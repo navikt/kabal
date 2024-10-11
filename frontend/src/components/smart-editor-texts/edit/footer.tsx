@@ -1,18 +1,18 @@
-import { TrashIcon, UploadIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage } from '@navikt/ds-react';
-import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
-import { SavedStatus, SavedStatusProps } from '@app/components/saved-status/saved-status';
+import { SavedStatus, type SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { isGodFormuleringType, isRegelverkType, isRichTextType } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { usePublishMutation } from '@app/redux-api/texts/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { IEdit, TextChangeType } from '@app/types/common-text-types';
-import { TextType } from '@app/types/texts/common';
+import { type IEdit, TextChangeType } from '@app/types/common-text-types';
+import type { TextType } from '@app/types/texts/common';
 import { LANGUAGE_NAMES, Language } from '@app/types/texts/language';
-import { IText } from '@app/types/texts/responses';
+import type { IText } from '@app/types/texts/responses';
+import { TrashIcon, UploadIcon } from '@navikt/aksel-icons';
+import { Button, ErrorMessage } from '@navikt/ds-react';
+import { useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 import { DeleteDraftButton } from '../delete-draft-button';
 
 interface Props {

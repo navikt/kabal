@@ -1,5 +1,5 @@
+import { type ScalingGroup, useSmartEditorScale } from '@app/hooks/settings/use-setting';
 import { useCallback } from 'react';
-import { ScalingGroup, useSmartEditorScale } from '@app/hooks/settings/use-setting';
 
 export const EDITOR_SCALE_CSS_VAR = '--kabal-editor-scale';
 

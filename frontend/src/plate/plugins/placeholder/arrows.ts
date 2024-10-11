@@ -1,6 +1,6 @@
 import {
-  PlateEditor,
-  TText,
+  type PlateEditor,
+  type TText,
   findNode,
   getNextNode,
   getNodeParent,
@@ -8,7 +8,7 @@ import {
   isText,
   setSelection as plateSetSelection,
 } from '@udecode/plate-common';
-import { KeyboardEvent } from 'react';
+import type { KeyboardEvent } from 'react';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 
 export const handleArrows = (editor: PlateEditor, e: KeyboardEvent) => {

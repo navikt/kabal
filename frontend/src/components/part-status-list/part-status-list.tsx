@@ -1,8 +1,8 @@
-import { FlowerPetalFallingIcon } from '@navikt/aksel-icons';
-import { Tag, TagProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
-import { IOrganizationStatus, IPart, IPersonStatus, PartStatusEnum } from '@app/types/oppgave-common';
+import { type IOrganizationStatus, type IPart, type IPersonStatus, PartStatusEnum } from '@app/types/oppgave-common';
+import { FlowerPetalFallingIcon } from '@navikt/aksel-icons';
+import { Tag, type TagProps } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props extends Pick<IPart, 'statusList'> {
   size?: TagProps['size'];

@@ -1,7 +1,7 @@
+import { useLatestYtelser, useSakstyperToUtfall, useYtelserAll } from '@app/simple-api-state/use-kodeverk';
+import type { ILovKildeToRegistreringshjemmel, IYtelse } from '@app/types/kodeverk';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
-import { useLatestYtelser, useSakstyperToUtfall, useYtelserAll } from '@app/simple-api-state/use-kodeverk';
-import { ILovKildeToRegistreringshjemmel, IYtelse } from '@app/types/kodeverk';
 
 const EMPTY_ARRAY: [] = [];
 

@@ -1,7 +1,7 @@
+import { isoDateTimeToPretty } from '@app/domain/date';
+import type { IRichText } from '@app/types/texts/responses';
 import { Button, Table } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { IRichText } from '@app/types/texts/responses';
 import { Row } from './row';
 
 type ScoredText = IRichText & { score: number };

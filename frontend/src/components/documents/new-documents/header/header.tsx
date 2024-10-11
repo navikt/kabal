@@ -1,10 +1,10 @@
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import { styled } from 'styled-components';
 import { DeleteDropArea } from '@app/components/documents/new-documents/header/drop-delete-area';
 import { DropHeading } from '@app/components/documents/new-documents/header/drop-header';
 import { listHeaderCSS } from '@app/components/documents/styled-components/list-header';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useValidationError } from '@app/hooks/use-validation-error';
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { styled } from 'styled-components';
 
 export const ListHeader = () => {
   const errorMessage = useValidationError('underArbeid');

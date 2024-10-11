@@ -1,5 +1,5 @@
-import { css, styled } from 'styled-components';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
+import { css, styled } from 'styled-components';
 
 const positioned = css`
   grid-template-areas:

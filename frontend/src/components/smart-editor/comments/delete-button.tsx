@@ -1,13 +1,13 @@
-import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { disconnectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { useDeleteCommentOrThreadMutation } from '@app/redux-api/smart-editor-comments';
+import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useContext, useState } from 'react';
+import { styled } from 'styled-components';
 import { useIsCommentAuthor } from './use-is-comment-author';
 
 interface DeleteButtonProps {

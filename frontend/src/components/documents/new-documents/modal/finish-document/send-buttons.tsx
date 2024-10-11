@@ -1,6 +1,3 @@
-import { Alert } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useContext } from 'react';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
@@ -8,9 +5,12 @@ import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottaker
 import { useFinishDocumentMutation, useSetMottakerListMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { NO_RECIPIENTS_ERROR } from '@app/types/documents/validation';
+import { Alert } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useContext } from 'react';
 import { Confirm } from './confirm';
 import { VALIDATION_ERROR_MESSAGES } from './error-messages';
-import { FinishProps, isSmartDocumentValidatonError } from './types';
+import { type FinishProps, isSmartDocumentValidatonError } from './types';
 
 export const SendButtons = ({ document }: FinishProps) => {
   const { id: dokumentId, tittel: documentTitle, mottakerList } = document;

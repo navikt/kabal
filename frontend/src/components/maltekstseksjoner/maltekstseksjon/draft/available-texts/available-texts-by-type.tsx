@@ -1,6 +1,3 @@
-import { Loader, Search, Table } from '@navikt/ds-react';
-import { useCallback, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-language/set-maltekstseksjon-language';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
@@ -9,7 +6,10 @@ import { useTrashQuery } from '@app/hooks/use-trash-query';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { IRichText, IText } from '@app/types/texts/responses';
+import type { IRichText, IText } from '@app/types/texts/responses';
+import { Loader, Search, Table } from '@navikt/ds-react';
+import { useCallback, useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 import { Body } from './body';
 
 export interface AvailableTextsByTypeProps {

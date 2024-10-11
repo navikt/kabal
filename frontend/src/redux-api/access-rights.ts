@@ -1,5 +1,5 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { toast } from '@app/components/toast/store';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { INNSTILLINGER_BASE_QUERY } from './common';
 
 export interface SaksbehandlerAccessRights {

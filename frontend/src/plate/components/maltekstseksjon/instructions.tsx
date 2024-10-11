@@ -1,13 +1,13 @@
-import { Alert, BodyShort, Heading } from '@navikt/ds-react';
-import { useEffect } from 'react';
-import { styled } from 'styled-components';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { pushError } from '@app/observability';
-import { ScoredText } from '@app/plate/functions/lex-specialis/lex-specialis';
-import { TemplateSections } from '@app/plate/template-sections';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { ScoredText } from '@app/plate/functions/lex-specialis/lex-specialis';
+import type { TemplateSections } from '@app/plate/template-sections';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { Alert, BodyShort, Heading } from '@navikt/ds-react';
+import { useEffect } from 'react';
+import { styled } from 'styled-components';
 
 interface DebugData {
   tiedList: ScoredText<IMaltekstseksjon>[];

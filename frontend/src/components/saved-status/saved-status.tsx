@@ -1,9 +1,9 @@
-import { Loader, Tooltip } from '@navikt/ds-react';
-import { SerializedError } from '@reduxjs/toolkit';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
-import { ErrorMessage, getErrorData } from '@app/functions/get-error-data';
+import { type ErrorMessage, getErrorData } from '@app/functions/get-error-data';
+import { Loader, Tooltip } from '@navikt/ds-react';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { styled } from 'styled-components';
 import { CheckmarkCircleFillIconColored, XMarkOctagonFillIconColored } from '../colored-icons/colored-icons';
 
 export interface SavedStatusProps {

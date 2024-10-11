@@ -1,4 +1,3 @@
-import { subDays } from 'date-fns';
 import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/read-only-date';
 import { DateContainer } from '@app/components/behandling/styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -7,6 +6,7 @@ import { useFieldName } from '@app/hooks/use-field-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useSetSendtTilTrygderettenMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
 import { SaksTypeEnum } from '@app/types/kodeverk';
+import { subDays } from 'date-fns';
 import { CURRENT_YEAR_IN_CENTURY } from '../../date-picker/constants';
 import { DatePicker } from '../../date-picker/date-picker';
 

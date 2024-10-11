@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { FilterList } from './filter-list';
 import { Header } from './header';
-import { BaseProps, DropdownProps } from './props';
+import type { BaseProps, DropdownProps } from './props';
 
 interface Props<T extends string> extends BaseProps<T>, DropdownProps {}
 

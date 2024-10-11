@@ -1,10 +1,10 @@
-import { Alert, Heading, HeadingProps, HelpText, Loader } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { AddAbbreviation } from '@app/components/settings/abbreviations/add';
 import { ExistingAbbreviation } from '@app/components/settings/abbreviations/existing';
 import { AbbreviationsExplanation } from '@app/components/settings/abbreviations/explanation';
 import { SectionHeader, SettingsSection } from '@app/components/settings/styled-components';
 import { useGetAbbreviationsQuery } from '@app/redux-api/bruker';
+import { Alert, Heading, type HeadingProps, HelpText, Loader } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 export const Abbreviations = () => (
   <SettingsSection $area="abbreviations" style={{ minWidth: 854 }}>

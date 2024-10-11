@@ -1,8 +1,3 @@
-import { ErrorMessage, Search, ToggleGroup } from '@navikt/ds-react';
-import { dnr, fnr } from '@navikt/fnrvalidator';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useState } from 'react';
-import { styled } from 'styled-components';
 import { Oppgaver } from '@app/components/search/common/oppgaver';
 import { FnrSearch } from '@app/components/search/fnr/fnr-search';
 import {
@@ -10,6 +5,11 @@ import {
   useSearchOppgaverByFnrQuery,
   useSearchPersonByFnrQuery,
 } from '@app/redux-api/oppgaver/queries/oppgaver';
+import { ErrorMessage, Search, ToggleGroup } from '@navikt/ds-react';
+import { dnr, fnr } from '@navikt/fnrvalidator';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useState } from 'react';
+import { styled } from 'styled-components';
 
 enum SearchType {
   SAKSNR = 'SAKSNR',

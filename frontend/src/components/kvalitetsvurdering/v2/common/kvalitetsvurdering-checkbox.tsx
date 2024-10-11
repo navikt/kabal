@@ -1,7 +1,7 @@
+import { useCanEdit } from '@app/hooks/use-can-edit';
+import type { IKvalitetsvurderingBooleans } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { Checkbox } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { useCanEdit } from '@app/hooks/use-can-edit';
-import { IKvalitetsvurderingBooleans } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { ContainerWithHelpText } from './container-with-helptext';
 
 interface Props {

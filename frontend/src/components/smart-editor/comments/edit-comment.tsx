@@ -1,10 +1,10 @@
+import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useUpdateCommentOrReplyMutation } from '@app/redux-api/smart-editor-comments';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { styled } from 'styled-components';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useUpdateCommentOrReplyMutation } from '@app/redux-api/smart-editor-comments';
 import { useIsCommentAuthor } from './use-is-comment-author';
 import { WriteComment } from './write-comment/write-comment';
 

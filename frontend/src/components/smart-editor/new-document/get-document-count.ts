@@ -1,4 +1,4 @@
-import { IMainDocument } from '@app/types/documents/documents';
+import type { IMainDocument } from '@app/types/documents/documents';
 
 interface IDocumentTitle {
   tittel: string;
@@ -37,7 +37,7 @@ export const getDocumentCount = (
         continue;
       }
 
-      const parsedCount = parseInt(countStr, 10);
+      const parsedCount = Number.parseInt(countStr, 10);
 
       if (Number.isNaN(parsedCount)) {
         continue;

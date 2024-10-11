@@ -1,7 +1,4 @@
-import { LightBulbIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { focusEditor } from '@udecode/plate-common';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { GLOBAL, LIST_DELIMITER, NONE, type NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { GodeFormuleringerList } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer-list';
@@ -15,13 +12,16 @@ import {
   Top,
 } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { useTranslatedFormuleringer } from '@app/components/smart-editor/gode-formuleringer/use-translated-formuleringer';
-import { GLOBAL, LIST_DELIMITER, NONE, NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
-import { TemplateSections } from '@app/plate/template-sections';
+import type { TemplateSections } from '@app/plate/template-sections';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { GOD_FORMULERING_TYPE } from '@app/types/common-text-types';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { IConsumerText, NonNullableGodFormulering } from '@app/types/texts/consumer';
+import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { IConsumerText, NonNullableGodFormulering } from '@app/types/texts/consumer';
+import { LightBulbIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { focusEditor } from '@udecode/plate-common';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Filter } from './filter';
 import { insertGodFormulering } from './insert';
 

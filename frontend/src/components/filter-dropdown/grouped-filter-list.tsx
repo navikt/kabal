@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { FilterList } from './filter-list';
 import { Header } from './header';
-import { BaseProps, DropdownProps, IOption } from './props';
+import type { BaseProps, DropdownProps, IOption } from './props';
 
 interface SectionHeader {
   id: string;

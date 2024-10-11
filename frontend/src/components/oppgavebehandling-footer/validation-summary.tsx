@@ -1,7 +1,7 @@
-import { Alert } from '@navikt/ds-react';
-import { IValidationError, IValidationSection } from '@app/functions/error-type-guard';
+import type { IValidationError, IValidationSection } from '@app/functions/error-type-guard';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useSectionTitle } from '@app/hooks/use-section-title';
+import { Alert } from '@navikt/ds-react';
 import { SectionTitle, StyledFieldList, StyledSection, ValidationSummaryContainer } from './styled-components';
 
 interface Props {

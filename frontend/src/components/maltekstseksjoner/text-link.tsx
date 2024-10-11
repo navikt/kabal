@@ -1,9 +1,9 @@
+import { StatusTag, type StatusTagProps } from '@app/components/maltekstseksjoner/status-tag';
+import { isoDateTimeToPretty } from '@app/domain/date';
 import { Tag } from '@navikt/ds-react';
 import { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { StatusTag, StatusTagProps } from '@app/components/maltekstseksjoner/status-tag';
-import { isoDateTimeToPretty } from '@app/domain/date';
 
 interface TextLinkProps extends StatusTagProps {
   children: string;

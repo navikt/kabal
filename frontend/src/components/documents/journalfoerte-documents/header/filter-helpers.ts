@@ -1,10 +1,10 @@
-import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
-import { useEffect, useState } from 'react';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
-import { ArchivedDocumentsSort, DateRange } from '@app/hooks/settings/use-setting';
-import { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
+import type { ArchivedDocumentsSort, DateRange } from '@app/hooks/settings/use-setting';
+import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
+import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
+import { useEffect, useState } from 'react';
 import { splitQuery } from './../../../smart-editor/gode-formuleringer/split-query';
 
 interface ScoredArkvertDocumentVedlegg extends IArkivertDocumentVedlegg {

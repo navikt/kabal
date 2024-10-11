@@ -1,4 +1,3 @@
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { deepFreeze } from '@app/functions/deep-freeze';
 import { Source } from '@app/plate/components/label-content';
 import { TemplateSections } from '@app/plate/template-sections';
@@ -11,10 +10,11 @@ import {
   createRegelverk,
   createSignature,
 } from '@app/plate/templates/helpers';
-import { EditorValue, TextAlign } from '@app/plate/types';
+import { type EditorValue, TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
-import { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 
 const INITIAL_SLATE_VALUE: EditorValue = [
   createCurrentDate(),

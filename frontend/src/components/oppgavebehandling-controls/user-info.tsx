@@ -1,9 +1,9 @@
-import { CopyButton } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { RelevantOppgaver } from '@app/components/relevant-oppgaver/relevant-oppgaver';
 import { formatFoedselsnummer } from '@app/functions/format-id';
-import { IOppgavebehandlingBase } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandlingBase } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { CopyButton } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 import { UserSex } from './user-sex';
 
 export const UserInfo = ({ sakenGjelder, id }: IOppgavebehandlingBase) => (

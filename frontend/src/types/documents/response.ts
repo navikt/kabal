@@ -1,5 +1,5 @@
-import { JournalfoertDokument } from '@app/types/documents/documents';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { JournalfoertDokument } from '@app/types/documents/documents';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 export interface ICreateVedleggResponse {
   addedJournalfoerteDokumenter: JournalfoertDokument[];

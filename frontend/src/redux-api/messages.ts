@@ -1,8 +1,8 @@
+import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
+import type { INavEmployee } from '@app/types/bruker';
+import type { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { format } from 'date-fns';
-import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
-import { INavEmployee } from '@app/types/bruker';
-import { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 import { ListTagTypes } from './tag-types';
 

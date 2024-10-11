@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import { accessRightsApi } from '@app/redux-api/access-rights';
 import { brukerApi } from '@app/redux-api/bruker';
 import { collaborationApi } from '@app/redux-api/collaboration';
@@ -16,6 +15,7 @@ import { smartEditorCommentsApi } from '@app/redux-api/smart-editor-comments';
 import { svarbrevApi } from '@app/redux-api/svarbrev';
 import { consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { textsApi } from '@app/redux-api/texts/texts';
+import { combineReducers } from 'redux';
 
 export const rootReducer = combineReducers({
   [oppgaverApi.reducerPath]: oppgaverApi.reducer,

@@ -1,3 +1,4 @@
+import { TimelineTypes, type Utsendingsinfo } from '@app/types/arkiverte-documents';
 import {
   ArrowUndoIcon,
   EnvelopeClosedIcon,
@@ -8,7 +9,6 @@ import {
   MobileSmallIcon,
   PrinterSmallIcon,
 } from '@navikt/aksel-icons';
-import { TimelineTypes, Utsendingsinfo } from '@app/types/arkiverte-documents';
 import { StyledEmailContent, StyledLabel, StyledSmsContent } from './styled-components';
 
 export const DATOTYPE_NAME: Record<TimelineTypes, string> = {

@@ -1,8 +1,3 @@
-import { PencilWritingIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, TextField } from '@navikt/ds-react';
-import { insertElements, isCollapsed, isExpanded, useEditorState } from '@udecode/plate-common';
-import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { MOD_KEY } from '@app/keys';
 import { createPlaceHolder } from '@app/plate/templates/helpers';
@@ -10,6 +5,11 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
+import { PencilWritingIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Button, TextField } from '@navikt/ds-react';
+import { insertElements, isCollapsed, isExpanded, useEditorState } from '@udecode/plate-common';
+import { useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const InsertPlaceholder = () => {
   const editor = useEditorState();

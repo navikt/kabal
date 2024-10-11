@@ -1,12 +1,12 @@
-import { UploadIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps, Heading, Tooltip } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { forwardRef, useCallback, useRef } from 'react';
 import { toast } from '@app/components/toast/store';
 import { BYTES_PER_KB, formatFileSize } from '@app/functions/format-file-size';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUploadFileDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DistribusjonsType } from '@app/types/documents/documents';
+import type { DistribusjonsType } from '@app/types/documents/documents';
+import { UploadIcon } from '@navikt/aksel-icons';
+import { Button, type ButtonProps, Heading, Tooltip } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { forwardRef, useCallback, useRef } from 'react';
 
 const MEBI = BYTES_PER_KB * BYTES_PER_KB;
 const MAX_SIZE_MIB = 256;

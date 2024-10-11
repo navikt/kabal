@@ -1,11 +1,11 @@
-import { BodyShort, Heading } from '@navikt/ds-react';
 import { SKELETON } from '@app/components/behandling/behandlingsdialog/messages/skeleton';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { formatEmployeeName } from '@app/domain/employee-name';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { IMessage, useGetMessagesQuery } from '@app/redux-api/messages';
+import { type IMessage, useGetMessagesQuery } from '@app/redux-api/messages';
+import { BodyShort, Heading } from '@navikt/ds-react';
 import {
   StyledAuthor,
   StyledMessage,

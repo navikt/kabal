@@ -6,7 +6,7 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
-import { CreatorRole, DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { CreatorRole, DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 

@@ -1,10 +1,10 @@
-import { findNode, toDOMNode } from '@udecode/plate-common';
-import { useCallback, useContext, useEffect, useRef } from 'react';
 import { Thread } from '@app/components/smart-editor/comments/thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useMyPlateEditorRef } from '@app/plate/types';
-import { ISmartEditorComment } from '@app/types/smart-editor/comments';
+import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
+import { findNode, toDOMNode } from '@udecode/plate-common';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { COMMENT_PREFIX } from '../constants';
 
 interface Props {

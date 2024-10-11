@@ -1,4 +1,4 @@
-import { CustomAbbrevation } from '@app/types/bruker';
+import type { CustomAbbrevation } from '@app/types/bruker';
 
 const URL = `/api/kabal-innstillinger/me/abbreviations`;
 

@@ -1,11 +1,11 @@
-import { Button } from '@navikt/ds-react';
-import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { Role } from '@app/types/bruker';
-import { IOppgave } from '@app/types/oppgaver';
+import type { IOppgave } from '@app/types/oppgaver';
+import { Button } from '@navikt/ds-react';
+import { useContext } from 'react';
+import { styled } from 'styled-components';
 import { useTildel } from './use-tildel';
 
 interface Props extends IOppgave {

@@ -1,6 +1,6 @@
-import { isText } from '@udecode/plate-common';
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
-import { RichText, useMyPlateEditorState } from '@app/plate/types';
+import { type RichText, useMyPlateEditorState } from '@app/plate/types';
+import { isText } from '@udecode/plate-common';
 
 export const useBookmarks = (): [string, RichText[]][] => {
   const editor = useMyPlateEditorState();

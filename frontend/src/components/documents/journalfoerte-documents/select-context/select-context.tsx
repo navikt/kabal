@@ -1,12 +1,12 @@
-import { createContext, useCallback, useState } from 'react';
 import { findDocument } from '@app/domain/find-document';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { createContext, useCallback, useState } from 'react';
 import { getId } from './helpers';
 import { useSelectMany } from './select-many';
 import { useSelectOne } from './select-one';
 import { useSelectRangeTo } from './select-range-to';
-import { ISelectContext, SelectedMap } from './types';
+import type { ISelectContext, SelectedMap } from './types';
 
 export const SelectContext = createContext<ISelectContext>({
   selectedDocuments: new Map(),

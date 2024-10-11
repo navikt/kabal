@@ -1,10 +1,10 @@
-import { TextField, ToggleGroup } from '@navikt/ds-react';
 import {
   BEHANDLINGSTID_UNIT_TYPES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
-  BehandlingstidUnitType,
+  type BehandlingstidUnitType,
   isBehandlingstidUnitType,
 } from '@app/types/svarbrev';
+import { TextField, ToggleGroup } from '@navikt/ds-react';
 
 interface Props {
   value: number;

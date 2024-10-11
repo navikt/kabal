@@ -1,7 +1,7 @@
+import { MOD_KEY } from '@app/keys';
 import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Textarea, Tooltip } from '@navikt/ds-react';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { MOD_KEY } from '@app/keys';
 import { StyledCommentButtonContainer } from '../styled-components';
 
 interface Props extends Omit<ButtonsProps, 'onSubmit' | 'disabled'> {

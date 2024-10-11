@@ -1,4 +1,3 @@
-import { BodyShort, Select } from '@navikt/ds-react';
 import { NONE } from '@app/components/behandling/behandlingsdialog/medunderskriver/constants';
 import { MedunderskriverReadOnly } from '@app/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
@@ -7,8 +6,9 @@ import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
+import type { SaksTypeEnum } from '@app/types/kodeverk';
+import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
+import { BodyShort, Select } from '@navikt/ds-react';
 import { getTitleCapitalized, getTitlePlural } from './get-title';
 
 interface Props {

@@ -5,28 +5,32 @@ import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-t
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { reduxStore } from '@app/redux/configure-store';
-import { IArkivertDocument, IArkivertDocumentVedlegg, Journalposttype } from '@app/types/arkiverte-documents';
-import { IDocumentParams } from '@app/types/documents/common-params';
+import { type IArkivertDocument, type IArkivertDocumentVedlegg, Journalposttype } from '@app/types/arkiverte-documents';
+import type { IDocumentParams } from '@app/types/documents/common-params';
 import {
   DistribusjonsType,
   DocumentTypeEnum,
-  IFileDocument,
-  IMainDocument,
-  InngaaendeKanal,
+  type IFileDocument,
+  type IMainDocument,
+  type InngaaendeKanal,
 } from '@app/types/documents/documents';
 import {
-  ICreateFileDocumentParams,
-  ICreateVedleggParams,
-  IFinishDocumentParams,
-  ISetMottakerListParams,
-  ISetNameParams,
-  ISetParentParams,
-  ISetTypeParams,
+  type ICreateFileDocumentParams,
+  type ICreateVedleggParams,
+  type IFinishDocumentParams,
+  type ISetMottakerListParams,
+  type ISetNameParams,
+  type ISetParentParams,
+  type ISetTypeParams,
   mottakerToInputMottaker,
 } from '@app/types/documents/params';
-import { ICreateVedleggResponse, IModifiedDocumentResponse, ISetParentResponse } from '@app/types/documents/response';
+import type {
+  ICreateVedleggResponse,
+  IModifiedDocumentResponse,
+  ISetParentResponse,
+} from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
-import { IPart } from '@app/types/oppgave-common';
+import type { IPart } from '@app/types/oppgave-common';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';

@@ -1,5 +1,3 @@
-import { HelpText, Label, Select, Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { AnkeDelvisMedholWarning, ReturWarning } from '@app/components/behandling/behandlingsdetaljer/warnings';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
@@ -9,6 +7,8 @@ import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateExtraUtfallMutation, useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import { HelpText, Label, Select, Tag } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface UtfallResultatProps {
   utfall: UtfallEnum | null;

@@ -1,6 +1,6 @@
-import { IMainDocument } from '@app/types/documents/documents';
-import { DocumentValidationErrorType, NO_RECIPIENTS_ERROR } from '@app/types/documents/validation';
-import { ApiError, isApiError } from '@app/types/errors';
+import type { IMainDocument } from '@app/types/documents/documents';
+import { DocumentValidationErrorType, type NO_RECIPIENTS_ERROR } from '@app/types/documents/validation';
+import { type ApiError, isApiError } from '@app/types/errors';
 
 export interface FinishProps {
   document: IMainDocument;

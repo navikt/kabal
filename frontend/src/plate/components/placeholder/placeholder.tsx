@@ -1,17 +1,3 @@
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Tooltip } from '@navikt/ds-react';
-import {
-  PlateElement,
-  PlateRenderElementProps,
-  findNodePath,
-  focusEditor,
-  getEndPoint,
-  getPreviousPath,
-  isEditorFocused,
-  setSelection,
-  useEditorReadOnly,
-} from '@udecode/plate-common';
-import { MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import {
@@ -26,7 +12,21 @@ import {
   lonePlaceholderInMaltekst,
 } from '@app/plate/components/placeholder/helpers';
 import { DeleteButton, Wrapper } from '@app/plate/components/placeholder/styled-components';
-import { EditorValue, PlaceholderElement } from '@app/plate/types';
+import type { EditorValue, PlaceholderElement } from '@app/plate/types';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Tooltip } from '@navikt/ds-react';
+import {
+  PlateElement,
+  type PlateRenderElementProps,
+  findNodePath,
+  focusEditor,
+  getEndPoint,
+  getPreviousPath,
+  isEditorFocused,
+  setSelection,
+  useEditorReadOnly,
+} from '@udecode/plate-common';
+import { type MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
 
 export const RedaktørPlaceholder = (props: PlateRenderElementProps<EditorValue, PlaceholderElement>) => (
   <Placeholder {...props} canManage />
@@ -162,7 +162,7 @@ const Placeholder = ({ element, children, attributes, editor, canManage }: Place
       contentEditable
       suppressContentEditableWarning
     >
-      <Tooltip content={element.placeholder} maxChar={Infinity} contentEditable={false}>
+      <Tooltip content={element.placeholder} maxChar={Number.POSITIVE_INFINITY} contentEditable={false}>
         <Wrapper
           style={{
             backgroundColor: isFocused ? 'var(--a-blue-100)' : 'var(--a-gray-200)',

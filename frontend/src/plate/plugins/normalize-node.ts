@@ -1,21 +1,3 @@
-import { LogLevel } from '@grafana/faro-web-sdk';
-import {
-  PlateEditor,
-  TNode,
-  TPath,
-  Value,
-  createPluginFactory,
-  getNode,
-  getParentNode,
-  insertNodes,
-  isElement,
-  setNodes,
-} from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
-import { Scrubber } from 'slate';
 import { pushEvent, pushLog } from '@app/observability';
 import {
   ELEMENT_CURRENT_DATE,
@@ -41,6 +23,24 @@ import {
   createTableCell,
   createTableRow,
 } from '@app/plate/templates/helpers';
+import { LogLevel } from '@grafana/faro-web-sdk';
+import {
+  type PlateEditor,
+  type TNode,
+  type TPath,
+  type Value,
+  createPluginFactory,
+  getNode,
+  getParentNode,
+  insertNodes,
+  isElement,
+  setNodes,
+} from '@udecode/plate-common';
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
+import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
+import { Scrubber } from 'slate';
 
 export const createNormalizeNodePlugin = createPluginFactory({
   key: 'normalize',

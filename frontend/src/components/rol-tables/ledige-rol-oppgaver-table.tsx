@@ -1,6 +1,3 @@
-import { Heading } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useState } from 'react';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
@@ -8,7 +5,10 @@ import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetSettingsQuery } from '@app/redux-api/bruker';
 import { useGetLedigeRolOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Role } from '@app/types/bruker';
-import { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { Heading } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useState } from 'react';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,

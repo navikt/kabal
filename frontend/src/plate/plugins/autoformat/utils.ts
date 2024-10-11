@@ -1,5 +1,5 @@
-import { AutoformatBlockRule } from '@udecode/plate-autoformat';
-import { PlateEditor, getParentNode, isElement } from '@udecode/plate-common';
+import type { AutoformatBlockRule } from '@udecode/plate-autoformat';
+import { type PlateEditor, getParentNode, isElement } from '@udecode/plate-common';
 import { toggleList, unwrapList } from '@udecode/plate-list';
 
 export const preFormat: AutoformatBlockRule['preFormat'] = (editor) => unwrapList(editor);

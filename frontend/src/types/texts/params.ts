@@ -1,7 +1,7 @@
-import { EditorValue } from '@app/plate/types';
-import { IGetTextsParams, RichTextTypes } from '../common-text-types';
-import { Language, UNTRANSLATED } from './language';
-import { IText } from './responses';
+import type { EditorValue } from '@app/plate/types';
+import type { IGetTextsParams, RichTextTypes } from '../common-text-types';
+import type { Language, UNTRANSLATED } from './language';
+import type { IText } from './responses';
 
 export type { IGetTextsParams } from '../common-text-types';
 export type { INewPlainTextParams, INewRichTextParams, INewTextParams } from './common';

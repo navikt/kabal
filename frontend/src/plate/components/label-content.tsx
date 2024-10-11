@@ -1,11 +1,11 @@
-import { PlateElement, PlateRenderElementProps } from '@udecode/plate-common';
+import { formatFoedselsnummer } from '@app/functions/format-id';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import type { EditorValue, LabelContentElement } from '@app/plate/types';
+import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
+import { PlateElement, type PlateRenderElementProps } from '@udecode/plate-common';
 import { setNodes } from '@udecode/slate';
 import { useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
-import { formatFoedselsnummer } from '@app/functions/format-id';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { EditorValue, LabelContentElement } from '@app/plate/types';
-import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 
 export const LabelContent = ({
   element,

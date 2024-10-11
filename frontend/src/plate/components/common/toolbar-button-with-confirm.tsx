@@ -1,8 +1,8 @@
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps, Tooltip } from '@navikt/ds-react';
+import { Button, type ButtonProps, Tooltip } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 
 interface Props extends Omit<ButtonProps, 'variant' | 'size'> {
   tooltip: string;
@@ -15,7 +15,7 @@ export const ToolbarButtonWithConfirm = ({ onClick, icon, tooltip, loading, ...r
 
   return (
     <Container ref={ref} contentEditable={false}>
-      <Tooltip content={tooltip} maxChar={Infinity} delay={0}>
+      <Tooltip content={tooltip} maxChar={Number.POSITIVE_INFINITY} delay={0}>
         <Button
           {...rest}
           style={showConfirm ? { ...rest.style, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : rest.style}

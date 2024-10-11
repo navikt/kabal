@@ -1,5 +1,3 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
 import { SetFilename } from '@app/components/documents/set-filename';
@@ -7,7 +5,7 @@ import { DocumentLink, EllipsisTitle } from '@app/components/documents/styled-co
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
-import { IShownDocument } from '@app/components/view-pdf/types';
+import type { IShownDocument } from '@app/components/view-pdf/types';
 import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -15,6 +13,8 @@ import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { MouseButtons } from '@app/keys';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { ConfirmEditButton, DocumentTitleActions } from './document-title-actions';
 
 interface Props {

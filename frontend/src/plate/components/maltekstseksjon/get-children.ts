@@ -1,8 +1,3 @@
-import { TElement, getNodeElements, getNodeString, isElement } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TABLE } from '@udecode/plate-table';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
@@ -12,9 +7,9 @@ import {
   ELEMENT_PLACEHOLDER,
   ELEMENT_REDIGERBAR_MALTEKST,
 } from '@app/plate/plugins/element-types';
-import { TemplateSections } from '@app/plate/template-sections';
+import type { TemplateSections } from '@app/plate/template-sections';
 import { createMaltekst, createRedigerbarMaltekst } from '@app/plate/templates/helpers';
-import {
+import type {
   MaltekstElement,
   MaltekstseksjonElement,
   ParentOrChildElement,
@@ -24,8 +19,13 @@ import {
 } from '@app/plate/types';
 import { isOfElementType, isOfElementTypesFn } from '@app/plate/utils/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { IConsumerRichText } from '@app/types/texts/consumer';
-import { Language } from '@app/types/texts/language';
+import type { IConsumerRichText } from '@app/types/texts/consumer';
+import type { Language } from '@app/types/texts/language';
+import { type TElement, getNodeElements, getNodeString, isElement } from '@udecode/plate-common';
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
+import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { ELEMENT_TABLE } from '@udecode/plate-table';
 
 export const getNewChildren = (
   texts: IConsumerRichText[],

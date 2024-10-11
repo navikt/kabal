@@ -1,5 +1,5 @@
-import { DraftTextReadOnlyMetadata, PublishedTextReadOnlyMetadata } from '../common-text-types';
-import { INewGodFormuleringParams, INewPlainTextParams, INewRegelverkParams, INewRichTextParams } from './common';
+import type { DraftTextReadOnlyMetadata, PublishedTextReadOnlyMetadata } from '../common-text-types';
+import type { INewGodFormuleringParams, INewPlainTextParams, INewRegelverkParams, INewRichTextParams } from './common';
 
 export type IDraftRichText = INewRichTextParams & DraftTextReadOnlyMetadata;
 type IDraftRegelverk = INewRegelverkParams & DraftTextReadOnlyMetadata;

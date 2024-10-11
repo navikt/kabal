@@ -1,10 +1,10 @@
-import { XMarkIcon } from '@navikt/aksel-icons';
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { SCALE_X } from '@app/components/toast/toast/animations';
 import { Icon } from '@app/components/toast/toast/icon';
 import { Container, Content, StyledCloseButton, TimedToastStyle } from '@app/components/toast/toast/styled-components';
-import { TimedMessage } from '@app/components/toast/types';
+import type { TimedMessage } from '@app/components/toast/types';
 import { useAnimationsEnabled } from '@app/hooks/use-animations-enabled';
+import { XMarkIcon } from '@navikt/aksel-icons';
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 
 interface Props extends TimedMessage {
   slideOut: () => void;

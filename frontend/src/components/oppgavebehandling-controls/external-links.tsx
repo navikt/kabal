@@ -1,14 +1,14 @@
-import { CheckmarkIcon, ExternalLinkIcon, FilesIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton, Link, Tooltip } from '@navikt/ds-react';
-import { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
 import { toast } from '@app/components/toast/store';
 import { EXTERNAL_URL_MODIA } from '@app/domain/eksterne-lenker';
 import { ENVIRONMENT } from '@app/environment';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { pushEvent } from '@app/observability';
 import { KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
-import { ISakenGjelder } from '@app/types/oppgave-common';
+import type { ISakenGjelder } from '@app/types/oppgave-common';
+import { CheckmarkIcon, ExternalLinkIcon, FilesIcon } from '@navikt/aksel-icons';
+import { Button, CopyButton, Link, Tooltip } from '@navikt/ds-react';
+import { useCallback, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface LinkProps {
   sakenGjelder: ISakenGjelder;

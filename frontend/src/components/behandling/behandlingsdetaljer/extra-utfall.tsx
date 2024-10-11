@@ -1,6 +1,3 @@
-import { Button, HelpText, Label, Tag } from '@navikt/ds-react';
-import { ReactNode, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/warnings';
 import { Dropdown } from '@app/components/filter-dropdown/dropdown';
 import { isUtfall } from '@app/functions/is-utfall';
@@ -9,7 +6,10 @@ import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useUpdateExtraUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
-import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import { type SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import { Button, HelpText, Label, Tag } from '@navikt/ds-react';
+import { type ReactNode, useMemo, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface TagsProps {
   utfallIdSet: UtfallEnum[];

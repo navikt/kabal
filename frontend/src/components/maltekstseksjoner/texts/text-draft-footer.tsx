@@ -1,11 +1,11 @@
-import { UploadIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage, Loader } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { DeleteDraftButton } from '@app/components/smart-editor-texts/delete-draft-button';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { usePublishMutation } from '@app/redux-api/texts/mutations';
-import { IDraftRichText } from '@app/types/texts/responses';
+import type { IDraftRichText } from '@app/types/texts/responses';
+import { UploadIcon } from '@navikt/aksel-icons';
+import { Button, ErrorMessage, Loader } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   text: IDraftRichText;

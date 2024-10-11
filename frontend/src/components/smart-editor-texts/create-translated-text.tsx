@@ -1,10 +1,10 @@
-import { Button } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { useUpdatePlainTextMutation, useUpdateRichTextMutation } from '@app/redux-api/texts/mutations';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
+import { Button } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   id: string;

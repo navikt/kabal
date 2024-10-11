@@ -1,9 +1,9 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetLanguageMutation } from '@app/redux-api/oppgaver/mutations/smart-document';
-import { Language } from '@app/types/texts/language';
+import type { Language } from '@app/types/texts/language';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useContext } from 'react';
 
 export const useSetSmartEditorLanguage = (): [
   (lang: Language) => Promise<void>,

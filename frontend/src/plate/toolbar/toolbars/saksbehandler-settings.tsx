@@ -1,7 +1,3 @@
-import { CogIcon } from '@navikt/aksel-icons';
-import { Heading, Modal, ToggleGroup } from '@navikt/ds-react';
-import { useCallback, useContext, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import {
   AbbreviationsContent,
   AbbreviationsHeadingContent,
@@ -13,6 +9,10 @@ import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushEvent } from '@app/observability';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { Language, isLanguage } from '@app/types/texts/language';
+import { CogIcon } from '@navikt/aksel-icons';
+import { Heading, Modal, ToggleGroup } from '@navikt/ds-react';
+import { useCallback, useContext, useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const SaksbehandlerSettings = () => {
   const { canManage, showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } = useContext(SmartEditorContext);

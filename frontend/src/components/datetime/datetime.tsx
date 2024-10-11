@@ -1,7 +1,7 @@
+import { isoDateTimeToPretty } from '@app/domain/date';
+import type { IEdit } from '@app/types/common-text-types';
 import { CalendarIcon, ClockIcon } from '@navikt/aksel-icons';
 import { styled } from 'styled-components';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { IEdit } from '@app/types/common-text-types';
 
 interface Props {
   created: string;

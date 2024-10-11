@@ -1,14 +1,14 @@
-import { Skeleton, Table } from '@navikt/ds-react';
-import { TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react';
-import { styled } from 'styled-components';
 import { ErrorAlert } from '@app/components/search/common/error-alert';
 import { FeilregistrerteOppgaverTable } from '@app/components/search/common/feilregistrerte-oppgaver-table';
 import { FullfoerteOppgaverTable } from '@app/components/search/common/fullfoerte-oppgaver-table';
 import { LedigeOppgaverTable } from '@app/components/search/common/ledige-oppgaver-table';
 import { OppgaverPaaVentTable } from '@app/components/search/common/oppgaver-paa-vent-table';
 import { OppgaverPageWrapper } from '@app/pages/page-wrapper';
-import { staggeredBaseQuery } from '@app/redux-api/common';
-import { IOppgaverResponse } from '@app/types/oppgaver';
+import type { staggeredBaseQuery } from '@app/redux-api/common';
+import type { IOppgaverResponse } from '@app/types/oppgaver';
+import { Skeleton, Table } from '@navikt/ds-react';
+import type { TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react';
+import { styled } from 'styled-components';
 
 // https://github.com/reduxjs/redux-toolkit/issues/1937#issuecomment-1842868277
 // https://redux-toolkit.js.org/rtk-query/usage-with-typescript#typing-query-and-mutation-endpoints

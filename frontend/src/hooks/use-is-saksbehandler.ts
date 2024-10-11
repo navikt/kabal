@@ -1,5 +1,5 @@
-import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { useContext, useMemo } from 'react';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useIsSaksbehandler = () => {

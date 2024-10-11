@@ -1,11 +1,11 @@
-import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Switch } from '@navikt/ds-react';
-import { useMemo } from 'react';
 import { useAvailableYtelser } from '@app/hooks/use-available-ytelser';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetSettingsQuery, useUpdateSettingsMutation } from '@app/redux-api/bruker';
-import { ISettings, Role } from '@app/types/bruker';
-import { IKodeverkSimpleValue } from '@app/types/kodeverk';
+import { type ISettings, Role } from '@app/types/bruker';
+import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
+import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Button, Switch } from '@navikt/ds-react';
+import { useMemo } from 'react';
 import {
   ButtonContainer,
   SectionHeader,

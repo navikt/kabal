@@ -1,5 +1,5 @@
+import type { EditorValue, RichTextEditor } from '@app/plate/types';
 import { focusEditor, insertFragment } from '@udecode/plate-common';
-import { EditorValue, RichTextEditor } from '@app/plate/types';
 
 export const insertGodFormulering = (editor: RichTextEditor, content: EditorValue) => {
   if (!isAvailable(editor)) {

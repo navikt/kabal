@@ -5,7 +5,7 @@ import {
   LOGISK_VEDLEGG_SPACE,
   ROW_HEIGHT,
 } from '@app/components/documents/journalfoerte-documents/contants';
-import { IArkivertDocument, IArkivertDocumentVedlegg, LogiskVedlegg } from '@app/types/arkiverte-documents';
+import type { IArkivertDocument, IArkivertDocumentVedlegg, LogiskVedlegg } from '@app/types/arkiverte-documents';
 
 interface Position {
   height: number;

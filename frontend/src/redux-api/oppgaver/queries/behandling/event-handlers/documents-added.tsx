@@ -1,18 +1,18 @@
-import { Tag } from '@navikt/ds-react';
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
-import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentsAddedEvent } from '@app/redux-api/server-sent-events/types';
-import { INavEmployee } from '@app/types/bruker';
+import type { DocumentsAddedEvent } from '@app/redux-api/server-sent-events/types';
+import { reduxStore } from '@app/redux/configure-store';
+import type { INavEmployee } from '@app/types/bruker';
 import {
   DISTRIBUTION_TYPE_NAMES,
   DOCUMENT_TYPE_NAMES,
   DocumentTypeEnum,
-  IMainDocument,
+  type IMainDocument,
 } from '@app/types/documents/documents';
+import { Tag } from '@navikt/ds-react';
 
 export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => (event: DocumentsAddedEvent) => {
   const { actor, documents } = event;

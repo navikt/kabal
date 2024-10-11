@@ -1,5 +1,3 @@
-import { ClockDashedIcon, LightBulbIcon } from '@navikt/aksel-icons';
-import { useContext } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { MOD_KEY } from '@app/keys';
 import { pushEvent } from '@app/observability';
@@ -8,6 +6,8 @@ import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { FirstRow, StyledToolbar } from '@app/plate/toolbar/styled-components';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { SaksbehandlerSettings } from '@app/plate/toolbar/toolbars/saksbehandler-settings';
+import { ClockDashedIcon, LightBulbIcon } from '@navikt/aksel-icons';
+import { useContext } from 'react';
 
 export const SaksbehandlerToolbar = () => {
   const { showGodeFormuleringer, setShowGodeFormuleringer, showHistory, setShowHistory } =

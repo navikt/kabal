@@ -1,10 +1,10 @@
-import { XMarkIcon } from '@navikt/aksel-icons';
-import { BodyLong, BodyShort, Button, Heading, Loader, Modal } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { formatEmployeeName } from '@app/domain/employee-name';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFagsystemName } from '@app/hooks/use-fagsystem-name';
+import { XMarkIcon } from '@navikt/aksel-icons';
+import { BodyLong, BodyShort, Button, Heading, Loader, Modal } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props extends ContentProps {
   isOpen: boolean;

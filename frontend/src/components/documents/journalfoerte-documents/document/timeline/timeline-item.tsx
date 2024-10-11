@@ -1,9 +1,9 @@
+import { isoDateTimeToPretty } from '@app/domain/date';
+import type { TimelineTypes } from '@app/types/arkiverte-documents';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Button, Detail, Popover } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { TimelineTypes } from '@app/types/arkiverte-documents';
 import { BACKGROUND_COLOR, DATOTYPE_NAME, ICON } from './helpers';
 import { NextArrow, StyledLabel, StyledTimelineItem } from './styled-components';
 

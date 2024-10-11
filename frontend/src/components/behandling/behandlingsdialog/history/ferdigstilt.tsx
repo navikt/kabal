@@ -1,5 +1,5 @@
+import { HistoryEventTypes, type IFerdigstiltEvent } from '@app/types/oppgavebehandling/response';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
-import { HistoryEventTypes, IFerdigstiltEvent } from '@app/types/oppgavebehandling/response';
 import { Line, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
 

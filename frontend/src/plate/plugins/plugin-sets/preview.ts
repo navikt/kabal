@@ -1,8 +1,3 @@
-import { createPlugins } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 import { EmptyVoid } from '@app/plate/components/empty-void';
 import { HeadingOne, HeadingThree, HeadingTwo } from '@app/plate/components/headings';
 import { LabelContent } from '@app/plate/components/label-content';
@@ -29,6 +24,11 @@ import { createMaltekstPlugin } from '@app/plate/plugins/maltekst';
 import { createSaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/saksbehandler';
 import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
 import { createRedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
+import { createPlugins } from '@udecode/plate-common';
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
+import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 
 export const previewPlugins = createPlugins(
   [

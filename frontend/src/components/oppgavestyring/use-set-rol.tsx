@@ -1,12 +1,12 @@
-import { parseISO } from 'date-fns';
-import { useCallback } from 'react';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
 import { errorToast, successToast } from '@app/components/oppgavestyring/toasts';
-import { OnChange } from '@app/components/oppgavestyring/types';
+import type { OnChange } from '@app/components/oppgavestyring/types';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
-import { INavEmployee } from '@app/types/bruker';
-import { EMPTY_MEDUNDERSKRIVERE, Return } from './use-set-medunderskriver';
+import type { INavEmployee } from '@app/types/bruker';
+import { parseISO } from 'date-fns';
+import { useCallback } from 'react';
+import { EMPTY_MEDUNDERSKRIVERE, type Return } from './use-set-medunderskriver';
 
 export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDERSKRIVERE): Return => {
   const [setRol, { isLoading: isUpdating }] = useSetRolMutation({

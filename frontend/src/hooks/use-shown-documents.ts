@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
-import { IShownDocument } from '@app/components/view-pdf/types';
+import type { IShownDocument } from '@app/components/view-pdf/types';
 import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { useMemo } from 'react';
 import { useOppgaveId } from './oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from './settings/use-setting';
 

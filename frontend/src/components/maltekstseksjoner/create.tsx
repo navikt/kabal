@@ -1,7 +1,3 @@
-import { PadlockLockedIcon, PencilWritingIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useCallback } from 'react';
-import { styled } from 'styled-components';
 import { getNewRichText } from '@app/components/smart-editor-texts/functions/new-text';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
@@ -10,9 +6,13 @@ import {
   useUpdateTextIdListMutation,
 } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useAddTextMutation } from '@app/redux-api/texts/mutations';
-import { IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
-import { INewMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import { type IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
+import type { INewMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import { PadlockLockedIcon, PencilWritingIcon, PlusIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useCallback } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   query: IGetMaltekstseksjonParams;

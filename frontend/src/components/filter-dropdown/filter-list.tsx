@@ -1,7 +1,7 @@
 import { CheckboxGroup } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { Filter } from './option';
-import { BaseProps } from './props';
+import type { BaseProps } from './props';
 
 interface Props<T extends string> extends BaseProps<T> {
   className?: string;

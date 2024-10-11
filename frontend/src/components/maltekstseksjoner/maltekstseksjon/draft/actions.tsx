@@ -1,7 +1,3 @@
-import { UploadIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps, ErrorMessage } from '@navikt/ds-react';
-import { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
 import { DeleteMaltekstseksjonDraftButton } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/delete-draft-button';
 import { isRichText } from '@app/functions/is-rich-plain-text';
 import {
@@ -10,10 +6,14 @@ import {
   usePublishWithTextsMutation,
 } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
-import { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { LANGUAGES } from '@app/types/texts/language';
-import { IRichText } from '@app/types/texts/responses';
+import type { IRichText } from '@app/types/texts/responses';
+import { UploadIcon } from '@navikt/aksel-icons';
+import { Button, type ButtonProps, ErrorMessage } from '@navikt/ds-react';
+import { useCallback, useState } from 'react';
+import { styled } from 'styled-components';
 import { ActionsContainer } from '../common';
 
 interface Props {

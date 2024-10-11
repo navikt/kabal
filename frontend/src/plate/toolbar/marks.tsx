@@ -1,3 +1,9 @@
+import { MOD_KEY } from '@app/keys';
+import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
+import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
+import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
+import { type EditorValue, useMyPlateEditorState } from '@app/plate/types';
+import { isOfElementTypesFn } from '@app/plate/utils/queries';
 import { ClearFormatting, TextBold, TextItalic, TextUnderline } from '@styled-icons/fluentui-system-regular';
 import { MARK_BOLD, MARK_ITALIC, MARK_UNDERLINE } from '@udecode/plate-basic-marks';
 import {
@@ -9,12 +15,6 @@ import {
 } from '@udecode/plate-common';
 import { MARK_COLOR } from '@udecode/plate-font';
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { MOD_KEY } from '@app/keys';
-import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { EditorValue, useMyPlateEditorState } from '@app/plate/types';
-import { isOfElementTypesFn } from '@app/plate/utils/queries';
 
 export const Marks = () => {
   const editor = useMyPlateEditorState();

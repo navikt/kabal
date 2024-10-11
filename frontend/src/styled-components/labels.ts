@@ -1,6 +1,6 @@
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 
 export const TypeTag = styled(Tag)<{ $type: SaksTypeEnum }>`
   background-color: ${({ $type: type }) =>

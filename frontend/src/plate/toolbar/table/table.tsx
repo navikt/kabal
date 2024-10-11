@@ -1,3 +1,17 @@
+import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
+import { createSimpleParagraph } from '@app/plate/templates/helpers';
+import { ToolbarSeparator } from '@app/plate/toolbar/separator';
+import { AddColumnLeftIcon } from '@app/plate/toolbar/table/icons/add-column-left';
+import { AddColumnRightIcon } from '@app/plate/toolbar/table/icons/add-column-right';
+import { AddRowAboveIcon } from '@app/plate/toolbar/table/icons/add-row-above';
+import { AddRowBelowIcon } from '@app/plate/toolbar/table/icons/add-row-below';
+import { DeleteColumnIcon } from '@app/plate/toolbar/table/icons/delete-column';
+import { DeleteRowIcon } from '@app/plate/toolbar/table/icons/delete-row';
+import { MergeCellsIcon } from '@app/plate/toolbar/table/icons/merge-cells';
+import { mergeCells } from '@app/plate/toolbar/table/merge-cells';
+import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
+import { type TableCellElement, useMyPlateEditorRef } from '@app/plate/types';
+import { isOfElementTypeFn, nextPath } from '@app/plate/utils/queries';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
 import {
@@ -18,20 +32,6 @@ import {
   insertTableColumn,
   insertTableRow,
 } from '@udecode/plate-table';
-import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { ToolbarSeparator } from '@app/plate/toolbar/separator';
-import { AddColumnLeftIcon } from '@app/plate/toolbar/table/icons/add-column-left';
-import { AddColumnRightIcon } from '@app/plate/toolbar/table/icons/add-column-right';
-import { AddRowAboveIcon } from '@app/plate/toolbar/table/icons/add-row-above';
-import { AddRowBelowIcon } from '@app/plate/toolbar/table/icons/add-row-below';
-import { DeleteColumnIcon } from '@app/plate/toolbar/table/icons/delete-column';
-import { DeleteRowIcon } from '@app/plate/toolbar/table/icons/delete-row';
-import { MergeCellsIcon } from '@app/plate/toolbar/table/icons/merge-cells';
-import { mergeCells } from '@app/plate/toolbar/table/merge-cells';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { TableCellElement, useMyPlateEditorRef } from '@app/plate/types';
-import { isOfElementTypeFn, nextPath } from '@app/plate/utils/queries';
 
 export const TableButtons = () => {
   const editor = useMyPlateEditorRef();

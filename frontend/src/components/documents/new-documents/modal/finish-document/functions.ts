@@ -1,6 +1,6 @@
 import { HandlingEnum } from '@app/types/documents/recipients';
 import { Brevmottakertype } from '@app/types/kodeverk';
-import { IPart, PartStatusEnum } from '@app/types/oppgave-common';
+import { type IPart, PartStatusEnum } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const getTypeName = (type: Brevmottakertype): string => {

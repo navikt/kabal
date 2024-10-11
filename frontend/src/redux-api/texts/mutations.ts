@@ -1,16 +1,14 @@
-/* eslint-disable max-lines */
-import { formatISO } from 'date-fns';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
-import { reduxStore } from '@app/redux/configure-store';
 import { getLastPublishedAndVersionToShowInTrash } from '@app/redux-api/redaktoer-helpers';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { textsApi } from '@app/redux-api/texts/texts';
+import { reduxStore } from '@app/redux/configure-store';
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
 import { LANGUAGES, UNTRANSLATED, isLanguage } from '@app/types/texts/language';
-import {
+import type {
   ICreateDraftFromVersionParams,
   IDeleteTextDraftParams,
   IGetTextsParams,
@@ -25,7 +23,7 @@ import {
   IUpdateTextUtfallIdListParams,
   IUpdateTextYtelseHjemmelIdListParams,
 } from '@app/types/texts/params';
-import {
+import type {
   IDraftRichText,
   IGodFormulering,
   IPlainText,
@@ -34,7 +32,9 @@ import {
   IRichText,
   IText,
 } from '@app/types/texts/responses';
-import { IDeleteDraftOrUnpublishTextResponse } from '@app/types/texts/responses-maltekster';
+import type { IDeleteDraftOrUnpublishTextResponse } from '@app/types/texts/responses-maltekster';
+/* eslint-disable max-lines */
+import { formatISO } from 'date-fns';
 import { maltekstseksjonerQuerySlice } from '../maltekstseksjoner/queries';
 import { textsQuerySlice } from './queries';
 

@@ -1,8 +1,8 @@
-import { findNode, isText } from '@udecode/plate-common';
-import { FocusedComment } from '@app/components/smart-editor/comments/use-threads';
+import type { FocusedComment } from '@app/components/smart-editor/comments/use-threads';
 import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { calculateRangePosition } from '@app/plate/functions/range-position';
-import { RichText, RichTextEditor } from '@app/plate/types';
+import type { RichText, RichTextEditor } from '@app/plate/types';
+import { findNode, isText } from '@udecode/plate-common';
 
 export enum ItemType {
   THREAD = 'thread',

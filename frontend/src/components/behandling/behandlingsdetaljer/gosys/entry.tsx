@@ -1,16 +1,16 @@
-import { BodyLong, HStack, Heading, Tag, Tooltip, VStack } from '@navikt/ds-react';
-import { format } from 'date-fns';
-import { styled } from 'styled-components';
 import {
-  GosysBeskrivelseEntry,
+  type GosysBeskrivelseEntry,
   GosysEntryAuthorType,
-  GosysEntryEmployee,
-  GosysEntrySystem,
+  type GosysEntryEmployee,
+  type GosysEntrySystem,
 } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useKlageenheter } from '@app/simple-api-state/use-kodeverk';
+import { BodyLong, HStack, Heading, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { format } from 'date-fns';
+import { styled } from 'styled-components';
 
 export const Entry = ({ author, content, date }: GosysBeskrivelseEntry) => (
   <VStack gap="1" as="section">

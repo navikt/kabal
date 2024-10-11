@@ -1,7 +1,3 @@
-import { Select } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -12,6 +8,10 @@ import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { CreatorRole } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { Select } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useContext } from 'react';
+import { styled } from 'styled-components';
 
 const NONE_SELECTED = 'NONE_SELECTED';
 

@@ -1,8 +1,3 @@
-import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import { Button, Loader, Tooltip } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
-import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -11,11 +6,16 @@ import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/co
 import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { EditorValue, EmptyVoidElement, RedigerbarMaltekstElement } from '@app/plate/types';
+import type { EditorValue, EmptyVoidElement, RedigerbarMaltekstElement } from '@app/plate/types';
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
+import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
+import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
+import { Button, Loader, Tooltip } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { PlateElement, type PlateRenderElementProps, findNodePath, replaceNodeChildren } from '@udecode/plate-common';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 
 const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
   if (element.children.length !== 1) {

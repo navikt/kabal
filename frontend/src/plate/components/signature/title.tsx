@@ -1,6 +1,6 @@
+import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { Alert } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { ptToEm } from '@app/plate/components/get-scaled-em';
 
 export const MISSING_TITLE = 'TITTEL MANGLER';
 

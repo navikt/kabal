@@ -1,7 +1,7 @@
-import { styled } from 'styled-components';
-import { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
+import type { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
-import { IYtelse } from '@app/types/kodeverk';
+import type { IYtelse } from '@app/types/kodeverk';
+import { styled } from 'styled-components';
 import { Cell } from './cell';
 
 interface Props {

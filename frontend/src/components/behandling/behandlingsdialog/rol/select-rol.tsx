@@ -1,4 +1,3 @@
-import { Select } from '@navikt/ds-react';
 import { NONE } from '@app/components/behandling/behandlingsdialog/rol/constants';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/rol/skeleton';
@@ -7,7 +6,8 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
 import { useGetPotentialRolQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
-import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
+import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
+import { Select } from '@navikt/ds-react';
 
 interface Props {
   oppgaveId: string;

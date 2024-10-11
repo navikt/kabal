@@ -1,8 +1,8 @@
-import { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
 import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
 import { DistribusjonsType } from '@app/types/documents/documents';
+import { useCallback, useState } from 'react';
+import { styled } from 'styled-components';
 import { SetDocumentType } from './document-type';
 
 export const UploadFile = () => {

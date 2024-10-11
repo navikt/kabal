@@ -1,13 +1,13 @@
+import { GroupedFilterList, type OptionGroup } from '@app/components/filter-dropdown/grouped-filter-list';
+import { InputError } from '@app/components/input-error/input-error';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { GroupedFilterList, OptionGroup } from '@app/components/filter-dropdown/grouped-filter-list';
-import { InputError } from '@app/components/input-error/input-error';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { StyledLovhjemmelSelect } from './styled-components';
 
 type Direction = 'down' | 'right';

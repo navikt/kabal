@@ -1,7 +1,3 @@
-import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { Direction } from '@app/components/deassign/direction';
 import { PaaVentWarning } from '@app/components/deassign/paa-vent-warning';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -9,7 +5,11 @@ import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useRef, useState } from 'react';
+import { styled } from 'styled-components';
 import { Popup } from '../../deassign/popup';
 
 interface Props {

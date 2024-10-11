@@ -1,5 +1,3 @@
-import { Loader } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { GeneratedIcon } from '@app/components/smart-editor/new-document/generated-icon';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -19,9 +17,11 @@ import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { Language } from '@app/types/texts/language';
+import { Loader } from '@navikt/ds-react';
+import { useContext, useState } from 'react';
 import { getDocumentCount } from './get-document-count';
 import {
   StyledHeader,

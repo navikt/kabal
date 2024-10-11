@@ -1,7 +1,7 @@
+import { type PreviewRequestsBody, getPdfUrl } from '@app/components/svarbrev/modal/get-pdf-url';
+import type { SaksTypeEnum } from '@app/types/kodeverk';
+import type { BehandlingstidUnitType } from '@app/types/svarbrev';
 import { useEffect, useRef, useState } from 'react';
-import { PreviewRequestsBody, getPdfUrl } from '@app/components/svarbrev/modal/get-pdf-url';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import { BehandlingstidUnitType } from '@app/types/svarbrev';
 
 interface Props {
   isOpen: boolean;

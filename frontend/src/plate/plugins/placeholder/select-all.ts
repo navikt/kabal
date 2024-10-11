@@ -1,5 +1,5 @@
-import { PlateEditor, findNode, select } from '@udecode/plate-common';
-import { KeyboardEvent } from 'react';
+import { type PlateEditor, findNode, select } from '@udecode/plate-common';
+import type { KeyboardEvent } from 'react';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 
 export const handleSelectAll = (editor: PlateEditor, e: KeyboardEvent) => {

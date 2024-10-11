@@ -1,16 +1,16 @@
-import { PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Alert } from '@navikt/ds-react';
-import { useRef } from 'react';
-import { styled } from 'styled-components';
 import { StyledHeading, getTitle } from '@app/components/editable-title/editable-title';
 import { PublishedTextFooter } from '@app/components/maltekstseksjoner/texts/text-published-footer';
 import { isRegelverk } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import { RichTextEditor } from '@app/plate/types';
-import { GOD_FORMULERING_TYPE, REGELVERK_TYPE, RichTextTypes } from '@app/types/common-text-types';
+import type { RichTextEditor } from '@app/plate/types';
+import { type GOD_FORMULERING_TYPE, type REGELVERK_TYPE, RichTextTypes } from '@app/types/common-text-types';
 import { LANGUAGE_NAMES, UNTRANSLATED } from '@app/types/texts/language';
-import { IPublishedGodFormulering, IPublishedRegelverk, IPublishedRichText } from '@app/types/texts/responses';
+import type { IPublishedGodFormulering, IPublishedRegelverk, IPublishedRichText } from '@app/types/texts/responses';
+import { PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
+import { Alert } from '@navikt/ds-react';
+import { useRef } from 'react';
+import { styled } from 'styled-components';
 import { RedaktoerRichText } from '../../redaktoer-rich-text/redaktoer-rich-text';
 
 interface Props {

@@ -1,7 +1,3 @@
-import { PlusIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { useCallback } from 'react';
-import { styled } from 'styled-components';
 import { SetStandaloneTextLanguage } from '@app/components/set-redaktoer-language/set-standalone-text-language';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { ShowDepublished } from '@app/components/smart-editor-texts/show-depublished';
@@ -14,8 +10,12 @@ import {
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useAddTextMutation } from '@app/redux-api/texts/mutations';
-import { REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
-import { Language } from '@app/types/texts/language';
+import { REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
+import type { Language } from '@app/types/texts/language';
+import { PlusIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { useCallback } from 'react';
+import { styled } from 'styled-components';
 import { LoadText } from './edit/load-text';
 import { FilteredTextList } from './filtered-text-list';
 import { getNewGodFormulering, getNewPlainText, getNewRegelverk, getNewRichText } from './functions/new-text';

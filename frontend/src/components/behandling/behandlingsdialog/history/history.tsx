@@ -1,6 +1,3 @@
-import { Heading, Select } from '@navikt/ds-react';
-import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { ALL, Filter } from '@app/components/behandling/behandlingsdialog/history/filter';
 import { getFullmektig } from '@app/components/behandling/behandlingsdialog/history/fullmektig';
 import { MissingHistoryWarning } from '@app/components/behandling/behandlingsdialog/history/history-warning';
@@ -12,7 +9,10 @@ import { getTildelingEvent } from '@app/components/behandling/behandlingsdialog/
 import { getVarsletBehandlingstidEvent } from '@app/components/behandling/behandlingsdialog/history/varslet-behandlingstid';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetHistoryQuery } from '@app/redux-api/oppgaver/queries/history';
-import { HistoryEventTypes, IHistory, IHistoryResponse } from '@app/types/oppgavebehandling/response';
+import { HistoryEventTypes, type IHistory, type IHistoryResponse } from '@app/types/oppgavebehandling/response';
+import { Heading, Select } from '@navikt/ds-react';
+import { useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 import { getFeilregistrertEvent } from './feilregistrert';
 import { getFerdigstiltEvent } from './ferdigstilt';
 

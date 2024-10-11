@@ -1,6 +1,3 @@
-/* eslint-disable max-lines */
-import { Table } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { FradelingReason } from '@app/components/common-table-components/fradeling-reason';
 import { Medunderskriver } from '@app/components/common-table-components/medunderskriver';
 import { Name } from '@app/components/common-table-components/name';
@@ -16,7 +13,10 @@ import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
-import { IOppgave } from '@app/types/oppgaver';
+import type { IOppgave } from '@app/types/oppgaver';
+/* eslint-disable max-lines */
+import { Table } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 import { Oppgavestyring } from '../../oppgavestyring/oppgavestyring';
 import { Type } from '../../type/type';
 import { Age } from '../age';

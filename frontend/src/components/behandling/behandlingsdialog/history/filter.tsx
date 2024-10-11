@@ -1,7 +1,7 @@
+import { pushEvent } from '@app/observability';
+import { HistoryEventTypes, type IHistoryResponse } from '@app/types/oppgavebehandling/response';
 import { Select } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { pushEvent } from '@app/observability';
-import { HistoryEventTypes, IHistoryResponse } from '@app/types/oppgavebehandling/response';
 
 export const ALL = 'ALL';
 

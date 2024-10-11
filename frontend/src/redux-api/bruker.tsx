@@ -1,9 +1,9 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
-import { CustomAbbrevation, ISetCustomInfoParams, ISettings, ISignatureResponse } from '@app/types/bruker';
+import type { CustomAbbrevation, ISetCustomInfoParams, ISettings, ISignatureResponse } from '@app/types/bruker';
 import { isApiRejectionError } from '@app/types/errors';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { INNSTILLINGER_BASE_QUERY } from './common';
 
 export const brukerApi = createApi({

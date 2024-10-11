@@ -1,6 +1,6 @@
-import { styled } from 'styled-components';
 import { isoDateToPretty } from '@app/domain/date';
-import { IOppgave } from '@app/types/oppgaver';
+import type { IOppgave } from '@app/types/oppgaver';
+import { styled } from 'styled-components';
 
 type Props = Pick<IOppgave, 'sattPaaVent'>;
 

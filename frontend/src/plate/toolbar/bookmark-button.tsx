@@ -1,14 +1,14 @@
-import { BookmarkFillIcon, BookmarkIcon } from '@navikt/aksel-icons';
-import { Button, Tooltip } from '@navikt/ds-react';
-import { findNode, isCollapsed, isText, setNodes } from '@udecode/plate-common';
-import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { pushEvent } from '@app/observability';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { RichText, useMyPlateEditorState } from '@app/plate/types';
+import { type RichText, useMyPlateEditorState } from '@app/plate/types';
+import { BookmarkFillIcon, BookmarkIcon } from '@navikt/aksel-icons';
+import { Button, Tooltip } from '@navikt/ds-react';
+import { findNode, isCollapsed, isText, setNodes } from '@udecode/plate-common';
+import { useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 export const BookmarkButton = () => {
   const editor = useMyPlateEditorState();

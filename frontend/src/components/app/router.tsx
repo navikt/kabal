@@ -1,4 +1,3 @@
-import { Route, Routes as Switch } from 'react-router-dom';
 import { NotFoundPage } from '@app/components/app/not-found-page';
 import { ProtectedRoute } from '@app/components/app/protected-route';
 import { ModalEnum } from '@app/components/svarbrev/row/row';
@@ -23,6 +22,7 @@ import { SvarbrevPage } from '@app/pages/svarbrev/svarbrev';
 import { ToppteksterPage } from '@app/pages/topptekster/topptekster';
 import { TrygderettsankebehandlingPage } from '@app/pages/trygderettsankebehandling/trygderettsankebehandling';
 import { Role } from '@app/types/bruker';
+import { Route, Routes as Switch } from 'react-router-dom';
 
 export const Router = () => (
   <Switch>

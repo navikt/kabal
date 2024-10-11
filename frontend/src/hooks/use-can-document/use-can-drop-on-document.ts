@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
@@ -9,10 +8,11 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
-import { DocumentTypeEnum, IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { useContext } from 'react';
 
 export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
   const { draggedDocument, draggedJournalfoertDocuments } = useContext(DragAndDropContext);

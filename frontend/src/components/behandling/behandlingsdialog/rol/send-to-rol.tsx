@@ -1,8 +1,8 @@
-import { PaperplaneIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
-import { FlowState, IMedunderskriverRol } from '@app/types/oppgave-common';
+import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
+import { PaperplaneIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
 import { getFixedCacheKey } from './helpers';
 
 interface Props {

@@ -1,7 +1,7 @@
-import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Role } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
+import { useContext, useMemo } from 'react';
 import { useHasYtelseAccess } from './use-has-ytelse-access';
 
 interface Actions {

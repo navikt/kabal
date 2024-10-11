@@ -1,4 +1,9 @@
-import { CreatorRole, DocumentTypeEnum, IMainDocument, JournalfoertDokument } from '@app/types/documents/documents';
+import {
+  CreatorRole,
+  DocumentTypeEnum,
+  type IMainDocument,
+  type JournalfoertDokument,
+} from '@app/types/documents/documents';
 import { FlowState } from '@app/types/oppgave-common';
 
 export const canRolEditDocument = (document: IMainDocument, flowState: FlowState | null) => {

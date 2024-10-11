@@ -1,4 +1,4 @@
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { isGenericObject } from './types';
 
 export interface ApiError {

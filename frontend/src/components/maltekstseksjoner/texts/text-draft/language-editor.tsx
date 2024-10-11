@@ -1,8 +1,8 @@
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import { EditorValue, RichTextEditor } from '@app/plate/types';
-import { Language } from '@app/types/texts/language';
-import { IRichText } from '@app/types/texts/responses';
+import type { EditorValue, RichTextEditor } from '@app/plate/types';
+import type { Language } from '@app/types/texts/language';
+import type { IRichText } from '@app/types/texts/responses';
 import { RedaktoerRichText } from '../../../redaktoer-rich-text/redaktoer-rich-text';
 
 export type RichTexts = Record<Language, EditorValue | null>;

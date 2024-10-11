@@ -1,6 +1,6 @@
-import { EditorValue } from '@app/plate/types';
+import type { EditorValue } from '@app/plate/types';
 import { Language, UNTRANSLATED } from '@app/types/texts/language';
-import {
+import type {
   GOD_FORMULERING_TYPE,
   ITextBaseMetadata,
   PlainTextTypes,

@@ -1,6 +1,6 @@
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Search, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 
 export enum ActiveEnum {
   ALL = '0',

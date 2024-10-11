@@ -1,4 +1,3 @@
-import { Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
@@ -6,7 +5,8 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { Reason, Reasons } from './reasons';
+import { Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
+import { type Reason, Reasons } from './reasons';
 import { FormSection, RadioButtonsRow, StyledHeaderHelpTextWrapper, StyledHelpText } from './styled-components';
 import { useKvalitetsvurderingV1FieldName } from './use-field-name';
 

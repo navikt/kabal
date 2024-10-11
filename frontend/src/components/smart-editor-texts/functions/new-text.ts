@@ -1,14 +1,14 @@
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import {
   GOD_FORMULERING_TYPE,
-  ITextBaseMetadata,
-  PlainTextTypes,
+  type ITextBaseMetadata,
+  type PlainTextTypes,
   REGELVERK_TYPE,
-  RichTextTypes,
+  type RichTextTypes,
 } from '@app/types/common-text-types';
-import { INewGodFormuleringParams, INewRegelverkParams } from '@app/types/texts/common';
+import type { INewGodFormuleringParams, INewRegelverkParams } from '@app/types/texts/common';
 import { Language, UNTRANSLATED } from '@app/types/texts/language';
-import { INewPlainTextParams, INewRichTextParams } from '@app/types/texts/params';
+import type { INewPlainTextParams, INewRichTextParams } from '@app/types/texts/params';
 
 const getMetadata = (): ITextBaseMetadata => ({
   templateSectionIdList: [],

@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'bun:test';
-import { CanEditDocumentParams, canEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
+import { type CanEditDocumentParams, canEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import {
   CreatorRole,
   DistribusjonsType,
   DocumentTypeEnum,
-  IBaseDocument,
-  ISmartDocument,
-  JournalfoertDokument,
-  JournalfoertDokumentReference,
+  type IBaseDocument,
+  type ISmartDocument,
+  type JournalfoertDokument,
+  type JournalfoertDokumentReference,
 } from '@app/types/documents/documents';
 import { FlowState } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';

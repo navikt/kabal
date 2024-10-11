@@ -1,7 +1,7 @@
-import { IAddress } from '@app/types/documents/recipients';
-import { SexEnum } from '@app/types/kodeverk';
-import { Language } from '@app/types/texts/language';
-import { INavEmployee } from './bruker';
+import type { IAddress } from '@app/types/documents/recipients';
+import type { SexEnum } from '@app/types/kodeverk';
+import type { Language } from '@app/types/texts/language';
+import type { INavEmployee } from './bruker';
 
 export interface IJournalfoertDokumentId {
   readonly journalpostId: string;

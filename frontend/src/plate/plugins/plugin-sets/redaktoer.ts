@@ -1,8 +1,3 @@
-import { createPlugins } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 import { HeadingOne, HeadingThree, HeadingTwo } from '@app/plate/components/headings';
 import { ListItem, OrderedList, UnorderedList } from '@app/plate/components/lists';
 import { PageBreak } from '@app/plate/components/page-break';
@@ -14,6 +9,11 @@ import { TableRowElement } from '@app/plate/components/plate-ui/table-row-elemen
 import { ELEMENT_PAGE_BREAK, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { createRedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redaktoer';
 import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
+import { createPlugins } from '@udecode/plate-common';
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
+import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 
 export const redaktoerPlugins = createPlugins([...defaultPlugins, createRedaktoerPlaceholderPlugin()], {
   components: {

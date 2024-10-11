@@ -1,12 +1,12 @@
-import { Button } from '@navikt/ds-react';
-import { useContext } from 'react';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { OpenOppgavebehandling } from '@app/components/common-table-components/open';
 import { ActionToast } from '@app/components/toast/action-toast';
 import { toast } from '@app/components/toast/store';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
 import { FlowState } from '@app/types/oppgave-common';
-import { IOppgave } from '@app/types/oppgaver';
+import type { IOppgave } from '@app/types/oppgaver';
+import { Button } from '@navikt/ds-react';
+import { useContext } from 'react';
 
 interface Props {
   oppgave: IOppgave;

@@ -1,9 +1,12 @@
+import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
+import { UNCHANGEABLE } from '@app/plate/plugins/element-types';
+import type { EditorValue, PageBreakElement, RichTextEditor } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import {
   PlateElement,
-  PlateRenderElementProps,
-  TNodeEntry,
+  type PlateRenderElementProps,
+  type TNodeEntry,
   findNode,
   getParentNode,
   isEditor,
@@ -11,9 +14,6 @@ import {
   removeNodes,
 } from '@udecode/plate-common';
 import { styled } from 'styled-components';
-import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
-import { UNCHANGEABLE } from '@app/plate/plugins/element-types';
-import { EditorValue, PageBreakElement, RichTextEditor } from '@app/plate/types';
 
 const parentIsUnchangeable = (editor: RichTextEditor, entry: TNodeEntry<PageBreakElement> | undefined): boolean => {
   if (entry === undefined) {

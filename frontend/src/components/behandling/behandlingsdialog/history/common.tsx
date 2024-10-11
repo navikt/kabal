@@ -1,8 +1,8 @@
-import { styled } from 'styled-components';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { formatIdNumber } from '@app/functions/format-id';
-import { INavEmployee } from '@app/types/bruker';
-import { HistoryEventTypes, IHistory, IPart } from '@app/types/oppgavebehandling/response';
+import type { INavEmployee } from '@app/types/bruker';
+import { HistoryEventTypes, type IHistory, type IPart } from '@app/types/oppgavebehandling/response';
+import { styled } from 'styled-components';
 
 type KeySource = Pick<IHistory, 'type' | 'timestamp'>;
 

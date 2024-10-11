@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { useUtfall } from '@app/simple-api-state/use-kodeverk';
+import { useMemo } from 'react';
 
 interface Props {
   utfallId: string | null;

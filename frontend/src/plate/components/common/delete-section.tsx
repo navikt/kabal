@@ -1,13 +1,13 @@
-import { CheckmarkIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Tooltip } from '@navikt/ds-react';
-import { removeNodes } from '@udecode/plate-common';
-import { useRef, useState } from 'react';
-import { Path } from 'slate';
-import { styled } from 'styled-components';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
 import { MaltekstseksjonToolbarStyle } from '@app/plate/components/styled-components';
 import { useMyPlateEditorRef } from '@app/plate/types';
+import { CheckmarkIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Alert, Button, Tooltip } from '@navikt/ds-react';
+import { removeNodes } from '@udecode/plate-common';
+import { useRef, useState } from 'react';
+import type { Path } from 'slate';
+import { styled } from 'styled-components';
 
 const DummyButton = ({ loading }: { loading?: boolean }) => (
   <Button

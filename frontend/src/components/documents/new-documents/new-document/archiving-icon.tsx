@@ -1,8 +1,8 @@
+import { Fields } from '@app/components/documents/new-documents/grid';
+import { DistribusjonsType } from '@app/types/documents/documents';
 import { HourglassIcon } from '@navikt/aksel-icons';
 import { memo } from 'react';
 import { css, styled } from 'styled-components';
-import { Fields } from '@app/components/documents/new-documents/grid';
-import { DistribusjonsType } from '@app/types/documents/documents';
 
 const GRID_CSS = css`
   grid-area: ${Fields.Action};

@@ -1,4 +1,4 @@
-import { GenericObject, Immutable, isGenericObject } from '@app/types/types';
+import { type GenericObject, type Immutable, isGenericObject } from '@app/types/types';
 
 export const deepFreeze = <T extends GenericObject>(toFreeze: T): Immutable<T> => {
   // Retrieve the property names defined on object.

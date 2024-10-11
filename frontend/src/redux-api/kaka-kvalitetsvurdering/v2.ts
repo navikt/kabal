@@ -1,5 +1,5 @@
+import type { IKvalitetsvurdering, IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { IKvalitetsvurdering, IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { KAKA_KVALITETSVURDERING_BASE_QUERY } from '../common';
 
 type Argument = Partial<IKvalitetsvurderingData> & Pick<IKvalitetsvurdering, 'id'>;

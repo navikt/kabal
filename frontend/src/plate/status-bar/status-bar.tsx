@@ -1,5 +1,5 @@
-import { styled } from 'styled-components';
 import { Scaling } from '@app/plate/status-bar/scaling';
+import { styled } from 'styled-components';
 
 interface Props {
   children?: React.ReactNode;

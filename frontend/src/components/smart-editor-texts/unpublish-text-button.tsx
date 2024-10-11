@@ -1,7 +1,3 @@
-import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, HelpText } from '@navikt/ds-react';
-import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import {
   MaltekstseksjonReferences,
   MaltekstseksjonType,
@@ -9,8 +5,12 @@ import {
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useUnpublishTextMutation } from '@app/redux-api/texts/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
-import { IText } from '@app/types/texts/responses';
+import { REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
+import type { IText } from '@app/types/texts/responses';
+import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Alert, Button, HelpText } from '@navikt/ds-react';
+import { useMemo, useState } from 'react';
+import { styled } from 'styled-components';
 import { useTextQuery } from './hooks/use-text-query';
 
 interface Props {

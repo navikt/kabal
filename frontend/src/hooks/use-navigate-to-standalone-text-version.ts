@@ -1,7 +1,7 @@
+import { Language } from '@app/types/texts/language';
 import { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
-import { Language } from '@app/types/texts/language';
 
 interface Params {
   id?: string | null;

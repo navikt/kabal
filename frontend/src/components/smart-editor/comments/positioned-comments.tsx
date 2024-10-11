@@ -1,15 +1,15 @@
-import { useContext, useMemo } from 'react';
-import { styled } from 'styled-components';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import {
   ItemType,
-  PositionedItem,
-  ThreadData,
+  type PositionedItem,
+  type ThreadData,
   getPositionedItems,
 } from '@app/components/smart-editor/functions/get-positioned-items';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 import { useMyPlateEditorState } from '@app/plate/types';
+import { useContext, useMemo } from 'react';
+import { styled } from 'styled-components';
 import { useThreads } from '../comments/use-threads';
 import { ExpandableThread } from './expandable-thread';
 

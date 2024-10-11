@@ -1,22 +1,22 @@
-import { SkipToken, skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useEffect, useState } from 'react';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { getNewChildren } from '@app/plate/components/maltekstseksjon/get-children';
 import { replaceNodes } from '@app/plate/components/maltekstseksjon/replace-nodes';
-import { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
+import type { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import { ReplaceMethod, useGetReplaceMethod } from '@app/plate/components/maltekstseksjon/use-get-replace-method';
 import { usePath } from '@app/plate/components/maltekstseksjon/use-path';
-import { LexSpecialisStatus, ScoredText, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
-import { MaltekstseksjonElement, useMyPlateEditorRef } from '@app/plate/types';
+import { LexSpecialisStatus, type ScoredText, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
+import { type MaltekstseksjonElement, useMyPlateEditorRef } from '@app/plate/types';
 import {
   useLazyGetConsumerMaltekstseksjonerQuery,
   useLazyGetMaltekstseksjonTextsQuery,
 } from '@app/redux-api/maltekstseksjoner/consumer';
-import { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { type SkipToken, skipToken } from '@reduxjs/toolkit/query';
+import { useCallback, useEffect, useState } from 'react';
 
 interface Result {
   isFetching: boolean;

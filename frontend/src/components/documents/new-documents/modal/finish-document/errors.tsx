@@ -1,8 +1,8 @@
+import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
+import { DocumentValidationErrorType } from '@app/types/documents/validation';
 import { Button, ErrorMessage, Heading, Label, List } from '@navikt/ds-react';
 import { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
-import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
-import { DocumentValidationErrorType } from '@app/types/documents/validation';
 
 interface Props {
   updatePdf: () => void;

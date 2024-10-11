@@ -1,7 +1,3 @@
-import { Box, Button, Modal, VStack } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { styled } from 'styled-components';
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/behandling/behandlingsdetaljer/gosys/domain';
 import { Entry } from '@app/components/behandling/behandlingsdetaljer/gosys/entry';
@@ -12,6 +8,10 @@ import { StyledEntryList } from '@app/components/behandling/behandlingsdetaljer/
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
 import { pushEvent, pushLog } from '@app/observability';
+import { Box, Button, Modal, VStack } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   oppgavebeskrivelse: string | null;

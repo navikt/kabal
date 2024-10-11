@@ -1,7 +1,7 @@
-import { styled } from 'styled-components';
 import { Bookmarks } from '@app/components/smart-editor/bookmarks/bookmarks';
 import { CommentSection } from '@app/components/smart-editor/comments/comment-section';
 import { NumberOfComments } from '@app/components/smart-editor/comments/number-of-comments';
+import { styled } from 'styled-components';
 
 interface StickyRightProps {
   id: string;

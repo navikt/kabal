@@ -1,8 +1,3 @@
-import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button, Modal, Tag } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useState } from 'react';
-import { styled } from 'styled-components';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { AnnenInngaaende } from '@app/components/documents/new-documents/modal/annen-inngaaende';
 import { FinishButton } from '@app/components/documents/new-documents/modal/finish-button';
@@ -25,8 +20,13 @@ import {
   DOCUMENT_TYPE_NAMES,
   DistribusjonsType,
   DocumentTypeEnum,
-  IMainDocument,
+  type IMainDocument,
 } from '@app/types/documents/documents';
+import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
+import { Button, Modal, Tag } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useState } from 'react';
+import { styled } from 'styled-components';
 import { DeleteDocumentButton } from './delete-button';
 import { SetParentDocument } from './set-parent';
 

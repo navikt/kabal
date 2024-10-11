@@ -1,6 +1,3 @@
-import { Tag } from '@navikt/ds-react';
-import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import {
   getTitleCapitalized,
@@ -8,7 +5,10 @@ import {
 } from '@app/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
-import { IOppgave } from '@app/types/oppgaver';
+import type { IOppgave } from '@app/types/oppgaver';
+import { Tag } from '@navikt/ds-react';
+import { useContext } from 'react';
+import { styled } from 'styled-components';
 
 type Props = Pick<IOppgave, 'medunderskriver' | 'typeId'>;
 

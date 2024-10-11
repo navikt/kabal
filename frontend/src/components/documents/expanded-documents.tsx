@@ -1,7 +1,3 @@
-import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Button, Heading } from '@navikt/ds-react';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { styled } from 'styled-components';
 import { DragAndDropContextElement } from '@app/components/documents/drag-context';
 import { Fields, SIZES } from '@app/components/documents/journalfoerte-documents/grid';
 import { ToggleExpandedButton } from '@app/components/documents/toggle-expand-button';
@@ -9,6 +5,10 @@ import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { useDocumentsWidth } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
+import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
+import { Button, Heading } from '@navikt/ds-react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { styled } from 'styled-components';
 import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-documents';
 import { NewDocuments } from './new-documents/new-documents';
 import { UploadFile } from './upload-file/upload-file';

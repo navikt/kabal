@@ -1,5 +1,3 @@
-import { Alert } from '@navikt/ds-react';
-import { useCallback, useEffect, useMemo } from 'react';
 import { CustomRecipients } from '@app/components/documents/new-documents/modal/finish-document/custom-recipients';
 import { isSendError } from '@app/components/documents/new-documents/modal/finish-document/is-send-error';
 import { SingleRecipient } from '@app/components/documents/new-documents/modal/finish-document/single-recipient';
@@ -9,8 +7,10 @@ import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import { useFinishDocumentMutation, useSetMottakerListMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { IMainDocument, IMottaker } from '@app/types/documents/documents';
+import type { IMainDocument, IMottaker } from '@app/types/documents/documents';
 import { PartStatusEnum } from '@app/types/oppgave-common';
+import { Alert } from '@navikt/ds-react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { StyledFinishDocument } from './styled-components';
 
 export const Receipients = (document: IMainDocument) => {

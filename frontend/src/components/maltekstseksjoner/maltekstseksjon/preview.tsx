@@ -1,16 +1,16 @@
-import { Alert, Loader } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
 import { isRichText } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import { EditorValue } from '@app/plate/types';
+import type { EditorValue } from '@app/plate/types';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
 import { isApiError } from '@app/types/errors';
-import { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { IRichText } from '@app/types/texts/responses';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IRichText } from '@app/types/texts/responses';
+import { Alert, Loader } from '@navikt/ds-react';
+import { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;

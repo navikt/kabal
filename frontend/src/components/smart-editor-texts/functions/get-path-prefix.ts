@@ -4,7 +4,7 @@ import {
   PlainTextTypes,
   REGELVERK_TYPE,
   RichTextTypes,
-  TextTypes,
+  type TextTypes,
 } from '@app/types/common-text-types';
 
 export const getPathPrefix = (textType: TextTypes): string => {

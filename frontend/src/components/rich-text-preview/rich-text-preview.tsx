@@ -1,8 +1,3 @@
-import { FileSearchIcon } from '@navikt/aksel-icons';
-import { Button, ButtonProps } from '@navikt/ds-react';
-import { Plate } from '@udecode/plate-common';
-import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
@@ -11,7 +6,12 @@ import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
 import { PlateEditor } from '@app/plate/plate-editor';
 import { previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
-import { EditorValue, RichTextEditor } from '@app/plate/types';
+import type { EditorValue, RichTextEditor } from '@app/plate/types';
+import { FileSearchIcon } from '@navikt/aksel-icons';
+import { Button, type ButtonProps } from '@navikt/ds-react';
+import { Plate } from '@udecode/plate-common';
+import { useRef, useState } from 'react';
+import { styled } from 'styled-components';
 
 type OpenSide = 'left' | 'right';
 type OpenDirection = 'up' | 'down';

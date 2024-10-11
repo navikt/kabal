@@ -1,11 +1,11 @@
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useEffect, useState } from 'react';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { ELEMENT_MALTEKST, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
-import { MaltekstseksjonElement } from '@app/plate/types';
+import type { MaltekstseksjonElement } from '@app/plate/types';
 import { useGetMaltekstseksjonTextsQuery } from '@app/redux-api/maltekstseksjoner/consumer';
-import { IConsumerRichText } from '@app/types/texts/consumer';
-import { Language } from '@app/types/texts/language';
+import type { IConsumerRichText } from '@app/types/texts/consumer';
+import type { Language } from '@app/types/texts/language';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useEffect, useState } from 'react';
 
 const getIsChanged = (element: MaltekstseksjonElement, texts: IConsumerRichText[]): boolean => {
   for (const child of element.children) {

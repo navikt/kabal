@@ -1,7 +1,7 @@
-import { Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { useInnsendingshjemlerFromIds, useRegistreringshjemlerFromIds } from '@app/hooks/use-kodeverk-ids';
+import { Tag } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 
 interface Props {
   hjemmelIdList: string[];

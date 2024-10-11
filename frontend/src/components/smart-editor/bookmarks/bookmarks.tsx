@@ -1,10 +1,10 @@
-import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { TNode, getNodeString, setNodes, toDOMNode } from '@udecode/plate-common';
-import { styled } from 'styled-components';
 import { useBookmarks } from '@app/components/smart-editor/bookmarks/use-bookmarks';
 import { pushEvent } from '@app/observability';
 import { useMyPlateEditorState } from '@app/plate/types';
+import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { type TNode, getNodeString, setNodes, toDOMNode } from '@udecode/plate-common';
+import { styled } from 'styled-components';
 
 interface Props {
   editorId: string;

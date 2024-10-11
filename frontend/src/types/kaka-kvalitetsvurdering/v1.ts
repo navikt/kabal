@@ -1,5 +1,5 @@
-import { IKvalitetsvurderingBase } from './common';
-import { Radiovalg, RadiovalgExtended } from './radio';
+import type { IKvalitetsvurderingBase } from './common';
+import type { Radiovalg, RadiovalgExtended } from './radio';
 
 interface Version {
   version: 1;

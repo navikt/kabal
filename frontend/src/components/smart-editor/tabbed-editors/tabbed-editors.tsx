@@ -1,7 +1,3 @@
-import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
-import { Alert, Heading, Tabs, Tooltip } from '@navikt/ds-react';
-import { useEffect } from 'react';
-import { styled } from 'styled-components';
 import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
 import { NewDocument } from '@app/components/smart-editor/new-document/new-document';
 import { StyledTabsPanel, TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
@@ -17,7 +13,11 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useSmartDocuments } from '@app/hooks/use-smart-documents';
-import { ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartDocument } from '@app/types/documents/documents';
+import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
+import { Alert, Heading, Tabs, Tooltip } from '@navikt/ds-react';
+import { useEffect } from 'react';
+import { styled } from 'styled-components';
 
 const NEW_TAB_ID = 'NEW_TAB_ID';
 

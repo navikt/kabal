@@ -1,5 +1,5 @@
-import { styled } from 'styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { styled } from 'styled-components';
 import { AaRegisteret, Ainntekt, Modia } from './external-links';
 import { PanelSwitches } from './panel-switches';
 import { UserInfo } from './user-info';

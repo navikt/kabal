@@ -1,21 +1,21 @@
-import { Loader } from '@navikt/ds-react';
-import { useMemo } from 'react';
-import { useParams } from 'react-router';
-import { styled } from 'styled-components';
 import { PublishedRichText } from '@app/components/maltekstseksjoner/texts/published-rich-text';
 import { Changelog } from '@app/components/smart-editor-texts/edit/changelog';
 import { DraftRegelverk } from '@app/components/smart-editor-texts/edit/draft-regelverk';
 import { DraftGodFormulering, DraftRichText } from '@app/components/smart-editor-texts/edit/draft-rich-text';
 import { PublishedPlainText } from '@app/components/smart-editor-texts/edit/published-plain-text';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
-import { DraftVersionProps } from '@app/components/smart-editor-texts/types';
+import type { DraftVersionProps } from '@app/components/smart-editor-texts/types';
 import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { isGodFormulering, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useGetTextByIdQuery, useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { PlainTextTypes, REGELVERK_TYPE, TextTypes } from '@app/types/common-text-types';
-import { IDraft, IPlainText, IPublishedText, IText } from '@app/types/texts/responses';
+import { PlainTextTypes, REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
+import type { IDraft, IPlainText, IPublishedText, IText } from '@app/types/texts/responses';
+import { Loader } from '@navikt/ds-react';
+import { useMemo } from 'react';
+import { useParams } from 'react-router';
+import { styled } from 'styled-components';
 import { DraftPlainText } from './draft-plain-text';
 
 interface Props {

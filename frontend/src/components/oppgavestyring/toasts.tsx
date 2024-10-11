@@ -1,8 +1,8 @@
+import { CountdownButton } from '@app/components/countdown-button/countdown-button';
+import type { OnChange } from '@app/components/oppgavestyring/types';
+import { toast } from '@app/components/toast/store';
 import { Button } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { CountdownButton } from '@app/components/countdown-button/countdown-button';
-import { OnChange } from '@app/components/oppgavestyring/types';
-import { toast } from '@app/components/toast/store';
 
 interface ToastProps {
   testId: string;

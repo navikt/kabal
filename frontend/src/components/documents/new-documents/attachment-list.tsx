@@ -1,12 +1,17 @@
-import { useMemo } from 'react';
-import { styled } from 'styled-components';
 import { AttachmentsOverview } from '@app/components/documents/new-documents/attachments-overview';
 import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@app/components/documents/new-documents/constants';
 import { NewAttachmentButtons } from '@app/components/documents/new-documents/new-attachment-buttons';
 import { NewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { sortWithNumbers } from '@app/functions/sort-with-numbers/sort-with-numbers';
-import { IFileDocument, IMainDocument, ISmartDocument, JournalfoertDokument } from '@app/types/documents/documents';
+import type {
+  IFileDocument,
+  IMainDocument,
+  ISmartDocument,
+  JournalfoertDokument,
+} from '@app/types/documents/documents';
+import { useMemo } from 'react';
+import { styled } from 'styled-components';
 import {
   NewDocAttachmentsContainer,
   StyledAttachmentList,

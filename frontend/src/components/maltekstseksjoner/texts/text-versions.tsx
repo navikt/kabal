@@ -1,10 +1,10 @@
-import { Alert, Loader } from '@navikt/ds-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { isApiError } from '@app/types/errors';
-import { IDraftRichText, IPublishedRichText, IRichText, IText } from '@app/types/texts/responses';
+import type { IDraftRichText, IPublishedRichText, IRichText, IText } from '@app/types/texts/responses';
+import { Alert, Loader } from '@navikt/ds-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { PublishedRichText } from './published-rich-text';
 import { DraftText } from './text-draft/text-draft';
 
