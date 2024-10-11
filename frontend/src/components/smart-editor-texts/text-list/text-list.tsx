@@ -126,7 +126,6 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
             return isAsc ? a.score - b.score : b.score - a.score;
           case SortKey.MODIFIED:
             return isAsc ? a.modified.localeCompare(b.modified) : b.modified.localeCompare(a.modified);
-          case SortKey.TITLE:
           default:
             return isAsc ? sortWithOrdinals(a.title, b.title) : sortWithOrdinals(b.title, a.title);
         }

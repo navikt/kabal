@@ -38,7 +38,7 @@ export const sortWithOrdinals = (a: string, b: string): number => {
       diff = aPartIsOrdinal && bPartIsOrdinal ? aPartOrdinalValue - bPartOrdinalValue : aPart.localeCompare(bPart);
     }
 
-    if (!aPartIsString && !bPartIsString) {
+    if (!(aPartIsString || bPartIsString)) {
       diff = aPart - bPart;
     }
 

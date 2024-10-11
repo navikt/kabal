@@ -19,7 +19,7 @@ interface EditButtonProps {
 export const EditButton = ({ authorIdent, isEditing, setIsEditing, isFocused, close }: EditButtonProps) => {
   const isCommentAuthor = useIsCommentAuthor(authorIdent);
 
-  if (!isFocused || !isCommentAuthor) {
+  if (!(isFocused && isCommentAuthor)) {
     return null;
   }
 

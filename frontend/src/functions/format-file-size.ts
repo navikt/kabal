@@ -13,10 +13,10 @@ export const formatFileSize = (size: number) => {
 
   for (let i = 0; i < UNITS.length; i++) {
     const unit = UNITS[i];
-    const limit = Math.pow(BYTES_PER_KB, i + 2);
+    const limit = BYTES_PER_KB ** (i + 2);
 
     if (size < limit) {
-      return `${(size / Math.pow(BYTES_PER_KB, i + 1)).toLocaleString(undefined, {
+      return `${(size / BYTES_PER_KB ** (i + 1)).toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })} ${unit}`;

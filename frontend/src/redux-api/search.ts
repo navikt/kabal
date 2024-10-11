@@ -13,7 +13,7 @@ export const searchApi = createApi({
   baseQuery: KABAL_API_BASE_QUERY,
   endpoints: (builder) => ({
     searchpartwithutsendingskanal: builder.query<IPart, SearchPartWithUtsendingskanalParams>({
-      query: (body) => ({ url: `/searchpartwithutsendingskanal`, method: 'POST', body }),
+      query: (body) => ({ url: '/searchpartwithutsendingskanal', method: 'POST', body }),
     }),
   }),
 });

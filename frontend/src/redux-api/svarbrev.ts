@@ -12,7 +12,7 @@ export const svarbrevApi = createApi({
   baseQuery: KABAL_API_BASE_QUERY,
   endpoints: (builder) => ({
     getSvarbrevSettings: builder.query<SvarbrevSetting[], void>({
-      query: () => ({ url: `/svarbrev-settings`, method: 'GET' }),
+      query: () => ({ url: '/svarbrev-settings', method: 'GET' }),
     }),
     getSvarbrevSettingHistory: builder.query<SvarbrevSetting[], string>({
       query: (id) => ({ url: `/svarbrev-settings/${id}/history`, method: 'GET' }),

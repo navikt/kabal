@@ -106,8 +106,7 @@ export const HjemlerSelect = ({
         .map<NestedOption>(({ id: ytelseId, navn: ytelsenavn, lovKildeToRegistreringshjemler }) => {
           const ytelseValue = ytelseIsWildcard ? `${ytelseId}${LIST_DELIMITER}${WILDCARD}` : ytelseId;
           const indeterminate =
-            !ytelseIsWildcard &&
-            !selected.includes(ytelseValue) &&
+            !(ytelseIsWildcard || selected.includes(ytelseValue)) &&
             (isGlobalSelected ||
               lovKildeToRegistreringshjemler.some(({ registreringshjemler }) =>
                 registreringshjemler.some(

@@ -51,7 +51,7 @@ export const NewDocument = ({ onCreate }: Props) => {
     return null;
   }
 
-  if (!isRol && !hasDocumentsAccess) {
+  if (!(isRol || hasDocumentsAccess)) {
     return null;
   }
 

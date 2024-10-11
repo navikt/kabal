@@ -10,7 +10,7 @@ import { ELEMENT_TABLE } from '@udecode/plate-table';
 
 const isIndented = (editor: RichTextEditor) =>
   someNode<TElement>(editor, {
-    match: (n) => isBlock(editor, n) && 'indent' in n && typeof n['indent'] === 'number' && n.indent !== 0,
+    match: (n) => isBlock(editor, n) && 'indent' in n && typeof n.indent === 'number' && n.indent !== 0,
     universal: true,
   });
 

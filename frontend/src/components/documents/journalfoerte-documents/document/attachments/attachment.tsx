@@ -84,7 +84,7 @@ export const Attachment = memo(
       [documents, dokumentInfoId, getSelectedDocuments, isSelected, journalpostId, setDraggedJournalfoertDocuments],
     );
 
-    const disabled = !harTilgangTilArkivvariant || (!isSaksbehandler && !isRol) || isFeilregistrert;
+    const disabled = !(harTilgangTilArkivvariant && (isSaksbehandler || isRol)) || isFeilregistrert;
     const draggingIsEnabled = draggingEnabled && !disabled;
 
     const Icon = useMemo(() => {

@@ -23,7 +23,7 @@ export const Saksbehandler = () => {
     return null;
   }
 
-  const showSelect = !isFeilregistrert && !isFullfoert && (isSaksbehandler || hasOppgavestyringRole);
+  const showSelect = !(isFeilregistrert || isFullfoert) && (isSaksbehandler || hasOppgavestyringRole);
 
   const { saksbehandler } = oppgave;
 
