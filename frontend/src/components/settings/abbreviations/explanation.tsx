@@ -1,6 +1,8 @@
 import { AbbrevationExample } from '@app/components/settings/abbreviations/example';
+import { format } from '@app/components/settings/abbreviations/format';
+import { ExpansionTypeEnum } from '@app/components/settings/abbreviations/types';
 import { pushEvent } from '@app/observability';
-import { BodyShort, ReadMore, Tag, Tooltip } from '@navikt/ds-react';
+import { BodyShort, ReadMore } from '@navikt/ds-react';
 import { useCallback } from 'react';
 
 export const AbbreviationsExplanation = () => {
@@ -26,7 +28,8 @@ export const AbbreviationsExplanation = () => {
 
       <BodyShort size="small" spacing>
         Tall og spesialtegn i kortformen kan være en måte å tydelig skille forkortelser fra ord eller unngå konflikter
-        på. F.eks. <b>«k9»</b> til <b>«kapittel 9 i folketrygdloven»</b> og <b>«@om»</b> til <b>«omsorgspenger»</b>.
+        på. F.eks. {format('k9')} til {format('kapittel 9 i folketrygdloven')} og {format('@om')} til{' '}
+        {format('omsorgspenger')}.
       </BodyShort>
 
       <BodyShort size="small" spacing>
@@ -48,130 +51,73 @@ export const AbbreviationsExplanation = () => {
         title="Eksempel på kortform med kun små bokstaver"
         recommended
         examples={[
-          <>
-            <b>«aap»</b> blir utvidet til <b>«arbeidsavklaringspenger»</b>/<b>«Arbeidsavklaringspenger»</b>. <AutoCap />
-          </>,
-          <>
-            <b>«Aap»</b> blir utvidet til <b>«Arbeidsavklaringspenger»</b>. <AlwaysCap />
-          </>,
-          <>
-            <b>«AAP»</b> blir utvidet til <b>«ARBEIDSAVKLARINGSPENGER»</b>. <AlwaysAllCaps />
-          </>,
+          { short: 'aap', long: 'Arbeidsavklaringspenger', cap: ExpansionTypeEnum.AutoCap },
+          { short: 'Aap', long: 'Arbeidsavklaringspenger', cap: ExpansionTypeEnum.AlwaysCap },
+          { short: 'AAP', long: 'ARBEIDSAVKLARINGSPENGER', cap: ExpansionTypeEnum.AlwaysAllCaps },
         ]}
       >
-        Kortform <b>«aap»</b> med langform <b>«arbeidsavklaringspenger»</b>
+        Kortform {format('aap')} med langform {format('arbeidsavklaringspenger')}
       </AbbrevationExample>
 
       <AbbrevationExample
         title="Eksempel på kortform med spesialtegn"
         recommended
         examples={[
-          <>
-            <b>«@om»</b> blir utvidet til <b>«omsorgspenger»</b>/<b>«Omsorgspenger»</b>. <AutoCap />
-          </>,
-          <>
-            <b>«@Om»</b> blir utvidet til <b>«Omsorgspenger»</b>. <AlwaysCap />
-          </>,
-          <>
-            <b>«@OM»</b> blir utvidet til <b>«OMSORGSPENGER»</b>. <AlwaysAllCaps />
-          </>,
+          { short: '@om', long: 'Omsorgspenger', cap: ExpansionTypeEnum.AutoCap },
+          { short: '@Om', long: 'Omsorgspenger', cap: ExpansionTypeEnum.AlwaysCap },
+          { short: '@OM', long: 'OMSORGSPENGER', cap: ExpansionTypeEnum.AlwaysAllCaps },
         ]}
       >
-        Kortform <b>«@om»</b> med langform <b>«omsorgspenger»</b>
+        Kortform {format('@om')} med langform {format('omsorgspenger')}
       </AbbrevationExample>
 
       <AbbrevationExample
         title="Eksempel på kortform med tall"
         recommended
         examples={[
-          <>
-            <b>«k9»</b> blir utvidet til <b>«kapittel 9 i folketrygdloven»</b>/<b>«Kapittel 9 i folketrygdloven»</b>.{' '}
-            <AutoCap />
-          </>,
-          <>
-            <b>«K9»</b> blir utvidet til <b>«Kapittel 9 i folketrygdloven»</b>. <AlwaysCap />
-          </>,
+          { short: 'k9', long: 'Kapittel 9 i folketrygdloven', cap: ExpansionTypeEnum.AutoCap },
+          { short: 'K9', long: 'Kapittel 9 i folketrygdloven', cap: ExpansionTypeEnum.AlwaysCap },
         ]}
       >
-        Kortform <b>«k9»</b> med langform <b>«kapittel 9 i folketrygdloven»</b>
+        Kortform {format('k9')} med langform {format('kapittel 9 i folketrygdloven')}
       </AbbrevationExample>
 
       <AbbrevationExample
         title="Eksempel på kortform med kun store bokstaver"
         examples={[
-          <>
-            <b>«aap»</b> blir <Error />.
-          </>,
-          <>
-            <b>«Aap»</b> blir <Error />.
-          </>,
-          <>
-            <b>«AAP»</b> blir utvidet til <b>«arbeidsavklaringspenger»</b>/<b>«Arbeidsavklaringspenger»</b>. <AutoCap />
-          </>,
+          { short: 'AAP' },
+          { short: 'Aap' },
+          { short: 'aap', long: 'Arbeidsavklaringspenger', cap: ExpansionTypeEnum.AutoCap },
         ]}
       >
-        Kortform <b>«AAP»</b> med langform <b>«arbeidsavklaringspenger»</b>
+        Kortform {format('AAP')} med langform {format('arbeidsavklaringspenger')}
       </AbbrevationExample>
 
       <AbbrevationExample
         title="Eksempel på kortform med både store og små bokstaver"
         examples={[
-          <>
-            <b>«aap»</b> blir <Error />.
-          </>,
-          <>
-            <b>«Aap»</b> blir utvidet til <b>«arbeidsavklaringspenger»</b>/<b>«Arbeidsavklaringspenger»</b>. <AutoCap />
-          </>,
-          <>
-            <b>«AAP»</b> blir <Error />.
-          </>,
+          { short: 'aap' },
+          { short: 'Aap', long: 'Arbeidsavklaringspenger', cap: ExpansionTypeEnum.AutoCap },
+          { short: 'AAP' },
         ]}
       >
-        Kortform <b>«Aap»</b> med langform <b>«arbeidsavklaringspenger»</b>
+        Kortform {format('Aap')} med langform {format('arbeidsavklaringspenger')}
       </AbbrevationExample>
 
       <AbbrevationExample
         title="Eksempel på kortform med kun én bokstav"
         examples={[
-          <>
-            <b>«x»</b> blir utvidet til <b>«høyesterettsjustitiarius»</b>/<b>«Høyesterettsjustitiarius»</b>. <AutoCap />
-          </>,
-          <>
-            <b>«X»</b> blir utvidet til <b>«Høyesterettsjustitiarius»</b>. <AlwaysCap />
-            <Tag variant="neutral" size="xsmall">
-              Umulig å få bare store boktaver siden kortformen består av kun én bokstav.
-            </Tag>
-          </>,
+          { short: 'x', long: 'Høyesterettsjustitiarius', cap: ExpansionTypeEnum.AutoCap },
+          {
+            short: 'X',
+            long: 'Høyesterettsjustitiarius',
+            cap: ExpansionTypeEnum.AlwaysCap,
+            tag: 'Umulig å få bare store boktaver siden kortformen består av kun én bokstav.',
+          },
         ]}
       >
-        Kortform <b>«x»</b> med langform <b>«høyesterettsjustitiarius»</b>
+        Kortform {format('x')} med langform {format('høyesterettsjustitiarius')}
       </AbbrevationExample>
     </ReadMore>
   );
 };
-
-const AutoCap = () => (
-  <Tooltip content="Automatisk stor forbokstav på starten av en setning">
-    <Tag variant="info" size="xsmall">
-      Automatisk stor forbokstav
-    </Tag>
-  </Tooltip>
-);
-
-const AlwaysCap = () => (
-  <Tag variant="info" size="xsmall">
-    Alltid stor forbokstav
-  </Tag>
-);
-
-const AlwaysAllCaps = () => (
-  <Tag variant="info" size="xsmall">
-    Alltid bare store bokstaver
-  </Tag>
-);
-
-const Error = () => (
-  <Tag variant="error" size="xsmall">
-    Ikke gjenkjent
-  </Tag>
-);
