@@ -17,7 +17,7 @@ export const ToggleButton = styled.button<Props>`
   background-color: none;
   user-select: none;
   position: relative;
-  font-size: 14px;
+  font-size: var(--a-font-size-small);
   font-weight: 600;
   color: var(--a-text-default);
 

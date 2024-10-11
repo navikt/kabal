@@ -133,7 +133,7 @@ const StyledName = styled.div`
 const StyledDate = styled.time`
   display: block;
   width: 100%;
-  font-size: 14px;
+  font-size: var(--a-font-size-small);
   color: var(--a-gray-700);
 `;
 
