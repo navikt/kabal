@@ -1,9 +1,9 @@
-import { isDeployed } from '@app/config/env';
-import { getLogger } from '@app/logger';
-import { EmojiIcons, sendToSlack } from '@app/slack';
 import { getAzureADClient } from '@app/auth/get-auth-client';
-import { resetClientsAndUniqueUsersMetrics } from '@app/plugins/version/unique-users-gauge';
+import { isDeployed } from '@app/config/env';
 import { formatDuration, getDuration } from '@app/helpers/duration';
+import { getLogger } from '@app/logger';
+import { resetClientsAndUniqueUsersMetrics } from '@app/plugins/version/unique-users-gauge';
+import { EmojiIcons, sendToSlack } from '@app/slack';
 
 const log = getLogger('init');
 

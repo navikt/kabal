@@ -1,15 +1,15 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
+import { getCacheKey, oboCache } from '@app/auth/cache/cache';
+import { oboRequestDuration } from '@app/auth/cache/cache-gauge';
 import { getAzureADClient } from '@app/auth/get-auth-client';
+import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
+import { isDeployed } from '@app/config/env';
 import { getDuration } from '@app/helpers/duration';
 import { getLogger } from '@app/logger';
-import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
-import fastifyPlugin from 'fastify-plugin';
-import { isDeployed } from '@app/config/env';
-import { oboRequestDuration } from '@app/auth/cache/cache-gauge';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
-import { SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
 import { NAV_IDENT_PLUGIN_ID } from '@app/plugins/nav-ident';
-import { getCacheKey, oboCache } from '@app/auth/cache/cache';
+import { SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import fastifyPlugin from 'fastify-plugin';
 
 const log = getLogger('obo-token-plugin');
 

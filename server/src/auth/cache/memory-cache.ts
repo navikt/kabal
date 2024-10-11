@@ -1,5 +1,5 @@
 import { memoryCacheGauge, memoryCacheSizeGauge } from '@app/auth/cache/cache-gauge';
-import { TokenMessage } from '@app/auth/cache/types';
+import type { TokenMessage } from '@app/auth/cache/types';
 import { getLogger } from '@app/logger';
 
 const log = getLogger('obo-memory-cache');

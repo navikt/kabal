@@ -1,15 +1,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { getLogger } from '@app/logger';
-import { getProxyRequestHeaders } from '@app/helpers/prepare-request-headers';
-import { getDuration } from '@app/helpers/duration';
-import { isDeployed } from '@app/config/env';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import fastifyPlugin from 'fastify-plugin';
-import { Static, Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
-import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 import { ApiClientEnum } from '@app/config/config';
+import { isDeployed } from '@app/config/env';
+import { getDuration } from '@app/helpers/duration';
+import { getProxyRequestHeaders } from '@app/helpers/prepare-request-headers';
+import { getLogger } from '@app/logger';
+import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
+import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
+import { type Static, Type, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import fastifyPlugin from 'fastify-plugin';
 
 interface IBaseMetadata {
   title: string;

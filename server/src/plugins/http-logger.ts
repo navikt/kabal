@@ -1,5 +1,5 @@
 import { getDuration } from '@app/helpers/duration';
-import { AnyObject, getLogger } from '@app/logger';
+import { type AnyObject, getLogger } from '@app/logger';
 import { PROXY_VERSION_PLUGIN_ID } from '@app/plugins/proxy-version';
 import { SERVE_ASSETS_PLUGIN_ID } from '@app/plugins/serve-assets';
 import { SERVE_INDEX_PLUGIN_ID } from '@app/plugins/serve-index';

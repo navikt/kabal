@@ -1,17 +1,17 @@
+import { getCacheKey, oboCache } from '@app/auth/cache/cache';
+import { ApiClientEnum } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
 import { isNotNull } from '@app/functions/guards';
 import { parseTokenPayload } from '@app/helpers/token-parser';
-import { Level, getLogger } from '@app/logger';
+import { type Level, getLogger } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
 import { setDocument } from '@app/plugins/crdt/api/set-document';
-import { ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
-import { getRedisExtension } from '@app/plugins/crdt/redis';
-import { Server } from '@hocuspocus/server';
-import { CloseEvent } from '@hocuspocus/common';
-import { applyUpdateV2 } from 'yjs';
-import { getCacheKey, oboCache } from '@app/auth/cache/cache';
-import { ApiClientEnum } from '@app/config/config';
+import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
 import { hasOwn, isObject } from '@app/plugins/crdt/functions';
+import { getRedisExtension } from '@app/plugins/crdt/redis';
+import type { CloseEvent } from '@hocuspocus/common';
+import { Server } from '@hocuspocus/server';
+import { applyUpdateV2 } from 'yjs';
 
 const log = getLogger('collaboration');
 
