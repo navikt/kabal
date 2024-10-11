@@ -70,7 +70,7 @@ export const documentPlugin = fastifyPlugin(
         async (req, reply) => {
           const { journalpostId, dokumentInfoId } = req.params;
 
-          if (!isPlainText(journalpostId) || !isPlainText(dokumentInfoId)) {
+          if (!(isPlainText(journalpostId) && isPlainText(dokumentInfoId))) {
             return invalidId(reply);
           }
 
@@ -103,7 +103,7 @@ export const documentPlugin = fastifyPlugin(
         async (req, reply) => {
           const { behandlingId, documentId } = req.params;
 
-          if (!isPlainText(behandlingId) || !isPlainText(documentId)) {
+          if (!(isPlainText(behandlingId) && isPlainText(documentId))) {
             return invalidId(reply);
           }
 
@@ -136,7 +136,7 @@ export const documentPlugin = fastifyPlugin(
         async (req, reply) => {
           const { behandlingId, documentId } = req.params;
 
-          if (!isPlainText(behandlingId) || !isPlainText(documentId)) {
+          if (!(isPlainText(behandlingId) && isPlainText(documentId))) {
             return invalidId(reply);
           }
 

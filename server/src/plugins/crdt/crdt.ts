@@ -77,7 +77,7 @@ export const crdtPlugin = fastifyPlugin(
 
         const { body } = req;
 
-        if (!isObject(body) || !('content' in body) || !Array.isArray(body.content)) {
+        if (!(isObject(body) && 'content' in body && Array.isArray(body.content))) {
           logReq('Invalid request body', req, { behandlingId }, 'error');
 
           return reply.status(400).send();

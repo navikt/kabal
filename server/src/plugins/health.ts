@@ -14,7 +14,7 @@ export const healthPlugin = fastifyPlugin(
     app.get('/isReady', async (__, reply) => {
       const isAzureClientReady = getIsAzureClientReady();
 
-      if (!oboCache.isReady && !isAzureClientReady) {
+      if (!(oboCache.isReady || isAzureClientReady)) {
         log.info({ msg: 'OBO Cache and Azure Client not ready' });
 
         return reply.status(503).type('text/plain').send('OBO Cache and Azure Client not ready');

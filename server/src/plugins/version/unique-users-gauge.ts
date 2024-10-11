@@ -63,7 +63,7 @@ const start = (nav_ident: string, req: FastifyRequest): EndFn => {
     app_start_time: START_TIME,
     trace_id: req.trace_id,
     span_id: req.span_id,
-    domain: req.headers['host'] ?? 'UNKNOWN',
+    domain: req.headers.host ?? 'UNKNOWN',
   };
 
   uniqueUsersGauge.set(labels, 1);
