@@ -140,6 +140,6 @@ const ListSeparator = styled.div`
     padding-right: var(--a-spacing-1);
     transform: translateY(-50%);
     background-color: var(--a-bg-default);
-    font-size: 14px;
+    font-size: var(--a-font-size-small);
   }
 `;

@@ -145,7 +145,7 @@ const EntryLabel = styled.span<ColorProps>`
 `;
 
 const EntryTime = styled.time`
-  font-size: 14px;
+  font-size: var(--a-font-size-small);
   font-weight: normal;
   font-style: italic;
   line-height: 1;

@@ -10,7 +10,7 @@ export const StyledAuthor = styled.p`
 `;
 
 export const StyledTime = styled.time`
-  font-size: 14px;
+  font-size: var(--a-font-size-small);
   font-style: italic;
 `;
 

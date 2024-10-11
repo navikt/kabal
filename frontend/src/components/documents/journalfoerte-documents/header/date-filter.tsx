@@ -17,7 +17,7 @@ const StyledButton = styled(Button)`
   font-weight: normal;
 
   .navds-label {
-    font-size: 14px;
+    font-size: var(--a-font-size-small);
   }
 `;
 
