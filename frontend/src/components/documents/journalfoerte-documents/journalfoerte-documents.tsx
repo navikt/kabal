@@ -56,7 +56,7 @@ export const JournalfoerteDocuments = () => {
     }
 
     setShowVedleggIdList(documentsWithVedleggIdList);
-  }, [documentsWithVedleggIdList, setShowVedleggIdList, showVedleggIdList]);
+  }, [documentsWithVedleggIdList, showVedleggIdList]);
 
   // IDs of vedlegg with logiske vedlegg.
   const vedleggWithLogiskeVedleggIdList = useMemo<string[]>(
@@ -81,7 +81,7 @@ export const JournalfoerteDocuments = () => {
     }
 
     setShowLogiskeVedleggIdList(vedleggWithLogiskeVedleggIdList);
-  }, [setShowLogiskeVedleggIdList, showLogiskeVedleggIdList, vedleggWithLogiskeVedleggIdList]);
+  }, [showLogiskeVedleggIdList, vedleggWithLogiskeVedleggIdList]);
 
   const showsAnyVedlegg = showVedleggIdList.length !== 0 || showLogiskeVedleggIdList.length !== 0;
 

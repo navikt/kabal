@@ -52,7 +52,12 @@ export const SharedDocumentTitle = ({ title, url, documentId, icon, disabled = f
     }
 
     return getNewDocumentTabId(documentId);
-  }, [documentId, rest]);
+  }, [
+    documentId,
+    rest.type,
+    rest.journalfoertDokumentReference?.journalpostId,
+    rest.journalfoertDokumentReference?.dokumentInfoId,
+  ]);
 
   const isTabOpen = useIsTabOpen(tabId);
 

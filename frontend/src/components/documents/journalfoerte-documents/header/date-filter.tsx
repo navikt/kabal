@@ -22,10 +22,10 @@ const StyledButton = styled(Button)`
 `;
 
 export const DateFilter = ({ value, setValue, remove, label, gridArea }: Props) => {
-  const [fromString, toString] = value;
+  const [fromDateString, toDateString] = value;
 
-  const from = fromString === null ? undefined : formatISO(parseISO(fromString), { representation: 'date' });
-  const to = toString === null ? undefined : formatISO(parseISO(toString), { representation: 'date' });
+  const from = fromDateString === null ? undefined : formatISO(parseISO(fromDateString), { representation: 'date' });
+  const to = toDateString === null ? undefined : formatISO(parseISO(toDateString), { representation: 'date' });
 
   const onChange = (range: DateRange | undefined) => {
     if (range === undefined) {

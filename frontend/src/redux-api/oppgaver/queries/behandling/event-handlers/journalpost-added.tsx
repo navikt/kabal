@@ -47,29 +47,37 @@ export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) =
           '',
         );
 
-        const avsenderMottakerList = journalpostList.reduce<AvsenderMottaker[]>(
-          (list, { avsenderMottaker }) =>
-            avsenderMottaker === null || list.some((a) => a.id === avsenderMottaker.id)
-              ? list
-              : [...list, avsenderMottaker],
-          [],
-        );
+        const avsenderMottakerList = journalpostList.reduce<AvsenderMottaker[]>((list, { avsenderMottaker }) => {
+          if (avsenderMottaker !== null && list.every((a) => a.id !== avsenderMottaker.id)) {
+            list.push(avsenderMottaker);
+          }
 
-        const journalposttypeList = journalpostList.reduce<Journalposttype[]>(
-          (list, { journalposttype }) =>
-            journalposttype === null || list.includes(journalposttype) ? list : [...list, journalposttype],
-          [],
-        );
+          return list;
+        }, []);
 
-        const sakList = journalpostList.reduce<Sak[]>(
-          (list, { sak }) => (sak === null || list.some((s) => isSakEqual(s, sak)) ? list : [...list, sak]),
-          [],
-        );
+        const journalposttypeList = journalpostList.reduce<Journalposttype[]>((list, { journalposttype }) => {
+          if (journalposttype !== null && !list.includes(journalposttype)) {
+            list.push(journalposttype);
+          }
 
-        const temaIdList = journalpostList.reduce<string[]>(
-          (list, { tema }) => (tema === null || list.includes(tema) ? list : [...list, tema]),
-          [],
-        );
+          return list;
+        }, []);
+
+        const sakList = journalpostList.reduce<Sak[]>((list, { sak }) => {
+          if (sak !== null && !list.some((s) => isSakEqual(s, sak))) {
+            list.push(sak);
+          }
+
+          return list;
+        }, []);
+
+        const temaIdList = journalpostList.reduce<string[]>((list, { tema }) => {
+          if (tema !== null && !list.includes(tema)) {
+            list.push(tema);
+          }
+
+          return list;
+        }, []);
 
         return {
           dokumenter: journalpostList,

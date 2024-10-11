@@ -49,15 +49,15 @@ const toWidth = (field: Fields): string => {
   }
 
   const [minValue, maxValue] = SIZES[field];
-  const min = toString(minValue);
+  const min = convertToString(minValue);
 
   if (minValue === maxValue) {
     return min;
   }
 
-  const max = toString(maxValue);
+  const max = convertToString(maxValue);
 
   return `minmax(${min}, ${max})`;
 };
 
-const toString = (n: number): string => (n === -1 ? 'auto' : `${n}px`);
+const convertToString = (n: number): string => (n === -1 ? 'auto' : `${n}px`);

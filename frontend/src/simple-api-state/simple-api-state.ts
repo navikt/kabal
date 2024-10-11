@@ -81,7 +81,9 @@ export class SimpleApiState<T> {
 
   private onChange = (): void => {
     const state = this.getState();
-    this.listeners.forEach((listener) => listener(state));
+    for (const listener of this.listeners) {
+      listener(state);
+    }
   };
 
   public getState = (): State<T> => ({

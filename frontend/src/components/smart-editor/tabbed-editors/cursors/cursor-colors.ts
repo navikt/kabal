@@ -17,7 +17,7 @@ const ORANGE: BaseColor = { red: 255, green: 145, blue: 0 };
 // #634689
 const PURPLE: BaseColor = { red: 99, green: 70, blue: 137 };
 
-const ALL_COLORS = [RED, GREEN, BLUE, ORANGE, PURPLE];
+const ALL_COLORS: [BaseColor, BaseColor, BaseColor, BaseColor, BaseColor] = [RED, GREEN, BLUE, ORANGE, PURPLE];
 
 interface Colors {
   caretColor: string;
@@ -31,6 +31,7 @@ export const getColors = (key: string): Colors => {
     const availableColors = getAvailableColors();
 
     const randomColorIndex = Math.floor(Math.random() * availableColors.length);
+    // biome-ignore lint/style/noNonNullAssertion: Index is guaranteed to be in bounds.
     const baseColor = availableColors[randomColorIndex]!;
 
     MAP.set(key, baseColor);

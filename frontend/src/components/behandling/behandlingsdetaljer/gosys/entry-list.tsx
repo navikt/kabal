@@ -9,8 +9,8 @@ interface Props {
 
 export const EntryList = ({ entries }: Props) => (
   <StyledEntryList>
-    {entries.map((entry, index) => (
-      <Container key={index}>
+    {entries.map((entry) => (
+      <Container key={entry.id}>
         <Entry {...entry} />
       </Container>
     ))}

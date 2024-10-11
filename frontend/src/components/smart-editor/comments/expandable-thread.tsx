@@ -73,7 +73,7 @@ export const ExpandableThread = ({ thread, isFocused, style, isOrphan = false, i
     if (isFocused && ref.current !== null) {
       requestAnimationFrame(() => ref.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' }));
     }
-  }, [isFocused, ref]);
+  }, [isFocused]);
 
   return (
     <Thread

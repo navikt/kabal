@@ -63,7 +63,7 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
     <Dropdown>
       <StyledList>
         {utfallSets.map((utfallSet, index) => (
-          <StyledListItem key={index}>
+          <StyledListItem key={utfallSet.join('-')}>
             <UtfallSet
               utfallSet={utfallSet}
               onDelete={() => onChange(utfallSets.filter((_, i) => i !== index))}

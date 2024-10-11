@@ -14,6 +14,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 14, 29),
       author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -27,6 +28,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 14, 29),
       author: { name: 'F_Z994864, E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -45,6 +47,7 @@ describe('parse Gosys header', () => {
         type: GosysEntryAuthorType.EMPLOYEE,
       },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -63,6 +66,7 @@ describe('parse Gosys header', () => {
         type: GosysEntryAuthorType.EMPLOYEE,
       },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -76,6 +80,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 14, 29),
       author: { name: 'Ola-Navn Navnesen', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -89,6 +94,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 14, 29),
       author: { name: null, navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -102,6 +108,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 14, 29),
       author: { name: null, navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -115,6 +122,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 14, 29),
       author: { name: null, navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -128,6 +136,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 14, 0),
       author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -141,6 +150,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 9, 0),
       author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -154,6 +164,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 9, 0),
       author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -167,6 +178,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 2, 9, 0),
       author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -180,6 +192,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 14, 29),
       author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -193,6 +206,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 14, 29),
       author: { name: 'F_Z994864 E_Z994864', navIdent: 'Z994864', enhet: '4291', type: GosysEntryAuthorType.EMPLOYEE },
       content: '',
+      id: expect.any(String),
     });
   });
 
@@ -206,6 +220,7 @@ describe('parse Gosys header', () => {
       date: new Date(2024, 5, 12, 14, 29),
       author: { name: 'kabal-api', type: GosysEntryAuthorType.SYSTEM },
       content: '',
+      id: expect.any(String),
     });
   });
 });

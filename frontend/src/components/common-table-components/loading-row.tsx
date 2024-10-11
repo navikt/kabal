@@ -9,10 +9,13 @@ interface Props {
 
 export const LoadingRow = ({ testId, columnCount, behandlingid }: Props) => (
   <Table.Row data-testid={testId} data-behandlingid={behandlingid} data-state="loading">
-    {new Array(columnCount).fill(null).map((_, index) => (
-      <Table.DataCell key={index}>
-        <LoadingCellContent key={index} />
-      </Table.DataCell>
-    ))}
+    {new Array(columnCount)
+      .fill(0)
+      .map((_, index) => index)
+      .map((index) => (
+        <Table.DataCell key={index}>
+          <LoadingCellContent key={index} />
+        </Table.DataCell>
+      ))}
   </Table.Row>
 );

@@ -48,7 +48,7 @@ export const EditLogiskVedlegg = ({
     }
   }, []);
 
-  useEffect(setCaretAtEnd, [setCaretAtEnd]);
+  useEffect(setCaretAtEnd, []);
 
   const setContent = useCallback((content: string) => {
     if (ref.current !== null) {
@@ -155,6 +155,7 @@ export const EditLogiskVedlegg = ({
           ref={ref}
           size="small"
           variant="neutral"
+          // biome-ignore lint/a11y/useSemanticElements: Recommended to use for contentEditable.
           role="textbox"
           aria-multiline="false"
           aria-placeholder={placeholder}

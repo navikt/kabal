@@ -13,6 +13,7 @@ interface Props extends TimedMessage {
 export const TimedToast = forwardRef<HTMLDivElement, Props>(
   ({ type, content, slideOut, expiresAt, id }, forwardedRef) => {
     const ref = useRef<HTMLDivElement>(null);
+    // biome-ignore lint/style/noNonNullAssertion: Guaranteed to not be null.
     useImperativeHandle(forwardedRef, () => ref.current!);
     const animationsEnabled = useAnimationsEnabled();
     const duration = useMemo(() => expiresAt - Date.now(), [expiresAt]);

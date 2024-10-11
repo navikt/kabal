@@ -45,7 +45,7 @@ export const NewComment = ({ container }: Props) => {
       ref.current.setSelectionRange(ref.current.value.length, ref.current.value.length, 'forward');
       ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-  }, [newCommentSelection]);
+  }, []);
 
   if (container === null || newCommentSelection === null || position === null) {
     return null;

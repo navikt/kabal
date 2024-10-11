@@ -71,7 +71,11 @@ export const NewDocuments = () => {
     const { length } = data;
 
     for (let i = 0; i < length; i++) {
-      const document = data[i]!;
+      const document = data[i];
+
+      if (document === undefined) {
+        continue;
+      }
 
       if (document.parentId === null) {
         const existing = _documentMap.get(document.id);
@@ -170,7 +174,13 @@ export const NewDocuments = () => {
     let overviewCount = 0;
 
     for (let i = 0; i < documentMap.size; i++) {
-      const { mainDocument, pdfOrSmartDocuments, journalfoerteDocuments, containsRolAttachments } = list[i]!;
+      const listItem = list[i];
+
+      if (listItem === undefined) {
+        continue;
+      }
+
+      const { mainDocument, pdfOrSmartDocuments, journalfoerteDocuments, containsRolAttachments } = listItem;
 
       if (mainDocument === undefined) {
         continue;

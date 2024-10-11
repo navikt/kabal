@@ -26,7 +26,7 @@ describe('are-descendants-equal', () => {
 
   it('should return false if deeply nested descendants differ', () => {
     expect.assertions(1);
-    const listA = [ul([(p('a'), p('b'), p('c'))])];
+    const listA = [ul([p('a'), p('b'), p('c')])];
     const listB = [ul([p('a'), p('2'), p('c')])];
     expect(areDescendantsEqual(listA, listB)).toBe(false);
   });

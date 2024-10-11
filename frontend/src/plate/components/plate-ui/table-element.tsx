@@ -25,6 +25,7 @@ export const TableElement = withHOC(
             {colSizes.map((width, i) =>
               typeof width !== 'number' ? null : (
                 <col
+                  // biome-ignore lint/suspicious/noArrayIndexKey: No other way to uniquely identify the columns.
                   key={i}
                   style={{
                     width: width === 0 ? 'auto' : pxToEm(width),

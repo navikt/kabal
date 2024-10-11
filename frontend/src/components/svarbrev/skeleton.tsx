@@ -53,6 +53,9 @@ const Buttons = styled(Row)`
   min-width: ${3 * 32 + 2 * 4}px;
 `;
 
-const ROWS = new Array(60).fill(null).map((_, i) => <SkeletonRow key={i} />);
+const ROWS = new Array(60)
+  .fill(0)
+  .map((_, i) => i)
+  .map((i) => <SkeletonRow key={i} />);
 
 export const SkeletonBody = () => <Table.Body>{ROWS}</Table.Body>;

@@ -96,8 +96,10 @@ export class ServerSentEventManager {
   }
 
   private removeAllEventListeners() {
-    if (typeof this.events !== 'undefined') {
-      this.listeners.forEach(([event, listener]) => this.events.removeEventListener(event, listener));
+    if (this.events !== undefined) {
+      for (const [event, listener] of this.listeners) {
+        this.events.removeEventListener(event, listener);
+      }
     }
   }
 
@@ -124,7 +126,9 @@ export class ServerSentEventManager {
     });
 
     events.addEventListener('open', () => {
-      this.listeners.forEach(([event, listener]) => events.addEventListener(event, listener));
+      for (const [event, listener] of this.listeners) {
+        events.addEventListener(event, listener);
+      }
       this.isConnected = true;
     });
 

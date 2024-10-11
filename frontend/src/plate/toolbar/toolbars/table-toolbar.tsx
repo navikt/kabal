@@ -1,4 +1,3 @@
-import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { CommentsButton } from '@app/plate/toolbar/add-comment';
 import { InsertPlaceholder } from '@app/plate/toolbar/insert-placeholder';
 import { Marks } from '@app/plate/toolbar/marks';
@@ -7,7 +6,7 @@ import { TableButtons } from '@app/plate/toolbar/table/table';
 import { type TableElement, useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
 import { findNode, isEditorFocused, toDOMNode } from '@udecode/plate-common';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyledFloatingToolbar } from './floating-toolbar';
 
 interface Props {
@@ -67,7 +66,6 @@ const TABLE_TOOLBAR_HEIGHT = 36;
 const OFFSET = TABLE_TOOLBAR_OFFSET + TABLE_TOOLBAR_HEIGHT;
 
 const useTablePosition = (table: TableElement | null, container: HTMLDivElement | null) => {
-  const { scale } = useContext(ScaleContext);
   const editor = useMyPlateEditorRef();
   const [position, setPosition] = useState<[number, number] | null>(null);
 
@@ -100,7 +98,7 @@ const useTablePosition = (table: TableElement | null, container: HTMLDivElement 
     );
 
     return () => cancelIdleCallback(handle);
-  }, [container, editor, table, scale]);
+  }, [container, editor, table]);
 
   return position;
 };

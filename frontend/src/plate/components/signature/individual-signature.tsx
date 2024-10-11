@@ -49,7 +49,7 @@ export const SaksbehandlerSignature = ({ element }: Props) => {
       at: [],
       match: (n) => n === element,
     });
-  }, [editor, element, saksbehandlerSignature, templateId, signature]);
+  }, [editor, element, signature]);
 
   if (signature === undefined) {
     return null;

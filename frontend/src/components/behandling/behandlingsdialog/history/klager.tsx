@@ -11,7 +11,7 @@ export const getKlager = (e: IKlagerEvent) => {
   const { actor, event, previous, timestamp } = e;
 
   if (previous.event.part === null && event.part !== null) {
-    return <Set actor={actor} part={event.part} timestamp={timestamp} key={key} />;
+    return <SetPart actor={actor} part={event.part} timestamp={timestamp} key={key} />;
   }
 
   if (previous.event.part !== null && event.part === null) {
@@ -33,7 +33,7 @@ interface SetProps {
   timestamp: string;
 }
 
-const Set = ({ actor, part, timestamp }: SetProps) => {
+const SetPart = ({ actor, part, timestamp }: SetProps) => {
   const tag = useTag();
 
   return (

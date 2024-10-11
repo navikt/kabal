@@ -57,9 +57,9 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
   const unselectMany = useCallback((documents: IJournalfoertDokumentId[]) => {
     setLastSelectedDocument(null);
     setSelectedDocuments((map) => {
-      documents.forEach((document) => {
+      for (const document of documents) {
         map.delete(getId(document));
-      });
+      }
 
       return new Map(map);
     });
@@ -78,7 +78,7 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
     const selectedDocumentsArray: IArkivertDocument[] = new Array<IArkivertDocument>(selectedDocuments.size);
 
     let index = 0;
-    selectedDocuments.forEach(({ journalpostId, dokumentInfoId }) => {
+    for (const [, { journalpostId, dokumentInfoId }] of selectedDocuments) {
       const doc = findDocument(journalpostId, dokumentInfoId, documentList);
 
       if (doc !== undefined) {
@@ -86,7 +86,7 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
       }
 
       index++;
-    });
+    }
 
     return selectedDocumentsArray;
   }, [documentList, selectedDocuments]);

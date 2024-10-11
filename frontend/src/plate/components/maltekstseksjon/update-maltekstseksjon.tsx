@@ -23,7 +23,7 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes, ignore }: Props) => 
   const { data: oppgave } = useOppgave();
   const [ignored, setIgnored] = useState(false);
 
-  // Reset ignored when text changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Reset ignored when text changes.
   useEffect(() => setIgnored(false), [next?.maltekstseksjon?.id]);
 
   const replaceMaltekstseksjonContent = useCallback(() => {
