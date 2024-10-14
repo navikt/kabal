@@ -2,6 +2,7 @@ import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extr
 import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
 import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/read-only-date';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
+import { Tilbakekreving } from '@app/components/behandling/behandlingsdetaljer/tilbakekreving';
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
@@ -95,6 +96,8 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
       <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
 
       <Lovhjemmel />
+
+      <Tilbakekreving />
     </StyledBehandlingSection>
   );
 };
