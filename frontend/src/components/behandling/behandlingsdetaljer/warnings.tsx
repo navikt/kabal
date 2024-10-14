@@ -7,3 +7,10 @@ export const ReturWarning = () => (
     gjøres svært sjelden.
   </Alert>
 );
+
+export const AnkeDelvisMedholWarning = () => (
+  <Alert variant="warning" size="small">
+    Du har valgt utfall delvis medhold. Kabal vil opprette en Anke i Trygderetten-oppgave for den delen som går videre
+    til Trygderetten. Dersom saken ikke skal videre til Trygderetten, velg utfall medhold.
+  </Alert>
+);

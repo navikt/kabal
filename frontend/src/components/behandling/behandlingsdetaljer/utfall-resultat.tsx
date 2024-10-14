@@ -1,6 +1,6 @@
 import { HelpText, Label, Select, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/warnings';
+import { AnkeDelvisMedholWarning, ReturWarning } from '@app/components/behandling/behandlingsdetaljer/warnings';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
@@ -97,6 +97,7 @@ const EditUtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: Utf
         {options}
       </Select>
       {utfall === UtfallEnum.RETUR ? <ReturWarning /> : null}
+      {typeId === SaksTypeEnum.ANKE && utfall === UtfallEnum.DELVIS_MEDHOLD ? <AnkeDelvisMedholWarning /> : null}
     </Container>
   );
 };
