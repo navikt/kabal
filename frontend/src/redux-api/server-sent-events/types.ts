@@ -104,6 +104,10 @@ export interface SattPaaVentEvent extends BaseEvent {
   sattPaaVent: IVenteperiode | null;
 }
 
+export interface TilbakekrevingEvent extends BaseEvent {
+  tilbakekreving: boolean;
+}
+
 export interface FerdigstiltEvent extends BaseEvent {
   avsluttetAvSaksbehandler: string;
 }

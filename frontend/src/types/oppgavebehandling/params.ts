@@ -59,6 +59,10 @@ export interface ISetKlagerParams extends IOppgavebehandlingBaseParams {
   klager: IPart;
 }
 
+export interface SetTilbakekrevingParams extends IOppgavebehandlingBaseParams {
+  tilbakekreving: boolean;
+}
+
 export type IFinishOppgavebehandlingParams =
   | IDefaultFinishOppgavebehandlingParams
   | IFinishOppgavebehandlingOpphevetTRParams;

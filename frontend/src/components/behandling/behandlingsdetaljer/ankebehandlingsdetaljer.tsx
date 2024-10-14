@@ -2,6 +2,7 @@ import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extr
 import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
+import { Tilbakekreving } from '@app/components/behandling/behandlingsdetaljer/tilbakekreving';
 import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
@@ -95,6 +96,8 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
       <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
 
       <Lovhjemmel />
+
+      <Tilbakekreving />
     </StyledBehandlingSection>
   );
 };

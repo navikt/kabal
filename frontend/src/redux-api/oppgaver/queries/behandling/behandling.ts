@@ -24,6 +24,7 @@ import { handleSmartDocumentCommentChangedEvent } from '@app/redux-api/oppgaver/
 import { handleSmartDocumentCommentRemovedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-removed';
 import { handleSmartDocumentLanguageChangedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/language-changed';
 import { handleSmartDocumentVersionedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/versioned';
+import { handleTilbakekrevingEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/tilbakekreving';
 import { handleTildelingEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/tildeling';
 import { handleUtfallEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/utfall';
 import { ServerSentEventManager, ServerSentEventType } from '@app/redux-api/server-sent-events/server-sent-events';
@@ -83,6 +84,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           const sattPaaVent = handleSattPaaVentEvent(oppgaveId, navIdent, updateCachedData);
           const ferdigstilt = handleFerdigstiltEvent(oppgaveId, navIdent, updateCachedData);
           const feilregistrering = handleFeilregistreringEvent(oppgaveId, navIdent, updateCachedData);
+          const tilbakekreving = handleTilbakekrevingEvent(navIdent, updateCachedData);
 
           events.addJsonEventListener(ServerSentEventType.TILDELING, tildeling);
           events.addJsonEventListener(ServerSentEventType.MEDUNDERSKRIVER, medunderskriverListener);
@@ -97,6 +99,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           events.addJsonEventListener(ServerSentEventType.SATT_PAA_VENT, sattPaaVent);
           events.addJsonEventListener(ServerSentEventType.FERDIGSTILT, ferdigstilt);
           events.addJsonEventListener(ServerSentEventType.FEILREGISTRERING, feilregistrering);
+          events.addJsonEventListener(ServerSentEventType.TILBAKEKREVING, tilbakekreving);
 
           // Dokumenter under arbeid
           const documentsAdded = handleDocumentsAddedEvent(oppgaveId, navIdent);

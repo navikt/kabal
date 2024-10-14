@@ -40,6 +40,7 @@ export enum ServerSentEventType {
   SATT_PAA_VENT = 'SATT_PAA_VENT',
   FERDIGSTILT = 'FERDIGSTILT',
   FEILREGISTRERING = 'FEILREGISTRERING',
+  TILBAKEKREVING = 'TILBAKEKREVING',
 }
 
 type ServerSentEvent = MessageEvent<string>;

@@ -1,6 +1,7 @@
 import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
+import { Tilbakekreving } from '@app/components/behandling/behandlingsdetaljer/tilbakekreving';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { ITrygderettsankebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -68,6 +69,8 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
       <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
 
       <Lovhjemmel />
+
+      <Tilbakekreving />
     </StyledBehandlingSection>
   );
 };
