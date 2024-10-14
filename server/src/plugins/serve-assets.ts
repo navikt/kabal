@@ -14,7 +14,9 @@ interface FileEntry {
 
 const FILE_ENTRY_MAP: Map<string, FileEntry> = new Map();
 
-readdirSync(ASSETS_FOLDER).forEach(async (fileName) => {
+const files = readdirSync(ASSETS_FOLDER);
+
+for (const fileName of files) {
   const filePath = `${ASSETS_FOLDER}/${fileName}`;
 
   if (existsSync(filePath)) {
@@ -23,7 +25,7 @@ readdirSync(ASSETS_FOLDER).forEach(async (fileName) => {
 
     FILE_ENTRY_MAP.set(fileKey, { data, mimeType: getMimeType(fileName) });
   }
-});
+}
 
 export const SERVE_ASSETS_PLUGIN_ID = 'serve-assets';
 

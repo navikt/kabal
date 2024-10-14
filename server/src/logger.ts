@@ -1,6 +1,8 @@
+import { hasOwn } from '@app/plugins/crdt/functions';
 import { isDeployed } from './config/env';
 
-const VERSION = process.env.VERSION ?? 'unknown';
+const VERSION: string =
+  hasOwn(process.env, 'VERSION') && typeof process.env.VERSION === 'string' ? process.env.VERSION : 'unknown';
 
 const LOGGERS: Map<string, Logger> = new Map();
 
