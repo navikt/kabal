@@ -1,3 +1,4 @@
+import { LogLevel } from '@grafana/faro-web-sdk';
 import {
   PlateEditor,
   TNode,
@@ -57,24 +58,36 @@ export const createNormalizeNodePlugin = createPluginFactory({
 
         const parentEntry = getParentNode(editor, path);
 
+        const options = { context: { node: Scrubber.stringify(node), path: JSON.stringify(path) } };
+
         if (parentEntry === undefined) {
+          pushLog('Missing node type, but no parent. Unable to normalize.', options, LogLevel.ERROR);
+
           return normalizeNode([node, path]);
         }
 
         const [parentNode] = parentEntry;
 
         if (!isElement(parentNode)) {
+          pushLog('Missing node type, but parent node is not element. Unable to normalize.', options, LogLevel.ERROR);
+
           return normalizeNode([node, path]);
         }
 
         switch (parentNode.type) {
           case ELEMENT_LI: {
-            pushLog('Normalized missing LIC', {
-              context: { node: Scrubber.stringify(node), path: JSON.stringify(path) },
-            });
+            pushLog('Normalized missing LIC', options);
 
             return setNodes(editor, { type: ELEMENT_LIC }, { at: path, match: (n) => n === node });
           }
+          default:
+            pushLog(
+              'Missing node type, but parent type was not LIC. Case not implemented.',
+              { ...options, context: { ...options.context, parent: Scrubber.stringify(parentNode) } },
+              LogLevel.ERROR,
+            );
+
+            return normalizeNode([node, path]);
         }
       }
 
