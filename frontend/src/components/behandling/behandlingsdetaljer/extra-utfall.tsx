@@ -1,7 +1,7 @@
 import { Button, HelpText, Label, Tag } from '@navikt/ds-react';
 import { ReactNode, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/retur-warning';
+import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/warnings';
 import { Dropdown } from '@app/components/filter-dropdown/dropdown';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';

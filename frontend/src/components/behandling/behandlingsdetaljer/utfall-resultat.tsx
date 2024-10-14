@@ -1,6 +1,6 @@
 import { HelpText, Label, Select, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/retur-warning';
+import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/warnings';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
