@@ -2,18 +2,19 @@ import { HelpText, Label, Select, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/warnings';
 import { isUtfall } from '@app/functions/is-utfall';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateExtraUtfallMutation, useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
-import { UtfallEnum } from '@app/types/kodeverk';
+import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 
 interface UtfallResultatProps {
   utfall: UtfallEnum | null;
   oppgaveId: string;
+  extraUtfallIdSet: UtfallEnum[];
+  typeId: SaksTypeEnum;
 }
 
 const NOT_SELECTED_VALUE = 'NOT_SELECTED';
@@ -46,30 +47,22 @@ const ReadOnlyUtfall = ({ utfall }: UtfallResultatProps) => {
   );
 };
 
-const EditUtfallResultat = ({ utfall, oppgaveId }: UtfallResultatProps) => {
+const EditUtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: UtfallResultatProps) => {
   const [updateUtfall] = useUpdateUtfallMutation();
   const [updateEkstraUtfall] = useUpdateExtraUtfallMutation();
   const validationError = useValidationError('utfall');
   const utfallLabel = useFieldName('utfall');
-  const { data: oppgave } = useOppgave();
 
-  const [utfallKodeverk, isLoading] = useUtfall(oppgave?.typeId);
+  const [utfallKodeverk, isLoading] = useUtfall(typeId);
 
   const onUtfallResultatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
-    if (typeof oppgaveId !== 'string') {
-      return;
-    }
-
     if (isUtfall(value)) {
       updateUtfall({ oppgaveId, utfallId: value });
 
-      if (oppgave !== undefined && oppgave.resultat.extraUtfallIdSet.includes(value)) {
-        updateEkstraUtfall({
-          oppgaveId,
-          extraUtfallIdSet: oppgave.resultat.extraUtfallIdSet.filter((id) => id !== value),
-        });
+      if (extraUtfallIdSet.includes(value)) {
+        updateEkstraUtfall({ oppgaveId, extraUtfallIdSet: extraUtfallIdSet.filter((id) => id !== value) });
       }
     } else if (value === NOT_SELECTED_VALUE) {
       // BE will handle extra utfall for this case
