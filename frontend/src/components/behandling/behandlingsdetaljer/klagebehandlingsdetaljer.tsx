@@ -35,7 +35,10 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
     prosessfullmektig,
     saksnummer,
     varsletFrist,
+    id,
   } = oppgavebehandling;
+
+  const { utfallId, extraUtfallIdSet } = resultat;
 
   return (
     <StyledBehandlingSection>
@@ -85,13 +88,9 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
       <GosysBeskrivelse oppgavebeskrivelse={oppgavebeskrivelse} />
 
-      <UtfallResultat utfall={resultat.utfallId} oppgaveId={oppgavebehandling.id} />
+      <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
 
-      <ExtraUtfall
-        utfallIdSet={resultat.extraUtfallIdSet}
-        mainUtfall={resultat.utfallId}
-        oppgaveId={oppgavebehandling.id}
-      />
+      <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
 
       <Lovhjemmel />
     </StyledBehandlingSection>

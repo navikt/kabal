@@ -9,11 +9,12 @@ import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useUpdateExtraUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
-import { UtfallEnum } from '@app/types/kodeverk';
+import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 
 interface TagsProps {
   utfallIdSet: UtfallEnum[];
   mainUtfall: UtfallEnum | null;
+  typeId: SaksTypeEnum;
 }
 
 interface Props extends TagsProps {
@@ -39,12 +40,11 @@ export const ExtraUtfall = (props: Props) => {
   );
 };
 
-const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId }: Props) => {
+const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props) => {
   const [updateUtfall] = useUpdateExtraUtfallMutation();
-  const { data: oppgave } = useOppgave();
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const [utfallKodeverk] = useUtfall(oppgave?.typeId);
+  const [utfallKodeverk] = useUtfall(typeId);
 
   useOnClickOutside(ref, () => setIsOpen(false), true);
 
@@ -114,9 +114,8 @@ const ReadOnlyLabel = () => {
 
 const TAGSCONTAINER_ID = 'tags-container';
 
-const Tags = ({ utfallIdSet, mainUtfall }: TagsProps) => {
-  const { data: oppgave } = useOppgave();
-  const [utfallKodeverk] = useUtfall(oppgave?.typeId);
+const Tags = ({ utfallIdSet, mainUtfall, typeId }: TagsProps) => {
+  const [utfallKodeverk] = useUtfall(typeId);
   const canEdit = useCanEditBehandling();
 
   return (
