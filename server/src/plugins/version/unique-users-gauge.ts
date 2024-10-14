@@ -30,7 +30,9 @@ type StopTimerFn = () => void;
 export const stopTimerList: StopTimerFn[] = [];
 
 export const resetClientsAndUniqueUsersMetrics = async () => {
-  stopTimerList.forEach((stopTimer) => stopTimer());
+  for (const stopTimer of stopTimerList) {
+    stopTimer();
+  }
   uniqueUsersGauge.reset();
 
   // Wait for metrics to be collected.
