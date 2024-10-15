@@ -29,7 +29,6 @@ interface TableFilterHeadersProps extends TablePlainHeadersProps {
 }
 
 export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams }: TableFilterHeadersProps) =>
-  // eslint-disable-next-line complexity
   columnKeys.map((key) => {
     if (params === undefined || setParams === undefined) {
       return <StyledColumnHeader key={key}>{TABLE_HEADERS[key]}</StyledColumnHeader>;

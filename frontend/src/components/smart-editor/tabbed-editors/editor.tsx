@@ -27,7 +27,6 @@ import { type EditorValue, type RichTextEditor, useMyPlateEditorRef } from '@app
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-/* eslint-disable max-lines */
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
 import { Plate, isCollapsed, isText } from '@udecode/plate-common';

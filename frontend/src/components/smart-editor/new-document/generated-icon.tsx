@@ -12,7 +12,6 @@ import {
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
 import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-/* eslint-disable max-lines */
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';

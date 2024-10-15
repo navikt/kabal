@@ -36,7 +36,6 @@ interface Props {
   containsRolAttachments: boolean;
 }
 
-// eslint-disable-next-line complexity
 export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
   const canEditDocument = useCanEditDocument(document, parentDocument);
   const { pdfOrSmartDocuments, journalfoerteDocuments } = useAttachments(document.id);

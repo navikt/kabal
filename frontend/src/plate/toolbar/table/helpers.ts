@@ -1,6 +1,5 @@
 import type { RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
 import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
-/* eslint-disable import/no-unused-modules */
 import { type TNode, type TNodeEntry, findNode, findNodePath, getParentNode, someNode } from '@udecode/plate-common';
 import { ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
 import { Path } from 'slate';

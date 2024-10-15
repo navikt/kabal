@@ -15,8 +15,6 @@ import type {
 } from '@app/plate/plugins/element-types';
 import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
 import type { Language } from '@app/types/texts/language';
-/* eslint-disable max-lines */
-/* eslint-disable import/no-unused-modules */
 import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
 import type { AutoformatRule } from '@udecode/plate-autoformat';
 import {

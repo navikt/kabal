@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { describe, expect, it } from 'bun:test';
 import { GLOBAL, type GLOBAL_TYPE, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';

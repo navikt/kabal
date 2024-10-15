@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unused-modules */
 import type { INavEmployee } from '@app/types/bruker';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import type { FlowState, IMedunderskriverRol, ISakenGjelder } from '@app/types/oppgave-common';

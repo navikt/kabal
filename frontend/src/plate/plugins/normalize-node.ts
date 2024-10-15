@@ -47,7 +47,6 @@ export const createNormalizeNodePlugin = createPluginFactory({
   withOverrides: (editor) => {
     const { normalizeNode } = editor;
 
-    // eslint-disable-next-line complexity
     editor.normalizeNode = ([node, path]) => {
       if (!isElement(node)) {
         return normalizeNode([node, path]);

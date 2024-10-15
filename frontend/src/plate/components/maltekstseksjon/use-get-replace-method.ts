@@ -12,7 +12,6 @@ import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { isConsumerRichText } from '@app/types/texts/consumer';
 import { LANGUAGES } from '@app/types/texts/language';
-/* eslint-disable max-depth */
 import { useCallback } from 'react';
 
 export enum ReplaceMethod {

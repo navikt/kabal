@@ -104,13 +104,11 @@ export const createRegelverk = (): RegelverkElement => ({
   children: [createPageBreak(), createMaltekstseksjon(TemplateSections.REGELVERK_TITLE), createRegelverkContainer()],
 });
 
-// eslint-disable-next-line import/no-unused-modules
 export const createHeadingOne = (text: string): H1Element => ({
   type: ELEMENT_H1,
   children: [{ text }],
 });
 
-// eslint-disable-next-line import/no-unused-modules
 export const createHeadingTwo = (text: string): H2Element => ({
   type: ELEMENT_H2,
   children: [{ text }],
@@ -132,7 +130,6 @@ export const createSimpleListItem = (text = ''): ListItemElement => ({
   children: [createSimpleListItemContainer(text)],
 });
 
-// eslint-disable-next-line import/no-unused-modules
 export const createSimpleBulletList = (...textItems: string[]): BulletListElement => ({
   type: ELEMENT_UL,
   indent: 2,

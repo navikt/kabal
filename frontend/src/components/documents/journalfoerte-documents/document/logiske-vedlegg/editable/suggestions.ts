@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 export const getSuggestions = (temaId: string): string[] => FORSLAG[temaId] ?? [];
 
 const FORSLAG: Record<string, string[]> = {

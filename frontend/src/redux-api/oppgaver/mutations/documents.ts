@@ -1,5 +1,3 @@
-/* eslint-disable max-depth */
-/* eslint-disable max-lines */
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';

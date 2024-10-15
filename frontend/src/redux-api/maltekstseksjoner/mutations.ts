@@ -33,7 +33,6 @@ import type {
 } from '@app/types/maltekstseksjoner/responses';
 import type { INewRichTextParams } from '@app/types/texts/common';
 import { LANGUAGES, type Language } from '@app/types/texts/language';
-/* eslint-disable max-lines */
 import { formatISO } from 'date-fns';
 import type { Patch } from 'immer';
 import { textsQuerySlice } from '../texts/queries';

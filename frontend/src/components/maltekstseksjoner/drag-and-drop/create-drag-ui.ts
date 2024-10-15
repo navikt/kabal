@@ -1,6 +1,5 @@
 type cleanFn = () => void;
 
-// eslint-disable-next-line import/no-unused-modules
 export const createDragUI = (dragElementRef: React.RefObject<HTMLAnchorElement>, e: React.DragEvent): cleanFn => {
   if (dragElementRef.current === null) {
     return () => {};

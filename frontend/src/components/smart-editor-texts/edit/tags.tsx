@@ -8,8 +8,6 @@ import { TEMPLATE_MAP } from '@app/plate/templates/templates';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import type { IText } from '@app/types/texts/responses';
-/* eslint-disable max-lines */
-/* eslint-disable max-depth */
 import { styled } from 'styled-components';
 import { CustomTag, ResolvedTags } from '../../tags/resolved-tag';
 
@@ -136,7 +134,6 @@ const useYtelseLovkildeAndHjemmelName = (selected: string): string => {
     for (const ytelse of data) {
       for (const lovkilde of ytelse.lovKildeToRegistreringshjemler) {
         for (const hjemmel of lovkilde.registreringshjemler) {
-          // eslint-disable-next-line max-depth
           if (hjemmel.id === hjemmelId) {
             return `Alle ytelser - ${lovkilde.navn} - ${hjemmel.navn}`;
           }

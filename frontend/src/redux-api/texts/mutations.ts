@@ -33,7 +33,6 @@ import type {
   IText,
 } from '@app/types/texts/responses';
 import type { IDeleteDraftOrUnpublishTextResponse } from '@app/types/texts/responses-maltekster';
-/* eslint-disable max-lines */
 import { formatISO } from 'date-fns';
 import { maltekstseksjonerQuerySlice } from '../maltekstseksjoner/queries';
 import { textsQuerySlice } from './queries';

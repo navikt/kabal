@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'bun:test';
-/* eslint-disable max-lines */
 import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 import { ELEMENT_MALTEKST, ELEMENT_REDIGERBAR_MALTEKST } from '../plugins/element-types';
 import { cleanHtml, containsNoopElements, htmlToString, scrubText } from './helpers';
