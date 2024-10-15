@@ -8,7 +8,14 @@ import { isValid, parse } from 'date-fns';
 
 const HEADER_REGEX = /(\d{1,2}\.\d{1,2}\.\d{4} \d{1,2}:\d{1,2})\s+(.*)\(([\w,-\s]+)\)/i;
 
+export const simpleHeaderPrecheck = (header: string): boolean =>
+  header.length >= 20 && header.startsWith('--') && header.endsWith('--');
+
 export const parseHeader = (header: string): GosysBeskrivelseEntry | null => {
+  if (!simpleHeaderPrecheck(header)) {
+    return null;
+  }
+
   const match = HEADER_REGEX.exec(header);
 
   if (match === null) {
