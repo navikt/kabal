@@ -9,33 +9,30 @@ export const splitBeskrivelse = (beskrivelse: string): GosysBeskrivelseEntry[] =
 
   for (const line of lines) {
     const trimmedLine = line.trim();
+    const header = parseHeader(trimmedLine);
 
-    // If the line starts and ends with '--' it could be a header.
-    if (trimmedLine.startsWith('--') && trimmedLine.endsWith('--')) {
-      const header = parseHeader(trimmedLine);
-
-      // If it is not a header, it is a continuation of the previous entry.
-      if (header === null) {
-        if (current !== null) {
-          current.content += `\n${trimmedLine}`;
-        }
-
-        // Ignore line.
-        continue;
+    // If it is not a header, it is a continuation of the previous entry or an invalid line.
+    if (header === null) {
+      // If there is a previous entry, add the line to it.
+      if (current !== null) {
+        current.content += current.content.length === 0 ? trimmedLine : `\n${trimmedLine}`;
       }
 
-      // If it is a header, create a new entry.
-      current = header;
-      result.push(current);
-    } else if (current !== null) {
-      // If it is not a header and we have a current entry, it is a continuation of the previous entry.
-      current.content += `\n${trimmedLine}`;
+      // If there is no previous entry, ignore the line.
+      continue;
     }
-    // Otherwise, ignore line.
+
+    // If it is a header.
+    // If there is a previous entry, the previous entry is done.
+    if (current !== null) {
+      current.content = current.content.trim();
+    }
+
+    // Set the new entry as the current entry.
+    current = header;
+    // Add the new entry to the result list.
+    result.push(current);
   }
 
-  return result.map((entry) => ({
-    ...entry,
-    content: entry.content.trim(),
-  }));
+  return result;
 };

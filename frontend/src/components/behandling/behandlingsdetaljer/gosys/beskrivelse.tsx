@@ -3,6 +3,7 @@ import { BEHANDLING_PANEL_DOMAIN } from '@app/components/behandling/behandlingsd
 import { Entry } from '@app/components/behandling/behandlingsdetaljer/gosys/entry';
 import { GosysBeskrivelseFormat } from '@app/components/behandling/behandlingsdetaljer/gosys/format-enum';
 import { ModalContent } from '@app/components/behandling/behandlingsdetaljer/gosys/modal-content';
+import { simpleHeaderPrecheck } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/parse-header';
 import { splitBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/split-beskrivelse';
 import { StyledEntryList } from '@app/components/behandling/behandlingsdetaljer/gosys/styled-entry-list';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -25,7 +26,8 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
     [oppgavebeskrivelse],
   );
   const expectedEntries =
-    trimmedBeskrivelse?.split('\n').filter((l) => l.includes('---') && !l.startsWith('"')).length ?? 0;
+    trimmedBeskrivelse?.split('\n').filter((l) => simpleHeaderPrecheck(l) && l.split('').some((c) => c !== '-'))
+      .length ?? 0;
   const entries = useMemo(
     () => (trimmedBeskrivelse === null ? [] : splitBeskrivelse(trimmedBeskrivelse)),
     [trimmedBeskrivelse],

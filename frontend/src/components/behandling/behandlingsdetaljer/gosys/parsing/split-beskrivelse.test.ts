@@ -575,4 +575,60 @@ Oppgaven er flyttet fra enhet 4295 til 0124, fra saksbehandler Z994863 til <inge
       },
     ]);
   });
+
+  it('should handle lines of dashes in messages', () => {
+    expect.assertions(1);
+
+    const beskrivelse = `--- 12.06.2024 14:26 F_Z994864 E_Z994864 (Z994864, 4291) ---
+Jeg har kopiert dette fra en annen oppgave i Gosys:
+
+---------------------------------
+--- 12.06.2024 14:29 F_Z994864 E_Z994864 (Z994864, 4291) ---
+Overførte oppgaven fra Kabin til Kabal.
+
+--- 12.06.2024 15:45 F_Z994864 E_Z994864 (Z994864, 4291) ---
+Oppdaterte frist
+---------------------------------------
+`;
+
+    const actual = splitBeskrivelse(beskrivelse);
+    expect(actual).toStrictEqual([
+      {
+        date: new Date(2024, 5, 12, 14, 26),
+        author: {
+          name: 'F_Z994864 E_Z994864',
+          navIdent: 'Z994864',
+          enhet: '4291',
+          type: GosysEntryAuthorType.EMPLOYEE,
+        },
+        content: `Jeg har kopiert dette fra en annen oppgave i Gosys:
+
+---------------------------------`,
+        id: expect.any(String),
+      },
+      {
+        date: new Date(2024, 5, 12, 14, 29),
+        author: {
+          name: 'F_Z994864 E_Z994864',
+          navIdent: 'Z994864',
+          enhet: '4291',
+          type: GosysEntryAuthorType.EMPLOYEE,
+        },
+        content: 'Overførte oppgaven fra Kabin til Kabal.',
+        id: expect.any(String),
+      },
+      {
+        date: new Date(2024, 5, 12, 15, 45),
+        author: {
+          name: 'F_Z994864 E_Z994864',
+          navIdent: 'Z994864',
+          enhet: '4291',
+          type: GosysEntryAuthorType.EMPLOYEE,
+        },
+        content: `Oppdaterte frist
+---------------------------------------`,
+        id: expect.any(String),
+      },
+    ]);
+  });
 });

@@ -222,4 +222,18 @@ describe('parse Gosys header', () => {
       id: expect.any(String),
     });
   });
+
+  it('should parse header with minimum required content', () => {
+    const header = '--1.6.2024 1:2 (M)--';
+
+    expect.assertions(1);
+
+    const actual = parseHeader(header);
+    expect(actual).toStrictEqual({
+      date: new Date(2024, 5, 1, 1, 2),
+      author: { name: 'M', type: GosysEntryAuthorType.SYSTEM },
+      content: '',
+      id: expect.any(String),
+    });
+  });
 });
