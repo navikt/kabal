@@ -17,9 +17,6 @@ Husk at `localhost:8061` ikke vil redirecte deg til Azure login automatisk.
 Requestene vil bare feile og redirected vil bli Blocked.
 Løsningen er da bare å refreshe kabal.intern.dev.nav.no og logge inn på nytt.
 
-For å jobbe bedre med ESLint er det best å jobbe i frontend-mappa i stedet for root-mappa.
-
-
 # Webpack eksempel prosjekt
 
 Satt opp for å støtte lasting av `.less`, samt `png|jpeg|gif|svg`.

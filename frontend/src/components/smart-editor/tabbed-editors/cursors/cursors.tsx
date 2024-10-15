@@ -16,7 +16,6 @@ interface YjsCursor {
   data: UserCursor;
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export const isYjsCursor = (value: unknown): value is YjsCursor =>
   typeof value === 'object' && value !== null && 'selection' in value && 'data' in value;
 
@@ -84,14 +83,12 @@ const CaretLabel = styled.div`
   white-space: nowrap;
 `;
 
-// eslint-disable-next-line import/no-unused-modules
 export const cursorStore = createZustandStore('cursors')<Record<string, CursorState<UserCursor>>>({});
 
 interface CursorOverlayProps {
   containerElement: HTMLElement;
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export const CursorOverlay = ({ containerElement }: CursorOverlayProps) => {
   const { useStore } = cursorStore;
   const yjsCursors = useStore();

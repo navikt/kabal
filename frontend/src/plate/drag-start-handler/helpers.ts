@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import { pushError } from '@app/observability';
 import {
   ELEMENT_CURRENT_DATE,

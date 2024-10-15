@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unused-modules */
 import { pushLog } from '@app/observability';
 
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/; // 2020-10-29

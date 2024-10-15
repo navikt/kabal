@@ -7,14 +7,12 @@ import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
-// eslint-disable-next-line import/no-cycle
 import { RelevantOppgaver } from '@app/components/relevant-oppgaver/relevant-oppgaver';
 import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgave } from '@app/types/oppgaver';
-/* eslint-disable max-lines */
 import { Table } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { Oppgavestyring } from '../../oppgavestyring/oppgavestyring';
@@ -55,7 +53,6 @@ export const OppgaveRow = ({ oppgaveId, columns, testId }: Props): JSX.Element =
 };
 
 const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
-  // eslint-disable-next-line complexity
   columnKeys.map((key) => {
     switch (key) {
       case ColumnKeyEnum.Type:

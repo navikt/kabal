@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { describe, expect, it } from 'bun:test';
 import { splitBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/split-beskrivelse';
 import { GosysEntryAuthorType } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';

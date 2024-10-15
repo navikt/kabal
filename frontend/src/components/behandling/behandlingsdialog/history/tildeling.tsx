@@ -4,7 +4,6 @@ import { useInnsendingshjemlerMap } from '@app/simple-api-state/use-kodeverk';
 import type { INavEmployee } from '@app/types/bruker';
 import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
 import { FradelReason } from '@app/types/oppgaver';
-/* eslint-disable max-lines */
 import { ArrowUndoIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Label, Tag } from '@navikt/ds-react';
 import { useId } from 'react';

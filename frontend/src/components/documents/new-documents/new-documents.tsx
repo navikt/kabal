@@ -21,7 +21,6 @@ import {
   type JournalfoertDokument,
 } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-/* eslint-disable max-lines */
 import { Loader } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unused-modules */
 import { BodyShort, Label } from '@navikt/ds-react';
 
 interface TitleAndDescriptionProps {

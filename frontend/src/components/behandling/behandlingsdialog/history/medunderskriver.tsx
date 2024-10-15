@@ -3,7 +3,6 @@ import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/histo
 import type { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
 import { HistoryEventTypes, type IMedunderskriverEvent } from '@app/types/oppgavebehandling/response';
-/* eslint-disable max-lines */
 import {
   ArrowRedoIcon,
   ArrowRightLeftIcon,

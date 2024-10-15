@@ -9,7 +9,6 @@ import type { INavEmployee } from '@app/types/bruker';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
 import { FradelReason } from '@app/types/oppgaver';
-/* eslint-disable max-lines */
 import { Label, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 

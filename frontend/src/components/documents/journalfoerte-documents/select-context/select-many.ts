@@ -1,5 +1,4 @@
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-/* eslint-disable max-depth */
 import { useCallback } from 'react';
 import { getId } from './helpers';
 import { useSelectOne } from './select-one';

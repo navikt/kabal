@@ -5,7 +5,6 @@ import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@app/components/s
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
-/* eslint-disable max-depth */
 import { useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 

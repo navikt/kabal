@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-cycle
 import { OppgaveRow } from '@app/components/common-table-components/oppgave-rows/oppgave-row';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { TablePlainHeaders } from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
@@ -10,7 +9,6 @@ import { ColumnKeyEnum } from '@app/components/common-table-components/types';
  * This is a recursive structure by nature, and resolving the import cycle does not seem possible without combining everything in one file.
  * Leaving the cycle should be safe however, as the cycle is only between (top-level) React components.
  */
-// eslint-disable-next-line import/no-cycle
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';

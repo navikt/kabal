@@ -15,7 +15,6 @@ import { smartEditorCommentsApi } from '@app/redux-api/smart-editor-comments';
 import { svarbrevApi } from '@app/redux-api/svarbrev';
 import { consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { textsApi } from '@app/redux-api/texts/texts';
-/* eslint-disable import/no-unused-modules */
 import { configureStore } from '@reduxjs/toolkit';
 import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { type RootState, rootReducer } from './root';

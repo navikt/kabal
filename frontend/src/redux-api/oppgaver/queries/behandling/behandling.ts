@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import type { IApiValidationResponse } from '@app/functions/error-type-guard';

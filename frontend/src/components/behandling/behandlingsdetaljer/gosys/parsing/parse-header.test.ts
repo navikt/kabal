@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { describe, expect, it } from 'bun:test';
 import { parseHeader } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/parse-header';
 import { GosysEntryAuthorType } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
