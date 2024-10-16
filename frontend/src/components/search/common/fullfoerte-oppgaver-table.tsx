@@ -21,12 +21,12 @@ const COLUMNS: ColumnKeyEnum[] = [
 
 export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
   if (oppgaveIds.length === 0) {
-    return <Alert variant="info">Ingen fullførte oppgaver siste 12 måneder</Alert>;
+    return <Alert variant="info">Ingen fullførte oppgaver</Alert>;
   }
 
   return (
     <section>
-      <Heading size="small">Fullførte oppgaver siste 12 måneder</Heading>
+      <Heading size="small">Fullførte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
         isLoading={isLoading}
