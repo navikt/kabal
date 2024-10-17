@@ -1,3 +1,4 @@
+import { EMPTY_CHAR_CODE } from '@app/functions/remove-empty-char-in-text';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
 import {
   type PlateEditor,
@@ -6,11 +7,14 @@ import {
   type TText,
   findNode,
   insertNodes,
+  isEdgePoint,
   isElement,
 } from '@udecode/plate-common';
 import { Path } from 'slate';
 import type { MaltekstElement, PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';
+
+const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE);
 
 const extractText = (fragment: TDescendant[]): TText[] =>
   fragment.flatMap((node, index) => {
@@ -22,7 +26,63 @@ const extractText = (fragment: TDescendant[]): TText[] =>
   });
 
 export const withOverrides = (editor: PlateEditor) => {
-  const { setSelection, insertBreak, insertSoftBreak, insertNode, setNodes, insertFragment } = editor;
+  const {
+    setSelection,
+    insertBreak,
+    insertSoftBreak,
+    insertNode,
+    setNodes,
+    insertFragment,
+    deleteBackward,
+    deleteForward,
+  } = editor;
+
+  editor.deleteBackward = (unit) => {
+    const placeholderEntry = getPlaceholderEntry(editor);
+
+    const offset = editor.selection?.anchor.offset;
+
+    // Normally we would check offset > 0, but remember that placeholders starts with an empty char
+    if (placeholderEntry === undefined || offset === undefined || offset > 1) {
+      return deleteBackward(unit);
+    }
+
+    const [node, path] = placeholderEntry;
+
+    const [firstChild] = node.children;
+    const isEmpty = node.children.length === 1 && firstChild !== undefined && firstChild.text === EMPTY_CHAR;
+
+    if (isEmpty) {
+      return editor.delete({ at: path });
+    }
+
+    deleteBackward(unit);
+  };
+
+  editor.deleteForward = (unit) => {
+    const placeholderEntry = getPlaceholderEntry(editor);
+
+    if (editor.selection === null || placeholderEntry === undefined) {
+      return deleteForward(unit);
+    }
+
+    const isAtEdge = isEdgePoint(editor, editor.selection.focus, placeholderEntry[1]);
+
+    if (!isAtEdge) {
+      return deleteForward(unit);
+    }
+
+    const [node, path] = placeholderEntry;
+
+    const [firstChild] = node.children;
+    const isEmpty = node.children.length === 1 && firstChild !== undefined && firstChild.text === EMPTY_CHAR;
+
+    if (isEmpty) {
+      return editor.delete({ at: path });
+    }
+
+    deleteForward(unit);
+  };
 
   editor.setNodes = (props, options) => {
     const maltekst = findNode<MaltekstElement>(editor, { match: { type: ELEMENT_MALTEKST } });
