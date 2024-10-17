@@ -10,7 +10,7 @@ import {
   isEdgePoint,
   isElement,
 } from '@udecode/plate-common';
-import { Path } from 'slate';
+import { Path, type TextUnit } from 'slate';
 import type { MaltekstElement, PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';
 
@@ -25,64 +25,61 @@ const extractText = (fragment: TDescendant[]): TText[] =>
     return node;
   });
 
+const deleteBackwardFromInside = (unit: TextUnit, editor: PlateEditor) => {
+  const { deleteBackward } = editor;
+  const placeholderEntry = getPlaceholderEntry(editor);
+
+  const offset = editor.selection?.anchor.offset;
+
+  // Normally we would check offset > 0, but remember that placeholders starts with an empty char
+  if (placeholderEntry === undefined || offset === undefined || offset > 1) {
+    return deleteBackward(unit);
+  }
+
+  const [node, path] = placeholderEntry;
+
+  const [firstChild] = node.children;
+  const isEmpty = node.children.length === 1 && firstChild !== undefined && firstChild.text === EMPTY_CHAR;
+
+  if (isEmpty) {
+    return editor.delete({ at: path });
+  }
+
+  deleteBackward(unit);
+};
+
+const deleteForwardFromInside = (unit: TextUnit, editor: PlateEditor) => {
+  const { deleteForward } = editor;
+  const placeholderEntry = getPlaceholderEntry(editor);
+
+  if (editor.selection === null || placeholderEntry === undefined) {
+    return deleteForward(unit);
+  }
+
+  const isAtEdge = isEdgePoint(editor, editor.selection.focus, placeholderEntry[1]);
+
+  if (!isAtEdge) {
+    return deleteForward(unit);
+  }
+
+  const [node, path] = placeholderEntry;
+
+  const [firstChild] = node.children;
+  const isEmpty = node.children.length === 1 && firstChild !== undefined && firstChild.text === EMPTY_CHAR;
+
+  if (isEmpty) {
+    return editor.delete({ at: path });
+  }
+
+  deleteForward(unit);
+};
+
 export const withOverrides = (editor: PlateEditor) => {
-  const {
-    setSelection,
-    insertBreak,
-    insertSoftBreak,
-    insertNode,
-    setNodes,
-    insertFragment,
-    deleteBackward,
-    deleteForward,
-  } = editor;
+  const { setSelection, insertBreak, insertSoftBreak, insertNode, setNodes, insertFragment } = editor;
 
-  editor.deleteBackward = (unit) => {
-    const placeholderEntry = getPlaceholderEntry(editor);
+  editor.deleteBackward = (unit) => deleteBackwardFromInside(unit, editor);
 
-    const offset = editor.selection?.anchor.offset;
-
-    // Normally we would check offset > 0, but remember that placeholders starts with an empty char
-    if (placeholderEntry === undefined || offset === undefined || offset > 1) {
-      return deleteBackward(unit);
-    }
-
-    const [node, path] = placeholderEntry;
-
-    const [firstChild] = node.children;
-    const isEmpty = node.children.length === 1 && firstChild !== undefined && firstChild.text === EMPTY_CHAR;
-
-    if (isEmpty) {
-      return editor.delete({ at: path });
-    }
-
-    deleteBackward(unit);
-  };
-
-  editor.deleteForward = (unit) => {
-    const placeholderEntry = getPlaceholderEntry(editor);
-
-    if (editor.selection === null || placeholderEntry === undefined) {
-      return deleteForward(unit);
-    }
-
-    const isAtEdge = isEdgePoint(editor, editor.selection.focus, placeholderEntry[1]);
-
-    if (!isAtEdge) {
-      return deleteForward(unit);
-    }
-
-    const [node, path] = placeholderEntry;
-
-    const [firstChild] = node.children;
-    const isEmpty = node.children.length === 1 && firstChild !== undefined && firstChild.text === EMPTY_CHAR;
-
-    if (isEmpty) {
-      return editor.delete({ at: path });
-    }
-
-    deleteForward(unit);
-  };
+  editor.deleteForward = (unit) => deleteForwardFromInside(unit, editor);
 
   editor.setNodes = (props, options) => {
     const maltekst = findNode<MaltekstElement>(editor, { match: { type: ELEMENT_MALTEKST } });
