@@ -3,20 +3,16 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { ptToEm, pxToEm } from '@app/plate/components/get-scaled-em';
 import { MedunderskriverSignature, SaksbehandlerSignature } from '@app/plate/components/signature/individual-signature';
-import type { EditorValue, SignatureElement } from '@app/plate/types';
+import type { SignatureElement } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { PlateElement, type PlateRenderElementProps, setNodes, useEditorReadOnly } from '@udecode/plate-common';
+import { setNodes } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from '@udecode/plate-common/react';
 import { type InputHTMLAttributes, useContext } from 'react';
 import { styled } from 'styled-components';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
 
-export const Signature = ({
-  element,
-  attributes,
-  children,
-  editor,
-}: PlateRenderElementProps<EditorValue, SignatureElement>) => {
+export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const isReadOnly = useEditorReadOnly();
   const { data: signature } = useGetMySignatureQuery();
   const { data: oppgave } = useOppgave();
@@ -35,11 +31,13 @@ export const Signature = ({
 
   const hideAll = !(showForkortedeNavnCheckbox || showSuffixCheckbox || hasMedunderskriver);
 
+  const { children, element, editor } = props;
+
   const setSignatureProp = (prop: Partial<SignatureElement>) =>
     setNodes(editor, { ...element, ...prop }, { at: [], voids: true, mode: 'lowest', match: (n) => n === element });
 
   return (
-    <PlateElement asChild attributes={attributes} element={element} editor={editor} contentEditable={false}>
+    <PlateElement<SignatureElement> {...props} asChild contentEditable={false}>
       <SectionContainer
         data-element={element.type}
         $sectionType={SectionTypeEnum.SIGNATURE}

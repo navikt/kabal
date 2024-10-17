@@ -6,36 +6,35 @@ import { RedaktørPlaceholder } from '@app/plate/components/placeholder/placehol
 import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-element';
 import { TableElement } from '@app/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
-import { ELEMENT_PAGE_BREAK, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { createRedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redaktoer';
+import { PageBreakPlugin } from '@app/plate/plugins/page-break';
+import { RedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redaktoer';
 import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
-import { createPlugins } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_LI, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
-import { ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
+import { BaseParagraphPlugin } from '@udecode/plate-core';
+import { HEADING_KEYS } from '@udecode/plate-heading';
+import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 
-export const redaktoerPlugins = createPlugins([...defaultPlugins, createRedaktoerPlaceholderPlugin()], {
-  components: {
-    [ELEMENT_PARAGRAPH]: Paragraph,
-    [ELEMENT_PAGE_BREAK]: PageBreak,
+export const redaktørComponents = {
+  [BaseParagraphPlugin.key]: Paragraph,
+  [PageBreakPlugin.key]: PageBreak,
 
-    // Headings
-    [ELEMENT_H1]: HeadingOne,
-    [ELEMENT_H2]: HeadingTwo,
-    [ELEMENT_H3]: HeadingThree,
+  // Headings
+  [HEADING_KEYS.h1]: HeadingOne,
+  [HEADING_KEYS.h2]: HeadingTwo,
+  [HEADING_KEYS.h3]: HeadingThree,
 
-    // Lists
-    [ELEMENT_UL]: UnorderedList,
-    [ELEMENT_OL]: OrderedList,
-    [ELEMENT_LI]: ListItem,
+  // Lists
+  [BaseBulletedListPlugin.key]: UnorderedList,
+  [BaseNumberedListPlugin.key]: OrderedList,
+  [BaseListItemPlugin.key]: ListItem,
 
-    // Table
-    [ELEMENT_TABLE]: TableElement,
-    [ELEMENT_TD]: TableCellElement,
-    [ELEMENT_TR]: TableRowElement,
+  // Table
+  [BaseTablePlugin.key]: TableElement,
+  [BaseTableCellPlugin.key]: TableCellElement,
+  [BaseTableRowPlugin.key]: TableRowElement,
 
-    // Smart blocks
-    [ELEMENT_PLACEHOLDER]: RedaktørPlaceholder,
-  },
-});
+  // Smart blocks
+  [RedaktoerPlaceholderPlugin.key]: RedaktørPlaceholder,
+};
+
+export const redaktørPlugins = [...defaultPlugins, RedaktoerPlaceholderPlugin];

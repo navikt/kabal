@@ -1,3 +1,5 @@
+import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
+import { CommentsPlugin } from '@app/plate/plugins/comments';
 import type {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
@@ -17,28 +19,24 @@ import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text
 import type { Language } from '@app/types/texts/language';
 import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
 import type { AutoformatRule } from '@udecode/plate-autoformat';
-import {
-  type PlateEditor,
-  type PlateId,
-  type PlatePlugin,
-  type PluginOptions,
-  type TElement,
-  type TText,
-  useEditorRef,
-  useEditorState,
-} from '@udecode/plate-common';
-import type { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import type { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import type { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import type { BaseParagraphPlugin, TElement, TText } from '@udecode/plate-common';
+import { type PlateEditor, useEditorRef, useEditorState } from '@udecode/plate-core/react';
+import type { HEADING_KEYS } from '@udecode/plate-heading';
 import type {
-  ELEMENT_TABLE,
-  ELEMENT_TD,
-  ELEMENT_TR,
+  BaseBulletedListPlugin,
+  BaseListItemContentPlugin,
+  BaseListItemPlugin,
+  BaseNumberedListPlugin,
+} from '@udecode/plate-list';
+import type {
+  BaseTableCellPlugin,
+  BaseTablePlugin,
+  BaseTableRowPlugin,
   TTableCellElement,
   TTableElement,
   TTableRowElement,
 } from '@udecode/plate-table';
-import type { CursorEditorProps, PlateYjsEditorProps } from '@udecode/plate-yjs';
+import type { PlateYjsEditorProps } from '@udecode/plate-yjs';
 import type { TemplateSections } from './template-sections';
 
 export enum TextAlign {
@@ -46,10 +44,12 @@ export enum TextAlign {
   RIGHT = 'right',
 }
 
-export interface RichText extends TText {
+export interface FormattedText extends TText {
   bold?: boolean;
   italic?: boolean;
   underline?: boolean;
+  [CommentsPlugin.key]?: boolean;
+  [BookmarkPlugin.key]?: boolean;
 }
 
 /**
@@ -64,7 +64,7 @@ export interface IndentableStyleProps {
 }
 
 interface BlockElement extends TElement {
-  id?: PlateId;
+  id?: string;
 }
 
 /**
@@ -72,58 +72,58 @@ interface BlockElement extends TElement {
  */
 
 export interface ParagraphElement extends BlockElement, IndentableStyleProps, AlignableStyleProps {
-  type: typeof ELEMENT_PARAGRAPH;
-  children: (RichText | PlaceholderElement | LabelContentElement)[];
+  type: typeof BaseParagraphPlugin.key;
+  children: (FormattedText | PlaceholderElement | LabelContentElement)[];
 }
 
 export interface H1Element extends BlockElement, IndentableStyleProps {
-  type: typeof ELEMENT_H1;
-  children: (RichText | PlaceholderElement)[];
+  type: typeof HEADING_KEYS.h1;
+  children: (FormattedText | PlaceholderElement)[];
 }
 
 export interface H2Element extends BlockElement, IndentableStyleProps {
-  type: typeof ELEMENT_H2;
-  children: (RichText | PlaceholderElement)[];
+  type: typeof HEADING_KEYS.h2;
+  children: (FormattedText | PlaceholderElement)[];
 }
 
 export interface H3Element extends BlockElement, IndentableStyleProps {
-  type: typeof ELEMENT_H3;
-  children: (RichText | PlaceholderElement)[];
+  type: typeof HEADING_KEYS.h3;
+  children: (FormattedText | PlaceholderElement)[];
 }
 
 export interface BulletListElement extends BlockElement, IndentableStyleProps {
-  type: typeof ELEMENT_UL;
+  type: typeof BaseBulletedListPlugin.key;
   children: ListItemElement[];
 }
 
 export interface NumberedListElement extends BlockElement, IndentableStyleProps {
-  type: typeof ELEMENT_OL;
+  type: typeof BaseNumberedListPlugin.key;
   children: ListItemElement[];
 }
 
 export interface ListItemContainerElement extends BlockElement {
-  type: typeof ELEMENT_LIC;
-  children: (RichText | PlaceholderElement)[];
+  type: typeof BaseListItemContentPlugin.key;
+  children: (FormattedText | PlaceholderElement)[];
 }
 
 export interface ListItemElement extends BlockElement {
-  type: typeof ELEMENT_LI;
+  type: typeof BaseListItemPlugin.key;
   // We have to ignore the sublist, as including it in the type causes TypeScript error ts2589 ("Type instantiation is excessively deep and possibly infinite").
   children: [ListItemContainerElement]; // | [ListItemContainerElement, BulletListElement | NumberedListElement];
 }
 
 export interface TableElement extends TTableElement, BlockElement, IndentableStyleProps {
-  type: typeof ELEMENT_TABLE;
+  type: typeof BaseTablePlugin.key;
   children: TableRowElement[];
 }
 
 export interface TableRowElement extends BlockElement, TTableRowElement {
-  type: typeof ELEMENT_TR;
+  type: typeof BaseTableRowPlugin.key;
   children: TableCellElement[];
 }
 
 export interface TableCellElement extends BlockElement, TTableCellElement {
-  type: typeof ELEMENT_TD;
+  type: typeof BaseTableCellPlugin.key;
   children: (ParagraphElement | BulletListElement | NumberedListElement)[];
 }
 
@@ -156,7 +156,7 @@ export interface MaltekstseksjonElement extends BlockElement {
 export interface PlaceholderElement extends BlockElement {
   type: typeof ELEMENT_PLACEHOLDER;
   placeholder: string;
-  children: RichText[];
+  children: FormattedText[];
 }
 
 export interface PageBreakElement extends BlockElement {
@@ -252,6 +252,8 @@ type ParentOnlyElement =
 
 export type RootElement = ParentOrChildElement | ParentOnlyElement;
 
+export type KabalValue = RootElement[];
+
 export type ChildElement =
   | ListItemElement
   | ListItemContainerElement
@@ -262,21 +264,13 @@ export type ChildElement =
 
 export type RichTextEditorElement = RootElement | ChildElement;
 
-export type EditorDescendant = RichTextEditorElement | RichText | TText;
-
-export type EditorValue = RootElement[];
+export type EditorDescendant = RichTextEditorElement | FormattedText;
 
 /**
  * Editor types
  */
 
-export type RichTextEditor = PlateEditor<EditorValue> & { isDragging?: boolean };
-
-/**
- * Plate types
- */
-
-export type EditorPlatePlugin<P = PluginOptions> = PlatePlugin<P>;
+export type RichTextEditor = PlateEditor & { isDragging?: boolean; children: KabalValue };
 
 /**
  * Editor utils
@@ -284,7 +278,7 @@ export type EditorPlatePlugin<P = PluginOptions> = PlatePlugin<P>;
 
 export type EditorAutoformatRule = AutoformatRule;
 
-export const useMyPlateEditorRef = (id?: PlateId) =>
-  useEditorRef<EditorValue, RichTextEditor & CursorEditor & CursorEditorProps & YjsEditor & PlateYjsEditorProps>(id);
-export const useMyPlateEditorState = (id?: PlateId) =>
-  useEditorState<EditorValue, RichTextEditor & CursorEditor & CursorEditorProps & YjsEditor & PlateYjsEditorProps>(id);
+export const useMyPlateEditorRef = (id?: string) =>
+  useEditorRef<RichTextEditor & CursorEditor & YjsEditor & PlateYjsEditorProps>(id);
+export const useMyPlateEditorState = (id?: string) =>
+  useEditorState<RichTextEditor & CursorEditor & YjsEditor & PlateYjsEditorProps>(id);

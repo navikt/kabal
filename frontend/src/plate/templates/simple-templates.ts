@@ -5,7 +5,7 @@ import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { BaseParagraphPlugin } from '@udecode/plate-core';
 import {
   createCurrentDate,
   createFooter,
@@ -38,7 +38,7 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
     createCurrentDate(),
     createMaltekstseksjon(TemplateSections.TITLE),
     {
-      type: ELEMENT_PARAGRAPH,
+      type: BaseParagraphPlugin.key,
       align: TextAlign.LEFT,
       children: [
         createLabelContent(Source.SAKEN_GJELDER_NAME, 'Navn'),

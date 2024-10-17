@@ -1,22 +1,25 @@
-import type { EditorValue, RichTextEditor } from '@app/plate/types';
+import { PageBreak } from '@app/plate/components/page-break';
 import { isInTable } from '@app/plate/utils/queries';
 import { insertPageBreak } from '@app/plate/utils/transforms';
-import { type AnyObject, createPluginFactory } from '@udecode/plate-common';
+import { createPlatePlugin } from '@udecode/plate-core/react';
 import { ELEMENT_PAGE_BREAK } from './element-types';
 
-export const createPageBreakPlugin = createPluginFactory<AnyObject, EditorValue, RichTextEditor>({
+export const PageBreakPlugin = createPlatePlugin({
   key: ELEMENT_PAGE_BREAK,
-  isElement: true,
-  isVoid: true,
+  node: {
+    isElement: true,
+    isVoid: true,
+    component: PageBreak,
+  },
   handlers: {
-    onKeyDown: (editor) => (event) => {
+    onKeyDown: ({ editor, event }) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
         event.preventDefault();
         insertPageBreak(editor);
       }
     },
   },
-  withOverrides: (editor) => {
+  extendEditor: ({ editor }) => {
     const { insertNode } = editor;
 
     editor.insertNode = (node) => {

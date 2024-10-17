@@ -7,9 +7,8 @@ import type {
 } from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
 import { TEMPLATE_MAP } from '@app/plate/templates/templates';
-import type { EditorValue } from '@app/plate/types';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { type TDescendant, isElement } from '@udecode/plate-common';
+import { type TDescendant, type Value, isElement } from '@udecode/plate-common';
 import { useMemo } from 'react';
 
 const EMPTY_LIST: TemplateSections[] = [];
@@ -31,7 +30,7 @@ export const getTemplateSections = (templateId: TemplateIdEnum, sectionType?: Se
     return EMPTY_LIST;
   }
 
-  return getSections(template.richText as EditorValue, sectionType);
+  return getSections(template.richText as Value, sectionType);
 };
 
 const getSections = (children: TDescendant[], sectionType?: SectionType): TemplateSections[] => {

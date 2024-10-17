@@ -4,30 +4,20 @@ import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-b
 import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
-import type { EditorValue, MaltekstElement } from '@app/plate/types';
+import type { MaltekstElement } from '@app/plate/types';
 import { getIsInRegelverk } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon, PadlockUnlockedIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import {
-  PlateElement,
-  type PlateRenderElementProps,
-  findNodePath,
-  isEditorReadOnly,
-  isElement,
-  replaceNodeChildren,
-  unwrapNodes,
-} from '@udecode/plate-common';
+import { isElement, replaceNodeChildren, unwrapNodes } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
+import { findNodePath, isEditorReadOnly } from '@udecode/slate-react';
 import { useContext, useMemo } from 'react';
 
-export const Maltekst = ({
-  editor,
-  attributes,
-  children,
-  element,
-}: PlateRenderElementProps<EditorValue, MaltekstElement>) => {
+export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
+  const { children, element, editor } = props;
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
   const language = useSmartEditorLanguage();
   const isInRegelverk = useMemo(() => getIsInRegelverk(editor, element), [editor, element]);
@@ -35,11 +25,7 @@ export const Maltekst = ({
 
   // TODO: Remove this when all smart documents in prod use maltekstseksjon
   if (element.id === undefined) {
-    return (
-      <LegacyMaltekst editor={editor} attributes={attributes} element={element}>
-        {children}
-      </LegacyMaltekst>
-    );
+    return <LegacyMaltekst {...props}>{children}</LegacyMaltekst>;
   }
 
   const reload = async () => {
@@ -66,7 +52,7 @@ export const Maltekst = ({
 
   if (isElement(first) && first.type === ELEMENT_EMPTY_VOID) {
     return (
-      <PlateElement as="div" attributes={attributes} element={element} editor={editor}>
+      <PlateElement<MaltekstElement> {...props} as="div">
         {null}
       </PlateElement>
     );
@@ -77,11 +63,9 @@ export const Maltekst = ({
   const readOnly = isEditorReadOnly(editor);
 
   return (
-    <PlateElement
+    <PlateElement<MaltekstElement>
+      {...props}
       asChild
-      attributes={attributes}
-      element={element}
-      editor={editor}
       contentEditable={!readOnly}
       suppressContentEditableWarning
       onDragStart={(event) => event.preventDefault()}

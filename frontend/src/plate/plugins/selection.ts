@@ -1,9 +1,10 @@
-import { createPluginFactory, getNode, getSelectionText, isText } from '@udecode/plate-common';
+import { getNode, getSelectionText, isText } from '@udecode/plate-common';
+import { createPlatePlugin } from '@udecode/plate-core/react';
 import { Range } from 'slate';
 
-export const createSelectionPlugin = createPluginFactory({
+export const SelectionPlugin = createPlatePlugin({
   key: 'selection',
-  withOverrides: (editor) => {
+  extendEditor: ({ editor }) => {
     const { select } = editor;
 
     editor.select = (target) => {

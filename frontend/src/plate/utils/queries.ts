@@ -1,33 +1,34 @@
-import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from '@app/plate/plugins/element-types';
+import { SaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/saksbehandler';
 import { isInRegelverk, isInUnchangeableElement } from '@app/plate/plugins/prohibit-deletion/helpers';
+import { RegelverkContainerPlugin, RegelverkPlugin } from '@app/plate/plugins/regelverk';
 import type {
   BulletListElement,
+  FormattedText,
   H1Element,
   H2Element,
   H3Element,
   NumberedListElement,
   ParentOrChildElement,
-  RichText,
   RichTextEditor,
   RichTextEditorElement,
 } from '@app/plate/types';
 import {
-  type PlateEditor,
   type TDescendant,
   type TElement,
   type TNode,
   type TText,
   findNode,
-  findNodePath,
   getNodeAncestors,
   isCollapsed,
   isElement,
   isText,
   someNode,
 } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
-import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate-list';
-import { ELEMENT_TABLE } from '@udecode/plate-table';
+import type { PlateEditor } from '@udecode/plate-core/react';
+import { HEADING_KEYS } from '@udecode/plate-heading';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { BaseTablePlugin } from '@udecode/plate-table';
+import { findNodePath } from '@udecode/slate-react';
 
 // Ensures a next-path even though original path is at end
 export const nextPath = (path: number[]) => {
@@ -36,7 +37,7 @@ export const nextPath = (path: number[]) => {
   return [...path.slice(0, -1), typeof last === 'number' ? last + 1 : 0];
 };
 
-const isChildEmpty = (child: ParentOrChildElement | TElement | TText | RichText): boolean => {
+const isChildEmpty = (child: ParentOrChildElement | TElement | TText | FormattedText): boolean => {
   if (isText(child)) {
     return child.text.length === 0;
   }
@@ -66,16 +67,23 @@ export const isOfElementTypesFn =
   (node: TNode): node is T =>
     isElement(node) && types.includes(node.type);
 
-const LIST_MATCHER = isOfElementTypesFn<BulletListElement | NumberedListElement>([ELEMENT_UL, ELEMENT_OL]);
-export const isInList = (editor: RichTextEditor): boolean =>
+const LIST_MATCHER = isOfElementTypesFn<BulletListElement | NumberedListElement>([
+  BaseBulletedListPlugin.key,
+  BaseNumberedListPlugin.key,
+]);
+export const isInList = (editor: PlateEditor): boolean =>
   someNode<BulletListElement | NumberedListElement>(editor, { match: LIST_MATCHER });
 
-export const isInTable = (editor: RichTextEditor): boolean => someNode(editor, { match: { type: ELEMENT_TABLE } });
+export const isInTable = (editor: PlateEditor): boolean => someNode(editor, { match: { type: BaseTablePlugin.key } });
 
-const HEADINGS_MATCHER = isOfElementTypesFn<H1Element | H2Element | H3Element>([ELEMENT_H1, ELEMENT_H2, ELEMENT_H3]);
+const HEADINGS_MATCHER = isOfElementTypesFn<H1Element | H2Element | H3Element>([
+  HEADING_KEYS.h1,
+  HEADING_KEYS.h2,
+  HEADING_KEYS.h3,
+]);
 export const isInHeading = (editor: RichTextEditor): boolean => someNode(editor, { match: HEADINGS_MATCHER });
 
-const isContained = (editor: RichTextEditor, type: string) => {
+const isContained = (editor: PlateEditor, type: string) => {
   if (editor.selection === null) {
     return false;
   }
@@ -100,21 +108,22 @@ const isContained = (editor: RichTextEditor, type: string) => {
   return false;
 };
 
-export const isUnchangeable = (editor: RichTextEditor) => {
+export const isUnchangeable = (editor: PlateEditor) => {
   if (isInRegelverk(editor)) {
-    return !isContained(editor, ELEMENT_REGELVERK_CONTAINER);
+    return !isContained(editor, RegelverkContainerPlugin.key);
   }
 
   if (isInUnchangeableElement(editor)) {
-    return !isContained(editor, ELEMENT_PLACEHOLDER);
+    return !isContained(editor, SaksbehandlerPlaceholderPlugin.key);
   }
 
   return false;
 };
 
-export const isPlaceholderActive = (editor: PlateEditor) => someNode(editor, { match: { type: ELEMENT_PLACEHOLDER } });
+export const isPlaceholderActive = (editor: PlateEditor) =>
+  someNode(editor, { match: { type: SaksbehandlerPlaceholderPlugin.key } });
 
-export const getIsInRegelverk = (editor: RichTextEditor, element: TNode): boolean => {
+export const getIsInRegelverk = (editor: PlateEditor, element: TNode): boolean => {
   const path = findNodePath(editor, element);
 
   if (path === undefined) {
@@ -124,7 +133,7 @@ export const getIsInRegelverk = (editor: RichTextEditor, element: TNode): boolea
   const ancestors = getNodeAncestors(editor, path);
 
   for (const ancestor of ancestors) {
-    if (isOfElementType(ancestor[0], ELEMENT_REGELVERK)) {
+    if (isOfElementType(ancestor[0], RegelverkPlugin.key)) {
       return true;
     }
   }
