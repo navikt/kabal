@@ -9,6 +9,7 @@ export enum SaksTypeEnum {
   ANKE = '2',
   ANKE_I_TRYGDERETTEN = '3',
   BEHANDLING_ETTER_TR_OPPHEVET = '4',
+  OMGJØRINGSKRAV = '5',
 }
 
 export enum UtfallEnum {

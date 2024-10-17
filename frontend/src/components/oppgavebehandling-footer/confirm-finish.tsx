@@ -127,6 +127,8 @@ const useText = (): string => {
       return isModernized
         ? 'Du fullfører nå behandlingen. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.'
         : 'Du fullfører nå behandlingen. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen. Husk at du også må oppdatere oppgaven i Gosys med beskjed til vedtaksenheten om utfall i saken.';
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+      return 'Du fullfører nå behandlingen av omgjøringskravet. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
   }
 };
 

@@ -90,11 +90,17 @@ export interface IBehandlingEtterTryderettenOpphevet extends IOppgavebehandlingB
   kjennelseMottatt: string | null;
 }
 
+export interface IOmgjøringskravbehandling extends IOppgavebehandlingBase {
+  typeId: SaksTypeEnum.OMGJØRINGSKRAV;
+  rol: IMedunderskriverRol;
+}
+
 export type IOppgavebehandling =
   | IKlagebehandling
   | IAnkebehandling
   | ITrygderettsankebehandling
-  | IBehandlingEtterTryderettenOpphevet;
+  | IBehandlingEtterTryderettenOpphevet
+  | IOmgjøringskravbehandling;
 
 interface Resultat {
   file: IVedlegg | null;

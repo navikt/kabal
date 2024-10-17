@@ -7,6 +7,7 @@ import type { FilterDropdownProps } from './types';
 const OPTIONS = [
   { value: SaksTypeEnum.KLAGE, label: 'Klage' },
   { value: SaksTypeEnum.ANKE, label: 'Anke' },
+  { value: SaksTypeEnum.OMGJØRINGSKRAV, label: 'Omgjøringskrav' },
 ];
 
 export const Sakstype = ({ params, setParams, columnKey }: FilterDropdownProps) => (
