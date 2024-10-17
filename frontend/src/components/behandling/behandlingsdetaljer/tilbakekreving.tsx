@@ -11,6 +11,8 @@ const TILBAKEKREVING_IDS = [
   '147',
   '148',
   '149',
+  '150',
+  '258',
   '268',
   'FORSKL_8',
   'INNKL_25_T',
