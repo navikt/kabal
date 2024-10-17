@@ -4,7 +4,20 @@ import { useSetTilbakekrevingMutation } from '@app/redux-api/oppgaver/mutations/
 import { Alert, BodyShort, Checkbox, CheckboxGroup, Heading, HelpText } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
-const TILBAKEKREVING_IDS = ['144', '145', '146', '147', '148', '149', '268'];
+const TILBAKEKREVING_IDS = [
+  '144',
+  '145',
+  '146',
+  '147',
+  '148',
+  '149',
+  '268',
+  'FORSKL_8',
+  'INNKL_25_T',
+  'INNKL_26A_T',
+  'INNKL_26B_T',
+  'INNKL_29',
+];
 
 export const Tilbakekreving = () => {
   const { data: oppgave } = useOppgave();
