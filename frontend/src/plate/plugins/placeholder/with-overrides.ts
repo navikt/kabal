@@ -6,11 +6,18 @@ import {
   type TRange,
   type TText,
   findNode,
+  getLastChildPath,
+  getNextNode,
+  getNode,
+  getPreviousNode,
   insertNodes,
   isEdgePoint,
   isElement,
+  isEndPoint,
+  isText,
+  setSelection,
 } from '@udecode/plate-common';
-import { Path, type TextUnit } from 'slate';
+import { Path } from 'slate';
 import type { MaltekstElement, PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';
 
@@ -25,15 +32,14 @@ const extractText = (fragment: TDescendant[]): TText[] =>
     return node;
   });
 
-const deleteBackwardFromInside = (unit: TextUnit, editor: PlateEditor) => {
-  const { deleteBackward } = editor;
+const deleteBackwardFromInside = (editor: PlateEditor): boolean => {
   const placeholderEntry = getPlaceholderEntry(editor);
 
   const offset = editor.selection?.anchor.offset;
 
   // Normally we would check offset > 0, but remember that placeholders starts with an empty char
   if (placeholderEntry === undefined || offset === undefined || offset > 1) {
-    return deleteBackward(unit);
+    return false;
   }
 
   const [node, path] = placeholderEntry;
@@ -42,24 +48,65 @@ const deleteBackwardFromInside = (unit: TextUnit, editor: PlateEditor) => {
   const isEmpty = node.children.length === 1 && firstChild !== undefined && firstChild.text === EMPTY_CHAR;
 
   if (isEmpty) {
-    return editor.delete({ at: path });
+    editor.delete({ at: path });
+
+    return true;
   }
 
-  deleteBackward(unit);
+  return false;
 };
 
-const deleteForwardFromInside = (unit: TextUnit, editor: PlateEditor) => {
-  const { deleteForward } = editor;
+const deleteBackwardFromOutside = (editor: PlateEditor): boolean => {
+  if (editor.selection === null) {
+    return false;
+  }
+
+  const isStart = editor.selection.focus.offset === 0;
+  const prevNode = getPreviousNode<PlaceholderElement>(editor, {
+    at: editor.selection.focus.path,
+    match: (n) => isElement(n) && n.type === ELEMENT_PLACEHOLDER,
+  });
+
+  if (!isStart || prevNode === undefined) {
+    return false;
+  }
+
+  const [node, path] = prevNode;
+
+  const [firstChild] = node.children;
+  const isEmpty = node.children.length === 1 && firstChild !== undefined && firstChild.text === EMPTY_CHAR;
+
+  if (isEmpty) {
+    editor.delete({ at: path });
+
+    return true;
+  }
+
+  const lastChildPath = getLastChildPath(prevNode);
+  const lastChild = getNode(editor, lastChildPath);
+
+  if (lastChild === null || !isText(lastChild)) {
+    return false;
+  }
+
+  const newSelection = { path: lastChildPath, offset: lastChild.text.length };
+
+  setSelection(editor, { focus: newSelection, anchor: newSelection });
+
+  return false;
+};
+
+const deleteForwardFromInside = (editor: PlateEditor): boolean => {
   const placeholderEntry = getPlaceholderEntry(editor);
 
   if (editor.selection === null || placeholderEntry === undefined) {
-    return deleteForward(unit);
+    return false;
   }
 
   const isAtEdge = isEdgePoint(editor, editor.selection.focus, placeholderEntry[1]);
 
   if (!isAtEdge) {
-    return deleteForward(unit);
+    return false;
   }
 
   const [node, path] = placeholderEntry;
@@ -68,18 +115,88 @@ const deleteForwardFromInside = (unit: TextUnit, editor: PlateEditor) => {
   const isEmpty = node.children.length === 1 && firstChild !== undefined && firstChild.text === EMPTY_CHAR;
 
   if (isEmpty) {
-    return editor.delete({ at: path });
+    editor.delete({ at: path });
+
+    return true;
   }
 
-  deleteForward(unit);
+  return false;
+};
+
+const deleteForwardFromOutside = (editor: PlateEditor): boolean => {
+  if (editor.selection === null) {
+    return false;
+  }
+
+  const isEnd = isEndPoint(editor, editor.selection.focus, editor.selection.focus.path);
+  // TODO: Litt for ivrig på å finne placeholder. Må kun finne nextnode om den er helt inntil selection,
+  // ellers vil den slette neste placeholder i hele dokumentet
+  const nextNode = getNextNode<PlaceholderElement>(editor, {
+    at: editor.selection.focus.path,
+    match: (n) => isElement(n) && n.type === ELEMENT_PLACEHOLDER,
+  });
+
+  if (!isEnd || nextNode === undefined) {
+    return false;
+  }
+
+  const [node, path] = nextNode;
+
+  const [firstChild] = node.children;
+  const isEmpty = node.children.length === 1 && firstChild !== undefined && firstChild.text === EMPTY_CHAR;
+
+  if (isEmpty) {
+    editor.delete({ at: path });
+
+    return true;
+  }
+
+  if (firstChild === undefined) {
+    return false;
+  }
+
+  const newSelection = { path: [...path, 0], offset: 0 };
+
+  setSelection(editor, { focus: newSelection, anchor: newSelection });
+
+  return false;
 };
 
 export const withOverrides = (editor: PlateEditor) => {
-  const { setSelection, insertBreak, insertSoftBreak, insertNode, setNodes, insertFragment } = editor;
+  const {
+    setSelection,
+    insertBreak,
+    insertSoftBreak,
+    insertNode,
+    setNodes,
+    insertFragment,
+    deleteBackward,
+    deleteForward,
+  } = editor;
 
-  editor.deleteBackward = (unit) => deleteBackwardFromInside(unit, editor);
+  editor.deleteBackward = (unit) => {
+    if (deleteBackwardFromInside(editor)) {
+      return;
+    }
 
-  editor.deleteForward = (unit) => deleteForwardFromInside(unit, editor);
+    if (deleteBackwardFromOutside(editor)) {
+      return;
+    }
+
+    deleteBackward(unit);
+  };
+
+  editor.deleteForward = (unit) => {
+    if (deleteForwardFromInside(editor)) {
+      return;
+    }
+
+    if (deleteForwardFromOutside(editor)) {
+      return;
+    }
+
+    deleteForward(unit);
+  };
 
   editor.setNodes = (props, options) => {
     const maltekst = findNode<MaltekstElement>(editor, { match: { type: ELEMENT_MALTEKST } });

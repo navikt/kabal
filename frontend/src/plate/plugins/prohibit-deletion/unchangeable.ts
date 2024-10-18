@@ -1,9 +1,5 @@
-import {
-  ELEMENT_PLACEHOLDER,
-  ELEMENT_REGELVERK_CONTAINER,
-  UNDELETABLE_BUT_REDIGERBAR,
-} from '@app/plate/plugins/element-types';
-import { isInRegelverk, isInUnchangeableElement, isUndeletable } from '@app/plate/plugins/prohibit-deletion/helpers';
+import { ELEMENT_REGELVERK_CONTAINER, UNDELETABLE_BUT_REDIGERBAR } from '@app/plate/plugins/element-types';
+import { isInRegelverk, isUndeletable } from '@app/plate/plugins/prohibit-deletion/helpers';
 import type { RichTextEditor } from '@app/plate/types';
 import { isInList } from '@app/plate/utils/queries';
 import {
@@ -168,9 +164,9 @@ export const handleDeleteInsideUnchangeable = (
     return handleDeleteInside(editor, ELEMENT_REGELVERK_CONTAINER, direction, unit);
   }
 
-  if (isInUnchangeableElement(editor)) {
-    return handleDeleteInside(editor, ELEMENT_PLACEHOLDER, direction, unit);
-  }
+  // if (isInUnchangeableElement(editor)) {
+  //   return handleDeleteInside(editor, ELEMENT_PLACEHOLDER, direction, unit);
+  // }
 
   return false;
 };

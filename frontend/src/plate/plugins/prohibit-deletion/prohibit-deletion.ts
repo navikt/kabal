@@ -1,8 +1,4 @@
 import {
-  handleDeleteBackwardInPlaceholder,
-  handleDeleteForwardInPlaceholder,
-} from '@app/plate/plugins/prohibit-deletion/helpers';
-import {
   handleDeleteBackwardIntoUnchangeable,
   handleDeleteForwardIntoUnchangeable,
   handleDeleteInsideUnchangeable,
@@ -40,10 +36,6 @@ const withOverrides = (editor: RichTextEditor) => {
       return;
     }
 
-    if (handleDeleteBackwardInPlaceholder(editor)) {
-      return;
-    }
-
     if (handleDeleteBackwardInUndeletable(editor)) {
       return;
     }
@@ -57,10 +49,6 @@ const withOverrides = (editor: RichTextEditor) => {
 
   editor.deleteForward = (unit: TextUnit) => {
     if (handleDeleteInsideUnchangeable(editor, 'forward', unit)) {
-      return;
-    }
-
-    if (handleDeleteForwardInPlaceholder(editor)) {
       return;
     }
 

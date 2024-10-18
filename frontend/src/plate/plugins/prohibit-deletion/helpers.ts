@@ -1,23 +1,11 @@
-import {
-  ELEMENT_LABEL_CONTENT,
-  ELEMENT_PLACEHOLDER,
-  ELEMENT_REGELVERK,
-  UNCHANGEABLE,
-  UNDELETABLE,
-} from '@app/plate/plugins/element-types';
-import type { EditorValue, PlaceholderElement, RichTextEditor } from '@app/plate/types';
+import { ELEMENT_LABEL_CONTENT, ELEMENT_REGELVERK, UNCHANGEABLE, UNDELETABLE } from '@app/plate/plugins/element-types';
+import type { EditorValue, RichTextEditor } from '@app/plate/types';
 import {
   type ENode,
   type TNodeEntry,
-  findNode,
   getNodeAncestors,
   getParentNode,
   isElement,
-  isElementEmpty,
-  isEndPoint,
-  isExpanded,
-  isStartPoint,
-  removeNodes,
   someNode,
 } from '@udecode/plate-common';
 
@@ -73,51 +61,3 @@ const hasUndeletableAncestor = (editor: RichTextEditor, descendantEntry: TNodeEn
 
 export const isInRegelverk = (editor: RichTextEditor): boolean =>
   someNode(editor, { match: { type: ELEMENT_REGELVERK } });
-
-export const handleDeleteBackwardInPlaceholder = (editor: RichTextEditor): boolean => {
-  const placeholderEntry = findNode<PlaceholderElement>(editor, { match: { type: ELEMENT_PLACEHOLDER } });
-
-  if (placeholderEntry === undefined) {
-    return false;
-  }
-
-  const [node, path] = placeholderEntry;
-
-  if (editor.selection === null || isExpanded(editor.selection)) {
-    return false;
-  }
-
-  if (isStartPoint(editor, editor.selection.anchor, path)) {
-    if (isElementEmpty(editor, node)) {
-      removeNodes(editor, { at: path });
-
-      return true;
-    }
-  }
-
-  return false;
-};
-
-export const handleDeleteForwardInPlaceholder = (editor: RichTextEditor): boolean => {
-  const placeholderEntry = findNode<PlaceholderElement>(editor, { match: { type: ELEMENT_PLACEHOLDER } });
-
-  if (placeholderEntry === undefined) {
-    return false;
-  }
-
-  const [node, path] = placeholderEntry;
-
-  if (editor.selection === null || isExpanded(editor.selection)) {
-    return false;
-  }
-
-  if (isEndPoint(editor, editor.selection.anchor, path)) {
-    if (isElementEmpty(editor, node)) {
-      removeNodes(editor, { at: path });
-
-      return true;
-    }
-  }
-
-  return false;
-};
