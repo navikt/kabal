@@ -34,7 +34,7 @@ export const PositionedComments = () => {
 
     const threads = attached.map<ThreadData>((a) => ({ ...a, type: ItemType.THREAD }));
 
-    const p = getPositionedItems(editor, threads, sheetRef);
+    const p = getPositionedItems(editor, threads, sheetRef.current);
 
     return {
       positionedItems: p.positionedItems,

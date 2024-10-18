@@ -1,11 +1,15 @@
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { TextBulletListLtr, TextNumberListLtr } from '@styled-icons/fluentui-system-regular';
-import { ELEMENT_OL, ELEMENT_UL, useListToolbarButton, useListToolbarButtonState } from '@udecode/plate-list';
+import { getPluginType } from '@udecode/plate-core';
+import { useEditorRef } from '@udecode/plate-core/react';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { useListToolbarButton, useListToolbarButtonState } from '@udecode/plate-list/react';
 
 export const Lists = () => {
-  const ulState = useListToolbarButtonState({ nodeType: ELEMENT_UL });
-  const olState = useListToolbarButtonState({ nodeType: ELEMENT_OL });
+  const editor = useEditorRef();
+  const ulState = useListToolbarButtonState({ nodeType: getPluginType(editor, BaseBulletedListPlugin) });
+  const olState = useListToolbarButtonState({ nodeType: getPluginType(editor, BaseNumberedListPlugin) });
   const {
     props: { onClick: toggleUl, pressed: ulActive },
   } = useListToolbarButton(ulState);

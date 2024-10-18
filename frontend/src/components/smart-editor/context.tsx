@@ -7,7 +7,7 @@ import {
 import { DistribusjonsType, type ISmartDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { TRange } from '@udecode/plate-common';
-import { createContext, useState } from 'react';
+import { type MutableRefObject, createContext, useRef, useState } from 'react';
 
 const noop = () => {};
 
@@ -23,8 +23,7 @@ interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokum
   setFocusedThreadId: (threadId: string | null) => void;
   showAnnotationsAtOrigin: boolean;
   setShowAnnotationsAtOrigin: (show: boolean) => void;
-  sheetRef: HTMLDivElement | null;
-  setSheetRef: (ref: HTMLDivElement | null) => void;
+  sheetRef: MutableRefObject<HTMLDivElement | null>;
   canManage: boolean;
 }
 
@@ -42,8 +41,7 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   setFocusedThreadId: noop,
   showAnnotationsAtOrigin: false,
   setShowAnnotationsAtOrigin: noop,
-  sheetRef: null,
-  setSheetRef: noop,
+  sheetRef: { current: null },
   canManage: false,
 });
 
@@ -61,7 +59,8 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(null);
   const { value: showAnnotationsAtOrigin = false, setValue: setShowAnnotationsAtOrigin } =
     useSmartEditorAnnotationsAtOrigin();
-  const [sheetRef, setSheetRef] = useState<HTMLDivElement | null>(null);
+  // const [sheetRef, setSheetRef] = useState<HTMLDivElement | null>(null);
+  const sheetRef = useRef<HTMLDivElement | null>(null);
   const canManage = useCanManageDocument(templateId);
 
   return (
@@ -81,7 +80,6 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
         showAnnotationsAtOrigin,
         setShowAnnotationsAtOrigin,
         sheetRef,
-        setSheetRef,
         canManage,
       }}
     >

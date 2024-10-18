@@ -1,4 +1,5 @@
-import { type PlateEditor, findNode, getNodeAncestors } from '@udecode/plate-common';
+import { findNode, getNodeAncestors } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-core/react';
 import type { Path } from 'slate';
 import type { PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';

@@ -11,12 +11,11 @@ import {
   handleDeleteBackwardInUndeletable,
   handleDeleteForwardInUndeletable,
 } from '@app/plate/plugins/prohibit-deletion/undeletable';
-import type { EditorValue, RichTextEditor } from '@app/plate/types';
 import { isUnchangeable } from '@app/plate/utils/queries';
-import { type AnyObject, createPluginFactory } from '@udecode/plate-common';
+import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
 import type { EditorFragmentDeletionOptions, TextUnit } from 'slate';
 
-const withOverrides = (editor: RichTextEditor) => {
+const withOverrides = (editor: PlateEditor) => {
   const { deleteBackward, deleteForward, deleteFragment, insertFragment, insertText, addMark } = editor;
 
   editor.insertText = (text, options) => {
@@ -94,7 +93,7 @@ const withOverrides = (editor: RichTextEditor) => {
   return editor;
 };
 
-export const createProhibitDeletionPlugin = createPluginFactory<AnyObject, EditorValue, RichTextEditor>({
+export const ProhibitDeletionPlugin = createPlatePlugin({
   key: 'prohibit-deletion',
-  withOverrides,
+  extendEditor: ({ editor }) => withOverrides(editor),
 });

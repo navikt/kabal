@@ -14,21 +14,18 @@ import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plat
 import type { ScoredText } from '@app/plate/functions/lex-specialis/lex-specialis';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import type { TemplateSections } from '@app/plate/template-sections';
-import type { EditorValue, MaltekstseksjonElement } from '@app/plate/types';
+import type { MaltekstseksjonElement } from '@app/plate/types';
 import { getIsInRegelverk } from '@app/plate/utils/queries';
 import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { type SkipToken, skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateRenderElementProps, isEditorReadOnly, setNodes } from '@udecode/plate-common';
+import { setNodes } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps, isEditorReadOnly } from '@udecode/plate-common/react';
 import { useCallback, useContext, useMemo } from 'react';
 
-export const Maltekstseksjon = ({
-  editor,
-  attributes,
-  children,
-  element,
-}: PlateRenderElementProps<EditorValue, MaltekstseksjonElement>) => {
+export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>) => {
+  const { children, element, editor } = props;
   const oppgave = useRequiredOppgave();
   const language = useSmartEditorLanguage();
   const { canManage, templateId } = useContext(SmartEditorContext);
@@ -76,11 +73,9 @@ export const Maltekstseksjon = ({
   }, [element]);
 
   return (
-    <PlateElement
+    <PlateElement<MaltekstseksjonElement>
+      {...props}
       asChild
-      attributes={attributes}
-      element={element}
-      editor={editor}
       contentEditable={!isEditorReadOnly(editor)}
       suppressContentEditableWarning
       onDragStart={onPlateContainerDragStart}

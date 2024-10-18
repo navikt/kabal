@@ -4,7 +4,6 @@ import {
   UNDELETABLE_BUT_REDIGERBAR,
 } from '@app/plate/plugins/element-types';
 import { isInRegelverk, isInUnchangeableElement, isUndeletable } from '@app/plate/plugins/prohibit-deletion/helpers';
-import type { RichTextEditor } from '@app/plate/types';
 import { isInList } from '@app/plate/utils/queries';
 import {
   findNode,
@@ -19,20 +18,21 @@ import {
   isStartPoint,
   removeNodes,
 } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-core/react';
 import { Path, type TextDirection, type TextUnit } from 'slate';
 
-const deleteCurrentNode = (editor: RichTextEditor): void => {
-  const currentNode = findNode(editor, { match: (n) => !isEditor(n) });
+const deleteCurrentNode = (editor: PlateEditor): void => {
+  const currentEntry = findNode(editor, { match: (n) => !isEditor(n) });
 
-  if (isUndeletable(editor, currentNode)) {
+  if (isUndeletable(editor, currentEntry)) {
     return;
   }
 
-  if (currentNode === undefined) {
+  if (currentEntry === undefined) {
     return;
   }
 
-  const [node] = currentNode;
+  const [node] = currentEntry;
 
   if (!isElement(node)) {
     return;
@@ -43,7 +43,7 @@ const deleteCurrentNode = (editor: RichTextEditor): void => {
   }
 };
 
-export const handleDeleteBackwardIntoUnchangeable = (editor: RichTextEditor): boolean => {
+export const handleDeleteBackwardIntoUnchangeable = (editor: PlateEditor): boolean => {
   if (editor.selection === null) {
     return false;
   }
@@ -91,7 +91,7 @@ export const handleDeleteBackwardIntoUnchangeable = (editor: RichTextEditor): bo
   return false;
 };
 
-export const handleDeleteForwardIntoUnchangeable = (editor: RichTextEditor): boolean => {
+export const handleDeleteForwardIntoUnchangeable = (editor: PlateEditor): boolean => {
   if (editor.selection === null) {
     return false;
   }
@@ -133,7 +133,7 @@ export const handleDeleteForwardIntoUnchangeable = (editor: RichTextEditor): boo
   return false;
 };
 
-const handleDeleteInside = (editor: RichTextEditor, type: string, direction: TextDirection, unit: TextUnit) => {
+const handleDeleteInside = (editor: PlateEditor, type: string, direction: TextDirection, unit: TextUnit) => {
   if (editor.selection === null) {
     return true;
   }
@@ -160,7 +160,7 @@ const handleDeleteInside = (editor: RichTextEditor, type: string, direction: Tex
 };
 
 export const handleDeleteInsideUnchangeable = (
-  editor: RichTextEditor,
+  editor: PlateEditor,
   direction: TextDirection,
   unit: TextUnit,
 ): boolean => {

@@ -1,26 +1,30 @@
+import { RedaktørPlaceholder } from '@app/plate/components/placeholder/placeholder';
 import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
 import { isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
-import { createPluginFactory } from '@udecode/plate-common';
+import { createPlatePlugin } from '@udecode/plate-core/react';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 import { withOverrides } from './with-overrides';
 
-export const createRedaktoerPlaceholderPlugin = createPluginFactory({
+export const RedaktoerPlaceholderPlugin = createPlatePlugin({
   key: ELEMENT_PLACEHOLDER,
-  isElement: true,
-  isVoid: false,
-  isInline: true,
-  withOverrides,
+  node: {
+    isElement: true,
+    isVoid: false,
+    isInline: true,
+    component: RedaktørPlaceholder,
+  },
+  extendEditor: ({ editor }) => withOverrides(editor),
   handlers: {
-    onKeyDown: (editor) => (e) => {
-      if (handleSelectAll(editor, e) || handleArrows(editor, e)) {
+    onKeyDown: ({ editor, event }) => {
+      if (handleSelectAll(editor, event) || handleArrows(editor, event)) {
         return;
       }
 
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'j') {
-        e.preventDefault();
-        e.stopPropagation();
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'j') {
+        event.preventDefault();
+        event.stopPropagation();
 
         if (isPlaceholderActive(editor)) {
           removePlaceholder(editor);

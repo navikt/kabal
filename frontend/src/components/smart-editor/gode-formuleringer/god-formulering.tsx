@@ -1,18 +1,17 @@
+import { DateTime } from '@app/components/datetime/datetime';
+import { AddButton } from '@app/components/smart-editor/gode-formuleringer/add-button';
 import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { SPELL_CHECK_LANGUAGES, useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
-import { PlateEditor } from '@app/plate/plate-editor';
-import { previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
-import { type EditorValue, type RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
+import { KabalPlateEditor } from '@app/plate/plate-editor';
+import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
+import { type KabalValue, type RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
 import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { CalendarIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading, Tag } from '@navikt/ds-react';
-import { Plate } from '@udecode/plate-common';
+import { Plate, usePlateEditor } from '@udecode/plate-core/react';
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { DateTime } from '../../datetime/datetime';
-import { AddButton } from './add-button';
 
 type Props = NonNullableGodFormulering & {
   isFocused: boolean;
@@ -22,8 +21,15 @@ type Props = NonNullableGodFormulering & {
 export const GodFormulering = ({ title, richText, publishedDateTime, isFocused, onClick, id, language }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const editor = useMyPlateEditorState();
+  const mainEditor = useMyPlateEditorState();
   const primaryLanguage = useSmartEditorLanguage();
+
+  const editor = usePlateEditor<KabalValue, (typeof previewPlugins)[0]>({
+    id,
+    plugins: previewPlugins,
+    override: { components: previewComponents },
+    value: richText,
+  });
 
   useEffect(() => {
     if (isFocused && ref.current !== null) {
@@ -46,7 +52,7 @@ export const GodFormulering = ({ title, richText, publishedDateTime, isFocused, 
           )}
         </Left>
         <AddButton
-          editor={editor}
+          editor={mainEditor}
           content={richText}
           title="Sett inn god formulering i markert område"
           disabledTitle="Mangler markert område å sette inn god formulering i"
@@ -56,8 +62,8 @@ export const GodFormulering = ({ title, richText, publishedDateTime, isFocused, 
       </ActionWrapper>
       <ContentContainer>
         <StyledContent $isExpanded={isExpanded}>
-          <Plate<EditorValue, RichTextEditor> initialValue={richText} id={id} readOnly plugins={previewPlugins}>
-            <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} lang={SPELL_CHECK_LANGUAGES[language]} />
+          <Plate<RichTextEditor> editor={editor} readOnly>
+            <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[language]} />
           </Plate>
         </StyledContent>
         <ShowMore isExpanded={isExpanded} setIsExpanded={setIsExpanded} />

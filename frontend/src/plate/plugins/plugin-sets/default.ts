@@ -1,33 +1,39 @@
+import { Paragraph } from '@app/plate/components/paragraph';
+import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-element';
+import { TableElement } from '@app/plate/components/plate-ui/table-element';
+import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
+import { BoldLeaf, ItalicLeaf, UnderlineLeaf } from '@app/plate/leaf/marks';
 import { autoformatRules } from '@app/plate/plugins/autoformat/rules';
-import { createCopyPlugin } from '@app/plate/plugins/copy/copy';
-import { createCustomAbbreviationPlugin } from '@app/plate/plugins/custom-abbreviations/create-custom-abbreviation-plugin';
+import { CopyPlugin } from '@app/plate/plugins/copy/copy';
+import { CustomAbbreviationPlugin } from '@app/plate/plugins/custom-abbreviations/create-custom-abbreviation-plugin';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { createNormalizeNodePlugin } from '@app/plate/plugins/normalize-node';
-import { createPageBreakPlugin } from '@app/plate/plugins/page-break';
-import { createProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
-import { createSelectionPlugin } from '@app/plate/plugins/selection';
-import { createAlignPlugin } from '@udecode/plate-alignment';
-import { createAutoformatPlugin } from '@udecode/plate-autoformat';
-import { createBoldPlugin, createItalicPlugin, createUnderlinePlugin } from '@udecode/plate-basic-marks';
-import { createExitBreakPlugin, createSoftBreakPlugin } from '@udecode/plate-break';
-import { type PlatePlugin, createInsertDataPlugin, someNode } from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, KEYS_HEADING, createHeadingPlugin } from '@udecode/plate-heading';
-import { createIndentPlugin } from '@udecode/plate-indent';
-import { ELEMENT_OL, ELEMENT_UL, createListPlugin } from '@udecode/plate-list';
-import { ELEMENT_PARAGRAPH, createParagraphPlugin } from '@udecode/plate-paragraph';
-import { createDeserializeDocxPlugin } from '@udecode/plate-serializer-docx';
-import { ELEMENT_TABLE, createTablePlugin } from '@udecode/plate-table';
+import { normalizeNodePlugin } from '@app/plate/plugins/normalize-node';
+import { PageBreakPlugin } from '@app/plate/plugins/page-break';
+import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
+import { SelectionPlugin } from '@app/plate/plugins/selection';
+import { AlignPlugin } from '@udecode/plate-alignment/react';
+import { AutoformatPlugin } from '@udecode/plate-autoformat/react';
+import { BoldPlugin, ItalicPlugin, UnderlinePlugin } from '@udecode/plate-basic-marks/react';
+import { ExitBreakPlugin, SoftBreakPlugin } from '@udecode/plate-break/react';
+import { ParserPlugin, someNode } from '@udecode/plate-common';
+import { ParagraphPlugin } from '@udecode/plate-common/react';
+import { DocxPlugin } from '@udecode/plate-docx';
+import { HEADING_KEYS } from '@udecode/plate-heading';
+import { HeadingPlugin } from '@udecode/plate-heading/react';
+import { IndentPlugin } from '@udecode/plate-indent/react';
+import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@udecode/plate-list/react';
+import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@udecode/plate-table/react';
 
-export const defaultPlugins: PlatePlugin[] = [
-  createInsertDataPlugin(),
-  createParagraphPlugin(),
-  createHeadingPlugin({
+export const defaultPlugins = [
+  ParserPlugin,
+  ParagraphPlugin.withComponent(Paragraph),
+  HeadingPlugin.configure({
     options: { levels: 3 },
-    withOverrides: (editor) => {
+    extendEditor: ({ editor }) => {
       const { addMark } = editor;
 
       editor.addMark = (key, value) => {
-        if (someNode(editor, { match: { type: [ELEMENT_H1, ELEMENT_H2, ELEMENT_H3] } })) {
+        if (someNode(editor, { match: { type: [HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3] } })) {
           return;
         }
 
@@ -37,61 +43,69 @@ export const defaultPlugins: PlatePlugin[] = [
       return editor;
     },
   }),
-  createBoldPlugin(),
-  createItalicPlugin(),
-  createUnderlinePlugin(),
-  createTablePlugin({ options: { disableMarginLeft: true } }),
-  createListPlugin(),
-  createIndentPlugin({
+  BoldPlugin.configure({ render: { node: BoldLeaf } }),
+  ItalicPlugin.configure({ render: { node: ItalicLeaf } }),
+  UnderlinePlugin.configure({ render: { node: UnderlineLeaf } }),
+  TablePlugin.configure({ options: { disableMarginLeft: true } }).withComponent(TableElement),
+  TableCellPlugin.withComponent(TableCellElement),
+  TableRowPlugin.withComponent(TableRowElement),
+  ListPlugin,
+  IndentPlugin.configure({
     options: { indentMax: 15, offset: 24, unit: 'pt' },
     inject: {
-      props: {
-        validTypes: [ELEMENT_PARAGRAPH, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_TABLE, ELEMENT_OL, ELEMENT_UL],
-      },
+      targetPlugins: [
+        ParagraphPlugin.key,
+        HEADING_KEYS.h1,
+        HEADING_KEYS.h2,
+        HEADING_KEYS.h3,
+        TablePlugin.key,
+        NumberedListPlugin.key,
+        BulletedListPlugin.key,
+      ],
     },
   }),
-  createSoftBreakPlugin({
+  SoftBreakPlugin.configure({
     options: {
       rules: [
         {
           hotkey: 'shift+enter',
           query: {
-            exclude: [ELEMENT_PLACEHOLDER, ELEMENT_MALTEKST, ELEMENT_UL, ELEMENT_OL],
-            allow: [ELEMENT_PARAGRAPH],
+            exclude: [ELEMENT_PLACEHOLDER, ELEMENT_MALTEKST, BulletedListPlugin.key, NumberedListPlugin.key],
+            allow: [ParagraphPlugin.key],
           },
         },
       ],
     },
   }),
-  createAlignPlugin({ inject: { props: { validTypes: [ELEMENT_PARAGRAPH] } } }),
-  createAutoformatPlugin({
+  AlignPlugin.configure({ inject: { targetPlugins: [ParagraphPlugin.key] } }),
+  AutoformatPlugin.configure({
     options: {
       rules: autoformatRules,
       enableUndoOnDelete: true,
     },
   }),
-  createExitBreakPlugin({
+  ExitBreakPlugin.configure({
     options: {
       rules: [
         { hotkey: 'mod+shift+enter', before: true },
         {
           hotkey: 'enter',
           before: false,
-          defaultType: ELEMENT_PARAGRAPH,
-          query: { start: true, end: true, allow: KEYS_HEADING },
+          defaultType: ParagraphPlugin.key,
+          query: { start: true, end: true, allow: [HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3] },
           relative: true,
           level: 1,
         },
       ],
     },
   }),
-  createDeserializeDocxPlugin(),
+  DocxPlugin,
 
   // Custom plugins
-  createPageBreakPlugin(),
-  createProhibitDeletionPlugin(),
-  createCopyPlugin(),
-  createSelectionPlugin(),
-  createNormalizeNodePlugin(),
-  createCustomAbbreviationPlugin(),
+  PageBreakPlugin,
+  ProhibitDeletionPlugin,
+  CopyPlugin,
+  SelectionPlugin,
+  normalizeNodePlugin,
+  CustomAbbreviationPlugin,
 ];

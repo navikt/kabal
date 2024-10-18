@@ -1,16 +1,8 @@
 import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
-import type {
-  EditorDescendant,
-  EditorValue,
-  MaltekstElement,
-  PlaceholderElement,
-  RichText,
-  RichTextEditor,
-} from '@app/plate/types';
+import type { EditorDescendant, FormattedText, MaltekstElement, PlaceholderElement } from '@app/plate/types';
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 import {
-  type PlateEditor,
   type TElement,
   type TPath,
   getNodeAncestors,
@@ -21,12 +13,13 @@ import {
   withoutNormalizing,
   withoutSavingHistory,
 } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-core/react';
 import { Path } from 'slate';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
 
-export const cleanText = (editor: RichTextEditor, element: PlaceholderElement, path: TPath, at: TPath) => {
-  const cleanedText: RichText[] = element.children.map((c) => ({ ...c, text: removeEmptyCharInText(c.text) }));
+export const cleanText = (editor: PlateEditor, element: PlaceholderElement, path: TPath, at: TPath) => {
+  const cleanedText: FormattedText[] = element.children.map((c) => ({ ...c, text: removeEmptyCharInText(c.text) }));
 
   withoutSavingHistory(editor, () => {
     withoutNormalizing(editor, () => {
@@ -34,21 +27,21 @@ export const cleanText = (editor: RichTextEditor, element: PlaceholderElement, p
         at: path,
         match: (n) => n !== element,
       });
-      insertNodes<RichText>(editor, cleanedText, { at, select: true });
+      insertNodes<FormattedText>(editor, cleanedText, { at, select: true });
     });
   });
 };
 
-export const ensureOnlyOneEmptyChar = (editor: RichTextEditor, element: PlaceholderElement, path: TPath, at: TPath) => {
+export const ensureOnlyOneEmptyChar = (editor: PlateEditor, element: PlaceholderElement, path: TPath, at: TPath) => {
   withoutSavingHistory(editor, () => {
     withoutNormalizing(editor, () => {
       removeNodes(editor, { at: path, match: (n) => n !== element });
-      insertNodes<RichText>(editor, { text: EMPTY_CHAR }, { at });
+      insertNodes<FormattedText>(editor, { text: EMPTY_CHAR }, { at });
     });
   });
 };
 
-export const insertEmptyChar = (editor: RichTextEditor, at: TPath) => {
+export const insertEmptyChar = (editor: PlateEditor, at: TPath) => {
   withoutSavingHistory(editor, () => {
     withoutNormalizing(editor, () => {
       insertText(editor, EMPTY_CHAR, { at });
@@ -100,7 +93,7 @@ export const containsMultipleEmptyCharAndNoText = (text: string): boolean => {
   return emptyCharCount > 1;
 };
 
-export const getIsFocused = (editor: RichTextEditor, path: TPath | undefined): boolean => {
+export const getIsFocused = (editor: PlateEditor, path: TPath | undefined): boolean => {
   if (editor.selection === null || path === undefined) {
     return false;
   }
@@ -108,7 +101,7 @@ export const getIsFocused = (editor: RichTextEditor, path: TPath | undefined): b
   return Path.isParent(path, editor.selection.focus.path);
 };
 
-const getMaltekstElement = (editor: PlateEditor<EditorValue>, path: Path | undefined): MaltekstElement | undefined => {
+const getMaltekstElement = (editor: PlateEditor, path: Path | undefined): MaltekstElement | undefined => {
   if (path === undefined) {
     return undefined;
   }
@@ -125,7 +118,7 @@ const getMaltekstElement = (editor: PlateEditor<EditorValue>, path: Path | undef
 };
 
 const containsLonePlaceholder = (
-  editor: RichTextEditor,
+  editor: PlateEditor,
   element: PlaceholderElement,
   child: EditorDescendant | TElement,
 ): boolean => {
@@ -158,11 +151,7 @@ const containsLonePlaceholder = (
  * I.e will return true if maltekst has one h1 child, and that h1 child has one placeholder child
  *
  */
-export const lonePlaceholderInMaltekst = (
-  editor: RichTextEditor,
-  element: PlaceholderElement,
-  path: Path | undefined,
-) => {
+export const lonePlaceholderInMaltekst = (editor: PlateEditor, element: PlaceholderElement, path: Path | undefined) => {
   const maltekst = getMaltekstElement(editor, path);
 
   if (maltekst === undefined) {

@@ -1,7 +1,8 @@
 import type { RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
 import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
-import { type TNode, type TNodeEntry, findNode, findNodePath, getParentNode, someNode } from '@udecode/plate-common';
-import { ELEMENT_TD, ELEMENT_TR } from '@udecode/plate-table';
+import { type TNode, type TNodeEntry, findNode, getParentNode, someNode } from '@udecode/plate-common';
+import { BaseTableCellPlugin, BaseTableRowPlugin } from '@udecode/plate-table';
+import { findNodePath } from '@udecode/slate-react';
 import { Path } from 'slate';
 
 const findPath = (editor: RichTextEditor, node: TNode | undefined = undefined): Path | undefined =>
@@ -9,7 +10,7 @@ const findPath = (editor: RichTextEditor, node: TNode | undefined = undefined): 
 
 // Cell helpers
 export const getCurrentCell = (editor: RichTextEditor): TNodeEntry<TableCellElement> | undefined =>
-  findNode(editor, { match: isOfElementTypeFn(ELEMENT_TD) });
+  findNode(editor, { match: isOfElementTypeFn(BaseTableCellPlugin.node.type) });
 
 export const getCellColumnOffset = (
   editor: RichTextEditor,
@@ -43,7 +44,7 @@ export const getCurrentRow = (
 
   const [currentRow, currentRowPath] = parentNodeEntry;
 
-  if (!isOfElementType<TableRowElement>(currentRow, ELEMENT_TR)) {
+  if (!isOfElementType<TableRowElement>(currentRow, BaseTableRowPlugin.node.type)) {
     return undefined;
   }
 
@@ -72,7 +73,7 @@ export const getNextRow = (
 
   const [targetRow, targetRowPath] = targetRowEntry;
 
-  if (!isOfElementType<TableRowElement>(targetRow, ELEMENT_TR)) {
+  if (!isOfElementType<TableRowElement>(targetRow, BaseTableRowPlugin.node.type)) {
     return undefined;
   }
 
@@ -105,7 +106,7 @@ export const getPreviousRow = (
 
   const [targetRow, targetRowPath] = targetRowEntry;
 
-  if (!isOfElementType<TableRowElement>(targetRow, ELEMENT_TR)) {
+  if (!isOfElementType<TableRowElement>(targetRow, BaseTableRowPlugin.node.type)) {
     return undefined;
   }
 

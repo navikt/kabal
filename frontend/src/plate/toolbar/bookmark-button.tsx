@@ -2,8 +2,9 @@ import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { pushEvent } from '@app/observability';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
+import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { type RichText, useMyPlateEditorState } from '@app/plate/types';
+import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, BookmarkIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { findNode, isCollapsed, isText, setNodes } from '@udecode/plate-common';
@@ -18,17 +19,17 @@ export const BookmarkButton = () => {
 
   const setBookmark = (bookmark: string) => {
     const id = BOOKMARK_PREFIX + Date.now();
-    setNodes(editor, { [id]: bookmark }, { match: isText, split: true });
+    setNodes(editor, { [BookmarkPlugin.key]: true, [id]: bookmark }, { match: isText, split: true });
 
-    const entries = editor.nodes<RichText>({ match: (n) => isText(n) && id in n });
-    const nodes: RichText[] = [];
+    const entries = editor.nodes<FormattedText>({ match: (n) => isText(n) && id in n });
+    const nodes: FormattedText[] = [];
 
     for (const [node] of entries) {
       nodes.push(node);
     }
   };
 
-  const activeEntry = findNode<RichText>(editor, {
+  const activeEntry = findNode<FormattedText>(editor, {
     match: (n) => isText(n) && Object.keys(n).some((k) => k.startsWith(BOOKMARK_PREFIX)),
   });
 
@@ -65,7 +66,7 @@ export const BookmarkButton = () => {
   );
 };
 
-const getActiveBookmark = (text: RichText | undefined): string | null => {
+const getActiveBookmark = (text: FormattedText | undefined): string | null => {
   if (text === undefined) {
     return null;
   }

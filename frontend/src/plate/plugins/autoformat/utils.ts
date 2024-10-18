@@ -1,10 +1,10 @@
 import type { AutoformatBlockRule } from '@udecode/plate-autoformat';
-import { type PlateEditor, getParentNode, isElement } from '@udecode/plate-common';
+import { type SlateEditor, getParentNode, isElement } from '@udecode/plate-common';
 import { toggleList, unwrapList } from '@udecode/plate-list';
 
 export const preFormat: AutoformatBlockRule['preFormat'] = (editor) => unwrapList(editor);
 
-const format = (editor: PlateEditor, customFormatting: () => void) => {
+const format = (editor: SlateEditor, customFormatting: () => void) => {
   if (editor.selection) {
     const parentEntry = getParentNode(editor, editor.selection);
 
@@ -19,7 +19,7 @@ const format = (editor: PlateEditor, customFormatting: () => void) => {
   }
 };
 
-export const formatList = (editor: PlateEditor, elementType: string) => {
+export const formatList = (editor: SlateEditor, elementType: string) => {
   format(editor, () =>
     toggleList(editor, {
       type: elementType,

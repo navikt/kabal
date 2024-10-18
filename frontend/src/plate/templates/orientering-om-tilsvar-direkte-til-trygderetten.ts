@@ -1,10 +1,11 @@
 import { deepFreeze } from '@app/functions/deep-freeze';
 import { Source } from '@app/plate/components/label-content';
-import { type EditorValue, TextAlign } from '@app/plate/types';
+import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import type { Value } from '@udecode/plate-common';
+import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { TemplateSections } from '../template-sections';
 import {
   createCurrentDate,
@@ -15,14 +16,14 @@ import {
   createSignature,
 } from './helpers';
 
-const INITIAL_SLATE_VALUE: EditorValue = [
+const INITIAL_SLATE_VALUE: Value = [
   createCurrentDate(),
   createHeader(),
 
   createMaltekstseksjon(TemplateSections.TILSVARSBREV_TITLE),
 
   {
-    type: ELEMENT_PARAGRAPH,
+    type: BaseParagraphPlugin.key,
     align: TextAlign.LEFT,
     children: [
       createLabelContent(Source.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME, 'Den ankende part'),

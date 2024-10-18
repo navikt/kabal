@@ -3,13 +3,12 @@ import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
-import { renderReadOnlyLeaf } from '@app/plate/leaf/render-leaf';
-import { PlateEditor } from '@app/plate/plate-editor';
-import { previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
-import type { EditorValue, RichTextEditor } from '@app/plate/types';
+import { KabalPlateEditor } from '@app/plate/plate-editor';
+import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
+import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { FileSearchIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps } from '@navikt/ds-react';
-import { Plate } from '@udecode/plate-common';
+import { Plate, usePlateEditor } from '@udecode/plate-core/react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -17,7 +16,7 @@ type OpenSide = 'left' | 'right';
 type OpenDirection = 'up' | 'down';
 
 interface PreviewProps {
-  content: EditorValue;
+  content: KabalValue;
   id: string;
   buttonSize: ButtonProps['size'];
   buttonVariant: ButtonProps['variant'];
@@ -40,6 +39,13 @@ export const RichTextPreview = ({
   useOnClickOutside(ref, () => setViewContent(false));
   const lang = useRedaktoerLanguage();
 
+  const editor = usePlateEditor<KabalValue, (typeof previewPlugins)[0]>({
+    id,
+    plugins: previewPlugins,
+    override: { components: previewComponents },
+    value: structuredClone(content), // Do not remove. Solves a bug where the main editor crashes when the preview is toggled on and off.
+  });
+
   return (
     <PreviewContainer ref={ref}>
       <Button
@@ -54,13 +60,8 @@ export const RichTextPreview = ({
 
       {viewContent ? (
         <ContentContainer $openSide={openSide} $openDirection={openDirection}>
-          <Plate<EditorValue, RichTextEditor>
-            id={id}
-            initialValue={structuredClone(content)} // Do not remove. Solves a bug where the main editor crashes when the preview is toggled on and off.
-            readOnly
-            plugins={previewPlugins}
-          >
-            <PlateEditor id={id} readOnly renderLeaf={renderReadOnlyLeaf} lang={SPELL_CHECK_LANGUAGES[lang]} />
+          <Plate<RichTextEditor> editor={editor} readOnly>
+            <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[lang]} />
           </Plate>
         </ContentContainer>
       ) : null}
