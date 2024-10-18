@@ -115,6 +115,13 @@ const StyledBodyLong = styled(BodyLong)`
   white-space: pre-wrap;
   border-left: var(--a-spacing-1) solid var(--a-border-subtle);
   padding-left: var(--a-spacing-2);
+
+  &:empty{
+    &::before {
+      font-style: italic;
+      content: 'Ingen tekst';
+    }
+  }
 `;
 
 const StyledCopyButton = styled(CopyButton)`
