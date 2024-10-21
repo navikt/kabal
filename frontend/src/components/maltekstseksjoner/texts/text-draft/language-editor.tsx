@@ -39,8 +39,8 @@ export const LanguageEditor = ({
       ref={editorRef}
       editorId={`${text.id}-${language}`}
       savedContent={savedContent}
-      onChange={(t) => {
-        const changed: RichTexts = { ...richTexts, [language]: t };
+      onChange={({ value }) => {
+        const changed: RichTexts = { ...richTexts, [language]: value };
         richTextRef.current = changed;
         setRichTexts(changed);
       }}
