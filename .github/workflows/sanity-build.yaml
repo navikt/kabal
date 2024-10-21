@@ -29,7 +29,6 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: |
-            ${{matrix.apps}}/.eslintcache
             ${{matrix.apps}}/.tsbuildinfo
           key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
 
@@ -56,6 +55,5 @@ jobs:
         if: always()
         with:
           path: |
-            ${{matrix.apps}}/.eslintcache
             ${{matrix.apps}}/.tsbuildinfo
           key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
