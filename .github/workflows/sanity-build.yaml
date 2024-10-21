@@ -22,6 +22,7 @@ jobs:
         shell: bash
         run: |
           cd ${{ matrix.apps }}
+          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"${{ secrets.READER_TOKEN }}\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
           bun install
           
       - name: Restore caches for ${{ matrix.apps }}
