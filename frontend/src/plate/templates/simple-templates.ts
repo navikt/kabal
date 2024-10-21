@@ -47,7 +47,7 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
         createLabelContent(Source.SAKSNUMMER, 'Saksnummer'),
       ],
     },
-    createMaltekstseksjon(TemplateSections.INTRODUCTION_TEMP),
+    createMaltekstseksjon(TemplateSections.INTRODUCTION),
     createMaltekstseksjon(TemplateSections.FREMLEGG),
     createSignature(),
   ],
