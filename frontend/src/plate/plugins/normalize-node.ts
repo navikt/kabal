@@ -45,6 +45,8 @@ import {
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 import { Scrubber } from 'slate';
 
+const module = 'normalize';
+
 export const normalizeNodePlugin = createPlatePlugin({
   key: 'normalize',
   extendEditor: ({ editor }) => {
@@ -58,7 +60,11 @@ export const normalizeNodePlugin = createPlatePlugin({
       if (node.type === undefined) {
         pushNodeEvent(editor, node, path, 'normalized-undefined-type');
 
+        pushLog(`Looking for parent node at: ${JSON.stringify(path)}`, { context: { module } });
+
         const parentEntry = getParentNode(editor, path);
+
+        pushLog(`Found parent entry: ${Scrubber.stringify(parentEntry)})`, { context: { module } });
 
         const options = { context: { node: Scrubber.stringify(node), path: JSON.stringify(path) } };
 
