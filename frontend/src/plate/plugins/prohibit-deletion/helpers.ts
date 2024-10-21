@@ -1,23 +1,10 @@
-import {
-  ELEMENT_LABEL_CONTENT,
-  ELEMENT_PLACEHOLDER,
-  ELEMENT_REGELVERK,
-  UNCHANGEABLE,
-  UNDELETABLE,
-} from '@app/plate/plugins/element-types';
-import type { PlaceholderElement } from '@app/plate/types';
+import { ELEMENT_LABEL_CONTENT, ELEMENT_REGELVERK, UNCHANGEABLE, UNDELETABLE } from '@app/plate/plugins/element-types';
 import {
   type NodeOf,
   type TNodeEntry,
-  findNode,
   getNodeAncestors,
   getParentNode,
   isElement,
-  isElementEmpty,
-  isEndPoint,
-  isExpanded,
-  isStartPoint,
-  removeNodes,
   someNode,
 } from '@udecode/plate-common';
 import type { PlateEditor } from '@udecode/plate-core/react';
@@ -70,51 +57,3 @@ const hasUndeletableAncestor = (editor: PlateEditor, descendantEntry: TNodeEntry
 };
 
 export const isInRegelverk = (editor: PlateEditor): boolean => someNode(editor, { match: { type: ELEMENT_REGELVERK } });
-
-export const handleDeleteBackwardInPlaceholder = (editor: PlateEditor): boolean => {
-  const placeholderEntry = findNode<PlaceholderElement>(editor, { match: { type: ELEMENT_PLACEHOLDER } });
-
-  if (placeholderEntry === undefined) {
-    return false;
-  }
-
-  const [node, path] = placeholderEntry;
-
-  if (editor.selection === null || isExpanded(editor.selection)) {
-    return false;
-  }
-
-  if (isStartPoint(editor, editor.selection.anchor, path)) {
-    if (isElementEmpty(editor, node)) {
-      removeNodes(editor, { at: path });
-
-      return true;
-    }
-  }
-
-  return false;
-};
-
-export const handleDeleteForwardInPlaceholder = (editor: PlateEditor): boolean => {
-  const placeholderEntry = findNode<PlaceholderElement>(editor, { match: { type: ELEMENT_PLACEHOLDER } });
-
-  if (placeholderEntry === undefined) {
-    return false;
-  }
-
-  const [node, path] = placeholderEntry;
-
-  if (editor.selection === null || isExpanded(editor.selection)) {
-    return false;
-  }
-
-  if (isEndPoint(editor, editor.selection.anchor, path)) {
-    if (isElementEmpty(editor, node)) {
-      removeNodes(editor, { at: path });
-
-      return true;
-    }
-  }
-
-  return false;
-};
