@@ -1,3 +1,9 @@
+import {
+  handleDeleteBackwardFromInside,
+  handleDeleteBackwardFromOutside,
+  handleDeleteForwardFromInside,
+  handleDeleteForwardFromOutside,
+} from '@app/plate/plugins/placeholder/delete';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
 import { type TDescendant, type TRange, type TText, findNode, insertNodes, isElement } from '@udecode/plate-common';
 import type { PlateEditor } from '@udecode/plate-core/react';
@@ -15,7 +21,40 @@ const extractText = (fragment: TDescendant[]): TText[] =>
   });
 
 export const withOverrides = (editor: PlateEditor) => {
-  const { setSelection, insertBreak, insertSoftBreak, insertNode, setNodes, insertFragment } = editor;
+  const {
+    setSelection,
+    insertBreak,
+    insertSoftBreak,
+    insertNode,
+    setNodes,
+    insertFragment,
+    deleteBackward,
+    deleteForward,
+  } = editor;
+
+  editor.deleteBackward = (unit) => {
+    if (handleDeleteBackwardFromInside(editor)) {
+      return;
+    }
+
+    if (handleDeleteBackwardFromOutside(editor)) {
+      return;
+    }
+
+    deleteBackward(unit);
+  };
+
+  editor.deleteForward = (unit) => {
+    if (handleDeleteForwardFromInside(editor)) {
+      return;
+    }
+
+    if (handleDeleteForwardFromOutside(editor)) {
+      return;
+    }
+
+    deleteForward(unit);
+  };
 
   editor.setNodes = (props, options) => {
     const maltekst = findNode<MaltekstElement>(editor, { match: { type: ELEMENT_MALTEKST } });
