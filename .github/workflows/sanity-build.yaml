@@ -23,7 +23,7 @@ jobs:
         run: |
           cd ${{ matrix.apps }}
           echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"${{ secrets.READER_TOKEN }}\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
-          bun install
+          bun install --frozen-lockfile
           
       - name: Restore caches for ${{ matrix.apps }}
         uses: actions/cache/restore@v3
