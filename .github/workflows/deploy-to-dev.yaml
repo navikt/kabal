@@ -56,7 +56,7 @@ jobs:
         run: |
           cd frontend
           echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"${{ secrets.READER_TOKEN }}\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
-          bun install
+          bun install --frozen-lockfile
 
       - name: Build frontend
         shell: bash
@@ -76,7 +76,7 @@ jobs:
         shell: bash
         run: |
           cd server
-          bun install
+          bun install --frozen-lockfile
       
       - name: Test server
         shell: bash
