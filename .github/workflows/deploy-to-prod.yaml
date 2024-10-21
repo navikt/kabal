@@ -6,6 +6,9 @@ on:
       NAIS_WORKLOAD_IDENTITY_PROVIDER:
         description: "Identity provider for nais/docker-build-push"
         required: true
+      READER_TOKEN:
+        description: "Token for reading from GitHub Package Registry"
+        required: true
   workflow_dispatch:
 
 run-name: Prod deploy of ${{ github.ref_name }}
