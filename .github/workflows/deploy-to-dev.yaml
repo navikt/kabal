@@ -55,6 +55,7 @@ jobs:
         shell: bash
         run: |
           cd frontend
+          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"${{ secrets.READER_TOKEN }}\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
           bun install
 
       - name: Build frontend
