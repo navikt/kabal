@@ -172,7 +172,7 @@ const LanguageEditor = ({ language, text, savedContent, setRichTexts, richTexts 
     <RedaktoerRichText
       editorId={`${text.id}-${language}`}
       savedContent={savedContent}
-      onChange={(t) => setRichTexts({ ...richTexts, [language]: t })}
+      onChange={({ value }) => setRichTexts({ ...richTexts, [language]: value })}
       lang={SPELL_CHECK_LANGUAGES[language]}
     />
   );
