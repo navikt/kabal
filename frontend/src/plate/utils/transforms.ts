@@ -1,3 +1,4 @@
+import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { createPageBreak, createPlaceHolder, createSimpleParagraph } from '@app/plate/templates/helpers';
 import type { PlaceholderElement } from '@app/plate/types';
@@ -55,17 +56,10 @@ export const removePlaceholder = (editor: PlateEditor) => {
   }
 
   const [node, path] = entry;
-  const text = editor.string(path);
-
-  const hadText = text.length !== 0;
+  const text = removeEmptyCharInText(editor.string(path));
 
   withoutNormalizing(editor, () => {
     removeNodes(editor, { at: path });
-
-    if (hadText) {
-      insertText(editor, text);
-    } else {
-      insertText(editor, node.placeholder);
-    }
+    insertText(editor, text.trim().length === 0 ? node.placeholder : text);
   });
 };
