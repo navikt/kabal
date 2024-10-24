@@ -1,0 +1,363 @@
+import { LoadingTable } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/loading-table';
+import { Row } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/row';
+import { TableHeader } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/table-header';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { usePushEvent } from '@app/observability';
+import { useGetGosysOppgaveListQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
+import { useSearchEnheterQuery } from '@app/redux-api/search';
+import type { INavEmployee } from '@app/types/bruker';
+import type { Enhet, ListGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { Button, Heading, Modal, Table } from '@navikt/ds-react';
+import type { SortState } from '@navikt/ds-react/Table';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useEffect, useMemo, useState } from 'react';
+import { styled } from 'styled-components';
+
+interface ScopedSortState extends SortState {
+  orderBy: keyof ListGosysOppgave;
+}
+
+const getDirection = (sortState: ScopedSortState, sortKey: keyof ListGosysOppgave): SortState['direction'] => {
+  if (sortState.orderBy !== sortKey) {
+    return 'ascending';
+  }
+
+  return sortState.direction === 'ascending' ? 'descending' : 'ascending';
+};
+
+const isINavEmployee = (_: unknown, key: string): _ is INavEmployee => key === 'opprettetAv' || key === 'endretAv';
+
+const sortData = (
+  data: ListGosysOppgave[],
+  { direction, orderBy }: ScopedSortState,
+  enheter: Enhet[],
+): ListGosysOppgave[] =>
+  data.sort((a, b) => {
+    const aVal = a[orderBy];
+    const bVal = b[orderBy];
+
+    if (aVal === null) {
+      return bVal === null ? 0 : 1;
+    }
+
+    if (bVal === null) {
+      return -1;
+    }
+
+    if (typeof aVal === 'string' && typeof bVal === 'string') {
+      return direction === 'ascending' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+    }
+
+    if (typeof aVal === 'number' && typeof bVal === 'number') {
+      return direction === 'ascending' ? aVal - bVal : bVal - aVal;
+    }
+
+    if (orderBy === 'opprettetAvEnhet') {
+      const aEnhet = `${a.opprettetAvEnhet?.navn ?? ''} (${a.opprettetAvEnhet?.enhetsnr ?? ''})`;
+      const bEnhet = `${b.opprettetAvEnhet?.navn ?? ''} (${b.opprettetAvEnhet?.enhetsnr ?? ''})`;
+
+      return direction === 'ascending' ? aEnhet.localeCompare(bEnhet) : bEnhet.localeCompare(aEnhet);
+    }
+
+    if (orderBy === 'tildeltEnhetsnr') {
+      const aEnhetName = enheter.find((e) => e.enhetsnr === aVal)?.navn ?? '';
+      const bEnhetName = enheter.find((e) => e.enhetsnr === bVal)?.navn ?? '';
+
+      const aEnhet = `${aEnhetName} (${aVal})`;
+      const bEnhet = `${bEnhetName} (${bVal})`;
+
+      return direction === 'ascending' ? aEnhet.localeCompare(bEnhet) : bEnhet.localeCompare(aEnhet);
+    }
+
+    if (orderBy === 'opprettetAv' || orderBy === 'endretAv') {
+      const aName = isINavEmployee(aVal, orderBy) ? aVal.navn : '';
+      const bName = isINavEmployee(bVal, orderBy) ? bVal.navn : '';
+
+      return direction === 'ascending' ? aName.localeCompare(bName) : bName.localeCompare(aName);
+    }
+
+    return 0;
+  });
+
+export const SelectGosysOppgaveModal = ({ hasGosysOppgave }: { hasGosysOppgave: boolean }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const pushEvent = usePushEvent();
+
+  const onClick = () => {
+    setIsOpen(true);
+    pushEvent('open-gosys-oppgave-modal', { hasGosysOppgave: hasGosysOppgave.toString() });
+  };
+
+  return (
+    <>
+      <Button variant="secondary" size="small" onClick={onClick}>
+        Oppgave fra Gosys
+      </Button>
+      <Modal
+        aria-label="Velg oppgave fra Gosys"
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        header={{ heading: 'Velg oppgave fra Gosys', closeButton: true }}
+        closeOnBackdropClick
+        width="90%"
+      >
+        <ModalBody>
+          <SelectGosysOppgave />
+        </ModalBody>
+
+        <Modal.Footer>
+          <Button variant="secondary" size="small" onClick={() => setIsOpen(false)} style={{ alignSelf: 'flex-end' }}>
+            Lukk
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+};
+
+interface SelectGosysOppgaveProps {
+  children?: React.ReactNode;
+}
+
+export const SelectGosysOppgave = ({ children }: SelectGosysOppgaveProps) => {
+  const { data: oppgave } = useOppgave();
+  const { data, isLoading, isSuccess } = useGetGosysOppgaveListQuery(oppgave?.id ?? skipToken);
+  const selected = oppgave?.gosysOppgaveId ?? null;
+  const hasGosysOppgaveId = selected !== null;
+  const [showOpen, setShowOpen] = useState(!hasGosysOppgaveId);
+  const [showOther, setShowOther] = useState(false);
+  const pushEvent = usePushEvent();
+
+  useEffect(() => {
+    if (!hasGosysOppgaveId) {
+      setShowOpen(true);
+    }
+  }, [hasGosysOppgaveId]);
+
+  const selectedGosysOppgave = useMemo(() => data?.find(({ id }) => id === selected), [data, selected]);
+
+  interface Lists {
+    openOppgaveList: ListGosysOppgave[];
+    otherOppgaveList: ListGosysOppgave[];
+  }
+
+  const { openOppgaveList, otherOppgaveList } = useMemo<Lists>(() => {
+    const openOppgaveList: ListGosysOppgave[] = [];
+    const otherOppgaveList: ListGosysOppgave[] = [];
+
+    if (!isSuccess) {
+      return { openOppgaveList, otherOppgaveList };
+    }
+
+    for (const oppgave of data) {
+      if (oppgave.editable) {
+        openOppgaveList.push(oppgave);
+      } else {
+        otherOppgaveList.push(oppgave);
+      }
+    }
+
+    return { openOppgaveList, otherOppgaveList };
+  }, [data, isSuccess]);
+
+  if (isLoading) {
+    return <LoadingTable />;
+  }
+
+  if (!isSuccess || oppgave === undefined) {
+    return null;
+  }
+
+  const onShowOpenClick = () => {
+    const eventName = showOpen ? 'hide-open-gosys-oppgaver' : 'show-open-gosys-oppgaver';
+
+    pushEvent(eventName, {
+      hasGosysOppgave: hasGosysOppgaveId.toString(),
+      selectedGosysOppgaveStatus: selectedGosysOppgave?.status ?? 'NONE',
+      showOpen: (!showOpen).toString(),
+    });
+
+    if (showOpen) {
+      setShowOpen(false);
+      setShowOther(false);
+    } else {
+      setShowOpen(true);
+    }
+  };
+
+  const onShowOtherClick = () => {
+    const eventName = showOther ? 'hide-other-gosys-oppgaver' : 'show-other-gosys-oppgaver';
+
+    pushEvent(eventName, {
+      hasGosysOppgave: hasGosysOppgaveId.toString(),
+      selectedGosysOppgaveStatus: selectedGosysOppgave?.status ?? 'NONE',
+      showOther: (!showOther).toString(),
+    });
+
+    setShowOther(!showOther);
+  };
+
+  return (
+    <>
+      <ButtonContainer>
+        {children}
+
+        <Button
+          variant="secondary"
+          size="small"
+          onClick={onShowOpenClick}
+          style={{ alignSelf: 'flex-start' }}
+          disabled={showOpen && !hasGosysOppgaveId}
+        >
+          {showOpen ? 'Vis bare valgt' : 'Bytt oppgave'}
+        </Button>
+
+        {showOpen ? (
+          <Button
+            variant="secondary"
+            size="small"
+            onClick={onShowOtherClick}
+            style={{ alignSelf: 'flex-start' }}
+            icon={showOther ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
+          >
+            {showOther
+              ? 'Skjul ferdigstilte og feilregistrerte oppgaver'
+              : 'Vis ferdigstilte og feilregistrerte oppgaver'}
+          </Button>
+        ) : null}
+      </ButtonContainer>
+
+      <SortableTable
+        heading={
+          showOpen || selectedGosysOppgave === undefined ? `Åpne oppgaver (${openOppgaveList.length})` : 'Valgt oppgave'
+        }
+        fallback="Ingen åpne oppgaver."
+        oppgaver={showOpen || selectedGosysOppgave === undefined ? openOppgaveList : [selectedGosysOppgave]}
+        selectedGosysOppgave={selectedGosysOppgave}
+        oppgaveId={oppgave.id}
+      />
+
+      {showOther ? (
+        <SortableTable
+          heading={`Ferdigstilte og feilregistrerte oppgaver (${otherOppgaveList.length})`}
+          fallback="Ingen ferdigstilte eller feilregistrerte oppgaver."
+          oppgaver={otherOppgaveList}
+          selectedGosysOppgave={selectedGosysOppgave}
+          oppgaveId={oppgave.id}
+          showFerdigstilt
+        />
+      ) : null}
+    </>
+  );
+};
+
+interface SortableTableProps {
+  heading: string;
+  fallback?: string;
+  oppgaver: ListGosysOppgave[];
+  selectedGosysOppgave: ListGosysOppgave | undefined;
+  oppgaveId: string;
+  showFerdigstilt?: boolean;
+}
+
+const SortableTable = ({
+  oppgaver,
+  selectedGosysOppgave,
+  oppgaveId,
+  heading,
+  showFerdigstilt = false,
+  fallback,
+}: SortableTableProps) => {
+  const { data: enheter = [] } = useSearchEnheterQuery({});
+  const [sort, setSort] = useState<ScopedSortState>({ direction: 'ascending', orderBy: 'opprettetTidspunkt' });
+
+  const handleSort = (sortKey: string) => {
+    if (!isKeyofGosysOppgave(sortKey)) {
+      return;
+    }
+
+    setSort({ orderBy: sortKey, direction: getDirection(sort, sortKey) });
+  };
+
+  const sortedOppgaver: ListGosysOppgave[] = useMemo(
+    () => sortData(oppgaver, sort, enheter),
+    [oppgaver, sort, enheter],
+  );
+
+  if (oppgaver.length === 0 && fallback !== undefined) {
+    return (
+      <section>
+        <Heading level="1" size="xsmall" spacing>
+          {heading}
+        </Heading>
+
+        <NoneWarning>{fallback}</NoneWarning>
+      </section>
+    );
+  }
+
+  return (
+    <section>
+      <Heading level="1" size="xsmall" spacing>
+        {heading}
+      </Heading>
+
+      <Table size="small" zebraStripes onSortChange={handleSort} sort={sort}>
+        <TableHeader showFerdigstilt={showFerdigstilt} />
+
+        <Table.Body>
+          {sortedOppgaver.map((d) => (
+            <Row
+              key={d.id}
+              gosysOppgave={d}
+              selectedGosysOppgave={selectedGosysOppgave}
+              oppgaveId={oppgaveId}
+              showFerdigstilt={showFerdigstilt}
+            />
+          ))}
+        </Table.Body>
+      </Table>
+    </section>
+  );
+};
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: var(--a-spacing-4);
+`;
+
+const NoneWarning = styled.span`
+  font-style: italic;
+`;
+
+const ModalBody = styled(Modal.Body)`
+  padding: var(--a-spacing-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--a-spacing-4);
+`;
+
+const GOSYS_OPPGAVE_KEYS: (keyof ListGosysOppgave)[] = [
+  'id',
+  'tildeltEnhetsnr',
+  'endretAvEnhetsnr',
+  'endretAv',
+  'endretTidspunkt',
+  'opprettetAv',
+  'opprettetTidspunkt',
+  'beskrivelse',
+  'temaId',
+  'gjelder',
+  'oppgavetype',
+  'fristFerdigstillelse',
+  'ferdigstiltTidspunkt',
+  'status',
+  'editable',
+  'opprettetAvEnhet',
+  'alreadyUsedBy',
+];
+
+const GOSYS_STATUS_KEY_STRINGS: string[] = GOSYS_OPPGAVE_KEYS.map((key) => key);
+
+const isKeyofGosysOppgave = (key: string): key is keyof ListGosysOppgave => GOSYS_STATUS_KEY_STRINGS.includes(key);

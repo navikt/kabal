@@ -11,6 +11,7 @@ import {
   useTableCellElementState,
 } from '@udecode/plate-table/react';
 import { forwardRef, useCallback, useContext } from 'react';
+import type { MouseEvent } from 'react';
 import { styled } from 'styled-components';
 import { StyledParagraph } from '../paragraph';
 

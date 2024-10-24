@@ -3,7 +3,7 @@ import type { INavEmployee } from '@app/types/bruker';
 import type { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import type { FlowState, IOrganizationPart, IPersonPart, IVenteperiode } from '@app/types/oppgave-common';
-import type { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { BehandlingGosysOppgave, IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type { FradelReason } from '@app/types/oppgaver';
 import type { Language } from '@app/types/texts/language';
 
@@ -113,6 +113,10 @@ export interface FerdigstiltEvent extends BaseEvent {
 }
 
 export interface FeilregistreringEvent extends BaseEvent, Omit<IFeilregistrering, 'feilregistrertAv'> {}
+
+export interface GosysOppgaveEvent extends BaseEvent {
+  gosysOppgave: BehandlingGosysOppgave;
+}
 
 interface ChangedDocument {
   id: string;
