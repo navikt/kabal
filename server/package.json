@@ -20,7 +20,7 @@
     "@hocuspocus/common": "2.13.7",
     "@hocuspocus/server": "2.13.7",
     "@slate-yjs/core": "1.0.2",
-    "@types/node": "22.7.7",
+    "@types/node": "22.7.9",
     "fastify": "5.0.0",
     "fastify-metrics": "12.1.0",
     "jose": "4.15.9",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@types/bun": "1.1.11",
+    "@types/bun": "1.1.12",
     "@types/uuid": "10.0.0",
     "typescript": "5.6.3"
   }
