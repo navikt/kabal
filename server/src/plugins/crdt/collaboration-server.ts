@@ -91,8 +91,8 @@ const startRefreshOboTokenInterval = (context: ConnectionContext, immediate = fa
 };
 
 export const collaborationServer = Server.configure({
-  debounce: 3_000,
-  maxDebounce: 15_000,
+  debounce: 500,
+  maxDebounce: 1_000,
 
   onConnect: async ({ context }) => {
     if (isConnectionContext(context)) {
