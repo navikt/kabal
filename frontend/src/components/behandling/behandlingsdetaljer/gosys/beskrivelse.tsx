@@ -1,66 +1,37 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
-import { BEHANDLING_PANEL_DOMAIN } from '@app/components/behandling/behandlingsdetaljer/gosys/domain';
+import { GosysBeskrivelseTabs } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse-tabs';
 import { Entry } from '@app/components/behandling/behandlingsdetaljer/gosys/entry';
-import { GosysBeskrivelseFormat } from '@app/components/behandling/behandlingsdetaljer/gosys/format-enum';
-import { ModalContent } from '@app/components/behandling/behandlingsdetaljer/gosys/modal-content';
-import { simpleHeaderPrecheck } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/parse-header';
 import { splitBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/split-beskrivelse';
 import { StyledEntryList } from '@app/components/behandling/behandlingsdetaljer/gosys/styled-entry-list';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
-import { pushEvent, pushLog } from '@app/observability';
+import { usePushEvent } from '@app/observability';
 import { Box, Button, Modal, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
-  oppgavebeskrivelse: string | null;
+  oppgavebeskrivelse: string;
 }
 
 export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
   const oppgaveId = useOppgaveIdString();
   const modalRef = useRef<HTMLDialogElement>(null);
-  const trimmedBeskrivelse = useMemo(
-    () => (oppgavebeskrivelse === null ? null : oppgavebeskrivelse.trim()),
-    [oppgavebeskrivelse],
-  );
-  const expectedEntries =
-    trimmedBeskrivelse?.split('\n').filter((l) => simpleHeaderPrecheck(l) && l.split('').some((c) => c !== '-'))
-      .length ?? 0;
-  const entries = useMemo(
-    () => (trimmedBeskrivelse === null ? [] : splitBeskrivelse(trimmedBeskrivelse)),
-    [trimmedBeskrivelse],
-  );
-  const preferredFormat = usePreferredFormat();
+  const trimmedBeskrivelse = oppgavebeskrivelse.trim();
+  const entries = useMemo(() => splitBeskrivelse(oppgavebeskrivelse), [oppgavebeskrivelse]);
+  const pushEvent = usePushEvent();
 
   const onOpenClick = useCallback(() => {
     modalRef.current?.showModal();
-    pushEvent('open-gosys-description', BEHANDLING_PANEL_DOMAIN, {
-      format: preferredFormat,
-      expectedEntries: expectedEntries.toString(10),
-      actualEntries: entries.length.toString(10),
+    pushEvent('open-gosys-description', {
+      entries: entries.length.toString(10),
       oppgaveId,
     });
-  }, [entries.length, expectedEntries, oppgaveId, preferredFormat]);
-
-  const hasExpectedEntries = entries.length === expectedEntries;
-
-  useEffect(() => {
-    if (!hasExpectedEntries) {
-      const context = {
-        expectedEntries: expectedEntries.toString(10),
-        actualEntries: entries.length.toString(10),
-        oppgaveId,
-      };
-      pushLog('Unexpected number of entries in Gosys description', { context });
-      pushEvent('unexpected-gosys-description', BEHANDLING_PANEL_DOMAIN, context);
-    }
-  }, [entries.length, expectedEntries, hasExpectedEntries, oppgaveId]);
+  }, [entries.length, oppgaveId, pushEvent]);
 
   const [firstEntry, secondEntry] = entries;
 
-  if (trimmedBeskrivelse === null || firstEntry === undefined) {
+  if (firstEntry === undefined) {
     return null;
   }
 
@@ -87,23 +58,11 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
 
       <Modal header={{ heading: 'Beskrivelse fra Gosys', closeButton: true }} ref={modalRef} closeOnBackdropClick>
         <Modal.Body style={{ height: '80vh', overflow: 'hidden' }}>
-          <ModalContent
-            defaultFormat={preferredFormat}
-            beskrivelse={trimmedBeskrivelse}
-            entries={entries}
-            gosysEntries={expectedEntries}
-            hasExpectedEntries={hasExpectedEntries}
-          />
+          <GosysBeskrivelseTabs beskrivelse={trimmedBeskrivelse} entries={entries} />
         </Modal.Body>
       </Modal>
     </BehandlingSection>
   );
-};
-
-const usePreferredFormat = () => {
-  const { value } = useGosysBeskrivelseTab();
-
-  return value !== GosysBeskrivelseFormat.GOSYS ? GosysBeskrivelseFormat.KABAL : GosysBeskrivelseFormat.GOSYS;
 };
 
 const useOppgaveIdString = () => {

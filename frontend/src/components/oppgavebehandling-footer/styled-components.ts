@@ -103,8 +103,8 @@ export const StyledFooter = styled.div<{ $type: FooterType }>`
 `;
 
 export const StyledFinishOppgaveButtons = styled.div<{ $width: number }>`
-  display: flex;
-  justify-content: space-between;
-  gap: var(--a-spacing-4);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 'left right'; 
   width: ${({ $width }) => $width}px;
 `;

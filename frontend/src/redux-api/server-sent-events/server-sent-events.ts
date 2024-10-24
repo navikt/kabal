@@ -30,6 +30,7 @@ export enum ServerSentEventType {
   MEDUNDERSKRIVER = 'MEDUNDERSKRIVER',
   KLAGER = 'KLAGER',
   FULLMEKTIG = 'FULLMEKTIG',
+  GOSYS_OPPGAVE = 'GOSYS_OPPGAVE',
   /** Added or changed */
   MESSAGE = 'MESSAGE',
   UTFALL = 'UTFALL',
