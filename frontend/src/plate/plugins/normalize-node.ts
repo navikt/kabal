@@ -31,6 +31,7 @@ import {
   getNode,
   getParentNode,
   insertNodes,
+  isEditor,
   isElement,
   setNodes,
 } from '@udecode/plate-common';
@@ -69,17 +70,31 @@ export const normalizeNodePlugin = createPlatePlugin({
         const options = { context: { node: Scrubber.stringify(node), path: JSON.stringify(path) } };
 
         if (parentEntry === undefined) {
-          pushLog('Missing node type, but no parent. Unable to normalize.', options, LogLevel.ERROR);
+          pushLog('Missing node type, but no parent. Setting type to paragraph.', options, LogLevel.WARN);
 
-          return normalizeNode([node, path]);
+          return setNodes(editor, { type: BaseParagraphPlugin.node.type }, { at: path, match: (n) => n === node });
         }
 
         const [parentNode] = parentEntry;
 
-        if (!isElement(parentNode)) {
-          pushLog('Missing node type, but parent node is not element. Unable to normalize.', options, LogLevel.ERROR);
+        if (isEditor(parentNode)) {
+          pushLog('Missing node type, element at top level. Setting type to paragraph.', options, LogLevel.WARN);
 
-          return normalizeNode([node, path]);
+          return setNodes(editor, { type: BaseParagraphPlugin.node.type }, { at: path, match: (n) => n === node });
+        }
+
+        if (!isElement(parentNode)) {
+          pushLog(
+            'Missing node type, but parent node is not element. Setting parent type to paragraph.',
+            options,
+            LogLevel.WARN,
+          );
+
+          return setNodes(
+            editor,
+            { type: BaseParagraphPlugin.node.type },
+            { at: path, match: (n) => n === parentNode },
+          );
         }
 
         if (parentNode.type === BaseListItemPlugin.node.type) {
