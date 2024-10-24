@@ -1,20 +1,21 @@
+import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
+import { Innsendingshjemmel } from '@app/components/behandling/behandlingsdetaljer/innsendingshjemmel';
+import { KjennelseMottatt } from '@app/components/behandling/behandlingsdetaljer/kjennelse-mottatt';
+import { Lovhjemmel } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
+import { SendtTilTrygderetten } from '@app/components/behandling/behandlingsdetaljer/sendt-til-trygderetten';
 import { Tilbakekreving } from '@app/components/behandling/behandlingsdetaljer/tilbakekreving';
+import { UtfallResultat } from '@app/components/behandling/behandlingsdetaljer/utfall-resultat';
+import { Ytelse } from '@app/components/behandling/behandlingsdetaljer/ytelse';
+import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
+import { Part } from '@app/components/part/part';
+import { Type } from '@app/components/type/type';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { ITrygderettsankebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Heading } from '@navikt/ds-react';
-import { Part } from '../../part/part';
-import { Type } from '../../type/type';
-import { StyledBehandlingSection } from '../styled-components';
-import { BehandlingSection } from './behandling-section';
-import { KjennelseMottatt } from './kjennelse-mottatt';
-import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
-import { SendtTilTrygderetten } from './sendt-til-trygderetten';
-import { UtfallResultat } from './utfall-resultat';
-import { Ytelse } from './ytelse';
 
 interface Props {
   oppgavebehandling: ITrygderettsankebehandling;
@@ -59,6 +60,8 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
       </BehandlingSection>
 
       <Saksnummer saksnummer={saksnummer} />
+
+      <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 
       <SendtTilTrygderetten />
 

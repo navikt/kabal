@@ -101,3 +101,7 @@ export interface IValidationParams extends IOppgavebehandlingBaseParams {
 export interface ISetRolParams extends IOppgavebehandlingBaseParams {
   employee: INavEmployee | null;
 }
+
+export interface ISetInnsendingshjemlerParams extends IOppgavebehandlingBaseParams {
+  hjemmelIdList: string[];
+}

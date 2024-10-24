@@ -1,13 +1,27 @@
+import { Age } from '@app/components/common-table-components/age';
+import { Deadline, ReadOnlyDeadline } from '@app/components/common-table-components/deadline';
 import { FradelingReason } from '@app/components/common-table-components/fradeling-reason';
+import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
+import { LoadingRow } from '@app/components/common-table-components/loading-row';
 import { Medunderskriver } from '@app/components/common-table-components/medunderskriver';
+import { MedudunderskriverFlowStateLabel } from '@app/components/common-table-components/medunderskriver-flow-state-label';
 import { Name } from '@app/components/common-table-components/name';
+import { OpenOppgavebehandling } from '@app/components/common-table-components/open';
+import { PaaVentReason, PaaVentTil } from '@app/components/common-table-components/paa-vent';
 import { Rol } from '@app/components/common-table-components/rol';
+import { RolFlowStateLabel } from '@app/components/common-table-components/rol-flow-state-label';
 import { RolTildeling } from '@app/components/common-table-components/rol-tildeling';
+import { SakenGjelderFnr, SakenGjelderName } from '@app/components/common-table-components/saken-gjelder';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
+import { Utfall } from '@app/components/common-table-components/utfall';
+import { Ytelse } from '@app/components/common-table-components/ytelse';
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
+import { Innsendingshjemler, Registreringshjemler } from '@app/components/hjemler/hjemler';
+import { Oppgavestyring } from '@app/components/oppgavestyring/oppgavestyring';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
 import { RelevantOppgaver } from '@app/components/relevant-oppgaver/relevant-oppgaver';
+import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { SaksTypeEnum } from '@app/types/kodeverk';
@@ -15,19 +29,6 @@ import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgave } from '@app/types/oppgaver';
 import { Table } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { Oppgavestyring } from '../../oppgavestyring/oppgavestyring';
-import { Type } from '../../type/type';
-import { Age } from '../age';
-import { Deadline, ReadOnlyDeadline } from '../deadline';
-import { Innsendingshjemler, Registreringshjemler } from '../hjemler';
-import { LoadingRow } from '../loading-row';
-import { MedudunderskriverFlowStateLabel } from '../medunderskriver-flow-state-label';
-import { OpenOppgavebehandling } from '../open';
-import { PaaVentReason, PaaVentTil } from '../paa-vent';
-import { RolFlowStateLabel } from '../rol-flow-state-label';
-import { SakenGjelderFnr, SakenGjelderName } from '../saken-gjelder';
-import { Utfall } from '../utfall';
-import { Ytelse } from '../ytelse';
 
 interface Props {
   oppgaveId: string;
@@ -74,13 +75,13 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.EnhetInnsendingshjemler:
         return (
           <Table.DataCell key={key}>
-            <Innsendingshjemler hjemmelIdList={oppgave.hjemmelIdList} />
+            <Innsendingshjemler hjemmelIdList={oppgave.hjemmelIdList} loading={<LoadingCellContent />} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Registreringshjemler:
         return (
           <Table.DataCell key={key}>
-            <Registreringshjemler hjemmelIdList={oppgave.registreringshjemmelIdList} />
+            <Registreringshjemler hjemmelIdList={oppgave.registreringshjemmelIdList} loading={<LoadingCellContent />} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Navn:

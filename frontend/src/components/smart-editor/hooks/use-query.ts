@@ -109,21 +109,30 @@ export const useGodFormuleringerQuery = (
   const { data: oppgave, isLoading } = useOppgave();
   const language = useSmartEditorLanguage();
 
+  const utfallId = oppgave?.resultat.utfallId;
+  const extraUtfallIdSet = oppgave?.resultat.extraUtfallIdSet;
+  const ytelseId = oppgave?.ytelseId;
+  const hjemmelIdSet = oppgave?.resultat.hjemmelIdSet;
+
   return useMemo<IGetConsumerGodFormuleringParams | SkipToken>(() => {
-    if (isLoading || oppgave === undefined) {
+    if (
+      isLoading ||
+      utfallId === undefined ||
+      extraUtfallIdSet === undefined ||
+      ytelseId === undefined ||
+      hjemmelIdSet === undefined
+    ) {
       return skipToken;
     }
 
-    const { extraUtfallIdSet, utfallId } = oppgave.resultat;
-
     return {
-      ytelseHjemmelIdList: getYtelseHjemmelList(oppgave.ytelseId, oppgave.resultat.hjemmelIdSet),
+      ytelseHjemmelIdList: getYtelseHjemmelList(ytelseId, hjemmelIdSet),
       utfallIdList: getUtfallList(extraUtfallIdSet, utfallId),
       templateSectionIdList: [`${templateId}${LIST_DELIMITER}${section}`, `${GLOBAL}${LIST_DELIMITER}${section}`],
       textType: GOD_FORMULERING_TYPE,
       language,
     };
-  }, [isLoading, oppgave, templateId, section, language]);
+  }, [isLoading, templateId, section, language, utfallId, extraUtfallIdSet, ytelseId, hjemmelIdSet]);
 };
 
 export const useRegelverkQuery = (): IGetConsumerRegelverkParams | SkipToken => {
