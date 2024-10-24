@@ -104,7 +104,7 @@ export const StyledFooter = styled.div<{ $type: FooterType }>`
 
 export const StyledFinishOppgaveButtons = styled.div<{ $width: number }>`
   display: flex;
-  justify-content: space-between;
-  gap: var(--a-spacing-4);
+  gap: var(--a-spacing-2);
   width: ${({ $width }) => $width}px;
+  align-items: center;
 `;

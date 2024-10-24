@@ -31,7 +31,11 @@ import { ServerSentEventManager, ServerSentEventType } from '@app/redux-api/serv
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
 import type { ISakenGjelder } from '@app/types/oppgave-common';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type {
+  BehandlingGosysOppgave,
+  IOppgavebehandling,
+  ListGosysOppgave,
+} from '@app/types/oppgavebehandling/oppgavebehandling';
 import type { IValidationParams } from '@app/types/oppgavebehandling/params';
 import type {
   IMedunderskrivereResponse,
@@ -40,6 +44,7 @@ import type {
 } from '@app/types/oppgavebehandling/response';
 import type { IRols, ISaksbehandlere } from '@app/types/oppgaver';
 import { OppgaveTagTypes, oppgaverApi } from '../../oppgaver';
+import { handleGosysOppgaveEvent } from './event-handlers/gosys-oppgave';
 import { handleMedunderskriverEvent } from './event-handlers/medunderskriver';
 import { handleMessageEvent } from './event-handlers/message';
 import { handleRolEvent } from './event-handlers/rol';
@@ -85,6 +90,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           const ferdigstilt = handleFerdigstiltEvent(oppgaveId, navIdent, updateCachedData);
           const feilregistrering = handleFeilregistreringEvent(oppgaveId, navIdent, updateCachedData);
           const tilbakekreving = handleTilbakekrevingEvent(navIdent, updateCachedData);
+          const gosysOppgaveListener = handleGosysOppgaveEvent(oppgaveId, navIdent, updateCachedData);
 
           events.addJsonEventListener(ServerSentEventType.TILDELING, tildeling);
           events.addJsonEventListener(ServerSentEventType.MEDUNDERSKRIVER, medunderskriverListener);
@@ -100,6 +106,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           events.addJsonEventListener(ServerSentEventType.FERDIGSTILT, ferdigstilt);
           events.addJsonEventListener(ServerSentEventType.FEILREGISTRERING, feilregistrering);
           events.addJsonEventListener(ServerSentEventType.TILBAKEKREVING, tilbakekreving);
+          events.addJsonEventListener(ServerSentEventType.GOSYSOPPGAVE, gosysOppgaveListener);
 
           // Dokumenter under arbeid
           const documentsAdded = handleDocumentsAddedEvent(oppgaveId, navIdent);
@@ -202,6 +209,12 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
     getFradelingReason: builder.query<ITildelingEvent | null, string>({
       query: (id) => `/kabal-api/behandlinger/${id}/fradelingreason`,
     }),
+    getGosysOppgaveList: builder.query<ListGosysOppgave[], string>({
+      query: (id) => ({ url: `/kabal-api/behandlinger/${id}/gosysoppgaver` }),
+    }),
+    getGosysOppgave: builder.query<BehandlingGosysOppgave, string>({
+      query: (id) => ({ url: `/kabal-api/behandlinger/${id}/gosysoppgave` }),
+    }),
   }),
 });
 
@@ -215,4 +228,6 @@ export const {
   useLazyValidateQuery,
   useGetPotentialRolQuery,
   useGetFradelingReasonQuery,
+  useGetGosysOppgaveListQuery,
+  useGetGosysOppgaveQuery,
 } = behandlingerQuerySlice;

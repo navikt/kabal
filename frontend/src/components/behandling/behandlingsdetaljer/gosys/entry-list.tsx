@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const EntryList = ({ entries }: Props) => (
-  <StyledEntryList>
+  <StyledEntryList $marginTop>
     {entries.map((entry) => (
       <Container key={entry.id}>
         <Entry {...entry} />

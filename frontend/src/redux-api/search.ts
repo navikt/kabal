@@ -1,5 +1,6 @@
 import { KABAL_API_BASE_QUERY } from '@app/redux-api/common';
 import type { IPart } from '@app/types/oppgave-common';
+import type { Enhet } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 interface SearchPartWithUtsendingskanalParams {
@@ -15,7 +16,13 @@ export const searchApi = createApi({
     searchpartwithutsendingskanal: builder.query<IPart, SearchPartWithUtsendingskanalParams>({
       query: (body) => ({ url: '/searchpartwithutsendingskanal', method: 'POST', body }),
     }),
+    searchEnhetmappe: builder.query<{ id: number; navn: string }[], string>({
+      query: (enhetId) => ({ url: `/search/gosysoppgavemapper/${enhetId}`, method: 'GET' }),
+    }),
+    searchEnheter: builder.query<Enhet[], { enhetsnr?: string; enhetsnavn?: string }>({
+      query: (params) => ({ url: '/search/enheter', method: 'GET', params }),
+    }),
   }),
 });
 
-export const { useLazySearchpartwithutsendingskanalQuery } = searchApi;
+export const { useLazySearchpartwithutsendingskanalQuery, useSearchEnhetmappeQuery, useSearchEnheterQuery } = searchApi;

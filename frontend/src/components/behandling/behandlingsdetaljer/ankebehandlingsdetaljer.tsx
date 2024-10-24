@@ -1,7 +1,8 @@
 import { AnkeMottattDato } from '@app/components/behandling/behandlingsdetaljer/anke-mottatt-dato';
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
-import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
+import { Gosys } from '@app/components/behandling/behandlingsdetaljer/gosys';
+import { BEHANDLING_PANEL_DOMAIN } from '@app/components/behandling/behandlingsdetaljer/gosys/domain';
 import { Innsendingshjemmel } from '@app/components/behandling/behandlingsdetaljer/innsendingshjemmel';
 import { Lovhjemmel } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
@@ -10,6 +11,7 @@ import { Tilbakekreving } from '@app/components/behandling/behandlingsdetaljer/t
 import { UtfallResultat } from '@app/components/behandling/behandlingsdetaljer/utfall-resultat';
 import { Ytelse } from '@app/components/behandling/behandlingsdetaljer/ytelse';
 import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
+import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
 import { Part } from '@app/components/part/part';
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
@@ -26,81 +28,73 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
   const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
   const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
 
-  const {
-    typeId,
-    fraNAVEnhetNavn,
-    fraNAVEnhet,
-    oppgavebeskrivelse,
-    resultat,
-    ytelseId,
-    prosessfullmektig,
-    saksnummer,
-    varsletFrist,
-    id,
-  } = oppgavebehandling;
+  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer, varsletFrist, id } =
+    oppgavebehandling;
 
   const { utfallId, extraUtfallIdSet } = resultat;
 
   return (
-    <StyledBehandlingSection>
-      <Heading level="1" size="medium" spacing>
-        Behandling
-      </Heading>
+    <GrafanaDomainProvider domain={BEHANDLING_PANEL_DOMAIN}>
+      <StyledBehandlingSection>
+        <Heading level="1" size="medium" spacing>
+          Behandling
+        </Heading>
 
-      <Part
-        isDeletable={false}
-        label="Den ankende part"
-        part={oppgavebehandling.klager}
-        onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
-        isLoading={klagerIsLoading}
-      />
-
-      <Part
-        isDeletable
-        label="Fullmektig"
-        part={prosessfullmektig}
-        onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
-        isLoading={fullmektigIsLoading}
-      />
-
-      <BehandlingSection label="Type">
-        <Type type={typeId} />
-      </BehandlingSection>
-
-      <BehandlingSection label="Ytelse">
-        <Ytelse ytelseId={ytelseId} />
-      </BehandlingSection>
-
-      <BehandlingSection label="Klagebehandling fullført av">
-        <PreviousSaksbehandler
-          previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
-          type={SaksTypeEnum.ANKE}
+        <Part
+          isDeletable={false}
+          label="Den ankende part"
+          part={oppgavebehandling.klager}
+          onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
+          isLoading={klagerIsLoading}
         />
-      </BehandlingSection>
 
-      <Saksnummer saksnummer={saksnummer} />
+        <Part
+          isDeletable
+          label="Fullmektig"
+          part={prosessfullmektig}
+          onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
+          isLoading={fullmektigIsLoading}
+        />
 
-      <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
+        <BehandlingSection label="Type">
+          <Type type={typeId} />
+        </BehandlingSection>
 
-      <BehandlingSection label="Varslet frist">
-        {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
-      </BehandlingSection>
+        <BehandlingSection label="Ytelse">
+          <Ytelse ytelseId={ytelseId} />
+        </BehandlingSection>
 
-      <BehandlingSection label="Behandlet av">
-        {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
-      </BehandlingSection>
+        <BehandlingSection label="Klagebehandling fullført av">
+          <PreviousSaksbehandler
+            previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
+            type={SaksTypeEnum.ANKE}
+          />
+        </BehandlingSection>
 
-      <AnkeMottattDato />
+        <Saksnummer saksnummer={saksnummer} />
 
-      <GosysBeskrivelse oppgavebeskrivelse={oppgavebeskrivelse} />
+        <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 
-      <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
+        <BehandlingSection label="Varslet frist">
+          {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
+        </BehandlingSection>
 
-      <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
+        <BehandlingSection label="Behandlet av">
+          {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
+        </BehandlingSection>
 
-      <Lovhjemmel />
+        <AnkeMottattDato />
 
-      <Tilbakekreving />
-    </StyledBehandlingSection>
+        <Gosys oppgavebehandling={oppgavebehandling} />
+
+        <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
+
+        <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
+
+        <Lovhjemmel />
+
+        <Tilbakekreving />
+      </StyledBehandlingSection>
+    </GrafanaDomainProvider>
   );
 };

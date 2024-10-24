@@ -9,6 +9,50 @@ export enum KvalitetsvurderingVersion {
   V2 = 2,
 }
 
+export enum GosysStatus {
+  AAPNET = 'AAPNET',
+  OPPRETTET = 'OPPRETTET',
+  UNDER_BEHANDLING = 'UNDER_BEHANDLING',
+  FERDIGSTILT = 'FERDIGSTILT',
+  FEILREGISTRERT = 'FEILREGISTRERT',
+}
+
+interface BaseGosysOppgave {
+  id: number;
+  tildeltEnhetsnr: string;
+  endretAvEnhetsnr: string | null;
+  endretAv: INavEmployee | null;
+  endretTidspunkt: string | null; // LocalDateTime
+  opprettetAv: INavEmployee | null;
+  opprettetTidspunkt: string | null; // LocalDateTime
+  beskrivelse: string | null;
+  temaId: string;
+  gjelder: string | null;
+  oppgavetype: string | null;
+  fristFerdigstillelse: string | null; // LocalDate
+  ferdigstiltTidspunkt: string | null; // LocalDateTime
+  status: GosysStatus;
+  editable: boolean;
+  opprettetAvEnhet: Enhet | null;
+  mappe: {
+    id: number;
+    navn: string;
+  };
+}
+
+export interface BehandlingGosysOppgave extends BaseGosysOppgave {
+  alreadyUsedBy: string;
+}
+
+export interface ListGosysOppgave extends BaseGosysOppgave {
+  alreadyUsedBy: string | null;
+}
+
+export interface Enhet {
+  enhetsnr: string;
+  navn: string;
+}
+
 export interface IOppgavebehandlingBase {
   /** DateTime */
   avsluttetAvSaksbehandlerDate: string | null;
@@ -32,7 +76,7 @@ export interface IOppgavebehandlingBase {
   isAvsluttetAvSaksbehandler: boolean;
   klager: IPart;
   kommentarFraVedtaksinstans: string | null;
-  oppgavebeskrivelse: string | null;
+  gosysOppgaveId: number | null;
   kvalitetsvurderingReference: {
     id: UUID;
     version: KvalitetsvurderingVersion;
