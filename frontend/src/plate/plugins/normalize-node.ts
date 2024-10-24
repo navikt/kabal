@@ -82,21 +82,23 @@ export const normalizeNodePlugin = createPlatePlugin({
           return normalizeNode([node, path]);
         }
 
-        switch (parentNode.type) {
-          case BaseListItemPlugin.key: {
-            pushLog('Normalized missing LIC', options);
+        if (parentNode.type === BaseListItemPlugin.node.type) {
+          pushLog('Normalized missing LIC', options);
 
-            return setNodes(editor, { type: BaseListItemContentPlugin.key }, { at: path, match: (n) => n === node });
-          }
-          default:
-            pushLog(
-              'Missing node type, but parent type was not LIC. Case not implemented.',
-              { ...options, context: { ...options.context, parent: Scrubber.stringify(parentNode) } },
-              LogLevel.ERROR,
-            );
-
-            return normalizeNode([node, path]);
+          return setNodes(
+            editor,
+            { type: BaseListItemContentPlugin.node.type },
+            { at: path, match: (n) => n === node },
+          );
         }
+
+        pushLog(
+          'Missing node type, but parent type was not LIC. Normalization not implemented.',
+          { ...options, context: { ...options.context, parent: Scrubber.stringify(parentNode) } },
+          LogLevel.ERROR,
+        );
+
+        return normalizeNode([node, path]);
       }
 
       if (node.children.length === 0) {
@@ -105,16 +107,16 @@ export const normalizeNodePlugin = createPlatePlugin({
         const options = { at: [...path, 0] };
 
         switch (node.type) {
-          case BaseBulletedListPlugin.key:
-          case BaseNumberedListPlugin.key:
+          case BaseBulletedListPlugin.node.type:
+          case BaseNumberedListPlugin.node.type:
             return insertNodes(editor, createSimpleListItem(), options);
-          case BaseListItemPlugin.key:
+          case BaseListItemPlugin.node.type:
             return insertNodes(editor, createSimpleListItemContainer(), options);
-          case BaseTablePlugin.key:
+          case BaseTablePlugin.node.type:
             return insertNodes(editor, createTableRow(), options);
-          case BaseTableRowPlugin.key:
+          case BaseTableRowPlugin.node.type:
             return insertNodes(editor, createTableCell(), options);
-          case BaseTableCellPlugin.key:
+          case BaseTableCellPlugin.node.type:
             return insertNodes(editor, createSimpleParagraph(), options);
           case ELEMENT_REDIGERBAR_MALTEKST:
             return insertNodes(editor, createSimpleParagraph(), options);
@@ -126,11 +128,11 @@ export const normalizeNodePlugin = createPlatePlugin({
           case ELEMENT_REGELVERK:
             return insertNodes(editor, createRegelverkContainer(), options);
           // Use extensive case instead of default in order to avoid inserting wrong node type when a new element type is introduced
-          case BaseParagraphPlugin.key:
+          case BaseParagraphPlugin.node.type:
           case HEADING_KEYS.h1:
           case HEADING_KEYS.h2:
           case HEADING_KEYS.h3:
-          case BaseListItemContentPlugin.key:
+          case BaseListItemContentPlugin.node.type:
           case ELEMENT_PLACEHOLDER:
           case ELEMENT_PAGE_BREAK:
           case ELEMENT_CURRENT_DATE:
