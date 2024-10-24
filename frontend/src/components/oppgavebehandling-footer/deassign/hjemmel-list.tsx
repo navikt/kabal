@@ -78,7 +78,7 @@ const Container = styled.div`
   flex-direction: column;
   position: absolute;
   gap: var(--a-spacing-2);
-  right: 100%;
+  left: 100%;
   min-width: 200px;
   padding: var(--a-spacing-2);
 
@@ -86,4 +86,6 @@ const Container = styled.div`
   border-radius: var(--a-border-radius-medium);
   border: 1px solid var(--a-border-divider);
   box-shadow: var(--a-shadow-medium);
+
+  z-index: 10;
 `;

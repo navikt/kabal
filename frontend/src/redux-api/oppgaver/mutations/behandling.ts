@@ -11,6 +11,7 @@ import type {
   IOppgavebehandlingBaseParams,
   ISetFeilregistrertParams,
   ISetFullmektigParams,
+  ISetInnsendingshjemlerParams,
   ISetKlagerParams,
 } from '@app/types/oppgavebehandling/params';
 import type {
@@ -120,6 +121,31 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
+    setInnsendingshjemler: builder.mutation<IModifiedResponse, ISetInnsendingshjemlerParams>({
+      query: ({ oppgaveId, hjemmelIdList }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/innsendingshjemler`,
+        method: 'PUT',
+        body: { hjemmelIdList },
+      }),
+      onQueryStarted: async ({ oppgaveId, hjemmelIdList }, { queryFulfilled }) => {
+        const undo = update(oppgaveId, { hjemmelIdList });
+
+        try {
+          const { data } = await queryFulfilled;
+          update(oppgaveId, data);
+          toast.success('Innsendingshjemler oppdatert');
+        } catch (e) {
+          undo();
+          const message = 'Kunne ikke oppdatere innsendingshjemler.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+        }
+      },
+    }),
     setFeilregistrert: builder.mutation<ISetFeilregistrertResponse, ISetFeilregistrertParams>({
       query: ({ oppgaveId, ...body }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/feilregistrer`,
@@ -190,6 +216,7 @@ export const {
   useFinishOppgavebehandlingMutation,
   useUpdateFullmektigMutation,
   useUpdateKlagerMutation,
+  useSetInnsendingshjemlerMutation,
   useSetFeilregistrertMutation,
   useNewAnkebehandlingMutation,
 } = behandlingerMutationSlice;
