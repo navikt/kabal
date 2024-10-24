@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
@@ -8,6 +9,7 @@ import { isApiRejectionError } from '@app/types/errors';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type {
   IFinishOppgavebehandlingParams,
+  IFinishWithUpdateInGosys,
   IOppgavebehandlingBaseParams,
   ISetFeilregistrertParams,
   ISetFullmektigParams,
@@ -26,6 +28,45 @@ import { kvalitetsvurderingV2Api } from '../../kaka-kvalitetsvurdering/v2';
 import { OppgaveTagTypes, oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
+const finishOppgaveOnQueryStarted = async ({
+  kvalitetsvurderingId: id,
+  oppgaveId,
+  queryFulfilled,
+}: {
+  oppgaveId: string;
+  kvalitetsvurderingId: string | null;
+  queryFulfilled: Promise<{ data: IVedtakFullfoertResponse }>;
+}) => {
+  try {
+    const { data } = await queryFulfilled;
+    update(oppgaveId, data);
+
+    reduxStore.dispatch(
+      oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+        draft.isAvsluttetAvSaksbehandler = true;
+        draft.avsluttetAvSaksbehandlerDate = data.modified;
+
+        return draft;
+      }),
+    );
+
+    reduxStore.dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
+
+    if (id !== null) {
+      reduxStore.dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+      reduxStore.dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+    }
+  } catch (e) {
+    const message = 'Kunne ikke fullføre behandling.';
+
+    if (isApiRejectionError(e)) {
+      apiErrorToast(message, e.error);
+    } else {
+      toast.error(message);
+    }
+  }
+};
+
 const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
@@ -35,35 +76,19 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         method: 'POST',
       }),
       extraOptions: { maxRetries: 0 },
-      onQueryStarted: async ({ oppgaveId, kvalitetsvurderingId: id }, { queryFulfilled, dispatch }) => {
-        try {
-          const { data } = await queryFulfilled;
-          update(oppgaveId, data);
-
-          dispatch(
-            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              draft.isAvsluttetAvSaksbehandler = true;
-              draft.avsluttetAvSaksbehandlerDate = data.modified;
-
-              return draft;
-            }),
-          );
-
-          dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
-
-          if (id !== null) {
-            dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
-            dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
-          }
-        } catch (e) {
-          const message = 'Kunne ikke fullføre behandling.';
-
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
-          } else {
-            toast.error(message);
-          }
-        }
+      onQueryStarted: ({ oppgaveId, kvalitetsvurderingId }, { queryFulfilled }) => {
+        finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled });
+      },
+    }),
+    finishOppgavebehandlingWithUpdateInGosys: builder.mutation<IVedtakFullfoertResponse, IFinishWithUpdateInGosys>({
+      query: ({ oppgaveId, gosysOppgaveUpdate, ignoreGosysOppgave }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/fullfoer?nybehandling=false`,
+        method: 'POST',
+        body: { gosysOppgaveUpdate, ignoreGosysOppgave },
+      }),
+      extraOptions: { maxRetries: 0 },
+      onQueryStarted: ({ oppgaveId, kvalitetsvurderingId }, { queryFulfilled }) => {
+        finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled });
       },
     }),
     updateFullmektig: builder.mutation<IModifiedResponse, ISetFullmektigParams>({
@@ -214,6 +239,7 @@ const update = (oppgaveId: string, upd: Partial<IOppgavebehandling>) => {
 
 export const {
   useFinishOppgavebehandlingMutation,
+  useFinishOppgavebehandlingWithUpdateInGosysMutation,
   useUpdateFullmektigMutation,
   useUpdateKlagerMutation,
   useSetInnsendingshjemlerMutation,

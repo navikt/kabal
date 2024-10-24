@@ -67,6 +67,15 @@ export type IFinishOppgavebehandlingParams =
   | IDefaultFinishOppgavebehandlingParams
   | IFinishOppgavebehandlingOpphevetTRParams;
 
+export interface IFinishWithUpdateInGosys extends Omit<IDefaultFinishOppgavebehandlingParams, 'nyBehandling'> {
+  gosysOppgaveUpdate: {
+    tildeltEnhet: string;
+    mappeId: number | null;
+    kommentar: string;
+  } | null;
+  ignoreGosysOppgave: boolean;
+}
+
 interface IDefaultFinishOppgavebehandlingParams {
   oppgaveId: string;
   kvalitetsvurderingId: string | null;
@@ -75,7 +84,6 @@ interface IDefaultFinishOppgavebehandlingParams {
 
 interface IFinishOppgavebehandlingOpphevetTRParams extends Omit<IDefaultFinishOppgavebehandlingParams, 'nyBehandling'> {
   typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
-  utfall: UtfallEnum.OPPHEVET;
   nyBehandling: boolean;
 }
 

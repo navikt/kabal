@@ -1,6 +1,7 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
-import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
+import { Gosys } from '@app/components/behandling/behandlingsdetaljer/gosys';
+import { BEHANDLING_PANEL_DOMAIN } from '@app/components/behandling/behandlingsdetaljer/gosys/domain';
 import { Innsendingshjemmel } from '@app/components/behandling/behandlingsdetaljer/innsendingshjemmel';
 import { Lovhjemmel } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel';
 import { MeldingFraVedtaksinstans } from '@app/components/behandling/behandlingsdetaljer/melding-fra-vedtaksinstans';
@@ -10,6 +11,7 @@ import { Tilbakekreving } from '@app/components/behandling/behandlingsdetaljer/t
 import { UtfallResultat } from '@app/components/behandling/behandlingsdetaljer/utfall-resultat';
 import { Ytelse } from '@app/components/behandling/behandlingsdetaljer/ytelse';
 import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
+import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
 import { Part } from '@app/components/part/part';
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
@@ -31,7 +33,6 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
     fraNAVEnhet,
     mottattKlageinstans,
     kommentarFraVedtaksinstans,
-    oppgavebeskrivelse,
     resultat,
     ytelseId,
     prosessfullmektig,
@@ -43,62 +44,64 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
   const { utfallId, extraUtfallIdSet } = resultat;
 
   return (
-    <StyledBehandlingSection>
-      <Heading level="1" size="medium" spacing>
-        Behandling
-      </Heading>
+    <GrafanaDomainProvider domain={BEHANDLING_PANEL_DOMAIN}>
+      <StyledBehandlingSection>
+        <Heading level="1" size="medium" spacing>
+          Behandling
+        </Heading>
 
-      <Part
-        isDeletable={false}
-        label="Klager"
-        part={oppgavebehandling.klager}
-        onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
-        isLoading={klagerIsLoading}
-      />
+        <Part
+          isDeletable={false}
+          label="Klager"
+          part={oppgavebehandling.klager}
+          onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
+          isLoading={klagerIsLoading}
+        />
 
-      <Part
-        isDeletable
-        label="Fullmektig"
-        part={prosessfullmektig}
-        onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
-        isLoading={fullmektigIsLoading}
-      />
+        <Part
+          isDeletable
+          label="Fullmektig"
+          part={prosessfullmektig}
+          onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
+          isLoading={fullmektigIsLoading}
+        />
 
-      <BehandlingSection label="Type">
-        <Type type={typeId} />
-      </BehandlingSection>
+        <BehandlingSection label="Type">
+          <Type type={typeId} />
+        </BehandlingSection>
 
-      <BehandlingSection label="Ytelse">
-        <Ytelse ytelseId={ytelseId} />
-      </BehandlingSection>
+        <BehandlingSection label="Ytelse">
+          <Ytelse ytelseId={ytelseId} />
+        </BehandlingSection>
 
-      <Saksnummer saksnummer={saksnummer} />
+        <Saksnummer saksnummer={saksnummer} />
 
-      <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
+        <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 
-      <MottattVedtaksinstans />
+        <MottattVedtaksinstans />
 
-      <BehandlingSection label="Varslet frist">
-        {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
-      </BehandlingSection>
+        <BehandlingSection label="Varslet frist">
+          {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
+        </BehandlingSection>
 
-      <BehandlingSection label="Fra NAV-enhet">
-        {fraNAVEnhetNavn} - {fraNAVEnhet}
-      </BehandlingSection>
+        <BehandlingSection label="Fra NAV-enhet">
+          {fraNAVEnhetNavn} - {fraNAVEnhet}
+        </BehandlingSection>
 
-      <BehandlingSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</BehandlingSection>
+        <BehandlingSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</BehandlingSection>
 
-      <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
+        <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
 
-      <GosysBeskrivelse oppgavebeskrivelse={oppgavebeskrivelse} />
+        <Gosys oppgavebehandling={oppgavebehandling} />
 
-      <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
+        <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
 
-      <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
+        <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
 
-      <Lovhjemmel />
+        <Lovhjemmel />
 
-      <Tilbakekreving />
-    </StyledBehandlingSection>
+        <Tilbakekreving />
+      </StyledBehandlingSection>
+    </GrafanaDomainProvider>
   );
 };

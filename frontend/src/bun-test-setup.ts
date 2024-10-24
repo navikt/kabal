@@ -31,4 +31,14 @@ mock.module('@app/observability', () => ({
   pushError: jest.fn(),
   pushLog: jest.fn(),
   pushEvent: jest.fn(),
+  usePushEvent: jest.fn(),
+}));
+
+mock.module('@app/environment', () => ({
+  ENVIRONMENT: {
+    isProduction: false,
+    isDevelopment: false,
+    isLocal: false,
+    version: '1.0.0',
+  },
 }));

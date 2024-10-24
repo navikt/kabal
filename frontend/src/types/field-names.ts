@@ -20,6 +20,7 @@ export const DEFAULT_FIELD_NAMES = {
   sendtTilTrygderetten: 'Sendt til Trygderetten',
   inngaaendeKanal: 'Inngående kanal',
   avsender: 'Avsender',
+  gosysOppgaveInput: 'Oppgaven fra Gosys er ferdigstilt',
 };
 
 const ANKE_I_TRYGDERETTEN_FIELD_NAMES = {

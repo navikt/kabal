@@ -30,6 +30,7 @@ export enum ServerSentEventType {
   MEDUNDERSKRIVER = 'MEDUNDERSKRIVER',
   KLAGER = 'KLAGER',
   FULLMEKTIG = 'FULLMEKTIG',
+  GOSYSOPPGAVE = 'GOSYSOPPGAVE',
   /** Added or changed */
   MESSAGE = 'MESSAGE',
   UTFALL = 'UTFALL',
