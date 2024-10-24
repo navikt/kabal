@@ -1,42 +1,30 @@
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
-import { GosysBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse';
+import { MottattDato } from '@app/components/behandling/behandlingsdetaljer/mottatt-klageinstans';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
-import { Tilbakekreving } from '@app/components/behandling/behandlingsdetaljer/tilbakekreving';
+import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOmgjøringskravbehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Heading } from '@navikt/ds-react';
 import { Part } from '../../part/part';
-import { Type } from '../../type/type';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
-import { MottattDato } from './mottatt-klageinstans';
 import { UtfallResultat } from './utfall-resultat';
 import { Ytelse } from './ytelse';
 
 interface Props {
-  oppgavebehandling: IOppgavebehandling;
+  oppgavebehandling: IOmgjøringskravbehandling;
 }
 
-export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
+export const Omgjøringskravdetaljer = ({ oppgavebehandling }: Props) => {
   const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
   const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
 
-  const {
-    typeId,
-    fraNAVEnhetNavn,
-    fraNAVEnhet,
-    oppgavebeskrivelse,
-    resultat,
-    ytelseId,
-    prosessfullmektig,
-    saksnummer,
-    varsletFrist,
-    id,
-  } = oppgavebehandling;
+  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer, varsletFrist, id } =
+    oppgavebehandling;
 
   const { utfallId, extraUtfallIdSet } = resultat;
 
@@ -48,7 +36,7 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
       <Part
         isDeletable={false}
-        label="Den ankende part"
+        label="Den som krever omgjøring"
         part={oppgavebehandling.klager}
         onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
         isLoading={klagerIsLoading}
@@ -70,10 +58,10 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
         <Ytelse ytelseId={ytelseId} />
       </BehandlingSection>
 
-      <BehandlingSection label="Klagebehandling fullført av">
+      <BehandlingSection label="Behandlingen som kreves omgjort er tidligere fullført av">
         <PreviousSaksbehandler
           previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
-          type={SaksTypeEnum.ANKE}
+          type={SaksTypeEnum.OMGJØRINGSKRAV}
         />
       </BehandlingSection>
 
@@ -84,20 +72,16 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
       </BehandlingSection>
 
       <BehandlingSection label="Behandlet av">
-        {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
+        {fraNAVEnhetNavn} - {fraNAVEnhet}
       </BehandlingSection>
 
       <MottattDato />
-
-      <GosysBeskrivelse oppgavebeskrivelse={oppgavebeskrivelse} />
 
       <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
 
       <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
 
       <Lovhjemmel />
-
-      <Tilbakekreving />
     </StyledBehandlingSection>
   );
 };
