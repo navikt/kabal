@@ -71,7 +71,13 @@ describe('cleanHtml', () => {
     const element = document.createElement('div');
     element.setAttribute('data-element', BaseParagraphPlugin.key);
 
-    expect(cleanHtml(element)).toStrictEqual(element);
+    const result = cleanHtml(element);
+
+    if (result === null) {
+      throw new Error('Expected result to be an HTMLElement');
+    }
+
+    expect(htmlToString(result)).toStrictEqual(htmlToString(element));
   });
 
   it('should unwrap the element when it is an unwrap element', () => {
