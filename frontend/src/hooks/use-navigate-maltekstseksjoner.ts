@@ -8,7 +8,6 @@ interface PathParams {
   maltekstseksjonVersionId?: string | null;
   textId?: string | null;
   lang?: Language | null;
-  trash?: boolean;
 }
 
 export const useNavigateMaltekstseksjoner = () => {
@@ -19,12 +18,6 @@ export const useNavigateMaltekstseksjoner = () => {
   return useCallback(
     (newParams: PathParams, replace = false) => {
       const path = calculateMaltekstseksjonPath(oldParams, newParams);
-
-      if (newParams.trash === true) {
-        searchParams.set('trash', 'true');
-      } else if (newParams.trash === false) {
-        searchParams.delete('trash');
-      }
 
       return navigate(`${path}?${searchParams.toString()}`, { replace });
     },

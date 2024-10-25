@@ -70,7 +70,6 @@ export interface IGetMaltekstseksjonParams {
   ytelseHjemmelIdList?: string[];
   utfallIdList?: string;
   enhetIdList?: string[];
-  trash: boolean;
 }
 
 export interface IGetTextsParams extends IGetMaltekstseksjonParams {
@@ -80,7 +79,7 @@ export interface IGetTextsParams extends IGetMaltekstseksjonParams {
 /** Deprecated
  * @deprecated Remove when no longer in use by legacy (redigerbar) maltekst.
  */
-export interface IGetConsumerTextsParams extends Omit<IGetTextsParams, 'trash'> {
+export interface IGetConsumerTextsParams extends IGetTextsParams {
   language: Language | typeof UNTRANSLATED;
 }
 
@@ -110,7 +109,7 @@ export interface IGetConsumerRegelverkParams {
   language: typeof UNTRANSLATED;
 }
 
-export interface IGetConsumerHeaderFooterParams extends Omit<IGetMaltekstseksjonParams, 'trash'> {
+export interface IGetConsumerHeaderFooterParams extends IGetMaltekstseksjonParams {
   textType: PlainTextTypes;
   language: Language;
 }

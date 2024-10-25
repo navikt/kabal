@@ -1,6 +1,5 @@
 import { SetStandaloneTextLanguage } from '@app/components/set-redaktoer-language/set-standalone-text-language';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { ShowDepublished } from '@app/components/smart-editor-texts/show-depublished';
 import {
   isGodFormuleringType,
   isPlainTextType,
@@ -33,7 +32,7 @@ export const SmartEditorTexts = ({ textType }: Props) => {
   const onClick = useCallback(async () => {
     const text = getNewText(textType, lang);
     const { id, versionId } = await addText({ text, query }).unwrap();
-    navigate({ id, versionId, trash: false });
+    navigate({ id, versionId });
   }, [addText, lang, navigate, query, textType]);
 
   return (
@@ -43,7 +42,6 @@ export const SmartEditorTexts = ({ textType }: Props) => {
           Legg til ny
         </Button>
         <SetStandaloneTextLanguage textType={textType} />
-        <ShowDepublished />
       </Header>
       <Content>
         <FilteredTextList textType={textType} />

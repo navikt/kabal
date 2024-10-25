@@ -8,7 +8,7 @@ import {
 } from '@app/redux-api/maltekstseksjoner/consumer';
 import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/maltekstseksjoner';
 import { maltekstseksjonerQuerySlice } from '@app/redux-api/maltekstseksjoner/queries';
-import { getLastPublishedAndVersionToShowInTrash } from '@app/redux-api/redaktoer-helpers';
+import { getLastPublishedVersion } from '@app/redux-api/redaktoer-helpers';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { reduxStore } from '@app/redux/configure-store';
 import { user } from '@app/static-data/static-data';
@@ -49,11 +49,10 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         const { data } = await queryFulfilled;
         toast.success('Ny maltekstseksjon opprettet.');
         dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData(
-            'getMaltekstseksjoner',
-            { ...query, trash: false },
-            (draft) => [data, ...draft],
-          ),
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) => [
+            data,
+            ...draft,
+          ]),
         );
         dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjonVersions', data.id, () => [data]));
         dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', data.id, () => data));
@@ -161,10 +160,8 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           toast.success('Maltekstseksjon publisert.');
 
           dispatch(
-            maltekstseksjonerQuerySlice.util.updateQueryData(
-              'getMaltekstseksjoner',
-              { ...query, trash: false },
-              (draft) => draft.map((t) => (t.id === id ? data : t)),
+            maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) =>
+              draft.map((t) => (t.id === id ? data : t)),
             ),
           );
           dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', id, () => data));
@@ -197,11 +194,10 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         }
         const textPatches: PatchResult[] = [];
 
-        const nonTrashQuery = { ...query, trash: false };
         const { navIdent, navn } = await user;
 
         const maltekstseksjonerPatch = dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', nonTrashQuery, (draft) =>
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
             draft.map((section) => {
               if (section.id === id) {
                 const publishedDateTime = formatISO(new Date());
@@ -268,7 +264,7 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           }
 
           dispatch(
-            maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', nonTrashQuery, (draft) =>
+            maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
               draft.map((ms) => (ms.id === id ? maltekstseksjon : ms)),
             ),
           );
@@ -338,31 +334,27 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', id, () => data));
 
         dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query, trash: true }, (draft) =>
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) =>
             draft.filter((t) => t.id !== id),
           ),
         );
 
         dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData(
-            'getMaltekstseksjoner',
-            { ...query, trash: false },
-            (draft) => {
-              let found = false;
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) => {
+            let found = false;
 
-              const updated = draft.map((text) => {
-                if (text.id === id) {
-                  found = true;
+            const updated = draft.map((text) => {
+              if (text.id === id) {
+                found = true;
 
-                  return data;
-                }
+                return data;
+              }
 
-                return text;
-              });
+              return text;
+            });
 
-              return found ? updated : [data, ...draft];
-            },
-          ),
+            return found ? updated : [data, ...draft];
+          }),
         );
 
         dispatch(
@@ -379,7 +371,7 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         url: `/maltekstseksjoner/${id}/draft`,
       }),
       onQueryStarted: async ({ id, query, title, versions }, { queryFulfilled, dispatch }) => {
-        const [lastPublishedVersion, versionToShowInTrash] = getLastPublishedAndVersionToShowInTrash(versions);
+        const lastPublishedVersion = getLastPublishedVersion(versions);
 
         const versionsPatchResult = dispatch(
           maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjonVersions', id, (draft) =>
@@ -388,25 +380,13 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         );
 
         const listPatchResult = dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData(
-            'getMaltekstseksjoner',
-            { ...query, trash: false },
-            (draft) => {
-              if (lastPublishedVersion === undefined) {
-                return draft.filter((text) => text.id !== id);
-              }
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) => {
+            if (lastPublishedVersion === undefined) {
+              return draft.filter((text) => text.id !== id);
+            }
 
-              return draft.map((text) => (text.id === id ? lastPublishedVersion : text));
-            },
-          ),
-        );
-
-        const trashListPatchResult = dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData(
-            'getMaltekstseksjoner',
-            { ...query, trash: true },
-            (draft) => (versionToShowInTrash === undefined ? draft : [versionToShowInTrash, ...draft]),
-          ),
+            return draft.map((text) => (text.id === id ? lastPublishedVersion : text));
+          }),
         );
 
         const idPatchResult = dispatch(
@@ -424,7 +404,6 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         } catch {
           versionsPatchResult.undo();
           listPatchResult.undo();
-          trashListPatchResult.undo();
           idPatchResult.undo();
         }
       },
@@ -441,21 +420,14 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         const { id, title } = publishedMaltekstseksjon;
 
         const listPatchResult = dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData(
-            'getMaltekstseksjoner',
-            { ...query, trash: false },
-            (draft) =>
-              maltekstseksjonDraft === undefined
-                ? draft.filter((text) => text.id !== id)
-                : draft.map((text) => (text.id === id ? maltekstseksjonDraft : text)),
-          ),
-        );
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) =>
+            draft.map((text) => {
+              if (text.id === id) {
+                return maltekstseksjonDraft === undefined ? { ...text, published: false } : maltekstseksjonDraft;
+              }
 
-        const trashListPatchResult = dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData(
-            'getMaltekstseksjoner',
-            { ...query, trash: true },
-            (draft) => [{ ...publishedMaltekstseksjon, published: false }, ...draft],
+              return text;
+            }),
           ),
         );
 
@@ -475,7 +447,6 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         } catch {
           idPatchResult.undo();
           listPatchResult.undo();
-          trashListPatchResult.undo();
           versionsPatchResult.undo();
         }
       },
@@ -497,7 +468,7 @@ const update = (id: string, upd: Partial<IDraftMaltekstseksjon>, query: IGetMalt
   );
 
   const listPatchResult = reduxStore.dispatch(
-    maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query, trash: false }, (draft) =>
+    maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) =>
       draft.map((t) => (t.publishedDateTime === null && t.id === id ? { ...t, ...upd } : t)),
     ),
   );

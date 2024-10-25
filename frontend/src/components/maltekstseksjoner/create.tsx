@@ -33,7 +33,7 @@ export const CreateMaltekstseksjon = ({ query }: Props) => {
     };
     const { id, versionId } = await createMaltekstseksjon({ maltekstseksjon, query }).unwrap();
 
-    setPath({ maltekstseksjonId: id, maltekstseksjonVersionId: versionId, trash: false });
+    setPath({ maltekstseksjonId: id, maltekstseksjonVersionId: versionId });
   }, [createMaltekstseksjon, query, setPath]);
 
   return (
