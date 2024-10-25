@@ -20,7 +20,7 @@ export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: Available
       </StyledButton>
 
       <Modal
-        header={{ heading: `${typeLabel} tekster` }}
+        header={{ heading: textType === RichTextTypes.MALTEKST ? 'Låste tekster' : 'Redigerbare tekster' }}
         width={1200}
         open={open}
         onClose={onClose}

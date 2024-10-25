@@ -4,7 +4,6 @@ import { Container, Header, HeaderGroup } from '@app/components/maltekstseksjone
 import { CreateTranslatedRichText } from '@app/components/smart-editor-texts/create-translated-text';
 import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { useTrashQuery } from '@app/hooks/use-trash-query';
 import type { RichTextEditor } from '@app/plate/types';
 import {
   usePublishMutation,
@@ -43,8 +42,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   const { id } = text;
   const isUpdating = useRef(false);
   const richTextRef = useRef(richTexts);
-  const trash = useTrashQuery();
-  const queryRef = useRef({ textType: text.textType, trash });
+  const queryRef = useRef({ textType: text.textType });
   const [error, setError] = useState<string>();
 
   useEffect(() => {

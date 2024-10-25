@@ -19,7 +19,7 @@ export const DeleteMaltekstseksjonDraftButton = ({ id, title, onDraftDeleted, qu
   const { data: versions = [] } = useGetMaltekstseksjonVersionsQuery(id);
   const lastPublishedVersion = useMemo(() => versions.find((version) => version.published), [versions]);
 
-  const text = lastPublishedVersion === undefined ? 'Slett utkast og flytt til avpubliserte' : 'Slett utkast';
+  const text = lastPublishedVersion !== undefined ? 'Slett utkast og flytt til avpubliserte' : 'Slett utkast';
 
   if (isOpen) {
     return (

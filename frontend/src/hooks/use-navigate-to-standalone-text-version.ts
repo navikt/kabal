@@ -7,7 +7,6 @@ interface Params {
   id?: string | null;
   versionId?: string | null;
   lang?: string;
-  trash?: boolean;
 }
 
 export const useNavigateToStandaloneTextVersion = (hasLanguage: boolean) => {
@@ -22,12 +21,6 @@ export const useNavigateToStandaloneTextVersion = (hasLanguage: boolean) => {
   const navigateToText = useCallback(
     (newParams: Params, replace = false) => {
       const path = calculatePath(rootPath, oldParams, newParams, hasLanguage);
-
-      if (newParams.trash === true) {
-        searchParams.set('trash', 'true');
-      } else if (newParams.trash === false) {
-        searchParams.delete('trash');
-      }
 
       return navigate(`${path}?${searchParams.toString()}`, { replace });
     },

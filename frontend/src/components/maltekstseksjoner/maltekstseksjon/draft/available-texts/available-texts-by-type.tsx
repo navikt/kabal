@@ -2,7 +2,6 @@ import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-langua
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { useTrashQuery } from '@app/hooks/use-trash-query';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
@@ -20,8 +19,7 @@ export interface AvailableTextsByTypeProps {
 }
 
 export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: AvailableTextsByTypeProps) => {
-  const trash = useTrashQuery();
-  const { data = [], isFetching } = useGetTextsQuery({ textType, trash });
+  const { data = [], isFetching } = useGetTextsQuery({ textType });
   const [sort, setSort] = useState<SortState>({ orderBy: SortKey.SCORE, direction: SortDirection.DESCENDING });
   const [filter, setFilter] = useState<string>('');
   const lang = useRedaktoerLanguage();

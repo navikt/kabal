@@ -1,33 +1,22 @@
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IText } from '@app/types/texts/responses';
 
-export const getLastPublishedAndVersionToShowInTrash = <T extends IText | IMaltekstseksjon>(
-  versions: T[],
-): [T | undefined, T | undefined] => {
-  let lastPublishedVersion: T | undefined = undefined;
-  let versionToShowInTrash: T | undefined = undefined;
+export const getLastPublishedVersion = <T extends IText | IMaltekstseksjon>(versions: T[]): T | undefined => {
+  type Published = T & { publishedDateTime: string };
+
+  const isPublished = (version: T): version is Published => version.publishedDateTime !== null;
+
+  let newest: Published | undefined = undefined;
 
   for (const version of versions) {
-    if (version.published) {
-      lastPublishedVersion = version;
+    if (!isPublished(version)) {
+      continue;
     }
 
-    if (lastPublishedVersion !== undefined) {
-      // If there is a published version then there is nothing to show in trash
-      versionToShowInTrash = undefined;
-      break;
-    }
-
-    if (version.publishedDateTime !== null) {
-      if (
-        versionToShowInTrash === undefined ||
-        versionToShowInTrash.publishedDateTime === null ||
-        version.publishedDateTime > versionToShowInTrash.publishedDateTime
-      ) {
-        versionToShowInTrash = version;
-      }
+    if (newest === undefined || version.publishedDateTime > newest.publishedDateTime) {
+      newest = version;
     }
   }
 
-  return [lastPublishedVersion, versionToShowInTrash];
+  return newest;
 };

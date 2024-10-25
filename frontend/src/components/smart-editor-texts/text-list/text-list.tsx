@@ -1,5 +1,10 @@
 import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
 import {
+  StatusFilter,
+  filterByStatus,
+  useStatusFilter,
+} from '@app/components/smart-editor-texts/status-filter/status-filter';
+import {
   Container,
   ListItem,
   LoaderOverlay,
@@ -68,6 +73,7 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
   const query = useParams<{ id: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const prevFilter = usePrevious(filter);
+  const [statusFilter] = useStatusFilter();
 
   const sort = useMemo(() => {
     const param = searchParams.get(QueryKey.SORT);
@@ -97,8 +103,10 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
   }, [filter, prevFilter?.length, searchParams, setSearchParams]);
 
   const filteredTexts = useMemo(() => {
+    const filteredByStatus = data.filter((t) => filterByStatus(statusFilter, t));
+
     if (filter.length === 0) {
-      return data.map<ScoredText>((text) => ({ ...text, score: 100 }));
+      return filteredByStatus.map<ScoredText>((text) => ({ ...text, score: 100 }));
     }
 
     const result: ScoredText[] = [];
@@ -114,7 +122,7 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
     }
 
     return result;
-  }, [data, filter, language]);
+  }, [data, filter, language, statusFilter]);
 
   const sortedTexts: ScoredText[] = useMemo(
     () =>
@@ -145,7 +153,7 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
     <Container>
       <StyledHeaders>
         <SortableHeader label="Tittel" sortKey={SortKey.TITLE} querySortKey={sort} querySortOrder={order} />
-        <div />
+        <StatusFilter />
         <SortableHeader label="Sist endret" sortKey={SortKey.MODIFIED} querySortKey={sort} querySortOrder={order} />
         <SortableHeader
           label={

@@ -49,21 +49,15 @@ interface DraftReadOnlyMetadata extends ReadOnlyMetadata {
   readonly publishedDateTime: null;
 }
 
-export type IPublishedMaltekstseksjon = Filters &
-  PublishedReadOnlyMetadata & {
-    readonly textIdList: string[];
-    readonly modified: string; // Datetime
-    readonly created: string; // Datetime
-    readonly createdByActor: INavEmployee;
-  };
+interface Base {
+  readonly textIdList: string[];
+  readonly modified: string; // Datetime
+  readonly created: string; // Datetime
+  readonly createdByActor: INavEmployee;
+}
 
-export type IDraftMaltekstseksjon = Filters &
-  DraftReadOnlyMetadata & {
-    readonly textIdList: string[];
-    readonly modified: string; // Datetime
-    readonly created: string; // Datetime
-    readonly createdByActor: INavEmployee;
-  };
+export type IPublishedMaltekstseksjon = Base & Filters & PublishedReadOnlyMetadata & {};
+export type IDraftMaltekstseksjon = Base & Filters & DraftReadOnlyMetadata & {};
 
 export type IMaltekstseksjon = IPublishedMaltekstseksjon | IDraftMaltekstseksjon;
 

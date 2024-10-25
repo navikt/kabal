@@ -84,7 +84,7 @@ const useExpandedYtelseHjemmelIdList = (selectedList: string[]): string[] => {
 };
 
 interface TagListProps {
-  variant: keyof Omit<IGetMaltekstseksjonParams, 'trash'>;
+  variant: keyof IGetMaltekstseksjonParams;
   noneLabel: string;
   ids: string[];
   useName: (id: string) => string;
