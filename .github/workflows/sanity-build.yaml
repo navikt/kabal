@@ -27,13 +27,16 @@ jobs:
           cd ${{ matrix.apps }}
           echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
           bun install --frozen-lockfile
-          
+
       - name: Restore cache for ${{ matrix.apps }}
         uses: actions/cache/restore@v4
         with:
           path: |
             ${{matrix.apps}}/.tsbuildinfo
-          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
+          key: ${{ matrix.apps }}-${{ github.ref_name }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }} # This will never hit, but it is required.
+          restore-keys: |
+            ${{ matrix.apps }}-${{ github.ref_name }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
+            ${{ matrix.apps }}-shared-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
 
       - name: Typecheck ${{ matrix.apps }}
         shell: bash
@@ -59,4 +62,4 @@ jobs:
         with:
           path: |
             ${{matrix.apps}}/.tsbuildinfo
-          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
+          key: ${{ matrix.apps }}-${{ github.ref_name }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}-${{ github.run_id }}

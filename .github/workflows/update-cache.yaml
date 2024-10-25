@@ -1,4 +1,4 @@
-name: Update TypeScript Cache
+name: Update TypeScript shared cache
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         apps: [frontend, server]
-    name: Update TypeScript ${{ matrix.apps }} cache
+    name: Update TypeScript ${{ matrix.apps }} shared cache
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,7 +36,8 @@ jobs:
         with:
           path: |
             ${{matrix.apps}}/.tsbuildinfo
-          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
+          key: ${{ matrix.apps }}-shared-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }} # This will never hit, but it is required.
+          restore-keys: ${{ matrix.apps }}-shared-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
 
       - name: Typecheck ${{ matrix.apps }}
         shell: bash
@@ -44,10 +45,10 @@ jobs:
           cd ${{ matrix.apps }}
           bun run typecheck
 
-      - name: Save cache for ${{ matrix.apps }}
+      - name: Save shared cache for ${{ matrix.apps }}
         uses: actions/cache/save@v4
         if: always()
         with:
           path: |
             ${{matrix.apps}}/.tsbuildinfo
-          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
+          key: ${{ matrix.apps }}-shared-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}-${{ github.run_id }}
