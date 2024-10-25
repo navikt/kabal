@@ -1,3 +1,4 @@
+import { DEFAULT_STATUS_FILTER } from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';
 import {
@@ -46,35 +47,59 @@ export const Nav = () => (
         <Buildings3Icon /> Oppgavestyring
       </NavItem>
 
-      <NavItem to="/maltekstseksjoner" testId="maltekstseksjoner-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
+      <NavItem
+        to={`/maltekstseksjoner?${DEFAULT_STATUS_FILTER}`}
+        testId="maltekstseksjoner-nav-link"
+        roles={[Role.KABAL_MALTEKSTREDIGERING]}
+      >
         <PuzzlePieceIcon /> Maltekstseksjoner
       </NavItem>
 
-      <NavItem to="/maltekster" testId="maltekster-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
+      <NavItem
+        to={`/maltekster?${DEFAULT_STATUS_FILTER}`}
+        testId="maltekster-nav-link"
+        roles={[Role.KABAL_MALTEKSTREDIGERING]}
+      >
         <FileIcon /> Maltekster
       </NavItem>
 
       <NavItem
-        to="/redigerbare-maltekster"
+        to={`/redigerbare-maltekster?${DEFAULT_STATUS_FILTER}`}
         testId="redigerbare-maltekster-nav-link"
         roles={[Role.KABAL_MALTEKSTREDIGERING]}
       >
         <FileTextIcon /> Redigerbare maltekster
       </NavItem>
 
-      <NavItem to="/gode-formuleringer" testId="gode-formuleringer-nav-link" roles={[Role.KABAL_FAGTEKSTREDIGERING]}>
+      <NavItem
+        to={`/gode-formuleringer?${DEFAULT_STATUS_FILTER}`}
+        testId="gode-formuleringer-nav-link"
+        roles={[Role.KABAL_FAGTEKSTREDIGERING]}
+      >
         <LightBulbIcon /> Gode formuleringer
       </NavItem>
 
-      <NavItem to="/regelverk" testId="regelverk-nav-link" roles={[Role.KABAL_FAGTEKSTREDIGERING]}>
+      <NavItem
+        to={`/regelverk?${DEFAULT_STATUS_FILTER}`}
+        testId="regelverk-nav-link"
+        roles={[Role.KABAL_FAGTEKSTREDIGERING]}
+      >
         <GavelSoundBlockIcon /> Regelverk
       </NavItem>
 
-      <NavItem to="/topptekster" testId="topptekster-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
+      <NavItem
+        to={`/topptekster?${DEFAULT_STATUS_FILTER}`}
+        testId="topptekster-nav-link"
+        roles={[Role.KABAL_MALTEKSTREDIGERING]}
+      >
         <DocumentHeader size={22} color="#fff" /> Topptekster
       </NavItem>
 
-      <NavItem to="/bunntekster" testId="bunntekster-nav-link" roles={[Role.KABAL_MALTEKSTREDIGERING]}>
+      <NavItem
+        to={`/bunntekster?${DEFAULT_STATUS_FILTER}`}
+        testId="bunntekster-nav-link"
+        roles={[Role.KABAL_MALTEKSTREDIGERING]}
+      >
         <DocumentFooter size={22} color="#fff" /> Bunntekster
       </NavItem>
 

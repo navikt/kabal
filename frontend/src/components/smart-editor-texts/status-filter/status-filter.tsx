@@ -32,6 +32,12 @@ const STATUS_VALUES = Object.values(Status);
 
 const isStatus = (value: string): value is Status => STATUS_VALUES.some((status) => status === value);
 
+const PARAM_KEY = 'status';
+
+const DEFAULT_STATUSES = [Status.PUBLISHED, Status.DRAFT];
+
+export const DEFAULT_STATUS_FILTER = `${PARAM_KEY}=${DEFAULT_STATUSES.join(encodeURIComponent(','))}`;
+
 interface Filterable {
   published: boolean;
   publishedDateTime: string | null;
@@ -43,7 +49,7 @@ const isPublished = ({ published, publishedDateTime }: Filterable) => published 
 
 export const filterByStatus = (filteredStatuses: Status[], text: Filterable) => {
   if (filteredStatuses.length === 0) {
-    return !isDepublished(text);
+    return true;
   }
 
   if (filteredStatuses.includes(Status.PUBLISHED) && isPublished(text)) {
@@ -62,15 +68,15 @@ export const filterByStatus = (filteredStatuses: Status[], text: Filterable) => 
 export const useStatusFilter = (): [Status[], (s: Status[]) => void] => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const status = searchParams.get('status');
+  const status = searchParams.get(PARAM_KEY);
 
   const statusAray = status === null ? [] : status.split(',').filter(isStatus);
 
   const setStatus = (status: Status[]) => {
     if (status.length === 0) {
-      searchParams.delete('status');
+      searchParams.delete(PARAM_KEY);
     } else {
-      searchParams.set('status', status.join(','));
+      searchParams.set(PARAM_KEY, status.join(','));
     }
 
     setSearchParams(searchParams);
