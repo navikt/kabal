@@ -43,7 +43,7 @@ export const Footer = ({ text, onDraftDeleted, status, onPublish, deleteTranslat
         <DeleteLanguageVersion deleteTranslation={deleteTranslation} />
         {isDraft ? (
           <DeleteDraftButton id={id} title={text.title} onDraftDeleted={onDraftDeleted}>
-            {lastPublishedVersion === undefined ? 'Slett utkast og flytt til avpubliserte' : 'Slett utkast'}
+            {lastPublishedVersion !== undefined ? 'Slett utkast og flytt til avpubliserte' : 'Slett utkast'}
           </DeleteDraftButton>
         ) : null}
       </Row>
