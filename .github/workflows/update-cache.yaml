@@ -1,0 +1,53 @@
+name: Update TypeScript Cache
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-cache:
+    strategy:
+      fail-fast: false
+      matrix:
+        apps: [frontend, server]
+    name: Update TypeScript ${{ matrix.apps }} cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+          
+      - name: Install ${{ matrix.apps }} dependencies
+        shell: bash
+        env:
+          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: |
+          cd ${{ matrix.apps }}
+          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
+          bun install --frozen-lockfile
+          
+      - name: Restore cache for ${{ matrix.apps }}
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ${{matrix.apps}}/.tsbuildinfo
+          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
+
+      - name: Typecheck ${{ matrix.apps }}
+        shell: bash
+        run: |
+          cd ${{ matrix.apps }}
+          bun run typecheck
+
+      - name: Save cache for ${{ matrix.apps }}
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: |
+            ${{matrix.apps}}/.tsbuildinfo
+          key: ${{ runner.os }}-${{ matrix.apps }}-${{ hashFiles(format('{0}/tsconfig.json', matrix.apps)) }}
