@@ -23,6 +23,7 @@ import {
   createTableCell,
   createTableRow,
 } from '@app/plate/templates/helpers';
+import { TextAlign } from '@app/plate/types';
 import { LogLevel } from '@grafana/faro-web-sdk';
 import {
   BaseParagraphPlugin,
@@ -72,7 +73,11 @@ export const normalizeNodePlugin = createPlatePlugin({
         if (parentEntry === undefined) {
           pushLog('Missing node type, but no parent. Setting type to paragraph.', options, LogLevel.WARN);
 
-          return setNodes(editor, { type: BaseParagraphPlugin.node.type }, { at: path, match: (n) => n === node });
+          return setNodes(
+            editor,
+            { type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT },
+            { at: path, match: (n) => n === node },
+          );
         }
 
         const [parentNode] = parentEntry;
@@ -80,7 +85,11 @@ export const normalizeNodePlugin = createPlatePlugin({
         if (isEditor(parentNode)) {
           pushLog('Missing node type, element at top level. Setting type to paragraph.', options, LogLevel.WARN);
 
-          return setNodes(editor, { type: BaseParagraphPlugin.node.type }, { at: path, match: (n) => n === node });
+          return setNodes(
+            editor,
+            { type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT },
+            { at: path, match: (n) => n === node },
+          );
         }
 
         if (!isElement(parentNode)) {
