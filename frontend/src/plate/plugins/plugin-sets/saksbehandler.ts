@@ -88,6 +88,11 @@ export const collaborationSaksbehandlerPlugins = (
           url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
           name: dokumentId,
           document: sharedRoot.doc ?? undefined,
+          onClose: ({ event }) => {
+            if (event.code === 4401) {
+              window.location.assign('/oauth2/login');
+            }
+          },
         },
       },
     }),
