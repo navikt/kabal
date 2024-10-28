@@ -199,25 +199,25 @@ export const collaborationServer = Server.configure({
         }
       } catch (err) {
         logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
-        throw getCloseEvent('MISSING_OBO_TOKEN', 4403);
+        throw getCloseEvent('MISSING_OBO_TOKEN', 4401);
       }
     }
 
     if (oboAccessToken === null) {
       if (context.cookie === undefined) {
         logContext('Missing session cookie', context, 'warn');
-        throw getCloseEvent('MISSING_COOKIE', 4403);
+        throw getCloseEvent('MISSING_COOKIE', 4401);
       }
 
       logContext('Missing OBO token', context, 'warn');
-      throw getCloseEvent('MISSING_OBO_TOKEN', 4403);
+      throw getCloseEvent('MISSING_OBO_TOKEN', 4401);
     }
 
     const parsedPayload = parseTokenPayload(oboAccessToken);
 
     if (parsedPayload === undefined) {
       logContext(`Invalid OBO token payload. oboAccessToken: ${oboAccessToken}`, context, 'warn');
-      throw getCloseEvent('INVALID_OBO_TOKEN', 4403);
+      throw getCloseEvent('INVALID_OBO_TOKEN', 4401);
     }
 
     const { exp } = parsedPayload;
@@ -225,7 +225,7 @@ export const collaborationServer = Server.configure({
 
     if (exp <= now) {
       logContext(`OBO token expired. exp: ${exp}, now: ${now} `, context, 'warn');
-      throw getCloseEvent('OBO_TOKEN_EXPIRED', 4403);
+      throw getCloseEvent('OBO_TOKEN_EXPIRED', 4401);
     }
   },
 
