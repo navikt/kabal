@@ -119,7 +119,7 @@ export const collaborationServer = Server.configure({
   onConnect: async ({ context }) => {
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to establish collaboration connection without context' });
-      throw new Error('Invalid context');
+      throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
     // navIdent is not defined when server is run without Wonderwall (ie. locally).
@@ -185,7 +185,7 @@ export const collaborationServer = Server.configure({
       context.abortController?.abort();
     } else {
       log.error({ msg: 'Tried to close collaboration connection without context' });
-      throw new Error('Invalid context');
+      throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
   },
 
@@ -196,7 +196,6 @@ export const collaborationServer = Server.configure({
 
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to handle message without context' });
-
       throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
@@ -256,7 +255,7 @@ export const collaborationServer = Server.configure({
   onLoadDocument: async ({ context, document }) => {
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to load document without context' });
-      throw new Error('Invalid context');
+      throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
     if (!document.isEmpty('content')) {
@@ -279,7 +278,7 @@ export const collaborationServer = Server.configure({
   onStoreDocument: async ({ context, document }) => {
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to store document without context' });
-      throw new Error('Invalid context');
+      throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
     await setDocument(context, document);
