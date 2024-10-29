@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Kabal",
+  "type": "collection",
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "https://kabal.intern.dev.nav.no"
+  }
+}
