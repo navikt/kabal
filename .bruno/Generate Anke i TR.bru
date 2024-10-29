@@ -1,0 +1,24 @@
+meta {
+  name: Generate Anke i TR
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://kabal.intern.dev.nav.no/api/kabal-api/mockdata/randomankeitrygderetten
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "ytelse": "SYK_SYK",
+    "sakenGjelder": {
+      "id": {
+        "type": "PERSON",
+        "verdi": "14828897927"
+      },
+      "skalMottaKopi": true
+    }
+  }
+}
