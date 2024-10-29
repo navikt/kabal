@@ -123,14 +123,14 @@ export const collaborationServer = Server.configure({
     }
 
     // navIdent is not defined when server is run without Wonderwall (ie. locally).
-    logContext(`Collaboration connection established for ${context.navIdent}!`, context);
+    logContext(`Collaboration connection established for ${context.navIdent}!`, context, 'debug');
 
     context.abortController = new AbortController();
 
     const oboToken = await oboCache.get(getCacheKey(context.navIdent, ApiClientEnum.KABAL_API));
 
     if (oboToken === null) {
-      logContext('Collaboration connection established without OBO token, refreshing OBO token now.', context, 'warn');
+      logContext('Collaboration connection established without OBO token, refreshing OBO token now.', context, 'debug');
 
       // Refresh OBO token immediately if it's missing or invalid.
       await refreshNow(context);
@@ -160,7 +160,7 @@ export const collaborationServer = Server.configure({
       logContext(
         `Collaboration connection established with OBO token expiring in ${expiresIn} seconds, refreshing OBO token now.`,
         context,
-        'warn',
+        'debug',
       );
 
       // Refresh OBO token immediately if it's about to expire.
@@ -172,7 +172,7 @@ export const collaborationServer = Server.configure({
     logContext(
       `Collaboration connection established with OBO token expiring in ${expiresIn}, starting OBO token refresh interval.`,
       context,
-      'warn',
+      'debug',
     );
     startRefreshOboTokenInterval(context);
   },
@@ -180,7 +180,7 @@ export const collaborationServer = Server.configure({
   onDisconnect: async ({ context }) => {
     if (isConnectionContext(context)) {
       // navIdent is not defined locally.
-      logContext(`Collaboration connection closed for ${context.navIdent}!`, context);
+      logContext(`Collaboration connection closed for ${context.navIdent}!`, context, 'debug');
 
       context.abortController?.abort();
     } else {
