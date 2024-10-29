@@ -66,6 +66,20 @@ const refresh = async (context: ConnectionContext) => {
   }
 };
 
+const refreshNow = async (context: ConnectionContext) => {
+  try {
+    await refresh(context);
+  } catch (err) {
+    logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
+
+    if (err instanceof RefreshError) {
+      throw getCloseEvent('INVALID_SESSION', 4000 + err.status);
+    }
+
+    throw getCloseEvent('INVALID_SESSION', 4500);
+  }
+};
+
 const startRefreshOboTokenInterval = (context: ConnectionContext) => {
   const { abortController, cookie } = context;
 
@@ -119,17 +133,7 @@ export const collaborationServer = Server.configure({
       logContext('Collaboration connection established without OBO token, refreshing OBO token now.', context, 'warn');
 
       // Refresh OBO token immediately if it's missing or invalid.
-      try {
-        await refresh(context);
-      } catch (err) {
-        logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
-
-        if (err instanceof RefreshError) {
-          throw getCloseEvent('INVALID_SESSION', 4000 + err.status);
-        }
-
-        throw getCloseEvent('INVALID_SESSION', 4500);
-      }
+      await refreshNow(context);
 
       return startRefreshOboTokenInterval(context);
     }
@@ -144,17 +148,7 @@ export const collaborationServer = Server.configure({
       );
 
       // Refresh OBO token immediately if it's invalid.
-      try {
-        await refresh(context);
-      } catch (err) {
-        logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
-
-        if (err instanceof RefreshError) {
-          throw getCloseEvent('INVALID_SESSION', 4000 + err.status);
-        }
-
-        throw getCloseEvent('INVALID_SESSION', 4500);
-      }
+      await refreshNow(context);
 
       return startRefreshOboTokenInterval(context);
     }
@@ -170,17 +164,7 @@ export const collaborationServer = Server.configure({
       );
 
       // Refresh OBO token immediately if it's about to expire.
-      try {
-        await refresh(context);
-      } catch (err) {
-        logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
-
-        if (err instanceof RefreshError) {
-          throw getCloseEvent('INVALID_SESSION', 4000 + err.status);
-        }
-
-        throw getCloseEvent('INVALID_SESSION', 4500);
-      }
+      await refreshNow(context);
 
       return startRefreshOboTokenInterval(context);
     }
