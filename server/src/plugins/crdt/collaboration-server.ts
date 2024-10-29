@@ -26,7 +26,7 @@ const logContext = (msg: string, context: ConnectionContext, level: Level = 'inf
   });
 };
 
-const refresh = async (context: ConnectionContext) => {
+const refresh = async (context: ConnectionContext, retries = 2) => {
   const { abortController, cookie } = context;
 
   if (abortController === undefined) {
@@ -62,7 +62,11 @@ const refresh = async (context: ConnectionContext) => {
       return logContext('OBO token interval refresh request aborted', context, 'debug');
     }
 
-    throw new RefreshError(500, `Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`);
+    if (retries === 0) {
+      throw new RefreshError(500, `Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`);
+    }
+
+    return refresh(context, retries - 1);
   }
 };
 
