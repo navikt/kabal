@@ -1,7 +1,7 @@
-import { GosysBeskrivelseTabs } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse-tabs';
-import { Entry } from '@app/components/behandling/behandlingsdetaljer/gosys/entry';
-import { splitBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/split-beskrivelse';
-import { StyledEntryList } from '@app/components/behandling/behandlingsdetaljer/gosys/styled-entry-list';
+import { GosysBeskrivelseTabs } from '@app/components/gosys/beskrivelse/beskrivelse-tabs';
+import { Entry } from '@app/components/gosys/beskrivelse/entry';
+import { splitBeskrivelse } from '@app/components/gosys/beskrivelse/parsing/split-beskrivelse';
+import { StyledEntryList } from '@app/components/gosys/beskrivelse/styled-entry-list';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { usePushEvent } from '@app/observability';
 import { Box, Button, Modal, VStack } from '@navikt/ds-react';

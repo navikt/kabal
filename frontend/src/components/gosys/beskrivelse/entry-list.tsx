@@ -1,6 +1,6 @@
-import { Entry } from '@app/components/behandling/behandlingsdetaljer/gosys/entry';
-import type { GosysBeskrivelseEntry } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
-import { StyledEntryList } from '@app/components/behandling/behandlingsdetaljer/gosys/styled-entry-list';
+import { Entry } from '@app/components/gosys/beskrivelse/entry';
+import type { GosysBeskrivelseEntry } from '@app/components/gosys/beskrivelse/parsing/type';
+import { StyledEntryList } from '@app/components/gosys/beskrivelse/styled-entry-list';
 import { styled } from 'styled-components';
 
 interface Props {

@@ -1,9 +1,9 @@
-import { GosysBeskrivelseTabs } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse-tabs';
 import {
   CheckmarkCircleFillIconColored,
   ExclamationmarkTriangleFillIconColored,
 } from '@app/components/colored-icons/colored-icons';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
+import { GosysBeskrivelseTabs } from '@app/components/gosys/beskrivelse/beskrivelse-tabs';
 import { isoDateTimeToPretty, isoDateToPretty } from '@app/domain/date';
 import { useFullTemaNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
 import { usePushEvent } from '@app/observability';

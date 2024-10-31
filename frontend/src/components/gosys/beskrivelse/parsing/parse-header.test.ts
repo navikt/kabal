@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { parseHeader } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/parse-header';
-import { GosysEntryAuthorType } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
+import { parseHeader } from '@app/components/gosys/beskrivelse/parsing/parse-header';
+import { GosysEntryAuthorType } from '@app/components/gosys/beskrivelse/parsing/type';
 
 describe('parse Gosys header', () => {
   it('should parse simple header', () => {

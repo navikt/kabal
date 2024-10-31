@@ -1,11 +1,11 @@
+import { CopyButton } from '@app/components/copy-button/copy-button';
+import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import {
   type GosysBeskrivelseEntry,
   GosysEntryAuthorType,
   type GosysEntryEmployee,
   type GosysEntrySystem,
-} from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
-import { CopyButton } from '@app/components/copy-button/copy-button';
-import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
+} from '@app/components/gosys/beskrivelse/parsing/type';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useKlageenheter } from '@app/simple-api-state/use-kodeverk';
 import { BodyLong, HStack, Heading, Tag, Tooltip, VStack } from '@navikt/ds-react';

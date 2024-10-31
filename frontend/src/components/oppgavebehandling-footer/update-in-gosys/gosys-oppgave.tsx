@@ -1,10 +1,10 @@
-import { GosysBeskrivelseTabs } from '@app/components/behandling/behandlingsdetaljer/gosys/beskrivelse-tabs';
 import {
   DateCell,
   Employee,
   Enhet,
   TimeCell,
 } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/row';
+import { GosysBeskrivelseTabs } from '@app/components/gosys/beskrivelse/beskrivelse-tabs';
 import { useFullTemaNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
 import { useGetGosysOppgaveQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { GosysStatus, type IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
