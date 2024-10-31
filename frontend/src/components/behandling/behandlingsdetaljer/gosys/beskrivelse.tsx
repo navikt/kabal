@@ -91,7 +91,6 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
             defaultFormat={preferredFormat}
             beskrivelse={trimmedBeskrivelse}
             entries={entries}
-            gosysEntries={minimumExpectedEntries}
             hasExpectedEntries={hasMinimumExpectedEntries}
           />
         </Modal.Body>

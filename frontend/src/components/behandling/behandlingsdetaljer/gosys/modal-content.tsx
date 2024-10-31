@@ -13,11 +13,10 @@ interface Props {
   defaultFormat: GosysBeskrivelseFormat;
   beskrivelse: string;
   entries: GosysBeskrivelseEntry[];
-  gosysEntries: number;
   hasExpectedEntries: boolean;
 }
 
-export const ModalContent = ({ defaultFormat, entries, beskrivelse, gosysEntries, hasExpectedEntries }: Props) => {
+export const ModalContent = ({ defaultFormat, entries, beskrivelse, hasExpectedEntries }: Props) => {
   const { setValue } = useGosysBeskrivelseTab();
 
   const onChange = useCallback(
@@ -45,7 +44,7 @@ export const ModalContent = ({ defaultFormat, entries, beskrivelse, gosysEntries
         />
         <Tabs.Tab
           value={GosysBeskrivelseFormat.GOSYS}
-          label={`Gosys (${gosysEntries})`}
+          label="Gosys"
           icon={<CaptionsIcon aria-hidden role="presentation" />}
         />
       </Tabs.List>
