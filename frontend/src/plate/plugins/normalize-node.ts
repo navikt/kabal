@@ -14,6 +14,9 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
+import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
+import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
+import { RegelverkContainerPlugin } from '@app/plate/plugins/regelverk';
 import {
   createEmptyVoid,
   createRegelverkContainer,
@@ -23,7 +26,14 @@ import {
   createTableCell,
   createTableRow,
 } from '@app/plate/templates/helpers';
-import { TextAlign } from '@app/plate/types';
+import {
+  type MaltekstElement,
+  type RedigerbarMaltekstElement,
+  type RegelverkContainerElement,
+  type TableCellElement,
+  TextAlign,
+} from '@app/plate/types';
+import { isOfElementTypesFn } from '@app/plate/utils/queries';
 import { LogLevel } from '@grafana/faro-web-sdk';
 import {
   BaseParagraphPlugin,
@@ -45,9 +55,19 @@ import {
   BaseNumberedListPlugin,
 } from '@udecode/plate-list';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
+import { TableCellPlugin } from '@udecode/plate-table/react';
 import { Scrubber } from 'slate';
 
 const module = 'normalize';
+
+type TopLevelElement = RedigerbarMaltekstElement | MaltekstElement | RegelverkContainerElement | TableCellElement;
+
+const isTopLevelElement = isOfElementTypesFn<TopLevelElement>([
+  RedigerbarMaltekstPlugin.node.type,
+  MaltekstPlugin.node.type,
+  RegelverkContainerPlugin.node.type,
+  TableCellPlugin.node.type,
+]);
 
 export const normalizeNodePlugin = createPlatePlugin({
   key: 'normalize',
@@ -82,8 +102,14 @@ export const normalizeNodePlugin = createPlatePlugin({
 
         const [parentNode] = parentEntry;
 
-        if (isEditor(parentNode)) {
-          pushLog('Missing node type, element at top level. Setting type to paragraph.', options, LogLevel.WARN);
+        const isParentTopLevelElement = isTopLevelElement(parentNode);
+
+        if (isParentTopLevelElement || isEditor(parentNode)) {
+          pushLog(
+            `Missing node type, element at top level in "${isParentTopLevelElement ? parentNode.type : 'editor'}". Setting type to paragraph.`,
+            options,
+            LogLevel.WARN,
+          );
 
           return setNodes(
             editor,
