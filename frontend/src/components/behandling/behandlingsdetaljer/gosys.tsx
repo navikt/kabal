@@ -3,8 +3,8 @@ import { useGetGosysOppgaveQuery } from '@app/redux-api/oppgaver/queries/behandl
 import { GosysStatus, type IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Alert, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { GosysBeskrivelse } from '../../gosys/beskrivelse/beskrivelse';
 import { BehandlingSection } from './behandling-section';
-import { GosysBeskrivelse } from './gosys/beskrivelse';
 import { SelectGosysOppgaveModal } from './select-gosys-oppgave/select-gosys-oppgave';
 
 interface Props {

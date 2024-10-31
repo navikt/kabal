@@ -3,7 +3,7 @@ import {
   GosysEntryAuthorType,
   type GosysEntryEmployee,
   type GosysEntrySystem,
-} from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
+} from '@app/components/gosys/beskrivelse/parsing/type';
 import { isValid, parse } from 'date-fns';
 
 const HEADER_REGEX = /(\d{1,2}\.\d{1,2}\.\d{4} \d{1,2}:\d{1,2})\s+(.*)\(([\w,-\s]+)\)/i;

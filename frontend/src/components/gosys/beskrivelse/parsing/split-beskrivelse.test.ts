@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { splitBeskrivelse } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/split-beskrivelse';
-import { GosysEntryAuthorType } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
+import { splitBeskrivelse } from '@app/components/gosys/beskrivelse/parsing/split-beskrivelse';
+import { GosysEntryAuthorType } from '@app/components/gosys/beskrivelse/parsing/type';
 
 describe('split beskrivelse', () => {
   it('should split one line', () => {

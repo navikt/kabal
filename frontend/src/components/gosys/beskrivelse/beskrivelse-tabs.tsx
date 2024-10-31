@@ -1,6 +1,6 @@
-import { EntryList } from '@app/components/behandling/behandlingsdetaljer/gosys/entry-list';
-import { GosysBeskrivelseFormat } from '@app/components/behandling/behandlingsdetaljer/gosys/format-enum';
-import type { GosysBeskrivelseEntry } from '@app/components/behandling/behandlingsdetaljer/gosys/parsing/type';
+import { EntryList } from '@app/components/gosys/beskrivelse/entry-list';
+import { GosysBeskrivelseFormat } from '@app/components/gosys/beskrivelse/format-enum';
+import type { GosysBeskrivelseEntry } from '@app/components/gosys/beskrivelse/parsing/type';
 import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
 import { pushLog, usePushEvent } from '@app/observability';
 import { BulletListIcon, CaptionsIcon } from '@navikt/aksel-icons';
