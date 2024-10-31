@@ -143,7 +143,7 @@ export const normalizeNodePlugin = createPlatePlugin({
         }
 
         pushLog(
-          'Missing node type, but parent type was not LIC. Normalization not implemented.',
+          `Missing node type, but normalization is not implemented for parent with type "${parentNode.type}".`,
           { ...options, context: { ...options.context, parent: Scrubber.stringify(parentNode) } },
           LogLevel.ERROR,
         );
