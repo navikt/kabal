@@ -25,7 +25,7 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
     () => (oppgavebeskrivelse === null ? null : oppgavebeskrivelse.trim()),
     [oppgavebeskrivelse],
   );
-  const expectedEntries =
+  const minimumExpectedEntries =
     trimmedBeskrivelse?.split('\n').filter((l) => simpleHeaderPrecheck(l) && l.split('').some((c) => c !== '-'))
       .length ?? 0;
   const entries = useMemo(
@@ -38,25 +38,25 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
     modalRef.current?.showModal();
     pushEvent('open-gosys-description', BEHANDLING_PANEL_DOMAIN, {
       format: preferredFormat,
-      expectedEntries: expectedEntries.toString(10),
+      expectedEntries: minimumExpectedEntries.toString(10),
       actualEntries: entries.length.toString(10),
       oppgaveId,
     });
-  }, [entries.length, expectedEntries, oppgaveId, preferredFormat]);
+  }, [entries.length, minimumExpectedEntries, oppgaveId, preferredFormat]);
 
-  const hasExpectedEntries = entries.length === expectedEntries;
+  const hasMinimumExpectedEntries = entries.length >= minimumExpectedEntries;
 
   useEffect(() => {
-    if (!hasExpectedEntries) {
+    if (!hasMinimumExpectedEntries) {
       const context = {
-        expectedEntries: expectedEntries.toString(10),
+        expectedEntries: minimumExpectedEntries.toString(10),
         actualEntries: entries.length.toString(10),
         oppgaveId,
       };
       pushLog('Unexpected number of entries in Gosys description', { context });
       pushEvent('unexpected-gosys-description', BEHANDLING_PANEL_DOMAIN, context);
     }
-  }, [entries.length, expectedEntries, hasExpectedEntries, oppgaveId]);
+  }, [entries.length, minimumExpectedEntries, hasMinimumExpectedEntries, oppgaveId]);
 
   const [firstEntry, secondEntry] = entries;
 
@@ -91,8 +91,8 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
             defaultFormat={preferredFormat}
             beskrivelse={trimmedBeskrivelse}
             entries={entries}
-            gosysEntries={expectedEntries}
-            hasExpectedEntries={hasExpectedEntries}
+            gosysEntries={minimumExpectedEntries}
+            hasExpectedEntries={hasMinimumExpectedEntries}
           />
         </Modal.Body>
       </Modal>
