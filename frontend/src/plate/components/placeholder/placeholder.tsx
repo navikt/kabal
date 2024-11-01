@@ -12,6 +12,7 @@ import {
   lonePlaceholderInMaltekst,
 } from '@app/plate/components/placeholder/helpers';
 import { DeleteButton, Wrapper } from '@app/plate/components/placeholder/styled-components';
+import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { PlaceholderElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
@@ -156,6 +157,8 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
     <PlateElement<PlaceholderElement> {...props} asChild contentEditable suppressContentEditableWarning>
       <Tooltip content={element.placeholder} maxChar={Number.POSITIVE_INFINITY} contentEditable={false}>
         <Wrapper
+          data-node-type={ELEMENT_PLACEHOLDER}
+          data-raw-placeholder={element.placeholder}
           style={{
             backgroundColor: isFocused ? 'var(--a-blue-100)' : 'var(--a-gray-200)',
             paddingLeft: hideDeleteButton || isReadOnly ? '0' : '1em',
