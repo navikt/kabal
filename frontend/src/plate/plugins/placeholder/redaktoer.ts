@@ -1,5 +1,6 @@
 import { RedaktørPlaceholder } from '@app/plate/components/placeholder/placeholder';
 import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
+import { parsers } from '@app/plate/plugins/placeholder/html-parsers';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
 import { isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
@@ -34,4 +35,5 @@ export const RedaktoerPlaceholderPlugin = createPlatePlugin({
       }
     },
   },
+  parsers,
 });

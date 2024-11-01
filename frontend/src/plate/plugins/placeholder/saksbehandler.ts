@@ -1,5 +1,6 @@
 import { SaksbehandlerPlaceholder } from '@app/plate/components/placeholder/placeholder';
 import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
+import { parsers } from '@app/plate/plugins/placeholder/html-parsers';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
 import { type TNodeEntry, findNode, getNextNode, getPreviousNode, isElement, select } from '@udecode/plate-common';
 import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
@@ -51,6 +52,7 @@ export const SaksbehandlerPlaceholderPlugin = createPlatePlugin({
       }
     },
   },
+  parsers,
 });
 
 const selectAndScrollIntoView = (editor: PlateEditor, [node, path]: TNodeEntry<PlaceholderElement>) => {
