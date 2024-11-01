@@ -31,10 +31,6 @@ export const RedaktørPlaceholder = (props: PlateElementProps<PlaceholderElement
   <Placeholder {...props} canManage />
 );
 
-export const PreviewPlaceholder = (props: PlateElementProps<PlaceholderElement>) => (
-  <Placeholder {...props} canManage={false} />
-);
-
 export const SaksbehandlerPlaceholder = (props: PlateElementProps<PlaceholderElement>) => {
   const { canManage } = useContext(SmartEditorContext);
 
