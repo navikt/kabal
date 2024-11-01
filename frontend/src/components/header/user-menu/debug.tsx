@@ -147,7 +147,7 @@ interface SendButtonProps {
 }
 
 const SendButton = ({ onClick, children }: SendButtonProps) => (
-  <Tooltip content="Sender teknisk informasjon om saken direkte til Team Klage.">
+  <Tooltip content="Sender teknisk informasjon direkte til Team Klage.">
     <Button variant="tertiary" size="small" onClick={onClick} icon={<BugIcon aria-hidden />}>
       {children}
     </Button>
