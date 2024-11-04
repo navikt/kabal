@@ -233,7 +233,7 @@ export const crdtPlugin = fastifyPlugin(
       '/collaboration/refresh-obo-access-token',
       {
         schema: {
-          response: { 200: Type.Object({ expiresIn: Type.Number() }), 400: Type.String() },
+          response: { 200: Type.Object({ exp: Type.Number(), expiresIn: Type.Number() }), 400: Type.String() },
         },
       },
       async (req, reply) => {
@@ -259,7 +259,7 @@ export const crdtPlugin = fastifyPlugin(
 
         const now = Math.ceil(Date.now() / 1_000);
 
-        return reply.status(200).send({ expiresIn: parsed.exp - now });
+        return reply.status(200).send({ exp: parsed.exp, expiresIn: parsed.exp - now });
       },
     );
   },

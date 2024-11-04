@@ -10,6 +10,7 @@ export interface ConnectionContext {
   readonly navIdent: string;
   readonly cookie: string | undefined;
   abortController?: AbortController;
+  timeout?: Timer;
 }
 
 export const isConnectionContext = (data: unknown): data is ConnectionContext =>
