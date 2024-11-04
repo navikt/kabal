@@ -26,7 +26,7 @@ const logContext = (msg: string, context: ConnectionContext, level: Level = 'inf
   });
 };
 
-const refresh = async (context: ConnectionContext, retries = 2) => {
+const refresh = async (context: ConnectionContext, retries = 2): Promise<number> => {
   const { abortController, cookie } = context;
 
   if (abortController === undefined) {
@@ -52,14 +52,22 @@ const refresh = async (context: ConnectionContext, retries = 2) => {
 
     const parsed = await res.json();
 
-    if (isObject(parsed) && hasOwn(parsed, 'expiresIn') && typeof parsed.expiresIn === 'number') {
-      logContext(`OBO token refreshed on interval. Expires in ${parsed.expiresIn} seconds`, context, 'debug');
-    } else {
-      logContext('Invalid OBO token refresh response', context, 'warn');
+    if (isObject(parsed) && hasOwn(parsed, 'exp') && typeof parsed.exp === 'number') {
+      const expiresIn = Math.floor(parsed.exp - Date.now() / 1_000);
+
+      logContext(`OBO token refreshed. Expires in ${expiresIn} seconds`, context, 'debug');
+
+      return expiresIn;
     }
+
+    logContext('Invalid OBO token refresh response', context, 'warn');
+
+    throw new RefreshError(500, 'Invalid OBO token refresh response');
   } catch (err) {
     if (err instanceof DOMException && err.name === 'AbortError') {
-      return logContext('OBO token interval refresh request aborted', context, 'debug');
+      logContext('OBO token refresh request aborted', context, 'debug');
+
+      return 0;
     }
 
     if (retries === 0) {
@@ -70,50 +78,58 @@ const refresh = async (context: ConnectionContext, retries = 2) => {
   }
 };
 
-const refreshNow = async (context: ConnectionContext) => {
-  try {
-    await refresh(context);
-  } catch (err) {
-    logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
+const REFRESH_TOKEN_LIMIT = 120; // Highest token expiration time Wonderwall will give new token for.
 
-    if (err instanceof RefreshError) {
-      throw getCloseEvent('INVALID_SESSION', 4000 + err.status);
-    }
-
-    throw getCloseEvent('INVALID_SESSION', 4500);
-  }
-};
-
-const startRefreshOboTokenInterval = (context: ConnectionContext) => {
-  const { abortController, cookie } = context;
-
-  if (abortController === undefined) {
-    return logContext('Missing abort controller', context, 'warn');
-  }
-
-  if (abortController.signal.aborted) {
-    return logContext('Abort controller already aborted', context, 'warn');
-  }
-
-  if (cookie === undefined) {
-    return logContext('Missing session cookie', context, 'warn');
-  }
-
-  const interval = setInterval(async () => {
+const createRefreshTimeout = async (context: ConnectionContext, expiresIn: number): Promise<void> => {
+  if (expiresIn <= REFRESH_TOKEN_LIMIT) {
     try {
-      await refresh(context);
+      // Refresh OBO token immediately if it's missing or about to expire.
+      const newExpiresIn = await refresh(context);
+      // Start a new timeout to refresh the new token when it expires.
+      return createRefreshTimeout(context, newExpiresIn);
     } catch (err) {
-      if (err instanceof RefreshError || err instanceof Error) {
-        logContext(err.message, context, 'warn');
+      logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
+
+      if (err instanceof RefreshError) {
+        throw getCloseEvent('INVALID_SESSION', 4000 + err.status);
       }
-      clearInterval(interval);
+
+      throw getCloseEvent('INVALID_SESSION', 4500);
     }
-  }, 30_000);
+  }
+
+  // Refresh OBO token 30 seconds before it expires.
+  const timeout = setTimeout(
+    async () => {
+      // Clear previous timeout reference.
+      context.timeout = undefined;
+
+      try {
+        const newExpiresIn = await refresh(context);
+        // Start a new timeout to refresh the new token when it expires.
+        createRefreshTimeout(context, newExpiresIn);
+      } catch (err) {
+        if (err instanceof RefreshError || err instanceof Error) {
+          logContext(err.message, context, 'warn');
+        } else {
+          logContext(`Failed to refresh OBO token. Error: ${err}`, context, 'warn');
+        }
+      }
+    },
+    (expiresIn - REFRESH_TOKEN_LIMIT) * 1_000,
+  );
+
+  context.timeout = timeout;
+
+  const abortController = new AbortController();
 
   abortController.signal.addEventListener('abort', () => {
-    logContext('Aborted refresh OBO token interval', context, 'debug');
-    clearInterval(interval);
+    logContext('Aborted refresh OBO token timeout', context, 'debug');
+    clearTimeout(timeout);
+    context.timeout = undefined;
   });
+
+  context.abortController = abortController;
 };
 
 export const collaborationServer = Server.configure({
@@ -126,65 +142,22 @@ export const collaborationServer = Server.configure({
       throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
+    const expiresIn = await getTokenExpiresIn(context, 'onConnect');
+
     // navIdent is not defined when server is run without Wonderwall (ie. locally).
-    logContext(`Collaboration connection established for ${context.navIdent}!`, context, 'debug');
-
-    context.abortController = new AbortController();
-
-    const oboToken = await oboCache.get(getCacheKey(context.navIdent, ApiClientEnum.KABAL_API));
-
-    if (oboToken === null) {
-      logContext('Collaboration connection established without OBO token, refreshing OBO token now.', context, 'debug');
-
-      // Refresh OBO token immediately if it's missing or invalid.
-      await refreshNow(context);
-
-      return startRefreshOboTokenInterval(context);
-    }
-
-    const payload = parseTokenPayload(oboToken);
-
-    if (payload === undefined) {
-      logContext(
-        'Collaboration connection established with an invalid OBO token, refreshing OBO token now.',
-        context,
-        'warn',
-      );
-
-      // Refresh OBO token immediately if it's invalid.
-      await refreshNow(context);
-
-      return startRefreshOboTokenInterval(context);
-    }
-
-    const { exp } = payload;
-    const expiresIn = exp - Math.ceil(Date.now() / 1_000);
-
-    if (expiresIn <= 120) {
-      logContext(
-        `Collaboration connection established with OBO token expiring in ${expiresIn} seconds, refreshing OBO token now.`,
-        context,
-        'debug',
-      );
-
-      // Refresh OBO token immediately if it's about to expire.
-      await refreshNow(context);
-
-      return startRefreshOboTokenInterval(context);
-    }
-
     logContext(
-      `Collaboration connection established with OBO token expiring in ${expiresIn} seconds, starting OBO token refresh interval.`,
+      `Collaboration connection established for ${context.navIdent} with token expiring in ${expiresIn} seconds.`,
       context,
       'debug',
     );
-    startRefreshOboTokenInterval(context);
+
+    createRefreshTimeout(context, expiresIn);
   },
 
   onDisconnect: async ({ context }) => {
     if (isConnectionContext(context)) {
       // navIdent is not defined locally.
-      logContext(`Collaboration connection closed for ${context.navIdent}!`, context, 'debug');
+      logContext(`Collaboration connection closed for ${context.navIdent}.`, context, 'debug');
 
       context.abortController?.abort();
     } else {
@@ -203,55 +176,21 @@ export const collaborationServer = Server.configure({
       throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
-    const { navIdent } = context;
-    let oboAccessToken = await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API));
-
-    if (oboAccessToken === null && context.cookie !== undefined) {
-      logContext('Trying to refresh OBO token', context, 'debug');
-
-      try {
-        // Refresh OBO token directly through Wonderwall.
-        const res = await fetch('http://localhost:7564/collaboration/refresh-obo-access-token', {
-          method: 'GET',
-          headers: {
-            Cookie: context.cookie,
-          },
-        });
-
-        if (res.ok) {
-          oboAccessToken = await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API));
-          logContext('OBO token refreshed', context, 'debug');
-        } else {
-          throw new Error(`Wonderwall responded with status code ${res.status}`);
-        }
-      } catch (err) {
-        logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
-        throw getCloseEvent('MISSING_OBO_TOKEN', 4401);
-      }
+    if (context.cookie === undefined) {
+      logContext('Missing session cookie', context, 'warn');
+      throw getCloseEvent('MISSING_COOKIE', 4401);
     }
 
-    if (oboAccessToken === null) {
-      if (context.cookie === undefined) {
-        logContext('Missing session cookie', context, 'warn');
-        throw getCloseEvent('MISSING_COOKIE', 4401);
-      }
-
-      logContext('Missing OBO token', context, 'warn');
-      throw getCloseEvent('MISSING_OBO_TOKEN', 4401);
+    if (context.timeout === undefined) {
+      const expiresIn = await getTokenExpiresIn(context, 'beforeHandleMessage');
+      logContext('Missing refresh OBO token timeout. Starting timeout.', context, 'warn');
+      await createRefreshTimeout(context, expiresIn);
     }
 
-    const parsedPayload = parseTokenPayload(oboAccessToken);
+    const expiresIn = await getTokenExpiresIn(context, 'beforeHandleMessage');
 
-    if (parsedPayload === undefined) {
-      logContext(`Invalid OBO token payload. oboAccessToken: ${oboAccessToken}`, context, 'warn');
-      throw getCloseEvent('INVALID_OBO_TOKEN', 4401);
-    }
-
-    const { exp } = parsedPayload;
-    const now = Math.ceil(Date.now() / 1000);
-
-    if (exp <= now) {
-      logContext(`OBO token expired. exp: ${exp}, now: ${now} `, context, 'warn');
+    if (expiresIn <= 0) {
+      logContext(`OBO token expired ${expiresIn} seconds ago.`, context, 'warn');
       throw getCloseEvent('OBO_TOKEN_EXPIRED', 4401);
     }
   },
@@ -303,3 +242,23 @@ class RefreshError extends Error {
     super(message);
   }
 }
+
+const getTokenExpiresIn = async (context: ConnectionContext, method: string) => {
+  const oboAccessToken = await oboCache.get(getCacheKey(context.navIdent, ApiClientEnum.KABAL_API));
+
+  if (oboAccessToken === null) {
+    logContext(`Missing OBO token: ${method}`, context, 'warn');
+
+    return 0;
+  }
+
+  const payload = parseTokenPayload(oboAccessToken);
+
+  if (payload === undefined) {
+    logContext(`Invalid OBO token payload: ${method}`, context, 'warn');
+
+    return 0;
+  }
+
+  return Math.floor(payload.exp - Date.now() / 1_000);
+};
