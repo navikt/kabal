@@ -44,6 +44,7 @@ export const Row = ({ gosysOppgave, selectedGosysOppgave, oppgaveId, showFerdigs
       selected={selected}
       content={<GosysBeskrivelseTabs id={gosysOppgave.id} beskrivelse={gosysOppgave.beskrivelse} />}
       shadeOnHover
+      expandOnRowClick
     >
       <Table.DataCell>
         {gosysOppgave.gjelder === null ? null : (
