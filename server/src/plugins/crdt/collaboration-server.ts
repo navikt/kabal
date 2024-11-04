@@ -174,7 +174,7 @@ export const collaborationServer = Server.configure({
     }
 
     logContext(
-      `Collaboration connection established with OBO token expiring in ${expiresIn}, starting OBO token refresh interval.`,
+      `Collaboration connection established with OBO token expiring in ${expiresIn} seconds, starting OBO token refresh interval.`,
       context,
       'debug',
     );
