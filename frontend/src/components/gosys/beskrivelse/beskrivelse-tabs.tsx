@@ -11,11 +11,13 @@ import { simpleHeaderPrecheck } from './parsing/parse-header';
 import { splitBeskrivelse } from './parsing/split-beskrivelse';
 
 interface Props {
+  id: number;
   beskrivelse?: string | null;
   entries?: GosysBeskrivelseEntry[];
 }
 
 export const GosysBeskrivelseTabs = ({
+  id,
   beskrivelse = '',
   entries = useMemo(() => splitBeskrivelse(beskrivelse ?? ''), [beskrivelse]),
 }: Props) => {
@@ -38,11 +40,12 @@ export const GosysBeskrivelseTabs = ({
       const context = {
         expectedEntries: expectedEntries.toString(10),
         actualEntries: entries.length.toString(10),
+        gosysOppgaveId: id.toString(10),
       };
       pushLog('Unexpected number of entries in Gosys description', { context });
       pushEvent('unexpected-gosys-description', context);
     }
-  }, [entries.length, expectedEntries, hasExpectedEntries, pushEvent]);
+  }, [entries.length, expectedEntries, hasExpectedEntries, pushEvent, id]);
 
   return (
     <Tabs
