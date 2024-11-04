@@ -91,22 +91,28 @@ export const SelectGosysOppgaveModal = ({ hasGosysOppgave }: SelectGosysOppgaveM
   const pushEvent = usePushEvent();
   const canEdit = useCanEdit();
 
+  if (!(canEdit || hasGosysOppgave)) {
+    return null;
+  }
+
   const onClick = () => {
     setIsOpen(true);
     pushEvent('open-gosys-oppgave-modal', { hasGosysOppgave: hasGosysOppgave.toString() });
   };
 
+  const text = getText(canEdit, hasGosysOppgave);
+
   return (
     <>
       <Button variant="secondary" size="small" onClick={onClick}>
-        {hasGosysOppgave ? 'Se/bytt oppgave fra Gosys' : 'Velg oppgave fra Gosys'}
+        {text}
       </Button>
 
       <Modal
-        aria-label="Velg oppgave fra Gosys"
+        aria-label={text}
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        header={{ heading: 'Velg oppgave fra Gosys', closeButton: true }}
+        header={{ heading: text, closeButton: true }}
         closeOnBackdropClick
         width="90%"
       >
@@ -120,6 +126,18 @@ export const SelectGosysOppgaveModal = ({ hasGosysOppgave }: SelectGosysOppgaveM
       </Modal>
     </>
   );
+};
+
+const getText = (canEdit: boolean, hasGosysOppgave: boolean) => {
+  if (!canEdit) {
+    return 'Se oppgave fra Gosys';
+  }
+
+  if (hasGosysOppgave) {
+    return 'Se/bytt oppgave fra Gosys';
+  }
+
+  return 'Velg oppgave fra Gosys';
 };
 
 interface Lists {
