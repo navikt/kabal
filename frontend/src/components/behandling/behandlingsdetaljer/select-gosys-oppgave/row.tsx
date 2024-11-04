@@ -5,6 +5,7 @@ import {
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { GosysBeskrivelseTabs } from '@app/components/gosys/beskrivelse/beskrivelse-tabs';
 import { isoDateTimeToPretty, isoDateToPretty } from '@app/domain/date';
+import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useFullTemaNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
 import { usePushEvent } from '@app/observability';
 import { useSetGosysOppgaveMutation } from '@app/redux-api/oppgaver/mutations/set-gosys-oppgave';
@@ -98,6 +99,8 @@ interface SelectionProps {
 }
 
 const Selection = ({ gosysOppgave, selected, onSelect, isSelecting }: SelectionProps) => {
+  const canEdit = useCanEdit();
+
   if (selected) {
     return (
       <Tooltip content="Valgt">
@@ -116,6 +119,10 @@ const Selection = ({ gosysOppgave, selected, onSelect, isSelecting }: SelectionP
         </IconContainer>
       </Tooltip>
     );
+  }
+
+  if (!canEdit) {
+    return null;
   }
 
   return (
