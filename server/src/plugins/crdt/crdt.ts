@@ -6,6 +6,7 @@ import { getAzureADClient } from '@app/auth/get-auth-client';
 import { refreshOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
 import { ApiClientEnum } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
+import { optionalEnvString } from '@app/config/env-var';
 import { parseTokenPayload } from '@app/helpers/token-parser';
 import { type AnyObject, type Level, type LogArgs, getLogger } from '@app/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
@@ -19,11 +20,13 @@ import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 import { TAB_ID_PLUGIN_ID } from '@app/plugins/tab-id';
 import { TRACEPARENT_PLUGIN_ID } from '@app/plugins/traceparent/traceparent';
 import { Type, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import { slateNodesToInsertDelta } from '@slate-yjs/core';
+import { slateNodesToInsertDelta, yTextToSlateElement } from '@slate-yjs/core';
 import fastifyPlugin from 'fastify-plugin';
 import type { FastifyRequest } from 'fastify/types/request';
+import { createClient } from 'redis';
 import WebSocket from 'ws';
 import * as Y from 'yjs';
+import { XmlText } from 'yjs';
 
 const UPGRADE_MAP: Map<IncomingMessage, { socket: Duplex; head: Buffer }> = new Map();
 const UPGRADE_TIMEOUT = 1_000;
@@ -200,6 +203,50 @@ export const crdtPlugin = fastifyPlugin(
           reply.code(500).send(e instanceof Error ? e.message : 'Internal Server Error');
           console.error(e);
         }
+      },
+    );
+
+    const REDIS_URI = optionalEnvString('REDIS_URI_HOCUSPOCUS');
+    const REDIS_USERNAME = optionalEnvString('REDIS_USERNAME_HOCUSPOCUS');
+    const REDIS_PASSWORD = optionalEnvString('REDIS_PASSWORD_HOCUSPOCUS');
+    const hasRedis = REDIS_URI !== undefined && REDIS_USERNAME !== undefined && REDIS_PASSWORD !== undefined;
+
+    const redis = hasRedis
+      ? createClient({
+          url: REDIS_URI,
+          username: REDIS_USERNAME,
+          password: REDIS_PASSWORD,
+          pingInterval: 30_000,
+        })
+      : null;
+
+    app.withTypeProvider<TypeBoxTypeProvider>().get(
+      '/collaboration/behandlinger/:behandlingId/dokumenter/:dokumentId/pdf',
+      {
+        schema: {
+          tags: ['collaboration'],
+          params: Type.Object({ behandlingId: Type.String(), dokumentId: Type.String() }),
+        },
+      },
+      async (req, reply) => {
+        const document = collaborationServer.documents.get(req.params.dokumentId);
+
+        if (document === undefined) {
+          if (redis !== null) {
+            await redis.connect();
+            const data = await redis.get(`hocuspocus:${req.params.dokumentId}`);
+            redis.disconnect();
+
+            return reply.code(200).send({ source: 'redis', data });
+          }
+
+          return reply.code(404).send('Document not found');
+        }
+
+        const sharedRoot = document.get('content', XmlText);
+        const nodes = yTextToSlateElement(sharedRoot);
+
+        reply.code(200).send({ content: nodes.children });
       },
     );
 
