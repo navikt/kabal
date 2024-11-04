@@ -149,7 +149,7 @@ export const crdtPlugin = fastifyPlugin(
         }
 
         const { behandlingId, dokumentId } = req.params;
-        logReq('Websocket connection init', req, { behandlingId, dokumentId });
+        logReq('Websocket connection init', req, { behandlingId, dokumentId }, 'debug');
 
         const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API, reply);
 
@@ -180,7 +180,7 @@ export const crdtPlugin = fastifyPlugin(
 
           reply.hijack();
 
-          logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId });
+          logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId }, 'debug');
 
           const { navIdent, trace_id, span_id, tab_id, client_version, headers } = req;
 

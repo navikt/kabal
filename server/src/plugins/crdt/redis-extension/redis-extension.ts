@@ -198,12 +198,7 @@ export class RedisExtension implements Extension {
     return this.#pub.publish(this.#getKey(documentName), this.#encodeMessage(awarenessMessage.toUint8Array()));
   }
 
-  async afterStoreDocument({ socketId, documentName }: afterStoreDocumentPayload) {
-    log.debug({
-      msg: `afterStoreDocument - socket: ${socketId}`,
-      data: { document: documentName, identifier: this.#identifier },
-    });
-
+  async afterStoreDocument({ socketId }: afterStoreDocumentPayload) {
     // If the change was initiated by a directConnection, we need to delay this hook to make sure sync can finish first.
     // For provider connections, this usually happens in the onDisconnect hook.
     if (socketId === 'server' && this.#disconnectDelay > 0) {
@@ -213,10 +208,6 @@ export class RedisExtension implements Extension {
 
   async onAwarenessUpdate(params: onAwarenessUpdatePayload): Promise<number> {
     const { documentName, awareness, added, updated, removed } = params;
-    log.debug({
-      msg: `onAwarenessUpdate - document: ${documentName}`,
-      data: { document: documentName, identifier: this.#identifier },
-    });
 
     if (!this.#isReady) {
       log.warn({
@@ -236,11 +227,6 @@ export class RedisExtension implements Extension {
   }
 
   public async onChange({ documentName, document, transactionOrigin }: onChangePayload): Promise<void> {
-    log.debug({
-      msg: `onChange - document: ${documentName}`,
-      data: { document: documentName, identifier: this.#identifier },
-    });
-
     if (transactionOrigin === this.#redisTransactionOrigin) {
       return;
     }
