@@ -17,24 +17,24 @@ export const Gosys = ({ oppgavebehandling }: Props) => {
     oppgavebehandling.gosysOppgaveId === null ? skipToken : oppgavebehandling.id,
   );
 
+  if (isModernized) {
+    return null;
+  }
+
   const hasGosysOppgave = oppgavebehandling.gosysOppgaveId !== null;
 
   return (
-    <>
-      {!isModernized ? (
-        <BehandlingSection label="Oppgave fra Gosys">
-          <VStack gap="2">
-            <SelectGosysOppgaveModal hasGosysOppgave={hasGosysOppgave} />
+    <BehandlingSection label="Oppgave fra Gosys">
+      <VStack gap="2">
+        <SelectGosysOppgaveModal hasGosysOppgave={hasGosysOppgave} />
 
-            <Warning hasGosysOppgave={hasGosysOppgave} status={gosysOppgave?.status} />
+        <Warning hasGosysOppgave={hasGosysOppgave} status={gosysOppgave?.status} />
 
-            {hasGosysOppgave && gosysOppgave !== undefined && gosysOppgave.beskrivelse !== null ? (
-              <GosysBeskrivelse id={gosysOppgave.id} oppgavebeskrivelse={gosysOppgave.beskrivelse} />
-            ) : null}
-          </VStack>
-        </BehandlingSection>
-      ) : null}
-    </>
+        {hasGosysOppgave && gosysOppgave !== undefined && gosysOppgave.beskrivelse !== null ? (
+          <GosysBeskrivelse id={gosysOppgave.id} oppgavebeskrivelse={gosysOppgave.beskrivelse} />
+        ) : null}
+      </VStack>
+    </BehandlingSection>
   );
 };
 
