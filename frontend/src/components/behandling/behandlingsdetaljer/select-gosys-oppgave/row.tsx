@@ -42,7 +42,7 @@ export const Row = ({ gosysOppgave, selectedGosysOppgave, oppgaveId, showFerdigs
     <StatusRow
       $status={gosysOppgave.status}
       selected={selected}
-      content={<GosysBeskrivelseTabs beskrivelse={gosysOppgave.beskrivelse} />}
+      content={<GosysBeskrivelseTabs id={gosysOppgave.id} beskrivelse={gosysOppgave.beskrivelse} />}
       shadeOnHover
     >
       <Table.DataCell>
