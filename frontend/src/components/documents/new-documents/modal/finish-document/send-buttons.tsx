@@ -57,7 +57,7 @@ export const SendButtons = ({ document }: FinishProps) => {
 
     const validation = await validate({ dokumentId, oppgaveId: data.id }).unwrap();
 
-    if (validation?.length !== 0 && validation.some((v) => v.errors.length !== 0)) {
+    if (validation?.length > 0 && validation.some((v) => v.errors.length > 0)) {
       const errors = validation.map((v) => ({
         dokumentId: v.dokumentId,
         title: documents.find((d) => d.id === v.dokumentId)?.tittel ?? v.dokumentId,

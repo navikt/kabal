@@ -154,16 +154,18 @@ export const collaborationServer = Server.configure({
     createRefreshTimeout(context, expiresIn);
   },
 
-  onDisconnect: async ({ context }) => {
+  onDisconnect: ({ context }) => {
     if (isConnectionContext(context)) {
       // navIdent is not defined locally.
       logContext(`Collaboration connection closed for ${context.navIdent}.`, context, 'debug');
 
       context.abortController?.abort();
-    } else {
-      log.error({ msg: 'Tried to close collaboration connection without context' });
-      throw getCloseEvent('INVALID_CONTEXT', 4401);
+
+      return Promise.resolve();
     }
+
+    log.error({ msg: 'Tried to close collaboration connection without context' });
+    throw getCloseEvent('INVALID_CONTEXT', 4401);
   },
 
   beforeHandleMessage: async ({ context }) => {
@@ -235,11 +237,11 @@ export const collaborationServer = Server.configure({
 const getCloseEvent = (reason: string, code: number): CloseEvent => ({ reason, code });
 
 class RefreshError extends Error {
-  constructor(
-    public readonly status: number,
-    message: string,
-  ) {
+  public readonly status: number;
+
+  constructor(status: number, message: string) {
     super(message);
+    this.status = status;
   }
 }
 

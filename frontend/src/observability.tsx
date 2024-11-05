@@ -47,7 +47,6 @@ initializeFaro({
 
 export const pushEvent = (name: string, domain: string, attributes?: Record<string, string>) => {
   if (!ENVIRONMENT.isProduction) {
-    console.log('pushEvent', name, domain, { ...attributes, domain });
   }
 
   return faro.api.pushEvent(name, { ...attributes, domain }, domain, { skipDedupe: true });

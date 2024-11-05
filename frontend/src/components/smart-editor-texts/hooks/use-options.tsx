@@ -9,6 +9,7 @@ const EMPTY_ARRAY: [] = [];
 export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
   const { data: sakstyperToUtfall = EMPTY_ARRAY } = useSakstyperToUtfall();
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   return useMemo(() => {
     const utfallList: IOption<UtfallEnum>[] = [];
 

@@ -62,7 +62,7 @@ export const VedleggList = ({
         vedlegg={vedlegg}
         isSelected={isSelected({ journalpostId, dokumentInfoId })}
         showVedlegg={showVedleggList}
-        hasVedlegg={logiskeVedlegg.length !== 0}
+        hasVedlegg={logiskeVedlegg.length > 0}
         toggleShowVedlegg={() =>
           setShowLogiskeVedleggIdList((ids) =>
             ids.includes(vedleggId) ? ids.filter((id) => id !== vedleggId) : [...ids, vedleggId],

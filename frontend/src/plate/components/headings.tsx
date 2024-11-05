@@ -80,7 +80,7 @@ const isEmpty = (element: H1Element | H2Element | H3Element | PlaceholderElement
       return false;
     }
 
-    if (child.text.length !== 0) {
+    if (child.text.length > 0) {
       return false;
     }
   }

@@ -22,6 +22,8 @@ interface NestedDropdownProps extends BaseProps<string, NestedOption> {
   'data-testid': string;
 }
 
+const WILDCARD_REGEX = /.*/;
+
 export const NestedFilterList = ({
   selected,
   options,
@@ -29,7 +31,7 @@ export const NestedFilterList = ({
   showFjernAlle = true,
   'data-testid': testId,
 }: NestedDropdownProps): JSX.Element | null => {
-  const [filter, setFilter] = useState<RegExp>(/.*/);
+  const [filter, setFilter] = useState<RegExp>(WILDCARD_REGEX);
   const [rawFilter, setRawFilter] = useState<string>('');
 
   useEffect(() => {
@@ -69,7 +71,7 @@ export const NestedFilterList = ({
         selected={selected}
         onCheck={toggle}
         filter={filter}
-        hasFilter={rawFilter.length !== 0}
+        hasFilter={rawFilter.length > 0}
       />
     </Container>
   );
@@ -103,7 +105,7 @@ interface ListItemProps {
 
 const ListItem = ({ option, selected, level, filter, onCheck, hasFilter }: ListItemProps) => {
   const { value, label, options } = option;
-  const hasOptionsOrGroups = options !== undefined && options.length !== 0;
+  const hasOptionsOrGroups = options !== undefined && options.length > 0;
 
   const isInFilter = useMemo(() => filter.test(option.filterValue), [filter, option.filterValue]);
 
@@ -174,7 +176,7 @@ interface CheckboxOrGroupProps {
 
 const CheckboxOrGroup = ({ option, children, selected, onCheck, subSelectionCount }: CheckboxOrGroupProps) => {
   const { options, type, value } = option;
-  const hasOptions = options !== undefined && options.length !== 0;
+  const hasOptions = options !== undefined && options.length > 0;
 
   const totalOptions = hasOptions
     ? options.reduce((count, o) => {
@@ -224,7 +226,7 @@ interface OptionLabelProps {
 const OptionLabel = ({ children, subOptionSelectedCount, options, totalOptions }: OptionLabelProps) => (
   <StyledOptionLabel title={children}>
     {children}
-    {options !== undefined && options.length !== 0 ? (
+    {options !== undefined && options.length > 0 ? (
       <Tag
         variant={getTagVariant(subOptionSelectedCount, totalOptions)}
         size="xsmall"

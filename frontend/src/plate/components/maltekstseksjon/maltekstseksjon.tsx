@@ -65,7 +65,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
   const elementIsEmpty = useMemo(() => {
     const [first, ...rest] = element.children;
 
-    if (rest.length !== 0) {
+    if (rest.length > 0) {
       return false;
     }
 

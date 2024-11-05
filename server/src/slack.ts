@@ -15,7 +15,7 @@ export enum EmojiIcons {
 const url = optionalEnvString('SLACK_URL');
 const channel = '#klage-notifications';
 const messagePrefix = `${requiredEnvString('NAIS_APP_NAME', 'kabal-frontend')} frontend NodeJS -`;
-const isConfigured = url !== undefined && url.length !== 0;
+const isConfigured = url !== undefined && url.length > 0;
 
 export const sendToSlack = async (message: string, icon_emoji: EmojiIcons): Promise<boolean> => {
   const text = `[${ENVIRONMENT}] ${messagePrefix} ${message}`;

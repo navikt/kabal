@@ -16,6 +16,7 @@ export const handleMessageEvent = (oppgaveId: string, userId: string) => (event:
   }
 
   reduxStore.dispatch(
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => {
       const { id, text, timestamp, actor } = event;
       const message: IMessage = {

@@ -5,6 +5,7 @@ const GLOBAL_HJEMMEL_SCORE = 1;
 const ONLY_YTELSE_SCORE = 2;
 const YTELSE_AND_HJEMMEL_SCORE = 3;
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const getYtelseScore = (ytelseId: string, hjemmelList: string[], ytelseHjemmelList: string[]): number => {
   if (ytelseHjemmelList.length === 0) {
     return INCLUDE_THRESHOLD;

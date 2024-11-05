@@ -131,14 +131,16 @@ const ScaleSelector = ({ close }: ScaleSelectorProps) => {
               case 'Escape':
                 close();
                 break;
-              case 'ArrowUp':
+              case 'ArrowUp': {
                 e.preventDefault();
                 scaleUp();
                 break;
-              case 'ArrowDown':
+              }
+              case 'ArrowDown': {
                 e.preventDefault();
                 scaleDown();
                 break;
+              }
             }
           }}
           size="small"

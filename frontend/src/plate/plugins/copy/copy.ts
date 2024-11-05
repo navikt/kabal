@@ -38,6 +38,7 @@ import {
 import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
 import { Range } from 'slate';
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const cleanNodes = (editor: PlateEditor, node: TDescendant | TDescendant[]): TDescendant | TDescendant[] => {
   if (Array.isArray(node)) {
     return node.flatMap((child) => cleanNodes(editor, child));

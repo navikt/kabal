@@ -118,9 +118,9 @@ const SelectSaksbehandler = ({
     >
       {tildeltSaksbehandlerident === null ? <option value={NOT_SELECTED}>Ikke tildelt</option> : null}
       {options}
-      {!valid ? (
+      {valid ? null : (
         <option value={tildeltSaksbehandlerident}>Ugyldig saksbehandler ({tildeltSaksbehandlerident})</option>
-      ) : null}
+      )}
     </StyledSelect>
   );
 };

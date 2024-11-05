@@ -5,7 +5,7 @@ import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
 import { pushLog, usePushEvent } from '@app/observability';
 import { BulletListIcon, CaptionsIcon } from '@navikt/aksel-icons';
 import { BodyLong, Tabs } from '@navikt/ds-react';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { simpleHeaderPrecheck } from './parsing/parse-header';
 import { splitBeskrivelse } from './parsing/split-beskrivelse';
@@ -19,7 +19,7 @@ interface Props {
 export const GosysBeskrivelseTabs = ({
   id,
   beskrivelse = '',
-  entries = useMemo(() => splitBeskrivelse(beskrivelse ?? ''), [beskrivelse]),
+  entries = splitBeskrivelse(beskrivelse ?? ''),
 }: Props) => {
   const [format, setFormat] = usePreferredFormat();
   const pushEvent = usePushEvent();

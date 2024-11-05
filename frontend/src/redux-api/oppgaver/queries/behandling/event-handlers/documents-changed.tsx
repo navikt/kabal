@@ -46,6 +46,7 @@ export const handleDocumentsChangedEvent = (oppgaveId: string, userId: string) =
 type Update = DocumentsChangedEvent['documents'][0];
 type Actor = DocumentsChangedEvent['actor'];
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const handleToast = (document: IMainDocument, update: Update, actor: Actor, draft: IMainDocument[]) => {
   if (update.isMarkertAvsluttet && !document.isMarkertAvsluttet && document.parentId === null) {
     const vedleggCount = draft.filter((d) => d.parentId === document.id).length;

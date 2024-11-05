@@ -45,7 +45,7 @@ export const TextInput = ({ value, onChange, hasChanges, settingId }: Props) => 
           onClick={async () => {
             const text = await navigator.clipboard.readText();
 
-            if (text.length !== 0) {
+            if (text.length > 0) {
               onChange(text);
             }
           }}

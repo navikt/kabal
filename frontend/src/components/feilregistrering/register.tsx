@@ -18,7 +18,7 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
 
   const save = useCallback(
     (id: string, r: string) => {
-      if (r.length !== 0) {
+      if (r.length > 0) {
         setFeilregistrert({ oppgaveId: id, reason: r });
         setShowEmptyError(false);
         close();

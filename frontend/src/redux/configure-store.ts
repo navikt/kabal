@@ -21,6 +21,7 @@ import { type RootState, rootReducer } from './root';
 
 export const reduxStore = configureStore({
   reducer: rootReducer,
+  // biome-ignore lint/nursery/noProcessEnv: Not in prod
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

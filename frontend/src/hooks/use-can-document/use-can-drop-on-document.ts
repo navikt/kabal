@@ -14,6 +14,7 @@ import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { useContext } from 'react';
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
   const { draggedDocument, draggedJournalfoertDocuments } = useContext(DragAndDropContext);
   const isRol = useIsRol();
@@ -28,7 +29,7 @@ export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
     return false;
   }
 
-  if (draggedJournalfoertDocuments.length !== 0) {
+  if (draggedJournalfoertDocuments.length > 0) {
     if (getIsIncomingDocument(targetDocument)) {
       return false;
     }

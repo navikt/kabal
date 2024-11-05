@@ -77,6 +77,7 @@ export const Receipients = (document: IMainDocument) => {
   );
 
   const changeMottaker = useCallback(
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     (changedMottaker: IMottaker) => {
       if (oppgaveId === undefined) {
         return;
@@ -122,7 +123,7 @@ export const Receipients = (document: IMainDocument) => {
       m.part.statusList.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED),
     );
 
-    if (unreachableRecipients.length !== 0) {
+    if (unreachableRecipients.length > 0) {
       removeMottakere(unreachableRecipients.map((r) => r.part.id));
     }
   }, [document.mottakerList, removeMottakere]);

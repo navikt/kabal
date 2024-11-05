@@ -156,6 +156,7 @@ const annenInngaaendeEqual = (prev: IMainDocument, next: IMainDocument) => {
   return prev.inngaaendeKanal === next.inngaaendeKanal && prev.avsender?.id === next.avsender?.id;
 };
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const mottakereEqual = (prev: IMainDocument, next: IMainDocument) => {
   if (prev.mottakerList.length !== next.mottakerList.length) {
     return false;

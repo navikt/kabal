@@ -29,6 +29,7 @@ export const journalposterApi = createApi({
       }),
       onQueryStarted: async ({ tittel, dokumentInfoId, oppgaveId }, { dispatch, queryFulfilled }) => {
         const journalfoertePatchResult = dispatch(
+          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
             for (let i = draft.dokumenter.length - 1; i >= 0; i--) {
               const doc = draft.dokumenter[i];

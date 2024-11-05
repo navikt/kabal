@@ -31,7 +31,7 @@ export const SelectedHjemlerList = ({ selected }: Props) => {
             selected.includes(registreringshjemmel.id),
           ),
         }))
-        .filter(({ registreringshjemler }) => registreringshjemler.length !== 0),
+        .filter(({ registreringshjemler }) => registreringshjemler.length > 0),
     [selected, hjemler],
   );
 

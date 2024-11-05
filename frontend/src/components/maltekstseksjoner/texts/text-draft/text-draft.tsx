@@ -65,7 +65,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
         return;
       }
 
-      const promises = LANGUAGES.map(async (lang) => {
+      const promises = LANGUAGES.map((lang) => {
         const localRichText = _richTexts[lang];
 
         if (areDescendantsEqual(localRichText ?? [], text.richText[lang] ?? [])) {
@@ -90,7 +90,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
       return;
     }
 
-    const timer = setTimeout(async () => {
+    const timer = setTimeout(() => {
       if (isUpdating.current) {
         return;
       }

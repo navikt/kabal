@@ -46,7 +46,7 @@ export const StyledParagraph = styled.p<{ $isEmpty: boolean }>`
 const isEmpty = (element: ParagraphElement | PlaceholderElement) => {
   for (const child of element.children) {
     if (isText(child)) {
-      if (child.text.length !== 0) {
+      if (child.text.length > 0) {
         return false;
       }
     } else {

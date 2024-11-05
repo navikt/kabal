@@ -28,6 +28,7 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async ({ oppgaveId, dokumentInfoId, journalpostId }, { dispatch, queryFulfilled }) => {
         const archiveResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
+            // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
             draft.dokumenter = draft.dokumenter.map((d) => {
               if (d.journalpostId !== journalpostId) {
                 return d;

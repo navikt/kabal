@@ -30,6 +30,7 @@ export const HjemlerSelect = ({
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => setIsOpen(false));
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const generelleHjemler = useMemo(() => {
     const lovkildeOptionList: NestedOption[] = [];
     const allHjemler = ytelser

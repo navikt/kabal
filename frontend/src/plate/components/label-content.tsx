@@ -53,6 +53,7 @@ const useContent = (source: string): string | null => {
   const { data: oppgave } = useOppgave();
   const { data: ytelser = [] } = useYtelserAll();
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   return useMemo(() => {
     if (oppgave === undefined) {
       return null;

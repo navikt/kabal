@@ -30,6 +30,7 @@ export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direc
   const [hjemmelError, setHjemmelError] = useState<string | null>(null);
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const onClick = useCallback(async () => {
     if (reasonId === null) {
       return;

@@ -23,7 +23,7 @@ export const getDocumentPath = (
         return [i, -1];
       }
 
-      if (doc.vedlegg.length !== 0) {
+      if (doc.vedlegg.length > 0) {
         const vedleggIndex = doc.vedlegg.findIndex((vedlegg) => vedlegg.dokumentInfoId === document.dokumentInfoId);
 
         if (vedleggIndex !== -1) {

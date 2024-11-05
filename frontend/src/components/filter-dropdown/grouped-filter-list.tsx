@@ -22,6 +22,8 @@ interface GroupedDropdownProps<T extends string> extends BaseProps<T, OptionGrou
 
 type Direction = 'down' | 'right';
 
+const WILDCARD_REGEX = /.*/;
+
 export const GroupedFilterList = <T extends string>({
   selected,
   options,
@@ -32,9 +34,10 @@ export const GroupedFilterList = <T extends string>({
   showFjernAlle = true,
 }: GroupedDropdownProps<T>): JSX.Element | null => {
   const ref = useRef<HTMLDivElement>(null);
-  const [filter, setFilter] = useState<RegExp>(/.*/);
+  const [filter, setFilter] = useState<RegExp>(WILDCARD_REGEX);
   const [focused, setFocused] = useState(-1);
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const filteredOptions = useMemo(() => {
     const filtered: OptionGroup<T>[] = [];
 

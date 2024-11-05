@@ -23,6 +23,7 @@ export const traceparentPlugin = fastifyPlugin(
     app.decorateRequest('trace_id', '');
     app.decorateRequest('span_id', '');
 
+    // biome-ignore lint/suspicious/useAwait: Needs to return a promise
     app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
       const { trace_id, span_id, traceparent } = getTraceIdAndSpanId(req);
       req.trace_id = trace_id;
@@ -43,7 +44,7 @@ const getTraceIdAndSpanId = ({
 }: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
   const traceparentHeader = headers[TRACEPARENT_HEADER];
 
-  if (typeof traceparentHeader === 'string' && traceparentHeader.length !== 0) {
+  if (typeof traceparentHeader === 'string' && traceparentHeader.length > 0) {
     const { trace_id, span_id } = getTraceIdAndSpanIdFromTraceparent(traceparentHeader, clientVersion);
 
     if (trace_id !== undefined && span_id !== undefined) {
@@ -53,7 +54,7 @@ const getTraceIdAndSpanId = ({
 
   const traceparentQuery = query[TRACEPARENT_QUERY];
 
-  if (typeof traceparentQuery === 'string' && traceparentQuery.length !== 0) {
+  if (typeof traceparentQuery === 'string' && traceparentQuery.length > 0) {
     const { trace_id, span_id } = getTraceIdAndSpanIdFromTraceparent(traceparentQuery, clientVersion);
 
     if (trace_id !== undefined && span_id !== undefined) {

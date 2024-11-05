@@ -49,6 +49,7 @@ export const Tags = ({ ytelseHjemmelIdList, utfallIdList, enhetIdList, templateS
   );
 };
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const useExpandedYtelseHjemmelIdList = (selectedList: string[]): string[] => {
   const { data: ytelser = [] } = useKabalYtelserLatest();
   const result: string[] = [];
@@ -117,6 +118,7 @@ const getTemaplateAndSectionName = (selected: string): string => {
   return sId === undefined ? templateName : `${templateName} - ${getMaltekstSectionName(sId) ?? sId}`;
 };
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const useYtelseLovkildeAndHjemmelName = (selected: string): string => {
   const { data, isLoading } = useKabalYtelserLatest();
   const [ytelseId, hjemmelId] = selected.split(LIST_DELIMITER);

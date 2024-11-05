@@ -5,10 +5,11 @@ import type { UtfallEnum } from '@app/types/kodeverk';
 
 export const MAX_UTFALL_SCORE = 4;
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const getUtfallScore = (utfallIdSet: UtfallEnum[], utfallSetList: string[]): number => {
   const parsedUtfallList = utfallSetList
     .map((utfallSet) => utfallSet.split(SET_DELIMITER).filter(isUtfall))
-    .filter((s) => s.length !== 0);
+    .filter((s) => s.length > 0);
 
   // Oppgaven with no utfall.
   if (utfallIdSet.length === 0) {

@@ -34,7 +34,7 @@ export const DragAndDropContextElement = ({ children }: Props) => {
   const [draggingEnabled, setDraggingEnabled] = useState(true);
 
   const hasDocument = draggedDocument !== null;
-  const hasJournalfoertDocuments = draggedJournalfoertDocuments.length !== 0;
+  const hasJournalfoertDocuments = draggedJournalfoertDocuments.length > 0;
 
   const clearDragState = useCallback(() => {
     if (hasJournalfoertDocuments) {

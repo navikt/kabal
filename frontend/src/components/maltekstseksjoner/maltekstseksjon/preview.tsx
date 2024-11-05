@@ -45,7 +45,7 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
     );
   }
 
-  if (texts.length === 0 && textIdList.length !== 0) {
+  if (texts.length === 0 && textIdList.length > 0) {
     return (
       <Section>
         <Loader size="medium" title="Laster..." />

@@ -90,7 +90,7 @@ const Checkbox = ({
     return null;
   }
 
-  const show = checkboxes !== undefined && checkboxes.length !== 0 && kvalitetsvurdering[field] === true;
+  const show = checkboxes !== undefined && checkboxes.length > 0 && kvalitetsvurdering[field] === true;
 
   return (
     <>

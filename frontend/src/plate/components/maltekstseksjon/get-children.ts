@@ -63,7 +63,7 @@ export const getNewChildren = (
 const containsEditedPlaceholder = (node: TElement): boolean => {
   for (const child of node.children) {
     if (isOfElementType<PlaceholderElement>(child, ELEMENT_PLACEHOLDER)) {
-      return getNodeString(child).length !== 0;
+      return getNodeString(child).length > 0;
     }
 
     if (isElement(child)) {
@@ -92,7 +92,7 @@ export const areFromPlaceholdersSafeToReplaceWithToPlaceholders = (
     }
 
     if (to === undefined) {
-      if (from.children.some(({ text }) => removeEmptyCharInText(text).length !== 0)) {
+      if (from.children.some(({ text }) => removeEmptyCharInText(text).length > 0)) {
         return false;
       }
       continue;

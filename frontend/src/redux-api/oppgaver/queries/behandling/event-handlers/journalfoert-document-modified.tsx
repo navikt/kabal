@@ -9,6 +9,7 @@ import { DocumentTypeEnum } from '@app/types/documents/documents';
 export const handleJournalfoertDocumentModified =
   (oppgaveId: string, userId: string) => (event: JournalfoertDocumentModifiedEvent) => {
     reduxStore.dispatch(
+      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
         if (draft === undefined) {
           return draft;

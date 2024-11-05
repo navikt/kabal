@@ -30,8 +30,10 @@ export const useFilteredDocuments = (
 
   useEffect(() => {
     const callback = requestIdleCallback(
+      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       () => {
         const filtered = documents.filter(
+          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
           ({ tema, journalposttype, avsenderMottaker, datoOpprettet, sak, vedlegg, valgt }) =>
             (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
             (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&

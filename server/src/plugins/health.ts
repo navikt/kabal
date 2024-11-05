@@ -11,6 +11,7 @@ export const healthPlugin = fastifyPlugin(
   async (app) => {
     app.get('/isAlive', (__, reply) => reply.status(200).type('text/plain').send('Alive'));
 
+    // biome-ignore lint/suspicious/useAwait: Needs to return a promise
     app.get('/isReady', async (__, reply) => {
       const isAzureClientReady = getIsAzureClientReady();
 

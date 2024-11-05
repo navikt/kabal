@@ -29,6 +29,7 @@ export const Header = ({
 
   const onInputChange = (value: string) => onFilterChange(stringToRegExp(value));
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Escape') {
       onFocusChange(-1);
@@ -62,11 +63,9 @@ export const Header = ({
       return onFocusChange(focused - 1);
     }
 
-    if (event.key === 'Enter' || (event.key === ' ' && focused !== -1)) {
-      if (focused < optionsCount && focused !== -1) {
-        event.preventDefault();
-        onSelect();
-      }
+    if ((event.key === 'Enter' || (event.key === ' ' && focused !== -1)) && focused < optionsCount && focused !== -1) {
+      event.preventDefault();
+      onSelect();
     }
   };
 

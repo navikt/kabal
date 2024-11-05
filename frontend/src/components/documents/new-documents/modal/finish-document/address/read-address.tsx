@@ -72,7 +72,7 @@ const useAddressLines = (address: IAddress | null): string[] => {
       ? `${address.postnummer} ${getPoststed(address.postnummer) ?? address.postnummer}`
       : null,
     country,
-  ].filter((line): line is string => isNotNull(line) && line.trim().length !== 0);
+  ].filter((line): line is string => isNotNull(line) && line.trim().length > 0);
 };
 
 const formatCopyAddress = (part: IPart, addressLines: string[]): string => [part.name, ...addressLines].join('\n');

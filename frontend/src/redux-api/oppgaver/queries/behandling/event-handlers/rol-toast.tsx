@@ -9,6 +9,7 @@ interface Params {
   rol: INavEmployee | null;
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const getRolToastContent = (actor: INavEmployee, userId: string, previous: Params, next: Params) => {
   const nextNavIdent = next.rol?.navIdent ?? null;
   const isFlowChange = next.flowState !== previous.flowState;

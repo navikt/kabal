@@ -47,6 +47,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props)
   );
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     (e) => {
       if (e.key === 'ArrowDown') {
         if (showCountryList) {

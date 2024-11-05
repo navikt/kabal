@@ -20,7 +20,7 @@ export const cleanAndValidate = (idNumber: string): [string, string | undefined]
   }
 
   if (value.length === 9) {
-    const orgNumError = !isValidOrgnr(value) ? 'Ugyldig organisasjonsnummer' : undefined;
+    const orgNumError = isValidOrgnr(value) ? undefined : 'Ugyldig organisasjonsnummer';
 
     return [value, orgNumError];
   }

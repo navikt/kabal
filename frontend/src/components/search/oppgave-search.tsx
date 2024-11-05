@@ -51,16 +51,18 @@ export const OppgaveSearch = () => {
 
   const search = () => {
     switch (searchType) {
-      case SearchType.FNR:
+      case SearchType.FNR: {
         if (!isFnr(query)) {
           return setFnrError('Ugyldig fødselsnummer/D-nummer');
         }
 
         return refetchByFnr();
-      case SearchType.SAKSNR:
+      }
+      case SearchType.SAKSNR: {
         setFnrError(undefined);
 
         return fetchBySaksnr();
+      }
     }
   };
 

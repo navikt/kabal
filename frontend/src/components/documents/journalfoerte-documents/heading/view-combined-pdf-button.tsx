@@ -65,7 +65,7 @@ export const ViewCombinedPDF = () => {
 
   const isTabOpen = useIsTabOpen(documentId);
 
-  const onClick: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
+  const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
 
     const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === 1;

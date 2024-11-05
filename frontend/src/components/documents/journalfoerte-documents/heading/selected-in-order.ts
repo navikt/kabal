@@ -8,6 +8,7 @@ export const getSelectedDocumentsInOrder = (
   selectedDocuments: SelectedMap,
   archivedDocuments: IArkivertDocument[],
   selectedCount: number,
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 ): IShownArchivedDocument[] => {
   const sortedList: IShownArchivedDocument[] = [];
 

@@ -30,7 +30,7 @@ class TabManager {
       return false;
     }
 
-    return tabInstances.length !== 0;
+    return tabInstances.length > 0;
   };
 
   public addListener = (documentId: string, listener: ListenerFn) => {
@@ -53,6 +53,7 @@ class TabManager {
     this.listeners[documentId] = tabListeners.filter((l) => l !== listener);
   };
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   private handleMessage = (e: MessageEvent<unknown>) => {
     const { data } = e;
 

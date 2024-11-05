@@ -29,6 +29,7 @@ export const SetDocumentType = ({ document, hasAttachments, showLabel = false }:
   const hasDocumentsAccess = useHasDocumentsAccess();
   const { outgoing, incoming } = useDistribusjonstypeOptions(document.type);
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const [canChangeType, options, reason] = useMemo<[boolean, Option[], string | null]>(() => {
     if (!hasDocumentsAccess) {
       return [false, [], 'Ingen tilgang'];

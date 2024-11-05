@@ -14,10 +14,8 @@ export const Filter = ({ isFocused, filter, setFilter, onFocus }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isFocused) {
-      if (inputRef.current !== null) {
-        inputRef.current.focus();
-      }
+    if (isFocused && inputRef.current !== null) {
+      inputRef.current.focus();
     }
   }, [isFocused]);
 

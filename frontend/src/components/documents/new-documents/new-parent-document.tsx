@@ -45,7 +45,7 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
       if (oppgaveId !== skipToken && isDropTarget) {
         if (isDroppableNewDocument(draggedDocument, document.id)) {
           setParent({ dokumentId: draggedDocument.id, oppgaveId, parentId: document.id });
-        } else if (draggedJournalfoertDocuments.length !== 0) {
+        } else if (draggedJournalfoertDocuments.length > 0) {
           createVedlegg({
             oppgaveId,
             parentId: document.id,

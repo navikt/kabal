@@ -34,7 +34,7 @@ export const Errors = ({ updatePdf }: Props) => {
 
       <StyledOuterList>
         {validationErrors
-          .filter((e) => e.errors.length !== 0)
+          .filter((e) => e.errors.length > 0)
           .map((e) => (
             <List.Item key={e.dokumentId}>
               <Label size="small">{e.title}</Label>
@@ -64,7 +64,7 @@ export const Errors = ({ updatePdf }: Props) => {
                       type !== DocumentValidationErrorType.WRONG_DATE,
                   ),
                 }))
-                .filter(({ errors }) => errors.length !== 0),
+                .filter(({ errors }) => errors.length > 0),
             );
           }}
           variant="secondary"

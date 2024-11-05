@@ -12,8 +12,8 @@ interface Props {
 }
 
 export const Row = ({ textId, draftMaltekstseksjonIdList, publishedMaltekstseksjonIdList, children }: Props) => {
-  const hasDrafts = draftMaltekstseksjonIdList.length !== 0;
-  const hasPublished = publishedMaltekstseksjonIdList.length !== 0;
+  const hasDrafts = draftMaltekstseksjonIdList.length > 0;
+  const hasPublished = publishedMaltekstseksjonIdList.length > 0;
   const [open, setOpen] = useState(false);
 
   const content = (
