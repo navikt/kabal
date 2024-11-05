@@ -31,6 +31,7 @@ export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) =
   }
 
   reduxStore.dispatch(
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (archiveResponse) => {
       if (archiveResponse === undefined) {
         if (count === 0) {

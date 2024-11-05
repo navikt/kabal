@@ -12,7 +12,7 @@ export const ValidationSummaryPopup = () => {
   const toggleOpen = useCallback(() => setOpen((o) => !o), []);
 
   useEffect(() => {
-    if (validationSectionErrors.length !== 0) {
+    if (validationSectionErrors.length > 0) {
       setOpen(true);
     }
   }, [validationSectionErrors]);
@@ -23,7 +23,7 @@ export const ValidationSummaryPopup = () => {
 
   const Icon = open ? ChevronUpIcon : ChevronDownIcon;
 
-  const hasErrors = validationSectionErrors.length !== 0;
+  const hasErrors = validationSectionErrors.length > 0;
 
   const statusText = hasErrors ? 'Feil i utfyllingen' : 'Under utfylling';
   const statusType = hasErrors ? 'warning' : 'info';

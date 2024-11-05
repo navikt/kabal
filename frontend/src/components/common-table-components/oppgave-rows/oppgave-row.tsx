@@ -54,6 +54,7 @@ export const OppgaveRow = ({ oppgaveId, columns, testId }: Props): JSX.Element =
 };
 
 const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   columnKeys.map((key) => {
     switch (key) {
       case ColumnKeyEnum.Type:
@@ -234,7 +235,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <FradelingReason oppgaveId={oppgave.id} />
           </Table.DataCell>
         );
-      case ColumnKeyEnum.PreviousSaksbehandler:
+      case ColumnKeyEnum.PreviousSaksbehandler: {
         if (oppgave.previousSaksbehandler === null) {
           return <Table.DataCell key={key} />;
         }
@@ -244,7 +245,8 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             {oppgave.previousSaksbehandler.navn} ({oppgave.previousSaksbehandler.navIdent})
           </Table.DataCell>
         );
-      case ColumnKeyEnum.DatoSendtTilTr:
+      }
+      case ColumnKeyEnum.DatoSendtTilTr: {
         if (oppgave.datoSendtTilTR === null) {
           return <Table.DataCell key={key} />;
         }
@@ -254,6 +256,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <time dateTime={oppgave.datoSendtTilTR}>{isoDateToPretty(oppgave.datoSendtTilTR)}</time>
           </Table.DataCell>
         );
+      }
     }
 
     return <Table.DataCell key={key} />;

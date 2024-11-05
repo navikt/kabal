@@ -74,6 +74,7 @@ export const normalizeNodePlugin = createPlatePlugin({
   extendEditor: ({ editor }) => {
     const { normalizeNode } = editor;
 
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     editor.normalizeNode = ([node, path]) => {
       if (!isElement(node)) {
         return normalizeNode([node, path]);

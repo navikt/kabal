@@ -110,7 +110,7 @@ export const DocumentList = ({
     }
 
     const { journalpostId, dokumentInfoId, tittel, vedlegg, logiskeVedlegg, tema } = dokument;
-    const hasVedlegg = vedlegg.length !== 0;
+    const hasVedlegg = vedlegg.length > 0;
 
     list.push(
       <StyledDocumentListItem
@@ -131,13 +131,13 @@ export const DocumentList = ({
             )
           }
           showVedlegg={showVedlegg}
-          hasVedlegg={hasVedlegg || logiskeVedlegg.length !== 0}
+          hasVedlegg={hasVedlegg || logiskeVedlegg.length > 0}
           toggleShowVedlegg={() => {
             setShowVedleggIdList((ids) =>
               showVedlegg ? ids.filter((id) => id !== journalpostId) : [...ids, journalpostId],
             );
 
-            const vedleggWithLogiskeVedlegg = dokument.vedlegg.filter((v) => v.logiskeVedlegg.length !== 0);
+            const vedleggWithLogiskeVedlegg = dokument.vedlegg.filter((v) => v.logiskeVedlegg.length > 0);
 
             if (vedleggWithLogiskeVedlegg.length === 0) {
               return;

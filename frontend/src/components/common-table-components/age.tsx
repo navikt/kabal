@@ -78,7 +78,7 @@ interface EditAgeProps {
 const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge }: EditAgeProps) => {
   const [setMottattklage] = useSetMottattKlageinstansMutation();
 
-  const onChange = async (date: string | null) => {
+  const onChange = (date: string | null) => {
     if (date === null || date === mottattDate) {
       return;
     }

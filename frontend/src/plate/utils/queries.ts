@@ -32,7 +32,7 @@ import { findNodePath } from '@udecode/slate-react';
 
 // Ensures a next-path even though original path is at end
 export const nextPath = (path: number[]) => {
-  const last = path[path.length - 1];
+  const last = path.at(-1);
 
   return [...path.slice(0, -1), typeof last === 'number' ? last + 1 : 0];
 };

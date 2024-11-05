@@ -70,6 +70,7 @@ export const getChangeSetText = ({
   behandlingstidUnits,
   customText,
   isInitialVersion,
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 }: InitialVersion | ChangeSet) => {
   if (isInitialVersion) {
     return (

@@ -12,6 +12,7 @@ import {
   PlusIcon,
 } from '@navikt/aksel-icons';
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const getROLEvent = (e: IRolEvent) => {
   const key = toKey(e);
   const { actor, event, previous, timestamp } = e;

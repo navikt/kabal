@@ -53,6 +53,7 @@ export const Sidebar = ({ maltekstseksjon, query }: Props) => {
     [draggedIndex],
   );
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const sortedTextIdList = useMemo(() => {
     if (draggedTextId === null || draggedIndex === -1 || hoveredIndex === -1 || dragDirection === DragDirection.NONE) {
       return textIdList;

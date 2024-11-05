@@ -35,6 +35,7 @@ const sortData = (
   { direction, orderBy }: ScopedSortState,
   enheter: Enhet[],
 ): ListGosysOppgave[] =>
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   data.sort((a, b) => {
     const aVal = a[orderBy];
     const bVal = b[orderBy];
@@ -145,6 +146,7 @@ interface Lists {
   otherOppgaveList: ListGosysOppgave[];
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const SelectGosysOppgave = () => {
   const { data: oppgave } = useOppgave();
   const { data, isLoading, isSuccess, refetch, isFetching } = useGetGosysOppgaveListQuery(oppgave?.id ?? skipToken);

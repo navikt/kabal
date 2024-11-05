@@ -85,6 +85,7 @@ export const DatePicker = ({
     [fromDate, onChange, toDate],
   );
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const onInputChange = useCallback(() => {
     if (input === '') {
       setInputError(undefined);

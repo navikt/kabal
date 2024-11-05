@@ -15,6 +15,7 @@ export const clientVersionPlugin = fastifyPlugin(
   async (app) => {
     app.decorateRequest('client_version', '');
 
+    // biome-ignore lint/suspicious/useAwait: Needs to return a promise
     app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
       const client_version = getHeaderOrQueryValue(req, CLIENT_VERSION_HEADER, CLIENT_VERSION_QUERY);
 

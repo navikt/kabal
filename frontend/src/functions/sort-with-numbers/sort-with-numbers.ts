@@ -1,6 +1,8 @@
 /**
  * Sorts strings with numbers.
  */
+
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const sortWithNumbers = (a: string, b: string): number => {
   const aParts = split(a);
   const bParts = split(b);

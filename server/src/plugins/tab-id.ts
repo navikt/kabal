@@ -15,6 +15,7 @@ export const tabIdPlugin = fastifyPlugin(
   async (app) => {
     app.decorateRequest('tab_id', '');
 
+    // biome-ignore lint/suspicious/useAwait: Needs to return a promise
     app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
       const tab_id = getHeaderOrQueryValue(req, TAB_ID_HEADER, TAB_ID_QUERY);
 

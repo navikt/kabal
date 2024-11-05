@@ -10,13 +10,13 @@ export const getHeaderOrQueryValue = (
 ): string | undefined => {
   const header = req.headers[headerKey];
 
-  if (typeof header === 'string' && header.length !== 0) {
+  if (typeof header === 'string' && header.length > 0) {
     return header;
   }
 
   const query = req.query[queryKey];
 
-  if (typeof query === 'string' && query.length !== 0) {
+  if (typeof query === 'string' && query.length > 0) {
     return query;
   }
 

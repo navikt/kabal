@@ -9,6 +9,7 @@ export const getTemplateScore = (
   templateId: TemplateIdEnum,
   section: string,
   templateSectionList: string[],
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 ): number => {
   if (templateSectionList.length === 0) {
     return NEGATIVE_INFINITY;

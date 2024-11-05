@@ -14,6 +14,7 @@ export const accessTokenPlugin = fastifyPlugin(
   async (app) => {
     app.decorateRequest('accessToken', '');
 
+    // biome-ignore lint/suspicious/useAwait: Needs to return a promise
     app.addHook('preHandler', async (req) => {
       const accessToken = getAccessToken(req);
 

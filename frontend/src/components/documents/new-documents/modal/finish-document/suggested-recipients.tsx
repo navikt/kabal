@@ -32,6 +32,7 @@ export const SuggestedRecipients = ({
   templateId,
 }: RecipientsProps) => {
   const onSelectedChange = useCallback(
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     (idList: string[]) => {
       const addList: IMottaker[] = [];
       const removeList: string[] = [];
@@ -46,11 +47,11 @@ export const SuggestedRecipients = ({
         }
       }
 
-      if (addList.length !== 0) {
+      if (addList.length > 0) {
         addMottakere(addList);
       }
 
-      if (removeList.length !== 0) {
+      if (removeList.length > 0) {
         removeMottakere(removeList);
       }
     },

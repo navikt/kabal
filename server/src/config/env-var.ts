@@ -1,7 +1,8 @@
 export const optionalEnvString = (name: string): string | undefined => {
+  // biome-ignore lint/nursery/noProcessEnv:
   const envVariable = process.env[name];
 
-  if (typeof envVariable === 'string' && envVariable.length !== 0) {
+  if (typeof envVariable === 'string' && envVariable.length > 0) {
     return envVariable;
   }
 
@@ -9,9 +10,10 @@ export const optionalEnvString = (name: string): string | undefined => {
 };
 
 export const requiredEnvString = (name: string, defaultValue?: string): string => {
+  // biome-ignore lint/nursery/noProcessEnv:
   const envVariable = process.env[name];
 
-  if (typeof envVariable === 'string' && envVariable.length !== 0) {
+  if (typeof envVariable === 'string' && envVariable.length > 0) {
     return envVariable;
   }
 

@@ -8,6 +8,7 @@ export const useSelectMany: SelectHook<SelectMany> = (setSelectedDocuments, setL
   const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument, documentList);
 
   return useCallback(
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     (documents: IJournalfoertDokumentId[]) => {
       if (documents.length === 0) {
         return;
@@ -38,6 +39,7 @@ export const useSelectMany: SelectHook<SelectMany> = (setSelectedDocuments, setL
       }
 
       setLastSelectedDocument(null);
+      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       setSelectedDocuments((map) => {
         for (const { journalpostId, dokumentInfoId } of documents) {
           for (const doc of documentList) {

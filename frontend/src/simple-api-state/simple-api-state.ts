@@ -28,11 +28,10 @@ export class SimpleApiState<T> {
     prefetch: false,
     cacheTime: 60000,
   };
+  private url: string;
 
-  constructor(
-    private url: string,
-    options?: Partial<Options>,
-  ) {
+  constructor(url: string, options?: Partial<Options>) {
+    this.url = url;
     this.options = Object.assign(this.options, options);
 
     if (this.options.prefetch) {
@@ -114,10 +113,8 @@ export class SimpleApiState<T> {
 
     this.listeners = this.listeners.filter((l) => l !== listener);
 
-    if (this.listeners.length === 0) {
-      if (this.options.cacheTime > 0) {
-        this.dataTimeout = setTimeout(this.clear, this.options.cacheTime);
-      }
+    if (this.listeners.length === 0 && this.options.cacheTime > 0) {
+      this.dataTimeout = setTimeout(this.clear, this.options.cacheTime);
     }
   };
 

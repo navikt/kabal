@@ -55,6 +55,7 @@ export const useUpdateMaltekstseksjon = (
   const [fetchMaltekstseksjonTexts, { isFetching: textsAreFetching }] = useLazyGetMaltekstseksjonTextsQuery();
 
   const update = useCallback(
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     async (preferCache = true) => {
       if (isUpdated || !canManage || query === skipToken) {
         return;

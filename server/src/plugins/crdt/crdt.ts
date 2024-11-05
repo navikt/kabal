@@ -23,6 +23,7 @@ import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import fastifyPlugin from 'fastify-plugin';
 import type { FastifyRequest } from 'fastify/types/request';
 import WebSocket from 'ws';
+// biome-ignore lint/style/noNamespaceImport: https://tiptap.dev/docs/hocuspocus/getting-started#backend
 import * as Y from 'yjs';
 
 const UPGRADE_MAP: Map<IncomingMessage, { socket: Duplex; head: Buffer }> = new Map();
@@ -102,11 +103,11 @@ export const crdtPlugin = fastifyPlugin(
             body: JSON.stringify({ ...body, data }),
           });
 
-          if (!res.ok) {
+          if (res.ok) {
+            logReq('Saved new document to database', req, { behandlingId }, 'debug');
+          } else {
             const msg = `Failed to save document. API responded with status code ${res.status}`;
             logReq(msg, req, { behandlingId, statusCode: res.status }, 'error');
-          } else {
-            logReq('Saved new document to database', req, { behandlingId }, 'debug');
           }
 
           return reply.send(res);

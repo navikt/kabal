@@ -43,7 +43,7 @@ export const Oppgavehjemler = ({ field, parentKey }: Props) => {
       return;
     }
 
-    if (selectedHjemmelIdList.length !== 0) {
+    if (selectedHjemmelIdList.length > 0) {
       const isUnchanged = previousHjemler === undefined || hjemmelIdListsEquals(previousHjemler, hjemler);
 
       if (!isUnchanged) {

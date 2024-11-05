@@ -78,8 +78,10 @@ class OboSimpleCache {
 
   public getCached = this.get;
 
-  public async set(key: string, token: string, expiresAt: number): Promise<void> {
+  public set(key: string, token: string, expiresAt: number): Promise<void> {
     this.#oboMemoryCache.set(key, token, expiresAt);
+
+    return Promise.resolve();
   }
 
   public get isReady(): boolean {

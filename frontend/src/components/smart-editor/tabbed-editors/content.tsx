@@ -17,6 +17,7 @@ export const Content = ({ children }: Props) => {
 
   const ref = useRef<HTMLDivElement>(null);
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     const lowerCaseKey = event.key.toLowerCase();
 

@@ -37,7 +37,7 @@ export const AbbreviationsContent = ({ headingSize = 'small' }: ContentProps) =>
     return <Loader title="Laster..." />;
   }
 
-  const hasAbbreviations = !isLoading && data.length !== 0;
+  const hasAbbreviations = !isLoading && data.length > 0;
 
   return (
     <>

@@ -104,7 +104,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
           }),
         );
 
-        let textToMove: IText | undefined = undefined;
+        let textToMove: IText | undefined;
 
         const movedFromListPatchResult = dispatch(
           textsQuerySlice.util.updateQueryData('getTexts', { textType: oldTextType }, (draft) =>
@@ -343,6 +343,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
       onQueryStarted: async ({ id, richText, query, language }, { queryFulfilled }) => {
         const undo = update(
           id,
+          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
           (t) => {
             if (isRegelverk(t)) {
               if (language === UNTRANSLATED && richText !== null) {

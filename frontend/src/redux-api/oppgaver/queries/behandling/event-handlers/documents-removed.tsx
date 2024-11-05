@@ -16,6 +16,7 @@ import { Tag } from '@navikt/ds-react';
 
 export const handleDocumentsRemovedEvent = (oppgaveId: string, userId: string) => (event: DocumentsRemovedEvent) => {
   reduxStore.dispatch(
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (documents) => {
       if (documents === undefined) {
         return documents;

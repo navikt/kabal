@@ -60,6 +60,7 @@ export const NewDocuments = () => {
     }
   }, [containerRef]);
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const documentMap = useMemo(() => {
     const _documentMap: Map<string, DocumentWithAttachments> = new Map();
 
@@ -121,6 +122,7 @@ export const NewDocuments = () => {
     return _documentMap;
   }, [data]);
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const listHeight = useMemo(() => {
     if (data === undefined) {
       return 0;
@@ -157,6 +159,7 @@ export const NewDocuments = () => {
     return [_absoluteStartIndex, _absoluteEndIndex];
   }, [containerHeight, scrollTop]);
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const documentNodes = useMemo(() => {
     const _documentNodes = new Array<React.ReactNode>(documentMap.size);
 

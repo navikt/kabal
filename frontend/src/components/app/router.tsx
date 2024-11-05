@@ -45,7 +45,13 @@ export const Router = () => (
         <Route path="oppgavestyring" element={<OppgavestyringPage />} />
       </Route>
 
-      <Route element={<ProtectedRoute roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]} />}>
+      <Route
+        element={
+          <ProtectedRoute
+            roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER, Role.KABAL_KROL, Role.KABAL_ROL]}
+          />
+        }
+      >
         <Route path="sok" element={<SearchPage />} />
       </Route>
 

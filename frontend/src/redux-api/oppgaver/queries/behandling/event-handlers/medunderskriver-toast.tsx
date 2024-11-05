@@ -12,6 +12,7 @@ export const getMedunderskriverToastContent = (
   actor: INavEmployee,
   previous: Params,
   next: Params,
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 ): React.ReactNode => {
   const isFlowChange = next.flowState !== previous.flowState;
 

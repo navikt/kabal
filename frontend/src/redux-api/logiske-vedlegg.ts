@@ -39,6 +39,7 @@ export const logiskeVedleggApi = createApi({
         const optimisticId = `${OPTIMISTIC_LOGISK_VEDLEGG_ID_PREFIX}-${now}`;
 
         const patchResult = dispatch(
+          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, ({ dokumenter }) => {
             const logiskeVedlegg: LogiskVedlegg = {
               tittel,
@@ -62,6 +63,7 @@ export const logiskeVedleggApi = createApi({
         try {
           const { data } = await queryFulfilled;
           dispatch(
+            // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
             documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, ({ dokumenter }) => {
               for (const d of dokumenter) {
                 if (d.dokumentInfoId === dokumentInfoId) {
@@ -89,6 +91,7 @@ export const logiskeVedleggApi = createApi({
       }),
       onQueryStarted: async ({ oppgaveId, dokumentInfoId, ...logiskVedlegg }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
+          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, ({ dokumenter }) => {
             for (const d of dokumenter) {
               if (d.dokumentInfoId === dokumentInfoId) {
@@ -118,6 +121,7 @@ export const logiskeVedleggApi = createApi({
       }),
       onQueryStarted: async ({ oppgaveId, dokumentInfoId, logiskVedleggId }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
+          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, ({ dokumenter }) => {
             for (const d of dokumenter) {
               if (d.dokumentInfoId === dokumentInfoId) {

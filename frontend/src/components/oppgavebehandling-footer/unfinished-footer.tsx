@@ -43,7 +43,7 @@ const useFooterType = () => {
   const { validationSectionErrors } = useContext(ValidationErrorContext);
   const { data } = useOppgave();
 
-  if (validationSectionErrors.length !== 0) {
+  if (validationSectionErrors.length > 0) {
     return FooterType.UNFINISHED_WITH_ERRORS;
   }
 

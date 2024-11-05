@@ -24,7 +24,7 @@ export const ArchiveButtons = ({ document }: FinishProps) => {
 
     const validation = await validate({ dokumentId, oppgaveId }).unwrap();
 
-    if (validation?.length !== 0 && validation.some((v) => v.errors.length !== 0)) {
+    if (validation?.length > 0 && validation.some((v) => v.errors.length > 0)) {
       const validationErrors = validation.map((v) => ({
         dokumentId: v.dokumentId,
         title: documents.find((d) => d.id === v.dokumentId)?.tittel ?? v.dokumentId,

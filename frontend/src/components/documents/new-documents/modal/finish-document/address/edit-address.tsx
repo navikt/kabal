@@ -19,6 +19,7 @@ interface EditProps extends Addresses {
   onCancel: () => void;
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: EditProps) => {
   const currentAddress = overriddenAddress ?? address;
   const [adresselinje1, setAdresselinje1] = useState(currentAddress?.adresselinje1 ?? null);

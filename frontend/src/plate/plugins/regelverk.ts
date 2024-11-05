@@ -24,10 +24,8 @@ export const RegelverkContainerPlugin = createPlatePlugin({
     const { normalizeNode } = editor;
 
     editor.normalizeNode = ([node, path]: TNodeEntry) => {
-      if (node.type === ELEMENT_REGELVERK_CONTAINER) {
-        if (isElement(node) && isElementEmpty(editor, node)) {
-          return insertElements(editor, createSimpleParagraph(), { select: true, at: [...path, 0] });
-        }
+      if (node.type === ELEMENT_REGELVERK_CONTAINER && isElement(node) && isElementEmpty(editor, node)) {
+        return insertElements(editor, createSimpleParagraph(), { select: true, at: [...path, 0] });
       }
 
       normalizeNode([node, path]);

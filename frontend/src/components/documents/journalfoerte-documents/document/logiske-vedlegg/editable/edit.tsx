@@ -96,6 +96,7 @@ export const EditLogiskVedlegg = ({
   );
 
   const onKeyDown = useCallback(
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     (e: React.KeyboardEvent<HTMLSpanElement>) => {
       if (e.key === 'Enter' || (!e.shiftKey && e.key === 'Tab')) {
         e.preventDefault();

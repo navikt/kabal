@@ -37,7 +37,7 @@ export const WriteMessage = () => {
       return;
     }
 
-    if (!message.length) {
+    if (message.length === 0) {
       setErrorMessage('Meldingen må ha et innhold');
 
       return;

@@ -31,6 +31,7 @@ export const SERVE_ASSETS_PLUGIN_ID = 'serve-assets';
 
 export const serveAssetsPlugin = fastifyPlugin(
   async (app) => {
+    // biome-ignore lint/suspicious/useAwait: Needs to return a promise
     app.get('/assets/*', async (req, res) => {
       const fileEntry = FILE_ENTRY_MAP.get(req.url);
 

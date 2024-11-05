@@ -12,6 +12,7 @@ import { type InputHTMLAttributes, useContext } from 'react';
 import { styled } from 'styled-components';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const isReadOnly = useEditorReadOnly();
   const { data: signature } = useGetMySignatureQuery();

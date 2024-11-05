@@ -23,6 +23,7 @@ export const useShownDocuments = (): ShowDocumentResult => {
 
   const journalpostDocuments = journalposter?.dokumenter ?? EMPTY_ARCHIVED_LIST;
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const title = useMemo(() => {
     if (showDocumentList.length !== 1) {
       return null;

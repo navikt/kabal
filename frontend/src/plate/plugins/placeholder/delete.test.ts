@@ -36,7 +36,7 @@ describe('placeholder deleting', () => {
   describe('by character', () => {
     describe('from inside', () => {
       describe('with backspace', () => {
-        it('should remove placeholder if empty', async () => {
+        it('should remove placeholder if empty', () => {
           const children = [createP([createText('before '), createPlaceholder(), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 1 }));
 
@@ -51,7 +51,7 @@ describe('placeholder deleting', () => {
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 6 }));
         });
 
-        it('should only remove character if placeholder is not empty', async () => {
+        it('should only remove character if placeholder is not empty', () => {
           const children = [createP([createText('before '), createPlaceholder('placeholder'), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 11 }));
 
@@ -190,7 +190,7 @@ describe('placeholder deleting', () => {
   describe('by word', () => {
     describe('from inside', () => {
       describe('with backspace', () => {
-        it('should remove placeholder if empty', async () => {
+        it('should remove placeholder if empty', () => {
           const children = [createP([createText('before '), createPlaceholder(), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 1 }));
 
@@ -205,7 +205,7 @@ describe('placeholder deleting', () => {
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 0 }));
         });
 
-        it('should only remove word if placeholder is not empty', async () => {
+        it('should only remove word if placeholder is not empty', () => {
           const children = [
             createP([createText('before '), createPlaceholder('this is placeholder'), createText(' after')]),
           ];
@@ -230,7 +230,7 @@ describe('placeholder deleting', () => {
       });
 
       describe('with delete', () => {
-        it('should remove placeholder if empty', async () => {
+        it('should remove placeholder if empty', () => {
           const children = [createP([createText('before '), createPlaceholder(), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 1 }));
 
@@ -245,7 +245,7 @@ describe('placeholder deleting', () => {
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
         });
 
-        it('should only remove word if placeholder is not empty', async () => {
+        it('should only remove word if placeholder is not empty', () => {
           const children = [
             createP([createText('before '), createPlaceholder('this is placeholder'), createText(' after')]),
           ];

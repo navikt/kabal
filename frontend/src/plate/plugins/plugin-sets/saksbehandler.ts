@@ -28,7 +28,7 @@ import { HEADING_KEYS } from '@udecode/plate-heading';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 import { YjsPlugin } from '@udecode/plate-yjs/react';
-import * as Y from 'yjs';
+import { XmlText } from 'yjs';
 
 export const components: Record<string, NodeComponent> = {
   [BaseParagraphPlugin.key]: Paragraph,
@@ -73,7 +73,7 @@ export const collaborationSaksbehandlerPlugins = (
   smartDocument: ISmartDocument,
   { navIdent, navn }: IUserData,
 ) => {
-  const sharedRoot = new Y.XmlText();
+  const sharedRoot = new XmlText();
   sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
 
   return [

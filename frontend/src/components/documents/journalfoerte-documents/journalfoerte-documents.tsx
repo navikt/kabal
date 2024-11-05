@@ -44,7 +44,7 @@ export const JournalfoerteDocuments = () => {
   }, [totalFilteredDocuments]);
 
   const documentsWithVedleggIdList = useMemo<string[]>(
-    () => documents.filter((d) => d.vedlegg.length !== 0 || d.logiskeVedlegg.length !== 0).map((d) => d.journalpostId),
+    () => documents.filter((d) => d.vedlegg.length > 0 || d.logiskeVedlegg.length > 0).map((d) => d.journalpostId),
     [documents],
   );
 
@@ -63,7 +63,7 @@ export const JournalfoerteDocuments = () => {
     () =>
       documents.reduce<string[]>((dokumentInfoIdList, d) => {
         for (const vedlegg of d.vedlegg) {
-          if (vedlegg.logiskeVedlegg.length !== 0 && !dokumentInfoIdList.includes(vedlegg.dokumentInfoId)) {
+          if (vedlegg.logiskeVedlegg.length > 0 && !dokumentInfoIdList.includes(vedlegg.dokumentInfoId)) {
             dokumentInfoIdList.push(`${d.journalpostId}-${vedlegg.dokumentInfoId}`);
           }
         }
@@ -83,7 +83,7 @@ export const JournalfoerteDocuments = () => {
     setShowLogiskeVedleggIdList(vedleggWithLogiskeVedleggIdList);
   }, [showLogiskeVedleggIdList, vedleggWithLogiskeVedleggIdList]);
 
-  const showsAnyVedlegg = showVedleggIdList.length !== 0 || showLogiskeVedleggIdList.length !== 0;
+  const showsAnyVedlegg = showVedleggIdList.length > 0 || showLogiskeVedleggIdList.length > 0;
 
   const onToggle = useCallback(() => {
     setShowVedleggIdList(showsAnyVedlegg ? [] : documentsWithVedleggIdList);

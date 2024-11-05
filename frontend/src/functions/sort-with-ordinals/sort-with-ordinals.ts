@@ -1,6 +1,8 @@
 /**
  * Sorts strings with numbers and ordinals.
  */
+
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const sortWithOrdinals = (a: string, b: string): number => {
   const aParts = split(a);
   const bParts = split(b);

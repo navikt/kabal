@@ -17,7 +17,7 @@ if (!existsSync(indexFilePath)) {
 const indexFileContent = readFileSync(indexFilePath, { encoding: 'utf-8' });
 const indexFile = indexFileContent.replace('{{ENVIRONMENT}}', ENVIRONMENT).replace('{{VERSION}}', PROXY_VERSION);
 
-const serveIndexHandler: RouteHandler = async (_, reply) => {
+const serveIndexHandler: RouteHandler = (_, reply) => {
   reply.header('content-type', 'text/html');
   reply.status(200);
 
@@ -27,6 +27,7 @@ const serveIndexHandler: RouteHandler = async (_, reply) => {
 export const SERVE_INDEX_PLUGIN_ID = 'serve-index';
 
 export const serveIndexPlugin = fastifyPlugin(
+  // biome-ignore lint/suspicious/useAwait: Needs to return a promise
   async (app) => {
     app.get('/', serveIndexHandler);
     app.get('*', serveIndexHandler);

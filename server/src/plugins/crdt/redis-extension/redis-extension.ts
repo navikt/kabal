@@ -59,9 +59,10 @@ export class RedisExtension implements Extension {
     this.#isReady = true;
   }
 
-  async onConfigure({ instance }: onConfigurePayload) {
+  onConfigure({ instance }: onConfigurePayload) {
     log.debug({ msg: 'Configuring RedisExtension', data: { identifier: this.#identifier } });
     this.instance = instance;
+    return Promise.resolve();
   }
 
   #getKey = (documentName: string) => `${this.#prefix}:${documentName}`;
@@ -228,10 +229,12 @@ export class RedisExtension implements Extension {
 
   public async onChange({ documentName, document, transactionOrigin }: onChangePayload): Promise<void> {
     if (transactionOrigin === this.#redisTransactionOrigin) {
-      return;
+      return Promise.resolve();
     }
 
-    this.#publishFirstSyncStep(documentName, document);
+    await this.#publishFirstSyncStep(documentName, document);
+
+    return Promise.resolve();
   }
 
   public async onDisconnect({ documentName, document }: onDisconnectPayload): Promise<void> {
@@ -308,11 +311,13 @@ export class RedisExtension implements Extension {
     this.#pub.publish(this.#getKey(documentName), this.#encodeMessage(message.toUint8Array()));
   }
 
-  public async onDestroy() {
+  public onDestroy() {
     log.debug({ msg: 'Destroying RedisExtension', data: { identifier: this.#identifier } });
 
     this.#pub.disconnect();
     this.#sub.disconnect();
+
+    return Promise.resolve();
   }
 }
 

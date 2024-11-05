@@ -34,7 +34,7 @@ export const Nav = () => (
       <NavItem
         to="/sok"
         testId="search-nav-link"
-        roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]}
+        roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER, Role.KABAL_ROL, Role.KABAL_ROL]}
       >
         <MagnifyingGlassIcon /> Søk på person
       </NavItem>

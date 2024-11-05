@@ -32,7 +32,7 @@ export const getProxyRequestHeaders = (
   return headers;
 };
 
-const exists = (value: string): boolean => value.length !== 0;
+const exists = (value: string): boolean => value.length > 0;
 
 const omit = <T extends Record<string, unknown>, K extends keyof T>(obj: T, key: K): Omit<T, K> => {
   const { [key]: _, ...rest } = obj;

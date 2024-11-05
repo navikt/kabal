@@ -36,6 +36,7 @@ interface Props {
   containsRolAttachments: boolean;
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
   const canEditDocument = useCanEditDocument(document, parentDocument);
   const { pdfOrSmartDocuments, journalfoerteDocuments } = useAttachments(document.id);

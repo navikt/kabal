@@ -13,6 +13,7 @@ export const handleSmartDocumentCommentAddedEvent =
       smartEditorCommentsApi.util.updateQueryData(
         'getComments',
         { oppgaveId, dokumentId: event.documentId },
+        // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
         (draft) => {
           const { actor, text, parentId } = event;
 
