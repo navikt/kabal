@@ -62,6 +62,13 @@ export const ReceivingEnhet = ({ selectedEnhet, setSelectedEnhet, enheter, error
 
   return (
     <Container>
+      <SuggestedEnhet
+        selectedEnhet={selectedEnhet}
+        setSelectedEnhet={setSelectedEnhet}
+        id={id}
+        typeId={typeId}
+        gosysOppgaveId={gosysOppgaveId}
+      />
       <Fieldset>
         <Legend>Velg enhet som skal motta oppgaven</Legend>
 
@@ -97,14 +104,6 @@ export const ReceivingEnhet = ({ selectedEnhet, setSelectedEnhet, enheter, error
         )}
         {error === null ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
       </Fieldset>
-
-      <SuggestedEnhet
-        selectedEnhet={selectedEnhet}
-        setSelectedEnhet={setSelectedEnhet}
-        id={id}
-        typeId={typeId}
-        gosysOppgaveId={gosysOppgaveId}
-      />
     </Container>
   );
 };
@@ -174,7 +173,7 @@ const Fieldset = styled.fieldset`
 `;
 
 const listStyle = css`
-  height: 266px;
+  height: 202px;
   overflow-y: scroll;
   overflow-x: auto;
   border: 1px solid var(--a-border-default);
