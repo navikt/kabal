@@ -1,6 +1,5 @@
 import { FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
-import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
 import {
   Beskrivelse,
   getInitialBeskrivelse,
@@ -9,7 +8,7 @@ import { Enhetmappe } from '@app/components/oppgavebehandling-footer/update-in-g
 import { GosysOppgave } from '@app/components/oppgavebehandling-footer/update-in-gosys/gosys-oppgave';
 import { ReceivingEnhet } from '@app/components/oppgavebehandling-footer/update-in-gosys/receiving-enhet';
 import { ValidationSummary } from '@app/components/oppgavebehandling-footer/validation-summary';
-import { isReduxValidationResponse } from '@app/functions/error-type-guard';
+import { type IValidationSection, isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFinishOppgavebehandlingWithUpdateInGosysMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { useSetGosysOppgaveMutation } from '@app/redux-api/oppgaver/mutations/set-gosys-oppgave';
@@ -26,7 +25,7 @@ import {
 import { Alert, BodyShort, Button, ConfirmationPanel, Heading, Modal, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { format } from 'date-fns';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
 const NOW = new Date();
 
@@ -74,7 +73,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
   const { data: gosysOppgave, isSuccess: hasGosysOppgave } = useGetGosysOppgaveQuery(
     gosysOppgaveId === null ? skipToken : oppgavebehandling.id,
   );
-  const { setValidationSectionErrors, validationSectionErrors } = useContext(ValidationErrorContext);
+  const [validationSectionErrors, setValidationSectionErrors] = useState<IValidationSection[]>([]);
 
   const gosysOppgaveIsOpen = hasGosysOppgave && gosysOppgave.editable;
 
@@ -93,18 +92,18 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
         const gosysOppgaveUpdate = { kommentar: beskrivelse, tildeltEnhet: selectedEnhet, mappeId: selectedMappe };
 
         await finish({ kvalitetsvurderingId, oppgaveId, gosysOppgaveUpdate, ignoreGosysOppgave });
+
+        setIsOpen(false);
       } else {
         setEnhetError(null);
 
-        await finish({ kvalitetsvurderingId, oppgaveId, gosysOppgaveUpdate: null, ignoreGosysOppgave });
+        await finish({ kvalitetsvurderingId, oppgaveId, gosysOppgaveUpdate: null, ignoreGosysOppgave }).unwrap();
       }
     } catch (e) {
       if (isReduxValidationResponse(e)) {
         setValidationSectionErrors(e.data.sections);
       }
     }
-
-    setIsOpen(false);
   };
 
   return (

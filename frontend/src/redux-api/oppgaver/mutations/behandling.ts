@@ -2,6 +2,7 @@
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { formatIdNumber } from '@app/functions/format-id';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { reduxStore } from '@app/redux/configure-store';
@@ -32,10 +33,12 @@ const finishOppgaveOnQueryStarted = async ({
   kvalitetsvurderingId: id,
   oppgaveId,
   queryFulfilled,
+  catchFn,
 }: {
   oppgaveId: string;
   kvalitetsvurderingId: string | null;
   queryFulfilled: Promise<{ data: IVedtakFullfoertResponse }>;
+  catchFn: (e: unknown) => void;
 }) => {
   try {
     const { data } = await queryFulfilled;
@@ -57,13 +60,7 @@ const finishOppgaveOnQueryStarted = async ({
       reduxStore.dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
     }
   } catch (e) {
-    const message = 'Kunne ikke fullføre behandling.';
-
-    if (isApiRejectionError(e)) {
-      apiErrorToast(message, e.error);
-    } else {
-      toast.error(message);
-    }
+    catchFn(e);
   }
 };
 
@@ -77,7 +74,17 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       }),
       extraOptions: { maxRetries: 0 },
       onQueryStarted: ({ oppgaveId, kvalitetsvurderingId }, { queryFulfilled }) => {
-        finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled });
+        const catchFn = (e: unknown) => {
+          const message = 'Kunne ikke fullføre behandling.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+        };
+
+        finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled, catchFn });
       },
     }),
     finishOppgavebehandlingWithUpdateInGosys: builder.mutation<IVedtakFullfoertResponse, IFinishWithUpdateInGosys>({
@@ -88,7 +95,22 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       }),
       extraOptions: { maxRetries: 0 },
       onQueryStarted: ({ oppgaveId, kvalitetsvurderingId }, { queryFulfilled }) => {
-        finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled });
+        const catchFn = (e: unknown) => {
+          const message = 'Kunne ikke fullføre behandling.';
+
+          if (isApiRejectionError(e)) {
+            // These will be shown inline in the modal
+            if (isReduxValidationResponse(e.error)) {
+              return;
+            }
+
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+        };
+
+        finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled, catchFn });
       },
     }),
     updateFullmektig: builder.mutation<IModifiedResponse, ISetFullmektigParams>({
