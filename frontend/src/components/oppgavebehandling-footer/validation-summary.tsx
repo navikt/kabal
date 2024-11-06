@@ -2,6 +2,7 @@ import type { IValidationError, IValidationSection } from '@app/functions/error-
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useSectionTitle } from '@app/hooks/use-section-title';
 import { Alert } from '@navikt/ds-react';
+import { styled } from 'styled-components';
 import { SectionTitle, StyledFieldList, StyledSection, ValidationSummaryContainer } from './styled-components';
 
 interface Props {
@@ -18,10 +19,10 @@ export const ValidationSummary = ({ sections }: Props) => {
   ));
 
   return (
-    <Alert variant="warning" size="small" data-testid="validation-summary">
+    <StyledAlert variant="warning" size="small" data-testid="validation-summary">
       <div>Kan ikke fullføre behandling. Dette mangler:</div>
       <ValidationSummaryContainer>{errorMessages}</ValidationSummaryContainer>
-    </Alert>
+    </StyledAlert>
   );
 };
 
@@ -42,3 +43,7 @@ const Field = ({ field, reason }: IValidationError) => (
     <span>{reason}</span>
   </li>
 );
+
+const StyledAlert = styled(Alert)`
+  width: fit-content;
+`;
