@@ -9,6 +9,7 @@ export enum SaksTypeEnum {
   ANKE = '2',
   ANKE_I_TRYGDERETTEN = '3',
   BEHANDLING_ETTER_TR_OPPHEVET = '4',
+  OMGJØRINGSKRAV = '5',
 }
 
 export enum UtfallEnum {
@@ -24,6 +25,9 @@ export enum UtfallEnum {
   INNSTILLING_AVVIST = '10',
   HEVET = '11',
   HENVIST = '12',
+  MEDHOLD_ETTER_FORVALTNINGSLOVEN_35 = '13',
+  BESLUTNING_OM_IKKE_Å_OMGJØRE = '14',
+  STADFESTET_MED_EN_ANNEN_BEGRUNNELSE = '15',
 }
 
 export enum Brevmottakertype {

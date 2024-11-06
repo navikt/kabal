@@ -165,6 +165,7 @@ const TYPE_TO_PATH: Record<SaksTypeEnum, string> = {
   [SaksTypeEnum.ANKE]: 'ankebehandling',
   [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: 'trygderettsankebehandling',
   [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: 'behandling-etter-tr-opphevet',
+  [SaksTypeEnum.OMGJØRINGSKRAV]: 'omgjøringskravbehandling',
 };
 
 const toCopyLine = ({ typeId, behandlingId, reason }: Task) => `${getUrl(behandlingId, typeId)} - ${reason}`;

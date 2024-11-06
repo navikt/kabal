@@ -3,9 +3,11 @@ import type { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Alert } from '@navikt/ds-react';
 
+type Type = SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.ANKE | SaksTypeEnum.OMGJØRINGSKRAV;
+
 interface Props {
   previousSaksbehandler: INavEmployee | null;
-  type: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.ANKE;
+  type: Type;
 }
 
 export const PreviousSaksbehandler = ({ previousSaksbehandler, type }: Props) => {
@@ -20,11 +22,13 @@ export const PreviousSaksbehandler = ({ previousSaksbehandler, type }: Props) =>
   return formatEmployeeNameAndId(previousSaksbehandler);
 };
 
-const getTypeName = (type: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.ANKE) => {
+const getTypeName = (type: Type) => {
   switch (type) {
     case SaksTypeEnum.ANKE:
       return 'klagebehandling';
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
       return 'ankebehandling';
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+      return 'omgjøringskrav';
   }
 };

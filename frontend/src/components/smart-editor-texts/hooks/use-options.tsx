@@ -1,19 +1,28 @@
 import type { IOption } from '@app/components/filter-dropdown/props';
 import { useKlageenheter, useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum, type UtfallEnum } from '@app/types/kodeverk';
-import { Tag } from '@navikt/ds-react';
+import { Tag, type TagProps } from '@navikt/ds-react';
 import { useMemo } from 'react';
+import { styled } from 'styled-components';
 
 const EMPTY_ARRAY: [] = [];
 
 export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
   const { data: sakstyperToUtfall = EMPTY_ARRAY } = useSakstyperToUtfall();
+  const shortNames = useMemo(
+    () =>
+      sakstyperToUtfall.map(({ navn, ...rest }) => ({
+        ...rest,
+        navn: navn.replace('Trygderetten', 'TR'),
+      })),
+    [sakstyperToUtfall],
+  );
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   return useMemo(() => {
     const utfallList: IOption<UtfallEnum>[] = [];
 
-    for (const { utfall, navn, id } of sakstyperToUtfall) {
+    for (const { utfall, navn, id } of shortNames) {
       for (const u of utfall) {
         const existing = utfallList.find(({ value }) => value === u.id);
 
@@ -22,16 +31,16 @@ export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
             value: u.id,
             label: u.navn,
             tags: [
-              <Tag size="xsmall" variant={sakstypeToTagVariant(id)} key={id}>
+              <StyledTag size="xsmall" variant={sakstypeToTagVariant(id)} key={id}>
                 {navn}
-              </Tag>,
+              </StyledTag>,
             ],
           });
         } else {
           const tag = (
-            <Tag size="xsmall" variant={sakstypeToTagVariant(id)} key={id}>
+            <StyledTag size="xsmall" variant={sakstypeToTagVariant(id)} key={id}>
               {navn}
-            </Tag>
+            </StyledTag>
           );
 
           if (existing.tags === undefined) {
@@ -44,10 +53,10 @@ export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
     }
 
     return utfallList.sort((a, b) => Number.parseInt(a.value, 10) - Number.parseInt(b.value, 10));
-  }, [sakstyperToUtfall]);
+  }, [shortNames]);
 };
 
-const sakstypeToTagVariant = (type: SaksTypeEnum) => {
+const sakstypeToTagVariant = (type: SaksTypeEnum): TagProps['variant'] => {
   switch (type) {
     case SaksTypeEnum.KLAGE:
       return 'info';
@@ -55,6 +64,10 @@ const sakstypeToTagVariant = (type: SaksTypeEnum) => {
       return 'warning';
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
       return 'error';
+    case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
+      return 'alt1';
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+      return 'alt2';
     default:
       return 'info';
   }
@@ -65,3 +78,7 @@ export const useKlageenheterOptions = (): IOption<string>[] => {
 
   return useMemo(() => values.map(({ id, navn }) => ({ value: id, label: navn })), [values]);
 };
+
+const StyledTag = styled(Tag)`
+  white-space: nowrap;
+`;

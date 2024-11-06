@@ -6,15 +6,13 @@ import { Toasts } from '@app/components/toast/toasts';
 import { VersionCheckerStatus } from '@app/components/version-checker/version-checker-status';
 import { AccessRightsPage } from '@app/pages/access-rights/access-rights';
 import { AdminPage } from '@app/pages/admin/admin';
-import { AnkebehandlingPage } from '@app/pages/ankebehandling/ankebehandling';
-import { BehandlingEtterTrOpphevetPage } from '@app/pages/behandling-etter-tr-opphevet/behandling-etter-tr-opphevet';
 import { BunnteksterPage } from '@app/pages/bunntekster/bunntekster';
 import { GodeFormuleringerPage } from '@app/pages/gode-formuleringer/gode-formuleringer';
-import { KlagebehandlingPage } from '@app/pages/klagebehandling/klagebehandling';
 import { LandingPage } from '@app/pages/landing-page/landing-page';
 import { MalteksterPage } from '@app/pages/maltekster/maltekster';
 import { MaltekstseksjonerPage } from '@app/pages/maltekstseksjoner/maltekstseksjoner';
 import { MineOppgaverPage } from '@app/pages/mine-oppgaver/mine-oppgaver';
+import { OppgavebehandlingPage } from '@app/pages/oppgavebehandling/oppgavebehandling';
 import { OppgaverPage } from '@app/pages/oppgaver/oppgaver';
 import { OppgavestyringPage } from '@app/pages/oppgavestyring/oppgavestyring';
 import { RedigerbareMalteksterPage } from '@app/pages/redigerbare-maltekster/redigerbare-maltekster';
@@ -23,7 +21,6 @@ import { SearchPage } from '@app/pages/search/search';
 import { SettingsPage } from '@app/pages/settings/settings';
 import { SvarbrevPage } from '@app/pages/svarbrev/svarbrev';
 import { ToppteksterPage } from '@app/pages/topptekster/topptekster';
-import { TrygderettsankebehandlingPage } from '@app/pages/trygderettsankebehandling/trygderettsankebehandling';
 import { Role } from '@app/types/bruker';
 import { Outlet, Route, Routes as Switch } from 'react-router-dom';
 
@@ -35,10 +32,11 @@ export const Router = () => (
       <Route element={<ProtectedRoute roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]} />}>
         <Route path="oppgaver" element={<OppgaverPage />} />
         <Route path="mineoppgaver" element={<MineOppgaverPage />} />
-        <Route path="klagebehandling/:oppgaveId" element={<KlagebehandlingPage />} />
-        <Route path="ankebehandling/:oppgaveId" element={<AnkebehandlingPage />} />
-        <Route path="trygderettsankebehandling/:oppgaveId" element={<TrygderettsankebehandlingPage />} />
-        <Route path="behandling-etter-tr-opphevet/:oppgaveId" element={<BehandlingEtterTrOpphevetPage />} />
+        <Route path="klagebehandling/:oppgaveId" element={<OppgavebehandlingPage />} />
+        <Route path="ankebehandling/:oppgaveId" element={<OppgavebehandlingPage />} />
+        <Route path="trygderettsankebehandling/:oppgaveId" element={<OppgavebehandlingPage />} />
+        <Route path="behandling-etter-tr-opphevet/:oppgaveId" element={<OppgavebehandlingPage />} />
+        <Route path="omgjøringskravbehandling/:oppgaveId" element={<OppgavebehandlingPage />} />
       </Route>
 
       <Route element={<ProtectedRoute roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]} />}>

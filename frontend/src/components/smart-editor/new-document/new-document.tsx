@@ -12,6 +12,7 @@ import {
   ANKE_TEMPLATES,
   BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
   KLAGE_TEMPLATES,
+  OMGJØRINGSKRAVVEDTAK_TEMPLATES,
 } from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -124,6 +125,8 @@ const useTemplates = (oppgave: IOppgavebehandling | undefined) => {
         return ANKE_I_TRYGDERETTEN_TEMPLATES;
       case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
         return BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES;
+      case SaksTypeEnum.OMGJØRINGSKRAV:
+        return OMGJØRINGSKRAVVEDTAK_TEMPLATES;
     }
   }
 

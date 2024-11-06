@@ -25,6 +25,7 @@ export enum TemplateSections {
   VEDLEGG = 'section-katt',
   SVAR_FRA_ROL = 'section-emu',
   TILSVARSBREV_TITLE = 'section-mink',
+  SAKSGANG = 'section-ørn',
 
   INTRODUCTION_TEMP = 'section-rev-temp', // For "migrating" ROL questions
 }

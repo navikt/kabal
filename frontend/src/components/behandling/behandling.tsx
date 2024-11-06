@@ -1,5 +1,6 @@
 import { BehandlingEtterTrOpphevetDetaljer } from '@app/components/behandling/behandlingsdetaljer/behandling-etter-tr-opphevet-detaljer';
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
+import { Omgjøringskravdetaljer } from '@app/components/behandling/behandlingsdetaljer/omgjøringskravdetaljer';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Heading, Skeleton } from '@navikt/ds-react';
@@ -68,5 +69,7 @@ const Behandlingsdetaljer = () => {
       return <Trygderettsankebehandlingsdetaljer oppgavebehandling={oppgave} />;
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
       return <BehandlingEtterTrOpphevetDetaljer oppgavebehandling={oppgave} />;
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+      return <Omgjøringskravdetaljer oppgavebehandling={oppgave} />;
   }
 };

@@ -17,6 +17,8 @@ const getPrefix = (type: SaksTypeEnum) => {
       return 'Trygderetten har fullført behandling av anken';
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
       return 'Klageinstansen har fullført ny behandling etter Trygderetten har opphevet';
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+      return 'Klageinstansen har fullført behandling av omgjøringskrav';
   }
 };
 
