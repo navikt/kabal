@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it, mock } from 'bun:test';
+import { afterAll, beforeAll, beforeEach, describe, expect, mock, test } from 'bun:test';
 import { ConfirmFinish } from '@app/components/oppgavebehandling-footer/confirm-finish';
 // biome-ignore lint/style/noNamespaceImport: Needed in order to restore after mock
 import * as originalUseOppgave from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -40,6 +40,9 @@ describe('ConfirmFinish', () => {
           { id: UtfallEnum.INNSTILLING_AVVIST, navn: 'Innstilling: Avvist' },
           { id: UtfallEnum.HEVET, navn: 'Hevet' },
           { id: UtfallEnum.HENVIST, navn: 'Henvist' },
+          { id: UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35, navn: 'Medhold etter forvaltningsloven § 35' },
+          { id: UtfallEnum.BESLUTNING_OM_IKKE_Å_OMGJØRE, navn: 'Beslutning om ikke å omgjøre' },
+          { id: UtfallEnum.STADFESTET_MED_EN_ANNEN_BEGRUNNELSE, navn: 'Stadfestet med en annen begrunnelse' },
         ],
         isSuccess: true,
       }),
@@ -57,7 +60,7 @@ describe('ConfirmFinish', () => {
   describe('Klage', () => {
     const cases = [true, false];
 
-    it.each(cases)('Modernized %p', async (isModernized) => {
+    test.each(cases)('Modernized %p', async (isModernized) => {
       mockIsModernized(isModernized);
       mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD);
       render(<ConfirmFinish cancel={() => {}} show />);
@@ -78,6 +81,73 @@ describe('ConfirmFinish', () => {
     });
   });
 
+  describe('Omgjøringskrav', () => {
+    describe('Modernized', async () => {
+      beforeEach(() => {
+        mockIsModernized(true);
+      });
+
+      const cases = [
+        UtfallEnum.STADFESTET_MED_EN_ANNEN_BEGRUNNELSE,
+        UtfallEnum.BESLUTNING_OM_IKKE_Å_OMGJØRE,
+        UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35,
+      ];
+
+      test.each(cases)('Utfall id: %s', async (utfall) => {
+        mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, utfall);
+        render(<ConfirmFinish cancel={() => {}} show />);
+
+        const buttonText = 'Fullfør';
+        const finishButton = screen.getByRole('button', { name: buttonText });
+        expect(finishButton).toBeVisible();
+        expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
+        expect(await screen.findAllByRole('button')).toHaveLength(2);
+
+        fireEvent.click(finishButton);
+
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+    });
+
+    describe('Not modernized', async () => {
+      beforeEach(() => {
+        mockIsModernized(false);
+      });
+
+      test('Medhold etter forvaltningsloven § 35', async () => {
+        mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35);
+        render(<ConfirmFinish cancel={() => {}} show />);
+
+        const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
+        const finishButton = screen.getByRole('button', { name: buttonText });
+        expect(finishButton).toBeVisible();
+        expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
+        expect(await screen.findAllByRole('button')).toHaveLength(2);
+
+        fireEvent.click(finishButton);
+
+        expect(screen.queryByRole('dialog')).toBeVisible();
+      });
+
+      const cases = [UtfallEnum.STADFESTET_MED_EN_ANNEN_BEGRUNNELSE, UtfallEnum.BESLUTNING_OM_IKKE_Å_OMGJØRE];
+
+      test.each(cases)('Utfall id: %s', async (utfall) => {
+        mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, utfall);
+        render(<ConfirmFinish cancel={() => {}} show />);
+
+        const buttonText = 'Fullfør';
+        const finishButton = screen.getByRole('button', { name: buttonText });
+        expect(finishButton).toBeVisible();
+        expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
+        expect(await screen.findAllByRole('button')).toHaveLength(2);
+
+        fireEvent.click(finishButton);
+
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+    });
+  });
+
   describe('Anke i Trygderetten', () => {
     const type = SaksTypeEnum.ANKE_I_TRYGDERETTEN;
 
@@ -94,7 +164,7 @@ describe('ConfirmFinish', () => {
         UtfallEnum.HEVET,
       ];
 
-      it.each(cases)('Utfall id: %s', async (utfall) => {
+      test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall);
         render(<ConfirmFinish cancel={() => {}} show />);
         const buttonText = 'Fullfør';
@@ -107,7 +177,7 @@ describe('ConfirmFinish', () => {
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       });
 
-      it('Opphevet', async () => {
+      test('Opphevet', async () => {
         mockOppgave(type, UtfallEnum.OPPHEVET);
         render(<ConfirmFinish cancel={() => {}} show />);
         const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal.';
@@ -122,7 +192,7 @@ describe('ConfirmFinish', () => {
         expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
       });
 
-      it('Henvist', async () => {
+      test('Henvist', async () => {
         mockOppgave(type, UtfallEnum.HENVIST);
         render(<ConfirmFinish cancel={() => {}} show />);
         const button = 'Fullfør';
@@ -143,7 +213,7 @@ describe('ConfirmFinish', () => {
         mockIsModernized(false);
       });
 
-      it('Opphevet', async () => {
+      test('Opphevet', async () => {
         mockOppgave(type, UtfallEnum.OPPHEVET);
         render(<ConfirmFinish cancel={() => {}} show />);
         const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal. Husk å sende oppgave i Gosys.';
@@ -166,7 +236,7 @@ describe('ConfirmFinish', () => {
         UtfallEnum.HEVET,
       ];
 
-      it.each(cases)('Utfall id: %s', async (utfall) => {
+      test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall);
         render(<ConfirmFinish cancel={() => {}} show />);
         const buttonText = 'Oppdater oppgaven i Gosys og fullfør';

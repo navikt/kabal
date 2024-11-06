@@ -31,11 +31,16 @@ const ANKE_FIELD_NAMES = {
   mottattKlageinstans: 'Anke mottatt dato',
 };
 
+const OMGJØRINGSKRAV_FIELD_NAMES = {
+  mottattKlageinstans: 'Omgjøringskrav mottatt dato',
+};
+
 export const FIELD_NAMES = {
   [SaksTypeEnum.KLAGE]: DEFAULT_FIELD_NAMES,
   [SaksTypeEnum.ANKE]: { ...DEFAULT_FIELD_NAMES, ...ANKE_FIELD_NAMES },
   [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: { ...DEFAULT_FIELD_NAMES, ...ANKE_I_TRYGDERETTEN_FIELD_NAMES },
   [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: DEFAULT_FIELD_NAMES,
+  [SaksTypeEnum.OMGJØRINGSKRAV]: { ...DEFAULT_FIELD_NAMES, ...OMGJØRINGSKRAV_FIELD_NAMES },
 };
 
 export type Field = keyof typeof DEFAULT_FIELD_NAMES;

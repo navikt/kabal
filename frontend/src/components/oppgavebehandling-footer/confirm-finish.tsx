@@ -50,7 +50,29 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
           <CancelButton cancel={cancel} />
         </StyledFinishOppgaveButtons>
       );
+    case SaksTypeEnum.OMGJØRINGSKRAV: {
+      switch (utfallId) {
+        case UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35:
+          return (
+            <StyledFinishOppgaveButtons $width={400}>
+              {isModernized ? (
+                <FinishButton>Fullfør</FinishButton>
+              ) : (
+                <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+              )}
+              <CancelButton cancel={cancel} />
+            </StyledFinishOppgaveButtons>
+          );
 
+        default:
+          return (
+            <StyledFinishOppgaveButtons $width={400}>
+              <FinishButton>Fullfør</FinishButton>
+              <CancelButton cancel={cancel} />
+            </StyledFinishOppgaveButtons>
+          );
+      }
+    }
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN: {
       switch (utfallId) {
         case UtfallEnum.MEDHOLD:
@@ -158,6 +180,8 @@ const useText = (): string => {
     }
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
       return 'Du fullfører nå behandlingen. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+      return 'Du fullfører nå behandlingen av omgjøringskravet. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
   }
 };
 

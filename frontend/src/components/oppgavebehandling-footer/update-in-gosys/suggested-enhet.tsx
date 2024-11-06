@@ -31,6 +31,7 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
   const noSuggestion =
     typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
     typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET ||
+    typeId === SaksTypeEnum.OMGJØRINGSKRAV ||
     (typeId === SaksTypeEnum.ANKE && (utfallId === TRUKKET || utfallId === MEDHOLD || utfallId === OPPHEVET));
 
   const { opprettetAvEnhet, tildeltEnhetsnr } = gosysOppgave;

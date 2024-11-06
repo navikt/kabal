@@ -10,16 +10,16 @@ import { useSetMottattKlageinstansMutation } from '@app/redux-api/oppgaver/mutat
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { subDays } from 'date-fns';
 
-const ID = 'anke-mottatt-dato';
+const ID = 'mottatt-dato';
 
-export const AnkeMottattDato = () => {
+export const MottattDato = () => {
   const canEdit = useCanEditBehandling();
   const { data } = useOppgave();
   const error = useValidationError('mottattKlageinstans');
   const label = useFieldName('mottattKlageinstans');
   const [setMottattKlageinstans] = useSetMottattKlageinstansMutation();
 
-  if (data?.typeId !== SaksTypeEnum.ANKE) {
+  if (data?.typeId !== SaksTypeEnum.ANKE && data?.typeId !== SaksTypeEnum.OMGJØRINGSKRAV) {
     return null;
   }
 

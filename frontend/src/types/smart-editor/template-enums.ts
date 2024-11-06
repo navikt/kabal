@@ -10,4 +10,6 @@ export enum TemplateIdEnum {
   OVERSENDELSESBREV = 'oversendelsesbrev',
   ORIENTERING_OM_TILSVAR = 'orientering-om-tilsvar',
   BEHANDLING_ETTER_TR_OPPHEVET_VEDTAK = 'behandling-etter-tr-opphevet',
+  OMGJØRINGSKRAVVEDTAK = 'omgjøringskravvedtak',
+  FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE = 'forenklet-beslutning-om-ikke-å-omgjøre',
 }

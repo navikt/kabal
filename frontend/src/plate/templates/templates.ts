@@ -1,6 +1,8 @@
 import { ANKEVEDTAK_TEMPLATE } from '@app/plate/templates/ankevedtak';
 import { BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATE } from '@app/plate/templates/behandling-etter-tr-opphevet-vedtak';
+import { FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE_TEMPLATE } from '@app/plate/templates/forenklet-beslutning-om-ikke-å-omgjøre';
 import { KLAGEVEDTAK_TEMPLATE } from '@app/plate/templates/klagevedtak';
+import { OMGJØRINGSKRAVVEDTAK_TEMPLATE } from '@app/plate/templates/omgjøringskravvedtak';
 import { ORIENTERING_OM_TILSVAR_TEMPLATE } from '@app/plate/templates/orientering-om-tilsvar-direkte-til-trygderetten';
 import { OVERSENDELSESBREV_TEMPLATE } from '@app/plate/templates/oversendelsesbrev';
 import {
@@ -22,6 +24,8 @@ export const TEMPLATE_MAP = {
   [ROL_TILSVARSBREV_TEMPLATE.templateId]: ROL_TILSVARSBREV_TEMPLATE,
   [ORIENTERING_OM_TILSVAR_TEMPLATE.templateId]: ORIENTERING_OM_TILSVAR_TEMPLATE,
   [BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATE.templateId]: BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATE,
+  [OMGJØRINGSKRAVVEDTAK_TEMPLATE.templateId]: OMGJØRINGSKRAVVEDTAK_TEMPLATE,
+  [FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE_TEMPLATE.templateId]: FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE_TEMPLATE,
 };
 
 export const TEMPLATES = Object.values(TEMPLATE_MAP);
@@ -52,4 +56,13 @@ export const BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES = [
   NOTAT_TEMPLATE,
   ROL_QUESTIONS_TEMPLATE,
   ROL_TILSVARSBREV_TEMPLATE,
+];
+
+export const OMGJØRINGSKRAVVEDTAK_TEMPLATES = [
+  GENERELT_BREV_TEMPLATE,
+  NOTAT_TEMPLATE,
+  ROL_QUESTIONS_TEMPLATE,
+  ROL_TILSVARSBREV_TEMPLATE,
+  OMGJØRINGSKRAVVEDTAK_TEMPLATE,
+  FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE_TEMPLATE,
 ];

@@ -87,5 +87,14 @@ export const OpenOppgavebehandling = ({
           data-behandling-etter-tr-opphevet-id={id}
         />
       );
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+      return (
+        <Button
+          {...commonProps}
+          to={`/omgjøringskravbehandling/${id}`}
+          data-testid="omgjøringskravbehandling-open-link"
+          data-omgjøringskravid={id}
+        />
+      );
   }
 };
