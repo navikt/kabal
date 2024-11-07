@@ -9,6 +9,7 @@ import { CustomAbbreviationPlugin } from '@app/plate/plugins/custom-abbreviation
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { normalizeNodePlugin } from '@app/plate/plugins/normalize-node';
 import { PageBreakPlugin } from '@app/plate/plugins/page-break';
+import { PastePlugin } from '@app/plate/plugins/paste';
 import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { SelectionPlugin } from '@app/plate/plugins/selection';
 import { AlignPlugin } from '@udecode/plate-alignment/react';
@@ -108,4 +109,5 @@ export const defaultPlugins = [
   SelectionPlugin,
   normalizeNodePlugin,
   CustomAbbreviationPlugin,
+  PastePlugin,
 ];
