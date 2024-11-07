@@ -1,13 +1,12 @@
 import { Oppgaver } from '@app/components/search/common/oppgaver';
-import { FnrSearch } from '@app/components/search/fnr/fnr-search';
+import { Person } from '@app/components/search/fnr/person';
 import {
+  useLazySearchOppgaverByFnrQuery,
   useLazySearchOppgaverBySaksnummerQuery,
-  useSearchOppgaverByFnrQuery,
-  useSearchPersonByFnrQuery,
+  useLazySearchPersonByFnrQuery,
 } from '@app/redux-api/oppgaver/queries/oppgaver';
-import { ErrorMessage, Search, ToggleGroup } from '@navikt/ds-react';
+import { ErrorMessage, Search, type SearchProps, ToggleGroup } from '@navikt/ds-react';
 import { dnr, fnr } from '@navikt/fnrvalidator';
-import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -24,106 +23,133 @@ const removeWhitespace = (str: string) => str.replaceAll(/\s+/gi, '');
 
 export const OppgaveSearch = () => {
   const [searchType, setSearchType] = useState(SearchType.FNR);
-  const [rawQuery, setRawQuery] = useState('');
-  const [fnrError, setFnrError] = useState<string>();
-  const [searchSaksnr, saksnrQuery] = useLazySearchOppgaverBySaksnummerQuery();
 
-  const query = removeWhitespace(rawQuery);
-  const fnrQueryString = searchType === SearchType.FNR && isFnr(query) ? query : skipToken;
-  const personQuery = useSearchPersonByFnrQuery(fnrQueryString);
-  const oppgaverQuery = useSearchOppgaverByFnrQuery(fnrQueryString);
-
-  const fetchBySaksnr = () => searchSaksnr(query);
-
-  const refetchByFnr = () => {
-    personQuery.refetch();
-    oppgaverQuery.refetch();
-  };
-
-  const getText = () => {
-    switch (searchType) {
-      case SearchType.FNR:
-        return 'Søk på fødselsnummer';
-      case SearchType.SAKSNR:
-        return 'Søk på saksnummer';
-    }
-  };
-
-  const search = () => {
-    switch (searchType) {
-      case SearchType.FNR: {
-        if (!isFnr(query)) {
-          return setFnrError('Ugyldig fødselsnummer/D-nummer');
+  const toggleGroup = (
+    <ToggleGroup
+      value={searchType}
+      onChange={(v) => {
+        if (isSearchType(v)) {
+          setSearchType(v);
         }
+      }}
+    >
+      <ToggleGroup.Item value={SearchType.FNR} label="Fødselsnummer" />
+      <ToggleGroup.Item value={SearchType.SAKSNR} label="Saksnummer" />
+    </ToggleGroup>
+  );
 
-        return refetchByFnr();
-      }
-      case SearchType.SAKSNR: {
-        setFnrError(undefined);
+  switch (searchType) {
+    case SearchType.FNR:
+      return <FnrSearch>{toggleGroup}</FnrSearch>;
+    case SearchType.SAKSNR:
+      return <SaksnrSearch>{toggleGroup}</SaksnrSearch>;
+  }
+};
 
-        return fetchBySaksnr();
-      }
+interface Props {
+  children: React.ReactNode;
+}
+
+const FnrSearch = ({ children }: Props) => {
+  const [rawQuery, setRawQuery] = useState('');
+  const [error, setError] = useState<string>();
+  const [fetchPerson, personQuery] = useLazySearchPersonByFnrQuery();
+  const [fetchOppgaver, oppgaverQuery] = useLazySearchOppgaverByFnrQuery();
+  const trimmedQuery = removeWhitespace(rawQuery);
+
+  const validateAndFetch = (fetchFn: () => void) => {
+    if (isFnr(trimmedQuery)) {
+      setError(undefined);
+      fetchFn();
+    } else {
+      setError('Ugyldig fødselsnummer/D-nummer');
     }
   };
 
-  const renderSearchType = () => {
-    switch (searchType) {
-      case SearchType.FNR:
-        return <FnrSearch fnr={rawQuery} personQuery={personQuery} oppgaverQuery={oppgaverQuery} />;
-      case SearchType.SAKSNR:
-        return <Oppgaver {...saksnrQuery} refetch={fetchBySaksnr} />;
-    }
-  };
-
-  const text = getText();
+  const forceSearch = () =>
+    validateAndFetch(() => {
+      fetchPerson(trimmedQuery);
+      fetchOppgaver(trimmedQuery);
+    });
 
   return (
     <>
       <Container>
         <Line>
-          <ToggleGroup
-            value={searchType}
-            onChange={(v) => {
-              if (isSearchType(v)) {
-                setSearchType(v);
-                setFnrError(undefined);
-              }
-            }}
-          >
-            <ToggleGroup.Item value={SearchType.FNR} label="Fødselsnummer" />
-            <ToggleGroup.Item value={SearchType.SAKSNR} label="Saksnummer" />
-          </ToggleGroup>
-          <StyledSearch
-            size="medium"
-            variant="simple"
+          {children}
+
+          <SearchField
+            label="Søk på fødselsnummer"
             onChange={(v) => {
               setRawQuery(v);
 
-              if (isFnr(v)) {
-                setFnrError(undefined);
+              const trimmed = removeWhitespace(v);
+
+              if (isFnr(trimmed)) {
+                setError(undefined);
+                fetchPerson(trimmed);
+                fetchOppgaver(trimmed);
               }
             }}
-            data-testid="search-input"
-            placeholder={text}
-            label={text}
-            onKeyDown={({ key }) => {
-              if (key === 'Enter') {
-                search();
-              }
-            }}
+            onKeyDown={forceSearch}
           >
-            <Search.Button
-              onClick={search}
-              loading={saksnrQuery.isFetching || personQuery.isFetching || oppgaverQuery.isFetching}
-            />
-          </StyledSearch>
+            <Search.Button onClick={forceSearch} loading={personQuery.isFetching || oppgaverQuery.isFetching} />
+          </SearchField>
         </Line>
-        <ErrorMessage>{fnrError}</ErrorMessage>
+
+        <ErrorMessage>{error}</ErrorMessage>
       </Container>
-      {renderSearchType()}
+
+      <Person {...personQuery} fnr={rawQuery} refetch={() => validateAndFetch(() => fetchPerson(trimmedQuery))} />
+      <Oppgaver {...oppgaverQuery} refetch={() => validateAndFetch(() => fetchOppgaver(trimmedQuery))} />
     </>
   );
 };
+
+const SaksnrSearch = ({ children }: Props) => {
+  const [rawQuery, setRawQuery] = useState('');
+  const query = removeWhitespace(rawQuery);
+  const [fetchOppgaver, oppgaverQuery] = useLazySearchOppgaverBySaksnummerQuery();
+
+  const search = () => fetchOppgaver(query);
+
+  return (
+    <Container>
+      <Line>
+        {children}
+
+        <SearchField label="Søk på saksnummer" onChange={setRawQuery} onKeyDown={search}>
+          <Search.Button onClick={search} loading={oppgaverQuery.isFetching} />
+        </SearchField>
+      </Line>
+
+      <Oppgaver {...oppgaverQuery} refetch={search} />
+    </Container>
+  );
+};
+
+const SearchField = ({
+  onChange,
+  onKeyDown,
+  label,
+  children,
+}: { onChange: SearchProps['onChange']; label: string; onKeyDown: () => void; children: SearchProps['children'] }) => (
+  <StyledSearch
+    size="medium"
+    variant="simple"
+    onChange={onChange}
+    data-testid="search-input"
+    placeholder={label}
+    label={label}
+    onKeyDown={({ key }) => {
+      if (key === 'Enter') {
+        onKeyDown();
+      }
+    }}
+  >
+    {children}
+  </StyledSearch>
+);
 
 const Container = styled.div`
   display: flex;
