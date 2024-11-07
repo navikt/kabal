@@ -1,4 +1,11 @@
+import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-language/set-maltekstseksjon-language';
+import {
+  DEFAULT_STATUSES,
+  STATUS_OPTIONS,
+  type Status,
+  filterByStatus,
+} from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
@@ -23,6 +30,7 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
   const [sort, setSort] = useState<SortState>({ orderBy: SortKey.SCORE, direction: SortDirection.DESCENDING });
   const [filter, setFilter] = useState<string>('');
   const lang = useRedaktoerLanguage();
+  const [filteredStatuses, setFilteredStatuses] = useState<Status[]>(DEFAULT_STATUSES);
 
   const onSortChange = useCallback(
     (sortKey: string | undefined) => {
@@ -42,13 +50,16 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const filteredAndSortedData = useMemo(() => {
-    const richTexts = data.filter(isRichtext);
-    let filtered: ScoredRichText[] = [];
+    const filtered: ScoredRichText[] = [];
 
-    if (filter.length === 0) {
-      filtered = richTexts.map((text) => ({ ...text, score: 100 }));
-    } else {
-      for (const text of richTexts) {
+    const hasTextFilter = filter.length > 0;
+
+    for (const text of data) {
+      if (!isRichtext(text) || !filterByStatus(filteredStatuses, text)) {
+        continue;
+      }
+
+      if (hasTextFilter) {
         const filterText = text.title + (getTextAsString(text.richText[lang] ?? []) ?? '');
 
         const score = fuzzySearch(splitQuery(filter), filterText);
@@ -56,6 +67,8 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
         if (score > 0) {
           filtered.push({ ...text, score });
         }
+      } else {
+        filtered.push({ ...text, score: 100 });
       }
     }
 
@@ -94,7 +107,7 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
     }
 
     return filtered;
-  }, [data, filter, lang, sort]);
+  }, [data, filter, lang, sort, filteredStatuses]);
 
   return (
     <Container>
@@ -128,6 +141,16 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
                 >
                   Maltekstseksjoner
                 </Table.ColumnHeader>
+                <Table.HeaderCell>
+                  <FilterDropdown<Status>
+                    data-testid="filter-status"
+                    selected={filteredStatuses}
+                    options={STATUS_OPTIONS}
+                    onChange={setFilteredStatuses}
+                  >
+                    Status
+                  </FilterDropdown>
+                </Table.HeaderCell>
                 <Table.ColumnHeader>%</Table.ColumnHeader>
                 <Table.HeaderCell />
               </Table.Row>
@@ -173,6 +196,7 @@ const Container = styled.div`
 const TableWrapper = styled.div`
   position: relative;
   overflow-y: auto;
+  flex-grow: 1;
 `;
 
 const StyledTableHeader = styled(Table.Header)`

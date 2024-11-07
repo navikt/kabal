@@ -1,3 +1,4 @@
+import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import type { IRichText } from '@app/types/texts/responses';
 import { Button, Table } from '@navikt/ds-react';
@@ -16,35 +17,49 @@ interface Props {
 export const Body = ({ texts, usedIds, onAdd, onRemove }: Props) => {
   const rows = useMemo(
     () =>
-      texts.map(({ title, modified, id, draftMaltekstseksjonIdList, publishedMaltekstseksjonIdList, score }) => {
-        const isUsed = usedIds.includes(id);
+      texts.map(
+        ({
+          title,
+          modified,
+          id,
+          draftMaltekstseksjonIdList,
+          publishedMaltekstseksjonIdList,
+          score,
+          published,
+          publishedDateTime,
+        }) => {
+          const isUsed = usedIds.includes(id);
 
-        return (
-          <Row
-            key={id}
-            textId={id}
-            draftMaltekstseksjonIdList={draftMaltekstseksjonIdList}
-            publishedMaltekstseksjonIdList={publishedMaltekstseksjonIdList}
-          >
-            <Table.HeaderCell>{title.length === 0 ? '<Ingen tittel>' : title}</Table.HeaderCell>
-            <Table.DataCell>
-              <time dateTime={modified}>{isoDateTimeToPretty(modified)}</time>
-            </Table.DataCell>
-            <Table.DataCell>
-              <RefCount
-                draftMaltekstseksjonIdList={draftMaltekstseksjonIdList}
-                publishedMaltekstseksjonIdList={publishedMaltekstseksjonIdList}
-              />
-            </Table.DataCell>
-            <Table.DataCell>{score.toFixed(2)} %</Table.DataCell>
-            <Table.DataCell>
-              <Button size="xsmall" variant="tertiary" onClick={() => (isUsed ? onRemove(id) : onAdd(id))}>
-                {isUsed ? 'Fjern' : 'Legg til'}
-              </Button>
-            </Table.DataCell>
-          </Row>
-        );
-      }),
+          return (
+            <Row
+              key={id}
+              textId={id}
+              draftMaltekstseksjonIdList={draftMaltekstseksjonIdList}
+              publishedMaltekstseksjonIdList={publishedMaltekstseksjonIdList}
+            >
+              <Table.HeaderCell>{title.length === 0 ? '<Ingen tittel>' : title}</Table.HeaderCell>
+              <Table.DataCell>
+                <time dateTime={modified}>{isoDateTimeToPretty(modified)}</time>
+              </Table.DataCell>
+              <Table.DataCell>
+                <RefCount
+                  draftMaltekstseksjonIdList={draftMaltekstseksjonIdList}
+                  publishedMaltekstseksjonIdList={publishedMaltekstseksjonIdList}
+                />
+              </Table.DataCell>
+              <Table.DataCell>
+                <StatusTag publishedDateTime={publishedDateTime} published={published} />
+              </Table.DataCell>
+              <Table.DataCell>{score.toFixed(2)} %</Table.DataCell>
+              <Table.DataCell>
+                <Button size="xsmall" variant="tertiary" onClick={() => (isUsed ? onRemove(id) : onAdd(id))}>
+                  {isUsed ? 'Fjern' : 'Legg til'}
+                </Button>
+              </Table.DataCell>
+            </Row>
+          );
+        },
+      ),
     [texts, usedIds, onRemove, onAdd],
   );
 
