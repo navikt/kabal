@@ -1,3 +1,4 @@
+import { isDepublished, isPublished } from '@app/components/smart-editor-texts/functions/status-helpers';
 import { useDeleteDraftVersionMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksjoner/queries';
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
@@ -17,9 +18,12 @@ export const DeleteMaltekstseksjonDraftButton = ({ id, title, onDraftDeleted, qu
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [, { isLoading }] = useDeleteDraftVersionMutation({ fixedCacheKey: id });
   const { data: versions = [] } = useGetMaltekstseksjonVersionsQuery(id);
-  const lastPublishedVersion = useMemo(() => versions.find((version) => version.published), [versions]);
+  const willBeMovedToDepublished = useMemo(
+    () => versions.some(isDepublished) && !versions.some(isPublished),
+    [versions],
+  );
 
-  const text = lastPublishedVersion !== undefined ? 'Slett utkast og flytt til avpubliserte' : 'Slett utkast';
+  const text = willBeMovedToDepublished ? 'Slett utkast og sett maltekstseksjon som avpublisert' : 'Slett utkast';
 
   if (isOpen) {
     return (

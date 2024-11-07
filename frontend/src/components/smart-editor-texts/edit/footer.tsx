@@ -1,5 +1,6 @@
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { SavedStatus, type SavedStatusProps } from '@app/components/saved-status/saved-status';
+import { isDepublished, isPublished } from '@app/components/smart-editor-texts/functions/status-helpers';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { isGodFormuleringType, isRegelverkType, isRichTextType } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
@@ -27,7 +28,10 @@ interface Props {
 export const Footer = ({ text, onDraftDeleted, status, onPublish, deleteTranslation, error }: Props) => {
   const [, { isLoading: publishIsLoading }] = usePublishMutation({ fixedCacheKey: text.id });
   const { data: versions = [] } = useGetTextVersionsQuery(text.id);
-  const lastPublishedVersion = useMemo(() => versions.find((version) => version.published), [versions]);
+  const willBeMovedToDepublished = useMemo(
+    () => versions.some(isDepublished) && !versions.some(isPublished),
+    [versions],
+  );
 
   const { id, edits, publishedMaltekstseksjonIdList, draftMaltekstseksjonIdList, textType } = text;
 
@@ -43,7 +47,7 @@ export const Footer = ({ text, onDraftDeleted, status, onPublish, deleteTranslat
         <DeleteLanguageVersion deleteTranslation={deleteTranslation} />
         {isDraft ? (
           <DeleteDraftButton id={id} title={text.title} onDraftDeleted={onDraftDeleted}>
-            {lastPublishedVersion !== undefined ? 'Slett utkast og flytt til avpubliserte' : 'Slett utkast'}
+            {willBeMovedToDepublished ? 'Slett utkast og sett tekst som avpublisert' : 'Slett utkast'}
           </DeleteDraftButton>
         ) : null}
       </Row>
