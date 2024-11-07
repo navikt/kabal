@@ -21,7 +21,7 @@ export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: Available
 
       <Modal
         header={{ heading: textType === RichTextTypes.MALTEKST ? 'Låste tekster' : 'Redigerbare tekster' }}
-        width={1200}
+        width={1500}
         open={open}
         onClose={onClose}
         closeOnBackdropClick

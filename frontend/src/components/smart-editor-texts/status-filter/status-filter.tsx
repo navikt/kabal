@@ -40,7 +40,7 @@ const isStatus = (value: string): value is Status => STATUS_VALUES.some((status)
 
 const PARAM_KEY = 'status';
 
-const DEFAULT_STATUSES = [Status.PUBLISHED, Status.DRAFT];
+export const DEFAULT_STATUSES = [Status.PUBLISHED, Status.DRAFT];
 
 export const DEFAULT_STATUS_FILTER = `${PARAM_KEY}=${DEFAULT_STATUSES.join(encodeURIComponent(','))}`;
 
