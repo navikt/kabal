@@ -1,5 +1,18 @@
+import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { KABAL_INTERNAL_BASE_QUERY } from './common';
+
+export interface Task {
+  id: string;
+  created: string;
+  typeId: SaksTypeEnum;
+  behandlingId: string;
+  reason: string;
+  dateHandled: string | null;
+  handledBy: string | null;
+  handledByName: string | null;
+  comment: string | null;
+}
 
 export const kabalInternalApi = createApi({
   reducerPath: 'kabalInternalApi',
@@ -23,8 +36,15 @@ export const kabalInternalApi = createApi({
         method: 'POST',
       }),
     }),
+    getMerkantilTasks: builder.query<Task[], void>({
+      query: () => '/kabal-api/internal/merkantil-tasks',
+    }),
   }),
 });
 
-export const { useRefillElasticAdminMutation, useResendDvhMutation, useRecreateElasticAdminMutation } =
-  kabalInternalApi;
+export const {
+  useRefillElasticAdminMutation,
+  useResendDvhMutation,
+  useRecreateElasticAdminMutation,
+  useGetMerkantilTasksQuery,
+} = kabalInternalApi;

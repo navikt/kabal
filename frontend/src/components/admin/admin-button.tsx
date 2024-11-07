@@ -13,7 +13,7 @@ export const AdminButton = ({ children, isLoading, isSuccess, isUninitialized, o
   <Button
     type="button"
     variant="primary"
-    size="medium"
+    size="small"
     onClick={onClick}
     loading={isLoading}
     disabled={isLoading}
