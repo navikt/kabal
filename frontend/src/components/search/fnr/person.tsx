@@ -11,7 +11,8 @@ import { styled } from 'styled-components';
 
 // https://github.com/reduxjs/redux-toolkit/issues/1937#issuecomment-1842868277
 // https://redux-toolkit.js.org/rtk-query/usage-with-typescript#typing-query-and-mutation-endpoints
-export type PersonQuery = TypedUseQueryHookResult<IPartBase, string, ReturnType<typeof staggeredBaseQuery>>;
+export type PersonHookResult = TypedUseQueryHookResult<IPartBase, string, ReturnType<typeof staggeredBaseQuery>>;
+export type PersonQuery = Omit<PersonHookResult, 'refetch'> & { refetch: () => void };
 
 type PersonProps = PersonQuery & { fnr: string };
 

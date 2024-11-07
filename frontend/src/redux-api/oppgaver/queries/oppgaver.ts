@@ -120,6 +120,8 @@ export const {
   useLazySearchOppgaverBySaksnummerQuery,
   useGetSaksbehandlereInEnhetQuery,
   useSearchPersonByFnrQuery,
+  useLazySearchPersonByFnrQuery,
+  useLazySearchOppgaverByFnrQuery,
   useGetReturnerteRolOppgaverQuery,
   useGetLedigeRolOppgaverQuery,
   useGetUferdigeRolOppgaverQuery,
