@@ -1,4 +1,10 @@
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import {
+  type Filterable,
+  isDepublished,
+  isDraft,
+  isPublished,
+} from '@app/components/smart-editor-texts/functions/status-helpers';
 import { useSearchParams } from 'react-router-dom';
 
 export const StatusFilter = () => {
@@ -37,15 +43,6 @@ const PARAM_KEY = 'status';
 const DEFAULT_STATUSES = [Status.PUBLISHED, Status.DRAFT];
 
 export const DEFAULT_STATUS_FILTER = `${PARAM_KEY}=${DEFAULT_STATUSES.join(encodeURIComponent(','))}`;
-
-interface Filterable {
-  published: boolean;
-  publishedDateTime: string | null;
-}
-
-const isDepublished = ({ published, publishedDateTime }: Filterable) => !published && publishedDateTime !== null;
-const isDraft = ({ published, publishedDateTime }: Filterable) => !published && publishedDateTime === null;
-const isPublished = ({ published, publishedDateTime }: Filterable) => published && publishedDateTime !== null;
 
 export const filterByStatus = (filteredStatuses: Status[], text: Filterable) => {
   if (filteredStatuses.length === 0) {
