@@ -29,6 +29,9 @@
         "noConsole": { "level": "off", "options": { "allow": ["debug", "info", "warn", "error"] } },
         "noReactSpecificProps": { "level": "off" },
         "noEmptyBlockStatements": { "level": "off" }
+      },
+      "complexity": {
+        "useSimplifiedLogicExpression": { "level": "off" }
       }
     }
   },
