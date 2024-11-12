@@ -83,7 +83,7 @@ interface KlageenhetSelectProps {
 // Styringsenheten er ikke en klageenhet.
 // De må likevel være med i listen man kan velge fra når man legger inn topp- og bunntekster.
 // Dette er fordi de er med i et pilotprosjekt hvor det kan forekomme at de selv må saksbehandle.
-const STYRINGSENHETEN = { value: '4200', label: 'Nav Klageinstans styringsenhet' };
+const STYRINGSENHETEN = { value: '4200', label: 'Nav klageinstans styringsenhet' };
 
 export const KlageenhetSelect = ({
   children,
