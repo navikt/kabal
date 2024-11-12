@@ -57,7 +57,7 @@ export const useUpdateMaltekstseksjon = (
   const update = useCallback(
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     async (preferCache = true) => {
-      if (isUpdated || !canManage || query === skipToken) {
+      if (!canManage || query === skipToken) {
         return;
       }
 
@@ -118,7 +118,6 @@ export const useUpdateMaltekstseksjon = (
       fetchMaltekstseksjonTexts,
       fetchMaltekstseksjoner,
       getReplaceMethod,
-      isUpdated,
       language,
       onUpdate,
       path,
