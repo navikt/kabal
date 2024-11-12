@@ -38,7 +38,7 @@ export const useUpdateMaltekstseksjon = (
   ytelseId: IOppgavebehandling['ytelseId'],
   resultat: IOppgavebehandling['resultat'],
   onUpdate: () => void,
-  isUpdated: boolean,
+  queryChanged: boolean,
   canManage: boolean,
 ): Result => {
   const editor = useMyPlateEditorRef(editorId);
@@ -130,12 +130,12 @@ export const useUpdateMaltekstseksjon = (
   );
 
   useEffect(() => {
-    if (isUpdated || maltekstseksjonIsFetching || textsAreFetching || !canManage || query === skipToken) {
+    if (queryChanged || maltekstseksjonIsFetching || textsAreFetching || !canManage || query === skipToken) {
       return;
     }
 
     update();
-  }, [canManage, isUpdated, maltekstseksjonIsFetching, query, textsAreFetching, update]);
+  }, [canManage, queryChanged, maltekstseksjonIsFetching, query, textsAreFetching, update]);
 
   return {
     isFetching: maltekstseksjonIsFetching || textsAreFetching,

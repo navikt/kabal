@@ -31,13 +31,13 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
   const { canManage, templateId } = useContext(SmartEditorContext);
   const query = useMaltekstseksjonQuery(templateId, element.section);
   const path = usePath(editor, element);
-  const isUpdated = useMemo(
+  const queryChanged = useMemo(
     () => language === element.language && areQueriesEqual(query, element.query),
     [language, element.language, element.query, query],
   );
 
   const setUpdated = useCallback(() => {
-    if (query === skipToken || isUpdated) {
+    if (query === skipToken || queryChanged) {
       return;
     }
 
@@ -46,7 +46,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
     }
 
     setNodes<MaltekstseksjonElement>(editor, { query, language }, { match: (n) => n === element, at: path });
-  }, [editor, element, isUpdated, language, path, query]);
+  }, [editor, element, queryChanged, language, path, query]);
 
   const { isFetching, maltekstseksjon, manualUpdate, tiedList, update } = useUpdateMaltekstseksjon(
     editor.id,
@@ -56,7 +56,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
     oppgave.ytelseId,
     oppgave.resultat,
     setUpdated,
-    isUpdated,
+    queryChanged,
     canManage,
   );
 
@@ -86,7 +86,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
         data-language={element.language}
         data-maltekstseksjon-id={element.id}
       >
-        {!canManage || isFetching || manualUpdate === undefined || isUpdated ? null : (
+        {!canManage || isFetching || manualUpdate === undefined || queryChanged ? null : (
           <UpdateMaltekstseksjon
             next={manualUpdate}
             ignore={setUpdated}
