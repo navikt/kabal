@@ -97,14 +97,14 @@ describe('ConfirmFinish', () => {
       it.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall);
         render(<ConfirmFinish cancel={() => {}} show />);
-        const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
+        const buttonText = 'Fullfør';
         expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
 
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(2);
 
         fireEvent.click(screen.getByRole('button', { name: buttonText }));
-        expect(screen.getByLabelText(buttonText, { selector: 'dialog' })).toBeVisible();
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       });
 
       it('Opphevet', async () => {
@@ -156,6 +156,27 @@ describe('ConfirmFinish', () => {
 
         fireEvent.click(screen.getByRole('button', { name: button2 }));
         expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).not.toBeVisible();
+      });
+
+      const cases = [
+        UtfallEnum.MEDHOLD,
+        UtfallEnum.DELVIS_MEDHOLD,
+        UtfallEnum.STADFESTELSE,
+        UtfallEnum.AVVIST,
+        UtfallEnum.HEVET,
+      ];
+
+      it.each(cases)('Utfall id: %s', async (utfall) => {
+        mockOppgave(type, utfall);
+        render(<ConfirmFinish cancel={() => {}} show />);
+        const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
+        expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
+
+        const items = await screen.findAllByRole('button');
+        expect(items).toHaveLength(2);
+
+        fireEvent.click(screen.getByRole('button', { name: buttonText }));
+        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
       });
     });
   });
