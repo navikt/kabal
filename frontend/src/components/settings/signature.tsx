@@ -69,7 +69,7 @@ const Anonymous = ({ saksbehandlerSignature }: Pick<SignatureProps, 'saksbehandl
   return (
     <StyledSignature>
       <Checkbox checked={saksbehandlerSignature.anonymous} onChange={({ target }) => setAnonymous(target.checked)}>
-        Signer anonymt med «Nav Klageinstans»
+        Signer anonymt med «Nav klageinstans»
       </Checkbox>
       <Status {...updateStatus} />
     </StyledSignature>
