@@ -83,7 +83,7 @@ interface WithPrevious<T, E extends HistoryEventTypes> extends BaseEvent<T, E> {
 }
 
 interface TildelingEvent {
-  saksbehandler: INavEmployee | null; // NAV Ident
+  saksbehandler: INavEmployee | null; // Nav Ident
   fradelingReasonId: FradelReason | null;
   /** `null` means no change. */
   hjemmelIdList: string[] | null;
@@ -91,13 +91,13 @@ interface TildelingEvent {
 
 export interface MedunderskriverEvent {
   /** Nav Ident. `null` betyr "felles kø". */
-  medunderskriver: INavEmployee | null; // NAV Ident
+  medunderskriver: INavEmployee | null; // Nav Ident
   flow: FlowState;
 }
 
 export interface RolEvent {
   /** Nav Ident. `null` betyr "felles kø". */
-  rol: INavEmployee | null; // NAV Ident
+  rol: INavEmployee | null; // Nav Ident
   flow: FlowState;
 }
 

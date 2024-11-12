@@ -91,7 +91,7 @@ describe('fuzzy search', () => {
     expect(
       fuzzySearch(
         splitQuery('dokument rett syk "Høyesteretts dom HR-2018-2344-A"'),
-        'Det er du som må dokumentere at du har rett til sykepenger. Ved vurderingen av om du har rett til sykepenger, skal NAV legge til grunn det som er mest sannsynlig. Vi legger mest vekt på tidsnære opplysninger. NAV kan overprøve legens vurderinger. Dette går frem av folketrygdloven § 8-4 første ledd, Høyesteretts dom HR-2018-2344-A og NAVs rundskriv.',
+        'Det er du som må dokumentere at du har rett til sykepenger. Ved vurderingen av om du har rett til sykepenger, skal Nav legge til grunn det som er mest sannsynlig. Vi legger mest vekt på tidsnære opplysninger. Nav kan overprøve legens vurderinger. Dette går frem av folketrygdloven § 8-4 første ledd, Høyesteretts dom HR-2018-2344-A og NAVs rundskriv.',
       ),
     ).toBe(100);
   });

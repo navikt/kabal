@@ -125,7 +125,7 @@ const CHECKBOXES: InputParams[] = [
     label: 'Utredningen under klageforberedelsen',
     groupErrorField: 'klageforberedelsenUtredningenUnderKlageforberedelsenGroup',
     helpText:
-      'Gjelder kvaliteten på utredningen under klageforberedelsen (fra vedtak ble fattet til saken ble oversendt klageinstansen). Gjelder kvaliteten på utredningen av opplysninger som NAV ikke har tilgang til. Dersom utredningen var mangelfull før vedtak ble fattet og dette ikke ble reparert under klageforberedelsen, huker du av for mangelfull utredning både her og under «Utredningen før vedtak».',
+      'Gjelder kvaliteten på utredningen under klageforberedelsen (fra vedtak ble fattet til saken ble oversendt klageinstansen). Gjelder kvaliteten på utredningen av opplysninger som Nav ikke har tilgang til. Dersom utredningen var mangelfull før vedtak ble fattet og dette ikke ble reparert under klageforberedelsen, huker du av for mangelfull utredning både her og under «Utredningen før vedtak».',
     checkboxes: [
       {
         field:

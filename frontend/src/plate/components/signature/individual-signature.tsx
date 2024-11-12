@@ -25,7 +25,7 @@ export const SaksbehandlerSignature = ({ element }: Props) => {
     const suffix = templateId !== TemplateIdEnum.ROL_ANSWERS && element.useSuffix ? 'saksbehandler' : undefined;
 
     if (saksbehandlerSignature.anonymous) {
-      return { name: 'NAV Klageinstans' };
+      return { name: 'Nav Klageinstans' };
     }
 
     return {

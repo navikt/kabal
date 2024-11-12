@@ -111,7 +111,7 @@ const CHECKBOXES: InputParams[] = [
     field: 'vedtaketDetErLagtTilGrunnFeilFaktum',
     label: 'Det er lagt til grunn feil faktum',
     helpText:
-      'Med faktum mener vi de faktiske forhold du legger til grunn etter å ha vurdert og vektet bevisene i saken. Du registrerer her dersom alle relevante bevis ikke er sett/vurdert, herunder informasjon fra andre fagsystemer NAV har tilgang til. Du registrerer også her dersom bevis er tolket eller vektlagt feil.',
+      'Med faktum mener vi de faktiske forhold du legger til grunn etter å ha vurdert og vektet bevisene i saken. Du registrerer her dersom alle relevante bevis ikke er sett/vurdert, herunder informasjon fra andre fagsystemer Nav har tilgang til. Du registrerer også her dersom bevis er tolket eller vektlagt feil.',
     type: KvalitetsvurderingInput.CHECKBOX,
   },
   {

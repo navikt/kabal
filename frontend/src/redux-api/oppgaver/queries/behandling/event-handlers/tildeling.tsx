@@ -215,7 +215,7 @@ const getToastContent = (
       case FradelReason.UTGÅTT:
         return (
           <InfoToast title="Fradelt">
-            {employeeName(from)} jobber ikke lenger i NAV. Saken er lagt tilbake i {QUEUE}.
+            {employeeName(from)} jobber ikke lenger i Nav. Saken er lagt tilbake i {QUEUE}.
           </InfoToast>
         );
       case FradelReason.ANGRET:
