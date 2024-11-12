@@ -60,7 +60,11 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
         case UtfallEnum.HEVET:
           return (
             <StyledFinishOppgaveButtons $width={400}>
-              <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+              {isModernized ? (
+                <FinishButton>Fullfør</FinishButton>
+              ) : (
+                <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+              )}
               <CancelButton cancel={cancel} />
             </StyledFinishOppgaveButtons>
           );
