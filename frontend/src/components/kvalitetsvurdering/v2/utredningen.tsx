@@ -26,7 +26,7 @@ export const Utredningen = () => {
 
   return (
     <section>
-      <HeadingWithHelpText helpText="Gjelder utredningen av saken i perioden frem til og med at vedtaket ble fattet. Gjelder kvaliteten på utredningen av opplysninger som NAV ikke har tilgang til.  Dersom opplysninger som er innhentet ikke er gode nok, og NAV burde bedt om presiseringer eller mer utdypede opplysninger, registreres det som mangelfullt. Dersom NAV har gjort et godt nok forsøk på å utrede saken, men opplysningene likevel er mangelfulle, er utredningen god nok. Er det kommet nye opplysninger etter at saken er oversendt klageinstansen, men som vedtaksinstansen burde innhentet før de fattet vedtak, skal dette også registreres som mangelfullt her.">
+      <HeadingWithHelpText helpText="Gjelder utredningen av saken i perioden frem til og med at vedtaket ble fattet. Gjelder kvaliteten på utredningen av opplysninger som Nav ikke har tilgang til.  Dersom opplysninger som er innhentet ikke er gode nok, og Nav burde bedt om presiseringer eller mer utdypede opplysninger, registreres det som mangelfullt. Dersom Nav har gjort et godt nok forsøk på å utrede saken, men opplysningene likevel er mangelfulle, er utredningen god nok. Er det kommet nye opplysninger etter at saken er oversendt klageinstansen, men som vedtaksinstansen burde innhentet før de fattet vedtak, skal dette også registreres som mangelfullt her.">
         {header}
       </HeadingWithHelpText>
       <StyledRadioGroup
@@ -65,7 +65,7 @@ const CHECKBOXES: InputParams[] = [
     field: 'utredningenAvMedisinskeForhold',
     label: 'Utredningen av medisinske forhold',
     helpText:
-      'F.eks. er det ikke innhentet uttalelse fra en behandler eller rapport fra rehabiliteringsopphold. Dersom opplysninger som er innhentet ikke er gode nok, og NAV burde bedt om presiseringer eller mer utdypede opplysninger, registreres det her.',
+      'F.eks. er det ikke innhentet uttalelse fra en behandler eller rapport fra rehabiliteringsopphold. Dersom opplysninger som er innhentet ikke er gode nok, og Nav burde bedt om presiseringer eller mer utdypede opplysninger, registreres det her.',
     type: KvalitetsvurderingInput.CHECKBOX,
   },
   {

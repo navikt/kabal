@@ -37,7 +37,7 @@ export const Vedtaket = () => {
       id: 'innholdetIRettsregleneErIkkeTilstrekkeligBeskrevet',
       label: 'Innholdet i rettsreglene er ikke tilstrekkelig beskrevet',
       checked: kvalitetsvurdering.innholdetIRettsregleneErIkkeTilstrekkeligBeskrevet,
-      helpText: 'Det er ikke forståelig for bruker hvordan NAV tolker lovbestemmelsen/innholdet i rettsregelen.',
+      helpText: 'Det er ikke forståelig for bruker hvordan Nav tolker lovbestemmelsen/innholdet i rettsregelen.',
     },
     {
       id: 'vurderingAvFaktumErMangelfull',

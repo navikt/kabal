@@ -84,7 +84,7 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
           {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
         </BehandlingSection>
 
-        <BehandlingSection label="Fra NAV-enhet">
+        <BehandlingSection label="Fra Nav-enhet">
           {fraNAVEnhetNavn} - {fraNAVEnhet}
         </BehandlingSection>
 

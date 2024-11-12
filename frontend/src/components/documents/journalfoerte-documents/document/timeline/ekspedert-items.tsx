@@ -119,7 +119,7 @@ const getOtherVarselData = (kanal: Kanal) => {
       return {
         icon: InformationSquareIcon,
         title: 'Info om varsling mangler',
-        info: 'Ikke alle journalposter har informasjon om varsling. NAV jobber med å utvide dette.',
+        info: 'Ikke alle journalposter har informasjon om varsling. Nav jobber med å utvide dette.',
         color: 'var(--a-gray-50)',
       };
     default:

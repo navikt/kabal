@@ -149,15 +149,15 @@ export interface Journalpost {
   sak: Sak | null;
   /** Personen eller organisasjonen som er avsender eller mottaker av dokumentene i journalposten. */
   avsenderMottaker: AvsenderMottaker | null;
-  /** NAV-enheten som har journalført forsendelsen. I noen tilfeller brukes journalfEnhet til å rute journalføringsoppgaven til korrekt enhet i NAV. I slike tilfeller vil journalfEnhet være satt også for ikke-journalførte dokumenter. */
+  /** Nav-enheten som har journalført forsendelsen. I noen tilfeller brukes journalfEnhet til å rute journalføringsoppgaven til korrekt enhet i Nav. I slike tilfeller vil journalfEnhet være satt også for ikke-journalførte dokumenter. */
   journalfoerendeEnhet: string | null;
   /**
-   * Personen eller systembrukeren i NAV som har journalført forsendelsen.
-   * Bruken av feltet varierer, og kan inneholde den ansattes navn eller NAV-ident. Dersom forsendelsen er automatisk journalført, kan innholdet være f.eks. en servicebruker eller et batchnavn. */
+   * Personen eller systembrukeren i Nav som har journalført forsendelsen.
+   * Bruken av feltet varierer, og kan inneholde den ansattes navn eller Nav-ident. Dersom forsendelsen er automatisk journalført, kan innholdet være f.eks. en servicebruker eller et batchnavn. */
   journalfortAvNavn: string | null;
   /**
-   * Personen eller systembrukeren i NAV som har opprettet journalposten.
-   * Bruken av feltet varierer, og kan inneholde den ansattes navn eller NAV-ident. For inngående dokumenter kan innholdet være f.eks. en servicebruker eller et batchnavn.
+   * Personen eller systembrukeren i Nav som har opprettet journalposten.
+   * Bruken av feltet varierer, og kan inneholde den ansattes navn eller Nav-ident. For inngående dokumenter kan innholdet være f.eks. en servicebruker eller et batchnavn.
    * */
   opprettetAvNavn: string | null;
   /** Datoen journalposten ble opprettet i arkivet. Datoen settes automatisk og kan ikke overskrives. Selv om hver journalpost har mange datoer (se Type: RelevantDato) er datoOpprettet å anse som "fasit" på journalpostens alder.
@@ -166,7 +166,7 @@ export interface Journalpost {
   datoOpprettet: string;
   /** Liste over datoer som kan være relevante for denne journalposten, f.eks. DATO_EKSPEDERT. Hvilke relevante datoer som returneres, avhenger av journalposttypen. */
   relevanteDatoer: RelevantDato[];
-  /** Antall ganger brevet har vært forsøkt sendt til bruker og deretter kommet i retur til NAV. Vil kun være satt for utgående forsendelser. */
+  /** Antall ganger brevet har vært forsøkt sendt til bruker og deretter kommet i retur til Nav. Vil kun være satt for utgående forsendelser. */
   antallRetur: number | null;
   /** Liste over fagspesifikke metadata som er tilknyttet journalpost. */
   tilleggsopplysninger: Tilleggsopplysninger[];

@@ -60,11 +60,11 @@ export const Utredningen = () => {
     },
     {
       id: 'veiledningFraNav',
-      label: 'Veiledning fra NAV',
+      label: 'Veiledning fra Nav',
       checked: kvalitetsvurdering.veiledningFraNav,
       textareaId: 'veiledningFraNavText',
       helpText:
-        'Mangelfull veiledning i saken slik at bruker ikke får fremmet krav, krever feil ytelse eller ikke forstår hvilke opplysninger hen skal levere for at NAV skal kunne behandle saken.',
+        'Mangelfull veiledning i saken slik at bruker ikke får fremmet krav, krever feil ytelse eller ikke forstår hvilke opplysninger hen skal levere for at Nav skal kunne behandle saken.',
     },
   ];
 

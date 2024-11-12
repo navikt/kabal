@@ -16,7 +16,7 @@ export const MottattDato = ({ document, oppgaveId }: Props) => {
   return (
     <DatePicker
       size="small"
-      label="NAV mottattdato"
+      label="Nav mottattdato"
       value={document.datoMottatt}
       disabled={isLoading}
       onChange={(datoMottatt) => {
