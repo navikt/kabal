@@ -12,8 +12,9 @@ import {
   useUpdateUtfallIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
 } from '@app/redux-api/texts/mutations';
-import { GOD_FORMULERING_TYPE, REGELVERK_TYPE, TextChangeType } from '@app/types/common-text-types';
+import { GOD_FORMULERING_TYPE, REGELVERK_TYPE } from '@app/types/common-text-types';
 import type { IText } from '@app/types/texts/responses';
+import { Label, useId } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { ModifiedCreatedDateTime } from '../../datetime/datetime';
 import { HjemlerSelect } from '../hjemler-select/hjemler-select';
@@ -44,17 +45,9 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
 
   const { enhet, templateSection, utfall, ytelseHjemmel } = useMetadataFilters(textType);
 
-  const [lastEdit] = text.edits.filter(
-    (e) =>
-      e.changeType === TextChangeType.TEXT_ENHETER ||
-      e.changeType === TextChangeType.TEXT_SECTIONS ||
-      e.changeType === TextChangeType.TEXT_YTELSE_HJEMMEL ||
-      e.changeType === TextChangeType.TEXT_UTFALL ||
-      e.changeType === TextChangeType.TEXT_TITLE ||
-      e.changeType === TextChangeType.TEXT_VERSION_CREATED ||
-      e.changeType === TextChangeType.TEXT_TYPE ||
-      e.changeType === TextChangeType.SMART_EDITOR_VERSION,
-  );
+  const [lastEdit] = text.edits;
+
+  const modifiedId = useId();
 
   return (
     <Container>
@@ -67,8 +60,10 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
         />
 
         <LineContainer>
-          <strong>Sist endret:</strong>
-          <ModifiedCreatedDateTime lastEdit={lastEdit} created={created} />
+          <Label size="small" htmlFor={modifiedId}>
+            Sist endret:
+          </Label>
+          <ModifiedCreatedDateTime id={modifiedId} lastEdit={lastEdit} created={created} />
         </LineContainer>
 
         <LineContainer>
