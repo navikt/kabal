@@ -1,34 +1,39 @@
 import { isDraft } from '@app/components/smart-editor-texts/functions/status-helpers';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
+import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { useCallback, useContext } from 'react';
+import { useContext } from 'react';
 import { DragAndDropContext } from '../drag-and-drop/drag-context';
 import { useDragState } from '../drag-and-drop/use-drag-state';
 import { ListItem } from '../styled-components';
 
 interface MaltekstListItemProps {
-  maltekstseksjon: IMaltekstseksjon;
+  maltekstseksjonId: string;
   activeId: string | undefined;
   query: IGetMaltekstseksjonParams;
   children: React.ReactNode;
 }
 
-export const MaltekstseksjontListItem = ({ maltekstseksjon, activeId, query, children }: MaltekstListItemProps) => {
-  const [updateTextIdList] = useUpdateTextIdListMutation({ fixedCacheKey: maltekstseksjon.id });
+export const MaltekstseksjontListItem = ({ maltekstseksjonId, activeId, query, children }: MaltekstListItemProps) => {
+  const { data: maltekstseksjon } = useGetMaltekstseksjonQuery(maltekstseksjonId);
+  const [updateTextIdList] = useUpdateTextIdListMutation({ fixedCacheKey: maltekstseksjonId });
   const { draggedTextId, clearDragState } = useContext(DragAndDropContext);
   const { isDragOver, onDragEnter, onDragLeave } = useDragState();
 
+  if (maltekstseksjon === undefined) {
+    return null;
+  }
+
   const { id, textIdList, title } = maltekstseksjon;
 
-  const onDrop = useCallback(() => {
+  const onDrop = () => {
     if (draggedTextId === null) {
       return;
     }
 
     updateTextIdList({ id, textIdList: [...textIdList, draggedTextId], query });
     clearDragState();
-  }, [clearDragState, draggedTextId, id, query, textIdList, updateTextIdList]);
+  };
 
   return (
     <ListItem

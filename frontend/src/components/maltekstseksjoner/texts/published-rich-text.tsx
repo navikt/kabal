@@ -17,9 +17,10 @@ interface Props {
   text: IPublishedRichText | IPublishedRegelverk | IPublishedGodFormulering;
   maltekstseksjonId?: string;
   hasDraft: boolean;
+  setTabId: (versionId: string) => void;
 }
 
-export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft }: Props) => {
+export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<RichTextEditor>(null);
   const lang = useRedaktoerLanguage();
@@ -40,7 +41,12 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft }: Props) 
             Tekst for {LANGUAGE_NAMES[lang].toLowerCase()} mangler
           </Alert>
 
-          <PublishedTextFooter text={text} maltekstseksjonId={maltekstseksjonId} hasDraft={hasDraft} />
+          <PublishedTextFooter
+            text={text}
+            maltekstseksjonId={maltekstseksjonId}
+            hasDraft={hasDraft}
+            setTabId={setTabId}
+          />
         </>
       ) : (
         <>
@@ -52,7 +58,12 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft }: Props) 
             lang={SPELL_CHECK_LANGUAGES[lang]}
           />
 
-          <PublishedTextFooter text={text} maltekstseksjonId={maltekstseksjonId} hasDraft={hasDraft} />
+          <PublishedTextFooter
+            text={text}
+            maltekstseksjonId={maltekstseksjonId}
+            hasDraft={hasDraft}
+            setTabId={setTabId}
+          />
         </>
       )}
     </Container>
