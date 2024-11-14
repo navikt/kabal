@@ -1,4 +1,5 @@
 import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
+import { getPathPrefix } from '@app/components/smart-editor-texts/functions/get-path-prefix';
 import { StatusFilter, useStatusFilter } from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { useFilteredAndSorted, useOrder, useSort } from '@app/components/smart-editor-texts/text-list/hooks';
 import {
@@ -13,23 +14,23 @@ import {
   StyledTitleText,
 } from '@app/components/smart-editor-texts/text-list/styled-components';
 import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
-import { useGetTextsQuery } from '@app/redux-api/texts/queries';
+import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
+import { getTextAsString } from '@app/plate/functions/get-text-string';
 import { REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
 import { type Language, UNTRANSLATED } from '@app/types/texts/language';
 import type { IText } from '@app/types/texts/responses';
 import { PercentIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import { useParams } from 'react-router-dom';
-import { getTextAsString } from '../../../plate/functions/get-text-string';
 import { DateTime } from '../../datetime/datetime';
-import { getPathPrefix } from '../functions/get-path-prefix';
-import { useTextQuery } from '../hooks/use-text-query';
 import { SortKey, SortableHeader } from '../sortable-header';
 
-interface TextListProps {
-  textType: TextTypes;
+interface StandaloneTextListProps {
   filter: string;
-  language: Language;
+  data: IText[];
+  isLoading: boolean;
+  style?: React.CSSProperties;
+  textType: TextTypes;
 }
 
 const getString = (text: IText, language: Language) => {
@@ -54,9 +55,8 @@ const getString = (text: IText, language: Language) => {
   return null;
 };
 
-export const TextList = ({ textType, filter, language }: TextListProps) => {
-  const textQuery = useTextQuery();
-  const { data = [], isLoading } = useGetTextsQuery(textQuery);
+export const StandaloneTextList = ({ filter, data, isLoading, style, textType }: StandaloneTextListProps) => {
+  const language = useRedaktoerLanguage();
   const query = useParams<{ id: string }>();
   const [statusFilter] = useStatusFilter();
   const getFilterText = (text: IText, language: Language) => text.title + (getString(text, language) ?? '');
@@ -71,10 +71,10 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
   }
 
   return (
-    <Container>
+    <Container style={style}>
       <Headers />
       <StyledList>
-        {sortedTexts.map(({ id, title, modified, publishedDateTime, score, published }) => (
+        {sortedTexts.map(({ id, title, modified, publishedDateTime, published, score }) => (
           <ListItem key={id} $active={query.id === id}>
             <StyledLink to={getLink(textType, language, id)}>
               <StyledTitle>
