@@ -1,5 +1,6 @@
+import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { QueryKey, SortKey } from '@app/components/smart-editor-texts/sortable-header';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
+import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import type { TextTypes } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
 import { Search } from '@navikt/ds-react';
@@ -7,7 +8,7 @@ import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { Filters } from './filters';
-import { TextList } from './text-list/text-list';
+import { StandaloneTextList } from './text-list/text-list';
 
 interface Props {
   textType: TextTypes;
@@ -15,8 +16,9 @@ interface Props {
 
 export const FilteredTextList = ({ textType }: Props) => {
   const [filter, setFilter] = useState<string>('');
-  const language = useRedaktoerLanguage();
+  const textQuery = useTextQuery();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { data = [], isLoading } = useGetTextsQuery(textQuery);
 
   return (
     <Container>
@@ -42,7 +44,7 @@ export const FilteredTextList = ({ textType }: Props) => {
           />
         </Row>
       </Header>
-      <TextList textType={textType} filter={filter} language={language} />
+      <StandaloneTextList filter={filter} data={data} isLoading={isLoading} textType={textType} />
     </Container>
   );
 };
