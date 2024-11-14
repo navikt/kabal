@@ -111,7 +111,7 @@ export const CursorOverlay = ({ containerElement }: CursorOverlayProps) => {
   return (
     <>
       {cursors.map((cursor) => (
-        <Cursor key={cursor.data?.tabId} {...cursor} />
+        <Cursor key={cursor.data?.tabId} id={cursor.data?.navIdent ?? 'UNKNOWN'} {...cursor} />
       ))}
     </>
   );
