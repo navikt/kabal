@@ -1,31 +1,24 @@
-import { useMaltekstseksjonPath } from '@app/hooks/use-navigate-maltekstseksjoner';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { TasklistIcon } from '@navikt/aksel-icons';
 import { useCallback, useContext } from 'react';
 import { DragAndDropContext } from '../drag-and-drop/drag-context';
 import { useDragState } from '../drag-and-drop/use-drag-state';
 import { ListItem } from '../styled-components';
-import { TextLink } from '../text-link';
 
 interface MaltekstListItemProps {
   maltekstseksjon: IMaltekstseksjon;
   activeId: string | undefined;
   query: IGetMaltekstseksjonParams;
+  children: React.ReactNode;
 }
 
-export const MaltekstseksjontListItem = ({ maltekstseksjon, activeId, query }: MaltekstListItemProps) => {
+export const MaltekstseksjontListItem = ({ maltekstseksjon, activeId, query, children }: MaltekstListItemProps) => {
   const [updateTextIdList] = useUpdateTextIdListMutation({ fixedCacheKey: maltekstseksjon.id });
   const { draggedTextId, clearDragState } = useContext(DragAndDropContext);
   const { isDragOver, onDragEnter, onDragLeave } = useDragState();
-  const lang = useRedaktoerLanguage();
 
-  const { id, versionId, textIdList, title, modified, published, publishedDateTime } = maltekstseksjon;
-  const textId = textIdList.at(0);
-
-  const path = useMaltekstseksjonPath({ maltekstseksjonId: id, maltekstseksjonVersionId: versionId, textId, lang });
+  const { id, textIdList, title } = maltekstseksjon;
 
   const onDrop = useCallback(() => {
     if (draggedTextId === null) {
@@ -55,16 +48,7 @@ export const MaltekstseksjontListItem = ({ maltekstseksjon, activeId, query }: M
       }}
       data-dragovertext={`Legg til «${title}»`}
     >
-      <TextLink
-        key={id}
-        to={path}
-        modified={modified}
-        icon={<TasklistIcon aria-hidden />}
-        publishedDateTime={publishedDateTime}
-        published={published}
-      >
-        {title}
-      </TextLink>
+      {children}
     </ListItem>
   );
 };

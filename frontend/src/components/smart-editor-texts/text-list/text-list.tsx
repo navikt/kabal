@@ -1,5 +1,7 @@
+import { MaltekstseksjontListItem } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-list-item';
 import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
 import { getPathPrefix } from '@app/components/smart-editor-texts/functions/get-path-prefix';
+import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { StatusFilter, useStatusFilter } from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { useFilteredAndSorted, useOrder, useSort } from '@app/components/smart-editor-texts/text-list/hooks';
 import {
@@ -16,10 +18,11 @@ import {
 import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
-import { REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
+import { type IGetMaltekstseksjonParams, REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { type Language, UNTRANSLATED } from '@app/types/texts/language';
 import type { IText } from '@app/types/texts/responses';
-import { PercentIcon } from '@navikt/aksel-icons';
+import { PercentIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import { useParams } from 'react-router-dom';
 import { DateTime } from '../../datetime/datetime';
@@ -76,7 +79,7 @@ export const StandaloneTextList = ({ filter, data, isLoading, style, textType }:
       <StyledList>
         {sortedTexts.map(({ id, title, modified, publishedDateTime, published, score }) => (
           <ListItem key={id} $active={query.id === id}>
-            <StyledLink to={getLink(textType, language, id)}>
+            <StyledLink to={getStandaloneTextLink(textType, language, id)}>
               <StyledTitle>
                 <StyledTitleIcon />
                 <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
@@ -88,6 +91,70 @@ export const StandaloneTextList = ({ filter, data, isLoading, style, textType }:
             </StyledLink>
           </ListItem>
         ))}
+      </StyledList>
+    </Container>
+  );
+};
+
+interface MaltekstseksjonListProps {
+  filter: string;
+  data: IMaltekstseksjon[];
+  isLoading: boolean;
+  style?: React.CSSProperties;
+}
+
+export const MaltekstseksjonList = ({ filter, data, isLoading, style }: MaltekstseksjonListProps) => {
+  const language = useRedaktoerLanguage();
+  const query = useParams<{ id: string }>();
+  const [statusFilter] = useStatusFilter();
+  const sortedTexts = useFilteredAndSorted(data, statusFilter, filter, (t) => t.title);
+  const { utfallIdList, templateSectionIdList, ytelseHjemmelIdList } = useTextQuery();
+
+  const maltekstseksjonQuery: IGetMaltekstseksjonParams = {
+    templateSectionIdList,
+    ytelseHjemmelIdList,
+    utfallIdList,
+  };
+
+  if (isLoading || typeof data === 'undefined') {
+    return (
+      <LoaderOverlay>
+        <Loader size="3xlarge" />
+      </LoaderOverlay>
+    );
+  }
+
+  const getLink = (maltekstseksjon: IMaltekstseksjon, language: Language) => {
+    const [firstTextId] = maltekstseksjon.textIdList;
+    const prefix = `/maltekstseksjoner/${language}/${maltekstseksjon.id}/versjoner/${maltekstseksjon.versionId}`;
+
+    return firstTextId === undefined
+      ? `${prefix}${window.location.search}`
+      : `${prefix}/tekster/${firstTextId}${window.location.search}`;
+  };
+
+  return (
+    <Container style={style}>
+      <Headers />
+      <StyledList>
+        {sortedTexts.map((text) => {
+          const { id, title, modified, publishedDateTime, published, score } = text;
+
+          return (
+            <MaltekstseksjontListItem key={id} query={maltekstseksjonQuery} activeId={query.id} maltekstseksjon={text}>
+              <StyledLink to={getLink(text, language)}>
+                <StyledTitle>
+                  <TasklistIcon aria-hidden style={{ flexShrink: 0 }} />
+                  <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
+                </StyledTitle>
+
+                <StatusTag publishedDateTime={publishedDateTime} published={published} />
+                <DateTime dateTime={modified} />
+                <span>{score.toFixed(0)} %</span>
+              </StyledLink>
+            </MaltekstseksjontListItem>
+          );
+        })}
       </StyledList>
     </Container>
   );
@@ -117,7 +184,7 @@ const Headers = () => {
   );
 };
 
-const getLink = (textType: TextTypes, language: Language, id: string) => {
+const getStandaloneTextLink = (textType: TextTypes, language: Language, id: string) => {
   if (textType === REGELVERK_TYPE) {
     return `${getPathPrefix(textType)}/${id}${window.location.search}`;
   }
