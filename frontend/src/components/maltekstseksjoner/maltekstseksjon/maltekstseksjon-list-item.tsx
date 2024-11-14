@@ -1,3 +1,4 @@
+import { isDraft } from '@app/components/smart-editor-texts/functions/status-helpers';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
@@ -32,7 +33,7 @@ export const MaltekstseksjontListItem = ({ maltekstseksjon, activeId, query, chi
   return (
     <ListItem
       $isActive={id === activeId}
-      $isDropTarget={draggedTextId !== null && !textIdList.includes(draggedTextId)}
+      $isDropTarget={isDraft(maltekstseksjon) && draggedTextId !== null && !textIdList.includes(draggedTextId)}
       $isDragOver={isDragOver}
       draggable={false}
       onDrop={onDrop}
