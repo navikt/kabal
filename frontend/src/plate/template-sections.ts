@@ -8,10 +8,12 @@
   https://en.wikipedia.org/wiki/Haiku
 */
 
+/**
+ * Do not reuse `section-elg` until all references in old documents are gone.
+ */
 export enum TemplateSections {
   TITLE = 'section-esel',
   INTRODUCTION = 'section-rev',
-  KONKLUSJON = 'section-elg',
   ANKEINFO = 'section-ape',
   ANFOERSLER = 'section-ulv',
   VURDERINGEN = 'section-mus',
