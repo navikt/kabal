@@ -28,6 +28,7 @@ export const StyledHeaders = styled.div`
   padding-right: var(--a-spacing-2);
   position: sticky;
   top: 0;
+  z-index: 1;
   background-color: var(--a-bg-default);
   box-shadow: 0px 5px 5px -3px rgb(0, 0, 0, 20%);
   border-bottom-left-radius: var(--a-spacing-1);
