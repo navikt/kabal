@@ -1,7 +1,10 @@
+import { QueryKey, SortKey } from '@app/components/smart-editor-texts/sortable-header';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import type { TextTypes } from '@app/types/common-text-types';
+import { SortOrder } from '@app/types/sort';
 import { Search } from '@navikt/ds-react';
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { Filters } from './filters';
 import { TextList } from './text-list/text-list';
@@ -13,6 +16,7 @@ interface Props {
 export const FilteredTextList = ({ textType }: Props) => {
   const [filter, setFilter] = useState<string>('');
   const language = useRedaktoerLanguage();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <Container>
@@ -21,7 +25,15 @@ export const FilteredTextList = ({ textType }: Props) => {
         <Row>
           <Search
             value={filter}
-            onChange={setFilter}
+            onChange={(v) => {
+              if (filter.length === 0 && v.length > 0) {
+                searchParams.set(QueryKey.SORT, SortKey.SCORE);
+                searchParams.set(QueryKey.ORDER, SortOrder.DESC);
+                setSearchParams(searchParams);
+              }
+
+              setFilter(v);
+            }}
             placeholder="Filtrer på tittel og innhold"
             label="Filtrer på tittel og innhold"
             size="small"
