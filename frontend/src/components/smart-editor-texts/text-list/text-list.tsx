@@ -13,21 +13,18 @@ import {
   StyledTitleText,
 } from '@app/components/smart-editor-texts/text-list/styled-components';
 import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
-import { usePrevious } from '@app/hooks/use-previous';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import { REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
-import { SortOrder } from '@app/types/sort';
 import { type Language, UNTRANSLATED } from '@app/types/texts/language';
 import type { IText } from '@app/types/texts/responses';
 import { PercentIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
-import { useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getTextAsString } from '../../../plate/functions/get-text-string';
 import { DateTime } from '../../datetime/datetime';
 import { getPathPrefix } from '../functions/get-path-prefix';
 import { useTextQuery } from '../hooks/use-text-query';
-import { QueryKey, SortKey, SortableHeader } from '../sortable-header';
+import { SortKey, SortableHeader } from '../sortable-header';
 
 interface TextListProps {
   textType: TextTypes;
@@ -61,20 +58,9 @@ export const TextList = ({ textType, filter, language }: TextListProps) => {
   const textQuery = useTextQuery();
   const { data = [], isLoading } = useGetTextsQuery(textQuery);
   const query = useParams<{ id: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const prevFilter = usePrevious(filter);
-
   const [statusFilter] = useStatusFilter();
   const getFilterText = (text: IText, language: Language) => text.title + (getString(text, language) ?? '');
   const sortedTexts = useFilteredAndSorted(data, statusFilter, filter, getFilterText);
-
-  useEffect(() => {
-    if (prevFilter?.length === 0 && filter.length > 0) {
-      searchParams.set(QueryKey.SORT, SortKey.SCORE);
-      searchParams.set(QueryKey.ORDER, SortOrder.DESC);
-      setSearchParams(searchParams);
-    }
-  }, [filter, prevFilter?.length, searchParams, setSearchParams]);
 
   if (isLoading || typeof data === 'undefined') {
     return (
