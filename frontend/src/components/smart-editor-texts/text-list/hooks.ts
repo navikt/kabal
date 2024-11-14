@@ -49,12 +49,16 @@ export const useFilteredAndSorted = <T extends RedaktørItem>(
 
   const sortedTexts: ScoredText<T>[] = useMemo(
     () =>
+      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       filteredTexts.toSorted((a, b) => {
         const isAsc = order === SortOrder.ASC;
 
         switch (sort) {
-          case SortKey.SCORE:
-            return isAsc ? a.score - b.score : b.score - a.score;
+          case SortKey.SCORE: {
+            const diff = isAsc ? a.score - b.score : b.score - a.score;
+
+            return diff === 0 ? sortWithOrdinals(a.title, b.title) : diff;
+          }
           case SortKey.MODIFIED:
             return isAsc ? a.modified.localeCompare(b.modified) : b.modified.localeCompare(a.modified);
           default:
