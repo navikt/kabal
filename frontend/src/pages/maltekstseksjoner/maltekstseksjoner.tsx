@@ -1,8 +1,8 @@
-import { MaltekstseksjonList } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-list';
+import { Maltekstseksjoner } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjoner';
 import { PageWrapper } from '../page-wrapper';
 
 export const MaltekstseksjonerPage = () => (
   <PageWrapper>
-    <MaltekstseksjonList />
+    <Maltekstseksjoner />
   </PageWrapper>
 );

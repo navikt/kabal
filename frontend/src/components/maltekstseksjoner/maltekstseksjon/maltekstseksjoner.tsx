@@ -16,7 +16,7 @@ import { styled } from 'styled-components';
 import { DragAndDropContextElement } from '../drag-and-drop/drag-context';
 import { List } from './common';
 
-export const MaltekstseksjonList = () => {
+export const Maltekstseksjoner = () => {
   const { id } = useParams();
   const { utfallIdList, templateSectionIdList, ytelseHjemmelIdList } = useTextQuery();
   const query: IGetMaltekstseksjonParams = {
