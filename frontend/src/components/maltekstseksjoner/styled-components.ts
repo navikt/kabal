@@ -82,7 +82,7 @@ export const ListItem = styled.li<ListItemProps>`
     width: 100%;
     height: 100%;
     border-radius: var(--a-border-radius-medium);
-    outline: var(--a-spacing-05) dashed var(--a-border-action);
+    border: var(--a-spacing-05) dashed var(--a-border-action);
     background-color: ${({ $isDragOver = false }) =>
       $isDragOver ? 'rgba(153, 195, 255, 0.5)' : 'rgba(230, 240, 255, 0.5)'};
     text-shadow:
