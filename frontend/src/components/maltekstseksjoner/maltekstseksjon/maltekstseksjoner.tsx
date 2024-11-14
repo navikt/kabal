@@ -29,8 +29,7 @@ export const Maltekstseksjoner = () => {
 
   const [rawSearch, setRawSearch] = useState('');
 
-  const selectedMaltekstseksjon = maltekstseksjoner.find((maltekst) => maltekst.id === id);
-  const hasSelectedMaltekstseksjon = selectedMaltekstseksjon !== undefined;
+  const hasSelectedMaltekstseksjon = id !== undefined;
 
   return (
     <Container>
@@ -66,7 +65,7 @@ export const Maltekstseksjoner = () => {
         />
 
         {hasSelectedMaltekstseksjon ? (
-          <Maltekstseksjon maltekstseksjon={selectedMaltekstseksjon} query={query} />
+          <Maltekstseksjon maltekstseksjonId={id} query={query} />
         ) : (
           <Placeholder>
             <PuzzlePieceIcon aria-hidden fontSize={400} />

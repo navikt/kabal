@@ -80,6 +80,35 @@ const textsMutationSlice = textsApi.injectEndpoints({
             ),
           );
 
+          for (const maltekstseksjonId of [
+            ...data.publishedMaltekstseksjonIdList,
+            ...data.draftMaltekstseksjonIdList,
+          ]) {
+            // Update modifiedOrTextsModified for the maltekstseksjon. It is is given that it references the text.
+            dispatch(
+              maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', maltekstseksjonId, (draft) => ({
+                ...draft,
+                modifiedOrTextsModified: data.modified,
+              })),
+            );
+
+            // Update modifiedOrTextsModified for all versions of the maltekstseksjon that reference the text. Not all versions are given to reference the text.
+            dispatch(
+              maltekstseksjonerQuerySlice.util.updateQueryData(
+                'getMaltekstseksjonVersions',
+                maltekstseksjonId,
+                (draft) =>
+                  draft.map((v) => {
+                    if (v.textIdList.includes(id)) {
+                      return { ...v, modifiedOrTextsModified: data.modified };
+                    }
+
+                    return v;
+                  }),
+              ),
+            );
+          }
+
           invalidateConsumerText(id);
         } catch {
           idPatchResult.undo();

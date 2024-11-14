@@ -20,12 +20,48 @@ export const useFilteredAndSorted = <T extends RedaktørItem>(
   statusFilter: Status[],
   filter: string,
   getFilterText: (text: T, language: Language) => string,
+  getModified: (text: T) => string,
 ) => {
-  const language = useRedaktoerLanguage();
   const order = useOrder();
   const sort = useSort();
 
-  const filteredTexts = useMemo(() => {
+  const filteredTexts = useFiltered(data, statusFilter, filter, getFilterText);
+
+  const sortedTexts: ScoredText<T>[] = useMemo(
+    () =>
+      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
+      filteredTexts.toSorted((a, b) => {
+        const isAsc = order === SortOrder.ASC;
+
+        switch (sort) {
+          case SortKey.SCORE: {
+            const diff = isAsc ? a.score - b.score : b.score - a.score;
+
+            return diff === 0 ? sortWithOrdinals(a.title, b.title) : diff;
+          }
+
+          case SortKey.MODIFIED:
+            return isAsc ? getModified(a).localeCompare(getModified(b)) : getModified(b).localeCompare(getModified(a));
+
+          default:
+            return isAsc ? sortWithOrdinals(a.title, b.title) : sortWithOrdinals(b.title, a.title);
+        }
+      }),
+    [filteredTexts, order, sort, getModified],
+  );
+
+  return sortedTexts;
+};
+
+const useFiltered = <T extends RedaktørItem>(
+  data: T[],
+  statusFilter: Status[],
+  filter: string,
+  getFilterText: (text: T, language: Language) => string,
+): ScoredText<T>[] => {
+  const language = useRedaktoerLanguage();
+
+  return useMemo(() => {
     const filteredByStatus = data.filter((t) => filterByStatus(statusFilter, t));
 
     if (filter.length === 0) {
@@ -46,29 +82,6 @@ export const useFilteredAndSorted = <T extends RedaktørItem>(
 
     return result;
   }, [data, filter, language, statusFilter, getFilterText]);
-
-  const sortedTexts: ScoredText<T>[] = useMemo(
-    () =>
-      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-      filteredTexts.toSorted((a, b) => {
-        const isAsc = order === SortOrder.ASC;
-
-        switch (sort) {
-          case SortKey.SCORE: {
-            const diff = isAsc ? a.score - b.score : b.score - a.score;
-
-            return diff === 0 ? sortWithOrdinals(a.title, b.title) : diff;
-          }
-          case SortKey.MODIFIED:
-            return isAsc ? a.modified.localeCompare(b.modified) : b.modified.localeCompare(a.modified);
-          default:
-            return isAsc ? sortWithOrdinals(a.title, b.title) : sortWithOrdinals(b.title, a.title);
-        }
-      }),
-    [filteredTexts, order, sort],
-  );
-
-  return sortedTexts;
 };
 
 export const useSort = () => {

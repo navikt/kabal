@@ -2,7 +2,6 @@ import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-ref
 import { DuplicateTextButton } from '@app/components/smart-editor-texts/duplicate-text-button';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { isoDateTimeToPretty } from '@app/domain/date';
-import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useCreateDraftFromVersionMutation } from '@app/redux-api/texts/mutations';
 import { REGELVERK_TYPE } from '@app/types/common-text-types';
 import type { IPublishedText } from '@app/types/texts/responses';
@@ -14,20 +13,20 @@ interface Props {
   text: IPublishedText;
   maltekstseksjonId?: string;
   hasDraft: boolean;
+  setTabId: (versionId: string) => void;
 }
 
-export const PublishedTextFooter = ({ text, maltekstseksjonId, hasDraft }: Props) => {
+export const PublishedTextFooter = ({ text, maltekstseksjonId, hasDraft, setTabId }: Props) => {
   const [createDraft] = useCreateDraftFromVersionMutation();
   const query = useTextQuery();
   const hasLanguage = text.textType !== REGELVERK_TYPE;
-  const navigate = useNavigateToStandaloneTextVersion(hasLanguage);
 
   const { id, versionId, publishedDateTime, title } = text;
 
   const createDraftAndNotify = useCallback(async () => {
     const draft = await createDraft({ id, title, versionId, query }).unwrap();
-    navigate({ id: draft.id, versionId: draft.versionId });
-  }, [createDraft, id, title, versionId, query, navigate]);
+    setTabId(draft.versionId);
+  }, [createDraft, id, title, versionId, query, setTabId]);
 
   return (
     <HStack justify="space-between" align="center" gap="2" marginBlock="2 0">

@@ -18,6 +18,7 @@ import {
 import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
+import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
 import { type IGetMaltekstseksjonParams, REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { type Language, UNTRANSLATED } from '@app/types/texts/language';
@@ -63,7 +64,7 @@ export const StandaloneTextList = ({ filter, data, isLoading, style, textType }:
   const query = useParams<{ id: string }>();
   const [statusFilter] = useStatusFilter();
   const getFilterText = (text: IText, language: Language) => text.title + (getString(text, language) ?? '');
-  const sortedTexts = useFilteredAndSorted(data, statusFilter, filter, getFilterText);
+  const sortedTexts = useFilteredAndSorted(data, statusFilter, filter, getFilterText, ({ modified }) => modified);
 
   if (isLoading || typeof data === 'undefined') {
     return (
@@ -104,25 +105,55 @@ interface MaltekstseksjonListProps {
 }
 
 export const MaltekstseksjonList = ({ filter, data, isLoading, style }: MaltekstseksjonListProps) => {
-  const language = useRedaktoerLanguage();
-  const query = useParams<{ id: string }>();
   const [statusFilter] = useStatusFilter();
-  const sortedTexts = useFilteredAndSorted(data, statusFilter, filter, (t) => t.title);
-  const { utfallIdList, templateSectionIdList, ytelseHjemmelIdList } = useTextQuery();
+  const sortedMaltekstseksjonList = useFilteredAndSorted(
+    data,
+    statusFilter,
+    filter,
+    (t) => t.title,
+    (t) => t.modifiedOrTextsModified,
+  );
 
-  const maltekstseksjonQuery: IGetMaltekstseksjonParams = {
-    templateSectionIdList,
-    ytelseHjemmelIdList,
-    utfallIdList,
-  };
-
-  if (isLoading || typeof data === 'undefined') {
+  if (isLoading || data === undefined) {
     return (
       <LoaderOverlay>
         <Loader size="3xlarge" />
       </LoaderOverlay>
     );
   }
+
+  return (
+    <Container style={style}>
+      <Headers />
+      <StyledList>
+        {sortedMaltekstseksjonList.map(({ id, score }) => (
+          <MaltekstseksjonItem key={id} maltekstseksjonId={id} score={score} />
+        ))}
+      </StyledList>
+    </Container>
+  );
+};
+
+interface MaltekstseksjonItemProps {
+  maltekstseksjonId: string;
+  score: number;
+}
+
+const MaltekstseksjonItem = ({ maltekstseksjonId, score }: MaltekstseksjonItemProps) => {
+  const language = useRedaktoerLanguage();
+  const query = useParams<{ id: string }>();
+  const { data: maltekstseksjon } = useGetMaltekstseksjonQuery(maltekstseksjonId);
+  const { utfallIdList, templateSectionIdList, ytelseHjemmelIdList } = useTextQuery();
+
+  if (maltekstseksjon === undefined) {
+    return null;
+  }
+
+  const maltekstseksjonQuery: IGetMaltekstseksjonParams = {
+    templateSectionIdList,
+    ytelseHjemmelIdList,
+    utfallIdList,
+  };
 
   const getLink = (maltekstseksjon: IMaltekstseksjon, language: Language) => {
     const [firstTextId] = maltekstseksjon.textIdList;
@@ -133,30 +164,21 @@ export const MaltekstseksjonList = ({ filter, data, isLoading, style }: Maltekst
       : `${prefix}/tekster/${firstTextId}${window.location.search}`;
   };
 
+  const { id, title, publishedDateTime, modifiedOrTextsModified, published } = maltekstseksjon;
+
   return (
-    <Container style={style}>
-      <Headers />
-      <StyledList>
-        {sortedTexts.map((text) => {
-          const { id, title, modified, publishedDateTime, published, score } = text;
+    <MaltekstseksjontListItem key={id} query={maltekstseksjonQuery} activeId={query.id} maltekstseksjonId={id}>
+      <StyledLink to={getLink(maltekstseksjon, language)}>
+        <StyledTitle>
+          <TasklistIcon aria-hidden style={{ flexShrink: 0 }} />
+          <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
+        </StyledTitle>
 
-          return (
-            <MaltekstseksjontListItem key={id} query={maltekstseksjonQuery} activeId={query.id} maltekstseksjon={text}>
-              <StyledLink to={getLink(text, language)}>
-                <StyledTitle>
-                  <TasklistIcon aria-hidden style={{ flexShrink: 0 }} />
-                  <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
-                </StyledTitle>
-
-                <StatusTag publishedDateTime={publishedDateTime} published={published} />
-                <DateTime dateTime={modified} />
-                <span>{score.toFixed(0)} %</span>
-              </StyledLink>
-            </MaltekstseksjontListItem>
-          );
-        })}
-      </StyledList>
-    </Container>
+        <StatusTag publishedDateTime={publishedDateTime} published={published} />
+        <DateTime dateTime={modifiedOrTextsModified} />
+        <span>{score.toFixed(0)} %</span>
+      </StyledLink>
+    </MaltekstseksjontListItem>
   );
 };
 

@@ -77,7 +77,7 @@ const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedPro
         selectedTabId={versionId}
         setSelectedTabId={navigateToVersion}
         createDraftPanel={(v) => <DraftVersion text={v} onDraftDeleted={onDraftDeleted} />}
-        createPublishedPanel={(v) => <PublishedVersion text={v} hasDraft={hasDraft} />}
+        createPublishedPanel={(v) => <PublishedVersion text={v} hasDraft={hasDraft} setTabId={navigateToVersion} />}
       />
     </Container>
   );
@@ -113,9 +113,10 @@ const DraftVersion = ({ text, onDraftDeleted }: DraftVersionProps) => {
 interface PublishedVersionProps {
   text: IPublishedText;
   hasDraft: boolean;
+  setTabId: (id: string) => void;
 }
 
-const PublishedVersion = ({ text, hasDraft }: PublishedVersionProps) => {
+const PublishedVersion = ({ text, hasDraft, setTabId }: PublishedVersionProps) => {
   if (isPlainText(text)) {
     return <PublishedPlainText text={text} hasDraft={hasDraft} setTabId={setTabId} />;
   }
@@ -124,7 +125,7 @@ const PublishedVersion = ({ text, hasDraft }: PublishedVersionProps) => {
     <PublishedContainer>
       <Tags {...text} />
 
-      <PublishedRichText text={text} hasDraft={hasDraft} />
+      <PublishedRichText text={text} hasDraft={hasDraft} setTabId={setTabId} />
     </PublishedContainer>
   );
 };

@@ -30,6 +30,10 @@ interface Filters {
 interface ReadOnlyMetadata {
   readonly id: string; // UUID
   readonly modified: string; // Datetime
+  /**
+   * Latest modified date of the maltekstseksjon and the texts in the maltekstseksjon.
+   */
+  readonly modifiedOrTextsModified: string; // Datetime
   readonly created: string; // Datetime
   readonly edits: IEditor[];
   readonly versionId: string;

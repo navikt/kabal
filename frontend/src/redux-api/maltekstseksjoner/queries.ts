@@ -9,7 +9,20 @@ export const maltekstseksjonerQuerySlice = maltekstseksjonerApi.injectEndpoints(
     getMaltekstseksjoner: builder.query<IMaltekstseksjon[], IGetMaltekstseksjonParams>({
       query: (params) => ({ url: '/maltekstseksjoner', params }),
       providesTags: (maltekstseksjoner) =>
-        maltekstseksjoner?.map(({ id }) => ({ type: MaltekstseksjonTagTypes.MALTEKSTSEKSJON, id })) ?? [],
+        maltekstseksjoner
+          ?.map(({ id }) => ({ type: MaltekstseksjonTagTypes.MALTEKSTSEKSJON, id }))
+          .concat({ type: MaltekstseksjonTagTypes.MALTEKSTSEKSJON, id: 'LIST' }) ?? [
+          { type: MaltekstseksjonTagTypes.MALTEKSTSEKSJON, id: 'LIST' },
+        ],
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+
+        for (const maltekstseksjon of data) {
+          dispatch(
+            maltekstseksjonerQuerySlice.util.upsertQueryData('getMaltekstseksjon', maltekstseksjon.id, maltekstseksjon),
+          );
+        }
+      },
     }),
     getMaltekstseksjon: builder.query<IMaltekstseksjon, string>({
       query: (id) => `/maltekstseksjoner/${id}`,

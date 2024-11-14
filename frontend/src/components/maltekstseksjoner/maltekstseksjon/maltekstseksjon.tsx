@@ -2,23 +2,22 @@ import { UnpublishMaltekstseksjonButton } from '@app/components/maltekstseksjone
 import { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { ScaleContextComponent } from '@app/plate/status-bar/scale-context';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { styled } from 'styled-components';
 import { MaltekstseksjonVersions } from './maltekstseksjon-versions';
 
 interface Props {
-  maltekstseksjon: IMaltekstseksjon;
+  maltekstseksjonId: string;
   query: IGetMaltekstseksjonParams;
 }
 
-export const Maltekstseksjon = ({ maltekstseksjon, query }: Props) => (
+export const Maltekstseksjon = ({ maltekstseksjonId, query }: Props) => (
   <MaltekstseksjonContainer data-element="MaltekstseksjonContainer">
     <MaltekstseksjonHeader>
       <UnpublishMaltekstseksjonButton publishedMaltekstseksjon={maltekstseksjon} query={query} />
     </MaltekstseksjonHeader>
 
     <ScaleContextComponent scalingGroup={ScalingGroup.REDAKTØR}>
-      <MaltekstseksjonVersions id={maltekstseksjon.id} query={query} />
+      <MaltekstseksjonVersions id={maltekstseksjonId} query={query} />
     </ScaleContextComponent>
   </MaltekstseksjonContainer>
 );

@@ -31,7 +31,7 @@ export const DraftTextFooter = ({
   const [lastEdit] = text.edits;
 
   return (
-    <HStack justify="space-between" align="center" gap="2" marginBlock="2 0">
+    <HStack justify="start" align="center" gap="2" marginBlock="2 0">
       <Button
         variant="primary"
         size="small"
