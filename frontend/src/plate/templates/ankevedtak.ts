@@ -40,7 +40,6 @@ const INITIAL_SLATE_VALUE: Value = [
   createMaltekstseksjon(TemplateSections.ANFOERSLER),
   createMaltekstseksjon(TemplateSections.OPPLYSNINGER),
   createMaltekstseksjon(TemplateSections.VURDERINGEN),
-  createMaltekstseksjon(TemplateSections.KONKLUSJON),
   createMaltekstseksjon(TemplateSections.ANKEINFO),
   createMaltekstseksjon(TemplateSections.SAKSKOSTNADER),
   createMaltekstseksjon(TemplateSections.GENERELL_INFO),

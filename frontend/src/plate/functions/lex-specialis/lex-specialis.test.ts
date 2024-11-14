@@ -80,14 +80,14 @@ describe('lex specialis', () => {
     const utfallText = getText(
       'no-utfall',
       KLAGEVEDTAK_V2,
-      TemplateSections.KONKLUSJON,
+      TemplateSections.AVGJOERELSE,
       ['y1'],
       [[UtfallEnum.MEDHOLD]],
     );
 
     const [actualStatus, actualResult] = lexSpecialis(
       TemplateIdEnum.KLAGEVEDTAK_V2,
-      TemplateSections.KONKLUSJON,
+      TemplateSections.AVGJOERELSE,
       'y1',
       [],
       [],

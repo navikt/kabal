@@ -40,7 +40,6 @@ const INITIAL_SLATE_VALUE: KabalValue = [
   createMaltekstseksjon(TemplateSections.OPPLYSNINGER),
   createMaltekstseksjon(TemplateSections.SAKSGANG),
   createMaltekstseksjon(TemplateSections.VURDERINGEN),
-  createMaltekstseksjon(TemplateSections.KONKLUSJON),
   createMaltekstseksjon(TemplateSections.ANKEINFO),
   createMaltekstseksjon(TemplateSections.SAKSKOSTNADER),
   createMaltekstseksjon(TemplateSections.GENERELL_INFO),

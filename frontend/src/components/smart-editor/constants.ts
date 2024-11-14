@@ -7,7 +7,6 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections, string> = {
   [TemplateSections.TITLE]: 'Dokumenttittel',
   [TemplateSections.INTRODUCTION]: 'Introduksjon',
   [TemplateSections.AVGJOERELSE]: 'Avgjørelse',
-  [TemplateSections.KONKLUSJON]: 'Konklusjonen vår',
   [TemplateSections.ANFOERSLER]: 'Anførsler',
   [TemplateSections.VURDERINGEN]: 'Vurderingen vår',
   [TemplateSections.OPPLYSNINGER]: 'Vektlagte dokumenter',
