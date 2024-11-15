@@ -46,6 +46,10 @@ export interface ICreateDraftFromMaltekstseksjonVersionParams extends IUpdateBas
   versionId: string;
 }
 
+export interface IDuplicateMaltekstseksjonVersionParams extends IUpdateBaseParams {
+  versionId: string;
+}
+
 export interface IDeleteMaltekstDraftParams extends IUpdateBaseParams {
   title: string;
   versions: IMaltekstseksjon[];

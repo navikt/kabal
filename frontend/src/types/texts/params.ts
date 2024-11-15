@@ -62,3 +62,10 @@ export interface ICreateDraftFromVersionParams {
   versionId: string;
   query: IGetTextsParams;
 }
+
+export interface IDuplicateVersionParams {
+  id: string;
+  title: string;
+  versionId: string;
+  query: IGetTextsParams;
+}

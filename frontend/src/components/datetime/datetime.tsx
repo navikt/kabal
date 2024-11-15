@@ -29,10 +29,11 @@ interface DateTimeProps {
   dateTime: string;
   icon?: React.ReactNode;
   title?: string;
+  id?: string;
 }
 
-export const DateTime = ({ dateTime, title, icon }: DateTimeProps) => (
-  <StyledTime dateTime={dateTime} title={title}>
+export const DateTime = ({ dateTime, title, icon, id }: DateTimeProps) => (
+  <StyledTime dateTime={dateTime} title={title} id={id}>
     {icon}
     {isoDateTimeToPretty(dateTime)}
   </StyledTime>

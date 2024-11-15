@@ -17,6 +17,7 @@ import { isApiRejectionError } from '@app/types/errors';
 import type {
   ICreateDraftFromMaltekstseksjonVersionParams,
   IDeleteMaltekstDraftParams,
+  IDuplicateMaltekstseksjonVersionParams,
   INewMaltekstseksjonParams,
   IUnpublishMaltekstseksjonParams,
   IUpdateBaseParams,
@@ -47,15 +48,14 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
       }),
       onQueryStarted: async ({ query }, { queryFulfilled, dispatch }) => {
         const { data } = await queryFulfilled;
+
         toast.success('Ny maltekstseksjon opprettet.');
+
         dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) => [
-            data,
-            ...draft,
-          ]),
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) => [data, ...draft]),
         );
-        dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjonVersions', data.id, () => [data]));
-        dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', data.id, () => data));
+        dispatch(maltekstseksjonerQuerySlice.util.upsertQueryData('getMaltekstseksjonVersions', data.id, [data]));
+        dispatch(maltekstseksjonerQuerySlice.util.upsertQueryData('getMaltekstseksjon', data.id, data));
       },
     }),
     updateMaltekstTitle: builder.mutation<IDraftMaltekstseksjon, IUpdateMaltekstseksjonTitleParams>({
@@ -160,7 +160,7 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           toast.success('Maltekstseksjon publisert.');
 
           dispatch(
-            maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) =>
+            maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
               draft.map((t) => (t.id === id ? data : t)),
             ),
           );
@@ -322,6 +322,24 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         }
       },
     }),
+    duplicateVersion: builder.mutation<IDraftMaltekstseksjon, IDuplicateMaltekstseksjonVersionParams>({
+      query: ({ id, versionId }) => ({
+        method: 'POST',
+        url: `/maltekstseksjoner/${id}/duplicate`,
+        body: { versionId },
+      }),
+      onQueryStarted: async ({ query }, { queryFulfilled, dispatch }) => {
+        const { data } = await queryFulfilled;
+
+        toast.success('Duplikat av maltekstseksjon er opprettet.');
+
+        dispatch(
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) => [data, ...draft]),
+        );
+        dispatch(maltekstseksjonerQuerySlice.util.upsertQueryData('getMaltekstseksjonVersions', data.id, [data]));
+        dispatch(maltekstseksjonerQuerySlice.util.upsertQueryData('getMaltekstseksjon', data.id, data));
+      },
+    }),
     createDraftFromVersion: builder.mutation<IDraftMaltekstseksjon, ICreateDraftFromMaltekstseksjonVersionParams>({
       query: ({ id, versionId }) => ({
         method: 'POST',
@@ -334,13 +352,13 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', id, () => data));
 
         dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) =>
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
             draft.filter((t) => t.id !== id),
           ),
         );
 
         dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) => {
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) => {
             let found = false;
 
             const updated = draft.map((text) => {
@@ -380,7 +398,7 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         );
 
         const listPatchResult = dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) => {
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) => {
             if (lastPublishedVersion === undefined) {
               return draft.filter((text) => text.id !== id);
             }
@@ -420,7 +438,7 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         const { id, title } = publishedMaltekstseksjon;
 
         const listPatchResult = dispatch(
-          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) =>
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
             draft.map((text) => {
               if (text.id === id) {
                 return maltekstseksjonDraft === undefined ? { ...text, published: false } : maltekstseksjonDraft;
@@ -468,7 +486,7 @@ const update = (id: string, upd: Partial<IDraftMaltekstseksjon>, query: IGetMalt
   );
 
   const listPatchResult = reduxStore.dispatch(
-    maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', { ...query }, (draft) =>
+    maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
       draft.map((t) => (t.publishedDateTime === null && t.id === id ? { ...t, ...upd } : t)),
     ),
   );
@@ -498,6 +516,7 @@ export const {
   useUpdateUtfallIdListMutation,
   useUpdateTextIdListMutation,
   useCreateDraftFromVersionMutation,
+  useDuplicateVersionMutation,
   useDeleteDraftVersionMutation,
   usePublishMutation,
   usePublishWithTextsMutation,

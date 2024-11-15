@@ -104,13 +104,7 @@ const Loaded = ({ firstVersion, versions, isActive, className, ...props }: Loade
         />
       )}
       createPublishedPanel={(version) => (
-        <PublishedRichText
-          key={version.versionId}
-          {...props}
-          text={version}
-          onDraftCreated={setTabId}
-          hasDraft={hasDraft}
-        />
+        <PublishedRichText key={version.versionId} {...props} text={version} hasDraft={hasDraft} />
       )}
     />
   );

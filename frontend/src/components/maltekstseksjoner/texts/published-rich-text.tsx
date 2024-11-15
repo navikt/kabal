@@ -15,12 +15,11 @@ import { RedaktoerRichText } from '../../redaktoer-rich-text/redaktoer-rich-text
 
 interface Props {
   text: IPublishedRichText | IPublishedRegelverk | IPublishedGodFormulering;
-  onDraftCreated: (versionId: string) => void;
   maltekstseksjonId?: string;
   hasDraft: boolean;
 }
 
-export const PublishedRichText = ({ text, onDraftCreated, maltekstseksjonId, hasDraft }: Props) => {
+export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<RichTextEditor>(null);
   const lang = useRedaktoerLanguage();
@@ -41,12 +40,7 @@ export const PublishedRichText = ({ text, onDraftCreated, maltekstseksjonId, has
             Tekst for {LANGUAGE_NAMES[lang].toLowerCase()} mangler
           </Alert>
 
-          <PublishedTextFooter
-            text={text}
-            onDraftCreated={onDraftCreated}
-            maltekstseksjonId={maltekstseksjonId}
-            hasDraft={hasDraft}
-          />
+          <PublishedTextFooter text={text} maltekstseksjonId={maltekstseksjonId} hasDraft={hasDraft} />
         </>
       ) : (
         <>
@@ -58,12 +52,7 @@ export const PublishedRichText = ({ text, onDraftCreated, maltekstseksjonId, has
             lang={SPELL_CHECK_LANGUAGES[lang]}
           />
 
-          <PublishedTextFooter
-            text={text}
-            onDraftCreated={onDraftCreated}
-            maltekstseksjonId={maltekstseksjonId}
-            hasDraft={hasDraft}
-          />
+          <PublishedTextFooter text={text} maltekstseksjonId={maltekstseksjonId} hasDraft={hasDraft} />
         </>
       )}
     </Container>

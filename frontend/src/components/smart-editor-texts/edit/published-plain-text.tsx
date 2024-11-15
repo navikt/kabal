@@ -7,11 +7,11 @@ import { styled } from 'styled-components';
 
 interface Props {
   text: IPublishedPlainText;
-  onDraftCreated: (id: string) => void;
   hasDraft: boolean;
+  setTabId: (versionId: string) => void;
 }
 
-export const PublishedPlainText = ({ text, onDraftCreated, hasDraft }: Props) => {
+export const PublishedPlainText = ({ text, hasDraft, setTabId }: Props) => {
   const lang = useRedaktoerLanguage();
 
   return (
@@ -26,7 +26,7 @@ export const PublishedPlainText = ({ text, onDraftCreated, hasDraft }: Props) =>
         <StyledBodyLong>{text.plainText[lang]}</StyledBodyLong>
       </Background>
 
-      <PublishedTextFooter text={text} onDraftCreated={onDraftCreated} hasDraft={hasDraft} />
+      <PublishedTextFooter text={text} hasDraft={hasDraft} setTabId={setTabId} />
     </PublishedContainer>
   );
 };

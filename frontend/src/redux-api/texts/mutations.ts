@@ -11,6 +11,7 @@ import { LANGUAGES, UNTRANSLATED, isLanguage } from '@app/types/texts/language';
 import type {
   ICreateDraftFromVersionParams,
   IDeleteTextDraftParams,
+  IDuplicateVersionParams,
   IGetTextsParams,
   INewTextParams,
   IUnpublishTextParams,
@@ -205,6 +206,22 @@ const textsMutationSlice = textsApi.injectEndpoints({
             return found ? updated : [data, ...draft];
           }),
         );
+      },
+    }),
+    duplicateVersion: builder.mutation<IText, IDuplicateVersionParams>({
+      query: ({ id, versionId }) => ({
+        method: 'POST',
+        url: `/texts/${id}/duplicate`,
+        body: { versionId },
+      }),
+      onQueryStarted: async ({ title, query }, { queryFulfilled, dispatch }) => {
+        const { data } = await queryFulfilled;
+
+        toast.success(`Duplikat av «${title}» opprettet.`);
+
+        dispatch(textsQuerySlice.util.updateQueryData('getTexts', { ...query }, (draft) => [data, ...draft]));
+        dispatch(textsQuerySlice.util.updateQueryData('getTextById', data.id, () => data));
+        dispatch(textsQuerySlice.util.upsertQueryData('getTextVersions', data.id, [data]));
       },
     }),
     addText: builder.mutation<IText, { text: INewTextParams; query: IGetTextsParams }>({
@@ -559,6 +576,7 @@ export const {
   usePublishMutation,
   useAddTextMutation,
   useCreateDraftFromVersionMutation,
+  useDuplicateVersionMutation,
   useUnpublishTextMutation,
   useSetTextTypeMutation,
   useSetTextTitleMutation,

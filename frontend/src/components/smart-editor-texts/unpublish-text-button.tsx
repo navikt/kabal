@@ -5,7 +5,7 @@ import {
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useUnpublishTextMutation } from '@app/redux-api/texts/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
+import type { TextTypes } from '@app/types/common-text-types';
 import type { IText } from '@app/types/texts/responses';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, HelpText } from '@navikt/ds-react';
@@ -71,7 +71,7 @@ const ConfirmUnpublishTextButton = ({
 }: Props & { textDraft: IText | undefined }) => {
   const { id } = publishedText;
   const [unpublish, { isLoading }] = useUnpublishTextMutation({ fixedCacheKey: id });
-  const navigate = useNavigateToStandaloneTextVersion(textType !== REGELVERK_TYPE);
+  const navigate = useNavigateToStandaloneTextVersion(textType);
   const query = useTextQuery();
 
   const onClick = async () => {

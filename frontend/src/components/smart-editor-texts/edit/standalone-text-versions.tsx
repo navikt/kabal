@@ -10,7 +10,7 @@ import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { isGodFormulering, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useGetTextByIdQuery, useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { PlainTextTypes, REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
+import { PlainTextTypes, type TextTypes } from '@app/types/common-text-types';
 import type { IDraft, IPlainText, IPublishedText, IText } from '@app/types/texts/responses';
 import { Loader } from '@navikt/ds-react';
 import { useMemo } from 'react';
@@ -47,7 +47,7 @@ interface VersionsLoadedProps {
 }
 
 const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedProps) => {
-  const navigate = useNavigateToStandaloneTextVersion(textType !== REGELVERK_TYPE);
+  const navigate = useNavigateToStandaloneTextVersion(textType);
   const publishedVersion = useMemo(() => versions.find(({ published }) => published), [versions]);
   const { versionId } = useParams();
 
@@ -77,9 +77,7 @@ const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedPro
         selectedTabId={versionId}
         setSelectedTabId={navigateToVersion}
         createDraftPanel={(v) => <DraftVersion text={v} onDraftDeleted={onDraftDeleted} />}
-        createPublishedPanel={(v) => (
-          <PublishedVersion text={v} setVersionTabId={navigateToVersion} hasDraft={hasDraft} />
-        )}
+        createPublishedPanel={(v) => <PublishedVersion text={v} hasDraft={hasDraft} />}
       />
     </Container>
   );
@@ -114,20 +112,19 @@ const DraftVersion = ({ text, onDraftDeleted }: DraftVersionProps) => {
 
 interface PublishedVersionProps {
   text: IPublishedText;
-  setVersionTabId: (versionId: string) => void;
   hasDraft: boolean;
 }
 
-const PublishedVersion = ({ text, setVersionTabId, hasDraft }: PublishedVersionProps) => {
+const PublishedVersion = ({ text, hasDraft }: PublishedVersionProps) => {
   if (isPlainText(text)) {
-    return <PublishedPlainText text={text} onDraftCreated={setVersionTabId} hasDraft={hasDraft} />;
+    return <PublishedPlainText text={text} hasDraft={hasDraft} setTabId={setTabId} />;
   }
 
   return (
     <PublishedContainer>
       <Tags {...text} />
 
-      <PublishedRichText text={text} onDraftCreated={setVersionTabId} hasDraft={hasDraft} />
+      <PublishedRichText text={text} hasDraft={hasDraft} />
     </PublishedContainer>
   );
 };

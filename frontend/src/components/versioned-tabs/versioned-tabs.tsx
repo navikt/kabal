@@ -109,4 +109,5 @@ const StyledTabPanel = styled(Tabs.Panel)`
 
 const StyledTabList = styled(Tabs.List)`
   white-space: nowrap;
+  width: 760px;
 `;
