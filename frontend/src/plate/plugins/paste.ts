@@ -36,7 +36,7 @@ export const PastePlugin = createPlatePlugin({
       const html = event.clipboardData.getData('text/html');
 
       // HTML content from PDFs in Chrome is equal to the plain text, with <meta charset="utf-8"> prepended.
-      if (html.length > 0 && html.startsWith(HTML_PREFIX) && html.length - HTML_PREFIX_LENGTH === plainText.length) {
+      if (html.length - HTML_PREFIX_LENGTH !== plainText.length) {
         // Pasted HTML not from PDF.
         return false;
       }
