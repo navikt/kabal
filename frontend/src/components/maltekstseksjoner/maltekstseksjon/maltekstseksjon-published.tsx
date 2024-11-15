@@ -1,6 +1,7 @@
 import { DateTime } from '@app/components/datetime/datetime';
 import { getTitle } from '@app/components/editable-title/editable-title';
 import { MaltekstseksjonTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/texts';
+import { DuplicateSectionButton } from '@app/components/smart-editor-texts/duplicate-section-button';
 import {
   TagContainer,
   TemplateSectionTagList,
@@ -12,20 +13,12 @@ import { useCreateDraftFromVersionMutation } from '@app/redux-api/maltekstseksjo
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IPublishedMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { CalendarIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack, Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
 import { TextListItem } from '../styled-components';
-import {
-  ActionsContainer,
-  Container,
-  DateTimeContainer,
-  Header,
-  List,
-  SidebarContainer,
-  StyledHeading,
-} from './common';
+import { Container, DateTimeContainer, Header, List, SidebarContainer, StyledHeading } from './common';
 import { LoadTextListItem } from './list-item';
 
 interface MaltekstProps {
@@ -65,11 +58,15 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
           <YtelseHjemmelTagList ytelseHjemmelIdList={maltekstseksjon.ytelseHjemmelIdList} />
           <UtfallTagList utfallIdList={maltekstseksjon.utfallIdList} />
         </TagContainer>
-        <ActionsContainer>
-          <Button size="small" variant="secondary" onClick={onCreateDraft} loading={isLoading}>
-            Opprett utkast basert på denne versjonen av maltekstseksjonen
-          </Button>
-        </ActionsContainer>
+        <HStack gridColumn="actions" gap="2" justify="end">
+          <Tooltip content="Opprett utkast basert på denne versjonen av maltekstseksjonen.">
+            <Button size="small" variant="secondary" onClick={onCreateDraft} loading={isLoading}>
+              Nytt utkast
+            </Button>
+          </Tooltip>
+
+          <DuplicateSectionButton id={id} versionId={versionId} query={query} />
+        </HStack>
       </Header>
 
       <SidebarContainer>

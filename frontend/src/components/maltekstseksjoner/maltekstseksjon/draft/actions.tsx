@@ -1,4 +1,5 @@
 import { DeleteMaltekstseksjonDraftButton } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/delete-draft-button';
+import { DuplicateSectionButton } from '@app/components/smart-editor-texts/duplicate-section-button';
 import { isRichText } from '@app/functions/is-rich-plain-text';
 import {
   useDeleteDraftVersionMutation,
@@ -11,10 +12,9 @@ import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { LANGUAGES } from '@app/types/texts/language';
 import type { IRichText } from '@app/types/texts/responses';
 import { UploadIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, ErrorMessage } from '@navikt/ds-react';
+import { Button, type ButtonProps, ErrorMessage, HStack, Tooltip } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
-import { ActionsContainer } from '../common';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;
@@ -23,14 +23,16 @@ interface Props {
 }
 
 export const Actions = ({ query, onDraftDeleted, maltekstseksjon }: Props) => {
-  const { id, title } = maltekstseksjon;
+  const { id, title, versionId } = maltekstseksjon;
 
   return (
-    <ActionsContainer>
+    <HStack gridColumn="actions" gap="2" justify="end">
       <PublishButtons maltekstseksjon={maltekstseksjon} query={query} />
 
+      <DuplicateSectionButton id={id} versionId={versionId} query={query} />
+
       <DeleteMaltekstseksjonDraftButton id={id} query={query} onDraftDeleted={onDraftDeleted} title={title} />
-    </ActionsContainer>
+    </HStack>
   );
 };
 
@@ -78,13 +80,17 @@ const PublishButtons = ({ query, maltekstseksjon }: PublishButtonProps) => {
 
   return (
     <>
-      <Button {...props} onClick={onPublish}>
-        Publiser maltekstseksjon
-      </Button>
+      <Tooltip content="Publiser bare maltekstseksjonen, upubliserte tekster forblir upuliserte.">
+        <Button {...props} onClick={onPublish}>
+          Publiser
+        </Button>
+      </Tooltip>
 
-      <Button {...props} onClick={onPublishWithTexts}>
-        Publiser maltekstseksjon og alle tekster
-      </Button>
+      <Tooltip content="Publiser maltekstseksjon og alle tekster.">
+        <Button {...props} onClick={onPublishWithTexts}>
+          Publiser alt
+        </Button>
+      </Tooltip>
 
       {untranslatedWarning === null ? null : (
         <StyledErrorMessage size="small">{untranslatedWarning}</StyledErrorMessage>

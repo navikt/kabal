@@ -1,11 +1,11 @@
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { DeleteDraftButton } from '@app/components/smart-editor-texts/delete-draft-button';
+import { DuplicateTextButton } from '@app/components/smart-editor-texts/duplicate-text-button';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { usePublishMutation } from '@app/redux-api/texts/mutations';
 import type { IDraftRichText } from '@app/types/texts/responses';
 import { UploadIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage, Loader } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Button, ErrorMessage, HStack, Loader } from '@navikt/ds-react';
 
 interface Props {
   text: IDraftRichText;
@@ -31,7 +31,7 @@ export const DraftTextFooter = ({
   const [lastEdit] = text.edits;
 
   return (
-    <ButtonsContainer>
+    <HStack justify="space-between" align="center" gap="2" marginBlock="2 0">
       <Button
         variant="primary"
         size="small"
@@ -42,38 +42,27 @@ export const DraftTextFooter = ({
       >
         Publiser
       </Button>
+
       {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
+
       <DeleteDraftButton id={id} title={title} onDraftDeleted={onDraftDeleted}>
         {isDeletable ? 'Slett utkast' : 'Slett tekst'}
       </DeleteDraftButton>
-      <Right>
-        <div style={{ display: 'flex' }}>
-          <AllMaltekstseksjonReferences
-            draftMaltekstseksjonIdList={text.draftMaltekstseksjonIdList}
-            publishedMaltekstseksjonIdList={text.publishedMaltekstseksjonIdList}
-            currentMaltekstseksjonId={maltekstseksjonId}
-          />
-        </div>
-        Sist endret:{' '}
-        {isSaving ? <Loader size="xsmall" /> : <time dateTime={modified}>{isoDateTimeToPretty(modified)}</time>}
-        {lastEdit === undefined ? null : <span>, av: {lastEdit.actor.navn}</span>}
-      </Right>
-    </ButtonsContainer>
+
+      <DuplicateTextButton {...text} />
+
+      <HStack align="center" justify="end" flexGrow="1">
+        <AllMaltekstseksjonReferences
+          draftMaltekstseksjonIdList={text.draftMaltekstseksjonIdList}
+          publishedMaltekstseksjonIdList={text.publishedMaltekstseksjonIdList}
+          currentMaltekstseksjonId={maltekstseksjonId}
+        />
+        <span>
+          <span>Sist endret: </span>
+          {isSaving ? <Loader size="xsmall" /> : <time dateTime={modified}>{isoDateTimeToPretty(modified)}</time>}
+          {lastEdit === undefined ? null : <span> av {lastEdit.actor.navn}</span>}
+        </span>
+      </HStack>
+    </HStack>
   );
 };
-
-const ButtonsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
-  margin-top: var(--a-spacing-2);
-`;
-
-const Right = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-left: auto;
-  white-space: pre;
-`;

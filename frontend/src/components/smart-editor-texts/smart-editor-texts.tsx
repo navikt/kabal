@@ -9,7 +9,7 @@ import {
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useAddTextMutation } from '@app/redux-api/texts/mutations';
-import { REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
+import type { TextTypes } from '@app/types/common-text-types';
 import type { Language } from '@app/types/texts/language';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
@@ -25,7 +25,7 @@ interface Props {
 
 export const SmartEditorTexts = ({ textType }: Props) => {
   const query = useTextQuery();
-  const navigate = useNavigateToStandaloneTextVersion(textType !== REGELVERK_TYPE);
+  const navigate = useNavigateToStandaloneTextVersion(textType);
   const [addText, { isLoading }] = useAddTextMutation();
   const lang = useRedaktoerLanguage();
 

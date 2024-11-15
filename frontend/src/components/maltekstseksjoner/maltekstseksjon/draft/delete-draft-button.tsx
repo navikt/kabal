@@ -4,7 +4,7 @@ import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksj
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, Tooltip } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 
 interface Props {
@@ -23,7 +23,8 @@ export const DeleteMaltekstseksjonDraftButton = ({ id, title, onDraftDeleted, qu
     [versions],
   );
 
-  const text = willBeMovedToDepublished ? 'Slett utkast og sett maltekstseksjon som avpublisert' : 'Slett utkast';
+  const text = willBeMovedToDepublished ? 'Slett utkast og avpubliser' : 'Slett utkast';
+  const tooltip = willBeMovedToDepublished ? 'Slett utkast og sett maltekstseksjon som avpublisert' : 'Slett utkast';
 
   if (isOpen) {
     return (
@@ -51,9 +52,11 @@ export const DeleteMaltekstseksjonDraftButton = ({ id, title, onDraftDeleted, qu
   }
 
   return (
-    <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
-      {text}
-    </Button>
+    <Tooltip content={tooltip}>
+      <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
+        {text}
+      </Button>
+    </Tooltip>
   );
 };
 

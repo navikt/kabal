@@ -1,5 +1,6 @@
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { SavedStatus, type SavedStatusProps } from '@app/components/saved-status/saved-status';
+import { DuplicateTextButton } from '@app/components/smart-editor-texts/duplicate-text-button';
 import { isDepublished, isPublished } from '@app/components/smart-editor-texts/functions/status-helpers';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { isGodFormuleringType, isRegelverkType, isRichTextType } from '@app/functions/is-rich-plain-text';
@@ -44,12 +45,21 @@ export const Footer = ({ text, onDraftDeleted, status, onPublish, deleteTranslat
         <Button onClick={onPublish} icon={<UploadIcon aria-hidden />} size="small" loading={publishIsLoading}>
           Publiser
         </Button>
+
         <DeleteLanguageVersion deleteTranslation={deleteTranslation} />
+
         {isDraft ? (
-          <DeleteDraftButton id={id} title={text.title} onDraftDeleted={onDraftDeleted}>
-            {willBeMovedToDepublished ? 'Slett utkast og sett tekst som avpublisert' : 'Slett utkast'}
+          <DeleteDraftButton
+            id={id}
+            title={text.title}
+            onDraftDeleted={onDraftDeleted}
+            tooltip={willBeMovedToDepublished ? 'Slett utkast og sett tekst som avpublisert.' : undefined}
+          >
+            {willBeMovedToDepublished ? 'Slett utkast og avpubliser' : 'Slett utkast'}
           </DeleteDraftButton>
         ) : null}
+
+        <DuplicateTextButton {...text} />
       </Row>
 
       <Row>
@@ -127,8 +137,9 @@ const LastEdit = ({ edits, textType }: LastEditProps) => {
 
   return (
     <LastEditContainer>
-      Sist endret: <time dateTime={lastEdit.created}>{isoDateTimeToPretty(lastEdit.created)}</time>, av:{' '}
-      {lastEdit.actor.navn}
+      <span>Sist endret: </span>
+      <time dateTime={lastEdit.created}>{isoDateTimeToPretty(lastEdit.created)}</time>
+      <span> av {lastEdit.actor.navn}</span>
     </LastEditContainer>
   );
 };

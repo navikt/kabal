@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 export const Container = styled.section`
   display: grid;
   grid-template-rows: min-content 1fr;
-  grid-template-columns: 440px min-content;
+  grid-template-columns: 440px 882px;
   grid-template-areas:
     'header header'
     'sidebar text-list';
@@ -70,11 +70,4 @@ export const DateTimeContainer = styled.div`
   flex-direction: row;
   align-items: center;
   column-gap: var(--a-spacing-1);
-`;
-
-export const ActionsContainer = styled.div`
-  grid-area: actions;
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-2);
 `;

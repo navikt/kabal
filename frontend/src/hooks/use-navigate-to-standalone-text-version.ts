@@ -1,6 +1,8 @@
+import { TEXT_TYPE_BASE_PATH } from '@app/domain/redaktør-paths';
+import { REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
 import { Language } from '@app/types/texts/language';
 import { useCallback, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
 
 interface Params {
@@ -9,22 +11,20 @@ interface Params {
   lang?: string;
 }
 
-export const useNavigateToStandaloneTextVersion = (hasLanguage: boolean) => {
+export const useNavigateToStandaloneTextVersion = (textType: TextTypes) => {
+  const hasLanguage = textType !== REGELVERK_TYPE;
   const navigate = useNavigate();
-  const { pathname } = useLocation();
   const oldParams = useParams();
   const { lang } = useParams();
   const [searchParams] = useSearchParams();
 
-  const [, rootPath] = pathname.split('/');
-
   const navigateToText = useCallback(
     (newParams: Params, replace = false) => {
-      const path = calculatePath(rootPath, oldParams, newParams, hasLanguage);
+      const path = calculatePath(textType, oldParams, newParams, hasLanguage);
 
       return navigate(`${path}?${searchParams.toString()}`, { replace });
     },
-    [hasLanguage, navigate, oldParams, rootPath, searchParams],
+    [hasLanguage, navigate, oldParams, textType, searchParams],
   );
 
   useEffect(() => {
@@ -37,12 +37,12 @@ export const useNavigateToStandaloneTextVersion = (hasLanguage: boolean) => {
 };
 
 const calculatePath = (
-  rootPath: string | undefined,
+  textType: TextTypes,
   oldParams: Record<string, string | undefined>,
   newParams: Params,
   hasLanguage: boolean,
 ): string => {
-  let path = `/${rootPath}`;
+  let path = `/${TEXT_TYPE_BASE_PATH[textType]}`;
 
   if (hasLanguage) {
     const newLanguage = newParams.lang ?? oldParams.lang ?? Language.NB;
