@@ -15,6 +15,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Registreringshjemler,
   ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Finished,
+  ColumnKeyEnum.Utfall,
   ColumnKeyEnum.Tildeling,
   ColumnKeyEnum.OpenWithYtelseAccess,
 ];
