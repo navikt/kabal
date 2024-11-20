@@ -1,14 +1,18 @@
-import { CurrentDatePlugin } from '@app/plate/plugins/current-date';
-import { EmptyVoidPlugin } from '@app/plate/plugins/empty-void';
-import { FooterPlugin, HeaderPlugin } from '@app/plate/plugins/header-footer';
+import {
+  ELEMENT_CURRENT_DATE,
+  ELEMENT_EMPTY_VOID,
+  ELEMENT_FOOTER,
+  ELEMENT_HEADER,
+  ELEMENT_MALTEKSTSEKSJON,
+  ELEMENT_PAGE_BREAK,
+  ELEMENT_PLACEHOLDER,
+  ELEMENT_REDIGERBAR_MALTEKST,
+  ELEMENT_REGELVERK,
+  ELEMENT_REGELVERK_CONTAINER,
+  ELEMENT_SIGNATURE,
+} from '@app/plate/plugins/element-types';
 import { LabelContentPlugin } from '@app/plate/plugins/label-content';
 import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
-import { MaltekstseksjonPlugin } from '@app/plate/plugins/maltekstseksjon';
-import { PageBreakPlugin } from '@app/plate/plugins/page-break';
-import { SaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/saksbehandler';
-import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
-import { RegelverkContainerPlugin, RegelverkPlugin } from '@app/plate/plugins/regelverk';
-import { SignaturePlugin } from '@app/plate/plugins/signature';
 import {
   type BulletListElement,
   type CurrentDateElement,
@@ -57,7 +61,7 @@ export const createMaltekstseksjon = (
   children: MaltekstseksjonElement['children'] = [createEmptyVoid()],
   language: Language = Language.NB,
 ): MaltekstseksjonElement => ({
-  type: MaltekstseksjonPlugin.key,
+  type: ELEMENT_MALTEKSTSEKSJON,
   id,
   section,
   children,
@@ -79,7 +83,7 @@ export const createRedigerbarMaltekst = (
   id?: string,
   language: Language = Language.NB,
 ): RedigerbarMaltekstElement => ({
-  type: RedigerbarMaltekstPlugin.key,
+  type: ELEMENT_REDIGERBAR_MALTEKST,
   section,
   id,
   language,
@@ -90,12 +94,12 @@ export const createRedigerbarMaltekst = (
 export const createRegelverkContainer = (
   children: ParentOrChildElement[] = [createSimpleParagraph()],
 ): RegelverkContainerElement => ({
-  type: RegelverkContainerPlugin.key,
+  type: ELEMENT_REGELVERK_CONTAINER,
   children,
 });
 
 export const createRegelverk = (): RegelverkElement => ({
-  type: RegelverkPlugin.key,
+  type: ELEMENT_REGELVERK,
   section: TemplateSections.REGELVERK_TITLE,
   children: [createPageBreak(), createMaltekstseksjon(TemplateSections.REGELVERK_TITLE), createRegelverkContainer()],
 });
@@ -133,7 +137,7 @@ export const createSimpleBulletList = (...textItems: string[]): BulletListElemen
 });
 
 export const createSignature = (): SignatureElement => ({
-  type: SignaturePlugin.key,
+  type: ELEMENT_SIGNATURE,
   useShortName: false,
   includeMedunderskriver: true,
   useSuffix: true,
@@ -142,24 +146,24 @@ export const createSignature = (): SignatureElement => ({
 });
 
 export const createPageBreak = (): PageBreakElement => ({
-  type: PageBreakPlugin.key,
+  type: ELEMENT_PAGE_BREAK,
   children: [{ text: '' }],
 });
 
 export const createCurrentDate = (): CurrentDateElement => ({
-  type: CurrentDatePlugin.key,
+  type: ELEMENT_CURRENT_DATE,
   children: [{ text: '' }],
 });
 
 export const createHeader = (): HeaderElement => ({
-  type: HeaderPlugin.key,
+  type: ELEMENT_HEADER,
   children: [{ text: '' }],
   threadIds: [],
   content: null,
 });
 
 export const createFooter = (): FooterElement => ({
-  type: FooterPlugin.key,
+  type: ELEMENT_FOOTER,
   children: [{ text: '' }],
   threadIds: [],
   content: null,
@@ -185,12 +189,12 @@ export const createTable = (): TableElement => ({
 });
 
 export const createPlaceHolder = (placeholder = ''): PlaceholderElement => ({
-  type: SaksbehandlerPlaceholderPlugin.key,
+  type: ELEMENT_PLACEHOLDER,
   placeholder,
   children: [{ text: '' }],
 });
 
 export const createEmptyVoid = (): EmptyVoidElement => ({
-  type: EmptyVoidPlugin.key,
+  type: ELEMENT_EMPTY_VOID,
   children: [{ text: '' }],
 });
