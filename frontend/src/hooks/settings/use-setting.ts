@@ -78,8 +78,7 @@ export const useDocumentsOnlyIncluded = () => useBooleanSetting(useOppgavePath('
 export const useSmartEditorActiveDocument = () => useSetting(useOppgavePath('tabs/smart-editor/active_document'));
 export const useSmartEditorGodeFormuleringerOpen = () =>
   useBooleanSetting(useOppgavePath('tabs/smart-editor/gode_formuleringer_open'));
-export const useSmartEditorAnnotationsAtOrigin = () =>
-  useBooleanSetting(useOppgavePath('tabs/smart-editor/annotations_at_origin'));
+export const useSmartEditorAnnotationsAtOrigin = () => useBooleanSetting('tabs/smart-editor/annotations_at_origin');
 export const useSmartEditorHistoryOpen = () => useBooleanSetting(useOppgavePath('tabs/smart-editor/history_open'));
 
 export enum ScalingGroup {
