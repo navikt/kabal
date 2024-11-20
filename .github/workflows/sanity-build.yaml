@@ -13,12 +13,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: latest
-          
+          bun-version: 1.1.34
+
       - name: Install ${{ matrix.apps }} dependencies
         shell: bash
         env:
@@ -43,13 +43,13 @@ jobs:
         run: |
           cd ${{ matrix.apps }}
           bun run typecheck
-            
+
       - name: Lint ${{ matrix.apps }}
         shell: bash
         run: |
           cd ${{ matrix.apps }}
           npm run lint
-    
+
       - name: Test ${{ matrix.apps }}
         shell: bash
         run: |
