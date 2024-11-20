@@ -9,12 +9,14 @@ import { Role } from '@app/types/bruker';
 import { CreatorRole, DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 export const useCanEditDocument = (document: IMainDocument | null, parentDocument?: IMainDocument) => {
   const isRol = useIsRol();
   const isTildeltSaksbehandler = useIsSaksbehandler();
   const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
   const hasMerkantilRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
+  const hasKrolRole = useHasRole(Role.KABAL_ROL);
   const isFeilregistrert = useIsFeilregistrert();
   const isFullfoert = useIsFullfoert();
   const { data: oppgave, isSuccess } = useOppgave();
@@ -29,6 +31,7 @@ export const useCanEditDocument = (document: IMainDocument | null, parentDocumen
     isRol,
     document,
     isFullfoert,
+    hasKrolRole,
     isFeilregistrert,
     hasMerkantilRole,
     hasSaksbehandlerRole,
@@ -47,6 +50,7 @@ export interface CanEditDocumentParams {
   isTildeltSaksbehandler: boolean;
   hasSaksbehandlerRole: boolean;
   hasMerkantilRole: boolean;
+  hasKrolRole: boolean;
   isFeilregistrert: boolean;
   isFullfoert: boolean;
   isRol: boolean;
@@ -56,6 +60,7 @@ export const canEditDocument = ({
   isRol,
   document,
   isFullfoert,
+  hasKrolRole,
   rolFlowState,
   isFeilregistrert,
   hasMerkantilRole,
@@ -80,6 +85,10 @@ export const canEditDocument = ({
 
   if (medunderskriverFlowState === FlowState.SENT) {
     return false;
+  }
+
+  if (document.templateId === TemplateIdEnum.ROL_ANSWERS) {
+    return isRol || hasKrolRole;
   }
 
   if (hasMerkantilRole) {

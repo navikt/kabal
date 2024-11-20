@@ -64,6 +64,7 @@ const BASE_PARAMS: CanEditDocumentParams = {
   medunderskriverFlowState: FlowState.NOT_SENT,
   hasMerkantilRole: false,
   hasSaksbehandlerRole: false,
+  hasKrolRole: false,
   isRol: false,
   isTildeltSaksbehandler: false,
   rolFlowState: null,
@@ -159,6 +160,74 @@ describe('canEditDocument', () => {
       const params = { ...BASE_PARAMS, isRol: true, rolFlowState: FlowState.SENT, document };
 
       expect(canEditDocument(params)).toBe(true);
+    });
+  });
+
+  describe('Svar fra rådgivende overlege', () => {
+    const rolAnswers = { ...SMART_DOCUMENT, templateId: TemplateIdEnum.ROL_ANSWERS };
+
+    it('should return true if user is assigned ROL', () => {
+      const creator = { creatorRole: CreatorRole.KABAL_ROL, employee: EMPLOYEE };
+      const document = { ...rolAnswers, creator };
+      const params = {
+        ...BASE_PARAMS,
+        isRol: true,
+        hasKrolRole: false,
+        hasMerkantilRole: false,
+        isTildeltSaksbehandler: false,
+        rolFlowState: FlowState.SENT,
+        document,
+      };
+
+      expect(canEditDocument(params)).toBe(true);
+    });
+
+    it('should return true if user is KROL', () => {
+      const creator = { creatorRole: CreatorRole.KABAL_ROL, employee: EMPLOYEE };
+      const document = { ...rolAnswers, creator };
+      const params = {
+        ...BASE_PARAMS,
+        isRol: false,
+        hasKrolRole: true,
+        hasMerkantilRole: false,
+        isTildeltSaksbehandler: false,
+        rolFlowState: FlowState.SENT,
+        document,
+      };
+
+      expect(canEditDocument(params)).toBe(true);
+    });
+
+    it('should return false if user is assigned saksbehandler', () => {
+      const creator = { creatorRole: CreatorRole.KABAL_ROL, employee: EMPLOYEE };
+      const document = { ...rolAnswers, creator };
+      const params = {
+        ...BASE_PARAMS,
+        isRol: false,
+        hasKrolRole: false,
+        hasMerkantilRole: false,
+        isTildeltSaksbehandler: true,
+        rolFlowState: FlowState.SENT,
+        document,
+      };
+
+      expect(canEditDocument(params)).toBe(false);
+    });
+
+    it('should return false if user is merkantil', () => {
+      const creator = { creatorRole: CreatorRole.KABAL_ROL, employee: EMPLOYEE };
+      const document = { ...rolAnswers, creator };
+      const params = {
+        ...BASE_PARAMS,
+        isRol: false,
+        hasKrolRole: false,
+        hasMerkantilRole: true,
+        isTildeltSaksbehandler: false,
+        rolFlowState: FlowState.SENT,
+        document,
+      };
+
+      expect(canEditDocument(params)).toBe(false);
     });
   });
 });
