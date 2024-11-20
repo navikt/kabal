@@ -5,6 +5,7 @@ import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { Role } from '@app/types/bruker';
 import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Heading, type HeadingProps } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useMemo, useRef, useState } from 'react';
@@ -91,7 +92,8 @@ export const DropHeading = ({ children }: Props) => {
 const isDroppable = (draggedDocument: IMainDocument | null): draggedDocument is IMainDocument =>
   draggedDocument !== null &&
   draggedDocument.parentId !== null &&
-  draggedDocument.type !== DocumentTypeEnum.JOURNALFOERT;
+  draggedDocument.type !== DocumentTypeEnum.JOURNALFOERT &&
+  draggedDocument.templateId !== TemplateIdEnum.ROL_ANSWERS;
 
 interface IDragOver extends HeadingProps {
   $isDropTarget: boolean;
