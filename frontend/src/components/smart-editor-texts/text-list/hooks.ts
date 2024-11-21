@@ -34,7 +34,7 @@ export const useFilteredAndSorted = <T extends RedaktørItem>(
 
     const result: ScoredText<T>[] = [];
 
-    for (const text of data) {
+    for (const text of filteredByStatus) {
       const filterText = getFilterText(text, language);
 
       const score = fuzzySearch(splitQuery(filter), filterText);
