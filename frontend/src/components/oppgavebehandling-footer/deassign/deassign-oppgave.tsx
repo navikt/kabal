@@ -35,7 +35,6 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
     !canEdit ||
     oppgave === undefined ||
     oppgave.feilregistrering !== null ||
-    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
     oppgave.typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET
   ) {
     return null;
