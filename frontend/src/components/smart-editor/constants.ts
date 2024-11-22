@@ -5,8 +5,8 @@ export const COMMENT_PREFIX = 'commentThreadId_';
 
 export const MALTEKST_SECTION_NAMES: Record<TemplateSections, string> = {
   [TemplateSections.TITLE]: 'Dokumenttittel',
-  [TemplateSections.INTRODUCTION_OLD]: 'Introduksjon (gammel)',
-  [TemplateSections.INTRODUCTION]: 'Introduksjon',
+  [TemplateSections.INTRODUCTION]: 'Introduksjon (gammel)',
+  [TemplateSections.INTRODUCTION_V2]: 'Introduksjon v2',
   [TemplateSections.AVGJOERELSE]: 'Avgjørelse',
   [TemplateSections.ANFOERSLER]: 'Anførsler',
   [TemplateSections.VURDERINGEN]: 'Vurderingen vår',
@@ -16,8 +16,8 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections, string> = {
   [TemplateSections.SAKSKOSTNADER]: 'Sakskostnader',
   [TemplateSections.REGELVERK_TITLE]: 'Regelverktittel',
   [TemplateSections.FREMLEGG]: 'Fremlegg',
-  [TemplateSections.TILSVARSRETT_OLD]: 'Tilsvarsrett (gammel)',
-  [TemplateSections.TILSVARSRETT]: 'Tilsvarsrett',
+  [TemplateSections.TILSVARSRETT]: 'Tilsvarsrett (gammel)',
+  [TemplateSections.TILSVARSRETT_V2]: 'Tilsvarsrett v2',
   [TemplateSections.VEDLEGG]: 'Vedlegg med forklaring',
   [TemplateSections.SVAR_FRA_ROL]: 'Svar fra ROL',
   [TemplateSections.TILSVARSBREV_TITLE]: 'Tilsvarsbrevtittel',
