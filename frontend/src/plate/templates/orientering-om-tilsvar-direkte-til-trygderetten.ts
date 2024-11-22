@@ -10,6 +10,7 @@ import { TemplateSections } from '../template-sections';
 import {
   createCurrentDate,
   createFooter,
+  createFullmektig,
   createHeader,
   createLabelContent,
   createMaltekstseksjon,
@@ -30,11 +31,12 @@ const INITIAL_SLATE_VALUE: Value = [
       createLabelContent(Source.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME, 'Saken gjelder'),
       createLabelContent(Source.SAKEN_GJELDER_FNR, 'Fødselsnummer'),
       createLabelContent(Source.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME, 'Den ankende part'),
+      createFullmektig(),
       createLabelContent(Source.SAKSNUMMER, 'Saksnummer'),
     ],
   },
 
-  createMaltekstseksjon(TemplateSections.TILSVARSRETT),
+  createMaltekstseksjon(TemplateSections.TILSVARSRETT_V2),
 
   createSignature(),
   createFooter(),

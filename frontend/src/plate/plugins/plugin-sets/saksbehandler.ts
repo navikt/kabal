@@ -10,6 +10,7 @@ import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { CommentsPlugin } from '@app/plate/plugins/comments';
 import { CurrentDatePlugin } from '@app/plate/plugins/current-date';
 import { EmptyVoidPlugin } from '@app/plate/plugins/empty-void';
+import { FullmektigPlugin } from '@app/plate/plugins/fullmektig';
 import { FooterPlugin, HeaderPlugin } from '@app/plate/plugins/header-footer';
 import { LabelContentPlugin } from '@app/plate/plugins/label-content';
 import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
@@ -61,6 +62,7 @@ export const saksbehandlerPlugins = [
   HeaderPlugin,
   FooterPlugin,
   LabelContentPlugin,
+  FullmektigPlugin,
   SignaturePlugin,
   EmptyVoidPlugin,
   CommentsPlugin,

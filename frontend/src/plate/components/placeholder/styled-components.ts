@@ -44,4 +44,5 @@ export const Wrapper = styled.span`
     content: attr(data-placeholder);
     user-select: none;
   }
+
 `;

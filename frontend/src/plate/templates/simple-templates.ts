@@ -47,7 +47,7 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
         createLabelContent(Source.SAKSNUMMER, 'Saksnummer'),
       ],
     },
-    createMaltekstseksjon(TemplateSections.INTRODUCTION),
+    createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
     createMaltekstseksjon(TemplateSections.FREMLEGG),
     createSignature(),
   ],
@@ -71,7 +71,7 @@ export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>
   tittel: 'Tilsvarsbrev (ROL)',
   richText: [
     createCurrentDate(),
-    createMaltekstseksjon(TemplateSections.TILSVARSRETT),
+    createMaltekstseksjon(TemplateSections.TILSVARSRETT_V2),
     createMaltekstseksjon(TemplateSections.GENERELL_INFO),
     createPageBreak(),
     createMaltekstseksjon(TemplateSections.VEDLEGG),

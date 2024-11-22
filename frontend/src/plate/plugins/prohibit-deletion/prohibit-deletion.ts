@@ -1,4 +1,8 @@
 import {
+  handleDeleteBackwardInFullmektig,
+  handleDeleteForwardInFullmektig,
+} from '@app/plate/plugins/prohibit-deletion/fullmektig';
+import {
   handleDeleteBackwardIntoUnchangeable,
   handleDeleteForwardIntoUnchangeable,
   handleDeleteInsideUnchangeable,
@@ -12,7 +16,7 @@ import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
 import type { EditorFragmentDeletionOptions, TextUnit } from 'slate';
 
 const withOverrides = (editor: PlateEditor) => {
-  const { deleteBackward, deleteForward, deleteFragment, insertFragment, insertText, addMark } = editor;
+  const { deleteBackward, deleteForward, deleteFragment, insertFragment, insertText, addMark, delete: del } = editor;
 
   editor.insertText = (text, options) => {
     if (isUnchangeable(editor)) {
@@ -28,6 +32,20 @@ const withOverrides = (editor: PlateEditor) => {
     }
 
     return addMark(key, value);
+  };
+
+  editor.delete = (options) => {
+    const backward = options?.reverse === true;
+
+    if (backward) {
+      if (handleDeleteBackwardInFullmektig(editor)) {
+        return;
+      }
+    } else if (handleDeleteForwardInFullmektig(editor)) {
+      return;
+    }
+
+    return del(options);
   };
 
   editor.deleteBackward = (unit: TextUnit) => {

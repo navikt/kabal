@@ -2,6 +2,7 @@ import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
   ELEMENT_FOOTER,
+  ELEMENT_FULLMEKTIG,
   ELEMENT_HEADER,
   ELEMENT_MALTEKSTSEKSJON,
   ELEMENT_PAGE_BREAK,
@@ -11,6 +12,7 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
+import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@app/plate/plugins/fullmektig';
 import { LabelContentPlugin } from '@app/plate/plugins/label-content';
 import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
 import {
@@ -18,6 +20,8 @@ import {
   type CurrentDateElement,
   type EmptyVoidElement,
   type FooterElement,
+  type FormattedText,
+  type FullmektigElement,
   type H1Element,
   type H2Element,
   type HeaderElement,
@@ -188,13 +192,31 @@ export const createTable = (): TableElement => ({
   ],
 });
 
-export const createPlaceHolder = (placeholder = ''): PlaceholderElement => ({
+export const createPlaceHolder = (
+  placeholder = '',
+  deletable = true,
+  children: FormattedText[] = [{ text: '' }],
+): PlaceholderElement => ({
   type: ELEMENT_PLACEHOLDER,
   placeholder,
-  children: [{ text: '' }],
+  children,
+  deletable,
 });
 
 export const createEmptyVoid = (): EmptyVoidElement => ({
   type: ELEMENT_EMPTY_VOID,
   children: [{ text: '' }],
+});
+
+export const createFullmektig = (): FullmektigElement => ({
+  type: ELEMENT_FULLMEKTIG,
+  children: [
+    { text: '' },
+    createPlaceHolder(FULLMEKTIG_LABEL_PLACEHOLDER, false, [{ text: 'Fullmektig', bold: true }]),
+    { text: '' },
+    createPlaceHolder(FULLMEKTIG_VALUE_PLACEHOLDER, false),
+    { text: '' },
+  ],
+  id: undefined,
+  show: false,
 });

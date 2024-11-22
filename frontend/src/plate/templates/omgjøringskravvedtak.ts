@@ -1,14 +1,16 @@
 import { deepFreeze } from '@app/functions/deep-freeze';
 import { Source } from '@app/plate/components/label-content';
-import { type KabalValue, TextAlign } from '@app/plate/types';
+import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { Value } from '@udecode/plate-common';
 import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { TemplateSections } from '../template-sections';
 import {
   createCurrentDate,
   createFooter,
+  createFullmektig,
   createHeader,
   createLabelContent,
   createMaltekstseksjon,
@@ -16,7 +18,7 @@ import {
   createSignature,
 } from './helpers';
 
-const INITIAL_SLATE_VALUE: KabalValue = [
+const INITIAL_SLATE_VALUE: Value = [
   createCurrentDate(),
   createHeader(),
 
@@ -30,11 +32,12 @@ const INITIAL_SLATE_VALUE: KabalValue = [
       createLabelContent(Source.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME, 'Saken gjelder'),
       createLabelContent(Source.SAKEN_GJELDER_FNR, 'Fødselsnummer'),
       createLabelContent(Source.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME, 'Den som krever omgjøring'),
+      createFullmektig(),
       createLabelContent(Source.SAKSNUMMER, 'Saksnummer'),
     ],
   },
 
-  createMaltekstseksjon(TemplateSections.INTRODUCTION),
+  createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
   createMaltekstseksjon(TemplateSections.AVGJOERELSE),
   createMaltekstseksjon(TemplateSections.ANFOERSLER),
   createMaltekstseksjon(TemplateSections.OPPLYSNINGER),
