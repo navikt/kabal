@@ -13,8 +13,8 @@
  */
 export enum TemplateSections {
   TITLE = 'section-esel',
-  INTRODUCTION_OLD = 'section-rev',
-  INTRODUCTION = 'section-rev-v2',
+  INTRODUCTION = 'section-rev',
+  INTRODUCTION_V2 = 'section-rev-v2',
   ANKEINFO = 'section-ape',
   ANFOERSLER = 'section-ulv',
   VURDERINGEN = 'section-mus',
@@ -24,8 +24,8 @@ export enum TemplateSections {
   REGELVERK_TITLE = 'section-gnu',
   SAKSKOSTNADER = 'section-gris',
   FREMLEGG = 'section-geit',
-  TILSVARSRETT_OLD = 'section-hund',
-  TILSVARSRETT = 'section-hund-v2',
+  TILSVARSRETT = 'section-hund',
+  TILSVARSRETT_V2 = 'section-hund-v2',
   VEDLEGG = 'section-katt',
   SVAR_FRA_ROL = 'section-emu',
   TILSVARSBREV_TITLE = 'section-mink',
