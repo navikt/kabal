@@ -32,6 +32,8 @@ export const Receipients = (document: IMainDocument) => {
 
   const oppgaveId = data?.id;
 
+  const reachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => s.reachable);
+
   const addMottakere = useCallback(
     (mottakere: IMottaker[]) => {
       if (oppgaveId === undefined) {
@@ -39,9 +41,11 @@ export const Receipients = (document: IMainDocument) => {
       }
 
       const mottakerList =
-        document.mottakerList.length === 0 && suggestedBrevmottakere.length === 1
+        document.mottakerList.length === 0 && reachableSuggestedRecipients.length === 1
           ? [
-              ...suggestedBrevmottakere.filter((s) => !document.mottakerList.some((m) => m.part.id === s.part.id)),
+              ...reachableSuggestedRecipients.filter(
+                (s) => !document.mottakerList.some((m) => m.part.id === s.part.id),
+              ),
               ...document.mottakerList,
             ]
           : [...document.mottakerList];
@@ -56,7 +60,7 @@ export const Receipients = (document: IMainDocument) => {
 
       setMottakerList({ oppgaveId, dokumentId: document.id, mottakerList });
     },
-    [oppgaveId, document.mottakerList, document.id, suggestedBrevmottakere, setMottakerList],
+    [oppgaveId, document.mottakerList, document.id, reachableSuggestedRecipients, setMottakerList],
   );
 
   const removeMottakere = useCallback(
@@ -135,7 +139,6 @@ export const Receipients = (document: IMainDocument) => {
   const customRecipients = document.mottakerList.filter((m) =>
     suggestedBrevmottakere.every((s) => s.part.id !== m.part.id),
   );
-  const reachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => s.reachable);
   const unreachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => !s.reachable);
   const [firstReachableRecipient, ...restReachableSuggestedRecipients] = reachableSuggestedRecipients;
   const onlyOneReachableRecipient =
