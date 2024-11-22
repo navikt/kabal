@@ -4,6 +4,7 @@ import { TemplateSections } from '@app/plate/template-sections';
 import {
   createCurrentDate,
   createFooter,
+  createFullmektig,
   createHeader,
   createLabelContent,
   createMaltekstseksjon,
@@ -31,11 +32,12 @@ const INITIAL_SLATE_VALUE: Value = [
       createLabelContent(Source.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME, 'Saken gjelder'),
       createLabelContent(Source.SAKEN_GJELDER_FNR, 'Fødselsnummer'),
       createLabelContent(Source.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME, 'Den ankende part'),
+      createFullmektig(),
       createLabelContent(Source.SAKSNUMMER, 'Saksnummer'),
     ],
   },
 
-  createMaltekstseksjon(TemplateSections.INTRODUCTION),
+  createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
   createMaltekstseksjon(TemplateSections.AVGJOERELSE),
   createMaltekstseksjon(TemplateSections.ANFOERSLER),
   createMaltekstseksjon(TemplateSections.OPPLYSNINGER),

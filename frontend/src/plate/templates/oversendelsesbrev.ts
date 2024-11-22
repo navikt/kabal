@@ -3,6 +3,7 @@ import { Source } from '@app/plate/components/label-content';
 import {
   createCurrentDate,
   createFooter,
+  createFullmektig,
   createHeader,
   createLabelContent,
   createMaltekstseksjon,
@@ -36,11 +37,12 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
         createLabelContent(Source.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME, 'Saken gjelder'),
         createLabelContent(Source.SAKEN_GJELDER_FNR, 'Fødselsnummer'),
         createLabelContent(Source.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME, 'Den ankende part'),
+        createFullmektig(),
         createLabelContent(Source.SAKSNUMMER, 'Saksnummer'),
       ],
     },
 
-    createMaltekstseksjon(TemplateSections.TILSVARSRETT),
+    createMaltekstseksjon(TemplateSections.TILSVARSRETT_V2),
     createMaltekstseksjon(TemplateSections.GENERELL_INFO),
 
     createSignature(),
@@ -61,7 +63,7 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
       ],
     },
 
-    createMaltekstseksjon(TemplateSections.INTRODUCTION),
+    createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
     createMaltekstseksjon(TemplateSections.ANFOERSLER),
     createMaltekstseksjon(TemplateSections.OPPLYSNINGER),
     createMaltekstseksjon(TemplateSections.VURDERINGEN),

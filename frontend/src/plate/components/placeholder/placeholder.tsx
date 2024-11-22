@@ -147,7 +147,11 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
   const hideDeleteButton = useMemo(() => {
     const path = findNodePath(editor, element);
 
-    return !(canManage && hasNoVisibleText) || lonePlaceholderInMaltekst(editor, element, path);
+    return (
+      !(canManage && hasNoVisibleText) ||
+      lonePlaceholderInMaltekst(editor, element, path) ||
+      element.deletable === false
+    );
   }, [editor, element, hasNoVisibleText, canManage]);
 
   return (

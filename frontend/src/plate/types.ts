@@ -4,6 +4,7 @@ import type {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
   ELEMENT_FOOTER,
+  ELEMENT_FULLMEKTIG,
   ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
@@ -157,6 +158,7 @@ export interface PlaceholderElement extends BlockElement {
   type: typeof ELEMENT_PLACEHOLDER;
   placeholder: string;
   children: FormattedText[];
+  deletable?: boolean;
 }
 
 export interface PageBreakElement extends BlockElement {
@@ -211,6 +213,14 @@ export interface LabelContentElement extends TElement {
   result?: string;
 }
 
+export interface FullmektigElement extends TElement {
+  type: typeof ELEMENT_FULLMEKTIG;
+  // One would think [PlaceholderElement, PlaceholderElement] would work, but Slate/Plate insists on inserting surrounding text nodes. At least now the type will be correct.
+  children: [{ text: '' }, PlaceholderElement, { text: '' }, PlaceholderElement, { text: '' }];
+  id: string | undefined;
+  show: boolean;
+}
+
 export interface ISignature {
   name: string;
   title?: string;
@@ -260,7 +270,8 @@ export type ChildElement =
   | TableRowElement
   | TableCellElement
   | RegelverkContainerElement
-  | PlaceholderElement;
+  | PlaceholderElement
+  | FullmektigElement;
 
 export type RichTextEditorElement = RootElement | ChildElement;
 
