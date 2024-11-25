@@ -6,7 +6,7 @@ import {
   useUpdateUtfallIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
 } from '@app/redux-api/maltekstseksjoner/mutations';
-import { type IGetMaltekstseksjonParams, MALTEKSTSEKSJON_TYPE } from '@app/types/common-text-types';
+import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { styled } from 'styled-components';
 
@@ -29,7 +29,6 @@ export const Filters = ({ maltekst, query }: Props) => {
   return (
     <Container>
       <TemplateSectionSelect
-        textType={MALTEKSTSEKSJON_TYPE}
         selected={maltekst.templateSectionIdList}
         onChange={(templateSectionIdList) => updateTemplateSection({ id: maltekst.id, templateSectionIdList, query })}
       >

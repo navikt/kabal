@@ -5,7 +5,7 @@ import {
   TemplateSectionSelect,
   UtfallSelect,
 } from '@app/components/smart-editor-texts/query-filter-selects';
-import type { IGetMaltekstseksjonParams, TextTypes } from '@app/types/common-text-types';
+import { GOD_FORMULERING_TYPE, type IGetMaltekstseksjonParams, type TextTypes } from '@app/types/common-text-types';
 import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { HjemlerSelect } from './hjemler-select/hjemler-select';
@@ -18,7 +18,7 @@ interface Props {
 
 export const Filters = ({ textType, className }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { enhet, templateSection, utfall, ytelseHjemmel } = useMetadataFilters(textType);
+  const { enhet, utfall, ytelseHjemmel } = useMetadataFilters(textType);
 
   const { enhetIdList, utfallIdList, templateSectionIdList, ytelseHjemmelIdList } = useTextQuery();
 
@@ -36,11 +36,10 @@ export const Filters = ({ textType, className }: Props) => {
 
   return (
     <Container className={className}>
-      {templateSection ? (
+      {textType === GOD_FORMULERING_TYPE ? (
         <TemplateSectionSelect
           selected={templateSectionIdList ?? []}
           onChange={(value) => setFilter('templateSectionIdList', value)}
-          textType={textType}
           includeNoneOption
           templatesSelectable
         >
