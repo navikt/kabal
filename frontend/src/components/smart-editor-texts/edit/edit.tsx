@@ -43,7 +43,7 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
 
   const { id, created, ytelseHjemmelIdList, utfallIdList, enhetIdList, templateSectionIdList, title, textType } = text;
 
-  const { enhet, templateSection, utfall, ytelseHjemmel } = useMetadataFilters(textType);
+  const { enhet, utfall, ytelseHjemmel } = useMetadataFilters(textType);
 
   const [lastEdit] = text.edits;
 
@@ -67,12 +67,11 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
         </LineContainer>
 
         <LineContainer>
-          {templateSection ? (
+          {textType === GOD_FORMULERING_TYPE ? (
             <TemplateSectionSelect
               selected={templateSectionIdList}
               onChange={(v) => updateTemplateSectionIdList({ id, query, templateSectionIdList: v })}
-              textType={textType}
-              templatesSelectable={textType === GOD_FORMULERING_TYPE}
+              templatesSelectable
             >
               Maler og seksjoner
             </TemplateSectionSelect>

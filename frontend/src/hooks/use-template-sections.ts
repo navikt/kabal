@@ -1,61 +1,47 @@
-import type {
-  ELEMENT_FOOTER,
-  ELEMENT_HEADER,
-  ELEMENT_MALTEKST,
-  ELEMENT_MALTEKSTSEKSJON,
-  ELEMENT_REDIGERBAR_MALTEKST,
-} from '@app/plate/plugins/element-types';
+import { ELEMENT_MALTEKSTSEKSJON } from '@app/plate/plugins/element-types';
 import { TemplateSections } from '@app/plate/template-sections';
 import { TEMPLATE_MAP } from '@app/plate/templates/templates';
+import type { MaltekstseksjonElement } from '@app/plate/types';
+import { isOfElementType } from '@app/plate/utils/queries';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { type TDescendant, type Value, isElement } from '@udecode/plate-common';
+import type { TDescendant, Value } from '@udecode/plate-common';
 import { useMemo } from 'react';
 
 const EMPTY_LIST: TemplateSections[] = [];
 
-export type SectionType =
-  | typeof ELEMENT_MALTEKSTSEKSJON
-  | typeof ELEMENT_MALTEKST
-  | typeof ELEMENT_REDIGERBAR_MALTEKST
-  | typeof ELEMENT_FOOTER
-  | typeof ELEMENT_HEADER;
+interface GroupedTemplateSections {
+  used: TemplateSections[];
+  unused: TemplateSections[];
+}
 
-export const useTemplateSections = (templateId: TemplateIdEnum, sectionType?: SectionType): TemplateSections[] =>
-  useMemo(() => getTemplateSections(templateId, sectionType), [templateId, sectionType]);
+export const useTemplateSections = (templateId: TemplateIdEnum): GroupedTemplateSections =>
+  useMemo(() => getTemplateSections(templateId), [templateId]);
 
-export const getTemplateSections = (templateId: TemplateIdEnum, sectionType?: SectionType): TemplateSections[] => {
+export const getTemplateSections = (templateId: TemplateIdEnum): GroupedTemplateSections => {
   const template = TEMPLATE_MAP[templateId];
 
   if (template === undefined) {
-    return EMPTY_LIST;
+    return { used: EMPTY_LIST, unused: TEMPLATE_SECTIONS };
   }
 
-  return getSections(template.richText as Value, sectionType);
+  return getSections(template.richText as Value);
 };
 
-const getSections = (children: TDescendant[], sectionType?: SectionType): TemplateSections[] => {
-  const sectionSet = new Set<TemplateSections>();
+const getSections = (children: TDescendant[]): GroupedTemplateSections => {
+  const used: TemplateSections[] = [];
+  const unused: TemplateSections[] = [];
 
-  for (const element of children) {
-    if (isElement(element)) {
-      if ('section' in element && isTemplateSection(element.section)) {
-        const sectionTypeMatches = sectionType === undefined || element.type === sectionType;
-
-        if (sectionTypeMatches) {
-          sectionSet.add(element.section);
-        }
-      }
-
-      for (const s of getSections(element.children, sectionType)) {
-        sectionSet.add(s);
-      }
+  for (const section of TEMPLATE_SECTIONS) {
+    if (
+      children.some((c) => isOfElementType<MaltekstseksjonElement>(c, ELEMENT_MALTEKSTSEKSJON) && c.section === section)
+    ) {
+      used.push(section);
+    } else {
+      unused.push(section);
     }
   }
 
-  return Array.from(sectionSet);
+  return { used, unused };
 };
 
 const TEMPLATE_SECTIONS = Object.values(TemplateSections);
-
-const isTemplateSection = (section: unknown): section is TemplateSections =>
-  typeof section === 'string' && TEMPLATE_SECTIONS.some((s) => s === section);

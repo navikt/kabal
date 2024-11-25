@@ -56,7 +56,8 @@ export const SectionSelect = ({ activeSection, setActiveSection }: Props) => {
   const { templateId } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorRef();
   const selection = useSelection();
-  const sections = useTemplateSections(templateId);
+
+  const { used } = useTemplateSections(templateId);
 
   useEffect(() => {
     if (selection === null) {
@@ -75,13 +76,13 @@ export const SectionSelect = ({ activeSection, setActiveSection }: Props) => {
       <option key={NONE} value={NONE}>
         Alle gode formuleringer
       </option>,
-      ...sections.map((section) => (
+      ...used.map((section) => (
         <option key={section} value={section}>
           {MALTEKST_SECTION_NAMES[section]}
         </option>
       )),
     ],
-    [sections],
+    [used],
   );
 
   const value = activeSection === NONE ? NONE : activeSection;

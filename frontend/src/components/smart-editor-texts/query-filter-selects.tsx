@@ -5,7 +5,6 @@ import { NONE, NONE_OPTION, type NONE_TYPE, SET_DELIMITER } from '@app/component
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import type { TextTypes } from '@app/types/common-text-types';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
@@ -106,7 +105,6 @@ interface TemplateSelectProps {
   children: string;
   selected: string[];
   onChange: (value: string[]) => void;
-  textType: TextTypes;
   includeNoneOption?: boolean;
   templatesSelectable?: boolean;
 }
@@ -115,13 +113,12 @@ export const TemplateSectionSelect = ({
   selected,
   children,
   onChange,
-  textType,
   includeNoneOption = false,
   templatesSelectable = false,
 }: TemplateSelectProps) => {
   const templates = useMemo(
-    () => getTemplateOptions(textType, includeNoneOption, templatesSelectable),
-    [includeNoneOption, templatesSelectable, textType],
+    () => getTemplateOptions(includeNoneOption, templatesSelectable),
+    [includeNoneOption, templatesSelectable],
   );
 
   return (
