@@ -58,7 +58,7 @@ interface LoadedProps extends Props {
   versions: IRichText[];
 }
 
-const Loaded = ({ firstVersion, versions, isActive, className, ...props }: LoadedProps) => {
+const Loaded = ({ firstVersion, versions, isActive, className, maltekstseksjonId, setActive }: LoadedProps) => {
   const tabsContainerRef = useRef<HTMLDivElement | null>(null);
   const [tabId, setTabId] = useState(firstVersion.versionId);
 
@@ -96,15 +96,22 @@ const Loaded = ({ firstVersion, versions, isActive, className, ...props }: Loade
       createDraftPanel={(version) => (
         <DraftText
           key={version.versionId}
-          {...props}
+          maltekstseksjonId={maltekstseksjonId}
           isActive={isActive}
           text={version}
           isDeletable={hasMoreThanOneVersion}
           onDraftDeleted={onDraftDeleted}
+          setActive={setActive}
         />
       )}
       createPublishedPanel={(version) => (
-        <PublishedRichText key={version.versionId} text={version} hasDraft={hasDraft} setTabId={setTabId} />
+        <PublishedRichText
+          key={version.versionId}
+          maltekstseksjonId={maltekstseksjonId}
+          text={version}
+          hasDraft={hasDraft}
+          setTabId={setTabId}
+        />
       )}
     />
   );

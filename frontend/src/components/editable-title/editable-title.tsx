@@ -119,8 +119,4 @@ const StyledTitle = styled(Heading)`
   }
 `;
 
-export const StyledHeading = styled(Heading)`
-  flex-grow: 1;
-`;
-
 export const getTitle = (title?: string) => (title === undefined ? '' : title.trim());

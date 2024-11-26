@@ -1,5 +1,6 @@
-import { StyledHeading, getTitle } from '@app/components/editable-title/editable-title';
+import { getTitle } from '@app/components/editable-title/editable-title';
 import { PublishedTextFooter } from '@app/components/maltekstseksjoner/texts/text-published-footer';
+import { isoDateTimeToPretty } from '@app/domain/date';
 import { isRegelverk } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
@@ -8,9 +9,8 @@ import { type GOD_FORMULERING_TYPE, type REGELVERK_TYPE, RichTextTypes } from '@
 import { LANGUAGE_NAMES, UNTRANSLATED } from '@app/types/texts/language';
 import type { IPublishedGodFormulering, IPublishedRegelverk, IPublishedRichText } from '@app/types/texts/responses';
 import { PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Alert } from '@navikt/ds-react';
+import { Alert, BodyShort, HStack, Heading, Label, VStack } from '@navikt/ds-react';
 import { useRef } from 'react';
-import { styled } from 'styled-components';
 import { RedaktoerRichText } from '../../redaktoer-rich-text/redaktoer-rich-text';
 
 interface Props {
@@ -26,14 +26,30 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
   const lang = useRedaktoerLanguage();
   const savedContent = isRegelverk(text) ? text.richText[UNTRANSLATED] : text.richText[lang];
 
+  const publishedId = `${text.id}-published`;
+
   return (
-    <Container ref={containerRef}>
-      <Header>
-        {getIcon(text.textType)}
-        <StyledHeading level="1" size="small">
-          {getTitle(text.title)}
-        </StyledHeading>
-      </Header>
+    <VStack ref={containerRef} position="relative" paddingBlock="2 0" flexGrow="1" overflowY="auto">
+      <VStack as="header" gap="2" marginBlock="0 2" minHeight="var(--a-spacing-8)">
+        <HStack gap="2" justify="space-between" align="center" paddingInline="0 2">
+          <Heading level="1" size="small">
+            {getTitle(text.title)}
+          </Heading>
+
+          {getIcon(text.textType)}
+        </HStack>
+
+        <HStack align="center" gap="1">
+          <Label size="small" htmlFor={publishedId}>
+            Publisert:
+          </Label>
+
+          <BodyShort id={publishedId}>
+            <time dateTime={text.publishedDateTime}>{isoDateTimeToPretty(text.publishedDateTime)}</time>
+            <span>, av {text.publishedByActor.navn}</span>
+          </BodyShort>
+        </HStack>
+      </VStack>
 
       {savedContent === null ? (
         <>
@@ -66,7 +82,7 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
           />
         </>
       )}
-    </Container>
+    </VStack>
   );
 };
 
@@ -80,22 +96,3 @@ const getIcon = (textType: RichTextTypes | typeof REGELVERK_TYPE | typeof GOD_FO
       return null;
   }
 };
-
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  position: relative;
-  padding-top: var(--a-spacing-2);
-  overflow-y: auto;
-`;
-
-const Header = styled.header`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
-  margin-bottom: var(--a-spacing-1);
-  min-height: var(--a-spacing-8);
-`;
