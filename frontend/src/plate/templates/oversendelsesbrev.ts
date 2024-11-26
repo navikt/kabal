@@ -33,12 +33,12 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
       type: BaseParagraphPlugin.key,
       align: TextAlign.LEFT,
       children: [
-        createLabelContent(Source.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME, 'Den ankende part'),
-        createLabelContent(Source.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME, 'Saken gjelder'),
-        createLabelContent(Source.SAKEN_GJELDER_FNR, 'Fødselsnummer'),
-        createLabelContent(Source.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME, 'Den ankende part'),
+        createLabelContent(Source.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
+        createLabelContent(Source.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
+        createLabelContent(Source.SAKEN_GJELDER_FNR),
+        createLabelContent(Source.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
         createFullmektig(),
-        createLabelContent(Source.SAKSNUMMER, 'Saksnummer'),
+        createLabelContent(Source.SAKSNUMMER),
       ],
     },
 
@@ -57,9 +57,9 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
       type: BaseParagraphPlugin.key,
       align: TextAlign.LEFT,
       children: [
-        createLabelContent(Source.SAKEN_GJELDER_NAME, 'Den ankende part'),
-        createLabelContent(Source.SAKEN_GJELDER_FNR, 'Fødselsnummer'),
-        createLabelContent(Source.SAKSNUMMER, 'Saksnummer'),
+        createLabelContent(Source.SAKEN_GJELDER_NAME),
+        createLabelContent(Source.SAKEN_GJELDER_FNR),
+        createLabelContent(Source.SAKSNUMMER),
       ],
     },
 

@@ -209,7 +209,7 @@ export interface FooterElement extends TElement {
 export interface LabelContentElement extends TElement {
   type: typeof ELEMENT_LABEL_CONTENT;
   children: [{ text: '' }];
-  label: string;
+  label?: string;
   source: Source;
   result?: string;
 }
