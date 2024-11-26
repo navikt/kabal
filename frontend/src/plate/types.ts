@@ -1,3 +1,4 @@
+import type { Source } from '@app/plate/components/label-content';
 import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { CommentsPlugin } from '@app/plate/plugins/comments';
 import type {
@@ -209,7 +210,7 @@ export interface LabelContentElement extends TElement {
   type: typeof ELEMENT_LABEL_CONTENT;
   children: [{ text: '' }];
   label: string;
-  source: string;
+  source: Source;
   result?: string;
 }
 

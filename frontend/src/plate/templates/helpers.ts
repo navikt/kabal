@@ -1,3 +1,4 @@
+import type { Source } from '@app/plate/components/label-content';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
@@ -50,7 +51,7 @@ import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin }
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 import { TemplateSections } from '../template-sections';
 
-export const createLabelContent = (source: string, label: string): LabelContentElement => ({
+export const createLabelContent = (source: Source, label: string): LabelContentElement => ({
   type: LabelContentPlugin.key,
   children: [{ text: '' }],
   source,
