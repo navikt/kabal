@@ -1,11 +1,11 @@
 import { deepFreeze } from '@app/functions/deep-freeze';
-import { Source } from '@app/plate/components/label-content';
 import { TemplateSections } from '@app/plate/template-sections';
 import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { BaseParagraphPlugin } from '@udecode/plate-core';
+import { LabelContentSource } from '../types';
 import {
   createCurrentDate,
   createFooter,
@@ -41,10 +41,10 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
       type: BaseParagraphPlugin.key,
       align: TextAlign.LEFT,
       children: [
-        createLabelContent(Source.SAKEN_GJELDER_NAME),
-        createLabelContent(Source.SAKEN_GJELDER_FNR),
-        createLabelContent(Source.YTELSE),
-        createLabelContent(Source.SAKSNUMMER),
+        createLabelContent(LabelContentSource.SAKEN_GJELDER_NAME),
+        createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
+        createLabelContent(LabelContentSource.YTELSE),
+        createLabelContent(LabelContentSource.SAKSNUMMER),
       ],
     },
     createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),

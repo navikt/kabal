@@ -1,5 +1,4 @@
 import { deepFreeze } from '@app/functions/deep-freeze';
-import { Source } from '@app/plate/components/label-content';
 import { TemplateSections } from '@app/plate/template-sections';
 import {
   createCurrentDate,
@@ -17,6 +16,7 @@ import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { Value } from '@udecode/plate-common';
 import { BaseParagraphPlugin } from '@udecode/plate-core';
+import { LabelContentSource } from '../types';
 
 const INITIAL_SLATE_VALUE: Value = [
   createCurrentDate(),
@@ -28,12 +28,12 @@ const INITIAL_SLATE_VALUE: Value = [
     type: BaseParagraphPlugin.key,
     align: TextAlign.LEFT,
     children: [
-      createLabelContent(Source.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
-      createLabelContent(Source.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
-      createLabelContent(Source.SAKEN_GJELDER_FNR),
-      createLabelContent(Source.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
+      createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
+      createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
+      createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
+      createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
       createFullmektig(),
-      createLabelContent(Source.SAKSNUMMER),
+      createLabelContent(LabelContentSource.SAKSNUMMER),
     ],
   },
 
