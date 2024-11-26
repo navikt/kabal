@@ -29,7 +29,17 @@ interface MaltekstProps {
 
 export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreated }: MaltekstProps) => {
   const { textId: activeTextId } = useParams<{ textId: string }>();
-  const { id, title, textIdList, publishedDateTime, versionId, publishedByActor } = maltekstseksjon;
+  const {
+    id,
+    title,
+    textIdList,
+    publishedDateTime,
+    modified,
+    modifiedOrTextsModified,
+    versionId,
+    publishedByActor,
+    published,
+  } = maltekstseksjon;
   const [createDraft, { isLoading }] = useCreateDraftFromVersionMutation();
 
   const onCreateDraft = useCallback(async () => {
@@ -51,6 +61,26 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
             </DateTimeContainer>
             av {publishedByActor.navn}
           </LabelValue>
+
+          {published ? (
+            <LabelValue>
+              <DateTimeContainer>
+                <strong>Sist endret:</strong>
+                <DateTime
+                  dateTime={modifiedOrTextsModified}
+                  icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />}
+                />
+              </DateTimeContainer>
+            </LabelValue>
+          ) : (
+            <LabelValue>
+              <DateTimeContainer>
+                <strong>Avpublisert:</strong>
+                <DateTime dateTime={modified} icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />} />
+              </DateTimeContainer>
+              av {publishedByActor.navn}
+            </LabelValue>
+          )}
           <TextHistory {...maltekstseksjon} isUpdating={false} />
         </Row>
         <TagContainer>
