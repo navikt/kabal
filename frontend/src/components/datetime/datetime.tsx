@@ -20,7 +20,7 @@ export const ModifiedCreatedDateTime = ({ id, lastEdit, created }: Props) => {
   return (
     <HStack id={id} align="center" gap="1">
       <DateTime icon={<Icon aria-hidden style={{ flexShrink: 0 }} />} dateTime={dateTime} title={title} />
-      {lastEdit === undefined ? null : <span>av {lastEdit.actor.navIdent}</span>}
+      {lastEdit === undefined ? null : <span>av {lastEdit.actor.navn}</span>}
     </HStack>
   );
 };
