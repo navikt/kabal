@@ -1,4 +1,4 @@
-import { Heading } from '@navikt/ds-react';
+import { Heading, VStack, type VStackProps } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 export const Container = styled.section`
@@ -28,34 +28,26 @@ export const Header = styled.header`
     'filters actions'
     'tags tags';
   grid-template-columns: 1fr fit-content;
-  white-space: nowrap;
   padding-right: var(--a-spacing-2);
   padding-top: var(--a-spacing-1);
-`;
-
-export const MetadataContainer = styled.div`
-  grid-area: metadata;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-1);
 `;
 
 export const StyledHeading = styled(Heading)`
   white-space: nowrap;
 `;
 
-export const SidebarContainer = styled.div`
-  position: sticky;
-  top: 0;
-  height: fit-content;
-  overflow: auto;
-  grid-area: sidebar;
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-  padding-top: var(--a-spacing-1);
-`;
+export const SidebarContainer = (props: VStackProps) => (
+  <VStack
+    position="sticky"
+    top="0"
+    height="fit-content"
+    overflow="auto"
+    gridColumn="sidebar"
+    gap="2"
+    paddingBlock="1 0"
+    {...props}
+  />
+);
 
 export const List = styled.ul`
   list-style: none;
@@ -64,11 +56,4 @@ export const List = styled.ul`
   white-space: nowrap;
   overflow-x: hidden;
   overflow-y: auto;
-`;
-
-export const DateTimeContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-1);
 `;

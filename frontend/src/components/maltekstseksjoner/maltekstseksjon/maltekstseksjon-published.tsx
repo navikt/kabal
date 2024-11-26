@@ -13,13 +13,12 @@ import { TextHistory } from '@app/components/text-history/text-history';
 import { useCreateDraftFromVersionMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IPublishedMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { CalendarIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Tooltip } from '@navikt/ds-react';
+import { CalendarIcon, PlusIcon } from '@navikt/aksel-icons';
+import { Button, HStack, Label, Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
 import { useParams } from 'react-router';
-import { styled } from 'styled-components';
 import { TextListItem } from '../styled-components';
-import { Container, DateTimeContainer, Header, List, SidebarContainer, StyledHeading } from './common';
+import { Container, Header, List, SidebarContainer, StyledHeading } from './common';
 import { LoadTextListItem } from './list-item';
 
 interface MaltekstProps {
@@ -48,50 +47,81 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
     onDraftCreated(draft.versionId);
   }, [createDraft, id, versionId, query, onDraftCreated]);
 
+  const publishedFieldId = `${id}-published`;
+  const modifiedFieldId = `${id}-modified`;
+  const depublishedFieldId = `${id}-depublished`;
+
   return (
     <Container>
       <Header>
         <StyledHeading level="1" size="small" style={{ gridArea: 'title' }}>
           {getTitle(title)}
         </StyledHeading>
-        <Row>
-          <LabelValue>
-            <DateTimeContainer>
-              <strong>Publisert:</strong>
-              <DateTime dateTime={publishedDateTime} icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />} />
-            </DateTimeContainer>
-            av {publishedByActor.navn}
-          </LabelValue>
+
+        <HStack gap="2" align="center" gridColumn="metadata">
+          <HStack gap="1" align="center">
+            <HStack gap="1" align="center">
+              <Label size="small" htmlFor={publishedFieldId}>
+                Publisert:
+              </Label>
+              <HStack align="center">
+                <DateTime
+                  id={publishedFieldId}
+                  dateTime={publishedDateTime}
+                  icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />}
+                />
+                <span>, av {publishedByActor.navn}</span>
+              </HStack>
+            </HStack>
+          </HStack>
 
           {published ? (
-            <LabelValue>
-              <DateTimeContainer>
-                <strong>Sist endret:</strong>
+            <HStack gap="1" align="center">
+              <HStack gap="1" align="center">
+                <Label size="small" htmlFor={modifiedFieldId}>
+                  Sist endret:
+                </Label>
                 <DateTime
+                  id={modifiedFieldId}
                   dateTime={modifiedOrTextsModified}
                   icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />}
                 />
-              </DateTimeContainer>
-            </LabelValue>
+              </HStack>
+            </HStack>
           ) : (
-            <LabelValue>
-              <DateTimeContainer>
-                <strong>Avpublisert:</strong>
-                <DateTime dateTime={modified} icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />} />
-              </DateTimeContainer>
-              av {publishedByActor.navn}
-            </LabelValue>
+            <HStack gap="1" align="center">
+              <HStack gap="1" align="center">
+                <Label size="small" htmlFor={depublishedFieldId}>
+                  Avpublisert:
+                </Label>
+                <DateTime
+                  id={depublishedFieldId}
+                  dateTime={modified}
+                  icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />}
+                />
+                <span>av {publishedByActor.navn}</span>
+              </HStack>
+            </HStack>
           )}
+
           <TextHistory {...maltekstseksjon} isUpdating={false} />
-        </Row>
+        </HStack>
+
         <TagContainer>
           <TemplateSectionTagList templateSectionIdList={maltekstseksjon.templateSectionIdList} />
           <YtelseHjemmelTagList ytelseHjemmelIdList={maltekstseksjon.ytelseHjemmelIdList} />
           <UtfallTagList utfallIdList={maltekstseksjon.utfallIdList} />
         </TagContainer>
-        <HStack gridColumn="actions" gap="2" justify="end">
+
+        <HStack gridColumn="actions" gap="2" justify="end" align="start">
           <Tooltip content="Opprett utkast basert på denne versjonen av maltekstseksjonen.">
-            <Button size="small" variant="secondary" onClick={onCreateDraft} loading={isLoading}>
+            <Button
+              size="small"
+              variant="secondary"
+              onClick={onCreateDraft}
+              loading={isLoading}
+              icon={<PlusIcon aria-hidden />}
+            >
               Nytt utkast
             </Button>
           </Tooltip>
@@ -118,18 +148,3 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
     </Container>
   );
 };
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
-  grid-area: metadata;
-`;
-
-const LabelValue = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-1);
-`;

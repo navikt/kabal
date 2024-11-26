@@ -4,9 +4,8 @@ import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksj
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, HelpText } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, HelpText } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   query: IGetMaltekstseksjonParams;
@@ -26,7 +25,7 @@ export const UnpublishMaltekstseksjonButton = ({ publishedMaltekstseksjon, query
 
   if (isOpen) {
     return (
-      <Container>
+      <HStack gap="2" align="center">
         <ConfirmUnpublishMaltekstseksjonButton
           publishedMaltekstseksjon={publishedMaltekstseksjon}
           query={query}
@@ -42,24 +41,27 @@ export const UnpublishMaltekstseksjonButton = ({ publishedMaltekstseksjon, query
           Avbryt
         </Button>
         <Explainer />
-      </Container>
+      </HStack>
     );
   }
 
   return (
-    <Container>
+    <HStack gap="2" align="center">
       <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
         Avpubliser
       </Button>
       <Explainer />
-    </Container>
+    </HStack>
   );
 };
 
 const Explainer = () => (
-  <HelpText>
-    Ved å avpublisere denne maltekstseksjonen vil den ikke lenger være tilgjengelig for saksbehandlerne.
-    Maltekstseksjonen kan når som helst publiseres igjen om ønskelig.
+  <HelpText placement="left">
+    <BodyShort spacing>
+      Ved å avpublisere denne maltekstseksjonen vil den ikke lenger være tilgjengelig for saksbehandlerne.
+    </BodyShort>
+
+    <BodyShort>Maltekstseksjonen kan når som helst publiseres igjen om ønskelig.</BodyShort>
   </HelpText>
 );
 
@@ -89,9 +91,3 @@ const ConfirmUnpublishMaltekstseksjonButton = ({
     </Button>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
-`;

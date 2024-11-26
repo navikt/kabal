@@ -3,10 +3,9 @@ import { AvailableTexts } from '@app/components/maltekstseksjoner/maltekstseksjo
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { type IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
 import type { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { Heading } from '@navikt/ds-react';
+import { Heading, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
-import { styled } from 'styled-components';
 import { DragAndDropContext } from '../../drag-and-drop/drag-context';
 import { List, SidebarContainer } from '../common';
 import { DraggableListItem } from './draggable-list-item';
@@ -155,7 +154,7 @@ export const Sidebar = ({ maltekstseksjon, query }: Props) => {
         ))}
       </List>
 
-      <ButtonsContainer>
+      <VStack as="section" gap="2" marginBlock="2 0" width="100%">
         <Heading level="1" size="xsmall">
           Legg til tekst i denne maltekstseksjonen
         </Heading>
@@ -175,15 +174,7 @@ export const Sidebar = ({ maltekstseksjon, query }: Props) => {
           usedIds={maltekstseksjon.textIdList}
           textType={RichTextTypes.REDIGERBAR_MALTEKST}
         />
-      </ButtonsContainer>
+      </VStack>
     </SidebarContainer>
   );
 };
-
-const ButtonsContainer = styled.section`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-  margin-top: var(--a-spacing-2);
-  width: 100%;
-`;

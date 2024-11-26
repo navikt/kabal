@@ -10,7 +10,7 @@ import { useGetMaltekstseksjonerQuery } from '@app/redux-api/maltekstseksjoner/q
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
 import { PuzzlePieceIcon } from '@navikt/aksel-icons';
-import { Search } from '@navikt/ds-react';
+import { HStack, Search } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
@@ -33,10 +33,10 @@ export const Maltekstseksjoner = () => {
 
   return (
     <Container>
-      <Header>
+      <HStack as="header" justify="start" align="center" gap="4" marginBlock="0 2" gridColumn="header">
         <CreateMaltekstseksjon query={query} />
         <SetMaltekstseksjonLanguage />
-      </Header>
+      </HStack>
 
       <Filters />
 
@@ -105,14 +105,4 @@ const Container = styled.article`
   column-gap: var(--a-spacing-2);
   height: 100%;
   overflow-y: hidden;
-`;
-
-const Header = styled.header`
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  align-items: center;
-  column-gap: var(--a-spacing-4);
-  margin-bottom: var(--a-spacing-2);
-  grid-area: header;
 `;
