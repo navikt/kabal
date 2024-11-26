@@ -1,4 +1,3 @@
-import { UnpublishMaltekstseksjonButton } from '@app/components/maltekstseksjoner/maltekstseksjon/unpublish-maltekstseksjon-button';
 import { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { ScaleContextComponent } from '@app/plate/status-bar/scale-context';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
@@ -12,10 +11,6 @@ interface Props {
 
 export const Maltekstseksjon = ({ maltekstseksjonId, query }: Props) => (
   <MaltekstseksjonContainer data-element="MaltekstseksjonContainer">
-    <MaltekstseksjonHeader>
-      <UnpublishMaltekstseksjonButton publishedMaltekstseksjon={maltekstseksjon} query={query} />
-    </MaltekstseksjonHeader>
-
     <ScaleContextComponent scalingGroup={ScalingGroup.REDAKTØR}>
       <MaltekstseksjonVersions id={maltekstseksjonId} query={query} />
     </ScaleContextComponent>
@@ -35,12 +30,4 @@ const MaltekstseksjonContainer = styled.div`
   margin-bottom: var(--a-spacing-1);
   margin-top: var(--a-spacing-1);
   grid-area: content;
-`;
-
-const MaltekstseksjonHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: var(--a-spacing-4);
-  padding-bottom: 0;
 `;

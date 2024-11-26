@@ -1,6 +1,7 @@
 import { DateTime } from '@app/components/datetime/datetime';
 import { getTitle } from '@app/components/editable-title/editable-title';
 import { MaltekstseksjonTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/texts';
+import { UnpublishMaltekstseksjonButton } from '@app/components/maltekstseksjoner/maltekstseksjon/unpublish-maltekstseksjon-button';
 import { DuplicateSectionButton } from '@app/components/smart-editor-texts/duplicate-section-button';
 import {
   TagContainer,
@@ -96,6 +97,10 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
           </Tooltip>
 
           <DuplicateSectionButton id={id} versionId={versionId} query={query} />
+
+          {maltekstseksjon.published ? (
+            <UnpublishMaltekstseksjonButton publishedMaltekstseksjon={maltekstseksjon} query={query} />
+          ) : null}
         </HStack>
       </Header>
 
