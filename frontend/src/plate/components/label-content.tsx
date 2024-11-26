@@ -1,6 +1,6 @@
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import type { LabelContentElement } from '@app/plate/types';
+import { type LabelContentElement, LabelContentSource } from '@app/plate/types';
 import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
@@ -44,17 +44,7 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   );
 };
 
-export enum Source {
-  YTELSE = 'ytelse',
-  SAKEN_GJELDER_NAME = 'sakenGjelder.name',
-  SAKEN_GJELDER_FNR = 'sakenGjelder.fnr',
-  SAKSNUMMER = 'saksnummer',
-  SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME = 'sakenGjelderIfDifferentFromKlager.name',
-  KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME = 'klagerIfEqualToSakenGjelder.name',
-  KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME = 'klagerIfDifferentFromSakenGjelder.name',
-}
-
-const useLabel = (source: Source): string | undefined => {
+const useLabel = (source: LabelContentSource): string | undefined => {
   const { data: oppgave } = useOppgave();
 
   return useMemo(() => {
@@ -63,15 +53,15 @@ const useLabel = (source: Source): string | undefined => {
     }
 
     switch (source) {
-      case Source.YTELSE:
+      case LabelContentSource.YTELSE:
         return 'Ytelse';
-      case Source.SAKEN_GJELDER_NAME:
-      case Source.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME:
+      case LabelContentSource.SAKEN_GJELDER_NAME:
+      case LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME:
         return 'Saken gjelder';
-      case Source.SAKEN_GJELDER_FNR:
+      case LabelContentSource.SAKEN_GJELDER_FNR:
         return 'Fødselsnummer';
-      case Source.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME:
-      case Source.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME: {
+      case LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME:
+      case LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME: {
         switch (oppgave.typeId) {
           case SaksTypeEnum.ANKE:
             return 'Den ankende part';
@@ -81,13 +71,13 @@ const useLabel = (source: Source): string | undefined => {
             return 'Klager';
         }
       }
-      case Source.SAKSNUMMER:
+      case LabelContentSource.SAKSNUMMER:
         return 'Saksnummer';
     }
   }, [oppgave, source]);
 };
 
-const useContent = (source: Source): string | null => {
+const useContent = (source: LabelContentSource): string | null => {
   const { data: oppgave } = useOppgave();
   const { data: ytelser = [] } = useYtelserAll();
 
@@ -97,27 +87,27 @@ const useContent = (source: Source): string | null => {
       return null;
     }
 
-    if (source === Source.YTELSE) {
+    if (source === LabelContentSource.YTELSE) {
       const ytelse = ytelser.find(({ id }) => id === oppgave.ytelseId)?.navn ?? oppgave.ytelseId;
 
       return `${ytelse}\n`;
     }
 
-    if (source === Source.SAKEN_GJELDER_NAME) {
+    if (source === LabelContentSource.SAKEN_GJELDER_NAME) {
       return `${oppgave.sakenGjelder.name ?? '-'}\n`;
     }
 
-    if (source === Source.SAKEN_GJELDER_FNR) {
+    if (source === LabelContentSource.SAKEN_GJELDER_FNR) {
       return `${formatFoedselsnummer(oppgave.sakenGjelder.id)}\n`;
     }
 
-    if (source === Source.SAKSNUMMER) {
+    if (source === LabelContentSource.SAKSNUMMER) {
       return oppgave.saksnummer;
     }
 
     const { klager, sakenGjelder } = oppgave;
 
-    if (source === Source.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME) {
+    if (source === LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME) {
       if (klager.id !== sakenGjelder.id) {
         return `${sakenGjelder.name ?? '-'}\n`;
       }
@@ -125,7 +115,7 @@ const useContent = (source: Source): string | null => {
       return null;
     }
 
-    if (source === Source.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME) {
+    if (source === LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME) {
       if (klager.id === sakenGjelder.id) {
         return `${klager.name ?? '-'}\n`;
       }
@@ -133,7 +123,7 @@ const useContent = (source: Source): string | null => {
       return null;
     }
 
-    if (source === Source.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME) {
+    if (source === LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME) {
       if (klager.id !== sakenGjelder.id) {
         return `${klager.name ?? '-'}\n`;
       }

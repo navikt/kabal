@@ -1,4 +1,3 @@
-import type { Source } from '@app/plate/components/label-content';
 import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { CommentsPlugin } from '@app/plate/plugins/comments';
 import type {
@@ -210,7 +209,7 @@ export interface LabelContentElement extends TElement {
   type: typeof ELEMENT_LABEL_CONTENT;
   children: [{ text: '' }];
   label?: string;
-  source: Source;
+  source: LabelContentSource;
   result?: string;
 }
 
@@ -294,3 +293,13 @@ export const useMyPlateEditorRef = (id?: string) =>
   useEditorRef<RichTextEditor & CursorEditor & YjsEditor & PlateYjsEditorProps>(id);
 export const useMyPlateEditorState = (id?: string) =>
   useEditorState<RichTextEditor & CursorEditor & YjsEditor & PlateYjsEditorProps>(id);
+
+export enum LabelContentSource {
+  YTELSE = 'ytelse',
+  SAKEN_GJELDER_NAME = 'sakenGjelder.name',
+  SAKEN_GJELDER_FNR = 'sakenGjelder.fnr',
+  SAKSNUMMER = 'saksnummer',
+  SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME = 'sakenGjelderIfDifferentFromKlager.name',
+  KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME = 'klagerIfEqualToSakenGjelder.name',
+  KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME = 'klagerIfDifferentFromSakenGjelder.name',
+}
