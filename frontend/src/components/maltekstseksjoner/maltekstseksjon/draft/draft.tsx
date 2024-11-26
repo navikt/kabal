@@ -17,8 +17,8 @@ import {
 } from '@app/redux-api/maltekstseksjoner/mutations';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { Label, Loader } from '@navikt/ds-react';
-import { Container, DateTimeContainer, Header, MetadataContainer } from '../common';
+import { HStack, Label, Loader } from '@navikt/ds-react';
+import { Container, Header } from '../common';
 import { Actions } from './actions';
 import { Sidebar } from './sidebar';
 
@@ -58,8 +58,8 @@ export const DraftMaltekstSection = ({ maltekstseksjon, query, onDraftDeleted }:
           onChange={(newTitle) => updateTitle({ id, query, title: newTitle })}
           isLoading={isUpdatingTitle}
         />
-        <MetadataContainer>
-          <DateTimeContainer>
+        <HStack gap="1" align="center" gridColumn="metadata">
+          <HStack gap="1" align="center">
             <Label size="small" htmlFor={modifiedId}>
               Sist endret:
             </Label>
@@ -68,10 +68,10 @@ export const DraftMaltekstSection = ({ maltekstseksjon, query, onDraftDeleted }:
             ) : (
               <DateTime id={modifiedId} dateTime={maltekstseksjon.modifiedOrTextsModified} />
             )}
-          </DateTimeContainer>
+          </HStack>
           <span>av {lastEdit === undefined ? 'Ukjent' : lastEdit.actor.navn}</span>
           <TextHistory {...maltekstseksjon} isUpdating={isUpdating} />
-        </MetadataContainer>
+        </HStack>
         <Filters maltekst={maltekstseksjon} query={query} />
         <TagContainer>
           <TemplateSectionTagList templateSectionIdList={maltekstseksjon.templateSectionIdList} />

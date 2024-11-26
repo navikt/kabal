@@ -2,7 +2,6 @@ import { isoDateTimeToPretty } from '@app/domain/date';
 import type { IEdit } from '@app/types/common-text-types';
 import { CalendarIcon, ClockIcon } from '@navikt/aksel-icons';
 import { HStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   created: string;
@@ -33,15 +32,8 @@ interface DateTimeProps {
 }
 
 export const DateTime = ({ dateTime, title, icon, id }: DateTimeProps) => (
-  <StyledTime dateTime={dateTime} title={title} id={id}>
+  <HStack as="time" align="center" gap="1" dateTime={dateTime} title={title} id={id} style={{ whiteSpace: 'nowrap' }}>
     {icon}
     {isoDateTimeToPretty(dateTime)}
-  </StyledTime>
+  </HStack>
 );
-
-const StyledTime = styled.time`
-  display: flex;
-  align-items: center;
-  column-gap: var(--a-spacing-1);
-  white-space: nowrap;
-`;
