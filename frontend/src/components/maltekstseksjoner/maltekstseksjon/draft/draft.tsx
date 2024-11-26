@@ -63,13 +63,16 @@ export const DraftMaltekstSection = ({ maltekstseksjon, query, onDraftDeleted }:
             <Label size="small" htmlFor={modifiedId}>
               Sist endret:
             </Label>
-            {isUpdating ? (
-              <Loader size="xsmall" />
-            ) : (
-              <DateTime id={modifiedId} dateTime={maltekstseksjon.modifiedOrTextsModified} />
-            )}
+
+            <HStack align="center">
+              {isUpdating ? (
+                <Loader size="xsmall" />
+              ) : (
+                <DateTime id={modifiedId} dateTime={maltekstseksjon.modifiedOrTextsModified} />
+              )}
+              <span>, av {lastEdit === undefined ? 'Ukjent' : lastEdit.actor.navn}</span>
+            </HStack>
           </HStack>
-          <span>av {lastEdit === undefined ? 'Ukjent' : lastEdit.actor.navn}</span>
           <TextHistory {...maltekstseksjon} isUpdating={isUpdating} />
         </HStack>
         <Filters maltekst={maltekstseksjon} query={query} />
