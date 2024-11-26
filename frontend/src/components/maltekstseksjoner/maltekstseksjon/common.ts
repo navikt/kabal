@@ -30,6 +30,7 @@ export const Header = styled.header`
   grid-template-columns: 1fr fit-content;
   white-space: nowrap;
   padding-right: var(--a-spacing-2);
+  padding-top: var(--a-spacing-1);
 `;
 
 export const MetadataContainer = styled.div`
