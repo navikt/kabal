@@ -48,7 +48,7 @@ export enum Source {
   KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME = 'klagerIfDifferentFromSakenGjelder.name',
 }
 
-const useContent = (source: string): string | null => {
+const useContent = (source: Source): string | null => {
   const { data: oppgave } = useOppgave();
   const { data: ytelser = [] } = useYtelserAll();
 
