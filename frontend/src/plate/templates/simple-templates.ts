@@ -71,7 +71,7 @@ export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>
   tittel: 'Tilsvarsbrev (ROL)',
   richText: [
     createCurrentDate(),
-    createMaltekstseksjon(TemplateSections.TILSVARSRETT_V2),
+    createMaltekstseksjon(TemplateSections.TILSVARSRETT_V1),
     createMaltekstseksjon(TemplateSections.GENERELL_INFO),
     createPageBreak(),
     createMaltekstseksjon(TemplateSections.VEDLEGG),
