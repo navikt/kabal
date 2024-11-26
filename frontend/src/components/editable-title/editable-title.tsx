@@ -1,6 +1,6 @@
-import { CheckmarkIcon, PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Heading, TextField } from '@navikt/ds-react';
-import { useState } from 'react';
+import { PencilIcon } from '@navikt/aksel-icons';
+import { Button, HStack, Heading } from '@navikt/ds-react';
+import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
@@ -13,124 +13,114 @@ interface Props {
 const SIZE = 'small';
 
 export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
-  const [editMode, setEditMode] = useState(false);
+  const ref = useRef<HTMLHeadingElement>(null);
   const [newTitle, setNewTitle] = useState(title);
-
-  const onCancel = () => {
-    setNewTitle(title);
-    setEditMode(false);
-  };
 
   const onSave = () => {
     if (newTitle !== title) {
       onChange(newTitle);
     }
-    setEditMode(false);
   };
 
   return (
-    <Container>
-      {editMode ? (
-        <StyledTextField
-          label={label}
-          size={SIZE}
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
-          hideLabel
-          placeholder='Skriv inn tittel og trykk "Enter"'
-          autoFocus
-          spellCheck
-          onBlur={onSave}
-          onKeyDown={(e) => {
-            switch (e.key) {
-              case 'Enter':
-                onSave();
-                break;
-              case 'Escape':
-                onCancel();
-                break;
-            }
-          }}
-        />
-      ) : (
-        <NoStyleButton onClick={() => setEditMode(true)}>
-          <Heading level="1" size={SIZE}>
-            {getTitle(title)}
-          </Heading>
-        </NoStyleButton>
-      )}
-      <Buttons
-        editMode={editMode}
-        isLoading={isLoading}
-        onCancel={onCancel}
-        onEdit={() => setEditMode(true)}
-        onSave={onSave}
-        size="xsmall"
-      />
-    </Container>
-  );
-};
+    <HStack gap="2" align="center" gridColumn="title">
+      <StyledTitle
+        level="1"
+        size={SIZE}
+        contentEditable="plaintext-only"
+        // biome-ignore lint/a11y/useSemanticElements: contenteditable
+        role="textbox"
+        aria-multiline="false"
+        aria-label={label}
+        aria-placeholder="Skriv inn tittel"
+        ref={ref}
+        style={{ opacity: isLoading ? 0.5 : 1 }}
+        onFocus={(e) => {
+          setCaretAtEnd(e.currentTarget);
+        }}
+        onBlur={(e) => {
+          e.preventDefault();
+          onSave();
+          // Reset selection.
+          window.getSelection()?.removeAllRanges();
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
-  grid-area: title;
-`;
+          // Reset content if empty. Otherwise, the placeholder will not show because the browser adds a <br> tag.
+          const { textContent } = e.currentTarget;
 
-interface ButtonsProps {
-  onEdit: () => void;
-  onSave: () => void;
-  onCancel: () => void;
-  isLoading: boolean;
-  editMode: boolean;
-  size: 'xsmall' | 'small' | 'medium';
-}
+          if (textContent === null || textContent?.length === 0) {
+            e.currentTarget.innerText = title;
+          }
+        }}
+        onKeyDown={(e) => {
+          const { key } = e;
+          if (key === 'Enter') {
+            e.preventDefault();
+            onSave();
+          } else if (key === 'Escape') {
+            e.preventDefault();
+            e.currentTarget.textContent = title;
+            setCaretAtEnd(e.currentTarget);
+            setNewTitle(title);
+          }
+        }}
+        onInput={(e) => {
+          const { currentTarget } = e;
 
-const Buttons = ({ editMode, isLoading, onCancel, onSave, onEdit, size }: ButtonsProps) => {
-  if (!editMode) {
-    return (
-      <ButtonsContainer>
-        <Button variant="tertiary" size={size} onClick={onEdit} icon={<PencilIcon aria-hidden />} loading={isLoading} />
-      </ButtonsContainer>
-    );
-  }
+          setNewTitle(currentTarget.textContent ?? '');
+        }}
+        suppressContentEditableWarning
+      >
+        {getTitle(title)}
+      </StyledTitle>
 
-  return (
-    <ButtonsContainer>
       <Button
         variant="tertiary"
-        size={size}
-        onClick={onSave}
-        icon={<CheckmarkIcon aria-hidden />}
+        size="small"
+        onClick={() => {
+          ref.current?.focus();
+        }}
+        icon={<PencilIcon aria-hidden />}
         loading={isLoading}
+        disabled={false}
       />
-      <Button variant="tertiary" size={size} onClick={onCancel} icon={<XMarkIcon aria-hidden />} loading={isLoading} />
-    </ButtonsContainer>
+    </HStack>
   );
 };
 
-const ButtonsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
+const setCaretAtEnd = (element: HTMLElement) => {
+  const selection = window.getSelection();
 
-const StyledTextField = styled(TextField)`
-  flex-grow: 1;
-`;
+  if (selection === null) {
+    return;
+  }
 
-const NoStyleButton = styled.button`
-  background-color: none;
-  border: none;
-  padding: 0;
-  margin: 0;
+  selection.selectAllChildren(element);
+  selection.collapseToEnd();
+};
+
+const StyledTitle = styled(Heading)`
   cursor: text;
+  min-width: var(--a-spacing-32);
+  border-radius: var(--a-border-radius-medium);
+  border-width: var(--a-spacing-05);
+  border-style: solid;
+  border-color: var(--a-border-subtle);
+  padding-left: var(--a-spacing-05);
+  padding-right: var(--a-spacing-05);
+  
+  &:focus {
+    border-color: var(--a-border-focus);
+  }
+
+  &:empty:not(:focus)::before {
+    color: var(--a-text-subtle);
+    font-style: italic;
+    content: attr(aria-placeholder);
+  }
 `;
 
 export const StyledHeading = styled(Heading)`
   flex-grow: 1;
 `;
 
-export const getTitle = (title?: string) => (title === undefined || title.length === 0 ? '<Ingen tittel>' : title);
+export const getTitle = (title?: string) => (title === undefined ? '' : title.trim());
