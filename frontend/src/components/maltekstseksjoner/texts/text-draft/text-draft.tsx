@@ -1,8 +1,8 @@
 import { EditableTitle } from '@app/components/editable-title/editable-title';
 import { LanguageEditor, type RichTexts } from '@app/components/maltekstseksjoner/texts/text-draft/language-editor';
-import { Container, Header, HeaderGroup } from '@app/components/maltekstseksjoner/texts/text-draft/styled-components';
 import { CreateTranslatedRichText } from '@app/components/smart-editor-texts/create-translated-text';
 import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
+import { isoDateTimeToPretty } from '@app/domain/date';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import type { RichTextEditor } from '@app/plate/types';
 import {
@@ -14,7 +14,7 @@ import {
 import { RichTextTypes } from '@app/types/common-text-types';
 import { LANGUAGES, type Language, isLanguage } from '@app/types/texts/language';
 import type { IDraftRichText } from '@app/types/texts/responses';
-import { HelpText, Switch, Tooltip } from '@navikt/ds-react';
+import { BodyShort, HStack, HelpText, Label, Loader, Switch, Tooltip, VStack } from '@navikt/ds-react';
 import { getEndPoint } from '@udecode/plate-common';
 import { focusEditor, isEditorFocused } from '@udecode/plate-common/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -133,39 +133,62 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
 
   const savedContent = text.richText[language];
 
-  return (
-    <Container ref={containerRef}>
-      <Header>
-        <HeaderGroup>
-          <EditableTitle
-            label="Teksttittel"
-            title={text.title}
-            onChange={(title) => updateTitle({ id: text.id, query: queryRef.current, title })}
-            isLoading={isTitleUpdating}
-          />
-        </HeaderGroup>
+  const isSaving = richTextStatus.isLoading || isTextTypeUpdating || isTitleUpdating;
+  const [lastEdit] = text.edits;
 
-        <HeaderGroup>
-          <Tooltip content={isLocked ? 'Lås opp' : 'Lås igjen'}>
-            <Switch
-              checked={isLocked}
-              size="small"
-              loading={isTextTypeUpdating}
-              onChange={({ target }) => {
-                const newTextType = target.checked ? RichTextTypes.MALTEKST : RichTextTypes.REDIGERBAR_MALTEKST;
-                queryRef.current.textType = newTextType;
-                updateTextType({ id, newTextType, oldTextType: text.textType });
-              }}
-            >
-              Låst
-            </Switch>
-          </Tooltip>
-          <HelpText title="Hva er låsing?">
-            En låst tekst vil ikke kunne redigeres av saksbehandler med unntak av innfyllingsfelter som legges inn i
-            teksten her.
-          </HelpText>
-        </HeaderGroup>
-      </Header>
+  const modifiedId = `${text.id}-modified`;
+
+  return (
+    <VStack ref={containerRef} position="relative" paddingBlock="2 0">
+      <VStack as="header" gap="2" marginBlock="0 2">
+        <HStack gap="2" align="center" justify="space-between" flexGrow="1">
+          <HStack gap="2" align="center">
+            <EditableTitle
+              label="Teksttittel"
+              title={text.title}
+              onChange={(title) => updateTitle({ id: text.id, query: queryRef.current, title })}
+              isLoading={isTitleUpdating}
+            />
+          </HStack>
+
+          <HStack gap="2" align="center">
+            <Tooltip content={isLocked ? 'Lås opp' : 'Lås igjen'}>
+              <Switch
+                checked={isLocked}
+                size="small"
+                loading={isTextTypeUpdating}
+                onChange={({ target }) => {
+                  const newTextType = target.checked ? RichTextTypes.MALTEKST : RichTextTypes.REDIGERBAR_MALTEKST;
+                  queryRef.current.textType = newTextType;
+                  updateTextType({ id, newTextType, oldTextType: text.textType });
+                }}
+              >
+                Låst
+              </Switch>
+            </Tooltip>
+
+            <HelpText title="Hva er låsing?">
+              En låst tekst vil ikke kunne redigeres av saksbehandler med unntak av innfyllingsfelter som legges inn i
+              teksten her.
+            </HelpText>
+          </HStack>
+        </HStack>
+
+        <HStack align="center" gap="1">
+          <Label size="small" htmlFor={modifiedId}>
+            Sist endret:
+          </Label>
+
+          <BodyShort size="small" id={modifiedId}>
+            {isSaving ? (
+              <Loader size="xsmall" />
+            ) : (
+              <time dateTime={text.modified}>{isoDateTimeToPretty(text.modified)}</time>
+            )}
+            {lastEdit === undefined ? null : <span>, av {lastEdit.actor.navn}</span>}
+          </BodyShort>
+        </HStack>
+      </VStack>
 
       {savedContent === null ? (
         <CreateTranslatedRichText id={text.id} />
@@ -194,6 +217,6 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
           />
         </>
       )}
-    </Container>
+    </VStack>
   );
 };

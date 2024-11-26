@@ -1,7 +1,6 @@
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { DuplicateTextButton } from '@app/components/smart-editor-texts/duplicate-text-button';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { isoDateTimeToPretty } from '@app/domain/date';
 import { useCreateDraftFromVersionMutation } from '@app/redux-api/texts/mutations';
 import { REGELVERK_TYPE } from '@app/types/common-text-types';
 import type { IPublishedText } from '@app/types/texts/responses';
@@ -21,7 +20,7 @@ export const PublishedTextFooter = ({ text, maltekstseksjonId, hasDraft, setTabI
   const query = useTextQuery();
   const hasLanguage = text.textType !== REGELVERK_TYPE;
 
-  const { id, versionId, publishedDateTime, title } = text;
+  const { id, versionId, title } = text;
 
   const createDraftAndNotify = useCallback(async () => {
     const draft = await createDraft({ id, title, versionId, query }).unwrap();
@@ -29,7 +28,7 @@ export const PublishedTextFooter = ({ text, maltekstseksjonId, hasDraft, setTabI
   }, [createDraft, id, title, versionId, query, setTabId]);
 
   return (
-    <HStack justify="space-between" align="center" gap="2" marginBlock="2 0">
+    <HStack justify="start" align="center" gap="2" marginBlock="2 0">
       {hasDraft ? null : (
         <Tooltip content="Opprett et utkast basert på denne versjonen.">
           <Button size="small" variant="secondary" onClick={createDraftAndNotify} icon={<PlusIcon aria-hidden />}>
@@ -40,17 +39,11 @@ export const PublishedTextFooter = ({ text, maltekstseksjonId, hasDraft, setTabI
 
       <DuplicateTextButton {...text} />
 
-      <HStack align="center" justify="end" flexGrow="1">
-        <AllMaltekstseksjonReferences
-          draftMaltekstseksjonIdList={text.draftMaltekstseksjonIdList}
-          publishedMaltekstseksjonIdList={text.publishedMaltekstseksjonIdList}
-          currentMaltekstseksjonId={maltekstseksjonId}
-        />
-        <span>
-          Publisert: <time dateTime={publishedDateTime}>{isoDateTimeToPretty(publishedDateTime)}</time>, av:{' '}
-          {text.publishedByActor.navn}
-        </span>
-      </HStack>
+      <AllMaltekstseksjonReferences
+        draftMaltekstseksjonIdList={text.draftMaltekstseksjonIdList}
+        publishedMaltekstseksjonIdList={text.publishedMaltekstseksjonIdList}
+        currentMaltekstseksjonId={maltekstseksjonId}
+      />
     </HStack>
   );
 };
