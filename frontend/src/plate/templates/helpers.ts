@@ -51,11 +51,10 @@ import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin }
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 import { TemplateSections } from '../template-sections';
 
-export const createLabelContent = (source: Source, label: string): LabelContentElement => ({
+export const createLabelContent = (source: Source): LabelContentElement => ({
   type: LabelContentPlugin.key,
   children: [{ text: '' }],
   source,
-  label,
   threadIds: [],
 });
 
