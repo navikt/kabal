@@ -9,6 +9,7 @@ import { LabelContentSource } from '../types';
 import {
   createCurrentDate,
   createFooter,
+  createFullmektig,
   createHeader,
   createLabelContent,
   createMaltekstseksjon,
@@ -71,7 +72,20 @@ export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>
   tittel: 'Tilsvarsbrev (ROL)',
   richText: [
     createCurrentDate(),
-    createMaltekstseksjon(TemplateSections.TILSVARSRETT_V2),
+    createMaltekstseksjon(TemplateSections.TITLE),
+    {
+      type: BaseParagraphPlugin.key,
+      align: TextAlign.LEFT,
+      children: [
+        createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
+        createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
+        createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
+        createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
+        createFullmektig(),
+        createLabelContent(LabelContentSource.SAKSNUMMER),
+      ],
+    },
+    createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
     createMaltekstseksjon(TemplateSections.GENERELL_INFO),
     createPageBreak(),
     createMaltekstseksjon(TemplateSections.VEDLEGG),
