@@ -8,7 +8,7 @@ import { TEMPLATE_MAP } from '@app/plate/templates/templates';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import type { IText } from '@app/types/texts/responses';
-import { styled } from 'styled-components';
+import { HStack } from '@navikt/ds-react';
 import { CustomTag, ResolvedTags } from '../../tags/resolved-tag';
 
 export const Tags = ({ ytelseHjemmelIdList, utfallIdList, enhetIdList, templateSectionIdList, textType }: IText) => {
@@ -179,18 +179,20 @@ const useYtelseLovkildeAndHjemmelName = (selected: string): string => {
   return 'Ukjent ytelse';
 };
 
-export const TagContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: start;
-  gap: var(--a-spacing-2);
-  flex-grow: 0;
-  grid-area: tags;
-  max-height: 250px;
-  overflow-y: auto;
-  flex-shrink: 0;
-`;
+export const TagContainer = (props: { children: React.ReactNode }) => (
+  <HStack
+    data-element="tag-container"
+    gap="2"
+    wrap
+    align="center"
+    flexGrow="0"
+    gridColumn="tags"
+    maxHeight="250px"
+    overflowY="auto"
+    flexShrink="0"
+    {...props}
+  />
+);
 
 export const YtelseHjemmelTagList = ({ ytelseHjemmelIdList }: Pick<IText, 'ytelseHjemmelIdList'>) => (
   <TagList
