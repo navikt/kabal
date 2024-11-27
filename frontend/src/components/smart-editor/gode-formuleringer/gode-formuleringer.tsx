@@ -86,7 +86,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
         }
       }
 
-      return result.sort((a, b) => a.title.localeCompare(b.title));
+      return result.toSorted((a, b) => a.title.localeCompare(b.title));
     }
 
     const result: [NonNullableGodFormulering, number][] = [];
@@ -101,7 +101,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
       }
     }
 
-    return result.sort(([, a], [, b]) => b - a).map(([t]) => t);
+    return result.toSorted(([, a], [, b]) => b - a).map(([t]) => t);
   }, [data, filter, templateId, activeSection]);
 
   const onKeyDown = useCallback(
