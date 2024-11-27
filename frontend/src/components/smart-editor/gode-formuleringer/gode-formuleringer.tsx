@@ -86,7 +86,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
         }
       }
 
-      return result;
+      return result.sort((a, b) => a.title.localeCompare(b.title));
     }
 
     const result: [NonNullableGodFormulering, number][] = [];
