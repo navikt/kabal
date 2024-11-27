@@ -1,3 +1,4 @@
+import { SavedStatus, type SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
@@ -22,10 +23,11 @@ interface Props {
   readOnly?: boolean;
   onFocus?: React.FocusEventHandler<HTMLDivElement>;
   lang: SpellCheckLanguage;
+  status?: SavedStatusProps;
 }
 
 export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
-  ({ editorId, savedContent, onChange, onKeyDown, readOnly, onFocus, lang }, editorRef) => {
+  ({ editorId, savedContent, onChange, onKeyDown, readOnly, onFocus, lang, status }, editorRef) => {
     const ref = useRef<HTMLDivElement>(null);
 
     const editor = usePlateEditor<KabalValue, (typeof redaktørPlugins)[0]>({
@@ -63,7 +65,7 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
             </Sheet>
           </Content>
 
-          <StatusBar />
+          <StatusBar>{status === undefined ? null : <SavedStatus {...status} />}</StatusBar>
         </Plate>
       </ErrorBoundary>
     );

@@ -1,4 +1,5 @@
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
+import type { SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { CreateTranslatedRichText } from '@app/components/smart-editor-texts/create-translated-text';
 import { Edit } from '@app/components/smart-editor-texts/edit/edit';
 import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
@@ -134,7 +135,6 @@ const DraftRichTextBase = ({ text, onDraftDeleted, validate, error }: DraftRichT
     <Edit
       text={text}
       onDraftDeleted={onDraftDeleted}
-      status={{ ...richTextStatus, modified: text.modified }}
       onPublish={onPublish}
       deleteTranslation={() => updateRichText({ query, richText: null, id: text.id, language })}
       error={error}
@@ -147,6 +147,7 @@ const DraftRichTextBase = ({ text, onDraftDeleted, validate, error }: DraftRichT
           savedContent={savedContent}
           richTexts={richTexts}
           setRichTexts={setRichTexts}
+          status={{ ...richTextStatus, modified: text.modified }}
         />
       ))}
     </Edit>
@@ -159,9 +160,10 @@ interface LanguageEditorProps {
   savedContent: KabalValue;
   richTexts: RichTexts;
   setRichTexts: (richTexts: RichTexts) => void;
+  status: SavedStatusProps;
 }
 
-const LanguageEditor = ({ language, text, savedContent, setRichTexts, richTexts }: LanguageEditorProps) => {
+const LanguageEditor = ({ language, text, savedContent, setRichTexts, richTexts, status }: LanguageEditorProps) => {
   const activeLang = useRedaktoerLanguage();
 
   if (activeLang !== language) {
@@ -174,6 +176,7 @@ const LanguageEditor = ({ language, text, savedContent, setRichTexts, richTexts 
       savedContent={savedContent}
       onChange={({ value }) => setRichTexts({ ...richTexts, [language]: value })}
       lang={SPELL_CHECK_LANGUAGES[language]}
+      status={status}
     />
   );
 };

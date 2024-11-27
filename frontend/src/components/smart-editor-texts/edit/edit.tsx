@@ -1,10 +1,12 @@
 import { EditableTitle } from '@app/components/editable-title/editable-title';
-import type { SavedStatusProps } from '@app/components/saved-status/saved-status';
-import { Footer } from '@app/components/smart-editor-texts/edit/footer';
+import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
+import { Changelog } from '@app/components/smart-editor-texts/edit/changelog';
+import { TextDraftActions } from '@app/components/smart-editor-texts/edit/draft-actions';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
 import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';
 import { KlageenhetSelect, TemplateSectionSelect } from '@app/components/smart-editor-texts/query-filter-selects';
 import { UtfallSetFilter } from '@app/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
+import { isPlainText } from '@app/functions/is-rich-plain-text';
 import {
   useSetTextTitleMutation,
   useUpdateEnhetIdListMutation,
@@ -12,6 +14,7 @@ import {
   useUpdateUtfallIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
 } from '@app/redux-api/texts/mutations';
+import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { type IGetTextsParams, REGELVERK_TYPE } from '@app/types/common-text-types';
 import type { IText } from '@app/types/texts/responses';
 import { HStack, Label, VStack, useId } from '@navikt/ds-react';
@@ -24,18 +27,19 @@ interface Props {
   onDraftDeleted: () => void;
   autofocus?: boolean;
   children: React.ReactNode;
-  status: SavedStatusProps;
   onPublish: () => void;
   deleteTranslation?: () => void;
   error?: string;
 }
 
-export const Edit = ({ text, onDraftDeleted, children, status, onPublish, deleteTranslation, error }: Props) => {
+export const Edit = ({ text, onDraftDeleted, children, onPublish, deleteTranslation, error }: Props) => {
   const query = useTextQuery();
 
   const [updateTitle, { isLoading: titleIsLoading }] = useSetTextTitleMutation();
 
-  const { id, created, title, textType } = text;
+  const { id, created, title, textType, draftMaltekstseksjonIdList, publishedMaltekstseksjonIdList } = text;
+
+  const { data: versions = [] } = useGetTextVersionsQuery(id);
 
   const filters = useMetadataFilters(textType);
   const { hasTemplateSectionFilter, hasEnhetFilter, hasUtfallFilter, hasYtelseHjemmelFilter } = filters;
@@ -61,21 +65,31 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
             Sist endret:
           </Label>
           <ModifiedCreatedDateTime id={modifiedId} lastEdit={lastEdit} created={created} />
+          <Changelog versions={versions} />
         </HStack>
 
         {hasAnyFilter ? <Filters text={text} query={query} filters={filters} /> : null}
+
+        <HStack gap="2" align="center" justify="space-between">
+          {isPlainText(text) ? null : (
+            <AllMaltekstseksjonReferences
+              textType={textType}
+              currentMaltekstseksjonId={id}
+              draftMaltekstseksjonIdList={draftMaltekstseksjonIdList}
+              publishedMaltekstseksjonIdList={publishedMaltekstseksjonIdList}
+            />
+          )}
+          <TextDraftActions
+            text={text}
+            onDraftDeleted={onDraftDeleted}
+            onPublish={onPublish}
+            deleteTranslation={deleteTranslation}
+            error={error}
+          />
+        </HStack>
       </VStack>
 
       {children}
-
-      <Footer
-        text={text}
-        onDraftDeleted={onDraftDeleted}
-        status={status}
-        onPublish={onPublish}
-        deleteTranslation={deleteTranslation}
-        error={error}
-      />
     </VStack>
   );
 };

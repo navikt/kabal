@@ -1,4 +1,5 @@
 import { EditableTitle } from '@app/components/editable-title/editable-title';
+import { DraftTextActions } from '@app/components/maltekstseksjoner/texts/text-draft-actions';
 import { LanguageEditor, type RichTexts } from '@app/components/maltekstseksjoner/texts/text-draft/language-editor';
 import { CreateTranslatedRichText } from '@app/components/smart-editor-texts/create-translated-text';
 import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
@@ -19,7 +20,6 @@ import { getEndPoint } from '@udecode/plate-common';
 import { focusEditor, isEditorFocused } from '@udecode/plate-common/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { areDescendantsEqual } from '../../../../functions/are-descendants-equal';
-import { DraftTextFooter } from '../text-draft-footer';
 
 interface Props {
   text: IDraftRichText;
@@ -139,7 +139,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   const modifiedId = `${text.id}-modified`;
 
   return (
-    <VStack ref={containerRef} position="relative" paddingBlock="2 0">
+    <VStack ref={containerRef} position="relative" paddingBlock="2 0" flexGrow="1">
       <VStack as="header" gap="2" marginBlock="0 2">
         <HStack gap="2" align="center" justify="space-between" flexGrow="1">
           <HStack gap="2" align="center">
@@ -188,34 +188,33 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
             {lastEdit === undefined ? null : <span>, av {lastEdit.actor.navn}</span>}
           </BodyShort>
         </HStack>
+
+        <DraftTextActions
+          text={text}
+          isSaving={richTextStatus.isLoading || isTextTypeUpdating || isTitleUpdating}
+          onPublish={onPublish}
+          error={error}
+          {...rest}
+        />
       </VStack>
 
       {savedContent === null ? (
         <CreateTranslatedRichText id={text.id} />
       ) : (
-        <>
-          {LANGUAGES.map((lang) => (
-            <LanguageEditor
-              key={lang}
-              language={lang}
-              text={text}
-              savedContent={savedContent}
-              richTexts={richTexts}
-              setRichTexts={setRichTexts}
-              editorRef={editorRef}
-              richTextRef={richTextRef}
-              setActive={setActive}
-            />
-          ))}
-
-          <DraftTextFooter
+        LANGUAGES.map((lang) => (
+          <LanguageEditor
+            key={lang}
+            language={lang}
             text={text}
-            isSaving={richTextStatus.isLoading || isTextTypeUpdating || isTitleUpdating}
-            onPublish={onPublish}
-            error={error}
-            {...rest}
+            savedContent={savedContent}
+            richTexts={richTexts}
+            setRichTexts={setRichTexts}
+            editorRef={editorRef}
+            richTextRef={richTextRef}
+            setActive={setActive}
+            status={{ ...richTextStatus, modified: text.modified }}
           />
-        </>
+        ))
       )}
     </VStack>
   );

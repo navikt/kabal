@@ -1,6 +1,7 @@
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { TextChangeType } from '@app/types/common-text-types';
 import type { IPublishedText, IText } from '@app/types/texts/responses';
+import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { Button, Modal, Table } from '@navikt/ds-react';
 import { Fragment, useCallback, useRef } from 'react';
 import { styled } from 'styled-components';
@@ -22,8 +23,8 @@ export const Changelog = ({ versions }: Props) => {
 
   return (
     <>
-      <Button onClick={openModal} size="xsmall" variant="tertiary">
-        Endringslogg
+      <Button onClick={openModal} size="xsmall" variant="tertiary" icon={<ClockDashedIcon aria-hidden />}>
+        Vis endringslogg
       </Button>
       <Modal header={{ heading: 'Endringslogg' }} ref={ref} closeOnBackdropClick>
         <Modal.Body>

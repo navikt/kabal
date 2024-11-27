@@ -1,3 +1,4 @@
+import type { SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { CreateTranslatedPlainText } from '@app/components/smart-editor-texts/create-translated-text';
 import { Edit } from '@app/components/smart-editor-texts/edit/edit';
 import { HeaderFooterEditor } from '@app/components/smart-editor-texts/edit/header-footer';
@@ -80,13 +81,7 @@ export const DraftPlainText = ({ text, onDraftDeleted }: Props) => {
   }
 
   return (
-    <Edit
-      text={text}
-      onDraftDeleted={onDraftDeleted}
-      status={{ ...plainTextStatus, modified: text.modified }}
-      onPublish={onPublish}
-      error={error}
-    >
+    <Edit text={text} onDraftDeleted={onDraftDeleted} onPublish={onPublish} error={error}>
       {LANGUAGES.map((lang) => (
         <LanguageEditor
           key={lang}
@@ -94,6 +89,7 @@ export const DraftPlainText = ({ text, onDraftDeleted }: Props) => {
           initialValue={initialValue}
           type={text.textType}
           onChange={(t) => setPlainTexts({ ...plainTexts, [lang]: t })}
+          status={{ ...plainTextStatus, modified: text.modified }}
         />
       ))}
     </Edit>
@@ -105,14 +101,15 @@ interface LanguageEditorProps {
   initialValue: string;
   type: PlainTextTypes;
   onChange: (plainText: string) => void;
+  status: SavedStatusProps;
 }
 
-const LanguageEditor = ({ initialValue, type, language, onChange }: LanguageEditorProps) => {
+const LanguageEditor = ({ initialValue, type, language, onChange, status }: LanguageEditorProps) => {
   const activeLang = useRedaktoerLanguage();
 
   if (language !== activeLang) {
     return null;
   }
 
-  return <HeaderFooterEditor initialValue={initialValue} type={type} update={onChange} />;
+  return <HeaderFooterEditor initialValue={initialValue} type={type} update={onChange} status={status} />;
 };
