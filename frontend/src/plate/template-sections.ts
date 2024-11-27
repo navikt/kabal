@@ -26,6 +26,7 @@ export enum TemplateSections {
   FREMLEGG = 'section-geit',
   TILSVARSRETT_V1 = 'section-hund',
   TILSVARSRETT_V2 = 'section-hund-v2',
+  TILSVARSRETT_V3 = 'section-hund-v3',
   VEDLEGG = 'section-katt',
   SVAR_FRA_ROL = 'section-emu',
   TILSVARSBREV_TITLE = 'section-mink',
