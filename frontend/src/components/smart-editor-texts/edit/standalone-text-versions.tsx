@@ -3,7 +3,6 @@ import { Changelog } from '@app/components/smart-editor-texts/edit/changelog';
 import { DraftRegelverk } from '@app/components/smart-editor-texts/edit/draft-regelverk';
 import { DraftGodFormulering, DraftRichText } from '@app/components/smart-editor-texts/edit/draft-rich-text';
 import { PublishedPlainText } from '@app/components/smart-editor-texts/edit/published-plain-text';
-import { Tags } from '@app/components/smart-editor-texts/edit/tags';
 import type { DraftVersionProps } from '@app/components/smart-editor-texts/types';
 import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
@@ -123,8 +122,6 @@ const PublishedVersion = ({ text, hasDraft, setTabId }: PublishedVersionProps) =
 
   return (
     <PublishedContainer>
-      <Tags {...text} />
-
       <PublishedRichText text={text} hasDraft={hasDraft} setTabId={setTabId} />
     </PublishedContainer>
   );
