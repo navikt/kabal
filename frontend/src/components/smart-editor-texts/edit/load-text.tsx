@@ -32,10 +32,10 @@ const Container = styled.article`
   flex-direction: column;
   width: calc(210mm * var(--kabal-editor-scale) + var(--a-spacing-16));
   min-width: calc(210mm + var(--a-spacing-16));
-  flex-shrink: 0;
-  height: 100%;
   box-shadow: var(--a-shadow-small);
   border-radius: var(--a-border-radius-medium);
+  grid-area: content;
+  margin-bottom: var(--a-spacing-4);
 `;
 
 const EmptyContainer = styled(Container)`
