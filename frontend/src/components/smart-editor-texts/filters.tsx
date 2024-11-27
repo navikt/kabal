@@ -5,7 +5,7 @@ import {
   TemplateSectionSelect,
   UtfallSelect,
 } from '@app/components/smart-editor-texts/query-filter-selects';
-import { GOD_FORMULERING_TYPE, type IGetMaltekstseksjonParams, type TextTypes } from '@app/types/common-text-types';
+import type { IGetMaltekstseksjonParams, TextTypes } from '@app/types/common-text-types';
 import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { HjemlerSelect } from './hjemler-select/hjemler-select';
@@ -18,11 +18,17 @@ interface Props {
 
 export const Filters = ({ textType, className }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { enhet, utfall, ytelseHjemmel } = useMetadataFilters(textType);
+  const { hasTemplateSectionFilter, hasEnhetFilter, hasUtfallFilter, hasYtelseHjemmelFilter } =
+    useMetadataFilters(textType);
+  const hasAnyFilter = hasTemplateSectionFilter || hasEnhetFilter || hasUtfallFilter || hasYtelseHjemmelFilter;
 
   const { enhetIdList, utfallIdList, templateSectionIdList, ytelseHjemmelIdList } = useTextQuery();
 
   const utfallOptions = useUtfallOptions();
+
+  if (!hasAnyFilter) {
+    return null;
+  }
 
   const setFilter = (filter: keyof IGetMaltekstseksjonParams, values: string[]) => {
     if (values.length === 0) {
@@ -36,7 +42,7 @@ export const Filters = ({ textType, className }: Props) => {
 
   return (
     <Container className={className}>
-      {textType === GOD_FORMULERING_TYPE ? (
+      {hasTemplateSectionFilter ? (
         <TemplateSectionSelect
           selected={templateSectionIdList ?? []}
           onChange={(value) => setFilter('templateSectionIdList', value)}
@@ -47,7 +53,7 @@ export const Filters = ({ textType, className }: Props) => {
         </TemplateSectionSelect>
       ) : null}
 
-      {ytelseHjemmel ? (
+      {hasYtelseHjemmelFilter ? (
         <HjemlerSelect
           selected={ytelseHjemmelIdList ?? []}
           onChange={(value: string[]) => setFilter('ytelseHjemmelIdList', value)}
@@ -57,7 +63,7 @@ export const Filters = ({ textType, className }: Props) => {
         />
       ) : null}
 
-      {utfall ? (
+      {hasUtfallFilter ? (
         <UtfallSelect
           selected={utfallIdList}
           onChange={(value) => setFilter('utfallIdList', value)}
@@ -67,7 +73,7 @@ export const Filters = ({ textType, className }: Props) => {
         </UtfallSelect>
       ) : null}
 
-      {enhet ? (
+      {hasEnhetFilter ? (
         <KlageenhetSelect
           selected={enhetIdList ?? []}
           onChange={(value) => setFilter('enhetIdList', value)}

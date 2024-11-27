@@ -12,13 +12,14 @@ import { styled } from 'styled-components';
 import { CustomTag, ResolvedTags } from '../../tags/resolved-tag';
 
 export const Tags = ({ ytelseHjemmelIdList, utfallIdList, enhetIdList, templateSectionIdList, textType }: IText) => {
-  const { enhet, templateSection, utfall, ytelseHjemmel } = useMetadataFilters(textType);
+  const { hasEnhetFilter, hasTemplateSectionFilter, hasUtfallFilter, hasYtelseHjemmelFilter } =
+    useMetadataFilters(textType);
 
   const expandedYtelseHjemmelIdList = useExpandedYtelseHjemmelIdList(ytelseHjemmelIdList);
 
   return (
     <TagContainer>
-      {templateSection ? (
+      {hasTemplateSectionFilter ? (
         <TagList
           variant="templateSectionIdList"
           noneLabel="Ingen maler eller seksjoner"
@@ -26,7 +27,7 @@ export const Tags = ({ ytelseHjemmelIdList, utfallIdList, enhetIdList, templateS
           useName={getTemaplateAndSectionName}
         />
       ) : null}
-      {ytelseHjemmel ? (
+      {hasYtelseHjemmelFilter ? (
         <TagList
           variant="ytelseHjemmelIdList"
           noneLabel="Alle ytelser og hjemler"
@@ -34,10 +35,10 @@ export const Tags = ({ ytelseHjemmelIdList, utfallIdList, enhetIdList, templateS
           useName={useYtelseLovkildeAndHjemmelName}
         />
       ) : null}
-      {utfall ? (
+      {hasUtfallFilter ? (
         <TagList variant="utfallIdList" noneLabel="Alle utfall" ids={utfallIdList} useName={useUtfallNameOrLoading} />
       ) : null}
-      {enhet ? (
+      {hasEnhetFilter ? (
         <TagList
           variant="enhetIdList"
           noneLabel="Alle enheter"

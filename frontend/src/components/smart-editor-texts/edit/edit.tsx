@@ -12,7 +12,7 @@ import {
   useUpdateUtfallIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
 } from '@app/redux-api/texts/mutations';
-import { GOD_FORMULERING_TYPE, REGELVERK_TYPE } from '@app/types/common-text-types';
+import { type IGetTextsParams, REGELVERK_TYPE } from '@app/types/common-text-types';
 import type { IText } from '@app/types/texts/responses';
 import { Label, useId } from '@navikt/ds-react';
 import { styled } from 'styled-components';
@@ -36,14 +36,12 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
 
   const [updateTitle, { isLoading: titleIsLoading }] = useSetTextTitleMutation();
 
-  const [updateTemplateSectionIdList] = useUpdateTemplateSectionIdListMutation();
-  const [updateYtelseHjemmelIdList] = useUpdateYtelseHjemmelIdListMutation();
-  const [updateUtfallIdList] = useUpdateUtfallIdListMutation();
-  const [updateEnhetIdList] = useUpdateEnhetIdListMutation();
+  const { id, created, title, textType } = text;
 
-  const { id, created, ytelseHjemmelIdList, utfallIdList, enhetIdList, templateSectionIdList, title, textType } = text;
+  const filters = useMetadataFilters(textType);
+  const { hasTemplateSectionFilter, hasEnhetFilter, hasUtfallFilter, hasYtelseHjemmelFilter } = filters;
 
-  const { enhet, utfall, ytelseHjemmel } = useMetadataFilters(textType);
+  const hasAnyFilter = hasTemplateSectionFilter || hasEnhetFilter || hasUtfallFilter || hasYtelseHjemmelFilter;
 
   const [lastEdit] = text.edits;
 
@@ -66,43 +64,7 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
           <ModifiedCreatedDateTime id={modifiedId} lastEdit={lastEdit} created={created} />
         </LineContainer>
 
-        <LineContainer>
-          {textType === GOD_FORMULERING_TYPE ? (
-            <TemplateSectionSelect
-              selected={templateSectionIdList}
-              onChange={(v) => updateTemplateSectionIdList({ id, query, templateSectionIdList: v })}
-              templatesSelectable
-            >
-              Maler og seksjoner
-            </TemplateSectionSelect>
-          ) : null}
-
-          {ytelseHjemmel ? (
-            <HjemlerSelect
-              selected={ytelseHjemmelIdList}
-              onChange={(value) => updateYtelseHjemmelIdList({ id, query, ytelseHjemmelIdList: value })}
-              ytelserSelectable={textType !== REGELVERK_TYPE}
-            />
-          ) : null}
-
-          {utfall ? (
-            <UtfallSetFilter
-              selected={utfallIdList}
-              onChange={(value) => updateUtfallIdList({ id, query, utfallIdList: value })}
-            />
-          ) : null}
-
-          {enhet ? (
-            <KlageenhetSelect
-              selected={enhetIdList ?? []}
-              onChange={(value) => updateEnhetIdList({ id, query, enhetIdList: value })}
-            >
-              Enheter
-            </KlageenhetSelect>
-          ) : null}
-        </LineContainer>
-
-        <Tags {...text} />
+        {hasAnyFilter ? <Filters text={text} query={query} filters={filters} /> : null}
       </Header>
 
       {children}
@@ -116,6 +78,65 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
         error={error}
       />
     </Container>
+  );
+};
+
+interface FiltersProps {
+  query: IGetTextsParams;
+  text: IText;
+  filters: ReturnType<typeof useMetadataFilters>;
+}
+
+const Filters = ({ text, query, filters }: FiltersProps) => {
+  const [updateTemplateSectionIdList] = useUpdateTemplateSectionIdListMutation();
+  const [updateYtelseHjemmelIdList] = useUpdateYtelseHjemmelIdListMutation();
+  const [updateUtfallIdList] = useUpdateUtfallIdListMutation();
+  const [updateEnhetIdList] = useUpdateEnhetIdListMutation();
+
+  const { id, ytelseHjemmelIdList, utfallIdList, enhetIdList, templateSectionIdList, textType } = text;
+
+  const { hasTemplateSectionFilter, hasEnhetFilter, hasUtfallFilter, hasYtelseHjemmelFilter } = filters;
+
+  return (
+    <>
+      <LineContainer>
+        {hasTemplateSectionFilter ? (
+          <TemplateSectionSelect
+            selected={templateSectionIdList}
+            onChange={(v) => updateTemplateSectionIdList({ id, query, templateSectionIdList: v })}
+            templatesSelectable
+          >
+            Maler og seksjoner
+          </TemplateSectionSelect>
+        ) : null}
+
+        {hasYtelseHjemmelFilter ? (
+          <HjemlerSelect
+            selected={ytelseHjemmelIdList}
+            onChange={(value) => updateYtelseHjemmelIdList({ id, query, ytelseHjemmelIdList: value })}
+            ytelserSelectable={textType !== REGELVERK_TYPE}
+          />
+        ) : null}
+
+        {hasUtfallFilter ? (
+          <UtfallSetFilter
+            selected={utfallIdList}
+            onChange={(value) => updateUtfallIdList({ id, query, utfallIdList: value })}
+          />
+        ) : null}
+
+        {hasEnhetFilter ? (
+          <KlageenhetSelect
+            selected={enhetIdList ?? []}
+            onChange={(value) => updateEnhetIdList({ id, query, enhetIdList: value })}
+          >
+            Enheter
+          </KlageenhetSelect>
+        ) : null}
+      </LineContainer>
+
+      <Tags {...text} />
+    </>
   );
 };
 
