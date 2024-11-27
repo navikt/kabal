@@ -1,11 +1,12 @@
 import { getTitle } from '@app/components/editable-title/editable-title';
 import { PublishedTextFooter } from '@app/components/maltekstseksjoner/texts/text-published-footer';
+import { Tags } from '@app/components/smart-editor-texts/edit/tags';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { isRegelverk } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import type { RichTextEditor } from '@app/plate/types';
-import { type GOD_FORMULERING_TYPE, type REGELVERK_TYPE, RichTextTypes } from '@app/types/common-text-types';
+import { GOD_FORMULERING_TYPE, REGELVERK_TYPE, RichTextTypes } from '@app/types/common-text-types';
 import { LANGUAGE_NAMES, UNTRANSLATED } from '@app/types/texts/language';
 import type { IPublishedGodFormulering, IPublishedRegelverk, IPublishedRichText } from '@app/types/texts/responses';
 import { PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
@@ -49,6 +50,8 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
             <span>, av {text.publishedByActor.navn}</span>
           </BodyShort>
         </HStack>
+
+        {text.textType === GOD_FORMULERING_TYPE || text.textType === REGELVERK_TYPE ? <Tags {...text} /> : null}
       </VStack>
 
       {savedContent === null ? (
