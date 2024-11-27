@@ -8,9 +8,8 @@ import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublis
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import type { IPublishedPlainText } from '@app/types/texts/responses';
-import { BodyLong, HStack, Heading, Label } from '@navikt/ds-react';
+import { BodyLong, Box, HStack, Heading, Label, VStack } from '@navikt/ds-react';
 import { useId } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   text: IPublishedPlainText;
@@ -28,7 +27,7 @@ export const PublishedPlainText = ({ text, hasDraft, setTabId }: Props) => {
   const modifiedId = useId();
 
   return (
-    <PublishedContainer>
+    <VStack gap="2" padding="4">
       <Heading level="1" size="small" spacing>
         {text.title}
       </Heading>
@@ -51,31 +50,11 @@ export const PublishedPlainText = ({ text, hasDraft, setTabId }: Props) => {
         <UnpublishTextButton publishedText={text} textType={textType} />
       </HStack>
 
-      <Background>
-        <StyledBodyLong>{text.plainText[lang]}</StyledBodyLong>
-      </Background>
-    </PublishedContainer>
+      <VStack as={Box} gap="4" background="bg-subtle" padding="4">
+        <Box as={BodyLong} background="bg-default" padding="4" borderRadius="medium" shadow="medium">
+          {text.plainText[lang]}
+        </Box>
+      </VStack>
+    </VStack>
   );
 };
-
-const Background = styled.div`
-  background-color: var(--a-bg-subtle);
-  padding: var(--a-spacing-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
-`;
-
-const PublishedContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-2);
-  padding: var(--a-spacing-4);
-`;
-
-const StyledBodyLong = styled(BodyLong)`
-  background-color: var(--a-bg-default);
-  padding: var(--a-spacing-4);
-  border-radius: var(--a-spacing-1);
-  box-shadow: var(--a-shadow-medium);
-`;
