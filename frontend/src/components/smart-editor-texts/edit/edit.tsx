@@ -14,8 +14,7 @@ import {
 } from '@app/redux-api/texts/mutations';
 import { type IGetTextsParams, REGELVERK_TYPE } from '@app/types/common-text-types';
 import type { IText } from '@app/types/texts/responses';
-import { Label, useId } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Label, VStack, useId } from '@navikt/ds-react';
 import { ModifiedCreatedDateTime } from '../../datetime/datetime';
 import { HjemlerSelect } from '../hjemler-select/hjemler-select';
 import { useTextQuery } from '../hooks/use-text-query';
@@ -48,8 +47,8 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
   const modifiedId = useId();
 
   return (
-    <Container>
-      <Header>
+    <VStack height="100%">
+      <VStack gap="2" paddingBlock="4" paddingInline="4">
         <EditableTitle
           title={title}
           onChange={(t) => updateTitle({ id, query, title: t })}
@@ -57,15 +56,15 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
           isLoading={titleIsLoading}
         />
 
-        <LineContainer>
+        <HStack gap="2" align="center">
           <Label size="small" htmlFor={modifiedId}>
             Sist endret:
           </Label>
           <ModifiedCreatedDateTime id={modifiedId} lastEdit={lastEdit} created={created} />
-        </LineContainer>
+        </HStack>
 
         {hasAnyFilter ? <Filters text={text} query={query} filters={filters} /> : null}
-      </Header>
+      </VStack>
 
       {children}
 
@@ -77,7 +76,7 @@ export const Edit = ({ text, onDraftDeleted, children, status, onPublish, delete
         deleteTranslation={deleteTranslation}
         error={error}
       />
-    </Container>
+    </VStack>
   );
 };
 
@@ -99,7 +98,7 @@ const Filters = ({ text, query, filters }: FiltersProps) => {
 
   return (
     <>
-      <LineContainer>
+      <HStack gap="2" align="center">
         {hasTemplateSectionFilter ? (
           <TemplateSectionSelect
             selected={templateSectionIdList}
@@ -133,29 +132,9 @@ const Filters = ({ text, query, filters }: FiltersProps) => {
             Enheter
           </KlageenhetSelect>
         ) : null}
-      </LineContainer>
+      </HStack>
 
       <Tags {...text} />
     </>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-  padding: var(--a-spacing-4);
-`;
-
-const LineContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
-`;

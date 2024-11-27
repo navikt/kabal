@@ -3,10 +3,9 @@ import { QueryKey, SortKey } from '@app/components/smart-editor-texts/sortable-h
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import type { TextTypes } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
-import { Search } from '@navikt/ds-react';
+import { HStack, Search, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { Filters } from './filters';
 import { StandaloneTextList } from './text-list/text-list';
 
@@ -21,10 +20,11 @@ export const FilteredTextList = ({ textType }: Props) => {
   const { data = [], isLoading } = useGetTextsQuery(textQuery);
 
   return (
-    <Container>
-      <Header>
+    <VStack gap="2" overflow="visible" gridColumn="list" overflowY="auto">
+      <VStack gap="2" position="relative">
         <Filters textType={textType} />
-        <Row>
+
+        <HStack gap="1">
           <Search
             value={filter}
             onChange={(v) => {
@@ -43,31 +43,10 @@ export const FilteredTextList = ({ textType }: Props) => {
             hideLabel
             spellCheck
           />
-        </Row>
-      </Header>
+        </HStack>
+      </VStack>
+
       <StandaloneTextList filter={filter} data={data} isLoading={isLoading} textType={textType} />
-    </Container>
+    </VStack>
   );
 };
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: var(--a-spacing-1);
-`;
-
-const Container = styled.div`
-  row-gap: var(--a-spacing-2);
-  z-index: 22;
-  overflow: visible;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-2);
-  position: relative;
-  background-color: var(--a-bg-default);
-`;
