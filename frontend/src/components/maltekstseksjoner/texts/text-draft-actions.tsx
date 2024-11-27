@@ -16,7 +16,7 @@ interface Props {
   error?: string;
 }
 
-export const DraftTextFooter = ({
+export const DraftTextActions = ({
   text,
   isSaving,
   isDeletable,
@@ -26,34 +26,37 @@ export const DraftTextFooter = ({
   error,
 }: Props) => {
   const [, { isLoading: isPublishing }] = usePublishMutation({ fixedCacheKey: text.id });
-  const { id, title } = text;
+  const { id, title, textType } = text;
 
   return (
-    <HStack justify="start" align="center" gap="2" marginBlock="4 0">
-      <Button
-        variant="primary"
-        size="small"
-        onClick={onPublish}
-        loading={isPublishing}
-        icon={<UploadIcon aria-hidden />}
-        disabled={isSaving}
-      >
-        Publiser
-      </Button>
-
-      {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
-
-      <DeleteDraftButton id={id} title={title} onDraftDeleted={onDraftDeleted}>
-        {isDeletable ? 'Slett utkast' : 'Slett tekst'}
-      </DeleteDraftButton>
-
-      <DuplicateTextButton {...text} />
-
+    <HStack justify="space-between" align="center">
       <AllMaltekstseksjonReferences
+        textType={textType}
         draftMaltekstseksjonIdList={text.draftMaltekstseksjonIdList}
         publishedMaltekstseksjonIdList={text.publishedMaltekstseksjonIdList}
         currentMaltekstseksjonId={maltekstseksjonId}
       />
+
+      <HStack gap="2" justify="end" marginInline="auto 0">
+        <Button
+          variant="primary"
+          size="small"
+          onClick={onPublish}
+          loading={isPublishing}
+          icon={<UploadIcon aria-hidden />}
+          disabled={isSaving}
+        >
+          Publiser
+        </Button>
+
+        {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
+
+        <DuplicateTextButton {...text} />
+
+        <DeleteDraftButton id={id} title={title} onDraftDeleted={onDraftDeleted}>
+          {isDeletable ? 'Slett utkast' : 'Slett tekst'}
+        </DeleteDraftButton>
+      </HStack>
     </HStack>
   );
 };

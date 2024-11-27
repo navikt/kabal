@@ -1,4 +1,5 @@
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
+import type { SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
@@ -16,6 +17,7 @@ interface LanguageEditorProps {
   editorRef: React.RefObject<RichTextEditor>;
   richTextRef: React.MutableRefObject<RichTexts>;
   setActive: (textId: string) => void;
+  status: SavedStatusProps;
 }
 
 export const LanguageEditor = ({
@@ -27,6 +29,7 @@ export const LanguageEditor = ({
   savedContent,
   setRichTexts,
   richTexts,
+  status,
 }: LanguageEditorProps) => {
   const activeLang = useRedaktoerLanguage();
 
@@ -46,6 +49,7 @@ export const LanguageEditor = ({
       }}
       onFocus={() => setActive(text.id)}
       lang={SPELL_CHECK_LANGUAGES[language]}
+      status={status}
     />
   );
 };

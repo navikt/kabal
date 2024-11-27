@@ -1,6 +1,10 @@
 import { getTitle } from '@app/components/editable-title/editable-title';
-import { PublishedTextFooter } from '@app/components/maltekstseksjoner/texts/text-published-footer';
+import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
+import { CreateDraftTextButton } from '@app/components/smart-editor-texts/create-draft-button';
+import { DuplicateTextButton } from '@app/components/smart-editor-texts/duplicate-text-button';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
+import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
+import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { isRegelverk } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
@@ -26,8 +30,13 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
   const editorRef = useRef<RichTextEditor>(null);
   const lang = useRedaktoerLanguage();
   const savedContent = isRegelverk(text) ? text.richText[UNTRANSLATED] : text.richText[lang];
+  const query = useTextQuery();
 
-  const publishedId = `${text.id}-published`;
+  const { id, textType } = text;
+
+  const publishedId = `${id}-published`;
+
+  const isNonReferencedText = textType === GOD_FORMULERING_TYPE || textType === REGELVERK_TYPE;
 
   return (
     <VStack ref={containerRef} position="relative" paddingBlock="2 0" flexGrow="1" overflowY="auto">
@@ -51,7 +60,24 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
           </BodyShort>
         </HStack>
 
-        {text.textType === GOD_FORMULERING_TYPE || text.textType === REGELVERK_TYPE ? <Tags {...text} /> : null}
+        {isNonReferencedText ? <Tags {...text} /> : null}
+
+        <HStack>
+          <AllMaltekstseksjonReferences
+            textType={textType}
+            draftMaltekstseksjonIdList={text.draftMaltekstseksjonIdList}
+            publishedMaltekstseksjonIdList={text.publishedMaltekstseksjonIdList}
+            currentMaltekstseksjonId={maltekstseksjonId}
+          />
+
+          <HStack gap="2" justify="end" marginInline="auto 0">
+            {hasDraft ? null : <CreateDraftTextButton text={text} onDraftCreated={setTabId} query={query} />}
+
+            <DuplicateTextButton {...text} />
+
+            <UnpublishTextButton publishedText={text} textType={textType} />
+          </HStack>
+        </HStack>
       </VStack>
 
       {savedContent === null ? (
@@ -59,13 +85,6 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
           <Alert variant="info" size="small">
             Tekst for {LANGUAGE_NAMES[lang].toLowerCase()} mangler
           </Alert>
-
-          <PublishedTextFooter
-            text={text}
-            maltekstseksjonId={maltekstseksjonId}
-            hasDraft={hasDraft}
-            setTabId={setTabId}
-          />
         </>
       ) : (
         <>
@@ -75,13 +94,6 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
             savedContent={savedContent}
             readOnly
             lang={SPELL_CHECK_LANGUAGES[lang]}
-          />
-
-          <PublishedTextFooter
-            text={text}
-            maltekstseksjonId={maltekstseksjonId}
-            hasDraft={hasDraft}
-            setTabId={setTabId}
           />
         </>
       )}

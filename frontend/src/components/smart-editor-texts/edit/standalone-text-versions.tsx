@@ -1,10 +1,8 @@
 import { PublishedRichText } from '@app/components/maltekstseksjoner/texts/published-rich-text';
-import { Changelog } from '@app/components/smart-editor-texts/edit/changelog';
 import { DraftRegelverk } from '@app/components/smart-editor-texts/edit/draft-regelverk';
 import { DraftGodFormulering, DraftRichText } from '@app/components/smart-editor-texts/edit/draft-rich-text';
 import { PublishedPlainText } from '@app/components/smart-editor-texts/edit/published-plain-text';
 import type { DraftVersionProps } from '@app/components/smart-editor-texts/types';
-import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { isGodFormulering, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
@@ -63,13 +61,6 @@ const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedPro
 
   return (
     <Container>
-      <Header>
-        <Changelog versions={versions} />
-        {publishedVersion === undefined ? null : (
-          <UnpublishTextButton publishedText={publishedVersion} textType={textType} />
-        )}
-      </Header>
-
       <StyledVersionTabs<IDraft, IPublishedText>
         first={firstText}
         versions={versions}
@@ -81,13 +72,6 @@ const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedPro
     </Container>
   );
 };
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: var(--a-spacing-4);
-  padding-bottom: 0;
-`;
 
 const DraftVersion = ({ text, onDraftDeleted }: DraftVersionProps) => {
   if (isRichText(text)) {

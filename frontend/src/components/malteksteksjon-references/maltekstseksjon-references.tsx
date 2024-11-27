@@ -1,4 +1,6 @@
 import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
+import { GOD_FORMULERING_TYPE, REGELVERK_TYPE } from '@app/types/common-text-types';
+import type { TextType } from '@app/types/texts/common';
 import { DocPencilIcon, ExternalLinkIcon, EyeIcon, FileSearchIcon, UploadIcon } from '@navikt/aksel-icons';
 import { Button, Link, List, Loader, Modal, Tooltip } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
@@ -6,16 +8,22 @@ import { styled } from 'styled-components';
 import { Preview } from './preview';
 
 interface Props {
+  textType: TextType;
   publishedMaltekstseksjonIdList: string[];
   draftMaltekstseksjonIdList: string[];
   currentMaltekstseksjonId?: string;
 }
 
 export const AllMaltekstseksjonReferences = ({
+  textType,
   draftMaltekstseksjonIdList,
   publishedMaltekstseksjonIdList,
   currentMaltekstseksjonId,
 }: Props) => {
+  if (textType === GOD_FORMULERING_TYPE || textType === REGELVERK_TYPE) {
+    return null;
+  }
+
   const draftReferences = draftMaltekstseksjonIdList.filter((id) => id !== currentMaltekstseksjonId);
   const publishedReferences = publishedMaltekstseksjonIdList.filter((id) => id !== currentMaltekstseksjonId);
 
