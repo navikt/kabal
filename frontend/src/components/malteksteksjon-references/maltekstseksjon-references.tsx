@@ -63,9 +63,7 @@ export const MaltekstseksjonReferences = ({
   const [previewedReference, setPreviewedReference] = useState<string | null>(first ?? null);
   const ref = useRef<HTMLDialogElement>(null);
 
-  if (references.length === 0) {
-    return null;
-  }
+  const noReferences = references.length === 0;
 
   const tooltip = `${type === MaltekstseksjonType.DRAFT ? 'Utkast' : 'Publiseringer'} av ${
     currentMaltekstseksjonId === undefined ? '' : 'andre '
@@ -80,7 +78,13 @@ export const MaltekstseksjonReferences = ({
       <Tooltip content={tooltip}>
         <StyledButton
           size="xsmall"
-          onClick={() => ref.current?.showModal()}
+          onClick={() => {
+            if (noReferences) {
+              return;
+            }
+
+            ref.current?.showModal();
+          }}
           variant="tertiary"
           icon={icon}
           iconPosition="right"
