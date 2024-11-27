@@ -39,6 +39,7 @@ export const FilteredTextList = ({ textType }: Props) => {
             placeholder="Filtrer på tittel og innhold"
             label="Filtrer på tittel og innhold"
             size="small"
+            variant="simple"
             hideLabel
             spellCheck
           />
