@@ -12,7 +12,7 @@ import { useAddTextMutation } from '@app/redux-api/texts/mutations';
 import type { TextTypes } from '@app/types/common-text-types';
 import type { Language } from '@app/types/texts/language';
 import { PlusIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { useCallback } from 'react';
 import { styled } from 'styled-components';
 import { LoadText } from './edit/load-text';
@@ -37,16 +37,17 @@ export const SmartEditorTexts = ({ textType }: Props) => {
 
   return (
     <Container>
-      <Header>
+      <HStack gap="4" justify="start" paddingBlock="0 1" gridColumn="header">
         <Button size="small" variant="secondary" loading={isLoading} onClick={onClick} icon={<PlusIcon aria-hidden />}>
           Legg til ny
         </Button>
+
         <SetStandaloneTextLanguage textType={textType} />
-      </Header>
-      <Content>
-        <FilteredTextList textType={textType} />
-        <LoadText />
-      </Content>
+      </HStack>
+
+      <FilteredTextList textType={textType} />
+
+      <LoadText />
     </Container>
   );
 };
@@ -72,26 +73,13 @@ const getNewText = (textType: TextTypes, lang: Language) => {
 };
 
 const Container = styled.article`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: min-content 1fr;
+  grid-template-areas:
+    'header content'
+    'list content';
+  column-gap: var(--a-spacing-2);
   height: 100%;
-  min-height: 100%;
-`;
-
-const Header = styled.header`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  column-gap: var(--a-spacing-4);
-  padding-bottom: var(--a-spacing-4);
-`;
-
-const Content = styled.div`
-  display: flex;
-  column-gap: var(--a-spacing-4);
-  padding-bottom: var(--a-spacing-4);
-  padding-top: var(--a-spacing-2);
-  padding-right: var(--a-spacing-2);
   overflow-y: hidden;
-  flex-grow: 1;
 `;
