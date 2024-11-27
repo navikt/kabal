@@ -1,6 +1,6 @@
 import { ALL_TEMPLATES_LABEL } from '@app/components/smart-editor-texts/get-template-options';
 import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';
-import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
+import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@app/components/smart-editor-texts/types';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { useEnhetNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
@@ -98,8 +98,17 @@ const MALTEKST_SECTION_IDS = Object.keys(MALTEKST_SECTION_NAMES);
 const isMaltekstSectionName = (sectionId: string): sectionId is keyof typeof MALTEKST_SECTION_NAMES =>
   MALTEKST_SECTION_IDS.includes(sectionId);
 
-const getMaltekstSectionName = (sectionId: string) =>
-  isMaltekstSectionName(sectionId) ? MALTEKST_SECTION_NAMES[sectionId] : sectionId;
+const getMaltekstSectionName = (sectionId: string) => {
+  if (isMaltekstSectionName(sectionId)) {
+    return MALTEKST_SECTION_NAMES[sectionId];
+  }
+
+  if (sectionId === WILDCARD) {
+    return 'Alle seksjoner';
+  }
+
+  return sectionId;
+};
 
 const getTemaplateAndSectionName = (selected: string): string => {
   const [tId, sId] = selected.split(LIST_DELIMITER);
