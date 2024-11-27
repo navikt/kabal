@@ -8,7 +8,7 @@ import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import type { TextTypes } from '@app/types/common-text-types';
 import type { IText } from '@app/types/texts/responses';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, HelpText } from '@navikt/ds-react';
+import { Alert, Button, HStack, HelpText } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { useTextQuery } from './hooks/use-text-query';
@@ -31,7 +31,7 @@ export const UnpublishTextButton = ({ publishedText, textType }: Props) => {
 
   if (isOpen) {
     return (
-      <Container>
+      <HStack gap="2" align="center">
         <ConfirmUnpublishTextButton publishedText={publishedText} textDraft={draft} textType={textType} />
         <Button
           size="small"
@@ -43,17 +43,17 @@ export const UnpublishTextButton = ({ publishedText, textType }: Props) => {
           Avbryt
         </Button>
         <Explainer />
-      </Container>
+      </HStack>
     );
   }
 
   return (
-    <Container>
+    <HStack gap="2" align="center">
       <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
         Avpubliser
       </Button>
       <Explainer />
-    </Container>
+    </HStack>
   );
 };
 
@@ -143,12 +143,6 @@ const getSuffix = (draftList: string[], publishedList: string[]) => {
 
   return 'denne';
 };
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
-`;
 
 const StyledReferences = styled(MaltekstseksjonReferences)`
   display: inline-block;

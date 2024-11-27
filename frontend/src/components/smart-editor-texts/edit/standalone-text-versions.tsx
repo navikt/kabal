@@ -9,7 +9,7 @@ import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-s
 import { useGetTextByIdQuery, useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { PlainTextTypes, type TextTypes } from '@app/types/common-text-types';
 import type { IDraft, IPlainText, IPublishedText, IText } from '@app/types/texts/responses';
-import { Loader } from '@navikt/ds-react';
+import { Loader, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { useParams } from 'react-router';
 import { styled } from 'styled-components';
@@ -60,7 +60,7 @@ const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedPro
   const hasDraft = versions.some((v) => 'publishedDateTime' in v && v.publishedDateTime === null);
 
   return (
-    <Container>
+    <VStack height="100%" overflowY="hidden">
       <StyledVersionTabs<IDraft, IPublishedText>
         first={firstText}
         versions={versions}
@@ -69,7 +69,7 @@ const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedPro
         createDraftPanel={(v) => <DraftVersion text={v} onDraftDeleted={onDraftDeleted} />}
         createPublishedPanel={(v) => <PublishedVersion text={v} hasDraft={hasDraft} setTabId={navigateToVersion} />}
       />
-    </Container>
+    </VStack>
   );
 };
 
@@ -105,33 +105,18 @@ const PublishedVersion = ({ text, hasDraft, setTabId }: PublishedVersionProps) =
   }
 
   return (
-    <PublishedContainer>
+    <VStack gap="2" padding="4" height="100%">
       <PublishedRichText text={text} hasDraft={hasDraft} setTabId={setTabId} />
-    </PublishedContainer>
+    </VStack>
   );
 };
 
 const isPlainText = (text: IText): text is IPlainText =>
   text.textType === PlainTextTypes.HEADER || text.textType === PlainTextTypes.FOOTER;
 
-const Container = styled.div`
-  display: flex;
-  height: 100%;
-  overflow-y: hidden;
-  flex-direction: column;
-`;
-
 const StyledVersionTabs: typeof VersionTabs = styled(VersionTabs)`
   overflow: hidden;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-`;
-
-const PublishedContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-2);
-  padding: var(--a-spacing-4);
-  height: 100%;
 `;

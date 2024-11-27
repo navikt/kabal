@@ -6,8 +6,8 @@ import {
   UtfallSelect,
 } from '@app/components/smart-editor-texts/query-filter-selects';
 import type { IGetMaltekstseksjonParams, TextTypes } from '@app/types/common-text-types';
+import { HStack } from '@navikt/ds-react';
 import { useSearchParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { HjemlerSelect } from './hjemler-select/hjemler-select';
 import { useTextQuery } from './hooks/use-text-query';
 
@@ -41,7 +41,7 @@ export const Filters = ({ textType, className }: Props) => {
   };
 
   return (
-    <Container className={className}>
+    <HStack className={className} gap="2">
       {hasTemplateSectionFilter ? (
         <TemplateSectionSelect
           selected={templateSectionIdList ?? []}
@@ -82,12 +82,6 @@ export const Filters = ({ textType, className }: Props) => {
           Enheter
         </KlageenhetSelect>
       ) : null}
-    </Container>
+    </HStack>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: var(--a-spacing-2);
-`;

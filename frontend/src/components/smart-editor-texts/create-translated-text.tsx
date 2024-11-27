@@ -3,8 +3,7 @@ import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { useUpdatePlainTextMutation, useUpdateRichTextMutation } from '@app/redux-api/texts/mutations';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
-import { Button } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Button, HStack } from '@navikt/ds-react';
 
 interface Props {
   id: string;
@@ -16,7 +15,7 @@ export const CreateTranslatedRichText = ({ id }: Props) => {
   const language = useRedaktoerLanguage();
 
   return (
-    <ButtonWrapper>
+    <HStack padding="4" justify="center">
       <Button
         size="small"
         onClick={() => updateRichText({ query, richText: [createSimpleParagraph()], id, language })}
@@ -24,7 +23,7 @@ export const CreateTranslatedRichText = ({ id }: Props) => {
       >
         Opprett versjon på {LANGUAGE_NAMES[language].toLowerCase()}
       </Button>
-    </ButtonWrapper>
+    </HStack>
   );
 };
 
@@ -34,16 +33,10 @@ export const CreateTranslatedPlainText = ({ id }: Props) => {
   const language = useRedaktoerLanguage();
 
   return (
-    <ButtonWrapper>
+    <HStack padding="4" justify="center">
       <Button size="small" onClick={() => updatePlainText({ query, plainText: '', id, language })} loading={isLoading}>
         Opprett versjon på {LANGUAGE_NAMES[language].toLowerCase()}
       </Button>
-    </ButtonWrapper>
+    </HStack>
   );
 };
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: var(--a-spacing-4);
-`;
