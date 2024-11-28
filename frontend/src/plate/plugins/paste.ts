@@ -13,9 +13,6 @@ import { ParagraphPlugin, createPlatePlugin } from '@udecode/plate-core/react';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { ListItemContentPlugin } from '@udecode/plate-list/react';
 
-const HTML_PREFIX = '<meta charset="utf-8">';
-const HTML_PREFIX_LENGTH = HTML_PREFIX.length;
-
 export const PastePlugin = createPlatePlugin({
   key: 'paste',
   handlers: {
@@ -36,7 +33,8 @@ export const PastePlugin = createPlatePlugin({
       const html = event.clipboardData.getData('text/html');
 
       // HTML content from PDFs in Chrome is equal to the plain text, with <meta charset="utf-8"> prepended.
-      if (html.length - HTML_PREFIX_LENGTH > plainText.length) {
+      // Some browsers and OS will wrap the plain text in <!html><body>pain text</body></html>.
+      if (html.includes(plainText)) {
         // Pasted HTML not from PDF.
         return false;
       }
