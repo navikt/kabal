@@ -25,7 +25,7 @@ export const PastePlugin = createPlatePlugin({
 
       const plainText = event.clipboardData.getData('text/plain');
 
-      // Nothing to pasted to handle.
+      // Nothing pasted to handle.
       if (plainText.length === 0) {
         return false;
       }
