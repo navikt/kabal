@@ -20,9 +20,15 @@ export const PastePlugin = createPlatePlugin({
   key: 'paste',
   handlers: {
     onPaste: ({ editor, event }) => {
+      for (const type of event.clipboardData.types) {
+        console.info(`Clipboard data for type ${type}:`, event.clipboardData.getData(type));
+      }
+
       // Pasting from PDFs in Chrome includes both text and HTML types.
       // Pasting from PDFs in Firefox includes only text type.
       if (event.clipboardData.types.some((t) => t !== 'text/plain' && t !== 'text/html')) {
+        console.info('Unsupported clipboard data types');
+
         return false;
       }
 
@@ -30,13 +36,24 @@ export const PastePlugin = createPlatePlugin({
 
       // Nothing to pasted to handle.
       if (plainText.length === 0) {
+        console.info('No plaintext to paste');
+
         return false;
       }
 
       const html = event.clipboardData.getData('text/html');
 
+      console.info('HTML length:', html.length);
+      console.info('HTML:', html);
+      console.info('plainText length:', plainText.length);
+      console.info('plainText:', plainText);
+
       // HTML content from PDFs in Chrome is equal to the plain text, with <meta charset="utf-8"> prepended.
       if (html.length - HTML_PREFIX_LENGTH > plainText.length) {
+        console.info(`HTML minus prefix was still longer than plaintext. html.length: ${html.length}`);
+        console.info('HTML_PREFIX:', HTML_PREFIX);
+        console.info('HTML_PREFIX_LENGTH:', HTML_PREFIX_LENGTH);
+
         // Pasted HTML not from PDF.
         return false;
       }
@@ -44,8 +61,10 @@ export const PastePlugin = createPlatePlugin({
       event.preventDefault();
 
       const paragraphs = processParagraphs(plainText);
+      console.info('paragraphs:', paragraphs);
 
       const currentEntry = findNode<TElement>(editor, { mode: 'lowest', match: isElement });
+      console.info('currentEntry:', currentEntry);
 
       if (currentEntry === undefined) {
         editor.insertFragment<ParagraphElement>(
