@@ -31,7 +31,7 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
         return;
       }
 
-      return setPath({ textId: first }, true);
+      setPath({ textId: first }, true);
     }
   }, [activeTextId, maltekstseksjon.textIdList, setPath]);
 

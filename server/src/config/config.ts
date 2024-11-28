@@ -31,7 +31,7 @@ export const frontendDirectoryPath = path.resolve(serverDirectoryPath, '../front
 export const frontendDistDirectoryPath = path.resolve(frontendDirectoryPath, './dist');
 
 const defaultValue = isLocal ? 'local' : undefined;
-const localJwk: JWK = {};
+const localJwk: JWK = { kty: 'RSA' };
 
 export const AZURE_APP_CLIENT_ID = requiredEnvString('AZURE_APP_CLIENT_ID', defaultValue);
 export const AZURE_APP_WELL_KNOWN_URL = requiredEnvString('AZURE_APP_WELL_KNOWN_URL', defaultValue);
