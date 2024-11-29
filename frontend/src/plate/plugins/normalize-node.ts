@@ -103,11 +103,9 @@ export const normalizeNodePlugin = createPlatePlugin({
 
         const [parentNode] = parentEntry;
 
-        const isParentTopLevelElement = isTopLevelElement(parentNode);
-
-        if (isParentTopLevelElement || isEditor(parentNode)) {
+        if (isEditor(parentNode)) {
           pushLog(
-            `Missing node type, element at top level in "${isParentTopLevelElement ? parentNode.type : 'editor'}". Setting type to paragraph.`,
+            'Missing node type, element at top level in editor. Setting type to paragraph.',
             options,
             LogLevel.WARN,
           );
@@ -115,7 +113,23 @@ export const normalizeNodePlugin = createPlatePlugin({
           return setNodes(
             editor,
             { type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT },
-            { at: path, match: (n) => n === node },
+            { at: [], match: (n) => n === node },
+          );
+        }
+
+        const isParentTopLevelElement = isTopLevelElement(parentNode);
+
+        if (isParentTopLevelElement) {
+          pushLog(
+            `Missing node type, element at top level in "${parentNode.type}". Setting type to paragraph.`,
+            options,
+            LogLevel.WARN,
+          );
+
+          return setNodes(
+            editor,
+            { type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT },
+            { match: (n) => n === node },
           );
         }
 
