@@ -75,9 +75,9 @@ export const normalizeNodePlugin = createPlatePlugin({
     const { normalizeNode } = editor;
 
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-    editor.normalizeNode = ([node, path]) => {
+    editor.normalizeNode = ([node, path], opts) => {
       if (!isElement(node)) {
-        return normalizeNode([node, path]);
+        return normalizeNode([node, path], opts);
       }
 
       if (node.type === undefined) {
@@ -149,7 +149,7 @@ export const normalizeNodePlugin = createPlatePlugin({
           LogLevel.ERROR,
         );
 
-        return normalizeNode([node, path]);
+        return normalizeNode([node, path], opts);
       }
 
       if (node.children.length === 0) {
@@ -196,7 +196,7 @@ export const normalizeNodePlugin = createPlatePlugin({
         }
       }
 
-      normalizeNode([node, path]);
+      normalizeNode([node, path], opts);
     };
 
     return editor;
