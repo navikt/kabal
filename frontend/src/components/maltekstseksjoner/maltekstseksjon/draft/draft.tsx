@@ -17,7 +17,7 @@ import {
 } from '@app/redux-api/maltekstseksjoner/mutations';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { HStack, Label, Loader } from '@navikt/ds-react';
+import { BodyShort, HStack, Label, Loader } from '@navikt/ds-react';
 import { Container, Header } from '../common';
 import { Actions } from './actions';
 import { Sidebar } from './sidebar';
@@ -64,13 +64,15 @@ export const DraftMaltekstSection = ({ maltekstseksjon, query, onDraftDeleted }:
               Sist endret:
             </Label>
 
-            <HStack align="center">
-              {isUpdating ? (
-                <Loader size="xsmall" />
-              ) : (
-                <DateTime id={modifiedId} dateTime={maltekstseksjon.modifiedOrTextsModified} />
-              )}
-              <span>, av {lastEdit === undefined ? 'Ukjent' : lastEdit.actor.navn}</span>
+            <HStack asChild align="center">
+              <BodyShort id={modifiedId} size="small">
+                {isUpdating ? (
+                  <Loader size="xsmall" />
+                ) : (
+                  <DateTime id={modifiedId} dateTime={maltekstseksjon.modifiedOrTextsModified} />
+                )}
+                <span>, av {lastEdit === undefined ? 'Ukjent' : lastEdit.actor.navn}</span>
+              </BodyShort>
             </HStack>
           </HStack>
           <TextHistory {...maltekstseksjon} isUpdating={isUpdating} />

@@ -179,14 +179,16 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
             Sist endret:
           </Label>
 
-          <BodyShort size="small" id={modifiedId}>
-            {isSaving ? (
-              <Loader size="xsmall" />
-            ) : (
-              <time dateTime={text.modified}>{isoDateTimeToPretty(text.modified)}</time>
-            )}
-            {lastEdit === undefined ? null : <span>, av {lastEdit.actor.navn}</span>}
-          </BodyShort>
+          <HStack asChild align="center">
+            <BodyShort size="small" id={modifiedId}>
+              {isSaving ? (
+                <Loader size="xsmall" />
+              ) : (
+                <time dateTime={text.modified}>{isoDateTimeToPretty(text.modified)}</time>
+              )}
+              {lastEdit === undefined ? null : <span>, av {lastEdit.actor.navn}</span>}
+            </BodyShort>
+          </HStack>
         </HStack>
 
         <DraftTextActions

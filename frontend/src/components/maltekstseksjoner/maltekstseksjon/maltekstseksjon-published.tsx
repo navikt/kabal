@@ -14,7 +14,7 @@ import { useCreateDraftFromVersionMutation } from '@app/redux-api/maltekstseksjo
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IPublishedMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { CalendarIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Label, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Label, Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
 import { useParams } from 'react-router';
 import { TextListItem } from '../styled-components';
@@ -60,18 +60,14 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
 
         <HStack gap="2" align="center" gridColumn="metadata">
           <HStack gap="1" align="center">
-            <HStack gap="1" align="center">
-              <Label size="small" htmlFor={publishedFieldId}>
-                Publisert:
-              </Label>
-              <HStack align="center">
-                <DateTime
-                  id={publishedFieldId}
-                  dateTime={publishedDateTime}
-                  icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />}
-                />
+            <Label size="small" htmlFor={publishedFieldId}>
+              Publisert:
+            </Label>
+            <HStack asChild align="center">
+              <BodyShort id={publishedFieldId} size="small">
+                <DateTime dateTime={publishedDateTime} icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />} />
                 <span>, av {publishedByActor.navn}</span>
-              </HStack>
+              </BodyShort>
             </HStack>
           </HStack>
 

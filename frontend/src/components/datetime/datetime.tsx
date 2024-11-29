@@ -1,7 +1,7 @@
 import { isoDateTimeToPretty } from '@app/domain/date';
 import type { IEdit } from '@app/types/common-text-types';
 import { CalendarIcon, ClockIcon } from '@navikt/aksel-icons';
-import { HStack } from '@navikt/ds-react';
+import { BodyShort, HStack } from '@navikt/ds-react';
 
 interface Props {
   created: string;
@@ -17,9 +17,11 @@ export const ModifiedCreatedDateTime = ({ id, lastEdit, created }: Props) => {
   const title = isModified ? 'Sist endret' : 'Opprettet';
 
   return (
-    <HStack id={id} align="center">
-      <DateTime icon={<Icon aria-hidden style={{ flexShrink: 0 }} />} dateTime={dateTime} title={title} />
-      {lastEdit === undefined ? null : <span>, av {lastEdit.actor.navn}</span>}
+    <HStack asChild align="center">
+      <BodyShort id={id} size="small">
+        <DateTime icon={<Icon aria-hidden style={{ flexShrink: 0 }} />} dateTime={dateTime} title={title} />
+        {lastEdit === undefined ? null : <span>, av {lastEdit.actor.navn}</span>}
+      </BodyShort>
     </HStack>
   );
 };
