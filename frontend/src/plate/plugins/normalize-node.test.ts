@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'bun:test';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
+import { ELEMENT_MALTEKSTSEKSJON, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
+import { normalizeNodePlugin } from '@app/plate/plugins/normalize-node';
+import { TemplateSections } from '@app/plate/template-sections';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import {
   type BulletListElement,
@@ -7,14 +9,16 @@ import {
   type KabalValue,
   type ListItemContainerElement,
   type ListItemElement,
+  type MaltekstseksjonElement,
   type ParagraphElement,
+  type RedigerbarMaltekstElement,
   TextAlign,
 } from '@app/plate/types';
 import { BaseParagraphPlugin, replaceNode } from '@udecode/plate-common';
 import { createPlateEditor } from '@udecode/plate-core/react';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
 
-const createEditor = (value: KabalValue) => createPlateEditor({ plugins: saksbehandlerPlugins, value });
+const createEditor = (value: KabalValue) => createPlateEditor({ plugins: [normalizeNodePlugin], value });
 
 describe('normalize node with missing type prop', () => {
   it('should fix LICs', () => {
@@ -64,5 +68,39 @@ describe('normalize node with missing type prop', () => {
     };
 
     expect(editor.children).toEqual([defaultedNode]);
+  });
+
+  it('should fix descendants inside redigerbar maltekst (top level element)', () => {
+    const invalidParagraph: ParagraphElement = { children: [{ text: 'some text' }] } as ParagraphElement;
+    const invalidRedigerbarMaltekst: RedigerbarMaltekstElement = {
+      type: ELEMENT_REDIGERBAR_MALTEKST,
+      section: TemplateSections.ANFOERSLER,
+      children: [invalidParagraph],
+    };
+    const invalidMaltekstseksjon: MaltekstseksjonElement = {
+      type: ELEMENT_MALTEKSTSEKSJON,
+      section: TemplateSections.REGELVERK_TITLE,
+      textIdList: [],
+      children: [invalidRedigerbarMaltekst],
+    };
+
+    const editor = createEditor([createSimpleParagraph()]);
+
+    replaceNode(editor, { at: [0], nodes: invalidMaltekstseksjon });
+
+    const validParagraph: ParagraphElement = { children: [{ text: 'some text' }] } as ParagraphElement;
+    const validRedigerbarMaltekst: RedigerbarMaltekstElement = {
+      type: ELEMENT_REDIGERBAR_MALTEKST,
+      section: TemplateSections.ANFOERSLER,
+      children: [validParagraph],
+    };
+    const validMaltekstseksjon: MaltekstseksjonElement = {
+      type: ELEMENT_MALTEKSTSEKSJON,
+      section: TemplateSections.REGELVERK_TITLE,
+      textIdList: [],
+      children: [validRedigerbarMaltekst],
+    };
+
+    expect(editor.children).toEqual([validMaltekstseksjon]);
   });
 });
