@@ -60,7 +60,7 @@ export const VersionTabs = <D extends DraftVersion, P extends PublishedVersion>(
     tabs[i] = <Tabs.Tab key={versionId} value={versionId} label={label} icon={getIcon(isDraft, published)} />;
 
     panels[i] = (
-      <StyledTabPanel key={versionId} value={versionId}>
+      <StyledTabPanel key={versionId} value={versionId} lazy={false}>
         {isDraft ? createDraftPanel(version) : createPublishedPanel(version)}
       </StyledTabPanel>
     );
