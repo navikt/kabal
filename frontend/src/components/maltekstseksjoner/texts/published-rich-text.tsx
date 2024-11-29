@@ -54,10 +54,12 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
             Publisert:
           </Label>
 
-          <BodyShort id={publishedId}>
-            <time dateTime={text.publishedDateTime}>{isoDateTimeToPretty(text.publishedDateTime)}</time>
-            <span>, av {text.publishedByActor.navn}</span>
-          </BodyShort>
+          <HStack asChild align="center">
+            <BodyShort id={publishedId} size="small">
+              <time dateTime={text.publishedDateTime}>{isoDateTimeToPretty(text.publishedDateTime)}</time>
+              <span>, av {text.publishedByActor.navn}</span>
+            </BodyShort>
+          </HStack>
         </HStack>
 
         {isNonReferencedText ? <Tags {...text} /> : null}
