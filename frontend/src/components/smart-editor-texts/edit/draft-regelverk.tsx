@@ -8,6 +8,7 @@ import type { KabalValue } from '@app/plate/types';
 import { usePublishMutation, useUpdateRichTextMutation } from '@app/redux-api/texts/mutations';
 import { UNTRANSLATED } from '@app/types/texts/language';
 import type { IRegelverk } from '@app/types/texts/responses';
+import { ErrorMessage } from '@navikt/ds-react';
 import { useCallback, useEffect, useState } from 'react';
 
 interface Props extends Omit<DraftVersionProps, 'text'> {
@@ -20,6 +21,7 @@ export const DraftRegelverk = ({ text, onDraftDeleted }: Props) => {
   const [publish] = usePublishMutation();
   const savedRichText = text.richText[UNTRANSLATED];
   const [richText, setRichText] = useState<KabalValue>(savedRichText);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (areDescendantsEqual(richText, savedRichText)) {
@@ -34,15 +36,22 @@ export const DraftRegelverk = ({ text, onDraftDeleted }: Props) => {
   }, [query, richText, savedRichText, text.id, updateRichText]);
 
   const onPublish = useCallback(async () => {
+    if (text.ytelseHjemmelIdList.length === 0) {
+      return setError('Du må velge minst én hjemmel før du kan publisere');
+    }
+
+    setError(null);
+
     if (!areDescendantsEqual(richText, savedRichText)) {
       await updateRichText({ query, richText, id: text.id, language: UNTRANSLATED });
     }
 
     publish({ query, id: text.id });
-  }, [richText, publish, query, savedRichText, text.id, updateRichText]);
+  }, [richText, publish, query, savedRichText, text.id, updateRichText, text]);
 
   return (
     <Edit text={text} onDraftDeleted={onDraftDeleted} onPublish={onPublish}>
+      {error === null ? null : <ErrorMessage style={{ alignSelf: 'flex-end' }}>{error}</ErrorMessage>}
       <RedaktoerRichText
         editorId={text.id}
         savedContent={savedRichText}
