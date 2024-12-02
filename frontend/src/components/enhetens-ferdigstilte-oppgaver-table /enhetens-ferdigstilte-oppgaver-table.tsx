@@ -23,6 +23,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.VarsletFrist,
   ColumnKeyEnum.Finished,
   ColumnKeyEnum.Utfall,
+  ColumnKeyEnum.PreviousSaksbehandler,
   ColumnKeyEnum.Open,
 ];
 
