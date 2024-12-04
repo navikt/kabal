@@ -1,5 +1,5 @@
 import { IS_LOCALHOST } from '@app/redux-api/common';
-import { paramsWithGlobalSections } from '@app/redux-api/redaktør-helpers';
+import { paramsWithGlobalQueries } from '@app/redux-api/redaktør-helpers';
 import { TextsTagTypes, textsApi } from '@app/redux-api/texts/texts';
 import type { IGetTextsParams } from '@app/types/texts/params';
 import type { IText } from '@app/types/texts/responses';
@@ -16,7 +16,7 @@ export const textsQuerySlice = textsApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     getTexts: builder.query<IText[], IGetTextsParams>({
-      query: (params) => ({ url: '/texts', params: paramsWithGlobalSections(params) }),
+      query: (params) => ({ url: '/texts', params: paramsWithGlobalQueries(params) }),
       providesTags: textsListTags,
     }),
     getTextById: builder.query<IText, string>({

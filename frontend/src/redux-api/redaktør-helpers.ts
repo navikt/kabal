@@ -1,23 +1,38 @@
-import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
+import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@app/components/smart-editor-texts/types';
 import type { IGetMaltekstseksjonParams, IGetTextsParams } from '@app/types/common-text-types';
 
 type Params = IGetMaltekstseksjonParams | IGetTextsParams;
 
-export const paramsWithGlobalSections = <T extends Params>(params: T): T => {
-  if (params.templateSectionIdList === undefined) {
-    return params;
-  }
+export const getListWithGlobal = (list: string[]) => {
+  const newList = [...list];
 
-  const list = [...params.templateSectionIdList];
+  for (const item of list) {
+    const [, lastPart] = item.split(LIST_DELIMITER);
 
-  for (const templateSectionId of list) {
-    const [, sectionId] = templateSectionId.split(LIST_DELIMITER);
-    const globalSection = `${GLOBAL}${LIST_DELIMITER}${sectionId}`;
+    if (lastPart === WILDCARD || lastPart === undefined) {
+      if (!newList.includes(GLOBAL)) {
+        newList.push(GLOBAL);
+      }
 
-    if (!list.includes(globalSection)) {
-      list.push(globalSection);
+      continue;
+    }
+
+    const withGlobal = `${GLOBAL}${LIST_DELIMITER}${lastPart}`;
+
+    if (!newList.includes(withGlobal)) {
+      newList.push(withGlobal);
     }
   }
 
-  return { ...params, templateSectionIdList: list.toSorted((a, b) => a.localeCompare(b)) };
+  return newList.toSorted((a, b) => a.localeCompare(b));
+};
+
+export const paramsWithGlobalQueries = <T extends Params>(params: T): T => {
+  const templateSectionIdList =
+    params.templateSectionIdList === undefined ? undefined : getListWithGlobal(params.templateSectionIdList);
+
+  const ytelseHjemmelIdList =
+    params.ytelseHjemmelIdList === undefined ? undefined : getListWithGlobal(params.ytelseHjemmelIdList);
+
+  return { ...params, templateSectionIdList, ytelseHjemmelIdList };
 };
