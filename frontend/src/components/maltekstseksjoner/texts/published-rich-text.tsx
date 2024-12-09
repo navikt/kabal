@@ -40,7 +40,7 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
 
   return (
     <VStack ref={containerRef} position="relative" paddingBlock="2 0" flexGrow="1" overflowY="auto">
-      <VStack as="header" gap="2" marginBlock="0 2" minHeight="var(--a-spacing-8)">
+      <VStack as="header" gap="2" marginBlock="0 2">
         <HStack gap="2" justify="space-between" align="center" paddingInline="0 2">
           <Heading level="1" size="small">
             {getTitle(text.title)}
@@ -83,21 +83,17 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
       </VStack>
 
       {savedContent === null ? (
-        <>
-          <Alert variant="info" size="small">
-            Tekst for {LANGUAGE_NAMES[lang].toLowerCase()} mangler
-          </Alert>
-        </>
+        <Alert variant="info" size="small">
+          Tekst for {LANGUAGE_NAMES[lang].toLowerCase()} mangler
+        </Alert>
       ) : (
-        <>
-          <RedaktoerRichText
-            ref={editorRef}
-            editorId={`${text.id}-${lang}`}
-            savedContent={savedContent}
-            readOnly
-            lang={SPELL_CHECK_LANGUAGES[lang]}
-          />
-        </>
+        <RedaktoerRichText
+          ref={editorRef}
+          editorId={`${text.id}-${lang}`}
+          savedContent={savedContent}
+          readOnly
+          lang={SPELL_CHECK_LANGUAGES[lang]}
+        />
       )}
     </VStack>
   );
