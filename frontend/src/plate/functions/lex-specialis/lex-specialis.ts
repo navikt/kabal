@@ -82,17 +82,29 @@ export const lexSpecialis = <T extends IConsumerRichText | IMaltekstseksjon>(
     .filter((st) => st.score > INCLUDE_THRESHOLD)
     .sort((a, b) => b.score - a.score);
 
-  const [first, second] = scoredTexts;
+  const [first] = scoredTexts;
 
   if (first === undefined) {
     return NONE_RESULT;
   }
 
-  if (first.score === second?.score) {
-    return getTieResult(scoredTexts.filter((st) => st.score === first.score));
+  // biome-ignore lint/suspicious/noEvolvingTypes: Needs to be reassignable.
+  let firstUntiedText = null;
+
+  for (const scoredText of scoredTexts) {
+    const hasUniqueScore = scoredTexts.every((st) => scoredText === st || scoredText.score !== st.score);
+
+    if (hasUniqueScore) {
+      firstUntiedText = scoredText;
+      break;
+    }
   }
 
-  return [LexSpecialisStatus.FOUND, first.maltekstseksjon];
+  if (firstUntiedText === null) {
+    return getTieResult(scoredTexts);
+  }
+
+  return [LexSpecialisStatus.FOUND, firstUntiedText.maltekstseksjon];
 };
 
 const getScore = <T extends IConsumerRichText | IMaltekstseksjon>(
