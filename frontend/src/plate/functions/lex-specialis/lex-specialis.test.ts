@@ -56,7 +56,7 @@ describe('lex specialis', () => {
     expect(actualResult).toBe(MORE_SPECIFIC_TITLE);
   });
 
-  it('handle ties', () => {
+  it('should return tie only if there are no unique scores', () => {
     expect.assertions(2);
 
     const [actualStatus, actualResult] = lexSpecialis(
@@ -65,13 +65,48 @@ describe('lex specialis', () => {
       'y1',
       ['h1'],
       [],
-      [GENERIC_TITLE, GENERIC_TITLE],
+      [GENERIC_TITLE, GENERIC_TITLE, SPECIFIC_TITLE, SPECIFIC_TITLE],
     );
+
     expect(actualStatus).toBe(LexSpecialisStatus.TIE);
     expect(actualResult).toStrictEqual([
+      { maltekstseksjon: SPECIFIC_TITLE, score: 22 },
+      { maltekstseksjon: SPECIFIC_TITLE, score: 22 },
       { maltekstseksjon: GENERIC_TITLE, score: 20 },
       { maltekstseksjon: GENERIC_TITLE, score: 20 },
     ]);
+  });
+
+  it('should fallback to result with unique score if more specific results were ties', () => {
+    expect.assertions(2);
+
+    const [actualStatus, actualResult] = lexSpecialis(
+      TemplateIdEnum.KLAGEVEDTAK_V2,
+      TemplateSections.TITLE,
+      'y1',
+      ['h1'],
+      [],
+      [MORE_SPECIFIC_TITLE, SPECIFIC_TITLE, GENERIC_TITLE, MORE_SPECIFIC_TITLE, SPECIFIC_TITLE],
+    );
+
+    expect(actualStatus).toBe(LexSpecialisStatus.FOUND);
+    expect(actualResult).toBe(GENERIC_TITLE);
+  });
+
+  it('should fallback to most specific result with unique score if more specific results were ties', () => {
+    expect.assertions(2);
+
+    const [actualStatus, actualResult] = lexSpecialis(
+      TemplateIdEnum.KLAGEVEDTAK_V2,
+      TemplateSections.TITLE,
+      'y1',
+      ['h1'],
+      [],
+      [MORE_SPECIFIC_TITLE, MORE_SPECIFIC_TITLE, GENERIC_TITLE, SPECIFIC_TITLE],
+    );
+
+    expect(actualStatus).toBe(LexSpecialisStatus.FOUND);
+    expect(actualResult).toBe(SPECIFIC_TITLE);
   });
 
   it('no utfall does not match texts with utfall', () => {
