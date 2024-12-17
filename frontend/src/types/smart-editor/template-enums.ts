@@ -12,4 +12,5 @@ export enum TemplateIdEnum {
   BEHANDLING_ETTER_TR_OPPHEVET_VEDTAK = 'behandling-etter-tr-opphevet',
   OMGJØRINGSKRAVVEDTAK = 'omgjøringskravvedtak',
   FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE = 'forenklet-beslutning-om-ikke-å-omgjøre',
+  SVAR_PÅ_INNSYNSBEGJÆRING = 'svar-på-innsynsbegjæring',
 }

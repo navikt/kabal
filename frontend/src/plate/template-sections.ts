@@ -31,6 +31,8 @@ export enum TemplateSections {
   SVAR_FRA_ROL = 'section-emu',
   TILSVARSBREV_TITLE = 'section-mink',
   SAKSGANG = 'section-ørn',
+  SVAR_PÅ_INNSYNSBEGJÆRING = 'section-orm',
+  OM_TAUSHETSPLIKT = 'section-due',
 
   INTRODUCTION_TEMP = 'section-rev-temp', // For "migrating" ROL questions
 }
