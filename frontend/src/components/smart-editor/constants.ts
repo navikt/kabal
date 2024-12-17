@@ -23,6 +23,8 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections, string> = {
   [TemplateSections.SVAR_FRA_ROL]: 'Svar fra ROL',
   [TemplateSections.TILSVARSBREV_TITLE]: 'Tilsvarsbrevtittel',
   [TemplateSections.SAKSGANG]: 'Saksgang',
+  [TemplateSections.SVAR_PÅ_INNSYNSBEGJÆRING]: 'Svar på innsynsbegjæring',
+  [TemplateSections.OM_TAUSHETSPLIKT]: 'Om taushetsplikt',
 
   [TemplateSections.INTRODUCTION_TEMP]: 'Introduksjon (midlertidig)',
 };
