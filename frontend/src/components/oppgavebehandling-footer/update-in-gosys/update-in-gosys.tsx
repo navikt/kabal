@@ -147,7 +147,14 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
 
                 <ReceivingEnhet
                   selectedEnhet={selectedEnhet}
-                  setSelectedEnhet={setSelectedEnhet}
+                  setSelectedEnhet={(e) => {
+                    if (e === selectedEnhet) {
+                      return;
+                    }
+
+                    setSelectedEnhet(e);
+                    setSelectedMappe(null);
+                  }}
                   error={enhetError}
                   enheter={enheter}
                   oppgavebehandling={oppgavebehandling}
