@@ -15,6 +15,7 @@ import type {
   ELEMENT_REGELVERK,
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
+  ELEMENT_WRAPPER,
 } from '@app/plate/plugins/element-types';
 import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
 import type { Language } from '@app/types/texts/language';
@@ -144,6 +145,11 @@ export interface RedigerbarMaltekstElement extends BlockElement {
   children: ParentOrChildElement[] | [EmptyVoidElement];
 }
 
+export interface WrapperElement extends BlockElement {
+  type: typeof ELEMENT_WRAPPER;
+  children: ParentOrChildElement[];
+}
+
 export interface MaltekstseksjonElement extends BlockElement {
   type: typeof ELEMENT_MALTEKSTSEKSJON;
   id?: string;
@@ -252,6 +258,7 @@ export type ParentOrChildElement =
 type ParentOnlyElement =
   | MaltekstElement
   | RedigerbarMaltekstElement
+  | WrapperElement
   | RegelverkElement
   | CurrentDateElement
   | PageBreakElement

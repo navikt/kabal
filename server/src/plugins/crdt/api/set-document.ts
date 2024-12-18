@@ -18,6 +18,11 @@ export const setDocument = async (context: ConnectionContext, document: Document
   const sharedRoot = document.get('content', XmlText);
   const nodes = yTextToSlateElement(sharedRoot);
 
+  // console.log('set-document document', document);
+  console.log('set-document nodes.children', JSON.stringify(nodes.children));
+  console.log('set-document update', update);
+  console.log('set-document data', data);
+
   const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
     method: 'PATCH',
     headers: {

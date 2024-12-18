@@ -18,6 +18,8 @@ import type { EditorFragmentDeletionOptions, TextUnit } from 'slate';
 const withOverrides = (editor: PlateEditor) => {
   const { deleteBackward, deleteForward, deleteFragment, insertFragment, insertText, addMark, delete: del } = editor;
 
+  console.log('prohibit-deletion.ts');
+
   editor.insertText = (text, options) => {
     if (isUnchangeable(editor)) {
       return;

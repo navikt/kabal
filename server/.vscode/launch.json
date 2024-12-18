@@ -10,7 +10,8 @@
       "name": "Launch Program",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/dist/server.js",
-      "cwd": "${workspaceFolder}"
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "/home/daniel/.nvm/versions/node/v22.6.0/bin/node"
     }
   ]
 }

@@ -11,7 +11,8 @@ import { hasOwn, isObject } from '@app/plugins/crdt/functions';
 import { getRedisExtension } from '@app/plugins/crdt/redis';
 import type { CloseEvent } from '@hocuspocus/common';
 import { Server } from '@hocuspocus/server';
-import { applyUpdateV2 } from 'yjs';
+import { yTextToSlateElement } from '@slate-yjs/core';
+import { XmlText, applyUpdateV2 } from 'yjs';
 
 const log = getLogger('collaboration');
 
@@ -229,6 +230,17 @@ export const collaborationServer = Server.configure({
     await setDocument(context, document);
 
     logContext('Saved document to database', context, 'debug');
+  },
+
+  onChange: ({ document }) => {
+    const sharedRoot = document.get('content', XmlText);
+
+    const nodes = yTextToSlateElement(sharedRoot);
+
+    // console.log('oChange document', document);
+    console.log('oChange nodes.children', JSON.stringify(nodes.children));
+
+    return Promise.resolve();
   },
 
   extensions: isDeployed ? [getRedisExtension()].filter(isNotNull) : [],

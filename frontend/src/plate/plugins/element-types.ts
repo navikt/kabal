@@ -12,6 +12,7 @@ export const ELEMENT_LABEL_CONTENT = 'label-content';
 export const ELEMENT_FULLMEKTIG = 'fullmektig';
 export const ELEMENT_SIGNATURE = 'signature';
 export const ELEMENT_EMPTY_VOID = 'empty-void';
+export const ELEMENT_WRAPPER = 'wrapper';
 
 export const UNCHANGEABLE = [
   ELEMENT_HEADER,
@@ -25,6 +26,7 @@ export const UNCHANGEABLE = [
 
 export const UNDELETABLE_BUT_REDIGERBAR = [
   ELEMENT_REDIGERBAR_MALTEKST,
+  ELEMENT_WRAPPER,
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_FULLMEKTIG,
 ];

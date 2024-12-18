@@ -86,6 +86,9 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   return (
     <Container style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(scalingGroup) }}>
       <Plate<RichTextEditor>
+        onChange={({ value }) => {
+          console.log(JSON.stringify(value, null, 2));
+        }}
         editor={editor}
         readOnly={!canEdit}
         decorate={({ entry }) => {
