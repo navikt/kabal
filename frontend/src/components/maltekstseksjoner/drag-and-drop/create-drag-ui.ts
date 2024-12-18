@@ -1,6 +1,9 @@
 type cleanFn = () => void;
 
-export const createDragUI = (dragElementRef: React.RefObject<HTMLAnchorElement>, e: React.DragEvent): cleanFn => {
+export const createDragUI = (
+  dragElementRef: React.RefObject<HTMLAnchorElement | null>,
+  e: React.DragEvent,
+): cleanFn => {
   if (dragElementRef.current === null) {
     return () => {};
   }

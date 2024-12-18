@@ -14,7 +14,7 @@ interface LanguageEditorProps {
   savedContent: KabalValue;
   richTexts: RichTexts;
   setRichTexts: (richTexts: RichTexts) => void;
-  editorRef: React.RefObject<RichTextEditor>;
+  editorRef: React.RefObject<RichTextEditor | null>;
   richTextRef: React.MutableRefObject<RichTexts>;
   setActive: (textId: string) => void;
   status: SavedStatusProps;
