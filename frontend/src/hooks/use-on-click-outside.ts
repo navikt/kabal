@@ -3,7 +3,7 @@ import { type RefObject, useEffect } from 'react';
 type Callback = (event: MouseEvent | TouchEvent | KeyboardEvent) => void;
 
 export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
-  ref: RefObject<T>,
+  ref: RefObject<T | null>,
   callback: Callback,
   children = false,
 ) =>

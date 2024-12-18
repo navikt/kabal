@@ -116,7 +116,8 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
   );
 };
 
-const getIsFocused = ({ current }: React.RefObject<HTMLElement>) => current?.contains(document.activeElement) ?? false;
+const getIsFocused = ({ current }: React.RefObject<HTMLElement | null>) =>
+  current?.contains(document.activeElement) ?? false;
 
 interface StyleProps {
   $isFocused: boolean;
