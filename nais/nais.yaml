@@ -52,6 +52,7 @@ spec:
         - application: kabal-innstillinger
         - application: klage-kodeverk-api
         - application: kabal-text-templates
+        - application: kabal-e2e-tests
       external:
         - host: login.microsoftonline.com
         - host: hooks.slack.com
