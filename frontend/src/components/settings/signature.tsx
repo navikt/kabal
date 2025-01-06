@@ -104,7 +104,7 @@ const SignatureValue = ({ infoKey, saksbehandlerSignature, label, navIdent }: Si
   );
 };
 
-const TITLES = ['Rådgiver', 'Seniorrådgiver', 'Fagleder', 'Avdelingsdirektør', 'Førstekonsulent'];
+const TITLES = ['rådgiver', 'seniorrådgiver', 'fagleder', 'avdelingsdirektør', 'førstekonsulent'];
 
 const TitleSelector = ({ infoKey, saksbehandlerSignature, label, navIdent }: SignatureProps) => {
   const savedValue = saksbehandlerSignature[infoKey];
