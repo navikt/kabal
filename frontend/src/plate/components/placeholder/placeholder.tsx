@@ -20,7 +20,7 @@ import { getEndPoint, getPreviousPath, setSelection } from '@udecode/plate-commo
 import {
   PlateElement,
   type PlateElementProps,
-  findNodePath,
+  findPath,
   focusEditor,
   isEditorFocused,
   useEditorReadOnly,
@@ -51,7 +51,7 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
-      const path = findNodePath(editor, element);
+      const path = findPath(editor, element);
 
       if (!hasNoVisibleText) {
         return;
@@ -68,11 +68,11 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
     [containsEmptyChar, editor, element, hasNoVisibleText],
   );
 
-  const isFocused = getIsFocused(editor, findNodePath(editor, element));
+  const isFocused = getIsFocused(editor, findPath(editor, element));
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   useEffect(() => {
-    const path = findNodePath(editor, element);
+    const path = findPath(editor, element);
 
     if (isDragging || path === undefined) {
       return;
@@ -115,7 +115,7 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
 
   const deletePlaceholder = useCallback(
     (event: MouseEvent) => {
-      const path = findNodePath(editor, element);
+      const path = findPath(editor, element);
 
       if (path === undefined) {
         return;
@@ -145,7 +145,7 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
   );
 
   const hideDeleteButton = useMemo(() => {
-    const path = findNodePath(editor, element);
+    const path = findPath(editor, element);
 
     return (
       !(canManage && hasNoVisibleText) ||

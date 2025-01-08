@@ -15,7 +15,7 @@ import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { isElement, replaceNodeChildren, withoutNormalizing, withoutSavingHistory } from '@udecode/plate-common';
 import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
-import { findNodePath, isEditorReadOnly } from '@udecode/slate-react';
+import { findPath, isEditorReadOnly } from '@udecode/slate-react';
 import { useContext, useEffect } from 'react';
 
 /**
@@ -33,7 +33,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
       return;
     }
 
-    const path = findNodePath(editor, element);
+    const path = findPath(editor, element);
 
     if (path === undefined) {
       return;

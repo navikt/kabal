@@ -28,7 +28,7 @@ import type { PlateEditor } from '@udecode/plate-core/react';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
 import { BaseTablePlugin } from '@udecode/plate-table';
-import { findNodePath } from '@udecode/slate-react';
+import { findPath } from '@udecode/slate-react';
 
 // Ensures a next-path even though original path is at end
 export const nextPath = (path: number[]) => {
@@ -124,7 +124,7 @@ export const isPlaceholderActive = (editor: PlateEditor) =>
   someNode(editor, { match: { type: SaksbehandlerPlaceholderPlugin.key } });
 
 export const getIsInRegelverk = (editor: PlateEditor, element: TNode): boolean => {
-  const path = findNodePath(editor, element);
+  const path = findPath(editor, element);
 
   if (path === undefined) {
     return false;

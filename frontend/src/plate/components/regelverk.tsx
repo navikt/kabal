@@ -17,7 +17,7 @@ import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { replaceNodeChildren, setNodes } from '@udecode/plate-common';
 import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
-import { findNodePath } from '@udecode/slate-react';
+import { findPath } from '@udecode/slate-react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -76,7 +76,7 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
 
     setLoading(true);
 
-    const at = findNodePath(editor, element);
+    const at = findPath(editor, element);
 
     if (at === undefined) {
       return;
@@ -154,7 +154,7 @@ const DeleteRegelverk = ({ element }: DeleteRegelverkProps) => {
     return () => clearTimeout(timeout);
   }, [regelverkContainerElement]);
 
-  const path = findNodePath(editor, element);
+  const path = findPath(editor, element);
 
   return (
     <DeleteSection

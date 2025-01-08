@@ -16,7 +16,7 @@ import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { replaceNodeChildren } from '@udecode/plate-common';
 import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
-import { findNodePath } from '@udecode/slate-react';
+import { findPath } from '@udecode/slate-react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 
 const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
@@ -42,7 +42,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
 
   const [getTexts, { isLoading }] = useLazyGetConsumerTextsQuery();
 
-  const path = findNodePath(editor, element);
+  const path = findPath(editor, element);
 
   const isInitialized = useRef(!isNodeEmpty(element));
 
