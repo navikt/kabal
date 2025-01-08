@@ -3,7 +3,7 @@ import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/elemen
 import type { FormattedText } from '@app/plate/types';
 import { getNodeAncestors } from '@udecode/plate-common';
 import { PlateContent, type PlateContentProps, type PlateEditor, useEditorRef } from '@udecode/plate-core/react';
-import { findNodePath } from '@udecode/slate-react';
+import { findPath } from '@udecode/slate-react';
 
 interface Props extends PlateContentProps {
   lang: SpellCheckLanguage;
@@ -32,7 +32,7 @@ const contentEditable = (editor: PlateEditor, isReadOnly: boolean, text: Formatt
     return false;
   }
 
-  const path = findNodePath(editor, text);
+  const path = findPath(editor, text);
 
   if (path === undefined) {
     return false;

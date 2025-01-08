@@ -10,12 +10,12 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { BaseTableCellPlugin, BaseTableRowPlugin } from '@udecode/plate-table';
-import { findNodePath } from '@udecode/slate-react';
+import { findPath } from '@udecode/slate-react';
 
 export const mergeCells = (
   editor: RichTextEditor,
   cellNode: TableCellElement,
-  cellPath = findNodePath(editor, cellNode),
+  cellPath = findPath(editor, cellNode),
 ) => {
   const rowEntry = getCurrentRow(editor, cellNode, cellPath);
 

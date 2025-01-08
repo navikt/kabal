@@ -24,14 +24,13 @@ import type { IUserData } from '@app/types/bruker';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import { BaseParagraphPlugin } from '@udecode/plate-common';
-import type { NodeComponent } from '@udecode/plate-core/react';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 import { YjsPlugin } from '@udecode/plate-yjs/react';
 import { XmlText } from 'yjs';
 
-export const components: Record<string, NodeComponent> = {
+export const components = {
   [BaseParagraphPlugin.key]: Paragraph,
 
   // Headings

@@ -2,11 +2,10 @@ import type { RichTextEditor, TableCellElement, TableRowElement } from '@app/pla
 import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
 import { type TNode, type TNodeEntry, findNode, getParentNode, someNode } from '@udecode/plate-common';
 import { BaseTableCellPlugin, BaseTableRowPlugin } from '@udecode/plate-table';
-import { findNodePath } from '@udecode/slate-react';
 import { Path } from 'slate';
 
 const findPath = (editor: RichTextEditor, node: TNode | undefined = undefined): Path | undefined =>
-  node === undefined ? undefined : findNodePath(editor, node);
+  node === undefined ? undefined : findPath(editor, node);
 
 // Cell helpers
 export const getCurrentCell = (editor: RichTextEditor): TNodeEntry<TableCellElement> | undefined =>

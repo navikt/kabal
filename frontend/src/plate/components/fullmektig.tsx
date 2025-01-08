@@ -6,7 +6,7 @@ import { isOfElementType } from '@app/plate/utils/queries';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, Loader } from '@navikt/ds-react';
 import { findDescendant, replaceNodeChildren, withoutSavingHistory } from '@udecode/plate-common';
-import { PlateElement, type PlateElementProps, findNodePath } from '@udecode/plate-common/react';
+import { PlateElement, type PlateElementProps, findPath } from '@udecode/plate-common/react';
 import { useEffect } from 'react';
 import { setNodes, withoutNormalizing } from 'slate';
 import { styled } from 'styled-components';
@@ -17,7 +17,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
   const { id, show } = element;
   const editor = useMyPlateEditorRef();
 
-  const at = findNodePath(editor, element);
+  const at = findPath(editor, element);
 
   const valueEntry = findDescendant<PlaceholderElement>(editor, {
     at,

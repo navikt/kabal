@@ -30,7 +30,7 @@ import {
   insertTableColumn,
   insertTableRow,
 } from '@udecode/plate-table';
-import { deleteColumn, deleteRow } from '@udecode/plate-table/react';
+import { deleteColumn, deleteRow } from '@udecode/plate-table';
 
 export const TableButtons = () => {
   const editor = useMyPlateEditorRef();
