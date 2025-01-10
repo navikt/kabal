@@ -1,7 +1,7 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { getName, getTitle } from '@app/plate/components/signature/functions';
+import { getName } from '@app/plate/components/signature/functions';
 import { useMainSignature, useMedunderskriverSignature } from '@app/plate/components/signature/hooks';
-import { type ISignature, type SignatureElement, useMyPlateEditorRef } from '@app/plate/types';
+import { type SignatureElement, useMyPlateEditorRef } from '@app/plate/types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { setNodes } from '@udecode/plate-common';
 import { useContext, useEffect, useMemo } from 'react';
@@ -14,41 +14,17 @@ interface Props {
 
 export const SaksbehandlerSignature = ({ element }: Props) => {
   const editor = useMyPlateEditorRef();
-  const { templateId } = useContext(SmartEditorContext);
-  const saksbehandlerSignature = useMainSignature(templateId);
-
-  const signature: ISignature | undefined = useMemo(() => {
-    if (saksbehandlerSignature === null) {
-      return undefined;
-    }
-
-    const suffix = templateId !== TemplateIdEnum.ROL_ANSWERS && element.useSuffix ? 'saksbehandler' : undefined;
-
-    if (saksbehandlerSignature.anonymous) {
-      return { name: 'Nav klageinstans' };
-    }
-
-    return {
-      name: getName(saksbehandlerSignature, element.useShortName),
-      title: getTitle(saksbehandlerSignature.customJobTitle, suffix) ?? MISSING_TITLE,
-    };
-  }, [saksbehandlerSignature, templateId, element.useSuffix, element.useShortName]);
+  const signature = useMainSignature(element);
 
   useEffect(() => {
-    if (element.saksbehandler?.name === signature?.name && element.saksbehandler?.title === signature?.title) {
+    if (
+      signature === element.saksbehandler ||
+      (signature?.name === element.saksbehandler?.name && signature?.title === element.saksbehandler?.title)
+    ) {
       return;
     }
 
-    const data: Partial<SignatureElement> = {
-      useShortName: element.useShortName,
-      medunderskriver: element.medunderskriver,
-      saksbehandler: signature,
-    };
-
-    setNodes(editor, data, {
-      at: [],
-      match: (n) => n === element,
-    });
+    setNodes(editor, { saksbehandler: signature }, { at: [], match: (n) => n === element });
   }, [editor, element, signature]);
 
   if (signature === undefined) {

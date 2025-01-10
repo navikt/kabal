@@ -230,6 +230,7 @@ interface ISignatureContent {
   useShortName: boolean;
   useSuffix: boolean;
   includeMedunderskriver: boolean;
+  overriddenSaksbehandler?: string;
   saksbehandler?: ISignature;
   medunderskriver?: ISignature;
 }
