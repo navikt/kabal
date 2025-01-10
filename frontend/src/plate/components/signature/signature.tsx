@@ -1,3 +1,4 @@
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
@@ -6,7 +7,7 @@ import { MedunderskriverSignature, SaksbehandlerSignature } from '@app/plate/com
 import type { SignatureElement } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { setNodes } from '@udecode/plate-common';
+import { type SetNodesOptions, setNodes } from '@udecode/plate-common';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from '@udecode/plate-common/react';
 import { type InputHTMLAttributes, useContext } from 'react';
 import { styled } from 'styled-components';
@@ -17,7 +18,8 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const isReadOnly = useEditorReadOnly();
   const { data: signature } = useGetMySignatureQuery();
   const { data: oppgave } = useOppgave();
-  const { canManage, templateId } = useContext(SmartEditorContext);
+  const { canManage, templateId, creator } = useContext(SmartEditorContext);
+  const { user } = useContext(StaticDataContext);
 
   if (oppgave === undefined || signature === undefined) {
     return null;
@@ -33,9 +35,19 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const hideAll = !(showForkortedeNavnCheckbox || showSuffixCheckbox || hasMedunderskriver);
 
   const { children, element, editor } = props;
+  const overriddenWithSelf = element.overriddenSaksbehandler === user.navIdent;
+
+  const options: SetNodesOptions = { at: [], voids: true, mode: 'lowest', match: (n) => n === element };
 
   const setSignatureProp = (prop: Partial<SignatureElement>) =>
-    setNodes(editor, { ...element, ...prop }, { at: [], voids: true, mode: 'lowest', match: (n) => n === element });
+    setNodes(
+      editor,
+      { ...prop, overriddenSaksbehandler: overriddenWithSelf ? element.overriddenSaksbehandler : undefined },
+      options,
+    );
+
+  const setOverriddenSaksbehandler = (overriddenSaksbehandler: string | undefined) =>
+    setNodes(editor, { overriddenSaksbehandler }, options);
 
   return (
     <PlateElement<SignatureElement> {...props} asChild contentEditable={false}>
@@ -79,6 +91,19 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
                 Bruk «/saksbehandler»-tittel
               </Checkbox>
             ) : null}
+
+            <Checkbox
+              disabled={
+                isReadOnly ||
+                (user.navIdent === creator && (overriddenWithSelf || element.overriddenSaksbehandler === undefined))
+              }
+              checked={
+                overriddenWithSelf || (user.navIdent === creator && element.overriddenSaksbehandler === undefined)
+              }
+              onChange={({ target }) => setOverriddenSaksbehandler(target.checked ? user.navIdent : undefined)}
+            >
+              Signer med mitt navn
+            </Checkbox>
           </Checkboxes>
         )}
 

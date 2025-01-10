@@ -1,8 +1,14 @@
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { getName, getTitle } from '@app/plate/components/signature/functions';
+import { MISSING_TITLE } from '@app/plate/components/signature/title';
+import type { ISignature, SignatureElement } from '@app/plate/types';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
+import type { ISignatureResponse } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { useContext } from 'react';
 
 export const useMedunderskriverSignature = () => {
   const { data: oppgave } = useOppgave();
@@ -19,31 +25,47 @@ export const useMedunderskriverSignature = () => {
   return medunderskriverSignature;
 };
 
-export const useMainSignature = (template: TemplateIdEnum) => {
+export const useMainSignature = (element: SignatureElement): ISignature | undefined => {
   const { data: oppgave } = useOppgave();
+  const { templateId, creator } = useContext(SmartEditorContext);
 
-  const isRolAnswers = template === TemplateIdEnum.ROL_ANSWERS;
+  const isRolAnswers = templateId === TemplateIdEnum.ROL_ANSWERS;
   const isRolSakstype = oppgave?.typeId === SaksTypeEnum.KLAGE || oppgave?.typeId === SaksTypeEnum.ANKE;
 
-  const { data: saksbehandlerSignature } = useGetSignatureQuery(
-    !isRolAnswers && typeof oppgave?.saksbehandler?.navIdent === 'string' ? oppgave.saksbehandler.navIdent : skipToken,
-  );
-
+  const { data: creatorSignature } = useGetSignatureQuery(isRolAnswers ? skipToken : creator);
+  const { data: overrideSignature } = useGetSignatureQuery(element.overriddenSaksbehandler ?? skipToken);
   const { data: rolSignature } = useGetSignatureQuery(
     isRolAnswers && isRolSakstype ? (oppgave.rol.employee?.navIdent ?? skipToken) : skipToken,
   );
 
+  if (element.anonymous) {
+    return { name: 'Nav klageinstans' };
+  }
+
+  const suffix = templateId !== TemplateIdEnum.ROL_ANSWERS && element.useSuffix ? 'saksbehandler' : undefined;
+
   if (isRolAnswers) {
-    if (oppgave === undefined || !isRolSakstype || oppgave.rol.employee === null || rolSignature === undefined) {
-      return null;
-    }
-
-    return rolSignature;
+    return toSignature(rolSignature, element.useShortName, suffix);
   }
 
-  if (oppgave === undefined || oppgave.saksbehandler === null || saksbehandlerSignature === undefined) {
-    return null;
+  if (element.overriddenSaksbehandler !== undefined) {
+    return toSignature(overrideSignature, element.useShortName, suffix);
   }
 
-  return saksbehandlerSignature;
+  return toSignature(creatorSignature, element.useShortName, suffix);
+};
+
+const toSignature = (
+  signature: ISignatureResponse | undefined,
+  useShortName: boolean,
+  suffix: string | undefined,
+): ISignature | undefined => {
+  if (signature === undefined) {
+    return undefined;
+  }
+
+  return {
+    name: getName(signature, useShortName),
+    title: getTitle(signature.customJobTitle, suffix) ?? MISSING_TITLE,
+  };
 };

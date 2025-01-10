@@ -145,6 +145,7 @@ export const createSignature = (): SignatureElement => ({
   useShortName: false,
   includeMedunderskriver: true,
   useSuffix: true,
+  overriddenSaksbehandler: undefined,
   children: [{ text: '' }],
   threadIds: [],
 });

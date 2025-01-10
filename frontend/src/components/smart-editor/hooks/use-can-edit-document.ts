@@ -7,17 +7,22 @@ import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebeh
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { useContext, useMemo } from 'react';
 
-export const useCanManageDocument = (templateId: TemplateIdEnum): boolean => {
+export const useCanManageDocument = (templateId: TemplateIdEnum, creator: string): boolean => {
   const { data: oppgave, isSuccess } = useOppgave();
   const { user } = useContext(StaticDataContext);
 
   return useMemo<boolean>(
-    () => isSuccess && canManageDocument(templateId, oppgave, user),
-    [oppgave, isSuccess, templateId, user],
+    () => isSuccess && canManageDocument(templateId, oppgave, user, creator),
+    [oppgave, isSuccess, templateId, user, creator],
   );
 };
 
-const canManageDocument = (templateId: TemplateIdEnum, oppgave: IOppgavebehandling, user: IUserData): boolean => {
+const canManageDocument = (
+  templateId: TemplateIdEnum,
+  oppgave: IOppgavebehandling,
+  user: IUserData,
+  creator: string,
+): boolean => {
   if (
     (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
     oppgave.rol?.flowState === FlowState.SENT &&
@@ -32,16 +37,23 @@ const canManageDocument = (templateId: TemplateIdEnum, oppgave: IOppgavebehandli
   }
 
   if (isMu(oppgave, user)) {
-    return false;
+    return oppgave.avsluttetAvSaksbehandlerDate !== null && saksbehandlerCanEdit(templateId, oppgave, user, creator);
   }
 
-  return saksbehandlerCanEdit(templateId, oppgave, user);
+  return saksbehandlerCanEdit(templateId, oppgave, user, creator);
 };
 
-const saksbehandlerCanEdit = (templateId: TemplateIdEnum, oppgave: IOppgavebehandling, user: IUserData): boolean => {
-  if (oppgave.saksbehandler?.navIdent !== user.navIdent) {
-    return false;
-  }
+const saksbehandlerCanEdit = (
+  templateId: TemplateIdEnum,
+  oppgave: IOppgavebehandling,
+  user: IUserData,
+  creator: string,
+): boolean => {
+  const isCreator = creator === user.navIdent;
+  const isFinished = oppgave.avsluttetAvSaksbehandlerDate !== null;
+  const isAssigned = oppgave.saksbehandler?.navIdent === user.navIdent;
+
+  const canWrite = (!isFinished && isAssigned) || (isFinished && isCreator);
 
   if (templateId === TemplateIdEnum.ROL_ANSWERS) {
     return false;
@@ -50,12 +62,13 @@ const saksbehandlerCanEdit = (templateId: TemplateIdEnum, oppgave: IOppgavebehan
   // When behandling is sent to ROL, saksbehandler can edit everything except questions.
   if (templateId === TemplateIdEnum.ROL_QUESTIONS) {
     return (
+      canWrite &&
       (oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE) &&
       oppgave.rol?.flowState !== FlowState.SENT
     );
   }
 
-  return oppgave.medunderskriver?.flowState !== FlowState.SENT;
+  return canWrite && oppgave.medunderskriver?.flowState !== FlowState.SENT;
 };
 
 const isMu = (oppgave: IOppgavebehandling, user: IUserData): boolean =>
@@ -71,18 +84,23 @@ const rolCanEdit = (templateId: TemplateIdEnum, oppgave: IOppgavebehandling): bo
   oppgave.rol.flowState === FlowState.SENT &&
   templateId === TemplateIdEnum.ROL_ANSWERS;
 
-export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
+export const useCanEditDocument = (templateId: TemplateIdEnum, creator: string): boolean => {
   const { data: oppgave, isSuccess } = useOppgave();
   const { user } = useContext(StaticDataContext);
 
   return useMemo<boolean>(
-    () => isSuccess && canEditDocument(templateId, oppgave, user),
-    [oppgave, isSuccess, templateId, user],
+    () => isSuccess && canEditDocument(templateId, oppgave, user, creator),
+    [oppgave, isSuccess, templateId, user, creator],
   );
 };
 
 const muCanEdit = (templateId: TemplateIdEnum, oppgave: IOppgavebehandling): boolean =>
   oppgave.medunderskriver.flowState === FlowState.SENT && templateId !== TemplateIdEnum.ROL_ANSWERS;
 
-export const canEditDocument = (templateId: TemplateIdEnum, oppgave: IOppgavebehandling, user: IUserData): boolean =>
-  canManageDocument(templateId, oppgave, user) || (isMu(oppgave, user) && muCanEdit(templateId, oppgave));
+export const canEditDocument = (
+  templateId: TemplateIdEnum,
+  oppgave: IOppgavebehandling,
+  user: IUserData,
+  creator: string,
+): boolean =>
+  canManageDocument(templateId, oppgave, user, creator) || (isMu(oppgave, user) && muCanEdit(templateId, oppgave));

@@ -1,4 +1,4 @@
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
+import { useCanEditDocument, useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import {
   useSmartEditorAnnotationsAtOrigin,
   useSmartEditorGodeFormuleringerOpen,
@@ -25,6 +25,8 @@ interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokum
   setShowAnnotationsAtOrigin: (show: boolean) => void;
   sheetRef: MutableRefObject<HTMLDivElement | null>;
   canManage: boolean;
+  canEdit: boolean;
+  creator: string;
 }
 
 export const SmartEditorContext = createContext<ISmartEditorContext>({
@@ -43,6 +45,8 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   setShowAnnotationsAtOrigin: noop,
   sheetRef: { current: null },
   canManage: false,
+  canEdit: false,
+  creator: '',
 });
 
 interface Props {
@@ -51,7 +55,7 @@ interface Props {
 }
 
 export const SmartEditorContextComponent = ({ children, smartDocument }: Props) => {
-  const { dokumentTypeId, templateId, id } = smartDocument;
+  const { dokumentTypeId, templateId, id, creator } = smartDocument;
   const { value: showGodeFormuleringer = false, setValue: setShowGodeFormuleringer } =
     useSmartEditorGodeFormuleringerOpen();
   const { value: showHistory = false, setValue: setShowHistory } = useSmartEditorHistoryOpen();
@@ -61,7 +65,8 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
     useSmartEditorAnnotationsAtOrigin();
   // const [sheetRef, setSheetRef] = useState<HTMLDivElement | null>(null);
   const sheetRef = useRef<HTMLDivElement | null>(null);
-  const canManage = useCanManageDocument(templateId);
+  const canManage = useCanManageDocument(templateId, creator.employee.navIdent);
+  const canEdit = useCanEditDocument(templateId, creator.employee.navIdent);
 
   return (
     <SmartEditorContext.Provider
@@ -81,6 +86,8 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
         setShowAnnotationsAtOrigin,
         sheetRef,
         canManage,
+        canEdit,
+        creator: creator.employee.navIdent,
       }}
     >
       {children}
