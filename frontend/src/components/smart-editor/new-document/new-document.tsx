@@ -6,7 +6,7 @@ import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { GENERELT_BREV_TEMPLATE, NOTAT_TEMPLATE } from '@app/plate/templates/simple-templates';
+import { GENERELT_BREV_WITHOUT_MU_TEMPLATE, NOTAT_TEMPLATE } from '@app/plate/templates/simple-templates';
 import {
   ANKE_I_TRYGDERETTEN_TEMPLATES,
   ANKE_TEMPLATES,
@@ -112,7 +112,7 @@ const useTemplates = (oppgave: IOppgavebehandling | undefined) => {
   const { isAvsluttetAvSaksbehandler, typeId } = oppgave;
 
   if (isAvsluttetAvSaksbehandler) {
-    return [GENERELT_BREV_TEMPLATE, NOTAT_TEMPLATE];
+    return [GENERELT_BREV_WITHOUT_MU_TEMPLATE, NOTAT_TEMPLATE];
   }
 
   if (isSaksbehandler || isRol) {
