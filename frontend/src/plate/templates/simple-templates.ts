@@ -4,6 +4,7 @@ import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { Immutable } from '@app/types/types';
 import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { LabelContentSource } from '../types';
 import {
@@ -18,12 +19,22 @@ import {
   createSimpleParagraph,
 } from './helpers';
 
-export const GENERELT_BREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
-  templateId: TemplateIdEnum.GENERELT_BREV,
-  tittel: 'Generelt brev',
-  richText: [createCurrentDate(), createHeader(), createSimpleParagraph(), createSignature(), createFooter()],
-  dokumentTypeId: DistribusjonsType.BREV,
-});
+const getGenereltBrevTemplate = (includeMedunderskriver: boolean): Immutable<IMutableSmartEditorTemplate> =>
+  deepFreeze({
+    templateId: TemplateIdEnum.GENERELT_BREV,
+    tittel: 'Generelt brev',
+    richText: [
+      createCurrentDate(),
+      createHeader(),
+      createSimpleParagraph(),
+      createSignature(includeMedunderskriver),
+      createFooter(),
+    ],
+    dokumentTypeId: DistribusjonsType.BREV,
+  });
+
+export const GENERELT_BREV_TEMPLATE = getGenereltBrevTemplate(true);
+export const GENERELT_BREV_WITHOUT_MU_TEMPLATE = getGenereltBrevTemplate(false);
 
 export const NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.NOTAT,

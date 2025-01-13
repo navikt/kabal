@@ -31,6 +31,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const showMedunderskriverCheckbox = hasMedunderskriver && !isRolAnswers;
   const showForkortedeNavnCheckbox = hasMedunderskriver || !signature.anonymous;
   const showSuffixCheckbox = !(signature.anonymous || isRolAnswers);
+  const showUseMyNameCheckbox = oppgave.avsluttetAvSaksbehandlerDate === null;
 
   const hideAll = !(showForkortedeNavnCheckbox || showSuffixCheckbox || hasMedunderskriver);
 
@@ -92,18 +93,20 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
               </Checkbox>
             ) : null}
 
-            <Checkbox
-              disabled={
-                isReadOnly ||
-                (user.navIdent === creator && (overriddenWithSelf || element.overriddenSaksbehandler === undefined))
-              }
-              checked={
-                overriddenWithSelf || (user.navIdent === creator && element.overriddenSaksbehandler === undefined)
-              }
-              onChange={({ target }) => setOverriddenSaksbehandler(target.checked ? user.navIdent : undefined)}
-            >
-              Signer med mitt navn
-            </Checkbox>
+            {showUseMyNameCheckbox ? (
+              <Checkbox
+                disabled={
+                  isReadOnly ||
+                  (user.navIdent === creator && (overriddenWithSelf || element.overriddenSaksbehandler === undefined))
+                }
+                checked={
+                  overriddenWithSelf || (user.navIdent === creator && element.overriddenSaksbehandler === undefined)
+                }
+                onChange={({ target }) => setOverriddenSaksbehandler(target.checked ? user.navIdent : undefined)}
+              >
+                Signer med mitt navn
+              </Checkbox>
+            ) : null}
           </Checkboxes>
         )}
 
@@ -151,7 +154,6 @@ const Checkboxes = styled.div`
   border-style: dashed;
   border-radius: var(--a-border-radius-medium);
   border-width: ${ptToEm(2)};
-  width: min-content;
   white-space: nowrap;
   display: flex;
   gap: ${pxToEm(8)};
@@ -161,6 +163,8 @@ const Checkboxes = styled.div`
   margin-right: auto;
   margin-top: ${pxToEm(16)};
   margin-bottom: ${pxToEm(8)};
+  flex-wrap: wrap;  
+  justify-content: center;
 `;
 
 const StyledSignatures = styled.div`
