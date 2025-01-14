@@ -27,15 +27,15 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
 
   const isRolAnswers = templateId === TemplateIdEnum.ROL_ANSWERS;
 
+  const { children, element, editor } = props;
   const hasMedunderskriver = oppgave.medunderskriver.employee !== null;
   const showMedunderskriverCheckbox = hasMedunderskriver && !isRolAnswers;
-  const showForkortedeNavnCheckbox = hasMedunderskriver || !signature.anonymous;
+  const showForkortedeNavnCheckbox = element.includeMedunderskriver || !signature.anonymous;
   const showSuffixCheckbox = !(signature.anonymous || isRolAnswers);
   const showUseMyNameCheckbox = oppgave.avsluttetAvSaksbehandlerDate !== null;
 
   const hideAll = !(showForkortedeNavnCheckbox || showSuffixCheckbox || hasMedunderskriver);
 
-  const { children, element, editor } = props;
   const overriddenWithSelf = element.overriddenSaksbehandler === user.navIdent;
 
   const options: SetNodesOptions = { at: [], voids: true, mode: 'lowest', match: (n) => n === element };
