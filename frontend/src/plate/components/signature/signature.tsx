@@ -31,7 +31,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const showMedunderskriverCheckbox = hasMedunderskriver && !isRolAnswers;
   const showForkortedeNavnCheckbox = hasMedunderskriver || !signature.anonymous;
   const showSuffixCheckbox = !(signature.anonymous || isRolAnswers);
-  const showUseMyNameCheckbox = oppgave.avsluttetAvSaksbehandlerDate === null;
+  const showUseMyNameCheckbox = oppgave.avsluttetAvSaksbehandlerDate !== null;
 
   const hideAll = !(showForkortedeNavnCheckbox || showSuffixCheckbox || hasMedunderskriver);
 

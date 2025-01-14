@@ -19,7 +19,10 @@ import {
   createSimpleParagraph,
 } from './helpers';
 
-const getGenereltBrevTemplate = (includeMedunderskriver: boolean): Immutable<IMutableSmartEditorTemplate> =>
+export const getGenereltBrevTemplate = (
+  includeMedunderskriver: boolean,
+  overriddenSaksbehandler?: string,
+): Immutable<IMutableSmartEditorTemplate> =>
   deepFreeze({
     templateId: TemplateIdEnum.GENERELT_BREV,
     tittel: 'Generelt brev',
@@ -27,14 +30,13 @@ const getGenereltBrevTemplate = (includeMedunderskriver: boolean): Immutable<IMu
       createCurrentDate(),
       createHeader(),
       createSimpleParagraph(),
-      createSignature(includeMedunderskriver),
+      createSignature(includeMedunderskriver, overriddenSaksbehandler),
       createFooter(),
     ],
     dokumentTypeId: DistribusjonsType.BREV,
   });
 
 export const GENERELT_BREV_TEMPLATE = getGenereltBrevTemplate(true);
-export const GENERELT_BREV_WITHOUT_MU_TEMPLATE = getGenereltBrevTemplate(false);
 
 export const NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.NOTAT,

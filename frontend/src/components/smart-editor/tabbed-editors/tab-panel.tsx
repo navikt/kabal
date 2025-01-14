@@ -16,7 +16,7 @@ export const TabPanel = ({ smartDocument }: TabPanelProps) => {
   const { id } = smartDocument;
   const smartDocumentRef = useRef<ISmartDocument>(smartDocument);
 
-  const canEditDocument = useCanEditDocument(smartDocument.templateId, smartDocument.creator.employee.navIdent);
+  const canEditDocument = useCanEditDocument(smartDocument.templateId);
   const canEditDocumentRef = useRef(canEditDocument);
 
   // Ensure that smartDocumentRef and canEditDocumentRef are always up to date in order to avoid the unmount debounce triggering on archive/delete/fradeling

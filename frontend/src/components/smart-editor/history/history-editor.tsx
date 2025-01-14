@@ -34,7 +34,7 @@ export const HistoryEditor = memo(
   ({ smartDocument, version, versionId }: Props) => {
     const mainEditor = useMyPlateEditorRef(smartDocument.id);
     const { templateId } = useContext(SmartEditorContext);
-    const canManage = useCanManageDocument(templateId, smartDocument.creator.employee.navIdent);
+    const canManage = useCanManageDocument(templateId);
 
     const id = `${smartDocument.id}-${versionId}`;
 

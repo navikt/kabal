@@ -6,7 +6,7 @@ import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { GENERELT_BREV_WITHOUT_MU_TEMPLATE, NOTAT_TEMPLATE } from '@app/plate/templates/simple-templates';
+import { NOTAT_TEMPLATE, getGenereltBrevTemplate } from '@app/plate/templates/simple-templates';
 import {
   ANKE_I_TRYGDERETTEN_TEMPLATES,
   ANKE_TEMPLATES,
@@ -104,6 +104,7 @@ export const NewDocument = ({ onCreate }: Props) => {
 const useTemplates = (oppgave: IOppgavebehandling | undefined) => {
   const isSaksbehandler = useIsSaksbehandler();
   const isRol = useIsRol();
+  const { user } = useContext(StaticDataContext);
 
   if (oppgave === undefined) {
     return [];
@@ -112,7 +113,7 @@ const useTemplates = (oppgave: IOppgavebehandling | undefined) => {
   const { isAvsluttetAvSaksbehandler, typeId } = oppgave;
 
   if (isAvsluttetAvSaksbehandler) {
-    return [GENERELT_BREV_WITHOUT_MU_TEMPLATE, NOTAT_TEMPLATE];
+    return [getGenereltBrevTemplate(false, user.navIdent), NOTAT_TEMPLATE];
   }
 
   if (isSaksbehandler || isRol) {
