@@ -140,12 +140,12 @@ export const createSimpleBulletList = (...textItems: string[]): BulletListElemen
   children: textItems.map(createSimpleListItem),
 });
 
-export const createSignature = (includeMedunderskriver = true): SignatureElement => ({
+export const createSignature = (includeMedunderskriver = true, overriddenSaksbehandler?: string): SignatureElement => ({
   type: ELEMENT_SIGNATURE,
   useShortName: false,
   includeMedunderskriver,
   useSuffix: true,
-  overriddenSaksbehandler: undefined,
+  overriddenSaksbehandler,
   children: [{ text: '' }],
   threadIds: [],
 });

@@ -65,8 +65,8 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
     useSmartEditorAnnotationsAtOrigin();
   // const [sheetRef, setSheetRef] = useState<HTMLDivElement | null>(null);
   const sheetRef = useRef<HTMLDivElement | null>(null);
-  const canManage = useCanManageDocument(templateId, creator.employee.navIdent);
-  const canEdit = useCanEditDocument(templateId, creator.employee.navIdent);
+  const canManage = useCanManageDocument(templateId);
+  const canEdit = useCanEditDocument(templateId);
 
   return (
     <SmartEditorContext.Provider

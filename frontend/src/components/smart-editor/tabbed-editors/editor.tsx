@@ -68,10 +68,10 @@ interface LoadedEditorProps extends EditorProps {
 }
 
 const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProps) => {
-  const { id, templateId, creator } = smartDocument;
+  const { id, templateId } = smartDocument;
   const { newCommentSelection } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
-  const canEdit = useCanEditDocument(templateId, creator.employee.navIdent);
+  const canEdit = useCanEditDocument(templateId);
   const plugins = collaborationSaksbehandlerPlugins(oppgave.id, id, smartDocument, user);
 
   const editor = usePlateEditor<KabalValue, (typeof plugins)[0]>({
