@@ -38,10 +38,6 @@ export const useMainSignature = (element: SignatureElement): ISignature | undefi
     isRolAnswers && isRolSakstype ? (oppgave.rol.employee?.navIdent ?? skipToken) : skipToken,
   );
 
-  if (element.anonymous) {
-    return { name: 'Nav klageinstans' };
-  }
-
   const suffix = templateId !== TemplateIdEnum.ROL_ANSWERS && element.useSuffix ? 'saksbehandler' : undefined;
 
   if (isRolAnswers) {
@@ -62,6 +58,10 @@ const toSignature = (
 ): ISignature | undefined => {
   if (signature === undefined) {
     return undefined;
+  }
+
+  if (signature.anonymous) {
+    return { name: 'Nav klageinstans' };
   }
 
   return {
