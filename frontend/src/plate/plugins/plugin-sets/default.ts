@@ -1,7 +1,4 @@
 import { Paragraph } from '@app/plate/components/paragraph';
-import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-element';
-import { TableElement } from '@app/plate/components/plate-ui/table-element';
-import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
 import { BoldLeaf, ItalicLeaf, UnderlineLeaf } from '@app/plate/leaf/marks';
 import { autoformatRules } from '@app/plate/plugins/autoformat/rules';
 import { CopyPlugin } from '@app/plate/plugins/copy/copy';
@@ -22,7 +19,7 @@ import { HEADING_KEYS } from '@udecode/plate-heading';
 import { HeadingPlugin } from '@udecode/plate-heading/react';
 import { IndentPlugin } from '@udecode/plate-indent/react';
 import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@udecode/plate-list/react';
-import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@udecode/plate-table/react';
+import { TablePlugin } from '@udecode/plate-table/react';
 import { ParagraphPlugin } from '@udecode/plate/react';
 
 export const defaultPlugins = [
@@ -47,9 +44,9 @@ export const defaultPlugins = [
   BoldPlugin.configure({ render: { node: BoldLeaf } }),
   ItalicPlugin.configure({ render: { node: ItalicLeaf } }),
   UnderlinePlugin.configure({ render: { node: UnderlineLeaf } }),
-  TablePlugin.configure({ options: { disableMarginLeft: true } }).withComponent(TableElement),
-  TableCellPlugin.withComponent(TableCellElement),
-  TableRowPlugin.withComponent(TableRowElement),
+  TablePlugin.configure({ options: { disableMarginLeft: true } }),
+  // TableCellPlugin.configure({ options: {} }),
+  // TableRowPlugin.configure({ options: {} }),
   ListPlugin,
   IndentPlugin.configure({
     options: { indentMax: 15, offset: 24, unit: 'pt' },

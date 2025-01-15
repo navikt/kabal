@@ -21,11 +21,15 @@ const parentIsUnchangeable = (editor: PlateEditor, entry: NodeEntry<PageBreakEle
     return true;
   }
 
-  const [parentNode] = parentEntry;
+  const [parentNode, parentNodePath] = parentEntry;
 
-  if (isEditor(parentNode)) {
+  if (parentNodePath.length === 0) {
     return false;
   }
+
+  // if (isEditor(parentNode)) {
+  //   return false;
+  // }
 
   if (!ElementApi.isElement(parentNode)) {
     return true;
