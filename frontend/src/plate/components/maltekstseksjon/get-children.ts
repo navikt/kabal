@@ -20,7 +20,7 @@ import { isOfElementType, isOfElementTypesFn } from '@app/plate/utils/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText } from '@app/types/texts/consumer';
 import type { Language } from '@app/types/texts/language';
-import { BaseParagraphPlugin, type TElement, getNodeElements, getNodeString, isElement } from '@udecode/plate-common';
+import { BaseParagraphPlugin, ElementApi, NodeApi, type TElement } from '@udecode/plate';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
 import { BaseTablePlugin } from '@udecode/plate-table';
@@ -63,10 +63,10 @@ export const getNewChildren = (
 const containsEditedPlaceholder = (node: TElement): boolean => {
   for (const child of node.children) {
     if (isOfElementType<PlaceholderElement>(child, ELEMENT_PLACEHOLDER)) {
-      return getNodeString(child).length > 0;
+      return NodeApi.string(child).length > 0;
     }
 
-    if (isElement(child)) {
+    if (ElementApi.isElement(child)) {
       return containsEditedPlaceholder(child);
     }
   }
@@ -109,7 +109,7 @@ export const areFromPlaceholdersSafeToReplaceWithToPlaceholders = (
 const getPlaceholders = (element: TElement): PlaceholderElement[] => {
   const list: PlaceholderElement[] = [];
 
-  const generator = getNodeElements(element);
+  const generator = NodeApi.elements(element);
 
   for (const [n] of generator) {
     if (isOfElementType<PlaceholderElement>(n, ELEMENT_PLACEHOLDER)) {

@@ -14,14 +14,7 @@ import { type TableCellElement, useMyPlateEditorRef } from '@app/plate/types';
 import { isOfElementTypeFn, nextPath } from '@app/plate/utils/queries';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
-import {
-  findNode,
-  insertElements,
-  isElement,
-  select,
-  withoutNormalizing,
-  withoutSavingHistory,
-} from '@udecode/plate-common';
+import { ElementApi } from '@udecode/plate';
 import {
   BaseTableCellPlugin,
   BaseTablePlugin,
@@ -40,7 +33,7 @@ export const TableButtons = () => {
     return null;
   }
 
-  const activeNode = findNode(editor, { match: (n) => isElement(n) && n.type === BaseTablePlugin.node.type });
+  const activeNode = editor.api.node({ match: (n) => ElementApi.isElement(n) && n.type === BaseTablePlugin.node.type });
 
   if (activeNode === undefined) {
     return null;
@@ -51,13 +44,15 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Legg til rad over"
         onClick={() => {
-          const activeRow = findNode(editor, { match: (n) => isElement(n) && n.type === BaseTableRowPlugin.node.type });
+          const activeRow = editor.api.node({
+            match: (n) => ElementApi.isElement(n) && n.type === BaseTableRowPlugin.node.type,
+          });
 
           if (activeRow === undefined) {
             return;
           }
 
-          insertTableRow(editor, { at: activeRow[1], disableSelect: true });
+          insertTableRow(editor, { at: activeRow[1], select: false });
         }}
         icon={<AddRowAboveIcon aria-hidden />}
       />
@@ -70,13 +65,15 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Legg til kolonne til venstre"
         onClick={() => {
-          const activeTd = findNode(editor, { match: (n) => isElement(n) && n.type === BaseTableCellPlugin.node.type });
+          const activeTd = editor.api.node({
+            match: (n) => ElementApi.isElement(n) && n.type === BaseTableCellPlugin.node.type,
+          });
 
           if (activeTd === undefined) {
             return;
           }
 
-          insertTableColumn(editor, { at: activeTd[1], disableSelect: true });
+          insertTableColumn(editor, { at: activeTd[1], select: false });
         }}
         icon={<AddColumnLeftIcon aria-hidden />}
       />
@@ -98,8 +95,8 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Slå sammen med celle til høyre"
         onClick={() => {
-          const entry = findNode<TableCellElement>(editor, {
-            match: (n) => isElement(n) && n.type === BaseTableCellPlugin.node.type,
+          const entry = editor.api.node<TableCellElement>({
+            match: (n) => ElementApi.isElement(n) && n.type === BaseTableCellPlugin.node.type,
           });
 
           if (entry === undefined) {
@@ -116,13 +113,13 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Legg til nytt avsnitt over"
         onClick={() => {
-          const entry = findNode(editor, { match: isOfElementTypeFn(BaseTablePlugin.node.type) });
+          const entry = editor.api.node({ match: isOfElementTypeFn(BaseTablePlugin.node.type) });
 
           if (entry === undefined) {
             return;
           }
 
-          insertElements(editor, createSimpleParagraph(), { at: entry[1] });
+          editor.tf.insertNodes(createSimpleParagraph(), { at: entry[1] });
         }}
         icon={<TextAddSpaceBefore width={24} aria-hidden />}
       />
@@ -130,13 +127,13 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Legg til nytt avsnitt under"
         onClick={() => {
-          const entry = findNode(editor, { match: isOfElementTypeFn(BaseTablePlugin.node.type) });
+          const entry = editor.api.node({ match: isOfElementTypeFn(BaseTablePlugin.node.type) });
 
           if (entry === undefined) {
             return;
           }
 
-          insertElements(editor, createSimpleParagraph(), { at: nextPath(entry[1]) });
+          editor.tf.insertNodes(createSimpleParagraph(), { at: nextPath(entry[1]) });
         }}
         icon={<TextAddSpaceAfter width={24} aria-hidden />}
       />
@@ -146,19 +143,19 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Slett tabell"
         onClick={() => {
-          const entry = findNode(editor, { match: isOfElementTypeFn(BaseTablePlugin.node.type) });
+          const entry = editor.api.node({ match: isOfElementTypeFn(BaseTablePlugin.node.type) });
 
           if (entry === undefined) {
             return;
           }
 
-          withoutNormalizing(editor, () => {
+          editor.tf.withoutNormalizing(() => {
             const [, path] = entry;
-            withoutSavingHistory(editor, () => {
-              insertElements(editor, createSimpleParagraph(), { at: path });
+            editor.tf.withoutSaving(() => {
+              editor.tf.insertNodes(createSimpleParagraph(), { at: path });
             });
             deleteTable(editor);
-            select(editor, path);
+            editor.tf.select(path);
           });
         }}
         icon={<TrashIcon aria-hidden />}

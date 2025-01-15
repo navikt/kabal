@@ -40,12 +40,12 @@ describe('placeholder deleting', () => {
           const children = [createP([createText('before '), createPlaceholder(), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 1 }));
 
-          editor.deleteBackward('character');
+          editor.tf.deleteBackward('character');
 
           expect(editor.children).toEqual([createP([createText('before  after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
 
-          editor.deleteBackward('character');
+          editor.tf.deleteBackward('character');
 
           expect(editor.children).toEqual([createP([createText('before after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 6 }));
@@ -55,7 +55,7 @@ describe('placeholder deleting', () => {
           const children = [createP([createText('before '), createPlaceholder('placeholder'), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 11 }));
 
-          removeCharNTimes(editor.deleteBackward, 6);
+          removeCharNTimes(editor.tf.deleteBackward, 6);
 
           const expectedChildren1 = [
             createP([createText('before '), createPlaceholder('place'), createText(' after')]),
@@ -63,7 +63,7 @@ describe('placeholder deleting', () => {
           expect(editor.children).toEqual(expectedChildren1);
           expect(editor.selection).toEqual(createSelection({ path: [0, 1, 0], offset: 5 }));
 
-          editor.deleteBackward('character');
+          editor.tf.deleteBackward('character');
 
           const expectedChildren2 = [createP([createText('before '), createPlaceholder('plac'), createText(' after')])];
           expect(editor.children).toEqual(expectedChildren2);
@@ -76,12 +76,12 @@ describe('placeholder deleting', () => {
           const children = [createP([createText('before '), createPlaceholder(), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 1 }));
 
-          editor.deleteForward('character');
+          editor.tf.deleteForward('character');
 
           expect(editor.children).toEqual([createP([createText('before  after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
 
-          editor.deleteForward('character');
+          editor.tf.deleteForward('character');
 
           expect(editor.children).toEqual([createP([createText('before after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
@@ -91,7 +91,7 @@ describe('placeholder deleting', () => {
           const children = [createP([createText('before '), createPlaceholder('placeholder'), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 0 }));
 
-          removeCharNTimes(editor.deleteForward, 5);
+          removeCharNTimes(editor.tf.deleteForward, 5);
 
           const expectedChildren1 = [
             createP([createText('before '), createPlaceholder('holder'), createText(' after')]),
@@ -99,7 +99,7 @@ describe('placeholder deleting', () => {
           expect(editor.children).toEqual(expectedChildren1);
           expect(editor.selection).toEqual(createSelection({ path: [0, 1, 0], offset: 0 }));
 
-          editor.deleteForward('character');
+          editor.tf.deleteForward('character');
 
           const expectedChildren2 = [
             createP([createText('before '), createPlaceholder('older'), createText(' after')]),
@@ -116,12 +116,12 @@ describe('placeholder deleting', () => {
           const children = [createP([createText('before '), createPlaceholder(), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 2], offset: 0 }));
 
-          editor.deleteBackward('character');
+          editor.tf.deleteBackward('character');
 
           expect(editor.children).toEqual([createP([createText('before  after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
 
-          editor.deleteBackward('character');
+          editor.tf.deleteBackward('character');
 
           expect(editor.children).toEqual([createP([createText('before after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 6 }));
@@ -131,7 +131,7 @@ describe('placeholder deleting', () => {
           const children = [createP([createText('before '), createPlaceholder('placeholder'), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 2], offset: 0 }));
 
-          removeCharNTimes(editor.deleteBackward, 6);
+          removeCharNTimes(editor.tf.deleteBackward, 6);
 
           const expectedChildren1 = [
             createP([createText('before '), createPlaceholder('place'), createText(' after')]),
@@ -139,7 +139,7 @@ describe('placeholder deleting', () => {
           expect(editor.children).toEqual(expectedChildren1);
           expect(editor.selection).toEqual(createSelection({ path: [0, 1, 0], offset: 5 }));
 
-          editor.deleteBackward('character');
+          editor.tf.deleteBackward('character');
 
           const expectedChildren2 = [createP([createText('before '), createPlaceholder('plac'), createText(' after')])];
           expect(editor.children).toEqual(expectedChildren2);
@@ -152,12 +152,12 @@ describe('placeholder deleting', () => {
           const children = [createP([createText('before '), createPlaceholder(), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 0], offset: 7 }));
 
-          editor.deleteForward('character');
+          editor.tf.deleteForward('character');
 
           expect(editor.children).toEqual([createP([createText('before  after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
 
-          editor.deleteForward('character');
+          editor.tf.deleteForward('character');
 
           expect(editor.children).toEqual([createP([createText('before after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
@@ -167,7 +167,7 @@ describe('placeholder deleting', () => {
           const children = [createP([createText('before '), createPlaceholder('placeholder'), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 0], offset: 7 }));
 
-          removeCharNTimes(editor.deleteForward, 5);
+          removeCharNTimes(editor.tf.deleteForward, 5);
 
           const expectedChildren1 = [
             createP([createText('before '), createPlaceholder('holder'), createText(' after')]),
@@ -175,7 +175,7 @@ describe('placeholder deleting', () => {
           expect(editor.children).toEqual(expectedChildren1);
           expect(editor.selection).toEqual(createSelection({ path: [0, 1, 0], offset: 0 }));
 
-          editor.deleteForward('character');
+          editor.tf.deleteForward('character');
 
           const expectedChildren2 = [
             createP([createText('before '), createPlaceholder('older'), createText(' after')]),
@@ -194,12 +194,12 @@ describe('placeholder deleting', () => {
           const children = [createP([createText('before '), createPlaceholder(), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 1 }));
 
-          editor.deleteBackward('word');
+          editor.tf.deleteBackward('word');
 
           expect(editor.children).toEqual([createP([createText('before  after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
 
-          editor.deleteBackward('word');
+          editor.tf.deleteBackward('word');
 
           expect(editor.children).toEqual([createP([createText(' after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 0 }));
@@ -211,7 +211,7 @@ describe('placeholder deleting', () => {
           ];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 19 }));
 
-          editor.deleteBackward('word');
+          editor.tf.deleteBackward('word');
 
           const expectedChildren1 = [
             createP([createText('before '), createPlaceholder('this is '), createText(' after')]),
@@ -219,7 +219,7 @@ describe('placeholder deleting', () => {
           expect(editor.children).toEqual(expectedChildren1);
           expect(editor.selection).toEqual(createSelection({ path: [0, 1, 0], offset: 8 }));
 
-          editor.deleteBackward('word');
+          editor.tf.deleteBackward('word');
 
           const expectedChildren2 = [
             createP([createText('before '), createPlaceholder('this '), createText(' after')]),
@@ -234,12 +234,12 @@ describe('placeholder deleting', () => {
           const children = [createP([createText('before '), createPlaceholder(), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 1 }));
 
-          editor.deleteForward('word');
+          editor.tf.deleteForward('word');
 
           expect(editor.children).toEqual([createP([createText('before  after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
 
-          editor.deleteForward('word');
+          editor.tf.deleteForward('word');
 
           expect(editor.children).toEqual([createP([createText('before ')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
@@ -251,7 +251,7 @@ describe('placeholder deleting', () => {
           ];
           const editor = createEditor(children, createSelection({ path: [0, 1, 0], offset: 0 }));
 
-          editor.deleteForward('word');
+          editor.tf.deleteForward('word');
 
           const expectedChildren1 = [
             createP([createText('before '), createPlaceholder(' is placeholder'), createText(' after')]),
@@ -259,7 +259,7 @@ describe('placeholder deleting', () => {
           expect(editor.children).toEqual(expectedChildren1);
           expect(editor.selection).toEqual(createSelection({ path: [0, 1, 0], offset: 0 }));
 
-          editor.deleteForward('word');
+          editor.tf.deleteForward('word');
 
           const expectedChildren2 = [
             createP([createText('before '), createPlaceholder(' placeholder'), createText(' after')]),
@@ -276,12 +276,12 @@ describe('placeholder deleting', () => {
           const children = [createP([createText('before '), createPlaceholder(), createText(' after')])];
           const editor = createEditor(children, createSelection({ path: [0, 2], offset: 0 }));
 
-          editor.deleteBackward('word');
+          editor.tf.deleteBackward('word');
 
           expect(editor.children).toEqual([createP([createText('before  after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
 
-          editor.deleteBackward('word');
+          editor.tf.deleteBackward('word');
 
           expect(editor.children).toEqual([createP([createText(' after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 0 }));
@@ -293,7 +293,7 @@ describe('placeholder deleting', () => {
           ];
           const editor = createEditor(children, createSelection({ path: [0, 2], offset: 0 }));
 
-          editor.deleteBackward('word');
+          editor.tf.deleteBackward('word');
 
           const expectedChildren1 = [
             createP([createText('before '), createPlaceholder('this is '), createText(' after')]),
@@ -301,7 +301,7 @@ describe('placeholder deleting', () => {
           expect(editor.children).toEqual(expectedChildren1);
           expect(editor.selection).toEqual(createSelection({ path: [0, 1, 0], offset: 8 }));
 
-          editor.deleteBackward('word');
+          editor.tf.deleteBackward('word');
 
           const expectedChildren2 = [
             createP([createText('before '), createPlaceholder('this '), createText(' after')]),
@@ -316,12 +316,12 @@ describe('placeholder deleting', () => {
           const initialValue = [createP([createText('before '), createPlaceholder(), createText(' after')])];
           const editor = createEditor(initialValue, createSelection({ path: [0, 0], offset: 7 }));
 
-          editor.deleteForward('word');
+          editor.tf.deleteForward('word');
 
           expect(editor.children).toEqual([createP([createText('before  after')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
 
-          editor.deleteForward('word');
+          editor.tf.deleteForward('word');
 
           expect(editor.children).toEqual([createP([createText('before ')])]);
           expect(editor.selection).toEqual(createSelection({ path: [0, 0], offset: 7 }));
@@ -333,7 +333,7 @@ describe('placeholder deleting', () => {
           ];
           const editor = createEditor(children, createSelection({ path: [0, 0], offset: 7 }));
 
-          editor.deleteForward('word');
+          editor.tf.deleteForward('word');
 
           const expectedChildren1 = [
             createP([createText('before '), createPlaceholder(' is placeholder'), createText(' after')]),
@@ -341,7 +341,7 @@ describe('placeholder deleting', () => {
           expect(editor.children).toEqual(expectedChildren1);
           expect(editor.selection).toEqual(createSelection({ path: [0, 1, 0], offset: 0 }));
 
-          editor.deleteForward('word');
+          editor.tf.deleteForward('word');
 
           const expectedChildren2 = [
             createP([createText('before '), createPlaceholder(' placeholder'), createText(' after')]),

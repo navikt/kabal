@@ -3,8 +3,6 @@ import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
-import { findNode } from '@udecode/plate-common';
-import { toDOMNode } from '@udecode/plate-common/react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { COMMENT_PREFIX } from '../constants';
 
@@ -44,14 +42,14 @@ export const ExpandableThread = ({ thread, isFocused, style, isOrphan = false, i
         return;
       }
 
-      const leafEntry = findNode(editor, { at: [], match: { [`${COMMENT_PREFIX}${thread.id}`]: true } });
+      const leafEntry = editor.api.node({ at: [], match: { [`${COMMENT_PREFIX}${thread.id}`]: true } });
 
       if (leafEntry === undefined) {
         return;
       }
 
       const [leafNode] = leafEntry;
-      const domNode = toDOMNode(editor, leafNode);
+      const domNode = editor.api.toDOMNode(leafNode);
 
       if (domNode === undefined) {
         return;

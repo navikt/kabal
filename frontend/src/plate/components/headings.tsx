@@ -1,6 +1,6 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { isElement } from '@udecode/plate-common';
-import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
+import { ElementApi } from '@udecode/plate';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { styled } from 'styled-components';
 import type { H1Element, H2Element, H3Element, PlaceholderElement } from '../types';
 
@@ -76,7 +76,7 @@ export const HeadingThree = ({ children, element, ...props }: PlateElementProps<
 
 const isEmpty = (element: H1Element | H2Element | H3Element | PlaceholderElement): boolean => {
   for (const child of element.children) {
-    if (isElement(child)) {
+    if (ElementApi.isElement(child)) {
       return false;
     }
 

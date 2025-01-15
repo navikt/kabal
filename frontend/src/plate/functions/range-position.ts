@@ -1,7 +1,6 @@
 import { CURRENT_SCALE } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE_PX } from '@app/plate/components/get-scaled-em';
 import type { RichTextEditor } from '@app/plate/types';
-import { toDOMRange } from '@udecode/slate-react';
 import type { BasePoint } from 'slate';
 
 export interface IRangePosition {
@@ -16,7 +15,7 @@ export const calculateRangePosition = (
   containerRef: HTMLElement,
   selectionStart: BasePoint,
 ): IRangePosition | null => {
-  const range = toDOMRange(editor, {
+  const range = editor.api.toDOMRange({
     anchor: selectionStart,
     focus: {
       path: selectionStart.path,

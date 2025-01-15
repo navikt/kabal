@@ -2,14 +2,14 @@ import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { hasOwn } from '@app/functions/object';
 import { BookmarkLeaf } from '@app/plate/leaf/bookmark';
 import type { FormattedText } from '@app/plate/types';
-import { findNode, isCollapsed, isText, setNodes, unsetNodes, withoutNormalizing } from '@udecode/plate-common';
+import { RangeApi, TextApi } from '@udecode/plate';
 import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
 
 export const BookmarkPlugin = createPlatePlugin({
   key: 'bookmark',
   node: { isLeaf: true },
   extendEditor: ({ editor }) => {
-    const { insertBreak } = editor;
+    const { insertBreak, normalizeNode } = editor.tf;
 
     editor.insertBreak = () => {
       removeBookmarkMarks(editor);
@@ -17,19 +17,17 @@ export const BookmarkPlugin = createPlatePlugin({
       insertBreak();
     };
 
-    const { normalizeNode } = editor;
-
-    editor.normalizeNode = (entry) => {
+    editor.tf.normalizeNode = (entry) => {
       const [node, path] = entry;
 
-      if (isText(node)) {
+      if (TextApi.isText(node)) {
         const hasBookmarkMark = hasOwn(node, BookmarkPlugin.key) && node[BookmarkPlugin.key] === true;
         const shouldHaveBookmarkMark = Object.keys(node).some((key) => key.startsWith(BOOKMARK_PREFIX));
 
         if (hasBookmarkMark && !shouldHaveBookmarkMark) {
-          unsetNodes(editor, BookmarkPlugin.key, { at: path, match: (n) => n === node, split: true });
+          editor.tf.unsetNodes(BookmarkPlugin.key, { at: path, match: (n) => n === node, split: true });
         } else if (!hasBookmarkMark && shouldHaveBookmarkMark) {
-          setNodes(editor, { [BookmarkPlugin.key]: true }, { at: path, match: (n) => n === node, split: true });
+          editor.tf.setNodes({ [BookmarkPlugin.key]: true }, { at: path, match: (n) => n === node, split: true });
         }
       }
 
@@ -40,7 +38,7 @@ export const BookmarkPlugin = createPlatePlugin({
   },
   handlers: {
     onKeyDown: ({ editor, event }) => {
-      if (event.key === 'Escape' && isCollapsed(editor.selection)) {
+      if (event.key === 'Escape' && RangeApi.isCollapsed(editor.selection)) {
         removeBookmarkMarks(editor);
       }
     },
@@ -51,7 +49,7 @@ export const BookmarkPlugin = createPlatePlugin({
 });
 
 const removeBookmarkMarks = (editor: PlateEditor) => {
-  const entry = findNode<FormattedText>(editor, { match: isText });
+  const entry = editor.api.node<FormattedText>({ match: TextApi.isText });
 
   if (entry === undefined) {
     return;
@@ -59,10 +57,10 @@ const removeBookmarkMarks = (editor: PlateEditor) => {
 
   const [node] = entry;
 
-  withoutNormalizing(editor, () => {
+  editor.tf.withoutNormalizing(() => {
     for (const key of Object.keys(node)) {
       if (key.startsWith(BOOKMARK_PREFIX)) {
-        editor.removeMark(key);
+        editor.tf.removeMark(key);
       }
     }
   });

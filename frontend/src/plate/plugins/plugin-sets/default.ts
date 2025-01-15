@@ -12,18 +12,18 @@ import { PageBreakPlugin } from '@app/plate/plugins/page-break';
 import { PastePlugin } from '@app/plate/plugins/paste';
 import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { SelectionPlugin } from '@app/plate/plugins/selection';
+import { ParserPlugin } from '@udecode/plate';
 import { AlignPlugin } from '@udecode/plate-alignment/react';
 import { AutoformatPlugin } from '@udecode/plate-autoformat/react';
 import { BoldPlugin, ItalicPlugin, UnderlinePlugin } from '@udecode/plate-basic-marks/react';
 import { ExitBreakPlugin, SoftBreakPlugin } from '@udecode/plate-break/react';
-import { ParserPlugin, someNode } from '@udecode/plate-common';
-import { ParagraphPlugin } from '@udecode/plate-common/react';
 import { DocxPlugin } from '@udecode/plate-docx';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { HeadingPlugin } from '@udecode/plate-heading/react';
 import { IndentPlugin } from '@udecode/plate-indent/react';
 import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@udecode/plate-list/react';
 import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@udecode/plate-table/react';
+import { ParagraphPlugin } from '@udecode/plate/react';
 
 export const defaultPlugins = [
   ParserPlugin,
@@ -31,10 +31,10 @@ export const defaultPlugins = [
   HeadingPlugin.configure({
     options: { levels: 3 },
     extendEditor: ({ editor }) => {
-      const { addMark } = editor;
+      const { addMark } = editor.tf;
 
-      editor.addMark = (key, value) => {
-        if (someNode(editor, { match: { type: [HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3] } })) {
+      editor.tf.addMark = (key, value) => {
+        if (editor.api.some({ match: { type: [HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3] } })) {
           return;
         }
 

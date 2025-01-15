@@ -1,7 +1,6 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { useMyPlateEditorRef } from '@app/plate/types';
-import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 import { type ResizeEvent, ResizeHandle } from '@udecode/plate-resizable';
 import { type TTableCellElement, setTableColSize } from '@udecode/plate-table';
 import {
@@ -10,6 +9,7 @@ import {
   useTableCellElementResizableState,
   useTableCellElementState,
 } from '@udecode/plate-table/react';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { forwardRef, useCallback, useContext } from 'react';
 import type { MouseEvent } from 'react';
 import { styled } from 'styled-components';

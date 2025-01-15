@@ -1,14 +1,7 @@
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { type ParagraphElement, TextAlign } from '@app/plate/types';
-import {
-  type TElement,
-  findNode,
-  insertBreak,
-  insertFragment,
-  insertText,
-  isElement,
-  withoutNormalizing,
-} from '@udecode/plate-common';
+import { isElement } from '@grafana/faro-web-sdk';
+import type { TElement } from '@udecode/plate';
 import { ParagraphPlugin, createPlatePlugin } from '@udecode/plate-core/react';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { ListItemContentPlugin } from '@udecode/plate-list/react';
@@ -43,10 +36,10 @@ export const PastePlugin = createPlatePlugin({
 
       const paragraphs = processParagraphs(plainText);
 
-      const currentEntry = findNode<TElement>(editor, { mode: 'lowest', match: isElement });
+      const currentEntry = editor.api.node<TElement>({ mode: 'lowest', match: isElement });
 
       if (currentEntry === undefined) {
-        editor.insertFragment<ParagraphElement>(
+        editor.tf.insertFragment<ParagraphElement>(
           paragraphs.map((text) => ({ type: ParagraphPlugin.key, align: TextAlign.LEFT, children: [{ text }] })),
         );
 
@@ -57,7 +50,7 @@ export const PastePlugin = createPlatePlugin({
 
       switch (node.type) {
         case ELEMENT_PLACEHOLDER: {
-          insertText(editor, paragraphs.join(' '));
+          editor.tf.insertText(paragraphs.join(' '));
 
           return true;
         }
@@ -69,12 +62,12 @@ export const PastePlugin = createPlatePlugin({
             return false;
           }
 
-          insertText(editor, first);
+          editor.tf.insertText(first);
 
-          withoutNormalizing(editor, () => {
+          editor.tf.withoutNormalizing(() => {
             for (const line of rest) {
-              insertBreak(editor);
-              insertFragment<ParagraphElement>(editor, [
+              editor.tf.insertBreak();
+              editor.tf.insertFragment<ParagraphElement>([
                 { type: ParagraphPlugin.key, align: TextAlign.LEFT, children: [{ text: line }] },
               ]);
             }
@@ -91,13 +84,13 @@ export const PastePlugin = createPlatePlugin({
           const [first, ...rest] = paragraphs;
 
           if (first !== undefined) {
-            insertText(editor, first);
+            editor.tf.insertText(first);
 
             if (rest.length > 0) {
-              withoutNormalizing(editor, () => {
+              editor.tf.withoutNormalizing(() => {
                 for (const line of rest) {
-                  insertBreak(editor);
-                  insertFragment<ParagraphElement>(editor, [
+                  editor.tf.insertBreak();
+                  editor.tf.insertFragment<ParagraphElement>([
                     { type: ParagraphPlugin.key, align: TextAlign.LEFT, children: [{ text: line }] },
                   ]);
                 }
@@ -109,9 +102,9 @@ export const PastePlugin = createPlatePlugin({
         }
       }
 
-      withoutNormalizing(editor, () => {
+      editor.tf.withoutNormalizing(() => {
         for (const line of paragraphs) {
-          insertFragment<ParagraphElement>(editor, [
+          editor.tf.insertFragment<ParagraphElement>([
             { type: ParagraphPlugin.key, align: TextAlign.LEFT, children: [{ text: line }] },
           ]);
         }

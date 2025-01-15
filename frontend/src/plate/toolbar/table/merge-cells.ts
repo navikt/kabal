@@ -1,21 +1,13 @@
 import { getCurrentRow } from '@app/plate/toolbar/table/helpers';
 import type { ParagraphElement, RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
 import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
-import {
-  BaseParagraphPlugin,
-  getNextNode,
-  isElementEmpty,
-  mergeNodes,
-  setNodes,
-  withoutNormalizing,
-} from '@udecode/plate-common';
+import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { BaseTableCellPlugin, BaseTableRowPlugin } from '@udecode/plate-table';
-import { findPath } from '@udecode/slate-react';
 
 export const mergeCells = (
   editor: RichTextEditor,
   cellNode: TableCellElement,
-  cellPath = findPath(editor, cellNode),
+  cellPath = editor.api.findPath(cellNode),
 ) => {
   const rowEntry = getCurrentRow(editor, cellNode, cellPath);
 
@@ -34,7 +26,7 @@ export const mergeCells = (
     return cellPath;
   }
 
-  const nextEntry = getNextNode<TableCellElement>(editor, {
+  const nextEntry = editor.api.next<TableCellElement>({
     at: cellPath,
     match: isOfElementTypeFn(BaseTableCellPlugin.node.type),
   });
@@ -45,16 +37,16 @@ export const mergeCells = (
 
   const [nextCell, nextPath] = nextEntry;
 
-  withoutNormalizing(editor, () => {
-    mergeNodes(editor, { at: nextPath });
-    mergeNodes(editor, {
+  editor.tf.withoutNormalizing(() => {
+    editor.tf.mergeNodes({ at: nextPath });
+    editor.tf.mergeNodes({
       at: cellPath,
-      match: (n) => isOfElementType<ParagraphElement>(n, BaseParagraphPlugin.node.type) && isElementEmpty(editor, n),
+      match: (n) => isOfElementType<ParagraphElement>(n, BaseParagraphPlugin.node.type) && editor.api.isEmpty(n),
     });
 
     const colSpan = (cellNode.colSpan ?? 1) + (nextCell.colSpan ?? 1);
 
-    setNodes(editor, { colSpan }, { at: cellPath });
+    editor.tf.setNodes({ colSpan }, { at: cellPath });
   });
 
   return cellPath;

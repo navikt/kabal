@@ -5,24 +5,12 @@ import {
 } from '@app/plate/plugins/element-types';
 import { isInRegelverk, isInUnchangeableElement, isUndeletable } from '@app/plate/plugins/prohibit-deletion/helpers';
 import { isInList } from '@app/plate/utils/queries';
-import {
-  findNode,
-  getNextNode,
-  getPreviousNode,
-  isEditor,
-  isElement,
-  isElementEmpty,
-  isEndPoint,
-  isSelectionAtBlockEnd,
-  isSelectionAtBlockStart,
-  isStartPoint,
-  removeNodes,
-} from '@udecode/plate-common';
+import { ElementApi } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
-import { Path, type TextDirection, type TextUnit } from 'slate';
+import { Path, type TextDirection, type TextUnit, isEditor } from 'slate';
 
 const deleteCurrentNode = (editor: PlateEditor): void => {
-  const currentEntry = findNode(editor, { match: (n) => !isEditor(n) });
+  const currentEntry = editor.api.node({ match: (n) => !isEditor(n) });
 
   if (isUndeletable(editor, currentEntry)) {
     return;
@@ -34,12 +22,12 @@ const deleteCurrentNode = (editor: PlateEditor): void => {
 
   const [node] = currentEntry;
 
-  if (!isElement(node)) {
+  if (!ElementApi.isElement(node)) {
     return;
   }
 
-  if (isElementEmpty(editor, node)) {
-    removeNodes(editor);
+  if (editor.api.isEmpty(node)) {
+    editor.tf.removeNodes();
   }
 };
 
@@ -49,7 +37,7 @@ export const handleDeleteBackwardIntoUnchangeable = (editor: PlateEditor): boole
   }
 
   const prevSibling = Path.hasPrevious(editor.selection.focus.path)
-    ? findNode(editor, { at: Path.previous(editor.selection.focus.path), mode: 'lowest', voids: true })
+    ? editor.api.node({ at: Path.previous(editor.selection.focus.path), mode: 'lowest', voids: true })
     : undefined;
 
   // Prohibit deletion for inline undeletables
@@ -59,7 +47,7 @@ export const handleDeleteBackwardIntoUnchangeable = (editor: PlateEditor): boole
     return true;
   }
 
-  if (!isSelectionAtBlockStart(editor)) {
+  if (!editor.api.isAt({ start: true })) {
     return false;
   }
 
@@ -68,21 +56,21 @@ export const handleDeleteBackwardIntoUnchangeable = (editor: PlateEditor): boole
     return false;
   }
 
-  const redigerbarMaltekstOrRegelverk = findNode(editor, {
-    match: (n) => isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type),
+  const redigerbarMaltekstOrRegelverk = editor.api.node({
+    match: (n) => ElementApi.isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type),
   });
 
   if (redigerbarMaltekstOrRegelverk !== undefined) {
     const [, path] = redigerbarMaltekstOrRegelverk;
 
     // Normal handling if focus is in redigerbar maltekst / regelverk container, but not at the start
-    if (!isStartPoint(editor, editor.selection.focus, path)) {
+    if (!editor.api.isStart(editor.selection.focus, path)) {
       return false;
     }
   }
 
   // If previous node is undeletable, remove self (if deletable)
-  if (isUndeletable(editor, getPreviousNode(editor))) {
+  if (isUndeletable(editor, editor.api.previous())) {
     deleteCurrentNode(editor);
 
     return true;
@@ -96,8 +84,8 @@ export const handleDeleteForwardIntoUnchangeable = (editor: PlateEditor): boolea
     return false;
   }
 
-  const nextSibling = findNode(editor, { at: Path.next(editor.selection.focus.path), mode: 'lowest', voids: true });
-  const isEnd = isEndPoint(editor, editor.selection.focus, editor.selection.focus.path);
+  const nextSibling = editor.api.node({ at: Path.next(editor.selection.focus.path), mode: 'lowest', voids: true });
+  const isEnd = editor.api.isEnd(editor.selection.focus, editor.selection.focus.path);
 
   // Prohibit deletion for inline undeletables
   if (isEnd && isUndeletable(editor, nextSibling)) {
@@ -106,25 +94,25 @@ export const handleDeleteForwardIntoUnchangeable = (editor: PlateEditor): boolea
     return true;
   }
 
-  if (!isSelectionAtBlockEnd(editor)) {
+  if (!editor.api.isAt({ end: true })) {
     return false;
   }
 
-  const redigerbarMaltekstOrRegelverk = findNode(editor, {
-    match: (n) => isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type),
+  const redigerbarMaltekstOrRegelverk = editor.api.node({
+    match: (n) => ElementApi.isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type),
   });
 
   if (redigerbarMaltekstOrRegelverk !== undefined) {
     const [, path] = redigerbarMaltekstOrRegelverk;
 
     // Normal handling if focus is in redigerbar maltekst / regelverk container, but not at the end
-    if (!isEndPoint(editor, editor.selection.focus, path)) {
+    if (!editor.api.isEnd(editor.selection.focus, path)) {
       return false;
     }
   }
 
   // Remove self if next node is undeletable
-  if (isUndeletable(editor, getNextNode(editor))) {
+  if (isUndeletable(editor, editor.api.next())) {
     deleteCurrentNode(editor);
 
     return true;
@@ -133,12 +121,17 @@ export const handleDeleteForwardIntoUnchangeable = (editor: PlateEditor): boolea
   return false;
 };
 
-const handleDeleteInside = (editor: PlateEditor, type: string, direction: TextDirection, unit: TextUnit) => {
+const handleDeleteInside = (
+  editor: PlateEditor,
+  type: string,
+  direction: TextDirection,
+  unit: TextUnit | undefined,
+) => {
   if (editor.selection === null) {
     return true;
   }
 
-  const entry = findNode(editor, { match: { type }, at: editor.selection });
+  const entry = editor.api.node({ match: { type }, at: editor.selection });
 
   if (entry === undefined) {
     return true;
@@ -153,16 +146,16 @@ const handleDeleteInside = (editor: PlateEditor, type: string, direction: TextDi
       return false;
     }
 
-    return isStartPoint(editor, editor.selection.focus, entry[1]);
+    return editor.api.isStart(editor.selection.focus, entry[1]);
   }
 
-  return isEndPoint(editor, editor.selection.focus, entry[1]);
+  return editor.api.isEnd(editor.selection.focus, entry[1]);
 };
 
 export const handleDeleteInsideUnchangeable = (
   editor: PlateEditor,
   direction: TextDirection,
-  unit: TextUnit,
+  unit: TextUnit | undefined,
 ): boolean => {
   if (isInRegelverk(editor)) {
     return handleDeleteInside(editor, ELEMENT_REGELVERK_CONTAINER, direction, unit);

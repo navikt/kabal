@@ -12,14 +12,7 @@ import { Sheet } from '@app/plate/sheet';
 import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import { Button } from '@navikt/ds-react';
-import {
-  type Value,
-  insertNodes,
-  removeNodes,
-  resetEditorChildren,
-  withoutNormalizing,
-  withoutSavingHistory,
-} from '@udecode/plate-common';
+import type { Value } from '@udecode/plate';
 import { Plate, usePlateEditor } from '@udecode/plate-core/react';
 import { memo, useContext, useEffect } from 'react';
 import { styled } from 'styled-components';
@@ -97,13 +90,13 @@ const HistoryContent = ({ id, version }: HistoryContentProps) => {
 };
 
 const restore = (editor: RichTextEditor, content: Value) => {
-  withoutNormalizing(editor, () => {
-    withoutSavingHistory(editor, () => {
-      resetEditorChildren(editor);
-      insertNodes(editor, content, { at: [0] });
+  editor.tf.withoutNormalizing(() => {
+    editor.tf.withoutSaving(() => {
+      editor.tf.reset({ children: true });
+      editor.tf.insertNodes(content, { at: [0] });
 
       // Remove empty paragraph that is added automatically
-      removeNodes(editor, { at: [content.length] });
+      editor.tf.removeNodes({ at: [content.length] });
     });
   });
 };

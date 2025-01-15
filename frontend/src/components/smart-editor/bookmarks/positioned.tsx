@@ -12,7 +12,6 @@ import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { BookmarkFillIcon, TrashFillIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
-import { setNodes } from '@udecode/plate-common';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -43,7 +42,7 @@ export const PositionedBookmarks = () => {
   const onDelete = useCallback(
     (id: string) => {
       pushEvent('remove-bookmark', 'smart-editor');
-      setNodes(editorRef, { [id]: undefined }, { match: (n) => id in n, mode: 'lowest', at: [] });
+      editorRef.tf.setNodes({ [id]: undefined }, { match: (n) => id in n, mode: 'lowest', at: [] });
     },
     [editorRef],
   );

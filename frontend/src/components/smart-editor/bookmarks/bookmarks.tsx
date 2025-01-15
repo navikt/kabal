@@ -5,8 +5,7 @@ import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { type TNode, getNodeString, unsetNodes } from '@udecode/plate-common';
-import { toDOMNode } from '@udecode/plate-common/react';
+import { NodeApi, type TNode } from '@udecode/plate';
 import { styled } from 'styled-components';
 
 interface Props {
@@ -21,7 +20,7 @@ export const Bookmarks = ({ editorId }: Props) => {
     return null;
   }
 
-  const onClick = (node: TNode) => toDOMNode(editor, node)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  const onClick = (node: TNode) => editor.api.toDOMNode(node)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   return (
     <BookmarkList>
@@ -38,7 +37,7 @@ export const Bookmarks = ({ editorId }: Props) => {
           return null;
         }
 
-        const content = nodes.map((n) => getNodeString(n)).join('');
+        const content = nodes.map((n) => NodeApi.string(n)).join('');
 
         return (
           <BookmarkListItem key={key}>
@@ -56,7 +55,7 @@ export const Bookmarks = ({ editorId }: Props) => {
               variant="tertiary-neutral"
               onClick={() => {
                 pushEvent('remove-bookmark', 'smart-editor');
-                unsetNodes<FormattedText>(editor, [BookmarkPlugin.key, key], {
+                editor.tf.unsetNodes<FormattedText>([BookmarkPlugin.key, key], {
                   match: (n) => hasOwn(n, key),
                   mode: 'lowest',
                   at: [],
