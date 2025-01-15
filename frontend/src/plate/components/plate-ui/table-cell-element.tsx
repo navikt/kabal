@@ -1,45 +1,39 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { useMyPlateEditorRef } from '@app/plate/types';
-import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 import { type ResizeEvent, ResizeHandle } from '@udecode/plate-resizable';
-import { type TTableCellElement, setTableColSize } from '@udecode/plate-table';
-import {
-  useTableCellElement,
-  useTableCellElementResizable,
-  useTableCellElementResizableState,
-  useTableCellElementState,
-} from '@udecode/plate-table/react';
-import { forwardRef, useCallback, useContext } from 'react';
+import { setTableColSize } from '@udecode/plate-table';
+import { TablePlugin, useTableCellElement, useTableCellElementResizable } from '@udecode/plate-table/react';
+import { PlateElement, useEditorPlugin, useReadOnly, withRef } from '@udecode/plate/react';
+import { useCallback, useContext } from 'react';
 import type { MouseEvent } from 'react';
 import { styled } from 'styled-components';
 import { StyledParagraph } from '../paragraph';
 
-type TableCellElementProps = PlateElementProps<TTableCellElement>;
+export const TableCellElement = withRef<typeof PlateElement>(({ style, children, ...props }, ref) => {
+  const { api } = useEditorPlugin(TablePlugin);
+  const { selected, minHeight, width } = useTableCellElement();
 
-export const TableCellElement = forwardRef<React.ElementRef<typeof PlateElement>, TableCellElementProps>(
-  ({ className, children, ...props }, ref) => {
-    const { selected } = useTableCellElementState();
-    const { props: cellProps } = useTableCellElement({ element: props.element });
+  const spans = {
+    colSpan: api.table.getColSpan(props.element),
+    rowSpan: api.table.getRowSpan(props.element),
+  };
 
-    return (
-      <PlateElement asChild ref={ref} className={className} {...cellProps} {...props}>
-        <StyledCell $selected={selected}>
-          <Content>{children}</Content>
-          <Resize />
-        </StyledCell>
-      </PlateElement>
-    );
-  },
-);
-
-TableCellElement.displayName = 'TableCellElement';
+  return (
+    <PlateElement asChild ref={ref} {...props}>
+      <StyledCell $selected={selected} style={{ ...style, width, minWidth: 50 }} {...spans}>
+        <Content style={{ minHeight }}>{children}</Content>
+        <Resize />
+      </StyledCell>
+    </PlateElement>
+  );
+});
 
 const Resize = () => {
   const { scale } = useContext(ScaleContext);
-  const { colIndex, readOnly, isSelectingCell, hovered, ...state } = useTableCellElementState();
-  const resizableState = useTableCellElementResizableState({ colIndex, ...state });
-  const { rightProps } = useTableCellElementResizable(resizableState);
+  const readOnly = useReadOnly();
+  const { colIndex, isSelectingCell, ...state } = useTableCellElement();
+  const { rightProps } = useTableCellElementResizable({ colIndex, ...state });
   const editor = useMyPlateEditorRef();
 
   const onDblClick = useCallback(
@@ -77,12 +71,11 @@ const Resize = () => {
       onDoubleClick={onDblClick}
       {...rest}
       options={scaledOptions}
-      style={{ backgroundColor: hovered ? 'color-mix(in srgb, var(--a-blue-200), transparent)' : 'transparent' }}
     />
   );
 };
 
-const PADDING = ptToEm(3);
+const PADDING = ptToEm(6);
 
 const StyledRightHandle = styled(ResizeHandle)`
   position: absolute;

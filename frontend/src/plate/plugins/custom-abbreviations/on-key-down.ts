@@ -1,6 +1,5 @@
 import { pushEvent } from '@app/observability';
 import { getShortAndLong } from '@app/plate/plugins/custom-abbreviations/get-short-and-long';
-import { deleteBackward, deleteText, insertNodes, insertText, withoutMergingHistory } from '@udecode/plate-common';
 import type { PlateEditor } from '@udecode/plate-core/react';
 
 const SPACE = ' ';
@@ -58,13 +57,13 @@ export const onKeyDown = (editor: PlateEditor, e: React.KeyboardEvent) => {
 
   e.preventDefault();
 
-  withoutMergingHistory(editor, () => {
-    insertText(editor, key);
-    deleteBackward(editor, { unit: 'character' });
+  editor.tf.withoutMerging(() => {
+    editor.tf.insertText(key);
+    editor.tf.deleteBackward('character');
   });
 
-  deleteText(editor, { at: range });
-  insertNodes(editor, { ...marks, text: `${long}${key}` });
+  editor.tf.delete({ at: range });
+  editor.tf.insertNodes({ ...marks, text: `${long}${key}` });
 
   const numberOfMarks = Object.values(marks).filter((m) => m).length;
 

@@ -5,10 +5,8 @@ import { type FullmektigElement, type PlaceholderElement, useMyPlateEditorRef } 
 import { isOfElementType } from '@app/plate/utils/queries';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, Loader } from '@navikt/ds-react';
-import { findDescendant, replaceNodeChildren, withoutSavingHistory } from '@udecode/plate-common';
-import { PlateElement, type PlateElementProps, findPath } from '@udecode/plate-common/react';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { useEffect } from 'react';
-import { setNodes, withoutNormalizing } from 'slate';
 import { styled } from 'styled-components';
 
 export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
@@ -17,9 +15,9 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
   const { id, show } = element;
   const editor = useMyPlateEditorRef();
 
-  const at = findPath(editor, element);
+  const at = editor.api.findPath(element);
 
-  const valueEntry = findDescendant<PlaceholderElement>(editor, {
+  const valueEntry = editor.api.descendant<PlaceholderElement>({
     at,
     match: (n) =>
       isOfElementType<PlaceholderElement>(n, ELEMENT_PLACEHOLDER) && n.placeholder === FULLMEKTIG_VALUE_PLACEHOLDER,
@@ -46,18 +44,18 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
     const [, valueAt] = valueEntry;
 
     if (prosessfullmektig === null) {
-      return withoutSavingHistory(editor, () => {
-        withoutNormalizing(editor, () => {
-          setNodes<FullmektigElement>(editor, { id: undefined, show: false }, { at });
-          replaceNodeChildren(editor, { at: valueAt, nodes: [{ text: '' }] });
+      return editor.tf.withoutSaving(() => {
+        editor.tf.withoutNormalizing(() => {
+          editor.tf.setNodes<FullmektigElement>({ id: undefined, show: false }, { at });
+          editor.tf.replaceNodes([{ text: '' }], { at: valueAt, children: true });
         });
       });
     }
 
-    withoutSavingHistory(editor, () => {
-      withoutNormalizing(editor, () => {
-        setNodes<FullmektigElement>(editor, { id: prosessfullmektig.id, show: true }, { at });
-        replaceNodeChildren(editor, { at: valueAt, nodes: [{ text: prosessfullmektig.name ?? '' }] });
+    editor.tf.withoutSaving(() => {
+      editor.tf.withoutNormalizing(() => {
+        editor.tf.setNodes<FullmektigElement>({ id: prosessfullmektig.id, show: true }, { at });
+        editor.tf.replaceNodes([{ text: prosessfullmektig.name ?? '' }], { at: valueAt, children: true });
       });
     });
   }, [editor, isSuccess, oppgave, id, valueEntry, at, show]);
@@ -89,7 +87,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
             size="small"
             title='Tilbakestill til navn "Fullmektig"'
             onClick={() => {
-              const labelEntry = findDescendant<PlaceholderElement>(editor, {
+              const labelEntry = editor.api.descendant<PlaceholderElement>({
                 at,
                 match: (n) =>
                   isOfElementType<PlaceholderElement>(n, ELEMENT_PLACEHOLDER) &&
@@ -100,7 +98,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
                 return;
               }
 
-              replaceNodeChildren(editor, { at: labelEntry[1], nodes: [{ text: 'Fullmektig', bold: true }] });
+              editor.tf.replaceNodes([{ text: 'Fullmektig', bold: true }], { at: labelEntry[1], children: true });
             }}
             icon={<ArrowUndoIcon aria-hidden />}
           />
@@ -119,7 +117,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
                 return;
               }
 
-              replaceNodeChildren(editor, { at: valueEntry[1], nodes: [{ text: prosessfullmektig.name ?? '' }] });
+              editor.tf.replaceNodes([{ text: prosessfullmektig.name ?? '' }], { at: valueEntry[1], children: true });
             }}
             icon={<ArrowUndoIcon aria-hidden />}
           />

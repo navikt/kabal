@@ -1,6 +1,6 @@
 import { getColors } from '@app/components/smart-editor/tabbed-editors/cursors/cursor-colors';
 import type { RelativeRange } from '@slate-yjs/core';
-import { type UnknownObject, createZustandStore } from '@udecode/plate-common';
+import { type UnknownObject, createZustandStore } from '@udecode/plate';
 import { type CursorData, type CursorProps, type CursorState, useCursorOverlayPositions } from '@udecode/plate-cursor';
 import { useEffect, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
@@ -83,7 +83,10 @@ const CaretLabel = styled.div`
   white-space: nowrap;
 `;
 
-export const cursorStore = createZustandStore('cursors')<Record<string, CursorState<UserCursor>>>({});
+export const cursorStore = createZustandStore<Record<string, CursorState<UserCursor>>>(
+  {},
+  { mutative: true, name: 'cursors' },
+);
 
 interface CursorOverlayProps {
   containerElement: HTMLElement;

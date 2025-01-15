@@ -1,38 +1,35 @@
-import { getNode, getSelectionText, isText } from '@udecode/plate-common';
+import { NodeApi, RangeApi, TextApi } from '@udecode/plate';
 import { createPlatePlugin } from '@udecode/plate-core/react';
 import { Range } from 'slate';
 
-export const SelectionPlugin = createPlatePlugin({
-  key: 'selection',
-  extendEditor: ({ editor }) => {
-    const { select } = editor;
+export const SelectionPlugin = createPlatePlugin({ key: 'selection' }).overrideEditor(({ editor }) => {
+  const { select } = editor.tf;
 
-    editor.select = (target) => {
-      if (!Range.isRange(target) || Range.isCollapsed(target)) {
-        return select(target);
-      }
+  editor.tf.select = (target) => {
+    if (!Range.isRange(target) || RangeApi.isCollapsed(target)) {
+      return select(target);
+    }
 
-      if (!containsMultipleWords(getSelectionText(editor))) {
-        return select(target);
-      }
+    if (!containsMultipleWords(editor.api.string())) {
+      return select(target);
+    }
 
-      const node = getNode(editor, target.anchor.path);
+    const node = NodeApi.get(editor, target.anchor.path);
 
-      if (!isText(node)) {
-        return select(target);
-      }
+    if (!TextApi.isText(node)) {
+      return select(target);
+    }
 
-      const isForward = Range.isForward(target);
+    const isForward = Range.isForward(target);
 
-      const anchorOffset = isForward
-        ? getWordStart(node.text, target.anchor.offset)
-        : getWordEnd(node.text, target.anchor.offset);
+    const anchorOffset = isForward
+      ? getWordStart(node.text, target.anchor.offset)
+      : getWordEnd(node.text, target.anchor.offset);
 
-      return select({ ...target, anchor: { ...target.anchor, offset: anchorOffset } });
-    };
+    return select({ ...target, anchor: { ...target.anchor, offset: anchorOffset } });
+  };
 
-    return editor;
-  },
+  return editor;
 });
 
 const START_REGEX = /\S+$/;
