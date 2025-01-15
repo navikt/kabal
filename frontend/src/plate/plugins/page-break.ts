@@ -19,17 +19,16 @@ export const PageBreakPlugin = createPlatePlugin({
       }
     },
   },
-  extendEditor: ({ editor }) => {
-    const { insertNode } = editor;
+}).overrideEditor(({ editor }) => {
+  const { insertNode } = editor.tf;
 
-    editor.insertNode = (node) => {
-      if (node.type === ELEMENT_PAGE_BREAK && isInTable(editor)) {
-        return;
-      }
+  editor.tf.insertNode = (node) => {
+    if (node.type === ELEMENT_PAGE_BREAK && isInTable(editor)) {
+      return;
+    }
 
-      insertNode(node);
-    };
+    insertNode(node);
+  };
 
-    return editor;
-  },
+  return editor;
 });

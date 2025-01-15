@@ -20,8 +20,7 @@ import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { type SkipToken, skipToken } from '@reduxjs/toolkit/query';
-import { setNodes } from '@udecode/plate-common';
-import { PlateElement, type PlateElementProps, isEditorReadOnly } from '@udecode/plate-common/react';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { useCallback, useContext, useMemo } from 'react';
 
 export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>) => {
@@ -41,11 +40,11 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
       return;
     }
 
-    if (path === undefined || !editor.hasPath(path)) {
+    if (path === undefined || !editor.api.hasPath(path)) {
       return;
     }
 
-    setNodes<MaltekstseksjonElement>(editor, { query, language }, { match: (n) => n === element, at: path });
+    editor.tf.setNodes<MaltekstseksjonElement>({ query, language }, { match: (n) => n === element, at: path });
   }, [editor, element, queryChanged, language, path, query]);
 
   const { isFetching, maltekstseksjon, manualUpdate, tiedList, update } = useUpdateMaltekstseksjon(
@@ -76,7 +75,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
     <PlateElement<MaltekstseksjonElement>
       {...props}
       asChild
-      contentEditable={!isEditorReadOnly(editor)}
+      contentEditable={!editor.api.isReadOnly()}
       suppressContentEditableWarning
       onDragStart={onPlateContainerDragStart}
     >

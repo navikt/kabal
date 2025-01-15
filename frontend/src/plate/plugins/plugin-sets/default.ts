@@ -12,37 +12,41 @@ import { PageBreakPlugin } from '@app/plate/plugins/page-break';
 import { PastePlugin } from '@app/plate/plugins/paste';
 import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { SelectionPlugin } from '@app/plate/plugins/selection';
+import { type NodeEntry, ParserPlugin } from '@udecode/plate';
 import { AlignPlugin } from '@udecode/plate-alignment/react';
 import { AutoformatPlugin } from '@udecode/plate-autoformat/react';
 import { BoldPlugin, ItalicPlugin, UnderlinePlugin } from '@udecode/plate-basic-marks/react';
 import { ExitBreakPlugin, SoftBreakPlugin } from '@udecode/plate-break/react';
-import { ParserPlugin, someNode } from '@udecode/plate-common';
-import { ParagraphPlugin } from '@udecode/plate-common/react';
 import { DocxPlugin } from '@udecode/plate-docx';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { HeadingPlugin } from '@udecode/plate-heading/react';
 import { IndentPlugin } from '@udecode/plate-indent/react';
 import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@udecode/plate-list/react';
+import { NodeIdPlugin } from '@udecode/plate-node-id';
 import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@udecode/plate-table/react';
+import { ParagraphPlugin } from '@udecode/plate/react';
 
 export const defaultPlugins = [
   ParserPlugin,
-  ParagraphPlugin.withComponent(Paragraph),
-  HeadingPlugin.configure({
-    options: { levels: 3 },
-    extendEditor: ({ editor }) => {
-      const { addMark } = editor;
-
-      editor.addMark = (key, value) => {
-        if (someNode(editor, { match: { type: [HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3] } })) {
-          return;
-        }
-
-        addMark(key, value);
-      };
-
-      return editor;
+  NodeIdPlugin.configure({
+    options: {
+      allow: [TableCellPlugin.key, TableRowPlugin.key],
+      filter: ([node]: NodeEntry) => Object.isExtensible(node),
     },
+  }),
+  ParagraphPlugin.withComponent(Paragraph),
+  HeadingPlugin.configure({ options: { levels: 3 } }).overrideEditor(({ editor }) => {
+    const { addMark } = editor.tf;
+
+    editor.tf.addMark = (key, value) => {
+      if (editor.api.some({ match: { type: [HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3] } })) {
+        return;
+      }
+
+      addMark(key, value);
+    };
+
+    return editor;
   }),
   BoldPlugin.configure({ render: { node: BoldLeaf } }),
   ItalicPlugin.configure({ render: { node: ItalicLeaf } }),

@@ -13,7 +13,7 @@ import {
 } from '@app/plate/types';
 import { isNodeEmpty, isOfElementTypesFn, nextPath } from '@app/plate/utils/queries';
 import { TableAdd } from '@styled-icons/fluentui-system-regular';
-import { BaseParagraphPlugin, findNode, insertNodes, removeNodes } from '@udecode/plate-common';
+import { BaseParagraphPlugin } from '@udecode/plate';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
 
@@ -25,9 +25,9 @@ export const InsertTableButton = () => {
 
   // Normal insertTable() leaves an empty paragraph above
   const onClick = () => {
-    const current = findNode<
+    const current = editor.api.node<
       ParagraphElement | H1Element | H2Element | H3Element | BulletListElement | NumberedListElement
-    >(editor, {
+    >({
       match: isOfElementTypesFn([
         BaseParagraphPlugin.node.type,
         HEADING_KEYS.h1,
@@ -38,10 +38,10 @@ export const InsertTableButton = () => {
       ]),
     });
 
-    insertNodes(editor, createTable(), { at: current !== undefined ? nextPath(current[1]) : undefined });
+    editor.tf.insertNodes(createTable(), { at: current !== undefined ? nextPath(current[1]) : undefined });
 
     if (current !== undefined && isNodeEmpty(current[0])) {
-      removeNodes(editor, { at: current[1] });
+      editor.tf.removeNodes({ at: current[1] });
     }
   };
 

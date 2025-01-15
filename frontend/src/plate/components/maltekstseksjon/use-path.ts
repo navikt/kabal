@@ -1,10 +1,10 @@
 import type { MaltekstseksjonElement } from '@app/plate/types';
-import { type PlateEditor, findPath } from '@udecode/plate-common/react';
+import type { PlateEditor } from '@udecode/plate/react';
 import { useEffect, useRef } from 'react';
 import { Path } from 'slate';
 
 export const usePath = (editor: PlateEditor, element: MaltekstseksjonElement) => {
-  const path = findPath(editor, element);
+  const path = editor.api.findPath(element);
   const previous = useRef<Path | undefined>(path);
 
   useEffect(() => {

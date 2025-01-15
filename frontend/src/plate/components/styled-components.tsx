@@ -1,5 +1,5 @@
 import { StyledParagraph } from '@app/plate/components/paragraph';
-import { useEditorReadOnly } from '@udecode/plate-common/react';
+import { useEditorReadOnly } from '@udecode/plate-core/react';
 import type { HtmlHTMLAttributes } from 'react';
 import { css, styled } from 'styled-components';
 

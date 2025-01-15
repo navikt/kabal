@@ -4,7 +4,7 @@ import { TEMPLATE_MAP } from '@app/plate/templates/templates';
 import type { MaltekstseksjonElement } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { TDescendant, Value } from '@udecode/plate-common';
+import type { Descendant, Value } from '@udecode/plate';
 import { useMemo } from 'react';
 
 const EMPTY_LIST: TemplateSections[] = [];
@@ -27,7 +27,7 @@ export const getTemplateSections = (templateId: TemplateIdEnum): GroupedTemplate
   return getSections(template.richText as Value);
 };
 
-const getSections = (children: TDescendant[]): GroupedTemplateSections => {
+const getSections = (children: Descendant[]): GroupedTemplateSections => {
   const used: TemplateSections[] = [];
   const unused: TemplateSections[] = [];
 

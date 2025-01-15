@@ -3,14 +3,13 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { type RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
 import { isInList, isInTable } from '@app/plate/utils/queries';
 import { TextIndentDecreaseLtr, TextIndentIncreaseLtr } from '@styled-icons/fluentui-system-regular';
-import { type TElement, isBlock, someNode } from '@udecode/plate-common';
 import { indent, outdent } from '@udecode/plate-indent';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
 import { BaseTablePlugin } from '@udecode/plate-table';
 
 const isIndented = (editor: RichTextEditor) =>
-  someNode<TElement>(editor, {
-    match: (n) => isBlock(editor, n) && 'indent' in n && typeof n.indent === 'number' && n.indent !== 0,
+  editor.api.some({
+    match: (n) => editor.api.isBlock(n) && 'indent' in n && typeof n.indent === 'number' && n.indent !== 0,
     universal: true,
   });
 

@@ -1,12 +1,5 @@
 import { ELEMENT_LABEL_CONTENT, ELEMENT_REGELVERK, UNCHANGEABLE, UNDELETABLE } from '@app/plate/plugins/element-types';
-import {
-  type NodeOf,
-  type TNodeEntry,
-  getNodeAncestors,
-  getParentNode,
-  isElement,
-  someNode,
-} from '@udecode/plate-common';
+import { ElementApi, NodeApi, type NodeEntry, type NodeOf } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
 
 export const isInUnchangeableElement = (editor: PlateEditor): boolean => {
@@ -14,15 +7,15 @@ export const isInUnchangeableElement = (editor: PlateEditor): boolean => {
     return false;
   }
 
-  return someNode(editor, { match: (n) => isElement(n) && UNCHANGEABLE.includes(n.type), voids: true });
+  return editor.api.some({ match: (n) => ElementApi.isElement(n) && UNCHANGEABLE.includes(n.type), voids: true });
 };
 
-export const isUndeletable = (editor: PlateEditor, nodeEntry: TNodeEntry<NodeOf<PlateEditor>> | undefined): boolean => {
+export const isUndeletable = (editor: PlateEditor, nodeEntry: NodeEntry<NodeOf<PlateEditor>> | undefined): boolean => {
   if (nodeEntry === undefined) {
     return false;
   }
 
-  const nodeIsUndeletable = isElement(nodeEntry[0]) && UNDELETABLE.includes(nodeEntry[0].type);
+  const nodeIsUndeletable = ElementApi.isElement(nodeEntry[0]) && UNDELETABLE.includes(nodeEntry[0].type);
 
   if (nodeIsUndeletable) {
     return true;
@@ -32,23 +25,22 @@ export const isUndeletable = (editor: PlateEditor, nodeEntry: TNodeEntry<NodeOf<
     return true;
   }
 
-  const parentNodeEntry = getParentNode(editor, nodeEntry[1]);
+  const parenNodeEntry = editor.api.parent(nodeEntry[1]);
   const containsLabelContent =
-    parentNodeEntry !== undefined &&
-    someNode(editor, { match: { type: ELEMENT_LABEL_CONTENT, at: parentNodeEntry[1] } });
+    parenNodeEntry !== undefined && editor.api.some({ match: { type: ELEMENT_LABEL_CONTENT, at: parenNodeEntry[1] } });
 
   return containsLabelContent;
 };
 
-const hasUndeletableAncestor = (editor: PlateEditor, descendantEntry: TNodeEntry<NodeOf<PlateEditor>>): boolean => {
-  const ancestorEntries = getNodeAncestors(editor, descendantEntry[1]);
+const hasUndeletableAncestor = (editor: PlateEditor, descendantEntry: NodeEntry<NodeOf<PlateEditor>>): boolean => {
+  const ancestorEntries = NodeApi.ancestors(editor, descendantEntry[1]);
 
   if (ancestorEntries === undefined) {
     return false;
   }
 
   for (const [node] of ancestorEntries) {
-    if (isElement(node) && UNDELETABLE.includes(node.type)) {
+    if (ElementApi.isElement(node) && UNDELETABLE.includes(node.type)) {
       return true;
     }
   }
@@ -56,4 +48,4 @@ const hasUndeletableAncestor = (editor: PlateEditor, descendantEntry: TNodeEntry
   return false;
 };
 
-export const isInRegelverk = (editor: PlateEditor): boolean => someNode(editor, { match: { type: ELEMENT_REGELVERK } });
+export const isInRegelverk = (editor: PlateEditor): boolean => editor.api.some({ match: { type: ELEMENT_REGELVERK } });

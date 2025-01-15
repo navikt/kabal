@@ -1,12 +1,4 @@
-import {
-  type TText,
-  findNode,
-  getNextNode,
-  getNodeParent,
-  getPreviousNode,
-  isText,
-  setSelection as plateSetSelection,
-} from '@udecode/plate-common';
+import { NodeApi, type TText, TextApi } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
 import type { KeyboardEvent } from 'react';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
@@ -15,16 +7,16 @@ export const handleArrows = (editor: PlateEditor, e: KeyboardEvent) => {
   const isArrowDown = e.key === 'ArrowDown';
 
   if (isArrowDown || e.key === 'ArrowUp') {
-    const current = findNode(editor, { match: { type: ELEMENT_PLACEHOLDER } });
+    const current = editor.api.node({ match: { type: ELEMENT_PLACEHOLDER } });
 
     if (current === undefined) {
       return true;
     }
 
     const [currentNode] = current;
-    const getNextOrPreviousNode = isArrowDown ? getNextNode : getPreviousNode;
-    const textNode = getNextOrPreviousNode<TText>(editor, {
-      match: (n, p) => isText(n) && getNodeParent(editor, p) !== currentNode,
+    const getNextOrPreviousNode = isArrowDown ? editor.api.next : editor.api.previous;
+    const textNode = getNextOrPreviousNode<TText>({
+      match: (n, p) => TextApi.isText(n) && NodeApi.parent(editor, p) !== currentNode,
     });
 
     if (textNode === undefined) {
@@ -36,7 +28,7 @@ export const handleArrows = (editor: PlateEditor, e: KeyboardEvent) => {
 
     e.preventDefault();
 
-    plateSetSelection(editor, { anchor: { path, offset }, focus: { path, offset } });
+    editor.tf.setSelection({ anchor: { path, offset }, focus: { path, offset } });
 
     return true;
   }

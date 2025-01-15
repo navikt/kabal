@@ -4,7 +4,7 @@ import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-ed
 import { SPELL_CHECK_LANGUAGES, useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
-import { type KabalValue, type RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
+import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { CalendarIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
@@ -21,7 +21,7 @@ type Props = NonNullableGodFormulering & {
 export const GodFormulering = ({ title, richText, publishedDateTime, isFocused, onClick, id, language }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const mainEditor = useMyPlateEditorState();
+  const mainEditor = useMyPlateEditorRef();
   const primaryLanguage = useSmartEditorLanguage();
 
   const editor = usePlateEditor<KabalValue, (typeof previewPlugins)[0]>({

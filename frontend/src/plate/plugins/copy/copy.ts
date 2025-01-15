@@ -26,26 +26,22 @@ import type {
   SignatureElement,
 } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
-import {
-  type TDescendant,
-  type TNodeEntry,
-  type TText,
-  getNodeFragment,
-  getNodeTexts,
-  isCollapsed,
-  isElement,
-} from '@udecode/plate-common';
-import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
-import { Range } from 'slate';
+import { ElementApi, NodeApi, RangeApi, type TText, TextApi } from '@udecode/plate';
+import { type OverrideEditor, type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
+import { type Descendant, type NodeEntry, Range } from 'slate';
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-const cleanNodes = (editor: PlateEditor, node: TDescendant | TDescendant[]): TDescendant | TDescendant[] => {
+const cleanNodes = (editor: PlateEditor, node: Descendant | Descendant[]): Descendant | Descendant[] => {
   if (Array.isArray(node)) {
     return node.flatMap((child) => cleanNodes(editor, child));
   }
 
-  if (!isElement(node)) {
+  if (TextApi.isText(node)) {
     return removeCommentAndBookmarkMarks(node);
+  }
+
+  if (!ElementApi.isElement(node)) {
+    return node;
   }
 
   if (node.type === ELEMENT_EMPTY_VOID) {
@@ -99,10 +95,10 @@ const cleanNodes = (editor: PlateEditor, node: TDescendant | TDescendant[]): TDe
   };
 };
 
-const withOverrides = (editor: PlateEditor) => {
-  const { setFragmentData, insertFragment, insertData } = editor;
+const withOverrides: OverrideEditor = ({ editor }) => {
+  const { setFragmentData, insertFragment, insertData } = editor.tf;
 
-  editor.insertData = (data: DataTransfer) => {
+  editor.tf.insertData = (data: DataTransfer) => {
     const plainText = data.getData('text/plain');
     const html = data.getData('text/html');
 
@@ -123,16 +119,20 @@ const withOverrides = (editor: PlateEditor) => {
     return insertData(data);
   };
 
-  editor.insertFragment = (descendants: TDescendant[]) => {
+  editor.tf.insertFragment = (descendants: Descendant[]) => {
     const nodes = cleanNodes(editor, descendants);
 
-    return insertFragment(Array.isArray(nodes) ? nodes : [nodes]);
+    const fragment = (Array.isArray(nodes) ? nodes : [nodes]).filter(
+      (node) => ElementApi.isElement(node) || TextApi.isText(node),
+    );
+
+    return insertFragment(fragment);
   };
 
-  editor.setFragmentData = (data, originEvent) => {
+  editor.tf.setFragmentData = (data, originEvent) => {
     const { selection } = editor;
 
-    if (selection === null || isCollapsed(selection)) {
+    if (selection === null || RangeApi.isCollapsed(selection)) {
       setFragmentData(data, originEvent);
 
       return;
@@ -141,11 +141,11 @@ const withOverrides = (editor: PlateEditor) => {
     const start = Range.start(selection);
     const end = Range.end(selection);
 
-    const slateFragments = cleanNodes(editor, getNodeFragment(editor, selection));
+    const slateFragments = cleanNodes(editor, NodeApi.fragment(editor, selection));
 
     data.setData('application/x-slate-fragment', window.btoa(encodeURIComponent(JSON.stringify(slateFragments))));
 
-    const textsGenerator = getNodeTexts(editor, { from: start.path, to: end.path });
+    const textsGenerator = NodeApi.texts(editor, { from: start.path, to: end.path });
     const textEntries = [...textsGenerator];
 
     if (textEntries.length === 0) {
@@ -166,7 +166,7 @@ const withOverrides = (editor: PlateEditor) => {
     const [firstNode, firstPath] = firstEntry;
     const [lastNode, lastPath] = lastEntry;
 
-    const selectedTextEntries: TNodeEntry<FormattedText | TText | { text: '' }>[] =
+    const selectedTextEntries: NodeEntry<FormattedText | TText | { text: '' }>[] =
       firstEntry === lastEntry
         ? [[{ ...firstNode, text: firstNode.text.slice(start.offset, end.offset) }, firstPath]]
         : [
@@ -196,7 +196,4 @@ const removeCommentAndBookmarkMarks = (textNode: TText) => {
   return cleanTextNode;
 };
 
-export const CopyPlugin = createPlatePlugin({
-  key: 'copy',
-  extendEditor: ({ editor }) => withOverrides(editor),
-});
+export const CopyPlugin = createPlatePlugin({ key: 'copy' }).overrideEditor(withOverrides);
