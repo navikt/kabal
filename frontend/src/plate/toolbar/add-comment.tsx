@@ -3,7 +3,7 @@ import { MOD_KEY } from '@app/keys';
 import { useSelection } from '@app/plate/hooks/use-selection';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { ChatElipsisIcon } from '@navikt/aksel-icons';
-import { isCollapsed } from '@udecode/plate-common';
+import { RangeApi } from '@udecode/plate';
 import { useContext } from 'react';
 
 export const CommentsButton = () => {
@@ -17,7 +17,7 @@ export const CommentsButton = () => {
       icon={<ChatElipsisIcon width={24} />}
       onClick={() => setNewCommentSelection(selection)}
       active={newCommentSelection !== null}
-      disabled={selection === null || isCollapsed(selection)}
+      disabled={selection === null || RangeApi.isCollapsed(selection)}
     />
   );
 };

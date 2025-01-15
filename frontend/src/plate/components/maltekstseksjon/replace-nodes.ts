@@ -1,12 +1,5 @@
 import { createEmptyVoid } from '@app/plate/templates/helpers';
 import type { MaltekstElement, MaltekstseksjonElement, RedigerbarMaltekstElement } from '@app/plate/types';
-import {
-  replaceNodeChildren,
-  setNodes,
-  unsetNodes,
-  withoutNormalizing,
-  withoutSavingHistory,
-} from '@udecode/plate-common';
 import type { PlateEditor } from '@udecode/plate-core/react';
 import type { Path } from 'slate';
 
@@ -17,28 +10,28 @@ export const replaceNodes = (
   textIdList: string[] | null,
   nodes: (MaltekstElement | RedigerbarMaltekstElement)[] | null,
 ) => {
-  if (path === undefined || !editor.hasPath(path)) {
+  if (path === undefined || !editor.api.hasPath(path)) {
     return;
   }
 
-  withoutSavingHistory(editor, () => {
-    withoutNormalizing(editor, () => {
+  editor.tf.withoutSaving(() => {
+    editor.tf.withoutNormalizing(() => {
       if (id === null) {
-        unsetNodes<MaltekstseksjonElement>(editor, 'id', { at: path });
+        editor.tf.unsetNodes<MaltekstseksjonElement>('id', { at: path });
       } else {
-        setNodes<MaltekstseksjonElement>(editor, { id }, { at: path });
+        editor.tf.setNodes<MaltekstseksjonElement>({ id }, { at: path });
       }
 
       if (textIdList === null) {
-        unsetNodes<MaltekstseksjonElement>(editor, 'textIdList', { at: path });
+        editor.tf.unsetNodes<MaltekstseksjonElement>('textIdList', { at: path });
       } else {
-        setNodes<MaltekstseksjonElement>(editor, { textIdList }, { at: path });
+        editor.tf.setNodes<MaltekstseksjonElement>({ textIdList }, { at: path });
       }
 
       if (nodes === null) {
-        replaceNodeChildren(editor, { at: path, nodes: [createEmptyVoid()] });
+        editor.tf.replaceNodes([createEmptyVoid()], { at: path, children: true });
       } else {
-        replaceNodeChildren(editor, { at: path, nodes });
+        editor.tf.replaceNodes(nodes, { at: path, children: true });
       }
     });
   });

@@ -2,34 +2,32 @@ import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { hasOwn } from '@app/functions/object';
 import { CommentLeaf } from '@app/plate/leaf/comment';
 import type { FormattedText } from '@app/plate/types';
-import { findNode, isText, setNodes, unsetNodes, withoutNormalizing } from '@udecode/plate-common';
+import { TextApi } from '@udecode/plate';
 import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
 
 export const CommentsPlugin = createPlatePlugin({
   key: 'comments',
   node: { isLeaf: true },
   extendEditor: ({ editor }) => {
-    const { insertBreak } = editor;
+    const { insertBreak, normalizeNode } = editor.tf;
 
-    editor.insertBreak = () => {
+    editor.tf.insertBreak = () => {
       removeCommentMarks(editor);
 
       insertBreak();
     };
 
-    const { normalizeNode } = editor;
-
-    editor.normalizeNode = (entry) => {
+    editor.tf.normalizeNode = (entry) => {
       const [node, path] = entry;
 
-      if (isText(node)) {
+      if (TextApi.isText(node)) {
         const hasCommentMark = hasOwn(node, CommentsPlugin.key) && node[CommentsPlugin.key] === true;
         const shouldHaveCommentMark = Object.keys(node).some((key) => key.startsWith(COMMENT_PREFIX));
 
         if (hasCommentMark && !shouldHaveCommentMark) {
-          unsetNodes(editor, CommentsPlugin.key, { at: path, match: (n) => n === node, split: true });
+          editor.tf.unsetNodes(CommentsPlugin.key, { at: path, match: (n) => n === node, split: true });
         } else if (!hasCommentMark && shouldHaveCommentMark) {
-          setNodes(editor, { [CommentsPlugin.key]: true }, { at: path, match: (n) => n === node, split: true });
+          editor.tf.setNodes({ [CommentsPlugin.key]: true }, { at: path, match: (n) => n === node, split: true });
         }
       }
 
@@ -51,7 +49,7 @@ export const CommentsPlugin = createPlatePlugin({
 });
 
 const removeCommentMarks = (editor: PlateEditor) => {
-  const entry = findNode<FormattedText>(editor, { match: isText });
+  const entry = editor.api.node<FormattedText>({ match: TextApi.isText });
 
   if (entry === undefined) {
     return;
@@ -59,10 +57,10 @@ const removeCommentMarks = (editor: PlateEditor) => {
 
   const [node] = entry;
 
-  withoutNormalizing(editor, () => {
+  editor.tf.withoutNormalizing(() => {
     for (const key of Object.keys(node)) {
       if (key.startsWith(COMMENT_PREFIX)) {
-        editor.removeMark(key);
+        editor.tf.removeMark(key);
       }
     }
   });

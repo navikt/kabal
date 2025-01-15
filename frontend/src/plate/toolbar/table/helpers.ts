@@ -1,6 +1,6 @@
 import type { RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
 import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
-import { type TNode, type TNodeEntry, findNode, getParentNode, someNode } from '@udecode/plate-common';
+import type { NodeEntry, TNode } from '@udecode/plate';
 import { BaseTableCellPlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 import { Path } from 'slate';
 
@@ -8,8 +8,8 @@ const findPath = (editor: RichTextEditor, node: TNode | undefined = undefined): 
   node === undefined ? undefined : findPath(editor, node);
 
 // Cell helpers
-export const getCurrentCell = (editor: RichTextEditor): TNodeEntry<TableCellElement> | undefined =>
-  findNode(editor, { match: isOfElementTypeFn(BaseTableCellPlugin.node.type) });
+export const getCurrentCell = (editor: RichTextEditor): NodeEntry<TableCellElement> | undefined =>
+  editor.api.node({ match: isOfElementTypeFn(BaseTableCellPlugin.node.type) });
 
 export const getCellColumnOffset = (
   editor: RichTextEditor,
@@ -30,18 +30,18 @@ export const getCurrentRow = (
   editor: RichTextEditor,
   currentCell: TableCellElement | undefined = getCurrentCell(editor)?.[0],
   currentCellPath = findPath(editor, currentCell),
-): TNodeEntry<TableRowElement> | undefined => {
+): NodeEntry<TableRowElement> | undefined => {
   if (currentCellPath === undefined) {
     return undefined;
   }
 
-  const parentNodeEntry = getParentNode(editor, currentCellPath);
+  const parenNodeEntry = editor.api.parent(currentCellPath);
 
-  if (parentNodeEntry === undefined) {
+  if (parenNodeEntry === undefined) {
     return undefined;
   }
 
-  const [currentRow, currentRowPath] = parentNodeEntry;
+  const [currentRow, currentRowPath] = parenNodeEntry;
 
   if (!isOfElementType<TableRowElement>(currentRow, BaseTableRowPlugin.node.type)) {
     return undefined;
@@ -53,18 +53,18 @@ export const getCurrentRow = (
 export const getNextRow = (
   editor: RichTextEditor,
   currentRowPath: Path | undefined = getCurrentRow(editor)?.[1],
-): TNodeEntry<TableRowElement> | undefined => {
+): NodeEntry<TableRowElement> | undefined => {
   if (currentRowPath === undefined) {
     return undefined;
   }
 
   const nextRowPath = Path.next(currentRowPath);
 
-  if (!someNode(editor, { at: nextRowPath })) {
+  if (!editor.api.some({ at: nextRowPath })) {
     return undefined;
   }
 
-  const targetRowEntry = findNode(editor, { at: nextRowPath });
+  const targetRowEntry = editor.api.node({ at: nextRowPath });
 
   if (targetRowEntry === undefined) {
     return undefined;
@@ -82,7 +82,7 @@ export const getNextRow = (
 export const getPreviousRow = (
   editor: RichTextEditor,
   currentRowPath: Path | undefined = getCurrentRow(editor)?.[1],
-): TNodeEntry<TableRowElement> | undefined => {
+): NodeEntry<TableRowElement> | undefined => {
   if (currentRowPath === undefined) {
     return undefined;
   }
@@ -93,11 +93,11 @@ export const getPreviousRow = (
 
   const nextRowPath = Path.previous(currentRowPath);
 
-  if (!someNode(editor, { at: nextRowPath })) {
+  if (!editor.api.some({ at: nextRowPath })) {
     return undefined;
   }
 
-  const targetRowEntry = findNode(editor, { at: nextRowPath });
+  const targetRowEntry = editor.api.node({ at: nextRowPath });
 
   if (targetRowEntry === undefined) {
     return undefined;

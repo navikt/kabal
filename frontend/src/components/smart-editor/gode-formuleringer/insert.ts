@@ -1,16 +1,15 @@
 import type { RichTextEditor } from '@app/plate/types';
-import { type Value, insertFragment } from '@udecode/plate-common';
-import { focusEditor } from '@udecode/plate-common/react';
+import type { Value } from '@udecode/plate';
 
 export const insertGodFormulering = (editor: RichTextEditor, content: Value) => {
   if (!isAvailable(editor)) {
     return;
   }
 
-  insertFragment(editor, structuredClone(content), { voids: false });
+  editor.tf.insertFragment(structuredClone(content), { voids: false });
 
   setTimeout(() => {
-    focusEditor(editor);
+    editor.tf.focus();
   });
 };
 

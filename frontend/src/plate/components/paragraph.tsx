@@ -1,7 +1,7 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import type { ParagraphElement, PlaceholderElement } from '@app/plate/types';
-import { isText } from '@udecode/plate-common';
-import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
+import { TextApi } from '@udecode/plate';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { type ElementRef, forwardRef } from 'react';
 import { styled } from 'styled-components';
 
@@ -45,7 +45,7 @@ export const StyledParagraph = styled.p<{ $isEmpty: boolean }>`
 
 const isEmpty = (element: ParagraphElement | PlaceholderElement) => {
   for (const child of element.children) {
-    if (isText(child)) {
+    if (TextApi.isText(child)) {
       if (child.text.length > 0) {
         return false;
       }

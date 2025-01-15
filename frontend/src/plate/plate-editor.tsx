@@ -1,9 +1,8 @@
 import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { FormattedText } from '@app/plate/types';
-import { getNodeAncestors } from '@udecode/plate-common';
+import { NodeApi } from '@udecode/plate';
 import { PlateContent, type PlateContentProps, type PlateEditor, useEditorRef } from '@udecode/plate-core/react';
-import { findPath } from '@udecode/slate-react';
 
 interface Props extends PlateContentProps {
   lang: SpellCheckLanguage;
@@ -32,13 +31,13 @@ const contentEditable = (editor: PlateEditor, isReadOnly: boolean, text: Formatt
     return false;
   }
 
-  const path = findPath(editor, text);
+  const path = editor.api.findPath(text);
 
   if (path === undefined) {
     return false;
   }
 
-  const ancestorEntries = getNodeAncestors(editor, path, { reverse: true });
+  const ancestorEntries = NodeApi.ancestors(editor, path, { reverse: true });
 
   if (ancestorEntries === undefined) {
     return false;

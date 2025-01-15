@@ -1,6 +1,6 @@
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import type { FormattedText } from '@app/plate/types';
-import { PlateLeaf, type PlateLeafProps } from '@udecode/plate-common/react';
+import { PlateLeaf, type PlateLeafProps } from '@udecode/plate/react';
 import { useMemo } from 'react';
 
 export const BookmarkLeaf = (props: PlateLeafProps<FormattedText>) => {

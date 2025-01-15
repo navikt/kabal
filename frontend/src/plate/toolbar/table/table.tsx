@@ -8,31 +8,19 @@ import { AddRowBelowIcon } from '@app/plate/toolbar/table/icons/add-row-below';
 import { DeleteColumnIcon } from '@app/plate/toolbar/table/icons/delete-column';
 import { DeleteRowIcon } from '@app/plate/toolbar/table/icons/delete-row';
 import { MergeCellsIcon } from '@app/plate/toolbar/table/icons/merge-cells';
-import { mergeCells } from '@app/plate/toolbar/table/merge-cells';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { type TableCellElement, useMyPlateEditorRef } from '@app/plate/types';
+import { useMyPlateEditorRef } from '@app/plate/types';
 import { isOfElementTypeFn, nextPath } from '@app/plate/utils/queries';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
-import {
-  findNode,
-  insertElements,
-  isElement,
-  select,
-  withoutNormalizing,
-  withoutSavingHistory,
-} from '@udecode/plate-common';
-import {
-  BaseTableCellPlugin,
-  BaseTablePlugin,
-  BaseTableRowPlugin,
-  deleteTable,
-  insertTableColumn,
-  insertTableRow,
-} from '@udecode/plate-table';
-import { deleteColumn, deleteRow } from '@udecode/plate-table';
+import { ElementApi } from '@udecode/plate';
+import { BaseTablePlugin, deleteTable } from '@udecode/plate-table';
+import { TablePlugin } from '@udecode/plate-table/react';
+import { useEditorPlugin } from '@udecode/plate/react';
 
 export const TableButtons = () => {
+  const { tf } = useEditorPlugin(TablePlugin);
+
   const editor = useMyPlateEditorRef();
   const unchangeable = useIsUnchangeable();
 
@@ -40,7 +28,7 @@ export const TableButtons = () => {
     return null;
   }
 
-  const activeNode = findNode(editor, { match: (n) => isElement(n) && n.type === BaseTablePlugin.node.type });
+  const activeNode = editor.api.node({ match: (n) => ElementApi.isElement(n) && n.type === BaseTablePlugin.node.type });
 
   if (activeNode === undefined) {
     return null;
@@ -50,64 +38,40 @@ export const TableButtons = () => {
     <>
       <ToolbarIconButton
         label="Legg til rad over"
-        onClick={() => {
-          const activeRow = findNode(editor, { match: (n) => isElement(n) && n.type === BaseTableRowPlugin.node.type });
-
-          if (activeRow === undefined) {
-            return;
-          }
-
-          insertTableRow(editor, { at: activeRow[1], disableSelect: true });
-        }}
+        onClick={() => tf.insert.tableRow({ before: true })}
         icon={<AddRowAboveIcon aria-hidden />}
       />
       <ToolbarIconButton
         label="Legg til rad under"
-        onClick={() => insertTableRow(editor)}
+        onClick={() => tf.insert.tableRow({ before: false })}
         icon={<AddRowBelowIcon aria-hidden />}
       />
 
       <ToolbarIconButton
         label="Legg til kolonne til venstre"
         onClick={() => {
-          const activeTd = findNode(editor, { match: (n) => isElement(n) && n.type === BaseTableCellPlugin.node.type });
-
-          if (activeTd === undefined) {
-            return;
-          }
-
-          insertTableColumn(editor, { at: activeTd[1], disableSelect: true });
+          tf.insert.tableColumn({ before: true });
         }}
         icon={<AddColumnLeftIcon aria-hidden />}
       />
 
       <ToolbarIconButton
         label="Legg til kolonne til høyre"
-        onClick={() => insertTableColumn(editor)}
+        onClick={() => tf.insert.tableColumn({ before: false })}
         icon={<AddColumnRightIcon aria-hidden />}
       />
 
-      <ToolbarIconButton label="Fjern rad" onClick={() => deleteRow(editor)} icon={<DeleteRowIcon aria-hidden />} />
+      <ToolbarIconButton label="Fjern rad" onClick={tf.remove.tableRow} icon={<DeleteRowIcon aria-hidden />} />
 
       <ToolbarIconButton
         label="Fjern kolonne"
-        onClick={() => deleteColumn(editor)}
+        onClick={tf.remove.tableColumn}
         icon={<DeleteColumnIcon aria-hidden />}
       />
 
       <ToolbarIconButton
         label="Slå sammen med celle til høyre"
-        onClick={() => {
-          const entry = findNode<TableCellElement>(editor, {
-            match: (n) => isElement(n) && n.type === BaseTableCellPlugin.node.type,
-          });
-
-          if (entry === undefined) {
-            return;
-          }
-
-          mergeCells(editor, entry[0]);
-        }}
+        onClick={tf.table.merge}
         icon={<MergeCellsIcon aria-hidden />}
       />
 
@@ -116,13 +80,13 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Legg til nytt avsnitt over"
         onClick={() => {
-          const entry = findNode(editor, { match: isOfElementTypeFn(BaseTablePlugin.node.type) });
+          const entry = editor.api.node({ match: isOfElementTypeFn(BaseTablePlugin.node.type) });
 
           if (entry === undefined) {
             return;
           }
 
-          insertElements(editor, createSimpleParagraph(), { at: entry[1] });
+          editor.tf.insertNodes(createSimpleParagraph(), { at: entry[1] });
         }}
         icon={<TextAddSpaceBefore width={24} aria-hidden />}
       />
@@ -130,13 +94,13 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Legg til nytt avsnitt under"
         onClick={() => {
-          const entry = findNode(editor, { match: isOfElementTypeFn(BaseTablePlugin.node.type) });
+          const entry = editor.api.node({ match: isOfElementTypeFn(BaseTablePlugin.node.type) });
 
           if (entry === undefined) {
             return;
           }
 
-          insertElements(editor, createSimpleParagraph(), { at: nextPath(entry[1]) });
+          editor.tf.insertNodes(createSimpleParagraph(), { at: nextPath(entry[1]) });
         }}
         icon={<TextAddSpaceAfter width={24} aria-hidden />}
       />
@@ -146,19 +110,19 @@ export const TableButtons = () => {
       <ToolbarIconButton
         label="Slett tabell"
         onClick={() => {
-          const entry = findNode(editor, { match: isOfElementTypeFn(BaseTablePlugin.node.type) });
+          const entry = editor.api.node({ match: isOfElementTypeFn(BaseTablePlugin.node.type) });
 
           if (entry === undefined) {
             return;
           }
 
-          withoutNormalizing(editor, () => {
+          editor.tf.withoutNormalizing(() => {
             const [, path] = entry;
-            withoutSavingHistory(editor, () => {
-              insertElements(editor, createSimpleParagraph(), { at: path });
+            editor.tf.withoutSaving(() => {
+              editor.tf.insertNodes(createSimpleParagraph(), { at: path });
             });
             deleteTable(editor);
-            select(editor, path);
+            editor.tf.select(path);
           });
         }}
         icon={<TrashIcon aria-hidden />}

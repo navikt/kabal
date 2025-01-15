@@ -1,5 +1,5 @@
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { type TNode, isNodeList, isText } from '@udecode/plate-common';
+import { NodeApi, type TNode, TextApi } from '@udecode/plate';
 
 export const nodesEquals = (a: TNode[], b: TNode[]): boolean => {
   if (a.length !== b.length) {
@@ -13,8 +13,8 @@ export const nodesEquals = (a: TNode[], b: TNode[]): boolean => {
       return false;
     }
 
-    if (isText(n)) {
-      if (!isText(n2)) {
+    if (TextApi.isText(n)) {
+      if (!TextApi.isText(n2)) {
         return false;
       }
 
@@ -29,7 +29,7 @@ export const nodesEquals = (a: TNode[], b: TNode[]): boolean => {
       return true;
     }
 
-    if (isNodeList(n2.children) && isNodeList(n.children)) {
+    if (NodeApi.isNodeList(n2.children) && NodeApi.isNodeList(n.children)) {
       return nodesEquals(n.children, n2.children);
     }
 

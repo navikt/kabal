@@ -35,17 +35,8 @@ import {
 } from '@app/plate/types';
 import { isOfElementTypesFn } from '@app/plate/utils/queries';
 import { LogLevel } from '@grafana/faro-web-sdk';
-import {
-  BaseParagraphPlugin,
-  type TNode,
-  type TPath,
-  getNode,
-  getParentNode,
-  insertNodes,
-  isEditor,
-  isElement,
-  setNodes,
-} from '@udecode/plate-common';
+import { ElementApi, NodeApi, type Path, type TNode } from '@udecode/plate';
+import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import {
@@ -56,7 +47,7 @@ import {
 } from '@udecode/plate-list';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 import { TableCellPlugin } from '@udecode/plate-table/react';
-import { Scrubber } from 'slate';
+import { Scrubber, isEditor } from 'slate';
 
 const module = 'normalize';
 
@@ -72,11 +63,11 @@ const isTopLevelElement = isOfElementTypesFn<TopLevelElement>([
 export const normalizeNodePlugin = createPlatePlugin({
   key: 'normalize',
   extendEditor: ({ editor }) => {
-    const { normalizeNode } = editor;
+    const { normalizeNode } = editor.tf;
 
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-    editor.normalizeNode = ([node, path], opts) => {
-      if (!isElement(node)) {
+    editor.tf.normalizeNode = ([node, path], opts) => {
+      if (!ElementApi.isElement(node)) {
         return normalizeNode([node, path], opts);
       }
 
@@ -85,7 +76,7 @@ export const normalizeNodePlugin = createPlatePlugin({
 
         pushLog(`Looking for parent node at: ${JSON.stringify(path)}`, { context: { module } });
 
-        const parentEntry = getParentNode(editor, path);
+        const parentEntry = editor.api.parent(path);
 
         pushLog(`Found parent entry: ${Scrubber.stringify(parentEntry)})`, { context: { module } });
 
@@ -94,8 +85,7 @@ export const normalizeNodePlugin = createPlatePlugin({
         if (parentEntry === undefined) {
           pushLog('Missing node type, but no parent. Setting type to paragraph.', options, LogLevel.WARN);
 
-          return setNodes(
-            editor,
+          return editor.tf.setNodes(
             { type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT },
             { at: path, match: (n) => n === node },
           );
@@ -110,8 +100,7 @@ export const normalizeNodePlugin = createPlatePlugin({
             LogLevel.WARN,
           );
 
-          return setNodes(
-            editor,
+          return editor.tf.setNodes(
             { type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT },
             { at: [], match: (n) => n === node },
           );
@@ -126,22 +115,20 @@ export const normalizeNodePlugin = createPlatePlugin({
             LogLevel.WARN,
           );
 
-          return setNodes(
-            editor,
+          return editor.tf.setNodes(
             { type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT },
             { match: (n) => n === node },
           );
         }
 
-        if (!isElement(parentNode)) {
+        if (!ElementApi.isElement(parentNode)) {
           pushLog(
             'Missing node type, but parent node is not element. Setting parent type to paragraph.',
             options,
             LogLevel.WARN,
           );
 
-          return setNodes(
-            editor,
+          return editor.tf.setNodes(
             { type: BaseParagraphPlugin.node.type },
             { at: path, match: (n) => n === parentNode },
           );
@@ -150,8 +137,7 @@ export const normalizeNodePlugin = createPlatePlugin({
         if (parentNode.type === BaseListItemPlugin.node.type) {
           pushLog('Normalized missing LIC', options);
 
-          return setNodes(
-            editor,
+          return editor.tf.setNodes(
             { type: BaseListItemContentPlugin.node.type },
             { at: path, match: (n) => n === node },
           );
@@ -174,24 +160,24 @@ export const normalizeNodePlugin = createPlatePlugin({
         switch (node.type) {
           case BaseBulletedListPlugin.node.type:
           case BaseNumberedListPlugin.node.type:
-            return insertNodes(editor, createSimpleListItem(), options);
+            return editor.tf.insertNodes(createSimpleListItem(), options);
           case BaseListItemPlugin.node.type:
-            return insertNodes(editor, createSimpleListItemContainer(), options);
+            return editor.tf.insertNodes(createSimpleListItemContainer(), options);
           case BaseTablePlugin.node.type:
-            return insertNodes(editor, createTableRow(), options);
+            return editor.tf.insertNodes(createTableRow(), options);
           case BaseTableRowPlugin.node.type:
-            return insertNodes(editor, createTableCell(), options);
+            return editor.tf.insertNodes(createTableCell(), options);
           case BaseTableCellPlugin.node.type:
-            return insertNodes(editor, createSimpleParagraph(), options);
+            return editor.tf.insertNodes(createSimpleParagraph(), options);
           case ELEMENT_REDIGERBAR_MALTEKST:
-            return insertNodes(editor, createSimpleParagraph(), options);
+            return editor.tf.insertNodes(createSimpleParagraph(), options);
           case ELEMENT_MALTEKST:
           case ELEMENT_MALTEKSTSEKSJON:
-            return insertNodes(editor, createEmptyVoid(), options);
+            return editor.tf.insertNodes(createEmptyVoid(), options);
           case ELEMENT_REGELVERK_CONTAINER:
-            return insertNodes(editor, createSimpleParagraph(), options);
+            return editor.tf.insertNodes(createSimpleParagraph(), options);
           case ELEMENT_REGELVERK:
-            return insertNodes(editor, createRegelverkContainer(), options);
+            return editor.tf.insertNodes(createRegelverkContainer(), options);
           // Use extensive case instead of default in order to avoid inserting wrong node type when a new element type is introduced
           case BaseParagraphPlugin.node.type:
           case HEADING_KEYS.h1:
@@ -206,7 +192,7 @@ export const normalizeNodePlugin = createPlatePlugin({
           case ELEMENT_FOOTER:
           case ELEMENT_LABEL_CONTENT:
           case ELEMENT_SIGNATURE:
-            return insertNodes(editor, { text: '' }, options);
+            return editor.tf.insertNodes({ text: '' }, options);
         }
       }
 
@@ -217,10 +203,10 @@ export const normalizeNodePlugin = createPlatePlugin({
   },
 });
 
-const pushNodeEvent = (editor: PlateEditor, node: TNode, path: TPath, name: string) => {
+const pushNodeEvent = (editor: PlateEditor, node: TNode, path: Path, name: string) => {
   const [highestAncestorPath] = path;
   const highestAncestor =
-    highestAncestorPath === undefined ? undefined : Scrubber.stringify(getNode(editor, [highestAncestorPath]));
+    highestAncestorPath === undefined ? undefined : Scrubber.stringify(NodeApi.get(editor, [highestAncestorPath]));
 
   pushEvent(name, 'smart-editor', {
     ancestor: JSON.stringify(highestAncestor),

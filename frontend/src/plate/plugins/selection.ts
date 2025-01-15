@@ -1,24 +1,26 @@
-import { getNode, getSelectionText, isText } from '@udecode/plate-common';
+import { NodeApi, RangeApi, TextApi } from '@udecode/plate';
 import { createPlatePlugin } from '@udecode/plate-core/react';
 import { Range } from 'slate';
 
 export const SelectionPlugin = createPlatePlugin({
   key: 'selection',
   extendEditor: ({ editor }) => {
-    const { select } = editor;
+    const { select } = editor.tf;
 
-    editor.select = (target) => {
-      if (!Range.isRange(target) || Range.isCollapsed(target)) {
+    editor.tf.select = (target) => {
+      // TODO: Is target same as editor.selection?
+      if (!Range.isRange(target) || RangeApi.isCollapsed(target)) {
         return select(target);
       }
 
-      if (!containsMultipleWords(getSelectionText(editor))) {
+      if (!containsMultipleWords(editor.api.string())) {
         return select(target);
       }
 
-      const node = getNode(editor, target.anchor.path);
+      // TODO: Is editor correct root?
+      const node = NodeApi.get(editor, target.anchor.path);
 
-      if (!isText(node)) {
+      if (!TextApi.isText(node)) {
         return select(target);
       }
 

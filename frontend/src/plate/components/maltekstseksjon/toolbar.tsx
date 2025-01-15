@@ -4,7 +4,7 @@ import { MaltekstseksjonToolbar } from '@app/plate/components/styled-components'
 import type { MaltekstseksjonElement } from '@app/plate/types';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import type { PlateEditor } from '@udecode/plate-common/react';
+import type { PlateEditor } from '@udecode/plate/react';
 import type { Path } from 'slate';
 
 interface Props {

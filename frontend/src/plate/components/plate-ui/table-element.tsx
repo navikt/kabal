@@ -1,26 +1,23 @@
-import { ptToEm, pxToEm } from '@app/plate/components/get-scaled-em';
+import { ptToEm } from '@app/plate/components/get-scaled-em';
 import type { TableElement as ITableElement } from '@app/plate/types';
-import { PlateElement, type PlateElementProps, withHOC, withRef } from '@udecode/plate-common/react';
-import { TableProvider, useTableElement, useTableElementState } from '@udecode/plate-table/react';
+import { TableProvider, useTableElement } from '@udecode/plate-table/react';
+import { withHOC } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps, withRef } from '@udecode/plate/react';
 import { styled } from 'styled-components';
 
 export const TableElement = withHOC(
   TableProvider,
-  withRef<typeof PlateElement, PlateElementProps<ITableElement>>(({ className, children, element, ...props }, ref) => {
-    const { colSizes, minColumnWidth: minWidth } = useTableElementState();
-    const { props: tableProps, colGroupProps } = useTableElement();
+  withRef<typeof PlateElement, PlateElementProps<ITableElement>>(({ children, ...props }, ref) => {
+    const { props: tableProps } = useTableElement();
 
     return (
       <PlateElement
         as={TableStyled}
         ref={ref}
-        className={className}
-        {...tableProps}
         {...props}
-        style={{ marginLeft: ptToEm(24 * (element.indent ?? 0)) }}
-        element={element}
+        style={{ marginLeft: ptToEm(24 * (props.element.indent ?? 0)) }}
       >
-        <colgroup {...colGroupProps}>
+        {/* <colgroup {...colGroupProps}>
           {colSizes.map((width, i) =>
             typeof width !== 'number' ? null : (
               <col
@@ -33,9 +30,11 @@ export const TableElement = withHOC(
               />
             ),
           )}
-        </colgroup>
+        </colgroup> */}
 
-        <tbody style={{ minWidth: '100%' }}>{children}</tbody>
+        <tbody style={{ minWidth: '100%' }} {...tableProps}>
+          {children}
+        </tbody>
       </PlateElement>
     );
   }),

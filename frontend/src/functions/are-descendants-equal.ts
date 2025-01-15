@@ -1,8 +1,8 @@
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
-import { type TDescendant, isElement } from '@udecode/plate-common';
+import { type Descendant, ElementApi } from '@udecode/plate';
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-export const areDescendantsEqual = (listA: TDescendant[], listB: TDescendant[]): boolean => {
+export const areDescendantsEqual = (listA: Descendant[], listB: Descendant[]): boolean => {
   if (listA.length !== listB.length) {
     return false;
   }
@@ -15,8 +15,8 @@ export const areDescendantsEqual = (listA: TDescendant[], listB: TDescendant[]):
       return false;
     }
 
-    if (isElement(nodeA)) {
-      if (!isElement(nodeB)) {
+    if (ElementApi.isElement(nodeA)) {
+      if (!ElementApi.isElement(nodeB)) {
         return false;
       }
 
@@ -38,7 +38,7 @@ export const areDescendantsEqual = (listA: TDescendant[], listB: TDescendant[]):
       continue;
     }
 
-    if (isElement(nodeB)) {
+    if (ElementApi.isElement(nodeB)) {
       return false;
     }
 

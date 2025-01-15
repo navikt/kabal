@@ -19,8 +19,8 @@ import type {
 import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
 import type { Language } from '@app/types/texts/language';
 import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
+import type { BaseParagraphPlugin, TElement, TText } from '@udecode/plate';
 import type { AutoformatRule } from '@udecode/plate-autoformat';
-import type { BaseParagraphPlugin, TElement, TText } from '@udecode/plate-common';
 import { type PlateEditor, useEditorRef, useEditorState } from '@udecode/plate-core/react';
 import type { HEADING_KEYS } from '@udecode/plate-heading';
 import type {

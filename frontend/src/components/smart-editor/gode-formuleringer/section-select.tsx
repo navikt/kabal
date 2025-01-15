@@ -20,7 +20,6 @@ import {
 } from '@app/plate/types';
 import { isOfElementTypeFn, isOfElementTypesFn } from '@app/plate/utils/queries';
 import { Select } from '@navikt/ds-react';
-import { findNode } from '@udecode/plate-common';
 import { useContext, useEffect, useMemo } from 'react';
 import type { BasePoint, Range } from 'slate';
 
@@ -39,11 +38,11 @@ const ANCHOR: BasePoint = { path: [0], offset: 0 };
 
 const getActiveSection = (editor: RichTextEditor, selection: Range): TemplateSections | null => {
   const entry =
-    findNode<MaltekstElement | RedigerbarMaltekstElement | RegelverkElement>(editor, {
+    editor.api.node<MaltekstElement | RedigerbarMaltekstElement | RegelverkElement>({
       at: selection.focus,
       match: MATCH,
     }) ??
-    findNode<MaltekstseksjonElement>(editor, {
+    editor.api.node<MaltekstseksjonElement>({
       at: { anchor: ANCHOR, focus: selection.focus },
       match: MATCH_SECTION,
       reverse: true,
