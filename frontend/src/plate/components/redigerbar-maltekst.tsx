@@ -8,9 +8,7 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { replaceNodeChildren } from '@udecode/plate-common';
-import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
-import { findPath, isEditorReadOnly } from '@udecode/slate-react';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { useContext } from 'react';
 
 export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstElement>) => {
@@ -25,7 +23,7 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
       return;
     }
 
-    const path = findPath(editor, element);
+    const path = editor.api.findPath(element);
 
     if (path === undefined) {
       return;
@@ -37,7 +35,7 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
       return;
     }
 
-    replaceNodeChildren(editor, { at: path, nodes: text.richText });
+    editor.tf.replaceNodes(text.richText, { at: path, children: true });
   };
 
   // TODO: Remove when all smart documents in prod use maltekstseksjon
@@ -45,7 +43,7 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
     return <LegacyRedigerbarMaltekst {...props}>{children}</LegacyRedigerbarMaltekst>;
   }
 
-  const readOnly = isEditorReadOnly(editor);
+  const readOnly = editor.api.isReadOnly();
 
   return (
     <PlateElement<RedigerbarMaltekstElement> {...props} asChild>

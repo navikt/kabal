@@ -14,7 +14,7 @@ import {
   type RedigerbarMaltekstElement,
   TextAlign,
 } from '@app/plate/types';
-import { BaseParagraphPlugin, replaceNode } from '@udecode/plate-common';
+import { BaseParagraphPlugin } from '@udecode/plate';
 import { createPlateEditor } from '@udecode/plate-core/react';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
 
@@ -28,7 +28,7 @@ describe('normalize node with missing type prop', () => {
     const invalidLi: ListItemElement = { type: BaseListItemPlugin.key, children: [invalidLic] };
     const invalidList: BulletListElement = { type: BaseBulletedListPlugin.key, children: [invalidLi] };
 
-    replaceNode(editor, { at: [0], nodes: invalidList });
+    editor.tf.replaceNodes(invalidList, { at: [0] });
 
     const validLic: ListItemContainerElement = { type: BaseListItemContentPlugin.key, children: [{ text: 'lic' }] };
     const validLi: ListItemElement = { type: BaseListItemPlugin.key, children: [validLic] };
@@ -42,7 +42,7 @@ describe('normalize node with missing type prop', () => {
 
     const invalidNode = { children: [{ text: 'some text' }] } as H1Element;
 
-    replaceNode(editor, { at: [0], nodes: invalidNode });
+    editor.tf.replaceNodes(invalidNode, { at: [0] });
 
     const defaultedNode: ParagraphElement = {
       type: BaseParagraphPlugin.key,
@@ -59,7 +59,7 @@ describe('normalize node with missing type prop', () => {
     const invalidChild = { text: 'some text' };
     const invalidParent = { children: [invalidChild] } as H1Element;
 
-    replaceNode(editor, { at: [0], nodes: invalidParent });
+    editor.tf.replaceNodes(invalidParent, { at: [0] });
 
     const defaultedNode: ParagraphElement = {
       type: BaseParagraphPlugin.key,
@@ -86,7 +86,7 @@ describe('normalize node with missing type prop', () => {
 
     const editor = createEditor([createSimpleParagraph()]);
 
-    replaceNode(editor, { at: [0], nodes: invalidMaltekstseksjon });
+    editor.tf.replaceNodes(invalidMaltekstseksjon, { at: [0] });
 
     const validParagraph: ParagraphElement = { children: [{ text: 'some text' }] } as ParagraphElement;
     const validRedigerbarMaltekst: RedigerbarMaltekstElement = {

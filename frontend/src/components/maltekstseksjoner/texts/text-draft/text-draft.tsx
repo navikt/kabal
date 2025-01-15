@@ -16,8 +16,6 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import { LANGUAGES, type Language, isLanguage } from '@app/types/texts/language';
 import type { IDraftRichText } from '@app/types/texts/responses';
 import { BodyShort, HStack, HelpText, Label, Loader, Switch, Tooltip, VStack } from '@navikt/ds-react';
-import { getEndPoint } from '@udecode/plate-common';
-import { focusEditor, isEditorFocused } from '@udecode/plate-common/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { areDescendantsEqual } from '../../../../functions/are-descendants-equal';
 
@@ -50,10 +48,10 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   }, [text.richText]);
 
   useEffect(() => {
-    if (isActive && editorRef.current !== null && !isEditorFocused(editorRef.current)) {
+    if (isActive && editorRef.current !== null && !editorRef.current.api.isFocused()) {
       setTimeout(() => {
         if (editorRef.current !== null) {
-          focusEditor(editorRef.current, getEndPoint(editorRef.current, []));
+          editorRef.current.tf.focus({ at: editorRef.current.api.end([]) });
         }
       }, 0);
     }

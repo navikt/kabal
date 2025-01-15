@@ -14,9 +14,7 @@ import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { replaceNodeChildren } from '@udecode/plate-common';
-import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
-import { findPath } from '@udecode/slate-react';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 
 const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
@@ -42,7 +40,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
 
   const [getTexts, { isLoading }] = useLazyGetConsumerTextsQuery();
 
-  const path = findPath(editor, element);
+  const path = editor.api.findPath(element);
 
   const isInitialized = useRef(!isNodeEmpty(element));
 
@@ -70,7 +68,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
 
       const nodes = lexSpecialisStatus === LexSpecialisStatus.FOUND ? richText.richText : [createSimpleParagraph()];
 
-      replaceNodeChildren(editor, { at: path, nodes });
+      editor.tf.replaceNodes(nodes, { at: path, children: true });
     } catch (e) {
       console.error('RedigerbarMaltekst: Failed to get texts', e, query);
       insertRedigerbarMaltekst();
