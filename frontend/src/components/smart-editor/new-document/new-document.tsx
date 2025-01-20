@@ -6,13 +6,13 @@ import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { NOTAT_TEMPLATE, getGenereltBrevTemplate } from '@app/plate/templates/simple-templates';
 import {
   ANKE_I_TRYGDERETTEN_TEMPLATES,
   ANKE_TEMPLATES,
   BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
   KLAGE_TEMPLATES,
   OMGJØRINGSKRAVVEDTAK_TEMPLATES,
+  getFinishedBehandlingTemplates,
 } from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -113,7 +113,7 @@ const useTemplates = (oppgave: IOppgavebehandling | undefined) => {
   const { isAvsluttetAvSaksbehandler, typeId } = oppgave;
 
   if (isAvsluttetAvSaksbehandler) {
-    return [getGenereltBrevTemplate(false, user.navIdent), NOTAT_TEMPLATE];
+    return getFinishedBehandlingTemplates(user.navIdent);
   }
 
   if (isSaksbehandler || isRol) {
