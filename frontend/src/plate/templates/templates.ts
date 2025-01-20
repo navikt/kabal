@@ -11,6 +11,7 @@ import {
   ROL_ANSWERS_TEMPLATE,
   ROL_QUESTIONS_TEMPLATE,
   ROL_TILSVARSBREV_TEMPLATE,
+  getGenereltBrevTemplate,
 } from '@app/plate/templates/simple-templates';
 import { SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE } from '@app/plate/templates/svar-på-innsynsbegjæring';
 
@@ -77,3 +78,7 @@ export const OMGJØRINGSKRAVVEDTAK_TEMPLATES = [
   FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE_TEMPLATE,
   SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE,
 ];
+
+export const getFinishedBehandlingTemplates = (navIdent: string) => {
+  return [getGenereltBrevTemplate(false, navIdent), NOTAT_TEMPLATE, SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE];
+};
