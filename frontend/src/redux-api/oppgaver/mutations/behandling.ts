@@ -5,6 +5,7 @@ import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-t
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { formatIdNumber } from '@app/functions/format-id';
 import { forlengetBehandlingstidApi } from '@app/redux-api/forlenget-behandlingstid';
+import { getFullmektigBody, getFullmektigMessage } from '@app/redux-api/oppgaver/mutations/fullmektig-helpers';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { reduxStore } from '@app/redux/configure-store';
 import { isApiRejectionError } from '@app/types/errors';
@@ -118,7 +119,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       query: ({ oppgaveId, fullmektig }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/fullmektig`,
         method: 'PUT',
-        body: { identifikator: fullmektig?.id ?? null },
+        body: getFullmektigBody(fullmektig),
       }),
       onQueryStarted: async ({ oppgaveId, fullmektig }, { queryFulfilled, dispatch }) => {
         const undo = update(oppgaveId, { prosessfullmektig: fullmektig });
@@ -133,11 +134,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           update(oppgaveId, data);
 
-          toast.success(
-            fullmektig === null
-              ? 'Fullmektig fjernet'
-              : `Fullmektig satt til ${fullmektig.name} (${formatIdNumber(fullmektig.id)})`,
-          );
+          toast.success(getFullmektigMessage(fullmektig));
         } catch (e) {
           undo();
           forlengetBehandlingstidPatchResult.undo();
