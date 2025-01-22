@@ -113,7 +113,7 @@ interface FeilregistrertEvent {
 }
 
 export interface IPart {
-  id: string;
+  identifikator: string | null;
   type: string;
   name: string | null;
 }

@@ -3,14 +3,18 @@ import { ErrorAlert } from '@app/components/search/common/error-alert';
 import { StyledFnr, StyledName } from '@app/components/search/common/styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import type { staggeredBaseQuery } from '@app/redux-api/common';
-import type { IPartBase } from '@app/types/oppgave-common';
+import type { SearchPersonResponse } from '@app/types/oppgave-common';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Skeleton } from '@navikt/ds-react';
 import type { TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react';
 
 // https://github.com/reduxjs/redux-toolkit/issues/1937#issuecomment-1842868277
 // https://redux-toolkit.js.org/rtk-query/usage-with-typescript#typing-query-and-mutation-endpoints
-export type PersonHookResult = TypedUseQueryHookResult<IPartBase, string, ReturnType<typeof staggeredBaseQuery>>;
+export type PersonHookResult = TypedUseQueryHookResult<
+  SearchPersonResponse,
+  string,
+  ReturnType<typeof staggeredBaseQuery>
+>;
 export type PersonQuery = Omit<PersonHookResult, 'refetch'> & { refetch: () => void };
 
 type PersonProps = PersonQuery & { fnr: string };

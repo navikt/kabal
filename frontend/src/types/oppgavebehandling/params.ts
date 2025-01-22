@@ -1,6 +1,6 @@
 import type { INavEmployee } from '@app/types/bruker';
 import type { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import type { FlowState, IJournalfoertDokumentId, IPart } from '../oppgave-common';
+import type { FlowState, IFullmektig, IJournalfoertDokumentId, IPart } from '../oppgave-common';
 
 export interface IOppgavebehandlingBaseParams {
   oppgaveId: string;
@@ -52,7 +52,7 @@ export interface ISetFlowStateParams extends IOppgavebehandlingBaseParams {
 }
 
 export interface ISetFullmektigParams extends IOppgavebehandlingBaseParams {
-  fullmektig: IPart | null;
+  fullmektig: IFullmektig | null;
 }
 
 export interface ISetKlagerParams extends IOppgavebehandlingBaseParams {
