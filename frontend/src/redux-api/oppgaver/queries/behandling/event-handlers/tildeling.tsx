@@ -51,7 +51,7 @@ export const handleTildelingEvent =
             return;
           }
 
-          const previous = history.tildeling.at(0);
+          const previous = history.tildeling.at(1);
 
           if (previous === undefined) {
             history.tildeling = [
@@ -80,7 +80,7 @@ export const handleTildelingEvent =
             previous,
           };
 
-          history.tildeling = [tildelingEvent, ...history.tildeling];
+          history.tildeling = [...history.tildeling, tildelingEvent];
 
           return history;
         }),

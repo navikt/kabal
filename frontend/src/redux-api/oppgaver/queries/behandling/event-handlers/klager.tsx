@@ -47,7 +47,7 @@ export const handleKlagerEvent =
             type: HistoryEventTypes.KLAGER,
           };
 
-          const previous = history.klager.at(0);
+          const previous = history.klager.at(-1);
 
           if (previous === undefined) {
             history.klager = [
@@ -73,7 +73,7 @@ export const handleKlagerEvent =
             previous,
           };
 
-          history.klager = [historyEvent, ...history.klager];
+          history.klager = [...history.klager, historyEvent];
 
           return history;
         }),

@@ -2,7 +2,7 @@ import { getInitalHandling } from '@app/components/receivers/functions';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import type { IMottaker } from '@app/types/documents/documents';
 import { Brevmottakertype } from '@app/types/kodeverk';
-import { type IPart, PartStatusEnum } from '@app/types/oppgave-common';
+import { type IFullmektig, type IPart, PartStatusEnum } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { useMemo } from 'react';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
@@ -59,7 +59,7 @@ export const useSuggestedBrevmottakere = (
 const EMPTY_BREVMOTTAKER_LIST: IBrevmottaker[] = [];
 
 const partToBrevmottaker = (
-  part: IPart | null,
+  part: IPart | IFullmektig | null,
   brevmottakerType: Brevmottakertype,
   templateId: TemplateIdEnum | undefined,
 ): IBrevmottaker | null => {
@@ -68,9 +68,9 @@ const partToBrevmottaker = (
   }
 
   const handling = getInitalHandling(part, templateId);
-  const reachable = !part.statusList.some(
-    (s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED,
-  );
+  const reachable =
+    part.statusList === null ||
+    !part.statusList.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED);
 
   return { part, brevmottakertyper: [brevmottakerType], handling, overriddenAddress: null, reachable };
 };

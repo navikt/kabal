@@ -1,5 +1,5 @@
+import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
 import { isoDateToPretty } from '@app/domain/date';
-import { formatIdNumber } from '@app/functions/format-id';
 import { HistoryEventTypes, type IPart, type IVarsletBehandlingstidEvent } from '@app/types/oppgavebehandling/response';
 import {
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
@@ -58,9 +58,9 @@ const Mottakere = ({ mottakere }: { mottakere: IPart[] }) => {
   );
 };
 
-const ListItemPart = ({ id, name }: IPart) => (
+const ListItemPart = (part: IPart) => (
   <li className="m-0 font-normal">
-    {name} ({formatIdNumber(id)})
+    <PartNameAndIdentifikator {...part} />
   </li>
 );
 

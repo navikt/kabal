@@ -50,7 +50,7 @@ export const handleRolEvent =
             return;
           }
 
-          const previous = history.rol.at(0);
+          const previous = history.rol.at(-1);
 
           if (previous === undefined) {
             if (flowState === FlowState.NOT_SENT) {
@@ -87,6 +87,7 @@ export const handleRolEvent =
           return {
             ...history,
             rol: [
+              ...history.rol,
               {
                 actor,
                 timestamp,
@@ -94,7 +95,6 @@ export const handleRolEvent =
                 type: HistoryEventTypes.ROL,
                 previous,
               } satisfies IRolEvent,
-              ...history.rol,
             ],
           };
         }),

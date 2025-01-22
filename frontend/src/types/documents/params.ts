@@ -39,8 +39,10 @@ export type IGetVersionParams = IDocumentParams & { versionId: number };
 
 interface InputMottaker {
   id: string;
+  identifikator: string | null;
   handling: HandlingEnum;
   overriddenAddress: IAddress | null;
+  navn: string | null;
 }
 
 export interface ISetMottakerListParams extends IDocumentParams {
@@ -48,11 +50,13 @@ export interface ISetMottakerListParams extends IDocumentParams {
 }
 
 export const mottakerToInputMottaker = (mottaker: IMottaker): InputMottaker => {
-  const { part, handling, overriddenAddress } = mottaker;
+  const { part, handling } = mottaker;
 
   return {
     id: part.id,
+    identifikator: part.identifikator,
     handling,
-    overriddenAddress,
+    overriddenAddress: part.identifikator === null ? (mottaker.overriddenAddress ?? part.address) : null,
+    navn: part.name,
   };
 };

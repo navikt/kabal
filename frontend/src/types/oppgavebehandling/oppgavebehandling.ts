@@ -1,6 +1,13 @@
 import type { INavEmployee } from '../bruker';
 import type { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import type { IMedunderskriverRol, IPart, ISakenGjelder, IVedlegg, IVenteperiode } from '../oppgave-common';
+import type {
+  IFullmektig,
+  IMedunderskriverRol,
+  IPart,
+  ISakenGjelder,
+  IVedlegg,
+  IVenteperiode,
+} from '../oppgave-common';
 
 type UUID = string;
 
@@ -89,7 +96,7 @@ export interface IOppgavebehandlingBase {
   /** Date */
   mottattKlageinstans: string | null;
   previousSaksbehandler: INavEmployee | null;
-  prosessfullmektig: IPart | null;
+  prosessfullmektig: IFullmektig | null;
   raadfoertMedLege: string | null;
   resultat: Resultat;
   rol: IMedunderskriverRol;

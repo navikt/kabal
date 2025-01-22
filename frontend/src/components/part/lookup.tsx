@@ -1,5 +1,5 @@
+import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
 import { type IPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
 import { Alert, BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
@@ -32,12 +32,13 @@ interface ResultProps {
 const Result = ({ part, isLoading, onChange, buttonText = 'Bruk', allowUnreachable = false }: ResultProps) => {
   const isReachable =
     allowUnreachable ||
+    part.statusList === null ||
     !part.statusList.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED);
 
   return (
     <StyledResult variant={part.type === IdType.FNR ? 'info' : 'warning'} size="medium">
       <BodyShort>
-        {part.name} ({part.type === IdType.FNR ? formatFoedselsnummer(part.id) : formatOrgNum(part.id)})
+        <PartNameAndIdentifikator identifikator={part.identifikator} name={part.name} />
       </BodyShort>
 
       <PartStatusList statusList={part.statusList} size="xsmall" />
@@ -63,6 +64,10 @@ const StyledResult = styled(Tag)`
 `;
 
 const getUnreachableText = (statusList: IPart['statusList']): string | null => {
+  if (statusList === null || statusList.length === 0) {
+    return null;
+  }
+
   if (statusList.some((s) => s.status === PartStatusEnum.DEAD)) {
     return 'personen er død';
   }

@@ -3,7 +3,7 @@ import { Details } from '@app/components/toast/toast-content/fetch-error-toast';
 import { type ApiError, isApiError } from '@app/types/errors';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Button, HStack, Heading, Loader, VStack } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
   if (error !== undefined) {
@@ -49,6 +49,7 @@ export const usePdfData = (url: string | undefined, skip = false): UsePdfData =>
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<string>();
   const [error, setError] = useState<string>();
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     if (url === undefined || skip) {
@@ -59,11 +60,16 @@ export const usePdfData = (url: string | undefined, skip = false): UsePdfData =>
   }, [url, skip]);
 
   const getData = async (u: string | undefined) => {
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    const signal = controller.signal;
+
     setLoading(true);
     setError(undefined);
 
     try {
-      const response = await fetch(`${u}?version=${Date.now()}`);
+      const response = await fetch(`${u}?version=${Date.now()}`, { signal });
 
       if (!response.ok) {
         const json = await response.json();
@@ -85,6 +91,10 @@ export const usePdfData = (url: string | undefined, skip = false): UsePdfData =>
 
       return `${URL.createObjectURL(blob)}${PDFparams}`;
     } catch (e) {
+      if (e instanceof DOMException && e.name === 'AbortError') {
+        return;
+      }
+
       const message = e instanceof Error ? e.message : 'Ukjent feil';
       setError(message);
 

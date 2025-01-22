@@ -46,7 +46,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
     return null;
   }
 
-  const fnr = formatFoedselsnummer(sakenGjelder?.id);
+  const fnr = formatFoedselsnummer(sakenGjelder?.identifikator);
   const name = sakenGjelder?.name ?? '';
   const heading = `${totalCount} andre pågående oppgaver for ${name} (${fnr})`;
   const tooltip = totalCount === 1 ? '1 annen pågående oppgave' : `${totalCount} andre pågående oppgaver`;
