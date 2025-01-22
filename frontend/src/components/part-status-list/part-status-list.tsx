@@ -14,7 +14,7 @@ interface Props extends Pick<IPart, 'statusList'> {
 }
 
 export const PartStatusList = ({ statusList, size, variant }: Props) => {
-  if (statusList.length === 0) {
+  if (statusList === null || statusList.length === 0) {
     return null;
   }
 

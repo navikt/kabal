@@ -148,40 +148,29 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
 
   return (
     <Container $state={addressState} onKeyDown={onKeyDown}>
-      <Row>
-        <AddressField
-          id="adresselinje1"
-          label="Adresselinje 1"
-          value={adresselinje1}
-          originalValue={address?.adresselinje1 ?? null}
-          onChange={setAdresselinje1}
-          autoFocus
-          required={!isNorway}
-          error={addresseLinje1Error}
-          htmlSize={64}
-        />
-      </Row>
-      <Row>
-        <AddressField
-          label="Adresselinje 2"
-          value={adresselinje2}
-          originalValue={address?.adresselinje2 ?? null}
-          onChange={setAdresselinje2}
-          htmlSize={64}
-        />
-      </Row>
-      <Row>
-        <AddressField
-          label="Adresselinje 3"
-          value={adresselinje3}
-          originalValue={address?.adresselinje3 ?? null}
-          onChange={setAdresselinje3}
-          htmlSize={64}
-        />
-      </Row>
-      <Row>
-        <Country value={landkode ?? undefined} originalValue={address?.landkode} onChange={onCountryChange} />
-      </Row>
+      <AddressField
+        id="adresselinje1"
+        label="Adresselinje 1"
+        value={adresselinje1}
+        originalValue={address?.adresselinje1 ?? null}
+        onChange={setAdresselinje1}
+        autoFocus
+        required={!isNorway}
+        error={addresseLinje1Error}
+      />
+      <AddressField
+        label="Adresselinje 2"
+        value={adresselinje2}
+        originalValue={address?.adresselinje2 ?? null}
+        onChange={setAdresselinje2}
+      />
+      <AddressField
+        label="Adresselinje 3"
+        value={adresselinje3}
+        originalValue={address?.adresselinje3 ?? null}
+        onChange={setAdresselinje3}
+      />
+      <Country value={landkode ?? undefined} originalValue={address?.landkode} onChange={onCountryChange} />
       {isNorway ? (
         <Postnummer
           value={postnummer}

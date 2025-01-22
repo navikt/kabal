@@ -32,6 +32,7 @@ interface ResultProps {
 const Result = ({ part, isLoading, onChange, buttonText = 'Bruk', allowUnreachable = false }: ResultProps) => {
   const isReachable =
     allowUnreachable ||
+    part.statusList === null ||
     !part.statusList.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED);
 
   return (
@@ -63,6 +64,10 @@ const StyledResult = styled(Tag)`
 `;
 
 const getUnreachableText = (statusList: IPart['statusList']): string | null => {
+  if (statusList === null || statusList.length === 0) {
+    return null;
+  }
+
   if (statusList.some((s) => s.status === PartStatusEnum.DEAD)) {
     return 'personen er død';
   }

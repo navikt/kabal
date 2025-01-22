@@ -4,6 +4,7 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { formatIdNumber } from '@app/functions/format-id';
+import { getFullmektigBody, getFullmektigMessage } from '@app/redux-api/oppgaver/mutations/fullmektig-helpers';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { reduxStore } from '@app/redux/configure-store';
 import { isApiRejectionError } from '@app/types/errors';
@@ -117,7 +118,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       query: ({ oppgaveId, fullmektig }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/fullmektig`,
         method: 'PUT',
-        body: { identifikator: fullmektig?.id ?? null },
+        body: getFullmektigBody(fullmektig),
       }),
       onQueryStarted: async ({ oppgaveId, fullmektig }, { queryFulfilled }) => {
         const undo = update(oppgaveId, { prosessfullmektig: fullmektig });
@@ -126,11 +127,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           update(oppgaveId, data);
 
-          toast.success(
-            fullmektig === null
-              ? 'Fullmektig fjernet'
-              : `Fullmektig satt til ${fullmektig.name} (${formatIdNumber(fullmektig.id)})`,
-          );
+          toast.success(getFullmektigMessage(fullmektig));
         } catch (e) {
           undo();
           const message = 'Kunne ikke endre fullmektig.';

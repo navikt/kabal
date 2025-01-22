@@ -71,6 +71,10 @@ export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) 
 };
 
 const getUnreachableText = (statusList: IPart['statusList']): string | null => {
+  if (statusList === null || statusList.length === 0) {
+    return null;
+  }
+
   if (statusList.some((s) => s.status === PartStatusEnum.DEAD)) {
     return 'personen er død';
   }
@@ -83,6 +87,10 @@ const getUnreachableText = (statusList: IPart['statusList']): string | null => {
 };
 
 const getUnreachableHelpText = (statusList: IPart['statusList']): string | null => {
+  if (statusList === null || statusList.length === 0) {
+    return null;
+  }
+
   if (statusList.some((s) => s.status === PartStatusEnum.DELETED)) {
     return 'Ta kontakt med parten for å få nytt organisasjonsnummer eller oppdatert adresse.';
   }

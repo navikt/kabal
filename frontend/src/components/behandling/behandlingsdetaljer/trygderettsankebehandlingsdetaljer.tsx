@@ -12,9 +12,8 @@ import { Ytelse } from '@app/components/behandling/behandlingsdetaljer/ytelse';
 import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domain';
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
-import { Part } from '@app/components/part/part';
+import { Fullmektig } from '@app/components/part/fullmektig/fullmektig';
 import { Type } from '@app/components/type/type';
-import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { ITrygderettsankebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Heading } from '@navikt/ds-react';
@@ -24,8 +23,6 @@ interface Props {
 }
 
 export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
-  const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
-
   const { typeId, resultat, ytelseId, prosessfullmektig, saksnummer, id } = oppgavebehandling;
 
   const { utfallId, extraUtfallIdSet } = resultat;
@@ -41,13 +38,7 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
           {oppgavebehandling.klager.name ?? 'Navn mangler'}
         </BehandlingSection>
 
-        <Part
-          isDeletable
-          label="Fullmektig"
-          part={prosessfullmektig}
-          onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
-          isLoading={fullmektigIsLoading}
-        />
+        <Fullmektig part={prosessfullmektig} />
 
         <BehandlingSection label="Type">
           <Type type={typeId} />

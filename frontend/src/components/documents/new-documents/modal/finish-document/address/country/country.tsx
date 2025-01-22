@@ -1,19 +1,20 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Option } from '@app/components/documents/new-documents/modal/finish-document/address/country/option';
-import { FieldLabel, Row } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
+import { FieldLabel } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import type { CountryCode } from '@app/types/common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, Search, Tag, Tooltip } from '@navikt/ds-react';
-import { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { type CSSProperties, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
   value?: string;
   originalValue?: string;
   onChange: (landkode: string) => void;
+  width?: CSSProperties['width'];
 }
 
-export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props) => {
+export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }: Props) => {
   const { countryCodeList, getCountryName } = useContext(StaticDataContext);
   const isOverridden = value !== originalValue;
   const currentCountryName = getCountryName(value) ?? value;
@@ -109,80 +110,76 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props)
 
   return (
     <Container>
-      <Row>
-        <Container>
-          <Search
-            size="small"
-            label={
-              <FieldLabel>
-                Land
-                <Tag size="xsmall" variant="info">
-                  Påkrevd
-                </Tag>
-                {isOverridden ? (
-                  <Tag size="xsmall" variant="warning">
-                    Overstyrt
-                  </Tag>
-                ) : null}
-                {isOverridden ? (
-                  <Tooltip content={`Tilbakestill til «${originalCountryName}»`}>
-                    <Button
-                      size="xsmall"
-                      variant="tertiary"
-                      onClick={() => {
-                        countryNameRef.current = originalCountryName;
-                        onChange(originalValue);
-                        setSearch(originalCountryName);
-                        searchRef.current?.focus();
-                        setShowCountryList(false);
-                      }}
-                      icon={<ArrowUndoIcon aria-hidden />}
-                    />
-                  </Tooltip>
-                ) : null}
-              </FieldLabel>
-            }
-            hideLabel={false}
-            value={search}
-            variant="simple"
-            placeholder={search.length === 0 ? 'Velg land' : undefined}
-            onChange={(v) => {
-              setSearch(v);
-              setShowCountryList(true);
-            }}
-            htmlSize={maxCountrySize + 15}
-            onFocus={() => setShowCountryList(true)}
-            onBlur={() =>
-              setTimeout(() => {
-                setShowCountryList(false);
-                setSearch(countryNameRef.current);
-              }, 100)
-            }
-            onKeyDown={onKeyDown}
-            ref={searchRef}
-          />
-          {showCountryList ? (
-            <DropdownList>
-              {options.map((country, i) => (
-                <Option
-                  key={country.landkode}
-                  country={country}
-                  isFocused={i === focusIndex}
-                  isSelected={country.landkode === value}
-                  onClick={onSelect}
+      <Search
+        style={{ width }}
+        size="small"
+        label={
+          <FieldLabel>
+            Land
+            <Tag size="xsmall" variant="info">
+              Påkrevd
+            </Tag>
+            {isOverridden ? (
+              <Tag size="xsmall" variant="warning">
+                Overstyrt
+              </Tag>
+            ) : null}
+            {isOverridden ? (
+              <Tooltip content={`Tilbakestill til «${originalCountryName}»`}>
+                <Button
+                  size="xsmall"
+                  variant="tertiary"
+                  onClick={() => {
+                    countryNameRef.current = originalCountryName;
+                    onChange(originalValue);
+                    setSearch(originalCountryName);
+                    searchRef.current?.focus();
+                    setShowCountryList(false);
+                  }}
+                  icon={<ArrowUndoIcon aria-hidden />}
                 />
-              ))}
-            </DropdownList>
-          ) : null}
-        </Container>
-      </Row>
+              </Tooltip>
+            ) : null}
+          </FieldLabel>
+        }
+        hideLabel={false}
+        value={search}
+        variant="simple"
+        placeholder={search.length === 0 ? 'Velg land' : undefined}
+        onChange={(v) => {
+          setSearch(v);
+          setShowCountryList(true);
+        }}
+        htmlSize={width === undefined ? maxCountrySize + 5 : undefined}
+        onFocus={() => setShowCountryList(true)}
+        onBlur={() =>
+          setTimeout(() => {
+            setShowCountryList(false);
+            setSearch(countryNameRef.current);
+          }, 100)
+        }
+        onKeyDown={onKeyDown}
+        ref={searchRef}
+      />
+      {showCountryList ? (
+        <DropdownList>
+          {options.map((country, i) => (
+            <Option
+              key={country.landkode}
+              country={country}
+              isFocused={i === focusIndex}
+              isSelected={country.landkode === value}
+              onClick={onSelect}
+            />
+          ))}
+        </DropdownList>
+      ) : null}
     </Container>
   );
 };
 
 const Container = styled.div`
   position: relative;
-  width: fit-content;
 `;
 
 const DropdownList = styled.ul`

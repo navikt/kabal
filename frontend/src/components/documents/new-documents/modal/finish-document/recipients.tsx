@@ -123,8 +123,10 @@ export const Receipients = (document: IMainDocument) => {
   );
 
   useEffect(() => {
-    const unreachableRecipients = document.mottakerList.filter((m) =>
-      m.part.statusList.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED),
+    const unreachableRecipients = document.mottakerList.filter(
+      (m) =>
+        m.part.statusList?.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED) ??
+        false,
     );
 
     if (unreachableRecipients.length > 0) {
