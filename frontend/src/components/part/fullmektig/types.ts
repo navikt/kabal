@@ -1,0 +1,1 @@
+export const NO_FULLMEKTIG_ID = 'NO_FULLMEKTIG_ID';

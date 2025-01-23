@@ -38,7 +38,13 @@ const Result = ({ part, isLoading, onChange, buttonText = 'Bruk', allowUnreachab
   return (
     <StyledResult variant={part.type === IdType.FNR ? 'info' : 'warning'} size="medium">
       <BodyShort>
-        {part.name} ({part.type === IdType.FNR ? formatFoedselsnummer(part.id) : formatOrgNum(part.id)})
+        {part.name}
+        {''}
+        {part.identifikator !== null ? (
+          <>
+            ({part.type === IdType.FNR ? formatFoedselsnummer(part.identifikator) : formatOrgNum(part.identifikator)})
+          </>
+        ) : null}
       </BodyShort>
 
       <PartStatusList statusList={part.statusList} size="xsmall" />

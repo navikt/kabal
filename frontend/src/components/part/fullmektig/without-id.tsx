@@ -1,9 +1,10 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Country } from '@app/components/documents/new-documents/modal/finish-document/address/country/country';
 import { Postnummer } from '@app/components/documents/new-documents/modal/finish-document/address/postnummer';
+import { NO_FULLMEKTIG_ID } from '@app/components/part/fullmektig/types';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import { FULLMEKTIG_WITHOUT_ID, type IFullmektig, Utsendingskanal } from '@app/types/oppgave-common';
+import { type IFullmektig, Utsendingskanal } from '@app/types/oppgave-common';
 import { Box, type BoxProps, Button, ErrorSummary, HStack, Tag, TextField, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext, useState } from 'react';
@@ -16,7 +17,7 @@ interface Props {
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const WithoutId = ({ part, onClose }: Props) => {
   const [setFullmektig, { isLoading, isError }] = useUpdateFullmektigMutation({
-    fixedCacheKey: FULLMEKTIG_WITHOUT_ID,
+    fixedCacheKey: part?.id ?? NO_FULLMEKTIG_ID,
   });
 
   const [name, setName] = useState(part?.name ?? '');
@@ -241,7 +242,7 @@ const RequiredTag = ({ children }: { children: string }) => (
 );
 
 const DEFAULT_PROPS = {
-  id: FULLMEKTIG_WITHOUT_ID,
+  identifikator: null,
   type: null,
   statusList: [],
   utsendingskanal: Utsendingskanal.SENTRAL_UTSKRIFT,
