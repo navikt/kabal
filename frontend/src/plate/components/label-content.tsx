@@ -98,7 +98,7 @@ const useContent = (source: LabelContentSource): string | null => {
     }
 
     if (source === LabelContentSource.SAKEN_GJELDER_FNR) {
-      return `${formatFoedselsnummer(oppgave.sakenGjelder.id)}\n`;
+      return `${formatFoedselsnummer(oppgave.sakenGjelder.identifikator)}\n`;
     }
 
     if (source === LabelContentSource.SAKSNUMMER) {
@@ -108,7 +108,7 @@ const useContent = (source: LabelContentSource): string | null => {
     const { klager, sakenGjelder } = oppgave;
 
     if (source === LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME) {
-      if (klager.id !== sakenGjelder.id) {
+      if (klager.identifikator !== sakenGjelder.identifikator) {
         return `${sakenGjelder.name ?? '-'}\n`;
       }
 
@@ -116,7 +116,7 @@ const useContent = (source: LabelContentSource): string | null => {
     }
 
     if (source === LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME) {
-      if (klager.id === sakenGjelder.id) {
+      if (klager.identifikator === sakenGjelder.identifikator) {
         return `${klager.name ?? '-'}\n`;
       }
 
@@ -124,7 +124,7 @@ const useContent = (source: LabelContentSource): string | null => {
     }
 
     if (source === LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME) {
-      if (klager.id !== sakenGjelder.id) {
+      if (klager.identifikator !== sakenGjelder.identifikator) {
         return `${klager.name ?? '-'}\n`;
       }
 

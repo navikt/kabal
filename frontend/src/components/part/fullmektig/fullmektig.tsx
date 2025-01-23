@@ -2,10 +2,11 @@ import { BehandlingSection } from '@app/components/behandling/behandlingsdetalje
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { EditPart } from '@app/components/part/edit-part';
+import { NO_FULLMEKTIG_ID } from '@app/components/part/fullmektig/types';
 import { WithoutId } from '@app/components/part/fullmektig/without-id';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import { FULLMEKTIG_WITHOUT_ID, type IFullmektig } from '@app/types/oppgave-common';
+import type { IFullmektig } from '@app/types/oppgave-common';
 import { ArrowUndoIcon, PencilIcon, TrashFillIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, ToggleGroup, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -25,7 +26,7 @@ const getInitialValue = (part: IFullmektig | null): Option => {
     return Option.ID;
   }
 
-  return part.id === null ? Option.ADDRESS : Option.ID;
+  return part.identifikator === null ? Option.ADDRESS : Option.ID;
 };
 
 interface Props {
@@ -35,7 +36,9 @@ interface Props {
 export const Fullmektig = ({ part }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(getInitialValue(part));
-  const [updateFullmektig, { isLoading }] = useUpdateFullmektigMutation({ fixedCacheKey: FULLMEKTIG_WITHOUT_ID });
+  const [updateFullmektig, { isLoading }] = useUpdateFullmektigMutation({
+    fixedCacheKey: part?.id ?? NO_FULLMEKTIG_ID,
+  });
   const oppgaveId = useOppgaveId();
 
   const onClose = () => setIsEditing(false);
@@ -49,11 +52,11 @@ export const Fullmektig = ({ part }: Props) => {
           ) : (
             'Ikke satt'
           )}
-          {typeof part?.id === 'string' ? <CopyIdButton size="small" id={part.id} /> : null}
+          {typeof part?.identifikator === 'string' ? <CopyIdButton size="small" id={part.identifikator} /> : null}
         </Name>
 
         <HStack wrap={false} align="start">
-          {isEditing ? <Delete onClose={onClose} /> : null}
+          {isEditing && part !== null ? <Delete onClose={onClose} id={part.id} /> : null}
           <EditButton onClick={() => setIsEditing(!isEditing)} isEditing={isEditing} />
         </HStack>
       </HStack>
@@ -95,9 +98,9 @@ export const Fullmektig = ({ part }: Props) => {
   );
 };
 
-const Delete = ({ onClose }: { onClose: () => void }) => {
+const Delete = ({ onClose, id }: { onClose: () => void; id: string }) => {
   const [showConfirm, setShowConfirm] = useState(false);
-  const [updateFullmektig, { isLoading }] = useUpdateFullmektigMutation({ fixedCacheKey: FULLMEKTIG_WITHOUT_ID });
+  const [updateFullmektig, { isLoading }] = useUpdateFullmektigMutation({ fixedCacheKey: id });
   const oppgaveId = useOppgaveId();
 
   if (oppgaveId === skipToken) {

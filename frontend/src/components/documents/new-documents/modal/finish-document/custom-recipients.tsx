@@ -93,7 +93,7 @@ const Recipients = ({ mottakerList, removeMottakere, changeMottaker, sendErrors,
                   </Tooltip>
                   <StyledName>
                     <span>{part.name}</span>
-                    <CopyIdButton id={part.id} size="xsmall" />
+                    {part.identifikator === null ? null : <CopyIdButton id={part.identifikator} size="xsmall" />}
                   </StyledName>
                   <PartStatusList statusList={part.statusList} size="xsmall" />
                   {error === null ? null : (

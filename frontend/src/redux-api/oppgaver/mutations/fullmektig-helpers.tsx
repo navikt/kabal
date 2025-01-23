@@ -1,19 +1,17 @@
 import { formatIdNumber } from '@app/functions/format-id';
 import type { IAddress } from '@app/types/documents/recipients';
-import { FULLMEKTIG_WITHOUT_ID, type IFullmektig } from '@app/types/oppgave-common';
+import type { ISetFullmektigParams } from '@app/types/oppgavebehandling/params';
 import { styled } from 'styled-components';
 
-export const getFullmektigMessage = (fullmektig: IFullmektig | null) => {
+export const getFullmektigMessage = (fullmektig: ISetFullmektigParams['fullmektig']) => {
   if (fullmektig === null) {
     return 'Fullmektig fjernet';
   }
 
-  const { name, id, address } = fullmektig;
+  const { name, identifikator, address } = fullmektig;
 
-  const hasId = id !== FULLMEKTIG_WITHOUT_ID;
-
-  if (hasId) {
-    return `Fullmektig satt til ${fullmektig.name} (${formatIdNumber(fullmektig.id)})`;
+  if (identifikator !== null) {
+    return `Fullmektig satt til ${fullmektig.name} (${formatIdNumber(fullmektig.identifikator)})`;
   }
 
   return address === null ? (
@@ -64,16 +62,14 @@ const addressToString = (address: IAddress): string => {
   return value;
 };
 
-export const getFullmektigBody = (fullmektig: IFullmektig | null) => {
+export const getFullmektigBody = (fullmektig: ISetFullmektigParams['fullmektig']) => {
   if (fullmektig === null) {
     return { fullmektig: null, address: null, name: null };
   }
 
-  const { address, name, id: identifikator } = fullmektig;
+  const { address, name, identifikator } = fullmektig;
 
-  const hasId = identifikator !== FULLMEKTIG_WITHOUT_ID;
-
-  if (hasId) {
+  if (identifikator !== null) {
     return { identifikator, address: null, name: null };
   }
 

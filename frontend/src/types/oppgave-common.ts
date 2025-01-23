@@ -46,6 +46,7 @@ export interface SearchPersonResponse {
 }
 
 export interface IPartBase {
+  id: string;
   name: string | null;
   address: IAddress | null;
   utsendingskanal: Utsendingskanal;
@@ -109,27 +110,25 @@ export type IOrganizationStatus =
     };
 
 export interface IPersonPart extends IPartBase {
-  id: string;
+  identifikator: string;
   type: IdType.FNR;
   statusList: IPersonStatus[];
 }
 
 export interface IOrganizationPart extends IPartBase {
-  id: string;
+  identifikator: string;
   type: IdType.ORGNR;
   statusList: IOrganizationStatus[];
 }
 
-export const FULLMEKTIG_WITHOUT_ID = 'FULLMEKTIG_WITHOUT_ID';
-
 export interface IPersonFullmektig extends IPartBase {
-  id: string | typeof FULLMEKTIG_WITHOUT_ID;
+  identifikator: string | null;
   type: IdType.FNR | null;
   statusList: IPersonStatus[] | null;
 }
 
 export interface IOrganizationFullmektig extends IPartBase {
-  id: string | typeof FULLMEKTIG_WITHOUT_ID;
+  identifikator: string | null;
   type: IdType.ORGNR | null;
   statusList: IOrganizationStatus[] | null;
 }

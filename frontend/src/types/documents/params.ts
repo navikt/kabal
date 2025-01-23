@@ -41,6 +41,7 @@ interface InputMottaker {
   id: string;
   handling: HandlingEnum;
   overriddenAddress: IAddress | null;
+  navn: string | null;
 }
 
 export interface ISetMottakerListParams extends IDocumentParams {
@@ -54,5 +55,6 @@ export const mottakerToInputMottaker = (mottaker: IMottaker): InputMottaker => {
     id: part.id,
     handling,
     overriddenAddress,
+    navn: part.name,
   };
 };
