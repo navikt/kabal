@@ -3,6 +3,7 @@ import { MedunderskriverReadOnly } from '@app/components/behandling/behandlingsd
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
 import { useHasRole } from '@app/hooks/use-has-role';
+import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
@@ -22,8 +23,10 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
   const isSaksbehandler = useIsSaksbehandler();
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const { onChange, isUpdating } = useSetMedunderskriver(oppgaveId, data?.medunderskrivere);
+  const isMedunderskriver = useIsMedunderskriver();
 
-  const canChange = isSaksbehandler || (hasOppgavestyringRole && medunderskriver.flowState === FlowState.SENT);
+  const canChange =
+    isSaksbehandler || isMedunderskriver || (hasOppgavestyringRole && medunderskriver.flowState === FlowState.SENT);
 
   if (!canChange) {
     return <MedunderskriverReadOnly medunderskriver={medunderskriver} typeId={typeId} />;
