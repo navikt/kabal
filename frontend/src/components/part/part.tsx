@@ -68,7 +68,7 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
             ) : (
               <CopyButton size="small" copyText={part.name} text={part.name} activeText={part.name} />
             )}
-            <CopyIdButton size="small" id={part.id} />
+            {part.identifikator === null ? null : <CopyIdButton size="small" id={part.identifikator} />}
           </Container>
 
           <PartStatusList statusList={part.statusList} size="xsmall" />

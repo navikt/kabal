@@ -5,9 +5,10 @@ import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdet
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domain';
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
+import { Fullmektig } from '@app/components/part/fullmektig/fullmektig';
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
-import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
+import { useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOmgjøringskravbehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Heading } from '@navikt/ds-react';
@@ -23,7 +24,6 @@ interface Props {
 }
 
 export const Omgjøringskravdetaljer = ({ oppgavebehandling }: Props) => {
-  const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
   const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
 
   const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer, varsletFrist, id } =
@@ -46,13 +46,7 @@ export const Omgjøringskravdetaljer = ({ oppgavebehandling }: Props) => {
           isLoading={klagerIsLoading}
         />
 
-        <Part
-          isDeletable
-          label="Fullmektig"
-          part={prosessfullmektig}
-          onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
-          isLoading={fullmektigIsLoading}
-        />
+        <Fullmektig part={prosessfullmektig} />
 
         <BehandlingSection label="Type">
           <Type type={typeId} />

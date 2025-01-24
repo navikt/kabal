@@ -40,5 +40,5 @@ export const SakenGjelderFnr = ({ oppgaveId }: Props) => {
     return <LoadingCellContent />;
   }
 
-  return <CopyIdButton id={data.id} />;
+  return <CopyIdButton id={data.identifikator} />;
 };
