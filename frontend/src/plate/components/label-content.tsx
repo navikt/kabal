@@ -3,7 +3,8 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { type LabelContentElement, LabelContentSource } from '@app/plate/types';
 import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
+import { setNodes } from '@udecode/slate';
 import { useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 
@@ -13,11 +14,11 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   const label = useLabel(element.source);
 
   useEffect(() => {
-    editor.tf.setNodes({ result: content }, { at: [], match: (n) => n === element });
+    setNodes(editor, { result: content }, { at: [], match: (n) => n === element });
   }, [content, editor, element]);
 
   useEffect(() => {
-    editor.tf.setNodes({ label }, { at: [], match: (n) => n === element });
+    setNodes(editor, { label }, { at: [], match: (n) => n === element });
   }, [label, editor, element]);
 
   return (

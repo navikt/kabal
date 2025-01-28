@@ -4,7 +4,9 @@ import { Marks } from '@app/plate/toolbar/marks';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { TableButtons } from '@app/plate/toolbar/table/table';
 import { type TableElement, useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
+import { findNode } from '@udecode/plate-common';
 import { BaseTablePlugin } from '@udecode/plate-table';
+import { isEditorFocused, toDOMNode } from '@udecode/slate-react';
 import { useEffect, useState } from 'react';
 import { StyledFloatingToolbar } from './floating-toolbar';
 
@@ -19,7 +21,7 @@ interface TableToolbarProps extends Props {
 
 const TableToolbar = ({ editorId, container, children }: TableToolbarProps) => {
   const editor = useMyPlateEditorState(editorId);
-  const tableEntry = editor.api.node<TableElement>({ match: { type: BaseTablePlugin.node.type } });
+  const tableEntry = findNode<TableElement>(editor, { match: { type: BaseTablePlugin.node.type } });
   const table = tableEntry?.[0] ?? null;
 
   const position = useTablePosition(table, container);
@@ -28,7 +30,7 @@ const TableToolbar = ({ editorId, container, children }: TableToolbarProps) => {
     return null;
   }
 
-  const isFocused = editor.api.isFocused();
+  const isFocused = isEditorFocused(editor);
 
   if (!isFocused) {
     return null;
@@ -77,7 +79,7 @@ const useTablePosition = (table: TableElement | null, container: HTMLDivElement 
 
     const handle = requestIdleCallback(
       () => {
-        const domNode = editor.api.toDOMNode(table);
+        const domNode = toDOMNode(editor, table);
 
         if (domNode === undefined) {
           setPosition(null);

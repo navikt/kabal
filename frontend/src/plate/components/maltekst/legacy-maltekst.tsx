@@ -13,8 +13,9 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
-import { ElementApi } from '@udecode/plate';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { isElement, replaceNodeChildren, withoutNormalizing, withoutSavingHistory } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
+import { findPath, isEditorReadOnly } from '@udecode/slate-react';
 import { useContext, useEffect } from 'react';
 
 /**
@@ -32,7 +33,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
       return;
     }
 
-    const path = editor.api.findPath(element);
+    const path = findPath(editor, element);
 
     if (path === undefined) {
       return;
@@ -56,8 +57,8 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
       return;
     }
 
-    editor.tf.withoutSaving(() => {
-      editor.tf.withoutNormalizing(() => editor.tf.replaceNodes(maltekster, { at: path, children: true }));
+    withoutSavingHistory(editor, () => {
+      withoutNormalizing(editor, () => replaceNodeChildren(editor, { at: path, nodes: maltekster }));
     });
   }, [data, editor, element, isFetching, isLoading, oppgave, oppgaveIsLoading, templateId]);
 
@@ -77,7 +78,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
 
   const [first] = element.children;
 
-  if (ElementApi.isElement(first) && first.type === ELEMENT_EMPTY_VOID) {
+  if (isElement(first) && first.type === ELEMENT_EMPTY_VOID) {
     return (
       <PlateElement<MaltekstElement> {...props} as="div">
         {null}
@@ -89,7 +90,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
     <PlateElement<MaltekstElement>
       {...props}
       asChild
-      contentEditable={!editor.api.isReadOnly()}
+      contentEditable={!isEditorReadOnly(editor)}
       suppressContentEditableWarning
     >
       <SectionContainer

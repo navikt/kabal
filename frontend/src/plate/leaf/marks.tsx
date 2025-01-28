@@ -1,5 +1,5 @@
 import type { FormattedText } from '@app/plate/types';
-import { PlateLeaf, type PlateLeafProps } from '@udecode/plate/react';
+import { PlateLeaf, type PlateLeafProps } from '@udecode/plate-common/react';
 
 export const BoldLeaf = (props: PlateLeafProps<FormattedText>) => (
   <PlateLeaf {...props} style={{ fontWeight: 'bold' }} />

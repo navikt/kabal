@@ -6,16 +6,16 @@ import { useMyPlateEditorState } from '@app/plate/types';
 import { isOfElementTypesFn } from '@app/plate/utils/queries';
 import { ClearFormatting, TextBold, TextItalic, TextUnderline } from '@styled-icons/fluentui-system-regular';
 import { BaseBoldPlugin, BaseItalicPlugin, BaseUnderlinePlugin } from '@udecode/plate-basic-marks';
-import { getPluginType } from '@udecode/plate-core';
+import { getPluginType, removeMark, someNode } from '@udecode/plate-common';
+import { useMarkToolbarButton, useMarkToolbarButtonState } from '@udecode/plate-common/react';
 
 import { HEADING_KEYS } from '@udecode/plate-heading';
-import { useMarkToolbarButton, useMarkToolbarButtonState } from '@udecode/plate/react';
 
 export const Marks = () => {
   const editor = useMyPlateEditorState();
 
-  const isInPlaceholder = editor.api.some({ match: { type: ELEMENT_PLACEHOLDER } });
-  const isInHeading = editor.api.some({
+  const isInPlaceholder = someNode(editor, { match: { type: ELEMENT_PLACEHOLDER } });
+  const isInHeading = someNode(editor, {
     match: isOfElementTypesFn([HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3]),
   });
 
@@ -70,11 +70,7 @@ export const Marks = () => {
       <ToolbarIconButton
         label="Fjern formatering"
         icon={<ClearFormatting aria-hidden width={24} />}
-        onClick={() => {
-          editor.tf.removeMark(BaseBoldPlugin.key);
-          editor.tf.removeMark(BaseItalicPlugin.key);
-          editor.tf.removeMark(BaseUnderlinePlugin.key);
-        }}
+        onClick={() => removeMark(editor, { key: [BaseBoldPlugin.key, BaseItalicPlugin.key, BaseUnderlinePlugin.key] })}
         disabled={disabled}
       />
     </>

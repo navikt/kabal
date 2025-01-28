@@ -5,12 +5,24 @@ import {
 } from '@app/plate/plugins/element-types';
 import { isInRegelverk, isInUnchangeableElement, isUndeletable } from '@app/plate/plugins/prohibit-deletion/helpers';
 import { isInList } from '@app/plate/utils/queries';
-import { ElementApi } from '@udecode/plate';
+import {
+  findNode,
+  getNextNode,
+  getPreviousNode,
+  isEditor,
+  isElement,
+  isElementEmpty,
+  isEndPoint,
+  isSelectionAtBlockEnd,
+  isSelectionAtBlockStart,
+  isStartPoint,
+  removeNodes,
+} from '@udecode/plate-common';
 import type { PlateEditor } from '@udecode/plate-core/react';
-import { Path, type TextDirection, type TextUnit, isEditor } from 'slate';
+import { Path, type TextDirection, type TextUnit } from 'slate';
 
 const deleteCurrentNode = (editor: PlateEditor): void => {
-  const currentEntry = editor.api.node({ match: (n) => !isEditor(n) });
+  const currentEntry = findNode(editor, { match: (n) => !isEditor(n) });
 
   if (isUndeletable(editor, currentEntry)) {
     return;
@@ -22,12 +34,12 @@ const deleteCurrentNode = (editor: PlateEditor): void => {
 
   const [node] = currentEntry;
 
-  if (!ElementApi.isElement(node)) {
+  if (!isElement(node)) {
     return;
   }
 
-  if (editor.api.isEmpty(node)) {
-    editor.tf.removeNodes();
+  if (isElementEmpty(editor, node)) {
+    removeNodes(editor);
   }
 };
 
@@ -37,7 +49,7 @@ export const handleDeleteBackwardIntoUnchangeable = (editor: PlateEditor): boole
   }
 
   const prevSibling = Path.hasPrevious(editor.selection.focus.path)
-    ? editor.api.node({ at: Path.previous(editor.selection.focus.path), mode: 'lowest', voids: true })
+    ? findNode(editor, { at: Path.previous(editor.selection.focus.path), mode: 'lowest', voids: true })
     : undefined;
 
   // Prohibit deletion for inline undeletables
@@ -47,7 +59,7 @@ export const handleDeleteBackwardIntoUnchangeable = (editor: PlateEditor): boole
     return true;
   }
 
-  if (!editor.api.isAt({ start: true })) {
+  if (!isSelectionAtBlockStart(editor)) {
     return false;
   }
 
@@ -56,21 +68,21 @@ export const handleDeleteBackwardIntoUnchangeable = (editor: PlateEditor): boole
     return false;
   }
 
-  const redigerbarMaltekstOrRegelverk = editor.api.node({
-    match: (n) => ElementApi.isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type),
+  const redigerbarMaltekstOrRegelverk = findNode(editor, {
+    match: (n) => isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type),
   });
 
   if (redigerbarMaltekstOrRegelverk !== undefined) {
     const [, path] = redigerbarMaltekstOrRegelverk;
 
     // Normal handling if focus is in redigerbar maltekst / regelverk container, but not at the start
-    if (!editor.api.isStart(editor.selection.focus, path)) {
+    if (!isStartPoint(editor, editor.selection.focus, path)) {
       return false;
     }
   }
 
   // If previous node is undeletable, remove self (if deletable)
-  if (isUndeletable(editor, editor.api.previous())) {
+  if (isUndeletable(editor, getPreviousNode(editor))) {
     deleteCurrentNode(editor);
 
     return true;
@@ -84,8 +96,8 @@ export const handleDeleteForwardIntoUnchangeable = (editor: PlateEditor): boolea
     return false;
   }
 
-  const nextSibling = editor.api.node({ at: Path.next(editor.selection.focus.path), mode: 'lowest', voids: true });
-  const isEnd = editor.api.isEnd(editor.selection.focus, editor.selection.focus.path);
+  const nextSibling = findNode(editor, { at: Path.next(editor.selection.focus.path), mode: 'lowest', voids: true });
+  const isEnd = isEndPoint(editor, editor.selection.focus, editor.selection.focus.path);
 
   // Prohibit deletion for inline undeletables
   if (isEnd && isUndeletable(editor, nextSibling)) {
@@ -94,25 +106,25 @@ export const handleDeleteForwardIntoUnchangeable = (editor: PlateEditor): boolea
     return true;
   }
 
-  if (!editor.api.isAt({ end: true })) {
+  if (!isSelectionAtBlockEnd(editor)) {
     return false;
   }
 
-  const redigerbarMaltekstOrRegelverk = editor.api.node({
-    match: (n) => ElementApi.isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type),
+  const redigerbarMaltekstOrRegelverk = findNode(editor, {
+    match: (n) => isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type),
   });
 
   if (redigerbarMaltekstOrRegelverk !== undefined) {
     const [, path] = redigerbarMaltekstOrRegelverk;
 
     // Normal handling if focus is in redigerbar maltekst / regelverk container, but not at the end
-    if (!editor.api.isEnd(editor.selection.focus, path)) {
+    if (!isEndPoint(editor, editor.selection.focus, path)) {
       return false;
     }
   }
 
   // Remove self if next node is undeletable
-  if (isUndeletable(editor, editor.api.next())) {
+  if (isUndeletable(editor, getNextNode(editor))) {
     deleteCurrentNode(editor);
 
     return true;
@@ -121,17 +133,12 @@ export const handleDeleteForwardIntoUnchangeable = (editor: PlateEditor): boolea
   return false;
 };
 
-const handleDeleteInside = (
-  editor: PlateEditor,
-  type: string,
-  direction: TextDirection,
-  unit: TextUnit | undefined,
-) => {
+const handleDeleteInside = (editor: PlateEditor, type: string, direction: TextDirection, unit: TextUnit) => {
   if (editor.selection === null) {
     return true;
   }
 
-  const entry = editor.api.node({ match: { type }, at: editor.selection });
+  const entry = findNode(editor, { match: { type }, at: editor.selection });
 
   if (entry === undefined) {
     return true;
@@ -146,16 +153,16 @@ const handleDeleteInside = (
       return false;
     }
 
-    return editor.api.isStart(editor.selection.focus, entry[1]);
+    return isStartPoint(editor, editor.selection.focus, entry[1]);
   }
 
-  return editor.api.isEnd(editor.selection.focus, entry[1]);
+  return isEndPoint(editor, editor.selection.focus, entry[1]);
 };
 
 export const handleDeleteInsideUnchangeable = (
   editor: PlateEditor,
   direction: TextDirection,
-  unit: TextUnit | undefined,
+  unit: TextUnit,
 ): boolean => {
   if (isInRegelverk(editor)) {
     return handleDeleteInside(editor, ELEMENT_REGELVERK_CONTAINER, direction, unit);

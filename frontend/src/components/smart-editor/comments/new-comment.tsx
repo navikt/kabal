@@ -8,7 +8,8 @@ import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostCommentMutation } from '@app/redux-api/smart-editor-comments';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { RangeApi } from '@udecode/plate';
+import { isCollapsed } from '@udecode/plate-common';
+import { focusEditor } from '@udecode/plate-common/react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { StyledNewThread } from './styled-components';
 import { WriteComment } from './write-comment/write-comment';
@@ -30,7 +31,7 @@ export const NewComment = ({ container }: Props) => {
 
   const onNewThread = useCallback(
     (threadId: string) => {
-      if (editor === null || newCommentSelection === null || RangeApi.isCollapsed(newCommentSelection)) {
+      if (editor === null || newCommentSelection === null || isCollapsed(newCommentSelection)) {
         return;
       }
 
@@ -71,14 +72,14 @@ export const NewComment = ({ container }: Props) => {
         setNewCommentSelection(null);
         setTimeout(() => {
           setFocusedThreadId(id);
-          editor.tf.focus();
+          focusEditor(editor);
         }, 0);
       });
   };
 
   const close = () => {
     setNewCommentSelection(null);
-    editor.tf.focus();
+    focusEditor(editor);
   };
 
   return (

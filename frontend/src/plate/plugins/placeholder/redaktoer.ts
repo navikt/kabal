@@ -16,6 +16,7 @@ export const RedaktoerPlaceholderPlugin = createPlatePlugin({
     isInline: true,
     component: RedaktørPlaceholder,
   },
+  extendEditor: ({ editor }) => withOverrides(editor),
   handlers: {
     onKeyDown: ({ editor, event }) => {
       if (handleSelectAll(editor, event) || handleArrows(editor, event)) {
@@ -35,4 +36,4 @@ export const RedaktoerPlaceholderPlugin = createPlatePlugin({
     },
   },
   parsers,
-}).overrideEditor(withOverrides);
+});

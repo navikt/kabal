@@ -1,4 +1,4 @@
-import type { TRange } from '@udecode/plate';
+import type { TRange } from '@udecode/plate-common';
 import type { RichTextEditor } from '../types';
 import { type IRangePosition, calculateRangePosition } from './range-position';
 import { getSelectionStart } from './selection-start';

@@ -11,7 +11,8 @@ import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IConsumerPlainText, IConsumerText } from '@app/types/texts/consumer';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { setNodes } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -71,7 +72,8 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
 
         setText(mostSpecificText);
 
-        editor.tf.setNodes<ElementTypes>(
+        setNodes<ElementTypes>(
+          editor,
           { content: mostSpecificText.plainText },
           { match: (n) => n === e, voids: true, at: [] },
         );
@@ -79,7 +81,7 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
         setInitialized(true);
       } catch {
         if (e.content === null) {
-          editor.tf.setNodes<ElementTypes>({ content: '' }, { match: (n) => n === e, voids: true, at: [] });
+          setNodes<ElementTypes>(editor, { content: '' }, { match: (n) => n === e, voids: true, at: [] });
         }
       }
     },

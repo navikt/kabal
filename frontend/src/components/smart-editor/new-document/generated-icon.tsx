@@ -12,7 +12,7 @@ import {
 } from '@app/plate/plugins/element-types';
 import { LabelContentPlugin } from '@app/plate/plugins/label-content';
 import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { BaseParagraphPlugin } from '@udecode/plate';
+import { BaseParagraphPlugin } from '@udecode/plate-common';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
 import { BaseTablePlugin } from '@udecode/plate-table';

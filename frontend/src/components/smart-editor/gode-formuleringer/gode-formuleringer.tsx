@@ -20,6 +20,7 @@ import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { IConsumerText, NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LightBulbIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
+import { focusEditor } from '@udecode/plate-common/react';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Filter } from './filter';
 import { insertGodFormulering } from './insert';
@@ -135,7 +136,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
         }
 
         if (editor !== null) {
-          editor.tf.focus();
+          focusEditor(editor);
         }
 
         return setShowGodeFormuleringer(false);

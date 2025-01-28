@@ -6,7 +6,7 @@ import {
 } from '@app/hooks/settings/use-setting';
 import { DistribusjonsType, type ISmartDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { TRange } from '@udecode/plate';
+import type { TRange } from '@udecode/plate-common';
 import { type MutableRefObject, createContext, useRef, useState } from 'react';
 
 const noop = () => {};

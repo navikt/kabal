@@ -2,39 +2,49 @@ import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@app/functions/remove-em
 import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
 import type { EditorDescendant, FormattedText, MaltekstElement, PlaceholderElement } from '@app/plate/types';
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
-import { ElementApi, NodeApi, type TElement } from '@udecode/plate';
+import {
+  type TElement,
+  type TPath,
+  getNodeAncestors,
+  insertNodes,
+  insertText,
+  isElement,
+  removeNodes,
+  withoutNormalizing,
+  withoutSavingHistory,
+} from '@udecode/plate-common';
 import type { PlateEditor } from '@udecode/plate-core/react';
 import { Path } from 'slate';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
 
-export const cleanText = (editor: PlateEditor, element: PlaceholderElement, path: Path, at: Path) => {
+export const cleanText = (editor: PlateEditor, element: PlaceholderElement, path: TPath, at: TPath) => {
   const cleanedText: FormattedText[] = element.children.map((c) => ({ ...c, text: removeEmptyCharInText(c.text) }));
 
-  editor.tf.withoutSaving(() => {
-    editor.tf.withoutNormalizing(() => {
-      editor.tf.removeNodes({
+  withoutSavingHistory(editor, () => {
+    withoutNormalizing(editor, () => {
+      removeNodes(editor, {
         at: path,
         match: (n) => n !== element,
       });
-      editor.tf.insertNodes<FormattedText>(cleanedText, { at, select: true });
+      insertNodes<FormattedText>(editor, cleanedText, { at, select: true });
     });
   });
 };
 
-export const ensureOnlyOneEmptyChar = (editor: PlateEditor, element: PlaceholderElement, path: Path, at: Path) => {
-  editor.tf.withoutSaving(() => {
-    editor.tf.withoutNormalizing(() => {
-      editor.tf.removeNodes({ at: path, match: (n) => n !== element });
-      editor.tf.insertNodes<FormattedText>({ text: EMPTY_CHAR }, { at });
+export const ensureOnlyOneEmptyChar = (editor: PlateEditor, element: PlaceholderElement, path: TPath, at: TPath) => {
+  withoutSavingHistory(editor, () => {
+    withoutNormalizing(editor, () => {
+      removeNodes(editor, { at: path, match: (n) => n !== element });
+      insertNodes<FormattedText>(editor, { text: EMPTY_CHAR }, { at });
     });
   });
 };
 
-export const insertEmptyChar = (editor: PlateEditor, at: Path) => {
-  editor.tf.withoutSaving(() => {
-    editor.tf.withoutNormalizing(() => {
-      editor.tf.insertText(EMPTY_CHAR, { at });
+export const insertEmptyChar = (editor: PlateEditor, at: TPath) => {
+  withoutSavingHistory(editor, () => {
+    withoutNormalizing(editor, () => {
+      insertText(editor, EMPTY_CHAR, { at });
     });
   });
 };
@@ -83,7 +93,7 @@ export const containsMultipleEmptyCharAndNoText = (text: string): boolean => {
   return emptyCharCount > 1;
 };
 
-export const getIsFocused = (editor: PlateEditor, path: Path | undefined): boolean => {
+export const getIsFocused = (editor: PlateEditor, path: TPath | undefined): boolean => {
   if (editor.selection === null || path === undefined) {
     return false;
   }
@@ -96,7 +106,7 @@ const getMaltekstElement = (editor: PlateEditor, path: Path | undefined): Maltek
     return undefined;
   }
 
-  const ancestors = NodeApi.ancestors(editor, path);
+  const ancestors = getNodeAncestors(editor, path);
 
   for (const [node] of ancestors) {
     if (isOfElementType<MaltekstElement>(node, ELEMENT_MALTEKST)) {
@@ -116,7 +126,7 @@ const containsLonePlaceholder = (
     return true;
   }
 
-  if (!ElementApi.isElement(child)) {
+  if (!isElement(child)) {
     return false;
   }
 

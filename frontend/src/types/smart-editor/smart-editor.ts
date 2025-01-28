@@ -1,4 +1,4 @@
-import type { Value } from '@udecode/plate';
+import type { Value } from '@udecode/plate-common';
 import type { GenericObject, Immutable } from '../types';
 import type { INewSmartEditorMetadata } from './metadata';
 

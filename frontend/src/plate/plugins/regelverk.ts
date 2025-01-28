@@ -1,6 +1,6 @@
 import { Regelverk, RegelverkContainer } from '@app/plate/components/regelverk';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { ElementApi, type NodeEntry } from '@udecode/plate';
+import { type TNodeEntry, insertElements, isElement, isElementEmpty } from '@udecode/plate-common';
 import { createPlatePlugin } from '@udecode/plate-core/react';
 import { ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from './element-types';
 
@@ -20,16 +20,17 @@ export const RegelverkContainerPlugin = createPlatePlugin({
     isElement: true,
     component: RegelverkContainer,
   },
-}).overrideEditor(({ editor }) => {
-  const { normalizeNode } = editor.tf;
+  extendEditor: ({ editor }) => {
+    const { normalizeNode } = editor;
 
-  editor.tf.normalizeNode = ([node, path]: NodeEntry) => {
-    if (node.type === ELEMENT_REGELVERK_CONTAINER && ElementApi.isElement(node) && editor.api.isEmpty(node)) {
-      return editor.tf.insertNodes(createSimpleParagraph(), { select: true, at: [...path, 0] });
-    }
+    editor.normalizeNode = ([node, path]: TNodeEntry) => {
+      if (node.type === ELEMENT_REGELVERK_CONTAINER && isElement(node) && isElementEmpty(editor, node)) {
+        return insertElements(editor, createSimpleParagraph(), { select: true, at: [...path, 0] });
+      }
 
-    normalizeNode([node, path]);
-  };
+      normalizeNode([node, path]);
+    };
 
-  return editor;
+    return editor;
+  },
 });
