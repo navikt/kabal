@@ -11,8 +11,9 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon, PadlockUnlockedIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { ElementApi } from '@udecode/plate';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { isElement, replaceNodeChildren, unwrapNodes } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
+import { findPath, isEditorReadOnly } from '@udecode/slate-react';
 import { useContext, useMemo } from 'react';
 
 export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
@@ -32,7 +33,7 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
       return;
     }
 
-    const path = editor.api.findPath(element);
+    const path = findPath(editor, element);
 
     if (path === undefined) {
       return;
@@ -44,12 +45,12 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
       return;
     }
 
-    editor.tf.replaceNodes(text.richText, { at: path, children: true });
+    replaceNodeChildren(editor, { at: path, nodes: text.richText });
   };
 
   const [first] = element.children;
 
-  if (ElementApi.isElement(first) && first.type === ELEMENT_EMPTY_VOID) {
+  if (isElement(first) && first.type === ELEMENT_EMPTY_VOID) {
     return (
       <PlateElement<MaltekstElement> {...props} as="div">
         {null}
@@ -57,9 +58,9 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
     );
   }
 
-  const unlock = () => editor.tf.unwrapNodes({ match: (n) => n === element, at: [] });
+  const unlock = () => unwrapNodes(editor, { match: (n) => n === element, at: [] });
 
-  const readOnly = editor.api.isReadOnly();
+  const readOnly = isEditorReadOnly(editor);
 
   return (
     <PlateElement<MaltekstElement>

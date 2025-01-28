@@ -3,7 +3,16 @@ import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { createPageBreak, createPlaceHolder, createSimpleParagraph } from '@app/plate/templates/helpers';
 import type { PlaceholderElement } from '@app/plate/types';
 import { isInTable, isPlaceholderActive } from '@app/plate/utils/queries';
-import { RangeApi, TextApi } from '@udecode/plate';
+import {
+  findNode,
+  insertElements,
+  insertNodes,
+  insertText,
+  isCollapsed,
+  isText,
+  removeNodes,
+  withoutNormalizing,
+} from '@udecode/plate-common';
 import type { PlateEditor } from '@udecode/plate-core/react';
 import { Range } from 'slate';
 
@@ -12,7 +21,7 @@ export const insertPageBreak = (editor: PlateEditor): boolean => {
     return false;
   }
 
-  editor.tf.insertNodes([createPageBreak(), createSimpleParagraph()], { select: true });
+  insertElements(editor, [createPageBreak(), createSimpleParagraph()], { select: true });
 
   return true;
 };
@@ -20,7 +29,7 @@ export const insertPageBreak = (editor: PlateEditor): boolean => {
 export const insertPlaceholderFromSelection = (editor: PlateEditor) => {
   const { selection } = editor;
 
-  if (selection === null || RangeApi.isCollapsed(selection)) {
+  if (selection === null || isCollapsed(selection)) {
     return;
   }
 
@@ -28,29 +37,29 @@ export const insertPlaceholderFromSelection = (editor: PlateEditor) => {
     return;
   }
 
-  const textFromSelection = editor.api.string(selection);
+  const textFromSelection = editor.string(selection);
 
-  editor.tf.withoutNormalizing(() => {
-    editor.tf.delete();
-    editor.tf.insertNodes([createPlaceHolder(textFromSelection), { text: '' }], {
+  withoutNormalizing(editor, () => {
+    editor.delete();
+    insertNodes(editor, [createPlaceHolder(textFromSelection), { text: '' }], {
       at: Range.start(selection),
-      match: TextApi.isText,
+      match: isText,
     });
   });
 };
 
 export const removePlaceholder = (editor: PlateEditor) => {
-  const entry = editor.api.node<PlaceholderElement>({ match: { type: ELEMENT_PLACEHOLDER } });
+  const entry = findNode<PlaceholderElement>(editor, { match: { type: ELEMENT_PLACEHOLDER } });
 
   if (entry === undefined) {
     return;
   }
 
   const [node, path] = entry;
-  const text = removeEmptyCharInText(editor.api.string(path));
+  const text = removeEmptyCharInText(editor.string(path));
 
-  editor.tf.withoutNormalizing(() => {
-    editor.tf.removeNodes({ at: path });
-    editor.tf.insertText(text.trim().length === 0 ? node.placeholder : text);
+  withoutNormalizing(editor, () => {
+    removeNodes(editor, { at: path });
+    insertText(editor, text.trim().length === 0 ? node.placeholder : text);
   });
 };

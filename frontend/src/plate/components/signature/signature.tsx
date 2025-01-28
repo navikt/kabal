@@ -7,9 +7,8 @@ import { MedunderskriverSignature, SaksbehandlerSignature } from '@app/plate/com
 import type { SignatureElement } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { SetNodesOptions } from '@udecode/plate';
-import { useEditorReadOnly } from '@udecode/plate-core/react';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { type SetNodesOptions, setNodes } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from '@udecode/plate-common/react';
 import { type InputHTMLAttributes, useContext } from 'react';
 import { styled } from 'styled-components';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
@@ -42,13 +41,14 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const options: SetNodesOptions = { at: [], voids: true, mode: 'lowest', match: (n) => n === element };
 
   const setSignatureProp = (prop: Partial<SignatureElement>) =>
-    editor.tf.setNodes(
+    setNodes(
+      editor,
       { ...prop, overriddenSaksbehandler: overriddenWithSelf ? element.overriddenSaksbehandler : undefined },
       options,
     );
 
   const setOverriddenSaksbehandler = (overriddenSaksbehandler: string | undefined) =>
-    editor.tf.setNodes({ overriddenSaksbehandler }, options);
+    setNodes(editor, { overriddenSaksbehandler }, options);
 
   return (
     <PlateElement<SignatureElement> {...props} asChild contentEditable={false}>

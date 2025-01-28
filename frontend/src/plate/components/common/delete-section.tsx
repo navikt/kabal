@@ -4,6 +4,7 @@ import { MaltekstseksjonToolbarStyle } from '@app/plate/components/styled-compon
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { CheckmarkIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Tooltip } from '@navikt/ds-react';
+import { removeNodes } from '@udecode/plate-common';
 import { useRef, useState } from 'react';
 import type { Path } from 'slate';
 import { styled } from 'styled-components';
@@ -52,7 +53,7 @@ export const DeleteSection = ({
     return <DummyButton loading />;
   }
 
-  const onDelete = () => editor.tf.removeNodes({ at: path });
+  const onDelete = () => removeNodes(editor, { at: path });
 
   if (isChanged) {
     return <IsChanged onConfirm={onDelete} isChangedWarning={isChangedWarning} side={side} />;

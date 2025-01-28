@@ -16,9 +16,15 @@ import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { PlaceholderElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
-import { PathApi } from '@udecode/plate';
-import { useEditorReadOnly } from '@udecode/plate-core/react';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { getEndPoint, getPreviousPath, setSelection } from '@udecode/plate-common';
+import {
+  PlateElement,
+  type PlateElementProps,
+  findPath,
+  focusEditor,
+  isEditorFocused,
+  useEditorReadOnly,
+} from '@udecode/plate-common/react';
 import { type MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
 
 export const RedaktørPlaceholder = (props: PlateElementProps<PlaceholderElement>) => (
@@ -45,7 +51,7 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
-      const path = editor.api.findPath(element);
+      const path = findPath(editor, element);
 
       if (!hasNoVisibleText) {
         return;
@@ -57,16 +63,16 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
 
       e.preventDefault();
 
-      editor.tf.select({ path: [...path, 0], offset: containsEmptyChar ? 1 : 0 });
+      editor.select({ path: [...path, 0], offset: containsEmptyChar ? 1 : 0 });
     },
     [containsEmptyChar, editor, element, hasNoVisibleText],
   );
 
-  const isFocused = getIsFocused(editor, editor.api.findPath(element));
+  const isFocused = getIsFocused(editor, findPath(editor, element));
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   useEffect(() => {
-    const path = editor.api.findPath(element);
+    const path = findPath(editor, element);
 
     if (isDragging || path === undefined) {
       return;
@@ -74,7 +80,7 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
 
     const at = [...path, 0];
 
-    if (!editor.api.hasPath(at)) {
+    if (!editor.hasPath(at)) {
       return;
     }
 
@@ -109,7 +115,7 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
 
   const deletePlaceholder = useCallback(
     (event: MouseEvent) => {
-      const path = editor.api.findPath(element);
+      const path = findPath(editor, element);
 
       if (path === undefined) {
         return;
@@ -117,29 +123,29 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
 
       event.stopPropagation();
 
-      const previousPath = PathApi.previous(path);
+      const previousPath = getPreviousPath(path);
 
       if (editor.selection === null && previousPath !== undefined) {
-        if (!editor.api.isFocused()) {
-          editor.tf.focus();
+        if (!isEditorFocused(editor)) {
+          focusEditor(editor);
         }
 
-        const previousPoint = editor.api.end(previousPath);
+        const previousPoint = getEndPoint(editor, previousPath);
 
-        editor.tf.setSelection({ focus: previousPoint, anchor: previousPoint });
+        setSelection(editor, { focus: previousPoint, anchor: previousPoint });
       }
 
-      editor.tf.delete({ at: path });
+      editor.delete({ at: path });
 
-      if (!editor.api.isFocused()) {
-        editor.tf.focus();
+      if (!isEditorFocused(editor)) {
+        focusEditor(editor);
       }
     },
     [editor, element],
   );
 
   const hideDeleteButton = useMemo(() => {
-    const path = editor.api.findPath(element);
+    const path = findPath(editor, element);
 
     return (
       !(canManage && hasNoVisibleText) ||

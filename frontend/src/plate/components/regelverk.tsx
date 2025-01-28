@@ -15,7 +15,9 @@ import type { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/con
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { replaceNodeChildren, setNodes } from '@udecode/plate-common';
+import { PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
+import { findPath } from '@udecode/slate-react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -74,7 +76,7 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
 
     setLoading(true);
 
-    const at = editor.api.findPath(element);
+    const at = findPath(editor, element);
 
     if (at === undefined) {
       return;
@@ -85,12 +87,13 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
 
     const { ytelseHjemmelIdList, utfallIdList } = query;
 
-    editor.tf.setNodes<RegelverkElement>(
+    setNodes<RegelverkElement>(
+      editor,
       { query: { ytelseHjemmelIdList, utfallIdList } },
       { match: (n) => n === element, at },
     );
 
-    editor.tf.replaceNodes(nodes, { at, children: true });
+    replaceNodeChildren(editor, { at, nodes });
 
     setLoading(false);
   }, [editor, element, getTexts, oppgave, query]);
@@ -151,7 +154,7 @@ const DeleteRegelverk = ({ element }: DeleteRegelverkProps) => {
     return () => clearTimeout(timeout);
   }, [regelverkContainerElement]);
 
-  const path = editor.api.findPath(element);
+  const path = findPath(editor, element);
 
   return (
     <DeleteSection

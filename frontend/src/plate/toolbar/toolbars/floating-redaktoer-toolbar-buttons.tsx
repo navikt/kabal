@@ -7,7 +7,7 @@ import { InsertPlaceholder } from '@app/plate/toolbar/insert-placeholder';
 import { Marks } from '@app/plate/toolbar/marks';
 import { ParagraphButton } from '@app/plate/toolbar/paragraph-button';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
-import { BaseParagraphPlugin, ElementApi } from '@udecode/plate';
+import { BaseParagraphPlugin, findNode, isElement } from '@udecode/plate-common';
 import { useEditorState } from '@udecode/plate-core/react';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
@@ -15,8 +15,8 @@ import { BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-li
 export const FloatingRedaktoerToolbarButtons = () => {
   const editor = useEditorState();
 
-  const activeEntry = editor.api.node({
-    match: (n) => ElementApi.isElement(n) && n.type !== ELEMENT_REDIGERBAR_MALTEKST && n.type !== ELEMENT_MALTEKST,
+  const activeEntry = findNode(editor, {
+    match: (n) => isElement(n) && n.type !== ELEMENT_REDIGERBAR_MALTEKST && n.type !== ELEMENT_MALTEKST,
     mode: 'lowest',
   });
 
@@ -26,7 +26,7 @@ export const FloatingRedaktoerToolbarButtons = () => {
 
   const [node] = activeEntry;
 
-  if (!ElementApi.isElement(node)) {
+  if (!isElement(node)) {
     return null;
   }
 

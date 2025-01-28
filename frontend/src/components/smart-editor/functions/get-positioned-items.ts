@@ -2,7 +2,7 @@ import type { FocusedComment } from '@app/components/smart-editor/comments/use-t
 import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { calculateRangePosition } from '@app/plate/functions/range-position';
 import type { FormattedText, RichTextEditor } from '@app/plate/types';
-import { TextApi } from '@udecode/plate';
+import { findNode, isText } from '@udecode/plate-common';
 
 export enum ItemType {
   THREAD = 'thread',
@@ -49,7 +49,7 @@ export const getPositionedItems = <T extends ThreadData | BookmarkData>(
 
     const mark = item.type === ItemType.THREAD ? `${COMMENT_PREFIX}${item.id}` : item.id;
 
-    const leafEntry = editor.api.node({ at: [], match: (n) => TextApi.isText(n) && Object.hasOwn(n, mark) });
+    const leafEntry = findNode(editor, { at: [], match: (n) => isText(n) && Object.hasOwn(n, mark) });
 
     if (leafEntry === undefined) {
       continue;

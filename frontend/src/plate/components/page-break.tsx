@@ -3,32 +3,30 @@ import { UNCHANGEABLE } from '@app/plate/plugins/element-types';
 import type { PageBreakElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { ElementApi, type NodeEntry } from '@udecode/plate';
-import type { PlateEditor } from '@udecode/plate-core/react';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { type TNodeEntry, findNode, getParentNode, isEditor, isElement, removeNodes } from '@udecode/plate-common';
+import { type PlateEditor, PlateElement, type PlateElementProps } from '@udecode/plate-common/react';
 import { styled } from 'styled-components';
 
-const parentIsUnchangeable = (editor: PlateEditor, entry: NodeEntry<PageBreakElement> | undefined): boolean => {
+const parentIsUnchangeable = (editor: PlateEditor, entry: TNodeEntry<PageBreakElement> | undefined): boolean => {
   if (entry === undefined) {
     return true;
   }
 
   const [, path] = entry;
 
-  const parentEntry = editor.api.parent(path);
+  const parentEntry = getParentNode(editor, path);
 
   if (parentEntry === undefined) {
     return true;
   }
 
-  const [parentNode, parentNodePath] = parentEntry;
+  const [parentNode] = parentEntry;
 
-  // Used to be isEditor(parentNode), but isEditor is unavailable for parentNode
-  if (parentNodePath.length === 0) {
+  if (isEditor(parentNode)) {
     return false;
   }
 
-  if (!ElementApi.isElement(parentNode)) {
+  if (!isElement(parentNode)) {
     return true;
   }
 
@@ -37,7 +35,7 @@ const parentIsUnchangeable = (editor: PlateEditor, entry: NodeEntry<PageBreakEle
 
 export const PageBreak = (props: PlateElementProps<PageBreakElement>) => {
   const { children, element, editor } = props;
-  const entry = editor.api.node<PageBreakElement>({ at: [], match: (n) => n === element });
+  const entry = findNode<PageBreakElement>(editor, { at: [], match: (n) => n === element });
 
   const disableDelete = parentIsUnchangeable(editor, entry);
 
@@ -48,7 +46,7 @@ export const PageBreak = (props: PlateElementProps<PageBreakElement>) => {
 
     const [, path] = entry;
 
-    editor.tf.removeNodes({ at: path });
+    removeNodes(editor, { at: path });
   };
 
   return (

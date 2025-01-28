@@ -12,13 +12,13 @@ import {
   handleDeleteForwardInUndeletable,
 } from '@app/plate/plugins/prohibit-deletion/undeletable';
 import { isUnchangeable } from '@app/plate/utils/queries';
-import { type OverrideEditor, createPlatePlugin } from '@udecode/plate-core/react';
-import type { EditorFragmentDeletionOptions } from 'slate';
+import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
+import type { EditorFragmentDeletionOptions, TextUnit } from 'slate';
 
-const withOverrides: OverrideEditor = ({ editor }) => {
-  const { deleteBackward, deleteForward, deleteFragment, insertFragment, insertText, addMark, delete: del } = editor.tf;
+const withOverrides = (editor: PlateEditor) => {
+  const { deleteBackward, deleteForward, deleteFragment, insertFragment, insertText, addMark, delete: del } = editor;
 
-  editor.tf.insertText = (text, options) => {
+  editor.insertText = (text, options) => {
     if (isUnchangeable(editor)) {
       return;
     }
@@ -26,7 +26,7 @@ const withOverrides: OverrideEditor = ({ editor }) => {
     return insertText(text, options);
   };
 
-  editor.tf.addMark = (key, value) => {
+  editor.addMark = (key, value) => {
     if (isUnchangeable(editor)) {
       return;
     }
@@ -34,7 +34,7 @@ const withOverrides: OverrideEditor = ({ editor }) => {
     return addMark(key, value);
   };
 
-  editor.tf.delete = (options) => {
+  editor.delete = (options) => {
     const backward = options?.reverse === true;
 
     if (backward) {
@@ -48,7 +48,7 @@ const withOverrides: OverrideEditor = ({ editor }) => {
     return del(options);
   };
 
-  editor.tf.deleteBackward = (unit) => {
+  editor.deleteBackward = (unit: TextUnit) => {
     if (handleDeleteInsideUnchangeable(editor, 'backward', unit)) {
       return;
     }
@@ -64,7 +64,7 @@ const withOverrides: OverrideEditor = ({ editor }) => {
     deleteBackward(unit);
   };
 
-  editor.tf.deleteForward = (unit) => {
+  editor.deleteForward = (unit: TextUnit) => {
     if (handleDeleteInsideUnchangeable(editor, 'forward', unit)) {
       return;
     }
@@ -80,7 +80,7 @@ const withOverrides: OverrideEditor = ({ editor }) => {
     deleteForward(unit);
   };
 
-  editor.tf.deleteFragment = (options: EditorFragmentDeletionOptions | undefined) => {
+  editor.deleteFragment = (options: EditorFragmentDeletionOptions | undefined) => {
     if (isUnchangeable(editor)) {
       return;
     }
@@ -88,7 +88,7 @@ const withOverrides: OverrideEditor = ({ editor }) => {
     return deleteFragment(options);
   };
 
-  editor.tf.insertFragment = (fragment) => {
+  editor.insertFragment = (fragment) => {
     if (isUnchangeable(editor)) {
       return;
     }
@@ -99,4 +99,7 @@ const withOverrides: OverrideEditor = ({ editor }) => {
   return editor;
 };
 
-export const ProhibitDeletionPlugin = createPlatePlugin({ key: 'prohibit-deletion' }).overrideEditor(withOverrides);
+export const ProhibitDeletionPlugin = createPlatePlugin({
+  key: 'prohibit-deletion',
+  extendEditor: ({ editor }) => withOverrides(editor),
+});

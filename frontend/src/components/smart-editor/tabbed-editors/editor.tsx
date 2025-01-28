@@ -30,7 +30,7 @@ import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebeh
 import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
-import { RangeApi, TextApi } from '@udecode/plate';
+import { isCollapsed, isText } from '@udecode/plate-common';
 import { Plate, useEditorRef, usePlateEditor } from '@udecode/plate-core/react';
 import { YjsPlugin } from '@udecode/plate-yjs/react';
 import { useContext, useEffect, useState } from 'react';
@@ -80,7 +80,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     override: {
       components,
     },
-    value: structuredClone(smartDocument.content),
+    value: smartDocument.content,
   });
 
   return (
@@ -90,7 +90,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         readOnly={!canEdit}
         decorate={({ entry }) => {
           const [node, path] = entry;
-          if (newCommentSelection === null || RangeApi.isCollapsed(newCommentSelection) || !TextApi.isText(node)) {
+          if (newCommentSelection === null || isCollapsed(newCommentSelection) || !isText(node)) {
             return [];
           }
 

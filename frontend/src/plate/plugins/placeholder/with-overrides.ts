@@ -5,22 +5,22 @@ import {
   handleDeleteForwardFromOutside,
 } from '@app/plate/plugins/placeholder/delete';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
-import { type Descendant, ElementApi, type TRange, type TText } from '@udecode/plate';
-import type { OverrideEditor } from '@udecode/plate-core/react';
+import { type TDescendant, type TRange, type TText, findNode, insertNodes, isElement } from '@udecode/plate-common';
+import type { PlateEditor } from '@udecode/plate-core/react';
 import { Path } from 'slate';
 import type { MaltekstElement, PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';
 
-const extractText = (fragment: Descendant[]): TText[] =>
+const extractText = (fragment: TDescendant[]): TText[] =>
   fragment.flatMap((node, index) => {
-    if (ElementApi.isElement(node)) {
+    if (isElement(node)) {
       return extractText(index === fragment.length - 1 ? node.children : [...node.children, { text: '\n' }]);
     }
 
     return node;
   });
 
-export const withOverrides: OverrideEditor = ({ editor }) => {
+export const withOverrides = (editor: PlateEditor) => {
   const {
     setSelection,
     insertBreak,
@@ -30,9 +30,9 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
     insertFragment,
     deleteBackward,
     deleteForward,
-  } = editor.tf;
+  } = editor;
 
-  editor.tf.deleteBackward = (unit) => {
+  editor.deleteBackward = (unit) => {
     if (handleDeleteBackwardFromInside(editor)) {
       return;
     }
@@ -44,7 +44,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
     deleteBackward(unit);
   };
 
-  editor.tf.deleteForward = (unit) => {
+  editor.deleteForward = (unit) => {
     if (handleDeleteForwardFromInside(editor)) {
       return;
     }
@@ -56,8 +56,8 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
     deleteForward(unit);
   };
 
-  editor.tf.setNodes = (props, options) => {
-    const maltekst = editor.api.node<MaltekstElement>({ match: { type: ELEMENT_MALTEKST } });
+  editor.setNodes = (props, options) => {
+    const maltekst = findNode<MaltekstElement>(editor, { match: { type: ELEMENT_MALTEKST } });
 
     if (maltekst !== undefined && 'type' in props) {
       return;
@@ -66,7 +66,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
     setNodes(props, options);
   };
 
-  editor.tf.insertBreak = () => {
+  editor.insertBreak = () => {
     const placeholder = getPlaceholderEntry(editor);
 
     if (placeholder !== undefined) {
@@ -76,7 +76,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
     insertBreak();
   };
 
-  editor.tf.insertSoftBreak = () => {
+  editor.insertSoftBreak = () => {
     const placeholder = getPlaceholderEntry(editor);
 
     if (placeholder !== undefined) {
@@ -86,7 +86,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
     insertSoftBreak();
   };
 
-  editor.tf.insertNode = (node) => {
+  editor.insertNode = (node) => {
     const placeholder = getPlaceholderEntry(editor);
 
     if (placeholder !== undefined) {
@@ -96,12 +96,12 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
     insertNode(node);
   };
 
-  editor.tf.insertFragment = (fragment: Descendant[]) => {
+  editor.insertFragment = (fragment: TDescendant[]) => {
     if (editor.selection === null) {
       return insertFragment(fragment);
     }
 
-    const activeNode = editor.api.node<PlaceholderElement>({
+    const activeNode = findNode<PlaceholderElement>(editor, {
       at: editor.selection,
       match: { type: ELEMENT_PLACEHOLDER },
     });
@@ -114,13 +114,13 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
 
     // Fixes fragments being pasted outside of placeholder
     if (placeholder.type === ELEMENT_PLACEHOLDER) {
-      editor.tf.insertNodes(extractText(fragment));
+      insertNodes(editor, extractText(fragment));
     }
   };
 
   // Chrome: Marking content from start to end (with Shift + Ctrl/nd) would leave a selection hanging outside the placeholder,
   // causing it to seemingly not be deletable
-  editor.tf.setSelection = ({ anchor, focus }) => {
+  editor.setSelection = ({ anchor, focus }) => {
     if (anchor === undefined || focus === undefined) {
       return setSelection({ anchor, focus });
     }

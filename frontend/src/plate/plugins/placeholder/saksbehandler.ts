@@ -2,8 +2,9 @@ import { SaksbehandlerPlaceholder } from '@app/plate/components/placeholder/plac
 import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
 import { parsers } from '@app/plate/plugins/placeholder/html-parsers';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
-import { ElementApi, type NodeEntry } from '@udecode/plate';
+import { type TNodeEntry, findNode, getNextNode, getPreviousNode, isElement, select } from '@udecode/plate-common';
 import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
+import { toDOMNode } from '@udecode/slate-react';
 import type { BasePoint } from 'slate';
 import type { PlaceholderElement } from '../../types';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
@@ -17,6 +18,7 @@ export const SaksbehandlerPlaceholderPlugin = createPlatePlugin({
     isInline: true,
     component: SaksbehandlerPlaceholder,
   },
+  extendEditor: ({ editor }) => withOverrides(editor),
   handlers: {
     onKeyDown: ({ editor, event }) => {
       if (handleSelectAll(editor, event) || handleArrows(editor, event)) {
@@ -27,18 +29,18 @@ export const SaksbehandlerPlaceholderPlugin = createPlatePlugin({
         event.preventDefault();
         event.stopPropagation();
 
-        const current = editor.api.node({ match: { type: ELEMENT_PLACEHOLDER } });
-        const getEntry = event.shiftKey ? editor.api.previous : editor.api.next;
+        const current = findNode(editor, { match: { type: ELEMENT_PLACEHOLDER } });
+        const getEntry = event.shiftKey ? getPreviousNode : getNextNode;
 
-        const nextOrPrevious = getEntry<PlaceholderElement>({
-          match: (n) => ElementApi.isElement(n) && n.type === ELEMENT_PLACEHOLDER && n !== current?.[0],
+        const nextOrPrevious = getEntry<PlaceholderElement>(editor, {
+          match: (n) => isElement(n) && n.type === ELEMENT_PLACEHOLDER && n !== current?.[0],
         });
 
         if (nextOrPrevious !== undefined) {
           return selectAndScrollIntoView(editor, nextOrPrevious);
         }
 
-        const firstOrLast = editor.api.node<PlaceholderElement>({
+        const firstOrLast = findNode<PlaceholderElement>(editor, {
           match: { type: ELEMENT_PLACEHOLDER },
           at: [],
           reverse: event.shiftKey,
@@ -51,13 +53,13 @@ export const SaksbehandlerPlaceholderPlugin = createPlatePlugin({
     },
   },
   parsers,
-}).overrideEditor(withOverrides);
+});
 
-const selectAndScrollIntoView = (editor: PlateEditor, [node, path]: NodeEntry<PlaceholderElement>) => {
+const selectAndScrollIntoView = (editor: PlateEditor, [node, path]: TNodeEntry<PlaceholderElement>) => {
   const lastIndex = node.children.length - 1;
   const offset = node.children[lastIndex]?.text.length ?? 0;
   const point: BasePoint = { path: [...path, lastIndex], offset };
 
-  editor.tf.select(point);
-  editor.api.toDOMNode(node)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  select(editor, point);
+  toDOMNode(editor, node)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 };

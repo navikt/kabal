@@ -3,7 +3,7 @@ import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { Value } from '@udecode/plate';
+import type { Value } from '@udecode/plate-common';
 import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { TemplateSections } from '../template-sections';
 import { LabelContentSource } from '../types';

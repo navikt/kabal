@@ -1,12 +1,12 @@
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
-import { TextApi } from '@udecode/plate';
+import { isText } from '@udecode/plate-common';
 
 export const useBookmarks = (): [string, FormattedText[]][] => {
   const editor = useMyPlateEditorState();
 
   const bookmarkEntries = editor.nodes<FormattedText>({
-    match: (n) => TextApi.isText(n) && Object.keys(n).some((k) => k.startsWith(BOOKMARK_PREFIX)),
+    match: (n) => isText(n) && Object.keys(n).some((k) => k.startsWith(BOOKMARK_PREFIX)),
     at: [],
   });
 

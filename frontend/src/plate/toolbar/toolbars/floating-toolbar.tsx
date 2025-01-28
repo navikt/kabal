@@ -6,8 +6,9 @@ import { useSelection } from '@app/plate/hooks/use-selection';
 import { FloatingRedaktoerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-redaktoer-toolbar-buttons';
 import { FloatingSaksbehandlerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-saksbehandler-toolbar-buttons';
 import { useMyPlateEditorRef } from '@app/plate/types';
-import { RangeApi } from '@udecode/plate';
+import { isCollapsed, someNode } from '@udecode/plate-common';
 import { BaseTablePlugin } from '@udecode/plate-table';
+import { isEditorFocused } from '@udecode/slate-react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -29,16 +30,16 @@ const FloatingToolbar = ({ editorId, container, children }: FloatingToolbarProps
   const editor = useMyPlateEditorRef();
   const [toolbarRef, setRef] = useState<HTMLElement | null>(null);
   const selection = useSelection(editorId);
-  const isInTable = editor.api.some({ match: { type: BaseTablePlugin.node.type } });
+  const isInTable = someNode(editor, { match: { type: BaseTablePlugin.node.type } });
   const position = getRangePosition(editor, isInTable ? null : selection, container);
-  const isFocused = editor.api.isFocused();
+  const isFocused = isEditorFocused(editor);
 
   const horizontalPosition = useMemo(
     () => getHorizontalPosition(toolbarRef, container, position),
     [container, position, toolbarRef],
   );
 
-  if (isInTable || !isFocused || position === null || RangeApi.isCollapsed()) {
+  if (isInTable || !isFocused || position === null || isCollapsed(editor.selection)) {
     return null;
   }
 

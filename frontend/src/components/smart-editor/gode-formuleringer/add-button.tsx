@@ -1,9 +1,8 @@
-import { useSelection } from '@app/plate/hooks/use-selection';
 import type { RichTextEditor } from '@app/plate/types';
 import { Button } from '@navikt/ds-react';
-import type { Value } from '@udecode/plate';
+import type { Value } from '@udecode/plate-common';
 import { styled } from 'styled-components';
-import { insertGodFormulering } from './insert';
+import { insertGodFormulering, isAvailable } from './insert';
 
 interface AddButtonProps {
   editor: RichTextEditor;
@@ -14,8 +13,7 @@ interface AddButtonProps {
 }
 
 export const AddButton = ({ editor, content, children, title = children, disabledTitle }: AddButtonProps) => {
-  const selection = useSelection();
-  const disabled = selection === null;
+  const disabled = !isAvailable(editor);
 
   return (
     <StyledButton

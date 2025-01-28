@@ -23,7 +23,7 @@ import { SignaturePlugin } from '@app/plate/plugins/signature';
 import type { IUserData } from '@app/types/bruker';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
-import { BaseParagraphPlugin } from '@udecode/plate';
+import { BaseParagraphPlugin } from '@udecode/plate-common';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';

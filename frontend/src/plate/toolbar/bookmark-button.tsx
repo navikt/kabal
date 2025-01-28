@@ -7,21 +7,21 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, BookmarkIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { RangeApi, TextApi } from '@udecode/plate';
+import { findNode, isCollapsed, isText, setNodes } from '@udecode/plate-common';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
 export const BookmarkButton = () => {
   const editor = useMyPlateEditorState();
-  const disabled = useIsUnchangeable() || RangeApi.isCollapsed();
+  const disabled = useIsUnchangeable() || isCollapsed(editor.selection);
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const setBookmark = (bookmark: string) => {
     const id = BOOKMARK_PREFIX + Date.now();
-    editor.tf.setNodes({ [BookmarkPlugin.key]: true, [id]: bookmark }, { match: TextApi.isText, split: true });
+    setNodes(editor, { [BookmarkPlugin.key]: true, [id]: bookmark }, { match: isText, split: true });
 
-    const entries = editor.nodes<FormattedText>({ match: (n) => TextApi.isText(n) && id in n });
+    const entries = editor.nodes<FormattedText>({ match: (n) => isText(n) && id in n });
     const nodes: FormattedText[] = [];
 
     for (const [node] of entries) {
@@ -29,8 +29,8 @@ export const BookmarkButton = () => {
     }
   };
 
-  const activeEntry = editor.api.node<FormattedText>({
-    match: (n) => TextApi.isText(n) && Object.keys(n).some((k) => k.startsWith(BOOKMARK_PREFIX)),
+  const activeEntry = findNode<FormattedText>(editor, {
+    match: (n) => isText(n) && Object.keys(n).some((k) => k.startsWith(BOOKMARK_PREFIX)),
   });
 
   const activeBookmark = getActiveBookmark(activeEntry?.[0]);

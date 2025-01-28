@@ -7,7 +7,7 @@ import { isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
 import { PencilWritingIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
-import { RangeApi } from '@udecode/plate';
+import { insertElements, isCollapsed, isExpanded } from '@udecode/plate-common';
 import { useEditorState } from '@udecode/plate-core/react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
@@ -27,7 +27,7 @@ export const InsertPlaceholder = () => {
   useOnClickOutside(ref, resetAndClose, true);
 
   const onClick = () => {
-    if (RangeApi.isCollapsed()) {
+    if (isCollapsed(editor.selection)) {
       if (isPlaceholderActive(editor)) {
         removePlaceholder(editor);
       } else {
@@ -38,7 +38,7 @@ export const InsertPlaceholder = () => {
     }
   };
 
-  const disabled = editor.selection === null || (RangeApi.isExpanded(editor.selection) && isPlaceholderActive(editor));
+  const disabled = editor.selection === null || (isExpanded(editor.selection) && isPlaceholderActive(editor));
 
   return (
     <span ref={ref}>
@@ -70,7 +70,7 @@ const PlaceholderText = ({ show, close, placeholder, setPlaceholder }: Placehold
   }
 
   const addPlaceholder = () => {
-    editor.tf.insertNodes(createPlaceHolder(placeholder), { select: true });
+    insertElements(editor, createPlaceHolder(placeholder), { select: true });
     close();
   };
 

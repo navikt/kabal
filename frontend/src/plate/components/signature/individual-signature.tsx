@@ -3,6 +3,7 @@ import { getName } from '@app/plate/components/signature/functions';
 import { useMainSignature, useMedunderskriverSignature } from '@app/plate/components/signature/hooks';
 import { type SignatureElement, useMyPlateEditorRef } from '@app/plate/types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { setNodes } from '@udecode/plate-common';
 import { useContext, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 import { MISSING_TITLE, Title } from './title';
@@ -23,7 +24,7 @@ export const SaksbehandlerSignature = ({ element }: Props) => {
       return;
     }
 
-    editor.tf.setNodes({ saksbehandler: signature }, { at: [], match: (n) => n === element });
+    setNodes(editor, { saksbehandler: signature }, { at: [], match: (n) => n === element });
   }, [editor, element, signature]);
 
   if (signature === undefined) {
@@ -80,7 +81,7 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
         medunderskriver: undefined,
       };
 
-      return editor.tf.setNodes(data, { match: (n) => n === element, at: [] });
+      return setNodes(editor, data, { match: (n) => n === element, at: [] });
     }
 
     if (element.medunderskriver?.name === signature?.name && element.medunderskriver?.title === signature?.title) {
@@ -93,7 +94,7 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
       medunderskriver: signature,
     };
 
-    editor.tf.setNodes(data, { match: (n) => n === element, at: [] });
+    setNodes(editor, data, { match: (n) => n === element, at: [] });
   }, [editor, element, noMedunderskriver, signature]);
 
   if (noMedunderskriver || signature === undefined) {

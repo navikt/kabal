@@ -1,5 +1,5 @@
 import type { Language } from '@app/types/texts/language';
-import type { Descendant } from '@udecode/plate';
+import type { TDescendant } from '@udecode/plate-common';
 import type { Role } from '../bruker';
 import type { DistribusjonsType } from '../documents/documents';
 import type { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
@@ -8,7 +8,7 @@ import type { TemplateIdEnum } from './template-enums';
 
 interface IMutableCreateSmartDocumentParams extends IOppgavebehandlingBaseParams {
   tittel: string;
-  content: Descendant[];
+  content: TDescendant[];
   templateId: TemplateIdEnum;
   dokumentTypeId: DistribusjonsType;
   parentId: string | null;

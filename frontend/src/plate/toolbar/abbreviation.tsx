@@ -7,7 +7,8 @@ import { useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
 import { useAddAbbreviationMutation } from '@app/redux-api/bruker';
 import { PlusIcon, TagIcon } from '@navikt/aksel-icons';
 import { Button, TextField, Tooltip } from '@navikt/ds-react';
-import { RangeApi } from '@udecode/plate';
+import { getEditorString, isCollapsed } from '@udecode/plate-common';
+import { focusEditor } from '@udecode/slate-react';
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -15,7 +16,7 @@ export const Abbreviation = () => {
   const [addAbbreviation] = useAddAbbreviationMutation();
   const editor = useMyPlateEditorState();
   const editorRef = useMyPlateEditorRef();
-  const disabled = RangeApi.isCollapsed();
+  const disabled = isCollapsed(editor.selection);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [localShort, setLocalShort] = useState('');
@@ -24,7 +25,7 @@ export const Abbreviation = () => {
     const listener = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setIsOpen(false);
-        editorRef.tf.focus();
+        focusEditor(editorRef);
       }
 
       if (e.key.toLowerCase() === 'f' && (e.ctrlKey || e.metaKey) && e.shiftKey) {
@@ -36,7 +37,7 @@ export const Abbreviation = () => {
     window.addEventListener('keydown', listener);
 
     return () => window.removeEventListener('keydown', listener);
-  }, [editorRef.tf.focus]);
+  }, [editorRef]);
 
   const onAdd = async () => {
     const short = localShort.trim();
@@ -59,7 +60,7 @@ export const Abbreviation = () => {
       return;
     }
 
-    const long = editor.api.string(editor.selection).trim();
+    const long = getEditorString(editor, editor.selection).trim();
 
     if (long.length === 0) {
       toast.warning('Du må markere teksten du vil forkorte.');
@@ -74,7 +75,7 @@ export const Abbreviation = () => {
     }
 
     await addAbbreviation({ short, long }).unwrap();
-    editor.tf.focus();
+    focusEditor(editorRef);
     setIsOpen(false);
 
     pushEvent('smart-editor-add-abbreviation', 'smart-editor', { short, long });
@@ -83,7 +84,7 @@ export const Abbreviation = () => {
   useOnClickOutside(containerRef, () => {
     if (isOpen) {
       setIsOpen(false);
-      editor.tf.focus();
+      focusEditor(editorRef);
     }
   });
 
@@ -114,7 +115,7 @@ export const Abbreviation = () => {
 
                 if (key === 'Escape') {
                   setIsOpen(false);
-                  editor.tf.focus();
+                  focusEditor(editorRef);
                 }
               }}
               autoCorrect="off"

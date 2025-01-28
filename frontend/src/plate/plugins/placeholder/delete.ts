@@ -3,6 +3,15 @@ import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { getPlaceholderEntry } from '@app/plate/plugins/placeholder/queries';
 import type { PlaceholderElement } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
+import {
+  getEndPoint,
+  getNextNode,
+  getPreviousNode,
+  getStartPoint,
+  isEndPoint,
+  isStartPoint,
+  setSelection,
+} from '@udecode/plate-common';
 import type { PlateEditor } from '@udecode/plate-core/react';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE);
@@ -26,7 +35,7 @@ export const handleDeleteBackwardFromInside = (editor: PlateEditor): boolean => 
   const [node, path] = placeholderEntry;
 
   if (placeholderIsEmpty(node)) {
-    editor.tf.delete({ at: path });
+    editor.delete({ at: path });
 
     return true;
   }
@@ -43,14 +52,14 @@ export const handleDeleteForwardFromInside = (editor: PlateEditor): boolean => {
 
   const [node, path] = placeholderEntry;
 
-  const isEnd = editor.api.isEnd(editor.selection.focus, path);
+  const isEnd = isEndPoint(editor, editor.selection.focus, path);
 
   if (!isEnd) {
     return false;
   }
 
   if (placeholderIsEmpty(node)) {
-    editor.tf.delete({ at: path });
+    editor.delete({ at: path });
 
     return true;
   }
@@ -63,13 +72,13 @@ export const handleDeleteBackwardFromOutside = (editor: PlateEditor): boolean =>
     return false;
   }
 
-  const isStart = editor.api.isStart(editor.selection.focus, editor.selection.focus.path);
+  const isStart = isStartPoint(editor, editor.selection.focus, editor.selection.focus.path);
 
   if (!isStart) {
     return false;
   }
 
-  const prevNode = editor.api.previous({ at: editor.selection.focus.path });
+  const prevNode = getPreviousNode(editor, { at: editor.selection.focus.path });
 
   if (prevNode === undefined) {
     return false;
@@ -82,13 +91,13 @@ export const handleDeleteBackwardFromOutside = (editor: PlateEditor): boolean =>
   }
 
   if (placeholderIsEmpty(node)) {
-    editor.tf.delete({ at: path });
+    editor.delete({ at: path });
 
     return true;
   }
 
-  const end = editor.api.end(path);
-  editor.tf.setSelection({ focus: end, anchor: end });
+  const end = getEndPoint(editor, path);
+  setSelection(editor, { focus: end, anchor: end });
 
   return false;
 };
@@ -98,13 +107,13 @@ export const handleDeleteForwardFromOutside = (editor: PlateEditor): boolean => 
     return false;
   }
 
-  const isEnd = editor.api.isEnd(editor.selection.focus, editor.selection.focus.path);
+  const isEnd = isEndPoint(editor, editor.selection.focus, editor.selection.focus.path);
 
   if (!isEnd) {
     return false;
   }
 
-  const nextNode = editor.api.next({ at: editor.selection.focus.path });
+  const nextNode = getNextNode(editor, { at: editor.selection.focus.path });
 
   if (nextNode === undefined) {
     return false;
@@ -117,13 +126,13 @@ export const handleDeleteForwardFromOutside = (editor: PlateEditor): boolean => 
   }
 
   if (placeholderIsEmpty(node)) {
-    editor.tf.delete({ at: path });
+    editor.delete({ at: path });
 
     return true;
   }
 
-  const start = editor.api.start(path);
-  editor.tf.setSelection({ focus: start, anchor: start });
+  const start = getStartPoint(editor, path);
+  setSelection(editor, { focus: start, anchor: start });
 
   return false;
 };

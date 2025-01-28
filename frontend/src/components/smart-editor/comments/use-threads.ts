@@ -5,9 +5,8 @@ import { useMyPlateEditorState } from '@app/plate/types';
 import { useGetCommentsQuery } from '@app/redux-api/smart-editor-comments';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { ElementApi } from '@udecode/plate';
 import { useContext, useMemo } from 'react';
-import type { Descendant } from 'slate';
+import { type Descendant, Text } from 'slate';
 import { COMMENT_PREFIX } from '../constants';
 
 export interface FocusedComment extends ISmartEditorComment {
@@ -74,7 +73,7 @@ export const useThreads = (): Threads => {
 
 const getRichTextThreadIds = (richText: Descendant[]): string[] =>
   richText.flatMap<string>((child) => {
-    if (!ElementApi.isElement(child)) {
+    if (Text.isText(child)) {
       return Object.keys(child)
         .filter((key) => key.startsWith(COMMENT_PREFIX))
         .map((key) => key.replace(COMMENT_PREFIX, ''));
