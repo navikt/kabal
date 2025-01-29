@@ -5,6 +5,7 @@ import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@app/components/s
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
+import { Tag } from '@navikt/ds-react';
 import { useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -16,7 +17,7 @@ interface Props {
   ytelseIsWildcard?: boolean;
 }
 
-const GENERAL_THRESHOLD = 12;
+const COMMON_HJEMMEL_THRESHOLD = 2;
 
 export const HjemlerSelect = ({
   selected,
@@ -33,63 +34,71 @@ export const HjemlerSelect = ({
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const generelleHjemler = useMemo(() => {
     const lovkildeOptionList: NestedOption[] = [];
-    const allHjemler = ytelser
-      .flatMap(({ lovKildeToRegistreringshjemler }) =>
-        lovKildeToRegistreringshjemler.flatMap(({ registreringshjemler }) => registreringshjemler.map(({ id }) => id)),
-      )
-      .reduce<string[]>((acc, hjemmel, _, all) => {
-        if (acc.includes(hjemmel)) {
-          return acc;
-        }
 
-        if (all.filter((id) => id === hjemmel).length >= GENERAL_THRESHOLD) {
-          acc.push(hjemmel);
-        }
-
-        return acc;
-      }, []);
+    const allHjemler = ytelser.flatMap(({ lovKildeToRegistreringshjemler }) =>
+      lovKildeToRegistreringshjemler.flatMap(({ registreringshjemler }) => registreringshjemler.map(({ id }) => id)),
+    );
 
     for (const ytelse of ytelser) {
       for (const { navn, id, registreringshjemler } of ytelse.lovKildeToRegistreringshjemler) {
         for (const hjemmel of registreringshjemler) {
-          if (allHjemler.includes(hjemmel.id)) {
-            const lovkildeId = `${GLOBAL}${LIST_DELIMITER}${id}`;
-            const hjemmedOptionId = `${GLOBAL}${LIST_DELIMITER}${hjemmel.id}`;
+          const count = allHjemler.filter((h) => h === hjemmel.id).length;
 
-            const lovkildeOption = lovkildeOptionList.find((o) => o.value === lovkildeId);
+          if (count < COMMON_HJEMMEL_THRESHOLD) {
+            continue;
+          }
 
-            if (lovkildeOption === undefined) {
-              lovkildeOptionList.push({
-                type: OptionType.GROUP,
-                label: navn,
-                value: lovkildeId,
-                filterValue: navn,
-                options: [
-                  {
-                    type: OptionType.OPTION,
-                    value: hjemmedOptionId,
-                    label: hjemmel.navn,
-                    filterValue: `${navn} ${hjemmel.navn}`,
-                  },
-                ],
-              });
-            } else if (lovkildeOption.options === undefined) {
-              lovkildeOption.options = [
+          const lovkildeId = `${GLOBAL}${LIST_DELIMITER}${id}`;
+          const hjemmedOptionId = `${GLOBAL}${LIST_DELIMITER}${hjemmel.id}`;
+
+          const lovkildeOption = lovkildeOptionList.find((o) => o.value === lovkildeId);
+
+          if (lovkildeOption === undefined) {
+            lovkildeOptionList.push({
+              type: OptionType.GROUP,
+              label: navn,
+              value: lovkildeId,
+              filterValue: navn,
+              options: [
                 {
                   type: OptionType.OPTION,
                   value: hjemmedOptionId,
                   label: hjemmel.navn,
+                  tags: [
+                    <Tag size="xsmall" variant="info-filled" key={hjemmel.id}>
+                      {`${count} ytelser`}
+                    </Tag>,
+                  ],
                   filterValue: `${navn} ${hjemmel.navn}`,
                 },
-              ];
-            } else if (lovkildeOption.options.every((o) => o.value !== hjemmedOptionId)) {
-              lovkildeOption.options.push({
+              ],
+            });
+          } else if (lovkildeOption.options === undefined) {
+            lovkildeOption.options = [
+              {
                 type: OptionType.OPTION,
                 value: hjemmedOptionId,
                 label: hjemmel.navn,
+                tags: [
+                  <Tag size="xsmall" variant="info-filled" key={hjemmel.id}>
+                    {`${count} ytelser`}
+                  </Tag>,
+                ],
                 filterValue: `${navn} ${hjemmel.navn}`,
-              });
-            }
+              },
+            ];
+          } else if (lovkildeOption.options.every((o) => o.value !== hjemmedOptionId)) {
+            lovkildeOption.options.push({
+              type: OptionType.OPTION,
+              value: hjemmedOptionId,
+              label: hjemmel.navn,
+              tags: [
+                <Tag size="xsmall" variant="info-filled" key={hjemmel.id}>
+                  {`${count} ytelser`}
+                </Tag>,
+              ],
+              filterValue: `${navn} ${hjemmel.navn}`,
+            });
           }
         }
       }
@@ -136,15 +145,13 @@ export const HjemlerSelect = ({
             })),
           };
         })
-        .concat([
-          {
-            type: OptionType.OPTION,
-            label: `Hjemler felles for ${GENERAL_THRESHOLD} ytelser`,
-            value: GLOBAL,
-            filterValue: GLOBAL,
-            options: generelleHjemler,
-          },
-        ]),
+        .concat({
+          type: OptionType.GROUP,
+          label: `Hjemler felles for minst ${COMMON_HJEMMEL_THRESHOLD} ytelser`,
+          value: GLOBAL,
+          filterValue: GLOBAL,
+          options: generelleHjemler,
+        }),
 
     [generelleHjemler, isGlobalSelected, selected, ytelseIsWildcard, ytelser, ytelserSelectable],
   );
