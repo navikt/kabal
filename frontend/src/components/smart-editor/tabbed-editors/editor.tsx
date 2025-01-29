@@ -80,7 +80,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     override: {
       components,
     },
-    value: structuredClone(smartDocument.content),
+    value: smartDocument.content,
   });
 
   return (

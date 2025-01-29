@@ -12,7 +12,7 @@ import { PageBreakPlugin } from '@app/plate/plugins/page-break';
 import { PastePlugin } from '@app/plate/plugins/paste';
 import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { SelectionPlugin } from '@app/plate/plugins/selection';
-import { ParserPlugin } from '@udecode/plate';
+import { type NodeEntry, ParserPlugin } from '@udecode/plate';
 import { AlignPlugin } from '@udecode/plate-alignment/react';
 import { AutoformatPlugin } from '@udecode/plate-autoformat/react';
 import { BoldPlugin, ItalicPlugin, UnderlinePlugin } from '@udecode/plate-basic-marks/react';
@@ -28,7 +28,12 @@ import { ParagraphPlugin } from '@udecode/plate/react';
 
 export const defaultPlugins = [
   ParserPlugin,
-  NodeIdPlugin.configure({ options: { allow: [TableCellPlugin.key, TableRowPlugin.key] } }),
+  NodeIdPlugin.configure({
+    options: {
+      allow: [TableCellPlugin.key, TableRowPlugin.key],
+      filter: ([node]: NodeEntry) => Object.isExtensible(node),
+    },
+  }),
   ParagraphPlugin.withComponent(Paragraph),
   HeadingPlugin.configure({ options: { levels: 3 } }).overrideEditor(({ editor }) => {
     const { addMark } = editor.tf;
