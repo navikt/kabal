@@ -104,15 +104,10 @@ interface ListItemProps {
 }
 
 const ListItem = ({ option, selected, level, filter, onCheck, hasFilter }: ListItemProps) => {
-  const { value, label, options } = option;
+  const { value, label, options, tags } = option;
   const hasOptionsOrGroups = options !== undefined && options.length > 0;
 
   const isInFilter = useMemo(() => filter.test(option.filterValue), [filter, option.filterValue]);
-
-  const filteredSubCount = useMemo(
-    () => (hasOptionsOrGroups ? options.reduce((count, o) => (filter.test(o.filterValue) ? count + 1 : count), 0) : 0),
-    [filter, hasOptionsOrGroups, options],
-  );
 
   const { subSelectionCount, isSubInFilter } = useMemo<SubOptions>(
     () =>
@@ -120,9 +115,7 @@ const ListItem = ({ option, selected, level, filter, onCheck, hasFilter }: ListI
     [filter, hasOptionsOrGroups, options, selected],
   );
 
-  const hasSubSelection = subSelectionCount !== 0;
-  const [isManualExpanded, setIsManualExpaded] = useState<boolean | null>(null);
-  const isExpanded = isManualExpanded ?? (hasSubSelection || (hasFilter && filteredSubCount <= 3));
+  const [isExpanded, setIsExpaded] = useState<boolean | null>(null);
 
   if (!(isInFilter || isSubInFilter)) {
     return null;
@@ -135,7 +128,7 @@ const ListItem = ({ option, selected, level, filter, onCheck, hasFilter }: ListI
           <ExpandButton
             variant="tertiary-neutral"
             size="xsmall"
-            onClick={() => setIsManualExpaded(!isExpanded)}
+            onClick={() => setIsExpaded(!isExpanded)}
             icon={isExpanded ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
           />
         ) : null}
@@ -143,12 +136,13 @@ const ListItem = ({ option, selected, level, filter, onCheck, hasFilter }: ListI
           option={option}
           selected={selected}
           onCheck={(id) => {
-            setIsManualExpaded(true);
+            setIsExpaded(true);
             onCheck(id);
           }}
           subSelectionCount={subSelectionCount}
         >
-          {label}
+          <span>{label}</span>
+          {tags}
         </CheckboxOrGroup>
       </CheckboxContainer>
 
@@ -170,7 +164,7 @@ interface CheckboxOrGroupProps {
   option: NestedOption;
   selected: string[];
   subSelectionCount: number;
-  children: string;
+  children: React.ReactNode;
   onCheck: (id: string) => void;
 }
 
@@ -217,14 +211,14 @@ const CheckboxOrGroup = ({ option, children, selected, onCheck, subSelectionCoun
 };
 
 interface OptionLabelProps {
-  children: string;
+  children: React.ReactNode;
   subOptionSelectedCount: number;
   options: NestedOption[] | undefined;
   totalOptions: number;
 }
 
 const OptionLabel = ({ children, subOptionSelectedCount, options, totalOptions }: OptionLabelProps) => (
-  <StyledOptionLabel title={children}>
+  <StyledOptionLabel>
     {children}
     {options !== undefined && options.length > 0 ? (
       <Tag
@@ -359,6 +353,9 @@ const GroupLabel = styled(BodyShort)`
 `;
 
 const StyledOptionLabel = styled.span`
+  display: flex;
+  align-items: center;
+  column-gap: var(--a-spacing-1);
   overflow: hidden;
   text-overflow: ellipsis;
 `;
