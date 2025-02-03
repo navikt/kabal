@@ -1,5 +1,6 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { getName, getTitle } from '@app/plate/components/signature/functions';
 import { MISSING_TITLE } from '@app/plate/components/signature/title';
 import type { ISignature, SignatureElement } from '@app/plate/types';
@@ -32,23 +33,31 @@ export const useMainSignature = (element: SignatureElement): ISignature | undefi
   const isRolAnswers = templateId === TemplateIdEnum.ROL_ANSWERS;
   const isRolSakstype = oppgave?.typeId === SaksTypeEnum.KLAGE || oppgave?.typeId === SaksTypeEnum.ANKE;
 
-  const { data: creatorSignature } = useGetSignatureQuery(isRolAnswers ? skipToken : creator);
+  const isFinished = useIsFullfoert();
+  const isOverridden = element.overriddenSaksbehandler !== undefined;
+
+  const { data: creatorSignature } = useGetSignatureQuery(
+    isFinished && !isRolAnswers && !isOverridden ? creator : skipToken,
+  );
+  const { data: saksbehandlerSignature } = useGetSignatureQuery(
+    !isFinished && !isRolAnswers && !isOverridden ? (oppgave?.saksbehandler?.navIdent ?? skipToken) : skipToken,
+  );
   const { data: overrideSignature } = useGetSignatureQuery(element.overriddenSaksbehandler ?? skipToken);
   const { data: rolSignature } = useGetSignatureQuery(
-    isRolAnswers && isRolSakstype ? (oppgave.rol.employee?.navIdent ?? skipToken) : skipToken,
+    !isOverridden && isRolAnswers && isRolSakstype ? (oppgave.rol.employee?.navIdent ?? skipToken) : skipToken,
   );
 
   const suffix = templateId !== TemplateIdEnum.ROL_ANSWERS && element.useSuffix ? 'saksbehandler' : undefined;
-
-  if (isRolAnswers) {
-    return toSignature(rolSignature, element.useShortName, suffix);
-  }
 
   if (element.overriddenSaksbehandler !== undefined) {
     return toSignature(overrideSignature, element.useShortName, suffix);
   }
 
-  return toSignature(creatorSignature, element.useShortName, suffix);
+  if (isRolAnswers) {
+    return toSignature(rolSignature, element.useShortName, suffix);
+  }
+
+  return toSignature(isFinished ? creatorSignature : saksbehandlerSignature, element.useShortName, suffix);
 };
 
 const toSignature = (
