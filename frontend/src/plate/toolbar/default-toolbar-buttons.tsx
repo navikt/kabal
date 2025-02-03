@@ -1,4 +1,3 @@
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { MOD_KEY } from '@app/keys';
 import { useIsElementActive } from '@app/plate/hooks/use-is-element-active';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
@@ -16,16 +15,20 @@ import { useIsInTable } from '@app/plate/toolbar/use-is-in-table';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { insertPageBreak } from '@app/plate/utils/transforms';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
+import type { skipToken } from '@reduxjs/toolkit/query';
 import { DocumentPageBreak, TextDescription, Wand } from '@styled-icons/fluentui-system-regular';
 import { BaseParagraphPlugin } from '@udecode/plate';
 import { styled } from 'styled-components';
 
-export const DefaultToolbarButtons = () => {
+interface Props {
+  oppgaveId?: string | typeof skipToken;
+}
+
+export const DefaultToolbarButtons = ({ oppgaveId }: Props) => {
   const editor = useMyPlateEditorRef();
   const unchangeable = useIsUnchangeable();
   const inList = useIsInList();
   const inTable = useIsInTable();
-  const oppgaveId = useOppgaveId();
 
   return (
     <>
