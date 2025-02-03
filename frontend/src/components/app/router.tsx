@@ -16,6 +16,7 @@ import { MineOppgaverPage } from '@app/pages/mine-oppgaver/mine-oppgaver';
 import { OppgavebehandlingPage } from '@app/pages/oppgavebehandling/oppgavebehandling';
 import { OppgaverPage } from '@app/pages/oppgaver/oppgaver';
 import { OppgavestyringPage } from '@app/pages/oppgavestyring/oppgavestyring';
+import { ProduksjonsstyringPage } from '@app/pages/produksjonsstyring/produksjonsstyring';
 import { RedigerbareMalteksterPage } from '@app/pages/redigerbare-maltekster/redigerbare-maltekster';
 import { RegelverkPage } from '@app/pages/regelverk/regelverk';
 import { SearchPage } from '@app/pages/search/search';
@@ -136,6 +137,10 @@ export const Router = () => (
           <Route path=":id" element={<SvarbrevPage modal={ModalEnum.PREVIEW} />} />
           <Route path=":id/historikk" element={<SvarbrevPage modal={ModalEnum.HISTORY} />} />
         </Route>
+      </Route>
+
+      <Route element={<ProtectedRoute roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]} />}>
+        <Route path="produksjonsstyring" element={<ProduksjonsstyringPage />} />
       </Route>
 
       <Route element={<ProtectedRoute roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]} />}>

@@ -104,6 +104,7 @@ export enum OppgaveTableRowsPerPage {
   SEARCH_FEILREGISTRERTE = 'oppgaver/search_feilregistrerte/rows_per_page',
   SEARCH_PAA_VENT = 'oppgaver/search_paa_vent/rows_per_page',
   RELEVANT_ACTIVE = 'oppgaver/relevant_active/rows_per_page',
+  PRODUKSJONSSTYRING = 'oppgaver/produksjonsstyring/rows_per_page',
 }
 
 export const useGosysBeskrivelseTab = () => useSetting('oppgavebehandling/gosys/beskrivelse/tab');
