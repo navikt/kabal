@@ -1,4 +1,5 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { MOD_KEY } from '@app/keys';
 import { pushEvent } from '@app/observability';
 import { DefaultToolbarButtons } from '@app/plate/toolbar/default-toolbar-buttons';
@@ -12,11 +13,12 @@ import { useContext } from 'react';
 export const SaksbehandlerToolbar = () => {
   const { showGodeFormuleringer, setShowGodeFormuleringer, showHistory, setShowHistory } =
     useContext(SmartEditorContext);
+  const oppgaveId = useOppgaveId();
 
   return (
     <StyledToolbar>
       <FirstRow>
-        <DefaultToolbarButtons />
+        <DefaultToolbarButtons oppgaveId={oppgaveId} />
 
         <ToolbarSeparator />
 

@@ -2,13 +2,13 @@ import { toast } from '@app/components/toast/store';
 import { pushEvent, pushLog } from '@app/observability';
 import { nodeNormalize } from '@app/plate/plugins/normalize-node';
 import { LogLevel } from '@grafana/faro-web-sdk';
-import { skipToken } from '@reduxjs/toolkit/query';
+import type { skipToken } from '@reduxjs/toolkit/query';
 import { type Descendant, ElementApi } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
 import { Scrubber } from 'slate';
 
-export const fixDocument = (editor: PlateEditor, id: string | typeof skipToken) => {
-  const oppgaveId = id === skipToken ? '' : id;
+export const fixDocument = (editor: PlateEditor, id?: string | typeof skipToken) => {
+  const oppgaveId = typeof id === 'string' ? id : '';
 
   pushEvent('fix-document', 'plate');
 
