@@ -25,6 +25,8 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections, string> = {
   [TemplateSections.SAKSGANG]: 'Saksgang',
   [TemplateSections.SVAR_PÅ_INNSYNSBEGJÆRING]: 'Svar på innsynsbegjæring',
   [TemplateSections.OM_TAUSHETSPLIKT]: 'Om taushetsplikt',
+  [TemplateSections.OM_REGELVERK]: 'Om regelverket i saken',
+  [TemplateSections.HVORFOR_OMGJØRING]: 'Om hvorfor omgjøring vurderes',
 
   [TemplateSections.INTRODUCTION_TEMP]: 'Introduksjon (midlertidig)',
 };

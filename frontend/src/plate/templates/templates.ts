@@ -14,6 +14,7 @@ import {
   getGenereltBrevTemplate,
 } from '@app/plate/templates/simple-templates';
 import { SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE } from '@app/plate/templates/svar-på-innsynsbegjæring';
+import { VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE } from '@app/plate/templates/varsel-om-omgjøring-til-ugunst';
 
 export const TEMPLATE_MAP = {
   [GENERELT_BREV_TEMPLATE.templateId]: GENERELT_BREV_TEMPLATE,
@@ -29,6 +30,7 @@ export const TEMPLATE_MAP = {
   [OMGJØRINGSKRAVVEDTAK_TEMPLATE.templateId]: OMGJØRINGSKRAVVEDTAK_TEMPLATE,
   [FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE_TEMPLATE.templateId]: FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE_TEMPLATE,
   [SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE.templateId]: SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE,
+  [VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE.templateId]: VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE,
 };
 
 export const TEMPLATES = Object.values(TEMPLATE_MAP);
@@ -40,6 +42,7 @@ export const KLAGE_TEMPLATES = [
   ROL_QUESTIONS_TEMPLATE,
   ROL_TILSVARSBREV_TEMPLATE,
   SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE,
+  // VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE, // Only visible for readaktør for now.
 ];
 
 export const ANKE_TEMPLATES = [
