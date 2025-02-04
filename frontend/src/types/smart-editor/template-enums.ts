@@ -13,4 +13,5 @@ export enum TemplateIdEnum {
   OMGJØRINGSKRAVVEDTAK = 'omgjøringskravvedtak',
   FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE = 'forenklet-beslutning-om-ikke-å-omgjøre',
   SVAR_PÅ_INNSYNSBEGJÆRING = 'svar-på-innsynsbegjæring',
+  VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE = 'varsel-om-omgjøring-til-ugunst',
 }

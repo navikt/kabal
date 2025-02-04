@@ -33,6 +33,8 @@ export enum TemplateSections {
   SAKSGANG = 'section-ørn',
   SVAR_PÅ_INNSYNSBEGJÆRING = 'section-orm',
   OM_TAUSHETSPLIKT = 'section-due',
+  HVORFOR_OMGJØRING = 'section-ara',
+  OM_REGELVERK = 'section-and',
 
   INTRODUCTION_TEMP = 'section-rev-temp', // For "migrating" ROL questions
 }
