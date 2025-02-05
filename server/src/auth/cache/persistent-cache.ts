@@ -1,26 +1,26 @@
-import { memoryCacheGauge, redisCacheGauge, redisCacheSizeGauge } from '@app/auth/cache/cache-gauge';
+import { memoryCacheGauge, persistentCacheGauge, persistentCacheSizeGauge } from '@app/auth/cache/cache-gauge';
 import type { TokenMessage } from '@app/auth/cache/types';
 import { getLogger } from '@app/logger';
-import { type RedisClientType, createClient } from 'redis';
+import { type RedisClientType as ValkeyClientType, createClient } from 'redis';
 
-const log = getLogger('obo-redis-cache');
+const log = getLogger('obo-persistent-cache');
 
 export type TokenListener = (message: TokenMessage) => void;
 
 const TOKEN_CHANNEL = 'obo-token';
 
-export class OboRedisCache {
-  #client: RedisClientType;
-  #subscribeClient: RedisClientType;
+export class OboPersistentCache {
+  #client: ValkeyClientType;
+  #subscribeClient: ValkeyClientType;
 
   #listeners: TokenListener[] = [];
 
   constructor(url: string, username: string, password: string) {
     this.#client = createClient({ url, username, password, pingInterval: 3_000 });
-    this.#client.on('error', (error) => log.error({ msg: 'Redis Data Client Error', error }));
+    this.#client.on('error', (error) => log.error({ msg: 'Valkey Data Client Error', error }));
 
     this.#subscribeClient = this.#client.duplicate();
-    this.#subscribeClient.on('error', (error) => log.error({ msg: 'Redis Subscribe Client Error', error }));
+    this.#subscribeClient.on('error', (error) => log.error({ msg: 'Valkey Subscribe Client Error', error }));
   }
 
   public async init() {
@@ -51,7 +51,7 @@ export class OboRedisCache {
 
   #refreshCacheSizeMetric = async () => {
     const count = await this.#client.dbSize();
-    redisCacheSizeGauge.set(count);
+    persistentCacheSizeGauge.set(count);
   };
 
   public async getAll(): Promise<TokenMessage[]> {
@@ -91,18 +91,18 @@ export class OboRedisCache {
      * ttl() gets remaining time to live in seconds.
      * Returns -2 if the key does not exist.
      * Returns -1 if the key exists but has no associated expire.
-     * @see https://redis.io/docs/latest/commands/ttl/
+     * @see https://valkey.io/commands/ttl/
      */
     const [token, ttl] = await Promise.all([this.#client.get(key), this.#client.ttl(key)]);
 
     if (token === null || ttl === -2) {
-      redisCacheGauge.inc({ hit: 'miss' });
+      persistentCacheGauge.inc({ hit: 'miss' });
 
       return null;
     }
 
     if (ttl === -1) {
-      redisCacheGauge.inc({ hit: 'invalid' });
+      persistentCacheGauge.inc({ hit: 'invalid' });
       this.#client.del(key);
       this.#refreshCacheSizeMetric();
 
@@ -110,13 +110,13 @@ export class OboRedisCache {
     }
 
     if (ttl === 0) {
-      redisCacheGauge.inc({ hit: 'expired' });
+      persistentCacheGauge.inc({ hit: 'expired' });
 
       return null;
     }
 
-    redisCacheGauge.inc({ hit: 'hit' });
-    memoryCacheGauge.inc({ hit: 'redis' });
+    persistentCacheGauge.inc({ hit: 'hit' });
+    memoryCacheGauge.inc({ hit: 'persistent' });
 
     return { token, expiresAt: now() + ttl };
   }
