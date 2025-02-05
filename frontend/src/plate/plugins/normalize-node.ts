@@ -76,23 +76,17 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
     if (parentEntry === undefined) {
       pushLog('Missing node type, but no parent. Setting type to paragraph.', options, LogLevel.WARN);
 
-      editor.tf.setNodes(
-        { type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT },
-        { at: path, match: (n) => n === node },
-      );
+      editor.tf.setNodes({ type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT }, { at: path, mode: 'highest' });
 
       return true;
     }
 
-    const [parentNode] = parentEntry;
+    const [parentNode, parentNodePath] = parentEntry;
 
     if (isEditor(parentNode)) {
       pushLog('Missing node type, element at top level in editor. Setting type to paragraph.', options, LogLevel.WARN);
 
-      editor.tf.setNodes(
-        { type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT },
-        { at: [], match: (n) => n === node },
-      );
+      editor.tf.setNodes({ type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT }, { at: path, mode: 'highest' });
 
       return true;
     }
@@ -106,7 +100,7 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
         LogLevel.WARN,
       );
 
-      editor.tf.setNodes({ type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT }, { match: (n) => n === node });
+      editor.tf.setNodes({ type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT }, { at: path, mode: 'highest' });
 
       return true;
     }
@@ -118,7 +112,7 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
         LogLevel.WARN,
       );
 
-      editor.tf.setNodes({ type: BaseParagraphPlugin.node.type }, { at: path, match: (n) => n === parentNode });
+      editor.tf.setNodes({ type: BaseParagraphPlugin.node.type }, { at: parentNodePath, mode: 'highest' });
 
       return true;
     }
@@ -126,7 +120,7 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
     if (parentNode.type === BaseListItemPlugin.node.type) {
       pushLog('Normalized missing LIC', options);
 
-      editor.tf.setNodes({ type: BaseListItemContentPlugin.node.type }, { at: path, match: (n) => n === node });
+      editor.tf.setNodes({ type: BaseListItemContentPlugin.node.type }, { at: path, mode: 'highest' });
 
       return true;
     }

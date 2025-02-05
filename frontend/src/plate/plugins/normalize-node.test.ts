@@ -3,18 +3,16 @@ import { ELEMENT_MALTEKSTSEKSJON, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate
 import { normalizeNodePlugin } from '@app/plate/plugins/normalize-node';
 import { TemplateSections } from '@app/plate/template-sections';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import {
-  type BulletListElement,
-  type H1Element,
-  type KabalValue,
-  type ListItemContainerElement,
-  type ListItemElement,
-  type MaltekstseksjonElement,
-  type ParagraphElement,
-  type RedigerbarMaltekstElement,
-  TextAlign,
+import type {
+  BulletListElement,
+  H1Element,
+  KabalValue,
+  ListItemContainerElement,
+  ListItemElement,
+  MaltekstseksjonElement,
+  ParagraphElement,
+  RedigerbarMaltekstElement,
 } from '@app/plate/types';
-import { BaseParagraphPlugin } from '@udecode/plate';
 import { createPlateEditor } from '@udecode/plate-core/react';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
 
@@ -44,11 +42,7 @@ describe('normalize node with missing type prop', () => {
 
     editor.tf.replaceNodes(invalidNode, { at: [0] });
 
-    const defaultedNode: ParagraphElement = {
-      type: BaseParagraphPlugin.key,
-      align: TextAlign.LEFT,
-      children: [{ text: 'some text' }],
-    };
+    const defaultedNode = createSimpleParagraph('some text');
 
     expect(editor.children).toEqual([defaultedNode]);
   });
@@ -61,11 +55,7 @@ describe('normalize node with missing type prop', () => {
 
     editor.tf.replaceNodes(invalidParent, { at: [0] });
 
-    const defaultedNode: ParagraphElement = {
-      type: BaseParagraphPlugin.key,
-      align: TextAlign.LEFT,
-      children: [{ text: 'some text' }],
-    };
+    const defaultedNode = createSimpleParagraph('some text');
 
     expect(editor.children).toEqual([defaultedNode]);
   });
@@ -88,7 +78,7 @@ describe('normalize node with missing type prop', () => {
 
     editor.tf.replaceNodes(invalidMaltekstseksjon, { at: [0] });
 
-    const validParagraph: ParagraphElement = { children: [{ text: 'some text' }] } as ParagraphElement;
+    const validParagraph: ParagraphElement = createSimpleParagraph('some text');
     const validRedigerbarMaltekst: RedigerbarMaltekstElement = {
       type: ELEMENT_REDIGERBAR_MALTEKST,
       section: TemplateSections.ANFOERSLER,
