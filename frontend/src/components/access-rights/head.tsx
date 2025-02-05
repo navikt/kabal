@@ -85,7 +85,7 @@ const getBackgroundColor = (props: StyledAngledHeaderDivProps) => {
   }
 
   if (props.$grey) {
-    return 'var(--a-text-default)';
+    return 'var(--a-gray-200)';
   }
 
   return 'var(--a-bg-default)';
