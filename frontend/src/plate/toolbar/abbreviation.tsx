@@ -2,13 +2,11 @@ import { toast } from '@app/components/toast/store';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { pushEvent } from '@app/observability';
-import { useSelection } from '@app/plate/hooks/use-selection';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
 import { useAddAbbreviationMutation } from '@app/redux-api/bruker';
 import { PlusIcon, TagIcon } from '@navikt/aksel-icons';
 import { Button, TextField, Tooltip } from '@navikt/ds-react';
-import { RangeApi } from '@udecode/plate';
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -16,8 +14,6 @@ export const Abbreviation = () => {
   const [addAbbreviation] = useAddAbbreviationMutation();
   const editor = useMyPlateEditorState();
   const editorRef = useMyPlateEditorRef();
-  const selection = useSelection();
-  const disabled = RangeApi.isCollapsed(selection);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [localShort, setLocalShort] = useState('');
@@ -96,7 +92,6 @@ export const Abbreviation = () => {
         icon={<TagIcon aria-hidden />}
         onClick={() => setIsOpen(!isOpen)}
         active={isOpen}
-        disabled={disabled}
         variant={isOpen ? 'primary' : 'tertiary-neutral'}
         keys={['Ctrl', 'Shift', 'F']}
       />
