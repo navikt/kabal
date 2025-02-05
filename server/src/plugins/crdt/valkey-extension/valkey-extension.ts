@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { getLogger } from '@app/logger';
-import type { RedisOptions } from '@app/plugins/crdt/redis-extension/types';
+import type { ValkeyOptions } from '@app/plugins/crdt/valkey-extension/types';
 import {
   Debugger,
   type Document,
@@ -17,34 +17,34 @@ import {
   type onConfigurePayload,
   type onDisconnectPayload,
 } from '@hocuspocus/server';
-import { type RedisClientType, createClient } from 'redis';
+import { type RedisClientType as ValkeyClientType, createClient } from 'redis';
 
-const log = getLogger('redis-extension');
+const log = getLogger('valkey-extension');
 
-export class RedisExtension implements Extension {
+export class ValkeyExtension implements Extension {
   readonly #prefix = 'hocuspocus';
   readonly #identifier = `host-${randomUUID()}`;
   readonly #disconnectDelay = 1_000;
-  readonly #redisConnectionRetryDelay = 100;
-  readonly #redisTransactionOrigin = '__hocuspocus__redis__origin__';
-  readonly #pub: RedisClientType;
-  readonly #sub: RedisClientType;
+  readonly #valkeyConnectionRetryDelay = 100;
+  readonly #valkeyTransactionOrigin = '__hocuspocus__valkey__origin__';
+  readonly #pub: ValkeyClientType;
+  readonly #sub: ValkeyClientType;
   readonly #messagePrefix: Buffer;
   instance?: Hocuspocus;
 
   #isReady = false;
 
-  public constructor(options: RedisOptions) {
-    log.debug({ msg: 'Creating RedisExtension', data: { identifier: this.#identifier } });
+  public constructor(options: ValkeyOptions) {
+    log.debug({ msg: 'Creating ValkeyExtension', data: { identifier: this.#identifier } });
 
     this.#pub = createClient({ ...options, pingInterval: 30_000 });
     this.#sub = this.#pub.duplicate();
 
     this.#pub.on('error', (error) =>
-      log.error({ msg: 'Redis publish client error', error, data: { identifier: this.#identifier } }),
+      log.error({ msg: 'Valkey publish client error', error, data: { identifier: this.#identifier } }),
     );
     this.#sub.on('error', (error) =>
-      log.error({ msg: 'Redis subscribe client error', error, data: { identifier: this.#identifier } }),
+      log.error({ msg: 'Valkey subscribe client error', error, data: { identifier: this.#identifier } }),
     );
 
     this.#init();
@@ -60,7 +60,7 @@ export class RedisExtension implements Extension {
   }
 
   onConfigure({ instance }: onConfigurePayload) {
-    log.debug({ msg: 'Configuring RedisExtension', data: { identifier: this.#identifier } });
+    log.debug({ msg: 'Configuring ValkeyExtension', data: { identifier: this.#identifier } });
     this.instance = instance;
     return Promise.resolve();
   }
@@ -92,11 +92,11 @@ export class RedisExtension implements Extension {
 
     if (!this.#isReady) {
       log.warn({
-        msg: 'Redis is not ready',
+        msg: 'Valkey is not ready',
         data: { document: documentName, method: 'afterLoadDocument', identifier: this.#identifier },
       });
 
-      await delay(this.#redisConnectionRetryDelay);
+      await delay(this.#valkeyConnectionRetryDelay);
 
       return this.afterLoadDocument(params);
     }
@@ -160,7 +160,7 @@ export class RedisExtension implements Extension {
       return;
     }
 
-    new MessageReceiver(message, new Debugger(), this.#redisTransactionOrigin).apply(document, undefined, (reply) =>
+    new MessageReceiver(message, new Debugger(), this.#valkeyTransactionOrigin).apply(document, undefined, (reply) =>
       this.#pub.publish(this.#getKey(document.name), this.#encodeMessage(reply)),
     );
   }
@@ -168,11 +168,11 @@ export class RedisExtension implements Extension {
   async #publishFirstSyncStep(documentName: string, document: Document): Promise<number> {
     if (!this.#isReady) {
       log.warn({
-        msg: 'Redis is not ready',
+        msg: 'Valkey is not ready',
         data: { document: documentName, method: 'publishFirstSyncStep', identifier: this.#identifier },
       });
 
-      await delay(this.#redisConnectionRetryDelay);
+      await delay(this.#valkeyConnectionRetryDelay);
 
       return this.#publishFirstSyncStep(documentName, document);
     }
@@ -185,11 +185,11 @@ export class RedisExtension implements Extension {
   async #requestAwarenessFromOtherInstances(documentName: string): Promise<number> {
     if (!this.#isReady) {
       log.warn({
-        msg: 'Redis is not ready',
+        msg: 'Valkey is not ready',
         data: { document: documentName, method: 'requestAwarenessFromOtherInstances', identifier: this.#identifier },
       });
 
-      await delay(this.#redisConnectionRetryDelay);
+      await delay(this.#valkeyConnectionRetryDelay);
 
       return this.#requestAwarenessFromOtherInstances(documentName);
     }
@@ -212,11 +212,11 @@ export class RedisExtension implements Extension {
 
     if (!this.#isReady) {
       log.warn({
-        msg: 'Redis is not ready',
+        msg: 'Valkey is not ready',
         data: { document: documentName, method: 'onAwarenessUpdate', identifier: this.#identifier },
       });
 
-      await delay(this.#redisConnectionRetryDelay);
+      await delay(this.#valkeyConnectionRetryDelay);
 
       return this.onAwarenessUpdate(params);
     }
@@ -228,7 +228,7 @@ export class RedisExtension implements Extension {
   }
 
   public async onChange({ documentName, document, transactionOrigin }: onChangePayload): Promise<void> {
-    if (transactionOrigin === this.#redisTransactionOrigin) {
+    if (transactionOrigin === this.#valkeyTransactionOrigin) {
       return Promise.resolve();
     }
 
@@ -297,11 +297,11 @@ export class RedisExtension implements Extension {
 
     if (!this.#isReady) {
       log.warn({
-        msg: 'Redis is not ready',
+        msg: 'Valkey is not ready',
         data: { document: documentName, method: 'beforeBroadcastStateless', identifier: this.#identifier },
       });
 
-      await delay(this.#redisConnectionRetryDelay);
+      await delay(this.#valkeyConnectionRetryDelay);
 
       return this.beforeBroadcastStateless(data);
     }
@@ -312,7 +312,7 @@ export class RedisExtension implements Extension {
   }
 
   public onDestroy() {
-    log.debug({ msg: 'Destroying RedisExtension', data: { identifier: this.#identifier } });
+    log.debug({ msg: 'Destroying ValkeyExtension', data: { identifier: this.#identifier } });
 
     this.#pub.disconnect();
     this.#sub.disconnect();
