@@ -3,7 +3,7 @@ import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { createPageBreak, createPlaceHolder, createSimpleParagraph } from '@app/plate/templates/helpers';
 import type { PlaceholderElement } from '@app/plate/types';
 import { isInTable, isPlaceholderActive } from '@app/plate/utils/queries';
-import { RangeApi, TextApi } from '@udecode/plate';
+import { RangeApi } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
 import { Range } from 'slate';
 
@@ -17,9 +17,7 @@ export const insertPageBreak = (editor: PlateEditor): boolean => {
   return true;
 };
 
-export const insertPlaceholderFromSelection = (editor: PlateEditor) => {
-  const { selection } = editor;
-
+export const insertPlaceholderFromSelection = (editor: PlateEditor, selection: Range | null) => {
   if (selection === null || RangeApi.isCollapsed(selection)) {
     return;
   }
@@ -32,9 +30,9 @@ export const insertPlaceholderFromSelection = (editor: PlateEditor) => {
 
   editor.tf.withoutNormalizing(() => {
     editor.tf.delete();
-    editor.tf.insertNodes([createPlaceHolder(textFromSelection), { text: '' }], {
+    editor.tf.insertNode(createPlaceHolder(textFromSelection), {
       at: Range.start(selection),
-      match: TextApi.isText,
+      select: true,
     });
   });
 };
