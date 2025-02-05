@@ -12,16 +12,7 @@ import type {
   RichTextEditor,
   RichTextEditorElement,
 } from '@app/plate/types';
-import {
-  type Descendant,
-  ElementApi,
-  NodeApi,
-  RangeApi,
-  type TElement,
-  type TNode,
-  type TText,
-  TextApi,
-} from '@udecode/plate';
+import { type Descendant, ElementApi, NodeApi, type TElement, type TNode, type TText, TextApi } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
@@ -87,7 +78,7 @@ const isContained = (editor: PlateEditor, type: string) => {
   const match = { type };
   const anchorPlaceholderEntry = editor.api.node({ match, at: editor.selection.anchor });
 
-  if (RangeApi.isCollapsed(editor.selection)) {
+  if (editor.api.isCollapsed()) {
     return anchorPlaceholderEntry !== undefined;
   }
 

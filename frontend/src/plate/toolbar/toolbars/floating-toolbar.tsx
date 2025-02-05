@@ -6,7 +6,6 @@ import { useSelection } from '@app/plate/hooks/use-selection';
 import { FloatingRedaktoerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-redaktoer-toolbar-buttons';
 import { FloatingSaksbehandlerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-saksbehandler-toolbar-buttons';
 import { useMyPlateEditorRef } from '@app/plate/types';
-import { RangeApi } from '@udecode/plate';
 import { BaseTablePlugin } from '@udecode/plate-table';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
@@ -38,7 +37,7 @@ const FloatingToolbar = ({ editorId, container, children }: FloatingToolbarProps
     [container, position, toolbarRef],
   );
 
-  if (isInTable || !isFocused || position === null || RangeApi.isCollapsed(selection)) {
+  if (isInTable || !isFocused || position === null || editor.api.isCollapsed()) {
     return null;
   }
 
