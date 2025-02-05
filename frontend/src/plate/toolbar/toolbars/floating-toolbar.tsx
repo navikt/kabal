@@ -38,7 +38,7 @@ const FloatingToolbar = ({ editorId, container, children }: FloatingToolbarProps
     [container, position, toolbarRef],
   );
 
-  if (isInTable || !isFocused || position === null || RangeApi.isCollapsed()) {
+  if (isInTable || !isFocused || position === null || RangeApi.isCollapsed(selection)) {
     return null;
   }
 
