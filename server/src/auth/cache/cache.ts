@@ -1,27 +1,27 @@
 import { OboMemoryCache } from '@app/auth/cache/memory-cache';
-import { OboRedisCache } from '@app/auth/cache/redis-cache';
+import { OboPersistentCache } from '@app/auth/cache/persistent-cache';
 import { optionalEnvString } from '@app/config/env-var';
 
-const REDIS_URI = optionalEnvString('REDIS_URI_OBO_CACHE');
-const REDIS_USERNAME = optionalEnvString('REDIS_USERNAME_OBO_CACHE');
-const REDIS_PASSWORD = optionalEnvString('REDIS_PASSWORD_OBO_CACHE');
+const VALKEY_URI = optionalEnvString('REDIS_URI_OBO_CACHE_KABAL');
+const VALKEY_USERNAME = optionalEnvString('REDIS_USERNAME_OBO_CACHE_KABAL');
+const VALKEY_PASSWORD = optionalEnvString('REDIS_PASSWORD_OBO_CACHE_KABAL');
 
 class OboTieredCache {
-  #oboRedisCache: OboRedisCache;
+  #oboPersistentCache: OboPersistentCache;
   #oboMemoryCache: OboMemoryCache | null = null;
   #isReady = false;
 
-  constructor(redisUri: string, redisUsername: string, redisPassword: string) {
-    this.#oboRedisCache = new OboRedisCache(redisUri, redisUsername, redisPassword);
+  constructor(valkeyUri: string, valkeyUsername: string, valkeyPassword: string) {
+    this.#oboPersistentCache = new OboPersistentCache(valkeyUri, valkeyUsername, valkeyPassword);
     this.#init();
   }
 
   async #init() {
-    await this.#oboRedisCache.init();
-    const allTokenMessages = await this.#oboRedisCache.getAll();
+    await this.#oboPersistentCache.init();
+    const allTokenMessages = await this.#oboPersistentCache.getAll();
     const oboMemoryCache = new OboMemoryCache(allTokenMessages);
     this.#oboMemoryCache = oboMemoryCache;
-    this.#oboRedisCache.addTokenListener(({ key, token, expiresAt }) => oboMemoryCache.set(key, token, expiresAt));
+    this.#oboPersistentCache.addTokenListener(({ key, token, expiresAt }) => oboMemoryCache.set(key, token, expiresAt));
     this.#isReady = true;
   }
 
@@ -36,12 +36,12 @@ class OboTieredCache {
       return memoryHit.token;
     }
 
-    const redisHit = await this.#oboRedisCache.get(key);
+    const persistentHit = await this.#oboPersistentCache.get(key);
 
-    if (redisHit !== null) {
-      this.#oboMemoryCache.set(key, redisHit.token, redisHit.expiresAt);
+    if (persistentHit !== null) {
+      this.#oboMemoryCache.set(key, persistentHit.token, persistentHit.expiresAt);
 
-      return redisHit.token;
+      return persistentHit.token;
     }
 
     return null;
@@ -59,11 +59,11 @@ class OboTieredCache {
 
   public async set(key: string, token: string, expiresAt: number): Promise<void> {
     this.#oboMemoryCache?.set(key, token, expiresAt);
-    await this.#oboRedisCache.set(key, token, expiresAt);
+    await this.#oboPersistentCache.set(key, token, expiresAt);
   }
 
   public get isReady(): boolean {
-    return this.#isReady && this.#oboRedisCache.isReady;
+    return this.#isReady && this.#oboPersistentCache.isReady;
   }
 }
 
@@ -89,8 +89,10 @@ class OboSimpleCache {
   }
 }
 
-const hasRedis = REDIS_URI !== undefined && REDIS_USERNAME !== undefined && REDIS_PASSWORD !== undefined;
+const hasValkey = VALKEY_URI !== undefined && VALKEY_USERNAME !== undefined && VALKEY_PASSWORD !== undefined;
 
-export const oboCache = hasRedis ? new OboTieredCache(REDIS_URI, REDIS_USERNAME, REDIS_PASSWORD) : new OboSimpleCache();
+export const oboCache = hasValkey
+  ? new OboTieredCache(VALKEY_URI, VALKEY_USERNAME, VALKEY_PASSWORD)
+  : new OboSimpleCache();
 
 export const getCacheKey = (navIdent: string, appName: string) => `${navIdent}-${appName}`;

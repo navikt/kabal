@@ -43,7 +43,6 @@ spec:
         - application: kabal-e2e-tests
     outbound:
       rules:
-        - application: klage-redis-fe
         - application: kabal-api
         - application: kabal-smart-editor-api
         - application: kabal-json-to-pdf
@@ -62,6 +61,11 @@ spec:
   envFrom:
     - secret: kabal-session-key
     - secret: slack-url
+  valkey:
+    - instance: obo-cache-kabal
+      access: readwrite
+    - instance: hocuspocus
+      access: readwrite
   redis:
     - instance: obo-cache
       access: readwrite

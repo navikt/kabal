@@ -8,7 +8,7 @@ import { getDocument } from '@app/plugins/crdt/api/get-document';
 import { setDocument } from '@app/plugins/crdt/api/set-document';
 import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
 import { hasOwn, isObject } from '@app/plugins/crdt/functions';
-import { getRedisExtension } from '@app/plugins/crdt/redis';
+import { getValkeyExtension } from '@app/plugins/crdt/valkey';
 import type { CloseEvent } from '@hocuspocus/common';
 import { Server } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
@@ -231,7 +231,7 @@ export const collaborationServer = Server.configure({
     logContext('Saved document to database', context, 'debug');
   },
 
-  extensions: isDeployed ? [getRedisExtension()].filter(isNotNull) : [],
+  extensions: isDeployed ? [getValkeyExtension()].filter(isNotNull) : [],
 });
 
 const getCloseEvent = (reason: string, code: number): CloseEvent => ({ reason, code });
