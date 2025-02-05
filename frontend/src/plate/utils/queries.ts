@@ -87,7 +87,7 @@ const isContained = (editor: PlateEditor, type: string) => {
   const match = { type };
   const anchorPlaceholderEntry = editor.api.node({ match, at: editor.selection.anchor });
 
-  if (RangeApi.isCollapsed()) {
+  if (RangeApi.isCollapsed(editor.selection)) {
     return anchorPlaceholderEntry !== undefined;
   }
 

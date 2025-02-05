@@ -2,6 +2,7 @@ import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { pushEvent } from '@app/observability';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
+import { useSelection } from '@app/plate/hooks/use-selection';
 import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
@@ -13,7 +14,8 @@ import { styled } from 'styled-components';
 
 export const BookmarkButton = () => {
   const editor = useMyPlateEditorState();
-  const disabled = useIsUnchangeable() || RangeApi.isCollapsed();
+  const selection = useSelection();
+  const disabled = useIsUnchangeable() || RangeApi.isCollapsed(selection);
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
