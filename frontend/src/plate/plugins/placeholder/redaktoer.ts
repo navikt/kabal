@@ -29,7 +29,7 @@ export const RedaktoerPlaceholderPlugin = createPlatePlugin({
         if (isPlaceholderActive(editor)) {
           removePlaceholder(editor);
         } else {
-          insertPlaceholderFromSelection(editor);
+          insertPlaceholderFromSelection(editor, editor.selection);
         }
       }
     },

@@ -1,5 +1,6 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { MOD_KEY } from '@app/keys';
+import { useSelection } from '@app/plate/hooks/use-selection';
 import { createPlaceHolder } from '@app/plate/templates/helpers';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef } from '@app/plate/types';
@@ -8,12 +9,13 @@ import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/ut
 import { PencilWritingIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, TextField } from '@navikt/ds-react';
 import { RangeApi } from '@udecode/plate';
-import { useEditorState } from '@udecode/plate-core/react';
+import { useEditorRef } from '@udecode/plate-core/react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
 export const InsertPlaceholder = () => {
-  const editor = useEditorState();
+  const editor = useEditorRef();
+  const selection = useSelection();
   const [isOpen, setIsOpen] = useState(false);
   const toggleOpen = () => setIsOpen(!isOpen);
   const ref = useRef<HTMLSpanElement>(null);
@@ -27,18 +29,18 @@ export const InsertPlaceholder = () => {
   useOnClickOutside(ref, resetAndClose, true);
 
   const onClick = () => {
-    if (RangeApi.isCollapsed()) {
+    if (RangeApi.isCollapsed(selection)) {
       if (isPlaceholderActive(editor)) {
         removePlaceholder(editor);
       } else {
         toggleOpen();
       }
     } else {
-      insertPlaceholderFromSelection(editor);
+      insertPlaceholderFromSelection(editor, selection);
     }
   };
 
-  const disabled = editor.selection === null || (RangeApi.isExpanded(editor.selection) && isPlaceholderActive(editor));
+  const disabled = selection === null || (RangeApi.isExpanded(selection) && isPlaceholderActive(editor));
 
   return (
     <span ref={ref}>
