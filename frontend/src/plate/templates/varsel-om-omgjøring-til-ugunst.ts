@@ -37,6 +37,7 @@ const INITIAL_SLATE_VALUE: Value = [
     ],
   },
 
+  createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
   createMaltekstseksjon(TemplateSections.HVORFOR_OMGJØRING),
   createMaltekstseksjon(TemplateSections.OM_REGELVERK),
   createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
