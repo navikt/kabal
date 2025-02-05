@@ -28,18 +28,11 @@ export const getTemplateSections = (templateId: TemplateIdEnum): GroupedTemplate
 };
 
 const getSections = (children: Descendant[]): GroupedTemplateSections => {
-  const used: TemplateSections[] = [];
-  const unused: TemplateSections[] = [];
+  const used = children
+    .filter((c) => isOfElementType<MaltekstseksjonElement>(c, ELEMENT_MALTEKSTSEKSJON))
+    .map((c) => c.section);
 
-  for (const section of TEMPLATE_SECTIONS) {
-    if (
-      children.some((c) => isOfElementType<MaltekstseksjonElement>(c, ELEMENT_MALTEKSTSEKSJON) && c.section === section)
-    ) {
-      used.push(section);
-    } else {
-      unused.push(section);
-    }
-  }
+  const unused = TEMPLATE_SECTIONS.filter((s) => !used.includes(s));
 
   return { used, unused };
 };
