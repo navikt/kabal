@@ -6,7 +6,6 @@ import { PageWrapper } from '@app/pages/page-wrapper';
 import { ALL_PUBLIC_ROLES, type Role } from '@app/types/bruker';
 import { BodyShort, Heading, Tag } from '@navikt/ds-react';
 import { useContext, useEffect } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   requiredRoles: Role[];
@@ -29,7 +28,7 @@ export const NoAccessPage = ({ requiredRoles }: Props) => {
 
   return (
     <PageWrapper>
-      <Centered>
+      <div className="mx-auto w-fit">
         <Heading level="1" size="medium" spacing>
           Din bruker har ikke tilgang til denne siden
         </Heading>
@@ -51,22 +50,13 @@ export const NoAccessPage = ({ requiredRoles }: Props) => {
           roles={ALL_PUBLIC_ROLES.filter((r) => !(user.roller.includes(r) || requiredRoles.includes(r)))}
           variant="neutral-moderate"
         />
-      </Centered>
+      </div>
     </PageWrapper>
   );
 };
 
 const Path = () => (
   <Tag variant="neutral-moderate" size="xsmall">
-    <StyledPre>{window.location.pathname}</StyledPre>
+    <pre className="m-0">{window.location.pathname}</pre>
   </Tag>
 );
-
-const StyledPre = styled.pre`
-  margin: 0;
-`;
-
-const Centered = styled.div`
-  margin: 0 auto;
-  width: fit-content;
-`;

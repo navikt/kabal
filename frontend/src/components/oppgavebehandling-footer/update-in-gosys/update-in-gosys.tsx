@@ -107,7 +107,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
   };
 
   return (
-    <div style={{ gridArea: 'left' }}>
+    <div className="[grid-area:left]">
       <Button variant="primary" size="small" onClick={() => setIsOpen(true)}>
         {children}
       </Button>

@@ -141,7 +141,7 @@ const HelpTextContainer = styled.div`
 const SkeletonItem = () => (
   <HStack align="center" gap="2" width="100%">
     <Skeleton width={20} />
-    <Skeleton style={{ flexGrow: 1 }} />
+    <Skeleton className="grow" />
     <Skeleton width={85} />
     <Skeleton width={150} />
   </HStack>

@@ -42,7 +42,7 @@ export const SidebarContainer = (props: VStackProps) => (
     top="0"
     height="fit-content"
     overflow="auto"
-    gridColumn="sidebar"
+    className="[grid-area:sidebar]"
     gap="2"
     paddingBlock="1 0"
     {...props}

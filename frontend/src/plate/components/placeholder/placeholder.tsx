@@ -154,10 +154,7 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
         <Wrapper
           data-node-type={ELEMENT_PLACEHOLDER}
           data-raw-placeholder={element.placeholder}
-          style={{
-            backgroundColor: isFocused ? 'var(--a-blue-100)' : 'var(--a-gray-200)',
-            paddingLeft: hideDeleteButton || isReadOnly ? '0' : '1em',
-          }}
+          className={`${isFocused ? 'bg-blue-200' : 'bg-gray-200'} ${hideDeleteButton || isReadOnly ? 'pl-0' : 'pl-1'}`}
           onClick={onClick}
           data-placeholder={hasNoVisibleText ? element.placeholder : undefined}
         >

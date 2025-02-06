@@ -1,6 +1,6 @@
 import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage, TextField } from '@navikt/ds-react';
-import { type CSSProperties, type KeyboardEventHandler, useEffect, useState } from 'react';
+import { type KeyboardEventHandler, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
@@ -58,8 +58,6 @@ export const Abbreviation = ({
     setError(getErrorMessage(isDuplicate, containsSpace));
   }, [isDuplicate, containsSpace, hasEmptyField]);
 
-  const buttonStyle: CSSProperties | undefined = showLabels ? { marginTop: '28px' } : undefined;
-
   return (
     <div>
       <StyledAbbreviation>
@@ -96,7 +94,7 @@ export const Abbreviation = ({
             loading={isSaving}
             title="Lagre forkortelse"
             disabled={isSaved || isDuplicate || containsSpace || isDeleting}
-            style={buttonStyle}
+            className={showLabels ? 'mt-7' : undefined}
           />
         )}
 
@@ -109,13 +107,13 @@ export const Abbreviation = ({
             loading={isDeleting}
             disabled={(isDeleting ?? false) || isSaving}
             title="Slett forkortelse"
-            style={buttonStyle}
+            className={showLabels ? 'mt-7' : undefined}
           />
         )}
       </StyledAbbreviation>
 
       {error === undefined ? null : (
-        <ErrorMessage size="small" style={{ gridArea: 'error' }} spacing>
+        <ErrorMessage size="small" className="[grid-area:error]" spacing>
           {error}
         </ErrorMessage>
       )}

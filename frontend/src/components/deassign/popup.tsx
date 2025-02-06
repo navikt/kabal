@@ -72,7 +72,7 @@ export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direc
       gap="2"
       padding="4"
       width="280px"
-      style={{ zIndex: 10, [direction === Direction.UP ? 'bottom' : 'top']: '100%' }}
+      className={`z-10 ${direction === Direction.UP ? 'bottom-full' : 'top-full'}`}
       data-testid="deassign-oppgave-popup"
     >
       <Box background="bg-default" borderRadius="medium" shadow="medium" borderWidth="1" borderColor="border-divider">

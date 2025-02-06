@@ -19,7 +19,7 @@ export const ReadUtfallSet = ({ utfallSet, onDelete, editUtfallSet }: ReadUtfall
         utfallSet.map((u) => <UtfallTag key={u} utfallId={u} />)
       )}
     </HStack>
-    <HStack align="start" wrap={false} style={{ alignSelf: 'flex-start' }}>
+    <HStack align="start" wrap={false} className="self-start">
       <Button
         variant="tertiary"
         size="xsmall"

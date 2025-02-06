@@ -1,6 +1,5 @@
 import { PageWrapper } from '@app/pages/page-wrapper';
 import { BodyShort, Heading, Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 export const NotFoundPage = () => (
   <PageWrapper>
@@ -15,10 +14,6 @@ export const NotFoundPage = () => (
 
 const Path = () => (
   <Tag variant="neutral-moderate" size="xsmall">
-    <StyledPre>{window.location.pathname}</StyledPre>
+    <pre className="m-0">{window.location.pathname}</pre>
   </Tag>
 );
-
-const StyledPre = styled.pre`
-  margin: 0;
-`;

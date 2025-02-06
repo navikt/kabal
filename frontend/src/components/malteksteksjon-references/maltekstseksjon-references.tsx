@@ -137,7 +137,7 @@ const ListItem = ({ id, onClick, selected }: ListItemProps) => {
 
   return (
     <List.Item>
-      <HStack align="center" gap="05" style={{ fontWeight: selected ? 'bold' : 'normal' }}>
+      <HStack align="center" gap="05" className={selected ? 'font-bold' : 'font-normal'}>
         <Button
           onClick={onClick}
           variant="tertiary"

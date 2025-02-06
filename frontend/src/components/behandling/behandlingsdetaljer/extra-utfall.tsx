@@ -9,7 +9,6 @@ import { useUpdateExtraUtfallMutation } from '@app/redux-api/oppgaver/mutations/
 import { type SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import { Button, HStack, HelpText, Label, Tag, VStack } from '@navikt/ds-react';
 import { type ReactNode, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface TagsProps {
   utfallIdSet: UtfallEnum[];
@@ -69,7 +68,7 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props
   const disabled = mainUtfall === null;
 
   return (
-    <ButtonContainer ref={ref}>
+    <div className="relative" ref={ref}>
       <HStack wrap gap="1" marginBlock="1 0">
         <Button variant="secondary" onClick={() => setIsOpen((o) => !o)} size="small" disabled={disabled}>
           Sett ekstra utfall for tilpasset tekst
@@ -89,7 +88,7 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props
           close={() => setIsOpen(false)}
         />
       </Popup>
-    </ButtonContainer>
+    </div>
   );
 };
 
@@ -139,19 +138,10 @@ const Tags = ({ utfallIdSet, mainUtfall, typeId }: TagsProps) => {
   );
 };
 
-const ButtonContainer = styled.div`
-  position: relative;
-`;
-
 const Popup = ({ isOpen, children }: { isOpen: boolean; children: ReactNode }) => {
   if (!isOpen) {
     return null;
   }
 
-  return <StyledPopup>{children}</StyledPopup>;
+  return <div className="absolute z-1">{children}</div>;
 };
-
-const StyledPopup = styled.div`
-  position: absolute;
-  z-index: 1;
-`;

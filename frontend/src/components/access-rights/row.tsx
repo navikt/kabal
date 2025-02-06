@@ -1,7 +1,6 @@
 import type { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import type { IYtelse } from '@app/types/kodeverk';
-import { styled } from 'styled-components';
 import { Cell } from './cell';
 
 interface Props {
@@ -24,25 +23,26 @@ export const Row = ({
   const numberOfSaksbehandlerePerYtelse = useNumberOfSaksbehandlerePerYtelse(ytelse.id, accessRights);
 
   const ytelseTitle = `(${numberOfSaksbehandlerePerYtelse}/${accessRights.length}) ${ytelse.navn} `;
+  const isFocused = rowIndex === focusedRow;
 
   return (
     <tr key={ytelse.id}>
-      <StyledHeader
+      <th
+        className={`relative z-1 m-0 h-8 max-w-64 border-(--a-border-on-inverted) border-x border-b ${isFocused ? 'bg-(--a-blue-200)' : 'bg-(--a-bg-default)'} p-0`}
         title={ytelseTitle}
-        $isHighlighted={rowIndex === focusedRow}
         onMouseEnter={() => setFocusedCell([-1, rowIndex])}
       >
-        <StyledHeaderText>
-          <HeaderEllipsis>{ytelseTitle}</HeaderEllipsis>
-        </StyledHeaderText>
-      </StyledHeader>
+        <span className="justify-left flex h-full w-full items-center overflow-hidden whitespace-nowrap px-2 hover:w-fit hover:overflow-visible hover:bg-(--a-blue-200)">
+          <span className="overflow-hidden text-ellipsis">{ytelseTitle}</span>
+        </span>
+      </th>
       <Cell
         isChecked={accessRights.every(({ ytelseIdList }) => ytelseIdList.includes(ytelse.id))}
         onCheck={(checked) => onCheck(checked, ytelse.id, null)}
         onFocus={() => setFocusedCell([0, rowIndex])}
         isCurrentColumn={focusedColumn === 0 && (rowIndex < focusedRow || focusedRow === -1)}
-        isCurrentRow={rowIndex === focusedRow}
-        isFocused={focusedColumn === 0 && rowIndex === focusedRow}
+        isCurrentRow={isFocused}
+        isFocused={focusedColumn === 0 && isFocused}
       >
         {`Alle saksbehandlere / ${ytelse.navn}`}
       </Cell>
@@ -53,8 +53,8 @@ export const Row = ({
           onCheck={(checked) => onCheck(checked, ytelse.id, saksbehandlerIdent)}
           onFocus={() => setFocusedCell([columnIndex + 1, rowIndex])}
           isCurrentColumn={columnIndex + 1 === focusedColumn && (rowIndex < focusedRow || focusedRow === -1)}
-          isCurrentRow={rowIndex === focusedRow && (columnIndex + 1 < focusedColumn || focusedColumn === -1)}
-          isFocused={focusedColumn === columnIndex + 1 && rowIndex === focusedRow}
+          isCurrentRow={isFocused && (columnIndex + 1 < focusedColumn || focusedColumn === -1)}
+          isFocused={focusedColumn === columnIndex + 1 && isFocused}
         >
           {`${saksbehandlerName} / ${ytelse.navn}`}
         </Cell>
@@ -62,48 +62,6 @@ export const Row = ({
     </tr>
   );
 };
-
-const StyledHeaderText = styled.span`
-  display: flex;
-  overflow: hidden;
-  height: 100%;
-  min-width: 100%;
-  padding-left: var(--a-spacing-2);
-  padding-right: var(--a-spacing-2);
-  white-space: nowrap;
-  align-items: center;
-  justify-content: left;
-
-  &:hover {
-    overflow: visible;
-    text-overflow: unset;
-    background-color: var(--a-blue-200);
-    box-shadow: var(--a-spacing-05) var(--a-spacing-05) 5px 0px var(--a-border-on-inverted);
-    width: fit-content;
-  }
-`;
-
-const StyledHeader = styled.th<{ $isHighlighted: boolean }>`
-  height: var(--a-spacing-8);
-  border-right: 1px solid var(--a-border-on-inverted);
-  border-left: 1px solid var(--a-border-on-inverted);
-  border-bottom: 1px solid var(--a-border-on-inverted);
-  padding: 0;
-  margin: 0;
-  max-width: 256px;
-  position: relative;
-  z-index: 1;
-  background-color: ${({ $isHighlighted }) => ($isHighlighted ? 'var(--a-blue-200)' : 'rgb(247, 247, 247)')};
-
-  &:hover {
-    overflow: visible;
-  }
-`;
-
-const HeaderEllipsis = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
 
 const useNumberOfSaksbehandlerePerYtelse = (ytelseId: string, accessRights: SaksbehandlerAccessRights[]): number => {
   const { data: ytelser = [] } = useLatestYtelser();

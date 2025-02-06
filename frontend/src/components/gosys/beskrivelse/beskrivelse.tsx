@@ -57,7 +57,7 @@ export const GosysBeskrivelse = ({ id, oppgavebeskrivelse }: Props) => {
       </VStack>
 
       <Modal header={{ heading: 'Beskrivelse fra Gosys', closeButton: true }} ref={modalRef} closeOnBackdropClick>
-        <Modal.Body style={{ height: '80vh', overflow: 'hidden' }}>
+        <Modal.Body className="h-[80vh] overflow-hidden">
           <GosysBeskrivelseTabs id={id} beskrivelse={trimmedBeskrivelse} entries={entries} />
         </Modal.Body>
       </Modal>

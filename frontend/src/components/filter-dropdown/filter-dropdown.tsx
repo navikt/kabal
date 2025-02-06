@@ -77,7 +77,7 @@ const Popup = ({ isOpen, direction, maxWidth, maxHeight = 500, children }: Popup
       maxHeight={`${maxHeight}px`}
       maxWidth={maxWidth ?? 'unset'}
       minWidth="275px"
-      style={{ zIndex: 22, top: '100%', left: isLeft ? 'auto' : 0, right: isLeft ? 0 : 'auto' }}
+      className={`top-full z-22 ${isLeft ? 'right-0' : 'left-0'}`}
     >
       <Box background="bg-default" borderRadius="medium" shadow="medium" position="absolute">
         {children}

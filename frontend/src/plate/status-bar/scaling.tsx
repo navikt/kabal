@@ -90,7 +90,7 @@ const ScaleSelector = ({ close }: ScaleSelectorProps) => {
   );
 
   return (
-    <VStack asChild position="absolute" gap="2" style={{ bottom: '100%', whiteSpace: 'nowrap' }}>
+    <VStack asChild position="absolute" gap="2" className="bottom-full whitespace-nowrap">
       <Box background="bg-default" padding="2" borderRadius="medium" shadow="medium">
         <RadioGroup legend="Skalering" onChange={handleChange} value={radioValue} size="small">
           {PRESETS.map((p) => (

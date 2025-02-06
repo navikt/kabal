@@ -35,10 +35,9 @@ const Wrapper = ({ children }: WrapperProps) => (
     align="center"
     gap="0 2"
     position="sticky"
-    gridColumn="counters"
     minWidth="382px"
     height="36px"
-    style={{ zIndex: 10 }}
+    className="z-10 [grid-area:counters]"
   >
     <Box background="bg-default" shadow="medium" marginInline="4" marginBlock="4" paddingInline="2" flexShrink="0">
       <ChatElipsisIcon aria-hidden fontSize={20} />

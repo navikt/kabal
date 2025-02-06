@@ -35,7 +35,7 @@ export const Toasts = () => {
       maxHeight="calc(100% - var(--a-spacing-4))"
       overflowY="auto"
       overflowX="visible"
-      style={{ zIndex: 1000 }}
+      className="z-1000"
       ref={ref}
       aria-live="polite"
       aria-relevant="additions text"

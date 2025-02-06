@@ -46,8 +46,8 @@ const FloatingToolbar = ({ editorId, container, children }: FloatingToolbarProps
       asChild
       align="center"
       position="absolute"
+      className="z-21"
       style={{
-        zIndex: 21,
         willChange: 'left, right, top',
         top: `calc(${position.top}em - ${OFFSET}px)`,
         left: horizontalPosition.left === undefined ? undefined : `${horizontalPosition.left}em`,

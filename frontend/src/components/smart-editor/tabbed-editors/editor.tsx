@@ -227,17 +227,11 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
 
   return (
     <>
-      <HStack
-        wrap={false}
-        maxHeight="100%"
-        flexShrink="1"
-        overflowY="scroll"
-        style={{ scrollPaddingTop: 'var(--a-spacing-16)' }}
-      >
+      <HStack wrap={false} maxHeight="100%" flexShrink="1" overflowY="scroll" className="scroll-pt-16">
         <GodeFormuleringer templateId={templateId} />
 
         <Content>
-          <VStack minWidth="210mm" gridColumn="content" data-area="content">
+          <VStack minWidth="210mm" className="[grid-area:content]" data-area="content">
             <SaksbehandlerToolbar />
 
             <ErrorBoundary
@@ -342,7 +336,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithN
   }, [containerElement, sheetRef]);
 
   return (
-    <Sheet ref={setContainerElement} $minHeight data-component="sheet" style={{ marginRight: 16 }}>
+    <Sheet ref={setContainerElement} $minHeight data-component="sheet" className="mr-4">
       <FloatingSaksbehandlerToolbar container={containerElement} editorId={id} />
       <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
 

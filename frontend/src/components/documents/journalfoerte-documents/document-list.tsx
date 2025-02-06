@@ -83,7 +83,7 @@ export const DocumentList = ({
 
   if (isLoading) {
     return (
-      <Container ref={onRef} style={{ height: '100%' }} onScroll={onScroll}>
+      <Container ref={onRef} className="h-full" onScroll={onScroll}>
         <StyledDocumentList data-testid="oppgavebehandling-documents-all-list" aria-rowcount={documents.length}>
           <Loader size="xlarge" />
         </StyledDocumentList>

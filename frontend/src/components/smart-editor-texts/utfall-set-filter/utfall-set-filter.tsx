@@ -60,7 +60,7 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
   );
 
   return (
-    <VStack asChild gap="2 0" width="400px" position="absolute" left="0" style={{ top: '100%', zIndex: 100 }}>
+    <VStack asChild gap="2 0" width="400px" position="absolute" left="0" className="top-full z-100">
       <Box
         background="bg-default"
         padding="2"
@@ -70,7 +70,7 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
         borderRadius="medium"
         overflow="auto"
       >
-        <VStack as="ul" gap="1 0" padding="0" margin="0" style={{ listStyle: 'none' }}>
+        <VStack as="ul" gap="1 0" padding="0" margin="0" className="list-none">
           {utfallSets.map((utfallSet, index) => (
             <StyledListItem key={utfallSet.join('-')}>
               <UtfallSet

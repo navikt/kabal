@@ -58,7 +58,7 @@ export const DraftMaltekstSection = ({ maltekstseksjon, query, onDraftDeleted }:
           onChange={(newTitle) => updateTitle({ id, query, title: newTitle })}
           isLoading={isUpdatingTitle}
         />
-        <HStack gap="1" align="center" gridColumn="metadata">
+        <HStack gap="1" align="center" className="[grid-area:metadata]">
           <HStack gap="1" align="center">
             <Label size="small" htmlFor={modifiedId}>
               Sist endret:

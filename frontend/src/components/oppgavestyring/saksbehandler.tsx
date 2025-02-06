@@ -11,7 +11,7 @@ import { useTildel } from './use-tildel';
 const NOT_SELECTED = 'NOT_SELECTED';
 
 export const Saksbehandler = (oppgave: IOppgave) => (
-  <HStack align="center" justify="start" height="34px" width="100%" gridColumn="saksbehandler">
+  <HStack align="center" justify="start" height="34px" width="100%" className="[grid-area:saksbehandler]">
     <SaksbehandlerContent {...oppgave} />
   </HStack>
 );

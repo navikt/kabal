@@ -58,7 +58,7 @@ export class AppErrorBoundary extends Component<Props, State> {
             Ooops, noe gikk galt :(
           </Heading>
           {isUpToDate ? null : (
-            <StyledAlert variant="warning">
+            <Alert variant="warning" className="mb-4">
               <b>Kabal er utdatert.</b>
               <div>
                 Din versjon: <Code>{ENVIRONMENT.version}</Code>
@@ -66,7 +66,7 @@ export class AppErrorBoundary extends Component<Props, State> {
               <div>
                 Siste versjon: <Code>{lastestVersion}</Code>
               </div>
-            </StyledAlert>
+            </Alert>
           )}
           <Heading level="2" size="medium" spacing>
             Feilmelding
@@ -115,8 +115,4 @@ const CodeBlock = styled.code`
   white-space: pre-wrap;
   word-break: normal;
   overflow-wrap: break-word;
-`;
-
-const StyledAlert = styled(Alert)`
-  margin-bottom: var(--a-spacing-4);
 `;

@@ -52,7 +52,7 @@ export const Comment = memo(
                 icon={<MenuElipsisVerticalIcon aria-hidden />}
               />
               {showActions ? (
-                <VStack asChild gap="1 0" right="0" style={{ top: '100%', whiteSpace: 'nowrap', zIndex: 1 }}>
+                <VStack asChild gap="1 0" right="0" className="top-full z-1 whitespace-nowrap">
                   <Box shadow="medium" background="bg-default" borderRadius="medium" padding="1" position="absolute">
                     <EditButton
                       authorIdent={author.ident}

@@ -51,7 +51,7 @@ export const DraftRegelverk = ({ text, onDraftDeleted }: Props) => {
 
   return (
     <Edit text={text} onDraftDeleted={onDraftDeleted} onPublish={onPublish}>
-      {error === null ? null : <ErrorMessage style={{ alignSelf: 'flex-end' }}>{error}</ErrorMessage>}
+      {error === null ? null : <ErrorMessage className="self-end">{error}</ErrorMessage>}
       <RedaktoerRichText
         editorId={text.id}
         savedContent={savedRichText}

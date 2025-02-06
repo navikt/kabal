@@ -109,12 +109,7 @@ export const GroupedFilterList = <T extends string>({
       position="absolute"
       width="350px"
       height="400px"
-      style={{
-        zIndex: 2,
-        scrollMarginBottom: 'var(--a-spacing-4)',
-        top: isDown ? '100%' : '0',
-        left: isDown ? '0' : '100%',
-      }}
+      className={`z-2 scroll-mb-4 ${isDown ? 'top-full left-0' : 'top-0 left-full'}`}
       ref={ref}
     >
       <Box background="bg-default" borderRadius="medium" borderWidth="1" borderColor="border-subtle" shadow="medium">

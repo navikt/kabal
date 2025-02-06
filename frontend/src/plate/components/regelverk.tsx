@@ -30,7 +30,7 @@ export const Regelverk = (props: PlateElementProps<RegelverkElement>) => {
       <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
         {children}
         {canManage ? (
-          <SectionToolbar contentEditable={false} style={{ top: 32 }}>
+          <SectionToolbar contentEditable={false} className="top-8">
             <DeleteRegelverk element={element} />
           </SectionToolbar>
         ) : null}

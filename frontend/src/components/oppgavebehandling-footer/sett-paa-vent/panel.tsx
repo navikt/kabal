@@ -36,7 +36,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
   }, []);
 
   return (
-    <VStack asChild gap="4 0" left="0" position="absolute" style={{ bottom: '100%', zIndex: 1 }}>
+    <VStack asChild gap="4 0" left="0" position="absolute" className="bottom-full z-1">
       <Box padding="4" background="bg-default" borderRadius="medium" shadow="medium" width="400px">
         <DatePicker
           label="Frist"

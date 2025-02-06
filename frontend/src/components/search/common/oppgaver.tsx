@@ -46,7 +46,7 @@ export const Oppgaver = ({ data, isFetching, isLoading, error, refetch }: Oppgav
 };
 
 const SkeletonTables = () => (
-  <Table zebraStripes size="small" style={{ marginLeft: 16 }}>
+  <Table zebraStripes size="small" className="ml-4">
     <Table.Body>
       <SkeletonTable />
       <SkeletonTable />

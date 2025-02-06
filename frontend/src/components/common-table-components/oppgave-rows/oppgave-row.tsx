@@ -52,7 +52,6 @@ export const OppgaveRow = ({ oppgaveId, columns, testId }: Props): JSX.Element =
 };
 
 const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   columnKeys.map((key) => {
     switch (key) {
       case ColumnKeyEnum.Type:

@@ -26,7 +26,7 @@ export const Actions = ({ query, onDraftDeleted, maltekstseksjon }: Props) => {
   const { id, title, versionId } = maltekstseksjon;
 
   return (
-    <HStack gridColumn="actions" gap="2" justify="end">
+    <HStack gap="2" justify="end" className="[grid-area:actions]">
       <PublishButtons maltekstseksjon={maltekstseksjon} query={query} />
 
       <DuplicateSectionButton id={id} versionId={versionId} query={query} />

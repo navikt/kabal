@@ -112,7 +112,8 @@ export const ExpandedDocuments = () => {
         overflowY="hidden"
         overflowX="auto"
         position="relative"
-        style={{ minWidth, resize: 'horizontal' }}
+        minWidth={`${minWidth}px`}
+        className="resize-x"
         ref={ref}
       >
         <HStack asChild align="start" justify="start" gap="0 2" position="relative">

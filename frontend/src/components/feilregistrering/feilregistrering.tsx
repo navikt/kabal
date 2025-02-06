@@ -80,13 +80,7 @@ const FeilregistrerPanel = ({ oppgaveId, position, align, fagsystemId }: Oppgave
   return (
     <VStack
       asChild
-      style={{
-        zIndex: 1,
-        top: isOver ? 'auto' : '100%',
-        bottom: isOver ? '100%' : 'auto',
-        right: isLeft ? '0' : 'auto',
-        left: isLeft ? '0' : 'auto',
-      }}
+      className={`z-1 ${isOver ? 'bottom-full' : 'top-full'} ${isLeft ? 'left-0' : 'right-0'}`}
       gap="4 0"
       minWidth="400px"
       position="absolute"

@@ -261,7 +261,7 @@ export const NewDocuments = () => {
         <ListHeader />
         <div
           ref={onRef}
-          style={{ overflowY: 'auto', borderBottom: '1px solid var(--a-border-divider)' }}
+          className="overflow-y-auto border-(--a-border-divider) border-b-1"
           onScroll={({ currentTarget }) => {
             const clamped = clamp(currentTarget.scrollTop, 0, currentTarget.scrollHeight - currentTarget.clientHeight); // Elastic scrolling in Safari can exceed the boundries.
             _setScrollTop(clamped);
@@ -269,7 +269,8 @@ export const NewDocuments = () => {
         >
           <StyledDocumentList
             data-testid="new-documents-list"
-            style={{ height: listHeight, overflowY: 'hidden', position: 'relative' }}
+            className="relative overflow-y-hidden"
+            style={{ height: listHeight }}
             aria-rowcount={documentMap.size}
           >
             {documentNodes}

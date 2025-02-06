@@ -86,7 +86,7 @@ const PlaceholderText = ({ show, close, placeholder, setPlaceholder }: Placehold
   };
 
   return (
-    <HStack asChild position="absolute" gap="1" minWidth="220px" right="0" style={{ top: '100%' }}>
+    <HStack asChild position="absolute" gap="1" minWidth="220px" right="0" className="top-full">
       <Box background="surface-subtle" padding="2" borderWidth="1" borderColor="border-strong" borderRadius="medium">
         <TextField
           autoFocus

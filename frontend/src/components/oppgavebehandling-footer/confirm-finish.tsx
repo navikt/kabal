@@ -111,7 +111,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
 
 const CancelButton = ({ cancel }: CancelButtonProps) => (
   <Button
-    style={{ flexShrink: 0, marginLeft: 'auto' }}
+    className="ml-auto shrink-0"
     variant="secondary"
     type="button"
     size="small"
@@ -235,7 +235,7 @@ const FinishButton = ({ children, nyBehandling = false }: FinishButtonProps) => 
       disabled={hasBeenFinished || loader.isLoading}
       data-testid="confirm-finish-klagebehandling-button"
       icon={<CheckmarkIcon aria-hidden />}
-      style={{ gridArea: 'left' }}
+      className="[grid-area:left]"
     >
       {children}
     </Button>

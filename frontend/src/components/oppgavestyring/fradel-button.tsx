@@ -127,7 +127,7 @@ const Deassign = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave
   };
 
   return (
-    <HStack position="relative" gridColumn="tildel" ref={ref}>
+    <HStack position="relative" className="[grid-area:tildel]" ref={ref}>
       <StyledButton
         variant="secondary"
         type="button"

@@ -54,18 +54,18 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
   return (
     <Container>
       <Header>
-        <StyledHeading level="1" size="small" style={{ gridArea: 'title' }}>
+        <StyledHeading level="1" size="small" className="[grid-area:title]">
           {getTitle(title)}
         </StyledHeading>
 
-        <HStack gap="2" align="center" gridColumn="metadata">
+        <HStack gap="2" align="center" className="[grid-area:metadata]">
           <HStack gap="1" align="center">
             <Label size="small" htmlFor={publishedFieldId}>
               Publisert:
             </Label>
             <HStack asChild align="center">
               <BodyShort id={publishedFieldId} size="small">
-                <DateTime dateTime={publishedDateTime} icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />} />
+                <DateTime dateTime={publishedDateTime} icon={<CalendarIcon aria-hidden className="shrink-0" />} />
                 <span>, av {publishedByActor.navn}</span>
               </BodyShort>
             </HStack>
@@ -80,7 +80,7 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
                 <DateTime
                   id={modifiedFieldId}
                   dateTime={modifiedOrTextsModified}
-                  icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />}
+                  icon={<CalendarIcon aria-hidden className="shrink-0" />}
                 />
               </HStack>
             </HStack>
@@ -93,7 +93,7 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
                 <DateTime
                   id={depublishedFieldId}
                   dateTime={modified}
-                  icon={<CalendarIcon aria-hidden style={{ flexShrink: 0 }} />}
+                  icon={<CalendarIcon aria-hidden className="shrink-0" />}
                 />
                 <span>av {publishedByActor.navn}</span>
               </HStack>
@@ -109,7 +109,7 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
           <UtfallTagList utfallIdList={maltekstseksjon.utfallIdList} />
         </TagContainer>
 
-        <HStack gridColumn="actions" gap="2" justify="end" align="start">
+        <HStack className="[grid-area:actions]" gap="2" justify="end" align="start">
           <Tooltip content="Opprett utkast basert på denne versjonen av maltekstseksjonen.">
             <Button
               size="small"

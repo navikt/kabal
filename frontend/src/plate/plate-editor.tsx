@@ -16,7 +16,7 @@ export const KabalPlateEditor = ({ className, spellCheck = true, readOnly = fals
     <PlateContent
       {...props}
       readOnly={readOnly}
-      className={className === undefined ? 'smart-editor' : `smart-editor ${className}`}
+      className={className === undefined ? 'min-h-full outline-none' : `min-h-full outline-none ${className}`}
       spellCheck={spellCheck}
       renderLeaf={({ attributes, children, text }) => (
         <span {...attributes} contentEditable={contentEditable(editor, readOnly, text)} suppressContentEditableWarning>

@@ -19,11 +19,7 @@ export const ThreadList = () => {
         width="100%"
         overflowY="auto"
         overflowX="hidden"
-        style={{
-          scrollSnapType: 'y proximity',
-          scrollPaddingBottom: 'var(--a-spacing-6)',
-          scrollPaddingTop: 'var(--a-spacing-12)',
-        }}
+        className="snap-y snap-proximity scroll-pt-12 scroll-pb-6"
       >
         <SkeletonThread />
         <SkeletonThread />
@@ -44,11 +40,7 @@ export const ThreadList = () => {
       width="100%"
       overflowY="auto"
       overflowX="hidden"
-      style={{
-        scrollSnapType: 'y proximity',
-        scrollPaddingBottom: 'var(--a-spacing-6)',
-        scrollPaddingTop: 'var(--a-spacing-12)',
-      }}
+      className="snap-y snap-proximity scroll-pt-12 scroll-pb-6"
     >
       {attached.map((thread) => (
         <ExpandableThread key={thread.id} thread={thread} isFocused={thread.isFocused} />

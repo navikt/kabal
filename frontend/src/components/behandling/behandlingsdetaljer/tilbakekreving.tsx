@@ -2,7 +2,6 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useSetTilbakekrevingMutation } from '@app/redux-api/oppgaver/mutations/set-tilbakekreving';
 import { Alert, BodyShort, Checkbox, CheckboxGroup, HStack, Heading, HelpText } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 const TILBAKEKREVING_IDS = [
   '144',
@@ -41,12 +40,12 @@ export const Tilbakekreving = () => {
 
   if (!canEdit) {
     return (
-      <Container>
-        <Heading size="xsmall" style={{ fontSize: 16 }}>
+      <div className="mt-4">
+        <Heading size="xsmall" className="text-base">
           Tilbakekreving
         </Heading>
         <BodyShort size="small">Gjelder{tilbakekreving ? ' ' : ' ikke '}en tilbakekrevingssak</BodyShort>
-      </Container>
+      </div>
     );
   }
 
@@ -65,7 +64,7 @@ export const Tilbakekreving = () => {
   );
 
   return (
-    <Container>
+    <div className="mt-4">
       <CheckboxGroup
         legend={legend}
         size="small"
@@ -76,7 +75,7 @@ export const Tilbakekreving = () => {
       </CheckboxGroup>
 
       {showWarning ? <Warning /> : null}
-    </Container>
+    </div>
   );
 };
 
@@ -86,7 +85,3 @@ const Warning = () => (
     at dette er riktig?
   </Alert>
 );
-
-const Container = styled.div`
-  margin-top: var(--a-spacing-4);
-`;

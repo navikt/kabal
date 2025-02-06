@@ -1,6 +1,5 @@
 import type { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
 import { Label } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   saksbehandlere: SaksbehandlerAccessRights[];
@@ -8,64 +7,13 @@ interface Props {
   setFocusedCell: (cell: [number, number]) => void;
 }
 
-export const Head = ({ saksbehandlere, setFocusedCell, focusedCell: [focusedColumn] }: Props) => (
-  <Thead>
-    <tr>
-      <StyledHeader>Ytelse</StyledHeader>
-      <AngledHeader
-        grey={false}
-        first
-        focused={focusedColumn === 0}
-        zIndex={saksbehandlere.length}
-        text={`Alle saksbehandlere (${saksbehandlere.length})`}
-        onMouseEnter={() => setFocusedCell([0, -1])}
-      />
-      {saksbehandlere.map(({ saksbehandlerName, saksbehandlerIdent, ytelseIdList }, i) => (
-        <AngledHeader
-          key={saksbehandlerIdent}
-          grey={i % 2 === 0}
-          focused={focusedColumn === i + 1}
-          zIndex={saksbehandlere.length - 1 - i}
-          text={`${saksbehandlerName} (${ytelseIdList.length}) (${saksbehandlerIdent})`}
-          onMouseEnter={() => setFocusedCell([i + 1, -1])}
-        />
-      ))}
-    </tr>
-  </Thead>
-);
+const SHADOW_STYLE: React.CSSProperties = {
+  boxShadow: 'var(--a-border-on-inverted) 0 1px 0 0, black 0px 5px 5px -5px',
+};
 
-interface AngledHeaderProps {
-  text: string;
-  grey: boolean;
-  first?: boolean;
-  focused: boolean;
-  zIndex: number;
-  onMouseEnter: () => void;
-}
-
-const AngledHeader = ({ text, grey, focused, zIndex, onMouseEnter, first = false }: AngledHeaderProps) => (
-  <StyledAngledHeader
-    $grey={grey}
-    $first={first}
-    $focused={focused}
-    $zIndex={zIndex}
-    title={text}
-    onMouseEnter={onMouseEnter}
-  >
-    <AngledHeaderDiv>{text}</AngledHeaderDiv>
-  </StyledAngledHeader>
-);
-
-const Thead = styled.thead`
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background-color: var(--a-bg-default);
-
-  box-shadow:
-    var(--a-border-on-inverted) 0 1px 0 0,
-    black 0px 5px 5px -5px;
-`;
+const ANGLED_TH_CLASSES =
+  'origin-bottom-left pl-2 text-left align-text-bottom whitespace-nowrap relative border-r-1 border-(--a-border-on-inverted)';
+const ANGLED_DIV_CLASSES = 'pr-3 overflow-hidden text-ellipsis absolute bottom-0 text-left origin-bottom-left';
 
 const NON_ANGLED_HEADER_HEIGHT = 32;
 const ANGLED_HEADER_WIDTH = 256;
@@ -73,59 +21,47 @@ const ANGLED_HEADER_HEIGHT = Math.ceil(Math.sqrt(2 * NON_ANGLED_HEADER_HEIGHT **
 const CONTAINER_WIDTH = NON_ANGLED_HEADER_HEIGHT;
 const CONTAINER_HEIGHT = Math.sqrt(ANGLED_HEADER_WIDTH ** 2 / 2);
 
-const StyledHeader = styled.th`
-  padding-left: var(--a-spacing-2);
-  vertical-align: bottom;
-  text-align: left;
-`;
-
-const getBackgroundColor = (props: StyledAngledHeaderDivProps) => {
-  if (props.$focused) {
-    return 'var(--a-blue-200)';
-  }
-
-  if (props.$grey) {
-    return 'var(--a-gray-200)';
-  }
-
-  return 'var(--a-bg-default)';
-};
-
-interface StyledAngledHeaderDivProps {
-  $grey: boolean;
-  $first: boolean;
-  $focused: boolean;
-  $zIndex?: number;
-}
-
-const StyledAngledHeader = styled(StyledHeader)<StyledAngledHeaderDivProps>`
-  white-space: nowrap;
-
-  transform-origin: bottom left;
-  position: relative;
-
-  transform: skew(-45deg);
-  border-right: 1px solid var(--a-border-on-inverted);
-  border-left: ${({ $first }) => ($first ? '1px solid var(--a-border-on-inverted)' : 'none')};
-
-  height: ${CONTAINER_HEIGHT}px;
-  background-color: ${getBackgroundColor};
-`;
-
-const AngledHeaderDiv = styled(Label)`
-  padding-right: var(--a-spacing-3);
-  width: ${ANGLED_HEADER_WIDTH}px;
-  height: ${ANGLED_HEADER_HEIGHT}px;
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  position: absolute;
-  bottom: 0;
-  left: ${CONTAINER_WIDTH}px;
-
-  transform-origin: bottom left;
-  transform: skew(45deg) rotate(-45deg);
-
-  text-align: left;
-`;
+export const Head = ({ saksbehandlere, setFocusedCell, focusedCell: [focusedColumn] }: Props) => (
+  <thead className="sticky top-0 z-2 bg-(--a-bg-default)" style={SHADOW_STYLE}>
+    <tr>
+      <th className="sticky top-0 z-2 bg-(--a-bg-default)">Ytelse</th>
+      <th
+        className={`${ANGLED_TH_CLASSES} ${focusedColumn === 0 ? 'bg-(--a-blue-200)' : 'odd:bg-(--a-bg-subtle)'}`}
+        style={{ height: CONTAINER_HEIGHT, transform: 'skew(-45deg)' }}
+        onMouseEnter={() => setFocusedCell([0, -1])}
+      >
+        <Label
+          className={ANGLED_DIV_CLASSES}
+          style={{
+            width: ANGLED_HEADER_WIDTH,
+            height: ANGLED_HEADER_HEIGHT,
+            left: CONTAINER_WIDTH,
+            transform: 'skew(45deg) rotate(-45deg)',
+          }}
+        >
+          Alle saksbehandlere ({saksbehandlere.length})
+        </Label>
+      </th>
+      {saksbehandlere.map(({ saksbehandlerName, saksbehandlerIdent, ytelseIdList }, i) => (
+        <th
+          className={`${ANGLED_TH_CLASSES} ${focusedColumn === i + 1 ? 'bg-(--a-blue-200)' : 'odd:bg-(--a-bg-subtle)'}`}
+          style={{ height: CONTAINER_HEIGHT, transform: 'skew(-45deg)' }}
+          key={saksbehandlerIdent}
+          onMouseEnter={() => setFocusedCell([i + 1, -1])}
+        >
+          <Label
+            className={ANGLED_DIV_CLASSES}
+            style={{
+              width: ANGLED_HEADER_WIDTH,
+              height: ANGLED_HEADER_HEIGHT,
+              left: CONTAINER_WIDTH,
+              transform: 'skew(45deg) rotate(-45deg)',
+            }}
+          >
+            {saksbehandlerName} ({ytelseIdList.length}) ({saksbehandlerIdent})
+          </Label>
+        </th>
+      ))}
+    </tr>
+  </thead>
+);

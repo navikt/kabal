@@ -8,7 +8,7 @@ export const IncludedFilter = () => {
   const title = value ? 'Viser kun inkluderte dokumenter.' : 'Viser alle dokumenter.';
 
   return (
-    <HStack align="center" justify="center" gridColumn={Fields.Action}>
+    <HStack align="center" justify="center" className={`[grid-area:${Fields.Action}]`}>
       <Checkbox size="small" checked={value} hideLabel onChange={() => setValue(!value)} title={title}>
         {title}
       </Checkbox>

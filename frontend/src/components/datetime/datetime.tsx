@@ -19,7 +19,7 @@ export const ModifiedCreatedDateTime = ({ id, lastEdit, created }: Props) => {
   return (
     <HStack asChild align="center">
       <BodyShort id={id} size="small">
-        <DateTime icon={<Icon aria-hidden style={{ flexShrink: 0 }} />} dateTime={dateTime} title={title} />
+        <DateTime icon={<Icon aria-hidden className="shrink-0" />} dateTime={dateTime} title={title} />
         {lastEdit === undefined ? null : <span>, av {lastEdit.actor.navn}</span>}
       </BodyShort>
     </HStack>
@@ -34,7 +34,7 @@ interface DateTimeProps {
 }
 
 export const DateTime = ({ dateTime, title, icon, id }: DateTimeProps) => (
-  <HStack as="time" align="center" gap="1" dateTime={dateTime} title={title} id={id} style={{ whiteSpace: 'nowrap' }}>
+  <HStack as="time" align="center" gap="1" dateTime={dateTime} title={title} id={id} className="whitespace-nowrap">
     {icon}
     {isoDateTimeToPretty(dateTime)}
   </HStack>
