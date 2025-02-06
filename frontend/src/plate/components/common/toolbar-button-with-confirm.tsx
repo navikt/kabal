@@ -27,7 +27,7 @@ export const ToolbarButtonWithConfirm = ({ onClick, icon, tooltip, loading, ...r
       </Tooltip>
 
       {showConfirm ? (
-        <VStack asChild position="absolute" right="0" style={{ top: '100%', zIndex: 1 }}>
+        <VStack asChild position="absolute" right="0" className="top-full z-1">
           <Box background="bg-subtle" borderRadius="0 0 medium medium" shadow="medium">
             <Tooltip content="Bekreft" delay={0} placement="right">
               <Button

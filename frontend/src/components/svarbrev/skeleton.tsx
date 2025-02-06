@@ -1,7 +1,7 @@
 import { HStack, Skeleton, Table } from '@navikt/ds-react';
 
 const SkeletonRow = () => (
-  <Table.Row style={{ height: 41.5 }}>
+  <Table.Row>
     <Table.DataCell>
       <Skeleton variant="rounded" />
     </Table.DataCell>

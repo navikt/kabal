@@ -72,7 +72,7 @@ export const PdfModal = ({
     >
       <ModalBody>
         <VStack gap="4">
-          <HStack align="center" gap="0 1" style={{ fontStyle: 'italic', fontSize: 'var(--a-spacing-4)' }}>
+          <HStack align="center" gap="0 1" className="text-base italic">
             <span>
               Sist endret <Time dateTime={modified} /> av <User {...modifiedBy} />.
             </span>
@@ -104,7 +104,7 @@ export const PdfModal = ({
               </HStack>
             </Tooltip>
             <Tooltip content="Tekst til svarbrev (valgfri)">
-              <div style={{ flexGrow: 1 }}>
+              <div className="grow">
                 <TextField
                   size="small"
                   label="Tekst (valgfri)"

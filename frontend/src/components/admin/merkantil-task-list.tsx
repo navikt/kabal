@@ -44,7 +44,9 @@ const TaskList = () => {
             <Heading level="2" size="small" spacing>
               Noe gikk galt
             </Heading>
-            <Code>{JSON.stringify(error, null, 2)}</Code>
+            <code className="block whitespace-pre-wrap rounded-lg bg-(--a-surface-neutral-subtle) p-4">
+              {JSON.stringify(error, null, 2)}
+            </code>
           </Alert>
         </HStack>
       </VStack>
@@ -135,11 +137,11 @@ const TaskList = () => {
             ),
           )}
         </Table.Body>
-        <StyledTableFooter>
+        <tfoot className="italic">
           <Table.Row>
             <Table.DataCell colSpan={999}>Totalt {tasks.length} oppgaver</Table.DataCell>
           </Table.Row>
-        </StyledTableFooter>
+        </tfoot>
       </Table>
     </VStack>
   );
@@ -177,16 +179,4 @@ const getPath: UrlFn = (id, typeId) => `/${TYPE_TO_PATH[typeId]}/${id}`;
 
 const NoWrapTableHeaderCell = styled(Table.HeaderCell)`
   white-space: nowrap;
-`;
-
-const StyledTableFooter = styled.tfoot`
-  font-style: italic;
-`;
-
-const Code = styled.code`
-  display: block;
-  white-space: pre-wrap;
-  padding: var(--a-spacing-4);
-  border-radius: var(--a-border-radius-medium);
-  background-color: var(--a-surface-neutral-subtle);
 `;

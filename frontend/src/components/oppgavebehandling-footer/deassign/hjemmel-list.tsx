@@ -30,6 +30,7 @@ export const HjemmelList = ({ selected, ytelseId, direction, onChange, error }: 
   );
 
   const hasFilter = options.length > 10;
+  const isUp = direction === Direction.UP;
 
   return (
     <VStack
@@ -38,7 +39,9 @@ export const HjemmelList = ({ selected, ytelseId, direction, onChange, error }: 
       padding="2"
       minWidth="200px"
       position="absolute"
-      style={{ left: '100%', [direction === Direction.UP ? 'bottom' : 'top']: '0', zIndex: 10 }}
+      bottom={isUp ? '0' : undefined}
+      top={isUp ? undefined : '0'}
+      className="left-full z-10"
     >
       <Box background="bg-default" borderRadius="medium" borderColor="border-divider" borderWidth="1" shadow="medium">
         <Heading level="1" size="small">

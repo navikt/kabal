@@ -1,5 +1,3 @@
-import { styled } from 'styled-components';
-
 interface Props {
   isChecked: boolean;
   onCheck: (checked: boolean) => void;
@@ -10,72 +8,63 @@ interface Props {
   isCurrentRow: boolean;
 }
 
-export const Cell = ({ isChecked, onCheck, children, onFocus, isFocused, isCurrentColumn, isCurrentRow }: Props) => (
-  <StyledCell
-    title={children}
-    $isChecked={isChecked}
-    onClick={onFocus}
-    onMouseEnter={onFocus}
-    $isFocused={isFocused}
-    $isCurrentColumn={isCurrentColumn}
-    $isCurrentRow={isCurrentRow}
-  >
-    <StyledCheckbox
-      type="checkbox"
+export const Cell = ({ isChecked, onCheck, children, onFocus, isFocused, isCurrentColumn, isCurrentRow }: Props) => {
+  const backgroundClass = VARIANTS[getVariant(isFocused, isCurrentColumn, isCurrentRow, isChecked)];
+
+  return (
+    <td
+      className={`border-(--a-border-on-inverted) border-r-1 border-b-1 p-0 ${backgroundClass}`}
       title={children}
-      checked={isChecked}
-      onChange={({ target }) => onCheck(target.checked)}
-    />
-  </StyledCell>
-);
-
-interface StyledCellProps {
-  $isChecked: boolean;
-  $isFocused: boolean;
-  $isCurrentColumn: boolean;
-  $isCurrentRow: boolean;
-}
-
-const getColor = (
-  { $isChecked, $isFocused, $isCurrentColumn, $isCurrentRow }: StyledCellProps,
-  defaultColor = 'var(--a-bg-default)',
-) => {
-  if ($isFocused || $isCurrentColumn || $isCurrentRow) {
-    if ($isChecked) {
-      return 'var(--a-purple-200)';
-    }
-
-    return 'var(--a-blue-200)';
-  }
-
-  if ($isChecked) {
-    return 'var(--a-green-200)';
-  }
-
-  return defaultColor;
+      onClick={onFocus}
+      onKeyDown={({ key }) => {
+        if (key === 'Enter' || key === ' ') {
+          onFocus();
+        }
+      }}
+      onMouseEnter={onFocus}
+    >
+      <input
+        type="checkbox"
+        className="m-0 block h-8 w-8 cursor-pointer border-none p-0 opacity-0"
+        title={children}
+        checked={isChecked}
+        onChange={({ target }) => onCheck(target.checked)}
+      />
+    </td>
+  );
 };
 
-const StyledCell = styled.td<StyledCellProps>`
-  padding: 0;
-  border-right: 1px solid var(--a-border-on-inverted);
-  border-bottom: 1px solid var(--a-border-on-inverted);
+enum Variant {
+  FOCUSED_OR_CURRENT_CHECKED = 0,
+  FOCUSED_OR_CURRENT_UNCHECKED = 1,
+  CHECKED = 2,
+  NONE = 3,
+}
 
-  &:nth-child(even) {
-    background-color: ${getColor};
+const VARIANTS: Record<Variant, string> = {
+  [Variant.FOCUSED_OR_CURRENT_CHECKED]: 'bg-(--a-purple-200)',
+  [Variant.FOCUSED_OR_CURRENT_UNCHECKED]: 'bg-(--a-blue-200)',
+  [Variant.CHECKED]: 'bg-(--a-green-200)',
+  [Variant.NONE]: 'even:bg-(--a-bg-default) odd:bg-(--a-bg-subtle)',
+};
+
+const getVariant = (
+  isFocused: boolean,
+  isCurrentColumn: boolean,
+  isCurrentRow: boolean,
+  isChecked: boolean,
+): Variant => {
+  if (isFocused || isCurrentColumn || isCurrentRow) {
+    if (isChecked) {
+      return Variant.FOCUSED_OR_CURRENT_CHECKED;
+    }
+
+    return Variant.FOCUSED_OR_CURRENT_UNCHECKED;
   }
 
-  &:nth-child(odd) {
-    background-color: ${(props) => getColor(props, 'rgb(247, 247, 247)')};
+  if (isChecked) {
+    return Variant.CHECKED;
   }
-`;
 
-const StyledCheckbox = styled.input`
-  display: block;
-  width: var(--a-spacing-8);
-  height: var(--a-spacing-8);
-  border: none;
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-  cursor: pointer;
-`;
+  return Variant.NONE;
+};

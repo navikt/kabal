@@ -48,12 +48,7 @@ export const GosysBeskrivelseTabs = ({
   }, [entries.length, expectedEntries, hasExpectedEntries, pushEvent, id]);
 
   return (
-    <Tabs
-      size="small"
-      value={format}
-      onChange={onChange}
-      style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-    >
+    <Tabs size="small" value={format} onChange={onChange} className="flex h-full flex-col">
       <Tabs.List>
         <Tabs.Tab
           value={GosysBeskrivelseFormat.KABAL}
@@ -66,10 +61,10 @@ export const GosysBeskrivelseTabs = ({
           icon={<CaptionsIcon aria-hidden role="presentation" />}
         />
       </Tabs.List>
-      <Tabs.Panel value={GosysBeskrivelseFormat.KABAL} style={{ overflow: 'auto' }}>
+      <Tabs.Panel value={GosysBeskrivelseFormat.KABAL} className="overflow-auto">
         <EntryList entries={entries} />
       </Tabs.Panel>
-      <Tabs.Panel value={GosysBeskrivelseFormat.GOSYS} style={{ overflow: 'auto' }}>
+      <Tabs.Panel value={GosysBeskrivelseFormat.GOSYS} className="overflow-auto">
         <GosysFormatted size="small">{beskrivelse?.trim()}</GosysFormatted>
       </Tabs.Panel>
     </Tabs>

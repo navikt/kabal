@@ -27,7 +27,7 @@ export const Popup = ({ isOpen, children }: PopupProps) => {
       maxWidth="275px"
       position="absolute"
       left="0"
-      style={{ top: '100%', zIndex: 22, scrollMarginBottom: 'var(--a-spacing-4)' }}
+      className="top-full z-22 scroll-mb-4"
     >
       <Box background="bg-default" borderRadius="medium" borderWidth="1" borderColor="border-divider" shadow="medium">
         {children}

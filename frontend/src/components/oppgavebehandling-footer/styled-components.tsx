@@ -94,7 +94,7 @@ export const StyledFooter = ({ $type, children }: StyledFooterProps) => (
     paddingInline="4"
     paddingBlock="2"
     width="100%"
-    style={{ zIndex: 23 }}
+    className="z-23"
   >
     <Box background={getBackgroundColor($type)} borderWidth="1 0 0 0" borderColor={getBorderColor($type)}>
       {children}

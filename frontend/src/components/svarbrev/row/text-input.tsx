@@ -14,7 +14,7 @@ export const TextInput = ({ value, onChange, hasChanges, settingId }: Props) => 
 
   return (
     <HStack align="center" gap="0 1">
-      <div style={{ flexGrow: 1 }}>
+      <div className="grow">
         <TextField
           size="small"
           value={value}

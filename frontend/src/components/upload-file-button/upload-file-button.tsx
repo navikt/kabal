@@ -97,7 +97,7 @@ export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
           multiple
           ref={inputRef}
           onChange={uploadVedlegg}
-          style={{ display: 'none' }}
+          className="hidden"
           disabled={isLoading}
         />
         <Tooltip content="Last opp dokument">

@@ -40,7 +40,7 @@ export const Filters = ({
   activeFilter,
   setActiveFilter,
 }: FilterProps) => (
-  <HStack asChild wrap={false} gap="4" width="100%" position="sticky" top="0" style={{ zIndex: 1 }}>
+  <HStack asChild wrap={false} gap="4" width="100%" position="sticky" top="0" className="z-1">
     <Box background="bg-default" paddingInline="0 1" paddingBlock="0 4">
       <ToggleGroup
         size="small"

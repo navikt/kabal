@@ -20,7 +20,14 @@ export const PopupContainer = ({ children, close, direction }: Props) => {
   const isLeft = direction === Direction.LEFT;
 
   return (
-    <VStack asChild gap="4" style={{ bottom: '100%', left: isLeft ? 'auto' : 0, right: isLeft ? 0 : 'auto' }} ref={ref}>
+    <VStack
+      asChild
+      gap="4"
+      left={isLeft ? undefined : '0'}
+      right={isLeft ? '0' : undefined}
+      className="bottom-full"
+      ref={ref}
+    >
       <Box position="absolute" background="bg-default" shadow="medium" padding="4">
         {children}
       </Box>

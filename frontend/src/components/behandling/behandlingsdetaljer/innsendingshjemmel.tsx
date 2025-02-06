@@ -8,7 +8,6 @@ import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebeh
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Tag, Tooltip } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   oppgavebehandling: IOppgavebehandling;
@@ -35,14 +34,14 @@ export const Innsendingshjemmel = ({ oppgavebehandling }: Props) => {
           }
         />
         {oppgavebehandling.isAvsluttetAvSaksbehandler ? null : (
-          <PopupContainer ref={ref}>
+          <div className="relative w-min shrink-0 grow-0 self-start" ref={ref}>
             <Tooltip content="Endre innsendingshjemler">
               <Button
                 size="xsmall"
                 variant="tertiary"
                 onClick={() => setIsOpen((o) => !o)}
                 icon={<PencilIcon aria-hidden />}
-                style={{ alignSelf: 'start', marginLeft: 'auto' }}
+                className="ml-auto self-start"
               />
             </Tooltip>
             {isOpen ? (
@@ -54,17 +53,9 @@ export const Innsendingshjemmel = ({ oppgavebehandling }: Props) => {
                 direction={Direction.DOWN}
               />
             ) : null}
-          </PopupContainer>
+          </div>
         )}
       </HStack>
     </BehandlingSection>
   );
 };
-
-const PopupContainer = styled.div`
-  position: relative;
-  align-self: start;
-  flex-grow: 0;
-  flex-shrink: 0;
-  width: min-content;
-`;

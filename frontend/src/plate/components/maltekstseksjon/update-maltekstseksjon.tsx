@@ -52,7 +52,7 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes, ignore }: Props) => 
       onSelect={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
     >
-      <Box borderRadius="medium" marginBlock="0 2" paddingBlock="6 0" width="100%" style={{ userSelect: 'none' }}>
+      <Box borderRadius="medium" marginBlock="0 2" paddingBlock="6 0" width="100%" className="select-none">
         <Button size={BUTTON_SIZE} icon={<FileTextIcon aria-hidden />} onClick={replaceMaltekstseksjonContent}>
           {willRemove ? 'Fjern tekst' : 'Erstatt tekst'}
         </Button>

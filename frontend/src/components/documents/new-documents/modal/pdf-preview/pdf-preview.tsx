@@ -31,7 +31,7 @@ export const PDFPreview = ({ isLoading, noFlickerReload }: Props) => {
   }, [onReload, setVersions]);
 
   return (
-    <div style={{ flexGrow: 1 }}>
+    <div className="grow">
       <VStack asChild height="100%" flexGrow="1" width={`${pdfWidth}px`}>
         <Box shadow="medium">
           <Header>

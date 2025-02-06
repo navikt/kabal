@@ -17,7 +17,7 @@ export const Maltekstseksjon = ({ maltekstseksjonId, query }: Props) => (
     paddingInline="2 0"
     marginBlock="1"
     marginInline="0 1"
-    gridColumn="content"
+    className="[grid-area:content]"
     data-element="MaltekstseksjonContainer"
   >
     <Box borderRadius="medium" shadow="medium">

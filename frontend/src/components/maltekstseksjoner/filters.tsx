@@ -27,7 +27,7 @@ export const Filters = ({ maltekst, query }: Props) => {
   });
 
   return (
-    <HStack gap="2" gridColumn="filters">
+    <HStack gap="2" className="[grid-area:filters]">
       <TemplateSectionSelect
         selected={maltekst.templateSectionIdList}
         onChange={(templateSectionIdList) => updateTemplateSection({ id: maltekst.id, templateSectionIdList, query })}

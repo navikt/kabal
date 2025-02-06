@@ -8,7 +8,7 @@ interface StickyRightProps {
 }
 
 export const StickyRight = ({ id }: StickyRightProps) => (
-  <VStack gap="4 0" position="sticky" top="0" overflowY="auto" gridColumn="right">
+  <VStack gap="4 0" position="sticky" top="0" overflowY="auto" className="[grid-area:right]">
     <NumberOfComments />
     <Bookmarks editorId={id} />
     <CommentSection />

@@ -186,7 +186,7 @@ export const TagContainer = (props: { children: React.ReactNode }) => (
     wrap
     align="center"
     flexGrow="0"
-    gridColumn="tags"
+    className="[grid-area:tags]"
     maxHeight="250px"
     overflowY="auto"
     flexShrink="0"

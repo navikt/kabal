@@ -23,7 +23,7 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
   };
 
   return (
-    <HStack gap="2" align="center" gridColumn="title">
+    <HStack gap="2" align="center" className="[grid-area:title]">
       <StyledTitle
         level="1"
         size={SIZE}
@@ -34,7 +34,7 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
         aria-label={label}
         aria-placeholder="Skriv inn tittel"
         ref={ref}
-        style={{ opacity: isLoading ? 0.5 : 1 }}
+        className={isLoading ? 'opacity-50' : 'opacity-100'}
         onFocus={(e) => {
           setCaretAtEnd(e.currentTarget);
         }}

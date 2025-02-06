@@ -37,7 +37,7 @@ export const SmartEditorTexts = ({ textType }: Props) => {
 
   return (
     <Container>
-      <HStack gap="4" justify="start" paddingBlock="0 1" gridColumn="header">
+      <HStack gap="4" justify="start" paddingBlock="0 1" className="[grid-area:header]">
         <Button size="small" variant="secondary" loading={isLoading} onClick={onClick} icon={<PlusIcon aria-hidden />}>
           Legg til ny
         </Button>

@@ -75,11 +75,11 @@ export const StandaloneTextList = ({ filter, data, isLoading, style, textType }:
   return (
     <VStack height="100%" width="700px" overflowY="auto" flexGrow="1" style={style}>
       <Headers />
-      <VStack as="ul" gap="1 0" width="100%" padding="0" margin="0" style={{ listStyle: 'none' }}>
+      <VStack as="ul" gap="1 0" width="100%" padding="0" margin="0" className="list-none">
         {sortedTexts.map(({ id, title, modified, publishedDateTime, published, score }) => (
           <ListItem key={id} $active={query.id === id}>
             <StyledLink to={getStandaloneTextLink(textType, language, id)}>
-              <HStack align="center" gap="05" overflow="hidden" wrap={false} style={{ whiteSpace: 'nowrap' }}>
+              <HStack align="center" gap="05" overflow="hidden" wrap={false} className="whitespace-nowrap">
                 <StyledTitleIcon />
                 <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
               </HStack>
@@ -99,10 +99,10 @@ interface MaltekstseksjonListProps {
   filter: string;
   data: IMaltekstseksjon[];
   isLoading: boolean;
-  style?: React.CSSProperties;
+  className?: string;
 }
 
-export const MaltekstseksjonList = ({ filter, data, isLoading, style }: MaltekstseksjonListProps) => {
+export const MaltekstseksjonList = ({ filter, data, isLoading, className }: MaltekstseksjonListProps) => {
   const [statusFilter] = useStatusFilter();
   const sortedMaltekstseksjonList = useFilteredAndSorted(
     data,
@@ -123,9 +123,9 @@ export const MaltekstseksjonList = ({ filter, data, isLoading, style }: Maltekst
   }
 
   return (
-    <VStack height="100%" width="700px" overflowY="auto" flexGrow="1" style={style}>
+    <VStack height="100%" width="700px" overflowY="auto" flexGrow="1" className={className}>
       <Headers />
-      <VStack as="ul" gap="1 0" width="100%" padding="0" margin="0" style={{ listStyle: 'none' }}>
+      <VStack as="ul" gap="1 0" width="100%" padding="0" margin="0" className="list-none">
         {sortedMaltekstseksjonList.map(({ id, score }) => (
           <MaltekstseksjonItem key={id} maltekstseksjonId={id} score={score} />
         ))}
@@ -169,8 +169,8 @@ const MaltekstseksjonItem = ({ maltekstseksjonId, score }: MaltekstseksjonItemPr
   return (
     <MaltekstseksjontListItem key={id} query={maltekstseksjonQuery} activeId={query.id} maltekstseksjonId={id}>
       <StyledLink to={getLink(maltekstseksjon, language)}>
-        <HStack align="center" gap="05" overflow="hidden" wrap={false} style={{ whiteSpace: 'nowrap' }}>
-          <TasklistIcon aria-hidden style={{ flexShrink: 0 }} />
+        <HStack align="center" gap="05" overflow="hidden" wrap={false} className="whitespace-nowrap">
+          <TasklistIcon aria-hidden className="shrink-0" />
           <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
         </HStack>
 
@@ -193,9 +193,9 @@ const Headers = () => {
       <SortableHeader label="Sist endret" sortKey={SortKey.MODIFIED} querySortKey={sort} querySortOrder={order} />
       <SortableHeader
         label={
-          <span style={{ display: 'flex', alignContent: 'center' }}>
+          <HStack align="center">
             <PercentIcon aria-hidden fontSize={18} />
-          </span>
+          </HStack>
         }
         sortKey={SortKey.SCORE}
         querySortKey={sort}

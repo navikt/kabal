@@ -131,7 +131,7 @@ const Container = ({ minWidth, children }: ContainerProps) => (
   <VStack
     asChild
     minWidth={`${minWidth}px`}
-    style={{ scrollSnapAlign: 'start' }}
+    className="snap-start"
     align="center"
     justify="center"
     data-testid="show-document"

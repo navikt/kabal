@@ -9,7 +9,6 @@ import type { IYtelse } from '@app/types/kodeverk';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Heading, Loader } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
-import { styled } from 'styled-components';
 import { Body } from './body';
 import { Head } from './head';
 
@@ -68,8 +67,8 @@ const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
   return (
     <>
       <TilgangsstyringHeading />
-      <TableWrapper>
-        <StyledTable onMouseLeave={() => setFocusedCell([-1, -1])}>
+      <div className="shrink-1 overflow-auto">
+        <table className="max-h-full border-separate border-spacing-0" onMouseLeave={() => setFocusedCell([-1, -1])}>
           <Head saksbehandlere={accessRights} focusedCell={focusedCell} setFocusedCell={setFocusedCell} />
           <Body
             ytelser={ytelser}
@@ -78,8 +77,8 @@ const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
             focusedCell={focusedCell}
             setFocusedCell={setFocusedCell}
           />
-        </StyledTable>
-      </TableWrapper>
+        </table>
+      </div>
       <HStack gap="4">
         <Button variant="primary" size="small" onClick={save} loading={isLoading} icon={<CheckmarkIcon aria-hidden />}>
           Lagre
@@ -99,14 +98,3 @@ const TilgangsstyringHeading = () => (
     Tilgangsstyring
   </Heading>
 );
-
-const StyledTable = styled.table`
-  border-collapse: separate;
-  border-spacing: 0;
-  max-height: 100%;
-`;
-
-const TableWrapper = styled.div`
-  flex-shrink: 1;
-  overflow: auto;
-`;

@@ -52,7 +52,7 @@ export const Enhetmappe = ({ enhetId, selectedMappe, setSelectedMappe, oppgavebe
         size="small"
         value={getValue(enhetId, selectedMappe)}
         onChange={({ target }) => setSelectedMappe(target.value === NONE ? null : Number.parseInt(target.value, 10))}
-        style={{ width: 250 }}
+        className="w-64"
       >
         {enhetId === null ? (
           <option disabled value={NO_ENHET_ID}>
@@ -71,7 +71,7 @@ export const Enhetmappe = ({ enhetId, selectedMappe, setSelectedMappe, oppgavebe
         )}
       </Select>
 
-      {isLoading ? <Loader title="Laster..." style={{ marginBottom: 4 }} /> : null}
+      {isLoading ? <Loader title="Laster..." className="mb-1" /> : null}
     </HStack>
   );
 };

@@ -33,19 +33,20 @@ export const Maltekstseksjoner = () => {
 
   return (
     <Container>
-      <HStack as="header" justify="start" align="center" gap="4" marginBlock="0 2" gridColumn="header">
+      <HStack as="header" justify="start" align="center" gap="4" marginBlock="0 2" className="[grid-area:header]">
         <CreateMaltekstseksjon query={query} />
         <SetMaltekstseksjonLanguage />
       </HStack>
 
       <Filters />
 
-      <StyledSearch
+      <Search
         variant="simple"
         size="small"
         label="Filtrer på navn"
         placeholder="Filtrer på navn"
         value={rawSearch}
+        className="[grid-area:search]"
         onChange={(v) => {
           if (rawSearch.length === 0 && v.length > 0) {
             searchParams.set(QueryKey.SORT, SortKey.SCORE);
@@ -58,7 +59,7 @@ export const Maltekstseksjoner = () => {
       />
       <DragAndDropContextElement>
         <MaltekstseksjonList
-          style={{ gridArea: 'list' }}
+          className="mt-1 [grid-area:list]"
           data={maltekstseksjoner}
           isLoading={isLoading}
           filter={rawSearch}
@@ -67,8 +68,15 @@ export const Maltekstseksjoner = () => {
         {hasSelectedMaltekstseksjon ? (
           <Maltekstseksjon maltekstseksjonId={id} query={query} />
         ) : (
-          <VStack asChild align="center" justify="center" gridColumn="content" minWidth="1330px" width="fit-content">
-            <Box borderRadius="medium" shadow="medium" marginBlock="1" style={{ color: 'var(--a-surface-subtle)' }}>
+          <VStack
+            asChild
+            align="center"
+            justify="center"
+            className="[grid-area:content]"
+            minWidth="1330px"
+            width="fit-content"
+          >
+            <Box borderRadius="medium" shadow="medium" marginBlock="1" className="text-(--a-surface-subtle)">
               <PuzzlePieceIcon aria-hidden fontSize={400} />
             </Box>
           </VStack>
@@ -77,12 +85,6 @@ export const Maltekstseksjoner = () => {
     </Container>
   );
 };
-
-const StyledSearch = styled(Search)`
-  grid-area: search;
-  padding-left: var(--a-spacing-1);
-  padding-right: var(--a-spacing-1);
-`;
 
 const Container = styled.article`
   display: grid;

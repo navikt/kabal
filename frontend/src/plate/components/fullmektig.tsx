@@ -131,7 +131,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
 };
 
 const Editable = ({ children }: { children: React.ReactNode }) => (
-  <span style={{ outline: 'none' }} contentEditable suppressContentEditableWarning>
+  <span className="outline-none" contentEditable suppressContentEditableWarning>
     {children}
   </span>
 );

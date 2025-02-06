@@ -120,7 +120,7 @@ export const SelectGosysOppgaveModal = ({ hasGosysOppgave }: SelectGosysOppgaveM
         <ModalBody>{canEdit ? <SelectGosysOppgave /> : <SelectedGosysOppgave />}</ModalBody>
 
         <Modal.Footer>
-          <Button variant="secondary" size="small" onClick={() => setIsOpen(false)} style={{ alignSelf: 'flex-end' }}>
+          <Button variant="secondary" size="small" onClick={() => setIsOpen(false)} className="self-start">
             Lukk
           </Button>
         </Modal.Footer>
@@ -227,7 +227,7 @@ const SelectGosysOppgave = () => {
           variant="secondary"
           size="small"
           onClick={onShowOpenClick}
-          style={{ alignSelf: 'flex-start' }}
+          className="self-start"
           disabled={showOpen && !hasGosysOppgaveId}
         >
           {showOpen ? 'Vis bare valgt' : 'Bytt oppgave'}
@@ -238,7 +238,7 @@ const SelectGosysOppgave = () => {
             variant="secondary"
             size="small"
             onClick={onShowOtherClick}
-            style={{ alignSelf: 'flex-start' }}
+            className="self-start"
             icon={showOther ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
           >
             {showOther

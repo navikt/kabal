@@ -37,7 +37,7 @@ const TableToolbar = ({ editorId, container, children }: TableToolbarProps) => {
   const [top, left] = position;
 
   return (
-    <HStack asChild align="center" position="absolute" style={{ top, left, zIndex: 21, willChange: 'left, top' }}>
+    <HStack asChild align="center" position="absolute" className="z-21" style={{ top, left, willChange: 'left, top' }}>
       <Box as="section" shadow="medium" background="surface-default" padding="05">
         {children}
       </Box>

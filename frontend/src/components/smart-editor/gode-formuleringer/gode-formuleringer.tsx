@@ -156,7 +156,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
       <Box as="section" background="bg-default" paddingInline="3 0" paddingBlock="4 0" width="350px" height="100%">
         <VStack gap="2 0" paddingInline="1 4" flexShrink="0">
           <HStack as="header" align="center" justify="space-between" wrap={false}>
-            <HStack as="h1" align="center" gap="2" margin="0" style={{ fontSize: 'var(--a-spacing-5)' }} wrap={false}>
+            <HStack as="h1" align="center" gap="2" margin="0" className="text-xl" wrap={false}>
               <LightBulbIcon />
               Gode formuleringer ({texts.length})
             </HStack>

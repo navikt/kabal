@@ -96,7 +96,7 @@ export const Abbreviation = () => {
         keys={['Ctrl', 'Shift', 'F']}
       />
       {isOpen ? (
-        <HStack asChild gap="0 1" position="absolute" right="0" style={{ top: '100%' }}>
+        <HStack asChild gap="0 1" position="absolute" right="0" className="top-full">
           <Box background="bg-default" padding="1" borderRadius="medium" shadow="medium">
             <Tooltip content="Den korte teksten du vil skal ekspandere til markert tekst">
               <TextField

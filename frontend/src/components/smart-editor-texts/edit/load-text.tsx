@@ -19,9 +19,9 @@ export const LoadText = () => {
         width="calc(210mm * var(--kabal-editor-scale) + var(--a-spacing-16))"
         minWidth="calc(210mm + var(--a-spacing-16))"
         data-textid={id}
-        style={{ color: 'var(--a-surface-subtle)' }}
+        className="text-(--a-surface-subtle)"
       >
-        <Box shadow="small" borderRadius="medium" marginBlock="0 4" gridColumn="content">
+        <Box shadow="small" borderRadius="medium" marginBlock="0 4" className="[grid-area:content]">
           <FileTextIcon fontSize={400} aria-hidden />
         </Box>
       </VStack>
@@ -38,7 +38,7 @@ export const LoadText = () => {
         data-textid={id}
         style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(ScalingGroup.REDAKTØR) }}
       >
-        <Box shadow="small" borderRadius="medium" marginBlock="0 4" gridColumn="content">
+        <Box shadow="small" borderRadius="medium" marginBlock="0 4" className="[grid-area:content]">
           <StandaloneTextVersions id={id} />
         </Box>
       </VStack>

@@ -74,7 +74,7 @@ export const NoFlickerReloadPdf = ({ versions, isLoading, onVersionLoaded }: Pro
   return (
     <StyledSwitcher data-count={versions.length} data-ready={versions.map((v) => v.ready)}>
       {isLoading ? (
-        <HStack asChild align="center" justify="center" position="absolute" top="0" left="0" style={{ zIndex: 2 }}>
+        <HStack asChild align="center" justify="center" position="absolute" top="0" left="0" className="z-2">
           <Box background="surface-neutral-moderate" height="100%" width="100%">
             <Loader size="3xlarge" />
           </Box>
@@ -88,7 +88,7 @@ export const NoFlickerReloadPdf = ({ versions, isLoading, onVersionLoaded }: Pro
           type="application/pdf"
           name="pdf-viewer"
           onLoad={() => onLoad(version)}
-          style={{ zIndex: version.ready ? 0 : -1 }}
+          className={version.ready ? 'z-0' : '-z-1'}
         />
       ))}
     </StyledSwitcher>

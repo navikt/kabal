@@ -24,7 +24,7 @@ export const TimeInput = ({ value, onChange, unit, setUnit }: Props) => (
       onChange={({ target }) => onChange(Number.parseInt(target.value, 10))}
       label="Saksbehandlingstid"
       hideLabel
-      style={{ width: 60 }}
+      className="w-15"
     />
 
     <ToggleGroup

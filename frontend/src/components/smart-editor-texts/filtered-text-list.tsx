@@ -20,7 +20,7 @@ export const FilteredTextList = ({ textType }: Props) => {
   const { data = [], isLoading } = useGetTextsQuery(textQuery);
 
   return (
-    <VStack gap="2" overflow="visible" gridColumn="list" overflowY="auto">
+    <VStack gap="2" overflow="visible" overflowY="auto" className="[grid-area:list]">
       <VStack gap="2" position="relative">
         <Filters textType={textType} />
 

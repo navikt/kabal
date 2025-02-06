@@ -26,7 +26,7 @@ const TableHeaders = () => (
       <Table.ColumnHeader sortable sortKey={SortKey.TIME}>
         Saksbehandlingstid
       </Table.ColumnHeader>
-      <Table.HeaderCell style={{ width: '100%' }}>Tekst til svarbrev (valgfri)</Table.HeaderCell>
+      <Table.HeaderCell className="w-full">Tekst til svarbrev (valgfri)</Table.HeaderCell>
       <Table.ColumnHeader sortable sortKey={SortKey.MODIFIED}>
         Sist endret
       </Table.ColumnHeader>
