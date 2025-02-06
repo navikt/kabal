@@ -1,8 +1,8 @@
 import { OppgaveSearch } from '@app/components/search/oppgave-search';
-import { SearchPageWrapper } from '../page-wrapper';
+import { VStack } from '@navikt/ds-react';
 
 export const SearchPage = () => (
-  <SearchPageWrapper>
+  <VStack flexGrow="1" width="100%" overflow="hidden">
     <OppgaveSearch />
-  </SearchPageWrapper>
+  </VStack>
 );

@@ -6,6 +6,7 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
@@ -100,7 +101,7 @@ export const JournalfoerteDocuments = () => {
           resetFilters={resetFilters}
           filteredDocuments={totalFilteredDocuments}
         />
-        <Wrapper>
+        <VStack overflow="hidden" flexGrow="1">
           <Header
             filters={filters}
             allSelectableDocuments={allSelectableDocuments}
@@ -119,18 +120,11 @@ export const JournalfoerteDocuments = () => {
             showLogiskeVedleggIdList={showLogiskeVedleggIdList}
             setShowLogiskeVedleggIdList={setShowLogiskeVedleggIdList}
           />
-        </Wrapper>
+        </VStack>
       </Container>
     </SelectContextElement>
   );
 };
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  flex-grow: 1;
-`;
 
 const Container = styled.section`
   ${commonStyles}

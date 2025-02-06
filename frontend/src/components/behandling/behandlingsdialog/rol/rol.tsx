@@ -13,7 +13,7 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { styled } from 'styled-components';
+import { VStack } from '@navikt/ds-react';
 import { RolReadOnly } from './read-only';
 
 export const Rol = () => {
@@ -65,9 +65,12 @@ const RolInternal = ({ oppgave }: Props) => {
   );
 };
 
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-2);
-  margin-bottom: var(--a-spacing-4);
-`;
+interface ContainerProps {
+  children: React.ReactNode;
+}
+
+const Container = ({ children }: ContainerProps) => (
+  <VStack gap="2" marginBlock="0 4">
+    {children}
+  </VStack>
+);

@@ -2,10 +2,9 @@ import { ISO_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants
 import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Box, Button, ErrorSummary, Textarea } from '@navikt/ds-react';
+import { Box, Button, ErrorSummary, HStack, Textarea, VStack } from '@navikt/ds-react';
 import { addDays, addWeeks, differenceInWeeks, format, isPast, isValid, parseISO } from 'date-fns';
 import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   oppgaveId: string;
@@ -37,73 +36,75 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
   }, []);
 
   return (
-    <StyledBox padding="4" background="bg-default" borderRadius="medium" shadow="medium">
-      <DatePicker
-        label="Frist"
-        value={to}
-        fromDate={fromDate}
-        toDate={dates.at(-1)?.[1]}
-        onChange={setTo}
-        id="paa-vent-date"
-        size="small"
-      />
-      <Column>
-        {dates.map(([weeks, date]) => {
-          const formattedDate = format(date, ISO_FORMAT);
-          const isActive = to === formattedDate;
-
-          return (
-            <Button
-              type="button"
-              variant={isActive ? 'primary' : 'secondary'}
-              size="small"
-              onClick={() => setTo(formattedDate)}
-              key={date.toISOString()}
-              disabled={isLoading}
-              aria-pressed={isActive}
-            >
-              {weeks} {weeks !== 1 ? 'uker' : 'uke'}
-              <br />({format(date, PRETTY_FORMAT)})
-            </Button>
-          );
-        })}
-      </Column>
-      <Textarea
-        label="Grunn (stikkord)"
-        value={reason}
-        onChange={(e) => setReason(e.target.value)}
-        maxLength={MAX_LENGTH}
-        size="small"
-        id="paa-vent-reason"
-        placeholder="Skriv kort hvorfor saken skal settes på vent. F.eks. «Venter på tilsvar»."
-      />
-      <Errors dateError={dateError} reasonError={reasonError} />
-      <Row>
-        <Button
-          type="button"
-          variant="primary"
+    <VStack asChild gap="4 0" left="0" position="absolute" style={{ bottom: '100%', zIndex: 1 }}>
+      <Box padding="4" background="bg-default" borderRadius="medium" shadow="medium" width="400px">
+        <DatePicker
+          label="Frist"
+          value={to}
+          fromDate={fromDate}
+          toDate={dates.at(-1)?.[1]}
+          onChange={setTo}
+          id="paa-vent-date"
           size="small"
-          onClick={() => {
-            const newDateError = validateDate(to);
-            const newReasonError = validateReason(reason);
+        />
+        <VStack gap="2">
+          {dates.map(([weeks, date]) => {
+            const formattedDate = format(date, ISO_FORMAT);
+            const isActive = to === formattedDate;
 
-            setDateError(newDateError);
-            setReasonError(newReasonError);
+            return (
+              <Button
+                type="button"
+                variant={isActive ? 'primary' : 'secondary'}
+                size="small"
+                onClick={() => setTo(formattedDate)}
+                key={date.toISOString()}
+                disabled={isLoading}
+                aria-pressed={isActive}
+              >
+                {weeks} {weeks !== 1 ? 'uker' : 'uke'}
+                <br />({format(date, PRETTY_FORMAT)})
+              </Button>
+            );
+          })}
+        </VStack>
+        <Textarea
+          label="Grunn (stikkord)"
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          maxLength={MAX_LENGTH}
+          size="small"
+          id="paa-vent-reason"
+          placeholder="Skriv kort hvorfor saken skal settes på vent. F.eks. «Venter på tilsvar»."
+        />
+        <Errors dateError={dateError} reasonError={reasonError} />
+        <HStack align="center" gap="0 4">
+          <Button
+            type="button"
+            variant="primary"
+            size="small"
+            onClick={() => {
+              const newDateError = validateDate(to);
+              const newReasonError = validateReason(reason);
 
-            if (newDateError === null && newReasonError === null && to !== null) {
-              settPaaVent({ to, oppgaveId, reason });
-            }
-          }}
-          loading={isLoading}
-          icon={<HourglassIcon aria-hidden />}
-        >
-          Sett på vent
-        </Button>
-        <Button type="button" variant="secondary" size="small" onClick={close} icon={<XMarkIcon aria-hidden />}>
-          Avbryt
-        </Button>
-      </Row>
-    </StyledBox>
+              setDateError(newDateError);
+              setReasonError(newReasonError);
+
+              if (newDateError === null && newReasonError === null && to !== null) {
+                settPaaVent({ to, oppgaveId, reason });
+              }
+            }}
+            loading={isLoading}
+            icon={<HourglassIcon aria-hidden />}
+          >
+            Sett på vent
+          </Button>
+          <Button type="button" variant="secondary" size="small" onClick={close} icon={<XMarkIcon aria-hidden />}>
+            Avbryt
+          </Button>
+        </HStack>
+      </Box>
+    </VStack>
   );
 };
 
@@ -166,27 +167,3 @@ const validateReason = (reason: string): string | null => {
 
   return null;
 };
-
-const StyledBox = styled(Box)`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-4);
-  z-index: 1;
-  bottom: 100%;
-  left: 0;
-  width: 400px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  column-gap: var(--a-spacing-4);
-  align-items: center;
-  flex-direction: row;
-`;
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-2);
-`;

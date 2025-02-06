@@ -1,5 +1,5 @@
+import { Box, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { FilterList } from './filter-list';
 import { Header } from './header';
 import type { BaseProps, DropdownProps } from './props';
@@ -39,33 +39,20 @@ export const Dropdown = <T extends string>({ selected, options, onChange, close 
   const focusedOption = filteredOptions[focused] ?? null;
 
   return (
-    <StyledDropdown data-testid="filter-dropdown">
-      <Header
-        onFocusChange={setFocused}
-        onFilterChange={setFilter}
-        onSelect={onSelectFocused}
-        focused={focused}
-        onReset={reset}
-        optionsCount={options.length}
-        close={close}
-        showFjernAlle
-      />
-      <FilterList options={filteredOptions} selected={selected} onChange={onChange} focused={focusedOption} />
-    </StyledDropdown>
+    <VStack asChild overflowY="auto" maxHeight="inherit" maxWidth="100%" data-testid="filter-dropdown">
+      <Box background="bg-default" borderRadius="medium" borderWidth="1" borderColor="border-divider" shadow="medium">
+        <Header
+          onFocusChange={setFocused}
+          onFilterChange={setFilter}
+          onSelect={onSelectFocused}
+          focused={focused}
+          onReset={reset}
+          optionsCount={options.length}
+          close={close}
+          showFjernAlle
+        />
+        <FilterList options={filteredOptions} selected={selected} onChange={onChange} focused={focusedOption} />
+      </Box>
+    </VStack>
   );
 };
-
-const StyledDropdown = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-  background-color: var(--a-bg-default);
-  border-radius: var(--a-border-radius-medium);
-  border: 1px solid var(--a-border-divider);
-  box-shadow: 0 1px var(--a-spacing-1) 0 rgba(0, 0, 0, 0.3);
-  z-index: 1;
-  max-width: 100%;
-  max-height: 100%;
-  overflow-y: auto;
-`;

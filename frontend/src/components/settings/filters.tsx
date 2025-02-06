@@ -4,16 +4,9 @@ import { useGetSettingsQuery, useUpdateSettingsMutation } from '@app/redux-api/b
 import { type ISettings, Role } from '@app/types/bruker';
 import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Switch } from '@navikt/ds-react';
+import { Button, HStack, Switch } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import {
-  ButtonContainer,
-  SectionHeader,
-  SettingsSection,
-  StyledFieldset,
-  StyledFilterContainer,
-  StyledFilters,
-} from './styled-components';
+import { SectionHeader, SettingsSection, StyledFieldset, StyledFilterContainer } from './styled-components';
 import { useHjemlerFromSettingsYtelser } from './use-hjemler-from-settings-ytelser';
 
 const EMPTY_SETTINGS: ISettings = {
@@ -53,10 +46,10 @@ export const Filters = () => {
     <SettingsSection $area="filters">
       <SectionHeader>Velg hvilke ytelser og hjemler du har kompetanse til å behandle</SectionHeader>
 
-      <StyledFilters>
+      <HStack gap="5" width="100%" wrap>
         <SettingsFilter label="Ytelser" options={ytelserOptions} selected={settings.ytelser} settingKey="ytelser" />
         <SettingsFilter label="Hjemler" options={hjemler} selected={settings.hjemler} settingKey="hjemler" />
-      </StyledFilters>
+      </HStack>
     </SettingsSection>
   );
 };
@@ -96,7 +89,7 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
 
   return (
     <StyledFilterContainer>
-      <ButtonContainer>
+      <HStack gap="0 2" position="absolute" top="0" right="0">
         <Button
           type="button"
           variant="secondary"
@@ -117,7 +110,7 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
         >
           Velg alle
         </Button>
-      </ButtonContainer>
+      </HStack>
       <StyledFieldset data-testid={`${settingKey}-settings`} legend={legend}>
         {options.map(({ id, navn }) => (
           <Switch

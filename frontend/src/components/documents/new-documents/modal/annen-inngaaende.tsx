@@ -4,10 +4,9 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetAvsenderMutation, useSetInngaaendeKanalMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { DocumentTypeEnum, type IMainDocument, InngaaendeKanal } from '@app/types/documents/documents';
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Label, Radio, RadioGroup } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Label, Radio, RadioGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
-import { styled } from 'styled-components';
 
 const INNGAAENDE_KANALER = Object.values(InngaaendeKanal);
 const isInngaaendeKanal = (type: string): type is InngaaendeKanal => INNGAAENDE_KANALER.some((t) => t === type);
@@ -49,7 +48,7 @@ export const AnnenInngaaende = ({ document, canEditDocument }: Props) => {
         <Label size="small" htmlFor="avsender">
           Avsender
         </Label>
-        <AvsenderContainer>
+        <HStack align="center" gap="2">
           <BodyShort size="small">{document.avsender?.name ?? 'Ikke satt'}</BodyShort>
           <PartStatusList statusList={document.avsender?.statusList ?? []} size="xsmall" />
           {canEditDocument && document.avsender !== null ? (
@@ -60,7 +59,7 @@ export const AnnenInngaaende = ({ document, canEditDocument }: Props) => {
               icon={editAvsender ? <XMarkIcon aria-hidden /> : <PencilIcon aria-hidden />}
             />
           ) : null}
-        </AvsenderContainer>
+        </HStack>
 
         {editAvsender ? (
           <EditPart
@@ -76,9 +75,3 @@ export const AnnenInngaaende = ({ document, canEditDocument }: Props) => {
     </>
   );
 };
-
-const AvsenderContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
-`;

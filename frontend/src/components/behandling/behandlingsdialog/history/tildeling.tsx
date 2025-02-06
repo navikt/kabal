@@ -5,9 +5,9 @@ import type { INavEmployee } from '@app/types/bruker';
 import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
 import { FradelReason } from '@app/types/oppgaver';
 import { ArrowUndoIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Label, Tag } from '@navikt/ds-react';
+import { HStack, Label, Tag } from '@navikt/ds-react';
+import type React from 'react';
 import { useId } from 'react';
-import { styled } from 'styled-components';
 
 export const getTildelingEvent = (e: ITildelingEvent) => {
   const key = toKey(e);
@@ -242,8 +242,12 @@ const getReason = (
   }
 };
 
-const FlexRowContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-1);
-`;
+interface FlexRowContainerProps {
+  children: React.ReactNode;
+}
+
+const FlexRowContainer = ({ children }: FlexRowContainerProps) => (
+  <HStack align="center" gap="1">
+    {children}
+  </HStack>
+);

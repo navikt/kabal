@@ -5,9 +5,8 @@ import { EditPart } from '@app/components/part/edit-part';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import type { IPart } from '@app/types/oppgave-common';
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
-import { styled } from 'styled-components';
 import { BehandlingSection } from '../behandling/behandlingsdetaljer/behandling-section';
 import { DeleteButton } from './delete-button';
 
@@ -36,13 +35,13 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
   if (part === null) {
     return (
       <BehandlingSection label={label}>
-        <StyledPart>
-          <StyledName>
+        <HStack align="center" justify="space-between">
+          <VStack align="start" justify="start">
             <span>Ikke satt</span>
-          </StyledName>
+          </VStack>
 
           <div>{canEdit ? <EditButton onClick={toggleEditing} isEditing={isEditing} /> : null}</div>
-        </StyledPart>
+        </HStack>
 
         {isEditing ? (
           <EditPart
@@ -60,21 +59,21 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
 
   return (
     <BehandlingSection label={label}>
-      <StyledPart>
-        <StyledName>
-          <Container>
+      <HStack align="center" justify="space-between" wrap={false}>
+        <VStack align="start" justify="start">
+          <HStack align="center" gap="1" wrap>
             {part.name === null ? (
               <span>Navn mangler</span>
             ) : (
               <CopyButton size="small" copyText={part.name} text={part.name} activeText={part.name} />
             )}
             <CopyIdButton size="small" id={part.id} />
-          </Container>
+          </HStack>
 
           <PartStatusList statusList={part.statusList} size="xsmall" />
-        </StyledName>
+        </VStack>
 
-        <ButtonContainer>
+        <HStack align="center" wrap={false}>
           {isDeletable && isEditing ? (
             <DeleteButton
               onDelete={() => {
@@ -84,8 +83,8 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
             />
           ) : null}
           {canEdit ? <EditButton onClick={toggleEditing} isEditing={isEditing} /> : null}
-        </ButtonContainer>
-      </StyledPart>
+        </HStack>
+      </HStack>
 
       {isEditing ? (
         <EditPart
@@ -108,37 +107,8 @@ interface EditButtonProps {
   isEditing: boolean;
 }
 
-const Container = styled.div`
-  display: flex;
-  gap: var(--a-spacing-1);
-  flex-wrap: wrap;
-  align-items: center;
-`;
-
 const EditButton = ({ onClick, isEditing }: EditButtonProps) => {
   const Icon = isEditing ? XMarkIcon : PencilIcon;
 
   return <Button variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />;
 };
-
-const StyledPart = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const StyledName = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: start;
-  row-gap: 0;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 0;
-  align-self: flex-start;
-`;

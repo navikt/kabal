@@ -1,8 +1,7 @@
 import { CountdownButton } from '@app/components/countdown-button/countdown-button';
 import type { OnChange } from '@app/components/oppgavestyring/types';
 import { toast } from '@app/components/toast/store';
-import { Button } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Button, HStack } from '@navikt/ds-react';
 
 interface ToastProps {
   testId: string;
@@ -34,7 +33,7 @@ const Tildelt = ({
     <span>
       {label} {name}.
     </span>
-    <ButtonRow>
+    <HStack justify="space-between" gap="0 2">
       <CountdownButton
         size="small"
         variant="tertiary"
@@ -43,7 +42,7 @@ const Tildelt = ({
       >
         Angre
       </CountdownButton>
-    </ButtonRow>
+    </HStack>
   </div>
 );
 
@@ -53,18 +52,11 @@ export const errorToast = ({ testId, fromNavIdent, label, name, onChange, oppgav
       <span>
         Kunne ikke sette {name} ({toNavIdent}) som {label}.
       </span>
-      <ButtonRow>
+      <HStack justify="space-between" gap="0 2">
         <Button size="small" variant="tertiary" onClick={() => onChange(toNavIdent, fromNavIdent)}>
           Prøv igjen
         </Button>
-      </ButtonRow>
+      </HStack>
     </div>,
   );
 };
-
-const ButtonRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  column-gap: var(--a-spacing-2);
-`;

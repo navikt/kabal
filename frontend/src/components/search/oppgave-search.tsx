@@ -5,7 +5,7 @@ import {
   useLazySearchOppgaverBySaksnummerQuery,
   useLazySearchPersonByFnrQuery,
 } from '@app/redux-api/oppgaver/queries/oppgaver';
-import { ErrorMessage, Search, type SearchProps, ToggleGroup } from '@navikt/ds-react';
+import { ErrorMessage, HStack, Search, type SearchProps, ToggleGroup, VStack } from '@navikt/ds-react';
 import { dnr, fnr } from '@navikt/fnrvalidator';
 import { useState } from 'react';
 import { styled } from 'styled-components';
@@ -74,8 +74,8 @@ const FnrSearch = ({ children }: Props) => {
 
   return (
     <>
-      <Container>
-        <Line>
+      <VStack gap="2" padding="4">
+        <HStack gap="05">
           {children}
 
           <SearchField
@@ -95,10 +95,10 @@ const FnrSearch = ({ children }: Props) => {
           >
             <Search.Button onClick={forceSearch} loading={personQuery.isFetching || oppgaverQuery.isFetching} />
           </SearchField>
-        </Line>
+        </HStack>
 
         <ErrorMessage>{error}</ErrorMessage>
-      </Container>
+      </VStack>
 
       <Person {...personQuery} fnr={rawQuery} refetch={() => validateAndFetch(() => fetchPerson(trimmedQuery))} />
       <Oppgaver {...oppgaverQuery} refetch={() => validateAndFetch(() => fetchOppgaver(trimmedQuery))} />
@@ -114,17 +114,17 @@ const SaksnrSearch = ({ children }: Props) => {
   const search = () => fetchOppgaver(query);
 
   return (
-    <Container>
-      <Line>
+    <VStack gap="2" padding="4">
+      <HStack gap="05">
         {children}
 
         <SearchField label="Søk på saksnummer" onChange={setRawQuery} onKeyDown={search}>
           <Search.Button onClick={search} loading={oppgaverQuery.isFetching} />
         </SearchField>
-      </Line>
+      </HStack>
 
       <Oppgaver {...oppgaverQuery} refetch={search} />
-    </Container>
+    </VStack>
   );
 };
 
@@ -151,18 +151,6 @@ const SearchField = ({
   </StyledSearch>
 );
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-2);
-  padding: var(--a-spacing-4);
-`;
-
 const StyledSearch = styled(Search)`
   width: 270px;
-`;
-
-const Line = styled.div`
-  display: flex;
-  gap: var(--a-spacing-05);
 `;

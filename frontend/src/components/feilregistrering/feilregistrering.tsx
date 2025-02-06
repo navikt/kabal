@@ -5,7 +5,7 @@ import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { FileXMarkIcon } from '@navikt/aksel-icons';
-import { Box, Button } from '@navikt/ds-react';
+import { Box, Button, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Context } from './context';
@@ -71,41 +71,38 @@ const FeilregistrerButton = ({
   );
 };
 
-const FeilregistrerPanel = ({ oppgaveId, $position, $align, fagsystemId }: OppgaveId & Position & FagsystemId) => {
+const FeilregistrerPanel = ({ oppgaveId, position, align, fagsystemId }: OppgaveId & Position & FagsystemId) => {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
+  const isOver = position === 'over';
+  const isLeft = align === 'left';
+
   return (
-    <FloatingBox
-      $position={$position}
-      $align={$align}
-      background="bg-default"
-      padding="4"
-      shadow="medium"
-      borderRadius="medium"
+    <VStack
+      asChild
+      style={{
+        zIndex: 1,
+        top: isOver ? 'auto' : '100%',
+        bottom: isOver ? '100%' : 'auto',
+        right: isLeft ? '0' : 'auto',
+        left: isLeft ? '0' : 'auto',
+      }}
+      gap="4 0"
+      minWidth="400px"
+      position="absolute"
     >
-      {isConfirmed ? (
-        <Register oppgaveId={oppgaveId} />
-      ) : (
-        <Confirm fagsystemId={fagsystemId} setIsConfirmed={() => setIsConfirmed(true)} />
-      )}
-    </FloatingBox>
+      <Box background="bg-default" padding="4" shadow="medium" borderRadius="medium">
+        {isConfirmed ? (
+          <Register oppgaveId={oppgaveId} />
+        ) : (
+          <Confirm fagsystemId={fagsystemId} setIsConfirmed={() => setIsConfirmed(true)} />
+        )}
+      </Box>
+    </VStack>
   );
 };
 
 const Container = styled.div`
   position: relative;
   display: inline-block;
-`;
-
-const FloatingBox = styled(Box)<Position>`
-  position: absolute;
-  top: ${({ $position }) => ($position === 'over' ? 'auto' : '100%')};
-  bottom: ${({ $position }) => ($position === 'over' ? '100%' : 'auto')};
-  right: ${({ $align }) => ($align === 'left' ? 'auto' : '0')};
-  left: ${({ $align }) => ($align === 'left' ? '0' : 'auto')};
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-4);
-  z-index: 1;
-  min-width: 400px;
 `;

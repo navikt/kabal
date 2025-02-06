@@ -1,5 +1,4 @@
-import { Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Tag } from '@navikt/ds-react';
 
 interface TabLabelProps {
   isDraft: boolean;
@@ -10,38 +9,32 @@ interface TabLabelProps {
 export const TabLabel = ({ isDraft, isPublished, children }: TabLabelProps) => {
   if (isPublished) {
     return (
-      <Container>
+      <HStack align="center" gap="1">
         <Tag size="xsmall" variant="info">
           Aktiv
         </Tag>
         Versjon {children}
-      </Container>
+      </HStack>
     );
   }
 
   if (isDraft) {
     return (
-      <Container>
+      <HStack align="center" gap="1">
         <Tag size="xsmall" variant="warning">
           Utkast
         </Tag>
         Versjon {children}
-      </Container>
+      </HStack>
     );
   }
 
   return (
-    <Container>
+    <HStack align="center" gap="1">
       <Tag size="xsmall" variant="neutral">
         Inaktiv
       </Tag>
       Versjon {children}
-    </Container>
+    </HStack>
   );
 };
-
-const Container = styled.span`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-1);
-`;

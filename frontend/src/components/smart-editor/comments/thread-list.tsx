@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { VStack } from '@navikt/ds-react';
 import { ExpandableThread } from './expandable-thread';
 import { SkeletonThread } from './skeleton-thread';
 import { useThreads } from './use-threads';
@@ -8,48 +8,51 @@ export const ThreadList = () => {
 
   if (isLoading) {
     return (
-      <StyledThreadSections>
-        <StyledThreadListContainer>
-          <SkeletonThread />
-          <SkeletonThread />
-          <SkeletonThread />
-        </StyledThreadListContainer>
-      </StyledThreadSections>
+      <VStack
+        as="section"
+        align="end"
+        gap="4"
+        paddingInline="4 0"
+        paddingBlock="0 8"
+        flexShrink="0"
+        height="100%"
+        width="100%"
+        overflowY="auto"
+        overflowX="hidden"
+        style={{
+          scrollSnapType: 'y proximity',
+          scrollPaddingBottom: 'var(--a-spacing-6)',
+          scrollPaddingTop: 'var(--a-spacing-12)',
+        }}
+      >
+        <SkeletonThread />
+        <SkeletonThread />
+        <SkeletonThread />
+      </VStack>
     );
   }
 
   return (
-    <StyledThreadSections>
-      <StyledThreadListContainer>
-        {attached.map((thread) => (
-          <ExpandableThread key={thread.id} thread={thread} isFocused={thread.isFocused} />
-        ))}
-      </StyledThreadListContainer>
-    </StyledThreadSections>
+    <VStack
+      as="section"
+      align="end"
+      gap="4"
+      paddingInline="4 0"
+      paddingBlock="0 8"
+      flexShrink="0"
+      height="100%"
+      width="100%"
+      overflowY="auto"
+      overflowX="hidden"
+      style={{
+        scrollSnapType: 'y proximity',
+        scrollPaddingBottom: 'var(--a-spacing-6)',
+        scrollPaddingTop: 'var(--a-spacing-12)',
+      }}
+    >
+      {attached.map((thread) => (
+        <ExpandableThread key={thread.id} thread={thread} isFocused={thread.isFocused} />
+      ))}
+    </VStack>
   );
 };
-
-const StyledThreadSections = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  row-gap: var(--a-spacing-4);
-  padding-left: var(--a-spacing-4);
-  flex-shrink: 0;
-  width: 100%;
-  height: 100%;
-  padding-bottom: var(--a-spacing-8);
-  overflow-y: auto;
-  overflow-x: hidden;
-  scroll-snap-type: y proximity;
-  scroll-padding-bottom: var(--a-spacing-6);
-  scroll-padding-top: var(--a-spacing-12);
-`;
-
-const StyledThreadListContainer = styled.section`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
-  height: 100%;
-`;

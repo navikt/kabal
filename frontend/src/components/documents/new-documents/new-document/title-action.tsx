@@ -1,8 +1,7 @@
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { CheckmarkIcon, PencilIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Button, CopyButton, HStack } from '@navikt/ds-react';
 
 interface Props {
   document: IMainDocument;
@@ -24,7 +23,7 @@ export const TitleAction = ({ setEditMode, editMode, className, document }: Prop
   const Icon = editMode ? CheckmarkIcon : PencilIcon;
 
   return (
-    <Container className={className}>
+    <HStack align="center" className={className}>
       <Button
         onClick={() => setEditMode(!editMode)}
         data-testid="document-title-edit-save-button"
@@ -34,11 +33,6 @@ export const TitleAction = ({ setEditMode, editMode, className, document }: Prop
         title="Endre dokumentnavn"
       />
       {editMode ? null : <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />}
-    </Container>
+    </HStack>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-`;

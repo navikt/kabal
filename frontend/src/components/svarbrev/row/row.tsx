@@ -3,7 +3,7 @@ import { SvarbrevSettingHistory } from '@app/components/svarbrev/history';
 import { PdfModal } from '@app/components/svarbrev/modal/modal';
 import { useSvarbrevNavigate } from '@app/components/svarbrev/navigate';
 import { Preview, Submit } from '@app/components/svarbrev/preview';
-import { Behandlingstid, Buttons, NoWrap, StyledTableRow } from '@app/components/svarbrev/row/styled-components';
+import { NoWrap, StyledTableRow } from '@app/components/svarbrev/row/styled-components';
 import { TextInput } from '@app/components/svarbrev/row/text-input';
 import { TimeInput } from '@app/components/svarbrev/time-input';
 import { Type } from '@app/components/type/type';
@@ -11,7 +11,7 @@ import { isoDateTimeToPretty } from '@app/domain/date';
 import { useYtelseName } from '@app/hooks/use-kodeverk-value';
 import { usePrevious } from '@app/hooks/use-previous';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Button, Detail, Skeleton, Switch, Table, Tooltip } from '@navikt/ds-react';
+import { Button, Detail, HStack, Skeleton, Switch, Table, Tooltip } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -100,14 +100,14 @@ export const Row = ({ modal, ...setting }: Props) => {
       </Table.DataCell>
 
       <Table.DataCell>
-        <Behandlingstid>
+        <HStack align="center" gap="1" width="max-content" wrap={false}>
           <TimeInput
             value={localBehandlingstidUnits}
             onChange={setLocalBehandlingstidUnits}
             unit={localBehandlingstidUnitTypeId}
             setUnit={setLocalBehandlingstidUnitTypeId}
           />
-        </Behandlingstid>
+        </HStack>
       </Table.DataCell>
 
       <Table.DataCell>
@@ -126,7 +126,7 @@ export const Row = ({ modal, ...setting }: Props) => {
       </Table.DataCell>
 
       <Table.DataCell>
-        <Buttons>
+        <HStack align="center" gap="0 1" min-width={`${3 * 32 + 2 * 4}px`}>
           <SvarbrevSettingHistory id={setting.id} isOpen={showHistory} close={() => navigate('/svarbrev')} />
 
           {hasChanges ? (
@@ -159,7 +159,7 @@ export const Row = ({ modal, ...setting }: Props) => {
             setBehandlingstidUnits={setLocalBehandlingstidUnits}
             setCustomText={setLocalCustomText}
           />
-        </Buttons>
+        </HStack>
       </Table.DataCell>
     </StyledTableRow>
   );

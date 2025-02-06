@@ -3,7 +3,7 @@ import { SuggestedEnhet } from '@app/components/oppgavebehandling-footer/update-
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import type { Enhet, IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Alert, Button, ErrorMessage, Search, Tooltip } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage, Search, Tooltip, VStack } from '@navikt/ds-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -61,7 +61,7 @@ export const ReceivingEnhet = ({ selectedEnhet, setSelectedEnhet, enheter, error
   };
 
   return (
-    <Container>
+    <VStack gap="1">
       <SuggestedEnhet
         selectedEnhet={selectedEnhet}
         setSelectedEnhet={setSelectedEnhet}
@@ -104,7 +104,7 @@ export const ReceivingEnhet = ({ selectedEnhet, setSelectedEnhet, enheter, error
         )}
         {error === null ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
       </Fieldset>
-    </Container>
+    </VStack>
   );
 };
 
@@ -203,10 +203,4 @@ const ListItem = styled.li`
   &:hover {
     background-color: var(--a-surface-hover);
   }
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-1);
 `;

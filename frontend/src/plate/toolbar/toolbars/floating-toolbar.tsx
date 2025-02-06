@@ -6,9 +6,9 @@ import { useSelection } from '@app/plate/hooks/use-selection';
 import { FloatingRedaktoerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-redaktoer-toolbar-buttons';
 import { FloatingSaksbehandlerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-saksbehandler-toolbar-buttons';
 import { useMyPlateEditorRef } from '@app/plate/types';
+import { Box, HStack } from '@navikt/ds-react';
 import { BaseTablePlugin } from '@udecode/plate-table';
 import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   editorId: string;
@@ -42,16 +42,23 @@ const FloatingToolbar = ({ editorId, container, children }: FloatingToolbarProps
   }
 
   return (
-    <StyledFloatingToolbar
+    <HStack
+      asChild
+      align="center"
+      position="absolute"
       style={{
+        zIndex: 21,
+        willChange: 'left, right, top',
         top: `calc(${position.top}em - ${OFFSET}px)`,
         left: horizontalPosition.left === undefined ? undefined : `${horizontalPosition.left}em`,
         right: horizontalPosition.right === undefined ? undefined : `${horizontalPosition.right}em`,
       }}
       ref={setRef}
     >
-      {children}
-    </StyledFloatingToolbar>
+      <Box as="section" shadow="medium" background="surface-default" padding="05">
+        {children}
+      </Box>
+    </HStack>
   );
 };
 
@@ -68,18 +75,6 @@ const getHorizontalPosition = (
 
   return position.left > maxLeft ? { right: 0 } : { left: position.left };
 };
-
-export const StyledFloatingToolbar = styled.section`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  position: absolute;
-  padding: var(--a-spacing-05);
-  box-shadow: var(--a-shadow-medium);
-  background-color: var(--a-surface-default);
-  z-index: 21;
-  will-change: left, top;
-`;
 
 export const FloatingSaksbehandlerToolbar = (props: Props) => (
   <FloatingToolbar {...props}>

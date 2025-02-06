@@ -2,10 +2,8 @@ import { PageInfo } from '@app/components/common-table-components/page-info';
 import { RowsPerPage } from '@app/components/rows-per-page';
 import type { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
-import { StyledFooterContent } from '@app/styled-components/table';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
-import { Button, Pagination, Table } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Button, HStack, Pagination, Table } from '@navikt/ds-react';
 
 interface Props {
   page: number;
@@ -39,8 +37,8 @@ export const TableFooter = ({
   <tfoot data-testid={testId}>
     <Table.Row>
       <Table.DataCell colSpan={columnCount}>
-        <StyledFooterContent>
-          <Left>
+        <HStack align="center" justify="space-between" width="100%">
+          <HStack align="center" gap="1">
             <Button
               size="small"
               variant="tertiary-neutral"
@@ -54,7 +52,7 @@ export const TableFooter = ({
               data-testid={`${testId}-refresh-button`}
             />
             <PageInfo total={total} fromNumber={from} toNumber={to} />
-          </Left>
+          </HStack>
           {pageSize >= total ? null : (
             <Pagination
               page={page}
@@ -68,14 +66,8 @@ export const TableFooter = ({
             />
           )}
           <RowsPerPage settingKey={settingsKey} pageSize={pageSize} data-testid={`${testId}-rows-per-page`} />
-        </StyledFooterContent>
+        </HStack>
       </Table.DataCell>
     </Table.Row>
   </tfoot>
 );
-
-const Left = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-1);
-`;

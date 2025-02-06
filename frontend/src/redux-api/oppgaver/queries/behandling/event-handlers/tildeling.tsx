@@ -9,8 +9,7 @@ import type { INavEmployee } from '@app/types/bruker';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
 import { FradelReason } from '@app/types/oppgaver';
-import { Label, Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Label, Tag } from '@navikt/ds-react';
 
 export const handleTildelingEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
@@ -150,16 +149,16 @@ const getToastContent = (
               {fromText}.
             </>
 
-            <FlexRowContainer>
+            <HStack align="center" gap="1">
               <Label size="small" htmlFor={labelId}>
                 Årsak
               </Label>
               <Tag size="xsmall" variant="info-moderate" id={labelId}>
                 Feil {oldHjemler !== null && oldHjemler.length === 1 ? 'hjemmel' : 'hjemler'}
               </Tag>
-            </FlexRowContainer>
+            </HStack>
 
-            <FlexRowContainer>
+            <HStack align="center" gap="1">
               <Label size="small" id={labelId}>
                 Gamle
               </Label>
@@ -172,9 +171,9 @@ const getToastContent = (
                   ingen
                 </Tag>
               )}
-            </FlexRowContainer>
+            </HStack>
 
-            <FlexRowContainer>
+            <HStack align="center" gap="1">
               <Label size="small" id={labelId}>
                 Nye
               </Label>
@@ -187,7 +186,7 @@ const getToastContent = (
                   ingen
                 </Tag>
               )}
-            </FlexRowContainer>
+            </HStack>
           </InfoToast>
         );
       }
@@ -243,12 +242,6 @@ const getToastContent = (
     </InfoToast>
   );
 };
-
-const FlexRowContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-1);
-`;
 
 const getFromText = (userId: string, employee: INavEmployee | null) => {
   if (employee === null) {

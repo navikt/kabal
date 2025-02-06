@@ -1,10 +1,7 @@
-import { styled } from 'styled-components';
+import { Box, HStack } from '@navikt/ds-react';
 
-export const ToolbarSeparator = styled.div`
-  display: flex;
-  background-color: var(--a-bg-subtle);
-  width: 1px;
-  height: var(--a-spacing-8);
-  margin-left: var(--a-spacing-1);
-  margin-right: var(--a-spacing-1);
-`;
+export const ToolbarSeparator = () => (
+  <HStack asChild width="1px" height="8" marginInline="1">
+    <Box background="bg-subtle" />
+  </HStack>
+);

@@ -7,7 +7,7 @@ import {
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import type { IYtelse } from '@app/types/kodeverk';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Loader } from '@navikt/ds-react';
+import { Button, HStack, Heading, Loader } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { Body } from './body';
@@ -80,14 +80,14 @@ const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
           />
         </StyledTable>
       </TableWrapper>
-      <ButtonContainer>
+      <HStack gap="4">
         <Button variant="primary" size="small" onClick={save} loading={isLoading} icon={<CheckmarkIcon aria-hidden />}>
           Lagre
         </Button>
         <Button variant="danger" size="small" onClick={reset} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
-      </ButtonContainer>
+      </HStack>
     </>
   );
 };
@@ -109,10 +109,4 @@ const StyledTable = styled.table`
 const TableWrapper = styled.div`
   flex-shrink: 1;
   overflow: auto;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--a-spacing-4);
 `;

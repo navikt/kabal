@@ -4,13 +4,6 @@ import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuz
 import { GodeFormuleringerList } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer-list';
 import { SectionSelect } from '@app/components/smart-editor/gode-formuleringer/section-select';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
-import {
-  GodeFormuleringerTitle,
-  Header,
-  ListContainer,
-  StyledGodeFormuleringer,
-  Top,
-} from '@app/components/smart-editor/gode-formuleringer/styles';
 import { useTranslatedFormuleringer } from '@app/components/smart-editor/gode-formuleringer/use-translated-formuleringer';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import type { TemplateSections } from '@app/plate/template-sections';
@@ -19,7 +12,7 @@ import { GOD_FORMULERING_TYPE } from '@app/types/common-text-types';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { IConsumerText, NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LightBulbIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Box, Button, HStack, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Filter } from './filter';
 import { insertGodFormulering } from './insert';
@@ -159,27 +152,29 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
   }
 
   return (
-    <StyledGodeFormuleringer ref={containerRef} onKeyDown={onKeyDown}>
-      <Top>
-        <Header>
-          <GodeFormuleringerTitle>
-            <LightBulbIcon />
-            Gode formuleringer ({texts.length})
-          </GodeFormuleringerTitle>
-          <Button
-            title="Skjul gode formuleringer"
-            size="small"
-            variant="tertiary-neutral"
-            icon={<XMarkIcon aria-hidden />}
-            onClick={() => setShowGodeFormuleringer(false)}
-          />
-        </Header>
-        <Filter filter={filter} setFilter={setFilter} isFocused={focused === -1} onFocus={() => setFocused(-1)} />
-        <SectionSelect activeSection={activeSection} setActiveSection={setActiveSection} />
-      </Top>
-      <ListContainer>
-        <GodeFormuleringerList texts={texts} isLoading={isLoading} focused={focused} setFocused={setFocused} />
-      </ListContainer>
-    </StyledGodeFormuleringer>
+    <VStack asChild position="sticky" top="0" gap="4" ref={containerRef} onKeyDown={onKeyDown}>
+      <Box as="section" background="bg-default" paddingInline="3 0" paddingBlock="4 0" width="350px" height="100%">
+        <VStack gap="2 0" paddingInline="1 4" flexShrink="0">
+          <HStack as="header" align="center" justify="space-between" wrap={false}>
+            <HStack as="h1" align="center" gap="2" margin="0" style={{ fontSize: 'var(--a-spacing-5)' }} wrap={false}>
+              <LightBulbIcon />
+              Gode formuleringer ({texts.length})
+            </HStack>
+            <Button
+              title="Skjul gode formuleringer"
+              size="small"
+              variant="tertiary-neutral"
+              icon={<XMarkIcon aria-hidden />}
+              onClick={() => setShowGodeFormuleringer(false)}
+            />
+          </HStack>
+          <Filter filter={filter} setFilter={setFilter} isFocused={focused === -1} onFocus={() => setFocused(-1)} />
+          <SectionSelect activeSection={activeSection} setActiveSection={setActiveSection} />
+        </VStack>
+        <VStack overflowY="auto" flexGrow="1" gap="4 0" paddingInline="1 4">
+          <GodeFormuleringerList texts={texts} isLoading={isLoading} focused={focused} setFocused={setFocused} />
+        </VStack>
+      </Box>
+    </VStack>
   );
 };

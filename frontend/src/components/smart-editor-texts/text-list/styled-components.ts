@@ -2,24 +2,6 @@ import { FileTextIcon } from '@navikt/aksel-icons';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-export const LoaderOverlay = styled.div`
-  width: 700px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  background-color: var(--a-bg-default);
-`;
-
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-y: auto;
-  width: 700px;
-  flex-grow: 1;
-`;
-
 export const StyledHeaders = styled.div`
   display: grid;
   grid-template-columns: 1fr 85px 160px var(--a-spacing-12);
@@ -33,16 +15,6 @@ export const StyledHeaders = styled.div`
   box-shadow: 0px 5px 5px -3px rgb(0, 0, 0, 20%);
   border-bottom-left-radius: var(--a-spacing-1);
   border-bottom-right-radius: var(--a-spacing-1);
-`;
-
-export const StyledList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-1);
-  width: 100%;
-  list-style: none;
-  padding: 0;
-  margin: 0;
 `;
 
 export const ListItem = styled.li<{ $active: boolean }>`
@@ -67,14 +39,6 @@ export const StyledLink = styled(Link)`
   color: inherit;
   text-decoration: none;
   padding: var(--a-spacing-2);
-`;
-
-export const StyledTitle = styled.span`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-05);
-  overflow: hidden;
-  white-space: nowrap;
 `;
 
 export const StyledTitleIcon = styled(FileTextIcon)`

@@ -7,10 +7,9 @@ import { useFinishOppgavebehandlingMutation } from '@app/redux-api/oppgaver/muta
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import type { IFinishOppgavebehandlingParams } from '@app/types/oppgavebehandling/params';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button } from '@navikt/ds-react';
+import { BodyLong, Button, HStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
-import { StyledFinishOppgaveButtons } from './styled-components';
 
 interface CancelButtonProps {
   cancel: () => void;
@@ -41,35 +40,35 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
     case SaksTypeEnum.ANKE:
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
       return (
-        <StyledFinishOppgaveButtons $width={400}>
+        <HStack align="center" gap="2" width="400px">
           {isModernized ? (
             <FinishButton>Fullfør</FinishButton>
           ) : (
             <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
           )}
           <CancelButton cancel={cancel} />
-        </StyledFinishOppgaveButtons>
+        </HStack>
       );
     case SaksTypeEnum.OMGJØRINGSKRAV: {
       switch (utfallId) {
         case UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35:
           return (
-            <StyledFinishOppgaveButtons $width={400}>
+            <HStack align="center" gap="2" width="400px">
               {isModernized ? (
                 <FinishButton>Fullfør</FinishButton>
               ) : (
                 <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
               )}
               <CancelButton cancel={cancel} />
-            </StyledFinishOppgaveButtons>
+            </HStack>
           );
 
         default:
           return (
-            <StyledFinishOppgaveButtons $width={400}>
+            <HStack align="center" gap="2" width="400px">
               <FinishButton>Fullfør</FinishButton>
               <CancelButton cancel={cancel} />
-            </StyledFinishOppgaveButtons>
+            </HStack>
           );
       }
     }
@@ -81,29 +80,29 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
         case UtfallEnum.AVVIST:
         case UtfallEnum.HEVET:
           return (
-            <StyledFinishOppgaveButtons $width={400}>
+            <HStack align="center" gap="2" width="400px">
               {isModernized ? (
                 <FinishButton>Fullfør</FinishButton>
               ) : (
                 <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
               )}
               <CancelButton cancel={cancel} />
-            </StyledFinishOppgaveButtons>
+            </HStack>
           );
         case UtfallEnum.OPPHEVET:
           return (
-            <StyledFinishOppgaveButtons $width={650}>
+            <HStack align="center" gap="2" width="650px">
               <FinishButton nyBehandling>Ja, fullfør og opprett ny behandling i Kabal</FinishButton>
               <UpdateInGosys>{getFinishText(isModernized)}</UpdateInGosys>
               <CancelButton cancel={cancel} />
-            </StyledFinishOppgaveButtons>
+            </HStack>
           );
         case UtfallEnum.HENVIST:
           return (
-            <StyledFinishOppgaveButtons $width={400}>
+            <HStack align="center" gap="2" width="400px">
               <FinishButton>Fullfør</FinishButton>
               <CancelButton cancel={cancel} />
-            </StyledFinishOppgaveButtons>
+            </HStack>
           );
       }
     }

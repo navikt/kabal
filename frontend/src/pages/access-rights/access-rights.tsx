@@ -1,19 +1,11 @@
 import { AccessRights } from '@app/components/access-rights/access-rights';
-import { styled } from 'styled-components';
+import { VStack } from '@navikt/ds-react';
 import { PageWrapper } from '../page-wrapper';
 
 export const AccessRightsPage = () => (
   <PageWrapper>
-    <AccessRightsArticle>
+    <VStack gap="4 0" overflow="hidden" maxHeight="100%">
       <AccessRights />
-    </AccessRightsArticle>
+    </VStack>
   </PageWrapper>
 );
-
-const AccessRightsArticle = styled.article`
-  max-height: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-4);
-`;

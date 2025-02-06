@@ -10,8 +10,7 @@ import {
   RichTextTypes,
 } from '@app/types/common-text-types';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
-import { Alert, ErrorMessage, Heading, Loader, Tag, type TagProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Alert, ErrorMessage, HStack, Heading, Loader, Tag, type TagProps } from '@navikt/ds-react';
 
 interface Props {
   textId: string;
@@ -40,14 +39,14 @@ export const TextPreview = ({ textId, className }: Props) => {
 
   return (
     <section className={className}>
-      <Header>
+      <HStack align="center" justify="start" as="header">
         <Heading level="1" size="small">
           {text.title}
         </Heading>
         <Tag size="xsmall" variant={tagVariant}>
           {name}
         </Tag>
-      </Header>
+      </HStack>
 
       {savedContent === null ? (
         <Alert variant="info" size="small">
@@ -81,10 +80,3 @@ const getRichTextTypeTagVariantAndName = (
       return ['Maltekstseksjon', 'neutral'];
   }
 };
-
-const Header = styled.header`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
-`;

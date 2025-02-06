@@ -12,12 +12,6 @@ export const Container = styled.div`
   hyphens: auto;
 `;
 
-export const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-`;
-
 export const StyledCloseButton = styled(Button)`
   position: absolute;
   top: 0;

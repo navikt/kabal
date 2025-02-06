@@ -5,12 +5,13 @@ import { FinishButton } from '@app/components/oppgavebehandling-footer/finish-bu
 import { NewAnkebehandlingButton } from '@app/components/oppgavebehandling-footer/new-ankebehandling-button';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { HStack } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { BackLink } from './back-link';
 import { DeassignOppgave } from './deassign/deassign-oppgave';
 import { VentButton } from './sett-paa-vent/vent-button';
-import { FooterType, StyledButtons, StyledFooter } from './styled-components';
+import { FooterType, StyledFooter } from './styled-components';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 
 export const UnfinishedFooter = () => {
@@ -24,7 +25,7 @@ export const UnfinishedFooter = () => {
 
   return (
     <StyledFooter $type={footerType}>
-      <StyledButtons>
+      <HStack align="center" justify="space-between" gap="4">
         <FinishButton />
         <SendToSaksbehandler oppgaveId={oppgave.id} isSaksbehandler={isSaksbehandler} />
         <TakeFromSaksbehandler oppgaveId={oppgave.id} variant="secondary" />
@@ -33,7 +34,7 @@ export const UnfinishedFooter = () => {
         <DeassignOppgave oppgave={oppgave} />
         <NewAnkebehandlingButton />
         <FeilregistrerButton />
-      </StyledButtons>
+      </HStack>
       <ValidationSummaryPopup />
     </StyledFooter>
   );

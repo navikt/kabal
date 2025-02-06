@@ -1,33 +1,6 @@
 import { Modal } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
-export const Details = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
-`;
-
-const Flex = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-export const Row = styled(Flex)`
-  column-gap: var(--a-spacing-4);
-`;
-
-export const TimeInputContainer = styled(Flex)`
-  column-gap: var(--a-spacing-2);
-`;
-
-export const TimeContainer = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: var(--a-spacing-1);
-  font-style: italic;
-  font-size: var(--a-spacing-4);
-`;
-
 export const StyledTime = styled.time`
   font-weight: bold;
 `;

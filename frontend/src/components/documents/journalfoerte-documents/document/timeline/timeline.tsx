@@ -1,5 +1,5 @@
 import { type IArkivertDocument, Journalposttype, TimelineTypes } from '@app/types/arkiverte-documents';
-import { styled } from 'styled-components';
+import { HStack } from '@navikt/ds-react';
 import { EkspedertItems } from './ekspedert-items';
 import { RelevantDateTimelineItem } from './timeline-item';
 
@@ -7,7 +7,7 @@ export const Timeline = ({ timeline, journalposttype, utsendingsinfo, kanal, kan
   const lastIndex = timeline.length - 1;
 
   return (
-    <TimelineContainer>
+    <HStack wrap={false} gap="2" as="ol">
       {timeline.map(({ type, timestamp }, index) => {
         const key = `${type}-${timestamp}`;
         const isLast = index === lastIndex;
@@ -28,14 +28,6 @@ export const Timeline = ({ timeline, journalposttype, utsendingsinfo, kanal, kan
 
         return <RelevantDateTimelineItem key={key} type={type} timestamp={timestamp} hideNext={isLast} />;
       })}
-    </TimelineContainer>
+    </HStack>
   );
 };
-
-const TimelineContainer = styled.ol`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: var(--a-spacing-2);
-  padding: 0;
-`;

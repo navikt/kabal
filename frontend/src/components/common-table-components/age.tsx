@@ -5,7 +5,7 @@ import { useSetMottattKlageinstansMutation } from '@app/redux-api/oppgaver/mutat
 import { Role } from '@app/types/bruker';
 import type { IOppgave } from '@app/types/oppgaver';
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { differenceInDays, parseISO } from 'date-fns';
 import { useState } from 'react';
 import { styled } from 'styled-components';
@@ -37,10 +37,10 @@ const EditableAge = ({ ageKA, mottatt, id }: IOppgave) => {
   );
 
   return (
-    <Container>
+    <HStack align="center" gap="2">
       {children}
       <EditButton isOpen={isOpen} setIsOpen={setIsOpen} />
-    </Container>
+    </HStack>
   );
 };
 
@@ -102,12 +102,6 @@ const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge }: EditAgeP
     />
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
-`;
 
 const StyledAge = styled.span`
   white-space: nowrap;

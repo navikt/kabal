@@ -4,7 +4,7 @@ import { pushEvent } from '@app/observability';
 import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { NodeApi, type TNode } from '@udecode/plate';
 import { styled } from 'styled-components';
 
@@ -40,7 +40,7 @@ export const Bookmarks = ({ editorId }: Props) => {
         const content = nodes.map((n) => NodeApi.string(n)).join('');
 
         return (
-          <BookmarkListItem key={key}>
+          <HStack as="li" key={key}>
             <StyledButton
               size="xsmall"
               variant="tertiary-neutral"
@@ -64,7 +64,7 @@ export const Bookmarks = ({ editorId }: Props) => {
               }}
               icon={<TrashIcon aria-hidden />}
             />
-          </BookmarkListItem>
+          </HStack>
         );
       })}
     </BookmarkList>
@@ -83,11 +83,6 @@ const BookmarkList = styled.ul`
   padding-right: var(--a-spacing-4);
   position: relative;
   max-width: 350px;
-`;
-
-const BookmarkListItem = styled.li`
-  display: flex;
-  flex-direction: row;
 `;
 
 const StyledButton = styled(Button)`

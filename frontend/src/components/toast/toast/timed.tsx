@@ -1,9 +1,10 @@
 import { SCALE_X } from '@app/components/toast/toast/animations';
 import { Icon } from '@app/components/toast/toast/icon';
-import { Container, Content, StyledCloseButton, TimedToastStyle } from '@app/components/toast/toast/styled-components';
+import { Container, StyledCloseButton, TimedToastStyle } from '@app/components/toast/toast/styled-components';
 import type { TimedMessage } from '@app/components/toast/types';
 import { useAnimationsEnabled } from '@app/hooks/use-animations-enabled';
 import { XMarkIcon } from '@navikt/aksel-icons';
+import { VStack } from '@navikt/ds-react';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 
 interface Props extends TimedMessage {
@@ -59,7 +60,7 @@ export const TimedToast = forwardRef<HTMLDivElement, Props>(
         <StyledCloseButton variant="tertiary" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
         <Container>
           <Icon type={type} />
-          <Content>{content}</Content>
+          <VStack gap="2 0">{content}</VStack>
         </Container>
       </TimedToastStyle>
     );

@@ -1,6 +1,6 @@
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { type ErrorMessage, getErrorData } from '@app/functions/get-error-data';
-import { Loader, Tooltip } from '@navikt/ds-react';
+import { HStack, Loader, Tooltip } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
@@ -17,37 +17,37 @@ export interface SavedStatusProps {
 export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified }: SavedStatusProps) => {
   if (isLoading) {
     return (
-      <Container>
+      <HStack align="center" gap="1">
         <StatusText>Lagrer...</StatusText>
 
         <Tooltip content="Lagrer..." delay={0}>
           <Loader size="xsmall" />
         </Tooltip>
-      </Container>
+      </HStack>
     );
   }
 
   if (isSuccess) {
     return (
-      <Container>
+      <HStack align="center" gap="1">
         <StatusText>Sist lagret: {isoDateTimeToPretty(modified)}</StatusText>
 
         <Tooltip content="Lagret!" delay={0}>
           <CheckmarkCircleFillIconColored />
         </Tooltip>
-      </Container>
+      </HStack>
     );
   }
 
   if (isError) {
     return (
-      <Container>
+      <HStack align="center" gap="1">
         <StatusText>Feil ved lagring</StatusText>
 
         <Tooltip content={`Feil ved lagring:\n${formatErrorMessage(getErrorData(error))}`} delay={0}>
           <XMarkOctagonFillIconColored />
         </Tooltip>
-      </Container>
+      </HStack>
     );
   }
 
@@ -60,13 +60,6 @@ const formatErrorMessage = (error: ErrorMessage) => {
 
   return message;
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--a-spacing-1);
-`;
 
 const StatusText = styled.span`
   color: var(--a-text-subtle);

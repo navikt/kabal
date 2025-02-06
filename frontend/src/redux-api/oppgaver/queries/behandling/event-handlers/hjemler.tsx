@@ -6,8 +6,7 @@ import type { HjemlerEvent } from '@app/redux-api/server-sent-events/types';
 import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
 import type { INavEmployee } from '@app/types/bruker';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Tag } from '@navikt/ds-react';
 
 export const handleRegistreringshjemlerEvent =
   (userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
@@ -98,18 +97,12 @@ const HjemmelList = ({ hjemler }: { hjemler: string[] }) => {
   const { data: hjemmelMap } = useRegistreringshjemlerMap();
 
   return (
-    <TagContainer>
+    <HStack as="span" gap="1" wrap>
       {hjemler.map((hjemmel) => (
         <Tag key={hjemmel} size="xsmall" variant="alt1">
           {hjemmelMap?.[hjemmel]?.hjemmelnavn ?? hjemmel}
         </Tag>
       ))}
-    </TagContainer>
+    </HStack>
   );
 };
-
-const TagContainer = styled.span`
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--a-spacing-1);
-`;

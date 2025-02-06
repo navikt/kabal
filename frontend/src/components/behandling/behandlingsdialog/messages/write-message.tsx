@@ -4,9 +4,9 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostMessageMutation } from '@app/redux-api/messages';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
-import { Button, Loader, Textarea } from '@navikt/ds-react';
+import { Button, Loader, Textarea, VStack } from '@navikt/ds-react';
 import { useContext, useEffect, useState } from 'react';
-import { StyleSendMessage, StyledWriteMessage } from './styled-components';
+import { StyleSendMessage } from './styled-components';
 
 export const WriteMessage = () => {
   const isFullfoert = useIsFullfoert();
@@ -62,7 +62,7 @@ export const WriteMessage = () => {
   };
 
   return (
-    <StyledWriteMessage>
+    <VStack>
       <Textarea
         size="small"
         onKeyDown={onKeyDown}
@@ -87,6 +87,6 @@ export const WriteMessage = () => {
           Legg til melding
         </Button>
       </StyleSendMessage>
-    </StyledWriteMessage>
+    </VStack>
   );
 };

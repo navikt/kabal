@@ -2,9 +2,8 @@ import { Header } from '@app/components/view-pdf/header';
 import { NoFlickerReloadPdf, type UseNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';
 import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
 import { ArrowCirclepathIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps } from '@navikt/ds-react';
+import { Box, Button, type ButtonProps, VStack } from '@navikt/ds-react';
 import { useEffect } from 'react';
-import { styled } from 'styled-components';
 
 const MIN_PDF_WIDTH = 400;
 const ZOOM_STEP = 150;
@@ -33,29 +32,23 @@ export const PDFPreview = ({ isLoading, noFlickerReload }: Props) => {
 
   return (
     <div style={{ flexGrow: 1 }}>
-      <Container style={{ width: pdfWidth }}>
-        <Header>
-          <Button onClick={decrease} title="Smalere PDF" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
-          <Button onClick={increase} title="Bredere PDF" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />
-          <Button
-            onClick={onReload}
-            title="Oppdater PDF"
-            icon={<ArrowCirclepathIcon aria-hidden />}
-            loading={isLoading}
-            {...BUTTON_PROPS}
-          />
-        </Header>
+      <VStack asChild height="100%" flexGrow="1" width={`${pdfWidth}px`}>
+        <Box shadow="medium">
+          <Header>
+            <Button onClick={decrease} title="Smalere PDF" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
+            <Button onClick={increase} title="Bredere PDF" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />
+            <Button
+              onClick={onReload}
+              title="Oppdater PDF"
+              icon={<ArrowCirclepathIcon aria-hidden />}
+              loading={isLoading}
+              {...BUTTON_PROPS}
+            />
+          </Header>
 
-        <NoFlickerReloadPdf versions={versions} isLoading={isLoading} onVersionLoaded={onLoaded} />
-      </Container>
+          <NoFlickerReloadPdf versions={versions} isLoading={isLoading} onVersionLoaded={onLoaded} />
+        </Box>
+      </VStack>
     </div>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  box-shadow: var(--a-shadow-medium);
-  flex-grow: 1;
-`;

@@ -1,7 +1,6 @@
 import { useSvarbrevNavigate } from '@app/components/svarbrev/navigate';
-import { Horizontal } from '@app/components/svarbrev/row/styled-components';
 import { ClipboardIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton, TextField, Tooltip } from '@navikt/ds-react';
+import { Button, CopyButton, HStack, TextField, Tooltip } from '@navikt/ds-react';
 
 interface Props {
   value: string;
@@ -14,7 +13,7 @@ export const TextInput = ({ value, onChange, hasChanges, settingId }: Props) => 
   const navigate = useSvarbrevNavigate();
 
   return (
-    <Horizontal>
+    <HStack align="center" gap="0 1">
       <div style={{ flexGrow: 1 }}>
         <TextField
           size="small"
@@ -51,6 +50,6 @@ export const TextInput = ({ value, onChange, hasChanges, settingId }: Props) => 
           }}
         />
       </Tooltip>
-    </Horizontal>
+    </HStack>
   );
 };

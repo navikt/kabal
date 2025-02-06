@@ -10,7 +10,7 @@ import { useGetMaltekstseksjonerQuery } from '@app/redux-api/maltekstseksjoner/q
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
 import { PuzzlePieceIcon } from '@navikt/aksel-icons';
-import { HStack, Search } from '@navikt/ds-react';
+import { Box, HStack, Search, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';
@@ -67,29 +67,16 @@ export const Maltekstseksjoner = () => {
         {hasSelectedMaltekstseksjon ? (
           <Maltekstseksjon maltekstseksjonId={id} query={query} />
         ) : (
-          <Placeholder>
-            <PuzzlePieceIcon aria-hidden fontSize={400} />
-          </Placeholder>
+          <VStack asChild align="center" justify="center" gridColumn="content" minWidth="1330px" width="fit-content">
+            <Box borderRadius="medium" shadow="medium" marginBlock="1" style={{ color: 'var(--a-surface-subtle)' }}>
+              <PuzzlePieceIcon aria-hidden fontSize={400} />
+            </Box>
+          </VStack>
         )}
       </DragAndDropContextElement>
     </Container>
   );
 };
-
-const Placeholder = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: var(--a-border-radius-medium);
-  box-shadow: var(--a-shadow-medium);
-  color: var(--a-surface-subtle);
-  width: fit-content;
-  min-width: 1330px;
-  grid-area: content;
-  margin-bottom: var(--a-spacing-1);
-  margin-top: var(--a-spacing-1);
-`;
 
 const StyledSearch = styled(Search)`
   grid-area: search;

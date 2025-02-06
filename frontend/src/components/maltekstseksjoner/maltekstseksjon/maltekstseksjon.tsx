@@ -1,7 +1,7 @@
 import { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { ScaleContextComponent } from '@app/plate/status-bar/scale-context';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import { styled } from 'styled-components';
+import { Box, VStack } from '@navikt/ds-react';
 import { MaltekstseksjonVersions } from './maltekstseksjon-versions';
 
 interface Props {
@@ -10,24 +10,20 @@ interface Props {
 }
 
 export const Maltekstseksjon = ({ maltekstseksjonId, query }: Props) => (
-  <MaltekstseksjonContainer data-element="MaltekstseksjonContainer">
-    <ScaleContextComponent scalingGroup={ScalingGroup.REDAKTØR}>
-      <MaltekstseksjonVersions id={maltekstseksjonId} query={query} />
-    </ScaleContextComponent>
-  </MaltekstseksjonContainer>
+  <VStack
+    asChild
+    overflow="hidden"
+    paddingBlock="0 2"
+    paddingInline="2 0"
+    marginBlock="1"
+    marginInline="0 1"
+    gridColumn="content"
+    data-element="MaltekstseksjonContainer"
+  >
+    <Box borderRadius="medium" shadow="medium">
+      <ScaleContextComponent scalingGroup={ScalingGroup.REDAKTØR}>
+        <MaltekstseksjonVersions id={maltekstseksjonId} query={query} />
+      </ScaleContextComponent>
+    </Box>
+  </VStack>
 );
-
-const MaltekstseksjonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border-radius: var(--a-border-radius-medium);
-  box-shadow: var(--a-shadow-medium);
-  padding: var(--a-spacing-2);
-  padding-top: 0;
-  padding-right: 0;
-  margin-right: var(--a-spacing-1);
-  margin-bottom: var(--a-spacing-1);
-  margin-top: var(--a-spacing-1);
-  grid-area: content;
-`;

@@ -5,9 +5,8 @@ import { formatFoedselsnummer } from '@app/functions/format-id';
 import type { staggeredBaseQuery } from '@app/redux-api/common';
 import type { IPartBase } from '@app/types/oppgave-common';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { Button, Skeleton } from '@navikt/ds-react';
+import { Button, HStack, Skeleton } from '@navikt/ds-react';
 import type { TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react';
-import { styled } from 'styled-components';
 
 // https://github.com/reduxjs/redux-toolkit/issues/1937#issuecomment-1842868277
 // https://redux-toolkit.js.org/rtk-query/usage-with-typescript#typing-query-and-mutation-endpoints
@@ -19,21 +18,21 @@ type PersonProps = PersonQuery & { fnr: string };
 export const Person = ({ data, isLoading, isFetching, error, fnr, refetch }: PersonProps) => {
   if (isLoading) {
     return (
-      <SkeletonContainer>
+      <HStack gap="4" marginInline="4 0">
         <Skeleton height={32} width={200} />
         <Skeleton height={32} width={100} />
         <Skeleton height={32} width={80} />
-      </SkeletonContainer>
+      </HStack>
     );
   }
 
   if (error !== undefined) {
     return (
-      <StyledPerson>
+      <HStack align="center" gap="0 4" paddingInline="4">
         <ErrorAlert error={error} refetch={refetch} isFetching={isFetching}>
           {`Fant ingen person med ID-nummer ${formatFoedselsnummer(fnr)}`}
         </ErrorAlert>
-      </StyledPerson>
+      </HStack>
     );
   }
 
@@ -42,7 +41,7 @@ export const Person = ({ data, isLoading, isFetching, error, fnr, refetch }: Per
   }
 
   return (
-    <StyledPerson data-testid="search-result-person">
+    <HStack align="center" gap="0 4" paddingInline="4" data-testid="search-result-person">
       <StyledName>{data.name}</StyledName>
       <StyledFnr>
         <CopyIdButton id={data.id} />
@@ -56,21 +55,6 @@ export const Person = ({ data, isLoading, isFetching, error, fnr, refetch }: Per
       >
         Søk på nytt
       </Button>
-    </StyledPerson>
+    </HStack>
   );
 };
-
-const StyledPerson = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-4);
-  padding-left: var(--a-spacing-4);
-  padding-right: var(--a-spacing-4);
-`;
-
-const SkeletonContainer = styled.div`
-  display: flex;
-  gap: var(--a-spacing-4);
-  margin-left: var(--a-spacing-4);
-`;

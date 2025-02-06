@@ -1,5 +1,4 @@
-import { Label } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Label, VStack } from '@navikt/ds-react';
 
 interface Props {
   label?: string;
@@ -9,25 +8,21 @@ interface Props {
 
 export const BehandlingSection = ({ label, children, testid }: Props) => {
   if (typeof label === 'undefined') {
-    return <StyledBehandlingSection data-testid={testid}>{children}</StyledBehandlingSection>;
+    return (
+      <VStack marginBlock="0 4" gap="1" style={{ whiteSpace: 'break-spaces' }} data-testid={testid}>
+        {children}
+      </VStack>
+    );
   }
 
   const id = `behandling-section-${label.toLowerCase().replaceAll(/\s/g, '-')}`;
 
   return (
-    <StyledBehandlingSection data-testid={testid}>
+    <VStack marginBlock="0 4" gap="1" style={{ whiteSpace: 'break-spaces' }} data-testid={testid}>
       <Label htmlFor={id} size="small">
         {label}
       </Label>
       <div id={id}>{children}</div>
-    </StyledBehandlingSection>
+    </VStack>
   );
 };
-
-const StyledBehandlingSection = styled.section`
-  margin-bottom: var(--a-spacing-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-1);
-  white-space: break-spaces;
-`;

@@ -11,7 +11,7 @@ import {
   useSvarbrevSearchParams,
 } from '@app/components/svarbrev/use-search-params';
 import { useGetSvarbrevSettingsQuery } from '@app/redux-api/svarbrev';
-import { Heading, type SortState, Table } from '@navikt/ds-react';
+import { Heading, type SortState, Table, VStack } from '@navikt/ds-react';
 import { type ReactNode, useCallback, useEffect } from 'react';
 import { styled } from 'styled-components';
 
@@ -42,7 +42,7 @@ interface ContainerProps extends FilterProps {
 }
 
 const Container = ({ children, sort, onSortChange, ...filterProps }: ContainerProps) => (
-  <StyledContainer>
+  <VStack maxHeight="100%" maxWidth="2000px" overflow="auto">
     <Heading level="1" size="medium" spacing>
       Svarbrev
     </Heading>
@@ -53,7 +53,7 @@ const Container = ({ children, sort, onSortChange, ...filterProps }: ContainerPr
       <TableHeaders />
       {children}
     </StyledTable>
-  </StyledContainer>
+  </VStack>
 );
 
 interface Props {
@@ -154,14 +154,6 @@ const StyledTableHeader = styled(Table.Header)`
   z-index: 1;
   white-space: nowrap;
   box-shadow: var(--a-shadow-medium);
-`;
-
-const StyledContainer = styled.div`
-  max-width: 2000px;
-  overflow: auto;
-  max-height: 100%;
-  display: flex;
-  flex-direction: column;
 `;
 
 const StyledTable = styled(Table)`

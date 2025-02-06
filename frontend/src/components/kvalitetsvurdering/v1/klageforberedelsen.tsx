@@ -5,9 +5,9 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
+import { HStack, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
 import { type Reason, Reasons } from './reasons';
-import { FormSection, RadioButtonsRow, StyledHeaderHelpTextWrapper, StyledHelpText } from './styled-components';
+import { FormSection, StyledHelpText } from './styled-components';
 import { useKvalitetsvurderingV1FieldName } from './use-field-name';
 
 export const Klageforberedelsen = () => {
@@ -73,7 +73,7 @@ export const Klageforberedelsen = () => {
 
   return (
     <FormSection>
-      <StyledHeaderHelpTextWrapper>
+      <HStack align="center" gap="2">
         <Heading level="2" size="small">
           {header}
         </Heading>
@@ -81,7 +81,7 @@ export const Klageforberedelsen = () => {
           Vedtaksinstansen skal gjøre en ny prøving av eget vedtak, vise klagers argumenter og begrunne hvorfor vedtaket
           blir fastholdt.
         </StyledHelpText>
-      </StyledHeaderHelpTextWrapper>
+      </HStack>
       <RadioGroup
         error={klageforberedelsenRadioValg === null ? validationError : undefined}
         legend="Vedtaksinstansen skal gjøre en ny prøving av eget vedtak, vise klagers argumenter og begrunne hvorfor vedtaket blir fastholdt."
@@ -90,7 +90,7 @@ export const Klageforberedelsen = () => {
         size="small"
         value={klageforberedelsenRadioValg}
       >
-        <RadioButtonsRow>
+        <HStack justify="space-between" width="300px">
           <Radio
             value={Radiovalg.BRA}
             onChange={() => updateKvalitetsvurdering({ id, klageforberedelsenRadioValg: Radiovalg.BRA })}
@@ -103,7 +103,7 @@ export const Klageforberedelsen = () => {
           >
             Mangelfullt
           </Radio>
-        </RadioButtonsRow>
+        </HStack>
       </RadioGroup>
       <Reasons
         show={klageforberedelsenRadioValg === Radiovalg.MANGELFULLT}

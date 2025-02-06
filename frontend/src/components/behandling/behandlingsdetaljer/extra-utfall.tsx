@@ -7,7 +7,7 @@ import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useUpdateExtraUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
 import { type SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { Button, HelpText, Label, Tag } from '@navikt/ds-react';
+import { Button, HStack, HelpText, Label, Tag, VStack } from '@navikt/ds-react';
 import { type ReactNode, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -32,11 +32,11 @@ export const ExtraUtfall = (props: Props) => {
   const includesRetur = oppgave.resultat.extraUtfallIdSet.some((u) => u === UtfallEnum.RETUR);
 
   return (
-    <Container>
+    <VStack gap="2" marginBlock="0 4">
       {canEdit ? <ExtraUtfallButton {...props} /> : null}
       <Tags {...props} />
       {canEdit && includesRetur ? <ReturWarning /> : null}
-    </Container>
+    </VStack>
   );
 };
 
@@ -70,17 +70,17 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props
 
   return (
     <ButtonContainer ref={ref}>
-      <HelpTextWrapper>
+      <HStack wrap gap="1" marginBlock="1 0">
         <Button variant="secondary" onClick={() => setIsOpen((o) => !o)} size="small" disabled={disabled}>
           Sett ekstra utfall for tilpasset tekst
         </Button>
         <HelpText>
-          <HelpTextContent>
+          <VStack width="300px">
             {disabled ? <strong>Du må velge utfall/resultat først.</strong> : null}
             <span>Her kan du velge flere utfall for å få opp maltekst som passer til flere utfall.</span>
-          </HelpTextContent>
+          </VStack>
         </HelpText>
-      </HelpTextWrapper>
+      </HStack>
       <Popup isOpen={isOpen && !disabled}>
         <Dropdown
           selected={selected}
@@ -101,14 +101,14 @@ const ReadOnlyLabel = () => {
   }
 
   return (
-    <HelpTextWrapper>
+    <HStack align="center" gap="2">
       <Label htmlFor={TAGSCONTAINER_ID} size="small">
         Ekstra utfall for tilpasset tekst
       </Label>
       <HelpText>
-        <HelpTextContent>Valg av flere utfall for å få opp maltekst som passer til flere utfall.</HelpTextContent>
+        <VStack width="300px">Valg av flere utfall for å få opp maltekst som passer til flere utfall.</VStack>
       </HelpText>
-    </HelpTextWrapper>
+    </HStack>
   );
 };
 
@@ -121,7 +121,7 @@ const Tags = ({ utfallIdSet, mainUtfall, typeId }: TagsProps) => {
   return (
     <>
       <ReadOnlyLabel />
-      <TagsContainer id={TAGSCONTAINER_ID}>
+      <HStack wrap gap="1" marginBlock="1 0" id={TAGSCONTAINER_ID}>
         {mainUtfall === null || !canEdit ? null : (
           <Tag size="small" variant="alt1">
             {utfallKodeverk.find((u) => u.id === mainUtfall)?.navn ?? `Ukjent utfall (${mainUtfall})`} (hovedutfall)
@@ -134,20 +134,13 @@ const Tags = ({ utfallIdSet, mainUtfall, typeId }: TagsProps) => {
             </Tag>
           ),
         )}
-      </TagsContainer>
+      </HStack>
     </>
   );
 };
 
 const ButtonContainer = styled.div`
   position: relative;
-`;
-
-const Container = styled.div`
-  margin-bottom: var(--a-spacing-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-2);
 `;
 
 const Popup = ({ isOpen, children }: { isOpen: boolean; children: ReactNode }) => {
@@ -161,23 +154,4 @@ const Popup = ({ isOpen, children }: { isOpen: boolean; children: ReactNode }) =
 const StyledPopup = styled.div`
   position: absolute;
   z-index: 1;
-`;
-
-const HelpTextWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
-`;
-
-const HelpTextContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-`;
-
-const TagsContainer = styled.div`
-  display: flex;
-  gap: var(--a-spacing-1);
-  flex-wrap: wrap;
-  margin-top: var(--a-spacing-2);
 `;

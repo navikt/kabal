@@ -6,7 +6,7 @@ import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, BookmarkIcon } from '@navikt/aksel-icons';
-import { Button, Tooltip } from '@navikt/ds-react';
+import { Box, Button, HStack, Tooltip } from '@navikt/ds-react';
 import { TextApi } from '@udecode/plate';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
@@ -56,11 +56,13 @@ export const BookmarkButton = () => {
         variant="tertiary-neutral"
       />
       {isOpen ? (
-        <Bookmarks>
-          {BOOKMARKS.map((color) => (
-            <Bookmark key={color.value} color={color} setIsOpen={setIsOpen} setBookmark={setBookmark} />
-          ))}
-        </Bookmarks>
+        <HStack asChild position="absolute" right="0" style={{ top: '100%' }}>
+          <Box background="bg-default" padding="1" shadow="medium" borderRadius="medium">
+            {BOOKMARKS.map((color) => (
+              <Bookmark key={color.value} color={color} setIsOpen={setIsOpen} setBookmark={setBookmark} />
+            ))}
+          </Box>
+        </HStack>
       ) : null}
     </Container>
   );
@@ -113,19 +115,6 @@ const StyledButton = styled(Button)`
 const Container = styled.div`
   position: relative;
   font-size: 12pt;
-`;
-
-const Bookmarks = styled.div`
-  position: absolute;
-  top: 100%;
-  right: 0;
-  display: flex;
-  flex-direction: row;
-  column-gap: 0;
-  background-color: var(--a-bg-default);
-  padding: var(--a-spacing-1);
-  box-shadow: var(--a-shadow-medium);
-  border-radius: var(--a-border-radius-medium);
 `;
 
 interface IBookmark {

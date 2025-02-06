@@ -1,8 +1,7 @@
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { Button, HStack, Heading, Stack } from '@navikt/ds-react';
 import { memo, useMemo } from 'react';
-import { styled } from 'styled-components';
 import { InvisibleWarning, type InvisibleWarningProps } from './invisible-warning';
 import { Menu } from './menu';
 
@@ -26,8 +25,15 @@ export const JournalfoertHeading = memo(
     const totalCount = totalLengthOfMainDocuments + numberOfVedlegg;
 
     return (
-      <Container $isExpanded={isExpanded}>
-        <LeftGroup>
+      <Stack
+        direction={isExpanded ? 'row' : 'column'}
+        align={isExpanded ? 'center' : 'start'}
+        justify="space-between"
+        paddingBlock="0 1"
+        gap="2 4"
+        flexShrink="0"
+      >
+        <HStack align="center" gap="2">
           {isExpanded ? <Menu /> : null}
 
           <Heading
@@ -38,7 +44,7 @@ export const JournalfoertHeading = memo(
             Journalførte dokumenter ({filteredDocuments.length}/{totalLengthOfMainDocuments})
           </Heading>
           {isExpanded ? null : <Menu />}
-        </LeftGroup>
+        </HStack>
 
         <InvisibleWarning
           filteredDocuments={filteredDocuments}
@@ -47,7 +53,7 @@ export const JournalfoertHeading = memo(
         />
 
         <RemoveFilters resetFilters={resetFilters} noFiltersActive={noFiltersActive} />
-      </Container>
+      </Stack>
     );
   },
   (prevProps, nextProps) =>
@@ -70,21 +76,3 @@ const RemoveFilters = ({ resetFilters, noFiltersActive }: RemoveFiltersProps) =>
     </Button>
   );
 };
-
-const LeftGroup = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: var(--a-spacing-2);
-  align-items: center;
-`;
-
-const Container = styled.div<{ $isExpanded: boolean }>`
-  display: flex;
-  flex-direction: ${({ $isExpanded }) => ($isExpanded ? 'row' : 'column')};
-  align-items: ${({ $isExpanded }) => ($isExpanded ? 'center' : 'flex-start')};
-  justify-content: space-between;
-  padding-bottom: var(--a-spacing-1);
-  column-gap: var(--a-spacing-4);
-  row-gap: var(--a-spacing-2);
-  flex-shrink: 0;
-`;

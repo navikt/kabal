@@ -1,5 +1,5 @@
+import { Box, HStack } from '@navikt/ds-react';
 import { useEffect, useRef } from 'react';
-import { styled } from 'styled-components';
 
 interface PopupProps {
   isOpen: boolean;
@@ -19,21 +19,19 @@ export const Popup = ({ isOpen, children }: PopupProps) => {
     return null;
   }
 
-  return <StyledPopup>{children}</StyledPopup>;
+  return (
+    <HStack
+      asChild
+      wrap={false}
+      maxHeight="400px"
+      maxWidth="275px"
+      position="absolute"
+      left="0"
+      style={{ top: '100%', zIndex: 22, scrollMarginBottom: 'var(--a-spacing-4)' }}
+    >
+      <Box background="bg-default" borderRadius="medium" borderWidth="1" borderColor="border-divider" shadow="medium">
+        {children}
+      </Box>
+    </HStack>
+  );
 };
-
-const StyledPopup = styled.div`
-  display: flex;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  max-height: 400px;
-  max-width: 275px;
-  scroll-margin-bottom: var(--a-spacing-4);
-  z-index: 22;
-
-  background-color: var(--a-bg-default);
-  border-radius: var(--a-border-radius-medium);
-  border: 1px solid var(--a-border-divider);
-  box-shadow: var(--a-shadow-medium);
-`;

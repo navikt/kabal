@@ -1,13 +1,9 @@
 import {
   CenterLoader,
-  Details,
   ModalBody,
   PdfWithLoader,
-  Row,
   StyledPDF,
   StyledTime,
-  TimeContainer,
-  TimeInputContainer,
 } from '@app/components/svarbrev/modal/styled-components';
 import { usePdfUrl } from '@app/components/svarbrev/modal/use-pdf-url';
 import { Warning } from '@app/components/svarbrev/modal/warning';
@@ -18,7 +14,7 @@ import { useUpdateSvarbrevSettingMutation } from '@app/redux-api/svarbrev';
 import type { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { BehandlingstidUnitType, SvarbrevSetting } from '@app/types/svarbrev';
-import { Button, Loader, Modal, Switch, Tag, TextField, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, Loader, Modal, Switch, Tag, TextField, Tooltip, VStack } from '@navikt/ds-react';
 
 interface Props extends SvarbrevSetting {
   isOpen: boolean;
@@ -75,8 +71,8 @@ export const PdfModal = ({
       onClose={close}
     >
       <ModalBody>
-        <Details>
-          <TimeContainer>
+        <VStack gap="4">
+          <HStack align="center" gap="0 1" style={{ fontStyle: 'italic', fontSize: 'var(--a-spacing-4)' }}>
             <span>
               Sist endret <Time dateTime={modified} /> av <User {...modifiedBy} />.
             </span>
@@ -89,8 +85,8 @@ export const PdfModal = ({
                 Lagret
               </Tag>
             )}
-          </TimeContainer>
-          <Row>
+          </HStack>
+          <HStack align="center" gap="0 4">
             <Switch size="small" checked={shouldSend} onChange={({ target }) => setShouldSend(target.checked)}>
               Aktiv
             </Switch>
@@ -98,14 +94,14 @@ export const PdfModal = ({
               <span>{ytelseNameIsLoading ? 'Laster...' : (ytelseName ?? `Ukjent ytelse med ID «${ytelseId}»`)}</span>
             </Tooltip>
             <Tooltip content="Saksbehandlingstid">
-              <TimeInputContainer>
+              <HStack align="center" gap="0 2">
                 <TimeInput
                   value={behandlingstidUnits}
                   onChange={setBehandlingstidUnits}
                   unit={behandlingstidUnitTypeId}
                   setUnit={setBehandlingstidUnitTypeId}
                 />
-              </TimeInputContainer>
+              </HStack>
             </Tooltip>
             <Tooltip content="Tekst til svarbrev (valgfri)">
               <div style={{ flexGrow: 1 }}>
@@ -119,8 +115,8 @@ export const PdfModal = ({
                 />
               </div>
             </Tooltip>
-          </Row>
-        </Details>
+          </HStack>
+        </VStack>
 
         {hasChanges ? (
           <Warning behandlingstidUnits={behandlingstidUnits} behandlingstidUnitTypeId={behandlingstidUnitTypeId} />

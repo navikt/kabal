@@ -13,7 +13,7 @@ import { getTextAsString } from '@app/plate/functions/get-text-string';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { IRichText, IText } from '@app/types/texts/responses';
-import { Loader, Search, Table } from '@navikt/ds-react';
+import { HStack, Loader, Search, Table, VStack } from '@navikt/ds-react';
 import { useCallback, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { Body } from './body';
@@ -110,8 +110,8 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
   }, [data, filter, lang, sort, filteredStatuses]);
 
   return (
-    <Container>
-      <Row>
+    <VStack gap="2" marginBlock="4 0" overflowY="hidden" height="75vh">
+      <HStack gap="1">
         <Search
           value={filter}
           onChange={setFilter}
@@ -121,7 +121,7 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
           hideLabel
         />
         <SetMaltekstseksjonLanguage />
-      </Row>
+      </HStack>
       {isFetching ? (
         <Loader title="Laster..." />
       ) : (
@@ -159,7 +159,7 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
           </Table>
         </TableWrapper>
       )}
-    </Container>
+    </VStack>
   );
 };
 
@@ -184,15 +184,6 @@ type ScoredRichText = IRichText & { score: number };
 const isRichtext = (text: IText): text is IRichText =>
   text.textType === RichTextTypes.MALTEKST || text.textType === RichTextTypes.REDIGERBAR_MALTEKST;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-2);
-  margin-top: var(--a-spacing-4);
-  height: 75vh;
-  overflow-y: hidden;
-`;
-
 const TableWrapper = styled.div`
   position: relative;
   overflow-y: auto;
@@ -204,9 +195,4 @@ const StyledTableHeader = styled(Table.Header)`
   top: 0;
   z-index: 1;
   background-color: var(--a-surface-default);
-`;
-
-const Row = styled.div`
-  display: flex;
-  gap: var(--a-spacing-1);
 `;

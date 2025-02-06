@@ -2,7 +2,7 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { EyeObfuscatedIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Tooltip } from '@navikt/ds-react';
+import { Alert, Button, HStack, Tooltip } from '@navikt/ds-react';
 import { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 
@@ -58,7 +58,7 @@ export const InvisibleWarning = ({ filteredDocuments, totalLengthWithVedlegg }: 
 
   return (
     <StyledAlert variant="warning" size="small" inline>
-      <AlertContent>
+      <HStack align="center" gap="0 2">
         <span>
           {invisibleDocuments.length === 1
             ? '1 skjult dokument er valgt.'
@@ -72,7 +72,7 @@ export const InvisibleWarning = ({ filteredDocuments, totalLengthWithVedlegg }: 
             icon={<EyeObfuscatedIcon aria-hidden />}
           />
         </Tooltip>
-      </AlertContent>
+      </HStack>
     </StyledAlert>
   );
 };
@@ -80,10 +80,4 @@ export const InvisibleWarning = ({ filteredDocuments, totalLengthWithVedlegg }: 
 const StyledAlert = styled(Alert)`
   display: flex;
   align-items: center;
-`;
-
-const AlertContent = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
 `;

@@ -18,13 +18,3 @@ export const StyledNewThread = styled.div`
   border-radius: var(--a-border-radius-medium);
   border: 1px solid #c9c9c9;
 `;
-
-export const StyledCommentButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: var(--a-spacing-4);
-  margin-top: var(--a-spacing-4);
-  margin-right: var(--a-spacing-5);
-  width: 100%;
-`;

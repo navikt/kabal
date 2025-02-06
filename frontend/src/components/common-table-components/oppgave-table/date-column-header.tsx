@@ -10,7 +10,7 @@ import {
   type ToDateSortKeys,
 } from '@app/types/oppgaver';
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, type TableProps } from '@navikt/ds-react';
+import { Button, type ButtonProps, HStack, type TableProps } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 import { styled } from 'styled-components';
@@ -90,12 +90,12 @@ export const DateColumnHeader = ({
   sortKey,
 }: DateColumnHeaderProps) => (
   <StyledColumnHeader aria-sort={params.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
-    <Container>
+    <HStack align="center" gap="1">
       <Sort params={params} onSortChange={onSortChange} sortKey={sortKey}>
         {children}
       </Sort>
       <Filter params={params} setParams={setParams} fromKey={fromKey} toKey={toKey} />
-    </Container>
+    </HStack>
   </StyledColumnHeader>
 );
 
@@ -106,12 +106,6 @@ const getSortIcon = (sorted: boolean, rekkefoelge: SortOrderEnum) => {
 
   return ArrowsUpDownIcon;
 };
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-1);
-`;
 
 interface StyledSortButtonProps {
   $sorted: boolean;

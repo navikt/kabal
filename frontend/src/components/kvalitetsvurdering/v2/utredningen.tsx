@@ -1,9 +1,9 @@
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
-import { Radio } from '@navikt/ds-react';
+import { HStack, Radio } from '@navikt/ds-react';
 import { Checkboxes } from './common/checkboxes';
 import { HeadingWithHelpText } from './common/heading-with-helptext';
-import { RadioButtonsRow, StyledRadioGroup } from './common/styled-components';
+import { StyledRadioGroup } from './common/styled-components';
 import { type InputParams, KvalitetsvurderingInput } from './common/types';
 import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
@@ -38,14 +38,14 @@ export const Utredningen = () => {
         id="utredningen"
         size="small"
       >
-        <RadioButtonsRow>
+        <HStack gap="4" width="100%">
           <Radio value={Radiovalg.BRA} disabled={!canEdit}>
             Bra/godt nok
           </Radio>
           <Radio value={Radiovalg.MANGELFULLT} disabled={!canEdit}>
             Mangelfullt
           </Radio>
-        </RadioButtonsRow>
+        </HStack>
       </StyledRadioGroup>
 
       <Checkboxes

@@ -4,7 +4,7 @@ import { pushEvent } from '@app/observability';
 import type { INavEmployee } from '@app/types/bruker';
 import type { IEditor } from '@app/types/maltekstseksjoner/responses';
 import { CalendarIcon, ClockDashedIcon, PencilWritingIcon, UploadIcon } from '@navikt/aksel-icons';
-import { Button, Tag } from '@navikt/ds-react';
+import { Box, Button, HStack, Tag, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -39,44 +39,46 @@ export const TextHistory = ({
   useOnClickOutside(ref, () => setShowEdits(false));
 
   return (
-    <EditorHistoryContainer ref={ref}>
+    <HStack align="center" position="relative" ref={ref} data-qqqqq>
       {showEdits && (
-        <EditorList>
-          {publishedDateTime !== null ? (
-            <ListItem>
-              <StyledTag variant="info" size="xsmall">
-                <UploadIcon aria-hidden />
-                Publisert
+        <VStack asChild position="absolute" right="0" gap="1 0" style={{ top: '100%', zIndex: 1, listStyle: 'none' }}>
+          <Box as="ul" background="bg-default" shadow="medium" borderRadius="medium" padding="2" margin="0">
+            {publishedDateTime !== null ? (
+              <HStack as="li" align="center" wrap={false} style={{ whiteSpace: 'pre' }}>
+                <StyledTag variant="info" size="xsmall">
+                  <UploadIcon aria-hidden />
+                  Publisert
+                </StyledTag>
+                <span>
+                  {' '}
+                  av {publishedByActor.navn} {isoDateTimeToPretty(publishedDateTime)}
+                </span>
+              </HStack>
+            ) : null}
+            {edits.map((edit) => (
+              <HStack as="li" align="center" key={edit.actor.navIdent} wrap={false} style={{ whiteSpace: 'pre' }}>
+                <StyledTag variant="warning" size="xsmall">
+                  <PencilWritingIcon aria-hidden />
+                  Endret
+                </StyledTag>
+                <span>
+                  {' '}
+                  av {edit.actor.navn} {isoDateTimeToPretty(edit.created)}
+                </span>
+              </HStack>
+            ))}
+            <HStack as="li" align="center" wrap={false} style={{ whiteSpace: 'pre' }}>
+              <StyledTag variant="alt1" size="xsmall">
+                <CalendarIcon aria-hidden />
+                Opprettet
               </StyledTag>
               <span>
                 {' '}
-                av {publishedByActor.navn} {isoDateTimeToPretty(publishedDateTime)}
+                av {createdByActor.navn} {isoDateTimeToPretty(created)}
               </span>
-            </ListItem>
-          ) : null}
-          {edits.map((edit) => (
-            <ListItem key={edit.actor.navIdent}>
-              <StyledTag variant="warning" size="xsmall">
-                <PencilWritingIcon aria-hidden />
-                Endret
-              </StyledTag>
-              <span>
-                {' '}
-                av {edit.actor.navn} {isoDateTimeToPretty(edit.created)}
-              </span>
-            </ListItem>
-          ))}
-          <ListItem>
-            <StyledTag variant="alt1" size="xsmall">
-              <CalendarIcon aria-hidden />
-              Opprettet
-            </StyledTag>
-            <span>
-              {' '}
-              av {createdByActor.navn} {isoDateTimeToPretty(created)}
-            </span>
-          </ListItem>
-        </EditorList>
+            </HStack>
+          </Box>
+        </VStack>
       )}
       <Button
         variant="tertiary"
@@ -90,39 +92,9 @@ export const TextHistory = ({
       >
         {showEdits ? 'Skjul' : 'Vis'} historikk
       </Button>
-    </EditorHistoryContainer>
+    </HStack>
   );
 };
-
-const EditorHistoryContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  position: relative;
-`;
-
-const EditorList = styled.ul`
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: var(--a-bg-default);
-  box-shadow: var(--a-shadow-medium);
-  border-radius: var(--a-border-radius-medium);
-  z-index: 1;
-  list-style: none;
-  margin: 0;
-  padding: var(--a-spacing-2);
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-1);
-`;
-
-const ListItem = styled.li`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  white-space: pre;
-`;
 
 const StyledTag = styled(Tag)`
   display: flex;

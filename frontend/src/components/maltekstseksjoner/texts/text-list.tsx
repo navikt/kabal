@@ -4,7 +4,7 @@ import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mu
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Tooltip } from '@navikt/ds-react';
+import { Alert, Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
@@ -110,11 +110,11 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
   }
 
   return (
-    <List>
+    <VStack gap="4 0" overflowY="auto" overflowX="hidden">
       {textIdList.map((textId, i) => (
-        <ListItem key={textId}>
+        <HStack flexGrow="1" width="100%" key={textId}>
           {isPublished ? null : (
-            <ArrowButtonsContainer>
+            <VStack>
               <Tooltip content="Flytt opp">
                 <Button
                   variant="tertiary"
@@ -137,7 +137,7 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
                   title="Flytt ned"
                 />
               </Tooltip>
-            </ArrowButtonsContainer>
+            </VStack>
           )}
           <StyledTextVersions
             textId={textId}
@@ -145,32 +145,11 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
             setActive={setActive}
             maltekstseksjonId={maltekstseksjon.id}
           />
-        </ListItem>
+        </HStack>
       ))}
-    </List>
+    </VStack>
   );
 };
-
-const List = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-4);
-  margin: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-`;
-
-const ListItem = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  flex-grow: 1;
-`;
-
-const ArrowButtonsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 
 const StyledTextVersions = styled(TextVersions)`
   border-radius: var(--a-border-radius-medium);

@@ -1,6 +1,4 @@
-import { type HeadingProps, HelpText, type HelpTextProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
-import { StyledHeading } from './styled-components';
+import { HStack, Heading, type HeadingProps, HelpText, type HelpTextProps } from '@navikt/ds-react';
 
 interface Props {
   children: string;
@@ -10,15 +8,10 @@ interface Props {
 }
 
 export const HeadingWithHelpText = ({ children, helpText, size = 'small', placement = 'right' }: Props) => (
-  <Container size={size}>
-    {children}
-    <HelpText placement={placement}>{helpText}</HelpText>
-  </Container>
+  <HStack asChild align="center" gap="2">
+    <Heading size={size}>
+      {children}
+      <HelpText placement={placement}>{helpText}</HelpText>
+    </Heading>
+  </HStack>
 );
-
-const Container = styled(StyledHeading)`
-  display: flex;
-  flex-direction: row;
-  gap: var(--a-spacing-2);
-  align-items: center;
-`;

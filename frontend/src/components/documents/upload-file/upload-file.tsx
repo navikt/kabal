@@ -1,8 +1,8 @@
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
 import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
 import { DistribusjonsType } from '@app/types/documents/documents';
+import { HStack } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
 import { SetDocumentType } from './document-type';
 
 export const UploadFile = () => {
@@ -20,7 +20,7 @@ export const UploadFile = () => {
   }
 
   return (
-    <Container>
+    <HStack align="center" gap="2">
       <SetDocumentType dokumentTypeId={dokumentTypeId} setDokumentTypeId={onChangeDocumentType} />
 
       <UploadFileButton
@@ -29,16 +29,9 @@ export const UploadFile = () => {
         data-testid="upload-document"
         dokumentTypeId={dokumentTypeId}
       />
-    </Container>
+    </HStack>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--a-spacing-2);
-`;
 
 const isDocumentType = (type: string): type is DistribusjonsType =>
   Object.values(DistribusjonsType).some((t) => t === type);

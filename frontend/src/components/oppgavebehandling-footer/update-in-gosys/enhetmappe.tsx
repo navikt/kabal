@@ -1,10 +1,9 @@
 import { useSearchEnhetmappeQuery } from '@app/redux-api/search';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Alert, Loader, Select } from '@navikt/ds-react';
+import { Alert, HStack, Loader, Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   enhetId: string | null;
@@ -40,7 +39,7 @@ export const Enhetmappe = ({ enhetId, selectedMappe, setSelectedMappe, oppgavebe
   }, [typeId, utfallId]);
 
   return (
-    <Container>
+    <HStack align="end" gap="2">
       {showEnhetmappeInfo ? (
         <Alert variant="info" size="small">
           Velg enhetsmappen «Sendt til Trygderetten».
@@ -73,15 +72,9 @@ export const Enhetmappe = ({ enhetId, selectedMappe, setSelectedMappe, oppgavebe
       </Select>
 
       {isLoading ? <Loader title="Laster..." style={{ marginBottom: 4 }} /> : null}
-    </Container>
+    </HStack>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  align-items: flex-end;
-  gap: var(--a-spacing-2);
-`;
 
 const NONE = 'NONE';
 const NO_ENHET_ID = 'NO_ENHET_ID';

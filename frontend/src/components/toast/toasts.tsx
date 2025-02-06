@@ -1,8 +1,8 @@
 import { toast } from '@app/components/toast/store';
 import { Toast } from '@app/components/toast/toast/toast';
 import type { Message } from '@app/components/toast/types';
+import { VStack } from '@navikt/ds-react';
 import { useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const Toasts = () => {
   const [toasts, setToasts] = useState<Message[]>([]);
@@ -25,25 +25,22 @@ export const Toasts = () => {
   const toastList = toasts.map((props) => <Toast key={props.id} {...props} />);
 
   return (
-    <Container ref={ref} aria-live="polite" aria-relevant="additions text">
+    <VStack
+      position="fixed"
+      bottom="2"
+      right="0"
+      gap="2 0"
+      paddingInline="0 2"
+      marginBlock="2 0"
+      maxHeight="calc(100% - var(--a-spacing-4))"
+      overflowY="auto"
+      overflowX="visible"
+      style={{ zIndex: 1000 }}
+      ref={ref}
+      aria-live="polite"
+      aria-relevant="additions text"
+    >
       {toastList}
-    </Container>
+    </VStack>
   );
 };
-
-const Container = styled.div`
-  position: fixed;
-  bottom: var(--a-spacing-2);
-  right: 0;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-  padding-right: var(--a-spacing-2);
-  margin-right: 0;
-  margin-bottom: 0;
-  margin-top: var(--a-spacing-2);
-  max-height: calc(100% - var(--a-spacing-4));
-  overflow-y: auto;
-  overflow-x: visible;
-`;

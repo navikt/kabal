@@ -1,3 +1,4 @@
+import { Box, VStack } from '@navikt/ds-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { FilterList } from './filter-list';
@@ -30,7 +31,7 @@ export const GroupedFilterList = <T extends string>({
   onChange,
   close,
   testType,
-  openDirection: direction = 'down',
+  openDirection = 'down',
   showFjernAlle = true,
 }: GroupedDropdownProps<T>): JSX.Element | null => {
   const ref = useRef<HTMLDivElement>(null);
@@ -99,32 +100,49 @@ export const GroupedFilterList = <T extends string>({
 
   const focusedOption = flattenedFilteredOptions[focused] ?? null;
 
+  const isDown = openDirection === 'down';
+
   return (
-    <Container $openDirection={direction} ref={ref}>
-      <Header
-        onFocusChange={setFocused}
-        onFilterChange={setFilter}
-        onSelect={onSelectFocused}
-        focused={focused}
-        onReset={reset}
-        optionsCount={flattenedFilteredOptions.length}
-        close={close}
-        showFjernAlle={showFjernAlle}
-      />
-      <GroupList data-testid="group-filter-list" data-type={testType}>
-        {filteredOptions.map(({ sectionHeader, sectionOptions }) => (
-          <li
-            key={sectionHeader.id}
-            data-testid="filter-group"
-            data-groupid={sectionHeader.id}
-            data-groupname={sectionHeader.name}
-          >
-            <GroupHeader header={sectionHeader.name} />
-            <FilterList options={sectionOptions} selected={selected} onChange={onChange} focused={focusedOption} />
-          </li>
-        ))}
-      </GroupList>
-    </Container>
+    <VStack
+      asChild
+      overflowY="auto"
+      position="absolute"
+      width="350px"
+      height="400px"
+      style={{
+        zIndex: 2,
+        scrollMarginBottom: 'var(--a-spacing-4)',
+        top: isDown ? '100%' : '0',
+        left: isDown ? '0' : '100%',
+      }}
+      ref={ref}
+    >
+      <Box background="bg-default" borderRadius="medium" borderWidth="1" borderColor="border-subtle" shadow="medium">
+        <Header
+          onFocusChange={setFocused}
+          onFilterChange={setFilter}
+          onSelect={onSelectFocused}
+          focused={focused}
+          onReset={reset}
+          optionsCount={flattenedFilteredOptions.length}
+          close={close}
+          showFjernAlle={showFjernAlle}
+        />
+        <GroupList data-testid="group-filter-list" data-type={testType}>
+          {filteredOptions.map(({ sectionHeader, sectionOptions }) => (
+            <li
+              key={sectionHeader.id}
+              data-testid="filter-group"
+              data-groupid={sectionHeader.id}
+              data-groupname={sectionHeader.name}
+            >
+              <GroupHeader header={sectionHeader.name} />
+              <FilterList options={sectionOptions} selected={selected} onChange={onChange} focused={focusedOption} />
+            </li>
+          ))}
+        </GroupList>
+      </Box>
+    </VStack>
   );
 };
 
@@ -139,28 +157,6 @@ const GroupHeader = ({ header }: GroupHeaderProps) => {
 
   return <StyledGroupHeader data-testid="group-title">{header}</StyledGroupHeader>;
 };
-
-const Container = styled.div<{ $openDirection: Direction }>`
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-  overflow-y: auto;
-
-  position: absolute;
-  top: ${({ $openDirection }) => ($openDirection === 'down' ? '100%' : '0')};
-  left: ${({ $openDirection }) => ($openDirection === 'down' ? '0' : '100%')};
-  z-index: 2;
-  max-height: 400px;
-  scroll-margin-bottom: var(--a-spacing-4);
-  background-color: var(--a-bg-default);
-  border-radius: 0.25rem;
-  border: 1px solid var(--a-border-subtle);
-  box-shadow: var(--a-shadow-medium);
-
-  width: 350px;
-  height: 400px;
-`;
 
 const StyledGroupHeader = styled.h3`
   font-size: var(--a-spacing-4);

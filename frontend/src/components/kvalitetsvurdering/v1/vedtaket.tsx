@@ -3,9 +3,9 @@ import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
-import { Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
+import { HStack, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
 import { type Reason, Reasons } from './reasons';
-import { FormSection, RadioButtonsRow } from './styled-components';
+import { FormSection } from './styled-components';
 import { useKvalitetsvurderingV1FieldName } from './use-field-name';
 
 export const Vedtaket = () => {
@@ -78,7 +78,7 @@ export const Vedtaket = () => {
         size="small"
         value={vedtaketRadioValg}
       >
-        <RadioButtonsRow>
+        <HStack justify="space-between" width="300px">
           <Radio
             onChange={() => updateKvalitetsvurdering({ id, vedtaketRadioValg: Radiovalg.BRA })}
             value={Radiovalg.BRA}
@@ -91,7 +91,7 @@ export const Vedtaket = () => {
           >
             Mangelfullt
           </Radio>
-        </RadioButtonsRow>
+        </HStack>
       </RadioGroup>
       <Reasons
         error={validationError}

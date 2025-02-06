@@ -1,4 +1,4 @@
-import { Loader } from '@navikt/ds-react';
+import { Box, HStack, Loader } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -74,9 +74,11 @@ export const NoFlickerReloadPdf = ({ versions, isLoading, onVersionLoaded }: Pro
   return (
     <StyledSwitcher data-count={versions.length} data-ready={versions.map((v) => v.ready)}>
       {isLoading ? (
-        <Overlay>
-          <Loader size="3xlarge" />
-        </Overlay>
+        <HStack asChild align="center" justify="center" position="absolute" top="0" left="0" style={{ zIndex: 2 }}>
+          <Box background="surface-neutral-moderate" height="100%" width="100%">
+            <Loader size="3xlarge" />
+          </Box>
+        </HStack>
       ) : null}
       {versions.map((version) => (
         <StyledPDF
@@ -110,17 +112,4 @@ const StyledSwitcher = styled.div`
   position: relative;
   width: 100%;
   flex-grow: 1;
-`;
-
-const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: var(--a-surface-neutral-moderate);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;

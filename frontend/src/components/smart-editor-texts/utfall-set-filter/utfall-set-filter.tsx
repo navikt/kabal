@@ -6,7 +6,7 @@ import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Box, Button, VStack } from '@navikt/ds-react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -60,37 +60,47 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
   );
 
   return (
-    <Dropdown>
-      <StyledList>
-        {utfallSets.map((utfallSet, index) => (
-          <StyledListItem key={utfallSet.join('-')}>
-            <UtfallSet
-              utfallSet={utfallSet}
-              onDelete={() => onChange(utfallSets.filter((_, i) => i !== index))}
-              onChange={(set) => onChange(utfallSets.map((e, i) => (i === index ? set : e)))}
-              isEditing={index === editingIndex}
-              toggleIsEditing={() => toggleIsEditing(index)}
-            />
-          </StyledListItem>
-        ))}
-        {isAddingSet ? (
-          <AddListItem key="add-set">
-            <EditUtfallSet
-              title="Legg til nytt utfallsett"
-              icon={<PlusIcon aria-hidden />}
-              utfallSet={[]}
-              onChange={onAddSet}
-              onCancel={toggleIsAddingSet}
-            />
-          </AddListItem>
-        ) : null}
-      </StyledList>
-      {isAddingSet ? null : (
-        <Button size="small" variant="secondary" onClick={toggleIsAddingSet} icon={<PlusIcon aria-hidden />}>
-          Legg til nytt utfallsett
-        </Button>
-      )}
-    </Dropdown>
+    <VStack asChild gap="2 0" width="400px" position="absolute" left="0" style={{ top: '100%', zIndex: 100 }}>
+      <Box
+        background="bg-default"
+        padding="2"
+        shadow="medium"
+        borderWidth="1"
+        borderColor="border-divider"
+        borderRadius="medium"
+        overflow="auto"
+      >
+        <VStack as="ul" gap="1 0" padding="0" margin="0" style={{ listStyle: 'none' }}>
+          {utfallSets.map((utfallSet, index) => (
+            <StyledListItem key={utfallSet.join('-')}>
+              <UtfallSet
+                utfallSet={utfallSet}
+                onDelete={() => onChange(utfallSets.filter((_, i) => i !== index))}
+                onChange={(set) => onChange(utfallSets.map((e, i) => (i === index ? set : e)))}
+                isEditing={index === editingIndex}
+                toggleIsEditing={() => toggleIsEditing(index)}
+              />
+            </StyledListItem>
+          ))}
+          {isAddingSet ? (
+            <AddListItem key="add-set">
+              <EditUtfallSet
+                title="Legg til nytt utfallsett"
+                icon={<PlusIcon aria-hidden />}
+                utfallSet={[]}
+                onChange={onAddSet}
+                onCancel={toggleIsAddingSet}
+              />
+            </AddListItem>
+          ) : null}
+        </VStack>
+        {isAddingSet ? null : (
+          <Button size="small" variant="secondary" onClick={toggleIsAddingSet} icon={<PlusIcon aria-hidden />}>
+            Legg til nytt utfallsett
+          </Button>
+        )}
+      </Box>
+    </VStack>
   );
 };
 
@@ -120,32 +130,6 @@ const UtfallSet = ({ utfallSet, onChange, onDelete, isEditing, toggleIsEditing }
 
 const Container = styled.div`
   position: relative;
-`;
-
-const Dropdown = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: var(--a-bg-default);
-  border: 1px solid black;
-  z-index: 100;
-  width: 400px;
-  overflow: auto;
-  padding: var(--a-spacing-2);
-  border-radius: var(--a-border-radius-medium);
-  box-shadow: var(--a-shadow-medium);
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-`;
-
-const StyledList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-1);
-  list-style: none;
-  padding: 0;
-  margin: 0;
 `;
 
 const BaseListItem = styled.li`

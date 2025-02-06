@@ -1,7 +1,7 @@
 import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { BulletListIcon, ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Checkbox, Search, Tag } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Checkbox, HStack, Search, Tag, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import type { BaseProps, IOption } from './props';
@@ -47,33 +47,46 @@ export const NestedFilterList = ({
   );
 
   return (
-    <Container data-testid={testId}>
-      <StyledHeader>
-        <Search
-          value={rawFilter}
-          onChange={setRawFilter}
-          placeholder="Søk"
-          label="Søk"
-          hideLabel
-          autoFocus
-          size="small"
-          variant="simple"
-          data-testid="header-filter"
+    <VStack
+      asChild
+      width="600px"
+      maxHeight="70vh"
+      overflowY="auto"
+      position="absolute"
+      style={{ top: '100%', whiteSpace: 'nowrap', zIndex: 22 }}
+      data-testid={testId}
+      data-asdasdasf
+    >
+      <Box padding="2" background="bg-default" shadow="medium">
+        <HStack asChild justify="space-between" padding="2" top="0" position="sticky" wrap={false}>
+          <Box background="bg-default" borderWidth="0 0 1 0" borderColor="border-divider">
+            <Search
+              value={rawFilter}
+              onChange={setRawFilter}
+              placeholder="Søk"
+              label="Søk"
+              hideLabel
+              autoFocus
+              size="small"
+              variant="simple"
+              data-testid="header-filter"
+            />
+            {showFjernAlle && (
+              <StyledButton size="xsmall" variant="danger" onClick={reset} icon={<TrashIcon aria-hidden />}>
+                Fjern alle
+              </StyledButton>
+            )}
+          </Box>
+        </HStack>
+        <OptionsList
+          options={options}
+          selected={selected}
+          onCheck={toggle}
+          filter={filter}
+          hasFilter={rawFilter.length > 0}
         />
-        {showFjernAlle && (
-          <StyledButton size="xsmall" variant="danger" onClick={reset} icon={<TrashIcon aria-hidden />}>
-            Fjern alle
-          </StyledButton>
-        )}
-      </StyledHeader>
-      <OptionsList
-        options={options}
-        selected={selected}
-        onCheck={toggle}
-        filter={filter}
-        hasFilter={rawFilter.length > 0}
-      />
-    </Container>
+      </Box>
+    </VStack>
   );
 };
 
@@ -201,11 +214,11 @@ const CheckboxOrGroup = ({ option, children, selected, onCheck, subSelectionCoun
       indeterminate={option.indeterminate}
       onChange={() => onCheck(value)}
     >
-      <CheckboxLabel>
+      <HStack align="center" gap="0 2">
         <OptionLabel options={options} subOptionSelectedCount={subSelectionCount} totalOptions={totalOptions}>
           {children}
         </OptionLabel>
-      </CheckboxLabel>
+      </HStack>
     </StyledCheckbox>
   );
 };
@@ -277,35 +290,9 @@ const getAllSubOptions = (options: NestedOption[], selected: string[], filter: R
   return { subSelectionCount, isSubInFilter };
 };
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 100%;
-  z-index: 22;
-  background-color: var(--a-bg-default);
-  padding: var(--a-spacing-2);
-  margin: 0;
-  overflow-y: auto;
-  box-shadow: var(--a-shadow-medium);
-  max-height: 70vh;
-  white-space: nowrap;
-  width: 600px;
-`;
-
 const StyledButton = styled(Button)`
   margin-left: 0.5em;
   flex-shrink: 0;
-`;
-
-const StyledHeader = styled.div`
-  position: sticky;
-  top: 0;
-  border-bottom: 1px solid var(--a-border-divider);
-  background-color: var(--a-bg-default);
-  padding: var(--a-spacing-2);
-  display: flex;
-  justify-content: space-between;
 `;
 
 const List = styled.ul<{ $level: number }>`
@@ -335,12 +322,6 @@ const ExpandButton = styled(Button)`
 
 const StyledCheckbox = styled(Checkbox)`
   grid-area: checkbox;
-  column-gap: var(--a-spacing-2);
-`;
-
-const CheckboxLabel = styled.span`
-  display: flex;
-  align-items: center;
   column-gap: var(--a-spacing-2);
 `;
 

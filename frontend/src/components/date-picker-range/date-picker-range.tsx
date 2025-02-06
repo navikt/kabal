@@ -1,6 +1,6 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CalendarIcon } from '@navikt/aksel-icons';
-import { Alert, Button, type ButtonProps, DatePicker } from '@navikt/ds-react';
+import { Alert, Button, type ButtonProps, DatePicker, HStack } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
@@ -54,7 +54,7 @@ export const DatePickerRange = ({
       </ButtonComponent>
       {isOpen ? (
         <DatepickerContainer>
-          <StyledButtons>
+          <HStack justify="end" padding="3" gap="3">
             <Button size="small" variant="primary" onClick={() => setIsOpen(false)}>
               Lukk
             </Button>
@@ -68,7 +68,7 @@ export const DatePickerRange = ({
             >
               Nullstill
             </Button>
-          </StyledButtons>
+          </HStack>
           <StyledDateRange>{formatDateRange(from, to)}</StyledDateRange>
           <DatePicker.Standalone selected={{ from, to }} mode="range" onSelect={onChange} />
         </DatepickerContainer>
@@ -116,13 +116,6 @@ const DatepickerContainer = styled.div`
   border-radius: var(--a-border-radius-medium);
   box-shadow: 0px var(--a-spacing-1) var(--a-spacing-2) rgba(0, 0, 0, 0.1);
   font-weight: initial;
-`;
-
-const StyledButtons = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding: var(--a-spacing-3);
-  column-gap: var(--a-spacing-3);
 `;
 
 const StyledDateRange = styled.div`

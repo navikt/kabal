@@ -3,8 +3,7 @@ import {
   useInnsendingshjemlerFromIds,
   useRegistreringshjemlerFromIds,
 } from '@app/hooks/use-kodeverk-ids';
-import { Tag, type TagProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Tag, type TagProps } from '@navikt/ds-react';
 
 interface Props {
   hjemmelIdList: string[];
@@ -38,7 +37,7 @@ const HjemmelList = ({ hjemmelList, size, loading, fallback }: HjemmelNamesProps
   hjemmelList === undefined ? (
     loading
   ) : (
-    <Container>
+    <HStack wrap gap="2">
       {hjemmelList.length === 0
         ? fallback
         : hjemmelList.map(({ id, name }) => (
@@ -46,11 +45,5 @@ const HjemmelList = ({ hjemmelList, size, loading, fallback }: HjemmelNamesProps
               {name}
             </Tag>
           ))}
-    </Container>
+    </HStack>
   );
-
-const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--a-spacing-2);
-`;

@@ -21,16 +21,10 @@ import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { Language } from '@app/types/texts/language';
-import { Loader } from '@navikt/ds-react';
+import { Box, HStack, Loader } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { getDocumentCount } from './get-document-count';
-import {
-  StyledHeader,
-  StyledLoadingOverlay,
-  StyledNewDocument,
-  StyledTemplateButton,
-  StyledTemplates,
-} from './styled-components';
+import { StyledHeader, StyledNewDocument, StyledTemplateButton } from './styled-components';
 
 interface Props {
   onCreate: (id: string) => void;
@@ -87,7 +81,7 @@ export const NewDocument = ({ onCreate }: Props) => {
     <StyledNewDocument>
       <StyledHeader>Opprett nytt dokument</StyledHeader>
 
-      <StyledTemplates>
+      <HStack as="section" wrap>
         {templates.map((template) => (
           <TemplateButton
             template={template}
@@ -96,7 +90,7 @@ export const NewDocument = ({ onCreate }: Props) => {
             loading={isLoading && loadingTemplate === template.templateId}
           />
         ))}
-      </StyledTemplates>
+      </HStack>
     </StyledNewDocument>
   );
 };
@@ -152,7 +146,9 @@ const TemplateButton = ({ template, loading, onClick }: TemplateButtonProps) => 
 
 const LoadingOverlay = ({ loading }: { loading: boolean }) =>
   loading ? (
-    <StyledLoadingOverlay>
-      <Loader size="xlarge" />
-    </StyledLoadingOverlay>
+    <HStack asChild align="center" justify="center" position="absolute" top="0">
+      <Box background="surface-backdrop" height="100%" width="100%">
+        <Loader size="xlarge" />
+      </Box>
+    </HStack>
   ) : null;

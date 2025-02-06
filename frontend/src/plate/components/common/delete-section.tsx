@@ -3,7 +3,7 @@ import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-b
 import { MaltekstseksjonToolbarStyle } from '@app/plate/components/styled-components';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { CheckmarkIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Tooltip } from '@navikt/ds-react';
+import { Alert, Button, HStack, Tooltip } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import type { Path } from 'slate';
 import { styled } from 'styled-components';
@@ -92,7 +92,7 @@ const IsChanged = ({ onConfirm, isChangedWarning, side = 'left' }: IsChangedProp
       {showConfirm ? (
         <StyledAlert variant="warning" size="small" $side={side}>
           {isChangedWarning}
-          <Buttons>
+          <HStack gap="1" wrap={false}>
             <Button icon={<CheckmarkIcon aria-hidden />} onClick={onConfirm} variant="tertiary" size="xsmall">
               Ja
             </Button>
@@ -105,17 +105,12 @@ const IsChanged = ({ onConfirm, isChangedWarning, side = 'left' }: IsChangedProp
             >
               Nei, avbryt
             </Button>
-          </Buttons>
+          </HStack>
         </StyledAlert>
       ) : null}
     </DeleteMaltekstseksjonContainer>
   );
 };
-
-const Buttons = styled.div`
-  display: flex;
-  gap: var(--a-spacing-1);
-`;
 
 const StyledAlert = styled(Alert)<{ $side: Side }>`
   position: absolute;

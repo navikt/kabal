@@ -1,10 +1,10 @@
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useIsRelevantYtelseForRaadgivende } from '@app/hooks/use-is-relevant-ytelse-for-raadgivende';
 import { RadiovalgExtended } from '@app/types/kaka-kvalitetsvurdering/radio';
-import { Radio } from '@navikt/ds-react';
+import { HStack, Heading, Radio } from '@navikt/ds-react';
 import { Checkboxes } from './common/checkboxes';
 import { ContainerWithHelpText } from './common/container-with-helptext';
-import { StyledHeading, StyledRadioGroup } from './common/styled-components';
+import { StyledRadioGroup } from './common/styled-components';
 import { type InputParams, KvalitetsvurderingInput } from './common/types';
 import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
@@ -28,7 +28,9 @@ export const BrukAvRaadgivendeLege = () => {
 
   return (
     <section>
-      <StyledHeading size="small">{header}</StyledHeading>
+      <HStack asChild align="center" gap="2">
+        <Heading size="small">{header}</Heading>
+      </HStack>
       <StyledRadioGroup
         legend={header}
         hideLegend

@@ -1,6 +1,6 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { Box, VStack } from '@navikt/ds-react';
 import { useRef } from 'react';
-import { styled } from 'styled-components';
 
 export enum Direction {
   LEFT = 0,
@@ -17,22 +17,13 @@ export const PopupContainer = ({ children, close, direction }: Props) => {
   const ref = useRef(null);
   useOnClickOutside(ref, close);
 
+  const isLeft = direction === Direction.LEFT;
+
   return (
-    <StyledPanel ref={ref} $direction={direction}>
-      {children}
-    </StyledPanel>
+    <VStack asChild gap="4" style={{ bottom: '100%', left: isLeft ? 'auto' : 0, right: isLeft ? 0 : 'auto' }} ref={ref}>
+      <Box position="absolute" background="bg-default" shadow="medium" padding="4">
+        {children}
+      </Box>
+    </VStack>
   );
 };
-
-const StyledPanel = styled.div<{ $direction: Direction }>`
-  position: absolute;
-  left: ${({ $direction }) => ($direction === Direction.LEFT ? 'auto' : '0')};
-  right: ${({ $direction }) => ($direction === Direction.RIGHT ? 'auto' : '0')};
-  bottom: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
-  box-shadow: var(--a-shadow-medium);
-  background-color: var(--a-bg-default);
-  padding: var(--a-spacing-4);
-`;

@@ -4,9 +4,9 @@ import { Marks } from '@app/plate/toolbar/marks';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { TableButtons } from '@app/plate/toolbar/table/table';
 import { type TableElement, useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
+import { Box, HStack } from '@navikt/ds-react';
 import { BaseTablePlugin } from '@udecode/plate-table';
 import { useEffect, useState } from 'react';
-import { StyledFloatingToolbar } from './floating-toolbar';
 
 interface Props {
   editorId: string;
@@ -36,7 +36,13 @@ const TableToolbar = ({ editorId, container, children }: TableToolbarProps) => {
 
   const [top, left] = position;
 
-  return <StyledFloatingToolbar style={{ top, left }}>{children}</StyledFloatingToolbar>;
+  return (
+    <HStack asChild align="center" position="absolute" style={{ top, left, zIndex: 21, willChange: 'left, top' }}>
+      <Box as="section" shadow="medium" background="surface-default" padding="05">
+        {children}
+      </Box>
+    </HStack>
+  );
 };
 
 export const SaksbehandlerTableToolbar = (props: Props) => (

@@ -1,7 +1,7 @@
 import { VERSION_CHECKER } from '@app/components/version-checker/version-checker';
 import { ENVIRONMENT } from '@app/environment';
 import { pushError } from '@app/observability';
-import { Alert, Button, CopyButton, Heading } from '@navikt/ds-react';
+import { Alert, Box, Button, CopyButton, HStack, Heading, VStack } from '@navikt/ds-react';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { styled } from 'styled-components';
 
@@ -43,7 +43,17 @@ export class AppErrorBoundary extends Component<Props, State> {
       const copyText = `${versionText}\n\n${this.state.error.message}\n\n${this.state.error.stack}`;
 
       return (
-        <ErrorContainer className={className}>
+        <Box
+          as="section"
+          background="bg-default"
+          padding="4"
+          width="fit-content"
+          overflowY="auto"
+          shadow="medium"
+          marginBlock="8"
+          marginInline="auto"
+          className={className}
+        >
           <Heading level="1" size="large" spacing>
             Ooops, noe gikk galt :(
           </Heading>
@@ -61,17 +71,17 @@ export class AppErrorBoundary extends Component<Props, State> {
           <Heading level="2" size="medium" spacing>
             Feilmelding
           </Heading>
-          <ErrorContent>
+          <VStack align="start" justify="start" gap="2">
             <CodeBlock>{this.state.error.message}</CodeBlock>
             <CodeBlock>{this.state.error.stack}</CodeBlock>
-            <Row>
+            <HStack gap="2">
               <Button onClick={() => window.location.reload()} variant="secondary">
                 Last Kabal på nytt
               </Button>
               <CopyButton copyText={copyText} text="Kopier feilmeldingen" variant="action" />
-            </Row>
-          </ErrorContent>
-        </ErrorContainer>
+            </HStack>
+          </VStack>
+        </Box>
       );
     }
 
@@ -79,34 +89,22 @@ export class AppErrorBoundary extends Component<Props, State> {
   }
 }
 
-const ErrorContainer = styled.section`
-  display: block;
-  width: fit-content;
-  background-color: var(--a-bg-default);
-  padding: var(--a-spacing-4);
-  overflow-y: auto;
-  box-shadow: var(--a-shadow-medium);
-  margin-top: var(--a-spacing-8);
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: var(--a-spacing-8);
-`;
+interface CodeProps {
+  children: string;
+}
 
-const ErrorContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: left;
-  row-gap: var(--a-spacing-2);
-`;
-
-const Code = styled.code`
-  background-color: var(--a-bg-subtle);
-  border: 1px solid var(--a-border-divider);
-  border-radius: var(--a-border-radius-medium);
-  padding-left: var(--a-spacing-1);
-  padding-right: var(--a-spacing-1);
-`;
+const Code = ({ children }: CodeProps) => (
+  <Box
+    as="code"
+    background="bg-subtle"
+    borderWidth="1"
+    borderColor="border-divider"
+    borderRadius="medium"
+    paddingInline="1"
+  >
+    {children}
+  </Box>
+);
 
 const CodeBlock = styled.code`
   display: block;
@@ -117,12 +115,6 @@ const CodeBlock = styled.code`
   white-space: pre-wrap;
   word-break: normal;
   overflow-wrap: break-word;
-`;
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--a-spacing-2);
 `;
 
 const StyledAlert = styled(Alert)`

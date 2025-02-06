@@ -3,7 +3,7 @@ import { formatIdNumber } from '@app/functions/format-id';
 import { HistoryEventTypes, type IPart, type IVarsletBehandlingstidEvent } from '@app/types/oppgavebehandling/response';
 import { BEHANDLINGSTID_UNIT_TYPE_NAMES, type BehandlingstidUnitType } from '@app/types/svarbrev';
 import { ClockIcon } from '@navikt/aksel-icons';
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, VStack } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import { Line, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
@@ -41,10 +41,10 @@ const ChangedMottakere = ({ previous, event }: IVarsletBehandlingstidEvent) => {
   }
 
   return (
-    <StyledMottakere aria-label="Mottakere">
+    <VStack gap="1" as="section" aria-label="Mottakere">
       Mottakere:
       <Mottakere mottakere={to} />
-    </StyledMottakere>
+    </VStack>
   );
 };
 
@@ -121,10 +121,4 @@ const StyledList = styled.ul`
 const StyledListItem = styled.li`
   margin: 0;
   font-weight: normal;
-`;
-
-const StyledMottakere = styled.section`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-1);
 `;

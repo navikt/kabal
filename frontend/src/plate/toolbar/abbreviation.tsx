@@ -6,7 +6,7 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
 import { useAddAbbreviationMutation } from '@app/redux-api/bruker';
 import { PlusIcon, TagIcon } from '@navikt/aksel-icons';
-import { Button, TextField, Tooltip } from '@navikt/ds-react';
+import { Box, Button, HStack, TextField, Tooltip } from '@navikt/ds-react';
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -96,35 +96,37 @@ export const Abbreviation = () => {
         keys={['Ctrl', 'Shift', 'F']}
       />
       {isOpen ? (
-        <Popup>
-          <Tooltip content="Den korte teksten du vil skal ekspandere til markert tekst">
-            <TextField
-              autoFocus
-              label="Forkortelse"
-              hideLabel
-              value={localShort}
-              onChange={(e) => setLocalShort(e.target.value)}
-              onKeyDown={({ key }) => {
-                if (key === 'Enter') {
-                  onAdd();
-                }
+        <HStack asChild gap="0 1" position="absolute" right="0" style={{ top: '100%' }}>
+          <Box background="bg-default" padding="1" borderRadius="medium" shadow="medium">
+            <Tooltip content="Den korte teksten du vil skal ekspandere til markert tekst">
+              <TextField
+                autoFocus
+                label="Forkortelse"
+                hideLabel
+                value={localShort}
+                onChange={(e) => setLocalShort(e.target.value)}
+                onKeyDown={({ key }) => {
+                  if (key === 'Enter') {
+                    onAdd();
+                  }
 
-                if (key === 'Escape') {
-                  setIsOpen(false);
-                  editor.tf.focus();
-                }
-              }}
-              autoCorrect="off"
-              spellCheck={false}
-              autoComplete="off"
-              size="small"
-              htmlSize={10}
-            />
-          </Tooltip>
-          <Tooltip content="Legg til forkortelse">
-            <Button size="xsmall" variant="primary" onClick={onAdd} icon={<PlusIcon aria-hidden />} />
-          </Tooltip>
-        </Popup>
+                  if (key === 'Escape') {
+                    setIsOpen(false);
+                    editor.tf.focus();
+                  }
+                }}
+                autoCorrect="off"
+                spellCheck={false}
+                autoComplete="off"
+                size="small"
+                htmlSize={10}
+              />
+            </Tooltip>
+            <Tooltip content="Legg til forkortelse">
+              <Button size="xsmall" variant="primary" onClick={onAdd} icon={<PlusIcon aria-hidden />} />
+            </Tooltip>
+          </Box>
+        </HStack>
       ) : null}
     </Container>
   );
@@ -133,17 +135,4 @@ export const Abbreviation = () => {
 const Container = styled.div`
   position: relative;
   font-size: 12pt;
-`;
-
-const Popup = styled.div`
-  position: absolute;
-  top: 100%;
-  right: 0;
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--a-spacing-1);
-  background-color: var(--a-bg-default);
-  padding: var(--a-spacing-1);
-  box-shadow: var(--a-shadow-medium);
-  border-radius: var(--a-border-radius-medium);
 `;

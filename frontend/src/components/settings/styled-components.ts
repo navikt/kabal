@@ -21,13 +21,6 @@ export const SectionHeader = styled.h1`
   gap: var(--a-spacing-2);
 `;
 
-export const StyledFilters = styled.div`
-  display: flex;
-  gap: var(--a-spacing-5);
-  width: 100%;
-  flex-wrap: wrap;
-`;
-
 export const StyledFilterContainer = styled.section`
   position: relative;
   width: 100%;
@@ -38,14 +31,4 @@ export const StyledFieldset = styled(Fieldset)`
   display: grid;
   grid-template-columns: repeat(auto-fit, 300px);
   width: 100%;
-`;
-
-export const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--a-spacing-2);
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 0;
 `;

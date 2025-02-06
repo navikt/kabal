@@ -1,7 +1,6 @@
 import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { useState } from 'react';
-import { StyledButtons } from './styled-components';
 
 interface ConfirmProps {
   onFinish: () => void;
@@ -16,7 +15,7 @@ export const Confirm = ({ onFinish, onValidate, actionText, isValidating, isFini
 
   if (!showConfirm) {
     return (
-      <StyledButtons>
+      <HStack justify="start" gap="0 4">
         <Button
           type="button"
           size="small"
@@ -31,12 +30,12 @@ export const Confirm = ({ onFinish, onValidate, actionText, isValidating, isFini
         >
           {actionText}
         </Button>
-      </StyledButtons>
+      </HStack>
     );
   }
 
   return (
-    <StyledButtons>
+    <HStack justify="start" gap="0 4">
       <Button
         type="button"
         size="small"
@@ -59,6 +58,6 @@ export const Confirm = ({ onFinish, onValidate, actionText, isValidating, isFini
       >
         Avbryt
       </Button>
-    </StyledButtons>
+    </HStack>
   );
 };

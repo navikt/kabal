@@ -30,11 +30,6 @@ export const StyledMessage = styled.li`
   margin-top: 1em;
 `;
 
-export const StyledWriteMessage = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 export const StyleSendMessage = styled.div`
   align-self: flex-end;
   margin-top: var(--a-spacing-2);
