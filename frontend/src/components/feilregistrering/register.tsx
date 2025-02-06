@@ -1,11 +1,10 @@
 import { MOD_KEY } from '@app/keys';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { FileXMarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Textarea } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Textarea } from '@navikt/ds-react';
 import { useCallback, useContext, useState } from 'react';
 import { styled } from 'styled-components';
 import { Context } from './context';
-import { Row } from './styled-components';
 import type { OppgaveId } from './types';
 
 const MAX_LENGTH = 250;
@@ -48,7 +47,7 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
           }
         }}
       />
-      <Row>
+      <HStack align="center" justify="space-between" gap="0 4">
         <Button
           size="small"
           variant="danger"
@@ -62,7 +61,7 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
         <Button size="small" variant="secondary" onClick={close} loading={isLoading} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
-      </Row>
+      </HStack>
     </>
   );
 };

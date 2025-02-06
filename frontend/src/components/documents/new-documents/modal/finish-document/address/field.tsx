@@ -1,6 +1,5 @@
-import { FieldLabel } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Button, Tag, TextField, type TextFieldProps, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, Tag, TextField, type TextFieldProps, Tooltip } from '@navikt/ds-react';
 import { useMemo } from 'react';
 
 interface Props extends Omit<TextFieldProps, 'value' | 'onChange' | 'defaultValue' | 'size'> {
@@ -29,7 +28,7 @@ export const AddressField = ({
     <TextField
       size="small"
       label={
-        <FieldLabel>
+        <HStack align="center" gap="0 1" minHeight="6" as="span">
           {label}
           {required ? (
             <Tag size="xsmall" variant="info">
@@ -51,7 +50,7 @@ export const AddressField = ({
               />
             </Tooltip>
           ) : null}
-        </FieldLabel>
+        </HStack>
       }
       value={value ?? ''}
       onChange={({ currentTarget }) => {

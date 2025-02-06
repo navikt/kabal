@@ -1,6 +1,7 @@
 import { HISTORY_COLORS } from '@app/components/behandling/behandlingsdialog/history/common';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import type { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
+import { Box, HStack, VStack } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface Props {
@@ -17,14 +18,18 @@ export const HistoryEvent = ({ type, tag, icon: Icon, color, timestamp, children
 
   return (
     <Container $accent={color ?? defaultColor}>
-      <Header>
-        <Category style={{ backgroundColor: `var(${color ?? defaultColor})` }}>
-          <Icon aria-hidden />
-          {tag}
-        </Category>
+      <HStack align="start" justify="space-between" marginBlock="0 2">
+        <HStack asChild align="center" gap="1" style={{ backgroundColor: `var(${color ?? defaultColor})` }}>
+          <Box as="span" borderRadius="0 0 medium 0" paddingInline="0 2" paddingBlock="0 space-1">
+            <Icon aria-hidden />
+            {tag}
+          </Box>
+        </HStack>
         <Time dateTime={timestamp}>{isoDateTimeToPretty(timestamp)}</Time>
-      </Header>
-      <ContentContainer>{children}</ContentContainer>
+      </HStack>
+      <VStack gap="1" paddingInline="2">
+        {children}
+      </VStack>
     </Container>
   );
 };
@@ -55,13 +60,6 @@ const Container = styled.li<{ $accent: string }>`
   }
 `;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--a-spacing-2);
-`;
-
 const Time = styled.time`
   font-size: var(--a-font-size-small);
   font-weight: normal;
@@ -69,26 +67,4 @@ const Time = styled.time`
   line-height: 1;
   padding-top: var(--a-spacing-05);
   padding-right: 3px;
-`;
-
-const ContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-1);
-  padding-left: var(--a-spacing-2);
-  padding-right: var(--a-spacing-2);
-`;
-
-const Category = styled.span`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--a-spacing-1);
-  padding-right: var(--a-spacing-2);
-  padding-top: 0;
-  padding-left: 0;
-  padding-bottom: 1px;
-  font-weight: normal;
-  font-size: var(--a-spacing-4);
-  border-bottom-right-radius: var(--a-border-radius-medium);
 `;

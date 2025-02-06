@@ -1,6 +1,7 @@
 import { OrphansModal } from '@app/components/smart-editor/comments/orphans-modal';
 import { useAnnotationsCounts } from '@app/components/smart-editor/comments/use-annotations-counts';
 import { ChatElipsisIcon } from '@navikt/aksel-icons';
+import { Box, HStack } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 export const NumberOfComments = () => {
@@ -29,42 +30,22 @@ interface WrapperProps {
 }
 
 const Wrapper = ({ children }: WrapperProps) => (
-  <WrapperContainer>
-    <StyledAlert>
+  <HStack
+    asChild
+    align="center"
+    gap="0 2"
+    position="sticky"
+    gridColumn="counters"
+    minWidth="382px"
+    height="36px"
+    style={{ zIndex: 10 }}
+  >
+    <Box background="bg-default" shadow="medium" marginInline="4" marginBlock="4" paddingInline="2" flexShrink="0">
       <ChatElipsisIcon aria-hidden fontSize={20} />
       {children}
-    </StyledAlert>
-  </WrapperContainer>
+    </Box>
+  </HStack>
 );
-
-const WrapperContainer = styled.div`
-  position: sticky;
-  top: var(--a-spacing-4);
-  z-index: 10;
-  grid-area: counters;
-  display: flex;
-  width: 100%;
-  min-width: 382px;
-  height: 52px;
-  padding-left: var(--a-spacing-4);
-  padding-right: var(--a-spacing-4);
-  padding-bottom: var(--a-spacing-4);
-  flex-shrink: 0;
-`;
-
-const StyledAlert = styled.div`
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--a-spacing-2);
-  align-items: center;
-  padding-left: var(--a-spacing-2);
-  padding-right: var(--a-spacing-2);
-  width: 100%;
-  min-width: 350px;
-  height: 100%;
-  background-color: var(--a-bg-default);
-  box-shadow: var(--a-shadow-medium);
-`;
 
 const TextContainer = styled.span`
   display: inline-flex;

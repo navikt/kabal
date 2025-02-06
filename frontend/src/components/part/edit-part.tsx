@@ -2,9 +2,8 @@ import { cleanAndValidate } from '@app/components/part/validate';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useLazySearchpartwithutsendingskanalQuery } from '@app/redux-api/search';
 import type { IPart } from '@app/types/oppgave-common';
-import { Search, Tag } from '@navikt/ds-react';
+import { Search, Tag, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { Lookup } from './lookup';
 
 interface EditPartProps {
@@ -60,7 +59,7 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
   }, [oppgave, rawValue, search]);
 
   return (
-    <StyledEditPart id={id}>
+    <VStack gap="2 0" id={id}>
       <Search
         label="Søk"
         size="small"
@@ -85,7 +84,7 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
         isError={isError}
         {...props}
       />
-    </StyledEditPart>
+    </VStack>
   );
 };
 
@@ -111,9 +110,3 @@ const Result = ({ part, search, isError, ...props }: ResultProps) => {
 
   return <Lookup part={part} {...props} />;
 };
-
-const StyledEditPart = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-`;

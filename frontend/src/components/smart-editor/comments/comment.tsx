@@ -4,7 +4,7 @@ import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Box, Button, VStack } from '@navikt/ds-react';
 import { memo, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { DeleteButton } from './delete-button';
@@ -36,7 +36,7 @@ export const Comment = memo(
 
     return (
       <StyledListItem>
-        <StyledComment>
+        <VStack as="article" position="relative">
           <StyledName>{author.name}</StyledName>
 
           <StyledDate dateTime={created}>{isoDateTimeToPretty(created)}</StyledDate>
@@ -52,27 +52,29 @@ export const Comment = memo(
                 icon={<MenuElipsisVerticalIcon aria-hidden />}
               />
               {showActions ? (
-                <StyledButtons>
-                  <EditButton
-                    authorIdent={author.ident}
-                    isEditing={isEditing}
-                    setIsEditing={setIsEditing}
-                    isFocused={isExpanded}
-                    close={() => setShowActions(false)}
-                  />
-                  <DeleteButton
-                    id={id}
-                    authorIdent={author.ident}
-                    isFocused={isExpanded}
-                    close={() => setShowActions(false)}
-                  >
-                    {isMain ? 'Slett tråd' : 'Slett svar'}
-                  </DeleteButton>
-                </StyledButtons>
+                <VStack asChild gap="1 0" right="0" style={{ top: '100%', whiteSpace: 'nowrap', zIndex: 1 }}>
+                  <Box shadow="medium" background="bg-default" borderRadius="medium" padding="1" position="absolute">
+                    <EditButton
+                      authorIdent={author.ident}
+                      isEditing={isEditing}
+                      setIsEditing={setIsEditing}
+                      isFocused={isExpanded}
+                      close={() => setShowActions(false)}
+                    />
+                    <DeleteButton
+                      id={id}
+                      authorIdent={author.ident}
+                      isFocused={isExpanded}
+                      close={() => setShowActions(false)}
+                    >
+                      {isMain ? 'Slett tråd' : 'Slett svar'}
+                    </DeleteButton>
+                  </Box>
+                </VStack>
               ) : null}
             </ActionsContainer>
           ) : null}
-        </StyledComment>
+        </VStack>
       </StyledListItem>
     );
   },
@@ -88,21 +90,6 @@ const ActionsContainer = styled.div`
   right: 0;
 `;
 
-const StyledButtons = styled.div`
-  position: absolute;
-  top: 100%;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-1);
-  box-shadow: var(--a-shadow-medium);
-  background-color: var(--a-bg-default);
-  padding: var(--a-spacing-1);
-  border-radius: var(--a-border-radius-medium);
-  white-space: nowrap;
-  z-index: 1;
-`;
-
 const StyledListItem = styled.li`
   padding-left: var(--a-spacing-1);
   border-left: var(--a-spacing-1) solid lightgrey;
@@ -111,13 +98,6 @@ const StyledListItem = styled.li`
     padding-left: 0;
     border-left: none;
   }
-`;
-
-const StyledComment = styled.article`
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  position: relative;
 `;
 
 const StyledName = styled.div`

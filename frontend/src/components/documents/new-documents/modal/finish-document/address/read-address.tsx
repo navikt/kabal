@@ -1,16 +1,12 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import {
-  AddressState,
-  Container,
-  Row,
-} from '@app/components/documents/new-documents/modal/finish-document/address/layout';
+import { AddressState, Container } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import type { Addresses } from '@app/components/documents/new-documents/modal/finish-document/address/types';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { type IAddress, isNorwegianAddress } from '@app/types/documents/recipients';
 import type { IPart } from '@app/types/oppgave-common';
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton, Tag, Tooltip } from '@navikt/ds-react';
+import { Button, CopyButton, HStack, Tag, Tooltip } from '@navikt/ds-react';
 import { useContext } from 'react';
 
 interface Props extends Addresses {
@@ -28,7 +24,7 @@ export const ReadAddress = ({ part, address, overriddenAddress, onEdit }: Props)
 
   return (
     <Container $state={isOverridden ? AddressState.OVERRIDDEN : AddressState.SAVED}>
-      <Row>
+      <HStack align="center" gap="1">
         <span>{noAddress ? 'Ingen adresse' : addressLines.join(', ')}</span>
 
         {noAddress ? null : (
@@ -50,7 +46,7 @@ export const ReadAddress = ({ part, address, overriddenAddress, onEdit }: Props)
             Overstyrt
           </Tag>
         ) : null}
-      </Row>
+      </HStack>
     </Container>
   );
 };

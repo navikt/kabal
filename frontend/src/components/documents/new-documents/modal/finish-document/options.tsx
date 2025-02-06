@@ -5,9 +5,8 @@ import { HandlingEnum, type IAddress } from '@app/types/documents/recipients';
 import { UTSENDINGSKANAL, Utsendingskanal } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, ToggleGroup, Tooltip } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
-import { styled } from 'styled-components';
 
 interface Props extends IMottaker {
   templateId: TemplateIdEnum | undefined;
@@ -51,7 +50,7 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
 
   return (
     <>
-      <Row>
+      <HStack align="center" gap="0 2" paddingInline="2" paddingBlock="0 1">
         <ToggleGroup size="small" value={handling} onChange={onHandlingChange}>
           <ToggleGroup.Item value={HandlingEnum.AUTO}>{UTSENDINGSKANAL[part.utsendingskanal]}</ToggleGroup.Item>
           {part.utsendingskanal !== Utsendingskanal.SENTRAL_UTSKRIFT ? (
@@ -72,8 +71,8 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
             />
           </Tooltip>
         )}
-      </Row>
-      <Row>
+      </HStack>
+      <HStack align="center" gap="0 2" paddingInline="2" paddingBlock="0 1">
         {isLocalPrint ? (
           <Alert size="small" variant="info">
             <BodyShort size="small">Du må skrive ut dokumentet selv og legge det til utsending.</BodyShort>
@@ -84,7 +83,7 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
             ) : null}
           </Alert>
         ) : null}
-      </Row>
+      </HStack>
       {showAddress ? (
         <Address
           part={part}
@@ -97,15 +96,6 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
     </>
   );
 };
-
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
-  padding-left: var(--a-spacing-2);
-  padding-right: var(--a-spacing-2);
-  padding-bottom: var(--a-spacing-1);
-`;
 
 const ensureIsHandling = (handling: string): HandlingEnum => {
   if (

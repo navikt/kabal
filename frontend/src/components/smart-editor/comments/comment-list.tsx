@@ -1,5 +1,5 @@
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
-import { styled } from 'styled-components';
+import { VStack } from '@navikt/ds-react';
 import { Comment } from './comment';
 
 interface CommentListProps {
@@ -8,19 +8,9 @@ interface CommentListProps {
 }
 
 export const CommentList = ({ comments, isExpanded }: CommentListProps) => (
-  <List>
+  <VStack as="ul" gap="4" padding="0" margin="0" style={{ fontSize: 'var(--a-spacing-4)', listStyle: 'none' }}>
     {comments.map(({ id, ...comment }, index) => (
       <Comment key={id} id={id} isExpanded={isExpanded} {...comment} isMain={index === 0} />
     ))}
-  </List>
+  </VStack>
 );
-
-const List = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  font-size: var(--a-spacing-4);
-`;

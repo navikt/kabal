@@ -8,7 +8,7 @@ import {
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useGetSvarbrevSettingHistoryQuery } from '@app/redux-api/svarbrev';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
-import { Button, Modal, Skeleton, Tooltip } from '@navikt/ds-react';
+import { Box, Button, HStack, Modal, Skeleton, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
@@ -43,13 +43,13 @@ export const SvarbrevSettingHistory = ({ id, isOpen, close }: Props) => {
       </Tooltip>
       <Modal open={isOpen} onClose={close} header={{ heading: 'Historikk' }} closeOnBackdropClick width={600}>
         <Modal.Body>
-          <StyledEntryList>
+          <VStack margin="0" padding="0" gap="2 0" style={{ listStyle: 'none' }}>
             {isLoading ? (
               <SkeletinListItems />
             ) : (
               changeSets.map((changeSet) => <HistoryEntry {...changeSet} key={changeSet.id} />)
             )}
-          </StyledEntryList>
+          </VStack>
         </Modal.Body>
       </Modal>
     </>
@@ -70,29 +70,29 @@ const SkeletonListItem = () => (
   </li>
 );
 
-const StyledEntryList = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-`;
-
 const HistoryEntry = (changeSet: InitialVersion | ChangeSet) => {
   const { user } = useContext(StaticDataContext);
   const isMine = user.navIdent === changeSet.modifiedBy.navIdent;
-  const backgroundColor = isMine ? 'var(--a-surface-alt-3-moderate)' : 'var(--a-surface-warning-moderate)';
+  const backgroundColor = isMine ? 'surface-alt-3-moderate' : 'surface-warning-moderate';
 
   return (
     <StyledEntry $backgroundColor={backgroundColor}>
-      <EntryHeader>
-        <EntryLabel $backgroundColor={backgroundColor}>
-          {changeSet.modifiedBy.navn} ({changeSet.modifiedBy.navIdent})
-        </EntryLabel>
+      <HStack align="start" justify="space-between" marginBlock="0 2">
+        <HStack asChild align="center" gap="1" paddingInline="0 2" paddingBlock="0 05">
+          <Box
+            as="span"
+            background={backgroundColor}
+            borderRadius="0 0 medium 0"
+            style={{ fontWeight: 'normal', fontSize: 'var(--a-spacing-4)' }}
+          >
+            {changeSet.modifiedBy.navn} ({changeSet.modifiedBy.navIdent})
+          </Box>
+        </HStack>
         <EntryTime dateTime={changeSet.modified}>{isoDateTimeToPretty(changeSet.modified)}</EntryTime>
-      </EntryHeader>
-      <EntryContent>{getChangeSetText(changeSet)}</EntryContent>
+      </HStack>
+      <VStack gap="1" paddingInline="2">
+        {getChangeSetText(changeSet)}
+      </VStack>
     </StyledEntry>
   );
 };
@@ -127,28 +127,6 @@ const StyledEntry = styled.li<ColorProps>`
   }
 `;
 
-const EntryHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--a-spacing-2);
-`;
-
-const EntryLabel = styled.span<ColorProps>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--a-spacing-1);
-  padding-right: var(--a-spacing-2);
-  padding-top: 0;
-  padding-left: 0;
-  padding-bottom: 1px;
-  font-weight: normal;
-  font-size: var(--a-spacing-4);
-  border-bottom-right-radius: var(--a-border-radius-medium);
-  background-color: ${({ $backgroundColor }) => $backgroundColor};
-`;
-
 const EntryTime = styled.time`
   font-size: var(--a-font-size-small);
   font-weight: normal;
@@ -156,12 +134,4 @@ const EntryTime = styled.time`
   line-height: 1;
   padding-top: var(--a-spacing-05);
   padding-right: 3px;
-`;
-
-const EntryContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-1);
-  padding-left: var(--a-spacing-2);
-  padding-right: var(--a-spacing-2);
 `;

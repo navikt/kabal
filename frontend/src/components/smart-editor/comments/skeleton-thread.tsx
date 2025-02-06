@@ -1,13 +1,13 @@
-import { Skeleton } from '@navikt/ds-react';
+import { Skeleton, VStack } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 export const SkeletonThread = () => (
   <StyledThread>
-    <ThreadContent>
+    <VStack gap="1 0">
       <Skeleton variant="text" height={21} width="50%" />
       <Skeleton variant="text" height={19} width={115} />
       <Skeleton variant="text" height={21} width="80%" />
-    </ThreadContent>
+    </VStack>
     <RightSkeleton variant="text" height={21} width={40} />
   </StyledThread>
 );
@@ -32,12 +32,6 @@ const StyledThread = styled.section`
   &:hover {
     box-shadow: var(--a-shadow-medium);
   }
-`;
-
-const ThreadContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-1);
 `;
 
 const RightSkeleton = styled(Skeleton)`

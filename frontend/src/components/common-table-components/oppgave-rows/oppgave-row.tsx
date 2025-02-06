@@ -26,8 +26,7 @@ import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgave } from '@app/types/oppgaver';
-import { Table } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Table } from '@navikt/ds-react';
 
 interface Props {
   oppgaveId: string;
@@ -126,10 +125,10 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.FlowStates:
         return (
           <Table.DataCell key={key}>
-            <FlowStateContainer>
+            <HStack wrap gap="2">
               <MedudunderskriverFlowStateLabel typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
               <RolFlowStateLabel rol={oppgave.rol} />
-            </FlowStateContainer>
+            </HStack>
           </Table.DataCell>
         );
       case ColumnKeyEnum.Rol:
@@ -203,8 +202,8 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
               fagsystemId={oppgave.fagsystemId}
               tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
               variant="secondary-neutral"
-              $position="below"
-              $align="right"
+              position="below"
+              align="right"
             />
           </Table.DataCell>
         );
@@ -258,9 +257,3 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
 
     return <Table.DataCell key={key} />;
   });
-
-const FlowStateContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--a-spacing-2);
-`;

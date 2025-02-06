@@ -1,4 +1,4 @@
-import { Heading } from '@navikt/ds-react';
+import { Heading, VStack } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface Props {
@@ -21,32 +21,15 @@ interface OppgaverPageWrapperProps {
 }
 
 export const OppgaverPageWrapper = ({ children, title, testId }: OppgaverPageWrapperProps): JSX.Element => (
-  <StyledOppgaverPageWrapper data-testid={`${testId}-container`}>
+  <VStack flexGrow="1" width="100%" overflow="hidden" data-testid={`${testId}-container`}>
     {typeof title === 'undefined' ? null : (
       <StyledOppgaveHeading level="1" size="medium" data-testid={`${testId}-title`}>
         {title}
       </StyledOppgaveHeading>
     )}
     <OppgaverContainer data-testid={testId}>{children}</OppgaverContainer>
-  </StyledOppgaverPageWrapper>
+  </VStack>
 );
-
-export const SearchPageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  width: 100%;
-  overflow: hidden;
-`;
-
-const StyledOppgaverPageWrapper = styled.main`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  width: 100%;
-  overflow: hidden;
-  padding: 0;
-`;
 
 const StyledOppgaveHeading = styled(Heading)`
   padding-left: var(--a-spacing-4);

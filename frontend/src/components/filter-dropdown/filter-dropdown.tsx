@@ -1,5 +1,6 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { Box, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { ToggleButton } from '../toggle-button/toggle-button';
@@ -57,42 +58,30 @@ const Container = styled.section`
 
 interface PopupProps {
   isOpen: boolean;
-  direction: StyledPopupProps['$direction'];
-  maxWidth?: StyledPopupProps['$maxWidth'];
-  maxHeight?: StyledPopupProps['$maxHeight'];
+  direction?: 'left' | 'right';
+  maxWidth?: string;
+  maxHeight?: number;
   children: React.ReactNode;
 }
 
-const Popup = ({ isOpen, direction, maxWidth, maxHeight, children }: PopupProps) => {
+const Popup = ({ isOpen, direction, maxWidth, maxHeight = 500, children }: PopupProps) => {
   if (!isOpen) {
     return null;
   }
 
+  const isLeft = direction === 'left';
+
   return (
-    <StyledPopup $direction={direction} $maxWidth={maxWidth} $maxHeight={maxHeight}>
-      {children}
-    </StyledPopup>
+    <HStack
+      asChild
+      maxHeight={`${maxHeight}px`}
+      maxWidth={maxWidth ?? 'unset'}
+      minWidth="275px"
+      style={{ zIndex: 22, top: '100%', left: isLeft ? 'auto' : 0, right: isLeft ? 0 : 'auto' }}
+    >
+      <Box background="bg-default" borderRadius="medium" shadow="medium" position="absolute">
+        {children}
+      </Box>
+    </HStack>
   );
 };
-
-interface StyledPopupProps {
-  $direction?: 'left' | 'right';
-  $maxWidth?: string;
-  $maxHeight?: number;
-}
-
-const StyledPopup = styled.div<StyledPopupProps>`
-  display: flex;
-  position: absolute;
-  top: 100%;
-  left: ${({ $direction }) => ($direction === 'left' ? 'auto' : '0')};
-  right: ${({ $direction }) => ($direction === 'left' ? '0' : 'auto')};
-  min-width: 275px;
-  max-height: ${({ $maxHeight = 500 }) => $maxHeight}px;
-  max-width: ${({ $maxWidth }) => $maxWidth ?? 'unset'};
-  z-index: 22;
-  background-color: var(--a-bg-default);
-  border-radius: 0.25rem;
-  border: 1px solid var(--a-border-divider);
-  box-shadow: 0 1px var(--a-spacing-1) 0 rgba(0, 0, 0, 0.3);
-`;

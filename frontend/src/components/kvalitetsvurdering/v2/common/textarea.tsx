@@ -4,7 +4,7 @@ import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/c
 import { SavedStatus } from '@app/components/saved-status/saved-status';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import type { IKvalitetsvurderingBooleans } from '@app/types/kaka-kvalitetsvurdering/v2';
-import { BodyLong, Label, Textarea } from '@navikt/ds-react';
+import { BodyLong, HStack, Label, Textarea } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -86,19 +86,12 @@ const KvalitetsskjemaTextareaInternal = ({
         onChange={({ target }) => setLocalValue(target.value)}
         description={description}
       />
-      <StatusContainer>
+      <HStack align="center" justify="end" marginBlock="1 0">
         <SavedStatus {...updateStatus} modified={kvalitetsvurdering.modified} />
-      </StatusContainer>
+      </HStack>
     </>
   );
 };
-
-const StatusContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-top: var(--a-spacing-1);
-`;
 
 const StyledBodyLong = styled(BodyLong)`
   border-left: var(--a-spacing-05) solid var(--a-border-subtle);

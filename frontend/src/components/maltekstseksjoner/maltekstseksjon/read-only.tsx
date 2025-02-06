@@ -1,5 +1,5 @@
 import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import { Heading, Loader, Tag } from '@navikt/ds-react';
+import { HStack, Heading, Loader, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
 import { TextPreview } from '../texts/preview';
@@ -22,14 +22,14 @@ export const MaltekstseksjonReadOnly = ({ id, textToHighlight }: Props) => {
 
   return (
     <Section>
-      <Header>
+      <HStack align="center" justify="start" gap="0 2" as="header">
         <Heading level="1" size="medium">
           {maltekstseksjon.title.length > 0 ? maltekstseksjon.title : '<Ingen tittel>'}
         </Heading>
         <Tag variant="info" size="xsmall">
           Maltekstseksjon
         </Tag>
-      </Header>
+      </HStack>
       <List>
         {maltekstseksjon.textIdList.map((textId) => (
           <li key={textId}>
@@ -64,11 +64,4 @@ const StyledTextPreview = styled(TextPreview)<{ $highlight: boolean }>`
   outline: ${({ $highlight }) => ($highlight ? '4px solid var(--a-border-action-selected)' : 'none')};
   outline-offset: var(--a-spacing-05);
   border-radius: var(--a-border-radius-medium);
-`;
-
-const Header = styled.header`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
 `;

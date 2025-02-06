@@ -1,18 +1,13 @@
 import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import { getTypeNames } from '@app/components/documents/new-documents/modal/finish-document/functions';
 import { Options } from '@app/components/documents/new-documents/modal/finish-document/options';
-import {
-  StyledBrevmottaker,
-  StyledRecipientContent,
-} from '@app/components/documents/new-documents/modal/finish-document/styled-components';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
 import type { IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
-import { Label, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Label, Tooltip, VStack } from '@navikt/ds-react';
 
 interface Props {
   recipient: IBrevmottaker;
@@ -26,14 +21,14 @@ export const SingleRecipient = ({ recipient, changeMottaker, templateId }: Props
   const isPerson = part.type === IdType.FNR;
 
   return (
-    <Container>
+    <VStack as="section">
       <Label size="small" spacing as="h1">
         Mottaker fra saken
       </Label>
 
       <StyledRecipient $accent="var(--a-border-success)">
-        <StyledBrevmottaker>
-          <StyledRecipientContent>
+        <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
+          <HStack align="center" gap="1">
             <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
               {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
             </Tooltip>
@@ -41,8 +36,8 @@ export const SingleRecipient = ({ recipient, changeMottaker, templateId }: Props
               {name} ({getTypeNames(brevmottakertyper)})
             </span>
             <PartStatusList statusList={statusList} size="xsmall" />
-          </StyledRecipientContent>
-        </StyledBrevmottaker>
+          </HStack>
+        </HStack>
         <Options
           part={part}
           handling={handling}
@@ -51,11 +46,6 @@ export const SingleRecipient = ({ recipient, changeMottaker, templateId }: Props
           templateId={templateId}
         />
       </StyledRecipient>
-    </Container>
+    </VStack>
   );
 };
-
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-`;

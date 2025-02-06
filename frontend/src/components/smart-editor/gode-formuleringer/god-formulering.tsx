@@ -8,7 +8,7 @@ import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/
 import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { CalendarIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Tag } from '@navikt/ds-react';
+import { Button, HStack, Heading, Tag, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@udecode/plate-core/react';
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
@@ -42,15 +42,15 @@ export const GodFormulering = ({ title, richText, publishedDateTime, isFocused, 
       <Heading title={title} level="1" size="small">
         {title}
       </Heading>
-      <ActionWrapper>
-        <Left>
+      <HStack align="center" justify="space-between" wrap={false}>
+        <HStack gap="1">
           <DateTime dateTime={publishedDateTime} title="Sist endret" icon={<CalendarIcon aria-hidden />} />
           {primaryLanguage === language ? null : (
             <Tag size="xsmall" variant="warning">
               {LANGUAGE_NAMES[language]}
             </Tag>
           )}
-        </Left>
+        </HStack>
         <AddButton
           editor={mainEditor}
           content={richText}
@@ -59,15 +59,15 @@ export const GodFormulering = ({ title, richText, publishedDateTime, isFocused, 
         >
           Sett inn
         </AddButton>
-      </ActionWrapper>
-      <ContentContainer>
+      </HStack>
+      <VStack gap="1">
         <StyledContent $isExpanded={isExpanded}>
           <Plate<RichTextEditor> editor={editor} readOnly>
             <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[language]} />
           </Plate>
         </StyledContent>
         <ShowMore isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
-      </ContentContainer>
+      </VStack>
     </StyledGodFormulering>
   );
 };
@@ -88,25 +88,6 @@ const ShowMore = ({ isExpanded, setIsExpanded }: ShowMoreProps) => (
     {isExpanded ? 'Vis mindre' : 'Vis mer'}
   </Button>
 );
-
-const Left = styled.div`
-  display: flex;
-  gap: var(--a-spacing-1);
-`;
-
-const ActionWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  flex-wrap: nowrap;
-`;
-
-const ContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-`;
 
 const StyledGodFormulering = styled.section<{ $isFocused: boolean }>`
   ${godFormuleringBaseStyle}

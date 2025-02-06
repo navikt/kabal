@@ -1,5 +1,5 @@
 import { sendCloseEvent } from '@app/components/toast/toast/helpers';
-import { styled } from 'styled-components';
+import { Stack } from '@navikt/ds-react';
 
 interface Props {
   children: React.ReactNode;
@@ -13,16 +13,9 @@ interface Props {
 export const ActionToast = ({ children, primary, secondary, attrs }: Props) => (
   <div {...attrs}>
     <span>{children}</span>
-    <ButtonRow onClick={({ target }) => sendCloseEvent(target)}>
+    <Stack direction="row-reverse" justify="space-between" gap="0 2" onClick={({ target }) => sendCloseEvent(target)}>
       {secondary}
       {primary}
-    </ButtonRow>
+    </Stack>
   </div>
 );
-
-const ButtonRow = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  column-gap: var(--a-spacing-2);
-`;

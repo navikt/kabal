@@ -7,7 +7,7 @@ import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutation
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Popup } from '../../deassign/popup';
@@ -42,11 +42,11 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
 
   if (oppgaveActionsIsLoading) {
     return (
-      <Container>
+      <HStack position="relative">
         <StyledButton variant="secondary" size="small" disabled loading icon={<FolderFileIcon aria-hidden />}>
           Legg tilbake
         </StyledButton>
-      </Container>
+      </HStack>
     );
   }
 
@@ -73,7 +73,7 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
     : undefined;
 
   return (
-    <Container ref={ref}>
+    <HStack position="relative" ref={ref}>
       <Button
         disabled={disabled}
         variant="secondary"
@@ -97,15 +97,9 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
           redirect
         />
       ) : null}
-    </Container>
+    </HStack>
   );
 };
-
-const Container = styled.section`
-  display: flex;
-  flex-direction: row;
-  position: relative;
-`;
 
 const StyledButton = styled(Button)`
   min-width: 275px;

@@ -10,6 +10,7 @@ import type {
   IMaltekstseksjon,
   IPublishedMaltekstseksjon,
 } from '@app/types/maltekstseksjoner/responses';
+import { VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
@@ -85,26 +86,28 @@ const Loaded = ({ versions, first, query }: LoadedProps) => {
       setSelectedTabId={setSelectedTabId}
       versions={versions}
       createDraftPanel={(version) => (
-        <PanelContent style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(ScalingGroup.REDAKTØR) }}>
+        <VStack
+          flexGrow="1"
+          marginBlock="2 0"
+          overflow="hidden"
+          style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(ScalingGroup.REDAKTØR) }}
+        >
           <DraftMaltekstSection maltekstseksjon={version} query={query} onDraftDeleted={onDraftDeleted} />
-        </PanelContent>
+        </VStack>
       )}
       createPublishedPanel={(version) => (
-        <PanelContent style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(ScalingGroup.REDAKTØR) }}>
+        <VStack
+          flexGrow="1"
+          marginBlock="2 0"
+          overflow="hidden"
+          style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(ScalingGroup.REDAKTØR) }}
+        >
           <PublishedMaltekstSection maltekstseksjon={version} query={query} onDraftCreated={onDraftCreated} />
-        </PanelContent>
+        </VStack>
       )}
     />
   );
 };
-
-const PanelContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  margin-top: var(--a-spacing-2);
-  flex-grow: 1;
-`;
 
 const StyledVersionTabs: typeof VersionTabs = styled(VersionTabs)`
   display: flex;

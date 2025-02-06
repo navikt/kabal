@@ -4,12 +4,11 @@ import {
   useRefillElasticAdminMutation,
   useResendDvhMutation,
 } from '@app/redux-api/internal';
-import { HStack, Heading } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Heading, VStack } from '@navikt/ds-react';
 import { ApiButton } from './api-button';
 
 export const Admin = () => (
-  <StyledPageContent>
+  <VStack gap="4" width="100%">
     <Heading level="1" size="large">
       Administrasjon
     </Heading>
@@ -21,12 +20,5 @@ export const Admin = () => (
     </HStack>
 
     <MerkantilTaskList />
-  </StyledPageContent>
+  </VStack>
 );
-
-const StyledPageContent = styled.article`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
-  width: 100%;
-`;

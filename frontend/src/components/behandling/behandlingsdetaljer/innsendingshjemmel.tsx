@@ -6,7 +6,7 @@ import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useSetInnsendingshjemlerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Button, Tag, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, Tag, Tooltip } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -24,7 +24,7 @@ export const Innsendingshjemmel = ({ oppgavebehandling }: Props) => {
 
   return (
     <BehandlingSection label={`Saken er sendt inn med ${hjemmelCount > 1 ? 'lovhjemler' : 'lovhjemmel'}`}>
-      <Container>
+      <HStack align="center" justify="space-between" width="100%">
         <Innsendingshjemler
           size="small"
           hjemmelIdList={oppgavebehandling.hjemmelIdList}
@@ -56,17 +56,10 @@ export const Innsendingshjemmel = ({ oppgavebehandling }: Props) => {
             ) : null}
           </PopupContainer>
         )}
-      </Container>
+      </HStack>
     </BehandlingSection>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`;
 
 const PopupContainer = styled.div`
   position: relative;

@@ -7,7 +7,7 @@ import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { FileSearchIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps } from '@navikt/ds-react';
+import { Button, type ButtonProps, HStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@udecode/plate-core/react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
@@ -47,7 +47,7 @@ export const RichTextPreview = ({
   });
 
   return (
-    <PreviewContainer ref={ref}>
+    <HStack align="center" position="relative" ref={ref}>
       <Button
         size={buttonSize}
         icon={<FileSearchIcon aria-hidden />}
@@ -65,15 +65,9 @@ export const RichTextPreview = ({
           </Plate>
         </ContentContainer>
       ) : null}
-    </PreviewContainer>
+    </HStack>
   );
 };
-
-const PreviewContainer = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-`;
 
 const ContentContainer = styled.div<{ $openSide: OpenSide; $openDirection: OpenDirection }>`
   background-color: var(--a-bg-default);

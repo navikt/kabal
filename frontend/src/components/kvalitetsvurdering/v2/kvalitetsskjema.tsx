@@ -1,5 +1,4 @@
-import { Skeleton } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Skeleton, VStack } from '@navikt/ds-react';
 import { Annet } from './annet';
 import { BrukAvRaadgivendeLege } from './bruk-av-raadgivende';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
@@ -12,7 +11,7 @@ export const KvalitetsskjemaV2 = () => {
 
   if (isLoading) {
     return (
-      <StyledKvalitetsskjema data-testid="kvalitetsskjema">
+      <VStack gap="8 0" data-testid="kvalitetsskjema">
         <div>
           <Skeleton variant="text" height={48} width="50%" />
           <Skeleton variant="rounded" height={32} />
@@ -29,23 +28,17 @@ export const KvalitetsskjemaV2 = () => {
           <Skeleton variant="text" height={48} width="50%" />
           <Skeleton variant="rounded" height={132} />
         </div>
-      </StyledKvalitetsskjema>
+      </VStack>
     );
   }
 
   return (
-    <StyledKvalitetsskjema data-testid="kvalitetsskjema">
+    <VStack gap="8 0" data-testid="kvalitetsskjema">
       <Klageforberedelsen />
       <Utredningen />
       <Vedtaket />
       <BrukAvRaadgivendeLege />
       <Annet />
-    </StyledKvalitetsskjema>
+    </VStack>
   );
 };
-
-const StyledKvalitetsskjema = styled.section`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-8);
-`;

@@ -1,9 +1,8 @@
 import { useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
 import { type IKodeverkSimpleValue, type ISakstyperToUtfall, UtfallEnum } from '@app/types/kodeverk';
 import { PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Checkbox, CheckboxGroup, Tag } from '@navikt/ds-react';
+import { Button, Checkbox, CheckboxGroup, HStack, Tag, VStack } from '@navikt/ds-react';
 import { useCallback, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface EditUtfallSetProps {
   utfallSet: UtfallEnum[];
@@ -55,13 +54,13 @@ export const EditUtfallSet = ({ utfallSet, onChange, onCancel, title, icon }: Ed
   const addDisabled = newUtfallSet.length === 0;
 
   return (
-    <Container>
+    <VStack as="section" gap="2 0">
       <CheckboxGroup
         legend={
-          <Legend>
+          <HStack as="span" align="center" gap="0 2">
             {icon}
             {title}
-          </Legend>
+          </HStack>
         }
         value={newUtfallSet}
         onChange={setNewUtfallSet}
@@ -82,7 +81,7 @@ export const EditUtfallSet = ({ utfallSet, onChange, onCancel, title, icon }: Ed
           );
         })}
       </CheckboxGroup>
-      <ButtonContainer>
+      <HStack gap="0 2">
         <Button
           size="small"
           variant="primary"
@@ -96,8 +95,8 @@ export const EditUtfallSet = ({ utfallSet, onChange, onCancel, title, icon }: Ed
         <Button size="small" variant="secondary" onClick={onCancel} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
-      </ButtonContainer>
-    </Container>
+      </HStack>
+    </VStack>
   );
 };
 
@@ -119,22 +118,3 @@ const getAvailableUtfall = (selected: UtfallEnum[], sakstyperToUtfall: ISakstype
 
   return sakstyper.flatMap((s) => s.utfall.map((u) => u.id));
 };
-
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-`;
-
-const Legend = styled.span`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--a-spacing-2);
-`;

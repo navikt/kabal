@@ -2,8 +2,7 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateRegistreringshjemlerMutation } from '@app/redux-api/oppgaver/mutations/set-registreringshjemler';
-import { HelpText, Label } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, HelpText, Label } from '@navikt/ds-react';
 import { LovhjemmelSelect } from './lovhjemmel-select';
 import { SelectedHjemlerList } from './selected-hjemler-list';
 
@@ -25,13 +24,13 @@ export const Lovhjemmel = () => {
 
   return (
     <>
-      <StyledHeaderHelpTextWrapper>
+      <HStack align="center" gap="2" marginBlock="0 2">
         <Label size="small">Utfallet er basert på lovhjemmel</Label>
         <HelpText>
           Her setter du hjemlene som utfallet i saken er basert på. Hjemlene du setter her påvirker også hvilke gode
           formuleringer du kan sette inn i brevet, og hvilket regelverk som dukker opp i vedlegget nederst.
         </HelpText>
-      </StyledHeaderHelpTextWrapper>
+      </HStack>
       <LovhjemmelSelect
         disabled={!canEdit}
         selected={oppgave.resultat.hjemmelIdSet}
@@ -46,10 +45,3 @@ export const Lovhjemmel = () => {
     </>
   );
 };
-
-const StyledHeaderHelpTextWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
-  margin-bottom: var(--a-spacing-2);
-`;

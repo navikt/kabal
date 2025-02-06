@@ -29,13 +29,12 @@ import type { ISmartDocument } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
-import { Tooltip } from '@navikt/ds-react';
+import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { RangeApi, TextApi } from '@udecode/plate';
 import { Plate, useEditorRef, usePlateEditor } from '@udecode/plate-core/react';
 import { YjsPlugin } from '@udecode/plate-yjs/react';
 import { useContext, useEffect, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
-import { styled } from 'styled-components';
 
 interface EditorProps {
   smartDocument: ISmartDocument;
@@ -53,10 +52,10 @@ export const Editor = (props: EditorProps) => {
 
   if (isLoading) {
     return (
-      <Container>
+      <VStack align="start" justify="space-between" height="100%" overflow="hidden">
         <SaksbehandlerToolbar />
         <Sheet $minHeight />
-      </Container>
+      </VStack>
     );
   }
 
@@ -84,7 +83,13 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   });
 
   return (
-    <Container style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(scalingGroup) }}>
+    <VStack
+      align="start"
+      justify="space-between"
+      height="100%"
+      overflow="hidden"
+      style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(scalingGroup) }}
+    >
       <Plate<RichTextEditor>
         editor={editor}
         readOnly={!canEdit}
@@ -117,7 +122,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
       >
         <PlateContext smartDocument={smartDocument} oppgave={oppgave} />
       </Plate>
-    </Container>
+    </VStack>
   );
 };
 
@@ -222,11 +227,17 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
 
   return (
     <>
-      <MainContainer>
+      <HStack
+        wrap={false}
+        maxHeight="100%"
+        flexShrink="1"
+        overflowY="scroll"
+        style={{ scrollPaddingTop: 'var(--a-spacing-16)' }}
+      >
         <GodeFormuleringer templateId={templateId} />
 
         <Content>
-          <EditorContainer data-area="content">
+          <VStack minWidth="210mm" gridColumn="content" data-area="content">
             <SaksbehandlerToolbar />
 
             <ErrorBoundary
@@ -243,7 +254,7 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
             >
               <EditorWithNewCommentAndFloatingToolbar id={id} isConnected={isConnected} />
             </ErrorBoundary>
-          </EditorContainer>
+          </VStack>
 
           {showAnnotationsAtOrigin ? <PositionedRight /> : null}
         </Content>
@@ -251,35 +262,25 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
         {showAnnotationsAtOrigin ? null : <StickyRight id={id} />}
 
         {showHistory ? <History oppgaveId={oppgave.id} smartDocument={smartDocument} /> : null}
-      </MainContainer>
+      </HStack>
 
       <StatusBar>
         <Tooltip content={isConnected ? 'Tilkoblet' : 'Frakoblet'}>
-          <ConnectionIconContainer>
-            {isConnected ? (
-              <CloudFillIcon aria-hidden role="presentation" fontSize={24} color="var(--a-icon-success)" />
-            ) : (
-              <CloudSlashFillIcon aria-hidden role="presentation" fontSize={24} color="var(--a-icon-danger)" />
-            )}
-          </ConnectionIconContainer>
+          <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="2" data-qqqq>
+            <Box as="span" borderWidth="0 1 0 0" borderColor="border-default" marginInline="auto 2">
+              {isConnected ? (
+                <CloudFillIcon aria-hidden role="presentation" fontSize={24} color="var(--a-icon-success)" />
+              ) : (
+                <CloudSlashFillIcon aria-hidden role="presentation" fontSize={24} color="var(--a-icon-danger)" />
+              )}
+            </Box>
+          </HStack>
         </Tooltip>
         <VersionStatus oppgaveId={oppgave.id} dokumentId={id} />
       </StatusBar>
     </>
   );
 };
-
-const ConnectionIconContainer = styled.span`
-  margin-left: auto;
-  margin-right: var(--a-spacing-2);
-  border-right: 1px solid var(--a-border-default);
-  padding-left: var(--a-spacing-2);
-  padding-right: var(--a-spacing-2);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 // interface ChangeSet {
 //   added: number[];
@@ -354,27 +355,3 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithN
     </Sheet>
   );
 };
-
-const MainContainer = styled.div`
-  display: flex;
-  max-height: 100%;
-  flex-shrink: 1;
-  overflow-y: scroll;
-  scroll-padding-top: var(--a-spacing-16);
-`;
-
-const EditorContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  grid-area: content;
-  min-width: 210mm;
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  align-items: flex-start;
-  overflow: hidden;
-`;

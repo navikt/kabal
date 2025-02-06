@@ -5,13 +5,9 @@ import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-
 import { StatusFilter, useStatusFilter } from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { useFilteredAndSorted, useOrder, useSort } from '@app/components/smart-editor-texts/text-list/hooks';
 import {
-  Container,
   ListItem,
-  LoaderOverlay,
   StyledHeaders,
   StyledLink,
-  StyledList,
-  StyledTitle,
   StyledTitleIcon,
   StyledTitleText,
 } from '@app/components/smart-editor-texts/text-list/styled-components';
@@ -24,7 +20,7 @@ import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { type Language, UNTRANSLATED } from '@app/types/texts/language';
 import type { IText } from '@app/types/texts/responses';
 import { PercentIcon, TasklistIcon } from '@navikt/aksel-icons';
-import { Loader } from '@navikt/ds-react';
+import { Box, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useParams } from 'react-router-dom';
 import { DateTime } from '../../datetime/datetime';
 import { SortKey, SortableHeader } from '../sortable-header';
@@ -68,23 +64,25 @@ export const StandaloneTextList = ({ filter, data, isLoading, style, textType }:
 
   if (isLoading || typeof data === 'undefined') {
     return (
-      <LoaderOverlay>
-        <Loader size="large" />
-      </LoaderOverlay>
+      <HStack asChild align="center" justify="center" width="700px" height="100%">
+        <Box background="bg-default">
+          <Loader size="large" />
+        </Box>
+      </HStack>
     );
   }
 
   return (
-    <Container style={style}>
+    <VStack height="100%" width="700px" overflowY="auto" flexGrow="1" style={style}>
       <Headers />
-      <StyledList>
+      <VStack as="ul" gap="1 0" width="100%" padding="0" margin="0" style={{ listStyle: 'none' }}>
         {sortedTexts.map(({ id, title, modified, publishedDateTime, published, score }) => (
           <ListItem key={id} $active={query.id === id}>
             <StyledLink to={getStandaloneTextLink(textType, language, id)}>
-              <StyledTitle>
+              <HStack align="center" gap="05" overflow="hidden" wrap={false} style={{ whiteSpace: 'nowrap' }}>
                 <StyledTitleIcon />
                 <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
-              </StyledTitle>
+              </HStack>
 
               <StatusTag publishedDateTime={publishedDateTime} published={published} />
               <DateTime dateTime={modified} />
@@ -92,8 +90,8 @@ export const StandaloneTextList = ({ filter, data, isLoading, style, textType }:
             </StyledLink>
           </ListItem>
         ))}
-      </StyledList>
-    </Container>
+      </VStack>
+    </VStack>
   );
 };
 
@@ -116,21 +114,23 @@ export const MaltekstseksjonList = ({ filter, data, isLoading, style }: Maltekst
 
   if (isLoading || data === undefined) {
     return (
-      <LoaderOverlay>
-        <Loader size="3xlarge" />
-      </LoaderOverlay>
+      <HStack asChild align="center" justify="center" width="700px" height="100%">
+        <Box background="bg-default">
+          <Loader size="3xlarge" />
+        </Box>
+      </HStack>
     );
   }
 
   return (
-    <Container style={style}>
+    <VStack height="100%" width="700px" overflowY="auto" flexGrow="1" style={style}>
       <Headers />
-      <StyledList>
+      <VStack as="ul" gap="1 0" width="100%" padding="0" margin="0" style={{ listStyle: 'none' }}>
         {sortedMaltekstseksjonList.map(({ id, score }) => (
           <MaltekstseksjonItem key={id} maltekstseksjonId={id} score={score} />
         ))}
-      </StyledList>
-    </Container>
+      </VStack>
+    </VStack>
   );
 };
 
@@ -169,10 +169,10 @@ const MaltekstseksjonItem = ({ maltekstseksjonId, score }: MaltekstseksjonItemPr
   return (
     <MaltekstseksjontListItem key={id} query={maltekstseksjonQuery} activeId={query.id} maltekstseksjonId={id}>
       <StyledLink to={getLink(maltekstseksjon, language)}>
-        <StyledTitle>
+        <HStack align="center" gap="05" overflow="hidden" wrap={false} style={{ whiteSpace: 'nowrap' }}>
           <TasklistIcon aria-hidden style={{ flexShrink: 0 }} />
           <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
-        </StyledTitle>
+        </HStack>
 
         <StatusTag publishedDateTime={publishedDateTime} published={published} />
         <DateTime dateTime={modifiedOrTextsModified} />

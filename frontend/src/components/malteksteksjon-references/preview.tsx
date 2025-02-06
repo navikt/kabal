@@ -10,7 +10,7 @@ import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IRichText, IText } from '@app/types/texts/responses';
-import { Heading, Loader } from '@navikt/ds-react';
+import { Box, Heading, Loader, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate, usePlateEditor } from '@udecode/plate/react';
 import { useCallback, useEffect, useState } from 'react';
@@ -73,29 +73,21 @@ const LoadedPreview = ({ id, value, maltekstseksjon }: LoadedPreviewProps) => {
   });
   return (
     <>
-      <PreviewBackground>
-        <Heading level="1" size="xsmall">
-          Forhåndsvisning av {getTitle(maltekstseksjon.title)}
-        </Heading>
-        <Sheet>
-          <Plate<RichTextEditor> editor={editor} readOnly>
-            <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[lang]} />
-          </Plate>
-        </Sheet>
-      </PreviewBackground>
+      <VStack asChild align="center" gap="4" padding="4">
+        <Box borderRadius="medium" background="surface-subtle">
+          <Heading level="1" size="xsmall">
+            Forhåndsvisning av {getTitle(maltekstseksjon.title)}
+          </Heading>
+          <Sheet>
+            <Plate<RichTextEditor> editor={editor} readOnly>
+              <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[lang]} />
+            </Plate>
+          </Sheet>
+        </Box>
+      </VStack>
     </>
   );
 };
-
-const PreviewBackground = styled.div`
-  background-color: var(--a-surface-subtle);
-  padding: var(--a-spacing-4);
-  border-radius: var(--a-spacing-1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--a-spacing-4);
-`;
 
 const Sheet = styled.div`
   padding: 20mm;

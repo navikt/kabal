@@ -11,9 +11,9 @@ import { RedaktoerToolbar } from '@app/plate/toolbar/toolbars/redaktoer-toolbar'
 import { RedaktoerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
+import { Box, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@udecode/plate-core/react';
 import { forwardRef, useImperativeHandle, useRef } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   editorId: string;
@@ -53,17 +53,19 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
         }}
       >
         <Plate<RichTextEditor> editor={editor} onValueChange={onChange} readOnly={readOnly}>
-          <Content onKeyDown={onKeyDown}>
-            {readOnly === true ? null : <RedaktoerToolbar />}
+          <VStack asChild padding="4" minWidth="calc(210mm + var(--a-spacing-8))" onKeyDown={onKeyDown}>
+            <Box background="surface-subtle" position="relative" overflowX="hidden" overflowY="auto" flexGrow="1">
+              {readOnly === true ? null : <RedaktoerToolbar />}
 
-            <Sheet ref={ref} $minHeight={false}>
-              <FloatingRedaktoerToolbar container={ref.current} editorId={editorId} />
+              <Sheet ref={ref} $minHeight={false}>
+                <FloatingRedaktoerToolbar container={ref.current} editorId={editorId} />
 
-              <RedaktoerTableToolbar container={ref.current} editorId={editorId} />
+                <RedaktoerTableToolbar container={ref.current} editorId={editorId} />
 
-              <KabalPlateEditor id={editorId} readOnly={readOnly} onFocus={onFocus} lang={lang} />
-            </Sheet>
-          </Content>
+                <KabalPlateEditor id={editorId} readOnly={readOnly} onFocus={onFocus} lang={lang} />
+              </Sheet>
+            </Box>
+          </VStack>
 
           <StatusBar>{status === undefined ? null : <SavedStatus {...status} />}</StatusBar>
         </Plate>
@@ -73,15 +75,3 @@ export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
 );
 
 RedaktoerRichText.displayName = 'RedaktoerRichText';
-
-const Content = styled.div`
-  padding: var(--a-spacing-4);
-  background-color: var(--a-surface-subtle);
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: calc(210mm + var(--a-spacing-4) + var(--a-spacing-4));
-`;

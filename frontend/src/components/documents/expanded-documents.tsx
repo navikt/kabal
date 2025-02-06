@@ -6,9 +6,8 @@ import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-do
 import { useDocumentsWidth } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { Box, Button, HStack, Heading, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { styled } from 'styled-components';
 import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-documents';
 import { NewDocuments } from './new-documents/new-documents';
 import { UploadFile } from './upload-file/upload-file';
@@ -107,69 +106,46 @@ export const ExpandedDocuments = () => {
 
   return (
     <DragAndDropContextElement>
-      <Container style={{ minWidth }} ref={ref}>
-        <DocumentsHeader>
-          <Heading size="medium" level="1">
-            Dokumenter
-          </Heading>
-          <ButtonContainer>
-            <Button
-              variant="tertiary-neutral"
-              size="xsmall"
-              icon={<MinusIcon aria-hidden />}
-              onClick={() => setWidth(Math.max(minWidth, width - 50))}
-              disabled={width <= minWidth}
-              title="Forminsk dokumenter"
-            />
-            <Button
-              variant="tertiary-neutral"
-              size="xsmall"
-              icon={<PlusIcon aria-hidden />}
-              onClick={() => setWidth(width + 50)}
-              title="Forstørr dokumenter"
-            />
-          </ButtonContainer>
-          <UploadFile />
-          <ToggleExpandedButton />
-        </DocumentsHeader>
+      <VStack
+        width="auto"
+        height="100%"
+        overflowY="hidden"
+        overflowX="auto"
+        position="relative"
+        style={{ minWidth, resize: 'horizontal' }}
+        ref={ref}
+      >
+        <HStack asChild align="start" justify="start" gap="0 2" position="relative">
+          <Box borderWidth="0 0 1 0" borderColor="border-divider" paddingInline="4" paddingBlock="2" marginBlock="0 2">
+            <Heading size="medium" level="1">
+              Dokumenter
+            </Heading>
+            <HStack align="center" height="100%">
+              <Button
+                variant="tertiary-neutral"
+                size="xsmall"
+                icon={<MinusIcon aria-hidden />}
+                onClick={() => setWidth(Math.max(minWidth, width - 50))}
+                disabled={width <= minWidth}
+                title="Forminsk dokumenter"
+              />
+              <Button
+                variant="tertiary-neutral"
+                size="xsmall"
+                icon={<PlusIcon aria-hidden />}
+                onClick={() => setWidth(width + 50)}
+                title="Forstørr dokumenter"
+              />
+            </HStack>
+            <UploadFile />
+            <ToggleExpandedButton />
+          </Box>
+        </HStack>
 
         <NewDocuments />
 
         <JournalfoerteDocuments />
-      </Container>
+      </VStack>
     </DragAndDropContextElement>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: auto;
-  height: 100%;
-  overflow-y: hidden;
-  overflow-x: auto;
-  position: relative;
-  resize: horizontal;
-`;
-
-const DocumentsHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  column-gap: var(--a-spacing-2);
-  position: relative;
-  padding-left: var(--a-spacing-4);
-  padding-right: var(--a-spacing-4);
-  padding-bottom: var(--a-spacing-2);
-  padding-top: var(--a-spacing-2);
-  border-bottom: 1px solid var(--a-border-divider);
-  margin-bottom: var(--a-spacing-2);
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 100%;
-`;

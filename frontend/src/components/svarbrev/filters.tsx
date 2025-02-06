@@ -1,5 +1,5 @@
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { Search, ToggleGroup, Tooltip } from '@navikt/ds-react';
+import { Box, HStack, Search, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 export enum ActiveEnum {
@@ -40,66 +40,54 @@ export const Filters = ({
   activeFilter,
   setActiveFilter,
 }: FilterProps) => (
-  <FilterContainer>
-    <ToggleGroup
-      size="small"
-      value={activeFilter}
-      onChange={(a) => setActiveFilter(isActiveValue(a) ? a : activeFilter)}
-    >
-      <ToggleGroup.Item value={ActiveEnum.ALL}>Alle</ToggleGroup.Item>
-      <ToggleGroup.Item value={ActiveEnum.ACTIVE}>Aktive</ToggleGroup.Item>
-      <ToggleGroup.Item value={ActiveEnum.INACTIVE}>Inaktive</ToggleGroup.Item>
-    </ToggleGroup>
+  <HStack asChild wrap={false} gap="4" width="100%" position="sticky" top="0" style={{ zIndex: 1 }}>
+    <Box background="bg-default" paddingInline="0 1" paddingBlock="0 4">
+      <ToggleGroup
+        size="small"
+        value={activeFilter}
+        onChange={(a) => setActiveFilter(isActiveValue(a) ? a : activeFilter)}
+      >
+        <ToggleGroup.Item value={ActiveEnum.ALL}>Alle</ToggleGroup.Item>
+        <ToggleGroup.Item value={ActiveEnum.ACTIVE}>Aktive</ToggleGroup.Item>
+        <ToggleGroup.Item value={ActiveEnum.INACTIVE}>Inaktive</ToggleGroup.Item>
+      </ToggleGroup>
 
-    <ToggleGroup size="small" value={typeFilter} onChange={(t) => setTypeFilter(isTypeFilter(t) ? t : typeFilter)}>
-      <ToggleGroup.Item value={ALL_TYPES}>Alle</ToggleGroup.Item>
-      <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
-      <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>
-    </ToggleGroup>
+      <ToggleGroup size="small" value={typeFilter} onChange={(t) => setTypeFilter(isTypeFilter(t) ? t : typeFilter)}>
+        <ToggleGroup.Item value={ALL_TYPES}>Alle</ToggleGroup.Item>
+        <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
+        <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>
+      </ToggleGroup>
 
-    <SearchContainer>
-      <Tooltip content="Filtrer på ytelse.">
-        <Search
-          placeholder="Filtrer på ytelse"
-          label="Filtrer på ytelse"
-          size="small"
-          hideLabel
-          onChange={setYtelseFilter}
-          value={ytelseFilter}
-          variant="simple"
-        />
-      </Tooltip>
-    </SearchContainer>
+      <SearchContainer>
+        <Tooltip content="Filtrer på ytelse.">
+          <Search
+            placeholder="Filtrer på ytelse"
+            label="Filtrer på ytelse"
+            size="small"
+            hideLabel
+            onChange={setYtelseFilter}
+            value={ytelseFilter}
+            variant="simple"
+          />
+        </Tooltip>
+      </SearchContainer>
 
-    <SearchContainer>
-      <Tooltip content="Filtrer på tekst.">
-        <Search
-          placeholder="Filtrer på tekst"
-          label="Filtrer på tekst"
-          size="small"
-          hideLabel
-          onChange={setTextFilter}
-          value={textFilter}
-          variant="simple"
-        />
-      </Tooltip>
-    </SearchContainer>
-  </FilterContainer>
+      <SearchContainer>
+        <Tooltip content="Filtrer på tekst.">
+          <Search
+            placeholder="Filtrer på tekst"
+            label="Filtrer på tekst"
+            size="small"
+            hideLabel
+            onChange={setTextFilter}
+            value={textFilter}
+            variant="simple"
+          />
+        </Tooltip>
+      </SearchContainer>
+    </Box>
+  </HStack>
 );
-
-const FilterContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: var(--a-spacing-4);
-  width: 100%;
-  padding-right: 3px;
-  padding-bottom: var(--a-spacing-4);
-  background-color: var(--a-bg-default);
-  position: sticky;
-  top: 0;
-  z-index: 1;
-`;
 
 const SearchContainer = styled.div`
   flex-grow: 1;

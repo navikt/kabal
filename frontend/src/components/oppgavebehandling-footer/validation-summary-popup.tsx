@@ -1,8 +1,7 @@
 import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Alert } from '@navikt/ds-react';
+import { Alert, HStack } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { StyledButton, StyledIconButton, StyledPopup } from './styled-components';
 import { ValidationSummary } from './validation-summary';
 
@@ -32,10 +31,10 @@ export const ValidationSummaryPopup = () => {
     <>
       <StyledButton onClick={toggleOpen}>
         <Alert variant={statusType} size="small" inline>
-          <StyledAlertStripeChildren>
+          <HStack align="center" gap="2">
             <span>{statusText}</span>
             <Icon fill="#262626" />
-          </StyledAlertStripeChildren>
+          </HStack>
         </Alert>
       </StyledButton>
       <Popup hasErrors={hasErrors} setOpen={setOpen} open={open} />
@@ -65,9 +64,3 @@ const Popup = ({ open, setOpen, hasErrors }: PopupProps) => {
     </StyledPopup>
   );
 };
-
-const StyledAlertStripeChildren = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-3);
-`;

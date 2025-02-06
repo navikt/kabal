@@ -1,3 +1,4 @@
+import { VStack } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 export const StyledContainer = styled.div`
@@ -14,8 +15,8 @@ export const StyledBehandlingSection = styled.section`
   min-height: 100%;
 `;
 
-export const DateContainer = styled.section`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: var(--a-spacing-4);
-`;
+interface DateContainerProps {
+  children: React.ReactNode;
+}
+
+export const DateContainer = ({ children }: DateContainerProps) => <VStack marginBlock="0 4">{children}</VStack>;

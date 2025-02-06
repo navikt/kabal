@@ -6,9 +6,8 @@ import { OppgaverPaaVentTable } from '@app/components/search/common/oppgaver-paa
 import { OppgaverPageWrapper } from '@app/pages/page-wrapper';
 import type { staggeredBaseQuery } from '@app/redux-api/common';
 import type { IOppgaverResponse } from '@app/types/oppgaver';
-import { Skeleton, Table } from '@navikt/ds-react';
+import { HStack, Skeleton, Table } from '@navikt/ds-react';
 import type { TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react';
-import { styled } from 'styled-components';
 
 // https://github.com/reduxjs/redux-toolkit/issues/1937#issuecomment-1842868277
 // https://redux-toolkit.js.org/rtk-query/usage-with-typescript#typing-query-and-mutation-endpoints
@@ -22,11 +21,11 @@ export const Oppgaver = ({ data, isFetching, isLoading, error, refetch }: Oppgav
 
   if (error !== undefined) {
     return (
-      <ErrorContainer>
+      <HStack margin="4">
         <ErrorAlert error={error} refetch={refetch} isFetching={isFetching}>
           Feil ved henting av oppgaver
         </ErrorAlert>
-      </ErrorContainer>
+      </HStack>
     );
   }
 
@@ -45,11 +44,6 @@ export const Oppgaver = ({ data, isFetching, isLoading, error, refetch }: Oppgav
     </OppgaverPageWrapper>
   );
 };
-
-const ErrorContainer = styled.div`
-  display: flex;
-  margin: var(--a-spacing-4);
-`;
 
 const SkeletonTables = () => (
   <Table zebraStripes size="small" style={{ marginLeft: 16 }}>

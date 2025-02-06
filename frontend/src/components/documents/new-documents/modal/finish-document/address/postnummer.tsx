@@ -1,7 +1,6 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { AddressField } from '@app/components/documents/new-documents/modal/finish-document/address/field';
-import { Row } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
-import { BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, HStack, Label, VStack } from '@navikt/ds-react';
 import { useContext, useId } from 'react';
 import { styled } from 'styled-components';
 
@@ -18,7 +17,7 @@ export const Postnummer = ({ value, originalValue, onChange, error }: Props) => 
   const { getPoststed } = useContext(StaticDataContext);
 
   return (
-    <Row>
+    <HStack align="center" gap="1">
       <AddressField
         id="postnummer"
         label="Postnummer"
@@ -32,24 +31,17 @@ export const Postnummer = ({ value, originalValue, onChange, error }: Props) => 
         pattern="^[0-9]{0,4}$"
         htmlSize={8}
       />
-      <PoststedContainer>
+      <VStack justify="start" gap="2">
         <StyledLabel size="small" htmlFor={poststedElementId}>
           Poststed
         </StyledLabel>
         <Poststed size="medium" id={poststedElementId}>
           {value === null ? 'Postnummer mangler' : (getPoststed(value) ?? 'Ukjent')}
         </Poststed>
-      </PoststedContainer>
-    </Row>
+      </VStack>
+    </HStack>
   );
 };
-
-const PoststedContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-items: start;
-  gap: var(--a-spacing-2);
-`;
 
 const StyledLabel = styled(Label)`
   display: flex;

@@ -1,6 +1,5 @@
 import { TabContext } from '@app/components/documents/tab-context';
 import { toast } from '@app/components/toast/store';
-import { Container, ErrorOrLoadingContainer } from '@app/components/view-pdf/container';
 import { Header, StyledDocumentTitle } from '@app/components/view-pdf/header';
 import { ReloadButton } from '@app/components/view-pdf/reload-button';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
@@ -9,7 +8,7 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
 import { useShownDocuments } from '@app/hooks/use-shown-documents';
 import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
-import { Alert, Button, type ButtonProps, Loader } from '@navikt/ds-react';
+import { Alert, Box, Button, type ButtonProps, Loader, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { NoFlickerReloadPdf, useNoFlickerReloadPdf } from './no-flicker-reload';
@@ -78,24 +77,24 @@ export const ViewPDF = () => {
 
   if (mergedDocumentIsError || inlineUrl === undefined) {
     return (
-      <ErrorOrLoadingContainer style={{ minWidth: pdfWidth }} data-testid="show-document">
+      <Container minWidth={pdfWidth}>
         <Alert variant="error" size="small">
           Kunne ikke vise dokument(er)
         </Alert>
-      </ErrorOrLoadingContainer>
+      </Container>
     );
   }
 
   if (mergedDocumentIsLoading) {
     return (
-      <ErrorOrLoadingContainer style={{ minWidth: pdfWidth }} data-testid="show-document">
+      <Container minWidth={pdfWidth}>
         <Loader title="Laster dokument" size="3xlarge" />
-      </ErrorOrLoadingContainer>
+      </Container>
     );
   }
 
   return (
-    <Container style={{ minWidth: pdfWidth }} data-testid="show-document">
+    <Container minWidth={pdfWidth}>
       <Header>
         <Button onClick={close} title="Lukk forhåndsvisning" icon={<XMarkIcon aria-hidden />} {...BUTTON_PROPS} />
         <Button onClick={decrease} title="Smalere PDF" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
@@ -122,3 +121,23 @@ const BUTTON_PROPS: ButtonProps = {
   size: 'xsmall',
   variant: 'tertiary-neutral',
 };
+
+interface ContainerProps {
+  minWidth: number;
+  children: React.ReactNode | React.ReactNode[];
+}
+
+const Container = ({ minWidth, children }: ContainerProps) => (
+  <VStack
+    asChild
+    minWidth={`${minWidth}px`}
+    style={{ scrollSnapAlign: 'start' }}
+    align="center"
+    justify="center"
+    data-testid="show-document"
+  >
+    <Box as="section" background="bg-default" shadow="medium" borderRadius="medium" position="relative" height="100%">
+      {children}
+    </Box>
+  </VStack>
+);

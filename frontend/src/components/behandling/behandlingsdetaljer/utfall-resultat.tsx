@@ -7,8 +7,7 @@ import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateExtraUtfallMutation, useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { HelpText, Label, Select, Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, HelpText, Label, Select, Tag, VStack } from '@navikt/ds-react';
 
 interface UtfallResultatProps {
   utfall: UtfallEnum | null;
@@ -33,17 +32,17 @@ const ReadOnlyUtfall = ({ utfall }: UtfallResultatProps) => {
   const utfallName = useUtfallNameOrLoading(utfall ?? NOT_SELECTED_LABEL);
 
   return (
-    <Container data-testid={CONTAINER_ID}>
-      <HelpTextWrapper>
+    <VStack align="start" gap="2" marginBlock="0 4" data-testid={CONTAINER_ID}>
+      <HStack align="center" gap="2">
         <Label size="small" htmlFor={SELECT_ID}>
           {utfallLabel}
         </Label>
         <HelpText>Det utfallet som passet best for saken.</HelpText>
-      </HelpTextWrapper>
+      </HStack>
       <Tag size="small" variant="alt1">
         {utfallName}
       </Tag>
-    </Container>
+    </VStack>
   );
 };
 
@@ -73,13 +72,13 @@ const EditUtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: Utf
   const options = utfallKodeverk.map(({ id, navn }) => <option key={id} value={id} label={navn} />);
 
   return (
-    <Container data-testid={CONTAINER_ID}>
-      <HelpTextWrapper>
+    <VStack align="start" gap="2" marginBlock="0 4" data-testid={CONTAINER_ID}>
+      <HStack align="center" gap="2">
         <Label size="small" htmlFor={SELECT_ID}>
           {utfallLabel}
         </Label>
         <HelpText>Du kan kun velge ett utfall i saken. Velg det utfallet som passer best.</HelpText>
-      </HelpTextWrapper>
+      </HStack>
 
       <Select
         disabled={isLoading}
@@ -98,20 +97,6 @@ const EditUtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: Utf
       </Select>
       {utfall === UtfallEnum.RETUR ? <ReturWarning /> : null}
       {typeId === SaksTypeEnum.ANKE && utfall === UtfallEnum.DELVIS_MEDHOLD ? <AnkeDelvisMedholWarning /> : null}
-    </Container>
+    </VStack>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-2);
-  margin-bottom: var(--a-spacing-4);
-  align-items: flex-start;
-`;
-
-const HelpTextWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
-`;

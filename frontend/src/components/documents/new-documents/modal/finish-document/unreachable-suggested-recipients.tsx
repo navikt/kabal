@@ -6,9 +6,8 @@ import { formatIdNumber } from '@app/functions/format-id';
 import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
 import { type IPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
-import { Alert, CopyButton, HelpText, Label, Tooltip } from '@navikt/ds-react';
+import { Alert, CopyButton, HStack, HelpText, Label, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import { StyledBrevmottaker, StyledRecipientContent } from './styled-components';
 
 interface RecipientsProps {
   recipients: IBrevmottaker[];
@@ -20,7 +19,7 @@ export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) 
   }
 
   return (
-    <Container>
+    <section>
       <Label size="small" spacing as="h1">
         Utilgjengelige parter fra saken
       </Label>
@@ -35,8 +34,8 @@ export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) 
 
           return (
             <StyledRecipient key={id} $accent="var(--a-border-danger)" as="li">
-              <StyledBrevmottaker>
-                <StyledRecipientContent>
+              <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
+                <HStack align="center" gap="1">
                   <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
                     {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
                   </Tooltip>
@@ -46,27 +45,27 @@ export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) 
                     text={`${name} (${getTypeNames(brevmottakertyper)})`}
                   />
                   <PartStatusList statusList={statusList} size="xsmall" />
-                </StyledRecipientContent>
-              </StyledBrevmottaker>
-              <Row>
+                </HStack>
+              </HStack>
+              <HStack align="center" gap="0 2" paddingInline="2" paddingBlock="0 1">
                 <CopyButton size="xsmall" copyText={id} text={formatIdNumber(id)} />
-              </Row>
+              </HStack>
               <Address part={part} address={part.address} overriddenAddress={overriddenAddress} handling={handling} />
               {alertText === null ? null : (
-                <Row>
+                <HStack align="center" gap="0 2" paddingInline="2" paddingBlock="0 1">
                   <Alert variant="warning" size="small">
-                    <AlertContent>
+                    <HStack align="center" gap="2">
                       Parten kan ikke velges som mottaker fordi {alertText}.
                       {helpText === null ? null : <HelpText>{helpText}</HelpText>}
-                    </AlertContent>
+                    </HStack>
                   </Alert>
-                </Row>
+                </HStack>
               )}
             </StyledRecipient>
           );
         })}
       </List>
-    </Container>
+    </section>
   );
 };
 
@@ -90,25 +89,8 @@ const getUnreachableHelpText = (statusList: IPart['statusList']): string | null 
   return null;
 };
 
-const Container = styled.section``;
-
 const List = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-`;
-
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
-  padding-left: var(--a-spacing-2);
-  padding-right: var(--a-spacing-2);
-  padding-bottom: var(--a-spacing-1);
-`;
-
-const AlertContent = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
 `;

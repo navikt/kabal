@@ -10,7 +10,7 @@ import { useSearchEnheterQuery } from '@app/redux-api/search';
 import type { INavEmployee } from '@app/types/bruker';
 import type { Enhet, ListGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { ArrowsCirclepathIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Modal, Table } from '@navikt/ds-react';
+import { Button, HStack, Heading, Modal, Table } from '@navikt/ds-react';
 import type { SortState } from '@navikt/ds-react/Table';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo, useState } from 'react';
@@ -222,7 +222,7 @@ const SelectGosysOppgave = () => {
 
   return (
     <>
-      <ButtonContainer>
+      <HStack gap="4">
         <Button
           variant="secondary"
           size="small"
@@ -246,7 +246,7 @@ const SelectGosysOppgave = () => {
               : 'Vis ferdigstilte og feilregistrerte oppgaver'}
           </Button>
         ) : null}
-      </ButtonContainer>
+      </HStack>
 
       <SortableTable
         heading={
@@ -358,7 +358,7 @@ interface HeaderProps {
 
 const Header = ({ children, refetch, isFetching = false }: HeaderProps) => (
   <Heading level="1" size="xsmall" spacing>
-    <HeadingContent>
+    <HStack align="center" justify="start" gap="2">
       <span>{children}</span>
       {refetch === undefined ? null : (
         <Button
@@ -369,14 +369,9 @@ const Header = ({ children, refetch, isFetching = false }: HeaderProps) => (
           icon={<ArrowsCirclepathIcon aria-hidden />}
         />
       )}
-    </HeadingContent>
+    </HStack>
   </Heading>
 );
-
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: var(--a-spacing-4);
-`;
 
 const NoneWarning = styled.span`
   font-style: italic;
@@ -387,13 +382,6 @@ const ModalBody = styled(Modal.Body)`
   display: flex;
   flex-direction: column;
   gap: var(--a-spacing-4);
-`;
-
-const HeadingContent = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
 `;
 
 const GOSYS_OPPGAVE_KEYS: (keyof ListGosysOppgave)[] = [

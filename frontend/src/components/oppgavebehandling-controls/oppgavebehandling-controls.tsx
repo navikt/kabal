@@ -1,47 +1,34 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { styled } from 'styled-components';
+import { Box, HStack } from '@navikt/ds-react';
 import { AaRegisteret, Ainntekt, Modia } from './external-links';
 import { PanelSwitches } from './panel-switches';
 import { UserInfo } from './user-info';
 
-export const OppgavebehandlingControls = () => {
+export const OppgavebehandlingControls = () => (
+  <HStack asChild gap="2 4" paddingInline="4" paddingBlock="2" wrap data-testid="behandling-control-panel">
+    <Box background="bg-default" borderWidth="0 0 1 0" borderColor="border-divider" as="header">
+      <Content />
+    </Box>
+  </HStack>
+);
+
+const Content = () => {
   const { data: oppgave } = useOppgave();
 
-  if (typeof oppgave === 'undefined') {
-    return <ControlPanel>Laster...</ControlPanel>;
+  if (oppgave === undefined) {
+    return 'Laster...';
   }
 
   const { sakenGjelder } = oppgave;
-
   return (
-    <ControlPanel data-testid="behandling-control-panel">
+    <>
       <UserInfo {...oppgave} />
       <PanelSwitches />
-      <OppgavebehandlingInformation>
+      <HStack align="center" marginInline="auto 0" gap="0 4">
         <Modia sakenGjelder={sakenGjelder} />
         <AaRegisteret />
         <Ainntekt />
-      </OppgavebehandlingInformation>
-    </ControlPanel>
+      </HStack>
+    </>
   );
 };
-
-const ControlPanel = styled.header`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  column-gap: var(--a-spacing-4);
-  row-gap: var(--a-spacing-2);
-  padding: 0 var(--a-spacing-4);
-  background-color: var(--a-bg-default);
-  padding-top: var(--a-spacing-2);
-  padding-bottom: var(--a-spacing-2);
-  border-bottom: 1px solid var(--a-border-divider);
-`;
-
-const OppgavebehandlingInformation = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: inherit;
-  margin-left: auto;
-`;

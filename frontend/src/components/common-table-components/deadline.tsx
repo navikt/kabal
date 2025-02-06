@@ -5,7 +5,7 @@ import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOppgave } from '@app/types/oppgaver';
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { addDays, addYears, isPast, parseISO } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
@@ -59,10 +59,10 @@ const EditableDeadline = ({ frist, id }: IOppgave) => {
   );
 
   return (
-    <Container>
+    <HStack align="center" gap="2">
       {children}
       <EditButton isOpen={isOpen} setIsOpen={setIsOpen} />
-    </Container>
+    </HStack>
   );
 };
 
@@ -131,10 +131,4 @@ interface StyledDeadlineProps {
 
 const StyledDeadline = styled.time<StyledDeadlineProps>`
   color: ${({ $fristExceeded }) => ($fristExceeded ? 'var(--a-text-danger)' : 'var(--a-text-default)')};
-`;
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
 `;

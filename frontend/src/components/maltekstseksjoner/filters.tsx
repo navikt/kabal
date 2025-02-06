@@ -8,7 +8,7 @@ import {
 } from '@app/redux-api/maltekstseksjoner/mutations';
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { styled } from 'styled-components';
+import { HStack } from '@navikt/ds-react';
 
 interface Props {
   maltekst: IMaltekstseksjon;
@@ -27,7 +27,7 @@ export const Filters = ({ maltekst, query }: Props) => {
   });
 
   return (
-    <Container>
+    <HStack gap="2" gridColumn="filters">
       <TemplateSectionSelect
         selected={maltekst.templateSectionIdList}
         onChange={(templateSectionIdList) => updateTemplateSection({ id: maltekst.id, templateSectionIdList, query })}
@@ -44,12 +44,6 @@ export const Filters = ({ maltekst, query }: Props) => {
         selected={maltekst.utfallIdList}
         onChange={(utfallIdList) => updateUtfall({ id: maltekst.id, utfallIdList, query })}
       />
-    </Container>
+    </HStack>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  gap: var(--a-spacing-2);
-  grid-area: filters;
-`;

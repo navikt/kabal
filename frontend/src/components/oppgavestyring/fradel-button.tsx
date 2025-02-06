@@ -8,7 +8,7 @@ import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FradelReason, type IOppgave } from '@app/types/oppgaver';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { differenceInSeconds, parse } from 'date-fns';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
@@ -127,7 +127,7 @@ const Deassign = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave
   };
 
   return (
-    <Container ref={ref}>
+    <HStack position="relative" gridColumn="tildel" ref={ref}>
       <StyledButton
         variant="secondary"
         type="button"
@@ -156,16 +156,10 @@ const Deassign = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave
           hjemmelIdList={hjemmelIdList}
         />
       ) : null}
-    </Container>
+    </HStack>
   );
 };
 
 const StyledButton = styled(Button)`
   white-space: nowrap;
-`;
-
-const Container = styled.div`
-  grid-area: tildel;
-  display: flex;
-  position: relative;
 `;

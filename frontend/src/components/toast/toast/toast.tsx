@@ -2,11 +2,12 @@ import { SLIDE_OUT_KEYFRAMES, SLIDE_OUT_OPTIONS } from '@app/components/toast/to
 import { CLOSE_TOAST_EVENT_TYPE } from '@app/components/toast/toast/constants';
 import { isTimedToast } from '@app/components/toast/toast/helpers';
 import { Icon } from '@app/components/toast/toast/icon';
-import { BaseToastStyle, Container, Content, StyledCloseButton } from '@app/components/toast/toast/styled-components';
+import { BaseToastStyle, Container, StyledCloseButton } from '@app/components/toast/toast/styled-components';
 import { TimedToast } from '@app/components/toast/toast/timed';
 import type { Message } from '@app/components/toast/types';
 import { useAnimationsEnabled } from '@app/hooks/use-animations-enabled';
 import { XMarkIcon } from '@navikt/aksel-icons';
+import { VStack } from '@navikt/ds-react';
 import { memo, useCallback, useEffect, useRef } from 'react';
 
 export const Toast = memo(
@@ -46,7 +47,7 @@ export const Toast = memo(
         <StyledCloseButton variant="tertiary" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
         <Container>
           <Icon type={type} />
-          <Content>{content}</Content>
+          <VStack gap="2 0">{content}</VStack>
         </Container>
       </BaseToastStyle>
     );

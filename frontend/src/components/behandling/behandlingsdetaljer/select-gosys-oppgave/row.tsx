@@ -12,7 +12,7 @@ import { useSetGosysOppgaveMutation } from '@app/redux-api/oppgaver/mutations/se
 import { useSearchEnheterQuery } from '@app/redux-api/search';
 import type { INavEmployee } from '@app/types/bruker';
 import { GosysStatus, type ListGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Button, Table, Tag, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, Table, Tag, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 export interface Props {
@@ -104,9 +104,9 @@ const Selection = ({ gosysOppgave, selected, onSelect, isSelecting }: SelectionP
   if (selected) {
     return (
       <Tooltip content="Valgt">
-        <IconContainer aria-label="Valgt">
+        <HStack align="center" justify="center" aria-label="Valgt">
           <CheckmarkCircleFillIconColored aria-hidden />
-        </IconContainer>
+        </HStack>
       </Tooltip>
     );
   }
@@ -114,9 +114,9 @@ const Selection = ({ gosysOppgave, selected, onSelect, isSelecting }: SelectionP
   if (gosysOppgave.alreadyUsedBy !== null) {
     return (
       <Tooltip content="Tilknyttet annen behandling">
-        <IconContainer>
+        <HStack align="center" justify="center">
           <ExclamationmarkTriangleFillIconColored aria-hidden />
-        </IconContainer>
+        </HStack>
       </Tooltip>
     );
   }
@@ -131,12 +131,6 @@ const Selection = ({ gosysOppgave, selected, onSelect, isSelecting }: SelectionP
     </Button>
   );
 };
-
-const IconContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 export const Enhet = ({ enhet }: { enhet: string }) => {
   const { data: enheter } = useSearchEnheterQuery({});

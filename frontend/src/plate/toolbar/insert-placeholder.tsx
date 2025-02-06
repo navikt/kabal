@@ -7,11 +7,10 @@ import { useMyPlateEditorRef } from '@app/plate/types';
 import { isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
 import { PencilWritingIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, TextField } from '@navikt/ds-react';
+import { Box, Button, HStack, TextField } from '@navikt/ds-react';
 import { RangeApi } from '@udecode/plate';
 import { useEditorRef } from '@udecode/plate-core/react';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const InsertPlaceholder = () => {
   const editor = useEditorRef();
@@ -87,38 +86,27 @@ const PlaceholderText = ({ show, close, placeholder, setPlaceholder }: Placehold
   };
 
   return (
-    <StyledPlaceholderText>
-      <TextField
-        autoFocus
-        size="small"
-        label="Innfyllingsfelt"
-        placeholder="Innfyllingsfelt"
-        hideLabel
-        value={placeholder}
-        onChange={({ target }) => setPlaceholder(target.value)}
-        onKeyDown={onKeyDown}
-      />
-      <Button
-        size="small"
-        onClick={addPlaceholder}
-        icon={<PlusIcon aria-hidden />}
-        variant="primary"
-        title="Sett inn"
-      />
-      <Button size="small" onClick={close} icon={<XMarkIcon aria-hidden />} variant="danger" title="Avbryt" />
-    </StyledPlaceholderText>
+    <HStack asChild position="absolute" gap="1" minWidth="220px" right="0" style={{ top: '100%' }}>
+      <Box background="surface-subtle" padding="2" borderWidth="1" borderColor="border-strong" borderRadius="medium">
+        <TextField
+          autoFocus
+          size="small"
+          label="Innfyllingsfelt"
+          placeholder="Innfyllingsfelt"
+          hideLabel
+          value={placeholder}
+          onChange={({ target }) => setPlaceholder(target.value)}
+          onKeyDown={onKeyDown}
+        />
+        <Button
+          size="small"
+          onClick={addPlaceholder}
+          icon={<PlusIcon aria-hidden />}
+          variant="primary"
+          title="Sett inn"
+        />
+        <Button size="small" onClick={close} icon={<XMarkIcon aria-hidden />} variant="danger" title="Avbryt" />
+      </Box>
+    </HStack>
   );
 };
-
-const StyledPlaceholderText = styled.div`
-  position: absolute;
-  display: flex;
-  gap: var(--a-spacing-1);
-  background-color: var(--a-surface-subtle);
-  padding: var(--a-spacing-2);
-  border: 1px solid var(--a-border-strong);
-  border-radius: var(--a-border-radius-medium);
-  min-width: 220px;
-  top: 100%;
-  right: 0;
-`;

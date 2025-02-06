@@ -46,18 +46,3 @@ export const StyledRecipient = styled.div<{ $accent: string }>`
     margin-bottom: 0;
   }
 `;
-
-export const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--a-spacing-1);
-`;
-
-export const FieldLabel = styled.span`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-1);
-  min-height: var(--a-spacing-6);
-`;

@@ -10,7 +10,7 @@ import { getVarsletBehandlingstidEvent } from '@app/components/behandling/behand
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetHistoryQuery } from '@app/redux-api/oppgaver/queries/history';
 import { HistoryEventTypes, type IHistory, type IHistoryResponse } from '@app/types/oppgavebehandling/response';
-import { Heading, Select } from '@navikt/ds-react';
+import { Heading, Select, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { getFeilregistrertEvent } from './feilregistrert';
@@ -22,7 +22,7 @@ export const EventHistory = () => {
 
   if (isLoading || data === undefined) {
     return (
-      <Container>
+      <VStack gap="2" as="section">
         <Heading level="1" size="xsmall">
           Hendelseslogg
         </Heading>
@@ -32,7 +32,7 @@ export const EventHistory = () => {
         </Select>
 
         <EmptyText>Laster hendelser...</EmptyText>
-      </Container>
+      </VStack>
     );
   }
 
@@ -131,7 +131,7 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
   }, [nodeCategories]);
 
   return (
-    <Container>
+    <VStack gap="2" as="section">
       <Heading level="1" size="xsmall">
         Hendelseslogg ({totalCount})
       </Heading>
@@ -142,7 +142,7 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
         {filteredNodes}
         <MissingHistoryWarning />
       </List>
-    </Container>
+    </VStack>
   );
 };
 
@@ -166,12 +166,6 @@ const toNodes = <T extends IHistory>(events: T[], toNode: ToNodeFn<T>): NodesCat
 
   return renderedEvents;
 };
-
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-`;
 
 const List = styled.ul`
   list-style: none;

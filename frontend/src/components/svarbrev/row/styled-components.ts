@@ -24,23 +24,6 @@ export const StyledTableRow = styled(Table.Row)<StyledRowProps>`
   }
 `;
 
-export const Behandlingstid = styled.div`
-  display: flex;
-  align-items: center;
-  width: max-content;
-  gap: var(--a-spacing-1);
-`;
-
-export const Horizontal = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: var(--a-spacing-1);
-`;
-
-export const Buttons = styled(Horizontal)`
-  min-width: ${3 * 32 + 2 * 4}px;
-`;
-
 export const NoWrap = styled.span`
   white-space: nowrap;
 `;

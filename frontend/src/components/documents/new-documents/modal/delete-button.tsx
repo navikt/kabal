@@ -4,7 +4,7 @@ import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/doc
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { ModalContext } from './modal-context';
@@ -51,7 +51,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
 
   if (showConfirm) {
     return (
-      <Container>
+      <HStack justify="end" gap="0 4">
         <StyledButton
           variant="danger"
           size="small"
@@ -71,12 +71,12 @@ export const DeleteDocumentButton = ({ document }: Props) => {
         >
           Avbryt
         </StyledButton>
-      </Container>
+      </HStack>
     );
   }
 
   return (
-    <Container>
+    <HStack justify="end" gap="0 4">
       <StyledButton
         variant="danger"
         size="small"
@@ -86,16 +86,9 @@ export const DeleteDocumentButton = ({ document }: Props) => {
       >
         {text}
       </StyledButton>
-    </Container>
+    </HStack>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  column-gap: var(--a-spacing-4);
-`;
 
 const StyledButton = styled(Button)`
   display: flex;

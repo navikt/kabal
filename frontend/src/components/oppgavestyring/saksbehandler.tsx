@@ -3,14 +3,20 @@ import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import type { IOppgave } from '@app/types/oppgaver';
-import { ErrorMessage, Select } from '@navikt/ds-react';
+import { ErrorMessage, HStack, Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
 import { useTildel } from './use-tildel';
 
 const NOT_SELECTED = 'NOT_SELECTED';
 
-export const Saksbehandler = (oppgave: IOppgave) => {
+export const Saksbehandler = (oppgave: IOppgave) => (
+  <HStack align="center" justify="start" height="34px" width="100%" gridColumn="saksbehandler">
+    <SaksbehandlerContent {...oppgave} />
+  </HStack>
+);
+
+export const SaksbehandlerContent = (oppgave: IOppgave) => {
   const [access, isLoading] = useOppgaveActions(
     oppgave.tildeltSaksbehandlerident,
     oppgave.medunderskriver.employee?.navIdent ?? null,
@@ -23,38 +29,22 @@ export const Saksbehandler = (oppgave: IOppgave) => {
   );
 
   if (signatureIsLoading || isLoading) {
-    return (
-      <Container>
-        <LoadingCellContent variant="rectangle" />
-      </Container>
-    );
+    return <LoadingCellContent variant="rectangle" />;
   }
 
   const name = signature?.customLongName ?? signature?.longName ?? null;
 
   if (access.assignOthers) {
-    return (
-      <Container>
-        <SelectSaksbehandler {...oppgave} tildeltSaksbehandlerNavn={name} />
-      </Container>
-    );
+    return <SelectSaksbehandler {...oppgave} tildeltSaksbehandlerNavn={name} />;
   }
 
   if (oppgave.tildeltSaksbehandlerident === null) {
-    return (
-      <Container>
-        <StyledSaksbehandler>Ikke tildelt</StyledSaksbehandler>
-      </Container>
-    );
+    return <StyledSaksbehandler>Ikke tildelt</StyledSaksbehandler>;
   }
 
   const saksbehandler = `${name ?? 'Laster...'} (${oppgave.tildeltSaksbehandlerident})`;
 
-  return (
-    <Container>
-      <StyledSaksbehandler title={saksbehandler}>{saksbehandler}</StyledSaksbehandler>
-    </Container>
-  );
+  return <StyledSaksbehandler title={saksbehandler}>{saksbehandler}</StyledSaksbehandler>;
 };
 
 interface ISelectSaksbehandlerProps extends Pick<IOppgave, 'id' | 'typeId' | 'ytelseId' | 'tildeltSaksbehandlerident'> {
@@ -124,16 +114,6 @@ const SelectSaksbehandler = ({
     </StyledSelect>
   );
 };
-
-const Container = styled.div`
-  grid-area: saksbehandler;
-  vertical-align: middle;
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  height: 34px;
-  width: 100%;
-`;
 
 const StyledSelect = styled(Select)`
   width: 100%;

@@ -3,7 +3,7 @@ import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetMySignatureQuery, useSetAnonymousMutation, useSetCustomInfoMutation } from '@app/redux-api/bruker';
 import { type ISetCustomInfoParams, type ISignatureResponse, Role } from '@app/types/bruker';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { Checkbox, Loader, Radio, RadioGroup, TextField } from '@navikt/ds-react';
+import { Checkbox, HStack, Loader, Radio, RadioGroup, TextField } from '@navikt/ds-react';
 import { useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { SectionHeader, SettingsSection } from './styled-components';
@@ -67,12 +67,12 @@ const Anonymous = ({ saksbehandlerSignature }: Pick<SignatureProps, 'saksbehandl
   }
 
   return (
-    <StyledSignature>
+    <HStack align="end" gap="2" width="100%">
       <Checkbox checked={saksbehandlerSignature.anonymous} onChange={({ target }) => setAnonymous(target.checked)}>
         Signer anonymt med «Nav klageinstans»
       </Checkbox>
       <Status {...updateStatus} />
-    </StyledSignature>
+    </HStack>
   );
 };
 
@@ -92,7 +92,7 @@ const SignatureValue = ({ infoKey, saksbehandlerSignature, label, navIdent }: Si
   }, [value, savedValue, navIdent, infoKey, setInfo]);
 
   return (
-    <StyledSignature>
+    <HStack align="end" gap="2" width="100%">
       <StyledInput
         label={label}
         value={value}
@@ -100,7 +100,7 @@ const SignatureValue = ({ infoKey, saksbehandlerSignature, label, navIdent }: Si
         disabled={saksbehandlerSignature.anonymous}
       />
       <Status {...updateStatus} />
-    </StyledSignature>
+    </HStack>
   );
 };
 
@@ -138,25 +138,25 @@ interface StatusProps {
 const Status = ({ isError, isLoading, isSuccess }: StatusProps) => {
   if (isLoading) {
     return (
-      <StyledStatus>
+      <HStack align="center" marginBlock="0 3">
         <Loader size="xsmall" /> <StyledStatusText>Lagrer ...</StyledStatusText>
-      </StyledStatus>
+      </HStack>
     );
   }
 
   if (isSuccess) {
     return (
-      <StyledStatus>
+      <HStack align="center" marginBlock="0 3">
         <StyledSuccess /> <StyledStatusText>Lagret!</StyledStatusText>
-      </StyledStatus>
+      </HStack>
     );
   }
 
   if (isError) {
     return (
-      <StyledStatus>
+      <HStack align="center" marginBlock="0 3">
         <StyledError /> <StyledStatusText>Ikke lagret</StyledStatusText>
-      </StyledStatus>
+      </HStack>
     );
   }
 
@@ -173,13 +173,6 @@ const StyledRadioGroup = styled(RadioGroup)`
   margin-top: var(--a-spacing-4);
 `;
 
-const StyledSignature = styled.div`
-  display: flex;
-  align-items: flex-end;
-  width: 100%;
-  gap: var(--a-spacing-2);
-`;
-
 const StyledSuccess = styled(CheckmarkCircleIcon)`
   color: #006a23;
 `;
@@ -187,11 +180,7 @@ const StyledSuccess = styled(CheckmarkCircleIcon)`
 const StyledError = styled(XMarkOctagonIcon)`
   color: #ba3a26;
 `;
-const StyledStatus = styled.span`
-  margin-bottom: var(--a-spacing-3);
-  display: flex;
-  align-items: center;
-`;
+
 const StyledStatusText = styled.span`
   font-size: var(--a-spacing-3);
   margin-left: 3px;

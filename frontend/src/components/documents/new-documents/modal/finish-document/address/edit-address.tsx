@@ -1,17 +1,13 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Country } from '@app/components/documents/new-documents/modal/finish-document/address/country/country';
 import { AddressField } from '@app/components/documents/new-documents/modal/finish-document/address/field';
-import {
-  AddressState,
-  Container,
-  Row,
-} from '@app/components/documents/new-documents/modal/finish-document/address/layout';
+import { AddressState, Container } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import { Postnummer } from '@app/components/documents/new-documents/modal/finish-document/address/postnummer';
 import type { Addresses } from '@app/components/documents/new-documents/modal/finish-document/address/types';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import type { IAddress } from '@app/types/documents/recipients';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Button, ErrorSummary, Tooltip } from '@navikt/ds-react';
+import { Button, ErrorSummary, HStack, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';
 
 interface EditProps extends Addresses {
@@ -148,7 +144,7 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
 
   return (
     <Container $state={addressState} onKeyDown={onKeyDown}>
-      <Row>
+      <HStack align="center" gap="1">
         <AddressField
           id="adresselinje1"
           label="Adresselinje 1"
@@ -160,8 +156,8 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
           error={addresseLinje1Error}
           htmlSize={64}
         />
-      </Row>
-      <Row>
+      </HStack>
+      <HStack align="center" gap="1">
         <AddressField
           label="Adresselinje 2"
           value={adresselinje2}
@@ -169,8 +165,8 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
           onChange={setAdresselinje2}
           htmlSize={64}
         />
-      </Row>
-      <Row>
+      </HStack>
+      <HStack align="center" gap="1">
         <AddressField
           label="Adresselinje 3"
           value={adresselinje3}
@@ -178,10 +174,10 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
           onChange={setAdresselinje3}
           htmlSize={64}
         />
-      </Row>
-      <Row>
+      </HStack>
+      <HStack align="center" gap="1">
         <Country value={landkode ?? undefined} originalValue={address?.landkode} onChange={onCountryChange} />
-      </Row>
+      </HStack>
       {isNorway ? (
         <Postnummer
           value={postnummer}
@@ -202,7 +198,7 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
           ) : null}
         </ErrorSummary>
       ) : null}
-      <Row>
+      <HStack align="center" gap="1">
         <Button size="small" variant="primary" onClick={save}>
           Lagre
         </Button>
@@ -216,7 +212,7 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
             </Button>
           </Tooltip>
         ) : null}
-      </Row>
+      </HStack>
     </Container>
   );
 };

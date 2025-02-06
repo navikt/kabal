@@ -1,9 +1,9 @@
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
-import { Alert, Checkbox, Radio } from '@navikt/ds-react';
+import { Alert, Checkbox, HStack, Heading, Radio } from '@navikt/ds-react';
 import { Checkboxes } from './common/checkboxes';
 import { ContainerWithHelpText } from './common/container-with-helptext';
-import { RadioButtonsRow, StyledHeading, StyledRadioGroup } from './common/styled-components';
+import { StyledRadioGroup } from './common/styled-components';
 import { type InputParams, KvalitetsvurderingInput } from './common/types';
 import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
@@ -29,7 +29,9 @@ export const Vedtaket = () => {
 
   return (
     <section>
-      <StyledHeading size="small">{header}</StyledHeading>
+      <HStack asChild align="center" gap="2">
+        <Heading size="small">{header}</Heading>
+      </HStack>
 
       {vedtakAutomatiskVedtak === true ? (
         <Alert variant="info" size="small">
@@ -57,14 +59,14 @@ export const Vedtaket = () => {
         id="vedtaket"
         size="small"
       >
-        <RadioButtonsRow>
+        <HStack gap="4" width="100%">
           <Radio value={Radiovalg.BRA} disabled={!canEdit}>
             Bra/godt nok
           </Radio>
           <Radio value={Radiovalg.MANGELFULLT} disabled={!canEdit}>
             Mangelfullt
           </Radio>
-        </RadioButtonsRow>
+        </HStack>
       </StyledRadioGroup>
 
       <Checkboxes

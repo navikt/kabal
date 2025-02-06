@@ -23,7 +23,7 @@ import {
   type IMainDocument,
 } from '@app/types/documents/documents';
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button, Modal, Tag } from '@navikt/ds-react';
+import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { styled } from 'styled-components';
@@ -62,8 +62,8 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
   return (
     <>
       <ModalBody $isMainDocument={isMainDocument}>
-        <Left>
-          <Row>
+        <VStack gap="4" width="fit-content" flexShrink="0" overflowY="auto">
+          <HStack align="center" gap="2">
             <Tag variant="info" size="small">
               {isMainDocument ? DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId] : 'Vedlegg'}
             </Tag>
@@ -71,10 +71,10 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
               {icon}&nbsp;{DOCUMENT_TYPE_NAMES[document.type]}
             </Tag>
             <OpprettetTag document={document} />
-          </Row>
+          </HStack>
 
           {canEditDocument && document.type !== DocumentTypeEnum.JOURNALFOERT ? (
-            <BottomAlignedRow>
+            <HStack align="end" gap="2">
               <StyledSetFilename
                 tittel={document.tittel}
                 setFilename={(title) => {
@@ -92,7 +92,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
                 title="Endre dokumentnavn"
                 data-testid="document-title-edit-save-button"
               />
-            </BottomAlignedRow>
+            </HStack>
           ) : null}
 
           {canEditDocument && isMainDocument && !isRolQuestions ? (
@@ -117,7 +117,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
           {canEditDocument && !isNotat && isMainDocument ? <Receipients {...document} /> : null}
 
           <Errors updatePdf={noFlickerReload.onReload} />
-        </Left>
+        </VStack>
 
         {isMainDocument ? <PDFPreview isLoading={pdfLoading} noFlickerReload={noFlickerReload} /> : null}
       </ModalBody>
@@ -148,32 +148,12 @@ const OpprettetTag = ({ document }: { document: IMainDocument }) => {
   );
 };
 
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--a-spacing-2);
-`;
-
-const BottomAlignedRow = styled(Row)`
-  align-items: flex-end;
-`;
-
 const ModalBody = styled(Modal.Body)<{ $isMainDocument: boolean }>`
   display: flex;
   width: 100%;
   height: ${({ $isMainDocument }) => ($isMainDocument ? '80vh' : 'auto')};
   gap: var(--a-spacing-4);
   overflow: hidden;
-`;
-
-const Left = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
-  width: fit-content;
-  flex-shrink: 0;
-  overflow-y: auto;
 `;
 
 const StyledSetFilename = styled(SetFilename)`

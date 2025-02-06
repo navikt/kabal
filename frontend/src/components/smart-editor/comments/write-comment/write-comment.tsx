@@ -1,8 +1,7 @@
 import { MOD_KEY } from '@app/keys';
 import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Textarea, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, Textarea, Tooltip } from '@navikt/ds-react';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { StyledCommentButtonContainer } from '../styled-components';
 
 interface Props extends Omit<ButtonsProps, 'onSubmit' | 'disabled'> {
   close?: () => void;
@@ -82,7 +81,7 @@ interface ButtonsProps {
 }
 
 const Buttons = ({ primaryButtonLabel, close, isLoading, onSubmit, disabled }: ButtonsProps) => (
-  <StyledCommentButtonContainer>
+  <HStack justify="space-between" wrap gap="4" marginBlock="4 0" marginInline="0 5" width="100%">
     <Tooltip content={primaryButtonLabel} keys={[MOD_KEY, 'Enter']}>
       <Button
         disabled={disabled}
@@ -111,5 +110,5 @@ const Buttons = ({ primaryButtonLabel, close, isLoading, onSubmit, disabled }: B
         </Button>
       </Tooltip>
     )}
-  </StyledCommentButtonContainer>
+  </HStack>
 );

@@ -2,10 +2,10 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingTexts } from '@app/types/kaka-kvalitetsvurdering/v1';
-import { CheckboxGroup, Loader } from '@navikt/ds-react';
+import { CheckboxGroup, HStack, Loader } from '@navikt/ds-react';
 import { Fragment } from 'react';
 import { CommentField } from './comment-field';
-import { StyledCheckbox, StyledCheckboxContainer, StyledHelpText } from './styled-components';
+import { StyledCheckbox, StyledHelpText } from './styled-components';
 
 export interface Reason {
   id: keyof IKvalitetsvurderingBooleans;
@@ -48,7 +48,7 @@ export const Reasons = ({ error, show = true, legendText = '', reasons }: Reason
 
           return (
             <Fragment key={String(reason.id)}>
-              <StyledCheckboxContainer>
+              <HStack gap="2" width="100%" position="relative">
                 <StyledCheckbox
                   size="small"
                   value={reason.id}
@@ -63,7 +63,7 @@ export const Reasons = ({ error, show = true, legendText = '', reasons }: Reason
                   {reason.label}
                 </StyledCheckbox>
                 <HjelpetekstDisplay helpText={reason.helpText} />
-              </StyledCheckboxContainer>
+              </HStack>
               <CommentFieldDisplay textareaId={reason.textareaId} show={showTextArea} />
             </Fragment>
           );

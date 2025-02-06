@@ -7,7 +7,7 @@ import {
 } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocument, ISmartDocumentVersion } from '@app/types/documents/documents';
 import { ChevronRightIcon, ClockDashedIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Loader, Tag } from '@navikt/ds-react';
+import { Box, Button, HStack, Heading, Loader, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { styled } from 'styled-components';
@@ -24,16 +24,24 @@ export const History = ({ smartDocument, oppgaveId }: Props) => {
   if (versions === undefined) {
     return (
       <>
-        <ListContainer>
-          <ListHeader>
+        <VStack align="center" marginBlock="0 4" minWidth="300px" top="0" position="sticky">
+          <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="6 5">
             <Heading level="1" size="xsmall">
               Tidligere versjoner
             </Heading>
-          </ListHeader>
-          <StyledHistory>
-            <Loader />
-          </StyledHistory>
-        </ListContainer>
+          </HStack>
+          <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
+            <Box
+              as="ul"
+              shadow="xlarge"
+              borderRadius="medium"
+              background="surface-default"
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              <Loader />
+            </Box>
+          </VStack>
+        </VStack>
       </>
     );
   }
@@ -41,16 +49,24 @@ export const History = ({ smartDocument, oppgaveId }: Props) => {
   if (!hasVersions(versions)) {
     return (
       <>
-        <ListContainer>
-          <ListHeader>
+        <VStack align="center" marginBlock="0 4" minWidth="300px" top="0" position="sticky">
+          <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="6 5">
             <Heading level="1" size="xsmall">
               Tidligere versjoner
             </Heading>
-          </ListHeader>
-          <StyledHistory>
-            <li>Ingen versioner</li>
-          </StyledHistory>
-        </ListContainer>
+          </HStack>
+          <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
+            <Box
+              as="ul"
+              shadow="xlarge"
+              borderRadius="medium"
+              background="surface-default"
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              <li>Ingen versioner</li>
+            </Box>
+          </VStack>
+        </VStack>
       </>
     );
   }
@@ -76,23 +92,31 @@ const LoadedHistory = ({ versions, smartDocument, oppgaveId }: LoadedHistoryProp
 
   return (
     <>
-      <ListContainer>
-        <ListHeader>
+      <VStack align="center" marginBlock="0 4" minWidth="300px" top="0" position="sticky">
+        <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="6 5">
           <Heading level="1" size="xsmall">
             Tidligere versjoner
           </Heading>
-        </ListHeader>
-        <StyledHistory>
-          {versions.map((v) => (
-            <HistoryItem
-              key={v.version}
-              documentVersion={v}
-              setSelectedVersion={setSelectedVersion}
-              isActive={v.version === selectedVersion}
-            />
-          ))}
-        </StyledHistory>
-      </ListContainer>
+        </HStack>
+        <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
+          <Box
+            as="ul"
+            shadow="xlarge"
+            borderRadius="medium"
+            background="surface-default"
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            {versions.map((v) => (
+              <HistoryItem
+                key={v.version}
+                documentVersion={v}
+                setSelectedVersion={setSelectedVersion}
+                isActive={v.version === selectedVersion}
+              />
+            ))}
+          </Box>
+        </VStack>
+      </VStack>
 
       {selectedVersion === null || version === undefined ? null : (
         <HistoryEditor smartDocument={smartDocument} versionId={selectedVersion} version={version} />
@@ -129,46 +153,12 @@ const HistoryItem = ({ documentVersion, isActive, setSelectedVersion }: HistoryI
   );
 };
 
-const ListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: var(--a-spacing-4);
-  min-width: 300px;
-  position: sticky;
-  top: 0;
-`;
-
-const ListHeader = styled.div`
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  width: 100%;
-  padding-top: var(--a-spacing-6);
-  padding-bottom: var(--a-spacing-5);
-`;
-
 const StyledButton = styled(Button)`
   display: flex;
   justify-content: space-between;
   text-align: left;
   width: 100%;
   padding: var(--a-spacing-2);
-`;
-
-const StyledHistory = styled.ul`
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-  white-space: nowrap;
-  row-gap: var(--a-spacing-2);
-  background-color: var(--a-surface-default);
-  box-shadow: var(--a-shadow-xlarge);
-  border-radius: var(--a-border-radius-medium);
-  width: 100%;
 `;
 
 const StyledHistoryItemAuthor = styled.div`

@@ -1,7 +1,7 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useSetTilbakekrevingMutation } from '@app/redux-api/oppgaver/mutations/set-tilbakekreving';
-import { Alert, BodyShort, Checkbox, CheckboxGroup, Heading, HelpText } from '@navikt/ds-react';
+import { Alert, BodyShort, Checkbox, CheckboxGroup, HStack, Heading, HelpText } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 const TILBAKEKREVING_IDS = [
@@ -53,7 +53,7 @@ export const Tilbakekreving = () => {
   const showWarning = !tilbakekreving && TILBAKEKREVING_IDS.some((tid) => hjemmelIdSet.includes(tid));
 
   const legend = (
-    <LegendContainer>
+    <HStack align="center" gap="1">
       Velg om det gjelder en tilbakekrevingssak
       <HelpText>
         Du skal huke av for at det gjelder en tilbakekrevingssak uavhengig av ytelse eller hjemmel for tilbakekreving.
@@ -61,7 +61,7 @@ export const Tilbakekreving = () => {
         går videre til spørsmålet om tilbakekreving, eller om tilbakekrevingssaken for eksempel gjelder klage- eller
         ankefrist.
       </HelpText>
-    </LegendContainer>
+    </HStack>
   );
 
   return (
@@ -89,10 +89,4 @@ const Warning = () => (
 
 const Container = styled.div`
   margin-top: var(--a-spacing-4);
-`;
-
-const LegendContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-1);
 `;

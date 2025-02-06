@@ -20,8 +20,8 @@ export const FeilregistrerButton = () => {
         fagsystemId={oppgave.fagsystemId}
         tildeltSaksbehandlerident={oppgave.saksbehandler?.navIdent ?? null}
         variant="secondary"
-        $position="over"
-        $align="left"
+        position="over"
+        align="left"
         feilregistrert={null}
       />
     );

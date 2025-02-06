@@ -6,7 +6,7 @@ import { useLazyValidateQuery } from '@app/redux-api/oppgaver/queries/behandling
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ValidationType } from '@app/types/oppgavebehandling/params';
 import { FolderPlusIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort, Button, HStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -70,7 +70,7 @@ const Popup = ({ show, close, oppgaveId }: PopupProps) => {
         orientering til Trygderetten om den nye ankebehandlingen du har gjort i saken. Vær oppmerksom på at det kan ta
         noen minutter før ankebehandlingen er opprettet.
       </BodyShort>
-      <Buttons>
+      <HStack justify="space-between">
         <StyledButton
           loading={isLoading}
           icon={<FolderPlusIcon aria-hidden />}
@@ -83,18 +83,13 @@ const Popup = ({ show, close, oppgaveId }: PopupProps) => {
         <StyledButton variant="secondary" size="small" onClick={close}>
           Avbryt
         </StyledButton>
-      </Buttons>
+      </HStack>
     </PopupContainer>
   );
 };
 
 const Container = styled.div`
   position: relative;
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;
 
 const StyledButton = styled(Button)`

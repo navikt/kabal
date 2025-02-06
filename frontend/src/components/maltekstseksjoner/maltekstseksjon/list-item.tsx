@@ -7,7 +7,7 @@ import { type IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common
 import { isApiError } from '@app/types/errors';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { CircleBrokenIcon, LinkBrokenIcon, PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Button, HelpText, Skeleton, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, HelpText, Skeleton, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 import { DragAndDropContext } from '../drag-and-drop/drag-context';
@@ -85,11 +85,11 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
     return (
       <>
         {unlink}
-        <ErrorContainer>
+        <HStack align="center" gap="2" marginInline="2 0">
           <XMarkOctagonFillIconColored aria-hidden />
           Feil ved lasting
           {helpText}
-        </ErrorContainer>
+        </HStack>
       </>
     );
   }
@@ -133,34 +133,16 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
   );
 };
 
-const Container = styled.div`
-  height: 38px;
-`;
-
-const ErrorContainer = styled(Container)`
-  display: flex;
-  align-items: center;
-  margin-left: var(--a-spacing-2);
-  gap: var(--a-spacing-2);
-`;
-
 const HelpTextContainer = styled.div`
   max-width: 300px;
   white-space: normal;
 `;
 
-const SkeletonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
-  width: 100%;
-`;
-
 const SkeletonItem = () => (
-  <SkeletonContainer>
+  <HStack align="center" gap="2" width="100%">
     <Skeleton width={20} />
     <Skeleton style={{ flexGrow: 1 }} />
     <Skeleton width={85} />
     <Skeleton width={150} />
-  </SkeletonContainer>
+  </HStack>
 );

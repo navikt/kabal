@@ -7,8 +7,7 @@ import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { BodyShort, Label, Select, Skeleton } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { BodyShort, Label, Select, Skeleton, VStack } from '@navikt/ds-react';
 
 const ID = 'tildelt-saksbehandler';
 
@@ -28,7 +27,7 @@ export const Saksbehandler = () => {
   const { saksbehandler } = oppgave;
 
   return (
-    <Container>
+    <VStack gap="2" marginBlock="0 4">
       {showSelect ? (
         <SelectSaksbehandler oppgave={oppgave} />
       ) : (
@@ -39,7 +38,7 @@ export const Saksbehandler = () => {
           <BodyShort id={ID}>{saksbehandler === null ? 'Ikke tildelt' : saksbehandler.navn}</BodyShort>
         </>
       )}
-    </Container>
+    </VStack>
   );
 };
 
@@ -89,10 +88,3 @@ const SelectSaksbehandler = ({ oppgave: { saksbehandler, id, typeId, ytelseId } 
     </Select>
   );
 };
-
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-2);
-  margin-bottom: var(--a-spacing-4);
-`;

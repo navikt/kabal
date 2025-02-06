@@ -2,17 +2,13 @@ import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import { getInitalHandling } from '@app/components/documents/new-documents/modal/finish-document/functions';
 import { Options } from '@app/components/documents/new-documents/modal/finish-document/options';
-import {
-  StyledBrevmottaker,
-  StyledRecipientContent,
-} from '@app/components/documents/new-documents/modal/finish-document/styled-components';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { EditPart } from '@app/components/part/edit-part';
 import type { IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Label, Tag, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, Label, Tag, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 import type { IErrorProperty } from './is-send-error';
 
@@ -76,9 +72,9 @@ const Recipients = ({ mottakerList, removeMottakere, changeMottaker, sendErrors,
 
         return (
           <StyledRecipient key={part.id} as="li" $accent="var(--a-border-success)">
-            <StyledRecipientContent>
-              <StyledBrevmottaker>
-                <StyledRecipientInnerContent>
+            <HStack align="center" gap="1">
+              <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
+                <HStack align="center" gap="1" paddingBlock="1">
                   <Tooltip content="Fjern mottaker">
                     <Button
                       size="xsmall"
@@ -91,19 +87,19 @@ const Recipients = ({ mottakerList, removeMottakere, changeMottaker, sendErrors,
                   <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
                     {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
                   </Tooltip>
-                  <StyledName>
+                  <HStack align="center" gap="0 1">
                     <span>{part.name}</span>
                     <CopyIdButton id={part.id} size="xsmall" />
-                  </StyledName>
+                  </HStack>
                   <PartStatusList statusList={part.statusList} size="xsmall" />
                   {error === null ? null : (
                     <Tag variant="error" size="xsmall">
                       {error}
                     </Tag>
                   )}
-                </StyledRecipientInnerContent>
-              </StyledBrevmottaker>
-            </StyledRecipientContent>
+                </HStack>
+              </HStack>
+            </HStack>
             <Options
               part={part}
               handling={handling}
@@ -118,24 +114,9 @@ const Recipients = ({ mottakerList, removeMottakere, changeMottaker, sendErrors,
   );
 };
 
-const StyledRecipientInnerContent = styled.div`
-  display: flex;
-  align-items: center;
-  padding-top: var(--a-spacing-1);
-  padding-bottom: var(--a-spacing-1);
-  gap: var(--a-spacing-1);
-`;
-
 const StyledRecipientList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
   margin-top: var(--a-spacing-1);
-`;
-
-const StyledName = styled.span`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-1);
 `;

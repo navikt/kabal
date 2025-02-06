@@ -3,9 +3,8 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useGetGosysOppgaveQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { useSearchEnheterQuery } from '@app/redux-api/search';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { BodyShort, Button, Tag } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
 
 interface Props {
   id: string;
@@ -49,7 +48,7 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
 
   if (isLoading) {
     return (
-      <Container>
+      <HStack align="center" gap="1">
         <BodyShort size="small">
           <b>Foreslått enhet som skal motta oppgaven:</b>{' '}
           <Tag size="small" variant="alt1">
@@ -59,12 +58,12 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
         <Button size="small" variant="tertiary-neutral" loading>
           Valgt
         </Button>
-      </Container>
+      </HStack>
     );
   }
 
   return (
-    <Container>
+    <HStack align="center" gap="1">
       <BodyShort size="small">
         <b>Foreslått enhet som skal motta oppgaven:</b>{' '}
         <Tag size="small" variant="alt1">
@@ -80,12 +79,6 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
           Velg
         </Button>
       )}
-    </Container>
+    </HStack>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-1);
-`;

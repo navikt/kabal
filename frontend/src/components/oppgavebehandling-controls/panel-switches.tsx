@@ -6,14 +6,13 @@ import {
   useSmartEditorEnabled,
 } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
-import { Switch } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { HStack, Switch } from '@navikt/ds-react';
 
 export const PanelSwitches = () => {
   const { value: documentsEnabled = true, setValue: setDocumentsEnabled } = useDocumentsEnabled();
 
   return (
-    <Container data-testid="behandling-panel-switches">
+    <HStack gap="0 4" data-testid="behandling-panel-switches">
       <TogglePanelButton
         checked={documentsEnabled}
         togglePanel={() => {
@@ -27,15 +26,9 @@ export const PanelSwitches = () => {
       </TogglePanelButton>
       <Brevutforming />
       <Kvalitetsvurdering />
-    </Container>
+    </HStack>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  column-gap: inherit;
-`;
 
 const Brevutforming = () => {
   const { value: smartEditorEnabled = true, setValue: setSmartEditorEnabled } = useSmartEditorEnabled();

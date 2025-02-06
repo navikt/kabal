@@ -3,8 +3,8 @@ import { useUtfallOptions } from '@app/components/smart-editor-texts/hooks/use-o
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { TemplateSectionSelect, UtfallSelect } from '@app/components/smart-editor-texts/query-filter-selects';
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
+import { HStack } from '@navikt/ds-react';
 import { useSearchParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 export const Filters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,7 +24,7 @@ export const Filters = () => {
   };
 
   return (
-    <Container>
+    <HStack gap="0 2" paddingInline="1" paddingBlock="0 1" gridColumn="filters">
       <TemplateSectionSelect
         selected={templateSectionIdList ?? []}
         onChange={(value) => setFilter('templateSectionIdList', value)}
@@ -49,15 +49,6 @@ export const Filters = () => {
       >
         Utfallsett
       </UtfallSelect>
-    </Container>
+    </HStack>
   );
 };
-
-const Container = styled.div`
-  grid-area: filters;
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--a-spacing-2);
-  padding: var(--a-spacing-1);
-  padding-top: 0;
-`;

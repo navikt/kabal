@@ -1,9 +1,8 @@
 import { useRestrictedNumberSetting } from '@app/hooks/settings/helpers';
 import { PAGE_SIZE_OPTIONS, restrictPageSize } from '@app/hooks/use-oppgave-pagination';
 import { pushEvent } from '@app/observability';
-import { Label, ToggleGroup } from '@navikt/ds-react';
+import { HStack, Label, ToggleGroup } from '@navikt/ds-react';
 import { useId } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   settingKey: string;
@@ -16,7 +15,7 @@ export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Pro
   const { value = pageSize, setValue } = useRestrictedNumberSetting(settingKey, restrictPageSize);
 
   return (
-    <StyledRowsPerPage>
+    <HStack align="center" justify="end" gap="2">
       <Label id={id} size="small">
         Rader per side
       </Label>
@@ -37,13 +36,6 @@ export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Pro
           </ToggleGroup.Item>
         ))}
       </ToggleGroup>
-    </StyledRowsPerPage>
+    </HStack>
   );
 };
-
-const StyledRowsPerPage = styled.div`
-  display: flex;
-  gap: var(--a-spacing-2);
-  align-items: center;
-  justify-self: right;
-`;

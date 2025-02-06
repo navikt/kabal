@@ -2,7 +2,7 @@ import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/que
 import { GOD_FORMULERING_TYPE, REGELVERK_TYPE } from '@app/types/common-text-types';
 import type { TextType } from '@app/types/texts/common';
 import { DocPencilIcon, ExternalLinkIcon, EyeIcon, FileSearchIcon, UploadIcon } from '@navikt/aksel-icons';
-import { Button, Link, List, Loader, Modal, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, Link, List, Loader, Modal, Tooltip } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Preview } from './preview';
@@ -82,7 +82,7 @@ export const MaltekstseksjonReferences = ({
   const icon = type === MaltekstseksjonType.DRAFT ? <DocPencilIcon aria-hidden /> : <UploadIcon aria-hidden />;
 
   return (
-    <Container className={className}>
+    <HStack align="center" gap="1" position="relative" className={className}>
       <Tooltip content={tooltip}>
         <StyledButton
           size="xsmall"
@@ -116,18 +116,11 @@ export const MaltekstseksjonReferences = ({
           <Preview id={previewedReference} />
         </Modal.Body>
       </Modal>
-    </Container>
+    </HStack>
   );
 };
 
 const getTitle = (title: string) => (title.length > 0 ? title : '<Ingen tittel>');
-
-const ListItemContent = styled.div<{ $selected: boolean }>`
-  font-weight: ${({ $selected }) => ($selected ? 'bold' : 'normal')};
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-05);
-`;
 
 interface ListItemProps {
   id: string;
@@ -144,7 +137,7 @@ const ListItem = ({ id, onClick, selected }: ListItemProps) => {
 
   return (
     <List.Item>
-      <ListItemContent $selected={selected}>
+      <HStack align="center" gap="05" style={{ fontWeight: selected ? 'bold' : 'normal' }}>
         <Button
           onClick={onClick}
           variant="tertiary"
@@ -157,7 +150,7 @@ const ListItem = ({ id, onClick, selected }: ListItemProps) => {
         <StyledLink href={`/maltekstseksjoner/${id}`} target="_blank">
           <ExternalLinkIcon aria-hidden />
         </StyledLink>
-      </ListItemContent>
+      </HStack>
     </List.Item>
   );
 };
@@ -168,11 +161,4 @@ const StyledButton = styled(Button)`
 
 const StyledLink = styled(Link)`
   white-space: nowrap;
-`;
-
-const Container = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-1);
 `;

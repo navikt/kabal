@@ -9,9 +9,8 @@ import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottaker
 import { useFinishDocumentMutation, useSetMottakerListMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import type { IMainDocument, IMottaker } from '@app/types/documents/documents';
 import { PartStatusEnum } from '@app/types/oppgave-common';
-import { Alert } from '@navikt/ds-react';
+import { Alert, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo } from 'react';
-import { StyledFinishDocument } from './styled-components';
 
 export const Receipients = (document: IMainDocument) => {
   const [setMottakerList] = useSetMottakerListMutation();
@@ -147,7 +146,7 @@ export const Receipients = (document: IMainDocument) => {
     firstReachableRecipient !== undefined;
 
   return (
-    <StyledFinishDocument>
+    <VStack gap="4 0" position="relative" as="section">
       {onlyOneReachableRecipient ? (
         <SingleRecipient
           recipient={firstReachableRecipient}
@@ -188,6 +187,6 @@ export const Receipients = (document: IMainDocument) => {
           Brevet er ikke sendt til noen. Se feil over.
         </Alert>
       )}
-    </StyledFinishDocument>
+    </VStack>
   );
 };

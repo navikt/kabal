@@ -8,9 +8,8 @@ import type { IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
-import { Checkbox, CheckboxGroup, Tag, Tooltip } from '@navikt/ds-react';
+import { Checkbox, CheckboxGroup, HStack, Tag, Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
-import { StyledBrevmottaker, StyledRecipientContent } from './styled-components';
 
 interface RecipientsProps {
   recipients: IBrevmottaker[];
@@ -78,9 +77,9 @@ export const SuggestedRecipients = ({
 
         return (
           <StyledRecipient key={id} $accent={isChecked ? 'var(--a-border-success)' : 'var(--a-border-info)'}>
-            <StyledBrevmottaker>
+            <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
               <Checkbox size="small" value={id} data-testid="document-send-recipient" error={error !== null}>
-                <StyledRecipientContent>
+                <HStack align="center" gap="1">
                   <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
                     {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
                   </Tooltip>
@@ -93,9 +92,9 @@ export const SuggestedRecipients = ({
                       {error}
                     </Tag>
                   )}
-                </StyledRecipientContent>
+                </HStack>
               </Checkbox>
-            </StyledBrevmottaker>
+            </HStack>
             {isChecked ? (
               <Options
                 part={part}

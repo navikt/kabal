@@ -1,6 +1,5 @@
-import { Checkbox } from '@navikt/ds-react';
+import { Checkbox, HStack } from '@navikt/ds-react';
 import { useEffect, useRef } from 'react';
-import { styled } from 'styled-components';
 
 interface FilterProps<T extends string> {
   filterId: T;
@@ -37,19 +36,12 @@ export const Filter = <T extends string>({
       title={children}
       value={filterId}
     >
-      <CheckboxContent>
+      <HStack align="center" gap="0 1">
         <span title={children}>{children}</span>
         {tags}
-      </CheckboxContent>
+      </HStack>
     </Checkbox>
   );
 };
 
 Filter.displayName = 'Filter';
-
-const CheckboxContent = styled.div`
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--a-spacing-1);
-  align-items: center;
-`;

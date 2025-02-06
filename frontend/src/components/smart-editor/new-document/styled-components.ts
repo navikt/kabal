@@ -29,24 +29,7 @@ export const StyledNewDocument = styled.section`
   overflow-y: auto;
 `;
 
-export const StyledTemplates = styled.section`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-`;
-
 export const StyledHeader = styled.h2`
   margin: 0;
   margin-bottom: 1em;
-`;
-
-export const StyledLoadingOverlay = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.25);
-  top: 0;
 `;

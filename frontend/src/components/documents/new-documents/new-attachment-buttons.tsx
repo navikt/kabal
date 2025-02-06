@@ -12,10 +12,9 @@ import { Role } from '@app/types/bruker';
 import { DistribusjonsType, type IMainDocument } from '@app/types/documents/documents';
 import { Language } from '@app/types/texts/language';
 import { Chat2Icon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   document: IMainDocument;
@@ -39,7 +38,7 @@ export const NewAttachmentButtons = ({ document }: Props) => {
   }
 
   return (
-    <Container>
+    <HStack align="center" gap="0 2" marginInline="7 0">
       <NewRolAnswerDocumentButton document={document} />
 
       <UploadFileButton
@@ -51,7 +50,7 @@ export const NewAttachmentButtons = ({ document }: Props) => {
       >
         Last opp vedlegg
       </UploadFileButton>
-    </Container>
+    </HStack>
   );
 };
 
@@ -88,11 +87,3 @@ const NewRolAnswerDocumentButton = ({ document }: Props) => {
     </Button>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  column-gap: var(--a-spacing-2);
-  margin-left: var(--a-spacing-7);
-`;

@@ -12,7 +12,7 @@ import {
   type IMainDocument,
 } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Alert, Button, Heading, Radio, RadioGroup, Tag } from '@navikt/ds-react';
+import { Alert, Button, HStack, Heading, Radio, RadioGroup, Tag, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { styled } from 'styled-components';
 
@@ -68,7 +68,7 @@ export const SetParentDocument = ({ document, parentDocument, hasAttachments }: 
   const onChange = (id: string) => setParentFn(id === IS_PARENT_DOCUMENT ? null : id);
 
   return (
-    <VedleggSection>
+    <VStack align="start" gap="4 0">
       <Heading level="1" size="xsmall">
         Vedlegg eller hoveddokument
       </Heading>
@@ -93,7 +93,7 @@ export const SetParentDocument = ({ document, parentDocument, hasAttachments }: 
           <RadioOption key={id} value={id} type={type} text={tittel} distType={dokumentTypeId} />
         ))}
       </RadioGroup>
-    </VedleggSection>
+    </VStack>
   );
 };
 
@@ -148,33 +148,18 @@ interface RadioOptionProps {
 
 const RadioOption = ({ value, type, distType, text }: RadioOptionProps) => (
   <Radio key={value} value={value} title={text}>
-    <RadioContent>
+    <HStack align="center" justify="start" gap="0 1">
       <DocumentIcon type={type} />
       <RadioText>{text}</RadioText>
       <Tag size="xsmall" variant="info">
         {DISTRIBUTION_TYPE_NAMES[distType]}
       </Tag>
-    </RadioContent>
+    </HStack>
   </Radio>
 );
-
-const RadioContent = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  column-gap: var(--a-spacing-1);
-`;
 
 const RadioText = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-`;
-
-const VedleggSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-4);
-  align-items: flex-start;
 `;

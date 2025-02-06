@@ -7,6 +7,7 @@ import { MedunderskriverSignature, SaksbehandlerSignature } from '@app/plate/com
 import type { SignatureElement } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { HStack } from '@navikt/ds-react';
 import type { SetNodesOptions } from '@udecode/plate';
 import { useEditorReadOnly } from '@udecode/plate-core/react';
 import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
@@ -110,10 +111,10 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
           </Checkboxes>
         )}
 
-        <StyledSignatures>
+        <HStack justify="space-between" wrap={false}>
           <MedunderskriverSignature element={element} />
           <SaksbehandlerSignature element={element} />
-        </StyledSignatures>
+        </HStack>
         {children}
         {canManage ? (
           <SectionToolbar>
@@ -130,19 +131,11 @@ interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Checkbox = ({ children, ...props }: CheckboxProps) => (
-  <StyledLabel>
+  <HStack as="label" align="center" style={{ cursor: 'pointer', fontSize: '1em', gap: pxToEm(8) }}>
     <StyledCheckbox {...props} type="checkbox" />
     {children}
-  </StyledLabel>
+  </HStack>
 );
-
-const StyledLabel = styled.label`
-  font-size: 1em;
-  display: flex;
-  align-items: center;
-  gap: ${pxToEm(8)};
-  cursor: pointer;
-`;
 
 const StyledCheckbox = styled.input`
   width: 1.2em;
@@ -165,9 +158,4 @@ const Checkboxes = styled.div`
   margin-bottom: ${pxToEm(8)};
   flex-wrap: wrap;  
   justify-content: center;
-`;
-
-const StyledSignatures = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;

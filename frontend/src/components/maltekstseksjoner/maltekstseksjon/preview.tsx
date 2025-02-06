@@ -8,7 +8,7 @@ import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
 import { isApiError } from '@app/types/errors';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IRichText } from '@app/types/texts/responses';
-import { Alert, Loader } from '@navikt/ds-react';
+import { Alert, Loader, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -37,19 +37,19 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
 
   if (error !== null) {
     return (
-      <Section>
+      <VStack flexGrow="1" position="relative" as="section">
         <StyledAlert variant="error" size="small" inline>
           Feil ved lasting: {error}
         </StyledAlert>
-      </Section>
+      </VStack>
     );
   }
 
   if (texts.length === 0 && textIdList.length > 0) {
     return (
-      <Section>
+      <VStack flexGrow="1" position="relative" as="section">
         <Loader size="medium" title="Laster..." />
-      </Section>
+      </VStack>
     );
   }
 
@@ -65,7 +65,7 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
 
   if (isUpdating) {
     return (
-      <Section>
+      <VStack flexGrow="1" position="relative" as="section">
         <Overlay>
           <StyledLoader size="large" />
           <RedaktoerRichText
@@ -75,33 +75,26 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
             lang={SPELL_CHECK_LANGUAGES[lang]}
           />
         </Overlay>
-      </Section>
+      </VStack>
     );
   }
 
   if (savedContent.length === 0) {
     return (
-      <Section>
+      <VStack flexGrow="1" position="relative" as="section">
         <StyledAlert variant="warning" size="small">
           Ingen tekster funnet
         </StyledAlert>
-      </Section>
+      </VStack>
     );
   }
 
   return (
-    <Section>
+    <VStack flexGrow="1" position="relative" as="section">
       <RedaktoerRichText editorId={editorId} savedContent={savedContent} readOnly lang={SPELL_CHECK_LANGUAGES[lang]} />
-    </Section>
+    </VStack>
   );
 };
-
-const Section = styled.section`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-`;
 
 const StyledLoader = styled(Loader)`
   position: absolute;

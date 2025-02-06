@@ -1,9 +1,8 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Option } from '@app/components/documents/new-documents/modal/finish-document/address/country/option';
-import { FieldLabel, Row } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
 import type { CountryCode } from '@app/types/common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Button, Search, Tag, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, Search, Tag, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -109,12 +108,12 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props)
 
   return (
     <Container>
-      <Row>
+      <HStack align="center" gap="1">
         <Container>
           <Search
             size="small"
             label={
-              <FieldLabel>
+              <HStack align="center" gap="0 1" minHeight="6" as="span">
                 Land
                 <Tag size="xsmall" variant="info">
                   Påkrevd
@@ -140,7 +139,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props)
                     />
                   </Tooltip>
                 ) : null}
-              </FieldLabel>
+              </HStack>
             }
             hideLabel={false}
             value={search}
@@ -175,7 +174,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange }: Props)
             </DropdownList>
           ) : null}
         </Container>
-      </Row>
+      </HStack>
     </Container>
   );
 };

@@ -17,7 +17,7 @@ import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/
 import { Journalposttype } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { DateFilter } from './date-filter';
@@ -77,16 +77,16 @@ export const ExpandedHeaders = ({
       ) : null}
 
       {columns.DATO_OPPRETTET ? (
-        <DateContainer>
+        <HStack align="center" as="span">
           <SortButton column={ArchivedDocumentsColumn.DATO_OPPRETTET} sort={sort} setSort={setSort} />
           <DateFilter {...datoOpprettetSetting} label="Dato opprettet" gridArea={Fields.DatoOpprettet} />
-        </DateContainer>
+        </HStack>
       ) : null}
       {columns.DATO_REG_SENDT ? (
-        <DateContainer>
+        <HStack align="center" as="span">
           <SortButton column={ArchivedDocumentsColumn.DATO_REG_SENDT} sort={sort} setSort={setSort} />
           <DateFilter {...datoRegSendtSetting} label="Dato reg./sendt" gridArea={Fields.DatoRegSendt} />
-        </DateContainer>
+        </HStack>
       ) : null}
 
       {columns.AVSENDER_MOTTAKER ? (
@@ -166,11 +166,6 @@ const getSortIcon = (sort: ArchivedDocumentsSort, column: ArchivedDocumentsSortC
 
   return <ArrowsUpDownIcon aria-hidden />;
 };
-
-const DateContainer = styled.span`
-  display: flex;
-  align-items: center;
-`;
 
 const JOURNALPOSTTYPE_OPTIONS = [
   { label: 'Inngående', value: Journalposttype.INNGAAENDE },
