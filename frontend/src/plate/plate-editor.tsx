@@ -3,6 +3,7 @@ import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/elemen
 import type { FormattedText } from '@app/plate/types';
 import { NodeApi } from '@udecode/plate';
 import { PlateContent, type PlateContentProps, type PlateEditor, useEditorRef } from '@udecode/plate-core/react';
+import type { HTMLAttributes } from 'react';
 
 interface Props extends PlateContentProps {
   lang: SpellCheckLanguage;
@@ -26,9 +27,13 @@ export const KabalPlateEditor = ({ className, spellCheck = true, readOnly = fals
   );
 };
 
-const contentEditable = (editor: PlateEditor, isReadOnly: boolean, text: FormattedText): boolean => {
+const contentEditable = (
+  editor: PlateEditor,
+  isReadOnly: boolean,
+  text: FormattedText,
+): HTMLAttributes<HTMLSpanElement>['contentEditable'] => {
   if (isReadOnly) {
-    return false;
+    return undefined;
   }
 
   const path = editor.api.findPath(text);
