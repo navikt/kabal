@@ -14,12 +14,13 @@ export const ToggleButton = styled.button<Props>`
   border-radius: 0.25rem;
   transition: box-shadow 0.1s ease;
   cursor: pointer;
-  background-color: none;
   user-select: none;
   position: relative;
   font-size: var(--a-font-size-small);
   font-weight: 600;
   color: var(--a-text-default);
+  padding-left: var(--a-spacing-2);
+  padding-right: var(--a-spacing-2);
 
   display: flex;
   align-items: center;
