@@ -222,7 +222,11 @@ export const collaborationServer = Server.configure({
 
   onStoreDocument: async ({ context, document }) => {
     if (!isConnectionContext(context)) {
-      log.error({ msg: 'Tried to store document without context' });
+      log.error({
+        msg: 'Tried to store document without context',
+        data: { ...context, cookie: undefined, abortController: undefined, timeout: undefined },
+      });
+
       throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
