@@ -3,9 +3,9 @@ import { ApiClientEnum } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
 import { isNotNull } from '@app/functions/guards';
 import { parseTokenPayload } from '@app/helpers/token-parser';
-import { type Level, getLogger } from '@app/logger';
+import { type Level, getLogger, getSecureLogger } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
-import { setDocument } from '@app/plugins/crdt/api/set-document';
+import { getDocumentJson, setDocument } from '@app/plugins/crdt/api/set-document';
 import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
 import { hasOwn, isObject } from '@app/plugins/crdt/functions';
 import { getValkeyExtension } from '@app/plugins/crdt/valkey';
@@ -14,6 +14,7 @@ import { Server } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
 
 const log = getLogger('collaboration');
+const secureLog = getSecureLogger('collaboration');
 
 const logContext = (msg: string, context: ConnectionContext, level: Level = 'info') => {
   log[level]({
@@ -224,9 +225,12 @@ export const collaborationServer = Server.configure({
     if (!isConnectionContext(context)) {
       log.error({
         msg: 'Tried to store document without context',
-        data: {
-          context: JSON.stringify({ ...context, cookie: undefined, abortController: undefined, timeout: undefined }),
-        },
+        data: { context: JSON.stringify({ ...context, cookie: undefined, abortController: undefined }) },
+      });
+
+      secureLog.debug({
+        msg: 'Tried to store document without context',
+        data: { document: JSON.stringify(getDocumentJson(document)), cookie: context.cookie ?? 'undefined' },
       });
 
       throw getCloseEvent('INVALID_CONTEXT', 4401);

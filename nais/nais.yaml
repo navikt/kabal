@@ -87,3 +87,5 @@ spec:
     autoInstrumentation:
       enabled: true
       runtime: nodejs
+  secureLogs:
+    enabled: true
