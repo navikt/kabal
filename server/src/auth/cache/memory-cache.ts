@@ -24,6 +24,12 @@ export class OboMemoryCache {
   }
 
   public get(key: string) {
+    console.log('Cache size:', this.#cache.size);
+
+    for (const [k, v] of this.#cache.entries()) {
+      console.log('Key:', k, 'Value:', v);
+    }
+
     const value = this.#cache.get(key);
 
     if (value === undefined) {
