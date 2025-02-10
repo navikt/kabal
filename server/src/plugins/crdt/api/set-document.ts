@@ -10,13 +10,18 @@ import { XmlText, encodeStateAsUpdateV2 } from 'yjs';
 
 const log = getLogger('collaboration');
 
+export const getDocumentJson = (document: Document) => {
+  const sharedRoot = document.get('content', XmlText);
+
+  return yTextToSlateElement(sharedRoot).children;
+};
+
 export const setDocument = async (context: ConnectionContext, document: Document) => {
   const { behandlingId, dokumentId, navIdent, trace_id, span_id, tab_id, client_version } = context;
   const update = Buffer.from(encodeStateAsUpdateV2(document));
   const data = update.toString('base64url');
 
-  const sharedRoot = document.get('content', XmlText);
-  const nodes = yTextToSlateElement(sharedRoot);
+  const content = getDocumentJson(document);
 
   const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
     method: 'PATCH',
@@ -25,7 +30,7 @@ export const setDocument = async (context: ConnectionContext, document: Document
       authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
       traceparent: generateTraceparent(trace_id),
     },
-    body: JSON.stringify({ content: nodes.children, data }),
+    body: JSON.stringify({ content, data }),
   });
 
   if (!res.ok) {
