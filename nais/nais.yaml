@@ -66,11 +66,6 @@ spec:
       access: readwrite
     - instance: hocuspocus
       access: readwrite
-  redis:
-    - instance: obo-cache
-      access: readwrite
-    - instance: hocuspocus
-      access: readwrite
   liveness:
     path: /isAlive
     initialDelay: 3
