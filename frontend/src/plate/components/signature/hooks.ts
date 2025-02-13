@@ -6,7 +6,6 @@ import { MISSING_TITLE } from '@app/plate/components/signature/title';
 import type { ISignature, SignatureElement } from '@app/plate/types';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import type { ISignatureResponse } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
@@ -31,7 +30,6 @@ export const useMainSignature = (element: SignatureElement): ISignature | undefi
   const { templateId, creator } = useContext(SmartEditorContext);
 
   const isRolAnswers = templateId === TemplateIdEnum.ROL_ANSWERS;
-  const isRolSakstype = oppgave?.typeId === SaksTypeEnum.KLAGE || oppgave?.typeId === SaksTypeEnum.ANKE;
 
   const isFinished = useIsFullfoert();
   const isOverridden = element.overriddenSaksbehandler !== undefined;
@@ -44,7 +42,7 @@ export const useMainSignature = (element: SignatureElement): ISignature | undefi
   );
   const { data: overrideSignature } = useGetSignatureQuery(element.overriddenSaksbehandler ?? skipToken);
   const { data: rolSignature } = useGetSignatureQuery(
-    !isOverridden && isRolAnswers && isRolSakstype ? (oppgave.rol.employee?.navIdent ?? skipToken) : skipToken,
+    !isOverridden && isRolAnswers ? (oppgave?.rol.employee?.navIdent ?? skipToken) : skipToken,
   );
 
   const suffix = templateId !== TemplateIdEnum.ROL_ANSWERS && element.useSuffix ? 'saksbehandler' : undefined;

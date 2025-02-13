@@ -92,6 +92,7 @@ export interface IOppgavebehandlingBase {
   prosessfullmektig: IPart | null;
   raadfoertMedLege: string | null;
   resultat: Resultat;
+  rol: IMedunderskriverRol;
   sakenGjelder: ISakenGjelder;
   sattPaaVent: IVenteperiode | null;
   sendTilbakemelding: boolean | null;
@@ -114,12 +115,10 @@ export interface IOppgavebehandlingBase {
 
 export interface IKlagebehandling extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.KLAGE;
-  rol: IMedunderskriverRol;
 }
 
 export interface IAnkebehandling extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.ANKE;
-  rol: IMedunderskriverRol;
 }
 
 export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
@@ -130,13 +129,11 @@ export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
 
 export interface IBehandlingEtterTryderettenOpphevet extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET;
-  rol: IMedunderskriverRol;
   kjennelseMottatt: string | null;
 }
 
 export interface IOmgjøringskravbehandling extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.OMGJØRINGSKRAV;
-  rol: IMedunderskriverRol;
 }
 
 export type IOppgavebehandling =

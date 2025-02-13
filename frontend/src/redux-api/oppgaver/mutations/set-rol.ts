@@ -2,7 +2,6 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import type { ISetRolParams } from '@app/types/oppgavebehandling/params';
 import type { ISetRolResponse } from '@app/types/oppgavebehandling/response';
@@ -22,10 +21,6 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async ({ oppgaveId, employee }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            if (draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
-              return draft;
-            }
-
             if (draft.rol.employee?.navIdent === employee?.navIdent) {
               return draft;
             }
@@ -43,10 +38,6 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-              if (draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
-                return draft;
-              }
-
               draft.modified = data.modified;
               draft.rol.flowState = data.flowState;
               draft.rol.employee = data.employee;
@@ -55,10 +46,6 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              if (draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
-                return draft;
-              }
-
               draft.rol.flowState = data.flowState;
               draft.rol.employee = data.employee;
               draft.rol.returnertDate = null;

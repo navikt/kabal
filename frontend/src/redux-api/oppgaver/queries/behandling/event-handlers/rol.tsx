@@ -4,7 +4,6 @@ import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types'
 import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
 import type { RolEvent } from '@app/redux-api/server-sent-events/types';
 import { reduxStore } from '@app/redux/configure-store';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
@@ -18,7 +17,7 @@ export const handleRolEvent =
     let previousFlow = FlowState.NOT_SENT;
 
     updateCachedData((draft) => {
-      if (draft === undefined || draft.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+      if (draft === undefined) {
         return draft;
       }
 

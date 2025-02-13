@@ -18,7 +18,7 @@ export const useOppgaveActions = (
   tildeltSaksbehandler: string | null,
   medunderskriver: string | null,
   medunderskriverFlowState: FlowState | null,
-  rolFlowState: FlowState | null,
+  rolFlowState: FlowState,
   ytelse?: string,
 ): ReturnType => {
   const { user } = useContext(StaticDataContext);
@@ -27,7 +27,7 @@ export const useOppgaveActions = (
   return useMemo<ReturnType>(() => {
     const medunderskriverInvolved =
       medunderskriverFlowState !== null && medunderskriverFlowState !== FlowState.NOT_SENT;
-    const rolInvolved = rolFlowState !== null && rolFlowState !== FlowState.NOT_SENT;
+    const rolInvolved = rolFlowState !== FlowState.NOT_SENT;
     const isAssigned = tildeltSaksbehandler !== null;
     const isAssignedToSelf = isAssigned && user.navIdent === tildeltSaksbehandler;
 

@@ -1,18 +1,10 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { type IUserData, Role } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
-import type {
-  IAnkebehandling,
-  IKlagebehandling,
-  IOppgavebehandling,
-} from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { useContext, useMemo } from 'react';
-
-const supportsRol = (oppgave: IOppgavebehandling): oppgave is IKlagebehandling | IAnkebehandling =>
-  oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE;
 
 export const useCanManageDocument = (templateId: TemplateIdEnum): boolean => {
   const { data: oppgave, isSuccess } = useOppgave();
@@ -35,13 +27,10 @@ export const useCanEditDocument = (templateId: TemplateIdEnum): boolean => {
 };
 
 const isRol = (oppgave: IOppgavebehandling, user: IUserData): boolean =>
-  supportsRol(oppgave) && oppgave.rol.employee?.navIdent === user.navIdent;
+  oppgave.rol.employee?.navIdent === user.navIdent;
 
 const rolCanEdit = (oppgave: IOppgavebehandling, user: IUserData): boolean =>
-  supportsRol(oppgave) &&
-  isRol(oppgave, user) &&
-  oppgave.avsluttetAvSaksbehandlerDate === null &&
-  oppgave.rol?.flowState === FlowState.SENT;
+  isRol(oppgave, user) && oppgave.avsluttetAvSaksbehandlerDate === null && oppgave.rol?.flowState === FlowState.SENT;
 
 export const canEditDocument = (templateId: TemplateIdEnum, oppgave: IOppgavebehandling, user: IUserData): boolean => {
   if (templateId === TemplateIdEnum.ROL_ANSWERS) {
@@ -58,7 +47,7 @@ export const canEditDocument = (templateId: TemplateIdEnum, oppgave: IOppgavebeh
   const isMu = oppgave.medunderskriver?.employee?.navIdent === user.navIdent;
   const sentToMu = oppgave.medunderskriver.flowState === FlowState.SENT;
 
-  if (templateId === TemplateIdEnum.ROL_QUESTIONS && supportsRol(oppgave)) {
+  if (templateId === TemplateIdEnum.ROL_QUESTIONS) {
     if (isRol(oppgave, user)) {
       return false;
     }
