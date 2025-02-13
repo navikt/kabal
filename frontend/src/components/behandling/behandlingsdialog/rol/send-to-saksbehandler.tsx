@@ -2,7 +2,6 @@ import { StaticDataContext } from '@app/components/app/static-data-context';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
@@ -15,15 +14,10 @@ interface Props {
 
 export const SendToSaksbehandler = ({ oppgaveId, isSaksbehandler }: Props) => {
   const [setRolState, { isLoading }] = useSetRolStateMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
-  const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
+  const { data: oppgave, isSuccess } = useOppgave();
   const { user } = useContext(StaticDataContext);
 
-  if (
-    isSaksbehandler ||
-    oppgaveIsLoading ||
-    oppgave === undefined ||
-    (oppgave.typeId !== SaksTypeEnum.KLAGE && oppgave.typeId !== SaksTypeEnum.ANKE)
-  ) {
+  if (isSaksbehandler || !isSuccess) {
     return null;
   }
 

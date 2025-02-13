@@ -12,8 +12,7 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import type { IAnkebehandling, IKlagebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { styled } from 'styled-components';
 import { RolReadOnly } from './read-only';
 
@@ -24,15 +23,11 @@ export const Rol = () => {
     return SKELETON;
   }
 
-  if (oppgave.typeId !== SaksTypeEnum.KLAGE && oppgave.typeId !== SaksTypeEnum.ANKE) {
-    return null;
-  }
-
   return <RolInternal oppgave={oppgave} />;
 };
 
 interface Props {
-  oppgave: IKlagebehandling | IAnkebehandling;
+  oppgave: IOppgavebehandling;
 }
 
 const RolInternal = ({ oppgave }: Props) => {

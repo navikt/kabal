@@ -24,7 +24,6 @@ import { RelevantOppgaver } from '@app/components/relevant-oppgaver/relevant-opp
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgave } from '@app/types/oppgaver';
 import { Table } from '@navikt/ds-react';
@@ -129,9 +128,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
           <Table.DataCell key={key}>
             <FlowStateContainer>
               <MedudunderskriverFlowStateLabel typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
-              {oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE ? (
-                <RolFlowStateLabel rol={oppgave.rol} />
-              ) : null}
+              <RolFlowStateLabel rol={oppgave.rol} />
             </FlowStateContainer>
           </Table.DataCell>
         );

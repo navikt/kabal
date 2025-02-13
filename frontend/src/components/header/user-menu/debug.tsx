@@ -6,7 +6,6 @@ import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents'
 import { useUtfall, useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 import { user } from '@app/static-data/static-data';
 import type { INavEmployee } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { BugIcon } from '@navikt/aksel-icons';
 import { Button, Dropdown, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -61,7 +60,7 @@ export const BehandlingDebug = () => {
     }
 
     const medunderskriver = oppgave.medunderskriver.employee;
-    const rol = oppgave.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN ? oppgave.rol : null;
+    const { rol } = oppgave;
 
     const body = JSON.stringify(
       {

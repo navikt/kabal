@@ -13,7 +13,6 @@ import {
   type ISmartDocument,
   type JournalfoertDokument,
 } from '@app/types/documents/documents';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Alert } from '@navikt/ds-react';
@@ -67,12 +66,6 @@ const getMustWaitForRolToReturn = (
   document: IMainDocument,
   containsRolAttachments: boolean,
 ) => {
-  const isOppgaveTypeRelevantToRol = oppgave.typeId === SaksTypeEnum.KLAGE || oppgave.typeId === SaksTypeEnum.ANKE;
-
-  if (!isOppgaveTypeRelevantToRol) {
-    return false;
-  }
-
   if (getIsRolQuestions(document)) {
     return !(containsRolAttachments && oppgave.rol.flowState === FlowState.RETURNED);
   }
