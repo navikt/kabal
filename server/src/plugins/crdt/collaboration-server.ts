@@ -134,8 +134,8 @@ const createRefreshTimeout = async (context: ConnectionContext, expiresIn: numbe
 };
 
 export const collaborationServer = Server.configure({
-  debounce: 3_000,
-  maxDebounce: 15_000,
+  debounce: 500,
+  maxDebounce: 500,
 
   onConnect: async ({ context }) => {
     if (!isConnectionContext(context)) {
@@ -221,11 +221,23 @@ export const collaborationServer = Server.configure({
     logContext('Loaded state/update applied', context, 'debug');
   },
 
-  onStoreDocument: async ({ context, document }) => {
+  onChange: (args) => {
+    log.debug({ msg: 'Document changed', data: JSON.stringify(args) });
+    return Promise.resolve();
+  },
+
+  onStoreDocument: async ({ context, document, ...rest }) => {
     if (!isConnectionContext(context)) {
       log.error({
         msg: 'Tried to store document without context',
-        data: { context: JSON.stringify({ ...context, cookie: undefined, abortController: undefined }) },
+        data: {
+          context: JSON.stringify({
+            ...context,
+            cookie: undefined,
+            abortController: undefined,
+            rest: JSON.stringify(rest),
+          }),
+        },
       });
 
       secureLog.debug({
