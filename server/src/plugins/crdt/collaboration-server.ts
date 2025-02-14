@@ -221,26 +221,15 @@ export const collaborationServer = Server.configure({
     logContext('Loaded state/update applied', context, 'debug');
   },
 
-  onStoreDocument: async ({
-    context,
-    document,
-    clientsCount,
-    documentName,
-    requestHeaders,
-    requestParameters,
-    socketId,
-  }) => {
+  onStoreDocument: async ({ context, document }) => {
     if (!isConnectionContext(context)) {
+      log.error({ msg: 'Tried to store document without context' });
+
       secureLog.debug({
         msg: 'Tried to store document without context',
         data: {
           document: JSON.stringify(getDocumentJson(document)),
           context: JSON.stringify({ ...context, abortController: undefined }),
-          clientsCount,
-          documentName,
-          requestHeaders: JSON.stringify(requestHeaders),
-          requestParameters: requestParameters.toString(),
-          socketId,
         },
       });
 
