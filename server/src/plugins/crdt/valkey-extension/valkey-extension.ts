@@ -26,7 +26,8 @@ export class ValkeyExtension implements Extension {
   readonly #identifier = `host-${randomUUID()}`;
   readonly #disconnectDelay = 1_000;
   readonly #valkeyConnectionRetryDelay = 100;
-  readonly #valkeyTransactionOrigin = '__hocuspocus__valkey__origin__';
+  // Referenced here: https://github.com/ueberdosis/hocuspocus/blob/main/packages/server/src/Hocuspocus.ts#L412
+  readonly #valkeyTransactionOrigin = '__hocuspocus__redis__origin__';
   readonly #pub: ValkeyClientType;
   readonly #sub: ValkeyClientType;
   readonly #messagePrefix: Buffer;
