@@ -32,17 +32,24 @@ export const useOppgavePagination = (
   const { value: pageSize } = useRestrictedNumberSetting(settingsKey, restrictPageSize);
 
   const total = allOppgaver.length;
-  const from = (page - 1) * pageSize;
 
-  const oppgaver = useMemo(() => allOppgaver.slice(from, from + pageSize), [pageSize, from, allOppgaver]);
+  const offsetFromEnd = total % pageSize;
+  const maxFrom = total - (offsetFromEnd === 0 ? pageSize : offsetFromEnd);
+  const from = Math.min((page - 1) * pageSize, maxFrom);
+
+  const to = Math.min(total, from + pageSize);
+
+  const oppgaver = useMemo(() => allOppgaver.slice(from, to), [allOppgaver, from, to]);
+
+  const maxPage = Math.ceil(total / pageSize);
 
   return {
     oppgaver,
     from: from + 1,
-    to: Math.min(total, from + pageSize),
+    to,
     total,
     pageSize,
-    page,
+    page: Math.min(page, maxPage),
     setPage,
   };
 };
