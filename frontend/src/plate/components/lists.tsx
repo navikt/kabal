@@ -18,6 +18,7 @@ const OrderedListStyle = styled.ol`
   padding-left: 1em;
   margin: 0;
   margin-top: 1em;
+  list-style-type: decimal;
 `;
 
 export const UnorderedList = ({ children, element, ...props }: PlateElementProps<BulletListElement>) => (
@@ -35,6 +36,7 @@ const UnorderedListStyle = styled.ul`
   padding-left: 1em;
   margin: 0;
   margin-top: 1em;
+  list-style-type: disc;
 `;
 
 export const ListItem = ({ children, ...props }: PlateElementProps<ListItemElement>) => (
