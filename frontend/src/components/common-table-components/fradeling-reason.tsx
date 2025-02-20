@@ -6,7 +6,6 @@ import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Popover } from '@navikt/ds-react';
 import { useContext, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   oppgaveId: string;
@@ -39,25 +38,21 @@ export const FradelingReason = ({ oppgaveId }: Props) => {
 
       <Popover open={openState} onClose={() => setOpenState(false)} anchorEl={buttonRef.current}>
         <Popover.Content>
-          <Line>
+          <p className="m-0">
             {user.navIdent === data.actor?.navIdent ? 'Du' : formatEmployeeNameAndIdFallback(data.actor, 'Ukjent')} la
-            saken tilbake i felles kø <Time dateTime={data.timestamp}>{isoDateTimeToPretty(data.timestamp)}</Time>.
-          </Line>
+            saken tilbake i felles kø{' '}
+            <time className="font-normal" dateTime={data.timestamp}>
+              {isoDateTimeToPretty(data.timestamp)}
+            </time>
+            .
+          </p>
           {data.event.fradelingReasonId === null || data.event.fradelingReasonId === FradelReason.LEDER ? null : (
-            <Line>
+            <p className="m-0">
               Årsak: <b>{FradelReasonText[data.event.fradelingReasonId]}</b>
-            </Line>
+            </p>
           )}
         </Popover.Content>
       </Popover>
     </>
   );
 };
-
-const Time = styled.time`
-  font-weight: normal;
-`;
-
-const Line = styled.p`
-  margin: 0;
-`;

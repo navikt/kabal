@@ -4,7 +4,6 @@ import { pushEvent } from '@app/observability';
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useCallback } from 'react';
-import { styled } from 'styled-components';
 
 export const ToggleExpandedButton = () => {
   const [isExpanded, setIsExpanded] = useIsExpanded();
@@ -19,7 +18,8 @@ export const ToggleExpandedButton = () => {
   const Icon = isExpanded ? ChevronLeftIcon : ChevronRightIcon;
 
   return (
-    <StyledButton
+    <Button
+      className="ml-auto"
       variant="secondary"
       size="small"
       onClick={onToggle}
@@ -29,7 +29,3 @@ export const ToggleExpandedButton = () => {
     />
   );
 };
-
-const StyledButton = styled(Button)`
-  margin-left: auto;
-`;

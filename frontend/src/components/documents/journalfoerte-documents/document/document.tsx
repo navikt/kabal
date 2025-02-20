@@ -13,7 +13,6 @@ import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useRef } from 'react';
-import { styled } from 'styled-components';
 import { DocumentTitle } from './shared/document-title';
 import { IncludeDocument } from './shared/include-document';
 
@@ -105,12 +104,13 @@ export const Document = ({
         harTilgangTilArkivvariant={harTilgangTilArkivvariant}
       />
 
-      <ExpandButton
+      <Button
         variant="tertiary"
         size="small"
         icon={<Icon aria-hidden />}
         onClick={toggleShowVedlegg}
         aria-label={showVedlegg ? 'Skjul vedlegg' : 'Vis vedlegg'}
+        style={{ gridArea: Fields.ToggleVedlegg }}
       />
 
       <DocumentTitle
@@ -136,7 +136,3 @@ export const Document = ({
 };
 
 Document.displayName = 'Document';
-
-const ExpandButton = styled(Button)`
-  grid-area: ${Fields.ToggleVedlegg};
-`;

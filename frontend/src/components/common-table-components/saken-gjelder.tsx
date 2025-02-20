@@ -2,7 +2,6 @@ import { LoadingCellContent } from '@app/components/common-table-components/load
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { useGetSakenGjelderQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   oppgaveId: string;
@@ -19,19 +18,10 @@ export const SakenGjelderName = ({ oppgaveId }: Props) => {
 
   return (
     <Tooltip content={name}>
-      <Name>{name}</Name>
+      <span className="inline-block min-w-full max-w-20 overflow-hidden text-ellipsis whitespace-nowrap">{name}</span>
     </Tooltip>
   );
 };
-
-const Name = styled.span`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
-  max-width: 20em;
-  min-width: 100%;
-`;
 
 export const SakenGjelderFnr = ({ oppgaveId }: Props) => {
   const { data, isLoading } = useGetSakenGjelderQuery(oppgaveId);

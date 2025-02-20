@@ -8,14 +8,13 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { differenceInDays, parseISO } from 'date-fns';
 import { useState } from 'react';
-import { styled } from 'styled-components';
 
 export const Age = (oppgave: IOppgave) => {
   if (oppgave.isAvsluttetAvSaksbehandler) {
     return (
-      <StyledAge>
+      <span className="overflow-hidden text-ellipsis whitespace-nowrap">
         {oppgave.ageKA} {oppgave.ageKA === 1 ? 'dag' : 'dager'}
-      </StyledAge>
+      </span>
     );
   }
 
@@ -31,13 +30,13 @@ const EditableAge = ({ ageKA, mottatt, id }: IOppgave) => {
   const children = isOpen ? (
     <EditAge mottattDate={mottatt} oppgaveId={id} closeCalendar={closeCalendar} setUserAge={setUserAge} />
   ) : (
-    <StyledAge>
+    <span className="overflow-hidden text-ellipsis whitespace-nowrap">
       {userAge} {userAge === 1 ? 'dag' : 'dager'}
-    </StyledAge>
+    </span>
   );
 
   return (
-    <HStack align="center" gap="2">
+    <HStack align="center" gap="2" wrap={false}>
       {children}
       <EditButton isOpen={isOpen} setIsOpen={setIsOpen} />
     </HStack>
@@ -102,9 +101,3 @@ const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge }: EditAgeP
     />
   );
 };
-
-const StyledAge = styled.span`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;

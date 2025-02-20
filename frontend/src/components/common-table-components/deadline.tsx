@@ -8,7 +8,6 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { addDays, addYears, isPast, parseISO } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { DatePicker } from '../date-picker/date-picker';
 
 export const Deadline = (oppgave: IOppgave) => {
@@ -31,9 +30,9 @@ export const ReadOnlyDeadline = ({ frist }: ReadOnlyDeadlineProps) => {
   const fristExceeded = useMemo(() => (frist === null ? false : isPast(addDays(parseISO(frist), 1))), [frist]);
 
   return (
-    <StyledDeadline $fristExceeded={fristExceeded} dateTime={frist ?? ''}>
+    <time className={fristExceeded ? 'text-(--a-text-danger)' : 'text-(--a-text-default)'} dateTime={frist ?? ''}>
       {isoDateToPretty(frist) ?? 'Ikke satt'}
-    </StyledDeadline>
+    </time>
   );
 };
 
@@ -53,13 +52,13 @@ const EditableDeadline = ({ frist, id }: IOppgave) => {
   const children = isOpen ? (
     <EditDeadline frist={frist} oppgaveId={id} closeCalendar={closeCalendar} setUserFrist={setUserFrist} />
   ) : (
-    <StyledDeadline $fristExceeded={fristExceeded} dateTime={userFrist ?? ''}>
+    <time className={fristExceeded ? 'text-(--a-text-danger)' : 'text-(--a-text-default)'} dateTime={userFrist ?? ''}>
       {isoDateToPretty(userFrist) ?? 'Ikke satt'}
-    </StyledDeadline>
+    </time>
   );
 
   return (
-    <HStack align="center" gap="2">
+    <HStack align="center" gap="2" wrap={false}>
       {children}
       <EditButton isOpen={isOpen} setIsOpen={setIsOpen} />
     </HStack>
@@ -124,11 +123,3 @@ const EditDeadline = ({ frist, oppgaveId, closeCalendar, setUserFrist }: EditDea
     />
   );
 };
-
-interface StyledDeadlineProps {
-  $fristExceeded: boolean;
-}
-
-const StyledDeadline = styled.time<StyledDeadlineProps>`
-  color: ${({ $fristExceeded }) => ($fristExceeded ? 'var(--a-text-danger)' : 'var(--a-text-default)')};
-`;

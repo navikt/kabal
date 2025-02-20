@@ -116,12 +116,13 @@ export const Attachment = memo(
           harTilgangTilArkivvariant={harTilgangTilArkivvariant}
         />
 
-        <ExpandButton
+        <Button
           variant="tertiary"
           size="small"
           icon={<Icon aria-hidden />}
           onClick={toggleShowVedlegg}
           aria-label={showVedlegg ? 'Skjul vedlegg' : 'Vis vedlegg'}
+          style={{ gridArea: Fields.ToggleVedlegg }}
         />
 
         <DocumentTitle
@@ -166,8 +167,4 @@ const StyledVedlegg = styled.article<{ $selected: boolean }>`
   &:hover {
     background-color: ${({ $selected }) => getHoverBackgroundColor($selected)};
   }
-`;
-
-const ExpandButton = styled(Button)`
-  grid-area: ${Fields.ToggleVedlegg};
 `;

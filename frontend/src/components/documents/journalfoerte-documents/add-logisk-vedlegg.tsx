@@ -4,7 +4,6 @@ import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useCallback, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   hasVedlegg: boolean;
@@ -49,13 +48,9 @@ export const AddLogiskVedlegg = ({ hasVedlegg, index, top, dokumentInfoId, logis
           onClick={() => setIsAdding(true)}
           ref={ref}
         >
-          <ButtonText>Legg til logisk vedlegg</ButtonText>
+          <span className="font-normal">Legg til logisk vedlegg</span>
         </Button>
       )}
     </LogiskeVedleggListItemStyle>
   );
 };
-
-const ButtonText = styled.span`
-  font-weight: normal;
-`;

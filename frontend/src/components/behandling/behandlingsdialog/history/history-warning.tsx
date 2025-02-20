@@ -1,7 +1,6 @@
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { Alert } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 const START_DATE = '2023-12-08T15:30:00.00000';
 
@@ -25,8 +24,8 @@ interface TimeProps {
   dateTime: string;
 }
 
-const Time = ({ dateTime }: TimeProps) => <StyledTime dateTime={dateTime}>{isoDateTimeToPretty(dateTime)}</StyledTime>;
-
-const StyledTime = styled.time`
-  font-weight: bold;
-`;
+const Time = ({ dateTime }: TimeProps) => (
+  <time className="font-bold" dateTime={dateTime}>
+    {isoDateTimeToPretty(dateTime)}
+  </time>
+);

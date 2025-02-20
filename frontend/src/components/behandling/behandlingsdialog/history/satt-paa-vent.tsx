@@ -8,7 +8,6 @@ import {
 import { PauseIcon, PlayIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
 import { useId } from 'react';
-import { styled } from 'styled-components';
 import { Line, Reason, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
 
@@ -36,7 +35,10 @@ const Start = ({ actor, event, timestamp }: StartProps) => {
     <HistoryEvent tag="Venteperiode" type={HistoryEventTypes.SATT_PAA_VENT} timestamp={timestamp} icon={PauseIcon}>
       <Line>
         {employeeName(actor)} satte behandlingen på vent til{' '}
-        <StyledTime dateTime={event.to}>{isoDateToPretty(event.to)}</StyledTime>.
+        <time className="font-bold" dateTime={event.to}>
+          {isoDateToPretty(event.to)}
+        </time>
+        .
       </Line>
       <Label size="small" htmlFor={id}>
         Årsak
@@ -56,7 +58,3 @@ const Stop = ({ actor, timestamp }: StopProps) => (
     <Line>{employeeName(actor)} avsluttet venteperioden for behandlingen.</Line>
   </HistoryEvent>
 );
-
-const StyledTime = styled.time`
-  font-weight: bold;
-`;

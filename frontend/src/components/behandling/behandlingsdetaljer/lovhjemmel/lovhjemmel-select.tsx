@@ -7,7 +7,6 @@ import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { StyledLovhjemmelSelect } from './styled-components';
 
 type Direction = 'down' | 'right';
@@ -65,16 +64,17 @@ export const LovhjemmelSelect = ({
   return (
     <>
       <StyledLovhjemmelSelect ref={ref} data-testid="lovhjemmel-select" data-selected={selected.join(',')}>
-        <StyledButton
+        <Button
           size="small"
           variant="secondary"
           onClick={toggleOpen}
           disabled={disabled}
           data-testid="lovhjemmel-button"
           icon={<MagnifyingGlassIcon aria-hidden />}
+          className="w-full"
         >
           {children}
-        </StyledButton>
+        </Button>
 
         {open ? (
           <GroupedFilterList
@@ -92,7 +92,3 @@ export const LovhjemmelSelect = ({
     </>
   );
 };
-
-const StyledButton = styled(Button)`
-  width: 100%;
-`;

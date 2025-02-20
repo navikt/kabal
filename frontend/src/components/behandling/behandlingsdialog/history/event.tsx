@@ -2,7 +2,6 @@ import { HISTORY_COLORS } from '@app/components/behandling/behandlingsdialog/his
 import { isoDateTimeToPretty } from '@app/domain/date';
 import type { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
 import { Box, HStack, VStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   type: HistoryEventTypes;
@@ -14,57 +13,35 @@ interface Props {
 }
 
 export const HistoryEvent = ({ type, tag, icon: Icon, color, timestamp, children }: Props) => {
-  const defaultColor = HISTORY_COLORS[type];
+  const accent = color ?? HISTORY_COLORS[type];
 
   return (
-    <Container $accent={color ?? defaultColor}>
-      <HStack align="start" justify="space-between" marginBlock="0 2">
-        <HStack asChild align="center" gap="1" style={{ backgroundColor: `var(${color ?? defaultColor})` }}>
-          <Box as="span" borderRadius="0 0 medium 0" paddingInline="0 2" paddingBlock="0 space-1">
-            <Icon aria-hidden />
-            {tag}
-          </Box>
+    <VStack asChild>
+      <Box
+        as="li"
+        borderRadius="medium"
+        borderWidth="1"
+        paddingBlock="0 2"
+        overflow="hidden"
+        position="relative"
+        className="pl-[3px] before:absolute before:top-0 before:bottom-0 before:left-0 before:rounded-tl-lg before:rounded-bl-lg before:border-inherit before:border-l-3"
+        style={{ borderColor: `var(${accent})` }}
+      >
+        <HStack align="start" justify="space-between" marginBlock="0 2">
+          <HStack asChild align="center" gap="1" style={{ backgroundColor: `var(${accent})` }}>
+            <Box as="span" borderRadius="0 0 medium 0" paddingInline="0 2" paddingBlock="0 space-1">
+              <Icon aria-hidden />
+              {tag}
+            </Box>
+          </HStack>
+          <time className="pt-0.5 pr-[3px] font-normal text-sm italic leading-none" dateTime={timestamp}>
+            {isoDateTimeToPretty(timestamp)}
+          </time>
         </HStack>
-        <Time dateTime={timestamp}>{isoDateTimeToPretty(timestamp)}</Time>
-      </HStack>
-      <VStack gap="1" paddingInline="2">
-        {children}
-      </VStack>
-    </Container>
+        <VStack gap="1" paddingInline="2">
+          {children}
+        </VStack>
+      </Box>
+    </VStack>
   );
 };
-
-const Container = styled.li<{ $accent: string }>`
-  display: flex;
-  flex-direction: column;
-  border-radius: var(--a-border-radius-medium);
-  border-width: 1px;
-  border-style: solid;
-  border-color: ${({ $accent }) => `var(${$accent})`};
-  padding-bottom: var(--a-spacing-2);
-  padding-right: 0;
-  padding-left: 3px;
-  overflow: hidden;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: -1px;
-    top: -1px;
-    bottom: -1px;
-    width: var(--a-spacing-1);
-    background-color: ${({ $accent }) => `var(${$accent})`};
-    border-top-left-radius: var(--a-border-radius-medium);
-    border-bottom-left-radius: var(--a-border-radius-medium);
-  }
-`;
-
-const Time = styled.time`
-  font-size: var(--a-font-size-small);
-  font-weight: normal;
-  font-style: italic;
-  line-height: 1;
-  padding-top: var(--a-spacing-05);
-  padding-right: 3px;
-`;

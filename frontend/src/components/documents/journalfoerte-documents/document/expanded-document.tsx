@@ -14,7 +14,7 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
   return (
     <VStack asChild gap="4 0" height={`${EXPANDED_HEIGHT}px`} width="calc(100% - var(--a-spacing-4))" overflowX="auto">
       <Box paddingBlock="2" paddingInline="4 2" marginInline="4 0" borderWidth="0 0 0 1" borderColor="border-divider">
-        <TopRow>
+        <HStack gap="0 4" position="sticky" left="0" className="whitespace-nowrap">
           <Section>
             <Label size="small">Status</Label>
             <NowrapDetail>
@@ -37,7 +37,7 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
             <Label size="small">Journalpost opprettet av</Label>
             <NowrapDetail title={opprettetAvNavn ?? undefined}>{opprettetAvNavn}</NowrapDetail>
           </Section>
-        </TopRow>
+        </HStack>
         <HStack gap="8">
           <Timeline {...document} />
         </HStack>
@@ -48,28 +48,12 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
 
 const MottattHelpText = () => (
   <HelpText>
-    <HelpTextContent>
+    <p className="m-0 whitespace-normal text-base">
       Denne journalposten har status «Mottatt» og har ikke blitt journalført. Sørg for å få dokumentet journalført
       riktig før du bruker det i saksbehandlingen din.
-    </HelpTextContent>
+    </p>
   </HelpText>
 );
-
-const HelpTextContent = styled.p`
-  font-size: var(--a-spacing-4);
-  white-space: normal;
-  line-height: var(--a-font-line-height-medium);
-  margin: 0;
-`;
-
-const TopRow = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, min-content);
-  grid-column-gap: var(--a-spacing-4);
-  white-space: nowrap;
-  position: sticky;
-  left: 0;
-`;
 
 interface SectionProps {
   children: React.ReactNode;

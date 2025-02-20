@@ -1,6 +1,5 @@
 import type { ListGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { type ColumnHeaderProps, Table } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   sortable?: boolean;
@@ -51,11 +50,7 @@ interface HeaderCellProps extends Omit<ColumnHeaderProps, 'sortKey'> {
 }
 
 const HeaderCell = ({ sortKey, sortable, children }: HeaderCellProps) => (
-  <StyledColumnHeader sortable={sortable} sortKey={sortKey}>
+  <Table.ColumnHeader className="whitespace-nowrap" sortable={sortable} sortKey={sortKey}>
     {children}
-  </StyledColumnHeader>
+  </Table.ColumnHeader>
 );
-
-const StyledColumnHeader = styled(Table.ColumnHeader)`
-  white-space: nowrap;
-`;

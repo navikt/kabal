@@ -1,6 +1,5 @@
 import { TextField } from '@navikt/ds-react';
 import { useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   tittel: string;
@@ -25,8 +24,8 @@ export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, classNa
   };
 
   return (
-    <StyledTextField
-      className={className}
+    <TextField
+      className={`w-full ${className}`}
       autoFocus={autoFocus}
       size="small"
       value={localFilename}
@@ -49,7 +48,3 @@ export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, classNa
     />
   );
 };
-
-const StyledTextField = styled(TextField)`
-  width: 100%;
-`;
