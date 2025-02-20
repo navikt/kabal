@@ -8,9 +8,10 @@ import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgave } from '@app/types/oppgaver';
 import { Tag } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { styled } from 'styled-components';
 
 type Props = Pick<IOppgave, 'medunderskriver' | 'typeId'>;
+
+const TAG_CLASSES = 'overflow-hidden text-ellipsis whitespace-nowrap';
 
 export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Props) => {
   const { user } = useContext(StaticDataContext);
@@ -23,33 +24,27 @@ export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Pro
 
   if (isMedunderskriver && medunderskriver.flowState === FlowState.SENT) {
     return (
-      <StyledTag variant="alt3" title={getTitleCapitalized(typeId)}>
+      <Tag className={TAG_CLASSES} variant="alt3" title={getTitleCapitalized(typeId)}>
         {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'Fagansvarlig' : 'MU'}
-      </StyledTag>
+      </Tag>
     );
   }
 
   if (!isMedunderskriver && medunderskriver.flowState === FlowState.SENT) {
     return (
-      <StyledTag variant="alt3" title={`Sendt til ${getTitleLowercase(typeId)}`}>
+      <Tag className={TAG_CLASSES} variant="alt3" title={`Sendt til ${getTitleLowercase(typeId)}`}>
         Sendt til {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
-      </StyledTag>
+      </Tag>
     );
   }
 
   if (!isMedunderskriver && medunderskriver.flowState === FlowState.RETURNED) {
     return (
-      <StyledTag variant="info" title={`Tilbake fra ${getTitleLowercase(typeId)}`}>
+      <Tag className={TAG_CLASSES} variant="info" title={`Tilbake fra ${getTitleLowercase(typeId)}`}>
         Tilbake fra {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
-      </StyledTag>
+      </Tag>
     );
   }
 
   return null;
 };
-
-const StyledTag = styled(Tag)`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;

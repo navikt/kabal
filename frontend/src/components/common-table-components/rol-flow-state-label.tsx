@@ -3,18 +3,19 @@ import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgave } from '@app/types/oppgaver';
 import { Tag } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { styled } from 'styled-components';
 
 type Props = Pick<IOppgave, 'rol'>;
+
+const TAG_CLASSES = 'whitespace-nowrap overflow-hidden text-ellipsis';
 
 export const RolFlowStateLabel = ({ rol }: Props) => {
   const { user } = useContext(StaticDataContext);
 
   if (rol.employee === null && rol.flowState === FlowState.SENT) {
     return (
-      <StyledTag variant="alt3" title="I felles kø for rådgivende overlege">
+      <Tag className={TAG_CLASSES} variant="alt3" title="I felles kø for rådgivende overlege">
         I felles kø for ROL
-      </StyledTag>
+      </Tag>
     );
   }
 
@@ -22,33 +23,27 @@ export const RolFlowStateLabel = ({ rol }: Props) => {
 
   if (isRol && rol.flowState === FlowState.SENT) {
     return (
-      <StyledTag variant="alt3" title="Rådgivende overlege">
+      <Tag className={TAG_CLASSES} variant="alt3" title="Rådgivende overlege">
         ROL
-      </StyledTag>
+      </Tag>
     );
   }
 
   if (!isRol && rol.flowState === FlowState.SENT) {
     return (
-      <StyledTag variant="alt3" title="Sendt til rådgivende overlege">
+      <Tag className={TAG_CLASSES} variant="alt3" title="Sendt til rådgivende overlege">
         Sendt til ROL
-      </StyledTag>
+      </Tag>
     );
   }
 
   if (!isRol && rol.flowState === FlowState.RETURNED) {
     return (
-      <StyledTag variant="info" title="Tilbake fra rådgivende overlege">
+      <Tag className={TAG_CLASSES} variant="info" title="Tilbake fra rådgivende overlege">
         Tilbake fra ROL
-      </StyledTag>
+      </Tag>
     );
   }
 
   return null;
 };
-
-const StyledTag = styled(Tag)`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;

@@ -1,10 +1,9 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CalendarIcon } from '@navikt/aksel-icons';
-import { Alert, Button, type ButtonProps, DatePicker, HStack } from '@navikt/ds-react';
+import { Alert, Box, Button, type ButtonProps, DatePicker, HStack } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
-import { styled } from 'styled-components';
 
 type DateStringISO = string;
 
@@ -48,12 +47,19 @@ export const DatePickerRange = ({
   }, [active, neutral]);
 
   return (
-    <Container ref={ref} $gridArea={gridArea}>
+    <div className="relative h-8" style={{ gridArea }} ref={ref}>
       <ButtonComponent onClick={onClick} size="small" variant={variant} icon={<CalendarIcon aria-hidden />}>
         {buttonLabel}
       </ButtonComponent>
       {isOpen ? (
-        <DatepickerContainer>
+        <Box
+          background="surface-default"
+          shadow="medium"
+          borderRadius="medium"
+          position="absolute"
+          right="0"
+          className="top-full z-1 font-normal"
+        >
           <HStack justify="end" padding="3" gap="3">
             <Button size="small" variant="primary" onClick={() => setIsOpen(false)}>
               Lukk
@@ -69,11 +75,11 @@ export const DatePickerRange = ({
               Nullstill
             </Button>
           </HStack>
-          <StyledDateRange>{formatDateRange(from, to)}</StyledDateRange>
+          <div className="h-8 w-full px-3">{formatDateRange(from, to)}</div>
           <DatePicker.Standalone selected={{ from, to }} mode="range" onSelect={onChange} />
-        </DatepickerContainer>
+        </Box>
       ) : null}
-    </Container>
+    </div>
   );
 };
 
@@ -100,27 +106,3 @@ interface TimeProps {
 const Time = ({ date }: TimeProps) => (
   <time dateTime={formatISO(date, { representation: 'date' })}>{format(date, 'dd.MM.yyyy')}</time>
 );
-
-const Container = styled.div<{ $gridArea?: string }>`
-  position: relative;
-  height: var(--a-spacing-8);
-  grid-area: ${({ $gridArea }) => $gridArea};
-`;
-
-const DatepickerContainer = styled.div`
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 1;
-  background-color: var(--a-surface-default);
-  border-radius: var(--a-border-radius-medium);
-  box-shadow: 0px var(--a-spacing-1) var(--a-spacing-2) rgba(0, 0, 0, 0.1);
-  font-weight: initial;
-`;
-
-const StyledDateRange = styled.div`
-  height: var(--a-spacing-8);
-  width: 100%;
-  padding-left: var(--a-spacing-3);
-  padding-right: var(--a-spacing-3);
-`;

@@ -1,6 +1,5 @@
 import { isoDateToPretty } from '@app/domain/date';
 import type { IOppgave } from '@app/types/oppgaver';
-import { styled } from 'styled-components';
 
 type Props = Pick<IOppgave, 'sattPaaVent'>;
 
@@ -13,29 +12,23 @@ export const PaaVentTil = ({ sattPaaVent }: Props) => {
 
   const prettyFrom = isoDateToPretty(from) ?? 'Ukjent dato';
   const prettyTo = isoDateToPretty(to) ?? 'Ukjent dato';
+  const className = isExpired ? 'text-(--a-surface-danger)' : undefined;
 
   return (
-    <Time dateTime={to} title={`Satt på vent fra ${prettyFrom}`} $isExpired={isExpired}>
+    <time className={className} dateTime={to} title={`Satt på vent fra ${prettyFrom}`}>
       {prettyTo}
-    </Time>
+    </time>
   );
 };
-
-const Time = styled.time<{ $isExpired: boolean }>`
-  color: ${({ $isExpired }) => ($isExpired ? 'var(--a-surface-danger)' : 'unset')};
-`;
-
-const Ellipsis = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 130px;
-`;
 
 export const PaaVentReason = ({ sattPaaVent }: Props) => {
   if (sattPaaVent === null) {
     return null;
   }
 
-  return <Ellipsis title={sattPaaVent.reason}>{sattPaaVent.reason}</Ellipsis>;
+  return (
+    <div className="max-w-32 overflow-hidden text-ellipsis whitespace-nowrap" title={sattPaaVent.reason}>
+      {sattPaaVent.reason}
+    </div>
+  );
 };

@@ -14,7 +14,6 @@ import { Button, HStack, Heading, Modal, Table } from '@navikt/ds-react';
 import type { SortState } from '@navikt/ds-react/Table';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface ScopedSortState extends SortState {
   orderBy: keyof ListGosysOppgave;
@@ -117,7 +116,9 @@ export const SelectGosysOppgaveModal = ({ hasGosysOppgave }: SelectGosysOppgaveM
         closeOnBackdropClick
         width="90%"
       >
-        <ModalBody>{canEdit ? <SelectGosysOppgave /> : <SelectedGosysOppgave />}</ModalBody>
+        <Modal.Body className="flex flex-col gap-4 p-6">
+          {canEdit ? <SelectGosysOppgave /> : <SelectedGosysOppgave />}
+        </Modal.Body>
 
         <Modal.Footer>
           <Button variant="secondary" size="small" onClick={() => setIsOpen(false)} className="self-start">
@@ -320,7 +321,7 @@ const SortableTable = ({
           {heading}
         </Header>
 
-        <NoneWarning>{fallback}</NoneWarning>
+        <span className="italic">{fallback}</span>
       </section>
     );
   }
@@ -372,17 +373,6 @@ const Header = ({ children, refetch, isFetching = false }: HeaderProps) => (
     </HStack>
   </Heading>
 );
-
-const NoneWarning = styled.span`
-  font-style: italic;
-`;
-
-const ModalBody = styled(Modal.Body)`
-  padding: var(--a-spacing-6);
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
-`;
 
 const GOSYS_OPPGAVE_KEYS: (keyof ListGosysOppgave)[] = [
   'id',

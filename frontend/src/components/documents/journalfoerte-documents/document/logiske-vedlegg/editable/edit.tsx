@@ -4,7 +4,6 @@ import { useSuggestions } from '@app/components/documents/journalfoerte-document
 import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 import { Tooltip } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   initialValue?: string;
@@ -149,7 +148,8 @@ export const EditLogiskVedlegg = ({
   }, [activeIndex, lastIndex]);
 
   return (
-    <Container onMouseDown={(e) => e.stopPropagation()}>
+    // biome-ignore lint/nursery/noStaticElementInteractions: It is not.
+    <div className="relative" onMouseDown={(e) => e.stopPropagation()}>
       <Tooltip content={`${placeholder} logisk vedlegg`} keys={['Enter', 'Tab', 'Esc']} open>
         <EditTag
           key="edit-tag"
@@ -176,12 +176,8 @@ export const EditLogiskVedlegg = ({
         </EditTag>
       </Tooltip>
       <Suggestions suggestions={suggestions} activeIndex={activeIndex} onSelect={onSelect} customValue={customValue} />
-    </Container>
+    </div>
   );
 };
-
-const Container = styled.div`
-  position: relative;
-`;
 
 const getText = (e: React.FormEvent<HTMLSpanElement>) => e.currentTarget.textContent?.replaceAll('\n', ' ').trim();

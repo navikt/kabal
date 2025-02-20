@@ -12,7 +12,6 @@ import { useGetHistoryQuery } from '@app/redux-api/oppgaver/queries/history';
 import { HistoryEventTypes, type IHistory, type IHistoryResponse } from '@app/types/oppgavebehandling/response';
 import { Heading, Select, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { getFeilregistrertEvent } from './feilregistrert';
 import { getFerdigstiltEvent } from './ferdigstilt';
 
@@ -31,7 +30,7 @@ export const EventHistory = () => {
           <option value={ALL}>Alle hendelser</option>
         </Select>
 
-        <EmptyText>Laster hendelser...</EmptyText>
+        <span className="block italic">Laster hendelser...</span>
       </VStack>
     );
   }
@@ -138,10 +137,10 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
 
       <Filter filter={filter} setFilter={setFilter} counts={counts} totalCount={totalCount} />
 
-      <List>
+      <ul className="m-0 flex list-none flex-col gap-y-2 p-0">
         {filteredNodes}
         <MissingHistoryWarning />
-      </List>
+      </ul>
     </VStack>
   );
 };
@@ -166,17 +165,3 @@ const toNodes = <T extends IHistory>(events: T[], toNode: ToNodeFn<T>): NodesCat
 
   return renderedEvents;
 };
-
-const List = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-`;
-
-const EmptyText = styled.span`
-  display: block;
-  font-style: italic;
-`;

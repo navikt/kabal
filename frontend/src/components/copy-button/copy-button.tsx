@@ -1,5 +1,4 @@
 import { type CopyButtonProps, CopyButton as InternalCopyBytton } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   text?: string | null;
@@ -32,8 +31,8 @@ export const CopyButton = ({
   }
 
   return (
-    <StyledCopyButton
-      className={className}
+    <InternalCopyBytton
+      className={`whitespace-nowrap border-none bg-(--a-surface-neutral-subtle) hover:bg-(--a-surface-neutral-subtle-hover) ${className}`}
       activeText={activeText}
       copyText={copyText}
       title={title}
@@ -43,20 +42,3 @@ export const CopyButton = ({
     />
   );
 };
-
-const StyledCopyButton = styled(InternalCopyBytton)`
-  border: 1px solid var(--a-border-subtle) inset;
-  white-space: nowrap;
-  background-color: var(--a-surface-neutral-subtle);
-
-  &:hover {
-    background-color: var(--a-surface-neutral-subtle-hover);
-  }
-
-  > .navds-label {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-`;

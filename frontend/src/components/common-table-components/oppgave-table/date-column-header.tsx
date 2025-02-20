@@ -10,10 +10,9 @@ import {
   type ToDateSortKeys,
 } from '@app/types/oppgaver';
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, HStack, type TableProps } from '@navikt/ds-react';
+import { Button, HStack, type TableProps } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
-import { styled } from 'styled-components';
 
 interface SortProps {
   params: CommonOppgaverParams;
@@ -38,15 +37,15 @@ const Sort = ({ params, onSortChange, sortKey, children }: SortProps) => {
   const Icon = getSortIcon(sorted, params.rekkefoelge);
 
   return (
-    <StyledSortButton
+    <Button
       variant="tertiary"
       icon={<Icon fontSize={16} />}
       onClick={onClick}
-      $sorted={sorted}
       iconPosition="right"
+      className={`whitespace-nowrap rounded-md px-3 py-4 ${sorted ? 'bg-(--a-surface-selected)' : 'bg-transparent'}`}
     >
       {children}
-    </StyledSortButton>
+    </Button>
   );
 };
 
@@ -90,7 +89,7 @@ export const DateColumnHeader = ({
   sortKey,
 }: DateColumnHeaderProps) => (
   <StyledColumnHeader aria-sort={params.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
-    <HStack align="center" gap="1">
+    <HStack align="center" gap="1" wrap={false}>
       <Sort params={params} onSortChange={onSortChange} sortKey={sortKey}>
         {children}
       </Sort>
@@ -106,18 +105,3 @@ const getSortIcon = (sorted: boolean, rekkefoelge: SortOrderEnum) => {
 
   return ArrowsUpDownIcon;
 };
-
-interface StyledSortButtonProps {
-  $sorted: boolean;
-}
-
-interface SortButtonProps extends ButtonProps, StyledSortButtonProps {}
-
-const SortButton = (props: SortButtonProps) => <Button {...props} />;
-
-const StyledSortButton = styled(SortButton)<StyledSortButtonProps>`
-  background-color: ${({ $sorted }) => ($sorted ? 'var(--a-surface-selected)' : 'transparent')};
-  white-space: nowrap;
-  border-radius: var(--a-border-radius-small);
-  padding: var(--a-spacing-4) var(--a-spacing-3);
-`;

@@ -4,7 +4,6 @@ import { HistoryEventTypes, type IPart, type IVarsletBehandlingstidEvent } from 
 import { BEHANDLINGSTID_UNIT_TYPE_NAMES, type BehandlingstidUnitType } from '@app/types/svarbrev';
 import { ClockIcon } from '@navikt/aksel-icons';
 import { BodyShort, VStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { Line, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
 
@@ -54,18 +53,18 @@ const Mottakere = ({ mottakere }: { mottakere: IPart[] }) => {
   }
 
   return (
-    <StyledList>
+    <ul className="m-0 list-disc pl-1">
       {mottakere.map((p) => (
         <ListItemPart key="id" {...p} />
       ))}
-    </StyledList>
+    </ul>
   );
 };
 
 const ListItemPart = ({ id, name }: IPart) => (
-  <StyledListItem>
+  <li className="m-0 font-normal">
     {name} ({formatIdNumber(id)})
-  </StyledListItem>
+  </li>
 );
 
 const ChangedFrist = ({ previous, event }: IVarsletBehandlingstidEvent) => {
@@ -111,14 +110,3 @@ const getUnits = (units: number | null, unitTypeId: BehandlingstidUnitType | nul
     return '<Ikke satt>';
   }
 };
-
-const StyledList = styled.ul`
-  margin: 0;
-  padding-left: 1rem;
-  list-style-type: disc;
-`;
-
-const StyledListItem = styled.li`
-  margin: 0;
-  font-weight: normal;
-`;

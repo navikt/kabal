@@ -43,11 +43,12 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
         </SaksIdButton>
       ) : null}
       {columns.TYPE ? <JournalposttypeTag type={journalposttype} /> : null}
-      <ExpandButton
+      <Button
         variant={showMetadata ? 'primary' : 'tertiary'}
         size="small"
         icon={<InformationSquareIcon aria-hidden />}
         onClick={toggleShowMetadata}
+        style={{ gridArea: Fields.ToggleMetadata }}
       />
     </>
   );
@@ -99,8 +100,4 @@ const SaksIdButton = styled(Button)`
     overflow: hidden;
     text-overflow: ellipsis;
   }
-`;
-
-const ExpandButton = styled(Button)`
-  grid-area: ${Fields.ToggleMetadata};
 `;

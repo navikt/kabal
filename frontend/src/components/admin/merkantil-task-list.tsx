@@ -6,7 +6,6 @@ import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ArrowsCirclepathIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, CopyButton, HStack, Heading, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { Link } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 export const MerkantilTaskList = () => {
   const { isLoading, isFetching, refetch } = useGetMerkantilTasksQuery();
@@ -94,15 +93,15 @@ const TaskList = () => {
       <Table zebraStripes size="small">
         <Table.Header>
           <Table.Row>
-            <NoWrapTableHeaderCell>Opprettet</NoWrapTableHeaderCell>
-            <NoWrapTableHeaderCell>Type</NoWrapTableHeaderCell>
-            <NoWrapTableHeaderCell>Behandling ID</NoWrapTableHeaderCell>
-            <NoWrapTableHeaderCell>Årsak</NoWrapTableHeaderCell>
-            <NoWrapTableHeaderCell>Behandlet dato</NoWrapTableHeaderCell>
-            <NoWrapTableHeaderCell>Behandlet av</NoWrapTableHeaderCell>
-            <NoWrapTableHeaderCell>Behandlet av navn</NoWrapTableHeaderCell>
-            <NoWrapTableHeaderCell>Kommentar</NoWrapTableHeaderCell>
-            <NoWrapTableHeaderCell />
+            <Table.HeaderCell className="whitespace-nowrap">Opprettet</Table.HeaderCell>
+            <Table.HeaderCell className="whitespace-nowrap">Type</Table.HeaderCell>
+            <Table.HeaderCell className="whitespace-nowrap">Behandling ID</Table.HeaderCell>
+            <Table.HeaderCell className="whitespace-nowrap">Årsak</Table.HeaderCell>
+            <Table.HeaderCell className="whitespace-nowrap">Behandlet dato</Table.HeaderCell>
+            <Table.HeaderCell className="whitespace-nowrap">Behandlet av</Table.HeaderCell>
+            <Table.HeaderCell className="whitespace-nowrap">Behandlet av navn</Table.HeaderCell>
+            <Table.HeaderCell className="whitespace-nowrap">Kommentar</Table.HeaderCell>
+            <Table.HeaderCell className="whitespace-nowrap" />
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -176,7 +175,3 @@ type UrlFn = (id: string, typeId: SaksTypeEnum) => string;
 
 const getUrl: UrlFn = (...args) => `${DOMAIN}${getPath(...args)}`;
 const getPath: UrlFn = (id, typeId) => `/${TYPE_TO_PATH[typeId]}/${id}`;
-
-const NoWrapTableHeaderCell = styled(Table.HeaderCell)`
-  white-space: nowrap;
-`;
