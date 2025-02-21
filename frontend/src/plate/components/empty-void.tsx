@@ -1,5 +1,6 @@
+import { PlateElement } from '@app/plate/plate-element';
 import type { EmptyVoidElement } from '@app/plate/types';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import type { PlateElementProps } from '@udecode/plate/react';
 
 type RenderProps = PlateElementProps<EmptyVoidElement>;
 

@@ -1,11 +1,12 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { PlateElement } from '@app/plate/plate-element';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@app/plate/plugins/fullmektig';
 import { type FullmektigElement, type PlaceholderElement, useMyPlateEditorRef } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, Loader } from '@navikt/ds-react';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import type { PlateElementProps } from '@udecode/plate/react';
 import { useEffect } from 'react';
 import { styled } from 'styled-components';
 
@@ -75,7 +76,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
   }
 
   return (
-    <PlateElement<FullmektigElement> asChild {...props}>
+    <PlateElement<FullmektigElement> as="span" {...props}>
       <span>
         <NonEditable>{children[0]}</NonEditable>
         <PlaceholderContainer>

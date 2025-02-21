@@ -1,6 +1,7 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
+import { PlateElement } from '@app/plate/plate-element';
 import { ElementApi } from '@udecode/plate';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import type { PlateElementProps } from '@udecode/plate/react';
 import { styled } from 'styled-components';
 import type { H1Element, H2Element, H3Element, PlaceholderElement } from '../types';
 
@@ -23,7 +24,7 @@ const HeadingOneStyle = styled.h1<HeadingStyleProps>`
 `;
 
 export const HeadingOne = ({ children, element, ...props }: PlateElementProps<H1Element>) => (
-  <PlateElement<H1Element> {...props} element={element} asChild>
+  <PlateElement<H1Element> {...props} element={element} as="div">
     <HeadingOneStyle $isEmpty={isEmpty(element)} style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}>
       {children}
     </HeadingOneStyle>
@@ -45,7 +46,7 @@ const HeadingTwoStyle = styled.h2<HeadingStyleProps>`
 `;
 
 export const HeadingTwo = ({ children, element, ...props }: PlateElementProps<H2Element>) => (
-  <PlateElement {...props} element={element} asChild>
+  <PlateElement {...props} element={element} as="div">
     <HeadingTwoStyle $isEmpty={isEmpty(element)} style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}>
       {children}
     </HeadingTwoStyle>
@@ -67,7 +68,7 @@ const HeadingThreeStyle = styled.h3<HeadingStyleProps>`
 `;
 
 export const HeadingThree = ({ children, element, ...props }: PlateElementProps<H3Element>) => (
-  <PlateElement {...props} element={element} asChild>
+  <PlateElement {...props} element={element} as="div">
     <HeadingThreeStyle $isEmpty={isEmpty(element)} style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}>
       {children}
     </HeadingThreeStyle>

@@ -12,6 +12,7 @@ import { useUpdateMaltekstseksjon } from '@app/plate/components/maltekstseksjon/
 import { MaltekstseksjonContainer } from '@app/plate/components/styled-components';
 import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
 import type { ScoredText } from '@app/plate/functions/lex-specialis/lex-specialis';
+import { PlateElement } from '@app/plate/plate-element';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import type { TemplateSections } from '@app/plate/template-sections';
 import type { MaltekstseksjonElement } from '@app/plate/types';
@@ -20,7 +21,7 @@ import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { type SkipToken, skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import type { PlateElementProps } from '@udecode/plate/react';
 import { useCallback, useContext, useMemo } from 'react';
 
 export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>) => {
@@ -74,7 +75,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
   return (
     <PlateElement<MaltekstseksjonElement>
       {...props}
-      asChild
+      as="div"
       contentEditable={!editor.api.isReadOnly()}
       suppressContentEditableWarning
       onDragStart={onPlateContainerDragStart}

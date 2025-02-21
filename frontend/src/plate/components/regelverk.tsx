@@ -7,6 +7,7 @@ import { DeleteSection } from '@app/plate/components/common/delete-section';
 import { useIsChanged } from '@app/plate/components/maltekstseksjon/use-is-changed';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
+import { PlateElement } from '@app/plate/plate-element';
 import { type RegelverkContainerElement, type RegelverkElement, useMyPlateEditorRef } from '@app/plate/types';
 import { isNodeEmpty } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
@@ -15,7 +16,7 @@ import type { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/con
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import type { PlateElementProps } from '@udecode/plate/react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -96,7 +97,7 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
   }, [editor, element, getTexts, oppgave, query]);
 
   return (
-    <PlateElement<RegelverkContainerElement> {...props} asChild onDragStart={onPlateContainerDragStart}>
+    <PlateElement<RegelverkContainerElement> {...props} as="div" onDragStart={onPlateContainerDragStart}>
       <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type} aria-disabled={loading}>
         {children}
         {loading ? (

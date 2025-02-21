@@ -1,11 +1,12 @@
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
+import { PlateElement } from '@app/plate/plate-element';
 import { UNCHANGEABLE } from '@app/plate/plugins/element-types';
 import type { PageBreakElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { ElementApi, type NodeEntry } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import type { PlateElementProps } from '@udecode/plate/react';
 import { styled } from 'styled-components';
 
 const parentIsUnchangeable = (editor: PlateEditor, entry: NodeEntry<PageBreakElement> | undefined): boolean => {
@@ -52,7 +53,7 @@ export const PageBreak = (props: PlateElementProps<PageBreakElement>) => {
   };
 
   return (
-    <PlateElement<PageBreakElement> {...props} asChild contentEditable={false}>
+    <PlateElement<PageBreakElement> {...props} as="div" contentEditable={false}>
       <StyledPageBreak>
         {disableDelete ? null : (
           <StyledDeleteButton

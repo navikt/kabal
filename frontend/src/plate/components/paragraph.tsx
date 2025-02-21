@@ -1,7 +1,8 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
+import { PlateElement } from '@app/plate/plate-element';
 import type { ParagraphElement, PlaceholderElement } from '@app/plate/types';
 import { TextApi } from '@udecode/plate';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import type { PlateElementProps } from '@udecode/plate/react';
 import { type ElementRef, forwardRef } from 'react';
 import { styled } from 'styled-components';
 
@@ -12,7 +13,7 @@ export const Paragraph = forwardRef<ElementRef<typeof PlateElement>, RenderProps
   const indent = ptToEm((element.indent ?? 0) * 24);
 
   return (
-    <PlateElement {...props} asChild ref={ref}>
+    <PlateElement {...props} as="div" ref={ref}>
       <StyledParagraph
         style={{
           marginLeft: element.align !== 'right' ? indent : undefined,
