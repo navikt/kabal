@@ -23,7 +23,7 @@ export const Innsendingshjemmel = ({ oppgavebehandling }: Props) => {
 
   return (
     <BehandlingSection label={`Saken er sendt inn med ${hjemmelCount > 1 ? 'lovhjemler' : 'lovhjemmel'}`}>
-      <HStack align="center" justify="space-between" width="100%">
+      <HStack align="center" justify="space-between" width="100%" wrap={false}>
         <Innsendingshjemler
           size="small"
           hjemmelIdList={oppgavebehandling.hjemmelIdList}
