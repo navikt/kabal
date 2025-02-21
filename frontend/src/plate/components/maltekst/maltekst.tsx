@@ -3,6 +3,7 @@ import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
 import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
+import { PlateElement } from '@app/plate/plate-element';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import type { MaltekstElement } from '@app/plate/types';
 import { getIsInRegelverk } from '@app/plate/utils/queries';
@@ -12,7 +13,7 @@ import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer
 import { ArrowCirclepathIcon, PadlockUnlockedIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { ElementApi } from '@udecode/plate';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import type { PlateElementProps } from '@udecode/plate/react';
 import { useContext, useMemo } from 'react';
 
 export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
@@ -64,7 +65,7 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
   return (
     <PlateElement<MaltekstElement>
       {...props}
-      asChild
+      as="div"
       contentEditable={!readOnly}
       suppressContentEditableWarning
       onDragStart={(event) => event.preventDefault()}

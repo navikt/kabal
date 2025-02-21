@@ -1,5 +1,6 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { PlateElement } from '@app/plate/plate-element';
+import type { PlateElementProps } from '@udecode/plate/react';
 import type { BulletListElement, ListItemElement, NumberedListElement } from '../types';
 
 const LIST_CLASSES = 'pl-[1em] mr-0 mb-0 ml-0 in-[li]:mt-0 not-in-[li]:mt-[1em]';

@@ -4,13 +4,14 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { ptToEm, pxToEm } from '@app/plate/components/get-scaled-em';
 import { MedunderskriverSignature, SaksbehandlerSignature } from '@app/plate/components/signature/individual-signature';
+import { PlateElement } from '@app/plate/plate-element';
 import type { SignatureElement } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { HStack } from '@navikt/ds-react';
 import type { SetNodesOptions } from '@udecode/plate';
 import { useEditorReadOnly } from '@udecode/plate-core/react';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import type { PlateElementProps } from '@udecode/plate/react';
 import { type InputHTMLAttributes, useContext } from 'react';
 import { styled } from 'styled-components';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
@@ -52,7 +53,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
     editor.tf.setNodes({ overriddenSaksbehandler }, options);
 
   return (
-    <PlateElement<SignatureElement> {...props} asChild contentEditable={false}>
+    <PlateElement<SignatureElement> {...props} as="div" contentEditable={false}>
       <SectionContainer
         data-element={element.type}
         $sectionType={SectionTypeEnum.SIGNATURE}

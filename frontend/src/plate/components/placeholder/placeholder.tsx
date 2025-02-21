@@ -12,13 +12,14 @@ import {
   lonePlaceholderInMaltekst,
 } from '@app/plate/components/placeholder/helpers';
 import { DeleteButton, Wrapper } from '@app/plate/components/placeholder/styled-components';
+import { PlateElement } from '@app/plate/plate-element';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { PlaceholderElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
 import { PathApi } from '@udecode/plate';
 import { useEditorReadOnly } from '@udecode/plate-core/react';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import type { PlateElementProps } from '@udecode/plate/react';
 import { type MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
 
 export const RedaktørPlaceholder = (props: PlateElementProps<PlaceholderElement>) => (
@@ -149,7 +150,7 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
   }, [editor, element, hasNoVisibleText, canManage]);
 
   return (
-    <PlateElement<PlaceholderElement> {...props} asChild contentEditable suppressContentEditableWarning>
+    <PlateElement<PlaceholderElement> {...props} as="span" contentEditable suppressContentEditableWarning>
       <Tooltip content={element.placeholder} maxChar={Number.POSITIVE_INFINITY} contentEditable={false}>
         <Wrapper
           data-node-type={ELEMENT_PLACEHOLDER}
