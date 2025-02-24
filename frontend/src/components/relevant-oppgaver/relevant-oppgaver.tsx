@@ -16,8 +16,8 @@ import { useGetSakenGjelderQuery } from '@app/redux-api/oppgaver/queries/behandl
 import { useGetRelevantOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { FolderFileIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps, Heading, Loader, Modal, Table, Tooltip } from '@navikt/ds-react';
-import { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
+import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
 
 interface Props {
   oppgaveId: string;
@@ -28,7 +28,8 @@ const EMPTY_LIST: string[] = [];
 const CURRENT_TEST_ID = 'relevant-current-oppgave-table';
 
 export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const modalRef = useRef<HTMLDialogElement>(null);
   const { data: sakenGjelder, isLoading: isOppgaveLoading } = useGetSakenGjelderQuery(oppgaveId);
   const { data, isLoading, refetch, isFetching, isError } = useGetRelevantOppgaverQuery(oppgaveId);
 
@@ -36,7 +37,10 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
   const ventendeOppgaverIdList = data?.paaVentBehandlinger ?? EMPTY_LIST;
   const totalCount = uferdigeOppgaverIdList.length + ventendeOppgaverIdList.length;
 
-  const onClose = useCallback(() => setIsOpen(false), []);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: React to changes in location.
+  useEffect(() => {
+    modalRef.current?.close();
+  }, [location.pathname]);
 
   if (!isLoading && totalCount === 0) {
     return null;
@@ -55,10 +59,8 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
           variant="secondary-neutral"
           loading={isLoading}
           onClick={() => {
-            if (!isOpen) {
-              pushEvent('open-relevant-oppgaver', 'oppgave-lists', { enabled: 'true' });
-            }
-            setIsOpen(!isOpen);
+            pushEvent('open-relevant-oppgaver', 'oppgave-lists', { enabled: 'true' });
+            modalRef.current?.showModal();
           }}
           icon={<FolderFileIcon aria-hidden />}
         >
@@ -66,57 +68,55 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
         </Button>
       </Tooltip>
 
-      {isOpen ? (
-        <Modal header={{ heading }} width="2000px" closeOnBackdropClick open onClose={onClose}>
-          <StyledBody>
-            {isOppgaveLoading || sakenGjelder === undefined ? (
-              <Loader />
-            ) : (
-              <section>
-                <Heading size="small">Denne oppgaven</Heading>
-                <Table>
-                  <Table.Header data-testid={`${CURRENT_TEST_ID}-header`}>
-                    <Table.Row>
-                      <TablePlainHeaders columnKeys={UFERDIGE_COLUMNS} />
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body data-testid={`${CURRENT_TEST_ID}-rows`} data-state="ready" data-empty="false">
-                    <OppgaveRow columns={UFERDIGE_COLUMNS} oppgaveId={oppgaveId} testId={`${CURRENT_TEST_ID}-row`} />
-                  </Table.Body>
-                </Table>
-              </section>
-            )}
-
+      <Modal header={{ heading }} width="2000px" closeOnBackdropClick ref={modalRef}>
+        <Modal.Body className="flex flex-col gap-y-4">
+          {isOppgaveLoading || sakenGjelder === undefined ? (
+            <Loader />
+          ) : (
             <section>
-              <Heading size="small">Andre oppgaver</Heading>
-              <OppgaveTable
-                behandlinger={uferdigeOppgaverIdList}
-                settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
-                data-testid="relevant-uferdige-oppgaver-table"
-                columns={UFERDIGE_COLUMNS}
-                refetch={refetch}
-                isLoading={isLoading}
-                isFetching={isFetching}
-                isError={isError}
-              />
+              <Heading size="small">Denne oppgaven</Heading>
+              <Table>
+                <Table.Header data-testid={`${CURRENT_TEST_ID}-header`}>
+                  <Table.Row>
+                    <TablePlainHeaders columnKeys={UFERDIGE_COLUMNS} />
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body data-testid={`${CURRENT_TEST_ID}-rows`} data-state="ready" data-empty="false">
+                  <OppgaveRow columns={UFERDIGE_COLUMNS} oppgaveId={oppgaveId} testId={`${CURRENT_TEST_ID}-row`} />
+                </Table.Body>
+              </Table>
             </section>
+          )}
 
-            <section>
-              <Heading size="small">Oppgaver på vent</Heading>
-              <OppgaveTable
-                behandlinger={ventendeOppgaverIdList}
-                settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
-                data-testid="relevant-ventende-oppgaver-table"
-                columns={VENTENDE_COLUMNS}
-                refetch={refetch}
-                isLoading={isLoading}
-                isFetching={isFetching}
-                isError={isError}
-              />
-            </section>
-          </StyledBody>
-        </Modal>
-      ) : null}
+          <section>
+            <Heading size="small">Andre oppgaver</Heading>
+            <OppgaveTable
+              behandlinger={uferdigeOppgaverIdList}
+              settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
+              data-testid="relevant-uferdige-oppgaver-table"
+              columns={UFERDIGE_COLUMNS}
+              refetch={refetch}
+              isLoading={isLoading}
+              isFetching={isFetching}
+              isError={isError}
+            />
+          </section>
+
+          <section>
+            <Heading size="small">Oppgaver på vent</Heading>
+            <OppgaveTable
+              behandlinger={ventendeOppgaverIdList}
+              settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
+              data-testid="relevant-ventende-oppgaver-table"
+              columns={VENTENDE_COLUMNS}
+              refetch={refetch}
+              isLoading={isLoading}
+              isFetching={isFetching}
+              isError={isError}
+            />
+          </section>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
@@ -147,9 +147,3 @@ const VENTENDE_COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.OpenWithYtelseAccess,
   ColumnKeyEnum.OppgavestyringNonFilterable,
 ];
-
-const StyledBody = styled(Modal.Body)`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-4);
-`;
