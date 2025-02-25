@@ -1,10 +1,9 @@
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { PlateElement } from '@app/plate/plate-element';
 import { type LabelContentElement, LabelContentSource } from '@app/plate/types';
 import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import type { PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 
@@ -24,7 +23,7 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   return (
     <PlateElement<LabelContentElement>
       {...props}
-      as="span"
+      asChild
       contentEditable={false}
       onDragStart={(event) => event.preventDefault()}
       onDrop={(e) => {

@@ -20,16 +20,11 @@ export const TableCellElement = withRef<typeof PlateElement>(({ style, children,
   };
 
   return (
-    <PlateElement
-      as={StyledCell}
-      ref={ref}
-      {...props}
-      className="min-w-12"
-      style={{ ...style, width, backgroundColor: selected ? 'var(--a-surface-selected)' : 'transparent' }}
-      {...spans}
-    >
-      <Content style={{ minHeight }}>{children}</Content>
-      <Resize />
+    <PlateElement asChild ref={ref} {...props}>
+      <StyledCell $selected={selected} className="min-w-12" style={{ ...style, width }} {...spans}>
+        <Content style={{ minHeight }}>{children}</Content>
+        <Resize />
+      </StyledCell>
     </PlateElement>
   );
 });
@@ -94,12 +89,17 @@ const StyledRightHandle = styled(ResizeHandle)`
   cursor: col-resize;
 `;
 
-const StyledCell = styled.td`
+interface CellProps {
+  $selected: boolean;
+}
+
+const StyledCell = styled.td<CellProps>`
   position: relative;
   border: ${ptToEm(1.25)} solid var(--a-border-default);
   vertical-align: top;
+  background-color: ${({ $selected }) => ($selected ? 'var(--a-surface-selected)' : 'transparent')};
   padding: 0;
-  `;
+`;
 
 const Content = styled.div`
   padding: ${PADDING};
@@ -107,9 +107,7 @@ const Content = styled.div`
   height: 100%;
   z-index: 20;
 
-  &&& ${StyledParagraph} {
-    margin-top: 0;
-
+  > ${StyledParagraph} {
     &::before {
       content: '';
     }

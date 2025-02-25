@@ -4,7 +4,6 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
-import { PlateElement } from '@app/plate/plate-element';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import type { EmptyVoidElement, RedigerbarMaltekstElement } from '@app/plate/types';
@@ -15,7 +14,7 @@ import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import type { PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 
 const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
@@ -90,7 +89,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
 
   if (isLoading) {
     return (
-      <PlateElement<RedigerbarMaltekstElement> {...props} as="div" contentEditable={false}>
+      <PlateElement<RedigerbarMaltekstElement> {...props} asChild contentEditable={false}>
         <SectionContainer
           data-element={element.type}
           data-section={element.section}
@@ -103,7 +102,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
   }
 
   return (
-    <PlateElement<RedigerbarMaltekstElement> {...props} as="div">
+    <PlateElement<RedigerbarMaltekstElement> {...props} asChild>
       <SectionContainer
         data-element={element.type}
         data-section={element.section}

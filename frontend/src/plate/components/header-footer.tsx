@@ -3,7 +3,6 @@ import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useHeaderFooterQuery } from '@app/components/smart-editor/hooks/use-query';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { PlateElement } from '@app/plate/plate-element';
 import { type ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
 import { type FooterElement, type HeaderElement, TextAlign, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
@@ -12,7 +11,7 @@ import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IConsumerPlainText, IConsumerText } from '@app/types/texts/consumer';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import type { PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -98,7 +97,7 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
   return (
     <PlateElement<ElementTypes>
       {...props}
-      as="div"
+      asChild
       contentEditable={false}
       onDragStart={(event) => event.preventDefault()}
       onDrop={(e) => {

@@ -17,8 +17,8 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
 import { ElementApi } from '@udecode/plate';
 import { BaseTablePlugin, deleteTable, getTableGridAbove, isTableRectangular } from '@udecode/plate-table';
-import { TablePlugin, TableProvider } from '@udecode/plate-table/react';
-import { useEditorPlugin, useEditorSelector, usePluginOption, useReadOnly, withHOC } from '@udecode/plate/react';
+import { TablePlugin, TableProvider, useTableStore } from '@udecode/plate-table/react';
+import { useEditorPlugin, useEditorSelector, useReadOnly, withHOC } from '@udecode/plate/react';
 
 export const TableButtons = withHOC(TableProvider, () => {
   const { tf } = useEditorPlugin(TablePlugin);
@@ -166,7 +166,7 @@ export const useTableMergeState = () => {
   const selectionExpanded = useEditorSelector((editor) => editor.api.isExpanded(), []);
 
   const collapsed = !readOnly && selected && !selectionExpanded;
-  const selectedTables = usePluginOption(TablePlugin, 'selectedTables');
+  const selectedTables = useTableStore().get.selectedTables();
   const selectedTable = selectedTables?.[0];
 
   const selectedCellEntries = useEditorSelector((editor) => getTableGridAbove(editor, { format: 'cell' }), []);

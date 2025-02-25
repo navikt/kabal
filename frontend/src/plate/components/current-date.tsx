@@ -1,8 +1,7 @@
 import { formatLongDate, zeroPad } from '@app/domain/date';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { PlateElement } from '@app/plate/plate-element';
 import type { CurrentDateElement } from '@app/plate/types';
-import type { PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';

@@ -5,7 +5,6 @@ import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph
 import { nodesEquals } from '@app/plate/components/maltekst/nodes-equals';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
-import { PlateElement } from '@app/plate/plate-element';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
 import { createEmptyVoid } from '@app/plate/templates/helpers';
 import type { MaltekstElement } from '@app/plate/types';
@@ -15,7 +14,7 @@ import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { ElementApi } from '@udecode/plate';
-import type { PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { useContext, useEffect } from 'react';
 
 /**
@@ -64,7 +63,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
 
   if (isLoading) {
     return (
-      <PlateElement<MaltekstElement> {...props} as="div" suppressContentEditableWarning>
+      <PlateElement<MaltekstElement> {...props} asChild suppressContentEditableWarning>
         <SectionContainer
           data-element={element.type}
           data-section={element.section}
@@ -89,7 +88,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
   return (
     <PlateElement<MaltekstElement>
       {...props}
-      as="div"
+      asChild
       contentEditable={!editor.api.isReadOnly()}
       suppressContentEditableWarning
     >
