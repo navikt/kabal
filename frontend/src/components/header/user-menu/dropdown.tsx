@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 import { CopyButton } from '../../copy-button/copy-button';
 
-export const UserDropdown = (): JSX.Element | null => {
+export const UserDropdown = (): React.JSX.Element | null => {
   const { version } = ENVIRONMENT;
 
   return (

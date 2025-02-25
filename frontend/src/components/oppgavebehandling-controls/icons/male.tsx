@@ -1,6 +1,6 @@
 import type { IconProps } from './props';
 
-export const MaleIcon = ({ alt = '' }: IconProps): JSX.Element => (
+export const MaleIcon = ({ alt = '' }: IconProps): React.JSX.Element => (
   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 40 40">
     <title>{alt}</title>
 

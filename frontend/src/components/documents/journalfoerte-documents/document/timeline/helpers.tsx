@@ -113,7 +113,7 @@ const EmailVarsel = ({ utsendingsinfo, timestamp, isLast }: VarselProps) => {
 interface VarselTimelineItemProps {
   timestamp: string;
   title: string;
-  content: JSX.Element;
+  content: React.JSX.Element;
   isLast?: boolean;
 }
 
@@ -130,7 +130,7 @@ const VarselTimelineItem = ({ timestamp, title, content, isLast = false }: Varse
 
 const BODY_REGEX = /<body>((?:.|\n|\r)*)<\/body>/i;
 
-const EmailContent = ({ varslingstekst }: { varslingstekst: string | undefined }): JSX.Element | null => {
+const EmailContent = ({ varslingstekst }: { varslingstekst: string | undefined }): React.JSX.Element | null => {
   if (varslingstekst === undefined) {
     return null;
   }

@@ -24,7 +24,7 @@ export const Header = ({
   close,
   onReset,
   showFjernAlle = true,
-}: HeaderProps): JSX.Element | null => {
+}: HeaderProps): React.JSX.Element | null => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const onInputChange = (value: string) => onFilterChange(stringToRegExp(value));

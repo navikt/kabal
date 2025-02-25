@@ -18,7 +18,7 @@ interface Props {
 }
 
 const InternalIncludeDocument = memo(
-  ({ dokumentInfoId, journalpostId, name, disabled, checked, className }: Props): JSX.Element | null => {
+  ({ dokumentInfoId, journalpostId, name, disabled, checked, className }: Props): React.JSX.Element | null => {
     const oppgaveId = useOppgaveId();
     const [setDocument, isUpdating] = useCheckDocument(oppgaveId, dokumentInfoId, journalpostId);
     const canEdit = useCanEdit();

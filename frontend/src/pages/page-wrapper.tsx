@@ -20,7 +20,7 @@ interface OppgaverPageWrapperProps {
   testId?: string;
 }
 
-export const OppgaverPageWrapper = ({ children, title, testId }: OppgaverPageWrapperProps): JSX.Element => (
+export const OppgaverPageWrapper = ({ children, title, testId }: OppgaverPageWrapperProps): React.JSX.Element => (
   <VStack flexGrow="1" width="100%" overflow="hidden" data-testid={`${testId}-container`}>
     {typeof title === 'undefined' ? null : (
       <StyledOppgaveHeading level="1" size="medium" data-testid={`${testId}-title`}>

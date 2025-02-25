@@ -9,7 +9,7 @@ interface Props {
   onClick: () => void;
 }
 
-export const AdminButton = ({ children, isLoading, isSuccess, isUninitialized, onClick }: Props): JSX.Element => (
+export const AdminButton = ({ children, isLoading, isSuccess, isUninitialized, onClick }: Props): React.JSX.Element => (
   <Button
     type="button"
     variant="primary"
