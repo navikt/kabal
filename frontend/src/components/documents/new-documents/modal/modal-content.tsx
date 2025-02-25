@@ -74,7 +74,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
           </HStack>
 
           {canEditDocument && document.type !== DocumentTypeEnum.JOURNALFOERT ? (
-            <HStack align="end" gap="2">
+            <HStack align="end" gap="2" wrap={false}>
               <StyledSetFilename
                 tittel={document.tittel}
                 setFilename={(title) => {
