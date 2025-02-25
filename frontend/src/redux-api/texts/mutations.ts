@@ -75,8 +75,18 @@ const textsMutationSlice = textsApi.injectEndpoints({
           );
 
           dispatch(
-            textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
-              draft.map((v) => (v.versionId === data.versionId ? data : { ...v, published: false })),
+            textsQuerySlice.util.updateQueryData('getTextVersions', id, (_draft) =>
+              _draft.map((v) => {
+                if (v.versionId === data.versionId) {
+                  return data;
+                }
+
+                if (v.published) {
+                  return { ...v, published: false };
+                }
+
+                return v;
+              }),
             ),
           );
 
@@ -280,7 +290,13 @@ const textsMutationSlice = textsApi.injectEndpoints({
           textsQuerySlice.util.updateQueryData('getTexts', { ...query }, (draft) =>
             draft.map((text) => {
               if (text.id === id) {
-                return textDraft === undefined ? { ...text, published: false } : textDraft;
+                if (textDraft !== undefined) {
+                  return textDraft;
+                }
+
+                if (text.published) {
+                  return { ...text, published: false };
+                }
               }
 
               return text;
@@ -292,7 +308,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         const versionsPatchResult = dispatch(
           textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) =>
-            draft.map((text) => ({ ...text, published: false })),
+            draft.map((text) => (text.published ? { ...text, published: false } : text)),
           ),
         );
 

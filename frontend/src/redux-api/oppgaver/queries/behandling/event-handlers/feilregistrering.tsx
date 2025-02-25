@@ -6,7 +6,7 @@ import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
 import type { FeilregistreringEvent } from '@app/redux-api/server-sent-events/types';
 import { reduxStore } from '@app/redux/configure-store';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
+import { HistoryEventTypes, type IFeilregistrertEvent } from '@app/types/oppgavebehandling/response';
 
 export const handleFeilregistreringEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
@@ -48,7 +48,7 @@ export const handleFeilregistreringEvent =
                   event: null,
                   type: HistoryEventTypes.FEILREGISTRERT,
                 },
-              },
+              } satisfies IFeilregistrertEvent,
             ],
           };
         }),

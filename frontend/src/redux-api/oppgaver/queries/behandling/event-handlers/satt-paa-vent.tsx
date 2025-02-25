@@ -7,7 +7,7 @@ import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
 import type { SattPaaVentEvent } from '@app/redux-api/server-sent-events/types';
 import { reduxStore } from '@app/redux/configure-store';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
+import { HistoryEventTypes, type ISattPaaVentEvent } from '@app/types/oppgavebehandling/response';
 import { Label } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
@@ -65,7 +65,7 @@ export const handleSattPaaVentEvent =
                   event: null,
                   type: HistoryEventTypes.SATT_PAA_VENT,
                 },
-              },
+              } satisfies ISattPaaVentEvent,
               ...history.sattPaaVent,
             ],
           };

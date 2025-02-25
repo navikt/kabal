@@ -6,7 +6,7 @@ import type { RolEvent } from '@app/redux-api/server-sent-events/types';
 import { reduxStore } from '@app/redux/configure-store';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
+import { HistoryEventTypes, type IRolEvent } from '@app/types/oppgavebehandling/response';
 import { BodyLong } from '@navikt/ds-react';
 
 export const handleRolEvent =
@@ -71,7 +71,7 @@ export const handleRolEvent =
                     event: { flow: FlowState.NOT_SENT, rol: null },
                     type: HistoryEventTypes.ROL,
                   },
-                },
+                } satisfies IRolEvent,
               ],
             };
           }
@@ -93,7 +93,7 @@ export const handleRolEvent =
                 event: { flow: flowState, rol },
                 type: HistoryEventTypes.ROL,
                 previous,
-              },
+              } satisfies IRolEvent,
               ...history.rol,
             ],
           };
