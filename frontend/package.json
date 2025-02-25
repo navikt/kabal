@@ -37,7 +37,7 @@
     "@navikt/ds-css": "7.13.0",
     "@navikt/ds-react": "7.13.0",
     "@navikt/fnrvalidator": "2.1.5",
-    "@reduxjs/toolkit": "2.5.1",
+    "@reduxjs/toolkit": "2.6.0",
     "@slate-yjs/core": "1.0.2",
     "@styled-icons/fluentui-system-regular": "10.47.0",
     "@udecode/plate": "43.0.5",

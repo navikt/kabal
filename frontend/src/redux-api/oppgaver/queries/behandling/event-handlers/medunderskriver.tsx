@@ -7,7 +7,7 @@ import { reduxStore } from '@app/redux/configure-store';
 import type { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
+import { HistoryEventTypes, type IMedunderskriverEvent } from '@app/types/oppgavebehandling/response';
 import { BodyLong } from '@navikt/ds-react';
 
 export const handleMedunderskriverEvent =
@@ -68,7 +68,7 @@ export const handleMedunderskriverEvent =
                     event: { flow: FlowState.NOT_SENT, medunderskriver: null },
                     type: HistoryEventTypes.MEDUNDERSKRIVER,
                   },
-                },
+                } satisfies IMedunderskriverEvent,
               ],
             };
           }
@@ -90,7 +90,7 @@ export const handleMedunderskriverEvent =
                 event: { flow: flowState, medunderskriver },
                 type: HistoryEventTypes.MEDUNDERSKRIVER,
                 previous,
-              },
+              } satisfies IMedunderskriverEvent,
               ...history.medunderskriver,
             ],
           };

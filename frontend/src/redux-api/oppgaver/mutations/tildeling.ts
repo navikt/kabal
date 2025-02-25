@@ -4,7 +4,7 @@ import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-t
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
-import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
+import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
 import {
   FradelReason,
   type FradelSaksbehandlerParams,
@@ -101,35 +101,40 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
         const userData = await user;
 
         const optimisticFradelingReason = dispatch(
-          behandlingerQuerySlice.util.updateQueryData('getFradelingReason', oppgaveId, (draft) => ({
-            previous: {
-              actor: draft?.actor ?? null,
-              event: draft?.event ?? {
-                fradelingReasonId: null,
-                hjemmelIdList: [],
-                saksbehandler: null,
-              },
-              timestamp: draft?.timestamp ?? format(new Date(), ISO_DATETIME_FORMAT),
-              type: HistoryEventTypes.TILDELING,
-            },
-            timestamp: format(new Date(), ISO_DATETIME_FORMAT),
-            type: HistoryEventTypes.TILDELING,
-            actor: {
-              navIdent: userData.navIdent,
-              navn: userData.navn,
-            },
-            event: isFeilHjemmel
-              ? {
-                  saksbehandler: null,
-                  fradelingReasonId: params.reasonId,
-                  hjemmelIdList: params.hjemmelIdList,
-                }
-              : {
-                  saksbehandler: null,
-                  fradelingReasonId: params.reasonId,
-                  hjemmelIdList: [],
+          behandlingerQuerySlice.util.updateQueryData(
+            'getFradelingReason',
+            oppgaveId,
+            (draft) =>
+              ({
+                previous: {
+                  actor: draft?.actor ?? null,
+                  event: draft?.event ?? {
+                    fradelingReasonId: null,
+                    hjemmelIdList: [],
+                    saksbehandler: null,
+                  },
+                  timestamp: draft?.timestamp ?? format(new Date(), ISO_DATETIME_FORMAT),
+                  type: HistoryEventTypes.TILDELING,
                 },
-          })),
+                timestamp: format(new Date(), ISO_DATETIME_FORMAT),
+                type: HistoryEventTypes.TILDELING,
+                actor: {
+                  navIdent: userData.navIdent,
+                  navn: userData.navn,
+                },
+                event: isFeilHjemmel
+                  ? {
+                      saksbehandler: null,
+                      fradelingReasonId: params.reasonId,
+                      hjemmelIdList: params.hjemmelIdList,
+                    }
+                  : {
+                      saksbehandler: null,
+                      fradelingReasonId: params.reasonId,
+                      hjemmelIdList: [],
+                    },
+              }) satisfies ITildelingEvent,
+          ),
         );
 
         try {

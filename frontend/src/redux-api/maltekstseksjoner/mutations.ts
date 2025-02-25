@@ -167,7 +167,17 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', id, () => data));
           dispatch(
             maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjonVersions', id, (draft) =>
-              draft.map((v) => (v.versionId === data.versionId ? data : { ...v, published: false })),
+              draft.map((v) => {
+                if (v.versionId === data.versionId) {
+                  return data;
+                }
+
+                if (v.published) {
+                  return { ...v, published: false };
+                }
+
+                return v;
+              }),
             ),
           );
         } catch (e) {
@@ -271,9 +281,17 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', id, () => maltekstseksjon));
           dispatch(
             maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjonVersions', id, (draft) =>
-              draft.map((v) =>
-                v.versionId === maltekstseksjon.versionId ? maltekstseksjon : { ...v, published: false },
-              ),
+              draft.map((v) => {
+                if (v.versionId === maltekstseksjon.versionId) {
+                  return maltekstseksjon;
+                }
+
+                if (v.published) {
+                  return { ...v, published: false };
+                }
+
+                return v;
+              }),
             ),
           );
 
@@ -291,7 +309,17 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
             dispatch(textsQuerySlice.util.updateQueryData('getTextById', text.id, () => text));
             dispatch(
               textsQuerySlice.util.updateQueryData('getTextVersions', text.id, (versionsDraft) =>
-                versionsDraft.map((v) => (v.versionId === text.versionId ? text : { ...v, published: false })),
+                versionsDraft.map((v) => {
+                  if (v.versionId === text.versionId) {
+                    return text;
+                  }
+
+                  if (v.published) {
+                    return { ...v, published: false };
+                  }
+
+                  return v;
+                }),
               ),
             );
           }
@@ -441,7 +469,13 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
             draft.map((text) => {
               if (text.id === id) {
-                return maltekstseksjonDraft === undefined ? { ...text, published: false } : maltekstseksjonDraft;
+                if (maltekstseksjonDraft !== undefined) {
+                  return maltekstseksjonDraft;
+                }
+
+                if (text.published) {
+                  return { ...text, published: false };
+                }
               }
 
               return text;
@@ -455,7 +489,7 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
 
         const versionsPatchResult = dispatch(
           maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjonVersions', id, (draft) =>
-            draft.map((text) => ({ ...text, published: false })),
+            draft.map((v) => (v.published ? { ...v, published: false } : v)),
           ),
         );
 
