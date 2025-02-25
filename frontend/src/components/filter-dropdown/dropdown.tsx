@@ -8,7 +8,12 @@ interface Props<T extends string> extends BaseProps<T>, DropdownProps {}
 
 const WILDCARD_REGEX = /.*/;
 
-export const Dropdown = <T extends string>({ selected, options, onChange, close }: Props<T>): JSX.Element | null => {
+export const Dropdown = <T extends string>({
+  selected,
+  options,
+  onChange,
+  close,
+}: Props<T>): React.JSX.Element | null => {
   const [filter, setFilter] = useState<RegExp>(WILDCARD_REGEX);
   const [focused, setFocused] = useState(-1);
   const [filteredOptions, setFilteredOptions] = useState(options);

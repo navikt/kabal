@@ -22,7 +22,7 @@ export const OppgaveRows = ({
   isError,
   'data-testid': testId,
   pageSize,
-}: OppgaveRowsProps): JSX.Element => {
+}: OppgaveRowsProps): React.JSX.Element => {
   if (isError) {
     return (
       <Table.Body data-testid={testId} data-state="error" data-empty="true">

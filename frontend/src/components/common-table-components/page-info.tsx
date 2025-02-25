@@ -4,7 +4,7 @@ interface PageInfoProps {
   toNumber: number;
 }
 
-export const PageInfo = ({ total, fromNumber, toNumber }: PageInfoProps): JSX.Element | null => {
+export const PageInfo = ({ total, fromNumber, toNumber }: PageInfoProps): React.JSX.Element | null => {
   if (total === 0) {
     return null;
   }

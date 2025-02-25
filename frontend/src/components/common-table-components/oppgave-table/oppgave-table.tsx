@@ -47,7 +47,7 @@ export const OppgaveTable = ({
   isError,
   refetch,
   ...rest
-}: Props & Params): JSX.Element => {
+}: Props & Params): React.JSX.Element => {
   const [sort, onSortChange] = useMemo<[SortState, (field?: string) => void] | [undefined, undefined]>(() => {
     if (typeof params === 'undefined') {
       return [undefined, undefined];

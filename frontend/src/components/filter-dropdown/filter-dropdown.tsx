@@ -26,7 +26,7 @@ export const FilterDropdown = <T extends string>({
   maxHeight,
   maxWidth,
   className,
-}: FilterDropdownProps<T>): JSX.Element => {
+}: FilterDropdownProps<T>): React.JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);

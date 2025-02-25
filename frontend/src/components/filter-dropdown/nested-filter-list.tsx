@@ -30,7 +30,7 @@ export const NestedFilterList = ({
   onChange,
   showFjernAlle = true,
   'data-testid': testId,
-}: NestedDropdownProps): JSX.Element | null => {
+}: NestedDropdownProps): React.JSX.Element | null => {
   const [filter, setFilter] = useState<RegExp>(WILDCARD_REGEX);
   const [rawFilter, setRawFilter] = useState<string>('');
 

@@ -6,7 +6,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const ApiButton = ({ children, useApi }: Props): JSX.Element => {
+export const ApiButton = ({ children, useApi }: Props): React.JSX.Element => {
   const [callApi, props] = useApi();
 
   return (

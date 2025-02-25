@@ -36,7 +36,7 @@ export const LedigeOppgaverTable = () => {
   return <LedigeOppgaverTableInternal />;
 };
 
-const LedigeOppgaverTableInternal = (): JSX.Element => {
+const LedigeOppgaverTableInternal = (): React.JSX.Element => {
   const [params, setParams] = useState<CommonOppgaverParams>({
     typer: [],
     ytelser: [],

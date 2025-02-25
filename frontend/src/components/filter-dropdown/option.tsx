@@ -15,7 +15,7 @@ export const Filter = <T extends string>({
   focused,
   disabled,
   tags,
-}: FilterProps<T>): JSX.Element => {
+}: FilterProps<T>): React.JSX.Element => {
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

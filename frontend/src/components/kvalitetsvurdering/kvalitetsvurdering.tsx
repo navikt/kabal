@@ -10,7 +10,7 @@ import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { KvalitetsskjemaV1 } from './v1/kvalitetsskjema';
 import { KvalitetsskjemaV2 } from './v2/kvalitetsskjema';
 
-export const Kvalitetsvurdering = (): JSX.Element | null => {
+export const Kvalitetsvurdering = (): React.JSX.Element | null => {
   const header = useSectionTitle(SECTION_KEY.KVALITETSVURDERING);
 
   const { value: shown = true } = useKvalitetsvurderingEnabled();

@@ -97,7 +97,7 @@ export const getChangeSetText = ({
     );
   }
 
-  const parts: JSX.Element[] = [];
+  const parts: React.JSX.Element[] = [];
 
   if (shouldSend !== undefined) {
     parts.push(

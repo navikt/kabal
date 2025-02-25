@@ -33,7 +33,7 @@ export const GroupedFilterList = <T extends string>({
   testType,
   openDirection = 'down',
   showFjernAlle = true,
-}: GroupedDropdownProps<T>): JSX.Element | null => {
+}: GroupedDropdownProps<T>): React.JSX.Element | null => {
   const ref = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState<RegExp>(WILDCARD_REGEX);
   const [focused, setFocused] = useState(-1);

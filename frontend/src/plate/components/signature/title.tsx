@@ -8,7 +8,7 @@ interface Props {
   title: string;
 }
 
-export const Title = ({ title }: Props): JSX.Element => {
+export const Title = ({ title }: Props): React.JSX.Element => {
   if (title === MISSING_TITLE) {
     return <StyledWarning variant="warning">Tittel mangler</StyledWarning>;
   }

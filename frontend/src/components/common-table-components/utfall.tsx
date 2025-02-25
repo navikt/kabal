@@ -6,7 +6,7 @@ interface Props {
   utfallId: string | null;
 }
 
-export const Utfall = ({ utfallId }: Props): JSX.Element => {
+export const Utfall = ({ utfallId }: Props): React.JSX.Element => {
   const { data: utfallList } = useUtfall();
 
   const children = useMemo(() => {
