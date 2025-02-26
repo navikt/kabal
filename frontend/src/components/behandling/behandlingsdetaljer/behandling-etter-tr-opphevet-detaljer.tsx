@@ -8,13 +8,13 @@ import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/rea
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { Tilbakekreving } from '@app/components/behandling/behandlingsdetaljer/tilbakekreving';
 import { UtfallResultat } from '@app/components/behandling/behandlingsdetaljer/utfall-resultat';
+import { VarseletFrist } from '@app/components/behandling/behandlingsdetaljer/varselet-frist/varslet-frist';
 import { Ytelse } from '@app/components/behandling/behandlingsdetaljer/ytelse';
 import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domain';
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
 import { Part } from '@app/components/part/part';
 import { Type } from '@app/components/type/type';
-import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import type { IBehandlingEtterTryderettenOpphevet as IBehandlingEtterTrOpphevet } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Heading } from '@navikt/ds-react';
@@ -36,7 +36,6 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
     ytelseId,
     prosessfullmektig,
     saksnummer,
-    varsletFrist,
     kjennelseMottatt,
     id,
   } = oppgavebehandling;
@@ -78,15 +77,13 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
 
         <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 
-        <ReadOnlyDate
-          date={kjennelseMottatt}
-          id="dato-for-kjennelse-mottatt-fra-trygderetten-med-utfall-opphevet"
-          label="Dato for kjennelse mottatt fra Trygderetten med utfall opphevet"
-        />
-
-        <BehandlingSection label="Varslet frist">
-          {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
-        </BehandlingSection>
+        <VarseletFrist oppgavebehandling={oppgavebehandling}>
+          <ReadOnlyDate
+            date={kjennelseMottatt}
+            id="dato-for-kjennelse-mottatt-fra-trygderetten-med-utfall-opphevet"
+            label="Dato for kjennelse mottatt fra Trygderetten med utfall opphevet"
+          />
+        </VarseletFrist>
 
         <BehandlingSection label="Anke behandlet av">
           {fraNAVEnhetNavn} - {fraNAVEnhet}
