@@ -1,9 +1,9 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
-import { VarseletFristModal } from '@app/components/behandling/behandlingsdetaljer/varselet-frist/modal';
+import { VarsletFristModal } from '@app/components/behandling/behandlingsdetaljer/varselet-frist/modal';
 import { isoDateToPretty } from '@app/domain/date';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Tooltip } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { useRef } from 'react';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export const VarseletFrist = ({ oppgavebehandling, children }: Props) => {
+export const VarsletFrist = ({ oppgavebehandling, children }: Props) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const { varsletFrist } = oppgavebehandling;
 
@@ -22,21 +22,26 @@ export const VarseletFrist = ({ oppgavebehandling, children }: Props) => {
       <BehandlingSection label="Varslet frist">
         <HStack justify="space-between">
           <span>{varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}</span>
-
-          <Tooltip content="Varsle ny frist" describesChild>
-            <Button
-              variant="tertiary"
-              size="xsmall"
-              icon={<PencilIcon aria-hidden />}
-              onClick={() => modalRef.current?.showModal()}
-            />
-          </Tooltip>
+          {/* <Button
+            variant="tertiary"
+            size="xsmall"
+            icon={<PencilIcon aria-hidden />}
+          /> */}
         </HStack>
+
+        <Button
+          variant="secondary"
+          size="small"
+          icon={<PencilIcon aria-hidden />}
+          onClick={() => modalRef.current?.showModal()}
+        >
+          Varsle om ny frist
+        </Button>
       </BehandlingSection>
 
-      <VarseletFristModal oppgavebehandling={oppgavebehandling} modalRef={modalRef}>
+      <VarsletFristModal oppgavebehandling={oppgavebehandling} modalRef={modalRef}>
         {children}
-      </VarseletFristModal>
+      </VarsletFristModal>
     </>
   );
 };

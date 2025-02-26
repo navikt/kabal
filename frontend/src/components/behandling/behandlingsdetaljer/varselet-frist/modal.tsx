@@ -1,6 +1,8 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
 import { DatePicker } from '@app/components/date-picker/date-picker';
+import { PDFPreview } from '@app/components/documents/new-documents/modal/pdf-preview/pdf-preview';
+import { useNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';
 import { isoDateToPretty } from '@app/domain/date';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Button, HStack, Modal, TextField, Textarea, VStack } from '@navikt/ds-react';
@@ -13,35 +15,29 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export const VarseletFristModal = ({ oppgavebehandling, modalRef, children }: Props) => {
+export const VarsletFristModal = ({ oppgavebehandling, modalRef, children }: Props) => {
   const { varsletFrist } = oppgavebehandling;
   const [newDate, setNewDate] = useState<string | null>(varsletFrist);
   const [title, setTitle] = useState<string>('');
   const [text, setText] = useState<string>('');
   const [dateError, setDateError] = useState<string | undefined>(undefined);
-  const [pdfParams, setPdfParams] = useState<PreviewParams | null>(null);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
-  useEffect(() => {
-    const timeout = setTimeout(
-      () =>
-        setPdfParams({
-          behandlingId: oppgavebehandling.id,
-          title,
-          customText: text,
-          // fullmektigFritekst: null,
-          // previousBehandlingstidInfo: null,
-          // reason: null,
-          // behandlingstidUnits: null,
-          // behandlingstidUnitTypeId: null,
-          behandlingstidDate: newDate ?? undefined,
-        }),
-      500,
-    );
+  const pdfParams = {
+    behandlingId: oppgavebehandling.id,
+    title,
+    customText: text,
+    // fullmektigFritekst: null,
+    // previousBehandlingstidInfo: null,
+    // reason: null,
+    // behandlingstidUnits: null,
+    // behandlingstidUnitTypeId: null,
+    behandlingstidDate: newDate ?? undefined,
+  };
 
-    return () => clearTimeout(timeout);
-  }, [oppgavebehandling.id, title, text, newDate]);
-
-  const pdfUrl = usePdfUrl(pdfParams);
+  // const pdfUrl = '/api/kabal-api/preview/forlenget-behandlingstid';
+  const pdfUrl = null;
+  const noFlickerReload = useNoFlickerReloadPdf(pdfUrl, setPdfLoading);
 
   const validate = (): boolean => {
     const isValid = newDate !== null;
@@ -51,9 +47,9 @@ export const VarseletFristModal = ({ oppgavebehandling, modalRef, children }: Pr
   };
 
   return (
-    <Modal ref={modalRef} header={{ heading: 'Send brev om endret frist' }} width="1200px" closeOnBackdropClick>
+    <Modal ref={modalRef} header={{ heading: 'Send brev om endret frist' }} width="2000px" closeOnBackdropClick>
       <Modal.Body>
-        <HStack>
+        <HStack gap="9">
           <VStack gap="4">
             <HStack gap="4">
               {children}
@@ -89,14 +85,7 @@ export const VarseletFristModal = ({ oppgavebehandling, modalRef, children }: Pr
             />
           </VStack>
 
-          {pdfUrl === null ? null : (
-            <object
-              data={`${pdfUrl}${PDF_PARAMS}`}
-              type="application/pdf"
-              name="pdf-viewer"
-              aria-label="Forhåndsvisning av brev om forlenget frist."
-            />
-          )}
+          {pdfUrl === null ? null : <PDFPreview isLoading={pdfLoading} noFlickerReload={noFlickerReload} />}
         </HStack>
       </Modal.Body>
 

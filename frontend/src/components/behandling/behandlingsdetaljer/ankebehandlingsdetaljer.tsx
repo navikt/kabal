@@ -8,7 +8,7 @@ import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdet
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { Tilbakekreving } from '@app/components/behandling/behandlingsdetaljer/tilbakekreving';
 import { UtfallResultat } from '@app/components/behandling/behandlingsdetaljer/utfall-resultat';
-import { VarseletFrist } from '@app/components/behandling/behandlingsdetaljer/varselet-frist/varslet-frist';
+import { VarsletFrist } from '@app/components/behandling/behandlingsdetaljer/varselet-frist/varslet-frist';
 import { Ytelse } from '@app/components/behandling/behandlingsdetaljer/ytelse';
 import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domain';
@@ -75,9 +75,9 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
         <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 
-        <VarseletFrist oppgavebehandling={oppgavebehandling}>
+        <VarsletFrist oppgavebehandling={oppgavebehandling}>
           <MottattDato />
-        </VarseletFrist>
+        </VarsletFrist>
 
         <BehandlingSection label="Behandlet av">
           {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
