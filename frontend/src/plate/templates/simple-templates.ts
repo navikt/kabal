@@ -50,12 +50,34 @@ export const getGenereltBrevTemplate = (
 
 export const GENERELT_BREV_TEMPLATE = getGenereltBrevTemplate(true);
 
-export const NOTAT_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
-  templateId: TemplateIdEnum.NOTAT,
-  tittel: 'Notat',
-  richText: [createCurrentDate(), createSimpleParagraph()],
-  dokumentTypeId: DistribusjonsType.NOTAT,
-});
+export const getNotatTemplate = (
+  includeMedunderskriver: boolean,
+  overriddenSaksbehandler?: string,
+): Immutable<IMutableSmartEditorTemplate> =>
+  deepFreeze({
+    templateId: TemplateIdEnum.NOTAT,
+    tittel: 'Notat',
+    richText: [
+      createCurrentDate(),
+      {
+        type: BaseParagraphPlugin.key,
+        align: TextAlign.LEFT,
+        children: [
+          createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
+          createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
+          createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
+          createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
+          createFullmektig(),
+          createLabelContent(LabelContentSource.SAKSNUMMER),
+        ],
+      },
+      createSimpleParagraph(),
+      createSignature(includeMedunderskriver, overriddenSaksbehandler),
+    ],
+    dokumentTypeId: DistribusjonsType.NOTAT,
+  });
+
+export const NOTAT_TEMPLATE = getNotatTemplate(true);
 
 export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ROL_QUESTIONS,

@@ -12,6 +12,7 @@ import {
   ROL_QUESTIONS_TEMPLATE,
   ROL_TILSVARSBREV_TEMPLATE,
   getGenereltBrevTemplate,
+  getNotatTemplate,
 } from '@app/plate/templates/simple-templates';
 import { SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE } from '@app/plate/templates/svar-på-innsynsbegjæring';
 import { VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE } from '@app/plate/templates/varsel-om-omgjøring-til-ugunst';
@@ -85,5 +86,9 @@ export const OMGJØRINGSKRAVVEDTAK_TEMPLATES = [
 ];
 
 export const getFinishedBehandlingTemplates = (navIdent: string) => {
-  return [getGenereltBrevTemplate(false, navIdent), NOTAT_TEMPLATE, SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE];
+  return [
+    getGenereltBrevTemplate(false, navIdent),
+    getNotatTemplate(false, navIdent),
+    SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE,
+  ];
 };
