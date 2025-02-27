@@ -1,5 +1,14 @@
 import type { DraftTextReadOnlyMetadata, PublishedTextReadOnlyMetadata } from '../common-text-types';
-import type { INewGodFormuleringParams, INewPlainTextParams, INewRegelverkParams, INewRichTextParams } from './common';
+import type {
+  INewGodFormuleringParams,
+  INewPlainTextParams,
+  INewRegelverkParams,
+  INewRichTextParams,
+  ListGodFormulering,
+  ListPlainText,
+  ListRegelverk,
+  ListRichText,
+} from './common';
 
 export type IDraftRichText = INewRichTextParams & DraftTextReadOnlyMetadata;
 type IDraftRegelverk = INewRegelverkParams & DraftTextReadOnlyMetadata;
@@ -21,3 +30,5 @@ export type IGodFormulering = IDraftGodFormulering | IPublishedGodFormulering;
 export type IPlainText = IDraftPlainText | IPublishedPlainText;
 
 export type IText = IDraft | IPublishedText;
+
+export type ListText = ListRichText | ListPlainText | ListRegelverk | ListGodFormulering;

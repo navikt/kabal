@@ -1,3 +1,4 @@
+import { QueryKey, SortKey } from '@app/components/smart-editor-texts/sortable-header';
 import { type Status, filterByStatus } from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
@@ -6,11 +7,11 @@ import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { SortOrder } from '@app/types/sort';
 import type { Language } from '@app/types/texts/language';
-import type { IText } from '@app/types/texts/responses';
+import type { ListText } from '@app/types/texts/responses';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { QueryKey, SortKey } from '../sortable-header';
-type RedaktørItem = IText | IMaltekstseksjon;
+
+type RedaktørItem = ListText | IMaltekstseksjon;
 type ScoredText<T extends RedaktørItem> = T & {
   score: number;
 };

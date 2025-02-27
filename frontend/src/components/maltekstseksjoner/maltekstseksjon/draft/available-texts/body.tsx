@@ -1,11 +1,11 @@
 import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
 import { isoDateTimeToPretty } from '@app/domain/date';
-import type { IRichText } from '@app/types/texts/responses';
+import type { ListRichText } from '@app/types/texts/common';
 import { Button, Table } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { Row } from './row';
 
-type ScoredText = IRichText & { score: number };
+type ScoredText = ListRichText & { score: number };
 
 interface Props {
   texts: ScoredText[];

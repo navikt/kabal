@@ -1,12 +1,20 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
-import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
+import {
+  isListGodFormulering,
+  isListPlainText,
+  isListRegelverk,
+  isListRichText,
+  isPlainText,
+  isRichText,
+} from '@app/functions/is-rich-plain-text';
 import { getLastPublishedVersion } from '@app/redux-api/redaktoer-helpers';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { textsApi } from '@app/redux-api/texts/texts';
 import { reduxStore } from '@app/redux/configure-store';
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
+import type { ListGodFormulering, ListPlainText, ListRegelverk, ListRichText } from '@app/types/texts/common';
 import { LANGUAGES, UNTRANSLATED, isLanguage } from '@app/types/texts/language';
 import type {
   ICreateDraftFromVersionParams,
@@ -32,6 +40,7 @@ import type {
   IRegelverk,
   IRichText,
   IText,
+  ListText,
 } from '@app/types/texts/responses';
 import type { IDeleteDraftOrUnpublishTextResponse } from '@app/types/texts/responses-maltekster';
 import { formatISO } from 'date-fns';
@@ -144,7 +153,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
           }),
         );
 
-        let textToMove: IText | undefined;
+        let textToMove: ListText | undefined;
 
         const movedFromListPatchResult = dispatch(
           textsQuerySlice.util.updateQueryData('getTexts', { textType: oldTextType }, (draft) =>
@@ -162,7 +171,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         const movedToListPatchResult = dispatch(
           textsQuerySlice.util.updateQueryData('getTexts', { textType: newTextType }, (draft) => {
-            if (textToMove !== undefined && isRichText(textToMove)) {
+            if (textToMove !== undefined && isListRichText(textToMove)) {
               draft.push({ ...textToMove, textType: newTextType });
             }
           }),
@@ -195,12 +204,14 @@ const textsMutationSlice = textsApi.injectEndpoints({
         body: { title },
       }),
       onQueryStarted: async ({ id, title, query }, { queryFulfilled }) => {
-        const undo = update(id, { title }, query);
+        const undo = update(id, { title });
+        const undoList = updateList(id, { title }, query);
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query);
         } catch {
           undo();
+          undoList();
         }
       },
     }),
@@ -403,43 +414,43 @@ const textsMutationSlice = textsApi.injectEndpoints({
         body: { richText },
       }),
       onQueryStarted: async ({ id, richText, query, language }, { queryFulfilled }) => {
-        const undo = update(
-          id,
-          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-          (t) => {
-            if (isRegelverk(t)) {
-              if (language === UNTRANSLATED && richText !== null) {
-                return { ...t, richText: { ...t.richText, [UNTRANSLATED]: richText } };
-              }
-
-              return t;
-            }
-
-            if (isGodFormulering(t)) {
-              if (isLanguage(language)) {
-                return { ...t, richText: { ...t.richText, [language]: richText } };
-              }
-
-              return t;
-            }
-
-            if (isRichText(t)) {
-              if (isLanguage(language)) {
-                return { ...t, richText: { ...t.richText, [language]: richText } };
-              }
-
-              return t;
+        // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
+        const upd = <T extends IText | ListText>(t: T) => {
+          if (isListRegelverk(t)) {
+            if (language === UNTRANSLATED && richText !== null) {
+              return { ...t, richText: { ...t.richText, [UNTRANSLATED]: richText } };
             }
 
             return t;
-          },
-          query,
-        );
+          }
+
+          if (isListGodFormulering(t)) {
+            if (isLanguage(language)) {
+              return { ...t, richText: { ...t.richText, [language]: richText } };
+            }
+
+            return t;
+          }
+
+          if (isListRichText(t)) {
+            if (isLanguage(language)) {
+              return { ...t, richText: { ...t.richText, [language]: richText } };
+            }
+
+            return t;
+          }
+
+          return t;
+        };
+
+        const undo = update(id, upd);
+        const undoList = updateList(id, upd, query);
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query, false);
         } catch {
           undo();
+          undoList();
         }
       },
     }),
@@ -451,16 +462,17 @@ const textsMutationSlice = textsApi.injectEndpoints({
         body: { plainText },
       }),
       onQueryStarted: async ({ id, plainText, query, language }, { queryFulfilled }) => {
-        const undo = update(
-          id,
-          (t) => (isPlainText(t) ? { ...t, plainText: { ...t.plainText, [language]: plainText } } : t),
-          query,
-        );
+        const upd = <T extends IText | ListText>(t: T) =>
+          isListPlainText(t) ? { ...t, plainText: { ...t.plainText, [language]: plainText } } : t;
+
+        const undo = update(id, upd);
+        const undoList = updateList(id, upd, query);
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query, false);
         } catch {
           undo();
+          undoList();
         }
       },
     }),
@@ -472,7 +484,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         body: { templateSectionIdList },
       }),
       onQueryStarted: async ({ id, templateSectionIdList, query }, { queryFulfilled }) => {
-        const undo = update(id, { templateSectionIdList }, query);
+        const undo = update(id, { templateSectionIdList });
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query);
@@ -489,7 +501,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         body: { ytelseHjemmelIdList },
       }),
       onQueryStarted: async ({ id, ytelseHjemmelIdList, query }, { queryFulfilled }) => {
-        const undo = update(id, { ytelseHjemmelIdList }, query);
+        const undo = update(id, { ytelseHjemmelIdList });
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query);
@@ -506,7 +518,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         body: { utfallIdList },
       }),
       onQueryStarted: async ({ id, utfallIdList, query }, { queryFulfilled }) => {
-        const undo = update(id, { utfallIdList }, query);
+        const undo = update(id, { utfallIdList });
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query);
@@ -523,7 +535,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         body: { enhetIdList },
       }),
       onQueryStarted: async ({ id, enhetIdList, query }, { queryFulfilled }) => {
-        const undo = update(id, { enhetIdList }, query);
+        const undo = update(id, { enhetIdList });
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query);
@@ -536,6 +548,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
 });
 
 type UpdateFn = (text: IText) => IText;
+type UpdateListFn = (text: ListText) => ListText;
 
 type Update = Partial<
   Pick<IText, 'title' | 'templateSectionIdList' | 'utfallIdList' | 'ytelseHjemmelIdList' | 'enhetIdList'> &
@@ -545,18 +558,16 @@ type Update = Partial<
       Pick<IGodFormulering, 'richText'>)
 >;
 
-const update = (id: string, upd: Update | UpdateFn, query: IGetTextsParams) => {
-  const idPatchResult = reduxStore.dispatch(
-    textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => {
-      if (draft.published || draft.publishedDateTime !== null) {
-        return draft;
-      }
+type UpdateList = Partial<
+  Pick<ListText, 'title'> &
+    (Pick<ListRichText, 'richText'> &
+      Pick<ListPlainText, 'plainText'> &
+      Pick<ListRegelverk, 'richText'> &
+      Pick<ListGodFormulering, 'richText'>)
+>;
 
-      return typeof upd === 'function' ? upd(draft) : { ...draft, ...upd };
-    }),
-  );
-
-  const listPatchResult = reduxStore.dispatch(
+const updateList = (id: string, upd: UpdateList | UpdateListFn, query: IGetTextsParams) =>
+  reduxStore.dispatch(
     textsQuerySlice.util.updateQueryData('getTexts', { ...query }, (draft) =>
       draft.map((t) => {
         if (t.published || t.publishedDateTime !== null || t.id !== id) {
@@ -566,6 +577,17 @@ const update = (id: string, upd: Update | UpdateFn, query: IGetTextsParams) => {
         return typeof upd === 'function' ? upd(t) : { ...t, ...upd };
       }),
     ),
+  ).undo;
+
+const update = (id: string, upd: Update | UpdateFn) => {
+  const idPatchResult = reduxStore.dispatch(
+    textsQuerySlice.util.updateQueryData('getTextById', id, (draft) => {
+      if (draft.published || draft.publishedDateTime !== null) {
+        return draft;
+      }
+
+      return typeof upd === 'function' ? upd(draft) : { ...draft, ...upd };
+    }),
   );
 
   const versionPatchResult = reduxStore.dispatch(
@@ -582,7 +604,6 @@ const update = (id: string, upd: Update | UpdateFn, query: IGetTextsParams) => {
 
   return () => {
     idPatchResult.undo();
-    listPatchResult.undo();
     versionPatchResult.undo();
   };
 };
