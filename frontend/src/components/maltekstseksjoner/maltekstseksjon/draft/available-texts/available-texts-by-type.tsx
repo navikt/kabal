@@ -12,7 +12,8 @@ import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
-import type { IRichText, IText } from '@app/types/texts/responses';
+import type { ListRichText } from '@app/types/texts/common';
+import type { IRichText, IText, ListText } from '@app/types/texts/responses';
 import { HStack, Loader, Search, Table, VStack } from '@navikt/ds-react';
 import { useCallback, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
@@ -179,9 +180,9 @@ enum SortKey {
   SCORE = 'score',
 }
 
-type ScoredRichText = IRichText & { score: number };
+type ScoredRichText = ListRichText & { score: number };
 
-const isRichtext = (text: IText): text is IRichText =>
+const isRichtext = (text: IText | ListText): text is IRichText =>
   text.textType === RichTextTypes.MALTEKST || text.textType === RichTextTypes.REDIGERBAR_MALTEKST;
 
 const TableWrapper = styled.div`

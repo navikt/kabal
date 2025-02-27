@@ -11,14 +11,19 @@ import {
   StyledTitleIcon,
   StyledTitleText,
 } from '@app/components/smart-editor-texts/text-list/styled-components';
-import { isGodFormulering, isPlainText, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
+import {
+  isListGodFormulering,
+  isListPlainText,
+  isListRegelverk,
+  isListRichText,
+} from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
 import { type IGetMaltekstseksjonParams, REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { type Language, UNTRANSLATED } from '@app/types/texts/language';
-import type { IText } from '@app/types/texts/responses';
+import type { ListText } from '@app/types/texts/responses';
 import { PercentIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { Box, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useParams } from 'react-router-dom';
@@ -27,14 +32,14 @@ import { SortKey, SortableHeader } from '../sortable-header';
 
 interface StandaloneTextListProps {
   filter: string;
-  data: IText[];
+  data: ListText[];
   isLoading: boolean;
   style?: React.CSSProperties;
   textType: TextTypes;
 }
 
-const getString = (text: IText, language: Language) => {
-  if (isRichText(text) || isGodFormulering(text)) {
+const getString = (text: ListText, language: Language) => {
+  if (isListRichText(text) || isListGodFormulering(text)) {
     const richText = text.richText[language];
 
     if (richText === null) {
@@ -44,11 +49,11 @@ const getString = (text: IText, language: Language) => {
     return getTextAsString(richText);
   }
 
-  if (isRegelverk(text)) {
+  if (isListRegelverk(text)) {
     return getTextAsString(text.richText[UNTRANSLATED]);
   }
 
-  if (isPlainText(text)) {
+  if (isListPlainText(text)) {
     return text.plainText[language];
   }
 
@@ -59,7 +64,7 @@ export const StandaloneTextList = ({ filter, data, isLoading, style, textType }:
   const language = useRedaktoerLanguage();
   const query = useParams<{ id: string }>();
   const [statusFilter] = useStatusFilter();
-  const getFilterText = (text: IText, language: Language) => text.title + (getString(text, language) ?? '');
+  const getFilterText = (text: ListText, language: Language) => text.title + (getString(text, language) ?? '');
   const sortedTexts = useFilteredAndSorted(data, statusFilter, filter, getFilterText, ({ modified }) => modified);
 
   if (isLoading || typeof data === 'undefined') {

@@ -2,10 +2,10 @@ import { IS_LOCALHOST } from '@app/redux-api/common';
 import { paramsWithGlobalQueries } from '@app/redux-api/redaktør-helpers';
 import { TextsTagTypes, textsApi } from '@app/redux-api/texts/texts';
 import type { IGetTextsParams } from '@app/types/texts/params';
-import type { IText } from '@app/types/texts/responses';
+import type { IText, ListText } from '@app/types/texts/responses';
 import { ListTagTypes } from '../tag-types';
 
-const textsListTags = (texts: IText[] | undefined) =>
+const textsListTags = (texts: ListText[] | undefined) =>
   texts === undefined
     ? [{ type: TextsTagTypes.TEXT, id: ListTagTypes.PARTIAL_LIST }]
     : texts
@@ -15,7 +15,7 @@ const textsListTags = (texts: IText[] | undefined) =>
 export const textsQuerySlice = textsApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    getTexts: builder.query<IText[], IGetTextsParams>({
+    getTexts: builder.query<ListText[], IGetTextsParams>({
       query: (params) => ({ url: '/texts', params: paramsWithGlobalQueries(params) }),
       providesTags: textsListTags,
     }),
