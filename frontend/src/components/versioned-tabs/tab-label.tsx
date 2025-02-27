@@ -9,7 +9,7 @@ interface TabLabelProps {
 export const TabLabel = ({ isDraft, isPublished, children }: TabLabelProps) => {
   if (isPublished) {
     return (
-      <HStack align="center" gap="1">
+      <HStack align="center" gap="1" wrap={false}>
         <Tag size="xsmall" variant="info">
           Aktiv
         </Tag>
@@ -20,7 +20,7 @@ export const TabLabel = ({ isDraft, isPublished, children }: TabLabelProps) => {
 
   if (isDraft) {
     return (
-      <HStack align="center" gap="1">
+      <HStack align="center" gap="1" wrap={false}>
         <Tag size="xsmall" variant="warning">
           Utkast
         </Tag>
@@ -30,7 +30,7 @@ export const TabLabel = ({ isDraft, isPublished, children }: TabLabelProps) => {
   }
 
   return (
-    <HStack align="center" gap="1">
+    <HStack align="center" gap="1" wrap={false}>
       <Tag size="xsmall" variant="neutral">
         Inaktiv
       </Tag>
