@@ -8,6 +8,7 @@ import { MottattVedtaksinstans } from '@app/components/behandling/behandlingsdet
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { Tilbakekreving } from '@app/components/behandling/behandlingsdetaljer/tilbakekreving';
 import { UtfallResultat } from '@app/components/behandling/behandlingsdetaljer/utfall-resultat';
+import { VarsletFrist } from '@app/components/behandling/behandlingsdetaljer/varslet-frist/varslet-frist';
 import { Ytelse } from '@app/components/behandling/behandlingsdetaljer/ytelse';
 import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domain';
@@ -37,7 +38,6 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
     ytelseId,
     prosessfullmektig,
     saksnummer,
-    varsletFrist,
     id,
   } = oppgavebehandling;
 
@@ -80,15 +80,13 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
         <MottattVedtaksinstans />
 
-        <BehandlingSection label="Varslet frist">
-          {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
-        </BehandlingSection>
+        <VarsletFrist oppgavebehandling={oppgavebehandling}>
+          <BehandlingSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</BehandlingSection>
+        </VarsletFrist>
 
         <BehandlingSection label="Fra Nav-enhet">
           {fraNAVEnhetNavn} - {fraNAVEnhet}
         </BehandlingSection>
-
-        <BehandlingSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</BehandlingSection>
 
         <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
 

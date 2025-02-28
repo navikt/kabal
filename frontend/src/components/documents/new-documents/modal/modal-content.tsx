@@ -4,14 +4,15 @@ import { FinishButton } from '@app/components/documents/new-documents/modal/fini
 import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
 import { Receipients } from '@app/components/documents/new-documents/modal/finish-document/recipients';
 import { MottattDato } from '@app/components/documents/new-documents/modal/mottatt-dato';
-import { PDFPreview } from '@app/components/documents/new-documents/modal/pdf-preview/pdf-preview';
 import { SetDocumentType } from '@app/components/documents/new-documents/new-document/set-type';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@app/components/documents/set-filename';
+import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
 import { useNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useAttachments } from '@app/hooks/use-parent-document';
 import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
@@ -38,6 +39,7 @@ interface Props {
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
+  const { value: pdfWidth, setValue: setPdfWidth } = useDocumentsArchivePdfWidth();
   const canEditDocument = useCanEditDocument(document, parentDocument);
   const { pdfOrSmartDocuments, journalfoerteDocuments } = useAttachments(document.id);
   const [setTitle] = useSetTitleMutation();
@@ -119,7 +121,14 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
           <Errors updatePdf={noFlickerReload.onReload} />
         </VStack>
 
-        {isMainDocument ? <PDFPreview isLoading={pdfLoading} noFlickerReload={noFlickerReload} /> : null}
+        {isMainDocument ? (
+          <SimplePdfPreview
+            width={pdfWidth}
+            setWidth={setPdfWidth}
+            isLoading={pdfLoading}
+            noFlickerReload={noFlickerReload}
+          />
+        ) : null}
       </ModalBody>
 
       <Modal.Footer>
