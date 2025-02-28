@@ -1,5 +1,5 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
-import { VarsletFristModal } from '@app/components/behandling/behandlingsdetaljer/varselet-frist/modal';
+import { VarsletFristModal } from '@app/components/behandling/behandlingsdetaljer/varslet-frist/modal';
 import { isoDateToPretty } from '@app/domain/date';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { PencilIcon } from '@navikt/aksel-icons';

@@ -1,13 +1,14 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
 import { DatePicker } from '@app/components/date-picker/date-picker';
-import { PDFPreview } from '@app/components/documents/new-documents/modal/pdf-preview/pdf-preview';
+import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
 import { useNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';
 import { isoDateToPretty } from '@app/domain/date';
+import { useForlengetFristPdfWidth } from '@app/hooks/settings/use-setting';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Button, HStack, Modal, TextField, Textarea, VStack } from '@navikt/ds-react';
 import { addYears, subDays } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface Props {
   oppgavebehandling: IOppgavebehandling;
@@ -22,6 +23,7 @@ export const VarsletFristModal = ({ oppgavebehandling, modalRef, children }: Pro
   const [text, setText] = useState<string>('');
   const [dateError, setDateError] = useState<string | undefined>(undefined);
   const [pdfLoading, setPdfLoading] = useState(false);
+  const { value: width, setValue: setWidth } = useForlengetFristPdfWidth();
 
   const pdfParams = {
     behandlingId: oppgavebehandling.id,
@@ -35,8 +37,7 @@ export const VarsletFristModal = ({ oppgavebehandling, modalRef, children }: Pro
     behandlingstidDate: newDate ?? undefined,
   };
 
-  // const pdfUrl = '/api/kabal-api/preview/forlenget-behandlingstid';
-  const pdfUrl = null;
+  const pdfUrl = '/arkivert-dokument/453930176/454332137';
   const noFlickerReload = useNoFlickerReloadPdf(pdfUrl, setPdfLoading);
 
   const validate = (): boolean => {
@@ -48,45 +49,43 @@ export const VarsletFristModal = ({ oppgavebehandling, modalRef, children }: Pro
 
   return (
     <Modal ref={modalRef} header={{ heading: 'Send brev om endret frist' }} width="2000px" closeOnBackdropClick>
-      <Modal.Body>
-        <HStack gap="9">
-          <VStack gap="4">
-            <HStack gap="4">
-              {children}
+      <Modal.Body className="flex h-[80vh] w-full gap-9">
+        <VStack gap="4" width="fit-content" flexShrink="0" overflowY="auto">
+          <HStack gap="4">
+            {children}
 
-              <BehandlingSection label="Varslet frist">
-                <span>{varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}</span>
-              </BehandlingSection>
-            </HStack>
+            <BehandlingSection label="Varslet frist">
+              <span>{varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}</span>
+            </BehandlingSection>
+          </HStack>
 
-            <DatePicker
-              label="Ny frist"
-              onChange={(mottattVedtaksinstans) => {
-                setNewDate(mottattVedtaksinstans);
-              }}
-              value={newDate}
-              size="small"
-              centuryThreshold={CURRENT_YEAR_IN_CENTURY}
-              warningThreshhold={subDays(new Date(), 360)}
-              fromDate={new Date()}
-              toDate={addYears(new Date(), 1)}
-              error={dateError}
-            />
+          <DatePicker
+            label="Ny frist"
+            onChange={(mottattVedtaksinstans) => {
+              setNewDate(mottattVedtaksinstans);
+            }}
+            value={newDate}
+            size="small"
+            centuryThreshold={CURRENT_YEAR_IN_CENTURY}
+            warningThreshhold={subDays(new Date(), 360)}
+            fromDate={new Date()}
+            toDate={addYears(new Date(), 1)}
+            error={dateError}
+          />
 
-            <TextField label="Tittel" size="small" value={title} onChange={({ target }) => setTitle(target.value)} />
+          <TextField label="Tittel" size="small" value={title} onChange={({ target }) => setTitle(target.value)} />
 
-            <Textarea
-              label="Ekstra tekst i brevet (valgfri)"
-              size="small"
-              value={text}
-              onChange={({ target }) => setText(target.value)}
-              cols={60}
-              rows={20}
-            />
-          </VStack>
+          <Textarea
+            label="Ekstra tekst i brevet (valgfri)"
+            size="small"
+            value={text}
+            onChange={({ target }) => setText(target.value)}
+            cols={60}
+            rows={20}
+          />
+        </VStack>
 
-          {pdfUrl === null ? null : <PDFPreview isLoading={pdfLoading} noFlickerReload={noFlickerReload} />}
-        </HStack>
+        <SimplePdfPreview noFlickerReload={noFlickerReload} isLoading={pdfLoading} width={width} setWidth={setWidth} />
       </Modal.Body>
 
       <Modal.Footer>
@@ -110,34 +109,6 @@ export const VarsletFristModal = ({ oppgavebehandling, modalRef, children }: Pro
       </Modal.Footer>
     </Modal>
   );
-};
-
-const PDF_PARAMS = '#toolbar=1&view=fitH&zoom=page-width';
-
-const usePdfUrl = (params: PreviewParams | null): string | null => {
-  const [url, setUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (params === null) {
-      setUrl(null);
-    } else {
-      getUrl(params).then(setUrl);
-    }
-  }, [params]);
-
-  return url;
-};
-
-const getUrl = async (params: PreviewParams): Promise<string | null> => {
-  const res = await fetch('/api/kabal-api/preview/forlenget-behandlingstid', {
-    method: 'POST',
-    body: JSON.stringify(params),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  return res.ok ? res.text() : null;
 };
 
 enum BehandlingstidUnitTypeId {

@@ -3,7 +3,7 @@ import { Gosys } from '@app/components/behandling/behandlingsdetaljer/gosys';
 import { MottattDato } from '@app/components/behandling/behandlingsdetaljer/mottatt-klageinstans';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
-import { VarsletFrist } from '@app/components/behandling/behandlingsdetaljer/varselet-frist/varslet-frist';
+import { VarsletFrist } from '@app/components/behandling/behandlingsdetaljer/varslet-frist/varslet-frist';
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domain';
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
 import { Type } from '@app/components/type/type';

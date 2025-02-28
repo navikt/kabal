@@ -8,7 +8,7 @@ import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/rea
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
 import { Tilbakekreving } from '@app/components/behandling/behandlingsdetaljer/tilbakekreving';
 import { UtfallResultat } from '@app/components/behandling/behandlingsdetaljer/utfall-resultat';
-import { VarsletFrist } from '@app/components/behandling/behandlingsdetaljer/varselet-frist/varslet-frist';
+import { VarsletFrist } from '@app/components/behandling/behandlingsdetaljer/varslet-frist/varslet-frist';
 import { Ytelse } from '@app/components/behandling/behandlingsdetaljer/ytelse';
 import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domain';
