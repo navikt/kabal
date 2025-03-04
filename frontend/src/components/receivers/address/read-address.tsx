@@ -1,6 +1,6 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import { AddressState, Container } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
-import type { Addresses } from '@app/components/documents/new-documents/modal/finish-document/address/types';
+import { AddressState, Container } from '@app/components/receivers/address/layout';
+import type { Addresses } from '@app/components/receivers/address/types';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { type IAddress, isNorwegianAddress } from '@app/types/documents/recipients';

@@ -1,5 +1,5 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import { Option } from '@app/components/documents/new-documents/modal/finish-document/address/country/option';
+import { Option } from '@app/components/receivers/address/country/option';
 import type { CountryCode } from '@app/types/common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Search, Tag, Tooltip } from '@navikt/ds-react';
