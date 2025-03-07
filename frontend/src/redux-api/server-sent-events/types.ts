@@ -100,6 +100,10 @@ export interface MottattVedtaksinstansEvent extends BaseEvent {
   mottattVedtaksinstans: string;
 }
 
+export interface VarsletFristEvent extends BaseEvent {
+  varsletFrist: string;
+}
+
 export interface SattPaaVentEvent extends BaseEvent {
   sattPaaVent: IVenteperiode | null;
 }

@@ -1,7 +1,7 @@
-import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
-import { getTypeNames } from '@app/components/documents/new-documents/modal/finish-document/functions';
-import { Options } from '@app/components/documents/new-documents/modal/finish-document/options';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
+import { getTypeNames } from '@app/components/receivers/functions';
+import { Options } from '@app/components/receivers/options';
+import { StyledRecipient } from '@app/components/receivers/styled-components';
 import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
 import type { IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';

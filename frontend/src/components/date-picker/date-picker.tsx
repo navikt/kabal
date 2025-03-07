@@ -21,6 +21,7 @@ interface Props {
   className?: string;
   hideLabel?: boolean;
   autoFocus?: boolean;
+  width?: number;
 }
 
 export const DatePicker = ({
@@ -38,6 +39,7 @@ export const DatePicker = ({
   className,
   hideLabel,
   autoFocus,
+  width,
 }: Props) => {
   const [inputError, setInputError] = useState<string>();
   const [input, setInput] = useState<string>(value === null ? '' : (isoDateToPretty(value) ?? ''));
@@ -193,6 +195,7 @@ export const DatePicker = ({
         size={size}
         hideLabel={hideLabel}
         autoFocus={autoFocus}
+        style={{ width }}
       />
       <Warning date={selected} threshhold={warningThreshhold} />
     </DSDatePicker>

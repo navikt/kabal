@@ -25,10 +25,13 @@ export const DOCUMENT_TYPE_NAMES: Record<DocumentTypeEnum, string> = {
 export enum DistribusjonsType {
   BREV = '1',
   NOTAT = '2',
+  // VEDLEGG = '3', // Old and unused
   VEDTAKSBREV = '4',
   BESLUTNING = '5',
   KJENNELSE_FRA_TRYGDERETTEN = '6',
   ANNEN_INNGAAENDE_POST = '7',
+  SVARBREV = '8',
+  FORLENGET_BEHANDLINGSTIDBREV = '9',
 }
 
 export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
@@ -38,6 +41,8 @@ export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
   [DistribusjonsType.NOTAT]: 'Notat',
   [DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN]: 'Kjennelse fra Trygderetten',
   [DistribusjonsType.ANNEN_INNGAAENDE_POST]: 'Annen inngående post',
+  [DistribusjonsType.SVARBREV]: 'Svarbrev',
+  [DistribusjonsType.FORLENGET_BEHANDLINGSTIDBREV]: 'Forlenget behandlingstidbrev',
 };
 
 export enum InngaaendeKanal {
