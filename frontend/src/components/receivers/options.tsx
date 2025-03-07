@@ -1,4 +1,4 @@
-import { Address } from '@app/components/documents/new-documents/modal/finish-document/address/address';
+import { Address } from '@app/components/receivers/address/address';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import type { IMottaker } from '@app/types/documents/documents';
 import { HandlingEnum, type IAddress } from '@app/types/documents/recipients';

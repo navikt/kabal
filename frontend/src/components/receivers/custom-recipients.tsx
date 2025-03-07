@@ -1,16 +1,16 @@
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
-import { getInitalHandling } from '@app/components/documents/new-documents/modal/finish-document/functions';
-import { Options } from '@app/components/documents/new-documents/modal/finish-document/options';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { EditPart } from '@app/components/part/edit-part';
+import { getInitalHandling } from '@app/components/receivers/functions';
+import type { IErrorProperty } from '@app/components/receivers/is-send-error';
+import { Options } from '@app/components/receivers/options';
+import { StyledRecipient } from '@app/components/receivers/styled-components';
 import type { IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Label, Tag, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-import type { IErrorProperty } from './is-send-error';
 
 interface Props {
   mottakerList: IMottaker[];

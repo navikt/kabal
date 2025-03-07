@@ -36,7 +36,7 @@ export enum ColumnKeyEnum {
   DatoSendtTilTr = 34,
 }
 
-export const TABLE_HEADERS: Record<ColumnKeyEnum, string | null> = {
+export const TABLE_HEADERS = {
   [ColumnKeyEnum.Type]: 'Type',
   [ColumnKeyEnum.TypeWithAnkeITrygderetten]: 'Type',
   [ColumnKeyEnum.Ytelse]: 'Ytelse',

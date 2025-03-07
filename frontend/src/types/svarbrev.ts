@@ -12,6 +12,10 @@ export const BEHANDLINGSTID_UNIT_TYPE_NAMES: Record<BehandlingstidUnitType, stri
   [BehandlingstidUnitType.WEEKS]: 'uker',
   [BehandlingstidUnitType.MONTHS]: 'måneder',
 };
+export const BEHANDLINGSTID_UNIT_TYPE_NAMES_SINGULAR: Record<BehandlingstidUnitType, string> = {
+  [BehandlingstidUnitType.WEEKS]: 'uke',
+  [BehandlingstidUnitType.MONTHS]: 'måned',
+};
 
 export const isBehandlingstidUnitType = (value: string): value is BehandlingstidUnitType =>
   BEHANDLINGSTID_UNIT_TYPES.some((t) => t === value);

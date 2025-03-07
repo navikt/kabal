@@ -1,7 +1,11 @@
 import { isoDateToPretty } from '@app/domain/date';
 import { formatIdNumber } from '@app/functions/format-id';
 import { HistoryEventTypes, type IPart, type IVarsletBehandlingstidEvent } from '@app/types/oppgavebehandling/response';
-import { BEHANDLINGSTID_UNIT_TYPE_NAMES, type BehandlingstidUnitType } from '@app/types/svarbrev';
+import {
+  BEHANDLINGSTID_UNIT_TYPE_NAMES,
+  BEHANDLINGSTID_UNIT_TYPE_NAMES_SINGULAR,
+  type BehandlingstidUnitType,
+} from '@app/types/svarbrev';
 import { ClockIcon } from '@navikt/aksel-icons';
 import { BodyShort, VStack } from '@navikt/ds-react';
 import { Line, employeeName, toKey } from './common';
@@ -25,19 +29,12 @@ const VarsletBehandlingstid = (props: IVarsletBehandlingstidEvent) => (
   </HistoryEvent>
 );
 
-const ChangedMottakere = ({ previous, event }: IVarsletBehandlingstidEvent) => {
+const ChangedMottakere = ({ event }: IVarsletBehandlingstidEvent) => {
   if (event === null) {
     return null;
   }
 
-  const from: IPart[] = previous.event.mottakere ?? [];
   const to: IPart[] = event.mottakere ?? [];
-
-  const changedMottakere = to.length !== from.length || to.some((m) => !from.some((p) => p.id === m.id));
-
-  if (!changedMottakere) {
-    return null;
-  }
 
   return (
     <VStack gap="1" as="section" aria-label="Mottakere">
@@ -53,7 +50,7 @@ const Mottakere = ({ mottakere }: { mottakere: IPart[] }) => {
   }
 
   return (
-    <ul className="m-0 list-disc pl-1">
+    <ul className="m-0 list-disc pl-5">
       {mottakere.map((p) => (
         <ListItemPart key="id" {...p} />
       ))}
@@ -72,30 +69,40 @@ const ChangedFrist = ({ previous, event }: IVarsletBehandlingstidEvent) => {
     return null;
   }
 
-  const changedFrist =
-    event.varsletBehandlingstidUnits !== previous.event.varsletBehandlingstidUnits ||
-    event.varsletBehandlingstidUnitTypeId !== previous.event.varsletBehandlingstidUnitTypeId;
+  const prevUnits = previous.event.varsletBehandlingstidUnits;
+  const prevType = previous.event.varsletBehandlingstidUnitTypeId;
+  const newUnits = event.varsletBehandlingstidUnits;
+  const newType = event.varsletBehandlingstidUnitTypeId;
+  const newFrist = event.varsletFrist;
 
-  if (!changedFrist) {
-    return null;
+  const changedRelative = newUnits !== prevUnits || newType !== prevType;
+
+  if (changedRelative && (newUnits !== null || newType !== null)) {
+    const toDate = newFrist === null ? null : ` (${isoDateToPretty(newFrist)})`;
+
+    return (
+      <Line>
+        Varslet frist:{' '}
+        <b>
+          {getUnits(newUnits, newType)}
+          {toDate}
+        </b>
+      </Line>
+    );
   }
 
-  const toDate = event.varsletFrist === null ? null : ` (${isoDateToPretty(event.varsletFrist)})`;
-
-  return (
-    <Line>
-      Behandlingstid:{' '}
-      <b>
-        {getUnits(event.varsletBehandlingstidUnits, event.varsletBehandlingstidUnitTypeId)}
-        {toDate}
-      </b>
-    </Line>
-  );
+  if (newFrist !== null) {
+    return (
+      <Line>
+        Varslet frist: <b>{isoDateToPretty(newFrist)}</b>
+      </Line>
+    );
+  }
 };
 
 const getUnits = (units: number | null, unitTypeId: BehandlingstidUnitType | null) => {
   if (units !== null && unitTypeId !== null) {
-    return `${units} ${BEHANDLINGSTID_UNIT_TYPE_NAMES[unitTypeId]}`;
+    return `${units} ${units === 1 ? BEHANDLINGSTID_UNIT_TYPE_NAMES_SINGULAR[unitTypeId] : BEHANDLINGSTID_UNIT_TYPE_NAMES[unitTypeId]}`;
   }
 
   if (units === null && unitTypeId !== null) {

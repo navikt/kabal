@@ -124,7 +124,8 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
       sattPaaVent.length +
       fullmektig.length +
       ferdigstilt.length +
-      feilregistrert.length;
+      feilregistrert.length +
+      varsletBehandlingstid.length;
 
     return { counts: _counts, totalCount: _totalCount };
   }, [nodeCategories]);

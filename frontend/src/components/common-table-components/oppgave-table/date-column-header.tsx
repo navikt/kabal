@@ -77,6 +77,7 @@ interface DateColumnHeaderProps {
   fromKey: keyof FromDateSortKeys;
   toKey: keyof ToDateSortKeys;
   sortKey: SortFieldEnum;
+  interactive?: boolean;
 }
 
 export const DateColumnHeader = ({
@@ -87,13 +88,20 @@ export const DateColumnHeader = ({
   fromKey,
   toKey,
   sortKey,
+  interactive = true,
 }: DateColumnHeaderProps) => (
   <StyledColumnHeader aria-sort={params.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
     <HStack align="center" gap="1" wrap={false}>
-      <Sort params={params} onSortChange={onSortChange} sortKey={sortKey}>
-        {children}
-      </Sort>
-      <Filter params={params} setParams={setParams} fromKey={fromKey} toKey={toKey} />
+      {interactive ? (
+        <>
+          <Sort params={params} onSortChange={onSortChange} sortKey={sortKey}>
+            {children}
+          </Sort>
+          <Filter params={params} setParams={setParams} fromKey={fromKey} toKey={toKey} />
+        </>
+      ) : (
+        children
+      )}
     </HStack>
   </StyledColumnHeader>
 );
