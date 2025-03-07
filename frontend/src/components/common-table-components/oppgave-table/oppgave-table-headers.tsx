@@ -3,6 +3,8 @@ import { Registreringshjemler } from '@app/components/common-table-components/op
 import { StyledColumnHeader } from '@app/components/common-table-components/oppgave-table/styled-components';
 import type { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum, TABLE_HEADERS } from '@app/components/common-table-components/types';
+import { useHasRole } from '@app/hooks/use-has-role';
+import { Role } from '@app/types/bruker';
 import { type CommonOppgaverParams, SortFieldEnum } from '@app/types/oppgaver';
 import type { TableProps } from '@navikt/ds-react';
 import { EnhetHjemmel } from './filter-dropdowns/enhet-hjemmel';
@@ -22,13 +24,15 @@ interface TablePlainHeadersProps {
 export const TablePlainHeaders = ({ columnKeys }: TablePlainHeadersProps) =>
   columnKeys.map((key) => <StyledColumnHeader key={key}>{TABLE_HEADERS[key]}</StyledColumnHeader>);
 
-interface TableFilterHeadersProps extends TablePlainHeadersProps {
+interface TableFilterHeadersProps {
   params: CommonOppgaverParams;
   setParams: SetCommonOppgaverParams;
   onSortChange: TableProps['onSortChange'];
 }
 
-export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams }: TableFilterHeadersProps) =>
+type Props = TableFilterHeadersProps & TablePlainHeadersProps;
+
+export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams }: Props) =>
   columnKeys.map((key) => {
     if (params === undefined || setParams === undefined) {
       return <StyledColumnHeader key={key}>{TABLE_HEADERS[key]}</StyledColumnHeader>;
@@ -69,15 +73,9 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         );
       case ColumnKeyEnum.VarsletFrist:
         return (
-          <DateColumnHeader
-            key={key}
-            {...baseColumnHeaderProps}
-            fromKey="varsletFristFrom"
-            toKey="varsletFristTo"
-            sortKey={SortFieldEnum.VARSLET_FRIST}
-          >
+          <VarsletFrist key={key} {...baseColumnHeaderProps}>
             {TABLE_HEADERS[key]}
-          </DateColumnHeader>
+          </VarsletFrist>
         );
       case ColumnKeyEnum.PaaVentTil:
         return (
@@ -142,3 +140,19 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
 
     return <StyledColumnHeader key={key} />;
   });
+
+const VarsletFrist = ({ children, ...props }: TableFilterHeadersProps & { children: string }) => {
+  const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
+
+  return (
+    <DateColumnHeader
+      {...props}
+      fromKey="varsletFristFrom"
+      toKey="varsletFristTo"
+      sortKey={SortFieldEnum.VARSLET_FRIST}
+      interactive={isMerkantil}
+    >
+      {children}
+    </DateColumnHeader>
+  );
+};

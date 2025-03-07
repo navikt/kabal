@@ -1,5 +1,6 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
+import { ForlengetBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/forlenget-behandlingstid';
 import { Gosys } from '@app/components/behandling/behandlingsdetaljer/gosys';
 import { Innsendingshjemmel } from '@app/components/behandling/behandlingsdetaljer/innsendingshjemmel';
 import { Lovhjemmel } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel';
@@ -14,7 +15,6 @@ import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domai
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
 import { Part } from '@app/components/part/part';
 import { Type } from '@app/components/type/type';
-import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -28,7 +28,7 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
   const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
   const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
 
-  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer, varsletFrist, id } =
+  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer, id } =
     oppgavebehandling;
 
   const { utfallId, extraUtfallIdSet } = resultat;
@@ -75,9 +75,9 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
         <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 
-        <BehandlingSection label="Varslet frist">
-          {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
-        </BehandlingSection>
+        <ForlengetBehandlingstid oppgavebehandling={oppgavebehandling}>
+          <MottattDato />
+        </ForlengetBehandlingstid>
 
         <BehandlingSection label="Behandlet av">
           {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}

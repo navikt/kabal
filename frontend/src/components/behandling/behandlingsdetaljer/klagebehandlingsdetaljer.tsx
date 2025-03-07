@@ -1,5 +1,6 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
+import { ForlengetBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/forlenget-behandlingstid';
 import { Gosys } from '@app/components/behandling/behandlingsdetaljer/gosys';
 import { Innsendingshjemmel } from '@app/components/behandling/behandlingsdetaljer/innsendingshjemmel';
 import { Lovhjemmel } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel';
@@ -31,17 +32,21 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
     typeId,
     fraNAVEnhetNavn,
     fraNAVEnhet,
-    mottattKlageinstans,
     kommentarFraVedtaksinstans,
     resultat,
     ytelseId,
     prosessfullmektig,
     saksnummer,
-    varsletFrist,
     id,
   } = oppgavebehandling;
 
   const { utfallId, extraUtfallIdSet } = resultat;
+
+  const mottattKlageinstans = (
+    <BehandlingSection label="Mottatt klageinstans">
+      {isoDateToPretty(oppgavebehandling.mottattKlageinstans)}
+    </BehandlingSection>
+  );
 
   return (
     <GrafanaDomainProvider domain={BEHANDLING_PANEL_DOMAIN}>
@@ -80,15 +85,13 @@ export const Klagebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
         <MottattVedtaksinstans />
 
-        <BehandlingSection label="Varslet frist">
-          {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
-        </BehandlingSection>
+        <ForlengetBehandlingstid oppgavebehandling={oppgavebehandling}>{mottattKlageinstans}</ForlengetBehandlingstid>
 
         <BehandlingSection label="Fra Nav-enhet">
           {fraNAVEnhetNavn} - {fraNAVEnhet}
         </BehandlingSection>
 
-        <BehandlingSection label="Mottatt klageinstans">{isoDateToPretty(mottattKlageinstans)}</BehandlingSection>
+        {mottattKlageinstans}
 
         <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
 

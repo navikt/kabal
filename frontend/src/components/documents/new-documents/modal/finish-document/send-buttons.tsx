@@ -21,7 +21,7 @@ export const SendButtons = ({ document }: FinishProps) => {
   const { data: documents = [] } = useGetDocumentsQuery(typeof data !== 'undefined' ? data.id : skipToken);
   const remove = useRemoveDocument();
   const { close, setValidationErrors } = useContext(ModalContext);
-  const [suggestedBrevmottakere] = useSuggestedBrevmottakere(document);
+  const [suggestedBrevmottakere] = useSuggestedBrevmottakere(document.mottakerList, document.templateId);
   const reachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => s.reachable);
 
   if (oppgaveIsLoading || data === undefined) {

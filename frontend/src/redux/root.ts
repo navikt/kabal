@@ -1,6 +1,7 @@
 import { accessRightsApi } from '@app/redux-api/access-rights';
 import { brukerApi } from '@app/redux-api/bruker';
 import { collaborationApi } from '@app/redux-api/collaboration';
+import { forlengetBehandlingstidApi } from '@app/redux-api/forlenget-behandlingstid';
 import { kabalInternalApi } from '@app/redux-api/internal';
 import { journalposterApi } from '@app/redux-api/journalposter';
 import { kvalitetsvurderingV1Api } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
@@ -35,6 +36,7 @@ export const rootReducer = combineReducers({
   [logiskeVedleggApi.reducerPath]: logiskeVedleggApi.reducer,
   [svarbrevApi.reducerPath]: svarbrevApi.reducer,
   [collaborationApi.reducerPath]: collaborationApi.reducer,
+  [forlengetBehandlingstidApi.reducerPath]: forlengetBehandlingstidApi.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
