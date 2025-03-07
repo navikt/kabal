@@ -13,11 +13,11 @@ import { useCallback, useEffect } from 'react';
 interface Props {
   setMottakerList: (mottakere: IMottaker[]) => void;
   mottakerList: IMottaker[];
-  sendErrors: IErrorProperty[];
+  sendErrors?: IErrorProperty[];
   templateId?: TemplateIdEnum | undefined;
 }
 
-export const Receivers = ({ setMottakerList, mottakerList, sendErrors, templateId }: Props) => {
+export const Receivers = ({ setMottakerList, mottakerList, sendErrors = [], templateId }: Props) => {
   const [suggestedBrevmottakere] = useSuggestedBrevmottakere(mottakerList, templateId);
 
   const reachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => s.reachable);
@@ -146,7 +146,7 @@ export const Receivers = ({ setMottakerList, mottakerList, sendErrors, templateI
         </Alert>
       ) : null}
 
-      {sendErrors?.length === 0 ? null : (
+      {sendErrors.length === 0 ? null : (
         <Alert variant="error" size="small">
           Brevet er ikke sendt til noen. Se feil over.
         </Alert>

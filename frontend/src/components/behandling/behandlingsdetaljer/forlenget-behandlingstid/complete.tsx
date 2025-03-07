@@ -1,17 +1,17 @@
+import { setErrorMessage } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
 import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import {
   useCompleteMutation,
   useGetOrCreateQuery,
   useSetReceiversMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
-import { isApiError } from '@app/types/errors';
 import { Button, HStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
 interface Props {
   id: string;
   onClose: () => void;
-  setError: (error: string) => void;
+  setError: (error: string | undefined) => void;
 }
 
 export const Complete = ({ id, onClose, setError }: Props) => {
@@ -29,17 +29,7 @@ export const Complete = ({ id, onClose, setError }: Props) => {
   return (
     <HStack gap="2" align="center">
       {showConfirm ? null : (
-        <Button
-          onClick={() => {
-            if (data.behandlingstid.varsletBehandlingstidUnits === null && data.behandlingstid.varsletFrist === null) {
-              return setError('Ny behandlingstid eller ny frist må være satt');
-            }
-
-            setShowConfirm(true);
-          }}
-          size="small"
-          variant="primary"
-        >
+        <Button onClick={() => setShowConfirm(true)} size="small" variant="primary">
           Endre frist og send brev
         </Button>
       )}
@@ -51,16 +41,19 @@ export const Complete = ({ id, onClose, setError }: Props) => {
             variant="primary"
             loading={isLoading}
             onClick={async () => {
-              if (data.receivers.length === 0 && reachable.length > 0) {
-                await setReceivers({ mottakerList: reachable, id }).unwrap();
-              }
-
               try {
-                await complete({ id, onClose: onClose }).unwrap();
-              } catch (e) {
-                if (typeof e === 'object' && e !== null && 'data' in e && isApiError(e.data)) {
-                  setError(e.data.title);
+                if (data.receivers.length === 0) {
+                  if (reachable.length === 0) {
+                    await setReceivers({ mottakerList: reachable, id }).unwrap();
+                  } else {
+                    return setError('Brevet må ha minst én mottaker');
+                  }
                 }
+
+                await complete({ id, onClose: onClose }).unwrap();
+                setError(undefined);
+              } catch (e) {
+                setErrorMessage(e, setError, 'Feil ved utsending av brev om lengre saksbehandlingstid.');
               }
             }}
           >

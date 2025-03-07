@@ -1,4 +1,7 @@
-import { useDebounce } from '@app/hooks/use-debounce';
+import {
+  setErrorMessage,
+  useDebounce,
+} from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
 import { usePrevious } from '@app/hooks/use-previous';
 import {
   useSetBehandlingstidUnitTypeMutation,
@@ -11,7 +14,7 @@ import {
   type BehandlingstidUnitType,
   isBehandlingstidUnitType,
 } from '@app/types/svarbrev';
-import { HStack, Heading, TextField, ToggleGroup, VStack } from '@navikt/ds-react';
+import { ErrorMessage, HStack, Heading, TextField, ToggleGroup, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -26,6 +29,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist }: Props) =>
   const [tempValue, setTempValue] = useState(units?.toString() ?? '');
   const [setUnits] = useSetBehandlingstidUnitsMutation({ fixedCacheKey: id });
   const prevVarsletFrist = usePrevious(varsletFrist);
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
     if (prevVarsletFrist === null && typeof varsletFrist === 'string') {
@@ -36,7 +40,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist }: Props) =>
   const parsed = Number.parseInt(tempValue, 10);
   const skip = Number.isNaN(parsed) || parsed === units || (tempValue === '' && units === null);
 
-  useDebounce(() => setUnits({ varsletBehandlingstidUnits: parsed, id }), 500, skip);
+  useDebounce(() => setUnits({ varsletBehandlingstidUnits: null, id }).unwrap(), 500, skip, setError);
 
   return (
     <VStack gap="1" as="section">
@@ -61,9 +65,16 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist }: Props) =>
           value={typeId}
           size="small"
           variant="neutral"
-          onChange={(typeId) => {
-            if (isBehandlingstidUnitType(typeId)) {
-              setUnitType({ varsletBehandlingstidUnitTypeId: typeId, id });
+          onChange={async (typeId) => {
+            if (!isBehandlingstidUnitType(typeId)) {
+              return;
+            }
+
+            try {
+              await setUnitType({ varsletBehandlingstidUnitTypeId: typeId, id }).unwrap();
+              setError(undefined);
+            } catch (e) {
+              setErrorMessage(e, setError);
             }
           }}
         >
@@ -76,6 +87,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist }: Props) =>
           ))}
         </ToggleGroup>
       </HStack>
+      {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
     </VStack>
   );
 };

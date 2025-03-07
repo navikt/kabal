@@ -1,6 +1,6 @@
-import { useDebounce } from '@app/hooks/use-debounce';
+import { useDebounce } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
 import { useSetTitleMutation } from '@app/redux-api/forlenget-behandlingstid';
-import { TextField } from '@navikt/ds-react';
+import { ErrorMessage, TextField, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
 interface Props {
@@ -11,11 +11,15 @@ interface Props {
 export const SetTitle = ({ value, id }: Props) => {
   const [setValue] = useSetTitleMutation({ fixedCacheKey: id });
   const [tempValue, setTempValue] = useState(value ?? '');
+  const [error, setError] = useState<string>();
 
   const skip = tempValue === value || (tempValue === '' && value === null);
-  useDebounce(() => setValue({ id, title: tempValue }), 500, skip);
+  useDebounce(() => setValue({ id, title: tempValue }).unwrap(), 500, skip, setError);
 
   return (
-    <TextField label="Tittel" size="small" value={tempValue} onChange={({ target }) => setTempValue(target.value)} />
+    <VStack gap="2">
+      <TextField label="Tittel" size="small" value={tempValue} onChange={({ target }) => setTempValue(target.value)} />
+      {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
+    </VStack>
   );
 };
