@@ -27,6 +27,7 @@ import { handleSmartDocumentVersionedEvent } from '@app/redux-api/oppgaver/queri
 import { handleTilbakekrevingEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/tilbakekreving';
 import { handleTildelingEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/tildeling';
 import { handleUtfallEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/utfall';
+import { handleVarsletFristEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/varslet-frist';
 import { ServerSentEventManager, ServerSentEventType } from '@app/redux-api/server-sent-events/server-sent-events';
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
@@ -91,6 +92,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           const feilregistrering = handleFeilregistreringEvent(oppgaveId, navIdent, updateCachedData);
           const tilbakekreving = handleTilbakekrevingEvent(navIdent, updateCachedData);
           const gosysOppgaveListener = handleGosysOppgaveEvent(oppgaveId, navIdent, updateCachedData);
+          const varsletFrist = handleVarsletFristEvent(navIdent, updateCachedData);
 
           events.addJsonEventListener(ServerSentEventType.TILDELING, tildeling);
           events.addJsonEventListener(ServerSentEventType.MEDUNDERSKRIVER, medunderskriverListener);
@@ -107,6 +109,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           events.addJsonEventListener(ServerSentEventType.FEILREGISTRERING, feilregistrering);
           events.addJsonEventListener(ServerSentEventType.TILBAKEKREVING, tilbakekreving);
           events.addJsonEventListener(ServerSentEventType.GOSYSOPPGAVE, gosysOppgaveListener);
+          events.addJsonEventListener(ServerSentEventType.VARSLET_FRIST, varsletFrist);
 
           // Dokumenter under arbeid
           const documentsAdded = handleDocumentsAddedEvent(oppgaveId, navIdent);

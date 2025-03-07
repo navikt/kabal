@@ -1,4 +1,5 @@
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
+import { ForlengetBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/forlenget-behandlingstid';
 import { Gosys } from '@app/components/behandling/behandlingsdetaljer/gosys';
 import { MottattDato } from '@app/components/behandling/behandlingsdetaljer/mottatt-klageinstans';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
@@ -6,7 +7,6 @@ import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksn
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domain';
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
 import { Type } from '@app/components/type/type';
-import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOmgjøringskravbehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -26,7 +26,7 @@ export const Omgjøringskravdetaljer = ({ oppgavebehandling }: Props) => {
   const [updateFullmektig, { isLoading: fullmektigIsLoading }] = useUpdateFullmektigMutation();
   const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
 
-  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer, varsletFrist, id } =
+  const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer, id } =
     oppgavebehandling;
 
   const { utfallId, extraUtfallIdSet } = resultat;
@@ -71,9 +71,9 @@ export const Omgjøringskravdetaljer = ({ oppgavebehandling }: Props) => {
 
         <Saksnummer saksnummer={saksnummer} />
 
-        <BehandlingSection label="Varslet frist">
-          {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
-        </BehandlingSection>
+        <ForlengetBehandlingstid oppgavebehandling={oppgavebehandling}>
+          <MottattDato />
+        </ForlengetBehandlingstid>
 
         <BehandlingSection label="Behandlet av">
           {fraNAVEnhetNavn} - {fraNAVEnhet}

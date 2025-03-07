@@ -42,6 +42,7 @@ export enum ServerSentEventType {
   FERDIGSTILT = 'FERDIGSTILT',
   FEILREGISTRERING = 'FEILREGISTRERING',
   TILBAKEKREVING = 'TILBAKEKREVING',
+  VARSLET_FRIST = 'VARSLET_FRIST',
 }
 
 type ServerSentEvent = MessageEvent<string>;

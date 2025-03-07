@@ -1,6 +1,6 @@
-import { EditAddress } from '@app/components/documents/new-documents/modal/finish-document/address/edit-address';
-import { ReadAddress } from '@app/components/documents/new-documents/modal/finish-document/address/read-address';
-import type { Addresses } from '@app/components/documents/new-documents/modal/finish-document/address/types';
+import { EditAddress } from '@app/components/receivers/address/edit-address';
+import { ReadAddress } from '@app/components/receivers/address/read-address';
+import type { Addresses } from '@app/components/receivers/address/types';
 import { HandlingEnum, type IAddress } from '@app/types/documents/recipients';
 import type { IPart } from '@app/types/oppgave-common';
 import { useEffect, useState } from 'react';

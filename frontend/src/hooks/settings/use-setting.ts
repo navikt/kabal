@@ -110,6 +110,7 @@ export enum OppgaveTableRowsPerPage {
 }
 
 export const useGosysBeskrivelseTab = () => useSetting('oppgavebehandling/gosys/beskrivelse/tab');
+export const useForlengetFristPdfWidth = () => useNumberSetting('oppgavebehandling/forlenget_frist/pdf/width');
 
 export enum GodeFormuleringerExpandState {
   COLLAPSED = 'COLLAPSED',
