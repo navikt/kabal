@@ -2,19 +2,25 @@ import { getIsRolQuestions } from '@app/components/documents/new-documents/helpe
 import { AnnenInngaaende } from '@app/components/documents/new-documents/modal/annen-inngaaende';
 import { FinishButton } from '@app/components/documents/new-documents/modal/finish-button';
 import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
-import { Receipients } from '@app/components/documents/new-documents/modal/finish-document/recipients';
 import { MottattDato } from '@app/components/documents/new-documents/modal/mottatt-dato';
-import { PDFPreview } from '@app/components/documents/new-documents/modal/pdf-preview/pdf-preview';
 import { SetDocumentType } from '@app/components/documents/new-documents/new-document/set-type';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@app/components/documents/set-filename';
+import { isSendError } from '@app/components/receivers/is-send-error';
+import { Receivers } from '@app/components/receivers/receivers';
+import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
 import { useNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useAttachments } from '@app/hooks/use-parent-document';
-import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import {
+  useFinishDocumentMutation,
+  useSetMottakerListMutation,
+  useSetTitleMutation,
+} from '@app/redux-api/oppgaver/mutations/documents';
 import {
   DISTRIBUTION_TYPE_NAMES,
   DOCUMENT_TYPE_NAMES,
@@ -25,7 +31,7 @@ import {
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { DeleteDocumentButton } from './delete-button';
 import { SetParentDocument } from './set-parent';
@@ -38,6 +44,16 @@ interface Props {
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
+  const [setMottakerList] = useSetMottakerListMutation();
+  const [, { error: finishError }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
+  const sendErrors = useMemo(
+    () =>
+      isSendError(finishError)
+        ? (finishError.data.sections.find((s) => s.section === 'mottakere')?.properties ?? [])
+        : [],
+    [finishError],
+  );
+  const { value: pdfWidth, setValue: setPdfWidth } = useDocumentsArchivePdfWidth();
   const canEditDocument = useCanEditDocument(document, parentDocument);
   const { pdfOrSmartDocuments, journalfoerteDocuments } = useAttachments(document.id);
   const [setTitle] = useSetTitleMutation();
@@ -48,6 +64,10 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
       ? undefined
       : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
   const noFlickerReload = useNoFlickerReloadPdf(pdfUrl, setPdfLoading);
+
+  if (oppgaveId === skipToken) {
+    return null;
+  }
 
   const icon = <DocumentIcon type={document.type} />;
 
@@ -77,13 +97,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
             <HStack align="end" gap="2" wrap={false}>
               <StyledSetFilename
                 tittel={document.tittel}
-                setFilename={(title) => {
-                  if (oppgaveId === skipToken) {
-                    return;
-                  }
-
-                  setTitle({ oppgaveId, dokumentId: document.id, title });
-                }}
+                setFilename={(title) => setTitle({ oppgaveId, dokumentId: document.id, title })}
               />
               <Button
                 size="small"
@@ -114,12 +128,26 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
             <AnnenInngaaende document={document} canEditDocument={canEditDocument} />
           ) : null}
 
-          {canEditDocument && !isNotat && isMainDocument ? <Receipients {...document} /> : null}
+          {canEditDocument && !isNotat && isMainDocument ? (
+            <Receivers
+              setMottakerList={(mottakerList) => setMottakerList({ oppgaveId, dokumentId: document.id, mottakerList })}
+              mottakerList={document.mottakerList}
+              templateId={document.templateId}
+              sendErrors={sendErrors}
+            />
+          ) : null}
 
           <Errors updatePdf={noFlickerReload.onReload} />
         </VStack>
 
-        {isMainDocument ? <PDFPreview isLoading={pdfLoading} noFlickerReload={noFlickerReload} /> : null}
+        {isMainDocument ? (
+          <SimplePdfPreview
+            width={pdfWidth}
+            setWidth={setPdfWidth}
+            isLoading={pdfLoading}
+            noFlickerReload={noFlickerReload}
+          />
+        ) : null}
       </ModalBody>
 
       <Modal.Footer>

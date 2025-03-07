@@ -4,6 +4,7 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { formatIdNumber } from '@app/functions/format-id';
+import { forlengetBehandlingstidApi } from '@app/redux-api/forlenget-behandlingstid';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { reduxStore } from '@app/redux/configure-store';
 import { isApiRejectionError } from '@app/types/errors';
@@ -119,8 +120,14 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         method: 'PUT',
         body: { identifikator: fullmektig?.id ?? null },
       }),
-      onQueryStarted: async ({ oppgaveId, fullmektig }, { queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, fullmektig }, { queryFulfilled, dispatch }) => {
         const undo = update(oppgaveId, { prosessfullmektig: fullmektig });
+
+        const forlengetBehandlingstidPatchResult = dispatch(
+          forlengetBehandlingstidApi.util.updateQueryData('getOrCreate', oppgaveId, (draft) => {
+            draft.fullmektigFritekst = fullmektig?.name ?? null;
+          }),
+        );
 
         try {
           const { data } = await queryFulfilled;
@@ -133,6 +140,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           );
         } catch (e) {
           undo();
+          forlengetBehandlingstidPatchResult.undo();
           const message = 'Kunne ikke endre fullmektig.';
 
           if (isApiRejectionError(e)) {
