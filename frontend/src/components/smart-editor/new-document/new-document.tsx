@@ -20,6 +20,7 @@ import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Language } from '@app/types/texts/language';
 import { Box, HStack, Loader } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
@@ -63,7 +64,7 @@ export const NewDocument = ({ onCreate }: Props) => {
         templateId: template.templateId,
         dokumentTypeId: template.dokumentTypeId,
         content: template.richText,
-        tittel,
+        tittel: getDefaultTitle(template.templateId, tittel),
         oppgaveId: oppgave.id,
         creatorIdent: user.navIdent,
         creatorRole,
@@ -152,3 +153,15 @@ const LoadingOverlay = ({ loading }: { loading: boolean }) =>
       </Box>
     </HStack>
   ) : null;
+
+const getDefaultTitle = (templateId: TemplateIdEnum, fallback: string) => {
+  switch (templateId) {
+    case TemplateIdEnum.KLAGEVEDTAK_V1:
+    case TemplateIdEnum.KLAGEVEDTAK_V2:
+      return 'Klagevedtak';
+    case TemplateIdEnum.ANKEVEDTAK:
+      return 'Omgjøring av klagevedtak';
+    default:
+      return fallback;
+  }
+};
