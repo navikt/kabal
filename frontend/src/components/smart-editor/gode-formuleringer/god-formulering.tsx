@@ -1,26 +1,39 @@
 import { DateTime } from '@app/components/datetime/datetime';
 import { AddButton } from '@app/components/smart-editor/gode-formuleringer/add-button';
 import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-editor/gode-formuleringer/styles';
+import { GodeFormuleringerExpandState } from '@app/hooks/settings/use-setting';
 import { SPELL_CHECK_LANGUAGES, useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
 import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
-import { CalendarIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { CalendarIcon, ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Heading, Tag, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@udecode/plate-core/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 
 type Props = NonNullableGodFormulering & {
   isFocused: boolean;
   onClick: () => void;
+  setExpandState: (state: GodeFormuleringerExpandState) => void;
+  expandState: GodeFormuleringerExpandState;
 };
 
-export const GodFormulering = ({ title, richText, publishedDateTime, isFocused, onClick, id, language }: Props) => {
+export const GodFormulering = ({
+  title,
+  richText,
+  publishedDateTime,
+  isFocused,
+  onClick,
+  id,
+  language,
+  expandState,
+  setExpandState,
+}: Props) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [isExpanded, setIsExpanded] = useState(false);
+  // const [showPreview, setShowPreview] = useState(false);
   const mainEditor = useMyPlateEditorRef();
   const primaryLanguage = useSmartEditorLanguage();
 
@@ -39,9 +52,20 @@ export const GodFormulering = ({ title, richText, publishedDateTime, isFocused, 
 
   return (
     <StyledGodFormulering $isFocused={isFocused} ref={ref} onClick={onClick} tabIndex={0}>
-      <Heading title={title} level="1" size="small">
-        {title}
-      </Heading>
+      <HStack wrap={false} align="start" justify="space-between">
+        <Heading title={title} level="1" size="xsmall">
+          {title}
+        </Heading>
+
+        <Button
+          size="small"
+          variant="tertiary-neutral"
+          title={nextTitle(expandState)}
+          icon={<NextExpandStateIcon state={expandState} />}
+          onClick={() => setExpandState(nextExpandState(expandState))}
+        />
+      </HStack>
+
       <HStack align="center" justify="space-between" wrap={false}>
         <HStack gap="1">
           <DateTime dateTime={publishedDateTime} title="Sist endret" icon={<CalendarIcon aria-hidden />} />
@@ -60,14 +84,26 @@ export const GodFormulering = ({ title, richText, publishedDateTime, isFocused, 
           Sett inn
         </AddButton>
       </HStack>
-      <VStack gap="1">
-        <StyledContent $isExpanded={isExpanded}>
-          <Plate<RichTextEditor> editor={editor} readOnly>
-            <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[language]} />
-          </Plate>
-        </StyledContent>
-        <ShowMore isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
-      </VStack>
+
+      {expandState === GodeFormuleringerExpandState.COLLAPSED ? null : (
+        <VStack gap="1" className="mt-2">
+          <StyledContent $isExpanded={expandState === GodeFormuleringerExpandState.FULL_RICH_TEXT}>
+            <Plate<RichTextEditor> editor={editor} readOnly>
+              <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[language]} />
+            </Plate>
+          </StyledContent>
+          <ShowMore
+            isExpanded={expandState === GodeFormuleringerExpandState.FULL_RICH_TEXT}
+            setIsExpanded={() =>
+              setExpandState(
+                expandState === GodeFormuleringerExpandState.FULL_RICH_TEXT
+                  ? GodeFormuleringerExpandState.PREVIEW
+                  : GodeFormuleringerExpandState.FULL_RICH_TEXT,
+              )
+            }
+          />
+        </VStack>
+      )}
     </StyledGodFormulering>
   );
 };
@@ -93,7 +129,6 @@ const StyledGodFormulering = styled.section<{ $isFocused: boolean }>`
   ${godFormuleringBaseStyle}
   display: flex;
   flex-direction: column;
-  gap: var(--a-spacing-2);
   padding: var(--a-spacing-2);
   background-color: var(--a-bg-subtle);
   outline: ${OUTLINE_WIDTH} solid ${({ $isFocused }) => ($isFocused ? 'var(--a-border-focus)' : 'transparent')};
@@ -124,3 +159,36 @@ const StyledContent = styled.div<{ $isExpanded: boolean }>`
     margin-top: 0;
   }
 `;
+
+export const nextExpandState = (state: GodeFormuleringerExpandState): GodeFormuleringerExpandState => {
+  switch (state) {
+    case GodeFormuleringerExpandState.COLLAPSED:
+      return GodeFormuleringerExpandState.PREVIEW;
+    case GodeFormuleringerExpandState.PREVIEW:
+      return GodeFormuleringerExpandState.FULL_RICH_TEXT;
+    case GodeFormuleringerExpandState.FULL_RICH_TEXT:
+      return GodeFormuleringerExpandState.COLLAPSED;
+  }
+};
+
+export const NextExpandStateIcon = ({ state }: { state: GodeFormuleringerExpandState }) => {
+  switch (state) {
+    case GodeFormuleringerExpandState.COLLAPSED:
+      return <ChevronDownIcon aria-hidden />;
+    case GodeFormuleringerExpandState.PREVIEW:
+      return <ChevronDownDoubleIcon aria-hidden />;
+    case GodeFormuleringerExpandState.FULL_RICH_TEXT:
+      return <ChevronUpIcon aria-hidden />;
+  }
+};
+
+const nextTitle = (state: GodeFormuleringerExpandState) => {
+  switch (state) {
+    case GodeFormuleringerExpandState.COLLAPSED:
+      return 'Vis overskrift og forhåndsvisning';
+    case GodeFormuleringerExpandState.PREVIEW:
+      return 'Vis god formulering i sin helhet';
+    case GodeFormuleringerExpandState.FULL_RICH_TEXT:
+      return 'Vis kun overskrift';
+  }
+};
