@@ -77,6 +77,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
             <HStack align="end" gap="2" wrap={false}>
               <StyledSetFilename
                 tittel={document.tittel}
+                templateId={document.templateId}
                 setFilename={(title) => {
                   if (oppgaveId === skipToken) {
                     return;

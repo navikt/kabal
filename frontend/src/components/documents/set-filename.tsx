@@ -1,3 +1,4 @@
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { TextField } from '@navikt/ds-react';
 import { useState } from 'react';
 
@@ -8,10 +9,11 @@ interface Props {
   hideLabel?: boolean;
   className?: string;
   close?: () => void;
+  templateId?: TemplateIdEnum | undefined;
 }
 
-export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, className, close }: Props) => {
-  const [localFilename, setLocalFilename] = useState(tittel ?? '');
+export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, className, close, templateId }: Props) => {
+  const [localFilename, setLocalFilename] = useState(defaultSuggestion(tittel, templateId));
 
   const save = () => {
     close?.();
@@ -47,4 +49,16 @@ export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, classNa
       }}
     />
   );
+};
+
+const defaultSuggestion = (tittel: string, templateId: TemplateIdEnum | undefined) => {
+  switch (templateId) {
+    case TemplateIdEnum.KLAGEVEDTAK_V1:
+    case TemplateIdEnum.KLAGEVEDTAK_V2:
+      return 'Klagevedtak';
+    case TemplateIdEnum.ANKEVEDTAK:
+      return 'Omgjøring av klagevedtak';
+    default:
+      return tittel;
+  }
 };

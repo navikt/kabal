@@ -62,6 +62,7 @@ export const DocumentTitle = memo(
             hideLabel
             tittel={document.tittel}
             close={() => setEditMode(false)}
+            templateId={document.templateId}
             setFilename={(title) => {
               if (oppgaveId === skipToken) {
                 return;
