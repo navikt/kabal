@@ -1,6 +1,8 @@
 import { useCanEditDocument, useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
 import {
+  GodeFormuleringerExpandState,
   useSmartEditorAnnotationsAtOrigin,
+  useSmartEditorGodeFormuleringerExpandstate,
   useSmartEditorGodeFormuleringerOpen,
   useSmartEditorHistoryOpen,
 } from '@app/hooks/settings/use-setting';
@@ -14,6 +16,8 @@ const noop = () => {};
 interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokumentTypeId'> {
   showGodeFormuleringer: boolean;
   setShowGodeFormuleringer: (show: boolean) => void;
+  godeFormuleringerExpandState: GodeFormuleringerExpandState;
+  setGodeFormuleringerExpandState: (state: GodeFormuleringerExpandState) => void;
   showHistory: boolean;
   setShowHistory: (show: boolean) => void;
   newCommentSelection: TRange | null;
@@ -34,6 +38,8 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   dokumentTypeId: DistribusjonsType.BREV,
   showGodeFormuleringer: false,
   setShowGodeFormuleringer: noop,
+  godeFormuleringerExpandState: GodeFormuleringerExpandState.PREVIEW,
+  setGodeFormuleringerExpandState: noop,
   showHistory: false,
   setShowHistory: noop,
   newCommentSelection: null,
@@ -58,6 +64,10 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
   const { dokumentTypeId, templateId, id, creator } = smartDocument;
   const { value: showGodeFormuleringer = false, setValue: setShowGodeFormuleringer } =
     useSmartEditorGodeFormuleringerOpen();
+  const {
+    value: godeFormuleringerExpandState = GodeFormuleringerExpandState.PREVIEW,
+    setValue: setGodeFormuleringerExpandState,
+  } = useSmartEditorGodeFormuleringerExpandstate();
   const { value: showHistory = false, setValue: setShowHistory } = useSmartEditorHistoryOpen();
   const [newCommentSelection, setNewCommentSelection] = useState<TRange | null>(null);
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(null);
@@ -75,6 +85,8 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
         dokumentTypeId,
         setShowGodeFormuleringer,
         showGodeFormuleringer,
+        godeFormuleringerExpandState,
+        setGodeFormuleringerExpandState,
         showHistory,
         setShowHistory,
         newCommentSelection,
