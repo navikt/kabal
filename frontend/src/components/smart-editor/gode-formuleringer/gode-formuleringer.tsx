@@ -3,8 +3,10 @@ import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { GodeFormuleringerList } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer-list';
 import { SectionSelect } from '@app/components/smart-editor/gode-formuleringer/section-select';
+import { SetGlobalExpandState } from '@app/components/smart-editor/gode-formuleringer/set-global-expand-state';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import { useTranslatedFormuleringer } from '@app/components/smart-editor/gode-formuleringer/use-translated-formuleringer';
+import type { GodeFormuleringerExpandState } from '@app/hooks/settings/use-setting';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import type { TemplateSections } from '@app/plate/template-sections';
 import { useMyPlateEditorRef } from '@app/plate/types';
@@ -60,6 +62,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
   const { showGodeFormuleringer, setShowGodeFormuleringer } = useContext(SmartEditorContext);
   const [activeSection, setActiveSection] = useState<TemplateSections | NONE_TYPE>(NONE);
   const { data, isLoading } = useTranslatedFormuleringer(templateId, activeSection);
+  const { godeFormuleringerExpandState } = useContext(SmartEditorContext);
 
   useEffect(() => {
     if (focused === -1 && containerRef.current !== null) {
@@ -95,6 +98,10 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
     return result.toSorted(([, a], [, b]) => b - a).map(([t]) => t);
   }, [data, filter, templateId, activeSection]);
+
+  const [expandState, setExpandState] = useState<Map<string, GodeFormuleringerExpandState>>(
+    texts.reduce((acc, t) => acc.set(t.id, godeFormuleringerExpandState), new Map()),
+  );
 
   const onKeyDown = useCallback(
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
@@ -160,19 +167,29 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
               <LightBulbIcon />
               Gode formuleringer ({texts.length})
             </HStack>
-            <Button
-              title="Skjul gode formuleringer"
-              size="small"
-              variant="tertiary-neutral"
-              icon={<XMarkIcon aria-hidden />}
-              onClick={() => setShowGodeFormuleringer(false)}
-            />
+            <HStack>
+              <SetGlobalExpandState expandState={expandState} />
+              <Button
+                title="Skjul gode formuleringer"
+                size="small"
+                variant="tertiary-neutral"
+                icon={<XMarkIcon aria-hidden />}
+                onClick={() => setShowGodeFormuleringer(false)}
+              />
+            </HStack>
           </HStack>
           <Filter filter={filter} setFilter={setFilter} isFocused={focused === -1} onFocus={() => setFocused(-1)} />
           <SectionSelect activeSection={activeSection} setActiveSection={setActiveSection} />
         </VStack>
         <VStack overflowY="auto" flexGrow="1" gap="4 0" paddingInline="1 4">
-          <GodeFormuleringerList texts={texts} isLoading={isLoading} focused={focused} setFocused={setFocused} />
+          <GodeFormuleringerList
+            texts={texts}
+            isLoading={isLoading}
+            focused={focused}
+            setFocused={setFocused}
+            expandState={expandState}
+            setExpandState={setExpandState}
+          />
         </VStack>
       </Box>
     </VStack>
