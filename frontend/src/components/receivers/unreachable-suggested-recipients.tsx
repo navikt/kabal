@@ -1,7 +1,7 @@
-import { Address } from '@app/components/documents/new-documents/modal/finish-document/address/address';
-import { StyledRecipient } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
-import { getTypeNames } from '@app/components/documents/new-documents/modal/finish-document/functions';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
+import { Address } from '@app/components/receivers/address/address';
+import { getTypeNames } from '@app/components/receivers/functions';
+import { StyledRecipient } from '@app/components/receivers/styled-components';
 import { formatIdNumber } from '@app/functions/format-id';
 import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
 import { type IPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';

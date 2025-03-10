@@ -1,9 +1,9 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import { Country } from '@app/components/documents/new-documents/modal/finish-document/address/country/country';
-import { AddressField } from '@app/components/documents/new-documents/modal/finish-document/address/field';
-import { AddressState, Container } from '@app/components/documents/new-documents/modal/finish-document/address/layout';
-import { Postnummer } from '@app/components/documents/new-documents/modal/finish-document/address/postnummer';
-import type { Addresses } from '@app/components/documents/new-documents/modal/finish-document/address/types';
+import { Country } from '@app/components/receivers/address/country/country';
+import { AddressField } from '@app/components/receivers/address/field';
+import { AddressState, Container } from '@app/components/receivers/address/layout';
+import { Postnummer } from '@app/components/receivers/address/postnummer';
+import type { Addresses } from '@app/components/receivers/address/types';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import type { IAddress } from '@app/types/documents/recipients';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';

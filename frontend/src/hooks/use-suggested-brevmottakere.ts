@@ -1,6 +1,6 @@
-import { getInitalHandling } from '@app/components/documents/new-documents/modal/finish-document/functions';
+import { getInitalHandling } from '@app/components/receivers/functions';
 import { isNotNull } from '@app/functions/is-not-type-guards';
-import type { IMainDocument, IMottaker } from '@app/types/documents/documents';
+import type { IMottaker } from '@app/types/documents/documents';
 import { Brevmottakertype } from '@app/types/kodeverk';
 import { type IPart, PartStatusEnum } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -12,7 +12,10 @@ export interface IBrevmottaker extends IMottaker {
   reachable: boolean;
 }
 
-export const useSuggestedBrevmottakere = ({ mottakerList, templateId }: IMainDocument): [IBrevmottaker[], boolean] => {
+export const useSuggestedBrevmottakere = (
+  mottakerList: IMottaker[],
+  templateId: TemplateIdEnum | undefined,
+): [IBrevmottaker[], boolean] => {
   const { data, isLoading } = useOppgave();
 
   return useMemo(() => {
