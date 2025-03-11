@@ -1,4 +1,4 @@
-import { Fields } from '@app/components/documents/new-documents/grid';
+import { Fields, GRID_CLASSES } from '@app/components/documents/new-documents/grid';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useCheckDocument } from '@app/hooks/use-check-document';
@@ -6,7 +6,6 @@ import { FolderPlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   name: string;
@@ -17,7 +16,7 @@ interface Props {
   className?: string;
 }
 
-const InternalIncludeDocument = memo(
+export const IncludeDocument = memo(
   ({ dokumentInfoId, journalpostId, name, disabled, checked, className }: Props): React.JSX.Element | null => {
     const oppgaveId = useOppgaveId();
     const [setDocument, isUpdating] = useCheckDocument(oppgaveId, dokumentInfoId, journalpostId);
@@ -37,7 +36,7 @@ const InternalIncludeDocument = memo(
         onClick={() => setDocument(!checked)}
         data-testid="journalfoert-document-button"
         loading={isUpdating}
-        className={className}
+        className={`${GRID_CLASSES[Fields.Action]} self-center ${className}`}
         data-included={checked}
         aria-pressed={checked}
       />
@@ -45,10 +44,3 @@ const InternalIncludeDocument = memo(
   },
   (prevProps, nextProps) => prevProps.checked === nextProps.checked && prevProps.name === nextProps.name,
 );
-
-export const IncludeDocument = styled(InternalIncludeDocument)`
-  grid-area: ${Fields.Action};
-  justify-self: center;
-`;
-
-InternalIncludeDocument.displayName = 'IncludeDocument';
