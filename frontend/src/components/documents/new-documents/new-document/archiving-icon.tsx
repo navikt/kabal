@@ -1,25 +1,18 @@
-import { Fields } from '@app/components/documents/new-documents/grid';
+import { Fields, GRID_CLASSES } from '@app/components/documents/new-documents/grid';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { HourglassIcon } from '@navikt/aksel-icons';
+import { HStack } from '@navikt/ds-react';
 import { memo } from 'react';
-import { css, styled } from 'styled-components';
-
-const GRID_CSS = css`
-  grid-area: ${Fields.Action};
-`;
-
-const IconContainer = styled.span`
-  ${GRID_CSS}
-  width: var(--a-spacing-8);
-  height: var(--a-spacing-8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 export const ArchivingIcon = memo(
   ({ dokumentTypeId }: { dokumentTypeId: DistribusjonsType }) => (
-    <IconContainer
+    <HStack
+      as="span"
+      width="8"
+      height="8"
+      align="center"
+      justify="center"
+      className={GRID_CLASSES[Fields.Action]}
       title={
         dokumentTypeId === DistribusjonsType.NOTAT
           ? 'Dokumentet er under journalføring.'
@@ -28,7 +21,7 @@ export const ArchivingIcon = memo(
       data-testid="document-archiving"
     >
       <HourglassIcon aria-hidden />
-    </IconContainer>
+    </HStack>
   ),
   (p, n) => p.dokumentTypeId === n.dokumentTypeId,
 );
