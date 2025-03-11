@@ -7,7 +7,6 @@ import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { getTemplateOptions } from './get-template-options';
 
@@ -144,17 +143,13 @@ const NestedDropDown = ({ children, selected, onChange, options, 'data-testid': 
   useOnClickOutside(ref, () => setIsOpen(false));
 
   return (
-    <Container ref={ref}>
+    <div ref={ref} className="relative">
       <ToggleButton $open={isOpen} onClick={toggleOpen}>
         {children} ({selected.length})
       </ToggleButton>
       {isOpen ? (
         <NestedFilterList options={options} selected={selected} onChange={onChange} data-testid={testId} />
       ) : null}
-    </Container>
+    </div>
   );
 };
-
-const Container = styled.div`
-  position: relative;
-`;
