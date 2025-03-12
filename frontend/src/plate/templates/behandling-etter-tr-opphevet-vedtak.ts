@@ -56,4 +56,5 @@ export const BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATE = deepFreeze<IMutableSmartEdi
   tittel: 'Vedtak/beslutning (ny behandling)',
   richText: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.VEDTAKSBREV,
+  deprecatedSections: [],
 });

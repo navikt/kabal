@@ -48,4 +48,5 @@ export const SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE = deepFreeze<IMutableSmartEdito
   tittel: 'Svar på innsynsbegjæring',
   richText: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.BREV,
+  deprecatedSections: [],
 });
