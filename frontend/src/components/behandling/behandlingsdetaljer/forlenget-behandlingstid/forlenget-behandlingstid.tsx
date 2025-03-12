@@ -27,11 +27,6 @@ export const ForlengetBehandlingstid = ({ oppgavebehandling, children }: Props) 
       <BehandlingSection label="Varslet frist">
         <HStack justify="space-between">
           <span>{varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}</span>
-          {/* <Button
-            variant="tertiary"
-            size="xsmall"
-            icon={<PencilIcon aria-hidden />}
-          /> */}
         </HStack>
 
         {canEdit || hasOppgavestyringRole ? (

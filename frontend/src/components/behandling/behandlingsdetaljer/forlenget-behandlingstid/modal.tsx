@@ -1,9 +1,12 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { Complete } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/complete';
+import { DoNotSendLetter } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/do-not-send-letter';
 import { Inputs } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/inputs';
 import { Pdf } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/pdf';
+import { TimesPreviouslyExtended } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/times-previously-extended';
 import { isoDateToPretty } from '@app/domain/date';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetOrCreateQuery } from '@app/redux-api/forlenget-behandlingstid';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Button, ErrorMessage, HStack, Modal, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -20,21 +23,21 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
   const [error, setError] = useState<string>();
   const { varsletFrist } = oppgavebehandling;
   const oppgaveId = useOppgaveId();
+  const heading = useHeading(isOpen);
 
   if (oppgaveId === skipToken) {
     return;
   }
 
   return (
-    <Modal
-      header={{ heading: 'Send brev om lengre saksbehandlingstid' }}
-      width="2000px"
-      closeOnBackdropClick
-      open={isOpen}
-      onClose={onClose}
-    >
+    <Modal header={{ heading }} width="2000px" closeOnBackdropClick open={isOpen} onClose={onClose}>
       <Modal.Body className="flex h-[80vh] w-full gap-9">
         <VStack minWidth="520px" style={{ flexShrink: 0 }} className="overflow-y-auto">
+          <VStack gap="4">
+            {isOpen ? <TimesPreviouslyExtended /> : null}
+            {isOpen ? <DoNotSendLetter /> : null}
+          </VStack>
+
           <HStack gap="4">
             {children}
 
@@ -64,4 +67,13 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
       </Modal.Footer>
     </Modal>
   );
+};
+
+const useHeading = (isOpen: boolean): string => {
+  const oppgaveId = useOppgaveId();
+  const { data } = useGetOrCreateQuery(isOpen ? oppgaveId : skipToken);
+
+  return data?.doNotSendLetter === true
+    ? 'Endre varslet frist uten å sende brev'
+    : 'Send brev om lengre saksbehandlingstid';
 };

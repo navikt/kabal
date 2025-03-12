@@ -30,7 +30,7 @@ export const Complete = ({ id, onClose, setError }: Props) => {
     <HStack gap="2" align="center">
       {showConfirm ? null : (
         <Button onClick={() => setShowConfirm(true)} size="small" variant="primary">
-          Endre frist og send brev
+          Endre frist{data.doNotSendLetter ? '' : ' og send brev'}
         </Button>
       )}
 
@@ -42,7 +42,7 @@ export const Complete = ({ id, onClose, setError }: Props) => {
             loading={isLoading}
             onClick={async () => {
               try {
-                if (data.receivers.length === 0) {
+                if (!data.doNotSendLetter && data.receivers.length === 0) {
                   if (reachable.length === 1) {
                     await setReceivers({ mottakerList: reachable, id }).unwrap();
                   } else {
@@ -50,14 +50,14 @@ export const Complete = ({ id, onClose, setError }: Props) => {
                   }
                 }
 
-                await complete({ id, onClose: onClose }).unwrap();
+                await complete({ id, onClose, doNotSendLetter: data.doNotSendLetter }).unwrap();
                 setError(undefined);
               } catch (e) {
                 setErrorMessage(e, setError, 'Feil ved utsending av brev om lengre saksbehandlingstid.');
               }
             }}
           >
-            Bekreft endring av frist og send brev
+            Bekreft endring av frist{data.doNotSendLetter ? '' : ' og send brev'}
           </Button>
           <Button size="small" variant="secondary" onClick={() => setShowConfirm(false)} disabled={isLoading}>
             Avbryt

@@ -24,7 +24,7 @@ export const HistoryEvent = ({ type, tag, icon: Icon, color, timestamp, children
         paddingBlock="0 2"
         overflow="hidden"
         position="relative"
-        className="pl-[3px] before:absolute before:top-0 before:bottom-0 before:left-0 before:rounded-tl-lg before:rounded-bl-lg before:border-inherit before:border-l-3"
+        className="pl-[2px] before:absolute before:top-0 before:bottom-0 before:left-0 before:rounded-tl-lg before:rounded-bl-lg before:border-inherit before:border-l-3"
         style={{ borderColor: `var(${accent})` }}
       >
         <HStack align="start" justify="space-between" marginBlock="0 2">

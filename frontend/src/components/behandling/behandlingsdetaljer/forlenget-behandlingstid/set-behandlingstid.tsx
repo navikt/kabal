@@ -11,10 +11,11 @@ import {
   BEHANDLINGSTID_UNIT_TYPES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES_SINGULAR,
-  type BehandlingstidUnitType,
+  BehandlingstidUnitType,
   isBehandlingstidUnitType,
 } from '@app/types/svarbrev';
 import { ErrorMessage, HStack, Heading, TextField, ToggleGroup, VStack } from '@navikt/ds-react';
+import { addMonths, addWeeks, isAfter } from 'date-fns';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -38,7 +39,8 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist }: Props) =>
   }, [varsletFrist, prevVarsletFrist]);
 
   const parsed = Number.parseInt(tempValue, 10);
-  const skip = Number.isNaN(parsed) || parsed === units || (tempValue === '' && units === null);
+  const isValid = getValid(parsed, typeId);
+  const skip = Number.isNaN(parsed) || parsed === units || (tempValue === '' && units === null) || !isValid;
   useDebounce(() => setUnits({ varsletBehandlingstidUnits: parsed, id }).unwrap(), skip, parsed, setError, 500);
 
   return (
@@ -60,6 +62,11 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist }: Props) =>
             if (numberRegex.test(target.value) || target.value === '') {
               setTempValue(target.value);
             }
+
+            const parsed = Number.parseInt(target.value, 10);
+            const isValid = getValid(parsed, typeId);
+
+            setError(isValid ? undefined : 'Fristen kan ikke settes mer enn fire måneder frem i tid.');
           }}
         />
 
@@ -98,3 +105,14 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist }: Props) =>
 };
 
 const numberRegex = /^[0-9]+$/;
+const NOW = new Date();
+const maxDate = addMonths(NOW, 4);
+
+const getValid = (units: number, type: BehandlingstidUnitType) => {
+  switch (type) {
+    case BehandlingstidUnitType.WEEKS:
+      return !isAfter(addWeeks(NOW, units), maxDate);
+    case BehandlingstidUnitType.MONTHS:
+      return !isAfter(addMonths(NOW, units), maxDate);
+  }
+};

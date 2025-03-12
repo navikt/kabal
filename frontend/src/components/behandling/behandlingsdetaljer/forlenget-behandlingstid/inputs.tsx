@@ -77,13 +77,17 @@ export const Inputs = () => {
         <SetBehandlingstidDate id={id} value={data.behandlingstid.varsletFrist} />
       </HStack>
 
-      <SetTitle id={id} value={data.title} />
-      {prosessfullmektig === null ? null : <SetFullmektigFritekst id={id} value={data.fullmektigFritekst} />}
-      <SetPreviousBehandlingstidInfo id={id} value={data.previousBehandlingstidInfo} />
-      <SetReason id={id} value={data.reason} />
-      <SetCustomText id={id} value={data.customText} />
+      {data.doNotSendLetter ? null : (
+        <>
+          <SetTitle id={id} value={data.title} />
+          {prosessfullmektig === null ? null : <SetFullmektigFritekst id={id} value={data.fullmektigFritekst} />}
+          <SetPreviousBehandlingstidInfo id={id} value={data.previousBehandlingstidInfo} />
+          <SetReason id={id} value={data.reason} />
+          <SetCustomText id={id} value={data.customText} />
 
-      <SetReceivers id={id} value={data.receivers} />
+          <SetReceivers id={id} value={data.receivers} />
+        </>
+      )}
     </VStack>
   );
 };

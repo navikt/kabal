@@ -67,7 +67,8 @@ export enum HistoryEventTypes {
   SATT_PAA_VENT = 'SATT_PAA_VENT',
   FERDIGSTILT = 'FERDIGSTILT',
   FEILREGISTRERT = 'FEILREGISTRERT',
-  VARSLET_BEHANDLINGSTID = 'VARSLING_BEHANDLINGSTID',
+  VARSLET_BEHANDLINGSTID = 'VARSLET_BEHANDLINGSTID',
+  FORLENGET_BEHANDLINGSTID = 'FORLENGET_BEHANDLINGSTID',
 }
 
 export interface BaseEvent<T, E extends HistoryEventTypes> {
@@ -136,6 +137,11 @@ interface VarsletBehandlingstidEvent {
   mottakere: IPart[] | null;
 }
 
+interface ForlengetBehandlingstidEvent extends VarsletBehandlingstidEvent {
+  reasonNoLetter: string | null;
+  doNotSendLetter: boolean;
+}
+
 export type ITildelingEvent = WithPrevious<TildelingEvent, HistoryEventTypes.TILDELING>;
 export type IMedunderskriverEvent = WithPrevious<MedunderskriverEvent, HistoryEventTypes.MEDUNDERSKRIVER>;
 export type IRolEvent = WithPrevious<RolEvent, HistoryEventTypes.ROL>;
@@ -148,6 +154,10 @@ export type IVarsletBehandlingstidEvent = WithPrevious<
   VarsletBehandlingstidEvent,
   HistoryEventTypes.VARSLET_BEHANDLINGSTID
 >;
+export type IForlengetBehandlingstidEvent = WithPrevious<
+  ForlengetBehandlingstidEvent,
+  HistoryEventTypes.FORLENGET_BEHANDLINGSTID
+>;
 
 export type IHistory =
   | ITildelingEvent
@@ -158,7 +168,8 @@ export type IHistory =
   | ISattPaaVentEvent
   | IFerdigstiltEvent
   | IFeilregistrertEvent
-  | IVarsletBehandlingstidEvent;
+  | IVarsletBehandlingstidEvent
+  | IForlengetBehandlingstidEvent;
 
 export interface IHistoryResponse {
   tildeling: ITildelingEvent[];
@@ -170,4 +181,5 @@ export interface IHistoryResponse {
   ferdigstilt: IFerdigstiltEvent[];
   feilregistrert: IFeilregistrertEvent[];
   varsletBehandlingstid: IVarsletBehandlingstidEvent[];
+  forlengetBehandlingstid: IForlengetBehandlingstidEvent[];
 }

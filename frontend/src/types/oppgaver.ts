@@ -38,6 +38,7 @@ export interface IOppgave {
   /** Date
    * @format yyyy-MM-dd
    */
+  timesPreviouslyExtended: number;
   varsletFrist: DateString | null;
   hjemmelIdList: string[];
   registreringshjemmelIdList: string[];

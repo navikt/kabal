@@ -1,6 +1,10 @@
 import { isoDateToPretty } from '@app/domain/date';
 import { formatIdNumber } from '@app/functions/format-id';
-import { HistoryEventTypes, type IPart, type IVarsletBehandlingstidEvent } from '@app/types/oppgavebehandling/response';
+import {
+  HistoryEventTypes,
+  type IForlengetBehandlingstidEvent,
+  type IPart,
+} from '@app/types/oppgavebehandling/response';
 import {
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES_SINGULAR,
@@ -8,29 +12,31 @@ import {
 } from '@app/types/svarbrev';
 import { ClockIcon } from '@navikt/aksel-icons';
 import { BodyShort, VStack } from '@navikt/ds-react';
-import { Line, toKey } from './common';
+import { Line, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
 
-export const getVarsletBehandlingstidEvent = (props: IVarsletBehandlingstidEvent) => (
-  <VarsletBehandlingstid key={toKey(props)} {...props} />
+export const getForlengetBehandlingstidEvent = (props: IForlengetBehandlingstidEvent) => (
+  <ForlengetBehandlingstid key={toKey(props)} {...props} />
 );
 
-const VarsletBehandlingstid = (props: IVarsletBehandlingstidEvent) => (
+const ForlengetBehandlingstid = (props: IForlengetBehandlingstidEvent) => (
   <HistoryEvent
-    tag="Varslet behandlingstid"
-    type={HistoryEventTypes.VARSLET_BEHANDLINGSTID}
+    tag="Forlenget behandlingstid"
+    type={HistoryEventTypes.FORLENGET_BEHANDLINGSTID}
     timestamp={props.timestamp}
     icon={ClockIcon}
   >
-    <Line>Varslet behandlingstid ble satt.</Line>
+    <Line>{employeeName(props.actor)} forlenget varslet behandlingstid.</Line>
+
+    <Begrunnelse {...props} />
 
     <ChangedFrist {...props} />
     <ChangedMottakere {...props} />
   </HistoryEvent>
 );
 
-const ChangedMottakere = ({ event }: IVarsletBehandlingstidEvent) => {
-  if (event === null) {
+const ChangedMottakere = ({ event }: IForlengetBehandlingstidEvent) => {
+  if (event === null || event.doNotSendLetter) {
     return null;
   }
 
@@ -64,13 +70,14 @@ const ListItemPart = ({ id, name }: IPart) => (
   </li>
 );
 
-const ChangedFrist = ({ previous, event }: IVarsletBehandlingstidEvent) => {
+const ChangedFrist = ({ previous, event }: IForlengetBehandlingstidEvent) => {
   if (event === null) {
     return null;
   }
 
   const prevUnits = previous.event.varsletBehandlingstidUnits;
   const prevType = previous.event.varsletBehandlingstidUnitTypeId;
+  const prevFrist = previous.event.varsletFrist;
   const newUnits = event.varsletBehandlingstidUnits;
   const newType = event.varsletBehandlingstidUnitTypeId;
   const newFrist = event.varsletFrist;
@@ -79,15 +86,23 @@ const ChangedFrist = ({ previous, event }: IVarsletBehandlingstidEvent) => {
 
   if (changedRelative && (newUnits !== null || newType !== null)) {
     const toDate = newFrist === null ? null : ` (${isoDateToPretty(newFrist)})`;
+    const fromDate = prevFrist === null ? null : `${isoDateToPretty(prevFrist)}`;
 
     return (
-      <Line>
-        Varslet frist:{' '}
-        <b>
-          {getUnits(newUnits, newType)}
-          {toDate}
-        </b>
-      </Line>
+      <>
+        <Line>
+          Varslet frist:{' '}
+          <b>
+            {getUnits(newUnits, newType)}
+            {toDate}
+          </b>
+        </Line>
+        {fromDate === null ? null : (
+          <Line>
+            Tidligere frist: <b>{fromDate}</b>
+          </Line>
+        )}
+      </>
     );
   }
 
@@ -98,6 +113,18 @@ const ChangedFrist = ({ previous, event }: IVarsletBehandlingstidEvent) => {
       </Line>
     );
   }
+};
+
+const Begrunnelse = ({ event }: IForlengetBehandlingstidEvent) => {
+  if (event === null || event.reasonNoLetter === null) {
+    return null;
+  }
+
+  return (
+    <Line>
+      Begrunnelse for endring: <i>{event.reasonNoLetter}</i>
+    </Line>
+  );
 };
 
 const getUnits = (units: number | null, unitTypeId: BehandlingstidUnitType | null) => {
