@@ -45,7 +45,6 @@ jobs:
           VARS: nais/prod.yaml
           RESOURCE: nais/nais.yaml
           VAR: image=${{ steps.image.outputs.image }}
-        timeout-minutes: 3
 
       - name: Generate release version
         id: release
