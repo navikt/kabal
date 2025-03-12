@@ -57,4 +57,5 @@ export const OMGJØRINGSKRAVVEDTAK_TEMPLATE = deepFreeze<IMutableSmartEditorTemp
   tittel: 'Vedtak/beslutning (omgjøringskrav)',
   richText: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.VEDTAKSBREV,
+  deprecatedSections: [],
 });

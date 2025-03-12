@@ -31,6 +31,7 @@ export const Filters = ({ maltekst, query }: Props) => {
       <TemplateSectionSelect
         selected={maltekst.templateSectionIdList}
         onChange={(templateSectionIdList) => updateTemplateSection({ id: maltekst.id, templateSectionIdList, query })}
+        includeDeprecated
       >
         Maler og seksjoner
       </TemplateSectionSelect>
