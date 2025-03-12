@@ -53,4 +53,5 @@ export const FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE_TEMPLATE = deepFreeze<IMut
   tittel: 'Forenklet beslutning om ikke å omgjøre',
   richText: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.BESLUTNING,
+  deprecatedSections: [],
 });

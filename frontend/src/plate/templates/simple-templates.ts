@@ -46,6 +46,7 @@ export const getGenereltBrevTemplate = (
       createFooter(),
     ],
     dokumentTypeId: DistribusjonsType.BREV,
+    deprecatedSections: [],
   });
 
 export const GENERELT_BREV_TEMPLATE = getGenereltBrevTemplate(true);
@@ -75,6 +76,7 @@ export const getNotatTemplate = (
       createSignature(includeMedunderskriver, overriddenSaksbehandler),
     ],
     dokumentTypeId: DistribusjonsType.NOTAT,
+    deprecatedSections: [],
   });
 
 export const NOTAT_TEMPLATE = getNotatTemplate(true);
@@ -100,6 +102,7 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
     createSignature(),
   ],
   dokumentTypeId: DistribusjonsType.NOTAT,
+  deprecatedSections: [],
 });
 
 export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
@@ -112,6 +115,7 @@ export const ROL_ANSWERS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
     createSignature(),
   ],
   dokumentTypeId: DistribusjonsType.NOTAT,
+  deprecatedSections: [],
 });
 
 export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
@@ -138,4 +142,5 @@ export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>
     createMaltekstseksjon(TemplateSections.VEDLEGG),
   ],
   dokumentTypeId: DistribusjonsType.BREV,
+  deprecatedSections: [],
 });

@@ -5,7 +5,7 @@ import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { Value } from '@udecode/plate';
 import { BaseParagraphPlugin } from '@udecode/plate-core';
-import { TemplateSections } from '../template-sections';
+import { DeprecatedTemplateSections, TemplateSections } from '../template-sections';
 import { LabelContentSource } from '../types';
 import {
   createCurrentDate,
@@ -36,7 +36,7 @@ const INITIAL_SLATE_VALUE: Value = [
     ],
   },
 
-  createMaltekstseksjon(TemplateSections.TILSVARSRETT_V2),
+  createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
 
   createSignature(),
   createFooter(),
@@ -47,4 +47,5 @@ export const ORIENTERING_OM_TILSVAR_TEMPLATE = deepFreeze<IMutableSmartEditorTem
   tittel: 'Orientering om tilsvar direkte til Trygderetten',
   richText: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.BREV,
+  deprecatedSections: [DeprecatedTemplateSections.TILSVARSRETT_V2],
 });

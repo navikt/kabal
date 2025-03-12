@@ -53,4 +53,5 @@ export const VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE = deepFreeze<IMutableSmart
   tittel: 'Varsel om omgjøring til ugunst',
   richText: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.BREV,
+  deprecatedSections: [],
 });

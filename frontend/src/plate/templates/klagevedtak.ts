@@ -56,4 +56,5 @@ export const KLAGEVEDTAK_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   tittel: 'Vedtak/beslutning (klage)',
   richText: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.VEDTAKSBREV,
+  deprecatedSections: [],
 });
