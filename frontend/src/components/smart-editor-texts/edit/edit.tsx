@@ -104,6 +104,7 @@ const Filters = ({ text, query, filters }: FiltersProps) => {
             selected={templateSectionIdList}
             onChange={(v) => updateTemplateSectionIdList({ id, query, templateSectionIdList: v })}
             templatesSelectable
+            includeDeprecated
           >
             Maler og seksjoner
           </TemplateSectionSelect>

@@ -30,6 +30,7 @@ export const Filters = () => {
         onChange={(value) => setFilter('templateSectionIdList', value)}
         includeNoneOption
         templatesSelectable
+        includeDeprecated
       >
         Maler og seksjoner
       </TemplateSectionSelect>

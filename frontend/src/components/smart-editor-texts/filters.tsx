@@ -48,6 +48,7 @@ export const Filters = ({ textType, className }: Props) => {
           onChange={(value) => setFilter('templateSectionIdList', value)}
           includeNoneOption
           templatesSelectable
+          includeDeprecated
         >
           Maler og seksjoner
         </TemplateSectionSelect>

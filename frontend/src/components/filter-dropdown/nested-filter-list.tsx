@@ -206,12 +206,14 @@ const CheckboxOrGroup = ({ option, children, selected, onCheck, subSelectionCoun
     );
   }
 
+  const isChecked = selected.includes(value);
+
   return (
     <StyledCheckbox
       value={value}
       size="small"
-      checked={selected.includes(value)}
-      indeterminate={option.indeterminate}
+      checked={isChecked}
+      indeterminate={!isChecked && option.indeterminate}
       onChange={() => onCheck(value)}
     >
       <HStack align="center" gap="0 2">

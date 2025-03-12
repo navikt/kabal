@@ -106,6 +106,7 @@ interface TemplateSelectProps {
   onChange: (value: string[]) => void;
   includeNoneOption?: boolean;
   templatesSelectable?: boolean;
+  includeDeprecated?: boolean;
 }
 
 export const TemplateSectionSelect = ({
@@ -114,10 +115,11 @@ export const TemplateSectionSelect = ({
   onChange,
   includeNoneOption = false,
   templatesSelectable = false,
+  includeDeprecated = false,
 }: TemplateSelectProps) => {
   const templates = useMemo(
-    () => getTemplateOptions(includeNoneOption, templatesSelectable),
-    [includeNoneOption, templatesSelectable],
+    () => getTemplateOptions(selected, includeNoneOption, includeDeprecated, templatesSelectable),
+    [selected, includeNoneOption, includeDeprecated, templatesSelectable],
   );
 
   return (
