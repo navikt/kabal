@@ -35,9 +35,9 @@ export const DoNotSendLetter = () => {
           size="small"
           checked={data.doNotSendLetter}
           disabled={isLoading}
-          id={UtvidetBehandlingstidFieldName.doNotSendLetter}
+          id={UtvidetBehandlingstidFieldName.DoNotSendLetter}
         >
-          {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.doNotSendLetter]}
+          {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.DoNotSendLetter]}
         </Checkbox>
       </Box>
       {data.doNotSendLetter ? (
@@ -64,21 +64,28 @@ const ReasonNoLetter = ({ value, id }: Props) => {
   const [error, setError] = useState<string>();
 
   const skip = tempValue === value || (tempValue === '' && value === null);
-  const action = () => setValue({ id, reasonNoLetter: tempValue === '' ? null : tempValue }).unwrap();
-  useDebounce(action, skip, tempValue, setError, 500);
+  const action = () => setValue({ id, reasonNoLetter: tempValue === '' ? null : tempValue });
+  useDebounce(action, skip, tempValue, 500);
 
   return (
     <VStack gap="2">
       <Textarea
-        id={UtvidetBehandlingstidFieldName.reasonNoLetter}
+        id={UtvidetBehandlingstidFieldName.ReasonNoLetter}
         minRows={3}
         maxRows={3}
-        label={UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.reasonNoLetter]}
+        label={UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.ReasonNoLetter]}
         hideLabel
         size="small"
         placeholder="Skriv kort hvordan du har varslet på annen måte"
         value={tempValue}
         onChange={({ target }) => setTempValue(target.value)}
+        onBlur={() => {
+          if (tempValue === '') {
+            setError('Du må skrive en begrunnelse');
+          } else {
+            setError(undefined);
+          }
+        }}
       />
       {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
     </VStack>

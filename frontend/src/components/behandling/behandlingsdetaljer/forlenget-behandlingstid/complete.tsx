@@ -43,14 +43,8 @@ export const Complete = ({ id, onClose, setError }: Props) => {
             loading={isLoading}
             onClick={async () => {
               try {
-                if (!data.doNotSendLetter && data.receivers.length === 0) {
-                  if (reachable.length === 1) {
-                    await setReceivers({ mottakerList: reachable, id }).unwrap();
-                  } else {
-                    return setError(
-                      createError('Brevet må ha minst én mottaker', UtvidetBehandlingstidFieldName.mottakere),
-                    );
-                  }
+                if (!data.doNotSendLetter && data.receivers.length === 0 && reachable.length === 1) {
+                  await setReceivers({ mottakerList: reachable, id }).unwrap();
                 }
 
                 await complete({ id, onClose, doNotSendLetter: data.doNotSendLetter }).unwrap();
@@ -59,7 +53,14 @@ export const Complete = ({ id, onClose, setError }: Props) => {
                 if (isReduxValidationResponse(e)) {
                   setError(e.data.sections);
                 } else {
-                  setError(createError('Ukjent feil', UtvidetBehandlingstidFieldName.forlengetBehandlingstidDraft));
+                  setError([
+                    {
+                      section: SECTION_KEY.FORLENGET_BEHANDLINGSTID_DRAFT,
+                      properties: [
+                        { reason: 'Ukjent feil', field: UtvidetBehandlingstidFieldName.ForlengetBehandlingstidDraft },
+                      ],
+                    },
+                  ]);
                 }
               }
             }}
@@ -74,10 +75,3 @@ export const Complete = ({ id, onClose, setError }: Props) => {
     </HStack>
   );
 };
-
-const createError = (reason: string, field: UtvidetBehandlingstidFieldName) => [
-  {
-    section: SECTION_KEY.FORLENGET_BEHANDLINGSTID_DRAFT,
-    properties: [{ reason, field }],
-  },
-];

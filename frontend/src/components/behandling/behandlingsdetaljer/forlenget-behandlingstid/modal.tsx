@@ -13,7 +13,7 @@ import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES } from '@app/types/field-names';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Button, ErrorSummary, HStack, Modal, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface Props {
   oppgavebehandling: IOppgavebehandling;
@@ -35,7 +35,7 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
   return (
     <Modal header={{ heading }} width="2000px" closeOnBackdropClick open={isOpen} onClose={onClose}>
       <Modal.Body className="flex h-[80vh] w-full gap-9">
-        <VStack minWidth="520px" style={{ flexShrink: 0 }} className="overflow-y-auto p-1">
+        <VStack width="754px" className="shrink-0 overflow-y-auto p-1">
           <VStack gap="4">
             {isOpen ? <TimesPreviouslyExtended /> : null}
             {isOpen ? <DoNotSendLetter /> : null}
@@ -78,12 +78,20 @@ const useHeading = (isOpen: boolean): string => {
 };
 
 const Errors = ({ sections }: { sections: IValidationSection[] }) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (sections.length > 0) {
+      ref.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [sections]);
+
   if (sections.length === 0) {
     return null;
   }
 
   return (
-    <ErrorSummary className="mt-10">
+    <ErrorSummary className="mt-10" ref={ref}>
       {sections.flatMap(({ properties }) =>
         properties.map(({ field, reason }) => (
           <ErrorSummary.Item key={field} href={`#${field}`}>

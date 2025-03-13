@@ -17,10 +17,8 @@ export const SetReceivers = ({ value, id }: Props) => {
   const [error, setError] = useState<string>();
 
   return (
-    <VStack gap="2" id={UtvidetBehandlingstidFieldName.mottakere} as="section">
-      <Heading size="xsmall" style={{ fontSize: 16 }}>
-        {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.mottakere]}
-      </Heading>
+    <VStack gap="2" id={UtvidetBehandlingstidFieldName.Mottakere} as="section">
+      <Heading size="xsmall">{UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.Mottakere]}</Heading>
       <Receivers
         mottakerList={value}
         setMottakerList={async (mottakerList) => {

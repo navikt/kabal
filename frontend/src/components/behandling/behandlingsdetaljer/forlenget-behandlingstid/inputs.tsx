@@ -10,10 +10,13 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useGetOrCreateQuery } from '@app/redux-api/forlenget-behandlingstid';
 import { Alert, HStack, Skeleton, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { useState } from 'react';
 
 export const Inputs = () => {
   const { data: oppgave, isSuccess: oppgaveIsSuccess } = useOppgave();
   const { data, isLoading, isError, isSuccess } = useGetOrCreateQuery(oppgave?.id ?? skipToken);
+  const [behandlingstidError, setBehandlingstidError] = useState<string>();
+  const [dateError, setDateError] = useState<string>();
 
   if (isLoading) {
     return (
@@ -59,16 +62,30 @@ export const Inputs = () => {
 
   return (
     <VStack gap="4">
-      <HStack justify="space-between" wrap gap="4">
+      <HStack gap="6">
         <SetBehandlingstid
           id={id}
           typeId={data.behandlingstid.varsletBehandlingstidUnitTypeId}
           units={data.behandlingstid.varsletBehandlingstidUnits}
           varsletFrist={data.behandlingstid.varsletFrist}
+          error={behandlingstidError}
+          setError={(e) => {
+            setDateError(undefined);
+            setBehandlingstidError(e);
+          }}
         />
 
         <Vr />
-        <SetBehandlingstidDate id={id} value={data.behandlingstid.varsletFrist} />
+
+        <SetBehandlingstidDate
+          id={id}
+          value={data.behandlingstid.varsletFrist}
+          error={dateError}
+          setError={(e) => {
+            setBehandlingstidError(undefined);
+            setDateError(e);
+          }}
+        />
       </HStack>
 
       {data.doNotSendLetter ? null : (
@@ -86,4 +103,4 @@ export const Inputs = () => {
   );
 };
 
-const Vr = () => <div className="mr-3 ml-3 h-full border-b-gray-700 border-l-1 " />;
+const Vr = () => <div className="h-full border-b-gray-700 border-l-1 " />;

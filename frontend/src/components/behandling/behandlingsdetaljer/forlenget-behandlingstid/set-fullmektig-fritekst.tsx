@@ -1,6 +1,6 @@
 import { useDebounce } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
 import { useSetFullmektigFritekstMutation } from '@app/redux-api/forlenget-behandlingstid';
-import { ErrorMessage, TextField, VStack } from '@navikt/ds-react';
+import { TextField, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
 interface Props {
@@ -11,12 +11,10 @@ interface Props {
 export const SetFullmektigFritekst = ({ value, id }: Props) => {
   const [setValue] = useSetFullmektigFritekstMutation({ fixedCacheKey: id });
   const [tempValue, setTempValue] = useState(value ?? '');
-  const [error, setError] = useState<string>();
 
   const skip = tempValue === value || (tempValue === '' && value === null);
-  const action = () => setValue({ id, fullmektigFritekst: tempValue === '' ? null : tempValue }).unwrap();
-
-  useDebounce(action, skip, tempValue, setError, 500);
+  const action = () => setValue({ id, fullmektigFritekst: tempValue === '' ? null : tempValue });
+  useDebounce(action, skip, tempValue, 500);
 
   return (
     <VStack gap="2">
@@ -26,7 +24,6 @@ export const SetFullmektigFritekst = ({ value, id }: Props) => {
         value={tempValue}
         onChange={({ target }) => setTempValue(target.value)}
       />
-      {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
     </VStack>
   );
 };

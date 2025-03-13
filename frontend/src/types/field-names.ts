@@ -6,20 +6,22 @@ import {
 import { SaksTypeEnum } from '@app/types/kodeverk';
 
 export enum UtvidetBehandlingstidFieldName {
-  behandling = 'behandling',
-  forlengetBehandlingstidDraft = 'forlengetBehandlingstidDraft',
-  behandlingstid = 'behandlingstid',
-  doNotSendLetter = 'doNotSendLetter',
-  reasonNoLetter = 'reasonNoLetter',
-  mottakere = 'mottakere',
+  Behandling = 'behandling',
+  ForlengetBehandlingstidDraft = 'forlengetBehandlingstidDraft',
+  Behandlingstid = 'behandlingstid',
+  DoNotSendLetter = 'doNotSendLetter',
+  ReasonNoLetter = 'reasonNoLetter',
+  Mottakere = 'mottakere',
+  Title = 'title',
 }
 export const UTVIDET_BEHANDLINGSTID_FIELD_NAMES: Record<UtvidetBehandlingstidFieldName, string> = {
-  [UtvidetBehandlingstidFieldName.behandling]: 'Behandling',
-  [UtvidetBehandlingstidFieldName.forlengetBehandlingstidDraft]: 'Forlenget behandlingstid',
-  [UtvidetBehandlingstidFieldName.behandlingstid]: 'Ny behandlingstid',
-  [UtvidetBehandlingstidFieldName.doNotSendLetter]: 'Endre varslet frist uten å sende brev',
-  [UtvidetBehandlingstidFieldName.reasonNoLetter]: 'Hvordan du har varslet på annen måte',
-  [UtvidetBehandlingstidFieldName.mottakere]: 'Mottakere',
+  [UtvidetBehandlingstidFieldName.Behandling]: 'Behandling',
+  [UtvidetBehandlingstidFieldName.ForlengetBehandlingstidDraft]: 'Forlenget behandlingstid',
+  [UtvidetBehandlingstidFieldName.Behandlingstid]: 'Ny behandlingstid',
+  [UtvidetBehandlingstidFieldName.DoNotSendLetter]: 'Endre varslet frist uten å sende brev',
+  [UtvidetBehandlingstidFieldName.ReasonNoLetter]: 'Hvordan du har varslet på annen måte',
+  [UtvidetBehandlingstidFieldName.Mottakere]: 'Mottakere',
+  [UtvidetBehandlingstidFieldName.Title]: 'Tittel',
 };
 
 export const DEFAULT_FIELD_NAMES = {
