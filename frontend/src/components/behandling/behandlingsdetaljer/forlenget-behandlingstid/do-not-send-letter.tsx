@@ -1,3 +1,7 @@
+import {
+  FIELD_LABELS,
+  FieldName,
+} from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/field-names';
 import { useDebounce } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
@@ -33,8 +37,9 @@ export const DoNotSendLetter = () => {
           size="small"
           checked={data.doNotSendLetter}
           disabled={isLoading}
+          id={FieldName.doNotSendLetter}
         >
-          Endre varslet frist uten å sende brev
+          {FIELD_LABELS[FieldName.doNotSendLetter]}
         </Checkbox>
       </Box>
       {data.doNotSendLetter ? (
@@ -67,9 +72,10 @@ const ReasonNoLetter = ({ value, id }: Props) => {
   return (
     <VStack gap="2">
       <Textarea
+        id={FieldName.reasonNoLetter}
         minRows={3}
         maxRows={3}
-        label="Begrunnelse"
+        label={FIELD_LABELS[FieldName.reasonNoLetter]}
         hideLabel
         size="small"
         placeholder="Skriv kort hvordan du har varslet på annen måte"

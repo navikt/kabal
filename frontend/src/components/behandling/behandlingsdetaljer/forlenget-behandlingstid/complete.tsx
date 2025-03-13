@@ -1,4 +1,5 @@
-import { setErrorMessage } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
+import { FieldName } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/field-names';
+import { type IValidationSection, SECTION_KEY, isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import {
   useCompleteMutation,
@@ -11,7 +12,7 @@ import { useState } from 'react';
 interface Props {
   id: string;
   onClose: () => void;
-  setError: (error: string | undefined) => void;
+  setError: (error: IValidationSection[]) => void;
 }
 
 export const Complete = ({ id, onClose, setError }: Props) => {
@@ -46,14 +47,18 @@ export const Complete = ({ id, onClose, setError }: Props) => {
                   if (reachable.length === 1) {
                     await setReceivers({ mottakerList: reachable, id }).unwrap();
                   } else {
-                    return setError('Brevet må ha minst én mottaker');
+                    return setError(createError('Brevet må ha minst én mottaker', FieldName.mottakere));
                   }
                 }
 
                 await complete({ id, onClose, doNotSendLetter: data.doNotSendLetter }).unwrap();
-                setError(undefined);
+                setError([]);
               } catch (e) {
-                setErrorMessage(e, setError, 'Feil ved utsending av brev om lengre saksbehandlingstid.');
+                if (isReduxValidationResponse(e)) {
+                  setError(e.data.sections);
+                } else {
+                  setError(createError('Ukjent feil', FieldName.forlengetBehandlingstidDraft));
+                }
               }
             }}
           >
@@ -67,3 +72,10 @@ export const Complete = ({ id, onClose, setError }: Props) => {
     </HStack>
   );
 };
+
+const createError = (reason: string, field: FieldName) => [
+  {
+    section: SECTION_KEY.FORLENGET_BEHANDLINGSTID_DRAFT,
+    properties: [{ reason, field }],
+  },
+];

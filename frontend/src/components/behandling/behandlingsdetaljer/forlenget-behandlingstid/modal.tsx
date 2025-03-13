@@ -1,14 +1,19 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { Complete } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/complete';
 import { DoNotSendLetter } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/do-not-send-letter';
+import {
+  FIELD_LABELS,
+  type FieldName,
+} from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/field-names';
 import { Inputs } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/inputs';
 import { Pdf } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/pdf';
 import { TimesPreviouslyExtended } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/times-previously-extended';
 import { isoDateToPretty } from '@app/domain/date';
+import type { IValidationSection } from '@app/functions/error-type-guard';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetOrCreateQuery } from '@app/redux-api/forlenget-behandlingstid';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Button, ErrorMessage, HStack, Modal, VStack } from '@navikt/ds-react';
+import { Button, ErrorSummary, HStack, Modal, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 
@@ -20,7 +25,7 @@ interface Props {
 }
 
 export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose }: Props) => {
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<IValidationSection[]>([]);
   const { varsletFrist } = oppgavebehandling;
   const oppgaveId = useOppgaveId();
   const heading = useHeading(isOpen);
@@ -32,7 +37,7 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
   return (
     <Modal header={{ heading }} width="2000px" closeOnBackdropClick open={isOpen} onClose={onClose}>
       <Modal.Body className="flex h-[80vh] w-full gap-9">
-        <VStack minWidth="520px" style={{ flexShrink: 0 }} className="overflow-y-auto">
+        <VStack minWidth="520px" style={{ flexShrink: 0 }} className="overflow-y-auto p-1">
           <VStack gap="4">
             {isOpen ? <TimesPreviouslyExtended /> : null}
             {isOpen ? <DoNotSendLetter /> : null}
@@ -48,11 +53,7 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
 
           {isOpen ? <Inputs /> : null}
 
-          {error === undefined ? null : (
-            <ErrorMessage size="small" className="mt-8">
-              {error}
-            </ErrorMessage>
-          )}
+          <Errors sections={error} />
         </VStack>
 
         {isOpen ? <Pdf id={oppgaveId} /> : null}
@@ -76,4 +77,22 @@ const useHeading = (isOpen: boolean): string => {
   return data?.doNotSendLetter === true
     ? 'Endre varslet frist uten å sende brev'
     : 'Send brev om lengre saksbehandlingstid';
+};
+
+const Errors = ({ sections }: { sections: IValidationSection[] }) => {
+  if (sections.length === 0) {
+    return null;
+  }
+
+  return (
+    <ErrorSummary className="mt-10">
+      {sections.flatMap(({ properties }) =>
+        properties.map(({ field, reason }) => (
+          <ErrorSummary.Item key={field} href={`#${field}`}>
+            {FIELD_LABELS[field as FieldName] ?? field}: {reason}
+          </ErrorSummary.Item>
+        )),
+      )}
+    </ErrorSummary>
+  );
 };

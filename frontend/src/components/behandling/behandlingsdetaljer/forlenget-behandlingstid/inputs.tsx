@@ -1,4 +1,3 @@
-import { BeregnetFrist } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/beregnet-frist';
 import { SetBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-behandlingstid';
 import { SetBehandlingstidDate } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-behandlingstid-date';
 import { SetCustomText } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-custom-text';
@@ -65,11 +64,6 @@ export const Inputs = () => {
           id={id}
           typeId={data.behandlingstid.varsletBehandlingstidUnitTypeId}
           units={data.behandlingstid.varsletBehandlingstidUnits}
-          varsletFrist={data.behandlingstid.varsletFrist}
-        />
-        <BeregnetFrist
-          units={data.behandlingstid.varsletBehandlingstidUnits}
-          typeId={data.behandlingstid.varsletBehandlingstidUnitTypeId}
           varsletFrist={data.behandlingstid.varsletFrist}
         />
 

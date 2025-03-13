@@ -1,15 +1,17 @@
+import type { FieldName } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/field-names';
 import type { DEFAULT_FIELD_NAMES } from '@app/types/field-names';
 import { type GenericObject, isGenericObject } from './../types/types';
 
 export interface IValidationError {
   reason: string;
-  field: keyof typeof DEFAULT_FIELD_NAMES;
+  field: keyof typeof DEFAULT_FIELD_NAMES | FieldName;
 }
 
 export enum SECTION_KEY {
   BEHANDLING = 'behandling',
   KVALITETSVURDERING = 'kvalitetsvurdering',
   DOKUMENTER = 'dokumenter',
+  FORLENGET_BEHANDLINGSTID_DRAFT = 'forlengetBehandlingstidDraft',
 }
 
 export interface IValidationSection extends GenericObject {
