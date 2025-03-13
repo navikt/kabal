@@ -1,4 +1,3 @@
-import { FieldName } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/field-names';
 import { type IValidationSection, SECTION_KEY, isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import {
@@ -6,6 +5,7 @@ import {
   useGetOrCreateQuery,
   useSetReceiversMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
+import { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
 import { Button, HStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
@@ -47,7 +47,9 @@ export const Complete = ({ id, onClose, setError }: Props) => {
                   if (reachable.length === 1) {
                     await setReceivers({ mottakerList: reachable, id }).unwrap();
                   } else {
-                    return setError(createError('Brevet må ha minst én mottaker', FieldName.mottakere));
+                    return setError(
+                      createError('Brevet må ha minst én mottaker', UtvidetBehandlingstidFieldName.mottakere),
+                    );
                   }
                 }
 
@@ -57,7 +59,7 @@ export const Complete = ({ id, onClose, setError }: Props) => {
                 if (isReduxValidationResponse(e)) {
                   setError(e.data.sections);
                 } else {
-                  setError(createError('Ukjent feil', FieldName.forlengetBehandlingstidDraft));
+                  setError(createError('Ukjent feil', UtvidetBehandlingstidFieldName.forlengetBehandlingstidDraft));
                 }
               }
             }}
@@ -73,7 +75,7 @@ export const Complete = ({ id, onClose, setError }: Props) => {
   );
 };
 
-const createError = (reason: string, field: FieldName) => [
+const createError = (reason: string, field: UtvidetBehandlingstidFieldName) => [
   {
     section: SECTION_KEY.FORLENGET_BEHANDLINGSTID_DRAFT,
     properties: [{ reason, field }],

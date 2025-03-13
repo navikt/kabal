@@ -1,10 +1,6 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { Complete } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/complete';
 import { DoNotSendLetter } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/do-not-send-letter';
-import {
-  FIELD_LABELS,
-  type FieldName,
-} from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/field-names';
 import { Inputs } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/inputs';
 import { Pdf } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/pdf';
 import { TimesPreviouslyExtended } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/times-previously-extended';
@@ -12,6 +8,8 @@ import { isoDateToPretty } from '@app/domain/date';
 import type { IValidationSection } from '@app/functions/error-type-guard';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetOrCreateQuery } from '@app/redux-api/forlenget-behandlingstid';
+import type { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
+import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES } from '@app/types/field-names';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Button, ErrorSummary, HStack, Modal, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -89,7 +87,7 @@ const Errors = ({ sections }: { sections: IValidationSection[] }) => {
       {sections.flatMap(({ properties }) =>
         properties.map(({ field, reason }) => (
           <ErrorSummary.Item key={field} href={`#${field}`}>
-            {FIELD_LABELS[field as FieldName] ?? field}: {reason}
+            {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[field as UtvidetBehandlingstidFieldName] ?? field}: {reason}
           </ErrorSummary.Item>
         )),
       )}

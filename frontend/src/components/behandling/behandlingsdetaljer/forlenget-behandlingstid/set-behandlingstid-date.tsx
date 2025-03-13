@@ -4,7 +4,7 @@ import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSetBehandlingstidDateMutation } from '@app/redux-api/forlenget-behandlingstid';
 import { ErrorMessage, VStack } from '@navikt/ds-react';
-import { addMonths } from 'date-fns';
+import { addDays, addMonths } from 'date-fns';
 import { useState } from 'react';
 
 interface Props {
@@ -35,7 +35,7 @@ export const SetBehandlingstidDate = ({ value, id }: Props) => {
         value={value}
         size="small"
         centuryThreshold={CURRENT_YEAR_IN_CENTURY}
-        fromDate={data.varsletFrist === null ? new Date() : new Date(data.varsletFrist)}
+        fromDate={data.varsletFrist === null ? new Date() : addDays(new Date(data.varsletFrist), 1)}
         toDate={addMonths(new Date(), 4)}
         width={125}
       />

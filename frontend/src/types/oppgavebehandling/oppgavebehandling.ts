@@ -111,6 +111,7 @@ export interface IOppgavebehandlingBase {
   fagsystemId: string;
   saksnummer: string;
   tilbakekreving: boolean;
+  timesPreviouslyExtended: number;
 }
 
 export interface IKlagebehandling extends IOppgavebehandlingBase {

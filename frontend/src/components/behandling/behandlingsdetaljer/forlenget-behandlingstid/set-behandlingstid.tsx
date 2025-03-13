@@ -1,9 +1,5 @@
 import { BeregnetFrist } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/beregnet-frist';
 import {
-  FIELD_LABELS,
-  FieldName,
-} from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/field-names';
-import {
   setErrorMessage,
   useDebounce,
 } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
@@ -12,6 +8,8 @@ import {
   useSetBehandlingstidUnitTypeMutation,
   useSetBehandlingstidUnitsMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
+import { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
+import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES } from '@app/types/field-names';
 import {
   BEHANDLINGSTID_UNIT_TYPES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
@@ -54,10 +52,10 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist }: Props) =>
     <HStack gap="2">
       <VStack gap="1" as="section">
         <Heading size="xsmall" style={{ fontSize: 16 }}>
-          {FIELD_LABELS[FieldName.behandlingstid]}
+          {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.behandlingstid]}
         </Heading>
 
-        <HStack align="end" gap="2" as="section" id={FieldName.behandlingstid}>
+        <HStack align="end" gap="2" as="section" id={UtvidetBehandlingstidFieldName.behandlingstid}>
           <TextField
             label={`Antall ${BEHANDLINGSTID_UNIT_TYPE_NAMES[typeId]}`}
             hideLabel

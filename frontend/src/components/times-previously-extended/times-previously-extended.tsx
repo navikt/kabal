@@ -10,7 +10,7 @@ export const TimesPreviouslyExtended = ({ timesPreviouslyExtended }: { timesPrev
     <Tooltip
       content={`Varslet frist i Kabal har blitt endret ${timesPreviouslyExtended} ${timesPreviouslyExtended === 1 ? 'gang' : 'ganger.'}`}
     >
-      <ExclamationmarkTriangleFillIconColored aria-hidden />
+      <ExclamationmarkTriangleFillIconColored aria-hidden fontSize={24} />
     </Tooltip>
   );
 };

@@ -1,7 +1,3 @@
-import {
-  FIELD_LABELS,
-  FieldName,
-} from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/field-names';
 import { useDebounce } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
@@ -9,6 +5,8 @@ import {
   useSetDoNotSendBrevMutation,
   useSetReasonNoLetterMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
+import { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
+import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES } from '@app/types/field-names';
 import { Alert, Box, Checkbox, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
@@ -37,9 +35,9 @@ export const DoNotSendLetter = () => {
           size="small"
           checked={data.doNotSendLetter}
           disabled={isLoading}
-          id={FieldName.doNotSendLetter}
+          id={UtvidetBehandlingstidFieldName.doNotSendLetter}
         >
-          {FIELD_LABELS[FieldName.doNotSendLetter]}
+          {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.doNotSendLetter]}
         </Checkbox>
       </Box>
       {data.doNotSendLetter ? (
@@ -72,10 +70,10 @@ const ReasonNoLetter = ({ value, id }: Props) => {
   return (
     <VStack gap="2">
       <Textarea
-        id={FieldName.reasonNoLetter}
+        id={UtvidetBehandlingstidFieldName.reasonNoLetter}
         minRows={3}
         maxRows={3}
-        label={FIELD_LABELS[FieldName.reasonNoLetter]}
+        label={UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.reasonNoLetter]}
         hideLabel
         size="small"
         placeholder="Skriv kort hvordan du har varslet på annen måte"
