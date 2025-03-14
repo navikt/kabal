@@ -4,6 +4,12 @@ export enum Fields {
   Action = 'action',
 }
 
+export const GRID_CLASSES: Record<Fields, string> = {
+  [Fields.Title]: '[grid-area:title]',
+  [Fields.TypeOrDate]: '[grid-area:type]',
+  [Fields.Action]: '[grid-area:action]',
+};
+
 const SIZES: Record<Fields, number> = {
   [Fields.Title]: -1,
   [Fields.TypeOrDate]: 170,

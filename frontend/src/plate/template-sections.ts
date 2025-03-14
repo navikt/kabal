@@ -1,6 +1,6 @@
 /*
   Why animals?
-  
+
   Short, non-sortable.
   No need for UUIDs.
   Many to choose from.
@@ -13,7 +13,6 @@
  */
 export enum TemplateSections {
   TITLE = 'section-esel',
-  INTRODUCTION_V1 = 'section-rev',
   INTRODUCTION_V2 = 'section-rev-v2',
   ANKEINFO = 'section-ape',
   ANFOERSLER = 'section-ulv',
@@ -24,8 +23,6 @@ export enum TemplateSections {
   REGELVERK_TITLE = 'section-gnu',
   SAKSKOSTNADER = 'section-gris',
   FREMLEGG = 'section-geit',
-  TILSVARSRETT_V1 = 'section-hund',
-  TILSVARSRETT_V2 = 'section-hund-v2',
   TILSVARSRETT_V3 = 'section-hund-v3',
   VEDLEGG = 'section-katt',
   SVAR_FRA_ROL = 'section-emu',
@@ -37,4 +34,15 @@ export enum TemplateSections {
   OM_REGELVERK = 'section-and',
 
   INTRODUCTION_TEMP = 'section-rev-temp', // For "migrating" ROL questions
+}
+
+/**
+ * Template sections that should not be used in new documents.
+ * They only exist for filtering existing sections and texts.
+ */
+export enum DeprecatedTemplateSections {
+  INTRODUCTION_V1 = 'section-rev',
+
+  TILSVARSRETT_V1 = 'section-hund',
+  TILSVARSRETT_V2 = 'section-hund-v2',
 }

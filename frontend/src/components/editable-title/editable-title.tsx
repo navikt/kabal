@@ -1,7 +1,6 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Heading } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   title: string;
@@ -11,20 +10,26 @@ interface Props {
 }
 
 const SIZE = 'small';
+const OPACITY_50_CLASS = 'opacity-50';
+const OPACITY_100_CLASS = 'opacity-100';
 
 export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
   const ref = useRef<HTMLHeadingElement>(null);
   const [newTitle, setNewTitle] = useState(title);
 
   const onSave = () => {
-    if (newTitle !== title) {
-      onChange(newTitle);
+    const newTrimmedTitle = newTitle.trim();
+
+    if (newTrimmedTitle !== title) {
+      onChange(newTrimmedTitle);
     }
   };
 
+  const opacityClass = isLoading ? OPACITY_50_CLASS : OPACITY_100_CLASS;
+
   return (
     <HStack gap="2" align="center" className="[grid-area:title]">
-      <StyledTitle
+      <Heading
         level="1"
         size={SIZE}
         contentEditable="plaintext-only"
@@ -34,7 +39,7 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
         aria-label={label}
         aria-placeholder="Skriv inn tittel"
         ref={ref}
-        className={isLoading ? 'opacity-50' : 'opacity-100'}
+        className={`${opacityClass} min-w-32 cursor-text whitespace-pre-wrap rounded-sm border border-(--a-border-subtle) px-0.5 empty:not-focus:text-(--a-text-subtle) empty:not-focus:italic empty:not-focus:before:content-[attr(aria-placeholder)] focus:border-(--a-border-focus)`}
         onFocus={(e) => {
           setCaretAtEnd(e.currentTarget);
         }}
@@ -71,7 +76,7 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
         suppressContentEditableWarning
       >
         {getTitle(title)}
-      </StyledTitle>
+      </Heading>
 
       <Button
         variant="tertiary"
@@ -97,26 +102,5 @@ const setCaretAtEnd = (element: HTMLElement) => {
   selection.selectAllChildren(element);
   selection.collapseToEnd();
 };
-
-const StyledTitle = styled(Heading)`
-  cursor: text;
-  min-width: var(--a-spacing-32);
-  border-radius: var(--a-border-radius-medium);
-  border-width: var(--a-spacing-05);
-  border-style: solid;
-  border-color: var(--a-border-subtle);
-  padding-left: var(--a-spacing-05);
-  padding-right: var(--a-spacing-05);
-  
-  &:focus {
-    border-color: var(--a-border-focus);
-  }
-
-  &:empty:not(:focus)::before {
-    color: var(--a-text-subtle);
-    font-style: italic;
-    content: attr(aria-placeholder);
-  }
-`;
 
 export const getTitle = (title?: string) => (title === undefined ? '' : title.trim());

@@ -56,4 +56,5 @@ export const ANKEVEDTAK_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   tittel: 'Vedtak/beslutning (anke)',
   richText: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.VEDTAKSBREV,
+  deprecatedSections: [],
 });

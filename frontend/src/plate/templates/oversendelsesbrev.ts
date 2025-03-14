@@ -16,7 +16,7 @@ import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { BaseParagraphPlugin } from '@udecode/plate-core';
-import { TemplateSections } from '../template-sections';
+import { DeprecatedTemplateSections, TemplateSections } from '../template-sections';
 import { LabelContentSource } from '../types';
 
 export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
@@ -42,7 +42,7 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
       ],
     },
 
-    createMaltekstseksjon(TemplateSections.TILSVARSRETT_V2),
+    createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
     createMaltekstseksjon(TemplateSections.GENERELL_INFO),
 
     createSignature(),
@@ -73,4 +73,5 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
     createRegelverk(),
   ],
   dokumentTypeId: DistribusjonsType.BREV,
+  deprecatedSections: [DeprecatedTemplateSections.TILSVARSRETT_V2],
 });
