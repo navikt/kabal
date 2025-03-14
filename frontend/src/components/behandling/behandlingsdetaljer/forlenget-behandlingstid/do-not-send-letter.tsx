@@ -21,7 +21,7 @@ export const DoNotSendLetter = () => {
   }
 
   return (
-    <VStack gap="4" className="mb-4">
+    <VStack gap="4">
       <Box
         background="surface-info-subtle"
         borderColor="border-info"

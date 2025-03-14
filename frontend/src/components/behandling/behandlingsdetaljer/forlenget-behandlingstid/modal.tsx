@@ -35,7 +35,7 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
   return (
     <Modal header={{ heading }} width="2000px" closeOnBackdropClick open={isOpen} onClose={onClose}>
       <Modal.Body className="flex h-[80vh] w-full gap-9">
-        <VStack width="754px" className="shrink-0 overflow-y-auto p-1">
+        <VStack width="754px" padding="1" overflowY="auto" flexShrink="0" gap="4">
           <VStack gap="4">
             {isOpen ? <TimesPreviouslyExtended /> : null}
             {isOpen ? <DoNotSendLetter /> : null}
@@ -91,7 +91,7 @@ const Errors = ({ sections }: { sections: IValidationSection[] }) => {
   }
 
   return (
-    <ErrorSummary className="mt-10" ref={ref}>
+    <ErrorSummary ref={ref}>
       {sections.flatMap(({ properties }) =>
         properties.map(({ field, reason }) => (
           <ErrorSummary.Item key={field} href={`#${field}`}>

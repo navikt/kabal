@@ -17,7 +17,7 @@ import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import type { IBehandlingEtterTryderettenOpphevet as IBehandlingEtterTrOpphevet } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Heading } from '@navikt/ds-react';
+import { Heading, VStack } from '@navikt/ds-react';
 
 interface Props {
   oppgavebehandling: IBehandlingEtterTrOpphevet;
@@ -49,60 +49,61 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
         <Heading level="1" size="medium" spacing>
           Behandling
         </Heading>
+        <VStack gap="4">
+          <Part
+            isDeletable={false}
+            label="Opprinnelig klager / ankende part"
+            part={oppgavebehandling.klager}
+            onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
+            isLoading={klagerIsLoading}
+          />
 
-        <Part
-          isDeletable={false}
-          label="Opprinnelig klager / ankende part"
-          part={oppgavebehandling.klager}
-          onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
-          isLoading={klagerIsLoading}
-        />
+          <Part
+            isDeletable
+            label="Fullmektig"
+            part={prosessfullmektig}
+            onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
+            isLoading={fullmektigIsLoading}
+          />
 
-        <Part
-          isDeletable
-          label="Fullmektig"
-          part={prosessfullmektig}
-          onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
-          isLoading={fullmektigIsLoading}
-        />
+          <BehandlingSection label="Type">
+            <Type type={typeId} />
+          </BehandlingSection>
 
-        <BehandlingSection label="Type">
-          <Type type={typeId} />
-        </BehandlingSection>
+          <BehandlingSection label="Ytelse">
+            <Ytelse ytelseId={ytelseId} />
+          </BehandlingSection>
 
-        <BehandlingSection label="Ytelse">
-          <Ytelse ytelseId={ytelseId} />
-        </BehandlingSection>
+          <Saksnummer saksnummer={saksnummer} />
 
-        <Saksnummer saksnummer={saksnummer} />
+          <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 
-        <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
+          <ReadOnlyDate
+            date={kjennelseMottatt}
+            id="dato-for-kjennelse-mottatt-fra-trygderetten-med-utfall-opphevet"
+            label="Dato for kjennelse mottatt fra Trygderetten med utfall opphevet"
+          />
 
-        <ReadOnlyDate
-          date={kjennelseMottatt}
-          id="dato-for-kjennelse-mottatt-fra-trygderetten-med-utfall-opphevet"
-          label="Dato for kjennelse mottatt fra Trygderetten med utfall opphevet"
-        />
+          <BehandlingSection label="Varslet frist">
+            {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
+          </BehandlingSection>
 
-        <BehandlingSection label="Varslet frist">
-          {varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}
-        </BehandlingSection>
+          <BehandlingSection label="Anke behandlet av">
+            {fraNAVEnhetNavn} - {fraNAVEnhet}
+          </BehandlingSection>
 
-        <BehandlingSection label="Anke behandlet av">
-          {fraNAVEnhetNavn} - {fraNAVEnhet}
-        </BehandlingSection>
+          <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
 
-        <MeldingFraVedtaksinstans kommentarFraVedtaksinstans={kommentarFraVedtaksinstans} />
+          <Gosys oppgavebehandling={oppgavebehandling} />
 
-        <Gosys oppgavebehandling={oppgavebehandling} />
+          <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
 
-        <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
+          <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
 
-        <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
+          <Lovhjemmel />
 
-        <Lovhjemmel />
-
-        <Tilbakekreving />
+          <Tilbakekreving />
+        </VStack>
       </StyledBehandlingSection>
     </GrafanaDomainProvider>
   );

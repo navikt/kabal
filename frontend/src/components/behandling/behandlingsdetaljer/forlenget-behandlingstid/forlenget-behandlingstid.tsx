@@ -23,8 +23,6 @@ export const ForlengetBehandlingstid = ({ oppgavebehandling, children }: Props) 
 
   return (
     <>
-      {children}
-
       <BehandlingSection label="Varslet frist">
         <HStack justify="space-between">
           <span>{varsletFrist === null ? 'Ikke satt' : isoDateToPretty(varsletFrist)}</span>
