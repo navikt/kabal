@@ -32,6 +32,7 @@ export const Header = ({
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Escape') {
+      event.stopPropagation();
       onFocusChange(-1);
 
       return close();

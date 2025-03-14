@@ -2,6 +2,7 @@ import { GLOBAL, LIST_DELIMITER, NONE, type NONE_TYPE } from '@app/components/sm
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { GodeFormuleringerList } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer-list';
+import { HjemlerFilter } from '@app/components/smart-editor/gode-formuleringer/hjemler-filter';
 import { SectionSelect } from '@app/components/smart-editor/gode-formuleringer/section-select';
 import { SetGlobalExpandState } from '@app/components/smart-editor/gode-formuleringer/set-global-expand-state';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
@@ -10,9 +11,8 @@ import type { GodeFormuleringerExpandState } from '@app/hooks/settings/use-setti
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import type { TemplateSections } from '@app/plate/template-sections';
 import { useMyPlateEditorRef } from '@app/plate/types';
-import { GOD_FORMULERING_TYPE } from '@app/types/common-text-types';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { IConsumerText, NonNullableGodFormulering } from '@app/types/texts/consumer';
+import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LightBulbIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -26,10 +26,17 @@ interface Props {
 type ActiveSection = TemplateSections | NONE_TYPE;
 
 const filterTemplateSection = (
+  godFormulering: NonNullableGodFormulering,
   templateId: TemplateIdEnum,
   activeSection: ActiveSection,
-  godFormulering: IConsumerText,
+  selectedHjemler: string[],
 ): boolean => {
+  const hjemler = godFormulering.ytelseHjemmelIdList.map((h) => h.split(LIST_DELIMITER)[1]);
+
+  if (selectedHjemler.length > 0 && !selectedHjemler.some((h) => hjemler.includes(h))) {
+    return false;
+  }
+
   if (godFormulering.templateSectionIdList.length === 0) {
     return true;
   }
@@ -48,13 +55,8 @@ const filterTemplateSection = (
   return false;
 };
 
-const isFilteredPublishedRichText = (
-  text: NonNullableGodFormulering,
-  templateId: TemplateIdEnum,
-  activeSection: ActiveSection,
-) => text.textType === GOD_FORMULERING_TYPE && filterTemplateSection(templateId, activeSection, text);
-
 export const GodeFormuleringer = ({ templateId }: Props) => {
+  const [selectedHjemler, setSelectedHjemler] = useState<string[]>([]);
   const [filter, setFilter] = useState<string>('');
   const [focused, setFocused] = useState<number>(-1);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -76,7 +78,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
       const result: NonNullableGodFormulering[] = [];
 
       for (const text of data) {
-        if (isFilteredPublishedRichText(text, templateId, activeSection)) {
+        if (filterTemplateSection(text, templateId, activeSection, selectedHjemler)) {
           result.push(text);
         }
       }
@@ -87,7 +89,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     const result: [NonNullableGodFormulering, number][] = [];
 
     for (const text of data) {
-      if (isFilteredPublishedRichText(text, templateId, activeSection)) {
+      if (filterTemplateSection(text, templateId, activeSection, selectedHjemler)) {
         const score = fuzzySearch(splitQuery(filter), text.title + getTextAsString(text.richText));
 
         if (score > 0) {
@@ -97,7 +99,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     }
 
     return result.toSorted(([, a], [, b]) => b - a).map(([t]) => t);
-  }, [data, filter, templateId, activeSection]);
+  }, [data, filter, templateId, activeSection, selectedHjemler]);
 
   const [expandState, setExpandState] = useState<Map<string, GodeFormuleringerExpandState>>(
     texts.reduce((acc, t) => acc.set(t.id, godeFormuleringerExpandState), new Map()),
@@ -180,6 +182,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
           </HStack>
           <Filter filter={filter} setFilter={setFilter} isFocused={focused === -1} onFocus={() => setFocused(-1)} />
           <SectionSelect activeSection={activeSection} setActiveSection={setActiveSection} />
+          <HjemlerFilter selected={selectedHjemler} setSelected={setSelectedHjemler} />
         </VStack>
         <VStack overflowY="auto" flexGrow="1" gap="4 0" paddingInline="1 4">
           <GodeFormuleringerList
