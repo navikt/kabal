@@ -4,25 +4,16 @@ import { Label, VStack } from '@navikt/ds-react';
 import { addMonths, addWeeks, format } from 'date-fns';
 
 interface Props {
-  units: number | null;
+  units: number;
   typeId: BehandlingstidUnitType;
-  varsletFrist: string | null;
 }
 
-const BeregnetFristWrapper = ({ children }: { children: string }) => (
+export const BeregnetFrist = ({ units, typeId }: Props) => (
   <VStack>
     <Label size="small">Beregnet frist</Label>
-    <div className="mt-3">{children}</div>
+    <div className="mt-3">{Number.isNaN(units) ? '-' : getNewDate(units, typeId)}</div>
   </VStack>
 );
-
-export const BeregnetFrist = ({ units, typeId }: Props) => {
-  if (units !== null) {
-    return <BeregnetFristWrapper>{getNewDate(units, typeId)}</BeregnetFristWrapper>;
-  }
-
-  return <BeregnetFristWrapper>-</BeregnetFristWrapper>;
-};
 
 const NOW = new Date();
 

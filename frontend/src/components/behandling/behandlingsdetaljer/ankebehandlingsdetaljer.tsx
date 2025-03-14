@@ -18,7 +18,7 @@ import { Type } from '@app/components/type/type';
 import { useUpdateFullmektigMutation, useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Heading } from '@navikt/ds-react';
+import { Heading, VStack } from '@navikt/ds-react';
 
 interface Props {
   oppgavebehandling: IOppgavebehandling;
@@ -40,60 +40,62 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
           Behandling
         </Heading>
 
-        <Part
-          isDeletable={false}
-          label="Den ankende part"
-          part={oppgavebehandling.klager}
-          onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
-          isLoading={klagerIsLoading}
-        />
-
-        <Part
-          isDeletable
-          label="Fullmektig"
-          part={prosessfullmektig}
-          onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
-          isLoading={fullmektigIsLoading}
-        />
-
-        <BehandlingSection label="Type">
-          <Type type={typeId} />
-        </BehandlingSection>
-
-        <BehandlingSection label="Ytelse">
-          <Ytelse ytelseId={ytelseId} />
-        </BehandlingSection>
-
-        <BehandlingSection label="Klagebehandling fullført av">
-          <PreviousSaksbehandler
-            previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
-            type={SaksTypeEnum.ANKE}
+        <VStack gap="4">
+          <Part
+            isDeletable={false}
+            label="Den ankende part"
+            part={oppgavebehandling.klager}
+            onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
+            isLoading={klagerIsLoading}
           />
-        </BehandlingSection>
 
-        <Saksnummer saksnummer={saksnummer} />
+          <Part
+            isDeletable
+            label="Fullmektig"
+            part={prosessfullmektig}
+            onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
+            isLoading={fullmektigIsLoading}
+          />
 
-        <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
+          <BehandlingSection label="Type">
+            <Type type={typeId} />
+          </BehandlingSection>
 
-        <ForlengetBehandlingstid oppgavebehandling={oppgavebehandling}>
+          <BehandlingSection label="Ytelse">
+            <Ytelse ytelseId={ytelseId} />
+          </BehandlingSection>
+
+          <BehandlingSection label="Klagebehandling fullført av">
+            <PreviousSaksbehandler
+              previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
+              type={SaksTypeEnum.ANKE}
+            />
+          </BehandlingSection>
+
+          <Saksnummer saksnummer={saksnummer} />
+
+          <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
+
+          <ForlengetBehandlingstid oppgavebehandling={oppgavebehandling}>
+            <MottattDato />
+          </ForlengetBehandlingstid>
+
+          <BehandlingSection label="Behandlet av">
+            {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
+          </BehandlingSection>
+
           <MottattDato />
-        </ForlengetBehandlingstid>
 
-        <BehandlingSection label="Behandlet av">
-          {fraNAVEnhetNavn} &mdash; {fraNAVEnhet}
-        </BehandlingSection>
+          <Gosys oppgavebehandling={oppgavebehandling} />
 
-        <MottattDato />
+          <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
 
-        <Gosys oppgavebehandling={oppgavebehandling} />
+          <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
 
-        <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
+          <Lovhjemmel />
 
-        <ExtraUtfall utfallIdSet={extraUtfallIdSet} mainUtfall={utfallId} oppgaveId={id} typeId={typeId} />
-
-        <Lovhjemmel />
-
-        <Tilbakekreving />
+          <Tilbakekreving />
+        </VStack>
       </StyledBehandlingSection>
     </GrafanaDomainProvider>
   );

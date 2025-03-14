@@ -10,6 +10,7 @@ export enum SECTION_KEY {
   BEHANDLING = 'behandling',
   KVALITETSVURDERING = 'kvalitetsvurdering',
   DOKUMENTER = 'dokumenter',
+  FORLENGET_BEHANDLINGSTID_DRAFT = 'forlengetBehandlingstidDraft',
 }
 
 export interface IValidationSection extends GenericObject {

@@ -1,4 +1,5 @@
 import { ALL, Filter } from '@app/components/behandling/behandlingsdialog/history/filter';
+import { getForlengetBehandlingstidEvent } from '@app/components/behandling/behandlingsdialog/history/forlenget-behandlingstid';
 import { getFullmektig } from '@app/components/behandling/behandlingsdialog/history/fullmektig';
 import { MissingHistoryWarning } from '@app/components/behandling/behandlingsdialog/history/history-warning';
 import { getKlager } from '@app/components/behandling/behandlingsdialog/history/klager';
@@ -56,6 +57,7 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
       ferdigstilt: toNodes(data.ferdigstilt, getFerdigstiltEvent),
       feilregistrert: toNodes(data.feilregistrert, getFeilregistrertEvent),
       varsletBehandlingstid: toNodes(data.varsletBehandlingstid, getVarsletBehandlingstidEvent),
+      forlengetBehandlingstid: toNodes(data.forlengetBehandlingstid, getForlengetBehandlingstidEvent),
     }),
     [data],
   );
@@ -71,6 +73,7 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
       tildeling,
       fullmektig,
       varsletBehandlingstid,
+      forlengetBehandlingstid,
     } = nodeCategories;
 
     if (filter === ALL) {
@@ -84,6 +87,7 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
         ...tildeling,
         ...fullmektig,
         ...varsletBehandlingstid,
+        ...forlengetBehandlingstid,
       ]
         .sort((a, b) => b.timestamp.localeCompare(a.timestamp))
         .map(({ node }) => node);
@@ -103,6 +107,7 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
       ferdigstilt,
       feilregistrert,
       varsletBehandlingstid,
+      forlengetBehandlingstid,
     } = nodeCategories;
 
     const _counts: Record<HistoryEventTypes, number> = {
@@ -115,6 +120,7 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
       [HistoryEventTypes.FERDIGSTILT]: ferdigstilt.length,
       [HistoryEventTypes.FEILREGISTRERT]: feilregistrert.length,
       [HistoryEventTypes.VARSLET_BEHANDLINGSTID]: varsletBehandlingstid.length,
+      [HistoryEventTypes.FORLENGET_BEHANDLINGSTID]: forlengetBehandlingstid.length,
     };
     const _totalCount =
       tildeling.length +

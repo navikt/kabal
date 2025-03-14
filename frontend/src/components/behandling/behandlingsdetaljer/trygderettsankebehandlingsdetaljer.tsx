@@ -17,7 +17,7 @@ import { Type } from '@app/components/type/type';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { ITrygderettsankebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Heading } from '@navikt/ds-react';
+import { Heading, VStack } from '@navikt/ds-react';
 
 interface Props {
   oppgavebehandling: ITrygderettsankebehandling;
@@ -36,49 +36,50 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
         <Heading level="1" size="medium" spacing>
           Behandling
         </Heading>
+        <VStack gap="4">
+          <BehandlingSection label="Den ankende part">
+            {oppgavebehandling.klager.name ?? 'Navn mangler'}
+          </BehandlingSection>
 
-        <BehandlingSection label="Den ankende part">
-          {oppgavebehandling.klager.name ?? 'Navn mangler'}
-        </BehandlingSection>
-
-        <Part
-          isDeletable
-          label="Fullmektig"
-          part={prosessfullmektig}
-          onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
-          isLoading={fullmektigIsLoading}
-        />
-
-        <BehandlingSection label="Type">
-          <Type type={typeId} />
-        </BehandlingSection>
-
-        <BehandlingSection label="Ytelse">
-          <Ytelse ytelseId={ytelseId} />
-        </BehandlingSection>
-
-        <BehandlingSection label="Ankebehandling fullført av">
-          <PreviousSaksbehandler
-            previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
-            type={SaksTypeEnum.ANKE_I_TRYGDERETTEN}
+          <Part
+            isDeletable
+            label="Fullmektig"
+            part={prosessfullmektig}
+            onChange={(fullmektig) => updateFullmektig({ fullmektig, oppgaveId: oppgavebehandling.id })}
+            isLoading={fullmektigIsLoading}
           />
-        </BehandlingSection>
 
-        <Saksnummer saksnummer={saksnummer} />
+          <BehandlingSection label="Type">
+            <Type type={typeId} />
+          </BehandlingSection>
 
-        <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
+          <BehandlingSection label="Ytelse">
+            <Ytelse ytelseId={ytelseId} />
+          </BehandlingSection>
 
-        <SendtTilTrygderetten />
+          <BehandlingSection label="Ankebehandling fullført av">
+            <PreviousSaksbehandler
+              previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
+              type={SaksTypeEnum.ANKE_I_TRYGDERETTEN}
+            />
+          </BehandlingSection>
 
-        <KjennelseMottatt />
+          <Saksnummer saksnummer={saksnummer} />
 
-        <Gosys oppgavebehandling={oppgavebehandling} />
+          <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 
-        <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
+          <SendtTilTrygderetten />
 
-        <Lovhjemmel />
+          <KjennelseMottatt />
 
-        <Tilbakekreving />
+          <Gosys oppgavebehandling={oppgavebehandling} />
+
+          <UtfallResultat utfall={utfallId} oppgaveId={id} extraUtfallIdSet={extraUtfallIdSet} typeId={typeId} />
+
+          <Lovhjemmel />
+
+          <Tilbakekreving />
+        </VStack>
       </StyledBehandlingSection>
     </GrafanaDomainProvider>
   );

@@ -9,8 +9,6 @@ export const useDebounce = <T extends string | number | null>(
   skip: boolean,
   /** The value to be set. Only used to stop execution if action errors */
   value: T,
-  /** The setter for the consumer's error message */
-  setError: (e: string | undefined) => void,
   /** Delay in ms */
   delay: number,
 ) => {
@@ -24,15 +22,13 @@ export const useDebounce = <T extends string | number | null>(
     const timeout = setTimeout(async () => {
       try {
         await action();
-        setError(undefined);
       } catch (e) {
         setErrorValue(value);
-        setErrorMessage(e, setError);
       }
     }, delay);
 
     return () => clearTimeout(timeout);
-  }, [action, delay, skip, setError, value, errorValue]);
+  }, [action, delay, skip, value, errorValue]);
 };
 
 export const setErrorMessage = (e: unknown, setError: (e: string) => void, fallbackMessage = 'Ukjent feil') => {

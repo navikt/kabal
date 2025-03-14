@@ -5,10 +5,30 @@ import {
 } from '@app/components/kvalitetsvurdering/v2/common/use-field-name';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 
+export enum UtvidetBehandlingstidFieldName {
+  Behandling = 'behandling',
+  ForlengetBehandlingstidDraft = 'forlengetBehandlingstidDraft',
+  Behandlingstid = 'behandlingstid',
+  DoNotSendLetter = 'doNotSendLetter',
+  ReasonNoLetter = 'reasonNoLetter',
+  Mottakere = 'mottakere',
+  Title = 'title',
+}
+export const UTVIDET_BEHANDLINGSTID_FIELD_NAMES: Record<UtvidetBehandlingstidFieldName, string> = {
+  [UtvidetBehandlingstidFieldName.Behandling]: 'Behandling',
+  [UtvidetBehandlingstidFieldName.ForlengetBehandlingstidDraft]: 'Forlenget behandlingstid',
+  [UtvidetBehandlingstidFieldName.Behandlingstid]: 'Ny behandlingstid',
+  [UtvidetBehandlingstidFieldName.DoNotSendLetter]: 'Endre varslet frist uten å sende brev',
+  [UtvidetBehandlingstidFieldName.ReasonNoLetter]: 'Hvordan du har varslet på annen måte',
+  [UtvidetBehandlingstidFieldName.Mottakere]: 'Mottakere',
+  [UtvidetBehandlingstidFieldName.Title]: 'Tittel',
+};
+
 export const DEFAULT_FIELD_NAMES = {
   ...KVALITETSVURDERING_V1_FIELD_NAMES,
   ...KVALITETSVURDERING_V2_FIELD_NAMES,
   ...KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES,
+  ...UTVIDET_BEHANDLINGSTID_FIELD_NAMES,
   vedtaksdokument: 'Vedtaksdokument',
   utfall: 'Utfall/resultat',
   hjemmel: 'Lovhjemmel',
