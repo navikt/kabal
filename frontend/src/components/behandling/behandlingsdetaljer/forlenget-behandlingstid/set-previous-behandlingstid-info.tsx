@@ -1,6 +1,6 @@
 import { useDebounce } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
 import { useSetPreviousBehandlingstidInfoMutation } from '@app/redux-api/forlenget-behandlingstid';
-import { ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
+import { Textarea, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
 interface Props {
@@ -11,11 +11,10 @@ interface Props {
 export const SetPreviousBehandlingstidInfo = ({ value, id }: Props) => {
   const [setValue] = useSetPreviousBehandlingstidInfoMutation({ fixedCacheKey: id });
   const [tempValue, setTempValue] = useState(value ?? '');
-  const [error, setError] = useState<string>();
 
   const skip = tempValue === value || (tempValue === '' && value === null);
-  const action = () => setValue({ id, previousBehandlingstidInfo: tempValue === '' ? null : tempValue }).unwrap();
-  useDebounce(action, skip, tempValue, setError, 500);
+  const action = () => setValue({ id, previousBehandlingstidInfo: tempValue === '' ? null : tempValue });
+  useDebounce(action, skip, tempValue, 500);
 
   return (
     <VStack gap="2">
@@ -27,7 +26,6 @@ export const SetPreviousBehandlingstidInfo = ({ value, id }: Props) => {
         value={tempValue}
         onChange={({ target }) => setTempValue(target.value)}
       />
-      {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
     </VStack>
   );
 };

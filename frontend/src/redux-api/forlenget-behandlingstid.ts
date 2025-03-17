@@ -20,6 +20,9 @@ interface IForlengetBehandlingstid {
     varsletFrist: string | null;
   };
   receivers: IMottaker[];
+  doNotSendLetter: boolean;
+  reasonNoLetter: string | null;
+  timesPreviouslyExtended: number;
 }
 
 const getPath = (id: string, subPath?: string) =>
@@ -126,16 +129,26 @@ export const forlengetBehandlingstidApi = createApi({
       }),
       onQueryStarted: (params, { queryFulfilled }) => optimisticUpdate(params, queryFulfilled),
     }),
-    complete: builder.mutation<void, { id: string; onClose: () => void }>({
+    setDoNotSendBrev: builder.mutation<IForlengetBehandlingstid, { doNotSendLetter: boolean; id: string }>({
+      query: ({ id, ...body }) => ({ url: getPath(id, 'do-not-send-letter'), method: 'PUT', body }),
+      onQueryStarted: (params, { queryFulfilled }) => optimisticUpdate(params, queryFulfilled),
+    }),
+    setReasonNoLetter: builder.mutation<IForlengetBehandlingstid, { reasonNoLetter: string | null; id: string }>({
+      query: ({ id, ...body }) => ({ url: getPath(id, 'reason-no-letter'), method: 'PUT', body }),
+      onQueryStarted: (params, { queryFulfilled }) => optimisticUpdate(params, queryFulfilled),
+    }),
+    complete: builder.mutation<void, { id: string; doNotSendLetter: boolean; onClose: () => void }>({
       query: ({ id }) => ({ url: getPath(id, 'complete'), method: 'POST' }),
-      onQueryStarted: async ({ onClose }, { queryFulfilled, dispatch }) => {
+      onQueryStarted: async ({ onClose, doNotSendLetter }, { queryFulfilled, dispatch }) => {
         await queryFulfilled;
 
         // Ensure modal is closed before resetting API in order to avoid refetch
         onClose();
         dispatch(forlengetBehandlingstidApi.util.resetApiState());
 
-        toast.success('Brev om lengre saksbehandlingstid er satt til utsending');
+        toast.success(
+          doNotSendLetter ? 'Varslet frist er endret' : 'Brev om lengre saksbehandlingstid er satt til utsending',
+        );
       },
     }),
   }),
@@ -183,5 +196,7 @@ export const {
   useSetTitleMutation,
   useSetReceiversMutation,
   useSetPreviousBehandlingstidInfoMutation,
+  useSetDoNotSendBrevMutation,
+  useSetReasonNoLetterMutation,
   useCompleteMutation,
 } = forlengetBehandlingstidApi;

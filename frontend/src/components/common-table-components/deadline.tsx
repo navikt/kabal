@@ -1,3 +1,4 @@
+import { TimesPreviouslyExtended } from '@app/components/times-previously-extended/times-previously-extended';
 import { isoDateToPretty } from '@app/domain/date';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
 import { useSetFristMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
@@ -24,15 +25,19 @@ export const Deadline = (oppgave: IOppgave) => {
 
 interface ReadOnlyDeadlineProps {
   frist: string | null;
+  timesPreviouslyExtended: number;
 }
 
-export const ReadOnlyDeadline = ({ frist }: ReadOnlyDeadlineProps) => {
+export const ReadOnlyDeadline = ({ frist, timesPreviouslyExtended }: ReadOnlyDeadlineProps) => {
   const fristExceeded = useMemo(() => (frist === null ? false : isPast(addDays(parseISO(frist), 1))), [frist]);
 
   return (
-    <time className={fristExceeded ? 'text-(--a-text-danger)' : 'text-(--a-text-default)'} dateTime={frist ?? ''}>
-      {isoDateToPretty(frist) ?? 'Ikke satt'}
-    </time>
+    <HStack align="center" gap="2" wrap={false}>
+      <time className={fristExceeded ? 'text-(--a-text-danger)' : 'text-(--a-text-default)'} dateTime={frist ?? ''}>
+        {isoDateToPretty(frist) ?? 'Ikke satt'}
+      </time>
+      <TimesPreviouslyExtended timesPreviouslyExtended={timesPreviouslyExtended} />
+    </HStack>
   );
 };
 

@@ -1,17 +1,18 @@
-import { setErrorMessage } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
+import { type IValidationSection, SECTION_KEY, isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import {
   useCompleteMutation,
   useGetOrCreateQuery,
   useSetReceiversMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
+import { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
 import { Button, HStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
 interface Props {
   id: string;
   onClose: () => void;
-  setError: (error: string | undefined) => void;
+  setError: (error: IValidationSection[]) => void;
 }
 
 export const Complete = ({ id, onClose, setError }: Props) => {
@@ -30,7 +31,7 @@ export const Complete = ({ id, onClose, setError }: Props) => {
     <HStack gap="2" align="center">
       {showConfirm ? null : (
         <Button onClick={() => setShowConfirm(true)} size="small" variant="primary">
-          Endre frist og send brev
+          Endre frist{data.doNotSendLetter ? '' : ' og send brev'}
         </Button>
       )}
 
@@ -42,22 +43,29 @@ export const Complete = ({ id, onClose, setError }: Props) => {
             loading={isLoading}
             onClick={async () => {
               try {
-                if (data.receivers.length === 0) {
-                  if (reachable.length === 1) {
-                    await setReceivers({ mottakerList: reachable, id }).unwrap();
-                  } else {
-                    return setError('Brevet må ha minst én mottaker');
-                  }
+                if (!data.doNotSendLetter && data.receivers.length === 0 && reachable.length === 1) {
+                  await setReceivers({ mottakerList: reachable, id }).unwrap();
                 }
 
-                await complete({ id, onClose: onClose }).unwrap();
-                setError(undefined);
+                await complete({ id, onClose, doNotSendLetter: data.doNotSendLetter }).unwrap();
+                setError([]);
               } catch (e) {
-                setErrorMessage(e, setError, 'Feil ved utsending av brev om lengre saksbehandlingstid.');
+                if (isReduxValidationResponse(e)) {
+                  setError(e.data.sections);
+                } else {
+                  setError([
+                    {
+                      section: SECTION_KEY.FORLENGET_BEHANDLINGSTID_DRAFT,
+                      properties: [
+                        { reason: 'Ukjent feil', field: UtvidetBehandlingstidFieldName.ForlengetBehandlingstidDraft },
+                      ],
+                    },
+                  ]);
+                }
               }
             }}
           >
-            Bekreft endring av frist og send brev
+            Bekreft endring av frist{data.doNotSendLetter ? '' : ' og send brev'}
           </Button>
           <Button size="small" variant="secondary" onClick={() => setShowConfirm(false)} disabled={isLoading}>
             Avbryt

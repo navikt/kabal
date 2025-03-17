@@ -8,7 +8,7 @@ import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebeh
 
 export const handleVarsletFristEvent =
   (userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
-  ({ actor, timestamp, varsletFrist }: VarsletFristEvent) => {
+  ({ actor, timestamp, varsletFrist, timesPreviouslyExtended }: VarsletFristEvent) => {
     updateCachedData((draft) => {
       if (draft === undefined) {
         return draft;
@@ -26,6 +26,7 @@ export const handleVarsletFristEvent =
       }
 
       draft.varsletFrist = varsletFrist;
+      draft.timesPreviouslyExtended = timesPreviouslyExtended;
       draft.modified = timestamp;
     });
   };

@@ -2,7 +2,9 @@ import { setErrorMessage } from '@app/components/behandling/behandlingsdetaljer/
 import { Receivers } from '@app/components/receivers/receivers';
 import { useSetReceiversMutation } from '@app/redux-api/forlenget-behandlingstid';
 import type { IMottaker } from '@app/types/documents/documents';
-import { ErrorMessage, VStack } from '@navikt/ds-react';
+import { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
+import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES } from '@app/types/field-names';
+import { ErrorMessage, Heading, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
 interface Props {
@@ -15,7 +17,8 @@ export const SetReceivers = ({ value, id }: Props) => {
   const [error, setError] = useState<string>();
 
   return (
-    <VStack gap="2">
+    <VStack gap="2" id={UtvidetBehandlingstidFieldName.Mottakere} as="section">
+      <Heading size="xsmall">{UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.Mottakere]}</Heading>
       <Receivers
         mottakerList={value}
         setMottakerList={async (mottakerList) => {

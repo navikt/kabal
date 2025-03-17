@@ -17,6 +17,12 @@ import { Alert, Loader } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 
 export const Pdf = ({ id }: { id: string }) => {
+  const { data } = useGetOrCreateQuery(id);
+
+  return data?.doNotSendLetter === true ? null : <PdfBody id={id} />;
+};
+
+const PdfBody = ({ id }: { id: string }) => {
   const [pdfLoading, setPdfLoading] = useState(false);
   const { value: width, setValue: setWidth } = useForlengetFristPdfWidth();
   const { data, isLoading, isSuccess, isError } = useGetOrCreateQuery(id);

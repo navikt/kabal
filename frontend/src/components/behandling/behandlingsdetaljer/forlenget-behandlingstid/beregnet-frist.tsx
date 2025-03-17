@@ -1,36 +1,33 @@
 import { PRETTY_FORMAT } from '@app/components/date-picker/constants';
 import { BehandlingstidUnitType } from '@app/types/svarbrev';
 import { Label, VStack } from '@navikt/ds-react';
-import { addMonths, addWeeks, format } from 'date-fns';
+import { addMonths, addWeeks, format, isValid } from 'date-fns';
 
 interface Props {
-  units: number | null;
+  units: number;
   typeId: BehandlingstidUnitType;
-  varsletFrist: string | null;
 }
 
-const BeregnetFristWrapper = ({ children }: { children: string }) => (
+export const BeregnetFrist = ({ units, typeId }: Props) => (
   <VStack>
     <Label size="small">Beregnet frist</Label>
-    <div className="mt-3">{children}</div>
+    <div className="mt-3">{Number.isNaN(units) ? '-' : getNewDate(units, typeId)}</div>
   </VStack>
 );
-
-export const BeregnetFrist = ({ units, typeId }: Props) => {
-  if (units !== null) {
-    return <BeregnetFristWrapper>{getNewDate(units, typeId)}</BeregnetFristWrapper>;
-  }
-
-  return <BeregnetFristWrapper>-</BeregnetFristWrapper>;
-};
 
 const NOW = new Date();
 
 const getNewDate = (units: number, typeId: BehandlingstidUnitType): string => {
+  const date = getRawDate(units, typeId);
+
+  return isValid(date) ? format(date, PRETTY_FORMAT) : '-';
+};
+
+const getRawDate = (units: number, typeId: BehandlingstidUnitType): Date => {
   switch (typeId) {
     case BehandlingstidUnitType.WEEKS:
-      return format(addWeeks(NOW, units), PRETTY_FORMAT);
+      return addWeeks(NOW, units);
     case BehandlingstidUnitType.MONTHS:
-      return format(addMonths(NOW, units), PRETTY_FORMAT);
+      return addMonths(NOW, units);
   }
 };
