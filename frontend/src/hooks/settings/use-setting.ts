@@ -117,3 +117,22 @@ export enum GodeFormuleringerExpandState {
   PREVIEW = 'PREVIEW',
   FULL_RICH_TEXT = 'FULL_RICH_TEXT',
 }
+
+/**
+ * Enum for PDF scale modes.
+ * All:     zoom=137
+ * Firefox: zoom=page-width|page-height|page-fit|page-actual|auto
+ * Chrome:  view=fitH|fitV|fitB|fitBH|fitBV|fit
+ * @external
+ * @see https://github.com/chromium/chromium/blob/main/chrome/browser/resources/pdf/open_pdf_params_parser.ts#L21
+ */
+export enum PdfScaleMode {
+  PAGE_FIT = 'page-fit',
+  PAGE_WIDTH = 'page-width',
+  PAGE_HEIGHT = 'page-height',
+  CUSTOM = 'custom',
+  NONE = 'none',
+}
+
+export const useNewTabPdfScaleMode = () => useJsonSetting<PdfScaleMode>('pdf/new_tab/scale_mode');
+export const useNewTabPdfCustomScale = () => useNumberSetting('pdf/new_tab/custom_scale');

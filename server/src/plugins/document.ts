@@ -44,9 +44,6 @@ const TEMPLATE = fs.readFileSync(path.join(process.cwd(), './src/templates/docum
 
 const QUERYSTRING = Type.Object({
   version: Type.Optional(Type.String()),
-  toolbar: Type.Optional(Type.String()),
-  view: Type.Optional(Type.String()),
-  zoom: Type.Optional(Type.String()),
 });
 
 type QuerystringType = Static<typeof QUERYSTRING>;
@@ -81,11 +78,11 @@ export const documentPlugin = fastifyPlugin(
           );
           const metadata = metadataResponse ?? DEFAULT_ARCHIVED_METADATA;
 
-          const queryAndHash = getQueryAndHash(req.query);
-          const url = `/api/kabal-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf${queryAndHash}`;
+          const query = getQuery(req.query);
+          const url = `/api/kabal-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf${query}`;
           const documentIdList = JSON.stringify([getJournalfoertDocumentDocumentId(journalpostId, dokumentInfoId)]);
 
-          return send(reply, url, documentIdList, metadata.title);
+          return send(reply, url, documentIdList, metadata.title, req.navIdent);
         },
       )
 
@@ -114,11 +111,10 @@ export const documentPlugin = fastifyPlugin(
           );
           const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
 
-          const queryAndHash = getQueryAndHash(req.query);
-          const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/pdf${queryAndHash}`;
+          const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/pdf${getQuery(req.query)}`;
           const documentIdList = JSON.stringify([getNewDocumentDocumentId(documentId)]);
 
-          return send(reply, url, documentIdList, metadata.title);
+          return send(reply, url, documentIdList, metadata.title, req.navIdent);
         },
       )
 
@@ -147,11 +143,10 @@ export const documentPlugin = fastifyPlugin(
           );
           const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
 
-          const queryAndHash = getQueryAndHash(req.query);
-          const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt/pdf${queryAndHash}`;
+          const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt/pdf${getQuery(req.query)}`;
           const documentIdList = JSON.stringify([getAttachmentsOverviewTabId(documentId)]);
 
-          return send(reply, url, documentIdList, metadata.title);
+          return send(reply, url, documentIdList, metadata.title, req.navIdent);
         },
       )
 
@@ -180,8 +175,7 @@ export const documentPlugin = fastifyPlugin(
           );
           const metadata = metadataResponse ?? DEFAULT_COMBINED_METADATA;
 
-          const queryAndHash = getQueryAndHash(req.query);
-          const url = `/api/kabal-api/journalposter/mergedocuments/${id}/pdf${queryAndHash}`;
+          const url = `/api/kabal-api/journalposter/mergedocuments/${id}/pdf${getQuery(req.query)}`;
           const combinedDocumentId = getMergedDocumentDocumentIdId(id);
           const documentIdList = JSON.stringify([
             combinedDocumentId,
@@ -190,17 +184,18 @@ export const documentPlugin = fastifyPlugin(
             ),
           ]);
 
-          return send(reply, url, documentIdList, metadata.title);
+          return send(reply, url, documentIdList, metadata.title, req.navIdent);
         },
       );
   },
   { fastify: '5', name: 'document-routes', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
 );
 
-const send = (reply: FastifyReply, url: string, documentIdList: string, title: string) => {
+const send = (reply: FastifyReply, url: string, documentIdList: string, title: string, navIdent: string) => {
   const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
     .replace('{{document-id-list}}', documentIdList)
-    .replace('{{title}}', title);
+    .replace('{{title}}', title)
+    .replace('{{navIdent}}', navIdent);
 
   return reply.type('text/html').status(200).send(templateResult);
 };
@@ -301,26 +296,10 @@ const DEFAULT_COMBINED_METADATA: ICombinedMetadata = {
   title: 'Ukjent dokument',
 };
 
-const getQueryAndHash = (query: QuerystringType): string => {
-  const { version, toolbar, view, zoom } = query;
+const getQuery = (query: QuerystringType): string => {
+  const { version } = query;
 
-  const versionQuery = version !== undefined && isPlainText(version) ? `?version=${version}` : '';
-
-  const hash: string[] = [];
-
-  if (toolbar !== undefined && isPlainText(toolbar)) {
-    hash.push(`toolbar=${toolbar}`);
-  }
-
-  if (view !== undefined && isPlainText(view)) {
-    hash.push(`view=${view}`);
-  }
-
-  if (zoom !== undefined && isPlainText(zoom)) {
-    hash.push(`zoom=${zoom}`);
-  }
-
-  return `${versionQuery}#${hash.join('&')}`;
+  return version !== undefined && isPlainText(version) ? `?version=${version}` : '';
 };
 
 const getNewDocumentDocumentId = (documentId: string) => `new-document-${documentId}`;
