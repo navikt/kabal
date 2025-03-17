@@ -36,13 +36,54 @@
         return;
       }
     });
+
+    const NAV_IDENT = '{{navIdent}}';
+
+    const scaleMode = localStorage.getItem(`${NAV_IDENT}/pdf/new_tab/scale_mode`)?.slice(1, -1) ?? 'none';
+    const customScale = localStorage.getItem(`${NAV_IDENT}/pdf/new_tab/custom_scale`) ?? '100';
+
+    const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
+
+    const CHROME_VIEW_MODES = {
+      'page-fit': 'fit',
+      'page-height': 'fitV',
+      'page-width': 'fitH',
+    };
+
+    const getHashParams = () => {
+      if (scaleMode === 'none') {
+        return '';
+      }
+
+      if (scaleMode === 'custom') {
+        return `#zoom=${customScale}`;
+      }
+
+      if (isFirefox) {
+        return `#zoom=${scaleMode}`;
+      }
+
+      return `#view=${CHROME_VIEW_MODES[scaleMode]}`;
+    };
+
+    const PDF_URL = `{{pdfUrl}}${getHashParams()}`;
+
+    const PDF_ELEMENT = document.createElement('object');
+    PDF_ELEMENT.setAttribute('data', PDF_URL);
+    PDF_ELEMENT.setAttribute('type', 'application/pdf');
+    PDF_ELEMENT.setAttribute('width', '100%');
+    PDF_ELEMENT.setAttribute('height', '100%');
+    PDF_ELEMENT.style.position = 'absolute';
+    PDF_ELEMENT.style.left = '0';
+    PDF_ELEMENT.style.top = '0';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.body.appendChild(PDF_ELEMENT);
+    });
   </script>
 </head>
 
 <body style="height: 100%; width: 100%; overflow: hidden; margin: 0; background-color: rgb(82, 86, 89);">
-  <object style="position:absolute; left: 0; top: 0;" width="100%" height="100%" type="application/pdf"
-    data="{{pdfUrl}}">
-  </object>
 </body>
 
 </html>

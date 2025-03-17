@@ -4,10 +4,9 @@ import { AbbreviationsExplanation } from '@app/components/settings/abbreviations
 import { SectionHeader, SettingsSection } from '@app/components/settings/styled-components';
 import { useGetAbbreviationsQuery } from '@app/redux-api/bruker';
 import { Alert, Heading, type HeadingProps, HelpText, Loader } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 export const Abbreviations = () => (
-  <SettingsSection $area="abbreviations" style={{ minWidth: 854 }}>
+  <SettingsSection>
     <SectionHeader>
       <AbbreviationsHeadingContent />
     </SectionHeader>
@@ -41,13 +40,13 @@ export const AbbreviationsContent = ({ headingSize = 'small' }: ContentProps) =>
 
   return (
     <>
-      <SpacedSection>
+      <section className="mb-(--a-spacing-6)">
         <Heading size={headingSize} spacing>
           Legg til forkortelse
         </Heading>
 
         <AddAbbreviation />
-      </SpacedSection>
+      </section>
 
       <section>
         <Heading size={headingSize} spacing>
@@ -57,13 +56,13 @@ export const AbbreviationsContent = ({ headingSize = 'small' }: ContentProps) =>
         {isLoading ? <Loader title="Laster..." /> : null}
 
         {hasAbbreviations ? (
-          <AbbreviationList>
+          <ul className="m-0 flex list-none flex-col gap-(--a-spacing-1) p-0">
             {data.map((item) => (
               <li key={item.id}>
                 <ExistingAbbreviation {...item} />
               </li>
             ))}
-          </AbbreviationList>
+          </ul>
         ) : (
           <Alert variant="info" size="small">
             Du har ingen forkortelser ennå.
@@ -73,16 +72,3 @@ export const AbbreviationsContent = ({ headingSize = 'small' }: ContentProps) =>
     </>
   );
 };
-
-const SpacedSection = styled.section`
-  margin-bottom: var(--a-spacing-6);
-`;
-
-const AbbreviationList = styled.ul`
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-1);
-`;

@@ -4,9 +4,9 @@ import { useGetSettingsQuery, useUpdateSettingsMutation } from '@app/redux-api/b
 import { type ISettings, Role } from '@app/types/bruker';
 import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Switch } from '@navikt/ds-react';
+import { Button, HStack, Switch, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { SectionHeader, SettingsSection, StyledFieldset, StyledFilterContainer } from './styled-components';
+import { SectionHeader, SettingsSection, StyledFieldset } from './styled-components';
 import { useHjemlerFromSettingsYtelser } from './use-hjemler-from-settings-ytelser';
 
 const EMPTY_SETTINGS: ISettings = {
@@ -43,13 +43,13 @@ export const Filters = () => {
   }
 
   return (
-    <SettingsSection $area="filters">
+    <SettingsSection gridColumn="filters">
       <SectionHeader>Velg hvilke ytelser og hjemler du har kompetanse til å behandle</SectionHeader>
 
-      <HStack gap="5" width="100%" wrap>
+      <VStack gap="5" width="100%">
         <SettingsFilter label="Ytelser" options={ytelserOptions} selected={settings.ytelser} settingKey="ytelser" />
         <SettingsFilter label="Hjemler" options={hjemler} selected={settings.hjemler} settingKey="hjemler" />
-      </HStack>
+      </VStack>
     </SettingsSection>
   );
 };
@@ -88,7 +88,7 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
   const legend = `${label} (${selected.length} av ${options.length} valgt${orphanText})`;
 
   return (
-    <StyledFilterContainer>
+    <section className="relative">
       <HStack gap="0 2" position="absolute" top="0" right="0">
         <Button
           type="button"
@@ -134,6 +134,6 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           </Switch>
         ))}
       </StyledFieldset>
-    </StyledFilterContainer>
+    </section>
   );
 };
