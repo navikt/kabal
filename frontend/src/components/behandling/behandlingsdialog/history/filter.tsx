@@ -32,6 +32,10 @@ export const Filter = ({ counts, totalCount, filter, setFilter }: Props) => {
         label: `Varslet behandlingstid (${counts[HistoryEventTypes.VARSLET_BEHANDLINGSTID]})`,
         value: 'varsletBehandlingstid',
       },
+      {
+        label: `Forlenget behandlingstid (${counts[HistoryEventTypes.FORLENGET_BEHANDLINGSTID]})`,
+        value: 'forlengetBehandlingstid',
+      },
     ],
     [counts],
   );
@@ -70,6 +74,7 @@ const KEYS: Record<keyof IHistoryResponse, undefined> = {
   sattPaaVent: undefined,
   tildeling: undefined,
   varsletBehandlingstid: undefined,
+  forlengetBehandlingstid: undefined,
 };
 
 const isHistoryResponse = (key: string): key is keyof IHistoryResponse => key in KEYS;

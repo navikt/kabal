@@ -109,7 +109,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.VarsletFrist:
         return (
           <Table.DataCell key={key}>
-            <ReadOnlyDeadline frist={oppgave.varsletFrist} />
+            <ReadOnlyDeadline frist={oppgave.varsletFrist} timesPreviouslyExtended={oppgave.timesPreviouslyExtended} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Medunderskriver:

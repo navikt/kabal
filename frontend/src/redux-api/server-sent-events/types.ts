@@ -101,6 +101,7 @@ export interface MottattVedtaksinstansEvent extends BaseEvent {
 }
 
 export interface VarsletFristEvent extends BaseEvent {
+  timesPreviouslyExtended: number;
   varsletFrist: string;
 }
 
