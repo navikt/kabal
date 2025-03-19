@@ -22,7 +22,7 @@ export const useDebounce = <T extends string | number | null>(
     const timeout = setTimeout(async () => {
       try {
         await action();
-      } catch (e) {
+      } catch {
         setErrorValue(value);
       }
     }, delay);
