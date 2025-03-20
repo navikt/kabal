@@ -41,6 +41,7 @@ export const DEFAULT_FIELD_NAMES = {
   inngaaendeKanal: 'Inngående kanal',
   avsender: 'Avsender',
   gosysOppgaveInput: 'Oppgaven fra Gosys er ferdigstilt',
+  gosysOppgave: 'Oppgave fra Gosys',
 };
 
 const ANKE_I_TRYGDERETTEN_FIELD_NAMES = {
