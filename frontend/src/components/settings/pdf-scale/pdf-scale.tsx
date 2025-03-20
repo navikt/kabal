@@ -3,6 +3,7 @@ import { CustomScale } from '@app/components/settings/pdf-scale/custom';
 import { PdfScaleModeToggle } from '@app/components/settings/pdf-scale/toggle';
 import { SectionHeader, SettingsSection } from '@app/components/settings/styled-components';
 import { PdfScaleMode, useNewTabPdfCustomScale, useNewTabPdfScaleMode } from '@app/hooks/settings/use-setting';
+import { pushEvent } from '@app/observability';
 import {
   CaretLeftRightIcon,
   CaretUpDownIcon,
@@ -12,16 +13,36 @@ import {
   PersonIcon,
 } from '@navikt/aksel-icons';
 import { BodyShort, HelpText, VStack } from '@navikt/ds-react';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 
 export const PdfScale = () => {
   const { value: customScale = DEFAULT_PDF_SCALE, setValue: setCustomScale } = useNewTabPdfCustomScale();
   const { value: scaleMode = DEFAULT_PDF_SCALE_MODE, setValue: setScaleMode } = useNewTabPdfScaleMode();
 
+  const onScaleModeChange = (value: PdfScaleMode) => {
+    setScaleMode(value);
+    pushEvent('pdf_set_scale_mode', 'pdf_scale', { scaleMode: value });
+  };
+
+  const timeoutRef = useRef<Timer>(null);
+
   const onCustomScaleChange = useCallback(
     (value: number): number => {
       setCustomScale(value);
       setScaleMode(PdfScaleMode.CUSTOM);
+
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(
+        () =>
+          pushEvent('pdf_set_custom_scale', 'pdf_scale', {
+            scaleMode: PdfScaleMode.CUSTOM,
+            customScale: value.toString(10),
+          }),
+        300,
+      );
 
       return value;
     },
@@ -47,7 +68,7 @@ export const PdfScale = () => {
       <VStack gap="4">
         <PdfScaleModeToggle
           value={scaleMode}
-          onChange={setScaleMode}
+          onChange={onScaleModeChange}
           options={[
             {
               label: 'Tilpass til skjermen',
