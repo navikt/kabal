@@ -21,6 +21,10 @@ const TILBAKEKREVING_IDS = [
   'INNKL_26A_T',
   'INNKL_26B_T',
   'INNKL_29',
+  'FL_16',
+  'FL_17',
+  'FL_21',
+  'FL_28',
 ];
 
 export const Tilbakekreving = () => {
