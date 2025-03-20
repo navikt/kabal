@@ -8,7 +8,7 @@ const log = getLogger('update-request');
  * @format `YYYY-mm-ddTHH:MM:ss`
  */
 const UPDATE_REQUIRED_THRESHOLD: `${string}-${string}-${string}T${string}:${string}:${string}` = '2024-09-19T13:15:00';
-const UPDATE_OPTIONAL_THRESHOLD: `${string}-${string}-${string}T${string}:${string}:${string}` = '2025-03-17T11:36:00';
+const UPDATE_OPTIONAL_THRESHOLD: `${string}-${string}-${string}T${string}:${string}:${string}` = '2025-03-20T11:12:00';
 
 if (UPDATE_REQUIRED_THRESHOLD > PROXY_VERSION) {
   log.error({
