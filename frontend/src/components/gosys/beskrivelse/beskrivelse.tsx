@@ -10,11 +10,10 @@ import { useCallback, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
-  id: number;
   oppgavebeskrivelse: string;
 }
 
-export const GosysBeskrivelse = ({ id, oppgavebeskrivelse }: Props) => {
+export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
   const oppgaveId = useOppgaveIdString();
   const modalRef = useRef<HTMLDialogElement>(null);
   const trimmedBeskrivelse = oppgavebeskrivelse.trim();
@@ -58,7 +57,7 @@ export const GosysBeskrivelse = ({ id, oppgavebeskrivelse }: Props) => {
 
       <Modal header={{ heading: 'Beskrivelse fra Gosys', closeButton: true }} ref={modalRef} closeOnBackdropClick>
         <Modal.Body className="h-[80vh] overflow-hidden">
-          <GosysBeskrivelseTabs id={id} beskrivelse={trimmedBeskrivelse} entries={entries} />
+          <GosysBeskrivelseTabs beskrivelse={trimmedBeskrivelse} entries={entries} />
         </Modal.Body>
       </Modal>
     </>

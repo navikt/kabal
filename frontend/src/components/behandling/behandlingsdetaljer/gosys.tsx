@@ -31,7 +31,7 @@ export const Gosys = ({ oppgavebehandling }: Props) => {
         <Warning hasGosysOppgave={hasGosysOppgave} status={gosysOppgave?.status} />
 
         {hasGosysOppgave && gosysOppgave !== undefined && gosysOppgave.beskrivelse !== null ? (
-          <GosysBeskrivelse id={gosysOppgave.id} oppgavebeskrivelse={gosysOppgave.beskrivelse} />
+          <GosysBeskrivelse oppgavebeskrivelse={gosysOppgave.beskrivelse} />
         ) : null}
       </VStack>
     </BehandlingSection>

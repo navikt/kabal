@@ -28,10 +28,7 @@ export const GosysOppgave = ({ oppgavebehandling }: Props) => {
     <Table size="small">
       <TableHeader isFerdigstilt={isFerdigstilt} />
       <Table.Body>
-        <Table.ExpandableRow
-          content={<GosysBeskrivelseTabs id={data.id} beskrivelse={data.beskrivelse} />}
-          expandOnRowClick
-        >
+        <Table.ExpandableRow content={<GosysBeskrivelseTabs beskrivelse={data.beskrivelse} />} expandOnRowClick>
           <Table.DataCell>
             {data.gjelder === null ? null : (
               <Tag size="small" variant="success">

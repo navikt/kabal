@@ -2,25 +2,19 @@ import { EntryList } from '@app/components/gosys/beskrivelse/entry-list';
 import { GosysBeskrivelseFormat } from '@app/components/gosys/beskrivelse/format-enum';
 import type { GosysBeskrivelseEntry } from '@app/components/gosys/beskrivelse/parsing/type';
 import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
-import { pushLog, usePushEvent } from '@app/observability';
+import { usePushEvent } from '@app/observability';
 import { BulletListIcon, CaptionsIcon } from '@navikt/aksel-icons';
 import { BodyLong, Tabs } from '@navikt/ds-react';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { styled } from 'styled-components';
-import { simpleHeaderPrecheck } from './parsing/parse-header';
 import { splitBeskrivelse } from './parsing/split-beskrivelse';
 
 interface Props {
-  id: number;
   beskrivelse?: string | null;
   entries?: GosysBeskrivelseEntry[];
 }
 
-export const GosysBeskrivelseTabs = ({
-  id,
-  beskrivelse = '',
-  entries = splitBeskrivelse(beskrivelse ?? ''),
-}: Props) => {
+export const GosysBeskrivelseTabs = ({ beskrivelse = '', entries = splitBeskrivelse(beskrivelse ?? '') }: Props) => {
   const [format, setFormat] = usePreferredFormat();
   const pushEvent = usePushEvent();
 
@@ -31,21 +25,6 @@ export const GosysBeskrivelseTabs = ({
     },
     [setFormat, pushEvent],
   );
-
-  const expectedEntries = getExpectedEntries(beskrivelse);
-  const hasExpectedEntries = entries.length === expectedEntries;
-
-  useEffect(() => {
-    if (!hasExpectedEntries) {
-      const context = {
-        expectedEntries: expectedEntries.toString(10),
-        actualEntries: entries.length.toString(10),
-        gosysOppgaveId: id.toString(10),
-      };
-      pushLog('Unexpected number of entries in Gosys description', { context });
-      pushEvent('unexpected-gosys-description', context);
-    }
-  }, [entries.length, expectedEntries, hasExpectedEntries, pushEvent, id]);
 
   return (
     <Tabs size="small" value={format} onChange={onChange} className="flex h-full flex-col">
@@ -70,9 +49,6 @@ export const GosysBeskrivelseTabs = ({
     </Tabs>
   );
 };
-
-const getExpectedEntries = (beskrivelse: string | null | undefined): number =>
-  beskrivelse?.split('\n').filter((l) => simpleHeaderPrecheck(l) && l.split('').some((c) => c !== '-')).length ?? 0;
 
 const usePreferredFormat = (): [GosysBeskrivelseFormat, (format: GosysBeskrivelseFormat) => void] => {
   const { value, setValue } = useGosysBeskrivelseTab();
