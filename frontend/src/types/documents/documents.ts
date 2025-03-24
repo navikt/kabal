@@ -1,7 +1,7 @@
 import type { KabalValue } from '@app/plate/types';
 import type { INavEmployee } from '@app/types/bruker';
 import type { HandlingEnum, IAddress } from '@app/types/documents/recipients';
-import type { IJournalfoertDokumentId, IPart } from '@app/types/oppgave-common';
+import type { IFullmektig, IJournalfoertDokumentId, IPart } from '@app/types/oppgave-common';
 import type { Language } from '@app/types/texts/language';
 import type { TemplateIdEnum } from '../smart-editor/template-enums';
 import type { DokumentInfo, Journalpost } from './../arkiverte-documents';
@@ -86,7 +86,7 @@ export interface IBaseDocument<P extends string | null = UUID | null> {
 }
 
 export interface IMottaker {
-  part: IPart;
+  part: IPart | IFullmektig;
   handling: HandlingEnum;
   overriddenAddress: IAddress | null;
 }

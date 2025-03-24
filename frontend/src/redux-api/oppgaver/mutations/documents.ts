@@ -548,7 +548,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
     setAvsender: builder.mutation<void, { oppgaveId: string; dokumentId: string; avsender: IPart }>({
       query: ({ oppgaveId, dokumentId, avsender }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/avsender`,
-        body: { id: avsender.id },
+        body: { id: avsender.identifikator }, // TODO: double check this
         method: 'PUT',
       }),
       onQueryStarted: async ({ dokumentId, avsender, oppgaveId }, { queryFulfilled }) => {
