@@ -1,7 +1,6 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import { Country } from '@app/components/documents/new-documents/modal/finish-document/address/country/country';
-import { Postnummer } from '@app/components/documents/new-documents/modal/finish-document/address/postnummer';
-import { NO_FULLMEKTIG_ID } from '@app/components/part/fullmektig/types';
+import { Country } from '@app/components/receivers/address/country/country';
+import { Postnummer } from '@app/components/receivers/address/postnummer';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { type IFullmektig, Utsendingskanal } from '@app/types/oppgave-common';
@@ -17,7 +16,7 @@ interface Props {
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const WithoutId = ({ part, onClose }: Props) => {
   const [setFullmektig, { isLoading, isError }] = useUpdateFullmektigMutation({
-    fixedCacheKey: part?.id ?? NO_FULLMEKTIG_ID,
+    fixedCacheKey: part?.id ?? 'temp',
   });
 
   const [name, setName] = useState(part?.name ?? '');
@@ -98,7 +97,7 @@ export const WithoutId = ({ part, onClose }: Props) => {
     }
 
     const address = { adresselinje1, adresselinje2, adresselinje3, landkode };
-    const fullmektig = { ...DEFAULT_PROPS, address, name };
+    const fullmektig = { ...DEFAULT_PROPS, address, name, id: part?.id ?? 'temp' };
 
     if (isNorway) {
       await setFullmektig({ oppgaveId, fullmektig: { ...fullmektig, address: { ...address, postnummer } } }).unwrap();

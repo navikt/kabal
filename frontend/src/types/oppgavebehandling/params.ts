@@ -52,7 +52,7 @@ export interface ISetFlowStateParams extends IOppgavebehandlingBaseParams {
 }
 
 export interface ISetFullmektigParams extends IOppgavebehandlingBaseParams {
-  fullmektig: (Omit<IFullmektig, 'id'> & { id?: string }) | null;
+  fullmektig: IFullmektig | null;
 }
 
 export interface ISetKlagerParams extends IOppgavebehandlingBaseParams {
