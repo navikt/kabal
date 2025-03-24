@@ -96,7 +96,7 @@ export const Receivers = ({ setMottakerList, mottakerList, sendErrors = [], temp
   );
 
   useEffect(() => {
-    const unreachableRecipients = document.mottakerList.filter(
+    const unreachableRecipients = mottakerList.filter(
       (m) =>
         m.part.statusList?.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED) ??
         false,
@@ -105,7 +105,7 @@ export const Receivers = ({ setMottakerList, mottakerList, sendErrors = [], temp
     if (unreachableRecipients.length > 0) {
       removeMottakere(unreachableRecipients.map((r) => r.part.id));
     }
-  }, [document.mottakerList, removeMottakere]);
+  }, [mottakerList, removeMottakere]);
 
   const customRecipients = mottakerList.filter((m) => suggestedBrevmottakere.every((s) => s.part.id !== m.part.id));
   const unreachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => !s.reachable);

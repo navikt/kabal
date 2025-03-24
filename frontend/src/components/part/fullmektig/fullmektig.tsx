@@ -2,7 +2,6 @@ import { BehandlingSection } from '@app/components/behandling/behandlingsdetalje
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { EditPart } from '@app/components/part/edit-part';
-import { NO_FULLMEKTIG_ID } from '@app/components/part/fullmektig/types';
 import { WithoutId } from '@app/components/part/fullmektig/without-id';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
@@ -37,7 +36,7 @@ export const Fullmektig = ({ part }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(getInitialValue(part));
   const [updateFullmektig, { isLoading }] = useUpdateFullmektigMutation({
-    fixedCacheKey: part?.id ?? NO_FULLMEKTIG_ID,
+    fixedCacheKey: part?.id ?? 'temp',
   });
   const oppgaveId = useOppgaveId();
 
