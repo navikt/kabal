@@ -1,6 +1,6 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { MOD_KEY } from '@app/keys';
+import { MOD_KEY_TEXT } from '@app/keys';
 import { pushEvent } from '@app/observability';
 import { DefaultToolbarButtons } from '@app/plate/toolbar/default-toolbar-buttons';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
@@ -23,7 +23,7 @@ export const SaksbehandlerToolbar = () => {
 
       <ToolbarIconButton
         label="Vis gode formuleringer"
-        keys={[MOD_KEY, 'Shift', 'G']}
+        keys={[MOD_KEY_TEXT, 'Shift', 'G']}
         icon={<LightBulbIcon aria-hidden />}
         active={showGodeFormuleringer}
         onClick={() => {

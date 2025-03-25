@@ -10,7 +10,7 @@ import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@ap
 import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
-import { MouseButtons } from '@app/keys';
+import { MouseButtons, isMetaKey } from '@app/keys';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -81,6 +81,7 @@ const DocumentTitleInternal = memo(
 
               setTitle({ journalpostId, dokumentInfoId, tittel: filename, oppgaveId });
             }}
+            tabIndex={-1}
           />
 
           <ConfirmEditButton setEditMode={setEditMode} />
@@ -101,7 +102,7 @@ const DocumentTitleInternal = memo(
         return;
       }
 
-      const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === MouseButtons.MIDDLE;
+      const shouldOpenInNewTab = isMetaKey(e) || e.button === MouseButtons.MIDDLE;
 
       if (!shouldOpenInNewTab) {
         setShownDocuments([
@@ -153,6 +154,7 @@ const DocumentTitleInternal = memo(
           data-testid="document-open-button"
           href={href}
           target={documentId}
+          tabIndex={-1}
         >
           <EllipsisTitle title={tittel}>{tittel}</EllipsisTitle>
         </DocumentLink>

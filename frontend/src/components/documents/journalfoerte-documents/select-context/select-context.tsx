@@ -1,3 +1,4 @@
+import { useSelectRange } from '@app/components/documents/journalfoerte-documents/select-context/select-range';
 import { findDocument } from '@app/domain/find-document';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
@@ -18,25 +19,28 @@ export const SelectContext = createContext<ISelectContext>({
   selectMany: () => {},
   unselectMany: () => {},
   selectRangeTo: () => {},
+  selectRange: () => {},
   unselectAll: () => {},
   getSelectedDocuments: () => [],
 });
 
 interface Props {
   children: React.ReactNode;
-  documentList: IArkivertDocument[];
+  filteredDocumentsList: IArkivertDocument[];
+  allDocumentsList: IArkivertDocument[];
 }
 
-export const SelectContextElement = ({ children, documentList }: Props) => {
+export const SelectContextElement = ({ children, filteredDocumentsList, allDocumentsList }: Props) => {
   const [selectedDocuments, setSelectedDocuments] = useState<SelectedMap>(new Map());
   const [lastSelectedDocument, setLastSelectedDocument] = useState<IJournalfoertDokumentId | null>(null);
 
-  const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument, documentList);
-  const selectMany = useSelectMany(setSelectedDocuments, setLastSelectedDocument, documentList);
+  const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument, filteredDocumentsList);
+  const selectMany = useSelectMany(setSelectedDocuments, setLastSelectedDocument, filteredDocumentsList);
+  const selectRange = useSelectRange(setSelectedDocuments, setLastSelectedDocument, filteredDocumentsList);
   const selectRangeTo = useSelectRangeTo(
     setSelectedDocuments,
     setLastSelectedDocument,
-    documentList,
+    filteredDocumentsList,
     lastSelectedDocument,
   );
 
@@ -79,7 +83,7 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
 
     let index = 0;
     for (const [, { journalpostId, dokumentInfoId }] of selectedDocuments) {
-      const doc = findDocument(journalpostId, dokumentInfoId, documentList);
+      const doc = findDocument(journalpostId, dokumentInfoId, allDocumentsList);
 
       if (doc !== undefined) {
         selectedDocumentsArray[index] = doc;
@@ -89,7 +93,7 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
     }
 
     return selectedDocumentsArray;
-  }, [documentList, selectedDocuments]);
+  }, [allDocumentsList, selectedDocuments]);
 
   return (
     <SelectContext.Provider
@@ -101,6 +105,7 @@ export const SelectContextElement = ({ children, documentList }: Props) => {
         unselectOne,
         selectMany,
         unselectMany,
+        selectRange,
         selectRangeTo,
         unselectAll,
         isSelected,

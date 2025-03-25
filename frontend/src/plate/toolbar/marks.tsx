@@ -1,4 +1,4 @@
-import { MOD_KEY } from '@app/keys';
+import { MOD_KEY_TEXT } from '@app/keys';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
@@ -42,7 +42,7 @@ export const Marks = () => {
     <>
       <ToolbarIconButton
         label="Fet skrift"
-        keys={[MOD_KEY, 'B']}
+        keys={[MOD_KEY_TEXT, 'B']}
         onClick={toggleBold}
         icon={<TextBold width={24} aria-hidden />}
         active={boldPressed}
@@ -51,7 +51,7 @@ export const Marks = () => {
 
       <ToolbarIconButton
         label="Kursiv"
-        keys={[MOD_KEY, 'I']}
+        keys={[MOD_KEY_TEXT, 'I']}
         onClick={toggleItalic}
         icon={<TextItalic width={24} aria-hidden />}
         active={italicPressed}
@@ -60,7 +60,7 @@ export const Marks = () => {
 
       <ToolbarIconButton
         label="Understreking"
-        keys={[MOD_KEY, 'U']}
+        keys={[MOD_KEY_TEXT, 'U']}
         onClick={toggleUnderline}
         icon={<TextUnderline width={24} aria-hidden />}
         active={underlinePressed}

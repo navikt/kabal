@@ -21,6 +21,7 @@ export const AvsenderMottaker = memo(
         onClick={() => setValue([avsenderMottaker === null ? 'NONE' : (avsenderMottaker.id ?? 'UNKNOWN')])}
         size="small"
         variant="tertiary"
+        tabIndex={-1}
       >
         {formatAvsenderMottaker(avsenderMottaker)}
       </AvsenderMottakerButton>

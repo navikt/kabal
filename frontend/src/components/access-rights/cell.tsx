@@ -1,3 +1,5 @@
+import { Keys } from '@app/keys';
+
 interface Props {
   isChecked: boolean;
   onCheck: (checked: boolean) => void;
@@ -17,7 +19,7 @@ export const Cell = ({ isChecked, onCheck, children, onFocus, isFocused, isCurre
       title={children}
       onClick={onFocus}
       onKeyDown={({ key }) => {
-        if (key === 'Enter' || key === ' ') {
+        if (key === Keys.Enter || key === Keys.Space) {
           onFocus();
         }
       }}

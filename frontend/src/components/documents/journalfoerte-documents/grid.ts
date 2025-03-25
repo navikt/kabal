@@ -25,9 +25,8 @@ export enum Fields {
 }
 
 export const SIZES: Record<Fields, [number, number]> = {
-  [Fields.ToggleVedlegg]: [20, 20],
-  [Fields.ToggleMetadata]: [20, 20],
   [Fields.SelectRow]: [20, 20],
+  [Fields.ToggleVedlegg]: [32, 32],
   [Fields.Title]: [275, -1],
   [Fields.Tema]: [85, 85],
   [Fields.DatoOpprettet]: [185, 185],
@@ -35,6 +34,7 @@ export const SIZES: Record<Fields, [number, number]> = {
   [Fields.AvsenderMottaker]: [200, 200],
   [Fields.Saksnummer]: [135, 135],
   [Fields.Type]: [82, 82],
+  [Fields.ToggleMetadata]: [32, 32],
   [Fields.Action]: [32, 32],
   [Fields.ResetFilters]: [32, 32],
   [Fields.LogiskeVedlegg]: [0, 0],

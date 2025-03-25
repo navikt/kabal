@@ -38,6 +38,7 @@ export const SelectRow = ({ hasAccess, dokumentInfoId, journalpostId }: Props) =
       onChange={onChange}
       onClick={onClick}
       disabled={!hasAccess}
+      tabIndex={-1}
     >
       Velg dokument
     </Checkbox>
