@@ -19,11 +19,15 @@ export const useKvalitetsvurderingEnabled = () => useBooleanSetting(useOppgavePa
 
 // Oppgavebehandling documents
 export const useDocumentsPdfViewed = () => {
-  const { value = [], ...rest } = useJsonSetting<IShownDocument[]>(useOppgavePath('tabs/documents/pdf/viewed'));
+  const {
+    value = [],
+    setValue,
+    remove,
+  } = useJsonSetting<IShownDocument[]>(useOppgavePath('tabs/documents/pdf/viewed'));
 
   const values = Array.isArray(value) ? value : [value];
 
-  return { value: values, ...rest };
+  return { value: values, setValue, remove };
 };
 export const useDocumentsPdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/pdf/width'));
 export const useDocumentsArchivePdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/modal/pdf/width'));
@@ -138,3 +142,5 @@ export enum PdfScaleMode {
 
 export const useNewTabPdfScaleMode = () => useJsonSetting<PdfScaleMode>('pdf/new_tab/scale_mode');
 export const useNewTabPdfCustomScale = () => useNumberSetting('pdf/new_tab/custom_scale');
+
+export const useHasSeenKeyboardShortcuts = () => useBooleanSetting('has_seen_keyboard_shortcuts');

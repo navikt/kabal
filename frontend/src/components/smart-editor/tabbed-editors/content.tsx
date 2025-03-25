@@ -1,5 +1,6 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { DEFAULT } from '@app/components/smart-editor/hooks/use-scale';
+import { Keys, isMetaKey } from '@app/keys';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { PlateEditorContent } from '@app/plate/styled-components';
 import { useMyPlateEditorRef } from '@app/plate/types';
@@ -20,39 +21,39 @@ export const Content = ({ children }: Props) => {
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     const lowerCaseKey = event.key.toLowerCase();
 
-    if (!(event.ctrlKey || event.metaKey)) {
+    if (!isMetaKey(event)) {
       return;
     }
 
-    if (event.shiftKey && lowerCaseKey === 'g') {
+    if (event.shiftKey && lowerCaseKey === Keys.G) {
       event.preventDefault();
       setShowGodeFormuleringer(!showGodeFormuleringer);
 
       return;
     }
 
-    if (!event.shiftKey && lowerCaseKey === 'k') {
+    if (!event.shiftKey && lowerCaseKey === Keys.K) {
       event.preventDefault();
       setNewCommentSelection(editor.selection);
 
       return;
     }
 
-    if (event.key === '+' || event.key === '=') {
+    if (event.key === Keys.Plus || event.key === Keys.Equals) {
       event.preventDefault();
       scaleUp();
 
       return;
     }
 
-    if (event.key === '-') {
+    if (event.key === Keys.Minus) {
       event.preventDefault();
       scaleDown();
 
       return;
     }
 
-    if (event.key === '0') {
+    if (event.key === Keys.Zero) {
       event.preventDefault();
       setScale(DEFAULT);
     }
@@ -60,7 +61,7 @@ export const Content = ({ children }: Props) => {
 
   const onWheel = useCallback(
     (e: WheelEvent) => {
-      if (e.ctrlKey || e.metaKey) {
+      if (isMetaKey(e)) {
         e.preventDefault();
 
         if (e.deltaY > 0) {

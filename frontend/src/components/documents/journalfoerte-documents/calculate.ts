@@ -5,6 +5,7 @@ import {
   LOGISK_VEDLEGG_SPACE,
   ROW_HEIGHT,
 } from '@app/components/documents/journalfoerte-documents/contants';
+import { PADDING_TOP } from '@app/components/documents/new-documents/constants';
 import type { IArkivertDocument, IArkivertDocumentVedlegg, LogiskVedlegg } from '@app/types/arkiverte-documents';
 
 interface Position {
@@ -21,13 +22,14 @@ interface LogiskVedleggRenderData extends Position, Index {
   logiskVedlegg: LogiskVedlegg;
 }
 
-interface VedleggRenderData extends Position, Index {
+export interface VedleggRenderData extends Position, Index {
   vedlegg: IArkivertDocumentVedlegg;
   logiskeVedleggList: LogiskeVedleggListRenderData;
 }
 
-interface DokumentRenderData extends Position, Index {
+export interface DokumentRenderData extends Position, Index {
   dokument: IArkivertDocument;
+  hasAccess: boolean;
   logiskeVedleggList: LogiskeVedleggListRenderData;
   vedleggList: VedleggListRenderData;
   showMetadata: boolean;
@@ -48,7 +50,7 @@ export const calculateDokumentPositions = (
 
   const list = new Array<DokumentRenderData>(dokumenterLength);
 
-  let listHeight = 0;
+  let listHeight = PADDING_TOP;
 
   for (let index = 0; index < dokumenterLength; index++) {
     // biome-ignore lint/style/noNonNullAssertion: Guaranteed to be defined.
@@ -80,6 +82,7 @@ export const calculateDokumentPositions = (
       logiskeVedleggList,
       vedleggList,
       height,
+      hasAccess: dokument.hasAccess,
       showMetadata,
       showVedlegg,
       index,

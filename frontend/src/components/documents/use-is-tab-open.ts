@@ -109,7 +109,7 @@ class TabManager {
   };
 }
 
-const TAB_MANAGER = new TabManager();
+export const TAB_MANAGER = new TabManager();
 
 export const useIsTabOpen = (documentId: string | undefined): boolean => {
   const [isOpen, setIsOpen] = useState<boolean>(documentId === undefined ? false : TAB_MANAGER.isTabOpen(documentId));

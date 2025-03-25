@@ -1,3 +1,4 @@
+import { Keys } from '@app/keys';
 import { type RefObject, useEffect } from 'react';
 
 type Callback = (event: MouseEvent | TouchEvent | KeyboardEvent) => void;
@@ -29,7 +30,7 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
         return;
       }
 
-      if (event.key === 'Escape') {
+      if (event.key === Keys.Escape) {
         callback(event);
       }
     };

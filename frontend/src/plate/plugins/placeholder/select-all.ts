@@ -1,3 +1,4 @@
+import { Keys, isMetaKey } from '@app/keys';
 import type { PlateEditor } from '@udecode/plate-core/react';
 import type { KeyboardEvent } from 'react';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
@@ -5,7 +6,7 @@ import { ELEMENT_PLACEHOLDER } from '../element-types';
 export const handleSelectAll = (editor: PlateEditor, e: KeyboardEvent) => {
   const lowerCaseKey = e.key.toLowerCase();
 
-  if ((e.ctrlKey || e.metaKey) && lowerCaseKey === 'a') {
+  if (isMetaKey(e) && lowerCaseKey === Keys.A) {
     const placeholder = editor.api.node({ match: { type: ELEMENT_PLACEHOLDER } });
 
     if (placeholder !== undefined) {
