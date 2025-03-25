@@ -3,6 +3,9 @@ type ListenerMap = Record<string, ListenerFn[]>;
 
 type UnsubscribeFn = () => void;
 
+type SetterFn = (oldValue: string | undefined) => string;
+type Setter = string | SetterFn;
+
 class SettingsManager {
   private listeners: ListenerMap = {};
   private settings: Record<string, string> = {};
@@ -74,11 +77,17 @@ class SettingsManager {
     return undefined;
   };
 
-  public set = (key: string, value: string): void => {
-    this.notify(key, value);
+  public set = (key: string, value: Setter): void => {
+    const newValue = typeof value === 'function' ? value(this.settings[key]) : value;
 
-    this.settings[key] = value;
-    setTimeout(() => window.localStorage.setItem(key, value), 0);
+    if (newValue === this.settings[key]) {
+      return;
+    }
+
+    this.notify(key, newValue);
+
+    this.settings[key] = newValue;
+    setTimeout(() => window.localStorage.setItem(key, newValue), 0);
   };
 
   public remove = (key: string): void => {

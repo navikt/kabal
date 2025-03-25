@@ -1,3 +1,4 @@
+import { Keys } from '@app/keys';
 import { TextField } from '@navikt/ds-react';
 import { useState } from 'react';
 
@@ -8,9 +9,10 @@ interface Props {
   hideLabel?: boolean;
   className?: string;
   close?: () => void;
+  tabIndex?: number;
 }
 
-export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, className, close }: Props) => {
+export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, className, close, tabIndex }: Props) => {
   const [localFilename, setLocalFilename] = useState(tittel ?? '');
 
   const save = () => {
@@ -36,15 +38,16 @@ export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, classNa
       onChange={({ target }) => setLocalFilename(target.value)}
       onBlur={save}
       onKeyDown={({ key }) => {
-        if (key === 'Enter') {
+        if (key === Keys.Enter) {
           save();
         }
 
-        if (key === 'Escape') {
+        if (key === Keys.Escape) {
           setLocalFilename(tittel ?? '');
           close?.();
         }
       }}
+      tabIndex={tabIndex}
     />
   );
 };

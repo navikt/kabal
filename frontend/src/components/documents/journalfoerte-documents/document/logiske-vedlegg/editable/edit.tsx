@@ -1,6 +1,7 @@
 import { EditTag } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/styled-components';
 import { Suggestions } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/suggestions-dropdown';
 import { useSuggestions } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/use-suggestions';
+import { Keys } from '@app/keys';
 import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 import { Tooltip } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -96,7 +97,7 @@ export const EditLogiskVedlegg = ({
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLSpanElement>) => {
-      if (e.key === 'Enter' || (!e.shiftKey && e.key === 'Tab')) {
+      if (e.key === Keys.Enter || (!e.shiftKey && e.key === Keys.Tab)) {
         e.preventDefault();
 
         if (activeIndex !== -1) {
@@ -110,23 +111,23 @@ export const EditLogiskVedlegg = ({
         return onSelectCustom(e);
       }
 
-      if (e.shiftKey && e.key === 'Tab') {
+      if (e.shiftKey && e.key === Keys.Tab) {
         return onClose();
       }
 
-      if (e.key === 'Escape') {
+      if (e.key === Keys.Escape) {
         e.preventDefault();
 
         return onClose();
       }
 
-      if (e.key === 'ArrowDown') {
+      if (e.key === Keys.ArrowDown) {
         e.preventDefault();
 
         return setActiveIndex((i) => (i + 1) % suggestions.length);
       }
 
-      if (e.key === 'ArrowUp') {
+      if (e.key === Keys.ArrowUp) {
         e.preventDefault();
 
         return setActiveIndex((i) => (i === -1 ? lastIndex : i - 1));
@@ -149,7 +150,7 @@ export const EditLogiskVedlegg = ({
   return (
     // biome-ignore lint/nursery/noStaticElementInteractions: It is not.
     <div className="relative" onMouseDown={(e) => e.stopPropagation()}>
-      <Tooltip content={`${placeholder} logisk vedlegg`} keys={['Enter', 'Tab', 'Esc']} open>
+      <Tooltip content={`${placeholder} logisk vedlegg`} keys={[Keys.Enter, Keys.Tab, Keys.Escape]} open>
         <EditTag
           key="edit-tag"
           ref={ref}

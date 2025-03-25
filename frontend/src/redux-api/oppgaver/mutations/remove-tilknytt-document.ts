@@ -60,7 +60,44 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
+    removeAllTilknyttedeDocuments: builder.mutation<void, { oppgaveId: string }>({
+      query: ({ oppgaveId }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/dokumenttilknytninger`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: () => [{ type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: ListTagTypes.PARTIAL_LIST }],
+      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
+            for (const d of draft.dokumenter) {
+              d.valgt = false;
+
+              for (const v of d.vedlegg) {
+                v.valgt = false;
+              }
+            }
+
+            return draft;
+          }),
+        );
+
+        try {
+          await queryFulfilled;
+        } catch (e) {
+          patchResult.undo();
+
+          const message = 'Kunne ikke fjerne dokumenter.';
+
+          if (isApiRejectionError(e)) {
+            apiErrorToast(message, e.error);
+          } else {
+            toast.error(message);
+          }
+        }
+      },
+    }),
   }),
 });
 
-export const { useRemoveTilknyttetDocumentMutation } = removeTilknyttDocumentMutationSlice;
+export const { useRemoveTilknyttetDocumentMutation, useRemoveAllTilknyttedeDocumentsMutation } =
+  removeTilknyttDocumentMutationSlice;

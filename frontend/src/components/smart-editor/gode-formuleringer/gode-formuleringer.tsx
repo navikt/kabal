@@ -8,6 +8,7 @@ import { SetGlobalExpandState } from '@app/components/smart-editor/gode-formuler
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import { useTranslatedFormuleringer } from '@app/components/smart-editor/gode-formuleringer/use-translated-formuleringer';
 import type { GodeFormuleringerExpandState } from '@app/hooks/settings/use-setting';
+import { Keys, isMetaKey } from '@app/keys';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import type { TemplateSections } from '@app/plate/template-sections';
 import { useMyPlateEditorRef } from '@app/plate/types';
@@ -106,24 +107,21 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'ArrowDown') {
+      if (event.key === Keys.ArrowDown) {
         setFocused((f) => Math.min(texts.length - 1, f + 1));
         event.preventDefault();
 
         return;
       }
 
-      if (event.key === 'ArrowUp') {
+      if (event.key === Keys.ArrowUp) {
         setFocused((f) => Math.max(-1, f - 1));
         event.preventDefault();
 
         return;
       }
 
-      if (
-        event.key === 'Escape' ||
-        (event.key.toLowerCase() === 'g' && (event.ctrlKey || event.metaKey) && event.shiftKey)
-      ) {
+      if (event.key === Keys.Escape || (event.shiftKey && isMetaKey(event) && event.key.toLowerCase() === Keys.G)) {
         event.preventDefault();
 
         if (focused !== -1) {
@@ -141,7 +139,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
         return setShowGodeFormuleringer(false);
       }
 
-      if (event.key === 'Enter' && editor !== null && focused !== -1) {
+      if (event.key === Keys.Enter && editor !== null && focused !== -1) {
         event.preventDefault();
 
         const text = texts[focused];

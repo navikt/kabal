@@ -32,6 +32,7 @@ export const AddLogiskVedlegg = ({ hasVedlegg, index, top, dokumentInfoId, logis
       aria-rowindex={index}
       $connected={hasVedlegg}
       $paddingLeft={10}
+      role="treeitem"
     >
       {isAdding ? (
         <CreateLogiskVedlegg
@@ -47,6 +48,7 @@ export const AddLogiskVedlegg = ({ hasVedlegg, index, top, dokumentInfoId, logis
           icon={<PlusCircleIcon aria-hidden />}
           onClick={() => setIsAdding(true)}
           ref={ref}
+          tabIndex={-1}
         >
           <span className="font-normal">Legg til logisk vedlegg</span>
         </Button>

@@ -1,4 +1,4 @@
-import { MOD_KEY } from '@app/keys';
+import { MOD_KEY_TEXT } from '@app/keys';
 import { useIsElementActive } from '@app/plate/hooks/use-is-element-active';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { Align } from '@app/plate/toolbar/align';
@@ -34,14 +34,14 @@ export const DefaultToolbarButtons = ({ oppgaveId }: Props) => {
     <>
       <ToolbarIconButton
         label="Angre"
-        keys={[MOD_KEY, 'Z']}
+        keys={[MOD_KEY_TEXT, 'Z']}
         icon={<ArrowUndoIcon aria-hidden />}
         onClick={editor.undo}
       />
 
       <ToolbarIconButton
         label="Gjenopprett"
-        keys={[MOD_KEY, 'Shift', 'Z']}
+        keys={[MOD_KEY_TEXT, 'Shift', 'Z']}
         icon={<Redo aria-hidden />}
         onClick={editor.redo}
       />
@@ -62,7 +62,7 @@ export const DefaultToolbarButtons = ({ oppgaveId }: Props) => {
 
       <ToolbarIconButton
         label="Sett inn sideskift"
-        keys={[MOD_KEY, 'Enter']}
+        keys={[MOD_KEY_TEXT, 'Enter']}
         onClick={() => insertPageBreak(editor)}
         icon={<DocumentPageBreak aria-hidden width={24} />}
         disabled={unchangeable || inList || inTable}

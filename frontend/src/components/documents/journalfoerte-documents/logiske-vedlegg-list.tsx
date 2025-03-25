@@ -74,6 +74,8 @@ export const LogiskeVedleggList = ({
       data-list="logiske-vedlegg"
       style={{ height: list.height, top: list.top, left }}
       $connectTop={connectTop}
+      // biome-ignore lint/a11y/useSemanticElements: Tree structure.
+      role="group"
     >
       {logiskeVedleggNodeList}
       {shouldRenderAddButton ? (

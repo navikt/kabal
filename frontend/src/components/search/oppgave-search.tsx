@@ -1,5 +1,6 @@
 import { Oppgaver } from '@app/components/search/common/oppgaver';
 import { Person } from '@app/components/search/fnr/person';
+import { Keys } from '@app/keys';
 import {
   useLazySearchOppgaverByFnrQuery,
   useLazySearchOppgaverBySaksnummerQuery,
@@ -142,7 +143,7 @@ const SearchField = ({
     placeholder={label}
     label={label}
     onKeyDown={({ key }) => {
-      if (key === 'Enter') {
+      if (key === Keys.Enter) {
         onKeyDown();
       }
     }}

@@ -5,6 +5,7 @@ import { AddressState, Container } from '@app/components/receivers/address/layou
 import { Postnummer } from '@app/components/receivers/address/postnummer';
 import type { Addresses } from '@app/components/receivers/address/types';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
+import { Keys, isMetaKey } from '@app/keys';
 import type { IAddress } from '@app/types/documents/recipients';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, ErrorSummary, HStack, Tooltip } from '@navikt/ds-react';
@@ -126,13 +127,13 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' || (e.key.toLowerCase() === 's' && (e.ctrlKey || e.metaKey))) {
+      if (e.key === Keys.Enter || (isMetaKey(e) && e.key.toLowerCase() === Keys.S)) {
         e.preventDefault();
         e.stopPropagation();
         save();
       }
 
-      if (e.key === 'Escape') {
+      if (e.key === Keys.Escape) {
         e.preventDefault();
         e.stopPropagation();
         onCancel();

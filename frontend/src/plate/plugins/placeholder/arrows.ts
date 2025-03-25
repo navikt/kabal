@@ -1,12 +1,13 @@
+import { Keys } from '@app/keys';
 import { NodeApi, type TText, TextApi } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
 import type { KeyboardEvent } from 'react';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 
 export const handleArrows = (editor: PlateEditor, e: KeyboardEvent) => {
-  const isArrowDown = e.key === 'ArrowDown';
+  const isArrowDown = e.key === Keys.ArrowDown;
 
-  if (isArrowDown || e.key === 'ArrowUp') {
+  if (isArrowDown || e.key === Keys.ArrowUp) {
     const current = editor.api.node({ match: { type: ELEMENT_PLACEHOLDER } });
 
     if (current === undefined) {

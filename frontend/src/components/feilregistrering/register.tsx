@@ -1,4 +1,4 @@
-import { MOD_KEY } from '@app/keys';
+import { Keys, MOD_KEY_TEXT, isMetaKey } from '@app/keys';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { FileXMarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, Textarea } from '@navikt/ds-react';
@@ -40,9 +40,9 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
         onChange={(e) => setReason(e.target.value)}
         error={showEmptyError ? 'Skriv inn en årsak.' : undefined}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          if (isMetaKey(e) && e.key === Keys.Enter) {
             save(oppgaveId, reason);
-          } else if (e.key === 'Escape') {
+          } else if (e.key === Keys.Escape) {
             close();
           }
         }}
@@ -75,7 +75,7 @@ const Code = styled.code`
 
 const Description = (
   <BodyShort>
-    Skriv inn årsak og trykk <strong>Feilregistrer</strong> (<Code>{MOD_KEY} + Enter</Code>) eller{' '}
+    Skriv inn årsak og trykk <strong>Feilregistrer</strong> (<Code>{MOD_KEY_TEXT} + Enter</Code>) eller{' '}
     <strong>Avbryt</strong> (<Code>Escape</Code>) for å avbryte.
   </BodyShort>
 );

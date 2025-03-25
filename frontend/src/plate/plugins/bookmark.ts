@@ -1,5 +1,6 @@
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { hasOwn } from '@app/functions/object';
+import { Keys } from '@app/keys';
 import { BookmarkLeaf } from '@app/plate/leaf/bookmark';
 import type { FormattedText } from '@app/plate/types';
 import { RangeApi, TextApi } from '@udecode/plate';
@@ -10,7 +11,7 @@ export const BookmarkPlugin = createPlatePlugin({
   node: { isLeaf: true },
   handlers: {
     onKeyDown: ({ editor, event }) => {
-      if (event.key === 'Escape' && RangeApi.isCollapsed(editor.selection)) {
+      if (event.key === Keys.Escape && RangeApi.isCollapsed(editor.selection)) {
         removeBookmarkMarks(editor);
       }
     },

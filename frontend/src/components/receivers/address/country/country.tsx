@@ -1,5 +1,6 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Option } from '@app/components/receivers/address/country/option';
+import { Keys } from '@app/keys';
 import type { CountryCode } from '@app/types/common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Search, Tag, Tooltip } from '@navikt/ds-react';
@@ -48,7 +49,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
 
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     (e) => {
-      if (e.key === 'ArrowDown') {
+      if (e.key === Keys.ArrowDown) {
         if (showCountryList) {
           setFocusIndex((prev) => (prev + 1) % options.length);
         } else {
@@ -58,7 +59,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
         return e.preventDefault();
       }
 
-      if (e.key === 'ArrowUp') {
+      if (e.key === Keys.ArrowUp) {
         if (showCountryList) {
           setFocusIndex((prev) => (prev === 0 ? options.length - 1 : prev - 1));
         } else {
@@ -68,19 +69,19 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
         return e.preventDefault();
       }
 
-      if (e.key === 'End') {
+      if (e.key === Keys.End) {
         setFocusIndex(options.length - 1);
 
         return e.preventDefault();
       }
 
-      if (e.key === 'Home') {
+      if (e.key === Keys.Home) {
         setFocusIndex(0);
 
         return e.preventDefault();
       }
 
-      if (e.key === 'Enter') {
+      if (e.key === Keys.Enter) {
         e.preventDefault();
         e.stopPropagation();
 
@@ -91,7 +92,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
         return;
       }
 
-      if (e.key === 'Escape') {
+      if (e.key === Keys.Escape) {
         e.preventDefault();
         e.stopPropagation();
 

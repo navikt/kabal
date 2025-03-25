@@ -3,9 +3,9 @@ import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { useCallback } from 'react';
 import { getDocumentPath, getFirstPath, matchDocuments } from './helpers';
 import { useSelectMany } from './select-many';
-import type { SelectRangeHook } from './types';
+import type { SelectRangeToHook } from './types';
 
-export const useSelectRangeTo: SelectRangeHook = (
+export const useSelectRangeTo: SelectRangeToHook = (
   setSelectedDocuments,
   setLastSelectedDocument,
   documentList,

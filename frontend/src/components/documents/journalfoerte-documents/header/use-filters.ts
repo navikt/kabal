@@ -1,3 +1,4 @@
+import { setAccessibleToRealDocumentIndexes } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import {
@@ -12,7 +13,7 @@ import {
 } from '@app/hooks/settings/use-setting';
 import type { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFilteredDocuments } from './filter-helpers';
 
 const EMPTY_FILTER: string[] = [];
@@ -64,6 +65,10 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     search,
     sort,
   );
+
+  useEffect(() => {
+    setAccessibleToRealDocumentIndexes(totalFilteredDocuments);
+  }, [totalFilteredDocuments]);
 
   const resetFilters = useCallback(() => {
     resetTitle();

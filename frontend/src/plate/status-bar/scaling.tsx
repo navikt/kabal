@@ -1,5 +1,6 @@
 import { MAX, MIN, STEP } from '@app/components/smart-editor/hooks/use-scale';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { Keys } from '@app/keys';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
@@ -115,16 +116,16 @@ const ScaleSelector = ({ close }: ScaleSelectorProps) => {
             onBlur={() => setStringValue(inputValue)}
             onKeyDown={(e) => {
               switch (e.key) {
-                case 'Enter':
-                case 'Escape':
+                case Keys.Enter:
+                case Keys.Escape:
                   close();
                   break;
-                case 'ArrowUp': {
+                case Keys.ArrowUp: {
                   e.preventDefault();
                   scaleUp();
                   break;
                 }
-                case 'ArrowDown': {
+                case Keys.ArrowDown: {
                   e.preventDefault();
                   scaleDown();
                   break;

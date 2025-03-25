@@ -1,5 +1,6 @@
 import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { hasOwn } from '@app/functions/object';
+import { Keys } from '@app/keys';
 import { CommentLeaf } from '@app/plate/leaf/comment';
 import type { FormattedText } from '@app/plate/types';
 import { TextApi } from '@udecode/plate';
@@ -10,7 +11,7 @@ export const CommentsPlugin = createPlatePlugin({
   node: { isLeaf: true },
   handlers: {
     onKeyDown: ({ editor, event }) => {
-      if (event.key === 'Escape') {
+      if (event.key === Keys.Escape) {
         removeCommentMarks(editor);
       }
     },
