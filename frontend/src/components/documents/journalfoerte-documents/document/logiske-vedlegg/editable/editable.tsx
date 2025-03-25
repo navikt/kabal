@@ -82,6 +82,7 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
             icon={<FilesIcon aria-hidden />}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            tabIndex={-1}
           />
         </Tooltip>
 
@@ -96,6 +97,7 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
             ref={editButtonRef}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            tabIndex={-1}
           />
         </Tooltip>
 
@@ -109,6 +111,7 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
             ref={removeButtonRef}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            tabIndex={-1}
           />
         </Tooltip>
       </ButtonContainer>

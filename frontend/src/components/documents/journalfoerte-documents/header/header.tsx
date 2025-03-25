@@ -28,6 +28,7 @@ interface Props {
   listHeight: number;
   showsAnyVedlegg: boolean;
   toggleShowAllVedlegg: () => void;
+  searchRef: React.RefObject<HTMLInputElement | null>;
 }
 
 export const Header = ({
@@ -36,6 +37,7 @@ export const Header = ({
   listHeight,
   showsAnyVedlegg,
   toggleShowAllVedlegg,
+  searchRef,
 }: Props) => {
   const [isExpanded] = useIsExpanded();
   const { columns } = useArchivedDocumentsColumns();
@@ -58,7 +60,7 @@ export const Header = ({
         />
       </Tooltip>
 
-      <DocumentSearch setSearch={setSearch} search={search} />
+      <DocumentSearch setSearch={setSearch} search={search} ref={searchRef} />
 
       {isExpanded ? <ExpandedHeaders {...filters} listHeight={listHeight} /> : null}
 
@@ -109,6 +111,10 @@ interface StyledListHeaderProps {
 }
 
 const StyledListHeader = styled.div<StyledListHeaderProps>`
+  position: sticky;
+  top: 0;
+  background-color: var(--a-bg-default);
+  z-index: 1;
   ${listHeaderCSS}
   padding-top: var(--a-spacing-1);
   ${documentsGridCSS}

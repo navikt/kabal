@@ -1,6 +1,6 @@
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Heading, Stack } from '@navikt/ds-react';
+import { Button, HStack, Heading, Stack, Tooltip } from '@navikt/ds-react';
 import { memo, useMemo } from 'react';
 import { InvisibleWarning, type InvisibleWarningProps } from './invisible-warning';
 import { Menu } from './menu';
@@ -36,13 +36,15 @@ export const JournalfoertHeading = memo(
         <HStack align="center" gap="2">
           {isExpanded ? <Menu /> : null}
 
-          <Heading
-            size="xsmall"
-            level="1"
-            title={`Viser ${filteredDocuments.length} filtrerte hoveddokumenter.\n\nAntall hoveddokumenter: ${totalLengthOfMainDocuments}\nAntall vedlegg: ${numberOfVedlegg}\nTotalt: ${totalCount}`}
+          <Tooltip
+            className="whitespace-pre"
+            maxChar={Number.POSITIVE_INFINITY}
+            content={`Viser ${filteredDocuments.length} filtrerte hoveddokumenter.\n\nAntall hoveddokumenter: ${totalLengthOfMainDocuments}\nAntall vedlegg: ${numberOfVedlegg}\nTotalt: ${totalCount}`}
           >
-            Journalførte dokumenter ({filteredDocuments.length}/{totalLengthOfMainDocuments})
-          </Heading>
+            <Heading size="xsmall" level="1" id="journalfoerte-dokumenter-heading">
+              Journalførte dokumenter ({filteredDocuments.length}/{totalLengthOfMainDocuments})
+            </Heading>
+          </Tooltip>
           {isExpanded ? null : <Menu />}
         </HStack>
 

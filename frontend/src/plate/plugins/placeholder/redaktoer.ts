@@ -1,3 +1,4 @@
+import { isMetaKey } from '@app/keys';
 import { RedaktørPlaceholder } from '@app/plate/components/placeholder/placeholder';
 import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
 import { parsers } from '@app/plate/plugins/placeholder/html-parsers';
@@ -22,7 +23,7 @@ export const RedaktoerPlaceholderPlugin = createPlatePlugin({
         return;
       }
 
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'j') {
+      if (isMetaKey(event) && event.key.toLowerCase() === 'j') {
         event.preventDefault();
         event.stopPropagation();
 

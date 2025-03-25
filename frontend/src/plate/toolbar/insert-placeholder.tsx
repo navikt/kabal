@@ -1,5 +1,5 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { MOD_KEY } from '@app/keys';
+import { Keys, MOD_KEY_TEXT } from '@app/keys';
 import { useSelection } from '@app/plate/hooks/use-selection';
 import { createPlaceHolder } from '@app/plate/templates/helpers';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
@@ -45,7 +45,7 @@ export const InsertPlaceholder = () => {
     <span ref={ref}>
       <ToolbarIconButton
         label="Sett inn innfyllingsfelt"
-        keys={[MOD_KEY, 'J']}
+        keys={[MOD_KEY_TEXT, 'J']}
         onClick={onClick}
         icon={<PencilWritingIcon aria-hidden />}
         active={isPlaceholderActive(editor)}
@@ -76,10 +76,10 @@ const PlaceholderText = ({ show, close, placeholder, setPlaceholder }: Placehold
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === Keys.Enter) {
       event.preventDefault();
       addPlaceholder();
-    } else if (event.key === 'Escape') {
+    } else if (event.key === Keys.Escape) {
       event.preventDefault();
       close();
     }

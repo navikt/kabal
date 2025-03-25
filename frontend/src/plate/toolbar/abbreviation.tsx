@@ -1,6 +1,7 @@
 import { toast } from '@app/components/toast/store';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { Keys, isMetaKey } from '@app/keys';
 import { pushEvent } from '@app/observability';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
@@ -20,12 +21,12 @@ export const Abbreviation = () => {
 
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === Keys.Escape) {
         setIsOpen(false);
         editorRef.tf.focus();
       }
 
-      if (e.key.toLowerCase() === 'f' && (e.ctrlKey || e.metaKey) && e.shiftKey) {
+      if (e.shiftKey && isMetaKey(e) && e.key.toLowerCase() === 'f') {
         e.preventDefault();
         setIsOpen((o) => !o);
       }
@@ -106,11 +107,11 @@ export const Abbreviation = () => {
                 value={localShort}
                 onChange={(e) => setLocalShort(e.target.value)}
                 onKeyDown={({ key }) => {
-                  if (key === 'Enter') {
+                  if (key === Keys.Enter) {
                     onAdd();
                   }
 
-                  if (key === 'Escape') {
+                  if (key === Keys.Escape) {
                     setIsOpen(false);
                     editor.tf.focus();
                   }
