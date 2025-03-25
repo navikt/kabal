@@ -1,4 +1,4 @@
-import { MOD_KEY } from '@app/keys';
+import { Keys, MOD_KEY_TEXT, isMetaKey } from '@app/keys';
 import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Textarea, Tooltip } from '@navikt/ds-react';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
@@ -30,14 +30,14 @@ export const WriteComment = forwardRef<HTMLTextAreaElement | null, Props>(
     const save = () => onSubmit(value).then(() => setValue(''));
 
     const onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
-      if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+      if (isMetaKey(event) && event.key === Keys.Enter) {
         event.preventDefault();
         save();
 
         return;
       }
 
-      if (event.key === 'Escape') {
+      if (event.key === Keys.Escape) {
         close?.();
       }
     };
@@ -82,7 +82,7 @@ interface ButtonsProps {
 
 const Buttons = ({ primaryButtonLabel, close, isLoading, onSubmit, disabled }: ButtonsProps) => (
   <HStack justify="space-between" wrap gap="4" marginBlock="4 0" marginInline="0 5" width="100%">
-    <Tooltip content={primaryButtonLabel} keys={[MOD_KEY, 'Enter']}>
+    <Tooltip content={primaryButtonLabel} keys={[MOD_KEY_TEXT, 'Enter']}>
       <Button
         disabled={disabled}
         icon={<PaperplaneIcon aria-hidden />}

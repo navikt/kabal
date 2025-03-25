@@ -1,4 +1,5 @@
 import { useSvarbrevNavigate } from '@app/components/svarbrev/navigate';
+import { Keys } from '@app/keys';
 import { ClipboardIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, HStack, TextField, Tooltip } from '@navikt/ds-react';
 
@@ -23,7 +24,7 @@ export const TextInput = ({ value, onChange, hasChanges, settingId }: Props) => 
           label="Tekst til svarbrev"
           hideLabel
           onKeyDown={(e) => {
-            if (hasChanges && e.key === 'Enter') {
+            if (hasChanges && e.key === Keys.Enter) {
               e.preventDefault();
               navigate(settingId);
             }

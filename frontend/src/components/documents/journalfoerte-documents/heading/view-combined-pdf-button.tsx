@@ -6,7 +6,7 @@ import { toast } from '@app/components/toast/store';
 import { getMergedDocumentTabId, getMergedDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
-import { MOD_KEY } from '@app/keys';
+import { MOD_KEY_TEXT, MouseButtons, isMetaKey } from '@app/keys';
 import {
   useGetArkiverteDokumenterQuery,
   useMergedDocumentsReferenceQuery,
@@ -67,7 +67,7 @@ export const ViewCombinedPDF = () => {
   const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
 
-    const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === 1;
+    const shouldOpenInNewTab = isMetaKey(e) || e.button === MouseButtons.MIDDLE;
 
     if (!shouldOpenInNewTab) {
       if (documents !== undefined) {
@@ -110,7 +110,7 @@ export const ViewCombinedPDF = () => {
   };
 
   return (
-    <Tooltip content={`Trykk med musehjulet / midterste knapp eller ${MOD_KEY} + klikk for å åpne i ny fane.`}>
+    <Tooltip content={`Trykk med musehjulet / midterste knapp eller ${MOD_KEY_TEXT} + klikk for å åpne i ny fane.`}>
       <Button
         as="a"
         variant="secondary"

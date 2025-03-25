@@ -109,6 +109,10 @@ interface StyledListHeaderProps {
 }
 
 const StyledListHeader = styled.div<StyledListHeaderProps>`
+  position: sticky;
+  top: 0;
+  background-color: var(--a-bg-default);
+  z-index: 1;
   ${listHeaderCSS}
   padding-top: var(--a-spacing-1);
   ${documentsGridCSS}

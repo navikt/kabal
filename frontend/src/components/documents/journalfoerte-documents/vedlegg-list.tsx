@@ -11,6 +11,7 @@ interface Props {
   minTop: number;
   maxTop: number;
   dokument: IArkivertDocument;
+  dokumentIndex: number;
   isSelected: (document: IJournalfoertDokumentId) => boolean;
   showLogiskeVedleggIdList: string[];
   setShowLogiskeVedleggIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
@@ -35,7 +36,7 @@ export const VedleggList = ({
     return null;
   }
 
-  const { journalpostId } = dokument;
+  const { journalpostId, journalstatus } = dokument;
 
   const vedleggNodeList: React.ReactNode[] = [];
 
@@ -43,12 +44,12 @@ export const VedleggList = ({
   let treeLineHeight = ROW_HEIGHT / 2 + 1;
 
   for (const { globalTop, top, height, vedlegg, logiskeVedleggList, index } of list.list) {
-    if (globalTop + height < minTop || globalTop > maxTop) {
-      continue;
-    }
-
     if (index !== lastIndex) {
       treeLineHeight += height;
+    }
+
+    if (globalTop + height < minTop || globalTop > maxTop) {
+      continue;
     }
 
     const { dokumentInfoId, logiskeVedlegg } = vedlegg;
@@ -59,6 +60,7 @@ export const VedleggList = ({
       <AttachmentListItem
         key={`vedlegg_${vedleggId}`}
         journalpostId={journalpostId}
+        journalpoststatus={journalstatus}
         vedlegg={vedlegg}
         isSelected={isSelected({ journalpostId, dokumentInfoId })}
         showVedlegg={showVedleggList}

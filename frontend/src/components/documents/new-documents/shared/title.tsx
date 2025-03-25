@@ -9,7 +9,7 @@ import {
   getNewDocumentTabId,
 } from '@app/domain/tabbed-document-url';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
-import { MouseButtons } from '@app/keys';
+import { MouseButtons, isMetaKey } from '@app/keys';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { useContext, useMemo } from 'react';
@@ -79,7 +79,7 @@ export const SharedDocumentTitle = (props: Props) => {
       return;
     }
 
-    const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === MouseButtons.MIDDLE;
+    const shouldOpenInNewTab = isMetaKey(e) || e.button === MouseButtons.MIDDLE;
 
     // Open in PDF-viewer panel.
     if (!shouldOpenInNewTab) {

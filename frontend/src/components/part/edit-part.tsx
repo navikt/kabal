@@ -1,5 +1,6 @@
 import { cleanAndValidate } from '@app/components/part/validate';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { Keys } from '@app/keys';
 import { useLazySearchpartwithutsendingskanalQuery } from '@app/redux-api/search';
 import type { IPart } from '@app/types/oppgave-common';
 import { Search, Tag, VStack } from '@navikt/ds-react';
@@ -33,7 +34,7 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === Keys.Enter) {
       if (data === undefined) {
         return;
       }
@@ -44,7 +45,7 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
       return;
     }
 
-    if (event.key === 'Escape') {
+    if (event.key === Keys.Escape) {
       onClose?.();
     }
   };
