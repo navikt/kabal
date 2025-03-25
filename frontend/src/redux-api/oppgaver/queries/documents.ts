@@ -106,6 +106,7 @@ export const {
   useGetArkiverteDokumenterQuery,
   useLazyValidateDocumentQuery,
   useMergedDocumentsReferenceQuery,
+  useLazyMergedDocumentsReferenceQuery,
   useLazyGetDocumentQuery,
   useGetSmartDocumentVersionsQuery,
   useGetSmartDocumentVersionQuery,

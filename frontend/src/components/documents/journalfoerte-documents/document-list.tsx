@@ -1,25 +1,32 @@
-import { calculateDokumentPositions } from '@app/components/documents/journalfoerte-documents/calculate';
+import {
+  type DokumentRenderData,
+  type VedleggRenderData,
+  calculateDokumentPositions,
+} from '@app/components/documents/journalfoerte-documents/calculate';
 import { ExpandedDocument } from '@app/components/documents/journalfoerte-documents/document/expanded-document';
+import { useKeyboardContext } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-context';
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { VedleggList } from '@app/components/documents/journalfoerte-documents/vedlegg-list';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { clamp } from '@app/functions/clamp';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { Loader } from '@navikt/ds-react';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Container, StyledDocumentList } from '../styled-components/document-list';
-import { StyledDocumentListItem } from './document-list-item';
+import { useContext, useEffect, useMemo } from 'react';
+import { StyledDocumentList } from '../styled-components/document-list';
 import { Document } from './document/document';
 
 interface Props {
   documents: IArkivertDocument[];
   isLoading: boolean;
-  onHeightChange: (height: number) => void;
+  scrollTop: number;
+  listHeight: number;
+  onScrollTo: (top: DokumentRenderData | VedleggRenderData) => void;
   showVedleggIdList: string[];
   setShowVedleggIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
   showLogiskeVedleggIdList: string[];
   setShowLogiskeVedleggIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
+  showMetadataIdList: string[];
+  setShowMetadataIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
 }
 
 const OVERSCAN = 32;
@@ -27,84 +34,61 @@ const OVERSCAN = 32;
 export const DocumentList = ({
   documents,
   isLoading,
-  onHeightChange,
+  scrollTop,
+  listHeight,
+  onScrollTo,
   showVedleggIdList,
   setShowVedleggIdList,
   showLogiskeVedleggIdList,
   setShowLogiskeVedleggIdList,
+  showMetadataIdList,
+  setShowMetadataIdList,
 }: Props) => {
   const { isSelected } = useContext(SelectContext);
   const [isExpandedListView] = useIsExpanded();
-  const [showMetadataIdList, setShowMetadataIdList] = useState<string[]>([]);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [containerHeight, setContainerHeight] = useState(0);
-  const [_scrollTop, _setScrollTop] = useState(0);
-  const [scrollTop, setScrollTop] = useState(0);
-
-  useEffect(() => {
-    const handle = requestAnimationFrame(() => setScrollTop(_scrollTop));
-
-    return () => cancelAnimationFrame(handle);
-  }, [_scrollTop]);
-
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver(() => {
-      const h = containerRef.current?.clientHeight ?? 0;
-      setContainerHeight(h);
-      onHeightChange(h);
-    });
-
-    if (containerRef.current !== null) {
-      resizeObserver.observe(containerRef.current);
-
-      return () => resizeObserver.disconnect();
-    }
-  }, [onHeightChange]);
-
-  const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(({ currentTarget }) => {
-    const clamped = clamp(currentTarget.scrollTop, 0, currentTarget.scrollHeight - currentTarget.clientHeight); // Elastic scrolling in Safari can exceed the boundries.
-    _setScrollTop(clamped);
-  }, []);
-
-  const onRef = useCallback(
-    (ref: HTMLDivElement | null) => {
-      const h = ref?.clientHeight ?? 0;
-      setContainerHeight(h);
-      onHeightChange(h);
-      containerRef.current = ref;
-    },
-    [onHeightChange],
-  );
+  const { focusedDocumentIndex: activeDocumentIndex, focusedVedleggIndex: activeVedleggIndex } = useKeyboardContext();
 
   const dokumenter = useMemo(
     () => calculateDokumentPositions(documents, showMetadataIdList, showVedleggIdList, showLogiskeVedleggIdList),
     [documents, showLogiskeVedleggIdList, showMetadataIdList, showVedleggIdList],
   );
 
+  useEffect(() => {
+    const d = dokumenter.list[activeDocumentIndex];
+
+    if (d === undefined) {
+      return;
+    }
+
+    if (activeVedleggIndex === -1) {
+      onScrollTo(d);
+      return;
+    }
+
+    const v = d.vedleggList.list[activeVedleggIndex];
+
+    if (v === undefined) {
+      return;
+    }
+
+    onScrollTo(v);
+  }, [activeVedleggIndex, activeDocumentIndex, dokumenter.list, onScrollTo]);
+
   if (isLoading) {
     return (
-      <Container ref={onRef} className="h-full" onScroll={onScroll}>
-        <StyledDocumentList data-testid="oppgavebehandling-documents-all-list" aria-rowcount={documents.length}>
-          <Loader size="xlarge" />
-        </StyledDocumentList>
-      </Container>
+      <StyledDocumentList data-testid="oppgavebehandling-documents-all-list" aria-rowcount={documents.length}>
+        <Loader size="xlarge" />
+      </StyledDocumentList>
     );
   }
 
   const list: React.ReactNode[] = [];
-  const maxTop = scrollTop + containerHeight + OVERSCAN;
+  const maxTop = scrollTop + listHeight + OVERSCAN;
   const minTop = scrollTop - OVERSCAN;
 
-  for (const {
-    dokument,
-    globalTop,
-    height,
-    showMetadata,
-    showVedlegg,
-    logiskeVedleggList,
-    vedleggList,
-    index,
-  } of dokumenter.list) {
+  for (const dok of dokumenter.list) {
+    const { index, dokument, globalTop, height, showMetadata, showVedlegg, logiskeVedleggList, vedleggList } = dok;
+
     if (globalTop + height < minTop || globalTop > maxTop) {
       continue;
     }
@@ -113,17 +97,18 @@ export const DocumentList = ({
     const hasVedlegg = vedlegg.length > 0;
 
     list.push(
-      <StyledDocumentListItem
+      <li
         data-testid="oppgavebehandling-documents-all-list-item"
         data-documentname={tittel}
         key={`dokument_${journalpostId}_${dokumentInfoId}`}
         style={{ top: globalTop, height }}
-        aria-rowindex={index}
+        className="absolute right-0 left-0 mx-(--a-spacing-05) rounded-(--a-border-radius-medium)"
       >
         <Document
           document={dokument}
           isSelected={isSelected(dokument)}
           isExpandedListView={isExpandedListView}
+          isKeyboardFocused={index === activeDocumentIndex && activeVedleggIndex === -1}
           showMetadata={showMetadata}
           toggleShowMetadata={() =>
             setShowMetadataIdList((ids) =>
@@ -172,24 +157,25 @@ export const DocumentList = ({
             minTop={minTop}
             maxTop={maxTop}
             dokument={dokument}
+            dokumentIndex={index}
             isSelected={isSelected}
             showLogiskeVedleggIdList={showLogiskeVedleggIdList}
             setShowLogiskeVedleggIdList={setShowLogiskeVedleggIdList}
           />
         ) : null}
-      </StyledDocumentListItem>,
+      </li>,
     );
   }
 
   return (
-    <Container ref={onRef} onScroll={onScroll}>
-      <StyledDocumentList
-        data-testid="oppgavebehandling-documents-all-list"
-        aria-rowcount={documents.length}
-        style={{ height: dokumenter.height }}
-      >
-        {list}
-      </StyledDocumentList>
-    </Container>
+    <StyledDocumentList
+      data-testid="oppgavebehandling-documents-all-list"
+      aria-rowcount={documents.length}
+      style={{ height: dokumenter.height }}
+      flexShrink="0"
+      flexGrow="1"
+    >
+      {list}
+    </StyledDocumentList>
   );
 };

@@ -8,7 +8,6 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
@@ -20,24 +19,27 @@ interface Props {
   document: IArkivertDocument;
   isSelected: boolean;
   isExpandedListView: boolean;
+  isKeyboardFocused: boolean;
   showMetadata: boolean;
   toggleShowMetadata: () => void;
   showVedlegg: boolean;
   toggleShowVedlegg: () => void;
   hasVedlegg: boolean;
+  className?: string;
 }
 
 export const Document = ({
   document,
   isSelected,
   isExpandedListView,
+  isKeyboardFocused,
   showMetadata,
   toggleShowMetadata,
   showVedlegg,
   toggleShowVedlegg,
   hasVedlegg,
+  className,
 }: Props) => {
-  const isSaksbehandler = useIsSaksbehandler();
   const isRol = useIsRol();
   const hasDocumentsAccess = useHasDocumentsAccess();
   const { columns } = useArchivedDocumentsColumns();
@@ -47,7 +49,7 @@ export const Document = ({
 
   const cleanDragUI = useRef<() => void>(() => undefined);
 
-  const { dokumentInfoId, journalpostId, tittel, hasAccess, valgt } = document;
+  const { dokumentInfoId, journalpostId, tittel, hasAccess, valgt, journalstatus } = document;
 
   const Icon = useMemo(() => {
     if (hasVedlegg) {
@@ -79,11 +81,13 @@ export const Document = ({
     [document, getSelectedDocuments, isSelected, setDraggedJournalfoertDocuments],
   );
 
-  const disabled = !((isSaksbehandler || isRol) && hasAccess);
+  const ref = useRef<HTMLDivElement>(null);
+
   const draggingIsEnabled = draggingEnabled && hasAccess && (isRol || hasDocumentsAccess);
 
   return (
     <StyledJournalfoertDocument
+      ref={ref}
       $isExpanded={isExpandedListView}
       $selected={isSelected}
       $columns={columns}
@@ -97,6 +101,7 @@ export const Document = ({
         clearDragState();
       }}
       draggable={draggingIsEnabled}
+      className={isKeyboardFocused ? `outline-2 ${className}` : className}
     >
       <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} hasAccess={hasAccess} />
 
@@ -123,7 +128,8 @@ export const Document = ({
       <IncludeDocument
         dokumentInfoId={dokumentInfoId}
         journalpostId={journalpostId}
-        disabled={disabled}
+        journalpoststatus={journalstatus}
+        hasAccess={hasAccess}
         name={tittel ?? ''}
         checked={valgt}
       />
