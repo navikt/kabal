@@ -1,5 +1,6 @@
 import { calculateDokumentPositions } from '@app/components/documents/journalfoerte-documents/calculate';
 import { ExpandedDocument } from '@app/components/documents/journalfoerte-documents/document/expanded-document';
+import { useKeyboardContext } from '@app/components/documents/journalfoerte-documents/keyboard-context';
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { VedleggList } from '@app/components/documents/journalfoerte-documents/vedlegg-list';
@@ -8,8 +9,7 @@ import { clamp } from '@app/functions/clamp';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { Loader } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Container, StyledDocumentList } from '../styled-components/document-list';
-import { StyledDocumentListItem } from './document-list-item';
+import { StyledDocumentList } from '../styled-components/document-list';
 import { Document } from './document/document';
 
 interface Props {
@@ -20,6 +20,8 @@ interface Props {
   setShowVedleggIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
   showLogiskeVedleggIdList: string[];
   setShowLogiskeVedleggIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
+  showMetadataIdList: string[];
+  setShowMetadataIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
 }
 
 const OVERSCAN = 32;
@@ -32,14 +34,16 @@ export const DocumentList = ({
   setShowVedleggIdList,
   showLogiskeVedleggIdList,
   setShowLogiskeVedleggIdList,
+  showMetadataIdList,
+  setShowMetadataIdList,
 }: Props) => {
   const { isSelected } = useContext(SelectContext);
   const [isExpandedListView] = useIsExpanded();
-  const [showMetadataIdList, setShowMetadataIdList] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerHeight, setContainerHeight] = useState(0);
   const [_scrollTop, _setScrollTop] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
+  const { activeDocument, activeVedlegg } = useKeyboardContext();
 
   useEffect(() => {
     const handle = requestAnimationFrame(() => setScrollTop(_scrollTop));
@@ -83,11 +87,11 @@ export const DocumentList = ({
 
   if (isLoading) {
     return (
-      <Container ref={onRef} className="h-full" onScroll={onScroll}>
+      <div className="relative min-h-full grow overflow-auto" ref={onRef} onScroll={onScroll}>
         <StyledDocumentList data-testid="oppgavebehandling-documents-all-list" aria-rowcount={documents.length}>
           <Loader size="xlarge" />
         </StyledDocumentList>
-      </Container>
+      </div>
     );
   }
 
@@ -95,16 +99,9 @@ export const DocumentList = ({
   const maxTop = scrollTop + containerHeight + OVERSCAN;
   const minTop = scrollTop - OVERSCAN;
 
-  for (const {
-    dokument,
-    globalTop,
-    height,
-    showMetadata,
-    showVedlegg,
-    logiskeVedleggList,
-    vedleggList,
-    index,
-  } of dokumenter.list) {
+  for (const dok of dokumenter.list) {
+    const { index, dokument, globalTop, height, showMetadata, showVedlegg, logiskeVedleggList, vedleggList } = dok;
+
     if (globalTop + height < minTop || globalTop > maxTop) {
       continue;
     }
@@ -113,14 +110,15 @@ export const DocumentList = ({
     const hasVedlegg = vedlegg.length > 0;
 
     list.push(
-      <StyledDocumentListItem
+      <li
         data-testid="oppgavebehandling-documents-all-list-item"
         data-documentname={tittel}
         key={`dokument_${journalpostId}_${dokumentInfoId}`}
         style={{ top: globalTop, height }}
-        aria-rowindex={index}
+        className="absolute right-0 left-0 mx-(--a-spacing-05) rounded-(--a-border-radius-medium)"
       >
         <Document
+          className={index === activeDocument && activeVedlegg === -1 ? 'outline-2' : ''}
           document={dokument}
           isSelected={isSelected(dokument)}
           isExpandedListView={isExpandedListView}
@@ -172,17 +170,18 @@ export const DocumentList = ({
             minTop={minTop}
             maxTop={maxTop}
             dokument={dokument}
+            dokumentIndex={index}
             isSelected={isSelected}
             showLogiskeVedleggIdList={showLogiskeVedleggIdList}
             setShowLogiskeVedleggIdList={setShowLogiskeVedleggIdList}
           />
         ) : null}
-      </StyledDocumentListItem>,
+      </li>,
     );
   }
 
   return (
-    <Container ref={onRef} onScroll={onScroll}>
+    <div className="relative min-h-full grow overflow-auto" ref={onRef} onScroll={onScroll}>
       <StyledDocumentList
         data-testid="oppgavebehandling-documents-all-list"
         aria-rowcount={documents.length}
@@ -190,6 +189,6 @@ export const DocumentList = ({
       >
         {list}
       </StyledDocumentList>
-    </Container>
+    </div>
   );
 };

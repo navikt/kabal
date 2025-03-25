@@ -6,6 +6,7 @@ import {
   getFieldNames,
   getFieldSizes,
 } from '@app/components/documents/journalfoerte-documents/grid';
+import { useKeyboardContext } from '@app/components/documents/journalfoerte-documents/keyboard-context';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import {
   documentCSS,
@@ -34,12 +35,14 @@ interface Props {
   showVedlegg: boolean;
   toggleShowVedlegg: () => void;
   hasVedlegg: boolean;
+  index: number;
+  dokumentIndex: number;
 }
 
 const EMPTY_ARRAY: IArkivertDocument[] = [];
 
 export const Attachment = memo(
-  ({ vedlegg, journalpostId, isSelected, showVedlegg, toggleShowVedlegg, hasVedlegg }: Props) => {
+  ({ vedlegg, journalpostId, isSelected, showVedlegg, toggleShowVedlegg, hasVedlegg, index, dokumentIndex }: Props) => {
     const { dokumentInfoId, harTilgangTilArkivvariant, tittel } = vedlegg;
     const oppgaveId = useOppgaveId();
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
@@ -49,6 +52,8 @@ export const Attachment = memo(
     const isSaksbehandler = useIsSaksbehandler();
     const isRol = useIsRol();
     const isFeilregistrert = useIsFeilregistrert();
+
+    const { activeVedlegg, activeDocument } = useKeyboardContext();
 
     const documents = arkiverteDokumenter?.dokumenter ?? EMPTY_ARRAY;
 
@@ -109,6 +114,7 @@ export const Attachment = memo(
           clearDragState();
         }}
         draggable={draggingIsEnabled}
+        className={dokumentIndex === activeDocument && index === activeVedlegg ? 'outline-2' : ''}
       >
         <SelectRow
           journalpostId={journalpostId}

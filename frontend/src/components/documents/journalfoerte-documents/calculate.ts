@@ -5,6 +5,7 @@ import {
   LOGISK_VEDLEGG_SPACE,
   ROW_HEIGHT,
 } from '@app/components/documents/journalfoerte-documents/contants';
+import { PADDING_TOP } from '@app/components/documents/new-documents/constants';
 import type { IArkivertDocument, IArkivertDocumentVedlegg, LogiskVedlegg } from '@app/types/arkiverte-documents';
 
 interface Position {
@@ -48,7 +49,7 @@ export const calculateDokumentPositions = (
 
   const list = new Array<DokumentRenderData>(dokumenterLength);
 
-  let listHeight = 0;
+  let listHeight = PADDING_TOP;
 
   for (let index = 0; index < dokumenterLength; index++) {
     // biome-ignore lint/style/noNonNullAssertion: Guaranteed to be defined.

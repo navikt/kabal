@@ -25,6 +25,7 @@ interface Props {
   showVedlegg: boolean;
   toggleShowVedlegg: () => void;
   hasVedlegg: boolean;
+  className?: string;
 }
 
 export const Document = ({
@@ -36,6 +37,7 @@ export const Document = ({
   showVedlegg,
   toggleShowVedlegg,
   hasVedlegg,
+  className,
 }: Props) => {
   const isSaksbehandler = useIsSaksbehandler();
   const isRol = useIsRol();
@@ -97,6 +99,7 @@ export const Document = ({
         clearDragState();
       }}
       draggable={draggingIsEnabled}
+      className={className}
     >
       <SelectRow
         journalpostId={journalpostId}

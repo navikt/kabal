@@ -11,6 +11,7 @@ interface Props {
   minTop: number;
   maxTop: number;
   dokument: IArkivertDocument;
+  dokumentIndex: number;
   isSelected: (document: IJournalfoertDokumentId) => boolean;
   showLogiskeVedleggIdList: string[];
   setShowLogiskeVedleggIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
@@ -21,6 +22,7 @@ export const VedleggList = ({
   minTop,
   maxTop,
   dokument,
+  dokumentIndex,
   isSelected,
   showLogiskeVedleggIdList,
   setShowLogiskeVedleggIdList,
@@ -58,6 +60,8 @@ export const VedleggList = ({
     vedleggNodeList.push(
       <AttachmentListItem
         key={`vedlegg_${vedleggId}`}
+        index={index}
+        dokumentIndex={dokumentIndex}
         journalpostId={journalpostId}
         vedlegg={vedlegg}
         isSelected={isSelected({ journalpostId, dokumentInfoId })}

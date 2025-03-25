@@ -1,7 +1,7 @@
 import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';
 import { Header } from '@app/components/documents/journalfoerte-documents/header/header';
+import { KeyboardContextElement } from '@app/components/documents/journalfoerte-documents/keyboard-context';
 import { SelectContextElement } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { commonStyles } from '@app/components/documents/styled-components/container';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
@@ -9,7 +9,6 @@ import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { useFilters } from './header/use-filters';
 import { JournalfoertHeading } from './heading/heading';
 
@@ -59,6 +58,8 @@ export const JournalfoerteDocuments = () => {
     setShowVedleggIdList(documentsWithVedleggIdList);
   }, [documentsWithVedleggIdList, showVedleggIdList]);
 
+  const [showMetadataIdList, setShowMetadataIdList] = useState<string[]>([]);
+
   // IDs of vedlegg with logiske vedlegg.
   const vedleggWithLogiskeVedleggIdList = useMemo<string[]>(
     () =>
@@ -93,42 +94,52 @@ export const JournalfoerteDocuments = () => {
 
   return (
     <SelectContextElement documentList={documents}>
-      <Container data-testid="oppgavebehandling-documents-all">
-        <JournalfoertHeading
-          allDocuments={documents}
-          totalLengthOfMainDocuments={data?.totaltAntall ?? 0}
-          noFiltersActive={noFiltersActive}
-          resetFilters={resetFilters}
-          filteredDocuments={totalFilteredDocuments}
-        />
-        <VStack overflow="hidden" flexGrow="1">
-          <Header
-            filters={filters}
-            allSelectableDocuments={allSelectableDocuments}
-            documentIdList={documentsWithVedleggIdList}
-            listHeight={listHeight}
-            showsAnyVedlegg={showsAnyVedlegg}
-            toggleShowAllVedlegg={onToggle}
+      <KeyboardContextElement
+        documents={documents}
+        showVedleggIdList={showVedleggIdList}
+        setShowVedleggIdList={setShowVedleggIdList}
+        setShowMetadataIdList={setShowMetadataIdList}
+      >
+        <VStack
+          as="section"
+          paddingInline="4"
+          paddingBlock="0 2"
+          flexGrow="1"
+          justify="space-between"
+          overflow="hidden"
+          data-testid="oppgavebehandling-documents-all"
+        >
+          <JournalfoertHeading
+            allDocuments={documents}
+            totalLengthOfMainDocuments={data?.totaltAntall ?? 0}
+            noFiltersActive={noFiltersActive}
+            resetFilters={resetFilters}
+            filteredDocuments={totalFilteredDocuments}
           />
+          <VStack overflow="hidden" flexGrow="1">
+            <Header
+              filters={filters}
+              allSelectableDocuments={allSelectableDocuments}
+              documentIdList={documentsWithVedleggIdList}
+              listHeight={listHeight}
+              showsAnyVedlegg={showsAnyVedlegg}
+              toggleShowAllVedlegg={onToggle}
+            />
 
-          <DocumentList
-            documents={totalFilteredDocuments}
-            isLoading={isLoading}
-            onHeightChange={setListHeight}
-            showVedleggIdList={showVedleggIdList}
-            setShowVedleggIdList={setShowVedleggIdList}
-            showLogiskeVedleggIdList={showLogiskeVedleggIdList}
-            setShowLogiskeVedleggIdList={setShowLogiskeVedleggIdList}
-          />
+            <DocumentList
+              documents={totalFilteredDocuments}
+              isLoading={isLoading}
+              onHeightChange={setListHeight}
+              showVedleggIdList={showVedleggIdList}
+              setShowVedleggIdList={setShowVedleggIdList}
+              showLogiskeVedleggIdList={showLogiskeVedleggIdList}
+              setShowLogiskeVedleggIdList={setShowLogiskeVedleggIdList}
+              showMetadataIdList={showMetadataIdList}
+              setShowMetadataIdList={setShowMetadataIdList}
+            />
+          </VStack>
         </VStack>
-      </Container>
+      </KeyboardContextElement>
     </SelectContextElement>
   );
 };
-
-const Container = styled.section`
-  ${commonStyles}
-  justify-content: space-between;
-  flex-grow: 1;
-  overflow: hidden;
-`;
