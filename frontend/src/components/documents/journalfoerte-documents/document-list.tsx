@@ -5,16 +5,17 @@ import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-docu
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { VedleggList } from '@app/components/documents/journalfoerte-documents/vedlegg-list';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { clamp } from '@app/functions/clamp';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { Loader } from '@navikt/ds-react';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { StyledDocumentList } from '../styled-components/document-list';
 import { Document } from './document/document';
 
 interface Props {
   documents: IArkivertDocument[];
   isLoading: boolean;
+  scrollTop: number;
+  listHeight: number;
   onHeightChange: (height: number) => void;
   showVedleggIdList: string[];
   setShowVedleggIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
@@ -24,11 +25,13 @@ interface Props {
   setShowMetadataIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
 }
 
-const OVERSCAN = 32;
+const OVERSCAN = 320;
 
 export const DocumentList = ({
   documents,
   isLoading,
+  scrollTop,
+  listHeight,
   onHeightChange,
   showVedleggIdList,
   setShowVedleggIdList,
@@ -40,21 +43,11 @@ export const DocumentList = ({
   const { isSelected } = useContext(SelectContext);
   const [isExpandedListView] = useIsExpanded();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [containerHeight, setContainerHeight] = useState(0);
-  const [_scrollTop, _setScrollTop] = useState(0);
-  const [scrollTop, setScrollTop] = useState(0);
   const { activeDocument, activeVedlegg } = useKeyboardContext();
-
-  useEffect(() => {
-    const handle = requestAnimationFrame(() => setScrollTop(_scrollTop));
-
-    return () => cancelAnimationFrame(handle);
-  }, [_scrollTop]);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
       const h = containerRef.current?.clientHeight ?? 0;
-      setContainerHeight(h);
       onHeightChange(h);
     });
 
@@ -65,15 +58,9 @@ export const DocumentList = ({
     }
   }, [onHeightChange]);
 
-  const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(({ currentTarget }) => {
-    const clamped = clamp(currentTarget.scrollTop, 0, currentTarget.scrollHeight - currentTarget.clientHeight); // Elastic scrolling in Safari can exceed the boundries.
-    _setScrollTop(clamped);
-  }, []);
-
   const onRef = useCallback(
     (ref: HTMLDivElement | null) => {
       const h = ref?.clientHeight ?? 0;
-      setContainerHeight(h);
       onHeightChange(h);
       containerRef.current = ref;
     },
@@ -87,7 +74,7 @@ export const DocumentList = ({
 
   if (isLoading) {
     return (
-      <div className="relative min-h-full grow overflow-auto" ref={onRef} onScroll={onScroll}>
+      <div className="relative min-h-full grow overflow-auto" ref={onRef}>
         <StyledDocumentList data-testid="oppgavebehandling-documents-all-list" aria-rowcount={documents.length}>
           <Loader size="xlarge" />
         </StyledDocumentList>
@@ -96,7 +83,7 @@ export const DocumentList = ({
   }
 
   const list: React.ReactNode[] = [];
-  const maxTop = scrollTop + containerHeight + OVERSCAN;
+  const maxTop = scrollTop + listHeight + OVERSCAN;
   const minTop = scrollTop - OVERSCAN;
 
   for (const dok of dokumenter.list) {
@@ -119,6 +106,7 @@ export const DocumentList = ({
       >
         <Document
           className={index === activeDocument && activeVedlegg === -1 ? 'outline-2' : ''}
+          isKeyboardFocused={index === activeDocument && activeVedlegg === -1}
           document={dokument}
           isSelected={isSelected(dokument)}
           isExpandedListView={isExpandedListView}
@@ -181,7 +169,7 @@ export const DocumentList = ({
   }
 
   return (
-    <div className="relative min-h-full grow overflow-auto" ref={onRef} onScroll={onScroll}>
+    <div className="relative min-h-full grow" ref={onRef}>
       <StyledDocumentList
         data-testid="oppgavebehandling-documents-all-list"
         aria-rowcount={documents.length}

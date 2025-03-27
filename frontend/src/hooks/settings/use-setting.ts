@@ -136,3 +136,5 @@ export enum PdfScaleMode {
 
 export const useNewTabPdfScaleMode = () => useJsonSetting<PdfScaleMode>('pdf/new_tab/scale_mode');
 export const useNewTabPdfCustomScale = () => useNumberSetting('pdf/new_tab/custom_scale');
+
+export const useHasSeenKeyboardShortcuts = () => useBooleanSetting('has_seen_keyboard_shortcuts');

@@ -1,8 +1,14 @@
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
+import { TabContext } from '@app/components/documents/tab-context';
+import { TAB_MANAGER } from '@app/components/documents/use-is-tab-open';
+import { toast } from '@app/components/toast/store';
+import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useRemoveTilknyttetDocumentMutation } from '@app/redux-api/oppgaver/mutations/remove-tilknytt-document';
 import { useTilknyttDocumentMutation } from '@app/redux-api/oppgaver/mutations/tilknytt-document';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { createContext, useCallback, useContext, useState } from 'react';
 
@@ -24,6 +30,7 @@ export const KeyboardContext = createContext<{
   right: () => void;
   toggleVedlegg: () => void;
   toggleAllVedlegg: () => void;
+  addLogiskVedlegg: () => void;
   toggleInfo: () => void;
   toggleAllInfo: () => void;
   toggleInclude: () => void;
@@ -51,6 +58,7 @@ export const KeyboardContext = createContext<{
   right: NOOP,
   toggleVedlegg: NOOP,
   toggleAllVedlegg: NOOP,
+  addLogiskVedlegg: NOOP,
   toggleInfo: NOOP,
   toggleAllInfo: NOOP,
   toggleInclude: NOOP,
@@ -101,7 +109,7 @@ export const KeyboardContextElement = ({
   const document = documents[activeDocumentIndex];
   const hasDocument = document !== undefined;
   const isOnDocument = hasDocument && !isInVedleggList;
-  const lastVedleggIndex = document?.vedlegg.length ?? -1;
+  const lastVedleggIndex = getLastIndex(document?.vedlegg);
 
   console.debug(`[${activeDocumentIndex}/${documents.length}, ${activeVedleggIndex}/${document?.vedlegg.length ?? 0}]`);
 
@@ -114,7 +122,7 @@ export const KeyboardContextElement = ({
       return;
     }
 
-    if (document === undefined) {
+    if (!hasDocument) {
       return;
     }
 
@@ -123,6 +131,7 @@ export const KeyboardContextElement = ({
       return;
     }
 
+    setActiveVedleggIndex(-1);
     setActiveDocumentIndex(increment(activeDocumentIndex, amount, lastDocumentIndex));
   };
 
@@ -195,6 +204,8 @@ export const KeyboardContextElement = ({
     setShowVedleggIdList(documents.filter((d) => d.vedlegg.length > 0).map((d) => d.journalpostId));
   };
 
+  const addLogiskVedlegg = () => {};
+
   const toggleAllInfo = () =>
     setShowMetadataIdList((prev) => (prev.length > 0 ? [] : documents.map((d) => d.journalpostId)));
 
@@ -242,7 +253,7 @@ export const KeyboardContextElement = ({
   };
 
   const toggleInclude = () => {
-    if (!hasDocument || oppgaveId === skipToken) {
+    if (!hasDocument || oppgaveId === skipToken || !document.harTilgangTilArkivvariant) {
       return;
     }
 
@@ -271,13 +282,103 @@ export const KeyboardContextElement = ({
     // TODO: Implement focus document title.
   };
 
+  const { value: shownDocuments, setValue: setShownDocuments } = useDocumentsPdfViewed();
+  const { getTabRef, setTabRef } = useContext(TabContext);
+
   const openInline = useCallback(() => {
-    // Handle key press events
-  }, []);
+    if (!hasDocument || !document.harTilgangTilArkivvariant) {
+      return;
+    }
+
+    const { journalpostId } = document;
+    let dokumentInfoId = document.dokumentInfoId;
+
+    if (isInVedleggList) {
+      const vedlegg = document.vedlegg[activeVedleggIndex];
+
+      if (vedlegg === undefined || !vedlegg.harTilgangTilArkivvariant) {
+        return;
+      }
+
+      dokumentInfoId = vedlegg.dokumentInfoId;
+    }
+
+    const isOpen = shownDocuments.some(
+      (d) =>
+        d.type === DocumentTypeEnum.JOURNALFOERT &&
+        d.dokumentInfoId === dokumentInfoId &&
+        d.journalpostId === journalpostId,
+    );
+
+    if (isOpen) {
+      setShownDocuments(
+        shownDocuments.filter(
+          (d) =>
+            d.type !== DocumentTypeEnum.JOURNALFOERT ||
+            d.dokumentInfoId !== dokumentInfoId ||
+            d.journalpostId !== journalpostId,
+        ),
+      );
+      return;
+    }
+
+    setShownDocuments([
+      {
+        type: DocumentTypeEnum.JOURNALFOERT,
+        dokumentInfoId,
+        journalpostId,
+      },
+    ]);
+  }, [hasDocument, isInVedleggList, activeVedleggIndex, document, setShownDocuments, shownDocuments]);
 
   const openNewTab = useCallback(() => {
-    // Handle key press events
-  }, []);
+    if (!hasDocument || !document.harTilgangTilArkivvariant) {
+      return;
+    }
+
+    const { journalpostId } = document;
+    let dokumentInfoId = document.dokumentInfoId;
+
+    if (isInVedleggList) {
+      const vedlegg = document.vedlegg[activeVedleggIndex];
+
+      if (vedlegg === undefined || !vedlegg.harTilgangTilArkivvariant) {
+        return;
+      }
+
+      dokumentInfoId = vedlegg.dokumentInfoId;
+    }
+
+    const documentId = getJournalfoertDocumentTabId(journalpostId, dokumentInfoId);
+    const isTabOpen = TAB_MANAGER.isTabOpen(documentId);
+    const tabRef = getTabRef(documentId);
+
+    // There is a reference to the tab and it is open.
+    if (tabRef !== undefined && !tabRef.closed) {
+      tabRef.focus();
+
+      return;
+    }
+
+    if (isTabOpen) {
+      toast.warning('Dokumentet er allerede åpent i en annen fane');
+
+      return;
+    }
+
+    const href = getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId);
+
+    // There is no reference to the tab or it is closed.
+    const newTabRef = window.open(href, documentId);
+
+    if (newTabRef === null) {
+      toast.error('Kunne ikke åpne dokument i ny fane');
+
+      return;
+    }
+
+    setTabRef(documentId, newTabRef);
+  }, [hasDocument, document, isInVedleggList, activeVedleggIndex, getTabRef, setTabRef]);
 
   return (
     <KeyboardContext.Provider
@@ -295,6 +396,7 @@ export const KeyboardContextElement = ({
         right,
         toggleVedlegg,
         toggleAllVedlegg,
+        addLogiskVedlegg,
         toggleSelect,
         toggleInfo,
         toggleAllInfo,
@@ -330,4 +432,12 @@ const decrement = (prev: number, amount: number, max: number) => {
   }
 
   return prev - amount;
+};
+
+const getLastIndex = <T,>(list: T[] | undefined): number => {
+  if (list === undefined) {
+    return -1;
+  }
+
+  return list.length - 1;
 };

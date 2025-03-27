@@ -22,7 +22,7 @@ import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/
 import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { memo, useCallback, useContext, useMemo, useRef } from 'react';
+import { memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 import { DocumentTitle } from '../shared/document-title';
 import { IncludeDocument } from '../shared/include-document';
@@ -100,8 +100,18 @@ export const Attachment = memo(
       return showVedlegg ? ChevronUpIcon : ChevronDownIcon;
     }, [hasVedlegg, showVedlegg]);
 
+    const isKeyboardFocused = dokumentIndex === activeDocument && index === activeVedlegg;
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      if (isKeyboardFocused) {
+        ref.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, [isKeyboardFocused]);
+
     return (
       <StyledVedlegg
+        ref={ref}
         key={journalpostId + dokumentInfoId}
         data-testid="oppgavebehandling-documents-all-list-item"
         data-journalpostid={journalpostId}
@@ -114,7 +124,7 @@ export const Attachment = memo(
           clearDragState();
         }}
         draggable={draggingIsEnabled}
-        className={dokumentIndex === activeDocument && index === activeVedlegg ? 'outline-2' : ''}
+        className={isKeyboardFocused ? 'outline-2' : ''}
       >
         <SelectRow
           journalpostId={journalpostId}

@@ -1,7 +1,9 @@
 import { useKeyboardContext } from '@app/components/documents/journalfoerte-documents/keyboard-context';
+import { useHasSeenKeyboardShortcuts } from '@app/hooks/settings/use-setting';
 import { MOD_KEY } from '@app/keys';
 import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon } from '@navikt/aksel-icons';
-import { Box, HGrid, HStack, Heading, HelpText, Search } from '@navikt/ds-react';
+import { Box, Button, HGrid, HStack, Heading, Modal, Search } from '@navikt/ds-react';
+import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
 import { Fragment, memo, useEffect, useRef, useState } from 'react';
 import { Fields } from '../grid';
 
@@ -13,6 +15,7 @@ interface Props {
 export const DocumentSearch = memo(
   ({ search, setSearch }: Props) => {
     const ref = useRef<HTMLDivElement>(null);
+    const modalRef = useRef<HTMLDialogElement>(null);
     const [value, setValue] = useState<string>(search);
 
     useEffect(() => {
@@ -37,6 +40,7 @@ export const DocumentSearch = memo(
       right,
       toggleVedlegg,
       toggleAllVedlegg,
+      addLogiskVedlegg,
       toggleInfo,
       toggleAllInfo,
       toggleSelect,
@@ -54,6 +58,11 @@ export const DocumentSearch = memo(
       if (event.key === 'ArrowDown') {
         event.preventDefault();
         down();
+      }
+
+      if (mod && event.key === 'h') {
+        event.preventDefault();
+        modalRef.current?.showModal();
       }
 
       if (activeDocument === -1) {
@@ -105,6 +114,11 @@ export const DocumentSearch = memo(
         mod ? toggleAllVedlegg() : toggleVedlegg();
       }
 
+      if (event.key === 'l') {
+        event.preventDefault();
+        addLogiskVedlegg();
+      }
+
       if (event.key === 'ArrowRight') {
         event.preventDefault();
         right();
@@ -141,6 +155,21 @@ export const DocumentSearch = memo(
       }
     };
 
+    const { value: hasSeenKeyboardShortcuts, setValue: setHasSeenKeyboardShortcuts } = useHasSeenKeyboardShortcuts();
+
+    useEffect(() => {
+      if (hasSeenKeyboardShortcuts) {
+        return;
+      }
+
+      const timeout = setTimeout(() => {
+        modalRef.current?.showModal();
+        setHasSeenKeyboardShortcuts(true);
+      });
+
+      return () => clearTimeout(timeout);
+    }, [hasSeenKeyboardShortcuts, setHasSeenKeyboardShortcuts]);
+
     return (
       <div ref={ref} style={{ gridArea: Fields.Title }}>
         <HStack align="center" gap="1" wrap={false}>
@@ -156,48 +185,60 @@ export const DocumentSearch = memo(
             onBlur={() => reset()}
           />
 
-          <HelpText title="Tastaturstyring">
-            <Heading level="2" size="small" spacing>
-              Tastaturstyring i dokumentlisten
-            </Heading>
+          <Button
+            variant="tertiary"
+            size="small"
+            icon={<Keyboard size={22} aria-hidden />}
+            onClick={() => modalRef.current?.showModal()}
+          />
 
-            <HGrid as="dl" gap="1 2" columns="min-content 1fr">
-              {KEYBOARD_HELP.map((item) => (
-                <Fragment key={item.shortcuts.map((combo) => combo.join('+')).join('|')}>
-                  <HStack as="dt" gap="1" wrap={false} align="center" justify="end" className="text-sm">
-                    {item.shortcuts.map((combo) => (
-                      <HStack
-                        gap="1"
-                        align="center"
-                        wrap={false}
-                        key={combo.join('+')}
-                        className='not-last:after:content-["eller"]'
-                      >
-                        {combo.map((k) => (
-                          <Box
-                            key={k}
-                            paddingInline="1"
-                            paddingBlock="05"
-                            background="surface-inverted"
-                            borderRadius="medium"
-                            minWidth="24px"
-                            minHeight="24px"
-                            className="flex items-center justify-center text-(--a-text-on-inverted)"
-                          >
-                            {KEY_ICONS[k]}
-                          </Box>
-                        ))}
-                      </HStack>
-                    ))}
-                  </HStack>
+          <Modal ref={modalRef} closeOnBackdropClick aria-labelledby="modal-title">
+            <Modal.Header closeButton>
+              <HStack as={Heading} gap="1" align="center" level="1" size="small">
+                <Keyboard size={24} aria-hidden />
+                <span id="modal-title">Tastaturstyring i dokumentlisten</span>
+              </HStack>
+            </Modal.Header>
 
-                  <HStack as="dd" align="center">
-                    {item.description}
-                  </HStack>
-                </Fragment>
-              ))}
-            </HGrid>
-          </HelpText>
+            <Modal.Body>
+              <HGrid as="dl" gap="1 2" columns="min-content 1fr">
+                {KEYBOARD_HELP.map((item) => (
+                  <Fragment key={item.shortcuts.map((combo) => combo.join('+')).join('|')}>
+                    <HStack as="dt" gap="1" wrap={false} align="center" justify="end" className="text-sm">
+                      {item.shortcuts.map((combo) => (
+                        <HStack
+                          gap="1"
+                          align="center"
+                          wrap={false}
+                          key={combo.join('+')}
+                          className='not-last:after:content-["eller"]'
+                        >
+                          {combo.map((k) => (
+                            <Box
+                              key={k}
+                              paddingInline="1"
+                              paddingBlock="05"
+                              background="surface-inverted"
+                              borderRadius="medium"
+                              minWidth="24px"
+                              minHeight="24px"
+                              className="flex items-center justify-center text-(--a-text-on-inverted)"
+                            >
+                              {KEY_ICONS[k]}
+                            </Box>
+                          ))}
+                        </HStack>
+                      ))}
+                    </HStack>
+
+                    <HStack as="dd" align="center">
+                      {item.description}
+                    </HStack>
+                  </Fragment>
+                ))}
+              </HGrid>
+            </Modal.Body>
+          </Modal>
         </HStack>
       </div>
     );
@@ -225,7 +266,9 @@ enum Keys {
   I = 'I',
   M = 'M',
   V = 'V',
+  L = 'L',
   N = 'N',
+  H = 'H',
   Mod = 'MOD',
   Shift = 'Shift',
 }
@@ -242,10 +285,12 @@ const KEY_ICONS: Record<Keys, React.ReactNode> = {
   [Keys.Escape]: 'Esc',
   [Keys.Space]: 'Space',
   [Keys.Enter]: 'Enter',
-  [Keys.I]: 'i',
-  [Keys.M]: 'm',
-  [Keys.V]: 'v',
-  [Keys.N]: 'n',
+  [Keys.I]: 'I',
+  [Keys.M]: 'M',
+  [Keys.V]: 'V',
+  [Keys.L]: 'L',
+  [Keys.N]: 'N',
+  [Keys.H]: 'H',
   [Keys.Mod]: MOD_KEY,
   [Keys.Shift]: 'Shift',
 };
@@ -265,10 +310,12 @@ const KEYBOARD_HELP: KeyboardShortcut[] = [
   { shortcuts: [[Keys.Mod, Keys.I]], description: 'Vis/skjul info (alle dokumenter og vedlegg).' },
   { shortcuts: [[Keys.M]], description: 'Inkluder i klage.' },
   { shortcuts: [[Keys.V]], description: 'Vis/skjul vedlegg.' },
+  { shortcuts: [[Keys.L]], description: 'Legg til logisk vedlegg.' },
   { shortcuts: [[Keys.Mod, Keys.V]], description: 'Vis/skjul vedlegg (alle dokumenter og vedlegg).' },
   { shortcuts: [[Keys.N]], description: 'Endre navn.' },
   { shortcuts: [[Keys.Enter]], description: 'Åpne dokument.' },
   { shortcuts: [[Keys.Mod, Keys.Enter]], description: 'Åpne dokument i ny fane.' },
   { shortcuts: [[Keys.Space]], description: 'Legg til/fjern fra valgte dokumenter.' },
   { shortcuts: [[Keys.Escape]], description: 'Avslutt tasteturstyring.' },
+  { shortcuts: [[Keys.Mod, Keys.H]], description: 'Vis hurtigtaster. Denne oversikten.' },
 ];

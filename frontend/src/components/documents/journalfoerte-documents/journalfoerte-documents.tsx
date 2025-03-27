@@ -2,6 +2,7 @@ import { DocumentList } from '@app/components/documents/journalfoerte-documents/
 import { Header } from '@app/components/documents/journalfoerte-documents/header/header';
 import { KeyboardContextElement } from '@app/components/documents/journalfoerte-documents/keyboard-context';
 import { SelectContextElement } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
+import { clamp } from '@app/functions/clamp';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
@@ -92,10 +93,16 @@ export const JournalfoerteDocuments = () => {
     setShowLogiskeVedleggIdList(showsAnyVedlegg ? [] : vedleggWithLogiskeVedleggIdList);
   }, [documentsWithVedleggIdList, showsAnyVedlegg, vedleggWithLogiskeVedleggIdList]);
 
+  const [scrollTop, setScrollTop] = useState(0);
+  const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(({ currentTarget }) => {
+    const clamped = clamp(currentTarget.scrollTop, 0, currentTarget.scrollHeight - currentTarget.clientHeight); // Elastic scrolling in Safari can exceed the boundries.
+    setScrollTop(clamped);
+  }, []);
+
   return (
     <SelectContextElement documentList={documents}>
       <KeyboardContextElement
-        documents={documents}
+        documents={totalFilteredDocuments}
         showVedleggIdList={showVedleggIdList}
         setShowVedleggIdList={setShowVedleggIdList}
         setShowMetadataIdList={setShowMetadataIdList}
@@ -116,7 +123,7 @@ export const JournalfoerteDocuments = () => {
             resetFilters={resetFilters}
             filteredDocuments={totalFilteredDocuments}
           />
-          <VStack overflow="hidden" flexGrow="1">
+          <VStack overflowX="auto" flexGrow="1" position="relative" onScroll={onScroll}>
             <Header
               filters={filters}
               allSelectableDocuments={allSelectableDocuments}
@@ -130,6 +137,8 @@ export const JournalfoerteDocuments = () => {
               documents={totalFilteredDocuments}
               isLoading={isLoading}
               onHeightChange={setListHeight}
+              scrollTop={scrollTop}
+              listHeight={listHeight}
               showVedleggIdList={showVedleggIdList}
               setShowVedleggIdList={setShowVedleggIdList}
               showLogiskeVedleggIdList={showLogiskeVedleggIdList}

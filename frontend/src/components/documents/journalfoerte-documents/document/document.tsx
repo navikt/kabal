@@ -12,13 +12,14 @@ import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { useCallback, useContext, useMemo, useRef } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { DocumentTitle } from './shared/document-title';
 import { IncludeDocument } from './shared/include-document';
 
 interface Props {
   document: IArkivertDocument;
   isSelected: boolean;
+  isKeyboardFocused: boolean;
   isExpandedListView: boolean;
   showMetadata: boolean;
   toggleShowMetadata: () => void;
@@ -31,6 +32,7 @@ interface Props {
 export const Document = ({
   document,
   isSelected,
+  isKeyboardFocused,
   isExpandedListView,
   showMetadata,
   toggleShowMetadata,
@@ -81,11 +83,20 @@ export const Document = ({
     [document, getSelectedDocuments, isSelected, setDraggedJournalfoertDocuments],
   );
 
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isKeyboardFocused) {
+      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [isKeyboardFocused]);
+
   const disabled = !((isSaksbehandler || isRol) && harTilgangTilArkivvariant);
   const draggingIsEnabled = draggingEnabled && harTilgangTilArkivvariant && (isRol || hasDocumentsAccess);
 
   return (
     <StyledJournalfoertDocument
+      ref={ref}
       $isExpanded={isExpandedListView}
       $selected={isSelected}
       $columns={columns}
