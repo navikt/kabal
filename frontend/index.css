@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "@navikt/ds-css" layer(components);
 @import "./fonts.css" layer(fonts);
+@config './tailwind.config.js';
 
 @layer components {
   @theme {
