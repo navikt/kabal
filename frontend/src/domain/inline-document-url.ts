@@ -9,3 +9,6 @@ export const getMergedDocumentInlineUrl = (mergedDocumentId: string) =>
 
 export const getAttachmentsOverviewInlineUrl = (oppgaveId: string, documentId: string) =>
   `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/${documentId}/vedleggsoversikt/pdf`;
+
+export const getMergedDuaDocumentInlineUrl = (oppgaveId: string, documentId: string) =>
+  `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${documentId}/pdf`;

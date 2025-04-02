@@ -186,6 +186,38 @@ export const documentPlugin = fastifyPlugin(
 
           return send(reply, url, documentIdList, metadata.title, req.navIdent);
         },
+      )
+
+      .get(
+        '/kombinert-dokument-under-arbeid/:behandlingId/:documentId',
+        {
+          schema: {
+            tags: ['dokumenter'],
+            params: Type.Object({ behandlingId: Type.String(), documentId: Type.String() }),
+            querystring: QUERYSTRING,
+            produces: ['application/pdf'],
+            response: { 200: { type: 'string', format: 'binary' } },
+          },
+        },
+        async (req, reply) => {
+          const { behandlingId, documentId } = req.params;
+
+          if (!(isPlainText(behandlingId) && isPlainText(documentId))) {
+            return invalidId(reply);
+          }
+
+          const metadataResponse = await getMetadata<INewMetadata>(
+            `${METADATA_BASE_URL}/behandlinger/${behandlingId}/dokumenter/${documentId}/title`,
+            req,
+            reply,
+          );
+          const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
+
+          const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/mergedocuments/${documentId}/pdf${getQuery(req.query)}`;
+          const documentIdList = JSON.stringify([getNewDocumentDocumentId(documentId)]);
+
+          return send(reply, url, documentIdList, metadata.title, req.navIdent);
+        },
       );
   },
   { fastify: '5', name: 'document-routes', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },

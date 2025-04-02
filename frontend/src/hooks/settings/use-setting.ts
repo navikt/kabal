@@ -19,7 +19,9 @@ export const useKvalitetsvurderingEnabled = () => useBooleanSetting(useOppgavePa
 
 // Oppgavebehandling documents
 export const useDocumentsPdfViewed = () => {
-  const { value = [], ...rest } = useJsonSetting<IShownDocument[]>(useOppgavePath('tabs/documents/pdf/viewed'));
+  const { value = [], ...rest } = useJsonSetting<{ documents: IShownDocument[]; type: 'single' | 'merged' }>(
+    useOppgavePath('tabs/documents/pdf/viewed'),
+  );
 
   const values = Array.isArray(value) ? value : [value];
 

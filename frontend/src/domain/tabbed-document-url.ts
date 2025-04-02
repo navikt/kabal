@@ -17,3 +17,8 @@ export const getAttachmentsOverviewTabUrl = (oppgaveId: string, documentId: stri
   `/vedleggsoversikt/${oppgaveId}/${documentId}`;
 
 export const getAttachmentsOverviewTabId = (documentId: string) => `attachments-overview-${documentId}`;
+
+export const getMergedDuaDocumentTabUrl = (behandlingId: string, documentId: string) =>
+  `/kombinert-dokument-under-arbeid/${behandlingId}/${documentId}`;
+
+export const getMergedDuaDocumentTabId = (documentId: string) => `merged-dua-document-${documentId}`;

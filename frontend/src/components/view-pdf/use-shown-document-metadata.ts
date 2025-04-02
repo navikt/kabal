@@ -3,6 +3,7 @@ import {
   getAttachmentsOverviewInlineUrl,
   getJournalfoertDocumentInlineUrl,
   getMergedDocumentInlineUrl,
+  getMergedDuaDocumentInlineUrl,
   getNewDocumentInlineUrl,
 } from '@app/domain/inline-document-url';
 import {
@@ -12,6 +13,8 @@ import {
   getJournalfoertDocumentTabUrl,
   getMergedDocumentTabId,
   getMergedDocumentTabUrl,
+  getMergedDuaDocumentTabId,
+  getMergedDuaDocumentTabUrl,
   getNewDocumentTabId,
   getNewDocumentTabUrl,
 } from '@app/domain/tabbed-document-url';
@@ -56,6 +59,14 @@ export const useShownDocumentMetadata = (
         tabUrl: getAttachmentsOverviewTabUrl(oppgaveId, onlyDocument.documentId),
         inlineUrl: getAttachmentsOverviewInlineUrl(oppgaveId, onlyDocument.documentId),
         tabId: getAttachmentsOverviewTabId(onlyDocument.documentId),
+      };
+    }
+
+    if (onlyDocument.type === DocumentTypeEnum.SMART) {
+      return {
+        tabUrl: getMergedDuaDocumentTabUrl(oppgaveId, onlyDocument.documentId),
+        inlineUrl: getMergedDuaDocumentInlineUrl(oppgaveId, onlyDocument.documentId),
+        tabId: getMergedDuaDocumentTabId(onlyDocument.documentId),
       };
     }
 
