@@ -56,7 +56,7 @@ export const ViewPDF = () => {
     return (
       <Container minWidth={pdfWidth}>
         <Alert variant="error" size="small">
-          Kunne ikke vise dokument(er)
+          Kunne ikke vise dokumenter
         </Alert>
       </Container>
     );

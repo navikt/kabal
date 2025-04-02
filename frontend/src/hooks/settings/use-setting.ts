@@ -30,13 +30,20 @@ export type ViewDocument = {
 
 export const useDocumentsPdfViewed = () => {
   const { value = { documents: [], mode: ViewDocumentMode.SINGLE }, ...rest } = useJsonSetting<ViewDocument>(
-    useOppgavePath('documents/pdf/viewed'),
+    useOppgavePath('tabs/documents/pdf/viewed'),
   );
 
-  // const values = Array.isArray(value.documents) ? value : [value];
   const setValue = (documents: IShownDocument[], mode = ViewDocumentMode.SINGLE) => {
     rest.setValue({ documents, mode });
   };
+
+  if (Array.isArray(value)) {
+    return { value: { documents: value, mode: ViewDocumentMode.SINGLE }, ...rest, setValue };
+  }
+
+  if (typeof value === 'string') {
+    return { value: { documents: [value], mode: ViewDocumentMode.SINGLE }, ...rest, setValue };
+  }
 
   return { value, ...rest, setValue };
 };

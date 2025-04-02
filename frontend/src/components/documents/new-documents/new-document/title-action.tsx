@@ -1,4 +1,4 @@
-import { ViewCombinedDuaButton } from '@app/components/documents/new-documents/new-document/view-combined-dua-button';
+import { ViewMergedDuaButton } from '@app/components/documents/new-documents/new-document/view-combined-dua-button';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
@@ -41,7 +41,7 @@ export const TitleAction = ({ setEditMode, editMode, className, document }: Prop
         title="Endre dokumentnavn"
       />
       {editMode ? null : <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />}
-      {editMode ? null : <ViewCombinedDuaButton document={document} oppgaveId={oppgaveId} />}
+      {editMode ? null : <ViewMergedDuaButton document={document} oppgaveId={oppgaveId} />}
     </HStack>
   );
 };

@@ -12,7 +12,7 @@ interface Props {
   oppgaveId: string;
 }
 
-export const ViewCombinedDuaButton = ({ document, oppgaveId, disabled = false }: Props) => {
+export const ViewMergedDuaButton = ({ document, oppgaveId, disabled = false }: Props) => {
   const { setValue } = useDocumentsPdfViewed();
 
   const tabId = getMergedDuaDocumentTabId(document.id);

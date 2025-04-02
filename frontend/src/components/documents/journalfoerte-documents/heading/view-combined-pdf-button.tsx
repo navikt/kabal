@@ -3,7 +3,7 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { getMergedDocumentTabId, getMergedDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
+import { ViewDocumentMode, useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useHandleTab } from '@app/hooks/use-handle-tab';
 import { MOD_KEY } from '@app/keys';
 import {
@@ -71,7 +71,7 @@ export const ViewCombinedPDF = () => {
 
     if (!shouldOpenInNewTab) {
       if (documents !== undefined) {
-        setValue(documents);
+        setValue(documents, ViewDocumentMode.MERGED);
       }
 
       return;
