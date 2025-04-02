@@ -1,16 +1,15 @@
-import { TabContext } from '@app/components/documents/tab-context';
-import { toast } from '@app/components/toast/store';
 import { Header, StyledDocumentTitle } from '@app/components/view-pdf/header';
 import { ReloadButton } from '@app/components/view-pdf/reload-button';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
 import { useShownDocumentMetadata } from '@app/components/view-pdf/use-shown-document-metadata';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
+import { useHandleTab } from '@app/hooks/use-handle-tab';
 import { useShownDocuments } from '@app/hooks/use-shown-documents';
 import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, type ButtonProps, Loader, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NoFlickerReloadPdf, useNoFlickerReloadPdf } from './no-flicker-reload';
 import { useMergedDocument } from './use-merged-document';
 
@@ -19,17 +18,18 @@ const ZOOM_STEP = 150;
 const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
 
 export const ViewPDF = () => {
-  const { getTabRef, setTabRef } = useContext(TabContext);
   const { value: pdfWidth = MIN_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
   const { remove: close } = useDocumentsPdfViewed();
-  const { showDocumentList, title } = useShownDocuments();
+  const title = useShownDocuments();
+  const { value } = useDocumentsPdfViewed();
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const oppgaveId = useOppgaveId();
-  const { mergedDocument, mergedDocumentIsError, mergedDocumentIsLoading } = useMergedDocument(showDocumentList);
-  const { inlineUrl, tabUrl, tabId } = useShownDocumentMetadata(oppgaveId, mergedDocument, showDocumentList);
+  const { mergedDocument, mergedDocumentIsError, mergedDocumentIsLoading } = useMergedDocument(value.documents);
+  const { inlineUrl, tabUrl, tabId } = useShownDocumentMetadata(oppgaveId, mergedDocument, value);
   const { onLoaded, onReload, setVersions, versions } = useNoFlickerReloadPdf(inlineUrl, setIsLoading);
+  const handleTab = useHandleTab(tabUrl, tabId);
 
   useMarkVisited(tabUrl);
 
@@ -38,40 +38,17 @@ export const ViewPDF = () => {
     onReload();
   }, [onReload, setVersions]);
 
-  const onNewTabClick: React.MouseEventHandler<HTMLButtonElement> = useCallback(
-    (e) => {
-      if (e.button !== 1 && e.button !== 0) {
-        return;
-      }
+  const onNewTabClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    if (e.button !== 1 && e.button !== 0) {
+      return;
+    }
 
-      e.preventDefault();
+    e.preventDefault();
 
-      if (tabId === undefined) {
-        return;
-      }
+    handleTab();
+  };
 
-      const tabRef = getTabRef(tabId);
-
-      // There is a reference to the tab and it is open.
-      if (tabRef !== undefined && !tabRef.closed) {
-        tabRef.focus();
-
-        return;
-      }
-
-      const ref = window.open(tabUrl, tabId);
-
-      if (ref === null) {
-        toast.error('Kunne ikke åpne dokumentet i ny fane');
-
-        return;
-      }
-      setTabRef(tabId, ref);
-    },
-    [getTabRef, setTabRef, tabId, tabUrl],
-  );
-
-  if (showDocumentList.length === 0 || oppgaveId === skipToken) {
+  if (value.documents.length === 0 || oppgaveId === skipToken) {
     return null;
   }
 
@@ -99,7 +76,7 @@ export const ViewPDF = () => {
         <Button onClick={close} title="Lukk forhåndsvisning" icon={<XMarkIcon aria-hidden />} {...BUTTON_PROPS} />
         <Button onClick={decrease} title="Smalere PDF" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
         <Button onClick={increase} title="Bredere PDF" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />
-        <ReloadButton showDocumentList={showDocumentList} isLoading={isLoading} onClick={onReload} />
+        <ReloadButton showDocumentList={value.documents} isLoading={isLoading} onClick={onReload} />
         <StyledDocumentTitle>{title ?? mergedDocument?.title ?? 'Ukjent dokument'}</StyledDocumentTitle>
         <Button
           as="a"

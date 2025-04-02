@@ -1,4 +1,3 @@
-import type { IShownDocument } from '@app/components/view-pdf/types';
 import {
   getAttachmentsOverviewInlineUrl,
   getJournalfoertDocumentInlineUrl,
@@ -18,6 +17,7 @@ import {
   getNewDocumentTabId,
   getNewDocumentTabUrl,
 } from '@app/domain/tabbed-document-url';
+import { type ViewDocument, ViewDocumentMode } from '@app/hooks/settings/use-setting';
 import { DocumentTypeEnum, type IMergedDocumentsResponse } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
@@ -29,7 +29,7 @@ type DocumentData =
 export const useShownDocumentMetadata = (
   oppgaveId: string | typeof skipToken,
   mergedDocument: IMergedDocumentsResponse | undefined,
-  showDocumentList: IShownDocument[],
+  viewDocument: ViewDocument,
 ) =>
   useMemo<DocumentData>(() => {
     if (mergedDocument !== undefined) {
@@ -40,7 +40,7 @@ export const useShownDocumentMetadata = (
       };
     }
 
-    const [onlyDocument] = showDocumentList;
+    const [onlyDocument] = viewDocument.documents;
 
     if (onlyDocument === undefined || oppgaveId === skipToken) {
       return { tabUrl: undefined, inlineUrl: undefined, tabId: undefined };
@@ -62,7 +62,7 @@ export const useShownDocumentMetadata = (
       };
     }
 
-    if (onlyDocument.type === DocumentTypeEnum.SMART) {
+    if (viewDocument.mode === ViewDocumentMode.MERGED) {
       return {
         tabUrl: getMergedDuaDocumentTabUrl(oppgaveId, onlyDocument.documentId),
         inlineUrl: getMergedDuaDocumentInlineUrl(oppgaveId, onlyDocument.documentId),
@@ -75,4 +75,4 @@ export const useShownDocumentMetadata = (
       inlineUrl: getNewDocumentInlineUrl(oppgaveId, onlyDocument.documentId),
       tabId: getNewDocumentTabId(onlyDocument.documentId),
     };
-  }, [mergedDocument, oppgaveId, showDocumentList]);
+  }, [mergedDocument, oppgaveId, viewDocument]);

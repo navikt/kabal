@@ -1,18 +1,17 @@
 import { StyledDocumentTitle } from '@app/components/documents/new-documents/new-document/title-style';
 import { DocumentLink, EllipsisTitle } from '@app/components/documents/styled-components/document-link';
-import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
-import { toast } from '@app/components/toast/store';
 import {
   getAttachmentsOverviewTabId,
   getJournalfoertDocumentTabId,
   getNewDocumentTabId,
 } from '@app/domain/tabbed-document-url';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
+import { useHandleTab } from '@app/hooks/use-handle-tab';
 import { MouseButtons } from '@app/keys';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 interface BaseProps {
   title: string;
@@ -37,7 +36,6 @@ type Props = JournalfoertProps | NotJournalfoertProps;
 
 export const SharedDocumentTitle = ({ title, url, documentId, icon, disabled = false, children, ...rest }: Props) => {
   const { value, setValue } = useDocumentsPdfViewed();
-  const { getTabRef, setTabRef } = useContext(TabContext);
 
   const tabId = useMemo<string>(() => {
     if (rest.type === DocumentTypeEnum.JOURNALFOERT) {
@@ -60,10 +58,11 @@ export const SharedDocumentTitle = ({ title, url, documentId, icon, disabled = f
   ]);
 
   const isTabOpen = useIsTabOpen(tabId);
+  const handleTab = useHandleTab(url, tabId);
 
   const isInlineOpen = useMemo(
     () =>
-      value.some((v) => {
+      value.documents.some((v) => {
         if (rest.type === DocumentTypeEnum.JOURNALFOERT) {
           return (
             v.type === DocumentTypeEnum.JOURNALFOERT &&
@@ -117,33 +116,9 @@ export const SharedDocumentTitle = ({ title, url, documentId, icon, disabled = f
         return;
       }
 
-      const tabRef = getTabRef(tabId);
-
-      // There is a reference to the tab and it is open.
-      if (tabRef !== undefined && !tabRef.closed) {
-        tabRef.focus();
-
-        return;
-      }
-
-      if (isTabOpen) {
-        toast.warning('Dokumentet er allerede åpent i en annen fane');
-
-        return;
-      }
-
-      // There is no reference to the tab or it is closed.
-      const newTabRef = window.open(url, tabId);
-
-      if (newTabRef === null) {
-        toast.error('Kunne ikke åpne dokument i ny fane');
-
-        return;
-      }
-
-      setTabRef(tabId, newTabRef);
+      handleTab();
     },
-    [disabled, getTabRef, isTabOpen, url, setTabRef, tabId, setViewedDocument],
+    [disabled, setViewedDocument, handleTab],
   );
 
   return (

@@ -4,12 +4,12 @@ import { SetFilename } from '@app/components/documents/set-filename';
 import { DocumentLink, EllipsisTitle } from '@app/components/documents/styled-components/document-link';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
-import { toast } from '@app/components/toast/store';
 import type { IShownDocument } from '@app/components/view-pdf/types';
 import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
+import { useHandleTab } from '@app/hooks/use-handle-tab';
 import { MouseButtons } from '@app/keys';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
@@ -28,7 +28,7 @@ export const DocumentTitle = (props: Props) => {
   // These hooks would cause rerenders if they were used directly in DocumentTitleInternal, even though used values does not change.
   const { value, setValue } = useDocumentsPdfViewed();
 
-  return <DocumentTitleInternal {...props} shownDocuments={value} setShownDocuments={setValue} />;
+  return <DocumentTitleInternal {...props} shownDocuments={value.documents} setShownDocuments={setValue} />;
 };
 
 interface DocumentTitleInternalProps extends Props {
@@ -51,7 +51,8 @@ const DocumentTitleInternal = memo(
     const { setDraggingEnabled } = useContext(DragAndDropContext);
     const oppgaveId = useOppgaveId();
     const [setTitle] = useSetTitleMutation();
-
+    const href = getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId);
+    const handleTab = useHandleTab(href, documentId);
     const [editMode, _setEditMode] = useState(false);
 
     const isInlineOpen = useMemo(
@@ -88,8 +89,6 @@ const DocumentTitleInternal = memo(
       );
     }
 
-    const href = getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId);
-
     const onClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
       if (e.button === MouseButtons.RIGHT) {
         return;
@@ -115,31 +114,7 @@ const DocumentTitleInternal = memo(
         return;
       }
 
-      const tabRef = getTabRef(documentId);
-
-      // There is a reference to the tab and it is open.
-      if (tabRef !== undefined && !tabRef.closed) {
-        tabRef.focus();
-
-        return;
-      }
-
-      if (isTabOpen) {
-        toast.warning('Dokumentet er allerede åpent i en annen fane');
-
-        return;
-      }
-
-      // There is no reference to the tab or it is closed.
-      const newTabRef = window.open(href, documentId);
-
-      if (newTabRef === null) {
-        toast.error('Kunne ikke åpne dokument i ny fane');
-
-        return;
-      }
-
-      setTabRef(documentId, newTabRef);
+      handleTab();
     };
 
     return (

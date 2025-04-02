@@ -1,11 +1,10 @@
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
-import { toast } from '@app/components/toast/store';
 import { getMergedDocumentTabId, getMergedDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
+import { useHandleTab } from '@app/hooks/use-handle-tab';
 import { MOD_KEY } from '@app/keys';
 import {
   useGetArkiverteDokumenterQuery,
@@ -18,7 +17,6 @@ import { forwardRef, useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 
 export const ViewCombinedPDF = () => {
-  const { getTabRef, setTabRef } = useContext(TabContext);
   const { value, setValue } = useDocumentsPdfViewed();
   const { selectedDocuments, selectedCount } = useContext(SelectContext);
   const { data: archivedList, isLoading: archivedIsLoading } = useGetArkiverteDokumenterQuery(useOppgaveId());
@@ -36,11 +34,11 @@ export const ViewCombinedPDF = () => {
       return false;
     }
 
-    if (value.length !== documents.length) {
+    if (value.documents.length !== documents.length) {
       return false;
     }
 
-    return value.every((v, i) => {
+    return value.documents.every((v, i) => {
       const d = documents[i];
 
       return d !== undefined && d.type === v.type && v.dokumentInfoId === d.dokumentInfoId;
@@ -63,6 +61,7 @@ export const ViewCombinedPDF = () => {
     };
   }, [mergedDocumentRef]);
 
+  const handleTab = useHandleTab(tabUrl, documentId);
   const isTabOpen = useIsTabOpen(documentId);
 
   const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -78,36 +77,7 @@ export const ViewCombinedPDF = () => {
       return;
     }
 
-    if (documentId === undefined) {
-      toast.error('Kunne ikke generere kombinert dokument');
-
-      return;
-    }
-
-    const tabRef = getTabRef(documentId);
-
-    // There is a reference to the tab and it is open.
-    if (tabRef !== undefined && !tabRef.closed) {
-      tabRef.focus();
-
-      return;
-    }
-
-    if (isTabOpen) {
-      toast.warning('Dokumentet er allerede åpent i en annen fane');
-
-      return;
-    }
-
-    const newTabRef = window.open(tabUrl, documentId);
-
-    if (newTabRef === null) {
-      toast.error('Kunne ikke åpne ny fane');
-
-      return;
-    }
-
-    setTabRef(documentId, newTabRef);
+    handleTab();
   };
 
   return (

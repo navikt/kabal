@@ -10,8 +10,8 @@ export const useRemoveDocument = () => {
       removeActiveSmartEditor();
     }
 
-    if (viewedPdf.length === 1) {
-      const [first] = viewedPdf;
+    if (viewedPdf.documents.length === 1) {
+      const [first] = viewedPdf.documents;
 
       if (first !== undefined) {
         const archiveMatch =

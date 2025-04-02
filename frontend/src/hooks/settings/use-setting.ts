@@ -18,14 +18,27 @@ export const useSmartEditorEnabled = () => useBooleanSetting(useOppgavePath('tab
 export const useKvalitetsvurderingEnabled = () => useBooleanSetting(useOppgavePath('tabs/kvalitetsvurdering/enabled'));
 
 // Oppgavebehandling documents
+export enum ViewDocumentMode {
+  SINGLE = 'SINGLE',
+  MERGED = 'MERGED',
+}
+
+export type ViewDocument = {
+  documents: IShownDocument[];
+  mode: ViewDocumentMode;
+};
+
 export const useDocumentsPdfViewed = () => {
-  const { value = [], ...rest } = useJsonSetting<{ documents: IShownDocument[]; type: 'single' | 'merged' }>(
-    useOppgavePath('tabs/documents/pdf/viewed'),
+  const { value = { documents: [], mode: ViewDocumentMode.SINGLE }, ...rest } = useJsonSetting<ViewDocument>(
+    useOppgavePath('documents/pdf/viewed'),
   );
 
-  const values = Array.isArray(value) ? value : [value];
+  // const values = Array.isArray(value.documents) ? value : [value];
+  const setValue = (documents: IShownDocument[], mode = ViewDocumentMode.SINGLE) => {
+    rest.setValue({ documents, mode });
+  };
 
-  return { value: values, ...rest };
+  return { value, ...rest, setValue };
 };
 export const useDocumentsPdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/pdf/width'));
 export const useDocumentsArchivePdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/modal/pdf/width'));
