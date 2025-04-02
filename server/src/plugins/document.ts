@@ -111,7 +111,7 @@ export const documentPlugin = fastifyPlugin(
           );
           const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
 
-          const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/pdf${getQuery(req.query)}`;
+          const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/mergedocuments/${documentId}/pdf${getQuery(req.query)}`;
           const documentIdList = JSON.stringify([getNewDocumentDocumentId(documentId)]);
 
           return send(reply, url, documentIdList, metadata.title, req.navIdent);
