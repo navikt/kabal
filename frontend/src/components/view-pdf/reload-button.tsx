@@ -1,10 +1,10 @@
+import type { IShownDocumentList } from '@app/components/view-pdf/types';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import type { IShownDocument } from './types';
 
 interface Props {
-  showDocumentList: IShownDocument[];
+  showDocumentList: IShownDocumentList;
   isLoading: boolean;
   onClick: () => void;
 }

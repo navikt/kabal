@@ -2,11 +2,9 @@ import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
 import { SetFilename } from '@app/components/documents/set-filename';
 import { DocumentLink, EllipsisTitle } from '@app/components/documents/styled-components/document-link';
-import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
-import type { IShownDocument } from '@app/components/view-pdf/types';
+import type { IShownDocumentList } from '@app/components/view-pdf/types';
 import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@app/domain/tabbed-document-url';
-import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useHandleTab } from '@app/hooks/use-handle-tab';
@@ -32,8 +30,8 @@ export const DocumentTitle = (props: Props) => {
 };
 
 interface DocumentTitleInternalProps extends Props {
-  shownDocuments: IShownDocument[];
-  setShownDocuments: (value: IShownDocument[]) => void;
+  shownDocuments: IShownDocumentList;
+  setShownDocuments: (value: IShownDocumentList) => void;
 }
 
 const DocumentTitleInternal = memo(
@@ -45,7 +43,6 @@ const DocumentTitleInternal = memo(
     shownDocuments,
     setShownDocuments,
   }: DocumentTitleInternalProps) => {
-    const { getTabRef, setTabRef } = useContext(TabContext);
     const documentId = getJournalfoertDocumentTabId(journalpostId, dokumentInfoId);
     const isTabOpen = useIsTabOpen(documentId);
     const { setDraggingEnabled } = useContext(DragAndDropContext);
@@ -145,7 +142,35 @@ const DocumentTitleInternal = memo(
     prevProps.harTilgangTilArkivvariant === nextProps.harTilgangTilArkivvariant &&
     prevProps.dokumentInfoId === nextProps.dokumentInfoId &&
     prevProps.journalpostId === nextProps.journalpostId &&
-    areArraysEqual(prevProps.shownDocuments, nextProps.shownDocuments),
+    areShowDocumentsEqual(prevProps.shownDocuments, nextProps.shownDocuments),
 );
+
+const areShowDocumentsEqual = (prev: IShownDocumentList, next: IShownDocumentList) => {
+  if (prev.length !== next.length) {
+    return false;
+  }
+
+  return prev.every((p, i) => {
+    const n = next[i];
+
+    if (n === undefined) {
+      return false;
+    }
+
+    if (p.type === DocumentTypeEnum.JOURNALFOERT) {
+      if (n.type !== DocumentTypeEnum.JOURNALFOERT) {
+        return false;
+      }
+
+      return p.journalpostId === n.journalpostId && p.dokumentInfoId === n.dokumentInfoId;
+    }
+
+    if (p.type !== n.type) {
+      return false;
+    }
+
+    return p.documentId === n.documentId;
+  });
+};
 
 DocumentTitleInternal.displayName = 'DocumentTitleInternal';

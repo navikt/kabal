@@ -1,4 +1,4 @@
-import type { IShownDocument } from '@app/components/view-pdf/types';
+import type { IShownDocumentList } from '@app/components/view-pdf/types';
 import {
   type Setting,
   useBooleanSetting,
@@ -24,7 +24,7 @@ export enum ViewDocumentMode {
 }
 
 export type ViewDocument = {
-  documents: IShownDocument[];
+  documents: IShownDocumentList;
   mode: ViewDocumentMode;
 };
 
@@ -33,7 +33,7 @@ export const useDocumentsPdfViewed = () => {
     useOppgavePath('tabs/documents/pdf/viewed'),
   );
 
-  const setValue = (documents: IShownDocument[], mode = ViewDocumentMode.SINGLE) => {
+  const setValue = (documents: IShownDocumentList, mode = ViewDocumentMode.SINGLE) => {
     rest.setValue({ documents, mode });
   };
 

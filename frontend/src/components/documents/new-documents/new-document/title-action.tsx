@@ -1,4 +1,4 @@
-import { ViewMergedDuaButton } from '@app/components/documents/new-documents/new-document/view-combined-dua-button';
+import { ViewMergedDuaButton } from '@app/components/documents/new-documents/new-document/view-merged-dua-button';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';

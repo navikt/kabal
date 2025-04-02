@@ -2,9 +2,9 @@ import { useMergedDocumentsReferenceQuery } from '@app/redux-api/oppgaver/querie
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
-import type { IShownArchivedDocument, IShownDocument } from './types';
+import type { IShownArchivedDocument, IShownDocumentList, IShownNewDocument } from './types';
 
-export const useMergedDocument = (showDocumentList: IShownDocument[]) => {
+export const useMergedDocument = (showDocumentList: IShownDocumentList) => {
   const archivedDocuments = useMemo(() => showDocumentList.filter(isArchivedDocument), [showDocumentList]);
 
   const param = archivedDocuments.length > 1 ? archivedDocuments : skipToken;
@@ -25,5 +25,6 @@ export const useMergedDocument = (showDocumentList: IShownDocument[]) => {
   };
 };
 
-const isArchivedDocument = (showDocument: IShownDocument): showDocument is IShownArchivedDocument =>
-  showDocument.type === DocumentTypeEnum.JOURNALFOERT;
+const isArchivedDocument = (
+  showDocument: IShownNewDocument | IShownArchivedDocument,
+): showDocument is IShownArchivedDocument => showDocument.type === DocumentTypeEnum.JOURNALFOERT;
