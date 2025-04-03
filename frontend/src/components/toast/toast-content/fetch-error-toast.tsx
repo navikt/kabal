@@ -23,7 +23,7 @@ interface DetailProps {
   label: string;
 }
 
-const Details = ({ label, children }: DetailProps) => {
+export const Details = ({ label, children }: DetailProps) => {
   if (typeof children === 'undefined') {
     return null;
   }
