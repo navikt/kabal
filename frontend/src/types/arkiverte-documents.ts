@@ -193,7 +193,7 @@ export interface DokumentInfo {
   /** Beskriver innholdet i journalposten samlet, f.eks. "Ettersendelse til søknad om foreldrepenger" */
   tittel: string | null;
   /** Om bruker har tilgang til dokumentet. */
-  harTilgangTilArkivvariant: boolean;
+  hasAccess: boolean;
   /**
    * Et dokumentInfo-objekt kan være gjenbrukt på flere journalposter. OriginalJournalpostId peker på den journalposten som dokumentene var knyttet til på arkiveringstidspunktet.
    */

@@ -359,7 +359,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                 journalfoertDokumentReference: {
                   journalpostId: doc.journalpostId,
                   dokumentInfoId: doc.dokumentInfoId,
-                  harTilgangTilArkivvariant: doc.harTilgangTilArkivvariant,
+                  hasAccess: doc.hasAccess,
                   datoOpprettet: doc.datoOpprettet,
                   sortKey: doc.sortKey,
                 },

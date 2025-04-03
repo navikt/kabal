@@ -8,7 +8,7 @@ interface ConfirmProps {
 }
 
 interface Props extends ConfirmProps {
-  harTilgangTilArkivvariant: boolean;
+  hasAccess: boolean;
   tittel: string;
 }
 
@@ -23,8 +23,8 @@ export const ConfirmEditButton = ({ setEditMode }: ConfirmProps) => (
   />
 );
 
-export const DocumentTitleActions = ({ setEditMode, harTilgangTilArkivvariant, tittel }: Props) => {
-  if (!harTilgangTilArkivvariant) {
+export const DocumentTitleActions = ({ setEditMode, hasAccess, tittel }: Props) => {
+  if (!hasAccess) {
     return null;
   }
 

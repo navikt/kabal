@@ -5,10 +5,10 @@ import { SelectContext } from '../../select-context/select-context';
 interface Props {
   journalpostId: string;
   dokumentInfoId: string;
-  harTilgangTilArkivvariant: boolean;
+  hasAccess: boolean;
 }
 
-export const SelectRow = ({ harTilgangTilArkivvariant, dokumentInfoId, journalpostId }: Props) => {
+export const SelectRow = ({ hasAccess, dokumentInfoId, journalpostId }: Props) => {
   const { isSelected, selectOne, unselectOne, selectRangeTo } = useContext(SelectContext);
   const ids = useMemo(() => ({ journalpostId, dokumentInfoId }), [journalpostId, dokumentInfoId]);
 
@@ -37,7 +37,7 @@ export const SelectRow = ({ harTilgangTilArkivvariant, dokumentInfoId, journalpo
       checked={selected}
       onChange={onChange}
       onClick={onClick}
-      disabled={!harTilgangTilArkivvariant}
+      disabled={!hasAccess}
     >
       Velg dokument
     </Checkbox>

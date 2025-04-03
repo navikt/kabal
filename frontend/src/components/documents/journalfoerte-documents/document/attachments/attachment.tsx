@@ -40,7 +40,7 @@ const EMPTY_ARRAY: IArkivertDocument[] = [];
 
 export const Attachment = memo(
   ({ vedlegg, journalpostId, isSelected, showVedlegg, toggleShowVedlegg, hasVedlegg }: Props) => {
-    const { dokumentInfoId, harTilgangTilArkivvariant, tittel } = vedlegg;
+    const { dokumentInfoId, hasAccess, tittel } = vedlegg;
     const oppgaveId = useOppgaveId();
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
     const { getSelectedDocuments } = useContext(SelectContext);
@@ -84,7 +84,7 @@ export const Attachment = memo(
       [documents, dokumentInfoId, getSelectedDocuments, isSelected, journalpostId, setDraggedJournalfoertDocuments],
     );
 
-    const disabled = !(harTilgangTilArkivvariant && (isSaksbehandler || isRol)) || isFeilregistrert;
+    const disabled = !(hasAccess && (isSaksbehandler || isRol)) || isFeilregistrert;
     const draggingIsEnabled = draggingEnabled && !disabled;
 
     const Icon = useMemo(() => {
@@ -110,11 +110,7 @@ export const Attachment = memo(
         }}
         draggable={draggingIsEnabled}
       >
-        <SelectRow
-          journalpostId={journalpostId}
-          dokumentInfoId={dokumentInfoId}
-          harTilgangTilArkivvariant={harTilgangTilArkivvariant}
-        />
+        <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} hasAccess={hasAccess} />
 
         <Button
           variant="tertiary"
@@ -129,7 +125,7 @@ export const Attachment = memo(
           journalpostId={journalpostId}
           dokumentInfoId={dokumentInfoId}
           tittel={tittel ?? ''}
-          harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+          hasAccess={hasAccess}
         />
 
         <IncludeDocument

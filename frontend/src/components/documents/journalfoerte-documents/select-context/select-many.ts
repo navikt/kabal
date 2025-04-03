@@ -45,7 +45,7 @@ export const useSelectMany: SelectHook<SelectMany> = (setSelectedDocuments, setL
           for (const doc of documentList) {
             if (doc.journalpostId === journalpostId) {
               if (doc.dokumentInfoId === dokumentInfoId) {
-                if (doc.harTilgangTilArkivvariant) {
+                if (doc.hasAccess) {
                   map.set(getId(doc), { journalpostId, dokumentInfoId });
                 }
 
@@ -54,7 +54,7 @@ export const useSelectMany: SelectHook<SelectMany> = (setSelectedDocuments, setL
 
               for (const vedlegg of doc.vedlegg) {
                 if (vedlegg.dokumentInfoId === dokumentInfoId) {
-                  if (vedlegg.harTilgangTilArkivvariant) {
+                  if (vedlegg.hasAccess) {
                     const ref = { journalpostId, dokumentInfoId: vedlegg.dokumentInfoId };
                     map.set(getId(ref), ref);
                   }
