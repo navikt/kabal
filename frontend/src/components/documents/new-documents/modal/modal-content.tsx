@@ -7,10 +7,10 @@ import { SetDocumentType } from '@app/components/documents/new-documents/new-doc
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@app/components/documents/set-filename';
+import { usePdfData } from '@app/components/pdf/pdf';
 import { isSendError } from '@app/components/receivers/is-send-error';
 import { Receivers } from '@app/components/receivers/receivers';
 import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
-import { useNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
@@ -31,7 +31,7 @@ import {
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { DeleteDocumentButton } from './delete-button';
 import { SetParentDocument } from './set-parent';
@@ -58,12 +58,11 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
   const { pdfOrSmartDocuments, journalfoerteDocuments } = useAttachments(document.id);
   const [setTitle] = useSetTitleMutation();
   const oppgaveId = useOppgaveId();
-  const [pdfLoading, setPdfLoading] = useState(false);
   const pdfUrl =
     oppgaveId === skipToken
       ? undefined
       : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
-  const noFlickerReload = useNoFlickerReloadPdf(pdfUrl, setPdfLoading);
+  const { refresh, ...pdfData } = usePdfData(pdfUrl);
 
   if (oppgaveId === skipToken) {
     return null;
@@ -137,16 +136,11 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
             />
           ) : null}
 
-          <Errors updatePdf={noFlickerReload.onReload} />
+          <Errors updatePdf={refresh} />
         </VStack>
 
         {isMainDocument ? (
-          <SimplePdfPreview
-            width={pdfWidth}
-            setWidth={setPdfWidth}
-            isLoading={pdfLoading}
-            noFlickerReload={noFlickerReload}
-          />
+          <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />
         ) : null}
       </ModalBody>
 

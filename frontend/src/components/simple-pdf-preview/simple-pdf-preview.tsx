@@ -1,8 +1,7 @@
+import { Pdf, type UsePdfData } from '@app/components/pdf/pdf';
 import { Header } from '@app/components/view-pdf/header';
-import { NoFlickerReloadPdf, type UseNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';
 import { ArrowCirclepathIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, type ButtonProps, VStack } from '@navikt/ds-react';
-import { useEffect } from 'react';
 
 const DEFAULT_WIDTH = 1000;
 const MIN_PDF_WIDTH = 400;
@@ -13,23 +12,14 @@ const BUTTON_PROPS: ButtonProps = {
   variant: 'tertiary-neutral',
 };
 
-interface Props {
-  isLoading: boolean;
-  noFlickerReload: UseNoFlickerReloadPdf;
+interface Props extends UsePdfData {
   width: number | undefined;
   setWidth: (width: number) => void;
 }
 
-export const SimplePdfPreview = ({ isLoading, noFlickerReload, width = DEFAULT_WIDTH, setWidth }: Props) => {
+export const SimplePdfPreview = ({ refresh, loading, data, error, width = DEFAULT_WIDTH, setWidth }: Props) => {
   const decrease = () => setWidth(Math.max(width - ZOOM_STEP, MIN_PDF_WIDTH));
   const increase = () => setWidth(Math.min(width + ZOOM_STEP, MAX_PDF_WIDTH));
-
-  const { onLoaded, versions, onReload, setVersions } = noFlickerReload;
-
-  useEffect(() => {
-    setVersions([]);
-    onReload();
-  }, [onReload, setVersions]);
 
   return (
     <div className="grow">
@@ -39,15 +29,15 @@ export const SimplePdfPreview = ({ isLoading, noFlickerReload, width = DEFAULT_W
             <Button onClick={decrease} title="Forstørr" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
             <Button onClick={increase} title="Forminsk" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />
             <Button
-              onClick={onReload}
+              onClick={refresh}
               title="Oppdater PDF"
               icon={<ArrowCirclepathIcon aria-hidden />}
-              loading={isLoading}
+              loading={loading}
               {...BUTTON_PROPS}
             />
           </Header>
 
-          <NoFlickerReloadPdf versions={versions} isLoading={isLoading} onVersionLoaded={onLoaded} />
+          <Pdf loading={loading} data={data} error={error} refresh={refresh} />
         </Box>
       </VStack>
     </div>

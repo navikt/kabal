@@ -1,5 +1,5 @@
+import { usePdfData } from '@app/components/pdf/pdf';
 import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
-import { useNoFlickerReloadPdf } from '@app/components/view-pdf/no-flicker-reload';
 import { useForlengetFristPdfWidth } from '@app/hooks/settings/use-setting';
 import {
   useGetOrCreateQuery,
@@ -14,7 +14,7 @@ import {
 } from '@app/redux-api/forlenget-behandlingstid';
 import { FilePdfIcon } from '@navikt/aksel-icons';
 import { Alert, Loader } from '@navikt/ds-react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 export const Pdf = ({ id }: { id: string }) => {
   const { data } = useGetOrCreateQuery(id);
@@ -23,7 +23,6 @@ export const Pdf = ({ id }: { id: string }) => {
 };
 
 const PdfBody = ({ id }: { id: string }) => {
-  const [pdfLoading, setPdfLoading] = useState(false);
   const { value: width, setValue: setWidth } = useForlengetFristPdfWidth();
   const { data, isLoading, isSuccess, isError } = useGetOrCreateQuery(id);
 
@@ -42,7 +41,7 @@ const PdfBody = ({ id }: { id: string }) => {
     [id, units, typeId, date, title, fullmektig, prevInfo, reason, customText],
   );
 
-  const noFlickerReload = useNoFlickerReloadPdf(pdfUrl, setPdfLoading);
+  const pdfData = usePdfData(pdfUrl);
 
   if (isLoading) {
     return (
@@ -75,7 +74,5 @@ const PdfBody = ({ id }: { id: string }) => {
     );
   }
 
-  return (
-    <SimplePdfPreview noFlickerReload={noFlickerReload} isLoading={pdfLoading} width={width} setWidth={setWidth} />
-  );
+  return <SimplePdfPreview {...pdfData} width={width} setWidth={setWidth} />;
 };
