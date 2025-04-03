@@ -47,7 +47,7 @@ export const Document = ({
 
   const cleanDragUI = useRef<() => void>(() => undefined);
 
-  const { dokumentInfoId, journalpostId, tittel, harTilgangTilArkivvariant, valgt } = document;
+  const { dokumentInfoId, journalpostId, tittel, hasAccess, valgt } = document;
 
   const Icon = useMemo(() => {
     if (hasVedlegg) {
@@ -79,8 +79,8 @@ export const Document = ({
     [document, getSelectedDocuments, isSelected, setDraggedJournalfoertDocuments],
   );
 
-  const disabled = !((isSaksbehandler || isRol) && harTilgangTilArkivvariant);
-  const draggingIsEnabled = draggingEnabled && harTilgangTilArkivvariant && (isRol || hasDocumentsAccess);
+  const disabled = !((isSaksbehandler || isRol) && hasAccess);
+  const draggingIsEnabled = draggingEnabled && hasAccess && (isRol || hasDocumentsAccess);
 
   return (
     <StyledJournalfoertDocument
@@ -98,11 +98,7 @@ export const Document = ({
       }}
       draggable={draggingIsEnabled}
     >
-      <SelectRow
-        journalpostId={journalpostId}
-        dokumentInfoId={dokumentInfoId}
-        harTilgangTilArkivvariant={harTilgangTilArkivvariant}
-      />
+      <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} hasAccess={hasAccess} />
 
       <Button
         variant="tertiary"
@@ -116,7 +112,7 @@ export const Document = ({
       <DocumentTitle
         journalpostId={journalpostId}
         dokumentInfoId={dokumentInfoId}
-        harTilgangTilArkivvariant={harTilgangTilArkivvariant}
+        hasAccess={hasAccess}
         tittel={tittel ?? ''}
       />
 

@@ -40,7 +40,7 @@ const SMART_DOCUMENT: ISmartDocument = {
 };
 
 const BASE_JD_REFERENCE: JournalfoertDokumentReference = {
-  harTilgangTilArkivvariant: true,
+  hasAccess: true,
   datoOpprettet: '2021-01-01',
   sortKey: '1',
   journalpostId: '1',
@@ -95,7 +95,7 @@ describe('canEditDocument', () => {
     const journalfoertDokumentReference = {
       ...BASE_JD_REFERENCE,
       type: DocumentTypeEnum.JOURNALFOERT,
-      harTilgangTilArkivvariant: false,
+      hasAccess: false,
     };
     const params = { ...BASE_PARAMS, document: { ...BASE_JD, journalfoertDokumentReference } };
 
@@ -140,14 +140,14 @@ describe('canEditDocument', () => {
     });
 
     it('should return false if flow state is sent, but user does not have tilgang to arkivvariant', () => {
-      const journalfoertDokumentReference = { ...BASE_JD_REFERENCE, harTilgangTilArkivvariant: false };
+      const journalfoertDokumentReference = { ...BASE_JD_REFERENCE, hasAccess: false };
       const document = { ...BASE_JD, journalfoertDokumentReference };
 
       expect(canEditDocument({ ...BASE_PARAMS, isRol: true, rolFlowState: FlowState.SENT, document })).toBe(false);
     });
 
     it('should return false if flow state is sent and user has tilgang to arkivvariant, but creator role is not KABAL_ROL', () => {
-      const journalfoertDokumentReference = { ...BASE_JD_REFERENCE, harTilgangTilArkivvariant: false };
+      const journalfoertDokumentReference = { ...BASE_JD_REFERENCE, hasAccess: false };
       const creator = { creatorRole: CreatorRole.KABAL_SAKSBEHANDLING, employee: EMPLOYEE };
       const document = { ...BASE_JD, journalfoertDokumentReference, creator };
 

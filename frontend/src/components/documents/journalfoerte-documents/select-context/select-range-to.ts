@@ -58,7 +58,7 @@ const getSelectedDocuments = (
         document,
         ...vedlegg
           .slice(0, lastVedleggCount)
-          .filter((v) => v.harTilgangTilArkivvariant)
+          .filter((v) => v.hasAccess)
           .map((v) => ({
             journalpostId,
             dokumentInfoId: v.dokumentInfoId,
@@ -70,7 +70,7 @@ const getSelectedDocuments = (
     return [
       ...vedlegg
         .slice(firstVedleggIndex, lastVedleggCount)
-        .filter((v) => v.harTilgangTilArkivvariant)
+        .filter((v) => v.hasAccess)
         .map((v) => ({
           journalpostId,
           dokumentInfoId: v.dokumentInfoId,

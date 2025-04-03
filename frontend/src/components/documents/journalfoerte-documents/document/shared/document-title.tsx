@@ -21,7 +21,7 @@ interface Props {
   journalpostId: string;
   dokumentInfoId: string;
   tittel: string;
-  harTilgangTilArkivvariant: boolean;
+  hasAccess: boolean;
 }
 
 export const DocumentTitle = (props: Props) => {
@@ -41,7 +41,7 @@ const DocumentTitleInternal = memo(
     journalpostId,
     dokumentInfoId,
     tittel,
-    harTilgangTilArkivvariant,
+    hasAccess,
     shownDocuments,
     setShownDocuments,
   }: DocumentTitleInternalProps) => {
@@ -97,7 +97,7 @@ const DocumentTitleInternal = memo(
 
       e.preventDefault();
 
-      if (!harTilgangTilArkivvariant) {
+      if (!hasAccess) {
         return;
       }
 
@@ -147,7 +147,7 @@ const DocumentTitleInternal = memo(
         <DocumentLink
           active={isInlineOpen || isTabOpen}
           aria-pressed={isInlineOpen || isTabOpen}
-          disabled={!harTilgangTilArkivvariant}
+          disabled={!hasAccess}
           onClick={onClick}
           onAuxClick={onClick}
           data-testid="document-open-button"
@@ -157,17 +157,13 @@ const DocumentTitleInternal = memo(
           <EllipsisTitle title={tittel}>{tittel}</EllipsisTitle>
         </DocumentLink>
 
-        <DocumentTitleActions
-          setEditMode={setEditMode}
-          tittel={tittel}
-          harTilgangTilArkivvariant={harTilgangTilArkivvariant}
-        />
+        <DocumentTitleActions setEditMode={setEditMode} tittel={tittel} hasAccess={hasAccess} />
       </StyledDocumentTitle>
     );
   },
   (prevProps, nextProps) =>
     prevProps.tittel === nextProps.tittel &&
-    prevProps.harTilgangTilArkivvariant === nextProps.harTilgangTilArkivvariant &&
+    prevProps.hasAccess === nextProps.hasAccess &&
     prevProps.dokumentInfoId === nextProps.dokumentInfoId &&
     prevProps.journalpostId === nextProps.journalpostId &&
     areArraysEqual(prevProps.shownDocuments, nextProps.shownDocuments),

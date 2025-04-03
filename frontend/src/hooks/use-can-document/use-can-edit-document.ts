@@ -74,7 +74,7 @@ export const canEditDocument = ({
 
   const isJournalfoert = document.type === DocumentTypeEnum.JOURNALFOERT;
 
-  if (isJournalfoert && !document.journalfoertDokumentReference.harTilgangTilArkivvariant) {
+  if (isJournalfoert && !document.journalfoertDokumentReference.hasAccess) {
     return false;
   }
 

@@ -19,4 +19,4 @@ export const canRolEditDocument = (document: IMainDocument, flowState: FlowState
 };
 
 const hasAccessToArchivedDocument = (document: IMainDocument): document is JournalfoertDokument =>
-  document.type === DocumentTypeEnum.JOURNALFOERT && document.journalfoertDokumentReference.harTilgangTilArkivvariant;
+  document.type === DocumentTypeEnum.JOURNALFOERT && document.journalfoertDokumentReference.hasAccess;

@@ -30,12 +30,12 @@ export const JournalfoerteDocuments = () => {
     const selectable: IJournalfoertDokumentId[] = [];
 
     for (const doc of totalFilteredDocuments) {
-      if (doc.harTilgangTilArkivvariant) {
+      if (doc.hasAccess) {
         selectable.push({ journalpostId: doc.journalpostId, dokumentInfoId: doc.dokumentInfoId });
       }
 
       for (const vedlegg of doc.vedlegg) {
-        if (vedlegg.harTilgangTilArkivvariant) {
+        if (vedlegg.hasAccess) {
           selectable.push({ journalpostId: doc.journalpostId, dokumentInfoId: vedlegg.dokumentInfoId });
         }
       }
