@@ -14,14 +14,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastify/cors": "10.0.1",
-    "@fastify/http-proxy": "11.0.0",
+    "@fastify/cors": "11.0.1",
+    "@fastify/http-proxy": "11.1.2",
     "@fastify/type-provider-typebox": "5.1.0",
-    "@hocuspocus/common": "2.15.0",
-    "@hocuspocus/server": "2.15.0",
+    "@hocuspocus/common": "2.15.2",
+    "@hocuspocus/server": "2.15.2",
     "@slate-yjs/core": "1.0.2",
-    "@types/node": "22.10.2",
-    "fastify": "5.2.0",
+    "@types/node": "22.14.0",
+    "fastify": "5.2.2",
     "fastify-metrics": "12.1.0",
     "jose": "5.9.1",
     "openid-client": "5.7.1",
@@ -30,8 +30,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@types/bun": "1.1.14",
+    "@types/bun": "1.2.8",
     "@types/uuid": "10.0.0",
-    "typescript": "5.7.2"
+    "typescript": "5.8.2"
   }
 }
