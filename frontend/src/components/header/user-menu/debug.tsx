@@ -1,4 +1,4 @@
-import { toast } from '@app/components/toast/store';
+import { useSendDebugInfo } from '@app/components/header/user-menu/send-debug-hook';
 import { ENVIRONMENT } from '@app/environment';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
@@ -6,7 +6,7 @@ import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents'
 import { useUtfall, useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 import { user } from '@app/static-data/static-data';
 import type { INavEmployee } from '@app/types/bruker';
-import { BugIcon } from '@navikt/aksel-icons';
+import { BugIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, Dropdown, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback } from 'react';
@@ -15,32 +15,28 @@ import { useParams } from 'react-router-dom';
 export const DebugButton = () => {
   const { oppgaveId } = useParams();
 
-  if (oppgaveId !== undefined) {
-    return <BehandlingDebug />;
-  }
-
-  return <SimpleDebug />;
+  return oppgaveId !== undefined ? <BehandlingDebug /> : <SimpleDebug />;
 };
 
 export const SimpleDebug = () => {
   const reporter = useReporter();
 
-  const onClick: React.MouseEventHandler<HTMLElement> = useCallback(async () => {
-    const body = JSON.stringify(
-      {
-        reporter: await reporter,
-        url: window.location.href,
-        version: ENVIRONMENT.version,
-      },
-      null,
-      2,
-    );
-
-    sendDebugInfo(body);
-  }, [reporter]);
+  const getData = useCallback(
+    async (): Promise<string> =>
+      JSON.stringify(
+        {
+          reporter: await reporter,
+          url: window.location.href,
+          version: ENVIRONMENT.version,
+        },
+        null,
+        2,
+      ),
+    [reporter],
+  );
 
   return (
-    <Dropdown.Menu.List.Item as={SendButton} onClick={onClick}>
+    <Dropdown.Menu.List.Item as={SendButton} getData={getData}>
       Send teknisk informasjon
     </Dropdown.Menu.List.Item>
   );
@@ -53,16 +49,16 @@ export const BehandlingDebug = () => {
   const { value: selectedTab = null } = useSmartEditorActiveDocument();
   const { data: utfallList = [] } = useUtfall();
 
-  const onClick: React.MouseEventHandler<HTMLElement> = useCallback(async () => {
+  const getData = useCallback(async () => {
     if (oppgave === undefined) {
       console.error('No behandling loaded');
-      return;
+      return null;
     }
 
     const medunderskriver = oppgave.medunderskriver.employee;
     const { rol } = oppgave;
 
-    const body = JSON.stringify(
+    return JSON.stringify(
       {
         reporter: await reporter,
         url: window.location.href,
@@ -88,33 +84,13 @@ export const BehandlingDebug = () => {
       null,
       2,
     );
-
-    sendDebugInfo(body);
   }, [oppgave, documents, selectedTab, reporter, utfallList]);
 
   return (
-    <Dropdown.Menu.List.Item as={SendButton} onClick={onClick}>
+    <Dropdown.Menu.List.Item as={SendButton} getData={getData}>
       Send teknisk informasjon
     </Dropdown.Menu.List.Item>
   );
-};
-
-const sendDebugInfo = async (body: string) => {
-  try {
-    const res = await fetch('/debug', { method: 'POST', body, headers: { 'Content-Type': 'application/json' } });
-
-    if (!res.ok) {
-      throw new Error(await res.text());
-    }
-
-    toast.success('Teknisk informasjon er sendt til Team Klage');
-  } catch (error) {
-    console.error('Failed to send debug info to Team Klage', error instanceof Error ? error.message : error);
-    toast.error(
-      'Klarte ikke sende teknisk informasjon til Team Klage. Teknisk informasjon er kopiert til utklippstavlen din.',
-    );
-    navigator.clipboard.writeText(body);
-  }
 };
 
 const useReporter = async () => {
@@ -141,17 +117,37 @@ const useReporter = async () => {
 };
 
 interface SendButtonProps {
-  onClick: () => void;
+  getData: () => Promise<string | null>;
   children?: React.ReactNode;
 }
 
-const SendButton = ({ onClick, children }: SendButtonProps) => (
-  <Tooltip content="Sender teknisk informasjon direkte til Team Klage.">
-    <Button variant="tertiary" size="small" onClick={onClick} icon={<BugIcon aria-hidden />}>
-      {children}
-    </Button>
-  </Tooltip>
-);
+const SendButton = ({ getData, children }: SendButtonProps) => {
+  const { sendDebugInfo, success, loading } = useSendDebugInfo();
+
+  const onClick = async () => {
+    const data = await getData();
+
+    if (data === null) {
+      return;
+    }
+
+    sendDebugInfo(data);
+  };
+
+  return (
+    <Tooltip content="Sender teknisk informasjon direkte til Team Klage.">
+      <Button
+        variant="tertiary"
+        size="small"
+        onClick={onClick}
+        loading={loading}
+        icon={success ? <CheckmarkIcon aria-hidden /> : <BugIcon aria-hidden />}
+      >
+        {children}
+      </Button>
+    </Tooltip>
+  );
+};
 
 const employeeToUser = (employee: INavEmployee | null = null) =>
   employee === null ? null : { name: employee.navn, navIdent: employee.navIdent };
