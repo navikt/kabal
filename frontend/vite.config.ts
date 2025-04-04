@@ -18,6 +18,7 @@ export default defineConfig({
     port: 8061,
     proxy: {
       '/api': PROXY,
+      '/debug': PROXY,
       '/collaboration': { ...PROXY, ws: true },
       '/arkivert-dokument': PROXY,
       '/kombinert-dokument': PROXY,
