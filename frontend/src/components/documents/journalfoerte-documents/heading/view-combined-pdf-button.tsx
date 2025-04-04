@@ -12,10 +12,9 @@ import {
   useMergedDocumentsReferenceQuery,
 } from '@app/redux-api/oppgaver/queries/documents';
 import { FilePdfIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, type LinkProps, Tooltip } from '@navikt/ds-react';
+import { Button, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { forwardRef, useContext, useMemo } from 'react';
-import { styled } from 'styled-components';
+import { useContext, useMemo } from 'react';
 
 export const ViewCombinedPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
@@ -112,35 +111,21 @@ export const ViewCombinedPDF = () => {
 
   return (
     <Tooltip content={`Trykk med musehjulet/midterste knapp eller ${MOD_KEY} + klikk for å åpne i ny fane.`}>
-      <StyledOpenButton
+      <Button
+        as="a"
+        variant="secondary"
+        size="small"
+        icon={<FilePdfIcon />}
         onClick={onClick}
         onAuxClick={onClick}
         href={tabUrl}
         loading={isLoading || isFetching || archivedIsLoading}
-        $isActive={isTabOpen || isInlineOpen}
+        className={`mx-4 mb-3 visited:text-text-visited ${
+          isTabOpen || isInlineOpen ? '[text-shadow:0_0_1px_var(--a-surface-neutral-active)]' : ''
+        }`}
       >
         Vis kombinert dokument
-      </StyledOpenButton>
+      </Button>
     </Tooltip>
   );
 };
-
-interface OpenButtonProps extends ButtonProps, Pick<LinkProps, 'href'> {
-  $isActive: boolean;
-}
-
-const OpenButton = forwardRef<HTMLAnchorElement, OpenButtonProps>((props, ref) => (
-  <Button {...props} as="a" variant="secondary" size="small" icon={<FilePdfIcon />} ref={ref} />
-));
-
-OpenButton.displayName = 'OpenButton';
-
-const StyledOpenButton = styled(OpenButton)`
-  text-shadow: ${({ $isActive }) => ($isActive ? '0 0 1px var(--a-surface-neutral-active)' : 'none')};
-  margin: var(--a-spacing-1) var(--a-spacing-4) var(--a-spacing-3);
-
-  &:visited {
-    color: var(--a-text-visited);
-    box-shadow: inset 0 0 0 var(--a-spacing-05) var(--a-text-visited);
-  }
-`;
