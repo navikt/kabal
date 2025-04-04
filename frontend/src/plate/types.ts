@@ -74,7 +74,7 @@ interface BlockElement extends TElement {
 
 export interface ParagraphElement extends BlockElement, IndentableStyleProps, AlignableStyleProps {
   type: typeof BaseParagraphPlugin.key;
-  children: (FormattedText | PlaceholderElement | LabelContentElement)[];
+  children: (FormattedText | PlaceholderElement | LabelContentElement | FullmektigElement)[];
 }
 
 export interface H1Element extends BlockElement, IndentableStyleProps {

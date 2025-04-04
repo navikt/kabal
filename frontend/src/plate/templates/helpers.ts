@@ -49,7 +49,7 @@ import { HEADING_KEYS } from '@udecode/plate-heading';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 import { TemplateSections } from '../template-sections';
-import type { LabelContentSource } from '../types';
+import { LabelContentSource } from '../types';
 
 export const createLabelContent = (source: LabelContentSource): LabelContentElement => ({
   type: LabelContentPlugin.key,
@@ -220,4 +220,17 @@ export const createFullmektig = (): FullmektigElement => ({
   ],
   id: undefined,
   show: false,
+});
+
+export const createSaksinfo = (): ParagraphElement => ({
+  type: BaseParagraphPlugin.key,
+  align: TextAlign.LEFT,
+  children: [
+    createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
+    createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
+    createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
+    createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
+    createFullmektig(),
+    createLabelContent(LabelContentSource.SAKSNUMMER),
+  ],
 });
