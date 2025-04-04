@@ -27,7 +27,7 @@ export const useMarkVisited = (url: string | undefined) => {
       const documentUrl =
         document.type === DocumentTypeEnum.JOURNALFOERT
           ? getJournalfoertDocumentTabUrl(document.journalpostId, document.dokumentInfoId)
-          : getNewDocumentTabUrl(oppgaveId, document.documentId);
+          : getNewDocumentTabUrl(oppgaveId, document.documentId, document.parentId);
 
       window.history.replaceState(null, '', documentUrl);
     }

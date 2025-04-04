@@ -10,10 +10,11 @@ import { StyledNewAttachment } from './new-document/new-attachment';
 
 interface Props {
   documentId: string;
+  parentId: string | null;
   style?: React.CSSProperties;
 }
 
-export const AttachmentsOverview = ({ documentId, style }: Props) => {
+export const AttachmentsOverview = ({ documentId, style, parentId }: Props) => {
   const oppgaveId = useOppgaveId();
   const [, { isLoading }] = useCreateVedleggFromJournalfoertDocumentMutation({
     fixedCacheKey: `createVedlegg-${documentId}`,
@@ -41,6 +42,7 @@ export const AttachmentsOverview = ({ documentId, style }: Props) => {
       >
         <SharedDocumentTitle
           title={title}
+          parentId={parentId}
           url={getAttachmentsOverviewTabUrl(oppgaveId, documentId)}
           documentId={documentId}
           icon={<BulletListIcon aria-hidden />}

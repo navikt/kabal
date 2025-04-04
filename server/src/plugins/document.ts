@@ -119,6 +119,38 @@ export const documentPlugin = fastifyPlugin(
       )
 
       .get(
+        '/nytt-dokumentvedlegg/:behandlingId/:documentId',
+        {
+          schema: {
+            tags: ['dokumenter'],
+            params: Type.Object({ behandlingId: Type.String(), documentId: Type.String() }),
+            querystring: QUERYSTRING,
+            produces: ['application/pdf'],
+            response: { 200: { type: 'string', format: 'binary' } },
+          },
+        },
+        async (req, reply) => {
+          const { behandlingId, documentId } = req.params;
+
+          if (!(isPlainText(behandlingId) && isPlainText(documentId))) {
+            return invalidId(reply);
+          }
+
+          const metadataResponse = await getMetadata<INewMetadata>(
+            `${METADATA_BASE_URL}/behandlinger/${behandlingId}/dokumenter/${documentId}/title`,
+            req,
+            reply,
+          );
+          const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
+
+          const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/pdf${getQuery(req.query)}`;
+          const documentIdList = JSON.stringify([getNewDocumentDocumentId(documentId)]);
+
+          return send(reply, url, documentIdList, metadata.title, req.navIdent);
+        },
+      )
+
+      .get(
         '/vedleggsoversikt/:behandlingId/:documentId',
         {
           schema: {

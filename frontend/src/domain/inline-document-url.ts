@@ -1,5 +1,7 @@
-export const getNewDocumentInlineUrl = (oppgaveId: string, documentId: string) =>
-  `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${documentId}/pdf`;
+export const getNewDocumentInlineUrl = (oppgaveId: string, documentId: string, parentId: string | null) =>
+  parentId === null
+    ? `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${documentId}/pdf`
+    : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/${documentId}/pdf`;
 
 export const getJournalfoertDocumentInlineUrl = (journalpostId: string, dokumentInfoId: string) =>
   `/api/kabal-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf`;

@@ -35,7 +35,7 @@ export const DocumentTitle = memo(
           return [undefined, undefined];
         }
 
-        return [getNewDocumentTabUrl(oppgaveId, document.id), document.id];
+        return [getNewDocumentTabUrl(oppgaveId, document.id, document.parentId), document.id];
       }
 
       const { dokumentInfoId, journalpostId } = document.journalfoertDokumentReference;
@@ -97,6 +97,7 @@ export const DocumentTitle = memo(
     return (
       <SharedDocumentTitle
         title={document.tittel}
+        parentId={document.parentId}
         url={url}
         icon={<DocumentIcon type={document.type} />}
         documentId={documentId}

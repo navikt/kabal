@@ -3,6 +3,7 @@ import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 interface IShownNewDocument {
   documentId: string;
+  parentId: string | null;
   type: DocumentTypeEnum.SMART | DocumentTypeEnum.UPLOADED | DocumentTypeEnum.VEDLEGGSOVERSIKT;
 }
 

@@ -74,7 +74,7 @@ export const AttachmentList = ({
         style={{ height: attachmentListHeight }}
         aria-rowcount={totalRowCount}
       >
-        {hasOverview ? <AttachmentsOverview documentId={parentDocument.id} /> : null}
+        {hasOverview ? <AttachmentsOverview documentId={parentDocument.id} parentId={parentDocument.parentId} /> : null}
         {sorted.map((attachment, index) => (
           <Attachment
             key={attachment.id}
