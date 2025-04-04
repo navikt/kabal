@@ -110,7 +110,7 @@ export const ViewCombinedPDF = () => {
   };
 
   return (
-    <Tooltip content={`Trykk med musehjulet/midterste knapp eller ${MOD_KEY} + klikk for å åpne i ny fane.`}>
+    <Tooltip content={`Trykk med musehjulet / midterste knapp eller ${MOD_KEY} + klikk for å åpne i ny fane.`}>
       <Button
         as="a"
         variant="secondary"
