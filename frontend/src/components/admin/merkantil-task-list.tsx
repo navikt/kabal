@@ -43,7 +43,7 @@ const TaskList = () => {
             <Heading level="2" size="small" spacing>
               Noe gikk galt
             </Heading>
-            <code className="block whitespace-pre-wrap rounded-lg bg-(--a-surface-neutral-subtle) p-4">
+            <code className="block whitespace-pre-wrap rounded-lg bg-surface-neutral-subtle p-4">
               {JSON.stringify(error, null, 2)}
             </code>
           </Alert>

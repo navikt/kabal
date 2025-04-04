@@ -32,7 +32,7 @@ export const CopyButton = ({
 
   return (
     <InternalCopyBytton
-      className={`whitespace-nowrap border-none bg-(--a-surface-neutral-subtle) hover:bg-(--a-surface-neutral-subtle-hover) ${className}`}
+      className={`whitespace-nowrap border-none bg-surface-neutral-subtle hover:bg-surface-neutral-subtle-hover ${className}`}
       activeText={activeText}
       copyText={copyText}
       title={title}

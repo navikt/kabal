@@ -39,7 +39,7 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
         aria-label={label}
         aria-placeholder="Skriv inn tittel"
         ref={ref}
-        className={`${opacityClass} min-w-32 cursor-text whitespace-pre-wrap rounded-sm border border-(--a-border-subtle) px-0.5 empty:not-focus:text-(--a-text-subtle) empty:not-focus:italic empty:not-focus:before:content-[attr(aria-placeholder)] focus:border-(--a-border-focus)`}
+        className={`${opacityClass} min-w-32 cursor-text whitespace-pre-wrap rounded-sm border border-border-subtle px-0.5 empty:not-focus:text-text-subtle empty:not-focus:italic empty:not-focus:before:content-[attr(aria-placeholder)] focus:border-border-focus`}
         onFocus={(e) => {
           setCaretAtEnd(e.currentTarget);
         }}

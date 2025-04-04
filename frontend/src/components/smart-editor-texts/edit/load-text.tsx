@@ -19,7 +19,7 @@ export const LoadText = () => {
         width="calc(210mm * var(--kabal-editor-scale) + var(--a-spacing-16))"
         minWidth="calc(210mm + var(--a-spacing-16))"
         data-textid={id}
-        className="text-(--a-surface-subtle)"
+        className="text-surface-subtle"
       >
         <Box shadow="small" borderRadius="medium" marginBlock="0 4" className="[grid-area:content]">
           <FileTextIcon fontSize={400} aria-hidden />

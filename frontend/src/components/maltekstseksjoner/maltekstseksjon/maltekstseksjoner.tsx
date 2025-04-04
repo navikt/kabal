@@ -76,7 +76,7 @@ export const Maltekstseksjoner = () => {
             minWidth="1330px"
             width="fit-content"
           >
-            <Box borderRadius="medium" shadow="medium" marginBlock="1" className="text-(--a-surface-subtle)">
+            <Box borderRadius="medium" shadow="medium" marginBlock="1" className="text-surface-subtle">
               <PuzzlePieceIcon aria-hidden fontSize={400} />
             </Box>
           </VStack>
