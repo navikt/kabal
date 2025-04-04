@@ -12,7 +12,7 @@ const SHADOW_STYLE: React.CSSProperties = {
 };
 
 const ANGLED_TH_CLASSES =
-  'origin-bottom-left pl-2 text-left align-text-bottom whitespace-nowrap relative border-r-1 border-(--a-border-on-inverted)';
+  'origin-bottom-left pl-2 text-left align-text-bottom whitespace-nowrap relative border-r-1 border-border-on-inverted';
 const ANGLED_DIV_CLASSES = 'pr-3 overflow-hidden text-ellipsis absolute bottom-0 text-left origin-bottom-left';
 
 const NON_ANGLED_HEADER_HEIGHT = 32;
@@ -22,11 +22,11 @@ const CONTAINER_WIDTH = NON_ANGLED_HEADER_HEIGHT;
 const CONTAINER_HEIGHT = Math.sqrt(ANGLED_HEADER_WIDTH ** 2 / 2);
 
 export const Head = ({ saksbehandlere, setFocusedCell, focusedCell: [focusedColumn] }: Props) => (
-  <thead className="sticky top-0 z-2 bg-(--a-bg-default)" style={SHADOW_STYLE}>
+  <thead className="sticky top-0 z-2 bg-bg-default" style={SHADOW_STYLE}>
     <tr>
-      <th className="sticky top-0 z-2 bg-(--a-bg-default)">Ytelse</th>
+      <th className="sticky top-0 z-2 bg-bg-default">Ytelse</th>
       <th
-        className={`${ANGLED_TH_CLASSES} ${focusedColumn === 0 ? 'bg-(--a-blue-200)' : 'odd:bg-(--a-bg-subtle)'}`}
+        className={`${ANGLED_TH_CLASSES} ${focusedColumn === 0 ? 'bg-blue-200' : 'odd:bg-bg-subtle'}`}
         style={{ height: CONTAINER_HEIGHT, transform: 'skew(-45deg)' }}
         onMouseEnter={() => setFocusedCell([0, -1])}
       >
@@ -44,7 +44,7 @@ export const Head = ({ saksbehandlere, setFocusedCell, focusedCell: [focusedColu
       </th>
       {saksbehandlere.map(({ saksbehandlerName, saksbehandlerIdent, ytelseIdList }, i) => (
         <th
-          className={`${ANGLED_TH_CLASSES} ${focusedColumn === i + 1 ? 'bg-(--a-blue-200)' : 'odd:bg-(--a-bg-subtle)'}`}
+          className={`${ANGLED_TH_CLASSES} ${focusedColumn === i + 1 ? 'bg-blue-200' : 'odd:bg-bg-subtle'}`}
           style={{ height: CONTAINER_HEIGHT, transform: 'skew(-45deg)' }}
           key={saksbehandlerIdent}
           onMouseEnter={() => setFocusedCell([i + 1, -1])}

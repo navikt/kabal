@@ -66,7 +66,7 @@ export const ScaleSelect = ({ scale, setScale, scaleUp, scaleDown, close }: Scal
       asChild
       position="absolute"
       gap="2"
-      className="top-full right-0 z-10 whitespace-nowrap text-(--a-text-default) not-italic"
+      className="top-full right-0 z-10 whitespace-nowrap text-text-default not-italic"
     >
       <Box background="bg-default" padding="2" borderRadius="medium" shadow="medium">
         <RadioGroup legend="Skalering" onChange={onRadioChange} value={radioValue} size="small">

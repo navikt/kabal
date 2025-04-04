@@ -42,7 +42,7 @@ const Sort = ({ params, onSortChange, sortKey, children }: SortProps) => {
       icon={<Icon fontSize={16} />}
       onClick={onClick}
       iconPosition="right"
-      className={`whitespace-nowrap rounded-md px-3 py-4 ${sorted ? 'bg-(--a-surface-selected)' : 'bg-transparent'}`}
+      className={`whitespace-nowrap rounded-md px-3 py-4 ${sorted ? 'bg-surface-selected' : 'bg-transparent'}`}
     >
       {children}
     </Button>

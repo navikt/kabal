@@ -13,7 +13,7 @@ export const Cell = ({ isChecked, onCheck, children, onFocus, isFocused, isCurre
 
   return (
     <td
-      className={`border-(--a-border-on-inverted) border-r-1 border-b-1 p-0 ${backgroundClass}`}
+      className={`border-border-on-inverted border-r-1 border-b-1 p-0 ${backgroundClass}`}
       title={children}
       onClick={onFocus}
       onKeyDown={({ key }) => {
@@ -42,10 +42,10 @@ enum Variant {
 }
 
 const VARIANTS: Record<Variant, string> = {
-  [Variant.FOCUSED_OR_CURRENT_CHECKED]: 'bg-(--a-purple-200)',
-  [Variant.FOCUSED_OR_CURRENT_UNCHECKED]: 'bg-(--a-blue-200)',
-  [Variant.CHECKED]: 'bg-(--a-green-200)',
-  [Variant.NONE]: 'even:bg-(--a-bg-default) odd:bg-(--a-bg-subtle)',
+  [Variant.FOCUSED_OR_CURRENT_CHECKED]: 'bg-purple-200',
+  [Variant.FOCUSED_OR_CURRENT_UNCHECKED]: 'bg-blue-200',
+  [Variant.CHECKED]: 'bg-green-200',
+  [Variant.NONE]: 'even:bg-bg-default odd:bg-bg-subtle',
 };
 
 const getVariant = (

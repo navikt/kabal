@@ -40,7 +40,7 @@ export const AbbreviationsContent = ({ headingSize = 'small' }: ContentProps) =>
 
   return (
     <>
-      <section className="mb-(--a-spacing-6)">
+      <section className="mb-6">
         <Heading size={headingSize} spacing>
           Legg til forkortelse
         </Heading>
@@ -56,7 +56,7 @@ export const AbbreviationsContent = ({ headingSize = 'small' }: ContentProps) =>
         {isLoading ? <Loader title="Laster..." /> : null}
 
         {hasAbbreviations ? (
-          <ul className="m-0 flex list-none flex-col gap-(--a-spacing-1) p-0">
+          <ul className="m-0 flex list-none flex-col gap-1 p-0">
             {data.map((item) => (
               <li key={item.id}>
                 <ExistingAbbreviation {...item} />

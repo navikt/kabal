@@ -261,7 +261,7 @@ export const NewDocuments = () => {
         <ListHeader />
         <div
           ref={onRef}
-          className="overflow-y-auto border-(--a-border-divider) border-b-1"
+          className="overflow-y-auto border-border-divider border-b-1"
           onScroll={({ currentTarget }) => {
             const clamped = clamp(currentTarget.scrollTop, 0, currentTarget.scrollHeight - currentTarget.clientHeight); // Elastic scrolling in Safari can exceed the boundries.
             _setScrollTop(clamped);

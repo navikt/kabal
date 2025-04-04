@@ -46,9 +46,7 @@ const ToggleButton = ({
     borderWidth="1"
     borderColor="border-divider"
     width="340px"
-    className={
-      selected ? 'text-(--a-text-on-action)' : 'text-(--a-text-default) hover:bg-(--a-surface-action-subtle-hover)'
-    }
+    className={selected ? 'text-text-on-action' : 'text-text-default hover:bg-surface-action-subtle-hover'}
   >
     <VStack>
       <button
