@@ -10,7 +10,11 @@ export const UserInfo = ({ sakenGjelder, id }: IOppgavebehandlingBase) => (
     <Box borderWidth="0 1 0 0" borderColor="border-divider">
       <UserSex sex={sakenGjelder.sex} />
       <span>{sakenGjelder.name ?? '-'}</span>
-      <CopyButton size="small" copyText={sakenGjelder.id} text={formatFoedselsnummer(sakenGjelder.id)} />
+      <CopyButton
+        size="small"
+        copyText={sakenGjelder.identifikator}
+        text={formatFoedselsnummer(sakenGjelder.identifikator)}
+      />
       <PartStatusList statusList={sakenGjelder.statusList} size="small" />
       <RelevantOppgaver oppgaveId={id} />
     </Box>
