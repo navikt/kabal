@@ -3,7 +3,6 @@ import { ENVIRONMENT } from '@app/environment';
 import { pushError } from '@app/observability';
 import { Alert, Box, Button, CopyButton, HStack, Heading, VStack } from '@navikt/ds-react';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   children: ReactNode;
@@ -106,13 +105,20 @@ const Code = ({ children }: CodeProps) => (
   </Box>
 );
 
-const CodeBlock = styled.code`
-  display: block;
-  padding: var(--a-spacing-4);
-  background-color: var(--a-bg-subtle);
-  border: 1px solid var(--a-border-divider);
-  border-radius: var(--a-border-radius-medium);
-  white-space: pre-wrap;
-  word-break: normal;
-  overflow-wrap: break-word;
-`;
+interface CodeBlockProps {
+  children?: string;
+}
+
+const CodeBlock = ({ children }: CodeBlockProps) => (
+  <Box
+    as="code"
+    background="bg-subtle"
+    borderWidth="1"
+    borderColor="border-divider"
+    borderRadius="medium"
+    padding="4"
+    className="wrap-break-word block whitespace-pre-wrap"
+  >
+    {children}
+  </Box>
+);

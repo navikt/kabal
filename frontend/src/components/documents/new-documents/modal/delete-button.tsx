@@ -6,7 +6,6 @@ import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/docum
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { ModalContext } from './modal-context';
 
 interface Props {
@@ -52,7 +51,8 @@ export const DeleteDocumentButton = ({ document }: Props) => {
   if (showConfirm) {
     return (
       <HStack justify="end" gap="0 4">
-        <StyledButton
+        <Button
+          className={BUTTON_CLASSES}
           variant="danger"
           size="small"
           disabled={isLoading}
@@ -61,8 +61,9 @@ export const DeleteDocumentButton = ({ document }: Props) => {
           icon={<TrashIcon aria-hidden />}
         >
           {text}
-        </StyledButton>
-        <StyledButton
+        </Button>
+        <Button
+          className={BUTTON_CLASSES}
           size="small"
           variant="secondary"
           onClick={() => setShowConfirm(false)}
@@ -70,14 +71,15 @@ export const DeleteDocumentButton = ({ document }: Props) => {
           icon={<ArrowUndoIcon aria-hidden />}
         >
           Avbryt
-        </StyledButton>
+        </Button>
       </HStack>
     );
   }
 
   return (
     <HStack justify="end" gap="0 4">
-      <StyledButton
+      <Button
+        className={BUTTON_CLASSES}
         variant="danger"
         size="small"
         onClick={() => setShowConfirm(true)}
@@ -85,14 +87,9 @@ export const DeleteDocumentButton = ({ document }: Props) => {
         icon={<TrashIcon aria-hidden />}
       >
         {text}
-      </StyledButton>
+      </Button>
     </HStack>
   );
 };
 
-const StyledButton = styled(Button)`
-  display: flex;
-  gap: var(--a-spacing-2);
-  width: min-content;
-  white-space: nowrap;
-`;
+const BUTTON_CLASSES = 'flex w-min flex-row gap-2 whitespace-nowrap';
