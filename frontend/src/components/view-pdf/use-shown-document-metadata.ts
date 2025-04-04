@@ -60,8 +60,8 @@ export const useShownDocumentMetadata = (
     }
 
     return {
-      tabUrl: getNewDocumentTabUrl(oppgaveId, onlyDocument.documentId),
-      inlineUrl: getNewDocumentInlineUrl(oppgaveId, onlyDocument.documentId),
-      tabId: getNewDocumentTabId(onlyDocument.documentId),
+      tabUrl: getNewDocumentTabUrl(oppgaveId, onlyDocument.documentId, onlyDocument.parentId),
+      inlineUrl: getNewDocumentInlineUrl(oppgaveId, onlyDocument.documentId, onlyDocument.parentId),
+      tabId: getNewDocumentTabId(onlyDocument.documentId, onlyDocument.parentId),
     };
   }, [mergedDocument, oppgaveId, showDocumentList]);
