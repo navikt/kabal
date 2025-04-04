@@ -10,11 +10,11 @@ import { LabelContentSource } from '../types';
 import {
   createCurrentDate,
   createFooter,
-  createFullmektig,
   createHeader,
   createLabelContent,
   createMaltekstseksjon,
   createPageBreak,
+  createSaksinfo,
   createSignature,
   createSimpleParagraph,
 } from './helpers';
@@ -29,18 +29,7 @@ export const getGenereltBrevTemplate = (
     richText: [
       createCurrentDate(),
       createHeader(),
-      {
-        type: BaseParagraphPlugin.key,
-        align: TextAlign.LEFT,
-        children: [
-          createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
-          createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
-          createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
-          createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
-          createFullmektig(),
-          createLabelContent(LabelContentSource.SAKSNUMMER),
-        ],
-      },
+      createSaksinfo(),
       createSimpleParagraph(),
       createSignature(includeMedunderskriver, overriddenSaksbehandler),
       createFooter(),
@@ -60,18 +49,7 @@ export const getNotatTemplate = (
     tittel: 'Notat',
     richText: [
       createCurrentDate(),
-      {
-        type: BaseParagraphPlugin.key,
-        align: TextAlign.LEFT,
-        children: [
-          createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
-          createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
-          createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
-          createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
-          createFullmektig(),
-          createLabelContent(LabelContentSource.SAKSNUMMER),
-        ],
-      },
+      createSaksinfo(),
       createSimpleParagraph(),
       createSignature(includeMedunderskriver, overriddenSaksbehandler),
     ],
@@ -124,18 +102,7 @@ export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>
   richText: [
     createCurrentDate(),
     createMaltekstseksjon(TemplateSections.TITLE),
-    {
-      type: BaseParagraphPlugin.key,
-      align: TextAlign.LEFT,
-      children: [
-        createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
-        createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
-        createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
-        createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
-        createFullmektig(),
-        createLabelContent(LabelContentSource.SAKSNUMMER),
-      ],
-    },
+    createSaksinfo(),
     createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
     createMaltekstseksjon(TemplateSections.GENERELL_INFO),
     createPageBreak(),
