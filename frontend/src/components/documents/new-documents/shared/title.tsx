@@ -12,7 +12,7 @@ import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { MouseButtons } from '@app/keys';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { useCallback, useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 
 interface BaseProps {
   title: string;
@@ -30,34 +30,18 @@ interface JournalfoertProps extends BaseProps {
 
 interface NotJournalfoertProps extends BaseProps {
   type: Exclude<DocumentTypeEnum, DocumentTypeEnum.JOURNALFOERT>;
+  parentId: string | null;
   journalfoertDokumentReference?: never;
 }
 
 type Props = JournalfoertProps | NotJournalfoertProps;
 
-export const SharedDocumentTitle = ({ title, url, documentId, icon, disabled = false, children, ...rest }: Props) => {
+export const SharedDocumentTitle = (props: Props) => {
+  const { title, url, documentId, icon, disabled = false, children, ...rest } = props;
   const { value, setValue } = useDocumentsPdfViewed();
   const { getTabRef, setTabRef } = useContext(TabContext);
 
-  const tabId = useMemo<string>(() => {
-    if (rest.type === DocumentTypeEnum.JOURNALFOERT) {
-      return getJournalfoertDocumentTabId(
-        rest.journalfoertDokumentReference.journalpostId,
-        rest.journalfoertDokumentReference.dokumentInfoId,
-      );
-    }
-
-    if (rest.type === DocumentTypeEnum.VEDLEGGSOVERSIKT) {
-      return getAttachmentsOverviewTabId(documentId);
-    }
-
-    return getNewDocumentTabId(documentId);
-  }, [
-    documentId,
-    rest.type,
-    rest.journalfoertDokumentReference?.journalpostId,
-    rest.journalfoertDokumentReference?.dokumentInfoId,
-  ]);
+  const tabId = getTabId(props);
 
   const isTabOpen = useIsTabOpen(tabId);
 
@@ -76,75 +60,60 @@ export const SharedDocumentTitle = ({ title, url, documentId, icon, disabled = f
     [documentId, rest.journalfoertDokumentReference, rest.type, value],
   );
 
-  const setViewedDocument = useCallback(() => {
+  const setViewedDocument = () => {
     if (rest.type === DocumentTypeEnum.JOURNALFOERT) {
-      setValue([
-        {
-          type: rest.type,
-          ...rest.journalfoertDokumentReference,
-        },
-      ]);
+      return setValue([{ type: rest.type, ...rest.journalfoertDokumentReference }]);
+    }
+
+    setValue([{ type: rest.type, documentId, parentId: rest.parentId }]);
+  };
+
+  const onClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+    if (disabled || e.button === MouseButtons.RIGHT) {
+      return;
+    }
+
+    e.preventDefault();
+
+    if (disabled) {
+      return;
+    }
+
+    const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === MouseButtons.MIDDLE;
+
+    // Open in PDF-viewer panel.
+    if (!shouldOpenInNewTab) {
+      setViewedDocument();
 
       return;
     }
 
-    setValue([
-      {
-        type: rest.type,
-        documentId,
-      },
-    ]);
-  }, [rest.type, rest.journalfoertDokumentReference, setValue, documentId]);
+    const tabRef = getTabRef(tabId);
 
-  const onClick: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
-    (e) => {
-      if (disabled || e.button === MouseButtons.RIGHT) {
-        return;
-      }
+    // There is a reference to the tab and it is open.
+    if (tabRef !== undefined && !tabRef.closed) {
+      tabRef.focus();
 
-      e.preventDefault();
+      return;
+    }
 
-      if (disabled) {
-        return;
-      }
+    if (isTabOpen) {
+      toast.warning('Dokumentet er allerede åpent i en annen fane');
 
-      const shouldOpenInNewTab = e.ctrlKey || e.metaKey || e.button === MouseButtons.MIDDLE;
+      return;
+    }
 
-      // Open in PDF-viewer panel.
-      if (!shouldOpenInNewTab) {
-        setViewedDocument();
+    // There is no reference to the tab or it is closed.
+    const newTabRef = window.open(url, tabId);
 
-        return;
-      }
+    if (newTabRef === null) {
+      toast.error('Kunne ikke åpne dokument i ny fane');
 
-      const tabRef = getTabRef(tabId);
+      return;
+    }
 
-      // There is a reference to the tab and it is open.
-      if (tabRef !== undefined && !tabRef.closed) {
-        tabRef.focus();
-
-        return;
-      }
-
-      if (isTabOpen) {
-        toast.warning('Dokumentet er allerede åpent i en annen fane');
-
-        return;
-      }
-
-      // There is no reference to the tab or it is closed.
-      const newTabRef = window.open(url, tabId);
-
-      if (newTabRef === null) {
-        toast.error('Kunne ikke åpne dokument i ny fane');
-
-        return;
-      }
-
-      setTabRef(tabId, newTabRef);
-    },
-    [disabled, getTabRef, isTabOpen, url, setTabRef, tabId, setViewedDocument],
-  );
+    setTabRef(tabId, newTabRef);
+  };
 
   return (
     <StyledDocumentTitle>
@@ -164,4 +133,19 @@ export const SharedDocumentTitle = ({ title, url, documentId, icon, disabled = f
       {children}
     </StyledDocumentTitle>
   );
+};
+
+const getTabId = (props: Props) => {
+  if (props.type === DocumentTypeEnum.JOURNALFOERT) {
+    return getJournalfoertDocumentTabId(
+      props.journalfoertDokumentReference.journalpostId,
+      props.journalfoertDokumentReference.dokumentInfoId,
+    );
+  }
+
+  if (props.type === DocumentTypeEnum.VEDLEGGSOVERSIKT) {
+    return getAttachmentsOverviewTabId(props.documentId);
+  }
+
+  return getNewDocumentTabId(props.documentId, props.parentId);
 };
