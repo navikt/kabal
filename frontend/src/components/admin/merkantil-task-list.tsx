@@ -4,14 +4,14 @@ import { ENVIRONMENT } from '@app/environment';
 import { type Task, useGetMerkantilTasksQuery } from '@app/redux-api/internal';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ArrowsCirclepathIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, CopyButton, HStack, Heading, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, CopyButton, HStack, Heading, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { Link } from 'react-router-dom';
 
 export const MerkantilTaskList = () => {
   const { isLoading, isFetching, refetch } = useGetMerkantilTasksQuery();
 
   return (
-    <section>
+    <Box as="section" shadow="medium" padding="4">
       <Heading level="1" size="medium" spacing>
         <HStack>
           <span>Merkantile oppgaver</span>
@@ -28,7 +28,7 @@ export const MerkantilTaskList = () => {
       </Heading>
 
       <TaskList />
-    </section>
+    </Box>
   );
 };
 

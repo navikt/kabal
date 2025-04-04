@@ -39,6 +39,13 @@ export const kabalInternalApi = createApi({
     getMerkantilTasks: builder.query<Task[], void>({
       query: () => '/kabal-api/internal/merkantil-tasks',
     }),
+    insertHjemlerInSettings: builder.mutation<void, { ytelseId: string; hjemmelIdList: string[] }>({
+      query: (body) => ({
+        url: '/kabal-innstillinger/admin/inserthjemlerinsettings',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -47,4 +54,5 @@ export const {
   useResendDvhMutation,
   useRecreateElasticAdminMutation,
   useGetMerkantilTasksQuery,
+  useInsertHjemlerInSettingsMutation,
 } = kabalInternalApi;
