@@ -2,6 +2,7 @@ import { DEFAULT_STATUS_FILTER } from '@app/components/smart-editor-texts/status
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';
 import {
+  BriefcaseClockIcon,
   Buildings3Icon,
   BulletListIcon,
   EnvelopeClosedIcon,
@@ -105,6 +106,14 @@ export const Nav = () => (
 
       <NavItem to="/svarbrev" testId="svarbrev-nav-link" roles={[Role.KABAL_SVARBREVINNSTILLINGER]}>
         <EnvelopeClosedIcon /> Svarbrev
+      </NavItem>
+
+      <NavItem
+        to="/produksjonsstyring"
+        testId="produksjonsstyring-nav-link"
+        roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]}
+      >
+        <BriefcaseClockIcon aria-hidden /> Produksjonsstyring
       </NavItem>
 
       <NavItem to="/tilgangsstyring" testId="access-rights-nav-link" roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]}>
