@@ -62,7 +62,8 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
     oppgaveId === skipToken
       ? undefined
       : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
-  const { refresh, ...pdfData } = usePdfData(pdfUrl);
+  const isMainDocument = document.parentId === null;
+  const { refresh, ...pdfData } = usePdfData(pdfUrl, !isMainDocument);
 
   if (oppgaveId === skipToken) {
     return null;
@@ -71,7 +72,6 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
   const icon = <DocumentIcon type={document.type} />;
 
   const isNotat = document.dokumentTypeId === DistribusjonsType.NOTAT;
-  const isMainDocument = document.parentId === null;
   const isRolQuestions = getIsRolQuestions(document);
 
   const hasAttachments = pdfOrSmartDocuments.length > 0 || journalfoerteDocuments.length > 0;

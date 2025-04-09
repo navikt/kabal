@@ -14,34 +14,10 @@ import {
 } from '@app/redux-api/forlenget-behandlingstid';
 import { FilePdfIcon } from '@navikt/aksel-icons';
 import { Alert, Loader } from '@navikt/ds-react';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
 export const Pdf = ({ id }: { id: string }) => {
-  const { data } = useGetOrCreateQuery(id);
-
-  return data?.doNotSendLetter === true ? null : <PdfBody id={id} />;
-};
-
-const PdfBody = ({ id }: { id: string }) => {
-  const { value: width, setValue: setWidth } = useForlengetFristPdfWidth();
   const { data, isLoading, isSuccess, isError } = useGetOrCreateQuery(id);
-
-  const [, { fulfilledTimeStamp: units }] = useSetBehandlingstidUnitsMutation({ fixedCacheKey: id });
-  const [, { fulfilledTimeStamp: typeId }] = useSetBehandlingstidUnitTypeMutation({ fixedCacheKey: id });
-  const [, { fulfilledTimeStamp: date }] = useSetBehandlingstidDateMutation({ fixedCacheKey: id });
-  const [, { fulfilledTimeStamp: title }] = useSetTitleMutation({ fixedCacheKey: id });
-  const [, { fulfilledTimeStamp: fullmektig }] = useSetFullmektigFritekstMutation({ fixedCacheKey: id });
-  const [, { fulfilledTimeStamp: prevInfo }] = useSetPreviousBehandlingstidInfoMutation({ fixedCacheKey: id });
-  const [, { fulfilledTimeStamp: reason }] = useSetReasonMutation({ fixedCacheKey: id });
-  const [, { fulfilledTimeStamp: customText }] = useSetCustomTextMutation({ fixedCacheKey: id });
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Refetch PDF when server has responded OK
-  const pdfUrl = useMemo(
-    () => `/api/kabal-api/behandlinger/${id}/forlenget-behandlingstid-draft/pdf?version=${Date.now()}`,
-    [id, units, typeId, date, title, fullmektig, prevInfo, reason, customText],
-  );
-
-  const pdfData = usePdfData(pdfUrl);
 
   if (isLoading) {
     return (
@@ -74,5 +50,58 @@ const PdfBody = ({ id }: { id: string }) => {
     );
   }
 
+  return data.doNotSendLetter ? null : <PdfBody id={id} />;
+};
+
+const PdfBody = ({ id }: { id: string }) => {
+  const { value: width, setValue: setWidth } = useForlengetFristPdfWidth();
+
+  const units = useFulfilledTimestamp(useSetBehandlingstidUnitsMutation({ fixedCacheKey: id })[1]);
+  const typeId = useFulfilledTimestamp(useSetBehandlingstidUnitTypeMutation({ fixedCacheKey: id })[1]);
+  const date = useFulfilledTimestamp(useSetBehandlingstidDateMutation({ fixedCacheKey: id })[1]);
+  const title = useFulfilledTimestamp(useSetTitleMutation({ fixedCacheKey: id })[1]);
+  const fullmektig = useFulfilledTimestamp(useSetFullmektigFritekstMutation({ fixedCacheKey: id })[1]);
+  const prevInfo = useFulfilledTimestamp(useSetPreviousBehandlingstidInfoMutation({ fixedCacheKey: id })[1]);
+  const reason = useFulfilledTimestamp(useSetReasonMutation({ fixedCacheKey: id })[1]);
+  const customText = useFulfilledTimestamp(useSetCustomTextMutation({ fixedCacheKey: id })[1]);
+
+  const pdfUrl = `/api/kabal-api/behandlinger/${id}/forlenget-behandlingstid-draft/pdf`;
+
+  const pdfData = usePdfData(pdfUrl);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Refetch PDF when server has responded OK
+  useEffect(() => {
+    pdfData.refresh();
+  }, [id, units, typeId, date, title, fullmektig, prevInfo, reason, customText]);
+
   return <SimplePdfPreview {...pdfData} width={width} setWidth={setWidth} />;
+};
+
+interface Props {
+  isLoading: boolean;
+  isSuccess: boolean;
+}
+
+// RTKQ hook changes after both optimistic update and server response.
+// We only want to react after server has responded - only then can we expect the PDF to be updated.
+const useFulfilledTimestamp = ({ isLoading, isSuccess }: Props): number | undefined => {
+  const [isReady, setIsReady] = useState(false);
+  const [returnValue, setReturnValue] = useState<number>();
+
+  // Only set ready after network request is started (and optimistic update is done)
+  useEffect(() => {
+    if (isLoading) {
+      setIsReady(true);
+    }
+  }, [isLoading]);
+
+  // Set return value when request is done
+  useEffect(() => {
+    if (isReady && !isLoading && isSuccess) {
+      setReturnValue(Date.now());
+      setIsReady(false);
+    }
+  }, [isLoading, isReady, isSuccess]);
+
+  return returnValue;
 };

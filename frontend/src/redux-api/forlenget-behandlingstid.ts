@@ -8,7 +8,7 @@ import { BehandlingstidUnitType } from '@app/types/svarbrev';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { addMonths, addWeeks, format } from 'date-fns';
 
-interface IForlengetBehandlingstid {
+export interface IForlengetBehandlingstid {
   title: string | null;
   fullmektigFritekst: string | null;
   customText: string | null;

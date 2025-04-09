@@ -22,16 +22,19 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
   }
 
   return (
-    <>
+    <div className="relative flex w-full grow">
       {loading ? (
-        <HStack asChild align="center" justify="center" position="absolute" top="0" left="0" className="z-2">
-          <Box background="surface-neutral-moderate" height="100%" width="100%">
-            <Loader size="3xlarge" />
-          </Box>
-        </HStack>
+        <Box
+          background="surface-neutral-moderate"
+          height="100%"
+          width="100%"
+          className="absolute flex items-center justify-center"
+        >
+          <Loader size="3xlarge" />
+        </Box>
       ) : null}
-      <object data={data} aria-label="PDF" type="application/pdf" name="pdf-viewer" className="w-full grow" />
-    </>
+      <object data={data} aria-label="PDF" type="application/pdf" name="pdf-viewer" className="w-full" />
+    </div>
   );
 };
 
@@ -42,18 +45,18 @@ export interface UsePdfData {
   error: string | undefined;
 }
 
-export const usePdfData = (url: string | undefined): UsePdfData => {
+export const usePdfData = (url: string | undefined, skip = false): UsePdfData => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<string>();
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    if (url === undefined) {
+    if (url === undefined || skip) {
       return;
     }
 
     getData(url).then(setData);
-  }, [url]);
+  }, [url, skip]);
 
   const getData = async (u: string | undefined) => {
     setLoading(true);
