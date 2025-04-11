@@ -2,8 +2,8 @@ import type {
   DokumentRenderData,
   VedleggRenderData,
 } from '@app/components/documents/journalfoerte-documents/calculate';
-import { convertAccessibleToRealDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/accessible-to-real-indexes';
-import { useKeyboardFocusState } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/focus';
+import { convertAccessibleToRealDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { useKeyboardFocusState } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { useEffect, useRef } from 'react';
 
 interface Props {

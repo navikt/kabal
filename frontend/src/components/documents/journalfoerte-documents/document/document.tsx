@@ -4,6 +4,7 @@ import { ExpandedColumns } from '@app/components/documents/journalfoerte-documen
 import { SelectRow } from '@app/components/documents/journalfoerte-documents/document/shared/select-row';
 import { StyledJournalfoertDocument } from '@app/components/documents/journalfoerte-documents/document/styled-journalfoert-document';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
+import { setRealDocumentPath } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
@@ -17,6 +18,7 @@ import { IncludeDocument } from './shared/include-document';
 
 interface Props {
   document: IArkivertDocument;
+  index: number;
   isSelected: boolean;
   isExpandedListView: boolean;
   showMetadata: boolean;
@@ -29,6 +31,7 @@ interface Props {
 
 export const Document = ({
   document,
+  index,
   isSelected,
   isExpandedListView,
   showMetadata,
@@ -100,6 +103,7 @@ export const Document = ({
       }}
       draggable={draggingIsEnabled}
       className={className}
+      onClick={() => setRealDocumentPath(index, -1)}
     >
       <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} hasAccess={hasAccess} />
 

@@ -1,9 +1,9 @@
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
-import { getIsInVedleggList } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/focus';
 import {
   useGetDocument,
   useGetVedlegg,
 } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import { getIsInVedleggList } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';

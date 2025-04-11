@@ -1,3 +1,4 @@
+import { useSetAsAttachmentTo } from '@app/components/documents/journalfoerte-documents/keyboard/actions/attachment';
 import { useDown } from '@app/components/documents/journalfoerte-documents/keyboard/actions/down';
 import { home, useEnd } from '@app/components/documents/journalfoerte-documents/keyboard/actions/home-end';
 import { useToggleInclude } from '@app/components/documents/journalfoerte-documents/keyboard/actions/include';
@@ -21,12 +22,13 @@ import {
 } from '@app/components/documents/journalfoerte-documents/keyboard/actions/vedlegg';
 import { AttachmentModal } from '@app/components/documents/journalfoerte-documents/keyboard/attachment-modal';
 import { useClampOnFilter } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/clamp-on-filter';
-import { resetIndexes } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/focus';
+import { KeyboardHelpModal } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-help-modal';
 import { RenameModal } from '@app/components/documents/journalfoerte-documents/keyboard/rename-modal';
-import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';
+import { resetIndexes } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { useDocumentsOnlyIncluded, useHasSeenKeyboardShortcuts } from '@app/hooks/settings/use-setting';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useRef, useState } from 'react';
 
 const NOOP = () => {};
 
@@ -56,6 +58,10 @@ interface KeyboardContextType {
   rename: () => void;
   openInline: () => void;
   openInNewTab: () => void;
+  focusSearch: () => void;
+  focusBoundary: () => void;
+
+  showHelpModal: () => void;
 }
 
 const KeyboardContext = createContext<KeyboardContextType>({
@@ -84,6 +90,11 @@ const KeyboardContext = createContext<KeyboardContextType>({
   rename: NOOP,
   openInline: NOOP,
   openInNewTab: NOOP,
+  focusSearch: NOOP,
+  focusBoundary: NOOP,
+
+  // Help
+  showHelpModal: NOOP,
 });
 
 export const useKeyboardContext = () => {
@@ -101,6 +112,8 @@ interface KeyboardContextElementProps {
   filteredDocuments: IArkivertDocument[];
   allSelectableDocuments: IJournalfoertDokumentId[];
   scrollToTop: () => void;
+  searchRef: React.RefObject<HTMLInputElement | null>;
+  keyboardBoundaryRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export const KeyboardContextElement = ({
@@ -108,6 +121,8 @@ export const KeyboardContextElement = ({
   filteredDocuments,
   allSelectableDocuments,
   scrollToTop,
+  searchRef,
+  keyboardBoundaryRef,
 }: KeyboardContextElementProps) => {
   const { setValue: setShowOnlyIncludedDocuments } = useDocumentsOnlyIncluded();
 
@@ -146,8 +161,37 @@ export const KeyboardContextElement = ({
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [renameModal, setRenameModal] = useState(false);
 
-  const setAsAttachmentTo = useCallback(() => setAttachmentModal(true), []);
+  const setAsAttachmentTo = useSetAsAttachmentTo(filteredDocuments, setAttachmentModal);
   const rename = useCallback(() => setRenameModal(true), []);
+
+  const { setValue: setHasSeenKeyboardShortcuts } = useHasSeenKeyboardShortcuts();
+
+  const helpModalRef = useRef<HTMLDialogElement>(null);
+
+  const showHelpModal = useCallback(() => {
+    helpModalRef.current?.showModal();
+    setHasSeenKeyboardShortcuts(true);
+  }, [setHasSeenKeyboardShortcuts]);
+
+  const focusBoundary = useCallback(() => {
+    if (keyboardBoundaryRef.current === null) {
+      return;
+    }
+
+    keyboardBoundaryRef.current.focus();
+  }, [keyboardBoundaryRef.current]);
+
+  const focusSearch = useCallback(() => {
+    if (searchRef.current === null) {
+      return;
+    }
+    // If already focused, blur and refocus.
+    if (document.activeElement === searchRef.current) {
+      focusBoundary();
+    } else {
+      searchRef.current.focus();
+    }
+  }, [searchRef.current, focusBoundary]);
 
   return (
     <KeyboardContext.Provider
@@ -175,9 +219,15 @@ export const KeyboardContextElement = ({
         rename,
         openInline,
         openInNewTab,
+        focusSearch,
+        focusBoundary,
+
+        showHelpModal,
       }}
     >
       {children}
+
+      <KeyboardHelpModal ref={helpModalRef} />
 
       <AttachmentModal
         open={attachmentModal}

@@ -4,12 +4,17 @@ import type {
 } from '@app/components/documents/journalfoerte-documents/calculate';
 import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';
 import { Header } from '@app/components/documents/journalfoerte-documents/header/header';
-import { KeyboardContextElement } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-context';
+import {
+  KeyboardContextElement,
+  useKeyboardContext,
+} from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-context';
+import { useKeyboard } from '@app/components/documents/journalfoerte-documents/keyboard/use-keyboard';
 import { SelectContextElement } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
 import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { clamp } from '@app/functions/clamp';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { Keys, isMetaKey } from '@app/keys';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
@@ -164,22 +169,19 @@ export const JournalfoerteDocuments = () => {
     scrollContainerRef.current.scrollTo({ top: 0, behavior: 'auto' });
   }, []);
 
+  const searchRef = useRef<HTMLInputElement>(null);
+  const keyboardBoundaryRef = useRef<HTMLDivElement | null>(null);
+
   return (
     <SelectContextElement allDocumentsList={documents} filteredDocumentsList={totalFilteredDocuments}>
       <KeyboardContextElement
         filteredDocuments={totalFilteredDocuments}
         allSelectableDocuments={allSelectableDocuments}
         scrollToTop={scrollToTop}
+        searchRef={searchRef}
+        keyboardBoundaryRef={keyboardBoundaryRef}
       >
-        <VStack
-          as="section"
-          paddingInline="4"
-          paddingBlock="0 2"
-          flexGrow="1"
-          justify="space-between"
-          overflow="hidden"
-          data-testid="oppgavebehandling-documents-all"
-        >
+        <KeyboardBoundary ref={keyboardBoundaryRef}>
           <JournalfoertHeading
             allDocuments={documents}
             totalLengthOfMainDocuments={data?.totaltAntall ?? 0}
@@ -196,6 +198,7 @@ export const JournalfoerteDocuments = () => {
               listHeight={listHeight}
               showsAnyVedlegg={showsAnyVedlegg}
               toggleShowAllVedlegg={onToggle}
+              searchRef={searchRef}
             />
 
             <DocumentList
@@ -208,8 +211,103 @@ export const JournalfoerteDocuments = () => {
               setShowLogiskeVedleggIdList={setShowLogiskeVedleggIdList}
             />
           </VStack>
-        </VStack>
+        </KeyboardBoundary>
       </KeyboardContextElement>
     </SelectContextElement>
   );
 };
+
+interface KeyboardBoundaryProps {
+  children: React.ReactNode;
+  ref: React.RefObject<HTMLDivElement | null>;
+}
+
+const KeyboardBoundary = ({ children, ref }: KeyboardBoundaryProps) => {
+  const { focusSearch } = useKeyboardContext();
+  const onKeyDown = useKeyboard();
+
+  useEffect(() => {
+    const listener = (e: KeyboardEvent) => {
+      if (isMetaKey(e) && e.key === Keys.J) {
+        e.preventDefault();
+        focusSearch();
+      }
+    };
+
+    window.addEventListener('keydown', listener);
+
+    return () => {
+      window.removeEventListener('keydown', listener);
+    };
+  }, [focusSearch]);
+
+  return (
+    <VStack
+      as="section"
+      paddingInline="4"
+      paddingBlock="0 2"
+      flexGrow="1"
+      justify="space-between"
+      overflow="hidden"
+      data-testid="oppgavebehandling-documents-all"
+      onKeyDown={onKeyDown}
+      tabIndex={0}
+      ref={ref}
+      onFocus={({ target }) => {
+        if (target === ref.current) {
+          focusSearch();
+        }
+      }}
+      aria-keyshortcuts={ARIA_KEYSHORTCUTS_STRING}
+    >
+      {children}
+    </VStack>
+  );
+};
+
+/**
+ * `' '` is not a valid key in the ARIA spec, `'Space'` is used instead.
+ * @see https://w3c.github.io/aria/#aria-keyshortcuts
+ */
+const ARIA_KEYSHORTCUTS: (Keys | 'Space')[][] = [
+  [Keys.ArrowUp],
+  [Keys.ArrowDown],
+  [Keys.Home],
+  [Keys.End],
+  [Keys.Shift, Keys.Home],
+  [Keys.Shift, Keys.End],
+  [Keys.Cmd, Keys.ArrowUp],
+  [Keys.Cmd, Keys.ArrowDown],
+  [Keys.Ctrl, Keys.ArrowUp],
+  [Keys.Ctrl, Keys.ArrowDown],
+  [Keys.Shift, Keys.ArrowUp],
+  [Keys.Shift, Keys.ArrowDown],
+  [Keys.Ctrl, Keys.Shift, Keys.ArrowUp],
+  [Keys.Ctrl, Keys.Shift, Keys.ArrowDown],
+  [Keys.Cmd, Keys.Shift, Keys.ArrowUp],
+  [Keys.Cmd, Keys.Shift, Keys.ArrowDown],
+  [Keys.ArrowRight],
+  [Keys.Cmd, Keys.ArrowRight],
+  [Keys.Ctrl, Keys.ArrowRight],
+  [Keys.ArrowLeft],
+  [Keys.Cmd, Keys.ArrowLeft],
+  [Keys.Ctrl, Keys.ArrowLeft],
+  [Keys.Cmd, Keys.A],
+  [Keys.Cmd, Keys.H],
+  [Keys.Cmd, Keys.F],
+  [Keys.Cmd, Keys.N],
+  [Keys.Cmd, Keys.V],
+  [Keys.Cmd, Keys.I],
+  [Keys.Cmd, Keys.D],
+  ['Space'],
+  [Keys.Shift, 'Space'],
+  [Keys.Enter],
+  [Keys.Cmd, Keys.Enter],
+  [Keys.Ctrl, Keys.Enter],
+  [Keys.Cmd, Keys.Shift, Keys.D],
+  [Keys.Escape],
+  [Keys.Cmd, Keys.J],
+  [Keys.Ctrl, Keys.J],
+];
+
+const ARIA_KEYSHORTCUTS_STRING: string = ARIA_KEYSHORTCUTS.map((keys) => keys.join('+')).join(' ');

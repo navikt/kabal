@@ -1,15 +1,15 @@
-import { useIsKeyboardActive } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/focus';
 import { useKeyboardContext } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-context';
+import { useIsKeyboardActive } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { Keys, isMetaKey } from '@app/keys';
 import { pushEvent } from '@app/observability';
 import { useCallback, useMemo } from 'react';
 
 const EVENT_DOMAIN = 'journalforte-documents-keyboard-shortcuts';
 
-export const useKeyboard = (showHelp: () => void, clearSearch: () => void) => {
+export const useKeyboard = () => {
   const isKeyboardActive = useIsKeyboardActive();
 
-  const { GLOBAL_ACTIONS, ACTIONS } = useKeyboardShortcuts(showHelp, clearSearch);
+  const { GLOBAL_ACTIONS, ACTIONS } = useKeyboardShortcuts();
   const actions = isKeyboardActive ? ACTIONS : GLOBAL_ACTIONS;
 
   return useCallback(
@@ -52,7 +52,7 @@ const isKey = (
   return isMetaKey(event) === meta && event.altKey === alt && event.shiftKey === shift && event.key === key;
 };
 
-const useKeyboardShortcuts = (showHelp: () => void, clearSearch: () => void) => {
+const useKeyboardShortcuts = () => {
   const {
     down,
     up,
@@ -76,6 +76,8 @@ const useKeyboardShortcuts = (showHelp: () => void, clearSearch: () => void) => 
     rename,
     openInline,
     openInNewTab,
+    focusSearch,
+    showHelpModal,
   } = useKeyboardContext();
 
   const ACTIONS = useMemo<Action[]>(
@@ -134,19 +136,25 @@ const useKeyboardShortcuts = (showHelp: () => void, clearSearch: () => void) => 
       },
 
       // Actions
-      { key: Keys.D, action: toggleInclude, metric: 'keyboard-shortcut-toggle-include' },
+      { key: Keys.D, modifiers: { meta: true }, action: toggleInclude, metric: 'keyboard-shortcut-toggle-include' },
       {
         key: Keys.D,
-        modifiers: { meta: true },
+        modifiers: { meta: true, shift: true },
         action: toggleShowIncludeOnly,
         metric: 'keyboard-shortcut-toggle-show-include-only',
       },
-      { key: Keys.I, action: toggleInfo, metric: 'keyboard-shortcut-toggle-metadata' },
-      { key: Keys.V, action: setAsAttachmentTo, metric: 'keyboard-shortcut-set-as-attachment-to' },
-      { key: Keys.N, action: rename, metric: 'keyboard-shortcut-rename' },
+      { key: Keys.I, modifiers: { meta: true }, action: toggleInfo, metric: 'keyboard-shortcut-toggle-metadata' },
+      {
+        key: Keys.V,
+        modifiers: { meta: true },
+        action: setAsAttachmentTo,
+        metric: 'keyboard-shortcut-set-as-attachment-to',
+      },
+      { key: Keys.N, modifiers: { meta: true }, action: rename, metric: 'keyboard-shortcut-rename' },
+      { key: Keys.F, modifiers: { meta: true }, action: focusSearch, metric: 'keyboard-shortcut-focus-search' },
 
       // Help
-      { key: Keys.H, modifiers: { meta: true }, action: showHelp, metric: 'keyboard-shortcut-help-open' },
+      { key: Keys.H, modifiers: { meta: true }, action: showHelpModal, metric: 'keyboard-shortcut-help-open' },
 
       // Vedlegg expand/collapse
       { key: Keys.ArrowRight, action: expandVedlegg, metric: 'keyboard-shortcut-expand-vedlegg' },
@@ -167,12 +175,6 @@ const useKeyboardShortcuts = (showHelp: () => void, clearSearch: () => void) => 
       // Select all
       {
         key: Keys.A,
-        modifiers: { meta: true },
-        action: toggleSelectAll,
-        metric: 'keyboard-shortcut-toggle-select-all',
-      },
-      {
-        key: Keys.Space,
         modifiers: { meta: true },
         action: toggleSelectAll,
         metric: 'keyboard-shortcut-toggle-select-all',
@@ -213,7 +215,8 @@ const useKeyboardShortcuts = (showHelp: () => void, clearSearch: () => void) => 
       rename,
       openInline,
       openInNewTab,
-      showHelp,
+      focusSearch,
+      showHelpModal,
       toggleShowIncludeOnly,
     ],
   );
@@ -224,22 +227,16 @@ const useKeyboardShortcuts = (showHelp: () => void, clearSearch: () => void) => 
       { key: Keys.ArrowDown, action: down, metric: 'keyboard-shortcut-down' },
 
       // Actions
-      { key: Keys.H, modifiers: { meta: true }, action: showHelp, metric: 'keyboard-shortcut-help-open' },
+      { key: Keys.H, modifiers: { meta: true }, action: showHelpModal, metric: 'keyboard-shortcut-help-open' },
       {
         key: Keys.D,
         modifiers: { meta: true },
         action: toggleShowIncludeOnly,
         metric: 'keyboard-shortcut-toggle-show-include-only',
       },
-
-      // Escape
-      {
-        key: Keys.Escape,
-        action: clearSearch,
-        metric: 'keyboard-shortcut-clear-search',
-      },
+      { key: Keys.F, modifiers: { meta: true }, action: focusSearch, metric: 'keyboard-shortcut-focus-search' },
     ],
-    [down, showHelp, toggleShowIncludeOnly, clearSearch],
+    [down, showHelpModal, toggleShowIncludeOnly, focusSearch],
   );
 
   return { GLOBAL_ACTIONS, ACTIONS };

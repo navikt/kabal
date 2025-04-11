@@ -1,6 +1,7 @@
 import type { VedleggListRenderData } from '@app/components/documents/journalfoerte-documents/calculate';
 import { ROW_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
 import { AttachmentListItem } from '@app/components/documents/journalfoerte-documents/document/attachments/attachment-list';
+import { setRealDocumentPath } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
 import { JournalfoerteDocumentsAttachments } from '@app/components/documents/styled-components/attachment-list';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
@@ -22,6 +23,7 @@ export const VedleggList = ({
   minTop,
   maxTop,
   dokument,
+  dokumentIndex,
   isSelected,
   showLogiskeVedleggIdList,
   setShowLogiskeVedleggIdList,
@@ -55,14 +57,18 @@ export const VedleggList = ({
     const { dokumentInfoId, logiskeVedlegg } = vedlegg;
     const vedleggId = `${journalpostId}-${dokumentInfoId}`;
     const showVedleggList = showLogiskeVedleggIdList.includes(vedleggId);
+    const selected = isSelected({ journalpostId, dokumentInfoId });
 
     vedleggNodeList.push(
       <AttachmentListItem
         key={`vedlegg_${vedleggId}`}
+        role="treeitem"
+        aria-selected={selected}
+        aria-level={2}
         journalpostId={journalpostId}
         journalpoststatus={journalstatus}
         vedlegg={vedlegg}
-        isSelected={isSelected({ journalpostId, dokumentInfoId })}
+        isSelected={selected}
         showVedlegg={showVedleggList}
         hasVedlegg={logiskeVedlegg.length > 0}
         toggleShowVedlegg={() =>
@@ -71,7 +77,8 @@ export const VedleggList = ({
           )
         }
         style={{ top, height }}
-        aria-rowindex={index}
+        aria-posinset={index}
+        onClick={() => setRealDocumentPath(dokumentIndex, index)}
       >
         {showVedleggList ? (
           <LogiskeVedleggList
@@ -91,8 +98,10 @@ export const VedleggList = ({
 
   return (
     <JournalfoerteDocumentsAttachments
+      // biome-ignore lint/a11y/useSemanticElements: Keyboard navigation.
+      role="listbox"
+      aria-setsize={list.list.length}
       data-testid="oppgavebehandling-documents-all-vedlegg-list"
-      aria-rowcount={list.list.length}
       style={{ height: list.height, top: list.top }}
       $treeLineHeight={treeLineHeight}
     >

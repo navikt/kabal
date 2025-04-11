@@ -1,8 +1,8 @@
-import { convertAccessibleToRealDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/accessible-to-real-indexes';
+import { convertAccessibleToRealDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import {
   getAccessibleDocumentIndex,
   getFocusedVedleggIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/hooks/focus';
+} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useCallback } from 'react';
 

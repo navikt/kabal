@@ -72,6 +72,8 @@ export const DocumentList = ({
     const { journalpostId, dokumentInfoId, tittel, vedlegg, logiskeVedlegg, tema } = dokument;
     const hasVedlegg = vedlegg.length > 0;
 
+    const selected = isSelected(dokument);
+
     list.push(
       <Box
         as="li"
@@ -79,6 +81,11 @@ export const DocumentList = ({
         data-documentname={tittel}
         aria-setsize={documents.length}
         aria-posinset={index + 1}
+        aria-level={1}
+        aria-label={tittel ?? 'Dokument uten navn'}
+        aria-selected={selected}
+        aria-expanded={showVedlegg}
+        role="treeitem"
         key={`dokument_${journalpostId}_${dokumentInfoId}`}
         style={{ top: globalTop, height }}
         position="absolute"
@@ -89,7 +96,8 @@ export const DocumentList = ({
       >
         <Document
           document={dokument}
-          isSelected={isSelected(dokument)}
+          index={index}
+          isSelected={selected}
           isExpandedListView={isExpandedListView}
           showMetadata={showMetadata}
           toggleShowMetadata={() =>
@@ -151,12 +159,15 @@ export const DocumentList = ({
   }
 
   return (
-    <Box position="relative" paddingBlock="2">
+    <Box position="relative" paddingBlock="2" marginBlock="0 8">
       <StyledDocumentList
         data-testid="oppgavebehandling-documents-all-list"
         style={{ height: dokumenter.height }}
         flexShrink="0"
         flexGrow="1"
+        role="tree"
+        aria-multiselectable
+        aria-labelledby="journalfoerte-dokumenter-heading"
       >
         {list}
       </StyledDocumentList>

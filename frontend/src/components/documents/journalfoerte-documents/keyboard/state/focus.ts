@@ -1,3 +1,4 @@
+import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { Observable } from '@app/observable';
 import { useMemo, useSyncExternalStore } from 'react';
 
@@ -35,3 +36,20 @@ export const setFocusedVedleggIndex = focusedVedleggIndexStore.set;
 export const getAccessibleDocumentIndex = accessibleDocumentIndexStore.get;
 export const getFocusedVedleggIndex = focusedVedleggIndexStore.get;
 export const getIsInVedleggList = () => focusedVedleggIndexStore.get() !== INITIAL_INDEX;
+
+export const setRealDocumentIndex = (index: number) => {
+  const accessibleDocumentIndex = convertRealToAccessibleDocumentIndex(index);
+
+  if (accessibleDocumentIndex === null) {
+    return false;
+  }
+
+  accessibleDocumentIndexStore.set(accessibleDocumentIndex);
+  return true;
+};
+
+export const setRealDocumentPath = (d: number, v: number) => {
+  if (setRealDocumentIndex(d)) {
+    setFocusedVedleggIndex(v);
+  }
+};

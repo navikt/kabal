@@ -1,17 +1,17 @@
-import { getDocumentPath } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/accessible-to-real-indexes';
+import { getDocumentPath } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { getHasVisibleVedlegg } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/visible-vedlegg';
+import { useGetDocument } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import {
+  decrement,
+  getLastIndex,
+} from '@app/components/documents/journalfoerte-documents/keyboard/increment-decrement';
 import {
   getAccessibleDocumentIndex,
   getIsInVedleggList,
   resetIndexes,
   setAccessibleDocumentIndex,
   setFocusedVedleggIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/hooks/focus';
-import { useGetDocument } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import { getHasVisibleVedlegg } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/visible-vedlegg';
-import {
-  decrement,
-  getLastIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/increment-decrement';
+} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import type { DocumentPath } from '@app/components/documents/journalfoerte-documents/select-context/types';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useCallback } from 'react';

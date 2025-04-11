@@ -1,8 +1,8 @@
-import { getIsInVedleggList } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/focus';
 import {
   useGetDocument,
   useGetVedlegg,
 } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import { getIsInVedleggList } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {

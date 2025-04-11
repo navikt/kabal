@@ -1,12 +1,12 @@
 import { useDown } from '@app/components/documents/journalfoerte-documents/keyboard/actions/down';
 import { home, useEnd } from '@app/components/documents/journalfoerte-documents/keyboard/actions/home-end';
 import { useUp } from '@app/components/documents/journalfoerte-documents/keyboard/actions/up';
-import { getDocumentPath } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/accessible-to-real-indexes';
-import { getIsInVedleggList } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/focus';
+import { getDocumentPath } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import {
   useGetDocument,
   useGetVedlegg,
 } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import { getIsInVedleggList } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';

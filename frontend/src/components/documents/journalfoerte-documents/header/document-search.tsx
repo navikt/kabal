@@ -1,18 +1,17 @@
-import { KeyboardHelp } from '@app/components/documents/journalfoerte-documents/header/keyboard-help';
-import { useKeyboard } from '@app/components/documents/journalfoerte-documents/keyboard/use-keyboard';
-import { useHasSeenKeyboardShortcuts } from '@app/hooks/settings/use-setting';
+import { KeyboardHelpButton } from '@app/components/documents/journalfoerte-documents/header/keyboard-help-button';
+import { Keys } from '@app/keys';
 import { HStack, Search } from '@navikt/ds-react';
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { Fields } from '../grid';
 
 interface Props {
   setSearch: (value: string) => void;
   search: string;
+  ref?: React.RefObject<HTMLInputElement | null>;
 }
 
 export const DocumentSearch = memo(
-  ({ search, setSearch }: Props) => {
-    const helpModalRef = useRef<HTMLDialogElement>(null);
+  ({ search, setSearch, ref }: Props) => {
     const [value, setValue] = useState<string>(search);
 
     useEffect(() => {
@@ -23,19 +22,19 @@ export const DocumentSearch = memo(
       return () => clearTimeout(timeout);
     }, [value, setSearch]);
 
-    const { setValue: setHasSeenKeyboardShortcuts } = useHasSeenKeyboardShortcuts();
-
-    const showHelpModal = useCallback(() => {
-      helpModalRef.current?.showModal();
-      setHasSeenKeyboardShortcuts(true);
-    }, [setHasSeenKeyboardShortcuts]);
-
     const clearSearch = useCallback(() => {
       setValue('');
       setSearch('');
     }, [setSearch]);
 
-    const onKeyDown = useKeyboard(showHelpModal, clearSearch);
+    const onKeyDown = useCallback(
+      (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === Keys.Escape) {
+          clearSearch();
+        }
+      },
+      [clearSearch],
+    );
 
     return (
       <div style={{ gridArea: Fields.Title }}>
@@ -48,11 +47,12 @@ export const DocumentSearch = memo(
             placeholder="Tittel/journalpost-ID"
             onChange={setValue}
             value={value}
-            onKeyDown={onKeyDown}
             autoComplete="off"
+            onKeyDown={onKeyDown}
+            ref={ref}
           />
 
-          <KeyboardHelp ref={helpModalRef} showModal={showHelpModal} />
+          <KeyboardHelpButton />
         </HStack>
       </div>
     );

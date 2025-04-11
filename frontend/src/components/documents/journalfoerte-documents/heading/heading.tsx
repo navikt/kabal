@@ -41,7 +41,7 @@ export const JournalfoertHeading = memo(
             maxChar={Number.POSITIVE_INFINITY}
             content={`Viser ${filteredDocuments.length} filtrerte hoveddokumenter.\n\nAntall hoveddokumenter: ${totalLengthOfMainDocuments}\nAntall vedlegg: ${numberOfVedlegg}\nTotalt: ${totalCount}`}
           >
-            <Heading size="xsmall" level="1">
+            <Heading size="xsmall" level="1" id="journalfoerte-dokumenter-heading">
               Journalførte dokumenter ({filteredDocuments.length}/{totalLengthOfMainDocuments})
             </Heading>
           </Tooltip>

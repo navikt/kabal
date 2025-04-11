@@ -1,4 +1,4 @@
-import { setAccessibleToRealDocumentIndexes } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/accessible-to-real-indexes';
+import { setAccessibleToRealDocumentIndexes } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import {
