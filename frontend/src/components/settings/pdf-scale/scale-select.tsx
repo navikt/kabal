@@ -1,5 +1,6 @@
 import { MAX, MIN } from '@app/components/settings/pdf-scale/constants';
 import { clamp } from '@app/functions/clamp';
+import { Keys } from '@app/keys';
 import { Box, HStack, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
 
@@ -94,16 +95,16 @@ export const ScaleSelect = ({ scale, setScale, scaleUp, scaleDown, close }: Scal
             onBlur={() => setStringValue(inputValue)}
             onKeyDown={(e) => {
               switch (e.key) {
-                case 'Enter':
-                case 'Escape':
+                case Keys.Enter:
+                case Keys.Escape:
                   close();
                   break;
-                case 'ArrowUp': {
+                case Keys.ArrowUp: {
                   e.preventDefault();
                   setInputValue(scaleUp().toString(10));
                   break;
                 }
-                case 'ArrowDown': {
+                case Keys.ArrowDown: {
                   e.preventDefault();
                   setInputValue(scaleDown().toString(10));
                   break;

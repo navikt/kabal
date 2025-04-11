@@ -2,6 +2,7 @@ import { StaticDataContext } from '@app/components/app/static-data-context';
 import { connectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { isMetaKey } from '@app/keys';
 import { getRangePosition } from '@app/plate/functions/get-range-position';
 import { useMyPlateEditorState } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
@@ -85,7 +86,7 @@ export const NewComment = ({ container }: Props) => {
     <StyledNewThread
       style={{ top: `${position.top}em` }}
       onKeyDown={(e) => {
-        if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'k') {
+        if (!e.shiftKey && isMetaKey(e) && e.key.toLowerCase() === 'k') {
           e.preventDefault();
           close();
         }

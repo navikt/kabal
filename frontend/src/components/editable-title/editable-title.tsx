@@ -1,3 +1,4 @@
+import { Keys } from '@app/keys';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Heading } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
@@ -58,10 +59,10 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
         }}
         onKeyDown={(e) => {
           const { key } = e;
-          if (key === 'Enter') {
+          if (key === Keys.Enter) {
             e.preventDefault();
             onSave();
-          } else if (key === 'Escape') {
+          } else if (key === Keys.Escape) {
             e.preventDefault();
             e.currentTarget.textContent = title;
             setCaretAtEnd(e.currentTarget);

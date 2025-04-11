@@ -18,7 +18,7 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
-import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
+import type { IArkivertDocument, IArkivertDocumentVedlegg, Journalstatus } from '@app/types/arkiverte-documents';
 import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { memo, useCallback, useContext, useMemo, useRef } from 'react';
@@ -29,6 +29,7 @@ import { SelectRow } from '../shared/select-row';
 
 interface Props {
   journalpostId: string;
+  journalpoststatus: Journalstatus | null;
   vedlegg: IArkivertDocumentVedlegg;
   isSelected: boolean;
   showVedlegg: boolean;
@@ -39,7 +40,7 @@ interface Props {
 const EMPTY_ARRAY: IArkivertDocument[] = [];
 
 export const Attachment = memo(
-  ({ vedlegg, journalpostId, isSelected, showVedlegg, toggleShowVedlegg, hasVedlegg }: Props) => {
+  ({ vedlegg, journalpostId, journalpoststatus, isSelected, showVedlegg, toggleShowVedlegg, hasVedlegg }: Props) => {
     const { dokumentInfoId, hasAccess, tittel } = vedlegg;
     const oppgaveId = useOppgaveId();
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
@@ -84,8 +85,8 @@ export const Attachment = memo(
       [documents, dokumentInfoId, getSelectedDocuments, isSelected, journalpostId, setDraggedJournalfoertDocuments],
     );
 
-    const disabled = !(hasAccess && (isSaksbehandler || isRol)) || isFeilregistrert;
-    const draggingIsEnabled = draggingEnabled && !disabled;
+    const disabled = !(isSaksbehandler || isRol) || isFeilregistrert;
+    const draggingIsEnabled = draggingEnabled && !disabled && hasAccess;
 
     const Icon = useMemo(() => {
       if (hasVedlegg) {
@@ -95,8 +96,11 @@ export const Attachment = memo(
       return showVedlegg ? ChevronUpIcon : ChevronDownIcon;
     }, [hasVedlegg, showVedlegg]);
 
+    const ref = useRef<HTMLDivElement>(null);
+
     return (
       <StyledVedlegg
+        ref={ref}
         key={journalpostId + dokumentInfoId}
         data-testid="oppgavebehandling-documents-all-list-item"
         data-journalpostid={journalpostId}
@@ -119,6 +123,7 @@ export const Attachment = memo(
           onClick={toggleShowVedlegg}
           aria-label={showVedlegg ? 'Skjul vedlegg' : 'Vis vedlegg'}
           style={{ gridArea: Fields.ToggleVedlegg }}
+          tabIndex={-1}
         />
 
         <DocumentTitle
@@ -131,7 +136,8 @@ export const Attachment = memo(
         <IncludeDocument
           dokumentInfoId={dokumentInfoId}
           journalpostId={journalpostId}
-          disabled={disabled}
+          journalpoststatus={journalpoststatus}
+          hasAccess={hasAccess}
           name={tittel ?? ''}
           checked={vedlegg.valgt}
         />

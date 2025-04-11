@@ -28,7 +28,7 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
   return (
     <>
       {columns.TEMA ? (
-        <TemaButton $area={Fields.Tema} onClick={() => setTema([tema ?? 'UNKNOWN'])} title={temaName}>
+        <TemaButton $area={Fields.Tema} onClick={() => setTema([tema ?? 'UNKNOWN'])} title={temaName} tabIndex={-1}>
           {temaName}
         </TemaButton>
       ) : null}
@@ -38,7 +38,12 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
         <AvsenderMottaker journalposttype={journalposttype} avsenderMottaker={avsenderMottaker} />
       ) : null}
       {columns.SAKSNUMMER ? (
-        <SaksIdButton size="small" variant="tertiary" onClick={() => setSaksId([sak?.fagsakId ?? 'NONE'])}>
+        <SaksIdButton
+          size="small"
+          variant="tertiary"
+          onClick={() => setSaksId([sak?.fagsakId ?? 'NONE'])}
+          tabIndex={-1}
+        >
           {sak?.fagsakId ?? 'Ingen'}
         </SaksIdButton>
       ) : null}
@@ -49,6 +54,7 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
         icon={<InformationSquareIcon aria-hidden />}
         onClick={toggleShowMetadata}
         style={{ gridArea: Fields.ToggleMetadata }}
+        tabIndex={-1}
       />
     </>
   );
