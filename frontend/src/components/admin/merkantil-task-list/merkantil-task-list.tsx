@@ -1,3 +1,5 @@
+import { Finish } from '@app/components/admin/merkantil-task-list/finish';
+import { SetStatusFilter, StatusFilter } from '@app/components/admin/merkantil-task-list/set-status-filter';
 import { Type } from '@app/components/type/type';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { ENVIRONMENT } from '@app/environment';
@@ -5,6 +7,7 @@ import { type Task, useGetMerkantilTasksQuery } from '@app/redux-api/internal';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ArrowsCirclepathIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, CopyButton, HStack, Heading, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export const MerkantilTaskList = () => {
@@ -33,7 +36,21 @@ export const MerkantilTaskList = () => {
 };
 
 const TaskList = () => {
-  const { data: tasks = [], isLoading, isError, error } = useGetMerkantilTasksQuery();
+  const { data = [], isLoading, isError, error } = useGetMerkantilTasksQuery();
+  const [filter, setFilter] = useState(StatusFilter.ALL);
+
+  const tasks = useMemo(() => {
+    return data.filter((task) => {
+      switch (filter) {
+        case StatusFilter.ALL:
+          return true;
+        case StatusFilter.HANDLED:
+          return task.dateHandled !== null;
+        case StatusFilter.UNHANDLED:
+          return task.dateHandled === null;
+      }
+    });
+  }, [data, filter]);
 
   if (isError) {
     return (
@@ -79,6 +96,7 @@ const TaskList = () => {
   return (
     <VStack gap="4">
       <HStack gap="4">
+        <SetStatusFilter filter={filter} setFilter={setFilter} />
         <CopyButton size="small" copyText={tasks.map(toCopyLine).join('\n')} text="Kopier alle" variant="action" />
         <CopyButton
           size="small"
@@ -102,6 +120,7 @@ const TaskList = () => {
             <Table.HeaderCell className="whitespace-nowrap">Behandlet av navn</Table.HeaderCell>
             <Table.HeaderCell className="whitespace-nowrap">Kommentar</Table.HeaderCell>
             <Table.HeaderCell className="whitespace-nowrap" />
+            <Table.HeaderCell className="whitespace-nowrap" />
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -124,13 +143,17 @@ const TaskList = () => {
                   <Button
                     as={Link}
                     to={getPath(behandlingId, typeId)}
-                    variant="primary"
+                    variant="secondary"
                     size="small"
                     target="_blank"
                     icon={<ExternalLinkIcon aria-hidden />}
                   >
                     Åpne
                   </Button>
+                </Table.DataCell>
+
+                <Table.DataCell>
+                  <Finish id={id} dateHandled={dateHandled} />
                 </Table.DataCell>
               </Table.Row>
             ),
@@ -157,6 +180,8 @@ const SkeletonRow = ({ height }: { height: number }) => (
     <Skeleton variant="text" height={height} width={158} />
     <Skeleton variant="text" height={height} width={104} />
     <Skeleton variant="text" height={height} width={105} />
+    <Skeleton variant="text" height={height} width={105} />
+    <Skeleton variant="text" height={height} width={132} />
   </HStack>
 );
 const DOMAIN = ENVIRONMENT.isProduction ? 'https://kabal.intern.nav.no' : 'https://kabal.intern.dev.nav.no';

@@ -1,5 +1,11 @@
+import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
+import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { user } from '@app/static-data/static-data';
+import { isApiRejectionError } from '@app/types/errors';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { format } from 'date-fns';
 import { KABAL_INTERNAL_BASE_QUERY } from './common';
 
 export interface Task {
@@ -39,6 +45,47 @@ export const kabalInternalApi = createApi({
     getMerkantilTasks: builder.query<Task[], void>({
       query: () => '/kabal-api/internal/merkantil-tasks',
     }),
+    completeMerkantilTask: builder.mutation<Task, { taskId: string; comment: string }>({
+      query: ({ taskId, comment }) => ({
+        url: `/kabal-api/internal/merkantil-tasks/${taskId}/complete`,
+        method: 'POST',
+        body: { comment },
+      }),
+      onQueryStarted: async ({ taskId, comment }, { dispatch, queryFulfilled }) => {
+        const { navIdent, navn } = await user;
+
+        const patchResult = dispatch(
+          kabalInternalApi.util.updateQueryData('getMerkantilTasks', undefined, (draft) =>
+            draft.map((task) => {
+              if (task.id === taskId) {
+                const dateHandled = format(new Date(), ISO_DATETIME_FORMAT);
+
+                return { ...task, dateHandled, comment, handledBy: navIdent, handledByName: navn };
+              }
+
+              return task;
+            }),
+          ),
+        );
+        try {
+          const { data } = await queryFulfilled;
+
+          kabalInternalApi.util.updateQueryData('getMerkantilTasks', undefined, (draft) =>
+            draft.map((task) => (task.id === taskId ? { ...task, ...data } : task)),
+          );
+        } catch (error) {
+          patchResult.undo();
+
+          const message = 'Kunne ikke fullføre oppgave.';
+
+          if (isApiRejectionError(error)) {
+            apiErrorToast(message, error.error);
+          } else {
+            toast.error(message);
+          }
+        }
+      },
+    }),
     insertHjemlerInSettings: builder.mutation<void, { ytelseId: string; hjemmelIdList: string[] }>({
       query: (body) => ({
         url: '/kabal-innstillinger/admin/inserthjemlerinsettings',
@@ -55,4 +102,5 @@ export const {
   useRecreateElasticAdminMutation,
   useGetMerkantilTasksQuery,
   useInsertHjemlerInSettingsMutation,
+  useCompleteMerkantilTaskMutation,
 } = kabalInternalApi;

@@ -1,5 +1,5 @@
 import { InsertHjemlerInSettings } from '@app/components/admin/insert-hjemler-in-settings';
-import { MerkantilTaskList } from '@app/components/admin/merkantil-task-list';
+import { MerkantilTaskList } from '@app/components/admin/merkantil-task-list/merkantil-task-list';
 import {
   useRecreateElasticAdminMutation,
   useRefillElasticAdminMutation,
