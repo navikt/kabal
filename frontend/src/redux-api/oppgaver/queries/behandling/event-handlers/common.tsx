@@ -1,15 +1,15 @@
+import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
-import { formatIdNumber } from '@app/functions/format-id';
 import type { INavEmployee } from '@app/types/bruker';
 
 interface Props {
-  id: string;
+  identifikator: string | null;
   name: string | null;
 }
 
-export const FormatName = ({ id, name = 'Navn mangler' }: Props) => (
+export const FormatName = (props: Props) => (
   <b>
-    {name} ({formatIdNumber(id)})
+    <PartNameAndIdentifikator {...props} />
   </b>
 );
 

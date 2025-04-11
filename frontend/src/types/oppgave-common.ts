@@ -34,6 +34,17 @@ export const UTSENDINGSKANAL: Record<Utsendingskanal, string> = {
   [Utsendingskanal.DPVT]: 'Taushetsbelagt digital post til virksomhet',
 };
 
+export interface SearchPersonResponse {
+  id: string;
+  name: string;
+  type: IdType.FNR;
+  available: boolean;
+  language: Language;
+  statusList: IPersonStatus[];
+  sex: SexEnum;
+  address: IAddress | null;
+}
+
 export interface IPartBase {
   id: string;
   name: string | null;
@@ -99,16 +110,31 @@ export type IOrganizationStatus =
     };
 
 export interface IPersonPart extends IPartBase {
+  identifikator: string;
   type: IdType.FNR;
   statusList: IPersonStatus[];
 }
 
 export interface IOrganizationPart extends IPartBase {
+  identifikator: string;
   type: IdType.ORGNR;
   statusList: IOrganizationStatus[];
 }
 
-export type IPart = IPersonPart | IOrganizationPart;
+export interface IPersonFullmektig extends IPartBase {
+  identifikator: string | null;
+  type: IdType.FNR | null;
+  statusList: IPersonStatus[] | null;
+}
+
+export interface IOrganizationFullmektig extends IPartBase {
+  identifikator: string | null;
+  type: IdType.ORGNR | null;
+  statusList: IOrganizationStatus[] | null;
+}
+
+export type IPart = IPersonPart | IOrganizationPart | IFullmektig;
+export type IFullmektig = IPersonFullmektig | IOrganizationFullmektig;
 
 export interface ISakenGjelder extends IPersonPart {
   sex: SexEnum;
