@@ -42,7 +42,7 @@ export const handleFerdigstiltEvent =
                 timestamp,
                 event: { avsluttetAvSaksbehandler },
                 type: HistoryEventTypes.FERDIGSTILT,
-                previous: history.ferdigstilt.at(-1) ?? {
+                previous: history.ferdigstilt.at(0) ?? {
                   actor: null,
                   timestamp: draft.created,
                   event: null,

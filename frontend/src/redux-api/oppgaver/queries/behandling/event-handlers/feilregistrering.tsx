@@ -42,7 +42,7 @@ export const handleFeilregistreringEvent =
                 timestamp,
                 event: { reason },
                 type: HistoryEventTypes.FEILREGISTRERT,
-                previous: history.feilregistrert.at(-1) ?? {
+                previous: history.feilregistrert.at(0) ?? {
                   actor: null,
                   timestamp: draft.created,
                   event: null,

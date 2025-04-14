@@ -7,7 +7,7 @@ import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
 import type { IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Buildings3Icon, PersonEnvelopeIcon, PersonIcon } from '@navikt/aksel-icons';
+import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { Checkbox, CheckboxGroup, HStack, Tag, Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
 
@@ -72,6 +72,7 @@ export const SuggestedRecipients = ({
       {recipients.map(({ part, brevmottakertyper, handling, overriddenAddress }) => {
         const { id, name, statusList } = part;
         const error = sendErrors.find((e) => e.field === id)?.reason ?? null;
+        const isPerson = part.type === IdType.FNR;
         const isChecked = selectedIds.includes(id);
 
         return (
@@ -79,10 +80,8 @@ export const SuggestedRecipients = ({
             <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
               <Checkbox size="small" value={id} data-testid="document-send-recipient" error={error !== null}>
                 <HStack align="center" gap="1">
-                  <Tooltip content={getTooltip(part.type)}>
-                    <span>
-                      <Icon type={part.type} />
-                    </span>
+                  <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
+                    {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
                   </Tooltip>
                   <span>
                     {name} ({getTypeNames(brevmottakertyper)})
@@ -110,26 +109,4 @@ export const SuggestedRecipients = ({
       })}
     </CheckboxGroup>
   );
-};
-
-const Icon = ({ type }: { type: IdType | null }) => {
-  switch (type) {
-    case IdType.FNR:
-      return <PersonIcon aria-hidden />;
-    case IdType.ORGNR:
-      return <Buildings3Icon aria-hidden />;
-    case null:
-      return <PersonEnvelopeIcon aria-hidden />;
-  }
-};
-
-const getTooltip = (type: IdType | null) => {
-  switch (type) {
-    case IdType.FNR:
-      return 'Person';
-    case IdType.ORGNR:
-      return 'Organisasjon';
-    case null:
-      return 'Ukjent mottakertype';
-  }
 };

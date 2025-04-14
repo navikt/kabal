@@ -15,10 +15,9 @@ export const employeeName = (employee: INavEmployee | null, fallback = '[Ukjent 
 export const QUEUE = <b>felles kø</b>;
 export const SELF = <b>seg selv</b>;
 
-export const partName = ({ name, identifikator }: IPart) => (
+export const partName = ({ name, id }: IPart) => (
   <b>
-    {name === null ? 'Navn mangler' : name}
-    {identifikator === null ? null : ` (${formatIdNumber(identifikator)})`}
+    {name} ({formatIdNumber(id)})
   </b>
 );
 

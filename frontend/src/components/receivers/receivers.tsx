@@ -96,10 +96,8 @@ export const Receivers = ({ setMottakerList, mottakerList, sendErrors = [], temp
   );
 
   useEffect(() => {
-    const unreachableRecipients = mottakerList.filter(
-      (m) =>
-        m.part.statusList?.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED) ??
-        false,
+    const unreachableRecipients = mottakerList.filter((m) =>
+      m.part.statusList.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED),
     );
 
     if (unreachableRecipients.length > 0) {

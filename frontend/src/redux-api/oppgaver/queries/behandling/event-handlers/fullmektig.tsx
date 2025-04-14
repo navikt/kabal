@@ -62,7 +62,7 @@ export const handlefullmektigEvent =
             type: HistoryEventTypes.FULLMEKTIG,
           };
 
-          const previous = history.fullmektig.at(-1);
+          const previous = history.fullmektig.at(0);
 
           if (previous === undefined) {
             history.fullmektig = [
@@ -88,7 +88,7 @@ export const handlefullmektigEvent =
             previous,
           };
 
-          history.fullmektig = [...history.fullmektig, historyEvent];
+          history.fullmektig = [historyEvent, ...history.fullmektig];
 
           return history;
         }),

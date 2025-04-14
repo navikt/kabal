@@ -1,4 +1,4 @@
-import type { SearchPersonResponse } from '@app/types/oppgave-common';
+import type { IPartBase } from '@app/types/oppgave-common';
 import type {
   ApiResponse,
   CommonOppgaverParams,
@@ -62,7 +62,7 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
         body: { query },
       }),
     }),
-    searchPersonByFnr: builder.query<SearchPersonResponse, string>({
+    searchPersonByFnr: builder.query<IPartBase, string>({
       query: (identifikator) => ({
         url: '/kabal-api/searchperson',
         method: 'POST', // Søk POST for å ikke sende fnr inn i URLen, som blir logget.
