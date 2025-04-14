@@ -119,7 +119,7 @@ const Tildelt = ({
   timestamp,
 }: TildeltProps) => {
   const { user } = useContext(StaticDataContext);
-  const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.identifikator})`;
+  const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
   const toSaksbehandlerText = formatEmployeeNameAndIdFallback(toSaksbehandler, 'ukjent saksbehandler');
   const fromSaksbehandlerText = fromSaksbehandler === null ? '' : ` fra ${formatEmployeeNameAndId(fromSaksbehandler)}`;
   const [tildel] = useTildel(oppgaveId, oppgaveType, ytelseId);
@@ -172,7 +172,7 @@ const Tildelt = ({
 };
 
 const Fradelt = ({ oppgaveId, sakenGjelder, fromSaksbehandler, oppgaveType, ytelseId }: Props) => {
-  const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.identifikator})`;
+  const sakenGjelderText = `${sakenGjelder.name ?? 'Navn mangler'} (${sakenGjelder.id})`;
   const fromSaksbehandlerText = formatEmployeeNameAndIdFallback(fromSaksbehandler, '');
   const [tildel] = useTildel(oppgaveId, oppgaveType, ytelseId);
 

@@ -78,8 +78,6 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
 
   const canDelete = isMainDocument && containsRolAttachments ? false : canEditDocument;
 
-  const isInngående = isMainDocument && document.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(document);
-
   return (
     <>
       <ModalBody $isMainDocument={isMainDocument}>
@@ -118,13 +116,18 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
             <SetParentDocument document={document} parentDocument={parentDocument} hasAttachments={hasAttachments} />
           ) : null}
 
-          {canEditDocument && isInngående ? <MottattDato document={document} oppgaveId={oppgaveId} /> : null}
+          {canEditDocument &&
+          isMainDocument &&
+          document.type === DocumentTypeEnum.UPLOADED &&
+          getIsIncomingDocument(document) ? (
+            <MottattDato document={document} oppgaveId={oppgaveId} />
+          ) : null}
 
           {isMainDocument && document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST ? (
             <AnnenInngaaende document={document} canEditDocument={canEditDocument} />
           ) : null}
 
-          {canEditDocument && !isNotat && !isInngående && isMainDocument ? (
+          {canEditDocument && !isNotat && isMainDocument ? (
             <Receivers
               setMottakerList={(mottakerList) => setMottakerList({ oppgaveId, dokumentId: document.id, mottakerList })}
               mottakerList={document.mottakerList}

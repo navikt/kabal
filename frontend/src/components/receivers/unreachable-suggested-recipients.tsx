@@ -26,7 +26,7 @@ export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) 
 
       <List>
         {recipients.map(({ part, brevmottakertyper, overriddenAddress, handling }) => {
-          const { identifikator, id, name, statusList } = part;
+          const { id, name, statusList } = part;
           const isPerson = part.type === IdType.FNR;
 
           const alertText = getUnreachableText(statusList);
@@ -39,20 +39,16 @@ export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) 
                   <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
                     {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
                   </Tooltip>
-                  {(name ?? identifikator === null) ? null : (
-                    <CopyButton
-                      size="xsmall"
-                      copyText={name ?? identifikator}
-                      text={`${name} (${getTypeNames(brevmottakertyper)})`}
-                    />
-                  )}
+                  <CopyButton
+                    size="xsmall"
+                    copyText={name ?? id}
+                    text={`${name} (${getTypeNames(brevmottakertyper)})`}
+                  />
                   <PartStatusList statusList={statusList} size="xsmall" />
                 </HStack>
               </HStack>
               <HStack align="center" gap="0 2" paddingInline="2" paddingBlock="0 1">
-                {identifikator === null ? null : (
-                  <CopyButton size="xsmall" copyText={id} text={formatIdNumber(identifikator)} />
-                )}
+                <CopyButton size="xsmall" copyText={id} text={formatIdNumber(id)} />
               </HStack>
               <Address part={part} address={part.address} overriddenAddress={overriddenAddress} handling={handling} />
               {alertText === null ? null : (
@@ -74,10 +70,6 @@ export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) 
 };
 
 const getUnreachableText = (statusList: IPart['statusList']): string | null => {
-  if (statusList === null || statusList.length === 0) {
-    return null;
-  }
-
   if (statusList.some((s) => s.status === PartStatusEnum.DEAD)) {
     return 'personen er død';
   }
@@ -90,10 +82,6 @@ const getUnreachableText = (statusList: IPart['statusList']): string | null => {
 };
 
 const getUnreachableHelpText = (statusList: IPart['statusList']): string | null => {
-  if (statusList === null || statusList.length === 0) {
-    return null;
-  }
-
   if (statusList.some((s) => s.status === PartStatusEnum.DELETED)) {
     return 'Ta kontakt med parten for å få nytt organisasjonsnummer eller oppdatert adresse.';
   }

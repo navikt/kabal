@@ -15,7 +15,7 @@ interface LinkProps {
 }
 
 export const Modia = ({ sakenGjelder }: LinkProps) => {
-  const url = `${EXTERNAL_URL_MODIA}/person/${sakenGjelder.identifikator}`;
+  const url = `${EXTERNAL_URL_MODIA}/person/${sakenGjelder.id}`;
   const eventName = 'modia-link';
   const appName = 'Modia';
 

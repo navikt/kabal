@@ -28,7 +28,7 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
     setError(inputError);
 
     if (inputError === undefined && oppgave !== undefined) {
-      search({ identifikator: value, sakenGjelderId: oppgave.sakenGjelder.identifikator, ytelseId: oppgave.ytelseId });
+      search({ identifikator: value, sakenGjelderId: oppgave.sakenGjelder.id, ytelseId: oppgave.ytelseId });
     }
   };
 
@@ -54,7 +54,7 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
     setError(undefined);
 
     if (inputError === undefined && oppgave !== undefined) {
-      search({ identifikator: value, sakenGjelderId: oppgave.sakenGjelder.identifikator, ytelseId: oppgave.ytelseId });
+      search({ identifikator: value, sakenGjelderId: oppgave.sakenGjelder.id, ytelseId: oppgave.ytelseId });
     }
   }, [oppgave, rawValue, search]);
 

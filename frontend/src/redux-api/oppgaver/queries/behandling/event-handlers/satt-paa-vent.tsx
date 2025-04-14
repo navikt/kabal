@@ -54,7 +54,6 @@ export const handleSattPaaVentEvent =
           return {
             ...history,
             sattPaaVent: [
-              ...history.sattPaaVent,
               {
                 actor,
                 timestamp,
@@ -67,6 +66,7 @@ export const handleSattPaaVentEvent =
                   type: HistoryEventTypes.SATT_PAA_VENT,
                 },
               } satisfies ISattPaaVentEvent,
+              ...history.sattPaaVent,
             ],
           };
         }),

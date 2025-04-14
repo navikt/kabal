@@ -89,7 +89,7 @@ const Recipients = ({ mottakerList, removeMottakere, changeMottaker, sendErrors,
                   </Tooltip>
                   <HStack align="center" gap="0 1">
                     <span>{part.name}</span>
-                    {part.identifikator === null ? null : <CopyIdButton id={part.identifikator} size="xsmall" />}
+                    <CopyIdButton id={part.id} size="xsmall" />
                   </HStack>
                   <PartStatusList statusList={part.statusList} size="xsmall" />
                   {error === null ? null : (

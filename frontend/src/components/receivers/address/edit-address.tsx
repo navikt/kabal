@@ -144,29 +144,40 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
 
   return (
     <Container $state={addressState} onKeyDown={onKeyDown}>
-      <AddressField
-        id="adresselinje1"
-        label="Adresselinje 1"
-        value={adresselinje1}
-        originalValue={address?.adresselinje1 ?? null}
-        onChange={setAdresselinje1}
-        autoFocus
-        required={!isNorway}
-        error={addresseLinje1Error}
-      />
-      <AddressField
-        label="Adresselinje 2"
-        value={adresselinje2}
-        originalValue={address?.adresselinje2 ?? null}
-        onChange={setAdresselinje2}
-      />
-      <AddressField
-        label="Adresselinje 3"
-        value={adresselinje3}
-        originalValue={address?.adresselinje3 ?? null}
-        onChange={setAdresselinje3}
-      />
-      <Country value={landkode ?? undefined} originalValue={address?.landkode} onChange={onCountryChange} />
+      <HStack align="center" gap="1">
+        <AddressField
+          id="adresselinje1"
+          label="Adresselinje 1"
+          value={adresselinje1}
+          originalValue={address?.adresselinje1 ?? null}
+          onChange={setAdresselinje1}
+          autoFocus
+          required={!isNorway}
+          error={addresseLinje1Error}
+          htmlSize={64}
+        />
+      </HStack>
+      <HStack align="center" gap="1">
+        <AddressField
+          label="Adresselinje 2"
+          value={adresselinje2}
+          originalValue={address?.adresselinje2 ?? null}
+          onChange={setAdresselinje2}
+          htmlSize={64}
+        />
+      </HStack>
+      <HStack align="center" gap="1">
+        <AddressField
+          label="Adresselinje 3"
+          value={adresselinje3}
+          originalValue={address?.adresselinje3 ?? null}
+          onChange={setAdresselinje3}
+          htmlSize={64}
+        />
+      </HStack>
+      <HStack align="center" gap="1">
+        <Country value={landkode ?? undefined} originalValue={address?.landkode} onChange={onCountryChange} />
+      </HStack>
       {isNorway ? (
         <Postnummer
           value={postnummer}

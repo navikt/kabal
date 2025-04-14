@@ -47,7 +47,7 @@ export const handleMedunderskriverEvent =
             return;
           }
 
-          const previous = history.medunderskriver.at(-1);
+          const previous = history.medunderskriver.at(0);
 
           if (previous === undefined) {
             if (flowState === FlowState.NOT_SENT) {
@@ -84,7 +84,6 @@ export const handleMedunderskriverEvent =
           return {
             ...history,
             medunderskriver: [
-              ...history.medunderskriver,
               {
                 actor,
                 timestamp,
@@ -92,6 +91,7 @@ export const handleMedunderskriverEvent =
                 type: HistoryEventTypes.MEDUNDERSKRIVER,
                 previous,
               } satisfies IMedunderskriverEvent,
+              ...history.medunderskriver,
             ],
           };
         }),
