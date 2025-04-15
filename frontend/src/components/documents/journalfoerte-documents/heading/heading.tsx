@@ -75,7 +75,7 @@ const RemoveFilters = ({ resetFilters, noFiltersActive }: RemoveFiltersProps) =>
 
   return (
     <Button size="small" variant="secondary" onClick={resetFilters} icon={<ArrowCirclepathIcon aria-hidden />}>
-      Nullstill filtere
+      Nullstill filtre
     </Button>
   );
 };
