@@ -6,7 +6,6 @@ import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/document
 import { Role } from '@app/types/bruker';
 import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Heading, type HeadingProps } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { styled } from 'styled-components';
@@ -15,7 +14,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const DropHeading = ({ children }: Props) => {
+export const DropZone = ({ children }: Props) => {
   const oppgaveId = useOppgaveId();
   const [setParent] = useSetParentMutation();
   const [isDragOver, setIsDragOver] = useState(false);
@@ -74,9 +73,7 @@ export const DropHeading = ({ children }: Props) => {
   );
 
   return (
-    <StyledHeading
-      size="xsmall"
-      level="2"
+    <StyledDropZone
       onDrop={onDrop}
       onDragOver={(e) => e.preventDefault()}
       onDragEnter={onDragEnter}
@@ -85,7 +82,7 @@ export const DropHeading = ({ children }: Props) => {
       $isDragOver={isDragOver}
     >
       {children}
-    </StyledHeading>
+    </StyledDropZone>
   );
 };
 
@@ -95,14 +92,12 @@ const isDroppable = (draggedDocument: IMainDocument | null): draggedDocument is 
   draggedDocument.type !== DocumentTypeEnum.JOURNALFOERT &&
   draggedDocument.templateId !== TemplateIdEnum.ROL_ANSWERS;
 
-interface IDragOver extends HeadingProps {
+interface IDragOver {
   $isDropTarget: boolean;
   $isDragOver: boolean;
 }
 
-const InternalHeading = ({ children, ...props }: IDragOver) => <Heading {...props}>{children}</Heading>;
-
-const StyledHeading = styled(InternalHeading)<IDragOver>`
+const StyledDropZone = styled.div<IDragOver>`
   display: flex;
   align-items: center;
   gap: var(--a-spacing-2);
