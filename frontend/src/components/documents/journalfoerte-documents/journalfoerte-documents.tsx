@@ -242,6 +242,7 @@ const KeyboardBoundary = ({ children }: KeyboardBoundaryProps) => {
   return (
     <VStack
       as="section"
+      aria-labelledby="journalfoerte-dokumenter-heading"
       paddingInline="4"
       paddingBlock="0 2"
       flexGrow="1"

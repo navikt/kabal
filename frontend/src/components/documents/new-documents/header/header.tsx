@@ -1,23 +1,30 @@
 import { DeleteDropArea } from '@app/components/documents/new-documents/header/drop-delete-area';
-import { DropHeading } from '@app/components/documents/new-documents/header/drop-header';
+import { DropZone } from '@app/components/documents/new-documents/header/drop-zone';
 import { listHeaderCSS } from '@app/components/documents/styled-components/list-header';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { Heading } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
-export const ListHeader = () => {
+interface Props {
+  headingId: string;
+}
+
+export const ListHeader = ({ headingId }: Props) => {
   const errorMessage = useValidationError('underArbeid');
   const [isExpanded] = useIsExpanded();
 
   return (
     <NewDocumentsStyledListHeader>
-      <DropHeading>
-        Dokumenter under arbeid
+      <DropZone>
+        <Heading size="xsmall" level="2" id={headingId}>
+          Dokumenter under arbeid
+        </Heading>
         {typeof errorMessage === 'string' ? (
           <ExclamationmarkTriangleIcon title={errorMessage} color="var(--a-text-danger)" />
         ) : null}
-      </DropHeading>
+      </DropZone>
       {isExpanded ? <DeleteDropArea /> : null}
     </NewDocumentsStyledListHeader>
   );
