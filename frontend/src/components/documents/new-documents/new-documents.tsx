@@ -270,9 +270,11 @@ export const NewDocuments = () => {
       height="fit-content"
       maxHeight="calc(50% - 200px)"
       data-testid="new-documents-section"
+      aria-labelledby="dua-heading"
     >
       <ModalContextElement>
-        <ListHeader />
+        <ListHeader headingId="dua-heading" />
+
         <div
           ref={onRef}
           className="grow overflow-y-auto border-border-divider border-b-1"
