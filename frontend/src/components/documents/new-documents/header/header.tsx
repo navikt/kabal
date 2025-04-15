@@ -22,7 +22,7 @@ export const ListHeader = ({ headingId }: Props) => {
           Dokumenter under arbeid
         </Heading>
         {typeof errorMessage === 'string' ? (
-          <ExclamationmarkTriangleIcon title={errorMessage} color="var(--a-text-danger)" />
+          <ExclamationmarkTriangleIcon title={errorMessage} className="text-text-danger" />
         ) : null}
       </DropZone>
       {isExpanded ? <DeleteDropArea /> : null}
