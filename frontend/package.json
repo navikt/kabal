@@ -62,7 +62,6 @@
     "react-redux": "9.2.0",
     "react-router": "7.5.0",
     "react-router-dom": "7.5.0",
-    "styled-components": "6.1.17",
-    "yjs": "13.6.23"
+    "styled-components": "6.1.17"
   }
 }
