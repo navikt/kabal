@@ -1,6 +1,5 @@
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
-import { forwardRef } from 'react';
-import { styled } from 'styled-components';
+import { Box, VStack } from '@navikt/ds-react';
 import { CommentList } from './comment-list';
 import { NewCommentInThread } from './new-comment-in-thread';
 
@@ -11,61 +10,45 @@ interface Props {
   onClick?: React.MouseEventHandler<HTMLElement>;
   onClose?: () => void;
   style?: Pick<React.CSSProperties, 'top' | 'left' | 'bottom' | 'transform'>;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 export const THREAD_WIDTH = 350;
 
-export const Thread = forwardRef<HTMLElement, Props>(
-  ({ thread, style, onClick, onClose, isAbsolute = false, isExpanded = false }, ref) => {
-    const comments: ISmartEditorComment[] = isExpanded ? [thread, ...thread.comments] : [thread];
+const BASE_CLASSES =
+  'will-change-[transform,opacity,box-shadow] transition-[transform,opacity,box-shadow] duration-100 ease-in-out hover:z-2 hover:shadow-large';
+const COLLAPSED_CLASSES = `${BASE_CLASSES} cursor-pointer select-none z-1`;
+const EXPANDED_CLASSES = `${BASE_CLASSES} cursor-auto select-auto z-3`;
 
-    return (
-      <StyledThread ref={ref} $isAbsolute={isAbsolute} $isExpanded={isExpanded} onClick={onClick} style={style}>
+export const Thread = ({ thread, style, onClick, onClose, isAbsolute = false, isExpanded = false, ref }: Props) => {
+  const comments: ISmartEditorComment[] = isExpanded ? [thread, ...thread.comments] : [thread];
+
+  return (
+    <VStack
+      asChild
+      gap="4"
+      width={`${THREAD_WIDTH}px`}
+      position={isAbsolute ? 'absolute' : 'static'}
+      padding="4"
+      ref={ref}
+      onClick={onClick}
+      style={style}
+    >
+      <Box
+        as="section"
+        background="surface-default"
+        borderWidth="1"
+        borderColor="border-divider"
+        borderRadius="medium"
+        shadow={isExpanded ? 'medium' : undefined}
+        className={isExpanded ? EXPANDED_CLASSES : COLLAPSED_CLASSES}
+      >
         <CommentList comments={comments} isExpanded={isExpanded} />
-        {isExpanded ? null : <Replies>{thread.comments.length} svar</Replies>}
+        {isExpanded ? null : (
+          <div className="text-right text-base text-gray-700 italic">{thread.comments.length} svar</div>
+        )}
         <NewCommentInThread threadId={thread.id} close={onClose} isExpanded={isExpanded} />
-      </StyledThread>
-    );
-  },
-);
-
-Thread.displayName = 'Thread';
-
-interface StyledProps {
-  $isExpanded: boolean;
-  $isAbsolute: boolean;
-}
-
-const StyledThread = styled.section<StyledProps>`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
-  width: ${THREAD_WIDTH}px;
-  position: ${({ $isAbsolute }) => ($isAbsolute ? 'absolute' : 'static')};
-  background-color: var(--a-surface-default);
-  padding: var(--a-spacing-4);
-  border: 1px solid #c9c9c9;
-  border-radius: var(--a-border-radius-medium);
-  will-change: transform, opacity, box-shadow;
-  cursor: ${({ $isExpanded }) => ($isExpanded ? 'auto' : 'pointer')};
-  user-select: ${({ $isExpanded }) => ($isExpanded ? 'auto' : 'none')};
-  opacity: 1;
-  box-shadow: ${({ $isExpanded }) => ($isExpanded ? 'var(--a-shadow-medium)' : 'none')};
-  transition-duration: 0.1s;
-  transition-timing-function: ease-in-out;
-  transition-property: transform, opacity, box-shadow;
-  scroll-snap-align: start;
-  z-index: ${({ $isExpanded }) => ($isExpanded ? '3' : '1')};
-
-  &:hover {
-    box-shadow: var(--a-shadow-large);
-    z-index: 2;
-  }
-`;
-
-const Replies = styled.div`
-  font-style: italic;
-  color: var(--a-gray-700);
-  text-align: right;
-  font-size: var(--a-spacing-4);
-`;
+      </Box>
+    </VStack>
+  );
+};
