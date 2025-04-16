@@ -7,7 +7,6 @@ import { usePostMessageMutation } from '@app/redux-api/messages';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Textarea, VStack } from '@navikt/ds-react';
 import { useContext, useEffect, useState } from 'react';
-import { StyleSendMessage } from './styled-components';
 
 export const WriteMessage = () => {
   const isFullfoert = useIsFullfoert();
@@ -75,7 +74,7 @@ export const WriteMessage = () => {
         label="Skriv en melding"
         hideLabel
       />
-      <StyleSendMessage>
+      <div className="mt-2 self-end">
         <Button
           type="button"
           size="small"
@@ -87,7 +86,7 @@ export const WriteMessage = () => {
         >
           Legg til melding
         </Button>
-      </StyleSendMessage>
+      </div>
     </VStack>
   );
 };

@@ -7,7 +7,6 @@ import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo, useRef, useState } from 'react';
-import { StyledLovhjemmelSelect } from './styled-components';
 
 type Direction = 'down' | 'right';
 
@@ -63,7 +62,7 @@ export const LovhjemmelSelect = ({
 
   return (
     <>
-      <StyledLovhjemmelSelect ref={ref} data-testid="lovhjemmel-select" data-selected={selected.join(',')}>
+      <div className="relative" ref={ref} data-testid="lovhjemmel-select" data-selected={selected.join(',')}>
         <Button
           size="small"
           variant="secondary"
@@ -87,7 +86,7 @@ export const LovhjemmelSelect = ({
             openDirection={openDirection}
           />
         ) : null}
-      </StyledLovhjemmelSelect>
+      </div>
       <InputError error={error} />
     </>
   );

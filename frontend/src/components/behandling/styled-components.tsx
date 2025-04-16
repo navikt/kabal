@@ -1,4 +1,4 @@
-import { VStack } from '@navikt/ds-react';
+import { Box, VStack } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 export const StyledContainer = styled.div`
@@ -10,10 +10,15 @@ export const StyledContainer = styled.div`
   flex-grow: 1;
 `;
 
-export const StyledBehandlingSection = styled.section`
-  padding: var(--a-spacing-4);
-  min-height: 100%;
-`;
+interface BehandlingSectionProps {
+  children: React.ReactNode;
+}
+
+export const StyledBehandlingSection = ({ children }: BehandlingSectionProps) => (
+  <Box padding="4" minHeight="100%">
+    {children}
+  </Box>
+);
 
 interface DateContainerProps {
   children: React.ReactNode;
