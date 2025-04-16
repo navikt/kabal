@@ -107,6 +107,7 @@ export const ExpandedDocuments = () => {
   return (
     <DragAndDropContextElement>
       <VStack
+        as="section"
         width="auto"
         height="100%"
         overflowY="hidden"
@@ -115,12 +116,22 @@ export const ExpandedDocuments = () => {
         minWidth={`${minWidth}px`}
         className="resize-x"
         ref={ref}
+        aria-labelledby="dokumenter-heading"
       >
         <HStack asChild align="start" justify="start" gap="0 2" position="relative">
-          <Box borderWidth="0 0 1 0" borderColor="border-divider" paddingInline="4" paddingBlock="2" marginBlock="0 2">
-            <Heading size="medium" level="1">
+          <Box
+            as="header"
+            borderWidth="0 0 1 0"
+            borderColor="border-divider"
+            paddingInline="4"
+            paddingBlock="2"
+            marginBlock="0 2"
+            aria-labelledby="dokumenter-heading"
+          >
+            <Heading size="medium" level="1" id="dokumenter-heading">
               Dokumenter
             </Heading>
+
             <HStack align="center" height="100%">
               <Button
                 variant="tertiary-neutral"
@@ -130,6 +141,7 @@ export const ExpandedDocuments = () => {
                 disabled={width <= minWidth}
                 title="Forminsk dokumenter"
               />
+
               <Button
                 variant="tertiary-neutral"
                 size="xsmall"
@@ -138,7 +150,9 @@ export const ExpandedDocuments = () => {
                 title="Forstørr dokumenter"
               />
             </HStack>
+
             <UploadFile />
+
             <ToggleExpandedButton />
           </Box>
         </HStack>

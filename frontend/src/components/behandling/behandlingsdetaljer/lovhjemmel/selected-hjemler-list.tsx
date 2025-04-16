@@ -1,17 +1,9 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useAllLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
 import type { ILovKildeToRegistreringshjemmel } from '@app/types/kodeverk';
-import { Loader } from '@navikt/ds-react';
+import { Box, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
-import {
-  StyledListItem,
-  StyledNoneSelected,
-  StyledSelectedHjemler,
-  StyledSelectedList,
-  StyledSelectedSection,
-  StyledSelectedSectionHeader,
-} from './styled-components';
 
 interface Props {
   selected: string[];
@@ -40,9 +32,9 @@ export const SelectedHjemlerList = ({ selected }: Props) => {
   }
 
   return (
-    <StyledSelectedHjemler>
+    <Box paddingBlock="2" paddingInline="1 0" marginBlock="2 0" borderWidth="0 0 0 2" borderColor="border-divider">
       <SelectedChildren registreringshjemmelIdList={list} />
-    </StyledSelectedHjemler>
+    </Box>
   );
 };
 
@@ -52,21 +44,23 @@ const SelectedChildren = ({
   registreringshjemmelIdList: ILovKildeToRegistreringshjemmel[];
 }) => {
   if (registreringshjemmelIdList.length === 0) {
-    return <StyledNoneSelected>Ingen valgte hjemler</StyledNoneSelected>;
+    return <p className="m-0 text-text-subtle">Ingen valgte hjemler</p>;
   }
 
   return (
     <section data-testid="selected-hjemler-list">
       {registreringshjemmelIdList.map(({ lovkilde, registreringshjemler }) => (
-        <StyledSelectedSection key={lovkilde.id}>
-          <StyledSelectedSectionHeader>{lovkilde.navn}</StyledSelectedSectionHeader>
+        <div className="not-first-of-type:pt-1" key={lovkilde.id}>
+          <h3 className="font-bold text-base">{lovkilde.navn}</h3>
 
-          <StyledSelectedList>
+          <ul className="m-0 list-none pl-2">
             {registreringshjemler.map(({ navn, id }) => (
-              <StyledListItem key={id}>{navn}</StyledListItem>
+              <li className="not-last:mb-2" key={id}>
+                {navn}
+              </li>
             ))}
-          </StyledSelectedList>
-        </StyledSelectedSection>
+          </ul>
+        </div>
       ))}
     </section>
   );

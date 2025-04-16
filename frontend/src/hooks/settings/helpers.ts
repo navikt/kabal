@@ -44,10 +44,10 @@ export const useSetting = (property: string, syncBetweenTabs = false): Setting =
   const setValue = useCallback(
     (newValue: string | ((oldValue: string | undefined) => string)) => {
       if (key !== null) {
-        SETTINGS_MANAGER.set(key, typeof newValue === 'string' ? newValue : newValue(value));
+        SETTINGS_MANAGER.set(key, newValue);
       }
     },
-    [key, value],
+    [key],
   );
 
   const remove = useCallback(() => {
@@ -60,16 +60,27 @@ export const useSetting = (property: string, syncBetweenTabs = false): Setting =
 };
 
 const booleanToString = (value: boolean): string => (value ? 'true' : 'false');
+const stringToBoolean = (value: string | undefined): boolean | undefined =>
+  value === undefined ? undefined : value === 'true';
 
 export const useBooleanSetting = (property: string): Setting<boolean> => {
-  const { value, setValue, ...rest } = useSetting(property);
+  const setting = useSetting(property);
 
-  const parsedValue = value === undefined ? undefined : value === 'true';
+  const setValue = useCallback(
+    (newValue: boolean | SetterFn<boolean>) => {
+      setting.setValue((prev) => {
+        const nextValue = typeof newValue === 'boolean' ? newValue : newValue(stringToBoolean(prev));
+
+        return booleanToString(nextValue);
+      });
+    },
+    [setting.setValue],
+  );
 
   return {
-    value: parsedValue,
-    setValue: (newValue) => setValue(booleanToString(typeof newValue === 'boolean' ? newValue : newValue(parsedValue))),
-    ...rest,
+    ...setting,
+    value: setting.value === undefined ? undefined : setting.value === 'true',
+    setValue,
   };
 };
 
@@ -122,7 +133,10 @@ export const useJsonSetting = <T>(property: string): Setting<T> => {
 
   return {
     value: parsedValue,
-    setValue: (newValue) => setValue(JSON.stringify(isFunction(newValue) ? newValue(parsedValue) : newValue)),
+    setValue: useCallback(
+      (newValue) => setValue(JSON.stringify(isFunction(newValue) ? newValue(parsedValue) : newValue)),
+      [parsedValue, setValue],
+    ),
     ...rest,
   };
 };

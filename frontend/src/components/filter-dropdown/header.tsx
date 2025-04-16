@@ -1,4 +1,5 @@
 import { stringToRegExp } from '@app/functions/string-to-regex';
+import { Keys } from '@app/keys';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Search } from '@navikt/ds-react';
 import { type KeyboardEventHandler, useRef } from 'react';
@@ -31,14 +32,14 @@ export const Header = ({
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
-    if (event.key === 'Escape') {
+    if (event.key === Keys.Escape) {
       event.stopPropagation();
       onFocusChange(-1);
 
       return close();
     }
 
-    if (event.key === 'ArrowDown') {
+    if (event.key === Keys.ArrowDown) {
       event.preventDefault();
 
       if (focused === optionsCount - 1) {
@@ -50,7 +51,7 @@ export const Header = ({
       return onFocusChange(focused + 1);
     }
 
-    if (event.key === 'ArrowUp') {
+    if (event.key === Keys.ArrowUp) {
       event.preventDefault();
 
       if (focused === -1) {
@@ -64,7 +65,11 @@ export const Header = ({
       return onFocusChange(focused - 1);
     }
 
-    if ((event.key === 'Enter' || (event.key === ' ' && focused !== -1)) && focused < optionsCount && focused !== -1) {
+    if (
+      (event.key === Keys.Enter || (event.key === Keys.Space && focused !== -1)) &&
+      focused < optionsCount &&
+      focused !== -1
+    ) {
       event.preventDefault();
       onSelect();
     }

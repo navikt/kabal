@@ -1,3 +1,4 @@
+import { Keys } from '@app/keys';
 import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage, TextField } from '@navikt/ds-react';
 import { type KeyboardEventHandler, useEffect, useState } from 'react';
@@ -45,7 +46,7 @@ export const Abbreviation = ({
   };
 
   const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === Keys.Enter) {
       save();
     }
   };

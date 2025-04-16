@@ -7,7 +7,6 @@ import {
 } from '@app/components/documents/new-documents/constants';
 import { ListHeader } from '@app/components/documents/new-documents/header/header';
 import { ModalContextElement } from '@app/components/documents/new-documents/modal/modal-context';
-import { commonStyles } from '@app/components/documents/styled-components/container';
 import { clamp } from '@app/functions/clamp';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -21,9 +20,8 @@ import {
   type JournalfoertDokument,
 } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Loader } from '@navikt/ds-react';
+import { Alert, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { StyledDocumentList } from '../styled-components/document-list';
 import { NewParentDocument } from './new-parent-document';
 
@@ -256,32 +254,44 @@ export const NewDocuments = () => {
   }
 
   return (
-    <StyledDocumentsContainer data-testid="new-documents-section">
+    <VStack
+      as="section"
+      paddingInline="4"
+      paddingBlock="0 2"
+      height="fit-content"
+      maxHeight="calc(50% - 200px)"
+      data-testid="new-documents-section"
+      aria-labelledby="dua-heading"
+    >
       <ModalContextElement>
-        <ListHeader />
+        <ListHeader headingId="dua-heading" />
+
         <div
           ref={onRef}
-          className="overflow-y-auto border-border-divider border-b-1"
+          className="grow overflow-y-auto border-border-divider border-b-1"
           onScroll={({ currentTarget }) => {
-            const clamped = clamp(currentTarget.scrollTop, 0, currentTarget.scrollHeight - currentTarget.clientHeight); // Elastic scrolling in Safari can exceed the boundries.
+            const clamped = clamp(currentTarget.scrollTop, 0, currentTarget.scrollHeight - currentTarget.clientHeight); // Elastic scrolling in Safari can exceed the boundaries.
             _setScrollTop(clamped);
           }}
         >
-          <StyledDocumentList
-            data-testid="new-documents-list"
-            className="relative overflow-y-hidden"
-            style={{ height: listHeight }}
-            aria-rowcount={documentMap.size}
-          >
-            {documentNodes}
-          </StyledDocumentList>
+          {documentMap.size === 0 ? (
+            <HStack height="var(--a-spacing-12)" align="center" paddingInline="2">
+              <Alert variant="info" inline>
+                Ingen dokumenter
+              </Alert>
+            </HStack>
+          ) : (
+            <StyledDocumentList
+              data-testid="new-documents-list"
+              className="relative overflow-y-hidden"
+              style={{ height: listHeight }}
+              aria-rowcount={documentMap.size}
+            >
+              {documentNodes}
+            </StyledDocumentList>
+          )}
         </div>
       </ModalContextElement>
-    </StyledDocumentsContainer>
+    </VStack>
   );
 };
-
-const StyledDocumentsContainer = styled.section`
-  ${commonStyles}
-  max-height: calc(50% - 100px);
-`;

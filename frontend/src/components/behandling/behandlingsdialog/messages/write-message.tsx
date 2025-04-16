@@ -1,12 +1,12 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { Keys, isMetaKey } from '@app/keys';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostMessageMutation } from '@app/redux-api/messages';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Textarea, VStack } from '@navikt/ds-react';
 import { useContext, useEffect, useState } from 'react';
-import { StyleSendMessage } from './styled-components';
 
 export const WriteMessage = () => {
   const isFullfoert = useIsFullfoert();
@@ -51,7 +51,7 @@ export const WriteMessage = () => {
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+    if (isMetaKey(event) && event.key === Keys.Enter) {
       post();
     }
   };
@@ -74,7 +74,7 @@ export const WriteMessage = () => {
         label="Skriv en melding"
         hideLabel
       />
-      <StyleSendMessage>
+      <div className="mt-2 self-end">
         <Button
           type="button"
           size="small"
@@ -86,7 +86,7 @@ export const WriteMessage = () => {
         >
           Legg til melding
         </Button>
-      </StyleSendMessage>
+      </div>
     </VStack>
   );
 };
