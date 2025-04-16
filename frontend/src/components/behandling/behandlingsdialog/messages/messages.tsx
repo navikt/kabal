@@ -6,14 +6,6 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { type IMessage, useGetMessagesQuery } from '@app/redux-api/messages';
 import { BodyShort, Heading } from '@navikt/ds-react';
-import {
-  StyledAuthor,
-  StyledMessage,
-  StyledMessageContent,
-  StyledMessages,
-  StyledMessagesContainer,
-  StyledTime,
-} from './styled-components';
 import { WriteMessage } from './write-message';
 
 export const Messages = () => {
@@ -30,18 +22,18 @@ export const Messages = () => {
   const isFeilregistrert = oppgave.feilregistrering !== null;
 
   return (
-    <StyledMessagesContainer>
+    <section className="pb-4">
       <Heading level="1" size="xsmall" spacing>
         Meldinger ({messages.length})
       </Heading>
       <WriteMessage />
       {messages.length === 0 && (isFullfoert || isFeilregistrert) ? <BodyShort>Ingen meldinger</BodyShort> : null}
-      <StyledMessages data-testid="messages-list">
+      <ul data-testid="messages-list" className="list-none">
         {messages.map((message) => (
           <Message key={message.id} {...message} />
         ))}
-      </StyledMessages>
-    </StyledMessagesContainer>
+      </ul>
+    </section>
   );
 };
 
@@ -49,10 +41,14 @@ const Message = ({ id, author, modified, text, created }: IMessage) => {
   const time = modified ?? created;
 
   return (
-    <StyledMessage data-testid="message-list-item" data-message-id={id}>
-      <StyledAuthor>{formatEmployeeName(author)}</StyledAuthor>
-      <StyledTime dateTime={time}>{isoDateTimeToPretty(time)}</StyledTime>
-      <StyledMessageContent data-testid="message-list-item-text">{text}</StyledMessageContent>
-    </StyledMessage>
+    <li data-testid="message-list-item" data-message-id={id} className="mt-1">
+      <p className="font-bold">{formatEmployeeName(author)}</p>
+      <time dateTime={time} className="text-small italic">
+        {isoDateTimeToPretty(time)}
+      </time>
+      <p data-testid="message-list-item-text" className="whitespace-pre-line break-words">
+        {text}
+      </p>
+    </li>
   );
 };

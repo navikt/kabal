@@ -41,7 +41,7 @@ export const Pdf = ({ id }: { id: string }) => {
     return (
       <div className="flex w-full items-center justify-center">
         <div className="flex flex-col items-center">
-          <FilePdfIcon fontSize={300} color="var(--a-gray-300)" />
+          <FilePdfIcon fontSize={300} className="text-gray-300" />
           <Alert variant="info" inline size="small">
             Fyll inn ny behandlingstid eller ny frist for å generere en forhåndsvisning
           </Alert>
