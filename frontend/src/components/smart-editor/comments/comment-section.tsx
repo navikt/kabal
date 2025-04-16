@@ -1,7 +1,6 @@
 import { useThreads } from '@app/components/smart-editor/comments/use-threads';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { ThreadList } from './thread-list';
 
 export const CommentSection = () => {
@@ -17,13 +16,8 @@ export const CommentSection = () => {
   }
 
   return (
-    <StyledCommentSection>
+    <div className="w-fit pr-4">
       <ThreadList />
-    </StyledCommentSection>
+    </div>
   );
 };
-
-const StyledCommentSection = styled.div`
-  width: fit-content;
-  padding-right: var(--a-spacing-4);
-`;

@@ -2,7 +2,6 @@ import { OrphansModal } from '@app/components/smart-editor/comments/orphans-moda
 import { useAnnotationsCounts } from '@app/components/smart-editor/comments/use-annotations-counts';
 import { ChatElipsisIcon } from '@navikt/aksel-icons';
 import { Box, HStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 export const NumberOfComments = () => {
   const { attached, orphans, bookmarks: bookmarksCount } = useAnnotationsCounts();
@@ -37,6 +36,7 @@ const Wrapper = ({ children }: WrapperProps) => (
     position="sticky"
     minWidth="382px"
     height="36px"
+    top="4"
     className="z-10 [grid-area:counters]"
   >
     <Box background="bg-default" shadow="medium" marginInline="4" marginBlock="4" paddingInline="2" flexShrink="0">
@@ -46,7 +46,10 @@ const Wrapper = ({ children }: WrapperProps) => (
   </HStack>
 );
 
-const TextContainer = styled.span`
-  display: inline-flex;
-  align-items: center;
-`;
+interface TextContainerProps {
+  children: React.ReactNode;
+}
+
+const TextContainer = ({ children }: TextContainerProps) => (
+  <span className="inline-flex items-center">{children}</span>
+);

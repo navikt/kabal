@@ -2,6 +2,7 @@ import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { formatIdNumber } from '@app/functions/format-id';
 import type { INavEmployee } from '@app/types/bruker';
 import { HistoryEventTypes, type IHistory, type IPart } from '@app/types/oppgavebehandling/response';
+import { Box } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 type KeySource = Pick<IHistory, 'type' | 'timestamp'>;
@@ -27,13 +28,16 @@ export const Line = styled.p`
   padding: 0;
 `;
 
-export const Reason = styled.p`
-  margin: 0;
-  padding: 0;
-  font-style: italic;
-  padding-left: var(--a-spacing-1);
-  border-left: var(--a-spacing-1) solid var(--a-border-subtle);
-`;
+interface ReasonProps {
+  id: string;
+  children: React.ReactNode;
+}
+
+export const Reason = ({ id, children }: ReasonProps) => (
+  <Box as="p" id={id} className="italic" paddingInline="1 0" borderWidth="0 0 0 4" borderColor="border-subtle">
+    {children}
+  </Box>
+);
 
 export const HISTORY_COLORS: Record<HistoryEventTypes, string> = {
   [HistoryEventTypes.TILDELING]: '--a-surface-alt-3-moderate',
