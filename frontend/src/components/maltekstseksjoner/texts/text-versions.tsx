@@ -1,7 +1,7 @@
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { isApiError } from '@app/types/errors';
+import { isApiDataError } from '@app/types/errors';
 import type { IDraftRichText, IPublishedRichText, IRichText, IText } from '@app/types/texts/responses';
 import { Alert, Loader } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -23,7 +23,7 @@ export const TextVersions = ({ textId, className, ...rest }: Props) => {
     return (
       <div className={className}>
         <Alert variant="error" inline size="small">
-          Feil ved lasting: {'data' in error && isApiError(error.data) ? error.data.detail : 'Ukjent feil'}
+          Feil ved lasting: {isApiDataError(error) ? error.data.detail : 'Ukjent feil'}
         </Alert>
       </div>
     );

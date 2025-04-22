@@ -1,4 +1,4 @@
-import { isApiError } from '@app/types/errors';
+import { isApiDataError } from '@app/types/errors';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 
@@ -21,7 +21,7 @@ export const getErrorData = (error: FetchBaseQueryError | SerializedError | unde
     if (typeof error.data === 'string') {
       return { title: error.data, status: error.status };
     }
-    if (isApiError(error.data)) {
+    if (isApiDataError(error)) {
       return error.data;
     }
   }

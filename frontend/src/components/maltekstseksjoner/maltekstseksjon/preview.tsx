@@ -5,7 +5,7 @@ import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import type { KabalValue } from '@app/plate/types';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
-import { isApiError } from '@app/types/errors';
+import { isApiDataError } from '@app/types/errors';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IRichText } from '@app/types/texts/responses';
 import { Alert, Loader, VStack } from '@navikt/ds-react';
@@ -32,7 +32,7 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
 
     Promise.all(promises)
       .then((textList) => setTexts(textList.filter(isRichText)))
-      .catch((e) => setError('data' in e && isApiError(e.data) ? e.data.detail : e.message));
+      .catch((e) => setError(isApiDataError(e) ? e.data.detail : e.message));
   }, [getText, textIdList]);
 
   if (error !== null) {

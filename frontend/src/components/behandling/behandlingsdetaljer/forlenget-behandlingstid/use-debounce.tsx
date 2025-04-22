@@ -1,5 +1,4 @@
-import { isObject } from '@app/functions/object';
-import { isApiError } from '@app/types/errors';
+import { isApiDataError } from '@app/types/errors';
 import { useEffect, useState } from 'react';
 
 export const useDebounce = <T extends string | number | null>(
@@ -32,7 +31,7 @@ export const useDebounce = <T extends string | number | null>(
 };
 
 export const setErrorMessage = (e: unknown, setError: (e: string) => void, fallbackMessage = 'Ukjent feil') => {
-  if (isObject(e) && 'data' in e && isApiError(e.data)) {
+  if (isApiDataError(e)) {
     setError(e.data.title);
   } else {
     setError(fallbackMessage);
