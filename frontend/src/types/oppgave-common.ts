@@ -133,7 +133,8 @@ export interface IOrganizationFullmektig extends IPartBase {
   statusList: IOrganizationStatus[] | null;
 }
 
-export type IPart = IPersonPart | IOrganizationPart | IFullmektig;
+export type IdentifikatorPart = IPersonPart | IOrganizationPart;
+export type IPart = IdentifikatorPart | IFullmektig;
 export type IFullmektig = IPersonFullmektig | IOrganizationFullmektig;
 
 export interface ISakenGjelder extends IPersonPart {

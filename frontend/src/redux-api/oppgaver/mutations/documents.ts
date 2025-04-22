@@ -28,7 +28,7 @@ import type {
   ISetParentResponse,
 } from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
-import type { IPart } from '@app/types/oppgave-common';
+import type { IdentifikatorPart } from '@app/types/oppgave-common';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';
@@ -545,7 +545,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    setAvsender: builder.mutation<void, { oppgaveId: string; dokumentId: string; avsender: IPart }>({
+    setAvsender: builder.mutation<void, { oppgaveId: string; dokumentId: string; avsender: IdentifikatorPart }>({
       query: ({ oppgaveId, dokumentId, avsender }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/avsender`,
         body: { identifikator: avsender.identifikator },
