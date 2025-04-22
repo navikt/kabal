@@ -34,7 +34,7 @@ export const Person = ({ data, isLoading, isFetching, error, fnr, refetch }: Per
     return (
       <HStack align="center" gap="0 4" paddingInline="4">
         <ErrorAlert error={error} refetch={refetch} isFetching={isFetching}>
-          {`Fant ingen person med ID-nummer ${formatFoedselsnummer(fnr)}`}
+          {`Kunne ikke hente person med ID-nummer ${formatFoedselsnummer(fnr)}`}
         </ErrorAlert>
       </HStack>
     );
