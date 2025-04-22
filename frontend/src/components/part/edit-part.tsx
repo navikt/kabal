@@ -2,7 +2,7 @@ import { cleanAndValidate } from '@app/components/part/validate';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useLazySearchpartwithutsendingskanalQuery } from '@app/redux-api/search';
 import { isApiDataError } from '@app/types/errors';
-import type { IPart } from '@app/types/oppgave-common';
+import type { IdentifikatorPart } from '@app/types/oppgave-common';
 import { Alert, Search, Tag, VStack } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { Lookup } from './lookup';
 
 interface EditPartProps {
-  onChange: (part: IPart) => void;
+  onChange: (part: IdentifikatorPart) => void;
   onClose?: () => void;
   isLoading: boolean;
   buttonText?: string;
@@ -106,8 +106,8 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
 };
 
 interface ResultProps {
-  part: IPart | undefined;
-  onChange: (part: IPart) => void;
+  part: IdentifikatorPart | undefined;
+  onChange: (part: IdentifikatorPart) => void;
   isLoading: boolean;
   isSearching: boolean;
   isError: boolean;

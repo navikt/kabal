@@ -1,5 +1,5 @@
 import { KABAL_API_BASE_QUERY } from '@app/redux-api/common';
-import type { IPart } from '@app/types/oppgave-common';
+import type { IdentifikatorPart } from '@app/types/oppgave-common';
 import type { Enhet } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
@@ -13,7 +13,7 @@ export const searchApi = createApi({
   reducerPath: 'searchApi',
   baseQuery: KABAL_API_BASE_QUERY,
   endpoints: (builder) => ({
-    searchpartwithutsendingskanal: builder.query<IPart, SearchPartWithUtsendingskanalParams>({
+    searchpartwithutsendingskanal: builder.query<IdentifikatorPart, SearchPartWithUtsendingskanalParams>({
       query: (body) => ({ url: '/searchpartwithutsendingskanal', method: 'POST', body }),
     }),
     searchEnhetmappe: builder.query<{ id: number; navn: string }[], string>({
