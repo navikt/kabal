@@ -6,7 +6,7 @@ export const findDocument = (
   documents: IArkivertDocument[],
 ): IArkivertDocument | undefined => {
   for (const document of documents) {
-    if (document.dokumentInfoId === dokumentInfoId) {
+    if (document.journalpostId === journalpostId && document.dokumentInfoId === dokumentInfoId) {
       return document;
     }
 
