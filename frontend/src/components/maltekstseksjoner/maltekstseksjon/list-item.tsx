@@ -4,7 +4,7 @@ import { useMaltekstseksjonPath } from '@app/hooks/use-navigate-maltekstseksjone
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { type IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
-import { isApiError } from '@app/types/errors';
+import { isApiDataError } from '@app/types/errors';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { CircleBrokenIcon, LinkBrokenIcon, PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Button, HStack, HelpText, Skeleton, Tooltip } from '@navikt/ds-react';
@@ -75,12 +75,11 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
   });
 
   if (isError) {
-    const helpText =
-      'data' in error && isApiError(error.data) ? (
-        <HelpText strategy="fixed">
-          <HelpTextContainer>{error.data.detail}</HelpTextContainer>
-        </HelpText>
-      ) : null;
+    const helpText = isApiDataError(error) ? (
+      <HelpText strategy="fixed">
+        <HelpTextContainer>{error.data.detail}</HelpTextContainer>
+      </HelpText>
+    ) : null;
 
     return (
       <>

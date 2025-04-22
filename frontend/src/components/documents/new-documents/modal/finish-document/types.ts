@@ -1,6 +1,6 @@
 import type { IMainDocument } from '@app/types/documents/documents';
 import { DocumentValidationErrorType, type NO_RECIPIENTS_ERROR } from '@app/types/documents/validation';
-import { type ApiError, isApiError } from '@app/types/errors';
+import { type ApiError, isApiDataError } from '@app/types/errors';
 
 export interface FinishProps {
   document: IMainDocument;
@@ -35,7 +35,7 @@ interface FinishValidationError extends ApiError {
 }
 
 export const isSmartDocumentValidatonError = (error: unknown): error is { data: FinishValidationError } => {
-  if (typeof error !== 'object' || error === null || !('data' in error) || !isApiError(error.data)) {
+  if (!isApiDataError(error)) {
     return false;
   }
 

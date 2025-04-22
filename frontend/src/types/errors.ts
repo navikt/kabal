@@ -9,6 +9,13 @@ export interface ApiError {
   instance: string; // /behandlinger/:id/mottattklageinstans
 }
 
+interface ApiDataError {
+  data: ApiError;
+}
+
+export const isApiDataError = (error: unknown): error is ApiDataError =>
+  isGenericObject(error) && 'data' in error && isApiError(error.data);
+
 export const isApiError = (error: unknown): error is ApiError =>
   isGenericObject(error) &&
   'type' in error &&
