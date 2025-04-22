@@ -56,7 +56,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
       <Tooltip content={tooltip}>
         <Button
           size={size}
-          variant="secondary-neutral"
+          variant="tertiary-neutral"
           loading={isLoading}
           onClick={() => {
             pushEvent('open-relevant-oppgaver', 'oppgave-lists', { enabled: 'true' });

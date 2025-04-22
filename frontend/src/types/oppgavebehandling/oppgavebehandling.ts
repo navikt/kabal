@@ -60,6 +60,23 @@ export interface Enhet {
   navn: string;
 }
 
+enum Tiltakstype {
+  FYUS = 'FYUS',
+  TFUS = 'TFUS',
+  FTUS = 'FTUS',
+  DIUS = 'DIUS',
+  TOAN = 'TOAN',
+}
+
+export interface ISikkerhetstiltak {
+  beskrivelse: string;
+  /** Date */
+  gyldigFraOgMed: string;
+  /** Date */
+  gyldigTilOgMed: string;
+  tiltakstype: Tiltakstype;
+}
+
 export interface IOppgavebehandlingBase {
   /** DateTime */
   avsluttetAvSaksbehandlerDate: string | null;
@@ -119,6 +136,7 @@ export interface IOppgavebehandlingBase {
   saksnummer: string;
   tilbakekreving: boolean;
   timesPreviouslyExtended: number;
+  sikkerhetstiltak: ISikkerhetstiltak | null;
 }
 
 export interface IKlagebehandling extends IOppgavebehandlingBase {
