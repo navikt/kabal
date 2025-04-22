@@ -1,11 +1,11 @@
 import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { type IPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
+import { IdType, type IdentifikatorPart, PartStatusEnum } from '@app/types/oppgave-common';
 import { Alert, BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface LookupProps extends Omit<ResultProps, 'part'> {
-  part: IPart | undefined;
+  part: IdentifikatorPart | undefined;
   isSearching: boolean;
 }
 
@@ -22,8 +22,8 @@ export const Lookup = ({ part, isSearching, ...rest }: LookupProps) => {
 };
 
 interface ResultProps {
-  part: IPart;
-  onChange: (part: IPart) => void;
+  part: IdentifikatorPart;
+  onChange: (part: IdentifikatorPart) => void;
   isLoading: boolean;
   buttonText?: string;
   allowUnreachable?: boolean;
@@ -63,7 +63,7 @@ const StyledResult = styled(Tag)`
   gap: var(--a-spacing-2);
 `;
 
-const getUnreachableText = (statusList: IPart['statusList']): string | null => {
+const getUnreachableText = (statusList: IdentifikatorPart['statusList']): string | null => {
   if (statusList === null || statusList.length === 0) {
     return null;
   }
