@@ -1,9 +1,12 @@
 import { cleanAndValidate } from '@app/components/part/validate';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useLazySearchpartwithutsendingskanalQuery } from '@app/redux-api/search';
+import { isApiDataError } from '@app/types/errors';
 import type { IPart } from '@app/types/oppgave-common';
-import { Search, Tag, VStack } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
+import { Alert, Search, Tag, VStack } from '@navikt/ds-react';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { useState } from 'react';
 import { Lookup } from './lookup';
 
 interface EditPartProps {
@@ -19,17 +22,23 @@ interface EditPartProps {
 export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPartProps) => {
   const { data: oppgave } = useOppgave();
   const [rawValue, setValue] = useState('');
-  const [error, setError] = useState<string>();
-  const [search, { data, isLoading: isSearching, isFetching, isError }] = useLazySearchpartwithutsendingskanalQuery();
+  const [inputError, setInputError] = useState<string>();
+  const [search, { data, isLoading, isFetching, isError, error }] = useLazySearchpartwithutsendingskanalQuery();
 
-  const onClick = () => {
-    const [value, inputError] = cleanAndValidate(rawValue);
+  if (oppgave === undefined) {
+    return null;
+  }
 
-    setError(inputError);
+  const onSearchChange = (value: string) => {
+    const [identifikator, validationError] = cleanAndValidate(value);
 
-    if (inputError === undefined && oppgave !== undefined) {
-      search({ identifikator: value, sakenGjelderId: oppgave.sakenGjelder.identifikator, ytelseId: oppgave.ytelseId });
+    if (validationError !== undefined) {
+      return;
     }
+
+    const { ytelseId } = oppgave;
+
+    search({ identifikator, sakenGjelderId: oppgave.sakenGjelder.identifikator, ytelseId });
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -49,14 +58,7 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
     }
   };
 
-  useEffect(() => {
-    const [value, inputError] = cleanAndValidate(rawValue);
-    setError(undefined);
-
-    if (inputError === undefined && oppgave !== undefined) {
-      search({ identifikator: value, sakenGjelderId: oppgave.sakenGjelder.identifikator, ytelseId: oppgave.ytelseId });
-    }
-  }, [oppgave, rawValue, search]);
+  const isSearching = isLoading || isFetching;
 
   return (
     <VStack gap="2 0" id={id}>
@@ -64,14 +66,28 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
         label="Søk"
         size="small"
         value={rawValue}
-        onChange={setValue}
-        error={error}
+        onChange={(v) => {
+          setValue(v);
+          onSearchChange(v);
+        }}
+        error={inputError}
         onKeyDown={onKeyDown}
         autoFocus={autoFocus}
         autoComplete="off"
         htmlSize={20}
       >
-        <Search.Button onClick={onClick} loading={isSearching || isFetching} />
+        <Search.Button
+          onClick={() => {
+            const [, validationError] = cleanAndValidate(rawValue);
+
+            if (validationError !== undefined) {
+              return setInputError(validationError);
+            }
+
+            onSearchChange(rawValue);
+          }}
+          loading={isSearching}
+        />
       </Search>
       <Result
         part={data}
@@ -80,8 +96,9 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
           setValue('');
           onChange(p);
         }}
-        isSearching={isSearching || isFetching}
+        isSearching={isSearching}
         isError={isError}
+        error={error}
         {...props}
       />
     </VStack>
@@ -97,9 +114,18 @@ interface ResultProps {
   search: string;
   buttonText?: string;
   allowUnreachable?: boolean;
+  error: SerializedError | FetchBaseQueryError | undefined;
 }
 
-const Result = ({ part, search, isError, ...props }: ResultProps) => {
+const Result = ({ part, search, isError, error, ...props }: ResultProps) => {
+  if (isApiDataError(error)) {
+    return (
+      <Alert variant="warning" size="small">
+        {error.data.title}
+      </Alert>
+    );
+  }
+
   if (isError) {
     return <Tag variant="warning">Ingen treff</Tag>;
   }
