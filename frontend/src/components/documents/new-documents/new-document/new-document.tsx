@@ -107,7 +107,8 @@ export const NewDocument = memo(
     prev.document.parentId === next.document.parentId &&
     mottattDatoEqual(prev.document, next.document) &&
     annenInngaaendeEqual(prev.document, next.document) &&
-    mottakereEqual(prev.document, next.document),
+    mottakereEqual(prev.document, next.document) &&
+    avsenderEqual(prev.document, next.document),
 );
 
 NewDocument.displayName = 'NewDocument';
@@ -154,6 +155,21 @@ const annenInngaaendeEqual = (prev: IMainDocument, next: IMainDocument) => {
   }
 
   return prev.inngaaendeKanal === next.inngaaendeKanal && prev.avsender?.id === next.avsender?.id;
+};
+
+const avsenderEqual = (prev: IMainDocument, next: IMainDocument) => {
+  const prevIsInngaaende = isAnnenInngaaende(prev);
+  const nextIsInngaaende = isAnnenInngaaende(next);
+
+  if (!prevIsInngaaende || !nextIsInngaaende) {
+    return prevIsInngaaende === nextIsInngaaende;
+  }
+
+  if (prev.avsender !== null && next.avsender !== null) {
+    return prev.avsender.identifikator === next.avsender.identifikator;
+  }
+
+  return prev.avsender === next.avsender;
 };
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
