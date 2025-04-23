@@ -15,29 +15,28 @@ import {
   type ArchivedDocumentsColumn,
   useArchivedDocumentsColumns,
 } from '@app/hooks/settings/use-archived-documents-setting';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { ChevronDownDoubleIcon, ChevronUpDoubleIcon } from '@navikt/aksel-icons';
-import { Button, Tooltip } from '@navikt/ds-react';
+import { ChevronRightDoubleIcon, InformationSquareIcon } from '@navikt/aksel-icons';
+import { Button, HStack, Tooltip } from '@navikt/ds-react';
 import { css, styled } from 'styled-components';
 import type { useFilters } from './use-filters';
 
 interface Props {
   documentIdList: string[];
   filters: ReturnType<typeof useFilters>;
-  allSelectableDocuments: IJournalfoertDokumentId[];
   listHeight: number;
   showsAnyVedlegg: boolean;
   toggleShowAllVedlegg: () => void;
   searchRef: React.RefObject<HTMLInputElement | null>;
+  keyboardBoundaryRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export const Header = ({
-  allSelectableDocuments,
   filters,
   listHeight,
   showsAnyVedlegg,
   toggleShowAllVedlegg,
   searchRef,
+  keyboardBoundaryRef,
 }: Props) => {
   const [isExpanded] = useIsExpanded();
   const { columns } = useArchivedDocumentsColumns();
@@ -47,22 +46,30 @@ export const Header = ({
   const tooltip = showsAnyVedlegg ? 'Skjul alle vedlegg' : 'Vis alle vedlegg';
 
   return (
-    <StyledListHeader $isExpanded={isExpanded} $columns={columns}>
-      <SelectAll allSelectableDocuments={allSelectableDocuments} />
+    <StyledListHeader
+      $isExpanded={isExpanded}
+      $columns={columns}
+      className="sticky top-0 z-1 shrink-0 whitespace-nowrap bg-bg-default px-2 pt-1"
+    >
+      <SelectAll />
 
       <Tooltip content={tooltip} placement="top">
         <Button
           size="small"
           variant="tertiary"
-          icon={showsAnyVedlegg ? <ChevronUpDoubleIcon aria-hidden /> : <ChevronDownDoubleIcon aria-hidden />}
+          icon={<ChevronRightDoubleIcon aria-hidden className={showsAnyVedlegg ? 'rotate-90' : 'rotate-0'} />}
           style={{ gridArea: Fields.ToggleVedlegg }}
           onClick={() => toggleShowAllVedlegg()}
         />
       </Tooltip>
 
-      <DocumentSearch setSearch={setSearch} search={search} ref={searchRef} />
+      <DocumentSearch setSearch={setSearch} search={search} ref={searchRef} keyboardBoundaryRef={keyboardBoundaryRef} />
 
       {isExpanded ? <ExpandedHeaders {...filters} listHeight={listHeight} /> : null}
+
+      <HStack style={{ gridArea: Fields.ToggleMetadata }} align="center" justify="center" padding="1-alt">
+        <InformationSquareIcon aria-hidden className="h-full w-full" />
+      </HStack>
 
       <IncludedFilter />
     </StyledListHeader>
@@ -70,9 +77,10 @@ export const Header = ({
 };
 
 const COLLAPSED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS = [
-  Fields.SelectRow,
+  Fields.Select,
   Fields.ToggleVedlegg,
   Fields.Title,
+  Fields.ToggleMetadata,
   Fields.Action,
 ];
 
@@ -85,7 +93,7 @@ const getGridCss = ({ $isExpanded, $columns }: StyledListHeaderProps) => {
   }
 
   const fields = [
-    Fields.SelectRow,
+    Fields.Select,
     Fields.ToggleVedlegg,
     Fields.Title,
     $columns.TEMA ? Fields.Tema : null,
@@ -94,6 +102,7 @@ const getGridCss = ({ $isExpanded, $columns }: StyledListHeaderProps) => {
     $columns.AVSENDER_MOTTAKER ? Fields.AvsenderMottaker : null,
     $columns.SAKSNUMMER ? Fields.Saksnummer : null,
     $columns.TYPE ? Fields.Type : null,
+    Fields.ToggleMetadata,
     Fields.Action,
   ].filter(isNotNull);
 
@@ -111,13 +120,7 @@ interface StyledListHeaderProps {
 }
 
 const StyledListHeader = styled.div<StyledListHeaderProps>`
-  position: sticky;
-  top: 0;
-  background-color: var(--a-bg-default);
-  z-index: 1;
   ${listHeaderCSS}
-  padding-top: var(--a-spacing-1);
   ${documentsGridCSS}
   ${getGridCss}
-  white-space: nowrap;
 `;

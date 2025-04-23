@@ -4,13 +4,10 @@ export const documentsGridCSS = css`
   display: grid;
   grid-column-gap: var(--a-spacing-2);
   align-items: center;
-  padding-left: 6px;
-  padding-right: 0;
 `;
 
 export enum Fields {
-  SelectRow = 'select-row',
-  ResetFilters = 'reset-filters',
+  Select = 'select',
   ToggleVedlegg = 'toggle-vedlegg',
   ToggleMetadata = 'toggle-metadata',
   Title = 'title',
@@ -24,8 +21,12 @@ export enum Fields {
   LogiskeVedlegg = 'logiske-vedlegg',
 }
 
+/**
+ * The column sizes. First number is the minimum size, second is the maximum size.
+ * `-1` means `auto`.
+ * */
 export const SIZES: Record<Fields, [number, number]> = {
-  [Fields.SelectRow]: [20, 20],
+  [Fields.Select]: [20, 20],
   [Fields.ToggleVedlegg]: [32, 32],
   [Fields.Title]: [275, -1],
   [Fields.Tema]: [85, 85],
@@ -36,7 +37,6 @@ export const SIZES: Record<Fields, [number, number]> = {
   [Fields.Type]: [82, 82],
   [Fields.ToggleMetadata]: [32, 32],
   [Fields.Action]: [32, 32],
-  [Fields.ResetFilters]: [32, 32],
   [Fields.LogiskeVedlegg]: [0, 0],
 };
 

@@ -1,46 +1,27 @@
 import {
-  getFirstAccessibleDocumentIndex,
+  FIRST_ACCESSIBLE_DOCUMENT_INDEX,
   getLastAccessibleDocumentIndex,
 } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import { useGetDocument } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import { getLastIndex } from '@app/components/documents/journalfoerte-documents/keyboard/increment-decrement';
-import {
-  getAccessibleDocumentIndex,
-  getFocusedVedleggIndex,
-  setAccessibleDocumentIndex,
-  setFocusedVedleggIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { getFocusIndex, setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { clamp } from '@app/functions/clamp';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useEffect } from 'react';
 
-export const useClampOnFilter = (filteredDocuments: IArkivertDocument[]) => {
-  const getDocument = useGetDocument(filteredDocuments);
-
+export const useClampOnFilter = () =>
   useEffect(() => {
-    const accessibleDocumentIndex = getAccessibleDocumentIndex();
+    const accessibleDocumentIndex = getFocusIndex();
 
-    if (accessibleDocumentIndex === -1) {
+    if (
+      accessibleDocumentIndex === FIRST_ACCESSIBLE_DOCUMENT_INDEX ||
+      accessibleDocumentIndex < getLastAccessibleDocumentIndex()
+    ) {
       return;
     }
 
     const clampedAccessibleDocumentIndex = clamp(
       accessibleDocumentIndex,
-      getFirstAccessibleDocumentIndex(),
+      FIRST_ACCESSIBLE_DOCUMENT_INDEX,
       getLastAccessibleDocumentIndex(),
     );
 
-    setAccessibleDocumentIndex(clampedAccessibleDocumentIndex);
-
-    const focusedVedleggIndex = getFocusedVedleggIndex();
-
-    if (focusedVedleggIndex === -1) {
-      return;
-    }
-
-    const document = getDocument(clampedAccessibleDocumentIndex);
-    const lastVedleggIndex = getLastIndex(document?.vedlegg);
-
-    setFocusedVedleggIndex(clamp(focusedVedleggIndex, -1, lastVedleggIndex));
-  }, [getDocument]);
-};
+    setFocusIndex(clampedAccessibleDocumentIndex);
+  }, []);

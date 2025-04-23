@@ -1,4 +1,4 @@
-import { Fields, GRID_CLASSES } from '@app/components/documents/new-documents/grid';
+import { Fields } from '@app/components/documents/new-documents/grid';
 import { DocumentModalContent } from '@app/components/documents/new-documents/modal/modal-content';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
@@ -33,7 +33,7 @@ export const DocumentModal = ({ document, parentDocument, containsRolAttachments
         variant="tertiary-neutral"
         size="small"
         icon={<MenuElipsisVerticalIcon aria-hidden />}
-        className={GRID_CLASSES[Fields.Action]}
+        style={{ gridArea: Fields.Action }}
       />
       {open ? (
         <Modal

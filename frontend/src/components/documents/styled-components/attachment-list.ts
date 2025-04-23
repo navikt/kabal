@@ -16,7 +16,7 @@ export const StyledAttachmentList = styled.ul`
   position: relative;
   padding: 0;
   margin: 0;
-  margin-left: var(--a-spacing-3);
+  margin-left: 14px;
   list-style-type: none;
 `;
 
@@ -31,13 +31,13 @@ const treeRootStructureCss = css`
 
 export const JournalfoerteDocumentsAttachments = styled(StyledAttachmentList)<{ $treeLineHeight: number }>`
   position: absolute;
-  left: 0;
   right: 0;
+  margin-left: 0;
 
   &::before {
     ${treeRootStructureCss}
     height: ${({ $treeLineHeight }) => $treeLineHeight}px;
-    left: var(--a-spacing-1);
+    left: 0;
   }
 `;
 
@@ -57,6 +57,7 @@ export const StyledNewAttachmentListItem: typeof StyledDocumentListItem = styled
   left: 0;
   right: 0;
   padding-left: var(--a-spacing-4);
+  padding-right: var(--a-spacing-1-alt);
   margin-left: 0;
   margin-right: 0;
 
@@ -65,13 +66,11 @@ export const StyledNewAttachmentListItem: typeof StyledDocumentListItem = styled
     display: block;
     width: var(--a-spacing-3);
     position: absolute;
-    left: 3px;
+    left: 0;
     top: var(--a-spacing-4);
     border-bottom: 1px solid var(--a-border-subtle);
   }
 `;
-
-const BRANCH_WIDTH = 9;
 
 export const StyledAttachmentListItem: typeof StyledDocumentListItem = styled(StyledDocumentListItem)`
   position: absolute;
@@ -84,9 +83,9 @@ export const StyledAttachmentListItem: typeof StyledDocumentListItem = styled(St
   &::before {
     content: '';
     display: block;
-    width: ${BRANCH_WIDTH}px;
+    width: var(--a-spacing-3);
     position: absolute;
-    left: 5px;
+    left: 0;
     top: var(--a-spacing-4);
     border-bottom: 1px solid var(--a-border-subtle);
   }
@@ -124,7 +123,7 @@ export const LogiskeVedleggListItemStyle = styled.li<{ $connected: boolean; $pad
     left: 0;
     top: -4px;
     bottom: ${({ $connected }) => ($connected ? '0' : '11px')};
-    width: ${BRANCH_WIDTH}px;
+    width: var(--a-spacing-3);
     border-left: 1px solid var(--a-border-subtle);
   }
 
@@ -134,7 +133,7 @@ export const LogiskeVedleggListItemStyle = styled.li<{ $connected: boolean; $pad
     left: 1px;
     top: var(--a-spacing-3);
     height: 1px;
-    width: ${BRANCH_WIDTH}px;
+    width: var(--a-spacing-3);
     background-color: var(--a-border-subtle);
   }
 `;

@@ -117,6 +117,7 @@ export const EditLogiskVedlegg = ({
 
       if (e.key === Keys.Escape) {
         e.preventDefault();
+        e.stopPropagation();
 
         return onClose();
       }

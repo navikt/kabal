@@ -1,21 +1,19 @@
 import type { VedleggListRenderData } from '@app/components/documents/journalfoerte-documents/calculate';
 import { ROW_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
 import { AttachmentListItem } from '@app/components/documents/journalfoerte-documents/document/attachments/attachment-list';
-import { setRealDocumentPath } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { isPathSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
 import { JournalfoerteDocumentsAttachments } from '@app/components/documents/styled-components/attachment-list';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 interface Props {
   list: VedleggListRenderData;
   minTop: number;
   maxTop: number;
   dokument: IArkivertDocument;
-  dokumentIndex: number;
-  isSelected: (document: IJournalfoertDokumentId) => boolean;
-  showLogiskeVedleggIdList: string[];
-  setShowLogiskeVedleggIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
+  documentIndex: number;
+  showLogiskeVedleggIdList: Readonly<string[]>;
+  setShowLogiskeVedleggIdList: (ids: Readonly<string[]> | ((ids: Readonly<string[]>) => Readonly<string[]>)) => void;
 }
 
 export const VedleggList = ({
@@ -23,8 +21,7 @@ export const VedleggList = ({
   minTop,
   maxTop,
   dokument,
-  dokumentIndex,
-  isSelected,
+  documentIndex,
   showLogiskeVedleggIdList,
   setShowLogiskeVedleggIdList,
 }: Props) => {
@@ -57,20 +54,20 @@ export const VedleggList = ({
     const { dokumentInfoId, logiskeVedlegg } = vedlegg;
     const vedleggId = `${journalpostId}-${dokumentInfoId}`;
     const showVedleggList = showLogiskeVedleggIdList.includes(vedleggId);
-    const selected = isSelected({ journalpostId, dokumentInfoId });
 
     vedleggNodeList.push(
       <AttachmentListItem
         key={`vedlegg_${vedleggId}`}
         role="treeitem"
-        aria-selected={selected}
+        aria-selected={isPathSelected(documentIndex, index)}
         aria-level={2}
         journalpostId={journalpostId}
         journalpoststatus={journalstatus}
         vedlegg={vedlegg}
-        isSelected={selected}
         showVedlegg={showVedleggList}
         hasVedlegg={logiskeVedlegg.length > 0}
+        documentIndex={documentIndex}
+        index={index}
         toggleShowVedlegg={() =>
           setShowLogiskeVedleggIdList((ids) =>
             ids.includes(vedleggId) ? ids.filter((id) => id !== vedleggId) : [...ids, vedleggId],
@@ -78,14 +75,14 @@ export const VedleggList = ({
         }
         style={{ top, height }}
         aria-posinset={index}
-        onClick={() => setRealDocumentPath(dokumentIndex, index)}
+        className="pr-05 pl-4"
       >
         {showVedleggList ? (
           <LogiskeVedleggList
             list={logiskeVedleggList}
             minTop={minTop}
             maxTop={maxTop}
-            left={32}
+            left={65}
             connectTop={4}
             dokumentInfoId={dokumentInfoId}
             logiskeVedlegg={logiskeVedlegg}
@@ -103,6 +100,7 @@ export const VedleggList = ({
       aria-setsize={list.list.length}
       data-testid="oppgavebehandling-documents-all-vedlegg-list"
       style={{ height: list.height, top: list.top }}
+      className="left-[51px]"
       $treeLineHeight={treeLineHeight}
     >
       {vedleggNodeList}

@@ -1,102 +1,91 @@
-import { useDown } from '@app/components/documents/journalfoerte-documents/keyboard/actions/down';
-import { home, useEnd } from '@app/components/documents/journalfoerte-documents/keyboard/actions/home-end';
-import { useUp } from '@app/components/documents/journalfoerte-documents/keyboard/actions/up';
-import { getDocumentPath } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { down } from '@app/components/documents/journalfoerte-documents/keyboard/actions/down';
+import { end, home } from '@app/components/documents/journalfoerte-documents/keyboard/actions/home-end';
+import { up } from '@app/components/documents/journalfoerte-documents/keyboard/actions/up';
+import { getLastAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { getFocusIndex, setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import {
-  useGetDocument,
-  useGetVedlegg,
-} from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import { getIsInVedleggList } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+  addOne,
+  getSelectionRanges,
+  isSelected,
+  selectAll,
+  selectOne,
+  selectRangeTo,
+  unselectAll,
+  unselectOne,
+  useSelectionRangesState,
+} from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
+import {
+  getRange,
+  getRangeEnd,
+  getRangeStart,
+  getRangeStartAndEnd,
+  isRangeCollapsed,
+} from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { useCallback, useContext } from 'react';
 
-export const useToggleSelectAll = (allSelectableDocuments: IJournalfoertDokumentId[]) => {
-  const { selectMany, unselectAll, selectedCount } = useContext(SelectContext);
+export const useToggleSelectAll = () => {
+  const { selectedCount } = useContext(SelectContext);
 
-  return useCallback(
-    () => (selectedCount > 0 ? unselectAll() : selectMany(allSelectableDocuments)),
-    [allSelectableDocuments, selectedCount, selectMany, unselectAll],
-  );
+  return useCallback(() => (selectedCount > 0 ? unselectAll() : selectAll()), [selectedCount]);
 };
 
-export const useToggleSelect = (documents: IArkivertDocument[]) => {
-  const { selectOne, unselectOne, isSelected } = useContext(SelectContext);
-  const getDocument = useGetDocument(documents);
-  const getVedlegg = useGetVedlegg();
+export const useAllSelected = (): boolean => {
+  const [range] = useSelectionRangesState();
 
-  return useCallback(() => {
-    const focusedDocument = getDocument();
+  if (range === undefined) {
+    return false;
+  }
 
-    const hasDocument = focusedDocument !== undefined;
+  const [start, end] = getRangeStartAndEnd(range);
 
-    if (!hasDocument) {
-      return;
-    }
-
-    const focusedVedlegg = getVedlegg(focusedDocument);
-
-    if (!focusedDocument.hasAccess) {
-      return;
-    }
-
-    if (!getIsInVedleggList()) {
-      isSelected(focusedDocument) ? unselectOne(focusedDocument) : selectOne(focusedDocument);
-    }
-
-    if (focusedVedlegg === undefined) {
-      return;
-    }
-
-    const id: IJournalfoertDokumentId = {
-      journalpostId: focusedDocument.journalpostId,
-      dokumentInfoId: focusedVedlegg.dokumentInfoId,
-    };
-
-    isSelected(id) ? unselectOne(id) : selectOne(id);
-  }, [isSelected, selectOne, unselectOne, getDocument, getVedlegg]);
+  return start === 0 && end === getLastAccessibleDocumentIndex();
 };
 
-export const useSelectDown = (documents: IArkivertDocument[]) => {
-  const { selectRange } = useContext(SelectContext);
-  const down = useDown(documents);
-
-  return useCallback(() => {
-    const beforePath = getDocumentPath();
-    const afterPath = down();
-    selectRange(beforePath, afterPath);
-  }, [down, selectRange]);
+export const toggleSelect = (focusedIndex = getFocusIndex()) => {
+  isSelected(focusedIndex) ? unselectOne(focusedIndex) : selectOne(focusedIndex);
 };
 
-export const useSelectUp = (documents: IArkivertDocument[]) => {
-  const { selectRange } = useContext(SelectContext);
-  const up = useUp(documents);
-
-  return useCallback(() => {
-    const beforePath = getDocumentPath();
-    const afterPath = up();
-    selectRange(beforePath, afterPath);
-  }, [selectRange, up]);
+export const addOrRemoveOne = (focusedIndex = getFocusIndex()) => {
+  isSelected(focusedIndex) ? unselectOne(focusedIndex) : addOne(focusedIndex);
 };
 
-export const useSelectHome = () => {
-  const { selectRange } = useContext(SelectContext);
+export const selectDown = (focusedIndex = getFocusIndex(), ranges = getSelectionRanges()) => {
+  const range = getRange(ranges, focusedIndex);
 
-  return useCallback(() => {
-    const beforePath = getDocumentPath();
-    const afterPath = home();
-    selectRange(beforePath, afterPath);
-  }, [selectRange]);
+  if (range === undefined || isRangeCollapsed(range)) {
+    selectRangeTo(down());
+    return;
+  }
+
+  if (getRangeStart(range) === focusedIndex) {
+    unselectOne(focusedIndex);
+    setFocusIndex(down());
+    return;
+  }
+
+  return selectRangeTo(down());
 };
 
-export const useSelectEnd = (documents: IArkivertDocument[]) => {
-  const { selectRange } = useContext(SelectContext);
-  const end = useEnd(documents);
+export const selectUp = (focusedIndex = getFocusIndex(), ranges = getSelectionRanges()) => {
+  const range = getRange(ranges, focusedIndex);
 
-  return useCallback(() => {
-    const beforePath = getDocumentPath();
-    const afterPath = end();
-    selectRange(beforePath, afterPath);
-  }, [end, selectRange]);
+  if (range === undefined || isRangeCollapsed(range)) {
+    selectRangeTo(up());
+    return;
+  }
+
+  if (getRangeEnd(range) === focusedIndex) {
+    unselectOne(focusedIndex);
+    setFocusIndex(up());
+    return;
+  }
+
+  return selectRangeTo(up());
 };
+
+export const selectHome = (from = getFocusIndex()) => selectRangeTo(home(), from);
+
+export const useSelectEnd = (filteredDocuments: IArkivertDocument[]) =>
+  useCallback((from = getFocusIndex()) => selectRangeTo(end(filteredDocuments), from), [filteredDocuments]);

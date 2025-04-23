@@ -1,40 +1,40 @@
 type Observer<T> = (state: T) => void;
 
-type EqualsFn<T> = (a: T, b: T) => boolean;
-
-type SetFn<T> = (state: T) => T;
+type SetFn<T> = (state: Readonly<T>) => Readonly<T>;
 
 export class Observable<T> {
-  private observers: Observer<T>[] = [];
-  private state: T;
-  private isEqual: EqualsFn<T>;
+  private observers: Observer<Readonly<T>>[] = [];
+  private state: Readonly<T>;
+  private onSet: SetFn<T> = (state) => state;
 
-  constructor(state: T, isEqual: EqualsFn<T> = Object.is) {
+  constructor(state: T, onSet?: SetFn<T>) {
     this.state = state;
-    this.isEqual = isEqual;
+    if (onSet !== undefined) {
+      this.onSet = onSet;
+    }
   }
 
   public get = () => this.state;
 
-  public set = (newState: T | SetFn<T>): T => {
-    const state = this.isFunction(newState) ? newState(this.state) : newState;
+  public set = (newState: Readonly<T> | SetFn<Readonly<T>>) => {
+    const state = Object.freeze(this.onSet(this.isFunction(newState) ? newState(this.state) : newState));
 
-    if (this.isEqual(state, this.state)) {
+    if (state === this.state) {
       return this.state;
     }
 
     this.state = state;
     this.notify();
-    return this.state;
+    return state;
   };
 
-  public subscribe = (observer: Observer<T>) => {
+  public subscribe = (observer: Observer<Readonly<T>>) => {
     this.observers.push(observer);
 
     return () => this.unsubscribe(observer);
   };
 
-  public unsubscribe = (observer: Observer<T>) => {
+  public unsubscribe = (observer: Observer<Readonly<T>>) => {
     this.observers = this.observers.filter((obs) => obs !== observer);
   };
 
@@ -44,5 +44,5 @@ export class Observable<T> {
     }
   };
 
-  private isFunction = (value: T | SetFn<T>): value is SetFn<T> => typeof value === 'function';
+  private isFunction = (value: Readonly<T> | SetFn<T>): value is SetFn<T> => typeof value === 'function';
 }

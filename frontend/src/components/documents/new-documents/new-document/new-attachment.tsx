@@ -118,6 +118,7 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
           clearDragState();
         }}
         draggable={isDraggable}
+        className="px-1.5"
       >
         <DocumentTitle document={document} />
         {isExpanded && document.type === DocumentTypeEnum.JOURNALFOERT ? (

@@ -1,9 +1,13 @@
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
 import {
+  getVedlegg,
   useGetDocument,
-  useGetVedlegg,
 } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import { getIsInVedleggList } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+import {
+  getFocusIndex,
+  getIsInVedleggList,
+} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { isSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
@@ -13,19 +17,19 @@ import { useCallback, useContext } from 'react';
 
 export const useOpenInline = (filteredDocuments: IArkivertDocument[]) => {
   const { value: shownDocuments, setValue: setShownDocuments } = useDocumentsPdfViewed();
-  const { isSelected, selectedDocuments, selectedCount } = useContext(SelectContext);
+  const { selectedDocuments, selectedCount } = useContext(SelectContext);
   const getDocument = useGetDocument(filteredDocuments);
-  const getVedlegg = useGetVedlegg();
 
   return useCallback(async () => {
-    const focusedDocument = getDocument();
+    const focusedIndex = getFocusIndex();
+    const focusedDocument = getDocument(focusedIndex);
     const hasDocument = focusedDocument !== undefined;
 
     if (!hasDocument) {
       return;
     }
 
-    if (selectedCount > 0 && isSelected(focusedDocument)) {
+    if (selectedCount > 0 && isSelected(focusedIndex)) {
       const selectedDocumentsInOrder = getSelectedDocumentsInOrder(selectedDocuments, filteredDocuments, selectedCount);
 
       if (
@@ -81,14 +85,5 @@ export const useOpenInline = (filteredDocuments: IArkivertDocument[]) => {
         journalpostId,
       },
     ]);
-  }, [
-    filteredDocuments,
-    getDocument,
-    getVedlegg,
-    isSelected,
-    selectedCount,
-    selectedDocuments,
-    setShownDocuments,
-    shownDocuments,
-  ]);
+  }, [filteredDocuments, getDocument, selectedCount, selectedDocuments, setShownDocuments, shownDocuments]);
 };

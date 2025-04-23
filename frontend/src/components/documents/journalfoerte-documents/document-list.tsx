@@ -1,30 +1,28 @@
-import {
-  type DokumentRenderData,
-  type VedleggRenderData,
-  calculateDokumentPositions,
-} from '@app/components/documents/journalfoerte-documents/calculate';
+import { calculateDokumentPositions } from '@app/components/documents/journalfoerte-documents/calculate';
 import { ExpandedDocument } from '@app/components/documents/journalfoerte-documents/document/expanded-document';
 import { KeyboardFocusIndicator } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-focus-indicator';
+import { isPathSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useShowMetadata } from '@app/components/documents/journalfoerte-documents/state/show-metadata';
 import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { VedleggList } from '@app/components/documents/journalfoerte-documents/vedlegg-list';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { Box, Loader } from '@navikt/ds-react';
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { StyledDocumentList } from '../styled-components/document-list';
 import { Document } from './document/document';
+
+type IdList = readonly string[];
 
 interface Props {
   documents: IArkivertDocument[];
   isLoading: boolean;
   scrollTop: number;
   listHeight: number;
-  onScrollTo: (top: DokumentRenderData | VedleggRenderData) => void;
-  showLogiskeVedleggIdList: string[];
-  setShowLogiskeVedleggIdList: (ids: string[] | ((ids: string[]) => string[])) => void;
+  onScrollTo: (globalTop: number) => void;
+  showLogiskeVedleggIdList: IdList;
+  setShowLogiskeVedleggIdList: (ids: IdList | ((ids: IdList) => IdList)) => void;
 }
 
 const OVERSCAN = 32;
@@ -38,7 +36,6 @@ export const DocumentList = ({
   showLogiskeVedleggIdList,
   setShowLogiskeVedleggIdList,
 }: Props) => {
-  const { isSelected } = useContext(SelectContext);
   const [isExpandedListView] = useIsExpanded();
   const { showVedleggIdList, setShowVedleggIdList } = useShowVedlegg();
   const { showMetadataIdList, setShowMetadataIdList } = useShowMetadata();
@@ -50,11 +47,9 @@ export const DocumentList = ({
 
   if (isLoading) {
     return (
-      <Box data-test position="relative" paddingBlock="2">
-        <StyledDocumentList data-testid="oppgavebehandling-documents-all-list">
-          <Loader size="xlarge" aria-hidden role="presentation" />
-        </StyledDocumentList>
-      </Box>
+      <StyledDocumentList data-testid="oppgavebehandling-documents-all-list">
+        <Loader size="xlarge" aria-hidden role="presentation" />
+      </StyledDocumentList>
     );
   }
 
@@ -72,7 +67,7 @@ export const DocumentList = ({
     const { journalpostId, dokumentInfoId, tittel, vedlegg, logiskeVedlegg, tema } = dokument;
     const hasVedlegg = vedlegg.length > 0;
 
-    const selected = isSelected(dokument);
+    const selected = isPathSelected(index);
 
     list.push(
       <Box
@@ -97,7 +92,6 @@ export const DocumentList = ({
         <Document
           document={dokument}
           index={index}
-          isSelected={selected}
           isExpandedListView={isExpandedListView}
           showMetadata={showMetadata}
           toggleShowMetadata={() =>
@@ -133,7 +127,7 @@ export const DocumentList = ({
             list={logiskeVedleggList}
             minTop={minTop}
             maxTop={maxTop}
-            left={16}
+            left={51}
             connectTop={8}
             hasVedlegg={hasVedlegg}
             dokumentInfoId={dokumentInfoId}
@@ -148,8 +142,7 @@ export const DocumentList = ({
             minTop={minTop}
             maxTop={maxTop}
             dokument={dokument}
-            dokumentIndex={index}
-            isSelected={isSelected}
+            documentIndex={index}
             showLogiskeVedleggIdList={showLogiskeVedleggIdList}
             setShowLogiskeVedleggIdList={setShowLogiskeVedleggIdList}
           />
@@ -159,12 +152,13 @@ export const DocumentList = ({
   }
 
   return (
-    <Box position="relative" paddingBlock="2" marginBlock="0 8">
+    <>
       <StyledDocumentList
         data-testid="oppgavebehandling-documents-all-list"
         style={{ height: dokumenter.height }}
         flexShrink="0"
         flexGrow="1"
+        overflowX="hidden"
         role="tree"
         aria-multiselectable
         aria-labelledby="journalfoerte-dokumenter-heading"
@@ -173,6 +167,6 @@ export const DocumentList = ({
       </StyledDocumentList>
 
       <KeyboardFocusIndicator dokumenterList={dokumenter.list} onScrollTo={onScrollTo} />
-    </Box>
+    </>
   );
 };

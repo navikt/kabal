@@ -6,7 +6,7 @@ import { Keys } from '@app/keys';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
 import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, Label, Modal, TextField } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Label, Modal, TextField, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useRef, useState } from 'react';
 
@@ -140,26 +140,30 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button
-          size="small"
-          variant="primary"
-          icon={<CheckmarkIcon aria-hidden />}
-          onClick={onSave}
-          loading={isLoading}
-          disabled={!canEdit}
-        >
-          Lagre
-        </Button>
+        <Tooltip placement="top" content="Lagre" keys={['Enter']}>
+          <Button
+            size="small"
+            variant="primary"
+            icon={<CheckmarkIcon aria-hidden />}
+            onClick={onSave}
+            loading={isLoading}
+            disabled={!canEdit}
+          >
+            Lagre
+          </Button>
+        </Tooltip>
 
-        <Button
-          size="small"
-          variant="secondary"
-          icon={<XMarkIcon aria-hidden />}
-          onClick={() => modalRef.current?.close()}
-          disabled={isLoading}
-        >
-          Avbryt
-        </Button>
+        <Tooltip placement="top" content="Avbryt" keys={['Esc']}>
+          <Button
+            size="small"
+            variant="secondary"
+            icon={<XMarkIcon aria-hidden />}
+            onClick={() => modalRef.current?.close()}
+            disabled={isLoading}
+          >
+            Avbryt
+          </Button>
+        </Tooltip>
       </Modal.Footer>
     </Modal>
   );

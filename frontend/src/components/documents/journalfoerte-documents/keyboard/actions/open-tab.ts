@@ -1,9 +1,13 @@
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
 import {
+  getVedlegg,
   useGetDocument,
-  useGetVedlegg,
 } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import { getIsInVedleggList } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+import {
+  getFocusIndex,
+  getIsInVedleggList,
+} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { isSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { TabContext } from '@app/components/documents/tab-context';
 import { TAB_MANAGER } from '@app/components/documents/use-is-tab-open';
@@ -20,21 +24,21 @@ import { useCallback, useContext } from 'react';
 
 export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
   const [getMergedDocumentRef] = useLazyMergedDocumentsReferenceQuery();
-  const { isSelected, selectedDocuments, selectedCount } = useContext(SelectContext);
+  const { selectedDocuments, selectedCount } = useContext(SelectContext);
   const getDocument = useGetDocument(filteredDocuments);
-  const getVedlegg = useGetVedlegg();
   const { getTabRef, setTabRef } = useContext(TabContext);
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   return useCallback(async () => {
-    const focusedDocument = getDocument();
+    const focusedIndex = getFocusIndex();
+    const focusedDocument = getDocument(focusedIndex);
     const hasDocument = focusedDocument !== undefined;
 
     if (!hasDocument) {
       return;
     }
 
-    if (selectedCount > 0 && isSelected(focusedDocument)) {
+    if (selectedCount > 0 && isSelected(focusedIndex)) {
       const documentsToCombine = getSelectedDocumentsInOrder(selectedDocuments, filteredDocuments, selectedCount);
       const { reference } = await getMergedDocumentRef(documentsToCombine).unwrap();
       const tabUrl = getMergedDocumentTabUrl(reference);
@@ -114,15 +118,5 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
     }
 
     setTabRef(documentId, newTabRef);
-  }, [
-    filteredDocuments,
-    getDocument,
-    getVedlegg,
-    getMergedDocumentRef,
-    getTabRef,
-    setTabRef,
-    isSelected,
-    selectedCount,
-    selectedDocuments,
-  ]);
+  }, [filteredDocuments, getDocument, getMergedDocumentRef, getTabRef, setTabRef, selectedCount, selectedDocuments]);
 };

@@ -1,13 +1,11 @@
 import { DocumentDate } from '@app/components/documents/journalfoerte-documents/document/document-date';
+import { formatAvsenderMottaker } from '@app/components/documents/journalfoerte-documents/document/format-avsender-mottaker';
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
-import { useDocumentsFilterSaksId, useDocumentsFilterTema } from '@app/hooks/settings/use-setting';
 import { useFullTemaNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { styled } from 'styled-components';
-import { AvsenderMottaker } from './avsender-mottaker';
+import { Button, CopyButton, Tag, Tooltip } from '@navikt/ds-react';
 import { JournalposttypeTag } from './journalposttype';
 
 interface Props {
@@ -19,91 +17,90 @@ interface Props {
 export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: Props) => {
   const { tema, avsenderMottaker, sak, journalposttype } = document;
 
-  const { setValue: setSaksId } = useDocumentsFilterSaksId();
-  const { setValue: setTema } = useDocumentsFilterTema();
-
   const temaName = useFullTemaNameFromIdOrLoading(tema);
   const { columns } = useArchivedDocumentsColumns();
 
   return (
     <>
       {columns.TEMA ? (
-        <TemaButton $area={Fields.Tema} onClick={() => setTema([tema ?? 'UNKNOWN'])} title={temaName} tabIndex={-1}>
-          {temaName}
-        </TemaButton>
-      ) : null}
-      {columns.DATO_OPPRETTET ? <StyledDate date={document.datoOpprettet} $gridArea={Fields.DatoOpprettet} /> : null}
-      {columns.DATO_REG_SENDT ? <StyledDate date={document.datoRegSendt} $gridArea={Fields.DatoRegSendt} /> : null}
-      {columns.AVSENDER_MOTTAKER ? (
-        <AvsenderMottaker journalposttype={journalposttype} avsenderMottaker={avsenderMottaker} />
-      ) : null}
-      {columns.SAKSNUMMER ? (
-        <SaksIdButton
+        <Tag
+          variant="info"
           size="small"
-          variant="tertiary"
-          onClick={() => setSaksId([sak?.fagsakId ?? 'NONE'])}
-          tabIndex={-1}
+          title={temaName}
+          style={{ gridArea: Fields.Tema }}
+          className="justify-start whitespace-nowrap"
         >
-          {sak?.fagsakId ?? 'Ingen'}
-        </SaksIdButton>
+          <span className="select-text overflow-hidden text-ellipsis">{temaName}</span>
+        </Tag>
       ) : null}
+
+      {columns.DATO_OPPRETTET ? (
+        <DocumentDate
+          date={document.datoOpprettet}
+          style={{ gridArea: Fields.DatoOpprettet }}
+          className="select-text overflow-hidden text-ellipsis"
+        />
+      ) : null}
+
+      {columns.DATO_REG_SENDT ? (
+        <DocumentDate
+          date={document.datoRegSendt}
+          style={{ gridArea: Fields.DatoRegSendt }}
+          className="select-text overflow-hidden text-ellipsis"
+        />
+      ) : null}
+
+      {columns.AVSENDER_MOTTAKER ? (
+        <span style={{ gridArea: Fields.AvsenderMottaker }} className="select-text">
+          {formatAvsenderMottaker(avsenderMottaker)}
+        </span>
+      ) : null}
+
+      {columns.SAKSNUMMER ? <Saksnummer saksnummer={sak?.fagsakId} /> : null}
+
       {columns.TYPE ? <JournalposttypeTag type={journalposttype} /> : null}
-      <Button
-        variant={showMetadata ? 'primary' : 'tertiary'}
-        size="small"
-        icon={<InformationSquareIcon aria-hidden />}
-        onClick={toggleShowMetadata}
-        style={{ gridArea: Fields.ToggleMetadata }}
-        tabIndex={-1}
-      />
+
+      <Tooltip placement="left" content={showMetadata ? 'Skjul informasjon' : 'Vis informasjon'} keys={['I']}>
+        <Button
+          variant={showMetadata ? 'primary' : 'tertiary'}
+          size="small"
+          icon={<InformationSquareIcon aria-hidden />}
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleShowMetadata();
+          }}
+          style={{ gridArea: Fields.ToggleMetadata }}
+          tabIndex={-1}
+        />
+      </Tooltip>
     </>
   );
 };
 
-interface StyledDateProps {
-  $gridArea: Fields.DatoOpprettet | Fields.DatoRegSendt;
+interface SaksnummerProps {
+  saksnummer: string | undefined | null;
 }
 
-const StyledDate = styled(DocumentDate)<StyledDateProps>`
-  grid-area: ${({ $gridArea }) => $gridArea};
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-interface TemaButtonProps {
-  $area: Fields;
-}
-
-const TemaButton = styled.button<TemaButtonProps>`
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left;
-  cursor: pointer;
-  grid-area: ${({ $area }) => $area};
-  padding-left: var(--a-spacing-3);
-  padding-right: var(--a-spacing-3);
-  padding-top: var(--a-spacing-1);
-  padding-bottom: var(--a-spacing-1);
-  border-radius: var(--a-border-radius-small);
-  border: 1px solid var(--a-border-action);
-  background-color: var(--a-surface-action-subtle);
-
-  &:hover {
-    background-color: var(--a-surface-action-subtle-hover);
+const Saksnummer = ({ saksnummer }: SaksnummerProps) => {
+  if (saksnummer === undefined || saksnummer === null || saksnummer.length === 0) {
+    return null;
   }
-`;
 
-const SaksIdButton = styled(Button)`
-  grid-area: ${Fields.Saksnummer};
-  white-space: nowrap;
-  text-align: left;
+  return (
+    <Tag
+      variant="neutral"
+      size="small"
+      style={{ gridArea: Fields.Saksnummer }}
+      className="group relative select-text justify-start whitespace-nowrap pr-6"
+    >
+      <span className="overflow-hidden text-ellipsis">{saksnummer}</span>
 
-  > .navds-label {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-`;
+      <CopyButton
+        copyText={saksnummer}
+        title="Kopier saksnummer"
+        size="xsmall"
+        className="absolute right-0 opacity-0 group-hover:opacity-100"
+      />
+    </Tag>
+  );
+};
