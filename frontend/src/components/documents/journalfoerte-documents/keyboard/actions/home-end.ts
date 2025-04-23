@@ -1,47 +1,74 @@
 import {
-  getDocumentPath,
+  convertAccessibleToRealDocumentPath,
+  convertRealToAccessibleDocumentIndex,
   getLastAccessibleDocumentIndex,
 } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import { useGetDocument } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import { getLastIndex } from '@app/components/documents/journalfoerte-documents/keyboard/increment-decrement';
 import {
-  getAccessibleDocumentIndex,
+  getLastIndex,
+  increment,
+} from '@app/components/documents/journalfoerte-documents/keyboard/increment-decrement';
+import {
+  getFocusIndex,
   getIsInVedleggList,
-  setAccessibleDocumentIndex,
-  setFocusPath,
-  setFocusedVedleggIndex,
+  resetFocusIndex,
+  setFocusIndex,
 } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import type { DocumentPath } from '@app/components/documents/journalfoerte-documents/select-context/types';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useCallback } from 'react';
 
-export const home = (): DocumentPath => {
+export const home = (): number => {
   if (getIsInVedleggList()) {
-    return getDocumentPath(...setFocusedVedleggIndex(0));
-  }
+    // Focus first vedlegg or document if at already first vedlegg.
+    const realPath = convertAccessibleToRealDocumentPath(getFocusIndex());
 
-  return getDocumentPath(...setFocusPath(0, -1));
-};
-
-export const useEnd = (filteredDocuments: IArkivertDocument[]) => {
-  const getDocument = useGetDocument(filteredDocuments);
-
-  return useCallback((): DocumentPath => {
-    if (getIsInVedleggList()) {
-      const accessibleDocumentIndex = getAccessibleDocumentIndex();
-      const focusedDocument = getDocument(accessibleDocumentIndex);
-      const lastVedleggIndex = getLastIndex(focusedDocument?.vedlegg);
-      setFocusedVedleggIndex(lastVedleggIndex);
-
-      return getDocumentPath(accessibleDocumentIndex, lastVedleggIndex);
+    if (realPath === null) {
+      return -1;
     }
 
-    const lastAccessibleDocumentIndex = getLastAccessibleDocumentIndex();
-    const lastDocument = getDocument(lastAccessibleDocumentIndex);
-    setAccessibleDocumentIndex(lastAccessibleDocumentIndex);
-    const lastVedleggIndex = getLastIndex(lastDocument?.vedlegg);
-    setFocusedVedleggIndex(lastVedleggIndex);
+    const [documentIndex, attachmentIndex] = realPath;
 
-    return getDocumentPath(lastAccessibleDocumentIndex, lastVedleggIndex);
-  }, [getDocument]);
+    if (attachmentIndex === 0) {
+      const accessibleDocumentIndex = convertRealToAccessibleDocumentIndex([documentIndex, -1]);
+      return setFocusIndex(accessibleDocumentIndex);
+    }
+
+    const accessibleDocumentIndex = convertRealToAccessibleDocumentIndex([documentIndex, 0]);
+    return setFocusIndex(accessibleDocumentIndex);
+  }
+
+  return resetFocusIndex();
 };
+
+export const end = (filteredDocuments: IArkivertDocument[]): number => {
+  if (getIsInVedleggList()) {
+    // Focus last vedlegg or next document if at already last vedlegg.
+    const focusIndex = getFocusIndex();
+    const realPath = convertAccessibleToRealDocumentPath(focusIndex);
+
+    if (realPath === null) {
+      return -1;
+    }
+
+    const [documentIndex, attachmentIndex] = realPath;
+    const currentDocument = filteredDocuments[documentIndex];
+
+    if (currentDocument === undefined) {
+      return -1;
+    }
+
+    const lastAttachmentIndex = getLastIndex(currentDocument.vedlegg);
+
+    if (attachmentIndex === lastAttachmentIndex) {
+      const nextAccessibleDocumentIndex = increment(focusIndex, 1, getLastAccessibleDocumentIndex());
+      return setFocusIndex(nextAccessibleDocumentIndex);
+    }
+
+    const accessibleDocumentIndex = convertRealToAccessibleDocumentIndex([documentIndex, lastAttachmentIndex]);
+    return setFocusIndex(accessibleDocumentIndex);
+  }
+
+  return getLastAccessibleDocumentIndex();
+};
+
+export const useEnd = (filteredDocuments: IArkivertDocument[]) =>
+  useCallback(() => setFocusIndex(end(filteredDocuments)), [filteredDocuments]);

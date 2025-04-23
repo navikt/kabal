@@ -284,7 +284,7 @@ export const NewDocuments = () => {
           }}
         >
           {documentMap.size === 0 ? (
-            <HStack height="var(--a-spacing-12)" align="center" paddingInline="2">
+            <HStack height="12" align="center" paddingInline="2">
               <Alert variant="info" inline>
                 Ingen dokumenter
               </Alert>
@@ -294,7 +294,7 @@ export const NewDocuments = () => {
               data-testid="new-documents-list"
               className="relative overflow-y-hidden"
               style={{ height: listHeight }}
-              aria-rowcount={documentMap.size}
+              aria-setsize={documentMap.size}
             >
               {documentNodes}
             </StyledDocumentList>

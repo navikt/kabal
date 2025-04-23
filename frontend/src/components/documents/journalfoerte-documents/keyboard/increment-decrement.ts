@@ -18,7 +18,7 @@ export const decrement = (prev: number, amount: number, min = 0, overflow = min)
   return prev - amount;
 };
 
-export const getLastIndex = <T>(list: T[] | undefined): number => {
+export const getLastIndex = <T>(list: Readonly<T[]> | undefined): number => {
   if (list === undefined) {
     return -1;
   }

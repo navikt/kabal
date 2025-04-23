@@ -26,13 +26,12 @@ export const ExpandedDocuments = () => {
     }
 
     const _minWidth =
-      75 +
+      125 +
       Object.values(columns).reduce((acc, v) => (v ? acc + 8 : acc), 0) +
-      SIZES[Fields.SelectRow][0] +
+      SIZES[Fields.Select][0] +
+      SIZES[Fields.ToggleVedlegg][0] +
       SIZES[Fields.Title][0] +
       SIZES[Fields.Action][0] +
-      SIZES[Fields.ToggleVedlegg][0] +
-      SIZES[Fields.ResetFilters][0] +
       (columns.AVSENDER_MOTTAKER ? SIZES[Fields.AvsenderMottaker][0] : 0) +
       (columns.DATO_OPPRETTET ? SIZES[Fields.DatoOpprettet][0] : 0) +
       (columns.DATO_REG_SENDT ? SIZES[Fields.DatoRegSendt][0] : 0) +

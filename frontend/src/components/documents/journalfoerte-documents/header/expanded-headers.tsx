@@ -19,7 +19,6 @@ import { SortOrder } from '@app/types/sort';
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { styled } from 'styled-components';
 import { DateFilter } from './date-filter';
 import type { useFilters } from './use-filters';
 
@@ -52,100 +51,109 @@ export const ExpandedHeaders = ({
     [data],
   );
 
-  const saksIdOptions = useMemo(
-    () => (data?.sakList ?? []).map(({ fagsakId }) => ({ label: fagsakId, value: fagsakId })),
-    [data],
-  );
+  const saksIdOptions = useMemo(() => {
+    const result: { label: string; value: string }[] = [];
+
+    if (data?.sakList === undefined) {
+      return result;
+    }
+
+    for (const { fagsakId } of data.sakList) {
+      if (fagsakId !== null) {
+        result.push({ label: fagsakId, value: fagsakId });
+      }
+    }
+
+    return result;
+  }, [data]);
 
   const allTemaer = useAllTemaer();
 
   return (
     <>
       {columns.TEMA ? (
-        <StyledFilterDropdown
+        <FilterDropdown
           options={kodeverkValuesToDropdownOptions(allTemaer)}
           onChange={setSelectedTemaer}
           selected={selectedTemaer}
           direction="left"
           maxWidth="410px"
           maxHeight={listHeight}
-          $area={Fields.Tema}
+          style={{ gridArea: Fields.Tema }}
           data-testid="filter-tema"
         >
           Tema
-        </StyledFilterDropdown>
+        </FilterDropdown>
       ) : null}
 
       {columns.DATO_OPPRETTET ? (
-        <HStack align="center" as="span">
+        <HStack align="center" as="section" style={{ gridArea: Fields.DatoOpprettet }}>
           <SortButton column={ArchivedDocumentsColumn.DATO_OPPRETTET} sort={sort} setSort={setSort} />
           <DateFilter {...datoOpprettetSetting} label="Dato opprettet" gridArea={Fields.DatoOpprettet} />
         </HStack>
       ) : null}
+
       {columns.DATO_REG_SENDT ? (
-        <HStack align="center" as="span">
+        <HStack align="center" as="section" style={{ gridArea: Fields.DatoRegSendt }}>
           <SortButton column={ArchivedDocumentsColumn.DATO_REG_SENDT} sort={sort} setSort={setSort} />
           <DateFilter {...datoRegSendtSetting} label="Dato reg./sendt" gridArea={Fields.DatoRegSendt} />
         </HStack>
       ) : null}
 
       {columns.AVSENDER_MOTTAKER ? (
-        <StyledFilterDropdown
+        <FilterDropdown
           options={avsenderMottakerOptions}
           onChange={setSelectedAvsenderMottakere}
           selected={selectedAvsenderMottakere}
           direction="left"
           maxWidth="410px"
           maxHeight={listHeight}
-          $area={Fields.AvsenderMottaker}
+          style={{ gridArea: Fields.AvsenderMottaker }}
           data-testid="filter-avsender-mottaker"
         >
           Avsender/mottaker
-        </StyledFilterDropdown>
+        </FilterDropdown>
       ) : null}
 
       {columns.SAKSNUMMER ? (
-        <StyledFilterDropdown
+        <FilterDropdown
           options={saksIdOptions}
           onChange={setSelectedSaksIds}
           selected={selectedSaksIds}
           direction="left"
           maxWidth="410px"
           maxHeight={listHeight}
-          $area={Fields.Saksnummer}
+          style={{ gridArea: Fields.Saksnummer }}
           data-testid="filter-saksnummer"
         >
           Saksnummer
-        </StyledFilterDropdown>
+        </FilterDropdown>
       ) : null}
 
       {columns.TYPE ? (
-        <StyledFilterDropdown
+        <FilterDropdown
           options={JOURNALPOSTTYPE_OPTIONS}
           onChange={(types) => setSelectedTypes(types.filter(isJournalpostType))}
           selected={selectedTypes}
           direction="left"
           maxWidth="410px"
           maxHeight={listHeight}
-          $area={Fields.Type}
+          style={{ gridArea: Fields.Type }}
           data-testid="filter-type"
         >
           Type
-        </StyledFilterDropdown>
+        </FilterDropdown>
       ) : null}
     </>
   );
 };
 
-const SortButton = ({
-  column,
-  sort,
-  setSort,
-}: {
+interface SortButtonProps {
   column: ArchivedDocumentsSortColumn;
   sort: ArchivedDocumentsSort;
   setSort: (sort: ArchivedDocumentsSort) => void;
-}) => (
+}
+const SortButton = ({ column, sort, setSort }: SortButtonProps) => (
   <Button
     icon={getSortIcon(sort, column)}
     variant="tertiary-neutral"
@@ -173,9 +181,7 @@ const JOURNALPOSTTYPE_OPTIONS = [
   { label: 'Notat', value: Journalposttype.NOTAT },
 ];
 
-const StyledFilterDropdown = styled(FilterDropdown)<{ $area: Fields }>`
-  grid-area: ${({ $area }) => $area};
-`;
+const JOURNALPOSTTYPE_VALUES = Object.values(Journalposttype);
 
 const isJournalpostType = (type: Journalposttype | string): type is Journalposttype =>
-  Object.values(Journalposttype).some((value) => value === type);
+  JOURNALPOSTTYPE_VALUES.some((value) => value === type);

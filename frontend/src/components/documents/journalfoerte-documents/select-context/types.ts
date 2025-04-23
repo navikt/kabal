@@ -1,25 +1,18 @@
+import type { Path } from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 export type SelectedMap = Map<string, IJournalfoertDokumentId>;
 
-export type SelectOne = (document: IJournalfoertDokumentId) => void;
-export type SelectMany = (documents: IJournalfoertDokumentId[]) => void;
-export type DocumentPath = [number, number];
-export type SelectRange = (start: DocumentPath, end: DocumentPath) => void;
+export type SelectOne = (documentIndex: number, attachmentIndex?: number) => void;
+export type SelectMany = (documentPaths: Path[]) => void;
+export type SelectRange = (start: Path, end: Path) => void;
 
 export interface ISelectContext {
   readonly selectedDocuments: SelectedMap;
   readonly selectedCount: number;
+  readonly selectableCount: number;
   readonly lastSelectedDocument: IJournalfoertDokumentId | null;
-  readonly isSelected: (document: IJournalfoertDokumentId) => boolean;
-  readonly selectOne: SelectOne;
-  readonly unselectOne: (document: IJournalfoertDokumentId) => void;
-  readonly selectMany: SelectMany;
-  readonly unselectMany: (documents: IJournalfoertDokumentId[]) => void;
-  readonly selectRangeTo: (document: IJournalfoertDokumentId) => void;
-  readonly selectRange: SelectRange;
-  readonly unselectAll: () => void;
   readonly getSelectedDocuments: () => IArkivertDocument[];
 }
 

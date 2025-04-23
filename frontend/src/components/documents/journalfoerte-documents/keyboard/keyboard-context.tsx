@@ -1,4 +1,3 @@
-import { useSetAsAttachmentTo } from '@app/components/documents/journalfoerte-documents/keyboard/actions/attachment';
 import { useDown } from '@app/components/documents/journalfoerte-documents/keyboard/actions/down';
 import { home, useEnd } from '@app/components/documents/journalfoerte-documents/keyboard/actions/home-end';
 import { useToggleInclude } from '@app/components/documents/journalfoerte-documents/keyboard/actions/include';
@@ -6,11 +5,7 @@ import { useToggleInfo } from '@app/components/documents/journalfoerte-documents
 import { useOpenInline } from '@app/components/documents/journalfoerte-documents/keyboard/actions/open-inline';
 import { useOpenInNewTab } from '@app/components/documents/journalfoerte-documents/keyboard/actions/open-tab';
 import {
-  useSelectDown,
   useSelectEnd,
-  useSelectHome,
-  useSelectUp,
-  useToggleSelect,
   useToggleSelectAll,
 } from '@app/components/documents/journalfoerte-documents/keyboard/actions/select';
 import { useUp } from '@app/components/documents/journalfoerte-documents/keyboard/actions/up';
@@ -22,13 +17,18 @@ import {
 } from '@app/components/documents/journalfoerte-documents/keyboard/actions/vedlegg';
 import { AttachmentModal } from '@app/components/documents/journalfoerte-documents/keyboard/attachment-modal';
 import { useClampOnFilter } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/clamp-on-filter';
+import { getDocument, getVedlegg } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
 import { KeyboardHelpModal } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-help-modal';
 import { RenameModal } from '@app/components/documents/journalfoerte-documents/keyboard/rename-modal';
-import { resetIndexes } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import { useDocumentsOnlyIncluded, useHasSeenKeyboardShortcuts } from '@app/hooks/settings/use-setting';
+import { getFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+import {
+  getSelectionRanges,
+  selectRangeTo,
+} from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { getRangeStartAndEnd } from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
+import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { createContext, useCallback, useContext, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 
 const NOOP = () => {};
 
@@ -38,12 +38,9 @@ interface KeyboardContextType {
   down: () => void;
   home: () => void;
   end: () => void;
-  reset: () => void;
 
   // Actions
-  selectUp: () => void;
-  selectDown: () => void;
-  selectHome: () => void;
+  selectTo: () => void;
   selectEnd: () => void;
   collapseVedlegg: () => void;
   expandVedlegg: () => void;
@@ -52,15 +49,13 @@ interface KeyboardContextType {
   toggleInfo: () => void;
   toggleInclude: () => void;
   toggleShowIncludeOnly: () => void;
-  toggleSelect: () => void;
   toggleSelectAll: () => void;
   setAsAttachmentTo: () => void;
   rename: () => void;
+  copyName: () => void;
   openInline: () => void;
   openInNewTab: () => void;
   focusSearch: () => void;
-
-  showHelpModal: () => void;
 }
 
 const KeyboardContext = createContext<KeyboardContextType>({
@@ -69,13 +64,10 @@ const KeyboardContext = createContext<KeyboardContextType>({
   down: NOOP,
   home: NOOP,
   end: NOOP,
-  reset: NOOP,
 
   // Actions
-  selectDown: NOOP,
-  selectUp: NOOP,
+  selectTo: NOOP,
   selectEnd: NOOP,
-  selectHome: NOOP,
   collapseVedlegg: NOOP,
   expandVedlegg: NOOP,
   collapseAllVedlegg: NOOP,
@@ -83,16 +75,13 @@ const KeyboardContext = createContext<KeyboardContextType>({
   toggleInfo: NOOP,
   toggleInclude: NOOP,
   toggleShowIncludeOnly: NOOP,
-  toggleSelect: NOOP,
   toggleSelectAll: NOOP,
   setAsAttachmentTo: NOOP,
   rename: NOOP,
+  copyName: NOOP,
   openInline: NOOP,
   openInNewTab: NOOP,
   focusSearch: NOOP,
-
-  // Help
-  showHelpModal: NOOP,
 });
 
 export const useKeyboardContext = () => {
@@ -108,41 +97,43 @@ export const useKeyboardContext = () => {
 interface KeyboardContextElementProps {
   children: React.ReactNode;
   filteredDocuments: IArkivertDocument[];
-  allSelectableDocuments: IJournalfoertDokumentId[];
-  scrollToTop: () => void;
   searchRef: React.RefObject<HTMLInputElement | null>;
 }
 
-export const KeyboardContextElement = ({
-  children,
-  filteredDocuments,
-  allSelectableDocuments,
-  scrollToTop,
-  searchRef,
-}: KeyboardContextElementProps) => {
+export const KeyboardContextElement = ({ children, filteredDocuments, searchRef }: KeyboardContextElementProps) => {
   const { setValue: setShowOnlyIncludedDocuments } = useDocumentsOnlyIncluded();
 
-  useClampOnFilter(filteredDocuments);
+  useClampOnFilter();
 
-  const down = useDown(filteredDocuments);
-  const up = useUp(filteredDocuments);
+  const down = useDown();
+  const up = useUp();
   const end = useEnd(filteredDocuments);
 
-  const reset = useCallback(() => {
-    resetIndexes();
-    scrollToTop();
-  }, [scrollToTop]);
+  const selectTo = useCallback(() => {
+    const ranges = getSelectionRanges();
+    const lastRange = ranges.at(-1);
+    const focusedIndex = getFocusIndex();
+
+    if (lastRange === undefined) {
+      return selectRangeTo(focusedIndex);
+    }
+
+    const [start, end] = getRangeStartAndEnd(lastRange);
+
+    const startDiff = Math.abs(start - focusedIndex);
+    const endDiff = Math.abs(end - focusedIndex);
+    const closest = startDiff < endDiff ? start : end;
+
+    selectRangeTo(focusedIndex, closest);
+  }, []);
+
+  const selectEnd = useSelectEnd(filteredDocuments);
 
   const collapseVedlegg = useCollapseVedlegg(filteredDocuments);
   const expandVedlegg = useExpandVedlegg(filteredDocuments);
   const expandAllVedlegg = useExpandAllVedlegg(filteredDocuments);
 
-  const toggleSelect = useToggleSelect(filteredDocuments);
-  const toggleSelectAll = useToggleSelectAll(allSelectableDocuments);
-  const selectDown = useSelectDown(filteredDocuments);
-  const selectUp = useSelectUp(filteredDocuments);
-  const selectHome = useSelectHome();
-  const selectEnd = useSelectEnd(filteredDocuments);
+  const toggleSelectAll = useToggleSelectAll();
 
   const toggleInfo = useToggleInfo(filteredDocuments);
   const toggleInclude = useToggleInclude(filteredDocuments);
@@ -157,17 +148,23 @@ export const KeyboardContextElement = ({
   const [attachmentModal, setAttachmentModal] = useState(false);
   const [renameModal, setRenameModal] = useState(false);
 
-  const setAsAttachmentTo = useSetAsAttachmentTo(filteredDocuments, setAttachmentModal);
+  const setAsAttachmentTo = () => setAttachmentModal(true);
   const rename = useCallback(() => setRenameModal(true), []);
 
-  const { setValue: setHasSeenKeyboardShortcuts } = useHasSeenKeyboardShortcuts();
+  const copyName = useCallback(() => {
+    const document = getDocument(filteredDocuments);
 
-  const helpModalRef = useRef<HTMLDialogElement>(null);
+    if (document === undefined) {
+      return;
+    }
 
-  const showHelpModal = useCallback(() => {
-    helpModalRef.current?.showModal();
-    setHasSeenKeyboardShortcuts(true);
-  }, [setHasSeenKeyboardShortcuts]);
+    const vedlegg = getVedlegg(document);
+    const name = vedlegg === undefined ? document.tittel : vedlegg.tittel;
+
+    if (name !== null) {
+      navigator.clipboard.writeText(name);
+    }
+  }, [filteredDocuments]);
 
   const focusSearch = useCallback(() => {
     if (searchRef.current === null) {
@@ -184,33 +181,28 @@ export const KeyboardContextElement = ({
         up,
         home,
         end,
-        reset,
 
-        selectDown,
-        selectUp,
-        selectHome,
         selectEnd,
+        selectTo,
         collapseVedlegg,
         expandVedlegg,
         collapseAllVedlegg,
         expandAllVedlegg,
-        toggleSelect,
         toggleSelectAll,
         toggleInfo,
         toggleInclude,
         toggleShowIncludeOnly,
         setAsAttachmentTo,
         rename,
+        copyName,
         openInline,
         openInNewTab,
         focusSearch,
-
-        showHelpModal,
       }}
     >
       {children}
 
-      <KeyboardHelpModal ref={helpModalRef} />
+      <KeyboardHelpModal />
 
       <AttachmentModal
         open={attachmentModal}
