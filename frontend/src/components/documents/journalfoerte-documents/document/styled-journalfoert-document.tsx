@@ -4,16 +4,12 @@ import {
   getFieldNames,
   getFieldSizes,
 } from '@app/components/documents/journalfoerte-documents/grid';
-import {
-  documentCSS,
-  getBackgroundColor,
-  getHoverBackgroundColor,
-} from '@app/components/documents/styled-components/document';
+import { documentCSS } from '@app/components/documents/styled-components/document';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import type { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import { css, styled } from 'styled-components';
 
-const COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS = [Fields.SelectRow, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
+const COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS = [Fields.Select, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
 
 const getGridCss = ({ $isExpanded, $columns }: Props) => {
   if (!$isExpanded) {
@@ -24,7 +20,7 @@ const getGridCss = ({ $isExpanded, $columns }: Props) => {
   }
 
   const fields = [
-    Fields.SelectRow,
+    Fields.Select,
     Fields.ToggleVedlegg,
     Fields.Title,
     $columns.TEMA ? Fields.Tema : null,
@@ -54,12 +50,5 @@ interface Props {
 export const StyledJournalfoertDocument = styled.article<Props>`
   ${documentCSS}
   ${documentsGridCSS}
-
   ${getGridCss}
-  
-  background-color: ${({ $selected }) => getBackgroundColor($selected)};
-
-  &:hover {
-    background-color: ${({ $selected }) => getHoverBackgroundColor($selected)};
-  }
 `;

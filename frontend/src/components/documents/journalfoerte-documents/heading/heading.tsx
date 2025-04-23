@@ -1,8 +1,10 @@
+import { KeyboardHelpButton } from '@app/components/documents/journalfoerte-documents/header/keyboard-help-button';
+import { unselectAll } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Heading, Stack, Tooltip } from '@navikt/ds-react';
 import { memo, useMemo } from 'react';
-import { InvisibleWarning, type InvisibleWarningProps } from './invisible-warning';
 import { Menu } from './menu';
 
 interface RemoveFiltersProps {
@@ -10,8 +12,10 @@ interface RemoveFiltersProps {
   noFiltersActive: boolean;
 }
 
-interface Props extends RemoveFiltersProps, Omit<InvisibleWarningProps, 'totalLengthWithVedlegg'> {
+interface Props extends RemoveFiltersProps {
   totalLengthOfMainDocuments: number;
+  allDocuments: IArkivertDocument[];
+  filteredDocuments: IArkivertDocument[];
 }
 
 export const JournalfoertHeading = memo(
@@ -29,8 +33,9 @@ export const JournalfoertHeading = memo(
         direction={isExpanded ? 'row' : 'column'}
         align={isExpanded ? 'center' : 'start'}
         justify="space-between"
-        paddingBlock="0 1"
-        gap="2 4"
+        paddingBlock="1"
+        paddingInline="1 2"
+        gap="2"
         flexShrink="0"
       >
         <HStack align="center" gap="2">
@@ -49,11 +54,11 @@ export const JournalfoertHeading = memo(
           {isExpanded ? null : <Menu />}
         </HStack>
 
-        <InvisibleWarning
-          filteredDocuments={filteredDocuments}
-          allDocuments={allDocuments}
-          totalLengthWithVedlegg={totalCount}
-        />
+        <KeyboardHelpButton />
+
+        <Button onClick={() => unselectAll()} variant="secondary" size="small">
+          Nullstill valg
+        </Button>
 
         <RemoveFilters resetFilters={resetFilters} noFiltersActive={noFiltersActive} />
       </Stack>

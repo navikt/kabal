@@ -2,7 +2,9 @@ import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon } from '@navi
 
 export const CMD = '⌘';
 export const CTRL = 'Ctrl';
-export const IS_MAC = /mac os x/i.test(navigator.userAgent);
+export const IS_WINDOWS = navigator.platform.startsWith('Win');
+export const IS_LINUX = navigator.platform.startsWith('Linux');
+export const IS_MAC = navigator.platform.startsWith('Mac');
 export const MOD_KEY_TEXT = IS_MAC ? CMD : CTRL;
 
 interface KeyEvent {
@@ -33,6 +35,8 @@ export enum Keys {
   Minus = '-',
   Plus = '+',
   A = 'a',
+  B = 'b',
+  C = 'c',
   D = 'd',
   F = 'f',
   G = 'g',
@@ -41,10 +45,12 @@ export enum Keys {
   J = 'j',
   K = 'k',
   L = 'l',
+  M = 'm',
   N = 'n',
   S = 's',
   V = 'v',
   Zero = '0',
+  F2 = 'F2',
 }
 
 export const MOD_KEY = IS_MAC ? Keys.Cmd : Keys.Ctrl;
@@ -76,6 +82,8 @@ export const KEY_ICONS: Record<Keys, React.ReactNode> = {
   [Keys.Minus]: '-',
   [Keys.Plus]: '+',
   [Keys.A]: 'A',
+  [Keys.B]: 'B',
+  [Keys.C]: 'C',
   [Keys.D]: 'D',
   [Keys.F]: 'F',
   [Keys.G]: 'G',
@@ -84,8 +92,10 @@ export const KEY_ICONS: Record<Keys, React.ReactNode> = {
   [Keys.J]: 'J',
   [Keys.K]: 'K',
   [Keys.L]: 'L',
+  [Keys.M]: 'M',
   [Keys.N]: 'N',
   [Keys.S]: 'S',
   [Keys.V]: 'V',
   [Keys.Zero]: '0',
+  [Keys.F2]: 'F2',
 };

@@ -1,8 +1,8 @@
 import { Popup, type PopupProps } from '@app/components/filter-dropdown/popup';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import type React from 'react';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { ToggleButton } from '../toggle-button/toggle-button';
 import { Dropdown } from './dropdown';
 import type { BaseProps } from './props';
@@ -14,6 +14,7 @@ interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   maxWidth?: PopupProps['maxWidth'];
   maxHeight?: PopupProps['maxHeight'];
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export const FilterDropdown = <T extends string>({
@@ -26,6 +27,7 @@ export const FilterDropdown = <T extends string>({
   maxHeight,
   maxWidth,
   className,
+  style,
 }: FilterDropdownProps<T>): React.JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
@@ -41,17 +43,18 @@ export const FilterDropdown = <T extends string>({
   const chevron = open ? <ChevronUpIcon aria-hidden fontSize={20} /> : <ChevronDownIcon aria-hidden fontSize={20} />;
 
   return (
-    <Container ref={ref} data-testid={testId} className={className}>
+    <section
+      ref={ref}
+      data-testid={testId}
+      className={className === undefined ? 'relative' : `relative ${className}`}
+      style={style}
+    >
       <ToggleButton $open={open} onClick={() => setOpen(!open)} ref={buttonRef} data-testid="toggle-button">
         {children} ({selected.length}) {chevron}
       </ToggleButton>
       <Popup isOpen={open} direction={direction} maxWidth={maxWidth} maxHeight={maxHeight}>
         <Dropdown selected={selected} options={options} onChange={onChange} close={close} />
       </Popup>
-    </Container>
+    </section>
   );
 };
-
-const Container = styled.section`
-  position: relative;
-`;

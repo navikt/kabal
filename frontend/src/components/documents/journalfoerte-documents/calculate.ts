@@ -5,7 +5,6 @@ import {
   LOGISK_VEDLEGG_SPACE,
   ROW_HEIGHT,
 } from '@app/components/documents/journalfoerte-documents/contants';
-import { PADDING_TOP } from '@app/components/documents/new-documents/constants';
 import type { IArkivertDocument, IArkivertDocumentVedlegg, LogiskVedlegg } from '@app/types/arkiverte-documents';
 
 interface Position {
@@ -41,16 +40,16 @@ interface DokumentListRenderData extends Position {
 }
 
 export const calculateDokumentPositions = (
-  dokumenter: IArkivertDocument[],
-  metadataIdList: string[],
-  showVedleggIdList: string[],
-  showLogiskeVedleggIdList: string[],
+  dokumenter: Readonly<IArkivertDocument[]>,
+  metadataIdList: Readonly<string[]>,
+  showVedleggIdList: Readonly<string[]>,
+  showLogiskeVedleggIdList: Readonly<string[]>,
 ): DokumentListRenderData => {
   const dokumenterLength = dokumenter.length;
 
   const list = new Array<DokumentRenderData>(dokumenterLength);
 
-  let listHeight = PADDING_TOP;
+  let listHeight = 0;
 
   for (let index = 0; index < dokumenterLength; index++) {
     // biome-ignore lint/style/noNonNullAssertion: Guaranteed to be defined.
@@ -120,10 +119,10 @@ export interface VedleggListRenderData extends Position {
 }
 
 const calculateVedlegg = (
-  vedlegg: IArkivertDocumentVedlegg[],
+  vedlegg: readonly IArkivertDocumentVedlegg[],
   listTop: number,
   listGlobalTop: number,
-  showLogiskeVedleggIdList: string[],
+  showLogiskeVedleggIdList: readonly string[],
   journalpostId: string,
 ): VedleggListRenderData => {
   let listHeight = 0;

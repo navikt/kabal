@@ -1,17 +1,24 @@
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
+import { ToggleVedleggButton } from '@app/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
 import {
   Fields,
   documentsGridCSS,
   getFieldNames,
   getFieldSizes,
 } from '@app/components/documents/journalfoerte-documents/grid';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
+import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import {
-  documentCSS,
-  getBackgroundColor,
-  getHoverBackgroundColor,
-} from '@app/components/documents/styled-components/document';
+  addOne,
+  getSelectedDocuments,
+  isPathSelected,
+  isSelected,
+  selectRangeTo,
+  unselectOne,
+  useIsPathSelected,
+} from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { documentCSS } from '@app/components/documents/styled-components/document';
 import { findDocument } from '@app/domain/find-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
@@ -19,32 +26,39 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument, IArkivertDocumentVedlegg, Journalstatus } from '@app/types/arkiverte-documents';
-import { ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpDoubleIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { memo, useCallback, useContext, useMemo, useRef } from 'react';
+import { Checkbox } from '@navikt/ds-react';
+import { memo, useCallback, useContext, useRef } from 'react';
 import { styled } from 'styled-components';
 import { DocumentTitle } from '../shared/document-title';
 import { IncludeDocument } from '../shared/include-document';
-import { SelectRow } from '../shared/select-row';
 
 interface Props {
   journalpostId: string;
   journalpoststatus: Journalstatus | null;
   vedlegg: IArkivertDocumentVedlegg;
-  isSelected: boolean;
   showVedlegg: boolean;
   toggleShowVedlegg: () => void;
   hasVedlegg: boolean;
+  index: number;
+  documentIndex: number;
 }
 
 const EMPTY_ARRAY: IArkivertDocument[] = [];
 
 export const Attachment = memo(
-  ({ vedlegg, journalpostId, journalpoststatus, isSelected, showVedlegg, toggleShowVedlegg, hasVedlegg }: Props) => {
+  ({
+    vedlegg,
+    journalpostId,
+    journalpoststatus,
+    showVedlegg,
+    toggleShowVedlegg,
+    hasVedlegg,
+    index,
+    documentIndex,
+  }: Props) => {
     const { dokumentInfoId, hasAccess, tittel } = vedlegg;
     const oppgaveId = useOppgaveId();
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
-    const { getSelectedDocuments } = useContext(SelectContext);
     const cleanDragUI = useRef<() => void>(() => undefined);
     const { setDraggedJournalfoertDocuments, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
     const isSaksbehandler = useIsSaksbehandler();
@@ -53,10 +67,12 @@ export const Attachment = memo(
 
     const documents = arkiverteDokumenter?.dokumenter ?? EMPTY_ARRAY;
 
+    const selected = useIsPathSelected(documentIndex, index);
+
     const onDragStart = useCallback(
       (e: React.DragEvent<HTMLDivElement>) => {
-        if (isSelected) {
-          const docs = getSelectedDocuments();
+        if (isPathSelected(documentIndex, index)) {
+          const docs = getSelectedDocuments(documents);
 
           cleanDragUI.current = createDragUI(
             docs.map((d) => d.tittel ?? 'Ukjent dokument'),
@@ -82,19 +98,45 @@ export const Attachment = memo(
         e.dataTransfer.dropEffect = 'link';
         setDraggedJournalfoertDocuments([doc]);
       },
-      [documents, dokumentInfoId, getSelectedDocuments, isSelected, journalpostId, setDraggedJournalfoertDocuments],
+      [documentIndex, index, documents, dokumentInfoId, journalpostId, setDraggedJournalfoertDocuments],
     );
+
+    const onDoubleClick = useCallback(() => {
+      const accessibleIndex = convertRealToAccessibleDocumentIndex([documentIndex, index]);
+
+      if (accessibleIndex === undefined) {
+        return;
+      }
+
+      setFocusIndex(accessibleIndex);
+      isPathSelected(documentIndex, index) ? unselectOne(accessibleIndex) : addOne(accessibleIndex);
+    }, [documentIndex, index]);
 
     const disabled = !(isSaksbehandler || isRol) || isFeilregistrert;
     const draggingIsEnabled = draggingEnabled && !disabled && hasAccess;
 
-    const Icon = useMemo(() => {
-      if (hasVedlegg) {
-        return showVedlegg ? ChevronUpDoubleIcon : ChevronDownDoubleIcon;
-      }
+    const onSelectPath = useCallback(
+      (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
 
-      return showVedlegg ? ChevronUpIcon : ChevronDownIcon;
-    }, [hasVedlegg, showVedlegg]);
+        const accessibleIndex = convertRealToAccessibleDocumentIndex([documentIndex, index]);
+
+        if (accessibleIndex === undefined) {
+          return;
+        }
+
+        if (isSelected(accessibleIndex)) {
+          return unselectOne(accessibleIndex);
+        }
+
+        if (e.shiftKey) {
+          return selectRangeTo(accessibleIndex);
+        }
+
+        return addOne(accessibleIndex);
+      },
+      [documentIndex, index],
+    );
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -106,25 +148,29 @@ export const Attachment = memo(
         data-journalpostid={journalpostId}
         data-dokumentinfoid={dokumentInfoId}
         data-documentname={tittel}
-        $selected={isSelected}
+        $selected={selected}
         onDragStart={draggingIsEnabled ? onDragStart : (e) => e.preventDefault()}
         onDragEnd={() => {
           cleanDragUI.current();
           clearDragState();
         }}
         draggable={draggingIsEnabled}
+        className="px-1.5 hover:bg-surface-hover focus:outline-none"
+        onDoubleClick={hasAccess ? onDoubleClick : undefined}
+        tabIndex={-1}
       >
-        <SelectRow journalpostId={journalpostId} dokumentInfoId={dokumentInfoId} hasAccess={hasAccess} />
-
-        <Button
-          variant="tertiary"
+        <Checkbox
           size="small"
-          icon={<Icon aria-hidden />}
-          onClick={toggleShowVedlegg}
-          aria-label={showVedlegg ? 'Skjul vedlegg' : 'Vis vedlegg'}
-          style={{ gridArea: Fields.ToggleVedlegg }}
+          checked={selected}
+          style={{ gridArea: Fields.Select }}
+          hideLabel
+          onClick={onSelectPath}
           tabIndex={-1}
-        />
+        >
+          Velg
+        </Checkbox>
+
+        <ToggleVedleggButton hasVedlegg={hasVedlegg} showVedlegg={showVedlegg} toggleShowVedlegg={toggleShowVedlegg} />
 
         <DocumentTitle
           journalpostId={journalpostId}
@@ -138,17 +184,17 @@ export const Attachment = memo(
           journalpostId={journalpostId}
           journalpoststatus={journalpoststatus}
           hasAccess={hasAccess}
-          name={tittel ?? ''}
           checked={vedlegg.valgt}
         />
       </StyledVedlegg>
     );
   },
   (prevProps, nextProps) =>
+    prevProps.documentIndex === nextProps.documentIndex &&
+    prevProps.index === nextProps.index &&
     prevProps.showVedlegg === nextProps.showVedlegg &&
     prevProps.journalpostId === nextProps.journalpostId &&
     prevProps.toggleShowVedlegg === nextProps.toggleShowVedlegg &&
-    prevProps.isSelected === nextProps.isSelected &&
     prevProps.hasVedlegg === nextProps.hasVedlegg &&
     prevProps.vedlegg.valgt === nextProps.vedlegg.valgt &&
     prevProps.vedlegg.tittel === nextProps.vedlegg.tittel,
@@ -156,17 +202,11 @@ export const Attachment = memo(
 
 Attachment.displayName = 'Attachment';
 
-const VEDLEGG_FIELDS = [Fields.SelectRow, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
+const VEDLEGG_FIELDS = [Fields.Select, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
 
 const StyledVedlegg = styled.article<{ $selected: boolean }>`
   ${documentCSS}
   ${documentsGridCSS}
   grid-template-columns: ${getFieldSizes(VEDLEGG_FIELDS)};
   grid-template-areas: '${getFieldNames(VEDLEGG_FIELDS)}';
-
-  background-color: ${({ $selected }) => getBackgroundColor($selected)};
-
-  &:hover {
-    background-color: ${({ $selected }) => getHoverBackgroundColor($selected)};
-  }
 `;

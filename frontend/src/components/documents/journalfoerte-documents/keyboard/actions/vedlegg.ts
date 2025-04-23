@@ -1,8 +1,12 @@
+import {
+  convertAccessibleToRealDocumentPath,
+  convertRealToAccessibleDocumentIndex,
+} from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { useGetDocument } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
 import {
-  getAccessibleDocumentIndex,
+  getFocusIndex,
   getIsInVedleggList,
-  setFocusedVedleggIndex,
+  setFocusIndex,
 } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { getShowVedlegg, setShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
@@ -14,11 +18,20 @@ export const useCollapseVedlegg = (filteredDocuments: IArkivertDocument[]) => {
   return useCallback(() => {
     if (getIsInVedleggList()) {
       // Focus document.
-      setFocusedVedleggIndex(-1);
+      const realPath = convertAccessibleToRealDocumentPath(getFocusIndex());
+
+      if (realPath === null) {
+        return;
+      }
+
+      const [documentIndex] = realPath;
+
+      const accessibleDocumentIndex = convertRealToAccessibleDocumentIndex([documentIndex, -1]);
+      setFocusIndex(accessibleDocumentIndex);
       return;
     }
 
-    const accessibleDocumentIndex = getAccessibleDocumentIndex();
+    const accessibleDocumentIndex = getFocusIndex();
     const focusedDocument = getDocument(accessibleDocumentIndex);
 
     if (focusedDocument !== undefined) {

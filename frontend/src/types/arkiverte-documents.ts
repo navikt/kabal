@@ -54,7 +54,7 @@ export interface AvsenderMottaker {
 /** Sier hvilken sak journalposten er knyttet til. En journalpost kan maksimalt være knyttet til én sak, men et dokument kan være knyttet til flere journalposter og dermed flere saker. */
 export interface Sak {
   datoOpprettet: string; // LocalDate
-  fagsakId: string;
+  fagsakId: string | null;
   fagsaksystem: string;
 }
 

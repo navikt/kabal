@@ -1,26 +1,21 @@
-import { useSelectRange } from '@app/components/documents/journalfoerte-documents/select-context/select-range';
+import { convertAccessibleToRealDocumentPaths } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { useSelectionRangesState } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
+import { rangesToIndexes } from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
+import type {
+  ISelectContext,
+  SelectedMap,
+} from '@app/components/documents/journalfoerte-documents/select-context/types';
 import { findDocument } from '@app/domain/find-document';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { createContext, useCallback, useState } from 'react';
-import { getId } from './helpers';
-import { useSelectMany } from './select-many';
-import { useSelectOne } from './select-one';
-import { useSelectRangeTo } from './select-range-to';
-import type { ISelectContext, SelectedMap } from './types';
+import { createContext, useCallback, useMemo } from 'react';
 
 export const SelectContext = createContext<ISelectContext>({
   selectedDocuments: new Map(),
   selectedCount: 0,
+  selectableCount: 0,
   lastSelectedDocument: null,
-  isSelected: () => false,
-  selectOne: () => {},
-  unselectOne: () => {},
-  selectMany: () => {},
-  unselectMany: () => {},
-  selectRangeTo: () => {},
-  selectRange: () => {},
-  unselectAll: () => {},
   getSelectedDocuments: () => [],
 });
 
@@ -31,49 +26,48 @@ interface Props {
 }
 
 export const SelectContextElement = ({ children, filteredDocumentsList, allDocumentsList }: Props) => {
-  const [selectedDocuments, setSelectedDocuments] = useState<SelectedMap>(new Map());
-  const [lastSelectedDocument, setLastSelectedDocument] = useState<IJournalfoertDokumentId | null>(null);
+  const ranges = useSelectionRangesState();
 
-  const selectOne = useSelectOne(setSelectedDocuments, setLastSelectedDocument, filteredDocumentsList);
-  const selectMany = useSelectMany(setSelectedDocuments, setLastSelectedDocument, filteredDocumentsList);
-  const selectRange = useSelectRange(setSelectedDocuments, setLastSelectedDocument, filteredDocumentsList);
-  const selectRangeTo = useSelectRangeTo(
-    setSelectedDocuments,
-    setLastSelectedDocument,
-    filteredDocumentsList,
-    lastSelectedDocument,
-  );
+  const selectedDocuments = useMemo(() => {
+    const accessibleDocumentIndexes = rangesToIndexes(ranges);
+    const documentPaths = convertAccessibleToRealDocumentPaths(accessibleDocumentIndexes);
 
-  const unselectOne = useCallback((document: IJournalfoertDokumentId) => {
-    setLastSelectedDocument(null);
-    setSelectedDocuments((map) => {
-      map.delete(getId(document));
+    return documentPaths.reduce<SelectedMap>((map, path) => {
+      const [documentIndex, attachmentIndex] = path;
+      const document = filteredDocumentsList[documentIndex];
 
-      return new Map(map);
-    });
-  }, []);
-
-  const unselectAll = useCallback(() => {
-    setLastSelectedDocument(null);
-    setSelectedDocuments(new Map());
-  }, []);
-
-  const unselectMany = useCallback((documents: IJournalfoertDokumentId[]) => {
-    setLastSelectedDocument(null);
-    setSelectedDocuments((map) => {
-      for (const document of documents) {
-        map.delete(getId(document));
+      if (document === undefined) {
+        return map;
       }
 
-      return new Map(map);
-    });
-  }, []);
+      if (attachmentIndex === -1) {
+        const documentId: IJournalfoertDokumentId = {
+          journalpostId: document.journalpostId,
+          dokumentInfoId: document.dokumentInfoId,
+        };
 
-  const isSelected = useCallback(
-    (document: IJournalfoertDokumentId) => selectedDocuments.has(getId(document)),
-    [selectedDocuments],
-  );
+        map.set(getId(documentId), documentId);
+      }
 
+      const attachment = document.vedlegg[attachmentIndex];
+      if (attachment === undefined) {
+        return map;
+      }
+
+      const attachmentId: IJournalfoertDokumentId = {
+        journalpostId: document.journalpostId,
+        dokumentInfoId: attachment.dokumentInfoId,
+      };
+
+      map.set(getId(attachmentId), attachmentId);
+
+      return map;
+    }, new Map());
+  }, [filteredDocumentsList, ranges]);
+
+  /**
+   * Returns the selected documents and attachments as a flat list. All as IArkivertDocument. Attachments are merged with the main document.
+   */
   const getSelectedDocuments = useCallback(() => {
     if (selectedDocuments.size === 0) {
       return [];
@@ -87,9 +81,8 @@ export const SelectContextElement = ({ children, filteredDocumentsList, allDocum
 
       if (doc !== undefined) {
         selectedDocumentsArray[index] = doc;
+        index++;
       }
-
-      index++;
     }
 
     return selectedDocumentsArray;
@@ -100,15 +93,8 @@ export const SelectContextElement = ({ children, filteredDocumentsList, allDocum
       value={{
         selectedDocuments,
         selectedCount: selectedDocuments.size,
-        lastSelectedDocument,
-        selectOne,
-        unselectOne,
-        selectMany,
-        unselectMany,
-        selectRange,
-        selectRangeTo,
-        unselectAll,
-        isSelected,
+        selectableCount: filteredDocumentsList.length,
+        lastSelectedDocument: null,
         getSelectedDocuments,
       }}
     >

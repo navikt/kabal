@@ -1,26 +1,46 @@
-import { KEY_ICONS, Keys, MOD_KEY, isMetaKey } from '@app/keys';
+import {
+  closeKeyboardHelpModal,
+  useIsKeyboardHelpModalOpen,
+} from '@app/components/documents/journalfoerte-documents/keyboard/state/help-modal';
+import { useHasSeenKeyboardShortcuts } from '@app/hooks/settings/use-setting';
+import { KEY_ICONS, Keys, MOD_KEY } from '@app/keys';
+import { pushEvent } from '@app/observability';
 import { Box, HGrid, HStack, Heading, Modal } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
-interface Props {
-  ref: React.RefObject<HTMLDialogElement | null>;
-}
+export const KeyboardHelpModal = () => {
+  const ref = useRef<HTMLDialogElement>(null);
+  const isOpen = useIsKeyboardHelpModalOpen();
+  const { setValue: setHasSeenKeyboardShortcuts } = useHasSeenKeyboardShortcuts();
 
-export const KeyboardHelpModal = ({ ref }: Props) => {
-  const onKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (isMetaKey(event) && event.key === Keys.H) {
-        event.preventDefault();
-        event.stopPropagation();
-        ref.current?.close();
-      }
-    },
-    [ref],
-  );
+  useEffect(() => {
+    if (isOpen) {
+      ref.current?.showModal();
+      setHasSeenKeyboardShortcuts(true);
+      pushEvent('keyboard-shortcut-help-button-open', 'journalforte-documents-keyboard-shortcuts');
+    } else {
+      ref.current?.close();
+    }
+  }, [isOpen, setHasSeenKeyboardShortcuts]);
+
+  const onKeyDown = useCallback((event: React.KeyboardEvent) => {
+    if (event.key === Keys.H) {
+      event.preventDefault();
+      event.stopPropagation();
+      ref.current?.close();
+    }
+  }, []);
 
   return (
-    <Modal ref={ref} closeOnBackdropClick aria-labelledby="kb-help-modal-title" width={720} onKeyDown={onKeyDown}>
+    <Modal
+      ref={ref}
+      closeOnBackdropClick
+      aria-labelledby="kb-help-modal-title"
+      width={780}
+      onKeyDown={onKeyDown}
+      onClose={closeKeyboardHelpModal}
+    >
       <Modal.Header closeButton>
         <HStack as={Heading} gap="1" align="center" level="1" size="small">
           <Keyboard size={24} aria-hidden />
@@ -36,12 +56,19 @@ export const KeyboardHelpModal = ({ ref }: Props) => {
           <Shortcut keys={[[Keys.ArrowUp], [Keys.ArrowDown]]}>Naviger mellom dokumenter og vedlegg</Shortcut>
           <Shortcut keys={[[Keys.ArrowLeft], [Keys.ArrowRight]]}>Vis/skjul vedlegg</Shortcut>
           <Shortcut keys={[[Keys.Enter]]}>Åpne/lukk valgt(e) dokument(er)</Shortcut>
-          <Shortcut keys={[[MOD_KEY, Keys.Enter]]}>Åpne valgt(e) dokument(er) i ny fane</Shortcut>
-          <Shortcut keys={[[Keys.Space]]}>Velg/avvelg dokument eller vedlegg</Shortcut>
+          <Shortcut keys={[[MOD_KEY, Keys.Enter]]}>
+            1. Åpne valgt(e) dokument(er) i ny fane / 2. Fokuser åpen fane
+          </Shortcut>
+          <Shortcut keys={[[Keys.Space]]}>Legg til/fjern som valgt dokument eller vedlegg</Shortcut>
+          <Shortcut keys={[[Keys.M]]}>
+            Inkluder/ekskluder dokument i/fra saks<H>m</H>appe
+          </Shortcut>
 
           <ShortcutHeading>Avansert</ShortcutHeading>
 
-          <Shortcut keys={[[Keys.Escape]]}>Tøm filter for dokumentnavn</Shortcut>
+          <Shortcut keys={[[Keys.Shift, Keys.Space]]}>Velg dokumenter og vedlegg fra forrige til dette</Shortcut>
+
+          <Shortcut keys={[[Keys.Escape]]}>Fjern valgte dokumenter/vedlegg</Shortcut>
 
           <Shortcut keys={[[MOD_KEY, Keys.ArrowUp], [Keys.Home]]}>Gå til første dokument eller vedlegg</Shortcut>
           <Shortcut keys={[[MOD_KEY, Keys.ArrowDown], [Keys.End]]}>Gå til siste dokument eller vedlegg</Shortcut>
@@ -49,21 +76,22 @@ export const KeyboardHelpModal = ({ ref }: Props) => {
           <Shortcut keys={[[MOD_KEY, Keys.ArrowLeft]]}>Skjul vedlegg for alle dokumenter</Shortcut>
           <Shortcut keys={[[MOD_KEY, Keys.ArrowRight]]}>Vis vedlegg for alle dokumenter</Shortcut>
 
-          <Shortcut keys={[[MOD_KEY, Keys.D]]}>
-            Inkluder/ekskluder <H>d</H>okument i/fra saken
+          <Shortcut keys={[[MOD_KEY, Keys.F]]}>
+            <H>F</H>iltrer dokumenter på navn
           </Shortcut>
-          <Shortcut keys={[[MOD_KEY, Keys.Shift, Keys.D]]}>
-            Vis bare <H>d</H>okumenter inkludert i saken
+          <Shortcut keys={[[Keys.B]]}>
+            Vis <H>b</H>are dokumenter inkludert i saken
           </Shortcut>
-          <Shortcut keys={[[MOD_KEY, Keys.I]]}>
+          <Shortcut keys={[[Keys.I]]}>
             Vis/skjul <H>i</H>nformasjon for dokument
           </Shortcut>
-          <Shortcut keys={[[MOD_KEY, Keys.V]]}>
+          <Shortcut keys={[[Keys.V]]}>
             Bruk som <H>v</H>edlegg til dokument under arbeid
           </Shortcut>
-          <Shortcut keys={[[MOD_KEY, Keys.N]]}>
+          <Shortcut keys={[[Keys.F2], [Keys.N]]}>
             Endre <H>n</H>avn
           </Shortcut>
+          <Shortcut keys={[[MOD_KEY, Keys.C]]}>Kopier dokumentnavn</Shortcut>
 
           <Shortcut
             keys={[
@@ -89,18 +117,11 @@ export const KeyboardHelpModal = ({ ref }: Props) => {
           >
             Velg alle dokumenter/vedlegg nedover
           </Shortcut>
-          <Shortcut
-            keys={[
-              [Keys.Shift, Keys.Space],
-              [MOD_KEY, Keys.A],
-            ]}
-          >
-            Velg/avvelg alle dokumenter og vedlegg
-          </Shortcut>
+          <Shortcut keys={[[MOD_KEY, Keys.A]]}>Velg/avvelg alle dokumenter og vedlegg</Shortcut>
 
           <ShortcutHeading>Hjelp</ShortcutHeading>
 
-          <Shortcut keys={[[MOD_KEY, Keys.H]]}>
+          <Shortcut keys={[[Keys.H]]}>
             Vis/skjul <H>h</H>jelp (denne oversikten over <H>h</H>urtigtaster)
           </Shortcut>
         </HGrid>

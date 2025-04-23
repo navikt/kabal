@@ -1,6 +1,6 @@
 import {
+  getVedlegg,
   useGetDocument,
-  useGetVedlegg,
 } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
 import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { useCallback } from 'react';
@@ -24,7 +24,6 @@ type FocusedDocumentResult = FocusedVedlegg | FocusedDocument | NoFocusedDocumen
 
 export const useLazyFocusedDocumentAndVedlegg = (filteredDocuments: IArkivertDocument[]) => {
   const getDocument = useGetDocument(filteredDocuments);
-  const getFocusedVedlegg = useGetVedlegg();
 
   return useCallback((): FocusedDocumentResult => {
     const focusedDocument = getDocument();
@@ -33,6 +32,6 @@ export const useLazyFocusedDocumentAndVedlegg = (filteredDocuments: IArkivertDoc
       return { focusedDocument: undefined, focusedVedlegg: undefined };
     }
 
-    return { focusedDocument, focusedVedlegg: getFocusedVedlegg(focusedDocument) };
-  }, [getDocument, getFocusedVedlegg]);
+    return { focusedDocument, focusedVedlegg: getVedlegg(focusedDocument) };
+  }, [getDocument]);
 };

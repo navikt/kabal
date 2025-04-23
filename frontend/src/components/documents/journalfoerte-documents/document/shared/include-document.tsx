@@ -1,4 +1,4 @@
-import { Fields, GRID_CLASSES } from '@app/components/documents/new-documents/grid';
+import { Fields } from '@app/components/documents/new-documents/grid';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useCheckDocument } from '@app/hooks/use-check-document';
@@ -12,7 +12,6 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useMemo } from 'react';
 
 interface Props {
-  name: string;
   dokumentInfoId: string;
   journalpostId: string;
   journalpoststatus: Journalstatus | null;
@@ -21,7 +20,7 @@ interface Props {
 }
 
 export const IncludeDocument = memo(
-  ({ dokumentInfoId, journalpostId, name, journalpoststatus, hasAccess, checked }: Props): React.JSX.Element | null => {
+  ({ dokumentInfoId, journalpostId, journalpoststatus, hasAccess, checked }: Props): React.JSX.Element | null => {
     const oppgaveId = useOppgaveId();
     const [setDocument, isUpdating] = useCheckDocument(oppgaveId, dokumentInfoId, journalpostId);
     const canEdit = useCanEdit();
@@ -29,7 +28,7 @@ export const IncludeDocument = memo(
     const isSaksbehandler = useIsSaksbehandler();
     const isRol = useIsRol();
 
-    const title = `${checked ? 'Ekskluder' : 'Inkluder'} ${name}`;
+    const title = checked ? 'Ekskluder fra saken' : 'Inkluder i saken';
 
     const unavailableMessage = useMemo(() => {
       if (!hasAccess) {
@@ -37,7 +36,7 @@ export const IncludeDocument = memo(
       }
 
       if (journalpoststatus === Journalstatus.MOTTATT) {
-        return 'Dokumentet har status "Mottatt". Fullfør journalføring i Gosys for å inkludere det.';
+        return 'Dokumentet har status mottatt. Fullfør journalføring i Gosys for å inkludere det.';
       }
 
       return null;
@@ -50,7 +49,7 @@ export const IncludeDocument = memo(
     if (unavailableMessage !== null) {
       return (
         <Tooltip placement="right" content={unavailableMessage} maxChar={Number.POSITIVE_INFINITY}>
-          <HStack align="center" justify="center" className="opacity-30">
+          <HStack align="center" justify="center" className="opacity-30" style={{ gridArea: Fields.Action }}>
             <CircleSlashIcon aria-hidden />
           </HStack>
         </Tooltip>
@@ -58,21 +57,26 @@ export const IncludeDocument = memo(
     }
 
     return (
-      <Button
-        size="small"
-        variant={checked ? 'primary' : 'tertiary'}
-        icon={<FolderPlusIcon aria-hidden />}
-        title={title}
-        onClick={() => setDocument(!checked)}
-        data-testid="journalfoert-document-button"
-        disabled={!canEdit || !(isSaksbehandler || isRol) || isFeilregistrert}
-        loading={isUpdating}
-        className={GRID_CLASSES[Fields.Action]}
-        data-included={checked}
-        aria-pressed={checked}
-        tabIndex={-1}
-      />
+      <Tooltip placement="right" content={title} keys={['M']}>
+        <Button
+          size="small"
+          variant={checked ? 'primary' : 'tertiary'}
+          icon={<FolderPlusIcon aria-hidden />}
+          title={title}
+          onClick={(e) => {
+            e.stopPropagation();
+            setDocument(!checked);
+          }}
+          data-testid="journalfoert-document-button"
+          disabled={!canEdit || !(isSaksbehandler || isRol) || isFeilregistrert}
+          loading={isUpdating}
+          style={{ gridArea: Fields.Action }}
+          data-included={checked}
+          aria-pressed={checked}
+          tabIndex={-1}
+        />
+      </Tooltip>
     );
   },
-  (prevProps, nextProps) => prevProps.checked === nextProps.checked && prevProps.name === nextProps.name,
+  (prevProps, nextProps) => prevProps.checked === nextProps.checked,
 );

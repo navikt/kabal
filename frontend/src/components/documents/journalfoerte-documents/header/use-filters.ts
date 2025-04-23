@@ -1,4 +1,5 @@
-import { setAccessibleToRealDocumentIndexes } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { setAccessibleToRealDocumentPaths } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import {
@@ -66,9 +67,11 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     sort,
   );
 
+  const { showVedleggIdList } = useShowVedlegg();
+
   useEffect(() => {
-    setAccessibleToRealDocumentIndexes(totalFilteredDocuments);
-  }, [totalFilteredDocuments]);
+    setAccessibleToRealDocumentPaths(totalFilteredDocuments, showVedleggIdList);
+  }, [totalFilteredDocuments, showVedleggIdList]);
 
   const resetFilters = useCallback(() => {
     resetTitle();

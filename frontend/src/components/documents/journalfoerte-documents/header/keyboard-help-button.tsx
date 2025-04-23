@@ -1,7 +1,6 @@
-import { useKeyboardContext } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-context';
+import { openKeyboardHelpModal } from '@app/components/documents/journalfoerte-documents/keyboard/state/help-modal';
 import { useHasSeenKeyboardShortcuts } from '@app/hooks/settings/use-setting';
-import { pushEvent } from '@app/observability';
-import { Button } from '@navikt/ds-react';
+import { Button, Tooltip } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
 
 const PING_ANIMATION_CLASSES =
@@ -14,23 +13,25 @@ const ANIMATIONS_COUNT = ANIMATIONS.length;
 const randomAnimationIndex = Math.floor(Math.random() * ANIMATIONS_COUNT);
 const getRandomAnimation = () => ANIMATIONS[randomAnimationIndex];
 
+const TITLE = 'Vis hjelp for tastaturstyring';
+
 export const KeyboardHelpButton = () => {
   const { value: hasSeenKeyboardShortcuts } = useHasSeenKeyboardShortcuts();
-  const { showHelpModal } = useKeyboardContext();
 
   return (
-    <Button
-      variant="tertiary"
-      size="small"
-      icon={
-        <span className={hasSeenKeyboardShortcuts ? undefined : getRandomAnimation()}>
-          <Keyboard size={22} aria-hidden />
-        </span>
-      }
-      onClick={() => {
-        showHelpModal();
-        pushEvent('keyboard-shortcut-help-button-open', 'journalforte-documents-keyboard-shortcuts');
-      }}
-    />
+    <Tooltip content={TITLE} placement="top">
+      <Button
+        variant="tertiary"
+        size="small"
+        className="mr-auto"
+        aria-label={TITLE}
+        icon={
+          <span className={hasSeenKeyboardShortcuts ? undefined : getRandomAnimation()}>
+            <Keyboard size={22} aria-hidden />
+          </span>
+        }
+        onClick={openKeyboardHelpModal}
+      />
+    </Tooltip>
   );
 };
