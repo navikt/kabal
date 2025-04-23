@@ -29,6 +29,7 @@ export const getGenereltBrevTemplate = (
     richText: [
       createCurrentDate(),
       createHeader(),
+      createMaltekstseksjon(TemplateSections.TITLE),
       createSaksinfo(),
       createSimpleParagraph(),
       createSignature(includeMedunderskriver, overriddenSaksbehandler),
