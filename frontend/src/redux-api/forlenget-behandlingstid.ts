@@ -66,18 +66,7 @@ export const forlengetBehandlingstidApi = createApi({
       { varsletBehandlingstidUnits: number | null; id: string }
     >({
       query: ({ id, ...body }) => ({ url: getPath(id, 'behandlingstid-units'), method: 'PUT', body }),
-      onQueryStarted: async ({ id, varsletBehandlingstidUnits }, { queryFulfilled }) => {
-        const patchResult = reduxStore.dispatch(
-          updateQueryData('getOrCreate', id, (draft) => {
-            return {
-              ...draft,
-              behandlingstid: { ...draft.behandlingstid, varsletBehandlingstidUnits, varsletFrist: null },
-            };
-          }),
-        );
-
-        await pessimisticUpdate(id, patchResult.undo, queryFulfilled);
-      },
+      onQueryStarted: ({ id }, { queryFulfilled }) => pessimisticUpdate(id, queryFulfilled),
     }),
     setBehandlingstidUnitType: builder.mutation<
       IForlengetBehandlingstid,
@@ -98,7 +87,7 @@ export const forlengetBehandlingstidApi = createApi({
           }),
         );
 
-        await pessimisticUpdate(id, patchResult.undo, queryFulfilled);
+        await pessimisticUpdate(id, queryFulfilled, patchResult.undo);
       },
     }),
     setBehandlingstidDate: builder.mutation<
@@ -106,20 +95,7 @@ export const forlengetBehandlingstidApi = createApi({
       { behandlingstidDate: string | null; id: string }
     >({
       query: ({ id, ...body }) => ({ url: getPath(id, 'behandlingstid-date'), method: 'PUT', body }),
-      onQueryStarted: async ({ id, behandlingstidDate }, { queryFulfilled }) => {
-        const patchResult = reduxStore.dispatch(
-          updateQueryData('getOrCreate', id, (draft) => ({
-            ...draft,
-            behandlingstid: {
-              ...draft.behandlingstid,
-              varsletFrist: behandlingstidDate,
-              varlsetBehandlingstidUnits: null,
-            },
-          })),
-        );
-
-        await pessimisticUpdate(id, patchResult.undo, queryFulfilled);
-      },
+      onQueryStarted: ({ id }, { queryFulfilled }) => pessimisticUpdate(id, queryFulfilled),
     }),
     setReceivers: builder.mutation<IForlengetBehandlingstid, { mottakerList: IMottaker[]; id: string }>({
       query: ({ id, mottakerList }) => ({
@@ -172,10 +148,10 @@ const { updateQueryData } = forlengetBehandlingstidApi.util;
 const optimisticUpdate = async ({ id, ...update }: Update, queryFulfilled: QueryFulfiled) => {
   const patchResult = reduxStore.dispatch(updateQueryData('getOrCreate', id, (draft) => ({ ...draft, ...update })));
 
-  await pessimisticUpdate(id, patchResult.undo, queryFulfilled);
+  await pessimisticUpdate(id, queryFulfilled, patchResult.undo);
 };
 
-const pessimisticUpdate = async (id: string, undo: () => void, queryFulfilled: QueryFulfiled) => {
+const pessimisticUpdate = async (id: string, queryFulfilled: QueryFulfiled, undo = () => {}) => {
   try {
     const { data } = await queryFulfilled;
 

@@ -1,3 +1,4 @@
+import { validateBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
 import { usePdfData } from '@app/components/pdf/pdf';
 import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
 import { useForlengetFristPdfWidth } from '@app/hooks/settings/use-setting';
@@ -16,7 +17,12 @@ import { FilePdfIcon } from '@navikt/aksel-icons';
 import { Alert, Loader } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 
-export const Pdf = ({ id }: { id: string }) => {
+interface VarsletFristProps {
+  id: string;
+  varsletFrist: string | null;
+}
+
+export const Pdf = ({ id, varsletFrist }: VarsletFristProps) => {
   const { data, isLoading, isSuccess, isError } = useGetOrCreateQuery(id);
 
   if (isLoading) {
@@ -37,21 +43,33 @@ export const Pdf = ({ id }: { id: string }) => {
     );
   }
 
-  if (data.behandlingstid.varsletBehandlingstidUnits === null && data.behandlingstid.varsletFrist === null) {
-    return (
-      <div className="flex w-full items-center justify-center">
-        <div className="flex flex-col items-center">
-          <FilePdfIcon fontSize={300} color="var(--a-gray-300)" />
-          <Alert variant="info" inline size="small">
-            Fyll inn ny behandlingstid eller ny frist for å generere en forhåndsvisning
-          </Alert>
-        </div>
-      </div>
-    );
+  if (data.doNotSendLetter) {
+    return null;
   }
 
-  return data.doNotSendLetter ? null : <PdfBody id={id} />;
+  if (data.behandlingstid.varsletBehandlingstidUnits === null && data.behandlingstid.varsletFrist === null) {
+    return <PdfPlaceholder>Fyll inn ny behandlingstid eller ny frist for å generere en forhåndsvisning</PdfPlaceholder>;
+  }
+
+  const error = validateBehandlingstid(data.behandlingstid, varsletFrist);
+
+  if (error !== undefined) {
+    return <PdfPlaceholder>{error}</PdfPlaceholder>;
+  }
+
+  return <PdfBody id={id} />;
 };
+
+const PdfPlaceholder = ({ children }: { children: string }) => (
+  <div className="flex w-full items-center justify-center">
+    <div className="flex flex-col items-center">
+      <FilePdfIcon fontSize={300} color="var(--a-gray-300)" />
+      <Alert variant="info" inline size="small">
+        {children}
+      </Alert>
+    </div>
+  </div>
+);
 
 const PdfBody = ({ id }: { id: string }) => {
   const { value: width, setValue: setWidth } = useForlengetFristPdfWidth();

@@ -35,7 +35,7 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
   return (
     <Modal header={{ heading }} width="2000px" closeOnBackdropClick open={isOpen} onClose={onClose}>
       <Modal.Body className="flex h-[80vh] w-full gap-9">
-        <VStack width="754px" padding="1" overflowY="auto" flexShrink="0" gap="4">
+        <VStack width="780px" padding="1" overflowY="auto" flexShrink="0" gap="4">
           <VStack gap="4">
             {isOpen ? <TimesPreviouslyExtended /> : null}
             {isOpen ? <DoNotSendLetter /> : null}
@@ -54,7 +54,7 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
           <Errors sections={error} />
         </VStack>
 
-        {isOpen ? <Pdf id={oppgaveId} /> : null}
+        {isOpen ? <Pdf id={oppgaveId} varsletFrist={varsletFrist} /> : null}
       </Modal.Body>
 
       <Modal.Footer>

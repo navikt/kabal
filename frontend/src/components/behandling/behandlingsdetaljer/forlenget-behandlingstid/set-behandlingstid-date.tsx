@@ -1,10 +1,11 @@
 import { MAX_MONTHS_FROM_TODAY } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/constants';
+import { validateDate } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
 import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
 import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSetBehandlingstidDateMutation } from '@app/redux-api/forlenget-behandlingstid';
 import { ErrorMessage, VStack } from '@navikt/ds-react';
-import { addDays, addMonths, isAfter } from 'date-fns';
+import { addDays, addMonths } from 'date-fns';
 
 interface Props {
   value: string | null;
@@ -32,15 +33,8 @@ export const SetBehandlingstidDate = ({ value, id, error, setError }: Props) => 
             return setError(undefined);
           }
 
-          if (data.varsletFrist !== null && !isAfter(new Date(date), new Date(data.varsletFrist))) {
-            return setError('Fristen kan ikke være før forrige varslet frist');
-          }
-
-          if (isAfter(new Date(date), addMonths(new Date(), MAX_MONTHS_FROM_TODAY))) {
-            return setError('Fristen kan ikke være mer enn fire måneder frem i tid');
-          }
-
-          setError(undefined);
+          const error = validateDate(date, data.varsletFrist);
+          setError(error);
         }}
         value={value}
         size="small"
