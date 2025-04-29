@@ -3,27 +3,9 @@ import { Details } from '@app/components/toast/toast-content/fetch-error-toast';
 import { type ApiError, isApiError } from '@app/types/errors';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Button, HStack, Heading, Loader, VStack } from '@navikt/ds-react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
-  const ref = useRef<HTMLObjectElement>(null);
-
-  useEffect(() => {
-    if (ref.current === null) {
-      return;
-    }
-
-    const listener = (e: KeyboardEvent) => {
-      console.debug('Key down:', e);
-    };
-
-    ref.current.contentWindow?.addEventListener('keydown', listener);
-
-    return () => {
-      ref.current?.contentWindow?.removeEventListener('keydown', listener);
-    };
-  }, []);
-
   if (error !== undefined) {
     return (
       <div className="grow p-5">
@@ -52,8 +34,64 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
         </Box>
       ) : null}
 
-      <object title="PDF" data={data} aria-label="PDF" name="pdf-viewer" className="w-full" ref={ref} />
+      <ObjectWithLoad data={data} />
     </div>
+  );
+};
+
+interface ObjectProps {
+  data: string | undefined;
+}
+
+const ObjectWithLoad = ({ data }: ObjectProps) => {
+  const ref = useRef<HTMLIFrameElement>(null);
+
+  const listener = useCallback((e: KeyboardEvent) => {
+    console.debug('Key down:', e);
+  }, []);
+
+  const onLoad: React.ReactEventHandler<HTMLIFrameElement> = useCallback(
+    ({ target }) => {
+      console.debug('PDF loaded', target);
+
+      const isIframe = target instanceof HTMLIFrameElement;
+
+      if (!isIframe) {
+        console.error('Target is not an iframe', target);
+        return;
+      }
+
+      for (const key of Object.keys(window)) {
+        if (/^on/.test(key)) {
+          const eventName = key.slice(2).toLowerCase();
+          console.debug('Adding event listener to PDF iframe', eventName);
+          target.addEventListener(
+            eventName,
+            (event) => {
+              console.debug(eventName, event);
+            },
+            { capture: true, passive: false },
+          );
+        }
+      }
+
+      target.addEventListener('keydown', listener);
+      target.contentWindow?.addEventListener('keydown', listener);
+      target.contentDocument?.addEventListener('keydown', listener);
+
+      target.contentWindow?.addEventListener('load', () => {
+        console.debug('PDF window loaded');
+      });
+
+      target.contentDocument?.addEventListener('load', () => {
+        console.debug('PDF document loaded');
+      });
+    },
+    [listener],
+  );
+
+  return (
+    <iframe title="PDF" src={data} aria-label="PDF" name="pdf-viewer" className="w-full" ref={ref} onLoad={onLoad} />
   );
 };
 

@@ -13,24 +13,24 @@ import {
   getQuery,
   invalidId,
   isPlainText,
-} from '@app/plugins/documents/common';
+} from '@app/plugins/documents/helpers';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 import { SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
 import { Type, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import type { FastifyReply } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 
-const INLINE_TEMPLATE = fs.readFileSync(path.join(process.cwd(), './src/templates/inline-document-template.html'), {
+const TEMPLATE = fs.readFileSync(path.join(process.cwd(), './src/templates/document-template.html'), {
   encoding: 'utf8',
 });
 
-export const inlineDocumentPlugin = fastifyPlugin(
-  (app) => {
+export const documentPlugin = fastifyPlugin(
+  async (app) => {
     app
       .withTypeProvider<TypeBoxTypeProvider>()
 
       .get(
-        '/inline/arkivert-dokument/:journalpostId/:dokumentInfoId',
+        '/arkivert-dokument/:journalpostId/:dokumentInfoId',
         {
           schema: {
             tags: ['dokumenter'],
@@ -56,13 +56,14 @@ export const inlineDocumentPlugin = fastifyPlugin(
 
           const query = getQuery(req.query);
           const url = `/api/kabal-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf${query}`;
+          const documentIdList = JSON.stringify([getJournalfoertDocumentDocumentId(journalpostId, dokumentInfoId)]);
 
-          return sendInlineDocument(reply, url, metadata.title);
+          return sendDocument(reply, url, documentIdList, metadata.title, req.navIdent);
         },
       )
 
       .get(
-        '/inline/nytt-dokument/:behandlingId/:documentId',
+        '/nytt-dokument/:behandlingId/:documentId',
         {
           schema: {
             tags: ['dokumenter'],
@@ -87,13 +88,14 @@ export const inlineDocumentPlugin = fastifyPlugin(
           const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
 
           const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/mergedocuments/${documentId}/pdf${getQuery(req.query)}`;
+          const documentIdList = JSON.stringify([getNewDocumentDocumentId(documentId)]);
 
-          return sendInlineDocument(reply, url, metadata.title);
+          return sendDocument(reply, url, documentIdList, metadata.title, req.navIdent);
         },
       )
 
       .get(
-        '/inline/nytt-dokumentvedlegg/:behandlingId/:documentId',
+        '/nytt-dokumentvedlegg/:behandlingId/:documentId',
         {
           schema: {
             tags: ['dokumenter'],
@@ -118,13 +120,14 @@ export const inlineDocumentPlugin = fastifyPlugin(
           const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
 
           const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/pdf${getQuery(req.query)}`;
+          const documentIdList = JSON.stringify([getNewDocumentAttachmentDocumentId(documentId)]);
 
-          return sendInlineDocument(reply, url, metadata.title);
+          return sendDocument(reply, url, documentIdList, metadata.title, req.navIdent);
         },
       )
 
       .get(
-        '/inline/vedleggsoversikt/:behandlingId/:documentId',
+        '/vedleggsoversikt/:behandlingId/:documentId',
         {
           schema: {
             tags: ['dokumenter'],
@@ -149,13 +152,14 @@ export const inlineDocumentPlugin = fastifyPlugin(
           const metadata = metadataResponse ?? DEFAULT_NEW_METADATA;
 
           const url = `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt/pdf${getQuery(req.query)}`;
+          const documentIdList = JSON.stringify([getAttachmentsOverviewTabId(documentId)]);
 
-          return sendInlineDocument(reply, url, metadata.title);
+          return sendDocument(reply, url, documentIdList, metadata.title, req.navIdent);
         },
       )
 
       .get(
-        '/inline/kombinert-dokument/:id',
+        '/kombinert-dokument/:id',
         {
           schema: {
             tags: ['dokumenter'],
@@ -180,16 +184,35 @@ export const inlineDocumentPlugin = fastifyPlugin(
           const metadata = metadataResponse ?? DEFAULT_COMBINED_METADATA;
 
           const url = `/api/kabal-api/journalposter/mergedocuments/${id}/pdf${getQuery(req.query)}`;
+          const combinedDocumentId = getMergedDocumentDocumentIdId(id);
+          const documentIdList = JSON.stringify([
+            combinedDocumentId,
+            ...metadata.archivedDocuments.map((d) =>
+              getJournalfoertDocumentDocumentId(d.journalpostId, d.dokumentInfoId),
+            ),
+          ]);
 
-          return sendInlineDocument(reply, url, metadata.title);
+          return sendDocument(reply, url, documentIdList, metadata.title, req.navIdent);
         },
       );
   },
   { fastify: '5', name: 'document-routes', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
 );
 
-const sendInlineDocument = (reply: FastifyReply, url: string, title: string) => {
-  const templateResult = INLINE_TEMPLATE.replace('{{pdfUrl}}', url).replace('{{title}}', title);
+const sendDocument = (reply: FastifyReply, url: string, documentIdList: string, title: string, navIdent: string) => {
+  const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
+    .replace('{{document-id-list}}', documentIdList)
+    .replace('{{title}}', title)
+    .replace('{{navIdent}}', navIdent);
 
   return reply.type('text/html').status(200).send(templateResult);
 };
+
+const getNewDocumentDocumentId = (documentId: string) => `new-document-${documentId}`;
+const getNewDocumentAttachmentDocumentId = (documentId: string) => `new-document-attachment-${documentId}`;
+const getAttachmentsOverviewTabId = (documentId: string) => `attachments-overview-${documentId}`;
+
+const getJournalfoertDocumentDocumentId = (journalpostId: string, dokumentInfoId: string) =>
+  `archived-document-${journalpostId}-${dokumentInfoId}`;
+
+const getMergedDocumentDocumentIdId = (mergedDocumentId: string) => `combined-document-${mergedDocumentId}`;

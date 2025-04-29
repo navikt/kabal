@@ -10,8 +10,7 @@ import { apiProxyPlugin } from '@app/plugins/api-proxy';
 import { clientVersionPlugin } from '@app/plugins/client-version';
 import { crdtPlugin } from '@app/plugins/crdt/crdt';
 import { debugPlugin } from '@app/plugins/debug/debug';
-import { inlineDocumentPlugin } from '@app/plugins/documents/inline-document';
-import { tabDocumentPlugin } from '@app/plugins/documents/tab-document';
+import { documentPlugin } from '@app/plugins/documents/documents';
 import { healthPlugin } from '@app/plugins/health';
 import { httpLoggerPlugin } from '@app/plugins/http-logger';
 import { navIdentPlugin } from '@app/plugins/nav-ident';
@@ -60,8 +59,7 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
   .register(oboAccessTokenPlugin)
   .register(versionPlugin)
   .register(apiProxyPlugin, { appNames: API_CLIENT_IDS, prefix: '/api' })
-  .register(inlineDocumentPlugin)
-  .register(tabDocumentPlugin)
+  .register(documentPlugin)
   .register(serveAssetsPlugin)
   .register(serveIndexPlugin)
   .register(httpLoggerPlugin)
