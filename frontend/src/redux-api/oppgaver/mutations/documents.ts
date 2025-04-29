@@ -105,7 +105,6 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
       }),
       onQueryStarted: async ({ parentId, dokumentId, oppgaveId }, { queryFulfilled, dispatch }) => {
         const documentsPatchResult = dispatch(
-          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
             const newDocuments: IMainDocument[] = [];
 
@@ -149,7 +148,6 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
 
           dispatch(
-            // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
             documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
               const newDocuments: IMainDocument[] = [];
 
@@ -387,7 +385,6 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         );
 
         const getArkiverteDokumenterPatchResult = dispatch(
-          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
             if (isFinished) {
               return draft;
@@ -432,7 +429,6 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
 
           dispatch(
-            // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
             documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
               for (const newDoc of data.addedJournalfoerteDokumenter) {
                 for (let index = draft.length - 1; index >= 0; index--) {

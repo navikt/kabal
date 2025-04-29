@@ -46,7 +46,6 @@ export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
     }, []);
 
     const uploadVedlegg = useCallback(
-      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       async (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
 

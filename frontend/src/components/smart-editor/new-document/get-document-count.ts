@@ -9,7 +9,6 @@ const DOCUMENT_COUNT_REGEX = /^ \((\d+)\)$/;
 export const getDocumentCount = (
   documents: Pick<IMainDocument, 'tittel' | 'parentId'>[],
   template: IDocumentTitle,
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 ): number => {
   const counts: number[] = [];
   let exactMatchCount = 0;

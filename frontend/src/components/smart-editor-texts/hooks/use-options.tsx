@@ -18,7 +18,6 @@ export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
     [sakstyperToUtfall],
   );
 
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   return useMemo(() => {
     const utfallList: IOption<UtfallEnum>[] = [];
 

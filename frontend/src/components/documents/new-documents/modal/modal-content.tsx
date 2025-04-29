@@ -42,7 +42,6 @@ interface Props {
   containsRolAttachments: boolean;
 }
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
   const [setMottakerList] = useSetMottakerListMutation();
   const [, { error: finishError }] = useFinishDocumentMutation({ fixedCacheKey: document.id });

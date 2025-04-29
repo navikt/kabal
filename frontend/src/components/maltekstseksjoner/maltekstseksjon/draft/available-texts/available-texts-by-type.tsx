@@ -49,7 +49,6 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
     [sort],
   );
 
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const filteredAndSortedData = useMemo(() => {
     const filtered: ScoredRichText[] = [];
 

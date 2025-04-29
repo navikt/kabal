@@ -44,7 +44,6 @@ export const handleRolEvent =
       draft.modified = timestamp;
 
       reduxStore.dispatch(
-        // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
         historyQuerySlice.util.updateQueryData('getHistory', oppgaveId, (history) => {
           if (history === undefined) {
             return;

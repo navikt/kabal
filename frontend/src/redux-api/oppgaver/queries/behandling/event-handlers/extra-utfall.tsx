@@ -12,7 +12,6 @@ import { styled } from 'styled-components';
 export const handleExtraUtfallEvent =
   (_: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
   ({ actor, timestamp, utfallIdList }: ExtraUtfallEvent) => {
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     updateCachedData((draft) => {
       if (draft === undefined) {
         return draft;

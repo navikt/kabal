@@ -147,7 +147,6 @@ interface Lists {
   otherOppgaveList: ListGosysOppgave[];
 }
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const SelectGosysOppgave = () => {
   const { data: oppgave } = useOppgave();
   const { data, isLoading, isSuccess, refetch, isFetching } = useGetGosysOppgaveListQuery(oppgave?.id ?? skipToken);

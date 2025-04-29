@@ -414,7 +414,6 @@ const textsMutationSlice = textsApi.injectEndpoints({
         body: { richText },
       }),
       onQueryStarted: async ({ id, richText, query, language }, { queryFulfilled }) => {
-        // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
         const upd = <T extends IText | ListText>(t: T) => {
           if (isListRegelverk(t)) {
             if (language === UNTRANSLATED && richText !== null) {

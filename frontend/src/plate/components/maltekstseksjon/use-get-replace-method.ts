@@ -33,7 +33,6 @@ const useGetIsChanged = () => {
   const [getOriginalText] = useLazyGetConsumerTextByIdQuery();
 
   return useCallback(
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     async (previousMaltekstseksjonElement: MaltekstseksjonElement): Promise<boolean> => {
       if (previousMaltekstseksjonElement.id === undefined) {
         return false;
@@ -96,7 +95,6 @@ export const useGetReplaceMethod = (oppgaveIsLoaded: boolean) => {
   const getIsChanged = useGetIsChanged();
 
   return useCallback<GetReplaceMethodFn>(
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     async (previousMaltekstseksjonElement, newMaltekstseksjon, newChildren = []) => {
       if (!oppgaveIsLoaded) {
         return ReplaceMethod.NO_CHANGE;
