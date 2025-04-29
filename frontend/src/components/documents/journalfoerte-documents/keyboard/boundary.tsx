@@ -1,3 +1,4 @@
+import { useBroadcastEvents } from '@app/components/documents/journalfoerte-documents/keyboard/bradcast-events';
 import { setKeyboardActive } from '@app/components/documents/journalfoerte-documents/keyboard/state/keyboard-active';
 import { useKeyboard } from '@app/components/documents/journalfoerte-documents/keyboard/use-keyboard';
 import { Keys, isMetaKey } from '@app/keys';
@@ -29,6 +30,12 @@ export const KeyboardBoundary = ({ children, ref }: KeyboardBoundaryProps) => {
       window.removeEventListener('keydown', listener);
     };
   }, [ref.current]);
+
+  useBroadcastEvents((event) => {
+    if (isMetaKey(event) && event.key === Keys.J) {
+      ref.current?.focus({ preventScroll: true });
+    }
+  });
 
   const onFocus = (e: React.FocusEvent<HTMLDivElement, Element>) => {
     if (e.target === ref.current) {

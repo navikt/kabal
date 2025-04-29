@@ -24,6 +24,7 @@ export default defineConfig({
       '/kombinert-dokument': PROXY,
       '/nytt-dokument': PROXY,
       '/vedleggsoversikt': PROXY,
+      '/inline': PROXY,
       '/version': PROXY,
       '/oauth': PROXY,
     },

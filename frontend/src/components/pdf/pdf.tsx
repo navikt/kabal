@@ -33,7 +33,8 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
           <Loader size="3xlarge" />
         </Box>
       ) : null}
-      <object data={data} aria-label="PDF" type="application/pdf" name="pdf-viewer" className="w-full" />
+
+      <object title="PDF" data={data} aria-label="PDF" name="pdf-viewer" className="w-full" />
     </div>
   );
 };
