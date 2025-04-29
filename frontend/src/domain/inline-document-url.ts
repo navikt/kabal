@@ -1,18 +1,13 @@
-import {
-  getAttachmentsOverviewTabUrl,
-  getJournalfoertDocumentTabUrl,
-  getMergedDocumentTabUrl,
-  getNewDocumentTabUrl,
-} from '@app/domain/tabbed-document-url';
-
 export const getNewDocumentInlineUrl = (oppgaveId: string, documentId: string, parentId: string | null) =>
-  `/inline${getNewDocumentTabUrl(oppgaveId, documentId, parentId)}`;
+  parentId === null
+    ? `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${documentId}/pdf`
+    : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/${documentId}/pdf`;
 
 export const getJournalfoertDocumentInlineUrl = (journalpostId: string, dokumentInfoId: string) =>
-  `/inline${getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId)}`;
+  `/api/kabal-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf`;
 
 export const getMergedDocumentInlineUrl = (mergedDocumentId: string) =>
-  `/inline${getMergedDocumentTabUrl(mergedDocumentId)}`;
+  `/api/kabal-api/journalposter/mergedocuments/${mergedDocumentId}/pdf`;
 
 export const getAttachmentsOverviewInlineUrl = (oppgaveId: string, documentId: string) =>
-  `/inline${getAttachmentsOverviewTabUrl(oppgaveId, documentId)}`;
+  `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/${documentId}/vedleggsoversikt/pdf`;

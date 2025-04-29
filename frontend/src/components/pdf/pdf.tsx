@@ -6,6 +6,24 @@ import { Alert, BodyShort, Box, Button, HStack, Heading, Loader, VStack } from '
 import { useEffect, useRef, useState } from 'react';
 
 export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
+  const ref = useRef<HTMLObjectElement>(null);
+
+  useEffect(() => {
+    if (ref.current === null) {
+      return;
+    }
+
+    const listener = (e: KeyboardEvent) => {
+      console.debug('Key down:', e);
+    };
+
+    ref.current.contentWindow?.addEventListener('keydown', listener);
+
+    return () => {
+      ref.current?.contentWindow?.removeEventListener('keydown', listener);
+    };
+  }, []);
+
   if (error !== undefined) {
     return (
       <div className="grow p-5">
@@ -34,7 +52,7 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
         </Box>
       ) : null}
 
-      <object title="PDF" data={data} aria-label="PDF" name="pdf-viewer" className="w-full" />
+      <object title="PDF" data={data} aria-label="PDF" name="pdf-viewer" className="w-full" ref={ref} />
     </div>
   );
 };
