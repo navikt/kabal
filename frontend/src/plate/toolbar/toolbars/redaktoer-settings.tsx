@@ -4,6 +4,7 @@ import {
 } from '@app/components/settings/abbreviations/abbreviations';
 import { AbbreviationsExplanation } from '@app/components/settings/abbreviations/explanation';
 import { pushEvent } from '@app/observability';
+import { Capitalise } from '@app/plate/toolbar/capitalise';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { CogIcon } from '@navikt/aksel-icons';
 import { Heading, Modal } from '@navikt/ds-react';
@@ -39,6 +40,8 @@ export const RedkatoerSettings = () => {
           </Heading>
         </Modal.Header>
         <StyledModalBody>
+          <Capitalise />
+
           <section>
             <StyledHeading level="2" size="small" spacing>
               <AbbreviationsHeadingContent />
