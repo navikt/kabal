@@ -1,7 +1,6 @@
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import { type Descendant, ElementApi } from '@udecode/plate';
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const areDescendantsEqual = (listA: Descendant[], listB: Descendant[]): boolean => {
   if (listA.length !== listB.length) {
     return false;

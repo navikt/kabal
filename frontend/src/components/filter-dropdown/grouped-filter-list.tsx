@@ -38,7 +38,6 @@ export const GroupedFilterList = <T extends string>({
   const [filter, setFilter] = useState<RegExp>(WILDCARD_REGEX);
   const [focused, setFocused] = useState(-1);
 
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const filteredOptions = useMemo(() => {
     const filtered: OptionGroup<T>[] = [];
 

@@ -172,7 +172,6 @@ const avsenderEqual = (prev: IMainDocument, next: IMainDocument) => {
   return prev.avsender === next.avsender;
 };
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const mottakereEqual = (prev: IMainDocument, next: IMainDocument) => {
   if (prev.mottakerList.length !== next.mottakerList.length) {
     return false;

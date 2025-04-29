@@ -12,7 +12,6 @@ import {
   XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const getMedunderskriverEvent = (e: IMedunderskriverEvent) => {
   const key = toKey(e);
   const { event, actor, previous, timestamp } = e;

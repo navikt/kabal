@@ -11,7 +11,6 @@ import { Tag } from '@navikt/ds-react';
 export const handleUtfallEvent =
   (userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
   ({ actor, timestamp, utfallId }: UtfallEvent) => {
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     updateCachedData((draft) => {
       if (draft === undefined) {
         return draft;

@@ -30,7 +30,6 @@ export const useFilteredAndSorted = <T extends RedaktørItem>(
 
   const sortedTexts: ScoredText<T>[] = useMemo(
     () =>
-      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       filteredTexts.toSorted((a, b) => {
         const isAsc = order === SortOrder.ASC;
 

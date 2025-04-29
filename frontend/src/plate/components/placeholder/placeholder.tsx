@@ -64,7 +64,6 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
 
   const isFocused = getIsFocused(editor, editor.api.findPath(element));
 
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   useEffect(() => {
     const path = editor.api.findPath(element);
 

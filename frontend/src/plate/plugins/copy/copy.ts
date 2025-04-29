@@ -30,7 +30,6 @@ import { ElementApi, NodeApi, RangeApi, type TText, TextApi } from '@udecode/pla
 import { type OverrideEditor, type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
 import { type Descendant, type NodeEntry, Range } from 'slate';
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const cleanNodes = (editor: PlateEditor, node: Descendant | Descendant[]): Descendant | Descendant[] => {
   if (Array.isArray(node)) {
     return node.flatMap((child) => cleanNodes(editor, child));

@@ -13,7 +13,6 @@ interface Props {
   part: IFullmektig | null;
 }
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const WithoutId = ({ part, onClose }: Props) => {
   const [setFullmektig, { isLoading, isError }] = useUpdateFullmektigMutation({
     fixedCacheKey: part?.id ?? 'temp',

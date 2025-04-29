@@ -31,7 +31,8 @@
         "noEmptyBlockStatements": { "level": "off" }
       },
       "complexity": {
-        "useSimplifiedLogicExpression": { "level": "off" }
+        "useSimplifiedLogicExpression": { "level": "off" },
+        "noExcessiveCognitiveComplexity": { "level": "warn", "options": { "maxAllowedComplexity": 25 } }
       }
     }
   },

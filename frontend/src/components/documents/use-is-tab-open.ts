@@ -53,7 +53,6 @@ class TabManager {
     this.listeners[documentId] = tabListeners.filter((l) => l !== listener);
   };
 
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   private handleMessage = (e: MessageEvent<unknown>) => {
     const { data } = e;
 

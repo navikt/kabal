@@ -17,7 +17,6 @@ import {
 export const handlefullmektigEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
   ({ actor, timestamp, part }: FullmektigEvent) => {
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     updateCachedData((draft) => {
       if (draft === undefined) {
         return draft;

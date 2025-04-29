@@ -97,7 +97,6 @@ const scoreFuntion = (
   return { ...setting, ytelseScore, textScore };
 };
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const sorter = (sort: SortState, settings: ScoredNamedSvarbrevSetting[]): ScoredNamedSvarbrevSetting[] => {
   if (sort.direction === SortDirection.ASCENDING) {
     if (sort.orderBy === SortKey.YTELSE) {

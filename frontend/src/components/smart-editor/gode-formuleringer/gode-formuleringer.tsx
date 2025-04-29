@@ -72,7 +72,6 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
     }
   }, [focused]);
 
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const texts = useMemo(() => {
     if (filter.length === 0) {
       const result: NonNullableGodFormulering[] = [];
@@ -106,7 +105,6 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
   );
 
   const onKeyDown = useCallback(
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'ArrowDown') {
         setFocused((f) => Math.min(texts.length - 1, f + 1));

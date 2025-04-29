@@ -32,7 +32,6 @@ const isRol = (oppgave: IOppgavebehandling, user: IUserData): boolean =>
 const rolCanEdit = (oppgave: IOppgavebehandling, user: IUserData): boolean =>
   isRol(oppgave, user) && oppgave.avsluttetAvSaksbehandlerDate === null && oppgave.rol?.flowState === FlowState.SENT;
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const canEditDocument = (templateId: TemplateIdEnum, oppgave: IOppgavebehandling, user: IUserData): boolean => {
   if (templateId === TemplateIdEnum.ROL_ANSWERS) {
     return rolCanEdit(oppgave, user);

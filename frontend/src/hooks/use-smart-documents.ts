@@ -6,7 +6,6 @@ import type { ISmartDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { skipToken } from '@reduxjs/toolkit/query';
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const useSmartDocuments = (oppgaveId: string | typeof skipToken): ISmartDocument[] | undefined => {
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
   const isRolWithAnyFlowState = useIsRolWithAnyFlowState();

@@ -29,7 +29,6 @@ export const Header = ({
 
   const onInputChange = (value: string) => onFilterChange(stringToRegExp(value));
 
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Escape') {
       event.stopPropagation();

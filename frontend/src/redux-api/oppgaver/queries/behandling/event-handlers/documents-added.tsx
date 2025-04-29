@@ -81,7 +81,6 @@ export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => 
   );
 };
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const handleToast = (documents: IMainDocument[], actor: INavEmployee) => {
   const count = documents.length;
 
