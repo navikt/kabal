@@ -78,7 +78,8 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
 
   const canDelete = isMainDocument && containsRolAttachments ? false : canEditDocument;
 
-  const isInngående = isMainDocument && document.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(document);
+  const isInngående =
+    isMainDocument && document.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(document.dokumentTypeId);
 
   return (
     <>

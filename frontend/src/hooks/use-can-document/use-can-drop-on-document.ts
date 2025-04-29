@@ -29,7 +29,7 @@ export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
   }
 
   if (draggedJournalfoertDocuments.length > 0) {
-    if (getIsIncomingDocument(targetDocument)) {
+    if (getIsIncomingDocument(targetDocument.dokumentTypeId)) {
       return false;
     }
 
@@ -53,7 +53,7 @@ export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
   }
 
   if (isTildeltSaksbehandler || hasOppgavestyringRole || (isFullfoert && hasSaksbehandlerRole)) {
-    if (getIsIncomingDocument(targetDocument)) {
+    if (getIsIncomingDocument(targetDocument.dokumentTypeId)) {
       return draggedDocument.type === DocumentTypeEnum.UPLOADED;
     }
 

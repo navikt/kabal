@@ -486,7 +486,9 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         const collectionPatchResult = reduxStore.dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
             draft.map((doc) =>
-              doc.id === dokumentId && doc.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(doc)
+              doc.id === dokumentId &&
+              doc.type === DocumentTypeEnum.UPLOADED &&
+              getIsIncomingDocument(doc.dokumentTypeId)
                 ? { ...doc, datoMottatt }
                 : doc,
             ),
@@ -495,7 +497,11 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         const documentPatchResult = reduxStore.dispatch(
           documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
-            if (draft !== null && draft.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(draft)) {
+            if (
+              draft !== null &&
+              draft.type === DocumentTypeEnum.UPLOADED &&
+              getIsIncomingDocument(draft.dokumentTypeId)
+            ) {
               draft.datoMottatt = datoMottatt;
             }
           }),

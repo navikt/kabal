@@ -30,7 +30,8 @@ export const SetParentDocument = ({ document, parentDocument, hasAttachments }: 
   const [setParent, { isLoading: isSetting }] = useSetParentMutation();
   const isRol = useIsRol();
 
-  const isIncomingDocument = getIsIncomingDocument(document) || getIsIncomingDocument(parentDocument);
+  const isIncomingDocument =
+    getIsIncomingDocument(document.dokumentTypeId) || getIsIncomingDocument(parentDocument?.dokumentTypeId);
 
   const potentialParents = useMemo(() => {
     if (data === undefined) {
@@ -38,7 +39,7 @@ export const SetParentDocument = ({ document, parentDocument, hasAttachments }: 
     }
 
     if (document.type === DocumentTypeEnum.UPLOADED || isIncomingDocument) {
-      return data.filter((d) => document.id !== d.id && d.parentId === null && getIsIncomingDocument(d));
+      return data.filter((d) => document.id !== d.id && d.parentId === null && getIsIncomingDocument(d.dokumentTypeId));
     }
 
     if (hasAttachments) {
