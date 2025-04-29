@@ -32,7 +32,7 @@ export const isAtStartOfBlock = (editor: PlateEditor): boolean => {
     return false;
   }
 
-  const closestBlock = editor.api.node({ at: editor.selection.anchor, block: true });
+  const closestBlock = editor.api.node({ at: editor.selection.anchor, block: true, mode: 'lowest' });
 
   if (closestBlock === undefined) {
     return false;

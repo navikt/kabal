@@ -6,7 +6,12 @@ import { afterAll } from 'bun:test';
 import * as originalSettingsManager from '@app/hooks/settings/manager';
 import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { TemplateSections } from '@app/plate/template-sections';
-import { createHeadingOne, createRedigerbarMaltekst, createSimpleParagraph } from '@app/plate/templates/helpers';
+import {
+  createHeadingOne,
+  createMaltekstseksjon,
+  createRedigerbarMaltekst,
+  createSimpleParagraph,
+} from '@app/plate/templates/helpers';
 import { type KabalValue, type ParagraphElement, TextAlign } from '@app/plate/types';
 import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { type PlateEditor, createPlateEditor } from '@udecode/plate-core/react';
@@ -192,6 +197,40 @@ describe('capitalise', () => {
 
       editor.tf.deleteBackward('character');
       expect(editor.api.string([])).toEqual('Old sentence. ');
+    });
+
+    it('should work in redigerbar maltekst inside maltekstseksjon', () => {
+      const redigerbarMaltekst = createRedigerbarMaltekst(TemplateSections.ANFOERSLER, [
+        createSimpleParagraph('Hello'),
+        createSimpleParagraph(''),
+      ]);
+      const maltekstseksjon = createMaltekstseksjon(TemplateSections.ANFOERSLER, 'id', [], [redigerbarMaltekst]);
+
+      const editor = createPlateEditor<KabalValue, (typeof plugins)[0]>({
+        plugins,
+        value: [maltekstseksjon],
+        selection: createSelection({ path: [0, 0, 1, 0], offset: 0 }),
+      });
+
+      type(editor, 'world');
+
+      expect(editor.children).toEqual([
+        createMaltekstseksjon(
+          TemplateSections.ANFOERSLER,
+          'id',
+          [],
+          [
+            createRedigerbarMaltekst(TemplateSections.ANFOERSLER, [
+              createSimpleParagraph('Hello'),
+              {
+                type: BaseParagraphPlugin.key,
+                align: TextAlign.LEFT,
+                children: [{ text: 'W', autoCapitalised: true }, { text: 'orld' }],
+              },
+            ]),
+          ],
+        ),
+      ]);
     });
   });
 
