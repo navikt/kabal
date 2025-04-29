@@ -6,9 +6,11 @@ import { RedaktørPlaceholder } from '@app/plate/components/placeholder/placehol
 import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-element';
 import { TableElement } from '@app/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
+import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { PageBreakPlugin } from '@app/plate/plugins/page-break';
 import { RedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redaktoer';
 import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
+import type { IUserData } from '@app/types/bruker';
 import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
@@ -37,4 +39,8 @@ export const redaktørComponents = {
   [RedaktoerPlaceholderPlugin.key]: RedaktørPlaceholder,
 };
 
-export const redaktørPlugins = [...defaultPlugins, RedaktoerPlaceholderPlugin];
+export const redaktørPlugins = ({ navIdent }: IUserData) => [
+  ...defaultPlugins,
+  RedaktoerPlaceholderPlugin,
+  createCapitalisePlugin(navIdent),
+];

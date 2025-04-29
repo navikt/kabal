@@ -8,6 +8,7 @@ import { useSmartEditorExpandedThreads } from '@app/hooks/settings/use-setting';
 import { useSetSmartEditorLanguage } from '@app/hooks/use-set-smart-editor-language';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushEvent } from '@app/observability';
+import { Capitalise } from '@app/plate/toolbar/capitalise';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { Language, isLanguage } from '@app/types/texts/language';
 import { CogIcon } from '@navikt/aksel-icons';
@@ -68,6 +69,8 @@ export const SaksbehandlerSettings = () => {
               </ToggleGroup>
             </section>
           ) : null}
+
+          <Capitalise />
 
           <section aria-labelledby="set-comments-and-bookmarks">
             <Heading level="2" size="small" spacing id="set-comments-and-bookmarks">

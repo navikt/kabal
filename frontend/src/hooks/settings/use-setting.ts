@@ -83,6 +83,8 @@ export const useSmartEditorGodeFormuleringerExpandstate = () =>
 export const useSmartEditorAnnotationsAtOrigin = () => useBooleanSetting('tabs/smart-editor/annotations_at_origin');
 export const useSmartEditorExpandedThreads = () => useBooleanSetting('tabs/smart-editor/expanded_threads');
 export const useSmartEditorHistoryOpen = () => useBooleanSetting(useOppgavePath('tabs/smart-editor/history_open'));
+export const CAPITALISE_SETTING_KEY = 'tabs/smart-editor/capitalise';
+export const useSmartEditorCapitalise = () => useBooleanSetting(CAPITALISE_SETTING_KEY);
 
 export enum ScalingGroup {
   OPPGAVEBEHANDLING = 'oppgavebehandling',

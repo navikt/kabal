@@ -1,3 +1,4 @@
+import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SavedStatus, type SavedStatusProps } from '@app/components/saved-status/saved-status';
 import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
@@ -13,7 +14,7 @@ import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { Box, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@udecode/plate-core/react';
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useContext, useImperativeHandle, useRef } from 'react';
 
 interface Props {
   editorId: string;
@@ -29,10 +30,12 @@ interface Props {
 export const RedaktoerRichText = forwardRef<RichTextEditor, Props>(
   ({ editorId, savedContent, onChange, onKeyDown, readOnly, onFocus, lang, status }, editorRef) => {
     const ref = useRef<HTMLDivElement>(null);
+    const { user } = useContext(StaticDataContext);
+    const plugins = redaktørPlugins(user);
 
-    const editor = usePlateEditor<KabalValue, (typeof redaktørPlugins)[0]>({
+    const editor = usePlateEditor<KabalValue, (typeof plugins)[0]>({
       id: editorId,
-      plugins: redaktørPlugins,
+      plugins,
       override: {
         components: redaktørComponents,
       },

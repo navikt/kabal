@@ -7,6 +7,7 @@ import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-elem
 import { TableElement } from '@app/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
 import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
+import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { CommentsPlugin } from '@app/plate/plugins/comments';
 import { CurrentDatePlugin } from '@app/plate/plugins/current-date';
 import { EmptyVoidPlugin } from '@app/plate/plugins/empty-void';
@@ -79,6 +80,7 @@ export const collaborationSaksbehandlerPlugins = (
 
   return [
     ...saksbehandlerPlugins,
+    createCapitalisePlugin(navIdent),
     YjsPlugin.configure({
       options: {
         cursorOptions: {
