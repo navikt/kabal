@@ -136,7 +136,7 @@ const StyledNewDocument = styled.article<StlyedNewDocumentProps>`
 `;
 
 const hasMottattDato = (doc: IMainDocument): doc is IFileDocument<null> =>
-  doc.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(doc);
+  doc.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(doc.dokumentTypeId);
 
 const mottattDatoEqual = (prev: IMainDocument, next: IMainDocument) => {
   if (!(hasMottattDato(prev) && hasMottattDato(next))) {

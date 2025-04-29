@@ -47,7 +47,7 @@ export const AttachmentList = ({
   hasAttachments,
   hasSeparator,
 }: Props) => {
-  const isIncomingDocument = getIsIncomingDocument(parentDocument);
+  const isIncomingDocument = getIsIncomingDocument(parentDocument.dokumentTypeId);
   const hasOverview = hasAttachments && !isIncomingDocument;
   const overviewCount = hasOverview ? 1 : 0;
   const totalRowCount = pdfLength + journalfoertLength + overviewCount;

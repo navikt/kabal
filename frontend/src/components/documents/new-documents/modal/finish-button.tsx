@@ -54,7 +54,7 @@ export const FinishButton = ({ document, pdfOrSmartDocuments, journalfoerteDocum
     );
   }
 
-  return document.dokumentTypeId === DistribusjonsType.NOTAT || getIsIncomingDocument(document) ? (
+  return document.dokumentTypeId === DistribusjonsType.NOTAT || getIsIncomingDocument(document.dokumentTypeId) ? (
     <ArchiveButtons document={document} />
   ) : (
     <SendButtons document={document} />

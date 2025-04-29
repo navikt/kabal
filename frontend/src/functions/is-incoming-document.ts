@@ -1,12 +1,12 @@
 import { DistribusjonsType, type IMainDocument } from '@app/types/documents/documents';
 
-export const getIsIncomingDocument = (document: IMainDocument | undefined): boolean => {
-  if (document === undefined) {
+export const getIsIncomingDocument = (dokumentTypeId: IMainDocument['dokumentTypeId'] | undefined): boolean => {
+  if (dokumentTypeId === undefined) {
     return false;
   }
 
   return (
-    document.dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN ||
-    document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST
+    dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN ||
+    dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST
   );
 };

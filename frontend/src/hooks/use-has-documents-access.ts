@@ -50,7 +50,7 @@ export const useHasArchiveAccess = (document: IMainDocument): boolean => {
   const isTildeltSaksbehandler = useIsSaksbehandler();
   const isFeilregistrert = useIsFeilregistrert();
 
-  const oppgaveStyringCanArchive = hasOppgavestyringRole && getIsIncomingDocument(document);
+  const oppgaveStyringCanArchive = hasOppgavestyringRole && getIsIncomingDocument(document.dokumentTypeId);
 
   if (isFeilregistrert) {
     return false;

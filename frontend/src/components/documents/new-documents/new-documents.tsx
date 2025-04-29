@@ -6,11 +6,14 @@ import {
   UPLOAD_BUTTON_HEIGHT,
 } from '@app/components/documents/new-documents/constants';
 import { ListHeader } from '@app/components/documents/new-documents/header/header';
+import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { ModalContextElement } from '@app/components/documents/new-documents/modal/modal-context';
 import { commonStyles } from '@app/components/documents/styled-components/container';
 import { clamp } from '@app/functions/clamp';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
+import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
   CreatorRole,
@@ -20,7 +23,6 @@ import {
   type ISmartDocument,
   type JournalfoertDokument,
 } from '@app/types/documents/documents';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Loader } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { styled } from 'styled-components';
@@ -39,6 +41,8 @@ const SCROLL_BUFFER_ROWS = 5;
 
 export const NewDocuments = () => {
   const oppgaveId = useOppgaveId();
+  const hasUploadAccess = useHasUploadAccess();
+  const isFeilregistrert = useIsFeilregistrert();
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
   const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
   const [containerHeight, setContainerHeight] = useState<number>(0);
@@ -59,6 +63,16 @@ export const NewDocuments = () => {
       return () => resizeObserver.disconnect();
     }
   }, [containerRef]);
+
+  const getHasUploadButton = useCallback(
+    (document: IMainDocument | undefined) =>
+      !isFeilregistrert &&
+      document !== undefined &&
+      document.parentId === null &&
+      hasUploadAccess &&
+      (getIsRolQuestions(document) || getIsIncomingDocument(document.dokumentTypeId)),
+    [isFeilregistrert, hasUploadAccess],
+  );
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const documentMap = useMemo(() => {
@@ -130,14 +144,13 @@ export const NewDocuments = () => {
 
     let h = PADDING_TOP + PADDING_BOTTOM;
 
-    for (const d of documentMap.values()) {
-      const isIncomingDocument = getIsIncomingDocument(d.mainDocument);
-      const hasUploadButton = d.mainDocument?.templateId === TemplateIdEnum.ROL_QUESTIONS || isIncomingDocument;
-      const pdfLength = d.pdfOrSmartDocuments.length;
-      const journalfoertLength = d.journalfoerteDocuments.length;
+    for (const { mainDocument, journalfoerteDocuments, pdfOrSmartDocuments } of documentMap.values()) {
+      const hasUploadButton = getHasUploadButton(mainDocument);
+      const pdfLength = pdfOrSmartDocuments.length;
+      const journalfoertLength = journalfoerteDocuments.length;
       const hasSeparator = pdfLength !== 0 && journalfoertLength !== 0;
       const hasAttachments = pdfLength !== 0 || journalfoertLength !== 0;
-      const hasOverview = !isIncomingDocument && hasAttachments;
+      const hasOverview = !getIsIncomingDocument(mainDocument?.dokumentTypeId) && hasAttachments;
 
       h += hasUploadButton ? UPLOAD_BUTTON_HEIGHT : 0;
       h += hasOverview ? ROW_HEIGHT : 0;
@@ -148,7 +161,7 @@ export const NewDocuments = () => {
     }
 
     return h;
-  }, [data, documentMap]);
+  }, [data, documentMap, getHasUploadButton]);
 
   const [absoluteStartIndex, absoluteEndIndex] = useMemo<[number, number]>(() => {
     const rowsToRender = containerHeight === 0 ? 0 : Math.ceil(containerHeight / ROW_HEIGHT);
@@ -188,18 +201,16 @@ export const NewDocuments = () => {
         continue;
       }
 
-      const isIncomingDocument = getIsIncomingDocument(mainDocument);
-
       const pdfLength = pdfOrSmartDocuments.length;
       const journalfoertLength = journalfoerteDocuments.length;
       const vedleggCount = pdfLength + journalfoertLength;
       const hasAttachments = vedleggCount !== 0;
 
-      const overview = !isIncomingDocument && hasAttachments ? 1 : 0;
+      const overview = !getIsIncomingDocument(mainDocument.dokumentTypeId) && hasAttachments ? 1 : 0;
       const hasSeparator = pdfLength !== 0 && journalfoertLength !== 0;
       const separatorCount = hasSeparator ? 1 : 0;
 
-      const hasUploadButton = mainDocument.templateId === TemplateIdEnum.ROL_QUESTIONS || isIncomingDocument;
+      const hasUploadButton = getHasUploadButton(mainDocument);
       const uploadButtonCount = hasUploadButton ? 1 : 0;
 
       const virtualRows = overview + separatorCount + uploadButtonCount;
@@ -244,7 +255,7 @@ export const NewDocuments = () => {
     }
 
     return _documentNodes;
-  }, [documentMap, absoluteEndIndex, absoluteStartIndex]);
+  }, [documentMap, absoluteEndIndex, absoluteStartIndex, getHasUploadButton]);
 
   const onRef = useCallback((ref: HTMLDivElement | null) => {
     setContainerHeight(ref?.clientHeight ?? 0);
