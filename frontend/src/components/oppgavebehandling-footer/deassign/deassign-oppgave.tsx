@@ -69,7 +69,7 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
 
   const disabled = !oppgaveActions.deassignSelf;
   const title = disabled
-    ? 'Oppgaven kan ikke legges tilbake på felles kø. Dette kan være pga. manglende tilgang eller fordi oppgaven har en medunderskriver.'
+    ? 'Oppgaven kan ikke legges tilbake på felles kø. Dette kan være pga. manglende tilgang eller fordi oppgaven er sendt til medunderskriver eller rådgivende overlege.'
     : undefined;
 
   return (
