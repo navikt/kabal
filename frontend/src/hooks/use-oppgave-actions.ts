@@ -25,9 +25,8 @@ export const useOppgaveActions = (
   const hasYtelseAccess = useHasYtelseAccess(ytelse);
 
   return useMemo<ReturnType>(() => {
-    const medunderskriverInvolved =
-      medunderskriverFlowState !== null && medunderskriverFlowState !== FlowState.NOT_SENT;
-    const rolInvolved = rolFlowState !== FlowState.NOT_SENT;
+    const medunderskriverInvolved = medunderskriverFlowState === FlowState.SENT;
+    const rolInvolved = rolFlowState === FlowState.SENT;
     const isAssigned = tildeltSaksbehandler !== null;
     const isAssignedToSelf = isAssigned && user.navIdent === tildeltSaksbehandler;
 
