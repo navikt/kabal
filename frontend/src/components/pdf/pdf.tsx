@@ -45,21 +45,21 @@ export interface UsePdfData {
   error: string | undefined;
 }
 
-export const usePdfData = (url: string | undefined, skip = false): UsePdfData => {
+export const usePdfData = (url: string | undefined, query?: Record<string, string>): UsePdfData => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<string>();
   const [error, setError] = useState<string>();
   const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    if (url === undefined || skip) {
+    if (url === undefined) {
       return;
     }
 
-    getData(url).then(setData);
-  }, [url, skip]);
+    getData(url, query).then(setData);
+  }, [url, query]);
 
-  const getData = async (u: string | undefined) => {
+  const getData = async (url: string | undefined, query?: Record<string, string>) => {
     abortControllerRef.current?.abort();
     const controller = new AbortController();
     abortControllerRef.current = controller;
@@ -69,7 +69,10 @@ export const usePdfData = (url: string | undefined, skip = false): UsePdfData =>
     setError(undefined);
 
     try {
-      const response = await fetch(`${u}?version=${Date.now()}`, { signal });
+      const params = new URLSearchParams(query);
+      params.append('version', Date.now().toString());
+
+      const response = await fetch(`${url}?${params.toString()}`, { signal });
 
       if (!response.ok) {
         const json = await response.json();

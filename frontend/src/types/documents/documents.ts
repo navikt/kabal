@@ -113,7 +113,7 @@ export interface ISmartDocument<P extends string | null = UUID | null> extends I
 export interface JournalfoertDokumentReference
   extends IJournalfoertDokumentId,
     Pick<DokumentInfo, 'hasAccess'>,
-    Pick<Journalpost, 'datoOpprettet'> {
+    Pick<Journalpost, 'datoOpprettet' | 'varianter'> {
   sortKey: string;
 }
 

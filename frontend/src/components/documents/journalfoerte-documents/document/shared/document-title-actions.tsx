@@ -1,7 +1,5 @@
-import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
 import { CheckmarkIcon, PencilIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Button, CopyButton, HStack } from '@navikt/ds-react';
 
 interface ConfirmProps {
   setEditMode: (editMode: boolean) => void;
@@ -15,7 +13,7 @@ interface Props extends ConfirmProps {
 export const ConfirmEditButton = ({ setEditMode }: ConfirmProps) => (
   <Button
     onClick={() => setEditMode(false)}
-    icon={<StyledSuccessIcon aria-hidden />}
+    icon={<CheckmarkIcon aria-hidden className="text-large" />}
     data-testid="document-title-edit-save-button"
     title="Endre"
     size="xsmall"
@@ -29,10 +27,10 @@ export const DocumentTitleActions = ({ setEditMode, hasAccess, tittel }: Props) 
   }
 
   return (
-    <Container>
+    <HStack align="center" wrap={false} className="hidden group-hover:flex">
       <Button
         onClick={() => setEditMode(true)}
-        icon={<StyledEditIcon aria-hidden />}
+        icon={<PencilIcon aria-hidden className="text-large" />}
         data-testid="document-title-edit-save-button"
         title="Endre"
         size="xsmall"
@@ -40,24 +38,6 @@ export const DocumentTitleActions = ({ setEditMode, hasAccess, tittel }: Props) 
       />
 
       <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />
-    </Container>
+    </HStack>
   );
 };
-
-const StyledEditIcon = styled(PencilIcon)`
-  font-size: var(--a-spacing-5);
-`;
-
-const StyledSuccessIcon = styled(CheckmarkIcon)`
-  font-size: var(--a-spacing-5);
-`;
-
-const Container = styled.div`
-  display: none;
-  flex-direction: row;
-  align-items: center;
-
-  ${StyledDocumentTitle}:hover & {
-    display: flex;
-  }
-`;

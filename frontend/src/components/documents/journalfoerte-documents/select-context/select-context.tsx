@@ -13,7 +13,6 @@ import { createContext, useCallback, useMemo } from 'react';
 
 export const SelectContext = createContext<ISelectContext>({
   selectedDocuments: new Map(),
-  selectedCount: 0,
   selectableCount: 0,
   lastSelectedDocument: null,
   getSelectedDocuments: () => [],
@@ -92,7 +91,6 @@ export const SelectContextElement = ({ children, filteredDocumentsList, allDocum
     <SelectContext.Provider
       value={{
         selectedDocuments,
-        selectedCount: selectedDocuments.size,
         selectableCount: filteredDocumentsList.length,
         lastSelectedDocument: null,
         getSelectedDocuments,

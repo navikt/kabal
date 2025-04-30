@@ -62,7 +62,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
       ? undefined
       : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
   const isMainDocument = document.parentId === null;
-  const { refresh, ...pdfData } = usePdfData(pdfUrl, !isMainDocument);
+  const { refresh, ...pdfData } = usePdfData(isMainDocument ? pdfUrl : undefined);
 
   if (oppgaveId === skipToken) {
     return null;

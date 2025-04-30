@@ -55,7 +55,7 @@ export const Document = ({
 
   const cleanDragUI = useRef<() => void>(() => undefined);
 
-  const { dokumentInfoId, journalpostId, tittel, hasAccess, journalstatus } = document;
+  const { dokumentInfoId, journalpostId, tittel, hasAccess, journalstatus, varianter } = document;
 
   const selected = useIsPathSelected(index);
 
@@ -178,6 +178,7 @@ export const Document = ({
         journalpostId={journalpostId}
         dokumentInfoId={dokumentInfoId}
         hasAccess={hasAccess}
+        varianter={varianter}
         tittel={tittel ?? ''}
         documentIndex={index}
       />

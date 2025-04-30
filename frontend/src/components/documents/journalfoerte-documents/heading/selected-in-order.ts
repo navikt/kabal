@@ -1,56 +1,60 @@
+import { canOpenInKabal } from '@app/components/documents/filetype';
 import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
 import type { SelectedMap } from '@app/components/documents/journalfoerte-documents/select-context/types';
 import type { IShownArchivedDocument } from '@app/components/view-pdf/types';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IArkivertDocument, Variants } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+
+interface DownloadableDocument extends IJournalfoertDokumentId {
+  tittel: string;
+  varianter: Variants;
+}
+
+interface Result {
+  toOpen: IShownArchivedDocument[];
+  toDownload: DownloadableDocument[];
+}
 
 export const getSelectedDocumentsInOrder = (
   selectedDocuments: SelectedMap,
   archivedDocuments: IArkivertDocument[],
-  selectedCount: number,
-): IShownArchivedDocument[] => {
-  const sortedList: IShownArchivedDocument[] = [];
+): Result => {
+  const toOpen: IShownArchivedDocument[] = [];
+  const toDownload: DownloadableDocument[] = [];
 
-  for (const document of archivedDocuments) {
-    {
-      const selected = selectedDocuments.get(getId(document));
+  interface ToAdd {
+    journalpostId: string;
+    dokumentInfoId: string;
+    tittel: string | null;
+    varianter: Variants;
+  }
 
-      if (selected !== undefined) {
-        sortedList.push({
-          ...selected,
-          type: DocumentTypeEnum.JOURNALFOERT,
-        });
-
-        if (sortedList.length === selectedCount) {
-          break;
-        }
-      }
+  const addDocument = ({ varianter, tittel, ...ids }: ToAdd): boolean => {
+    if (!selectedDocuments.has(getId(ids))) {
+      return false;
     }
 
-    for (const vedlegg of document.vedlegg) {
-      const selected = selectedDocuments.get(
-        getId({
-          dokumentInfoId: vedlegg.dokumentInfoId,
-          journalpostId: document.journalpostId,
-        }),
-      );
-
-      if (selected !== undefined) {
-        sortedList.push({
-          ...selected,
-          type: DocumentTypeEnum.JOURNALFOERT,
-        });
-
-        if (sortedList.length === selectedCount) {
-          break;
-        }
-      }
+    if (canOpenInKabal(varianter)) {
+      toOpen.push({ ...ids, varianter, type: DocumentTypeEnum.JOURNALFOERT });
+    } else {
+      toDownload.push({ ...ids, tittel: tittel ?? ids.journalpostId, varianter });
     }
 
-    if (sortedList.length === selectedCount) {
-      break;
+    return toOpen.length + toDownload.length === selectedDocuments.size;
+  };
+
+  for (const { journalpostId, dokumentInfoId, varianter, tittel, vedlegg } of archivedDocuments) {
+    if (addDocument({ varianter, tittel, journalpostId, dokumentInfoId })) {
+      return { toOpen, toDownload };
+    }
+
+    for (const { dokumentInfoId, varianter, tittel } of vedlegg) {
+      if (addDocument({ journalpostId, dokumentInfoId, varianter, tittel })) {
+        return { toOpen, toDownload };
+      }
     }
   }
 
-  return sortedList;
+  return { toOpen, toDownload };
 };

@@ -1,4 +1,5 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { canDistributeAny } from '@app/components/documents/filetype';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useCanEditDocument } from '@app/components/documents/journalfoerte-documents/use-can-edit';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -10,7 +11,7 @@ import {
 } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { CreatorRole, type IMainDocument } from '@app/types/documents/documents';
+import { CreatorRole, DistribusjonsType, type IMainDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -20,9 +21,10 @@ const NONE_SELECTED = 'NONE_SELECTED';
 
 export const UseAsAttachments = () => {
   const canEdit = useCanEditDocument();
-  const options = useOptions();
-  const attachFn = useAttachVedleggFn();
   const { getSelectedDocuments } = useContext(SelectContext);
+  const selectedDocuments = getSelectedDocuments();
+  const options = useOptions(selectedDocuments);
+  const attachFn = useAttachVedleggFn();
 
   if (!canEdit || attachFn === null) {
     return null;
@@ -33,7 +35,7 @@ export const UseAsAttachments = () => {
       <Select
         size="small"
         label="Bruk som vedlegg for"
-        onChange={({ target }) => attachFn(target.value, ...getSelectedDocuments())}
+        onChange={({ target }) => attachFn(target.value, ...selectedDocuments)}
         value={NONE_SELECTED}
       >
         <option key={NONE_SELECTED} value={NONE_SELECTED} label="Velg dokument" />
@@ -48,12 +50,17 @@ export const UseAsAttachments = () => {
   );
 };
 
-export const useOptions = (): IMainDocument[] => {
+export const useOptions = (selectedDocuments: IArkivertDocument[]): IMainDocument[] => {
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
   const isRol = useIsRol();
 
   return data.filter((d) => {
+    if (selectedDocuments.some((s) => !canDistributeAny(s.varianter) && d.dokumentTypeId !== DistribusjonsType.NOTAT)) {
+      // File types that cannot be distributed, can only be dropped on documents of type NOTAT.
+      return false;
+    }
+
     if (isRol) {
       return d.parentId === null && d.isSmartDokument && d.templateId === TemplateIdEnum.ROL_QUESTIONS;
     }

@@ -1,4 +1,4 @@
-import { css, styled } from 'styled-components';
+import { HStack } from '@navikt/ds-react';
 
 interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   active?: boolean;
@@ -7,58 +7,41 @@ interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 
 export const DocumentLink = ({ active = false, disabled = false, children, href, ...rest }: Props) => {
   if (disabled) {
-    return <DisabledDocumentLink {...rest}>{children}</DisabledDocumentLink>;
+    return (
+      <span className={DISABLED_CLASSES} {...rest}>
+        {children}
+      </span>
+    );
   }
 
   return (
-    <StyledDocumentLink href={href} $isActive={active} {...rest}>
-      {children}
-    </StyledDocumentLink>
+    <HStack
+      asChild
+      gap="2"
+      align="center"
+      overflow="hidden"
+      height="100%"
+      className={active ? ACTIVE_CLASSES : INACTIVE_CLASSES}
+    >
+      <a {...rest} href={href}>
+        {children}
+      </a>
+    </HStack>
   );
 };
 
-const sharedCss = css`
-  display: flex;
-  gap: var(--a-spacing-2);
-  align-items: center;
-  border: none;
-  padding: 0;
-  font-size: inherit;
-  background-color: transparent;
-  padding-top: 0;
-  padding-bottom: 0;
-  line-height: 1.25;
-  font-size: 1em;
-  overflow: hidden;
-  text-align: left;
-  height: 100%;
-`;
+const INACTIVE_CLASSES = 'cursor-pointer text-text-action hover:text-text-action-hover visited:text-text-visited';
+const ACTIVE_CLASSES =
+  'cursor-pointer text-text-action-selected text-shadow-[0_0_1px] text-shadow-text-action-selected visited:text-text-action-selected';
+const DISABLED_CLASSES = 'text-text-subtle cursor-not-allowed opacity-50';
 
-const DisabledDocumentLink = styled.span`
-  ${sharedCss}
-  color: var(--a-text-subtle);
-  cursor: not-allowed;
-  opacity: 0.5;
-`;
+interface EllipsisTitleProps {
+  children: React.ReactNode;
+  title?: string;
+}
 
-const StyledDocumentLink = styled.a<{ $isActive: boolean }>`
-  ${sharedCss}
-  cursor: pointer;
-  text-decoration: none;
-  color: ${({ $isActive }) => ($isActive ? 'var(--a-text-action-selected)' : 'var(--a-text-action)')};
-  text-shadow: ${({ $isActive }) => ($isActive ? '0 0 1px var(--a-text-action-selected)' : 'none')};
-  user-select: text;
-
-  &:hover {
-    color: var(--a-text-action-hover);
-  }
-
-  &:visited {
-    color: ${({ $isActive }) => ($isActive ? 'var(--a-text-action-selected)' : 'var(--a-text-visited)')};
-  }
-`;
-
-export const EllipsisTitle = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
+export const EllipsisTitle = ({ children, ...rest }: EllipsisTitleProps) => (
+  <span {...rest} className="overflow-hidden text-ellipsis">
+    {children}
+  </span>
+);
