@@ -16,9 +16,9 @@ import { useIsExpanded } from '../../use-is-expanded';
 
 export const Menu = () => {
   const [isExpanded] = useIsExpanded();
-  const { selectedCount } = useContext(SelectContext);
+  const { selectedDocuments } = useContext(SelectContext);
 
-  if (selectedCount === 0 && !isExpanded) {
+  if (selectedDocuments.size === 0 && !isExpanded) {
     return null;
   }
 
@@ -42,9 +42,9 @@ export const Menu = () => {
 };
 
 const SelectedMenu = () => {
-  const { selectedCount } = useContext(SelectContext);
+  const { selectedDocuments } = useContext(SelectContext);
 
-  if (selectedCount === 0) {
+  if (selectedDocuments.size === 0) {
     return null;
   }
 
@@ -52,7 +52,7 @@ const SelectedMenu = () => {
     <>
       <Dropdown.Menu.GroupedList>
         <Dropdown.Menu.GroupedList.Heading>Verktøy for dokumenter</Dropdown.Menu.GroupedList.Heading>
-        {selectedCount > 1 ? (
+        {selectedDocuments.size > 1 ? (
           <Dropdown.Menu.GroupedList.Item as={ViewCombinedPDF}>1</Dropdown.Menu.GroupedList.Item>
         ) : null}
 

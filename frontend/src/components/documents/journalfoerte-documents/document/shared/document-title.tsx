@@ -1,5 +1,7 @@
+import { DocumentWarnings } from '@app/components/documents/document-warnings';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
-import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
+import { canOpenInKabal } from '@app/components/documents/filetype';
+import { DocumentTitleContainer } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-container';
 import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { SetFilename } from '@app/components/documents/set-filename';
@@ -8,12 +10,14 @@ import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
 import type { IShownDocument } from '@app/components/view-pdf/types';
+import { getJournalfoertDocumentInlineUrl } from '@app/domain/inline-document-url';
 import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { MouseButtons, isMetaKey } from '@app/keys';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
+import type { Variants } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useCallback, useContext, useMemo, useRef, useState } from 'react';
@@ -22,10 +26,11 @@ import { ConfirmEditButton, DocumentTitleActions } from './document-title-action
 interface Props {
   journalpostId: string;
   dokumentInfoId: string;
-  tittel: string;
   hasAccess: boolean;
   documentIndex: number;
   vedleggIndex?: number;
+  varianter: Variants;
+  tittel: string;
 }
 
 export const DocumentTitle = (props: Props) => {
@@ -46,6 +51,7 @@ const DocumentTitleInternal = memo(
     dokumentInfoId,
     tittel,
     hasAccess,
+    varianter,
     shownDocuments,
     setShownDocuments,
     documentIndex,
@@ -57,6 +63,8 @@ const DocumentTitleInternal = memo(
     const { setDraggingEnabled } = useContext(DragAndDropContext);
     const oppgaveId = useOppgaveId();
     const [setTitle] = useSetTitleMutation();
+
+    const isDownload = useMemo(() => !canOpenInKabal(varianter), [varianter]);
 
     const [editMode, _setEditMode] = useState(false);
 
@@ -79,7 +87,7 @@ const DocumentTitleInternal = memo(
 
     if (editMode) {
       return (
-        <StyledDocumentTitle onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()}>
+        <DocumentTitleContainer onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()}>
           <SetFilename
             tittel={tittel}
             close={() => {
@@ -99,22 +107,21 @@ const DocumentTitleInternal = memo(
           />
 
           <ConfirmEditButton setEditMode={setEditMode} />
-        </StyledDocumentTitle>
+        </DocumentTitleContainer>
       );
     }
 
-    const href = getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId);
+    const href = isDownload
+      ? getJournalfoertDocumentInlineUrl(journalpostId, dokumentInfoId)
+      : getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId);
 
     const onClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
-      if (e.button === MouseButtons.RIGHT) {
+      if (!hasAccess || isDownload || e.button === MouseButtons.RIGHT) {
+        // Use default browser behavior.
         return;
       }
 
       e.preventDefault();
-
-      if (!hasAccess) {
-        return;
-      }
 
       const shouldOpenInNewTab = isMetaKey(e) || e.button === MouseButtons.MIDDLE;
 
@@ -122,6 +129,7 @@ const DocumentTitleInternal = memo(
         setShownDocuments([
           {
             type: DocumentTypeEnum.JOURNALFOERT,
+            varianter,
             dokumentInfoId,
             journalpostId,
           },
@@ -158,7 +166,7 @@ const DocumentTitleInternal = memo(
     };
 
     return (
-      <StyledDocumentTitle>
+      <DocumentTitleContainer>
         <DocumentLink
           active={isInlineOpen || isTabOpen}
           aria-pressed={isInlineOpen || isTabOpen}
@@ -168,18 +176,22 @@ const DocumentTitleInternal = memo(
           data-testid="document-open-button"
           href={href}
           target={documentId}
+          download={isDownload}
           tabIndex={-1}
         >
           <EllipsisTitle title={tittel}>{tittel}</EllipsisTitle>
         </DocumentLink>
 
+        <DocumentWarnings varianter={varianter} />
+
         <DocumentTitleActions setEditMode={setEditMode} tittel={tittel} hasAccess={hasAccess} />
-      </StyledDocumentTitle>
+      </DocumentTitleContainer>
     );
   },
   (prevProps, nextProps) =>
     prevProps.tittel === nextProps.tittel &&
     prevProps.hasAccess === nextProps.hasAccess &&
+    prevProps.varianter === nextProps.varianter &&
     prevProps.dokumentInfoId === nextProps.dokumentInfoId &&
     prevProps.journalpostId === nextProps.journalpostId &&
     prevProps.documentIndex === nextProps.documentIndex &&

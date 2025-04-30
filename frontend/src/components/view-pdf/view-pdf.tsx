@@ -1,17 +1,19 @@
 import { TabContext } from '@app/components/documents/tab-context';
 import { Pdf, usePdfData } from '@app/components/pdf/pdf';
 import { toast } from '@app/components/toast/store';
-import { Header, StyledDocumentTitle } from '@app/components/view-pdf/header';
+import { Header } from '@app/components/view-pdf/header';
 import { ReloadButton } from '@app/components/view-pdf/reload-button';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
 import { useShownDocumentMetadata } from '@app/components/view-pdf/use-shown-document-metadata';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
 import { useShownDocuments } from '@app/hooks/use-shown-documents';
+import { VariantFormat } from '@app/types/arkiverte-documents';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, type ButtonProps, Loader, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, type ButtonProps, Loader, Switch, Tag, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useMergedDocument } from './use-merged-document';
 
 const MIN_PDF_WIDTH = 400;
@@ -26,9 +28,26 @@ export const ViewPDF = () => {
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
   const oppgaveId = useOppgaveId();
+  const showsArchivedDocument = showDocumentList.some((doc) => doc.type === DocumentTypeEnum.JOURNALFOERT);
+  const hasRedactedDocuments = showDocumentList.some(
+    (doc) =>
+      doc.type === DocumentTypeEnum.JOURNALFOERT &&
+      doc.varianter.some(({ format }) => format === VariantFormat.SLADDET),
+  );
+  const hasAccessToArchivedDocuments = showDocumentList.some(
+    (doc) =>
+      doc.type === DocumentTypeEnum.JOURNALFOERT &&
+      doc.varianter.some(({ hasAccess, format }) => hasAccess && format === VariantFormat.ARKIV),
+  );
+  const [showRedacted, setShowRedacted] = useState(hasRedactedDocuments);
+  useEffect(() => {
+    setShowRedacted(hasRedactedDocuments);
+  }, [hasRedactedDocuments]);
   const { mergedDocument, mergedDocumentIsError, mergedDocumentIsLoading } = useMergedDocument(showDocumentList);
   const { inlineUrl, tabUrl, tabId } = useShownDocumentMetadata(oppgaveId, mergedDocument, showDocumentList);
-  const { loading, data, refresh, error } = usePdfData(inlineUrl);
+  const format = showRedacted ? VariantFormat.SLADDET : VariantFormat.ARKIV;
+  const formatQuery = useMemo(() => ({ format }), [format]);
+  const { loading, data, refresh, error } = usePdfData(inlineUrl, formatQuery);
 
   useMarkVisited(tabUrl);
 
@@ -94,10 +113,23 @@ export const ViewPDF = () => {
         <Button onClick={decrease} title="Smalere PDF" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
         <Button onClick={increase} title="Bredere PDF" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />
         <ReloadButton isLoading={loading} onClick={refresh} />
-        <StyledDocumentTitle>{title ?? mergedDocument?.title ?? 'Ukjent dokument'}</StyledDocumentTitle>
+        <RedactedSwitch
+          showsArchivedDocument={showsArchivedDocument}
+          hasRedactedDocuments={hasRedactedDocuments}
+          hasAccessToArchivedDocuments={hasAccessToArchivedDocuments}
+          showRedacted={showRedacted}
+          setShowRedacted={setShowRedacted}
+        />
+        <h1 className="m-0 overflow-hidden text-ellipsis whitespace-nowrap border-border-divider border-l py-1 pl-1 font-bold text-base">
+          {title ?? mergedDocument?.title ?? 'Ukjent dokument'}
+        </h1>
         <Button
           as="a"
-          href={tabUrl}
+          href={
+            showsArchivedDocument && hasRedactedDocuments && hasAccessToArchivedDocuments
+              ? `${tabUrl}?format=${format}`
+              : tabUrl
+          }
           target={tabId}
           title="Åpne i ny fane"
           icon={<ExternalLinkIcon aria-hidden />}
@@ -110,6 +142,48 @@ export const ViewPDF = () => {
     </Container>
   );
 };
+
+interface RedactedSwitchProps {
+  showsArchivedDocument: boolean;
+  hasRedactedDocuments: boolean;
+  hasAccessToArchivedDocuments: boolean;
+  showRedacted: boolean;
+  setShowRedacted: (showRedacted: boolean) => void;
+}
+
+const RedactedSwitch = ({
+  showsArchivedDocument,
+  hasRedactedDocuments,
+  hasAccessToArchivedDocuments,
+  showRedacted,
+  setShowRedacted,
+}: RedactedSwitchProps) => {
+  if (!showsArchivedDocument || !hasRedactedDocuments) {
+    return null;
+  }
+
+  if (!hasAccessToArchivedDocuments) {
+    return (
+      <Tooltip content="Du har ikke tilgang til å se usladdet versjon" placement="top">
+        <div className={LEFT_DIVIDER_CLASSES}>
+          <Tag variant="alt1-filled" size="small">
+            Sladdet
+          </Tag>
+        </div>
+      </Tooltip>
+    );
+  }
+
+  return (
+    <div className={LEFT_DIVIDER_CLASSES}>
+      <Switch size="small" checked={showRedacted} onChange={() => setShowRedacted(!showRedacted)} className="py-0">
+        Sladdet
+      </Switch>
+    </div>
+  );
+};
+
+const LEFT_DIVIDER_CLASSES = 'border-border-divider border-l pl-1';
 
 const BUTTON_PROPS: ButtonProps = {
   size: 'xsmall',

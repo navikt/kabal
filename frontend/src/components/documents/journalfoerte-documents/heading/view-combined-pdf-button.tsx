@@ -1,3 +1,4 @@
+import { showDownloadDocumentsToast } from '@app/components/documents/journalfoerte-documents/download-toast';
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { TabContext } from '@app/components/documents/tab-context';
@@ -19,34 +20,34 @@ import { useContext, useMemo } from 'react';
 export const ViewCombinedPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
   const { value, setValue } = useDocumentsPdfViewed();
-  const { selectedDocuments, selectedCount } = useContext(SelectContext);
+  const { selectedDocuments } = useContext(SelectContext);
   const { data: archivedList, isLoading: archivedIsLoading } = useGetArkiverteDokumenterQuery(useOppgaveId());
 
-  const documents = useMemo(
+  const { toOpen, toDownload } = useMemo(
     () =>
       archivedList === undefined
-        ? undefined
-        : getSelectedDocumentsInOrder(selectedDocuments, archivedList.dokumenter, selectedCount),
-    [archivedList, selectedCount, selectedDocuments],
+        ? { toOpen: [], toDownload: [] }
+        : getSelectedDocumentsInOrder(selectedDocuments, archivedList.dokumenter),
+    [archivedList, selectedDocuments],
   );
 
   const isInlineOpen = useMemo(() => {
-    if (documents === undefined) {
-      return false;
-    }
-
-    if (value.length !== documents.length) {
+    if (value.length !== toOpen.length) {
       return false;
     }
 
     return value.every((v, i) => {
-      const d = documents[i];
+      const d = toOpen[i];
 
       return d !== undefined && d.type === v.type && v.dokumentInfoId === d.dokumentInfoId;
     });
-  }, [documents, value]);
+  }, [toOpen, value]);
 
-  const { data: mergedDocumentRef, isLoading, isFetching } = useMergedDocumentsReferenceQuery(documents ?? skipToken);
+  const {
+    data: mergedDocumentRef,
+    isLoading,
+    isFetching,
+  } = useMergedDocumentsReferenceQuery(toOpen.length === 0 ? skipToken : toOpen);
 
   const { tabUrl, documentId } = useMemo(() => {
     if (mergedDocumentRef === undefined) {
@@ -69,11 +70,12 @@ export const ViewCombinedPDF = () => {
 
     const shouldOpenInNewTab = isMetaKey(e) || e.button === MouseButtons.MIDDLE;
 
-    if (!shouldOpenInNewTab) {
-      if (documents !== undefined) {
-        setValue(documents);
-      }
+    if (toDownload.length > 0) {
+      showDownloadDocumentsToast(...toDownload);
+    }
 
+    if (!shouldOpenInNewTab) {
+      setValue(toOpen);
       return;
     }
 

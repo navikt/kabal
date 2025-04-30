@@ -1,3 +1,5 @@
+import { canOpenInKabal } from '@app/components/documents/filetype';
+import { downloadDocuments } from '@app/components/documents/journalfoerte-documents/download';
 import { StyledDocumentTitle } from '@app/components/documents/new-documents/new-document/title-style';
 import { DocumentLink, EllipsisTitle } from '@app/components/documents/styled-components/document-link';
 import { TabContext } from '@app/components/documents/tab-context';
@@ -10,8 +12,7 @@ import {
 } from '@app/domain/tabbed-document-url';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { MouseButtons, isMetaKey } from '@app/keys';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { DocumentTypeEnum, type JournalfoertDokumentReference } from '@app/types/documents/documents';
 import { useContext, useMemo } from 'react';
 
 interface BaseProps {
@@ -25,7 +26,7 @@ interface BaseProps {
 
 interface JournalfoertProps extends BaseProps {
   type: DocumentTypeEnum.JOURNALFOERT;
-  journalfoertDokumentReference: IJournalfoertDokumentId;
+  journalfoertDokumentReference: JournalfoertDokumentReference;
 }
 
 interface NotJournalfoertProps extends BaseProps {
@@ -62,7 +63,11 @@ export const SharedDocumentTitle = (props: Props) => {
 
   const setViewedDocument = () => {
     if (rest.type === DocumentTypeEnum.JOURNALFOERT) {
-      return setValue([{ type: rest.type, ...rest.journalfoertDokumentReference }]);
+      if (canOpenInKabal(rest.journalfoertDokumentReference.varianter)) {
+        return setValue([{ type: rest.type, ...rest.journalfoertDokumentReference }]);
+      }
+
+      return downloadDocuments({ ...rest.journalfoertDokumentReference, tittel: title });
     }
 
     setValue([{ type: rest.type, documentId, parentId: rest.parentId }]);

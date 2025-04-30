@@ -26,9 +26,9 @@ import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useCallback, useContext } from 'react';
 
 export const useToggleSelectAll = () => {
-  const { selectedCount } = useContext(SelectContext);
+  const { selectedDocuments } = useContext(SelectContext);
 
-  return useCallback(() => (selectedCount > 0 ? unselectAll() : selectAll()), [selectedCount]);
+  return useCallback(() => (selectedDocuments.size > 0 ? unselectAll() : selectAll()), [selectedDocuments.size]);
 };
 
 export const useAllSelected = (): boolean => {

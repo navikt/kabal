@@ -1,3 +1,4 @@
+import { showDownloadDocumentsToast } from '@app/components/documents/journalfoerte-documents/download-toast';
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
 import {
   getVedlegg,
@@ -24,7 +25,7 @@ import { useCallback, useContext } from 'react';
 
 export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
   const [getMergedDocumentRef] = useLazyMergedDocumentsReferenceQuery();
-  const { selectedDocuments, selectedCount } = useContext(SelectContext);
+  const { selectedDocuments } = useContext(SelectContext);
   const getDocument = useGetDocument(filteredDocuments);
   const { getTabRef, setTabRef } = useContext(TabContext);
 
@@ -38,11 +39,15 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
       return;
     }
 
-    if (selectedCount > 0 && isSelected(focusedIndex)) {
-      const documentsToCombine = getSelectedDocumentsInOrder(selectedDocuments, filteredDocuments, selectedCount);
-      const { reference } = await getMergedDocumentRef(documentsToCombine).unwrap();
+    if (selectedDocuments.size > 0 && isSelected(focusedIndex)) {
+      const { toOpen, toDownload } = getSelectedDocumentsInOrder(selectedDocuments, filteredDocuments);
+      const { reference } = await getMergedDocumentRef(toOpen).unwrap();
       const tabUrl = getMergedDocumentTabUrl(reference);
       const documentId = getMergedDocumentTabId(reference);
+
+      if (toDownload.length > 0) {
+        showDownloadDocumentsToast(...toDownload);
+      }
 
       const isTabOpen = TAB_MANAGER.isTabOpen(documentId);
       const tabRef = getTabRef(documentId);
@@ -118,5 +123,5 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
     }
 
     setTabRef(documentId, newTabRef);
-  }, [filteredDocuments, getDocument, getMergedDocumentRef, getTabRef, setTabRef, selectedCount, selectedDocuments]);
+  }, [filteredDocuments, getDocument, getMergedDocumentRef, getTabRef, setTabRef, selectedDocuments]);
 };

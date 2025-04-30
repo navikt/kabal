@@ -1,8 +1,7 @@
+import { canOpenInKabal } from '@app/components/documents/filetype';
+import { showDownloadDocumentsToast } from '@app/components/documents/journalfoerte-documents/download-toast';
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
-import {
-  getVedlegg,
-  useGetDocument,
-} from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import { getDocument, getVedlegg } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
 import {
   getFocusIndex,
   getIsInVedleggList,
@@ -17,23 +16,18 @@ import { useCallback, useContext } from 'react';
 
 export const useOpenInline = (filteredDocuments: IArkivertDocument[]) => {
   const { value: shownDocuments, setValue: setShownDocuments } = useDocumentsPdfViewed();
-  const { selectedDocuments, selectedCount } = useContext(SelectContext);
-  const getDocument = useGetDocument(filteredDocuments);
+  const { selectedDocuments } = useContext(SelectContext);
 
   return useCallback(async () => {
     const focusedIndex = getFocusIndex();
-    const focusedDocument = getDocument(focusedIndex);
-    const hasDocument = focusedDocument !== undefined;
 
-    if (!hasDocument) {
-      return;
-    }
+    if (selectedDocuments.size > 0 && isSelected(focusedIndex)) {
+      const { toOpen, toDownload } = getSelectedDocumentsInOrder(selectedDocuments, filteredDocuments);
 
-    if (selectedCount > 0 && isSelected(focusedIndex)) {
-      const selectedDocumentsInOrder = getSelectedDocumentsInOrder(selectedDocuments, filteredDocuments, selectedCount);
+      showDownloadDocumentsToast(...toDownload);
 
       if (
-        selectedDocumentsInOrder.length === shownDocuments.length &&
+        toOpen.length === shownDocuments.length &&
         shownDocuments.every((d) => d.type === DocumentTypeEnum.JOURNALFOERT && selectedDocuments.has(getId(d)))
       ) {
         // If all selected documents are already open, close them.
@@ -41,16 +35,20 @@ export const useOpenInline = (filteredDocuments: IArkivertDocument[]) => {
         return;
       }
 
-      setShownDocuments(selectedDocumentsInOrder);
+      setShownDocuments(toOpen);
       return;
     }
 
-    if (!focusedDocument.hasAccess) {
+    const focusedDocument = getDocument(filteredDocuments, focusedIndex);
+
+    if (focusedDocument?.hasAccess !== true) {
       return;
     }
 
     const { journalpostId } = focusedDocument;
     let dokumentInfoId = focusedDocument.dokumentInfoId;
+    let tittel = focusedDocument.tittel ?? journalpostId;
+    let varianter = focusedDocument.varianter;
 
     if (getIsInVedleggList()) {
       const vedlegg = getVedlegg(focusedDocument);
@@ -60,6 +58,13 @@ export const useOpenInline = (filteredDocuments: IArkivertDocument[]) => {
       }
 
       dokumentInfoId = vedlegg.dokumentInfoId;
+      tittel = vedlegg.tittel ?? vedlegg.dokumentInfoId;
+      varianter = vedlegg.varianter;
+    }
+
+    if (!canOpenInKabal(varianter)) {
+      showDownloadDocumentsToast({ journalpostId, dokumentInfoId, tittel, varianter });
+      return;
     }
 
     // If exactly this document is open, and no other, close it.
@@ -81,9 +86,10 @@ export const useOpenInline = (filteredDocuments: IArkivertDocument[]) => {
     setShownDocuments([
       {
         type: DocumentTypeEnum.JOURNALFOERT,
+        varianter,
         dokumentInfoId,
         journalpostId,
       },
     ]);
-  }, [filteredDocuments, getDocument, selectedCount, selectedDocuments, setShownDocuments, shownDocuments]);
+  }, [filteredDocuments, selectedDocuments, setShownDocuments, shownDocuments]);
 };

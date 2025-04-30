@@ -1,3 +1,4 @@
+import type { Variants } from '@app/types/arkiverte-documents';
 import type { DocumentTypeEnum } from '@app/types/documents/documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
@@ -9,6 +10,7 @@ interface IShownNewDocument {
 
 export interface IShownArchivedDocument extends IJournalfoertDokumentId {
   type: DocumentTypeEnum.JOURNALFOERT;
+  varianter: Variants;
 }
 
 export type IShownDocument = IShownNewDocument | IShownArchivedDocument;

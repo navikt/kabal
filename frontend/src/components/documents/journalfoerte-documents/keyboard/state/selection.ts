@@ -12,7 +12,7 @@ import {
 import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
 import {
   type SelectionRange,
-  isInRange,
+  isInRanges,
   mergeRanges,
   rangesToIndexes,
   removeIndexFromRanges,
@@ -94,6 +94,7 @@ export const selectAll = () => {
   }
 
   selectionRangesStore.set([{ anchor: 0, focus: lastAccessibleDocumentIndex }]);
+
   return setFocusIndex(lastAccessibleDocumentIndex);
 };
 
@@ -101,13 +102,8 @@ export const unselectOne = (accessibleDocumentIndex: number) => {
   selectionRangesStore.set((prevRanges) => removeIndexFromRanges(prevRanges, accessibleDocumentIndex));
 };
 
-export const isSelected = (accessibleIndex: number | undefined) => {
-  if (accessibleIndex === undefined) {
-    return false;
-  }
-
-  return getSelectionRanges().some((range) => isInRange(range, accessibleIndex));
-};
+export const isSelected = (accessibleIndex: number | undefined) =>
+  accessibleIndex === undefined ? false : isInRanges(getSelectionRanges(), accessibleIndex);
 
 export const isPathSelected = (document: number, attachment = -1) =>
   isSelected(convertRealToAccessibleDocumentIndex([document, attachment]));
@@ -116,11 +112,7 @@ export const useIsPathSelected = (document: number, attachment = -1) => {
   const ranges = useSelectionRangesState();
   const accessibleIndex = convertRealToAccessibleDocumentIndex([document, attachment]);
 
-  if (accessibleIndex === undefined) {
-    return false;
-  }
-
-  return ranges.some((range) => isInRange(range, accessibleIndex));
+  return accessibleIndex === undefined ? false : isInRanges(ranges, accessibleIndex);
 };
 
 export const getSelectedDocumentsMap = (filteredDocumentsList: IArkivertDocument[]) => {

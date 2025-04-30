@@ -1,4 +1,5 @@
 import { DragAndDropContext } from '@app/components/documents/drag-context';
+import { canDistributeAny } from '@app/components/documents/filetype';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -8,7 +9,7 @@ import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
-import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { useContext } from 'react';
@@ -29,6 +30,14 @@ export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
 
   if (draggedJournalfoertDocuments.length > 0) {
     if (getIsIncomingDocument(targetDocument.dokumentTypeId)) {
+      return false;
+    }
+
+    // File types that cannot be distributed, can only be dropped on documents of type NOTAT.
+    if (
+      draggedJournalfoertDocuments.some((d) => !canDistributeAny(d.varianter)) &&
+      targetDocument.dokumentTypeId !== DistribusjonsType.NOTAT
+    ) {
       return false;
     }
 

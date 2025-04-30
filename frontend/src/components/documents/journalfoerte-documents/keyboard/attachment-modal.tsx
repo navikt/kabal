@@ -27,7 +27,7 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 interface Props {
   open: boolean;
@@ -39,10 +39,11 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
   const [focused, setFocused] = useState(0);
   const oppgaveId = useOppgaveId();
   const canEdit = useCanEditDocument();
-  const options = useOptions();
+  const { getSelectedDocuments } = useContext(SelectContext);
+  const selectedDocuments = getSelectedDocuments();
+  const options = useOptions(selectedDocuments);
   const allDuaVedlegg = useDuaVedlegg();
   const attachToDua = useAttachVedleggFn();
-  const { getSelectedDocuments } = useContext(SelectContext);
   const [deleteDocument] = useDeleteDocumentMutation();
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -55,27 +56,15 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
   }, [open]);
 
   const getDocuments = useCallback(() => {
-    const selected = getSelectedDocuments();
-
-    if (selected.length === 0) {
+    if (selectedDocuments.length === 0) {
       const focused = getDocument(filteredDocuments);
       return focused === undefined ? [] : [focused];
     }
 
-    return selected;
-  }, [getSelectedDocuments, filteredDocuments]);
+    return selectedDocuments;
+  }, [filteredDocuments, selectedDocuments]);
 
-  const [documents, setDocuments] = useState<IArkivertDocument[]>([]);
-
-  useEffect(() => {
-    if (!open) {
-      setDocuments([]);
-
-      return;
-    }
-
-    setDocuments(getDocuments());
-  }, [open, getDocuments]);
+  const documents = useMemo(() => (open ? getDocuments() : []), [open, getDocuments]);
 
   if (!open || !canEdit || attachToDua === null) {
     return null;

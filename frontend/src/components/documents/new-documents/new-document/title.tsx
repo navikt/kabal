@@ -1,8 +1,6 @@
+import { DocumentWarnings } from '@app/components/documents/document-warnings';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
-import {
-  StyledDocumentTitle,
-  StyledTitleAction,
-} from '@app/components/documents/new-documents/new-document/title-style';
+import { StyledDocumentTitle } from '@app/components/documents/new-documents/new-document/title-style';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SharedDocumentTitle } from '@app/components/documents/new-documents/shared/title';
 import { SetFilename } from '@app/components/documents/set-filename';
@@ -89,7 +87,14 @@ export const DocumentTitle = memo(
           type={document.type}
           journalfoertDokumentReference={document.journalfoertDokumentReference}
         >
-          <StyledTitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
+          <DocumentWarnings varianter={document.journalfoertDokumentReference.varianter} />
+
+          <TitleAction
+            editMode={editMode}
+            setEditMode={setEditMode}
+            document={document}
+            className={TITLE_ACTION_CLASSES}
+          />
         </SharedDocumentTitle>
       );
     }
@@ -103,12 +108,19 @@ export const DocumentTitle = memo(
         documentId={documentId}
         type={document.type}
       >
-        <StyledTitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
+        <TitleAction
+          editMode={editMode}
+          setEditMode={setEditMode}
+          document={document}
+          className={TITLE_ACTION_CLASSES}
+        />
       </SharedDocumentTitle>
     );
   },
   (prevProps, nextProps) =>
     prevProps.document.id === nextProps.document.id && prevProps.document.tittel === nextProps.document.tittel,
 );
+
+const TITLE_ACTION_CLASSES = 'hidden group-hover:flex';
 
 DocumentTitle.displayName = 'DocumentTitle';

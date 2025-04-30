@@ -10,7 +10,6 @@ export type SelectRange = (start: Path, end: Path) => void;
 
 export interface ISelectContext {
   readonly selectedDocuments: SelectedMap;
-  readonly selectedCount: number;
   readonly selectableCount: number;
   readonly lastSelectedDocument: IJournalfoertDokumentId | null;
   readonly getSelectedDocuments: () => IArkivertDocument[];

@@ -1,3 +1,4 @@
+import { canOpenInKabal } from '@app/components/documents/filetype';
 import type { IShownDocument } from '@app/components/view-pdf/types';
 import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
@@ -39,10 +40,16 @@ export const useShownDocuments = (): ShowDocumentResult => {
       for (const jp of journalpostDocuments) {
         if (jp.journalpostId === onlyDocument.journalpostId) {
           if (jp.dokumentInfoId === onlyDocument.dokumentInfoId) {
-            return jp.tittel;
+            return canOpenInKabal(jp.varianter) ? jp.tittel : null;
           }
 
-          return jp.vedlegg.find((v) => v.dokumentInfoId === onlyDocument.dokumentInfoId)?.tittel ?? null;
+          const vedlegg = jp.vedlegg.find((v) => v.dokumentInfoId === onlyDocument.dokumentInfoId);
+
+          if (vedlegg === undefined || !canOpenInKabal(vedlegg.varianter)) {
+            return null;
+          }
+
+          return vedlegg.tittel;
         }
       }
     }

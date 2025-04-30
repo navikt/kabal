@@ -37,6 +37,16 @@ export const isInRange = (range: SelectionRange, accessibleIndex: number) => {
   const [start, end] = getRangeStartAndEnd(range);
   return accessibleIndex >= start && accessibleIndex <= end;
 };
+/**
+ * Checks if the given index is within any of the ranges.
+ * @example Check if `2` is in any of the ranges [`0..2`, `3..4`] === `true`.
+ * @example Check if `5` is in any of the ranges [`0..2`, `3..4`] === `false`.
+ * @param ranges
+ * @param accessibleIndex
+ * @returns - True if the index is in any range, false otherwise.
+ */
+export const isInRanges = (ranges: Readonly<SelectionRange[]>, accessibleIndex: number) =>
+  ranges.some((range) => isInRange(range, accessibleIndex));
 
 /**
  * Checks if two ranges are equal and same direction.

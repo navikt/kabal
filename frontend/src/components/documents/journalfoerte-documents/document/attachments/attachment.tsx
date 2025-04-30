@@ -56,7 +56,7 @@ export const Attachment = memo(
     index,
     documentIndex,
   }: Props) => {
-    const { dokumentInfoId, hasAccess, tittel } = vedlegg;
+    const { dokumentInfoId, hasAccess, tittel, varianter } = vedlegg;
     const oppgaveId = useOppgaveId();
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
     const cleanDragUI = useRef<() => void>(() => undefined);
@@ -201,6 +201,7 @@ export const Attachment = memo(
           hasAccess={hasAccess}
           documentIndex={documentIndex}
           vedleggIndex={index}
+          varianter={varianter}
         />
 
         <IncludeDocument

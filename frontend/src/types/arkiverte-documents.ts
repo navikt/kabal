@@ -121,6 +121,19 @@ export enum Kanal {
   UKJENT = 'UKJENT',
 }
 
+export enum Filtype {
+  PDF = 'PDF',
+  JPEG = 'JPEG',
+  PNG = 'PNG',
+  TIFF = 'TIFF',
+  XLSX = 'XLSX',
+  JSON = 'JSON',
+  XML = 'XML',
+  AXML = 'AXML',
+  DXML = 'DXML',
+  RTF = 'RTF',
+}
+
 /**
  * SAF Journalpost
  * @documentation https://confluence.adeo.no/display/BOA/Type%3A+Journalpost
@@ -179,6 +192,7 @@ export interface Journalpost {
   kanalnavn: string;
   /** Utsendingsinfo tilknyttet journalposten. Beskriver hvor forsendelsen er distribuert, eller hvor varsel er sendt. Settes kun for utgående journalposter. */
   utsendingsinfo: Utsendingsinfo | null;
+  varianter: Variants;
 }
 
 export interface LogiskVedlegg {
@@ -199,7 +213,22 @@ export interface DokumentInfo {
    */
   originalJournalpostId: string;
   logiskeVedlegg: LogiskVedlegg[];
+  varianter: Variants;
 }
+
+export enum VariantFormat {
+  ARKIV = 'ARKIV',
+  SLADDET = 'SLADDET',
+}
+
+export interface Variant {
+  /** Filtype for dokumentvarianten. */
+  filtype: Filtype;
+  hasAccess: boolean;
+  format: VariantFormat;
+}
+
+export type Variants = [Variant, Variant] | [Variant];
 
 export enum TimelineTypes {
   OPPRETTET = 'OPPRETTET',

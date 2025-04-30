@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { type CanEditDocumentParams, canEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
+import { Filtype, VariantFormat } from '@app/types/arkiverte-documents';
 import {
   CreatorRole,
   DistribusjonsType,
@@ -41,6 +42,13 @@ const SMART_DOCUMENT: ISmartDocument = {
 
 const BASE_JD_REFERENCE: JournalfoertDokumentReference = {
   hasAccess: true,
+  varianter: [
+    {
+      filtype: Filtype.PDF,
+      format: VariantFormat.ARKIV,
+      hasAccess: true,
+    },
+  ],
   datoOpprettet: '2021-01-01',
   sortKey: '1',
   journalpostId: '1',

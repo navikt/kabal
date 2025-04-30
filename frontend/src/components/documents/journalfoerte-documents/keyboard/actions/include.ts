@@ -23,7 +23,7 @@ import { useCallback, useContext } from 'react';
 
 export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
   const oppgaveId = useOppgaveId();
-  const { selectedCount, getSelectedDocuments } = useContext(SelectContext);
+  const { selectedDocuments, getSelectedDocuments } = useContext(SelectContext);
   const getDocument = useGetDocument(filteredDocuments);
   const [removeAllIncludedDocuments] = useRemoveAllTilknyttedeDocumentsMutation();
   const [removeIncludedDocuments] = useRemoveTilknyttedeDocumentsMutation();
@@ -66,7 +66,7 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
         return;
       }
 
-      if (selectedCount > 0 && isSelected(accessibleIndex)) {
+      if (selectedDocuments.size > 0 && isSelected(accessibleIndex)) {
         const selected = getSelectedDocuments();
         const selectedAndIncludable = selected.filter((d) => d.journalstatus !== Journalstatus.MOTTATT);
 
@@ -165,7 +165,7 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
       removeAllIncludedDocuments,
       removeIncludedDocuments,
       tilknyttDocuments,
-      selectedCount,
+      selectedDocuments.size,
       getSelectedDocuments,
       isTilknyttet,
       getAllIncludedDocumentCount,
