@@ -1,12 +1,12 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { isApiRejectionError } from '@app/types/errors';
 import type { ICheckDocumentParams } from '@app/types/oppgavebehandling/params';
 import type { ITilknyttDocumentResponse } from '@app/types/oppgavebehandling/response';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
-import { documentsQuerySlice } from '../queries/documents';
 
 const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
@@ -26,26 +26,17 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
         { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
       ],
       onQueryStarted: async ({ oppgaveId, dokumentInfoId, journalpostId }, { dispatch, queryFulfilled }) => {
-        const archiveResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
-            draft.dokumenter = draft.dokumenter.map((d) => {
-              if (d.journalpostId !== journalpostId) {
-                return d;
-              }
+        const detailsResult = dispatch(
+          behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            if (
+              draft.tilknyttedeDokumenter.some(
+                (d) => d.journalpostId === journalpostId && d.dokumentInfoId === dokumentInfoId,
+              )
+            ) {
+              return draft;
+            }
 
-              if (d.dokumentInfoId === dokumentInfoId) {
-                return { ...d, valgt: true };
-              }
-
-              for (const v of d.vedlegg) {
-                if (v.dokumentInfoId === dokumentInfoId) {
-                  v.valgt = true;
-                  break;
-                }
-              }
-
-              return d;
-            });
+            draft.tilknyttedeDokumenter.push({ journalpostId, dokumentInfoId });
 
             return draft;
           }),
@@ -54,7 +45,7 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
         try {
           await queryFulfilled;
         } catch (e) {
-          archiveResult.undo();
+          detailsResult.undo();
 
           const message = 'Kunne ikke tilknytte dokument.';
 

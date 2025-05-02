@@ -67,7 +67,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     sort,
   );
 
-  const { showVedleggIdList } = useShowVedlegg();
+  const showVedleggIdList = useShowVedlegg();
 
   useEffect(() => {
     setAccessibleToRealDocumentPaths(totalFilteredDocuments, showVedleggIdList);
