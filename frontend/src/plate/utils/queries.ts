@@ -55,10 +55,13 @@ export const isOfElementTypesFn =
   (node: TNode): node is T =>
     'type' in node && typeof node.type === 'string' && types.includes(node.type);
 
+export const isText = (node: TText | TElement): node is FormattedText => TextApi.isText(node);
+
 const LIST_MATCHER = isOfElementTypesFn<BulletListElement | NumberedListElement>([
   BaseBulletedListPlugin.key,
   BaseNumberedListPlugin.key,
 ]);
+
 export const isInList = (editor: PlateEditor): boolean => editor.api.some({ match: LIST_MATCHER });
 
 export const isInTable = (editor: PlateEditor): boolean => editor.api.some({ match: { type: BaseTablePlugin.key } });

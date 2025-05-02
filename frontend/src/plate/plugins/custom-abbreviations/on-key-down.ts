@@ -1,5 +1,5 @@
 import { pushEvent } from '@app/observability';
-import { getShortAndLong } from '@app/plate/plugins/custom-abbreviations/get-short-and-long';
+import { getAbbreviationData } from '@app/plate/plugins/custom-abbreviations/get-short-and-long';
 import type { PlateEditor } from '@udecode/plate-core/react';
 
 const SPACE = ' ';
@@ -47,13 +47,13 @@ export const onKeyDown = (editor: PlateEditor, e: React.KeyboardEvent) => {
     return;
   }
 
-  const shortAndLong = getShortAndLong(editor);
+  const data = getAbbreviationData(editor);
 
-  if (shortAndLong === null) {
+  if (data === null) {
     return;
   }
 
-  const { short, long, range, marks } = shortAndLong;
+  const { short, long, range, marks } = data;
 
   e.preventDefault();
 
