@@ -12,11 +12,23 @@ import type { FormattedText } from '@app/plate/types';
 import { isText } from '@app/plate/utils/queries';
 import { type Descendant, type EditorSelection, type InsertTextOptions, RangeApi } from '@udecode/plate';
 import { createPlatePlugin } from '@udecode/plate-core/react';
+import { PlateLeaf, type PlateLeafProps } from '@udecode/plate/react';
+
+const AutoCapitalisedLeaf = (props: PlateLeafProps<FormattedText>) => (
+  <PlateLeaf
+    {...props}
+    className="underline decoration-auto decoration-text-action decoration-dotted underline-offset-1"
+  />
+);
 
 export const createCapitalisePlugin = (ident: string) => {
   const settingsKey = `${ident}/${CAPITALISE_SETTING_KEY}`;
 
-  return createPlatePlugin({ key: 'capitalise' }).overrideEditor(({ editor }) => {
+  return createPlatePlugin({
+    key: 'autoCapitalised',
+    render: { node: AutoCapitalisedLeaf },
+    node: { isLeaf: true },
+  }).overrideEditor(({ editor }) => {
     const { insertText, insertFragment, deleteBackward } = editor.tf;
 
     // If next to capitalised node, create new node that is uncapitalised
