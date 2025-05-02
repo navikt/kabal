@@ -86,7 +86,7 @@ export const isAfterSentence = (editor: PlateEditor): boolean => {
     focus: start,
   });
 
-  if (maybeSpace !== ' ') {
+  if (maybeSpace.trim().length > 0) {
     return false;
   }
 
