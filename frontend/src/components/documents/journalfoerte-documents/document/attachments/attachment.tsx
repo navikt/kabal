@@ -177,6 +177,8 @@ export const Attachment = memo(
           dokumentInfoId={dokumentInfoId}
           tittel={tittel ?? ''}
           hasAccess={hasAccess}
+          documentIndex={documentIndex}
+          vedleggIndex={index}
         />
 
         <IncludeDocument

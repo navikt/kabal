@@ -10,9 +10,10 @@ interface Props {
   className?: string;
   close?: () => void;
   tabIndex?: number;
+  ref?: React.RefObject<HTMLInputElement | null>;
 }
 
-export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, className, close, tabIndex }: Props) => {
+export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, className, close, tabIndex, ref }: Props) => {
   const [localFilename, setLocalFilename] = useState(tittel ?? '');
 
   const save = () => {
@@ -40,14 +41,13 @@ export const SetFilename = ({ tittel, setFilename, autoFocus, hideLabel, classNa
       onKeyDown={({ key }) => {
         if (key === Keys.Enter) {
           save();
-        }
-
-        if (key === Keys.Escape) {
+        } else if (key === Keys.Escape) {
           setLocalFilename(tittel ?? '');
           close?.();
         }
       }}
       tabIndex={tabIndex}
+      ref={ref}
     />
   );
 };

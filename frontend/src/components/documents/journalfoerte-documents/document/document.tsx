@@ -157,6 +157,7 @@ export const Document = ({
         dokumentInfoId={dokumentInfoId}
         hasAccess={hasAccess}
         tittel={tittel ?? ''}
+        documentIndex={index}
       />
 
       {isExpandedListView ? (
