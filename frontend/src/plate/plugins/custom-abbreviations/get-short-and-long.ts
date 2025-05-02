@@ -1,19 +1,22 @@
+import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
+import { CommentsPlugin } from '@app/plate/plugins/comments';
 import { getLong } from '@app/plate/plugins/custom-abbreviations/get-long';
 import type { FormattedText } from '@app/plate/types';
-import { RangeApi } from '@udecode/plate';
+import { isText } from '@app/plate/utils/queries';
+import { type NodeEntry, RangeApi } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
 import type { Range } from 'slate';
 
 type Marks = Omit<FormattedText, 'text'>;
 
-interface PreviousWord {
+interface AbbreviationData {
   long: string;
   short: string;
   range: Range;
   marks: Marks;
 }
 
-export const getShortAndLong = (editor: PlateEditor): PreviousWord | null => {
+export const getAbbreviationData = (editor: PlateEditor): AbbreviationData | null => {
   const { selection } = editor;
 
   if (selection === null || RangeApi.isExpanded(selection)) {
@@ -26,33 +29,37 @@ export const getShortAndLong = (editor: PlateEditor): PreviousWord | null => {
     return null;
   }
 
-  const lineToCaretRange: Range = { anchor: lineStart, focus: selection.focus };
+  const fromLineStartToCaretRange: Range = { anchor: lineStart, focus: selection.focus };
 
-  if (RangeApi.isCollapsed(lineToCaretRange)) {
+  if (RangeApi.isCollapsed(fromLineStartToCaretRange)) {
     return null;
   }
 
-  const lineToCaretText = editor.api.string(lineToCaretRange);
+  const textEntries = editor.api.nodes<FormattedText>({
+    at: fromLineStartToCaretRange,
+    mode: 'lowest',
+    match: (n) => editor.api.isText(n),
+  });
 
-  if (lineToCaretText.length === 0) {
+  const { uncapitalisedShort, capitalisedShort, autoCapitalised, previousWord } = getWords(textEntries.toArray());
+
+  if (
+    uncapitalisedShort === undefined ||
+    uncapitalisedShort.length === 0 ||
+    capitalisedShort === undefined ||
+    capitalisedShort.length === 0
+  ) {
     return null;
   }
 
-  const words = lineToCaretText.split(' ');
-
-  const short = words.at(-1);
-
-  if (short === undefined || short.length === 0) {
-    return null;
-  }
-
-  const long = getLong(short, words.at(-2));
+  const long =
+    getLong(uncapitalisedShort, previousWord) ?? (autoCapitalised ? getLong(capitalisedShort, previousWord) : null);
 
   if (long === null) {
     return null;
   }
 
-  const anchor = editor.api.before(selection, { unit: 'character', distance: short.length });
+  const anchor = editor.api.before(selection, { unit: 'character', distance: uncapitalisedShort.length });
 
   if (anchor === undefined) {
     return null;
@@ -60,20 +67,72 @@ export const getShortAndLong = (editor: PlateEditor): PreviousWord | null => {
 
   const range: Range = { anchor, focus: selection.focus };
 
-  const entry = editor.api.leaf(range);
+  const entries = editor.api
+    .nodes<FormattedText>({ at: range, mode: 'lowest', match: (n) => editor.api.isText(n) })
+    .toArray();
 
-  if (entry === undefined) {
+  if (entries.length === 0) {
     return null;
   }
 
-  const [shortNode] = entry;
-
-  return { short, long, marks: getMarks(shortNode), range };
+  return { short: uncapitalisedShort, long, marks: getMarks(entries), range };
 };
 
-const getMarks = (node: FormattedText): Marks => {
-  const marks: Marks = { ...node };
-  marks.text = undefined;
+interface Words {
+  uncapitalisedShort: string | undefined;
+  capitalisedShort: string | undefined;
+  autoCapitalised: boolean;
+  previousWord: string | undefined;
+}
 
-  return marks;
+const getWords = (textNodes: NodeEntry<FormattedText>[]): Words => {
+  let uncapitalised = '';
+  let capitalised = '';
+
+  for (const [node] of textNodes) {
+    if (!isText(node)) {
+      continue;
+    }
+
+    uncapitalised += node.autoCapitalised === true ? node.text.toLowerCase() : node.text;
+    capitalised += node.text;
+  }
+
+  const uncapitalisedWords = uncapitalised.split(' ');
+  const capitalisedWords = capitalised.split(' ');
+
+  const uncapitalisedShort = uncapitalisedWords.at(-1);
+  const capitalisedShort = capitalisedWords.at(-1);
+
+  return {
+    uncapitalisedShort,
+    capitalisedShort,
+    autoCapitalised: capitalisedShort !== uncapitalisedShort,
+    previousWord: capitalisedWords.at(-2),
+  };
 };
+
+const getMarks = (entries: NodeEntry<FormattedText>[]): Marks =>
+  entries.reduce<Marks>((acc, [node]) => {
+    if (node.bold === true) {
+      acc.bold = true;
+    }
+
+    if (node.italic === true) {
+      acc.italic = true;
+    }
+
+    if (node.underline === true) {
+      acc.underline = true;
+    }
+
+    if (node[CommentsPlugin.key] !== undefined) {
+      acc[CommentsPlugin.key] = node[CommentsPlugin.key];
+    }
+
+    if (node[BookmarkPlugin.key] !== undefined) {
+      acc[BookmarkPlugin.key] = node[BookmarkPlugin.key];
+    }
+
+    return acc;
+  }, {});
