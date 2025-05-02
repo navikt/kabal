@@ -42,11 +42,13 @@ export const createCapitalisePlugin = (ident: string) => {
         return insertUncapitalised(text, options);
       }
 
+      const marks = editor.api.marks();
+
       editor.tf.withNewBatch(() => {
-        editor.tf.insertNode({ text: text.charAt(0).toUpperCase(), autoCapitalised: true });
+        editor.tf.insertNode({ text: text.charAt(0).toUpperCase(), ...marks, autoCapitalised: true });
 
         if (text.length > 1) {
-          editor.tf.insertNode({ text: text.slice(1) });
+          editor.tf.insertNode({ text: text.slice(1), ...marks });
         }
       });
     };
