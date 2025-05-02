@@ -3,6 +3,10 @@ import { ROW_HEIGHT } from '@app/components/documents/journalfoerte-documents/co
 import { AttachmentListItem } from '@app/components/documents/journalfoerte-documents/document/attachments/attachment-list';
 import { isPathSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
+import {
+  setShowLogiskeVedlegg,
+  useShowLogiskeVedlegg,
+} from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
 import { JournalfoerteDocumentsAttachments } from '@app/components/documents/styled-components/attachment-list';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 
@@ -12,19 +16,11 @@ interface Props {
   maxTop: number;
   dokument: IArkivertDocument;
   documentIndex: number;
-  showLogiskeVedleggIdList: Readonly<string[]>;
-  setShowLogiskeVedleggIdList: (ids: Readonly<string[]> | ((ids: Readonly<string[]>) => Readonly<string[]>)) => void;
 }
 
-export const VedleggList = ({
-  list,
-  minTop,
-  maxTop,
-  dokument,
-  documentIndex,
-  showLogiskeVedleggIdList,
-  setShowLogiskeVedleggIdList,
-}: Props) => {
+export const VedleggList = ({ list, minTop, maxTop, dokument, documentIndex }: Props) => {
+  const showLogiskeVedlegg = useShowLogiskeVedlegg();
+
   if (list.globalTop + list.height < minTop || list.globalTop > maxTop) {
     return null;
   }
@@ -53,7 +49,7 @@ export const VedleggList = ({
 
     const { dokumentInfoId, logiskeVedlegg } = vedlegg;
     const vedleggId = `${journalpostId}-${dokumentInfoId}`;
-    const showVedleggList = showLogiskeVedleggIdList.includes(vedleggId);
+    const showVedleggList = showLogiskeVedlegg.includes(vedleggId);
 
     vedleggNodeList.push(
       <AttachmentListItem
@@ -69,7 +65,7 @@ export const VedleggList = ({
         documentIndex={documentIndex}
         index={index}
         toggleShowVedlegg={() =>
-          setShowLogiskeVedleggIdList((ids) =>
+          setShowLogiskeVedlegg((ids) =>
             ids.includes(vedleggId) ? ids.filter((id) => id !== vedleggId) : [...ids, vedleggId],
           )
         }

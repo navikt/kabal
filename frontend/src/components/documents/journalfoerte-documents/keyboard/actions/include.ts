@@ -8,6 +8,7 @@ import {
 } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { isSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
+import { useLazyIsTilknyttetDokument } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
 import { toast } from '@app/components/toast/store';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
@@ -26,6 +27,7 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
   const [removeAllIncludedDocuments] = useRemoveAllTilknyttedeDocumentsMutation();
   const [removeIncludedDocument] = useRemoveTilknyttetDocumentMutation();
   const [tilknyttDocument] = useTilknyttDocumentMutation();
+  const isTilknyttet = useLazyIsTilknyttetDokument();
 
   return useCallback(
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
@@ -50,11 +52,16 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
           return;
         }
 
-        const selectedAndIncluded = selectedAndIncludable.filter((d) => d.valgt);
+        const selectedAndIncluded = selectedAndIncludable.filter((d) =>
+          isTilknyttet(d.journalpostId, d.dokumentInfoId),
+        );
 
         // If all documents are selected, remove all.
         if (selectedAndIncluded.length === selectedAndIncludable.length) {
-          if (filteredDocuments.filter((d) => d.valgt).length === selectedAndIncludable.length) {
+          if (
+            filteredDocuments.filter((d) => isTilknyttet(d.journalpostId, d.dokumentInfoId)).length ===
+            selectedAndIncludable.length
+          ) {
             // Remove all documents.
             removeAllIncludedDocuments({ oppgaveId });
             toast.success(`Fjernet alle ${d(selectedAndIncludable.length)}.`);
@@ -71,8 +78,8 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
         }
 
         // If not all documents are selected, add missing.
-        for (const { journalpostId, dokumentInfoId, valgt } of selectedAndIncludable) {
-          if (!valgt) {
+        for (const { journalpostId, dokumentInfoId } of selectedAndIncludable) {
+          if (!isTilknyttet(journalpostId, dokumentInfoId)) {
             tilknyttDocument({ oppgaveId, journalpostId, dokumentInfoId });
           }
         }
@@ -98,7 +105,7 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
           return;
         }
 
-        currentVedlegg.valgt
+        isTilknyttet(journalpostId, currentVedlegg.dokumentInfoId)
           ? removeIncludedDocument({ oppgaveId, journalpostId, dokumentInfoId })
           : tilknyttDocument({ oppgaveId, journalpostId, dokumentInfoId });
 
@@ -111,7 +118,7 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
 
       const { dokumentInfoId } = focusedDocument;
 
-      focusedDocument.valgt
+      isTilknyttet(journalpostId, dokumentInfoId)
         ? removeIncludedDocument({ oppgaveId, journalpostId, dokumentInfoId })
         : tilknyttDocument({ oppgaveId, journalpostId, dokumentInfoId });
     },
@@ -124,6 +131,7 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
       selectedCount,
       getSelectedDocuments,
       filteredDocuments,
+      isTilknyttet,
     ],
   );
 };

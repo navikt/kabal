@@ -1,11 +1,11 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { isApiRejectionError } from '@app/types/errors';
 import type { ICheckDocumentParams } from '@app/types/oppgavebehandling/params';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
-import { documentsQuerySlice } from '../queries/documents';
 
 const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
@@ -21,28 +21,12 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
       ],
       onQueryStarted: async ({ oppgaveId, dokumentInfoId, journalpostId }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
-            draft.dokumenter = draft.dokumenter.map((d) => {
-              if (d.journalpostId !== journalpostId) {
-                return d;
-              }
-
-              if (d.dokumentInfoId === dokumentInfoId) {
-                return { ...d, valgt: false };
-              }
-
-              for (const v of d.vedlegg) {
-                if (v.dokumentInfoId === dokumentInfoId) {
-                  v.valgt = false;
-                  break;
-                }
-              }
-
-              return d;
-            });
-
-            return draft;
-          }),
+          behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => ({
+            ...draft,
+            tilknyttedeDokumenter: draft.tilknyttedeDokumenter.filter(
+              (d) => d.journalpostId !== journalpostId || d.dokumentInfoId !== dokumentInfoId,
+            ),
+          })),
         );
 
         try {
@@ -68,17 +52,10 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
       invalidatesTags: () => [{ type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: ListTagTypes.PARTIAL_LIST }],
       onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
-            for (const d of draft.dokumenter) {
-              d.valgt = false;
-
-              for (const v of d.vedlegg) {
-                v.valgt = false;
-              }
-            }
-
-            return draft;
-          }),
+          behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => ({
+            ...draft,
+            tilknyttedeDokumenter: [],
+          })),
         );
 
         try {

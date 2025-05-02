@@ -2,6 +2,7 @@ import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
+import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import type { DocumentsAddedEvent } from '@app/redux-api/server-sent-events/types';
 import { reduxStore } from '@app/redux/configure-store';
@@ -52,8 +53,7 @@ export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => 
   );
 
   reduxStore.dispatch(
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-    documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
+    behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
       if (draft === undefined) {
         return draft;
       }
@@ -65,15 +65,15 @@ export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => 
 
         const { journalpostId, dokumentInfoId } = document.journalfoertDokumentReference;
 
-        for (const archivedDocument of draft.dokumenter) {
-          if (archivedDocument.journalpostId === journalpostId) {
-            archivedDocument.valgt = archivedDocument.dokumentInfoId === dokumentInfoId ? true : archivedDocument.valgt;
-
-            for (const vedlegg of archivedDocument.vedlegg) {
-              vedlegg.valgt = vedlegg.dokumentInfoId === dokumentInfoId ? true : vedlegg.valgt;
-            }
-          }
+        if (
+          draft.tilknyttedeDokumenter.some(
+            (d) => d.journalpostId === journalpostId && d.dokumentInfoId === dokumentInfoId,
+          )
+        ) {
+          continue;
         }
+
+        draft.tilknyttedeDokumenter.push({ journalpostId, dokumentInfoId });
       }
 
       return draft;

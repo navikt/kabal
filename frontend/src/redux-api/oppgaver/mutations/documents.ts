@@ -3,7 +3,7 @@ import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-t
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { reduxStore } from '@app/redux/configure-store';
-import { type IArkivertDocument, type IArkivertDocumentVedlegg, Journalposttype } from '@app/types/arkiverte-documents';
+import { Journalposttype } from '@app/types/arkiverte-documents';
 import type { IDocumentParams } from '@app/types/documents/common-params';
 import {
   DistribusjonsType,
@@ -322,7 +322,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         },
       }),
       onQueryStarted: async (
-        { oppgaveId, parentId, journalfoerteDokumenter, creator, isFinished },
+        { oppgaveId, parentId, journalfoerteDokumenter, creator },
         { dispatch, queryFulfilled },
       ) => {
         const getDocumentsPatchResult = dispatch(
@@ -384,47 +384,6 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           }),
         );
 
-        const getArkiverteDokumenterPatchResult = dispatch(
-          documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
-            if (isFinished) {
-              return draft;
-            }
-
-            const { length: dokumenterCount } = draft.dokumenter;
-            const dokumenter = new Array<IArkivertDocument>(dokumenterCount);
-
-            for (let i = dokumenterCount - 1; i >= 0; i--) {
-              // biome-ignore lint/style/noNonNullAssertion: Guaranteed to be defined.
-              const doc = draft.dokumenter[i]!;
-              const journalpostDocuments = journalfoerteDokumenter.filter((j) => j.journalpostId === doc.journalpostId);
-
-              if (journalpostDocuments.length === 0) {
-                dokumenter[i] = doc;
-                continue;
-              }
-
-              const { length: vedleggCount } = doc.vedlegg;
-              const vedlegg = new Array<IArkivertDocumentVedlegg>(vedleggCount);
-
-              for (let ii = vedleggCount - 1; ii >= 0; ii--) {
-                // biome-ignore lint/style/noNonNullAssertion: Guaranteed to be defined.
-                const v = doc.vedlegg[ii]!;
-                const vedleggInList =
-                  v.valgt || journalpostDocuments.some((j) => j.dokumentInfoId === v.dokumentInfoId);
-                vedlegg[ii] = vedleggInList ? { ...v, valgt: true } : v;
-              }
-
-              dokumenter[i] = {
-                ...doc,
-                valgt: doc.valgt || journalpostDocuments.some((j) => j.dokumentInfoId === doc.dokumentInfoId),
-                vedlegg,
-              };
-            }
-
-            return { ...draft, dokumenter };
-          }),
-        );
-
         try {
           const { data } = await queryFulfilled;
 
@@ -460,7 +419,6 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           }
         } catch (e) {
           getDocumentsPatchResult.undo();
-          getArkiverteDokumenterPatchResult.undo();
 
           const message = 'Kunne ikke sette journalpost(er) som vedlegg.';
 

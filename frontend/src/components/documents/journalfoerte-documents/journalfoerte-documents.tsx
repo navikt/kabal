@@ -4,8 +4,11 @@ import { JournalfoertHeading } from '@app/components/documents/journalfoerte-doc
 import { KeyboardBoundary } from '@app/components/documents/journalfoerte-documents/keyboard/boundary';
 import { KeyboardContextElement } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-context';
 import { SelectContextElement } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
-import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
+import {
+  setShowLogiskeVedlegg,
+  useShowLogiskeVedlegg,
+} from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
+import { setShowVedlegg, useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { clamp } from '@app/functions/clamp';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -42,11 +45,15 @@ export const JournalfoerteDocuments = () => {
     return journalpostIdList;
   }, [documents]);
 
-  const { showVedleggIdList, setShowVedleggIdList } = useShowVedlegg();
-
   useEffect(() => {
-    setShowVedleggIdList(documentsWithVedleggIdList);
-  }, [documentsWithVedleggIdList, setShowVedleggIdList]);
+    setShowVedlegg((prev) => {
+      const added = documentsWithVedleggIdList.filter((id) => !prev.includes(id));
+
+      return added.length > 0 ? [...prev, ...added] : prev;
+    });
+  }, [documentsWithVedleggIdList]);
+
+  const showVedleggIdList = useShowVedlegg();
 
   // IDs of vedlegg with logiske vedlegg.
   const vedleggWithLogiskeVedleggIdList = useMemo<string[]>(
@@ -63,28 +70,22 @@ export const JournalfoerteDocuments = () => {
     [documents],
   );
 
-  const { showLogiskeVedleggIdList, setShowLogiskeVedleggIdList } = useShowLogiskeVedlegg();
+  const showLogiskeVedleggIdList = useShowLogiskeVedlegg();
 
   useEffect(() => {
     if (showLogiskeVedleggIdList !== EMPTY_ID_LIST || vedleggWithLogiskeVedleggIdList.length === 0) {
       return;
     }
 
-    setShowLogiskeVedleggIdList(vedleggWithLogiskeVedleggIdList);
-  }, [showLogiskeVedleggIdList, vedleggWithLogiskeVedleggIdList, setShowLogiskeVedleggIdList]);
+    setShowLogiskeVedlegg(vedleggWithLogiskeVedleggIdList);
+  }, [showLogiskeVedleggIdList, vedleggWithLogiskeVedleggIdList]);
 
   const showsAnyVedlegg = showVedleggIdList.length > 0 || showLogiskeVedleggIdList.length > 0;
 
   const onToggle = useCallback(() => {
-    setShowVedleggIdList(showsAnyVedlegg ? [] : documentsWithVedleggIdList);
-    setShowLogiskeVedleggIdList(showsAnyVedlegg ? [] : vedleggWithLogiskeVedleggIdList);
-  }, [
-    documentsWithVedleggIdList,
-    showsAnyVedlegg,
-    vedleggWithLogiskeVedleggIdList,
-    setShowVedleggIdList,
-    setShowLogiskeVedleggIdList,
-  ]);
+    setShowVedlegg(showsAnyVedlegg ? [] : documentsWithVedleggIdList);
+    setShowLogiskeVedlegg(showsAnyVedlegg ? [] : vedleggWithLogiskeVedleggIdList);
+  }, [documentsWithVedleggIdList, showsAnyVedlegg, vedleggWithLogiskeVedleggIdList]);
 
   const [scrollTop, setScrollTop] = useState(0);
   const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(({ currentTarget }) => {
@@ -180,8 +181,6 @@ export const JournalfoerteDocuments = () => {
                 onScrollTo={onScrollTo}
                 scrollTop={scrollTop}
                 listHeight={listHeight}
-                showLogiskeVedleggIdList={showLogiskeVedleggIdList}
-                setShowLogiskeVedleggIdList={setShowLogiskeVedleggIdList}
               />
             </KeyboardBoundary>
           </KeyboardContextElement>

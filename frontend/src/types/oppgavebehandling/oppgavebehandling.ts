@@ -137,6 +137,12 @@ export interface IOppgavebehandlingBase {
   tilbakekreving: boolean;
   timesPreviouslyExtended: number;
   sikkerhetstiltak: ISikkerhetstiltak | null;
+  readonly tilknyttedeDokumenter: TilknyttetDokument[];
+}
+
+export interface TilknyttetDokument {
+  readonly journalpostId: string;
+  readonly dokumentInfoId: string;
 }
 
 export interface IKlagebehandling extends IOppgavebehandlingBase {

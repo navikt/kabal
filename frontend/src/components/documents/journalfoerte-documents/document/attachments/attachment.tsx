@@ -186,7 +186,6 @@ export const Attachment = memo(
           journalpostId={journalpostId}
           journalpoststatus={journalpoststatus}
           hasAccess={hasAccess}
-          checked={vedlegg.valgt}
         />
       </StyledVedlegg>
     );
@@ -198,7 +197,6 @@ export const Attachment = memo(
     prevProps.journalpostId === nextProps.journalpostId &&
     prevProps.toggleShowVedlegg === nextProps.toggleShowVedlegg &&
     prevProps.hasVedlegg === nextProps.hasVedlegg &&
-    prevProps.vedlegg.valgt === nextProps.vedlegg.valgt &&
     prevProps.vedlegg.tittel === nextProps.vedlegg.tittel,
 );
 

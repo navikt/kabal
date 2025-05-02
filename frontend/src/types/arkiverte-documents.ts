@@ -219,8 +219,6 @@ interface TimelineItem {
 
 /** Kabal */
 interface KabalProperties {
-  /** Om dokumentet er inkludert i saksmappen. */
-  valgt: boolean;
   datoRegSendt: string | null;
   sortKey: string;
   timeline: TimelineItem[];

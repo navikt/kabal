@@ -5,7 +5,11 @@ import {
   LOGISK_VEDLEGG_SPACE,
   ROW_HEIGHT,
 } from '@app/components/documents/journalfoerte-documents/contants';
+import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
+import { useShowMetadata } from '@app/components/documents/journalfoerte-documents/state/show-metadata';
+import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import type { IArkivertDocument, IArkivertDocumentVedlegg, LogiskVedlegg } from '@app/types/arkiverte-documents';
+import { useMemo } from 'react';
 
 interface Position {
   height: number;
@@ -39,11 +43,22 @@ interface DokumentListRenderData extends Position {
   list: DokumentRenderData[];
 }
 
+export const useDokumentPositions = (documents: readonly IArkivertDocument[]) => {
+  const showVedleggIdList = useShowVedlegg();
+  const showLogiskeVedlegg = useShowLogiskeVedlegg();
+  const showMetadataIdList = useShowMetadata();
+
+  return useMemo(
+    () => calculateDokumentPositions(documents, showMetadataIdList, showVedleggIdList, showLogiskeVedlegg),
+    [documents, showLogiskeVedlegg, showMetadataIdList, showVedleggIdList],
+  );
+};
+
 export const calculateDokumentPositions = (
-  dokumenter: Readonly<IArkivertDocument[]>,
-  metadataIdList: Readonly<string[]>,
-  showVedleggIdList: Readonly<string[]>,
-  showLogiskeVedleggIdList: Readonly<string[]>,
+  dokumenter: readonly IArkivertDocument[],
+  metadataIdList: readonly string[],
+  showVedleggIdList: readonly string[],
+  showLogiskeVedleggIdList: readonly string[],
 ): DokumentListRenderData => {
   const dokumenterLength = dokumenter.length;
 

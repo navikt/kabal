@@ -1,3 +1,4 @@
+import { useLazyIsTilknyttetDokument } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import type { ArchivedDocumentsSort, DateRange } from '@app/hooks/settings/use-setting';
@@ -27,13 +28,14 @@ export const useFilteredDocuments = (
   sort: ArchivedDocumentsSort,
 ): IArkivertDocument[] => {
   const [result, setResult] = useState<IArkivertDocument[]>(documents);
+  const isTilknyttet = useLazyIsTilknyttetDokument();
 
   useEffect(() => {
     const callback = requestIdleCallback(
       // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       () => {
         const filtered = documents.filter(
-          ({ tema, journalposttype, avsenderMottaker, datoOpprettet, sak, vedlegg, valgt }) =>
+          ({ journalpostId, dokumentInfoId, tema, journalposttype, avsenderMottaker, datoOpprettet, sak, vedlegg }) =>
             (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
             (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
             (selectedAvsenderMottakere.length === 0 ||
@@ -43,13 +45,19 @@ export const useFilteredDocuments = (
             (selectedSaksIds.length === 0 ||
               selectedSaksIds.includes(sak === null ? 'NONE' : (sak.fagsakId ?? 'UNKNOWN'))) &&
             (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
-            (onlyIncluded === false || valgt || vedlegg.some((v) => v.valgt)),
+            (onlyIncluded === false ||
+              isTilknyttet(journalpostId, dokumentInfoId) ||
+              vedlegg.some((v) => isTilknyttet(journalpostId, v.dokumentInfoId))),
         );
 
         if (search.length === 0) {
           return setResult(
             filtered
-              .map((d) => (onlyIncluded ? { ...d, vedlegg: d.vedlegg.filter(({ valgt }) => valgt) } : d))
+              .map((d) =>
+                onlyIncluded
+                  ? { ...d, vedlegg: d.vedlegg.filter((v) => isTilknyttet(d.journalpostId, v.dokumentInfoId)) }
+                  : d,
+              )
               .toSorted((a, b) => sortByDate(a, b, sort)),
           );
         }
@@ -101,6 +109,7 @@ export const useFilteredDocuments = (
     sort,
     sort.order,
     sort.orderBy,
+    isTilknyttet,
   ]);
 
   return result;

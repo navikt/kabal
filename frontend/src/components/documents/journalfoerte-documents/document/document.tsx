@@ -55,7 +55,7 @@ export const Document = ({
 
   const cleanDragUI = useRef<() => void>(() => undefined);
 
-  const { dokumentInfoId, journalpostId, tittel, hasAccess, valgt, journalstatus } = document;
+  const { dokumentInfoId, journalpostId, tittel, hasAccess, journalstatus } = document;
 
   const selected = useIsPathSelected(index);
 
@@ -169,7 +169,6 @@ export const Document = ({
         journalpostId={journalpostId}
         journalpoststatus={journalstatus}
         hasAccess={hasAccess}
-        checked={valgt}
       />
     </StyledJournalfoertDocument>
   );

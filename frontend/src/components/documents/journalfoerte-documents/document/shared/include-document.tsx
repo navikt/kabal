@@ -1,3 +1,4 @@
+import { useIsTilknyttetDokument } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -8,7 +9,6 @@ import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Journalstatus } from '@app/types/arkiverte-documents';
 import { CircleSlashIcon, FolderPlusIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Tooltip } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useMemo } from 'react';
 
 interface Props {
@@ -16,20 +16,10 @@ interface Props {
   journalpostId: string;
   journalpoststatus: Journalstatus | null;
   hasAccess: boolean;
-  checked: boolean;
 }
 
 export const IncludeDocument = memo(
-  ({ dokumentInfoId, journalpostId, journalpoststatus, hasAccess, checked }: Props): React.JSX.Element | null => {
-    const oppgaveId = useOppgaveId();
-    const [setDocument, isUpdating] = useCheckDocument(oppgaveId, dokumentInfoId, journalpostId);
-    const canEdit = useCanEdit();
-    const isFeilregistrert = useIsFeilregistrert();
-    const isSaksbehandler = useIsSaksbehandler();
-    const isRol = useIsRol();
-
-    const title = checked ? 'Ekskluder fra saken' : 'Inkluder i saken';
-
+  ({ journalpoststatus, hasAccess, ...rest }: Props) => {
     const unavailableMessage = useMemo(() => {
       if (!hasAccess) {
         return 'Du har ikke tilgang til dette dokumentet.';
@@ -42,41 +32,62 @@ export const IncludeDocument = memo(
       return null;
     }, [hasAccess, journalpoststatus]);
 
-    if (oppgaveId === skipToken) {
-      return null;
-    }
-
-    if (unavailableMessage !== null) {
-      return (
-        <Tooltip placement="right" content={unavailableMessage} maxChar={Number.POSITIVE_INFINITY}>
-          <HStack align="center" justify="center" className="opacity-30" style={{ gridArea: Fields.Action }}>
-            <CircleSlashIcon aria-hidden />
-          </HStack>
-        </Tooltip>
-      );
-    }
-
-    return (
-      <Tooltip placement="right" content={title} keys={['M']}>
-        <Button
-          size="small"
-          variant={checked ? 'primary' : 'tertiary'}
-          icon={<FolderPlusIcon aria-hidden />}
-          title={title}
-          onClick={(e) => {
-            e.stopPropagation();
-            setDocument(!checked);
-          }}
-          data-testid="journalfoert-document-button"
-          disabled={!canEdit || !(isSaksbehandler || isRol) || isFeilregistrert}
-          loading={isUpdating}
-          style={{ gridArea: Fields.Action }}
-          data-included={checked}
-          aria-pressed={checked}
-          tabIndex={-1}
-        />
-      </Tooltip>
-    );
+    return unavailableMessage === null ? <Enabled {...rest} /> : <Disabled unavailableMessage={unavailableMessage} />;
   },
-  (prevProps, nextProps) => prevProps.checked === nextProps.checked,
+  (prevProps, nextProps) =>
+    prevProps.journalpostId === nextProps.journalpostId &&
+    prevProps.dokumentInfoId === nextProps.dokumentInfoId &&
+    prevProps.hasAccess === nextProps.hasAccess &&
+    prevProps.journalpoststatus === nextProps.journalpoststatus,
 );
+
+interface DisabledProps {
+  unavailableMessage: string;
+}
+
+const Disabled = ({ unavailableMessage }: DisabledProps) => (
+  <Tooltip placement="right" content={unavailableMessage} maxChar={Number.POSITIVE_INFINITY}>
+    <HStack align="center" justify="center" className="opacity-30" style={{ gridArea: Fields.Action }}>
+      <CircleSlashIcon aria-hidden />
+    </HStack>
+  </Tooltip>
+);
+
+interface EnabledProps {
+  dokumentInfoId: string;
+  journalpostId: string;
+}
+
+const Enabled = ({ dokumentInfoId, journalpostId }: EnabledProps) => {
+  const oppgaveId = useOppgaveId();
+  const [setDocument, isUpdating] = useCheckDocument(oppgaveId, dokumentInfoId, journalpostId);
+  const canEdit = useCanEdit();
+  const isFeilregistrert = useIsFeilregistrert();
+  const isSaksbehandler = useIsSaksbehandler();
+  const isRol = useIsRol();
+  const checked = useIsTilknyttetDokument(journalpostId, dokumentInfoId);
+
+  const title = checked ? 'Ekskluder fra saken' : 'Inkluder i saken';
+
+  return (
+    <Tooltip placement="right" content={title} keys={['M']}>
+      <Button
+        size="small"
+        variant={checked ? 'primary' : 'tertiary'}
+        icon={<FolderPlusIcon aria-hidden />}
+        title={title}
+        onClick={(e) => {
+          e.stopPropagation();
+          setDocument(!checked);
+        }}
+        data-testid="journalfoert-document-button"
+        disabled={!canEdit || !(isSaksbehandler || isRol) || isFeilregistrert}
+        loading={isUpdating}
+        style={{ gridArea: Fields.Action }}
+        data-included={checked}
+        aria-pressed={checked}
+        tabIndex={-1}
+      />
+    </Tooltip>
+  );
+};
