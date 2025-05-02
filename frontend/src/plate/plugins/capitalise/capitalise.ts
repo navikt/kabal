@@ -8,7 +8,9 @@ import {
   nodeContainsSingleWord,
   skipCapitalisation,
 } from '@app/plate/plugins/capitalise/helpers';
-import { type Descendant, type InsertTextOptions, RangeApi } from '@udecode/plate';
+import type { FormattedText } from '@app/plate/types';
+import { isText } from '@app/plate/utils/queries';
+import { type Descendant, type EditorSelection, type InsertTextOptions, RangeApi } from '@udecode/plate';
 import { createPlatePlugin } from '@udecode/plate-core/react';
 
 export const createCapitalisePlugin = (ident: string) => {
@@ -18,10 +20,28 @@ export const createCapitalisePlugin = (ident: string) => {
     const { insertText, insertFragment, deleteBackward } = editor.tf;
 
     // If next to capitalised node, create new node that is uncapitalised
-    const insertUncapitalised = (text: string, options: InsertTextOptions | undefined) =>
-      editor.api.some({ match: { autoCapitalised: true } })
-        ? editor.tf.withoutMerging(() => editor.tf.insertNode({ text }))
-        : insertText(text, options);
+    const insertUncapitalised = (text: string, options: InsertTextOptions | undefined) => {
+      if (options?.marks === false) {
+        // If marks are explicitly ignored, the default behaviour is to insert the text without any marks.
+        // No need to manually remove the autoCapitalised mark.
+        // Default value for `options.marks` is `true`.
+        return insertText(text, options);
+      }
+
+      // Get the marks that would be applied to the text.
+      const marks = editor.api.marks();
+
+      if (marks === null || marks.autoCapitalised !== true) {
+        // If there is no autoCapitalised mark, or if the autoCapitalised mark is not true, there is no need to manually remove it.
+        return insertText(text, options);
+      }
+
+      // Strip the autoCapitalised mark from the marks object.
+      const { autoCapitalised, ...marksWithoutAutoCapitalised } = marks;
+
+      // Insert the text with the remaining marks.
+      return editor.tf.insertNode<FormattedText>({ ...marksWithoutAutoCapitalised, text });
+    };
 
     editor.tf.insertText = (text, options) => {
       const enabled = SETTINGS_MANAGER.get(settingsKey);
@@ -54,25 +74,35 @@ export const createCapitalisePlugin = (ident: string) => {
     };
 
     editor.tf.deleteBackward = (unit) => {
-      if (editor.selection === null || RangeApi.isExpanded(editor.selection)) {
+      if (editor.selection === null || unit !== 'character' || RangeApi.isExpanded(editor.selection)) {
         return deleteBackward(unit);
       }
 
-      const capitalised = editor.api.node({ at: editor.selection.anchor, match: { autoCapitalised: true } });
+      const anchor = editor.api.before(editor.selection.anchor, { distance: 1, unit });
 
-      if (capitalised === undefined) {
+      if (anchor === undefined) {
         return deleteBackward(unit);
       }
 
-      const char = editor.api.string({
-        anchor: editor.selection.anchor,
-        focus: { ...editor.selection.anchor, offset: editor.selection.anchor.offset - 1 },
-      });
+      const rangeToDelete: EditorSelection = { anchor, focus: editor.selection.anchor };
+
+      const capitalisedEntry = editor.api.node({ at: rangeToDelete, match: { autoCapitalised: true } });
+
+      if (capitalisedEntry === undefined) {
+        return deleteBackward(unit);
+      }
+
+      const [capitalisedNode] = capitalisedEntry;
+
+      if (!isText(capitalisedNode)) {
+        return deleteBackward(unit);
+      }
+
+      const { text, autoCapitalised, ...marks } = capitalisedNode;
 
       editor.tf.withNewBatch(() => {
-        deleteBackward('character');
-        insertText(char.toLowerCase());
-        editor.tf.setNodes({ autoCapitalised: false });
+        deleteBackward(unit);
+        editor.tf.insertNode({ text: text.toLowerCase(), ...marks });
       });
     };
 
