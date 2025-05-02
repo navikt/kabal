@@ -2,7 +2,7 @@ import { setKeyboardActive } from '@app/components/documents/journalfoerte-docum
 import { useKeyboard } from '@app/components/documents/journalfoerte-documents/keyboard/use-keyboard';
 import { Keys, isMetaKey } from '@app/keys';
 import { Box } from '@navikt/ds-react';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 interface KeyboardBoundaryProps {
   children: React.ReactNode;
@@ -12,6 +12,8 @@ interface KeyboardBoundaryProps {
 export const KeyboardBoundary = ({ children, ref }: KeyboardBoundaryProps) => {
   const onKeyDown = useKeyboard();
 
+  const focus = useCallback(() => ref.current?.focus({ preventScroll: true }), [ref]);
+
   useEffect(() => {
     // Set the initial keyboard active state based on the current focused element.
     setKeyboardActive(document.activeElement !== null && document.activeElement === ref.current);
@@ -19,16 +21,18 @@ export const KeyboardBoundary = ({ children, ref }: KeyboardBoundaryProps) => {
     const listener = (e: KeyboardEvent) => {
       if (!e.defaultPrevented && isMetaKey(e) && e.key === Keys.J) {
         e.preventDefault();
-        ref.current?.focus({ preventScroll: true });
+        focus();
       }
     };
 
+    ref.current?.addEventListener('focus-journalfoerte-documents', focus);
     window.addEventListener('keydown', listener);
 
     return () => {
       window.removeEventListener('keydown', listener);
+      ref.current?.removeEventListener('focus-journalfoerte-documents', focus);
     };
-  }, [ref.current]);
+  }, [ref, focus]);
 
   const onFocus = (e: React.FocusEvent<HTMLDivElement, Element>) => {
     if (e.target === ref.current) {

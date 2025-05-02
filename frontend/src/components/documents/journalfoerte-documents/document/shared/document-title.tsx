@@ -1,5 +1,7 @@
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { StyledDocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-style';
+import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { SetFilename } from '@app/components/documents/set-filename';
 import { DocumentLink, EllipsisTitle } from '@app/components/documents/styled-components/document-link';
 import { TabContext } from '@app/components/documents/tab-context';
@@ -14,7 +16,7 @@ import { MouseButtons, isMetaKey } from '@app/keys';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { memo, useCallback, useContext, useMemo, useState } from 'react';
+import { memo, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { ConfirmEditButton, DocumentTitleActions } from './document-title-actions';
 
 interface Props {
@@ -22,6 +24,8 @@ interface Props {
   dokumentInfoId: string;
   tittel: string;
   hasAccess: boolean;
+  documentIndex: number;
+  vedleggIndex?: number;
 }
 
 export const DocumentTitle = (props: Props) => {
@@ -44,6 +48,8 @@ const DocumentTitleInternal = memo(
     hasAccess,
     shownDocuments,
     setShownDocuments,
+    documentIndex,
+    vedleggIndex = -1,
   }: DocumentTitleInternalProps) => {
     const { getTabRef, setTabRef } = useContext(TabContext);
     const documentId = getJournalfoertDocumentTabId(journalpostId, dokumentInfoId);
@@ -63,25 +69,33 @@ const DocumentTitleInternal = memo(
       (edit: boolean) => {
         _setEditMode(edit);
         setDraggingEnabled(!edit);
+        const index = convertRealToAccessibleDocumentIndex([documentIndex, vedleggIndex]);
+        setFocusIndex(index);
       },
-      [setDraggingEnabled],
+      [setDraggingEnabled, documentIndex, vedleggIndex],
     );
+
+    const filenameInputRef = useRef<HTMLInputElement | null>(null);
 
     if (editMode) {
       return (
-        <StyledDocumentTitle>
+        <StyledDocumentTitle onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()}>
           <SetFilename
             tittel={tittel}
-            close={() => setEditMode(false)}
+            close={() => {
+              setEditMode(false);
+              filenameInputRef.current?.dispatchEvent(new Event('focus-journalfoerte-documents', { bubbles: true }));
+              const index = convertRealToAccessibleDocumentIndex([documentIndex, vedleggIndex]);
+              setFocusIndex(index);
+            }}
             hideLabel
             setFilename={(filename) => {
-              if (oppgaveId === skipToken) {
-                return;
+              if (oppgaveId !== skipToken) {
+                setTitle({ journalpostId, dokumentInfoId, tittel: filename, oppgaveId });
               }
-
-              setTitle({ journalpostId, dokumentInfoId, tittel: filename, oppgaveId });
             }}
-            tabIndex={-1}
+            autoFocus
+            ref={filenameInputRef}
           />
 
           <ConfirmEditButton setEditMode={setEditMode} />
@@ -168,6 +182,8 @@ const DocumentTitleInternal = memo(
     prevProps.hasAccess === nextProps.hasAccess &&
     prevProps.dokumentInfoId === nextProps.dokumentInfoId &&
     prevProps.journalpostId === nextProps.journalpostId &&
+    prevProps.documentIndex === nextProps.documentIndex &&
+    prevProps.vedleggIndex === nextProps.vedleggIndex &&
     areArraysEqual(prevProps.shownDocuments, nextProps.shownDocuments),
 );
 
