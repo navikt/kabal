@@ -79,20 +79,28 @@ export const isAfterSentence = (editor: PlateEditor): boolean => {
     return false;
   }
 
-  const start = RangeApi.isForward(editor.selection) ? editor.selection.anchor : editor.selection.focus;
+  const start = RangeApi.start(editor.selection);
+  const oneBeforeStart = editor.api.before(start, { distance: 1, unit: 'character' });
 
-  const maybeSpace = editor.api.string({
-    anchor: { ...start, offset: start.offset - 1 },
-    focus: start,
-  });
+  if (oneBeforeStart === undefined) {
+    return false;
+  }
+
+  const maybeSpace = editor.api.string({ anchor: oneBeforeStart, focus: start });
 
   if (maybeSpace.trim().length > 0) {
     return false;
   }
 
+  const twoBeforeStart = editor.api.before(start, { distance: 2, unit: 'character' });
+
+  if (twoBeforeStart === undefined) {
+    return false;
+  }
+
   const maybeSeparator = editor.api.string({
-    anchor: { ...start, offset: start.offset - 2 },
-    focus: { ...start, offset: start.offset - 1 },
+    anchor: twoBeforeStart,
+    focus: oneBeforeStart,
   });
 
   return maybeSeparator === '.' || maybeSeparator === '!' || maybeSeparator === '?';
