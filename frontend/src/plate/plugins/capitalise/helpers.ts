@@ -148,5 +148,5 @@ const isAbbreviation = (word: string): boolean => {
     return false;
   }
 
-  return ABBREVIATION_REGEX.test(word) || ABBREVIATIONS.includes(word);
+  return ABBREVIATIONS.has(word) || ABBREVIATION_REGEX.test(word);
 };
