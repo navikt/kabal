@@ -1,15 +1,38 @@
 import { useSmartEditorCapitalise } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
-import { Heading, ToggleGroup } from '@navikt/ds-react';
+import { BodyShort, HStack, Heading, HelpText, Tag, ToggleGroup } from '@navikt/ds-react';
 
 export const Capitalise = () => {
   const { setValue, value } = useSmartEditorCapitalise();
 
   return (
     <section aria-labelledby="capitalise">
-      <Heading level="2" size="small" spacing id="capitalise">
-        Automatisk stor forbokstav
-      </Heading>
+      <HStack asChild align="center" gap="1" wrap={false}>
+        <Heading level="2" size="small" spacing id="capitalise">
+          <span>Automatisk stor forbokstav</span>
+
+          <HelpText title="Hjelp">
+            <BodyShort size="small" spacing>
+              Gjør automatisk om første bokstav i setninger til stor bokstav.
+            </BodyShort>
+
+            <BodyShort size="small" spacing>
+              <span className="block">Tar høyde for norske forkortelser.</span>
+              <span className="italic">
+                Om du savner en fortkortelse, ta kontakt med Team Klage i kanalen «Tilbakemelding til Kabal» på Teams.
+              </span>
+            </BodyShort>
+
+            <BodyShort size="small">
+              <span>Bruk </span>
+              <Tag variant="neutral" size="xsmall">
+                backspace
+              </Tag>
+              <span> for å gjøre om til liten bokstav igjen.</span>
+            </BodyShort>
+          </HelpText>
+        </Heading>
+      </HStack>
 
       <ToggleGroup
         size="small"
