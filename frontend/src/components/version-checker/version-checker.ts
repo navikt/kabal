@@ -1,6 +1,7 @@
 import { ENVIRONMENT } from '@app/environment';
 import { getQueryParams } from '@app/headers';
 import { pushError } from '@app/observability';
+import { useSyncExternalStore } from 'react';
 
 export enum UpdateRequest {
   REQUIRED = 'REQUIRED',
@@ -106,7 +107,7 @@ class VersionChecker {
     }
   };
 
-  public getIsUpToDate = (): boolean => this.isUpToDate;
+  public getIsUpToDate = (): boolean => !this.isUpToDate;
   public getLatestVersion = (): string => this.latestVersion;
 }
 
@@ -115,3 +116,13 @@ const UPDATE_REQUEST_VALUES = Object.values(UpdateRequest);
 const isUpdateRequest = (data: string): data is UpdateRequest => UPDATE_REQUEST_VALUES.some((value) => value === data);
 
 export const VERSION_CHECKER = new VersionChecker();
+
+export const useIsUpToDate = (): boolean =>
+  useSyncExternalStore(
+    (onStoreChange) => {
+      VERSION_CHECKER.addUpdateRequestListener(onStoreChange);
+
+      return () => VERSION_CHECKER.removeUpdateRequestListener(onStoreChange);
+    },
+    () => VERSION_CHECKER.getIsUpToDate(),
+  );

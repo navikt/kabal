@@ -119,9 +119,10 @@ const useReporter = async () => {
 interface SendButtonProps {
   getData: () => Promise<string | null>;
   children?: React.ReactNode;
+  className?: string;
 }
 
-const SendButton = ({ getData, children }: SendButtonProps) => {
+const SendButton = ({ getData, children, className }: SendButtonProps) => {
   const { sendDebugInfo, success, loading } = useSendDebugInfo();
 
   const onClick = async () => {
@@ -142,6 +143,7 @@ const SendButton = ({ getData, children }: SendButtonProps) => {
         onClick={onClick}
         loading={loading}
         icon={success ? <CheckmarkIcon aria-hidden /> : <BugIcon aria-hidden />}
+        className={className}
       >
         {children}
       </Button>
