@@ -136,7 +136,7 @@ const SendButton = ({ getData, children, className }: SendButtonProps) => {
   };
 
   return (
-    <Tooltip content="Sender teknisk informasjon direkte til Team Klage.">
+    <Tooltip content="Sender teknisk informasjon direkte til Team Klage" placement="left">
       <Button
         variant="tertiary"
         size="small"
