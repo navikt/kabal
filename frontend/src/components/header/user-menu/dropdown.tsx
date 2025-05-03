@@ -1,14 +1,16 @@
 import { DebugButton } from '@app/components/header/user-menu/debug';
+import { useIsUpToDate } from '@app/components/version-checker/version-checker';
 import { ENVIRONMENT } from '@app/environment';
 import { pushEvent } from '@app/observability';
-import { CogIcon, CogRotationIcon, LeaveIcon } from '@navikt/aksel-icons';
-import { Dropdown } from '@navikt/ds-react';
+import { ArrowCirclepathIcon, BranchingIcon, CheckmarkCircleIcon, CogIcon, LeaveIcon } from '@navikt/aksel-icons';
+import { Button, Dropdown } from '@navikt/ds-react';
 import { NavLink } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 import { CopyButton } from '../../copy-button/copy-button';
 
 export const UserDropdown = (): React.JSX.Element | null => {
   const { version } = ENVIRONMENT;
+  const isUpToDate = useIsUpToDate();
 
   return (
     <Menu>
@@ -16,6 +18,7 @@ export const UserDropdown = (): React.JSX.Element | null => {
         <Dropdown.Menu.List.Item as={StyledNavLink} to="/innstillinger" data-testid="innstillinger-link">
           <CogIcon /> Innstillinger
         </Dropdown.Menu.List.Item>
+
         <Dropdown.Menu.List.Item
           as={StyledLogoutLink}
           href="/oauth2/logout"
@@ -24,13 +27,25 @@ export const UserDropdown = (): React.JSX.Element | null => {
         >
           <LeaveIcon /> Logg ut
         </Dropdown.Menu.List.Item>
+
         <Dropdown.Menu.Divider />
+
+        <Dropdown.Menu.List.Item
+          as={Button}
+          icon={isUpToDate ? <CheckmarkCircleIcon aria-hidden /> : <ArrowCirclepathIcon aria-hidden />}
+          size="small"
+          className="justify-start"
+          onClick={isUpToDate ? undefined : () => window.location.reload()}
+        >
+          {isUpToDate ? 'Kabal er oppdatert' : 'Oppdater Kabal'}
+        </Dropdown.Menu.List.Item>
+
         <Dropdown.Menu.List.Item
           as={StyledCopyButton}
           title="Klikk for å kopiere versjonsnummeret"
           copyText={version}
           text={`Kabal-versjon: ${getShortVersion(version)}`}
-          icon={<VersionIcon fontSize={16} aria-hidden />}
+          icon={<BranchingIcon aria-hidden />}
         >
           {null}
         </Dropdown.Menu.List.Item>
@@ -59,8 +74,8 @@ const linkStyle = css`
   background: transparent;
   padding-left: var(--a-spacing-4);
   padding-right: var(--a-spacing-4);
-  padding-top: var(--a-spacing-3);
-  padding-bottom: var(--a-spacing-3);
+  padding-top: var(--a-spacing-1);
+  padding-bottom: var(--a-spacing-1);
 `;
 
 const StyledLink = styled.a`
@@ -83,6 +98,7 @@ const StyledCopyButton = styled(CopyButton)`
 
   &:hover {
     color: var(--a-text-action-on-action-subtle);
+    background-color: var(--a-surface-action-subtle-hover);
   }
 
   svg {
@@ -96,10 +112,6 @@ const StyledCopyButton = styled(CopyButton)`
   .navds-copybutton__content {
     justify-content: flex-start;
   }
-`;
-
-const VersionIcon = styled(CogRotationIcon)`
-  margin-right: var(--a-spacing-2);
 `;
 
 const getShortVersion = (version: string): string => {
