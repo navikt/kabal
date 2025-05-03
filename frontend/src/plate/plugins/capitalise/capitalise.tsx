@@ -10,7 +10,7 @@ import {
 } from '@app/plate/plugins/capitalise/helpers';
 import type { FormattedText } from '@app/plate/types';
 import { isText } from '@app/plate/utils/queries';
-import { type Descendant, type EditorSelection, type InsertTextOptions, RangeApi } from '@udecode/plate';
+import { type Descendant, type InsertTextOptions, PathApi, RangeApi } from '@udecode/plate';
 import { createPlatePlugin } from '@udecode/plate-core/react';
 import { PlateLeaf, type PlateLeafProps } from '@udecode/plate/react';
 
@@ -109,9 +109,10 @@ export const createCapitalisePlugin = (ident: string) => {
         return deleteBackward(unit);
       }
 
-      const rangeToDelete: EditorSelection = { anchor, focus: editor.selection.anchor };
+      // Prevent the range from hanging at the start of the focus block.
+      const focus = PathApi.equals(anchor.path, editor.selection.focus.path) ? editor.selection.focus : anchor;
 
-      const capitalisedEntry = editor.api.node({ at: rangeToDelete, match: { autoCapitalised: true } });
+      const capitalisedEntry = editor.api.node({ at: { anchor, focus }, match: { autoCapitalised: true } });
 
       if (capitalisedEntry === undefined) {
         return deleteBackward(unit);
