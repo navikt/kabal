@@ -50,7 +50,20 @@ export const createCapitalisePlugin = (ident: string) => {
         return insertUncapitalised(text, options);
       }
 
-      if (editor.selection === null || !isSingleWord(text)) {
+      if (editor.selection === null) {
+        return insertUncapitalised(text, options);
+      }
+
+      const firstChar = text.charAt(0);
+      const uppercaseFirstChar = firstChar.toUpperCase();
+
+      if (firstChar === uppercaseFirstChar) {
+        // If the first character has no uppercase or is already uppercase, insert the text as is.
+        // Otherwise, some autoformatting plugins (e.g. lists) will not work.
+        return insertUncapitalised(text, options);
+      }
+
+      if (!isSingleWord(text)) {
         return insertUncapitalised(text, options);
       }
 
@@ -65,7 +78,7 @@ export const createCapitalisePlugin = (ident: string) => {
       const marks = editor.api.marks();
 
       editor.tf.withNewBatch(() => {
-        editor.tf.insertNode({ text: text.charAt(0).toUpperCase(), ...marks, autoCapitalised: true });
+        editor.tf.insertNode({ text: uppercaseFirstChar, ...marks, autoCapitalised: true });
 
         if (text.length > 1) {
           editor.tf.insertNode({ text: text.slice(1), ...marks });
