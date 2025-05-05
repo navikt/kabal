@@ -1,6 +1,7 @@
 import { setKeyboardActive } from '@app/components/documents/journalfoerte-documents/keyboard/state/keyboard-active';
-import { useKeyboard } from '@app/components/documents/journalfoerte-documents/keyboard/use-keyboard';
+import { EVENT_DOMAIN, useKeyboard } from '@app/components/documents/journalfoerte-documents/keyboard/use-keyboard';
 import { Keys, isMetaKey } from '@app/keys';
+import { pushEvent } from '@app/observability';
 import { Box } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 
@@ -22,6 +23,7 @@ export const KeyboardBoundary = ({ children, ref }: KeyboardBoundaryProps) => {
       if (!e.defaultPrevented && isMetaKey(e) && e.key === Keys.J) {
         e.preventDefault();
         focus();
+        pushEvent('keyboard-shortcut-global-focus-list', EVENT_DOMAIN);
       }
     };
 
