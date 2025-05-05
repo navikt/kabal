@@ -9,9 +9,9 @@ import { Box, Button, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Context } from './context';
-import type { Children, FagsystemId, OppgaveId, Position, Variant } from './types';
+import type { Children, OppgaveId, Position, Variant } from './types';
 
-interface Props extends OppgaveId, Variant, Position, FagsystemId {
+interface Props extends OppgaveId, Variant, Position {
   feilregistrert: string | null;
   tildeltSaksbehandlerident: string | null;
 }
@@ -71,7 +71,7 @@ const FeilregistrerButton = ({
   );
 };
 
-const FeilregistrerPanel = ({ oppgaveId, position, align, fagsystemId }: OppgaveId & Position & FagsystemId) => {
+const FeilregistrerPanel = ({ oppgaveId, position, align }: OppgaveId & Position) => {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   const isOver = position === 'over';
@@ -86,11 +86,7 @@ const FeilregistrerPanel = ({ oppgaveId, position, align, fagsystemId }: Oppgave
       position="absolute"
     >
       <Box background="bg-default" padding="4" shadow="medium" borderRadius="medium">
-        {isConfirmed ? (
-          <Register oppgaveId={oppgaveId} />
-        ) : (
-          <Confirm fagsystemId={fagsystemId} setIsConfirmed={() => setIsConfirmed(true)} />
-        )}
+        {isConfirmed ? <Register oppgaveId={oppgaveId} /> : <Confirm setIsConfirmed={() => setIsConfirmed(true)} />}
       </Box>
     </VStack>
   );

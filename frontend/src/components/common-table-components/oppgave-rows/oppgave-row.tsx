@@ -198,7 +198,6 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <Feilregistrering
               oppgaveId={oppgave.id}
               feilregistrert={oppgave.feilregistrert}
-              fagsystemId={oppgave.fagsystemId}
               tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
               variant="secondary-neutral"
               position="below"

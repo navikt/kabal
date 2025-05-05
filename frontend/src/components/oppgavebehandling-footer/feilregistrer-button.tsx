@@ -17,7 +17,6 @@ export const FeilregistrerButton = () => {
     return (
       <Feilregistrering
         oppgaveId={oppgave.id}
-        fagsystemId={oppgave.fagsystemId}
         tildeltSaksbehandlerident={oppgave.saksbehandler?.navIdent ?? null}
         variant="secondary"
         position="over"
