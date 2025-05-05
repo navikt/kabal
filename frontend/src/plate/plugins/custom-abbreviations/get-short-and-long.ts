@@ -2,8 +2,7 @@ import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { CommentsPlugin } from '@app/plate/plugins/comments';
 import { getLong } from '@app/plate/plugins/custom-abbreviations/get-long';
 import type { FormattedText } from '@app/plate/types';
-import { isText } from '@app/plate/utils/queries';
-import { type NodeEntry, RangeApi } from '@udecode/plate';
+import { type NodeEntry, PathApi, RangeApi } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
 import type { Range } from 'slate';
 
@@ -35,13 +34,34 @@ export const getAbbreviationData = (editor: PlateEditor): AbbreviationData | nul
     return null;
   }
 
-  const textEntries = editor.api.nodes<FormattedText>({
-    at: fromLineStartToCaretRange,
-    mode: 'lowest',
-    match: (n) => editor.api.isText(n),
-  });
+  const textNodes = editor.api
+    .nodes<FormattedText>({ at: fromLineStartToCaretRange, mode: 'lowest', text: true })
+    .map<FormattedText>(([node, path], i) => {
+      const isFirst = i === 0;
+      const isLast = PathApi.equals(path, fromLineStartToCaretRange.focus.path);
 
-  const { uncapitalisedShort, capitalisedShort, autoCapitalised, previousWord } = getWords(textEntries.toArray());
+      if (isFirst && isLast) {
+        return {
+          ...node,
+          text: node.text.slice(fromLineStartToCaretRange.anchor.offset, fromLineStartToCaretRange.focus.offset),
+        };
+      }
+
+      if (isFirst) {
+        return {
+          ...node,
+          text: node.text.slice(fromLineStartToCaretRange.anchor.offset),
+        };
+      }
+
+      if (isLast) {
+        return { ...node, text: node.text.slice(0, fromLineStartToCaretRange.focus.offset) };
+      }
+
+      return node;
+    });
+
+  const { uncapitalisedShort, capitalisedShort, autoCapitalised, previousWord } = getWords(textNodes);
 
   if (
     uncapitalisedShort === undefined ||
@@ -85,15 +105,11 @@ interface Words {
   previousWord: string | undefined;
 }
 
-const getWords = (textNodes: NodeEntry<FormattedText>[]): Words => {
+const getWords = (textNodes: Iterable<FormattedText>): Words => {
   let uncapitalised = '';
   let capitalised = '';
 
-  for (const [node] of textNodes) {
-    if (!isText(node)) {
-      continue;
-    }
-
+  for (const node of textNodes) {
     uncapitalised += node.autoCapitalised === true ? node.text.toLowerCase() : node.text;
     capitalised += node.text;
   }
