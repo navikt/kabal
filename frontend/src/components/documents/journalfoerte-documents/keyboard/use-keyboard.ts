@@ -170,7 +170,7 @@ const useKeyboardShortcuts = () => {
       },
       { key: Keys.N, action: rename, metric: 'keyboard-shortcut-rename' },
       { key: Keys.F2, action: rename, metric: 'keyboard-shortcut-rename' },
-      { key: Keys.C, modifiers: { meta: true }, action: copyName, metric: 'keyboard-shortcut-rename' },
+      { key: Keys.C, modifiers: { meta: true }, action: copyName, metric: 'keyboard-shortcut-copy-name' },
 
       { key: Keys.Escape, action: unselectAll, metric: 'keyboard-shortcut-unselect-all' },
 
