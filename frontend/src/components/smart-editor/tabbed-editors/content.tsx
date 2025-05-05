@@ -46,7 +46,7 @@ export const Content = ({ children }: Props) => {
       return;
     }
 
-    if (event.key === Keys.Minus) {
+    if (event.key === Keys.Dash) {
       event.preventDefault();
       scaleDown();
 

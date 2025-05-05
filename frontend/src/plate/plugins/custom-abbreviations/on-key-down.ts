@@ -1,23 +1,7 @@
+import { Keys } from '@app/keys';
 import { pushEvent } from '@app/observability';
 import { getAbbreviationData } from '@app/plate/plugins/custom-abbreviations/get-short-and-long';
 import type { PlateEditor } from '@udecode/plate-core/react';
-
-const SPACE = ' ';
-const PERIOD = '.';
-const COMMA = ',';
-const EXCLAMATION = '!';
-const QUESTION = '?';
-const COLON = ':';
-const SEMICOLON = ';';
-const DASH = '-';
-const SLASH = '/';
-const PARENTHESIS = ')';
-const BRACKET = ']';
-const BRACE = '}';
-const ANGLE_BRACKET = '>';
-const ASTERISK = '*';
-const QUOTE = '"';
-const GUILLEMET = '»';
 
 export const onKeyDown = (editor: PlateEditor, e: React.KeyboardEvent) => {
   if (e.defaultPrevented) {
@@ -27,22 +11,22 @@ export const onKeyDown = (editor: PlateEditor, e: React.KeyboardEvent) => {
   const { key } = e;
 
   if (
-    key !== SPACE &&
-    key !== PERIOD &&
-    key !== COMMA &&
-    key !== COLON &&
-    key !== SEMICOLON &&
-    key !== EXCLAMATION &&
-    key !== QUESTION &&
-    key !== DASH &&
-    key !== SLASH &&
-    key !== PARENTHESIS &&
-    key !== BRACKET &&
-    key !== BRACE &&
-    key !== ANGLE_BRACKET &&
-    key !== ASTERISK &&
-    key !== QUOTE &&
-    key !== GUILLEMET
+    key !== Keys.Space &&
+    key !== Keys.Period &&
+    key !== Keys.Comma &&
+    key !== Keys.Colon &&
+    key !== Keys.Semicolon &&
+    key !== Keys.Exclamation &&
+    key !== Keys.Question &&
+    key !== Keys.Dash &&
+    key !== Keys.Slash &&
+    key !== Keys.Parenthesis &&
+    key !== Keys.Bracket &&
+    key !== Keys.Brace &&
+    key !== Keys.AngleBracket &&
+    key !== Keys.Asterisk &&
+    key !== Keys.Quote &&
+    key !== Keys.Guillemet
   ) {
     return;
   }
