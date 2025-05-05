@@ -2,7 +2,6 @@ import { UpdateInGosys } from '@app/components/oppgavebehandling-footer/update-i
 import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useIsModernized } from '@app/hooks/use-is-modernized';
 import { useFinishOppgavebehandlingMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import type { IFinishOppgavebehandlingParams } from '@app/types/oppgavebehandling/params';
@@ -19,14 +18,13 @@ interface FinishProps extends CancelButtonProps {
   show: boolean;
 }
 
-const getFinishText = (isModernized: boolean) =>
-  isModernized
-    ? 'Nei, fullfør uten å opprette ny behandling i Kabal.'
-    : 'Nei, fullfør uten å opprette ny behandling i Kabal. Husk å sende oppgave i Gosys.';
+const getFinishText = (requiresGosysOppgave: boolean) =>
+  requiresGosysOppgave
+    ? 'Nei, fullfør uten å opprette ny behandling i Kabal. Husk å sende oppgave i Gosys.'
+    : 'Nei, fullfør uten å opprette ny behandling i Kabal.';
 
 const Buttons = ({ cancel }: CancelButtonProps) => {
   const { data: oppgave } = useOppgave();
-  const isModernized = useIsModernized();
 
   if (oppgave === undefined) {
     return null;
@@ -41,10 +39,10 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
       return (
         <HStack align="center" gap="2" width="400px">
-          {isModernized ? (
-            <FinishButton>Fullfør</FinishButton>
-          ) : (
+          {oppgave.requiresGosysOppgave ? (
             <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+          ) : (
+            <FinishButton>Fullfør</FinishButton>
           )}
           <CancelButton cancel={cancel} />
         </HStack>
@@ -54,10 +52,10 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
         case UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35:
           return (
             <HStack align="center" gap="2" width="400px">
-              {isModernized ? (
-                <FinishButton>Fullfør</FinishButton>
-              ) : (
+              {oppgave.requiresGosysOppgave ? (
                 <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+              ) : (
+                <FinishButton>Fullfør</FinishButton>
               )}
               <CancelButton cancel={cancel} />
             </HStack>
@@ -81,10 +79,10 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
         case UtfallEnum.HEVET:
           return (
             <HStack align="center" gap="2" width="400px">
-              {isModernized ? (
-                <FinishButton>Fullfør</FinishButton>
-              ) : (
+              {oppgave.requiresGosysOppgave ? (
                 <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+              ) : (
+                <FinishButton>Fullfør</FinishButton>
               )}
               <CancelButton cancel={cancel} />
             </HStack>
@@ -93,7 +91,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
           return (
             <HStack align="center" gap="2" width="650px">
               <FinishButton nyBehandling>Ja, fullfør og opprett ny behandling i Kabal</FinishButton>
-              <UpdateInGosys>{getFinishText(isModernized)}</UpdateInGosys>
+              <UpdateInGosys>{getFinishText(oppgave.requiresGosysOppgave)}</UpdateInGosys>
               <CancelButton cancel={cancel} />
             </HStack>
           );

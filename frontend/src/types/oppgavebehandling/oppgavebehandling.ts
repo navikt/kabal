@@ -138,6 +138,7 @@ export interface IOppgavebehandlingBase {
   timesPreviouslyExtended: number;
   sikkerhetstiltak: ISikkerhetstiltak | null;
   readonly tilknyttedeDokumenter: TilknyttetDokument[];
+  requiresGosysOppgave: boolean;
 }
 
 export interface TilknyttetDokument {

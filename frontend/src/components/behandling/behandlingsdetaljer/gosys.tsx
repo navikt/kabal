@@ -1,4 +1,4 @@
-import { useIsModernized } from '@app/hooks/use-is-modernized';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useGetGosysOppgaveQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { GosysStatus, type IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Alert, VStack } from '@navikt/ds-react';
@@ -12,12 +12,12 @@ interface Props {
 }
 
 export const Gosys = ({ oppgavebehandling }: Props) => {
-  const isModernized = useIsModernized();
+  const { data: oppgave } = useOppgave();
   const { data: gosysOppgave } = useGetGosysOppgaveQuery(
     oppgavebehandling.gosysOppgaveId === null ? skipToken : oppgavebehandling.id,
   );
 
-  if (isModernized) {
+  if (oppgave === undefined || !oppgave.requiresGosysOppgave) {
     return null;
   }
 
