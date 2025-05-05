@@ -107,7 +107,7 @@ class VersionChecker {
     }
   };
 
-  public getIsUpToDate = (): boolean => !this.isUpToDate;
+  public getIsUpToDate = (): boolean => this.isUpToDate;
   public getLatestVersion = (): string => this.latestVersion;
 }
 
