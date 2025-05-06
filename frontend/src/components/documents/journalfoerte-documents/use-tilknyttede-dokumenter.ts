@@ -21,6 +21,22 @@ export const useIsTilknyttetDokument = (journalpostId: string, dokumentInfoId: s
   );
 };
 
+/**
+ * Checks if this journalpost has any included attachments.
+ * If the main document is included, it will return false.
+ * @param journalpostId - journalpostId of the main document
+ * @param dokumentInfoId - dokumentInfoId of the main document
+ * @returns true if there are attachments, excluding the main document, included. Otherwise false.
+ */
+export const useHasTilknyttetVedlegg = (journalpostId: string, dokumentInfoId: string) => {
+  const tilknyttedeDokumenter = useTilknyttedeDokumenter();
+
+  return useMemo(
+    () => tilknyttedeDokumenter.some((t) => t.journalpostId === journalpostId && t.dokumentInfoId !== dokumentInfoId),
+    [tilknyttedeDokumenter, journalpostId, dokumentInfoId],
+  );
+};
+
 export const useLazyIsTilknyttetDokument = () => {
   const tilknyttedeDokumenter = useTilknyttedeDokumenter();
 

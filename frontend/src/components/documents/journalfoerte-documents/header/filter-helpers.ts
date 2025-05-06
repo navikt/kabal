@@ -8,13 +8,17 @@ import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns
 import { useEffect, useState } from 'react';
 import { splitQuery } from './../../../smart-editor/gode-formuleringer/split-query';
 
-interface ScoredArkvertDocumentVedlegg extends IArkivertDocumentVedlegg {
+export interface ScoredArkvertDocumentVedlegg extends IArkivertDocumentVedlegg {
   score: number;
 }
-interface ScoredArkivertDocument extends IArkivertDocument {
+
+export interface ScoredArkivertDocument extends IArkivertDocument {
   score: number;
+  sortScore: number;
   vedlegg: ScoredArkvertDocumentVedlegg[];
 }
+
+const EMPTY_ARRAY: ScoredArkivertDocument[] = [];
 
 export const useFilteredDocuments = (
   documents: IArkivertDocument[],
@@ -26,72 +30,94 @@ export const useFilteredDocuments = (
   onlyIncluded: boolean,
   search: string,
   sort: ArchivedDocumentsSort,
-): IArkivertDocument[] => {
-  const [result, setResult] = useState<IArkivertDocument[]>(documents);
+): ScoredArkivertDocument[] => {
+  const [result, setResult] = useState<ScoredArkivertDocument[]>(EMPTY_ARRAY);
   const isTilknyttet = useLazyIsTilknyttetDokument();
 
   useEffect(() => {
     const callback = requestIdleCallback(
       // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       () => {
-        const filtered = documents.filter(
-          ({ journalpostId, dokumentInfoId, tema, journalposttype, avsenderMottaker, datoOpprettet, sak, vedlegg }) =>
-            (selectedTemaer.length === 0 || (tema !== null && selectedTemaer.includes(tema))) &&
-            (selectedTypes.length === 0 || (journalposttype !== null && selectedTypes.includes(journalposttype))) &&
-            (selectedAvsenderMottakere.length === 0 ||
-              selectedAvsenderMottakere.includes(
-                avsenderMottaker === null ? 'NONE' : (avsenderMottaker.id ?? 'UNKNOWN'),
-              )) &&
-            (selectedSaksIds.length === 0 ||
-              selectedSaksIds.includes(sak === null ? 'NONE' : (sak.fagsakId ?? 'UNKNOWN'))) &&
-            (selectedDateRange === undefined || checkDateInterval(datoOpprettet, selectedDateRange)) &&
-            (onlyIncluded === false ||
-              isTilknyttet(journalpostId, dokumentInfoId) ||
-              vedlegg.some((v) => isTilknyttet(journalpostId, v.dokumentInfoId))),
-        );
+        const splitSearch = search.length > 0 ? splitQuery(search) : null;
+        const hasSearch = splitSearch !== null;
+        const filteredDocuments: ScoredArkivertDocument[] = [];
 
-        if (search.length === 0) {
-          return setResult(
-            filtered
-              .map((d) =>
-                onlyIncluded
-                  ? { ...d, vedlegg: d.vedlegg.filter((v) => isTilknyttet(d.journalpostId, v.dokumentInfoId)) }
-                  : d,
-              )
-              .toSorted((a, b) => sortByDate(a, b, sort)),
-          );
-        }
+        for (const document of documents) {
+          const {
+            journalpostId,
+            dokumentInfoId,
+            tittel,
+            tema,
+            journalposttype,
+            avsenderMottaker,
+            datoOpprettet,
+            sak,
+            vedlegg,
+          } = document;
 
-        const scored: ScoredArkivertDocument[] = [];
+          if (
+            checkList(selectedTemaer, tema) &&
+            checkList(selectedTypes, journalposttype) &&
+            checkListWithNone(selectedAvsenderMottakere, avsenderMottaker?.id ?? 'UNKNOWN') &&
+            checkListWithNone(selectedSaksIds, sak?.fagsakId ?? 'UNKNOWN') &&
+            checkDateInterval(datoOpprettet, selectedDateRange)
+          ) {
+            const filteredVedlegg: ScoredArkvertDocumentVedlegg[] = [];
+            let highestVedleggScore = 0;
 
-        for (const document of filtered) {
-          const vedlegg: ScoredArkvertDocumentVedlegg[] = [];
-          let highestVedleggScore = 0;
-          const journalpostScore = fuzzySearch(splitQuery(search), (document.tittel ?? '') + document.journalpostId);
-          const noJournalpostHit = journalpostScore <= 0;
+            for (const v of vedlegg) {
+              if (onlyIncluded && !isTilknyttet(journalpostId, v.dokumentInfoId)) {
+                continue;
+              }
 
-          for (const v of document.vedlegg) {
-            const score = fuzzySearch(splitQuery(search), v.tittel ?? '');
+              if (!hasSearch) {
+                filteredVedlegg.push({ ...v, score: 0 });
+                continue;
+              }
 
-            if (noJournalpostHit && score <= 0) {
+              const score = fuzzySearch(splitSearch, v.tittel ?? '');
+
+              if (score > highestVedleggScore) {
+                highestVedleggScore = score;
+              }
+
+              if (score > 0) {
+                filteredVedlegg.push({ ...v, score });
+              }
+            }
+
+            if (onlyIncluded && filteredVedlegg.length === 0 && !isTilknyttet(journalpostId, dokumentInfoId)) {
               continue;
             }
 
-            if (score > highestVedleggScore) {
-              highestVedleggScore = score;
+            if (hasSearch) {
+              const score = hasSearch ? fuzzySearch(splitSearch, (tittel ?? '') + journalpostId) : 0;
+
+              if (score <= 0) {
+                continue;
+              }
+
+              filteredDocuments.push({
+                ...document,
+                vedlegg: filteredVedlegg.toSorted((a, b) => b.score - a.score),
+                score: score,
+                sortScore: Math.max(score, highestVedleggScore),
+              });
+            } else {
+              filteredDocuments.push({ ...document, vedlegg: filteredVedlegg, score: 0, sortScore: 0 });
             }
-
-            vedlegg.push({ ...v, score });
-          }
-
-          const score = Math.max(journalpostScore, highestVedleggScore);
-
-          if (score > 0) {
-            scored.push({ ...document, score, vedlegg: vedlegg.toSorted((a, b) => b.score - a.score) });
           }
         }
 
-        setResult(scored.toSorted((a, b) => (a.score === b.score ? sortByDate(a, b, sort) : b.score - a.score)));
+        if (hasSearch) {
+          setResult(
+            filteredDocuments.toSorted((a, b) =>
+              a.sortScore === b.sortScore ? sortByDate(a, b, sort) : b.sortScore - a.sortScore,
+            ),
+          );
+        } else {
+          setResult(filteredDocuments.toSorted((a, b) => sortByDate(a, b, sort)));
+        }
       },
       { timeout: 200 },
     );
@@ -115,7 +141,23 @@ export const useFilteredDocuments = (
   return result;
 };
 
-const checkDateInterval = (dateString: string, [from, to]: DateRange): boolean => {
+const checkList = (list: string[], value: string | null): boolean => {
+  if (list.length === 0) {
+    return true;
+  }
+
+  return value === null ? false : list.includes(value);
+};
+
+const checkListWithNone = (list: string[], value: string | null): boolean =>
+  list.length === 0 ? true : list.includes(value ?? 'NONE');
+
+const checkDateInterval = (dateString: string, dateRange?: DateRange): boolean => {
+  if (dateRange === undefined) {
+    return true;
+  }
+
+  const [from, to] = dateRange;
   const start = from === null ? null : parseISO(from);
   const end = to === null ? null : parseISO(to);
 

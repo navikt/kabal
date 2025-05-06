@@ -1,4 +1,7 @@
-import { useIsTilknyttetDokument } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
+import {
+  useHasTilknyttetVedlegg,
+  useIsTilknyttetDokument,
+} from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
@@ -8,7 +11,7 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Journalstatus } from '@app/types/arkiverte-documents';
 import { CircleSlashIcon, FolderPlusIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Tooltip } from '@navikt/ds-react';
+import { Button, type ButtonProps, HStack, Tooltip } from '@navikt/ds-react';
 import { memo, useMemo } from 'react';
 
 interface Props {
@@ -66,16 +69,26 @@ const Enabled = ({ dokumentInfoId, journalpostId }: EnabledProps) => {
   const isSaksbehandler = useIsSaksbehandler();
   const isRol = useIsRol();
   const checked = useIsTilknyttetDokument(journalpostId, dokumentInfoId);
+  const indeterminate = useHasTilknyttetVedlegg(journalpostId, dokumentInfoId);
 
-  const title = checked ? 'Ekskluder fra saken' : 'Inkluder i saken';
+  const { variant, title } = useMemo<{ variant: ButtonProps['variant']; title: string }>(() => {
+    if (checked) {
+      return { variant: 'primary', title: 'Ekskluder fra saken' };
+    }
+
+    if (indeterminate) {
+      return { variant: 'secondary', title: 'Inkluder i saken.\nEtt eller flere vedlegg er inkludert.' };
+    }
+
+    return { variant: 'tertiary', title: 'Inkluder i saken' };
+  }, [indeterminate, checked]);
 
   return (
-    <Tooltip placement="right" content={title} keys={['M']}>
+    <Tooltip placement="right" content={title} keys={['M']} className="whitespace-pre" describesChild>
       <Button
         size="small"
-        variant={checked ? 'primary' : 'tertiary'}
+        variant={variant}
         icon={<FolderPlusIcon aria-hidden />}
-        title={title}
         onClick={(e) => {
           e.stopPropagation();
           setDocument(!checked);
