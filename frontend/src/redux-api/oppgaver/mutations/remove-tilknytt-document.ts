@@ -2,7 +2,7 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { isApiRejectionError } from '@app/types/errors';
-import type { ICheckDocumentParams } from '@app/types/oppgavebehandling/params';
+import type { IBatchDocumentParams } from '@app/types/oppgavebehandling/params';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
@@ -10,21 +10,25 @@ import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
 const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    removeTilknyttetDocument: builder.mutation<{ modified: string }, ICheckDocumentParams>({
-      query: ({ oppgaveId, journalpostId, dokumentInfoId }) => ({
-        url: `/kabal-api/behandlinger/${oppgaveId}/dokumenttilknytninger/${journalpostId}/${dokumentInfoId}`,
+    removeTilknyttedeDocuments: builder.mutation<void, IBatchDocumentParams>({
+      query: ({ oppgaveId, documentIdList }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/dokumenttilknytninger`,
         method: 'DELETE',
+        body: { journalfoertDokumentReferenceSet: documentIdList },
       }),
-      invalidatesTags: (_, __, { journalpostId, dokumentInfoId }) => [
-        { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: `${journalpostId}-${dokumentInfoId}` },
+      invalidatesTags: (_, __, { documentIdList }) => [
+        ...documentIdList.map((d) => ({
+          type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER,
+          id: `${d.journalpostId}-${d.dokumentInfoId}`,
+        })),
         { type: DokumenterListTagTypes.TILKNYTTEDEDOKUMENTER, id: ListTagTypes.PARTIAL_LIST },
       ],
-      onQueryStarted: async ({ oppgaveId, dokumentInfoId, journalpostId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, documentIdList }, { dispatch, queryFulfilled }) => {
         const patchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => ({
             ...draft,
-            tilknyttedeDokumenter: draft.tilknyttedeDokumenter.filter(
-              (d) => d.journalpostId !== journalpostId || d.dokumentInfoId !== dokumentInfoId,
+            tilknyttedeDokumenter: draft.tilknyttedeDokumenter.filter((d) =>
+              documentIdList.some((r) => d.journalpostId !== r.journalpostId || d.dokumentInfoId !== r.dokumentInfoId),
             ),
           })),
         );
@@ -34,7 +38,7 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
         } catch (e) {
           patchResult.undo();
 
-          const message = 'Kunne ikke fjerne dokument.';
+          const message = `Kunne ikke fjerne ${documentIdList.length === 1 ? 'dokument' : 'dokumenter'}.`;
 
           if (isApiRejectionError(e)) {
             apiErrorToast(message, e.error);
@@ -76,5 +80,5 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
   }),
 });
 
-export const { useRemoveTilknyttetDocumentMutation, useRemoveAllTilknyttedeDocumentsMutation } =
+export const { useRemoveTilknyttedeDocumentsMutation, useRemoveAllTilknyttedeDocumentsMutation } =
   removeTilknyttDocumentMutationSlice;

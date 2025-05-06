@@ -13,9 +13,9 @@ import { toast } from '@app/components/toast/store';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
   useRemoveAllTilknyttedeDocumentsMutation,
-  useRemoveTilknyttetDocumentMutation,
+  useRemoveTilknyttedeDocumentsMutation,
 } from '@app/redux-api/oppgaver/mutations/remove-tilknytt-document';
-import { useTilknyttDocumentMutation } from '@app/redux-api/oppgaver/mutations/tilknytt-document';
+import { useTilknyttDocumentsMutation } from '@app/redux-api/oppgaver/mutations/tilknytt-document';
 import { type IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext } from 'react';
@@ -25,8 +25,8 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
   const { selectedCount, getSelectedDocuments } = useContext(SelectContext);
   const getDocument = useGetDocument(filteredDocuments);
   const [removeAllIncludedDocuments] = useRemoveAllTilknyttedeDocumentsMutation();
-  const [removeIncludedDocument] = useRemoveTilknyttetDocumentMutation();
-  const [tilknyttDocument] = useTilknyttDocumentMutation();
+  const [removeIncludedDocuments] = useRemoveTilknyttedeDocumentsMutation();
+  const [tilknyttDocuments] = useTilknyttDocumentsMutation();
   const isTilknyttet = useLazyIsTilknyttetDokument();
 
   return useCallback(
@@ -69,20 +69,26 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
           }
 
           // Remove only selected documents.
-          for (const { journalpostId, dokumentInfoId } of selectedAndIncluded) {
-            removeIncludedDocument({ oppgaveId, journalpostId, dokumentInfoId });
-          }
+          removeIncludedDocuments({
+            oppgaveId,
+            documentIdList: selectedAndIncluded.map(({ journalpostId, dokumentInfoId }) => ({
+              journalpostId,
+              dokumentInfoId,
+            })),
+          });
 
           toast.success(`Fjernet ${d(selectedAndIncluded.length)}.`);
           return;
         }
 
         // If not all documents are selected, add missing.
-        for (const { journalpostId, dokumentInfoId } of selectedAndIncludable) {
-          if (!isTilknyttet(journalpostId, dokumentInfoId)) {
-            tilknyttDocument({ oppgaveId, journalpostId, dokumentInfoId });
-          }
-        }
+        tilknyttDocuments({
+          oppgaveId,
+          documentIdList: selectedAndIncludable.map(({ journalpostId, dokumentInfoId }) => ({
+            journalpostId,
+            dokumentInfoId,
+          })),
+        });
 
         if (selectedAndIncludable.length > 0) {
           toast.success(`Inkluderte ${d(selectedAndIncludable.length)}.`);
@@ -106,8 +112,8 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
         }
 
         isTilknyttet(journalpostId, currentVedlegg.dokumentInfoId)
-          ? removeIncludedDocument({ oppgaveId, journalpostId, dokumentInfoId })
-          : tilknyttDocument({ oppgaveId, journalpostId, dokumentInfoId });
+          ? removeIncludedDocuments({ oppgaveId, documentIdList: [{ journalpostId, dokumentInfoId }] })
+          : tilknyttDocuments({ oppgaveId, documentIdList: [{ journalpostId, dokumentInfoId }] });
 
         return;
       }
@@ -119,15 +125,15 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
       const { dokumentInfoId } = focusedDocument;
 
       isTilknyttet(journalpostId, dokumentInfoId)
-        ? removeIncludedDocument({ oppgaveId, journalpostId, dokumentInfoId })
-        : tilknyttDocument({ oppgaveId, journalpostId, dokumentInfoId });
+        ? removeIncludedDocuments({ oppgaveId, documentIdList: [{ journalpostId, dokumentInfoId }] })
+        : tilknyttDocuments({ oppgaveId, documentIdList: [{ journalpostId, dokumentInfoId }] });
     },
     [
       oppgaveId,
       getDocument,
       removeAllIncludedDocuments,
-      removeIncludedDocument,
-      tilknyttDocument,
+      removeIncludedDocuments,
+      tilknyttDocuments,
       selectedCount,
       getSelectedDocuments,
       filteredDocuments,
