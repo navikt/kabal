@@ -51,7 +51,10 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
       ) : null}
 
       {columns.AVSENDER_MOTTAKER ? (
-        <span style={{ gridArea: Fields.AvsenderMottaker }} className="select-text">
+        <span
+          style={{ gridArea: Fields.AvsenderMottaker }}
+          className="select-text overflow-hidden text-ellipsis whitespace-nowrap"
+        >
           {formatAvsenderMottaker(avsenderMottaker)}
         </span>
       ) : null}
