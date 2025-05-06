@@ -1,5 +1,5 @@
-import { useRemoveTilknyttetDocumentMutation } from '@app/redux-api/oppgaver/mutations/remove-tilknytt-document';
-import { useTilknyttDocumentMutation } from '@app/redux-api/oppgaver/mutations/tilknytt-document';
+import { useRemoveTilknyttedeDocumentsMutation } from '@app/redux-api/oppgaver/mutations/remove-tilknytt-document';
+import { useTilknyttDocumentsMutation } from '@app/redux-api/oppgaver/mutations/tilknytt-document';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback } from 'react';
 
@@ -8,8 +8,8 @@ export const useCheckDocument = (
   dokumentInfoId: string,
   journalpostId: string,
 ): [(checked: boolean) => void, boolean] => {
-  const [tilknyttDocument, tilknyttLoader] = useTilknyttDocumentMutation();
-  const [removeDocument, removeLoader] = useRemoveTilknyttetDocumentMutation();
+  const [tilknyttDocuments, tilknyttLoader] = useTilknyttDocumentsMutation();
+  const [removeDocuments, removeLoader] = useRemoveTilknyttedeDocumentsMutation();
 
   const onCheck = useCallback(
     (checked: boolean) => {
@@ -17,13 +17,12 @@ export const useCheckDocument = (
         return;
       }
 
-      return (checked ? tilknyttDocument : removeDocument)({
-        dokumentInfoId,
-        journalpostId,
+      return (checked ? tilknyttDocuments : removeDocuments)({
         oppgaveId,
+        documentIdList: [{ dokumentInfoId, journalpostId }],
       });
     },
-    [oppgaveId, dokumentInfoId, journalpostId, tilknyttDocument, removeDocument],
+    [oppgaveId, dokumentInfoId, journalpostId, tilknyttDocuments, removeDocuments],
   );
 
   const isLoading = tilknyttLoader.isLoading || removeLoader.isLoading;

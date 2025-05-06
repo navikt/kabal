@@ -43,6 +43,10 @@ export interface ISendtTilTrygderettenParams extends IOppgavebehandlingBaseParam
 
 export type ICheckDocumentParams = IJournalfoertDokumentId & IOppgavebehandlingBaseParams;
 
+export interface IBatchDocumentParams extends IOppgavebehandlingBaseParams {
+  documentIdList: IJournalfoertDokumentId[];
+}
+
 export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams {
   employee: INavEmployee | null;
 }
