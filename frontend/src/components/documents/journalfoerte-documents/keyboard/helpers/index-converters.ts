@@ -91,18 +91,18 @@ const getNextState = (
 ): Readonly<DocumentIndexesState> => {
   const result: Document[] = [];
 
-  filteredDocuments.forEach((d, i) => {
-    if (d.hasAccess) {
-      result.push({ path: [i, -1], journalpostId: d.journalpostId, dokumentInfoId: d.dokumentInfoId });
+  filteredDocuments.forEach(({ hasAccess, journalpostId, dokumentInfoId, vedlegg }, i) => {
+    if (hasAccess) {
+      result.push({ path: [i, -1], journalpostId, dokumentInfoId });
     }
 
-    if (!showVedleggIdList.includes(d.journalpostId)) {
+    if (!showVedleggIdList.includes(journalpostId)) {
       return;
     }
 
-    d.vedlegg.forEach((a, j) => {
-      if (a.hasAccess) {
-        result.push({ path: [i, j], journalpostId: d.journalpostId, dokumentInfoId: a.dokumentInfoId });
+    vedlegg.forEach((v, j) => {
+      if (v.hasAccess) {
+        result.push({ path: [i, j], journalpostId, dokumentInfoId: v.dokumentInfoId });
       }
     });
   });

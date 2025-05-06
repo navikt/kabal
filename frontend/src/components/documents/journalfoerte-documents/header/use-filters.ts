@@ -1,3 +1,4 @@
+import { useFilteredDocuments } from '@app/components/documents/journalfoerte-documents/header/filter-helpers';
 import { setAccessibleToRealDocumentPaths } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
@@ -15,7 +16,6 @@ import {
 import type { IArkivertDocument, Journalposttype } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useFilteredDocuments } from './filter-helpers';
 
 const EMPTY_FILTER: string[] = [];
 const EMPTY_TYPE_FILTER: Journalposttype[] = [];
