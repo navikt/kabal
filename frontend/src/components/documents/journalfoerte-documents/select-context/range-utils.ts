@@ -27,8 +27,8 @@ export const isRangeCollapsed = ({ anchor, focus }: SelectionRange) => anchor ==
 
 /**
  * Checks if the given index is within the range.
- * @example `0=>4` and `2` is in range
- * @example `0=>4` and `5` is not in range
+ * @example `0..4` and `2` is in range
+ * @example `0..4` and `5` is not in range
  * @param range
  * @param accessibleIndex
  * @returns - True if the index is in range, false otherwise.
@@ -40,9 +40,9 @@ export const isInRange = (range: SelectionRange, accessibleIndex: number) => {
 
 /**
  * Checks if two ranges are equal and same direction.
- * @example `0=>4` and `0=>4` are equal
- * @example `0=>4` and `4=>0` are not equal
- * @example `0=>4` and `0=>3` are not equal
+ * @example `0..4` and `0..4` are equal
+ * @example `0..4` and `4..0` are not equal
+ * @example `0..4` and `0..3` are not equal
  * @returns - True if the ranges are equal, false otherwise.
  */
 const areRangesEqual = (rangeA: SelectionRange, rangeB: SelectionRange) =>
@@ -60,7 +60,7 @@ export const getRangeStartAndEnd = (range: SelectionRange): [number, number] => 
 
 /**
  * Inserts a space into a range at the given index. Splitting the range and preserving the total length of the range.
- * @example `0=>4` split on `2` becomes `0=>1` and `3=>5`
+ * @example `0..4` split on `2` becomes `0..1` and `3..5`
  * @param range - The range to insert into.
  * @param index - The index to insert at.
  * @returns - An array of one or two ranges, neither including the index.
@@ -167,8 +167,8 @@ const _mergeRanges = (reversedRanges: SelectionRange[]): SelectionRange[] => {
 
 /**
  * Merges all adjacent or overlapping ranges.
- * @example `0=>4` and `3=>7` becomes `0=>7`
- * @example `0=>4` and `5=>7` becomes `0=>7`
+ * @example `0..4` and `3..7` becomes `0..7`
+ * @example `0..4` and `5..7` becomes `0..7`
  * @param ranges - The ranges to merge.
  * @returns - The merged ranges.
  */
@@ -180,7 +180,7 @@ export const mergeRanges = (ranges: readonly SelectionRange[]): readonly Selecti
 
 /**
  * Removes the given index from the range.
- * @example `0=>4` with index `2` becomes `0=>1`, `3=>4`
+ * @example `0..4` with index `2` becomes `0..1`, `3..4`
  * @param range - The range to remove the index from.
  * @param index - The index to remove from the range.
  * @returns - The updated range after removing the index.
@@ -214,7 +214,7 @@ export const removeIndexFromRange = (range: SelectionRange, index: number): Sele
 
 /**
  * Removes the given index from all ranges. Leaving a gap in the ranges.
- * @example `0=>4` and `7=>7` with index `2` becomes `0=>1`, `3=>4`, and `7=>7`
+ * @example `0..4` and `7..7` with index `2` becomes `0..1`, `3..4`, and `7..7`
  * @param ranges - The ranges to remove the index from.
  * @param index - The index to remove from the ranges.
  * @returns - The updated ranges after removing the index.
@@ -235,7 +235,7 @@ export const removeIndexFromRanges = (ranges: Readonly<SelectionRange[]>, index:
 
 /**
  * Converts a range to a sorted array of all the individual unique indexes.
- * @example `0=>4` becomes `0, 1, 2, 3, 4`
+ * @example `0..4` becomes `0, 1, 2, 3, 4`
  * @param range - The range to convert.
  * @returns - All indexes in the range.
  */
@@ -253,7 +253,7 @@ export const rangeToIndexes = (range: SelectionRange) => {
 
 /**
  * Converts an array of ranges to a sorted array of all the individual unique indexes.
- * @example `0=>4` and `7=>7` becomes `0, 1, 2, 3, 4, 7`
+ * @example `0..4` and `7..7` becomes `0, 1, 2, 3, 4, 7`
  * @param ranges - The ranges to convert.
  * @returns - All indexes in the ranges.
  */
@@ -271,7 +271,7 @@ export const rangesToIndexes = (ranges: readonly SelectionRange[]): readonly num
 
 /**
  * Converts an array of indexes to a sorted array of ranges.
- * @example `0, 1, 2, 3, 4, 7` becomes `0=>4` and `7=>7`
+ * @example `0, 1, 2, 3, 4, 7` becomes `0..4` and `7..7`
  * @param indexes - The indexes to convert to ranges.
  * @returns - All ranges covering the indexes.
  */
