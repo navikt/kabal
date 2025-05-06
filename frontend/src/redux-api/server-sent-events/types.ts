@@ -2,7 +2,13 @@ import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import type { INavEmployee } from '@app/types/bruker';
 import type { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
 import type { UtfallEnum } from '@app/types/kodeverk';
-import type { FlowState, IOrganizationPart, IPersonPart, IVenteperiode } from '@app/types/oppgave-common';
+import type {
+  FlowState,
+  IJournalfoertDokumentId,
+  IOrganizationPart,
+  IPersonPart,
+  IVenteperiode,
+} from '@app/types/oppgave-common';
 import type { BehandlingGosysOppgave, IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type { FradelReason } from '@app/types/oppgaver';
 import type { Language } from '@app/types/texts/language';
@@ -175,4 +181,8 @@ export interface JournalfoertDocumentModifiedEvent extends BaseEvent {
   journalpostId: string;
   dokumentInfoId: string;
   tittel: string;
+}
+
+export interface IncludedDocumentsChangedEvent extends BaseEvent {
+  journalfoertDokumentReferenceSet: IJournalfoertDokumentId[];
 }
