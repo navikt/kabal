@@ -16,6 +16,7 @@ import {
   useRemoveTilknyttedeDocumentsMutation,
 } from '@app/redux-api/oppgaver/mutations/remove-tilknytt-document';
 import { useTilknyttDocumentsMutation } from '@app/redux-api/oppgaver/mutations/tilknytt-document';
+import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { type IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext } from 'react';
@@ -28,10 +29,31 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
   const [removeIncludedDocuments] = useRemoveTilknyttedeDocumentsMutation();
   const [tilknyttDocuments] = useTilknyttDocumentsMutation();
   const isTilknyttet = useLazyIsTilknyttetDokument();
+  const { data: allDocuments } = useGetArkiverteDokumenterQuery(oppgaveId);
+
+  const getAllIncludedDocumentCount = useCallback(
+    () =>
+      allDocuments?.dokumenter.reduce((count, d) => {
+        if (!d.hasAccess || d.journalstatus === Journalstatus.MOTTATT) {
+          return count;
+        }
+
+        const vedleggCount = d.vedlegg.filter(
+          (v) => v.hasAccess && isTilknyttet(d.journalpostId, v.dokumentInfoId),
+        ).length;
+
+        if (isTilknyttet(d.journalpostId, d.dokumentInfoId)) {
+          return count + 1 + vedleggCount;
+        }
+
+        return count + vedleggCount;
+      }, 0),
+    [isTilknyttet, allDocuments?.dokumenter],
+  );
 
   return useCallback(
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-    () => {
+    async () => {
       const accessibleIndex = getFocusIndex();
       const focusedDocument = getDocument();
       const hasDocument = focusedDocument !== undefined;
@@ -56,43 +78,52 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
           isTilknyttet(d.journalpostId, d.dokumentInfoId),
         );
 
-        // If all documents are selected, remove all.
-        if (selectedAndIncluded.length === selectedAndIncludable.length) {
-          if (
-            filteredDocuments.filter((d) => isTilknyttet(d.journalpostId, d.dokumentInfoId)).length ===
-            selectedAndIncludable.length
-          ) {
-            // Remove all documents.
-            removeAllIncludedDocuments({ oppgaveId });
-            toast.success(`Fjernet alle ${d(selectedAndIncludable.length)}.`);
-            return;
+        // If all included documents are selected, and all selected are included, remove all.
+        if (
+          selectedAndIncluded.length > 0 &&
+          selectedAndIncludable.length === selectedAndIncluded.length && // All includable selected are included.
+          selectedAndIncluded.length === getAllIncludedDocumentCount() // All selected are all the included documents.
+        ) {
+          // Remove all documents.
+          try {
+            await removeAllIncludedDocuments({ oppgaveId }).unwrap();
+            toast.success(`Ekskluderte ${d(selectedAndIncluded.length)}. Ingen dokumenter er nå inkluderte.`);
+          } catch {
+            toast.error(`Kunne ikke ekskludere ${d(selectedAndIncluded.length)}.`);
           }
-
-          // Remove only selected documents.
-          removeIncludedDocuments({
-            oppgaveId,
-            documentIdList: selectedAndIncluded.map(({ journalpostId, dokumentInfoId }) => ({
-              journalpostId,
-              dokumentInfoId,
-            })),
-          });
-
-          toast.success(`Fjernet ${d(selectedAndIncluded.length)}.`);
           return;
         }
 
-        // If not all documents are selected, add missing.
-        tilknyttDocuments({
-          oppgaveId,
-          documentIdList: selectedAndIncludable.map(({ journalpostId, dokumentInfoId }) => ({
-            journalpostId,
-            dokumentInfoId,
-          })),
-        });
+        // If all selected documents are included, remove them.
+        if (selectedAndIncluded.length === selectedAndIncludable.length) {
+          try {
+            const documentIdList = selectedAndIncluded.map(({ journalpostId, dokumentInfoId }) => ({
+              journalpostId,
+              dokumentInfoId,
+            }));
+            await removeIncludedDocuments({ oppgaveId, documentIdList }).unwrap();
+            toast.success(`Ekskluderte ${d(selectedAndIncluded.length)}.`);
+          } catch {
+            toast.error(`Kunne ikke ekskludere ${d(selectedAndIncluded.length)}.`);
+          }
 
-        if (selectedAndIncludable.length > 0) {
-          toast.success(`Inkluderte ${d(selectedAndIncludable.length)}.`);
+          return;
         }
+
+        // If not all documents are included, include missing.
+        if (selectedAndIncludable.length > 0) {
+          try {
+            const documentIdList = selectedAndIncludable.map(({ journalpostId, dokumentInfoId }) => ({
+              journalpostId,
+              dokumentInfoId,
+            }));
+            await tilknyttDocuments({ oppgaveId, documentIdList }).unwrap();
+            toast.success(`Inkluderte ${d(selectedAndIncludable.length)}.`);
+          } catch {
+            toast.error(`Kunne ikke inkludere ${d(selectedAndIncludable.length)}.`);
+          }
+        }
+
         return;
       }
 
@@ -136,8 +167,8 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
       tilknyttDocuments,
       selectedCount,
       getSelectedDocuments,
-      filteredDocuments,
       isTilknyttet,
+      getAllIncludedDocumentCount,
     ],
   );
 };
