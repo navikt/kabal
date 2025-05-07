@@ -16,6 +16,7 @@ import {
 } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/hjemler';
 import {
   handleIncludedDocumentsAdded,
+  handleIncludedDocumentsCleared,
   handleIncludedDocumentsRemoved,
 } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/included-documents-changed';
 import { handleJournalfoertDocumentModified } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/journalfoert-document-modified';
@@ -144,11 +145,13 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           const journalfoertDocumentModified = handleJournalfoertDocumentModified(oppgaveId, navIdent);
           const includedDocumentsAdded = handleIncludedDocumentsAdded(oppgaveId, navIdent);
           const includedDocumentsRemoved = handleIncludedDocumentsRemoved(oppgaveId, navIdent);
+          const includedDocumentsCleared = handleIncludedDocumentsCleared(oppgaveId, navIdent);
 
           events.addJsonEventListener(ServerSentEventType.JOURNALPOST_ADDED, journalpostAdded);
           events.addJsonEventListener(ServerSentEventType.JOURNALFOERT_DOCUMENT_MODIFIED, journalfoertDocumentModified);
           events.addJsonEventListener(ServerSentEventType.INCLUDED_DOCUMENTS_ADDED, includedDocumentsAdded);
           events.addJsonEventListener(ServerSentEventType.INCLUDED_DOCUMENTS_REMOVED, includedDocumentsRemoved);
+          events.addJsonEventListener(ServerSentEventType.INCLUDED_DOCUMENTS_CLEARED, includedDocumentsCleared);
 
           await cacheEntryRemoved;
 

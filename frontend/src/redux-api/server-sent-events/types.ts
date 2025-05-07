@@ -13,7 +13,7 @@ import type { BehandlingGosysOppgave, IFeilregistrering } from '@app/types/oppga
 import type { FradelReason } from '@app/types/oppgaver';
 import type { Language } from '@app/types/texts/language';
 
-interface BaseEvent {
+export interface BaseEvent {
   actor: INavEmployee;
   timestamp: string;
 }
