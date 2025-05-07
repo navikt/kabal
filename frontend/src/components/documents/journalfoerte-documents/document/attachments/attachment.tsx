@@ -138,19 +138,26 @@ export const Attachment = memo(
       [documentIndex, index],
     );
 
-    const onFocus = useCallback(() => {
-      if (!hasAccess) {
-        return;
-      }
+    const onClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
+      (e) => {
+        if (!hasAccess) {
+          return;
+        }
 
-      const accessibleIndex = convertRealToAccessibleDocumentIndex([documentIndex, index]);
+        const accessibleIndex = convertRealToAccessibleDocumentIndex([documentIndex, index]);
 
-      if (accessibleIndex === undefined) {
-        return;
-      }
+        if (accessibleIndex === undefined) {
+          return;
+        }
 
-      setFocusIndex(accessibleIndex);
-    }, [documentIndex, index, hasAccess]);
+        if (e.shiftKey) {
+          selectRangeTo(accessibleIndex);
+        } else {
+          setFocusIndex(accessibleIndex);
+        }
+      },
+      [documentIndex, index, hasAccess],
+    );
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -170,7 +177,7 @@ export const Attachment = memo(
         }}
         draggable={draggingIsEnabled}
         className="px-1.5 hover:bg-surface-hover focus:outline-none"
-        onClick={onFocus}
+        onClick={onClick}
         onDoubleClick={hasAccess ? onDoubleClick : undefined}
         tabIndex={-1}
       >

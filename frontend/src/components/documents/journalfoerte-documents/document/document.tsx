@@ -119,19 +119,26 @@ export const Document = ({
     [index],
   );
 
-  const onFocus = useCallback(() => {
-    if (!hasAccess) {
-      return;
-    }
+  const onClick: React.MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (!hasAccess) {
+        return;
+      }
 
-    const accessibleIndex = convertRealToAccessibleDocumentIndex([index, -1]);
+      const accessibleIndex = convertRealToAccessibleDocumentIndex([index, -1]);
 
-    if (accessibleIndex === undefined) {
-      return;
-    }
+      if (accessibleIndex === undefined) {
+        return;
+      }
 
-    setFocusIndex(accessibleIndex);
-  }, [index, hasAccess]);
+      if (e.shiftKey) {
+        selectRangeTo(accessibleIndex);
+      } else {
+        setFocusIndex(accessibleIndex);
+      }
+    },
+    [index, hasAccess],
+  );
 
   return (
     <StyledJournalfoertDocument
@@ -150,7 +157,7 @@ export const Document = ({
       }}
       draggable={draggingIsEnabled}
       className={`px-1.5 hover:bg-surface-hover focus:outline-none ${className}`}
-      onClick={onFocus}
+      onClick={onClick}
       onDoubleClick={hasAccess ? onDoubleClick : undefined}
       tabIndex={-1}
     >
