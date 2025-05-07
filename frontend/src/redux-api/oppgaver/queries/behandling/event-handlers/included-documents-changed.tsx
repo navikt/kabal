@@ -2,7 +2,7 @@ import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
 import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import type { IncludedDocumentsChangedEvent } from '@app/redux-api/server-sent-events/types';
+import type { BaseEvent, IncludedDocumentsChangedEvent } from '@app/redux-api/server-sent-events/types';
 import { reduxStore } from '@app/redux/configure-store';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
@@ -59,6 +59,24 @@ export const handleIncludedDocumentsRemoved =
       );
     }
   };
+
+export const handleIncludedDocumentsCleared = (oppgaveId: string, userId: string) => (event: BaseEvent) => {
+  reduxStore.dispatch(
+    behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => ({
+      ...draft,
+      tilknyttedeDokumenter: [],
+    })),
+  );
+
+  if (event.actor.navIdent !== userId) {
+    toast.info(
+      <InfoToast title="Inkluderte dokumenter endret">
+        Alle inkluderte dokumenter ble ekskludert av {formatEmployeeName(event.actor)}. Ingen dokumenter er nå
+        inkluderte.
+      </InfoToast>,
+    );
+  }
+};
 
 const match = (a: IJournalfoertDokumentId, b: IJournalfoertDokumentId) =>
   a.journalpostId === b.journalpostId && a.dokumentInfoId === b.dokumentInfoId;
