@@ -28,35 +28,41 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
           size="small"
           title={temaName}
           style={{ gridArea: Fields.Tema }}
-          className="justify-start whitespace-nowrap"
+          className="group relative justify-start whitespace-nowrap"
         >
-          <span className="select-text overflow-hidden text-ellipsis">{temaName}</span>
+          <span className="select-none overflow-hidden text-ellipsis">{temaName}</span>
+
+          <CopyButton
+            copyText={temaName}
+            title="Kopier tema"
+            size="xsmall"
+            className="absolute top-0 right-0 opacity-0 group-hover:opacity-100"
+          />
         </Tag>
       ) : null}
 
       {columns.DATO_OPPRETTET ? (
-        <DocumentDate
-          date={document.datoOpprettet}
-          style={{ gridArea: Fields.DatoOpprettet }}
-          className="select-text overflow-hidden text-ellipsis"
-        />
+        <DocumentDate date={document.datoOpprettet} style={{ gridArea: Fields.DatoOpprettet }} />
       ) : null}
 
       {columns.DATO_REG_SENDT ? (
-        <DocumentDate
-          date={document.datoRegSendt}
-          style={{ gridArea: Fields.DatoRegSendt }}
-          className="select-text overflow-hidden text-ellipsis"
-        />
+        <DocumentDate date={document.datoRegSendt} style={{ gridArea: Fields.DatoRegSendt }} />
       ) : null}
 
       {columns.AVSENDER_MOTTAKER ? (
-        <span
+        <div
           style={{ gridArea: Fields.AvsenderMottaker }}
-          className="select-text overflow-hidden text-ellipsis whitespace-nowrap"
+          className="group relative select-none overflow-hidden text-ellipsis whitespace-nowrap"
         >
-          {formatAvsenderMottaker(avsenderMottaker)}
-        </span>
+          <span>{formatAvsenderMottaker(avsenderMottaker)}</span>
+
+          <CopyButton
+            copyText={formatAvsenderMottaker(avsenderMottaker)}
+            title="Kopier avsender/mottaker"
+            size="xsmall"
+            className="absolute top-0 right-0 opacity-0 group-hover:opacity-100"
+          />
+        </div>
       ) : null}
 
       {columns.SAKSNUMMER ? <Saksnummer saksnummer={sak?.fagsakId} /> : null}
@@ -94,7 +100,7 @@ const Saksnummer = ({ saksnummer }: SaksnummerProps) => {
       variant="neutral"
       size="small"
       style={{ gridArea: Fields.Saksnummer }}
-      className="group relative select-text justify-start whitespace-nowrap pr-6"
+      className="group relative select-none justify-start whitespace-nowrap pr-6"
     >
       <span className="overflow-hidden text-ellipsis">{saksnummer}</span>
 
