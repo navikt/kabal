@@ -2,7 +2,6 @@ import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
-import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import type { DocumentsAddedEvent } from '@app/redux-api/server-sent-events/types';
 import { reduxStore } from '@app/redux/configure-store';
@@ -49,34 +48,6 @@ export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => 
 
         return b.created.localeCompare(a.created);
       });
-    }),
-  );
-
-  reduxStore.dispatch(
-    behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-      if (draft === undefined) {
-        return draft;
-      }
-
-      for (const document of event.documents) {
-        if (document.type !== DocumentTypeEnum.JOURNALFOERT) {
-          continue;
-        }
-
-        const { journalpostId, dokumentInfoId } = document.journalfoertDokumentReference;
-
-        if (
-          draft.tilknyttedeDokumenter.some(
-            (d) => d.journalpostId === journalpostId && d.dokumentInfoId === dokumentInfoId,
-          )
-        ) {
-          continue;
-        }
-
-        draft.tilknyttedeDokumenter.push({ journalpostId, dokumentInfoId });
-      }
-
-      return draft;
     }),
   );
 };
