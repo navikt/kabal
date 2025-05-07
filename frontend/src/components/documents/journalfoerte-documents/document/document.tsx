@@ -119,6 +119,20 @@ export const Document = ({
     [index],
   );
 
+  const onFocus = useCallback(() => {
+    if (!hasAccess) {
+      return;
+    }
+
+    const accessibleIndex = convertRealToAccessibleDocumentIndex([index, -1]);
+
+    if (accessibleIndex === undefined) {
+      return;
+    }
+
+    setFocusIndex(accessibleIndex);
+  }, [index, hasAccess]);
+
   return (
     <StyledJournalfoertDocument
       ref={ref}
@@ -136,6 +150,7 @@ export const Document = ({
       }}
       draggable={draggingIsEnabled}
       className={`px-1.5 hover:bg-surface-hover focus:outline-none ${className}`}
+      onClick={onFocus}
       onDoubleClick={hasAccess ? onDoubleClick : undefined}
       tabIndex={-1}
     >

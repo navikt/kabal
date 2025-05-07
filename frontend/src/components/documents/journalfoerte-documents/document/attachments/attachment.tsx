@@ -138,6 +138,20 @@ export const Attachment = memo(
       [documentIndex, index],
     );
 
+    const onFocus = useCallback(() => {
+      if (!hasAccess) {
+        return;
+      }
+
+      const accessibleIndex = convertRealToAccessibleDocumentIndex([documentIndex, index]);
+
+      if (accessibleIndex === undefined) {
+        return;
+      }
+
+      setFocusIndex(accessibleIndex);
+    }, [documentIndex, index, hasAccess]);
+
     const ref = useRef<HTMLDivElement>(null);
 
     return (
@@ -156,6 +170,7 @@ export const Attachment = memo(
         }}
         draggable={draggingIsEnabled}
         className="px-1.5 hover:bg-surface-hover focus:outline-none"
+        onClick={onFocus}
         onDoubleClick={hasAccess ? onDoubleClick : undefined}
         tabIndex={-1}
       >
