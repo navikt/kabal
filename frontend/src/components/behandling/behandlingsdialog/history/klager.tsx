@@ -3,7 +3,7 @@ import type { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { HistoryEventTypes, type IKlagerEvent, type IPart } from '@app/types/oppgavebehandling/response';
 import { ArrowRightLeftIcon, PlusIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { Line, employeeName, partName, toKey } from './common';
+import { employeeName, partName, toKey } from './common';
 import { HistoryEvent } from './event';
 
 export const getKlager = (e: IKlagerEvent) => {
@@ -38,9 +38,9 @@ const SetPart = ({ actor, part, timestamp }: SetProps) => {
 
   return (
     <HistoryEvent tag={tag} type={HistoryEventTypes.KLAGER} timestamp={timestamp} icon={PlusIcon}>
-      <Line>
+      <p>
         {employeeName(actor)} satt {tag.toLowerCase()} til {partName(part)}. Ingen tidligere {tag.toLowerCase()}.
-      </Line>
+      </p>
     </HistoryEvent>
   );
 };
@@ -56,9 +56,9 @@ const Remove = ({ actor, previousPart, timestamp }: RemoveProps) => {
 
   return (
     <HistoryEvent tag={tag} type={HistoryEventTypes.KLAGER} timestamp={timestamp} icon={XMarkOctagonIcon}>
-      <Line>
+      <p>
         {employeeName(actor)} fjernet {tag.toLowerCase()}. Tidligere {tag.toLowerCase()} var {partName(previousPart)}.
-      </Line>
+      </p>
     </HistoryEvent>
   );
 };
@@ -76,9 +76,9 @@ const Change = ({ actor, part, previousPart, timestamp }: ChangeProps) => {
 
   return (
     <HistoryEvent tag={tag} type={HistoryEventTypes.KLAGER} timestamp={timestamp} icon={ArrowRightLeftIcon}>
-      <Line>
+      <p>
         {employeeName(actor)} endret {tag.toLowerCase()} fra {partName(previousPart)} til {partName(part)}.
-      </Line>
+      </p>
     </HistoryEvent>
   );
 };

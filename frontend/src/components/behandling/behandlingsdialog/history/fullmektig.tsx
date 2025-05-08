@@ -1,7 +1,7 @@
 import type { INavEmployee } from '@app/types/bruker';
 import { HistoryEventTypes, type IFullmektigEvent, type IPart } from '@app/types/oppgavebehandling/response';
 import { ArrowRightLeftIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Line, employeeName, partName, toKey } from './common';
+import { employeeName, partName, toKey } from './common';
 import { HistoryEvent } from './event';
 
 export const getFullmektig = (e: IFullmektigEvent) => {
@@ -33,9 +33,9 @@ interface SetProps {
 
 const SetPart = ({ actor, part, timestamp }: SetProps) => (
   <HistoryEvent tag="Fullmektig" type={HistoryEventTypes.FULLMEKTIG} timestamp={timestamp} icon={PlusIcon}>
-    <Line>
+    <p>
       {employeeName(actor)} satt fullmektig til {partName(part)}. Ingen tidligere fullmektig.
-    </Line>
+    </p>
   </HistoryEvent>
 );
 
@@ -47,9 +47,9 @@ interface RemoveProps {
 
 const Remove = ({ actor, previousPart, timestamp }: RemoveProps) => (
   <HistoryEvent tag="Fullmektig" type={HistoryEventTypes.FULLMEKTIG} timestamp={timestamp} icon={XMarkIcon}>
-    <Line>
+    <p>
       {employeeName(actor)} fjernet fullmektig. Tidligere fullmektig var {partName(previousPart)}.
-    </Line>
+    </p>
   </HistoryEvent>
 );
 
@@ -62,8 +62,8 @@ interface ChangeProps {
 
 const Change = ({ actor, part, previousPart, timestamp }: ChangeProps) => (
   <HistoryEvent tag="Fullmektig" type={HistoryEventTypes.FULLMEKTIG} timestamp={timestamp} icon={ArrowRightLeftIcon}>
-    <Line>
+    <p>
       {employeeName(actor)} endret fullmektig fra {partName(previousPart)} til {partName(part)}.
-    </Line>
+    </p>
   </HistoryEvent>
 );

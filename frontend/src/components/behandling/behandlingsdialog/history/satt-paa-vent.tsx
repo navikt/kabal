@@ -8,7 +8,7 @@ import {
 import { PauseIcon, PlayIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
 import { useId } from 'react';
-import { Line, Reason, employeeName, toKey } from './common';
+import { Reason, employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
 
 export const getSattPaaVent = (e: ISattPaaVentEvent) => {
@@ -33,13 +33,13 @@ const Start = ({ actor, event, timestamp }: StartProps) => {
 
   return (
     <HistoryEvent tag="Venteperiode" type={HistoryEventTypes.SATT_PAA_VENT} timestamp={timestamp} icon={PauseIcon}>
-      <Line>
+      <p>
         {employeeName(actor)} satte behandlingen på vent til{' '}
         <time className="font-bold" dateTime={event.to}>
           {isoDateToPretty(event.to)}
         </time>
         .
-      </Line>
+      </p>
       <Label size="small" htmlFor={id}>
         Årsak
       </Label>
@@ -55,6 +55,6 @@ interface StopProps {
 
 const Stop = ({ actor, timestamp }: StopProps) => (
   <HistoryEvent tag="Venteperiode" type={HistoryEventTypes.SATT_PAA_VENT} timestamp={timestamp} icon={PlayIcon}>
-    <Line>{employeeName(actor)} avsluttet venteperioden for behandlingen.</Line>
+    <p>{employeeName(actor)} avsluttet venteperioden for behandlingen.</p>
   </HistoryEvent>
 );

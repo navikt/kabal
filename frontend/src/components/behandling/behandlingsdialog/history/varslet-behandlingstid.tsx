@@ -8,7 +8,7 @@ import {
 } from '@app/types/svarbrev';
 import { ClockIcon } from '@navikt/aksel-icons';
 import { BodyShort, VStack } from '@navikt/ds-react';
-import { Line, toKey } from './common';
+import { toKey } from './common';
 import { HistoryEvent } from './event';
 
 export const getVarsletBehandlingstidEvent = (props: IVarsletBehandlingstidEvent) => (
@@ -22,7 +22,7 @@ const VarsletBehandlingstid = (props: IVarsletBehandlingstidEvent) => (
     timestamp={props.timestamp}
     icon={ClockIcon}
   >
-    <Line>Varslet behandlingstid ble satt.</Line>
+    <p>Varslet behandlingstid ble satt.</p>
 
     <ChangedFrist {...props} />
     <ChangedMottakere {...props} />
@@ -81,21 +81,21 @@ const ChangedFrist = ({ previous, event }: IVarsletBehandlingstidEvent) => {
     const toDate = newFrist === null ? null : ` (${isoDateToPretty(newFrist)})`;
 
     return (
-      <Line>
+      <p>
         Varslet frist:{' '}
         <b>
           {getUnits(newUnits, newType)}
           {toDate}
         </b>
-      </Line>
+      </p>
     );
   }
 
   if (newFrist !== null) {
     return (
-      <Line>
+      <p>
         Varslet frist: <b>{isoDateToPretty(newFrist)}</b>
-      </Line>
+      </p>
     );
   }
 };

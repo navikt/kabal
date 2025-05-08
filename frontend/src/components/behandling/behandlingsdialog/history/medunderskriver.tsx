@@ -1,4 +1,4 @@
-import { Line, SELF, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
+import { SELF, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
 import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
 import type { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
@@ -89,9 +89,9 @@ const Retracted = ({ actor, timestamp }: RetractedProps) => (
     timestamp={timestamp}
     icon={ArrowRedoIcon}
   >
-    <Line>
+    <p>
       {employeeName(actor)} hentet saken tilbake fra saksbehandler til {SELF}.
-    </Line>
+    </p>
   </HistoryEvent>
 );
 
@@ -108,9 +108,9 @@ const SendBack = ({ actor, medunderskriver, timestamp }: SendBackProps) => (
     timestamp={timestamp}
     icon={ArrowRedoIcon}
   >
-    <Line>
+    <p>
       {employeeName(actor)} sendte saken tilbake til medunderskriver {employeeName(medunderskriver)}.
-    </Line>
+    </p>
   </HistoryEvent>
 );
 
@@ -127,9 +127,9 @@ const Send = ({ actor, medunderskriver, timestamp }: SendProps) => (
     timestamp={timestamp}
     icon={PaperplaneIcon}
   >
-    <Line>
+    <p>
       {employeeName(actor)} sendte saken til medunderskriver {employeeName(medunderskriver)}.
-    </Line>
+    </p>
   </HistoryEvent>
 );
 
@@ -145,7 +145,7 @@ const Return = ({ actor, timestamp }: ReturnProps) => (
     timestamp={timestamp}
     icon={CheckmarkIcon}
   >
-    <Line>{employeeName(actor)} returnerte saken fra medunderskrift til saksbehandler.</Line>
+    <p>{employeeName(actor)} returnerte saken fra medunderskrift til saksbehandler.</p>
   </HistoryEvent>
 );
 
@@ -162,9 +162,9 @@ const RetractOther = ({ actor, medunderskriver, timestamp }: RetractOther) => (
     timestamp={timestamp}
     icon={ArrowUndoIcon}
   >
-    <Line>
+    <p>
       {employeeName(actor)} hentet saken tilbake fra medunderskriver {employeeName(medunderskriver)}.
-    </Line>
+    </p>
   </HistoryEvent>
 );
 
@@ -181,9 +181,9 @@ const Remove = ({ actor, previousMedunderskriver, timestamp }: RemoveProps) => (
     timestamp={timestamp}
     icon={XMarkOctagonIcon}
   >
-    <Line>
+    <p>
       {employeeName(actor)} fjernet {employeeName(previousMedunderskriver)} som medunderskriver.
-    </Line>
+    </p>
   </HistoryEvent>
 );
 
@@ -200,9 +200,9 @@ const SendOther = ({ actor, medunderskriver, timestamp }: SendOtherProps) => (
     timestamp={timestamp}
     icon={PaperplaneIcon}
   >
-    <Line>
+    <p>
       {employeeName(actor)} sendte saken til medunderskriver {employeeName(medunderskriver)}.
-    </Line>
+    </p>
   </HistoryEvent>
 );
 
@@ -220,9 +220,9 @@ const Change = ({ actor, medunderskriver, previousMedunderskriver, timestamp }: 
     timestamp={timestamp}
     icon={ArrowRightLeftIcon}
   >
-    <Line>
+    <p>
       {employeeName(actor)} byttet medunderskriver fra {employeeName(previousMedunderskriver)} til{' '}
       {employeeName(medunderskriver)}.
-    </Line>
+    </p>
   </HistoryEvent>
 );
