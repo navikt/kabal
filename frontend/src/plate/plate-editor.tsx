@@ -1,3 +1,4 @@
+import { merge } from '@app/functions/classes';
 import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { FormattedText } from '@app/plate/types';
@@ -16,7 +17,7 @@ export const KabalPlateEditor = ({ className, spellCheck = true, readOnly = fals
     <PlateContent
       {...props}
       readOnly={readOnly}
-      className={className === undefined ? 'min-h-full outline-none' : `min-h-full outline-none ${className}`}
+      className={merge('min-h-full outline-none', className)}
       spellCheck={spellCheck}
       renderLeaf={({ attributes, children, text }) => (
         <span {...attributes} contentEditable={contentEditable(editor, readOnly, text)} suppressContentEditableWarning>
