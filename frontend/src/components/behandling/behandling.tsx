@@ -3,20 +3,20 @@ import { BehandlingSection } from '@app/components/behandling/behandlingsdetalje
 import { Omgjøringskravdetaljer } from '@app/components/behandling/behandlingsdetaljer/omgjøringskravdetaljer';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { Heading, Skeleton } from '@navikt/ds-react';
+import { HGrid, Heading, Skeleton } from '@navikt/ds-react';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
 import { Klagebehandlingsdetaljer } from './behandlingsdetaljer/klagebehandlingsdetaljer';
 import { Trygderettsankebehandlingsdetaljer } from './behandlingsdetaljer/trygderettsankebehandlingsdetaljer';
 import { Behandlingsdialog } from './behandlingsdialog/behandlingsdialog';
-import { StyledBehandlingSection, StyledContainer } from './styled-components';
+import { StyledBehandlingSection } from './styled-components';
 
 export const Behandling = () => (
   <PanelContainer data-testid="behandling-panel">
-    <StyledContainer>
+    <HGrid columns="1fr 1fr" width="750px" flexGrow="1" gap="05" className="bg-border-divider">
       <Behandlingsdetaljer />
       <Behandlingsdialog />
-    </StyledContainer>
+    </HGrid>
   </PanelContainer>
 );
 
