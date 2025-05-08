@@ -8,7 +8,7 @@ import {
 } from '@app/components/documents/new-documents/grid';
 import { DocumentModal } from '@app/components/documents/new-documents/modal/modal';
 import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
-import { documentCSS } from '@app/components/documents/styled-components/document';
+import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
@@ -21,9 +21,9 @@ import {
   type IFileDocument,
   type IMainDocument,
 } from '@app/types/documents/documents';
+import { HGrid } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useCallback, useContext, useRef } from 'react';
-import { styled } from 'styled-components';
 import { SetDocumentType } from './set-type';
 import { DocumentTitle } from './title';
 
@@ -74,8 +74,12 @@ export const NewDocument = memo(
     );
 
     return (
-      <StyledNewDocument
-        $isExpanded={isExpanded}
+      <HGrid
+        as="article"
+        gap="0 2"
+        align="center"
+        paddingInline="1-alt 0"
+        columns={getFieldSizes(getGridFields(isExpanded))}
         data-documentname={document.tittel}
         data-documentid={document.id}
         data-testid="new-document-list-item-content"
@@ -86,6 +90,10 @@ export const NewDocument = memo(
           clearDragState();
         }}
         draggable={isDraggable}
+        className={`${DOCUMENT_CLASSES} hover:bg-surface-hover`}
+        style={{
+          gridTemplateAreas: `"${getFieldNames(getGridFields(isExpanded))}"`,
+        }}
       >
         <DocumentTitle document={document} />
         {isExpanded ? <SetDocumentType document={document} hasAttachments={hasAttachments} /> : null}
@@ -94,7 +102,7 @@ export const NewDocument = memo(
         ) : (
           <DocumentModal document={document} containsRolAttachments={containsRolAttachments} />
         )}
-      </StyledNewDocument>
+      </HGrid>
     );
   },
   (prev, next) =>
@@ -113,27 +121,8 @@ export const NewDocument = memo(
 
 NewDocument.displayName = 'NewDocument';
 
-const getGridFields = ({ $isExpanded }: StlyedNewDocumentProps) =>
-  $isExpanded ? EXPANDED_NEW_DOCUMENT_FIELDS : COLLAPSED_NEW_DOCUMENT_FIELDS;
-
-interface StlyedNewDocumentProps {
-  $isExpanded: boolean;
-}
-
-const StyledNewDocument = styled.article<StlyedNewDocumentProps>`
-  ${documentCSS}
-  display: grid;
-  grid-column-gap: var(--a-spacing-2);
-  align-items: center;
-  padding-left: 6px;
-  padding-right: 0;
-  grid-template-columns: ${(props) => getFieldSizes(getGridFields(props))};
-  grid-template-areas: '${(props) => getFieldNames(getGridFields(props))}';
-
-  &:hover {
-    background-color: var(--a-surface-hover);
-  }
-`;
+const getGridFields = (isExpanded: boolean) =>
+  isExpanded ? EXPANDED_NEW_DOCUMENT_FIELDS : COLLAPSED_NEW_DOCUMENT_FIELDS;
 
 const hasMottattDato = (doc: IMainDocument): doc is IFileDocument<null> =>
   doc.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(doc.dokumentTypeId);
