@@ -1,4 +1,3 @@
-import { StyledColumnHeader } from '@app/components/common-table-components/oppgave-table/styled-components';
 import type { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
@@ -10,7 +9,7 @@ import {
   type ToDateSortKeys,
 } from '@app/types/oppgaver';
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
-import { Button, HStack, type TableProps } from '@navikt/ds-react';
+import { Button, HStack, Table, type TableProps } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 
@@ -90,7 +89,10 @@ export const DateColumnHeader = ({
   sortKey,
   interactive = true,
 }: DateColumnHeaderProps) => (
-  <StyledColumnHeader aria-sort={params.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}>
+  <Table.ColumnHeader
+    className="whitespace-nowrap"
+    aria-sort={params.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}
+  >
     <HStack align="center" gap="1" wrap={false}>
       {interactive ? (
         <>
@@ -103,7 +105,7 @@ export const DateColumnHeader = ({
         children
       )}
     </HStack>
-  </StyledColumnHeader>
+  </Table.ColumnHeader>
 );
 
 const getSortIcon = (sorted: boolean, rekkefoelge: SortOrderEnum) => {

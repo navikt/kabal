@@ -1,12 +1,11 @@
 import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
 import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
-import { StyledColumnHeader } from '@app/components/common-table-components/oppgave-table/styled-components';
 import type { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum, TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';
 import { type CommonOppgaverParams, SortFieldEnum } from '@app/types/oppgaver';
-import type { TableProps } from '@navikt/ds-react';
+import { Table, type TableProps } from '@navikt/ds-react';
 import { EnhetHjemmel } from './filter-dropdowns/enhet-hjemmel';
 import { Hjemmel } from './filter-dropdowns/hjemmel';
 import { Medunderskriver } from './filter-dropdowns/medunderskriver';
@@ -22,7 +21,11 @@ interface TablePlainHeadersProps {
 }
 
 export const TablePlainHeaders = ({ columnKeys }: TablePlainHeadersProps) =>
-  columnKeys.map((key) => <StyledColumnHeader key={key}>{TABLE_HEADERS[key]}</StyledColumnHeader>);
+  columnKeys.map((key) => (
+    <Table.ColumnHeader className="whitespace-nowrap" key={key}>
+      {TABLE_HEADERS[key]}
+    </Table.ColumnHeader>
+  ));
 
 interface TableFilterHeadersProps {
   params: CommonOppgaverParams;
@@ -35,7 +38,11 @@ type Props = TableFilterHeadersProps & TablePlainHeadersProps;
 export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams }: Props) =>
   columnKeys.map((key) => {
     if (params === undefined || setParams === undefined) {
-      return <StyledColumnHeader key={key}>{TABLE_HEADERS[key]}</StyledColumnHeader>;
+      return (
+        <Table.ColumnHeader className="whitespace-nowrap" key={key}>
+          {TABLE_HEADERS[key]}
+        </Table.ColumnHeader>
+      );
     }
 
     const baseColumnHeaderProps = { params, setParams, onSortChange };
@@ -55,9 +62,9 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         return <Registreringshjemler key={key} columnKey={key} params={params} setParams={setParams} />;
       case ColumnKeyEnum.Age:
         return (
-          <StyledColumnHeader key={key} sortable sortKey={SortFieldEnum.ALDER}>
+          <Table.ColumnHeader className="whitespace-nowrap" key={key} sortable sortKey={SortFieldEnum.ALDER}>
             {TABLE_HEADERS[key]}
-          </StyledColumnHeader>
+          </Table.ColumnHeader>
         );
       case ColumnKeyEnum.Deadline:
         return (
@@ -79,9 +86,9 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         );
       case ColumnKeyEnum.PaaVentTil:
         return (
-          <StyledColumnHeader key={key} sortable sortKey={SortFieldEnum.PAA_VENT_TO}>
+          <Table.ColumnHeader className="whitespace-nowrap" key={key} sortable sortKey={SortFieldEnum.PAA_VENT_TO}>
             {TABLE_HEADERS[key]}
-          </StyledColumnHeader>
+          </Table.ColumnHeader>
         );
       case ColumnKeyEnum.TildelingWithFilter:
       case ColumnKeyEnum.Oppgavestyring:
@@ -135,10 +142,14 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
       case ColumnKeyEnum.FradelingReason:
       case ColumnKeyEnum.PreviousSaksbehandler:
       case ColumnKeyEnum.DatoSendtTilTr:
-        return <StyledColumnHeader key={key}>{TABLE_HEADERS[key]}</StyledColumnHeader>;
+        return (
+          <Table.ColumnHeader className="whitespace-nowrap" key={key}>
+            {TABLE_HEADERS[key]}
+          </Table.ColumnHeader>
+        );
     }
 
-    return <StyledColumnHeader key={key} />;
+    return <Table.ColumnHeader className="whitespace-nowrap" key={key} />;
   });
 
 const VarsletFrist = ({ children, ...props }: TableFilterHeadersProps & { children: string }) => {
