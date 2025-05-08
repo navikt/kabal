@@ -11,7 +11,6 @@ import { pushEvent } from '@app/observability';
 import { MenuHamburgerIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox, CheckboxGroup, Dropdown } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { useIsExpanded } from '../../use-is-expanded';
 
 export const Menu = () => {
@@ -32,11 +31,11 @@ export const Menu = () => {
         variant="tertiary-neutral"
       />
 
-      <StyledDropdownMenu>
+      <Dropdown.Menu className="w-96">
         <SelectedMenu />
 
         {isExpanded ? <ColumnOptions /> : null}
-      </StyledDropdownMenu>
+      </Dropdown.Menu>
     </Dropdown>
   );
 };
@@ -82,10 +81,6 @@ const ColumnOptions = () => {
     </CheckboxGroup>
   );
 };
-
-const StyledDropdownMenu = styled(Dropdown.Menu)`
-  width: 350px;
-`;
 
 const logColumnEvent = (column: ArchivedDocumentsColumn, checked: boolean) =>
   pushEvent(`toggle-col-archived-docs-${column.toLowerCase()}`, 'documents', { checked: checked.toString() });
