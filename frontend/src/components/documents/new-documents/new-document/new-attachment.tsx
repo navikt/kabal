@@ -119,7 +119,7 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
           clearDragState();
         }}
         draggable={isDraggable}
-        className={`${DOCUMENT_CLASSES} px-1.5`}
+        className={DOCUMENT_CLASSES}
       >
         <DocumentTitle document={document} />
         {isExpanded && document.type === DocumentTypeEnum.JOURNALFOERT ? (
@@ -167,7 +167,7 @@ export const StyledNewAttachment = ({ isExpanded, children, className, ...props 
     as="article"
     gap="0 2"
     align="center"
-    paddingInline="1-alt 0"
+    paddingInline="1-alt"
     columns={getFieldSizes(getGridFields(isExpanded))}
     className={className === undefined ? DOCUMENT_CLASSES : `${DOCUMENT_CLASSES} ${className}`}
     style={{
