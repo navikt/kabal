@@ -5,14 +5,10 @@ import { IncludedFilter } from '@app/components/documents/journalfoerte-document
 import { SelectAll } from '@app/components/documents/journalfoerte-documents/header/select-all';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { isNotNull } from '@app/functions/is-not-type-guards';
-import {
-  type ArchivedDocumentsColumn,
-  useArchivedDocumentsColumns,
-} from '@app/hooks/settings/use-archived-documents-setting';
+import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { IS_WINDOWS } from '@app/keys';
 import { ChevronRightDoubleIcon, InformationSquareIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Tooltip } from '@navikt/ds-react';
-import { css, styled } from 'styled-components';
+import { Button, HGrid, HStack, Tooltip } from '@navikt/ds-react';
 import type { useFilters } from './use-filters';
 
 interface Props {
@@ -25,8 +21,8 @@ interface Props {
   keyboardBoundaryRef: React.RefObject<HTMLDivElement | null>;
 }
 
-const BASE_CLASSES =
-  'grid gap-x-2 items-center z-1 shrink-0 overflow-visible whitespace-nowrap bg-bg-default border-b border-border-divider pt-1 pb-2 px-2';
+const BASE_CLASSES = 'z-1 whitespace-nowrap bg-bg-default border-b border-border-divider';
+const CLASSES = IS_WINDOWS ? `${BASE_CLASSES} mr-[13px]` : BASE_CLASSES;
 
 export const Header = ({
   filters,
@@ -43,11 +39,36 @@ export const Header = ({
 
   const tooltip = showsAnyVedlegg ? 'Skjul alle vedlegg' : 'Vis alle vedlegg';
 
+  const fields = [
+    Fields.Select,
+    Fields.ToggleVedlegg,
+    Fields.Title,
+    columns.TEMA ? Fields.Tema : null,
+    columns.DATO_OPPRETTET ? Fields.DatoOpprettet : null,
+    columns.DATO_REG_SENDT ? Fields.DatoRegSendt : null,
+    columns.AVSENDER_MOTTAKER ? Fields.AvsenderMottaker : null,
+    columns.SAKSNUMMER ? Fields.Saksnummer : null,
+    columns.TYPE ? Fields.Type : null,
+    Fields.ToggleMetadata,
+    Fields.Action,
+  ].filter(isNotNull);
+
   return (
-    <StyledListHeader
-      $isExpanded={isExpanded}
-      $columns={columns}
-      className={IS_WINDOWS ? `${BASE_CLASSES} mr-[13px]` : BASE_CLASSES}
+    <HGrid
+      as="div"
+      gap="0 2"
+      align="center"
+      flexShrink="0"
+      paddingBlock="1 2"
+      paddingInline="2"
+      overflow="visible"
+      columns={isExpanded ? getFieldSizes(fields) : getFieldSizes(COLLAPSED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS)}
+      className={CLASSES}
+      style={{
+        gridTemplateAreas: `"${
+          isExpanded ? getFieldNames(fields) : getFieldNames(COLLAPSED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS)
+        }"`,
+      }}
     >
       <SelectAll />
 
@@ -70,7 +91,7 @@ export const Header = ({
       </HStack>
 
       <IncludedFilter />
-    </StyledListHeader>
+    </HGrid>
   );
 };
 
@@ -81,42 +102,3 @@ const COLLAPSED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS = [
   Fields.ToggleMetadata,
   Fields.Action,
 ];
-
-const getGridCss = ({ $isExpanded, $columns }: StyledListHeaderProps) => {
-  if (!$isExpanded) {
-    return toCss(
-      getFieldSizes(COLLAPSED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS),
-      getFieldNames(COLLAPSED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS),
-    );
-  }
-
-  const fields = [
-    Fields.Select,
-    Fields.ToggleVedlegg,
-    Fields.Title,
-    $columns.TEMA ? Fields.Tema : null,
-    $columns.DATO_OPPRETTET ? Fields.DatoOpprettet : null,
-    $columns.DATO_REG_SENDT ? Fields.DatoRegSendt : null,
-    $columns.AVSENDER_MOTTAKER ? Fields.AvsenderMottaker : null,
-    $columns.SAKSNUMMER ? Fields.Saksnummer : null,
-    $columns.TYPE ? Fields.Type : null,
-    Fields.ToggleMetadata,
-    Fields.Action,
-  ].filter(isNotNull);
-
-  return toCss(getFieldSizes(fields), getFieldNames(fields));
-};
-
-const toCss = (columns: string, areas: string) => css`
-  grid-template-columns: ${columns};
-  grid-template-areas: '${areas}';
-`;
-
-interface StyledListHeaderProps {
-  $isExpanded: boolean;
-  $columns: Record<ArchivedDocumentsColumn, boolean>;
-}
-
-const StyledListHeader = styled.div<StyledListHeaderProps>`
-  ${getGridCss}
-`;
