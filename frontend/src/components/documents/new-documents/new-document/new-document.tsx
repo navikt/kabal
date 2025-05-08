@@ -90,7 +90,7 @@ export const NewDocument = memo(
           clearDragState();
         }}
         draggable={isDraggable}
-        className={`${DOCUMENT_CLASSES} hover:bg-surface-hover`}
+        className={DOCUMENT_CLASSES}
         style={{
           gridTemplateAreas: `"${getFieldNames(getGridFields(isExpanded))}"`,
         }}

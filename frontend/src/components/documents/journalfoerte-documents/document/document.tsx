@@ -14,6 +14,7 @@ import {
   useIsPathSelected,
 } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
+import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsRol } from '@app/hooks/use-is-rol';
@@ -156,7 +157,7 @@ export const Document = ({
         clearDragState();
       }}
       draggable={draggingIsEnabled}
-      className={`px-1.5 hover:bg-surface-hover focus:outline-none ${className}`}
+      className={`${DOCUMENT_CLASSES} px-1.5 focus:outline-none ${className}`}
       onClick={onClick}
       onDoubleClick={hasAccess ? onDoubleClick : undefined}
       tabIndex={-1}
