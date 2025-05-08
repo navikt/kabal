@@ -1,5 +1,5 @@
 import { EditLogiskVedlegg } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/edit';
-import { ReadOnlyTag } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/shared/vedlegg-style';
+import { EditableTag } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/editable-tag';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveLogiskVedleggMutation, useUpdateLogiskVedleggMutation } from '@app/redux-api/logiske-vedlegg';
 import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
@@ -68,7 +68,7 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
   const hideOnFocusClasses = isFocused ? 'opacity-0' : 'opacity-100';
 
   return (
-    <ReadOnlyTag
+    <EditableTag
       size="small"
       variant="neutral"
       title={logiskVedlegg.tittel}
@@ -127,7 +127,7 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
           />
         </Tooltip>
       </HStack>
-    </ReadOnlyTag>
+    </EditableTag>
   );
 };
 
