@@ -12,6 +12,7 @@ import { ArchivingIcon } from '@app/components/documents/new-documents/new-docum
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
+import { merge } from '@app/functions/classes';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -169,7 +170,7 @@ export const StyledNewAttachment = ({ isExpanded, children, className, ...props 
     align="center"
     paddingInline="1-alt"
     columns={getFieldSizes(getGridFields(isExpanded))}
-    className={className === undefined ? DOCUMENT_CLASSES : `${DOCUMENT_CLASSES} ${className}`}
+    className={merge(DOCUMENT_CLASSES, className)}
     style={{
       gridTemplateAreas: `"${getFieldNames(getGridFields(isExpanded))}"`,
     }}

@@ -1,4 +1,5 @@
 import { Popup, type PopupProps } from '@app/components/filter-dropdown/popup';
+import { merge } from '@app/functions/classes';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import type React from 'react';
@@ -43,12 +44,7 @@ export const FilterDropdown = <T extends string>({
   const chevron = open ? <ChevronUpIcon aria-hidden fontSize={20} /> : <ChevronDownIcon aria-hidden fontSize={20} />;
 
   return (
-    <section
-      ref={ref}
-      data-testid={testId}
-      className={className === undefined ? 'relative' : `relative ${className}`}
-      style={style}
-    >
+    <section ref={ref} data-testid={testId} className={merge('relative', className)} style={style}>
       <ToggleButton $open={open} onClick={() => setOpen(!open)} ref={buttonRef} data-testid="toggle-button">
         {children} ({selected.length}) {chevron}
       </ToggleButton>
