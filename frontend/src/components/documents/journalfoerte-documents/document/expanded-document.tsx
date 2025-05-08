@@ -1,7 +1,6 @@
 import { EXPANDED_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
 import { type IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
-import { Box, CopyButton, Detail, HStack, HelpText, Label, VStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Box, CopyButton, HStack, HelpText, Label, VStack } from '@navikt/ds-react';
 import { Timeline } from './timeline/timeline';
 
 interface ExpandedDocumentProps {
@@ -14,18 +13,18 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
   return (
     <VStack asChild gap="4 0" height={`${EXPANDED_HEIGHT}px`} width="calc(100% - var(--a-spacing-4))" overflowX="auto">
       <Box paddingBlock="2" paddingInline="4 2" marginInline="4 0" borderWidth="0 0 0 1" borderColor="border-divider">
-        <HStack gap="0 4" position="sticky" left="0" className="whitespace-nowrap">
+        <HStack gap="0 4" position="sticky" left="0" className="whitespace-nowrap" wrap={false}>
           <Section>
             <Label size="small">Status</Label>
-            <NowrapDetail>
+            <Data>
               {journalstatus === null ? 'Ingen' : JOURNALSTATUS_NAME[journalstatus]}
               {journalstatus === Journalstatus.MOTTATT ? <MottattHelpText /> : null}
-            </NowrapDetail>
+            </Data>
           </Section>
 
           <Section>
             <Label size="small">Kanal</Label>
-            <NowrapDetail>{kanalnavn}</NowrapDetail>
+            <Data>{kanalnavn}</Data>
           </Section>
 
           <Section>
@@ -35,7 +34,7 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
 
           <Section>
             <Label size="small">Journalpost opprettet av</Label>
-            <NowrapDetail title={opprettetAvNavn ?? undefined}>{opprettetAvNavn}</NowrapDetail>
+            <Data title={opprettetAvNavn ?? undefined}>{opprettetAvNavn}</Data>
           </Section>
         </HStack>
         <HStack gap="8">
@@ -60,20 +59,30 @@ interface SectionProps {
 }
 
 const Section = ({ children }: SectionProps) => (
-  <VStack overflow="hidden" as="section">
+  <VStack overflow="hidden" as="section" flexShrink="0">
     {children}
   </VStack>
 );
 
-const NowrapDetail = styled(Detail)`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-05);
-  height: var(--a-spacing-6);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
+interface DetailsProps {
+  children: React.ReactNode;
+  title?: string;
+}
+
+const Data = ({ children, title }: DetailsProps) => (
+  <HStack
+    as="p"
+    title={title}
+    gap="05"
+    align="center"
+    height="6"
+    wrap={false}
+    overflow="hidden"
+    className="text-ellipsis whitespace-nowrap"
+  >
+    {children}
+  </HStack>
+);
 
 const JOURNALSTATUS_NAME: Record<Journalstatus, string> = {
   [Journalstatus.MOTTATT]: 'Mottatt',
