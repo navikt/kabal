@@ -1,11 +1,9 @@
 import { isoDateTimeToPretty } from '@app/domain/date';
 import type { TimelineTypes } from '@app/types/arkiverte-documents';
-import { XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { Button, Detail, Popover } from '@navikt/ds-react';
+import { ChevronRightIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { Button, Detail, Label, Popover, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { BACKGROUND_COLOR, DATOTYPE_NAME, ICON } from './helpers';
-import { NextArrow, StyledLabel, StyledTimelineItem } from './styled-components';
 
 interface RelevantDateTimelineItemProps {
   timestamp: string;
@@ -47,14 +45,23 @@ export const TimelineItem = ({
   popover = null,
   hideNext = false,
 }: TimelineItemProps) => (
-  <StyledTimelineItem $color={color}>
-    <StyledLabel size="small">
+  <VStack
+    as="li"
+    position={'relative'}
+    gap="1 0"
+    padding="2"
+    style={{ backgroundColor: color }}
+    className="whitespace-nowrap rounded-medium border border-default"
+  >
+    <Label size="small" className="flex items-center gap-1">
       {icon} <span>{title}</span>
-    </StyledLabel>
+    </Label>
     <Detail>{isoDateTimeToPretty(timestamp)}</Detail>
     {popover === null ? null : <TimelinePopover buttonText={popover.buttonText}>{popover.content}</TimelinePopover>}
-    {hideNext ? null : <NextArrow aria-hidden />}
-  </StyledTimelineItem>
+    {hideNext ? null : (
+      <ChevronRightIcon aria-hidden className="-translate-y-1/2 -translate-x-[22.5%] absolute top-1/2 left-full" />
+    )}
+  </VStack>
 );
 
 interface TimelinePopoverProps {
@@ -67,17 +74,13 @@ const TimelinePopover = ({ children, buttonText }: TimelinePopoverProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <PopoverContainer>
+    <div className="whitespace-normal">
       <Button ref={ref} onClick={() => setIsOpen(!isOpen)} size="xsmall" variant="tertiary">
         {buttonText}
       </Button>
       <Popover open={isOpen} onClose={() => setIsOpen(false)} anchorEl={ref.current}>
         <Popover.Content>{children}</Popover.Content>
       </Popover>
-    </PopoverContainer>
+    </div>
   );
 };
-
-const PopoverContainer = styled.div`
-  white-space: normal;
-`;
