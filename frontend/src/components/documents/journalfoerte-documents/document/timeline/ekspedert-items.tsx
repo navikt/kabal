@@ -7,9 +7,7 @@ import {
   InformationSquareIcon,
   PrinterSmallIcon,
 } from '@navikt/aksel-icons';
-import { CopyButton } from '@navikt/ds-react';
-import { styled } from 'styled-components';
-import { StyledHeading } from './styled-components';
+import { CopyButton, Heading, VStack } from '@navikt/ds-react';
 import { RelevantDateTimelineItem, TimelineItem } from './timeline-item';
 
 interface Props extends Pick<IArkivertDocument, 'utsendingsinfo' | 'kanal' | 'kanalnavn'> {
@@ -35,11 +33,9 @@ export const EkspedertItems = ({ utsendingsinfo, type, timestamp, kanal, kanalna
             ? {
                 buttonText: 'Vis adresse',
                 content: (
-                  <PopupContainer>
-                    <StyledHeading size="xsmall" level="3" spacing>
-                      <EnvelopeClosedIcon aria-hidden /> Adresse
-                    </StyledHeading>
+                  <PopupContainer heading="Adresse" icon={<EnvelopeClosedIcon aria-hidden />}>
                     {utsendingsinfo.fysiskpostSendt.adressetekstKonvolutt}
+
                     <CopyButton
                       copyText={utsendingsinfo.fysiskpostSendt.adressetekstKonvolutt}
                       text="Kopier adresse"
@@ -86,10 +82,7 @@ const OtherVarselInfo = ({ dato, kanal, kanalnavn, isLast }: VarselInfoProps) =>
       popover={{
         buttonText: 'Vis forklaring',
         content: (
-          <PopupContainer>
-            <StyledHeading size="xsmall" level="3" spacing>
-              <Icon aria-hidden /> {kanalnavn}
-            </StyledHeading>
+          <PopupContainer heading={kanalnavn} icon={<Icon aria-hidden />}>
             {info}
           </PopupContainer>
         ),
@@ -132,8 +125,18 @@ const getOtherVarselData = (kanal: Kanal) => {
   }
 };
 
-const PopupContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  white-space: pre;
-`;
+interface PopupContainerProps {
+  heading: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}
+
+const PopupContainer = ({ heading, icon, children }: PopupContainerProps) => (
+  <VStack className="whitespace-pre">
+    <Heading size="xsmall" level="3" spacing className="flex items-center gap-1">
+      {icon} {heading}
+    </Heading>
+
+    {children}
+  </VStack>
+);

@@ -1,12 +1,6 @@
 import { ChevronRightIcon } from '@navikt/aksel-icons';
-import { Heading, Label } from '@navikt/ds-react';
+import { Label } from '@navikt/ds-react';
 import { styled } from 'styled-components';
-
-export const StyledHeading = styled(Heading)`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-1);
-`;
 
 export const StyledSmsContent = styled.blockquote`
   border-left: var(--a-spacing-1) solid var(--a-gray-200);
