@@ -4,10 +4,9 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveLogiskVedleggMutation, useUpdateLogiskVedleggMutation } from '@app/redux-api/logiske-vedlegg';
 import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 import { FilesIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton, Tooltip } from '@navikt/ds-react';
+import { Button, CopyButton, HStack, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   dokumentInfoId: string;
@@ -65,15 +64,28 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
     );
   }
 
+  const showOnFocusClasses = isFocused ? 'opacity-100' : 'opacity-0';
+  const hideOnFocusClasses = isFocused ? 'opacity-0' : 'opacity-100';
+
   return (
-    <EditableTag size="small" variant="neutral" title={logiskVedlegg.tittel} onMouseLeave={() => setIsFocused(false)}>
-      <Title $isFocused={isFocused}>{logiskVedlegg.tittel}</Title>
+    <ReadOnlyTag
+      size="small"
+      variant="neutral"
+      title={logiskVedlegg.tittel}
+      onMouseLeave={() => setIsFocused(false)}
+      className="group min-w-[88px]"
+    >
+      <span className={`${TITLE_CLASSES} group-hover:opacity-0 ${hideOnFocusClasses}`}>{logiskVedlegg.tittel}</span>
 
-      <AbsoluteTitle $isFocused={isFocused} aria-hidden role="presentation">
+      <span
+        className={`absolute right-20 left-2 group-hover:opacity-100 ${TITLE_CLASSES} ${showOnFocusClasses}`}
+        aria-hidden
+        role="presentation"
+      >
         {logiskVedlegg.tittel}
-      </AbsoluteTitle>
+      </span>
 
-      <ButtonContainer $isFocused={isFocused}>
+      <HStack position="absolute" right="2" className={`select-none group-hover:opacity-100 ${showOnFocusClasses}`}>
         <Tooltip content="Kopier" placement="top">
           <CopyButton
             size="xsmall"
@@ -114,57 +126,12 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
             tabIndex={-1}
           />
         </Tooltip>
-      </ButtonContainer>
-    </EditableTag>
+      </HStack>
+    </ReadOnlyTag>
   );
 };
 
+const TITLE_CLASSES = 'overflow-hidden text-ellipsis whitespace-nowrap cursor-text';
+
 const getIsFocused = ({ current }: React.RefObject<HTMLElement | null>) =>
   current?.contains(document.activeElement) ?? false;
-
-interface StyleProps {
-  $isFocused: boolean;
-}
-
-const Title = styled.span<StyleProps>`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  opacity: ${({ $isFocused }) => ($isFocused ? 0 : 1)};
-  cursor: text;
-`;
-
-const AbsoluteTitle = styled.span<StyleProps>`
-  position: absolute;
-  left: var(--a-spacing-2);
-  right: var(--a-spacing-20);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0)};
-  cursor: text;
-`;
-
-const ButtonContainer = styled.div<StyleProps>`
-  display: flex;
-  flex-direction: row;
-  column-gap: 0;
-  opacity: ${({ $isFocused }) => ($isFocused ? 1 : 0)};
-  position: absolute;
-  right: var(--a-spacing-2);
-  user-select: none;
-`;
-
-const EditableTag = styled(ReadOnlyTag)`
-  min-width: 88px;
-
-  &:hover {
-    ${Title} {
-      opacity: 0;
-    }
-
-    ${AbsoluteTitle}, ${ButtonContainer} {
-      opacity: 1;
-    }
-  }
-`;
