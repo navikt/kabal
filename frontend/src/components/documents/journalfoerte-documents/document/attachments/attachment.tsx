@@ -1,12 +1,7 @@
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { ToggleVedleggButton } from '@app/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
-import {
-  Fields,
-  documentsGridCSS,
-  getFieldNames,
-  getFieldSizes,
-} from '@app/components/documents/journalfoerte-documents/grid';
+import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/journalfoerte-documents/grid';
 import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import {
@@ -26,9 +21,8 @@ import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument, IArkivertDocumentVedlegg, Journalstatus } from '@app/types/arkiverte-documents';
-import { Checkbox } from '@navikt/ds-react';
+import { Checkbox, HGrid } from '@navikt/ds-react';
 import { memo, useCallback, useContext, useRef } from 'react';
-import { styled } from 'styled-components';
 import { DocumentTitle } from '../shared/document-title';
 import { IncludeDocument } from '../shared/include-document';
 
@@ -162,21 +156,25 @@ export const Attachment = memo(
     const ref = useRef<HTMLDivElement>(null);
 
     return (
-      <StyledVedlegg
+      <HGrid
+        as="article"
+        gap="0 2"
+        paddingInline="1-alt"
+        columns={getFieldSizes(VEDLEGG_FIELDS)}
         ref={ref}
         key={journalpostId + dokumentInfoId}
         data-testid="oppgavebehandling-documents-all-list-item"
         data-journalpostid={journalpostId}
         data-dokumentinfoid={dokumentInfoId}
         data-documentname={tittel}
-        $selected={selected}
         onDragStart={draggingIsEnabled ? onDragStart : (e) => e.preventDefault()}
         onDragEnd={() => {
           cleanDragUI.current();
           clearDragState();
         }}
         draggable={draggingIsEnabled}
-        className={`${DOCUMENT_CLASSES} px-1.5 focus:outline-none`}
+        className={DOCUMENT_CLASSES}
+        style={{ gridTemplateAreas: `"${getFieldNames(VEDLEGG_FIELDS)}"` }}
         onClick={onClick}
         onDoubleClick={hasAccess ? onDoubleClick : undefined}
         tabIndex={-1}
@@ -210,7 +208,7 @@ export const Attachment = memo(
           journalpoststatus={journalpoststatus}
           hasAccess={hasAccess}
         />
-      </StyledVedlegg>
+      </HGrid>
     );
   },
   (prevProps, nextProps) =>
@@ -226,9 +224,3 @@ export const Attachment = memo(
 Attachment.displayName = 'Attachment';
 
 const VEDLEGG_FIELDS = [Fields.Select, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
-
-const StyledVedlegg = styled.article<{ $selected: boolean }>`
-  ${documentsGridCSS}
-  grid-template-columns: ${getFieldSizes(VEDLEGG_FIELDS)};
-  grid-template-areas: '${getFieldNames(VEDLEGG_FIELDS)}';
-`;

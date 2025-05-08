@@ -2,8 +2,7 @@ import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { ExpandedColumns } from '@app/components/documents/journalfoerte-documents/document/expanded-columns';
 import { ToggleVedleggButton } from '@app/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
-import { StyledJournalfoertDocument } from '@app/components/documents/journalfoerte-documents/document/styled-journalfoert-document';
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
+import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/journalfoerte-documents/grid';
 import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import {
@@ -15,11 +14,12 @@ import {
 } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
+import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { Checkbox } from '@navikt/ds-react';
+import { Checkbox, HGrid } from '@navikt/ds-react';
 import { useCallback, useContext, useRef } from 'react';
 import { DocumentTitle } from './shared/document-title';
 import { IncludeDocument } from './shared/include-document';
@@ -141,12 +141,28 @@ export const Document = ({
     [index, hasAccess],
   );
 
+  const fields = [
+    Fields.Select,
+    Fields.ToggleVedlegg,
+    Fields.Title,
+    columns.TEMA ? Fields.Tema : null,
+    columns.DATO_OPPRETTET ? Fields.DatoOpprettet : null,
+    columns.DATO_REG_SENDT ? Fields.DatoRegSendt : null,
+    columns.AVSENDER_MOTTAKER ? Fields.AvsenderMottaker : null,
+    columns.SAKSNUMMER ? Fields.Saksnummer : null,
+    columns.TYPE ? Fields.Type : null,
+    Fields.ToggleMetadata,
+    Fields.Action,
+  ].filter(isNotNull);
+
   return (
-    <StyledJournalfoertDocument
+    <HGrid
+      as="article"
+      gap="0 2"
+      align="center"
+      paddingInline="1-alt"
+      columns={isExpandedListView ? getFieldSizes(fields) : getFieldSizes(COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS)}
       ref={ref}
-      $isExpanded={isExpandedListView}
-      $selected={selected}
-      $columns={columns}
       data-testid="document-journalfoert"
       data-journalpostid={journalpostId}
       data-dokumentinfoid={dokumentInfoId}
@@ -157,10 +173,13 @@ export const Document = ({
         clearDragState();
       }}
       draggable={draggingIsEnabled}
-      className={`${DOCUMENT_CLASSES} px-1.5 focus:outline-none ${className}`}
       onClick={onClick}
       onDoubleClick={hasAccess ? onDoubleClick : undefined}
       tabIndex={-1}
+      className={`${DOCUMENT_CLASSES} ${className}`}
+      style={{
+        gridTemplateAreas: `"${isExpandedListView ? getFieldNames(fields) : getFieldNames(COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS)}"`,
+      }}
     >
       <Checkbox
         size="small"
@@ -194,6 +213,8 @@ export const Document = ({
         journalpoststatus={journalstatus}
         hasAccess={hasAccess}
       />
-    </StyledJournalfoertDocument>
+    </HGrid>
   );
 };
+
+const COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS = [Fields.Select, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
