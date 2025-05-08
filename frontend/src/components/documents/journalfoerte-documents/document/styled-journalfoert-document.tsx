@@ -4,7 +4,6 @@ import {
   getFieldNames,
   getFieldSizes,
 } from '@app/components/documents/journalfoerte-documents/grid';
-import { documentCSS } from '@app/components/documents/styled-components/document';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import type { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import { css, styled } from 'styled-components';
@@ -48,7 +47,6 @@ interface Props {
 }
 
 export const StyledJournalfoertDocument = styled.article<Props>`
-  ${documentCSS}
   ${documentsGridCSS}
   ${getGridCss}
 `;

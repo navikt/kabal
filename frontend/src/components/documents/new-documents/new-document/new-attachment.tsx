@@ -10,14 +10,15 @@ import {
 import { DocumentModal } from '@app/components/documents/new-documents/modal/modal';
 import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
-import { documentCSS } from '@app/components/documents/styled-components/document';
+import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { HGrid } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { memo, useCallback, useContext, useRef } from 'react';
+import { type HTMLAttributes, memo, useCallback, useContext, useRef } from 'react';
 import { styled } from 'styled-components';
 import { DocumentTitle } from './title';
 
@@ -107,7 +108,7 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
 
     return (
       <StyledNewAttachment
-        $isExpanded={isExpanded}
+        isExpanded={isExpanded}
         data-documentname={document.tittel}
         data-documentid={document.id}
         data-testid="new-document-list-item-content"
@@ -118,7 +119,7 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
           clearDragState();
         }}
         draggable={isDraggable}
-        className="px-1.5"
+        className={`${DOCUMENT_CLASSES} px-1.5`}
       >
         <DocumentTitle document={document} />
         {isExpanded && document.type === DocumentTypeEnum.JOURNALFOERT ? (
@@ -152,24 +153,28 @@ const StyledDate = styled(DocumentDate)`
   text-overflow: ellipsis;
 `;
 
-const getGridFields = ({ $isExpanded }: StlyedNewAttachmentProps) =>
-  $isExpanded ? EXPANDED_NEW_ATTACHMENT_FIELDS : COLLAPSED_NEW_DOCUMENT_FIELDS;
+const getGridFields = (isExpanded: boolean) =>
+  isExpanded ? EXPANDED_NEW_ATTACHMENT_FIELDS : COLLAPSED_NEW_DOCUMENT_FIELDS;
 
-interface StlyedNewAttachmentProps {
-  $isExpanded: boolean;
+interface StlyedNewAttachmentProps extends HTMLAttributes<HTMLDivElement> {
+  isExpanded: boolean;
+  className?: string;
+  children?: React.ReactNode;
 }
 
-export const StyledNewAttachment = styled.article<StlyedNewAttachmentProps>`
-  ${documentCSS}
-  display: grid;
-  grid-column-gap: var(--a-spacing-2);
-  align-items: center;
-  padding-left: 6px;
-  padding-right: 0;
-  grid-template-columns: ${(props) => getFieldSizes(getGridFields(props))};
-  grid-template-areas: '${(props) => getFieldNames(getGridFields(props))}';
-
-  &:hover {
-    background-color: var(--a-surface-hover);
-  }
-`;
+export const StyledNewAttachment = ({ isExpanded, children, className, ...props }: StlyedNewAttachmentProps) => (
+  <HGrid
+    as="article"
+    gap="0 2"
+    align="center"
+    paddingInline="1-alt 0"
+    columns={getFieldSizes(getGridFields(isExpanded))}
+    className={className === undefined ? DOCUMENT_CLASSES : `${DOCUMENT_CLASSES} ${className}`}
+    style={{
+      gridTemplateAreas: `"${getFieldNames(getGridFields(isExpanded))}"`,
+    }}
+    {...props}
+  >
+    {children}
+  </HGrid>
+);

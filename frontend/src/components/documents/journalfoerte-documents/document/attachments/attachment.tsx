@@ -18,7 +18,7 @@ import {
   unselectOne,
   useIsPathSelected,
 } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { documentCSS } from '@app/components/documents/styled-components/document';
+import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { findDocument } from '@app/domain/find-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
@@ -176,7 +176,7 @@ export const Attachment = memo(
           clearDragState();
         }}
         draggable={draggingIsEnabled}
-        className="px-1.5 hover:bg-surface-hover focus:outline-none"
+        className={`${DOCUMENT_CLASSES} px-1.5 focus:outline-none`}
         onClick={onClick}
         onDoubleClick={hasAccess ? onDoubleClick : undefined}
         tabIndex={-1}
@@ -228,7 +228,6 @@ Attachment.displayName = 'Attachment';
 const VEDLEGG_FIELDS = [Fields.Select, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
 
 const StyledVedlegg = styled.article<{ $selected: boolean }>`
-  ${documentCSS}
   ${documentsGridCSS}
   grid-template-columns: ${getFieldSizes(VEDLEGG_FIELDS)};
   grid-template-areas: '${getFieldNames(VEDLEGG_FIELDS)}';
