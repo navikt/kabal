@@ -97,6 +97,8 @@ export const EditLogiskVedlegg = ({
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLSpanElement>) => {
+      e.stopPropagation();
+
       if (e.key === Keys.Enter || (!e.shiftKey && e.key === Keys.Tab)) {
         e.preventDefault();
 
@@ -112,12 +114,12 @@ export const EditLogiskVedlegg = ({
       }
 
       if (e.shiftKey && e.key === Keys.Tab) {
+        e.stopPropagation();
         return onClose();
       }
 
       if (e.key === Keys.Escape) {
         e.preventDefault();
-        e.stopPropagation();
 
         return onClose();
       }
@@ -165,6 +167,7 @@ export const EditLogiskVedlegg = ({
           suppressContentEditableWarning
           tabIndex={0}
           autoFocus
+          onClick={(e) => e.stopPropagation()}
           onKeyDown={onKeyDown}
           onBlur={onSelectCustom}
           onInput={(e) => {
