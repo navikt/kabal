@@ -6,10 +6,9 @@ import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { CreatorRole, DocumentTypeEnum } from '@app/types/documents/documents';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Loader } from '@navikt/ds-react';
+import { Box, HStack, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const DeleteDropArea = () => {
   const dragEnterCount = useRef(0);
@@ -68,47 +67,37 @@ export const DeleteDropArea = () => {
     [clearDragState, deleteDocument, draggedDocument, isDropTarget, oppgaveId, removeSmartDocument],
   );
 
+  const textClasses = isDropOver ? 'text-text-on-danger' : 'text-text-default';
+  const opacityClasses = isDropTarget ? 'opacity-100' : 'opacity-0';
+
   return (
-    <DeleteDropAreaContainer
-      onDragEnter={onDragEnter}
-      onDragLeave={onDragLeave}
-      onDragOver={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-      onDrop={onDrop}
-      $isDropTarget={isDropTarget}
-      $isDragOver={isDropOver}
+    <Box
+      asChild
+      background={isDropOver ? 'surface-danger' : 'surface-danger-subtle'}
+      borderRadius="medium"
+      className={`${textClasses} ${opacityClasses} white-space-nowrap font-bold text-large outline-dashed outline-2 outline-surface-danger transition-[opacity,background-color] duration-200 ease-in-out`}
     >
-      <TrashIcon aria-hidden />
-      <span>Slett</span>
-      {isLoading ? <Loader /> : null}
-    </DeleteDropAreaContainer>
+      <HStack
+        align="center"
+        justify="center"
+        gap="0 2"
+        flexGrow="0"
+        flexShrink="0"
+        paddingInline="12"
+        marginInline="0 2"
+        height="100%"
+        onDragEnter={onDragEnter}
+        onDragLeave={onDragLeave}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onDrop={onDrop}
+      >
+        <TrashIcon aria-hidden />
+        <span>Slett</span>
+        {isLoading ? <Loader /> : null}
+      </HStack>
+    </Box>
   );
 };
-
-const DeleteDropAreaContainer = styled.div<{ $isDropTarget: boolean; $isDragOver: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  column-gap: var(--a-spacing-2);
-  flex-grow: 0;
-  flex-shrink: 0;
-  padding-left: var(--a-spacing-12);
-  padding-right: var(--a-spacing-12);
-  margin-right: var(--a-spacing-2);
-  white-space: nowrap;
-  height: 100%;
-  transition-property: opacity;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-in-out;
-  border-radius: var(--a-border-radius-medium);
-  outline: var(--a-spacing-05) dashed var(--a-surface-danger);
-  font-size: 18px;
-  font-weight: bold;
-
-  opacity: ${({ $isDropTarget }) => ($isDropTarget ? 1 : 0)};
-
-  color: ${({ $isDragOver }) => ($isDragOver ? 'var(--a-text-on-danger)' : 'var(--a-text-default)')};
-  background-color: ${({ $isDragOver }) => ($isDragOver ? 'var(--a-surface-danger)' : 'var(--a-surface-danger-subtle)')};
-`;
