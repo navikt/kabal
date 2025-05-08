@@ -9,6 +9,7 @@ import {
 } from '@app/hooks/settings/helpers';
 import type { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import { Journalposttype } from '@app/types/arkiverte-documents';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import type { SortOrder } from '@app/types/sort';
 import { useMemo } from 'react';
 
@@ -25,7 +26,9 @@ export const useDocumentsPdfViewed = () => {
     remove,
   } = useJsonSetting<IShownDocument[]>(useOppgavePath('tabs/documents/pdf/viewed'));
 
-  const values = Array.isArray(value) ? value : [value];
+  const values = (Array.isArray(value) ? value : [value]).filter(
+    (d) => d.type !== DocumentTypeEnum.JOURNALFOERT || 'varianter' in d, // Validate that archived documents have variants.
+  );
 
   return { value: values, setValue, remove };
 };
