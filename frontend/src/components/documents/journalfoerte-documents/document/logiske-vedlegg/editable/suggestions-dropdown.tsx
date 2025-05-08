@@ -1,6 +1,6 @@
-import { Button } from '@navikt/ds-react';
-import { useEffect, useRef } from 'react';
-import { styled } from 'styled-components';
+import { merge } from '@app/functions/classes';
+import { Button, type ButtonProps } from '@navikt/ds-react';
+import { type HTMLAttributes, useEffect, useRef } from 'react';
 
 interface BaseProps {
   onSelect: (suggestion: string) => void;
@@ -44,7 +44,7 @@ const Suggestion = ({ suggestion, isActive, onSelect }: SuggestionProps) => {
   }, [isActive]);
 
   return (
-    <ListItem key={suggestion} ref={ref}>
+    <li key={suggestion} ref={ref} className="w-full overflow-hidden">
       <Option
         size="xsmall"
         variant={isActive ? 'primary' : 'tertiary-neutral'}
@@ -52,51 +52,33 @@ const Suggestion = ({ suggestion, isActive, onSelect }: SuggestionProps) => {
       >
         <OptionText>{suggestion}</OptionText>
       </Option>
-    </ListItem>
+    </li>
   );
 };
 
-const Container = styled.ul`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  width: fit-content;
-  background-color: var(--a-bg-default);
-  border-radius: var(--a-border-radius-medium);
-  box-shadow: var(--a-shadow-medium);
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  z-index: 1;
-  max-height: 200px;
-  overflow-y: auto;
-  max-width: 400px;
-  overflow-x: hidden;
-`;
+const Container = ({ children }: { children: React.ReactNode }) => (
+  <ul className="absolute top-full right-0 left-0 z-1 m-0 max-h-50 w-fit max-w-100 list-none overflow-y-auto overflow-x-hidden rounded-medium bg-bg-default p-0 shadow-medium">
+    {children}
+  </ul>
+);
 
-const ListItem = styled.li`
-  width: 100%;
-  overflow: hidden;
-`;
+const Option = ({ children, ...rest }: Omit<ButtonProps, 'className'>) => (
+  <Button className="w-full cursor-pointer justify-start overflow-hidden" {...rest}>
+    {children}
+  </Button>
+);
 
-const Option = styled(Button)`
-  width: 100%;
-  justify-content: left;
-  cursor: pointer;
-  overflow: hidden;
-`;
+const OptionText = ({ children, className, ...rest }: HTMLAttributes<HTMLSpanElement>) => (
+  <span
+    className={merge(className, 'block w-full overflow-hidden text-ellipsis whitespace-nowrap text-left font-normal')}
+    {...rest}
+  >
+    {children}
+  </span>
+);
 
-const OptionText = styled.span`
-  display: block;
-  text-align: left;
-  font-weight: normal;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;
-`;
-
-const NoOptionText = styled(OptionText)`
-  font-style: italic;
-`;
+const NoOptionText = ({ children, className, ...rest }: HTMLAttributes<HTMLSpanElement>) => (
+  <OptionText className="italic" {...rest}>
+    {children}
+  </OptionText>
+);
