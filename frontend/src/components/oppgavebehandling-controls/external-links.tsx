@@ -90,8 +90,10 @@ const AppLink = ({ appName, url, eventName }: RedirectLinkProps) => (
     title="Åpne i ny fane"
     rel="noreferrer"
     onClick={() => pushEvent(eventName, 'external-links')}
+    icon={<ExternalLinkIcon aria-hidden />}
+    className="text-text-default no-underline"
   >
-    {appName} <ExternalLinkIcon title="Ekstern lenke" />
+    {appName}
   </Button>
 );
 
