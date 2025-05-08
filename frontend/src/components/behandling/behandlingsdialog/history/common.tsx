@@ -3,7 +3,6 @@ import { formatIdNumber } from '@app/functions/format-id';
 import type { INavEmployee } from '@app/types/bruker';
 import { HistoryEventTypes, type IHistory, type IPart } from '@app/types/oppgavebehandling/response';
 import { Box } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 type KeySource = Pick<IHistory, 'type' | 'timestamp'>;
 
@@ -22,11 +21,6 @@ export const partName = ({ name, identifikator }: IPart) => (
     {identifikator === null ? null : ` (${formatIdNumber(identifikator)})`}
   </b>
 );
-
-export const Line = styled.p`
-  margin: 0;
-  padding: 0;
-`;
 
 interface ReasonProps {
   id: string;

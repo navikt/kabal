@@ -12,7 +12,7 @@ import {
 } from '@app/types/svarbrev';
 import { ClockIcon } from '@navikt/aksel-icons';
 import { BodyShort, VStack } from '@navikt/ds-react';
-import { Line, employeeName, toKey } from './common';
+import { employeeName, toKey } from './common';
 import { HistoryEvent } from './event';
 
 export const getForlengetBehandlingstidEvent = (props: IForlengetBehandlingstidEvent) => (
@@ -26,7 +26,7 @@ const ForlengetBehandlingstid = (props: IForlengetBehandlingstidEvent) => (
     timestamp={props.timestamp}
     icon={ClockIcon}
   >
-    <Line>{employeeName(props.actor)} forlenget varslet behandlingstid.</Line>
+    <p>{employeeName(props.actor)} forlenget varslet behandlingstid.</p>
 
     <Begrunnelse {...props} />
 
@@ -90,17 +90,17 @@ const ChangedFrist = ({ previous, event }: IForlengetBehandlingstidEvent) => {
 
     return (
       <>
-        <Line>
+        <p>
           Varslet frist:{' '}
           <b>
             {getUnits(newUnits, newType)}
             {toDate}
           </b>
-        </Line>
+        </p>
         {fromDate === null ? null : (
-          <Line>
+          <p>
             Tidligere frist: <b>{fromDate}</b>
-          </Line>
+          </p>
         )}
       </>
     );
@@ -108,9 +108,9 @@ const ChangedFrist = ({ previous, event }: IForlengetBehandlingstidEvent) => {
 
   if (newFrist !== null) {
     return (
-      <Line>
+      <p>
         Varslet frist: <b>{isoDateToPretty(newFrist)}</b>
-      </Line>
+      </p>
     );
   }
 };
@@ -121,9 +121,9 @@ const Begrunnelse = ({ event }: IForlengetBehandlingstidEvent) => {
   }
 
   return (
-    <Line>
+    <p>
       Begrunnelse for endring: <i>{event.reasonNoLetter}</i>
-    </Line>
+    </p>
   );
 };
 
