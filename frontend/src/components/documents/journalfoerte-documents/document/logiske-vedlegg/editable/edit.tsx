@@ -1,6 +1,6 @@
+import { EditableTag } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/editable-tag';
 import { Suggestions } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/suggestions-dropdown';
 import { useSuggestions } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/use-suggestions';
-import { ReadOnlyTag } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/shared/vedlegg-style';
 import { Keys } from '@app/keys';
 import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 import { Tooltip } from '@navikt/ds-react';
@@ -154,7 +154,7 @@ export const EditLogiskVedlegg = ({
     // biome-ignore lint/nursery/noStaticElementInteractions: It is not.
     <div className="relative max-w-full" onMouseDown={(e) => e.stopPropagation()}>
       <Tooltip content={`${placeholder} logisk vedlegg`} keys={[Keys.Enter, Keys.Tab, Keys.Escape]} open>
-        <ReadOnlyTag
+        <EditableTag
           key="edit-tag"
           ref={ref}
           size="small"
@@ -178,7 +178,7 @@ export const EditLogiskVedlegg = ({
           className="bg-bg-default before:text-text-subtle empty:before:content-[attr(aria-placeholder)] [contenteditable=true]:cursor-text"
         >
           {initialValue}
-        </ReadOnlyTag>
+        </EditableTag>
       </Tooltip>
 
       <Suggestions suggestions={suggestions} activeIndex={activeIndex} onSelect={onSelect} customValue={customValue} />
