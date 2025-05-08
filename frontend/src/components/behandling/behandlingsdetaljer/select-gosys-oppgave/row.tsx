@@ -13,7 +13,6 @@ import { useSearchEnheterQuery } from '@app/redux-api/search';
 import type { INavEmployee } from '@app/types/bruker';
 import { GosysStatus, type ListGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Button, HStack, Table, Tag, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 export interface Props {
   oppgaveId: string;
@@ -40,12 +39,16 @@ export const Row = ({ gosysOppgave, selectedGosysOppgave, oppgaveId, showFerdigs
   const selected = selectedGosysOppgave !== undefined && selectedGosysOppgave.id === gosysOppgave.id;
 
   return (
-    <StatusRow
-      $status={gosysOppgave.status}
+    <Table.ExpandableRow
       selected={selected}
       content={<GosysBeskrivelseTabs beskrivelse={gosysOppgave.beskrivelse} />}
       shadeOnHover
       expandOnRowClick
+      className={
+        !selected && gosysOppgave.status === GosysStatus.FEILREGISTRERT
+          ? 'bg-surface-danger-subtle hover:bg-surface-danger-subtle-hover'
+          : undefined
+      }
     >
       <Table.DataCell>
         {gosysOppgave.gjelder === null ? null : (
@@ -87,7 +90,7 @@ export const Row = ({ gosysOppgave, selectedGosysOppgave, oppgaveId, showFerdigs
       <Table.DataCell>
         <Selection selected={selected} gosysOppgave={gosysOppgave} onSelect={onSelect} isSelecting={isLoading} />
       </Table.DataCell>
-    </StatusRow>
+    </Table.ExpandableRow>
   );
 };
 
@@ -196,16 +199,3 @@ export const TimeCell = ({ time }: { time: string | null }) => {
     </Table.DataCell>
   );
 };
-
-const StatusRow = styled(Table.ExpandableRow)<{ $status: GosysStatus }>`
-  &&& {
-    ${({ selected, $status }) => {
-      if (selected) {
-        return null;
-      }
-
-      if ($status === GosysStatus.FEILREGISTRERT) {
-        return 'background-color: var(--a-surface-danger-subtle);';
-      }
-    }}}
-`;
