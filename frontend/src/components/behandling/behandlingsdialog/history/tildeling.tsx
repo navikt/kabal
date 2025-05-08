@@ -15,7 +15,7 @@ export const getTildelingEvent = (e: ITildelingEvent) => {
   const { saksbehandler } = event;
 
   const isFradeling = 'fradelingReasonId' in event;
-  const toSelf = saksbehandler === actor;
+  const toSelf = saksbehandler?.navIdent === actor?.navIdent;
   const previousSaksbehandler = previous.event.saksbehandler;
 
   if (toSelf) {
