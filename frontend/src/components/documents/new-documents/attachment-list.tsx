@@ -11,7 +11,6 @@ import type {
   JournalfoertDokument,
 } from '@app/types/documents/documents';
 import { useMemo } from 'react';
-import { styled } from 'styled-components';
 import {
   NewDocAttachmentsContainer,
   StyledAttachmentList,
@@ -85,7 +84,7 @@ export const AttachmentList = ({
           />
         ))}
 
-        {hasSeparator ? <ListSeparator style={{ top: pdfHeight + overviewHeight }} /> : null}
+        {hasSeparator ? <ListSeparator top={pdfHeight + overviewHeight} /> : null}
 
         {journalfoerteDocuments.map((attachment, index) => (
           <Attachment
@@ -125,26 +124,10 @@ const Attachment = ({ attachment, parentDocument, containsRolAttachments, top }:
   </StyledNewAttachmentListItem>
 );
 
-const ListSeparator = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin: 0;
-  margin-top: var(--a-spacing-3);
-  margin-bottom: var(--a-spacing-3);
-  margin-left: var(--a-spacing-1);
-  border: none;
-  border-bottom: 1px solid var(--a-border-subtle);
-
-  &::after {
-    content: 'Journalførte dokumenter';
-    position: absolute;
-    top: 50%;
-    left: 17px;
-    padding-left: var(--a-spacing-1);
-    padding-right: var(--a-spacing-1);
-    transform: translateY(-50%);
-    background-color: var(--a-bg-default);
-    font-size: var(--a-font-size-small);
-  }
-`;
+const ListSeparator = ({ top }: { top: number }) => (
+  <div
+    data-label="Journalførte dokumenter"
+    className="after:-translate-y-1/2 absolute right-0 left-0 my-3 ml-1 border-border-subtle border-b after:absolute after:top-1/2 after:left-[17px] after:bg-bg-default after:px-1 after:text-small after:content-[attr(data-label)]"
+    style={{ top }}
+  />
+);
