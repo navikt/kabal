@@ -42,6 +42,6 @@
     "linter": { "enabled": true }
   },
   "files": {
-    "ignore": ["dist/**"]
+    "ignore": ["dist/**", "./**/*.css"]
   }
 }
