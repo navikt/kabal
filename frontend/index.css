@@ -6,7 +6,18 @@
 @layer components {
   @theme {
     --a-font-family: "Source Sans 3", Arial, sans-serif;
+    --color-drop-background: rgba(230, 240, 255, 0.5);
+    --color-drop-background-hover: rgba(153, 195, 255, 0.5);
   }
+
+}
+
+@utility text-stroke {
+  text-shadow:
+    -1px -1px 0 var(--a-bg-default),  
+    1px -1px 0 var(--a-bg-default),
+    -1px 1px 0 var(--a-bg-default),
+    1px 1px 0 var(--a-bg-default);
 }
 
 :root {
