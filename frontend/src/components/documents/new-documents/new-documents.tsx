@@ -5,7 +5,7 @@ import {
   SEPARATOR_HEIGHT,
   UPLOAD_BUTTON_HEIGHT,
 } from '@app/components/documents/new-documents/constants';
-import { ListHeader } from '@app/components/documents/new-documents/header/header';
+import { NewDocumentsHeader } from '@app/components/documents/new-documents/header/header';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { ModalContextElement } from '@app/components/documents/new-documents/modal/modal-context';
 import { clamp } from '@app/functions/clamp';
@@ -273,7 +273,7 @@ export const NewDocuments = () => {
       aria-labelledby="dua-heading"
     >
       <ModalContextElement>
-        <ListHeader headingId="dua-heading" />
+        <NewDocumentsHeader headingId="dua-heading" />
 
         <div
           ref={onRef}
