@@ -6,9 +6,9 @@ import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/document
 import { Role } from '@app/types/bruker';
 import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { HStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   children: React.ReactNode;
@@ -73,16 +73,23 @@ export const DropZone = ({ children }: Props) => {
   );
 
   return (
-    <StyledDropZone
+    <HStack
+      align="center"
+      gap="2"
+      width="fit-content"
+      flexShrink="0"
+      flexGrow="1"
+      paddingInline="2 0"
+      position="relative"
+      data-content="Hoveddokument"
+      className={`whitespace-nowrap ${isDragTarget ? 'after:flex' : 'after:hidden'} after:items-center after:justify-center after:rounded-medium after:text-stroke after:outline-dashed after:outline-2 after:outline-border-action after:content-[attr(data-content)] ${isDragOver ? 'after:bg-drop-background-hover' : 'after:bg-drop-background'} after:absolute after:top-0 after:left-0 after:h-full after:w-full after:rounded-medium after:font-bold after:backdrop-blur-[2px]`}
       onDrop={onDrop}
       onDragOver={(e) => e.preventDefault()}
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
-      $isDropTarget={isDragTarget}
-      $isDragOver={isDragOver}
     >
       {children}
-    </StyledDropZone>
+    </HStack>
   );
 };
 
@@ -91,41 +98,3 @@ const isDroppable = (draggedDocument: IMainDocument | null): draggedDocument is 
   draggedDocument.parentId !== null &&
   draggedDocument.type !== DocumentTypeEnum.JOURNALFOERT &&
   draggedDocument.templateId !== TemplateIdEnum.ROL_ANSWERS;
-
-interface IDragOver {
-  $isDropTarget: boolean;
-  $isDragOver: boolean;
-}
-
-const StyledDropZone = styled.div<IDragOver>`
-  display: flex;
-  align-items: center;
-  gap: var(--a-spacing-2);
-  width: fit-content;
-  white-space: nowrap;
-  flex-shrink: 0;
-  flex-grow: 1;
-  padding-left: var(--a-spacing-2);
-  position: relative;
-
-  &::after {
-    display: ${({ $isDropTarget }) => ($isDropTarget ? 'flex' : 'none')};
-    align-items: center;
-    justify-content: center;
-    content: 'Hoveddokument';
-    border-radius: var(--a-border-radius-medium);
-    outline: var(--a-spacing-05) dashed var(--a-border-action);
-    font-size: 18px;
-    font-weight: bold;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: ${({ $isDragOver }) => ($isDragOver ? 'rgba(153, 195, 255, 0.5)' : 'rgba(230, 240, 255, 0.5)')};
-    text-shadow:
-      1px 1px white,
-      -1px -1px var(--a-bg-default);
-    backdrop-filter: blur(var(--a-spacing-05));
-  }
-`;
