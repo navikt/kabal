@@ -57,7 +57,6 @@ export const StyledNewAttachmentListItem: typeof StyledDocumentListItem = styled
   left: 0;
   right: 0;
   padding-left: var(--a-spacing-4);
-  padding-right: var(--a-spacing-1-alt);
   margin-left: 0;
   margin-right: 0;
 
