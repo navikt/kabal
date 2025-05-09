@@ -1,8 +1,10 @@
 import { DragAndDropContext } from '@app/components/documents/drag-context';
+import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Role } from '@app/types/bruker';
 import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -20,12 +22,15 @@ export const DropZone = ({ children }: Props) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const dragEnterCount = useRef(0);
   const { draggedDocument, clearDragState } = useContext(DragAndDropContext);
+  const { data: documents } = useGetDocumentsQuery(oppgaveId);
+  const currentParent =
+    draggedDocument === null ? undefined : documents?.find((document) => document.id === draggedDocument?.parentId);
   const isSaksbehandler = useIsSaksbehandler();
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
 
   const isDragTarget = useMemo(
-    () => (isSaksbehandler || hasOppgavestyringRole) && isDroppable(draggedDocument),
-    [isSaksbehandler, hasOppgavestyringRole, draggedDocument],
+    () => (isSaksbehandler || hasOppgavestyringRole) && isDroppable(draggedDocument, currentParent),
+    [isSaksbehandler, hasOppgavestyringRole, draggedDocument, currentParent],
   );
 
   const onDragEnter = useCallback(
@@ -93,8 +98,13 @@ export const DropZone = ({ children }: Props) => {
   );
 };
 
-const isDroppable = (draggedDocument: IMainDocument | null): draggedDocument is IMainDocument =>
+const isDroppable = (
+  draggedDocument: IMainDocument | null,
+  currentParent?: IMainDocument,
+): draggedDocument is IMainDocument =>
   draggedDocument !== null &&
   draggedDocument.parentId !== null &&
+  currentParent !== undefined &&
+  getIsIncomingDocument(currentParent?.dokumentTypeId) &&
   draggedDocument.type !== DocumentTypeEnum.JOURNALFOERT &&
   draggedDocument.templateId !== TemplateIdEnum.ROL_ANSWERS;
