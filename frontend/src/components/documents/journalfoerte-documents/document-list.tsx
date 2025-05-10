@@ -110,7 +110,6 @@ export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onSc
             minTop={minTop}
             maxTop={maxTop}
             left={51}
-            connectTop={8}
             hasVedlegg={hasVedlegg}
             dokumentInfoId={dokumentInfoId}
             logiskeVedlegg={logiskeVedlegg}
