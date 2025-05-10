@@ -79,7 +79,6 @@ export const VedleggList = ({ list, minTop, maxTop, dokument, documentIndex }: P
             minTop={minTop}
             maxTop={maxTop}
             left={65}
-            connectTop={4}
             dokumentInfoId={dokumentInfoId}
             logiskeVedlegg={logiskeVedlegg}
             temaId={dokument.tema}

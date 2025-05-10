@@ -2,6 +2,11 @@ import { AttachmentsOverview } from '@app/components/documents/new-documents/att
 import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@app/components/documents/new-documents/constants';
 import { NewAttachmentButtons } from '@app/components/documents/new-documents/new-attachment-buttons';
 import { NewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
+import {
+  NewDocAttachmentsContainer,
+  StyledAttachmentList,
+  StyledAttachmentListItem,
+} from '@app/components/documents/styled-components/attachment-list';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { sortWithNumbers } from '@app/functions/sort-with-numbers/sort-with-numbers';
 import type {
@@ -11,11 +16,6 @@ import type {
   JournalfoertDokument,
 } from '@app/types/documents/documents';
 import { useMemo } from 'react';
-import {
-  NewDocAttachmentsContainer,
-  StyledAttachmentList,
-  StyledNewAttachmentListItem,
-} from '../styled-components/attachment-list';
 
 export interface ListProps {
   pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
@@ -108,7 +108,7 @@ interface AttachmentProps {
 }
 
 const Attachment = ({ attachment, parentDocument, containsRolAttachments, top }: AttachmentProps) => (
-  <StyledNewAttachmentListItem
+  <StyledAttachmentListItem
     key={attachment.id}
     data-testid="new-attachments-list-item"
     data-documentname={attachment.tittel}
@@ -121,7 +121,7 @@ const Attachment = ({ attachment, parentDocument, containsRolAttachments, top }:
       parentDocument={parentDocument}
       containsRolAttachments={containsRolAttachments}
     />
-  </StyledNewAttachmentListItem>
+  </StyledAttachmentListItem>
 );
 
 const ListSeparator = ({ top }: { top: number }) => (
