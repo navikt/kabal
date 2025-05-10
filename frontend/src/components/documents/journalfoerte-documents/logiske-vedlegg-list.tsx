@@ -5,10 +5,7 @@ import {
   LOGISK_VEDLEGG_SPACE,
 } from '@app/components/documents/journalfoerte-documents/contants';
 import { EditableLogiskVedlegg } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/editable';
-import {
-  LogiskeVedleggListItemStyle,
-  LogiskeVedleggListStyle,
-} from '@app/components/documents/styled-components/attachment-list';
+import { LogiskeVedleggListItemStyle } from '@app/components/documents/styled-components/attachment-list';
 import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 
 interface Props {
@@ -20,7 +17,6 @@ interface Props {
   logiskeVedlegg: LogiskVedlegg[];
   temaId: string | null;
   dokumentInfoId: string;
-  connectTop: number;
 }
 
 export const LogiskeVedleggList = ({
@@ -32,7 +28,6 @@ export const LogiskeVedleggList = ({
   dokumentInfoId,
   logiskeVedlegg,
   temaId,
-  connectTop,
 }: Props) => {
   if (list.globalTop + list.height < minTop || list.globalTop > maxTop) {
     return null;
@@ -51,8 +46,7 @@ export const LogiskeVedleggList = ({
         key={`logisk-vedlegg_${logiskVedlegg.logiskVedleggId}`}
         style={{ top }}
         aria-rowindex={index}
-        $connected
-        $paddingLeft={18}
+        connected
       >
         <EditableLogiskVedlegg
           logiskVedlegg={logiskVedlegg}
@@ -70,10 +64,10 @@ export const LogiskeVedleggList = ({
   const shouldRenderAddButton = addButtonGlobalTop >= minTop && addButtonGlobalTop <= maxTop;
 
   return (
-    <LogiskeVedleggListStyle
+    <ul
+      className="absolute right-0"
       data-list="logiske-vedlegg"
       style={{ height: list.height, top: list.top, left }}
-      $connectTop={connectTop}
       // biome-ignore lint/a11y/useSemanticElements: Tree structure.
       role="group"
     >
@@ -88,6 +82,6 @@ export const LogiskeVedleggList = ({
           temaId={temaId}
         />
       ) : null}
-    </LogiskeVedleggListStyle>
+    </ul>
   );
 };

@@ -73,7 +73,7 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
       variant="neutral"
       title={logiskVedlegg.tittel}
       onMouseLeave={() => setIsFocused(false)}
-      className="group min-w-[88px]"
+      className="group ml-1.5 min-w-[88px]"
     >
       <span className={`${TITLE_CLASSES} group-hover:opacity-0 ${hideOnFocusClasses}`}>{logiskVedlegg.tittel}</span>
 

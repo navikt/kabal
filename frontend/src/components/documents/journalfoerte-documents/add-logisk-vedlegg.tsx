@@ -30,8 +30,7 @@ export const AddLogiskVedlegg = ({ hasVedlegg, index, top, dokumentInfoId, logis
       key="logisk-vedlegg_add"
       style={{ top }}
       aria-rowindex={index}
-      $connected={hasVedlegg}
-      $paddingLeft={10}
+      connected={hasVedlegg}
       role="treeitem"
     >
       {isAdding ? (
