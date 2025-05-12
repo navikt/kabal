@@ -18,7 +18,7 @@ const INITIAL_SLATE_VALUE: Value = [
   createHeader(),
 
   createMaltekstseksjon(TemplateSections.TITLE),
-  createSaksinfo(),
+  ...createSaksinfo(),
   createMaltekstseksjon(TemplateSections.SVAR_PÅ_INNSYNSBEGJÆRING),
   createMaltekstseksjon(TemplateSections.OM_TAUSHETSPLIKT),
 

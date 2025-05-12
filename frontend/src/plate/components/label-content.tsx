@@ -1,16 +1,21 @@
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { type LabelContentElement, LabelContentSource } from '@app/plate/types';
 import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/kodeverk';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
-import { useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { styled } from 'styled-components';
 
 export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   const { children, element, editor } = props;
   const content = useContent(element.source);
   const label = useLabel(element.source);
+  const { canManage } = useContext(SmartEditorContext);
 
   useEffect(() => {
     editor.tf.setNodes({ result: content }, { at: [], match: (n) => n === element });
@@ -31,14 +36,23 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
         e.stopPropagation();
       }}
     >
-      <span>
+      <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.LABEL}>
         {content === null ? null : (
           <StyledLabelContent>
             <b>{label}</b>: {content}
           </StyledLabelContent>
         )}
         {children}
-      </span>
+        {canManage ? (
+          <SectionToolbar>
+            <ToolbarButtonWithConfirm
+              onClick={() => editor.tf.removeNodes({ match: (n) => n === element, at: [] })}
+              icon={<TrashIcon aria-hidden />}
+              tooltip={`Slett ${label?.toLowerCase()}`}
+            />
+          </SectionToolbar>
+        ) : null}
+      </SectionContainer>
     </PlateElement>
   );
 };

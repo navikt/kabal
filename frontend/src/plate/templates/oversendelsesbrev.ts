@@ -24,7 +24,7 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
     createHeader(),
 
     createMaltekstseksjon(TemplateSections.TILSVARSBREV_TITLE),
-    createSaksinfo(),
+    ...createSaksinfo(),
     createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
     createMaltekstseksjon(TemplateSections.GENERELL_INFO),
 
@@ -35,7 +35,7 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
     createCurrentDate(),
 
     createMaltekstseksjon(TemplateSections.TITLE),
-    createSaksinfo(),
+    ...createSaksinfo(),
     createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
     createMaltekstseksjon(TemplateSections.ANFOERSLER),
     createMaltekstseksjon(TemplateSections.OPPLYSNINGER),

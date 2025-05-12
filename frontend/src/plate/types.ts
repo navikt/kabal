@@ -14,6 +14,7 @@ import type {
   ELEMENT_REDIGERBAR_MALTEKST,
   ELEMENT_REGELVERK,
   ELEMENT_REGELVERK_CONTAINER,
+  ELEMENT_SAKSNUMMER,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
 import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
@@ -223,6 +224,13 @@ export interface FullmektigElement extends TElement {
   show: boolean;
 }
 
+export interface SaksnummerElement extends TElement {
+  type: typeof ELEMENT_SAKSNUMMER;
+  // One would think [PlaceholderElement] would work, but Slate/Plate insists on inserting surrounding text nodes. At least now the type will be correct.
+  children: [{ text: '' }, PlaceholderElement, { text: '' }];
+  isInitialized: boolean;
+}
+
 export interface ISignature {
   name: string;
   title?: string;
@@ -262,7 +270,8 @@ type ParentOnlyElement =
   | HeaderElement
   | FooterElement
   | SignatureElement
-  | MaltekstseksjonElement;
+  | MaltekstseksjonElement
+  | SaksnummerElement;
 
 export type RootElement = ParentOrChildElement | ParentOnlyElement;
 

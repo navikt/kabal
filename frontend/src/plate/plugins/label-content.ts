@@ -7,7 +7,7 @@ export const LabelContentPlugin = createPlatePlugin({
   node: {
     isElement: true,
     isVoid: true,
-    isInline: true,
+    isInline: false,
     component: LabelContent,
   },
 });

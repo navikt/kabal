@@ -10,6 +10,7 @@ import {
   ELEMENT_REDIGERBAR_MALTEKST,
   ELEMENT_REGELVERK,
   ELEMENT_REGELVERK_CONTAINER,
+  ELEMENT_SAKSNUMMER,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
 import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@app/plate/plugins/fullmektig';
@@ -223,15 +224,15 @@ export const createFullmektig = (): FullmektigElement => ({
   show: false,
 });
 
-export const createSaksinfo = (): ParagraphElement => ({
-  type: BaseParagraphPlugin.key,
-  align: TextAlign.LEFT,
-  children: [
-    createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
-    createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
-    createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
-    createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
-    createFullmektig(),
-    createLabelContent(LabelContentSource.SAKSNUMMER),
-  ],
-});
+export const createSaksinfo = () => [
+  createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
+  createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
+  createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
+  createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
+  createFullmektig(),
+  {
+    type: ELEMENT_SAKSNUMMER,
+    children: [createPlaceHolder('Saksnummer', false)],
+    isInitialized: false,
+  },
+];
