@@ -34,6 +34,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const showForkortedeNavnCheckbox = element.includeMedunderskriver || !signature.anonymous;
   const showSuffixCheckbox = !(signature.anonymous || isRolAnswers);
   const showUseMyNameCheckbox = oppgave.avsluttetAvSaksbehandlerDate !== null;
+  const showEnableCheckbox = templateId === TemplateIdEnum.NOTAT || templateId === TemplateIdEnum.GENERELT_BREV;
 
   const hideAll = !(showForkortedeNavnCheckbox || showSuffixCheckbox || hasMedunderskriver);
 
@@ -50,6 +51,8 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const setOverriddenSaksbehandler = (overriddenSaksbehandler: string | undefined) =>
     editor.tf.setNodes({ overriddenSaksbehandler }, options);
 
+  const disabledCheckbox = element.enabled === false || isReadOnly;
+
   return (
     <PlateElement<SignatureElement> {...props} asChild contentEditable={false}>
       <SectionContainer
@@ -63,9 +66,19 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
       >
         {hideAll || !canManage ? null : (
           <Checkboxes>
-            {showForkortedeNavnCheckbox ? (
+            {showEnableCheckbox ? (
               <Checkbox
                 disabled={isReadOnly}
+                checked={element.enabled}
+                onChange={({ target }) => setSignatureProp({ enabled: target.checked })}
+              >
+                Inkluder signatur
+              </Checkbox>
+            ) : null}
+
+            {showForkortedeNavnCheckbox ? (
+              <Checkbox
+                disabled={disabledCheckbox}
                 checked={element.useShortName}
                 onChange={({ target }) => setSignatureProp({ useShortName: target.checked })}
               >
@@ -75,7 +88,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
 
             {showMedunderskriverCheckbox ? (
               <Checkbox
-                disabled={isReadOnly}
+                disabled={disabledCheckbox}
                 checked={element.includeMedunderskriver}
                 onChange={({ target }) => setSignatureProp({ includeMedunderskriver: target.checked })}
               >
@@ -85,7 +98,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
 
             {showSuffixCheckbox ? (
               <Checkbox
-                disabled={isReadOnly || signature?.anonymous === true}
+                disabled={disabledCheckbox || signature?.anonymous === true}
                 checked={element.useSuffix}
                 onChange={({ target }) => setSignatureProp({ useSuffix: target.checked })}
               >
@@ -96,7 +109,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
             {showUseMyNameCheckbox ? (
               <Checkbox
                 disabled={
-                  isReadOnly ||
+                  disabledCheckbox ||
                   (user.navIdent === creator && (overriddenWithSelf || element.overriddenSaksbehandler === undefined))
                 }
                 checked={

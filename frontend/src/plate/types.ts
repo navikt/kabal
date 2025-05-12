@@ -228,6 +228,7 @@ export interface ISignature {
 }
 
 interface ISignatureContent {
+  enabled?: boolean;
   useShortName: boolean;
   useSuffix: boolean;
   includeMedunderskriver: boolean;
