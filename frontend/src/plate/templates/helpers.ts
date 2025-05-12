@@ -142,6 +142,7 @@ export const createSimpleBulletList = (...textItems: string[]): BulletListElemen
 
 export const createSignature = (includeMedunderskriver = true, overriddenSaksbehandler?: string): SignatureElement => ({
   type: ELEMENT_SIGNATURE,
+  enabled: true,
   useShortName: false,
   includeMedunderskriver,
   useSuffix: true,

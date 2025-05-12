@@ -45,6 +45,10 @@ export const useMainSignature = (element: SignatureElement): ISignature | undefi
     !isOverridden && isRolAnswers ? (oppgave?.rol.employee?.navIdent ?? skipToken) : skipToken,
   );
 
+  if (element.enabled === false) {
+    return undefined;
+  }
+
   const suffix = templateId !== TemplateIdEnum.ROL_ANSWERS && element.useSuffix ? 'saksbehandler' : undefined;
 
   if (element.overriddenSaksbehandler !== undefined) {
