@@ -7,7 +7,7 @@ export const FullmektigPlugin = createPlatePlugin({
   node: {
     isElement: true,
     isVoid: false,
-    isInline: true,
+    isInline: false,
     component: Fullmektig,
   },
 });

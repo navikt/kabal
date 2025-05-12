@@ -20,7 +20,7 @@ const INITIAL_SLATE_VALUE: Value = [
 
   createMaltekstseksjon(TemplateSections.TITLE),
 
-  createSaksinfo(),
+  ...createSaksinfo(),
 
   createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
   createMaltekstseksjon(TemplateSections.AVGJOERELSE),

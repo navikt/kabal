@@ -1,12 +1,15 @@
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@app/plate/plugins/fullmektig';
 import { type FullmektigElement, type PlaceholderElement, useMyPlateEditorRef } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
-import { ArrowUndoIcon } from '@navikt/aksel-icons';
+import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Loader } from '@navikt/ds-react';
 import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { styled } from 'styled-components';
 
 export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
@@ -14,6 +17,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
   const { element, children } = props;
   const { id, show } = element;
   const editor = useMyPlateEditorRef();
+  const { canManage } = useContext(SmartEditorContext);
 
   const at = editor.api.findPath(element);
 
@@ -76,7 +80,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
 
   return (
     <PlateElement<FullmektigElement> asChild {...props}>
-      <span>
+      <SectionContainer data-element={props.element.type} $sectionType={SectionTypeEnum.LABEL}>
         <NonEditable>{children[0]}</NonEditable>
         <PlaceholderContainer>
           <StyledButton
@@ -85,7 +89,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
             $align="left"
             variant="tertiary"
             size="small"
-            title='Tilbakestill til navn "Fullmektig"'
+            title='Tilbakestill tittel til "Fullmektig"'
             onClick={() => {
               const labelEntry = editor.api.descendant<PlaceholderElement>({
                 at,
@@ -105,27 +109,35 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
           <Editable>{children[1]}</Editable>
         </PlaceholderContainer>
         <NonEditable>: </NonEditable>
-        <NonEditable>{children[2]}</NonEditable>
-        <PlaceholderContainer>
-          <StyledButton
-            $align="right"
-            variant="tertiary"
-            size="small"
-            title="Tilbakestill til navn fra behandlingen"
-            onClick={() => {
-              if (valueEntry === undefined) {
-                return;
-              }
+        <Editable>{children[3]}</Editable>
 
-              editor.tf.replaceNodes([{ text: prosessfullmektig.name ?? '' }], { at: valueEntry[1], children: true });
-            }}
-            icon={<ArrowUndoIcon aria-hidden />}
-          />
-          <Editable>{children[3]}</Editable>
-        </PlaceholderContainer>
-        <NonEditable>{children[4]}</NonEditable>
-        <br />
-      </span>
+        {canManage ? (
+          <SectionToolbar>
+            <ToolbarButtonWithConfirm
+              onClick={() => editor.tf.removeNodes({ match: (n) => n === props.element, at: [] })}
+              icon={<TrashIcon aria-hidden />}
+              tooltip="Slett fullmektig"
+            />
+
+            {prosessfullmektig.name === null ? null : (
+              <ToolbarButtonWithConfirm
+                onClick={() => {
+                  if (valueEntry === undefined) {
+                    return;
+                  }
+
+                  editor.tf.replaceNodes([{ text: prosessfullmektig.name ?? '' }], {
+                    at: valueEntry[1],
+                    children: true,
+                  });
+                }}
+                icon={<ArrowUndoIcon aria-hidden />}
+                tooltip={`Tilbakestill til navn fra behandlingen (${prosessfullmektig.name})`}
+              />
+            )}
+          </SectionToolbar>
+        ) : null}
+      </SectionContainer>
     </PlateElement>
   );
 };

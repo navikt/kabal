@@ -20,6 +20,7 @@ import { SaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/s
 import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
 import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
 import { RegelverkContainerPlugin, RegelverkPlugin } from '@app/plate/plugins/regelverk';
+import { SaksnummerPlugin } from '@app/plate/plugins/saksnummer';
 import { SignaturePlugin } from '@app/plate/plugins/signature';
 import type { IUserData } from '@app/types/bruker';
 import type { ISmartDocument } from '@app/types/documents/documents';
@@ -67,6 +68,7 @@ export const saksbehandlerPlugins = [
   EmptyVoidPlugin,
   CommentsPlugin,
   BookmarkPlugin,
+  SaksnummerPlugin,
 ];
 
 export const collaborationSaksbehandlerPlugins = (

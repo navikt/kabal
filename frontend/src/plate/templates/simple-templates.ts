@@ -30,7 +30,7 @@ export const getGenereltBrevTemplate = (
       createCurrentDate(),
       createHeader(),
       createMaltekstseksjon(TemplateSections.TITLE),
-      createSaksinfo(),
+      ...createSaksinfo(),
       createSimpleParagraph(),
       createSignature(includeMedunderskriver, overriddenSaksbehandler),
       createFooter(),
@@ -50,7 +50,7 @@ export const getNotatTemplate = (
     tittel: 'Notat',
     richText: [
       createCurrentDate(),
-      createSaksinfo(),
+      ...createSaksinfo(),
       createSimpleParagraph(),
       createSignature(includeMedunderskriver, overriddenSaksbehandler),
     ],
@@ -103,7 +103,7 @@ export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>
   richText: [
     createCurrentDate(),
     createMaltekstseksjon(TemplateSections.TITLE),
-    createSaksinfo(),
+    ...createSaksinfo(),
     createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
     createMaltekstseksjon(TemplateSections.GENERELL_INFO),
     createPageBreak(),
