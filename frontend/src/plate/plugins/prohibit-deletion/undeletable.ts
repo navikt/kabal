@@ -1,10 +1,10 @@
-import { UNDELETABLE_BUT_REDIGERBAR } from '@app/plate/plugins/element-types';
+import { UNDELETABLE_BUT_EDITABLE } from '@app/plate/plugins/element-types';
 import type { EditorDescendant } from '@app/plate/types';
 import { isInList } from '@app/plate/utils/queries';
 import { ElementApi, type NodeOf } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
 
-const match = (n: NodeOf<EditorDescendant>) => ElementApi.isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type);
+const match = (n: NodeOf<EditorDescendant>) => ElementApi.isElement(n) && UNDELETABLE_BUT_EDITABLE.includes(n.type);
 
 export const handleDeleteBackwardInUndeletable = (editor: PlateEditor): boolean => {
   if (editor.selection === null) {
