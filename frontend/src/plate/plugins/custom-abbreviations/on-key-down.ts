@@ -37,7 +37,7 @@ export const onKeyDown = (editor: PlateEditor, e: React.KeyboardEvent) => {
     return;
   }
 
-  const { short, long, range, marks } = data;
+  const { short, long, range, marks, autoCapitalised } = data;
 
   e.preventDefault();
 
@@ -47,7 +47,24 @@ export const onKeyDown = (editor: PlateEditor, e: React.KeyboardEvent) => {
   });
 
   editor.tf.delete({ at: range });
-  editor.tf.insertNodes({ ...marks, text: `${long}${key}` });
+
+  if (autoCapitalised) {
+    const firstChar = long.charAt(0);
+    const rest = long.substring(1);
+
+    const uppercaseFirstChar = firstChar.toUpperCase();
+
+    if (firstChar !== uppercaseFirstChar) {
+      editor.tf.insertNodes([
+        { ...marks, text: uppercaseFirstChar, autoCapitalised: true, abbreviation: short },
+        { ...marks, text: `${rest}${key}`, abbreviation: short },
+      ]);
+    } else {
+      editor.tf.insertNodes([{ ...marks, text: `${long}${key}`, abbreviation: short }]);
+    }
+  } else {
+    editor.tf.insertNodes([{ ...marks, text: `${long}${key}`, abbreviation: short }]);
+  }
 
   const numberOfMarks = Object.values(marks).filter((m) => m).length;
 

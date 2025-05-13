@@ -50,6 +50,7 @@ export interface FormattedText extends TText {
   italic?: boolean;
   underline?: boolean;
   autoCapitalised?: boolean;
+  abbreviation?: string;
   [CommentsPlugin.key]?: boolean;
   [BookmarkPlugin.key]?: boolean;
 }

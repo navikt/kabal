@@ -1,6 +1,8 @@
 import { ABBREVIATIONS } from '@app/plate/plugins/capitalise/abbreviations';
-import { type Descendant, ElementApi, type Point, RangeApi, TextApi } from '@udecode/plate';
+import { isOfElementType } from '@app/plate/utils/queries';
+import { type Descendant, ElementApi, PathApi, type Point, RangeApi, TextApi } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
+import { ListItemContentPlugin } from '@udecode/plate-list/react';
 
 const LOWERCASE_CHAR_AND_DASH_REGEX = /^[\p{Ll}-]+$/u;
 export const isSingleWord = (text: string) => LOWERCASE_CHAR_AND_DASH_REGEX.test(text);
@@ -27,18 +29,24 @@ export const nodeContainsSingleWord = (editor: PlateEditor, node: Descendant): b
   return true;
 };
 
-export const isAtStartOfBlock = (editor: PlateEditor): boolean => {
+/**
+ * If at the start of a paragraph (not the technical block). Lists are considered parts of paragraphs.
+ * List items should not be capitalised.
+ */
+export const isAtStartOfParagraph = (editor: PlateEditor): boolean => {
   if (editor.selection === null) {
     return false;
   }
 
-  const closestBlock = editor.api.node({ at: editor.selection.anchor, block: true, mode: 'lowest' });
+  const closestBlockEntry = editor.api.node({ at: editor.selection.anchor, block: true, mode: 'lowest' });
 
-  if (closestBlock === undefined) {
+  if (closestBlockEntry === undefined) {
     return false;
   }
 
-  return editor.api.isStart(editor.selection.anchor, closestBlock[1]);
+  const [node, path] = closestBlockEntry;
+
+  return !isOfElementType(node, ListItemContentPlugin.key) && editor.api.isStart(editor.selection.anchor, path);
 };
 
 export const capitaliseFirstNodeWithText = (elements: Descendant[]): void => {
@@ -80,9 +88,17 @@ export const isAfterSentence = (editor: PlateEditor): boolean => {
   }
 
   const start = RangeApi.start(editor.selection);
+  const startBlockEntry = editor.api.node({ at: start, block: true, mode: 'lowest' });
+
+  if (startBlockEntry === undefined) {
+    return false;
+  }
+
+  const [, startBlockPath] = startBlockEntry;
+
   const oneBeforeStart = editor.api.before(start, { distance: 1, unit: 'character' });
 
-  if (oneBeforeStart === undefined) {
+  if (oneBeforeStart === undefined || !PathApi.isCommon(startBlockPath, oneBeforeStart.path)) {
     return false;
   }
 
@@ -94,7 +110,7 @@ export const isAfterSentence = (editor: PlateEditor): boolean => {
 
   const twoBeforeStart = editor.api.before(start, { distance: 2, unit: 'character' });
 
-  if (twoBeforeStart === undefined) {
+  if (twoBeforeStart === undefined || !PathApi.isCommon(startBlockPath, twoBeforeStart.path)) {
     return false;
   }
 
@@ -107,7 +123,7 @@ export const isAfterSentence = (editor: PlateEditor): boolean => {
 };
 
 export const skipCapitalisation = (editor: PlateEditor): boolean =>
-  !isAtStartOfBlock(editor) && !isAfterSentence(editor);
+  !isAtStartOfParagraph(editor) && !isAfterSentence(editor);
 
 const ORDINAL_REGEX = /[0-9]+\./;
 export const isOrdinalOrAbbreviation = (editor: PlateEditor): boolean => {
@@ -125,7 +141,7 @@ const getLastWord = (editor: PlateEditor): string | null => {
     return null;
   }
 
-  const closestBlock = editor.api.node({ at: editor.selection.anchor, block: true });
+  const closestBlock = editor.api.node({ at: editor.selection.anchor, block: true, mode: 'lowest' });
 
   if (closestBlock === undefined) {
     return null;
