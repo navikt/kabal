@@ -1,7 +1,7 @@
 import {
   ELEMENT_PLACEHOLDER,
   ELEMENT_REGELVERK_CONTAINER,
-  UNDELETABLE_BUT_REDIGERBAR,
+  UNDELETABLE_BUT_EDITABLE,
 } from '@app/plate/plugins/element-types';
 import { isInRegelverk, isInUnchangeableElement, isUndeletable } from '@app/plate/plugins/prohibit-deletion/helpers';
 import { isInList } from '@app/plate/utils/queries';
@@ -57,7 +57,7 @@ export const handleDeleteBackwardIntoUnchangeable = (editor: PlateEditor): boole
   }
 
   const redigerbarMaltekstOrRegelverk = editor.api.node({
-    match: (n) => ElementApi.isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type),
+    match: (n) => ElementApi.isElement(n) && UNDELETABLE_BUT_EDITABLE.includes(n.type),
   });
 
   if (redigerbarMaltekstOrRegelverk !== undefined) {
@@ -99,7 +99,7 @@ export const handleDeleteForwardIntoUnchangeable = (editor: PlateEditor): boolea
   }
 
   const redigerbarMaltekstOrRegelverk = editor.api.node({
-    match: (n) => ElementApi.isElement(n) && UNDELETABLE_BUT_REDIGERBAR.includes(n.type),
+    match: (n) => ElementApi.isElement(n) && UNDELETABLE_BUT_EDITABLE.includes(n.type),
   });
 
   if (redigerbarMaltekstOrRegelverk !== undefined) {
