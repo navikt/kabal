@@ -1,14 +1,15 @@
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
 import { autoCapitalise, capitaliseWord } from '@app/plate/plugins/custom-abbreviations/auto-capitalise';
+import type { PlateEditor } from '@udecode/plate-core/react';
 
-export const getLong = (short: string, previous: string | undefined): string | null => {
+export const getLong = (editor: PlateEditor, short: string): string | null => {
   const lowerCaseShort = short.toLowerCase();
   const shortIsLowerCase = lowerCaseShort === short;
 
   if (shortIsLowerCase) {
     const long = ABBREVIATIONS.getAbbreviation(short);
 
-    return long === undefined ? null : autoCapitalise(long, previous);
+    return long === undefined ? null : autoCapitalise(editor, long);
   }
 
   const lettersOnly = getLettersOnly(short);
@@ -22,7 +23,7 @@ export const getLong = (short: string, previous: string | undefined): string | n
       return long === undefined ? null : long.toUpperCase();
     }
 
-    return autoCapitalise(uppercaseLong, previous);
+    return autoCapitalise(editor, uppercaseLong);
   }
 
   if (isCapitalised(lettersOnly)) {
@@ -35,7 +36,7 @@ export const getLong = (short: string, previous: string | undefined): string | n
 
   const mixedCaseLong = ABBREVIATIONS.getAbbreviation(short);
 
-  return mixedCaseLong === undefined ? null : autoCapitalise(mixedCaseLong, previous);
+  return mixedCaseLong === undefined ? null : autoCapitalise(editor, mixedCaseLong);
 };
 
 const LETTERS_ONLY_REGEX = /[^a-zæøå]/gi;

@@ -13,6 +13,7 @@ interface AbbreviationData {
   short: string;
   range: Range;
   marks: Marks;
+  autoCapitalised: boolean;
 }
 
 export const getAbbreviationData = (editor: PlateEditor): AbbreviationData | null => {
@@ -61,7 +62,7 @@ export const getAbbreviationData = (editor: PlateEditor): AbbreviationData | nul
       return node;
     });
 
-  const { uncapitalisedShort, capitalisedShort, autoCapitalised, previousWord } = getWords(textNodes);
+  const { uncapitalisedShort, capitalisedShort, autoCapitalised } = getWords(textNodes);
 
   if (
     uncapitalisedShort === undefined ||
@@ -72,8 +73,7 @@ export const getAbbreviationData = (editor: PlateEditor): AbbreviationData | nul
     return null;
   }
 
-  const long =
-    getLong(uncapitalisedShort, previousWord) ?? (autoCapitalised ? getLong(capitalisedShort, previousWord) : null);
+  const long = getLong(editor, uncapitalisedShort) ?? (autoCapitalised ? getLong(editor, capitalisedShort) : null);
 
   if (long === null) {
     return null;
@@ -95,14 +95,13 @@ export const getAbbreviationData = (editor: PlateEditor): AbbreviationData | nul
     return null;
   }
 
-  return { short: uncapitalisedShort, long, marks: getMarks(entries), range };
+  return { short: uncapitalisedShort, long, marks: getMarks(entries), range, autoCapitalised };
 };
 
 interface Words {
   uncapitalisedShort: string | undefined;
   capitalisedShort: string | undefined;
   autoCapitalised: boolean;
-  previousWord: string | undefined;
 }
 
 const getWords = (textNodes: Iterable<FormattedText>): Words => {
@@ -124,7 +123,6 @@ const getWords = (textNodes: Iterable<FormattedText>): Words => {
     uncapitalisedShort,
     capitalisedShort,
     autoCapitalised: capitalisedShort !== uncapitalisedShort,
-    previousWord: capitalisedWords.at(-2),
   };
 };
 
