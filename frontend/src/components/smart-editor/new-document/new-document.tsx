@@ -20,11 +20,10 @@ import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Language } from '@app/types/texts/language';
 import { Box, HStack, Loader } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
-import { getDocumentCount } from './get-document-count';
+import { getTitle } from './get-title';
 import { StyledHeader, StyledNewDocument, StyledTemplateButton } from './styled-components';
 
 interface Props {
@@ -54,17 +53,14 @@ export const NewDocument = ({ onCreate }: Props) => {
   const onClick = async (template: ISmartEditorTemplate) => {
     setLoadingTemplate(template.templateId);
 
-    const count = getDocumentCount(documents, template);
-
     const creatorRole = isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING;
-    const tittel = count === 0 ? template.tittel : `${template.tittel} (${count})`;
 
     try {
       const { id } = await createSmartDocument({
         templateId: template.templateId,
         dokumentTypeId: template.dokumentTypeId,
         content: template.richText,
-        tittel: getDefaultTitle(template.templateId, tittel),
+        tittel: getTitle(documents, template),
         oppgaveId: oppgave.id,
         creatorIdent: user.navIdent,
         creatorRole,
@@ -153,15 +149,3 @@ const LoadingOverlay = ({ loading }: { loading: boolean }) =>
       </Box>
     </HStack>
   ) : null;
-
-const getDefaultTitle = (templateId: TemplateIdEnum, fallback: string) => {
-  switch (templateId) {
-    case TemplateIdEnum.KLAGEVEDTAK_V1:
-    case TemplateIdEnum.KLAGEVEDTAK_V2:
-      return 'Klagevedtak';
-    case TemplateIdEnum.ANKEVEDTAK:
-      return 'Omgjøring av klagevedtak';
-    default:
-      return fallback;
-  }
-};
