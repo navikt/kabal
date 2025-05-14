@@ -1,11 +1,9 @@
 import { deepFreeze } from '@app/functions/deep-freeze';
 import { TemplateSections } from '@app/plate/template-sections';
-import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { Immutable } from '@app/types/types';
-import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { LabelContentSource } from '../types';
 import {
   createCurrentDate,
@@ -66,16 +64,12 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   richText: [
     createCurrentDate(),
     createMaltekstseksjon(TemplateSections.TITLE),
-    {
-      type: BaseParagraphPlugin.key,
-      align: TextAlign.LEFT,
-      children: [
-        createLabelContent(LabelContentSource.SAKEN_GJELDER_NAME),
-        createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
-        createLabelContent(LabelContentSource.YTELSE),
-        createLabelContent(LabelContentSource.SAKSNUMMER),
-      ],
-    },
+
+    createLabelContent(LabelContentSource.SAKEN_GJELDER_NAME),
+    createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
+    createLabelContent(LabelContentSource.YTELSE),
+    createLabelContent(LabelContentSource.SAKSNUMMER),
+
     createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
     createMaltekstseksjon(TemplateSections.FREMLEGG),
     createSignature(),
