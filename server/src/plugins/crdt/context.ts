@@ -1,4 +1,4 @@
-import { isObject } from '@app/plugins/crdt/functions';
+import { isObject } from '@app/functions/functions';
 
 export interface ConnectionContext {
   readonly behandlingId: string;

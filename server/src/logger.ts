@@ -1,5 +1,5 @@
 import { TEAM_LOG_PARMS } from '@app/config/config';
-import { hasOwn } from '@app/plugins/crdt/functions';
+import { hasOwn } from '@app/functions/functions';
 import { isDeployed } from './config/env';
 
 const VERSION: string =
