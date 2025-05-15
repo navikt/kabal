@@ -4,6 +4,7 @@ import {
   UNDELETABLE_BUT_EDITABLE,
 } from '@app/plate/plugins/element-types';
 import { isInRegelverk, isInUnchangeableElement, isUndeletable } from '@app/plate/plugins/prohibit-deletion/helpers';
+import type { PlaceholderElement } from '@app/plate/types';
 import { isInList } from '@app/plate/utils/queries';
 import { ElementApi } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
@@ -166,4 +167,31 @@ export const handleDeleteInsideUnchangeable = (
   }
 
   return false;
+};
+
+export const handleDeleteInsidePlaceholder = (editor: PlateEditor, backward: boolean) => {
+  if (editor.selection === null) {
+    return false;
+  }
+
+  const entry = editor.api.node<PlaceholderElement>({
+    match: (n) => ElementApi.isElement(n) && n.type === ELEMENT_PLACEHOLDER,
+    at: editor.selection,
+  });
+
+  if (entry === undefined) {
+    return false;
+  }
+
+  const [{ deletable }, path] = entry;
+
+  if (backward) {
+    const isStart = editor.api.isStart(editor.selection.focus, path);
+
+    return isStart && deletable === false;
+  }
+
+  const isEnd = editor.api.isEnd(editor.selection.focus, path);
+
+  return isEnd && deletable === false;
 };
