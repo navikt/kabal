@@ -1,4 +1,4 @@
-import { hasOwn, isObject } from '@app/plugins/crdt/functions';
+import { hasOwn, isObject } from '@app/functions/functions';
 
 interface TokenPayload {
   aud: string;

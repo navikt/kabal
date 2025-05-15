@@ -1,6 +1,6 @@
 import { requiredEnvString } from '@app/config/env-var';
 import { serverConfig } from '@app/config/server-config';
-import { hasOwn } from '@app/plugins/crdt/functions';
+import { hasOwn } from '@app/functions/functions';
 
 const getEnvironmentVersion = <T>(local: T, development: T, production: T): T => {
   if (isDeployedToDev) {

@@ -1,13 +1,13 @@
 import { getCacheKey, oboCache } from '@app/auth/cache/cache';
 import { ApiClientEnum } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
+import { hasOwn, isObject } from '@app/functions/functions';
 import { isNotNull } from '@app/functions/guards';
 import { parseTokenPayload } from '@app/helpers/token-parser';
 import { type Level, getLogger, getTeamLogger } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
 import { getDocumentJson, setDocument } from '@app/plugins/crdt/api/set-document';
 import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
-import { hasOwn, isObject } from '@app/plugins/crdt/functions';
 import { getValkeyExtension } from '@app/plugins/crdt/valkey';
 import type { CloseEvent } from '@hocuspocus/common';
 import { Server } from '@hocuspocus/server';

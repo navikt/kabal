@@ -1,10 +1,10 @@
 import { getCacheKey, oboCache } from '@app/auth/cache/cache';
 import { ApiClientEnum } from '@app/config/config';
+import { isObject } from '@app/functions/functions';
 import { generateTraceparent } from '@app/helpers/traceparent';
 import { getLogger } from '@app/logger';
 import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import type { ConnectionContext } from '@app/plugins/crdt/context';
-import { isObject } from '@app/plugins/crdt/functions';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import type { Node } from 'slate';
 import { Doc, XmlText, encodeStateAsUpdateV2 } from 'yjs';
