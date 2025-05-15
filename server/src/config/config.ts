@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { isLocal } from '@app/config/env';
+import { isLocal, isTest } from '@app/config/env';
 import { requiredEnvJson, requiredEnvString } from '@app/config/env-var';
 import type { JWK } from 'jose';
 
@@ -40,3 +40,10 @@ export const PROXY_VERSION = requiredEnvString('VERSION', defaultValue);
 export const PORT = requiredEnvString('PORT', '8080');
 export const NAIS_CLUSTER_NAME = requiredEnvString('NAIS_CLUSTER_NAME', defaultValue);
 export const START_TIME = Date.now();
+
+export const TEAM_LOG_PARMS = {
+  google_cloud_project: requiredEnvString('GOOGLE_CLOUD_PROJECT', isTest ? '' : undefined),
+  nais_namespace_name: requiredEnvString('NAIS_NAMESPACE', isTest ? '' : undefined),
+  nais_pod_name: requiredEnvString('HOSTNAME', isTest ? '' : undefined),
+  nais_container_name: requiredEnvString('NAIS_APP_NAME', isTest ? '' : undefined),
+};

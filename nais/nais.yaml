@@ -51,6 +51,8 @@ spec:
         - application: kabal-innstillinger
         - application: klage-kodeverk-api
         - application: kabal-text-templates
+        - application: logging
+          namespace: nais-system
       external:
         - host: login.microsoftonline.com
         - host: hooks.slack.com
@@ -82,5 +84,3 @@ spec:
     autoInstrumentation:
       enabled: true
       runtime: nodejs
-  secureLogs:
-    enabled: true

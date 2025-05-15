@@ -3,7 +3,7 @@ import { ApiClientEnum } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
 import { isNotNull } from '@app/functions/guards';
 import { parseTokenPayload } from '@app/helpers/token-parser';
-import { type Level, getLogger, getSecureLogger } from '@app/logger';
+import { type Level, getLogger, getTeamLogger } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
 import { getDocumentJson, setDocument } from '@app/plugins/crdt/api/set-document';
 import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
@@ -14,7 +14,7 @@ import { Server } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
 
 const log = getLogger('collaboration');
-const secureLog = getSecureLogger('collaboration');
+const teamLog = getTeamLogger('collaboration');
 
 const logContext = (msg: string, context: ConnectionContext, level: Level = 'info') => {
   log[level]({
@@ -225,7 +225,7 @@ export const collaborationServer = Server.configure({
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to store document without context' });
 
-      secureLog.debug({
+      teamLog.debug({
         msg: 'Tried to store document without context',
         data: {
           document: JSON.stringify(getDocumentJson(document)),
