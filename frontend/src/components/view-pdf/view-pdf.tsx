@@ -1,3 +1,4 @@
+import { FeilTag, PolTag } from '@app/components/documents/document-warnings';
 import { TabContext } from '@app/components/documents/tab-context';
 import { Pdf, usePdfData } from '@app/components/pdf/pdf';
 import { toast } from '@app/components/toast/store';
@@ -8,10 +9,10 @@ import { useShownDocumentMetadata } from '@app/components/view-pdf/use-shown-doc
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
 import { useShownDocuments } from '@app/hooks/use-shown-documents';
-import { VariantFormat } from '@app/types/arkiverte-documents';
+import { Skjerming, VariantFormat } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, type ButtonProps, Loader, Switch, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, type ButtonProps, HStack, Loader, Switch, Tag, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useMergedDocument } from './use-merged-document';
@@ -28,6 +29,14 @@ export const ViewPDF = () => {
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
   const oppgaveId = useOppgaveId();
+  const showsPol = showDocumentList.some(
+    (doc) =>
+      doc.type === DocumentTypeEnum.JOURNALFOERT && doc.varianter.some(({ skjerming }) => skjerming === Skjerming.POL),
+  );
+  const showsFeil = showDocumentList.some(
+    (doc) =>
+      doc.type === DocumentTypeEnum.JOURNALFOERT && doc.varianter.some(({ skjerming }) => skjerming === Skjerming.FEIL),
+  );
   const showsArchivedDocument = showDocumentList.some((doc) => doc.type === DocumentTypeEnum.JOURNALFOERT);
   const hasRedactedDocuments = showDocumentList.some(
     (doc) =>
@@ -113,8 +122,10 @@ export const ViewPDF = () => {
         <Button onClick={decrease} title="Smalere PDF" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
         <Button onClick={increase} title="Bredere PDF" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />
         <ReloadButton isLoading={loading} onClick={refresh} />
-        <RedactedSwitch
+        <Variant
           showsArchivedDocument={showsArchivedDocument}
+          showsPol={showsPol}
+          showsFeil={showsFeil}
           hasRedactedDocuments={hasRedactedDocuments}
           hasAccessToArchivedDocuments={hasAccessToArchivedDocuments}
           showRedacted={showRedacted}
@@ -150,6 +161,22 @@ interface RedactedSwitchProps {
   showRedacted: boolean;
   setShowRedacted: (showRedacted: boolean) => void;
 }
+
+interface VariantProps extends RedactedSwitchProps {
+  showsPol: boolean;
+  showsFeil: boolean;
+}
+
+const Variant = ({ showsPol, showsFeil, ...props }: VariantProps) => {
+  return (
+    <HStack gap="1" wrap={false}>
+      <RedactedSwitch {...props} />
+
+      {showsPol ? <PolTag /> : null}
+      {showsFeil ? <FeilTag /> : null}
+    </HStack>
+  );
+};
 
 const RedactedSwitch = ({
   showsArchivedDocument,

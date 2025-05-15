@@ -47,6 +47,7 @@ const BASE_JD_REFERENCE: JournalfoertDokumentReference = {
       filtype: Filtype.PDF,
       format: VariantFormat.ARKIV,
       hasAccess: true,
+      skjerming: null,
     },
   ],
   datoOpprettet: '2021-01-01',
