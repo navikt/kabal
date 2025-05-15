@@ -221,11 +221,17 @@ export enum VariantFormat {
   SLADDET = 'SLADDET',
 }
 
+export enum Skjerming {
+  POL = 'POL',
+  FEIL = 'FEIL',
+}
+
 export interface Variant {
   /** Filtype for dokumentvarianten. */
   filtype: Filtype;
   hasAccess: boolean;
   format: VariantFormat;
+  skjerming: Skjerming | null;
 }
 
 export type Variants = [Variant, Variant] | [Variant];

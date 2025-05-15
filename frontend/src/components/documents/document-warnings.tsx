@@ -6,7 +6,7 @@ import {
   getDefaultVariant,
   hasRedactedVariant,
 } from '@app/components/documents/filetype';
-import type { Variants } from '@app/types/arkiverte-documents';
+import { Skjerming, type Variants } from '@app/types/arkiverte-documents';
 import { ExclamationmarkTriangleIcon, EyeObfuscatedIcon } from '@navikt/aksel-icons';
 import { HStack, Tag, Tooltip } from '@navikt/ds-react';
 
@@ -38,6 +38,26 @@ export const DocumentWarnings = ({ varianter }: Props) => {
           </Tag>
         </Tooltip>
       ) : null}
+
+      {variant.skjerming === Skjerming.POL ? <PolTag /> : null}
+
+      {variant.skjerming === Skjerming.FEIL ? <FeilTag /> : null}
     </HStack>
   );
 };
+
+export const PolTag = () => (
+  <Tooltip content="Dokumentet er begrenset basert på personopplysningsloven">
+    <Tag size="xsmall" variant="warning-filled">
+      Begrenset
+    </Tag>
+  </Tooltip>
+);
+
+export const FeilTag = () => (
+  <Tooltip content="Dokumentet er markert for sletting">
+    <Tag size="xsmall" variant="error-filled">
+      Slettes
+    </Tag>
+  </Tooltip>
+);
