@@ -5,6 +5,7 @@ import {
 import {
   handleDeleteBackwardIntoUnchangeable,
   handleDeleteForwardIntoUnchangeable,
+  handleDeleteInsidePlaceholder,
   handleDeleteInsideUnchangeable,
 } from '@app/plate/plugins/prohibit-deletion/unchangeable';
 import {
@@ -36,6 +37,10 @@ const withOverrides: OverrideEditor = ({ editor }) => {
 
   editor.tf.delete = (options) => {
     const backward = options?.reverse === true;
+
+    if (handleDeleteInsidePlaceholder(editor, backward)) {
+      return;
+    }
 
     if (backward) {
       if (handleDeleteBackwardInFullmektig(editor)) {

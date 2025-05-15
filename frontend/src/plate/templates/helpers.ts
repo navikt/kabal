@@ -234,5 +234,6 @@ export const createSaksinfo = () => [
     type: ELEMENT_SAKSNUMMER,
     children: [createPlaceHolder('Saksnummer', false)],
     isInitialized: false,
+    deletable: false,
   },
 ];
