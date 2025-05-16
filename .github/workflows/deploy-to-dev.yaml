@@ -14,6 +14,9 @@ on:
         default: latest
         type: string
     secrets:
+      STATUS_API_KEY:
+        description: "API key for status API"
+        required: true
       NAIS_WORKLOAD_IDENTITY_PROVIDER:
         description: "Identity provider for nais/docker-build-push"
         required: true
