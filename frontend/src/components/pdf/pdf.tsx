@@ -45,11 +45,14 @@ export interface UsePdfData {
   error: string | undefined;
 }
 
-export const usePdfData = (url: string | undefined, query?: Record<string, string>): UsePdfData => {
+type Fix = () => Promise<void>;
+
+export const usePdfData = (url: string | undefined, query?: Record<string, string>, fix?: Fix): UsePdfData => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<string>();
   const [error, setError] = useState<string>();
   const abortControllerRef = useRef<AbortController | null>(null);
+  const fixAttempted = useRef(false);
 
   useEffect(() => {
     if (url === undefined) {
@@ -98,6 +101,14 @@ export const usePdfData = (url: string | undefined, query?: Record<string, strin
         return;
       }
 
+      if (!fixAttempted.current && fix !== undefined) {
+        fixAttempted.current = true;
+        await fix();
+        refresh();
+
+        return;
+      }
+
       const message = e instanceof Error ? e.message : 'Ukjent feil';
       setError(message);
 
@@ -107,7 +118,10 @@ export const usePdfData = (url: string | undefined, query?: Record<string, strin
     }
   };
 
-  const refresh = () => getData(url).then(setData);
+  const refresh = () => {
+    fixAttempted.current = false;
+    getData(url).then(setData);
+  };
 
   return { data, loading, refresh, error };
 };

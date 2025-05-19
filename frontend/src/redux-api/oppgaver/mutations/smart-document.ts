@@ -1,4 +1,5 @@
 import { toast } from '@app/components/toast/store';
+import type { KabalValue } from '@app/plate/types';
 import type { IDocumentParams } from '@app/types/documents/common-params';
 import type { Language } from '@app/types/texts/language';
 import { IS_LOCALHOST } from '../../common';
@@ -38,7 +39,24 @@ const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
+    saveDocument: builder.mutation<
+      { modified: string; version: number },
+      { content: KabalValue; data?: string; dokumentId: string; oppgaveId: string }
+    >({
+      query: ({ content, dokumentId, oppgaveId, data }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}`,
+        method: 'PATCH',
+        body: { content, data },
+      }),
+      onQueryStarted: async (_, { queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+        } catch {
+          toast.error('Feil ved lagring av dokument.');
+        }
+      },
+    }),
   }),
 });
 
-export const { useSetLanguageMutation } = smartDocumentsMutationSlice;
+export const { useSetLanguageMutation, useSaveDocumentMutation } = smartDocumentsMutationSlice;

@@ -4,6 +4,7 @@ import { Pdf, usePdfData } from '@app/components/pdf/pdf';
 import { toast } from '@app/components/toast/store';
 import { Header } from '@app/components/view-pdf/header';
 import { ReloadButton } from '@app/components/view-pdf/reload-button';
+import { useFixSmartDocuments } from '@app/components/view-pdf/use-fix-smart-documents';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
 import { useShownDocumentMetadata } from '@app/components/view-pdf/use-shown-document-metadata';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -56,7 +57,8 @@ export const ViewPDF = () => {
   const { inlineUrl, tabUrl, tabId } = useShownDocumentMetadata(oppgaveId, mergedDocument, showDocumentList);
   const format = showRedacted ? VariantFormat.SLADDET : VariantFormat.ARKIV;
   const formatQuery = useMemo(() => ({ format }), [format]);
-  const { loading, data, refresh, error } = usePdfData(inlineUrl, formatQuery);
+  const fixSmartDocuments = useFixSmartDocuments();
+  const { loading, data, refresh, error } = usePdfData(inlineUrl, formatQuery, fixSmartDocuments);
 
   useMarkVisited(tabUrl);
 

@@ -8,6 +8,7 @@ import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-sca
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
+import { useSaveDocument } from '@app/components/smart-editor/tabbed-editors/use-save-document/use-save-document';
 import { VersionStatus } from '@app/components/smart-editor/tabbed-editors/version-status';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
@@ -138,6 +139,7 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
   const editor = useEditorRef(id);
   const options = editor.getOptions(YjsPlugin);
   const [isConnected, setIsConnected] = useState(options.provider.isConnected);
+  useSaveDocument();
 
   // useEffect(() => {
   //   const onChange: OnChangeFn = ({ added, removed, updated }) => {
