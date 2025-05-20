@@ -20,11 +20,31 @@ export const useCanEditDocument = (document: IMainDocument | null, parentDocumen
   const isFullfoert = useIsFullfoert();
   const { data: oppgave, isSuccess } = useOppgave();
 
-  const parentIsMarkertAvsluttet = parentDocument?.isMarkertAvsluttet === true;
-
   if (!isSuccess) {
     return false;
   }
+
+  const parentIsMarkertAvsluttet = parentDocument?.isMarkertAvsluttet === true;
+  const medunderskriverFlowState = oppgave.medunderskriver.flowState;
+  const rolFlowState = oppgave.rol.flowState;
+
+  const canEditParentOrIsMain =
+    parentDocument === undefined
+      ? true
+      : canEditDocument({
+          isRol,
+          document: parentDocument,
+          isFullfoert,
+          hasKrolRole,
+          isFeilregistrert,
+          hasMerkantilRole,
+          hasSaksbehandlerRole,
+          isTildeltSaksbehandler,
+          parentIsMarkertAvsluttet,
+          medunderskriverFlowState,
+          rolFlowState,
+          canEditParentOrIsMain: true,
+        });
 
   return canEditDocument({
     isRol,
@@ -36,8 +56,9 @@ export const useCanEditDocument = (document: IMainDocument | null, parentDocumen
     hasSaksbehandlerRole,
     isTildeltSaksbehandler,
     parentIsMarkertAvsluttet,
-    medunderskriverFlowState: oppgave.medunderskriver.flowState,
-    rolFlowState: oppgave.rol.flowState,
+    medunderskriverFlowState,
+    rolFlowState,
+    canEditParentOrIsMain,
   });
 };
 
@@ -53,6 +74,7 @@ export interface CanEditDocumentParams {
   isFeilregistrert: boolean;
   isFullfoert: boolean;
   isRol: boolean;
+  canEditParentOrIsMain: boolean;
 }
 
 export const canEditDocument = ({
@@ -67,6 +89,7 @@ export const canEditDocument = ({
   isTildeltSaksbehandler,
   medunderskriverFlowState,
   parentIsMarkertAvsluttet,
+  canEditParentOrIsMain,
 }: CanEditDocumentParams) => {
   if (parentIsMarkertAvsluttet || isFeilregistrert || document === null || document.isMarkertAvsluttet) {
     return false;
@@ -92,6 +115,10 @@ export const canEditDocument = ({
 
   if (hasMerkantilRole) {
     return true;
+  }
+
+  if (canEditParentOrIsMain && document.type === DocumentTypeEnum.UPLOADED) {
+    return hasSaksbehandlerRole;
   }
 
   if (isTildeltSaksbehandler) {
