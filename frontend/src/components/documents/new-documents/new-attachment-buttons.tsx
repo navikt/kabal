@@ -1,7 +1,6 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
@@ -30,10 +29,9 @@ export const NewAttachmentButtons = (props: Props) =>
   );
 
 const Upload = ({ document }: Props) => {
-  const canUpload =
-    useHasUploadAccess() && (getIsRolQuestions(document) || getIsIncomingDocument(document.dokumentTypeId));
+  const canUpload = useHasUploadAccess();
 
-  if (!canUpload) {
+  if (!canUpload || document.isSmartDokument) {
     return null;
   }
 
@@ -41,7 +39,7 @@ const Upload = ({ document }: Props) => {
     <UploadFileButton
       variant="tertiary"
       size="xsmall"
-      dokumentTypeId={document.dokumentTypeId}
+      distributionType={document.dokumentTypeId}
       parentId={document.id}
       data-testid="upload-attachment"
     >

@@ -6,7 +6,6 @@ import {
   UPLOAD_BUTTON_HEIGHT,
 } from '@app/components/documents/new-documents/constants';
 import { NewDocumentsHeader } from '@app/components/documents/new-documents/header/header';
-import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { ModalContextElement } from '@app/components/documents/new-documents/modal/modal-context';
 import { clamp } from '@app/functions/clamp';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
@@ -68,7 +67,7 @@ export const NewDocuments = () => {
       document !== undefined &&
       document.parentId === null &&
       hasUploadAccess &&
-      (getIsRolQuestions(document) || getIsIncomingDocument(document.dokumentTypeId)),
+      !document.isSmartDokument,
     [isFeilregistrert, hasUploadAccess],
   );
 

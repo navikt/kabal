@@ -33,18 +33,10 @@ export const DragAndDropContextElement = ({ children }: Props) => {
   const [draggedDocument, setDraggedDocument] = useState<IMainDocument | null>(null);
   const [draggingEnabled, setDraggingEnabled] = useState(true);
 
-  const hasDocument = draggedDocument !== null;
-  const hasJournalfoertDocuments = draggedJournalfoertDocuments.length > 0;
-
   const clearDragState = useCallback(() => {
-    if (hasJournalfoertDocuments) {
-      setDraggedJournalfoertDocuments(EMPTY_ARRAY);
-    }
-
-    if (hasDocument) {
-      setDraggedDocument(null);
-    }
-  }, [hasJournalfoertDocuments, hasDocument]);
+    setDraggedJournalfoertDocuments(EMPTY_ARRAY);
+    setDraggedDocument(null);
+  }, []);
 
   return (
     <DragAndDropContext.Provider

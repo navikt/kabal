@@ -1,5 +1,4 @@
 import { useDistribusjonstypeOptions } from '@app/hooks/use-distribusjonstype-options';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { type DistribusjonsType, DocumentTypeEnum } from '@app/types/documents/documents';
 import { Select } from '@navikt/ds-react';
 import { useMemo } from 'react';
@@ -9,35 +8,34 @@ const NONE = 'NONE';
 const NONE_OPTION = <option value={NONE}>Velg dokumenttype</option>;
 
 interface DocumentTypeProps {
-  setDokumentTypeId: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  dokumentTypeId: DistribusjonsType | null;
+  setDistributionType: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  distributionType: DistribusjonsType | null;
 }
 
-export const SetDocumentType = ({ dokumentTypeId, setDokumentTypeId }: DocumentTypeProps) => {
+export const SetDistributionType = ({ distributionType, setDistributionType }: DocumentTypeProps) => {
   const { outgoing, incoming } = useDistribusjonstypeOptions(DocumentTypeEnum.UPLOADED);
-  const isSaksbehandler = useIsSaksbehandler();
 
-  const options = useMemo<React.ReactNode[]>(() => {
-    const _options = isSaksbehandler ? [...outgoing, ...incoming] : incoming;
-
-    return _options.map(({ label, value }) => (
-      <option key={value} value={value}>
-        {label}
-      </option>
-    ));
-  }, [isSaksbehandler, outgoing, incoming]);
+  const options = useMemo<React.ReactNode[]>(
+    () =>
+      [...outgoing, ...incoming].map(({ label, value }) => (
+        <option key={value} value={value}>
+          {label}
+        </option>
+      )),
+    [outgoing, incoming],
+  );
 
   return (
     <StyledSelect
-      onChange={setDokumentTypeId}
+      onChange={setDistributionType}
       label="Dokumenttype"
-      value={dokumentTypeId ?? NONE}
+      value={distributionType ?? NONE}
       hideLabel
       size="small"
       title="Dokumenttype for opplastet dokument"
       data-testid="upload-document-type-select"
     >
-      {dokumentTypeId === null ? NONE_OPTION : null}
+      {distributionType === null ? NONE_OPTION : null}
       {options}
     </StyledSelect>
   );

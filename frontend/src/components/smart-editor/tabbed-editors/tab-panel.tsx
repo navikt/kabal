@@ -6,7 +6,6 @@ import { ScaleContextComponent } from '@app/plate/status-bar/scale-context';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import { Tabs } from '@navikt/ds-react';
 import { useEffect, useRef } from 'react';
-import { styled } from 'styled-components';
 
 interface TabPanelProps {
   smartDocument: ISmartDocument;
@@ -32,17 +31,12 @@ export const TabPanel = ({ smartDocument }: TabPanelProps) => {
   }, [canEditDocument, smartDocument]);
 
   return (
-    <StyledTabsPanel value={smartDocument.id}>
+    <Tabs.Panel className="h-full overflow-hidden" value={smartDocument.id}>
       <SmartEditorContextComponent smartDocument={smartDocument}>
         <ScaleContextComponent scalingGroup={ScalingGroup.OPPGAVEBEHANDLING}>
           <Editor key={id} smartDocument={smartDocument} scalingGroup={ScalingGroup.OPPGAVEBEHANDLING} />
         </ScaleContextComponent>
       </SmartEditorContextComponent>
-    </StyledTabsPanel>
+    </Tabs.Panel>
   );
 };
-
-export const StyledTabsPanel = styled(Tabs.Panel)`
-  height: 100%;
-  overflow: hidden;
-`;
