@@ -51,14 +51,15 @@ export const UserDropdown = (): React.JSX.Element | null => {
             as={CopyButton}
             title="Klikk for å kopiere versjonsnummeret"
             copyText={version}
-            text={`Kabal-versjon: ${getShortVersion(version)}`}
+            text={`Kabal-versjon: ${version}`}
             size="small"
-            className="justify-start bg-bg-default hover:bg-surface-action-subtle-hover active:bg-surface-action-active"
+            className="justify-start whitespace-nowrap bg-bg-default hover:bg-surface-action-subtle-hover active:bg-surface-action-active"
             icon={<BranchingIcon aria-hidden />}
           >
             {null}
           </Dropdown.Menu.List.Item>
         </Tooltip>
+
         <DebugButton />
       </Dropdown.Menu.List>
     </Dropdown.Menu>
@@ -67,11 +68,3 @@ export const UserDropdown = (): React.JSX.Element | null => {
 
 const LINK_CLASSES =
   'flex gap-2 items-center cursor-pointer hover:bg-surface-action-subtle-hover active:bg-surface-action-active active:text-text-on-action';
-
-const getShortVersion = (version: string): string => {
-  if (version.length <= 7) {
-    return version;
-  }
-
-  return `${version.substring(0, 7)}...`;
-};
