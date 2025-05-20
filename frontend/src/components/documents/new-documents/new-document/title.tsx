@@ -11,17 +11,19 @@ import {
 } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useCallback, useContext, useMemo, useState } from 'react';
-import { TitleAction } from './title-action';
+import { TitleActions, type TitleActionsProps } from './title-actions';
 
 interface Props {
-  document: IMainDocument;
+  document: IDocument;
+  renameAllowed: boolean;
+  noRenameAccessMessage: string | null;
 }
 
 export const DocumentTitle = memo(
-  ({ document }: Props) => {
+  ({ document, renameAllowed, noRenameAccessMessage }: Props) => {
     const [editMode, _setEditMode] = useState(false);
     const { setDraggingEnabled } = useContext(DragAndDropContext);
     const oppgaveId = useOppgaveId();
@@ -52,6 +54,14 @@ export const DocumentTitle = memo(
       [setDraggingEnabled],
     );
 
+    const titleActionsProps: TitleActionsProps = {
+      document,
+      setEditMode,
+      editMode,
+      renameAllowed,
+      noRenameAccessMessage,
+    };
+
     if (editMode) {
       return (
         <StyledDocumentTitle>
@@ -68,7 +78,7 @@ export const DocumentTitle = memo(
               setTitle({ oppgaveId, dokumentId: document.id, title });
             }}
           />
-          <TitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
+          <TitleActions {...titleActionsProps} />
         </StyledDocumentTitle>
       );
     }
@@ -89,7 +99,7 @@ export const DocumentTitle = memo(
         >
           <DocumentWarnings varianter={document.journalfoertDokumentReference.varianter} />
 
-          <TitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
+          <TitleActions {...titleActionsProps} />
         </SharedDocumentTitle>
       );
     }
@@ -103,7 +113,7 @@ export const DocumentTitle = memo(
         documentId={documentId}
         type={document.type}
       >
-        <TitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
+        <TitleActions {...titleActionsProps} />
       </SharedDocumentTitle>
     );
   },

@@ -6,24 +6,19 @@ import { RolStateText } from '@app/components/behandling/behandlingsdialog/rol/s
 import { TakeFromRol } from '@app/components/behandling/behandlingsdialog/rol/take-from-rol';
 import { TakeFromSaksbehandler } from '@app/components/behandling/behandlingsdialog/rol/take-from-saksbehandler';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { Role } from '@app/types/bruker';
+import { useIsAssignedRol } from '@app/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { VStack } from '@navikt/ds-react';
 import { RolReadOnly } from './read-only';
 
 export const Rol = () => {
-  const { data: oppgave, isLoading } = useOppgave();
+  const { data, isSuccess } = useOppgave();
 
-  if (isLoading || oppgave === undefined) {
-    return SKELETON;
-  }
-
-  return <RolInternal oppgave={oppgave} />;
+  return isSuccess ? <RolInternal oppgave={data} /> : SKELETON;
 };
 
 interface Props {
@@ -31,17 +26,19 @@ interface Props {
 }
 
 const RolInternal = ({ oppgave }: Props) => {
-  const isSaksbehandler = useIsSaksbehandler();
-  const isRol = useIsRol();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
+  const isAssignedRol = useIsAssignedRol();
   const isFinished = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
-  const isKrol = useHasRole(Role.KABAL_KROL);
 
   const { rol } = oppgave;
 
-  const isReadOnly = isFinished || isFeilregistrert || !(isSaksbehandler || isRol || isKrol);
+  const canEdit =
+    !isFinished &&
+    !isFeilregistrert &&
+    (isSaksbehandler || (isAssignedRol && oppgave.rol.flowState !== FlowState.NOT_SENT));
 
-  if (isReadOnly) {
+  if (!canEdit) {
     if (rol.employee === null) {
       return null;
     }

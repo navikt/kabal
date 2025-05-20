@@ -5,7 +5,7 @@ import {
   useGetSmartDocumentVersionQuery,
   useGetSmartDocumentVersionsQuery,
 } from '@app/redux-api/oppgaver/queries/documents';
-import type { ISmartDocument, ISmartDocumentVersion } from '@app/types/documents/documents';
+import type { ISmartDocumentOrAttachment, ISmartDocumentVersion } from '@app/types/documents/documents';
 import { ChevronRightIcon, ClockDashedIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Heading, Loader, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -14,7 +14,7 @@ import { styled } from 'styled-components';
 
 interface Props {
   oppgaveId: string;
-  smartDocument: ISmartDocument;
+  smartDocument: ISmartDocumentOrAttachment;
 }
 
 export const History = ({ smartDocument, oppgaveId }: Props) => {

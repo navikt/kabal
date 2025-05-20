@@ -1,86 +1,131 @@
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { canDistributeAny } from '@app/components/documents/filetype';
-import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useHasRole } from '@app/hooks/use-has-role';
+import { getIsRolAnswers, getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
+import { AttachmentAccessEnum } from '@app/hooks/dua-access/attachment-access';
+import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
+import { useLazyAttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
+import { type DocumentAccess, useLazyDocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { Role } from '@app/types/bruker';
-import { DistribusjonsType, DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
-import { FlowState } from '@app/types/oppgave-common';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { useContext } from 'react';
+import { useLazyParentDocument } from '@app/hooks/use-parent-document';
+import {
+  DistribusjonsType,
+  DocumentTypeEnum,
+  type IAttachmentDocument,
+  type IDocument,
+  type IParentDocument,
+  isAttachmentDocument,
+  isParentDocument,
+} from '@app/types/documents/documents';
+import { useCallback, useContext, useMemo } from 'react';
 
-export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
+export const useCanDropOnDocument = (targetDocument: IDocument, targetAccess: DocumentAccess) => {
   const { draggedDocument, draggedJournalfoertDocuments } = useContext(DragAndDropContext);
-  const isRol = useIsRol();
-  const isTildeltSaksbehandler = useIsSaksbehandler();
-  const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
-  const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
-  const isFullfoert = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
-  const { data: oppgave } = useOppgave();
+  const canBeParentOfDocument = useLazyCanBeParentOfDocument();
 
-  if (targetDocument.isMarkertAvsluttet || isFeilregistrert || oppgave === undefined) {
+  if (targetDocument.isMarkertAvsluttet || isFeilregistrert || isAttachmentDocument(targetDocument)) {
     return false;
   }
 
+  // Nye journalførte dokumenter.
   if (draggedJournalfoertDocuments.length > 0) {
-    if (getIsIncomingDocument(targetDocument.dokumentTypeId)) {
+    if (targetAccess.referAttachments !== DocumentAccessEnum.ALLOWED) {
       return false;
     }
 
-    // File types that cannot be distributed, can only be dropped on documents of type NOTAT.
     if (
       draggedJournalfoertDocuments.some((d) => !canDistributeAny(d.varianter)) &&
       targetDocument.dokumentTypeId !== DistribusjonsType.NOTAT
     ) {
+      // Journalførte dokumenter med varianter som ikke kan distribueres, kan kun legges som vedlegg til dokumenter av typen NOTAT.
       return false;
     }
 
-    if (isFullfoert) {
-      return hasSaksbehandlerRole;
-    }
-
-    if (isTildeltSaksbehandler || hasOppgavestyringRole) {
-      return true;
-    }
-
-    if (isRol) {
-      return canRolActOnDocument(targetDocument, oppgave);
-    }
+    return true;
   }
 
-  const isAllowedNewDocument = isDroppableNewDocument(draggedDocument, targetDocument.id);
-
-  if (!isAllowedNewDocument) {
+  // Eksisterende dokumenter.
+  if (draggedDocument === null) {
     return false;
   }
 
-  if (isTildeltSaksbehandler || hasOppgavestyringRole || (isFullfoert && hasSaksbehandlerRole)) {
-    if (getIsIncomingDocument(targetDocument.dokumentTypeId)) {
-      return draggedDocument.type === DocumentTypeEnum.UPLOADED && draggedDocument.parentId !== null;
-    }
-
-    return draggedDocument.type === DocumentTypeEnum.JOURNALFOERT || getIsRolQuestions(targetDocument);
+  if (isParentDocument(draggedDocument)) {
+    // Hoveddokumenter kan ikke gjøres om til vedlegg.
+    return false;
   }
 
-  if (isRol) {
-    return canRolActOnDocument(targetDocument, oppgave);
-  }
-
-  return false;
+  return canBeParentOfDocument(targetDocument, draggedDocument, undefined, targetAccess);
 };
 
-const isDroppableNewDocument = (dragged: IMainDocument | null, documentId: string): dragged is IMainDocument =>
-  dragged !== null &&
-  !dragged.isMarkertAvsluttet &&
-  dragged.id !== documentId &&
-  dragged.parentId !== documentId &&
-  !getIsRolQuestions(dragged);
+export const useLazyCanBeParentOfDocument = () => {
+  const getDocumentAccess = useLazyDocumentAccess();
+  const getAttachmentAccess = useLazyAttachmentAccess();
+  const getParentDocument = useLazyParentDocument();
 
-const canRolActOnDocument = (document: IMainDocument, oppgave: IOppgavebehandling) =>
-  getIsRolQuestions(document) && oppgave.rol.flowState === FlowState.SENT;
+  type Fn = (
+    targetDocument: IParentDocument,
+    attachment: IAttachmentDocument,
+    parentDocument?: IParentDocument,
+    targetAccess?: DocumentAccess,
+  ) => boolean;
+
+  return useCallback<Fn>(
+    (
+      targetDocument,
+      attachment,
+      parentDocument = getParentDocument(attachment.parentId),
+      targetAccess = getDocumentAccess(targetDocument),
+    ) => {
+      if (targetDocument.id === attachment.parentId) {
+        // Vedlegg kan ikke flyttes til samme hoveddokument. Ingen endring.
+        return false;
+      }
+
+      const access = getAttachmentAccess(attachment, parentDocument);
+
+      if (access.move !== AttachmentAccessEnum.ALLOWED) {
+        // Dratt dokument kan ikke flyttes.
+        return false;
+      }
+
+      // Target allows uploaded attachments.
+      if (
+        targetAccess.uploadAttachments === DocumentAccessEnum.ALLOWED &&
+        attachment.type === DocumentTypeEnum.UPLOADED
+      ) {
+        return true;
+      }
+
+      // Target allows archived attachments.
+      if (
+        targetAccess.referAttachments === DocumentAccessEnum.ALLOWED &&
+        attachment.type === DocumentTypeEnum.JOURNALFOERT
+      ) {
+        return true;
+      }
+
+      // ROL-spørsmål
+      if (getIsRolQuestions(targetDocument)) {
+        // ROL-svar kan bare være vedlegg til ROL-spørsmål.
+        // ROL-svar kan flyttes mellom ROL-spørsmål.
+        return attachment.type === DocumentTypeEnum.JOURNALFOERT || getIsRolAnswers(attachment);
+      }
+
+      return false;
+    },
+    [getDocumentAccess, getAttachmentAccess, getParentDocument],
+  );
+};
+
+export const useCanBeParentOfDocument = (
+  targetDocument: IParentDocument,
+  attachment: IAttachmentDocument,
+  parentDocument?: IParentDocument,
+): boolean => {
+  const canBeParentOfDocument = useLazyCanBeParentOfDocument();
+
+  return useMemo(
+    () => canBeParentOfDocument(targetDocument, attachment, parentDocument),
+    [targetDocument, attachment, parentDocument, canBeParentOfDocument],
+  );
+};

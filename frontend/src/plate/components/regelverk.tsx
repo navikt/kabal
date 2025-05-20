@@ -22,7 +22,7 @@ import { styled } from 'styled-components';
 const isRegelverk = (text: IConsumerText): text is IConsumerRegelverkText => text.textType === REGELVERK_TYPE;
 
 export const Regelverk = (props: PlateElementProps<RegelverkElement>) => {
-  const { canManage } = useContext(SmartEditorContext);
+  const { hasWriteAccess } = useContext(SmartEditorContext);
   const { children, element } = props;
 
   return (
@@ -33,7 +33,7 @@ export const Regelverk = (props: PlateElementProps<RegelverkElement>) => {
     >
       <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
         {children}
-        {canManage ? (
+        {hasWriteAccess ? (
           <SectionToolbar contentEditable={false} className="top-8">
             <DeleteRegelverk element={element} />
           </SectionToolbar>
@@ -65,7 +65,7 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
   const [loading, setLoading] = useState(false);
   const { data: oppgave } = useOppgave();
   const query = useRegelverkQuery();
-  const { canManage } = useContext(SmartEditorContext);
+  const { hasWriteAccess } = useContext(SmartEditorContext);
 
   const [getTexts] = useLazyGetConsumerTextsQuery();
 
@@ -111,7 +111,7 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
             <StyledLoader title="Laster..." size="2xlarge" />
           </LoadingWrapper>
         ) : null}
-        {canManage ? (
+        {hasWriteAccess ? (
           <SectionToolbar contentEditable={false}>
             <Tooltip content={loading ? 'Oppdaterer regelverk...' : 'Oppdater regelverk'} delay={0}>
               <Button

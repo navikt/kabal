@@ -1,30 +1,34 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { canRolEditDocument } from '@app/hooks/use-can-document/common';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
-import { CreatorRole, DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import {
+  CreatorRole,
+  DocumentTypeEnum,
+  type IDocument,
+  type JournalfoertDokument,
+} from '@app/types/documents/documents';
 import { FlowState } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
-export const useCanEditDocument = (document: IMainDocument | null, parentDocument?: IMainDocument) => {
-  const isRol = useIsRol();
-  const isTildeltSaksbehandler = useIsSaksbehandler();
-  const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
-  const hasMerkantilRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
+export const useCanEditDocument = (document: IDocument | null, parentDocument?: IDocument) => {
+  const isRol = useIsAssignedRolAndSent();
+  const isTildeltSaksbehandler = useIsTildeltSaksbehandler();
   const hasKrolRole = useHasRole(Role.KABAL_ROL);
   const isFeilregistrert = useIsFeilregistrert();
   const isFullfoert = useIsFullfoert();
   const { data: oppgave, isSuccess } = useOppgave();
 
-  const parentIsMarkertAvsluttet = parentDocument?.isMarkertAvsluttet === true;
-
-  if (!isSuccess) {
+  if (!isSuccess || document === null) {
     return false;
   }
+
+  const isMarkertAvsluttet = (parentDocument ?? document).isMarkertAvsluttet === true;
+  const medunderskriverFlowState = oppgave.medunderskriver.flowState;
+  const rolFlowState = oppgave.rol.flowState;
 
   return canEditDocument({
     isRol,
@@ -32,23 +36,19 @@ export const useCanEditDocument = (document: IMainDocument | null, parentDocumen
     isFullfoert,
     hasKrolRole,
     isFeilregistrert,
-    hasMerkantilRole,
-    hasSaksbehandlerRole,
     isTildeltSaksbehandler,
-    parentIsMarkertAvsluttet,
-    medunderskriverFlowState: oppgave.medunderskriver.flowState,
-    rolFlowState: oppgave.rol.flowState,
+    isMarkertAvsluttet,
+    medunderskriverFlowState,
+    rolFlowState,
   });
 };
 
 export interface CanEditDocumentParams {
   medunderskriverFlowState: FlowState;
-  parentIsMarkertAvsluttet: boolean;
-  document: IMainDocument | null;
+  isMarkertAvsluttet: boolean;
+  document: IDocument;
   rolFlowState: FlowState;
   isTildeltSaksbehandler: boolean;
-  hasSaksbehandlerRole: boolean;
-  hasMerkantilRole: boolean;
   hasKrolRole: boolean;
   isFeilregistrert: boolean;
   isFullfoert: boolean;
@@ -62,45 +62,59 @@ export const canEditDocument = ({
   hasKrolRole,
   rolFlowState,
   isFeilregistrert,
-  hasMerkantilRole,
-  hasSaksbehandlerRole,
   isTildeltSaksbehandler,
   medunderskriverFlowState,
-  parentIsMarkertAvsluttet,
+  isMarkertAvsluttet,
 }: CanEditDocumentParams) => {
-  if (parentIsMarkertAvsluttet || isFeilregistrert || document === null || document.isMarkertAvsluttet) {
+  if (isMarkertAvsluttet || isFeilregistrert || document === null || document.isMarkertAvsluttet) {
     return false;
   }
 
-  const isJournalfoert = document.type === DocumentTypeEnum.JOURNALFOERT;
-
-  if (isJournalfoert && !document.journalfoertDokumentReference.hasAccess) {
+  if (document.type === DocumentTypeEnum.JOURNALFOERT && !document.journalfoertDokumentReference.hasAccess) {
+    // Bare brukere med tilgang til arkivvariant kan håndtere journalførte dokumenter.
     return false;
   }
 
   if (isFullfoert) {
-    return hasSaksbehandlerRole;
+    // Alle kan håndtere dokumenter i fullførte saker.
+    return true;
+  }
+
+  if (document.type === DocumentTypeEnum.UPLOADED) {
+    // Alle kan håndtere opplastede dokumenter.
+    return true;
   }
 
   if (medunderskriverFlowState === FlowState.SENT) {
+    // Ingen kan håndtere dokumenter i saker som er sendt til medunderskriver.
     return false;
   }
 
   if (document.templateId === TemplateIdEnum.ROL_ANSWERS) {
+    // Bare ROL og KROL kan håndtere ROL-svar.
     return isRol || hasKrolRole;
   }
 
-  if (hasMerkantilRole) {
-    return true;
-  }
-
   if (isTildeltSaksbehandler) {
+    // Tildelt saksbehandler kan kun håndtere dokumenter som er opprettet av brukere med rollen KABAL_SAKSBEHANDLING.
     return document.creator.creatorRole === CreatorRole.KABAL_SAKSBEHANDLING;
   }
 
   if (isRol) {
-    return canRolEditDocument(document, rolFlowState);
+    if (rolFlowState !== FlowState.SENT) {
+      // ROL kan kun håndtere dokumenter i saker som er sendt til ROL.
+      return false;
+    }
+
+    if (document.type === DocumentTypeEnum.JOURNALFOERT && !hasAccessToArchivedDocument(document)) {
+      return false;
+    }
+
+    return document.creator.creatorRole === CreatorRole.KABAL_ROL;
   }
 
   return false;
 };
+
+const hasAccessToArchivedDocument = (document: IDocument): document is JournalfoertDokument =>
+  document.type === DocumentTypeEnum.JOURNALFOERT && document.journalfoertDokumentReference.hasAccess;

@@ -22,20 +22,20 @@ import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { type MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
 
 export const RedaktørPlaceholder = (props: PlateElementProps<PlaceholderElement>) => (
-  <Placeholder {...props} canManage />
+  <Placeholder {...props} hasWriteAccess />
 );
 
 export const SaksbehandlerPlaceholder = (props: PlateElementProps<PlaceholderElement>) => {
-  const { canManage } = useContext(SmartEditorContext);
+  const { hasWriteAccess } = useContext(SmartEditorContext);
 
-  return <Placeholder {...props} canManage={canManage} />;
+  return <Placeholder {...props} hasWriteAccess={hasWriteAccess} />;
 };
 
 interface PlaceholderProps extends PlateElementProps<PlaceholderElement> {
-  canManage: boolean;
+  hasWriteAccess: boolean;
 }
 
-const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
+const Placeholder = ({ hasWriteAccess, ...props }: PlaceholderProps) => {
   const { children, element, editor } = props;
   const text: string = useMemo(() => element.children.map((c) => c.text).join(''), [element.children]);
   const hasNoVisibleText = useMemo(() => getHasNoVisibleText(text), [text]);
@@ -141,11 +141,11 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
     const path = editor.api.findPath(element);
 
     return (
-      !(canManage && hasNoVisibleText) ||
+      !(hasWriteAccess && hasNoVisibleText) ||
       lonePlaceholderInMaltekst(editor, element, path) ||
       element.deletable === false
     );
-  }, [editor, element, hasNoVisibleText, canManage]);
+  }, [editor, element, hasNoVisibleText, hasWriteAccess]);
 
   return (
     <PlateElement

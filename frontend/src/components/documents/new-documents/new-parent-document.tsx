@@ -1,15 +1,16 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { DropZone } from '@app/components/documents/new-documents/shared/drop-zone';
+import { useDocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDropOnDocument } from '@app/hooks/use-can-document/use-can-drop-on-document';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import {
   useCreateVedleggFromJournalfoertDocumentMutation,
   useSetParentMutation,
 } from '@app/redux-api/oppgaver/mutations/documents';
-import { CreatorRole, type IMainDocument } from '@app/types/documents/documents';
+import { CreatorRole, type IDocument, type IParentDocument } from '@app/types/documents/documents';
 import { PaperclipIcon } from '@navikt/aksel-icons';
 import { Box } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -18,20 +19,21 @@ import { AttachmentList, type ListProps } from './attachment-list';
 import { NewDocument } from './new-document/new-document';
 
 interface Props extends ListProps {
-  document: IMainDocument;
+  document: IParentDocument;
   style: React.CSSProperties;
 }
 
 export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
   const { user } = useContext(StaticDataContext);
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
   const oppgaveId = useOppgaveId();
   const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation({
     fixedCacheKey: `createVedlegg-${document.id}`,
   });
   const [setParent] = useSetParentMutation();
   const { draggedDocument, draggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
-  const isDropTarget = useCanDropOnDocument(document);
+  const access = useDocumentAccess(document);
+  const isDropTarget = useCanDropOnDocument(document, access);
   const isFinished = useIsFullfoert();
 
   const onDrop = useCallback(() => {
@@ -91,11 +93,7 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
         label={`Vedlegg for «${document.tittel}»`}
         onDrop={onDrop}
       >
-        <NewDocument
-          document={document}
-          containsRolAttachments={listProps.containsRolAttachments}
-          hasAttachments={listProps.hasAttachments}
-        />
+        <NewDocument document={document} access={access} />
 
         <AttachmentList parentDocument={document} {...listProps} />
       </DropZone>
@@ -103,5 +101,5 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
   );
 };
 
-const isDroppableNewDocument = (dragged: IMainDocument | null, documentId: string): dragged is IMainDocument =>
+const isDroppableNewDocument = (dragged: IDocument | null, documentId: string): dragged is IDocument =>
   dragged !== null && !dragged.isMarkertAvsluttet && dragged.id !== documentId && dragged.parentId !== documentId;

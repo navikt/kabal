@@ -1,14 +1,13 @@
-import { useMemo } from 'react';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
+export const useLazyIsFullfoert = () => {
+  const { data, isSuccess } = useOppgave();
+
+  return () => isSuccess && data.isAvsluttetAvSaksbehandler;
+};
+
 export const useIsFullfoert = (): boolean => {
-  const { data: oppgave } = useOppgave();
+  const isLazyFullfoert = useLazyIsFullfoert();
 
-  return useMemo(() => {
-    if (typeof oppgave === 'undefined') {
-      return false;
-    }
-
-    return oppgave.isAvsluttetAvSaksbehandler;
-  }, [oppgave]);
+  return isLazyFullfoert();
 };

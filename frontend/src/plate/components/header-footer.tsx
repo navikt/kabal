@@ -53,7 +53,7 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
 
   const editor = useMyPlateEditorRef();
   const query = useHeaderFooterQuery(textType);
-  const { canManage } = useContext(SmartEditorContext);
+  const { hasWriteAccess } = useContext(SmartEditorContext);
 
   const loadMaltekst = useCallback(
     async (e: ElementTypes) => {
@@ -111,7 +111,7 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
       <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.FOOTER}>
         <HeaderFooterContent text={text} isLoading={isLoading && isUninitialized} type={element.type} />
         {children}
-        {canManage ? (
+        {hasWriteAccess ? (
           <SectionToolbar>
             <AddNewParagraph editor={editor} element={element} />
           </SectionToolbar>

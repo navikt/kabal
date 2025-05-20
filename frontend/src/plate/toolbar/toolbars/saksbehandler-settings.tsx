@@ -17,7 +17,7 @@ import { useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
 export const SaksbehandlerSettings = () => {
-  const { canManage, showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } = useContext(SmartEditorContext);
+  const { hasWriteAccess, showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } = useContext(SmartEditorContext);
   const { value: expandedThreads = true, setValue: setExpandedThreads } = useSmartEditorExpandedThreads();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -58,7 +58,7 @@ export const SaksbehandlerSettings = () => {
           </Heading>
         </Modal.Header>
         <StyledModalBody>
-          {canManage ? (
+          {hasWriteAccess ? (
             <section aria-labelledby="set-language">
               <Heading level="2" size="small" spacing id="set-language">
                 Språk

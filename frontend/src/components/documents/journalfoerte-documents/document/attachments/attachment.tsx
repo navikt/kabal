@@ -17,8 +17,8 @@ import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/do
 import { findDocument } from '@app/domain/find-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument, IArkivertDocumentVedlegg, Journalstatus } from '@app/types/arkiverte-documents';
 import { Checkbox, HGrid } from '@navikt/ds-react';
@@ -55,8 +55,8 @@ export const Attachment = memo(
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
     const cleanDragUI = useRef<() => void>(() => undefined);
     const { setDraggedJournalfoertDocuments, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
-    const isSaksbehandler = useIsSaksbehandler();
-    const isRol = useIsRol();
+    const isSaksbehandler = useIsTildeltSaksbehandler();
+    const isRol = useIsAssignedRolAndSent();
     const isFeilregistrert = useIsFeilregistrert();
 
     const documents = arkiverteDokumenter?.dokumenter ?? EMPTY_ARRAY;

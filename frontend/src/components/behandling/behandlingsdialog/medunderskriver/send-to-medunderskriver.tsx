@@ -1,4 +1,4 @@
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
 import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const SendToMedunderskriver = ({ oppgaveId, typeId, medunderskriver }: Props) => {
-  const isSaksbehandler = useIsSaksbehandler();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
   const [, medunderskriverLoader] = useSetMedunderskriverMutation({ fixedCacheKey: oppgaveId });
   const [setMedunderskriverFlowState, loader] = useSetMedunderskriverFlowStateMutation();
 

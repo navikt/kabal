@@ -1,39 +1,43 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import { ROL_ANSWERS_TEMPLATE } from '@app/plate/templates/simple-templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { Role } from '@app/types/bruker';
-import type { IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IParentDocument } from '@app/types/documents/documents';
 import { Language } from '@app/types/texts/language';
 import { Chat2Icon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useContext } from 'react';
 
 interface Props {
-  document: IMainDocument;
+  document: IParentDocument;
 }
 
-export const NewAttachmentButtons = (props: Props) =>
-  useIsFeilregistrert() ? null : (
+export const NewAttachmentButtons = (props: Props) => {
+  const isFeilregistrert = useIsFeilregistrert();
+
+  if (isFeilregistrert) {
+    return null;
+  }
+
+  return (
     <HStack align="center" gap="0 2" marginInline="7 0" className="empty:hidden">
       <NewRolAnswerDocumentButton {...props} />
-
       <Upload {...props} />
     </HStack>
   );
+};
 
 const Upload = ({ document }: Props) => {
-  const canUpload =
-    useHasUploadAccess() && (getIsRolQuestions(document) || getIsIncomingDocument(document.dokumentTypeId));
+  const canUpload = useHasUploadAccess();
 
-  if (!canUpload) {
+  if (!canUpload || document.isSmartDokument || document.type !== DocumentTypeEnum.UPLOADED) {
     return null;
   }
 
@@ -41,7 +45,7 @@ const Upload = ({ document }: Props) => {
     <UploadFileButton
       variant="tertiary"
       size="xsmall"
-      dokumentTypeId={document.dokumentTypeId}
+      distributionType={document.dokumentTypeId}
       parentId={document.id}
       data-testid="upload-attachment"
     >
@@ -51,14 +55,14 @@ const Upload = ({ document }: Props) => {
 };
 
 const NewRolAnswerDocumentButton = ({ document }: Props) => {
-  const { data: oppgave } = useOppgave();
+  const { data: oppgave, isSuccess } = useOppgave();
   const { user } = useContext(StaticDataContext);
   const isFinished = useIsFullfoert();
-  const isRolQuestions = getIsRolQuestions(document);
-  const isRol = useIsRol();
+  const isFeilregistrert = useIsFeilregistrert();
+  const isRol = useIsAssignedRolAndSent();
   const [create, { isLoading }] = useCreateSmartDocumentMutation();
 
-  if (oppgave === undefined || !isRol || !isRolQuestions || isFinished) {
+  if (!isSuccess || isFeilregistrert || isFinished || !isRol || !getIsRolQuestions(document)) {
     return null;
   }
 

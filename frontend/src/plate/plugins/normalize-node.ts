@@ -64,6 +64,7 @@ const isTopLevelElement = isOfElementTypesFn<TopLevelElement>([
   TableCellPlugin.node.type,
 ]);
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): boolean => {
   if (node.type === undefined) {
     pushNodeEvent(editor, node, path, 'normalized-undefined-type');

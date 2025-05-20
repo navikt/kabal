@@ -23,7 +23,7 @@ import { useContext, useEffect } from 'react';
 export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
   const { children, element, editor } = props;
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const { canManage, templateId } = useContext(SmartEditorContext);
+  const { hasWriteAccess, templateId } = useContext(SmartEditorContext);
   const query = useQuery({ textType: RichTextTypes.MALTEKST, section: element.section, templateId });
   const { data, isLoading, isFetching, refetch } = useGetConsumerTextsQuery(query);
 
@@ -110,7 +110,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
         }}
       >
         {children}
-        {canManage ? (
+        {hasWriteAccess ? (
           <SectionToolbar contentEditable={false}>
             <AddNewParagraphs editor={editor} element={element} />
             <Tooltip content="Oppdater til siste versjon" delay={0} placement="bottom">

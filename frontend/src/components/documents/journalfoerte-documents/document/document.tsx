@@ -17,7 +17,7 @@ import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/do
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { Checkbox, HGrid } from '@navikt/ds-react';
 import { useCallback, useContext, useRef } from 'react';
@@ -47,7 +47,7 @@ export const Document = ({
   hasVedlegg,
   className,
 }: Props) => {
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
   const hasDocumentsAccess = useHasDocumentsAccess();
   const { columns } = useArchivedDocumentsColumns();
 

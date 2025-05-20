@@ -27,7 +27,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
   const { children, element, editor } = props;
   const oppgave = useRequiredOppgave();
   const language = useSmartEditorLanguage();
-  const { canManage, templateId } = useContext(SmartEditorContext);
+  const { hasWriteAccess, templateId } = useContext(SmartEditorContext);
   const query = useMaltekstseksjonQuery(templateId, element.section);
   const path = usePath(editor, element);
   const queryChanged = useMemo(
@@ -56,7 +56,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
     oppgave.resultat,
     setUpdated,
     queryChanged,
-    canManage,
+    hasWriteAccess,
   );
 
   const isInRegelverk = useMemo(() => getIsInRegelverk(editor, element), [editor, element]);
@@ -88,7 +88,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
         data-language={element.language}
         data-maltekstseksjon-id={element.id}
       >
-        {!canManage || isFetching || manualUpdate === undefined || queryChanged ? null : (
+        {!hasWriteAccess || isFetching || manualUpdate === undefined || queryChanged ? null : (
           <UpdateMaltekstseksjon
             next={manualUpdate}
             ignore={setUpdated}
@@ -99,7 +99,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
           />
         )}
         {children}
-        {canManage && elementIsEmpty && maltekstseksjon === null && oppgave !== undefined ? (
+        {hasWriteAccess && elementIsEmpty && maltekstseksjon === null && oppgave !== undefined ? (
           <Information
             isUpdating={false}
             oppgave={oppgave}
@@ -108,7 +108,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
             tiedList={tiedList}
           />
         ) : null}
-        {canManage ? (
+        {hasWriteAccess ? (
           <Toolbar
             editor={editor}
             element={element}

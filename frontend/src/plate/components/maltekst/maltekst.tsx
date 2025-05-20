@@ -20,7 +20,7 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
   const language = useSmartEditorLanguage();
   const isInRegelverk = useMemo(() => getIsInRegelverk(editor, element), [editor, element]);
-  const { canManage } = useContext(SmartEditorContext);
+  const { hasWriteAccess } = useContext(SmartEditorContext);
 
   // TODO: Remove this when all smart documents in prod use maltekstseksjon
   if (element.id === undefined) {
@@ -82,7 +82,7 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
         $sectionType={SectionTypeEnum.MALTEKST}
       >
         {children}
-        {readOnly || !canManage ? null : (
+        {readOnly || !hasWriteAccess ? null : (
           <SectionToolbar contentEditable={false}>
             <Tooltip content="Oppdater til siste versjon" delay={0}>
               <Button

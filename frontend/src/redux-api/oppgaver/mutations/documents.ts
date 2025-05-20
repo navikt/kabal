@@ -8,8 +8,8 @@ import type { IDocumentParams } from '@app/types/documents/common-params';
 import {
   DistribusjonsType,
   DocumentTypeEnum,
+  type IDocument,
   type IFileDocument,
-  type IMainDocument,
   type InngaaendeKanal,
 } from '@app/types/documents/documents';
 import {
@@ -105,8 +105,9 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
       }),
       onQueryStarted: async ({ parentId, dokumentId, oppgaveId }, { queryFulfilled, dispatch }) => {
         const documentsPatchResult = dispatch(
+          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
-            const newDocuments: IMainDocument[] = [];
+            const newDocuments: IDocument[] = [];
 
             for (const existing of draft) {
               if (existing.id === dokumentId || existing.parentId === dokumentId) {
@@ -133,7 +134,12 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                   continue;
                 }
 
-                newDocuments.push({ ...existing, parentId });
+                // Just to satisfy the TypeScript type system.
+                if (parentId === null) {
+                  newDocuments.push({ ...existing, parentId: null });
+                } else {
+                  newDocuments.push({ ...existing, parentId });
+                }
                 continue;
               }
 
@@ -149,7 +155,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
           dispatch(
             documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
-              const newDocuments: IMainDocument[] = [];
+              const newDocuments: IDocument[] = [];
 
               for (const oldDoc of draft) {
                 let altered = false;
@@ -274,13 +280,13 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    uploadFileDocument: builder.mutation<IFileDocument, ICreateFileDocumentParams>({
+    uploadFileDocument: builder.mutation<IFileDocument<null> | IFileDocument<string>, ICreateFileDocumentParams>({
       query: ({ oppgaveId, file, dokumentTypeId, parentId }) => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('dokumentTypeId', dokumentTypeId);
 
-        if (typeof parentId === 'string') {
+        if (parentId !== undefined) {
           formData.append('parentId', parentId);
         }
 
@@ -327,7 +333,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
       ) => {
         const getDocumentsPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
-            const addedDocuments: IMainDocument[] = draft;
+            const addedDocuments: IDocument[] = draft;
 
             for (const doc of journalfoerteDokumenter) {
               if (
@@ -431,7 +437,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    setDatoMottatt: builder.mutation<IMainDocument, { oppgaveId: string; dokumentId: string; datoMottatt: string }>({
+    setDatoMottatt: builder.mutation<IDocument, { oppgaveId: string; dokumentId: string; datoMottatt: string }>({
       query: ({ oppgaveId, dokumentId, datoMottatt }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/datomottatt`,
         body: { datoMottatt },
@@ -541,11 +547,11 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
   }),
 });
 
-const optimisticUpdate = <K extends keyof IMainDocument>(
+const optimisticUpdate = <K extends keyof IDocument>(
   oppgaveId: string,
   dokumentId: string,
   key: K,
-  value: IMainDocument[K],
+  value: IDocument[K],
 ) => {
   const documentsPatchResult = reduxStore.dispatch(
     documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>

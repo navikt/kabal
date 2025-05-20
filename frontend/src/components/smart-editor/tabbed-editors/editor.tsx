@@ -2,7 +2,7 @@ import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
 import { History } from '@app/components/smart-editor/history/history';
-import { useCanEditDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
+import { useHasWriteAccess } from '@app/components/smart-editor/hooks/use-has-write-access';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
@@ -25,7 +25,7 @@ import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
-import type { ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
@@ -38,7 +38,7 @@ import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { type BasePoint, Path, Range } from 'slate';
 
 interface EditorProps {
-  smartDocument: ISmartDocument;
+  smartDocument: ISmartDocumentOrAttachment;
   scalingGroup: ScalingGroup;
 }
 
@@ -68,10 +68,10 @@ interface LoadedEditorProps extends EditorProps {
 }
 
 const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProps) => {
-  const { id, templateId } = smartDocument;
+  const { id } = smartDocument;
   const { newCommentSelection } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
-  const canEdit = useCanEditDocument(templateId);
+  const hasWriteAccess = useHasWriteAccess(smartDocument);
   const [isConnected, setIsConnected] = useState(false);
 
   const provider: YjsProviderConfig = {
@@ -174,7 +174,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     >
       <Plate<RichTextEditor>
         editor={editor}
-        readOnly={!canEdit}
+        readOnly={!hasWriteAccess}
         decorate={({ entry }) => {
           const [node, path] = entry;
           if (newCommentSelection === null || RangeApi.isCollapsed(newCommentSelection) || !TextApi.isText(node)) {
@@ -209,7 +209,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 };
 
 interface PlateContextProps {
-  smartDocument: ISmartDocument;
+  smartDocument: ISmartDocumentOrAttachment;
   oppgave: IOppgavebehandling;
   isConnected: boolean;
 }
@@ -287,7 +287,7 @@ interface EditorWithNewCommentAndFloatingToolbarProps {
 }
 
 const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithNewCommentAndFloatingToolbarProps) => {
-  const { sheetRef, canEdit } = useContext(SmartEditorContext);
+  const { sheetRef, hasWriteAccess } = useContext(SmartEditorContext);
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const lang = useSmartEditorSpellCheckLanguage();
 
@@ -299,7 +299,8 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithN
     <Sheet ref={setContainerElement} $minHeight data-component="sheet" className="mr-4">
       <FloatingSaksbehandlerToolbar container={containerElement} editorId={id} />
       <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
-      <KabalPlateEditor id={id} readOnly={!(canEdit && isConnected)} lang={lang} />
+
+      <KabalPlateEditor id={id} readOnly={!(hasWriteAccess && isConnected)} lang={lang} />
     </Sheet>
   );
 };
