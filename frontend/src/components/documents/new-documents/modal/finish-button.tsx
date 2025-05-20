@@ -1,50 +1,42 @@
-import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { ArchiveButtons } from '@app/components/documents/new-documents/modal/finish-document/archive-buttons';
 import { SendButtons } from '@app/components/documents/new-documents/modal/finish-document/send-buttons';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useContainsRolAttachments } from '@app/hooks/use-contains-rol-attachments';
-import { useHasArchiveAccess } from '@app/hooks/use-has-documents-access';
-import {
-  DistribusjonsType,
-  DocumentTypeEnum,
-  type IFileDocument,
-  type IMainDocument,
-  type ISmartDocument,
-  type JournalfoertDokument,
-} from '@app/types/documents/documents';
-import { FlowState } from '@app/types/oppgave-common';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { type DocumentAccess, FinishStateEnum } from '@app/hooks/dua-access/use-document-access';
+import { DistribusjonsType, DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Alert } from '@navikt/ds-react';
+import { useMemo } from 'react';
 
 interface Props {
-  document: IMainDocument;
-  pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
-  journalfoerteDocuments: JournalfoertDokument[];
+  document: IDocument;
   innsendingshjemlerConfirmed: boolean;
+  access: DocumentAccess;
 }
 
-export const FinishButton = ({
-  document,
-  pdfOrSmartDocuments,
-  journalfoerteDocuments,
-  innsendingshjemlerConfirmed,
-}: Props) => {
-  const { data: oppgave } = useOppgave();
-  const hasArchiveAccess = useHasArchiveAccess(document);
-  const containsRolPDFOrSmartAttachments = useContainsRolAttachments(document, pdfOrSmartDocuments);
-  const containsRolJournalfoerteAttachments = useContainsRolAttachments(document, journalfoerteDocuments);
-  const containsRolAttachments = containsRolPDFOrSmartAttachments || containsRolJournalfoerteAttachments;
+export const FinishButton = ({ document, innsendingshjemlerConfirmed, access }: Props) => {
+  const accessMessage = useMemo(() => {
+    switch (access.finish) {
+      case FinishStateEnum.FEILREGISTRERT:
+        return 'Saken er feilregistrert';
+      case FinishStateEnum.FINISHED:
+        return 'Dokumentet er allerede arkivert eller sendt';
+      case FinishStateEnum.NOT_ASSIGNED:
+        return 'Kun tildelt saksbehandler kan arkivere eller sende dokumentet';
+      case FinishStateEnum.ROL_KROL:
+        return 'ROL og KROL kan ikke arkivere eller sende dokumenter';
+      case FinishStateEnum.SENT_TO_MU:
+        return 'Kan ikke arkiveres eller sendes mens saken er hos medunderskriver.';
+      case FinishStateEnum.ROL_REQUIRED:
+        return 'Kan ikke arkiveres før rådgivende overlege har svart og returnert saken.';
+      case FinishStateEnum.ALLOWED:
+        return null;
+    }
+  }, [access.finish]);
 
-  if (!hasArchiveAccess || document.parentId !== null || oppgave === undefined) {
-    return null;
-  }
-
-  if (getMustWaitForRolToReturn(oppgave, document, containsRolAttachments)) {
+  if (accessMessage !== null) {
     return (
       <Alert variant="info" size="small" inline>
-        Kan ikke arkiveres før rådgivende overlege har svart og returnert saken.
+        {accessMessage}
       </Alert>
     );
   }
@@ -74,16 +66,4 @@ export const FinishButton = ({
   ) : (
     <SendButtons document={document} />
   );
-};
-
-const getMustWaitForRolToReturn = (
-  oppgave: IOppgavebehandling,
-  document: IMainDocument,
-  containsRolAttachments: boolean,
-) => {
-  if (getIsRolQuestions(document)) {
-    return !(containsRolAttachments && oppgave.rol.flowState === FlowState.RETURNED);
-  }
-
-  return false;
 };

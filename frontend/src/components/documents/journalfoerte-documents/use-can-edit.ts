@@ -1,8 +1,8 @@
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 
 export const useCanEditDocument = () => {
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
   const hasDocumentsAccess = useHasDocumentsAccess();
 
   return hasDocumentsAccess || isRol;

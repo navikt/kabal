@@ -1,11 +1,11 @@
-import type { IMainDocument } from '@app/types/documents/documents';
+import type { IDocument } from '@app/types/documents/documents';
 import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 const DOCUMENT_COUNT_REGEX = /^ \((\d+)\)$/;
 
 export type BaseTemplate = Pick<ISmartEditorTemplate, 'templateId' | 'tittel'>;
-export type BaseDocument = Pick<IMainDocument, 'tittel' | 'parentId'>;
+export type BaseDocument = Pick<IDocument, 'tittel' | 'parentId'>;
 
 const getDocumentCount = (documents: BaseDocument[], template: BaseTemplate): number => {
   const counts: number[] = [];

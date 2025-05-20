@@ -1,10 +1,10 @@
 import type { ValidationError } from '@app/components/documents/new-documents/modal/finish-document/types';
-import type { IMainDocument } from '@app/types/documents/documents';
+import type { IDocument } from '@app/types/documents/documents';
 import { createContext, useCallback, useState } from 'react';
 
 interface IModalContext {
-  document: IMainDocument | null;
-  setDocument: (document: IMainDocument | null) => void;
+  document: IDocument | null;
+  setDocument: (document: IDocument | null) => void;
   close: () => void;
 
   validationErrors: ValidationError[];
@@ -26,11 +26,11 @@ interface Props {
 }
 
 export const ModalContextElement = ({ children }: Props) => {
-  const [document, setInternalDocument] = useState<IMainDocument | null>(null);
+  const [document, setInternalDocument] = useState<IDocument | null>(null);
 
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>(INITIAL_VALIDATION_ERRORS);
 
-  const setDocument = useCallback((newDocument: IMainDocument | null) => {
+  const setDocument = useCallback((newDocument: IDocument | null) => {
     setInternalDocument(newDocument);
     // Reset state when document changes or modal is closed.
     setValidationErrors(INITIAL_VALIDATION_ERRORS);

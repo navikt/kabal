@@ -1,12 +1,12 @@
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import type { IMainDocument } from '@app/types/documents/documents';
+import type { IDocument } from '@app/types/documents/documents';
 import { createContext, useCallback, useState } from 'react';
 
 interface IDragAndDropContext {
   draggedJournalfoertDocuments: IArkivertDocument[];
   setDraggedJournalfoertDocuments: (documents: IArkivertDocument[]) => void;
-  draggedDocument: IMainDocument | null;
-  setDraggedDocument: (document: IMainDocument | null) => void;
+  draggedDocument: IDocument | null;
+  setDraggedDocument: (document: IDocument | null) => void;
   clearDragState: () => void;
   draggingEnabled: boolean;
   setDraggingEnabled: (enabled: boolean) => void;
@@ -30,21 +30,13 @@ const EMPTY_ARRAY: IArkivertDocument[] = [];
 
 export const DragAndDropContextElement = ({ children }: Props) => {
   const [draggedJournalfoertDocuments, setDraggedJournalfoertDocuments] = useState<IArkivertDocument[]>(EMPTY_ARRAY);
-  const [draggedDocument, setDraggedDocument] = useState<IMainDocument | null>(null);
+  const [draggedDocument, setDraggedDocument] = useState<IDocument | null>(null);
   const [draggingEnabled, setDraggingEnabled] = useState(true);
 
-  const hasDocument = draggedDocument !== null;
-  const hasJournalfoertDocuments = draggedJournalfoertDocuments.length > 0;
-
   const clearDragState = useCallback(() => {
-    if (hasJournalfoertDocuments) {
-      setDraggedJournalfoertDocuments(EMPTY_ARRAY);
-    }
-
-    if (hasDocument) {
-      setDraggedDocument(null);
-    }
-  }, [hasJournalfoertDocuments, hasDocument]);
+    setDraggedJournalfoertDocuments(EMPTY_ARRAY);
+    setDraggedDocument(null);
+  }, []);
 
   return (
     <DragAndDropContext.Provider

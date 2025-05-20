@@ -1,4 +1,4 @@
-import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
+import { useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
 import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const SendToSaksbehandler = ({ oppgaveId, medunderskriver }: Props) => {
-  const isMedunderskriver = useIsMedunderskriver();
+  const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
   const [setFlowState, { isLoading }] = useSetMedunderskriverFlowStateMutation();
 
   if (!isMedunderskriver || medunderskriver.flowState !== FlowState.SENT) {

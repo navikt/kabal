@@ -4,14 +4,14 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { useCanEditDocument } from '@app/components/documents/journalfoerte-documents/use-can-edit';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import {
   useCreateVedleggFromJournalfoertDocumentMutation,
   useDeleteDocumentMutation,
 } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { CreatorRole, DistribusjonsType, type IMainDocument } from '@app/types/documents/documents';
+import { CreatorRole, DistribusjonsType, type IDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -50,10 +50,10 @@ export const UseAsAttachments = () => {
   );
 };
 
-export const useOptions = (selectedDocuments: IArkivertDocument[]): IMainDocument[] => {
+export const useOptions = (selectedDocuments: IArkivertDocument[]): IDocument[] => {
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
 
   return data.filter((d) => {
     if (selectedDocuments.some((s) => !canDistributeAny(s.varianter) && d.dokumentTypeId !== DistribusjonsType.NOTAT)) {
@@ -75,7 +75,7 @@ export const useAttachVedleggFn = () => {
   const { user } = useContext(StaticDataContext);
   const { navIdent, navn } = user;
   const isFinished = useIsFullfoert();
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
 
   if (oppgaveId === skipToken) {
     return null;

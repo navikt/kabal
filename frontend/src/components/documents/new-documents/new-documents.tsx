@@ -3,7 +3,7 @@ import {
   PADDING_TOP,
   ROW_HEIGHT,
   SEPARATOR_HEIGHT,
-  UPLOAD_BUTTON_HEIGHT,
+  UPLOAD_BUTTON_HEIGHT as UPLOAD_OR_ROL_ANSWERS_BUTTON_HEIGHT,
 } from '@app/components/documents/new-documents/constants';
 import { NewDocumentsHeader } from '@app/components/documents/new-documents/header/header';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
@@ -13,14 +13,16 @@ import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
-  CreatorRole,
   DocumentTypeEnum,
+  type IDocument,
   type IFileDocument,
-  type IMainDocument,
+  type IParentDocument,
   type ISmartDocument,
   type JournalfoertDokument,
+  isParentDocument,
 } from '@app/types/documents/documents';
 import { Alert, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -28,10 +30,9 @@ import { StyledDocumentList } from '../styled-components/document-list';
 import { NewParentDocument } from './new-parent-document';
 
 interface DocumentWithAttachments {
-  mainDocument?: IMainDocument;
-  pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
+  mainDocument?: IParentDocument;
+  pdfOrSmartDocuments: (IFileDocument<string> | ISmartDocument<string>)[];
   journalfoerteDocuments: JournalfoertDokument[];
-  containsRolAttachments: boolean;
 }
 
 /** Number of rows to render above and below the rendered window. */
@@ -46,6 +47,7 @@ export const NewDocuments = () => {
   const [containerHeight, setContainerHeight] = useState<number>(0);
   const [_scrollTop, _setScrollTop] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
+  const isAssignedRolAndSent = useIsAssignedRolAndSent();
 
   useEffect(() => {
     const handle = requestAnimationFrame(() => setScrollTop(_scrollTop));
@@ -62,14 +64,25 @@ export const NewDocuments = () => {
     }
   }, [containerRef]);
 
-  const getHasUploadButton = useCallback(
-    (document: IMainDocument | undefined) =>
-      !isFeilregistrert &&
-      document !== undefined &&
-      document.parentId === null &&
-      hasUploadAccess &&
-      (getIsRolQuestions(document) || getIsIncomingDocument(document.dokumentTypeId)),
-    [isFeilregistrert, hasUploadAccess],
+  const getHasUploadOrRolAnswersButton = useCallback(
+    (document: IDocument | undefined) => {
+      if (document === undefined) {
+        return false;
+      }
+
+      if (getIsRolQuestions(document)) {
+        return isAssignedRolAndSent;
+      }
+
+      return (
+        !isAssignedRolAndSent && // ROL users cannot upload documents.
+        !isFeilregistrert && // Feilregistrert cases cannot get new documents.
+        document.parentId === null && // Only main documents can have attachments.
+        hasUploadAccess &&
+        !document.isSmartDokument
+      );
+    },
+    [isFeilregistrert, hasUploadAccess, isAssignedRolAndSent],
   );
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
@@ -89,7 +102,7 @@ export const NewDocuments = () => {
         continue;
       }
 
-      if (document.parentId === null) {
+      if (isParentDocument(document)) {
         const existing = _documentMap.get(document.id);
 
         if (existing === undefined) {
@@ -97,11 +110,11 @@ export const NewDocuments = () => {
             mainDocument: document,
             pdfOrSmartDocuments: [],
             journalfoerteDocuments: [],
-            containsRolAttachments: false,
           });
         } else if (existing.mainDocument === undefined) {
           existing.mainDocument = document;
         }
+
         continue;
       }
 
@@ -116,18 +129,15 @@ export const NewDocuments = () => {
         } else {
           existing.pdfOrSmartDocuments.push(document);
         }
-        existing.containsRolAttachments =
-          existing.containsRolAttachments || document.creator.creatorRole === CreatorRole.KABAL_ROL;
         continue;
       }
 
-      const containsRolAttachments = document.creator.creatorRole === CreatorRole.KABAL_ROL;
       // Unknown parent.
       _documentMap.set(
         document.parentId,
         isJournalfoertDocument
-          ? { pdfOrSmartDocuments: [], journalfoerteDocuments: [document], containsRolAttachments }
-          : { pdfOrSmartDocuments: [document], journalfoerteDocuments: [], containsRolAttachments },
+          ? { pdfOrSmartDocuments: [], journalfoerteDocuments: [document] }
+          : { pdfOrSmartDocuments: [document], journalfoerteDocuments: [] },
       );
     }
 
@@ -142,14 +152,14 @@ export const NewDocuments = () => {
     let h = PADDING_TOP + PADDING_BOTTOM;
 
     for (const { mainDocument, journalfoerteDocuments, pdfOrSmartDocuments } of documentMap.values()) {
-      const hasUploadButton = getHasUploadButton(mainDocument);
+      const hasUploadOrRolAnswersButton = getHasUploadOrRolAnswersButton(mainDocument);
       const pdfLength = pdfOrSmartDocuments.length;
       const journalfoertLength = journalfoerteDocuments.length;
       const hasSeparator = pdfLength !== 0 && journalfoertLength !== 0;
       const hasAttachments = pdfLength !== 0 || journalfoertLength !== 0;
       const hasOverview = !getIsIncomingDocument(mainDocument?.dokumentTypeId) && hasAttachments;
 
-      h += hasUploadButton ? UPLOAD_BUTTON_HEIGHT : 0;
+      h += hasUploadOrRolAnswersButton ? UPLOAD_OR_ROL_ANSWERS_BUTTON_HEIGHT : 0;
       h += hasOverview ? ROW_HEIGHT : 0;
       h += pdfLength * ROW_HEIGHT;
       h += hasSeparator ? SEPARATOR_HEIGHT : 0;
@@ -158,7 +168,7 @@ export const NewDocuments = () => {
     }
 
     return h;
-  }, [data, documentMap, getHasUploadButton]);
+  }, [data, documentMap, getHasUploadOrRolAnswersButton]);
 
   const [absoluteStartIndex, absoluteEndIndex] = useMemo<[number, number]>(() => {
     const rowsToRender = containerHeight === 0 ? 0 : Math.ceil(containerHeight / ROW_HEIGHT);
@@ -191,7 +201,7 @@ export const NewDocuments = () => {
         continue;
       }
 
-      const { mainDocument, pdfOrSmartDocuments, journalfoerteDocuments, containsRolAttachments } = listItem;
+      const { mainDocument, pdfOrSmartDocuments, journalfoerteDocuments } = listItem;
 
       if (mainDocument === undefined) {
         continue;
@@ -206,8 +216,8 @@ export const NewDocuments = () => {
       const hasSeparator = pdfLength !== 0 && journalfoertLength !== 0;
       const separatorCount = hasSeparator ? 1 : 0;
 
-      const hasUploadButton = getHasUploadButton(mainDocument);
-      const uploadButtonCount = hasUploadButton ? 1 : 0;
+      const hasUploadOrRolAnswersButton = getHasUploadOrRolAnswersButton(mainDocument);
+      const uploadButtonCount = hasUploadOrRolAnswersButton ? 1 : 0;
 
       const virtualRows = overview + separatorCount + uploadButtonCount;
 
@@ -227,7 +237,6 @@ export const NewDocuments = () => {
           document={mainDocument}
           pdfOrSmartDocuments={pdfOrSmartDocuments.slice(pdfStart, pdfEnd)}
           journalfoerteDocuments={journalfoerteDocuments.slice(journalfoertStart, journalfoertEnd)}
-          containsRolAttachments={containsRolAttachments}
           key={mainDocument.id}
           style={{ top: offsetPx }}
           pdfLength={pdfLength}
@@ -246,12 +255,12 @@ export const NewDocuments = () => {
         pdfLength * ROW_HEIGHT +
         journalfoertLength * ROW_HEIGHT +
         separatorCount * SEPARATOR_HEIGHT +
-        uploadButtonCount * UPLOAD_BUTTON_HEIGHT +
+        uploadButtonCount * UPLOAD_OR_ROL_ANSWERS_BUTTON_HEIGHT +
         overview * ROW_HEIGHT;
     }
 
     return _documentNodes;
-  }, [documentMap, absoluteEndIndex, absoluteStartIndex, getHasUploadButton]);
+  }, [documentMap, absoluteEndIndex, absoluteStartIndex, getHasUploadOrRolAnswersButton]);
 
   const onRef = useCallback((ref: HTMLDivElement | null) => {
     setContainerHeight(ref?.clientHeight ?? 0);

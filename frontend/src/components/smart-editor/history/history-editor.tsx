@@ -10,7 +10,7 @@ import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { components, saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
-import type { ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { Button } from '@navikt/ds-react';
 import type { Value } from '@udecode/plate';
 import { Plate, usePlateEditor } from '@udecode/plate-core/react';
@@ -20,7 +20,7 @@ import { styled } from 'styled-components';
 interface Props {
   versionId: number;
   version: KabalValue;
-  smartDocument: ISmartDocument;
+  smartDocument: ISmartDocumentOrAttachment;
 }
 
 export const HistoryEditor = memo(

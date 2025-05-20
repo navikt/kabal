@@ -11,17 +11,18 @@ import {
 } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useCallback, useContext, useMemo, useState } from 'react';
-import { TitleAction } from './title-action';
+import { TitleActions } from './title-actions';
 
 interface Props {
-  document: IMainDocument;
+  document: IDocument;
+  renameAccess: boolean;
 }
 
 export const DocumentTitle = memo(
-  ({ document }: Props) => {
+  ({ document, renameAccess }: Props) => {
     const [editMode, _setEditMode] = useState(false);
     const { setDraggingEnabled } = useContext(DragAndDropContext);
     const oppgaveId = useOppgaveId();
@@ -68,7 +69,7 @@ export const DocumentTitle = memo(
               setTitle({ oppgaveId, dokumentId: document.id, title });
             }}
           />
-          <TitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
+          <TitleActions editMode={editMode} setEditMode={setEditMode} document={document} renameAccess={renameAccess} />
         </StyledDocumentTitle>
       );
     }
@@ -89,7 +90,7 @@ export const DocumentTitle = memo(
         >
           <DocumentWarnings varianter={document.journalfoertDokumentReference.varianter} />
 
-          <TitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
+          <TitleActions editMode={editMode} setEditMode={setEditMode} document={document} renameAccess={renameAccess} />
         </SharedDocumentTitle>
       );
     }
@@ -103,7 +104,7 @@ export const DocumentTitle = memo(
         documentId={documentId}
         type={document.type}
       >
-        <TitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
+        <TitleActions editMode={editMode} setEditMode={setEditMode} document={document} renameAccess={renameAccess} />
       </SharedDocumentTitle>
     );
   },

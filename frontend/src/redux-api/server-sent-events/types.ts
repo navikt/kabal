@@ -1,6 +1,6 @@
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import type { INavEmployee } from '@app/types/bruker';
-import type { DistribusjonsType, IMainDocument } from '@app/types/documents/documents';
+import type { DistribusjonsType, IDocument } from '@app/types/documents/documents';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import type {
   FlowState,
@@ -142,7 +142,7 @@ export interface DocumentsChangedEvent extends BaseEvent {
 }
 
 export interface DocumentsAddedEvent extends BaseEvent {
-  documents: IMainDocument[];
+  documents: IDocument[];
 }
 
 /** The document has been archived and possibly sent. */

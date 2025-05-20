@@ -10,7 +10,7 @@ import {
   DISTRIBUTION_TYPE_NAMES,
   DOCUMENT_TYPE_NAMES,
   DocumentTypeEnum,
-  type IMainDocument,
+  type IDocument,
 } from '@app/types/documents/documents';
 import { Tag } from '@navikt/ds-react';
 
@@ -52,7 +52,7 @@ export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => 
   );
 };
 
-const handleToast = (documents: IMainDocument[], actor: INavEmployee) => {
+const handleToast = (documents: IDocument[], actor: INavEmployee) => {
   const count = documents.length;
 
   if (count === 0) {
@@ -122,7 +122,7 @@ const handleToast = (documents: IMainDocument[], actor: INavEmployee) => {
   }
 };
 
-const ACTION: Record<IMainDocument['type'], string> = {
+const ACTION: Record<IDocument['type'], string> = {
   [DocumentTypeEnum.JOURNALFOERT]: 'lagt til',
   [DocumentTypeEnum.UPLOADED]: 'lastet opp',
   [DocumentTypeEnum.SMART]: 'opprettet',

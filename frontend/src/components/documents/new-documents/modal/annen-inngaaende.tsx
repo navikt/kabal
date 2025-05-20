@@ -2,7 +2,7 @@ import { PartStatusList } from '@app/components/part-status-list/part-status-lis
 import { EditPart } from '@app/components/part/edit-part';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetAvsenderMutation, useSetInngaaendeKanalMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DocumentTypeEnum, type IMainDocument, InngaaendeKanal } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IDocument, InngaaendeKanal } from '@app/types/documents/documents';
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, Label, Radio, RadioGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -12,7 +12,7 @@ const INNGAAENDE_KANALER = Object.values(InngaaendeKanal);
 const isInngaaendeKanal = (type: string): type is InngaaendeKanal => INNGAAENDE_KANALER.some((t) => t === type);
 
 interface Props {
-  document: IMainDocument;
+  document: IDocument;
   canEditDocument: boolean;
 }
 

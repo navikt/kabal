@@ -33,7 +33,6 @@ export const AttachmentsOverview = ({ documentId, style, parentId }: Props) => {
       style={style}
     >
       <StyledNewAttachment
-        isExpanded={false}
         data-documentname={title}
         data-testid="new-document-list-item-content"
         data-documenttype="attachment"

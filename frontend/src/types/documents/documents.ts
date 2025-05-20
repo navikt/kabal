@@ -35,6 +35,8 @@ export enum DistribusjonsType {
   EKSPEDISJONSBREV_TIL_TRYGDERETTEN = '10',
 }
 
+export const DISTRIBUSJONSTYPER = Object.values(DistribusjonsType);
+
 export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
   [DistribusjonsType.VEDTAKSBREV]: 'Vedtaksbrev',
   [DistribusjonsType.BESLUTNING]: 'Beslutningsbrev',
@@ -59,7 +61,7 @@ export enum CreatorRole {
   NONE = 'NONE',
 }
 
-export interface IBaseDocument<P extends string | null = UUID | null> {
+export interface IBaseDocument<P extends UUID | null = UUID | null> {
   type: DocumentTypeEnum;
   id: UUID;
   tittel: string;
@@ -93,7 +95,7 @@ export interface IMottaker {
   overriddenAddress: IAddress | null;
 }
 
-export interface IFileDocument<P extends string | null = UUID | null> extends IBaseDocument<P> {
+export interface IFileDocument<P extends UUID | null> extends IBaseDocument<P> {
   type: DocumentTypeEnum.UPLOADED;
   isSmartDokument: false;
   templateId?: never;
@@ -103,7 +105,9 @@ export interface IFileDocument<P extends string | null = UUID | null> extends IB
   avsender: IdentifikatorPart | null;
 }
 
-export interface ISmartDocument<P extends string | null = UUID | null> extends IBaseDocument<P> {
+export type IFileDocumentOrAttachment = IFileDocument<null> | IFileDocument<string>;
+
+export interface ISmartDocument<P extends UUID | null> extends IBaseDocument<P> {
   type: DocumentTypeEnum.SMART;
   isSmartDokument: true;
   templateId: TemplateIdEnum;
@@ -111,6 +115,8 @@ export interface ISmartDocument<P extends string | null = UUID | null> extends I
   version: number;
   language: Language;
 }
+
+export type ISmartDocumentOrAttachment = ISmartDocument<null> | ISmartDocument<string>;
 
 export interface JournalfoertDokumentReference
   extends IJournalfoertDokumentId,
@@ -127,9 +133,14 @@ export interface JournalfoertDokument extends IBaseDocument<UUID> {
   content?: never;
 }
 
-export type IMainDocument = IFileDocument | ISmartDocument | JournalfoertDokument;
-
+export type IAttachmentDocument = IFileDocument<string> | ISmartDocument<string> | JournalfoertDokument;
 export type IParentDocument = IFileDocument<null> | ISmartDocument<null>;
+export type IDocument = IParentDocument | IAttachmentDocument;
+
+export const isAttachmentDocument = (document: IDocument): document is IAttachmentDocument =>
+  document.parentId !== null;
+
+export const isParentDocument = (document: IDocument): document is IParentDocument => document.parentId === null;
 
 export interface IMergedDocumentsResponse {
   reference: string;

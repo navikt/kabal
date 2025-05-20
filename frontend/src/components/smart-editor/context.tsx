@@ -6,15 +6,15 @@ import {
   useSmartEditorGodeFormuleringerOpen,
   useSmartEditorHistoryOpen,
 } from '@app/hooks/settings/use-setting';
-import { DistribusjonsType, type ISmartDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, type ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { TRange } from '@udecode/plate';
-import { type MutableRefObject, createContext, useRef, useState } from 'react';
+import { type RefObject, createContext, useRef, useState } from 'react';
 
 const noop = () => {};
 
-interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokumentTypeId'> {
+interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'templateId' | 'dokumentTypeId'> {
   showGodeFormuleringer: boolean;
   setShowGodeFormuleringer: (show: boolean) => void;
   godeFormuleringerExpandState: GodeFormuleringerExpandState;
@@ -28,7 +28,7 @@ interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokum
   setFocusedThreadId: (threadId: string | null) => void;
   showAnnotationsAtOrigin: boolean;
   setShowAnnotationsAtOrigin: (show: boolean) => void;
-  sheetRef: MutableRefObject<HTMLDivElement | null>;
+  sheetRef: RefObject<HTMLDivElement | null>;
   canManage: boolean;
   canEdit: boolean;
   creator: string;
@@ -62,7 +62,7 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
 
 interface Props {
   children: React.ReactNode;
-  smartDocument: ISmartDocument;
+  smartDocument: ISmartDocumentOrAttachment;
 }
 
 export const SmartEditorContextComponent = ({ children, smartDocument }: Props) => {
