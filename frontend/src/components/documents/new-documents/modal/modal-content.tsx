@@ -3,6 +3,7 @@ import { AnnenInngaaende } from '@app/components/documents/new-documents/modal/a
 import { FinishButton } from '@app/components/documents/new-documents/modal/finish-button';
 import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
 import { MottattDato } from '@app/components/documents/new-documents/modal/mottatt-dato';
+import { SetParentDocument } from '@app/components/documents/new-documents/modal/set-parent';
 import { SetDocumentType } from '@app/components/documents/new-documents/new-document/set-type';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
@@ -34,7 +35,6 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { DeleteDocumentButton } from './delete-button';
-import { SetParentDocument } from './set-parent';
 
 interface Props {
   document: IMainDocument;

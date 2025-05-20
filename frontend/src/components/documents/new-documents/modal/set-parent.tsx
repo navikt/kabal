@@ -2,17 +2,16 @@ import { DocumentIcon, type ModalDocumentType } from '@app/components/documents/
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
   DISTRIBUTION_TYPE_NAMES,
-  type DistribusjonsType,
+  DistribusjonsType,
   DocumentTypeEnum,
   type IMainDocument,
 } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Alert, Button, HStack, Heading, Radio, RadioGroup, Tag, VStack } from '@navikt/ds-react';
+import { HStack, Heading, Radio, RadioGroup, Tag, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { styled } from 'styled-components';
 
@@ -39,6 +38,10 @@ export const SetParentDocument = ({ document, parentDocument, hasAttachments }: 
     }
 
     if (document.type === DocumentTypeEnum.UPLOADED || isIncomingDocument) {
+      if (document.parentId === null) {
+        return [];
+      }
+
       return data.filter((d) => document.id !== d.id && d.parentId === null && getIsIncomingDocument(d.dokumentTypeId));
     }
 
@@ -52,8 +55,14 @@ export const SetParentDocument = ({ document, parentDocument, hasAttachments }: 
       );
     }
 
-    return data.filter((d) => document.id !== d.id && d.parentId === null);
-  }, [data, document.id, document.type, hasAttachments, isIncomingDocument, isRol]);
+    return data.filter(
+      (d) =>
+        document.id !== d.id &&
+        d.parentId === null &&
+        d.dokumentTypeId !== DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN &&
+        d.dokumentTypeId !== DistribusjonsType.ANNEN_INNGAAENDE_POST,
+    );
+  }, [data, document.id, document.type, document.parentId, isIncomingDocument, hasAttachments, isRol]);
 
   if (
     isLoadingDocuments ||
@@ -74,13 +83,6 @@ export const SetParentDocument = ({ document, parentDocument, hasAttachments }: 
         Vedlegg eller hoveddokument
       </Heading>
 
-      <MainDocument
-        document={document}
-        isIncomingDocument={isIncomingDocument}
-        onClick={() => setParentFn(null)}
-        isLoading={isSetting}
-      />
-
       <RadioGroup
         size="small"
         value={document.parentId ?? IS_PARENT_DOCUMENT}
@@ -95,48 +97,6 @@ export const SetParentDocument = ({ document, parentDocument, hasAttachments }: 
         ))}
       </RadioGroup>
     </VStack>
-  );
-};
-
-interface MainDocumentProps {
-  document: IMainDocument;
-  isIncomingDocument: boolean;
-  onClick: () => void;
-  isLoading: boolean;
-}
-
-const MainDocument = ({ document, isIncomingDocument, onClick, isLoading }: MainDocumentProps) => {
-  const isJournalfoert = document.type === DocumentTypeEnum.JOURNALFOERT;
-  const isSaksbehandler = useIsSaksbehandler();
-
-  if (document.parentId === null) {
-    return (
-      <Alert variant="info" size="small" inline>
-        Dette dokumentet er et hoveddokument.
-      </Alert>
-    );
-  }
-
-  if (isJournalfoert) {
-    return (
-      <Alert variant="info" size="small" inline>
-        Journalførte dokumenter kan kun være vedlegg.
-      </Alert>
-    );
-  }
-
-  if (!(isSaksbehandler || isIncomingDocument)) {
-    return (
-      <Alert variant="info" size="small" inline>
-        Bare tildelt saksbehandler kan gjøre dette dokumentet til et hoveddokument.
-      </Alert>
-    );
-  }
-
-  return (
-    <Button size="small" variant="secondary-neutral" onClick={onClick} loading={isLoading}>
-      Gjør til hoveddokument
-    </Button>
   );
 };
 
