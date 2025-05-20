@@ -1,17 +1,23 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import { useContext, useMemo } from 'react';
+import { useHasRole } from '@app/hooks/use-has-role';
+import { Role } from '@app/types/bruker';
+import { useContext } from 'react';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
-export const useIsSaksbehandler = () => {
-  const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
-
+/** Checks if the current user is assigned to the current case as saksbehandler. */
+export const useLazyIsTildeltSaksbehandler = () => {
+  const { data, isSuccess } = useOppgave();
   const { user } = useContext(StaticDataContext);
 
-  return useMemo(() => {
-    if (oppgavebehandlingIsLoading || oppgavebehandling === undefined) {
-      return false;
-    }
-
-    return oppgavebehandling.saksbehandler?.navIdent === user.navIdent;
-  }, [oppgavebehandling, oppgavebehandlingIsLoading, user]);
+  return () => isSuccess && data.saksbehandler?.navIdent === user.navIdent;
 };
+
+/** Checks if the current user is assigned to the current case as saksbehandler. */
+export const useIsTildeltSaksbehandler = () => {
+  const isLazyTildeltSaksbehandler = useLazyIsTildeltSaksbehandler();
+
+  return isLazyTildeltSaksbehandler();
+};
+
+/** Checks if the current user has the saksbehandler role. */
+export const useIsSaksbehandler = (): boolean => useHasRole(Role.KABAL_SAKSBEHANDLING);

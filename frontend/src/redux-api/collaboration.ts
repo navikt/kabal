@@ -2,7 +2,7 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { PROXY_BASE_QUERY } from '@app/redux-api/common';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import type { ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { isApiRejectionError } from '@app/types/errors';
 import type { ICreateSmartDocumentParams } from '@app/types/smart-editor/params';
 import { createApi } from '@reduxjs/toolkit/query/react';
@@ -11,7 +11,7 @@ export const collaborationApi = createApi({
   reducerPath: 'collaborationApi',
   baseQuery: PROXY_BASE_QUERY,
   endpoints: (builder) => ({
-    createSmartDocument: builder.mutation<ISmartDocument, ICreateSmartDocumentParams>({
+    createSmartDocument: builder.mutation<ISmartDocumentOrAttachment, ICreateSmartDocumentParams>({
       query: ({ oppgaveId, ...body }) => ({
         url: `/collaboration/behandlinger/${oppgaveId}/dokumenter`,
         method: 'POST',
@@ -27,9 +27,7 @@ export const collaborationApi = createApi({
             ),
           );
 
-          dispatch(
-            documentsQuerySlice.util.updateQueryData('getDocument', { dokumentId: data.id, oppgaveId }, () => data),
-          );
+          dispatch(documentsQuerySlice.util.upsertQueryData('getDocument', { dokumentId: data.id, oppgaveId }, data));
         } catch (e) {
           const message = 'Kunne ikke opprette dokument.';
 

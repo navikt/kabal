@@ -3,8 +3,8 @@ import { MedunderskriverReadOnly } from '@app/components/behandling/behandlingsd
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
 import { useHasRole } from '@app/hooks/use-has-role';
-import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
@@ -20,10 +20,10 @@ interface Props {
 
 export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Props) => {
   const { data } = useGetPotentialMedunderskrivereQuery(oppgaveId);
-  const isSaksbehandler = useIsSaksbehandler();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const { onChange, isUpdating } = useSetMedunderskriver(oppgaveId, data?.medunderskrivere);
-  const isMedunderskriver = useIsMedunderskriver();
+  const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
 
   const canChange =
     isSaksbehandler || isMedunderskriver || (hasOppgavestyringRole && medunderskriver.flowState === FlowState.SENT);

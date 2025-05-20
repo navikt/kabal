@@ -1,6 +1,5 @@
 import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
+import { useHasWriteAccess } from '@app/components/smart-editor/hooks/use-has-write-access';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
@@ -10,24 +9,23 @@ import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { components, saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
-import type { ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { Button } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@platejs/core/react';
 import type { Value } from 'platejs';
-import { memo, useContext, useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { styled } from 'styled-components';
 
 interface Props {
   versionId: number;
   version: KabalValue;
-  smartDocument: ISmartDocument;
+  smartDocument: ISmartDocumentOrAttachment;
 }
 
 export const HistoryEditor = memo(
   ({ smartDocument, version, versionId }: Props) => {
     const mainEditor = useMyPlateEditorRef(smartDocument.id);
-    const { templateId } = useContext(SmartEditorContext);
-    const canManage = useCanManageDocument(templateId);
+    const canManage = useHasWriteAccess(smartDocument);
 
     const id = `${smartDocument.id}-${versionId}`;
 

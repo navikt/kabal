@@ -14,7 +14,7 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   const { children, element, editor, path } = props;
   const content = useContent(element.source);
   const label = useLabel(element.source);
-  const { canManage } = useContext(SmartEditorContext);
+  const { hasWriteAccess } = useContext(SmartEditorContext);
 
   useEffect(() => {
     editor.tf.setNodes({ result: content }, { at: path });
@@ -45,7 +45,7 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
           </span>
         )}
         {children}
-        {canManage ? (
+        {hasWriteAccess ? (
           <SectionToolbar>
             <ToolbarButtonWithConfirm
               onClick={() => editor.tf.removeNodes({ match: (n) => n === element, at: [] })}

@@ -1,49 +1,45 @@
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
-import {
-  COLLAPSED_NEW_DOCUMENT_FIELDS,
-  EXPANDED_NEW_DOCUMENT_FIELDS,
-  getFieldNames,
-  getFieldSizes,
-} from '@app/components/documents/new-documents/grid';
-import { DocumentModal } from '@app/components/documents/new-documents/modal/modal';
+import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/new-documents/grid';
+import { DocumentModal } from '@app/components/documents/new-documents/modal/document-modal';
 import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
+import { documentAccessAreEqual } from '@app/hooks/dua-access/diff';
+import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
+import { RENAME_ACCESS_ENUM_TO_TEXT } from '@app/hooks/dua-access/document-messages';
+import type { DocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
+  DISTRIBUTION_TYPE_NAMES,
   DistribusjonsType,
   DocumentTypeEnum,
+  type IDocument,
   type IFileDocument,
-  type IMainDocument,
+  type IParentDocument,
 } from '@app/types/documents/documents';
-import { HGrid } from '@navikt/ds-react';
+import { HGrid, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useCallback, useContext, useRef, useState } from 'react';
 import { SetDocumentType } from './set-type';
 import { DocumentTitle } from './title';
 
 interface Props {
-  document: IMainDocument;
-  hasAttachments: boolean;
-  containsRolAttachments: boolean;
+  document: IParentDocument;
+  access: DocumentAccess;
 }
 
 export const NewDocument = memo(
-  ({ document, containsRolAttachments, hasAttachments }: Props) => {
+  ({ document, access }: Props) => {
     const oppgaveId = useOppgaveId();
     const [getDocuments] = useLazyGetDocumentsQuery();
-    const [isExpanded] = useIsExpanded();
     const cleanDragUI = useRef<() => void>(() => undefined);
     const { setDraggedDocument, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
-    const canEdit = useCanEditDocument(document);
     const [modalOpen, setModalOpen] = useState(false);
 
-    const isDraggable = draggingEnabled && canEdit && !containsRolAttachments && !modalOpen;
+    const isDraggable = draggingEnabled && !modalOpen && access.remove === DocumentAccessEnum.ALLOWED;
 
     const onDragStart = useCallback(
       async (e: React.DragEvent<HTMLDivElement>) => {
@@ -80,7 +76,7 @@ export const NewDocument = memo(
         gap="0 2"
         align="center"
         paddingInline="1-alt 0"
-        columns={getFieldSizes(getGridFields(isExpanded))}
+        columns={getFieldSizes(EXPANDED_NEW_DOCUMENT_FIELDS)}
         data-documentname={document.tittel}
         data-documentid={document.id}
         data-testid="new-document-list-item-content"
@@ -93,32 +89,38 @@ export const NewDocument = memo(
         draggable={isDraggable}
         className={DOCUMENT_CLASSES}
         style={{
-          gridTemplateAreas: `"${getFieldNames(getGridFields(isExpanded))}"`,
+          gridTemplateAreas: `"${getFieldNames(EXPANDED_NEW_DOCUMENT_FIELDS)}"`,
         }}
       >
-        <DocumentTitle document={document} />
-        {isExpanded ? <SetDocumentType document={document} hasAttachments={hasAttachments} /> : null}
+        <DocumentTitle
+          document={document}
+          renameAllowed={access.rename === DocumentAccessEnum.ALLOWED}
+          noRenameAccessMessage={RENAME_ACCESS_ENUM_TO_TEXT[access.rename]}
+        />
+
+        {access.changeType === DocumentAccessEnum.ALLOWED ? (
+          <SetDocumentType document={document} />
+        ) : (
+          <Tag variant="info" size="small">
+            {DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId]}
+          </Tag>
+        )}
+
         {document.isMarkertAvsluttet ? (
           <ArchivingIcon dokumentTypeId={document.dokumentTypeId} />
         ) : (
-          <DocumentModal
-            document={document}
-            containsRolAttachments={containsRolAttachments}
-            isOpen={modalOpen}
-            setIsOpen={setModalOpen}
-          />
+          <DocumentModal document={document} isOpen={modalOpen} setIsOpen={setModalOpen} access={access} />
         )}
       </HGrid>
     );
   },
   (prev, next) =>
-    prev.hasAttachments === next.hasAttachments &&
-    prev.containsRolAttachments === next.containsRolAttachments &&
     prev.document.id === next.document.id &&
     prev.document.tittel === next.document.tittel &&
     prev.document.dokumentTypeId === next.document.dokumentTypeId &&
     prev.document.isMarkertAvsluttet === next.document.isMarkertAvsluttet &&
     prev.document.parentId === next.document.parentId &&
+    documentAccessAreEqual(prev.access, next.access) &&
     mottattDatoEqual(prev.document, next.document) &&
     annenInngaaendeEqual(prev.document, next.document) &&
     mottakereEqual(prev.document, next.document) &&
@@ -127,13 +129,12 @@ export const NewDocument = memo(
 
 NewDocument.displayName = 'NewDocument';
 
-const getGridFields = (isExpanded: boolean) =>
-  isExpanded ? EXPANDED_NEW_DOCUMENT_FIELDS : COLLAPSED_NEW_DOCUMENT_FIELDS;
+const EXPANDED_NEW_DOCUMENT_FIELDS = [Fields.Title, Fields.TypeOrDate, Fields.Action];
 
-const hasMottattDato = (doc: IMainDocument): doc is IFileDocument<null> =>
+const hasMottattDato = (doc: IDocument): doc is IFileDocument<null> =>
   doc.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(doc.dokumentTypeId);
 
-const mottattDatoEqual = (prev: IMainDocument, next: IMainDocument) => {
+const mottattDatoEqual = (prev: IDocument, next: IDocument) => {
   if (!(hasMottattDato(prev) && hasMottattDato(next))) {
     return true;
   }
@@ -141,10 +142,10 @@ const mottattDatoEqual = (prev: IMainDocument, next: IMainDocument) => {
   return prev.datoMottatt === next.datoMottatt;
 };
 
-const isAnnenInngaaende = (doc: IMainDocument): doc is IFileDocument<null> =>
+const isAnnenInngaaende = (doc: IDocument): doc is IFileDocument<null> =>
   doc.type === DocumentTypeEnum.UPLOADED && doc.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST;
 
-const annenInngaaendeEqual = (prev: IMainDocument, next: IMainDocument) => {
+const annenInngaaendeEqual = (prev: IDocument, next: IDocument) => {
   if (!(isAnnenInngaaende(prev) && isAnnenInngaaende(next))) {
     return true;
   }
@@ -152,7 +153,7 @@ const annenInngaaendeEqual = (prev: IMainDocument, next: IMainDocument) => {
   return prev.inngaaendeKanal === next.inngaaendeKanal && prev.avsender?.id === next.avsender?.id;
 };
 
-const avsenderEqual = (prev: IMainDocument, next: IMainDocument) => {
+const avsenderEqual = (prev: IDocument, next: IDocument) => {
   const prevIsInngaaende = isAnnenInngaaende(prev);
   const nextIsInngaaende = isAnnenInngaaende(next);
 
@@ -167,7 +168,7 @@ const avsenderEqual = (prev: IMainDocument, next: IMainDocument) => {
   return prev.avsender === next.avsender;
 };
 
-const mottakereEqual = (prev: IMainDocument, next: IMainDocument) => {
+const mottakereEqual = (prev: IDocument, next: IDocument) => {
   if (prev.mottakerList.length !== next.mottakerList.length) {
     return false;
   }

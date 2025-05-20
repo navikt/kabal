@@ -1,7 +1,7 @@
 import { AttachmentsOverview } from '@app/components/documents/new-documents/attachments-overview';
-import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@app/components/documents/new-documents/constants';
 import { NewAttachmentButtons } from '@app/components/documents/new-documents/new-attachment-buttons';
 import { NewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
+import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@app/components/documents/new-documents/new-documents-list/constants';
 import {
   NewDocAttachmentsContainer,
   StyledAttachmentList,
@@ -10,18 +10,17 @@ import {
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { sortWithNumbers } from '@app/functions/sort-with-numbers/sort-with-numbers';
 import type {
+  IAttachmentDocument,
   IFileDocument,
-  IMainDocument,
+  IParentDocument,
   ISmartDocument,
   JournalfoertDokument,
 } from '@app/types/documents/documents';
 import { useMemo } from 'react';
 
 export interface ListProps {
-  pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
+  pdfOrSmartDocuments: (IFileDocument<string> | ISmartDocument<string>)[];
   journalfoerteDocuments: JournalfoertDokument[];
-  containsRolAttachments: boolean;
-
   pdfLength: number;
   journalfoertLength: number;
   pdfStart: number;
@@ -31,14 +30,13 @@ export interface ListProps {
 }
 
 interface Props extends ListProps {
-  parentDocument: IMainDocument;
+  parentDocument: IParentDocument;
 }
 
 export const AttachmentList = ({
   parentDocument,
   pdfOrSmartDocuments,
   journalfoerteDocuments,
-  containsRolAttachments,
   pdfLength,
   journalfoertLength,
   pdfStart,
@@ -79,7 +77,6 @@ export const AttachmentList = ({
             key={attachment.id}
             attachment={attachment}
             parentDocument={parentDocument}
-            containsRolAttachments={containsRolAttachments}
             top={(index + pdfStart) * ROW_HEIGHT + overviewHeight}
           />
         ))}
@@ -91,7 +88,6 @@ export const AttachmentList = ({
             key={attachment.id}
             attachment={attachment}
             parentDocument={parentDocument}
-            containsRolAttachments={containsRolAttachments}
             top={(index + journalfoertStart) * ROW_HEIGHT + pdfHeight + separatorHeight + overviewHeight}
           />
         ))}
@@ -101,13 +97,12 @@ export const AttachmentList = ({
 };
 
 interface AttachmentProps {
-  attachment: IMainDocument;
-  parentDocument: IMainDocument;
-  containsRolAttachments: boolean;
+  attachment: IAttachmentDocument;
+  parentDocument: IParentDocument;
   top: number;
 }
 
-const Attachment = ({ attachment, parentDocument, containsRolAttachments, top }: AttachmentProps) => (
+const Attachment = ({ attachment, parentDocument, top }: AttachmentProps) => (
   <StyledAttachmentListItem
     key={attachment.id}
     data-testid="new-attachments-list-item"
@@ -116,11 +111,7 @@ const Attachment = ({ attachment, parentDocument, containsRolAttachments, top }:
     data-documenttype="attachment"
     style={{ top }}
   >
-    <NewAttachment
-      document={attachment}
-      parentDocument={parentDocument}
-      containsRolAttachments={containsRolAttachments}
-    />
+    <NewAttachment document={attachment} parentDocument={parentDocument} />
   </StyledAttachmentListItem>
 );
 

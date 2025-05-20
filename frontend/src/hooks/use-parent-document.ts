@@ -2,18 +2,25 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
   DocumentTypeEnum,
+  type IDocument,
   type IFileDocument,
-  type IMainDocument,
   type ISmartDocument,
   type JournalfoertDokument,
 } from '@app/types/documents/documents';
 import { useMemo } from 'react';
 
-export const useParentDocument = (parentId: string | null): IMainDocument | undefined => {
+export const useLazyParentDocument = () => {
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
 
-  return useMemo(() => (parentId === null ? undefined : data.find((doc) => doc.id === parentId)), [data, parentId]);
+  return (parentId: string | null): IDocument | undefined =>
+    parentId === null ? undefined : data.find((doc) => doc.id === parentId);
+};
+
+export const useParentDocument = (parentId: string | null): IDocument | undefined => {
+  const getParentDocument = useLazyParentDocument();
+
+  return useMemo(() => getParentDocument(parentId), [getParentDocument, parentId]);
 };
 
 /** Returns the attachments under the given `parentId`. */
@@ -21,7 +28,7 @@ export const useAttachments = (parentId: string | null | undefined) => {
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
 
-  const pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[] = [];
+  const pdfOrSmartDocuments: (IFileDocument<string> | ISmartDocument<string>)[] = [];
   const journalfoerteDocuments: JournalfoertDokument[] = [];
 
   if (parentId === null || parentId === undefined) {

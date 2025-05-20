@@ -1,10 +1,10 @@
 import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useSetDatoMottattMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import type { IFileDocument } from '@app/types/documents/documents';
+import type { IFileDocumentOrAttachment } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 interface Props {
-  document: IFileDocument;
+  document: IFileDocumentOrAttachment;
   oppgaveId: string | typeof skipToken;
 }
 

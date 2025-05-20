@@ -1,11 +1,11 @@
-import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { useDocumentsPdfViewed, useSmartEditorActiveDocument } from './settings/use-setting';
 
 export const useRemoveDocument = () => {
   const { value: viewedPdf, remove: removeViewedPdf } = useDocumentsPdfViewed();
   const { value: activeSmartEditor, remove: removeActiveSmartEditor } = useSmartEditorActiveDocument();
 
-  return (smartEditorId: string, document: IMainDocument) => {
+  return (smartEditorId: string, document: IDocument) => {
     if (activeSmartEditor === smartEditorId) {
       removeActiveSmartEditor();
     }

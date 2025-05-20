@@ -14,7 +14,7 @@ import { useContext } from 'react';
 export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstElement>) => {
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
   const language = useSmartEditorLanguage();
-  const { canManage } = useContext(SmartEditorContext);
+  const { hasWriteAccess } = useContext(SmartEditorContext);
 
   const { children, element, editor } = props;
 
@@ -53,7 +53,7 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
         $sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
       >
         {children}
-        {readOnly || !canManage ? null : (
+        {readOnly || !hasWriteAccess ? null : (
           <SectionToolbar contentEditable={false}>
             <Tooltip content="Tilbakestill tekst" delay={0}>
               <Button

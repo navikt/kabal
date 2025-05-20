@@ -1,4 +1,4 @@
-import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
+import { useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
 import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { ArrowRedoIcon } from '@navikt/aksel-icons';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const TakeFromSaksbehandler = ({ oppgaveId, medunderskriver }: Props) => {
-  const isMedunderskriver = useIsMedunderskriver();
+  const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
   const [setMedunderskriverFlowState, { isLoading }] = useSetMedunderskriverFlowStateMutation({
     fixedCacheKey: getFixedCacheKey(oppgaveId),
   });

@@ -1,17 +1,17 @@
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
 import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
-import { DistribusjonsType } from '@app/types/documents/documents';
+import { DISTRIBUSJONSTYPER, type DistribusjonsType } from '@app/types/documents/documents';
 import { HStack } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
-import { SetDocumentType } from './document-type';
+import { SetDistributionType } from './distribution-type';
 
 export const UploadFile = () => {
   const hasUploadAccess = useHasUploadAccess();
-  const [dokumentTypeId, setDokumentTypeId] = useState<DistribusjonsType | null>(null);
+  const [distributionType, setDistributionType] = useState<DistribusjonsType | null>(null);
 
   const onChangeDocumentType = useCallback(({ target }: React.ChangeEvent<HTMLSelectElement>) => {
-    if (isDocumentType(target.value)) {
-      setDokumentTypeId(target.value);
+    if (isDistributionType(target.value)) {
+      setDistributionType(target.value);
     }
   }, []);
 
@@ -21,17 +21,16 @@ export const UploadFile = () => {
 
   return (
     <HStack align="center" gap="2">
-      <SetDocumentType dokumentTypeId={dokumentTypeId} setDokumentTypeId={onChangeDocumentType} />
+      <SetDistributionType distributionType={distributionType} setDistributionType={onChangeDocumentType} />
 
       <UploadFileButton
         variant="secondary"
         size="small"
         data-testid="upload-document"
-        dokumentTypeId={dokumentTypeId}
+        distributionType={distributionType}
       />
     </HStack>
   );
 };
 
-const isDocumentType = (type: string): type is DistribusjonsType =>
-  Object.values(DistribusjonsType).some((t) => t === type);
+const isDistributionType = (type: string): type is DistribusjonsType => DISTRIBUSJONSTYPER.some((t) => t === type);

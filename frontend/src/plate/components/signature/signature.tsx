@@ -14,11 +14,12 @@ import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useContext, useId } from 'react';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const isReadOnly = useEditorReadOnly();
   const { data: signature } = useGetMySignatureQuery();
   const { data: oppgave } = useOppgave();
-  const { canManage, templateId, creator } = useContext(SmartEditorContext);
+  const { hasWriteAccess, templateId, creator } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
 
   if (oppgave === undefined || signature === undefined) {
@@ -66,7 +67,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
           e.stopPropagation();
         }}
       >
-        {hideAll || !canManage ? null : (
+        {hideAll || !hasWriteAccess ? null : (
           <HStack
             marginInline="auto"
             wrap
@@ -144,7 +145,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
 
         {children}
 
-        {canManage ? (
+        {hasWriteAccess ? (
           <SectionToolbar>
             <AddNewParagraphs editor={editor} element={element} />
           </SectionToolbar>

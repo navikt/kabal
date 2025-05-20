@@ -30,10 +30,11 @@ const BASE_DOCUMENT: IBaseDocument = {
   tittel: 'Tittel',
 };
 
-const SMART_DOCUMENT: ISmartDocument = {
+const SMART_DOCUMENT: ISmartDocument<null> = {
   ...BASE_DOCUMENT,
   type: DocumentTypeEnum.SMART,
   isSmartDokument: true,
+  parentId: null,
   templateId: TemplateIdEnum.NOTAT,
   content: [],
   version: 1,
@@ -66,13 +67,11 @@ const BASE_JD: JournalfoertDokument = {
 
 // Default params will skip through all ifs in canEditDocument
 const BASE_PARAMS: CanEditDocumentParams = {
-  parentIsMarkertAvsluttet: false,
+  isMarkertAvsluttet: false,
   isFeilregistrert: false,
   document: BASE_JD,
   isFullfoert: false,
   medunderskriverFlowState: FlowState.NOT_SENT,
-  hasMerkantilRole: false,
-  hasSaksbehandlerRole: false,
   hasKrolRole: false,
   isRol: false,
   isTildeltSaksbehandler: false,
@@ -84,16 +83,12 @@ describe('canEditDocument', () => {
     expect(canEditDocument(BASE_PARAMS)).toBe(false);
   });
 
-  it('should return false if parent is markert avsluttet', () => {
-    expect(canEditDocument({ ...BASE_PARAMS, parentIsMarkertAvsluttet: true })).toBe(false);
+  it('should return false if it is markert avsluttet', () => {
+    expect(canEditDocument({ ...BASE_PARAMS, isMarkertAvsluttet: true })).toBe(false);
   });
 
   it('should return false if behandling is feilregistrert', () => {
     expect(canEditDocument({ ...BASE_PARAMS, isFeilregistrert: true })).toBe(false);
-  });
-
-  it('should return false if document is null', () => {
-    expect(canEditDocument({ ...BASE_PARAMS, document: null })).toBe(false);
   });
 
   it('should return false if document is markert avsluttet', () => {
@@ -111,22 +106,12 @@ describe('canEditDocument', () => {
     expect(canEditDocument(params)).toBe(false);
   });
 
-  describe('oppgave is fullført', () => {
-    it('should return false if user does not have saksbehandler role', () => {
-      expect(canEditDocument({ ...BASE_PARAMS, isFullfoert: true, hasSaksbehandlerRole: false })).toBe(false);
-    });
-
-    it('should return true if user has saksbehandler role', () => {
-      expect(canEditDocument({ ...BASE_PARAMS, isFullfoert: true, hasSaksbehandlerRole: true })).toBe(true);
-    });
+  it('should return true for fullført oppgave', () => {
+    expect(canEditDocument({ ...BASE_PARAMS, isFullfoert: true })).toBe(true);
   });
 
   it('should return false if medunderskriver flow state is sent', () => {
     expect(canEditDocument({ ...BASE_PARAMS, medunderskriverFlowState: FlowState.SENT })).toBe(false);
-  });
-
-  it('should return true if user is merkantil', () => {
-    expect(canEditDocument({ ...BASE_PARAMS, hasMerkantilRole: true })).toBe(true);
   });
 
   describe('user is tildelt saksbehandler', () => {
@@ -143,7 +128,7 @@ describe('canEditDocument', () => {
     });
   });
 
-  describe('user is rol', () => {
+  describe('user is ROL', () => {
     it('should return false if flow state is not sent', () => {
       expect(canEditDocument({ ...BASE_PARAMS, isRol: true, rolFlowState: FlowState.NOT_SENT })).toBe(false);
     });

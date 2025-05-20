@@ -1,4 +1,4 @@
-import { CreatorRole, type IMainDocument } from '@app/types/documents/documents';
+import { CreatorRole, type IDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { useMemo } from 'react';
 
@@ -11,10 +11,10 @@ import { useMemo } from 'react';
  *
  * Returns `true` while loading.
  */
-export const useContainsRolAttachments = (document: IMainDocument | null, siblings: IMainDocument[]): boolean =>
+export const useContainsRolAttachments = (document: IDocument | null, siblings: IDocument[]): boolean =>
   useMemo(() => getContainsRolAttachments(document, siblings), [document, siblings]);
 
-const getContainsRolAttachments = (document: IMainDocument | null, siblings: IMainDocument[]): boolean => {
+const getContainsRolAttachments = (document: IDocument | null, siblings: IDocument[]): boolean => {
   if (document === null) {
     return true;
   }

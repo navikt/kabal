@@ -13,11 +13,11 @@ interface Props {
 export const SaksbehandlerSignature = ({ element }: Props) => {
   const editor = useMyPlateEditorRef();
   const signature = useMainSignature(element);
-  const { canEdit } = useContext(SmartEditorContext);
+  const { hasWriteAccess } = useContext(SmartEditorContext);
 
   useEffect(() => {
     if (
-      !canEdit ||
+      !hasWriteAccess ||
       signature === element.saksbehandler ||
       (signature?.name === element.saksbehandler?.name && signature?.title === element.saksbehandler?.title)
     ) {
@@ -25,7 +25,7 @@ export const SaksbehandlerSignature = ({ element }: Props) => {
     }
 
     editor.tf.setNodes({ saksbehandler: signature }, { at: [], match: (n) => n === element });
-  }, [editor, element, signature, canEdit]);
+  }, [editor, element, signature, hasWriteAccess]);
 
   if (signature === undefined) {
     return null;
@@ -46,7 +46,7 @@ interface MedunderskriverSignatureProps {
 export const MedunderskriverSignature = ({ element }: MedunderskriverSignatureProps) => {
   const editor = useMyPlateEditorRef();
   const medunderskriverSignature = useMedunderskriverSignature();
-  const { templateId, canEdit } = useContext(SmartEditorContext);
+  const { templateId, hasWriteAccess } = useContext(SmartEditorContext);
 
   const noMedunderskriver = useMemo(
     () =>
@@ -68,7 +68,7 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
   );
 
   useEffect(() => {
-    if (!canEdit) {
+    if (!hasWriteAccess) {
       return;
     }
 
@@ -97,7 +97,7 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
     };
 
     editor.tf.setNodes(data, { match: (n) => n === element, at: [] });
-  }, [editor, element, noMedunderskriver, signature, canEdit]);
+  }, [editor, element, noMedunderskriver, signature, hasWriteAccess]);
 
   if (noMedunderskriver || signature === undefined) {
     return null;

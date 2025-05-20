@@ -4,8 +4,9 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsSentToMedunderskriver } from '@app/hooks/use-is-medunderskriver';
+import { useIsAssignedRolAndSent, useIsRolOrKrolUser, useIsSentToRol } from '@app/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import {
   ANKE_I_TRYGDERETTEN_TEMPLATES,
   ANKE_TEMPLATES,
@@ -18,9 +19,10 @@ import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Role } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Language } from '@app/types/texts/language';
+import type { Immutable } from '@app/types/types';
 import { Box, HStack, Loader } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { getTitle } from './get-title';
@@ -32,7 +34,7 @@ interface Props {
 
 export const NewDocument = ({ onCreate }: Props) => {
   const { user } = useContext(StaticDataContext);
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
   const hasDocumentsAccess = useHasDocumentsAccess();
   const isFeilregistrert = useIsFeilregistrert();
   const oppgaveId = useOppgaveId();
@@ -40,7 +42,7 @@ export const NewDocument = ({ onCreate }: Props) => {
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
   const { data: oppgave } = useOppgave();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
-  const templates = useTemplates(oppgave);
+  const templates = useNewSmartDocumentTemplates();
 
   if (isFeilregistrert || oppgave === undefined) {
     return null;
@@ -92,12 +94,22 @@ export const NewDocument = ({ onCreate }: Props) => {
   );
 };
 
-const useTemplates = (oppgave: IOppgavebehandling | undefined) => {
-  const isSaksbehandler = useIsSaksbehandler();
-  const isRol = useIsRol();
+export const useNewSmartDocumentTemplates = () => {
+  const { data: oppgave, isSuccess } = useOppgave();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
   const { user } = useContext(StaticDataContext);
+  const isRolOrKrolUser = useIsRolOrKrolUser();
+  const isSentToMedunderskriver = useIsSentToMedunderskriver();
+  const isSentToRol = useIsSentToRol();
 
-  if (oppgave === undefined) {
+  if (!isSuccess || isRolOrKrolUser) {
+    // ROL and KROL can never create new main documents.
+    // ROL can only create answers to ROL questions.
+    return [];
+  }
+
+  if (isSentToMedunderskriver) {
+    // If case is sent to medunderskriver, new documents cannot be created.
     return [];
   }
 
@@ -107,22 +119,25 @@ const useTemplates = (oppgave: IOppgavebehandling | undefined) => {
     return getFinishedBehandlingTemplates(user.navIdent);
   }
 
-  if (isSaksbehandler || isRol) {
-    switch (typeId) {
-      case SaksTypeEnum.KLAGE:
-        return KLAGE_TEMPLATES;
-      case SaksTypeEnum.ANKE:
-        return ANKE_TEMPLATES;
-      case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
-        return ANKE_I_TRYGDERETTEN_TEMPLATES;
-      case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
-        return BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES;
-      case SaksTypeEnum.OMGJØRINGSKRAV:
-        return OMGJØRINGSKRAVVEDTAK_TEMPLATES;
+  if (isSaksbehandler) {
+    const saksbehandlerTemplates = SAKSBEHANDLER_TEMPLATES[typeId];
+
+    if (isSentToRol) {
+      return saksbehandlerTemplates.filter(({ templateId }) => templateId !== TemplateIdEnum.ROL_QUESTIONS);
     }
+
+    return saksbehandlerTemplates;
   }
 
   return [];
+};
+
+const SAKSBEHANDLER_TEMPLATES: Record<SaksTypeEnum, Immutable<IMutableSmartEditorTemplate>[]> = {
+  [SaksTypeEnum.KLAGE]: KLAGE_TEMPLATES,
+  [SaksTypeEnum.ANKE]: ANKE_TEMPLATES,
+  [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: ANKE_I_TRYGDERETTEN_TEMPLATES,
+  [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
+  [SaksTypeEnum.OMGJØRINGSKRAV]: OMGJØRINGSKRAVVEDTAK_TEMPLATES,
 };
 
 interface TemplateButtonProps {

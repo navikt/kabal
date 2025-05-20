@@ -1,41 +1,33 @@
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
-import {
-  COLLAPSED_NEW_DOCUMENT_FIELDS,
-  EXPANDED_NEW_ATTACHMENT_FIELDS,
-  Fields,
-  getFieldNames,
-  getFieldSizes,
-} from '@app/components/documents/new-documents/grid';
-import { DocumentModal } from '@app/components/documents/new-documents/modal/modal';
+import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/new-documents/grid';
+import { AttachmentModal } from '@app/components/documents/new-documents/modal/attachment-modal';
 import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { merge } from '@app/functions/classes';
+import { AttachmentAccessEnum } from '@app/hooks/dua-access/attachment-access';
+import { RENAME_ACCESS_ENUM_TO_TEXT } from '@app/hooks/dua-access/attachment-messages';
+import { useAttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IAttachmentDocument, type IParentDocument } from '@app/types/documents/documents';
 import { HGrid } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { type HTMLAttributes, memo, useCallback, useContext, useRef, useState } from 'react';
+import { type HTMLAttributes, type RefObject, memo, useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { DocumentTitle } from './title';
 
 interface Props {
-  document: IMainDocument;
-  parentDocument: IMainDocument;
-  containsRolAttachments: boolean;
+  document: IAttachmentDocument;
+  parentDocument: IParentDocument;
 }
 
-export const NewAttachment = ({ document, parentDocument, containsRolAttachments }: Props) => {
+export const NewAttachment = ({ document, parentDocument }: Props) => {
   const oppgaveId = useOppgaveId();
   const [getDocuments] = useLazyGetDocumentsQuery();
-  const [isExpanded] = useIsExpanded();
   const cleanDragUI = useRef<() => void>(() => undefined);
   const { setDraggedDocument, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
-  const canEdit = useCanEditDocument(document, parentDocument);
 
   const onDragStart = useCallback(
     async (e: React.DragEvent<HTMLDivElement>) => {
@@ -70,47 +62,34 @@ export const NewAttachment = ({ document, parentDocument, containsRolAttachments
     <NewAttachmentInternal
       document={document}
       parentDocument={parentDocument}
-      isExpanded={isExpanded}
       cleanDragUI={cleanDragUI}
       clearDragState={clearDragState}
       draggingEnabled={draggingEnabled}
-      canEdit={canEdit}
       onDragStart={onDragStart}
-      containsRolAttachments={containsRolAttachments}
     />
   );
 };
 
 interface NewDocumentInternalProps {
-  document: IMainDocument;
-  parentDocument: IMainDocument;
-  isExpanded: boolean;
-  cleanDragUI: React.MutableRefObject<() => void>;
+  document: IAttachmentDocument;
+  parentDocument: IParentDocument;
+  cleanDragUI: RefObject<() => void>;
   clearDragState: () => void;
   draggingEnabled: boolean;
-  canEdit: boolean;
-  containsRolAttachments: boolean;
   onDragStart: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 
 const NewAttachmentInternal = memo<NewDocumentInternalProps>(
-  ({
-    document,
-    parentDocument,
-    isExpanded,
-    cleanDragUI,
-    clearDragState,
-    draggingEnabled,
-    canEdit,
-    containsRolAttachments,
-    onDragStart,
-  }) => {
-    const isDraggable = draggingEnabled && canEdit;
+  ({ document, parentDocument, cleanDragUI, clearDragState, draggingEnabled, onDragStart }) => {
+    const access = useAttachmentAccess(document, parentDocument);
     const [modalOpen, setModalOpen] = useState(false);
+    const isDraggable =
+      draggingEnabled &&
+      !modalOpen &&
+      (access.move === AttachmentAccessEnum.ALLOWED || access.remove === AttachmentAccessEnum.ALLOWED);
 
     return (
       <StyledNewAttachment
-        isExpanded={isExpanded}
         data-documentname={document.tittel}
         data-documentid={document.id}
         data-testid="new-document-list-item-content"
@@ -123,30 +102,23 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
         draggable={isDraggable}
         className={DOCUMENT_CLASSES}
       >
-        <DocumentTitle document={document} />
-        {isExpanded && document.type === DocumentTypeEnum.JOURNALFOERT ? (
+        <DocumentTitle
+          document={document}
+          renameAllowed={access.rename === AttachmentAccessEnum.ALLOWED}
+          noRenameAccessMessage={RENAME_ACCESS_ENUM_TO_TEXT[access.rename]}
+        />
+        {document.type === DocumentTypeEnum.JOURNALFOERT ? (
           <StyledDate data-testid="new-document-date" document={document} />
         ) : null}
         {parentDocument.isMarkertAvsluttet ? (
           <ArchivingIcon dokumentTypeId={document.dokumentTypeId} />
         ) : (
-          <DocumentModal
-            document={document}
-            parentDocument={parentDocument}
-            containsRolAttachments={containsRolAttachments}
-            isOpen={modalOpen}
-            setIsOpen={setModalOpen}
-          />
+          <AttachmentModal document={document} isOpen={modalOpen} setIsOpen={setModalOpen} access={access} />
         )}
       </StyledNewAttachment>
     );
   },
-  (prev, next) =>
-    prev.document === next.document &&
-    prev.isExpanded === next.isExpanded &&
-    prev.draggingEnabled === next.draggingEnabled &&
-    prev.canEdit === next.canEdit &&
-    prev.containsRolAttachments === next.containsRolAttachments,
+  (prev, next) => prev.document === next.document && prev.draggingEnabled === next.draggingEnabled,
 );
 
 NewAttachmentInternal.displayName = 'NewAttachmentInternal';
@@ -157,28 +129,26 @@ const StyledDate = styled(DocumentDate)`
   text-overflow: ellipsis;
 `;
 
-const getGridFields = (isExpanded: boolean) =>
-  isExpanded ? EXPANDED_NEW_ATTACHMENT_FIELDS : COLLAPSED_NEW_DOCUMENT_FIELDS;
-
 interface StlyedNewAttachmentProps extends HTMLAttributes<HTMLDivElement> {
-  isExpanded: boolean;
   className?: string;
   children?: React.ReactNode;
 }
 
-export const StyledNewAttachment = ({ isExpanded, children, className, ...props }: StlyedNewAttachmentProps) => (
+export const StyledNewAttachment = ({ children, className, ...props }: StlyedNewAttachmentProps) => (
   <HGrid
     as="article"
     gap="0 2"
     align="center"
     paddingInline="1-alt 0"
-    columns={getFieldSizes(getGridFields(isExpanded))}
+    columns={getFieldSizes(EXPANDED_NEW_ATTACHMENT_FIELDS)}
     className={merge(DOCUMENT_CLASSES, className)}
     style={{
-      gridTemplateAreas: `"${getFieldNames(getGridFields(isExpanded))}"`,
+      gridTemplateAreas: `"${getFieldNames(EXPANDED_NEW_ATTACHMENT_FIELDS)}"`,
     }}
     {...props}
   >
     {children}
   </HGrid>
 );
+
+const EXPANDED_NEW_ATTACHMENT_FIELDS = [Fields.Title, Fields.TypeOrDate, Fields.Action];

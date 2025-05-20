@@ -7,8 +7,8 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useCheckDocument } from '@app/hooks/use-check-document';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Journalstatus } from '@app/types/arkiverte-documents';
 import { CircleSlashIcon, FolderPlusIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps, HStack, Tooltip } from '@navikt/ds-react';
@@ -66,8 +66,8 @@ const Enabled = ({ dokumentInfoId, journalpostId }: EnabledProps) => {
   const [setDocument, isUpdating] = useCheckDocument(oppgaveId, dokumentInfoId, journalpostId);
   const canEdit = useCanEdit();
   const isFeilregistrert = useIsFeilregistrert();
-  const isSaksbehandler = useIsSaksbehandler();
-  const isRol = useIsRol();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
+  const isRol = useIsAssignedRolAndSent();
   const checked = useIsTilknyttetDokument(journalpostId, dokumentInfoId);
   const indeterminate = useHasTilknyttetVedlegg(journalpostId, dokumentInfoId);
 

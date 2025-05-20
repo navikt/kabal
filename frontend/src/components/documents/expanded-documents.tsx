@@ -9,7 +9,7 @@ import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Heading, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-documents';
-import { NewDocuments } from './new-documents/new-documents';
+import { NewDocuments } from './new-documents/new-documents-list/new-documents';
 import { UploadFile } from './upload-file/upload-file';
 
 const MIN_WIDTH = 570;

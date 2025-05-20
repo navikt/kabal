@@ -2,7 +2,7 @@ import type { IShownArchivedDocument } from '@app/components/view-pdf/types';
 import type { KabalValue } from '@app/plate/types';
 import type { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
 import type { IDocumentParams } from '@app/types/documents/common-params';
-import type { IMainDocument, IMergedDocumentsResponse, ISmartDocumentVersion } from '@app/types/documents/documents';
+import type { IDocument, IMergedDocumentsResponse, ISmartDocumentVersion } from '@app/types/documents/documents';
 import type { IGetVersionParams } from '@app/types/documents/params';
 import type { IValidateDocumentResponse } from '@app/types/documents/validation';
 import { IS_LOCALHOST } from '../../common';
@@ -19,10 +19,10 @@ const dokumenterListTags = (type: DokumenterListTagTypes) => (result: IArkiverte
 export const documentsQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
-    getDocument: builder.query<IMainDocument, IDocumentParams>({
+    getDocument: builder.query<IDocument, IDocumentParams>({
       query: ({ oppgaveId, dokumentId }) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}`,
     }),
-    getDocuments: builder.query<IMainDocument[], string>({
+    getDocuments: builder.query<IDocument[], string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter`,
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;

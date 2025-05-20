@@ -1,4 +1,4 @@
-import { useCanEditDocument, useCanManageDocument } from '@app/components/smart-editor/hooks/use-can-edit-document';
+import { useHasWriteAccess } from '@app/components/smart-editor/hooks/use-has-write-access';
 import {
   GodeFormuleringerExpandState,
   useSmartEditorAnnotationsAtOrigin,
@@ -6,15 +6,15 @@ import {
   useSmartEditorGodeFormuleringerOpen,
   useSmartEditorHistoryOpen,
 } from '@app/hooks/settings/use-setting';
-import { DistribusjonsType, type ISmartDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, type ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { TRange } from 'platejs';
-import { type MutableRefObject, createContext, useRef, useState } from 'react';
+import { type RefObject, createContext, useRef, useState } from 'react';
 
 const noop = () => {};
 
-interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokumentTypeId'> {
+interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'templateId' | 'dokumentTypeId'> {
   showGodeFormuleringer: boolean;
   setShowGodeFormuleringer: (show: boolean) => void;
   godeFormuleringerExpandState: GodeFormuleringerExpandState;
@@ -28,9 +28,8 @@ interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokum
   setFocusedThreadId: (threadId: string | null) => void;
   showAnnotationsAtOrigin: boolean;
   setShowAnnotationsAtOrigin: (show: boolean) => void;
-  sheetRef: MutableRefObject<HTMLDivElement | null>;
-  canManage: boolean;
-  canEdit: boolean;
+  sheetRef: RefObject<HTMLDivElement | null>;
+  hasWriteAccess: boolean;
   creator: string;
   editingComment: ISmartEditorComment | null;
   setEditingComment: (comment: ISmartEditorComment | null) => void;
@@ -53,8 +52,7 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   showAnnotationsAtOrigin: false,
   setShowAnnotationsAtOrigin: noop,
   sheetRef: { current: null },
-  canManage: false,
-  canEdit: false,
+  hasWriteAccess: false,
   creator: '',
   editingComment: null,
   setEditingComment: noop,
@@ -62,7 +60,7 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
 
 interface Props {
   children: React.ReactNode;
-  smartDocument: ISmartDocument;
+  smartDocument: ISmartDocumentOrAttachment;
 }
 
 export const SmartEditorContextComponent = ({ children, smartDocument }: Props) => {
@@ -79,8 +77,7 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
   const { value: showAnnotationsAtOrigin = false, setValue: setShowAnnotationsAtOrigin } =
     useSmartEditorAnnotationsAtOrigin();
   const sheetRef = useRef<HTMLDivElement | null>(null);
-  const canManage = useCanManageDocument(templateId);
-  const canEdit = useCanEditDocument(templateId);
+  const hasWriteAccess = useHasWriteAccess(smartDocument);
   const [editingComment, setEditingComment] = useState<ISmartEditorComment | null>(null);
 
   return (
@@ -102,8 +99,7 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
         showAnnotationsAtOrigin,
         setShowAnnotationsAtOrigin,
         sheetRef,
-        canManage,
-        canEdit,
+        hasWriteAccess,
         creator: creator.employee.navIdent,
         editingComment,
         setEditingComment,

@@ -11,7 +11,7 @@ import { useContext, useEffect, useMemo } from 'react';
 export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
   const { data: oppgave } = useOppgave();
   const { editor, children, element } = props;
-  const { canManage } = useContext(SmartEditorContext);
+  const { hasWriteAccess } = useContext(SmartEditorContext);
 
   const at = useMemo(() => editor.api.findPath(element), [editor, element]);
   const placeholder = useMemo(
@@ -45,7 +45,7 @@ export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
         {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
         {children[0][1]}
 
-        {canManage ? (
+        {hasWriteAccess ? (
           <SectionToolbar>
             <ToolbarButtonWithConfirm
               onClick={() => editor.tf.removeNodes({ match: (n) => n === element, at: [] })}

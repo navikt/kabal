@@ -2,19 +2,19 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
 import { ModalContext } from './modal-context';
 
 interface Props {
-  document: IMainDocument;
+  document: IDocument;
 }
 
 export const DeleteDocumentButton = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
-  const { data, isLoading: documentsIsLoading } = useGetDocumentsQuery(oppgaveId);
+  const { data, isSuccess } = useGetDocumentsQuery(oppgaveId);
   const [deleteDocument, { isLoading }] = useDeleteDocumentMutation();
   const [showConfirm, setShowConfirm] = useState(false);
   const remove = useRemoveDocument();
@@ -44,7 +44,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
     return 'Slett dokument';
   }, [data, document.id, document.parentId, document.type]);
 
-  if (documentsIsLoading || typeof data === 'undefined') {
+  if (!isSuccess) {
     return null;
   }
 

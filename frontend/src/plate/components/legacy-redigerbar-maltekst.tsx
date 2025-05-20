@@ -32,7 +32,7 @@ const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
  */
 export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstElement>) => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const { canManage, templateId } = useContext(SmartEditorContext);
+  const { hasWriteAccess, templateId } = useContext(SmartEditorContext);
 
   const { children, element, editor } = props;
 
@@ -113,7 +113,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
         $sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
       >
         {children}
-        {canManage ? (
+        {hasWriteAccess ? (
           <SectionToolbar contentEditable={false}>
             <AddNewParagraphs editor={editor} element={element} />
             <Tooltip content="Tilbakestill tekst" delay={0}>

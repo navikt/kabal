@@ -2,7 +2,7 @@ import { canOpenInKabal } from '@app/components/documents/filetype';
 import type { IShownDocument } from '@app/components/view-pdf/types';
 import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { useMemo } from 'react';
 import { useOppgaveId } from './oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from './settings/use-setting';
@@ -13,7 +13,7 @@ interface ShowDocumentResult {
 }
 
 const EMPTY_SHOWN_LIST: IShownDocument[] = [];
-const EMPTY_MAIN_LIST: IMainDocument[] = [];
+const EMPTY_MAIN_LIST: IDocument[] = [];
 const EMPTY_ARCHIVED_LIST: IArkivertDocument[] = [];
 
 export const useShownDocuments = (): ShowDocumentResult => {

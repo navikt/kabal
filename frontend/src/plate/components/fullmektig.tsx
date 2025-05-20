@@ -17,7 +17,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
   const { element, children } = props;
   const { id, show } = element;
   const editor = useMyPlateEditorRef();
-  const { canManage } = useContext(SmartEditorContext);
+  const { hasWriteAccess } = useContext(SmartEditorContext);
 
   const at = editor.api.findPath(element);
 
@@ -112,7 +112,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
         {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
         <Editable>{children[0][3]}</Editable>
 
-        {canManage ? (
+        {hasWriteAccess ? (
           <SectionToolbar>
             <ToolbarButtonWithConfirm
               onClick={() => editor.tf.removeNodes({ match: (n) => n === props.element, at: [] })}

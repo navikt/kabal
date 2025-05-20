@@ -2,7 +2,7 @@ import { PartStatusList } from '@app/components/part-status-list/part-status-lis
 import { EditPart } from '@app/components/part/edit-part';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetAvsenderMutation, useSetInngaaendeKanalMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DocumentTypeEnum, type IMainDocument, InngaaendeKanal } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IDocument, InngaaendeKanal } from '@app/types/documents/documents';
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, Label, Radio, RadioGroup } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -12,15 +12,15 @@ const INNGAAENDE_KANALER = Object.values(InngaaendeKanal);
 const isInngaaendeKanal = (type: string): type is InngaaendeKanal => INNGAAENDE_KANALER.some((t) => t === type);
 
 interface Props {
-  document: IMainDocument;
-  canEditDocument: boolean;
+  document: IDocument;
+  hasAccess: boolean;
 }
 
-export const AnnenInngaaende = ({ document, canEditDocument }: Props) => {
+export const AnnenInngaaende = ({ document, hasAccess }: Props) => {
   const [setKanal] = useSetInngaaendeKanalMutation();
   const [setAvsender, { isLoading }] = useSetAvsenderMutation();
   const isUploaded = document.type === DocumentTypeEnum.UPLOADED;
-  const [editAvsender, setEditAvsender] = useState(canEditDocument && isUploaded && document.avsender === null);
+  const [editAvsender, setEditAvsender] = useState(hasAccess && isUploaded && document.avsender === null);
   const oppgaveId = useOppgaveId();
 
   if (oppgaveId === skipToken || !isUploaded) {
@@ -38,7 +38,7 @@ export const AnnenInngaaende = ({ document, canEditDocument }: Props) => {
         }}
         size="small"
         value={document.inngaaendeKanal?.toString() ?? null}
-        disabled={!canEditDocument}
+        disabled={!hasAccess}
       >
         <Radio value={InngaaendeKanal.ALTINN}>Altinn Innboks</Radio>
         <Radio value={InngaaendeKanal.E_POST}>E-post</Radio>
@@ -51,7 +51,7 @@ export const AnnenInngaaende = ({ document, canEditDocument }: Props) => {
         <HStack align="center" gap="2">
           <BodyShort size="small">{document.avsender?.name ?? 'Ikke satt'}</BodyShort>
           <PartStatusList statusList={document.avsender?.statusList ?? []} size="xsmall" />
-          {canEditDocument && document.avsender !== null ? (
+          {hasAccess && document.avsender !== null ? (
             <Button
               size="xsmall"
               variant="tertiary"
