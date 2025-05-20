@@ -62,7 +62,7 @@ export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
 
   if (isTildeltSaksbehandler || hasOppgavestyringRole || (isFullfoert && hasSaksbehandlerRole)) {
     if (getIsIncomingDocument(targetDocument.dokumentTypeId)) {
-      return draggedDocument.type === DocumentTypeEnum.UPLOADED;
+      return draggedDocument.type === DocumentTypeEnum.UPLOADED && draggedDocument.parentId !== null;
     }
 
     return draggedDocument.type === DocumentTypeEnum.JOURNALFOERT || getIsRolQuestions(targetDocument);
