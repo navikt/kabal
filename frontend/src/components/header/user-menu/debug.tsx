@@ -143,7 +143,7 @@ const SendButton = ({ getData, children, className }: SendButtonProps) => {
         onClick={onClick}
         loading={loading}
         icon={success ? <CheckmarkIcon aria-hidden /> : <BugIcon aria-hidden />}
-        className={className}
+        className={`${className} justify-start`}
       >
         {children}
       </Button>
