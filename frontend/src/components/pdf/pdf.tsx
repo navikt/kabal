@@ -1,20 +1,50 @@
 import { toast } from '@app/components/toast/store';
 import { Details } from '@app/components/toast/toast-content/fetch-error-toast';
+import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { type ApiError, isApiError } from '@app/types/errors';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Button, HStack, Heading, Loader, VStack } from '@navikt/ds-react';
 import { useEffect, useRef, useState } from 'react';
 
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const useFixPdf = (refresh: () => void): [() => Promise<void>, boolean] => {
+  const { setValue } = useSmartEditorEnabled();
+  const [isLoading, setIsLoading] = useState(false);
+
+  return [
+    async () => {
+      setIsLoading(true);
+      setValue(false);
+      await wait(200);
+      setValue(true);
+      await wait(5000);
+      refresh();
+      setIsLoading(false);
+    },
+    isLoading,
+  ];
+};
+
 export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
+  const [fixPdf, isLoading] = useFixPdf(refresh);
+
   if (error !== undefined) {
     return (
       <div className="grow p-5">
         <Alert variant="error" size="small">
-          <HStack gap="2" align="center">
-            {error}{' '}
-            <Button size="small" icon={<ArrowsCirclepathIcon aria-hidden />} onClick={refresh}>
-              Prøv igjen
+          <HStack gap="4" align="center">
+            <Heading size="small">Feil ved lasting av PDF</Heading>
+            <BodyShort>
+              Hvis dette er et brev som er skrevet i Kabal kan det hende det hjelper å{' '}
+              <Button size="small" variant="primary" onClick={fixPdf} loading={isLoading}>
+                Åpne brevutformingen på nytt
+              </Button>
+              .
+            </BodyShort>
+            <Button variant="secondary" size="small" icon={<ArrowsCirclepathIcon aria-hidden />} onClick={refresh}>
+              Last PDF på nytt
             </Button>
+            <code className="border-2 border-border-default bg-gray-200 p-2 text-xs">{error}</code>
           </HStack>
         </Alert>
       </div>
