@@ -77,6 +77,7 @@ const BASE_PARAMS: CanEditDocumentParams = {
   isRol: false,
   isTildeltSaksbehandler: false,
   rolFlowState: FlowState.NOT_SENT,
+  canEditParentOrIsMain: true,
 };
 
 describe('canEditDocument', () => {
