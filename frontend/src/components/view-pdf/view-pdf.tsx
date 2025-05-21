@@ -29,14 +29,6 @@ export const ViewPDF = () => {
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
   const oppgaveId = useOppgaveId();
-  const showsPol = showDocumentList.some(
-    (doc) =>
-      doc.type === DocumentTypeEnum.JOURNALFOERT && doc.varianter.some(({ skjerming }) => skjerming === Skjerming.POL),
-  );
-  const showsFeil = showDocumentList.some(
-    (doc) =>
-      doc.type === DocumentTypeEnum.JOURNALFOERT && doc.varianter.some(({ skjerming }) => skjerming === Skjerming.FEIL),
-  );
   const showsArchivedDocument = showDocumentList.some((doc) => doc.type === DocumentTypeEnum.JOURNALFOERT);
   const hasRedactedDocuments = showDocumentList.some(
     (doc) =>
@@ -114,6 +106,18 @@ export const ViewPDF = () => {
       </Container>
     );
   }
+
+  const showsPol = showDocumentList.some(
+    (d) =>
+      d.type === DocumentTypeEnum.JOURNALFOERT &&
+      d.varianter.some((v) => v.hasAccess && v.format === format && v.skjerming === Skjerming.POL),
+  );
+
+  const showsFeil = showDocumentList.some(
+    (d) =>
+      d.type === DocumentTypeEnum.JOURNALFOERT &&
+      d.varianter.some((v) => v.hasAccess && v.format === format && v.skjerming === Skjerming.FEIL),
+  );
 
   return (
     <Container minWidth={pdfWidth}>
