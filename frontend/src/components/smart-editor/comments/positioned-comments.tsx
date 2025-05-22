@@ -44,12 +44,16 @@ export const PositionedComments = () => {
 
   return (
     <Container style={{ width: maxCount * ITEM_OFFSET + ITEM_WIDTH + MIN_OFFSET }}>
-      {positionedItems.map(({ data, top, floorIndex }) => (
+      {positionedItems.map(({ data, top, floorIndex }, i) => (
         <ExpandableThread
           key={data.id}
           thread={data}
           isFocused={data.isFocused}
-          style={{ top: `${top}em`, left: floorIndex * ITEM_OFFSET + MIN_OFFSET }}
+          style={{
+            top: `${top}em`,
+            left: floorIndex * ITEM_OFFSET + MIN_OFFSET,
+            zIndex: i + 1,
+          }}
           isAbsolute
         />
       ))}

@@ -9,8 +9,8 @@ interface CommentListProps {
 
 export const CommentList = ({ comments, isExpanded }: CommentListProps) => (
   <VStack as="ul" gap="4" padding="0" margin="0" className="list-none text-base">
-    {comments.map(({ id, ...comment }, index) => (
-      <Comment key={id} id={id} isExpanded={isExpanded} {...comment} isMain={index === 0} />
+    {comments.map((comment, index) => (
+      <Comment key={comment.id} isExpanded={isExpanded} {...comment} isMain={index === 0} />
     ))}
   </VStack>
 );

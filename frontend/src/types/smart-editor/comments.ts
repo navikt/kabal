@@ -19,11 +19,16 @@ export interface IPostCommentParams extends IDocumentParams {
 
 export interface ISmartEditorComment {
   author: ICommentAuthor;
-  comments: ISmartEditorComment[];
   created: string; // "2021-10-26T12:37:10.929Z",
   id: string; // "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   modified: string; // "2021-10-26T12:37:10.929Z",
   text: string;
+  comments: ISmartEditorComment[]; // "comments": [],
+}
+
+export interface CommentId {
+  id: string;
+  parentId: string | null;
 }
 
 interface ICommentAuthor {

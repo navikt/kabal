@@ -1,86 +1,86 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { WriteComment } from '@app/components/smart-editor/comments/write-comment/write-comment';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Box, Button, VStack } from '@navikt/ds-react';
-import { memo, useContext, useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { DeleteButton } from './delete-button';
-import { EditButton, EditComment } from './edit-comment';
+import { EditButton } from './edit-comment';
 
 interface Props extends ISmartEditorComment {
   isExpanded: boolean;
-  isMain: boolean;
+  isMain?: boolean;
+  id: string;
 }
 
-export const Comment = memo(
-  ({ author, created, text, id, isExpanded, isMain }: Props) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [showActions, setShowActions] = useState(false);
-    const actionsRef = useRef<HTMLDivElement>(null);
-    useOnClickOutside(actionsRef, () => setShowActions(false));
-    const { user } = useContext(StaticDataContext);
-    const isSaksbehandler = useIsSaksbehandler();
+export const Comment = ({ author, created, text, id, isExpanded, isMain = false }: Props) => {
+  const [showActions, setShowActions] = useState(false);
+  const actionsRef = useRef<HTMLDivElement>(null);
+  useOnClickOutside(actionsRef, () => setShowActions(false));
+  const { user } = useContext(StaticDataContext);
+  const { editCommentId, setEditCommentId } = useContext(SmartEditorContext);
+  const isSaksbehandler = useIsSaksbehandler();
 
-    const isAuthor = author.ident === user.navIdent;
-    const canEdit = isSaksbehandler || isAuthor;
+  const isAuthor = author.ident === user.navIdent;
+  const canEdit = isSaksbehandler || isAuthor;
 
-    const Text = () =>
-      isEditing ? (
-        <EditComment id={id} authorIdent={author.ident} close={() => setIsEditing(false)} defaultValue={text} />
-      ) : (
-        <StyledText>{text}</StyledText>
-      );
+  const isEditing = editCommentId === id;
 
-    return (
-      <StyledListItem>
-        <VStack as="article" position="relative">
-          <StyledName>{author.name}</StyledName>
+  return (
+    <StyledListItem>
+      <VStack as="article" position="relative">
+        <StyledName>{author.name}</StyledName>
 
-          <StyledDate dateTime={created}>{isoDateTimeToPretty(created)}</StyledDate>
+        <StyledDate dateTime={created}>{isoDateTimeToPretty(created)}</StyledDate>
 
-          <Text />
+        {isEditing ? (
+          <WriteComment commentId={id} text={text} label="Rediger kommentar" />
+        ) : (
+          <StyledText>{text}</StyledText>
+        )}
 
-          {canEdit && isExpanded ? (
-            <ActionsContainer ref={actionsRef}>
-              <Button
-                onClick={() => setShowActions((a) => !a)}
-                size="xsmall"
-                variant="tertiary-neutral"
-                icon={<MenuElipsisVerticalIcon aria-hidden />}
-              />
-              {showActions ? (
-                <VStack asChild gap="1 0" right="0" className="top-full z-1 whitespace-nowrap">
-                  <Box shadow="medium" background="bg-default" borderRadius="medium" padding="1" position="absolute">
-                    <EditButton
-                      authorIdent={author.ident}
-                      isEditing={isEditing}
-                      setIsEditing={setIsEditing}
-                      isFocused={isExpanded}
-                      close={() => setShowActions(false)}
-                    />
-                    <DeleteButton
-                      id={id}
-                      authorIdent={author.ident}
-                      isFocused={isExpanded}
-                      close={() => setShowActions(false)}
-                    >
-                      {isMain ? 'Slett tråd' : 'Slett svar'}
-                    </DeleteButton>
-                  </Box>
-                </VStack>
-              ) : null}
-            </ActionsContainer>
-          ) : null}
-        </VStack>
-      </StyledListItem>
-    );
-  },
-  (prevProps, nextProps) =>
-    prevProps.id === nextProps.id && prevProps.text === nextProps.text && prevProps.isExpanded === nextProps.isExpanded,
-);
+        {canEdit && isExpanded ? (
+          <ActionsContainer ref={actionsRef}>
+            <Button
+              onClick={() => setShowActions((a) => !a)}
+              size="xsmall"
+              variant="tertiary-neutral"
+              icon={<MenuElipsisVerticalIcon aria-hidden />}
+            />
+            {showActions ? (
+              <VStack asChild gap="1 0" right="0" className="top-full z-1 whitespace-nowrap">
+                <Box shadow="medium" background="bg-default" borderRadius="medium" padding="1" position="absolute">
+                  <EditButton
+                    authorIdent={author.ident}
+                    isEditing={isEditing}
+                    setIsEditing={() => {
+                      setEditCommentId(id);
+                      setShowActions(false);
+                    }}
+                    isFocused={isExpanded}
+                  />
+                  <DeleteButton
+                    id={id}
+                    authorIdent={author.ident}
+                    isFocused={isExpanded}
+                    close={() => setShowActions(false)}
+                  >
+                    {isMain ? 'Slett tråd' : 'Slett svar'}
+                  </DeleteButton>
+                </Box>
+              </VStack>
+            ) : null}
+          </ActionsContainer>
+        ) : null}
+      </VStack>
+    </StyledListItem>
+  );
+};
 
 Comment.displayName = 'Comment';
 
