@@ -42,8 +42,8 @@ export const ThreadList = () => {
       overflowX="hidden"
       className="snap-y snap-proximity scroll-pt-12 scroll-pb-6"
     >
-      {attached.map((thread) => (
-        <ExpandableThread key={thread.id} thread={thread} isFocused={thread.isFocused} />
+      {attached.map((thread, i) => (
+        <ExpandableThread key={thread.id} thread={thread} isFocused={thread.isFocused} style={{ zIndex: i + 1 }} />
       ))}
     </VStack>
   );

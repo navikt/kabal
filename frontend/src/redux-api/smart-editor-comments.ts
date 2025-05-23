@@ -13,6 +13,10 @@ export const smartEditorCommentsApi = createApi({
   reducerPath: 'smartEditorCommentsApi',
   baseQuery: KABAL_BEHANDLINGER_BASE_QUERY,
   endpoints: (builder) => ({
+    getComment: builder.query<ISmartEditorComment, IDeleteCommentOrReplyParams>({
+      query: ({ oppgaveId, dokumentId, commentId }) =>
+        `${oppgaveId}/smartdokumenter/${dokumentId}/comments/${commentId}`,
+    }),
     getComments: builder.query<ISmartEditorComment[], IDocumentParams>({
       query: ({ oppgaveId, dokumentId }) => `${oppgaveId}/smartdokumenter/${dokumentId}/comments`,
     }),
@@ -80,24 +84,49 @@ export const smartEditorCommentsApi = createApi({
         method: 'PATCH',
         body,
       }),
-      onQueryStarted: async ({ oppgaveId, dokumentId, commentId }, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
+      onQueryStarted: async ({ oppgaveId, dokumentId, commentId, text }, { dispatch, queryFulfilled }) => {
+        const commentPatchResult = dispatch(
+          smartEditorCommentsApi.util.updateQueryData('getComment', { oppgaveId, dokumentId, commentId }, (draft) => ({
+            ...draft,
+            text,
+          })),
+        );
 
-        dispatch(
+        const commentsPatchResult = dispatch(
           smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
             draft.map((t) =>
               t.id === commentId
-                ? { ...t, ...data }
-                : { ...t, comments: t.comments.map((c) => (c.id === commentId ? { ...c, ...data } : c)) },
+                ? { ...t, text }
+                : { ...t, comments: t.comments.map((c) => (c.id === commentId ? { ...c, text } : c)) },
             ),
           ),
         );
+
+        try {
+          await queryFulfilled;
+
+          const { data } = await queryFulfilled;
+
+          dispatch(
+            smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
+              draft.map((t) =>
+                t.id === commentId
+                  ? { ...t, ...data }
+                  : { ...t, comments: t.comments.map((c) => (c.id === commentId ? { ...c, ...data } : c)) },
+              ),
+            ),
+          );
+        } catch {
+          commentPatchResult.undo();
+          commentsPatchResult.undo();
+        }
       },
     }),
   }),
 });
 
 export const {
+  useGetCommentQuery,
   useGetCommentsQuery,
   usePostCommentMutation,
   usePostReplyMutation,

@@ -21,6 +21,7 @@ const EMPTY_LIST: PositionedItem<ThreadData>[] = [];
 
 export const PositionedComments = () => {
   const { attached, orphans } = useThreads();
+
   const { sheetRef, showAnnotationsAtOrigin } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorState();
 
@@ -37,10 +38,19 @@ export const PositionedComments = () => {
     const p = getPositionedItems(editor, threads, sheetRef.current);
 
     return {
+      // positionedItems: p.positionedItems.toSorted((a, b) => a.data.created.localeCompare(b.data.created)),
       positionedItems: p.positionedItems,
       maxCount: Math.max(p.maxCount, orphans.length),
     };
   }, [showAnnotationsAtOrigin, attached, editor, sheetRef, orphans.length]);
+
+  // return (
+  //   <div>
+  //     {positionedItems.map(({ data, top, floorIndex }) => (
+  //       <h1 key={data.id}>{top}</h1>
+  //     ))}
+  //   </div>
+  // );
 
   return (
     <Container style={{ width: maxCount * ITEM_OFFSET + ITEM_WIDTH + MIN_OFFSET }}>
@@ -49,7 +59,11 @@ export const PositionedComments = () => {
           key={data.id}
           thread={data}
           isFocused={data.isFocused}
-          style={{ top: `${top}em`, left: floorIndex * ITEM_OFFSET + MIN_OFFSET }}
+          style={{
+            top: `${top}em`,
+            left: floorIndex * ITEM_OFFSET + MIN_OFFSET,
+            zIndex: floorIndex,
+          }}
           isAbsolute
         />
       ))}
