@@ -10,6 +10,7 @@ import {
 } from '@app/hooks/settings/use-setting';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
+import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useSmartDocuments } from '@app/hooks/use-smart-documents';
@@ -92,11 +93,12 @@ const Tabbed = ({ documents }: TabbedProps) => {
 
 const TabNew = () => {
   const isMedunderskriver = useIsMedunderskriver();
+  const isFinished = useIsFullfoert();
   const isRol = useIsRol();
   const isFeilregistrert = useIsFeilregistrert();
   const hasDocumentsAccess = useHasDocumentsAccess();
 
-  if (isMedunderskriver || isRol || isFeilregistrert || !hasDocumentsAccess) {
+  if ((!isFinished && isMedunderskriver) || isRol || isFeilregistrert || !hasDocumentsAccess) {
     return null;
   }
 
@@ -113,9 +115,10 @@ interface TabPanelNewProps {
 
 const TabPanelNew = ({ onCreate }: TabPanelNewProps) => {
   const isMedunderskriver = useIsMedunderskriver();
+  const isFinished = useIsFullfoert();
   const isRol = useIsRol();
 
-  if (isMedunderskriver || isRol) {
+  if ((!isFinished && isMedunderskriver) || isRol) {
     return null;
   }
 
