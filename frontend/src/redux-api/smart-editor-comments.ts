@@ -25,11 +25,8 @@ export const smartEditorCommentsApi = createApi({
       onQueryStarted: async ({ oppgaveId, dokumentId }, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
 
-        dispatch(
-          smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
-            draft.some((c) => c.id === data.id) ? draft : [...draft, data],
-          ),
-        );
+        const { updateQueryData } = smartEditorCommentsApi.util;
+        dispatch(updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) => [...draft, data]));
       },
     }),
     deleteCommentOrThread: builder.mutation<void, IDeleteCommentOrReplyParams>({
@@ -80,18 +77,34 @@ export const smartEditorCommentsApi = createApi({
         method: 'PATCH',
         body,
       }),
-      onQueryStarted: async ({ oppgaveId, dokumentId, commentId }, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-
-        dispatch(
+      onQueryStarted: async ({ oppgaveId, dokumentId, commentId, text }, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
           smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
             draft.map((t) =>
               t.id === commentId
-                ? { ...t, ...data }
-                : { ...t, comments: t.comments.map((c) => (c.id === commentId ? { ...c, ...data } : c)) },
+                ? { ...t, text }
+                : { ...t, comments: t.comments.map((c) => (c.id === commentId ? { ...c, text } : c)) },
             ),
           ),
         );
+
+        try {
+          await queryFulfilled;
+
+          const { data } = await queryFulfilled;
+
+          dispatch(
+            smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId }, (draft) =>
+              draft.map((t) =>
+                t.id === commentId
+                  ? { ...t, ...data }
+                  : { ...t, comments: t.comments.map((c) => (c.id === commentId ? { ...c, ...data } : c)) },
+              ),
+            ),
+          );
+        } catch {
+          patchResult.undo();
+        }
       },
     }),
   }),

@@ -4,7 +4,7 @@ import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/c
 import { SavedStatus } from '@app/components/saved-status/saved-status';
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import type { IKvalitetsvurderingBooleans } from '@app/types/kaka-kvalitetsvurdering/v2';
-import { BodyLong, HStack, Label, Textarea } from '@navikt/ds-react';
+import { BodyLong, HStack, Label, Textarea, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -78,7 +78,7 @@ const KvalitetsskjemaTextareaInternal = ({
   }
 
   return (
-    <>
+    <VStack gap="2">
       <Textarea
         size="small"
         label={<ContainerWithHelpText helpText={helpText}>{label}</ContainerWithHelpText>}
@@ -86,10 +86,10 @@ const KvalitetsskjemaTextareaInternal = ({
         onChange={({ target }) => setLocalValue(target.value)}
         description={description}
       />
-      <HStack align="center" justify="end" marginBlock="1 0">
-        <SavedStatus {...updateStatus} modified={kvalitetsvurdering.modified} />
+      <HStack align="center" justify="end" marginBlock="1 0" height="21px">
+        <SavedStatus {...updateStatus} />
       </HStack>
-    </>
+    </VStack>
   );
 };
 

@@ -1,4 +1,3 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
 import { disconnectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -8,32 +7,20 @@ import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { styled } from 'styled-components';
-import { useIsCommentAuthor } from './use-is-comment-author';
 
 interface DeleteButtonProps {
   id: string;
-  authorIdent: string;
-  isFocused: boolean;
-  children: string;
-  close: () => void;
+  title: string;
 }
 
-export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: DeleteButtonProps) => {
+export const DeleteButton = ({ id, title }: DeleteButtonProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { data: oppgave } = useOppgave();
-  const { user } = useContext(StaticDataContext);
   const { dokumentId } = useContext(SmartEditorContext);
   const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation();
-  const isCommentAuthor = useIsCommentAuthor(authorIdent);
   const editor = useMyPlateEditorRef();
 
-  if (!isFocused || typeof oppgave === 'undefined') {
-    return null;
-  }
-
-  const canDelete = isCommentAuthor || oppgave.saksbehandler?.navIdent === user.navIdent;
-
-  if (!canDelete) {
+  if (typeof oppgave === 'undefined') {
     return null;
   }
 
@@ -53,12 +40,11 @@ export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: De
       <AlignLeftButton
         size="xsmall"
         icon={<TrashIcon aria-hidden />}
-        variant="tertiary-neutral"
+        variant="danger"
         onClick={() => setShowConfirm(true)}
         disabled={isDeleting}
-      >
-        {children}
-      </AlignLeftButton>
+        title={title}
+      />
     );
   }
 
@@ -66,22 +52,20 @@ export const DeleteButton = ({ id, authorIdent, isFocused, children, close }: De
     <>
       <AlignLeftButton
         size="xsmall"
+        icon={<TrashIcon aria-hidden />}
+        variant="danger"
+        onClick={onDelete}
+        loading={isDeleting}
+        title={title}
+      />
+      <AlignLeftButton
+        size="xsmall"
         icon={<XMarkIcon aria-hidden />}
         variant="tertiary"
         onClick={() => setShowConfirm(false)}
         disabled={isDeleting}
-      >
-        Avbryt
-      </AlignLeftButton>
-      <AlignLeftButton
-        size="xsmall"
-        icon={<TrashIcon aria-hidden />}
-        variant="tertiary-neutral"
-        onClick={onDelete}
-        loading={isDeleting}
-      >
-        {children}
-      </AlignLeftButton>
+        title="Avbryt"
+      />
     </>
   );
 };

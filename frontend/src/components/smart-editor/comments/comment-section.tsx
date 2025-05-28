@@ -5,13 +5,13 @@ import { ThreadList } from './thread-list';
 
 export const CommentSection = () => {
   const { attached, orphans, isLoading } = useThreads();
-  const { newCommentSelection } = useContext(SmartEditorContext);
+  const { editingComment } = useContext(SmartEditorContext);
 
   if (isLoading) {
     return null;
   }
 
-  if (newCommentSelection === null && attached.length === 0 && orphans.length === 0) {
+  if (editingComment === null && attached.length === 0 && orphans.length === 0) {
     return null;
   }
 

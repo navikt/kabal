@@ -13,11 +13,12 @@ interface Props {
   isOrphan?: boolean;
   style?: React.CSSProperties;
   isAbsolute?: boolean;
+  zIndex?: number;
 }
 
 const DONT_WAIT_FOR_TRANSITION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-export const ExpandableThread = ({ thread, isFocused, style, isOrphan = false, isAbsolute = false }: Props) => {
+export const ExpandableThread = ({ thread, isFocused, style, isOrphan = false, isAbsolute = false, zIndex }: Props) => {
   const { setFocusedThreadId, focusedThreadId } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorRef();
   const { value: expandedThreads = true } = useSmartEditorExpandedThreads();
@@ -84,6 +85,7 @@ export const ExpandableThread = ({ thread, isFocused, style, isOrphan = false, i
       isExpanded={expandedThreads || isFocused}
       onClick={open}
       style={{ ...style, transform: isFocused ? 'translateX(-10px)' : 'translateX(0px)' }}
+      zIndex={zIndex ?? 0}
     />
   );
 };

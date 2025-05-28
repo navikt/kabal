@@ -7,9 +7,9 @@ import { PositionedComments } from '../comments/positioned-comments';
 
 export const PositionedRight = () => {
   const { attached, orphans, bookmarks } = useAnnotationsCounts();
-  const { newCommentSelection } = useContext(SmartEditorContext);
+  const { editingComment } = useContext(SmartEditorContext);
 
-  if (attached === 0 && orphans === 0 && bookmarks === 0 && newCommentSelection === null) {
+  if (attached === 0 && orphans === 0 && bookmarks === 0 && editingComment === null) {
     return null;
   }
 
