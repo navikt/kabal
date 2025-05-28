@@ -1,3 +1,4 @@
+import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { pushEvent, pushLog } from '@app/observability';
 import {
   ELEMENT_CURRENT_DATE,
@@ -34,6 +35,8 @@ import {
   TextAlign,
 } from '@app/plate/types';
 import { isOfElementTypesFn } from '@app/plate/utils/queries';
+import { reduxStore } from '@app/redux/configure-store';
+import { isGenericObject } from '@app/types/types';
 import { LogLevel } from '@grafana/faro-web-sdk';
 import { ElementApi, NodeApi } from '@udecode/plate';
 import type { TElement, TNode } from '@udecode/plate';
@@ -123,6 +126,55 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
       editor.tf.setNodes({ type: BaseListItemContentPlugin.node.type }, { at: path, mode: 'highest' });
 
       return true;
+    }
+
+    if (parentNode.type === ELEMENT_MALTEKSTSEKSJON) {
+      pushLog(
+        'Parent node is maltekstseksjon, trying to get consumer text in order to assert if missing type is either maltekst or redigerbar maltekst',
+        options,
+        LogLevel.INFO,
+      );
+
+      const element = node as MaltekstElement | RedigerbarMaltekstElement;
+      const { id } = element;
+
+      if (typeof id !== 'string') {
+        pushLog('Cant find id in node', options, LogLevel.WARN);
+
+        return false;
+      }
+
+      const consumerText = Object.values(reduxStore.getState().consumerMaltekstseksjonerApi.queries)
+        .filter(isNotUndefined)
+        .flatMap(({ data }) => data)
+        .filter(isGenericObject)
+        .find((text) => 'id' in text && text.id === id);
+
+      if (consumerText === undefined) {
+        pushLog(`Could not find consumer text with textId: ${id}`, options, LogLevel.WARN);
+
+        return false;
+      }
+
+      if ('textType' in consumerText && typeof consumerText.textType === 'string') {
+        pushLog(
+          `Found consumer text with textType "${consumerText.textType}". Setting node type to consumer textType.`,
+          options,
+          LogLevel.INFO,
+        );
+
+        editor.tf.setNodes({ type: consumerText.textType }, { at: path, mode: 'highest' });
+
+        return true;
+      }
+
+      pushLog(
+        'Found consumer text, but it does not have a valid textType',
+        { ...options, context: { ...options.context, consumerText: JSON.stringify(consumerText) } },
+        LogLevel.WARN,
+      );
+
+      return false;
     }
 
     pushLog(
