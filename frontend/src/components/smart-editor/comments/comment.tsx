@@ -1,94 +1,70 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { SavedStatus } from '@app/components/saved-status/saved-status';
+import { DeleteButton } from '@app/components/smart-editor/comments/delete-button';
+import { WriteComment } from '@app/components/smart-editor/comments/write-comment/write-comment';
+import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
+import { useUpdateCommentOrReplyMutation } from '@app/redux-api/smart-editor-comments';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
-import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { Box, Button, VStack } from '@navikt/ds-react';
-import { memo, useContext, useRef, useState } from 'react';
+import { BodyLong, HStack, VStack } from '@navikt/ds-react';
+import { useContext } from 'react';
 import { styled } from 'styled-components';
-import { DeleteButton } from './delete-button';
-import { EditButton, EditComment } from './edit-comment';
+import { EditButton } from './edit-comment';
 
-interface Props extends ISmartEditorComment {
+interface Props {
   isExpanded: boolean;
-  isMain: boolean;
+  isMain?: boolean;
+  comment: ISmartEditorComment;
 }
 
-export const Comment = memo(
-  ({ author, created, text, id, isExpanded, isMain }: Props) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [showActions, setShowActions] = useState(false);
-    const actionsRef = useRef<HTMLDivElement>(null);
-    useOnClickOutside(actionsRef, () => setShowActions(false));
-    const { user } = useContext(StaticDataContext);
-    const isSaksbehandler = useIsSaksbehandler();
+export const Comment = ({ isExpanded, isMain, comment }: Props) => {
+  const { author, modified, text, id } = comment;
+  const { user } = useContext(StaticDataContext);
+  const { editingComment, setEditingComment } = useContext(SmartEditorContext);
+  const isSaksbehandler = useIsSaksbehandler();
+  const [, status] = useUpdateCommentOrReplyMutation({ fixedCacheKey: comment.id });
 
-    const isAuthor = author.ident === user.navIdent;
-    const canEdit = isSaksbehandler || isAuthor;
+  const isAuthor = author.ident === user.navIdent;
+  const isEditing = editingComment?.id === id;
+  const canEditComment = isAuthor && isExpanded;
+  const canDeleteComment = (isAuthor || isSaksbehandler) && isExpanded;
 
-    const Text = () =>
-      isEditing ? (
-        <EditComment id={id} authorIdent={author.ident} close={() => setIsEditing(false)} defaultValue={text} />
-      ) : (
-        <StyledText>{text}</StyledText>
-      );
-
-    return (
-      <StyledListItem>
-        <VStack as="article" position="relative">
+  return (
+    <StyledListItem>
+      <VStack as="article" position="relative">
+        <HStack gap="2" align="center" justify="space-between" wrap={false}>
           <StyledName>{author.name}</StyledName>
+          {canDeleteComment ? <DeleteButton id={id} title={isMain ? 'Slett tråd' : 'Slett svar'} /> : null}
+        </HStack>
 
-          <StyledDate dateTime={created}>{isoDateTimeToPretty(created)}</StyledDate>
+        <SavedStatus
+          {...status}
+          modified={modified}
+          fallback={
+            <HStack className="text-small text-text-subtle" gap="1" align="center">
+              Sist lagret: <time dateTime={modified}>{isoDateTimeToPretty(modified)}</time>
+            </HStack>
+          }
+        />
 
-          <Text />
+        {isEditing ? (
+          <WriteComment comment={editingComment} label="Rediger kommentar" />
+        ) : (
+          <HStack gap="2" justify="space-between" align="start" wrap={false}>
+            <BodyLong size="small" className="wrap-break-word overflow-hidden whitespace-break-spaces">
+              {text}
+            </BodyLong>
 
-          {canEdit && isExpanded ? (
-            <ActionsContainer ref={actionsRef}>
-              <Button
-                onClick={() => setShowActions((a) => !a)}
-                size="xsmall"
-                variant="tertiary-neutral"
-                icon={<MenuElipsisVerticalIcon aria-hidden />}
-              />
-              {showActions ? (
-                <VStack asChild gap="1 0" right="0" className="top-full z-1 whitespace-nowrap">
-                  <Box shadow="medium" background="bg-default" borderRadius="medium" padding="1" position="absolute">
-                    <EditButton
-                      authorIdent={author.ident}
-                      isEditing={isEditing}
-                      setIsEditing={setIsEditing}
-                      isFocused={isExpanded}
-                      close={() => setShowActions(false)}
-                    />
-                    <DeleteButton
-                      id={id}
-                      authorIdent={author.ident}
-                      isFocused={isExpanded}
-                      close={() => setShowActions(false)}
-                    >
-                      {isMain ? 'Slett tråd' : 'Slett svar'}
-                    </DeleteButton>
-                  </Box>
-                </VStack>
-              ) : null}
-            </ActionsContainer>
-          ) : null}
-        </VStack>
-      </StyledListItem>
-    );
-  },
-  (prevProps, nextProps) =>
-    prevProps.id === nextProps.id && prevProps.text === nextProps.text && prevProps.isExpanded === nextProps.isExpanded,
-);
-
-Comment.displayName = 'Comment';
-
-const ActionsContainer = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-`;
+            {canEditComment ? (
+              <EditButton isEditing={isEditing} setIsEditing={() => setEditingComment(comment)} />
+            ) : null}
+          </HStack>
+        )}
+      </VStack>
+    </StyledListItem>
+  );
+};
 
 const StyledListItem = styled.li`
   padding-left: var(--a-spacing-1);
@@ -108,19 +84,4 @@ const StyledName = styled.div`
   flex-grow: 1;
   overflow: hidden;
   text-overflow: ellipsis;
-`;
-
-const StyledDate = styled.time`
-  display: block;
-  width: 100%;
-  font-size: var(--a-font-size-small);
-  color: var(--a-gray-700);
-`;
-
-const StyledText = styled.p`
-  font-size: var(--a-spacing-4);
-  margin: 0;
-  margin-top: var(--a-spacing-1);
-  white-space: break-spaces;
-  overflow-wrap: break-word;
 `;

@@ -37,7 +37,7 @@ export const OrphansModal = () => {
           </Alert>
           <HStack as="section" wrap align="start" gap="4" marginBlock="4 0">
             {orphans.map((o) => (
-              <Thread key={o.id} thread={o} isExpanded />
+              <Thread key={o.id} thread={o} isExpanded zIndex={0} />
             ))}
           </HStack>
         </Modal.Body>

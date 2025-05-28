@@ -3,7 +3,7 @@ import { type ErrorMessage, getErrorData } from '@app/functions/get-error-data';
 import { HStack, Loader, Tooltip } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
+import type { ReactNode } from 'react';
 import { CheckmarkCircleFillIconColored, XMarkOctagonFillIconColored } from '../colored-icons/colored-icons';
 
 export interface SavedStatusProps {
@@ -11,17 +11,29 @@ export interface SavedStatusProps {
   isError: boolean;
   isLoading: boolean;
   error?: FetchBaseQueryError | SerializedError | undefined;
-  modified: string;
+  modified?: string;
+  fallback?: ReactNode;
 }
 
-export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified }: SavedStatusProps) => {
+const CLASSNAMES = 'text-text-subtle text-small';
+
+export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified, fallback }: SavedStatusProps) => {
+  const lastSaved =
+    typeof modified === 'string' ? (
+      <>
+        Sist lagret: <time dateTime={modified}>{isoDateTimeToPretty(modified)}</time>
+      </>
+    ) : null;
+
   if (isLoading) {
     return (
-      <HStack align="center" gap="1">
-        <StatusText>Lagrer...</StatusText>
+      <HStack align="center" gap="1" className={CLASSNAMES}>
+        {lastSaved}
 
         <Tooltip content="Lagrer..." delay={0}>
-          <Loader size="xsmall" />
+          <HStack align="center" gap="1">
+            <Loader size="xsmall" /> Lagrer...
+          </HStack>
         </Tooltip>
       </HStack>
     );
@@ -29,11 +41,11 @@ export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified }: 
 
   if (isSuccess) {
     return (
-      <HStack align="center" gap="1">
-        <StatusText>Sist lagret: {isoDateTimeToPretty(modified)}</StatusText>
+      <HStack align="center" gap="1" className={CLASSNAMES}>
+        {lastSaved}
 
         <Tooltip content="Lagret!" delay={0}>
-          <CheckmarkCircleFillIconColored />
+          <CheckmarkCircleFillIconColored aria-hidden className="mb-1" />
         </Tooltip>
       </HStack>
     );
@@ -41,9 +53,8 @@ export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified }: 
 
   if (isError) {
     return (
-      <HStack align="center" gap="1">
-        <StatusText>Feil ved lagring</StatusText>
-
+      <HStack align="center" gap="1" className={CLASSNAMES}>
+        Feil ved lagring
         <Tooltip content={`Feil ved lagring:\n${formatErrorMessage(getErrorData(error))}`} delay={0}>
           <XMarkOctagonFillIconColored />
         </Tooltip>
@@ -51,7 +62,7 @@ export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified }: 
     );
   }
 
-  return null;
+  return fallback ?? null;
 };
 
 const formatErrorMessage = (error: ErrorMessage) => {
@@ -60,8 +71,3 @@ const formatErrorMessage = (error: ErrorMessage) => {
 
   return message;
 };
-
-const StatusText = styled.span`
-  color: var(--a-text-subtle);
-  font-size: var(--a-font-size-small);
-`;

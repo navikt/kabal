@@ -1,5 +1,4 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import { NewComment } from '@app/components/smart-editor/comments/new-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
 import { History } from '@app/components/smart-editor/history/history';
@@ -339,8 +338,6 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithN
     <Sheet ref={setContainerElement} $minHeight data-component="sheet" className="mr-4">
       <FloatingSaksbehandlerToolbar container={containerElement} editorId={id} />
       <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
-
-      <NewComment container={containerElement} />
 
       <KabalPlateEditor id={id} readOnly={!(canEdit && isConnected)} lang={lang} />
 

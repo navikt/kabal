@@ -7,6 +7,7 @@ import {
   useSmartEditorHistoryOpen,
 } from '@app/hooks/settings/use-setting';
 import { DistribusjonsType, type ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { TRange } from '@udecode/plate';
 import { type MutableRefObject, createContext, useRef, useState } from 'react';
@@ -31,6 +32,8 @@ interface ISmartEditorContext extends Pick<ISmartDocument, 'templateId' | 'dokum
   canManage: boolean;
   canEdit: boolean;
   creator: string;
+  editingComment: ISmartEditorComment | null;
+  setEditingComment: (comment: ISmartEditorComment | null) => void;
 }
 
 export const SmartEditorContext = createContext<ISmartEditorContext>({
@@ -53,6 +56,8 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   canManage: false,
   canEdit: false,
   creator: '',
+  editingComment: null,
+  setEditingComment: noop,
 });
 
 interface Props {
@@ -73,10 +78,10 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(null);
   const { value: showAnnotationsAtOrigin = false, setValue: setShowAnnotationsAtOrigin } =
     useSmartEditorAnnotationsAtOrigin();
-  // const [sheetRef, setSheetRef] = useState<HTMLDivElement | null>(null);
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const canManage = useCanManageDocument(templateId);
   const canEdit = useCanEditDocument(templateId);
+  const [editingComment, setEditingComment] = useState<ISmartEditorComment | null>(null);
 
   return (
     <SmartEditorContext.Provider
@@ -100,6 +105,8 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
         canManage,
         canEdit,
         creator: creator.employee.navIdent,
+        editingComment,
+        setEditingComment,
       }}
     >
       {children}

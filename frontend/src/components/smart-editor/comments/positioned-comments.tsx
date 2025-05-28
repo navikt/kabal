@@ -1,7 +1,6 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import {
   ItemType,
-  type PositionedItem,
   type ThreadData,
   getPositionedItems,
 } from '@app/components/smart-editor/functions/get-positioned-items';
@@ -17,22 +16,20 @@ const ITEM_WIDTH = 350;
 const ITEM_OFFSET = 32;
 const MIN_OFFSET = 16;
 
-const EMPTY_LIST: PositionedItem<ThreadData>[] = [];
-
 export const PositionedComments = () => {
   const { attached, orphans } = useThreads();
+
   const { sheetRef, showAnnotationsAtOrigin } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorState();
 
-  const { positionedItems, maxCount } = useMemo<{
-    positionedItems: PositionedItem<ThreadData>[];
-    maxCount: number;
-  }>(() => {
+  const { positionedItems, maxCount } = useMemo(() => {
     if (!showAnnotationsAtOrigin) {
-      return { positionedItems: EMPTY_LIST, maxCount: 0 };
+      return { positionedItems: [], maxCount: 0 };
     }
 
-    const threads = attached.map<ThreadData>((a) => ({ ...a, type: ItemType.THREAD }));
+    const threads = attached
+      .map<ThreadData>((a) => ({ ...a, type: ItemType.THREAD }))
+      .toSorted((a, b) => a.created.localeCompare(b.created));
 
     const p = getPositionedItems(editor, threads, sheetRef.current);
 
@@ -44,12 +41,13 @@ export const PositionedComments = () => {
 
   return (
     <Container style={{ width: maxCount * ITEM_OFFSET + ITEM_WIDTH + MIN_OFFSET }}>
-      {positionedItems.map(({ data, top, floorIndex }) => (
+      {positionedItems.map(({ data, top, floorIndex }, zIndex) => (
         <ExpandableThread
           key={data.id}
           thread={data}
           isFocused={data.isFocused}
           style={{ top: `${top}em`, left: floorIndex * ITEM_OFFSET + MIN_OFFSET }}
+          zIndex={zIndex}
           isAbsolute
         />
       ))}
