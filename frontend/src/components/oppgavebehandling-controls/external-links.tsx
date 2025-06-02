@@ -73,6 +73,14 @@ export const Ainntekt = () => {
   return <AppLink appName={appName} url={`${baseUrl}/redirect`} eventName={eventName} />;
 };
 
+export const KunnskapsbankTrygdemedisin = () => (
+  <AppLink
+    appName="Kunnskapsbank trygdemedisin"
+    url="https://navno.sharepoint.com/sites/fag-og-ytelser-Kunnskapsbank-trygdemedisin"
+    eventName="kunnskapsbank-trygdemedisin-link"
+  />
+);
+
 interface RedirectLinkProps {
   appName: string;
   url: string;

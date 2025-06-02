@@ -1,6 +1,6 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { Box, HStack } from '@navikt/ds-react';
-import { AaRegisteret, Ainntekt, Modia } from './external-links';
+import { AaRegisteret, Ainntekt, KunnskapsbankTrygdemedisin, Modia } from './external-links';
 import { PanelSwitches } from './panel-switches';
 import { UserInfo } from './user-info';
 
@@ -25,6 +25,7 @@ const Content = () => {
       <UserInfo {...oppgave} />
       <PanelSwitches />
       <HStack align="center" marginInline="auto 0" gap="0 4">
+        <KunnskapsbankTrygdemedisin />
         <Modia sakenGjelder={sakenGjelder} />
         <AaRegisteret />
         <Ainntekt />
