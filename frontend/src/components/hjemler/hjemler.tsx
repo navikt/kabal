@@ -14,7 +14,7 @@ interface Props {
   size?: TagProps['size'];
 }
 
-export const Innsendingshjemler = ({ hjemmelIdList, ...rest }: Props) => {
+export const InnsendingshjemlerList = ({ hjemmelIdList, ...rest }: Props) => {
   const hjemmelList = useInnsendingshjemlerFromIds(hjemmelIdList);
 
   return <HjemmelList hjemmelList={hjemmelList} {...rest} />;

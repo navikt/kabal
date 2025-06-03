@@ -17,7 +17,7 @@ import { Utfall } from '@app/components/common-table-components/utfall';
 import { Ytelse } from '@app/components/common-table-components/ytelse';
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
-import { Innsendingshjemler, Registreringshjemler } from '@app/components/hjemler/hjemler';
+import { InnsendingshjemlerList, Registreringshjemler } from '@app/components/hjemler/hjemler';
 import { Oppgavestyring } from '@app/components/oppgavestyring/oppgavestyring';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
 import { RelevantOppgaver } from '@app/components/relevant-oppgaver/relevant-oppgaver';
@@ -73,7 +73,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.EnhetInnsendingshjemler:
         return (
           <Table.DataCell key={key}>
-            <Innsendingshjemler hjemmelIdList={oppgave.hjemmelIdList} loading={<LoadingCellContent />} />
+            <InnsendingshjemlerList hjemmelIdList={oppgave.hjemmelIdList} loading={<LoadingCellContent />} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Registreringshjemler:
