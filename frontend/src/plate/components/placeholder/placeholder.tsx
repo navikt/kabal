@@ -16,7 +16,7 @@ import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { PlaceholderElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Tooltip } from '@navikt/ds-react';
-import { PathApi } from '@udecode/plate';
+import { type AnyPluginConfig, PathApi } from '@udecode/plate';
 import { useEditorReadOnly } from '@udecode/plate-core/react';
 import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { type MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
@@ -148,7 +148,7 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
   }, [editor, element, hasNoVisibleText, canManage]);
 
   return (
-    <PlateElement<PlaceholderElement>
+    <PlateElement<PlaceholderElement, AnyPluginConfig, 'span'>
       {...props}
       as="span"
       attributes={{

@@ -22,7 +22,7 @@ import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
-import type { KabalValue, RichTextEditor } from '@app/plate/types';
+import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -131,6 +131,17 @@ interface PlateContextProps {
   oppgave: IOppgavebehandling;
 }
 
+// Copy-paste from Plate docs
+const useMounted = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return mounted;
+};
+
 const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
   const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
@@ -141,6 +152,19 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
   const options = usePluginOption(YjsPlugin, 'providers').find(
     (p): p is YjsProviderConfig => p.type === 'hocuspocus',
   )?.options;
+
+  const mounted = useMounted();
+  const editor = useMyPlateEditorRef();
+
+  useEffect(() => {
+    if (!mounted) {
+      return;
+    }
+
+    editor.getApi(YjsPlugin).yjs.init();
+
+    return editor.getApi(YjsPlugin).yjs.destroy;
+  });
 
   // useEffect(() => {
   //   const onChange: OnChangeFn = ({ added, removed, updated }) => {
