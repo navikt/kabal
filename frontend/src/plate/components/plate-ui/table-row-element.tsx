@@ -2,8 +2,8 @@ import { PlateElement, withRef } from '@udecode/plate/react';
 import { styled } from 'styled-components';
 
 const TableRowElement = withRef<typeof PlateElement>(({ children, ...props }, ref) => (
-  <PlateElement as={StyledTableRowElement} ref={ref} {...props} className="static">
-    {children}
+  <PlateElement as="div" ref={ref} {...props} className="static">
+    <StyledTableRowElement>{children}</StyledTableRowElement>
   </PlateElement>
 ));
 

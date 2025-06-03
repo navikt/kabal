@@ -28,12 +28,16 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   return (
     <PlateElement<LabelContentElement>
       {...props}
-      asChild
-      contentEditable={false}
-      onDragStart={(event) => event.preventDefault()}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      as="div"
+      attributes={{
+        ...props.attributes,
+        contentEditable: false,
+        suppressContentEditableWarning: true,
+        onDragStart: (event) => event.preventDefault(),
+        onDrop: (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        },
       }}
     >
       <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.LABEL}>

@@ -12,7 +12,7 @@ export const Paragraph = forwardRef<ElementRef<typeof PlateElement>, RenderProps
   const indent = ptToEm((element.indent ?? 0) * 24);
 
   return (
-    <PlateElement {...props} asChild ref={ref}>
+    <PlateElement {...props} ref={ref}>
       <StyledParagraph
         style={{
           marginLeft: element.align !== 'right' ? indent : undefined,

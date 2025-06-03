@@ -26,7 +26,10 @@ export const Regelverk = (props: PlateElementProps<RegelverkElement>) => {
   const { children, element } = props;
 
   return (
-    <PlateElement<RegelverkElement> {...props} onDragStart={onPlateContainerDragStart}>
+    <PlateElement<RegelverkElement>
+      {...props}
+      attributes={{ ...props.attributes, onDragStart: onPlateContainerDragStart }}
+    >
       <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
         {children}
         {canManage ? (
@@ -96,7 +99,10 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
   }, [editor, element, getTexts, oppgave, query]);
 
   return (
-    <PlateElement<RegelverkContainerElement> {...props} asChild onDragStart={onPlateContainerDragStart}>
+    <PlateElement<RegelverkContainerElement>
+      {...props}
+      attributes={{ ...props.attributes, onDragStart: onPlateContainerDragStart }}
+    >
       <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type} aria-disabled={loading}>
         {children}
         {loading ? (

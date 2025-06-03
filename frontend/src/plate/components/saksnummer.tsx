@@ -37,7 +37,7 @@ export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
   }
 
   return (
-    <PlateElement<SaksnummerElement> {...props} asChild>
+    <PlateElement<SaksnummerElement> {...props} as="div">
       <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.LABEL}>
         <span className="font-bold text-gray-700" contentEditable={false}>
           Saksnummer:{' '}

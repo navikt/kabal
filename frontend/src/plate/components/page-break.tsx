@@ -52,7 +52,7 @@ export const PageBreak = (props: PlateElementProps<PageBreakElement>) => {
   };
 
   return (
-    <PlateElement<PageBreakElement> {...props} asChild contentEditable={false}>
+    <PlateElement<PageBreakElement> {...props} attributes={{ ...props.attributes, contentEditable: false }}>
       <StyledPageBreak>
         {disableDelete ? null : (
           <StyledDeleteButton

@@ -89,7 +89,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
 
   if (isLoading) {
     return (
-      <PlateElement<RedigerbarMaltekstElement> {...props} asChild contentEditable={false}>
+      <PlateElement<RedigerbarMaltekstElement> {...props} attributes={{ ...props.attributes, contentEditable: false }}>
         <SectionContainer
           data-element={element.type}
           data-section={element.section}
@@ -102,7 +102,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
   }
 
   return (
-    <PlateElement<RedigerbarMaltekstElement> {...props} asChild>
+    <PlateElement<RedigerbarMaltekstElement> {...props}>
       <SectionContainer
         data-element={element.type}
         data-section={element.section}

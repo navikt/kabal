@@ -97,12 +97,15 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
   return (
     <PlateElement<ElementTypes>
       {...props}
-      asChild
-      contentEditable={false}
-      onDragStart={(event) => event.preventDefault()}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      as="div"
+      attributes={{
+        ...props.attributes,
+        contentEditable: false,
+        onDragStart: (event) => event.preventDefault(),
+        onDrop: (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        },
       }}
     >
       <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.FOOTER}>

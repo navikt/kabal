@@ -1,5 +1,3 @@
-import type { UserCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
-import { TAB_UUID } from '@app/headers';
 import { HeadingOne, HeadingThree, HeadingTwo } from '@app/plate/components/headings';
 import { ListItem, OrderedList, UnorderedList } from '@app/plate/components/lists';
 import { Paragraph } from '@app/plate/components/paragraph';
@@ -75,7 +73,7 @@ export const collaborationSaksbehandlerPlugins = (
   behandlingId: string,
   dokumentId: string,
   smartDocument: ISmartDocument,
-  { navIdent, navn }: IUserData,
+  { navIdent }: IUserData,
 ) => {
   const sharedRoot = new XmlText();
   sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
@@ -85,20 +83,21 @@ export const collaborationSaksbehandlerPlugins = (
     createCapitalisePlugin(navIdent),
     YjsPlugin.configure({
       options: {
-        cursorOptions: {
-          data: { navIdent, navn, tabId: TAB_UUID } satisfies UserCursor,
-        },
-        disableCursors: true,
-        hocuspocusProviderOptions: {
-          url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
-          name: dokumentId,
-          document: sharedRoot.doc ?? undefined,
-          onClose: ({ event }) => {
-            if (event.code === 4401) {
-              window.location.assign('/oauth2/login');
-            }
+        providers: [
+          {
+            type: 'hocuspocus',
+            options: {
+              url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
+              name: dokumentId,
+              document: sharedRoot.doc ?? undefined,
+              onClose: ({ event }) => {
+                if (event.code === 4401) {
+                  window.location.assign('/oauth2/login');
+                }
+              },
+            },
           },
-        },
+        ],
       },
     }),
   ];

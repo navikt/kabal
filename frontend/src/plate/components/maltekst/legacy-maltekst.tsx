@@ -63,7 +63,11 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
 
   if (isLoading) {
     return (
-      <PlateElement<MaltekstElement> {...props} asChild suppressContentEditableWarning>
+      <PlateElement<MaltekstElement>
+        {...props}
+        as="div"
+        attributes={{ ...props.attributes, suppressContentEditableWarning: true }}
+      >
         <SectionContainer
           data-element={element.type}
           data-section={element.section}
@@ -88,9 +92,8 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
   return (
     <PlateElement<MaltekstElement>
       {...props}
-      asChild
-      contentEditable={!editor.api.isReadOnly()}
-      suppressContentEditableWarning
+      as="div"
+      attributes={{ ...props.attributes, contentEditable: false, suppressContentEditableWarning: true }}
     >
       <SectionContainer
         data-element={element.type}

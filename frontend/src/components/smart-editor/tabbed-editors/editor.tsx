@@ -30,7 +30,8 @@ import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
 import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { RangeApi, TextApi } from '@udecode/plate';
-import { Plate, useEditorRef, usePlateEditor } from '@udecode/plate-core/react';
+import { Plate, usePlateEditor, usePluginOption } from '@udecode/plate-core/react';
+import type { YjsProviderConfig } from '@udecode/plate-yjs';
 import { YjsPlugin } from '@udecode/plate-yjs/react';
 import { useContext, useEffect, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
@@ -134,9 +135,12 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
   const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { showAnnotationsAtOrigin, showHistory } = useContext(SmartEditorContext);
-  const editor = useEditorRef(id);
-  const options = editor.getOptions(YjsPlugin);
-  const [isConnected, setIsConnected] = useState(options.provider.isConnected);
+  const _isConnected = usePluginOption(YjsPlugin, '_isConnected');
+  const [isConnected, setIsConnected] = useState(_isConnected);
+
+  const options = usePluginOption(YjsPlugin, 'providers').find(
+    (p): p is YjsProviderConfig => p.type === 'hocuspocus',
+  )?.options;
 
   // useEffect(() => {
   //   const onChange: OnChangeFn = ({ added, removed, updated }) => {
@@ -174,6 +178,10 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
   // }, [editor, editor.awareness]);
 
   useEffect(() => {
+    if (options === undefined) {
+      return;
+    }
+
     // Close happens after connect is broken. Safe to reconnect.
     const onClose = async () => {
       setIsConnected(false);
@@ -194,35 +202,39 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
           hasOwn(data.session, 'active') &&
           data.session.active === true
         ) {
-          options.provider.connect();
+          options.connect();
         }
       } catch (err) {
         console.error(err);
       }
     };
 
-    options.provider.on('close', onClose);
+    options.onClose = onClose;
 
     return () => {
-      options.provider.off('close', onClose);
+      options.onClose = undefined;
     };
-  }, [options.provider]);
+  }, [options]);
 
   useEffect(() => {
+    if (options === undefined) {
+      return;
+    }
+
     // Disconnect happens before close. Too early to reconnect.
     const onDisconnect = () => setIsConnected(false);
 
     // Connect happens after connection is established.
     const onConnect = () => setIsConnected(true);
 
-    options.provider.on('disconnect', onDisconnect);
-    options.provider.on('connect', onConnect);
+    options.onDisconnect = onDisconnect;
+    options.onConnect = onConnect;
 
     return () => {
-      options.provider.off('disconnect', onDisconnect);
-      options.provider.off('connect', onConnect);
+      options.onDisconnect = undefined;
+      options.onConnect = undefined;
     };
-  }, [options.provider]);
+  }, [options]);
 
   return (
     <>

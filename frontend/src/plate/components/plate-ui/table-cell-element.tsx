@@ -20,7 +20,7 @@ export const TableCellElement = withRef<typeof PlateElement>(({ style, children,
   };
 
   return (
-    <PlateElement asChild ref={ref} {...props}>
+    <PlateElement as="div" ref={ref} {...props}>
       <StyledCell $selected={selected} className="min-w-12" style={{ ...style, width }} {...spans}>
         <Content style={{ minHeight }}>{children}</Content>
         <Resize />

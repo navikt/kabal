@@ -79,7 +79,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
   }
 
   return (
-    <PlateElement<FullmektigElement> asChild {...props}>
+    <PlateElement<FullmektigElement> {...props}>
       <SectionContainer data-element={props.element.type} $sectionType={SectionTypeEnum.LABEL}>
         <NonEditable>{children[0]}</NonEditable>
         <PlaceholderContainer>

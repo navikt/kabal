@@ -148,7 +148,15 @@ const Placeholder = ({ canManage, ...props }: PlaceholderProps) => {
   }, [editor, element, hasNoVisibleText, canManage]);
 
   return (
-    <PlateElement<PlaceholderElement> {...props} asChild contentEditable suppressContentEditableWarning>
+    <PlateElement<PlaceholderElement>
+      {...props}
+      as="span"
+      attributes={{
+        ...props.attributes,
+        contentEditable: true,
+        suppressContentEditableWarning: true,
+      }}
+    >
       <Tooltip content={element.placeholder} maxChar={Number.POSITIVE_INFINITY} contentEditable={false}>
         <Wrapper
           data-node-type={ELEMENT_PLACEHOLDER}
