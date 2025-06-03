@@ -27,6 +27,8 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections | DeprecatedTemplat
   [TemplateSections.OM_TAUSHETSPLIKT]: 'Om taushetsplikt',
   [TemplateSections.OM_REGELVERK]: 'Om regelverket i saken',
   [TemplateSections.HVORFOR_OMGJØRING]: 'Om hvorfor omgjøring vurderes',
+  [TemplateSections.OM_ANKENDE_PARTS_TILSVAR]: 'Om ankende parts tilsvar',
+  [TemplateSections.OM_VEDLAGTE_DOKUMENTER]: 'Om vedlagte dokumenter',
 
   [TemplateSections.INTRODUCTION_TEMP]: 'Introduksjon (midlertidig)',
 };

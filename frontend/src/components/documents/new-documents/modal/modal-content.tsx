@@ -2,6 +2,7 @@ import { getIsRolQuestions } from '@app/components/documents/new-documents/helpe
 import { AnnenInngaaende } from '@app/components/documents/new-documents/modal/annen-inngaaende';
 import { FinishButton } from '@app/components/documents/new-documents/modal/finish-button';
 import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
+import { ConfirmInnsendingshjemler } from '@app/components/documents/new-documents/modal/innsendingshjemler';
 import { MottattDato } from '@app/components/documents/new-documents/modal/mottatt-dato';
 import { SetParentDocument } from '@app/components/documents/new-documents/modal/set-parent';
 import { SetDocumentType } from '@app/components/documents/new-documents/new-document/set-type';
@@ -32,7 +33,7 @@ import {
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { DeleteDocumentButton } from './delete-button';
 
@@ -63,6 +64,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
       : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
   const isMainDocument = document.parentId === null;
   const { refresh, ...pdfData } = usePdfData(isMainDocument ? pdfUrl : undefined);
+  const [innsendingshjemlerConfirmed, setInnsendingshjemlerConfirmed] = useState(false);
 
   if (oppgaveId === skipToken) {
     return null;
@@ -83,7 +85,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
   return (
     <>
       <ModalBody $isMainDocument={isMainDocument}>
-        <VStack gap="4" width="400px" flexShrink="0" overflowY="auto">
+        <VStack gap="4" minWidth="400px" flexShrink="0">
           <HStack align="center" gap="2">
             <Tag variant="info" size="small">
               {isMainDocument ? DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId] : 'Vedlegg'}
@@ -133,6 +135,13 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
             />
           ) : null}
 
+          {document.dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN ? (
+            <ConfirmInnsendingshjemler
+              innsendingshjemlerConfirmed={innsendingshjemlerConfirmed}
+              setInnsendingshjemlerConfirmed={setInnsendingshjemlerConfirmed}
+            />
+          ) : null}
+
           <Errors updatePdf={refresh} />
         </VStack>
 
@@ -147,6 +156,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
           document={document}
           journalfoerteDocuments={journalfoerteDocuments}
           pdfOrSmartDocuments={pdfOrSmartDocuments}
+          innsendingshjemlerConfirmed={innsendingshjemlerConfirmed}
         />
       </Modal.Footer>
     </>

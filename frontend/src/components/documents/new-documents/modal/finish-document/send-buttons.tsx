@@ -4,6 +4,7 @@ import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import { useFinishDocumentMutation, useSetMottakerListMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { DistribusjonsType } from '@app/types/documents/documents';
 import { NO_RECIPIENTS_ERROR } from '@app/types/documents/validation';
 import { Alert } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -13,7 +14,7 @@ import { VALIDATION_ERROR_MESSAGES } from './error-messages';
 import { type FinishProps, isSmartDocumentValidatonError } from './types';
 
 export const SendButtons = ({ document }: FinishProps) => {
-  const { id: dokumentId, tittel: documentTitle, mottakerList } = document;
+  const { id: dokumentId, tittel: documentTitle, mottakerList, dokumentTypeId } = document;
   const { data, isLoading: oppgaveIsLoading } = useOppgave();
   const [setMottakerList] = useSetMottakerListMutation();
   const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
@@ -35,7 +36,8 @@ export const SendButtons = ({ document }: FinishProps) => {
 
     setValidationErrors([]);
 
-    if (mottakerList.length === 0) {
+    // Ekspedisjonsbrev til trygderetten will always have Trygderetten as a receiver
+    if (mottakerList.length === 0 && dokumentTypeId !== DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN) {
       if (reachableSuggestedRecipients.length !== 1) {
         setValidationErrors([
           {
