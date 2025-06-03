@@ -6,17 +6,18 @@ import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-doc
 import type { IMainDocument } from '@app/types/documents/documents';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Button, Modal } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 interface Props {
   document: IMainDocument;
   parentDocument?: IMainDocument;
   containsRolAttachments: boolean;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-export const DocumentModal = ({ document, parentDocument, containsRolAttachments }: Props) => {
+export const DocumentModal = ({ document, parentDocument, containsRolAttachments, isOpen, setIsOpen }: Props) => {
   const { tittel, type } = document;
-  const [open, setOpen] = useState(false);
   const { close } = useContext(ModalContext);
 
   const canEditDocument = useCanEditDocument(document, parentDocument);
@@ -28,14 +29,14 @@ export const DocumentModal = ({ document, parentDocument, containsRolAttachments
   return (
     <>
       <Button
-        onClick={() => setOpen(!open)}
+        onClick={() => setIsOpen(!isOpen)}
         data-testid="document-actions-button"
         variant="tertiary-neutral"
         size="small"
         icon={<MenuElipsisVerticalIcon aria-hidden />}
         style={{ gridArea: Fields.Action }}
       />
-      {open ? (
+      {isOpen ? (
         <Modal
           open
           width={document.parentId === null ? '2000px' : '600px'}
@@ -48,7 +49,7 @@ export const DocumentModal = ({ document, parentDocument, containsRolAttachments
           closeOnBackdropClick
           onClose={() => {
             close();
-            setOpen(false);
+            setIsOpen(false);
           }}
         >
           <DocumentModalContent

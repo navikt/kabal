@@ -19,7 +19,7 @@ import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/docume
 import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { HGrid } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { type HTMLAttributes, memo, useCallback, useContext, useRef } from 'react';
+import { type HTMLAttributes, memo, useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { DocumentTitle } from './title';
 
@@ -106,6 +106,7 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
     onDragStart,
   }) => {
     const isDraggable = draggingEnabled && canEdit;
+    const [modalOpen, setModalOpen] = useState(false);
 
     return (
       <StyledNewAttachment
@@ -133,6 +134,8 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
             document={document}
             parentDocument={parentDocument}
             containsRolAttachments={containsRolAttachments}
+            isOpen={modalOpen}
+            setIsOpen={setModalOpen}
           />
         )}
       </StyledNewAttachment>

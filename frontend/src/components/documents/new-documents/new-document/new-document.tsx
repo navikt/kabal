@@ -23,7 +23,7 @@ import {
 } from '@app/types/documents/documents';
 import { HGrid } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { memo, useCallback, useContext, useRef } from 'react';
+import { memo, useCallback, useContext, useRef, useState } from 'react';
 import { SetDocumentType } from './set-type';
 import { DocumentTitle } from './title';
 
@@ -41,8 +41,9 @@ export const NewDocument = memo(
     const cleanDragUI = useRef<() => void>(() => undefined);
     const { setDraggedDocument, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
     const canEdit = useCanEditDocument(document);
+    const [modalOpen, setModalOpen] = useState(false);
 
-    const isDraggable = draggingEnabled && canEdit && !containsRolAttachments;
+    const isDraggable = draggingEnabled && canEdit && !containsRolAttachments && !modalOpen;
 
     const onDragStart = useCallback(
       async (e: React.DragEvent<HTMLDivElement>) => {
@@ -100,7 +101,12 @@ export const NewDocument = memo(
         {document.isMarkertAvsluttet ? (
           <ArchivingIcon dokumentTypeId={document.dokumentTypeId} />
         ) : (
-          <DocumentModal document={document} containsRolAttachments={containsRolAttachments} />
+          <DocumentModal
+            document={document}
+            containsRolAttachments={containsRolAttachments}
+            isOpen={modalOpen}
+            setIsOpen={setModalOpen}
+          />
         )}
       </HGrid>
     );
