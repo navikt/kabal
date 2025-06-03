@@ -32,6 +32,8 @@ export enum TemplateSections {
   OM_TAUSHETSPLIKT = 'section-due',
   HVORFOR_OMGJØRING = 'section-ara',
   OM_REGELVERK = 'section-and',
+  OM_ANKENDE_PARTS_TILSVAR = 'section-sei',
+  OM_VEDLAGTE_DOKUMENTER = 'section-uer',
 
   INTRODUCTION_TEMP = 'section-rev-temp', // For "migrating" ROL questions
 }

@@ -32,6 +32,7 @@ export enum DistribusjonsType {
   ANNEN_INNGAAENDE_POST = '7',
   SVARBREV = '8',
   FORLENGET_BEHANDLINGSTIDBREV = '9',
+  EKSPEDISJONSBREV_TIL_TRYGDERETTEN = '10',
 }
 
 export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
@@ -43,6 +44,7 @@ export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
   [DistribusjonsType.ANNEN_INNGAAENDE_POST]: 'Annen inngående post',
   [DistribusjonsType.SVARBREV]: 'Svarbrev',
   [DistribusjonsType.FORLENGET_BEHANDLINGSTIDBREV]: 'Forlenget behandlingstidbrev',
+  [DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN]: 'Ekspedisjonsbrev til Trygderetten',
 };
 
 export enum InngaaendeKanal {

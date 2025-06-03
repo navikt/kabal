@@ -12,7 +12,7 @@ import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-
 import { NewDocuments } from './new-documents/new-documents';
 import { UploadFile } from './upload-file/upload-file';
 
-const MIN_WIDTH = 550;
+const MIN_WIDTH = 570;
 
 export const ExpandedDocuments = () => {
   const [isExpanded] = useIsExpanded();

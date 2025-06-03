@@ -62,6 +62,10 @@ export const SetDocumentType = ({ document, hasAttachments, showLabel = false }:
         : [true, [...outgoing, ...incoming], null];
     }
 
+    if (dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN) {
+      return [false, [], 'Du kan ikke endre type for ekspedisjonsbrev til Trygderetten'];
+    }
+
     if (hasAttachments) {
       return [true, outgoing, 'Kan kun endres til andre utgående typer fordi dokumentet har vedlegg fra arkivet'];
     }
