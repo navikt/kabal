@@ -9,7 +9,6 @@ import { SaksTypeEnum } from '@app/types/kodeverk';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { useContext, useEffect, useMemo } from 'react';
-import { styled } from 'styled-components';
 
 export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   const { children, element, editor } = props;
@@ -38,9 +37,9 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
     >
       <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.LABEL}>
         {content === null ? null : (
-          <StyledLabelContent>
+          <span className="text-gray-700">
             <b>{label}</b>: {content}
-          </StyledLabelContent>
+          </span>
         )}
         {children}
         {canManage ? (
@@ -86,6 +85,8 @@ const useLabel = (source: LabelContentSource): string | undefined => {
       }
       case LabelContentSource.SAKSNUMMER:
         return 'Saksnummer';
+      case LabelContentSource.EKSPEDISJONSBREV_ANKEMOTPART:
+        return 'Ankemotpart';
     }
   }, [oppgave, source]);
 };
@@ -144,10 +145,10 @@ const useContent = (source: LabelContentSource): string | null => {
       return null;
     }
 
+    if (source === LabelContentSource.EKSPEDISJONSBREV_ANKEMOTPART) {
+      return 'Nav klageinstans\n';
+    }
+
     return 'Verdi mangler\n';
   }, [oppgave, source, ytelser]);
 };
-
-const StyledLabelContent = styled.span`
-  color: var(--a-gray-700);
-`;
