@@ -14,7 +14,7 @@ const MAX_SIZE_BYTES = MAX_SIZE_MIB * MEBI - 288;
 
 interface Props extends Pick<ButtonProps, 'variant' | 'size' | 'children'> {
   parentId?: string;
-  dokumentTypeId: DistribusjonsType | null;
+  distributionType: DistribusjonsType | null;
   'data-testid'?: string;
 }
 
@@ -22,7 +22,7 @@ const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 const INPUT_ACCEPT = ALLOWED_FILE_TYPES.join(', ');
 
 export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
-  ({ variant, size, children, parentId, dokumentTypeId, 'data-testid': dataTestId }, ref) => {
+  ({ variant, size, children, parentId, distributionType, 'data-testid': dataTestId }, ref) => {
     const oppgaveId = useOppgaveId();
     const inputRef = useRef<HTMLInputElement>(null);
     const [uploadFile, { isLoading }] = useUploadFileDocumentMutation();
@@ -49,7 +49,7 @@ export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
       async (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
 
-        if (oppgaveId === skipToken || dokumentTypeId === null) {
+        if (oppgaveId === skipToken || distributionType === null) {
           return;
         }
 
@@ -75,7 +75,7 @@ export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
           }
 
           try {
-            await uploadFile({ file, dokumentTypeId, oppgaveId, parentId }).unwrap();
+            await uploadFile({ file, dokumentTypeId: distributionType, oppgaveId, parentId }).unwrap();
             toast.success(`«${file.name}» (${formatFileSize(file.size)}) ble lastet opp.`);
           } catch {
             displayError(`Kunne ikke laste opp «${file.name}» (${formatFileSize(file.size)}).`);
@@ -84,7 +84,7 @@ export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
 
         event.target.value = '';
       },
-      [oppgaveId, displayError, uploadFile, dokumentTypeId, parentId],
+      [oppgaveId, displayError, uploadFile, distributionType, parentId],
     );
 
     return (
@@ -108,8 +108,8 @@ export const UploadFileButton = forwardRef<HTMLButtonElement, Props>(
             onClick={onClick}
             loading={isLoading}
             data-testid={`${dataTestId}-button`}
-            disabled={dokumentTypeId === null}
-            title={dokumentTypeId === null ? 'Velg dokumenttype' : undefined}
+            disabled={distributionType === null}
+            title={distributionType === null ? 'Velg dokumenttype' : undefined}
           >
             {children}
           </Button>

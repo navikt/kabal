@@ -13,38 +13,18 @@ import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 export const useCanEditDocument = (document: IMainDocument | null, parentDocument?: IMainDocument) => {
   const isRol = useIsRol();
   const isTildeltSaksbehandler = useIsSaksbehandler();
-  const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
-  const hasMerkantilRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const hasKrolRole = useHasRole(Role.KABAL_ROL);
   const isFeilregistrert = useIsFeilregistrert();
   const isFullfoert = useIsFullfoert();
   const { data: oppgave, isSuccess } = useOppgave();
 
-  if (!isSuccess) {
+  if (!isSuccess || document === null) {
     return false;
   }
 
-  const parentIsMarkertAvsluttet = parentDocument?.isMarkertAvsluttet === true;
+  const isMarkertAvsluttet = (parentDocument ?? document).isMarkertAvsluttet === true;
   const medunderskriverFlowState = oppgave.medunderskriver.flowState;
   const rolFlowState = oppgave.rol.flowState;
-
-  const canEditParentOrIsMain =
-    parentDocument === undefined
-      ? true
-      : canEditDocument({
-          isRol,
-          document: parentDocument,
-          isFullfoert,
-          hasKrolRole,
-          isFeilregistrert,
-          hasMerkantilRole,
-          hasSaksbehandlerRole,
-          isTildeltSaksbehandler,
-          parentIsMarkertAvsluttet,
-          medunderskriverFlowState,
-          rolFlowState,
-          canEditParentOrIsMain: true,
-        });
 
   return canEditDocument({
     isRol,
@@ -52,29 +32,23 @@ export const useCanEditDocument = (document: IMainDocument | null, parentDocumen
     isFullfoert,
     hasKrolRole,
     isFeilregistrert,
-    hasMerkantilRole,
-    hasSaksbehandlerRole,
     isTildeltSaksbehandler,
-    parentIsMarkertAvsluttet,
+    isMarkertAvsluttet,
     medunderskriverFlowState,
     rolFlowState,
-    canEditParentOrIsMain,
   });
 };
 
 export interface CanEditDocumentParams {
   medunderskriverFlowState: FlowState;
-  parentIsMarkertAvsluttet: boolean;
-  document: IMainDocument | null;
+  isMarkertAvsluttet: boolean;
+  document: IMainDocument;
   rolFlowState: FlowState;
   isTildeltSaksbehandler: boolean;
-  hasSaksbehandlerRole: boolean;
-  hasMerkantilRole: boolean;
   hasKrolRole: boolean;
   isFeilregistrert: boolean;
   isFullfoert: boolean;
   isRol: boolean;
-  canEditParentOrIsMain: boolean;
 }
 
 export const canEditDocument = ({
@@ -84,25 +58,23 @@ export const canEditDocument = ({
   hasKrolRole,
   rolFlowState,
   isFeilregistrert,
-  hasMerkantilRole,
-  hasSaksbehandlerRole,
   isTildeltSaksbehandler,
   medunderskriverFlowState,
-  parentIsMarkertAvsluttet,
-  canEditParentOrIsMain,
+  isMarkertAvsluttet,
 }: CanEditDocumentParams) => {
-  if (parentIsMarkertAvsluttet || isFeilregistrert || document === null || document.isMarkertAvsluttet) {
+  if (isMarkertAvsluttet || isFeilregistrert || document === null || document.isMarkertAvsluttet) {
     return false;
   }
 
-  const isJournalfoert = document.type === DocumentTypeEnum.JOURNALFOERT;
-
-  if (isJournalfoert && !document.journalfoertDokumentReference.hasAccess) {
+  // If the document is a journalfoert document, check if the user has access to the document.
+  if (document.type === DocumentTypeEnum.JOURNALFOERT && !document.journalfoertDokumentReference.hasAccess) {
     return false;
   }
 
-  if (isFullfoert) {
-    return hasSaksbehandlerRole;
+  // If the case is finished, anyone can edit the documents.
+  // If the document is uploaded, anyone can edit it.
+  if (isFullfoert || document.type === DocumentTypeEnum.UPLOADED) {
+    return true;
   }
 
   if (medunderskriverFlowState === FlowState.SENT) {
@@ -111,14 +83,6 @@ export const canEditDocument = ({
 
   if (document.templateId === TemplateIdEnum.ROL_ANSWERS) {
     return isRol || hasKrolRole;
-  }
-
-  if (hasMerkantilRole) {
-    return true;
-  }
-
-  if (canEditParentOrIsMain && document.type === DocumentTypeEnum.UPLOADED) {
-    return hasSaksbehandlerRole;
   }
 
   if (isTildeltSaksbehandler) {

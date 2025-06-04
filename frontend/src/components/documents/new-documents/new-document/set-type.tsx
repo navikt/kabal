@@ -1,15 +1,14 @@
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import {
-  ANNEN_INNGAAENDE_POST,
-  KJENNELSE_FRA_TRYGDERETTEN,
-  type Option,
-  useDistribusjonstypeOptions,
-} from '@app/hooks/use-distribusjonstype-options';
+import { type Option, useDistribusjonstypeOptions } from '@app/hooks/use-distribusjonstype-options';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DISTRIBUTION_TYPE_NAMES, DistribusjonsType, type IMainDocument } from '@app/types/documents/documents';
+import {
+  DISTRIBUSJONSTYPER,
+  DISTRIBUTION_TYPE_NAMES,
+  type DistribusjonsType,
+  type IMainDocument,
+} from '@app/types/documents/documents';
 import { Select, Tag, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
@@ -21,15 +20,14 @@ interface Props {
   showLabel?: boolean;
 }
 
-export const SetDocumentType = ({ document, hasAttachments, showLabel = false }: Props) => {
+export const SetDocumentType = ({ document, showLabel = false }: Props) => {
   const { id, dokumentTypeId, isMarkertAvsluttet } = document;
   const [setType] = useSetTypeMutation();
   const oppgaveId = useOppgaveId();
-  const isSaksbehandler = useIsSaksbehandler();
   const hasDocumentsAccess = useHasDocumentsAccess();
-  const { outgoing, incoming } = useDistribusjonstypeOptions(document.type);
+  const { outgoing, incoming, explanation } = useDistribusjonstypeOptions(document.type);
 
-  const [canChangeType, options, reason] = useMemo<[boolean, Option[], string | null]>(() => {
+  const [canChangeType, options, warning] = useMemo<[boolean, Option[], string | null]>(() => {
     if (!hasDocumentsAccess) {
       return [false, [], 'Ingen tilgang'];
     }
@@ -42,55 +40,16 @@ export const SetDocumentType = ({ document, hasAttachments, showLabel = false }:
       return [false, [], 'Du kan ikke endre type for dokumenter for ROL-spørsmål'];
     }
 
-    if (dokumentTypeId === DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN) {
-      return hasAttachments
-        ? [
-            true,
-            [KJENNELSE_FRA_TRYGDERETTEN, ANNEN_INNGAAENDE_POST],
-            'Kan kun endres til «Annen inngående post» fordi dokumentet har opplastede vedlegg',
-          ]
-        : [true, [...outgoing, ...incoming], null];
-    }
-
-    if (dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST) {
-      return hasAttachments
-        ? [
-            true,
-            [ANNEN_INNGAAENDE_POST, KJENNELSE_FRA_TRYGDERETTEN],
-            'Kan kun endres til «Kjennelse fra TR» fordi dokumentet har opplastede vedlegg',
-          ]
-        : [true, [...outgoing, ...incoming], null];
-    }
-
-    if (dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN) {
-      return [false, [], 'Du kan ikke endre type for ekspedisjonsbrev til Trygderetten'];
-    }
-
-    if (hasAttachments) {
-      return [true, outgoing, 'Kan kun endres til andre utgående typer fordi dokumentet har vedlegg fra arkivet'];
-    }
-
-    if (isSaksbehandler) {
-      return [true, [...outgoing, ...incoming], null];
-    }
-
-    return [false, [], 'Du kan ikke endre utgående dokumenter uten å være tildelt saken'];
-  }, [
-    hasDocumentsAccess,
-    isMarkertAvsluttet,
-    document,
-    dokumentTypeId,
-    hasAttachments,
-    isSaksbehandler,
-    outgoing,
-    incoming,
-  ]);
+    return [true, [...outgoing, ...incoming], null];
+  }, [hasDocumentsAccess, isMarkertAvsluttet, document, outgoing, incoming]);
 
   if (!canChangeType) {
     return (
-      <Tooltip content={reason ?? ''}>
+      <Tooltip content={explanation ?? ''}>
         <Tag variant="info" size="small">
-          <NoWrap>{DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}</NoWrap>
+          <span className="inline-block overflow-hidden text-ellipsis whitespace-nowrap">
+            {DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}
+          </span>
         </Tag>
       </Tooltip>
     );
@@ -103,7 +62,7 @@ export const SetDocumentType = ({ document, hasAttachments, showLabel = false }:
   };
 
   return (
-    <Tooltip content={reason ?? 'Kan endres til alle typer'} maxChar={Number.POSITIVE_INFINITY}>
+    <Tooltip content={warning ?? explanation} maxChar={Number.POSITIVE_INFINITY}>
       <StyledSelect
         data-testid="document-type-select"
         label="Dokumenttype"
@@ -122,9 +81,7 @@ export const SetDocumentType = ({ document, hasAttachments, showLabel = false }:
   );
 };
 
-const DOCUMENT_TYPES = Object.values(DistribusjonsType);
-
-const isDocumentType = (type: string): type is DistribusjonsType => DOCUMENT_TYPES.some((t) => t === type);
+const isDocumentType = (type: string): type is DistribusjonsType => DISTRIBUSJONSTYPER.some((t) => t === type);
 
 const StyledSelect = styled(Select)`
   max-width: 250px;
@@ -134,11 +91,4 @@ const StyledSelect = styled(Select)`
     overflow: hidden;
     text-overflow: ellipsis;
   }
-`;
-
-const NoWrap = styled.span`
-  display: inline-block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;

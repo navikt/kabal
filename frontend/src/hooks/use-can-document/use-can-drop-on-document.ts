@@ -22,17 +22,21 @@ export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const isFullfoert = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
-  const { data: oppgave } = useOppgave();
+  const { data: oppgave, isSuccess } = useOppgave();
 
-  if (targetDocument.isMarkertAvsluttet || isFeilregistrert || oppgave === undefined) {
+  if (draggedDocument === null || draggedDocument.isSmartDokument) {
+    return false;
+  }
+
+  if (targetDocument.isMarkertAvsluttet || isFeilregistrert || !isSuccess) {
+    return false;
+  }
+
+  if (targetDocument.type === DocumentTypeEnum.UPLOADED) {
     return false;
   }
 
   if (draggedJournalfoertDocuments.length > 0) {
-    if (getIsIncomingDocument(targetDocument.dokumentTypeId)) {
-      return false;
-    }
-
     // File types that cannot be distributed, can only be dropped on documents of type NOTAT.
     if (
       draggedJournalfoertDocuments.some((d) => !canDistributeAny(d.varianter)) &&

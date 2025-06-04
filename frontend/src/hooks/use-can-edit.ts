@@ -27,19 +27,15 @@ export const useCanEdit = () => {
 };
 
 export const useCanEditBehandling = () => {
-  const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
+  const { data: oppgavebehandling, isSuccess } = useOppgave();
 
   const canEdit = useCanEdit();
 
   return useMemo(() => {
-    if (
-      oppgavebehandlingIsLoading ||
-      oppgavebehandling === undefined ||
-      oppgavebehandling.medunderskriver.flowState === FlowState.SENT
-    ) {
+    if (!isSuccess || oppgavebehandling.medunderskriver.flowState === FlowState.SENT) {
       return false;
     }
 
     return canEdit;
-  }, [canEdit, oppgavebehandling, oppgavebehandlingIsLoading]);
+  }, [canEdit, oppgavebehandling, isSuccess]);
 };
