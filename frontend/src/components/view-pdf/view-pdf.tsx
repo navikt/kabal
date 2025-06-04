@@ -17,13 +17,14 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useMergedDocument } from './use-merged-document';
 
+const DEFAULT_PDF_WIDTH = 800;
 const MIN_PDF_WIDTH = 400;
 const ZOOM_STEP = 150;
 const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
 
 export const ViewPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
-  const { value: pdfWidth = MIN_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
+  const { value: pdfWidth = DEFAULT_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
   const { remove: close } = useDocumentsPdfViewed();
   const { showDocumentList, title } = useShownDocuments();
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
