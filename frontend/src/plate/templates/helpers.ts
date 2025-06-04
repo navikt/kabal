@@ -38,6 +38,7 @@ import {
   type RedigerbarMaltekstElement,
   type RegelverkContainerElement,
   type RegelverkElement,
+  type SaksnummerElement,
   type SignatureElement,
   type TableCellElement,
   type TableElement,
@@ -230,10 +231,12 @@ export const createSaksinfo = () => [
   createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
   createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
   createFullmektig(),
-  {
-    type: ELEMENT_SAKSNUMMER,
-    children: [createPlaceHolder('Saksnummer', false)],
-    isInitialized: false,
-    deletable: false,
-  },
+  createSaksnummer(),
 ];
+
+export const createSaksnummer = (): SaksnummerElement => ({
+  type: ELEMENT_SAKSNUMMER,
+  children: [{ text: '' }, createPlaceHolder('Saksnummer', false), { text: '' }],
+  isInitialized: false,
+  deletable: false,
+});

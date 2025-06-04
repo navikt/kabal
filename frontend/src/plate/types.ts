@@ -315,4 +315,5 @@ export enum LabelContentSource {
   SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME = 'sakenGjelderIfDifferentFromKlager.name',
   KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME = 'klagerIfEqualToSakenGjelder.name',
   KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME = 'klagerIfDifferentFromSakenGjelder.name',
+  EKSPEDISJONSBREV_ANKEMOTPART = 'ekspedisjonsbrevAnkemotpart',
 }
