@@ -34,7 +34,7 @@ const INITIAL_SLATE_VALUE: Value = [
   createMaltekstseksjon(TemplateSections.OM_ANKENDE_PARTS_TILSVAR),
   createMaltekstseksjon(TemplateSections.OM_VEDLAGTE_DOKUMENTER),
 
-  createSignature(),
+  createSignature(false),
   createFooter(),
 ];
 
