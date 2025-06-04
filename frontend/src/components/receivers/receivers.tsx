@@ -4,9 +4,9 @@ import { SingleRecipient } from '@app/components/receivers/single-recipient';
 import { SuggestedRecipients } from '@app/components/receivers/suggested-recipients';
 import { UnreachableSuggestedRecipients } from '@app/components/receivers/unreachable-suggested-recipients';
 import { type IBrevmottaker, useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
-import type { IMottaker } from '@app/types/documents/documents';
+import { DistribusjonsType, type IMottaker } from '@app/types/documents/documents';
 import { PartStatusEnum } from '@app/types/oppgave-common';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Alert, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 
@@ -15,9 +15,10 @@ interface Props {
   mottakerList: IMottaker[];
   sendErrors?: IErrorProperty[];
   templateId?: TemplateIdEnum | undefined;
+  dokumentTypeId?: DistribusjonsType;
 }
 
-export const Receivers = ({ setMottakerList, mottakerList, sendErrors = [], templateId }: Props) => {
+export const Receivers = ({ setMottakerList, mottakerList, sendErrors = [], templateId, dokumentTypeId }: Props) => {
   const [suggestedBrevmottakere] = useSuggestedBrevmottakere(mottakerList, templateId);
 
   const reachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => s.reachable);
@@ -27,7 +28,7 @@ export const Receivers = ({ setMottakerList, mottakerList, sendErrors = [], temp
       const newMottakere =
         mottakerList.length === 0 &&
         reachableSuggestedRecipients.length === 1 &&
-        templateId !== TemplateIdEnum.EKSPEDISJONSBREV_TIL_TRYGDERETTEN
+        dokumentTypeId !== DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN
           ? [
               ...reachableSuggestedRecipients.filter((s) => !mottakerList.some((m) => m.part.id === s.part.id)),
               ...mottakerList,
@@ -44,7 +45,7 @@ export const Receivers = ({ setMottakerList, mottakerList, sendErrors = [], temp
 
       setMottakerList(newMottakere);
     },
-    [mottakerList, setMottakerList, reachableSuggestedRecipients, templateId],
+    [mottakerList, setMottakerList, reachableSuggestedRecipients, dokumentTypeId],
   );
 
   const removeMottakere = useCallback(
@@ -128,6 +129,7 @@ export const Receivers = ({ setMottakerList, mottakerList, sendErrors = [], temp
         templateId={templateId}
         onlyOneReachable={onlyOneReachableRecipient}
         receivers={reachableSuggestedRecipients}
+        dokumentTypeId={dokumentTypeId}
       />
 
       <UnreachableSuggestedRecipients recipients={unreachableSuggestedRecipients} />
@@ -163,12 +165,13 @@ interface DefaultReceiversProps {
   changeMottaker: (mottaker: IMottaker) => void;
   sendErrors: IErrorProperty[];
   templateId: TemplateIdEnum | undefined;
+  dokumentTypeId?: DistribusjonsType;
   receivers: IBrevmottaker[];
   onlyOneReachable: boolean;
 }
 
-const DefaultReceivers = ({ onlyOneReachable, receivers, ...props }: DefaultReceiversProps) => {
-  if (props.templateId === TemplateIdEnum.EKSPEDISJONSBREV_TIL_TRYGDERETTEN) {
+const DefaultReceivers = ({ onlyOneReachable, receivers, dokumentTypeId, ...props }: DefaultReceiversProps) => {
+  if (dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN) {
     return (
       <>
         <Alert variant="info" size="small" inline>

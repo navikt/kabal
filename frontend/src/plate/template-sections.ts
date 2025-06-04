@@ -34,6 +34,7 @@ export enum TemplateSections {
   OM_REGELVERK = 'section-and',
   OM_ANKENDE_PARTS_TILSVAR = 'section-sei',
   OM_VEDLAGTE_DOKUMENTER = 'section-uer',
+  OM_ETTERSENDING_TIL_TR = 'section-hai',
 
   INTRODUCTION_TEMP = 'section-rev-temp', // For "migrating" ROL questions
 }
