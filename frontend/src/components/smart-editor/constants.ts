@@ -29,6 +29,7 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections | DeprecatedTemplat
   [TemplateSections.HVORFOR_OMGJØRING]: 'Om hvorfor omgjøring vurderes',
   [TemplateSections.OM_ANKENDE_PARTS_TILSVAR]: 'Om ankende parts tilsvar',
   [TemplateSections.OM_VEDLAGTE_DOKUMENTER]: 'Om vedlagte dokumenter',
+  [TemplateSections.OM_ETTERSENDING_TIL_TR]: 'Om ettersending til Trygderetten',
 
   [TemplateSections.INTRODUCTION_TEMP]: 'Introduksjon (midlertidig)',
 };

@@ -15,4 +15,5 @@ export enum TemplateIdEnum {
   SVAR_PÅ_INNSYNSBEGJÆRING = 'svar-på-innsynsbegjæring',
   VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE = 'varsel-om-omgjøring-til-ugunst',
   EKSPEDISJONSBREV_TIL_TRYGDERETTEN = 'ekspedisjonsbrev-til-trygderetten',
+  ETTERSENDING_TIL_TRYGDERETTEN = 'ettersending-til-trygderetten',
 }

@@ -30,6 +30,7 @@ import {
   DocumentTypeEnum,
   type IMainDocument,
 } from '@app/types/documents/documents';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -131,11 +132,12 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
               setMottakerList={(mottakerList) => setMottakerList({ oppgaveId, dokumentId: document.id, mottakerList })}
               mottakerList={document.mottakerList}
               templateId={document.templateId}
+              dokumentTypeId={document.dokumentTypeId}
               sendErrors={sendErrors}
             />
           ) : null}
 
-          {document.dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN ? (
+          {document.templateId === TemplateIdEnum.EKSPEDISJONSBREV_TIL_TRYGDERETTEN ? (
             <ConfirmInnsendingshjemler
               innsendingshjemlerConfirmed={innsendingshjemlerConfirmed}
               setInnsendingshjemlerConfirmed={setInnsendingshjemlerConfirmed}

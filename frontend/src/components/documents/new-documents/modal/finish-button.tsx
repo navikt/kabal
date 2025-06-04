@@ -15,6 +15,7 @@ import {
 } from '@app/types/documents/documents';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Alert } from '@navikt/ds-react';
 
 interface Props {
@@ -60,10 +61,10 @@ export const FinishButton = ({
     );
   }
 
-  if (document.dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN && !innsendingshjemlerConfirmed) {
+  if (document.templateId === TemplateIdEnum.EKSPEDISJONSBREV_TIL_TRYGDERETTEN && !innsendingshjemlerConfirmed) {
     return (
       <Alert variant="info" size="small" inline>
-        Kan ikke arkiveres før det er bekreftet at innsendingshjemlene stemmer.
+        Kan ikke sendes ut før det er bekreftet at innsendingshjemlene stemmer.
       </Alert>
     );
   }

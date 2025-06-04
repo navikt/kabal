@@ -31,16 +31,15 @@ const INITIAL_SLATE_VALUE: Value = [
   createSaksnummer(),
 
   createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
-  createMaltekstseksjon(TemplateSections.OM_ANKENDE_PARTS_TILSVAR),
-  createMaltekstseksjon(TemplateSections.OM_VEDLAGTE_DOKUMENTER),
+  createMaltekstseksjon(TemplateSections.OM_ETTERSENDING_TIL_TR),
 
   createSignature(false),
   createFooter(),
 ];
 
-export const EKSPEDISJONSBREV_TIL_TRYGDERETTEN_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
-  templateId: TemplateIdEnum.EKSPEDISJONSBREV_TIL_TRYGDERETTEN,
-  tittel: 'Ekspedisjonsbrev til Trygderetten',
+export const ETTERSENDING_TIL_TRYGDERETTEN_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
+  templateId: TemplateIdEnum.ETTERSENDING_TIL_TRYGDERETTEN,
+  tittel: 'Ettersending til Trygderetten',
   richText: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN,
   deprecatedSections: [],

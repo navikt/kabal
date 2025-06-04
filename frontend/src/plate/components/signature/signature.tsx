@@ -34,7 +34,10 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const showForkortedeNavnCheckbox = element.includeMedunderskriver || !signature.anonymous;
   const showSuffixCheckbox = !(signature.anonymous || isRolAnswers);
   const showUseMyNameCheckbox = oppgave.avsluttetAvSaksbehandlerDate !== null;
-  const showEnableCheckbox = templateId === TemplateIdEnum.NOTAT || templateId === TemplateIdEnum.GENERELT_BREV;
+  const showEnableCheckbox =
+    templateId === TemplateIdEnum.NOTAT ||
+    templateId === TemplateIdEnum.GENERELT_BREV ||
+    templateId === TemplateIdEnum.ETTERSENDING_TIL_TRYGDERETTEN;
 
   const hideAll = !(showForkortedeNavnCheckbox || showSuffixCheckbox || hasMedunderskriver);
 

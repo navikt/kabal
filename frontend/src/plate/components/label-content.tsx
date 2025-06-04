@@ -85,7 +85,7 @@ const useLabel = (source: LabelContentSource): string | undefined => {
       }
       case LabelContentSource.SAKSNUMMER:
         return 'Saksnummer';
-      case LabelContentSource.EKSPEDISJONSBREV_ANKEMOTPART:
+      case LabelContentSource.ANKEMOTPART:
         return 'Ankemotpart';
     }
   }, [oppgave, source]);
@@ -145,7 +145,7 @@ const useContent = (source: LabelContentSource): string | null => {
       return null;
     }
 
-    if (source === LabelContentSource.EKSPEDISJONSBREV_ANKEMOTPART) {
+    if (source === LabelContentSource.ANKEMOTPART) {
       return 'Nav klageinstans\n';
     }
 
