@@ -1,68 +1,49 @@
 import { DocumentIcon, type ModalDocumentType } from '@app/components/documents/new-documents/shared/document-icon';
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useIsRol } from '@app/hooks/use-is-rol';
 import { useSetParentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
   DISTRIBUTION_TYPE_NAMES,
-  DistribusjonsType,
+  type DistribusjonsType,
   DocumentTypeEnum,
   type IMainDocument,
 } from '@app/types/documents/documents';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { HStack, Heading, Radio, RadioGroup, Tag, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { styled } from 'styled-components';
 
 const IS_PARENT_DOCUMENT = 'PARENT_DOCUMENT_VALUE';
 
 interface Props {
   document: IMainDocument;
-  parentDocument: IMainDocument | undefined;
-  hasAttachments: boolean;
 }
 
-export const SetParentDocument = ({ document, parentDocument, hasAttachments }: Props) => {
+export const SetParentDocument = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data, isLoading: isLoadingDocuments } = useGetDocumentsQuery(oppgaveId);
   const [setParent, { isLoading: isSetting }] = useSetParentMutation();
-  const isRol = useIsRol();
-
-  const isIncomingDocument =
-    getIsIncomingDocument(document.dokumentTypeId) || getIsIncomingDocument(parentDocument?.dokumentTypeId);
 
   const potentialParents = useMemo(() => {
     if (data === undefined) {
       return [];
     }
 
-    if (document.type === DocumentTypeEnum.UPLOADED || isIncomingDocument) {
-      if (document.parentId === null) {
-        return [];
-      }
-
-      return data.filter((d) => document.id !== d.id && d.parentId === null && getIsIncomingDocument(d.dokumentTypeId));
-    }
-
-    if (hasAttachments) {
+    // No main documents may be converted to attachments.
+    if (document.parentId === null) {
       return [];
     }
 
-    if (isRol || document.type !== DocumentTypeEnum.JOURNALFOERT) {
-      return data.filter(
-        (d) => d.isSmartDokument && document.id !== d.id && d.templateId === TemplateIdEnum.ROL_QUESTIONS,
-      );
+    // Uploaded documents can only be attachments to other uploaded documents.
+    if (document.type === DocumentTypeEnum.UPLOADED) {
+      return data.filter((d) => document.id !== d.id && d.parentId === null && d.type === DocumentTypeEnum.UPLOADED);
     }
 
-    return data.filter(
-      (d) =>
-        document.id !== d.id &&
-        d.parentId === null &&
-        d.dokumentTypeId !== DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN &&
-        d.dokumentTypeId !== DistribusjonsType.ANNEN_INNGAAENDE_POST,
-    );
-  }, [data, document.id, document.type, document.parentId, isIncomingDocument, hasAttachments, isRol]);
+    // Archived documents can only be attachments to smart documents.
+    if (document.type === DocumentTypeEnum.JOURNALFOERT) {
+      return data.filter((d) => d.isSmartDokument && d.parentId === null);
+    }
+
+    return [];
+  }, [data, document.id, document.type, document.parentId]);
 
   if (
     isLoadingDocuments ||
@@ -111,16 +92,10 @@ const RadioOption = ({ value, type, distType, text }: RadioOptionProps) => (
   <Radio key={value} value={value} title={text}>
     <HStack align="center" justify="start" gap="0 1">
       <DocumentIcon type={type} />
-      <RadioText>{text}</RadioText>
+      <span className="overflow-hidden text-ellipsis whitespace-nowrap">{text}</span>
       <Tag size="xsmall" variant="info">
         {DISTRIBUTION_TYPE_NAMES[distType]}
       </Tag>
     </HStack>
   </Radio>
 );
-
-const RadioText = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;

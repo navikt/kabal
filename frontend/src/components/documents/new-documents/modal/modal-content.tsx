@@ -116,9 +116,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
             <SetDocumentType document={document} hasAttachments={hasAttachments} showLabel />
           ) : null}
 
-          {canEditDocument && !isRolQuestions ? (
-            <SetParentDocument document={document} parentDocument={parentDocument} hasAttachments={hasAttachments} />
-          ) : null}
+          {canEditDocument && !isRolQuestions ? <SetParentDocument document={document} /> : null}
 
           {canEditDocument && isInngående ? <MottattDato document={document} oppgaveId={oppgaveId} /> : null}
 

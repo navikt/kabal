@@ -1,14 +1,10 @@
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { canDistributeAny } from '@app/components/documents/filetype';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { Role } from '@app/types/bruker';
 import { DistribusjonsType, DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -18,73 +14,86 @@ export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
   const { draggedDocument, draggedJournalfoertDocuments } = useContext(DragAndDropContext);
   const isRol = useIsRol();
   const isTildeltSaksbehandler = useIsSaksbehandler();
-  const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
-  const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
-  const isFullfoert = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
   const { data: oppgave, isSuccess } = useOppgave();
 
-  if (draggedDocument === null || draggedDocument.isSmartDokument) {
+  if (
+    targetDocument.isMarkertAvsluttet ||
+    isFeilregistrert ||
+    !isSuccess ||
+    oppgave.medunderskriver.flowState === FlowState.SENT
+  ) {
     return false;
   }
 
-  if (targetDocument.isMarkertAvsluttet || isFeilregistrert || !isSuccess) {
-    return false;
-  }
-
-  if (targetDocument.type === DocumentTypeEnum.UPLOADED) {
-    return false;
-  }
-
+  // Journalførte dokumenter.
   if (draggedJournalfoertDocuments.length > 0) {
-    // File types that cannot be distributed, can only be dropped on documents of type NOTAT.
+    if (!targetDocument.isSmartDokument) {
+      // Journalførte dokumenter kan kun legges som vedlegg til smartdokumenter.
+      return false;
+    }
+
+    if (isRol) {
+      // ROL kan legge journalførte dokumenter som vedlegg til ROL-spørsmål. Kun når saken er sendt til ROL.
+      return canRolActOnDocument(targetDocument, oppgave);
+    }
+
+    if (!isTildeltSaksbehandler) {
+      // Kun tildelt saksbehandler kan legge journalførte dokumenter som vedlegg til smartdokumenter.
+      return false;
+    }
+
     if (
       draggedJournalfoertDocuments.some((d) => !canDistributeAny(d.varianter)) &&
       targetDocument.dokumentTypeId !== DistribusjonsType.NOTAT
     ) {
+      // Journalførte dokumenter med varianter som ikke kan distribueres, kan kun legges som vedlegg til dokumenter av typen NOTAT.
       return false;
     }
 
-    if (isFullfoert) {
-      return hasSaksbehandlerRole;
-    }
-
-    if (isTildeltSaksbehandler || hasOppgavestyringRole) {
-      return true;
-    }
-
-    if (isRol) {
-      return canRolActOnDocument(targetDocument, oppgave);
-    }
+    return true;
   }
 
-  const isAllowedNewDocument = isDroppableNewDocument(draggedDocument, targetDocument.id);
-
-  if (!isAllowedNewDocument) {
+  if (draggedDocument === null) {
     return false;
   }
 
-  if (isTildeltSaksbehandler || hasOppgavestyringRole || (isFullfoert && hasSaksbehandlerRole)) {
-    if (getIsIncomingDocument(targetDocument.dokumentTypeId)) {
-      return draggedDocument.type === DocumentTypeEnum.UPLOADED && draggedDocument.parentId !== null;
-    }
-
-    return draggedDocument.type === DocumentTypeEnum.JOURNALFOERT || getIsRolQuestions(targetDocument);
+  if (draggedDocument.parentId === null) {
+    // Hoveddokumenter kan ikke gjøres om til vedlegg.
+    return false;
   }
 
-  if (isRol) {
-    return canRolActOnDocument(targetDocument, oppgave);
+  if (targetDocument.id === draggedDocument.parentId) {
+    // Vedlegg kan ikke flyttes til samme hoveddokument. Ingen endring.
+    return false;
+  }
+
+  // Smartdokument
+  if (draggedDocument.isSmartDokument) {
+    // Smartdokumenter som allerede er vedlegg kan kun flyttes mellom andre ROL-spørsmål.
+    return getIsRolQuestions(targetDocument);
+  }
+
+  // Opplastet dokument.
+  if (draggedDocument.type === DocumentTypeEnum.UPLOADED) {
+    // Opplastede dokumenter kan kun være vedlegg til andre opplastede dokumenter.
+    return targetDocument.type === DocumentTypeEnum.UPLOADED;
+  }
+
+  // Journalført dokumentreferanse.
+  if (draggedDocument.type === DocumentTypeEnum.JOURNALFOERT) {
+    if (isRol) {
+      // ROL kan flytte journalførte dokumentreferanser mellom ROL-spørsmål. Kun når saken er sendt til ROL.
+      return canRolActOnDocument(targetDocument, oppgave);
+    }
+
+    // Journalførte dokumentreferanser kan kun være vedlegg til smartdokumenter.
+    // Kun tildelt saksbehandler kan legge journalførte dokumentreferanser som vedlegg til smartdokumenter.
+    return targetDocument.isSmartDokument && isTildeltSaksbehandler;
   }
 
   return false;
 };
-
-const isDroppableNewDocument = (dragged: IMainDocument | null, documentId: string): dragged is IMainDocument =>
-  dragged !== null &&
-  !dragged.isMarkertAvsluttet &&
-  dragged.id !== documentId &&
-  dragged.parentId !== documentId &&
-  !getIsRolQuestions(dragged);
 
 const canRolActOnDocument = (document: IMainDocument, oppgave: IOppgavebehandling) =>
   getIsRolQuestions(document) && oppgave.rol.flowState === FlowState.SENT;
