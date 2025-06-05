@@ -4,7 +4,6 @@ import { useMainSignature, useMedunderskriverSignature } from '@app/plate/compon
 import { type SignatureElement, useMyPlateEditorRef } from '@app/plate/types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { useContext, useEffect, useMemo } from 'react';
-import { styled } from 'styled-components';
 import { MISSING_TITLE, Title } from './title';
 
 interface Props {
@@ -14,9 +13,11 @@ interface Props {
 export const SaksbehandlerSignature = ({ element }: Props) => {
   const editor = useMyPlateEditorRef();
   const signature = useMainSignature(element);
+  const { canEdit } = useContext(SmartEditorContext);
 
   useEffect(() => {
     if (
+      !canEdit ||
       signature === element.saksbehandler ||
       (signature?.name === element.saksbehandler?.name && signature?.title === element.saksbehandler?.title)
     ) {
@@ -24,19 +25,17 @@ export const SaksbehandlerSignature = ({ element }: Props) => {
     }
 
     editor.tf.setNodes({ saksbehandler: signature }, { at: [], match: (n) => n === element });
-  }, [editor, element, signature]);
+  }, [editor, element, signature, canEdit]);
 
   if (signature === undefined) {
     return null;
   }
 
   return (
-    <Container>
-      <SignatureContainer>
-        <div>{signature.name}</div>
-        {signature.title === undefined ? null : <Title title={signature.title} />}
-      </SignatureContainer>
-    </Container>
+    <div className="whitespace-nowrap">
+      <div>{element.saksbehandler?.name}</div>
+      {element.saksbehandler?.title === undefined ? null : <Title title={element.saksbehandler.title} />}
+    </div>
   );
 };
 
@@ -47,7 +46,7 @@ interface MedunderskriverSignatureProps {
 export const MedunderskriverSignature = ({ element }: MedunderskriverSignatureProps) => {
   const editor = useMyPlateEditorRef();
   const medunderskriverSignature = useMedunderskriverSignature();
-  const { templateId } = useContext(SmartEditorContext);
+  const { templateId, canEdit } = useContext(SmartEditorContext);
 
   const noMedunderskriver = useMemo(
     () =>
@@ -69,6 +68,10 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
   );
 
   useEffect(() => {
+    if (!canEdit) {
+      return;
+    }
+
     if (noMedunderskriver) {
       if (element.medunderskriver === undefined) {
         return;
@@ -94,33 +97,16 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
     };
 
     editor.tf.setNodes(data, { match: (n) => n === element, at: [] });
-  }, [editor, element, noMedunderskriver, signature]);
+  }, [editor, element, noMedunderskriver, signature, canEdit]);
 
   if (noMedunderskriver || signature === undefined) {
     return null;
   }
 
   return (
-    <Container>
-      <SignatureContainer>
-        <div>{signature.name}</div>
-        <Title title={signature.title} />
-      </SignatureContainer>
-    </Container>
+    <div className="whitespace-nowrap">
+      <div>{element.medunderskriver?.name}</div>
+      {element.medunderskriver?.title === undefined ? null : <Title title={element.medunderskriver.title} />}
+    </div>
   );
 };
-
-const Container = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas:
-    'toggle'
-    'signature';
-  width: min-content;
-  align-items: start;
-`;
-
-const SignatureContainer = styled.div`
-  grid-area: signature;
-  white-space: nowrap;
-`;
