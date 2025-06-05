@@ -34,7 +34,6 @@ import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { DeleteDocumentButton } from './delete-button';
 
 interface Props {
@@ -84,7 +83,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
 
   return (
     <>
-      <ModalBody $isMainDocument={isMainDocument}>
+      <Modal.Body className={`flex w-full gap-4 overflow-hidden ${isMainDocument ? 'h-[80vh]' : 'h-auto'}`}>
         <VStack gap="4" minWidth="400px" flexShrink="0">
           <HStack align="center" gap="2">
             <Tag variant="info" size="small">
@@ -98,7 +97,8 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
 
           {canEditDocument && document.type !== DocumentTypeEnum.JOURNALFOERT ? (
             <HStack align="end" gap="2" wrap={false}>
-              <StyledSetFilename
+              <SetFilename
+                className="max-w-lg flex-grow"
                 tittel={document.tittel}
                 setFilename={(title) => setTitle({ oppgaveId, dokumentId: document.id, title })}
               />
@@ -116,9 +116,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
             <SetDocumentType document={document} hasAttachments={hasAttachments} showLabel />
           ) : null}
 
-          {canEditDocument && !isRolQuestions ? (
-            <SetParentDocument document={document} parentDocument={parentDocument} hasAttachments={hasAttachments} />
-          ) : null}
+          {canEditDocument && !isRolQuestions ? <SetParentDocument document={document} /> : null}
 
           {canEditDocument && isInngående ? <MottattDato document={document} oppgaveId={oppgaveId} /> : null}
 
@@ -148,7 +146,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
         {isMainDocument ? (
           <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />
         ) : null}
-      </ModalBody>
+      </Modal.Body>
 
       <Modal.Footer>
         {canDelete ? <DeleteDocumentButton document={document} /> : null}
@@ -176,16 +174,3 @@ const OpprettetTag = ({ document }: { document: IMainDocument }) => {
     </Tag>
   );
 };
-
-const ModalBody = styled(Modal.Body)<{ $isMainDocument: boolean }>`
-  display: flex;
-  width: 100%;
-  height: ${({ $isMainDocument }) => ($isMainDocument ? '80vh' : 'auto')};
-  gap: var(--a-spacing-4);
-  overflow: hidden;
-`;
-
-const StyledSetFilename = styled(SetFilename)`
-  flex-grow: 1;
-  max-width: 512px;
-`;

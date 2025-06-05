@@ -32,14 +32,23 @@ export const ANNEN_INNGAAENDE_POST = {
 interface Result {
   incoming: Option[];
   outgoing: Option[];
+  explanation: string;
 }
 
 export const useDistribusjonstypeOptions = (type: DocumentTypeEnum): Result => {
-  if (type !== DocumentTypeEnum.UPLOADED) {
-    return { outgoing: OPTIONS_LIST, incoming: [] };
+  if (type === DocumentTypeEnum.SMART) {
+    return {
+      outgoing: OPTIONS_LIST,
+      incoming: [],
+      explanation: 'Kan ikke endres til inngående typer fordi det er et smartdokument',
+    };
   }
 
-  return { outgoing: OPTIONS_LIST, incoming: [KJENNELSE_FRA_TRYGDERETTEN, ANNEN_INNGAAENDE_POST] };
+  return {
+    outgoing: OPTIONS_LIST,
+    incoming: [KJENNELSE_FRA_TRYGDERETTEN, ANNEN_INNGAAENDE_POST],
+    explanation: 'Kan endres til alle typer',
+  };
 };
 
 export interface Option {

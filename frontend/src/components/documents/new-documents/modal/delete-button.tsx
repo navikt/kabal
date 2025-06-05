@@ -14,7 +14,7 @@ interface Props {
 
 export const DeleteDocumentButton = ({ document }: Props) => {
   const oppgaveId = useOppgaveId();
-  const { data, isLoading: documentsIsLoading } = useGetDocumentsQuery(oppgaveId);
+  const { data, isSuccess } = useGetDocumentsQuery(oppgaveId);
   const [deleteDocument, { isLoading }] = useDeleteDocumentMutation();
   const [showConfirm, setShowConfirm] = useState(false);
   const remove = useRemoveDocument();
@@ -44,7 +44,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
     return 'Slett dokument';
   }, [data, document.id, document.parentId, document.type]);
 
-  if (documentsIsLoading || typeof data === 'undefined') {
+  if (!isSuccess) {
     return null;
   }
 
