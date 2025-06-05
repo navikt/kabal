@@ -11,8 +11,7 @@ import { HStack } from '@navikt/ds-react';
 import type { SetNodesOptions } from '@udecode/plate';
 import { useEditorReadOnly } from '@udecode/plate-core/react';
 import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
-import { type InputHTMLAttributes, useContext } from 'react';
-import { styled } from 'styled-components';
+import { useContext, useId } from 'react';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
 
 export const Signature = (props: PlateElementProps<SignatureElement>) => {
@@ -68,12 +67,24 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
         }}
       >
         {hideAll || !canManage ? null : (
-          <Checkboxes>
+          <HStack
+            marginInline="auto"
+            wrap
+            justify="center"
+            className="select-none self-center whitespace-nowrap rounded-medium border-dashed"
+            style={{
+              marginTop: pxToEm(16),
+              marginBottom: pxToEm(8),
+              borderWidth: ptToEm(2),
+              padding: pxToEm(8),
+              gap: pxToEm(8),
+            }}
+          >
             {showEnableCheckbox ? (
               <Checkbox
                 disabled={isReadOnly}
                 checked={element.enabled}
-                onChange={({ target }) => setSignatureProp({ enabled: target.checked })}
+                onChange={(enabled) => setSignatureProp({ enabled })}
               >
                 Inkluder signatur
               </Checkbox>
@@ -83,7 +94,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
               <Checkbox
                 disabled={disabledCheckbox}
                 checked={element.useShortName}
-                onChange={({ target }) => setSignatureProp({ useShortName: target.checked })}
+                onChange={(useShortName) => setSignatureProp({ useShortName })}
               >
                 Bruk forkortede navn
               </Checkbox>
@@ -93,7 +104,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
               <Checkbox
                 disabled={disabledCheckbox}
                 checked={element.includeMedunderskriver}
-                onChange={({ target }) => setSignatureProp({ includeMedunderskriver: target.checked })}
+                onChange={(includeMedunderskriver) => setSignatureProp({ includeMedunderskriver })}
               >
                 Inkluder medunderskriver
               </Checkbox>
@@ -103,7 +114,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
               <Checkbox
                 disabled={disabledCheckbox || signature?.anonymous === true}
                 checked={element.useSuffix}
-                onChange={({ target }) => setSignatureProp({ useSuffix: target.checked })}
+                onChange={(useSuffix) => setSignatureProp({ useSuffix })}
               >
                 Bruk «/saksbehandler»-tittel
               </Checkbox>
@@ -118,19 +129,21 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
                 checked={
                   overriddenWithSelf || (user.navIdent === creator && element.overriddenSaksbehandler === undefined)
                 }
-                onChange={({ target }) => setOverriddenSaksbehandler(target.checked ? user.navIdent : undefined)}
+                onChange={(checked) => setOverriddenSaksbehandler(checked ? user.navIdent : undefined)}
               >
                 Signer med mitt navn
               </Checkbox>
             ) : null}
-          </Checkboxes>
+          </HStack>
         )}
 
-        <HStack justify="space-between" wrap={false}>
+        <HStack justify="space-between" wrap={false} marginBlock="4">
           <MedunderskriverSignature element={element} />
           <SaksbehandlerSignature element={element} />
         </HStack>
+
         {children}
+
         {canManage ? (
           <SectionToolbar>
             <AddNewParagraphs editor={editor} element={element} />
@@ -141,36 +154,28 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   );
 };
 
-interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
+interface CheckboxProps {
   children: string;
+  checked?: boolean;
+  disabled: boolean;
+  onChange: (checked: boolean) => void;
 }
 
-const Checkbox = ({ children, ...props }: CheckboxProps) => (
-  <HStack as="label" align="center" style={{ cursor: 'pointer', fontSize: '1em', gap: pxToEm(8) }}>
-    <StyledCheckbox {...props} type="checkbox" />
-    {children}
-  </HStack>
-);
+const Checkbox = ({ children, onChange, ...props }: CheckboxProps) => {
+  const id = useId();
 
-const StyledCheckbox = styled.input`
-  width: 1.2em;
-  height: 1.2em;
-`;
-
-const Checkboxes = styled.div`
-  user-select: none;
-  border-style: dashed;
-  border-radius: var(--a-border-radius-medium);
-  border-width: ${ptToEm(2)};
-  white-space: nowrap;
-  display: flex;
-  gap: ${pxToEm(8)};
-  padding: ${pxToEm(8)};
-  align-self: center;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: ${pxToEm(16)};
-  margin-bottom: ${pxToEm(8)};
-  flex-wrap: wrap;  
-  justify-content: center;
-`;
+  return (
+    <HStack align="center" style={{ fontSize: '1em' }}>
+      <input
+        {...props}
+        id={id}
+        className="h-[1.2em] w-[1.2em] cursor-pointer"
+        type="checkbox"
+        onChange={(e) => onChange(e.target.checked)}
+      />
+      <label htmlFor={id} style={{ paddingLeft: pxToEm(8) }} className="cursor-pointer">
+        {children}
+      </label>
+    </HStack>
+  );
+};
