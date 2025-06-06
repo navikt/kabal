@@ -24,7 +24,6 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Utfall,
   ColumnKeyEnum.Open,
   ColumnKeyEnum.OppgavestyringNonFilterable,
-  ColumnKeyEnum.Feilregistrering,
 ];
 
 export const OppgaverPaaVentTable = () => {

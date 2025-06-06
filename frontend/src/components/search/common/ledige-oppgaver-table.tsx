@@ -23,7 +23,6 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.DatoSendtTilTr,
   ColumnKeyEnum.OpenWithYtelseAccess,
   ColumnKeyEnum.OppgavestyringNonFilterable,
-  ColumnKeyEnum.Feilregistrering,
 ];
 
 export const LedigeOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {

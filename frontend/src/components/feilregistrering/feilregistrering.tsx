@@ -1,7 +1,7 @@
 import { Confirm } from '@app/components/feilregistrering/confirm';
+import { Feilregistrert } from '@app/components/feilregistrering/feilregistrert';
 import { Register } from '@app/components/feilregistrering/register';
 import { useCanFeilregistrere } from '@app/components/feilregistrering/use-can-feilregistrere';
-import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { FileXMarkIcon } from '@navikt/aksel-icons';
@@ -26,7 +26,7 @@ export const Feilregistrering = ({
   const canFeilregistrere = useCanFeilregistrere(tildeltSaksbehandlerident);
 
   if (feilregistrert !== null) {
-    return <time dateTime={feilregistrert}>{isoDateTimeToPretty(feilregistrert)}</time>;
+    return <Feilregistrert feilregistrert={feilregistrert} />;
   }
 
   if (!canFeilregistrere) {
