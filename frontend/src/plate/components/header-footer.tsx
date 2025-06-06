@@ -2,8 +2,9 @@ import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useHeaderFooterQuery } from '@app/components/smart-editor/hooks/use-query';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
+import { pxToEm } from '@app/plate/components/get-scaled-em';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { type ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
+import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
 import { type FooterElement, type HeaderElement, TextAlign, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { PlainTextTypes } from '@app/types/common-text-types';
@@ -13,7 +14,6 @@ import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 const lexSpecialis = (enhetId: string, texts: IConsumerPlainText[]): IConsumerPlainText | null => {
   const sorted = texts
@@ -125,26 +125,24 @@ interface HeaderFooterContentProps {
 }
 
 const HeaderFooterContent = ({ text, isLoading, type }: HeaderFooterContentProps) => {
-  if (isLoading || typeof text === 'undefined') {
+  const fontSize = type === ELEMENT_FOOTER ? pxToEm(14) : pxToEm(16);
+
+  if (isLoading || text === undefined) {
     return (
-      <Paragraph $textAlign={TextAlign.LEFT}>
+      <p style={{ textAlign: TextAlign.LEFT, fontSize }}>
         <Loader />
-      </Paragraph>
+      </p>
     );
   }
 
   const { plainText } = text;
 
   if (plainText === null) {
-    return <Paragraph $textAlign={TextAlign.LEFT}>Ingen {getLabel(type)} funnet.</Paragraph>;
+    return <p style={{ textAlign: TextAlign.LEFT, fontSize }}>Ingen {getLabel(type)} funnet.</p>;
   }
 
-  return <Paragraph $textAlign={TextAlign.LEFT}>{plainText}</Paragraph>;
+  return <p style={{ textAlign: TextAlign.LEFT, fontSize }}>{plainText}</p>;
 };
 
 const getLabel = (type: typeof ELEMENT_HEADER | typeof ELEMENT_FOOTER) =>
   type === ELEMENT_HEADER ? 'topptekst' : 'bunntekst';
-
-const Paragraph = styled.p<{ $textAlign: TextAlign }>`
-  text-align: ${({ $textAlign }) => $textAlign};
-`;
