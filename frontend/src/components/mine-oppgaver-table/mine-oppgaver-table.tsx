@@ -24,7 +24,6 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.FlowStates,
   ColumnKeyEnum.Open,
   ColumnKeyEnum.OppgavestyringNonFilterable,
-  ColumnKeyEnum.Feilregistrering,
 ];
 
 export const MineOppgaverTable = () => {

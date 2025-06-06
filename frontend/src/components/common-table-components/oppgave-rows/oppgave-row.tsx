@@ -16,7 +16,7 @@ import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { Utfall } from '@app/components/common-table-components/utfall';
 import { Ytelse } from '@app/components/common-table-components/ytelse';
 import { CopyButton } from '@app/components/copy-button/copy-button';
-import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
+import { Feilregistrert } from '@app/components/feilregistrering/feilregistrert';
 import { InnsendingshjemlerList, Registreringshjemler } from '@app/components/hjemler/hjemler';
 import { Oppgavestyring } from '@app/components/oppgavestyring/oppgavestyring';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
@@ -191,18 +191,10 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             {oppgave.rol.flowState === FlowState.RETURNED ? isoDateToPretty(oppgave.rol.returnertDate) : null}
           </Table.DataCell>
         );
-      case ColumnKeyEnum.Feilregistrering:
       case ColumnKeyEnum.Feilregistrert:
         return (
           <Table.DataCell key={key}>
-            <Feilregistrering
-              oppgaveId={oppgave.id}
-              feilregistrert={oppgave.feilregistrert}
-              tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
-              variant="secondary-neutral"
-              position="below"
-              align="right"
-            />
+            <Feilregistrert feilregistrert={oppgave.feilregistrert} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Saksnummer:

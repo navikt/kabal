@@ -134,7 +134,6 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
       case ColumnKeyEnum.OppgavestyringNonFilterable:
       case ColumnKeyEnum.Utfall:
       case ColumnKeyEnum.PaaVentReason:
-      case ColumnKeyEnum.Feilregistrering:
       case ColumnKeyEnum.Feilregistrert:
       case ColumnKeyEnum.Saksnummer:
       case ColumnKeyEnum.RolTildeling:
