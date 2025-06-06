@@ -7,7 +7,6 @@ import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/
 import { FileXMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { Context } from './context';
 import type { Children, OppgaveId, Position, Variant } from './types';
 
@@ -56,7 +55,7 @@ const FeilregistrerButton = ({
   useOnClickOutside(ref, () => setIsOpen(false));
 
   return (
-    <Container ref={ref}>
+    <div className="relative inline-block" ref={ref}>
       <Button
         variant={variant}
         size="small"
@@ -67,7 +66,7 @@ const FeilregistrerButton = ({
         Feilregistrer
       </Button>
       <Context.Provider value={{ isOpen, close: () => setIsOpen(false) }}>{isOpen ? children : null}</Context.Provider>
-    </Container>
+    </div>
   );
 };
 
@@ -91,8 +90,3 @@ const FeilregistrerPanel = ({ oppgaveId, position, align }: OppgaveId & Position
     </VStack>
   );
 };
-
-const Container = styled.div`
-  position: relative;
-  display: inline-block;
-`;
