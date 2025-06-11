@@ -6,17 +6,17 @@ import { BoldLeaf, ItalicLeaf, UnderlineLeaf } from '@app/plate/leaf/marks';
 import { autoformatRules } from '@app/plate/plugins/autoformat/rules';
 import { CopyPlugin } from '@app/plate/plugins/copy/copy';
 import { CustomAbbreviationPlugin } from '@app/plate/plugins/custom-abbreviations/create-custom-abbreviation-plugin';
-import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { normalizeNodePlugin } from '@app/plate/plugins/normalize-node';
 import { PageBreakPlugin } from '@app/plate/plugins/page-break';
 import { PastePlugin } from '@app/plate/plugins/paste';
 import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { SelectionPlugin } from '@app/plate/plugins/selection';
+import { SoftBreakPlugin } from '@app/plate/plugins/soft-break';
 import { type NodeEntry, ParserPlugin } from '@udecode/plate';
 import { AlignPlugin } from '@udecode/plate-alignment/react';
 import { AutoformatPlugin } from '@udecode/plate-autoformat/react';
 import { BoldPlugin, ItalicPlugin, UnderlinePlugin } from '@udecode/plate-basic-marks/react';
-import { ExitBreakPlugin, SoftBreakPlugin } from '@udecode/plate-break/react';
+import { ExitBreakPlugin } from '@udecode/plate-break/react';
 import { DocxPlugin } from '@udecode/plate-docx';
 import { HEADING_KEYS } from '@udecode/plate-heading';
 import { HeadingPlugin } from '@udecode/plate-heading/react';
@@ -69,19 +69,20 @@ export const defaultPlugins = [
       ],
     },
   }),
-  SoftBreakPlugin.configure({
-    options: {
-      rules: [
-        {
-          hotkey: 'shift+enter',
-          query: {
-            exclude: [ELEMENT_PLACEHOLDER, ELEMENT_MALTEKST, BulletedListPlugin.key, NumberedListPlugin.key],
-            allow: [ParagraphPlugin.key],
-          },
-        },
-      ],
-    },
-  }),
+  SoftBreakPlugin,
+  // SoftBreakPlugin.configure({
+  //   options: {
+  //     rules: [
+  //       {
+  //         hotkey: 'shift+enter',
+  //         query: {
+  //           exclude: [ELEMENT_PLACEHOLDER, ELEMENT_MALTEKST, BulletedListPlugin.key, NumberedListPlugin.key],
+  //           allow: [ParagraphPlugin.key],
+  //         },
+  //       },
+  //     ],
+  //   },
+  // }),
   AlignPlugin.configure({ inject: { targetPlugins: [ParagraphPlugin.key] } }),
   AutoformatPlugin.configure({
     options: {
