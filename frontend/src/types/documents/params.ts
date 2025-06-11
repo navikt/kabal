@@ -50,13 +50,13 @@ export interface ISetMottakerListParams extends IDocumentParams {
 }
 
 export const mottakerToInputMottaker = (mottaker: IMottaker): InputMottaker => {
-  const { part, handling } = mottaker;
+  const { part, handling, overriddenAddress } = mottaker;
 
   return {
     id: part.id,
     identifikator: part.identifikator,
     handling,
-    overriddenAddress: part.identifikator === null ? (mottaker.overriddenAddress ?? part.address) : null,
+    overriddenAddress,
     navn: part.name,
   };
 };
