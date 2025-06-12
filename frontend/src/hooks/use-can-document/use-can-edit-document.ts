@@ -2,8 +2,8 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
 import {
   CreatorRole,
@@ -15,8 +15,8 @@ import { FlowState } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 
 export const useCanEditDocument = (document: IMainDocument | null, parentDocument?: IMainDocument) => {
-  const isRol = useIsRol();
-  const isTildeltSaksbehandler = useIsSaksbehandler();
+  const isRol = useIsAssignedRolAndSent();
+  const isTildeltSaksbehandler = useIsTildeltSaksbehandler();
   const hasKrolRole = useHasRole(Role.KABAL_ROL);
   const isFeilregistrert = useIsFeilregistrert();
   const isFullfoert = useIsFullfoert();

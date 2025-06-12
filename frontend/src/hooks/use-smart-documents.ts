@@ -1,5 +1,5 @@
 import { useHasRole } from '@app/hooks/use-has-role';
-import { useIsRolWithAnyFlowState } from '@app/hooks/use-is-rol';
+import { useIsAssignedRol } from '@app/hooks/use-is-rol';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Role } from '@app/types/bruker';
 import type { ISmartDocument } from '@app/types/documents/documents';
@@ -8,7 +8,7 @@ import type { skipToken } from '@reduxjs/toolkit/query';
 
 export const useSmartDocuments = (oppgaveId: string | typeof skipToken): ISmartDocument[] | undefined => {
   const { data, isLoading } = useGetDocumentsQuery(oppgaveId);
-  const isRolWithAnyFlowState = useIsRolWithAnyFlowState();
+  const isAssignedRol = useIsAssignedRol();
   const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
 
   if (isLoading || typeof data === 'undefined') {
@@ -25,7 +25,7 @@ export const useSmartDocuments = (oppgaveId: string | typeof skipToken): ISmartD
     }
   }
 
-  if (isRolWithAnyFlowState) {
+  if (isAssignedRol) {
     for (const document of data) {
       if (document.isSmartDokument && document.templateId === TemplateIdEnum.ROL_ANSWERS) {
         documents.push(document);

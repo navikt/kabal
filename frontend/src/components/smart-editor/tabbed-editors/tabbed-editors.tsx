@@ -11,8 +11,8 @@ import {
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import { useSmartDocuments } from '@app/hooks/use-smart-documents';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
@@ -91,9 +91,9 @@ const Tabbed = ({ documents }: TabbedProps) => {
 };
 
 const TabNew = () => {
-  const isMedunderskriver = useIsMedunderskriver();
+  const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
   const isFinished = useIsFullfoert();
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
   const isFeilregistrert = useIsFeilregistrert();
   const hasDocumentsAccess = useHasDocumentsAccess();
 
@@ -113,9 +113,9 @@ interface TabPanelNewProps {
 }
 
 const TabPanelNew = ({ onCreate }: TabPanelNewProps) => {
-  const isMedunderskriver = useIsMedunderskriver();
+  const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
   const isFinished = useIsFullfoert();
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
 
   if ((!isFinished && isMedunderskriver) || isRol) {
     return null;

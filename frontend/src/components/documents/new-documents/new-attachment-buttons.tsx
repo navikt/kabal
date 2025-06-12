@@ -5,7 +5,7 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import { ROL_ANSWERS_TEMPLATE } from '@app/plate/templates/simple-templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { Role } from '@app/types/bruker';
@@ -53,7 +53,7 @@ const NewRolAnswerDocumentButton = ({ document }: Props) => {
   const { user } = useContext(StaticDataContext);
   const isFinished = useIsFullfoert();
   const isRolQuestions = getIsRolQuestions(document);
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
   const [create, { isLoading }] = useCreateSmartDocumentMutation();
 
   if (oppgave === undefined || !isRol || !isRolQuestions || isFinished) {

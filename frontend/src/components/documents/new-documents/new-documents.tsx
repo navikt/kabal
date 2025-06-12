@@ -12,6 +12,7 @@ import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
   CreatorRole,
@@ -45,6 +46,7 @@ export const NewDocuments = () => {
   const [containerHeight, setContainerHeight] = useState<number>(0);
   const [_scrollTop, _setScrollTop] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
+  const isRol = useIsAssignedRolAndSent();
 
   useEffect(() => {
     const handle = requestAnimationFrame(() => setScrollTop(_scrollTop));
@@ -63,12 +65,13 @@ export const NewDocuments = () => {
 
   const getHasUploadButton = useCallback(
     (document: IMainDocument | undefined) =>
-      !isFeilregistrert &&
+      !isRol && // ROL users cannot upload documents.
+      !isFeilregistrert && // Feilregistrert cases cannot get new documents.
       document !== undefined &&
       document.parentId === null &&
       hasUploadAccess &&
       !document.isSmartDokument,
-    [isFeilregistrert, hasUploadAccess],
+    [isFeilregistrert, hasUploadAccess, isRol],
   );
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯

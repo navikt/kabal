@@ -3,8 +3,8 @@ import { canDistributeAny } from '@app/components/documents/filetype';
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { DistribusjonsType, DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -12,8 +12,8 @@ import { useContext } from 'react';
 
 export const useCanDropOnDocument = (targetDocument: IMainDocument) => {
   const { draggedDocument, draggedJournalfoertDocuments } = useContext(DragAndDropContext);
-  const isRol = useIsRol();
-  const isTildeltSaksbehandler = useIsSaksbehandler();
+  const isRol = useIsAssignedRolAndSent();
+  const isTildeltSaksbehandler = useIsTildeltSaksbehandler();
   const isFeilregistrert = useIsFeilregistrert();
   const { data: oppgave, isSuccess } = useOppgave();
 
