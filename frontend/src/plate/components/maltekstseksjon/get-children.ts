@@ -21,8 +21,8 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText } from '@app/types/texts/consumer';
 import type { Language } from '@app/types/texts/language';
 import { BaseParagraphPlugin, ElementApi, NodeApi, type TElement } from '@udecode/plate';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@udecode/plate-basic-nodes';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list-classic';
 import { BaseTablePlugin } from '@udecode/plate-table';
 
 export const getNewChildren = (
@@ -123,9 +123,9 @@ const getPlaceholders = (element: TElement): PlaceholderElement[] => {
 const isParentOrChildElement = (node: TElement): node is ParentOrChildElement =>
   isOfElementTypesFn([
     BaseParagraphPlugin.key,
-    HEADING_KEYS.h1,
-    HEADING_KEYS.h2,
-    HEADING_KEYS.h3,
+    BaseH1Plugin.key,
+    BaseH2Plugin.key,
+    BaseH3Plugin.key,
     BaseBulletedListPlugin.key,
     BaseNumberedListPlugin.key,
     BaseTablePlugin.key,

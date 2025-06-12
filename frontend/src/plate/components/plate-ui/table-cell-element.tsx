@@ -8,23 +8,33 @@ import { PlateElement, useEditorPlugin, useReadOnly, withRef } from '@udecode/pl
 import { useCallback, useContext } from 'react';
 import type { MouseEvent } from 'react';
 import { styled } from 'styled-components';
-import { StyledParagraph } from '../paragraph';
 
-export const TableCellElement = withRef<typeof PlateElement>(({ style, children, ...props }, ref) => {
+const BASE_CLASSES = 'min-w-12 relative align-top ';
+const REMOVE_P_PLACEHOLDER = "[&>p::before]:content-['']";
+const REMOVE_P_MARGIN_TOP = '[&>*:first-child]:mt-0!';
+const ALL_CLASSES = `${BASE_CLASSES} ${REMOVE_P_PLACEHOLDER} ${REMOVE_P_MARGIN_TOP}`;
+
+export const TableCellElement = withRef<typeof PlateElement>(({ children, className, ...props }, ref) => {
   const { api } = useEditorPlugin(TablePlugin);
-  const { selected, minHeight, width } = useTableCellElement();
+  const { minHeight, width } = useTableCellElement();
 
   const spans = {
     colSpan: api.table.getColSpan(props.element),
     rowSpan: api.table.getRowSpan(props.element),
   };
 
+  const style = {
+    ...props.style,
+    width,
+    minHeight,
+    padding: PADDING,
+    border: `${ptToEm(1.25)} solid var(--a-border-default)`,
+  };
+
   return (
-    <PlateElement asChild ref={ref} {...props}>
-      <StyledCell $selected={selected} className="min-w-12" style={{ ...style, width }} {...spans}>
-        <Content style={{ minHeight }}>{children}</Content>
-        <Resize />
-      </StyledCell>
+    <PlateElement as="td" ref={ref} {...props} className={ALL_CLASSES} style={style} {...spans}>
+      {children}
+      <Resize />
     </PlateElement>
   );
 });
@@ -87,33 +97,4 @@ const StyledRightHandle = styled(ResizeHandle)`
   right: 0;
   top: 0;
   cursor: col-resize;
-`;
-
-interface CellProps {
-  $selected: boolean;
-}
-
-const StyledCell = styled.td<CellProps>`
-  position: relative;
-  border: ${ptToEm(1.25)} solid var(--a-border-default);
-  vertical-align: top;
-  background-color: ${({ $selected }) => ($selected ? 'var(--a-surface-selected)' : 'transparent')};
-  padding: 0;
-`;
-
-const Content = styled.div`
-  padding: ${PADDING};
-  position: relative;
-  height: 100%;
-  z-index: 20;
-
-  > ${StyledParagraph} {
-    &::before {
-      content: '';
-    }
-  }
-
-  > :first-child {
-    margin-top: 0;
-  }
 `;

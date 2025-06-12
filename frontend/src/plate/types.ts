@@ -21,23 +21,18 @@ import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text
 import type { Language } from '@app/types/texts/language';
 import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
 import type { BaseParagraphPlugin, TElement, TText } from '@udecode/plate';
+import type { TTableCellElement, TTableElement, TTableRowElement } from '@udecode/plate';
 import type { AutoformatRule } from '@udecode/plate-autoformat';
+import type { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@udecode/plate-basic-nodes';
 import { type PlateEditor, useEditorRef, useEditorState } from '@udecode/plate-core/react';
-import type { HEADING_KEYS } from '@udecode/plate-heading';
 import type {
   BaseBulletedListPlugin,
   BaseListItemContentPlugin,
   BaseListItemPlugin,
   BaseNumberedListPlugin,
-} from '@udecode/plate-list';
-import type {
-  BaseTableCellPlugin,
-  BaseTablePlugin,
-  BaseTableRowPlugin,
-  TTableCellElement,
-  TTableElement,
-  TTableRowElement,
-} from '@udecode/plate-table';
+} from '@udecode/plate-list-classic';
+import type { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
+
 import type { PlateYjsEditorProps } from '@udecode/plate-yjs';
 import type { TemplateSections } from './template-sections';
 
@@ -81,17 +76,17 @@ export interface ParagraphElement extends BlockElement, IndentableStyleProps, Al
 }
 
 export interface H1Element extends BlockElement, IndentableStyleProps {
-  type: typeof HEADING_KEYS.h1;
+  type: typeof BaseH1Plugin.key;
   children: (FormattedText | PlaceholderElement)[];
 }
 
 export interface H2Element extends BlockElement, IndentableStyleProps {
-  type: typeof HEADING_KEYS.h2;
+  type: typeof BaseH2Plugin.key;
   children: (FormattedText | PlaceholderElement)[];
 }
 
 export interface H3Element extends BlockElement, IndentableStyleProps {
-  type: typeof HEADING_KEYS.h3;
+  type: typeof BaseH3Plugin.key;
   children: (FormattedText | PlaceholderElement)[];
 }
 

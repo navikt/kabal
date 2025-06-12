@@ -5,10 +5,10 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorState } from '@app/plate/types';
 import { isOfElementTypesFn } from '@app/plate/utils/queries';
 import { ClearFormatting, TextBold, TextItalic, TextUnderline } from '@styled-icons/fluentui-system-regular';
-import { BaseBoldPlugin, BaseItalicPlugin, BaseUnderlinePlugin } from '@udecode/plate-basic-marks';
+import { BaseBoldPlugin, BaseItalicPlugin, BaseUnderlinePlugin } from '@udecode/plate-basic-nodes';
 import { getPluginType } from '@udecode/plate-core';
 
-import { HEADING_KEYS } from '@udecode/plate-heading';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@udecode/plate-basic-nodes';
 import { useMarkToolbarButton, useMarkToolbarButtonState } from '@udecode/plate/react';
 
 export const Marks = () => {
@@ -16,24 +16,24 @@ export const Marks = () => {
 
   const isInPlaceholder = editor.api.some({ match: { type: ELEMENT_PLACEHOLDER } });
   const isInHeading = editor.api.some({
-    match: isOfElementTypesFn([HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3]),
+    match: isOfElementTypesFn([BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key]),
   });
 
   const isInUnchangeableElement = useIsUnchangeable();
 
   const disabled = isInHeading || (isInUnchangeableElement && !isInPlaceholder);
 
-  const boldState = useMarkToolbarButtonState({ nodeType: getPluginType(editor, BaseBoldPlugin) });
+  const boldState = useMarkToolbarButtonState({ nodeType: getPluginType(editor, BaseBoldPlugin.key) });
   const {
     props: { onClick: toggleBold, pressed: boldPressed },
   } = useMarkToolbarButton(boldState);
 
-  const italicState = useMarkToolbarButtonState({ nodeType: getPluginType(editor, BaseItalicPlugin) });
+  const italicState = useMarkToolbarButtonState({ nodeType: getPluginType(editor, BaseItalicPlugin.key) });
   const {
     props: { onClick: toggleItalic, pressed: italicPressed },
   } = useMarkToolbarButton(italicState);
 
-  const underlineState = useMarkToolbarButtonState({ nodeType: getPluginType(editor, BaseUnderlinePlugin) });
+  const underlineState = useMarkToolbarButtonState({ nodeType: getPluginType(editor, BaseUnderlinePlugin.key) });
   const {
     props: { onClick: toggleUnderline, pressed: underlinePressed },
   } = useMarkToolbarButton(underlineState);

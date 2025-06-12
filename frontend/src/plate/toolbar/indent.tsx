@@ -4,7 +4,7 @@ import { type RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
 import { isInList, isInTable } from '@app/plate/utils/queries';
 import { TextIndentDecreaseLtr, TextIndentIncreaseLtr } from '@styled-icons/fluentui-system-regular';
 import { indent, outdent } from '@udecode/plate-indent';
-import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list-classic';
 import { BaseTablePlugin } from '@udecode/plate-table';
 
 const isIndented = (editor: RichTextEditor) =>

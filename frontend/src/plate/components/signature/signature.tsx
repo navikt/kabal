@@ -56,7 +56,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const disabledCheckbox = element.enabled === false || isReadOnly;
 
   return (
-    <PlateElement<SignatureElement> {...props} asChild contentEditable={false}>
+    <PlateElement<SignatureElement> {...props} attributes={{ ...props.attributes, contentEditable: false }}>
       <SectionContainer
         data-element={element.type}
         $sectionType={SectionTypeEnum.SIGNATURE}

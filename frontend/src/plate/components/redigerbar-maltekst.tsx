@@ -46,7 +46,7 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
   const readOnly = editor.api.isReadOnly();
 
   return (
-    <PlateElement<RedigerbarMaltekstElement> {...props} asChild>
+    <PlateElement<RedigerbarMaltekstElement> {...props} as="div">
       <SectionContainer
         data-element={element.type}
         data-section={element.section}

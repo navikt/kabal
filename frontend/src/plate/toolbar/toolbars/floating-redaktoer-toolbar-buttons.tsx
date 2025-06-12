@@ -8,9 +8,9 @@ import { Marks } from '@app/plate/toolbar/marks';
 import { ParagraphButton } from '@app/plate/toolbar/paragraph-button';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { BaseParagraphPlugin, ElementApi } from '@udecode/plate';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@udecode/plate-basic-nodes';
 import { useEditorState } from '@udecode/plate-core/react';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
+import { BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list-classic';
 
 export const FloatingRedaktoerToolbarButtons = () => {
   const editor = useEditorState();
@@ -58,7 +58,7 @@ export const FloatingRedaktoerToolbarButtons = () => {
     );
   }
 
-  if (type === HEADING_KEYS.h1 || type === HEADING_KEYS.h2 || type === HEADING_KEYS.h3) {
+  if (type === BaseH1Plugin.key || type === BaseH2Plugin.key || type === BaseH3Plugin.key) {
     return (
       <>
         <ParagraphButton />
