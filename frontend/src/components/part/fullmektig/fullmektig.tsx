@@ -129,23 +129,28 @@ const Delete = ({ onClose, id }: { onClose: () => void; id: string }) => {
   return (
     <>
       {showConfirm ? (
-        <Button
-          icon={<TrashFillIcon />}
-          variant="danger"
-          size="small"
-          loading={isLoading}
-          onClick={async () => {
-            await updateFullmektig({ oppgaveId, fullmektig: null }).unwrap();
-            onClose();
-          }}
-        />
+        <Tooltip content="Fjern fullmektig">
+          <Button
+            icon={<TrashFillIcon />}
+            variant="danger"
+            size="small"
+            loading={isLoading}
+            onClick={async () => {
+              await updateFullmektig({ oppgaveId, fullmektig: null }).unwrap();
+              onClose();
+            }}
+          />
+        </Tooltip>
       ) : null}
-      <Button
-        icon={showConfirm ? <ArrowUndoIcon aria-hidden /> : <TrashFillIcon aria-hidden />}
-        variant={showConfirm ? 'tertiary' : 'danger'}
-        size="small"
-        onClick={() => setShowConfirm(!showConfirm)}
-      />
+
+      <Tooltip content={showConfirm ? 'Avbryt' : 'Fjern fullmektig'}>
+        <Button
+          icon={showConfirm ? <ArrowUndoIcon aria-hidden /> : <TrashFillIcon aria-hidden />}
+          variant={showConfirm ? 'tertiary' : 'danger'}
+          size="small"
+          onClick={() => setShowConfirm(!showConfirm)}
+        />
+      </Tooltip>
     </>
   );
 };
@@ -158,5 +163,9 @@ interface EditButtonProps {
 const EditButton = ({ onClick, isEditing }: EditButtonProps) => {
   const Icon = isEditing ? XMarkIcon : PencilIcon;
 
-  return <Button variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />;
+  return (
+    <Tooltip content="Endre eller fjern fullmektig">
+      <Button variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />
+    </Tooltip>
+  );
 };
