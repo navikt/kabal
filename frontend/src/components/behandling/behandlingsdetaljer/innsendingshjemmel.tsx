@@ -44,7 +44,7 @@ export const Innsendingshjemler = ({ oppgavebehandling }: Props) => {
         <div className="relative w-min shrink-0 grow-0 self-start" ref={ref}>
           <Tooltip content="Endre innsendingshjemler">
             <Button
-              size="xsmall"
+              size="small"
               variant="tertiary"
               onClick={() => setIsOpen((o) => !o)}
               icon={<PencilIcon aria-hidden />}
