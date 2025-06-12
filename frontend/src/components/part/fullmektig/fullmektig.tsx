@@ -72,8 +72,9 @@ export const Fullmektig = ({ part }: Props) => {
           ) : null}
 
           {canEdit ? (
-            <HStack wrap={false} align="center">
+            <HStack gap="1" wrap={false} align="center">
               {isEditing && part !== null ? <Delete onClose={onClose} id={part.id} /> : null}
+
               <EditButton onClick={() => setIsEditing(!isEditing)} isEditing={isEditing} />
             </HStack>
           ) : null}
