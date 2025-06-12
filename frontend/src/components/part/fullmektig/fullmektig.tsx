@@ -1,5 +1,4 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
-import { CopyButton } from '@app/components/copy-button/copy-button';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { EditPart } from '@app/components/part/edit-part';
 import { WithoutId } from '@app/components/part/fullmektig/without-id';
@@ -8,7 +7,7 @@ import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import type { IFullmektig } from '@app/types/oppgave-common';
 import { ArrowUndoIcon, PencilIcon, TrashFillIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, HStack, ToggleGroup, VStack } from '@navikt/ds-react';
+import { Button, CopyButton, HStack, Tag, ToggleGroup, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 
@@ -45,25 +44,39 @@ export const Fullmektig = ({ part }: Props) => {
 
   const onClose = () => setIsEditing(false);
 
+  const name = part?.name;
+  const id = part?.identifikator;
+  const hasName = typeof name === 'string' && name.length > 0;
+  const hasId = typeof id === 'string' && id.length > 0;
+
   return (
     <BehandlingSection label="Fullmektig">
-      <HStack justify="space-between" wrap={false}>
-        <HStack gap="2" align="center">
-          {typeof part?.name === 'string' ? (
-            <CopyButton size="small" copyText={part.name} text={part.name} activeText={part.name} />
+      <VStack gap="1" marginInline="0 auto">
+        <HStack align="start" justify="space-between" wrap={false}>
+          {hasName ? (
+            <Tag size="small" variant="neutral-moderate" className="mr-auto justify-start break-all py-[7px]">
+              {name}
+            </Tag>
           ) : (
             'Ikke satt'
           )}
-          {typeof part?.identifikator === 'string' ? <CopyIdButton size="small" id={part.identifikator} /> : null}
+
+          {hasName ? (
+            <Tooltip content="Kopier navn">
+              <CopyButton size="small" copyText={name} />
+            </Tooltip>
+          ) : null}
+
+          {canEdit ? (
+            <HStack wrap={false} align="center">
+              {isEditing && part !== null ? <Delete onClose={onClose} id={part.id} /> : null}
+              <EditButton onClick={() => setIsEditing(!isEditing)} isEditing={isEditing} />
+            </HStack>
+          ) : null}
         </HStack>
 
-        {canEdit ? (
-          <HStack wrap={false} align="start">
-            {isEditing && part !== null ? <Delete onClose={onClose} id={part.id} /> : null}
-            <EditButton onClick={() => setIsEditing(!isEditing)} isEditing={isEditing} />
-          </HStack>
-        ) : null}
-      </HStack>
+        {hasId ? <CopyIdButton size="small" id={id} className="self-start" /> : null}
+      </VStack>
 
       {isEditing ? (
         <VStack gap="4" marginBlock="4 0">
