@@ -13,15 +13,16 @@ import { PastePlugin } from '@app/plate/plugins/paste';
 import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { SelectionPlugin } from '@app/plate/plugins/selection';
 import { type NodeEntry, ParserPlugin } from '@udecode/plate';
-import { AlignPlugin } from '@udecode/plate-alignment/react';
-import { AutoformatPlugin } from '@udecode/plate-autoformat/react';
-import { BoldPlugin, ItalicPlugin, UnderlinePlugin } from '@udecode/plate-basic-marks/react';
+import { AutoformatPlugin } from '@udecode/plate-autoformat';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@udecode/plate-basic-nodes';
+import { BoldPlugin, ItalicPlugin, UnderlinePlugin } from '@udecode/plate-basic-nodes/react';
+import { TextAlignPlugin } from '@udecode/plate-basic-styles/react';
 import { ExitBreakPlugin, SoftBreakPlugin } from '@udecode/plate-break/react';
 import { DocxPlugin } from '@udecode/plate-docx';
-import { HEADING_KEYS } from '@udecode/plate-heading';
+
 import { HeadingPlugin } from '@udecode/plate-heading/react';
 import { IndentPlugin } from '@udecode/plate-indent/react';
-import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@udecode/plate-list/react';
+import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@udecode/plate-list-classic/react';
 import { NodeIdPlugin } from '@udecode/plate-node-id';
 import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@udecode/plate-table/react';
 import { ParagraphPlugin } from '@udecode/plate/react';
@@ -39,7 +40,7 @@ export const defaultPlugins = [
     const { addMark } = editor.tf;
 
     editor.tf.addMark = (key, value) => {
-      if (editor.api.some({ match: { type: [HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3] } })) {
+      if (editor.api.some({ match: { type: [BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key] } })) {
         return;
       }
 
@@ -60,9 +61,9 @@ export const defaultPlugins = [
     inject: {
       targetPlugins: [
         ParagraphPlugin.key,
-        HEADING_KEYS.h1,
-        HEADING_KEYS.h2,
-        HEADING_KEYS.h3,
+        BaseH1Plugin.key,
+        BaseH2Plugin.key,
+        BaseH3Plugin.key,
         TablePlugin.key,
         NumberedListPlugin.key,
         BulletedListPlugin.key,
@@ -82,7 +83,7 @@ export const defaultPlugins = [
       ],
     },
   }),
-  AlignPlugin.configure({ inject: { targetPlugins: [ParagraphPlugin.key] } }),
+  TextAlignPlugin.configure({ inject: { targetPlugins: [ParagraphPlugin.key] } }),
   AutoformatPlugin.configure({
     options: {
       rules: autoformatRules,
@@ -97,7 +98,7 @@ export const defaultPlugins = [
           hotkey: 'enter',
           before: false,
           defaultType: ParagraphPlugin.key,
-          query: { start: true, end: true, allow: [HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3] },
+          query: { start: true, end: true, allow: [BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key] },
           relative: true,
           level: 1,
         },

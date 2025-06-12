@@ -2,7 +2,7 @@ import { ABBREVIATIONS } from '@app/plate/plugins/capitalise/abbreviations';
 import { isOfElementType } from '@app/plate/utils/queries';
 import { type Descendant, ElementApi, PathApi, type Point, RangeApi, TextApi } from '@udecode/plate';
 import type { PlateEditor } from '@udecode/plate-core/react';
-import { ListItemContentPlugin } from '@udecode/plate-list/react';
+import { ListItemContentPlugin } from '@udecode/plate-list-classic/react';
 
 const LOWERCASE_CHAR_AND_DASH_REGEX = /^[\p{Ll}-]+$/u;
 export const isSingleWord = (text: string) => LOWERCASE_CHAR_AND_DASH_REGEX.test(text);

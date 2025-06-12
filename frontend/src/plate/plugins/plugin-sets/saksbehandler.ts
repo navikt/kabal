@@ -1,5 +1,3 @@
-import type { UserCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
-import { TAB_UUID } from '@app/headers';
 import { HeadingOne, HeadingThree, HeadingTwo } from '@app/plate/components/headings';
 import { ListItem, OrderedList, UnorderedList } from '@app/plate/components/lists';
 import { Paragraph } from '@app/plate/components/paragraph';
@@ -26,8 +24,8 @@ import type { IUserData } from '@app/types/bruker';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import { BaseParagraphPlugin } from '@udecode/plate';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@udecode/plate-basic-nodes';
+import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 import { YjsPlugin } from '@udecode/plate-yjs/react';
 import { XmlText } from 'yjs';
@@ -36,9 +34,9 @@ export const components = {
   [BaseParagraphPlugin.key]: Paragraph,
 
   // Headings
-  [HEADING_KEYS.h1]: HeadingOne,
-  [HEADING_KEYS.h2]: HeadingTwo,
-  [HEADING_KEYS.h3]: HeadingThree,
+  [BaseH1Plugin.key]: HeadingOne,
+  [BaseH2Plugin.key]: HeadingTwo,
+  [BaseH3Plugin.key]: HeadingThree,
 
   // Lists
   [BaseBulletedListPlugin.key]: UnorderedList,
@@ -75,7 +73,7 @@ export const collaborationSaksbehandlerPlugins = (
   behandlingId: string,
   dokumentId: string,
   smartDocument: ISmartDocument,
-  { navIdent, navn }: IUserData,
+  { navIdent }: IUserData,
 ) => {
   const sharedRoot = new XmlText();
   sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
@@ -85,20 +83,21 @@ export const collaborationSaksbehandlerPlugins = (
     createCapitalisePlugin(navIdent),
     YjsPlugin.configure({
       options: {
-        cursorOptions: {
-          data: { navIdent, navn, tabId: TAB_UUID } satisfies UserCursor,
-        },
-        disableCursors: true,
-        hocuspocusProviderOptions: {
-          url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
-          name: dokumentId,
-          document: sharedRoot.doc ?? undefined,
-          onClose: ({ event }) => {
-            if (event.code === 4401) {
-              window.location.assign('/oauth2/login');
-            }
+        providers: [
+          {
+            type: 'hocuspocus',
+            options: {
+              url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
+              name: dokumentId,
+              document: sharedRoot.doc ?? undefined,
+              onClose: ({ event }) => {
+                if (event.code === 4401) {
+                  window.location.assign('/oauth2/login');
+                }
+              },
+            },
           },
-        },
+        ],
       },
     }),
   ];

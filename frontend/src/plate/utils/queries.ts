@@ -13,9 +13,9 @@ import type {
   RichTextEditorElement,
 } from '@app/plate/types';
 import { type Descendant, ElementApi, NodeApi, type TElement, type TNode, type TText, TextApi } from '@udecode/plate';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@udecode/plate-basic-nodes';
 import type { PlateEditor } from '@udecode/plate-core/react';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list-classic';
 import { BaseTablePlugin } from '@udecode/plate-table';
 
 // Ensures a next-path even though original path is at end
@@ -67,9 +67,9 @@ export const isInList = (editor: PlateEditor): boolean => editor.api.some({ matc
 export const isInTable = (editor: PlateEditor): boolean => editor.api.some({ match: { type: BaseTablePlugin.key } });
 
 const HEADINGS_MATCHER = isOfElementTypesFn<H1Element | H2Element | H3Element>([
-  HEADING_KEYS.h1,
-  HEADING_KEYS.h2,
-  HEADING_KEYS.h3,
+  BaseH1Plugin.key,
+  BaseH2Plugin.key,
+  BaseH3Plugin.key,
 ]);
 export const isInHeading = (editor: RichTextEditor): boolean => editor.api.some({ match: HEADINGS_MATCHER });
 

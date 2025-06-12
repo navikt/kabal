@@ -46,12 +46,15 @@ const RenderCurrentDate = memo<Props & DateParts>(
       <PlateElement<CurrentDateElement>
         {...props}
         as="div"
-        contentEditable={false}
-        suppressContentEditableWarning
-        onDragStart={(event) => event.preventDefault()}
-        onDrop={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
+        attributes={{
+          ...props.attributes,
+          contentEditable: false,
+          suppressContentEditableWarning: true,
+          onDragStart: (event) => event.preventDefault(),
+          onDrop: (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          },
         }}
       >
         {children}

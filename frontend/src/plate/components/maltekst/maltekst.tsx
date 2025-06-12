@@ -64,13 +64,16 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
   return (
     <PlateElement<MaltekstElement>
       {...props}
-      asChild
-      contentEditable={!readOnly}
-      suppressContentEditableWarning
-      onDragStart={(event) => event.preventDefault()}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      as="div"
+      attributes={{
+        ...props.attributes,
+        contentEditable: !readOnly,
+        suppressContentEditableWarning: true,
+        onDragStart: (event) => event.preventDefault(),
+        onDrop: (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        },
       }}
     >
       <SectionContainer
