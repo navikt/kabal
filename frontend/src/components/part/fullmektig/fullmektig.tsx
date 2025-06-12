@@ -51,10 +51,14 @@ export const Fullmektig = ({ part }: Props) => {
 
   return (
     <BehandlingSection label="Fullmektig">
-      <VStack gap="1" marginInline="0 auto">
-        <HStack align="start" justify="space-between" wrap={false}>
+      <VStack gap="1">
+        <HStack gap="1" align="start" justify="space-between" wrap={false}>
           {hasName ? (
-            <Tag size="small" variant="neutral-moderate" className="mr-auto justify-start break-all py-[7px]">
+            <Tag
+              size="small"
+              variant="neutral-moderate"
+              className="mr-auto justify-start hyphens-auto break-words py-[7px]"
+            >
               {name}
             </Tag>
           ) : (
