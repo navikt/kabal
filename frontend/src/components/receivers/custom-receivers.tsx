@@ -4,7 +4,7 @@ import { EditPart } from '@app/components/part/edit-part';
 import { getInitalHandling } from '@app/components/receivers/functions';
 import type { IErrorProperty } from '@app/components/receivers/is-send-error';
 import { Options } from '@app/components/receivers/options';
-import { StyledRecipient } from '@app/components/receivers/styled-components';
+import { StyledReceiver } from '@app/components/receivers/styled-components';
 import type { IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -21,7 +21,7 @@ interface Props {
   templateId: TemplateIdEnum | undefined;
 }
 
-export const CustomRecipients = ({
+export const CustomReceivers = ({
   mottakerList,
   addMottakere,
   removeMottakere,
@@ -30,18 +30,18 @@ export const CustomRecipients = ({
   templateId,
 }: Props) => (
   <section>
-    <Label size="small" htmlFor="extra-recipients">
+    <Label size="small" htmlFor="extra-receivers">
       Ekstra mottakere
     </Label>
     <EditPart
       isLoading={false}
-      id="extra-recipients"
+      id="extra-receivers"
       onChange={(part) =>
         addMottakere([{ part, handling: getInitalHandling(part, templateId), overriddenAddress: null }])
       }
       buttonText="Legg til mottaker"
     />
-    <Recipients
+    <Receivers
       mottakerList={mottakerList}
       removeMottakere={removeMottakere}
       changeMottaker={changeMottaker}
@@ -51,7 +51,7 @@ export const CustomRecipients = ({
   </section>
 );
 
-interface RecipientsProps {
+interface ReceiversProps {
   mottakerList: IMottaker[];
   removeMottakere: (ids: string[]) => void;
   changeMottaker: (mottaker: IMottaker) => void;
@@ -59,19 +59,19 @@ interface RecipientsProps {
   templateId: TemplateIdEnum | undefined;
 }
 
-const Recipients = ({ mottakerList, removeMottakere, changeMottaker, sendErrors, templateId }: RecipientsProps) => {
+const Receivers = ({ mottakerList, removeMottakere, changeMottaker, sendErrors, templateId }: ReceiversProps) => {
   if (mottakerList.length === 0) {
     return null;
   }
 
   return (
-    <StyledRecipientList>
+    <StyledReceiverList>
       {mottakerList.map(({ part, handling, overriddenAddress }) => {
         const error = sendErrors.find((e) => e.field === part.id)?.reason ?? null;
         const isPerson = part.type === IdType.FNR;
 
         return (
-          <StyledRecipient key={part.id} as="li" $accent="var(--a-border-success)">
+          <StyledReceiver key={part.id} as="li" $accent="var(--a-border-success)">
             <HStack align="center" gap="1">
               <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
                 <HStack align="center" gap="1" paddingBlock="1">
@@ -107,14 +107,14 @@ const Recipients = ({ mottakerList, removeMottakere, changeMottaker, sendErrors,
               onChange={changeMottaker}
               templateId={templateId}
             />
-          </StyledRecipient>
+          </StyledReceiver>
         );
       })}
-    </StyledRecipientList>
+    </StyledReceiverList>
   );
 };
 
-const StyledRecipientList = styled.ul`
+const StyledReceiverList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;

@@ -1,7 +1,7 @@
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { Address } from '@app/components/receivers/address/address';
 import { getTypeNames } from '@app/components/receivers/functions';
-import { StyledRecipient } from '@app/components/receivers/styled-components';
+import { StyledReceiver } from '@app/components/receivers/styled-components';
 import { formatIdNumber } from '@app/functions/format-id';
 import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
 import { type IPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
@@ -9,12 +9,12 @@ import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { Alert, CopyButton, HStack, HelpText, Label, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
-interface RecipientsProps {
-  recipients: IBrevmottaker[];
+interface ReceiversProps {
+  receivers: IBrevmottaker[];
 }
 
-export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) => {
-  if (recipients.length === 0) {
+export const UnreachableSuggestedReceivers = ({ receivers }: ReceiversProps) => {
+  if (receivers.length === 0) {
     return null;
   }
 
@@ -25,7 +25,7 @@ export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) 
       </Label>
 
       <List>
-        {recipients.map(({ part, brevmottakertyper, overriddenAddress, handling }) => {
+        {receivers.map(({ part, brevmottakertyper, overriddenAddress, handling }) => {
           const { identifikator, id, name, statusList } = part;
           const isPerson = part.type === IdType.FNR;
 
@@ -33,7 +33,7 @@ export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) 
           const helpText = getUnreachableHelpText(statusList);
 
           return (
-            <StyledRecipient key={id} $accent="var(--a-border-danger)" as="li">
+            <StyledReceiver key={id} $accent="var(--a-border-danger)" as="li">
               <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
                 <HStack align="center" gap="1">
                   <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
@@ -65,7 +65,7 @@ export const UnreachableSuggestedRecipients = ({ recipients }: RecipientsProps) 
                   </Alert>
                 </HStack>
               )}
-            </StyledRecipient>
+            </StyledReceiver>
           );
         })}
       </List>

@@ -1,4 +1,4 @@
-import type { IAddress } from '@app/types/documents/recipients';
+import type { IAddress } from '@app/types/documents/receivers';
 import type { SexEnum } from '@app/types/kodeverk';
 import type { Language } from '@app/types/texts/language';
 import type { INavEmployee } from './bruker';

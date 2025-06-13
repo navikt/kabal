@@ -1,7 +1,7 @@
 import { Address } from '@app/components/receivers/address/address';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import type { IMottaker } from '@app/types/documents/documents';
-import { HandlingEnum, type IAddress } from '@app/types/documents/recipients';
+import { HandlingEnum, type IAddress } from '@app/types/documents/receivers';
 import { UTSENDINGSKANAL, Utsendingskanal } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';

@@ -3,7 +3,7 @@ import { AddressState, Container } from '@app/components/receivers/address/layou
 import type { Addresses } from '@app/components/receivers/address/types';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { isNotNull } from '@app/functions/is-not-type-guards';
-import { type IAddress, isNorwegianAddress } from '@app/types/documents/recipients';
+import { type IAddress, isNorwegianAddress } from '@app/types/documents/receivers';
 import type { IPart } from '@app/types/oppgave-common';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, HStack, Tag, Tooltip } from '@navikt/ds-react';

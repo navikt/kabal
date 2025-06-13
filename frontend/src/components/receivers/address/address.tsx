@@ -1,7 +1,7 @@
 import { EditAddress } from '@app/components/receivers/address/edit-address';
 import { ReadAddress } from '@app/components/receivers/address/read-address';
 import type { Addresses } from '@app/components/receivers/address/types';
-import { HandlingEnum, type IAddress } from '@app/types/documents/recipients';
+import { HandlingEnum, type IAddress } from '@app/types/documents/receivers';
 import type { IPart } from '@app/types/oppgave-common';
 import { useEffect, useState } from 'react';
 

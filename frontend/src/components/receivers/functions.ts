@@ -1,4 +1,4 @@
-import { HandlingEnum } from '@app/types/documents/recipients';
+import { HandlingEnum } from '@app/types/documents/receivers';
 import { Brevmottakertype } from '@app/types/kodeverk';
 import { type IFullmektig, type IPart, PartStatusEnum } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';

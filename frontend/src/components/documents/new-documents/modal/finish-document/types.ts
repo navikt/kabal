@@ -1,5 +1,5 @@
 import type { IMainDocument } from '@app/types/documents/documents';
-import { DocumentValidationErrorType, type NO_RECIPIENTS_ERROR } from '@app/types/documents/validation';
+import { DocumentValidationErrorType, type NO_RECEIVERS_ERROR } from '@app/types/documents/validation';
 import { type ApiError, isApiDataError } from '@app/types/errors';
 
 export interface FinishProps {
@@ -10,7 +10,7 @@ export interface ValidationError {
   dokumentId: string;
   title: string;
   errors: {
-    type: DocumentValidationErrorType | typeof NO_RECIPIENTS_ERROR;
+    type: DocumentValidationErrorType | typeof NO_RECEIVERS_ERROR;
     message: string;
   }[];
 }

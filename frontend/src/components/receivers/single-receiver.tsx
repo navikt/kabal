@@ -1,7 +1,7 @@
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { getTypeNames } from '@app/components/receivers/functions';
 import { Options } from '@app/components/receivers/options';
-import { StyledRecipient } from '@app/components/receivers/styled-components';
+import { StyledReceiver } from '@app/components/receivers/styled-components';
 import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
 import type { IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';
@@ -10,13 +10,13 @@ import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { HStack, Label, Tooltip, VStack } from '@navikt/ds-react';
 
 interface Props {
-  recipient: IBrevmottaker;
+  receiver: IBrevmottaker;
   templateId: TemplateIdEnum | undefined;
   changeMottaker: (mottaker: IMottaker) => void;
 }
 
-export const SingleRecipient = ({ recipient, changeMottaker, templateId }: Props) => {
-  const { part, handling, overriddenAddress, brevmottakertyper } = recipient;
+export const SingleReceiver = ({ receiver, changeMottaker, templateId }: Props) => {
+  const { part, handling, overriddenAddress, brevmottakertyper } = receiver;
   const { name, statusList } = part;
   const isPerson = part.type === IdType.FNR;
 
@@ -26,7 +26,7 @@ export const SingleRecipient = ({ recipient, changeMottaker, templateId }: Props
         Mottaker fra saken
       </Label>
 
-      <StyledRecipient $accent="var(--a-border-success)">
+      <StyledReceiver $accent="var(--a-border-success)">
         <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
           <HStack align="center" gap="1">
             <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
@@ -45,7 +45,7 @@ export const SingleRecipient = ({ recipient, changeMottaker, templateId }: Props
           onChange={changeMottaker}
           templateId={templateId}
         />
-      </StyledRecipient>
+      </StyledReceiver>
     </VStack>
   );
 };

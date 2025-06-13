@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-export const StyledRecipient = styled.div<{ $accent: string }>`
+export const StyledReceiver = styled.div<{ $accent: string }>`
   display: flex;
   flex-direction: column;
   border-radius: var(--a-border-radius-medium);

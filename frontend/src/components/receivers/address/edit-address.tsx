@@ -6,7 +6,7 @@ import { Postnummer } from '@app/components/receivers/address/postnummer';
 import type { Addresses } from '@app/components/receivers/address/types';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { Keys, isMetaKey } from '@app/keys';
-import type { IAddress } from '@app/types/documents/recipients';
+import type { IAddress } from '@app/types/documents/receivers';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, ErrorSummary, HStack, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';
