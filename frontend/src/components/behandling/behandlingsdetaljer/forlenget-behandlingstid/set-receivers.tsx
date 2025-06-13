@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const SetReceivers = ({ value, id }: Props) => {
-  const [setReceivers] = useSetReceiversMutation();
+  const [setReceivers, { isLoading }] = useSetReceiversMutation();
   const [error, setError] = useState<string>();
 
   return (
@@ -21,6 +21,7 @@ export const SetReceivers = ({ value, id }: Props) => {
       <Heading size="xsmall">{UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.Mottakere]}</Heading>
       <Receivers
         mottakerList={value}
+        isLoading={isLoading}
         setMottakerList={async (mottakerList) => {
           try {
             await setReceivers({ mottakerList, id }).unwrap();

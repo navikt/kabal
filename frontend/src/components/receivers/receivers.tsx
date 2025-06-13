@@ -16,9 +16,17 @@ interface Props {
   sendErrors?: IErrorProperty[];
   templateId?: TemplateIdEnum | undefined;
   dokumentTypeId?: DistribusjonsType;
+  isLoading: boolean;
 }
 
-export const Receivers = ({ setMottakerList, mottakerList, sendErrors = [], templateId, dokumentTypeId }: Props) => {
+export const Receivers = ({
+  setMottakerList,
+  mottakerList,
+  sendErrors = [],
+  templateId,
+  dokumentTypeId,
+  isLoading,
+}: Props) => {
   const [suggestedBrevmottakere] = useSuggestedBrevmottakere(mottakerList, templateId);
 
   const reachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => s.reachable);
@@ -130,6 +138,7 @@ export const Receivers = ({ setMottakerList, mottakerList, sendErrors = [], temp
         onlyOneReachable={onlyOneReachableRecipient}
         receivers={reachableSuggestedRecipients}
         dokumentTypeId={dokumentTypeId}
+        isLoading={isLoading}
       />
 
       <UnreachableSuggestedRecipients recipients={unreachableSuggestedRecipients} />
@@ -168,6 +177,7 @@ interface DefaultReceiversProps {
   dokumentTypeId?: DistribusjonsType;
   receivers: IBrevmottaker[];
   onlyOneReachable: boolean;
+  isLoading: boolean;
 }
 
 const DefaultReceivers = ({ onlyOneReachable, receivers, dokumentTypeId, ...props }: DefaultReceiversProps) => {

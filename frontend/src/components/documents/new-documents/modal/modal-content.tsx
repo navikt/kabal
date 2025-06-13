@@ -45,7 +45,7 @@ interface Props {
 }
 
 export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
-  const [setMottakerList] = useSetMottakerListMutation();
+  const [setMottakerList, { isLoading }] = useSetMottakerListMutation();
   const [, { error: finishError }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const sendErrors = useMemo(
     () =>
@@ -134,6 +134,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
               templateId={document.templateId}
               dokumentTypeId={document.dokumentTypeId}
               sendErrors={sendErrors}
+              isLoading={isLoading}
             />
           ) : null}
 
