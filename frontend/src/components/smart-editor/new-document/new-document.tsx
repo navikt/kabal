@@ -4,8 +4,8 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import {
   ANKE_I_TRYGDERETTEN_TEMPLATES,
   ANKE_TEMPLATES,
@@ -32,7 +32,7 @@ interface Props {
 
 export const NewDocument = ({ onCreate }: Props) => {
   const { user } = useContext(StaticDataContext);
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
   const hasDocumentsAccess = useHasDocumentsAccess();
   const isFeilregistrert = useIsFeilregistrert();
   const oppgaveId = useOppgaveId();
@@ -93,8 +93,8 @@ export const NewDocument = ({ onCreate }: Props) => {
 };
 
 const useTemplates = (oppgave: IOppgavebehandling | undefined) => {
-  const isSaksbehandler = useIsSaksbehandler();
-  const isRol = useIsRol();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
+  const isRol = useIsAssignedRolAndSent();
   const { user } = useContext(StaticDataContext);
 
   if (oppgave === undefined) {

@@ -4,7 +4,7 @@ import { DropZone } from '@app/components/documents/new-documents/shared/drop-zo
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDropOnDocument } from '@app/hooks/use-can-document/use-can-drop-on-document';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import {
   useCreateVedleggFromJournalfoertDocumentMutation,
   useSetParentMutation,
@@ -24,7 +24,7 @@ interface Props extends ListProps {
 
 export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
   const { user } = useContext(StaticDataContext);
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
   const oppgaveId = useOppgaveId();
   const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation({
     fixedCacheKey: `createVedlegg-${document.id}`,
@@ -91,11 +91,7 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
         label={`Vedlegg for «${document.tittel}»`}
         onDrop={onDrop}
       >
-        <NewDocument
-          document={document}
-          containsRolAttachments={listProps.containsRolAttachments}
-          hasAttachments={listProps.hasAttachments}
-        />
+        <NewDocument document={document} />
 
         <AttachmentList parentDocument={document} {...listProps} />
       </DropZone>

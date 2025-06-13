@@ -1,6 +1,6 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { FlowState } from '@app/types/oppgave-common';
-import { useContext, useMemo } from 'react';
+import { useIsSentToMedunderskriver } from '@app/hooks/use-is-medunderskriver';
+import { useLazyIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useMemo } from 'react';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useNoOneCanEdit = () => {
@@ -13,33 +13,24 @@ export const useNoOneCanEdit = () => {
 };
 
 export const useCanEdit = () => {
-  const { data: oppgavebehandling, isSuccess } = useOppgave();
-  const { user } = useContext(StaticDataContext);
+  const isTildeltSaksbehandler = useLazyIsTildeltSaksbehandler();
   const noOneCanEdit = useNoOneCanEdit();
 
-  return useMemo(() => {
-    if (noOneCanEdit || !isSuccess || oppgavebehandling.saksbehandler === null) {
-      return false;
-    }
+  if (noOneCanEdit) {
+    return false;
+  }
 
-    return oppgavebehandling.saksbehandler.navIdent === user.navIdent;
-  }, [oppgavebehandling, isSuccess, user.navIdent, noOneCanEdit]);
+  return isTildeltSaksbehandler();
 };
 
 export const useCanEditBehandling = () => {
-  const { data: oppgavebehandling, isLoading: oppgavebehandlingIsLoading } = useOppgave();
-
+  const isSentToMedunderskriver = useIsSentToMedunderskriver();
   const canEdit = useCanEdit();
 
-  return useMemo(() => {
-    if (
-      oppgavebehandlingIsLoading ||
-      oppgavebehandling === undefined ||
-      oppgavebehandling.medunderskriver.flowState === FlowState.SENT
-    ) {
-      return false;
-    }
+  if (isSentToMedunderskriver) {
+    // When the case is sent to a medunderskriver, no one can edit the case.
+    return false;
+  }
 
-    return canEdit;
-  }, [canEdit, oppgavebehandling, oppgavebehandlingIsLoading]);
+  return canEdit;
 };

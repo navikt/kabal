@@ -4,7 +4,7 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { useCanEditDocument } from '@app/components/documents/journalfoerte-documents/use-can-edit';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import {
   useCreateVedleggFromJournalfoertDocumentMutation,
   useDeleteDocumentMutation,
@@ -53,7 +53,7 @@ export const UseAsAttachments = () => {
 export const useOptions = (selectedDocuments: IArkivertDocument[]): IMainDocument[] => {
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
 
   return data.filter((d) => {
     if (selectedDocuments.some((s) => !canDistributeAny(s.varianter) && d.dokumentTypeId !== DistribusjonsType.NOTAT)) {
@@ -75,7 +75,7 @@ export const useAttachVedleggFn = () => {
   const { user } = useContext(StaticDataContext);
   const { navIdent, navn } = user;
   const isFinished = useIsFullfoert();
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
 
   if (oppgaveId === skipToken) {
     return null;

@@ -35,6 +35,8 @@ export enum DistribusjonsType {
   EKSPEDISJONSBREV_TIL_TRYGDERETTEN = '10',
 }
 
+export const DISTRIBUSJONSTYPER = Object.values(DistribusjonsType);
+
 export const DISTRIBUTION_TYPE_NAMES: Record<DistribusjonsType, string> = {
   [DistribusjonsType.VEDTAKSBREV]: 'Vedtaksbrev',
   [DistribusjonsType.BESLUTNING]: 'Beslutningsbrev',
@@ -128,8 +130,11 @@ export interface JournalfoertDokument extends IBaseDocument<UUID> {
 }
 
 export type IMainDocument = IFileDocument | ISmartDocument | JournalfoertDokument;
-
+export type IAttachmentDocument = IFileDocument<string> | ISmartDocument<string> | JournalfoertDokument;
 export type IParentDocument = IFileDocument<null> | ISmartDocument<null>;
+
+export const isAttachmentDocument = (document: IMainDocument): document is IAttachmentDocument =>
+  document.parentId !== null;
 
 export interface IMergedDocumentsResponse {
   reference: string;

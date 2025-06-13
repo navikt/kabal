@@ -1,6 +1,6 @@
 import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
 import { NewDocument } from '@app/components/smart-editor/new-document/new-document';
-import { StyledTabsPanel, TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
+import { TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
 import { useFirstEditor } from '@app/components/smart-editor/tabbed-editors/use-first-editor';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
@@ -11,14 +11,13 @@ import {
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsMedunderskriver } from '@app/hooks/use-is-medunderskriver';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import { useSmartDocuments } from '@app/hooks/use-smart-documents';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
 import { Alert, Heading, Tabs, Tooltip } from '@navikt/ds-react';
 import { useEffect } from 'react';
-import { styled } from 'styled-components';
 
 const NEW_TAB_ID = 'NEW_TAB_ID';
 
@@ -58,7 +57,7 @@ const Tabbed = ({ documents }: TabbedProps) => {
   if (documents.length === 0 && !hasDocumentsAccess) {
     return (
       <PanelContainer>
-        <StyledNoDocuments>
+        <div className="bg-bg-default p-4">
           <Heading level="1" size="medium" spacing>
             Ingen redigerbare dokumenter.
           </Heading>
@@ -66,35 +65,35 @@ const Tabbed = ({ documents }: TabbedProps) => {
             Ingen redigerbare dokumenter å vise. Om du forventet å se noen dokumenter her, be saksbehandler om å
             opprette dem.
           </Alert>
-        </StyledNoDocuments>
+        </div>
       </PanelContainer>
     );
   }
 
   return (
     <PanelContainer>
-      <StyledTabs value={activeEditorId} onChange={setEditorId} size="small">
-        <StyledTabsList style={{ maxWidth: getMaxWidth(showGodeFormuleringer, showHistory) }}>
+      <Tabs className="flex h-full flex-col overflow-hidden" value={activeEditorId} onChange={setEditorId} size="small">
+        <Tabs.List className="whitespace-nowrap" style={{ maxWidth: getMaxWidth(showGodeFormuleringer, showHistory) }}>
           {documents.map(({ id, tittel }) => (
             <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
           ))}
           <TabNew />
-        </StyledTabsList>
-        <StyledTabPanels>
+        </Tabs.List>
+        <div className="grow overflow-hidden">
           {documents.map((d) => (
             <TabPanel key={d.id} smartDocument={d} />
           ))}
           <TabPanelNew onCreate={setEditorId} />
-        </StyledTabPanels>
-      </StyledTabs>
+        </div>
+      </Tabs>
     </PanelContainer>
   );
 };
 
 const TabNew = () => {
-  const isMedunderskriver = useIsMedunderskriver();
+  const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
   const isFinished = useIsFullfoert();
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
   const isFeilregistrert = useIsFeilregistrert();
   const hasDocumentsAccess = useHasDocumentsAccess();
 
@@ -114,27 +113,20 @@ interface TabPanelNewProps {
 }
 
 const TabPanelNew = ({ onCreate }: TabPanelNewProps) => {
-  const isMedunderskriver = useIsMedunderskriver();
+  const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
   const isFinished = useIsFullfoert();
-  const isRol = useIsRol();
+  const isRol = useIsAssignedRolAndSent();
 
   if ((!isFinished && isMedunderskriver) || isRol) {
     return null;
   }
 
   return (
-    <StyledTabsPanel value={NEW_TAB_ID}>
+    <Tabs.Panel className="h-full overflow-hidden" value={NEW_TAB_ID}>
       <NewDocument onCreate={onCreate} />
-    </StyledTabsPanel>
+    </Tabs.Panel>
   );
 };
-
-const StyledTabs = styled(Tabs)`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-`;
 
 const ONLY_DOCUMENT = 762;
 const HISTORY = 1_110;
@@ -158,17 +150,3 @@ const getMaxWidth = (showGodeFormuleringer: boolean, showHistory: boolean) => {
 
   return ONLY_DOCUMENT;
 };
-
-const StyledTabsList = styled(Tabs.List)`
-  white-space: nowrap;
-`;
-
-const StyledTabPanels = styled.div`
-  overflow: hidden;
-  flex-grow: 1;
-`;
-
-const StyledNoDocuments = styled.div`
-  background-color: var(--a-bg-default);
-  padding: var(--a-spacing-4);
-`;

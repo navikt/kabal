@@ -1,10 +1,8 @@
-import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { AnnenInngaaende } from '@app/components/documents/new-documents/modal/annen-inngaaende';
 import { FinishButton } from '@app/components/documents/new-documents/modal/finish-button';
 import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
 import { ConfirmInnsendingshjemler } from '@app/components/documents/new-documents/modal/innsendingshjemler';
 import { MottattDato } from '@app/components/documents/new-documents/modal/mottatt-dato';
-import { SetParentDocument } from '@app/components/documents/new-documents/modal/set-parent';
 import { SetDocumentType } from '@app/components/documents/new-documents/new-document/set-type';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
@@ -14,10 +12,9 @@ import { isSendError } from '@app/components/receivers/is-send-error';
 import { Receivers } from '@app/components/receivers/receivers';
 import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
+import type { DocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
-import { useCanEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
-import { useAttachments } from '@app/hooks/use-parent-document';
 import {
   useFinishDocumentMutation,
   useSetMottakerListMutation,
@@ -35,16 +32,14 @@ import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { DeleteDocumentButton } from './delete-button';
 
 interface Props {
   document: IMainDocument;
-  parentDocument?: IMainDocument;
-  containsRolAttachments: boolean;
+  access: DocumentAccess;
 }
 
-export const DocumentModalContent = ({ document, parentDocument, containsRolAttachments }: Props) => {
+export const DocumentModalContent = ({ document, access }: Props) => {
   const [setMottakerList, { isLoading }] = useSetMottakerListMutation();
   const [, { error: finishError }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const sendErrors = useMemo(
@@ -55,16 +50,13 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
     [finishError],
   );
   const { value: pdfWidth, setValue: setPdfWidth } = useDocumentsArchivePdfWidth();
-  const canEditDocument = useCanEditDocument(document, parentDocument);
-  const { pdfOrSmartDocuments, journalfoerteDocuments } = useAttachments(document.id);
   const [setTitle] = useSetTitleMutation();
   const oppgaveId = useOppgaveId();
   const pdfUrl =
     oppgaveId === skipToken
       ? undefined
       : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
-  const isMainDocument = document.parentId === null;
-  const { refresh, ...pdfData } = usePdfData(isMainDocument ? pdfUrl : undefined);
+  const { refresh, ...pdfData } = usePdfData(pdfUrl);
   const [innsendingshjemlerConfirmed, setInnsendingshjemlerConfirmed] = useState(false);
 
   if (oppgaveId === skipToken) {
@@ -74,22 +66,16 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
   const icon = <DocumentIcon type={document.type} />;
 
   const isNotat = document.dokumentTypeId === DistribusjonsType.NOTAT;
-  const isRolQuestions = getIsRolQuestions(document);
 
-  const hasAttachments = pdfOrSmartDocuments.length > 0 || journalfoerteDocuments.length > 0;
-
-  const canDelete = isMainDocument && containsRolAttachments ? false : canEditDocument;
-
-  const isInngående =
-    isMainDocument && document.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(document.dokumentTypeId);
+  const isInngående = document.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(document.dokumentTypeId);
 
   return (
     <>
-      <ModalBody $isMainDocument={isMainDocument}>
+      <Modal.Body className="flex h-[80vh] w-full gap-4 overflow-hidden">
         <VStack gap="4" minWidth="400px" flexShrink="0" overflowY="auto">
           <HStack align="center" gap="2">
             <Tag variant="info" size="small">
-              {isMainDocument ? DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId] : 'Vedlegg'}
+              {DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId]}
             </Tag>
             <Tag variant="info" size="small" title="Dokumenttype">
               {icon}&nbsp;{DOCUMENT_TYPE_NAMES[document.type]}
@@ -97,9 +83,10 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
             <OpprettetTag document={document} />
           </HStack>
 
-          {canEditDocument && document.type !== DocumentTypeEnum.JOURNALFOERT ? (
+          {access.rename ? (
             <HStack align="end" gap="2" wrap={false}>
-              <StyledSetFilename
+              <SetFilename
+                className="max-w-lg flex-grow"
                 tittel={document.tittel}
                 setFilename={(title) => setTitle({ oppgaveId, dokumentId: document.id, title })}
               />
@@ -113,21 +100,17 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
             </HStack>
           ) : null}
 
-          {canEditDocument && isMainDocument && !isRolQuestions ? (
-            <SetDocumentType document={document} hasAttachments={hasAttachments} showLabel />
+          {access.changeType ? <SetDocumentType document={document} showLabel /> : null}
+
+          {access.write && document.type === DocumentTypeEnum.UPLOADED ? (
+            <MottattDato document={document} oppgaveId={oppgaveId} />
           ) : null}
 
-          {canEditDocument && !isRolQuestions ? (
-            <SetParentDocument document={document} parentDocument={parentDocument} hasAttachments={hasAttachments} />
+          {document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST ? (
+            <AnnenInngaaende document={document} canEditDocument={access.write} />
           ) : null}
 
-          {canEditDocument && isInngående ? <MottattDato document={document} oppgaveId={oppgaveId} /> : null}
-
-          {isMainDocument && document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST ? (
-            <AnnenInngaaende document={document} canEditDocument={canEditDocument} />
-          ) : null}
-
-          {canEditDocument && !isNotat && !isInngående && isMainDocument ? (
+          {access.write && !isNotat && !isInngående ? (
             <Receivers
               setMottakerList={(mottakerList) => setMottakerList({ oppgaveId, dokumentId: document.id, mottakerList })}
               mottakerList={document.mottakerList}
@@ -148,19 +131,12 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
           <Errors updatePdf={refresh} />
         </VStack>
 
-        {isMainDocument ? (
-          <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />
-        ) : null}
-      </ModalBody>
+        <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />
+      </Modal.Body>
 
       <Modal.Footer>
-        {canDelete ? <DeleteDocumentButton document={document} /> : null}
-        <FinishButton
-          document={document}
-          journalfoerteDocuments={journalfoerteDocuments}
-          pdfOrSmartDocuments={pdfOrSmartDocuments}
-          innsendingshjemlerConfirmed={innsendingshjemlerConfirmed}
-        />
+        {access.remove ? <DeleteDocumentButton document={document} /> : null}
+        <FinishButton document={document} innsendingshjemlerConfirmed={innsendingshjemlerConfirmed} access={access} />
       </Modal.Footer>
     </>
   );
@@ -179,16 +155,3 @@ const OpprettetTag = ({ document }: { document: IMainDocument }) => {
     </Tag>
   );
 };
-
-const ModalBody = styled(Modal.Body)<{ $isMainDocument: boolean }>`
-  display: flex;
-  width: 100%;
-  height: ${({ $isMainDocument }) => ($isMainDocument ? '80vh' : 'auto')};
-  gap: var(--a-spacing-4);
-  overflow: hidden;
-`;
-
-const StyledSetFilename = styled(SetFilename)`
-  flex-grow: 1;
-  max-width: 512px;
-`;

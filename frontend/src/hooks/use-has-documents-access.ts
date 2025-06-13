@@ -1,16 +1,15 @@
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
+import { useLazyIsTildelt } from '@app/hooks/oppgavebehandling/use-is-tildelt';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { Role } from '@app/types/bruker';
-import type { IMainDocument } from '@app/types/documents/documents';
-import { useHasBehandlingAccess } from './oppgavebehandling/use-has-access';
+import { useIsFeilregistrert, useLazyIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
+import { useIsFullfoert, useLazyIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { useLazyIsSentToMedunderskriver } from '@app/hooks/use-is-medunderskriver';
+import { useIsRolOrKrolUser } from '@app/hooks/use-is-rol';
+import { useIsSaksbehandler, useLazyIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
 
 export const useHasDocumentsAccess = (): boolean => {
   const isFullfoert = useIsFullfoert();
-  const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
+  const isSaksbehandler = useIsSaksbehandler();
   const canEdit = useCanEditBehandling();
   const isFeilregistrert = useIsFeilregistrert();
 
@@ -19,46 +18,49 @@ export const useHasDocumentsAccess = (): boolean => {
   }
 
   if (isFullfoert) {
-    return hasSaksbehandlerRole;
+    return isSaksbehandler;
   }
 
   return canEdit;
 };
 
 export const useHasUploadAccess = (): boolean => {
-  const isFullfoert = useIsFullfoert();
-  const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
-  const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
-  const isFeilregistrert = useIsFeilregistrert();
-  const hasBehandlingAccess = useHasBehandlingAccess();
+  const isFeilregistrert = useIsFeilregistrert(); // Feilregistrert cases cannot upload documents.
+  const isRolOrKrol = useIsRolOrKrolUser(); // ROL and KROL users cannot upload documents.
 
-  if (isFeilregistrert) {
-    return false;
-  }
-
-  if (isFullfoert) {
-    return hasSaksbehandlerRole || hasOppgavestyringRole;
-  }
-
-  return hasBehandlingAccess;
+  return !isFeilregistrert && !isRolOrKrol;
 };
 
-export const useHasArchiveAccess = (document: IMainDocument): boolean => {
-  const isFullfoert = useIsFullfoert();
-  const hasSaksbehandlerRole = useHasRole(Role.KABAL_SAKSBEHANDLING);
-  const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
-  const isTildeltSaksbehandler = useIsSaksbehandler();
-  const isFeilregistrert = useIsFeilregistrert();
+export const useHasDocumentAccess = (document: IMainDocument): boolean => {
+  const isTildelt = useLazyIsTildelt();
+  const isTildeltSaksbehandler = useLazyIsTildeltSaksbehandler();
+  const isSentToMedunderskriver = useLazyIsSentToMedunderskriver();
+  const isFullfoert = useLazyIsFullfoert();
+  const isFeilregistrert = useLazyIsFeilregistrert();
+  const isRolOrKrol = useIsRolOrKrolUser();
 
-  const oppgaveStyringCanArchive = hasOppgavestyringRole && getIsIncomingDocument(document.dokumentTypeId);
-
-  if (isFeilregistrert) {
+  if (isRolOrKrol || isFeilregistrert()) {
+    // ROL and KROL users do not have access to documents.
+    // No one has access to documents in feilregistrert cases.
     return false;
   }
 
-  if (isFullfoert) {
-    return hasSaksbehandlerRole || oppgaveStyringCanArchive;
+  if (isFullfoert() || document.type === DocumentTypeEnum.UPLOADED) {
+    // Anyone, except ROL/KROL, has access to documents that are uploaded or on finished cases.
+    return true;
   }
 
-  return isTildeltSaksbehandler || oppgaveStyringCanArchive;
+  if (isTildelt()) {
+    // If the case is assigned, only the assigned saksbehandler has access.
+    return isTildeltSaksbehandler();
+  }
+
+  if (isSentToMedunderskriver()) {
+    // If the case is sent to medunderskriver, no one has access to documents.
+    return false;
+  }
+
+  // If the case is not assigned, and not sent to medunderskriver, anyone has access to its documents.
+  // Except for ROL/KROL users.
+  return true;
 };

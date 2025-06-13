@@ -9,8 +9,8 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsRol } from '@app/hooks/use-is-rol';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Role } from '@app/types/bruker';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { VStack } from '@navikt/ds-react';
@@ -31,15 +31,15 @@ interface Props {
 }
 
 const RolInternal = ({ oppgave }: Props) => {
-  const isSaksbehandler = useIsSaksbehandler();
-  const isRol = useIsRol();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
+  const isRolAndSent = useIsAssignedRolAndSent();
   const isFinished = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
   const isKrol = useHasRole(Role.KABAL_KROL);
 
   const { rol } = oppgave;
 
-  const isReadOnly = isFinished || isFeilregistrert || !(isSaksbehandler || isRol || isKrol);
+  const isReadOnly = isFinished || isFeilregistrert || !(isSaksbehandler || isRolAndSent || isKrol);
 
   if (isReadOnly) {
     if (rol.employee === null) {
