@@ -19,6 +19,7 @@ interface RecipientsProps {
   changeMottaker: (mottaker: IMottaker) => void;
   sendErrors: IErrorProperty[];
   templateId: TemplateIdEnum | undefined;
+  isLoading: boolean;
 }
 
 export const SuggestedRecipients = ({
@@ -29,6 +30,7 @@ export const SuggestedRecipients = ({
   changeMottaker,
   sendErrors,
   templateId,
+  isLoading,
 }: RecipientsProps) => {
   const onSelectedChange = useCallback(
     (idList: string[]) => {
@@ -67,6 +69,7 @@ export const SuggestedRecipients = ({
       onChange={onSelectedChange}
       data-testid="document-send-recipient-list"
       size="small"
+      disabled={isLoading}
     >
       {recipients.map(({ part, brevmottakertyper, handling, overriddenAddress }) => {
         const { id, name, statusList } = part;
