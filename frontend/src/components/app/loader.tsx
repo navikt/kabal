@@ -1,4 +1,4 @@
-import { Box, HStack, Loader } from '@navikt/ds-react';
+import { Box, HStack, Loader, VStack } from '@navikt/ds-react';
 
 interface Props {
   text: string;
@@ -7,10 +7,10 @@ interface Props {
 export const AppLoader = ({ text }: Props) => (
   <HStack asChild align="center" justify="center" height="100vh" width="100vw">
     <Box background="surface-subtle">
-      <HStack align="center">
+      <VStack align="center" justify="center">
         <Loader size="2xlarge" variant="neutral" transparent title={text} />
         <span>{text}</span>
-      </HStack>
+      </VStack>
     </Box>
   </HStack>
 );
