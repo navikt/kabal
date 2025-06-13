@@ -18,7 +18,3 @@ const toWidth = (field: Fields): string => {
 
   return size === -1 ? '1fr' : `${size}px`;
 };
-
-export const COLLAPSED_NEW_DOCUMENT_FIELDS = [Fields.Title, Fields.Action];
-export const EXPANDED_NEW_DOCUMENT_FIELDS = [Fields.Title, Fields.TypeOrDate, Fields.Action];
-export const EXPANDED_NEW_ATTACHMENT_FIELDS = [Fields.Title, Fields.TypeOrDate, Fields.Action];

@@ -15,7 +15,6 @@ import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
-  CreatorRole,
   DocumentTypeEnum,
   type IFileDocument,
   type IMainDocument,
@@ -31,7 +30,6 @@ interface DocumentWithAttachments {
   mainDocument?: IMainDocument;
   pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
   journalfoerteDocuments: JournalfoertDokument[];
-  containsRolAttachments: boolean;
 }
 
 /** Number of rows to render above and below the rendered window. */
@@ -99,7 +97,6 @@ export const NewDocuments = () => {
             mainDocument: document,
             pdfOrSmartDocuments: [],
             journalfoerteDocuments: [],
-            containsRolAttachments: false,
           });
         } else if (existing.mainDocument === undefined) {
           existing.mainDocument = document;
@@ -118,18 +115,15 @@ export const NewDocuments = () => {
         } else {
           existing.pdfOrSmartDocuments.push(document);
         }
-        existing.containsRolAttachments =
-          existing.containsRolAttachments || document.creator.creatorRole === CreatorRole.KABAL_ROL;
         continue;
       }
 
-      const containsRolAttachments = document.creator.creatorRole === CreatorRole.KABAL_ROL;
       // Unknown parent.
       _documentMap.set(
         document.parentId,
         isJournalfoertDocument
-          ? { pdfOrSmartDocuments: [], journalfoerteDocuments: [document], containsRolAttachments }
-          : { pdfOrSmartDocuments: [document], journalfoerteDocuments: [], containsRolAttachments },
+          ? { pdfOrSmartDocuments: [], journalfoerteDocuments: [document] }
+          : { pdfOrSmartDocuments: [document], journalfoerteDocuments: [] },
       );
     }
 
@@ -193,7 +187,7 @@ export const NewDocuments = () => {
         continue;
       }
 
-      const { mainDocument, pdfOrSmartDocuments, journalfoerteDocuments, containsRolAttachments } = listItem;
+      const { mainDocument, pdfOrSmartDocuments, journalfoerteDocuments } = listItem;
 
       if (mainDocument === undefined) {
         continue;
@@ -229,7 +223,6 @@ export const NewDocuments = () => {
           document={mainDocument}
           pdfOrSmartDocuments={pdfOrSmartDocuments.slice(pdfStart, pdfEnd)}
           journalfoerteDocuments={journalfoerteDocuments.slice(journalfoertStart, journalfoertEnd)}
-          containsRolAttachments={containsRolAttachments}
           key={mainDocument.id}
           style={{ top: offsetPx }}
           pdfLength={pdfLength}

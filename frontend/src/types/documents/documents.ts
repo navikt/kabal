@@ -130,8 +130,11 @@ export interface JournalfoertDokument extends IBaseDocument<UUID> {
 }
 
 export type IMainDocument = IFileDocument | ISmartDocument | JournalfoertDokument;
-
+export type IAttachmentDocument = IFileDocument<string> | ISmartDocument<string> | JournalfoertDokument;
 export type IParentDocument = IFileDocument<null> | ISmartDocument<null>;
+
+export const isAttachmentDocument = (document: IMainDocument): document is IAttachmentDocument =>
+  document.parentId !== null;
 
 export interface IMergedDocumentsResponse {
   reference: string;

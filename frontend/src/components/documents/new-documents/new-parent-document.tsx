@@ -91,11 +91,7 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
         label={`Vedlegg for «${document.tittel}»`}
         onDrop={onDrop}
       >
-        <NewDocument
-          document={document}
-          containsRolAttachments={listProps.containsRolAttachments}
-          hasAttachments={listProps.hasAttachments}
-        />
+        <NewDocument document={document} />
 
         <AttachmentList parentDocument={document} {...listProps} />
       </DropZone>

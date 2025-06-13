@@ -1,6 +1,6 @@
 import { DISTRIBUTION_TYPE_NAMES, DistribusjonsType, DocumentTypeEnum } from '@app/types/documents/documents';
 
-const OPTIONS_LIST = [
+const SMART_DOCUMENT_OPTIONS = [
   {
     label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.VEDTAKSBREV],
     value: DistribusjonsType.VEDTAKSBREV,
@@ -19,34 +19,33 @@ const OPTIONS_LIST = [
   },
 ];
 
-export const KJENNELSE_FRA_TRYGDERETTEN = {
+const KJENNELSE_FRA_TRYGDERETTEN = {
   label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN],
   value: DistribusjonsType.KJENNELSE_FRA_TRYGDERETTEN,
 };
 
-export const ANNEN_INNGAAENDE_POST = {
+const ANNEN_INNGAAENDE_POST = {
   label: DISTRIBUTION_TYPE_NAMES[DistribusjonsType.ANNEN_INNGAAENDE_POST],
   value: DistribusjonsType.ANNEN_INNGAAENDE_POST,
 };
 
+const UPLOADED_OPTIONS = [...SMART_DOCUMENT_OPTIONS, KJENNELSE_FRA_TRYGDERETTEN, ANNEN_INNGAAENDE_POST];
+
 interface Result {
-  incoming: Option[];
-  outgoing: Option[];
+  options: Option[];
   explanation: string;
 }
 
 export const useDistribusjonstypeOptions = (type: DocumentTypeEnum): Result => {
   if (type === DocumentTypeEnum.SMART) {
     return {
-      outgoing: OPTIONS_LIST,
-      incoming: [],
+      options: SMART_DOCUMENT_OPTIONS,
       explanation: 'Kan ikke endres til inngående typer fordi det er et smartdokument',
     };
   }
 
   return {
-    outgoing: OPTIONS_LIST,
-    incoming: [KJENNELSE_FRA_TRYGDERETTEN, ANNEN_INNGAAENDE_POST],
+    options: UPLOADED_OPTIONS,
     explanation: 'Kan endres til alle typer',
   };
 };

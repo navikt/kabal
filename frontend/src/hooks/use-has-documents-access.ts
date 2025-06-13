@@ -31,7 +31,7 @@ export const useHasUploadAccess = (): boolean => {
   return !isFeilregistrert && !isRolOrKrol;
 };
 
-export const useHasArchiveAccess = (document: IMainDocument): boolean => {
+export const useHasDocumentAccess = (document: IMainDocument): boolean => {
   const isTildelt = useLazyIsTildelt();
   const isTildeltSaksbehandler = useLazyIsTildeltSaksbehandler();
   const isSentToMedunderskriver = useLazyIsSentToMedunderskriver();
@@ -40,27 +40,27 @@ export const useHasArchiveAccess = (document: IMainDocument): boolean => {
   const isRolOrKrol = useIsRolOrKrolUser();
 
   if (isRolOrKrol || isFeilregistrert()) {
-    // Feilregistrert cases cannot archive documents.
-    // ROL and KROL users can never archive documents.
+    // ROL and KROL users do not have access to documents.
+    // No one has access to documents in feilregistrert cases.
     return false;
   }
 
   if (isFullfoert() || document.type === DocumentTypeEnum.UPLOADED) {
-    // Anyone, except ROL/KROL, can archive documents that are uploaded.
-    // Anyone, except ROL/KROL, can archive documents on completed cases.
+    // Anyone, except ROL/KROL, has access to documents that are uploaded or on finished cases.
     return true;
   }
 
   if (isTildelt()) {
-    // If the case is assigned, only the assigned saksbehandler can archive.
+    // If the case is assigned, only the assigned saksbehandler has access.
     return isTildeltSaksbehandler();
   }
 
   if (isSentToMedunderskriver()) {
-    // If the case is sent to medunderskriver, no one can archive documents.
+    // If the case is sent to medunderskriver, no one has access to documents.
     return false;
   }
 
-  // If the case is not assigned, and not sent to medunderskriver, anyone can archive.
+  // If the case is not assigned, and not sent to medunderskriver, anyone has access to its documents.
+  // Except for ROL/KROL users.
   return true;
 };

@@ -20,8 +20,6 @@ import { useMemo } from 'react';
 export interface ListProps {
   pdfOrSmartDocuments: (IFileDocument | ISmartDocument)[];
   journalfoerteDocuments: JournalfoertDokument[];
-  containsRolAttachments: boolean;
-
   pdfLength: number;
   journalfoertLength: number;
   pdfStart: number;
@@ -38,7 +36,6 @@ export const AttachmentList = ({
   parentDocument,
   pdfOrSmartDocuments,
   journalfoerteDocuments,
-  containsRolAttachments,
   pdfLength,
   journalfoertLength,
   pdfStart,
@@ -79,7 +76,6 @@ export const AttachmentList = ({
             key={attachment.id}
             attachment={attachment}
             parentDocument={parentDocument}
-            containsRolAttachments={containsRolAttachments}
             top={(index + pdfStart) * ROW_HEIGHT + overviewHeight}
           />
         ))}
@@ -91,7 +87,6 @@ export const AttachmentList = ({
             key={attachment.id}
             attachment={attachment}
             parentDocument={parentDocument}
-            containsRolAttachments={containsRolAttachments}
             top={(index + journalfoertStart) * ROW_HEIGHT + pdfHeight + separatorHeight + overviewHeight}
           />
         ))}
@@ -103,11 +98,10 @@ export const AttachmentList = ({
 interface AttachmentProps {
   attachment: IMainDocument;
   parentDocument: IMainDocument;
-  containsRolAttachments: boolean;
   top: number;
 }
 
-const Attachment = ({ attachment, parentDocument, containsRolAttachments, top }: AttachmentProps) => (
+const Attachment = ({ attachment, parentDocument, top }: AttachmentProps) => (
   <StyledAttachmentListItem
     key={attachment.id}
     data-testid="new-attachments-list-item"
@@ -116,11 +110,7 @@ const Attachment = ({ attachment, parentDocument, containsRolAttachments, top }:
     data-documenttype="attachment"
     style={{ top }}
   >
-    <NewAttachment
-      document={attachment}
-      parentDocument={parentDocument}
-      containsRolAttachments={containsRolAttachments}
-    />
+    <NewAttachment document={attachment} parentDocument={parentDocument} />
   </StyledAttachmentListItem>
 );
 

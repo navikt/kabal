@@ -36,4 +36,16 @@ export const useIsSentToRol = () => {
   return isSuccess && oppgave.rol.flowState === FlowState.SENT;
 };
 
+/**
+ * If the current case is returned from ROL.
+ * Not necessarily assigned to the current user, just returned.
+ */
+export const useLazyIsReturnedFromRol = () => {
+  const { data, isSuccess } = useOppgave();
+
+  return () => isSuccess && data.rol.flowState === FlowState.RETURNED;
+};
+
 export const useIsRolOrKrolUser = (): boolean => useHasAnyOfRoles([Role.KABAL_ROL, Role.KABAL_KROL]);
+export const useIsKrolUser = (): boolean => useHasAnyOfRoles([Role.KABAL_KROL]);
+export const useIsRolUser = (): boolean => useHasAnyOfRoles([Role.KABAL_ROL]);
