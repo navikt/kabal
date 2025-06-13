@@ -86,7 +86,7 @@ export const DocumentModalContent = ({ document, parentDocument, containsRolAtta
   return (
     <>
       <ModalBody $isMainDocument={isMainDocument}>
-        <VStack gap="4" minWidth="400px" flexShrink="0">
+        <VStack gap="4" minWidth="400px" flexShrink="0" overflowY="auto">
           <HStack align="center" gap="2">
             <Tag variant="info" size="small">
               {isMainDocument ? DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId] : 'Vedlegg'}
