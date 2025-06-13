@@ -1,8 +1,8 @@
-import { CustomRecipients } from '@app/components/receivers/custom-recipients';
+import { CustomReceivers } from '@app/components/receivers/custom-receivers';
 import type { IErrorProperty } from '@app/components/receivers/is-send-error';
-import { SingleRecipient } from '@app/components/receivers/single-recipient';
-import { SuggestedRecipients } from '@app/components/receivers/suggested-recipients';
-import { UnreachableSuggestedRecipients } from '@app/components/receivers/unreachable-suggested-recipients';
+import { SingleReceiver } from '@app/components/receivers/single-receiver';
+import { SuggestedReceivers } from '@app/components/receivers/suggested-receivers';
+import { UnreachableSuggestedReceivers } from '@app/components/receivers/unreachable-suggested-receivers';
 import { type IBrevmottaker, useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import { DistribusjonsType, type IMottaker } from '@app/types/documents/documents';
 import { PartStatusEnum } from '@app/types/oppgave-common';
@@ -29,16 +29,16 @@ export const Receivers = ({
 }: Props) => {
   const [suggestedBrevmottakere] = useSuggestedBrevmottakere(mottakerList, templateId);
 
-  const reachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => s.reachable);
+  const reachableSuggestedReceivers = suggestedBrevmottakere.filter((s) => s.reachable);
 
   const addMottakere = useCallback(
     (mottakere: IMottaker[]) => {
       const newMottakere =
         mottakerList.length === 0 &&
-        reachableSuggestedRecipients.length === 1 &&
+        reachableSuggestedReceivers.length === 1 &&
         dokumentTypeId !== DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN
           ? [
-              ...reachableSuggestedRecipients.filter((s) => !mottakerList.some((m) => m.part.id === s.part.id)),
+              ...reachableSuggestedReceivers.filter((s) => !mottakerList.some((m) => m.part.id === s.part.id)),
               ...mottakerList,
             ]
           : [...mottakerList];
@@ -53,7 +53,7 @@ export const Receivers = ({
 
       setMottakerList(newMottakere);
     },
-    [mottakerList, setMottakerList, reachableSuggestedRecipients, dokumentTypeId],
+    [mottakerList, setMottakerList, reachableSuggestedReceivers, dokumentTypeId],
   );
 
   const removeMottakere = useCallback(
@@ -107,24 +107,24 @@ export const Receivers = ({
   );
 
   useEffect(() => {
-    const unreachableRecipients = mottakerList.filter(
+    const unreachableReceivers = mottakerList.filter(
       (m) =>
         m.part.statusList?.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED) ??
         false,
     );
 
-    if (unreachableRecipients.length > 0) {
-      removeMottakere(unreachableRecipients.map((r) => r.part.id));
+    if (unreachableReceivers.length > 0) {
+      removeMottakere(unreachableReceivers.map((r) => r.part.id));
     }
   }, [mottakerList, removeMottakere]);
 
-  const customRecipients = mottakerList.filter((m) => suggestedBrevmottakere.every((s) => s.part.id !== m.part.id));
-  const unreachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => !s.reachable);
-  const [firstReachableRecipient, ...restReachableSuggestedRecipients] = reachableSuggestedRecipients;
-  const onlyOneReachableRecipient =
-    restReachableSuggestedRecipients.length === 0 &&
-    customRecipients.length === 0 &&
-    firstReachableRecipient !== undefined;
+  const customReceivers = mottakerList.filter((m) => suggestedBrevmottakere.every((s) => s.part.id !== m.part.id));
+  const unreachableSuggestedReceivers = suggestedBrevmottakere.filter((s) => !s.reachable);
+  const [firstReachableReceiver, ...restReachableSuggestedReceivers] = reachableSuggestedReceivers;
+  const onlyOneReachableReceiver =
+    restReachableSuggestedReceivers.length === 0 &&
+    customReceivers.length === 0 &&
+    firstReachableReceiver !== undefined;
 
   return (
     <VStack gap="4 0" position="relative" as="section">
@@ -135,16 +135,16 @@ export const Receivers = ({
         changeMottaker={changeMottaker}
         sendErrors={sendErrors}
         templateId={templateId}
-        onlyOneReachable={onlyOneReachableRecipient}
-        receivers={reachableSuggestedRecipients}
+        onlyOneReachable={onlyOneReachableReceiver}
+        receivers={reachableSuggestedReceivers}
         dokumentTypeId={dokumentTypeId}
         isLoading={isLoading}
       />
 
-      <UnreachableSuggestedRecipients recipients={unreachableSuggestedRecipients} />
+      <UnreachableSuggestedReceivers receivers={unreachableSuggestedReceivers} />
 
-      <CustomRecipients
-        mottakerList={customRecipients}
+      <CustomReceivers
+        mottakerList={customReceivers}
         addMottakere={addMottakere}
         removeMottakere={removeMottakere}
         changeMottaker={changeMottaker}
@@ -152,7 +152,7 @@ export const Receivers = ({
         templateId={templateId}
       />
 
-      {reachableSuggestedRecipients.length === 0 && customRecipients.length === 0 ? (
+      {reachableSuggestedReceivers.length === 0 && customReceivers.length === 0 ? (
         <Alert variant="warning" size="small">
           Ingen gyldige mottakere.
         </Alert>
@@ -188,7 +188,7 @@ const DefaultReceivers = ({ onlyOneReachable, receivers, dokumentTypeId, ...prop
           Forhåndsvalgt mottaker: Trygderetten
         </Alert>
 
-        <SuggestedRecipients {...props} recipients={receivers} />
+        <SuggestedReceivers {...props} receivers={receivers} />
       </>
     );
   }
@@ -196,8 +196,8 @@ const DefaultReceivers = ({ onlyOneReachable, receivers, dokumentTypeId, ...prop
   const [first, ...rest] = receivers;
 
   if (onlyOneReachable && first !== undefined) {
-    return <SingleRecipient recipient={first} changeMottaker={props.changeMottaker} templateId={props.templateId} />;
+    return <SingleReceiver receiver={first} changeMottaker={props.changeMottaker} templateId={props.templateId} />;
   }
 
-  return <SuggestedRecipients {...props} recipients={onlyOneReachable ? rest : receivers} />;
+  return <SuggestedReceivers {...props} receivers={onlyOneReachable ? rest : receivers} />;
 };

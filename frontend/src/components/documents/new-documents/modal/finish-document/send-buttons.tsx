@@ -5,7 +5,7 @@ import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottaker
 import { useFinishDocumentMutation, useSetMottakerListMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DistribusjonsType } from '@app/types/documents/documents';
-import { NO_RECIPIENTS_ERROR } from '@app/types/documents/validation';
+import { NO_RECEIVERS_ERROR } from '@app/types/documents/validation';
 import { Alert } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
@@ -23,7 +23,7 @@ export const SendButtons = ({ document }: FinishProps) => {
   const remove = useRemoveDocument();
   const { close, setValidationErrors } = useContext(ModalContext);
   const [suggestedBrevmottakere] = useSuggestedBrevmottakere(document.mottakerList, document.templateId);
-  const reachableSuggestedRecipients = suggestedBrevmottakere.filter((s) => s.reachable);
+  const reachableSuggestedReceivers = suggestedBrevmottakere.filter((s) => s.reachable);
 
   if (oppgaveIsLoading || data === undefined) {
     return null;
@@ -38,12 +38,12 @@ export const SendButtons = ({ document }: FinishProps) => {
 
     // Ekspedisjonsbrev til trygderetten will always have Trygderetten as a receiver
     if (mottakerList.length === 0 && dokumentTypeId !== DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN) {
-      if (reachableSuggestedRecipients.length !== 1) {
+      if (reachableSuggestedReceivers.length !== 1) {
         setValidationErrors([
           {
             dokumentId,
             title: documentTitle,
-            errors: [{ type: NO_RECIPIENTS_ERROR, message: 'Utsendingen må ha minst én mottaker' }],
+            errors: [{ type: NO_RECEIVERS_ERROR, message: 'Utsendingen må ha minst én mottaker' }],
           },
         ]);
 
@@ -53,7 +53,7 @@ export const SendButtons = ({ document }: FinishProps) => {
       await setMottakerList({
         oppgaveId: data.id,
         dokumentId,
-        mottakerList: reachableSuggestedRecipients,
+        mottakerList: reachableSuggestedReceivers,
       });
     }
 
@@ -84,11 +84,11 @@ export const SendButtons = ({ document }: FinishProps) => {
 
   const onFinish = async () => {
     try {
-      if (mottakerList.length === 0 && reachableSuggestedRecipients.length === 1) {
+      if (mottakerList.length === 0 && reachableSuggestedReceivers.length === 1) {
         await setMottakerList({
           oppgaveId: data.id,
           dokumentId,
-          mottakerList: reachableSuggestedRecipients,
+          mottakerList: reachableSuggestedReceivers,
         });
       }
 

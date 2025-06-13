@@ -5,11 +5,11 @@ export enum DocumentValidationErrorType {
   EMPTY_REGELVERK = 'EMPTY_REGELVERK',
   WRONG_DATE = 'WRONG_DATE',
   DOCUMENT_MODIFIED = 'DOCUMENT_MODIFIED',
-  INVALID_RECIPIENT = 'INVALID_RECIPIENT',
+  INVALID_RECEIVER = 'INVALID_RECIPIENT',
 }
 
 // Caught by frontend
-export const NO_RECIPIENTS_ERROR = 'NO_RECIPIENTS_ERROR';
+export const NO_RECEIVERS_ERROR = 'NO_RECEIVERS_ERROR';
 
 interface IValidationError {
   type: DocumentValidationErrorType;

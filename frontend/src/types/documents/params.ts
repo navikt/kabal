@@ -1,5 +1,5 @@
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import type { HandlingEnum, IAddress } from '@app/types/documents/recipients';
+import type { HandlingEnum, IAddress } from '@app/types/documents/receivers';
 import type { INavEmployee } from '../bruker';
 import type { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
 import type { IDocumentParams } from './common-params';
