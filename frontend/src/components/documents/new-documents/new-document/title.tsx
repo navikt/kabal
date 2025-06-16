@@ -89,12 +89,7 @@ export const DocumentTitle = memo(
         >
           <DocumentWarnings varianter={document.journalfoertDokumentReference.varianter} />
 
-          <TitleAction
-            editMode={editMode}
-            setEditMode={setEditMode}
-            document={document}
-            className={TITLE_ACTION_CLASSES}
-          />
+          <TitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
         </SharedDocumentTitle>
       );
     }
@@ -108,19 +103,12 @@ export const DocumentTitle = memo(
         documentId={documentId}
         type={document.type}
       >
-        <TitleAction
-          editMode={editMode}
-          setEditMode={setEditMode}
-          document={document}
-          className={TITLE_ACTION_CLASSES}
-        />
+        <TitleAction editMode={editMode} setEditMode={setEditMode} document={document} />
       </SharedDocumentTitle>
     );
   },
   (prevProps, nextProps) =>
     prevProps.document.id === nextProps.document.id && prevProps.document.tittel === nextProps.document.tittel,
 );
-
-const TITLE_ACTION_CLASSES = 'hidden group-hover:flex';
 
 DocumentTitle.displayName = 'DocumentTitle';

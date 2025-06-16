@@ -7,23 +7,36 @@ interface Props {
   document: IMainDocument;
   setEditMode: (editMode: boolean) => void;
   editMode: boolean;
-  className?: string;
 }
 
-export const TitleAction = ({ setEditMode, editMode, className, document }: Props) => {
+export const TitleAction = ({ setEditMode, editMode, document }: Props) => {
   const canEdit = useCanEditDocument(document);
   const canRename = canEdit && document.type !== DocumentTypeEnum.JOURNALFOERT;
 
   const { tittel } = document;
 
   if (!canRename) {
-    return <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" className={className} />;
+    return (
+      <CopyButton
+        copyText={tittel}
+        title="Kopier dokumentnavn"
+        size="xsmall"
+        className="w-0 shrink-0 overflow-hidden focus-within:w-fit group-hover:w-fit"
+      />
+    );
   }
 
   const Icon = editMode ? CheckmarkIcon : PencilIcon;
 
   return (
-    <HStack align="center" className={className}>
+    <HStack
+      align="center"
+      wrap={false}
+      flexShrink="0"
+      width="0"
+      overflow="hidden"
+      className="focus-within:w-fit group-hover:w-fit"
+    >
       <Button
         onClick={() => setEditMode(!editMode)}
         data-testid="document-title-edit-save-button"
