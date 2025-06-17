@@ -20,14 +20,14 @@ import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst
 import { RegelverkContainerPlugin, RegelverkPlugin } from '@app/plate/plugins/regelverk';
 import { SaksnummerPlugin } from '@app/plate/plugins/saksnummer';
 import { SignaturePlugin } from '@app/plate/plugins/signature';
-import type { IUserData } from '@app/types/bruker';
 import type { ISmartDocument } from '@app/types/documents/documents';
+import type { YjsProviderConfig } from '@platejs/yjs';
+import { YjsPlugin } from '@platejs/yjs/react';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import { BaseParagraphPlugin } from '@udecode/plate';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@udecode/plate-basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
-import { YjsPlugin } from '@udecode/plate-yjs/react';
 import { XmlText } from 'yjs';
 
 export const components = {
@@ -69,36 +69,37 @@ export const saksbehandlerPlugins = [
   SaksnummerPlugin,
 ];
 
-export const collaborationSaksbehandlerPlugins = (
-  behandlingId: string,
-  dokumentId: string,
-  smartDocument: ISmartDocument,
-  { navIdent }: IUserData,
-) => {
-  const sharedRoot = new XmlText();
-  sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
-
+export const collaborationSaksbehandlerPlugins = (providers: [YjsProviderConfig], navIdent: string) => {
   return [
     ...saksbehandlerPlugins,
     createCapitalisePlugin(navIdent),
     YjsPlugin.configure({
       options: {
-        providers: [
-          {
-            type: 'hocuspocus',
-            options: {
-              url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
-              name: dokumentId,
-              document: sharedRoot.doc ?? undefined,
-              onClose: ({ event }) => {
-                if (event.code === 4401) {
-                  window.location.assign('/oauth2/login');
-                }
-              },
-            },
-          },
-        ],
+        providers,
       },
     }),
   ];
+};
+
+export const getHocusPocusProvider = (
+  behandlingId: string,
+  dokumentId: string,
+  smartDocument: ISmartDocument,
+): YjsProviderConfig => {
+  const sharedRoot = new XmlText();
+  sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
+
+  return {
+    type: 'hocuspocus',
+    options: {
+      url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
+      name: dokumentId,
+      // document: sharedRoot.doc ?? undefined,
+      onClose: ({ event }) => {
+        if (event.code === 4401) {
+          window.location.assign('/oauth2/login');
+        }
+      },
+    },
+  };
 };

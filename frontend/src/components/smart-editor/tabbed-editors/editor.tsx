@@ -15,7 +15,11 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { KabalPlateEditor } from '@app/plate/plate-editor';
-import { collaborationSaksbehandlerPlugins, components } from '@app/plate/plugins/plugin-sets/saksbehandler';
+import {
+  collaborationSaksbehandlerPlugins,
+  components,
+  getHocusPocusProvider,
+} from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { getScaleVar } from '@app/plate/status-bar/scale-context';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
@@ -29,11 +33,11 @@ import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebeh
 import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
 import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
+import type { YjsProviderConfig } from '@platejs/yjs';
+import { YjsPlugin } from '@platejs/yjs/react';
 import { RangeApi, TextApi } from '@udecode/plate';
 import { Plate, usePlateEditor, usePluginOption } from '@udecode/plate-core/react';
-import type { YjsProviderConfig } from '@udecode/plate-yjs';
-import { YjsPlugin } from '@udecode/plate-yjs/react';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 
 interface EditorProps {
@@ -71,7 +75,8 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const { newCommentSelection } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
   const canEdit = useCanEditDocument(templateId);
-  const plugins = collaborationSaksbehandlerPlugins(oppgave.id, id, smartDocument, user);
+  const provider = getHocusPocusProvider(oppgave.id, id, smartDocument);
+  const plugins = collaborationSaksbehandlerPlugins([provider], user.navIdent);
 
   const editor = usePlateEditor<KabalValue, (typeof plugins)[0]>({
     id,
@@ -121,7 +126,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           return [];
         }}
       >
-        <PlateContext smartDocument={smartDocument} oppgave={oppgave} />
+        <PlateContext smartDocument={smartDocument} oppgave={oppgave} provider={provider} />
       </Plate>
     </VStack>
   );
@@ -130,6 +135,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 interface PlateContextProps {
   smartDocument: ISmartDocument;
   oppgave: IOppgavebehandling;
+  provider: YjsProviderConfig;
 }
 
 // Copy-paste from Plate docs
@@ -143,36 +149,32 @@ const useMounted = () => {
   return mounted;
 };
 
-const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
+const PlateContext = ({ smartDocument, oppgave, provider }: PlateContextProps) => {
   const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { showAnnotationsAtOrigin, showHistory } = useContext(SmartEditorContext);
   const [isConnected, setIsConnected] = useState(usePluginOption(YjsPlugin, '_isConnected'));
 
-  const options = usePluginOption(YjsPlugin, 'providers').find(
-    (p): p is YjsProviderConfig => p.type === 'hocuspocus',
-  )?.options;
-
   const mounted = useMounted();
+  const isInitialized = useRef(false);
   const editor = useMyPlateEditorRef();
 
   const { yjs } = editor.getApi(YjsPlugin);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!mounted) {
       return;
     }
 
+    console.log('Initializing Yjs');
+
     yjs.init();
+    isInitialized.current = true;
 
     return yjs.destroy;
-  });
+  }, [mounted, yjs]);
 
   useEffect(() => {
-    if (options === undefined) {
-      return;
-    }
-
     // Close happens after connect is broken. Safe to reconnect.
     const onClose = async () => {
       setIsConnected(false);
@@ -193,39 +195,45 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
           hasOwn(data.session, 'active') &&
           data.session.active === true
         ) {
-          options.connect();
+          console.log(`Reconnecting to Yjs provider ${provider.options.id}...`);
+
+          yjs.init();
         }
       } catch (err) {
         console.error(err);
       }
     };
 
-    options.onClose = onClose;
+    provider.options.onClose = onClose;
 
     return () => {
-      options.onClose = undefined;
+      provider.options.onClose = undefined;
     };
-  }, [options]);
+  }, [provider, yjs]);
 
   useEffect(() => {
-    if (options === undefined) {
-      return;
-    }
-
     // Disconnect happens before close. Too early to reconnect.
-    const onDisconnect = () => setIsConnected(false);
+    const onDisconnect = () => {
+      console.log(`Yjs disconnected from ${provider.options.id}`);
+
+      return setIsConnected(false);
+    };
 
     // Connect happens after connection is established.
-    const onConnect = () => setIsConnected(true);
+    const onConnect = () => {
+      console.log(`Yjs connected to ${provider.options.id}`);
 
-    options.onDisconnect = onDisconnect;
-    options.onConnect = onConnect;
+      return setIsConnected(true);
+    };
+
+    provider.options.onDisconnect = onDisconnect;
+    provider.options.onConnect = onConnect;
 
     return () => {
-      options.onDisconnect = undefined;
-      options.onConnect = undefined;
+      provider.options.onDisconnect = undefined;
+      provider.options.onConnect = undefined;
     };
-  }, [options]);
+  }, [provider]);
 
   return (
     <>

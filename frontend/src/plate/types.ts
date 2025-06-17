@@ -33,7 +33,7 @@ import type {
 } from '@udecode/plate-list-classic';
 import type { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
 
-import type { PlateYjsEditorProps } from '@udecode/plate-yjs';
+import type { PlateYjsEditorProps } from '@platejs/yjs';
 import type { TemplateSections } from './template-sections';
 
 export enum TextAlign {
