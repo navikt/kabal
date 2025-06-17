@@ -123,13 +123,7 @@ const getLog = (
     return JSON.stringify(isTeamLog ? { ...TEAM_LOG_PARMS, ...log, severity: level.toUpperCase() } : log);
   }
 
-  if (
-    module === 'http' ||
-    module === 'version' ||
-    module === 'api-proxy' ||
-    module === 'obo-token-plugin' ||
-    module === 'prepare-proxy-request-headers'
-  ) {
+  if (module !== 'crdt' && module !== 'collaboration') {
     return;
   }
 
