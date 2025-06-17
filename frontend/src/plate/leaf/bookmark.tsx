@@ -12,7 +12,7 @@ export const BookmarkLeaf = (props: PlateLeafProps<FormattedText>) => {
       {...props}
       style={{ color: bookmarks[0]?.color }}
       data-selected={leaf.selected}
-      suppressContentEditableWarning
+      attributes={{ ...props.attributes, suppressContentEditableWarning: true }}
     >
       {children}
     </PlateLeaf>

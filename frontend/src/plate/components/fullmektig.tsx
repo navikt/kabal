@@ -79,9 +79,8 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
   }
 
   return (
-    <PlateElement<FullmektigElement> asChild {...props}>
+    <PlateElement<FullmektigElement> as="div" {...props}>
       <SectionContainer data-element={props.element.type} $sectionType={SectionTypeEnum.LABEL}>
-        <NonEditable>{children[0]}</NonEditable>
         <PlaceholderContainer>
           <StyledButton
             contentEditable
@@ -106,10 +105,12 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
             }}
             icon={<ArrowUndoIcon aria-hidden />}
           />
-          <Editable>{children[1]}</Editable>
+          {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
+          <Editable>{children[0][1]}</Editable>
         </PlaceholderContainer>
         <NonEditable>: </NonEditable>
-        <Editable>{children[3]}</Editable>
+        {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
+        <Editable>{children[0][3]}</Editable>
 
         {canManage ? (
           <SectionToolbar>

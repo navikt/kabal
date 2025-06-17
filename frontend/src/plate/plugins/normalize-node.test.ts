@@ -14,7 +14,7 @@ import type {
   RedigerbarMaltekstElement,
 } from '@app/plate/types';
 import { createPlateEditor } from '@udecode/plate-core/react';
-import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
+import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list-classic';
 
 const createEditor = (value: KabalValue) => createPlateEditor({ plugins: [normalizeNodePlugin], value });
 

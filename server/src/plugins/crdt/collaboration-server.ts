@@ -10,7 +10,7 @@ import { getDocumentJson, setDocument } from '@app/plugins/crdt/api/set-document
 import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
 import { getValkeyExtension } from '@app/plugins/crdt/valkey';
 import type { CloseEvent } from '@hocuspocus/common';
-import { Server } from '@hocuspocus/server';
+import { Hocuspocus } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
 
 const log = getLogger('collaboration');
@@ -133,7 +133,7 @@ const createRefreshTimeout = async (context: ConnectionContext, expiresIn: numbe
   context.abortController = abortController;
 };
 
-export const collaborationServer = Server.configure({
+export const collaborationServer = new Hocuspocus({
   debounce: 3_000,
   maxDebounce: 15_000,
 

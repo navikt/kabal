@@ -74,10 +74,13 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
   return (
     <PlateElement<MaltekstseksjonElement>
       {...props}
-      asChild
-      contentEditable={!editor.api.isReadOnly()}
-      suppressContentEditableWarning
-      onDragStart={onPlateContainerDragStart}
+       as="div"
+      attributes={{
+        ...props.attributes,
+        contentEditable: !editor.api.isReadOnly(),
+        suppressContentEditableWarning: true,
+        onDragStart: onPlateContainerDragStart,
+      }}
     >
       <MaltekstseksjonContainer
         data-element={element.type}

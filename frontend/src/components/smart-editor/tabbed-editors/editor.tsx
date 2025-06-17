@@ -15,24 +15,29 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { KabalPlateEditor } from '@app/plate/plate-editor';
-import { collaborationSaksbehandlerPlugins, components } from '@app/plate/plugins/plugin-sets/saksbehandler';
+import {
+  collaborationSaksbehandlerPlugins,
+  components,
+  getHocusPocusProvider,
+} from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { getScaleVar } from '@app/plate/status-bar/scale-context';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
-import type { KabalValue, RichTextEditor } from '@app/plate/types';
+import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
 import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
+import type { YjsProviderConfig } from '@platejs/yjs';
+import { YjsPlugin } from '@platejs/yjs/react';
 import { RangeApi, TextApi } from '@udecode/plate';
-import { Plate, useEditorRef, usePlateEditor } from '@udecode/plate-core/react';
-import { YjsPlugin } from '@udecode/plate-yjs/react';
-import { useContext, useEffect, useState } from 'react';
+import { Plate, usePlateEditor, usePluginOption } from '@udecode/plate-core/react';
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 
 interface EditorProps {
@@ -70,7 +75,8 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const { newCommentSelection } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
   const canEdit = useCanEditDocument(templateId);
-  const plugins = collaborationSaksbehandlerPlugins(oppgave.id, id, smartDocument, user);
+  const provider = getHocusPocusProvider(oppgave.id, id, smartDocument);
+  const plugins = collaborationSaksbehandlerPlugins([provider], user.navIdent);
 
   const editor = usePlateEditor<KabalValue, (typeof plugins)[0]>({
     id,
@@ -79,6 +85,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
       components,
     },
     value: smartDocument.content,
+    skipInitialization: true,
   });
 
   return (
@@ -119,7 +126,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           return [];
         }}
       >
-        <PlateContext smartDocument={smartDocument} oppgave={oppgave} />
+        <PlateContext smartDocument={smartDocument} oppgave={oppgave} provider={provider} />
       </Plate>
     </VStack>
   );
@@ -128,50 +135,44 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 interface PlateContextProps {
   smartDocument: ISmartDocument;
   oppgave: IOppgavebehandling;
+  provider: YjsProviderConfig;
 }
 
-const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
+// Copy-paste from Plate docs
+const useMounted = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return mounted;
+};
+
+const PlateContext = ({ smartDocument, oppgave, provider }: PlateContextProps) => {
   const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { showAnnotationsAtOrigin, showHistory } = useContext(SmartEditorContext);
-  const editor = useEditorRef(id);
-  const options = editor.getOptions(YjsPlugin);
-  const [isConnected, setIsConnected] = useState(options.provider.isConnected);
+  const [isConnected, setIsConnected] = useState(usePluginOption(YjsPlugin, '_isConnected'));
 
-  // useEffect(() => {
-  //   const onChange: OnChangeFn = ({ added, removed, updated }) => {
-  //     const states = editor.awareness.getStates();
+  const mounted = useMounted();
+  const isInitialized = useRef(false);
+  const editor = useMyPlateEditorRef();
 
-  //     requestAnimationFrame(() => {
-  //       cursorStore.store.setState((draft) => {
-  //         for (const a of [...added, ...updated]) {
-  //           const cursor = states.get(a);
+  const { yjs } = editor.getApi(YjsPlugin);
 
-  //           if (isYjsCursor(cursor) && cursor.data.tabId !== TAB_UUID) {
-  //             draft[a] = {
-  //               ...cursor,
-  //               selection: relativeRangeToSlateRange(
-  //                 options.provider.document.get('content', XmlText),
-  //                 editor,
-  //                 cursor.selection,
-  //               ),
-  //             };
-  //           }
-  //         }
+  useLayoutEffect(() => {
+    if (!mounted) {
+      return;
+    }
 
-  //         for (const r of removed) {
-  //           delete draft[r];
-  //         }
-  //       });
-  //     });
-  //   };
+    console.log('Initializing Yjs');
 
-  //   editor.awareness.on('change', onChange);
+    yjs.init();
+    isInitialized.current = true;
 
-  //   return () => {
-  //     editor.awareness.off('change', onChange);
-  //   };
-  // }, [editor, editor.awareness]);
+    return yjs.destroy;
+  }, [mounted, yjs]);
 
   useEffect(() => {
     // Close happens after connect is broken. Safe to reconnect.
@@ -194,35 +195,45 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
           hasOwn(data.session, 'active') &&
           data.session.active === true
         ) {
-          options.provider.connect();
+          console.log(`Reconnecting to Yjs provider ${provider.options.id}...`);
+
+          yjs.init();
         }
       } catch (err) {
         console.error(err);
       }
     };
 
-    options.provider.on('close', onClose);
+    provider.options.onClose = onClose;
 
     return () => {
-      options.provider.off('close', onClose);
+      provider.options.onClose = undefined;
     };
-  }, [options.provider]);
+  }, [provider, yjs]);
 
   useEffect(() => {
     // Disconnect happens before close. Too early to reconnect.
-    const onDisconnect = () => setIsConnected(false);
+    const onDisconnect = () => {
+      console.log(`Yjs disconnected from ${provider.options.id}`);
+
+      return setIsConnected(false);
+    };
 
     // Connect happens after connection is established.
-    const onConnect = () => setIsConnected(true);
+    const onConnect = () => {
+      console.log(`Yjs connected to ${provider.options.id}`);
 
-    options.provider.on('disconnect', onDisconnect);
-    options.provider.on('connect', onConnect);
+      return setIsConnected(true);
+    };
+
+    provider.options.onDisconnect = onDisconnect;
+    provider.options.onConnect = onConnect;
 
     return () => {
-      options.provider.off('disconnect', onDisconnect);
-      options.provider.off('connect', onConnect);
+      provider.options.onDisconnect = undefined;
+      provider.options.onConnect = undefined;
     };
-  }, [options.provider]);
+  }, [provider]);
 
   return (
     <>
@@ -275,14 +286,6 @@ const PlateContext = ({ smartDocument, oppgave }: PlateContextProps) => {
   );
 };
 
-// interface ChangeSet {
-//   added: number[];
-//   removed: number[];
-//   updated: number[];
-// }
-
-// type OnChangeFn = (changeset: ChangeSet) => void;
-
 interface EditorWithNewCommentAndFloatingToolbarProps {
   id: string;
   isConnected: boolean;
@@ -293,43 +296,6 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithN
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const lang = useSmartEditorSpellCheckLanguage();
 
-  // const editor = useMyPlateEditorRef(id);
-
-  // useEffect(() => {
-  //   const onChange: OnChangeFn = ({ added, removed, updated }) => {
-  //     const states = editor.awareness.getStates();
-
-  //     requestAnimationFrame(() => {
-  //       cursorStore.store.setState((draft) => {
-  //         for (const a of [...added, ...updated]) {
-  //           const cursor = states.get(a);
-
-  //           if (isYjsCursor(cursor) && cursor.data.tabId !== TAB_UUID) {
-  //             draft[a] = {
-  //               ...cursor,
-  //               selection: relativeRangeToSlateRange(
-  //                 options.provider.document.get('content', XmlText),
-  //                 editor,
-  //                 cursor.selection,
-  //               ),
-  //             };
-  //           }
-  //         }
-
-  //         for (const r of removed) {
-  //           delete draft[r];
-  //         }
-  //       });
-  //     });
-  //   };
-
-  //   editor.awareness.on('change', onChange);
-
-  //   return () => {
-  //     editor.awareness.off('change', onChange);
-  //   };
-  // }, [editor, editor.awareness]);
-
   useEffect(() => {
     sheetRef.current = containerElement;
   }, [containerElement, sheetRef]);
@@ -338,11 +304,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithN
     <Sheet ref={setContainerElement} $minHeight data-component="sheet" className="mr-4">
       <FloatingSaksbehandlerToolbar container={containerElement} editorId={id} />
       <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
-
       <KabalPlateEditor id={id} readOnly={!(canEdit && isConnected)} lang={lang} />
-
-      {/* Not needed for now - only one person will edit at a time */}
-      {/* {containerElement === null ? null : <CursorOverlay containerElement={containerElement} />} */}
     </Sheet>
   );
 };
