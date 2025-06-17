@@ -21,6 +21,7 @@ export const DocumentLink = ({ active = false, disabled = false, children, href,
       align="center"
       overflow="hidden"
       height="100%"
+      wrap={false}
       className={active ? ACTIVE_CLASSES : INACTIVE_CLASSES}
     >
       <a {...rest} href={href}>
@@ -41,7 +42,7 @@ interface EllipsisTitleProps {
 }
 
 export const EllipsisTitle = ({ children, ...rest }: EllipsisTitleProps) => (
-  <span {...rest} className="overflow-hidden text-ellipsis">
+  <span {...rest} className="overflow-hidden text-ellipsis whitespace-nowrap">
     {children}
   </span>
 );

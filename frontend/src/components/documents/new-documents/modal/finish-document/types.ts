@@ -1,9 +1,9 @@
-import type { IMainDocument } from '@app/types/documents/documents';
+import type { IDocument } from '@app/types/documents/documents';
 import { DocumentValidationErrorType, type NO_RECEIVERS_ERROR } from '@app/types/documents/validation';
 import { type ApiError, isApiDataError } from '@app/types/errors';
 
 export interface FinishProps {
-  document: IMainDocument;
+  document: IDocument;
 }
 
 export interface ValidationError {

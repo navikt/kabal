@@ -4,7 +4,14 @@ import { formatEmployeeName } from '@app/domain/employee-name';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import type { DocumentsChangedEvent } from '@app/redux-api/server-sent-events/types';
 import { reduxStore } from '@app/redux/configure-store';
-import { DISTRIBUTION_TYPE_NAMES, DocumentTypeEnum, type IMainDocument } from '@app/types/documents/documents';
+import {
+  DISTRIBUTION_TYPE_NAMES,
+  DocumentTypeEnum,
+  type IDocument,
+  type IFileDocument,
+  type ISmartDocument,
+  type JournalfoertDokument,
+} from '@app/types/documents/documents';
 import { Tag } from '@navikt/ds-react';
 
 export const handleDocumentsChangedEvent = (oppgaveId: string, userId: string) => (event: DocumentsChangedEvent) => {
@@ -21,6 +28,26 @@ export const handleDocumentsChangedEvent = (oppgaveId: string, userId: string) =
           handleToast(document, update, event.actor, draft);
         }
 
+        if (document.type === DocumentTypeEnum.SMART) {
+          if (update.parentId === null) {
+            return {
+              ...document,
+              parentId: null,
+              dokumentTypeId: update.dokumentTypeId,
+              tittel: update.tittel,
+              isMarkertAvsluttet: update.isMarkertAvsluttet,
+            } satisfies ISmartDocument<null>;
+          }
+
+          return {
+            ...document,
+            parentId: update.parentId,
+            dokumentTypeId: update.dokumentTypeId,
+            tittel: update.tittel,
+            isMarkertAvsluttet: update.isMarkertAvsluttet,
+          } satisfies ISmartDocument<string>;
+        }
+
         if (document.type === DocumentTypeEnum.JOURNALFOERT) {
           return {
             ...document,
@@ -28,16 +55,29 @@ export const handleDocumentsChangedEvent = (oppgaveId: string, userId: string) =
             dokumentTypeId: update.dokumentTypeId,
             tittel: update.tittel,
             isMarkertAvsluttet: update.isMarkertAvsluttet,
-          };
+          } satisfies JournalfoertDokument;
         }
 
-        return {
-          ...document,
-          parentId: update.parentId,
-          dokumentTypeId: update.dokumentTypeId,
-          tittel: update.tittel,
-          isMarkertAvsluttet: update.isMarkertAvsluttet,
-        };
+        if (document.type === DocumentTypeEnum.UPLOADED) {
+          if (update.parentId === null) {
+            return {
+              ...document,
+              parentId: null,
+              dokumentTypeId: update.dokumentTypeId,
+              tittel: update.tittel,
+              isMarkertAvsluttet: update.isMarkertAvsluttet,
+            } satisfies IFileDocument<null>;
+          }
+          return {
+            ...document,
+            parentId: update.parentId,
+            dokumentTypeId: update.dokumentTypeId,
+            tittel: update.tittel,
+            isMarkertAvsluttet: update.isMarkertAvsluttet,
+          } satisfies IFileDocument<string>;
+        }
+
+        return document;
       }),
     ),
   );
@@ -46,7 +86,7 @@ export const handleDocumentsChangedEvent = (oppgaveId: string, userId: string) =
 type Update = DocumentsChangedEvent['documents'][0];
 type Actor = DocumentsChangedEvent['actor'];
 
-const handleToast = (document: IMainDocument, update: Update, actor: Actor, draft: IMainDocument[]) => {
+const handleToast = (document: IDocument, update: Update, actor: Actor, draft: IDocument[]) => {
   if (update.isMarkertAvsluttet && !document.isMarkertAvsluttet && document.parentId === null) {
     const vedleggCount = draft.filter((d) => d.parentId === document.id).length;
 

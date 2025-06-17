@@ -1,5 +1,5 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useIsRol } from '@app/hooks/use-is-rol';
+import { useIsAssignedRol } from '@app/hooks/use-is-rol';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
 import { FlowState } from '@app/types/oppgave-common';
 import { ArrowRedoIcon } from '@navikt/aksel-icons';
@@ -12,11 +12,11 @@ interface Props {
 }
 
 export const TakeFromSaksbehandler = ({ oppgaveId, variant = 'primary' }: Props) => {
-  const isRol = useIsRol();
+  const isAssignedRol = useIsAssignedRol();
   const [setRolState, { isLoading }] = useSetRolStateMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
   const { data: oppgave, isSuccess } = useOppgave();
 
-  if (!isSuccess || !isRol) {
+  if (!isSuccess || !isAssignedRol) {
     return null;
   }
 

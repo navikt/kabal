@@ -4,7 +4,7 @@ import { DeleteButton } from '@app/components/smart-editor/comments/delete-butto
 import { WriteComment } from '@app/components/smart-editor/comments/write-comment/write-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isoDateTimeToPretty } from '@app/domain/date';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useUpdateCommentOrReplyMutation } from '@app/redux-api/smart-editor-comments';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { BodyLong, HStack, VStack } from '@navikt/ds-react';
@@ -22,7 +22,7 @@ export const Comment = ({ isExpanded, isMain, comment }: Props) => {
   const { author, modified, text, id } = comment;
   const { user } = useContext(StaticDataContext);
   const { editingComment, setEditingComment } = useContext(SmartEditorContext);
-  const isSaksbehandler = useIsSaksbehandler();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
   const [, status] = useUpdateCommentOrReplyMutation({ fixedCacheKey: comment.id });
 
   const isAuthor = author.ident === user.navIdent;

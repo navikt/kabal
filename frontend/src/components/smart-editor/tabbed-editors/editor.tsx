@@ -24,7 +24,7 @@ import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
-import type { ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
@@ -36,7 +36,7 @@ import { useContext, useEffect, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 
 interface EditorProps {
-  smartDocument: ISmartDocument;
+  smartDocument: ISmartDocumentOrAttachment;
   scalingGroup: ScalingGroup;
 }
 
@@ -126,7 +126,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 };
 
 interface PlateContextProps {
-  smartDocument: ISmartDocument;
+  smartDocument: ISmartDocumentOrAttachment;
   oppgave: IOppgavebehandling;
 }
 

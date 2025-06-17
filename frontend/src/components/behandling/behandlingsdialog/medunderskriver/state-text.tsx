@@ -1,4 +1,4 @@
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { Alert } from '@navikt/ds-react';
@@ -20,7 +20,7 @@ export const MedunderskriverStateText = ({ medunderskriver, typeId }: Props) => 
 };
 
 const useText = ({ employee, flowState }: IMedunderskriverRol, typeId: SaksTypeEnum): string => {
-  const isSaksbehandler = useIsSaksbehandler();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
 
   switch (flowState) {
     case FlowState.NOT_SENT:

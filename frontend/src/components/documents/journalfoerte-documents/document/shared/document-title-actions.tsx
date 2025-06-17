@@ -27,7 +27,14 @@ export const DocumentTitleActions = ({ setEditMode, hasAccess, tittel }: Props) 
   }
 
   return (
-    <HStack align="center" wrap={false} className="hidden group-hover:flex">
+    <HStack
+      align="center"
+      wrap={false}
+      flexShrink="0"
+      width="0"
+      overflow="hidden"
+      className="focus-within:w-fit group-hover:w-fit"
+    >
       <Button
         onClick={() => setEditMode(true)}
         icon={<PencilIcon aria-hidden className="text-large" />}

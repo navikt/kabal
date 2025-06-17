@@ -1,11 +1,16 @@
+import type { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { useOppgave } from './oppgavebehandling/use-oppgave';
 
-export const useIsFeilregistrert = (): boolean => {
-  const { data: oppgave } = useOppgave();
+export const useLazyIsFeilregistrert = () => {
+  const { data, isSuccess } = useOppgave();
 
-  if (typeof oppgave === 'undefined') {
-    return false;
-  }
-
-  return oppgave.feilregistrering !== null;
+  return () => isSuccess && getIsFeilregistrert(data.feilregistrering);
 };
+
+export const useIsFeilregistrert = (): boolean => {
+  const isLazyFeilregistrert = useLazyIsFeilregistrert();
+
+  return isLazyFeilregistrert();
+};
+
+export const getIsFeilregistrert = (feilregistrering: IFeilregistrering | null): boolean => feilregistrering !== null;

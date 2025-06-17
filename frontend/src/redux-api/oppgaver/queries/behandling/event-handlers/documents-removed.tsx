@@ -9,7 +9,7 @@ import {
   DISTRIBUTION_TYPE_NAMES,
   DOCUMENT_TYPE_NAMES,
   DocumentTypeEnum,
-  type IMainDocument,
+  type IDocument,
   type IParentDocument,
 } from '@app/types/documents/documents';
 import { Tag } from '@navikt/ds-react';
@@ -26,9 +26,9 @@ export const handleDocumentsRemovedEvent = (oppgaveId: string, userId: string) =
       }
 
       const removedParentDocuments: IParentDocument[] = [];
-      const removedVedlegg: IMainDocument[] = [];
+      const removedVedlegg: IDocument[] = [];
 
-      const filteredList: IMainDocument[] = [];
+      const filteredList: IDocument[] = [];
 
       for (const d of documents) {
         if (event.idList.includes(d.id)) {
@@ -52,8 +52,8 @@ export const handleDocumentsRemovedEvent = (oppgaveId: string, userId: string) =
 const handleToast = (
   actor: INavEmployee,
   removedParentDocuments: IParentDocument[],
-  removedVedlegg: IMainDocument[],
-  documents: IMainDocument[],
+  removedVedlegg: IDocument[],
+  documents: IDocument[],
 ) => {
   if (removedParentDocuments.length === 0) {
     const vedleggCount = removedVedlegg.length;
@@ -121,9 +121,9 @@ const handleToast = (
   }
 };
 
-const isParentDocument = (document: IMainDocument): document is IParentDocument => document.parentId === null;
+const isParentDocument = (document: IDocument): document is IParentDocument => document.parentId === null;
 
-const ACTION: Record<IMainDocument['type'], string> = {
+const ACTION: Record<IDocument['type'], string> = {
   [DocumentTypeEnum.JOURNALFOERT]: 'fjernet',
   [DocumentTypeEnum.UPLOADED]: 'slettet',
   [DocumentTypeEnum.SMART]: 'slettet',

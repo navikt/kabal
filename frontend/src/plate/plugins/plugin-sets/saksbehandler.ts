@@ -23,7 +23,7 @@ import { RegelverkContainerPlugin, RegelverkPlugin } from '@app/plate/plugins/re
 import { SaksnummerPlugin } from '@app/plate/plugins/saksnummer';
 import { SignaturePlugin } from '@app/plate/plugins/signature';
 import type { IUserData } from '@app/types/bruker';
-import type { ISmartDocument } from '@app/types/documents/documents';
+import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import { BaseParagraphPlugin } from '@udecode/plate';
 import { HEADING_KEYS } from '@udecode/plate-heading';
@@ -74,7 +74,7 @@ export const saksbehandlerPlugins = [
 export const collaborationSaksbehandlerPlugins = (
   behandlingId: string,
   dokumentId: string,
-  smartDocument: ISmartDocument,
+  smartDocument: ISmartDocumentOrAttachment,
   { navIdent, navn }: IUserData,
 ) => {
   const sharedRoot = new XmlText();

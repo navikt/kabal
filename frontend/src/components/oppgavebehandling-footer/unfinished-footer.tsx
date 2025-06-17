@@ -4,7 +4,7 @@ import { FeilregistrerButton } from '@app/components/oppgavebehandling-footer/fe
 import { FinishButton } from '@app/components/oppgavebehandling-footer/finish-button';
 import { NewAnkebehandlingButton } from '@app/components/oppgavebehandling-footer/new-ankebehandling-button';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { HStack } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
@@ -15,11 +15,11 @@ import { FooterType, StyledFooter } from './styled-components';
 import { ValidationSummaryPopup } from './validation-summary-popup';
 
 export const UnfinishedFooter = () => {
-  const { data: oppgave } = useOppgave();
-  const isSaksbehandler = useIsSaksbehandler();
+  const { data: oppgave, isSuccess } = useOppgave();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
   const footerType = useFooterType();
 
-  if (typeof oppgave === 'undefined') {
+  if (!isSuccess) {
     return null;
   }
 
