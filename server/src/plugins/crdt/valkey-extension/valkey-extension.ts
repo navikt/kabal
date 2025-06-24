@@ -2,7 +2,6 @@ import { randomUUID } from 'node:crypto';
 import { getLogger } from '@app/logger';
 import type { ValkeyOptions } from '@app/plugins/crdt/valkey-extension/types';
 import {
-  Debugger,
   type Document,
   type Extension,
   type Hocuspocus,
@@ -161,7 +160,7 @@ export class ValkeyExtension implements Extension {
       return;
     }
 
-    new MessageReceiver(message, new Debugger(), this.#valkeyTransactionOrigin).apply(document, undefined, (reply) =>
+    new MessageReceiver(message, this.#valkeyTransactionOrigin).apply(document, undefined, (reply) =>
       this.#pub.publish(this.#getKey(document.name), this.#encodeMessage(reply)),
     );
   }

@@ -25,6 +25,7 @@ import { versionPlugin } from '@app/plugins/version/version';
 import { processErrors } from '@app/process-errors';
 import { EmojiIcons, sendToSlack } from '@app/slack';
 import cors from '@fastify/cors';
+import fastifyWebsocket from '@fastify/websocket';
 import { fastify } from 'fastify';
 import metricsPlugin from 'fastify-metrics';
 
@@ -41,6 +42,7 @@ if (isDeployed) {
 const bodyLimit = 300 * 1024 * 1024; // 300 MB
 
 fastify({ trustProxy: true, querystringParser, bodyLimit })
+  .register(fastifyWebsocket)
   .register(cors, corsOptions)
   .register(healthPlugin)
   .register(metricsPlugin, {

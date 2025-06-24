@@ -1,6 +1,3 @@
-import type { IncomingMessage } from 'node:http';
-import { Socket } from 'node:net';
-import type { Duplex } from 'node:stream';
 import { getCacheKey } from '@app/auth/cache/cache';
 import { getAzureADClient } from '@app/auth/get-auth-client';
 import { refreshOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
@@ -22,12 +19,8 @@ import { Type, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import fastifyPlugin from 'fastify-plugin';
 import type { FastifyRequest } from 'fastify/types/request';
-import WebSocket from 'ws';
 // biome-ignore lint/style/noNamespaceImport: https://tiptap.dev/docs/hocuspocus/getting-started#backend
 import * as Y from 'yjs';
-
-const UPGRADE_MAP: Map<IncomingMessage, { socket: Duplex; head: Buffer }> = new Map();
-const UPGRADE_TIMEOUT = 1_000;
 
 export const CRDT_PLUGIN_ID = 'crdt';
 
@@ -119,88 +112,44 @@ export const crdtPlugin = fastifyPlugin(
       },
     );
 
-    const wss = new WebSocket.Server({ noServer: true });
-
-    app.server.on('upgrade', (rawRequest, socket, head) => {
-      UPGRADE_MAP.set(rawRequest, { socket, head });
-
-      // Make sure the upgrade request is deleted, even if the handler does not.
-      setTimeout(() => {
-        if (UPGRADE_MAP.has(rawRequest)) {
-          log.warn({ msg: 'Upgrade request timed out' });
-          UPGRADE_MAP.delete(rawRequest);
-        }
-      }, UPGRADE_TIMEOUT);
-    });
-
     app.withTypeProvider<TypeBoxTypeProvider>().get(
       '/collaboration/behandlinger/:behandlingId/dokumenter/:dokumentId',
       {
+        websocket: true,
         schema: {
           tags: ['collaboration'],
           params: Type.Object({ behandlingId: Type.String(), dokumentId: Type.String() }),
         },
       },
-      async (req, reply) => {
-        const upgradeData = UPGRADE_MAP.get(req.raw);
-        UPGRADE_MAP.delete(req.raw);
-
-        if (upgradeData === undefined) {
-          return reply.code(400).send('No upgrade data found');
-        }
-
+      async (socket, req) => {
         const { behandlingId, dokumentId } = req.params;
         logReq('Websocket connection init', req, { behandlingId, dokumentId }, 'debug');
 
-        const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API, reply);
+        const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API);
 
         if (isDeployed && oboAccessToken === undefined) {
           const msg = 'Tried to authenticate collaboration connection without OBO access token';
           logReq(msg, req, { behandlingId, dokumentId }, 'warn');
 
-          return reply.code(401).send('Unauthorized');
+          return socket.close(4401, msg);
         }
 
-        const { socket, head } = upgradeData;
+        logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId }, 'debug');
 
-        try {
-          const webSocket = await new Promise<WebSocket>((resolve, reject) => {
-            wss.handleUpgrade(req.raw, socket, head, (ws) => {
-              wss.emit('connection', socket, req.raw);
+        const { navIdent, trace_id, span_id, tab_id, client_version, headers } = req;
 
-              socket.on('error', (error) => {
-                app.log.error(error);
-                reject(error);
-              });
+        const context: ConnectionContext = {
+          behandlingId,
+          dokumentId,
+          trace_id,
+          span_id,
+          tab_id,
+          client_version,
+          navIdent,
+          cookie: headers.cookie,
+        };
 
-              resolve(ws);
-            });
-          });
-
-          reply.raw.assignSocket(new Socket(socket));
-
-          reply.hijack();
-
-          logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId }, 'debug');
-
-          const { navIdent, trace_id, span_id, tab_id, client_version, headers } = req;
-
-          const context: ConnectionContext = {
-            behandlingId,
-            dokumentId,
-            trace_id,
-            span_id,
-            tab_id,
-            client_version,
-            navIdent,
-            cookie: headers.cookie,
-          };
-
-          collaborationServer.handleConnection(webSocket, req.raw, context);
-        } catch (e) {
-          reply.code(500).send(e instanceof Error ? e.message : 'Internal Server Error');
-          console.error(e);
-        }
+        collaborationServer.handleConnection(socket, req.raw, context);
       },
     );
 

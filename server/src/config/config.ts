@@ -42,8 +42,8 @@ export const NAIS_CLUSTER_NAME = requiredEnvString('NAIS_CLUSTER_NAME', defaultV
 export const START_TIME = Date.now();
 
 export const TEAM_LOG_PARMS = {
-  google_cloud_project: requiredEnvString('GOOGLE_CLOUD_PROJECT', isTest ? '' : undefined),
-  nais_namespace_name: requiredEnvString('NAIS_NAMESPACE', isTest ? '' : undefined),
-  nais_pod_name: requiredEnvString('HOSTNAME', isTest ? '' : undefined),
-  nais_container_name: requiredEnvString('NAIS_APP_NAME', isTest ? '' : undefined),
+  google_cloud_project: requiredEnvString('GOOGLE_CLOUD_PROJECT', isTest || isLocal ? '' : undefined),
+  nais_namespace_name: requiredEnvString('NAIS_NAMESPACE', isTest || isLocal ? '' : undefined),
+  nais_pod_name: requiredEnvString('HOSTNAME', isTest || isLocal ? '' : undefined),
+  nais_container_name: requiredEnvString('NAIS_APP_NAME', isTest || isLocal ? '' : undefined),
 };
