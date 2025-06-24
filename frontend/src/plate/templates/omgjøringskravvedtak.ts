@@ -2,7 +2,7 @@ import { deepFreeze } from '@app/functions/deep-freeze';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { Value } from '@udecode/plate';
+import type { Value } from 'platejs';
 import { TemplateSections } from '../template-sections';
 import { LabelContentSource } from '../types';
 import {

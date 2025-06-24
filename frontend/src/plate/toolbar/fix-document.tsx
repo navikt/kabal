@@ -2,9 +2,9 @@ import { toast } from '@app/components/toast/store';
 import { pushEvent, pushLog } from '@app/observability';
 import { nodeNormalize } from '@app/plate/plugins/normalize-node';
 import { LogLevel } from '@grafana/faro-web-sdk';
+import type { PlateEditor } from '@platejs/core/react';
 import type { skipToken } from '@reduxjs/toolkit/query';
-import { type Descendant, ElementApi } from '@udecode/plate';
-import type { PlateEditor } from '@udecode/plate-core/react';
+import { type Descendant, ElementApi } from 'platejs';
 import { Scrubber } from 'slate';
 
 export const fixDocument = (editor: PlateEditor, id?: string | typeof skipToken) => {

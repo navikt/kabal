@@ -1,5 +1,5 @@
 import { Signature } from '@app/plate/components/signature/signature';
-import { createPlatePlugin } from '@udecode/plate-core/react';
+import { createPlatePlugin } from '@platejs/core/react';
 import { ELEMENT_SIGNATURE } from './element-types';
 
 export const SignaturePlugin = createPlatePlugin({

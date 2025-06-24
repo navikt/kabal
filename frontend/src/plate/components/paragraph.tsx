@@ -1,9 +1,8 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import type { ParagraphElement, PlaceholderElement } from '@app/plate/types';
-import { TextApi } from '@udecode/plate';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { TextApi } from 'platejs';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { type ElementRef, forwardRef } from 'react';
-import { styled } from 'styled-components';
 
 type RenderProps = PlateElementProps<ParagraphElement>;
 
@@ -12,36 +11,26 @@ export const Paragraph = forwardRef<ElementRef<typeof PlateElement>, RenderProps
   const indent = ptToEm((element.indent ?? 0) * 24);
 
   return (
-    <PlateElement {...props} asChild ref={ref}>
-      <StyledParagraph
-        style={{
-          marginLeft: element.align !== 'right' ? indent : undefined,
-          marginRight: element.align === 'right' ? indent : undefined,
-          textAlign: element.align,
-        }}
-        $isEmpty={isEmpty(element)}
-      >
-        {children}
-      </StyledParagraph>
+    <PlateElement
+      {...props}
+      as="p"
+      ref={ref}
+      style={{
+        marginLeft: element.align !== 'right' ? indent : undefined,
+        marginRight: element.align === 'right' ? indent : undefined,
+        textAlign: element.align,
+        fontSize: '1em',
+        marginTop: '1em',
+      }}
+      className="mb-0 whitespace-pre-wrap before:absolute before:cursor-text before:text-gray-500 before:content-[attr(data-placeholder)]"
+      attributes={{ ...props.attributes, 'data-placeholder': isEmpty(element) ? 'Avsnitt' : '' }}
+    >
+      {children}
     </PlateElement>
   );
 });
 
 Paragraph.displayName = 'Paragraph';
-
-export const StyledParagraph = styled.p<{ $isEmpty: boolean }>`
-  font-size: 1em;
-  white-space: pre-wrap;
-  margin-top: 1em;
-  margin-bottom: 0;
-
-  &::before {
-    position: absolute;
-    content: '${({ $isEmpty }) => ($isEmpty ? 'Avsnitt' : '')}';
-    color: var(--a-gray-500);
-    cursor: text;
-  }
-`;
 
 const isEmpty = (element: ParagraphElement | PlaceholderElement) => {
   for (const child of element.children) {

@@ -6,8 +6,8 @@ import {
 import { isInRegelverk, isInUnchangeableElement, isUndeletable } from '@app/plate/plugins/prohibit-deletion/helpers';
 import type { PlaceholderElement } from '@app/plate/types';
 import { isInList } from '@app/plate/utils/queries';
-import { ElementApi } from '@udecode/plate';
-import type { PlateEditor } from '@udecode/plate-core/react';
+import type { PlateEditor } from '@platejs/core/react';
+import { ElementApi } from 'platejs';
 import { Path, type TextDirection, type TextUnit, isEditor } from 'slate';
 
 const deleteCurrentNode = (editor: PlateEditor): void => {

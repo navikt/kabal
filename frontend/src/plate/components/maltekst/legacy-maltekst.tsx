@@ -13,8 +13,8 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
-import { ElementApi } from '@udecode/plate';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { ElementApi } from 'platejs';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useContext, useEffect } from 'react';
 
 /**
@@ -63,7 +63,11 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
 
   if (isLoading) {
     return (
-      <PlateElement<MaltekstElement> {...props} asChild suppressContentEditableWarning>
+      <PlateElement<MaltekstElement>
+        {...props}
+        as="div"
+        attributes={{ ...props.attributes, suppressContentEditableWarning: true }}
+      >
         <SectionContainer
           data-element={element.type}
           data-section={element.section}
@@ -88,9 +92,12 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
   return (
     <PlateElement<MaltekstElement>
       {...props}
-      asChild
-      contentEditable={!editor.api.isReadOnly()}
-      suppressContentEditableWarning
+      as="div"
+      attributes={{
+        ...props.attributes,
+        contentEditable: !editor.api.isReadOnly(),
+        suppressContentEditableWarning: true,
+      }}
     >
       <SectionContainer
         data-element={element.type}

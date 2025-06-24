@@ -2,8 +2,8 @@ import { merge } from '@app/functions/classes';
 import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { FormattedText } from '@app/plate/types';
-import { NodeApi } from '@udecode/plate';
-import { PlateContent, type PlateContentProps, type PlateEditor, useEditorRef } from '@udecode/plate-core/react';
+import { PlateContent, type PlateContentProps, type PlateEditor, useEditorRef } from '@platejs/core/react';
+import { NodeApi } from 'platejs';
 import type { HTMLAttributes } from 'react';
 
 interface Props extends PlateContentProps {

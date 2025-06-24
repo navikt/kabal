@@ -3,8 +3,8 @@ import { TextAlign } from '@app/plate/types';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { Value } from '@udecode/plate';
-import { BaseParagraphPlugin } from '@udecode/plate-core';
+import { BaseParagraphPlugin } from '@platejs/core';
+import type { Value } from 'platejs';
 import { DeprecatedTemplateSections, TemplateSections } from '../template-sections';
 import { LabelContentSource } from '../types';
 import {

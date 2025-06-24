@@ -1,5 +1,5 @@
 import { Keys, isMetaKey } from '@app/keys';
-import type { PlateEditor } from '@udecode/plate-core/react';
+import type { PlateEditor } from '@platejs/core/react';
 import type { KeyboardEvent } from 'react';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 

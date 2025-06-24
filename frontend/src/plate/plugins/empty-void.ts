@@ -1,6 +1,6 @@
 import { EmptyVoid } from '@app/plate/components/empty-void';
 import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
-import { createPlatePlugin } from '@udecode/plate-core/react';
+import { createPlatePlugin } from '@platejs/core/react';
 
 export const EmptyVoidPlugin = createPlatePlugin({
   key: ELEMENT_EMPTY_VOID,

@@ -1,9 +1,9 @@
-import { useEditorSelection } from '@udecode/plate-core/react';
+import { useMyPlateEditorState } from '@app/plate/types';
 import type { BaseRange } from 'slate';
 
-// useEditorSelection from @udecode/plate-common is typed as any in current version. This can be removed when it gets typed correctly.
+// Workaround while we are waiting for https://github.com/udecode/plate/issues/4140
 export const useSelection = (editorId?: string): BaseRange | null => {
-  const selection: unknown = useEditorSelection(editorId);
+  const { selection } = useMyPlateEditorState(editorId);
 
-  return selection === null ? null : (selection as BaseRange);
+  return selection;
 };

@@ -3,8 +3,8 @@ import { hasOwn } from '@app/functions/object';
 import { Keys } from '@app/keys';
 import { BookmarkLeaf } from '@app/plate/leaf/bookmark';
 import type { FormattedText } from '@app/plate/types';
-import { RangeApi, TextApi } from '@udecode/plate';
-import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
+import { type PlateEditor, createPlatePlugin } from '@platejs/core/react';
+import { RangeApi, TextApi } from 'platejs';
 
 export const BookmarkPlugin = createPlatePlugin({
   key: 'bookmark',

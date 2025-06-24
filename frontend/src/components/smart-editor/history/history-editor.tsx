@@ -12,8 +12,8 @@ import { Sheet } from '@app/plate/sheet';
 import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import type { ISmartDocument } from '@app/types/documents/documents';
 import { Button } from '@navikt/ds-react';
-import type { Value } from '@udecode/plate';
-import { Plate, usePlateEditor } from '@udecode/plate-core/react';
+import { Plate, usePlateEditor } from '@platejs/core/react';
+import type { Value } from 'platejs';
 import { memo, useContext, useEffect } from 'react';
 import { styled } from 'styled-components';
 

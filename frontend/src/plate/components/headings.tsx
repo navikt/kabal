@@ -1,76 +1,47 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { ElementApi } from '@udecode/plate';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
-import { styled } from 'styled-components';
+import { ElementApi } from 'platejs';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import type { H1Element, H2Element, H3Element, PlaceholderElement } from '../types';
 
-interface HeadingStyleProps {
-  $isEmpty: boolean;
-}
-
-const HeadingOneStyle = styled.h1<HeadingStyleProps>`
-  font-size: ${ptToEm(16)};
-  font-weight: 600;
-  margin-top: 1em;
-  margin-bottom: 0;
-
-  &::before {
-    position: absolute;
-    content: '${({ $isEmpty }) => ($isEmpty ? 'Dokumenttittel / Overskrift 1' : '')}';
-    color: var(--a-gray-500);
-    cursor: text;
-  }
-`;
+const CLASSNAMES =
+  'font-semibold mt-4 mb-0 before:absolute before:text-gray-500 before:cursor-text before:content-[attr(data-placeholder)] ';
 
 export const HeadingOne = ({ children, element, ...props }: PlateElementProps<H1Element>) => (
-  <PlateElement<H1Element> {...props} element={element} asChild>
-    <HeadingOneStyle $isEmpty={isEmpty(element)} style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}>
-      {children}
-    </HeadingOneStyle>
+  <PlateElement
+    {...props}
+    element={element}
+    as="h1"
+    style={{ fontSize: ptToEm(16), marginTop: '1em', marginLeft: ptToEm((element.indent ?? 0) * 24) }}
+    className={CLASSNAMES}
+    attributes={{ ...props.attributes, 'data-placeholder': isEmpty(element) ? 'Dokumenttittel / Overskrift 1' : '' }}
+  >
+    {children}
   </PlateElement>
 );
-
-const HeadingTwoStyle = styled.h2<HeadingStyleProps>`
-  font-size: ${ptToEm(14)};
-  font-weight: 600;
-  margin-top: 1em;
-  margin-bottom: 0;
-
-  &::before {
-    position: absolute;
-    content: '${({ $isEmpty }) => ($isEmpty ? 'Overskrift 2' : '')}';
-    color: var(--a-gray-500);
-    cursor: text;
-  }
-`;
 
 export const HeadingTwo = ({ children, element, ...props }: PlateElementProps<H2Element>) => (
-  <PlateElement {...props} element={element} asChild>
-    <HeadingTwoStyle $isEmpty={isEmpty(element)} style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}>
-      {children}
-    </HeadingTwoStyle>
+  <PlateElement
+    {...props}
+    element={element}
+    as="h2"
+    style={{ fontSize: ptToEm(14), marginLeft: ptToEm((element.indent ?? 0) * 24) }}
+    className={CLASSNAMES}
+    attributes={{ ...props.attributes, 'data-placeholder': isEmpty(element) ? 'Overskrift 2' : '' }}
+  >
+    {children}
   </PlateElement>
 );
 
-const HeadingThreeStyle = styled.h3<HeadingStyleProps>`
-  font-size: 1em;
-  font-weight: 600;
-  margin-top: 1em;
-  margin-bottom: 0;
-
-  &::before {
-    position: absolute;
-    content: '${({ $isEmpty }) => ($isEmpty ? 'Overskrift 3' : '')}';
-    color: var(--a-gray-500);
-    cursor: text;
-  }
-`;
-
 export const HeadingThree = ({ children, element, ...props }: PlateElementProps<H3Element>) => (
-  <PlateElement {...props} element={element} asChild>
-    <HeadingThreeStyle $isEmpty={isEmpty(element)} style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}>
-      {children}
-    </HeadingThreeStyle>
+  <PlateElement
+    {...props}
+    element={element}
+    as="h3"
+    style={{ fontSize: ptToEm(12), marginLeft: ptToEm((element.indent ?? 0) * 24) }}
+    className={CLASSNAMES}
+    attributes={{ ...props.attributes, 'data-placeholder': isEmpty(element) ? 'Overskrift 3' : '' }}
+  >
+    {children}
   </PlateElement>
 );
 

@@ -1,7 +1,7 @@
 import { useSelection } from '@app/plate/hooks/use-selection';
 import type { RichTextEditor } from '@app/plate/types';
 import { Button } from '@navikt/ds-react';
-import type { Value } from '@udecode/plate';
+import type { Value } from 'platejs';
 import { styled } from 'styled-components';
 import { insertGodFormulering } from './insert';
 

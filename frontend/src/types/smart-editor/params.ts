@@ -1,5 +1,5 @@
 import type { Language } from '@app/types/texts/language';
-import type { Descendant } from '@udecode/plate';
+import type { Descendant } from 'platejs';
 import type { Role } from '../bruker';
 import type { DistribusjonsType } from '../documents/documents';
 import type { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';

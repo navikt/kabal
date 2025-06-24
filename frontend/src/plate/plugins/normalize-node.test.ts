@@ -13,8 +13,8 @@ import type {
   ParagraphElement,
   RedigerbarMaltekstElement,
 } from '@app/plate/types';
-import { createPlateEditor } from '@udecode/plate-core/react';
-import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
+import { createPlateEditor } from '@platejs/core/react';
+import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 
 const createEditor = (value: KabalValue) => createPlateEditor({ plugins: [normalizeNodePlugin], value });
 

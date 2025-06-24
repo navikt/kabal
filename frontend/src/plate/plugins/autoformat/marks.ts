@@ -1,4 +1,4 @@
-import { BaseBoldPlugin, BaseItalicPlugin, BaseUnderlinePlugin } from '@udecode/plate-basic-marks';
+import { BaseBoldPlugin, BaseItalicPlugin, BaseUnderlinePlugin } from '@platejs/basic-nodes';
 import type { EditorAutoformatRule } from '../../types';
 
 export const autoformatMarks: EditorAutoformatRule[] = [

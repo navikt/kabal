@@ -1,7 +1,7 @@
 import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import type { FormattedText } from '@app/plate/types';
-import { PlateLeaf, type PlateLeafProps } from '@udecode/plate/react';
+import { PlateLeaf, type PlateLeafProps } from 'platejs/react';
 import { useContext, useMemo } from 'react';
 
 export const CommentLeaf = (props: PlateLeafProps<FormattedText>) => {
@@ -25,17 +25,20 @@ export const CommentLeaf = (props: PlateLeafProps<FormattedText>) => {
             : getBackgroundColor(commentIds.length, isCommentFocused),
       }}
       data-selected={leaf.selected}
-      suppressContentEditableWarning
-      onMouseDown={(e) => {
-        e.stopPropagation();
+      attributes={{
+        ...props.attributes,
+        suppressContentEditableWarning: true,
+        onMouseDown: (e) => {
+          e.stopPropagation();
 
-        if (commentIds.length === 0) {
-          return;
-        }
+          if (commentIds.length === 0) {
+            return;
+          }
 
-        setTimeout(() => {
-          setFocusedThreadId(commentIds.at(-1) ?? null);
-        }, 50);
+          setTimeout(() => {
+            setFocusedThreadId(commentIds.at(-1) ?? null);
+          }, 50);
+        },
       }}
     >
       {children}

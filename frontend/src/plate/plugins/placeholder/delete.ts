@@ -3,7 +3,7 @@ import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { getPlaceholderEntry } from '@app/plate/plugins/placeholder/queries';
 import type { PlaceholderElement } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
-import type { PlateEditor } from '@udecode/plate-core/react';
+import type { PlateEditor } from '@platejs/core/react';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE);
 

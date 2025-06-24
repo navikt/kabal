@@ -1,7 +1,7 @@
 import { Regelverk, RegelverkContainer } from '@app/plate/components/regelverk';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { ElementApi, type NodeEntry } from '@udecode/plate';
-import { createPlatePlugin } from '@udecode/plate-core/react';
+import { createPlatePlugin } from '@platejs/core/react';
+import { ElementApi, type NodeEntry } from 'platejs';
 import { ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from './element-types';
 
 export const RegelverkPlugin = createPlatePlugin({

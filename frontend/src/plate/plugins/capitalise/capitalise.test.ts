@@ -13,9 +13,9 @@ import {
   createSimpleParagraph,
 } from '@app/plate/templates/helpers';
 import { type KabalValue, type ParagraphElement, TextAlign } from '@app/plate/types';
-import { BaseParagraphPlugin } from '@udecode/plate-core';
-import { type PlateEditor, createPlateEditor } from '@udecode/plate-core/react';
-import { HEADING_KEYS } from '@udecode/plate-heading';
+import { BaseH1Plugin } from '@platejs/basic-nodes';
+import { BaseParagraphPlugin } from '@platejs/core';
+import { type PlateEditor, createPlateEditor } from '@platejs/core/react';
 import type { Point, Selection } from 'slate';
 
 const plugins = [createCapitalisePlugin('some user')];
@@ -113,7 +113,7 @@ describe('capitalise', () => {
       editor.tf.insertText('start');
 
       expect(editor.children).toEqual([
-        { type: HEADING_KEYS.h1, children: [{ text: 'S', autoCapitalised: true }, { text: 'tart' }] },
+        { type: BaseH1Plugin.key, children: [{ text: 'S', autoCapitalised: true }, { text: 'tart' }] },
       ]);
     });
 

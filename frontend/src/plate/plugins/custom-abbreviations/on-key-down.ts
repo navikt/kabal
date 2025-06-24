@@ -1,7 +1,7 @@
 import { Keys } from '@app/keys';
 import { pushEvent } from '@app/observability';
 import { getAbbreviationData } from '@app/plate/plugins/custom-abbreviations/get-short-and-long';
-import type { PlateEditor } from '@udecode/plate-core/react';
+import type { PlateEditor } from '@platejs/core/react';
 
 export const onKeyDown = (editor: PlateEditor, e: React.KeyboardEvent) => {
   if (e.defaultPrevented) {

@@ -5,7 +5,7 @@ import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
-import { NodeApi, type TNode } from '@udecode/plate';
+import { NodeApi, type TNode } from 'platejs';
 import { styled } from 'styled-components';
 
 interface Props {

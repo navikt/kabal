@@ -8,8 +8,8 @@ import { isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
 import { PencilWritingIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, TextField } from '@navikt/ds-react';
-import { RangeApi } from '@udecode/plate';
-import { useEditorRef } from '@udecode/plate-core/react';
+import { useEditorRef } from '@platejs/core/react';
+import { RangeApi } from 'platejs';
 import { useRef, useState } from 'react';
 
 export const InsertPlaceholder = () => {

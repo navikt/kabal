@@ -7,7 +7,7 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, BookmarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Tooltip } from '@navikt/ds-react';
-import { TextApi } from '@udecode/plate';
+import { TextApi } from 'platejs';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 

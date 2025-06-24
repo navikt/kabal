@@ -38,19 +38,19 @@ import { isOfElementTypesFn } from '@app/plate/utils/queries';
 import { reduxStore } from '@app/redux/configure-store';
 import { isGenericObject } from '@app/types/types';
 import { LogLevel } from '@grafana/faro-web-sdk';
-import { ElementApi, NodeApi } from '@udecode/plate';
-import type { TElement, TNode } from '@udecode/plate';
-import { BaseParagraphPlugin } from '@udecode/plate-core';
-import { type OverrideEditor, type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
-import { HEADING_KEYS } from '@udecode/plate-heading';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseParagraphPlugin } from '@platejs/core';
+import { type OverrideEditor, type PlateEditor, createPlatePlugin } from '@platejs/core/react';
 import {
   BaseBulletedListPlugin,
   BaseListItemContentPlugin,
   BaseListItemPlugin,
   BaseNumberedListPlugin,
-} from '@udecode/plate-list';
-import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
-import { TableCellPlugin } from '@udecode/plate-table/react';
+} from '@platejs/list-classic';
+import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
+import { TableCellPlugin } from '@platejs/table/react';
+import { ElementApi, NodeApi } from 'platejs';
+import type { TElement, TNode } from 'platejs';
 import { type Path, Scrubber, isEditor } from 'slate';
 
 const module = 'normalize';
@@ -223,9 +223,9 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
         break;
       // Use extensive case instead of default in order to avoid inserting wrong node type when a new element type is introduced
       case BaseParagraphPlugin.node.type:
-      case HEADING_KEYS.h1:
-      case HEADING_KEYS.h2:
-      case HEADING_KEYS.h3:
+      case BaseH1Plugin.key:
+      case BaseH2Plugin.key:
+      case BaseH3Plugin.key:
       case BaseListItemContentPlugin.node.type:
       case ELEMENT_PLACEHOLDER:
       case ELEMENT_PAGE_BREAK:

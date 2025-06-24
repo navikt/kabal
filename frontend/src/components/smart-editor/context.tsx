@@ -9,7 +9,7 @@ import {
 import { DistribusjonsType, type ISmartDocument } from '@app/types/documents/documents';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { TRange } from '@udecode/plate';
+import type { TRange } from 'platejs';
 import { type MutableRefObject, createContext, useRef, useState } from 'react';
 
 const noop = () => {};

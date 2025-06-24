@@ -13,7 +13,7 @@ import {
   handleDeleteForwardInUndeletable,
 } from '@app/plate/plugins/prohibit-deletion/undeletable';
 import { isUnchangeable } from '@app/plate/utils/queries';
-import { type OverrideEditor, createPlatePlugin } from '@udecode/plate-core/react';
+import { type OverrideEditor, createPlatePlugin } from '@platejs/core/react';
 import type { EditorFragmentDeletionOptions } from 'slate';
 
 const withOverrides: OverrideEditor = ({ editor }) => {

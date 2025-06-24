@@ -11,8 +11,8 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon, PadlockUnlockedIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { ElementApi } from '@udecode/plate';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { ElementApi } from 'platejs';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useContext, useMemo } from 'react';
 
 export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
@@ -64,13 +64,16 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
   return (
     <PlateElement<MaltekstElement>
       {...props}
-      asChild
-      contentEditable={!readOnly}
-      suppressContentEditableWarning
-      onDragStart={(event) => event.preventDefault()}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      as="div"
+      attributes={{
+        ...props.attributes,
+        contentEditable: !readOnly,
+        suppressContentEditableWarning: true,
+        onDragStart: (event) => event.preventDefault(),
+        onDrop: (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        },
       }}
     >
       <SectionContainer

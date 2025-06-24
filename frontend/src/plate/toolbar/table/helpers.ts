@@ -1,7 +1,7 @@
 import type { RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
 import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
-import type { NodeEntry, TNode } from '@udecode/plate';
-import { BaseTableCellPlugin, BaseTableRowPlugin } from '@udecode/plate-table';
+import { BaseTableCellPlugin, BaseTableRowPlugin } from '@platejs/table';
+import type { NodeEntry, TNode } from 'platejs';
 import { Path } from 'slate';
 
 const findPath = (editor: RichTextEditor, node: TNode | undefined = undefined): Path | undefined =>

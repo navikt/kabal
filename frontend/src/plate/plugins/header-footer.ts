@@ -1,6 +1,6 @@
 import { HeaderFooter } from '@app/plate/components/header-footer';
 import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
-import { createPlatePlugin } from '@udecode/plate-core/react';
+import { createPlatePlugin } from '@platejs/core/react';
 
 export const HeaderPlugin = createPlatePlugin({
   key: ELEMENT_HEADER,

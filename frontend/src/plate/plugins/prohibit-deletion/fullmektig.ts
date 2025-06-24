@@ -1,5 +1,5 @@
 import { ELEMENT_FULLMEKTIG, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import type { PlateEditor } from '@udecode/plate-core/react';
+import type { PlateEditor } from '@platejs/core/react';
 
 export const handleDeleteBackwardInFullmektig = (editor: PlateEditor): boolean => {
   if (editor.selection === null) {

@@ -1,6 +1,6 @@
 import type { RichTextEditor, TableElement } from '@app/plate/types';
-import { RangeApi, type TRange } from '@udecode/plate';
-import { BaseTablePlugin } from '@udecode/plate-table';
+import { BaseTablePlugin } from '@platejs/table';
+import { RangeApi, type TRange } from 'platejs';
 import { type BasePoint, Range } from 'slate';
 
 export const getSelectionStart = (editor: RichTextEditor, selection: TRange): BasePoint | null => {

@@ -1,6 +1,6 @@
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
-import { TextApi } from '@udecode/plate';
+import { TextApi } from 'platejs';
 
 export const useBookmarks = (): [string, FormattedText[]][] => {
   const editor = useMyPlateEditorState();

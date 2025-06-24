@@ -1,17 +1,10 @@
 import type { IShownArchivedDocument } from '@app/components/view-pdf/types';
-import { ELEMENT_LABEL_CONTENT } from '@app/plate/plugins/element-types';
-import { type KabalValue, TextAlign } from '@app/plate/types';
+import type { KabalValue } from '@app/plate/types';
 import type { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
 import type { IDocumentParams } from '@app/types/documents/common-params';
-import type {
-  IMainDocument,
-  IMergedDocumentsResponse,
-  ISmartDocument,
-  ISmartDocumentVersion,
-} from '@app/types/documents/documents';
+import type { IMainDocument, IMergedDocumentsResponse, ISmartDocumentVersion } from '@app/types/documents/documents';
 import type { IGetVersionParams } from '@app/types/documents/params';
 import type { IValidateDocumentResponse } from '@app/types/documents/validation';
-import { BaseParagraphPlugin } from '@udecode/plate-core';
 import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
@@ -23,40 +16,14 @@ const dokumenterListTags = (type: DokumenterListTagTypes) => (result: IArkiverte
         .map(({ journalpostId, dokumentInfoId }) => ({ id: `${journalpostId}-${dokumentInfoId}`, type }))
         .concat({ type, id: ListTagTypes.PARTIAL_LIST });
 
-// TODO: Remove this when we are sure that there are no documents in progress that was created before 13.10.2023.
-const transformResponse = (document: IMainDocument): IMainDocument => {
-  if (!document.isSmartDokument) {
-    return document;
-  }
-
-  const smartDocument: ISmartDocument = {
-    ...document,
-    content: document.content.map((content) => {
-      if (content.type === ELEMENT_LABEL_CONTENT) {
-        return {
-          type: BaseParagraphPlugin.key,
-          align: TextAlign.LEFT,
-          children: [{ text: '' }, content, { text: '' }],
-        };
-      }
-
-      return content;
-    }),
-  };
-
-  return smartDocument;
-};
-
 export const documentsQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     getDocument: builder.query<IMainDocument, IDocumentParams>({
       query: ({ oppgaveId, dokumentId }) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}`,
-      transformResponse,
     }),
     getDocuments: builder.query<IMainDocument[], string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter`,
-      transformResponse: (documents: IMainDocument[]) => documents.map(transformResponse),
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
 

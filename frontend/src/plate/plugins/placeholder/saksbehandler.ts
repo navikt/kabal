@@ -3,8 +3,8 @@ import { SaksbehandlerPlaceholder } from '@app/plate/components/placeholder/plac
 import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
 import { parsers } from '@app/plate/plugins/placeholder/html-parsers';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
-import { ElementApi, type NodeEntry } from '@udecode/plate';
-import { type PlateEditor, createPlatePlugin } from '@udecode/plate-core/react';
+import { type PlateEditor, createPlatePlugin } from '@platejs/core/react';
+import { ElementApi, type NodeEntry } from 'platejs';
 import type { BasePoint } from 'slate';
 import type { PlaceholderElement } from '../../types';
 import { ELEMENT_PLACEHOLDER } from '../element-types';

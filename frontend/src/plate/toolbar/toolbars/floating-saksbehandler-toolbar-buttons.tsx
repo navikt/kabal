@@ -8,10 +8,10 @@ import { Indent } from '@app/plate/toolbar/indent';
 import { Marks } from '@app/plate/toolbar/marks';
 import { ParagraphButton } from '@app/plate/toolbar/paragraph-button';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
-import { BaseParagraphPlugin, ElementApi } from '@udecode/plate';
-import { useEditorState } from '@udecode/plate-core/react';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { useEditorState } from '@platejs/core/react';
+import { BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
+import { BaseParagraphPlugin, ElementApi } from 'platejs';
 
 export const FloatingSaksbehandlerToolbarButtons = () => {
   const editor = useEditorState();
@@ -63,7 +63,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
     );
   }
 
-  if (type === HEADING_KEYS.h1 || type === HEADING_KEYS.h2 || type === HEADING_KEYS.h3) {
+  if (type === BaseH1Plugin.key || type === BaseH2Plugin.key || type === BaseH3Plugin.key) {
     return (
       <>
         <ParagraphButton />
