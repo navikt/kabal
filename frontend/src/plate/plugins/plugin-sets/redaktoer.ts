@@ -11,19 +11,19 @@ import { PageBreakPlugin } from '@app/plate/plugins/page-break';
 import { RedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redaktoer';
 import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
 import type { IUserData } from '@app/types/bruker';
-import { BaseParagraphPlugin } from '@udecode/plate-core';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
-import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseParagraphPlugin } from '@platejs/core';
+import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
+import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 
 export const redaktørComponents = {
   [BaseParagraphPlugin.key]: Paragraph,
   [PageBreakPlugin.key]: PageBreak,
 
   // Headings
-  [HEADING_KEYS.h1]: HeadingOne,
-  [HEADING_KEYS.h2]: HeadingTwo,
-  [HEADING_KEYS.h3]: HeadingThree,
+  [BaseH1Plugin.key]: HeadingOne,
+  [BaseH2Plugin.key]: HeadingTwo,
+  [BaseH3Plugin.key]: HeadingThree,
 
   // Lists
   [BaseBulletedListPlugin.key]: UnorderedList,

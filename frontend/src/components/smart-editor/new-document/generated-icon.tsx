@@ -12,10 +12,10 @@ import {
 } from '@app/plate/plugins/element-types';
 import { LabelContentPlugin } from '@app/plate/plugins/label-content';
 import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { BaseParagraphPlugin } from '@udecode/plate';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
-import { BaseTablePlugin } from '@udecode/plate-table';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
+import { BaseTablePlugin } from '@platejs/table';
+import { BaseParagraphPlugin } from 'platejs';
 import { styled } from 'styled-components';
 
 interface GeneratedIconProps {
@@ -58,19 +58,19 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
         y += 5 + SPACING;
         break;
       }
-      case HEADING_KEYS.h1: {
+      case BaseH1Plugin.key: {
         y += SPACING;
         rects.push(h1({ type, key: i, y }));
         y += 10 + SPACING;
         break;
       }
-      case HEADING_KEYS.h2: {
+      case BaseH2Plugin.key: {
         y += 2;
         rects.push(h2({ type, key: i, y }));
         y += 7 + SPACING;
         break;
       }
-      case HEADING_KEYS.h3: {
+      case BaseH3Plugin.key: {
         y += 1;
         rects.push(h3({ type, key: i, y }));
         y += 5 + SPACING;

@@ -12,7 +12,7 @@ import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IConsumerPlainText, IConsumerText } from '@app/types/texts/consumer';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 
 const lexSpecialis = (enhetId: string, texts: IConsumerPlainText[]): IConsumerPlainText | null => {
@@ -97,12 +97,15 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
   return (
     <PlateElement<ElementTypes>
       {...props}
-      asChild
-      contentEditable={false}
-      onDragStart={(event) => event.preventDefault()}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      as="div"
+      attributes={{
+        ...props.attributes,
+        contentEditable: false,
+        onDragStart: (event) => event.preventDefault(),
+        onDrop: (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        },
       }}
     >
       <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.FOOTER}>

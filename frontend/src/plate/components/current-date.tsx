@@ -1,7 +1,7 @@
 import { formatLongDate, zeroPad } from '@app/domain/date';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import type { CurrentDateElement } from '@app/plate/types';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { styled } from 'styled-components';
@@ -46,12 +46,15 @@ const RenderCurrentDate = memo<Props & DateParts>(
       <PlateElement<CurrentDateElement>
         {...props}
         as="div"
-        contentEditable={false}
-        suppressContentEditableWarning
-        onDragStart={(event) => event.preventDefault()}
-        onDrop={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
+        attributes={{
+          ...props.attributes,
+          contentEditable: false,
+          suppressContentEditableWarning: true,
+          onDragStart: (event) => event.preventDefault(),
+          onDrop: (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          },
         }}
       >
         {children}

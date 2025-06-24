@@ -1,5 +1,4 @@
-import { StyledParagraph } from '@app/plate/components/paragraph';
-import { useEditorReadOnly } from '@udecode/plate-core/react';
+import { useEditorReadOnly } from '@platejs/core/react';
 import type { HtmlHTMLAttributes } from 'react';
 import { css, styled } from 'styled-components';
 
@@ -117,7 +116,7 @@ const sectionContainerCss = css`
   user-select: text;
 
   /* Hide empty paragraph placeholders */
-  &[data-element='maltekst'] ${StyledParagraph}::before {
+  &[data-element='maltekst'] p::before {
     content: '';
   }
 `;

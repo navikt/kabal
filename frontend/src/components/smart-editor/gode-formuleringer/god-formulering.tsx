@@ -10,7 +10,7 @@ import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { CalendarIcon, ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Heading, Tag, VStack } from '@navikt/ds-react';
-import { Plate, usePlateEditor } from '@udecode/plate-core/react';
+import { Plate, usePlateEditor } from '@platejs/core/react';
 import { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 

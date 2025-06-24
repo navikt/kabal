@@ -12,7 +12,7 @@ import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IRichText, IText } from '@app/types/texts/responses';
 import { Box, Heading, Loader, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { Plate, usePlateEditor } from '@udecode/plate/react';
+import { Plate, usePlateEditor } from 'platejs/react';
 import { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 

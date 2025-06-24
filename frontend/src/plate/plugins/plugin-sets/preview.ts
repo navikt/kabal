@@ -10,10 +10,10 @@ import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
 import { SaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/saksbehandler';
 import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
 import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
-import { BaseParagraphPlugin } from '@udecode/plate-core';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
-import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseParagraphPlugin } from '@platejs/core';
+import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
+import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 
 export const previewPlugins = [
   ...defaultPlugins,
@@ -28,9 +28,9 @@ export const previewComponents = {
   [BaseParagraphPlugin.key]: Paragraph,
 
   // Headings
-  [HEADING_KEYS.h1]: HeadingOne,
-  [HEADING_KEYS.h2]: HeadingTwo,
-  [HEADING_KEYS.h3]: HeadingThree,
+  [BaseH1Plugin.key]: HeadingOne,
+  [BaseH2Plugin.key]: HeadingTwo,
+  [BaseH3Plugin.key]: HeadingThree,
 
   // Lists
   [BaseBulletedListPlugin.key]: UnorderedList,

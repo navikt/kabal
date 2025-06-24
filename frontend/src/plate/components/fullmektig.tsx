@@ -8,7 +8,7 @@ import { type FullmektigElement, type PlaceholderElement, useMyPlateEditorRef } 
 import { isOfElementType } from '@app/plate/utils/queries';
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Loader } from '@navikt/ds-react';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useContext, useEffect } from 'react';
 import { styled } from 'styled-components';
 
@@ -79,9 +79,8 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
   }
 
   return (
-    <PlateElement<FullmektigElement> asChild {...props}>
+    <PlateElement<FullmektigElement> as="div" {...props}>
       <SectionContainer data-element={props.element.type} $sectionType={SectionTypeEnum.LABEL}>
-        <NonEditable>{children[0]}</NonEditable>
         <PlaceholderContainer>
           <StyledButton
             contentEditable
@@ -106,10 +105,12 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
             }}
             icon={<ArrowUndoIcon aria-hidden />}
           />
-          <Editable>{children[1]}</Editable>
+          {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
+          <Editable>{children[0][1]}</Editable>
         </PlaceholderContainer>
         <NonEditable>: </NonEditable>
-        <Editable>{children[3]}</Editable>
+        {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
+        <Editable>{children[0][3]}</Editable>
 
         {canManage ? (
           <SectionToolbar>

@@ -3,7 +3,7 @@ import type { RootElement } from '@app/plate/types';
 import { nextPath } from '@app/plate/utils/queries';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
-import { type PlateEditor, useEditorReadOnly } from '@udecode/plate/react';
+import { type PlateEditor, useEditorReadOnly } from 'platejs/react';
 
 interface Props {
   element: RootElement;

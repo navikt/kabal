@@ -2,8 +2,8 @@ import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { CommentsPlugin } from '@app/plate/plugins/comments';
 import { getLong } from '@app/plate/plugins/custom-abbreviations/get-long';
 import type { FormattedText } from '@app/plate/types';
-import { type NodeEntry, PathApi, RangeApi } from '@udecode/plate';
-import type { PlateEditor } from '@udecode/plate-core/react';
+import type { PlateEditor } from '@platejs/core/react';
+import { type NodeEntry, PathApi, RangeApi } from 'platejs';
 import type { Range } from 'slate';
 
 type Marks = Omit<FormattedText, 'text'>;

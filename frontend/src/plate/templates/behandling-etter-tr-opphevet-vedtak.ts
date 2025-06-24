@@ -12,7 +12,7 @@ import {
 import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { Value } from '@udecode/plate';
+import type { Value } from 'platejs';
 
 const INITIAL_SLATE_VALUE: Value = [
   createCurrentDate(),

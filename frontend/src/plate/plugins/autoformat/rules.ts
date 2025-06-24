@@ -5,7 +5,7 @@ import {
   autoformatLegalHtml,
   autoformatMath,
   autoformatPunctuation,
-} from '@udecode/plate-autoformat';
+} from '@platejs/autoformat';
 import type { EditorAutoformatRule } from '../../types';
 import { autoformatBlocks } from './blocks';
 import { autoformatLists } from './lists';

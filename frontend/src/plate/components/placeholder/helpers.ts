@@ -2,8 +2,8 @@ import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@app/functions/remove-em
 import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
 import type { EditorDescendant, FormattedText, MaltekstElement, PlaceholderElement } from '@app/plate/types';
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
-import { ElementApi, NodeApi, type TElement } from '@udecode/plate';
-import type { PlateEditor } from '@udecode/plate-core/react';
+import type { PlateEditor } from '@platejs/core/react';
+import { ElementApi, NodeApi, type TElement } from 'platejs';
 import { Path } from 'slate';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b

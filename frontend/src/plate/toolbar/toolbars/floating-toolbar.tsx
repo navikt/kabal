@@ -7,7 +7,7 @@ import { FloatingRedaktoerToolbarButtons } from '@app/plate/toolbar/toolbars/flo
 import { FloatingSaksbehandlerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-saksbehandler-toolbar-buttons';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { Box, HStack } from '@navikt/ds-react';
-import { BaseTablePlugin } from '@udecode/plate-table';
+import { BaseTablePlugin } from '@platejs/table';
 import { useMemo, useState } from 'react';
 
 interface Props {

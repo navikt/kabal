@@ -1,5 +1,5 @@
 import type { MaltekstseksjonElement } from '@app/plate/types';
-import type { PlateEditor } from '@udecode/plate/react';
+import type { PlateEditor } from 'platejs/react';
 import { useEffect, useRef } from 'react';
 import { Path } from 'slate';
 

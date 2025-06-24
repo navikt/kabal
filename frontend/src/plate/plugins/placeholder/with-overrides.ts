@@ -5,8 +5,8 @@ import {
   handleDeleteForwardFromOutside,
 } from '@app/plate/plugins/placeholder/delete';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
-import { type Descendant, ElementApi, type TRange, type TText } from '@udecode/plate';
-import type { OverrideEditor } from '@udecode/plate-core/react';
+import type { OverrideEditor } from '@platejs/core/react';
+import { type Descendant, ElementApi, type TRange, type TText } from 'platejs';
 import { Path } from 'slate';
 import type { MaltekstElement, PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';

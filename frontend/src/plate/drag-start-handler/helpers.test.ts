@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { BaseParagraphPlugin } from '@udecode/plate';
+import { BaseParagraphPlugin } from 'platejs';
 import { ELEMENT_MALTEKST, ELEMENT_REDIGERBAR_MALTEKST } from '../plugins/element-types';
 import { cleanHtml, containsNoopElements, htmlToString, scrubText } from './helpers';
 

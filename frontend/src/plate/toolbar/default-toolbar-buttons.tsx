@@ -17,7 +17,7 @@ import { insertPageBreak } from '@app/plate/utils/transforms';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import type { skipToken } from '@reduxjs/toolkit/query';
 import { DocumentPageBreak, TextDescription, Wand } from '@styled-icons/fluentui-system-regular';
-import { BaseParagraphPlugin } from '@udecode/plate';
+import { BaseParagraphPlugin } from 'platejs';
 import { styled } from 'styled-components';
 
 interface Props {

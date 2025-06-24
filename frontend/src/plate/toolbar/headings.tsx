@@ -4,8 +4,8 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useIsInList } from '@app/plate/toolbar/use-is-in-list';
 import { useIsInTable } from '@app/plate/toolbar/use-is-in-table';
 import { useMyPlateEditorState } from '@app/plate/types';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { TextHeader1, TextHeader2, TextHeader3 } from '@styled-icons/fluentui-system-regular';
-import { HEADING_KEYS } from '@udecode/plate-heading';
 
 export const Headings = () => {
   const editor = useMyPlateEditorState();
@@ -19,27 +19,27 @@ export const Headings = () => {
       <ToolbarIconButton
         label="Dokumenttittel / Overskrift 1"
         keys={['# + mellomrom']}
-        onClick={() => editor.tf.setNodes({ type: HEADING_KEYS.h1 })}
+        onClick={() => editor.tf.setNodes({ type: BaseH1Plugin.key })}
         icon={<TextHeader1 width={24} aria-hidden />}
-        active={useIsElementActive(HEADING_KEYS.h1)}
+        active={useIsElementActive(BaseH1Plugin.key)}
         disabled={disabled}
       />
 
       <ToolbarIconButton
         label="Overskrift 2"
         keys={['## + mellomrom']}
-        onClick={() => editor.tf.setNodes({ type: HEADING_KEYS.h2 })}
+        onClick={() => editor.tf.setNodes({ type: BaseH2Plugin.key })}
         icon={<TextHeader2 width={24} aria-hidden />}
-        active={useIsElementActive(HEADING_KEYS.h2)}
+        active={useIsElementActive(BaseH2Plugin.key)}
         disabled={disabled}
       />
 
       <ToolbarIconButton
         label="Overskrift 3"
         keys={['### + mellomrom']}
-        onClick={() => editor.tf.setNodes({ type: HEADING_KEYS.h3 })}
+        onClick={() => editor.tf.setNodes({ type: BaseH3Plugin.key })}
         icon={<TextHeader3 width={24} aria-hidden />}
-        active={useIsElementActive(HEADING_KEYS.h3)}
+        active={useIsElementActive(BaseH3Plugin.key)}
         disabled={disabled}
       />
     </>

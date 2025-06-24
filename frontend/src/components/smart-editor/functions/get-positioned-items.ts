@@ -2,7 +2,7 @@ import type { FocusedComment } from '@app/components/smart-editor/comments/use-t
 import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { calculateRangePosition } from '@app/plate/functions/range-position';
 import type { FormattedText, RichTextEditor } from '@app/plate/types';
-import { TextApi } from '@udecode/plate';
+import { TextApi } from 'platejs';
 
 export enum ItemType {
   THREAD = 'thread',

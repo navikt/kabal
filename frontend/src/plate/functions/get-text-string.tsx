@@ -2,7 +2,7 @@ import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text'
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { PlaceholderElement } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
-import { type Descendant, ElementApi, NodeApi, type Value } from '@udecode/plate';
+import { type Descendant, ElementApi, NodeApi, type Value } from 'platejs';
 
 const SPACE_REGEX = /\s+/g;
 

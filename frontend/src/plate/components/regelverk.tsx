@@ -15,7 +15,7 @@ import type { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/con
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
@@ -26,7 +26,11 @@ export const Regelverk = (props: PlateElementProps<RegelverkElement>) => {
   const { children, element } = props;
 
   return (
-    <PlateElement<RegelverkElement> {...props} onDragStart={onPlateContainerDragStart}>
+    <PlateElement<RegelverkElement>
+      {...props}
+      as="div"
+      attributes={{ ...props.attributes, onDragStart: onPlateContainerDragStart }}
+    >
       <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
         {children}
         {canManage ? (
@@ -96,7 +100,10 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
   }, [editor, element, getTexts, oppgave, query]);
 
   return (
-    <PlateElement<RegelverkContainerElement> {...props} asChild onDragStart={onPlateContainerDragStart}>
+    <PlateElement<RegelverkContainerElement>
+      {...props}
+      attributes={{ ...props.attributes, onDragStart: onPlateContainerDragStart }}
+    >
       <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type} aria-disabled={loading}>
         {children}
         {loading ? (

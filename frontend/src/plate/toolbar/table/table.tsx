@@ -14,11 +14,11 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { isOfElementTypeFn, nextPath } from '@app/plate/utils/queries';
 import { TrashIcon } from '@navikt/aksel-icons';
+import { BaseTablePlugin, deleteTable, getTableGridAbove, isTableRectangular } from '@platejs/table';
+import { TablePlugin, TableProvider } from '@platejs/table/react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
-import { ElementApi } from '@udecode/plate';
-import { BaseTablePlugin, deleteTable, getTableGridAbove, isTableRectangular } from '@udecode/plate-table';
-import { TablePlugin, TableProvider, useTableStore } from '@udecode/plate-table/react';
-import { useEditorPlugin, useEditorSelector, useReadOnly, withHOC } from '@udecode/plate/react';
+import { ElementApi } from 'platejs';
+import { useEditorPlugin, useEditorSelector, usePluginOption, useReadOnly, withHOC } from 'platejs/react';
 
 export const TableButtons = withHOC(TableProvider, () => {
   const { tf } = useEditorPlugin(TablePlugin);
@@ -166,7 +166,7 @@ export const useTableMergeState = () => {
   const selectionExpanded = useEditorSelector((editor) => editor.api.isExpanded(), []);
 
   const collapsed = !readOnly && selected && !selectionExpanded;
-  const selectedTables = useTableStore().get.selectedTables();
+  const selectedTables = usePluginOption(TablePlugin, 'selectedTables');
   const selectedTable = selectedTables?.[0];
 
   const selectedCellEntries = useEditorSelector((editor) => getTableGridAbove(editor, { format: 'cell' }), []);

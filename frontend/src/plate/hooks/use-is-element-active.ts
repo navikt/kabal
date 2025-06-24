@@ -1,4 +1,4 @@
-import { RangeApi } from '@udecode/plate';
+import { RangeApi } from 'platejs';
 import { useMyPlateEditorState } from '../types';
 
 export const useIsElementActive = (element: string) => {

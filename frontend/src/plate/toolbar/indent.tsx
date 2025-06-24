@@ -2,10 +2,10 @@ import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { type RichTextEditor, useMyPlateEditorState } from '@app/plate/types';
 import { isInList, isInTable } from '@app/plate/utils/queries';
+import { indent, outdent } from '@platejs/indent';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
+import { BaseTablePlugin } from '@platejs/table';
 import { TextIndentDecreaseLtr, TextIndentIncreaseLtr } from '@styled-icons/fluentui-system-regular';
-import { indent, outdent } from '@udecode/plate-indent';
-import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
-import { BaseTablePlugin } from '@udecode/plate-table';
 
 const isIndented = (editor: RichTextEditor) =>
   editor.api.some({

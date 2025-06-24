@@ -8,9 +8,9 @@ import type { SignatureElement } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { HStack } from '@navikt/ds-react';
-import type { SetNodesOptions } from '@udecode/plate';
-import { useEditorReadOnly } from '@udecode/plate-core/react';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { useEditorReadOnly } from '@platejs/core/react';
+import type { SetNodesOptions } from 'platejs';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useContext, useId } from 'react';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
 
@@ -56,7 +56,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const disabledCheckbox = element.enabled === false || isReadOnly;
 
   return (
-    <PlateElement<SignatureElement> {...props} asChild contentEditable={false}>
+    <PlateElement<SignatureElement> {...props} attributes={{ ...props.attributes, contentEditable: false }}>
       <SectionContainer
         data-element={element.type}
         $sectionType={SectionTypeEnum.SIGNATURE}

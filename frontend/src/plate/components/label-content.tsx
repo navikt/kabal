@@ -7,7 +7,7 @@ import { type LabelContentElement, LabelContentSource } from '@app/plate/types';
 import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useContext, useEffect, useMemo } from 'react';
 
 export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
@@ -27,12 +27,15 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   return (
     <PlateElement<LabelContentElement>
       {...props}
-      asChild
-      contentEditable={false}
-      onDragStart={(event) => event.preventDefault()}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      as="div"
+      attributes={{
+        ...props.attributes,
+        contentEditable: false,
+        onDragStart: (event) => event.preventDefault(),
+        onDrop: (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        },
       }}
     >
       <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.LABEL}>

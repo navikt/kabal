@@ -3,9 +3,9 @@ import { UNCHANGEABLE } from '@app/plate/plugins/element-types';
 import type { PageBreakElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { ElementApi, type NodeEntry } from '@udecode/plate';
-import type { PlateEditor } from '@udecode/plate-core/react';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import type { PlateEditor } from '@platejs/core/react';
+import { ElementApi, type NodeEntry } from 'platejs';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { styled } from 'styled-components';
 
 const parentIsUnchangeable = (editor: PlateEditor, entry: NodeEntry<PageBreakElement> | undefined): boolean => {
@@ -52,7 +52,7 @@ export const PageBreak = (props: PlateElementProps<PageBreakElement>) => {
   };
 
   return (
-    <PlateElement<PageBreakElement> {...props} asChild contentEditable={false}>
+    <PlateElement<PageBreakElement> {...props} as="div" attributes={{ ...props.attributes, contentEditable: false }}>
       <StyledPageBreak>
         {disableDelete ? null : (
           <StyledDeleteButton

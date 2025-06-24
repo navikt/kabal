@@ -1,6 +1,6 @@
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
 import { autoCapitalise, capitaliseWord } from '@app/plate/plugins/custom-abbreviations/auto-capitalise';
-import type { PlateEditor } from '@udecode/plate-core/react';
+import type { PlateEditor } from '@platejs/core/react';
 
 export const getLong = (editor: PlateEditor, short: string): string | null => {
   const lowerCaseShort = short.toLowerCase();

@@ -12,10 +12,11 @@ import {
   useMyPlateEditorRef,
 } from '@app/plate/types';
 import { isNodeEmpty, isOfElementTypesFn, nextPath } from '@app/plate/utils/queries';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { TableAdd } from '@styled-icons/fluentui-system-regular';
-import { BaseParagraphPlugin } from '@udecode/plate';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { BaseParagraphPlugin } from 'platejs';
+
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 
 export const InsertTableButton = () => {
   const editor = useMyPlateEditorRef();
@@ -30,9 +31,9 @@ export const InsertTableButton = () => {
     >({
       match: isOfElementTypesFn([
         BaseParagraphPlugin.node.type,
-        HEADING_KEYS.h1,
-        HEADING_KEYS.h2,
-        HEADING_KEYS.h3,
+        BaseH1Plugin.key,
+        BaseH2Plugin.key,
+        BaseH3Plugin.key,
         BaseBulletedListPlugin.node.type,
         BaseNumberedListPlugin.node.type,
       ]),

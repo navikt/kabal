@@ -10,7 +10,7 @@ import { usePostCommentMutation } from '@app/redux-api/smart-editor-comments';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { ChatElipsisIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { RangeApi } from '@udecode/plate';
+import { RangeApi } from 'platejs';
 import { useContext } from 'react';
 
 export const CommentsButton = () => {

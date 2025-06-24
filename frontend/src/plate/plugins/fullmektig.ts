@@ -1,5 +1,5 @@
 import { Fullmektig } from '@app/plate/components/fullmektig';
-import { createPlatePlugin } from '@udecode/plate-core/react';
+import { createPlatePlugin } from '@platejs/core/react';
 import { ELEMENT_FULLMEKTIG } from './element-types';
 
 export const FullmektigPlugin = createPlatePlugin({

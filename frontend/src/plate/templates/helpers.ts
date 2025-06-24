@@ -46,10 +46,10 @@ import {
   TextAlign,
 } from '@app/plate/types';
 import { Language } from '@app/types/texts/language';
-import { BaseParagraphPlugin } from '@udecode/plate-core';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@udecode/plate-list';
-import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
+import { BaseH1Plugin, BaseH2Plugin } from '@platejs/basic-nodes';
+import { BaseParagraphPlugin } from '@platejs/core';
+import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
+import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { TemplateSections } from '../template-sections';
 import { LabelContentSource } from '../types';
 
@@ -111,12 +111,12 @@ export const createRegelverk = (): RegelverkElement => ({
 });
 
 export const createHeadingOne = (text: string): H1Element => ({
-  type: HEADING_KEYS.h1,
+  type: BaseH1Plugin.key,
   children: [{ text }],
 });
 
 export const createHeadingTwo = (text: string): H2Element => ({
-  type: HEADING_KEYS.h2,
+  type: BaseH2Plugin.key,
   children: [{ text }],
 });
 

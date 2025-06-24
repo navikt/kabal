@@ -8,7 +8,7 @@ import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-set
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { FileSearchIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps, HStack } from '@navikt/ds-react';
-import { Plate, usePlateEditor } from '@udecode/plate-core/react';
+import { Plate, usePlateEditor } from '@platejs/core/react';
 import { useRef, useState } from 'react';
 import { styled } from 'styled-components';
 

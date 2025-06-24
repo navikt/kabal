@@ -3,8 +3,8 @@ import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { createPageBreak, createPlaceHolder, createSimpleParagraph } from '@app/plate/templates/helpers';
 import type { PlaceholderElement } from '@app/plate/types';
 import { isInTable, isPlaceholderActive } from '@app/plate/utils/queries';
-import { RangeApi } from '@udecode/plate';
-import type { PlateEditor } from '@udecode/plate-core/react';
+import type { PlateEditor } from '@platejs/core/react';
+import { RangeApi } from 'platejs';
 import { Range } from 'slate';
 
 export const insertPageBreak = (editor: PlateEditor): boolean => {

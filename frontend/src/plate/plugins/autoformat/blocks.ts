@@ -1,23 +1,23 @@
-import { HEADING_KEYS } from '@udecode/plate-heading';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import type { EditorAutoformatRule } from '../../types';
 import { preFormat } from './utils';
 
 export const autoformatBlocks: EditorAutoformatRule[] = [
   {
     mode: 'block',
-    type: HEADING_KEYS.h1,
+    type: BaseH1Plugin.key,
     match: '# ',
     preFormat,
   },
   {
     mode: 'block',
-    type: HEADING_KEYS.h2,
+    type: BaseH2Plugin.key,
     match: '## ',
     preFormat,
   },
   {
     mode: 'block',
-    type: HEADING_KEYS.h3,
+    type: BaseH3Plugin.key,
     match: '### ',
     preFormat,
   },

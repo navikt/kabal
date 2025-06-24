@@ -6,25 +6,24 @@ import { BoldLeaf, ItalicLeaf, UnderlineLeaf } from '@app/plate/leaf/marks';
 import { autoformatRules } from '@app/plate/plugins/autoformat/rules';
 import { CopyPlugin } from '@app/plate/plugins/copy/copy';
 import { CustomAbbreviationPlugin } from '@app/plate/plugins/custom-abbreviations/create-custom-abbreviation-plugin';
-import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { normalizeNodePlugin } from '@app/plate/plugins/normalize-node';
 import { PageBreakPlugin } from '@app/plate/plugins/page-break';
 import { PastePlugin } from '@app/plate/plugins/paste';
 import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { SelectionPlugin } from '@app/plate/plugins/selection';
-import { type NodeEntry, ParserPlugin } from '@udecode/plate';
-import { AlignPlugin } from '@udecode/plate-alignment/react';
-import { AutoformatPlugin } from '@udecode/plate-autoformat/react';
-import { BoldPlugin, ItalicPlugin, UnderlinePlugin } from '@udecode/plate-basic-marks/react';
-import { ExitBreakPlugin, SoftBreakPlugin } from '@udecode/plate-break/react';
-import { DocxPlugin } from '@udecode/plate-docx';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { HeadingPlugin } from '@udecode/plate-heading/react';
-import { IndentPlugin } from '@udecode/plate-indent/react';
-import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@udecode/plate-list/react';
-import { NodeIdPlugin } from '@udecode/plate-node-id';
-import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@udecode/plate-table/react';
-import { ParagraphPlugin } from '@udecode/plate/react';
+import { AutoformatPlugin } from '@platejs/autoformat';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BoldPlugin, ItalicPlugin, UnderlinePlugin } from '@platejs/basic-nodes/react';
+import { HeadingPlugin } from '@platejs/basic-nodes/react';
+import { TextAlignPlugin } from '@platejs/basic-styles/react';
+import { NodeIdPlugin } from '@platejs/core';
+import { DocxPlugin } from '@platejs/docx';
+import { IndentPlugin } from '@platejs/indent/react';
+import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@platejs/list-classic/react';
+import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@platejs/table/react';
+import { ExitBreakPlugin } from '@platejs/utils';
+import { type NodeEntry, ParserPlugin } from 'platejs';
+import { ParagraphPlugin } from 'platejs/react';
 
 export const defaultPlugins = [
   ParserPlugin,
@@ -39,7 +38,7 @@ export const defaultPlugins = [
     const { addMark } = editor.tf;
 
     editor.tf.addMark = (key, value) => {
-      if (editor.api.some({ match: { type: [HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3] } })) {
+      if (editor.api.some({ match: { type: [BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key] } })) {
         return;
       }
 
@@ -60,29 +59,16 @@ export const defaultPlugins = [
     inject: {
       targetPlugins: [
         ParagraphPlugin.key,
-        HEADING_KEYS.h1,
-        HEADING_KEYS.h2,
-        HEADING_KEYS.h3,
+        BaseH1Plugin.key,
+        BaseH2Plugin.key,
+        BaseH3Plugin.key,
         TablePlugin.key,
         NumberedListPlugin.key,
         BulletedListPlugin.key,
       ],
     },
   }),
-  SoftBreakPlugin.configure({
-    options: {
-      rules: [
-        {
-          hotkey: 'shift+enter',
-          query: {
-            exclude: [ELEMENT_PLACEHOLDER, ELEMENT_MALTEKST, BulletedListPlugin.key, NumberedListPlugin.key],
-            allow: [ParagraphPlugin.key],
-          },
-        },
-      ],
-    },
-  }),
-  AlignPlugin.configure({ inject: { targetPlugins: [ParagraphPlugin.key] } }),
+  TextAlignPlugin.configure({ inject: { targetPlugins: [ParagraphPlugin.key] } }),
   AutoformatPlugin.configure({
     options: {
       rules: autoformatRules,
@@ -97,7 +83,7 @@ export const defaultPlugins = [
           hotkey: 'enter',
           before: false,
           defaultType: ParagraphPlugin.key,
-          query: { start: true, end: true, allow: [HEADING_KEYS.h1, HEADING_KEYS.h2, HEADING_KEYS.h3] },
+          query: { start: true, end: true, allow: [BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key] },
           relative: true,
           level: 1,
         },

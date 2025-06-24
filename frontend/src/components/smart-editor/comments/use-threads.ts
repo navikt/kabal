@@ -5,7 +5,7 @@ import { useMyPlateEditorState } from '@app/plate/types';
 import { useGetCommentsQuery } from '@app/redux-api/smart-editor-comments';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { ElementApi } from '@udecode/plate';
+import { ElementApi } from 'platejs';
 import { useContext, useMemo } from 'react';
 import type { Descendant } from 'slate';
 import { COMMENT_PREFIX } from '../constants';

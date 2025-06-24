@@ -8,7 +8,7 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useContext } from 'react';
 
 export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstElement>) => {
@@ -46,7 +46,7 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
   const readOnly = editor.api.isReadOnly();
 
   return (
-    <PlateElement<RedigerbarMaltekstElement> {...props} asChild>
+    <PlateElement<RedigerbarMaltekstElement> {...props} as="div">
       <SectionContainer
         data-element={element.type}
         data-section={element.section}

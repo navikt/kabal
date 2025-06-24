@@ -1,5 +1,5 @@
-import { NodeApi, RangeApi, TextApi } from '@udecode/plate';
-import { createPlatePlugin } from '@udecode/plate-core/react';
+import { createPlatePlugin } from '@platejs/core/react';
+import { NodeApi, RangeApi, TextApi } from 'platejs';
 import { Range } from 'slate';
 
 export const SelectionPlugin = createPlatePlugin({ key: 'selection' }).overrideEditor(({ editor }) => {

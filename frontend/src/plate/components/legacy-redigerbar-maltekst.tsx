@@ -14,7 +14,7 @@ import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateElementProps } from '@udecode/plate/react';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 
 const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
@@ -89,7 +89,11 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
 
   if (isLoading) {
     return (
-      <PlateElement<RedigerbarMaltekstElement> {...props} asChild contentEditable={false}>
+      <PlateElement<RedigerbarMaltekstElement>
+        {...props}
+        as="div"
+        attributes={{ ...props.attributes, contentEditable: false }}
+      >
         <SectionContainer
           data-element={element.type}
           data-section={element.section}
@@ -102,7 +106,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
   }
 
   return (
-    <PlateElement<RedigerbarMaltekstElement> {...props} asChild>
+    <PlateElement<RedigerbarMaltekstElement> {...props} as="div">
       <SectionContainer
         data-element={element.type}
         data-section={element.section}

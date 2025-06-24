@@ -1,10 +1,17 @@
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { type ParagraphElement, TextAlign } from '@app/plate/types';
 import { isElement } from '@grafana/faro-web-sdk';
-import type { TElement } from '@udecode/plate';
-import { ParagraphPlugin, createPlatePlugin } from '@udecode/plate-core/react';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { ListItemContentPlugin } from '@udecode/plate-list/react';
+import {
+  BaseH1Plugin,
+  BaseH2Plugin,
+  BaseH3Plugin,
+  BaseH4Plugin,
+  BaseH5Plugin,
+  BaseH6Plugin,
+} from '@platejs/basic-nodes';
+import { ParagraphPlugin, createPlatePlugin } from '@platejs/core/react';
+import { ListItemContentPlugin } from '@platejs/list-classic/react';
+import type { TElement } from 'platejs';
 
 export const PastePlugin = createPlatePlugin({
   key: 'paste',
@@ -75,12 +82,12 @@ export const PastePlugin = createPlatePlugin({
 
           return true;
         }
-        case HEADING_KEYS.h1:
-        case HEADING_KEYS.h2:
-        case HEADING_KEYS.h3:
-        case HEADING_KEYS.h4:
-        case HEADING_KEYS.h5:
-        case HEADING_KEYS.h6: {
+        case BaseH1Plugin.key:
+        case BaseH2Plugin.key:
+        case BaseH3Plugin.key:
+        case BaseH4Plugin.key:
+        case BaseH5Plugin.key:
+        case BaseH6Plugin.key: {
           const [first, ...rest] = paragraphs;
 
           if (first !== undefined) {

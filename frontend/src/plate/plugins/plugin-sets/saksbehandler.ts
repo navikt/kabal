@@ -1,5 +1,3 @@
-import type { UserCursor } from '@app/components/smart-editor/tabbed-editors/cursors/cursors';
-import { TAB_UUID } from '@app/headers';
 import { HeadingOne, HeadingThree, HeadingTwo } from '@app/plate/components/headings';
 import { ListItem, OrderedList, UnorderedList } from '@app/plate/components/lists';
 import { Paragraph } from '@app/plate/components/paragraph';
@@ -22,23 +20,23 @@ import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst
 import { RegelverkContainerPlugin, RegelverkPlugin } from '@app/plate/plugins/regelverk';
 import { SaksnummerPlugin } from '@app/plate/plugins/saksnummer';
 import { SignaturePlugin } from '@app/plate/plugins/signature';
-import type { IUserData } from '@app/types/bruker';
 import type { ISmartDocument } from '@app/types/documents/documents';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
+import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
+import type { YjsProviderConfig } from '@platejs/yjs';
+import { YjsPlugin } from '@platejs/yjs/react';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
-import { BaseParagraphPlugin } from '@udecode/plate';
-import { HEADING_KEYS } from '@udecode/plate-heading';
-import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
-import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@udecode/plate-table';
-import { YjsPlugin } from '@udecode/plate-yjs/react';
+import { BaseParagraphPlugin } from 'platejs';
 import { XmlText } from 'yjs';
 
 export const components = {
   [BaseParagraphPlugin.key]: Paragraph,
 
   // Headings
-  [HEADING_KEYS.h1]: HeadingOne,
-  [HEADING_KEYS.h2]: HeadingTwo,
-  [HEADING_KEYS.h3]: HeadingThree,
+  [BaseH1Plugin.key]: HeadingOne,
+  [BaseH2Plugin.key]: HeadingTwo,
+  [BaseH3Plugin.key]: HeadingThree,
 
   // Lists
   [BaseBulletedListPlugin.key]: UnorderedList,
@@ -71,35 +69,37 @@ export const saksbehandlerPlugins = [
   SaksnummerPlugin,
 ];
 
-export const collaborationSaksbehandlerPlugins = (
-  behandlingId: string,
-  dokumentId: string,
-  smartDocument: ISmartDocument,
-  { navIdent, navn }: IUserData,
-) => {
-  const sharedRoot = new XmlText();
-  sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
-
+export const collaborationSaksbehandlerPlugins = (providers: [YjsProviderConfig], navIdent: string) => {
   return [
     ...saksbehandlerPlugins,
     createCapitalisePlugin(navIdent),
     YjsPlugin.configure({
       options: {
-        cursorOptions: {
-          data: { navIdent, navn, tabId: TAB_UUID } satisfies UserCursor,
-        },
-        disableCursors: true,
-        hocuspocusProviderOptions: {
-          url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
-          name: dokumentId,
-          document: sharedRoot.doc ?? undefined,
-          onClose: ({ event }) => {
-            if (event.code === 4401) {
-              window.location.assign('/oauth2/login');
-            }
-          },
-        },
+        providers,
       },
     }),
   ];
+};
+
+export const getHocusPocusProvider = (
+  behandlingId: string,
+  dokumentId: string,
+  smartDocument: ISmartDocument,
+): YjsProviderConfig => {
+  const sharedRoot = new XmlText();
+  sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
+
+  return {
+    type: 'hocuspocus',
+    options: {
+      url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
+      name: dokumentId,
+      // document: sharedRoot.doc ?? undefined,
+      onClose: ({ event }) => {
+        if (event.code === 4401) {
+          window.location.assign('/oauth2/login');
+        }
+      },
+    },
+  };
 };

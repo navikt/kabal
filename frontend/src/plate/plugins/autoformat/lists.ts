@@ -1,4 +1,4 @@
-import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@udecode/plate-list';
+import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import type { EditorAutoformatRule } from '../../types';
 import { formatList, preFormat } from './utils';
 

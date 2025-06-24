@@ -13,7 +13,7 @@ import { RedaktoerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { Box, VStack } from '@navikt/ds-react';
-import { Plate, usePlateEditor } from '@udecode/plate-core/react';
+import { Plate, usePlateEditor } from '@platejs/core/react';
 import { useContext, useImperativeHandle, useRef } from 'react';
 
 interface Props {

@@ -3,8 +3,8 @@ import { EMPTY_CHAR_CODE } from '@app/functions/remove-empty-char-in-text';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { type KabalValue, type ParagraphElement, type PlaceholderElement, TextAlign } from '@app/plate/types';
-import { BaseParagraphPlugin } from '@udecode/plate-core';
-import { createPlateEditor } from '@udecode/plate-core/react';
+import { BaseParagraphPlugin } from '@platejs/core';
+import { createPlateEditor } from '@platejs/core/react';
 import type { Point, Selection, TextUnit } from 'slate';
 
 const createPlaceholder = (text = String.fromCharCode(EMPTY_CHAR_CODE)): PlaceholderElement => ({

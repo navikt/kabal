@@ -6,7 +6,7 @@ import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { TableButtons } from '@app/plate/toolbar/table/table';
 import { type TableElement, useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
 import { Box, HStack } from '@navikt/ds-react';
-import { BaseTablePlugin } from '@udecode/plate-table';
+import { BaseTablePlugin } from '@platejs/table';
 import { useContext, useEffect, useState } from 'react';
 
 interface Props {

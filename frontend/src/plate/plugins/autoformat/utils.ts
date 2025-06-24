@@ -1,6 +1,6 @@
-import { ElementApi, type SlateEditor } from '@udecode/plate';
-import type { AutoformatBlockRule } from '@udecode/plate-autoformat';
-import { toggleList, unwrapList } from '@udecode/plate-list';
+import type { AutoformatBlockRule } from '@platejs/autoformat';
+import { toggleList, unwrapList } from '@platejs/list-classic';
+import { ElementApi, type SlateEditor } from 'platejs';
 
 export const preFormat: AutoformatBlockRule['preFormat'] = (editor) => unwrapList(editor);
 
