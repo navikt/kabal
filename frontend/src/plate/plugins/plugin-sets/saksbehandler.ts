@@ -5,7 +5,6 @@ import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-elem
 import { TableElement } from '@app/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
 import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
-import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { CommentsPlugin } from '@app/plate/plugins/comments';
 import { CurrentDatePlugin } from '@app/plate/plugins/current-date';
 import { EmptyVoidPlugin } from '@app/plate/plugins/empty-void';
@@ -20,15 +19,10 @@ import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst
 import { RegelverkContainerPlugin, RegelverkPlugin } from '@app/plate/plugins/regelverk';
 import { SaksnummerPlugin } from '@app/plate/plugins/saksnummer';
 import { SignaturePlugin } from '@app/plate/plugins/signature';
-import type { ISmartDocument } from '@app/types/documents/documents';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
-import type { YjsProviderConfig } from '@platejs/yjs';
-import { YjsPlugin } from '@platejs/yjs/react';
-import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import { BaseParagraphPlugin } from 'platejs';
-import { XmlText } from 'yjs';
 
 export const components = {
   [BaseParagraphPlugin.key]: Paragraph,
@@ -68,38 +62,3 @@ export const saksbehandlerPlugins = [
   BookmarkPlugin,
   SaksnummerPlugin,
 ];
-
-export const collaborationSaksbehandlerPlugins = (providers: [YjsProviderConfig], navIdent: string) => {
-  return [
-    ...saksbehandlerPlugins,
-    createCapitalisePlugin(navIdent),
-    YjsPlugin.configure({
-      options: {
-        providers,
-      },
-    }),
-  ];
-};
-
-export const getHocusPocusProvider = (
-  behandlingId: string,
-  dokumentId: string,
-  smartDocument: ISmartDocument,
-): YjsProviderConfig => {
-  const sharedRoot = new XmlText();
-  sharedRoot.applyDelta(slateNodesToInsertDelta(smartDocument.content));
-
-  return {
-    type: 'hocuspocus',
-    options: {
-      url: `/collaboration/behandlinger/${behandlingId}/dokumenter/${dokumentId}`,
-      name: dokumentId,
-      // document: sharedRoot.doc ?? undefined,
-      onClose: ({ event }) => {
-        if (event.code === 4401) {
-          window.location.assign('/oauth2/login');
-        }
-      },
-    },
-  };
-};
