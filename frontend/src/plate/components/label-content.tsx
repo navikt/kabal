@@ -16,13 +16,15 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   const label = useLabel(element.source);
   const { canManage } = useContext(SmartEditorContext);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Having element in the dependency array causes infinite loop. Besides, this useEffect only needs to run when content changes.
   useEffect(() => {
     editor.tf.setNodes({ result: content }, { at: [], match: (n) => n === element });
-  }, [content, editor, element]);
+  }, [content, editor]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Having element in the dependency array causes infinite loop. Besides, this useEffect only needs to run when label changes.
   useEffect(() => {
     editor.tf.setNodes({ label }, { at: [], match: (n) => n === element });
-  }, [label, editor, element]);
+  }, [label, editor]);
 
   return (
     <PlateElement<LabelContentElement>
