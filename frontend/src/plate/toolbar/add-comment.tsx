@@ -44,8 +44,10 @@ export const CommentsButton = () => {
 
         connectCommentThread(editor, selection, comment.id);
 
-        setNewCommentSelection(selection);
-        setEditingComment(comment);
+        setTimeout(() => {
+          setNewCommentSelection(selection);
+          setEditingComment(comment);
+        }, 50);
       }}
       active={editingComment !== null}
       disabled={selection === null || RangeApi.isCollapsed(selection)}
