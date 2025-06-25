@@ -14,7 +14,6 @@ import { Language, isLanguage } from '@app/types/texts/language';
 import { CogIcon } from '@navikt/aksel-icons';
 import { Heading, Modal, ToggleGroup, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const SaksbehandlerSettings = () => {
   const { hasWriteAccess, showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } = useContext(SmartEditorContext);
@@ -57,7 +56,7 @@ export const SaksbehandlerSettings = () => {
             Innstillinger for brevutforming
           </Heading>
         </Modal.Header>
-        <StyledModalBody>
+        <Modal.Body className="flex flex-col gap-y-4">
           {hasWriteAccess ? (
             <section aria-labelledby="set-language">
               <Heading level="2" size="small" spacing id="set-language">
@@ -112,15 +111,21 @@ export const SaksbehandlerSettings = () => {
           </section>
 
           <section aria-labelledby="set-abbreviations">
-            <StyledHeading level="2" size="small" spacing id="set-abbreviations">
+            <Heading
+              level="2"
+              size="small"
+              spacing
+              id="set-abbreviations"
+              className="flex flex-row items-center gap-x-2"
+            >
               <AbbreviationsHeadingContent />
-            </StyledHeading>
+            </Heading>
 
             <AbbreviationsExplanation />
 
             <AbbreviationsContent headingSize="xsmall" />
           </section>
-        </StyledModalBody>
+        </Modal.Body>
       </Modal>
     </>
   );
@@ -130,16 +135,3 @@ enum Placement {
   RELATIVE = 'RELATIVE',
   COLUMN = 'COLUMN',
 }
-
-const StyledModalBody = styled(Modal.Body)`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-4);
-`;
-
-const StyledHeading = styled(Heading)`
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--a-spacing-2);
-  align-items: center;
-`;
