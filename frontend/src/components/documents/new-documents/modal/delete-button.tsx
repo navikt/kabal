@@ -1,8 +1,9 @@
+import { count } from '@app/functions/count';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IDocument, isAttachmentDocument } from '@app/types/documents/documents';
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
@@ -30,19 +31,23 @@ export const DeleteDocumentButton = ({ document }: Props) => {
     close();
   };
 
+  const isAttachment = isAttachmentDocument(document);
+
   const text = useMemo(() => {
     // If the document has a parent, it is an attachment.
-    if (document.parentId !== null) {
+    if (isAttachment) {
       return document.type === DocumentTypeEnum.JOURNALFOERT ? 'Fjern vedlegg' : 'Slett vedlegg';
     }
 
+    const vedleggCount = count(data, ({ parentId }) => parentId === document.id);
+
     // If the document has attatchments.
-    if (data?.some(({ parentId }) => parentId === document.id)) {
-      return 'Slett dokument og vedlegg';
+    if (vedleggCount > 0) {
+      return `Slett dokument og ${vedleggCount} vedlegg`;
     }
 
     return 'Slett dokument';
-  }, [data, document.id, document.parentId, document.type]);
+  }, [data, document.id, document.type, isAttachment]);
 
   if (!isSuccess) {
     return null;
