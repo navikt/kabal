@@ -11,20 +11,18 @@ import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useContext, useEffect, useMemo } from 'react';
 
 export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
-  const { children, element, editor } = props;
+  const { children, element, editor, path } = props;
   const content = useContent(element.source);
   const label = useLabel(element.source);
   const { canManage } = useContext(SmartEditorContext);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Having element in the dependency array causes infinite loop. Besides, this useEffect only needs to run when content changes.
   useEffect(() => {
-    editor.tf.setNodes({ result: content }, { at: [], match: (n) => n === element });
-  }, [content, editor]);
+    editor.tf.setNodes({ result: content }, { at: path });
+  }, [content, editor, path]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Having element in the dependency array causes infinite loop. Besides, this useEffect only needs to run when label changes.
   useEffect(() => {
-    editor.tf.setNodes({ label }, { at: [], match: (n) => n === element });
-  }, [label, editor]);
+    editor.tf.setNodes({ label }, { at: path });
+  }, [label, editor, path]);
 
   return (
     <PlateElement<LabelContentElement>
