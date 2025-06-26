@@ -1,8 +1,5 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from 'bun:test';
 import { ConfirmFinish } from '@app/components/oppgavebehandling-footer/confirm-finish';
-import * as originalUseOppgave from '@app/hooks/oppgavebehandling/use-oppgave';
-import * as originalSearch from '@app/redux-api/search';
-import * as originalKodeverk from '@app/simple-api-state/use-kodeverk';
 import { fireEvent, render, screen } from '@app/test-utils';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 
@@ -44,7 +41,11 @@ describe('ConfirmFinish', () => {
   });
 
   // Reset all mocked modules to original implementations.
-  afterAll(() => {
+  afterAll(async () => {
+    const originalUseOppgave = await import('@app/hooks/oppgavebehandling/use-oppgave');
+    const originalSearch = await import('@app/redux-api/search');
+    const originalKodeverk = await import('@app/simple-api-state/use-kodeverk');
+
     mock.module('@app/redux-api/search', () => originalSearch);
     mock.module('@app/simple-api-state/use-kodeverk', () => originalKodeverk);
     mock.module('@app/hooks/oppgavebehandling/use-oppgave', () => originalUseOppgave);

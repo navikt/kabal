@@ -22,6 +22,22 @@
       "test": "recommended"
     },
     "rules": {
+      "recommended": true,
+      "performance": {
+        "noDelete": "warn",
+        "noBarrelFile": "warn",
+        "noAccumulatingSpread": "warn",
+        "useTopLevelRegex": "warn",
+        "noDynamicNamespaceImportAccess": "warn",
+        "noNamespaceImport": "warn",
+        "noReExportAll": "warn"
+      },
+      "a11y": {
+        "recommended": true
+      },
+      "security": {
+        "recommended": true
+      },
       "nursery": {
         "noSecrets": { "level": "off", "options": {} },
         "useExplicitType": { "level": "off" }

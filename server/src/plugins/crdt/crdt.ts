@@ -19,7 +19,7 @@ import { Type, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import type { FastifyRequest } from 'fastify/types/request';
 import fastifyPlugin from 'fastify-plugin';
-import * as Y from 'yjs';
+import { Doc, encodeStateAsUpdateV2, XmlText } from 'yjs';
 
 export const CRDT_PLUGIN_ID = 'crdt';
 
@@ -78,11 +78,11 @@ export const crdtPlugin = fastifyPlugin(
 
         try {
           const { content } = body;
-          const document = new Y.Doc();
-          const sharedRoot = document.get('content', Y.XmlText);
+          const document = new Doc();
+          const sharedRoot = document.get('content', XmlText);
           const insertDelta = slateNodesToInsertDelta(content);
           sharedRoot.applyDelta(insertDelta);
-          const state = Y.encodeStateAsUpdateV2(document);
+          const state = encodeStateAsUpdateV2(document);
           const data = Buffer.from(state).toString('base64');
 
           logReq('Saving new document to database', req, { behandlingId, data });
