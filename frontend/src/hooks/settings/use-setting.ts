@@ -51,15 +51,15 @@ const useDateRangeSetting = (property: string): DateRangeSetting => {
 };
 
 export const useDocumentsFilterDatoOpprettet = () => useDateRangeSetting(useOppgavePath('tabs/documents/filters/dato'));
-export const useDocumentsFilterDatoRegSendt = () =>
-  useDateRangeSetting(useOppgavePath('tabs/documents/filters/dato_reg_sendt'));
+export const useDocumentsFilterDatoSortering = () =>
+  useDateRangeSetting(useOppgavePath('tabs/documents/filters/dato_sortering'));
 
 export const useDocumentsAvsenderMottaker = () =>
   useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/avsender_mottaker'));
 
 export type ArchivedDocumentsSortColumn =
   | ArchivedDocumentsColumn.DATO_OPPRETTET
-  | ArchivedDocumentsColumn.DATO_REG_SENDT;
+  | ArchivedDocumentsColumn.DATO_SORTERING;
 
 export interface ArchivedDocumentsSort {
   order: SortOrder;

@@ -45,8 +45,8 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
         <DocumentDate date={document.datoOpprettet} style={{ gridArea: Fields.DatoOpprettet }} />
       ) : null}
 
-      {columns.DATO_REG_SENDT ? (
-        <DocumentDate date={document.datoRegSendt} style={{ gridArea: Fields.DatoRegSendt }} />
+      {columns.DATO_SORTERING ? (
+        <DocumentDate date={document.datoSortering} style={{ gridArea: Fields.DatoSortering }} />
       ) : null}
 
       {columns.AVSENDER_MOTTAKER ? (
