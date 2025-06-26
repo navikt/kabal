@@ -3,7 +3,6 @@
   "root": false,
   "extends": "//",
   "linter": {
-    "enabled": true,
     "domains": {
       "react": "recommended"
     }
