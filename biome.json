@@ -68,6 +68,6 @@
     "formatter": { "enabled": true, "trailingCommas": "none" }
   },
   "files": {
-    "includes": ["**", "!**/*.css"]
+    "includes": ["**", "!**/*.css", "!.bruno"]
   }
 }
