@@ -11,5 +11,7 @@ const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
 const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
   render(ui, { wrapper: AllTheProviders, ...options });
 
+// biome-ignore lint/performance/noBarrelFile: Tests
+// biome-ignore lint/performance/noReExportAll: Tests
 export * from '@testing-library/react';
 export { customRender as render };

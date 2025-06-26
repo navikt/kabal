@@ -1,5 +1,4 @@
 import { afterAll, beforeAll, describe, expect, it, mock } from 'bun:test';
-import * as originalSettingsManager from '@app/hooks/settings/manager';
 import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { TemplateSections } from '@app/plate/template-sections';
 import {
@@ -34,7 +33,8 @@ describe('capitalise', () => {
     }));
   });
 
-  afterAll(() => {
+  afterAll(async () => {
+    const originalSettingsManager = await import('@app/hooks/settings/manager');
     mock.module('@app/hooks/settings/manager', () => originalSettingsManager);
   });
 
