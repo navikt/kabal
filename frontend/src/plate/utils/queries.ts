@@ -16,7 +16,7 @@ import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import type { PlateEditor } from '@platejs/core/react';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTablePlugin } from '@platejs/table';
-import { type Descendant, ElementApi, NodeApi, type TElement, type TNode, type TText, TextApi } from 'platejs';
+import { type Descendant, ElementApi, NodeApi, type TElement, TextApi, type TNode, type TText } from 'platejs';
 
 // Ensures a next-path even though original path is at end
 export const nextPath = (path: number[]) => {

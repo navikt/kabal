@@ -10,7 +10,7 @@ import {
   RichTextTypes,
 } from '@app/types/common-text-types';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
-import { Alert, ErrorMessage, HStack, Heading, Loader, Tag, type TagProps } from '@navikt/ds-react';
+import { Alert, ErrorMessage, Heading, HStack, Loader, Tag, type TagProps } from '@navikt/ds-react';
 
 interface Props {
   textId: string;

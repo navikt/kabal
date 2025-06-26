@@ -21,7 +21,6 @@ export const navIdentPlugin = fastifyPlugin(
   async (app) => {
     app.decorateRequest('navIdent', '');
 
-    // biome-ignore lint/suspicious/useAwait: Needs to return a promise
     app.addHook('preHandler', async (req) => {
       const { accessToken } = req;
 

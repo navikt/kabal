@@ -4,11 +4,16 @@ import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorState } from '@app/plate/types';
 import { isOfElementTypesFn } from '@app/plate/utils/queries';
-import { BaseBoldPlugin, BaseItalicPlugin, BaseUnderlinePlugin } from '@platejs/basic-nodes';
+import {
+  BaseBoldPlugin,
+  BaseH1Plugin,
+  BaseH2Plugin,
+  BaseH3Plugin,
+  BaseItalicPlugin,
+  BaseUnderlinePlugin,
+} from '@platejs/basic-nodes';
 import { getPluginType } from '@platejs/core';
 import { ClearFormatting, TextBold, TextItalic, TextUnderline } from '@styled-icons/fluentui-system-regular';
-
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { useMarkToolbarButton, useMarkToolbarButtonState } from 'platejs/react';
 
 export const Marks = () => {

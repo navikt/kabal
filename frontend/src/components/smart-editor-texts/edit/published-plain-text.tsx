@@ -6,7 +6,7 @@ import { TextModified } from '@app/components/smart-editor-texts/modified';
 import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import type { IPublishedPlainText } from '@app/types/texts/responses';
-import { BodyLong, Box, HStack, Heading, VStack } from '@navikt/ds-react';
+import { BodyLong, Box, Heading, HStack, VStack } from '@navikt/ds-react';
 
 interface Props {
   text: IPublishedPlainText;

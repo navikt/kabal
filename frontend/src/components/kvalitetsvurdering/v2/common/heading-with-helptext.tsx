@@ -1,4 +1,4 @@
-import { HStack, Heading, type HeadingProps, HelpText, type HelpTextProps } from '@navikt/ds-react';
+import { Heading, type HeadingProps, HelpText, type HelpTextProps, HStack } from '@navikt/ds-react';
 
 interface Props {
   children: string;

@@ -1,6 +1,6 @@
 import { Keys } from '@app/keys';
 import type { PlateEditor } from '@platejs/core/react';
-import { NodeApi, type TText, TextApi } from 'platejs';
+import { NodeApi, TextApi, type TText } from 'platejs';
 import type { KeyboardEvent } from 'react';
 import { ELEMENT_PLACEHOLDER } from '../element-types';
 

@@ -74,6 +74,8 @@ interface EditAgeProps {
   setUserAge: (age: number) => void;
 }
 
+const DATE_PICKER_ID = 'edit-age';
+
 const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge }: EditAgeProps) => {
   const [setMottattklage] = useSetMottattKlageinstansMutation();
 
@@ -90,7 +92,7 @@ const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge }: EditAgeP
 
   return (
     <DatePicker
-      id="mottatt-dato"
+      id={DATE_PICKER_ID}
       label="Mottattdato"
       hideLabel
       value={mottattDate}

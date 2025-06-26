@@ -36,7 +36,9 @@ export const getOnBehalfOfAccessToken = async (
   if (parsed.exp - now < 30) {
     log.debug({ msg: `Refreshing OBO token for ${appName}`, trace_id, span_id, data: { navIdent, appName } });
 
-    refreshOnBehalfOfAccessToken(authClient, accessToken, cacheKey, appName, trace_id, span_id);
+    refreshOnBehalfOfAccessToken(authClient, accessToken, cacheKey, appName, trace_id, span_id).catch((error) => {
+      log.error({ msg: 'Failed to refresh OBO token', error, trace_id, span_id, data: { navIdent, appName } });
+    });
   }
 
   return token;

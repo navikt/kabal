@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { SET_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { NEGATIVE_INFINITY } from '@app/plate/functions/lex-specialis/scores';
-import { MAX_UTFALL_SCORE, getUtfallScore } from '@app/plate/functions/lex-specialis/utfall-score';
+import { getUtfallScore, MAX_UTFALL_SCORE } from '@app/plate/functions/lex-specialis/utfall-score';
 import { UtfallEnum } from '@app/types/kodeverk';
 
 describe('utfall score', () => {

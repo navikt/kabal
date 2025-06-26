@@ -49,6 +49,7 @@ export const createCapitalisePlugin = (ident: string) => {
       }
 
       // Strip the autoCapitalised mark from the marks object.
+      // biome-ignore lint/correctness/noUnusedVariables: Omit
       const { autoCapitalised, ...marksWithoutAutoCapitalised } = marks;
 
       // Insert the text with the remaining marks.
@@ -124,6 +125,7 @@ export const createCapitalisePlugin = (ident: string) => {
         return deleteBackward(unit);
       }
 
+      // biome-ignore lint/correctness/noUnusedVariables: Omit
       const { text, autoCapitalised, ...marks } = capitalisedNode;
 
       editor.tf.withNewBatch(() => {

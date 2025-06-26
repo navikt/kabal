@@ -1,7 +1,7 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { Keys, isMetaKey } from '@app/keys';
+import { isMetaKey, Keys } from '@app/keys';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostMessageMutation } from '@app/redux-api/messages';
 import { PaperplaneIcon } from '@navikt/aksel-icons';

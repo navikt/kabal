@@ -10,7 +10,6 @@ export const HTTP_LOGGER_PLUGIN_ID = 'http-logger';
 
 export const httpLoggerPlugin = fastifyPlugin(
   async (app) => {
-    // biome-ignore lint/suspicious/useAwait: Needs to return a promise
     app.addHook('onResponse', async (req, res) => {
       const { url } = req;
 

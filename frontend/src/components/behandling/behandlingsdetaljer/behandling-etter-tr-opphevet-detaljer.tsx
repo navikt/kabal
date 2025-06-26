@@ -24,6 +24,8 @@ interface Props {
   oppgavebehandling: IBehandlingEtterTrOpphevet;
 }
 
+const DATE_ID = 'dato-for-kjennelse-mottatt-fra-trygderetten-med-utfall-opphevet';
+
 export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) => {
   const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
 
@@ -74,7 +76,7 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
 
           <ReadOnlyDate
             date={kjennelseMottatt}
-            id="dato-for-kjennelse-mottatt-fra-trygderetten-med-utfall-opphevet"
+            id={DATE_ID}
             label="Dato for kjennelse mottatt fra Trygderetten med utfall opphevet"
           />
 

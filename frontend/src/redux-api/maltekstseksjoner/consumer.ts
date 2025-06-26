@@ -1,6 +1,6 @@
 import type {
-  IGetConsumerMaltekstseksjonTextsParams,
   IGetConsumerMaltekstseksjonerParams,
+  IGetConsumerMaltekstseksjonTextsParams,
 } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IConsumerRichText } from '@app/types/texts/consumer';

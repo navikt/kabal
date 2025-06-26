@@ -101,6 +101,8 @@ interface EditDeadlineProps {
   setUserFrist: (frist: string) => void;
 }
 
+const DATE_PICKER_ID = 'edit-deadline';
+
 const EditDeadline = ({ frist, oppgaveId, closeCalendar, setUserFrist }: EditDeadlineProps) => {
   const [setFrist] = useSetFristMutation();
 
@@ -117,7 +119,7 @@ const EditDeadline = ({ frist, oppgaveId, closeCalendar, setUserFrist }: EditDea
 
   return (
     <DatePicker
-      id=""
+      id={DATE_PICKER_ID}
       label="Frist"
       hideLabel
       value={frist}

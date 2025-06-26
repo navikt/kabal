@@ -1,7 +1,7 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useSetTilbakekrevingMutation } from '@app/redux-api/oppgaver/mutations/set-tilbakekreving';
-import { Alert, BodyShort, Checkbox, CheckboxGroup, HStack, Heading, HelpText } from '@navikt/ds-react';
+import { Alert, BodyShort, Checkbox, CheckboxGroup, Heading, HelpText, HStack } from '@navikt/ds-react';
 
 const TILBAKEKREVING_IDS = [
   '144',

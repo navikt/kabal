@@ -1,7 +1,7 @@
 import { memoryCacheGauge, persistentCacheGauge, persistentCacheSizeGauge } from '@app/auth/cache/cache-gauge';
 import type { TokenMessage } from '@app/auth/cache/types';
 import { getLogger } from '@app/logger';
-import { type RedisClientType as ValkeyClientType, createClient } from 'redis';
+import { createClient, type RedisClientType as ValkeyClientType } from 'redis';
 
 const log = getLogger('obo-persistent-cache');
 
@@ -44,7 +44,7 @@ export class OboPersistentCache {
       }
     });
 
-    this.#refreshCacheSizeMetric();
+    await this.#refreshCacheSizeMetric();
 
     setInterval(() => this.#refreshCacheSizeMetric(), 30_000);
   }
@@ -104,7 +104,7 @@ export class OboPersistentCache {
     if (ttl === -1) {
       persistentCacheGauge.inc({ hit: 'invalid' });
       this.#client.del(key);
-      this.#refreshCacheSizeMetric();
+      await this.#refreshCacheSizeMetric();
 
       return null;
     }
@@ -128,7 +128,7 @@ export class OboPersistentCache {
 
     await this.#client.set(key, token, { EXAT: expiresAt });
 
-    this.#refreshCacheSizeMetric();
+    await this.#refreshCacheSizeMetric();
   }
 
   public addTokenListener(listener: TokenListener) {

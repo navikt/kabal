@@ -1,5 +1,5 @@
-import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { EditPart } from '@app/components/part/edit-part';
+import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetAvsenderMutation, useSetInngaaendeKanalMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { DocumentTypeEnum, type IDocument, InngaaendeKanal } from '@app/types/documents/documents';
@@ -10,6 +10,7 @@ import { useState } from 'react';
 
 const INNGAAENDE_KANALER = Object.values(InngaaendeKanal);
 const isInngaaendeKanal = (type: string): type is InngaaendeKanal => INNGAAENDE_KANALER.some((t) => t === type);
+const AVSENDER_ID = 'avsender';
 
 interface Props {
   document: IDocument;
@@ -45,7 +46,7 @@ export const AnnenInngaaende = ({ document, hasAccess }: Props) => {
       </RadioGroup>
 
       <div>
-        <Label size="small" htmlFor="avsender">
+        <Label size="small" htmlFor={AVSENDER_ID}>
           Avsender
         </Label>
         <HStack align="center" gap="2">
@@ -68,7 +69,7 @@ export const AnnenInngaaende = ({ document, hasAccess }: Props) => {
             }}
             onClose={() => setEditAvsender(false)}
             isLoading={isLoading}
-            id="avsender"
+            id={AVSENDER_ID}
           />
         ) : null}
       </div>

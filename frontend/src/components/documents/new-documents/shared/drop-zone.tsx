@@ -70,7 +70,7 @@ export const DropZone = ({
   );
 
   return (
-    // biome-ignore lint/nursery/noStaticElementInteractions: ¯\_(ツ)_/¯
+    // biome-ignore lint/a11y/noStaticElementInteractions: ¯\_(ツ)_/¯
     <div
       data-drop-zone
       onDrop={internalOnDrop}

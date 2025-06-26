@@ -4,19 +4,18 @@ import { validateUnits } from '@app/components/behandling/behandlingsdetaljer/fo
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { usePrevious } from '@app/hooks/use-previous';
 import {
-  useSetBehandlingstidUnitTypeMutation,
   useSetBehandlingstidUnitsMutation,
+  useSetBehandlingstidUnitTypeMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
-import { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
-import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES } from '@app/types/field-names';
+import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
 import {
-  BEHANDLINGSTID_UNIT_TYPES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES_SINGULAR,
+  BEHANDLINGSTID_UNIT_TYPES,
   type BehandlingstidUnitType,
   isBehandlingstidUnitType,
 } from '@app/types/svarbrev';
-import { ErrorMessage, HStack, Heading, TextField, ToggleGroup, VStack } from '@navikt/ds-react';
+import { ErrorMessage, Heading, HStack, TextField, ToggleGroup, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 
 interface Props {

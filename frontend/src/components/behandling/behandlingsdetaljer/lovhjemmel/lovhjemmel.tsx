@@ -2,7 +2,7 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateRegistreringshjemlerMutation } from '@app/redux-api/oppgaver/mutations/set-registreringshjemler';
-import { HStack, HelpText, Label } from '@navikt/ds-react';
+import { HelpText, HStack, Label } from '@navikt/ds-react';
 import { LovhjemmelSelect } from './lovhjemmel-select';
 import { SelectedHjemlerList } from './selected-hjemler-list';
 

@@ -1,7 +1,7 @@
 import { toast } from '@app/components/toast/store';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { Keys, isMetaKey } from '@app/keys';
+import { isMetaKey, Keys } from '@app/keys';
 import { pushEvent } from '@app/observability';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
@@ -72,11 +72,16 @@ export const Abbreviation = () => {
       return;
     }
 
-    await addAbbreviation({ short, long }).unwrap();
-    editor.tf.focus();
-    setIsOpen(false);
+    try {
+      await addAbbreviation({ short, long }).unwrap();
+      editor.tf.focus();
+      setIsOpen(false);
 
-    pushEvent('smart-editor-add-abbreviation', 'smart-editor', { short, long });
+      pushEvent('smart-editor-add-abbreviation', 'smart-editor', { short, long });
+    } catch (error) {
+      console.error('Failed to add abbreviation:', error);
+      toast.error('Kunne ikke legge til forkortelse.');
+    }
   };
 
   useOnClickOutside(containerRef, () => {
@@ -108,6 +113,7 @@ export const Abbreviation = () => {
                 onChange={(e) => setLocalShort(e.target.value)}
                 onKeyDown={({ key }) => {
                   if (key === Keys.Enter) {
+                    // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
                     onAdd();
                   }
 

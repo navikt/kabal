@@ -1,4 +1,4 @@
-import { ALL_TYPES, ActiveEnum, type TypeFilter, isActiveValue, isTypeFilter } from '@app/components/svarbrev/filters';
+import { ActiveEnum, ALL_TYPES, isActiveValue, isTypeFilter, type TypeFilter } from '@app/components/svarbrev/filters';
 import type { SortState } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';

@@ -5,7 +5,7 @@ import { ApiClientEnum } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
 import { isObject } from '@app/functions/functions';
 import { parseTokenPayload } from '@app/helpers/token-parser';
-import { type AnyObject, type Level, type LogArgs, getLogger } from '@app/logger';
+import { type AnyObject, getLogger, type Level, type LogArgs } from '@app/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
 import { getHeaders } from '@app/plugins/crdt/api/headers';
 import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
@@ -17,9 +17,8 @@ import { TAB_ID_PLUGIN_ID } from '@app/plugins/tab-id';
 import { TRACEPARENT_PLUGIN_ID } from '@app/plugins/traceparent/traceparent';
 import { Type, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
-import fastifyPlugin from 'fastify-plugin';
 import type { FastifyRequest } from 'fastify/types/request';
-// biome-ignore lint/style/noNamespaceImport: https://tiptap.dev/docs/hocuspocus/getting-started#backend
+import fastifyPlugin from 'fastify-plugin';
 import * as Y from 'yjs';
 
 export const CRDT_PLUGIN_ID = 'crdt';

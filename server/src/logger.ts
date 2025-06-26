@@ -3,7 +3,6 @@ import { hasOwn } from '@app/functions/functions';
 import { isDeployed } from './config/env';
 
 const VERSION: string =
-  // biome-ignore lint/nursery/noProcessEnv:
   hasOwn(process.env, 'VERSION') && typeof process.env.VERSION === 'string' ? process.env.VERSION : 'unknown';
 
 const LOGGERS: Map<string, Logger> = new Map();

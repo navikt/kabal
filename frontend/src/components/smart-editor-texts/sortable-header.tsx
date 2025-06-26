@@ -1,5 +1,5 @@
 import { SortOrder } from '@app/types/sort';
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { useSearchParams } from 'react-router-dom';
 import { styled } from 'styled-components';

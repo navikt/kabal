@@ -5,8 +5,7 @@ import {
   useSetDoNotSendBrevMutation,
   useSetReasonNoLetterMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
-import { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
-import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES } from '@app/types/field-names';
+import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
 import { Alert, Box, Checkbox, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';

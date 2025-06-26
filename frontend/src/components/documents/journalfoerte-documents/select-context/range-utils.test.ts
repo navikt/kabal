@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'bun:test';
 import {
-  RangeDirection,
-  type SelectionRange,
   getRangeDirection,
   indexesToRanges,
   insertIndexIntoRange,
@@ -9,10 +7,12 @@ import {
   isRangeCollapsed,
   mergeRanges,
   mergeTwoRanges,
-  rangeToIndexes,
+  RangeDirection,
   rangesToIndexes,
+  rangeToIndexes,
   removeIndexFromRange,
   removeIndexFromRanges,
+  type SelectionRange,
 } from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
 
 describe('getRangeDirection', () => {

@@ -1,4 +1,4 @@
-import { Keys, isMetaKey } from '@app/keys';
+import { isMetaKey, Keys } from '@app/keys';
 import { PageBreak } from '@app/plate/components/page-break';
 import { isInTable } from '@app/plate/utils/queries';
 import { insertPageBreak } from '@app/plate/utils/transforms';

@@ -13,10 +13,9 @@ import {
 } from '@app/plate/types';
 import { isNodeEmpty, isOfElementTypesFn, nextPath } from '@app/plate/utils/queries';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { TableAdd } from '@styled-icons/fluentui-system-regular';
 import { BaseParagraphPlugin } from 'platejs';
-
-import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 
 export const InsertTableButton = () => {
   const editor = useMyPlateEditorRef();

@@ -7,7 +7,7 @@ import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import type { ConnectionContext } from '@app/plugins/crdt/context';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import type { Node } from 'slate';
-import { Doc, XmlText, encodeStateAsUpdateV2 } from 'yjs';
+import { Doc, encodeStateAsUpdateV2, XmlText } from 'yjs';
 
 const log = getLogger('collaboration');
 

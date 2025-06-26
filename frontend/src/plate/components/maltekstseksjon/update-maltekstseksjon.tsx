@@ -3,7 +3,7 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import type { MaltekstElement, RedigerbarMaltekstElement } from '@app/plate/types';
 import { FileTextIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Box, Button, type ButtonProps, HStack, HelpText } from '@navikt/ds-react';
+import { Box, Button, type ButtonProps, HelpText, HStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 

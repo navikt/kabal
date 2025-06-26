@@ -1,7 +1,7 @@
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { EditPart } from '@app/components/part/edit-part';
+import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import type { IPart } from '@app/types/oppgave-common';
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';

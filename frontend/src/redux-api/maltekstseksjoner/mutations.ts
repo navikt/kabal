@@ -2,6 +2,7 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import type { KabalValue } from '@app/plate/types';
+import { reduxStore } from '@app/redux/configure-store';
 import {
   ConsumerMaltekstseksjonerTagTypes,
   consumerMaltekstseksjonerApi,
@@ -10,7 +11,6 @@ import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/malteksts
 import { maltekstseksjonerQuerySlice } from '@app/redux-api/maltekstseksjoner/queries';
 import { getLastPublishedVersion } from '@app/redux-api/redaktoer-helpers';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
-import { reduxStore } from '@app/redux/configure-store';
 import { user } from '@app/static-data/static-data';
 import type { IGetMaltekstseksjonParams, PublishedTextReadOnlyMetadata } from '@app/types/common-text-types';
 import { isApiRejectionError } from '@app/types/errors';
@@ -29,8 +29,8 @@ import type {
 } from '@app/types/maltekstseksjoner/params';
 import type {
   IDraftMaltekstseksjon,
-  IPublishWithTextsResponse,
   IPublishedMaltekstseksjon,
+  IPublishWithTextsResponse,
 } from '@app/types/maltekstseksjoner/responses';
 import type { INewRichTextParams } from '@app/types/texts/common';
 import { LANGUAGES, type Language } from '@app/types/texts/language';

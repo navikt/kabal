@@ -29,8 +29,8 @@ import {
 } from '@app/redux-api/oppgaver/mutations/documents';
 import {
   DISTRIBUTION_TYPE_NAMES,
-  DOCUMENT_TYPE_NAMES,
   DistribusjonsType,
+  DOCUMENT_TYPE_NAMES,
   DocumentTypeEnum,
   type IDocument,
 } from '@app/types/documents/documents';

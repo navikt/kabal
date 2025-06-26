@@ -1,6 +1,6 @@
 import { EditableTitle } from '@app/components/editable-title/editable-title';
-import { DraftTextActions } from '@app/components/maltekstseksjoner/texts/text-draft-actions';
 import { LanguageEditor, type RichTexts } from '@app/components/maltekstseksjoner/texts/text-draft/language-editor';
+import { DraftTextActions } from '@app/components/maltekstseksjoner/texts/text-draft-actions';
 import { CreateTranslatedRichText } from '@app/components/smart-editor-texts/create-translated-text';
 import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
 import { isoDateTimeToPretty } from '@app/domain/date';
@@ -13,9 +13,9 @@ import {
   useUpdateRichTextMutation,
 } from '@app/redux-api/texts/mutations';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { LANGUAGES, type Language, isLanguage } from '@app/types/texts/language';
+import { isLanguage, LANGUAGES, type Language } from '@app/types/texts/language';
 import type { IDraftRichText } from '@app/types/texts/responses';
-import { BodyShort, HStack, HelpText, Label, Loader, Switch, Tooltip, VStack } from '@navikt/ds-react';
+import { BodyShort, HelpText, HStack, Label, Loader, Switch, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { areDescendantsEqual } from '../../../../functions/are-descendants-equal';
 
@@ -63,22 +63,26 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
         return;
       }
 
-      const promises = LANGUAGES.map((lang) => {
-        const localRichText = _richTexts[lang];
+      try {
+        const promises = LANGUAGES.map((lang) => {
+          const localRichText = _richTexts[lang];
 
-        if (areDescendantsEqual(localRichText ?? [], text.richText[lang] ?? [])) {
-          return;
-        }
+          if (areDescendantsEqual(localRichText ?? [], text.richText[lang] ?? [])) {
+            return;
+          }
 
-        isUpdating.current = true;
-        const query = queryRef.current;
+          isUpdating.current = true;
+          const query = queryRef.current;
 
-        return updateRichText({ query, id, richText: localRichText, language: lang });
-      });
+          return updateRichText({ query, id, richText: localRichText, language: lang });
+        });
 
-      await Promise.all(promises);
-
-      isUpdating.current = false;
+        await Promise.all(promises);
+      } catch (error) {
+        console.error('Failed to update rich text:', error);
+      } finally {
+        isUpdating.current = false;
+      }
     },
     [id, text.richText, updateRichText],
   );
@@ -93,6 +97,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
         return;
       }
 
+      // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
       updateContentIfChanged(richTexts);
     }, 1000);
 
@@ -102,6 +107,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   useEffect(
     () => () => {
       // Save on unmount, if changed.
+      // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
       updateContentIfChanged(richTextRef.current);
     },
     [updateContentIfChanged],

@@ -1,14 +1,16 @@
 import { useSmartEditorCapitalise } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
-import { BodyShort, HStack, Heading, HelpText, Tag, ToggleGroup } from '@navikt/ds-react';
+import { BodyShort, Heading, HelpText, HStack, Tag, ToggleGroup } from '@navikt/ds-react';
+import { useId } from 'react';
 
 export const Capitalise = () => {
   const { setValue, value } = useSmartEditorCapitalise();
+  const id = useId();
 
   return (
-    <section aria-labelledby="capitalise">
+    <section aria-labelledby={id}>
       <HStack asChild align="center" gap="1" wrap={false}>
-        <Heading level="2" size="small" spacing id="capitalise">
+        <Heading level="2" size="small" spacing id={id}>
           <span>Automatisk stor forbokstav</span>
 
           <HelpText title="Hjelp">

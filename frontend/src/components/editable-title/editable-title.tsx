@@ -1,6 +1,6 @@
 import { Keys } from '@app/keys';
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Heading } from '@navikt/ds-react';
+import { Button, Heading, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 
 interface Props {

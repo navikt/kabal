@@ -14,7 +14,7 @@ import { GOD_FORMULERING_TYPE, REGELVERK_TYPE, RichTextTypes } from '@app/types/
 import { LANGUAGE_NAMES, UNTRANSLATED } from '@app/types/texts/language';
 import type { IPublishedGodFormulering, IPublishedRegelverk, IPublishedRichText } from '@app/types/texts/responses';
 import { PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, HStack, Heading, Label, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, HStack, Label, VStack } from '@navikt/ds-react';
 import { useRef } from 'react';
 import { RedaktoerRichText } from '../../redaktoer-rich-text/redaktoer-rich-text';
 

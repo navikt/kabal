@@ -1,13 +1,13 @@
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-language/set-maltekstseksjon-language';
-import {
-  DEFAULT_STATUSES,
-  STATUS_OPTIONS,
-  type Status,
-  filterByStatus,
-} from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
+import {
+  DEFAULT_STATUSES,
+  filterByStatus,
+  STATUS_OPTIONS,
+  type Status,
+} from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import { useGetTextsQuery } from '@app/redux-api/texts/queries';

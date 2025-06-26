@@ -13,8 +13,7 @@ import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/pro
 import { SelectionPlugin } from '@app/plate/plugins/selection';
 import { AutoformatPlugin } from '@platejs/autoformat';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import { BoldPlugin, ItalicPlugin, UnderlinePlugin } from '@platejs/basic-nodes/react';
-import { HeadingPlugin } from '@platejs/basic-nodes/react';
+import { BoldPlugin, HeadingPlugin, ItalicPlugin, UnderlinePlugin } from '@platejs/basic-nodes/react';
 import { TextAlignPlugin } from '@platejs/basic-styles/react';
 import { NodeIdPlugin } from '@platejs/core';
 import { DocxPlugin } from '@platejs/docx';

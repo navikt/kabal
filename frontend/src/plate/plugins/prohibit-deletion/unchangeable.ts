@@ -8,7 +8,7 @@ import type { PlaceholderElement } from '@app/plate/types';
 import { isInList } from '@app/plate/utils/queries';
 import type { PlateEditor } from '@platejs/core/react';
 import { ElementApi } from 'platejs';
-import { Path, type TextDirection, type TextUnit, isEditor } from 'slate';
+import { isEditor, Path, type TextDirection, type TextUnit } from 'slate';
 
 const deleteCurrentNode = (editor: PlateEditor): void => {
   const currentEntry = editor.api.node({ match: (n) => !isEditor(n) });

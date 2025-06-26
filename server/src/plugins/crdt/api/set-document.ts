@@ -6,7 +6,7 @@ import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import type { ConnectionContext } from '@app/plugins/crdt/context';
 import type { Document } from '@hocuspocus/server';
 import { yTextToSlateElement } from '@slate-yjs/core';
-import { XmlText, encodeStateAsUpdateV2 } from 'yjs';
+import { encodeStateAsUpdateV2, XmlText } from 'yjs';
 
 const log = getLogger('collaboration');
 

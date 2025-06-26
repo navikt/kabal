@@ -2,21 +2,21 @@ import { randomUUID } from 'node:crypto';
 import { getLogger } from '@app/logger';
 import type { ValkeyOptions } from '@app/plugins/crdt/valkey-extension/types';
 import {
+  type afterLoadDocumentPayload,
+  type afterStoreDocumentPayload,
+  type beforeBroadcastStatelessPayload,
   type Document,
   type Extension,
   type Hocuspocus,
   IncomingMessage,
   MessageReceiver,
   OutgoingMessage,
-  type afterLoadDocumentPayload,
-  type afterStoreDocumentPayload,
-  type beforeBroadcastStatelessPayload,
   type onAwarenessUpdatePayload,
   type onChangePayload,
   type onConfigurePayload,
   type onDisconnectPayload,
 } from '@hocuspocus/server';
-import { type RedisClientType as ValkeyClientType, createClient } from 'redis';
+import { createClient, type RedisClientType as ValkeyClientType } from 'redis';
 
 const log = getLogger('valkey-extension');
 
@@ -53,10 +53,14 @@ export class ValkeyExtension implements Extension {
     this.#messagePrefix = Buffer.concat([Buffer.from([identifierBuffer.length]), identifierBuffer]);
   }
 
-  async #init() {
-    await Promise.all([this.#sub.connect(), this.#pub.connect()]);
-
-    this.#isReady = true;
+  #init() {
+    Promise.all([this.#sub.connect(), this.#pub.connect()])
+      .then(() => {
+        this.#isReady = true;
+      })
+      .catch((error) => {
+        log.error({ msg: 'Failed to connect to Valkey', error, data: { identifier: this.#identifier } });
+      });
   }
 
   onConfigure({ instance }: onConfigurePayload) {

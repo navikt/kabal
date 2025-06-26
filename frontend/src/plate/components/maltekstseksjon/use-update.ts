@@ -5,7 +5,7 @@ import { replaceNodes } from '@app/plate/components/maltekstseksjon/replace-node
 import type { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import { ReplaceMethod, useGetReplaceMethod } from '@app/plate/components/maltekstseksjon/use-get-replace-method';
 import { usePath } from '@app/plate/components/maltekstseksjon/use-path';
-import { LexSpecialisStatus, type ScoredText, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
+import { LexSpecialisStatus, lexSpecialis, type ScoredText } from '@app/plate/functions/lex-specialis/lex-specialis';
 import { type MaltekstseksjonElement, useMyPlateEditorRef } from '@app/plate/types';
 import {
   useLazyGetConsumerMaltekstseksjonerQuery,
@@ -132,7 +132,9 @@ export const useUpdateMaltekstseksjon = (
       return;
     }
 
-    update();
+    update().catch((error) => {
+      console.error('Failed to update maltekstseksjon:', error);
+    });
   }, [canManage, queryChanged, maltekstseksjonIsFetching, query, textsAreFetching, update]);
 
   return {

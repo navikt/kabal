@@ -1,8 +1,8 @@
 import {
-  FILE_TYPE_NAMES,
-  FileType,
   canDistribute,
   canOpenInKabal,
+  FILE_TYPE_NAMES,
+  FileType,
   getDefaultVariant,
   hasRedactedVariant,
 } from '@app/components/documents/filetype';

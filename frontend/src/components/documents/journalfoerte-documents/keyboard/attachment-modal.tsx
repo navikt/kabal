@@ -8,7 +8,7 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { useCanEditDocument } from '@app/components/documents/journalfoerte-documents/use-can-edit';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { Keys, isMetaKey } from '@app/keys';
+import { isMetaKey, Keys } from '@app/keys';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { type IArkivertDocument, type IArkivertDocumentVedlegg, Journalstatus } from '@app/types/arkiverte-documents';
@@ -19,8 +19,8 @@ import {
   BodyShort,
   Button,
   type ButtonProps,
-  HStack,
   Heading,
+  HStack,
   List,
   Modal,
   Tag,

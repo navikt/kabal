@@ -4,10 +4,10 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { formatIdNumber } from '@app/functions/format-id';
+import { reduxStore } from '@app/redux/configure-store';
 import { forlengetBehandlingstidApi } from '@app/redux-api/forlenget-behandlingstid';
 import { getFullmektigBody, getFullmektigMessage } from '@app/redux-api/oppgaver/mutations/fullmektig-helpers';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { reduxStore } from '@app/redux/configure-store';
 import { isApiRejectionError } from '@app/types/errors';
 import type { IFullmektig } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -87,7 +87,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           }
         };
 
-        finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled, catchFn });
+        return finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled, catchFn });
       },
     }),
     finishOppgavebehandlingWithUpdateInGosys: builder.mutation<IVedtakFullfoertResponse, IFinishWithUpdateInGosys>({
@@ -113,7 +113,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           }
         };
 
-        finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled, catchFn });
+        return finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled, catchFn });
       },
     }),
     updateFullmektig: builder.mutation<IModifiedResponse, ISetFullmektigParams>({

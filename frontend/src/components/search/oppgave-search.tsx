@@ -134,7 +134,12 @@ const SearchField = ({
   onKeyDown,
   label,
   children,
-}: { onChange: SearchProps['onChange']; label: string; onKeyDown: () => void; children: SearchProps['children'] }) => (
+}: {
+  onChange: SearchProps['onChange'];
+  label: string;
+  onKeyDown: () => void;
+  children: SearchProps['children'];
+}) => (
   <StyledSearch
     size="medium"
     variant="simple"

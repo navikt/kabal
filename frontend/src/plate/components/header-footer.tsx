@@ -88,7 +88,9 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
 
   useEffect(() => {
     if (!initialized) {
-      loadMaltekst(element);
+      loadMaltekst(element).catch((error) => {
+        console.error('Failed to load maltekst for header/footer:', error);
+      });
     }
   }, [element, initialized, loadMaltekst]);
 

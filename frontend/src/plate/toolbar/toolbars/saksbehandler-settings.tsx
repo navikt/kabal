@@ -10,10 +10,10 @@ import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushEvent } from '@app/observability';
 import { Capitalise } from '@app/plate/toolbar/capitalise';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { Language, isLanguage } from '@app/types/texts/language';
+import { isLanguage, Language } from '@app/types/texts/language';
 import { CogIcon } from '@navikt/aksel-icons';
 import { Heading, Modal, ToggleGroup, VStack } from '@navikt/ds-react';
-import { useCallback, useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useId, useRef, useState } from 'react';
 
 export const SaksbehandlerSettings = () => {
   const { hasWriteAccess, showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } = useContext(SmartEditorContext);
@@ -22,6 +22,10 @@ export const SaksbehandlerSettings = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const language = useSmartEditorLanguage();
   const [setLanguage] = useSetSmartEditorLanguage();
+  const modalHeadingId = useId();
+  const langHeadingId = useId();
+  const commentHeadingId = useId();
+  const abbreviationsHeadingId = useId();
 
   const onChangeLanguage = useCallback(
     (lang: string) => {
@@ -48,18 +52,18 @@ export const SaksbehandlerSettings = () => {
         ref={modalRef}
         onClose={() => setIsSettingsOpen(false)}
         width="900px"
-        aria-labelledby="modal-heading"
+        aria-labelledby={modalHeadingId}
         closeOnBackdropClick
       >
         <Modal.Header>
-          <Heading size="medium" level="1" id="modal-heading">
+          <Heading size="medium" level="1" id={modalHeadingId}>
             Innstillinger for brevutforming
           </Heading>
         </Modal.Header>
         <Modal.Body className="flex flex-col gap-y-4">
           {hasWriteAccess ? (
-            <section aria-labelledby="set-language">
-              <Heading level="2" size="small" spacing id="set-language">
+            <section aria-labelledby={langHeadingId}>
+              <Heading level="2" size="small" spacing id={langHeadingId}>
                 Språk
               </Heading>
               <ToggleGroup size="small" value={language} onChange={onChangeLanguage}>
@@ -71,8 +75,8 @@ export const SaksbehandlerSettings = () => {
 
           <Capitalise />
 
-          <section aria-labelledby="set-comments-and-bookmarks">
-            <Heading level="2" size="small" spacing id="set-comments-and-bookmarks">
+          <section aria-labelledby={commentHeadingId}>
+            <Heading level="2" size="small" spacing id={commentHeadingId}>
               Kommentarer og bokmerker
             </Heading>
 
@@ -110,12 +114,12 @@ export const SaksbehandlerSettings = () => {
             </VStack>
           </section>
 
-          <section aria-labelledby="set-abbreviations">
+          <section aria-labelledby={abbreviationsHeadingId}>
             <Heading
               level="2"
               size="small"
               spacing
-              id="set-abbreviations"
+              id={abbreviationsHeadingId}
               className="flex flex-row items-center gap-x-2"
             >
               <AbbreviationsHeadingContent />

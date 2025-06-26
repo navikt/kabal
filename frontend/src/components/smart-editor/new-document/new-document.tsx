@@ -11,9 +11,9 @@ import {
   ANKE_I_TRYGDERETTEN_TEMPLATES,
   ANKE_TEMPLATES,
   BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
+  getFinishedBehandlingTemplates,
   KLAGE_TEMPLATES,
   OMGJØRINGSKRAVVEDTAK_TEMPLATES,
-  getFinishedBehandlingTemplates,
 } from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';

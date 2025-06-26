@@ -1,29 +1,45 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": { "enabled": true },
+  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
+  "root": true,
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
   "linter": {
     "enabled": true,
+    "domains": {
+      "project": "recommended",
+      "test": "recommended"
+    },
     "rules": {
-      "all": true,
       "nursery": {
-        "all": true,
-        "useImportRestrictions": { "level": "off" },
         "noSecrets": { "level": "off", "options": {} },
-        "useComponentExportOnlyModules": { "level": "off", "options": {} },
-        "noEnum": { "level": "off" },
-        "useExplicitType": { "level": "off" },
-        "useConsistentMemberAccessibility": { "level": "off", "options": {} },
-        "useConsistentCurlyBraces": { "level": "off", "fix": "none" }
+        "useExplicitType": { "level": "off" }
       },
       "correctness": {
-        "noUndeclaredDependencies": { "level": "off" },
-        "useImportExtensions": { "level": "off", "fix": "none", "options": {} },
-        "noUndeclaredVariables": { "level": "off" }
+        "useImportExtensions": { "level": "off", "fix": "none", "options": {} }
       },
       "style": {
         "noImplicitBoolean": { "level": "off", "fix": "none" },
         "useDefaultSwitchClause": { "level": "off" },
-        "useNamingConvention": { "level": "off", "fix": "none", "options": {} }
+        "useNamingConvention": { "level": "off", "fix": "none", "options": {} },
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error",
+        "useComponentExportOnlyModules": { "level": "off", "options": {} },
+        "noEnum": { "level": "off" },
+        "useConsistentMemberAccessibility": { "level": "off", "options": {} },
+        "useConsistentCurlyBraces": { "level": "off", "fix": "none" }
       },
       "suspicious": {
         "noConsole": { "level": "off", "options": { "allow": ["debug", "info", "warn", "error"] } },
@@ -42,6 +58,6 @@
     "linter": { "enabled": true }
   },
   "files": {
-    "ignore": ["dist/**", "./**/*.css"]
+    "includes": ["**", "!dist/**", "!**/*.css"]
   }
 }

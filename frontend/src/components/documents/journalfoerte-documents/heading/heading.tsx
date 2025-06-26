@@ -3,7 +3,7 @@ import { unselectAll } from '@app/components/documents/journalfoerte-documents/k
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Heading, Stack, Tooltip } from '@navikt/ds-react';
+import { Button, Heading, HStack, Stack, Tooltip } from '@navikt/ds-react';
 import { memo, useMemo } from 'react';
 import { Menu } from './menu';
 
@@ -17,6 +17,8 @@ interface Props extends RemoveFiltersProps {
   allDocuments: IArkivertDocument[];
   filteredDocuments: IArkivertDocument[];
 }
+
+const JOURNALFOERTE_DOCUMENTS_HEADING_ID = 'journalfoerte-dokumenter-heading';
 
 export const JournalfoertHeading = memo(
   ({ resetFilters, noFiltersActive, filteredDocuments, allDocuments, totalLengthOfMainDocuments }: Props) => {
@@ -47,7 +49,7 @@ export const JournalfoertHeading = memo(
             content={`Viser ${filteredDocuments.length} filtrerte hoveddokumenter.\n\nAntall hoveddokumenter: ${totalLengthOfMainDocuments}\nAntall vedlegg: ${numberOfVedlegg}\nTotalt: ${totalCount}`}
             describesChild
           >
-            <Heading size="xsmall" level="1" id="journalfoerte-dokumenter-heading">
+            <Heading size="xsmall" level="1" id={JOURNALFOERTE_DOCUMENTS_HEADING_ID}>
               Journalførte dokumenter ({filteredDocuments.length}/{totalLengthOfMainDocuments})
             </Heading>
           </Tooltip>

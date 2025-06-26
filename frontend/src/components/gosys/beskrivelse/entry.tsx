@@ -8,7 +8,7 @@ import {
 } from '@app/components/gosys/beskrivelse/parsing/type';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useKlageenheter } from '@app/simple-api-state/use-kodeverk';
-import { BodyLong, HStack, Heading, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { BodyLong, Heading, HStack, Tag, Tooltip, VStack } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import { styled } from 'styled-components';
 

@@ -1,4 +1,4 @@
-import { Keys, MOD_KEY_TEXT, isMetaKey } from '@app/keys';
+import { isMetaKey, Keys, MOD_KEY_TEXT } from '@app/keys';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { FileXMarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, Textarea } from '@navikt/ds-react';

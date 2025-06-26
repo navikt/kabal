@@ -3,7 +3,7 @@ import { hasOwn } from '@app/functions/object';
 import { Keys } from '@app/keys';
 import { BookmarkLeaf } from '@app/plate/leaf/bookmark';
 import type { FormattedText } from '@app/plate/types';
-import { type PlateEditor, createPlatePlugin } from '@platejs/core/react';
+import { createPlatePlugin, type PlateEditor } from '@platejs/core/react';
 import { RangeApi, TextApi } from 'platejs';
 
 export const BookmarkPlugin = createPlatePlugin({

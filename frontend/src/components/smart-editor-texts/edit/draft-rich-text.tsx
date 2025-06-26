@@ -10,7 +10,7 @@ import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
 import type { KabalValue } from '@app/plate/types';
 import { usePublishMutation, useUpdateRichTextMutation } from '@app/redux-api/texts/mutations';
-import { LANGUAGES, type Language, isLanguage } from '@app/types/texts/language';
+import { isLanguage, LANGUAGES, type Language } from '@app/types/texts/language';
 import type { IGodFormulering, IRichText } from '@app/types/texts/responses';
 import { useCallback, useEffect, useState } from 'react';
 

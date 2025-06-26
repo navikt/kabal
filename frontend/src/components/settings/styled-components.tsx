@@ -1,4 +1,4 @@
-import { Box, type BoxProps, Fieldset, HStack, Heading, VStack } from '@navikt/ds-react';
+import { Box, type BoxProps, Fieldset, Heading, HStack, VStack } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 type Props = Omit<BoxProps, 'asChild' | 'padding' | 'borderRadius' | 'shadow' | 'height'>;

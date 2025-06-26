@@ -8,12 +8,13 @@ import { Capitalise } from '@app/plate/toolbar/capitalise';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { CogIcon } from '@navikt/aksel-icons';
 import { Heading, Modal } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 
 export const RedkatoerSettings = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const headingId = useId();
 
   return (
     <>
@@ -31,11 +32,11 @@ export const RedkatoerSettings = () => {
         ref={modalRef}
         onClose={() => setIsSettingsOpen(false)}
         width="900px"
-        aria-labelledby="modal-heading"
+        aria-labelledby={headingId}
         closeOnBackdropClick
       >
         <Modal.Header>
-          <Heading size="medium" level="1" id="modal-heading">
+          <Heading size="medium" level="1" id={headingId}>
             Innstillinger for brevutforming
           </Heading>
         </Modal.Header>

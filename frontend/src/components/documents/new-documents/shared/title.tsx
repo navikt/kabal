@@ -11,7 +11,7 @@ import {
   getNewDocumentTabId,
 } from '@app/domain/tabbed-document-url';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
-import { MouseButtons, isMetaKey } from '@app/keys';
+import { isMetaKey, MouseButtons } from '@app/keys';
 import { DocumentTypeEnum, type JournalfoertDokumentReference } from '@app/types/documents/documents';
 import { useContext, useMemo } from 'react';
 

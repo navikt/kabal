@@ -1,8 +1,8 @@
 import {
   EXPANDED_HEIGHT,
-  LOGISKE_VEDLEGG_OFFSET,
   LOGISK_VEDLEGG_HEIGHT,
   LOGISK_VEDLEGG_SPACE,
+  LOGISKE_VEDLEGG_OFFSET,
   ROW_HEIGHT,
 } from '@app/components/documents/journalfoerte-documents/contants';
 import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';

@@ -3,8 +3,8 @@ import { Details } from '@app/components/toast/toast-content/fetch-error-toast';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { type ApiError, isApiError } from '@app/types/errors';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, HStack, Heading, Loader, VStack } from '@navikt/ds-react';
-import { useEffect, useRef, useState } from 'react';
+import { Alert, BodyShort, Box, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const useFixPdf = (refresh: () => void): [() => Promise<void>, boolean] => {
@@ -81,15 +81,7 @@ export const usePdfData = (url: string | undefined, query?: Record<string, strin
   const [error, setError] = useState<string>();
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  useEffect(() => {
-    if (url === undefined) {
-      return;
-    }
-
-    getData(url, query).then(setData);
-  }, [url, query]);
-
-  const getData = async (url: string | undefined, query?: Record<string, string>) => {
+  const getData = useCallback(async (url: string | undefined, query?: Record<string, string>) => {
     abortControllerRef.current?.abort();
     const controller = new AbortController();
     abortControllerRef.current = controller;
@@ -135,7 +127,16 @@ export const usePdfData = (url: string | undefined, query?: Record<string, strin
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (url === undefined) {
+      return;
+    }
+
+    // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
+    getData(url, query).then(setData);
+  }, [url, query, getData]);
 
   const refresh = () => getData(url).then(setData);
 

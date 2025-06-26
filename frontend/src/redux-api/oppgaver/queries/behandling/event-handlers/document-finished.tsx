@@ -1,7 +1,7 @@
+import { reduxStore } from '@app/redux/configure-store';
 import { handleJournalpostAddedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/journalpost-added';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import type { DocumentFinishedEvent } from '@app/redux-api/server-sent-events/types';
-import { reduxStore } from '@app/redux/configure-store';
 
 export const handleDocumentFinishedEvent = (oppgaveId: string, userId: string) => (event: DocumentFinishedEvent) => {
   handleJournalpostAddedEvent(oppgaveId, userId)(event);

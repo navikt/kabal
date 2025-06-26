@@ -95,7 +95,9 @@ class FrameTimes {
     const avg = Math.round(this.measurements.reduce((a, b) => a + b, 0) / this.measurements.length);
     this.measurements = [];
 
-    this.internalPushMeasurement(max, avg);
+    this.internalPushMeasurement(max, avg).catch((error) => {
+      console.error('Failed to push frame time measurement:', error);
+    });
 
     return this;
   }

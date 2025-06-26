@@ -23,7 +23,6 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
   async (app, { appNames }) => {
     app.decorateRequest('proxyStartTime', 0);
 
-    // biome-ignore lint/suspicious/useAwait: Needs to return a promise
     app.addHook('onSend', async (req, reply) => {
       if (!req.url.startsWith('/api/')) {
         return;

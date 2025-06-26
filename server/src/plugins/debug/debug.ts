@@ -9,7 +9,6 @@ import fastifyPlugin from 'fastify-plugin';
 export const DEBUG_PLUGIN_ID = 'tab-id';
 
 export const debugPlugin = fastifyPlugin(
-  // biome-ignore lint/suspicious/useAwait: Needs to return a promise
   async (app) => {
     app.withTypeProvider<TypeBoxTypeProvider>().post(
       '/debug',

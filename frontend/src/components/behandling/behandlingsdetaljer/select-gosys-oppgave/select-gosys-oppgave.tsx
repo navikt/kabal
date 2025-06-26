@@ -10,7 +10,7 @@ import { useSearchEnheterQuery } from '@app/redux-api/search';
 import type { INavEmployee } from '@app/types/bruker';
 import type { Enhet, ListGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { ArrowsCirclepathIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Heading, Modal, Table } from '@navikt/ds-react';
+import { Button, Heading, HStack, Modal, Table } from '@navikt/ds-react';
 import type { SortState } from '@navikt/ds-react/Table';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo, useState } from 'react';

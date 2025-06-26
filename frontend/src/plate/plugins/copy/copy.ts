@@ -26,8 +26,8 @@ import type {
   SignatureElement,
 } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
-import { type OverrideEditor, type PlateEditor, createPlatePlugin } from '@platejs/core/react';
-import { ElementApi, NodeApi, RangeApi, type TText, TextApi } from 'platejs';
+import { createPlatePlugin, type OverrideEditor, type PlateEditor } from '@platejs/core/react';
+import { ElementApi, NodeApi, RangeApi, TextApi, type TText } from 'platejs';
 import { type Descendant, type NodeEntry, Range } from 'slate';
 
 const cleanNodes = (editor: PlateEditor, node: Descendant | Descendant[]): Descendant | Descendant[] => {

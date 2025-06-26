@@ -8,7 +8,7 @@ import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import type { TextTypes } from '@app/types/common-text-types';
 import type { IText } from '@app/types/texts/responses';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, HStack, HelpText } from '@navikt/ds-react';
+import { Alert, Button, HelpText, HStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { useTextQuery } from './hooks/use-text-query';

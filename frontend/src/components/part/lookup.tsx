@@ -1,6 +1,6 @@
 import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { IdType, type IdentifikatorPart, PartStatusEnum } from '@app/types/oppgave-common';
+import { type IdentifikatorPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
 import { Alert, BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 

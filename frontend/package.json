@@ -8,11 +8,12 @@
     "build": "vite build",
     "test": "bun test",
     "typecheck": "tsc --noEmit",
-    "lint": "biome check"
+    "lint": "biome check",
+    "migrate": "biome migrate"
   },
   "license": "MIT",
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.0.5",
     "@happy-dom/global-registrator": "18.0.1",
     "@tailwindcss/vite": "4.1.10",
     "@testing-library/dom": "10.4.0",

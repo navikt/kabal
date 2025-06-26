@@ -4,7 +4,7 @@ import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksj
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, HelpText } from '@navikt/ds-react';
+import { BodyShort, Button, HelpText, HStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 
 interface Props {

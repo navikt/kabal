@@ -7,7 +7,7 @@ import { toast } from '@app/components/toast/store';
 import { getMergedDocumentTabId, getMergedDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
-import { MOD_KEY_TEXT, MouseButtons, isMetaKey } from '@app/keys';
+import { isMetaKey, MOD_KEY_TEXT, MouseButtons } from '@app/keys';
 import {
   useGetArkiverteDokumenterQuery,
   useMergedDocumentsReferenceQuery,

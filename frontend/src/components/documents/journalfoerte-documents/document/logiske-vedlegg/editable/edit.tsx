@@ -151,7 +151,7 @@ export const EditLogiskVedlegg = ({
   }, [activeIndex, lastIndex]);
 
   return (
-    // biome-ignore lint/nursery/noStaticElementInteractions: It is not.
+    // biome-ignore lint/a11y/noStaticElementInteractions: It is not.
     <div className="relative max-w-full" onMouseDown={(e) => e.stopPropagation()}>
       <Tooltip content={`${placeholder} logisk vedlegg`} keys={[Keys.Enter, Keys.Tab, Keys.Escape]} open>
         <EditableTag

@@ -6,7 +6,7 @@ import { ENVIRONMENT } from '@app/environment';
 import { type Task, useGetMerkantilTasksQuery } from '@app/redux-api/internal';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ArrowsCirclepathIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, CopyButton, HStack, Heading, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, CopyButton, Heading, HStack, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 

@@ -2,9 +2,9 @@ import { useBookmarks } from '@app/components/smart-editor/bookmarks/use-bookmar
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import {
   type BookmarkData,
+  getPositionedItems,
   ItemType,
   type PositionedItem,
-  getPositionedItems,
 } from '@app/components/smart-editor/functions/get-positioned-items';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { pushEvent } from '@app/observability';

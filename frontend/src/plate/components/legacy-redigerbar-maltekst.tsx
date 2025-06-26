@@ -71,7 +71,9 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
       editor.tf.replaceNodes(nodes, { at: path, children: true });
     } catch (e) {
       console.error('RedigerbarMaltekst: Failed to get texts', e, query);
-      insertRedigerbarMaltekst();
+      insertRedigerbarMaltekst().catch((error) => {
+        console.error('RedigerbarMaltekst: Failed to insert redigerbar maltekst', error);
+      });
     }
   }, [query, path, oppgaveIsLoading, oppgave, getTexts, templateId, element.section, editor]);
 
@@ -83,7 +85,9 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
     isInitialized.current = !consistsOfOnlyEmptyVoid(element);
 
     if (!isInitialized.current) {
-      insertRedigerbarMaltekst();
+      insertRedigerbarMaltekst().catch((error) => {
+        console.error('RedigerbarMaltekst: Failed to insert redigerbar maltekst on init', error);
+      });
     }
   }, [element, insertRedigerbarMaltekst]);
 
