@@ -1,7 +1,7 @@
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useIsRelevantYtelseForRaadgivende } from '@app/hooks/use-is-relevant-ytelse-for-raadgivende';
 import { RadiovalgExtended } from '@app/types/kaka-kvalitetsvurdering/radio';
-import { HStack, Heading, Radio } from '@navikt/ds-react';
+import { Heading, HStack, Radio } from '@navikt/ds-react';
 import { Checkboxes } from './common/checkboxes';
 import { ContainerWithHelpText } from './common/container-with-helptext';
 import { StyledRadioGroup } from './common/styled-components';
@@ -10,13 +10,15 @@ import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
 import { useValidationError } from './common/use-validation-error';
 
+const USE_ROL_FIELD = 'brukAvRaadgivendeLege';
+
 export const BrukAvRaadgivendeLege = () => {
   const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV2();
   const show = useIsRelevantYtelseForRaadgivende(oppgave?.ytelseId ?? null);
 
   const canEdit = useCanEdit();
-  const validationError = useValidationError('brukAvRaadgivendeLege');
-  const header = useKvalitetsvurderingV2FieldName('brukAvRaadgivendeLege');
+  const validationError = useValidationError(USE_ROL_FIELD);
+  const header = useKvalitetsvurderingV2FieldName(USE_ROL_FIELD);
 
   if (!show || isLoading) {
     return null;
@@ -37,7 +39,7 @@ export const BrukAvRaadgivendeLege = () => {
         value={brukAvRaadgivendeLege}
         error={validationError}
         onChange={onChange}
-        id="brukAvRaadgivendeLege"
+        id={USE_ROL_FIELD}
         size="small"
       >
         <ContainerWithHelpText helpText="Du registrerer her dersom den konkrete saken ikke gjelder trygdemedisinske spørsmål.">

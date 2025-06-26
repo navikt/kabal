@@ -1,7 +1,7 @@
-import { QueryKey, SortKey } from '@app/components/smart-editor-texts/sortable-header';
-import { type Status, filterByStatus } from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
+import { QueryKey, SortKey } from '@app/components/smart-editor-texts/sortable-header';
+import { filterByStatus, type Status } from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';

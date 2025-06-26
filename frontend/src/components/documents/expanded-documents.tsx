@@ -6,13 +6,14 @@ import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-do
 import { useDocumentsWidth } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, Heading, VStack } from '@navikt/ds-react';
+import { Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-documents';
 import { NewDocuments } from './new-documents/new-documents-list/new-documents';
 import { UploadFile } from './upload-file/upload-file';
 
 const MIN_WIDTH = 570;
+const HEADING_ID = 'dokumenter-heading';
 
 export const ExpandedDocuments = () => {
   const [isExpanded] = useIsExpanded();
@@ -115,7 +116,7 @@ export const ExpandedDocuments = () => {
         minWidth={`${minWidth}px`}
         className="resize-x"
         ref={ref}
-        aria-labelledby="dokumenter-heading"
+        aria-labelledby={HEADING_ID}
       >
         <HStack asChild align="start" justify="start" gap="0 2" position="relative">
           <Box
@@ -125,9 +126,9 @@ export const ExpandedDocuments = () => {
             paddingInline="4"
             paddingBlock="2"
             marginBlock="0 2"
-            aria-labelledby="dokumenter-heading"
+            aria-labelledby={HEADING_ID}
           >
-            <Heading size="medium" level="1" id="dokumenter-heading">
+            <Heading size="medium" level="1" id={HEADING_ID}>
               Dokumenter
             </Heading>
 

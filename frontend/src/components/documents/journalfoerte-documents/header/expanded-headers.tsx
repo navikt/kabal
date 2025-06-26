@@ -16,7 +16,7 @@ import { useAllTemaer } from '@app/hooks/use-all-temaer';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Journalposttype } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons';
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { DateFilter } from './date-filter';

@@ -1,7 +1,7 @@
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
-import { KABAL_API_BASE_QUERY } from '@app/redux-api/common';
 import { reduxStore } from '@app/redux/configure-store';
+import { KABAL_API_BASE_QUERY } from '@app/redux-api/common';
 import type { IMottaker } from '@app/types/documents/documents';
 import { mottakerToInputMottaker } from '@app/types/documents/params';
 import { BehandlingstidUnitType } from '@app/types/svarbrev';

@@ -5,7 +5,7 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { HStack, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
+import { Heading, HStack, Loader, Radio, RadioGroup } from '@navikt/ds-react';
 import { type Reason, Reasons } from './reasons';
 import { FormSection, StyledHelpText } from './styled-components';
 import { useKvalitetsvurderingV1FieldName } from './use-field-name';

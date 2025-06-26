@@ -5,8 +5,8 @@ import { useForlengetFristPdfWidth } from '@app/hooks/settings/use-setting';
 import {
   useGetOrCreateQuery,
   useSetBehandlingstidDateMutation,
-  useSetBehandlingstidUnitTypeMutation,
   useSetBehandlingstidUnitsMutation,
+  useSetBehandlingstidUnitTypeMutation,
   useSetCustomTextMutation,
   useSetFullmektigFritekstMutation,
   useSetPreviousBehandlingstidInfoMutation,

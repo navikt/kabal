@@ -1,6 +1,6 @@
 import { DateTime } from '@app/components/datetime/datetime';
 import { AddButton } from '@app/components/smart-editor/gode-formuleringer/add-button';
-import { OUTLINE_WIDTH, godFormuleringBaseStyle } from '@app/components/smart-editor/gode-formuleringer/styles';
+import { godFormuleringBaseStyle, OUTLINE_WIDTH } from '@app/components/smart-editor/gode-formuleringer/styles';
 import { GodeFormuleringerExpandState } from '@app/hooks/settings/use-setting';
 import { SPELL_CHECK_LANGUAGES, useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { KabalPlateEditor } from '@app/plate/plate-editor';
@@ -9,7 +9,7 @@ import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/
 import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { CalendarIcon, ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Heading, Tag, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@platejs/core/react';
 import { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';

@@ -7,7 +7,7 @@ import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useUpdateExtraUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
 import { type SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { Button, HStack, HelpText, Label, Tag, VStack } from '@navikt/ds-react';
+import { Button, HelpText, HStack, Label, Tag, VStack } from '@navikt/ds-react';
 import { type ReactNode, useMemo, useRef, useState } from 'react';
 
 interface TagsProps {

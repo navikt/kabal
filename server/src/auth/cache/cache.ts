@@ -1,10 +1,13 @@
 import { OboMemoryCache } from '@app/auth/cache/memory-cache';
 import { OboPersistentCache } from '@app/auth/cache/persistent-cache';
 import { optionalEnvString } from '@app/config/env-var';
+import { getLogger } from '@app/logger';
 
 const VALKEY_URI = optionalEnvString('REDIS_URI_OBO_CACHE_KABAL');
 const VALKEY_USERNAME = optionalEnvString('REDIS_USERNAME_OBO_CACHE_KABAL');
 const VALKEY_PASSWORD = optionalEnvString('REDIS_PASSWORD_OBO_CACHE_KABAL');
+
+const log = getLogger('obo-cache');
 
 class OboTieredCache {
   #oboPersistentCache: OboPersistentCache;
@@ -13,7 +16,9 @@ class OboTieredCache {
 
   constructor(valkeyUri: string, valkeyUsername: string, valkeyPassword: string) {
     this.#oboPersistentCache = new OboPersistentCache(valkeyUri, valkeyUsername, valkeyPassword);
-    this.#init();
+    this.#init().catch((error) => {
+      log.error({ msg: 'Failed to initialize OBO cache:', error, data: { valkeyUri, valkeyUsername } });
+    });
   }
 
   async #init() {

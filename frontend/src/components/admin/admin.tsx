@@ -5,7 +5,7 @@ import {
   useRefillElasticAdminMutation,
   useResendDvhMutation,
 } from '@app/redux-api/internal';
-import { Box, HStack, Heading, VStack } from '@navikt/ds-react';
+import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
 import { ApiButton } from './api-button';
 
 export const Admin = () => (

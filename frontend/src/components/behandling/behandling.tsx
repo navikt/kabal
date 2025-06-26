@@ -3,7 +3,7 @@ import { BehandlingSection } from '@app/components/behandling/behandlingsdetalje
 import { Omgjøringskravdetaljer } from '@app/components/behandling/behandlingsdetaljer/omgjøringskravdetaljer';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { HGrid, Heading, Skeleton } from '@navikt/ds-react';
+import { Heading, HGrid, Skeleton } from '@navikt/ds-react';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
 import { Klagebehandlingsdetaljer } from './behandlingsdetaljer/klagebehandlingsdetaljer';

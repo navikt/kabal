@@ -18,7 +18,9 @@ export const getAccessSummary = <
     reasons: string[];
   }
 
-  const reasonGroups: ReasonGroup[] = [];
+  const reasonGroups: ReasonGroup[] = read
+    ? []
+    : [{ title: 'Ingen tilgang', reasons: ['Du har ikke tilgang til dette dokumentet.'] }];
 
   const accessList = Object.entries(rest);
 

@@ -5,14 +5,15 @@ import {
 import { useHasSeenKeyboardShortcuts } from '@app/hooks/settings/use-setting';
 import { KEY_ICONS, Keys, MOD_KEY } from '@app/keys';
 import { pushEvent } from '@app/observability';
-import { Box, HGrid, HStack, Heading, Modal } from '@navikt/ds-react';
+import { Box, Heading, HGrid, HStack, Modal } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useId, useRef } from 'react';
 
 export const KeyboardHelpModal = () => {
   const ref = useRef<HTMLDialogElement>(null);
   const isOpen = useIsKeyboardHelpModalOpen();
   const { setValue: setHasSeenKeyboardShortcuts } = useHasSeenKeyboardShortcuts();
+  const modalHeadingId = useId();
 
   useEffect(() => {
     if (isOpen) {
@@ -36,7 +37,7 @@ export const KeyboardHelpModal = () => {
     <Modal
       ref={ref}
       closeOnBackdropClick
-      aria-labelledby="kb-help-modal-title"
+      aria-labelledby={modalHeadingId}
       width={780}
       onKeyDown={onKeyDown}
       onClose={closeKeyboardHelpModal}
@@ -45,7 +46,7 @@ export const KeyboardHelpModal = () => {
         <HStack as={Heading} gap="1" align="center" level="1" size="small">
           <Keyboard size={24} aria-hidden />
 
-          <span id="kb-help-modal-title">Tastaturstyring i journalførte dokumenter</span>
+          <span id={modalHeadingId}>Tastaturstyring i journalførte dokumenter</span>
         </HStack>
       </Modal.Header>
 

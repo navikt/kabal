@@ -1,6 +1,6 @@
 import { AppErrorBoundary } from '@app/components/app/error-boundary';
 import { StaticDataLoader } from '@app/components/app/static-data-context';
-import { Keys, isMetaKey } from '@app/keys';
+import { isMetaKey, Keys } from '@app/keys';
 import { reduxStore } from '@app/redux/configure-store';
 import { StrictMode, useEffect } from 'react';
 import { Provider } from 'react-redux';

@@ -7,7 +7,7 @@ import {
 import { useKeyboardContext } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-context';
 import { openKeyboardHelpModal } from '@app/components/documents/journalfoerte-documents/keyboard/state/help-modal';
 import { unselectAll } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { Keys, isMetaKey } from '@app/keys';
+import { isMetaKey, Keys } from '@app/keys';
 import { pushEvent } from '@app/observability';
 import { useCallback, useMemo } from 'react';
 

@@ -9,12 +9,14 @@ import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
 import { useValidationError } from './common/use-validation-error';
 
+const UTREDNINGEN_ID = 'utredningen';
+
 export const Utredningen = () => {
   const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV2();
 
   const canEdit = useCanEdit();
-  const validationError = useValidationError('utredningen');
-  const header = useKvalitetsvurderingV2FieldName('utredningen');
+  const validationError = useValidationError(UTREDNINGEN_ID);
+  const header = useKvalitetsvurderingV2FieldName(UTREDNINGEN_ID);
 
   if (isLoading) {
     return null;
@@ -35,7 +37,7 @@ export const Utredningen = () => {
         value={utredningen}
         error={validationError}
         onChange={onChange}
-        id="utredningen"
+        id={UTREDNINGEN_ID}
         size="small"
       >
         <HStack gap="4" width="100%">

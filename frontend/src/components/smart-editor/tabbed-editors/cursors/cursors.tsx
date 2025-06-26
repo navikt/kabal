@@ -1,7 +1,7 @@
 import { getColors } from '@app/components/smart-editor/tabbed-editors/cursors/cursor-colors';
 import { type CursorData, type CursorProps, type CursorState, useCursorOverlayPositions } from '@platejs/cursor';
 import type { RelativeRange } from '@slate-yjs/core';
-import { type UnknownObject, createZustandStore } from 'platejs';
+import { createZustandStore, type UnknownObject } from 'platejs';
 import { useEffect, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 

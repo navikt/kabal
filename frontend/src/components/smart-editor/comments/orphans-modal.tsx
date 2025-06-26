@@ -1,8 +1,8 @@
 import { THREAD_WIDTH, Thread } from '@app/components/smart-editor/comments/thread';
 import { useThreads } from '@app/components/smart-editor/comments/use-threads';
 import { LinkBrokenIcon } from '@navikt/aksel-icons';
-import { Alert, Button, HStack, Heading, Modal, Tooltip } from '@navikt/ds-react';
-import { useRef } from 'react';
+import { Alert, Button, Heading, HStack, Modal, Tooltip } from '@navikt/ds-react';
+import { useId, useRef } from 'react';
 
 const ORPHAN_HELP_TEXT = 'Teksten som kommentarene var knyttet til finnes ikke lenger i dokumentet.';
 
@@ -12,6 +12,7 @@ const MODAL_PADDING = 24;
 export const OrphansModal = () => {
   const { orphans } = useThreads();
   const modalRef = useRef<HTMLDialogElement>(null);
+  const headerId = useId();
 
   const orphansCount = orphans.length;
   const modalWidth = Math.min(orphansCount * (THREAD_WIDTH + GAP * 4) - GAP * 4 + MODAL_PADDING * 2, window.innerWidth);
@@ -25,8 +26,8 @@ export const OrphansModal = () => {
           </HStack>
         </Button>
       </Tooltip>
-      <Modal ref={modalRef} closeOnBackdropClick width={modalWidth} aria-labelledby="modal-header">
-        <Modal.Header id="modal-header" closeButton>
+      <Modal ref={modalRef} closeOnBackdropClick width={modalWidth} aria-labelledby={headerId}>
+        <Modal.Header id={headerId} closeButton>
           <Heading level="1" size="small">
             Andre kommentarer
           </Heading>

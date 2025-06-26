@@ -1,4 +1,4 @@
-import { HStack, HelpText, type HelpTextProps } from '@navikt/ds-react';
+import { HelpText, type HelpTextProps, HStack } from '@navikt/ds-react';
 
 interface Props {
   children: React.ReactNode;

@@ -4,10 +4,10 @@ import { type ModalEnum, Row } from '@app/components/svarbrev/row/row';
 import { SkeletonBody } from '@app/components/svarbrev/skeleton';
 import { useFilterSort } from '@app/components/svarbrev/use-filter-sort';
 import {
-  SortDirection,
-  SortKey,
   getDefaultSortDirection,
   isSortKey,
+  SortDirection,
+  SortKey,
   useSvarbrevSearchParams,
 } from '@app/components/svarbrev/use-search-params';
 import { useGetSvarbrevSettingsQuery } from '@app/redux-api/svarbrev';

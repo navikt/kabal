@@ -31,17 +31,23 @@ export const Preview = ({ id }: Props) => {
       return;
     }
 
-    const texts = await Promise.all(maltekstseksjon.textIdList.map((tId) => getContent(tId, false).unwrap()));
+    try {
+      const texts = await Promise.all(maltekstseksjon.textIdList.map((tId) => getContent(tId, false).unwrap()));
 
-    const c: KabalValue = texts
-      .filter(isMaltekstOrRedigerbarMaltekst)
-      .flatMap((text) => text.richText[lang])
-      .filter(isNotNull);
+      const c: KabalValue = texts
+        .filter(isMaltekstOrRedigerbarMaltekst)
+        .flatMap((text) => text.richText[lang])
+        .filter(isNotNull);
 
-    setChildren(c);
+      setChildren(c);
+    } catch (error) {
+      console.error('Failed to load maltekstseksjon content:', error);
+      setChildren(null);
+    }
   }, [getContent, lang, maltekstseksjon]);
 
   useEffect(() => {
+    // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
     getChildren();
   }, [getChildren]);
 

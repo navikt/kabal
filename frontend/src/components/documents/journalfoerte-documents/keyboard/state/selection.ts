@@ -1,7 +1,7 @@
 import {
-  FIRST_ACCESSIBLE_DOCUMENT_INDEX,
   convertAccessibleToRealDocumentPaths,
   convertRealToAccessibleDocumentIndex,
+  FIRST_ACCESSIBLE_DOCUMENT_INDEX,
   getLastAccessibleDocumentIndex,
 } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import {
@@ -11,11 +11,11 @@ import {
 } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
 import {
-  type SelectionRange,
   isInRanges,
   mergeRanges,
   rangesToIndexes,
   removeIndexFromRanges,
+  type SelectionRange,
 } from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
 import type { SelectedMap } from '@app/components/documents/journalfoerte-documents/select-context/types';
 import { findDocument } from '@app/domain/find-document';

@@ -1,7 +1,7 @@
 import {
+  filterSort,
   type NamedSvarbrevSetting,
   type ScoredNamedSvarbrevSetting,
-  filterSort,
 } from '@app/components/svarbrev/filter-sort';
 import type { ActiveEnum, TypeFilter } from '@app/components/svarbrev/filters';
 import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';

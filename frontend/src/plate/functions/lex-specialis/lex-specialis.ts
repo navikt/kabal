@@ -88,7 +88,6 @@ export const lexSpecialis = <T extends IConsumerRichText | IMaltekstseksjon>(
     return NONE_RESULT;
   }
 
-  // biome-ignore lint/suspicious/noEvolvingTypes: Needs to be reassignable.
   let firstUntiedText = null;
 
   for (const scoredText of scoredTexts) {

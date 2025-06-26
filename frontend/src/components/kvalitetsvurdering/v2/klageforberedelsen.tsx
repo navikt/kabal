@@ -10,12 +10,14 @@ import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
 import { useValidationError } from './common/use-validation-error';
 
+const KLAGEFORBEREDELSEN_FIELD = 'klageforberedelsen';
+
 export const Klageforberedelsen = () => {
   const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV2();
 
   const canEdit = useCanEdit();
-  const validationError = useValidationError('klageforberedelsen');
-  const header = useKvalitetsvurderingV2FieldName('klageforberedelsen');
+  const validationError = useValidationError(KLAGEFORBEREDELSEN_FIELD);
+  const header = useKvalitetsvurderingV2FieldName(KLAGEFORBEREDELSEN_FIELD);
 
   if (isLoading || oppgave.typeId === SaksTypeEnum.ANKE || oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
     return null;
@@ -36,7 +38,7 @@ export const Klageforberedelsen = () => {
         value={klageforberedelsen}
         error={validationError}
         onChange={onChange}
-        id="klageforberedelsen"
+        id={KLAGEFORBEREDELSEN_FIELD}
         size="small"
       >
         <HStack gap="4" width="100%">

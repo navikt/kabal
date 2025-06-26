@@ -2,7 +2,7 @@ import { HistoryEventTypes, type IFeilregistrertEvent } from '@app/types/oppgave
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
 import { useId } from 'react';
-import { Reason, employeeName, toKey } from './common';
+import { employeeName, Reason, toKey } from './common';
 import { HistoryEvent } from './event';
 
 export const getFeilregistrertEvent = (props: IFeilregistrertEvent) => <Feilregistrert key={toKey(props)} {...props} />;

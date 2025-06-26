@@ -1,9 +1,9 @@
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
+import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import type { JournalpostAddedEvent } from '@app/redux-api/server-sent-events/types';
-import { reduxStore } from '@app/redux/configure-store';
 import { type AvsenderMottaker, Journalposttype, type Sak } from '@app/types/arkiverte-documents';
 
 export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) => (event: JournalpostAddedEvent) => {

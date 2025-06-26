@@ -23,7 +23,6 @@ export const traceparentPlugin = fastifyPlugin(
     app.decorateRequest('trace_id', '');
     app.decorateRequest('span_id', '');
 
-    // biome-ignore lint/suspicious/useAwait: Needs to return a promise
     app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
       const { trace_id, span_id, traceparent } = getTraceIdAndSpanId(req);
       req.trace_id = trace_id;

@@ -1,7 +1,7 @@
 import { useInsertHjemlerInSettingsMutation } from '@app/redux-api/internal';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Checkbox, CheckboxGroup, HStack, Heading, Select, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HStack, Select, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
 export const InsertHjemlerInSettings = () => {

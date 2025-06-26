@@ -1,8 +1,8 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import {
+  getPositionedItems,
   ItemType,
   type ThreadData,
-  getPositionedItems,
 } from '@app/components/smart-editor/functions/get-positioned-items';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';

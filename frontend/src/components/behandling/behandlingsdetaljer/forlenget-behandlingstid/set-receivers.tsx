@@ -2,8 +2,7 @@ import { setErrorMessage } from '@app/components/behandling/behandlingsdetaljer/
 import { Receivers } from '@app/components/receivers/receivers';
 import { useSetReceiversMutation } from '@app/redux-api/forlenget-behandlingstid';
 import type { IMottaker } from '@app/types/documents/documents';
-import { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
-import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES } from '@app/types/field-names';
+import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
 import { ErrorMessage, Heading, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 

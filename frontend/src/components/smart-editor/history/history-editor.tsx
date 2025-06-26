@@ -1,6 +1,6 @@
-import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
 import { useHasWriteAccess } from '@app/components/smart-editor/hooks/use-has-write-access';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
+import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';

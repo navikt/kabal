@@ -5,7 +5,7 @@ import { AddressState, Container } from '@app/components/receivers/address/layou
 import { Postnummer } from '@app/components/receivers/address/postnummer';
 import type { Addresses } from '@app/components/receivers/address/types';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
-import { Keys, isMetaKey } from '@app/keys';
+import { isMetaKey, Keys } from '@app/keys';
 import type { IAddress } from '@app/types/documents/receivers';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, ErrorSummary, HStack, Tooltip } from '@navikt/ds-react';
@@ -15,6 +15,8 @@ interface EditProps extends Addresses {
   onSave: (address: IAddress | null) => void;
   onCancel: () => void;
 }
+
+const LINE1_ID = 'adresselinje1';
 
 export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: EditProps) => {
   const currentAddress = overriddenAddress ?? address;
@@ -145,7 +147,7 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
   return (
     <Container $state={addressState} onKeyDown={onKeyDown}>
       <AddressField
-        id="adresselinje1"
+        id={LINE1_ID}
         label="Adresselinje 1"
         value={adresselinje1}
         originalValue={address?.adresselinje1 ?? null}
@@ -178,7 +180,7 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
       {addresseLinje1Error || postnummerError ? (
         <ErrorSummary heading="Påkrevde felt mangler" size="small">
           {addresseLinje1Error ? (
-            <ErrorSummary.Item href="#adresselinje1">
+            <ErrorSummary.Item href={`#${LINE1_ID}`}>
               Adresselinje 1 må fylles ut for post til utlandet.
             </ErrorSummary.Item>
           ) : null}

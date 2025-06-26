@@ -13,7 +13,10 @@ export const isStatusFilter = (value: string): value is StatusFilter => STATUS_F
 export const SetStatusFilter = ({
   filter,
   setFilter,
-}: { filter: StatusFilter; setFilter: (f: StatusFilter) => void }) => {
+}: {
+  filter: StatusFilter;
+  setFilter: (f: StatusFilter) => void;
+}) => {
   return (
     <ToggleGroup
       value={filter}

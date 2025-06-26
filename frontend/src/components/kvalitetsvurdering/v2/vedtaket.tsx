@@ -1,6 +1,6 @@
 import { useCanEdit } from '@app/hooks/use-can-edit';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
-import { Alert, Checkbox, HStack, Heading, Radio } from '@navikt/ds-react';
+import { Alert, Checkbox, Heading, HStack, Radio } from '@navikt/ds-react';
 import { Checkboxes } from './common/checkboxes';
 import { ContainerWithHelpText } from './common/container-with-helptext';
 import { StyledRadioGroup } from './common/styled-components';
@@ -11,13 +11,14 @@ import { useValidationError } from './common/use-validation-error';
 
 const AUTOMATISK_VEDTAK_HELPTEXT =
   'Du skal gjøre de samme kvalitetsvurderingene for automatiske vedtak som for andre vedtak. Du kan krysse av for automatisk vedtak dersom det er tydelig merket i vedtaket.';
+const VEDTAKET_ID = 'vedtaket';
 
 export const Vedtaket = () => {
   const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV2();
 
   const canEdit = useCanEdit();
-  const validationError = useValidationError('vedtaket');
-  const header = useKvalitetsvurderingV2FieldName('vedtaket');
+  const validationError = useValidationError(VEDTAKET_ID);
+  const header = useKvalitetsvurderingV2FieldName(VEDTAKET_ID);
 
   if (isLoading) {
     return null;
@@ -56,7 +57,7 @@ export const Vedtaket = () => {
         value={vedtaket}
         error={validationError}
         onChange={onChange}
-        id="vedtaket"
+        id={VEDTAKET_ID}
         size="small"
       >
         <HStack gap="4" width="100%">

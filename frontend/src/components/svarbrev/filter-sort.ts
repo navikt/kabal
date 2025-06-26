@@ -1,6 +1,6 @@
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { type SplitQuery, splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
-import { ALL_TYPES, ActiveEnum, type TypeFilter } from '@app/components/svarbrev/filters';
+import { ActiveEnum, ALL_TYPES, type TypeFilter } from '@app/components/svarbrev/filters';
 import { SortDirection, SortKey } from '@app/components/svarbrev/use-search-params';
 import { BehandlingstidUnitType, type SvarbrevSetting } from '@app/types/svarbrev';
 import type { SortState } from '@navikt/ds-react';

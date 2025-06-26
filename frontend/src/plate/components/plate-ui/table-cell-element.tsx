@@ -5,8 +5,8 @@ import { type ResizeEvent, ResizeHandle } from '@platejs/resizable';
 import { setTableColSize } from '@platejs/table';
 import { TablePlugin, useTableCellElement, useTableCellElementResizable } from '@platejs/table/react';
 import { PlateElement, useEditorPlugin, useReadOnly, withRef } from 'platejs/react';
-import { useCallback, useContext } from 'react';
 import type { MouseEvent } from 'react';
+import { useCallback, useContext } from 'react';
 import { styled } from 'styled-components';
 
 const BASE_CLASSES = 'min-w-12 relative align-top ';

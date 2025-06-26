@@ -1,5 +1,5 @@
-import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { reduxStore } from '@app/redux/configure-store';
+import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiError } from '@app/types/errors';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type {
@@ -11,11 +11,11 @@ import type {
 } from '@app/types/oppgavebehandling/params';
 import type { IModifiedResponse } from '@app/types/oppgavebehandling/response';
 import type { IOppgave } from '@app/types/oppgaver';
+import { toast } from './../../../components/toast/store';
+import { isoDateToPretty } from './../../../domain/date';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
-import { toast } from './../../../components/toast/store';
-import { isoDateToPretty } from './../../../domain/date';
 
 const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,

@@ -12,8 +12,7 @@ import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { Textarea } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import type React from 'react';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { useContext } from 'react';
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 interface Props {
   comment: ISmartEditorComment;

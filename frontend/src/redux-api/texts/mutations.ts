@@ -8,14 +8,14 @@ import {
   isPlainText,
   isRichText,
 } from '@app/functions/is-rich-plain-text';
+import { reduxStore } from '@app/redux/configure-store';
 import { getLastPublishedVersion } from '@app/redux-api/redaktoer-helpers';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { textsApi } from '@app/redux-api/texts/texts';
-import { reduxStore } from '@app/redux/configure-store';
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
 import type { ListGodFormulering, ListPlainText, ListRegelverk, ListRichText } from '@app/types/texts/common';
-import { LANGUAGES, UNTRANSLATED, isLanguage } from '@app/types/texts/language';
+import { isLanguage, LANGUAGES, UNTRANSLATED } from '@app/types/texts/language';
 import type {
   ICreateDraftFromVersionParams,
   IDeleteTextDraftParams,

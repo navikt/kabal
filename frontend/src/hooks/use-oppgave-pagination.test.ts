@@ -1,5 +1,4 @@
-import { describe, expect } from 'bun:test';
-import { it } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 import { renderHook, waitFor } from '@testing-library/react';

@@ -1,9 +1,9 @@
 import { toast } from '@app/components/toast/store';
+import { reduxStore } from '@app/redux/configure-store';
 import { getMedunderskriverToastContent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/medunderskriver-toast';
 import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
 import type { MedunderskriverEvent } from '@app/redux-api/server-sent-events/types';
-import { reduxStore } from '@app/redux/configure-store';
 import type { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';

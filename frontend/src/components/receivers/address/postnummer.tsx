@@ -11,6 +11,8 @@ interface Props {
   error: boolean;
 }
 
+export const POSTNUMMER_ID = 'postnummer';
+
 export const Postnummer = ({ value, originalValue, onChange, error }: Props) => {
   const poststedElementId = useId();
 
@@ -19,7 +21,7 @@ export const Postnummer = ({ value, originalValue, onChange, error }: Props) => 
   return (
     <HStack align="center" gap="1">
       <AddressField
-        id="postnummer"
+        id={POSTNUMMER_ID}
         label="Postnummer"
         value={value}
         originalValue={originalValue}

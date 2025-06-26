@@ -1,9 +1,9 @@
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
+import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import type { SmartDocumentLanguageEvent } from '@app/redux-api/server-sent-events/types';
-import { reduxStore } from '@app/redux/configure-store';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { Tag } from '@navikt/ds-react';
 
@@ -30,13 +30,13 @@ export const handleSmartDocumentLanguageChangedEvent =
 
           if (event.actor.navIdent !== userId) {
             const from = (
-              <Tag variant="info" size="xsmall">
+              <Tag key="from" variant="info" size="xsmall">
                 {LANGUAGE_NAMES[document.language]}
               </Tag>
             );
 
             const to = (
-              <Tag variant="info" size="xsmall">
+              <Tag key="to" variant="info" size="xsmall">
                 {LANGUAGE_NAMES[event.document.language]}
               </Tag>
             );

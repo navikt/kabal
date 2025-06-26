@@ -4,8 +4,8 @@ import {
   type Expression,
   SPACE_REGEX,
   type SplitQuery,
-  WORD_SCORE,
   splitQuery,
+  WORD_SCORE,
 } from '@app/components/smart-editor/gode-formuleringer/split-query';
 
 describe('split query', () => {

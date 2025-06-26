@@ -95,6 +95,7 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
   const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === Keys.Enter) {
       event.preventDefault();
+      // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
       onSave();
       return;
     }

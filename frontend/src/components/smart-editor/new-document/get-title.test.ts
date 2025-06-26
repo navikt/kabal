@@ -1,5 +1,4 @@
-import { expect, it } from 'bun:test';
-import { describe } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { type BaseDocument, type BaseTemplate, getTitle } from './get-title';
 

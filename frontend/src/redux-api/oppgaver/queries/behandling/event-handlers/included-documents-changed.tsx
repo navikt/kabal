@@ -1,9 +1,9 @@
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
+import { reduxStore } from '@app/redux/configure-store';
 import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import type { BaseEvent, IncludedDocumentsChangedEvent } from '@app/redux-api/server-sent-events/types';
-import { reduxStore } from '@app/redux/configure-store';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 export const handleIncludedDocumentsAdded =

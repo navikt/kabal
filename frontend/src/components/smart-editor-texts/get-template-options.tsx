@@ -1,6 +1,6 @@
 import { type NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
-import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@app/components/smart-editor-texts/types';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
+import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@app/components/smart-editor-texts/types';
 import { getTemplateSections } from '@app/hooks/use-template-sections';
 import { DeprecatedTemplateSections, TemplateSections } from '@app/plate/template-sections';
 import { TEMPLATES } from '@app/plate/templates/templates';

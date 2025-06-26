@@ -8,7 +8,7 @@ import type { DraftVersionProps } from '@app/components/smart-editor-texts/types
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { usePublishMutation, useUpdatePlainTextMutation } from '@app/redux-api/texts/mutations';
 import type { PlainTextTypes } from '@app/types/common-text-types';
-import { LANGUAGES, type Language, isLanguage } from '@app/types/texts/language';
+import { isLanguage, LANGUAGES, type Language } from '@app/types/texts/language';
 import type { IPlainText } from '@app/types/texts/responses';
 import { useCallback, useEffect, useState } from 'react';
 

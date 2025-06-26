@@ -12,6 +12,8 @@ interface Props {
 }
 
 const MAX_LENGTH = 100;
+const PÅ_VENT_REASON_ID = 'paa-vent-reason';
+const PÅ_VENT_DATE_ID = 'paa-vent-date';
 
 export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
   const [to, setTo] = useState<string | null>(null);
@@ -44,7 +46,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
           fromDate={fromDate}
           toDate={dates.at(-1)?.[1]}
           onChange={setTo}
-          id="paa-vent-date"
+          id={PÅ_VENT_DATE_ID}
           size="small"
         />
         <VStack gap="2">
@@ -74,7 +76,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
           onChange={(e) => setReason(e.target.value)}
           maxLength={MAX_LENGTH}
           size="small"
-          id="paa-vent-reason"
+          id={PÅ_VENT_REASON_ID}
           placeholder="Skriv kort hvorfor saken skal settes på vent. F.eks. «Venter på tilsvar»."
         />
         <Errors dateError={dateError} reasonError={reasonError} />
@@ -119,8 +121,8 @@ const Errors = ({ dateError, reasonError }: ErrorsProps) => {
   }
 
   const errors = [
-    { message: dateError, href: '#paa-vent-date' },
-    { message: reasonError, href: '#paa-vent-reason' },
+    { message: dateError, href: `#${PÅ_VENT_DATE_ID}` },
+    { message: reasonError, href: `#${PÅ_VENT_REASON_ID}` },
   ].filter(({ message }) => message !== null);
 
   return (

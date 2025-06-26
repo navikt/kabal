@@ -1,4 +1,3 @@
-import { GLOBAL, LIST_DELIMITER, NONE, type NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { GodeFormuleringerList } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer-list';
@@ -7,8 +6,9 @@ import { SectionSelect } from '@app/components/smart-editor/gode-formuleringer/s
 import { SetGlobalExpandState } from '@app/components/smart-editor/gode-formuleringer/set-global-expand-state';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import { useTranslatedFormuleringer } from '@app/components/smart-editor/gode-formuleringer/use-translated-formuleringer';
+import { GLOBAL, LIST_DELIMITER, NONE, type NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import type { GodeFormuleringerExpandState } from '@app/hooks/settings/use-setting';
-import { Keys, isMetaKey } from '@app/keys';
+import { isMetaKey, Keys } from '@app/keys';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
 import type { TemplateSections } from '@app/plate/template-sections';
 import { useMyPlateEditorRef } from '@app/plate/types';

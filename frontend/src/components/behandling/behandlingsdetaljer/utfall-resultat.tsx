@@ -7,7 +7,7 @@ import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateExtraUtfallMutation, useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { HStack, HelpText, Label, Select, Tag, VStack } from '@navikt/ds-react';
+import { HelpText, HStack, Label, Select, Tag, VStack } from '@navikt/ds-react';
 
 interface UtfallResultatProps {
   utfall: UtfallEnum | null;

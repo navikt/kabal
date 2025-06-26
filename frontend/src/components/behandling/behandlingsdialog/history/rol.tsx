@@ -1,4 +1,4 @@
-import { SELF, employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
+import { employeeName, SELF, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
 import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
 import type { INavEmployee } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
@@ -28,7 +28,7 @@ export const getROLEvent = (e: IRolEvent) => {
     }
 
     if (event.flow === FlowState.SENT) {
-      const from = previous.event.flow !== FlowState.NOT_SENT ? <> fra {employeeName(previous.event.rol)}</> : <></>;
+      const from = previous.event.flow !== FlowState.NOT_SENT ? <> fra {employeeName(previous.event.rol)}</> : null;
 
       if (actor === event.rol) {
         return <ClaimSelf actor={actor} from={from} timestamp={timestamp} key={key} />;

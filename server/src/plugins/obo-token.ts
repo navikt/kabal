@@ -32,7 +32,6 @@ export const oboAccessTokenPlugin = fastifyPlugin(
   async (app) => {
     app.decorateRequest('oboAccessTokenMap');
 
-    // biome-ignore lint/suspicious/useAwait: Needs to return a promise
     app.addHook('onRequest', async (req): Promise<void> => {
       req.oboAccessTokenMap = new Map();
     });

@@ -2,9 +2,9 @@ import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
 import { formatEmployeeName } from '@app/domain/employee-name';
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
+import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import type { DocumentsAddedEvent } from '@app/redux-api/server-sent-events/types';
-import { reduxStore } from '@app/redux/configure-store';
 import type { INavEmployee } from '@app/types/bruker';
 import {
   DISTRIBUTION_TYPE_NAMES,

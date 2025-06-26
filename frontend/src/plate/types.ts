@@ -29,11 +29,9 @@ import type {
   BaseNumberedListPlugin,
 } from '@platejs/list-classic';
 import type { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
-import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
-import type { BaseParagraphPlugin, TElement, TText } from 'platejs';
-import type { TTableCellElement, TTableElement, TTableRowElement } from 'platejs';
-
 import type { PlateYjsEditorProps } from '@platejs/yjs';
+import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
+import type { BaseParagraphPlugin, TElement, TTableCellElement, TTableElement, TTableRowElement, TText } from 'platejs';
 import type { TemplateSections } from './template-sections';
 
 export enum TextAlign {

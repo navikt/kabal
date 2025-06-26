@@ -9,7 +9,7 @@ import {
   BaseH5Plugin,
   BaseH6Plugin,
 } from '@platejs/basic-nodes';
-import { ParagraphPlugin, createPlatePlugin } from '@platejs/core/react';
+import { createPlatePlugin, ParagraphPlugin } from '@platejs/core/react';
 import { ListItemContentPlugin } from '@platejs/list-classic/react';
 import type { TElement } from 'platejs';
 

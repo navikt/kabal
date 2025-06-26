@@ -1,7 +1,7 @@
+import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { ALL_TEMPLATES_LABEL } from '@app/components/smart-editor-texts/get-template-options';
 import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';
 import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@app/components/smart-editor-texts/types';
-import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { useEnhetNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { TEMPLATE_MAP } from '@app/plate/templates/templates';

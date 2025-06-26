@@ -4,7 +4,7 @@ import { isDeployed } from '@app/config/env';
 import { hasOwn, isObject } from '@app/functions/functions';
 import { isNotNull } from '@app/functions/guards';
 import { parseTokenPayload } from '@app/helpers/token-parser';
-import { type Level, getLogger, getTeamLogger } from '@app/logger';
+import { getLogger, getTeamLogger, type Level } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
 import { getDocumentJson, setDocument } from '@app/plugins/crdt/api/set-document';
 import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
@@ -108,7 +108,7 @@ const createRefreshTimeout = async (context: ConnectionContext, expiresIn: numbe
       try {
         const newExpiresIn = await refresh(context);
         // Start a new timeout to refresh the new token when it expires.
-        createRefreshTimeout(context, newExpiresIn);
+        await createRefreshTimeout(context, newExpiresIn);
       } catch (err) {
         if (err instanceof RefreshError || err instanceof Error) {
           logContext(err.message, context, 'warn');
@@ -152,7 +152,7 @@ export const collaborationServer = new Hocuspocus({
       'debug',
     );
 
-    createRefreshTimeout(context, expiresIn);
+    await createRefreshTimeout(context, expiresIn);
   },
 
   onDisconnect: ({ context }) => {

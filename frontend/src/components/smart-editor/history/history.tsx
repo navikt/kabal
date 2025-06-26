@@ -7,7 +7,7 @@ import {
 } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocumentOrAttachment, ISmartDocumentVersion } from '@app/types/documents/documents';
 import { ChevronRightIcon, ClockDashedIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, Heading, Loader, Tag, VStack } from '@navikt/ds-react';
+import { Box, Button, Heading, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { styled } from 'styled-components';

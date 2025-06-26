@@ -1,6 +1,6 @@
 import type { TRange } from 'platejs';
 import type { RichTextEditor } from '../types';
-import { type IRangePosition, calculateRangePosition } from './range-position';
+import { calculateRangePosition, type IRangePosition } from './range-position';
 import { getSelectionStart } from './selection-start';
 
 export const getRangePosition = (

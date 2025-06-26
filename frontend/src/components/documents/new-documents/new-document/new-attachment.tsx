@@ -14,7 +14,7 @@ import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/docume
 import { DocumentTypeEnum, type IAttachmentDocument, type IParentDocument } from '@app/types/documents/documents';
 import { HGrid } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { type HTMLAttributes, type RefObject, memo, useCallback, useContext, useRef, useState } from 'react';
+import { type HTMLAttributes, memo, type RefObject, useCallback, useContext, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { DocumentTitle } from './title';
 

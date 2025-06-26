@@ -1,6 +1,6 @@
 import {
-  BEHANDLINGSTID_UNIT_TYPES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
+  BEHANDLINGSTID_UNIT_TYPES,
   type BehandlingstidUnitType,
   isBehandlingstidUnitType,
 } from '@app/types/svarbrev';

@@ -7,7 +7,7 @@ import {
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import type { IYtelse } from '@app/types/kodeverk';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Heading, Loader } from '@navikt/ds-react';
+import { Button, Heading, HStack, Loader } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { Body } from './body';
 import { Head } from './head';

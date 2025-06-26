@@ -7,9 +7,10 @@ class Abbreviations {
   private map: Map<string, string> = new Map();
 
   constructor() {
-    // biome-ignore lint/nursery/noProcessEnv: Used for testing
     if (process.env.NODE_ENV !== 'test') {
-      this.load();
+      this.load().catch((error) => {
+        console.error('Failed to load abbreviations:', error);
+      });
     }
   }
 

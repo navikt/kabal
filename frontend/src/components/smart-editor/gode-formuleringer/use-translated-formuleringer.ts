@@ -1,10 +1,10 @@
-import { NONE, type NONE_TYPE, WILDCARD } from '@app/components/smart-editor-texts/types';
 import { useGodFormuleringerQuery } from '@app/components/smart-editor/hooks/use-query';
+import { NONE, type NONE_TYPE, WILDCARD } from '@app/components/smart-editor-texts/types';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import type { TemplateSections } from '@app/plate/template-sections';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { type NonNullableGodFormulering, isNonNullGodFormulering } from '@app/types/texts/consumer';
+import { isNonNullGodFormulering, type NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LANGUAGES } from '@app/types/texts/language';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
@@ -44,29 +44,33 @@ export const useTranslatedFormuleringer = (
       return 0;
     }).map((language) => getTexts({ ...baseQuery, language }).unwrap());
 
-    Promise.allSettled(sortedLanguageTextsPromises).then((results) => {
-      const [uniqueTexts, ...others] = results
-        .filter(isFulfilled)
-        .map(({ value }) => value.filter(isNonNullGodFormulering));
+    Promise.allSettled(sortedLanguageTextsPromises)
+      .then((results) => {
+        const [uniqueTexts, ...others] = results
+          .filter(isFulfilled)
+          .map(({ value }) => value.filter(isNonNullGodFormulering));
 
-      if (uniqueTexts === undefined) {
-        setTexts([]);
-        setIsLoading(false);
+        if (uniqueTexts === undefined) {
+          setTexts([]);
+          setIsLoading(false);
 
-        return;
-      }
+          return;
+        }
 
-      for (const other of others) {
-        for (const text of other) {
-          if (!uniqueTexts.some((t) => t.id === text.id)) {
-            uniqueTexts.push(text);
+        for (const other of others) {
+          for (const text of other) {
+            if (!uniqueTexts.some((t) => t.id === text.id)) {
+              uniqueTexts.push(text);
+            }
           }
         }
-      }
 
-      setTexts(uniqueTexts);
-      setIsLoading(false);
-    });
+        setTexts(uniqueTexts);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch translated formuleringer:', error);
+      });
   }, [baseQuery, primaryLanguage, getTexts]);
 
   return { data: texts, isLoading };

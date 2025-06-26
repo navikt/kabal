@@ -1,6 +1,7 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Country } from '@app/components/receivers/address/country/country';
-import { Postnummer } from '@app/components/receivers/address/postnummer';
+import { POSTNUMMER_ID, Postnummer } from '@app/components/receivers/address/postnummer';
+import { toast } from '@app/components/toast/store';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { type IFullmektig, Utsendingskanal } from '@app/types/oppgave-common';
@@ -12,6 +13,11 @@ interface Props {
   onClose: () => void;
   part: IFullmektig | null;
 }
+
+const NAME_ID = 'name';
+const LINE1_ID = 'adresselinje1';
+const LINE2_ID = 'adresselinje2';
+const LINE3_ID = 'adresselinje3';
 
 export const WithoutId = ({ part, onClose }: Props) => {
   const [setFullmektig, { isLoading, isError }] = useUpdateFullmektigMutation({
@@ -133,7 +139,10 @@ export const WithoutId = ({ part, onClose }: Props) => {
     if (e.key === 'Enter' || (e.key.toLowerCase() === 's' && (e.ctrlKey || e.metaKey))) {
       e.preventDefault();
       e.stopPropagation();
-      save();
+      save().catch((error) => {
+        toast.error('Kunne ikke lagre fullmektig. Prøv igjen senere.');
+        console.error('Failed to save fullmektig:', error);
+      });
     }
 
     if (e.key === 'Escape') {
@@ -156,7 +165,7 @@ export const WithoutId = ({ part, onClose }: Props) => {
           Nullstill
         </Button>
         <TextField
-          id="name"
+          id={NAME_ID}
           label={<RequiredTag>Navn</RequiredTag>}
           value={name}
           onChange={({ target }) => setName(target.value)}
@@ -165,7 +174,7 @@ export const WithoutId = ({ part, onClose }: Props) => {
           size="small"
         />
         <TextField
-          id="adresselinje1"
+          id={LINE1_ID}
           label={isNorway ? 'Adresselinje 1' : <RequiredTag>Adresselinje 1</RequiredTag>}
           value={adresselinje1}
           onChange={({ target }) => setAdresselinje1(target.value)}
@@ -173,12 +182,14 @@ export const WithoutId = ({ part, onClose }: Props) => {
           size="small"
         />
         <TextField
+          id={LINE2_ID}
           label="Adresselinje 2"
           value={adresselinje2}
           onChange={({ target }) => setAdresselinje2(target.value)}
           size="small"
         />
         <TextField
+          id={LINE3_ID}
           label="Adresselinje 3"
           value={adresselinje3}
           onChange={({ target }) => setAdresselinje3(target.value)}
@@ -198,15 +209,17 @@ export const WithoutId = ({ part, onClose }: Props) => {
         {addresselinje1Error || postnummerError || nameError ? (
           <ErrorSummary heading="Påkrevde felt mangler" size="small">
             {addresselinje1Error ? (
-              <ErrorSummary.Item href="#adresselinje1">
+              <ErrorSummary.Item href={`#${LINE1_ID}`}>
                 Adresselinje 1 må fylles ut for post til utlandet.
               </ErrorSummary.Item>
             ) : null}
             {postnummerError ? (
-              <ErrorSummary.Item href="#postnummer">Gyldig postnummer må fylles ut for post i Norge.</ErrorSummary.Item>
+              <ErrorSummary.Item href={`#${POSTNUMMER_ID}`}>
+                Gyldig postnummer må fylles ut for post i Norge.
+              </ErrorSummary.Item>
             ) : null}
 
-            {nameError ? <ErrorSummary.Item href="#name">Navn må fylles ut.</ErrorSummary.Item> : null}
+            {nameError ? <ErrorSummary.Item href={`#${NAME_ID}`}>Navn må fylles ut.</ErrorSummary.Item> : null}
           </ErrorSummary>
         ) : null}
 

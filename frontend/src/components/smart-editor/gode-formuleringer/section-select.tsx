@@ -1,6 +1,6 @@
-import { NONE, type NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { NONE, type NONE_TYPE } from '@app/components/smart-editor-texts/types';
 import { useTemplateSections } from '@app/hooks/use-template-sections';
 import { useSelection } from '@app/plate/hooks/use-selection';
 import { ELEMENT_MALTEKSTSEKSJON } from '@app/plate/plugins/element-types';

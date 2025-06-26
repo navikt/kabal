@@ -4,9 +4,9 @@ import { getTypeNames } from '@app/components/receivers/functions';
 import { StyledReceiver } from '@app/components/receivers/styled-components';
 import { formatIdNumber } from '@app/functions/format-id';
 import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
-import { type IPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
+import { IdType, type IPart, PartStatusEnum } from '@app/types/oppgave-common';
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
-import { Alert, CopyButton, HStack, HelpText, Label, Tooltip } from '@navikt/ds-react';
+import { Alert, CopyButton, HelpText, HStack, Label, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface ReceiversProps {

@@ -7,7 +7,7 @@ import { type IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common
 import { isApiDataError } from '@app/types/errors';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { CircleBrokenIcon, LinkBrokenIcon, PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Button, HStack, HelpText, Skeleton, Tooltip } from '@navikt/ds-react';
+import { Button, HelpText, HStack, Skeleton, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useRef } from 'react';
 import { styled } from 'styled-components';
 import { DragAndDropContext } from '../drag-and-drop/drag-context';

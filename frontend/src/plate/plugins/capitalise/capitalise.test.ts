@@ -1,8 +1,4 @@
-import { describe, expect, it } from 'bun:test';
-import { beforeAll } from 'bun:test';
-import { mock } from 'bun:test';
-import { afterAll } from 'bun:test';
-// biome-ignore lint/style/noNamespaceImport: Needed in order to restore after mock
+import { afterAll, beforeAll, describe, expect, it, mock } from 'bun:test';
 import * as originalSettingsManager from '@app/hooks/settings/manager';
 import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { TemplateSections } from '@app/plate/template-sections';
@@ -15,7 +11,7 @@ import {
 import { type KabalValue, type ParagraphElement, TextAlign } from '@app/plate/types';
 import { BaseH1Plugin } from '@platejs/basic-nodes';
 import { BaseParagraphPlugin } from '@platejs/core';
-import { type PlateEditor, createPlateEditor } from '@platejs/core/react';
+import { createPlateEditor, type PlateEditor } from '@platejs/core/react';
 import type { Point, Selection } from 'slate';
 
 const plugins = [createCapitalisePlugin('some user')];

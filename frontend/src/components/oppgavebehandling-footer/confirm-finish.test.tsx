@@ -1,11 +1,7 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from 'bun:test';
 import { ConfirmFinish } from '@app/components/oppgavebehandling-footer/confirm-finish';
-// biome-ignore lint/style/noNamespaceImport: Needed in order to restore after mock
 import * as originalUseOppgave from '@app/hooks/oppgavebehandling/use-oppgave';
-// biome-ignore lint/style/noNamespaceImport: Needed in order to restore after mock
-// biome-ignore lint/style/noNamespaceImport: Needed in order to restore after mock
 import * as originalSearch from '@app/redux-api/search';
-// biome-ignore lint/style/noNamespaceImport: Needed in order to restore after mock
 import * as originalKodeverk from '@app/simple-api-state/use-kodeverk';
 import { fireEvent, render, screen } from '@app/test-utils';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';

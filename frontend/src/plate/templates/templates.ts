@@ -10,12 +10,12 @@ import { ORIENTERING_OM_TILSVAR_TEMPLATE } from '@app/plate/templates/orienterin
 import { OVERSENDELSESBREV_TEMPLATE } from '@app/plate/templates/oversendelsesbrev';
 import {
   GENERELT_BREV_TEMPLATE,
+  getGenereltBrevTemplate,
+  getNotatTemplate,
   NOTAT_TEMPLATE,
   ROL_ANSWERS_TEMPLATE,
   ROL_QUESTIONS_TEMPLATE,
   ROL_TILSVARSBREV_TEMPLATE,
-  getGenereltBrevTemplate,
-  getNotatTemplate,
 } from '@app/plate/templates/simple-templates';
 import { SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE } from '@app/plate/templates/svar-på-innsynsbegjæring';
 import { VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE } from '@app/plate/templates/varsel-om-omgjøring-til-ugunst';

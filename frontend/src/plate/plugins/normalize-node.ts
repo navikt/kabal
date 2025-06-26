@@ -40,7 +40,7 @@ import { isGenericObject } from '@app/types/types';
 import { LogLevel } from '@grafana/faro-web-sdk';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseParagraphPlugin } from '@platejs/core';
-import { type OverrideEditor, type PlateEditor, createPlatePlugin } from '@platejs/core/react';
+import { createPlatePlugin, type OverrideEditor, type PlateEditor } from '@platejs/core/react';
 import {
   BaseBulletedListPlugin,
   BaseListItemContentPlugin,
@@ -49,9 +49,9 @@ import {
 } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { TableCellPlugin } from '@platejs/table/react';
-import { ElementApi, NodeApi } from 'platejs';
 import type { TElement, TNode } from 'platejs';
-import { type Path, Scrubber, isEditor } from 'slate';
+import { ElementApi, NodeApi } from 'platejs';
+import { isEditor, type Path, Scrubber } from 'slate';
 
 const module = 'normalize';
 

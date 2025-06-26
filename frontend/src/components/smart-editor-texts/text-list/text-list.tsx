@@ -28,7 +28,7 @@ import { PercentIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { Box, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useParams } from 'react-router-dom';
 import { DateTime } from '../../datetime/datetime';
-import { SortKey, SortableHeader } from '../sortable-header';
+import { SortableHeader, SortKey } from '../sortable-header';
 
 interface StandaloneTextListProps {
   filter: string;

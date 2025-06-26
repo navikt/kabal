@@ -18,7 +18,6 @@ const isDeployedToDev = serverConfig.cluster === 'dev-gcp';
 export const isDeployedToProd = serverConfig.cluster === 'prod-gcp';
 export const isDeployed = isDeployedToDev || isDeployedToProd;
 export const isLocal = !isDeployed;
-// biome-ignore lint/nursery/noProcessEnv: Used in test
 export const isTest = hasOwn(process.env, 'NODE_ENV') && process.env.NODE_ENV === 'test';
 
 export const ENVIRONMENT = getEnvironmentVersion('local', 'development', 'production');

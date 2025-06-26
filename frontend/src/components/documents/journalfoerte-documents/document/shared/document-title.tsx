@@ -15,7 +15,7 @@ import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@ap
 import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
-import { MouseButtons, isMetaKey } from '@app/keys';
+import { isMetaKey, MouseButtons } from '@app/keys';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
 import type { Variants } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';

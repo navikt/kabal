@@ -47,20 +47,31 @@ export const versionPlugin = fastifyPlugin(
 
       new Promise<string>((resolve) => {
         req.socket.once('close', () => resolve('req.socket.once(close)'));
-      }).then((reason) => {
-        onClose();
+      })
+        .then((reason) => {
+          onClose();
 
-        const duration = getDuration(start);
+          const duration = getDuration(start);
 
-        log.debug({
-          msg: `Version connection closed after ${formatDuration(duration)} (${reason})`,
-          trace_id,
-          span_id,
-          data: { sse: true, duration, reason },
+          log.debug({
+            msg: `Version connection closed after ${formatDuration(duration)} (${reason})`,
+            trace_id,
+            span_id,
+            data: { sse: true, duration, reason },
+          });
+
+          return reason;
+        })
+        .catch((error) => {
+          log.error({
+            msg: 'Error during version connection close',
+            trace_id,
+            span_id,
+            error,
+            data: { sse: true },
+          });
+          onClose();
         });
-
-        return reason;
-      });
 
       if (reply.raw.headersSent) {
         log.warn({ msg: 'Version connection opened after headers sent', trace_id, span_id, data: { sse: true } });

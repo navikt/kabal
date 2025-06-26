@@ -1,9 +1,9 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import {
   type ChangeSet,
-  type InitialVersion,
-  getChangeSetText,
   getChangeSets,
+  getChangeSetText,
+  type InitialVersion,
 } from '@app/components/svarbrev/change-sets';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useGetSvarbrevSettingHistoryQuery } from '@app/redux-api/svarbrev';

@@ -1,10 +1,10 @@
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
-import { QUEUE, SELF, employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
+import { reduxStore } from '@app/redux/configure-store';
+import { employeeName, QUEUE, SELF } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
 import type { TildelingEvent } from '@app/redux-api/server-sent-events/types';
-import { reduxStore } from '@app/redux/configure-store';
 import type { INavEmployee } from '@app/types/bruker';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
@@ -144,11 +144,7 @@ const getToastContent = (
       case FradelReason.FEIL_HJEMMEL: {
         return (
           <InfoToast title="Fradelt">
-            <>
-              {employeeName(actor)} la saken tilbake i {QUEUE}
-              {fromText}.
-            </>
-
+            {employeeName(actor)} la saken tilbake i {QUEUE} {fromText}.
             <HStack align="center" gap="1">
               <Label size="small" htmlFor={labelId}>
                 Årsak
@@ -157,7 +153,6 @@ const getToastContent = (
                 Feil {oldHjemler !== null && oldHjemler.length === 1 ? 'hjemmel' : 'hjemler'}
               </Tag>
             </HStack>
-
             <HStack align="center" gap="1">
               <Label size="small" id={labelId}>
                 Gamle
@@ -172,7 +167,6 @@ const getToastContent = (
                 </Tag>
               )}
             </HStack>
-
             <HStack align="center" gap="1">
               <Label size="small" id={labelId}>
                 Nye

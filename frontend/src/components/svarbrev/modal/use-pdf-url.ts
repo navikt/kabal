@@ -1,4 +1,4 @@
-import { type PreviewRequestsBody, getPdfUrl } from '@app/components/svarbrev/modal/get-pdf-url';
+import { getPdfUrl, type PreviewRequestsBody } from '@app/components/svarbrev/modal/get-pdf-url';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import type { BehandlingstidUnitType } from '@app/types/svarbrev';
 import { useEffect, useRef, useState } from 'react';

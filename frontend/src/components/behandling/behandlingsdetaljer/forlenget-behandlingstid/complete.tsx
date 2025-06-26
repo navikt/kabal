@@ -1,4 +1,4 @@
-import { type IValidationSection, SECTION_KEY, isReduxValidationResponse } from '@app/functions/error-type-guard';
+import { type IValidationSection, isReduxValidationResponse, SECTION_KEY } from '@app/functions/error-type-guard';
 import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import {
   useCompleteMutation,

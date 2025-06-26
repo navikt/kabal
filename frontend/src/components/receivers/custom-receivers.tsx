@@ -1,6 +1,6 @@
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { EditPart } from '@app/components/part/edit-part';
+import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { getInitalHandling } from '@app/components/receivers/functions';
 import type { IErrorProperty } from '@app/components/receivers/is-send-error';
 import { Options } from '@app/components/receivers/options';
@@ -21,6 +21,8 @@ interface Props {
   templateId: TemplateIdEnum | undefined;
 }
 
+const EXTRA_RECEIVERS_ID = 'extra-receivers';
+
 export const CustomReceivers = ({
   mottakerList,
   addMottakere,
@@ -30,12 +32,12 @@ export const CustomReceivers = ({
   templateId,
 }: Props) => (
   <section>
-    <Label size="small" htmlFor="extra-receivers">
+    <Label size="small" htmlFor={EXTRA_RECEIVERS_ID}>
       Ekstra mottakere
     </Label>
     <EditPart
       isLoading={false}
-      id="extra-receivers"
+      id={EXTRA_RECEIVERS_ID}
       onChange={(part) =>
         addMottakere([{ part, handling: getInitalHandling(part, templateId), overriddenAddress: null }])
       }

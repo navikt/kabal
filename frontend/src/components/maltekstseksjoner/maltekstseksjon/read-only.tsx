@@ -1,5 +1,5 @@
 import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import { HStack, Heading, Loader, Tag } from '@navikt/ds-react';
+import { Heading, HStack, Loader, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { styled } from 'styled-components';
 import { TextPreview } from '../texts/preview';

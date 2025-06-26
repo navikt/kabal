@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { PROXY_VERSION, frontendDistDirectoryPath } from '@app/config/config';
+import { frontendDistDirectoryPath, PROXY_VERSION } from '@app/config/config';
 import { ENVIRONMENT } from '@app/config/env';
 import { getLogger } from '@app/logger';
 import type { RouteHandler } from 'fastify';
@@ -27,7 +27,6 @@ const serveIndexHandler: RouteHandler = (_, reply) => {
 export const SERVE_INDEX_PLUGIN_ID = 'serve-index';
 
 export const serveIndexPlugin = fastifyPlugin(
-  // biome-ignore lint/suspicious/useAwait: Needs to return a promise
   async (app) => {
     app.get('/', serveIndexHandler);
     app.get('*', serveIndexHandler);
