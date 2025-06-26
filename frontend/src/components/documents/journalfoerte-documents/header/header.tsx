@@ -45,7 +45,7 @@ export const Header = ({
     Fields.Title,
     columns.TEMA ? Fields.Tema : null,
     columns.DATO_OPPRETTET ? Fields.DatoOpprettet : null,
-    columns.DATO_REG_SENDT ? Fields.DatoRegSendt : null,
+    columns.DATO_SORTERING ? Fields.DatoSortering : null,
     columns.AVSENDER_MOTTAKER ? Fields.AvsenderMottaker : null,
     columns.SAKSNUMMER ? Fields.Saksnummer : null,
     columns.TYPE ? Fields.Type : null,

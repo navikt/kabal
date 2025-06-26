@@ -189,15 +189,7 @@ const sortByDate = (a: IArkivertDocument, b: IArkivertDocument, sort: ArchivedDo
       return a.datoOpprettet.localeCompare(b.datoOpprettet);
     }
 
-    if (a.datoRegSendt === null) {
-      return b.datoRegSendt === null ? 0 : -1;
-    }
-
-    if (b.datoRegSendt === null) {
-      return 1;
-    }
-
-    return a.datoRegSendt.localeCompare(b.datoRegSendt);
+    return a.datoSortering.localeCompare(b.datoSortering);
   }
 
   // Descending
@@ -205,13 +197,5 @@ const sortByDate = (a: IArkivertDocument, b: IArkivertDocument, sort: ArchivedDo
     return b.datoOpprettet.localeCompare(a.datoOpprettet);
   }
 
-  if (b.datoRegSendt === null) {
-    return a.datoRegSendt === null ? 0 : -1;
-  }
-
-  if (a.datoRegSendt === null) {
-    return 1;
-  }
-
-  return b.datoRegSendt.localeCompare(a.datoRegSendt);
+  return b.datoSortering.localeCompare(a.datoSortering);
 };

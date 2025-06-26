@@ -175,8 +175,14 @@ export interface Journalpost {
   opprettetAvNavn: string | null;
   /** Datoen journalposten ble opprettet i arkivet. Datoen settes automatisk og kan ikke overskrives. Selv om hver journalpost har mange datoer (se Type: RelevantDato) er datoOpprettet å anse som "fasit" på journalpostens alder.
    * @format LocalDateTime
+   * @example 2025-06-26T14:11:34.897Z
    */
   datoOpprettet: string;
+  /** Dato for sortering av journalposter.
+   * @format LocalDateTime
+   * @example 2025-06-26T14:11:34.897Z
+   */
+  datoSortering: string;
   /** Liste over datoer som kan være relevante for denne journalposten, f.eks. DATO_EKSPEDERT. Hvilke relevante datoer som returneres, avhenger av journalposttypen. */
   relevanteDatoer: RelevantDato[];
   /** Antall ganger brevet har vært forsøkt sendt til bruker og deretter kommet i retur til Nav. Vil kun være satt for utgående forsendelser. */
@@ -254,7 +260,6 @@ interface TimelineItem {
 
 /** Kabal */
 interface KabalProperties {
-  datoRegSendt: string | null;
   sortKey: string;
   timeline: TimelineItem[];
 }

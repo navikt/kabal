@@ -35,7 +35,7 @@ export const ExpandedDocuments = () => {
       SIZES[Fields.Action][0] +
       (columns.AVSENDER_MOTTAKER ? SIZES[Fields.AvsenderMottaker][0] : 0) +
       (columns.DATO_OPPRETTET ? SIZES[Fields.DatoOpprettet][0] : 0) +
-      (columns.DATO_REG_SENDT ? SIZES[Fields.DatoRegSendt][0] : 0) +
+      (columns.DATO_SORTERING ? SIZES[Fields.DatoSortering][0] : 0) +
       (columns.SAKSNUMMER ? SIZES[Fields.Saksnummer][0] : 0) +
       (columns.TEMA ? SIZES[Fields.Tema][0] : 0) +
       (columns.TYPE ? SIZES[Fields.Type][0] : 0);

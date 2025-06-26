@@ -10,7 +10,7 @@ import {
   type ArchivedDocumentsSort,
   type ArchivedDocumentsSortColumn,
   useDocumentsFilterDatoOpprettet,
-  useDocumentsFilterDatoRegSendt,
+  useDocumentsFilterDatoSortering,
 } from '@app/hooks/settings/use-setting';
 import { useAllTemaer } from '@app/hooks/use-all-temaer';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -43,7 +43,7 @@ export const ExpandedHeaders = ({
   const { data } = useGetArkiverteDokumenterQuery(oppgaveId);
   const { columns } = useArchivedDocumentsColumns();
   const datoOpprettetSetting = useDocumentsFilterDatoOpprettet();
-  const datoRegSendtSetting = useDocumentsFilterDatoRegSendt();
+  const datoSorteringSetting = useDocumentsFilterDatoSortering();
 
   const avsenderMottakerOptions = useMemo(
     () =>
@@ -93,10 +93,10 @@ export const ExpandedHeaders = ({
         </HStack>
       ) : null}
 
-      {columns.DATO_REG_SENDT ? (
-        <HStack align="center" as="section" style={{ gridArea: Fields.DatoRegSendt }}>
-          <SortButton column={ArchivedDocumentsColumn.DATO_REG_SENDT} sort={sort} setSort={setSort} />
-          <DateFilter {...datoRegSendtSetting} label="Dato reg./sendt" gridArea={Fields.DatoRegSendt} />
+      {columns.DATO_SORTERING ? (
+        <HStack align="center" as="section" style={{ gridArea: Fields.DatoSortering }}>
+          <SortButton column={ArchivedDocumentsColumn.DATO_SORTERING} sort={sort} setSort={setSort} />
+          <DateFilter {...datoSorteringSetting} label="Dato reg./sendt" gridArea={Fields.DatoSortering} />
         </HStack>
       ) : null}
 
