@@ -32,7 +32,7 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isExpanded 
 
   const isEditing = thread.comments.some((comment) => comment.id === editingComment?.id);
 
-  const z = focusedThreadId === thread.id ? ' z-9999' : ` z-${zIndex}`;
+  const z = isEditing || focusedThreadId === thread.id ? ' z-9999' : ` z-${zIndex}`;
 
   return (
     <VStack
