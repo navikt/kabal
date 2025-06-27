@@ -95,7 +95,7 @@ export const SaksbehandlerSettings = () => {
                   Vis kommentarer og bokmerker ved siden av innhold
                 </ToggleGroup.Item>
                 <ToggleGroup.Item value={Placement.COLUMN}>
-                  Vis kommentarer og bokmerker sortert kronologisk
+                  Vis kommentarer og bokmerker frikoblet fra innhold
                 </ToggleGroup.Item>
               </ToggleGroup>
 

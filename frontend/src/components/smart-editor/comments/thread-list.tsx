@@ -42,11 +42,9 @@ export const ThreadList = () => {
       overflowX="hidden"
       className="snap-y snap-proximity scroll-pt-12 scroll-pb-6"
     >
-      {attached
-        .toSorted((a, b) => a.created.localeCompare(b.created))
-        .map((thread, i) => (
-          <ExpandableThread key={thread.id} thread={thread} isFocused={thread.isFocused} style={{ zIndex: i + 1 }} />
-        ))}
+      {attached.map((thread, i) => (
+        <ExpandableThread key={thread.id} thread={thread} isFocused={thread.isFocused} style={{ zIndex: i + 1 }} />
+      ))}
     </VStack>
   );
 };
