@@ -32,8 +32,6 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isExpanded 
 
   const isEditing = thread.comments.some((comment) => comment.id === editingComment?.id);
 
-  const z = isEditing || focusedThreadId === thread.id ? ' z-9999' : ` z-${zIndex}`;
-
   return (
     <VStack
       asChild
@@ -52,7 +50,8 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isExpanded 
         borderColor="border-divider"
         borderRadius="medium"
         shadow={isExpanded ? 'medium' : undefined}
-        className={(isExpanded ? EXPANDED_CLASSES : COLLAPSED_CLASSES) + z}
+        className={isExpanded ? EXPANDED_CLASSES : COLLAPSED_CLASSES}
+        style={{ zIndex: isEditing || focusedThreadId === thread.id ? 999 : zIndex }}
       >
         <CommentList comments={comments} isExpanded={isExpanded} />
         {isExpanded ? null : (
