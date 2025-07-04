@@ -8,7 +8,7 @@ import { Confirm } from './confirm';
 import { VALIDATION_ERROR_MESSAGES } from './error-messages';
 import { type FinishProps, isSmartDocumentValidatonError } from './types';
 
-export const ArchiveButtons = ({ document }: FinishProps) => {
+export const ArchiveButtons = ({ document, disabled, ...rest }: FinishProps) => {
   const { id: dokumentId } = document;
   const [finish, { isLoading }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const oppgaveId = useOppgaveId();
@@ -71,6 +71,8 @@ export const ArchiveButtons = ({ document }: FinishProps) => {
       onFinish={onFinish}
       isFinishing={isLoading || document.isMarkertAvsluttet}
       isValidating={isValidating}
+      disabled={disabled}
+      {...rest}
     />
   );
 };

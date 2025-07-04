@@ -3,7 +3,7 @@ import { Row } from '@app/components/behandling/behandlingsdetaljer/select-gosys
 import { SelectedGosysOppgave } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/selected-gosys-oppgave';
 import { TableHeader } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/table-header';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { usePushEvent } from '@app/observability';
 import { useGetGosysOppgaveListQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { useSearchEnheterQuery } from '@app/redux-api/search';
@@ -89,7 +89,7 @@ interface SelectGosysOppgaveModalProps {
 export const SelectGosysOppgaveModal = ({ hasGosysOppgave }: SelectGosysOppgaveModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pushEvent = usePushEvent();
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
 
   if (!(canEdit || hasGosysOppgave)) {
     return null;

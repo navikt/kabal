@@ -14,11 +14,12 @@ import { useMemo } from 'react';
 
 const IS_PARENT_DOCUMENT = 'PARENT_DOCUMENT_VALUE';
 
-interface Props {
+interface Props extends React.RefAttributes<HTMLFieldSetElement> {
   document: IAttachmentDocument;
+  disabled?: boolean;
 }
 
-export const SetParentDocument = ({ document }: Props) => {
+export const SetParentDocument = ({ document, disabled = false, ...rest }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data, isSuccess } = useGetDocumentsQuery(oppgaveId);
   const [setParent, { isLoading: isSetting }] = useSetParentMutation();
@@ -53,7 +54,8 @@ export const SetParentDocument = ({ document }: Props) => {
       title="Vedlegg til"
       legend="Vedlegg til"
       data-testid="document-set-parent-document"
-      disabled={isSetting}
+      disabled={isSetting || disabled}
+      {...rest}
     >
       {potentialParents.map(({ tittel, id, type, dokumentTypeId }) => (
         <RadioOption key={id} value={id} type={type} text={tittel} distType={dokumentTypeId} />

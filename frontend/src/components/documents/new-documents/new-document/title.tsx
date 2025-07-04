@@ -18,12 +18,11 @@ import { TitleActions, type TitleActionsProps } from './title-actions';
 
 interface Props {
   document: IDocument;
-  renameAllowed: boolean;
-  noRenameAccessMessage: string | null;
+  renameAccessError: string | null;
 }
 
 export const DocumentTitle = memo(
-  ({ document, renameAllowed, noRenameAccessMessage }: Props) => {
+  ({ document, renameAccessError }: Props) => {
     const [editMode, _setEditMode] = useState(false);
     const { setDraggingEnabled } = useContext(DragAndDropContext);
     const oppgaveId = useOppgaveId();
@@ -58,8 +57,7 @@ export const DocumentTitle = memo(
       document,
       setEditMode,
       editMode,
-      renameAllowed,
-      noRenameAccessMessage,
+      renameAccessError,
     };
 
     if (editMode) {
@@ -118,7 +116,9 @@ export const DocumentTitle = memo(
     );
   },
   (prevProps, nextProps) =>
-    prevProps.document.id === nextProps.document.id && prevProps.document.tittel === nextProps.document.tittel,
+    prevProps.document.id === nextProps.document.id &&
+    prevProps.document.tittel === nextProps.document.tittel &&
+    prevProps.renameAccessError === nextProps.renameAccessError,
 );
 
 DocumentTitle.displayName = 'DocumentTitle';

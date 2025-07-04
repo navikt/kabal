@@ -5,8 +5,9 @@ import { useDocumentNodes } from '@app/components/documents/new-documents/new-do
 import { getListHeight } from '@app/components/documents/new-documents/new-documents-list/list-height';
 import { useDocumentMap } from '@app/components/documents/new-documents/new-documents-list/use-document-map';
 import { clamp } from '@app/functions/clamp';
+import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
+import { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -19,7 +20,8 @@ const SCROLL_BUFFER_ROWS = 5;
 
 export const NewDocuments = () => {
   const oppgaveId = useOppgaveId();
-  const hasUploadAccess = useHasUploadAccess();
+  const creatorRole = useCreatorRole();
+  const getUploadAccessError = useLazyDuaAccess();
   const isFeilregistrert = useIsFeilregistrert();
   const { isSuccess, isError } = useGetDocumentsQuery(oppgaveId);
   const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
@@ -44,7 +46,13 @@ export const NewDocuments = () => {
   }, [containerRef]);
 
   const documentMap = useDocumentMap();
-  const listHeight = getListHeight(documentMap, isAssignedRolAndSent, isFeilregistrert, hasUploadAccess);
+  const listHeight = getListHeight(
+    documentMap,
+    isAssignedRolAndSent,
+    isFeilregistrert,
+    getUploadAccessError,
+    creatorRole,
+  );
 
   const [absoluteStartIndex, absoluteEndIndex] = useMemo<[number, number]>(() => {
     const rowsToRender = containerHeight === 0 ? 0 : Math.ceil(containerHeight / ROW_HEIGHT);
@@ -61,7 +69,8 @@ export const NewDocuments = () => {
     absoluteEndIndex,
     isAssignedRolAndSent,
     isFeilregistrert,
-    hasUploadAccess,
+    getUploadAccessError,
+    creatorRole,
   );
 
   const onRef = useCallback((ref: HTMLDivElement | null) => {

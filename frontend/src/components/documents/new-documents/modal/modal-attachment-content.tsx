@@ -1,15 +1,8 @@
+import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
 import { SetParentDocument } from '@app/components/documents/new-documents/modal/set-parent';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@app/components/documents/set-filename';
-import { AttachmentAccessEnum } from '@app/hooks/dua-access/attachment-access';
-import {
-  type AttachmentAccessEnumMap,
-  MOVE_ACCESS_ENUM_TO_TEXT,
-  REMOVE_ACCESS_ENUM_TO_TEXT,
-  RENAME_ACCESS_ENUM_TO_TEXT,
-} from '@app/hooks/dua-access/attachment-messages';
-import type { AttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import {
@@ -19,16 +12,17 @@ import {
   type IDocument,
 } from '@app/types/documents/documents';
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
+import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { DeleteDocumentButton } from './delete-button';
 
 interface AttachmentProps {
   document: IAttachmentDocument;
-  access: AttachmentAccess;
+  renameAccess: string | null;
+  removeAccess: string | null;
 }
 
-export const AttachmentModalContent = ({ document, access }: AttachmentProps) => {
+export const AttachmentModalContent = ({ document, renameAccess, removeAccess }: AttachmentProps) => {
   const [setTitle] = useSetTitleMutation();
   const oppgaveId = useOppgaveId();
 
@@ -52,12 +46,13 @@ export const AttachmentModalContent = ({ document, access }: AttachmentProps) =>
             <OpprettetTag document={document} />
           </HStack>
 
-          {access.rename === AttachmentAccessEnum.ALLOWED ? (
+          <AccessErrorsSummary documentErrors={renameAccess === null ? [] : [renameAccess]}>
             <HStack align="end" gap="2" wrap={false}>
               <SetFilename
                 className="max-w-lg flex-grow"
                 tittel={document.tittel}
                 setFilename={(title) => setTitle({ oppgaveId, dokumentId: document.id, title })}
+                disabled={renameAccess !== null}
               />
               <Button
                 size="small"
@@ -65,26 +60,21 @@ export const AttachmentModalContent = ({ document, access }: AttachmentProps) =>
                 icon={<CheckmarkIcon aria-hidden />}
                 title="Endre dokumentnavn"
                 data-testid="document-title-edit-save-button"
+                disabled={renameAccess !== null}
               />
             </HStack>
-          ) : (
-            <AccessAlert access={access.rename} TEXT={RENAME_ACCESS_ENUM_TO_TEXT} />
-          )}
+          </AccessErrorsSummary>
 
-          {access.move === AttachmentAccessEnum.ALLOWED ? (
-            <SetParentDocument document={document} />
-          ) : (
-            <AccessAlert access={access.move} TEXT={MOVE_ACCESS_ENUM_TO_TEXT} />
-          )}
+          <AccessErrorsSummary documentErrors={removeAccess === null ? [] : [removeAccess]}>
+            <SetParentDocument document={document} disabled={removeAccess !== null} />
+          </AccessErrorsSummary>
         </VStack>
       </Modal.Body>
 
       <Modal.Footer className="items-center">
-        {access.remove === AttachmentAccessEnum.ALLOWED ? (
-          <DeleteDocumentButton document={document} />
-        ) : (
-          <AccessAlert access={access.remove} TEXT={REMOVE_ACCESS_ENUM_TO_TEXT} />
-        )}
+        <AccessErrorsSummary documentErrors={removeAccess === null ? [] : [removeAccess]}>
+          <DeleteDocumentButton document={document} disabled={removeAccess !== null} />
+        </AccessErrorsSummary>
       </Modal.Footer>
     </>
   );
@@ -101,24 +91,5 @@ const OpprettetTag = ({ document }: { document: IDocument }) => {
       &nbsp;
       <DocumentDate document={document} />
     </Tag>
-  );
-};
-
-interface AccessAlertProps {
-  access: AttachmentAccessEnum;
-  TEXT: AttachmentAccessEnumMap;
-}
-
-const AccessAlert = ({ access, TEXT }: AccessAlertProps) => {
-  const text = TEXT[access];
-
-  if (text === null) {
-    return null;
-  }
-
-  return (
-    <Alert variant="info" size="small" inline>
-      {text}
-    </Alert>
   );
 };

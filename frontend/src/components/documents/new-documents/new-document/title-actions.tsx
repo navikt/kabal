@@ -1,4 +1,4 @@
-import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
+import type { IDocument } from '@app/types/documents/documents';
 import { CheckmarkIcon, PadlockLockedIcon, PencilIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, HStack, Tooltip } from '@navikt/ds-react';
 
@@ -6,17 +6,10 @@ export interface TitleActionsProps {
   document: IDocument;
   setEditMode: (editMode: boolean) => void;
   editMode: boolean;
-  renameAllowed: boolean;
-  noRenameAccessMessage: string | null;
+  renameAccessError: string | null;
 }
 
-export const TitleActions = ({
-  setEditMode,
-  editMode,
-  document,
-  renameAllowed,
-  noRenameAccessMessage,
-}: TitleActionsProps) => {
+export const TitleActions = ({ setEditMode, editMode, document, renameAccessError }: TitleActionsProps) => {
   const { tittel } = document;
   const Icon = editMode ? CheckmarkIcon : PencilIcon;
 
@@ -29,7 +22,7 @@ export const TitleActions = ({
       overflow="hidden"
       className="focus-within:w-fit group-hover:w-fit"
     >
-      {renameAllowed ? (
+      {renameAccessError === null ? (
         <Button
           onClick={() => setEditMode(!editMode)}
           data-testid="document-title-edit-save-button"
@@ -39,11 +32,7 @@ export const TitleActions = ({
           title="Endre dokumentnavn"
         />
       ) : (
-        <Padlock>
-          {(noRenameAccessMessage ?? document.type === DocumentTypeEnum.JOURNALFOERT)
-            ? 'Journalførte vedlegg må endres navn på i listen over journalførte dokumenter.'
-            : null}
-        </Padlock>
+        <Padlock>{renameAccessError}</Padlock>
       )}
 
       {editMode ? null : (

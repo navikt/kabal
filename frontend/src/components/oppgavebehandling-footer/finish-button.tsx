@@ -1,6 +1,6 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useLazyValidateQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { ValidationType } from '@app/types/oppgavebehandling/params';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
@@ -12,7 +12,7 @@ import { ConfirmFinish } from './confirm-finish';
 const TEST_ID = 'complete-button';
 
 export const FinishButton = () => {
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
   const [validate, { data: validationData, isLoading, isFetching }] = useLazyValidateQuery();
   const { setValidationSectionErrors } = useContext(ValidationErrorContext);
   const [showConfirmFinish, setConfirmFinish] = useState(false);

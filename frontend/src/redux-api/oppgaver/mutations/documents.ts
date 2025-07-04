@@ -3,9 +3,11 @@ import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-t
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { reduxStore } from '@app/redux/configure-store';
+import { user } from '@app/static-data/static-data';
 import { Journalposttype } from '@app/types/arkiverte-documents';
 import type { IDocumentParams } from '@app/types/documents/common-params';
 import {
+  CreatorRole,
   DistribusjonsType,
   DocumentTypeEnum,
   type IDocument,
@@ -327,10 +329,9 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           })),
         },
       }),
-      onQueryStarted: async (
-        { oppgaveId, parentId, journalfoerteDokumenter, creator },
-        { dispatch, queryFulfilled },
-      ) => {
+      onQueryStarted: async ({ oppgaveId, parentId, journalfoerteDokumenter }, { dispatch, queryFulfilled }) => {
+        const { navIdent, navn } = await user;
+
         const getDocumentsPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
             const addedDocuments: IDocument[] = draft;
@@ -368,7 +369,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                   varianter: doc.varianter,
                   sortKey: doc.sortKey,
                 },
-                creator,
+                creator: { creatorRole: CreatorRole.KABAL_SAKSBEHANDLING, employee: { navIdent, navn } },
                 mottakerList: [],
               });
             }

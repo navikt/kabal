@@ -8,16 +8,27 @@ import {
 import type { DocumentWithAttachments } from '@app/components/documents/new-documents/new-documents-list/types';
 import { getHasUploadOrRolAnswersButton } from '@app/components/documents/new-documents/new-documents-list/upload-button';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import type { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
+import { type CreatorRole, DocumentTypeEnum } from '@app/types/documents/documents';
 
 export const getListHeight = (
   documentMap: Map<string, DocumentWithAttachments>,
   isAssignedRolAndSent: boolean,
   isFeilregistrert: boolean,
-  hasUploadAccess: boolean,
+  getUploadAccessError: ReturnType<typeof useLazyDuaAccess>,
+  creatorRole: CreatorRole,
 ) => {
   let h = PADDING_TOP + PADDING_BOTTOM;
 
   for (const { mainDocument, journalfoerteDocuments, pdfOrSmartDocuments } of documentMap.values()) {
+    const hasUploadAccess =
+      getUploadAccessError(
+        { creator: { creatorRole }, type: DocumentTypeEnum.UPLOADED },
+        DuaActionEnum.CREATE,
+        mainDocument,
+      ) === null;
+
     const hasUploadOrRolAnswersButton = getHasUploadOrRolAnswersButton(
       mainDocument,
       isAssignedRolAndSent,

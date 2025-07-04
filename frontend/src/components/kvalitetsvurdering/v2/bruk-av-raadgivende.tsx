@@ -1,5 +1,5 @@
-import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useIsRelevantYtelseForRaadgivende } from '@app/hooks/use-is-relevant-ytelse-for-raadgivende';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { RadiovalgExtended } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { Heading, HStack, Radio } from '@navikt/ds-react';
 import { Checkboxes } from './common/checkboxes';
@@ -16,7 +16,7 @@ export const BrukAvRaadgivendeLege = () => {
   const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV2();
   const show = useIsRelevantYtelseForRaadgivende(oppgave?.ytelseId ?? null);
 
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
   const validationError = useValidationError(USE_ROL_FIELD);
   const header = useKvalitetsvurderingV2FieldName(USE_ROL_FIELD);
 

@@ -1,13 +1,12 @@
 import { Fields } from '@app/components/documents/new-documents/grid';
+import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
 import { AttachmentModalContent } from '@app/components/documents/new-documents/modal/modal-attachment-content';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { AttachmentAccessEnum } from '@app/hooks/dua-access/attachment-access';
-import { getAttachmentAccessSummary } from '@app/hooks/dua-access/summary/get-attachment-access-summary';
-import type { AttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
+import { isNotNull } from '@app/functions/is-not-type-guards';
 import type { IAttachmentDocument } from '@app/types/documents/documents';
 import { MenuElipsisVerticalIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
-import { Button, Modal, Tooltip } from '@navikt/ds-react';
+import { Button, Modal } from '@navikt/ds-react';
 import { useContext } from 'react';
 
 interface Props {
@@ -16,28 +15,31 @@ interface Props {
 }
 interface AttachmentProps extends Props {
   document: IAttachmentDocument;
-  access: AttachmentAccess;
+  renameAccessError: string | null;
+  removeAccessError: string | null;
 }
 
-export const AttachmentModal = ({ document, isOpen, setIsOpen, access }: AttachmentProps) => {
+export const AttachmentModal = ({
+  document,
+  isOpen,
+  setIsOpen,
+  renameAccessError,
+  removeAccessError,
+}: AttachmentProps) => {
   const { tittel, type } = document;
   const { close } = useContext(ModalContext);
 
-  if (
-    access.rename !== AttachmentAccessEnum.ALLOWED &&
-    access.move !== AttachmentAccessEnum.ALLOWED &&
-    access.remove !== AttachmentAccessEnum.ALLOWED
-  ) {
+  if (renameAccessError !== null && removeAccessError !== null) {
     return (
-      <AttachmentSummary access={access}>
+      <AccessErrorsSummary documentErrors={[removeAccessError, renameAccessError]} placement="left">
         <PadlockLockedIcon style={{ gridArea: Fields.Action }} className="h-full w-full p-2" />
-      </AttachmentSummary>
+      </AccessErrorsSummary>
     );
   }
 
   return (
     <>
-      <AttachmentSummary access={access}>
+      <AccessErrorsSummary documentErrors={[removeAccessError, renameAccessError].filter(isNotNull)} placement="left">
         <Button
           onClick={() => setIsOpen(!isOpen)}
           data-testid="document-actions-button"
@@ -46,7 +48,7 @@ export const AttachmentModal = ({ document, isOpen, setIsOpen, access }: Attachm
           icon={<MenuElipsisVerticalIcon aria-hidden />}
           style={{ gridArea: Fields.Action }}
         />
-      </AttachmentSummary>
+      </AccessErrorsSummary>
       {isOpen ? (
         <Modal
           open
@@ -63,28 +65,13 @@ export const AttachmentModal = ({ document, isOpen, setIsOpen, access }: Attachm
             setIsOpen(false);
           }}
         >
-          <AttachmentModalContent document={document} access={access} />
+          <AttachmentModalContent
+            document={document}
+            renameAccess={renameAccessError}
+            removeAccess={removeAccessError}
+          />
         </Modal>
       ) : null}
     </>
-  );
-};
-
-interface AttachmentSummaryProps {
-  access: AttachmentAccess;
-  children: React.ReactElement;
-}
-
-const AttachmentSummary = ({ access, children }: AttachmentSummaryProps) => {
-  const summary = getAttachmentAccessSummary(access);
-
-  if (summary === null) {
-    return children;
-  }
-
-  return (
-    <Tooltip content={summary} maxChar={Number.POSITIVE_INFINITY} className="whitespace-pre text-left">
-      {children}
-    </Tooltip>
   );
 };

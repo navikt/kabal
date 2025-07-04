@@ -49,3 +49,4 @@ export const useLazyIsReturnedFromRol = () => {
 export const useIsRolOrKrolUser = (): boolean => useHasAnyOfRoles([Role.KABAL_ROL, Role.KABAL_KROL]);
 export const useIsKrolUser = (): boolean => useHasAnyOfRoles([Role.KABAL_KROL]);
 export const useIsRolUser = (): boolean => useHasAnyOfRoles([Role.KABAL_ROL]);
+export const getIsRolUser = (roles: Role[]): boolean => roles.includes(Role.KABAL_ROL);

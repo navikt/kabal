@@ -1,12 +1,10 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { GeneratedIcon } from '@app/components/smart-editor/new-document/generated-icon';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
+import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsSentToMedunderskriver } from '@app/hooks/use-is-medunderskriver';
-import { useIsAssignedRolAndSent, useIsRolOrKrolUser, useIsSentToRol } from '@app/hooks/use-is-rol';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import {
   ANKE_I_TRYGDERETTEN_TEMPLATES,
   ANKE_TEMPLATES,
@@ -17,13 +15,12 @@ import {
 } from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { Role } from '@app/types/bruker';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Language } from '@app/types/texts/language';
 import type { Immutable } from '@app/types/types';
-import { BoxNew, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
+import { Alert, BoxNew, Heading, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { getTitle } from './get-title';
 
@@ -32,29 +29,19 @@ interface Props {
 }
 
 export const NewDocument = ({ onCreate }: Props) => {
-  const { user } = useContext(StaticDataContext);
-  const isRol = useIsAssignedRolAndSent();
-  const hasDocumentsAccess = useHasDocumentsAccess();
-  const isFeilregistrert = useIsFeilregistrert();
   const oppgaveId = useOppgaveId();
   const [createSmartDocument, { isLoading }] = useCreateSmartDocumentMutation();
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
-  const { data: oppgave } = useOppgave();
+  const { data: oppgave, isSuccess } = useOppgave();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
   const templates = useNewSmartDocumentTemplates();
 
-  if (isFeilregistrert || oppgave === undefined) {
-    return null;
-  }
-
-  if (!(isRol || hasDocumentsAccess)) {
-    return null;
+  if (!isSuccess) {
+    return <Loader size="large" />;
   }
 
   const onClick = async (template: ISmartEditorTemplate) => {
     setLoadingTemplate(template.templateId);
-
-    const creatorRole = isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING;
 
     try {
       const { id } = await createSmartDocument({
@@ -63,8 +50,6 @@ export const NewDocument = ({ onCreate }: Props) => {
         content: template.richText,
         tittel: getTitle(documents, template),
         oppgaveId: oppgave.id,
-        creatorIdent: user.navIdent,
-        creatorRole,
         parentId: null,
         language: Language.NB,
       }).unwrap();
@@ -85,7 +70,7 @@ export const NewDocument = ({ onCreate }: Props) => {
       background="default"
       overflowY="auto"
     >
-      <Heading level="1" size="xsmall">
+      <Heading level="1" size="xsmall" spacing>
         Opprett nytt dokument
       </Heading>
 
@@ -98,6 +83,11 @@ export const NewDocument = ({ onCreate }: Props) => {
             loading={isLoading && loadingTemplate === template.templateId}
           />
         ))}
+        {templates.length === 0 ? (
+          <Alert variant="info" className="grow">
+            Ingen maler tilgjengelig.
+          </Alert>
+        ) : null}
       </HStack>
     </BoxNew>
   );
@@ -105,20 +95,11 @@ export const NewDocument = ({ onCreate }: Props) => {
 
 export const useNewSmartDocumentTemplates = () => {
   const { data: oppgave, isSuccess } = useOppgave();
-  const isSaksbehandler = useIsTildeltSaksbehandler();
   const { user } = useContext(StaticDataContext);
-  const isRolOrKrolUser = useIsRolOrKrolUser();
-  const isSentToMedunderskriver = useIsSentToMedunderskriver();
-  const isSentToRol = useIsSentToRol();
 
-  if (!isSuccess || isRolOrKrolUser) {
+  if (!isSuccess) {
     // ROL and KROL can never create new main documents.
     // ROL can only create answers to ROL questions.
-    return [];
-  }
-
-  if (isSentToMedunderskriver) {
-    // If case is sent to medunderskriver, new documents cannot be created.
     return [];
   }
 
@@ -128,20 +109,10 @@ export const useNewSmartDocumentTemplates = () => {
     return getFinishedBehandlingTemplates(user.navIdent);
   }
 
-  if (isSaksbehandler) {
-    const saksbehandlerTemplates = SAKSBEHANDLER_TEMPLATES[typeId];
-
-    if (isSentToRol) {
-      return saksbehandlerTemplates.filter(({ templateId }) => templateId !== TemplateIdEnum.ROL_QUESTIONS);
-    }
-
-    return saksbehandlerTemplates;
-  }
-
-  return [];
+  return TEMPLATES[typeId];
 };
 
-const SAKSBEHANDLER_TEMPLATES: Record<SaksTypeEnum, Immutable<IMutableSmartEditorTemplate>[]> = {
+const TEMPLATES: Record<SaksTypeEnum, Immutable<IMutableSmartEditorTemplate>[]> = {
   [SaksTypeEnum.KLAGE]: KLAGE_TEMPLATES,
   [SaksTypeEnum.ANKE]: ANKE_TEMPLATES,
   [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: ANKE_I_TRYGDERETTEN_TEMPLATES,
@@ -155,25 +126,55 @@ interface TemplateButtonProps {
   onClick: () => void;
 }
 
-const TemplateButton = ({ template, loading, onClick }: TemplateButtonProps) => (
-  <BoxNew asChild padding="4" borderRadius="medium" width="25%" minWidth="190px">
-    <VStack
-      as="button"
-      type="button"
-      onClick={onClick}
-      disabled={loading}
-      align="center"
-      position="relative"
-      className="cursor-pointer hover:bg-ax-bg-neutral-moderate-hover"
-    >
-      <LoadingOverlay loading={loading} />
+const TemplateButton = ({ template, loading, onClick }: TemplateButtonProps) => {
+  const creatorRole = useCreatorRole();
+  const noAccessMessage = useDuaAccess(
+    { creator: { creatorRole }, type: DocumentTypeEnum.SMART, templateId: template.templateId },
+    DuaActionEnum.CREATE,
+  );
 
-      <GeneratedIcon template={template} />
+  const hasAccess = noAccessMessage === null;
 
-      <span className="font-bold text-ax-medium">{template.tittel}</span>
-    </VStack>
-  </BoxNew>
-);
+  return (
+    <ErrorWrapper noAccessMessage={noAccessMessage}>
+      <BoxNew asChild padding="4" borderRadius="medium" width="25%" minWidth="190px">
+        <VStack
+          as="button"
+          type="button"
+          onClick={hasAccess ? onClick : undefined}
+          disabled={loading}
+          align="center"
+          position="relative"
+          style={{ opacity: hasAccess ? 1 : 0.5, cursor: hasAccess ? 'pointer' : 'not-allowed' }}
+          className="hover:bg-ax-bg-neutral-moderate-hover"
+        >
+          <LoadingOverlay loading={loading} />
+
+          <GeneratedIcon template={template} />
+
+          <span className="font-bold text-ax-medium">{template.tittel}</span>
+        </VStack>
+      </BoxNew>
+    </ErrorWrapper>
+  );
+};
+
+interface ErrorWrapperProps {
+  noAccessMessage: string | null;
+  children: React.ReactElement;
+}
+
+const ErrorWrapper = ({ children, noAccessMessage }: ErrorWrapperProps) => {
+  if (noAccessMessage === null) {
+    return children;
+  }
+
+  return (
+    <Tooltip content={noAccessMessage} placement="bottom">
+      {children}
+    </Tooltip>
+  );
+};
 
 const LoadingOverlay = ({ loading }: { loading: boolean }) =>
   loading ? (

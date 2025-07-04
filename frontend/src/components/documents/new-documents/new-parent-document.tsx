@@ -1,16 +1,13 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { DropZone } from '@app/components/documents/new-documents/shared/drop-zone';
-import { useDocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDropOnDocument } from '@app/hooks/use-can-document/use-can-drop-on-document';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import {
   useCreateVedleggFromJournalfoertDocumentMutation,
   useSetParentMutation,
 } from '@app/redux-api/oppgaver/mutations/documents';
-import { CreatorRole, type IDocument, type IParentDocument } from '@app/types/documents/documents';
+import type { IDocument, IParentDocument } from '@app/types/documents/documents';
 import { PaperclipIcon } from '@navikt/aksel-icons';
 import { BoxNew } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -24,16 +21,13 @@ interface Props extends ListProps {
 }
 
 export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
-  const { user } = useContext(StaticDataContext);
-  const isRol = useIsAssignedRolAndSent();
   const oppgaveId = useOppgaveId();
   const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation({
     fixedCacheKey: `createVedlegg-${document.id}`,
   });
   const [setParent] = useSetParentMutation();
   const { draggedDocument, draggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
-  const access = useDocumentAccess(document);
-  const isDropTarget = useCanDropOnDocument(document, access);
+  const isDropTarget = useCanDropOnDocument(document);
   const isFinished = useIsFullfoert();
 
   const onDrop = useCallback(() => {
@@ -45,13 +39,6 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
           oppgaveId,
           parentId: document.id,
           journalfoerteDokumenter: draggedJournalfoertDocuments,
-          creator: {
-            employee: {
-              navIdent: user.navIdent,
-              navn: user.navn,
-            },
-            creatorRole: isRol ? CreatorRole.KABAL_ROL : CreatorRole.KABAL_SAKSBEHANDLING,
-          },
           isFinished,
         });
       }
@@ -67,9 +54,6 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
     draggedJournalfoertDocuments,
     setParent,
     createVedlegg,
-    user.navIdent,
-    user.navn,
-    isRol,
     isFinished,
   ]);
 
@@ -93,7 +77,7 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
         label={`Vedlegg for «${document.tittel}»`}
         onDrop={onDrop}
       >
-        <NewDocument document={document} access={access} />
+        <NewDocument document={document} />
 
         <AttachmentList parentDocument={document} {...listProps} />
       </DropZone>

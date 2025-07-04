@@ -16,8 +16,6 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
-import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
-import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { Checkbox, HGrid } from '@navikt/ds-react';
 import { useCallback, useContext, useRef } from 'react';
@@ -47,8 +45,6 @@ export const Document = ({
   hasVedlegg,
   className,
 }: Props) => {
-  const isRol = useIsAssignedRolAndSent();
-  const hasDocumentsAccess = useHasDocumentsAccess();
   const { columns } = useArchivedDocumentsColumns();
 
   const { getSelectedDocuments } = useContext(SelectContext);
@@ -84,7 +80,7 @@ export const Document = ({
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const draggingIsEnabled = draggingEnabled && hasAccess && (isRol || hasDocumentsAccess);
+  const draggingIsEnabled = draggingEnabled && hasAccess;
 
   const onDoubleClick = useCallback(() => {
     const accessibleIndex = convertRealToAccessibleDocumentIndex([index, -1]);

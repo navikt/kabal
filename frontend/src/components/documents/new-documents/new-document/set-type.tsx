@@ -10,27 +10,30 @@ import {
 import { Select, Tag, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 
-interface Props {
+interface Props extends React.RefAttributes<HTMLSpanElement> {
   document: IDocument;
   showLabel?: boolean;
+  disabled?: boolean;
 }
 
-export const SetDocumentType = ({ document, showLabel }: Props) => {
+export const SetDocumentType = ({ document, disabled, ...rest }: Props) => {
   const { options, explanation } = useDistribusjonstypeOptions(document.type);
 
-  if (options.some(({ value }) => value === document.dokumentTypeId)) {
-    return <Options options={options} explanation={explanation} document={document} showLabel={showLabel} />;
+  if (!disabled && options.some(({ value }) => value === document.dokumentTypeId)) {
+    return <Options options={options} explanation={explanation} document={document} />;
   }
 
-  return <DocumentTypeTag dokumentTypeId={document.dokumentTypeId} />;
+  return <DocumentTypeTag dokumentTypeId={document.dokumentTypeId} {...rest} />;
 };
 
-interface IsOptionProps extends Props {
+interface IsOptionProps {
+  document: IDocument;
+  showLabel?: boolean;
   options: DistribusjonsTypeOption[];
   explanation: string;
 }
 
-const Options = ({ options, explanation, document, showLabel = false }: IsOptionProps) => {
+const Options = ({ options, explanation, document, showLabel = false, ...rest }: IsOptionProps) => {
   const { id, dokumentTypeId } = document;
   const [setType] = useSetTypeMutation();
   const oppgaveId = useOppgaveId();
@@ -50,6 +53,7 @@ const Options = ({ options, explanation, document, showLabel = false }: IsOption
         size="small"
         onChange={onChange}
         value={dokumentTypeId}
+        {...rest}
       >
         {options.map(({ label, value }) => (
           <option key={value} value={value}>
@@ -63,13 +67,13 @@ const Options = ({ options, explanation, document, showLabel = false }: IsOption
 
 const isDocumentType = (type: string): type is DistribusjonsType => DISTRIBUSJONSTYPER.some((t) => t === type);
 
-interface TypeTagProps {
+interface TypeTagProps extends React.RefAttributes<HTMLSpanElement> {
   dokumentTypeId: DistribusjonsType;
 }
 
-export const DocumentTypeTag = ({ dokumentTypeId }: TypeTagProps) => (
+export const DocumentTypeTag = ({ dokumentTypeId, ...rest }: TypeTagProps) => (
   <Tooltip content={DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}>
-    <Tag variant="info" size="small">
+    <Tag variant="info" size="small" {...rest}>
       <span className="truncate text-left">{DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}</span>
     </Tag>
   </Tooltip>
