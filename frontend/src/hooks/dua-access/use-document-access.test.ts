@@ -72,7 +72,6 @@ describe('Document access', () => {
       it('should allow full access', () => {
         const access = getDocumentAccess(UPLOADED_NOTAT, [], { ...BASE_PARAMS, isFinished: true });
         expect(access).toEqual({
-          read: true,
           write: DocumentAccessEnum.NOT_SUPPORTED,
           uploadAttachments: DocumentAccessEnum.ALLOWED,
           referAttachments: DocumentAccessEnum.NOT_SUPPORTED,
@@ -88,7 +87,6 @@ describe('Document access', () => {
       it('should allow full access', () => {
         const access = getDocumentAccess(SMART_NOTAT, [], { ...BASE_PARAMS, isFinished: true });
         expect(access).toEqual({
-          read: true,
           write: DocumentAccessEnum.ALLOWED,
           uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED,
           referAttachments: DocumentAccessEnum.ALLOWED,
@@ -104,7 +102,6 @@ describe('Document access', () => {
       it('should allow full access', () => {
         const access = getDocumentAccess(ROL_QUESTIONS, [], { ...BASE_PARAMS, isFinished: true });
         expect(access).toEqual({
-          read: true,
           write: DocumentAccessEnum.ALLOWED,
           uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED,
           referAttachments: DocumentAccessEnum.ALLOWED,
@@ -122,7 +119,6 @@ describe('Document access', () => {
       it('should only allow read access', () => {
         const access = getDocumentAccess(UPLOADED_NOTAT, [], { ...BASE_PARAMS, isFeilregistrert: true });
         expect(access).toEqual({
-          read: true,
           write: DocumentAccessEnum.NOT_SUPPORTED,
           uploadAttachments: DocumentAccessEnum.CASE_FEILREGISTRERT,
           referAttachments: DocumentAccessEnum.CASE_FEILREGISTRERT,
@@ -140,7 +136,6 @@ describe('Document access', () => {
       const access = getDocumentAccess(UPLOADED_NOTAT, [], BASE_PARAMS);
 
       expect(access).toEqual({
-        read: true,
         write: DocumentAccessEnum.NOT_SUPPORTED,
         uploadAttachments: DocumentAccessEnum.ALLOWED,
         referAttachments: DocumentAccessEnum.NOT_SUPPORTED,
@@ -155,7 +150,6 @@ describe('Document access', () => {
       const access = getDocumentAccess(SMART_NOTAT, [], BASE_PARAMS);
 
       expect(access).toEqual({
-        read: true,
         write: DocumentAccessEnum.ALLOWED,
         uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED,
         referAttachments: DocumentAccessEnum.ALLOWED,
@@ -178,7 +172,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.NOT_SUPPORTED,
             uploadAttachments: DocumentAccessEnum.ALLOWED,
             referAttachments: DocumentAccessEnum.NOT_SUPPORTED,
@@ -197,7 +190,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.ALLOWED,
             uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED,
             referAttachments: DocumentAccessEnum.ALLOWED,
@@ -218,7 +210,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.NOT_SUPPORTED,
             uploadAttachments: DocumentAccessEnum.ALLOWED,
             referAttachments: DocumentAccessEnum.NOT_SUPPORTED,
@@ -237,7 +228,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.NOT_ASSIGNED,
             uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED,
             referAttachments: DocumentAccessEnum.NOT_ASSIGNED,
@@ -261,7 +251,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.NOT_SUPPORTED,
             uploadAttachments: DocumentAccessEnum.ALLOWED,
             referAttachments: DocumentAccessEnum.NOT_SUPPORTED,
@@ -281,7 +270,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.SENT_TO_MU,
             uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED,
             referAttachments: DocumentAccessEnum.SENT_TO_MU,
@@ -303,7 +291,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.NOT_SUPPORTED,
             uploadAttachments: DocumentAccessEnum.ALLOWED,
             referAttachments: DocumentAccessEnum.NOT_SUPPORTED,
@@ -323,7 +310,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.ALLOWED,
             uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED,
             referAttachments: DocumentAccessEnum.NOT_ASSIGNED,
@@ -347,7 +333,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.NOT_SUPPORTED,
             uploadAttachments: DocumentAccessEnum.ALLOWED,
             referAttachments: DocumentAccessEnum.NOT_SUPPORTED,
@@ -367,7 +352,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.NOT_ASSIGNED,
             uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED,
             referAttachments: DocumentAccessEnum.NOT_ASSIGNED,
@@ -387,7 +371,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.NOT_ASSIGNED_OR_MEDUNDERSKRIVER,
             uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED,
             referAttachments: DocumentAccessEnum.ALLOWED,
@@ -409,7 +392,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.NOT_SUPPORTED,
             uploadAttachments: DocumentAccessEnum.ALLOWED,
             referAttachments: DocumentAccessEnum.NOT_SUPPORTED,
@@ -429,7 +411,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.ALLOWED,
             uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED,
             referAttachments: DocumentAccessEnum.ALLOWED,
@@ -449,7 +430,6 @@ describe('Document access', () => {
           });
 
           expect(access).toEqual({
-            read: true,
             write: DocumentAccessEnum.SENT_TO_ROL,
             uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED,
             referAttachments: DocumentAccessEnum.SENT_TO_ROL,

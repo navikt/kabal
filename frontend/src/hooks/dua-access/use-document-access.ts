@@ -1,5 +1,5 @@
 import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
-import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
+import type { DocumentAccess } from '@app/hooks/dua-access/access';
 import { useLazyIsTildelt } from '@app/hooks/oppgavebehandling/use-is-tildelt';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
@@ -14,28 +14,6 @@ import {
   type IAttachmentDocument,
   type IDocument,
 } from '@app/types/documents/documents';
-
-export interface DocumentAccess {
-  /** Read the document */
-  read: boolean;
-  /** Write to the document */
-  write: DocumentAccessEnum;
-  /** Delete the document */
-  remove: DocumentAccessEnum;
-  /** Change the document type */
-  changeType: DocumentAccessEnum;
-  /** Rename the document */
-  rename: DocumentAccessEnum;
-  /** Finish the document (archive or send) */
-  finish: DocumentAccessEnum;
-
-  // Attachments
-
-  /** Upload attachments */
-  uploadAttachments: DocumentAccessEnum;
-  /** Refer to archived documents as attachments */
-  referAttachments: DocumentAccessEnum;
-}
 
 export const useLazyDocumentAccess = (): ((document: IDocument) => DocumentAccess) => {
   const isFinished = useIsFullfoert();
@@ -58,7 +36,6 @@ export const useLazyDocumentAccess = (): ((document: IDocument) => DocumentAcces
       const isRolQuestions = getIsRolQuestions(document);
 
       return {
-        read: true,
         write: getWriteAccess(document, DocumentAccessEnum.NOT_ASSIGNED),
         remove: DocumentAccessEnum.NOT_ASSIGNED,
         changeType: isRolQuestions ? DocumentAccessEnum.NOT_SUPPORTED : DocumentAccessEnum.NOT_ASSIGNED,
@@ -121,7 +98,6 @@ export const getDocumentAccess = (
   if (isFinished) {
     // Everyone has full access to documents in finished cases.
     return {
-      read: true,
       write: getWriteAccess(document, DocumentAccessEnum.ALLOWED),
       remove: DocumentAccessEnum.ALLOWED,
       changeType: getChangeTypeAccess(document, DocumentAccessEnum.ALLOWED),
@@ -135,7 +111,6 @@ export const getDocumentAccess = (
   if (isFeilregistrert) {
     // Everyone has read-only access to documents in feilregistrert cases.
     return {
-      read: true,
       write: getWriteAccess(document, DocumentAccessEnum.CASE_FEILREGISTRERT),
       remove: DocumentAccessEnum.CASE_FEILREGISTRERT,
       changeType: getChangeTypeAccess(document, DocumentAccessEnum.CASE_FEILREGISTRERT),
@@ -149,7 +124,6 @@ export const getDocumentAccess = (
   if (document.isMarkertAvsluttet) {
     // Everyone has read-only access to documents that are marked as avsluttet.
     return {
-      read: true,
       write: getWriteAccess(document, DocumentAccessEnum.DOCUMENT_FINISHED),
       remove: DocumentAccessEnum.DOCUMENT_FINISHED,
       changeType: getChangeTypeAccess(document, DocumentAccessEnum.DOCUMENT_FINISHED),
@@ -163,7 +137,6 @@ export const getDocumentAccess = (
   if (document.type === DocumentTypeEnum.UPLOADED) {
     // Uploaded documents are accessible to all users.
     return {
-      read: true,
       write: DocumentAccessEnum.NOT_SUPPORTED,
       remove: DocumentAccessEnum.ALLOWED,
       changeType: DocumentAccessEnum.ALLOWED,
@@ -185,7 +158,6 @@ export const getDocumentAccess = (
     // ROL users have read-only access to documents, unless they are assigned and the case is sent to ROL.
     // The only document type that ROL users may have access to is the ROL answers attachment. Attachments are handled separately.
     return {
-      read: true,
       write: getWriteAccess(document, DocumentAccessEnum.ROL_USER),
       remove: DocumentAccessEnum.ROL_USER,
       changeType: getChangeTypeAccess(document, DocumentAccessEnum.ROL_USER),
@@ -205,7 +177,6 @@ export const getDocumentAccess = (
   if (isTildeltSaksbehandler()) {
     // Only the assigned saksbehandler has full access when the case is assigned.
     return {
-      read: true,
       write: getWriteAccess(document, DocumentAccessEnum.ALLOWED),
       remove: DocumentAccessEnum.ALLOWED,
       changeType: getChangeTypeAccess(document, DocumentAccessEnum.ALLOWED),
@@ -219,7 +190,6 @@ export const getDocumentAccess = (
   if (isCaseTildelt()) {
     // Everyone else has read-only access to documents.
     return {
-      read: true,
       write: getWriteAccess(document, DocumentAccessEnum.NOT_ASSIGNED),
       remove: DocumentAccessEnum.NOT_ASSIGNED,
       changeType: getChangeTypeAccess(document, DocumentAccessEnum.NOT_ASSIGNED),
@@ -232,7 +202,6 @@ export const getDocumentAccess = (
 
   // Non-ROL documents in non-feilregistrert, non-medunderskriver, non-assigned cases.
   return {
-    read: true,
     write: getWriteAccess(document, DocumentAccessEnum.ALLOWED),
     remove: DocumentAccessEnum.ALLOWED,
     changeType: getChangeTypeAccess(document, DocumentAccessEnum.ALLOWED),
@@ -244,7 +213,6 @@ export const getDocumentAccess = (
 };
 
 const ROL_QUESTIONS: Pick<DocumentAccess, 'read' | 'changeType' | 'uploadAttachments'> = {
-  read: true,
   changeType: DocumentAccessEnum.NOT_SUPPORTED, // ROL questions documents cannot change type.
   uploadAttachments: DocumentAccessEnum.NOT_SUPPORTED, // ROL questions documents cannot have uploaded as attachments.
 };
@@ -401,7 +369,6 @@ const getSentToMedunderskriverDocumentAccess = (
   if (isMedunderskriver()) {
     // Medunderskriver has read and write access to all non-ROL documents.
     return {
-      read: true,
       write: getWriteAccess(document, DocumentAccessEnum.ALLOWED), // Tilsendt medunderskriver can write in documents.
       remove: DocumentAccessEnum.NOT_ASSIGNED, // Tilsendt medunderskriver cannot remove documents.
       changeType: DocumentAccessEnum.NOT_ASSIGNED, // Tilsendt medunderskriver cannot change type of documents.
@@ -414,7 +381,6 @@ const getSentToMedunderskriverDocumentAccess = (
 
   // No one else has access to documents when the case is sent to medunderskriver.
   return {
-    read: true,
     write: getWriteAccess(document, DocumentAccessEnum.SENT_TO_MU),
     remove: DocumentAccessEnum.SENT_TO_MU,
     changeType: DocumentAccessEnum.SENT_TO_MU,
