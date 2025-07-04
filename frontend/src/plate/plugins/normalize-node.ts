@@ -15,9 +15,10 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
+import { FooterPlugin, HeaderPlugin } from '@app/plate/plugins/header-footer';
 import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
 import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
-import { RegelverkContainerPlugin } from '@app/plate/plugins/regelverk';
+import { RegelverkContainerPlugin, RegelverkPlugin } from '@app/plate/plugins/regelverk';
 import {
   createEmptyVoid,
   createRegelverkContainer,
@@ -36,11 +37,12 @@ import {
 } from '@app/plate/types';
 import { isOfElementTypesFn } from '@app/plate/utils/queries';
 import { reduxStore } from '@app/redux/configure-store';
+import { MALTEKSTSEKSJON_TYPE, PlainTextTypes, REGELVERK_TYPE, RichTextTypes } from '@app/types/common-text-types';
 import { isGenericObject } from '@app/types/types';
 import { LogLevel } from '@grafana/faro-web-sdk';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseParagraphPlugin } from '@platejs/core';
-import { createPlatePlugin, type OverrideEditor, type PlateEditor } from '@platejs/core/react';
+import { createPlatePlugin, type OverrideEditor, ParagraphPlugin, type PlateEditor } from '@platejs/core/react';
 import {
   BaseBulletedListPlugin,
   BaseListItemContentPlugin,
@@ -187,6 +189,36 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
     return false;
   }
 
+  // Handle nested paragraphs
+  if (node.type === ParagraphPlugin.node.type) {
+    const parentEntry = editor.api.parent(path);
+
+    if (parentEntry === undefined) {
+      return true;
+    }
+
+    const [parentNode] = parentEntry;
+
+    if (parentNode.type === ParagraphPlugin.node.type) {
+      pushNodeEvent(editor, node, path, 'normalized-nested-paragraph');
+
+      editor.tf.unwrapNodes({ at: path, match: (n) => n === node, mode: 'highest' });
+
+      return true;
+    }
+  }
+
+  // Handle wrong node types.
+  const correctedNodeType = CORRECTED_NODE_TYPE_MAP[node.type];
+
+  if (correctedNodeType !== undefined) {
+    pushNodeEvent(editor, node, path, 'normalized-type', { fromType: node.type, toType: correctedNodeType });
+
+    editor.tf.setNodes({ type: correctedNodeType }, { at: path, match: (n) => n === node, mode: 'highest' });
+
+    return true;
+  }
+
   if (node.children.length === 0) {
     pushNodeEvent(editor, node, path, 'normalized-empty-children');
 
@@ -266,7 +298,13 @@ const withNormalizeNode: OverrideEditor = ({ editor }) => {
 
 export const normalizeNodePlugin = createPlatePlugin({ key: 'normalize' }).overrideEditor(withNormalizeNode);
 
-const pushNodeEvent = (editor: PlateEditor, node: TNode, path: Path, name: string) => {
+const pushNodeEvent = (
+  editor: PlateEditor,
+  node: TNode,
+  path: Path,
+  name: string,
+  extraAttributes?: Record<string, string>,
+) => {
   const [highestAncestorPath] = path;
   const highestAncestor =
     highestAncestorPath === undefined ? undefined : Scrubber.stringify(NodeApi.get(editor, [highestAncestorPath]));
@@ -275,5 +313,15 @@ const pushNodeEvent = (editor: PlateEditor, node: TNode, path: Path, name: strin
     ancestor: JSON.stringify(highestAncestor),
     node: Scrubber.stringify(node),
     path: JSON.stringify(path),
+    ...extraAttributes,
   });
+};
+
+const CORRECTED_NODE_TYPE_MAP: Record<string, string> = {
+  [RichTextTypes.REDIGERBAR_MALTEKST]: RedigerbarMaltekstPlugin.key,
+  [RichTextTypes.MALTEKST]: MaltekstPlugin.key,
+  [PlainTextTypes.HEADER]: HeaderPlugin.key,
+  [PlainTextTypes.FOOTER]: FooterPlugin.key,
+  [REGELVERK_TYPE]: RegelverkPlugin.key,
+  [MALTEKSTSEKSJON_TYPE]: MaltekstPlugin.key,
 };

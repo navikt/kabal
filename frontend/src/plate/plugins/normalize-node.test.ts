@@ -1,20 +1,24 @@
 import { describe, expect, it } from 'bun:test';
 import { ELEMENT_MALTEKSTSEKSJON, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
 import { normalizeNodePlugin } from '@app/plate/plugins/normalize-node';
+import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
 import { TemplateSections } from '@app/plate/template-sections';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import type {
-  BulletListElement,
-  H1Element,
-  KabalValue,
-  ListItemContainerElement,
-  ListItemElement,
-  MaltekstseksjonElement,
-  ParagraphElement,
-  RedigerbarMaltekstElement,
+import {
+  type BulletListElement,
+  type H1Element,
+  type KabalValue,
+  type ListItemContainerElement,
+  type ListItemElement,
+  type MaltekstseksjonElement,
+  type ParagraphElement,
+  type RedigerbarMaltekstElement,
+  TextAlign,
 } from '@app/plate/types';
-import { createPlateEditor } from '@platejs/core/react';
+import { RichTextTypes } from '@app/types/common-text-types';
+import { createPlateEditor, ParagraphPlugin } from '@platejs/core/react';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
+import { BaseParagraphPlugin } from 'platejs';
 
 const createEditor = (value: KabalValue) => createPlateEditor({ plugins: [normalizeNodePlugin], value });
 
@@ -92,5 +96,51 @@ describe('normalize node with missing type prop', () => {
     };
 
     expect(editor.children).toEqual([validMaltekstseksjon]);
+  });
+
+  it('should unwrap nested paragraphs', () => {
+    const nestedParagraph: ParagraphElement = {
+      type: ParagraphPlugin.key,
+      align: TextAlign.LEFT,
+      children: [{ text: 'some text' }],
+    };
+
+    const paragraphChildren = [nestedParagraph] as unknown as ParagraphElement['children'];
+
+    const topLevelParagraph: ParagraphElement = {
+      type: ParagraphPlugin.key,
+      align: TextAlign.LEFT,
+      children: paragraphChildren,
+    };
+
+    const editor = createEditor([topLevelParagraph]);
+
+    editor.tf.normalize({ force: true });
+
+    expect(editor.children).toEqual([
+      { type: BaseParagraphPlugin.key, align: TextAlign.LEFT, children: [{ text: 'some text' }] },
+    ]);
+  });
+
+  it('should fix incorrect node types', () => {
+    const nestedParagraph: ParagraphElement = {
+      type: ParagraphPlugin.key,
+      align: TextAlign.LEFT,
+      children: [{ text: 'some text' }],
+    };
+
+    const redigerbarMaltekst: RedigerbarMaltekstElement = {
+      type: RichTextTypes.REDIGERBAR_MALTEKST as unknown as typeof ELEMENT_REDIGERBAR_MALTEKST,
+      section: TemplateSections.ANFOERSLER,
+      children: [nestedParagraph],
+    };
+
+    const editor = createEditor([redigerbarMaltekst]);
+
+    editor.tf.normalize({ force: true });
+
+    expect(editor.children).toEqual([
+      { type: RedigerbarMaltekstPlugin.key, section: TemplateSections.ANFOERSLER, children: [nestedParagraph] },
+    ]);
   });
 });
