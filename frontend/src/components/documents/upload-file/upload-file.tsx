@@ -1,12 +1,18 @@
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
-import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
-import { DISTRIBUSJONSTYPER, type DistribusjonsType } from '@app/types/documents/documents';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
+import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
+import { DISTRIBUSJONSTYPER, type DistribusjonsType, DocumentTypeEnum } from '@app/types/documents/documents';
 import { HStack } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
 import { SetDistributionType } from './distribution-type';
 
 export const UploadFile = () => {
-  const hasUploadAccess = useHasUploadAccess();
+  const creatorRole = useCreatorRole();
+  const uploadAccessError = useDuaAccess(
+    { creator: { creatorRole }, type: DocumentTypeEnum.UPLOADED },
+    DuaActionEnum.CREATE,
+  );
   const [distributionType, setDistributionType] = useState<DistribusjonsType | null>(null);
 
   const onChangeDocumentType = useCallback(({ target }: React.ChangeEvent<HTMLSelectElement>) => {
@@ -15,7 +21,7 @@ export const UploadFile = () => {
     }
   }, []);
 
-  if (!hasUploadAccess) {
+  if (uploadAccessError !== null) {
     return null;
   }
 

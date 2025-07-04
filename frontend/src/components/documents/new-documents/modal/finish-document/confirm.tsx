@@ -2,20 +2,29 @@ import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
-interface ConfirmProps {
+interface ConfirmProps extends React.RefAttributes<HTMLDivElement> {
   onFinish: () => void;
   onValidate: () => Promise<boolean>;
   isFinishing: boolean;
   isValidating: boolean;
   actionText: string;
+  disabled?: boolean;
 }
 
-export const Confirm = ({ onFinish, onValidate, actionText, isValidating, isFinishing }: ConfirmProps) => {
+export const Confirm = ({
+  onFinish,
+  onValidate,
+  actionText,
+  isValidating,
+  isFinishing,
+  disabled = false,
+  ...rest
+}: ConfirmProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   if (!showConfirm) {
     return (
-      <HStack justify="start" gap="0 4">
+      <HStack justify="start" gap="0 4" {...rest}>
         <Button
           type="button"
           size="small"
@@ -27,6 +36,7 @@ export const Confirm = ({ onFinish, onValidate, actionText, isValidating, isFini
           loading={isFinishing || isValidating}
           data-testid="document-finish-button"
           icon={<PaperplaneIcon aria-hidden />}
+          disabled={disabled}
         >
           {actionText}
         </Button>
@@ -35,7 +45,7 @@ export const Confirm = ({ onFinish, onValidate, actionText, isValidating, isFini
   }
 
   return (
-    <HStack justify="start" gap="0 4">
+    <HStack justify="start" gap="0 4" {...rest}>
       <Button
         type="button"
         size="small"

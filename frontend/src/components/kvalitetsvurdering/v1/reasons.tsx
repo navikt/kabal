@@ -1,4 +1,4 @@
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingTexts } from '@app/types/kaka-kvalitetsvurdering/v1';
@@ -25,7 +25,7 @@ interface ReasonsProps {
 export const Reasons = ({ error, show = true, legendText = '', reasons }: ReasonsProps) => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
   const [updateKvalitetsvurdering] = useUpdateKvalitetsvurderingMutation();
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
 
   if (isLoading) {
     return <Loader size="xlarge" />;

@@ -1,39 +1,37 @@
+import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
 import { ArchiveButtons } from '@app/components/documents/new-documents/modal/finish-document/archive-buttons';
 import { SendButtons } from '@app/components/documents/new-documents/modal/finish-document/send-buttons';
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { DistribusjonsType, DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Alert } from '@navikt/ds-react';
+import type { IDocument } from '@app/types/documents/documents';
 
-interface Props {
+interface CommonProps extends React.RefAttributes<HTMLDivElement> {
   document: IDocument;
-  innsendingshjemlerConfirmed: boolean;
 }
 
-export const FinishButton = ({ document, innsendingshjemlerConfirmed }: Props) => {
-  if (
-    document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST &&
-    document.type === DocumentTypeEnum.UPLOADED &&
-    (document.avsender === null || document.inngaaendeKanal === null)
-  ) {
-    return (
-      <Alert variant="info" size="small" inline>
-        Kan ikke arkiveres før avsender og inngående kanal er satt.
-      </Alert>
-    );
-  }
+interface Props extends CommonProps {
+  innsendingshjemlerConfirmed: boolean;
+  finishAccessError: string | null;
+  finishValidationErrors: string[];
+  isArchiveOnly: boolean;
+}
 
-  if (document.templateId === TemplateIdEnum.EKSPEDISJONSBREV_TIL_TRYGDERETTEN && !innsendingshjemlerConfirmed) {
-    return (
-      <Alert variant="info" size="small" inline>
-        Kan ikke sendes ut før det er bekreftet at innsendingshjemlene stemmer.
-      </Alert>
-    );
-  }
+export const FinishButton = ({
+  document,
+  innsendingshjemlerConfirmed,
+  finishAccessError,
+  finishValidationErrors,
+  isArchiveOnly,
+  ...rest
+}: Props) => {
+  const documentErrors: string[] =
+    finishAccessError === null ? finishValidationErrors : [finishAccessError, ...finishValidationErrors];
 
-  return document.dokumentTypeId === DistribusjonsType.NOTAT || getIsIncomingDocument(document.dokumentTypeId) ? (
-    <ArchiveButtons document={document} />
-  ) : (
-    <SendButtons document={document} />
+  return (
+    <AccessErrorsSummary documentErrors={documentErrors}>
+      {isArchiveOnly ? (
+        <ArchiveButtons document={document} disabled={documentErrors.length !== 0} {...rest} />
+      ) : (
+        <SendButtons document={document} disabled={documentErrors.length !== 0} {...rest} />
+      )}
+    </AccessErrorsSummary>
   );
 };

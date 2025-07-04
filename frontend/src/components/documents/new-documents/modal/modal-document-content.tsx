@@ -1,3 +1,4 @@
+import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
 import { AnnenInngaaende } from '@app/components/documents/new-documents/modal/annen-inngaaende';
 import { FinishButton } from '@app/components/documents/new-documents/modal/finish-button';
 import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
@@ -12,14 +13,6 @@ import { isSendError } from '@app/components/receivers/is-send-error';
 import { Receivers } from '@app/components/receivers/receivers';
 import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
-import {
-  CHANGE_TYPE_ACCESS_ENUM_TO_TEXT,
-  type DocumentAccessEnumMap,
-  FINISH_ACCESS_ENUM_TO_TEXT,
-  REMOVE_ACCESS_ENUM_TO_TEXT,
-} from '@app/hooks/dua-access/document-messages';
-import type { DocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
 import {
@@ -33,20 +26,40 @@ import {
   DOCUMENT_TYPE_NAMES,
   DocumentTypeEnum,
   type IDocument,
+  type IParentDocument,
 } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
+import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { DeleteDocumentButton } from './delete-button';
 
 interface Props {
-  document: IDocument;
-  access: DocumentAccess;
+  document: IParentDocument;
+  renameAccess: string | null;
+  changeTypeAccess: string | null;
+  finishAccess: string | null;
+  removeAccess: string | null;
+  removeAttachmentsAccess: string[];
+  finishValidationErrors: string[];
+  innsendingshjemlerConfirmed: boolean;
+  setInnsendingshjemlerConfirmed: (confirmed: boolean) => void;
+  isArchiveOnly: boolean;
 }
 
-export const DocumentModalContent = ({ document, access }: Props) => {
+export const DocumentModalContent = ({
+  document,
+  renameAccess,
+  changeTypeAccess,
+  finishAccess,
+  removeAccess,
+  removeAttachmentsAccess,
+  finishValidationErrors,
+  innsendingshjemlerConfirmed,
+  setInnsendingshjemlerConfirmed,
+  isArchiveOnly,
+}: Props) => {
   const [setMottakerList, { isLoading }] = useSetMottakerListMutation();
   const [, { error: finishError }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const sendErrors = useMemo(
@@ -64,7 +77,6 @@ export const DocumentModalContent = ({ document, access }: Props) => {
       ? undefined
       : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
   const { refresh, ...pdfData } = usePdfData(pdfUrl);
-  const [innsendingshjemlerConfirmed, setInnsendingshjemlerConfirmed] = useState(false);
 
   if (oppgaveId === skipToken) {
     return null;
@@ -90,7 +102,7 @@ export const DocumentModalContent = ({ document, access }: Props) => {
             <OpprettetTag document={document} />
           </HStack>
 
-          {access.rename === DocumentAccessEnum.ALLOWED ? (
+          {renameAccess === null ? (
             <HStack align="end" gap="2" wrap={false}>
               <SetFilename
                 className="max-w-lg flex-grow"
@@ -107,21 +119,17 @@ export const DocumentModalContent = ({ document, access }: Props) => {
             </HStack>
           ) : null}
 
-          {access.changeType === DocumentAccessEnum.ALLOWED ? (
-            <SetDocumentType document={document} showLabel />
-          ) : (
-            <AccessAlert access={access.changeType} TEXT={CHANGE_TYPE_ACCESS_ENUM_TO_TEXT} />
-          )}
+          <AccessErrorsSummary documentErrors={changeTypeAccess === null ? [] : [changeTypeAccess]}>
+            <SetDocumentType document={document} showLabel disabled={changeTypeAccess !== null} />
+          </AccessErrorsSummary>
 
-          {access.finish === DocumentAccessEnum.ALLOWED && isInngående ? (
-            <MottattDato document={document} oppgaveId={oppgaveId} />
-          ) : null}
+          {finishAccess === null && isInngående ? <MottattDato document={document} oppgaveId={oppgaveId} /> : null}
 
           {document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST ? (
-            <AnnenInngaaende document={document} hasAccess={access.finish === DocumentAccessEnum.ALLOWED} />
+            <AnnenInngaaende document={document} hasAccess={finishAccess === null} />
           ) : null}
 
-          {access.finish === DocumentAccessEnum.ALLOWED && !isNotat && !isInngående ? (
+          {finishAccess === null && !isNotat && !isInngående ? (
             <Receivers
               setMottakerList={(mottakerList) => setMottakerList({ oppgaveId, dokumentId: document.id, mottakerList })}
               mottakerList={document.mottakerList}
@@ -146,17 +154,23 @@ export const DocumentModalContent = ({ document, access }: Props) => {
       </Modal.Body>
 
       <Modal.Footer className="items-center">
-        {access.remove === DocumentAccessEnum.ALLOWED ? (
-          <DeleteDocumentButton document={document} />
-        ) : (
-          <AccessAlert access={access.remove} TEXT={REMOVE_ACCESS_ENUM_TO_TEXT} />
-        )}
+        <AccessErrorsSummary
+          documentErrors={removeAccess === null ? [] : [removeAccess]}
+          attachmentErrors={removeAttachmentsAccess}
+        >
+          <DeleteDocumentButton
+            document={document}
+            disabled={removeAccess !== null || removeAttachmentsAccess.length !== 0}
+          />
+        </AccessErrorsSummary>
 
-        {access.finish === DocumentAccessEnum.ALLOWED ? (
-          <FinishButton document={document} innsendingshjemlerConfirmed={innsendingshjemlerConfirmed} />
-        ) : (
-          <AccessAlert access={access.finish} TEXT={FINISH_ACCESS_ENUM_TO_TEXT} />
-        )}
+        <FinishButton
+          document={document}
+          innsendingshjemlerConfirmed={innsendingshjemlerConfirmed}
+          finishAccessError={finishAccess}
+          finishValidationErrors={finishValidationErrors}
+          isArchiveOnly={isArchiveOnly}
+        />
       </Modal.Footer>
     </>
   );
@@ -173,24 +187,5 @@ const OpprettetTag = ({ document }: { document: IDocument }) => {
       &nbsp;
       <DocumentDate document={document} />
     </Tag>
-  );
-};
-
-interface AccessAlertProps {
-  access: DocumentAccessEnum;
-  TEXT: DocumentAccessEnumMap;
-}
-
-const AccessAlert = ({ access, TEXT }: AccessAlertProps) => {
-  const text = TEXT[access];
-
-  if (text === null) {
-    return null;
-  }
-
-  return (
-    <Alert variant="info" size="small" inline>
-      {text}
-    </Alert>
   );
 };

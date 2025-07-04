@@ -2,7 +2,6 @@ import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
 import { History } from '@app/components/smart-editor/history/history';
-import { useHasWriteAccess } from '@app/components/smart-editor/hooks/use-has-write-access';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
@@ -69,9 +68,8 @@ interface LoadedEditorProps extends EditorProps {
 
 const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProps) => {
   const { id } = smartDocument;
-  const { newCommentSelection } = useContext(SmartEditorContext);
+  const { newCommentSelection, hasWriteAccess } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
-  const hasWriteAccess = useHasWriteAccess(smartDocument);
   const [isConnected, setIsConnected] = useState(false);
 
   const provider: YjsProviderConfig = {
@@ -265,7 +263,7 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
 
       <StatusBar>
         <Tooltip content={isConnected ? 'Tilkoblet' : 'Frakoblet'}>
-          <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="2" data-qqqq>
+          <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="2">
             <BoxNew as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="auto 2">
               {isConnected ? (
                 <CloudFillIcon

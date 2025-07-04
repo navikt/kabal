@@ -9,6 +9,9 @@ import { getHasUploadOrRolAnswersButton } from '@app/components/documents/new-do
 import { NewParentDocument } from '@app/components/documents/new-documents/new-parent-document';
 import { clamp } from '@app/functions/clamp';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import type { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
+import { type CreatorRole, DocumentTypeEnum } from '@app/types/documents/documents';
 
 export const useDocumentNodes = (
   documentMap: Map<string, DocumentWithAttachments>,
@@ -16,7 +19,8 @@ export const useDocumentNodes = (
   absoluteEndIndex: number,
   isAssignedRolAndSent: boolean,
   isFeilregistrert: boolean,
-  hasUploadAccess: boolean,
+  getUploadAccessError: ReturnType<typeof useLazyDuaAccess>,
+  creatorRole: CreatorRole,
 ) => {
   const _documentNodes = new Array<React.ReactNode>(documentMap.size);
 
@@ -53,6 +57,12 @@ export const useDocumentNodes = (
     const overview = !getIsIncomingDocument(mainDocument.dokumentTypeId) && hasAttachments ? 1 : 0;
     const hasSeparator = pdfLength !== 0 && journalfoertLength !== 0;
     const separatorCount = hasSeparator ? 1 : 0;
+    const hasUploadAccess =
+      getUploadAccessError(
+        { creator: { creatorRole }, type: DocumentTypeEnum.UPLOADED },
+        DuaActionEnum.CREATE,
+        mainDocument,
+      ) === null;
 
     const hasUploadOrRolAnswersButton = getHasUploadOrRolAnswersButton(
       mainDocument,

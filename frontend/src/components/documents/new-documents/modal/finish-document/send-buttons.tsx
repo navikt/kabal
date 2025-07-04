@@ -6,14 +6,13 @@ import { useFinishDocumentMutation, useSetMottakerListMutation } from '@app/redu
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DistribusjonsType } from '@app/types/documents/documents';
 import { NO_RECEIVERS_ERROR } from '@app/types/documents/validation';
-import { Alert } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
 import { Confirm } from './confirm';
 import { VALIDATION_ERROR_MESSAGES } from './error-messages';
 import { type FinishProps, isSmartDocumentValidatonError } from './types';
 
-export const SendButtons = ({ document }: FinishProps) => {
+export const SendButtons = ({ document, disabled, ...rest }: FinishProps) => {
   const { id: dokumentId, tittel: documentTitle, mottakerList, dokumentTypeId } = document;
   const { data, isLoading: oppgaveIsLoading } = useOppgave();
   const [setMottakerList] = useSetMottakerListMutation();
@@ -74,14 +73,6 @@ export const SendButtons = ({ document }: FinishProps) => {
     return true;
   };
 
-  if (document.isMarkertAvsluttet) {
-    return (
-      <Alert variant="info" size="small">
-        Dokumentet er under journalføring og utsending.
-      </Alert>
-    );
-  }
-
   const onFinish = async () => {
     try {
       if (
@@ -120,6 +111,8 @@ export const SendButtons = ({ document }: FinishProps) => {
       onFinish={onFinish}
       isValidating={isValidating}
       isFinishing={isFinishing}
+      disabled={disabled}
+      {...rest}
     />
   );
 };

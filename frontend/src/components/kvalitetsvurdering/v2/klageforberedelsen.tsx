@@ -1,4 +1,4 @@
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { HStack, Radio } from '@navikt/ds-react';
@@ -15,7 +15,7 @@ const KLAGEFORBEREDELSEN_FIELD = 'klageforberedelsen';
 export const Klageforberedelsen = () => {
   const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV2();
 
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
   const validationError = useValidationError(KLAGEFORBEREDELSEN_FIELD);
   const header = useKvalitetsvurderingV2FieldName(KLAGEFORBEREDELSEN_FIELD);
 

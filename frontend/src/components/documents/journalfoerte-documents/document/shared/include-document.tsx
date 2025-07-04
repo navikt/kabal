@@ -4,7 +4,6 @@ import {
 } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEdit } from '@app/hooks/use-can-edit';
 import { useCheckDocument } from '@app/hooks/use-check-document';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
@@ -64,7 +63,7 @@ interface EnabledProps {
 const Enabled = ({ dokumentInfoId, journalpostId }: EnabledProps) => {
   const oppgaveId = useOppgaveId();
   const [setDocument, isUpdating] = useCheckDocument(oppgaveId, dokumentInfoId, journalpostId);
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
   const isFeilregistrert = useIsFeilregistrert();
   const isSaksbehandler = useIsTildeltSaksbehandler();
   const isRol = useIsAssignedRolAndSent();

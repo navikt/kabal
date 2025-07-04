@@ -2,25 +2,61 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
   DocumentTypeEnum,
-  type IDocument,
+  type IAttachmentDocument,
   type IFileDocument,
+  type IParentDocument,
   type ISmartDocument,
+  isAttachmentDocument,
+  isParentDocument,
   type JournalfoertDokument,
 } from '@app/types/documents/documents';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export const useLazyParentDocument = () => {
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
 
-  return (parentId: string | null): IDocument | undefined =>
-    parentId === null ? undefined : data.find((doc) => doc.id === parentId);
+  return (parentId: string | null): IParentDocument | undefined => {
+    if (parentId === null) {
+      return undefined;
+    }
+
+    for (const doc of data) {
+      if (doc.id === parentId && isParentDocument(doc)) {
+        return doc;
+      }
+    }
+  };
 };
 
-export const useParentDocument = (parentId: string | null): IDocument | undefined => {
+export const useParentDocument = (parentId: string | null): IParentDocument | undefined => {
   const getParentDocument = useLazyParentDocument();
 
   return useMemo(() => getParentDocument(parentId), [getParentDocument, parentId]);
+};
+
+export const useLazyAttachments = () => {
+  const oppgaveId = useOppgaveId();
+  const { data = [] } = useGetDocumentsQuery(oppgaveId);
+
+  return useCallback(
+    (parentId: string | null): IAttachmentDocument[] => {
+      const attachments: IAttachmentDocument[] = [];
+
+      if (parentId === null) {
+        return attachments;
+      }
+
+      for (const doc of data) {
+        if (isAttachmentDocument(doc) && doc.parentId === parentId) {
+          attachments.push(doc);
+        }
+      }
+
+      return attachments;
+    },
+    [data],
+  );
 };
 
 /** Returns the attachments under the given `parentId`. */

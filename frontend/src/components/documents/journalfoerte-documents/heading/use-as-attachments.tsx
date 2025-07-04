@@ -1,18 +1,17 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
 import { canDistributeAny } from '@app/components/documents/filetype';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { useCanEditDocument } from '@app/components/documents/journalfoerte-documents/use-can-edit';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
+import { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import {
   useCreateVedleggFromJournalfoertDocumentMutation,
   useDeleteDocumentMutation,
 } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { CreatorRole, DistribusjonsType, type IDocument } from '@app/types/documents/documents';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { DistribusjonsType, DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
@@ -20,13 +19,12 @@ import { useContext } from 'react';
 const NONE_SELECTED = 'NONE_SELECTED';
 
 export const UseAsAttachments = () => {
-  const canEdit = useCanEditDocument();
   const { getSelectedDocuments } = useContext(SelectContext);
   const selectedDocuments = getSelectedDocuments();
   const options = useOptions(selectedDocuments);
   const attachFn = useAttachVedleggFn();
 
-  if (!canEdit || attachFn === null) {
+  if (attachFn === null) {
     return null;
   }
 
@@ -53,29 +51,33 @@ export const UseAsAttachments = () => {
 export const useOptions = (selectedDocuments: IArkivertDocument[]): IDocument[] => {
   const oppgaveId = useOppgaveId();
   const { data = [] } = useGetDocumentsQuery(oppgaveId);
-  const isRol = useIsAssignedRolAndSent();
+  const getAccess = useLazyDuaAccess();
+  const creatorRole = useCreatorRole();
 
   return data.filter((d) => {
-    if (selectedDocuments.some((s) => !canDistributeAny(s.varianter) && d.dokumentTypeId !== DistribusjonsType.NOTAT)) {
+    if (d.parentId !== null) {
+      return false; // Cannot attach to attachments.
+    }
+
+    if (d.dokumentTypeId !== DistribusjonsType.NOTAT && selectedDocuments.some((s) => !canDistributeAny(s.varianter))) {
       // File types that cannot be distributed, can only be dropped on documents of type NOTAT.
       return false;
     }
 
-    if (isRol) {
-      return d.parentId === null && d.isSmartDokument && d.templateId === TemplateIdEnum.ROL_QUESTIONS;
-    }
+    const accessError = getAccess(
+      { creator: { creatorRole }, type: DocumentTypeEnum.JOURNALFOERT },
+      DuaActionEnum.CREATE,
+      d,
+    );
 
-    return d.parentId === null;
+    return accessError === null;
   });
 };
 
 export const useAttachVedleggFn = () => {
   const oppgaveId = useOppgaveId();
   const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation();
-  const { user } = useContext(StaticDataContext);
-  const { navIdent, navn } = user;
   const isFinished = useIsFullfoert();
-  const isRol = useIsAssignedRolAndSent();
 
   if (oppgaveId === skipToken) {
     return null;
@@ -86,10 +88,6 @@ export const useAttachVedleggFn = () => {
       oppgaveId,
       parentId,
       journalfoerteDokumenter: vedlegg,
-      creator: {
-        employee: { navIdent, navn },
-        creatorRole: isRol ? CreatorRole.KABAL_ROL : CreatorRole.KABAL_SAKSBEHANDLING,
-      },
       isFinished,
     });
 };

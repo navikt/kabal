@@ -9,11 +9,12 @@ import { Button, HStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
 import { ModalContext } from './modal-context';
 
-interface Props {
+interface Props extends React.RefAttributes<HTMLDivElement> {
   document: IDocument;
+  disabled?: boolean;
 }
 
-export const DeleteDocumentButton = ({ document }: Props) => {
+export const DeleteDocumentButton = ({ document, disabled = false, ...rest }: Props) => {
   const oppgaveId = useOppgaveId();
   const { data, isSuccess } = useGetDocumentsQuery(oppgaveId);
   const [deleteDocument, { isLoading }] = useDeleteDocumentMutation();
@@ -55,12 +56,13 @@ export const DeleteDocumentButton = ({ document }: Props) => {
 
   if (showConfirm) {
     return (
-      <HStack justify="end" gap="0 4">
+      <HStack justify="end" gap="0 4" {...rest}>
         <Button
           className={BUTTON_CLASSES}
           variant="danger"
           size="small"
-          disabled={isLoading}
+          loading={isLoading}
+          disabled={disabled}
           onClick={onDelete}
           data-testid="document-delete-confirm"
           icon={<TrashIcon aria-hidden />}
@@ -82,7 +84,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
   }
 
   return (
-    <HStack justify="end" gap="0 4">
+    <HStack justify="end" gap="0 4" {...rest}>
       <Button
         className={BUTTON_CLASSES}
         variant="danger"
@@ -90,6 +92,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
         onClick={() => setShowConfirm(true)}
         data-testid="document-delete-button"
         icon={<TrashIcon aria-hidden />}
+        disabled={disabled}
       >
         {text}
       </Button>

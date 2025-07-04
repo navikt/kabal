@@ -1,31 +1,16 @@
-import { AttachmentAccessEnum } from '@app/hooks/dua-access/attachment-access';
-import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
-import { useLazyAttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
-import { useLazyDocumentAccess } from '@app/hooks/dua-access/use-document-access';
-import { useLazyParentDocument } from '@app/hooks/use-parent-document';
-import { type ISmartDocumentOrAttachment, isParentDocument } from '@app/types/documents/documents';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
+import { useParentDocument } from '@app/hooks/use-parent-document';
+import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { useMemo } from 'react';
 
-export const useHasWriteAccess = (smartDocument: ISmartDocumentOrAttachment): boolean => {
-  const getDocumentAccess = useLazyDocumentAccess();
-  const getAttachmentAccess = useLazyAttachmentAccess();
-  const getParentDocument = useLazyParentDocument();
+export const useHasWriteAccess = ({ parentId, creator, type, templateId }: ISmartDocumentOrAttachment): boolean => {
+  const parent = useParentDocument(parentId);
+  const getDuaAccess = useLazyDuaAccess();
 
   return useMemo(() => {
-    if (isParentDocument(smartDocument)) {
-      const { write } = getDocumentAccess(smartDocument);
+    const writeAccessError = getDuaAccess({ creator, type, templateId }, DuaActionEnum.WRITE, parent);
 
-      return write === DocumentAccessEnum.ALLOWED;
-    }
-
-    const parentDocument = getParentDocument(smartDocument.parentId);
-
-    if (parentDocument === undefined) {
-      return false;
-    }
-
-    const { write } = getAttachmentAccess(smartDocument, parentDocument);
-
-    return write === AttachmentAccessEnum.ALLOWED;
-  }, [getDocumentAccess, getAttachmentAccess, getParentDocument, smartDocument]);
+    return writeAccessError === null;
+  }, [creator, type, templateId, getDuaAccess, parent]);
 };
