@@ -1,19 +1,16 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
+import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasUploadAccess } from '@app/hooks/use-has-documents-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import { ROL_ANSWERS_TEMPLATE } from '@app/plate/templates/simple-templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
-import { Role } from '@app/types/bruker';
 import { DocumentTypeEnum, type IParentDocument } from '@app/types/documents/documents';
 import { Language } from '@app/types/texts/language';
 import { Chat2Icon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
-import { useContext } from 'react';
 
 interface Props {
   document: IParentDocument;
@@ -36,8 +33,14 @@ export const NewAttachmentButtons = (props: Props) => {
 
 const Upload = ({ document }: Props) => {
   const canUpload = useHasUploadAccess();
+  const creatorRole = useCreatorRole();
+  const createAccess = useDuaAccess(
+    { isSmartDokument: false, creator: { creatorRole }, type: DocumentTypeEnum.UPLOADED, parentId: document.id },
+    DuaActionEnum.CREATE,
+    document,
+  );
 
-  if (!canUpload || document.isSmartDokument || document.type !== DocumentTypeEnum.UPLOADED) {
+  if (!canUpload || createAccess !== null) {
     return null;
   }
 
@@ -56,13 +59,23 @@ const Upload = ({ document }: Props) => {
 
 const NewRolAnswerDocumentButton = ({ document }: Props) => {
   const { data: oppgave, isSuccess } = useOppgave();
-  const { user } = useContext(StaticDataContext);
-  const isFinished = useIsFullfoert();
-  const isFeilregistrert = useIsFeilregistrert();
-  const isRol = useIsAssignedRolAndSent();
   const [create, { isLoading }] = useCreateSmartDocumentMutation();
 
-  if (!isSuccess || isFeilregistrert || isFinished || !isRol || !getIsRolQuestions(document)) {
+  const creatorRole = useCreatorRole();
+
+  const createAccess = useDuaAccess(
+    {
+      isSmartDokument: true,
+      templateId: ROL_ANSWERS_TEMPLATE.templateId,
+      type: DocumentTypeEnum.SMART,
+      creator: { creatorRole },
+      parentId: document.id,
+    },
+    DuaActionEnum.CREATE,
+    document,
+  );
+
+  if (!isSuccess || createAccess !== null) {
     return null;
   }
 
@@ -70,8 +83,6 @@ const NewRolAnswerDocumentButton = ({ document }: Props) => {
     create({
       oppgaveId: oppgave.id,
       parentId: document.id,
-      creatorIdent: user.navIdent,
-      creatorRole: Role.KABAL_ROL,
       tittel: 'Svar fra rådgivende overlege',
       content: ROL_ANSWERS_TEMPLATE.richText,
       dokumentTypeId: ROL_ANSWERS_TEMPLATE.dokumentTypeId,

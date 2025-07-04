@@ -1,4 +1,4 @@
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import type { IKvalitetsvurderingTexts, IKvalitetsvurderingV1 } from '@app/types/kaka-kvalitetsvurdering/v1';
@@ -25,7 +25,7 @@ interface CommentFieldContentProps extends Props {
 
 const CommentFieldContent = ({ textareaId, kvalitetsvurdering }: CommentFieldContentProps) => {
   const [updateKvalitetsvurdering] = useUpdateKvalitetsvurderingMutation();
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
 
   const [comment, setComment] = useState<string>(kvalitetsvurdering[textareaId] ?? '');
 

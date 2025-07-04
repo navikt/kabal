@@ -1,6 +1,6 @@
 import { Direction } from '@app/components/deassign/direction';
 import { PaaVentWarning } from '@app/components/deassign/paa-vent-warning';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
@@ -20,7 +20,7 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
   const [warningIsOpen, setWarningIsOpen] = useState(false);
   const [, { isLoading }] = useTildelSaksbehandlerMutation();
   const ref = useRef<HTMLDivElement>(null);
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
   const [oppgaveActions, oppgaveActionsIsLoading] = useOppgaveActions(
     oppgave.saksbehandler?.navIdent ?? null,
     oppgave.medunderskriver.employee?.navIdent ?? null,
