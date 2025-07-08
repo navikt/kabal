@@ -6,9 +6,8 @@ import { ArchivingIcon } from '@app/components/documents/new-documents/new-docum
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { merge } from '@app/functions/classes';
-import { AttachmentAccessEnum } from '@app/hooks/dua-access/attachment-access';
-import { RENAME_ACCESS_ENUM_TO_TEXT } from '@app/hooks/dua-access/attachment-messages';
-import { useAttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useAttachmentAccessList } from '@app/hooks/dua-access/use-attachment-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum, type IAttachmentDocument, type IParentDocument } from '@app/types/documents/documents';
@@ -81,12 +80,14 @@ interface NewDocumentInternalProps {
 
 const NewAttachmentInternal = memo<NewDocumentInternalProps>(
   ({ document, parentDocument, cleanDragUI, clearDragState, draggingEnabled, onDragStart }) => {
-    const access = useAttachmentAccess(document, parentDocument);
+    const { RENAME, REMOVE } = useAttachmentAccessList(
+      document,
+      parentDocument,
+      DuaActionEnum.RENAME,
+      DuaActionEnum.REMOVE,
+    );
     const [modalOpen, setModalOpen] = useState(false);
-    const isDraggable =
-      draggingEnabled &&
-      !modalOpen &&
-      (access.move === AttachmentAccessEnum.ALLOWED || access.remove === AttachmentAccessEnum.ALLOWED);
+    const isDraggable = draggingEnabled && !modalOpen && REMOVE === null;
 
     return (
       <StyledNewAttachment
@@ -102,18 +103,20 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
         draggable={isDraggable}
         className={DOCUMENT_CLASSES}
       >
-        <DocumentTitle
-          document={document}
-          renameAllowed={access.rename === AttachmentAccessEnum.ALLOWED}
-          noRenameAccessMessage={RENAME_ACCESS_ENUM_TO_TEXT[access.rename]}
-        />
+        <DocumentTitle document={document} renameAccess={RENAME} />
         {document.type === DocumentTypeEnum.JOURNALFOERT ? (
           <StyledDate data-testid="new-document-date" document={document} />
         ) : null}
         {parentDocument.isMarkertAvsluttet ? (
           <ArchivingIcon dokumentTypeId={document.dokumentTypeId} />
         ) : (
-          <AttachmentModal document={document} isOpen={modalOpen} setIsOpen={setModalOpen} access={access} />
+          <AttachmentModal
+            document={document}
+            isOpen={modalOpen}
+            setIsOpen={setModalOpen}
+            renameAccess={RENAME}
+            removeAccess={REMOVE}
+          />
         )}
       </StyledNewAttachment>
     );

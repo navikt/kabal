@@ -1,5 +1,4 @@
-import { AttachmentAccessEnum } from '@app/hooks/dua-access/attachment-access';
-import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
 import { useLazyAttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
 import { useLazyDocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import { useLazyParentDocument } from '@app/hooks/use-parent-document';
@@ -13,9 +12,9 @@ export const useHasWriteAccess = (smartDocument: ISmartDocumentOrAttachment): bo
 
   return useMemo(() => {
     if (isParentDocument(smartDocument)) {
-      const { write } = getDocumentAccess(smartDocument);
+      const writeAccess = getDocumentAccess(smartDocument, DuaActionEnum.WRITE);
 
-      return write === DocumentAccessEnum.ALLOWED;
+      return writeAccess === null;
     }
 
     const parentDocument = getParentDocument(smartDocument.parentId);
@@ -24,8 +23,8 @@ export const useHasWriteAccess = (smartDocument: ISmartDocumentOrAttachment): bo
       return false;
     }
 
-    const { write } = getAttachmentAccess(smartDocument, parentDocument);
+    const writeAccess = getAttachmentAccess(DuaActionEnum.WRITE, smartDocument, parentDocument);
 
-    return write === AttachmentAccessEnum.ALLOWED;
+    return writeAccess === null;
   }, [getDocumentAccess, getAttachmentAccess, getParentDocument, smartDocument]);
 };

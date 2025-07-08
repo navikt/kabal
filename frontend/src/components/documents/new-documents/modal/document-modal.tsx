@@ -2,9 +2,8 @@ import { Fields } from '@app/components/documents/new-documents/grid';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { DocumentModalContent } from '@app/components/documents/new-documents/modal/modal-document-content';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
+import type { DuaAccessMap } from '@app/hooks/dua-access/access-map';
 import { getDocumentAccessSummary } from '@app/hooks/dua-access/summary/get-document-access-summary';
-import type { DocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import type { IParentDocument } from '@app/types/documents/documents';
 import { MenuElipsisVerticalIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
 import { Button, Modal, Tooltip } from '@navikt/ds-react';
@@ -17,19 +16,14 @@ interface Props {
 
 interface DocumentProps extends Props {
   document: IParentDocument;
-  access: DocumentAccess;
+  access: DuaAccessMap;
 }
 
 export const DocumentModal = ({ document, isOpen, setIsOpen, access }: DocumentProps) => {
   const { tittel, type } = document;
   const { close } = useContext(ModalContext);
 
-  if (
-    access.rename !== DocumentAccessEnum.ALLOWED &&
-    access.remove !== DocumentAccessEnum.ALLOWED &&
-    access.changeType !== DocumentAccessEnum.ALLOWED &&
-    access.finish !== DocumentAccessEnum.ALLOWED
-  ) {
+  if (access.RENAME !== null && access.REMOVE !== null && access.CHANGE_TYPE !== null && access.FINISH !== null) {
     return (
       <DocumentSummary access={access}>
         <PadlockLockedIcon style={{ gridArea: Fields.Action }} className="h-full w-full p-2" />
@@ -73,7 +67,7 @@ export const DocumentModal = ({ document, isOpen, setIsOpen, access }: DocumentP
 };
 
 interface DocumentSummaryProps {
-  access: DocumentAccess;
+  access: DuaAccessMap;
   children: React.ReactElement;
 }
 

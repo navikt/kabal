@@ -1,7 +1,7 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { DropZone } from '@app/components/documents/new-documents/shared/drop-zone';
-import { useDocumentAccess } from '@app/hooks/dua-access/use-document-access';
+import { useDocumentAccessMap } from '@app/hooks/dua-access/use-document-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDropOnDocument } from '@app/hooks/use-can-document/use-can-drop-on-document';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
@@ -32,8 +32,8 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
   });
   const [setParent] = useSetParentMutation();
   const { draggedDocument, draggedJournalfoertDocuments, clearDragState } = useContext(DragAndDropContext);
-  const access = useDocumentAccess(document);
-  const isDropTarget = useCanDropOnDocument(document, access);
+  const access = useDocumentAccessMap(document);
+  const isDropTarget = useCanDropOnDocument(document);
   const isFinished = useIsFullfoert();
 
   const onDrop = useCallback(() => {

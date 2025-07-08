@@ -12,14 +12,7 @@ import { isSendError } from '@app/components/receivers/is-send-error';
 import { Receivers } from '@app/components/receivers/receivers';
 import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
-import {
-  CHANGE_TYPE_ACCESS_ENUM_TO_TEXT,
-  type DocumentAccessEnumMap,
-  FINISH_ACCESS_ENUM_TO_TEXT,
-  REMOVE_ACCESS_ENUM_TO_TEXT,
-} from '@app/hooks/dua-access/document-messages';
-import type { DocumentAccess } from '@app/hooks/dua-access/use-document-access';
+import type { DuaAccessMap } from '@app/hooks/dua-access/access-map';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
 import {
@@ -43,7 +36,7 @@ import { DeleteDocumentButton } from './delete-button';
 
 interface Props {
   document: IDocument;
-  access: DocumentAccess;
+  access: DuaAccessMap;
 }
 
 export const DocumentModalContent = ({ document, access }: Props) => {
@@ -90,7 +83,7 @@ export const DocumentModalContent = ({ document, access }: Props) => {
             <OpprettetTag document={document} />
           </HStack>
 
-          {access.rename === DocumentAccessEnum.ALLOWED ? (
+          {access.RENAME === null ? (
             <HStack align="end" gap="2" wrap={false}>
               <SetFilename
                 className="max-w-lg flex-grow"
@@ -107,21 +100,19 @@ export const DocumentModalContent = ({ document, access }: Props) => {
             </HStack>
           ) : null}
 
-          {access.changeType === DocumentAccessEnum.ALLOWED ? (
+          {access.CHANGE_TYPE === null ? (
             <SetDocumentType document={document} showLabel />
           ) : (
-            <AccessAlert access={access.changeType} TEXT={CHANGE_TYPE_ACCESS_ENUM_TO_TEXT} />
+            <AccessAlert access={access.CHANGE_TYPE} />
           )}
 
-          {access.finish === DocumentAccessEnum.ALLOWED && isInngående ? (
-            <MottattDato document={document} oppgaveId={oppgaveId} />
-          ) : null}
+          {access.FINISH === null && isInngående ? <MottattDato document={document} oppgaveId={oppgaveId} /> : null}
 
           {document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST ? (
-            <AnnenInngaaende document={document} hasAccess={access.finish === DocumentAccessEnum.ALLOWED} />
+            <AnnenInngaaende document={document} hasAccess={access.FINISH === null} />
           ) : null}
 
-          {access.finish === DocumentAccessEnum.ALLOWED && !isNotat && !isInngående ? (
+          {access.FINISH === null && !isNotat && !isInngående ? (
             <Receivers
               setMottakerList={(mottakerList) => setMottakerList({ oppgaveId, dokumentId: document.id, mottakerList })}
               mottakerList={document.mottakerList}
@@ -146,16 +137,12 @@ export const DocumentModalContent = ({ document, access }: Props) => {
       </Modal.Body>
 
       <Modal.Footer className="items-center">
-        {access.remove === DocumentAccessEnum.ALLOWED ? (
-          <DeleteDocumentButton document={document} />
-        ) : (
-          <AccessAlert access={access.remove} TEXT={REMOVE_ACCESS_ENUM_TO_TEXT} />
-        )}
+        {access.REMOVE === null ? <DeleteDocumentButton document={document} /> : <AccessAlert access={access.REMOVE} />}
 
-        {access.finish === DocumentAccessEnum.ALLOWED ? (
+        {access.FINISH === null ? (
           <FinishButton document={document} innsendingshjemlerConfirmed={innsendingshjemlerConfirmed} />
         ) : (
-          <AccessAlert access={access.finish} TEXT={FINISH_ACCESS_ENUM_TO_TEXT} />
+          <AccessAlert access={access.FINISH} />
         )}
       </Modal.Footer>
     </>
@@ -177,20 +164,17 @@ const OpprettetTag = ({ document }: { document: IDocument }) => {
 };
 
 interface AccessAlertProps {
-  access: DocumentAccessEnum;
-  TEXT: DocumentAccessEnumMap;
+  access: string | null;
 }
 
-const AccessAlert = ({ access, TEXT }: AccessAlertProps) => {
-  const text = TEXT[access];
-
-  if (text === null) {
+const AccessAlert = ({ access }: AccessAlertProps) => {
+  if (access === null) {
     return null;
   }
 
   return (
     <Alert variant="info" size="small" inline>
-      {text}
+      {access}
     </Alert>
   );
 };
