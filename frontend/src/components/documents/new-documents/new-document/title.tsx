@@ -18,12 +18,11 @@ import { TitleActions, type TitleActionsProps } from './title-actions';
 
 interface Props {
   document: IDocument;
-  renameAllowed: boolean;
-  noRenameAccessMessage: string | null;
+  renameAccess: string | null;
 }
 
 export const DocumentTitle = memo(
-  ({ document, renameAllowed, noRenameAccessMessage }: Props) => {
+  ({ document, renameAccess }: Props) => {
     const [editMode, _setEditMode] = useState(false);
     const { setDraggingEnabled } = useContext(DragAndDropContext);
     const oppgaveId = useOppgaveId();
@@ -58,8 +57,7 @@ export const DocumentTitle = memo(
       document,
       setEditMode,
       editMode,
-      renameAllowed,
-      noRenameAccessMessage,
+      renameAccess,
     };
 
     if (editMode) {

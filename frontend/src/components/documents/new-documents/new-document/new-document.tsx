@@ -6,10 +6,8 @@ import { ArchivingIcon } from '@app/components/documents/new-documents/new-docum
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { documentAccessAreEqual } from '@app/hooks/dua-access/diff';
-import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
-import { RENAME_ACCESS_ENUM_TO_TEXT } from '@app/hooks/dua-access/document-messages';
-import type { DocumentAccess } from '@app/hooks/dua-access/use-document-access';
+import type { DuaAccessMap } from '@app/hooks/dua-access/access-map';
+import { duaAccessAreEqual } from '@app/hooks/dua-access/diff';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
@@ -28,7 +26,7 @@ import { DocumentTitle } from './title';
 
 interface Props {
   document: IParentDocument;
-  access: DocumentAccess;
+  access: DuaAccessMap;
 }
 
 export const NewDocument = memo(
@@ -39,7 +37,7 @@ export const NewDocument = memo(
     const { setDraggedDocument, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
     const [modalOpen, setModalOpen] = useState(false);
 
-    const isDraggable = draggingEnabled && !modalOpen && access.remove === DocumentAccessEnum.ALLOWED;
+    const isDraggable = draggingEnabled && !modalOpen && access.REMOVE === null;
 
     const onDragStart = useCallback(
       async (e: React.DragEvent<HTMLDivElement>) => {
@@ -92,13 +90,9 @@ export const NewDocument = memo(
           gridTemplateAreas: `"${getFieldNames(EXPANDED_NEW_DOCUMENT_FIELDS)}"`,
         }}
       >
-        <DocumentTitle
-          document={document}
-          renameAllowed={access.rename === DocumentAccessEnum.ALLOWED}
-          noRenameAccessMessage={RENAME_ACCESS_ENUM_TO_TEXT[access.rename]}
-        />
+        <DocumentTitle document={document} renameAccess={access.RENAME} />
 
-        {access.changeType === DocumentAccessEnum.ALLOWED ? (
+        {access.CHANGE_TYPE === null ? (
           <SetDocumentType document={document} />
         ) : (
           <Tag variant="info" size="small">
@@ -120,7 +114,7 @@ export const NewDocument = memo(
     prev.document.dokumentTypeId === next.document.dokumentTypeId &&
     prev.document.isMarkertAvsluttet === next.document.isMarkertAvsluttet &&
     prev.document.parentId === next.document.parentId &&
-    documentAccessAreEqual(prev.access, next.access) &&
+    duaAccessAreEqual(prev.access, next.access) &&
     mottattDatoEqual(prev.document, next.document) &&
     annenInngaaendeEqual(prev.document, next.document) &&
     mottakereEqual(prev.document, next.document) &&
