@@ -1,6 +1,7 @@
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { canDistributeAny } from '@app/components/documents/filetype';
 import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import type { AttachmentAccessDocument } from '@app/hooks/dua-access/attachment/access';
 import { useLazyAttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import {
@@ -60,13 +61,20 @@ export const useLazyCanBeParentOfDocument = () => {
         return false;
       }
 
-      const removeAccess = getAttachmentAccess(DuaActionEnum.REMOVE, attachment, fromParent);
+      const attachmentParams: AttachmentAccessDocument = {
+        creatorRole: attachment.creator.creatorRole,
+        isSmartDokument: attachment.isSmartDokument,
+        type: attachment.type,
+        templateId: attachment.templateId,
+      };
+
+      const removeAccess = getAttachmentAccess(DuaActionEnum.REMOVE, attachmentParams, fromParent);
 
       if (removeAccess !== null) {
         return false;
       }
 
-      const createAccess = getAttachmentAccess(DuaActionEnum.CREATE, attachment, toParent);
+      const createAccess = getAttachmentAccess(DuaActionEnum.CREATE, attachmentParams, toParent);
 
       return createAccess === null;
     },

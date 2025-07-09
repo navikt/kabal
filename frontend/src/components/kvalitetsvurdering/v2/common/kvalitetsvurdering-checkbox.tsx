@@ -1,4 +1,4 @@
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import type { IKvalitetsvurderingBooleans } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { Checkbox } from '@navikt/ds-react';
 import { useMemo } from 'react';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const KvalitetsskjemaCheckbox = ({ children, field, helpText }: Props) => {
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
 
   const checkbox = useMemo(
     () => (

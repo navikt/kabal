@@ -8,16 +8,23 @@ import {
 } from '@app/hooks/dua-access/access';
 import type { DuaAccessMap } from '@app/hooks/dua-access/access-map';
 import { getAttachmentAccessError } from '@app/hooks/dua-access/attachment/access';
-import { getParentDocumentType } from '@app/hooks/dua-access/attachment/parent';
-import { getDocumentType } from '@app/hooks/dua-access/document/type';
+import { type DetermineParentDocumentType, getParentDocumentType } from '@app/hooks/dua-access/attachment/parent';
+import { type DetermineDocumentType, getDocumentType } from '@app/hooks/dua-access/document/type';
 import { getCaseStatus } from '@app/hooks/dua-access/shared/case-status';
 import { CREATOR_ROLE_TO_DUA_ACCESS_CREATOR } from '@app/hooks/dua-access/shared/creator';
 import type { DocumentAccessParams } from '@app/hooks/dua-access/shared/params';
 import { getUser } from '@app/hooks/dua-access/shared/user';
 import type { IAttachmentDocument, IParentDocument } from '@app/types/documents/documents';
 
+export type DuaDocumentAccessDocument = DetermineDocumentType &
+  DetermineParentDocumentType &
+  Pick<IParentDocument, 'isMarkertAvsluttet'> & {
+    id?: IParentDocument['id'];
+    creatorRole: IParentDocument['creator']['creatorRole'];
+  };
+
 export const getDocumentAccess = (
-  document: IParentDocument,
+  document: DuaDocumentAccessDocument,
   getAttachments: (parentId: string | null) => IAttachmentDocument[],
   params: DocumentAccessParams,
   action: DuaActionEnum,
@@ -51,7 +58,7 @@ export const getDocumentAccess = (
   const documentType: DuaAccessDocumentType | null = getDocumentType(document);
 
   if (documentType === null) {
-    return `Ukjent type for dokument "${document.tittel}"`;
+    return 'Ukjent type for dokument';
   }
 
   const caseStatus = getCaseStatus(
@@ -62,7 +69,7 @@ export const getDocumentAccess = (
     isCaseTildelt,
   );
 
-  const creator: DuaAccessCreator = CREATOR_ROLE_TO_DUA_ACCESS_CREATOR[document.creator.creatorRole];
+  const creator: DuaAccessCreator = CREATOR_ROLE_TO_DUA_ACCESS_CREATOR[document.creatorRole];
 
   const parent = DuaAccessParent.NONE;
 
@@ -76,20 +83,26 @@ export const getDocumentAccess = (
   // If the action is to remove, we need to check attachments as well.
   // If the action is not to remove, we can return the document access immediately.
   // This is because attachments are only relevant for removal actions.
-  if (action !== DuaActionEnum.REMOVE) {
+  if (action !== DuaActionEnum.REMOVE || document.id === undefined) {
     return documentAccess;
   }
 
   const attachmentParent: DuaAccessParent | null = getParentDocumentType(document);
 
   if (attachmentParent === null) {
-    return `Ukjent type for dokument "${document.tittel}"`;
+    return 'Ukjent type for dokument';
   }
 
   // Check attachments for the document.
   // If any attachment has an error, return that error.
-  for (const attachment of getAttachments(document.parentId)) {
-    const attachmentAccess = getAttachmentAccessError(action, attachment, user, caseStatus, attachmentParent);
+  for (const { creator, isSmartDokument, type, templateId } of getAttachments(document.id)) {
+    const attachmentAccess = getAttachmentAccessError(
+      action,
+      { creatorRole: creator.creatorRole, isSmartDokument, type, templateId },
+      user,
+      caseStatus,
+      attachmentParent,
+    );
 
     if (attachmentAccess !== null) {
       return attachmentAccess;
@@ -102,14 +115,14 @@ export const getDocumentAccess = (
 };
 
 export const getDocumentAccessList = (
-  document: IParentDocument,
+  document: DuaDocumentAccessDocument,
   getAttachments: (parentId: string | null) => IAttachmentDocument[],
   params: DocumentAccessParams,
   ...actions: DuaActionEnum[]
 ): string[] => actions.map((action) => getDocumentAccess(document, getAttachments, params, action)).filter(isNotNull);
 
 export const getDocumentAccessMap = (
-  document: IParentDocument,
+  document: DuaDocumentAccessDocument,
   getAttachments: (parentId: string | null) => IAttachmentDocument[],
   params: DocumentAccessParams,
 ): DuaAccessMap => ({

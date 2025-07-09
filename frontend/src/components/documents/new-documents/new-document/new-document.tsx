@@ -6,8 +6,9 @@ import { ArchivingIcon } from '@app/components/documents/new-documents/new-docum
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import type { DuaAccessMap } from '@app/hooks/dua-access/access-map';
-import { duaAccessAreEqual } from '@app/hooks/dua-access/diff';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import type { DuaDocumentAccessDocument } from '@app/hooks/dua-access/document/access';
+import { useDocumentAccess, useLazyDocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
@@ -26,18 +27,29 @@ import { DocumentTitle } from './title';
 
 interface Props {
   document: IParentDocument;
-  access: DuaAccessMap;
 }
 
 export const NewDocument = memo(
-  ({ document, access }: Props) => {
+  ({ document }: Props) => {
     const oppgaveId = useOppgaveId();
     const [getDocuments] = useLazyGetDocumentsQuery();
     const cleanDragUI = useRef<() => void>(() => undefined);
     const { setDraggedDocument, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
     const [modalOpen, setModalOpen] = useState(false);
+    const getDocumentAccess = useLazyDocumentAccess();
+    const { id, type, creator, isSmartDokument, templateId, isMarkertAvsluttet } = document;
+    const documentAccessParams: DuaDocumentAccessDocument = {
+      creatorRole: creator.creatorRole,
+      isSmartDokument,
+      type,
+      templateId,
+      isMarkertAvsluttet,
+      id,
+    };
+    const removeAccess = getDocumentAccess(documentAccessParams, DuaActionEnum.REMOVE);
+    const changeTypeAccess = useDocumentAccess(documentAccessParams, DuaActionEnum.CHANGE_TYPE);
 
-    const isDraggable = draggingEnabled && !modalOpen && access.REMOVE === null;
+    const isDraggable = draggingEnabled && !modalOpen && removeAccess === null;
 
     const onDragStart = useCallback(
       async (e: React.DragEvent<HTMLDivElement>) => {
@@ -90,9 +102,9 @@ export const NewDocument = memo(
           gridTemplateAreas: `"${getFieldNames(EXPANDED_NEW_DOCUMENT_FIELDS)}"`,
         }}
       >
-        <DocumentTitle document={document} renameAccess={access.RENAME} />
+        <DocumentTitle document={document} />
 
-        {access.CHANGE_TYPE === null ? (
+        {changeTypeAccess === null ? (
           <SetDocumentType document={document} />
         ) : (
           <Tag variant="info" size="small">
@@ -103,7 +115,7 @@ export const NewDocument = memo(
         {document.isMarkertAvsluttet ? (
           <ArchivingIcon dokumentTypeId={document.dokumentTypeId} />
         ) : (
-          <DocumentModal document={document} isOpen={modalOpen} setIsOpen={setModalOpen} access={access} />
+          <DocumentModal document={document} isOpen={modalOpen} setIsOpen={setModalOpen} />
         )}
       </HGrid>
     );
@@ -114,7 +126,6 @@ export const NewDocument = memo(
     prev.document.dokumentTypeId === next.document.dokumentTypeId &&
     prev.document.isMarkertAvsluttet === next.document.isMarkertAvsluttet &&
     prev.document.parentId === next.document.parentId &&
-    duaAccessAreEqual(prev.access, next.access) &&
     mottattDatoEqual(prev.document, next.document) &&
     annenInngaaendeEqual(prev.document, next.document) &&
     mottakereEqual(prev.document, next.document) &&

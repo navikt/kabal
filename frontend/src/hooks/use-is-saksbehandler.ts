@@ -9,7 +9,11 @@ export const useLazyIsTildeltSaksbehandler = () => {
   const { data, isSuccess } = useOppgave();
   const { user } = useContext(StaticDataContext);
 
-  return () => isSuccess && data.saksbehandler?.navIdent === user.navIdent;
+  return () =>
+    isSuccess &&
+    !data.isAvsluttetAvSaksbehandler && // Ferdigstilte saker har ikke tildelt saksbehandler. Dette er kun historisk informasjon.
+    data.feilregistrering === null && // Feilregistrerte saker har ikke tildelt saksbehandler. Dette er kun historisk informasjon.
+    data.saksbehandler?.navIdent === user.navIdent;
 };
 
 /** Checks if the current user is assigned to the current case as saksbehandler. */

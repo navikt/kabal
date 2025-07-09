@@ -1,17 +1,16 @@
+import { isNotNull } from '@app/functions/is-not-type-guards';
 import { DuaActionEnum, FINISHED_ERROR } from '@app/hooks/dua-access/access';
 import type { DuaAccessMap } from '@app/hooks/dua-access/access-map';
-import { getAttachmentAccess } from '@app/hooks/dua-access/attachment/access';
-import { getDocumentAccess } from '@app/hooks/dua-access/document/access';
+import { type DuaDocumentAccessDocument, getDocumentAccess } from '@app/hooks/dua-access/document/access';
 import { useLazyIsTildelt } from '@app/hooks/oppgavebehandling/use-is-tildelt';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useLazyIsAssignedMedunderskriver, useLazyIsSentToMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useIsAssignedRol, useIsRolUser, useIsSentToRol, useLazyIsReturnedFromRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler, useLazyIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useLazyAttachments, useLazyParentDocument } from '@app/hooks/use-parent-document';
-import { type IDocument, type IParentDocument, isParentDocument } from '@app/types/documents/documents';
+import { useLazyAttachments } from '@app/hooks/use-parent-document';
 
-type ValidateDocumentAccessFn = (document: IDocument, action: DuaActionEnum) => string | null;
+type ValidateDocumentAccessFn = (document: DuaDocumentAccessDocument, action: DuaActionEnum) => string | null;
 
 export const useLazyDocumentAccess = (): ValidateDocumentAccessFn => {
   const isCaseFinished = useIsFullfoert();
@@ -26,7 +25,6 @@ export const useLazyDocumentAccess = (): ValidateDocumentAccessFn => {
   const isCaseTildelt = useLazyIsTildelt();
   const isTildeltSaksbehandler = useLazyIsTildeltSaksbehandler();
   const getAttachments = useLazyAttachments();
-  const getParentDocument = useLazyParentDocument();
 
   return (document, action) => {
     if (isCaseFeilregistrert) {
@@ -37,35 +35,9 @@ export const useLazyDocumentAccess = (): ValidateDocumentAccessFn => {
       return FINISHED_ERROR;
     }
 
-    if (isParentDocument(document)) {
-      return getDocumentAccess(
-        document,
-        getAttachments,
-        {
-          isCaseFinished,
-          isRolUser,
-          isAssignedRol,
-          isSentToRol,
-          isReturnedFromRol,
-          isSentToMedunderskriver,
-          isMedunderskriver,
-          isCaseTildelt,
-          isTildeltSaksbehandler,
-          isSaksbehandlerUser,
-        },
-        action,
-      );
-    }
-
-    const parentDocument = getParentDocument(document.parentId);
-
-    if (parentDocument === undefined) {
-      return 'Ukjent hoveddokument';
-    }
-
-    return getAttachmentAccess(
+    return getDocumentAccess(
       document,
-      parentDocument,
+      getAttachments,
       {
         isCaseFinished,
         isRolUser,
@@ -83,13 +55,41 @@ export const useLazyDocumentAccess = (): ValidateDocumentAccessFn => {
   };
 };
 
-export const useDocumentAccess = (document: IDocument, action: DuaActionEnum): string | null => {
+export const useDocumentAccess = (document: DuaDocumentAccessDocument, action: DuaActionEnum): string | null => {
   const getDocumentAccess = useLazyDocumentAccess();
 
   return getDocumentAccess(document, action);
 };
 
-export const useDocumentAccessMap = (document: IParentDocument): DuaAccessMap => {
+export const useDOcumentAccessList = (document: DuaDocumentAccessDocument, ...actions: DuaActionEnum[]): string[] => {
+  const getDocumentAccess = useLazyDocumentAccess();
+
+  return actions.map((action) => getDocumentAccess(document, action)).filter(isNotNull);
+};
+
+export const useDocumentAccessPartialMap = (
+  document: DuaDocumentAccessDocument,
+  ...actions: DuaActionEnum[]
+): DuaAccessMap => {
+  const getDocumentAccess = useLazyDocumentAccess();
+
+  const accessMap: DuaAccessMap = {
+    [DuaActionEnum.CREATE]: null,
+    [DuaActionEnum.WRITE]: null,
+    [DuaActionEnum.RENAME]: null,
+    [DuaActionEnum.CHANGE_TYPE]: null,
+    [DuaActionEnum.REMOVE]: null,
+    [DuaActionEnum.FINISH]: null,
+  };
+
+  for (const action of actions) {
+    accessMap[action] = getDocumentAccess(document, action);
+  }
+
+  return accessMap;
+};
+
+export const useDocumentAccessMap = (document: DuaDocumentAccessDocument): DuaAccessMap => {
   const getDocumentAccess = useLazyDocumentAccess();
 
   const accessMap: DuaAccessMap = {

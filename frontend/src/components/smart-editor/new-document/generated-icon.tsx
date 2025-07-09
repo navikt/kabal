@@ -16,10 +16,10 @@ import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTablePlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
-import { styled } from 'styled-components';
 
 interface GeneratedIconProps {
   template: ISmartEditorTemplate;
+  className?: string;
 }
 
 const HEIGHT = 297;
@@ -27,7 +27,7 @@ const WIDTH = 210;
 const MARGIN = 20;
 const SPACING = 2;
 
-export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
+export const GeneratedIcon = ({ template, className }: GeneratedIconProps) => {
   const rects: React.ReactNode[] = [];
   let y = MARGIN;
   let bottomOffset = 39 + MARGIN;
@@ -174,9 +174,10 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
   }
 
   return (
-    <StyledSvg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox={`0 0 ${WIDTH} ${HEIGHT}`}>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className={className}>
+      <title>{template.tittel}</title>
       {rects}
-    </StyledSvg>
+    </svg>
   );
 };
 
@@ -219,11 +220,3 @@ interface HeadingProps {
 const h1 = (props: HeadingProps) => r({ ...props, height: 9, width: 160, fill: 'gray-400' });
 const h2 = (props: HeadingProps) => r({ ...props, height: 7, width: 150, fill: 'gray-400' });
 const h3 = (props: HeadingProps) => r({ ...props, width: 140, fill: 'gray-400' });
-
-const StyledSvg = styled.svg`
-  box-shadow: var(--a-shadow-medium);
-  border: 1px solid var(--a-border-default);
-  border-radius: var(--a-border-radius-medium);
-  margin-bottom: var(--a-spacing-2);
-  width: 100%;
-`;

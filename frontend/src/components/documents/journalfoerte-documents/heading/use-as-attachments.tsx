@@ -1,4 +1,3 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
 import { canDistributeAny } from '@app/components/documents/filetype';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useCanEditDocument } from '@app/components/documents/journalfoerte-documents/use-can-edit';
@@ -11,7 +10,7 @@ import {
 } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { CreatorRole, DistribusjonsType, type IDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, type IDocument } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -72,10 +71,7 @@ export const useOptions = (selectedDocuments: IArkivertDocument[]): IDocument[] 
 export const useAttachVedleggFn = () => {
   const oppgaveId = useOppgaveId();
   const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation();
-  const { user } = useContext(StaticDataContext);
-  const { navIdent, navn } = user;
   const isFinished = useIsFullfoert();
-  const isRol = useIsAssignedRolAndSent();
 
   if (oppgaveId === skipToken) {
     return null;
@@ -86,10 +82,6 @@ export const useAttachVedleggFn = () => {
       oppgaveId,
       parentId,
       journalfoerteDokumenter: vedlegg,
-      creator: {
-        employee: { navIdent, navn },
-        creatorRole: isRol ? CreatorRole.KABAL_ROL : CreatorRole.KABAL_SAKSBEHANDLING,
-      },
       isFinished,
     });
 };

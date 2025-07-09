@@ -1,8 +1,10 @@
-import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
+import { getIsRolQuestions, type MaybeRolQuestionsDocument } from '@app/components/documents/new-documents/helpers';
 import { DuaAccessParent } from '@app/hooks/dua-access/access';
-import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
+import { DocumentTypeEnum, type IParentDocument } from '@app/types/documents/documents';
 
-export const getParentDocumentType = (document: IDocument | undefined): DuaAccessParent | null => {
+export type DetermineParentDocumentType = MaybeRolQuestionsDocument & Pick<IParentDocument, 'type' | 'isSmartDokument'>;
+
+export const getParentDocumentType = (document: DetermineParentDocumentType | undefined): DuaAccessParent | null => {
   if (document === undefined) {
     return DuaAccessParent.NONE;
   }

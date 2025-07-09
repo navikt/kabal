@@ -1,55 +1,31 @@
 import { describe, expect, it } from 'bun:test';
 import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { getDocumentAccessMap } from '@app/hooks/dua-access/document/access';
+import { type DuaDocumentAccessDocument, getDocumentAccessMap } from '@app/hooks/dua-access/document/access';
 import type { DocumentAccessParams } from '@app/hooks/dua-access/shared/params';
-import {
-  CreatorRole,
-  DistribusjonsType,
-  DocumentTypeEnum,
-  type IFileDocument,
-  type ISmartDocument,
-} from '@app/types/documents/documents';
+import { CreatorRole, DocumentTypeEnum } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Language } from '@app/types/texts/language';
 
-const BASE_DOCUMENT: Omit<IFileDocument<null>, 'type' | 'isSmartDokument'> = {
+const BASE_DOCUMENT: Omit<DuaDocumentAccessDocument, 'type' | 'isSmartDokument'> = {
   id: '1',
-  tittel: 'Test Document',
-  created: '2021-01-01',
-  modified: '2021-01-01',
-  parentId: null,
-  dokumentTypeId: DistribusjonsType.NOTAT,
   isMarkertAvsluttet: false,
-  avsender: null,
-  inngaaendeKanal: null,
-  creator: {
-    employee: { navIdent: 'Z123456', navn: 'Ola Nordmann' },
-    creatorRole: CreatorRole.KABAL_SAKSBEHANDLING,
-  },
-  datoMottatt: null,
-  mottakerList: [],
+  creatorRole: CreatorRole.KABAL_SAKSBEHANDLING,
 };
 
-const UPLOADED_NOTAT: IFileDocument<null> = {
+const UPLOADED_NOTAT: DuaDocumentAccessDocument = {
   ...BASE_DOCUMENT,
   type: DocumentTypeEnum.UPLOADED,
   isSmartDokument: false,
-  dokumentTypeId: DistribusjonsType.NOTAT,
   isMarkertAvsluttet: false,
 };
 
-const SMART_NOTAT: ISmartDocument<null> = {
+const SMART_NOTAT: DuaDocumentAccessDocument = {
   ...BASE_DOCUMENT,
   type: DocumentTypeEnum.SMART,
   isSmartDokument: true,
-  dokumentTypeId: DistribusjonsType.NOTAT,
   templateId: TemplateIdEnum.NOTAT,
-  content: [],
-  version: 1,
-  language: Language.NB,
 };
 
-const ROL_QUESTIONS: ISmartDocument<null> = {
+const ROL_QUESTIONS: DuaDocumentAccessDocument = {
   ...SMART_NOTAT,
   templateId: TemplateIdEnum.ROL_QUESTIONS,
 };

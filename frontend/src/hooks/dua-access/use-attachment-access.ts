@@ -1,22 +1,22 @@
 import { DuaActionEnum } from '@app/hooks/dua-access/access';
 import type { DuaAccessMap } from '@app/hooks/dua-access/access-map';
-import { getAttachmentAccess } from '@app/hooks/dua-access/attachment/access';
+import { type AttachmentAccessDocument, getAttachmentAccess } from '@app/hooks/dua-access/attachment/access';
 import { useLazyIsTildelt } from '@app/hooks/oppgavebehandling/use-is-tildelt';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useLazyIsAssignedMedunderskriver, useLazyIsSentToMedunderskriver } from '@app/hooks/use-is-medunderskriver';
 import { useIsAssignedRol, useIsRolUser, useIsSentToRol, useLazyIsReturnedFromRol } from '@app/hooks/use-is-rol';
 import { useIsSaksbehandler, useLazyIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import type { IAttachmentDocument, IParentDocument } from '@app/types/documents/documents';
+import type { IParentDocument } from '@app/types/documents/documents';
 
 type UseAttachmentAccess = (
-  document: IAttachmentDocument,
+  attachment: AttachmentAccessDocument,
   parentDocument: IParentDocument | undefined,
   action: DuaActionEnum,
 ) => string | null;
 
 type UseAttachmentAccessList = (
-  document: IAttachmentDocument,
+  attachment: AttachmentAccessDocument,
   parentDocument: IParentDocument,
   action: DuaActionEnum,
   ...actions: DuaActionEnum[]
@@ -24,7 +24,7 @@ type UseAttachmentAccessList = (
 
 type GetAttachmentAccess = (
   actions: DuaActionEnum,
-  document: IAttachmentDocument,
+  attachment: AttachmentAccessDocument,
   parentDocument: IParentDocument | undefined,
 ) => string | null;
 
@@ -43,7 +43,7 @@ export const useLazyAttachmentAccess: UseLazyAttachmentAccess = () => {
   const isSaksbehandlerUser = useIsSaksbehandler();
   const isReturnedFromRol = useLazyIsReturnedFromRol();
 
-  return (action, document, parentDocument) => {
+  return (action, attachment, parentDocument) => {
     if (isCaseFeilregistrert) {
       return 'Feilregistrert sak har ikke tilgang til dokumenter';
     }
@@ -53,7 +53,7 @@ export const useLazyAttachmentAccess: UseLazyAttachmentAccess = () => {
     }
 
     return getAttachmentAccess(
-      document,
+      attachment,
       parentDocument,
       {
         isCaseFinished,
@@ -78,7 +78,17 @@ export const useAttachmentAccess: UseAttachmentAccess = (document, parentDocumen
   return getAttachmentAccess(action, document, parentDocument);
 };
 
-export const useAttachmentAccessList: UseAttachmentAccessList = (document, parentDocument, ...actions) => {
+export const useLazyAttachmentAccessList = () => {
+  const getAttachmentAccess = useLazyAttachmentAccess();
+
+  return (
+    attachment: AttachmentAccessDocument,
+    parentDocument: IParentDocument | undefined,
+    ...actions: DuaActionEnum[]
+  ) => actions.map((action) => getAttachmentAccess(action, attachment, parentDocument));
+};
+
+export const useAttachmentAccessPartialMap: UseAttachmentAccessList = (document, parentDocument, ...actions) => {
   const getAttachmentAccess = useLazyAttachmentAccess();
 
   const accessMap: DuaAccessMap = {
@@ -103,17 +113,17 @@ export const useAttachmentAccessList: UseAttachmentAccessList = (document, paren
 };
 
 export const useAttachmentAccessMap = (
-  document: IAttachmentDocument,
+  attachment: AttachmentAccessDocument,
   parentDocument: IParentDocument,
 ): DuaAccessMap => {
   const getAttachmentAccess = useLazyAttachmentAccess();
 
   return {
-    [DuaActionEnum.CREATE]: getAttachmentAccess(DuaActionEnum.CREATE, document, parentDocument),
-    [DuaActionEnum.WRITE]: getAttachmentAccess(DuaActionEnum.WRITE, document, parentDocument),
-    [DuaActionEnum.RENAME]: getAttachmentAccess(DuaActionEnum.RENAME, document, parentDocument),
-    [DuaActionEnum.CHANGE_TYPE]: getAttachmentAccess(DuaActionEnum.CHANGE_TYPE, document, parentDocument),
-    [DuaActionEnum.REMOVE]: getAttachmentAccess(DuaActionEnum.REMOVE, document, parentDocument),
-    [DuaActionEnum.FINISH]: getAttachmentAccess(DuaActionEnum.FINISH, document, parentDocument),
+    [DuaActionEnum.CREATE]: getAttachmentAccess(DuaActionEnum.CREATE, attachment, parentDocument),
+    [DuaActionEnum.WRITE]: getAttachmentAccess(DuaActionEnum.WRITE, attachment, parentDocument),
+    [DuaActionEnum.RENAME]: getAttachmentAccess(DuaActionEnum.RENAME, attachment, parentDocument),
+    [DuaActionEnum.CHANGE_TYPE]: getAttachmentAccess(DuaActionEnum.CHANGE_TYPE, attachment, parentDocument),
+    [DuaActionEnum.REMOVE]: getAttachmentAccess(DuaActionEnum.REMOVE, attachment, parentDocument),
+    [DuaActionEnum.FINISH]: getAttachmentAccess(DuaActionEnum.FINISH, attachment, parentDocument),
   };
 };

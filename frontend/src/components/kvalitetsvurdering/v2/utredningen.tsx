@@ -1,4 +1,4 @@
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { HStack, Radio } from '@navikt/ds-react';
 import { Checkboxes } from './common/checkboxes';
@@ -14,7 +14,7 @@ const UTREDNINGEN_ID = 'utredningen';
 export const Utredningen = () => {
   const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV2();
 
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
   const validationError = useValidationError(UTREDNINGEN_ID);
   const header = useKvalitetsvurderingV2FieldName(UTREDNINGEN_ID);
 

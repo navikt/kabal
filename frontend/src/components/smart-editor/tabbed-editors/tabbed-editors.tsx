@@ -61,6 +61,7 @@ const Tabbed = ({ documents }: TabbedProps) => {
           <Heading level="1" size="medium" spacing>
             Ingen dokumenter.
           </Heading>
+
           <Alert variant="info" size="small">
             Ingen dokumenter å vise. Om du forventet å se noen dokumenter her, be saksbehandler om å opprette dem.
           </Alert>
@@ -76,12 +77,15 @@ const Tabbed = ({ documents }: TabbedProps) => {
           {documents.map(({ id, tittel }) => (
             <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
           ))}
+
           <TabNew />
         </Tabs.List>
+
         <div className="grow overflow-hidden">
           {documents.map((d) => (
             <TabPanel key={d.id} smartDocument={d} />
           ))}
+
           <TabPanelNew onCreate={setEditorId} />
         </div>
       </Tabs>

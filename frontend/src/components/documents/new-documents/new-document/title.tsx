@@ -9,6 +9,8 @@ import {
   getJournalfoertDocumentTabUrl,
   getNewDocumentTabUrl,
 } from '@app/domain/tabbed-document-url';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useDuaAccess } from '@app/hooks/dua-access/use-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
@@ -18,15 +20,15 @@ import { TitleActions, type TitleActionsProps } from './title-actions';
 
 interface Props {
   document: IDocument;
-  renameAccess: string | null;
 }
 
 export const DocumentTitle = memo(
-  ({ document, renameAccess }: Props) => {
+  ({ document }: Props) => {
     const [editMode, _setEditMode] = useState(false);
     const { setDraggingEnabled } = useContext(DragAndDropContext);
     const oppgaveId = useOppgaveId();
     const [setTitle] = useSetTitleMutation();
+    const renameAccess = useDuaAccess(document, DuaActionEnum.RENAME);
 
     const [url, documentId] = useMemo<[string, string] | [undefined, undefined]>(() => {
       if (document.type !== DocumentTypeEnum.JOURNALFOERT) {
