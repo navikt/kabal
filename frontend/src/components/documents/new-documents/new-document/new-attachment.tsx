@@ -7,7 +7,7 @@ import { DocumentDate } from '@app/components/documents/new-documents/shared/doc
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { merge } from '@app/functions/classes';
 import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { useAttachmentAccessList } from '@app/hooks/dua-access/use-attachment-access';
+import { useAttachmentAccessPartialMap } from '@app/hooks/dua-access/use-attachment-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum, type IAttachmentDocument, type IParentDocument } from '@app/types/documents/documents';
@@ -80,8 +80,13 @@ interface NewDocumentInternalProps {
 
 const NewAttachmentInternal = memo<NewDocumentInternalProps>(
   ({ document, parentDocument, cleanDragUI, clearDragState, draggingEnabled, onDragStart }) => {
-    const { RENAME, REMOVE } = useAttachmentAccessList(
-      document,
+    const { RENAME, REMOVE } = useAttachmentAccessPartialMap(
+      {
+        isSmartDokument: document.isSmartDokument,
+        creatorRole: document.creator.creatorRole,
+        type: document.type,
+        templateId: document.templateId,
+      },
       parentDocument,
       DuaActionEnum.RENAME,
       DuaActionEnum.REMOVE,
@@ -103,7 +108,7 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
         draggable={isDraggable}
         className={DOCUMENT_CLASSES}
       >
-        <DocumentTitle document={document} renameAccess={RENAME} />
+        <DocumentTitle document={document} />
         {document.type === DocumentTypeEnum.JOURNALFOERT ? (
           <StyledDate data-testid="new-document-date" document={document} />
         ) : null}

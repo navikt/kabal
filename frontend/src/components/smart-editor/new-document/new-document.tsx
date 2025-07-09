@@ -1,5 +1,8 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { GeneratedIcon } from '@app/components/smart-editor/new-document/generated-icon';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
+import { useLazyDocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
@@ -17,7 +20,7 @@ import {
 } from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { Role } from '@app/types/bruker';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
@@ -33,7 +36,6 @@ interface Props {
 }
 
 export const NewDocument = ({ onCreate }: Props) => {
-  const { user } = useContext(StaticDataContext);
   const isRol = useIsAssignedRolAndSent();
   const hasDocumentsAccess = useHasDocumentsAccess();
   const isFeilregistrert = useIsFeilregistrert();
@@ -43,6 +45,21 @@ export const NewDocument = ({ onCreate }: Props) => {
   const { data: oppgave } = useOppgave();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
   const templates = useNewSmartDocumentTemplates();
+  const getDocumentAccess = useLazyDocumentAccess();
+  const creatorRole = useCreatorRole();
+
+  templates.map((template) =>
+    getDocumentAccess(
+      {
+        creatorRole,
+        isMarkertAvsluttet: false,
+        isSmartDokument: true,
+        templateId: template.templateId,
+        type: DocumentTypeEnum.SMART,
+      },
+      DuaActionEnum.CREATE,
+    ),
+  );
 
   if (isFeilregistrert || oppgave === undefined) {
     return null;
@@ -55,8 +72,6 @@ export const NewDocument = ({ onCreate }: Props) => {
   const onClick = async (template: ISmartEditorTemplate) => {
     setLoadingTemplate(template.templateId);
 
-    const creatorRole = isRol ? Role.KABAL_ROL : Role.KABAL_SAKSBEHANDLING;
-
     try {
       const { id } = await createSmartDocument({
         templateId: template.templateId,
@@ -64,8 +79,6 @@ export const NewDocument = ({ onCreate }: Props) => {
         content: template.richText,
         tittel: getTitle(documents, template),
         oppgaveId: oppgave.id,
-        creatorIdent: user.navIdent,
-        creatorRole,
         parentId: null,
         language: Language.NB,
       }).unwrap();

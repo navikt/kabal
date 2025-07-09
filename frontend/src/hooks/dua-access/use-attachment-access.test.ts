@@ -1,138 +1,53 @@
 import { describe, expect, it } from 'bun:test';
 import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { getAttachmentAccessMap } from '@app/hooks/dua-access/attachment/access';
+import { type AttachmentAccessDocument, getAttachmentAccessMap } from '@app/hooks/dua-access/attachment/access';
+import type { DetermineParentDocumentType } from '@app/hooks/dua-access/attachment/parent';
 import type { DocumentAccessParams } from '@app/hooks/dua-access/shared/params';
-import { Filtype, VariantFormat } from '@app/types/arkiverte-documents';
-import {
-  CreatorRole,
-  DistribusjonsType,
-  DocumentTypeEnum,
-  type IFileDocument,
-  type ISmartDocument,
-  type JournalfoertDokument,
-} from '@app/types/documents/documents';
+import { CreatorRole, DocumentTypeEnum } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Language } from '@app/types/texts/language';
 
-const SMART_PARENT: ISmartDocument<null> = {
-  id: 'smart-parent',
-  tittel: 'Test Smart Document',
-  created: '2021-01-01',
-  modified: '2021-01-01',
-  parentId: null,
-  dokumentTypeId: DistribusjonsType.BREV,
-  isMarkertAvsluttet: false,
-  creator: {
-    employee: { navIdent: 'Z123456', navn: 'Ola Nordmann' },
-    creatorRole: CreatorRole.KABAL_SAKSBEHANDLING,
-  },
-  mottakerList: [],
+const SMART_PARENT: DetermineParentDocumentType = {
   templateId: TemplateIdEnum.ROL_ANSWERS,
   type: DocumentTypeEnum.SMART,
   isSmartDokument: true,
-  version: 1,
-  language: Language.NB,
-  content: [],
 };
 
-const ROL_QUESTIONS: ISmartDocument<null> = {
+const ROL_QUESTIONS: DetermineParentDocumentType = {
   ...SMART_PARENT,
-  id: 'rol-questions',
   templateId: TemplateIdEnum.ROL_QUESTIONS,
 };
 
-const BASE_ATTACHMENT: Omit<IFileDocument<string>, 'type' | 'isSmartDokument'> = {
-  id: '1',
-  tittel: 'Test Document',
-  created: '2021-01-01',
-  modified: '2021-01-01',
-  parentId: '2',
-  dokumentTypeId: DistribusjonsType.NOTAT,
-  isMarkertAvsluttet: false,
-  avsender: null,
-  inngaaendeKanal: null,
-  creator: {
-    employee: { navIdent: 'Z123456', navn: 'Ola Nordmann' },
-    creatorRole: CreatorRole.KABAL_SAKSBEHANDLING,
-  },
-  datoMottatt: null,
-  mottakerList: [],
-};
-
-const UPLOADED_PARENT: IFileDocument<null> = {
-  id: 'uploaded-parent',
-  tittel: 'Test Uploaded Document',
-  created: '2021-01-01',
-  modified: '2021-01-01',
-  parentId: null,
-  dokumentTypeId: DistribusjonsType.BREV,
-  isMarkertAvsluttet: false,
-  creator: {
-    employee: { navIdent: 'Z123456', navn: 'Ola Nordmann' },
-    creatorRole: CreatorRole.KABAL_SAKSBEHANDLING,
-  },
-  mottakerList: [],
+const UPLOADED_PARENT: DetermineParentDocumentType = {
   isSmartDokument: false,
   type: DocumentTypeEnum.UPLOADED,
-  avsender: null,
-  inngaaendeKanal: null,
-  datoMottatt: null,
 };
 
-const UPLOADED_ATTACHMENT: IFileDocument<string> = {
+const BASE_ATTACHMENT: Omit<AttachmentAccessDocument, 'type' | 'isSmartDokument'> = {
+  creatorRole: CreatorRole.KABAL_SAKSBEHANDLING,
+};
+
+const UPLOADED_ATTACHMENT: AttachmentAccessDocument = {
   ...BASE_ATTACHMENT,
-  parentId: UPLOADED_PARENT.id,
   type: DocumentTypeEnum.UPLOADED,
   isSmartDokument: false,
-  dokumentTypeId: DistribusjonsType.NOTAT,
-  isMarkertAvsluttet: false,
 };
 
-const JOURNALFOERT_ATTACHMENT: JournalfoertDokument = {
+const JOURNALFOERT_ATTACHMENT: AttachmentAccessDocument = {
   ...BASE_ATTACHMENT,
-  parentId: SMART_PARENT.id,
   type: DocumentTypeEnum.JOURNALFOERT,
   isSmartDokument: false,
-  dokumentTypeId: DistribusjonsType.NOTAT,
-  isMarkertAvsluttet: false,
-  journalfoertDokumentReference: {
-    datoOpprettet: '2021-01-01',
-    journalpostId: '123456789',
-    dokumentInfoId: '987654321',
-    hasAccess: true,
-    sortKey: '20210101000000',
-    varianter: [
-      {
-        filtype: Filtype.PDF,
-        format: VariantFormat.ARKIV,
-        hasAccess: true,
-        skjerming: null,
-      },
-    ],
-  },
 };
 
-const JOURNALFOERT_ROL_ATTACHMENT: JournalfoertDokument = {
+const JOURNALFOERT_ROL_ATTACHMENT: AttachmentAccessDocument = {
   ...JOURNALFOERT_ATTACHMENT,
-  creator: {
-    employee: { navIdent: 'Z654321', navn: 'Lege Over' },
-    creatorRole: CreatorRole.KABAL_ROL,
-  },
 };
 
-const ROL_ANSWERS: ISmartDocument<string> = {
+const ROL_ANSWERS: AttachmentAccessDocument = {
   ...BASE_ATTACHMENT,
-  parentId: ROL_QUESTIONS.id,
   templateId: TemplateIdEnum.ROL_ANSWERS,
   type: DocumentTypeEnum.SMART,
-  creator: {
-    employee: { navIdent: 'Z654321', navn: 'Lege Over' },
-    creatorRole: CreatorRole.KABAL_ROL,
-  },
+  creatorRole: CreatorRole.KABAL_ROL,
   isSmartDokument: true,
-  version: 1,
-  language: Language.NB,
-  content: [],
 };
 
 const BASE_PARAMS: DocumentAccessParams = {

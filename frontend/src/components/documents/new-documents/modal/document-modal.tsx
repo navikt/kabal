@@ -2,8 +2,8 @@ import { Fields } from '@app/components/documents/new-documents/grid';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { DocumentModalContent } from '@app/components/documents/new-documents/modal/modal-document-content';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import type { DuaAccessMap } from '@app/hooks/dua-access/access-map';
-import { getDocumentAccessSummary } from '@app/hooks/dua-access/summary/get-document-access-summary';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useDOcumentAccessList } from '@app/hooks/dua-access/use-document-access';
 import type { IParentDocument } from '@app/types/documents/documents';
 import { MenuElipsisVerticalIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
 import { Button, Modal, Tooltip } from '@navikt/ds-react';
@@ -16,16 +16,21 @@ interface Props {
 
 interface DocumentProps extends Props {
   document: IParentDocument;
-  access: DuaAccessMap;
 }
 
-export const DocumentModal = ({ document, isOpen, setIsOpen, access }: DocumentProps) => {
-  const { tittel, type } = document;
-  const { close } = useContext(ModalContext);
+const ACCESS_LIST = [DuaActionEnum.RENAME, DuaActionEnum.CHANGE_TYPE, DuaActionEnum.REMOVE, DuaActionEnum.FINISH];
 
-  if (access.RENAME !== null && access.REMOVE !== null && access.CHANGE_TYPE !== null && access.FINISH !== null) {
+export const DocumentModal = ({ document, isOpen, setIsOpen }: DocumentProps) => {
+  const { tittel, type, id, isMarkertAvsluttet, isSmartDokument, creator, templateId } = document;
+  const { close } = useContext(ModalContext);
+  const accessList = useDOcumentAccessList(
+    { creatorRole: creator.creatorRole, isMarkertAvsluttet, id, isSmartDokument, type, templateId },
+    ...ACCESS_LIST,
+  );
+
+  if (accessList.length === ACCESS_LIST.length) {
     return (
-      <DocumentSummary access={access}>
+      <DocumentSummary accessList={accessList}>
         <PadlockLockedIcon style={{ gridArea: Fields.Action }} className="h-full w-full p-2" />
       </DocumentSummary>
     );
@@ -33,7 +38,7 @@ export const DocumentModal = ({ document, isOpen, setIsOpen, access }: DocumentP
 
   return (
     <>
-      <DocumentSummary access={access}>
+      <DocumentSummary accessList={accessList}>
         <Button
           onClick={() => setIsOpen(!isOpen)}
           data-testid="document-actions-button"
@@ -59,7 +64,7 @@ export const DocumentModal = ({ document, isOpen, setIsOpen, access }: DocumentP
             setIsOpen(false);
           }}
         >
-          <DocumentModalContent document={document} access={access} />
+          <DocumentModalContent document={document} />
         </Modal>
       ) : null}
     </>
@@ -67,19 +72,21 @@ export const DocumentModal = ({ document, isOpen, setIsOpen, access }: DocumentP
 };
 
 interface DocumentSummaryProps {
-  access: DuaAccessMap;
+  accessList: string[];
   children: React.ReactElement;
 }
 
-const DocumentSummary = ({ access, children }: DocumentSummaryProps) => {
-  const summary = getDocumentAccessSummary(access);
-
-  if (summary === null) {
+const DocumentSummary = ({ accessList, children }: DocumentSummaryProps) => {
+  if (accessList.length === 0) {
     return children;
   }
 
   return (
-    <Tooltip content={summary} maxChar={Number.POSITIVE_INFINITY} className="whitespace-pre text-left">
+    <Tooltip
+      content={`- ${accessList.join('\n- ')}`}
+      maxChar={Number.POSITIVE_INFINITY}
+      className="whitespace-pre text-left"
+    >
       {children}
     </Tooltip>
   );

@@ -12,7 +12,8 @@ import { isSendError } from '@app/components/receivers/is-send-error';
 import { Receivers } from '@app/components/receivers/receivers';
 import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import type { DuaAccessMap } from '@app/hooks/dua-access/access-map';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useDocumentAccessPartialMap } from '@app/hooks/dua-access/use-document-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
 import {
@@ -26,6 +27,7 @@ import {
   DOCUMENT_TYPE_NAMES,
   DocumentTypeEnum,
   type IDocument,
+  type IParentDocument,
 } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
@@ -35,11 +37,10 @@ import { useMemo, useState } from 'react';
 import { DeleteDocumentButton } from './delete-button';
 
 interface Props {
-  document: IDocument;
-  access: DuaAccessMap;
+  document: IParentDocument;
 }
 
-export const DocumentModalContent = ({ document, access }: Props) => {
+export const DocumentModalContent = ({ document }: Props) => {
   const [setMottakerList, { isLoading }] = useSetMottakerListMutation();
   const [, { error: finishError }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const sendErrors = useMemo(
@@ -58,6 +59,16 @@ export const DocumentModalContent = ({ document, access }: Props) => {
       : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
   const { refresh, ...pdfData } = usePdfData(pdfUrl);
   const [innsendingshjemlerConfirmed, setInnsendingshjemlerConfirmed] = useState(false);
+
+  const { creator, isMarkertAvsluttet, id, isSmartDokument, type, templateId } = document;
+
+  const access = useDocumentAccessPartialMap(
+    { creatorRole: creator.creatorRole, isSmartDokument, type, templateId, isMarkertAvsluttet, id },
+    DuaActionEnum.RENAME,
+    DuaActionEnum.CHANGE_TYPE,
+    DuaActionEnum.REMOVE,
+    DuaActionEnum.FINISH,
+  );
 
   if (oppgaveId === skipToken) {
     return null;

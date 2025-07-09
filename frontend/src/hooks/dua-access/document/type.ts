@@ -1,8 +1,14 @@
-import { getIsRolAnswers, getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
+import {
+  getIsRolAnswers,
+  getIsRolQuestions,
+  type MaybeRolAnswersDocument,
+} from '@app/components/documents/new-documents/helpers';
 import { DuaAccessDocumentType } from '@app/hooks/dua-access/access';
 import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 
-export const getDocumentType = (document: IDocument): DuaAccessDocumentType | null => {
+export type DetermineDocumentType = MaybeRolAnswersDocument & MaybeRolAnswersDocument & Pick<IDocument, 'type'>;
+
+export const getDocumentType = (document: DetermineDocumentType): DuaAccessDocumentType | null => {
   if (document.type === DocumentTypeEnum.JOURNALFOERT) {
     return DuaAccessDocumentType.JOURNALFOERT;
   }

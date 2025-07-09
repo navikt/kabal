@@ -11,8 +11,13 @@ export const useHasWriteAccess = (smartDocument: ISmartDocumentOrAttachment): bo
   const getParentDocument = useLazyParentDocument();
 
   return useMemo(() => {
+    const { id, creator, isSmartDokument, type, templateId, isMarkertAvsluttet } = smartDocument;
+
     if (isParentDocument(smartDocument)) {
-      const writeAccess = getDocumentAccess(smartDocument, DuaActionEnum.WRITE);
+      const writeAccess = getDocumentAccess(
+        { creatorRole: creator.creatorRole, isSmartDokument, type, templateId, isMarkertAvsluttet, id },
+        DuaActionEnum.WRITE,
+      );
 
       return writeAccess === null;
     }
@@ -23,7 +28,11 @@ export const useHasWriteAccess = (smartDocument: ISmartDocumentOrAttachment): bo
       return false;
     }
 
-    const writeAccess = getAttachmentAccess(DuaActionEnum.WRITE, smartDocument, parentDocument);
+    const writeAccess = getAttachmentAccess(
+      DuaActionEnum.WRITE,
+      { creatorRole: creator.creatorRole, isSmartDokument, type, templateId },
+      parentDocument,
+    );
 
     return writeAccess === null;
   }, [getDocumentAccess, getAttachmentAccess, getParentDocument, smartDocument]);
