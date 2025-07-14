@@ -2,9 +2,7 @@ import { Fields } from '@app/components/documents/new-documents/grid';
 import { AttachmentModalContent } from '@app/components/documents/new-documents/modal/modal-attachment-content';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { AttachmentAccessEnum } from '@app/hooks/dua-access/attachment-access';
-import { getAttachmentAccessSummary } from '@app/hooks/dua-access/summary/get-attachment-access-summary';
-import type { AttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
+import { isNotNull } from '@app/functions/is-not-type-guards';
 import type { IAttachmentDocument } from '@app/types/documents/documents';
 import { MenuElipsisVerticalIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
 import { Button, Modal, Tooltip } from '@navikt/ds-react';
@@ -16,20 +14,17 @@ interface Props {
 }
 interface AttachmentProps extends Props {
   document: IAttachmentDocument;
-  access: AttachmentAccess;
+  renameAccess: string | null;
+  removeAccess: string | null;
 }
 
-export const AttachmentModal = ({ document, isOpen, setIsOpen, access }: AttachmentProps) => {
+export const AttachmentModal = ({ document, isOpen, setIsOpen, renameAccess, removeAccess }: AttachmentProps) => {
   const { tittel, type } = document;
   const { close } = useContext(ModalContext);
 
-  if (
-    access.rename !== AttachmentAccessEnum.ALLOWED &&
-    access.move !== AttachmentAccessEnum.ALLOWED &&
-    access.remove !== AttachmentAccessEnum.ALLOWED
-  ) {
+  if (renameAccess !== null && removeAccess !== null) {
     return (
-      <AttachmentSummary access={access}>
+      <AttachmentSummary removeAccess={removeAccess} renameAccess={renameAccess}>
         <PadlockLockedIcon style={{ gridArea: Fields.Action }} className="h-full w-full p-2" />
       </AttachmentSummary>
     );
@@ -37,7 +32,7 @@ export const AttachmentModal = ({ document, isOpen, setIsOpen, access }: Attachm
 
   return (
     <>
-      <AttachmentSummary access={access}>
+      <AttachmentSummary removeAccess={removeAccess} renameAccess={renameAccess}>
         <Button
           onClick={() => setIsOpen(!isOpen)}
           data-testid="document-actions-button"
@@ -63,7 +58,7 @@ export const AttachmentModal = ({ document, isOpen, setIsOpen, access }: Attachm
             setIsOpen(false);
           }}
         >
-          <AttachmentModalContent document={document} access={access} />
+          <AttachmentModalContent document={document} renameAccess={renameAccess} removeAccess={removeAccess} />
         </Modal>
       ) : null}
     </>
@@ -71,12 +66,13 @@ export const AttachmentModal = ({ document, isOpen, setIsOpen, access }: Attachm
 };
 
 interface AttachmentSummaryProps {
-  access: AttachmentAccess;
+  renameAccess: string | null;
+  removeAccess: string | null;
   children: React.ReactElement;
 }
 
-const AttachmentSummary = ({ access, children }: AttachmentSummaryProps) => {
-  const summary = getAttachmentAccessSummary(access);
+const AttachmentSummary = ({ renameAccess, removeAccess, children }: AttachmentSummaryProps) => {
+  const summary = toSummary(renameAccess, removeAccess);
 
   if (summary === null) {
     return children;
@@ -87,4 +83,10 @@ const AttachmentSummary = ({ access, children }: AttachmentSummaryProps) => {
       {children}
     </Tooltip>
   );
+};
+
+const toSummary = (...points: (string | null)[]) => {
+  const filtered = points.filter(isNotNull);
+
+  return filtered.length === 0 ? null : filtered.join('\n- ');
 };

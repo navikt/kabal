@@ -1,4 +1,4 @@
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
@@ -11,7 +11,7 @@ import { useKvalitetsvurderingV1FieldName } from './use-field-name';
 export const Utredningen = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
   const [updateKvalitetsvurdering] = useUpdateKvalitetsvurderingMutation();
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
   const validationError = useValidationError('utredningenRadioValg');
   const header = useKvalitetsvurderingV1FieldName('utredningenRadioValg');
 

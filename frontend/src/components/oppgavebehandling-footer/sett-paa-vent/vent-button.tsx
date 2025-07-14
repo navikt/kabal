@@ -1,6 +1,5 @@
 import { SettPaaVentPanel } from '@app/components/oppgavebehandling-footer/sett-paa-vent/panel';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useNoOneCanEdit } from '@app/hooks/use-can-edit';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
@@ -13,11 +12,10 @@ import { useRef, useState } from 'react';
 const useCanEditSetPaaVent = () => {
   const { data, isSuccess } = useOppgave();
   const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
-  const noOneCanEdit = useNoOneCanEdit();
   const userIsTildeltSaksbehandler = useIsTildeltSaksbehandler();
   const isTildeltSomeone = isSuccess && data.saksbehandler !== null;
 
-  if (noOneCanEdit) {
+  if (!isSuccess || data.feilregistrering !== null || data.isAvsluttetAvSaksbehandler) {
     return false;
   }
 

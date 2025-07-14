@@ -1,11 +1,10 @@
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { DropZone } from '@app/components/documents/new-documents/shared/drop-zone';
-import { AttachmentAccessEnum } from '@app/hooks/dua-access/attachment-access';
-import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
-import { useAttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
-import { useDocumentAccess } from '@app/hooks/dua-access/use-document-access';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useAttachmentAccess, useLazyAttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
+import { useLazyDocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useParentDocument } from '@app/hooks/use-parent-document';
+import { useLazyParentDocument, useParentDocument } from '@app/hooks/use-parent-document';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import {
@@ -13,6 +12,7 @@ import {
   type IAttachmentDocument,
   type IDocument,
   isAttachmentDocument,
+  isParentDocument,
 } from '@app/types/documents/documents';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
@@ -58,12 +58,33 @@ interface DocumentProps {
 }
 
 const DocumentDeleteDropArea = ({ draggedDocument, onDrop, isLoading }: DocumentProps) => {
-  const access = useDocumentAccess(draggedDocument);
+  const getDocumentAccess = useLazyDocumentAccess();
+  const getAttachmentAccess = useLazyAttachmentAccess();
+  const getParent = useLazyParentDocument();
+
+  const creatorRole = draggedDocument.creator.creatorRole;
+  const { id, isSmartDokument, templateId, isMarkertAvsluttet } = draggedDocument;
+
+  const access = isParentDocument(draggedDocument)
+    ? getDocumentAccess(
+        { id, creatorRole, isSmartDokument, type: draggedDocument.type, templateId, isMarkertAvsluttet },
+        DuaActionEnum.REMOVE,
+      )
+    : getAttachmentAccess(
+        DuaActionEnum.REMOVE,
+        {
+          isSmartDokument,
+          creatorRole,
+          type: draggedDocument.type,
+          templateId,
+        },
+        getParent(draggedDocument.parentId),
+      );
 
   return (
     <DropZone
       onDrop={() => onDrop(draggedDocument)}
-      active={access.remove === DocumentAccessEnum.ALLOWED || isLoading}
+      active={access === null || isLoading}
       label="Slett"
       icon={isLoading ? <Loader size="xsmall" /> : <TrashIcon aria-hidden />}
       danger
@@ -80,12 +101,21 @@ interface AttachmentProps {
 
 const AttachmentDeleteDropArea = ({ draggedDocument, onDrop, isLoading }: AttachmentProps) => {
   const parentDocument = useParentDocument(draggedDocument.parentId);
-  const access = useAttachmentAccess(draggedDocument, parentDocument);
+  const removeAccessError = useAttachmentAccess(
+    {
+      creatorRole: draggedDocument.creator.creatorRole,
+      isSmartDokument: draggedDocument.isSmartDokument,
+      type: draggedDocument.type,
+      templateId: draggedDocument.templateId,
+    },
+    parentDocument,
+    DuaActionEnum.REMOVE,
+  );
 
   return (
     <DropZone
       onDrop={() => onDrop(draggedDocument)}
-      active={access.remove === AttachmentAccessEnum.ALLOWED || isLoading}
+      active={removeAccessError === null || isLoading}
       label="Slett"
       icon={isLoading ? <Loader size="xsmall" /> : <TrashIcon aria-hidden />}
       danger

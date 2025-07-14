@@ -1,7 +1,7 @@
 import { LovhjemmelSelect } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel-select';
 import { SelectedHjemlerList } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/selected-hjemler-list';
 import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import type {
   IKvalitetsvurderingAllRegistreringshjemler,
   IKvalitetsvurderingBooleans,
@@ -16,7 +16,7 @@ interface AllRegistreringshjemlerProps {
 
 export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshjemlerProps) => {
   const { update, isLoading, kvalitetsvurdering } = useKvalitetsvurderingV2();
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
 
   if (isLoading) {
     return null;

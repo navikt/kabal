@@ -1,6 +1,5 @@
 import type { Language } from '@app/types/texts/language';
 import type { Descendant } from 'platejs';
-import type { Role } from '../bruker';
 import type { DistribusjonsType } from '../documents/documents';
 import type { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
 import type { Immutable } from '../types';
@@ -12,8 +11,6 @@ interface IMutableCreateSmartDocumentParams extends IOppgavebehandlingBaseParams
   templateId: TemplateIdEnum;
   dokumentTypeId: DistribusjonsType;
   parentId: string | null;
-  creatorIdent: string;
-  creatorRole: Role.KABAL_SAKSBEHANDLING | Role.KABAL_ROL;
   language: Language;
 }
 
