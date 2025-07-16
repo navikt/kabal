@@ -17,7 +17,7 @@ export const Medunderskriver = ({ params, setParams, columnKey }: FilterDropdown
     <Table.ColumnHeader>
       <FilterDropdown
         selected={params.medunderskrivere ?? []}
-        onChange={(medunderskrivere) => setParams({ ...params, medunderskrivere })}
+        onChange={(medunderskrivere) => setParams({ medunderskrivere })}
         options={options}
         data-testid="filter-medunderskriver"
       >

@@ -1,18 +1,15 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
+import { useOppgaveTableState } from '@app/components/common-table-components/oppgave-table/use-state';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetEnhetensVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Role } from '@app/types/bruker';
-import {
-  type CommonOppgaverParams,
-  type EnhetensOppgaverParams,
-  SortFieldEnum,
-  SortOrderEnum,
-} from '@app/types/oppgaver';
+import { type EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { Heading } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithAnkeITrygderetten,
@@ -43,12 +40,8 @@ export const EnhetensOppgaverPaaVentTable = () => {
 const EnhetensOppgaverPaaVentTableInternal = () => {
   const { user } = useContext(StaticDataContext);
 
-  const [params, setParams] = useState<CommonOppgaverParams>({
-    typer: [],
-    ytelser: [],
-    hjemler: [],
-    tildelteSaksbehandlere: [],
-    rekkefoelge: SortOrderEnum.STIGENDE,
+  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.ENHETENS_VENTENDE, {
+    rekkefoelge: SortOrderEnum.ASC,
     sortering: SortFieldEnum.PAA_VENT_TO,
   });
 
@@ -74,6 +67,7 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
         refetch={refetch}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ENHETENS_VENTENDE}
+        tableKey={OppgaveTableKey.ENHETENS_VENTENDE}
       />
     </section>
   );

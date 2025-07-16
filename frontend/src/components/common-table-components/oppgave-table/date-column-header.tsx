@@ -1,4 +1,4 @@
-import type { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
+import type { SetParams } from '@app/components/common-table-components/oppgave-table/use-state';
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
 import {
@@ -22,7 +22,7 @@ interface SortProps {
 
 interface FilterProps {
   params: CommonOppgaverParams;
-  setParams: SetCommonOppgaverParams;
+  setParams: SetParams;
   fromKey: keyof FromDateSortKeys;
   toKey: keyof ToDateSortKeys;
 }
@@ -52,14 +52,12 @@ const Filter = ({ params: filters, setParams: setFilters, fromKey, toKey }: Filt
   const onChange = (range: DateRange | undefined) => {
     if (range === undefined) {
       return setFilters({
-        ...filters,
         [fromKey]: undefined,
         [toKey]: undefined,
       });
     }
 
     setFilters({
-      ...filters,
       [fromKey]: range.from instanceof Date ? format(range.from, ISO_FORMAT) : undefined,
       [toKey]: range.to instanceof Date ? format(range.to, ISO_FORMAT) : undefined,
     });
@@ -70,7 +68,7 @@ const Filter = ({ params: filters, setParams: setFilters, fromKey, toKey }: Filt
 
 interface DateColumnHeaderProps {
   params: CommonOppgaverParams;
-  setParams: SetCommonOppgaverParams;
+  setParams: SetParams;
   onSortChange: TableProps['onSortChange'];
   children: string | null;
   fromKey: keyof FromDateSortKeys;
@@ -91,7 +89,7 @@ export const DateColumnHeader = ({
 }: DateColumnHeaderProps) => (
   <Table.ColumnHeader
     className="whitespace-nowrap"
-    aria-sort={params.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}
+    aria-sort={params.rekkefoelge === SortOrderEnum.ASC ? 'ascending' : 'descending'}
   >
     <HStack align="center" gap="1" wrap={false}>
       {interactive ? (
@@ -110,7 +108,7 @@ export const DateColumnHeader = ({
 
 const getSortIcon = (sorted: boolean, rekkefoelge: SortOrderEnum) => {
   if (sorted) {
-    return rekkefoelge === SortOrderEnum.STIGENDE ? ArrowUpIcon : ArrowDownIcon;
+    return rekkefoelge === SortOrderEnum.ASC ? ArrowUpIcon : ArrowDownIcon;
   }
 
   return ArrowsUpDownIcon;

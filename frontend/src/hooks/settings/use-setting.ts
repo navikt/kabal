@@ -102,20 +102,23 @@ export const useSmartEditorScale = (prefix: ScalingGroup) => useNumberSetting(`$
 
 export enum OppgaveTableRowsPerPage {
   LEDIGE = 'oppgaver/ledige/rows_per_page',
-  MINE_UFERDIGE = 'oppgaver/mine_uferdige/rows_per_page',
+  MINE_TILDELTE = 'oppgaver/mine_tildelte/rows_per_page',
   MINE_RETURNERTE = 'oppgaver/mine_returnerte/rows_per_page',
   MINE_VENTENDE = 'oppgaver/mine_ventende/rows_per_page',
   ENHETENS_UFERDIGE = 'oppgaver/enhetens_uferdige/rows_per_page',
   ENHETENS_VENTENDE = 'oppgaver/enhetens_ventende/rows_per_page',
   ENHETENS_FERDIGE = 'oppgaver/enhetens_ferdige/rows_per_page',
-  ROL_UFERDIGE = 'oppgaver/rol_uferdige/rows_per_page',
+  ROL_LEDIGE = 'oppgaver/rol_ledige/rows_per_page',
+  ROL_TILDELTE = 'oppgaver/rol_tildelte/rows_per_page',
   ROL_VENTENDE = 'oppgaver/rol_ventende/rows_per_page',
+  ROL_RETURNERTE = 'oppgaver/rol_returnerte/rows_per_page',
   ROL_FERDIGE = 'oppgaver/rol_ferdige/rows_per_page',
   SEARCH_ACTIVE = 'oppgaver/search_active/rows_per_page',
-  SEARCH_DONE = 'oppgaver/search_done/rows_per_page',
+  SEARCH_FERDIGE = 'oppgaver/search_ferdige/rows_per_page',
   SEARCH_FEILREGISTRERTE = 'oppgaver/search_feilregistrerte/rows_per_page',
-  SEARCH_PAA_VENT = 'oppgaver/search_paa_vent/rows_per_page',
+  SEARCH_VENTENDE = 'oppgaver/search_ventende/rows_per_page',
   RELEVANT_ACTIVE = 'oppgaver/relevant_active/rows_per_page',
+  RELEVANT_VENTENDE = 'oppgaver/relevant_ventende/rows_per_page',
 }
 
 export const useGosysBeskrivelseTab = () => useSetting('oppgavebehandling/gosys/beskrivelse/tab');

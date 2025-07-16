@@ -28,7 +28,7 @@ export const RolHjemmel = ({ params, setParams, columnKey }: FilterDropdownProps
     <Table.ColumnHeader>
       <FilterDropdown
         selected={params.hjemler ?? []}
-        onChange={(hjemler) => setParams({ ...params, hjemler })}
+        onChange={(hjemler) => setParams({ hjemler })}
         options={options}
         data-testid="filter-hjemler"
       >

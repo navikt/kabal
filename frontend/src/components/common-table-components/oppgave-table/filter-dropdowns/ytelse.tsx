@@ -12,7 +12,7 @@ export const Ytelse = ({ params, setParams, columnKey }: FilterDropdownProps) =>
     <Table.ColumnHeader>
       <FilterDropdown
         selected={params.ytelser ?? []}
-        onChange={(ytelser) => setParams({ ...params, ytelser })}
+        onChange={(ytelser) => setParams({ ytelser })}
         options={kodeverkSimpleValuesToDropdownOptions(ytelseOptions)}
         data-testid="filter-ytelse"
       >

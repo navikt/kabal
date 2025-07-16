@@ -1,12 +1,13 @@
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
+import { useOppgaveTableState } from '@app/components/common-table-components/oppgave-table/use-state';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetMineVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Role } from '@app/types/bruker';
-import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { Heading } from '@navikt/ds-react';
-import { useState } from 'react';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithAnkeITrygderetten,
@@ -37,12 +38,9 @@ export const OppgaverPaaVentTable = () => {
 };
 
 const OppgaverPaaVentTableInternal = () => {
-  const [params, setParams] = useState<CommonOppgaverParams>({
-    typer: [],
-    ytelser: [],
-    hjemler: [],
+  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.MINE_VENTENDE, {
+    rekkefoelge: SortOrderEnum.ASC,
     sortering: SortFieldEnum.PAA_VENT_TO,
-    rekkefoelge: SortOrderEnum.STIGENDE,
   });
 
   const { data, isError, isFetching, isLoading, refetch } = useGetMineVentendeOppgaverQuery(params, {
@@ -64,6 +62,7 @@ const OppgaverPaaVentTableInternal = () => {
         refetch={refetch}
         behandlinger={data?.behandlinger}
         data-testid="oppgaver-paa-vent-table"
+        tableKey={OppgaveTableKey.MINE_VENTENDE}
       />
     </section>
   );

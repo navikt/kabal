@@ -1,4 +1,6 @@
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
+import { useOppgaveTableState } from '@app/components/common-table-components/oppgave-table/use-state';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
@@ -8,7 +10,6 @@ import { Role } from '@app/types/bruker';
 import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useState } from 'react';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
@@ -31,13 +32,11 @@ export const LedigeRolOppgaverTable = () => {
 };
 
 const LedigeOppgaverTableInternal = (): React.JSX.Element => {
-  const [params, setParams] = useState<CommonOppgaverParams>({
-    typer: [],
-    ytelser: [],
-    hjemler: [],
+  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.ROL_LEDIGE, {
+    rekkefoelge: SortOrderEnum.ASC,
     sortering: SortFieldEnum.FRIST,
-    rekkefoelge: SortOrderEnum.STIGENDE,
   });
+
   const {
     data: settingsData,
     isLoading: isLoadingSettings,
@@ -64,11 +63,12 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
         params={params}
         setParams={setParams}
         behandlinger={data?.behandlinger}
-        settingsKey={OppgaveTableRowsPerPage.LEDIGE}
+        settingsKey={OppgaveTableRowsPerPage.ROL_LEDIGE}
         isLoading={isLoading || isLoadingSettings}
         isFetching={isFetching || isFetchingSettings}
         isError={isError || isErrorSettings}
         refetch={refetch}
+        tableKey={OppgaveTableKey.ROL_LEDIGE}
       />
     </section>
   );

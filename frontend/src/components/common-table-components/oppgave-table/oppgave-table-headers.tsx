@@ -1,6 +1,6 @@
 import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
 import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
-import type { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
+import type { SetParams } from '@app/components/common-table-components/oppgave-table/use-state';
 import { ColumnKeyEnum, TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';
@@ -29,7 +29,7 @@ export const TablePlainHeaders = ({ columnKeys }: TablePlainHeadersProps) =>
 
 interface TableFilterHeadersProps {
   params: CommonOppgaverParams;
-  setParams: SetCommonOppgaverParams;
+  setParams: SetParams;
   onSortChange: TableProps['onSortChange'];
 }
 

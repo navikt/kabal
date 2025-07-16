@@ -1,12 +1,13 @@
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
+import { useOppgaveTableState } from '@app/components/common-table-components/oppgave-table/use-state';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetMineUferdigeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Role } from '@app/types/bruker';
-import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { Heading } from '@navikt/ds-react';
-import { useState } from 'react';
 
 const TEST_ID = 'mine-oppgaver-table';
 
@@ -37,9 +38,9 @@ export const MineOppgaverTable = () => {
 };
 
 const MineOppgaverTableInternal = () => {
-  const [params, setParams] = useState<CommonOppgaverParams>({
+  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.MINE_TILDELTE, {
+    rekkefoelge: SortOrderEnum.ASC,
     sortering: SortFieldEnum.FRIST,
-    rekkefoelge: SortOrderEnum.STIGENDE,
   });
 
   const { data, isError, isLoading, isFetching, refetch } = useGetMineUferdigeOppgaverQuery(params, {
@@ -58,9 +59,10 @@ const MineOppgaverTableInternal = () => {
         isLoading={isLoading}
         isFetching={isFetching}
         behandlinger={data?.behandlinger}
-        settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
+        settingsKey={OppgaveTableRowsPerPage.MINE_TILDELTE}
         refetch={refetch}
         data-testid={TEST_ID}
+        tableKey={OppgaveTableKey.MINE_TILDELTE}
       />
     </section>
   );

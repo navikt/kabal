@@ -1,12 +1,13 @@
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
+import { useOppgaveTableState } from '@app/components/common-table-components/oppgave-table/use-state';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetReturnerteRolOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Role } from '@app/types/bruker';
-import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { Heading } from '@navikt/ds-react';
-import { useState } from 'react';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
@@ -22,8 +23,6 @@ const COLUMNS: ColumnKeyEnum[] = [
 
 const TEST_ID = 'returnerte-oppgaver-table';
 
-const EMPTY_ARRAY: string[] = [];
-
 export const ReturnerteRolOppgaverTable = () => {
   const hasAccess = useHasRole(Role.KABAL_ROL);
 
@@ -35,13 +34,9 @@ export const ReturnerteRolOppgaverTable = () => {
 };
 
 const ReturnerteRolOppgaverTableInternal = () => {
-  const [params, setParams] = useState<CommonOppgaverParams>({
+  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.ROL_RETURNERTE, {
+    rekkefoelge: SortOrderEnum.DESC,
     sortering: SortFieldEnum.RETURNERT_FRA_ROL,
-    rekkefoelge: SortOrderEnum.SYNKENDE,
-    typer: [],
-    ytelser: EMPTY_ARRAY,
-    hjemler: EMPTY_ARRAY,
-    tildelteSaksbehandlere: EMPTY_ARRAY,
   });
 
   const { data, isLoading, isFetching, isError, refetch } = useGetReturnerteRolOppgaverQuery(params, {
@@ -59,11 +54,12 @@ const ReturnerteRolOppgaverTableInternal = () => {
         isError={isError}
         refetch={refetch}
         data-testid={TEST_ID}
-        settingsKey={OppgaveTableRowsPerPage.MINE_RETURNERTE}
+        settingsKey={OppgaveTableRowsPerPage.ROL_RETURNERTE}
         behandlinger={data?.behandlinger}
         params={params}
         setParams={setParams}
         zebraStripes
+        tableKey={OppgaveTableKey.ROL_RETURNERTE}
       />
     </section>
   );

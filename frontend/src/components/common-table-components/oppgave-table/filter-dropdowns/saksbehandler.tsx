@@ -17,7 +17,7 @@ export const Saksbehandler = ({ params, setParams, columnKey }: FilterDropdownPr
     <Table.ColumnHeader>
       <FilterDropdown
         selected={params.tildelteSaksbehandlere ?? []}
-        onChange={(tildelteSaksbehandlere) => setParams({ ...params, tildelteSaksbehandlere })}
+        onChange={(tildelteSaksbehandlere) => setParams({ tildelteSaksbehandlere })}
         options={options}
         data-testid="filter-saksbehandler"
       >
