@@ -1,20 +1,17 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { useOppgaveTableState } from '@app/components/common-table-components/oppgave-table/state/state';
+import { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useSakstyper } from '@app/hooks/use-kodeverk-value';
 import { useGetRolUferdigeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Role } from '@app/types/bruker';
-import {
-  type CommonOppgaverParams,
-  type EnhetensOppgaverParams,
-  SortFieldEnum,
-  SortOrderEnum,
-} from '@app/types/oppgaver';
+import { type EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
@@ -38,14 +35,7 @@ export const RolOppgaverTable = () => {
 };
 
 const RolOppgaverTableInternal = () => {
-  const [params, setParams] = useState<CommonOppgaverParams>({
-    typer: [],
-    ytelser: [],
-    hjemler: [],
-    tildelteSaksbehandlere: [],
-    rekkefoelge: SortOrderEnum.STIGENDE,
-    sortering: SortFieldEnum.FRIST,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.ROL_UFERDIGE, SortFieldEnum.FRIST, SortOrderEnum.ASC);
 
   const types = useSakstyper();
 
@@ -64,8 +54,6 @@ const RolOppgaverTableInternal = () => {
       <Heading size="small">Tildelte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        params={params}
-        setParams={setParams}
         data-testid="rol-oppgaver-table"
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ROL_UFERDIGE}
@@ -73,6 +61,9 @@ const RolOppgaverTableInternal = () => {
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}
+        tableKey={OppgaveTableKey.ROL_UFERDIGE}
+        defaultRekkefoelge={SortOrderEnum.ASC}
+        defaultSortering={SortFieldEnum.FRIST}
       />
     </section>
   );

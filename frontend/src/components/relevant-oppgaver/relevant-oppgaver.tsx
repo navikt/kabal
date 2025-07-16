@@ -1,6 +1,6 @@
 import { OppgaveRow } from '@app/components/common-table-components/oppgave-rows/oppgave-row';
-import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
 import { TablePlainHeaders } from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
+import { StaticOppgaveTable } from '@app/components/common-table-components/oppgave-table/static-oppgave-table';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 /*
  * We have the following dependency cycle:
@@ -90,7 +90,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
 
           <section>
             <Heading size="small">Andre oppgaver</Heading>
-            <OppgaveTable
+            <StaticOppgaveTable
               behandlinger={uferdigeOppgaverIdList}
               settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
               data-testid="relevant-uferdige-oppgaver-table"
@@ -104,9 +104,9 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
 
           <section>
             <Heading size="small">Oppgaver på vent</Heading>
-            <OppgaveTable
+            <StaticOppgaveTable
               behandlinger={ventendeOppgaverIdList}
-              settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
+              settingsKey={OppgaveTableRowsPerPage.RELEVANT_VENTENDE}
               data-testid="relevant-ventende-oppgaver-table"
               columns={VENTENDE_COLUMNS}
               refetch={refetch}

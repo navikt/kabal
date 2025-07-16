@@ -1,4 +1,5 @@
-import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { StaticOppgaveTableWithPageState } from '@app/components/common-table-components/oppgave-table/static-oppgave-table';
+import { StaticOppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { Alert, Heading } from '@navikt/ds-react';
@@ -28,15 +29,16 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
   return (
     <section>
       <Heading size="small">Fullførte oppgaver</Heading>
-      <OppgaveTable
+      <StaticOppgaveTableWithPageState
         columns={COLUMNS}
         isLoading={isLoading}
         isFetching={false}
         isError={false}
         behandlinger={oppgaveIds}
         refetch={onRefresh}
-        settingsKey={OppgaveTableRowsPerPage.SEARCH_DONE}
+        settingsKey={OppgaveTableRowsPerPage.SEARCH_FERDIGE}
         data-testid="search-result-fullfoerte-oppgaver"
+        tableKey={StaticOppgaveTableKey.SEARCH_FERDIGE}
       />
     </section>
   );

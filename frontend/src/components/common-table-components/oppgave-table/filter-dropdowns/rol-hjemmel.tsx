@@ -1,3 +1,4 @@
+import { useOppgaveTableHjemler } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import type { IOption } from '@app/components/filter-dropdown/props';
@@ -7,8 +8,9 @@ import { Table } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import type { FilterDropdownProps } from './types';
 
-export const RolHjemmel = ({ params, setParams, columnKey }: FilterDropdownProps) => {
+export const RolHjemmel = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const { data: ytelser = [] } = useLatestYtelser();
+  const [hjemler, setHjemler] = useOppgaveTableHjemler(tableKey);
 
   const options = useMemo<IOption<string>[]>(() => {
     const o: IOption<string>[] = [];
@@ -26,12 +28,7 @@ export const RolHjemmel = ({ params, setParams, columnKey }: FilterDropdownProps
 
   return (
     <Table.ColumnHeader>
-      <FilterDropdown
-        selected={params.hjemler ?? []}
-        onChange={(hjemler) => setParams({ ...params, hjemler })}
-        options={options}
-        data-testid="filter-hjemler"
-      >
+      <FilterDropdown selected={hjemler ?? []} onChange={setHjemler} options={options} data-testid="filter-hjemler">
         {TABLE_HEADERS[columnKey]}
       </FilterDropdown>
     </Table.ColumnHeader>

@@ -1,4 +1,5 @@
-import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { StaticOppgaveTableWithPageState } from '@app/components/common-table-components/oppgave-table/static-oppgave-table';
+import { StaticOppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { Alert, Heading } from '@navikt/ds-react';
@@ -33,7 +34,7 @@ export const LedigeOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props)
   return (
     <section>
       <Heading size="small">Oppgaver</Heading>
-      <OppgaveTable
+      <StaticOppgaveTableWithPageState
         columns={COLUMNS}
         data-testid={TEST_ID}
         isLoading={isLoading}
@@ -42,6 +43,8 @@ export const LedigeOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props)
         refetch={onRefresh}
         behandlinger={oppgaveIds}
         settingsKey={OppgaveTableRowsPerPage.SEARCH_ACTIVE}
+        tableKey={StaticOppgaveTableKey.SEARCH_ACTIVE}
+        resetPageOnLoad
       />
     </section>
   );

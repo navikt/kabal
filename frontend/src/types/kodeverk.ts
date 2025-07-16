@@ -12,6 +12,11 @@ export enum SaksTypeEnum {
   OMGJØRINGSKRAV = '5',
 }
 
+export const SAKS_TYPE_ENUM_VALUES = Object.values(SaksTypeEnum);
+
+export const isSaksTypeEnum = (value: string): value is SaksTypeEnum =>
+  SAKS_TYPE_ENUM_VALUES.includes(value as SaksTypeEnum);
+
 export enum UtfallEnum {
   TRUKKET = '1',
   RETUR = '2',

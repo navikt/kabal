@@ -77,10 +77,21 @@ export enum SortFieldEnum {
   RETURNERT_FRA_ROL = 'RETURNERT_FRA_ROL',
 }
 
+export const SORT_FIELD_ENUM_VALUES = Object.values(SortFieldEnum);
+
+export const isSortFieldEnum = (value: string): value is SortFieldEnum =>
+  SORT_FIELD_ENUM_VALUES.includes(value as SortFieldEnum);
+
+/** API param */
 export enum SortOrderEnum {
-  STIGENDE = 'STIGENDE',
-  SYNKENDE = 'SYNKENDE',
+  ASC = 'STIGENDE',
+  DESC = 'SYNKENDE',
 }
+
+export const SORT_ORDER_ENUM_VALUES = Object.values(SortOrderEnum);
+
+export const isSortOrderEnum = (value: string): value is SortOrderEnum =>
+  SORT_ORDER_ENUM_VALUES.includes(value as SortOrderEnum);
 
 export interface FromDateSortKeys {
   ferdigstiltFrom?: string;
@@ -107,6 +118,8 @@ export interface CommonOppgaverParams extends FromDateSortKeys, ToDateSortKeys {
   rekkefoelge: SortOrderEnum;
   tildelteRol?: string[];
 }
+
+export type CommonOppgaverParamsKey = keyof CommonOppgaverParams;
 
 interface EnhetParam {
   enhetId: string;

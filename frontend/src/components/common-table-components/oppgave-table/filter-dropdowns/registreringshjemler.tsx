@@ -1,3 +1,4 @@
+import { useOppgaveTableRegistreringshjemler } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { GroupedFilterList, type OptionGroup } from '@app/components/filter-dropdown/grouped-filter-list';
 import { ToggleButton } from '@app/components/toggle-button/toggle-button';
@@ -8,10 +9,11 @@ import { Table } from '@navikt/ds-react';
 import { useMemo, useRef, useState } from 'react';
 import type { FilterDropdownProps } from './types';
 
-export const Registreringshjemler = ({ params, setParams, columnKey }: FilterDropdownProps) => {
+export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLTableCellElement>(null);
   const { data: hjemler = [] } = useLovKildeToRegistreringshjemler();
+  const [registreringshjemler, setRegistreringshjemler] = useOppgaveTableRegistreringshjemler(tableKey);
 
   const options: OptionGroup<string>[] = useMemo(
     () =>
@@ -32,15 +34,15 @@ export const Registreringshjemler = ({ params, setParams, columnKey }: FilterDro
   return (
     <Table.ColumnHeader className="relative" ref={ref}>
       <ToggleButton onClick={toggleOpen} data-testid="lovhjemmel-button" $open={open}>
-        {TABLE_HEADERS[columnKey]} ({params.registreringshjemler?.length ?? 0}) {chevron}
+        {TABLE_HEADERS[columnKey]} ({registreringshjemler?.length ?? 0}) {chevron}
       </ToggleButton>
 
       {open ? (
         <GroupedFilterList
           data-testid="filter-hjemler"
-          selected={params.registreringshjemler ?? []}
+          selected={registreringshjemler ?? []}
           options={options}
-          onChange={(registreringshjemler) => setParams({ ...params, registreringshjemler })}
+          onChange={setRegistreringshjemler}
           close={close}
           showFjernAlle
           testType="oppgave-list-filter-registreringshjemler"
