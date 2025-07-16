@@ -1,4 +1,5 @@
-import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { StaticOppgaveTableWithPageState } from '@app/components/common-table-components/oppgave-table/static-oppgave-table';
+import { StaticOppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { Alert, Heading } from '@navikt/ds-react';
@@ -32,7 +33,7 @@ export const OppgaverPaaVentTable = ({ oppgaveIds, onRefresh, isLoading }: Props
   return (
     <section>
       <Heading size="small">Oppgaver på vent</Heading>
-      <OppgaveTable
+      <StaticOppgaveTableWithPageState
         columns={COLUMNS}
         data-testid="search-result-oppgaver-paa-vent"
         zebraStripes
@@ -41,7 +42,8 @@ export const OppgaverPaaVentTable = ({ oppgaveIds, onRefresh, isLoading }: Props
         isFetching={false}
         isError={false}
         refetch={onRefresh}
-        settingsKey={OppgaveTableRowsPerPage.SEARCH_PAA_VENT}
+        settingsKey={OppgaveTableRowsPerPage.SEARCH_VENTENDE}
+        tableKey={StaticOppgaveTableKey.SEARCH_VENTENDE}
       />
     </section>
   );

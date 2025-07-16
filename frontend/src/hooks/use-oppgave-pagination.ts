@@ -24,11 +24,14 @@ export const restrictPageSize = (value: number | undefined) => {
   return VALUES.includes(value) ? value : DEFAULT_VALUE;
 };
 
+export const DEFAULT_PAGE = 1;
+
 export const useOppgavePagination = (
   settingsKey: OppgaveTableRowsPerPage,
   allOppgaver: string[] = [],
+  initialPage = DEFAULT_PAGE,
 ): OppgavePagination => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(initialPage);
   const { value: pageSize } = useRestrictedNumberSetting(settingsKey, restrictPageSize);
 
   const total = allOppgaver.length;

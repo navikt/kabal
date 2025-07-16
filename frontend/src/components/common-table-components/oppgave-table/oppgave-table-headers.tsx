@@ -1,10 +1,16 @@
 import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
 import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
-import type { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
+import {
+  useOppgaveTableFerdigstilt,
+  useOppgaveTableFrist,
+  useOppgaveTableReturnert,
+  useOppgaveTableVarsletFrist,
+} from '@app/components/common-table-components/oppgave-table/state/use-date-range';
+import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum, TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';
-import { type CommonOppgaverParams, SortFieldEnum } from '@app/types/oppgaver';
+import { SortFieldEnum, type SortOrderEnum } from '@app/types/oppgaver';
 import { Table, type TableProps } from '@navikt/ds-react';
 import { EnhetHjemmel } from './filter-dropdowns/enhet-hjemmel';
 import { Hjemmel } from './filter-dropdowns/hjemmel';
@@ -28,38 +34,29 @@ export const TablePlainHeaders = ({ columnKeys }: TablePlainHeadersProps) =>
   ));
 
 interface TableFilterHeadersProps {
-  params: CommonOppgaverParams;
-  setParams: SetCommonOppgaverParams;
-  onSortChange: TableProps['onSortChange'];
+  tableKey: OppgaveTableKey;
+  sortering: SortFieldEnum;
+  rekkefoelge: SortOrderEnum;
+  onSortChange: Exclude<TableProps['onSortChange'], undefined>;
 }
 
 type Props = TableFilterHeadersProps & TablePlainHeadersProps;
 
-export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams }: Props) =>
+export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props) =>
   columnKeys.map((key) => {
-    if (params === undefined || setParams === undefined) {
-      return (
-        <Table.ColumnHeader className="whitespace-nowrap" key={key}>
-          {TABLE_HEADERS[key]}
-        </Table.ColumnHeader>
-      );
-    }
-
-    const baseColumnHeaderProps = { params, setParams, onSortChange };
-
     switch (key) {
       case ColumnKeyEnum.Type:
-        return <Sakstype key={key} columnKey={key} params={params} setParams={setParams} />;
+        return <Sakstype key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.TypeWithAnkeITrygderetten:
-        return <SakstypeWithAnkeITrygderetten key={key} columnKey={key} params={params} setParams={setParams} />;
+        return <SakstypeWithAnkeITrygderetten key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Ytelse:
-        return <Ytelse key={key} columnKey={key} params={params} setParams={setParams} />;
+        return <Ytelse key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Innsendingshjemler:
-        return <Hjemmel key={key} columnKey={key} params={params} setParams={setParams} />;
+        return <Hjemmel key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.EnhetInnsendingshjemler:
-        return <EnhetHjemmel key={key} columnKey={key} params={params} setParams={setParams} />;
+        return <EnhetHjemmel key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Registreringshjemler:
-        return <Registreringshjemler key={key} columnKey={key} params={params} setParams={setParams} />;
+        return <Registreringshjemler key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Age:
         return (
           <Table.ColumnHeader className="whitespace-nowrap" key={key} sortable sortKey={SortFieldEnum.ALDER}>
@@ -68,19 +65,13 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         );
       case ColumnKeyEnum.Deadline:
         return (
-          <DateColumnHeader
-            key={key}
-            {...baseColumnHeaderProps}
-            fromKey="fristFrom"
-            toKey="fristTo"
-            sortKey={SortFieldEnum.FRIST}
-          >
+          <Frist key={key} tableKey={tableKey} {...sortProps}>
             {TABLE_HEADERS[key]}
-          </DateColumnHeader>
+          </Frist>
         );
       case ColumnKeyEnum.VarsletFrist:
         return (
-          <VarsletFrist key={key} {...baseColumnHeaderProps}>
+          <VarsletFrist key={key} {...sortProps} tableKey={tableKey}>
             {TABLE_HEADERS[key]}
           </VarsletFrist>
         );
@@ -92,39 +83,27 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
         );
       case ColumnKeyEnum.TildelingWithFilter:
       case ColumnKeyEnum.Oppgavestyring:
-        return <Saksbehandler key={key} columnKey={key} params={params} setParams={setParams} />;
+        return <Saksbehandler key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Medunderskriver:
-        return <Medunderskriver key={key} columnKey={key} params={params} setParams={setParams} />;
+        return <Medunderskriver key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Finished:
         return (
-          <DateColumnHeader
-            {...baseColumnHeaderProps}
-            key={key}
-            fromKey="ferdigstiltFrom"
-            toKey="ferdigstiltTo"
-            sortKey={SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER}
-          >
+          <Finished key={key} tableKey={tableKey} {...sortProps}>
             {TABLE_HEADERS[key]}
-          </DateColumnHeader>
+          </Finished>
         );
       case ColumnKeyEnum.Returnert:
         return (
-          <DateColumnHeader
-            {...baseColumnHeaderProps}
-            key={key}
-            fromKey="returnertFrom"
-            toKey="returnertTo"
-            sortKey={SortFieldEnum.RETURNERT_FRA_ROL}
-          >
+          <Returnert key={key} tableKey={tableKey} {...sortProps}>
             {TABLE_HEADERS[key]}
-          </DateColumnHeader>
+          </Returnert>
         );
       case ColumnKeyEnum.Rol:
-        return <Rol key={key} columnKey={key} params={params} setParams={setParams} />;
+        return <Rol key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.RolYtelse:
-        return <RolYtelse key={key} columnKey={key} params={params} setParams={setParams} />;
+        return <RolYtelse key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.RolInnsendingshjemler:
-        return <RolHjemmel key={key} columnKey={key} params={params} setParams={setParams} />;
+        return <RolHjemmel key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Navn:
       case ColumnKeyEnum.Fnr:
       case ColumnKeyEnum.FlowStates:
@@ -151,16 +130,60 @@ export const TableFilterHeaders = ({ columnKeys, onSortChange, params, setParams
     return <Table.ColumnHeader className="whitespace-nowrap" key={key} />;
   });
 
-const VarsletFrist = ({ children, ...props }: TableFilterHeadersProps & { children: string }) => {
+const Frist = ({ children, tableKey, ...props }: TableFilterHeadersProps & { children: string }) => {
+  const { from, to, setDateRange } = useOppgaveTableFrist(tableKey);
+
+  return (
+    <DateColumnHeader {...props} from={from} to={to} setDateRange={setDateRange} sortKey={SortFieldEnum.FRIST}>
+      {children}
+    </DateColumnHeader>
+  );
+};
+
+const VarsletFrist = ({ children, tableKey, ...props }: TableFilterHeadersProps & { children: string }) => {
   const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
+  const { from, to, setDateRange } = useOppgaveTableVarsletFrist(tableKey);
 
   return (
     <DateColumnHeader
       {...props}
-      fromKey="varsletFristFrom"
-      toKey="varsletFristTo"
+      from={from}
+      to={to}
+      setDateRange={setDateRange}
       sortKey={SortFieldEnum.VARSLET_FRIST}
       interactive={isMerkantil}
+    >
+      {children}
+    </DateColumnHeader>
+  );
+};
+
+const Finished = ({ children, tableKey, ...props }: TableFilterHeadersProps & { children: string }) => {
+  const { from, to, setDateRange } = useOppgaveTableFerdigstilt(tableKey);
+
+  return (
+    <DateColumnHeader
+      {...props}
+      from={from}
+      to={to}
+      setDateRange={setDateRange}
+      sortKey={SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER}
+    >
+      {children}
+    </DateColumnHeader>
+  );
+};
+
+const Returnert = ({ children, tableKey, ...props }: TableFilterHeadersProps & { children: string }) => {
+  const { from, to, setDateRange } = useOppgaveTableReturnert(tableKey);
+
+  return (
+    <DateColumnHeader
+      {...props}
+      from={from}
+      to={to}
+      setDateRange={setDateRange}
+      sortKey={SortFieldEnum.RETURNERT_FRA_ROL}
     >
       {children}
     </DateColumnHeader>

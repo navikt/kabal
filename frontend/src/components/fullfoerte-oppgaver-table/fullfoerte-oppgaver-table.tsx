@@ -1,12 +1,13 @@
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { useOppgaveTableState } from '@app/components/common-table-components/oppgave-table/state/state';
+import { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetMineFerdigstilteOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Role } from '@app/types/bruker';
-import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { Heading } from '@navikt/ds-react';
-import { useState } from 'react';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithAnkeITrygderetten,
@@ -22,8 +23,6 @@ const COLUMNS: ColumnKeyEnum[] = [
 
 const TEST_ID = 'fullfoerte-oppgaver-table';
 
-const EMPTY_ARRAY: string[] = [];
-
 export const FullfoerteOppgaverTable = () => {
   const hasAccess = useHasRole(Role.KABAL_SAKSBEHANDLING);
 
@@ -35,14 +34,11 @@ export const FullfoerteOppgaverTable = () => {
 };
 
 const FullfoerteOppgaverTableInternal = () => {
-  const [params, setParams] = useState<CommonOppgaverParams>({
-    sortering: SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER,
-    rekkefoelge: SortOrderEnum.SYNKENDE,
-    typer: [],
-    ytelser: EMPTY_ARRAY,
-    registreringshjemler: EMPTY_ARRAY,
-    tildelteSaksbehandlere: EMPTY_ARRAY,
-  });
+  const params = useOppgaveTableState(
+    OppgaveTableKey.MINE_RETURNERTE,
+    SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER,
+    SortOrderEnum.DESC,
+  );
 
   const { data, isLoading, isFetching, isError, refetch } = useGetMineFerdigstilteOppgaverQuery(params, {
     refetchOnFocus: true,
@@ -61,9 +57,10 @@ const FullfoerteOppgaverTableInternal = () => {
         data-testid={TEST_ID}
         settingsKey={OppgaveTableRowsPerPage.MINE_RETURNERTE}
         behandlinger={data?.behandlinger}
-        params={params}
-        setParams={setParams}
         zebraStripes
+        tableKey={OppgaveTableKey.MINE_RETURNERTE}
+        defaultRekkefoelge={SortOrderEnum.DESC}
+        defaultSortering={SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER}
       />
     </section>
   );

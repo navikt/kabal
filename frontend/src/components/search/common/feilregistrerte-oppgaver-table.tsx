@@ -1,4 +1,5 @@
-import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { StaticOppgaveTableWithPageState } from '@app/components/common-table-components/oppgave-table/static-oppgave-table';
+import { StaticOppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { Alert, Heading } from '@navikt/ds-react';
@@ -28,7 +29,7 @@ export const FeilregistrerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading 
   return (
     <section>
       <Heading size="small">Feilregistrerte oppgaver</Heading>
-      <OppgaveTable
+      <StaticOppgaveTableWithPageState
         columns={COLUMNS}
         data-testid={TEST_ID}
         settingsKey={OppgaveTableRowsPerPage.SEARCH_FEILREGISTRERTE}
@@ -37,6 +38,7 @@ export const FeilregistrerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading 
         isError={false}
         behandlinger={oppgaveIds}
         refetch={onRefresh}
+        tableKey={StaticOppgaveTableKey.SEARCH_FEILREGISTRERTE}
       />
     </section>
   );

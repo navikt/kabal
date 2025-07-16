@@ -1,45 +1,34 @@
-import type { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
-import {
-  type CommonOppgaverParams,
-  type FromDateSortKeys,
-  type SortFieldEnum,
-  SortOrderEnum,
-  type ToDateSortKeys,
-} from '@app/types/oppgaver';
+import { type SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Table, type TableProps } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 
 interface SortProps {
-  params: CommonOppgaverParams;
-  onSortChange: TableProps['onSortChange'];
+  sortering: SortFieldEnum;
+  rekkefoelge: SortOrderEnum;
   sortKey: SortFieldEnum;
+  onSortChange: Exclude<TableProps['onSortChange'], undefined>;
   children: string | null;
 }
 
 interface FilterProps {
-  params: CommonOppgaverParams;
-  setParams: SetCommonOppgaverParams;
-  fromKey: keyof FromDateSortKeys;
-  toKey: keyof ToDateSortKeys;
+  from: string | undefined;
+  to: string | undefined;
+  setDateRange: (from: string | undefined, to: string | undefined) => void;
 }
 
-const Sort = ({ params, onSortChange, sortKey, children }: SortProps) => {
-  const onClick = () => {
-    onSortChange?.(sortKey);
-  };
-
-  const sorted = params.sortering === sortKey;
-  const Icon = getSortIcon(sorted, params.rekkefoelge);
+const Sort = ({ sortering, rekkefoelge, onSortChange, sortKey, children }: SortProps) => {
+  const sorted = sortering === sortKey;
+  const Icon = getSortIcon(sorted, rekkefoelge);
 
   return (
     <Button
       variant="tertiary"
       icon={<Icon fontSize={16} />}
-      onClick={onClick}
+      onClick={() => onSortChange(sortKey)}
       iconPosition="right"
       className={`whitespace-nowrap rounded-md px-3 py-4 ${sorted ? 'bg-surface-selected' : 'bg-transparent'}`}
     >
@@ -48,58 +37,46 @@ const Sort = ({ params, onSortChange, sortKey, children }: SortProps) => {
   );
 };
 
-const Filter = ({ params: filters, setParams: setFilters, fromKey, toKey }: FilterProps) => {
+const Filter = ({ from, to, setDateRange }: FilterProps) => {
   const onChange = (range: DateRange | undefined) => {
     if (range === undefined) {
-      return setFilters({
-        ...filters,
-        [fromKey]: undefined,
-        [toKey]: undefined,
-      });
+      setDateRange(undefined, undefined);
+      return;
     }
 
-    setFilters({
-      ...filters,
-      [fromKey]: range.from instanceof Date ? format(range.from, ISO_FORMAT) : undefined,
-      [toKey]: range.to instanceof Date ? format(range.to, ISO_FORMAT) : undefined,
-    });
+    setDateRange(
+      range.from instanceof Date ? format(range.from, ISO_FORMAT) : undefined,
+      range.to instanceof Date ? format(range.to, ISO_FORMAT) : undefined,
+    );
   };
 
-  return <DatePickerRange onChange={onChange} selected={{ from: filters[fromKey], to: filters[toKey] }} />;
+  return <DatePickerRange onChange={onChange} selected={{ from, to }} />;
 };
 
-interface DateColumnHeaderProps {
-  params: CommonOppgaverParams;
-  setParams: SetCommonOppgaverParams;
-  onSortChange: TableProps['onSortChange'];
-  children: string | null;
-  fromKey: keyof FromDateSortKeys;
-  toKey: keyof ToDateSortKeys;
-  sortKey: SortFieldEnum;
+interface DateColumnHeaderProps extends FilterProps, SortProps {
   interactive?: boolean;
 }
 
 export const DateColumnHeader = ({
-  params,
-  setParams,
-  onSortChange,
+  rekkefoelge,
+  sortering,
   children,
-  fromKey,
-  toKey,
   sortKey,
+  onSortChange,
   interactive = true,
+  ...filterProps
 }: DateColumnHeaderProps) => (
   <Table.ColumnHeader
     className="whitespace-nowrap"
-    aria-sort={params.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending'}
+    aria-sort={rekkefoelge === SortOrderEnum.ASC ? 'ascending' : 'descending'}
   >
     <HStack align="center" gap="1" wrap={false}>
       {interactive ? (
         <>
-          <Sort params={params} onSortChange={onSortChange} sortKey={sortKey}>
+          <Sort sortering={sortering} rekkefoelge={rekkefoelge} onSortChange={onSortChange} sortKey={sortKey}>
             {children}
           </Sort>
-          <Filter params={params} setParams={setParams} fromKey={fromKey} toKey={toKey} />
+          <Filter {...filterProps} />
         </>
       ) : (
         children
@@ -110,7 +87,7 @@ export const DateColumnHeader = ({
 
 const getSortIcon = (sorted: boolean, rekkefoelge: SortOrderEnum) => {
   if (sorted) {
-    return rekkefoelge === SortOrderEnum.STIGENDE ? ArrowUpIcon : ArrowDownIcon;
+    return rekkefoelge === SortOrderEnum.ASC ? ArrowUpIcon : ArrowDownIcon;
   }
 
   return ArrowsUpDownIcon;

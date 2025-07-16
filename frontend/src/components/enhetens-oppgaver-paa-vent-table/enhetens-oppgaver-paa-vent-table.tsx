@@ -1,18 +1,15 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { OppgaveTable } from '@app/components/common-table-components/oppgave-table/oppgave-table';
+import { useOppgaveTableState } from '@app/components/common-table-components/oppgave-table/state/state';
+import { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetEnhetensVentendeOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Role } from '@app/types/bruker';
-import {
-  type CommonOppgaverParams,
-  type EnhetensOppgaverParams,
-  SortFieldEnum,
-  SortOrderEnum,
-} from '@app/types/oppgaver';
+import { type EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { Heading } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithAnkeITrygderetten,
@@ -43,14 +40,7 @@ export const EnhetensOppgaverPaaVentTable = () => {
 const EnhetensOppgaverPaaVentTableInternal = () => {
   const { user } = useContext(StaticDataContext);
 
-  const [params, setParams] = useState<CommonOppgaverParams>({
-    typer: [],
-    ytelser: [],
-    hjemler: [],
-    tildelteSaksbehandlere: [],
-    rekkefoelge: SortOrderEnum.STIGENDE,
-    sortering: SortFieldEnum.PAA_VENT_TO,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.ENHETENS_VENTENDE, SortFieldEnum.PAA_VENT_TO, SortOrderEnum.ASC);
 
   const queryParams: EnhetensOppgaverParams = { ...params, enhetId: user.ansattEnhet.id };
 
@@ -65,8 +55,6 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
       <OppgaveTable
         columns={COLUMNS}
         zebraStripes
-        params={params}
-        setParams={setParams}
         data-testid="enhetens-oppgaver-paa-vent-table"
         isLoading={isLoading}
         isFetching={isFetching}
@@ -74,6 +62,9 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
         refetch={refetch}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ENHETENS_VENTENDE}
+        tableKey={OppgaveTableKey.ENHETENS_VENTENDE}
+        defaultRekkefoelge={SortOrderEnum.ASC}
+        defaultSortering={SortFieldEnum.PAA_VENT_TO}
       />
     </section>
   );
