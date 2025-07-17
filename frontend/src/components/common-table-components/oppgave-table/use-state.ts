@@ -17,7 +17,7 @@ import {
   SortFieldEnum,
   SortOrderEnum,
 } from '@app/types/oppgaver';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
 export type SetParams = (paramsUpdate: Partial<CommonOppgaverParams>) => void;
@@ -32,19 +32,27 @@ export const useOppgaveTableState = (
   defaultParams: Partial<CommonOppgaverParams>,
 ): OppgaveTableState => {
   const [query, setQuery] = useSearchParams();
-  const params = fromUrlParams(query, tableKey);
+
+  const [state, setState] = useState<CommonOppgaverParams>({
+    ...DEFAULT_PARAMS,
+    ...defaultParams,
+    ...fromUrlParams(query, tableKey),
+  });
 
   const setParams = useCallback(
-    (paramsUpdate: Partial<CommonOppgaverParams>) =>
-      setQuery(
-        (urlParams) =>
-          toUrlParams(urlParams, tableKey, { ...DEFAULT_PARAMS, ...defaultParams, ...params, ...paramsUpdate }),
-        { preventScrollReset: true, replace: true },
-      ),
-    [setQuery, defaultParams, tableKey, params],
+    (paramsUpdate: Partial<CommonOppgaverParams>) => setState((prevState) => ({ ...prevState, ...paramsUpdate })),
+    [],
   );
 
-  return { params: { ...DEFAULT_PARAMS, ...defaultParams, ...params }, setParams };
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setQuery((urlParams) => toUrlParams(urlParams, tableKey, state), { preventScrollReset: true, replace: true });
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [state, setQuery, tableKey]);
+
+  return { params: state, setParams };
 };
 
 const toUrlParams = (urlParams: URLSearchParams, tableKey: OppgaveTableKey, newParams: CommonOppgaverParams) => {
