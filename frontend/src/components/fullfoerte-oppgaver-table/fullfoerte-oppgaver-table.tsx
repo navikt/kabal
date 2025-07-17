@@ -34,10 +34,7 @@ export const FullfoerteOppgaverTable = () => {
 };
 
 const FullfoerteOppgaverTableInternal = () => {
-  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.MINE_RETURNERTE, {
-    rekkefoelge: SortOrderEnum.DESC,
-    sortering: SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.MINE_RETURNERTE);
 
   const { data, isLoading, isFetching, isError, refetch } = useGetMineFerdigstilteOppgaverQuery(params, {
     refetchOnFocus: true,
@@ -56,10 +53,10 @@ const FullfoerteOppgaverTableInternal = () => {
         data-testid={TEST_ID}
         settingsKey={OppgaveTableRowsPerPage.MINE_RETURNERTE}
         behandlinger={data?.behandlinger}
-        params={params}
-        setParams={setParams}
         zebraStripes
         tableKey={OppgaveTableKey.MINE_RETURNERTE}
+        defaultRekkefoelge={SortOrderEnum.DESC}
+        defaultSortering={SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER}
       />
     </section>
   );

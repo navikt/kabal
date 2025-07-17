@@ -34,10 +34,7 @@ export const ReturnerteRolOppgaverTable = () => {
 };
 
 const ReturnerteRolOppgaverTableInternal = () => {
-  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.ROL_RETURNERTE, {
-    rekkefoelge: SortOrderEnum.DESC,
-    sortering: SortFieldEnum.RETURNERT_FRA_ROL,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.ROL_RETURNERTE);
 
   const { data, isLoading, isFetching, isError, refetch } = useGetReturnerteRolOppgaverQuery(params, {
     refetchOnFocus: true,
@@ -56,10 +53,10 @@ const ReturnerteRolOppgaverTableInternal = () => {
         data-testid={TEST_ID}
         settingsKey={OppgaveTableRowsPerPage.ROL_RETURNERTE}
         behandlinger={data?.behandlinger}
-        params={params}
-        setParams={setParams}
         zebraStripes
         tableKey={OppgaveTableKey.ROL_RETURNERTE}
+        defaultRekkefoelge={SortOrderEnum.DESC}
+        defaultSortering={SortFieldEnum.RETURNERT_FRA_ROL}
       />
     </section>
   );

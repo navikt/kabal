@@ -40,10 +40,7 @@ export const EnhetensOppgaverPaaVentTable = () => {
 const EnhetensOppgaverPaaVentTableInternal = () => {
   const { user } = useContext(StaticDataContext);
 
-  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.ENHETENS_VENTENDE, {
-    rekkefoelge: SortOrderEnum.ASC,
-    sortering: SortFieldEnum.PAA_VENT_TO,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.ENHETENS_VENTENDE);
 
   const queryParams: EnhetensOppgaverParams = { ...params, enhetId: user.ansattEnhet.id };
 
@@ -58,8 +55,6 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
       <OppgaveTable
         columns={COLUMNS}
         zebraStripes
-        params={params}
-        setParams={setParams}
         data-testid="enhetens-oppgaver-paa-vent-table"
         isLoading={isLoading}
         isFetching={isFetching}
@@ -68,6 +63,8 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ENHETENS_VENTENDE}
         tableKey={OppgaveTableKey.ENHETENS_VENTENDE}
+        defaultRekkefoelge={SortOrderEnum.ASC}
+        defaultSortering={SortFieldEnum.PAA_VENT_TO}
       />
     </section>
   );

@@ -38,10 +38,7 @@ export const OppgaverPaaVentTable = () => {
 };
 
 const OppgaverPaaVentTableInternal = () => {
-  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.MINE_VENTENDE, {
-    rekkefoelge: SortOrderEnum.ASC,
-    sortering: SortFieldEnum.PAA_VENT_TO,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.MINE_VENTENDE);
 
   const { data, isError, isFetching, isLoading, refetch } = useGetMineVentendeOppgaverQuery(params, {
     refetchOnFocus: true,
@@ -53,8 +50,6 @@ const OppgaverPaaVentTableInternal = () => {
       <Heading size="small">Oppgaver på vent</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        params={params}
-        setParams={setParams}
         isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
@@ -63,6 +58,8 @@ const OppgaverPaaVentTableInternal = () => {
         behandlinger={data?.behandlinger}
         data-testid="oppgaver-paa-vent-table"
         tableKey={OppgaveTableKey.MINE_VENTENDE}
+        defaultRekkefoelge={SortOrderEnum.ASC}
+        defaultSortering={SortFieldEnum.PAA_VENT_TO}
       />
     </section>
   );

@@ -38,10 +38,7 @@ export const MineOppgaverTable = () => {
 };
 
 const MineOppgaverTableInternal = () => {
-  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.MINE_TILDELTE, {
-    rekkefoelge: SortOrderEnum.ASC,
-    sortering: SortFieldEnum.FRIST,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.MINE_TILDELTE);
 
   const { data, isError, isLoading, isFetching, refetch } = useGetMineUferdigeOppgaverQuery(params, {
     refetchOnFocus: true,
@@ -53,8 +50,6 @@ const MineOppgaverTableInternal = () => {
       <Heading size="small">Oppgaver under arbeid</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        params={params}
-        setParams={setParams}
         isError={isError}
         isLoading={isLoading}
         isFetching={isFetching}
@@ -63,6 +58,8 @@ const MineOppgaverTableInternal = () => {
         refetch={refetch}
         data-testid={TEST_ID}
         tableKey={OppgaveTableKey.MINE_TILDELTE}
+        defaultRekkefoelge={SortOrderEnum.ASC}
+        defaultSortering={SortFieldEnum.FRIST}
       />
     </section>
   );

@@ -32,10 +32,7 @@ export const EnhetensFerdigstilteOppgaverTable = () => {
 };
 
 const EnhetensFerdigstilteOppgaverTableInternal = () => {
-  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.ENHETENS_FERDIGE, {
-    rekkefoelge: SortOrderEnum.DESC,
-    sortering: SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.ENHETENS_FERDIGE);
 
   const { user } = useContext(StaticDataContext);
 
@@ -51,8 +48,6 @@ const EnhetensFerdigstilteOppgaverTableInternal = () => {
       <Heading size="small">Fullførte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        params={params}
-        setParams={setParams}
         data-testid="enhetens-ferdigstilte-oppgaver-table"
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ENHETENS_FERDIGE}
@@ -61,6 +56,8 @@ const EnhetensFerdigstilteOppgaverTableInternal = () => {
         isError={isError}
         refetch={refetch}
         tableKey={OppgaveTableKey.ENHETENS_FERDIGE}
+        defaultRekkefoelge={SortOrderEnum.DESC}
+        defaultSortering={SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER}
       />
     </section>
   );

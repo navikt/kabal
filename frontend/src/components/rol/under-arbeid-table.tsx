@@ -35,10 +35,7 @@ export const RolOppgaverTable = () => {
 };
 
 const RolOppgaverTableInternal = () => {
-  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.ROL_TILDELTE, {
-    rekkefoelge: SortOrderEnum.ASC,
-    sortering: SortFieldEnum.FRIST,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.ROL_TILDELTE);
 
   const types = useSakstyper();
 
@@ -57,8 +54,6 @@ const RolOppgaverTableInternal = () => {
       <Heading size="small">Tildelte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        params={params}
-        setParams={setParams}
         data-testid="rol-oppgaver-table"
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ROL_TILDELTE}
@@ -67,6 +62,8 @@ const RolOppgaverTableInternal = () => {
         isError={isError}
         refetch={refetch}
         tableKey={OppgaveTableKey.ROL_TILDELTE}
+        defaultRekkefoelge={SortOrderEnum.ASC}
+        defaultSortering={SortFieldEnum.FRIST}
       />
     </section>
   );

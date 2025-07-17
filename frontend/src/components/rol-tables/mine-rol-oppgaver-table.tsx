@@ -37,10 +37,7 @@ export const MineRolOppgaverTable = () => {
 };
 
 const MineRolOppgaverTableInternal = () => {
-  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.MINE_TILDELTE, {
-    rekkefoelge: SortOrderEnum.ASC,
-    sortering: SortFieldEnum.FRIST,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.MINE_TILDELTE);
 
   const queryParams: typeof skipToken | CommonOppgaverParams = params;
 
@@ -54,8 +51,6 @@ const MineRolOppgaverTableInternal = () => {
       <Heading size="small">Oppgaver under arbeid</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        params={params}
-        setParams={setParams}
         isError={isError}
         isLoading={isLoading}
         isFetching={isFetching}
@@ -64,6 +59,8 @@ const MineRolOppgaverTableInternal = () => {
         refetch={refetch}
         data-testid={TEST_ID}
         tableKey={OppgaveTableKey.MINE_TILDELTE}
+        defaultRekkefoelge={SortOrderEnum.ASC}
+        defaultSortering={SortFieldEnum.FRIST}
       />
     </section>
   );

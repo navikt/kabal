@@ -4,16 +4,14 @@ import { OppgaveRows } from '@app/components/common-table-components/oppgave-row
 import { TableFilterHeaders } from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
 import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { usePage } from '@app/components/common-table-components/oppgave-table/use-page';
-import type { SetParams } from '@app/components/common-table-components/oppgave-table/use-state';
+import {
+  useOppgaveTableRekkefoelge,
+  useOppgaveTableSortering,
+} from '@app/components/common-table-components/oppgave-table/use-state';
 import type { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import type { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
-import {
-  type CommonOppgaverParams,
-  SORT_FIELD_ENUM_VALUES,
-  type SortFieldEnum,
-  SortOrderEnum,
-} from '@app/types/oppgaver';
+import { SORT_FIELD_ENUM_VALUES, type SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { type SortState, Table, type TableProps } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
 
@@ -26,15 +24,13 @@ interface Props extends TableProps {
   isError: boolean;
   refetch: () => void;
   'data-testid': string;
-  params: CommonOppgaverParams;
-  setParams: SetParams;
   tableKey: OppgaveTableKey;
+  defaultRekkefoelge: SortOrderEnum;
+  defaultSortering: SortFieldEnum;
 }
 
 export const OppgaveTable = ({
   columns,
-  params,
-  setParams,
   behandlinger,
   settingsKey,
   isLoading,
@@ -44,8 +40,9 @@ export const OppgaveTable = ({
   tableKey,
   ...rest
 }: Props): React.JSX.Element => {
+  const [sortering, setSortering] = useOppgaveTableSortering(tableKey);
+  const [rekkefoelge, setRekkefoelge] = useOppgaveTableRekkefoelge(tableKey);
   const [initialPage, setPageQueryParam] = usePage(tableKey);
-  const { sortering, rekkefoelge } = params;
 
   const sort: SortState = useMemo(
     () => ({
@@ -58,11 +55,11 @@ export const OppgaveTable = ({
   const onSortChange = useCallback(
     (newSortering: string) => {
       if (isSortFieldEnum(newSortering)) {
-        setParams('sortering', newSortering);
-        setParams('rekkefoelge', newSortering === sortering ? invertSort(rekkefoelge) : SortOrderEnum.ASC);
+        setSortering(newSortering);
+        setRekkefoelge(newSortering === sortering ? invertSort(rekkefoelge) : SortOrderEnum.ASC);
       }
     },
-    [setParams, rekkefoelge, sortering],
+    [setRekkefoelge, setSortering, rekkefoelge, sortering],
   );
 
   const { oppgaver, setPage, ...footerProps } = useOppgavePagination(settingsKey, behandlinger, initialPage);
@@ -71,7 +68,13 @@ export const OppgaveTable = ({
     <Table {...rest} zebraStripes sort={sort} onSortChange={onSortChange}>
       <Table.Header data-testid={`${rest['data-testid']}-header`}>
         <Table.Row>
-          <TableFilterHeaders columnKeys={columns} onSortChange={onSortChange} params={params} setParams={setParams} />
+          <TableFilterHeaders
+            tableKey={tableKey}
+            columnKeys={columns}
+            sortering={sortering}
+            rekkefoelge={rekkefoelge}
+            onSortChange={onSortChange}
+          />
         </Table.Row>
       </Table.Header>
 

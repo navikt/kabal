@@ -38,10 +38,7 @@ export const EnhetensOppgaverTable = () => {
 };
 
 const EnhetensOppgaverTableInternal = () => {
-  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.ENHETENS_TILDELTE, {
-    rekkefoelge: SortOrderEnum.ASC,
-    sortering: SortFieldEnum.FRIST,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.ENHETENS_TILDELTE);
 
   const types = useSakstyper();
 
@@ -60,8 +57,6 @@ const EnhetensOppgaverTableInternal = () => {
       <Heading size="small">Tildelte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        params={params}
-        setParams={setParams}
         data-testid="enhetens-oppgaver-table"
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ENHETENS_UFERDIGE}
@@ -70,6 +65,8 @@ const EnhetensOppgaverTableInternal = () => {
         isError={isError}
         refetch={refetch}
         tableKey={OppgaveTableKey.ENHETENS_TILDELTE}
+        defaultRekkefoelge={SortOrderEnum.ASC}
+        defaultSortering={SortFieldEnum.FRIST}
       />
     </section>
   );

@@ -32,10 +32,7 @@ export const LedigeRolOppgaverTable = () => {
 };
 
 const LedigeOppgaverTableInternal = (): React.JSX.Element => {
-  const { params, setParams } = useOppgaveTableState(OppgaveTableKey.ROL_LEDIGE, {
-    rekkefoelge: SortOrderEnum.ASC,
-    sortering: SortFieldEnum.FRIST,
-  });
+  const params = useOppgaveTableState(OppgaveTableKey.ROL_LEDIGE);
 
   const {
     data: settingsData,
@@ -60,8 +57,6 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
         data-testid="oppgave-table"
         zebraStripes
         columns={COLUMNS}
-        params={params}
-        setParams={setParams}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ROL_LEDIGE}
         isLoading={isLoading || isLoadingSettings}
@@ -69,6 +64,8 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
         isError={isError || isErrorSettings}
         refetch={refetch}
         tableKey={OppgaveTableKey.ROL_LEDIGE}
+        defaultRekkefoelge={SortOrderEnum.ASC}
+        defaultSortering={SortFieldEnum.FRIST}
       />
     </section>
   );
