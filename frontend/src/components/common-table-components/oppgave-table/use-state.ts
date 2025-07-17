@@ -8,7 +8,7 @@ import {
 import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { isSaksTypeEnum, type SaksTypeEnum } from '@app/types/kodeverk';
 import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
 export type SetTyper = ReturnType<typeof useOppgaveTableTyper>[1];
@@ -61,9 +61,16 @@ const DEFAULT_PARAMS: CommonOppgaverParams = {
   sortering: SortFieldEnum.FRIST,
 };
 
-// Utility functions for URL query management
-const useUrlQueryManager = () => {
+// Generic hook for URL query parameter management
+const useUrlQueryParam = <T>(
+  key: string,
+  getter: (query: URLSearchParams, key: string) => T | undefined,
+  setter: (query: URLSearchParams, key: string, value: T | undefined) => URLSearchParams,
+  defaultValue?: T,
+) => {
   const [query, setQuery] = useSearchParams();
+  const [state, setState] = useState<T | undefined>(getter(query, key) ?? defaultValue);
+
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const updateUrlQuery = useCallback(
@@ -80,313 +87,164 @@ const useUrlQueryManager = () => {
     [setQuery],
   );
 
-  return { query, updateUrlQuery };
+  const setStateWithQuery = useCallback(
+    (value: T | undefined) => {
+      setState(value);
+      updateUrlQuery(setter(query, key, value));
+    },
+    [query, key, updateUrlQuery, setter],
+  );
+
+  // Sync with URL changes
+  useEffect(() => {
+    const newState = getter(query, key) ?? defaultValue;
+    setState(newState);
+  }, [query, getter, defaultValue, key]);
+
+  return [state, setStateWithQuery] as const;
 };
 
 // Individual hooks for each parameter
 
-export const useOppgaveTableTyper = (tableKey: OppgaveTableKey, defaultValue?: SaksTypeEnum[]) => {
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [typer, setTyper] = useState<SaksTypeEnum[] | undefined>(
-    getTyperParam(query, tableKey) ?? defaultValue ?? DEFAULT_PARAMS.typer,
+export const useOppgaveTableTyper = (tableKey: OppgaveTableKey, defaultValue?: SaksTypeEnum[]) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.TYPER}`,
+    (query) => getTyperParam(query, tableKey),
+    (query, key, value) => setArrayQuery(query, key, value as string[]),
+    defaultValue ?? DEFAULT_PARAMS.typer,
   );
 
-  const setTyperWithQuery = useCallback(
-    (value: SaksTypeEnum[] | undefined) => {
-      setTyper(value);
-      updateUrlQuery(setArrayQuery(query, `${tableKey}.${ShortParamKey.TYPER}`, value));
-    },
-    [query, tableKey, updateUrlQuery],
+export const useOppgaveTableYtelser = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.YTELSER}`,
+    (query, key) => getArrayParam(query, key),
+    (query, key, value) => setArrayQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.ytelser,
   );
 
-  return [typer, setTyperWithQuery] as const;
-};
-
-export const useOppgaveTableYtelser = (tableKey: OppgaveTableKey, defaultValue?: string[]) => {
-  const key = `${tableKey}.${ShortParamKey.YTELSER}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [ytelser, setYtelser] = useState<string[] | undefined>(
-    getArrayParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.ytelser,
+export const useOppgaveTableHjemler = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.HJEMLER}`,
+    (query, key) => getArrayParam(query, key),
+    (query, key, value) => setArrayQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.hjemler,
   );
 
-  const setYtelserWithQuery = useCallback(
-    (value: string[] | undefined) => {
-      setYtelser(value);
-      updateUrlQuery(setArrayQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
+export const useOppgaveTableRegistreringshjemler = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.REGISTRERINGSHEMLER}`,
+    (query, key) => getArrayParam(query, key),
+    (query, key, value) => setArrayQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.registreringshjemler,
   );
 
-  return [ytelser, setYtelserWithQuery] as const;
-};
-
-export const useOppgaveTableHjemler = (tableKey: OppgaveTableKey, defaultValue?: string[]) => {
-  const key = `${tableKey}.${ShortParamKey.HJEMLER}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [hjemler, setHjemler] = useState<string[] | undefined>(
-    getArrayParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.hjemler,
+export const useOppgaveTableTildelteSaksbehandlere = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.TILDELTE_SAKSBEHANDLERE}`,
+    (query, key) => getArrayParam(query, key),
+    (query, key, value) => setArrayQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.tildelteSaksbehandlere,
   );
 
-  const setHjemlerWithQuery = useCallback(
-    (value: string[] | undefined) => {
-      setHjemler(value);
-      updateUrlQuery(setArrayQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
+export const useOppgaveTableMedunderskrivere = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.MEDUNDERSKRIVERE}`,
+    (query, key) => getArrayParam(query, key),
+    (query, key, value) => setArrayQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.medunderskrivere,
   );
 
-  return [hjemler, setHjemlerWithQuery] as const;
-};
-
-export const useOppgaveTableRegistreringshjemler = (tableKey: OppgaveTableKey, defaultValue?: string[]) => {
-  const key = `${tableKey}.${ShortParamKey.REGISTRERINGSHEMLER}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [registreringshjemler, setRegistreringshjemler] = useState<string[] | undefined>(
-    getArrayParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.registreringshjemler,
+export const useOppgaveTableTildelteRol = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.TILDELTE_ROL}`,
+    (query, key) => getArrayParam(query, key),
+    (query, key, value) => setArrayQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.tildelteRol,
   );
-
-  const setRegistreringshjemlerWithQuery = useCallback(
-    (value: string[] | undefined) => {
-      setRegistreringshjemler(value);
-      updateUrlQuery(setArrayQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
-  );
-
-  return [registreringshjemler, setRegistreringshjemlerWithQuery] as const;
-};
-
-export const useOppgaveTableTildelteSaksbehandlere = (tableKey: OppgaveTableKey, defaultValue?: string[]) => {
-  const key = `${tableKey}.${ShortParamKey.TILDELTE_SAKSBEHANDLERE}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [tildelteSaksbehandlere, setTildelteSaksbehandlere] = useState<string[] | undefined>(
-    getArrayParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.tildelteSaksbehandlere,
-  );
-
-  const setTildelteSaksbehandlereWithQuery = useCallback(
-    (value: string[] | undefined) => {
-      setTildelteSaksbehandlere(value);
-      updateUrlQuery(setArrayQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
-  );
-
-  return [tildelteSaksbehandlere, setTildelteSaksbehandlereWithQuery] as const;
-};
-
-export const useOppgaveTableMedunderskrivere = (tableKey: OppgaveTableKey, defaultValue?: string[]) => {
-  const key = `${tableKey}.${ShortParamKey.MEDUNDERSKRIVERE}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [medunderskrivere, setMedunderskrivere] = useState<string[] | undefined>(
-    getArrayParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.medunderskrivere,
-  );
-
-  const setMedunderskrivereWithQuery = useCallback(
-    (value: string[] | undefined) => {
-      setMedunderskrivere(value);
-      updateUrlQuery(setArrayQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
-  );
-
-  return [medunderskrivere, setMedunderskrivereWithQuery] as const;
-};
-
-export const useOppgaveTableTildelteRol = (tableKey: OppgaveTableKey, defaultValue?: string[]) => {
-  const key = `${tableKey}.${ShortParamKey.TILDELTE_ROL}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [tildelteRol, setTildelteRol] = useState<string[] | undefined>(
-    getArrayParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.tildelteRol,
-  );
-
-  const setTildelteRolWithQuery = useCallback(
-    (value: string[] | undefined) => {
-      setTildelteRol(value);
-      updateUrlQuery(setArrayQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
-  );
-
-  return [tildelteRol, setTildelteRolWithQuery] as const;
-};
 
 export const useOppgaveTableSortering = (tableKey: OppgaveTableKey, defaultValue?: SortFieldEnum) => {
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [sortering, setSortering] = useState<SortFieldEnum>(
-    getSortFieldParam(query, tableKey) ?? defaultValue ?? DEFAULT_PARAMS.sortering,
+  const [sortering, setSortering] = useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.SORTERING}`,
+    (query) => getSortFieldParam(query, tableKey),
+    (query, key, value) => setStringQuery(query, key, value as string),
+    defaultValue ?? DEFAULT_PARAMS.sortering,
   );
-
-  const setSorteringWithQuery = useCallback(
-    (value: SortFieldEnum) => {
-      setSortering(value);
-      updateUrlQuery(setStringQuery(query, `${tableKey}.${ShortParamKey.SORTERING}`, value));
-    },
-    [query, tableKey, updateUrlQuery],
-  );
-
-  return [sortering, setSorteringWithQuery] as const;
+  return [sortering ?? DEFAULT_PARAMS.sortering, setSortering] as const;
 };
 
 export const useOppgaveTableRekkefoelge = (tableKey: OppgaveTableKey, defaultValue?: SortOrderEnum) => {
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [rekkefoelge, setRekkefoelge] = useState<SortOrderEnum>(
-    getSortOrderParam(query, tableKey) ?? defaultValue ?? DEFAULT_PARAMS.rekkefoelge,
+  const [rekkefoelge, setRekkefoelge] = useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.REKKEFOELGE}`,
+    (query) => getSortOrderParam(query, tableKey),
+    (query, key, value) => setStringQuery(query, key, value as string),
+    defaultValue ?? DEFAULT_PARAMS.rekkefoelge,
   );
-
-  const setRekkefoelgeWithQuery = useCallback(
-    (value: SortOrderEnum) => {
-      setRekkefoelge(value);
-      updateUrlQuery(setStringQuery(query, `${tableKey}.${ShortParamKey.REKKEFOELGE}`, value));
-    },
-    [query, tableKey, updateUrlQuery],
-  );
-
-  return [rekkefoelge, setRekkefoelgeWithQuery] as const;
+  return [rekkefoelge ?? DEFAULT_PARAMS.rekkefoelge, setRekkefoelge] as const;
 };
 
-export const useOppgaveTableFerdigstiltFrom = (tableKey: OppgaveTableKey, defaultValue?: string) => {
-  const key = `${tableKey}.${ShortParamKey.FERDIGSTILT_FROM}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [ferdigstiltFrom, setFerdigstiltFrom] = useState<string | undefined>(
-    getStringParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.ferdigstiltFrom,
+export const useOppgaveTableFerdigstiltFrom = (tableKey: OppgaveTableKey, defaultValue?: string) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.FERDIGSTILT_FROM}`,
+    (query, key) => getStringParam(query, key),
+    (query, key, value) => setStringQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.ferdigstiltFrom,
   );
 
-  const setFerdigstiltFromWithQuery = useCallback(
-    (value: string | undefined) => {
-      setFerdigstiltFrom(value);
-      updateUrlQuery(setStringQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
+export const useOppgaveTableFerdigstiltTo = (tableKey: OppgaveTableKey, defaultValue?: string) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.FERDIGSTILT_TO}`,
+    (query, key) => getStringParam(query, key),
+    (query, key, value) => setStringQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.ferdigstiltTo,
   );
 
-  return [ferdigstiltFrom, setFerdigstiltFromWithQuery] as const;
-};
-
-export const useOppgaveTableFerdigstiltTo = (tableKey: OppgaveTableKey, defaultValue?: string) => {
-  const key = `${tableKey}.${ShortParamKey.FERDIGSTILT_TO}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [ferdigstiltTo, setFerdigstiltTo] = useState<string | undefined>(
-    getStringParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.ferdigstiltTo,
+export const useOppgaveTableReturnertFrom = (tableKey: OppgaveTableKey, defaultValue?: string) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.RETURNERT_FROM}`,
+    (query, key) => getStringParam(query, key),
+    (query, key, value) => setStringQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.returnertFrom,
   );
 
-  const setFerdigstiltToWithQuery = useCallback(
-    (value: string | undefined) => {
-      setFerdigstiltTo(value);
-      updateUrlQuery(setStringQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
+export const useOppgaveTableReturnertTo = (tableKey: OppgaveTableKey, defaultValue?: string) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.RETURNERT_TO}`,
+    (query, key) => getStringParam(query, key),
+    (query, key, value) => setStringQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.returnertTo,
   );
 
-  return [ferdigstiltTo, setFerdigstiltToWithQuery] as const;
-};
-
-export const useOppgaveTableReturnertFrom = (tableKey: OppgaveTableKey, defaultValue?: string) => {
-  const key = `${tableKey}.${ShortParamKey.RETURNERT_FROM}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [returnertFrom, setReturnertFrom] = useState<string | undefined>(
-    getStringParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.returnertFrom,
+export const useOppgaveTableFristFrom = (tableKey: OppgaveTableKey, defaultValue?: string) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.FRIST_FROM}`,
+    (query, key) => getStringParam(query, key),
+    (query, key, value) => setStringQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.fristFrom,
   );
 
-  const setReturnertFromWithQuery = useCallback(
-    (value: string | undefined) => {
-      setReturnertFrom(value);
-      updateUrlQuery(setStringQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
+export const useOppgaveTableFristTo = (tableKey: OppgaveTableKey, defaultValue?: string) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.FRIST_TO}`,
+    (query, key) => getStringParam(query, key),
+    (query, key, value) => setStringQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.fristTo,
   );
 
-  return [returnertFrom, setReturnertFromWithQuery] as const;
-};
-
-export const useOppgaveTableReturnertTo = (tableKey: OppgaveTableKey, defaultValue?: string) => {
-  const key = `${tableKey}.${ShortParamKey.RETURNERT_TO}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [returnertTo, setReturnertTo] = useState<string | undefined>(
-    getStringParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.returnertTo,
+export const useOppgaveTableVarsletFristFrom = (tableKey: OppgaveTableKey, defaultValue?: string) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.VARSLT_FRIST_FROM}`,
+    (query, key) => getStringParam(query, key),
+    (query, key, value) => setStringQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.varsletFristFrom,
   );
 
-  const setReturnertToWithQuery = useCallback(
-    (value: string | undefined) => {
-      setReturnertTo(value);
-      updateUrlQuery(setStringQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
+export const useOppgaveTableVarsletFristTo = (tableKey: OppgaveTableKey, defaultValue?: string) =>
+  useUrlQueryParam(
+    `${tableKey}.${ShortParamKey.VARSLT_FRIST_TO}`,
+    (query, key) => getStringParam(query, key),
+    (query, key, value) => setStringQuery(query, key, value),
+    defaultValue ?? DEFAULT_PARAMS.varsletFristTo,
   );
-
-  return [returnertTo, setReturnertToWithQuery] as const;
-};
-
-export const useOppgaveTableFristFrom = (tableKey: OppgaveTableKey, defaultValue?: string) => {
-  const key = `${tableKey}.${ShortParamKey.FRIST_FROM}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [fristFrom, setFristFrom] = useState<string | undefined>(
-    getStringParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.fristFrom,
-  );
-
-  const setFristFromWithQuery = useCallback(
-    (value: string | undefined) => {
-      setFristFrom(value);
-      updateUrlQuery(setStringQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
-  );
-
-  return [fristFrom, setFristFromWithQuery] as const;
-};
-
-export const useOppgaveTableFristTo = (tableKey: OppgaveTableKey, defaultValue?: string) => {
-  const key = `${tableKey}.${ShortParamKey.FRIST_TO}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [fristTo, setFristTo] = useState<string | undefined>(
-    getStringParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.fristTo,
-  );
-
-  const setFristToWithQuery = useCallback(
-    (value: string | undefined) => {
-      setFristTo(value);
-      updateUrlQuery(setStringQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
-  );
-
-  return [fristTo, setFristToWithQuery] as const;
-};
-
-export const useOppgaveTableVarsletFristFrom = (tableKey: OppgaveTableKey, defaultValue?: string) => {
-  const key = `${tableKey}.${ShortParamKey.VARSLT_FRIST_FROM}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [varsletFristFrom, setVarsletFristFrom] = useState<string | undefined>(
-    getStringParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.varsletFristFrom,
-  );
-
-  const setVarsletFristFromWithQuery = useCallback(
-    (value: string | undefined) => {
-      setVarsletFristFrom(value);
-      updateUrlQuery(setStringQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
-  );
-
-  return [varsletFristFrom, setVarsletFristFromWithQuery] as const;
-};
-
-export const useOppgaveTableVarsletFristTo = (tableKey: OppgaveTableKey, defaultValue?: string) => {
-  const key = `${tableKey}.${ShortParamKey.VARSLT_FRIST_TO}`;
-  const { query, updateUrlQuery } = useUrlQueryManager();
-  const [varsletFristTo, setVarsletFristTo] = useState<string | undefined>(
-    getStringParam(query, key) ?? defaultValue ?? DEFAULT_PARAMS.varsletFristTo,
-  );
-
-  const setVarsletFristToWithQuery = useCallback(
-    (value: string | undefined) => {
-      setVarsletFristTo(value);
-      updateUrlQuery(setStringQuery(query, key, value));
-    },
-    [query, key, updateUrlQuery],
-  );
-
-  return [varsletFristTo, setVarsletFristToWithQuery] as const;
-};
 
 // Helper functions for URL parameter management
 
@@ -433,4 +291,51 @@ const setStringQuery = (query: URLSearchParams, key: string, value: string | und
   }
 
   return query;
+};
+
+// Main hook that returns CommonOppgaverParams using all individual hooks
+export const useOppgaveTableState = (
+  tableKey: OppgaveTableKey,
+  defaultParams: Partial<CommonOppgaverParams> = {},
+): CommonOppgaverParams => {
+  const [typer] = useOppgaveTableTyper(tableKey, defaultParams.typer);
+  const [ytelser] = useOppgaveTableYtelser(tableKey, defaultParams.ytelser);
+  const [hjemler] = useOppgaveTableHjemler(tableKey, defaultParams.hjemler);
+  const [registreringshjemler] = useOppgaveTableRegistreringshjemler(tableKey, defaultParams.registreringshjemler);
+  const [tildelteSaksbehandlere] = useOppgaveTableTildelteSaksbehandlere(
+    tableKey,
+    defaultParams.tildelteSaksbehandlere,
+  );
+  const [medunderskrivere] = useOppgaveTableMedunderskrivere(tableKey, defaultParams.medunderskrivere);
+  const [tildelteRol] = useOppgaveTableTildelteRol(tableKey, defaultParams.tildelteRol);
+  const [sortering] = useOppgaveTableSortering(tableKey, defaultParams.sortering);
+  const [rekkefoelge] = useOppgaveTableRekkefoelge(tableKey, defaultParams.rekkefoelge);
+  const [ferdigstiltFrom] = useOppgaveTableFerdigstiltFrom(tableKey, defaultParams.ferdigstiltFrom);
+  const [ferdigstiltTo] = useOppgaveTableFerdigstiltTo(tableKey, defaultParams.ferdigstiltTo);
+  const [returnertFrom] = useOppgaveTableReturnertFrom(tableKey, defaultParams.returnertFrom);
+  const [returnertTo] = useOppgaveTableReturnertTo(tableKey, defaultParams.returnertTo);
+  const [fristFrom] = useOppgaveTableFristFrom(tableKey, defaultParams.fristFrom);
+  const [fristTo] = useOppgaveTableFristTo(tableKey, defaultParams.fristTo);
+  const [varsletFristFrom] = useOppgaveTableVarsletFristFrom(tableKey, defaultParams.varsletFristFrom);
+  const [varsletFristTo] = useOppgaveTableVarsletFristTo(tableKey, defaultParams.varsletFristTo);
+
+  return {
+    typer,
+    ytelser,
+    hjemler,
+    registreringshjemler,
+    tildelteSaksbehandlere,
+    medunderskrivere,
+    tildelteRol,
+    rekkefoelge,
+    sortering,
+    ferdigstiltFrom,
+    ferdigstiltTo,
+    returnertFrom,
+    returnertTo,
+    fristFrom,
+    fristTo,
+    varsletFristFrom,
+    varsletFristTo,
+  };
 };
