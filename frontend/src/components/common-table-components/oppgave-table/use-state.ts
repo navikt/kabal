@@ -8,7 +8,7 @@ import {
 import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { isSaksTypeEnum, type SaksTypeEnum } from '@app/types/kodeverk';
 import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
 export type SetTyper = ReturnType<typeof useOppgaveTableTyper>[1];
@@ -69,7 +69,10 @@ const useUrlQueryParam = <T>(
   defaultValue?: T,
 ) => {
   const [query, setQuery] = useSearchParams();
-  const [state, setState] = useState<T | undefined>(getter(query, key) ?? defaultValue);
+  const [optimisticValue, setOptimisticValue] = useState<T | undefined>(undefined);
+
+  // Use optimistic value if available, otherwise use URL value or default value
+  const currentValue = optimisticValue ?? getter(query, key) ?? defaultValue;
 
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -81,6 +84,7 @@ const useUrlQueryParam = <T>(
 
       debounceTimeout.current = setTimeout(() => {
         setQuery(query, { preventScrollReset: true, replace: true });
+        setOptimisticValue(undefined); // Clear optimistic value after URL update
         debounceTimeout.current = null;
       }, 300);
     },
@@ -89,19 +93,13 @@ const useUrlQueryParam = <T>(
 
   const setStateWithQuery = useCallback(
     (value: T | undefined) => {
-      setState(value);
+      setOptimisticValue(value); // Set optimistic value immediately for UI responsiveness
       updateUrlQuery(setter(query, key, value));
     },
     [query, key, updateUrlQuery, setter],
   );
 
-  // Sync with URL changes
-  useEffect(() => {
-    const newState = getter(query, key) ?? defaultValue;
-    setState(newState);
-  }, [query, getter, defaultValue, key]);
-
-  return [state, setStateWithQuery] as const;
+  return [currentValue, setStateWithQuery] as const;
 };
 
 // Individual hooks for each parameter
@@ -293,7 +291,6 @@ const setStringQuery = (query: URLSearchParams, key: string, value: string | und
   return query;
 };
 
-// Main hook that returns CommonOppgaverParams using all individual hooks
 export const useOppgaveTableState = (
   tableKey: OppgaveTableKey,
   defaultParams: Partial<CommonOppgaverParams> = {},
