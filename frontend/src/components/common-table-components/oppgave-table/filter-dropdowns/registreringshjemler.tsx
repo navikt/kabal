@@ -40,7 +40,7 @@ export const Registreringshjemler = ({ params, setParams, columnKey }: FilterDro
           data-testid="filter-hjemler"
           selected={params.registreringshjemler ?? []}
           options={options}
-          onChange={(registreringshjemler) => setParams({ registreringshjemler })}
+          onChange={(registreringshjemler) => setParams('registreringshjemler', registreringshjemler)}
           close={close}
           showFjernAlle
           testType="oppgave-list-filter-registreringshjemler"

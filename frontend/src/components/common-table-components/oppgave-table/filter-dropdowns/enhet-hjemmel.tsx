@@ -12,7 +12,7 @@ export const EnhetHjemmel = ({ params, setParams, columnKey }: FilterDropdownPro
     <Table.ColumnHeader>
       <FilterDropdown
         selected={params.hjemler ?? []}
-        onChange={(hjemler) => setParams({ hjemler })}
+        onChange={(hjemler) => setParams('hjemler', hjemler)}
         options={kodeverkValuesToDropdownOptions(enhetHjemlerOptions)}
         data-testid="filter-hjemler"
       >

@@ -58,10 +58,8 @@ export const OppgaveTable = ({
   const onSortChange = useCallback(
     (newSortering: string) => {
       if (isSortFieldEnum(newSortering)) {
-        setParams({
-          sortering: newSortering,
-          rekkefoelge: newSortering === sortering ? invertSort(rekkefoelge) : SortOrderEnum.ASC,
-        });
+        setParams('sortering', newSortering);
+        setParams('rekkefoelge', newSortering === sortering ? invertSort(rekkefoelge) : SortOrderEnum.ASC);
       }
     },
     [setParams, rekkefoelge, sortering],

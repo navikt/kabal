@@ -48,19 +48,16 @@ const Sort = ({ params, onSortChange, sortKey, children }: SortProps) => {
   );
 };
 
-const Filter = ({ params: filters, setParams: setFilters, fromKey, toKey }: FilterProps) => {
+const Filter = ({ params: filters, setParams, fromKey, toKey }: FilterProps) => {
   const onChange = (range: DateRange | undefined) => {
     if (range === undefined) {
-      return setFilters({
-        [fromKey]: undefined,
-        [toKey]: undefined,
-      });
+      setParams(fromKey, undefined);
+      setParams(toKey, undefined);
+      return;
     }
 
-    setFilters({
-      [fromKey]: range.from instanceof Date ? format(range.from, ISO_FORMAT) : undefined,
-      [toKey]: range.to instanceof Date ? format(range.to, ISO_FORMAT) : undefined,
-    });
+    setParams(fromKey, range.from instanceof Date ? format(range.from, ISO_FORMAT) : undefined);
+    setParams(toKey, range.to instanceof Date ? format(range.to, ISO_FORMAT) : undefined);
   };
 
   return <DatePickerRange onChange={onChange} selected={{ from: filters[fromKey], to: filters[toKey] }} />;

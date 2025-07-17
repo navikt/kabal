@@ -1,26 +1,22 @@
 import {
   isShortSortField,
   isShortSortOrder,
-  PARAMS_KEY_TO_SHORT,
   SHORT_TO_SORT_FIELD,
   SHORT_TO_SORT_ORDER,
   ShortParamKey,
-  SORT_FIELD_TO_SHORT,
-  SORT_ORDER_TO_SHORT,
 } from '@app/components/common-table-components/oppgave-table/compression';
 import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
+import { isSaksTypeEnum, type SaksTypeEnum } from '@app/types/kodeverk';
 import {
   type CommonOppgaverParams,
   type CommonOppgaverParamsKey,
-  isSortFieldEnum,
-  isSortOrderEnum,
   SortFieldEnum,
   SortOrderEnum,
 } from '@app/types/oppgaver';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
-export type SetParams = (paramsUpdate: Partial<CommonOppgaverParams>) => void;
+export type SetParams = <K extends CommonOppgaverParamsKey>(key: K, paramsUpdate: CommonOppgaverParams[K]) => void;
 
 interface OppgaveTableState {
   params: CommonOppgaverParams;
@@ -33,131 +29,259 @@ export const useOppgaveTableState = (
 ): OppgaveTableState => {
   const [query, setQuery] = useSearchParams();
 
-  const [state, setState] = useState<CommonOppgaverParams>({
-    ...DEFAULT_PARAMS,
-    ...defaultParams,
-    ...fromUrlParams(query, tableKey),
-  });
-
-  const setParams = useCallback(
-    (paramsUpdate: Partial<CommonOppgaverParams>) => setState((prevState) => ({ ...prevState, ...paramsUpdate })),
-    [],
+  // Saksdata
+  const [typer, setTyper] = useState<SaksTypeEnum[] | undefined>(
+    getTyperParam(query, tableKey) ?? defaultParams.typer ?? DEFAULT_PARAMS.typer,
+  );
+  const [ytelser, setYtelser] = useState<string[] | undefined>(
+    getArrayParam(query, `${tableKey}.${ShortParamKey.YTELSER}`) ?? defaultParams.ytelser ?? DEFAULT_PARAMS.ytelser,
+  );
+  const [hjemler, setHjemler] = useState<string[] | undefined>(
+    getArrayParam(query, `${tableKey}.${ShortParamKey.HJEMLER}`) ?? defaultParams.hjemler ?? DEFAULT_PARAMS.hjemler,
+  );
+  const [registreringshjemler, setRegistreringshjemler] = useState<string[] | undefined>(
+    getArrayParam(query, `${tableKey}.${ShortParamKey.REGISTRERINGSHEMLER}`) ??
+      defaultParams.registreringshjemler ??
+      DEFAULT_PARAMS.registreringshjemler,
   );
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setQuery((urlParams) => toUrlParams(urlParams, tableKey, state), { preventScrollReset: true, replace: true });
-    }, 300);
+  // Tildeling
+  const [tildelteSaksbehandlere, setTildelteSaksbehandlere] = useState<string[] | undefined>(
+    getArrayParam(query, `${tableKey}.${ShortParamKey.TILDELTE_SAKSBEHANDLERE}`) ??
+      defaultParams.tildelteSaksbehandlere ??
+      DEFAULT_PARAMS.tildelteSaksbehandlere,
+  );
+  const [medunderskrivere, setMedunderskrivere] = useState<string[] | undefined>(
+    getArrayParam(query, `${tableKey}.${ShortParamKey.MEDUNDERSKRIVERE}`) ??
+      defaultParams.medunderskrivere ??
+      DEFAULT_PARAMS.medunderskrivere,
+  );
+  const [tildelteRol, setTildelteRol] = useState<string[] | undefined>(
+    getArrayParam(query, `${tableKey}.${ShortParamKey.TILDELTE_ROL}`) ??
+      defaultParams.tildelteRol ??
+      DEFAULT_PARAMS.tildelteRol,
+  );
 
-    return () => clearTimeout(timeoutId);
-  }, [state, setQuery, tableKey]);
+  // Sortering
+  const [rekkefoelge, setRekkefoelge] = useState<SortOrderEnum>(
+    getSortOrderParam(query, tableKey) ?? defaultParams.rekkefoelge ?? DEFAULT_PARAMS.rekkefoelge,
+  );
+  const [sortering, setSortering] = useState<SortFieldEnum>(
+    getSortFieldParam(query, tableKey) ?? defaultParams.sortering ?? DEFAULT_PARAMS.sortering,
+  );
 
-  return { params: state, setParams };
+  // Ferdigstilt
+  const [ferdigstiltFrom, setFerdigstiltFrom] = useState<string | undefined>(
+    getStringParam(query, `${tableKey}.${ShortParamKey.FERDIGSTILT_FROM}`) ??
+      defaultParams.ferdigstiltFrom ??
+      DEFAULT_PARAMS.ferdigstiltFrom,
+  );
+  const [ferdigstiltTo, setFerdigstiltTo] = useState<string | undefined>(
+    getStringParam(query, `${tableKey}.${ShortParamKey.FERDIGSTILT_TO}`) ??
+      defaultParams.ferdigstiltTo ??
+      DEFAULT_PARAMS.ferdigstiltTo,
+  );
+
+  // Returnert
+  const [returnertFrom, setReturnertFrom] = useState<string | undefined>(
+    getStringParam(query, `${tableKey}.${ShortParamKey.RETURNERT_FROM}`) ??
+      defaultParams.returnertFrom ??
+      DEFAULT_PARAMS.returnertFrom,
+  );
+  const [returnertTo, setReturnertTo] = useState<string | undefined>(
+    getStringParam(query, `${tableKey}.${ShortParamKey.RETURNERT_TO}`) ??
+      defaultParams.returnertTo ??
+      DEFAULT_PARAMS.returnertTo,
+  );
+
+  // Frist
+  const [fristFrom, setFristFrom] = useState<string | undefined>(
+    getStringParam(query, `${tableKey}.${ShortParamKey.FRIST_FROM}`) ??
+      defaultParams.fristFrom ??
+      DEFAULT_PARAMS.fristFrom,
+  );
+  const [fristTo, setFristTo] = useState<string | undefined>(
+    getStringParam(query, `${tableKey}.${ShortParamKey.FRIST_TO}`) ?? defaultParams.fristTo ?? DEFAULT_PARAMS.fristTo,
+  );
+
+  // Varslet frist
+  const [varsletFristFrom, setVarsletFristFrom] = useState<string | undefined>(
+    getStringParam(query, `${tableKey}.${ShortParamKey.VARSLT_FRIST_FROM}`) ??
+      defaultParams.varsletFristFrom ??
+      DEFAULT_PARAMS.varsletFristFrom,
+  );
+  const [varsletFristTo, setVarsletFristTo] = useState<string | undefined>(
+    getStringParam(query, `${tableKey}.${ShortParamKey.VARSLT_FRIST_TO}`) ??
+      defaultParams.varsletFristTo ??
+      DEFAULT_PARAMS.varsletFristTo,
+  );
+
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const updateUrlQuery = useCallback(
+    (query: URLSearchParams) => {
+      if (debounceTimeout.current !== null) {
+        clearTimeout(debounceTimeout.current);
+      }
+
+      debounceTimeout.current = setTimeout(() => {
+        setQuery(query, { preventScrollReset: true, replace: true });
+        debounceTimeout.current = null;
+      }, 300);
+    },
+    [setQuery],
+  );
+
+  const setParams = useCallback(
+    <K extends CommonOppgaverParamsKey>(key: K, value: CommonOppgaverParams[K]) => {
+      switch (key) {
+        case 'typer':
+          setTyper(value as SaksTypeEnum[]);
+          setArrayQuery(query, `${tableKey}.${ShortParamKey.TYPER}`, value as SaksTypeEnum[]);
+          break;
+        case 'ytelser':
+          setYtelser(value as string[]);
+          setArrayQuery(query, `${tableKey}.${ShortParamKey.YTELSER}`, value as string[]);
+          break;
+        case 'hjemler':
+          setHjemler(value as string[]);
+          setArrayQuery(query, `${tableKey}.${ShortParamKey.HJEMLER}`, value as string[]);
+          break;
+        case 'registreringshjemler':
+          setRegistreringshjemler(value as string[]);
+          setArrayQuery(query, `${tableKey}.${ShortParamKey.REGISTRERINGSHEMLER}`, value as string[]);
+          break;
+        case 'tildelteSaksbehandlere':
+          setTildelteSaksbehandlere(value as string[]);
+          setArrayQuery(query, `${tableKey}.${ShortParamKey.TILDELTE_SAKSBEHANDLERE}`, value as string[]);
+          break;
+        case 'medunderskrivere':
+          setMedunderskrivere(value as string[]);
+          setArrayQuery(query, `${tableKey}.${ShortParamKey.MEDUNDERSKRIVERE}`, value as string[]);
+          break;
+        case 'tildelteRol':
+          setTildelteRol(value as string[]);
+          setArrayQuery(query, `${tableKey}.${ShortParamKey.TILDELTE_ROL}`, value as string[]);
+          break;
+        case 'rekkefoelge':
+          setRekkefoelge(value as SortOrderEnum);
+          setStringQuery(query, `${tableKey}.${ShortParamKey.REKKEFOELGE}`, value as SortOrderEnum);
+          break;
+        case 'sortering':
+          setSortering(value as SortFieldEnum);
+          setStringQuery(query, `${tableKey}.${ShortParamKey.SORTERING}`, value as SortFieldEnum);
+          break;
+        case 'ferdigstiltFrom':
+          setFerdigstiltFrom(value as string);
+          setStringQuery(query, `${tableKey}.${ShortParamKey.FERDIGSTILT_FROM}`, value as string);
+          break;
+        case 'ferdigstiltTo':
+          setFerdigstiltTo(value as string);
+          setStringQuery(query, `${tableKey}.${ShortParamKey.FERDIGSTILT_TO}`, value as string);
+          break;
+        case 'returnertFrom':
+          setReturnertFrom(value as string);
+          setStringQuery(query, `${tableKey}.${ShortParamKey.RETURNERT_FROM}`, value as string);
+          break;
+        case 'returnertTo':
+          setReturnertTo(value as string);
+          setStringQuery(query, `${tableKey}.${ShortParamKey.RETURNERT_TO}`, value as string);
+          break;
+        case 'fristFrom':
+          setFristFrom(value as string);
+          setStringQuery(query, `${tableKey}.${ShortParamKey.FRIST_FROM}`, value as string);
+          break;
+        case 'fristTo':
+          setFristTo(value as string);
+          setStringQuery(query, `${tableKey}.${ShortParamKey.FRIST_TO}`, value as string);
+          break;
+        case 'varsletFristFrom':
+          setVarsletFristFrom(value as string);
+          setStringQuery(query, `${tableKey}.${ShortParamKey.VARSLT_FRIST_FROM}`, value as string);
+          break;
+        case 'varsletFristTo':
+          setVarsletFristTo(value as string);
+          setStringQuery(query, `${tableKey}.${ShortParamKey.VARSLT_FRIST_TO}`, value as string);
+          break;
+      }
+
+      updateUrlQuery(query);
+    },
+    [query, tableKey, updateUrlQuery],
+  );
+
+  return {
+    params: {
+      typer,
+      ytelser,
+      hjemler,
+      registreringshjemler,
+      tildelteSaksbehandlere,
+      medunderskrivere,
+      tildelteRol,
+      rekkefoelge,
+      sortering,
+      ferdigstiltFrom,
+      ferdigstiltTo,
+      returnertFrom,
+      returnertTo,
+      fristFrom,
+      fristTo,
+      varsletFristFrom,
+      varsletFristTo,
+    },
+    setParams,
+  };
 };
 
-const toUrlParams = (urlParams: URLSearchParams, tableKey: OppgaveTableKey, newParams: CommonOppgaverParams) => {
-  for (const paramKey of COMMON_OPPGAVER_PARAMS_KEYS) {
-    const value = newParams[paramKey];
-    const shortKey = PARAMS_KEY_TO_SHORT[paramKey];
+const ARRAY_SEPARATOR = '~';
 
-    if (value === undefined) {
-      urlParams.delete(`${tableKey}.${shortKey}`); // Delete parameter if value is undefined
-      continue; // Skip further processing for this key
-    }
+// Getters for URL parameters
 
-    // Sort order value
-    if (shortKey === ShortParamKey.REKKEFOELGE) {
-      if (typeof value === 'string' && isSortOrderEnum(value)) {
-        urlParams.set(`${tableKey}.${shortKey}`, SORT_ORDER_TO_SHORT[value]);
-      } else {
-        urlParams.delete(`${tableKey}.${shortKey}`); // Remove if not a valid sort order
-      }
-      continue; // Skip further processing for this key
-    }
-
-    // Sort field value
-    if (shortKey === ShortParamKey.SORTERING) {
-      if (typeof value === 'string' && isSortFieldEnum(value)) {
-        urlParams.set(`${tableKey}.${shortKey}`, SORT_FIELD_TO_SHORT[value]);
-      } else {
-        urlParams.delete(`${tableKey}.${shortKey}`); // Remove if not a valid sort field
-      }
-      continue; // Skip further processing for this key
-    }
-
-    // Array value
-    if (Array.isArray(value)) {
-      if (value.length > 0) {
-        urlParams.set(`${tableKey}.${shortKey}`, value.join('~'));
-      } else {
-        urlParams.delete(`${tableKey}.${shortKey}`); // Remove if the array is empty
-      }
-      continue; // Skip further processing for this key
-    }
-
-    // String value
-    if (value.length > 0) {
-      urlParams.set(`${tableKey}.${shortKey}`, value);
-    } else {
-      urlParams.delete(`${tableKey}.${shortKey}`); // Remove if the string is empty
-    }
-  }
-
-  return urlParams;
+const getTyperParam = (query: URLSearchParams, tableKey: OppgaveTableKey): SaksTypeEnum[] | undefined => {
+  const value = query.get(`${tableKey}.${ShortParamKey.TYPER}`);
+  return value !== null ? value.split(ARRAY_SEPARATOR).filter(isSaksTypeEnum) : undefined;
 };
 
-const fromUrlParams = (query: URLSearchParams, tableKey: OppgaveTableKey): Partial<CommonOppgaverParams> => {
-  const entries: [CommonOppgaverParamsKey, string | number | string[]][] = [];
+const getStringParam = (query: URLSearchParams, key: string): string | undefined => {
+  const value = query.get(key);
+  return value !== null ? value.trim() : undefined;
+};
 
-  const shortSortOrder = query.get(`${tableKey}.${ShortParamKey.REKKEFOELGE}`);
+const getArrayParam = (query: URLSearchParams, key: string): string[] | undefined => {
+  const value = query.get(key);
+  return value !== null ? value.split(ARRAY_SEPARATOR) : undefined;
+};
 
-  if (shortSortOrder !== null && isShortSortOrder(shortSortOrder)) {
-    entries.push(['rekkefoelge', SHORT_TO_SORT_ORDER[shortSortOrder]]);
+const getSortOrderParam = (query: URLSearchParams, tableKey: OppgaveTableKey): SortOrderEnum | undefined => {
+  const value = query.get(`${tableKey}.${ShortParamKey.REKKEFOELGE}`);
+  return value !== null && isShortSortOrder(value) ? SHORT_TO_SORT_ORDER[value] : undefined;
+};
+
+const getSortFieldParam = (query: URLSearchParams, tableKey: OppgaveTableKey): SortFieldEnum | undefined => {
+  const value = query.get(`${tableKey}.${ShortParamKey.SORTERING}`);
+  return value !== null && isShortSortField(value) ? SHORT_TO_SORT_FIELD[value] : undefined;
+};
+
+// Setters for URL parameters
+
+const setArrayQuery = (query: URLSearchParams, key: string, values: string[] | undefined) => {
+  if (values !== undefined && values.length > 0) {
+    query.set(key, values.join(ARRAY_SEPARATOR));
+  } else {
+    query.delete(key);
   }
+};
 
-  const shortSortField = query.get(`${tableKey}.${ShortParamKey.SORTERING}`);
-
-  if (shortSortField !== null && isShortSortField(shortSortField)) {
-    entries.push(['sortering', SHORT_TO_SORT_FIELD[shortSortField]]);
+const setStringQuery = (query: URLSearchParams, key: string, value: string | undefined) => {
+  if (value !== undefined && value.length > 0) {
+    query.set(key, value);
+  } else {
+    query.delete(key);
   }
-
-  for (const paramKey of GENERIC_COMMON_OPPGAVER_PARAMS_KEYS) {
-    const shortKey = PARAMS_KEY_TO_SHORT[paramKey];
-    const queryKey = `${tableKey}.${shortKey}`;
-    const queryValue = query.get(queryKey);
-
-    if (queryValue === null) {
-      continue; // Skip if the query parameter is not present
-    }
-
-    const value = ARRAY_PARAMS.has(paramKey) ? queryValue.split('~') : queryValue.trim();
-
-    if (value.length > 0) {
-      entries.push([paramKey, value]);
-    }
-  }
-
-  return Object.fromEntries(entries);
 };
 
 const DEFAULT_PARAMS: CommonOppgaverParams = {
   rekkefoelge: SortOrderEnum.DESC,
   sortering: SortFieldEnum.FRIST,
 };
-
-const ARRAY_PARAMS = new Set([
-  'typer',
-  'ytelser',
-  'hjemler',
-  'registreringshjemler',
-  'tildelteSaksbehandlere',
-  'medunderskrivere',
-  'tildelteRol',
-]);
-
-const COMMON_OPPGAVER_PARAMS_KEYS = Object.keys(PARAMS_KEY_TO_SHORT) as CommonOppgaverParamsKey[];
-
-const SPECIAL_COMMON_OPPGAVER_PARAMS_KEYS: CommonOppgaverParamsKey[] = ['rekkefoelge', 'sortering'];
-const GENERIC_COMMON_OPPGAVER_PARAMS_KEYS: CommonOppgaverParamsKey[] = COMMON_OPPGAVER_PARAMS_KEYS.filter(
-  (key) => !SPECIAL_COMMON_OPPGAVER_PARAMS_KEYS.includes(key),
-);

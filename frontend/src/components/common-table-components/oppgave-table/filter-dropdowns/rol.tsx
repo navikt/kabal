@@ -15,7 +15,7 @@ export const Rol = ({ params, setParams, columnKey }: FilterDropdownProps) => {
     <Table.ColumnHeader>
       <FilterDropdown
         selected={params.tildelteRol ?? []}
-        onChange={(tildelteRol) => setParams({ tildelteRol })}
+        onChange={(tildelteRol) => setParams('tildelteRol', tildelteRol)}
         options={options}
         data-testid="filter-rol"
       >
