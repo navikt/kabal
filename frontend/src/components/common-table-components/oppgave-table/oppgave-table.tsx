@@ -1,29 +1,19 @@
 import { TableFooter } from '@app/components/common-table-components/footer';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
 import { OppgaveRows } from '@app/components/common-table-components/oppgave-rows/oppgave-rows';
+import { TableFilterHeaders } from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
+import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
+import { usePage } from '@app/components/common-table-components/oppgave-table/use-page';
 import {
-  TableFilterHeaders,
-  TablePlainHeaders,
-} from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
-import type { SetCommonOppgaverParams } from '@app/components/common-table-components/oppgave-table/types';
+  useOppgaveTableRekkefoelge,
+  useOppgaveTableSortering,
+} from '@app/components/common-table-components/oppgave-table/use-state';
 import type { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import type { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
-import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { SORT_FIELD_ENUM_VALUES, type SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { type SortState, Table, type TableProps } from '@navikt/ds-react';
-import { useMemo } from 'react';
-
-interface WithParams {
-  params: CommonOppgaverParams;
-  setParams: SetCommonOppgaverParams;
-}
-
-interface WithoutParams {
-  params?: never;
-  setParams?: never;
-}
-
-type Params = WithParams | WithoutParams;
+import { useCallback, useMemo } from 'react';
 
 interface Props extends TableProps {
   columns: ColumnKeyEnum[];
@@ -34,56 +24,60 @@ interface Props extends TableProps {
   isError: boolean;
   refetch: () => void;
   'data-testid': string;
+  tableKey: OppgaveTableKey;
+  defaultRekkefoelge: SortOrderEnum;
+  defaultSortering: SortFieldEnum;
 }
 
 export const OppgaveTable = ({
   columns,
-  params,
-  setParams,
   behandlinger,
   settingsKey,
   isLoading,
   isFetching,
   isError,
   refetch,
+  tableKey,
   ...rest
-}: Props & Params): React.JSX.Element => {
-  const [sort, onSortChange] = useMemo<[SortState, (field?: string) => void] | [undefined, undefined]>(() => {
-    if (typeof params === 'undefined') {
-      return [undefined, undefined];
-    }
+}: Props): React.JSX.Element => {
+  const [sortering, setSortering] = useOppgaveTableSortering(tableKey);
+  const [rekkefoelge, setRekkefoelge] = useOppgaveTableRekkefoelge(tableKey);
+  const [initialPage, setPageQueryParam] = usePage(tableKey);
 
-    const sortState: SortState = {
-      orderBy: params.sortering,
-      direction: params.rekkefoelge === SortOrderEnum.STIGENDE ? 'ascending' : 'descending',
-    };
+  const sort: SortState = useMemo(
+    () => ({
+      orderBy: sortering,
+      direction: rekkefoelge === SortOrderEnum.ASC ? TableSortDirection.ASC : TableSortDirection.DESC,
+    }),
+    [sortering, rekkefoelge],
+  );
 
-    return [
-      sortState,
-      (sortering?: string) => {
-        if (isSortFieldEnum(sortering)) {
-          const rekkefoelge = params.sortering === sortering ? invertSort(params.rekkefoelge) : SortOrderEnum.STIGENDE;
+  const onSortChange = useCallback(
+    (newSortering: string) => {
+      if (isSortFieldEnum(newSortering)) {
+        setSortering(newSortering);
+        setRekkefoelge(newSortering === sortering ? invertSort(rekkefoelge) : SortOrderEnum.ASC);
+      }
+    },
+    [setRekkefoelge, setSortering, rekkefoelge, sortering],
+  );
 
-          setParams({ ...params, sortering, rekkefoelge });
-        }
-      },
-    ];
-  }, [params, setParams]);
-
-  const headers =
-    params === undefined ? (
-      <TablePlainHeaders columnKeys={columns} />
-    ) : (
-      <TableFilterHeaders columnKeys={columns} onSortChange={onSortChange} params={params} setParams={setParams} />
-    );
-
-  const { oppgaver, ...footerProps } = useOppgavePagination(settingsKey, behandlinger);
+  const { oppgaver, setPage, ...footerProps } = useOppgavePagination(settingsKey, behandlinger, initialPage);
 
   return (
     <Table {...rest} zebraStripes sort={sort} onSortChange={onSortChange}>
       <Table.Header data-testid={`${rest['data-testid']}-header`}>
-        <Table.Row>{headers}</Table.Row>
+        <Table.Row>
+          <TableFilterHeaders
+            tableKey={tableKey}
+            columnKeys={columns}
+            sortering={sortering}
+            rekkefoelge={rekkefoelge}
+            onSortChange={onSortChange}
+          />
+        </Table.Row>
       </Table.Header>
+
       <OppgaveRows
         data-testid={`${rest['data-testid']}-rows`}
         oppgaver={oppgaver}
@@ -93,8 +87,13 @@ export const OppgaveTable = ({
         isError={isError}
         pageSize={footerProps.pageSize}
       />
+
       <TableFooter
         {...footerProps}
+        setPage={(page) => {
+          setPageQueryParam(page);
+          setPage(page);
+        }}
         columnCount={columns.length}
         onRefresh={refetch}
         isLoading={isLoading}
@@ -107,7 +106,12 @@ export const OppgaveTable = ({
 };
 
 const isSortFieldEnum = (field: string | undefined): field is SortFieldEnum =>
-  Object.values(SortFieldEnum).some((v) => v === field);
+  SORT_FIELD_ENUM_VALUES.includes(field as SortFieldEnum);
 
-const invertSort = (order: SortOrderEnum) =>
-  order === SortOrderEnum.STIGENDE ? SortOrderEnum.SYNKENDE : SortOrderEnum.STIGENDE;
+const invertSort = (order: SortOrderEnum) => (order === SortOrderEnum.ASC ? SortOrderEnum.DESC : SortOrderEnum.ASC);
+
+enum TableSortDirection {
+  ASC = 'ascending',
+  DESC = 'descending',
+  NONE = 'none',
+}
