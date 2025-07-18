@@ -1,6 +1,6 @@
 import type { INavEmployee } from '@app/types/bruker';
 import type { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import type { IHelper, IPartBase, IVenteperiode } from '@app/types/oppgave-common';
+import type { IHelper, IVenteperiode } from '@app/types/oppgave-common';
 
 /** DateTime */
 type DateString = string;
@@ -114,12 +114,6 @@ interface EnhetParam {
 
 export type EnhetensOppgaverParams = CommonOppgaverParams & EnhetParam;
 
-export interface INameSearchParams {
-  antall: number;
-  query: string;
-  start: number;
-}
-
 export interface TildelSaksbehandlerParams {
   employee: INavEmployee;
   oppgaveId: string;
@@ -168,16 +162,6 @@ export interface FradelWithHjemler {
 }
 
 export type FradelSaksbehandlerParams = FradelReasonBase & (FradelWithHjemler | FradelWithoutHjemler);
-
-export interface INameSearchParams {
-  antall: number;
-  query: string;
-  start: number;
-}
-
-export interface INameSearchResponse {
-  people: IPartBase[];
-}
 
 export interface ISaksbehandlere {
   saksbehandlere: INavEmployee[];

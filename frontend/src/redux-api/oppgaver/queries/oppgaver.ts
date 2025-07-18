@@ -4,8 +4,6 @@ import type {
   CommonOppgaverParams,
   EnhetensOppgaverParams,
   IMedunderskrivere,
-  INameSearchParams,
-  INameSearchResponse,
   IOppgaverResponse,
   IRolList,
   ISaksbehandlere,
@@ -51,9 +49,6 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
       query: (params) => ({ url: '/kabal-search/antalloppgavermedutgaattefrister', params }),
-    }),
-    searchPeopleByName: builder.query<INameSearchResponse, INameSearchParams>({
-      query: (body) => ({ url: '/kabal-search/search/name', method: 'POST', body }),
     }),
     searchOppgaverByFnr: builder.query<IOppgaverResponse, string>({
       query: (query) => ({
