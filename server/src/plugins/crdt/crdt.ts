@@ -1,6 +1,3 @@
-import { getCacheKey } from '@app/auth/cache/cache';
-import { getAzureADClient } from '@app/auth/get-auth-client';
-import { refreshOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
 import { ApiClientEnum } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
 import { isObject } from '@app/functions/functions';
@@ -12,7 +9,7 @@ import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import { collaborationServer } from '@app/plugins/crdt/collaboration-server';
 import type { ConnectionContext } from '@app/plugins/crdt/context';
 import { NAV_IDENT_PLUGIN_ID } from '@app/plugins/nav-ident';
-import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
+import { getOboToken, OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 import { TAB_ID_PLUGIN_ID } from '@app/plugins/tab-id';
 import { TRACEPARENT_PLUGIN_ID } from '@app/plugins/traceparent/traceparent';
 import { Type, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
@@ -186,19 +183,13 @@ export const crdtPlugin = fastifyPlugin(
         },
       },
       async (req, reply) => {
-        const { navIdent, accessToken, trace_id, span_id } = req;
-
-        const authClient = await getAzureADClient();
-        const cacheKey = getCacheKey(navIdent, ApiClientEnum.KABAL_API);
-
-        const oboAccessToken = await refreshOnBehalfOfAccessToken(
-          authClient,
-          accessToken,
-          cacheKey,
-          ApiClientEnum.KABAL_API,
-          trace_id,
-          span_id,
+        const oboAccessToken = await getOboToken(
+          ApiClientEnum.KABAL_API,req, reply,
         );
+
+        if (oboAccessToken === undefined) {
+          return reply.status(400).send('Failed to refresh OBO token');
+        }
 
         const parsed = parseTokenPayload(oboAccessToken);
 

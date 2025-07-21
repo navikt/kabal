@@ -7,7 +7,7 @@
         "@grafana/faro-react": "1.19.0",
         "@grafana/faro-web-sdk": "1.19.0",
         "@grafana/faro-web-tracing": "1.19.0",
-        "@hocuspocus/provider": "^3.2.0",
+        "@hocuspocus/provider": "3.2.0",
         "@navikt/aksel-icons": "7.25.1",
         "@navikt/ds-css": "7.25.1",
         "@navikt/ds-react": "7.25.1",
@@ -36,7 +36,7 @@
         "react-router": "7.6.3",
         "react-router-dom": "7.6.3",
         "styled-components": "6.1.19",
-        "y-webrtc": "^10.3.0",
+        "y-webrtc": "10.3.0",
       },
       "devDependencies": {
         "@happy-dom/global-registrator": "18.0.1",

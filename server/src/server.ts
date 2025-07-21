@@ -3,7 +3,6 @@ import { corsOptions } from '@app/config/cors';
 import { isDeployed } from '@app/config/env';
 import { serverConfig } from '@app/config/server-config';
 import { querystringParser } from '@app/helpers/query-parser';
-import { init } from '@app/init';
 import { getLogger } from '@app/logger';
 import { accessTokenPlugin } from '@app/plugins/access-token';
 import { apiProxyPlugin } from '@app/plugins/api-proxy';
@@ -72,6 +71,3 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
   .listen({ host: '0.0.0.0', port: serverConfig.port });
 
 log.info({ msg: `Server listening on port ${serverConfig.port}` });
-
-// Initialize.
-init();
