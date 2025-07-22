@@ -49,9 +49,9 @@ const ToggleButton = ({
     className={selected ? 'text-text-on-action' : 'text-text-default hover:bg-surface-action-subtle-hover'}
   >
     <VStack>
+      {/** biome-ignore lint/a11y/useSemanticElements: Option in radio group. */}
       <button
         type="button"
-        // biome-ignore lint/a11y/useSemanticElements: Option in radio group.
         role="radio"
         onClick={onClick}
         className="grow cursor-pointer p-2"

@@ -30,11 +30,11 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
 
   return (
     <HStack gap="2" align="center" className="[grid-area:title]">
+      {/** biome-ignore lint/a11y/useSemanticElements: Contenteditable */}
       <Heading
         level="1"
         size={SIZE}
         contentEditable="plaintext-only"
-        // biome-ignore lint/a11y/useSemanticElements: contenteditable
         role="textbox"
         aria-multiline="false"
         aria-label={label}

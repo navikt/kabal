@@ -89,8 +89,8 @@ export const VedleggList = ({ list, minTop, maxTop, dokument, documentIndex }: P
   }
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: Keyboard navigation.
     <JournalfoerteDocumentsAttachments
-      // biome-ignore lint/a11y/useSemanticElements: Keyboard navigation.
       role="group"
       aria-setsize={list.list.length}
       data-testid="oppgavebehandling-documents-all-vedlegg-list"

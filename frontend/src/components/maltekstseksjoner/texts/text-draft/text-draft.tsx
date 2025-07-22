@@ -97,7 +97,6 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
         return;
       }
 
-      // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
       updateContentIfChanged(richTexts);
     }, 1000);
 
@@ -107,7 +106,6 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   useEffect(
     () => () => {
       // Save on unmount, if changed.
-      // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
       updateContentIfChanged(richTextRef.current);
     },
     [updateContentIfChanged],

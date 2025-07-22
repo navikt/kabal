@@ -134,7 +134,6 @@ export const usePdfData = (url: string | undefined, query?: Record<string, strin
       return;
     }
 
-    // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
     getData(url, query).then(setData);
   }, [url, query, getData]);
 

@@ -154,12 +154,12 @@ export const EditLogiskVedlegg = ({
     // biome-ignore lint/a11y/noStaticElementInteractions: It is not.
     <div className="relative max-w-full" onMouseDown={(e) => e.stopPropagation()}>
       <Tooltip content={`${placeholder} logisk vedlegg`} keys={[Keys.Enter, Keys.Tab, Keys.Escape]} open>
+        {/** biome-ignore lint/a11y/useSemanticElements: Recommended to use for contentEditable. */}
         <EditableTag
           key="edit-tag"
           ref={ref}
           size="small"
           variant="neutral"
-          // biome-ignore lint/a11y/useSemanticElements: Recommended to use for contentEditable.
           role="textbox"
           aria-multiline="false"
           aria-placeholder={placeholder}

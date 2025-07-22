@@ -35,7 +35,6 @@ export class SimpleApiState<T> {
     this.options = Object.assign(this.options, options);
 
     if (this.options.prefetch) {
-      // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
       this.fetchData();
     }
   }
@@ -103,7 +102,6 @@ export class SimpleApiState<T> {
     }
 
     if (!(this.isLoading || this.isError) && typeof this.data === 'undefined') {
-      // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
       this.fetchData();
     }
   };
