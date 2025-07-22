@@ -47,7 +47,6 @@ export const Preview = ({ id }: Props) => {
   }, [getContent, lang, maltekstseksjon]);
 
   useEffect(() => {
-    // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
     getChildren();
   }, [getChildren]);
 
@@ -78,20 +77,18 @@ const LoadedPreview = ({ id, value, maltekstseksjon }: LoadedPreviewProps) => {
     value: value,
   });
   return (
-    <>
-      <VStack asChild align="center" gap="4" padding="4">
-        <Box borderRadius="medium" background="surface-subtle">
-          <Heading level="1" size="xsmall">
-            Forhåndsvisning av {getTitle(maltekstseksjon.title)}
-          </Heading>
-          <Sheet>
-            <Plate<RichTextEditor> editor={editor} readOnly>
-              <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[lang]} />
-            </Plate>
-          </Sheet>
-        </Box>
-      </VStack>
-    </>
+    <VStack asChild align="center" gap="4" padding="4">
+      <Box borderRadius="medium" background="surface-subtle">
+        <Heading level="1" size="xsmall">
+          Forhåndsvisning av {getTitle(maltekstseksjon.title)}
+        </Heading>
+        <Sheet>
+          <Plate<RichTextEditor> editor={editor} readOnly>
+            <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[lang]} />
+          </Plate>
+        </Sheet>
+      </Box>
+    </VStack>
   );
 };
 

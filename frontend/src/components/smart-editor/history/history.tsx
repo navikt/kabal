@@ -23,51 +23,47 @@ export const History = ({ smartDocument, oppgaveId }: Props) => {
 
   if (versions === undefined) {
     return (
-      <>
-        <VStack align="center" marginBlock="0 4" minWidth="300px" top="0" position="sticky">
-          <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="6 5">
-            <Heading level="1" size="xsmall">
-              Tidligere versjoner
-            </Heading>
-          </HStack>
-          <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
-            <Box
-              as="ul"
-              shadow="xlarge"
-              borderRadius="medium"
-              background="surface-default"
-              style={{ whiteSpace: 'nowrap' }}
-            >
-              <Loader />
-            </Box>
-          </VStack>
+      <VStack align="center" marginBlock="0 4" minWidth="300px" top="0" position="sticky">
+        <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="6 5">
+          <Heading level="1" size="xsmall">
+            Tidligere versjoner
+          </Heading>
+        </HStack>
+        <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
+          <Box
+            as="ul"
+            shadow="xlarge"
+            borderRadius="medium"
+            background="surface-default"
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            <Loader />
+          </Box>
         </VStack>
-      </>
+      </VStack>
     );
   }
 
   if (!hasVersions(versions)) {
     return (
-      <>
-        <VStack align="center" marginBlock="0 4" minWidth="300px" top="0" position="sticky">
-          <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="6 5">
-            <Heading level="1" size="xsmall">
-              Tidligere versjoner
-            </Heading>
-          </HStack>
-          <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
-            <Box
-              as="ul"
-              shadow="xlarge"
-              borderRadius="medium"
-              background="surface-default"
-              style={{ whiteSpace: 'nowrap' }}
-            >
-              <li>Ingen versioner</li>
-            </Box>
-          </VStack>
+      <VStack align="center" marginBlock="0 4" minWidth="300px" top="0" position="sticky">
+        <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="6 5">
+          <Heading level="1" size="xsmall">
+            Tidligere versjoner
+          </Heading>
+        </HStack>
+        <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
+          <Box
+            as="ul"
+            shadow="xlarge"
+            borderRadius="medium"
+            background="surface-default"
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            <li>Ingen versioner</li>
+          </Box>
         </VStack>
-      </>
+      </VStack>
     );
   }
 

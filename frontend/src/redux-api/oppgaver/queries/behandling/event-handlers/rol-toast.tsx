@@ -99,12 +99,12 @@ const From = ({ flowState, rol }: Params) => {
   const { user } = useContext(StaticDataContext);
 
   if (flowState === FlowState.NOT_SENT) {
-    return <>saken</>;
+    return 'saken';
   }
 
   if (user.navIdent === rol?.navIdent) {
-    return <>saken din</>;
+    return 'saken din';
   }
 
-  return <>saken hos {employeeName(rol)}</>;
+  return `saken hos ${employeeName(rol)}`;
 };

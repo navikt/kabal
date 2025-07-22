@@ -113,7 +113,6 @@ export const Abbreviation = () => {
                 onChange={(e) => setLocalShort(e.target.value)}
                 onKeyDown={({ key }) => {
                   if (key === Keys.Enter) {
-                    // biome-ignore lint/nursery/noFloatingPromises: Safe promise.
                     onAdd();
                   }
 

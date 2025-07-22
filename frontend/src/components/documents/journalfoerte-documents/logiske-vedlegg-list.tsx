@@ -64,11 +64,11 @@ export const LogiskeVedleggList = ({
   const shouldRenderAddButton = addButtonGlobalTop >= minTop && addButtonGlobalTop <= maxTop;
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: Tree structure.
     <ul
       className="absolute right-0"
       data-list="logiske-vedlegg"
       style={{ height: list.height, top: list.top, left }}
-      // biome-ignore lint/a11y/useSemanticElements: Tree structure.
       role="group"
     >
       {logiskeVedleggNodeList}
