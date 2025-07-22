@@ -49,10 +49,7 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
   const { templateId, hasWriteAccess } = useContext(SmartEditorContext);
 
   const noMedunderskriver = useMemo(
-    () =>
-      medunderskriverSignature === null ||
-      templateId === TemplateIdEnum.ROL_QUESTIONS ||
-      templateId === TemplateIdEnum.ROL_ANSWERS,
+    () => medunderskriverSignature === null || templateId === TemplateIdEnum.ROL_ANSWERS,
     [medunderskriverSignature, templateId],
   );
 
