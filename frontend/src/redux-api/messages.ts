@@ -52,9 +52,10 @@ export const messagesApi = createApi({
         const newMessageId = `${OPTIMISTIC_MESSAGE_ID_PREFIX}-${now}`;
 
         const patchResult = dispatch(
-          messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => {
-            messages.push({ ...newMessage, created: now, modified: now, id: newMessageId });
-          }),
+          messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => [
+            { ...newMessage, created: now, modified: now, id: newMessageId },
+            ...messages,
+          ]),
         );
 
         try {
