@@ -1,6 +1,6 @@
 import { useRestrictedNumberSetting } from '@app/hooks/settings/helpers';
 import type { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 interface OppgavePagination {
   from: number;
@@ -9,7 +9,6 @@ interface OppgavePagination {
   page: number;
   pageSize: number;
   oppgaver: string[];
-  setPage: (page: number) => void;
 }
 
 const DEFAULT_VALUE = 10;
@@ -28,10 +27,9 @@ export const DEFAULT_PAGE = 1;
 
 export const useOppgavePagination = (
   settingsKey: OppgaveTableRowsPerPage,
-  allOppgaver: string[] = [],
-  initialPage = DEFAULT_PAGE,
+  allOppgaver: string[],
+  page: number,
 ): OppgavePagination => {
-  const [page, setPage] = useState(initialPage);
   const { value: pageSize } = useRestrictedNumberSetting(settingsKey, restrictPageSize);
 
   const total = allOppgaver.length;
@@ -53,6 +51,5 @@ export const useOppgavePagination = (
     total,
     pageSize,
     page: Math.min(page, maxPage),
-    setPage,
   };
 };
