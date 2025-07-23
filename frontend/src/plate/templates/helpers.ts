@@ -188,12 +188,9 @@ export const createTableCell = (text = ''): TableCellElement => ({
   attributes: {},
 });
 
-export const createTable = (): TableElement => ({
+export const createTable = (rows: number, columns: number): TableElement => ({
   type: BaseTablePlugin.key,
-  children: [
-    createTableRow([createTableCell(), createTableCell()]),
-    createTableRow([createTableCell(), createTableCell()]),
-  ],
+  children: Array.from({ length: rows }, () => createTableRow(Array.from({ length: columns }, createTableCell))),
 });
 
 export const createPlaceHolder = (
