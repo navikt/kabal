@@ -2,7 +2,7 @@ import { TableFooter } from '@app/components/common-table-components/footer';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
 import { OppgaveRows } from '@app/components/common-table-components/oppgave-rows/oppgave-rows';
 import { TableFilterHeaders } from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
-import { usePage } from '@app/components/common-table-components/oppgave-table/state/use-page';
+import { usePageQueryParam } from '@app/components/common-table-components/oppgave-table/state/use-page';
 import { useOppgaveTableSorting } from '@app/components/common-table-components/oppgave-table/state/use-sort-state';
 import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import type { ColumnKeyEnum } from '@app/components/common-table-components/types';
@@ -28,7 +28,7 @@ interface Props extends TableProps {
 
 export const OppgaveTable = ({
   columns,
-  behandlinger,
+  behandlinger = [],
   settingsKey,
   isLoading,
   isFetching,
@@ -40,7 +40,7 @@ export const OppgaveTable = ({
   ...rest
 }: Props): React.JSX.Element => {
   const { sortField, sortOrder, setSortering } = useOppgaveTableSorting(tableKey, defaultSortering, defaultRekkefoelge);
-  const [initialPage, setPageQueryParam] = usePage(tableKey);
+  const [page, setPage] = usePageQueryParam(tableKey);
 
   const sort: SortState = useMemo(
     () => ({
@@ -59,7 +59,7 @@ export const OppgaveTable = ({
     [sortOrder, sortField, setSortering],
   );
 
-  const { oppgaver, setPage, ...footerProps } = useOppgavePagination(settingsKey, behandlinger, initialPage);
+  const { oppgaver, ...footerProps } = useOppgavePagination(settingsKey, behandlinger, page);
 
   return (
     <Table {...rest} zebraStripes sort={sort} onSortChange={onSortChange}>
@@ -87,10 +87,7 @@ export const OppgaveTable = ({
 
       <TableFooter
         {...footerProps}
-        setPage={(page) => {
-          setPageQueryParam(page);
-          setPage(page);
-        }}
+        setPage={setPage}
         columnCount={columns.length}
         onRefresh={refetch}
         isLoading={isLoading}

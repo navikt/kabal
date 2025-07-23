@@ -1,13 +1,13 @@
 import { TableFooter } from '@app/components/common-table-components/footer';
 import { OppgaveRows } from '@app/components/common-table-components/oppgave-rows/oppgave-rows';
 import { TablePlainHeaders } from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
-import { usePage } from '@app/components/common-table-components/oppgave-table/state/use-page';
+import { usePageQueryParam } from '@app/components/common-table-components/oppgave-table/state/use-page';
 import type { StaticOppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import type { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import type { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { DEFAULT_PAGE, useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 import { Table, type TableProps } from '@navikt/ds-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface CommonProps extends TableProps {
   columns: ColumnKeyEnum[];
@@ -26,46 +26,42 @@ interface WithPageStateProps extends CommonProps {
 }
 
 export const StaticOppgaveTableWithPageState = ({ tableKey, isLoading, ...props }: WithPageStateProps) => {
-  const [initialPage, setPageQueryParam] = usePage(tableKey);
+  const [page, setPage] = usePageQueryParam(tableKey);
 
-  return (
-    <InternalStaticOppgaveTable
-      {...props}
-      isLoading={isLoading}
-      initialPage={initialPage}
-      setPageQueryParam={setPageQueryParam}
-    />
-  );
+  return <InternalStaticOppgaveTable {...props} isLoading={isLoading} page={page} setPage={setPage} />;
 };
 
-export const StaticOppgaveTable = (props: CommonProps) => <InternalStaticOppgaveTable {...props} />;
+export const StaticOppgaveTable = (props: CommonProps) => {
+  const [page, setPage] = useState(DEFAULT_PAGE);
+
+  return <InternalStaticOppgaveTable {...props} page={page} setPage={setPage} />;
+};
 
 interface InternalProps extends CommonProps {
-  initialPage?: number;
-  setPageQueryParam?: (page: number) => void;
+  page: number;
+  setPage: (page: number) => void;
 }
 
 const InternalStaticOppgaveTable = ({
   columns,
-  behandlinger,
+  behandlinger = [],
   settingsKey,
   isLoading,
   isFetching,
   isError,
   refetch,
-  initialPage,
-  setPageQueryParam,
+  page,
+  setPage,
   resetPageOnLoad = false,
   ...rest
 }: InternalProps): React.JSX.Element => {
-  const { oppgaver, setPage, ...footerProps } = useOppgavePagination(settingsKey, behandlinger, initialPage);
+  const { oppgaver, ...footerProps } = useOppgavePagination(settingsKey, behandlinger, page);
 
   useEffect(() => {
     if (resetPageOnLoad && isLoading) {
-      setPageQueryParam?.(DEFAULT_PAGE);
       setPage(DEFAULT_PAGE);
     }
-  }, [isLoading, resetPageOnLoad, setPageQueryParam, setPage]);
+  }, [isLoading, resetPageOnLoad, setPage]);
 
   return (
     <Table {...rest} zebraStripes>
@@ -85,10 +81,7 @@ const InternalStaticOppgaveTable = ({
       />
       <TableFooter
         {...footerProps}
-        setPage={(page) => {
-          setPageQueryParam?.(page);
-          setPage(page);
-        }}
+        setPage={setPage}
         columnCount={columns.length}
         onRefresh={refetch}
         isLoading={isLoading}
