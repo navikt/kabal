@@ -4,7 +4,6 @@ import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
 import { CLIENT_VERSION_PLUGIN_ID } from '@app/plugins/client-version';
 import { TAB_ID_PLUGIN_ID } from '@app/plugins/tab-id';
 import { TRACEPARENT_PLUGIN_ID } from '@app/plugins/traceparent/traceparent';
-
 import fastifyPlugin from 'fastify-plugin';
 
 declare module 'fastify' {
