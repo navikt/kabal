@@ -11,7 +11,12 @@
     "enabled": true,
     "actions": {
       "source": {
-        "organizeImports": "on"
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": ["**"]
+          }
+        }
       }
     }
   },
@@ -40,10 +45,12 @@
       },
       "nursery": {
         "noSecrets": { "level": "off", "options": {} },
-        "useExplicitType": { "level": "off" }
+        "useExplicitType": { "level": "off" },
+        "noImportCycles": {  "level": "on" }
       },
       "correctness": {
-        "useImportExtensions": { "level": "off", "fix": "none", "options": {} }
+        "useImportExtensions": { "level": "off", "fix": "none", "options": {} },
+        "noUnusedImports": { "level": "error", "fix": "unsafe" }
       },
       "style": {
         "noImplicitBoolean": { "level": "off", "fix": "none" },

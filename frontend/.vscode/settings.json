@@ -6,7 +6,8 @@
     "quickfix.biome": "always",
     "source.fixAll.biome": "always",
     "source.organizeImports.biome": "always",
-    "source.addMissingImports.ts": "never"
+    "source.addMissingImports.ts": "never",
+    "source.removeUnusedImports": "explicit"
   },
   "editor.acceptSuggestionOnCommitCharacter": false,
   "typescript.validate.enable": true,

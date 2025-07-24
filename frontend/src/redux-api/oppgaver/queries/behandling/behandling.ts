@@ -2,6 +2,7 @@ import { toast } from '@app/components/toast/store';
 import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
 import type { IApiValidationResponse } from '@app/functions/error-type-guard';
 import { IS_LOCALHOST, KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
+import { OppgaveTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
 import { handleDocumentFinishedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/document-finished';
 import { handleDocumentsAddedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/documents-added';
 import { handleDocumentsChangedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/documents-changed';
@@ -10,6 +11,7 @@ import { handleExtraUtfallEvent } from '@app/redux-api/oppgaver/queries/behandli
 import { handleFeilregistreringEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/feilregistrering';
 import { handleFerdigstiltEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/ferdigstilt';
 import { handlefullmektigEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/fullmektig';
+import { handleGosysOppgaveEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/gosys-oppgave';
 import {
   handleInnsendingshjemlerEvent,
   handleRegistreringshjemlerEvent,
@@ -22,7 +24,10 @@ import {
 import { handleJournalfoertDocumentModified } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/journalfoert-document-modified';
 import { handleJournalpostAddedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/journalpost-added';
 import { handleKlagerEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/klager';
+import { handleMedunderskriverEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/medunderskriver';
+import { handleMessageEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/message';
 import { handleMottattVedtaksinstansEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/mottatt-vedtaksinstans';
+import { handleRolEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/rol';
 import { handleSattPaaVentEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/satt-paa-vent';
 import { handleSmartDocumentCommentAddedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-added';
 import { handleSmartDocumentCommentChangedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-changed';
@@ -49,11 +54,6 @@ import type {
   ITildelingEvent,
 } from '@app/types/oppgavebehandling/response';
 import type { IRols, ISaksbehandlere } from '@app/types/oppgaver';
-import { OppgaveTagTypes, oppgaverApi } from '../../oppgaver';
-import { handleGosysOppgaveEvent } from './event-handlers/gosys-oppgave';
-import { handleMedunderskriverEvent } from './event-handlers/medunderskriver';
-import { handleMessageEvent } from './event-handlers/message';
-import { handleRolEvent } from './event-handlers/rol';
 
 export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
