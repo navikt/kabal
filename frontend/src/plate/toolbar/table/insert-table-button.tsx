@@ -19,7 +19,7 @@ import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { TableAdd } from '@styled-icons/fluentui-system-regular';
 import { BaseParagraphPlugin } from 'platejs';
-import { memo, useCallback, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 export const InsertTableButton = () => {
   const unchangeable = useIsUnchangeable();
@@ -83,8 +83,77 @@ const TableGrid = ({ close }: TableGridProps) => {
     [editor],
   );
 
-  const maxRows = clamp(hoveredRow + 2, MIN_ROWS, MAX_ROWS_COUNT);
-  const maxColumns = clamp(hoveredColumn + 2, MIN_COLUMNS, MAX_COLUMNS_COUNT);
+  const maxRows = clamp(hoveredRow + 2, MIN_ROWS, MAX_ROWS);
+  const maxColumns = clamp(hoveredColumn + 2, MIN_COLUMNS, MAX_COLUMNS);
+
+  const isInGrid = useRef(false);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const gridRectRef = useRef<DOMRect | null>(null);
+
+  useLayoutEffect(() => {
+    if (gridRef.current !== null) {
+      gridRectRef.current = gridRef.current.getBoundingClientRect();
+    }
+  }, []);
+
+  const setCellFromMouse = useCallback((e: MouseEvent) => {
+    if (gridRectRef.current === null) {
+      return;
+    }
+
+    const { right, bottom, top, left } = gridRectRef.current;
+    const maxBottom = top + MAX_BOTTOM;
+    const maxRight = left + MAX_RIGHT;
+
+    if (e.clientX > maxRight && e.clientY > maxBottom) {
+      return setHoveredCell([MAX_ROWS, MAX_COLUMNS]);
+    }
+
+    if (e.clientX > right && e.clientY > bottom) {
+      return setHoveredCell([
+        e.clientY > maxBottom ? MAX_ROWS : Math.min(Math.round((e.clientY - top) / 26), MAX_ROWS),
+        e.clientX > maxRight ? MAX_COLUMNS : Math.min(Math.round((e.clientX - left) / 26), MAX_COLUMNS),
+      ]);
+    }
+
+    if (e.clientX > right) {
+      return setHoveredCell(([row]) => [
+        row,
+        e.clientX > maxRight ? MAX_COLUMNS : Math.min(Math.round((e.clientX - left) / 26), MAX_COLUMNS),
+      ]);
+    }
+
+    if (e.clientY > bottom) {
+      return setHoveredCell(([, col]) => [
+        e.clientY > maxBottom ? MAX_ROWS : Math.min(Math.round((e.clientY - top) / 26), MAX_ROWS),
+        col,
+      ]);
+    }
+  }, []);
+
+  useEffect(() => {
+    const listener = (e: MouseEvent) => {
+      if (!isInGrid.current || gridRectRef.current === null) {
+        return;
+      }
+
+      const { right, bottom, top, left } = gridRectRef.current;
+
+      // If mouse is inside grid, do nothing.
+      if (e.clientX >= left && e.clientX <= right && e.clientY >= top && e.clientY <= bottom) {
+        isInGrid.current = true;
+        return;
+      }
+
+      setCellFromMouse(e);
+    };
+
+    window.addEventListener('mousemove', listener);
+
+    return () => {
+      window.removeEventListener('mousemove', listener);
+    };
+  }, [setCellFromMouse]);
 
   return (
     <Box
@@ -98,12 +167,22 @@ const TableGrid = ({ close }: TableGridProps) => {
       className="-left-28"
     >
       <Box
+        ref={gridRef}
         style={{
-          width: `${maxColumns * 24 + (maxColumns - 1) * 2}px`,
-          height: `${maxRows * 24 + (maxRows - 1) * 2}px`,
+          width: getWidth(maxColumns),
+          height: getHeight(maxRows),
         }}
         overflow="hidden"
         position="relative"
+        onMouseLeave={(e) => {
+          setCellFromMouse(e.nativeEvent);
+          setTimeout(() => {
+            isInGrid.current = false;
+          }, 100);
+        }}
+        onMouseEnter={() => {
+          isInGrid.current = true;
+        }}
       >
         <Box
           position="absolute"
@@ -111,8 +190,8 @@ const TableGrid = ({ close }: TableGridProps) => {
           left="0"
           overflow="hidden"
           style={{
-            width: `${(hoveredColumn + 1) * 24 + (hoveredColumn) * 2}px`,
-            height: `${(hoveredRow + 1) * 24 + (hoveredRow) * 2}px`,
+            width: getWidth(hoveredColumn + 1),
+            height: getHeight(hoveredRow + 1),
           }}
           role="presentation"
           aria-hidden
@@ -192,3 +271,12 @@ const MAX_COLUMNS_COUNT = 12;
 const MAX_ROWS_COUNT = 16;
 const COLUMNS = Array.from({ length: MAX_COLUMNS_COUNT }).map((_, i) => i);
 const ROWS = Array.from({ length: MAX_ROWS_COUNT }).map((_, i) => i);
+
+const MAX_COLUMNS = MAX_COLUMNS_COUNT - 1;
+const MAX_ROWS = MAX_ROWS_COUNT - 1;
+
+const getWidth = (columns: number) => columns * 24 + (columns - 1) * 2;
+const getHeight = (rows: number) => rows * 24 + (rows - 1) * 2;
+
+const MAX_BOTTOM = getHeight(MAX_ROWS_COUNT);
+const MAX_RIGHT = getWidth(MAX_COLUMNS_COUNT);
