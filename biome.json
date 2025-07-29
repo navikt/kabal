@@ -46,11 +46,12 @@
       "nursery": {
         "noSecrets": { "level": "off", "options": {} },
         "useExplicitType": { "level": "off" },
-        "noImportCycles": {  "level": "on" }
+        "noImportCycles": {  "level": "on" },
+        "useSortedClasses": { "level": "on", "fix": "safe", "options": { } }
       },
       "correctness": {
         "useImportExtensions": { "level": "off", "fix": "none", "options": {} },
-        "noUnusedImports": { "level": "error", "fix": "unsafe" }
+        "noUnusedImports": { "level": "error", "fix": "safe" }
       },
       "style": {
         "noImplicitBoolean": { "level": "off", "fix": "none" },
@@ -78,7 +79,8 @@
       },
       "complexity": {
         "useSimplifiedLogicExpression": { "level": "off" },
-        "noExcessiveCognitiveComplexity": { "level": "warn", "options": { "maxAllowedComplexity": 25 } }
+        "noExcessiveCognitiveComplexity": { "level": "warn", "options": { "maxAllowedComplexity": 25 } },
+        "noUselessFragments": {  "level": "on", "fix": "safe" }
       }
     }
   },
@@ -88,7 +90,14 @@
     "linter": { "enabled": true }
   },
   "json": {
-    "formatter": { "enabled": true, "trailingCommas": "none" }
+    "formatter": { "enabled": true, "trailingCommas": "none", "indentStyle": "space", "lineWidth": 120, "indentWidth": 2, "bracketSpacing": true, "expand": "auto", "lineEnding": "lf" },
+    "linter": { "enabled": true },
+    "assist": { "enabled": true }
+  },
+  "css": {
+    "formatter": { "enabled": true, "indentStyle": "space", "lineWidth": 120, "indentWidth": 2, "lineEnding": "lf", "quoteStyle": "double" },
+    "linter": { "enabled": true },
+    "assist": { "enabled": true }
   },
   "files": {
     "includes": ["**", "!**/*.css", "!.bruno"]
