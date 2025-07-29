@@ -7,7 +7,6 @@ import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Alert, BodyShort, Heading } from '@navikt/ds-react';
 import { useEffect } from 'react';
-import { styled } from 'styled-components';
 
 interface DebugData {
   tiedList: ScoredText<IMaltekstseksjon>[];
@@ -30,10 +29,10 @@ export const Instructions = ({ oppgave, section, tiedList, templateId }: Props) 
 
   if (text !== null) {
     return (
-      <StyledAlert size="small" variant="info" contentEditable={false}>
+      <Alert size="small" variant="info" contentEditable={false} className="my-4">
         {heading}
         {text}
-      </StyledAlert>
+      </Alert>
     );
   }
 
@@ -42,10 +41,10 @@ export const Instructions = ({ oppgave, section, tiedList, templateId }: Props) 
   }
 
   return (
-    <StyledAlert size="small" variant="warning" contentEditable={false}>
+    <Alert size="small" variant="warning" contentEditable={false} className="my-4">
       {heading}
       <TieText {...oppgave.resultat} section={section} templateId={templateId} tiedList={tiedList} />
-    </StyledAlert>
+    </Alert>
   );
 };
 
@@ -114,8 +113,3 @@ const TieText = ({ utfallId, extraUtfallIdSet, hjemmelIdSet, section, templateId
     </>
   );
 };
-
-const StyledAlert = styled(Alert)`
-  margin-top: 1em;
-  margin-bottom: 1em;
-`;

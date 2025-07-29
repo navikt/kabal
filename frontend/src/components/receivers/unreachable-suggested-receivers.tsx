@@ -7,7 +7,6 @@ import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
 import { IdType, type IPart, PartStatusEnum } from '@app/types/oppgave-common';
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { Alert, CopyButton, HelpText, HStack, Label, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface ReceiversProps {
   receivers: IBrevmottaker[];
@@ -24,7 +23,7 @@ export const UnreachableSuggestedReceivers = ({ receivers }: ReceiversProps) => 
         Utilgjengelige parter fra saken
       </Label>
 
-      <List>
+      <ul className="m-0 list-none p-0">
         {receivers.map(({ part, brevmottakertyper, overriddenAddress, handling }) => {
           const { identifikator, id, name, statusList } = part;
           const isPerson = part.type === IdType.FNR;
@@ -33,7 +32,7 @@ export const UnreachableSuggestedReceivers = ({ receivers }: ReceiversProps) => 
           const helpText = getUnreachableHelpText(statusList);
 
           return (
-            <StyledReceiver key={id} $accent="var(--a-border-danger)" as="li">
+            <StyledReceiver key={id} as="li" accent="danger">
               <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
                 <HStack align="center" gap="1">
                   <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
@@ -68,7 +67,7 @@ export const UnreachableSuggestedReceivers = ({ receivers }: ReceiversProps) => 
             </StyledReceiver>
           );
         })}
-      </List>
+      </ul>
     </section>
   );
 };
@@ -100,9 +99,3 @@ const getUnreachableHelpText = (statusList: IPart['statusList']): string | null 
 
   return null;
 };
-
-const List = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`;

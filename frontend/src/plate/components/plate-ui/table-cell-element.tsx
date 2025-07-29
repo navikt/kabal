@@ -4,17 +4,16 @@ import { useMyPlateEditorRef } from '@app/plate/types';
 import { type ResizeEvent, ResizeHandle } from '@platejs/resizable';
 import { setTableColSize } from '@platejs/table';
 import { TablePlugin, useTableCellElement, useTableCellElementResizable } from '@platejs/table/react';
-import { PlateElement, useEditorPlugin, useReadOnly, withRef } from 'platejs/react';
+import { PlateElement, type PlateElementProps, useEditorPlugin, useReadOnly } from 'platejs/react';
 import type { MouseEvent } from 'react';
 import { useCallback, useContext } from 'react';
-import { styled } from 'styled-components';
 
-const BASE_CLASSES = 'min-w-12 relative align-top ';
+const BASE_CLASSES = 'min-w-12 relative align-top';
 const REMOVE_P_PLACEHOLDER = "[&>p::before]:content-['']";
 const REMOVE_P_MARGIN_TOP = '[&>*:first-child]:mt-0!';
 const ALL_CLASSES = `${BASE_CLASSES} ${REMOVE_P_PLACEHOLDER} ${REMOVE_P_MARGIN_TOP}`;
 
-export const TableCellElement = withRef<typeof PlateElement>(({ children, className, ...props }, ref) => {
+export const TableCellElement = ({ children, ref, ...props }: PlateElementProps) => {
   const { api } = useEditorPlugin(TablePlugin);
   const { minHeight, width } = useTableCellElement();
 
@@ -24,11 +23,11 @@ export const TableCellElement = withRef<typeof PlateElement>(({ children, classN
   };
 
   const style = {
-    ...props.style,
+    ...props.attributes.style,
     width,
     minHeight,
     padding: PADDING,
-    border: `${ptToEm(1.25)} solid var(--a-border-default)`,
+    border: `${ptToEm(1.25)} solid var(--ax-border-neutral)`,
   };
 
   return (
@@ -37,7 +36,7 @@ export const TableCellElement = withRef<typeof PlateElement>(({ children, classN
       <Resize />
     </PlateElement>
   );
-});
+};
 
 const Resize = () => {
   const { scale } = useContext(ScaleContext);
@@ -59,7 +58,7 @@ const Resize = () => {
     return null;
   }
 
-  const { options, ...rest } = rightProps;
+  const { options, className, style, ...rest } = rightProps;
 
   const scaledOptions = {
     ...options,
@@ -75,26 +74,16 @@ const Resize = () => {
   };
 
   return (
-    <StyledRightHandle
+    <ResizeHandle
       contentEditable={false}
       suppressContentEditableWarning
       onDoubleClick={onDblClick}
       {...rest}
       options={scaledOptions}
+      style={{ width: PADDING, ...style }}
+      className={`${className} absolute top-0 right-0 z-20 h-full translate-x-1/2 cursor-col-resize select-none`}
     />
   );
 };
 
 const PADDING = ptToEm(6);
-
-const StyledRightHandle = styled(ResizeHandle)`
-  position: absolute;
-  z-index: 20;
-  user-select: none;
-  height: 100%;
-  width: ${PADDING};
-  transform: translateX(50%);
-  right: 0;
-  top: 0;
-  cursor: col-resize;
-`;

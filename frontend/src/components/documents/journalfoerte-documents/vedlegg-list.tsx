@@ -7,8 +7,8 @@ import {
   setShowLogiskeVedlegg,
   useShowLogiskeVedlegg,
 } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
-import { JournalfoerteDocumentsAttachments } from '@app/components/documents/styled-components/attachment-list';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { VStack } from '@navikt/ds-react';
 
 interface Props {
   list: VedleggListRenderData;
@@ -90,15 +90,26 @@ export const VedleggList = ({ list, minTop, maxTop, dokument, documentIndex }: P
 
   return (
     // biome-ignore lint/a11y/useSemanticElements: Keyboard navigation.
-    <JournalfoerteDocumentsAttachments
+    <VStack
+      as="ul"
       role="group"
       aria-setsize={list.list.length}
       data-testid="oppgavebehandling-documents-all-vedlegg-list"
-      style={{ height: list.height, top: list.top }}
-      className="left-[51px]"
-      $treeLineHeight={treeLineHeight}
+      position="absolute"
+      right="0"
+      left="0"
+      style={{
+        height: list.height,
+        top: list.top,
+        gridColumnEnd: 'action-end',
+        gridColumnStart: 'title-start',
+        [TREE_HEIGHT_VAR]: `${treeLineHeight}px`,
+      }}
+      className="left-[51px] before:absolute before:top-0 before:left-0 before:h-(--tree-height) before:border-l before:border-l-ax-border-neutral-subtle"
     >
       {vedleggNodeList}
-    </JournalfoerteDocumentsAttachments>
+    </VStack>
   );
 };
+
+const TREE_HEIGHT_VAR: string = '--tree-height';

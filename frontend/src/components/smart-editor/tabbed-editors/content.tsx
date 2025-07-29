@@ -1,9 +1,9 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { DEFAULT } from '@app/components/smart-editor/hooks/use-scale';
+import { DEFAULT, EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { isMetaKey, Keys } from '@app/keys';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
-import { PlateEditorContent } from '@app/plate/styled-components';
 import { useMyPlateEditorRef } from '@app/plate/types';
+import { BoxNew, HGrid } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 
 interface Props {
@@ -87,8 +87,31 @@ export const Content = ({ children }: Props) => {
   }, [onWheel]);
 
   return (
-    <PlateEditorContent onKeyDown={onKeyDown} ref={ref} $showAnnotationsAtOrigin={showAnnotationsAtOrigin}>
-      {children}
-    </PlateEditorContent>
+    <BoxNew asChild background="default" paddingBlock="space-16 0" paddingInline="space-16 0" height="max-content">
+      <HGrid
+        position="relative"
+        overflow="visible"
+        columns={showAnnotationsAtOrigin ? 'min-content min-content min-content' : 'min-content min-content'}
+        style={{
+          gridTemplateRows: showAnnotationsAtOrigin
+            ? 'min-content 1fr minmax(200px, min-content)'
+            : '1fr minmax(200px, min-content)',
+          gridTemplateAreas: showAnnotationsAtOrigin
+            ? "'content counters counters' 'content bookmarks comments' 'padding bookmarks comments'"
+            : "'content right' 'padding right'",
+        }}
+        onKeyDown={onKeyDown}
+        ref={ref}
+        className="scroll-pt-16 underline-offset-[.25em]"
+      >
+        {children}
+        <div
+          role="presentation"
+          aria-hidden
+          style={{ gridArea: 'padding', paddingBottom: `calc(20mm * var(${EDITOR_SCALE_CSS_VAR}) + 100px)` }}
+          className="h-0"
+        />
+      </HGrid>
+    </BoxNew>
   );
 };

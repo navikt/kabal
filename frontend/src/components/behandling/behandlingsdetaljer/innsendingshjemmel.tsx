@@ -41,7 +41,7 @@ export const Innsendingshjemler = ({ oppgavebehandling }: Props) => {
         }
       />
       {oppgavebehandling.isAvsluttetAvSaksbehandler ? null : (
-        <div className="relative w-min shrink-0 grow-0 self-start" ref={ref}>
+        <div className="relative z-10 w-min shrink-0 grow-0 self-start" ref={ref}>
           <Tooltip content="Endre innsendingshjemler">
             <Button
               size="small"

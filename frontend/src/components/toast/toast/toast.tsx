@@ -1,8 +1,7 @@
-import { SLIDE_OUT_KEYFRAMES, SLIDE_OUT_OPTIONS } from '@app/components/toast/toast/animations';
 import { CLOSE_TOAST_EVENT_TYPE } from '@app/components/toast/toast/constants';
 import { isTimedToast } from '@app/components/toast/toast/helpers';
 import { Icon } from '@app/components/toast/toast/icon';
-import { BaseToastStyle, Container, StyledCloseButton } from '@app/components/toast/toast/styled-components';
+import { Container, SLIDE_DURATION, StyledCloseButton, ToastContainer } from '@app/components/toast/toast/shared';
 import { TimedToast } from '@app/components/toast/toast/timed';
 import type { Message } from '@app/components/toast/types';
 import { useAnimationsEnabled } from '@app/hooks/use-animations-enabled';
@@ -43,13 +42,13 @@ export const Toast = memo(
     }
 
     return (
-      <BaseToastStyle $type={type} ref={ref} key={id}>
+      <ToastContainer type={type} ref={ref} key={id}>
         <StyledCloseButton variant="tertiary" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
         <Container>
           <Icon type={type} />
           <VStack gap="2 0">{content}</VStack>
         </Container>
-      </BaseToastStyle>
+      </ToastContainer>
     );
   },
   (prevProps, nextProps) => {
@@ -66,3 +65,14 @@ export const Toast = memo(
 );
 
 Toast.displayName = 'Toast';
+
+const SLIDE_OUT_KEYFRAMES: Keyframe[] = [
+  { transform: 'translateX(0%)' },
+  { transform: 'translateX(calc(100% + var(--ax-space-8)))' },
+];
+
+const SLIDE_OUT_OPTIONS: KeyframeAnimationOptions = {
+  duration: SLIDE_DURATION,
+  easing: 'ease-in-out',
+  fill: 'forwards',
+};

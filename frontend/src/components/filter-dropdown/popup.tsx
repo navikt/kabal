@@ -1,4 +1,4 @@
-import { Box, HStack } from '@navikt/ds-react';
+import { BoxNew, HStack } from '@navikt/ds-react';
 
 export interface PopupProps {
   isOpen: boolean;
@@ -23,9 +23,9 @@ export const Popup = ({ isOpen, direction, maxWidth, maxHeight = 500, children }
       minWidth="275px"
       className={`top-full z-22 ${isLeft ? 'right-0' : 'left-0'}`}
     >
-      <Box background="bg-default" borderRadius="medium" shadow="medium" position="absolute">
+      <BoxNew background="default" borderRadius="medium" shadow="dialog" position="absolute">
         {children}
-      </Box>
+      </BoxNew>
     </HStack>
   );
 };

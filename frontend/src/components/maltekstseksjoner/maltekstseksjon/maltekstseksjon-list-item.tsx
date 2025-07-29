@@ -37,9 +37,9 @@ export const MaltekstseksjontListItem = ({ maltekstseksjonId, activeId, query, c
 
   return (
     <ListItem
-      $isActive={id === activeId}
-      $isDropTarget={isDraft(maltekstseksjon) && draggedTextId !== null && !textIdList.includes(draggedTextId)}
-      $isDragOver={isDragOver}
+      isActive={id === activeId}
+      isDropTarget={isDraft(maltekstseksjon) && draggedTextId !== null && !textIdList.includes(draggedTextId)}
+      isDragOver={isDragOver}
       draggable={false}
       onDrop={onDrop}
       onDragEnter={onDragEnter}
@@ -52,7 +52,7 @@ export const MaltekstseksjontListItem = ({ maltekstseksjonId, activeId, query, c
         e.preventDefault();
         e.stopPropagation();
       }}
-      data-dragovertext={`Legg til «${title}»`}
+      dragOverText={`Legg til «${title}»`}
     >
       {children}
     </ListItem>

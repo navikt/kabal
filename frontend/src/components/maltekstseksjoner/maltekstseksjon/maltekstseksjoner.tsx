@@ -10,10 +10,9 @@ import { useGetMaltekstseksjonerQuery } from '@app/redux-api/maltekstseksjoner/q
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
 import { PuzzlePieceIcon } from '@navikt/aksel-icons';
-import { Box, HStack, Search, VStack } from '@navikt/ds-react';
+import { BoxNew, HGrid, HStack, Search, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 export const Maltekstseksjoner = () => {
   const { id } = useParams();
@@ -32,8 +31,17 @@ export const Maltekstseksjoner = () => {
   const hasSelectedMaltekstseksjon = id !== undefined;
 
   return (
-    <Container>
-      <HStack as="header" justify="start" align="center" gap="4" marginBlock="0 2" className="[grid-area:header]">
+    <HGrid
+      columns="700px min-content"
+      style={{
+        gridTemplateRows: 'min-content min-content min-content 1fr',
+        gridTemplateAreas: '"header content" "filters content" "search content" "list content"',
+      }}
+      gap="1 2"
+      height="100%"
+      overflowY="hidden"
+    >
+      <HStack as="header" justify="start" align="center" gap="4" className="[grid-area:header]">
         <CreateMaltekstseksjon query={query} />
         <SetMaltekstseksjonLanguage />
       </HStack>
@@ -59,7 +67,7 @@ export const Maltekstseksjoner = () => {
       />
       <DragAndDropContextElement>
         <MaltekstseksjonList
-          className="mt-1 [grid-area:list]"
+          className="[grid-area:list]"
           data={maltekstseksjoner}
           isLoading={isLoading}
           filter={rawSearch}
@@ -76,22 +84,12 @@ export const Maltekstseksjoner = () => {
             minWidth="1330px"
             width="fit-content"
           >
-            <Box borderRadius="medium" shadow="medium" marginBlock="1" className="text-surface-subtle">
+            <BoxNew borderRadius="medium" shadow="dialog" marginBlock="1" className="text-ax-text-neutral-decoration">
               <PuzzlePieceIcon aria-hidden fontSize={400} />
-            </Box>
+            </BoxNew>
           </VStack>
         )}
       </DragAndDropContextElement>
-    </Container>
+    </HGrid>
   );
 };
-
-const Container = styled.article`
-  display: grid;
-  grid-template-columns: 700px min-content;
-  grid-template-rows: min-content min-content min-content 1fr;
-  grid-template-areas: 'header content' 'filters content' 'search content' 'list content';
-  column-gap: var(--a-spacing-2);
-  height: 100%;
-  overflow-y: hidden;
-`;

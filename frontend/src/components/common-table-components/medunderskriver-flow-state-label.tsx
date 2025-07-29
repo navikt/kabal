@@ -11,7 +11,7 @@ import { useContext } from 'react';
 
 type Props = Pick<IOppgave, 'medunderskriver' | 'typeId'>;
 
-const TAG_CLASSES = 'overflow-hidden text-ellipsis whitespace-nowrap';
+const TAG_CLASSES = 'ellipsis';
 
 export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Props) => {
   const { user } = useContext(StaticDataContext);

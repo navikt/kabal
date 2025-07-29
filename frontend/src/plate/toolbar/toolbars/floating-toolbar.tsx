@@ -6,7 +6,7 @@ import { useSelection } from '@app/plate/hooks/use-selection';
 import { FloatingRedaktoerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-redaktoer-toolbar-buttons';
 import { FloatingSaksbehandlerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-saksbehandler-toolbar-buttons';
 import { useMyPlateEditorRef } from '@app/plate/types';
-import { Box, HStack } from '@navikt/ds-react';
+import { BoxNew, HStack } from '@navikt/ds-react';
 import { BaseTablePlugin } from '@platejs/table';
 import { useMemo, useState } from 'react';
 
@@ -55,9 +55,9 @@ const FloatingToolbar = ({ editorId, container, children }: FloatingToolbarProps
       }}
       ref={setRef}
     >
-      <Box as="section" shadow="medium" background="surface-default" padding="05">
+      <BoxNew as="section" shadow="dialog" background="default" padding="05">
         {children}
-      </Box>
+      </BoxNew>
     </HStack>
   );
 };

@@ -1,5 +1,4 @@
 import { useHasWriteAccess } from '@app/components/smart-editor/hooks/use-has-write-access';
-import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
@@ -10,11 +9,10 @@ import { components, saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets
 import { Sheet } from '@app/plate/sheet';
 import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
-import { Button } from '@navikt/ds-react';
+import { Button, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@platejs/core/react';
 import type { Value } from 'platejs';
 import { memo, useEffect } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   versionId: number;
@@ -38,8 +36,17 @@ export const HistoryEditor = memo(
     });
 
     return (
-      <HistoryEditorContainer>
-        <StyledButton
+      <VStack
+        position="relative"
+        overflowY="auto"
+        overflowX="visible"
+        height="max-content"
+        minWidth="210mm"
+        paddingInline="space-16"
+        paddingBlock="space-16 0"
+        className="after:pb-[calc(20mm*var(--kabal-editor-scale)+100px)]"
+      >
+        <Button
           variant="primary"
           onClick={() => {
             pushEvent('restore-smart-editor-version', 'smart-editor', {
@@ -50,15 +57,16 @@ export const HistoryEditor = memo(
           }}
           size="small"
           disabled={!canManage}
+          className="sticky top-0 z-1 mb-5 w-[210mm]"
         >
           Gjenopprett denne versjonen
-        </StyledButton>
-        <StyledErrorBoundary errorComponent={() => <ErrorComponent textId={id} />}>
+        </Button>
+        <ErrorBoundary errorComponent={() => <ErrorComponent textId={id} />} className="w-[210mm]">
           <Plate<RichTextEditor> editor={editor}>
             <HistoryContent id={id} version={version} />
           </Plate>
-        </StyledErrorBoundary>
-      </HistoryEditorContainer>
+        </ErrorBoundary>
+      </VStack>
     );
   },
   (prevProps, nextProps) =>
@@ -81,7 +89,7 @@ const HistoryContent = ({ id, version }: HistoryContentProps) => {
   useEffect(() => restore(editor, version), [editor, version]);
 
   return (
-    <Sheet $minHeight>
+    <Sheet minHeight>
       <KabalPlateEditor id={id} readOnly lang={lang} />
     </Sheet>
   );
@@ -98,33 +106,3 @@ const restore = (editor: RichTextEditor, content: Value) => {
     });
   });
 };
-
-const HistoryEditorContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow-y: auto;
-  overflow-x: visible;
-  padding-top: var(--a-spacing-4);
-  padding-right: var(--a-spacing-4);
-  padding-left: var(--a-spacing-4);
-  height: max-content;
-  min-width: 210mm;
-
-  &::after {
-    content: '';
-    padding-bottom: calc(20mm * var(${EDITOR_SCALE_CSS_VAR}) + 100px);
-  }
-`;
-
-const StyledButton = styled(Button)`
-  position: sticky;
-  margin-bottom: var(--a-spacing-5);
-  top: 0;
-  width: 210mm;
-  z-index: 1;
-`;
-
-const StyledErrorBoundary = styled(ErrorBoundary)`
-  width: 210mm;
-`;

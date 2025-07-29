@@ -2,6 +2,7 @@ import { Popup, type PopupProps } from '@app/components/filter-dropdown/popup';
 import { merge } from '@app/functions/classes';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import type { ButtonProps } from '@navikt/ds-react';
 import type React from 'react';
 import { useRef, useState } from 'react';
 import { ToggleButton } from '../toggle-button/toggle-button';
@@ -16,6 +17,7 @@ interface FilterDropdownProps<T extends string> extends BaseProps<T> {
   maxHeight?: PopupProps['maxHeight'];
   className?: string;
   style?: React.CSSProperties;
+  size?: ButtonProps['size'];
 }
 
 export const FilterDropdown = <T extends string>({
@@ -29,6 +31,7 @@ export const FilterDropdown = <T extends string>({
   maxWidth,
   className,
   style,
+  size,
 }: FilterDropdownProps<T>): React.JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLElement>(null);
@@ -45,9 +48,17 @@ export const FilterDropdown = <T extends string>({
 
   return (
     <section ref={ref} data-testid={testId} className={merge('relative', className)} style={style}>
-      <ToggleButton $open={open} onClick={() => setOpen(!open)} ref={buttonRef} data-testid="toggle-button">
-        {children} ({selected.length}) {chevron}
+      <ToggleButton
+        open={open}
+        onClick={() => setOpen(!open)}
+        ref={buttonRef}
+        data-testid="toggle-button"
+        icon={chevron}
+        size={size}
+      >
+        {children} ({selected.length})
       </ToggleButton>
+
       <Popup isOpen={open} direction={direction} maxWidth={maxWidth} maxHeight={maxHeight}>
         <Dropdown selected={selected} options={options} onChange={onChange} close={close} />
       </Popup>

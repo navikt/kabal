@@ -1,12 +1,10 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
-import { MaltekstseksjonToolbarStyle } from '@app/plate/components/styled-components';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { CheckmarkIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, HStack, Tooltip } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import type { Path } from 'slate';
-import { styled } from 'styled-components';
 
 const DummyButton = ({ loading }: { loading?: boolean }) => (
   <Button
@@ -81,8 +79,10 @@ const IsChanged = ({ onConfirm, isChangedWarning, side = 'left' }: IsChangedProp
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => setShowConfirm(false));
 
+  const isLeft = side === 'left';
+
   return (
-    <DeleteMaltekstseksjonContainer ref={ref} contentEditable={false}>
+    <HStack position="relative" gap="1" ref={ref} contentEditable={false}>
       <Button
         icon={<TrashIcon aria-hidden />}
         variant="tertiary"
@@ -90,7 +90,11 @@ const IsChanged = ({ onConfirm, isChangedWarning, side = 'left' }: IsChangedProp
         onClick={() => setShowConfirm(!showConfirm)}
       />
       {showConfirm ? (
-        <StyledAlert variant="warning" size="small" $side={side}>
+        <Alert
+          variant="warning"
+          size="small"
+          className={`absolute top-0 text-ax-text-neutral ${isLeft ? 'left-full' : 'right-full'}`}
+        >
           {isChangedWarning}
           <HStack gap="1" wrap={false}>
             <Button icon={<CheckmarkIcon aria-hidden />} onClick={onConfirm} variant="tertiary" size="xsmall">
@@ -106,26 +110,8 @@ const IsChanged = ({ onConfirm, isChangedWarning, side = 'left' }: IsChangedProp
               Nei, avbryt
             </Button>
           </HStack>
-        </StyledAlert>
+        </Alert>
       ) : null}
-    </DeleteMaltekstseksjonContainer>
+    </HStack>
   );
 };
-
-const StyledAlert = styled(Alert)<{ $side: Side }>`
-  position: absolute;
-  top: 0;
-  left: ${({ $side }) => ($side === 'right' ? '100%' : 'auto')};
-  right: ${({ $side }) => ($side === 'left' ? '100%' : 'auto')};
-  color: var(--a-text-default);
-`;
-
-const DeleteMaltekstseksjonContainer = styled.div`
-  position: relative;
-  display: flex;
-  gap: var(--a-spacing-1);
-
-  > ${MaltekstseksjonToolbarStyle} {
-    opacity: 1;
-  }
-`;

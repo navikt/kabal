@@ -23,7 +23,7 @@ export const ReadAddress = ({ part, address, overriddenAddress, onEdit }: Props)
   const noAddress = addressLines.length === 0;
 
   return (
-    <Container $state={isOverridden ? AddressState.OVERRIDDEN : AddressState.SAVED}>
+    <Container state={isOverridden ? AddressState.OVERRIDDEN : AddressState.SAVED}>
       <HStack align="center" gap="1">
         <span>{noAddress ? 'Ingen adresse' : addressLines.join(', ')}</span>
 

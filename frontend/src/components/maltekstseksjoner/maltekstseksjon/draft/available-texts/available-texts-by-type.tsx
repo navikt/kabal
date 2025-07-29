@@ -14,9 +14,8 @@ import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { ListRichText } from '@app/types/texts/common';
 import type { IRichText, IText, ListText } from '@app/types/texts/responses';
-import { HStack, Loader, Search, Table, VStack } from '@navikt/ds-react';
+import { BoxNew, HStack, Loader, Search, Table, VStack } from '@navikt/ds-react';
 import { useCallback, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { Body } from './body';
 
 export interface AvailableTextsByTypeProps {
@@ -125,39 +124,42 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
       {isFetching ? (
         <Loader title="Laster..." />
       ) : (
-        <TableWrapper>
+        <BoxNew position="relative" overflowY="auto" flexGrow="1">
           <Table size="small" zebraStripes onSortChange={onSortChange} sort={sort}>
-            <StyledTableHeader>
-              <Table.Row>
-                <Table.HeaderCell />
-                <Table.HeaderCell>Tittel</Table.HeaderCell>
-                <Table.ColumnHeader sortKey={SortKey.MODIFIED} sortable>
-                  Sist endret
-                </Table.ColumnHeader>
-                <Table.ColumnHeader
-                  sortKey={SortKey.REFERENCES}
-                  sortable
-                  title="Viser referanser til andre maltekstseksjoner som bruker denne teksten."
-                >
-                  Maltekstseksjoner
-                </Table.ColumnHeader>
-                <Table.HeaderCell>
-                  <FilterDropdown<Status>
-                    data-testid="filter-status"
-                    selected={filteredStatuses}
-                    options={STATUS_OPTIONS}
-                    onChange={setFilteredStatuses}
+            <BoxNew asChild position="sticky" top="0" background="default" className="z-1">
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell />
+                  <Table.HeaderCell>Tittel</Table.HeaderCell>
+                  <Table.ColumnHeader sortKey={SortKey.MODIFIED} sortable>
+                    Sist endret
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader
+                    sortKey={SortKey.REFERENCES}
+                    sortable
+                    title="Viser referanser til andre maltekstseksjoner som bruker denne teksten."
                   >
-                    Status
-                  </FilterDropdown>
-                </Table.HeaderCell>
-                <Table.ColumnHeader>%</Table.ColumnHeader>
-                <Table.HeaderCell />
-              </Table.Row>
-            </StyledTableHeader>
+                    Maltekstseksjoner
+                  </Table.ColumnHeader>
+                  <Table.HeaderCell>
+                    <FilterDropdown<Status>
+                      data-testid="filter-status"
+                      selected={filteredStatuses}
+                      options={STATUS_OPTIONS}
+                      onChange={setFilteredStatuses}
+                      size="small"
+                    >
+                      Status
+                    </FilterDropdown>
+                  </Table.HeaderCell>
+                  <Table.ColumnHeader>%</Table.ColumnHeader>
+                  <Table.HeaderCell />
+                </Table.Row>
+              </Table.Header>
+            </BoxNew>
             <Body texts={filteredAndSortedData} onAdd={onAdd} onRemove={onRemove} usedIds={usedIds} />
           </Table>
-        </TableWrapper>
+        </BoxNew>
       )}
     </VStack>
   );
@@ -183,16 +185,3 @@ type ScoredRichText = ListRichText & { score: number };
 
 const isRichtext = (text: IText | ListText): text is IRichText =>
   text.textType === RichTextTypes.MALTEKST || text.textType === RichTextTypes.REDIGERBAR_MALTEKST;
-
-const TableWrapper = styled.div`
-  position: relative;
-  overflow-y: auto;
-  flex-grow: 1;
-`;
-
-const StyledTableHeader = styled(Table.Header)`
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background-color: var(--a-surface-default);
-`;

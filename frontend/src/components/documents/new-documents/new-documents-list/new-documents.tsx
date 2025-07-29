@@ -137,7 +137,7 @@ const Wrapper = ({ children }: WrapperProps) => (
     maxHeight="calc(50% - 200px)"
     data-testid="new-documents-section"
     aria-labelledby="dua-heading"
-    className="border-border-divider border-b-1"
+    className="border-ax-border-neutral border-b-1"
   >
     <NewDocumentsHeader headingId="dua-heading" />
 

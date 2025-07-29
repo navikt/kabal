@@ -29,7 +29,7 @@ import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents'
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
-import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
+import { BoxNew, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@platejs/core/react';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
@@ -55,7 +55,7 @@ export const Editor = (props: EditorProps) => {
     return (
       <VStack align="start" justify="space-between" height="100%" overflow="hidden">
         <SaksbehandlerToolbar />
-        <Sheet $minHeight />
+        <Sheet minHeight />
       </VStack>
     );
   }
@@ -266,13 +266,23 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
       <StatusBar>
         <Tooltip content={isConnected ? 'Tilkoblet' : 'Frakoblet'}>
           <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="2" data-qqqq>
-            <Box as="span" borderWidth="0 1 0 0" borderColor="border-default" marginInline="auto 2">
+            <BoxNew as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="auto 2">
               {isConnected ? (
-                <CloudFillIcon aria-hidden role="presentation" fontSize={24} color="var(--a-icon-success)" />
+                <CloudFillIcon
+                  aria-hidden
+                  role="presentation"
+                  fontSize={24}
+                  color="var(--ax-text-success-decoration)"
+                />
               ) : (
-                <CloudSlashFillIcon aria-hidden role="presentation" fontSize={24} color="var(--a-icon-danger)" />
+                <CloudSlashFillIcon
+                  aria-hidden
+                  role="presentation"
+                  fontSize={24}
+                  color="var(--ax-text-danger-decoration)"
+                />
               )}
-            </Box>
+            </BoxNew>
           </HStack>
         </Tooltip>
         <VersionStatus oppgaveId={oppgave.id} dokumentId={id} />
@@ -296,7 +306,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithN
   }, [containerElement, sheetRef]);
 
   return (
-    <Sheet ref={setContainerElement} $minHeight data-component="sheet" className="mr-4">
+    <Sheet ref={setContainerElement} minHeight data-component="sheet" className="mr-4">
       <FloatingSaksbehandlerToolbar container={containerElement} editorId={id} />
       <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
 

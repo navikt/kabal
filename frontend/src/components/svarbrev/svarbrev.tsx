@@ -11,28 +11,29 @@ import {
   useSvarbrevSearchParams,
 } from '@app/components/svarbrev/use-search-params';
 import { useGetSvarbrevSettingsQuery } from '@app/redux-api/svarbrev';
-import { Heading, type SortState, Table, VStack } from '@navikt/ds-react';
+import { BoxNew, Heading, type SortState, Table, VStack } from '@navikt/ds-react';
 import { type ReactNode, useCallback, useEffect } from 'react';
-import { styled } from 'styled-components';
 
 const TableHeaders = () => (
-  <StyledTableHeader>
-    <Table.Row>
-      <Table.HeaderCell>Aktiv</Table.HeaderCell>
-      <Table.HeaderCell>Type</Table.HeaderCell>
-      <Table.ColumnHeader sortable sortKey={SortKey.YTELSE}>
-        Ytelse
-      </Table.ColumnHeader>
-      <Table.ColumnHeader sortable sortKey={SortKey.TIME}>
-        Saksbehandlingstid
-      </Table.ColumnHeader>
-      <Table.HeaderCell className="w-full">Tekst til svarbrev (valgfri)</Table.HeaderCell>
-      <Table.ColumnHeader sortable sortKey={SortKey.MODIFIED}>
-        Sist endret
-      </Table.ColumnHeader>
-      <Table.HeaderCell />
-    </Table.Row>
-  </StyledTableHeader>
+  <BoxNew asChild position="sticky" top="8" background="default">
+    <Table.Header className="z-1 whitespace-nowrap">
+      <Table.Row>
+        <Table.HeaderCell>Aktiv</Table.HeaderCell>
+        <Table.HeaderCell>Type</Table.HeaderCell>
+        <Table.ColumnHeader sortable sortKey={SortKey.YTELSE}>
+          Ytelse
+        </Table.ColumnHeader>
+        <Table.ColumnHeader sortable sortKey={SortKey.TIME}>
+          Saksbehandlingstid
+        </Table.ColumnHeader>
+        <Table.HeaderCell className="w-full">Tekst til svarbrev (valgfri)</Table.HeaderCell>
+        <Table.ColumnHeader sortable sortKey={SortKey.MODIFIED}>
+          Sist endret
+        </Table.ColumnHeader>
+        <Table.HeaderCell />
+      </Table.Row>
+    </Table.Header>
+  </BoxNew>
 );
 
 interface ContainerProps extends FilterProps {
@@ -49,10 +50,10 @@ const Container = ({ children, sort, onSortChange, ...filterProps }: ContainerPr
 
     <Filters {...filterProps} />
 
-    <StyledTable size="small" zebraStripes sort={sort} onSortChange={onSortChange}>
+    <Table size="small" zebraStripes sort={sort} onSortChange={onSortChange} className="relative">
       <TableHeaders />
       {children}
-    </StyledTable>
+    </Table>
   </VStack>
 );
 
@@ -146,16 +147,3 @@ export const Svarbrev = ({ modal }: Props) => {
     </Container>
   );
 };
-
-const StyledTableHeader = styled(Table.Header)`
-  position: sticky;
-  top: var(--a-spacing-8);
-  background-color: var(--a-surface-default);
-  z-index: 1;
-  white-space: nowrap;
-  box-shadow: var(--a-shadow-medium);
-`;
-
-const StyledTable = styled(Table)`
-  position: relative;
-`;

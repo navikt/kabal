@@ -1,62 +1,77 @@
-interface BaseColor {
-  red: number;
-  green: number;
-  blue: number;
+enum ColorKey {
+  RED = 'red',
+  GREEN = 'green',
+  BLUE = 'blue',
+  ORANGE = 'orange',
+  PURPLE = 'purple',
 }
 
-const MAP: Map<string, BaseColor> = new Map();
+const RED_COLOR_CLASS = 'bg-ax-bg-danger-strong';
+const RED_BACKGROUND_CLASS = 'bg-ax-bg-danger-moderate-a';
 
-// #C30000
-const RED: BaseColor = { red: 195, green: 0, blue: 0 };
-// #06893A
-const GREEN: BaseColor = { red: 6, green: 137, blue: 58 };
-// #0067C5
-const BLUE: BaseColor = { red: 0, green: 103, blue: 197 };
-// #FF9100
-const ORANGE: BaseColor = { red: 255, green: 145, blue: 0 };
-// #634689
-const PURPLE: BaseColor = { red: 99, green: 70, blue: 137 };
+const GREEN_COLOR_CLASS = 'bg-ax-bg-success-strong';
+const GREEN_BACKGROUND_CLASS = 'bg-ax-bg-success-moderate-a';
 
-const ALL_COLORS: [BaseColor, BaseColor, BaseColor, BaseColor, BaseColor] = [RED, GREEN, BLUE, ORANGE, PURPLE];
+const BLUE_COLOR_CLASS = 'bg-ax-bg-info-strong';
+const BLUE_BACKGROUND_CLASS = 'bg-ax-bg-info-moderate-a';
 
-interface Colors {
-  caretColor: string;
-  selectionColor: string;
-}
+const ORANGE_COLOR_CLASS = 'bg-ax-bg-warning-strong';
+const ORANGE_BACKGROUND_CLASS = 'bg-ax-bg-warning-moderate-a';
 
-export const getColors = (key: string): Colors => {
-  const existing = MAP.get(key);
+const PURPLE_COLOR_CLASS = 'bg-ax-bg-info-strong';
+const PURPLE_BACKGROUND_CLASS = 'bg-ax-bg-info-moderate-a';
 
-  if (existing === undefined) {
-    const availableColors = getAvailableColors();
+type ColorSet = [string, string];
 
-    const randomColorIndex = Math.floor(Math.random() * availableColors.length);
-    // biome-ignore lint/style/noNonNullAssertion: Index is guaranteed to be in bounds.
-    const baseColor = availableColors[randomColorIndex]!;
-
-    MAP.set(key, baseColor);
-
-    return {
-      selectionColor: formatColor(baseColor, 0.2),
-      caretColor: formatColor(baseColor, 1),
-    };
-  }
-
-  return {
-    selectionColor: formatColor(existing, 0.2),
-    caretColor: formatColor(existing, 1),
-  };
+const COLOR_MAP: Record<ColorKey, ColorSet> = {
+  [ColorKey.RED]: [RED_BACKGROUND_CLASS, RED_COLOR_CLASS],
+  [ColorKey.GREEN]: [GREEN_BACKGROUND_CLASS, GREEN_COLOR_CLASS],
+  [ColorKey.BLUE]: [BLUE_BACKGROUND_CLASS, BLUE_COLOR_CLASS],
+  [ColorKey.ORANGE]: [ORANGE_BACKGROUND_CLASS, ORANGE_COLOR_CLASS],
+  [ColorKey.PURPLE]: [PURPLE_BACKGROUND_CLASS, PURPLE_COLOR_CLASS],
 };
 
-const getAvailableColors = (): BaseColor[] => {
-  const availableColors = ALL_COLORS.filter((color) => ![...MAP.values()].includes(color));
+const COLOR_KEYS = Object.values(ColorKey);
+
+const MAP: Map<string, ColorKey> = new Map();
+
+interface Colors {
+  caretBackgroundColorClass: string;
+  selectionBackgroundColorClass: string;
+}
+
+export const getColorClasses = (key: string): Colors => {
+  const colorKey = getColorKey(key);
+
+  const [selectionBackgroundColorClass, caretBackgroundColorClass] = COLOR_MAP[colorKey];
+
+  return { selectionBackgroundColorClass, caretBackgroundColorClass };
+};
+
+const getColorKey = (key: string): ColorKey => {
+  const existing = MAP.get(key);
+
+  if (existing !== undefined) {
+    return existing;
+  }
+
+  const availableColors = getAvailableColors();
+
+  const randomColorIndex = Math.floor(Math.random() * availableColors.length);
+  // biome-ignore lint/style/noNonNullAssertion: Index is guaranteed to be in bounds.
+  const colorKey = availableColors[randomColorIndex]!;
+
+  MAP.set(key, colorKey);
+
+  return colorKey;
+};
+
+const getAvailableColors = (): ColorKey[] => {
+  const availableColors = COLOR_KEYS.filter((colorKey) => MAP.values().every((k) => k !== colorKey));
 
   if (availableColors.length === 0) {
-    return ALL_COLORS;
+    return COLOR_KEYS;
   }
 
   return availableColors;
 };
-
-const formatColor = (color: BaseColor, opacity: number): string =>
-  `rgba(${color.red}, ${color.green}, ${color.blue}, ${opacity})`;

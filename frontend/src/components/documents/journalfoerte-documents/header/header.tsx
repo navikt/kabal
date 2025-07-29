@@ -21,7 +21,7 @@ interface Props {
   keyboardBoundaryRef: React.RefObject<HTMLDivElement | null>;
 }
 
-const BASE_CLASSES = 'z-1 whitespace-nowrap bg-bg-default border-b border-border-divider';
+const BASE_CLASSES = 'z-1 whitespace-nowrap bg-ax-bg-default border-b border-ax-border-neutral';
 const CLASSES = IS_WINDOWS ? `${BASE_CLASSES} mr-[13px]` : BASE_CLASSES;
 
 export const Header = ({

@@ -9,7 +9,6 @@ import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { CircleBrokenIcon, LinkBrokenIcon, PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Button, HelpText, HStack, Skeleton, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useRef } from 'react';
-import { styled } from 'styled-components';
 import { DragAndDropContext } from '../drag-and-drop/drag-context';
 import { TextLink } from '../text-link';
 
@@ -77,7 +76,7 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
   if (isError) {
     const helpText = isApiDataError(error) ? (
       <HelpText strategy="fixed">
-        <HelpTextContainer>{error.data.detail}</HelpTextContainer>
+        <div className="max-w-80 whitespace-normal">{error.data.detail}</div>
       </HelpText>
     ) : null;
 
@@ -112,6 +111,7 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
   return (
     <>
       {maltekstseksjon.publishedDateTime === null ? unlink : null}
+
       <TextLink
         ref={dragElementRef}
         to={path}
@@ -131,11 +131,6 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
     </>
   );
 };
-
-const HelpTextContainer = styled.div`
-  max-width: 300px;
-  white-space: normal;
-`;
 
 const SkeletonItem = () => (
   <HStack align="center" gap="2" width="100%">

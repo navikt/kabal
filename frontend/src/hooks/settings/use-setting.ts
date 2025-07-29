@@ -150,3 +150,12 @@ export const useNewTabPdfScaleMode = () => useJsonSetting<PdfScaleMode>('pdf/new
 export const useNewTabPdfCustomScale = () => useNumberSetting('pdf/new_tab/custom_scale');
 
 export const useHasSeenKeyboardShortcuts = () => useBooleanSetting('has_seen_keyboard_shortcuts');
+
+const prefersDarkMode =
+  typeof window.matchMedia !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+export const useDarkMode = () => {
+  const { value = prefersDarkMode, setValue } = useBooleanSetting('darkmode');
+
+  return { value, setValue };
+};

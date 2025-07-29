@@ -1,7 +1,7 @@
 import { OrphansModal } from '@app/components/smart-editor/comments/orphans-modal';
 import { useAnnotationsCounts } from '@app/components/smart-editor/comments/use-annotations-counts';
 import { ChatElipsisIcon } from '@navikt/aksel-icons';
-import { Box, HStack } from '@navikt/ds-react';
+import { BoxNew, HStack } from '@navikt/ds-react';
 
 export const NumberOfComments = () => {
   const { attached, orphans, bookmarks: bookmarksCount } = useAnnotationsCounts();
@@ -39,10 +39,10 @@ const Wrapper = ({ children }: WrapperProps) => (
     top="4"
     className="z-10 [grid-area:counters]"
   >
-    <Box background="bg-default" shadow="medium" marginInline="4" marginBlock="4" paddingInline="2" flexShrink="0">
+    <BoxNew background="default" shadow="dialog" marginInline="4" marginBlock="4" paddingInline="2" flexShrink="0">
       <ChatElipsisIcon aria-hidden fontSize={20} />
       {children}
-    </Box>
+    </BoxNew>
   </HStack>
 );
 

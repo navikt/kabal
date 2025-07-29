@@ -21,7 +21,7 @@ export const NewDocumentsHeader = ({ headingId }: Props) => {
       paddingBlock="0 2"
       flexGrow="1"
       wrap={false}
-      className="border-border-divider border-b"
+      className="border-ax-border-neutral border-b"
     >
       <Heading size="xsmall" level="2" id={headingId}>
         Dokumenter under arbeid

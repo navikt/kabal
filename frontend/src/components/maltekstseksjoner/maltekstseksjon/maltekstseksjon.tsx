@@ -1,7 +1,7 @@
 import { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { ScaleContextComponent } from '@app/plate/status-bar/scale-context';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import { Box, VStack } from '@navikt/ds-react';
+import { BoxNew, VStack } from '@navikt/ds-react';
 import { MaltekstseksjonVersions } from './maltekstseksjon-versions';
 
 interface Props {
@@ -20,10 +20,10 @@ export const Maltekstseksjon = ({ maltekstseksjonId, query }: Props) => (
     className="[grid-area:content]"
     data-element="MaltekstseksjonContainer"
   >
-    <Box borderRadius="medium" shadow="medium">
+    <BoxNew borderRadius="medium" shadow="dialog">
       <ScaleContextComponent scalingGroup={ScalingGroup.REDAKTØR}>
         <MaltekstseksjonVersions id={maltekstseksjonId} query={query} />
       </ScaleContextComponent>
-    </Box>
+    </BoxNew>
   </VStack>
 );

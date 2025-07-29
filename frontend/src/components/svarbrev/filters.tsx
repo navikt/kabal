@@ -1,6 +1,5 @@
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { Box, HStack, Search, ToggleGroup, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { BoxNew, HStack, Search, ToggleGroup, Tooltip } from '@navikt/ds-react';
 
 export enum ActiveEnum {
   ALL = '0',
@@ -41,7 +40,7 @@ export const Filters = ({
   setActiveFilter,
 }: FilterProps) => (
   <HStack asChild wrap={false} gap="4" width="100%" position="sticky" top="0" className="z-1">
-    <Box background="bg-default" paddingInline="0 1" paddingBlock="0 4">
+    <BoxNew background="default" paddingInline="0 1" paddingBlock="0 4">
       <ToggleGroup
         size="small"
         value={activeFilter}
@@ -58,7 +57,7 @@ export const Filters = ({
         <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>
       </ToggleGroup>
 
-      <SearchContainer>
+      <div className="grow">
         <Tooltip content="Filtrer på ytelse.">
           <Search
             placeholder="Filtrer på ytelse"
@@ -70,9 +69,9 @@ export const Filters = ({
             variant="simple"
           />
         </Tooltip>
-      </SearchContainer>
+      </div>
 
-      <SearchContainer>
+      <div className="grow">
         <Tooltip content="Filtrer på tekst.">
           <Search
             placeholder="Filtrer på tekst"
@@ -84,11 +83,7 @@ export const Filters = ({
             variant="simple"
           />
         </Tooltip>
-      </SearchContainer>
-    </Box>
+      </div>
+    </BoxNew>
   </HStack>
 );
-
-const SearchContainer = styled.div`
-  flex-grow: 1;
-`;

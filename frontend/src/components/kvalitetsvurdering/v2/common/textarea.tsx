@@ -6,7 +6,6 @@ import { useCanEdit } from '@app/hooks/use-can-edit';
 import type { IKvalitetsvurderingBooleans } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { BodyLong, HStack, Label, Textarea, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props extends TextParams {
   parentKey?: keyof IKvalitetsvurderingBooleans;
@@ -30,7 +29,9 @@ export const KvalitetsskjemaTextarea = (props: Props) => {
             {label}
           </Label>
         </ContainerWithHelpText>
-        <StyledBodyLong id={field}>{kvalitetsvurdering[field]}</StyledBodyLong>
+        <BodyLong id={field} className="border-ax-border-neutral-subtle border-l-2 pl-2">
+          {kvalitetsvurdering[field]}
+        </BodyLong>
       </div>
     );
   }
@@ -92,8 +93,3 @@ const KvalitetsskjemaTextareaInternal = ({
     </VStack>
   );
 };
-
-const StyledBodyLong = styled(BodyLong)`
-  border-left: var(--a-spacing-05) solid var(--a-border-subtle);
-  padding-left: var(--a-spacing-2);
-`;

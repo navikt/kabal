@@ -1,4 +1,4 @@
-import { Box, HStack } from '@navikt/ds-react';
+import { BoxNew, HStack } from '@navikt/ds-react';
 import { useEffect, useRef } from 'react';
 
 interface PopupProps {
@@ -29,9 +29,9 @@ export const Popup = ({ isOpen, children }: PopupProps) => {
       left="0"
       className="top-full z-22 scroll-mb-4"
     >
-      <Box background="bg-default" borderRadius="medium" borderWidth="1" borderColor="border-divider" shadow="medium">
+      <BoxNew background="default" borderRadius="medium" borderWidth="1" borderColor="neutral" shadow="dialog">
         {children}
-      </Box>
+      </BoxNew>
     </HStack>
   );
 };

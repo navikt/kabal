@@ -38,7 +38,7 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
         },
       }}
     >
-      <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.LABEL}>
+      <SectionContainer data-element={element.type} sectionType={SectionTypeEnum.LABEL}>
         {content === null ? null : (
           <span className="text-gray-700">
             <b>{label}</b>: {content}

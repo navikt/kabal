@@ -1,7 +1,7 @@
 import { canOpenInKabal } from '@app/components/documents/filetype';
 import { downloadDocuments } from '@app/components/documents/journalfoerte-documents/download';
 import { StyledDocumentTitle } from '@app/components/documents/new-documents/new-document/title-style';
-import { DocumentLink, EllipsisTitle } from '@app/components/documents/styled-components/document-link';
+import { DocumentLink } from '@app/components/documents/styled-components/document-link';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
@@ -131,9 +131,9 @@ export const SharedDocumentTitle = (props: Props) => {
         data-testid="document-open-button"
         href={url}
         target={tabId}
+        icon={icon}
       >
-        {icon}
-        <EllipsisTitle title={title}>{title}</EllipsisTitle>
+        {title}
       </DocumentLink>
       {children}
     </StyledDocumentTitle>

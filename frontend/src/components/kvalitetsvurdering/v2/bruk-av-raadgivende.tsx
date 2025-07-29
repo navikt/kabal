@@ -40,7 +40,6 @@ export const BrukAvRaadgivendeLege = () => {
         error={validationError}
         onChange={onChange}
         id={USE_ROL_FIELD}
-        size="small"
       >
         <ContainerWithHelpText helpText="Du registrerer her dersom den konkrete saken ikke gjelder trygdemedisinske spørsmål.">
           <Radio value={RadiovalgExtended.IKKE_AKTUELT} disabled={!canEdit}>

@@ -15,7 +15,7 @@ export interface SavedStatusProps {
   fallback?: ReactNode;
 }
 
-const CLASSNAMES = 'text-text-subtle text-small';
+const CLASSNAMES = 'text-ax-text-neutral-subtle text-ax-small';
 
 export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified, fallback }: SavedStatusProps) => {
   const lastSaved =
@@ -31,9 +31,7 @@ export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified, fa
         {lastSaved}
 
         <Tooltip content="Lagrer..." delay={0}>
-          <HStack align="center" gap="1">
-            <Loader size="xsmall" /> Lagrer...
-          </HStack>
+          <Loader size="xsmall" />
         </Tooltip>
       </HStack>
     );
@@ -45,7 +43,7 @@ export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified, fa
         {lastSaved}
 
         <Tooltip content="Lagret!" delay={0}>
-          <CheckmarkCircleFillIconColored aria-hidden className="mb-1" />
+          <CheckmarkCircleFillIconColored aria-hidden />
         </Tooltip>
       </HStack>
     );
@@ -66,8 +64,8 @@ export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified, fa
 };
 
 const formatErrorMessage = (error: ErrorMessage) => {
-  const title = typeof error.status === 'undefined' ? error.title : `${error.title} (${error.status})`;
-  const message = typeof error.detail === 'undefined' ? error.title : `${title}: ${error.detail}`;
+  const title = error.status === undefined ? error.title : `${error.title} (${error.status})`;
+  const message = error.detail === undefined ? error.title : `${title}: ${error.detail}`;
 
   return message;
 };

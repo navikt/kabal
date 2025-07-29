@@ -1,6 +1,5 @@
-import { SCALE_X } from '@app/components/toast/toast/animations';
 import { Icon } from '@app/components/toast/toast/icon';
-import { Container, StyledCloseButton, TimedToastStyle } from '@app/components/toast/toast/styled-components';
+import { Container, StyledCloseButton, TimedToastContainer } from '@app/components/toast/toast/shared';
 import type { TimedMessage } from '@app/components/toast/types';
 import { useAnimationsEnabled } from '@app/hooks/use-animations-enabled';
 import { XMarkIcon } from '@navikt/aksel-icons';
@@ -41,7 +40,7 @@ export const TimedToast = forwardRef<HTMLDivElement, Props>(
       }
 
       const listener = (event: AnimationEvent) => {
-        if (event.animationName !== SCALE_X.name) {
+        if (event.animationName !== 'timer') {
           return;
         }
 
@@ -56,13 +55,13 @@ export const TimedToast = forwardRef<HTMLDivElement, Props>(
     }, [animationsEnabled, slideOut]);
 
     return (
-      <TimedToastStyle $type={type} ref={ref} key={id} $duration={duration}>
+      <TimedToastContainer type={type} ref={ref} key={id} duration={duration}>
         <StyledCloseButton variant="tertiary" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
         <Container>
           <Icon type={type} />
           <VStack gap="2 0">{content}</VStack>
         </Container>
-      </TimedToastStyle>
+      </TimedToastContainer>
     );
   },
 );

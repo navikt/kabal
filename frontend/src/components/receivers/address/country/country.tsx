@@ -3,9 +3,8 @@ import { Option } from '@app/components/receivers/address/country/option';
 import { Keys } from '@app/keys';
 import type { CountryCode } from '@app/types/common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Search, Tag, Tooltip } from '@navikt/ds-react';
+import { BoxNew, Button, HStack, Search, Tag, Tooltip } from '@navikt/ds-react';
 import { type CSSProperties, useCallback, useContext, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   value?: string;
@@ -108,7 +107,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
   );
 
   return (
-    <Container>
+    <div className="relative">
       <Search
         style={{ width }}
         size="small"
@@ -161,7 +160,19 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
         ref={searchRef}
       />
       {showCountryList ? (
-        <DropdownList>
+        <BoxNew
+          as="ul"
+          position="absolute"
+          left="0"
+          padding="0"
+          background="default"
+          borderRadius="medium"
+          shadow="dialog"
+          maxHeight="200"
+          overflowX="auto"
+          width="100%"
+          className="top-full z-1"
+        >
           {options.map((country, i) => (
             <Option
               key={country.landkode}
@@ -171,26 +182,8 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
               onClick={onSelect}
             />
           ))}
-        </DropdownList>
+        </BoxNew>
       ) : null}
-    </Container>
+    </div>
   );
 };
-
-const Container = styled.div`
-  position: relative;
-`;
-
-const DropdownList = styled.ul`
-  position: absolute;
-  top: 100%;
-  width: 100%;
-  left: 0;
-  padding: 0;
-  background-color: var(--a-bg-default);
-  border-radius: var(--a-border-radius-medium);
-  box-shadow: var(--a-shadow-medium);
-  z-index: 1;
-  max-height: 200px;
-  overflow-x: auto;
-`;

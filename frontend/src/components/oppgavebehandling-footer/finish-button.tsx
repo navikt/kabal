@@ -6,7 +6,6 @@ import { ValidationType } from '@app/types/oppgavebehandling/params';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
-import { styled } from 'styled-components';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 import { ConfirmFinish } from './confirm-finish';
 
@@ -35,18 +34,18 @@ export const FinishButton = () => {
     );
   }
 
-  if (!canEdit || typeof oppgave === 'undefined') {
+  if (!canEdit || oppgave === undefined) {
     return null;
   }
 
   return (
-    <Container>
+    <div className="relative">
       <Button
         type="button"
         size="small"
         disabled={showConfirmFinishDisplay}
         onClick={async () => {
-          if (typeof oppgave === 'undefined') {
+          if (oppgave === undefined) {
             return;
           }
 
@@ -61,10 +60,6 @@ export const FinishButton = () => {
         Fullfør
       </Button>
       <ConfirmFinish show={showConfirmFinishDisplay} cancel={() => setConfirmFinish(false)} />
-    </Container>
+    </div>
   );
 };
-
-const Container = styled.div`
-  position: relative;
-`;

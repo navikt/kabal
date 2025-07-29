@@ -1,6 +1,6 @@
+import { BoxNew, HGrid } from '@navikt/ds-react';
 import { useEditorReadOnly } from '@platejs/core/react';
 import type { HtmlHTMLAttributes } from 'react';
-import { css, styled } from 'styled-components';
 
 export enum SectionTypeEnum {
   LABEL = 0,
@@ -15,46 +15,44 @@ export enum SectionTypeEnum {
 
 const FONT_COLOR_MAP: Record<SectionTypeEnum, string> = {
   [SectionTypeEnum.MALTEKSTSEKSJON]: 'inherit',
-  [SectionTypeEnum.MALTEKST]: 'var(--a-gray-700)',
+  [SectionTypeEnum.MALTEKST]: 'var(--ax-text-neutral)',
   [SectionTypeEnum.REDIGERBAR_MALTEKST]: 'inherit',
   [SectionTypeEnum.REGELVERK]: 'inherit',
-  [SectionTypeEnum.HEADER]: 'var(--a-gray-700)',
-  [SectionTypeEnum.FOOTER]: 'var(--a-gray-700)',
-  [SectionTypeEnum.SIGNATURE]: 'var(--a-gray-700)',
-  [SectionTypeEnum.LABEL]: 'var(--a-gray-700)',
+  [SectionTypeEnum.HEADER]: 'var(--ax-text-neutral)',
+  [SectionTypeEnum.FOOTER]: 'var(--ax-text-neutral)',
+  [SectionTypeEnum.SIGNATURE]: 'var(--ax-text-neutral)',
+  [SectionTypeEnum.LABEL]: 'var(--ax-text-neutral)',
 };
 
-const PRIMARY_COLOR_MAP: Record<SectionTypeEnum, string> = {
-  [SectionTypeEnum.MALTEKSTSEKSJON]: 'var(--a-deepblue-300)',
-  [SectionTypeEnum.MALTEKST]: 'var(--a-purple-300)',
-  [SectionTypeEnum.REDIGERBAR_MALTEKST]: 'var(--a-green-100)',
-  [SectionTypeEnum.REGELVERK]: 'var(--a-blue-200)',
-  [SectionTypeEnum.HEADER]: 'var(--a-gray-300)',
-  [SectionTypeEnum.FOOTER]: 'var(--a-gray-300)',
-  [SectionTypeEnum.SIGNATURE]: 'var(--a-limegreen-300)',
-  [SectionTypeEnum.LABEL]: 'var(--a-gray-200)',
+const BORDER_COLOR_MAP: Record<SectionTypeEnum, string> = {
+  [SectionTypeEnum.MALTEKSTSEKSJON]: 'var(--ax-border-info)',
+  [SectionTypeEnum.MALTEKST]: 'var(--ax-border-meta-purple)',
+  [SectionTypeEnum.REDIGERBAR_MALTEKST]: 'var(--ax-border-success)',
+  [SectionTypeEnum.REGELVERK]: 'var(--ax-border-accent)',
+  [SectionTypeEnum.HEADER]: 'var(--ax-border-neutral)',
+  [SectionTypeEnum.FOOTER]: 'var(--ax-border-neutral)',
+  [SectionTypeEnum.SIGNATURE]: 'var(--ax-border-meta-lime)',
+  [SectionTypeEnum.LABEL]: 'var(--ax-border-neutral)',
 };
 
-const sectionToolbarCss = css`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  padding: 0;
-  font-size: 12pt;
+const BaseToolbarStyle = ({ style, className, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => (
+  <BoxNew
+    position="absolute"
+    top="0"
+    bottom="0"
+    {...rest}
+    style={style}
+    className={`text-[12pt] opacity-0 transition-opacity duration-200 focus:opacity-100 ${className}`}
+  />
+);
 
-  &:focus {
-    opacity: 1;
-  }
-`;
-
-const SectionToolbarStyle = styled.div`
-  ${sectionToolbarCss}
-  right: calc(100% + var(--a-spacing-2));
-  border-top-left-radius: var(--a-spacing-1);
-  border-bottom-left-radius: var(--a-spacing-1);
-`;
+const SectionToolbarStyle = ({ style, className, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => (
+  <BaseToolbarStyle
+    {...rest}
+    style={{ right: 'calc(100% + var(--ax-space-8))', ...style }}
+    className={`rounded-l-sm group-hover/section:opacity-100 ${className}`}
+  />
+);
 
 export const SectionToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => {
   if (useEditorReadOnly()) {
@@ -68,12 +66,13 @@ export const SectionToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDiv
   );
 };
 
-export const MaltekstseksjonToolbarStyle = styled.div`
-  ${sectionToolbarCss}
-  left: calc(100% + var(--a-spacing-2));
-  border-top-right-radius: var(--a-spacing-1);
-  border-bottom-right-radius: var(--a-spacing-1);
-`;
+export const MaltekstseksjonToolbarStyle = ({ style, className, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => (
+  <BaseToolbarStyle
+    {...rest}
+    style={{ left: 'calc(100% + var(--ax-space-8))', ...style }}
+    className={`rounded-r-sm group-hover/maltekst:opacity-100 ${className}`}
+  />
+);
 
 export const MaltekstseksjonToolbar = ({ children, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => {
   if (useEditorReadOnly()) {
@@ -87,88 +86,61 @@ export const MaltekstseksjonToolbar = ({ children, ...rest }: HtmlHTMLAttributes
   );
 };
 
-const StickyContent = styled.div`
-  position: sticky;
-  top: var(--a-spacing-12);
-  display: grid;
-  grid-template-columns: auto auto;
-  flex-direction: row;
-  gap: var(--a-spacing-1);
-  background-color: var(--a-bg-subtle);
-  color: var(--a-icon-action);
-  box-shadow: var(--a-shadow-medium);
-`;
-
-const sectionBeforeCss = css`
-  content: '';
-  display: block;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  border-style: solid;
-  border-color: transparent;
-`;
-
-const sectionContainerCss = css`
-  position: relative;
-  margin-top: 0;
-  background-color: transparent;
-  user-select: text;
-
-  /* Hide empty paragraph placeholders */
-  &[data-element='maltekst'] p::before {
-    content: '';
-  }
-`;
-
-interface SectionContainerProps {
-  $sectionType: SectionTypeEnum;
+interface StickyContentProps {
+  children: React.ReactNode;
 }
 
-export const SectionContainer = styled.div<SectionContainerProps>`
-  ${sectionContainerCss}
-  color: ${(props) => FONT_COLOR_MAP[props.$sectionType]};
+const StickyContent = ({ children }: StickyContentProps) => (
+  <HGrid asChild position="sticky" columns="auto auto" top="space-48" gap="space-4">
+    <BoxNew background="sunken" shadow="dialog" className="text-ax-text-accent">
+      {children}
+    </BoxNew>
+  </HGrid>
+);
 
-  &::before {
-    ${sectionBeforeCss}
-    left: -8px;
-    transition: border-left-color 0.2s ease-in-out;
-    border-left-width: var(--a-spacing-1);
-  }
+interface BaseSectionContainerProps extends HtmlHTMLAttributes<HTMLDivElement> {
+  color: string;
+  borderColor: string;
+}
 
-  &:hover {
-    &::before {
-      border-left-color: ${(props) => PRIMARY_COLOR_MAP[props.$sectionType]};
-    }
+const BaseSectionContainer = ({
+  color,
+  borderColor,
+  className,
+  style,
+  children,
+  ...rest
+}: BaseSectionContainerProps) => (
+  <BoxNew
+    position="relative"
+    style={{ color: color, ['--border-color' as string]: borderColor, ...style }}
+    className={`select-none before:absolute before:top-0 before:bottom-0 before:block before:border-transparent hover:z-1 hover:before:border-(--border-color) ${className}`}
+    {...rest}
+  >
+    {children}
+  </BoxNew>
+);
 
-    > ${SectionToolbarStyle} {
-      opacity: 1;
-    }
+interface SectionContainerProps extends HtmlHTMLAttributes<HTMLDivElement> {
+  sectionType: SectionTypeEnum;
+}
 
-    z-index: 1;
-  }
-`;
+export const SectionContainer = ({ sectionType, children, ...rest }: SectionContainerProps) => (
+  <BaseSectionContainer
+    color={FONT_COLOR_MAP[sectionType]}
+    borderColor={BORDER_COLOR_MAP[sectionType]}
+    className="group/section before:-left-2 before:border-l-4"
+    {...rest}
+  >
+    {children}
+  </BaseSectionContainer>
+);
 
-export const MaltekstseksjonContainer = styled.div`
-  ${sectionContainerCss}
-  color:  ${FONT_COLOR_MAP[SectionTypeEnum.MALTEKSTSEKSJON]};
-
-  &::before {
-    ${sectionBeforeCss}
-    right: -8px;
-    transition: border-right-color 0.2s ease-in-out;
-    border-right-width: var(--a-spacing-1);
-  }
-
-  &:hover {
-    &::before {
-      border-right-color: ${PRIMARY_COLOR_MAP[SectionTypeEnum.MALTEKSTSEKSJON]};
-    }
-
-    > ${MaltekstseksjonToolbarStyle} {
-      opacity: 1;
-    }
-
-    z-index: 1;
-  }
-`;
+export const MaltekstseksjonContainer = (props: HtmlHTMLAttributes<HTMLDivElement>) => (
+  <BaseSectionContainer
+    color={FONT_COLOR_MAP[SectionTypeEnum.MALTEKSTSEKSJON]}
+    borderColor={BORDER_COLOR_MAP[SectionTypeEnum.MALTEKSTSEKSJON]}
+    className="group/maltekst before:-right-2 before:border-l-4 [&>p:before]:content-['']"
+    {...props}
+  />
+);

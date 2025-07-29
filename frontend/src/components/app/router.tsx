@@ -5,6 +5,8 @@ import { ModalEnum } from '@app/components/svarbrev/row/row';
 import { Toasts } from '@app/components/toast/toasts';
 import { VersionCheckerStatus } from '@app/components/version-checker/version-checker-status';
 import { TEXT_TYPE_BASE_PATH } from '@app/domain/redaktør-paths';
+import { useDarkMode } from '@app/hooks/settings/use-setting';
+import { pushEvent } from '@app/observability';
 import { AccessRightsPage } from '@app/pages/access-rights/access-rights';
 import { AdminPage } from '@app/pages/admin/admin';
 import { BunnteksterPage } from '@app/pages/bunntekster/bunntekster';
@@ -30,6 +32,8 @@ import {
   REGELVERK_TYPE,
   RichTextTypes,
 } from '@app/types/common-text-types';
+import { Theme, VStack } from '@navikt/ds-react';
+import { useEffect } from 'react';
 import { Outlet, Route, Routes as Switch } from 'react-router-dom';
 
 export const Router = () => (
@@ -153,11 +157,21 @@ export const Router = () => (
   </Switch>
 );
 
-const AppWrapper = () => (
-  <>
-    <NavHeader />
-    <Outlet />
-    <Toasts />
-    <VersionCheckerStatus />
-  </>
-);
+const AppWrapper = () => {
+  const { value: darkMode } = useDarkMode();
+
+  useEffect(() => {
+    pushEvent(darkMode ? 'theme-dark' : 'theme-light', 'theme');
+  }, [darkMode]);
+
+  return (
+    <VStack asChild height="100%" width="100%" overflow="hidden">
+      <Theme theme={darkMode ? 'dark' : 'light'}>
+        <NavHeader />
+        <Outlet />
+        <Toasts />
+        <VersionCheckerStatus />
+      </Theme>
+    </VStack>
+  );
+};

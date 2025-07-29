@@ -1,7 +1,6 @@
 import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import { Heading, HStack, Loader, Tag } from '@navikt/ds-react';
+import { BoxNew, Heading, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
 import { TextPreview } from '../texts/preview';
 
 interface Props {
@@ -21,7 +20,7 @@ export const MaltekstseksjonReadOnly = ({ id, textToHighlight }: Props) => {
   }
 
   return (
-    <Section>
+    <section className="mt-4">
       <HStack align="center" justify="start" gap="0 2" as="header">
         <Heading level="1" size="medium">
           {maltekstseksjon.title.length > 0 ? maltekstseksjon.title : '<Ingen tittel>'}
@@ -30,38 +29,26 @@ export const MaltekstseksjonReadOnly = ({ id, textToHighlight }: Props) => {
           Maltekstseksjon
         </Tag>
       </HStack>
-      <List>
-        {maltekstseksjon.textIdList.map((textId) => (
-          <li key={textId}>
-            <StyledTextPreview textId={textId} $highlight={textId === textToHighlight} />
-          </li>
-        ))}
-      </List>
-    </Section>
+
+      <VStack asChild gap="2 0">
+        <BoxNew
+          as="ul"
+          borderRadius="medium 0 0 medium"
+          paddingBlock="4 2"
+          paddingInline="3 0"
+          borderWidth="0 0 0 4"
+          borderColor="info"
+        >
+          {maltekstseksjon.textIdList.map((textId) => (
+            <li key={textId}>
+              <TextPreview
+                textId={textId}
+                className={`rounded-sm outline-offset-2 ${textId === textToHighlight ? 'outline-4 outline-ax-border-accent outline-solid' : ''}`}
+              />
+            </li>
+          ))}
+        </BoxNew>
+      </VStack>
+    </section>
   );
 };
-
-const Section = styled.section`
-  margin-top: var(--a-spacing-4);
-`;
-
-const List = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-2);
-  border-bottom-left-radius: var(--a-border-radius-medium);
-  border-top-left-radius: var(--a-border-radius-medium);
-  padding-bottom: var(--a-spacing-2);
-  padding-top: var(--a-spacing-4);
-  padding-left: var(--a-spacing-3);
-  border-left: var(--a-spacing-1) solid var(--a-surface-info);
-`;
-
-const StyledTextPreview = styled(TextPreview)<{ $highlight: boolean }>`
-  outline: ${({ $highlight }) => ($highlight ? '4px solid var(--a-border-action-selected)' : 'none')};
-  outline-offset: var(--a-spacing-05);
-  border-radius: var(--a-border-radius-medium);
-`;

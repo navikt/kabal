@@ -6,7 +6,6 @@ import { usePushEvent } from '@app/observability';
 import { BulletListIcon, CaptionsIcon } from '@navikt/aksel-icons';
 import { BodyLong, Tabs } from '@navikt/ds-react';
 import { useCallback } from 'react';
-import { styled } from 'styled-components';
 import { splitBeskrivelse } from './parsing/split-beskrivelse';
 
 interface Props {
@@ -44,7 +43,12 @@ export const GosysBeskrivelseTabs = ({ beskrivelse = '', entries = splitBeskrive
         <EntryList entries={entries} />
       </Tabs.Panel>
       <Tabs.Panel value={GosysBeskrivelseFormat.GOSYS} className="overflow-auto">
-        <GosysFormatted size="small">{beskrivelse?.trim()}</GosysFormatted>
+        <BodyLong
+          size="small"
+          className="mt-2 overflow-auto whitespace-pre-wrap border-ax-border-neutral-subtle border-l-4 pl-4"
+        >
+          {beskrivelse?.trim()}
+        </BodyLong>
       </Tabs.Panel>
     </Tabs>
   );
@@ -58,11 +62,3 @@ const usePreferredFormat = (): [GosysBeskrivelseFormat, (format: GosysBeskrivels
 
 const ensureGosysFormat = (value: string | undefined): GosysBeskrivelseFormat =>
   value !== GosysBeskrivelseFormat.GOSYS ? GosysBeskrivelseFormat.KABAL : GosysBeskrivelseFormat.GOSYS;
-
-const GosysFormatted = styled(BodyLong)`
-  white-space: pre-wrap;
-  border-left: var(--a-spacing-1) solid var(--a-border-subtle);
-  padding-left: var(--a-spacing-4);
-  margin-top: var(--a-spacing-2);
-  overflow: auto;
-`;

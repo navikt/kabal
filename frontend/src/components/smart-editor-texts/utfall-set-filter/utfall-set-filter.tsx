@@ -6,9 +6,8 @@ import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Box, Button, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, VStack } from '@navikt/ds-react';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   selected: string[];
@@ -31,12 +30,12 @@ export const UtfallSetFilter = ({ selected, onChange }: Props) => {
   );
 
   return (
-    <Container ref={ref}>
-      <ToggleButton $open={isOpen} onClick={() => setIsOpen(!isOpen)}>
+    <div className="relative" ref={ref}>
+      <ToggleButton open={isOpen} onClick={() => setIsOpen(!isOpen)} size="small">
         Utfallsett ({selected.length})
       </ToggleButton>
       {isOpen ? <UtfallSets onChange={_onChange} utfallSets={utfallSets} /> : null}
-    </Container>
+    </div>
   );
 };
 
@@ -61,18 +60,24 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
 
   return (
     <VStack asChild gap="2 0" width="400px" position="absolute" left="0" className="top-full z-100">
-      <Box
-        background="bg-default"
+      <BoxNew
+        background="default"
         padding="2"
-        shadow="medium"
+        shadow="dialog"
         borderWidth="1"
-        borderColor="border-divider"
+        borderColor="neutral"
         borderRadius="medium"
         overflow="auto"
       >
         <VStack as="ul" gap="1 0" padding="0" margin="0" className="list-none">
           {utfallSets.map((utfallSet, index) => (
-            <StyledListItem key={utfallSet.join('-')}>
+            <BoxNew
+              as="li"
+              key={utfallSet.join('-')}
+              borderRadius="medium"
+              padding="space-8"
+              className="odd:bg-ax-bg-neutral-moderate"
+            >
               <UtfallSet
                 utfallSet={utfallSet}
                 onDelete={() => onChange(utfallSets.filter((_, i) => i !== index))}
@@ -80,10 +85,10 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
                 isEditing={index === editingIndex}
                 toggleIsEditing={() => toggleIsEditing(index)}
               />
-            </StyledListItem>
+            </BoxNew>
           ))}
           {isAddingSet ? (
-            <AddListItem key="add-set">
+            <BoxNew key="add-set" borderRadius="medium" padding="space-8" background="accent-moderate">
               <EditUtfallSet
                 title="Legg til nytt utfallsett"
                 icon={<PlusIcon aria-hidden />}
@@ -91,7 +96,7 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
                 onChange={onAddSet}
                 onCancel={toggleIsAddingSet}
               />
-            </AddListItem>
+            </BoxNew>
           ) : null}
         </VStack>
         {isAddingSet ? null : (
@@ -99,7 +104,7 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
             Legg til nytt utfallsett
           </Button>
         )}
-      </Box>
+      </BoxNew>
     </VStack>
   );
 };
@@ -127,22 +132,3 @@ const UtfallSet = ({ utfallSet, onChange, onDelete, isEditing, toggleIsEditing }
 
   return <ReadUtfallSet utfallSet={utfallSet} onDelete={onDelete} editUtfallSet={toggleIsEditing} />;
 };
-
-const Container = styled.div`
-  position: relative;
-`;
-
-const BaseListItem = styled.li`
-  border-radius: var(--a-border-radius-medium);
-  padding: var(--a-spacing-2);
-`;
-
-const StyledListItem = styled(BaseListItem)`
-  &:nth-child(odd) {
-    background-color: var(--a-bg-subtle);
-  }
-`;
-
-const AddListItem = styled(BaseListItem)`
-  background-color: var(--a-surface-action-subtle);
-`;

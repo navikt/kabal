@@ -1,32 +1,31 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
-import { Dropdown, InternalHeader } from '@navikt/ds-react';
+import { ActionMenu, InternalHeader } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { UserDropdown } from './dropdown';
 
 export const User = () => {
-  const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
   const { user } = useContext(StaticDataContext);
-
-  const name =
-    signatureIsLoading || typeof signature === 'undefined'
-      ? 'Laster...'
-      : (signature.customLongName ?? signature.longName);
+  const name = useSignature();
 
   return (
-    <Dropdown>
-      <InternalHeader.UserButton
-        as={StyledToggle}
-        data-testid="user-menu-button"
-        name={name}
-        description={`Enhet: ${user.ansattEnhet.navn}`}
-      />
+    <ActionMenu>
+      <ActionMenu.Trigger>
+        <InternalHeader.UserButton
+          data-testid="user-menu-button"
+          name={name}
+          description={`Enhet: ${user.ansattEnhet.navn}`}
+          className="whitespace-nowrap"
+        />
+      </ActionMenu.Trigger>
+
       <UserDropdown />
-    </Dropdown>
+    </ActionMenu>
   );
 };
 
-const StyledToggle = styled(Dropdown.Toggle)`
-  white-space: nowrap;
-`;
+const useSignature = () => {
+  const { data, isSuccess } = useGetMySignatureQuery();
+
+  return isSuccess ? (data.customLongName ?? data.longName) : 'Laster...';
+};

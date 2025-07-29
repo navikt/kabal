@@ -4,7 +4,7 @@ import { Button, Tooltip } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
 
 const PING_ANIMATION_CLASSES =
-  'relative after:absolute after:top-1.5 after:left-0 after:right-0 after:bottom-1 after:animate-ping motion-reduce:after:animate-ping after:rounded-medium after:border-2 after:border-border-action';
+  'relative after:absolute after:top-1.5 after:left-0 after:right-0 after:bottom-1 after:animate-ping motion-reduce:after:animate-ping after:rounded-medium after:border-2 after:border-ax-border-accent';
 const WIGGLE_ANIMATION_CLASSES = 'animate-wiggle motion-reduce:animate-wiggle';
 const BOUCE_ANIMATION_CLASSES = 'animate-bounce motion-reduce:animate-bounce';
 const ANIMATIONS = [PING_ANIMATION_CLASSES, WIGGLE_ANIMATION_CLASSES, BOUCE_ANIMATION_CLASSES];

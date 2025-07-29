@@ -6,7 +6,7 @@ import { TextModified } from '@app/components/smart-editor-texts/modified';
 import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import type { IPublishedPlainText } from '@app/types/texts/responses';
-import { BodyLong, Box, Heading, HStack, VStack } from '@navikt/ds-react';
+import { BodyLong, Box, BoxNew, Heading, HStack, VStack } from '@navikt/ds-react';
 
 interface Props {
   text: IPublishedPlainText;
@@ -38,9 +38,9 @@ export const PublishedPlainText = ({ text, hasDraft, setTabId }: Props) => {
       </HStack>
 
       <VStack as={Box} gap="4" background="bg-subtle" padding="4">
-        <Box as={BodyLong} background="bg-default" padding="4" borderRadius="medium" shadow="medium">
+        <BoxNew as={BodyLong} background="default" padding="4" borderRadius="medium" shadow="dialog">
           {text.plainText[lang]}
-        </Box>
+        </BoxNew>
       </VStack>
     </VStack>
   );

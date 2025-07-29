@@ -1,48 +1,8 @@
 import { TimelineItem } from '@app/components/documents/journalfoerte-documents/document/timeline/timeline-item';
-import { TimelineTypes, type Utsendingsinfo } from '@app/types/arkiverte-documents';
-import {
-  ArrowUndoIcon,
-  BellIcon,
-  EnvelopeClosedIcon,
-  FileCheckmarkIcon,
-  FolderFileIcon,
-  GlassesIcon,
-  HddUpIcon,
-  MobileSmallIcon,
-  PrinterSmallIcon,
-} from '@navikt/aksel-icons';
-import { Box, Label } from '@navikt/ds-react';
+import type { Utsendingsinfo } from '@app/types/arkiverte-documents';
+import { BellIcon, EnvelopeClosedIcon, MobileSmallIcon } from '@navikt/aksel-icons';
+import { BoxNew, Label } from '@navikt/ds-react';
 import type { HTMLAttributes } from 'react';
-
-export const DATOTYPE_NAME: Record<TimelineTypes, string> = {
-  [TimelineTypes.OPPRETTET]: 'Opprettet',
-  [TimelineTypes.SENDT_PRINT]: 'Sendt print',
-  [TimelineTypes.EKSPEDERT]: 'Ekspedert',
-  [TimelineTypes.JOURNALFOERT]: 'Journalført',
-  [TimelineTypes.REGISTRERT]: 'Registrert',
-  [TimelineTypes.AVSENDER_RETUR]: 'Avsender retur',
-  [TimelineTypes.LEST]: 'Lest',
-};
-
-export const BACKGROUND_COLOR: Record<TimelineTypes, string> = {
-  [TimelineTypes.OPPRETTET]: 'var(--a-limegreen-50)',
-  [TimelineTypes.SENDT_PRINT]: 'var(--a-orange-50)',
-  [TimelineTypes.EKSPEDERT]: 'var(--a-deepblue-50)',
-  [TimelineTypes.JOURNALFOERT]: 'var(--a-blue-50)',
-  [TimelineTypes.REGISTRERT]: 'var(--a-purple-50)',
-  [TimelineTypes.AVSENDER_RETUR]: 'var(--a-red-50)',
-  [TimelineTypes.LEST]: 'var(--a-green-50)',
-};
-
-export const ICON: Record<TimelineTypes, React.FC> = {
-  [TimelineTypes.OPPRETTET]: FileCheckmarkIcon,
-  [TimelineTypes.SENDT_PRINT]: PrinterSmallIcon,
-  [TimelineTypes.EKSPEDERT]: EnvelopeClosedIcon,
-  [TimelineTypes.JOURNALFOERT]: FolderFileIcon,
-  [TimelineTypes.REGISTRERT]: HddUpIcon,
-  [TimelineTypes.AVSENDER_RETUR]: ArrowUndoIcon,
-  [TimelineTypes.LEST]: GlassesIcon,
-};
 
 interface VarslerProps {
   isEmailSent: boolean;
@@ -126,7 +86,7 @@ const VarselTimelineItem = ({ timestamp, title, content, isLast = false }: Varse
     timestamp={timestamp}
     title={title}
     icon={<BellIcon aria-hidden />}
-    color="var(--a-lightblue-50)"
+    background="brand-blue-soft"
     popover={{ buttonText: 'Vis varsel', content }}
     hideNext={isLast}
   />
@@ -155,15 +115,15 @@ const EmailContent = ({ varslingstekst }: { varslingstekst: string | undefined }
 };
 
 const MessageContainer = ({ children, ...rest }: HTMLAttributes<HTMLDivElement>) => (
-  <Box
+  <BoxNew
     as="blockquote"
     borderWidth="0 0 0 1"
-    borderColor="border-on-inverted"
+    borderColor="neutral"
     paddingInline="1 0"
     borderRadius="medium"
     marginBlock="2 0"
     {...rest}
   >
     {children}
-  </Box>
+  </BoxNew>
 );

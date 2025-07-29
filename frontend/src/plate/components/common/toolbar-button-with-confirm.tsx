@@ -1,6 +1,6 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Box, Button, type ButtonProps, HStack, Tooltip, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, type ButtonProps, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 
 interface Props extends Omit<ButtonProps, 'variant' | 'size'> {
@@ -28,7 +28,7 @@ export const ToolbarButtonWithConfirm = ({ onClick, icon, tooltip, loading, ...r
 
       {showConfirm ? (
         <VStack asChild position="absolute" right="0" className="top-full z-1">
-          <Box background="bg-subtle" borderRadius="0 0 medium medium" shadow="medium">
+          <BoxNew background="neutral-soft" borderRadius="0 0 medium medium" shadow="dialog">
             <Tooltip content="Bekreft" delay={0} placement="right">
               <Button
                 icon={<CheckmarkIcon aria-hidden />}
@@ -47,7 +47,7 @@ export const ToolbarButtonWithConfirm = ({ onClick, icon, tooltip, loading, ...r
                 loading={loading}
               />
             </Tooltip>
-          </Box>
+          </BoxNew>
         </VStack>
       ) : null}
     </HStack>
