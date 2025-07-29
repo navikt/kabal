@@ -1,9 +1,8 @@
 import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { BulletListIcon, ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, Checkbox, HStack, Search, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, BoxNew, Button, Checkbox, HGrid, HStack, Search, Tag, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import type { BaseProps, IOption } from './props';
 
 export enum OptionType {
@@ -57,9 +56,9 @@ export const NestedFilterList = ({
       data-testid={testId}
       data-asdasdasf
     >
-      <Box padding="2" background="bg-default" shadow="medium">
+      <BoxNew padding="2" background="default" shadow="dialog">
         <HStack asChild justify="space-between" padding="2" top="0" position="sticky" wrap={false}>
-          <Box background="bg-default" borderWidth="0 0 1 0" borderColor="border-divider">
+          <BoxNew background="default" borderWidth="0 0 1 0" borderColor="neutral">
             <Search
               value={rawFilter}
               onChange={setRawFilter}
@@ -72,12 +71,19 @@ export const NestedFilterList = ({
               data-testid="header-filter"
             />
             {showFjernAlle && (
-              <StyledButton size="xsmall" variant="danger" onClick={reset} icon={<TrashIcon aria-hidden />}>
+              <Button
+                size="xsmall"
+                variant="danger"
+                onClick={reset}
+                icon={<TrashIcon aria-hidden />}
+                className="ml-2 shrink-0"
+              >
                 Fjern alle
-              </StyledButton>
+              </Button>
             )}
-          </Box>
+          </BoxNew>
         </HStack>
+
         <OptionsList
           options={options}
           selected={selected}
@@ -85,7 +91,7 @@ export const NestedFilterList = ({
           filter={filter}
           hasFilter={rawFilter.length > 0}
         />
-      </Box>
+      </BoxNew>
     </VStack>
   );
 };
@@ -100,11 +106,11 @@ interface ListProps {
 }
 
 const OptionsList = ({ options, level = 0, ...rest }: ListProps) => (
-  <List $level={level}>
+  <VStack as="ul" overflowY="auto" paddingInline={level === 0 ? '0 0' : '6 0'}>
     {options.map((o) => (
       <ListItem key={o.value} {...rest} option={o} level={level} />
     ))}
-  </List>
+  </VStack>
 );
 
 interface ListItemProps {
@@ -136,13 +142,14 @@ const ListItem = ({ option, selected, level, filter, onCheck, hasFilter }: ListI
 
   return (
     <li key={value}>
-      <CheckboxContainer>
+      <HGrid columns="32px auto" align="start" style={{ gridTemplateAreas: '"expand checkbox"' }}>
         {isSubInFilter ? (
-          <ExpandButton
+          <Button
             variant="tertiary-neutral"
             size="xsmall"
             onClick={() => setIsExpaded(!isExpanded)}
             icon={isExpanded ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
+            className="h-8 [grid-area:expand]"
           />
         ) : null}
         <CheckboxOrGroup
@@ -157,7 +164,7 @@ const ListItem = ({ option, selected, level, filter, onCheck, hasFilter }: ListI
           <span>{label}</span>
           {tags}
         </CheckboxOrGroup>
-      </CheckboxContainer>
+      </HGrid>
 
       {isSubInFilter && hasOptionsOrGroups && isExpanded ? (
         <OptionsList
@@ -197,31 +204,32 @@ const CheckboxOrGroup = ({ option, children, selected, onCheck, subSelectionCoun
 
   if (type === OptionType.GROUP) {
     return (
-      <GroupLabel size="small">
+      <HStack as={BodyShort} align="center" gap="2" height="100%" overflow="hidden" size="small">
         <BulletListIcon aria-hidden height={20} width={20} style={{ flexShrink: 0 }} />
         <OptionLabel options={options} subOptionSelectedCount={subSelectionCount} totalOptions={totalOptions}>
           {children}
         </OptionLabel>
-      </GroupLabel>
+      </HStack>
     );
   }
 
   const isChecked = selected.includes(value);
 
   return (
-    <StyledCheckbox
+    <Checkbox
       value={value}
       size="small"
       checked={isChecked}
       indeterminate={!isChecked && option.indeterminate}
       onChange={() => onCheck(value)}
+      className="[grid-area:checkbox]"
     >
       <HStack align="center" gap="0 2">
         <OptionLabel options={options} subOptionSelectedCount={subSelectionCount} totalOptions={totalOptions}>
           {children}
         </OptionLabel>
       </HStack>
-    </StyledCheckbox>
+    </Checkbox>
   );
 };
 
@@ -233,7 +241,7 @@ interface OptionLabelProps {
 }
 
 const OptionLabel = ({ children, subOptionSelectedCount, options, totalOptions }: OptionLabelProps) => (
-  <StyledOptionLabel>
+  <HStack as="span" align="center" gap="1" overflow="hidden" className="truncate">
     {children}
     {options !== undefined && options.length > 0 ? (
       <Tag
@@ -241,7 +249,7 @@ const OptionLabel = ({ children, subOptionSelectedCount, options, totalOptions }
         size="xsmall"
       >{`${subOptionSelectedCount}/${totalOptions}`}</Tag>
     ) : null}
-  </StyledOptionLabel>
+  </HStack>
 );
 
 const getTagVariant = (
@@ -291,54 +299,3 @@ const getAllSubOptions = (options: NestedOption[], selected: string[], filter: R
 
   return { subSelectionCount, isSubInFilter };
 };
-
-const StyledButton = styled(Button)`
-  margin-left: 0.5em;
-  flex-shrink: 0;
-`;
-
-const List = styled.ul<{ $level: number }>`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  overflow-y: auto;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-  padding-left: ${({ $level }) => ($level === 0 ? 0 : 26)}px;
-`;
-
-const CHECKBOX_SIZE = 32;
-
-const CheckboxContainer = styled.div`
-  display: grid;
-  grid-template-columns: ${CHECKBOX_SIZE}px auto;
-  grid-template-areas: 'expand checkbox';
-  align-items: flex-start;
-`;
-
-const ExpandButton = styled(Button)`
-  grid-area: expand;
-  height: ${CHECKBOX_SIZE}px;
-`;
-
-const StyledCheckbox = styled(Checkbox)`
-  grid-area: checkbox;
-  column-gap: var(--a-spacing-2);
-`;
-
-const GroupLabel = styled(BodyShort)`
-  display: flex;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
-  height: 100%;
-  overflow: hidden;
-`;
-
-const StyledOptionLabel = styled.span`
-  display: flex;
-  align-items: center;
-  column-gap: var(--a-spacing-1);
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;

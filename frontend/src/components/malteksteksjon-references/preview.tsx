@@ -10,11 +10,10 @@ import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IRichText, IText } from '@app/types/texts/responses';
-import { Box, Heading, Loader, VStack } from '@navikt/ds-react';
+import { BoxNew, Heading, Loader, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { useCallback, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   id: string | null;
@@ -78,27 +77,26 @@ const LoadedPreview = ({ id, value, maltekstseksjon }: LoadedPreviewProps) => {
   });
   return (
     <VStack asChild align="center" gap="4" padding="4">
-      <Box borderRadius="medium" background="surface-subtle">
+      <BoxNew borderRadius="medium" background="neutral-soft">
         <Heading level="1" size="xsmall">
           Forhåndsvisning av {getTitle(maltekstseksjon.title)}
         </Heading>
-        <Sheet>
+
+        <BoxNew
+          shadow="dialog"
+          background="input"
+          width="210mm"
+          className="px-[20mm] pt-[15mm] pb-[20mm]"
+          data-element="sheet"
+        >
           <Plate<RichTextEditor> editor={editor} readOnly>
             <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[lang]} />
           </Plate>
-        </Sheet>
-      </Box>
+        </BoxNew>
+      </BoxNew>
     </VStack>
   );
 };
-
-const Sheet = styled.div`
-  padding: 20mm;
-  padding-top: 15mm;
-  box-shadow: var(--a-shadow-medium);
-  background-color: var(--a-bg-default);
-  width: 210mm;
-`;
 
 const isMaltekstOrRedigerbarMaltekst = (text: IText): text is IRichText =>
   text.textType === RichTextTypes.MALTEKST || text.textType === RichTextTypes.REDIGERBAR_MALTEKST;

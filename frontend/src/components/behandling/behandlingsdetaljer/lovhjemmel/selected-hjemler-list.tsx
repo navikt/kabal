@@ -1,7 +1,7 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useAllLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
 import type { ILovKildeToRegistreringshjemmel } from '@app/types/kodeverk';
-import { Box, Loader } from '@navikt/ds-react';
+import { BoxNew, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 
@@ -32,9 +32,9 @@ export const SelectedHjemlerList = ({ selected }: Props) => {
   }
 
   return (
-    <Box paddingBlock="2" paddingInline="1 0" marginBlock="2 0" borderWidth="0 0 0 2" borderColor="border-divider">
+    <BoxNew paddingBlock="2" paddingInline="1 0" marginBlock="2 0" borderWidth="0 0 0 2" borderColor="neutral">
       <SelectedChildren registreringshjemmelIdList={list} />
-    </Box>
+    </BoxNew>
   );
 };
 
@@ -44,7 +44,7 @@ const SelectedChildren = ({
   registreringshjemmelIdList: ILovKildeToRegistreringshjemmel[];
 }) => {
   if (registreringshjemmelIdList.length === 0) {
-    return <p className="m-0 text-text-subtle">Ingen valgte hjemler</p>;
+    return <p className="m-0 text-ax-text-neutral-subtle">Ingen valgte hjemler</p>;
   }
 
   return (

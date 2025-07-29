@@ -1,3 +1,4 @@
+import { darkModeStore, getDarkMode } from '@app/darkmode';
 import { ENVIRONMENT } from '@app/environment';
 import { getQueryParams } from '@app/headers';
 import { pushError } from '@app/observability';
@@ -24,23 +25,42 @@ class VersionChecker {
   private isUpToDate = true;
   private updateRequest: UpdateRequest = UpdateRequest.NONE;
   private updateRequestListeners: UpdateRequestListenerFn[] = [];
+  private eventSource: EventSource;
+  private darkmode: boolean = getDarkMode();
 
   constructor() {
     console.info('CURRENT VERSION', ENVIRONMENT.version);
 
-    this.createEventSource();
+    this.eventSource = this.createEventSource();
 
     window.sendUpdateRequest = (data: UpdateRequest) => {
       this.onUpdateRequest(new MessageEvent(UPDATE_REQUEST_EVENT, { data }));
     };
+
+    // Listen for dark mode changes
+    darkModeStore.subscribe((darkMode) => {
+      if (this.darkmode !== darkMode) {
+        this.darkmode = darkMode;
+        this.reopenEventSource();
+      }
+    });
   }
 
   public getUpdateRequest = (): UpdateRequest => this.updateRequest;
 
   private delay = 0;
 
+  private reopenEventSource = () => {
+    this.eventSource.close();
+    this.delay = 0;
+    this.eventSource = this.createEventSource();
+  };
+
   private createEventSource = () => {
-    const events = new EventSource(`/version?${getQueryParams()}`);
+    const params = getQueryParams();
+    params.set('theme', this.darkmode ? 'dark' : 'light');
+
+    const events = new EventSource(`/version?${params.toString()}`);
 
     events.addEventListener('error', () => {
       if (events.readyState === EventSource.CLOSED) {
@@ -61,6 +81,8 @@ class VersionChecker {
     events.addEventListener('version', this.onVersion);
 
     events.addEventListener(UPDATE_REQUEST_EVENT, this.onUpdateRequest);
+
+    return events;
   };
 
   private onVersion = ({ data }: MessageEvent<string>) => {

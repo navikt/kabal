@@ -3,9 +3,8 @@ import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import type { IOppgave } from '@app/types/oppgaver';
-import { ErrorMessage, HStack, Select } from '@navikt/ds-react';
+import { BoxNew, ErrorMessage, HStack, Select, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
 import { useTildel } from './use-tildel';
 
 const NOT_SELECTED = 'NOT_SELECTED';
@@ -39,12 +38,12 @@ export const SaksbehandlerContent = (oppgave: IOppgave) => {
   }
 
   if (oppgave.tildeltSaksbehandlerident === null) {
-    return <StyledSaksbehandler>Ikke tildelt</StyledSaksbehandler>;
+    return <SaksbehandlerName>Ikke tildelt</SaksbehandlerName>;
   }
 
   const saksbehandler = `${name ?? 'Laster...'} (${oppgave.tildeltSaksbehandlerident})`;
 
-  return <StyledSaksbehandler title={saksbehandler}>{saksbehandler}</StyledSaksbehandler>;
+  return <SaksbehandlerName>{saksbehandler}</SaksbehandlerName>;
 };
 
 interface ISelectSaksbehandlerProps extends Pick<IOppgave, 'id' | 'typeId' | 'ytelseId' | 'tildeltSaksbehandlerident'> {
@@ -66,7 +65,7 @@ const SelectSaksbehandler = ({
   const [tildel, { isLoading }] = useTildel(id, typeId, ytelseId);
 
   if (saksbehandlereIsError) {
-    return <StyledErrorMessage>Feil ved lasting</StyledErrorMessage>;
+    return <ErrorMessage className="w-full truncate">Feil ved lasting</ErrorMessage>;
   }
 
   if (potentialSaksbehandlereIsLoading || typeof data === 'undefined') {
@@ -97,7 +96,7 @@ const SelectSaksbehandler = ({
     data.saksbehandlere.some(({ navIdent }) => navIdent === tildeltSaksbehandlerident);
 
   return (
-    <StyledSelect
+    <Select
       label="Velg saksbehandler"
       hideLabel
       size="small"
@@ -105,33 +104,35 @@ const SelectSaksbehandler = ({
       onChange={onChange}
       disabled={isLoading}
       title={saksbehandler}
+      className="w-full"
     >
       {tildeltSaksbehandlerident === null ? <option value={NOT_SELECTED}>Ikke tildelt</option> : null}
       {options}
       {valid ? null : (
         <option value={tildeltSaksbehandlerident}>Ugyldig saksbehandler ({tildeltSaksbehandlerident})</option>
       )}
-    </StyledSelect>
+    </Select>
   );
 };
 
-const StyledSelect = styled(Select)`
-  width: 100%;
-`;
+interface SaksbehandlerNameProps {
+  children: string;
+}
 
-const StyledSaksbehandler = styled.span`
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding: 0.25rem;
-  border: 1px solid var(--a-border-divider);
-  border-radius: var(--a-border-radius-medium);
-  background-color: var(--a-bg-default);
-`;
-
-const StyledErrorMessage = styled(ErrorMessage)`
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
+const SaksbehandlerName = ({ children }: SaksbehandlerNameProps) => (
+  <Tooltip content={children}>
+    <BoxNew
+      as="span"
+      width="100%"
+      overflow="hidden"
+      padding="space-4"
+      borderWidth="1"
+      borderColor="neutral"
+      borderRadius="medium"
+      background="default"
+      className="truncate"
+    >
+      {children}
+    </BoxNew>
+  </Tooltip>
+);

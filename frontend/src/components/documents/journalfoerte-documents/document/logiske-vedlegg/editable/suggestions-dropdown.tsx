@@ -1,5 +1,5 @@
 import { merge } from '@app/functions/classes';
-import { Button, type ButtonProps } from '@navikt/ds-react';
+import { BoxNew, Button, type ButtonProps } from '@navikt/ds-react';
 import { type HTMLAttributes, useEffect, useRef } from 'react';
 
 interface BaseProps {
@@ -57,9 +57,22 @@ const Suggestion = ({ suggestion, isActive, onSelect }: SuggestionProps) => {
 };
 
 const Container = ({ children }: { children: React.ReactNode }) => (
-  <ul className="absolute top-full right-0 left-0 z-1 m-0 max-h-50 w-fit max-w-100 list-none overflow-y-auto overflow-x-hidden rounded-medium bg-bg-default p-0 shadow-medium">
+  <BoxNew
+    as="ul"
+    position="absolute"
+    right="0"
+    left="0"
+    margin="0"
+    padding="0"
+    overflowY="auto"
+    overflowX="hidden"
+    borderRadius="medium"
+    background="default"
+    shadow="dialog"
+    className="top-full z-1 max-h-50 w-fit max-w-100 list-none"
+  >
     {children}
-  </ul>
+  </BoxNew>
 );
 
 const Option = ({ children, ...rest }: Omit<ButtonProps, 'className'>) => (
@@ -69,10 +82,7 @@ const Option = ({ children, ...rest }: Omit<ButtonProps, 'className'>) => (
 );
 
 const OptionText = ({ children, className, ...rest }: HTMLAttributes<HTMLSpanElement>) => (
-  <span
-    className={merge(className, 'block w-full overflow-hidden text-ellipsis whitespace-nowrap text-left font-normal')}
-    {...rest}
-  >
+  <span className={merge(className, 'block w-full truncate text-left font-normal')} {...rest}>
     {children}
   </span>
 );

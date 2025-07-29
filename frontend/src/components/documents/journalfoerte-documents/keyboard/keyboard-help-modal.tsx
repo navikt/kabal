@@ -5,7 +5,7 @@ import {
 import { useHasSeenKeyboardShortcuts } from '@app/hooks/settings/use-setting';
 import { KEY_ICONS, Keys, MOD_KEY } from '@app/keys';
 import { pushEvent } from '@app/observability';
-import { Box, Heading, HGrid, HStack, Modal } from '@navikt/ds-react';
+import { BoxNew, Heading, HGrid, HStack, Modal } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
 import { useCallback, useEffect, useId, useRef } from 'react';
 
@@ -144,18 +144,18 @@ const Shortcut = ({ keys, children: description }: ShortcutProps) => (
       {keys.map((combo) => (
         <HStack gap="1" align="center" wrap={false} key={combo.join('+')} className='not-last:after:content-["eller"]'>
           {combo.map((k) => (
-            <Box
+            <BoxNew
               key={k}
               paddingInline="1"
               paddingBlock="05"
-              background="surface-inverted"
+              background="sunken"
               borderRadius="medium"
               minWidth="24px"
               minHeight="24px"
-              className="flex items-center justify-center text-text-on-inverted"
+              className="flex items-center justify-center"
             >
               {KEY_ICONS[k]}
-            </Box>
+            </BoxNew>
           ))}
         </HStack>
       ))}

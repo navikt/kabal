@@ -2,7 +2,6 @@ import { TabLabel } from '@app/components/versioned-tabs/tab-label';
 import { DocPencilIcon, FileTextIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { Tabs } from '@navikt/ds-react';
 import { useEffect } from 'react';
-import { styled } from 'styled-components';
 
 interface DraftVersion {
   versionId: string;
@@ -60,9 +59,14 @@ export const VersionTabs = <D extends DraftVersion, P extends PublishedVersion>(
     tabs[i] = <Tabs.Tab key={versionId} value={versionId} label={label} icon={getIcon(isDraft, published)} />;
 
     panels[i] = (
-      <StyledTabPanel key={versionId} value={versionId} lazy={false}>
+      <Tabs.Panel
+        key={versionId}
+        value={versionId}
+        lazy={false}
+        className='flex flex-col overflow-y-auto data-[state="active"]:grow'
+      >
         {isDraft ? createDraftPanel(version) : createPublishedPanel(version)}
-      </StyledTabPanel>
+      </Tabs.Panel>
     );
   }
 
@@ -75,7 +79,7 @@ export const VersionTabs = <D extends DraftVersion, P extends PublishedVersion>(
       ref={setRef}
       style={{ display: 'flex', flexDirection: 'column' }}
     >
-      <StyledTabList>{tabs}</StyledTabList>
+      <Tabs.List className="w-[760px] whitespace-nowrap">{tabs}</Tabs.List>
       {panels}
     </Tabs>
   );
@@ -96,18 +100,3 @@ const getIcon = (isDraft: boolean, published: boolean) => {
 
   return ARCHIVED_ICON;
 };
-
-const StyledTabPanel = styled(Tabs.Panel)`
-  display: flex;
-  overflow-y: auto;
-  flex-direction: column;
-
-  &[data-state='active'] {
-    flex-grow: 1;
-  }
-`;
-
-const StyledTabList = styled(Tabs.List)`
-  white-space: nowrap;
-  width: 760px;
-`;

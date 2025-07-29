@@ -38,9 +38,8 @@ export const Utredningen = () => {
         error={validationError}
         onChange={onChange}
         id={UTREDNINGEN_ID}
-        size="small"
       >
-        <HStack gap="4" width="100%">
+        <HStack gap="4" width="100%" wrap={false}>
           <Radio value={Radiovalg.BRA} disabled={!canEdit}>
             Bra/godt nok
           </Radio>

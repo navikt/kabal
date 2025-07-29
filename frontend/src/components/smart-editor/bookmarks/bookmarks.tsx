@@ -4,9 +4,8 @@ import { pushEvent } from '@app/observability';
 import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, HStack } from '@navikt/ds-react';
+import { Button, HStack, VStack } from '@navikt/ds-react';
 import { NodeApi, type TNode } from 'platejs';
-import { styled } from 'styled-components';
 
 interface Props {
   editorId: string;
@@ -23,7 +22,7 @@ export const Bookmarks = ({ editorId }: Props) => {
   const onClick = (node: TNode) => editor.api.toDOMNode(node)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   return (
-    <BookmarkList>
+    <VStack as="ul" position="relative" justify="start" width="100%" paddingInline="space-16" maxWidth="350px">
       {bookmarks.map(([key, nodes]) => {
         const [node] = nodes;
 
@@ -41,15 +40,16 @@ export const Bookmarks = ({ editorId }: Props) => {
 
         return (
           <HStack as="li" key={key}>
-            <StyledButton
+            <Button
               size="xsmall"
               variant="tertiary-neutral"
               onClick={() => onClick(node)}
               icon={<BookmarkFillIcon aria-hidden />}
               style={{ color }}
+              className="grow justify-start overflow-hidden"
             >
-              {content}
-            </StyledButton>
+              <span className="truncate">{content}</span>
+            </Button>
             <Button
               size="xsmall"
               variant="tertiary-neutral"
@@ -67,32 +67,6 @@ export const Bookmarks = ({ editorId }: Props) => {
           </HStack>
         );
       })}
-    </BookmarkList>
+    </VStack>
   );
 };
-
-const BookmarkList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  list-style: none;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  padding-left: var(--a-spacing-4);
-  padding-right: var(--a-spacing-4);
-  position: relative;
-  max-width: 350px;
-`;
-
-const StyledButton = styled(Button)`
-  justify-content: flex-start;
-  flex-grow: 1;
-  overflow: hidden;
-
-  > .navds-label {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-`;

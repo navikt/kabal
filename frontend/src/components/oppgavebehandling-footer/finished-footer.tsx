@@ -4,7 +4,7 @@ import { BackLink } from './back-link';
 import { FooterType, StyledFooter } from './styled-components';
 
 export const FinishedFooter = () => (
-  <StyledFooter $type={FooterType.FINISHED}>
+  <StyledFooter type={FooterType.FINISHED}>
     <HStack align="center" justify="space-between" gap="4">
       <Button
         variant="primary"

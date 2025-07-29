@@ -8,7 +8,6 @@ import { ValidationType } from '@app/types/oppgavebehandling/params';
 import { FolderPlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const NewAnkebehandlingButton = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -22,7 +21,7 @@ export const NewAnkebehandlingButton = () => {
   }
 
   return (
-    <Container>
+    <div className="relative">
       <Button
         icon={<FolderPlusIcon aria-hidden />}
         variant="secondary"
@@ -46,7 +45,7 @@ export const NewAnkebehandlingButton = () => {
         oppgaveId={oppgave.id}
         close={() => setShowPopup(false)}
       />
-    </Container>
+    </div>
   );
 };
 interface PopupProps {
@@ -71,7 +70,8 @@ const Popup = ({ show, close, oppgaveId }: PopupProps) => {
         noen minutter før ankebehandlingen er opprettet.
       </BodyShort>
       <HStack justify="space-between">
-        <StyledButton
+        <Button
+          className="whitespace-nowrap"
           loading={isLoading}
           icon={<FolderPlusIcon aria-hidden />}
           variant="primary"
@@ -79,19 +79,11 @@ const Popup = ({ show, close, oppgaveId }: PopupProps) => {
           onClick={() => newAnkebehandling({ oppgaveId })}
         >
           Ny behandling
-        </StyledButton>
-        <StyledButton variant="secondary" size="small" onClick={close}>
+        </Button>
+        <Button className="whitespace-nowrap" variant="secondary" size="small" onClick={close}>
           Avbryt
-        </StyledButton>
+        </Button>
       </HStack>
     </PopupContainer>
   );
 };
-
-const Container = styled.div`
-  position: relative;
-`;
-
-const StyledButton = styled(Button)`
-  white-space: nowrap;
-`;

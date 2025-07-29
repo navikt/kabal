@@ -1,10 +1,9 @@
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
-import { Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { BoxNew, type BoxNewProps, Tag } from '@navikt/ds-react';
 
 interface BaseProps {
   useName: (id: string) => string;
-  variant: keyof typeof VARIANTS;
+  variant: keyof typeof BACKGROUND;
 }
 
 interface Props extends BaseProps {
@@ -27,28 +26,27 @@ export const ResolvedTags = ({ ids, ...props }: ListProps) => (
 
 interface CustomTagProps {
   children: string;
-  variant: keyof typeof VARIANTS;
+  variant: keyof typeof BACKGROUND;
 }
 
 export const CustomTag = ({ children, variant }: CustomTagProps) => (
-  <StyledTag variant="info" size="small" title={children} $variant={variant}>
-    {children}
-  </StyledTag>
+  <BoxNew asChild height="fit-content" borderWidth="1" background={BACKGROUND[variant]} borderColor={BORDER[variant]}>
+    <Tag variant="info" size="small" title={children}>
+      {children}
+    </Tag>
+  </BoxNew>
 );
 
-interface StyledTagProps {
-  $variant: keyof typeof VARIANTS;
-}
+const BACKGROUND: Record<keyof IGetMaltekstseksjonParams, BoxNewProps['background']> = {
+  templateSectionIdList: 'danger-moderate',
+  ytelseHjemmelIdList: 'accent-moderate',
+  utfallIdList: 'meta-lime-moderate',
+  enhetIdList: 'meta-purple-moderate',
+};
 
-const StyledTag = styled(Tag)<StyledTagProps>`
-  height: fit-content;
-  border: 1px solid ${({ $variant }) => `var(--a-${VARIANTS[$variant]}-300)`};
-  background-color: ${({ $variant }) => `var(--a-${VARIANTS[$variant]}-100)`};
-`;
-
-const VARIANTS: Record<keyof IGetMaltekstseksjonParams, string> = {
-  templateSectionIdList: 'red',
-  ytelseHjemmelIdList: 'blue',
-  utfallIdList: 'limegreen',
-  enhetIdList: 'purple',
+const BORDER: Record<keyof IGetMaltekstseksjonParams, BoxNewProps['borderColor']> = {
+  templateSectionIdList: 'accent',
+  ytelseHjemmelIdList: 'accent',
+  utfallIdList: 'meta-lime',
+  enhetIdList: 'meta-purple',
 };

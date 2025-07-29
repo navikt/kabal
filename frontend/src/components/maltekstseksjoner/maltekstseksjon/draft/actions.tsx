@@ -14,7 +14,6 @@ import type { IRichText } from '@app/types/texts/responses';
 import { UploadIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps, ErrorMessage, HStack, Tooltip } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;
@@ -93,7 +92,9 @@ const PublishButtons = ({ query, maltekstseksjon }: PublishButtonProps) => {
       </Tooltip>
 
       {untranslatedWarning === null ? null : (
-        <StyledErrorMessage size="small">{untranslatedWarning}</StyledErrorMessage>
+        <ErrorMessage size="small" className="whitespace-normal">
+          {untranslatedWarning}
+        </ErrorMessage>
       )}
     </>
   );
@@ -127,7 +128,3 @@ const useUtranslatedWarning = (textIdList: string[]): (() => Promise<string | nu
     return `Følgende tekster må oversettes før du kan publisere: ${untranslated.join(', ')}`;
   }, [getText, textIdList]);
 };
-
-const StyledErrorMessage = styled(ErrorMessage)`
-  white-space: wrap;
-`;

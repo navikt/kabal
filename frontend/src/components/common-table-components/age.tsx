@@ -12,7 +12,7 @@ import { useState } from 'react';
 export const Age = (oppgave: IOppgave) => {
   if (oppgave.isAvsluttetAvSaksbehandler) {
     return (
-      <span className="overflow-hidden text-ellipsis whitespace-nowrap">
+      <span className="truncate">
         {oppgave.ageKA} {oppgave.ageKA === 1 ? 'dag' : 'dager'}
       </span>
     );
@@ -30,7 +30,7 @@ const EditableAge = ({ ageKA, mottatt, id }: IOppgave) => {
   const children = isOpen ? (
     <EditAge mottattDate={mottatt} oppgaveId={id} closeCalendar={closeCalendar} setUserAge={setUserAge} />
   ) : (
-    <span className="overflow-hidden text-ellipsis whitespace-nowrap">
+    <span className="truncate">
       {userAge} {userAge === 1 ? 'dag' : 'dager'}
     </span>
   );

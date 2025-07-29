@@ -10,7 +10,6 @@ import type { IText } from '@app/types/texts/responses';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, HelpText, HStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { useTextQuery } from './hooks/use-text-query';
 
 interface Props {
@@ -112,21 +111,23 @@ const Warning = ({
   return (
     <Alert inline size="small" variant="warning">
       Denne teksten er referert til i
-      <StyledReferences
+      <MaltekstseksjonReferences
         maltekstseksjonIdList={draftList}
         currentMaltekstseksjonId={id}
         type={MaltekstseksjonType.DRAFT}
+        className="inline-block"
       >
         {draftList.length.toString(10)} utkast
-      </StyledReferences>
+      </MaltekstseksjonReferences>
       {draftList.length > 0 && publishedList.length > 0 ? ' og' : null}
-      <StyledReferences
+      <MaltekstseksjonReferences
         maltekstseksjonIdList={publishedList}
         currentMaltekstseksjonId={id}
         type={MaltekstseksjonType.PUBLISHED}
+        className="inline-block"
       >
         {publishedList.length.toString(10)} {publishedList.length === 1 ? 'publisering' : 'publiseringer'}
-      </StyledReferences>
+      </MaltekstseksjonReferences>
       og vil ikke lenger være tilgjengelig for {getSuffix(draftList, publishedList)}.
     </Alert>
   );
@@ -143,7 +144,3 @@ const getSuffix = (draftList: string[], publishedList: string[]) => {
 
   return 'denne';
 };
-
-const StyledReferences = styled(MaltekstseksjonReferences)`
-  display: inline-block;
-`;

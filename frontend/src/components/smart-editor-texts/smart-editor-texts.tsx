@@ -1,5 +1,8 @@
 import { SetStandaloneTextLanguage } from '@app/components/set-redaktoer-language/set-standalone-text-language';
+import { Filters } from '@app/components/smart-editor-texts/filters';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
+import { QueryKey, SortKey } from '@app/components/smart-editor-texts/sortable-header';
+import { StandaloneTextList } from '@app/components/smart-editor-texts/text-list/text-list';
 import {
   isGodFormuleringType,
   isPlainTextType,
@@ -9,14 +12,15 @@ import {
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useAddTextMutation } from '@app/redux-api/texts/mutations';
+import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import type { TextTypes } from '@app/types/common-text-types';
+import { SortOrder } from '@app/types/sort';
 import type { Language } from '@app/types/texts/language';
 import { PlusIcon } from '@navikt/aksel-icons';
-import { Button, HStack } from '@navikt/ds-react';
-import { useCallback } from 'react';
-import { styled } from 'styled-components';
+import { Button, HGrid, HStack, Search } from '@navikt/ds-react';
+import { useCallback, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { LoadText } from './edit/load-text';
-import { FilteredTextList } from './filtered-text-list';
 import { getNewGodFormulering, getNewPlainText, getNewRegelverk, getNewRichText } from './functions/new-text';
 
 interface Props {
@@ -26,7 +30,7 @@ interface Props {
 export const SmartEditorTexts = ({ textType }: Props) => {
   const query = useTextQuery();
   const navigate = useNavigateToStandaloneTextVersion(textType);
-  const [addText, { isLoading }] = useAddTextMutation();
+  const [addText, { isLoading: isAdding }] = useAddTextMutation();
   const lang = useRedaktoerLanguage();
 
   const onClick = useCallback(async () => {
@@ -35,20 +39,62 @@ export const SmartEditorTexts = ({ textType }: Props) => {
     navigate({ id, versionId });
   }, [addText, lang, navigate, query, textType]);
 
+  const [filter, setFilter] = useState<string>('');
+  const textQuery = useTextQuery();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { data = [], isLoading } = useGetTextsQuery(textQuery);
+
   return (
-    <Container>
-      <HStack gap="4" justify="start" paddingBlock="0 1" className="[grid-area:header]">
-        <Button size="small" variant="secondary" loading={isLoading} onClick={onClick} icon={<PlusIcon aria-hidden />}>
+    <HGrid
+      columns="700px min-content"
+      style={{
+        gridTemplateRows: 'min-content min-content min-content 1fr',
+        gridTemplateAreas: "'header content' 'filters content' 'search content' 'list content'",
+      }}
+      gap="1 2"
+      height="100%"
+      overflowY="hidden"
+    >
+      <HStack gap="4" justify="start" className="[grid-area:header]">
+        <Button size="small" variant="secondary" loading={isAdding} onClick={onClick} icon={<PlusIcon aria-hidden />}>
           Legg til ny
         </Button>
 
         <SetStandaloneTextLanguage textType={textType} />
       </HStack>
 
-      <FilteredTextList textType={textType} />
+      <Filters textType={textType} className="[grid-area:filters]" />
+
+      <Search
+        value={filter}
+        onChange={(v) => {
+          if (filter.length === 0 && v.length > 0) {
+            searchParams.set(QueryKey.SORT, SortKey.SCORE);
+            searchParams.set(QueryKey.ORDER, SortOrder.DESC);
+            setSearchParams(searchParams);
+          }
+
+          setFilter(v);
+        }}
+        placeholder="Filtrer på tittel og innhold"
+        label="Filtrer på tittel og innhold"
+        size="small"
+        variant="simple"
+        hideLabel
+        spellCheck
+        className="[grid-area:search]"
+      />
+
+      <StandaloneTextList
+        filter={filter}
+        data={data}
+        isLoading={isLoading}
+        textType={textType}
+        style={{ gridArea: 'list' }}
+      />
 
       <LoadText />
-    </Container>
+    </HGrid>
   );
 };
 
@@ -71,15 +117,3 @@ const getNewText = (textType: TextTypes, lang: Language) => {
 
   throw new Error('Unknown text type');
 };
-
-const Container = styled.article`
-  display: grid;
-  grid-template-rows: min-content 1fr;
-  grid-template-columns: min-content 1fr;
-  grid-template-areas:
-    'header content'
-    'list content';
-  column-gap: var(--a-spacing-2);
-  height: 100%;
-  overflow-y: hidden;
-`;

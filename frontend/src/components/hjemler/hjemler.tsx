@@ -41,7 +41,7 @@ const HjemmelList = ({ hjemmelList, size, loading, fallback }: HjemmelNamesProps
       {hjemmelList.length === 0
         ? fallback
         : hjemmelList.map(({ id, name }) => (
-            <Tag variant="alt1" size={size} key={id}>
+            <Tag variant="alt1" size={size} key={id} className="truncate">
               {name}
             </Tag>
           ))}

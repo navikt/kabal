@@ -4,6 +4,7 @@ import { NavHeader } from '@app/components/header/header';
 import { ModalEnum } from '@app/components/svarbrev/row/row';
 import { Toasts } from '@app/components/toast/toasts';
 import { VersionCheckerStatus } from '@app/components/version-checker/version-checker-status';
+import { useDarkMode } from '@app/darkmode';
 import { TEXT_TYPE_BASE_PATH } from '@app/domain/redaktør-paths';
 import { AccessRightsPage } from '@app/pages/access-rights/access-rights';
 import { AdminPage } from '@app/pages/admin/admin';
@@ -30,6 +31,7 @@ import {
   REGELVERK_TYPE,
   RichTextTypes,
 } from '@app/types/common-text-types';
+import { Theme, VStack } from '@navikt/ds-react';
 import { Outlet, Route, Routes as Switch } from 'react-router-dom';
 
 export const Router = () => (
@@ -153,11 +155,17 @@ export const Router = () => (
   </Switch>
 );
 
-const AppWrapper = () => (
-  <>
-    <NavHeader />
-    <Outlet />
-    <Toasts />
-    <VersionCheckerStatus />
-  </>
-);
+const AppWrapper = () => {
+  const darkMode = useDarkMode();
+
+  return (
+    <Theme theme={darkMode ? 'dark' : 'light'} className="h-full w-full">
+      <VStack height="100%" width="100%" overflow="hidden">
+        <NavHeader />
+        <Outlet />
+        <Toasts />
+        <VersionCheckerStatus />
+      </VStack>
+    </Theme>
+  );
+};

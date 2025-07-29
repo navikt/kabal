@@ -1,9 +1,7 @@
 import type { IValidationError, IValidationSection } from '@app/functions/error-type-guard';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useSectionTitle } from '@app/hooks/use-section-title';
-import { Alert } from '@navikt/ds-react';
-import { styled } from 'styled-components';
-import { SectionTitle, StyledFieldList, StyledSection, ValidationSummaryContainer } from './styled-components';
+import { Alert, Heading, VStack } from '@navikt/ds-react';
 
 interface Props {
   sections: IValidationSection[];
@@ -19,22 +17,30 @@ export const ValidationSummary = ({ sections }: Props) => {
   ));
 
   return (
-    <StyledAlert variant="warning" size="small" data-testid="validation-summary">
-      <div>Kan ikke fullføre behandling. Dette mangler:</div>
-      <ValidationSummaryContainer>{errorMessages}</ValidationSummaryContainer>
-    </StyledAlert>
+    <Alert variant="warning" size="small" data-testid="validation-summary">
+      <Heading level="1" size="xsmall" spacing className="pr-8">
+        Kan ikke fullføre behandlingen
+      </Heading>
+
+      <VStack as="article" gap="4">
+        {errorMessages}
+      </VStack>
+    </Alert>
   );
 };
 
 const Section = ({ section, properties }: IValidationSection) => (
-  <StyledSection>
-    <SectionTitle>{useSectionTitle(section)}</SectionTitle>
-    <StyledFieldList>
+  <section>
+    <Heading level="2" size="xsmall">
+      {useSectionTitle(section)}
+    </Heading>
+
+    <ul className="pl-4">
       {properties.map((p) => (
         <Field key={`${p.field}-${p.reason}`} {...p} />
       ))}
-    </StyledFieldList>
-  </StyledSection>
+    </ul>
+  </section>
 );
 
 const Field = ({ field, reason }: IValidationError) => (
@@ -43,7 +49,3 @@ const Field = ({ field, reason }: IValidationError) => (
     <span>{reason}</span>
   </li>
 );
-
-const StyledAlert = styled(Alert)`
-  width: fit-content;
-`;

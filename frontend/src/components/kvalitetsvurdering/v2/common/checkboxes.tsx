@@ -1,11 +1,10 @@
 import { AllRegistreringshjemler } from '@app/components/kvalitetsvurdering/v2/common/all-registreringshjemler';
 import { KvalitetsskjemaTextarea } from '@app/components/kvalitetsvurdering/v2/common/textarea';
 import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
-import { CheckboxGroup } from '@navikt/ds-react';
+import { BoxNew, CheckboxGroup } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { KvalitetsskjemaCheckbox } from './kvalitetsvurdering-checkbox';
 import { Oppgavehjemler } from './oppgavehjemler';
-import { SubSection } from './styled-components';
 import { type CheckboxParams, type InputParams, KvalitetsvurderingInput } from './types';
 import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
 import { useKvalitetsvurderingV2 } from './use-kvalitetsvurdering-v2';
@@ -54,7 +53,7 @@ export const Checkboxes = ({
   };
 
   return (
-    <SubSection>
+    <BoxNew marginBlock="0 4" marginInline="8 0">
       <CheckboxGroup
         legend={label}
         hideLegend={hideLegend}
@@ -71,7 +70,7 @@ export const Checkboxes = ({
           return <KvalitetsskjemaTextarea key={m.field} {...m} />;
         })}
       </CheckboxGroup>
-    </SubSection>
+    </BoxNew>
   );
 };
 

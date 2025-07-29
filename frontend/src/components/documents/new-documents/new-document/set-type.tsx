@@ -70,9 +70,7 @@ interface TypeTagProps {
 export const DocumentTypeTag = ({ dokumentTypeId }: TypeTagProps) => (
   <Tooltip content={DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}>
     <Tag variant="info" size="small">
-      <span className="overflow-hidden text-ellipsis whitespace-nowrap text-left">
-        {DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}
-      </span>
+      <span className="truncate text-left">{DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}</span>
     </Tag>
   </Tooltip>
 );

@@ -7,7 +7,7 @@ import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useDeleteSattPaaVentMutation, useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
 import { Role } from '@app/types/bruker';
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, HStack } from '@navikt/ds-react';
+import { Alert, BoxNew, Button, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 
 const useCanEditSetPaaVent = () => {
@@ -97,11 +97,11 @@ const AvsluttVenteperiode = ({ id }: { id: string }) => {
       </Button>
 
       {showConfirm ? (
-        <Box
+        <BoxNew
           padding="3"
           borderRadius="medium"
-          shadow="medium"
-          background="bg-default"
+          shadow="dialog"
+          background="default"
           className="absolute bottom-full flex flex-col gap-2"
         >
           <Alert inline variant="info" className="text-nowrap">
@@ -116,7 +116,7 @@ const AvsluttVenteperiode = ({ id }: { id: string }) => {
               Avbryt
             </Button>
           </HStack>
-        </Box>
+        </BoxNew>
       ) : null}
     </div>
   );

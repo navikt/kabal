@@ -1,13 +1,13 @@
-import { Box, VStack } from '@navikt/ds-react';
+import { BoxNew, VStack } from '@navikt/ds-react';
 
 interface BehandlingSectionProps {
   children: React.ReactNode;
 }
 
 export const StyledBehandlingSection = ({ children }: BehandlingSectionProps) => (
-  <Box padding="4" minHeight="100%" background="bg-default">
+  <BoxNew padding="4" minHeight="100%" background="default">
     {children}
-  </Box>
+  </BoxNew>
 );
 
 interface DateContainerProps {

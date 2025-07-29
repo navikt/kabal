@@ -175,7 +175,7 @@ export const EditLogiskVedlegg = ({
             customValueRef.current = getText(e) ?? '';
             setCustomValue(customValueRef.current);
           }}
-          className="bg-bg-default before:text-text-subtle empty:before:content-[attr(aria-placeholder)] [contenteditable=true]:cursor-text"
+          className="bg-ax-bg-default before:text-ax-text-neutral-subtle empty:before:content-[attr(aria-placeholder)] [contenteditable=true]:cursor-text"
         >
           {initialValue}
         </EditableTag>

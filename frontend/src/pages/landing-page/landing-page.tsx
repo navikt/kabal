@@ -5,10 +5,9 @@ import { useLandingPagePath } from '@app/hooks/use-landing-page-path';
 import { pushEvent } from '@app/observability';
 import { PageWrapper } from '@app/pages/page-wrapper';
 import { ALL_PUBLIC_ROLES } from '@app/types/bruker';
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, BoxNew, Heading } from '@navikt/ds-react';
 import { useContext, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 const INSTRUCTION = ENVIRONMENT.isProduction
   ? 'Be din leder om å tildele deg nødvendige roller.'
@@ -36,7 +35,7 @@ export const LandingPage = () => {
 
   return (
     <PageWrapper>
-      <Centered>
+      <BoxNew marginInline="auto" width="fit-content" maxWidth="500px">
         <Heading level="1" size="medium" spacing>
           Velkommen til Kabal
         </Heading>
@@ -52,13 +51,7 @@ export const LandingPage = () => {
           roles={ALL_PUBLIC_ROLES.filter((r) => !user.roller.includes(r))}
           variant="neutral-moderate"
         />
-      </Centered>
+      </BoxNew>
     </PageWrapper>
   );
 };
-
-const Centered = styled.div`
-  margin: 0 auto;
-  width: fit-content;
-  max-width: 500px;
-`;

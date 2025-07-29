@@ -3,7 +3,6 @@ import { useKlageenheter, useSakstyperToUtfall } from '@app/simple-api-state/use
 import { SaksTypeEnum, type UtfallEnum } from '@app/types/kodeverk';
 import { Tag, type TagProps } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { styled } from 'styled-components';
 
 const EMPTY_ARRAY: [] = [];
 
@@ -30,16 +29,16 @@ export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
             value: u.id,
             label: u.navn,
             tags: [
-              <StyledTag size="xsmall" variant={sakstypeToTagVariant(id)} key={id}>
+              <Tag size="xsmall" variant={sakstypeToTagVariant(id)} key={id} className="whitespace-nowrap">
                 {navn}
-              </StyledTag>,
+              </Tag>,
             ],
           });
         } else {
           const tag = (
-            <StyledTag size="xsmall" variant={sakstypeToTagVariant(id)} key={id}>
+            <Tag size="xsmall" variant={sakstypeToTagVariant(id)} key={id} className="whitespace-nowrap">
               {navn}
-            </StyledTag>
+            </Tag>
           );
 
           if (existing.tags === undefined) {
@@ -77,7 +76,3 @@ export const useKlageenheterOptions = (): IOption<string>[] => {
 
   return useMemo(() => values.map(({ id, navn }) => ({ value: id, label: navn })), [values]);
 };
-
-const StyledTag = styled(Tag)`
-  white-space: nowrap;
-`;

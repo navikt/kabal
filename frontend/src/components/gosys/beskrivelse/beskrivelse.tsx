@@ -1,13 +1,11 @@
 import { GosysBeskrivelseTabs } from '@app/components/gosys/beskrivelse/beskrivelse-tabs';
 import { Entry } from '@app/components/gosys/beskrivelse/entry';
 import { splitBeskrivelse } from '@app/components/gosys/beskrivelse/parsing/split-beskrivelse';
-import { StyledEntryList } from '@app/components/gosys/beskrivelse/styled-entry-list';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { usePushEvent } from '@app/observability';
-import { Box, Button, Modal, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, Modal, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useMemo, useRef } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   oppgavebeskrivelse: string;
@@ -37,18 +35,18 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
   return (
     <>
       <VStack gap="2">
-        <StyledEntryList>
-          <Box background="surface-subtle" padding="2" borderRadius="medium">
+        <VStack as="ul" gap="2">
+          <BoxNew background="neutral-soft" padding="2" borderRadius="medium">
             <Entry {...firstEntry} />
-          </Box>
+          </BoxNew>
           {secondEntry !== undefined ? (
-            <FadeOut $height={50}>
-              <Box background="bg-subtle" padding="2" borderRadius="medium">
+            <div className="relative z-1 h-12 overflow-hidden after:pointer-events-none after:absolute after:right-0 after:bottom-0 after:left-0 after:h-12 after:bg-gradient-to-t after:from-ax-bg-default after:to-transparent">
+              <BoxNew background="neutral-soft" padding="2" borderRadius="medium">
                 <Entry {...secondEntry} />
-              </Box>
-            </FadeOut>
+              </BoxNew>
+            </div>
           ) : null}
-        </StyledEntryList>
+        </VStack>
 
         <Button variant="tertiary" size="small" onClick={onOpenClick}>
           Vis alle ({entries.length})
@@ -69,21 +67,3 @@ const useOppgaveIdString = () => {
 
   return oppgaveId === skipToken ? 'unknown' : oppgaveId;
 };
-
-const FadeOut = styled.div<{ $height: number; $fadeStart?: number }>`
-  position: relative;
-  overflow: hidden;
-  height: ${({ $height }) => $height}px;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: ${({ $height, $fadeStart = $height }) => $fadeStart}px;
-    background: linear-gradient(transparent, var(--a-surface-default));
-    z-index: 1;
-    pointer-events: none;
-  }
-`;

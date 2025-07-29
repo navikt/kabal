@@ -11,7 +11,7 @@ export const EditableTag = ({ children, className, ...rest }: TagProps & React.R
     paddingInline="2"
     justify="start"
     maxWidth="100%"
-    className={merge('text-ellipsis whitespace-nowrap rounded-xlarge text-left', className)}
+    className={merge('truncate rounded-xlarge text-left', className)}
     {...rest}
   >
     {children}

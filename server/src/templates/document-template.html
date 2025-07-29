@@ -68,14 +68,42 @@
 
     const PDF_URL = `{{pdfUrl}}${getHashParams()}`;
 
+    const DARK_MODE_KEY = `${NAV_IDENT}/darkmode`;
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    /**
+     * Retrieves the dark mode preference based on a stored value.
+     * @param {string|boolean|null} storedValue - The stored dark mode preference value
+     * @returns {boolean} Returns true if dark mode should be enabled, false otherwise
+     */
+    const getDarkMode = (storedValue) => {
+      switch (storedValue) {
+        case 'true':
+          return true;
+        case 'false':
+          return false;
+        default:
+          return prefersDarkMode;
+      }
+    };
+
     const PDF_ELEMENT = document.createElement('object');
     PDF_ELEMENT.setAttribute('data', PDF_URL);
     PDF_ELEMENT.setAttribute('type', 'application/pdf');
     PDF_ELEMENT.setAttribute('width', '100%');
     PDF_ELEMENT.setAttribute('height', '100%');
+    PDF_ELEMENT.style.filter = getDarkMode(localStorage.getItem(DARK_MODE_KEY)) ? 'invert(1) hue-rotate(180deg)' : 'none';
     PDF_ELEMENT.style.position = 'absolute';
     PDF_ELEMENT.style.left = '0';
     PDF_ELEMENT.style.top = '0';
+
+    // Listen for dark mode changes in localStorage.
+    window.addEventListener('storage', (event) => {
+      if (event.key === DARK_MODE_KEY) {
+        const darkMode = getDarkMode(event.newValue);
+        PDF_ELEMENT.style.filter = darkMode ? 'invert(1) hue-rotate(180deg)' : 'none';
+      }
+    });
 
     document.addEventListener("DOMContentLoaded", () => {
       document.body.appendChild(PDF_ELEMENT);

@@ -1,8 +1,7 @@
 import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { type IdentifikatorPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
-import { Alert, BodyShort, Button, Loader, Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Alert, BodyShort, Button, Loader, Tag, VStack } from '@navikt/ds-react';
 
 interface LookupProps extends Omit<ResultProps, 'part'> {
   part: IdentifikatorPart | undefined;
@@ -36,32 +35,27 @@ const Result = ({ part, isLoading, onChange, buttonText = 'Bruk', allowUnreachab
     !part.statusList.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED);
 
   return (
-    <StyledResult variant={part.type === IdType.FNR ? 'info' : 'warning'} size="medium">
-      <BodyShort>
-        <PartNameAndIdentifikator identifikator={part.identifikator} name={part.name} />
-      </BodyShort>
+    <VStack asChild gap="2" align="start" marginBlock="space-16" paddingInline="space-12" paddingBlock="space-8">
+      <Tag variant={part.type === IdType.FNR ? 'info' : 'neutral'} size="medium">
+        <BodyShort>
+          <PartNameAndIdentifikator identifikator={part.identifikator} name={part.name} />
+        </BodyShort>
 
-      <PartStatusList statusList={part.statusList} size="xsmall" />
+        <PartStatusList statusList={part.statusList} size="xsmall" />
 
-      {isReachable ? (
-        <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
-          {buttonText}
-        </Button>
-      ) : (
-        <Alert size="small" variant="warning">
-          Parten kan ikke velges som mottaker fordi {getUnreachableText(part.statusList)}.
-        </Alert>
-      )}
-    </StyledResult>
+        {isReachable ? (
+          <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
+            {buttonText}
+          </Button>
+        ) : (
+          <Alert size="small" variant="warning">
+            Parten kan ikke velges som mottaker fordi {getUnreachableText(part.statusList)}.
+          </Alert>
+        )}
+      </Tag>
+    </VStack>
   );
 };
-
-const StyledResult = styled(Tag)`
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: var(--a-spacing-2);
-`;
 
 const getUnreachableText = (statusList: IdentifikatorPart['statusList']): string | null => {
   if (statusList === null || statusList.length === 0) {

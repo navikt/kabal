@@ -7,7 +7,7 @@ import { useMyPlateEditorRef } from '@app/plate/types';
 import { isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
 import { PencilWritingIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, TextField } from '@navikt/ds-react';
+import { BoxNew, Button, HStack, TextField } from '@navikt/ds-react';
 import { useEditorRef } from '@platejs/core/react';
 import { RangeApi } from 'platejs';
 import { useRef, useState } from 'react';
@@ -87,7 +87,7 @@ const PlaceholderText = ({ show, close, placeholder, setPlaceholder }: Placehold
 
   return (
     <HStack asChild position="absolute" gap="1" minWidth="220px" right="0" className="top-full">
-      <Box background="surface-subtle" padding="2" borderWidth="1" borderColor="border-strong" borderRadius="medium">
+      <BoxNew background="neutral-soft" padding="2" borderWidth="1" borderColor="neutral-strong" borderRadius="medium">
         <TextField
           autoFocus
           size="small"
@@ -106,7 +106,7 @@ const PlaceholderText = ({ show, close, placeholder, setPlaceholder }: Placehold
           title="Sett inn"
         />
         <Button size="small" onClick={close} icon={<XMarkIcon aria-hidden />} variant="danger" title="Avbryt" />
-      </Box>
+      </BoxNew>
     </HStack>
   );
 };

@@ -7,7 +7,7 @@ interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'className'> {
 }
 
 export const DocumentDate = ({ date, ...attrs }: Props) => (
-  <HStack {...attrs} gap="2" overflow="hidden" className="group select-none text-ellipsis">
+  <HStack {...attrs} gap="2" overflow="hidden" className="group select-none truncate">
     <time dateTime={date}>{isoDateTimeToPrettyDate(date)}</time>
 
     <CopyButton

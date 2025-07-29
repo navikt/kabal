@@ -13,7 +13,6 @@ import type {
 import { VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { DraftMaltekstSection } from './draft/draft';
 import { PublishedMaltekstSection } from './maltekstseksjon-published';
 
@@ -80,7 +79,8 @@ const Loaded = ({ versions, first, query }: LoadedProps) => {
   }, [first.versionId, maltekstseksjonVersionId, setPath]);
 
   return (
-    <StyledVersionTabs<IDraftMaltekstseksjon, IPublishedMaltekstseksjon>
+    <VersionTabs<IDraftMaltekstseksjon, IPublishedMaltekstseksjon>
+      className="flex w-fit flex-grow flex-col overflow-hidden"
       first={first}
       selectedTabId={maltekstseksjonVersionId}
       setSelectedTabId={setSelectedTabId}
@@ -108,11 +108,3 @@ const Loaded = ({ versions, first, query }: LoadedProps) => {
     />
   );
 };
-
-const StyledVersionTabs: typeof VersionTabs = styled(VersionTabs)`
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  flex-grow: 1;
-  width: fit-content;
-`;

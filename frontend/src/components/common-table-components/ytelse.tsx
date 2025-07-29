@@ -13,5 +13,9 @@ export const Ytelse = ({ ytelseId }: Props) => {
     return <LoadingCellContent />;
   }
 
-  return <Tag variant="alt3">{ytelseName ?? 'Ukjent'}</Tag>;
+  return (
+    <Tag variant="alt3" className="truncate">
+      {ytelseName ?? 'Ukjent'}
+    </Tag>
+  );
 };

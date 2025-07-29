@@ -15,7 +15,7 @@ import { useMyPlateEditorRef } from '@app/plate/types';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LightBulbIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, HStack, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Filter } from './filter';
 import { insertGodFormulering } from './insert';
@@ -158,7 +158,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
 
   return (
     <VStack asChild position="sticky" top="0" gap="4" ref={containerRef} onKeyDown={onKeyDown}>
-      <Box as="section" background="bg-default" paddingInline="3 0" paddingBlock="4 0" width="350px" height="100%">
+      <BoxNew as="section" background="default" paddingInline="3 0" paddingBlock="4 0" width="350px" height="100%">
         <VStack gap="2 0" paddingInline="1 4" flexShrink="0">
           <HStack as="header" align="center" justify="space-between" wrap={false}>
             <HStack as="h1" align="center" gap="2" margin="0" className="text-xl" wrap={false}>
@@ -180,6 +180,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
           <SectionSelect activeSection={activeSection} setActiveSection={setActiveSection} />
           <HjemlerFilter selected={selectedHjemler} setSelected={setSelectedHjemler} />
         </VStack>
+
         <VStack overflowY="auto" flexGrow="1" gap="4 0" paddingInline="1 4">
           <GodeFormuleringerList
             texts={texts}
@@ -190,7 +191,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
             setExpandState={setExpandState}
           />
         </VStack>
-      </Box>
+      </BoxNew>
     </VStack>
   );
 };

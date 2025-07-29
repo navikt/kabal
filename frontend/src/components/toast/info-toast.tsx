@@ -1,5 +1,4 @@
 import { Heading } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props {
   title: string;
@@ -10,15 +9,10 @@ interface Props {
 }
 
 export const InfoToast = ({ title, children, attrs }: Props) => (
-  <Wrapper {...attrs}>
+  <div {...attrs} className="whitespace-normal break-normal">
     <Heading level="1" size="xsmall">
       {title}
     </Heading>
     {children}
-  </Wrapper>
+  </div>
 );
-
-const Wrapper = styled.div`
-  white-space: normal;
-  word-break: break-word;
-`;

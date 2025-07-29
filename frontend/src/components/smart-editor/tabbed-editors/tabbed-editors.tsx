@@ -78,10 +78,12 @@ const Tabbed = ({ documents }: TabbedProps) => {
           ))}
           <TabNew />
         </Tabs.List>
+
         <div className="grow overflow-hidden">
           {documents.map((d) => (
             <TabPanel key={d.id} smartDocument={d} />
           ))}
+
           <TabPanelNew onCreate={setEditorId} />
         </div>
       </Tabs>

@@ -3,9 +3,8 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import type { MaltekstElement, RedigerbarMaltekstElement } from '@app/plate/types';
 import { FileTextIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Box, Button, type ButtonProps, HelpText, HStack } from '@navikt/ds-react';
+import { BoxNew, Button, type ButtonProps, HelpText, HStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   next: MaltekstseksjonUpdate | null;
@@ -52,13 +51,13 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes, ignore }: Props) => 
       onSelect={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
     >
-      <Box borderRadius="medium" marginBlock="0 2" paddingBlock="6 0" width="100%" className="select-none">
+      <BoxNew borderRadius="medium" marginBlock="0 2" paddingBlock="6 0" width="100%" className="select-none">
         <Button size={BUTTON_SIZE} icon={<FileTextIcon aria-hidden />} onClick={replaceMaltekstseksjonContent}>
           {willRemove ? 'Fjern tekst' : 'Erstatt tekst'}
         </Button>
 
         <HelpText>
-          <HelpTextContainer>{willRemove ? REMOVE_HELP_TEXT : REPLACE_HELP_TEXT}</HelpTextContainer>
+          <div className="w-96">{willRemove ? REMOVE_HELP_TEXT : REPLACE_HELP_TEXT}</div>
         </HelpText>
 
         {willRemove ? null : (
@@ -76,7 +75,7 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes, ignore }: Props) => 
         </Button>
 
         <Explainer />
-      </Box>
+      </BoxNew>
     </HStack>
   );
 };
@@ -88,10 +87,6 @@ const REMOVE_HELP_TEXT =
 
 const Explainer = () => (
   <HelpText>
-    <HelpTextContainer>Sett utfall/resultat for å få bedre forslag til tekst.</HelpTextContainer>
+    <div className="w-96">Sett utfall/resultat for å få bedre forslag til tekst.</div>
   </HelpText>
 );
-
-const HelpTextContainer = styled.div`
-  width: 350px;
-`;

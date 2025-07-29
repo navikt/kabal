@@ -1,11 +1,3 @@
-import { css } from 'styled-components';
-
-export const documentsGridCSS = css`
-  display: grid;
-  grid-column-gap: var(--a-spacing-2);
-  align-items: center;
-`;
-
 export enum Fields {
   Select = 'select',
   ToggleVedlegg = 'toggle-vedlegg',
@@ -29,8 +21,8 @@ export const SIZES: Record<Fields, [number, number]> = {
   [Fields.Select]: [20, 20],
   [Fields.ToggleVedlegg]: [32, 32],
   [Fields.Title]: [275, -1],
-  [Fields.Tema]: [85, 85],
-  [Fields.DatoOpprettet]: [185, 185],
+  [Fields.Tema]: [110, 110],
+  [Fields.DatoOpprettet]: [190, 190],
   [Fields.DatoSortering]: [191, 191],
   [Fields.AvsenderMottaker]: [200, 200],
   [Fields.Saksnummer]: [135, 135],

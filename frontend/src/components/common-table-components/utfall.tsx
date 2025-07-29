@@ -10,12 +10,12 @@ export const Utfall = ({ utfallId }: Props): React.JSX.Element => {
   const { data: utfallList } = useUtfall();
 
   const children = useMemo(() => {
-    if (typeof utfallList === 'undefined') {
+    if (utfallList === undefined) {
       return <LoadingCellContent />;
     }
 
     return utfallList.find((u) => u.id === utfallId)?.navn;
   }, [utfallList, utfallId]);
 
-  return <>{children}</>;
+  return <span className="truncate">{children}</span>;
 };

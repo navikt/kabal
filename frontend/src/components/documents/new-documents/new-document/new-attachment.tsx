@@ -15,7 +15,6 @@ import { DocumentTypeEnum, type IAttachmentDocument, type IParentDocument } from
 import { HGrid } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { type HTMLAttributes, memo, type RefObject, useCallback, useContext, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { DocumentTitle } from './title';
 
 interface Props {
@@ -108,7 +107,12 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
           noRenameAccessMessage={RENAME_ACCESS_ENUM_TO_TEXT[access.rename]}
         />
         {document.type === DocumentTypeEnum.JOURNALFOERT ? (
-          <StyledDate data-testid="new-document-date" document={document} />
+          <DocumentDate
+            data-testid="new-document-date"
+            document={document}
+            className="truncate"
+            style={{ gridArea: Fields.TypeOrDate }}
+          />
         ) : null}
         {parentDocument.isMarkertAvsluttet ? (
           <ArchivingIcon dokumentTypeId={document.dokumentTypeId} />
@@ -122,12 +126,6 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
 );
 
 NewAttachmentInternal.displayName = 'NewAttachmentInternal';
-
-const StyledDate = styled(DocumentDate)`
-  grid-area: ${Fields.TypeOrDate};
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
 
 interface StlyedNewAttachmentProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;

@@ -8,12 +8,12 @@ interface Props {
 }
 
 const SHADOW_STYLE: React.CSSProperties = {
-  boxShadow: 'var(--a-border-on-inverted) 0 1px 0 0, black 0px 5px 5px -5px',
+  boxShadow: 'var(--ax-border-neutral) 0 1px 0 0, black 0px 5px 5px -5px',
 };
 
 const ANGLED_TH_CLASSES =
-  'origin-bottom-left pl-2 text-left align-text-bottom whitespace-nowrap relative border-r-1 border-border-on-inverted';
-const ANGLED_DIV_CLASSES = 'pr-3 overflow-hidden text-ellipsis absolute bottom-0 text-left origin-bottom-left';
+  'origin-bottom-left pl-2 text-left align-text-bottom whitespace-nowrap relative border-r-1 border-ax-border-neutral';
+const ANGLED_DIV_CLASSES = 'truncate pr-3 absolute bottom-0 text-left origin-bottom-left';
 
 const NON_ANGLED_HEADER_HEIGHT = 32;
 const ANGLED_HEADER_WIDTH = 256;
@@ -22,11 +22,11 @@ const CONTAINER_WIDTH = NON_ANGLED_HEADER_HEIGHT;
 const CONTAINER_HEIGHT = Math.sqrt(ANGLED_HEADER_WIDTH ** 2 / 2);
 
 export const Head = ({ saksbehandlere, setFocusedCell, focusedCell: [focusedColumn] }: Props) => (
-  <thead className="sticky top-0 z-2 bg-bg-default" style={SHADOW_STYLE}>
+  <thead className="sticky top-0 z-2 bg-ax-bg-default" style={SHADOW_STYLE}>
     <tr>
-      <th className="sticky top-0 z-2 bg-bg-default">Ytelse</th>
+      <th className="sticky top-0 z-2 bg-ax-bg-default">Ytelse</th>
       <th
-        className={`${ANGLED_TH_CLASSES} ${focusedColumn === 0 ? 'bg-blue-200' : 'odd:bg-bg-subtle'}`}
+        className={`${ANGLED_TH_CLASSES} ${focusedColumn === 0 ? 'bg-ax-accent-200' : 'odd:bg-ax-bg-neutral-moderate'}`}
         style={{ height: CONTAINER_HEIGHT, transform: 'skew(-45deg)' }}
         onMouseEnter={() => setFocusedCell([0, -1])}
       >
@@ -44,7 +44,7 @@ export const Head = ({ saksbehandlere, setFocusedCell, focusedCell: [focusedColu
       </th>
       {saksbehandlere.map(({ saksbehandlerName, saksbehandlerIdent, ytelseIdList }, i) => (
         <th
-          className={`${ANGLED_TH_CLASSES} ${focusedColumn === i + 1 ? 'bg-blue-200' : 'odd:bg-bg-subtle'}`}
+          className={`${ANGLED_TH_CLASSES} ${focusedColumn === i + 1 ? 'bg-ax-accent-200' : 'odd:bg-ax-bg-neutral-moderate'}`}
           style={{ height: CONTAINER_HEIGHT, transform: 'skew(-45deg)' }}
           key={saksbehandlerIdent}
           onMouseEnter={() => setFocusedCell([i + 1, -1])}

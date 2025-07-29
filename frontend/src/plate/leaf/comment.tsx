@@ -21,7 +21,7 @@ export const CommentLeaf = (props: PlateLeafProps<FormattedText>) => {
       style={{
         backgroundColor:
           leaf.selected === true
-            ? 'var(--a-surface-success-subtle-hover)'
+            ? 'var(--ax-bg-success-moderate)'
             : getBackgroundColor(commentIds.length, isCommentFocused),
       }}
       data-selected={leaf.selected}
@@ -63,7 +63,7 @@ const useCommentIds = (leaf: FormattedText) =>
 
 const getBackgroundColor = (commentCount: number, isCommentActive: boolean): React.CSSProperties['backgroundColor'] => {
   if (isCommentActive) {
-    return commentCount === 1 ? 'var(--a-green-200)' : 'var(--a-green-300)';
+    return commentCount === 1 ? 'var(--ax-bg-success-moderate)' : 'var(--ax-bg-success-moderate-hover)';
   }
 
   if (commentCount === 0) {
@@ -71,8 +71,8 @@ const getBackgroundColor = (commentCount: number, isCommentActive: boolean): Rea
   }
 
   if (commentCount === 1) {
-    return 'var(--a-orange-100)';
+    return 'var(--ax-bg-warning-soft)';
   }
 
-  return 'var(--a-orange-200)';
+  return 'var(--ax-bg-warning-moderate)';
 };

@@ -36,6 +36,6 @@ export const ScaleContextComponent = ({ scalingGroup, children }: Props) => {
   return <ScaleContext.Provider value={{ ...state, scalingGroup }}>{children}</ScaleContext.Provider>;
 };
 
-const getScaleVarName = (scalingGroup: ScalingGroup) => `${EDITOR_SCALE_CSS_VAR}-${scalingGroup}`;
+export const getScaleVarName = (scalingGroup: ScalingGroup) => `${EDITOR_SCALE_CSS_VAR}-${scalingGroup}`;
 
 export const getScaleVar = (scalingGroup: ScalingGroup) => `var(${getScaleVarName(scalingGroup)})`;

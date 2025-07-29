@@ -3,10 +3,9 @@ import { HStack } from '@navikt/ds-react';
 
 interface Props {
   children: React.ReactNode;
-  className?: string;
 }
 
-export const StyledDocumentTitle = ({ children, className }: Props) => (
+export const StyledDocumentTitle = ({ children }: Props) => (
   <HStack
     as="h1"
     gap="2"
@@ -16,7 +15,7 @@ export const StyledDocumentTitle = ({ children, className }: Props) => (
     minWidth="100px"
     align="center"
     style={{ gridArea: Fields.Title }}
-    className={`group text-large ${className}`}
+    className="group text-ax-large"
   >
     {children}
   </HStack>

@@ -6,10 +6,9 @@ import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, BookmarkIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, Tooltip } from '@navikt/ds-react';
+import { BoxNew, Button, HStack, Tooltip } from '@navikt/ds-react';
 import { TextApi } from 'platejs';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const BookmarkButton = () => {
   const editor = useMyPlateEditorState();
@@ -46,7 +45,7 @@ export const BookmarkButton = () => {
   const label = active ? 'Bytt bokmerke' : 'Sett bokmerke';
 
   return (
-    <Container ref={ref}>
+    <div ref={ref} className="relative text-[12pt]">
       <ToolbarIconButton
         label={label}
         icon={<Icon style={{ color: activeBookmark ?? 'inherit' }} />}
@@ -57,14 +56,14 @@ export const BookmarkButton = () => {
       />
       {isOpen ? (
         <HStack asChild position="absolute" right="0" style={{ top: '100%' }}>
-          <Box background="bg-default" padding="1" shadow="medium" borderRadius="medium">
-            {BOOKMARKS.map((color) => (
-              <Bookmark key={color.value} color={color} setIsOpen={setIsOpen} setBookmark={setBookmark} />
+          <BoxNew background="default" padding="1" shadow="dialog" borderRadius="medium">
+            {BOOKMARKS.map((option) => (
+              <Bookmark key={option.value} color={option} setIsOpen={setIsOpen} setBookmark={setBookmark} />
             ))}
-          </Box>
+          </BoxNew>
         </HStack>
       ) : null}
-    </Container>
+    </div>
   );
 };
 
@@ -85,14 +84,14 @@ const getActiveBookmark = (text: FormattedText | undefined): string | null => {
 };
 
 interface BookmarkProps {
-  color: IBookmark;
+  color: BookmarkOption;
   setIsOpen: (open: boolean) => void;
   setBookmark: (color: string) => void;
 }
 
 const Bookmark = ({ color, setIsOpen, setBookmark }: BookmarkProps) => (
   <Tooltip content={color.name} key={color.value}>
-    <StyledButton
+    <Button
       onClick={() => {
         pushEvent('set-bookmark', 'smart-editor', { color: color.name });
         setBookmark(color.value);
@@ -100,39 +99,27 @@ const Bookmark = ({ color, setIsOpen, setBookmark }: BookmarkProps) => (
       }}
       size="small"
       variant="tertiary-neutral"
-    >
-      <BookmarkFillIcon aria-hidden color={color.value} />
-    </StyledButton>
+      icon={<BookmarkFillIcon aria-hidden color={color.value} />}
+    />
   </Tooltip>
 );
 
-const StyledButton = styled(Button)`
-  > span {
-    line-height: 0;
-  }
-`;
-
-const Container = styled.div`
-  position: relative;
-  font-size: 12pt;
-`;
-
-interface IBookmark {
+interface BookmarkOption {
   name: string;
   value: string;
 }
 
-const BOOKMARKS: [IBookmark, IBookmark, IBookmark] = [
+const BOOKMARKS: [BookmarkOption, BookmarkOption, BookmarkOption] = [
   {
     name: 'Rød',
-    value: 'var(--a-red-600)',
+    value: 'var(--ax-bg-danger-strong)',
   },
   {
     name: 'Grønn',
-    value: 'var(--a-green-600)',
+    value: 'var(--ax-bg-success-strong)',
   },
   {
     name: 'Blå',
-    value: 'var(--a-blue-600)',
+    value: 'var(--ax-bg-accent-strong)',
   },
 ];

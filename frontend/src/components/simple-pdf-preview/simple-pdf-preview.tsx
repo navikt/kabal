@@ -1,7 +1,7 @@
 import { Pdf, type UsePdfData } from '@app/components/pdf/pdf';
 import { Header } from '@app/components/view-pdf/header';
 import { ArrowCirclepathIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
-import { Box, Button, type ButtonProps, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, type ButtonProps, VStack } from '@navikt/ds-react';
 
 const DEFAULT_WIDTH = 1000;
 const MIN_PDF_WIDTH = 400;
@@ -24,7 +24,7 @@ export const SimplePdfPreview = ({ refresh, loading, data, error, width = DEFAUL
   return (
     <div className="grow">
       <VStack asChild height="100%" flexGrow="1" width={`${width}px`}>
-        <Box shadow="medium">
+        <BoxNew shadow="dialog">
           <Header>
             <Button onClick={decrease} title="Forstørr" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
             <Button onClick={increase} title="Forminsk" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />
@@ -38,7 +38,7 @@ export const SimplePdfPreview = ({ refresh, loading, data, error, width = DEFAUL
           </Header>
 
           <Pdf loading={loading} data={data} error={error} refresh={refresh} />
-        </Box>
+        </BoxNew>
       </VStack>
     </div>
   );

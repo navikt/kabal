@@ -4,10 +4,9 @@ import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mu
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
-import { Alert, Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
+import { Alert, BoxNew, Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { TextVersions } from './text-versions';
 
 interface Props {
@@ -103,9 +102,9 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
 
   if (textIdList.length === 0) {
     return (
-      <StyledAlert variant="warning" size="small">
+      <Alert variant="warning" size="small" className="mt-2">
         Ingen tekster funnet
-      </StyledAlert>
+      </Alert>
     );
   }
 
@@ -139,35 +138,26 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
               </Tooltip>
             </VStack>
           )}
-          <StyledTextVersions
-            textId={textId}
-            isActive={textId === activeTextId}
-            setActive={setActive}
-            maltekstseksjonId={maltekstseksjon.id}
-          />
+          <BoxNew
+            asChild
+            borderRadius="medium"
+            shadow="dialog"
+            borderWidth="4"
+            borderColor={textId === activeTextId ? 'accent' : undefined}
+            flexGrow="1"
+            padding="1"
+            marginInline="1"
+            className="last:mb-1"
+          >
+            <TextVersions
+              textId={textId}
+              isActive={textId === activeTextId}
+              setActive={setActive}
+              maltekstseksjonId={maltekstseksjon.id}
+            />
+          </BoxNew>
         </HStack>
       ))}
     </VStack>
   );
 };
-
-const StyledTextVersions = styled(TextVersions)`
-  border-radius: var(--a-border-radius-medium);
-  box-shadow: var(--a-shadow-medium);
-  border-width: var(--a-spacing-1);
-  border-style: solid;
-  border-color: ${({ isActive }) => (isActive ? 'var(--a-border-action-selected)' : 'transparent')};
-  flex-grow: 1;
-  padding: var(--a-spacing-1);
-  margin-left: var(--a-spacing-1);
-  margin-right: var(--a-spacing-1);
-  flex-grow: 1;
-
-  &:last-child {
-    margin-bottom: var(--a-spacing-1);
-  }
-`;
-
-const StyledAlert = styled(Alert)`
-  margin-top: var(--a-spacing-2);
-`;

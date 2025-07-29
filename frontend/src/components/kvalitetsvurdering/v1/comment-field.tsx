@@ -4,7 +4,6 @@ import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalite
 import type { IKvalitetsvurderingTexts, IKvalitetsvurderingV1 } from '@app/types/kaka-kvalitetsvurdering/v1';
 import { Textarea } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { StyledCommentField } from './styled-components';
 
 interface Props {
   textareaId: keyof IKvalitetsvurderingTexts;
@@ -49,7 +48,7 @@ const CommentFieldContent = ({ textareaId, kvalitetsvurdering }: CommentFieldCon
   }
 
   return (
-    <StyledCommentField>
+    <div className="ml-8 w-[calc(100%_-_var(--ax-space-32))]">
       <Textarea
         label="Oppsummert i stikkord"
         size="small"
@@ -59,6 +58,6 @@ const CommentFieldContent = ({ textareaId, kvalitetsvurdering }: CommentFieldCon
         onChange={({ target }) => setComment(target.value)}
         disabled={!canEdit}
       />
-    </StyledCommentField>
+    </div>
   );
 };

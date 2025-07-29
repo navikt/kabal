@@ -14,7 +14,7 @@ import {
   useMyPlateEditorRef,
 } from '@app/plate/types';
 import { isNodeEmpty, isOfElementTypesFn, nextPath } from '@app/plate/utils/queries';
-import { Box, HGrid, HStack, Tooltip } from '@navikt/ds-react';
+import { BoxNew, HGrid, HStack, Tooltip } from '@navikt/ds-react';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { TableAdd } from '@styled-icons/fluentui-system-regular';
@@ -156,17 +156,17 @@ const TableGrid = ({ close }: TableGridProps) => {
   }, [setCellFromMouse]);
 
   return (
-    <Box
+    <BoxNew
       position="absolute"
-      background="bg-default"
+      background="default"
       borderWidth="1"
-      borderColor="border-default"
+      borderColor="neutral"
       borderRadius="medium"
-      shadow="medium"
+      shadow="dialog"
       padding="2"
       className="-left-28"
     >
-      <Box
+      <BoxNew
         ref={gridRef}
         style={{
           width: getWidth(maxColumns),
@@ -184,7 +184,7 @@ const TableGrid = ({ close }: TableGridProps) => {
           isInGrid.current = true;
         }}
       >
-        <Box
+        <BoxNew
           position="absolute"
           top="0"
           left="0"
@@ -197,10 +197,10 @@ const TableGrid = ({ close }: TableGridProps) => {
           aria-hidden
         >
           <BackgroundGrid />
-        </Box>
+        </BoxNew>
 
         <Grid close={close} onClick={onClick} onFocus={setHoveredCell} />
-      </Box>
+      </BoxNew>
 
       <HStack justify="end">
         <HGrid columns="min-content min-content" gap="0 2" className="font-bold text-small">
@@ -210,7 +210,7 @@ const TableGrid = ({ close }: TableGridProps) => {
           <span>{hoveredColumn === -1 ? '?' : hoveredColumn + 1}</span>
         </HGrid>
       </HStack>
-    </Box>
+    </BoxNew>
   );
 };
 
@@ -238,10 +238,11 @@ const Grid = memo(({ close, onClick, onFocus }: GridProps) => (
           content={`Sett inn tabell med ${row + 1} ${row > 0 ? 'rader' : 'rad'} og ${col + 1} ${col > 0 ? 'kolonner' : 'kolonne'}`}
           describesChild
         >
-          <Box
+          <BoxNew
             as="button"
             type="button"
             borderWidth="1"
+            borderColor="neutral"
             borderRadius="small"
             onClick={() => {
               onClick(row + 1, col + 1);
@@ -249,7 +250,7 @@ const Grid = memo(({ close, onClick, onFocus }: GridProps) => (
             }}
             onMouseEnter={() => onFocus([row, col])}
             onFocus={() => onFocus([row, col])}
-            className={'w-6 h-6 cursor-pointer bg-transparent hover:bg-surface-action-subtle-hover'}
+            className={'h-6 w-6 cursor-pointer bg-transparent'}
           />
         </Tooltip>
       )),
@@ -260,7 +261,7 @@ const Grid = memo(({ close, onClick, onFocus }: GridProps) => (
 const BackgroundGrid = memo(() => (
   <HGrid gap="05" width="max-content" overflow="hidden" className="z-0" columns={MAX_COLUMNS_COUNT}>
     {ROWS.map((row) =>
-      COLUMNS.map((col) => <Box key={`${row}-${col}`} className="w-6 h-6 bg-surface-action-subtle" />),
+      COLUMNS.map((col) => <BoxNew key={`${row}-${col}`} background="accent-strong" className="h-6 w-6" />),
     )}
   </HGrid>
 ));

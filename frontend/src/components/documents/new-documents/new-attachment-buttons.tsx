@@ -27,7 +27,7 @@ export const NewAttachmentButtons = (props: Props) => {
   }
 
   return (
-    <HStack align="center" gap="0 2" marginInline="7 0" className="empty:hidden">
+    <HStack align="center" gap="0 2" marginInline="9 0" className="empty:hidden">
       <NewRolAnswerDocumentButton {...props} />
       <Upload {...props} />
     </HStack>
@@ -81,7 +81,7 @@ const NewRolAnswerDocumentButton = ({ document }: Props) => {
 
   return (
     <Button variant="tertiary" size="xsmall" icon={<Chat2Icon aria-hidden />} onClick={onClick} loading={isLoading}>
-      Opprett svardokument
+      <span className="font-normal">Opprett svardokument</span>
     </Button>
   );
 };

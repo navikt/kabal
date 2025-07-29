@@ -7,10 +7,9 @@ import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { FileSearchIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, HStack } from '@navikt/ds-react';
+import { BoxNew, Button, type ButtonProps, HStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@platejs/core/react';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 type OpenSide = 'left' | 'right';
 type OpenDirection = 'up' | 'down';
@@ -46,6 +45,9 @@ export const RichTextPreview = ({
     value: structuredClone(content), // Do not remove. Solves a bug where the main editor crashes when the preview is toggled on and off.
   });
 
+  const openLeft = openSide === 'left';
+  const openUp = openDirection === 'up';
+
   return (
     <HStack align="center" position="relative" ref={ref}>
       <Button
@@ -59,27 +61,26 @@ export const RichTextPreview = ({
       </Button>
 
       {viewContent ? (
-        <ContentContainer $openSide={openSide} $openDirection={openDirection}>
+        <BoxNew
+          position="absolute"
+          background="default"
+          shadow="dialog"
+          padding="2"
+          style={{
+            left: openLeft ? 'auto' : '0',
+            right: openLeft ? '0' : 'auto',
+            bottom: openUp ? '100%' : 'auto',
+            top: openUp ? 'auto' : '100%',
+            width: `calc(var(${EDITOR_SCALE_CSS_VAR}) * 105mm)`,
+            fontSize: `calc(var(${EDITOR_SCALE_CSS_VAR}) * ${BASE_FONT_SIZE}pt)`,
+          }}
+          className="z-22"
+        >
           <Plate<RichTextEditor> editor={editor} readOnly>
             <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[lang]} />
           </Plate>
-        </ContentContainer>
+        </BoxNew>
       ) : null}
     </HStack>
   );
 };
-
-const ContentContainer = styled.div<{ $openSide: OpenSide; $openDirection: OpenDirection }>`
-  background-color: var(--a-bg-default);
-  box-shadow: var(--a-shadow-medium);
-  position: absolute;
-  padding: var(--a-spacing-2);
-  left: ${({ $openSide }) => ($openSide === 'left' ? 'auto' : '0')};
-  right: ${({ $openSide }) => ($openSide === 'left' ? '0' : 'auto')};
-  bottom: ${({ $openDirection }) => ($openDirection === 'up' ? '100%' : 'auto')};
-  top: ${({ $openDirection }) => ($openDirection === 'up' ? 'auto' : '100%')};
-  z-index: 22;
-
-  width: calc(var(${EDITOR_SCALE_CSS_VAR}) * 105mm);
-  font-size: calc(var(${EDITOR_SCALE_CSS_VAR}) * ${BASE_FONT_SIZE}pt);
-`;

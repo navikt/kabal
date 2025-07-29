@@ -4,14 +4,14 @@ const MORE_THRESHOLD = MAX_DOCUMENT_LINES + 2;
 export const createDragUI = (documentTitleList: string[], e: React.DragEvent<HTMLDivElement>): (() => void) => {
   const dragElement = window.document.createElement('section');
 
-  dragElement.style.backgroundColor = 'var(--a-bg-default)';
-  dragElement.style.border = 'var(--a-spacing-05) solid var(--a-surface-action-hover)';
-  dragElement.style.padding = 'var(--a-spacing-1)';
-  dragElement.style.paddingLeft = 'var(--a-spacing-4)';
-  dragElement.style.borderTopRightRadius = 'var(--a-spacing-4)';
-  dragElement.style.borderBottomRightRadius = 'var(--a-spacing-4)';
-  dragElement.style.borderBottomLeftRadius = 'var(--a-spacing-4)';
-  dragElement.style.boxShadow = 'var(--a-shadow-medium)';
+  dragElement.style.backgroundColor = 'var(--ax-bg-default)';
+  dragElement.style.border = 'var(--ax-space-2) solid var(--ax-bg-accent-soft-hover)';
+  dragElement.style.padding = 'var(--ax-space-4)';
+  dragElement.style.paddingLeft = 'var(--ax-space-16)';
+  dragElement.style.borderTopRightRadius = 'var(--ax-space-16)';
+  dragElement.style.borderBottomRightRadius = 'var(--ax-space-16)';
+  dragElement.style.borderBottomLeftRadius = 'var(--ax-space-16)';
+  dragElement.style.boxShadow = 'var(--ax-shadow-dialog)';
 
   const documentsCount = documentTitleList.length;
 
@@ -26,7 +26,7 @@ export const createDragUI = (documentTitleList: string[], e: React.DragEvent<HTM
   if (documentsCount > 1) {
     const list = window.document.createElement('ul');
     list.style.margin = '0';
-    list.style.paddingLeft = 'var(--a-spacing-4)';
+    list.style.paddingLeft = 'var(--ax-space-16)';
     list.style.paddingTop = '0';
     list.style.paddingBottom = '0';
 

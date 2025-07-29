@@ -23,10 +23,9 @@ import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@app/typ
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Language } from '@app/types/texts/language';
 import type { Immutable } from '@app/types/types';
-import { Box, HStack, Loader } from '@navikt/ds-react';
+import { BoxNew, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { getTitle } from './get-title';
-import { StyledHeader, StyledNewDocument, StyledTemplateButton } from './styled-components';
 
 interface Props {
   onCreate: (id: string) => void;
@@ -77,8 +76,18 @@ export const NewDocument = ({ onCreate }: Props) => {
   };
 
   return (
-    <StyledNewDocument>
-      <StyledHeader>Opprett nytt dokument</StyledHeader>
+    <BoxNew
+      as="section"
+      width="826px"
+      height="100%"
+      paddingBlock="4"
+      paddingInline="8"
+      background="default"
+      overflowY="auto"
+    >
+      <Heading level="1" size="xsmall">
+        Opprett nytt dokument
+      </Heading>
 
       <HStack as="section" wrap>
         {templates.map((template) => (
@@ -90,7 +99,7 @@ export const NewDocument = ({ onCreate }: Props) => {
           />
         ))}
       </HStack>
-    </StyledNewDocument>
+    </BoxNew>
   );
 };
 
@@ -147,20 +156,30 @@ interface TemplateButtonProps {
 }
 
 const TemplateButton = ({ template, loading, onClick }: TemplateButtonProps) => (
-  <StyledTemplateButton onClick={onClick} disabled={loading}>
-    <LoadingOverlay loading={loading} />
+  <BoxNew asChild padding="4" borderRadius="medium" width="25%" minWidth="190px">
+    <VStack
+      as="button"
+      type="button"
+      onClick={onClick}
+      disabled={loading}
+      align="center"
+      position="relative"
+      className="cursor-pointer hover:bg-ax-bg-neutral-moderate-hover"
+    >
+      <LoadingOverlay loading={loading} />
 
-    <GeneratedIcon template={template} />
+      <GeneratedIcon template={template} />
 
-    {template.tittel}
-  </StyledTemplateButton>
+      <span className="font-bold text-ax-medium">{template.tittel}</span>
+    </VStack>
+  </BoxNew>
 );
 
 const LoadingOverlay = ({ loading }: { loading: boolean }) =>
   loading ? (
     <HStack asChild align="center" justify="center" position="absolute" top="0">
-      <Box background="surface-backdrop" height="100%" width="100%">
+      <BoxNew background="neutral-soft" height="100%" width="100%">
         <Loader size="xlarge" />
-      </Box>
+      </BoxNew>
     </HStack>
   ) : null;

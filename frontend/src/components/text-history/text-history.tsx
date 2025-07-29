@@ -4,9 +4,8 @@ import { pushEvent } from '@app/observability';
 import type { INavEmployee } from '@app/types/bruker';
 import type { IEditor } from '@app/types/maltekstseksjoner/responses';
 import { CalendarIcon, ClockDashedIcon, PencilWritingIcon, UploadIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, Tag, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, HStack, Tag, type TagProps, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface PublishedProps {
   publishedDateTime: string;
@@ -42,7 +41,7 @@ export const TextHistory = ({
     <HStack align="center" position="relative" ref={ref} data-qqqqq>
       {showEdits && (
         <VStack asChild position="absolute" right="0" gap="1 0" style={{ top: '100%', zIndex: 1, listStyle: 'none' }}>
-          <Box as="ul" background="bg-default" shadow="medium" borderRadius="medium" padding="2" margin="0">
+          <BoxNew as="ul" background="default" shadow="dialog" borderRadius="medium" padding="2" margin="0">
             {publishedDateTime !== null ? (
               <HStack as="li" align="center" wrap={false} style={{ whiteSpace: 'pre' }}>
                 <StyledTag variant="info" size="xsmall">
@@ -77,7 +76,7 @@ export const TextHistory = ({
                 av {createdByActor.navn} {isoDateTimeToPretty(created)}
               </span>
             </HStack>
-          </Box>
+          </BoxNew>
         </VStack>
       )}
       <Button
@@ -96,9 +95,8 @@ export const TextHistory = ({
   );
 };
 
-const StyledTag = styled(Tag)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-1);
-`;
+const StyledTag = (props: TagProps) => (
+  <HStack asChild align="center" gap="1">
+    <Tag {...props} />
+  </HStack>
+);

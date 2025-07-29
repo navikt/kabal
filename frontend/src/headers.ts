@@ -33,5 +33,9 @@ export const getQueryParams = () => {
   const { version } = ENVIRONMENT;
   const traceParent = generateTraceParent();
 
-  return `${QueryKeys.VERSION}=${version}&${QueryKeys.TAB_ID}=${TAB_UUID}&${QueryKeys.TRACEPARENT}=${traceParent}`;
+  return new URLSearchParams({
+    [QueryKeys.VERSION]: version,
+    [QueryKeys.TAB_ID]: TAB_UUID,
+    [QueryKeys.TRACEPARENT]: traceParent,
+  });
 };

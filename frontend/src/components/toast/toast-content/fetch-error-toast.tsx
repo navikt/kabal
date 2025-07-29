@@ -1,7 +1,6 @@
 import { getErrorData } from '@app/functions/get-error-data';
 import { Detail, Label } from '@navikt/ds-react';
 import type { FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import { styled } from 'styled-components';
 import { toast } from '../store';
 
 export const apiErrorToast = (message: string, error: FetchBaseQueryError, args?: string | FetchArgs) => {
@@ -30,16 +29,7 @@ export const Details = ({ label, children }: DetailProps) => {
 
   return (
     <Detail>
-      <DetailLabel>{label}:</DetailLabel> <StyledCode>{children}</StyledCode>
+      <span className="font-bold">{label}:</span> <code className="break-normal text-xs">{children}</code>
     </Detail>
   );
 };
-
-const DetailLabel = styled.span`
-  font-weight: bold;
-`;
-
-const StyledCode = styled.code`
-  font-size: var(--a-spacing-3);
-  word-break: break-word;
-`;

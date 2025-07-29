@@ -28,7 +28,13 @@ export const UtfallSelect = ({ children, selected, onChange, options }: UtfallSe
   );
 
   return (
-    <FilterDropdown options={_options} selected={_selected} onChange={_onChange} data-testid="filter-utfall">
+    <FilterDropdown
+      options={_options}
+      selected={_selected}
+      onChange={_onChange}
+      data-testid="filter-utfall"
+      size="small"
+    >
       {children}
     </FilterDropdown>
   );
@@ -146,7 +152,7 @@ const NestedDropDown = ({ children, selected, onChange, options, 'data-testid': 
 
   return (
     <div ref={ref} className="relative">
-      <ToggleButton $open={isOpen} onClick={toggleOpen}>
+      <ToggleButton open={isOpen} onClick={toggleOpen} size="small">
         {children} ({selected.length})
       </ToggleButton>
       {isOpen ? (

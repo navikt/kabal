@@ -6,7 +6,6 @@ import { useDeleteCommentOrThreadMutation } from '@app/redux-api/smart-editor-co
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface DeleteButtonProps {
   id: string;
@@ -37,39 +36,38 @@ export const DeleteButton = ({ id, title }: DeleteButtonProps) => {
 
   if (!showConfirm) {
     return (
-      <AlignLeftButton
+      <Button
         size="xsmall"
         icon={<TrashIcon aria-hidden />}
         variant="danger"
         onClick={() => setShowConfirm(true)}
         disabled={isDeleting}
         title={title}
+        className="justify-start"
       />
     );
   }
 
   return (
     <>
-      <AlignLeftButton
+      <Button
         size="xsmall"
         icon={<TrashIcon aria-hidden />}
         variant="danger"
         onClick={onDelete}
         loading={isDeleting}
         title={title}
+        className="justify-start"
       />
-      <AlignLeftButton
+      <Button
         size="xsmall"
         icon={<XMarkIcon aria-hidden />}
         variant="tertiary"
         onClick={() => setShowConfirm(false)}
         disabled={isDeleting}
         title="Avbryt"
+        className="justify-start"
       />
     </>
   );
 };
-
-const AlignLeftButton = styled(Button)`
-  justify-content: flex-start;
-`;

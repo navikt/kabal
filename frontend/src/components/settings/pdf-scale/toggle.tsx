@@ -1,6 +1,6 @@
 import { ScalePreviewSvg } from '@app/components/settings/pdf-scale/preview-svg';
 import type { PdfScaleMode } from '@app/hooks/settings/use-setting';
-import { BodyShort, Box, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, BoxNew, HStack, VStack } from '@navikt/ds-react';
 
 interface Option {
   label: string;
@@ -39,14 +39,17 @@ const ToggleButton = ({
   interactiveContent,
   ...rest
 }: ToggleButtonProps) => (
-  <Box
+  <BoxNew
     asChild
-    background={selected ? 'surface-action-selected' : 'bg-default'}
     borderRadius="medium"
     borderWidth="1"
-    borderColor="border-divider"
+    borderColor="neutral"
     width="340px"
-    className={selected ? 'text-text-on-action' : 'text-text-default hover:bg-surface-action-subtle-hover'}
+    className={
+      selected
+        ? 'bg-ax-bg-accent-strong-pressed text-ax-text-accent-contrast hover:bg-ax-bg-accent-strong-hover'
+        : 'bg-ax-bg-default text-ax-text-neutral hover:bg-ax-bg-accent-strong-hover hover:text-ax-text-accent-contrast'
+    }
   >
     <VStack>
       {/** biome-ignore lint/a11y/useSemanticElements: Option in radio group. */}
@@ -74,5 +77,5 @@ const ToggleButton = ({
 
       {interactiveContent}
     </VStack>
-  </Box>
+  </BoxNew>
 );

@@ -2,7 +2,6 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import { PadlockLockedIcon, PencilWritingIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Modal } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
 import { AvailableTextsByType, type AvailableTextsByTypeProps } from './available-texts-by-type';
 
 export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: AvailableTextsByTypeProps) => {
@@ -15,9 +14,15 @@ export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: Available
 
   return (
     <>
-      <StyledButton variant="tertiary" size="small" onClick={() => setOpen(!open)} icon={<Icon aria-hidden />}>
+      <Button
+        variant="tertiary"
+        size="small"
+        onClick={() => setOpen(!open)}
+        icon={<Icon aria-hidden />}
+        className="justify-start"
+      >
         Legg til eksisterende {typeLabel} tekst
-      </StyledButton>
+      </Button>
 
       <Modal
         header={{ heading: textType === RichTextTypes.MALTEKST ? 'Låste tekster' : 'Redigerbare tekster' }}
@@ -41,7 +46,3 @@ export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: Available
     </>
   );
 };
-
-const StyledButton = styled(Button)`
-  justify-content: flex-start;
-`;

@@ -7,9 +7,8 @@ import { isoDateTimeToPretty } from '@app/domain/date';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useUpdateCommentOrReplyMutation } from '@app/redux-api/smart-editor-comments';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
-import { BodyLong, HStack, VStack } from '@navikt/ds-react';
+import { BodyLong, BoxNew, HStack, VStack } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { EditButton } from './edit-comment';
 
 interface Props {
@@ -31,10 +30,16 @@ export const Comment = ({ isExpanded, isMain, comment }: Props) => {
   const canDeleteComment = (isAuthor || isSaksbehandler) && isExpanded;
 
   return (
-    <StyledListItem>
+    <BoxNew
+      as="li"
+      paddingInline="2 0"
+      borderWidth="0 0 0 4"
+      borderColor="neutral-subtle"
+      className="first:border-l-0 first:pl-0"
+    >
       <VStack as="article" position="relative">
         <HStack gap="2" align="center" justify="space-between" wrap={false}>
-          <StyledName>{author.name}</StyledName>
+          <div className="w-full grow truncate text-ax-medium">{author.name}</div>
           {canDeleteComment ? <DeleteButton id={id} title={isMain ? 'Slett tråd' : 'Slett svar'} /> : null}
         </HStack>
 
@@ -42,7 +47,7 @@ export const Comment = ({ isExpanded, isMain, comment }: Props) => {
           {...status}
           modified={modified}
           fallback={
-            <HStack className="text-small text-text-subtle" gap="1" align="center">
+            <HStack className="text-ax-small text-ax-text-neutral-subtle" gap="1" align="center">
               Sist lagret: <time dateTime={modified}>{isoDateTimeToPretty(modified)}</time>
             </HStack>
           }
@@ -62,26 +67,6 @@ export const Comment = ({ isExpanded, isMain, comment }: Props) => {
           </HStack>
         )}
       </VStack>
-    </StyledListItem>
+    </BoxNew>
   );
 };
-
-const StyledListItem = styled.li`
-  padding-left: var(--a-spacing-1);
-  border-left: var(--a-spacing-1) solid lightgrey;
-
-  &:first-child {
-    padding-left: 0;
-    border-left: none;
-  }
-`;
-
-const StyledName = styled.div`
-  display: block;
-  width: 100%;
-  font-size: var(--a-spacing-4);
-  font-weight: bold;
-  flex-grow: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;

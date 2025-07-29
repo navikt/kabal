@@ -11,11 +11,10 @@ import {
   insertEmptyChar,
   lonePlaceholderInMaltekst,
 } from '@app/plate/components/placeholder/helpers';
-import { DeleteButton, Wrapper } from '@app/plate/components/placeholder/styled-components';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { PlaceholderElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Tooltip } from '@navikt/ds-react';
+import { BoxNew, Tooltip } from '@navikt/ds-react';
 import { useEditorReadOnly } from '@platejs/core/react';
 import { PathApi } from 'platejs';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
@@ -158,20 +157,38 @@ const Placeholder = ({ hasWriteAccess, ...props }: PlaceholderProps) => {
       }}
     >
       <Tooltip content={element.placeholder} maxChar={Number.POSITIVE_INFINITY} contentEditable={false}>
-        <Wrapper
+        <BoxNew
+          position="relative"
+          borderRadius="medium"
           data-node-type={ELEMENT_PLACEHOLDER}
           data-raw-placeholder={element.placeholder}
-          className={`${isFocused ? 'bg-blue-200' : 'bg-gray-200'} ${hideDeleteButton || isReadOnly ? 'pl-0' : 'pl-[1em]'}`}
-          onClick={onClick}
           data-placeholder={hasNoVisibleText ? element.placeholder : undefined}
+          style={{
+            paddingLeft: hideDeleteButton || isReadOnly ? '0' : '1em',
+          }}
+          className={`inline-block text-ax-text-neutral ${isFocused ? 'bg-ax-accent-200' : 'bg-ax-neutral-200'} after:cursor-text after:select-none after:text-ax-text-neutral-subtle after:content-[attr(data-placeholder)]`}
+          onClick={onClick}
         >
           {children}
           {hideDeleteButton || isReadOnly ? null : (
-            <DeleteButton title="Slett innfyllingsfelt" onClick={deletePlaceholder} contentEditable={false}>
-              <TrashIcon aria-hidden />
-            </DeleteButton>
+            <BoxNew
+              asChild
+              title="Slett innfyllingsfelt"
+              contentEditable={false}
+              borderRadius="medium"
+              height="1.333em"
+              width="1em"
+              position="absolute"
+              top="0"
+              left="0"
+              className="inline-flex cursor-pointer items-center text-ax-text-danger hover:bg-ax-bg-neutral-moderate active:bg-ax-bg-neutral-strong"
+            >
+              <button type="button" onClick={deletePlaceholder}>
+                <TrashIcon aria-hidden />
+              </button>
+            </BoxNew>
           )}
-        </Wrapper>
+        </BoxNew>
       </Tooltip>
     </PlateElement>
   );

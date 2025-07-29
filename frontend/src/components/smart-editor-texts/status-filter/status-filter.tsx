@@ -16,6 +16,7 @@ export const StatusFilter = () => {
       selected={filteredStatuses}
       options={STATUS_OPTIONS}
       onChange={setFilteredStatuses}
+      size="small"
     >
       Status
     </FilterDropdown>

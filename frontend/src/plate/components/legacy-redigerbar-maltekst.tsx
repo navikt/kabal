@@ -101,7 +101,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
         <SectionContainer
           data-element={element.type}
           data-section={element.section}
-          $sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
+          sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
         >
           <Loader title="Laster..." />
         </SectionContainer>
@@ -114,7 +114,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
       <SectionContainer
         data-element={element.type}
         data-section={element.section}
-        $sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
+        sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
       >
         {children}
         {hasWriteAccess ? (

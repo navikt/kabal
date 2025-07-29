@@ -1,7 +1,7 @@
 import { useInsertHjemlerInSettingsMutation } from '@app/redux-api/internal';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Checkbox, CheckboxGroup, Heading, HStack, Select, VStack } from '@navikt/ds-react';
+import { Alert, BoxNew, Button, Checkbox, CheckboxGroup, Heading, HStack, Select, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
 export const InsertHjemlerInSettings = () => {
@@ -16,7 +16,7 @@ export const InsertHjemlerInSettings = () => {
   ));
 
   return (
-    <Box shadow="medium" padding="4" asChild>
+    <BoxNew shadow="dialog" padding="4" asChild>
       <VStack gap="4">
         <Heading size="small">Sett inn innsendingshjemler i innstillinger</Heading>
 
@@ -34,7 +34,7 @@ export const InsertHjemlerInSettings = () => {
           <Hjemler ytelse={selectedYtelse} selectedHjemler={selectedHjemler} setSelectedHjemler={setSelectedHjemler} />
         )}
       </VStack>
-    </Box>
+    </BoxNew>
   );
 };
 

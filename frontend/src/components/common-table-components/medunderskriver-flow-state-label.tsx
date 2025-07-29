@@ -11,8 +11,6 @@ import { useContext } from 'react';
 
 type Props = Pick<IOppgave, 'medunderskriver' | 'typeId'>;
 
-const TAG_CLASSES = 'overflow-hidden text-ellipsis whitespace-nowrap';
-
 export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Props) => {
   const { user } = useContext(StaticDataContext);
 
@@ -24,7 +22,7 @@ export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Pro
 
   if (isMedunderskriver && medunderskriver.flowState === FlowState.SENT) {
     return (
-      <Tag className={TAG_CLASSES} variant="alt3" title={getTitleCapitalized(typeId)}>
+      <Tag className="truncate" variant="alt3" title={getTitleCapitalized(typeId)}>
         {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'Fagansvarlig' : 'MU'}
       </Tag>
     );
@@ -32,7 +30,7 @@ export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Pro
 
   if (!isMedunderskriver && medunderskriver.flowState === FlowState.SENT) {
     return (
-      <Tag className={TAG_CLASSES} variant="alt3" title={`Sendt til ${getTitleLowercase(typeId)}`}>
+      <Tag className="truncate" variant="alt3" title={`Sendt til ${getTitleLowercase(typeId)}`}>
         Sendt til {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
       </Tag>
     );
@@ -40,7 +38,7 @@ export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Pro
 
   if (!isMedunderskriver && medunderskriver.flowState === FlowState.RETURNED) {
     return (
-      <Tag className={TAG_CLASSES} variant="info" title={`Tilbake fra ${getTitleLowercase(typeId)}`}>
+      <Tag className="truncate" variant="info" title={`Tilbake fra ${getTitleLowercase(typeId)}`}>
         Tilbake fra {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
       </Tag>
     );

@@ -74,7 +74,7 @@ const RadioOption = ({ value, type, distType, text }: RadioOptionProps) => (
     <HStack align="center" justify="start" gap="0 1">
       <DocumentIcon type={type} />
 
-      <span className="overflow-hidden text-ellipsis whitespace-nowrap">{text}</span>
+      <span className="truncate">{text}</span>
 
       <Tag size="xsmall" variant="info">
         {DISTRIBUTION_TYPE_NAMES[distType]}

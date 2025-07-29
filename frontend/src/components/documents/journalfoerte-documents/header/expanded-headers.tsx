@@ -81,20 +81,21 @@ export const ExpandedHeaders = ({
           maxHeight={listHeight}
           style={{ gridArea: Fields.Tema }}
           data-testid="filter-tema"
+          size="small"
         >
           Tema
         </FilterDropdown>
       ) : null}
 
       {columns.DATO_OPPRETTET ? (
-        <HStack align="center" as="section" style={{ gridArea: Fields.DatoOpprettet }}>
+        <HStack align="center" as="section" style={{ gridArea: Fields.DatoOpprettet }} wrap={false}>
           <SortButton column={ArchivedDocumentsColumn.DATO_OPPRETTET} sort={sort} setSort={setSort} />
           <DateFilter {...datoOpprettetSetting} label="Dato opprettet" gridArea={Fields.DatoOpprettet} />
         </HStack>
       ) : null}
 
       {columns.DATO_SORTERING ? (
-        <HStack align="center" as="section" style={{ gridArea: Fields.DatoSortering }}>
+        <HStack align="center" as="section" style={{ gridArea: Fields.DatoSortering }} wrap={false}>
           <SortButton column={ArchivedDocumentsColumn.DATO_SORTERING} sort={sort} setSort={setSort} />
           <DateFilter {...datoSorteringSetting} label="Dato reg./sendt" gridArea={Fields.DatoSortering} />
         </HStack>
@@ -110,6 +111,7 @@ export const ExpandedHeaders = ({
           maxHeight={listHeight}
           style={{ gridArea: Fields.AvsenderMottaker }}
           data-testid="filter-avsender-mottaker"
+          size="small"
         >
           Avsender/mottaker
         </FilterDropdown>
@@ -125,6 +127,7 @@ export const ExpandedHeaders = ({
           maxHeight={listHeight}
           style={{ gridArea: Fields.Saksnummer }}
           data-testid="filter-saksnummer"
+          size="small"
         >
           Saksnummer
         </FilterDropdown>
@@ -140,6 +143,7 @@ export const ExpandedHeaders = ({
           maxHeight={listHeight}
           style={{ gridArea: Fields.Type }}
           data-testid="filter-type"
+          size="small"
         >
           Type
         </FilterDropdown>

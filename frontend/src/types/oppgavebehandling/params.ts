@@ -96,7 +96,7 @@ export interface ISetFeilregistrertParams extends IOppgavebehandlingBaseParams {
 }
 
 export interface ISettPaaVentParams extends IOppgavebehandlingBaseParams {
-  to: string; // string($date)
+  to: string; // LocalDate
   reason: string;
 }
 

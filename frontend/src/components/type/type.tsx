@@ -1,7 +1,6 @@
 import { useTypeNameFromId } from '@app/hooks/use-kodeverk-ids';
-import { TypeTag } from '@app/styled-components/labels';
-import type { SaksTypeEnum } from '@app/types/kodeverk';
-import { Skeleton, type TagProps } from '@navikt/ds-react';
+import { SaksTypeEnum } from '@app/types/kodeverk';
+import { Skeleton, Tag, type TagProps } from '@navikt/ds-react';
 
 interface Props {
   type: SaksTypeEnum;
@@ -16,8 +15,16 @@ export const Type = ({ type, size = 'small' }: Props) => {
   }
 
   return (
-    <TypeTag $type={type} variant="neutral" size={size}>
+    <Tag variant={VARIANT[type]} size={size} className="truncate">
       {typeName}
-    </TypeTag>
+    </Tag>
   );
+};
+
+const VARIANT: Record<SaksTypeEnum, TagProps['variant']> = {
+  [SaksTypeEnum.KLAGE]: 'info-moderate',
+  [SaksTypeEnum.ANKE]: 'alt1-moderate',
+  [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: 'neutral-moderate',
+  [SaksTypeEnum.OMGJØRINGSKRAV]: 'warning-moderate',
+  [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: 'alt2-moderate',
 };

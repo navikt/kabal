@@ -13,11 +13,10 @@ import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { REGELVERK_TYPE } from '@app/types/common-text-types';
 import type { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/consumer';
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
-import { Button, Loader, Tooltip } from '@navikt/ds-react';
+import { BoxNew, Button, HStack, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 const isRegelverk = (text: IConsumerText): text is IConsumerRegelverkText => text.textType === REGELVERK_TYPE;
 
@@ -31,7 +30,7 @@ export const Regelverk = (props: PlateElementProps<RegelverkElement>) => {
       as="div"
       attributes={{ ...props.attributes, onDragStart: onPlateContainerDragStart }}
     >
-      <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
+      <SectionContainer sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
         {children}
         {hasWriteAccess ? (
           <SectionToolbar contentEditable={false} className="top-8">
@@ -42,24 +41,6 @@ export const Regelverk = (props: PlateElementProps<RegelverkElement>) => {
     </PlateElement>
   );
 };
-
-const LoadingWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-`;
-
-const StyledLoader = styled(Loader)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-`;
 
 export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerElement>) => {
   const [loading, setLoading] = useState(false);
@@ -104,12 +85,14 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
       {...props}
       attributes={{ ...props.attributes, onDragStart: onPlateContainerDragStart }}
     >
-      <SectionContainer $sectionType={SectionTypeEnum.REGELVERK} data-element={element.type} aria-disabled={loading}>
+      <SectionContainer sectionType={SectionTypeEnum.REGELVERK} data-element={element.type} aria-disabled={loading}>
         {children}
         {loading ? (
-          <LoadingWrapper>
-            <StyledLoader title="Laster..." size="2xlarge" />
-          </LoadingWrapper>
+          <BoxNew asChild position="absolute" top="0" left="0" right="0" bottom="0" background="neutral-strong">
+            <HStack align="center" justify="center">
+              <Loader title="Laster..." size="2xlarge" />
+            </HStack>
+          </BoxNew>
         ) : null}
         {hasWriteAccess ? (
           <SectionToolbar contentEditable={false}>

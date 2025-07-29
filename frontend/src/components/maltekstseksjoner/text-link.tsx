@@ -30,7 +30,7 @@ export const TextLink = ({
     return (
       <GridLink ref={ref} to={to} {...dragProps} title={children}>
         {icon}
-        <EllipsisTitle>Laster...</EllipsisTitle>
+        <span className="truncate">Laster...</span>
         <Tag size="xsmall" variant="neutral">
           Laster
         </Tag>
@@ -42,7 +42,7 @@ export const TextLink = ({
   return (
     <GridLink ref={ref} to={to} {...dragProps} title={children}>
       {icon}
-      <EllipsisTitle>{getTitle(children)}</EllipsisTitle>
+      <span className="truncate">{getTitle(children)}</span>
       <StatusTag publishedDateTime={publishedDateTime} published={published} />
       <time dateTime={modified}>{isoDateTimeToPretty(modified)}</time>
     </GridLink>
@@ -78,11 +78,3 @@ const GridLink = ({ children, title, ref, to, ...dragProps }: GridLinkProps) => 
 );
 
 const getTitle = (title?: string) => (title === undefined || title.length === 0 ? '<Ingen tittel>' : title);
-
-interface EllipsisTitleProps {
-  children: string;
-}
-
-const EllipsisTitle = ({ children }: EllipsisTitleProps) => (
-  <span className="overflow-hidden text-ellipsis whitespace-nowrap">{children}</span>
-);

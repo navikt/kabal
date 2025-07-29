@@ -14,7 +14,7 @@ import {
   useSetTitleMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
 import { FilePdfIcon } from '@navikt/aksel-icons';
-import { Alert, Loader } from '@navikt/ds-react';
+import { Alert, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 
 interface VarsletFristProps {
@@ -61,14 +61,14 @@ export const Pdf = ({ id, varsletFrist }: VarsletFristProps) => {
 };
 
 const PdfPlaceholder = ({ children }: { children: string }) => (
-  <div className="flex w-full items-center justify-center">
-    <div className="flex flex-col items-center">
-      <FilePdfIcon fontSize={300} color="var(--a-gray-300)" />
+  <HStack align="center" justify="center" width="100%">
+    <VStack align="center">
+      <FilePdfIcon fontSize={300} color="var(--ax-text-neutral-decoration)" />
       <Alert variant="info" inline size="small">
         {children}
       </Alert>
-    </div>
-  </div>
+    </VStack>
+  </HStack>
 );
 
 const PdfBody = ({ id }: { id: string }) => {

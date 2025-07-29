@@ -39,9 +39,8 @@ export const Klageforberedelsen = () => {
         error={validationError}
         onChange={onChange}
         id={KLAGEFORBEREDELSEN_FIELD}
-        size="small"
       >
-        <HStack gap="4" width="100%">
+        <HStack gap="4" width="100%" wrap={false}>
           <Radio value={Radiovalg.BRA} disabled={!canEdit}>
             Bra/godt nok
           </Radio>

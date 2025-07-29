@@ -5,7 +5,6 @@ import { useKvalitetsvurderingEnabled } from '@app/hooks/settings/use-setting';
 import { useSectionTitle } from '@app/hooks/use-section-title';
 import { KvalitetsvurderingVersion } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Heading } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
 import { KvalitetsskjemaV1 } from './v1/kvalitetsskjema';
 import { KvalitetsskjemaV2 } from './v2/kvalitetsskjema';
@@ -22,13 +21,13 @@ export const Kvalitetsvurdering = (): React.JSX.Element | null => {
 
   return (
     <PanelContainer data-testid="kvalitetsvurdering-panel">
-      <KvalitetsVurderingContainer>
+      <div className="w-100 p-4">
         <Heading level="1" size="medium" spacing>
           {header}
         </Heading>
 
         <Kvalitetsskjema />
-      </KvalitetsVurderingContainer>
+      </div>
     </PanelContainer>
   );
 };
@@ -47,8 +46,3 @@ const Kvalitetsskjema = () => {
       return <KvalitetsskjemaV2 />;
   }
 };
-
-const KvalitetsVurderingContainer = styled.div`
-  padding: var(--a-spacing-4);
-  width: 400px;
-`;

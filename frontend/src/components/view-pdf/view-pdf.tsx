@@ -12,7 +12,18 @@ import { useShownDocuments } from '@app/hooks/use-shown-documents';
 import { Skjerming, VariantFormat } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, type ButtonProps, HStack, Loader, Switch, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import {
+  Alert,
+  BoxNew,
+  Button,
+  type ButtonProps,
+  HStack,
+  Loader,
+  Switch,
+  Tag,
+  Tooltip,
+  VStack,
+} from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useMergedDocument } from './use-merged-document';
@@ -136,7 +147,7 @@ export const ViewPDF = () => {
           showRedacted={showRedacted}
           setShowRedacted={setShowRedacted}
         />
-        <h1 className="m-0 overflow-hidden text-ellipsis whitespace-nowrap border-border-divider border-l py-1 pl-1 font-bold text-base">
+        <h1 className="m-0 truncate border-ax-border-neutral border-l py-1 pl-1 font-bold text-base">
           {title ?? mergedDocument?.title ?? 'Ukjent dokument'}
         </h1>
         <Button
@@ -215,7 +226,7 @@ const RedactedSwitch = ({
   );
 };
 
-const LEFT_DIVIDER_CLASSES = 'border-border-divider border-l pl-1';
+const LEFT_DIVIDER_CLASSES = 'border-ax-border-neutral border-l pl-1';
 
 const BUTTON_PROPS: ButtonProps = {
   size: 'xsmall',
@@ -236,8 +247,8 @@ const Container = ({ minWidth, children }: ContainerProps) => (
     justify="center"
     data-testid="show-document"
   >
-    <Box as="section" background="bg-default" shadow="medium" borderRadius="medium" position="relative" height="100%">
+    <BoxNew as="section" background="default" shadow="dialog" borderRadius="medium" position="relative">
       {children}
-    </Box>
+    </BoxNew>
   </VStack>
 );

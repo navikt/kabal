@@ -50,7 +50,7 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
       <SectionContainer
         data-element={element.type}
         data-section={element.section}
-        $sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
+        sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
       >
         {children}
         {readOnly || !hasWriteAccess ? null : (

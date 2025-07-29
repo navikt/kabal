@@ -12,7 +12,6 @@ import type { IDraft, IPlainText, IPublishedText, IText } from '@app/types/texts
 import { Loader, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { useParams } from 'react-router';
-import { styled } from 'styled-components';
 import { DraftPlainText } from './draft-plain-text';
 
 interface Props {
@@ -57,11 +56,11 @@ const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedPro
 
   const navigateToVersion = (vId: string) => navigate({ id, versionId: vId });
 
-  const hasDraft = versions.some((v) => 'publishedDateTime' in v && v.publishedDateTime === null);
+  const hasDraft = versions.some((v) => v.publishedDateTime === null);
 
   return (
-    <VStack height="100%" overflowY="hidden">
-      <StyledVersionTabs<IDraft, IPublishedText>
+    <VStack asChild height="100%" overflow="hidden" flexGrow="1">
+      <VersionTabs<IDraft, IPublishedText>
         first={firstText}
         versions={versions}
         selectedTabId={versionId}
@@ -113,10 +112,3 @@ const PublishedVersion = ({ text, hasDraft, setTabId }: PublishedVersionProps) =
 
 const isPlainText = (text: IText): text is IPlainText =>
   text.textType === PlainTextTypes.HEADER || text.textType === PlainTextTypes.FOOTER;
-
-const StyledVersionTabs: typeof VersionTabs = styled(VersionTabs)`
-  overflow: hidden;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-`;

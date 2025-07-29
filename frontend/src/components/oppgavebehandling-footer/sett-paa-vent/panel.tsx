@@ -2,7 +2,7 @@ import { ISO_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants
 import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Box, Button, ErrorSummary, HStack, Textarea, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, ErrorSummary, HStack, Textarea, VStack } from '@navikt/ds-react';
 import { addDays, addWeeks, differenceInWeeks, format, isPast, isValid, parseISO } from 'date-fns';
 import { useMemo, useState } from 'react';
 
@@ -39,7 +39,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
 
   return (
     <VStack asChild gap="4 0" left="0" position="absolute" className="bottom-full z-1">
-      <Box padding="4" background="bg-default" borderRadius="medium" shadow="medium" width="400px">
+      <BoxNew padding="4" background="default" borderRadius="medium" shadow="dialog" width="400px">
         <DatePicker
           label="Frist"
           value={to}
@@ -105,7 +105,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
             Avbryt
           </Button>
         </HStack>
-      </Box>
+      </BoxNew>
     </VStack>
   );
 };

@@ -1,6 +1,6 @@
 import { EXPANDED_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
 import { type IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
-import { Box, CopyButton, HelpText, HStack, Label, VStack } from '@navikt/ds-react';
+import { BoxNew, CopyButton, HelpText, HStack, Label, VStack } from '@navikt/ds-react';
 import { Timeline } from './timeline/timeline';
 
 interface ExpandedDocumentProps {
@@ -11,8 +11,8 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
   const { journalstatus, kanalnavn, opprettetAvNavn, journalpostId } = document;
 
   return (
-    <VStack asChild gap="4 0" height={`${EXPANDED_HEIGHT}px`} width="calc(100% - var(--a-spacing-4))" overflowX="auto">
-      <Box paddingBlock="2" paddingInline="4 2" marginInline="4 0" borderWidth="0 0 0 1" borderColor="border-divider">
+    <VStack asChild gap="4 0" height={`${EXPANDED_HEIGHT}px`} width="calc(100% - var(--ax-space-16))" overflowX="auto">
+      <BoxNew paddingBlock="2" paddingInline="4 2" marginInline="4 0" borderWidth="0 0 0 1" borderColor="neutral">
         <HStack gap="0 4" position="sticky" left="0" className="whitespace-nowrap" wrap={false}>
           <Section>
             <Label size="small">Status</Label>
@@ -40,7 +40,7 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
         <HStack gap="8">
           <Timeline {...document} />
         </HStack>
-      </Box>
+      </BoxNew>
     </VStack>
   );
 };
@@ -70,16 +70,7 @@ interface DetailsProps {
 }
 
 const Data = ({ children, title }: DetailsProps) => (
-  <HStack
-    as="p"
-    title={title}
-    gap="05"
-    align="center"
-    height="6"
-    wrap={false}
-    overflow="hidden"
-    className="text-ellipsis whitespace-nowrap"
-  >
+  <HStack as="p" title={title} gap="05" align="center" height="6" wrap={false} overflow="hidden" className="truncate">
     {children}
   </HStack>
 );

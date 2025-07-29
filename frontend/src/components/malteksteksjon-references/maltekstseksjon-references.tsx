@@ -4,7 +4,6 @@ import type { TextType } from '@app/types/texts/common';
 import { DocPencilIcon, ExternalLinkIcon, EyeIcon, FileSearchIcon, UploadIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Link, List, Loader, Modal, Tooltip } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { Preview } from './preview';
 
 interface Props {
@@ -84,7 +83,7 @@ export const MaltekstseksjonReferences = ({
   return (
     <HStack align="center" gap="1" position="relative" className={className}>
       <Tooltip content={tooltip}>
-        <StyledButton
+        <Button
           size="xsmall"
           onClick={() => {
             if (noReferences) {
@@ -96,9 +95,10 @@ export const MaltekstseksjonReferences = ({
           variant="tertiary"
           icon={icon}
           iconPosition="right"
+          className="whitespace-nowrap"
         >
           {children}
-        </StyledButton>
+        </Button>
       </Tooltip>
 
       <Modal ref={ref} header={{ heading }} width={900} closeOnBackdropClick>
@@ -147,18 +147,10 @@ const ListItem = ({ id, onClick, selected }: ListItemProps) => {
           disabled={selected}
         />
         {getTitle(maltekstseksjon.title)}
-        <StyledLink href={`/maltekstseksjoner/${id}`} target="_blank">
+        <Link href={`/maltekstseksjoner/${id}`} target="_blank" className="whitespace-nowrap">
           <ExternalLinkIcon aria-hidden />
-        </StyledLink>
+        </Link>
       </HStack>
     </List.Item>
   );
 };
-
-const StyledButton = styled(Button)`
-  white-space: nowrap;
-`;
-
-const StyledLink = styled(Link)`
-  white-space: nowrap;
-`;

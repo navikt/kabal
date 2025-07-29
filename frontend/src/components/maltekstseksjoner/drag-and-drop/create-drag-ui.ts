@@ -11,7 +11,7 @@ export const createDragUI = (
   const width = dragElementRef.current.offsetWidth;
   const dragElement = dragElementRef.current.cloneNode(true) as HTMLAnchorElement;
   dragElement.style.width = `${width}px`;
-  dragElement.style.backgroundColor = 'var(--a-blue-100)';
+  dragElement.style.backgroundColor = 'var(--ax-bg-accent-soft)';
   dragElement.style.opacity = '0.5';
   dragElement.style.transform = 'rotate(3deg)';
 
