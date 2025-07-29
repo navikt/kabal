@@ -10,7 +10,6 @@ import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Loader } from '@navikt/ds-react';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { useContext, useEffect } from 'react';
-import { styled } from 'styled-components';
 
 export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
   const { data: oppgave, isLoading, isSuccess } = useOppgave();
@@ -80,12 +79,13 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
 
   return (
     <PlateElement<FullmektigElement> as="div" {...props}>
-      <SectionContainer data-element={props.element.type} $sectionType={SectionTypeEnum.LABEL}>
-        <PlaceholderContainer>
-          <StyledButton
+      <SectionContainer data-element={props.element.type} sectionType={SectionTypeEnum.LABEL}>
+        <span className="group/placeholder relative">
+          <Button
+            style={{}}
+            className="-translate-y-1/2 absolute top-1/2 right-full hidden group-hover/placeholder:block"
             contentEditable
             suppressContentEditableWarning
-            $align="left"
             variant="tertiary"
             size="small"
             title='Tilbakestill tittel til "Fullmektig"'
@@ -107,7 +107,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
           />
           {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
           <Editable>{children[0][1]}</Editable>
-        </PlaceholderContainer>
+        </span>
         <NonEditable>: </NonEditable>
         {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
         <Editable>{children[0][3]}</Editable>
@@ -150,20 +150,3 @@ const Editable = ({ children }: { children: React.ReactNode }) => (
 );
 
 const NonEditable = ({ children }: { children: React.ReactNode }) => <span contentEditable={false}>{children}</span>;
-
-const StyledButton = styled(Button)<{ $align: 'left' | 'right' }>`
-  display: none;
-  position: absolute;
-  left: ${({ $align }) => ($align === 'right' ? '100%' : 'auto')};
-  right: ${({ $align }) => ($align === 'left' ? '100%' : 'auto')};
-  top: 50%;
-  transform: translateY(-50%);
-`;
-
-const PlaceholderContainer = styled.span`
-  position: relative;
-
-  &:hover ${StyledButton} {
-    display: block;
-  }
-`;

@@ -79,7 +79,7 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
       <SectionContainer
         data-element={element.type}
         data-section={element.section}
-        $sectionType={SectionTypeEnum.MALTEKST}
+        sectionType={SectionTypeEnum.MALTEKST}
       >
         {children}
         {readOnly || !hasWriteAccess ? null : (

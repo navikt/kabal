@@ -7,9 +7,8 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
 import { useAddAbbreviationMutation } from '@app/redux-api/bruker';
 import { PlusIcon, TagIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, TextField, Tooltip } from '@navikt/ds-react';
+import { BoxNew, Button, HStack, TextField, Tooltip } from '@navikt/ds-react';
 import { useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const Abbreviation = () => {
   const [addAbbreviation] = useAddAbbreviationMutation();
@@ -92,7 +91,7 @@ export const Abbreviation = () => {
   });
 
   return (
-    <Container ref={containerRef}>
+    <div ref={containerRef} className="relative text-[12pt]">
       <ToolbarIconButton
         label="Legg til forkortelse"
         icon={<TagIcon aria-hidden />}
@@ -102,8 +101,8 @@ export const Abbreviation = () => {
         keys={['Ctrl', 'Shift', 'F']}
       />
       {isOpen ? (
-        <HStack asChild gap="0 1" position="absolute" right="0" className="top-full">
-          <Box background="bg-default" padding="1" borderRadius="medium" shadow="medium">
+        <HStack asChild gap="0 1" position="absolute" right="0" className="top-full" wrap={false}>
+          <BoxNew background="default" padding="1" borderRadius="medium" shadow="dialog">
             <Tooltip content="Den korte teksten du vil skal ekspandere til markert tekst">
               <TextField
                 autoFocus
@@ -125,20 +124,17 @@ export const Abbreviation = () => {
                 spellCheck={false}
                 autoComplete="off"
                 size="small"
-                htmlSize={10}
+                htmlSize={25}
+                placeholder='Kortversjon (f.eks. "osv.")'
               />
             </Tooltip>
+
             <Tooltip content="Legg til forkortelse">
-              <Button size="xsmall" variant="primary" onClick={onAdd} icon={<PlusIcon aria-hidden />} />
+              <Button size="small" variant="primary" onClick={onAdd} icon={<PlusIcon aria-hidden />} />
             </Tooltip>
-          </Box>
+          </BoxNew>
         </HStack>
       ) : null}
-    </Container>
+    </div>
   );
 };
-
-const Container = styled.div`
-  position: relative;
-  font-size: 12pt;
-`;

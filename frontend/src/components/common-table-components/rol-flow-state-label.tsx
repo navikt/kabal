@@ -6,7 +6,7 @@ import { useContext } from 'react';
 
 type Props = Pick<IOppgave, 'rol'>;
 
-const TAG_CLASSES = 'whitespace-nowrap overflow-hidden text-ellipsis';
+const TAG_CLASSES = 'truncate';
 
 export const RolFlowStateLabel = ({ rol }: Props) => {
   const { user } = useContext(StaticDataContext);

@@ -1,6 +1,7 @@
 import { PROXY_VERSION } from '@app/config/config';
 import { formatDuration, getDuration } from '@app/helpers/duration';
 import { getLogger } from '@app/logger';
+import { QUERY_STRING_SCHEMA } from '@app/plugins/version/query';
 import { histogram } from '@app/plugins/version/session-histogram';
 import { startUserSession, stopTimerList } from '@app/plugins/version/unique-users-gauge';
 import { getUpdateRequest } from '@app/plugins/version/update-request';
@@ -15,7 +16,7 @@ export const versionPlugin = fastifyPlugin(
     const RETRY_SSE = `retry: ${RETRY_DELAY}\n\n`;
     const VERSION_SSE = formatSseEvent(EventNames.SERVER_VERSION, PROXY_VERSION);
 
-    app.get('/version', async (req, reply) => {
+    app.get('/version', { schema: { querystring: QUERY_STRING_SCHEMA } }, async (req, reply) => {
       const { trace_id, span_id } = req;
 
       if (req.headers.accept !== 'text/event-stream') {

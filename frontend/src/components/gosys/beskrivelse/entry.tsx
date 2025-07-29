@@ -10,7 +10,6 @@ import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useKlageenheter } from '@app/simple-api-state/use-kodeverk';
 import { BodyLong, Heading, HStack, Tag, Tooltip, VStack } from '@navikt/ds-react';
 import { format } from 'date-fns';
-import { styled } from 'styled-components';
 
 export const Entry = ({ author, content, date }: GosysBeskrivelseEntry) => (
   <VStack gap="1" as="section">
@@ -18,9 +17,14 @@ export const Entry = ({ author, content, date }: GosysBeskrivelseEntry) => (
       <Header author={author} />
     </HStack>
 
-    <StyledBodyLong size="small">{content}</StyledBodyLong>
+    <BodyLong
+      size="small"
+      className="whitespace-pre-wrap border-ax-border-neutral-subtle border-l-4 pl-2 empty:before:italic empty:before:content-['Ingen_tekst']"
+    >
+      {content}
+    </BodyLong>
 
-    <StyledTime>{format(date, 'dd.MM.yyyy HH:mm')}</StyledTime>
+    <time className="ml-auto whitespace-nowrap text-ax-small italic">{format(date, 'dd.MM.yyyy HH:mm')}</time>
   </VStack>
 );
 
@@ -29,9 +33,9 @@ const Header = ({ author }: Pick<GosysBeskrivelseEntry, 'author'>) => {
     return (
       <>
         <System name="Ukjent" />
-        <StyledTag size="xsmall" variant="warning">
+        <Tag size="xsmall" variant="warning" className="w-min whitespace-nowrap">
           Ukjent
-        </StyledTag>
+        </Tag>
       </>
     );
   }
@@ -40,9 +44,9 @@ const Header = ({ author }: Pick<GosysBeskrivelseEntry, 'author'>) => {
     return (
       <>
         <System {...author} />
-        <StyledTag size="xsmall" variant="neutral-filled">
+        <Tag size="xsmall" variant="neutral-filled" className="w-min whitespace-nowrap">
           System
-        </StyledTag>
+        </Tag>
       </>
     );
   }
@@ -59,9 +63,9 @@ const Enhet = ({ enhet }: Pick<GosysEntryEmployee, 'enhet'>) => {
   const { data: enheter } = useKlageenheter();
 
   return (
-    <StyledTag size="xsmall" variant="alt1">
+    <Tag size="xsmall" variant="alt1" className="w-min whitespace-nowrap">
       {enheter?.find((e) => e.id === enhet)?.navn ?? 'Ukjent enhet'} ({enhet})
-    </StyledTag>
+    </Tag>
   );
 };
 
@@ -72,7 +76,7 @@ const Employee = ({ navIdent, name }: Omit<GosysEntryEmployee, 'type'>) => {
     <>
       <AuthorName>{data?.longName ?? name ?? 'Laster...'}</AuthorName>
 
-      <StyledCopyIdButton id={navIdent} size="xsmall" />
+      <CopyIdButton id={navIdent} size="xsmall" className="shrink-0" />
     </>
   );
 };
@@ -81,53 +85,14 @@ const System = ({ name }: Omit<GosysEntrySystem, 'type'>) => (
   <>
     <AuthorName>{name}</AuthorName>
 
-    <StyledCopyButton copyText={name} text={name} activeText={name} size="xsmall" />
+    <CopyButton copyText={name} text={name} activeText={name} size="xsmall" className="shrink-0" />
   </>
 );
 
 const AuthorName = ({ children }: { children: string }) => (
   <Tooltip content={children} placement="top">
-    <StyledName size="xsmall" level="1">
+    <Heading size="xsmall" level="1" className="truncate">
       {children}
-    </StyledName>
+    </Heading>
   </Tooltip>
 );
-
-const StyledName = styled(Heading)`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const StyledTag = styled(Tag)`
-  white-space: nowrap;
-  width: min-content;
-`;
-
-const StyledTime = styled.time`
-  font-size: var(--a-font-size-small);
-  font-style: italic;
-  white-space: nowrap;
-  margin-left: auto;
-`;
-
-const StyledBodyLong = styled(BodyLong)`
-  white-space: pre-wrap;
-  border-left: var(--a-spacing-1) solid var(--a-border-subtle);
-  padding-left: var(--a-spacing-2);
-
-  &:empty{
-    &::before {
-      font-style: italic;
-      content: 'Ingen tekst';
-    }
-  }
-`;
-
-const StyledCopyButton = styled(CopyButton)`
-  flex-shrink: 0;
-`;
-
-const StyledCopyIdButton = styled(CopyIdButton)`
-  flex-shrink: 0;
-`;

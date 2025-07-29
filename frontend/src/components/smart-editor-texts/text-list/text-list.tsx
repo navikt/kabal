@@ -1,16 +1,9 @@
-import { MaltekstseksjontListItem } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-list-item';
+import { MaltekstseksjontLinkListItem } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-link-list-item';
 import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
 import { getPathPrefix } from '@app/components/smart-editor-texts/functions/get-path-prefix';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { StatusFilter, useStatusFilter } from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { useFilteredAndSorted, useOrder, useSort } from '@app/components/smart-editor-texts/text-list/hooks';
-import {
-  ListItem,
-  StyledHeaders,
-  StyledLink,
-  StyledTitleIcon,
-  StyledTitleText,
-} from '@app/components/smart-editor-texts/text-list/styled-components';
 import {
   isListGodFormulering,
   isListPlainText,
@@ -24,9 +17,9 @@ import { type IGetMaltekstseksjonParams, REGELVERK_TYPE, type TextTypes } from '
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { type Language, UNTRANSLATED } from '@app/types/texts/language';
 import type { ListText } from '@app/types/texts/responses';
-import { PercentIcon, TasklistIcon } from '@navikt/aksel-icons';
-import { Box, HStack, Loader, VStack } from '@navikt/ds-react';
-import { useParams } from 'react-router-dom';
+import { FileTextIcon, PercentIcon, TasklistIcon } from '@navikt/aksel-icons';
+import { BoxNew, HGrid, HStack, Loader, VStack } from '@navikt/ds-react';
+import { Link, useParams } from 'react-router-dom';
 import { DateTime } from '../../datetime/datetime';
 import { SortableHeader, SortKey } from '../sortable-header';
 
@@ -67,12 +60,12 @@ export const StandaloneTextList = ({ filter, data, isLoading, style, textType }:
   const getFilterText = (text: ListText, language: Language) => text.title + (getString(text, language) ?? '');
   const sortedTexts = useFilteredAndSorted(data, statusFilter, filter, getFilterText, ({ modified }) => modified);
 
-  if (isLoading || typeof data === 'undefined') {
+  if (isLoading || data === undefined) {
     return (
       <HStack asChild align="center" justify="center" width="700px" height="100%">
-        <Box background="bg-default">
+        <BoxNew background="default">
           <Loader size="large" />
-        </Box>
+        </BoxNew>
       </HStack>
     );
   }
@@ -80,20 +73,33 @@ export const StandaloneTextList = ({ filter, data, isLoading, style, textType }:
   return (
     <VStack height="100%" width="700px" overflowY="auto" flexGrow="1" style={style}>
       <Headers />
+
       <VStack as="ul" gap="1 0" width="100%" padding="0" margin="0" className="list-none">
         {sortedTexts.map(({ id, title, modified, publishedDateTime, published, score }) => (
-          <ListItem key={id} $active={query.id === id}>
-            <StyledLink to={getStandaloneTextLink(textType, language, id)}>
+          <BoxNew
+            as="li"
+            key={id}
+            background={query.id === id ? 'accent-soft' : 'default'}
+            borderRadius="medium"
+            style={{
+              ['--hover-background' as string]:
+                query.id === id ? 'var(--ax-bg-accent-moderate)' : 'var(--ax-bg-accent-soft)',
+            }}
+            className="transition-colors duration-200 ease-in-out hover:bg-(--hover-background)"
+          >
+            <CustomLink to={getStandaloneTextLink(textType, language, id)}>
               <HStack align="center" gap="05" overflow="hidden" wrap={false} className="whitespace-nowrap">
-                <StyledTitleIcon />
-                <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
+                <FileTextIcon aria-hidden className="shrink-0" />
+                <span className="truncate" title={getTitle(title)}>
+                  {getTitle(title)}
+                </span>
               </HStack>
 
               <StatusTag publishedDateTime={publishedDateTime} published={published} />
               <DateTime dateTime={modified} />
               <span>{score.toFixed(0)} %</span>
-            </StyledLink>
-          </ListItem>
+            </CustomLink>
+          </BoxNew>
         ))}
       </VStack>
     </VStack>
@@ -120,9 +126,9 @@ export const MaltekstseksjonList = ({ filter, data, isLoading, className }: Malt
   if (isLoading || data === undefined) {
     return (
       <HStack asChild align="center" justify="center" width="700px" height="100%">
-        <Box background="bg-default">
+        <BoxNew background="default">
           <Loader size="3xlarge" />
-        </Box>
+        </BoxNew>
       </HStack>
     );
   }
@@ -172,18 +178,20 @@ const MaltekstseksjonItem = ({ maltekstseksjonId, score }: MaltekstseksjonItemPr
   const { id, title, publishedDateTime, modifiedOrTextsModified, published } = maltekstseksjon;
 
   return (
-    <MaltekstseksjontListItem key={id} query={maltekstseksjonQuery} activeId={query.id} maltekstseksjonId={id}>
-      <StyledLink to={getLink(maltekstseksjon, language)}>
+    <MaltekstseksjontLinkListItem key={id} query={maltekstseksjonQuery} activeId={query.id} maltekstseksjonId={id}>
+      <CustomLink to={getLink(maltekstseksjon, language)}>
         <HStack align="center" gap="05" overflow="hidden" wrap={false} className="whitespace-nowrap">
           <TasklistIcon aria-hidden className="shrink-0" />
-          <StyledTitleText title={getTitle(title)}>{getTitle(title)}</StyledTitleText>
+          <span className="truncate" title={getTitle(title)}>
+            {getTitle(title)}
+          </span>
         </HStack>
 
         <StatusTag publishedDateTime={publishedDateTime} published={published} />
         <DateTime dateTime={modifiedOrTextsModified} />
         <span>{score.toFixed(0)} %</span>
-      </StyledLink>
-    </MaltekstseksjontListItem>
+      </CustomLink>
+    </MaltekstseksjontLinkListItem>
   );
 };
 
@@ -192,24 +200,48 @@ const Headers = () => {
   const order = useOrder();
 
   return (
-    <StyledHeaders>
-      <SortableHeader label="Tittel" sortKey={SortKey.TITLE} querySortKey={sort} querySortOrder={order} />
-      <StatusFilter />
-      <SortableHeader label="Sist endret" sortKey={SortKey.MODIFIED} querySortKey={sort} querySortOrder={order} />
-      <SortableHeader
-        label={
-          <HStack align="center">
-            <PercentIcon aria-hidden fontSize={18} />
-          </HStack>
-        }
-        sortKey={SortKey.SCORE}
-        querySortKey={sort}
-        querySortOrder={order}
-        title="Sorter på søkeresultat"
-      />
-    </StyledHeaders>
+    <HGrid asChild columns={COLUMNS} gap="2" position="sticky" top="0" className="z-1">
+      <BoxNew background="default" shadow="dialog" borderRadius="0 0 medium medium" paddingInline="2">
+        <SortableHeader label="Tittel" sortKey={SortKey.TITLE} querySortKey={sort} querySortOrder={order} />
+        <StatusFilter />
+        <SortableHeader label="Sist endret" sortKey={SortKey.MODIFIED} querySortKey={sort} querySortOrder={order} />
+        <SortableHeader
+          label={
+            <HStack align="center">
+              <PercentIcon aria-hidden fontSize={18} />
+            </HStack>
+          }
+          sortKey={SortKey.SCORE}
+          querySortKey={sort}
+          querySortOrder={order}
+          title="Sorter på søkeresultat"
+        />
+      </BoxNew>
+    </HGrid>
   );
 };
+
+const COLUMNS = '1fr 120px 135px 48px';
+
+interface CustomLinkProps {
+  children: React.ReactNode;
+  to: string;
+}
+
+const CustomLink = ({ children, to }: CustomLinkProps) => (
+  <HGrid
+    as={Link}
+    to={to}
+    columns={COLUMNS}
+    gap="2"
+    align="center"
+    width="100%"
+    padding="space-8"
+    className="text-[inherit] no-underline"
+  >
+    {children}
+  </HGrid>
+);
 
 const getStandaloneTextLink = (textType: TextTypes, language: Language, id: string) => {
   if (textType === REGELVERK_TYPE) {

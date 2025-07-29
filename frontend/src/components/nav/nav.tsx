@@ -14,15 +14,14 @@ import {
   PuzzlePieceIcon,
   TasklistIcon,
 } from '@navikt/aksel-icons';
-import { InternalHeader } from '@navikt/ds-react';
+import { HStack } from '@navikt/ds-react';
 import { DocumentFooter } from '@styled-icons/fluentui-system-regular/DocumentFooter';
 import { DocumentHeader } from '@styled-icons/fluentui-system-regular/DocumentHeader';
 import { NavLink, type NavLinkProps } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 export const Nav = () => (
-  <InternalHeader.Title as={StyledNav} aria-label="Meny" data-testid="oppgaver-nav">
-    <StyledNavLinkList>
+  <HStack as="nav" flexGrow="1" overflowX="auto" aria-label="Meny" data-testid="oppgaver-nav">
+    <HStack as="ol" align="center" gap="4" wrap={false} height="100%" paddingInline="4">
       <NavItem to="/oppgaver" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
         <BulletListIcon /> Oppgaver
       </NavItem>
@@ -110,8 +109,8 @@ export const Nav = () => (
       <NavItem to="/tilgangsstyring" testId="access-rights-nav-link" roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]}>
         <PadlockLockedIcon /> Tilgangsstyring
       </NavItem>
-    </StyledNavLinkList>
-  </InternalHeader.Title>
+    </HStack>
+  </HStack>
 );
 
 interface NavItemProps extends NavLinkProps {
@@ -119,7 +118,7 @@ interface NavItemProps extends NavLinkProps {
   roles?: Role[];
 }
 
-const NavItem = ({ testId, roles, ...props }: NavItemProps) => {
+const NavItem = ({ testId, roles, children, ...props }: NavItemProps) => {
   const hasRole = useHasAnyOfRoles(roles);
 
   if (!hasRole) {
@@ -127,53 +126,16 @@ const NavItem = ({ testId, roles, ...props }: NavItemProps) => {
   }
 
   return (
-    <StyledNavListItem>
-      <StyledNavLink {...props} data-testid={testId} />
-    </StyledNavListItem>
+    <HStack as="li" align="center">
+      <NavLink
+        {...props}
+        data-testid={testId}
+        className={({ isActive }) =>
+          `flex w-full items-center gap-2 whitespace-nowrap border-transparent border-b-2 px-1 transition-colors hover:border-ax-border-neutral-strong ${isActive ? 'border-b-ax-border-focus' : ''}`
+        }
+      >
+        {children}
+      </NavLink>
+    </HStack>
   );
 };
-
-const StyledNav = styled.nav`
-  height: 100%;
-  flex-grow: 1;
-  overflow-x: auto;
-`;
-
-const StyledNavLinkList = styled.ul`
-  height: 100%;
-  display: flex;
-  list-style: none;
-  padding: 0;
-  align-items: center;
-  margin: 0;
-  gap: var(--a-spacing-4);
-`;
-
-const StyledNavListItem = styled.li`
-  text-align: center;
-`;
-
-const StyledNavLink = styled(NavLink)`
-  display: flex;
-  gap: var(--a-spacing-2);
-  align-items: center;
-  width: 100%;
-  border-bottom: var(--a-spacing-1) solid transparent;
-  word-break: keep-all;
-  white-space: nowrap;
-  border-left: none;
-  text-decoration: none;
-  color: var(--a-text-on-inverted);
-  padding: 0;
-  padding-left: var(--a-spacing-1);
-  padding-right: var(--a-spacing-1);
-  transition: border-bottom-color 0.2s ease-in-out;
-
-  &.active {
-    border-bottom: var(--a-spacing-1) solid var(--a-blue-300);
-  }
-
-  &:hover {
-    border-bottom: var(--a-spacing-1) solid var(--a-text-subtle);
-  }
-`;

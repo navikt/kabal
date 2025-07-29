@@ -12,7 +12,6 @@ import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { PadlockLockedIcon, PencilWritingIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useCallback } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   query: IGetMaltekstseksjonParams;
@@ -75,18 +74,15 @@ export const CreateText = ({ query, textType, maltekstseksjon }: CreateTextProps
   const Icon = isLocked ? PadlockLockedIcon : PencilWritingIcon;
 
   return (
-    <StyledButton
+    <Button
       variant="tertiary"
       size="small"
       onClick={create}
       loading={isLoading || isMaltekstLoading}
       icon={<Icon aria-hidden />}
+      className="justify-start"
     >
       Opprett ny {textName} tekst
-    </StyledButton>
+    </Button>
   );
 };
-
-const StyledButton = styled(Button)`
-  justify-content: flex-start;
-`;

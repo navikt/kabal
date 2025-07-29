@@ -5,7 +5,6 @@ import { type ISetCustomInfoParams, type ISignatureResponse, Role } from '@app/t
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Checkbox, HStack, Loader, Radio, RadioGroup, TextField } from '@navikt/ds-react';
 import { useContext, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 import { SectionHeader, SettingsSection } from './styled-components';
 
 export const Signature = () => {
@@ -93,11 +92,12 @@ const SignatureValue = ({ infoKey, saksbehandlerSignature, label, navIdent }: Si
 
   return (
     <HStack align="end" gap="2" width="100%">
-      <StyledInput
+      <TextField
         label={label}
         value={value}
         onChange={({ target }) => setDefaultValue(target.value)}
         disabled={saksbehandlerSignature.anonymous}
+        className="mt-4 mr-1.5 w-4/5 min-w-96"
       />
       <Status {...updateStatus} />
     </HStack>
@@ -117,13 +117,13 @@ const TitleSelector = ({ infoKey, saksbehandlerSignature, label, navIdent }: Sig
 
   return (
     <>
-      <StyledRadioGroup legend={label} value={savedValue} disabled={saksbehandlerSignature.anonymous}>
+      <RadioGroup legend={label} value={savedValue} disabled={saksbehandlerSignature.anonymous} className="mt-4">
         {TITLES.map((value) => (
           <Radio name={infoKey} onChange={() => setInfo({ key: infoKey, value, navIdent })} value={value} key={value}>
             {value}
           </Radio>
         ))}
-      </StyledRadioGroup>
+      </RadioGroup>
       <Status {...updateStatus} />
     </>
   );
@@ -138,24 +138,27 @@ interface StatusProps {
 const Status = ({ isError, isLoading, isSuccess }: StatusProps) => {
   if (isLoading) {
     return (
-      <HStack align="center" marginBlock="0 3">
-        <Loader size="xsmall" /> <StyledStatusText>Lagrer ...</StyledStatusText>
+      <HStack align="center" marginBlock="0 3" gap="2">
+        <Loader size="xsmall" />
+        <StatusText>Lagrer ...</StatusText>
       </HStack>
     );
   }
 
   if (isSuccess) {
     return (
-      <HStack align="center" marginBlock="0 3">
-        <StyledSuccess /> <StyledStatusText>Lagret!</StyledStatusText>
+      <HStack align="center" marginBlock="0 3" gap="2">
+        <CheckmarkCircleIcon aria-hidden className="text-ax-text-success" />
+        <StatusText>Lagret!</StatusText>
       </HStack>
     );
   }
 
   if (isError) {
     return (
-      <HStack align="center" marginBlock="0 3">
-        <StyledError /> <StyledStatusText>Ikke lagret</StyledStatusText>
+      <HStack align="center" marginBlock="0 3" gap="2">
+        <XMarkOctagonIcon aria-hidden className="text-ax-text-error" />
+        <StatusText>Ikke lagret</StatusText>
       </HStack>
     );
   }
@@ -163,25 +166,10 @@ const Status = ({ isError, isLoading, isSuccess }: StatusProps) => {
   return null;
 };
 
-const StyledInput = styled(TextField)`
-  margin-top: var(--a-spacing-4);
-  margin-right: 6px;
-  width: 350px;
-`;
+interface StyledStatusTextProps {
+  children: string;
+}
 
-const StyledRadioGroup = styled(RadioGroup)`
-  margin-top: var(--a-spacing-4);
-`;
-
-const StyledSuccess = styled(CheckmarkCircleIcon)`
-  color: #006a23;
-`;
-
-const StyledError = styled(XMarkOctagonIcon)`
-  color: #ba3a26;
-`;
-
-const StyledStatusText = styled.span`
-  font-size: var(--a-spacing-3);
-  margin-left: 3px;
-`;
+const StatusText = ({ children }: StyledStatusTextProps) => (
+  <span className="text-(length:--ax-space-12)">{children}</span>
+);

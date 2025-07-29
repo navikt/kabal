@@ -1,6 +1,6 @@
 import { Innsendingshjemler } from '@app/components/behandling/behandlingsdetaljer/innsendingshjemmel';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { Box, Checkbox } from '@navikt/ds-react';
+import { BoxNew, Checkbox } from '@navikt/ds-react';
 
 interface Props {
   setInnsendingshjemlerConfirmed: (confirmed: boolean) => void;
@@ -15,13 +15,7 @@ export const ConfirmInnsendingshjemler = ({ setInnsendingshjemlerConfirmed, inns
   }
 
   return (
-    <Box
-      padding="2"
-      borderRadius="medium"
-      background="surface-warning-subtle"
-      borderWidth="1"
-      borderColor="border-warning"
-    >
+    <BoxNew padding="2" borderRadius="medium" background="warning-soft" borderWidth="1" borderColor="warning">
       <Innsendingshjemler oppgavebehandling={oppgave} />
       <Checkbox
         onChange={({ target }) => setInnsendingshjemlerConfirmed(target.checked)}
@@ -29,6 +23,6 @@ export const ConfirmInnsendingshjemler = ({ setInnsendingshjemlerConfirmed, inns
       >
         <div className="w-90">Jeg bekrefter at innsendingshjemlene som skal følge saken til Trygderetten stemmer</div>
       </Checkbox>
-    </Box>
+    </BoxNew>
   );
 };

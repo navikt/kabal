@@ -2,7 +2,6 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Button, HStack } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { Context } from './context';
 
 interface ConfirmProps {
@@ -24,10 +23,18 @@ export const Confirm = ({ setIsConfirmed }: ConfirmProps) => {
       <Alert variant="info" inline>
         {text}
       </Alert>
-      <HStack align="center" justify="space-between" gap="0 4">
-        <StyledButton size="small" variant="primary" onClick={setIsConfirmed} icon={<CheckmarkIcon aria-hidden />}>
+
+      <HStack align="center" justify="space-between" gap="0 4" wrap={false}>
+        <Button
+          size="small"
+          variant="primary"
+          onClick={setIsConfirmed}
+          icon={<CheckmarkIcon aria-hidden />}
+          className="whitespace-nowrap"
+        >
           Jeg forstår, gå til feilregistrering.
-        </StyledButton>
+        </Button>
+
         <Button size="small" variant="secondary" onClick={close} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
@@ -35,10 +42,6 @@ export const Confirm = ({ setIsConfirmed }: ConfirmProps) => {
     </>
   );
 };
-
-const StyledButton = styled(Button)`
-  white-space: nowrap;
-`;
 
 const DEFAULT_TEXT =
   'Feilregistrering er noe annet enn utfallene «trukket» eller «retur». Du skal kun feilregistrere dersom saken aldri skulle vært i Kabal, for eksempel om vedtaksenheten har bedt om å få saken tilbake fordi den ble sendt til klageinstansen ved en feil, eller fordi samme sak er registrert to ganger ved en feil.';

@@ -110,7 +110,7 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
         },
       }}
     >
-      <SectionContainer data-element={element.type} $sectionType={SectionTypeEnum.FOOTER}>
+      <SectionContainer data-element={element.type} sectionType={SectionTypeEnum.FOOTER}>
         <HeaderFooterContent text={text} isLoading={isLoading && isUninitialized} type={element.type} />
         {children}
         {hasWriteAccess ? (

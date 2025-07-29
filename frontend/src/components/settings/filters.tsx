@@ -4,9 +4,9 @@ import { useGetSettingsQuery, useUpdateSettingsMutation } from '@app/redux-api/b
 import { type ISettings, Role } from '@app/types/bruker';
 import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Switch, VStack } from '@navikt/ds-react';
+import { Button, Fieldset, HGrid, HStack, Switch, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { SectionHeader, SettingsSection, StyledFieldset } from './styled-components';
+import { SectionHeader, SettingsSection } from './styled-components';
 import { useHjemlerFromSettingsYtelser } from './use-hjemler-from-settings-ytelser';
 
 const EMPTY_SETTINGS: ISettings = {
@@ -111,29 +111,32 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           Velg alle
         </Button>
       </HStack>
-      <StyledFieldset data-testid={`${settingKey}-settings`} legend={legend}>
-        {options.map(({ id, navn }) => (
-          <Switch
-            key={id}
-            value={id}
-            size="medium"
-            position="left"
-            checked={selected.includes(id)}
-            data-type={settingKey}
-            data-id={id}
-            data-testid={`${settingKey}-${id}`}
-            onChange={(event) => {
-              if (event.target.checked === true) {
-                onChange({ ...settings, [settingKey]: [...selected, id] });
-              } else {
-                onChange({ ...settings, [settingKey]: selected.filter((t) => t !== id) });
-              }
-            }}
-          >
-            {navn}
-          </Switch>
-        ))}
-      </StyledFieldset>
+
+      <HGrid asChild width="100%" columns="repeat(auto-fit, 300px)">
+        <Fieldset data-testid={`${settingKey}-settings`} legend={legend}>
+          {options.map(({ id, navn }) => (
+            <Switch
+              key={id}
+              value={id}
+              size="medium"
+              position="left"
+              checked={selected.includes(id)}
+              data-type={settingKey}
+              data-id={id}
+              data-testid={`${settingKey}-${id}`}
+              onChange={(event) => {
+                if (event.target.checked === true) {
+                  onChange({ ...settings, [settingKey]: [...selected, id] });
+                } else {
+                  onChange({ ...settings, [settingKey]: selected.filter((t) => t !== id) });
+                }
+              }}
+            >
+              {navn}
+            </Switch>
+          ))}
+        </Fieldset>
+      </HGrid>
     </section>
   );
 };

@@ -27,7 +27,7 @@ export const PaaVentReason = ({ sattPaaVent }: Props) => {
   }
 
   return (
-    <div className="max-w-32 overflow-hidden text-ellipsis whitespace-nowrap" title={sattPaaVent.reason}>
+    <div className="max-w-32 truncate" title={sattPaaVent.reason}>
       {sattPaaVent.reason}
     </div>
   );

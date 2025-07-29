@@ -2,11 +2,7 @@ import { AttachmentsOverview } from '@app/components/documents/new-documents/att
 import { NewAttachmentButtons } from '@app/components/documents/new-documents/new-attachment-buttons';
 import { NewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
 import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@app/components/documents/new-documents/new-documents-list/constants';
-import {
-  NewDocAttachmentsContainer,
-  StyledAttachmentList,
-  StyledAttachmentListItem,
-} from '@app/components/documents/styled-components/attachment-list';
+import { StyledAttachmentListItem } from '@app/components/documents/styled-components/attachment-list';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { sortWithNumbers } from '@app/functions/sort-with-numbers/sort-with-numbers';
 import type {
@@ -16,6 +12,7 @@ import type {
   ISmartDocument,
   JournalfoertDokument,
 } from '@app/types/documents/documents';
+import { VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 
 export interface ListProps {
@@ -64,12 +61,19 @@ export const AttachmentList = ({
   }, [isIncomingDocument, pdfOrSmartDocuments]);
 
   return (
-    <NewDocAttachmentsContainer $showTreeLine={hasAttachments}>
+    <VStack
+      position="relative"
+      className={`before:absolute before:top-0 before:bottom-4 before:left-4 before:border-l before:border-l-ax-border-neutral-subtle ${hasAttachments ? 'before:block' : 'before:hidden'}`}
+    >
       <NewAttachmentButtons document={parentDocument} />
-      <StyledAttachmentList
+
+      <VStack
+        as="ul"
+        position="relative"
         data-testid="new-attachments-list"
-        style={{ height: attachmentListHeight }}
+        style={{ height: attachmentListHeight, gridColumnEnd: 'action-end', gridColumnStart: 'title-start' }}
         aria-rowcount={totalRowCount}
+        className="ml-4"
       >
         {hasOverview ? <AttachmentsOverview documentId={parentDocument.id} parentId={parentDocument.parentId} /> : null}
         {sorted.map((attachment, index) => (
@@ -91,8 +95,8 @@ export const AttachmentList = ({
             top={(index + journalfoertStart) * ROW_HEIGHT + pdfHeight + separatorHeight + overviewHeight}
           />
         ))}
-      </StyledAttachmentList>
-    </NewDocAttachmentsContainer>
+      </VStack>
+    </VStack>
   );
 };
 
@@ -118,7 +122,7 @@ const Attachment = ({ attachment, parentDocument, top }: AttachmentProps) => (
 const ListSeparator = ({ top }: { top: number }) => (
   <div
     data-label="Journalførte dokumenter"
-    className="after:-translate-y-1/2 absolute right-0 left-0 my-3 ml-0 border-border-subtle border-b after:absolute after:top-1/2 after:left-5 after:bg-bg-default after:px-1 after:text-small after:content-[attr(data-label)]"
+    className="after:-translate-y-1/2 absolute right-0 left-0 my-3 ml-0 border-ax-border-neutral-subtle border-b after:absolute after:top-1/2 after:left-5 after:bg-ax-bg-default after:px-1 after:text-small after:content-[attr(data-label)]"
     style={{ top }}
   />
 );

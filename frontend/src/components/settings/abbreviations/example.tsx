@@ -5,8 +5,7 @@ import {
   ExpansionTypeEnum,
 } from '@app/components/settings/abbreviations/types';
 import { hasOwn } from '@app/functions/object';
-import { BodyShort, Heading, List, Tag, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { BodyShort, Heading, HStack, List, Tag, Tooltip } from '@navikt/ds-react';
 
 interface Props {
   title: string;
@@ -17,18 +16,21 @@ interface Props {
 
 export const AbbrevationExample = ({ title, children, examples, recommended = false }: Props) => (
   <section>
-    <StyledHeading size="small" spacing>
-      {title}
-      {recommended ? (
-        <Tag variant="success" size="xsmall">
-          Anbefalt
-        </Tag>
-      ) : (
-        <Tag variant="warning" size="xsmall">
-          Ikke anbefalt
-        </Tag>
-      )}
-    </StyledHeading>
+    <HStack asChild align="center" gap="2">
+      <Heading size="small" spacing>
+        {title}
+        {recommended ? (
+          <Tag variant="success" size="xsmall">
+            Anbefalt
+          </Tag>
+        ) : (
+          <Tag variant="warning" size="xsmall">
+            Ikke anbefalt
+          </Tag>
+        )}
+      </Heading>
+    </HStack>
+
     <BodyShort size="small" spacing>
       {children}
     </BodyShort>
@@ -46,13 +48,6 @@ export const AbbrevationExample = ({ title, children, examples, recommended = fa
     </List>
   </section>
 );
-
-const StyledHeading = styled(Heading)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: var(--a-spacing-2);
-`;
 
 const ExpandingExample = (data: ExpandingExampleData | ErrorExampleData) => {
   if (!isExampleData(data)) {

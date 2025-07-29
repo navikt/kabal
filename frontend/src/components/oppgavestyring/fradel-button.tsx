@@ -11,7 +11,6 @@ import { FradelReason, type IOppgave } from '@app/types/oppgaver';
 import { Button, HStack } from '@navikt/ds-react';
 import { differenceInSeconds, parse } from 'date-fns';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 const KABAL_HEADER_HEIGHT = 48;
 const UNDO_TIMEOUT_SECONDS = 10;
@@ -69,7 +68,7 @@ export const FradelButton = (props: IOppgave) => {
 
   if (tildeltSaksbehandlerident !== null && undoSecondsLeft > 0) {
     return (
-      <StyledButton
+      <Button
         variant="secondary"
         size="small"
         loading={isLoading}
@@ -81,9 +80,10 @@ export const FradelButton = (props: IOppgave) => {
             clearInterval(undoInterval.current);
           }
         }}
+        className="whitespace-nowrap"
       >
         Angre ({undoSecondsLeft})
-      </StyledButton>
+      </Button>
     );
   }
 
@@ -128,7 +128,7 @@ const Deassign = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave
 
   return (
     <HStack position="relative" className="[grid-area:tildel]" ref={ref}>
-      <StyledButton
+      <Button
         variant="secondary"
         type="button"
         size="small"
@@ -136,9 +136,10 @@ const Deassign = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave
         loading={isLoading}
         data-testid="behandling-fradel-button"
         data-klagebehandlingid={id}
+        className="whitespace-nowrap"
       >
         Legg tilbake
-      </StyledButton>
+      </Button>
 
       <PaaVentWarning
         close={() => setPaaVentWarningIsOpen(false)}
@@ -159,7 +160,3 @@ const Deassign = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave
     </HStack>
   );
 };
-
-const StyledButton = styled(Button)`
-  white-space: nowrap;
-`;

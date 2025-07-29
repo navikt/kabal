@@ -19,7 +19,7 @@ export const AccessRights = () => {
   const { data: ytelser = EMPTY_ARRAY } = useLatestYtelser();
   const { data, isLoading } = useGetAccessRightsQuery(user.ansattEnhet.id);
 
-  if (isLoading || typeof ytelser === 'undefined' || typeof data === 'undefined') {
+  if (isLoading || ytelser === undefined || data === undefined) {
     return <Loader />;
   }
 

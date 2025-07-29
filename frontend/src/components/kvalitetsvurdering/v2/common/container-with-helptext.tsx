@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const ContainerWithHelpText = ({ children, helpText, placement = 'right' }: Props) => (
-  <HStack align="center" justify="space-between" gap="2" width="100%">
+  <HStack align="center" justify="space-between" gap="2" width="100%" wrap={false}>
     {children}
     {helpText !== undefined ? <HelpText placement={placement}>{helpText}</HelpText> : null}
   </HStack>

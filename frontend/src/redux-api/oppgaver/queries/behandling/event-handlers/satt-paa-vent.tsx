@@ -9,7 +9,6 @@ import type { SattPaaVentEvent } from '@app/redux-api/server-sent-events/types';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { HistoryEventTypes, type ISattPaaVentEvent } from '@app/types/oppgavebehandling/response';
 import { Label } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 export const handleSattPaaVentEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
@@ -30,13 +29,15 @@ export const handleSattPaaVentEvent =
           const id = `satt-paa-vent-${oppgaveId}-${timestamp}`;
           toast.info(
             <InfoToast title="Behandling satt på vent">
-              <Line>
+              <p className="m-0 p-0">
                 {employeeName(actor)} har satt behandlingen på vent til {isoDateToPretty(sattPaaVent.to)}.
-              </Line>
+              </p>
               <Label size="small" htmlFor={id}>
                 Årsak
               </Label>
-              <Reason id={id}>{sattPaaVent.reason}</Reason>
+              <p id={id} className="m-0 border-l border-l-ax-border-neutral-subtle p-0 pl-1 italic">
+                {sattPaaVent.reason}
+              </p>
             </InfoToast>,
           );
         }
@@ -73,16 +74,3 @@ export const handleSattPaaVentEvent =
       );
     });
   };
-
-const Line = styled.p`
-  margin: 0;
-  padding: 0;
-`;
-
-const Reason = styled.p`
-  margin: 0;
-  padding: 0;
-  font-style: italic;
-  padding-left: var(--a-spacing-1);
-  border-left: var(--a-spacing-1) solid var(--a-border-subtle);
-`;

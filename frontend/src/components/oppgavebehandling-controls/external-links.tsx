@@ -8,7 +8,6 @@ import type { ISakenGjelder } from '@app/types/oppgave-common';
 import { CheckmarkIcon, ExternalLinkIcon, FilesIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Link, Tooltip } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface LinkProps {
   sakenGjelder: ISakenGjelder;
@@ -99,7 +98,7 @@ const AppLink = ({ appName, url, eventName }: RedirectLinkProps) => (
     rel="noreferrer"
     onClick={() => pushEvent(eventName, 'external-links')}
     icon={<ExternalLinkIcon aria-hidden />}
-    className="text-text-default no-underline"
+    className="text-ax-text-default no-underline"
   >
     {appName}
   </Button>
@@ -133,7 +132,9 @@ const AsyncCopyLink = ({ baseUrl, eventName, appName }: AsyncCopyLinkProps) => {
         aria-label={getTitle(appName)}
         onClick={onClick}
         onAnimationEnd={() => setCopied(false)}
-        icon={copied ? <JumpingSuccess aria-hidden /> : <FilesIcon aria-hidden />}
+        icon={
+          copied ? <CheckmarkIcon aria-hidden className="animate-bounce animate-once" /> : <FilesIcon aria-hidden />
+        }
       >
         {appName}
       </Button>
@@ -143,10 +144,6 @@ const AsyncCopyLink = ({ baseUrl, eventName, appName }: AsyncCopyLinkProps) => {
 
 const getTooltipContent = (appName: string) => `${appName} kan kun åpnes via Applikasjonsportalen. Lim inn lenken der.`;
 const getTitle = (appName: string) => `Ekstern lenke til ${appName} for denne personen`;
-
-const JumpingSuccess = styled(CheckmarkIcon)`
-  animation: akselCopyButtonIconAnimation 2s cubic-bezier(0.215, 0.61, 0.355, 1);
-`;
 
 interface UrlResponse {
   url: string;

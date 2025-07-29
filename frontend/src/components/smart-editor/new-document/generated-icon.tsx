@@ -12,11 +12,11 @@ import {
 } from '@app/plate/plugins/element-types';
 import { LabelContentPlugin } from '@app/plate/plugins/label-content';
 import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import { BoxNew } from '@navikt/ds-react';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTablePlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
-import { styled } from 'styled-components';
 
 interface GeneratedIconProps {
   template: ISmartEditorTemplate;
@@ -44,12 +44,12 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
 
     switch (type) {
       case CurrentDatePlugin.key: {
-        rects.push(r({ type, key: i, width: 30, y, fill: 'gray-400', align: 'right' }));
+        rects.push(r({ type, key: i, width: 30, y, fill: 'text-neutral-decoration', align: 'right' }));
         y += 10;
         break;
       }
       case LabelContentPlugin.key: {
-        rects.push(r({ type, key: i, y, fill: 'gray-400' }));
+        rects.push(r({ type, key: i, y, fill: 'text-neutral-decoration' }));
         y += 5 + SPACING;
         break;
       }
@@ -103,7 +103,7 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
       }
       case ELEMENT_REGELVERK: {
         y += SPACING * 5;
-        rects.push(r({ type, key: i, width: WIDTH, height: 2, y, offset: 0, fill: 'surface-inverted', radius: 0 }));
+        rects.push(r({ type, key: i, width: WIDTH, height: 2, y, offset: 0, fill: 'text-neutral', radius: 0 }));
         y += 5 + SPACING * 5;
         rects.push(h1({ type, key: `${i}-title`, y }));
         y += 10 + SPACING;
@@ -138,31 +138,41 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
       case ELEMENT_PAGE_BREAK: {
         y += SPACING * 5;
         const height = 2;
-        rects.push(r({ type, key: i, width: WIDTH, height, y, offset: 0, fill: 'surface-inverted', radius: 0 }));
+        rects.push(r({ type, key: i, width: WIDTH, height, y, offset: 0, fill: 'text-neutral-subtle', radius: 0 }));
         y += height + SPACING * 5;
         break;
       }
       case ELEMENT_HEADER: {
-        rects.push(r({ type, key: `${i}-header-line-1`, width: 30, y, fill: 'gray-400' }));
+        rects.push(r({ type, key: `${i}-header-line-1`, width: 30, y, fill: 'text-neutral-decoration' }));
         y += 5 + SPACING;
-        rects.push(r({ type, key: `${i}-header-line-2`, width: 70, y, fill: 'gray-400' }));
+        rects.push(r({ type, key: `${i}-header-line-2`, width: 70, y, fill: 'text-neutral-decoration' }));
         y += 5 + SPACING + SPACING;
         break;
       }
       case ELEMENT_FOOTER: {
-        rects.push(r({ type, key: `${i}-footer-line-1`, width: 150, y: HEIGHT - MARGIN - 14, fill: 'gray-400' }));
-        rects.push(r({ type, key: `${i}-footer-line-2`, width: 50, y: HEIGHT - MARGIN - 7, fill: 'gray-400' }));
-        rects.push(r({ type, key: `${i}-footer-line-3`, width: 20, y: HEIGHT - MARGIN, fill: 'gray-400' }));
+        rects.push(
+          r({ type, key: `${i}-footer-line-1`, width: 150, y: HEIGHT - MARGIN - 14, fill: 'text-neutral-decoration' }),
+        );
+        rects.push(
+          r({ type, key: `${i}-footer-line-2`, width: 50, y: HEIGHT - MARGIN - 7, fill: 'text-neutral-decoration' }),
+        );
+        rects.push(
+          r({ type, key: `${i}-footer-line-3`, width: 20, y: HEIGHT - MARGIN, fill: 'text-neutral-decoration' }),
+        );
         bottomOffset += 21 + SPACING;
         break;
       }
       case ELEMENT_SIGNATURE: {
         y += SPACING;
-        rects.push(r({ type, key: `${i}-signature-name-1`, width: 60, y, fill: 'gray-400' }));
-        rects.push(r({ type, key: `${i}-signature-name-2`, width: 60, y, align: 'right', fill: 'gray-400' }));
+        rects.push(r({ type, key: `${i}-signature-name-1`, width: 60, y, fill: 'text-neutral-decoration' }));
+        rects.push(
+          r({ type, key: `${i}-signature-name-2`, width: 60, y, align: 'right', fill: 'text-neutral-decoration' }),
+        );
         y += 5 + SPACING;
-        rects.push(r({ type, key: `${i}-signature-title-1`, width: 30, y, fill: 'gray-400' }));
-        rects.push(r({ type, key: `${i}-signature-title-2`, width: 30, y, align: 'right', fill: 'gray-400' }));
+        rects.push(r({ type, key: `${i}-signature-title-1`, width: 30, y, fill: 'text-neutral-decoration' }));
+        rects.push(
+          r({ type, key: `${i}-signature-title-2`, width: 30, y, align: 'right', fill: 'text-neutral-decoration' }),
+        );
         y += 5 + SPACING;
         break;
       }
@@ -174,9 +184,21 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
   }
 
   return (
-    <StyledSvg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox={`0 0 ${WIDTH} ${HEIGHT}`}>
+    <BoxNew
+      as="svg"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+      shadow="dialog"
+      borderWidth="1"
+      borderColor="neutral"
+      borderRadius="medium"
+      marginBlock="0 2"
+      width="100%"
+      background="input"
+    >
       {rects}
-    </StyledSvg>
+    </BoxNew>
   );
 };
 
@@ -200,13 +222,13 @@ const r = ({
   align,
   offset = MARGIN,
   y,
-  fill = 'gray-300',
+  fill = 'bg-neutral-moderate-pressed',
   radius = 4,
 }: RectProps) => {
   const x = align === 'right' ? WIDTH - offset - width : offset;
 
   return (
-    <rect data-type={type} key={key} width={width} height={height} y={y} x={x} fill={`var(--a-${fill})`} rx={radius} />
+    <rect data-type={type} key={key} width={width} height={height} y={y} x={x} fill={`var(--ax-${fill})`} rx={radius} />
   );
 };
 
@@ -216,14 +238,6 @@ interface HeadingProps {
   y: number;
 }
 
-const h1 = (props: HeadingProps) => r({ ...props, height: 9, width: 160, fill: 'gray-400' });
-const h2 = (props: HeadingProps) => r({ ...props, height: 7, width: 150, fill: 'gray-400' });
-const h3 = (props: HeadingProps) => r({ ...props, width: 140, fill: 'gray-400' });
-
-const StyledSvg = styled.svg`
-  box-shadow: var(--a-shadow-medium);
-  border: 1px solid var(--a-border-default);
-  border-radius: var(--a-border-radius-medium);
-  margin-bottom: var(--a-spacing-2);
-  width: 100%;
-`;
+const h1 = (props: HeadingProps) => r({ ...props, height: 9, width: 160, fill: 'text-neutral-decoration' });
+const h2 = (props: HeadingProps) => r({ ...props, height: 7, width: 150, fill: 'text-neutral-decoration' });
+const h3 = (props: HeadingProps) => r({ ...props, width: 140, fill: 'text-neutral-decoration' });

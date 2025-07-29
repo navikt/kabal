@@ -77,7 +77,7 @@ export const SuggestedReceivers = ({
         const isChecked = selectedIds.includes(id);
 
         return (
-          <StyledReceiver key={id} $accent={isChecked ? 'var(--a-border-success)' : 'var(--a-border-info)'}>
+          <StyledReceiver key={id} accent={isChecked ? 'success' : 'info'}>
             <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
               <Checkbox size="small" value={id} data-testid="document-send-receiver" error={error !== null}>
                 <HStack align="center" gap="1">

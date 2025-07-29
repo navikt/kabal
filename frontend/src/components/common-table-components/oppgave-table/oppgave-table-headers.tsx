@@ -27,11 +27,7 @@ interface TablePlainHeadersProps {
 }
 
 export const TablePlainHeaders = ({ columnKeys }: TablePlainHeadersProps) =>
-  columnKeys.map((key) => (
-    <Table.ColumnHeader className="whitespace-nowrap" key={key}>
-      {TABLE_HEADERS[key]}
-    </Table.ColumnHeader>
-  ));
+  columnKeys.map((key) => <Table.ColumnHeader key={key}>{TABLE_HEADERS[key]}</Table.ColumnHeader>);
 
 interface TableFilterHeadersProps {
   tableKey: OppgaveTableKey;
@@ -59,7 +55,7 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         return <Registreringshjemler key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Age:
         return (
-          <Table.ColumnHeader className="whitespace-nowrap" key={key} sortable sortKey={SortFieldEnum.ALDER}>
+          <Table.ColumnHeader key={key} sortable sortKey={SortFieldEnum.ALDER}>
             {TABLE_HEADERS[key]}
           </Table.ColumnHeader>
         );
@@ -77,7 +73,7 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         );
       case ColumnKeyEnum.PaaVentTil:
         return (
-          <Table.ColumnHeader className="whitespace-nowrap" key={key} sortable sortKey={SortFieldEnum.PAA_VENT_TO}>
+          <Table.ColumnHeader key={key} sortable sortKey={SortFieldEnum.PAA_VENT_TO}>
             {TABLE_HEADERS[key]}
           </Table.ColumnHeader>
         );
@@ -120,14 +116,10 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
       case ColumnKeyEnum.FradelingReason:
       case ColumnKeyEnum.PreviousSaksbehandler:
       case ColumnKeyEnum.DatoSendtTilTr:
-        return (
-          <Table.ColumnHeader className="whitespace-nowrap" key={key}>
-            {TABLE_HEADERS[key]}
-          </Table.ColumnHeader>
-        );
+        return <Table.ColumnHeader key={key}>{TABLE_HEADERS[key]}</Table.ColumnHeader>;
     }
 
-    return <Table.ColumnHeader className="whitespace-nowrap" key={key} />;
+    return <Table.ColumnHeader key={key} />;
   });
 
 const Frist = ({ children, tableKey, ...props }: TableFilterHeadersProps & { children: string }) => {

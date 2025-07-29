@@ -7,9 +7,8 @@ import { pushEvent } from '@app/observability';
 import { Capitalise } from '@app/plate/toolbar/capitalise';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { CogIcon } from '@navikt/aksel-icons';
-import { Heading, Modal } from '@navikt/ds-react';
+import { Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import { useId, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const RedkatoerSettings = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -40,33 +39,25 @@ export const RedkatoerSettings = () => {
             Innstillinger for brevutforming
           </Heading>
         </Modal.Header>
-        <StyledModalBody>
-          <Capitalise />
 
-          <section>
-            <StyledHeading level="2" size="small" spacing>
-              <AbbreviationsHeadingContent />
-            </StyledHeading>
+        <VStack asChild gap="4">
+          <Modal.Body>
+            <Capitalise />
 
-            <AbbreviationsExplanation />
+            <section>
+              <HStack asChild gap="2" align="center">
+                <Heading level="2" size="small" spacing>
+                  <AbbreviationsHeadingContent />
+                </Heading>
+              </HStack>
 
-            <AbbreviationsContent headingSize="xsmall" />
-          </section>
-        </StyledModalBody>
+              <AbbreviationsExplanation />
+
+              <AbbreviationsContent headingSize="xsmall" />
+            </section>
+          </Modal.Body>
+        </VStack>
       </Modal>
     </>
   );
 };
-
-const StyledModalBody = styled(Modal.Body)`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--a-spacing-4);
-`;
-
-const StyledHeading = styled(Heading)`
-  display: flex;
-  flex-direction: row;
-  column-gap: var(--a-spacing-2);
-  align-items: center;
-`;

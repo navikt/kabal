@@ -122,8 +122,8 @@ export const ViewCombinedPDF = () => {
         onAuxClick={onClick}
         href={tabUrl}
         loading={isLoading || isFetching || archivedIsLoading}
-        className={`mx-4 mb-3 visited:text-text-visited ${
-          isTabOpen || isInlineOpen ? '[text-shadow:0_0_1px_var(--a-surface-neutral-active)]' : ''
+        className={`mx-4 mb-3 visited:text-ax-text-meta-purple ${
+          isTabOpen || isInlineOpen ? '[text-shadow:0_0_1px_var(--ax-bg-neutral-strong)]' : ''
         }`}
       >
         Vis kombinert dokument

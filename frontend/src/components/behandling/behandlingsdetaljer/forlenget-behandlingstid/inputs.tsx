@@ -32,6 +32,7 @@ export const Inputs = () => {
           </HStack>
 
           <Vr />
+
           <Skeleton width="150px" height="32px" variant="rectangle" />
         </HStack>
 
@@ -103,4 +104,4 @@ export const Inputs = () => {
   );
 };
 
-const Vr = () => <div className="h-full border-b-gray-700 border-l-1 " />;
+const Vr = () => <div className="h-full border-b-ax-neutral border-l-1" />;

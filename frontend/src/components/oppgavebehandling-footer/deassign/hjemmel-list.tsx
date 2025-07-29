@@ -1,8 +1,7 @@
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';
-import { Box, Heading, Loader, Search, VStack } from '@navikt/ds-react';
+import { BoxNew, Heading, Loader, Search, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 import { Direction } from '../../deassign/direction';
 import { FilterList } from '../../filter-dropdown/filter-list';
 
@@ -41,9 +40,9 @@ export const HjemmelList = ({ selected, ytelseId, direction, onChange, error }: 
       position="absolute"
       bottom={isUp ? '0' : undefined}
       top={isUp ? undefined : '0'}
-      className="left-full z-10"
+      className="left-full"
     >
-      <Box background="bg-default" borderRadius="medium" borderColor="border-divider" borderWidth="1" shadow="medium">
+      <BoxNew background="default" borderRadius="medium" borderColor="neutral" borderWidth="1" shadow="dialog">
         <Heading level="1" size="small">
           Endre hjemmel?
         </Heading>
@@ -57,30 +56,21 @@ export const HjemmelList = ({ selected, ytelseId, direction, onChange, error }: 
               size="small"
               variant="simple"
             />
-            <StyledHr />
+            <hr className="m-0 border-ax-border-neutral border-b" />
           </>
         ) : null}
         {ytelseIsLoading ? (
-          <StyledLoader title="Laster..." />
+          <Loader title="Laster..." className="m-2" />
         ) : (
-          <StyledFilterList options={filteredOptions} selected={selected} onChange={onChange} error={error} />
+          <FilterList
+            options={filteredOptions}
+            selected={selected}
+            onChange={onChange}
+            error={error}
+            className="max-h-[min(50vh,400px)] overflow-y-auto"
+          />
         )}
-      </Box>
+      </BoxNew>
     </VStack>
   );
 };
-
-const StyledLoader = styled(Loader)`
-  margin: var(--a-spacing-2);
-`;
-
-const StyledHr = styled.hr`
-  margin: 0;
-  border: none;
-  border-bottom: 1px solid var(--a-border-divider);
-`;
-
-const StyledFilterList = styled(FilterList)`
-  max-height: min(50vh, 400px);
-  overflow-y: auto;
-`;

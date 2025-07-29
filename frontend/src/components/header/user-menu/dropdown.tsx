@@ -1,70 +1,72 @@
-import { DebugButton } from '@app/components/header/user-menu/debug';
+import { DarkModeSwitch } from '@app/components/header/user-menu/dark-mode';
+import { SendDebugInfoButton } from '@app/components/header/user-menu/debug';
 import { useIsUpToDate } from '@app/components/version-checker/version-checker';
 import { ENVIRONMENT } from '@app/environment';
 import { pushEvent } from '@app/observability';
 import { ArrowCirclepathIcon, BranchingIcon, CheckmarkCircleIcon, CogIcon, LeaveIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton, Dropdown, Tooltip } from '@navikt/ds-react';
-import { NavLink } from 'react-router-dom';
+import { ActionMenu, Tooltip } from '@navikt/ds-react';
+import { Link } from 'react-router-dom';
 
 export const UserDropdown = (): React.JSX.Element | null => {
   const { version } = ENVIRONMENT;
   const isUpToDate = useIsUpToDate();
 
   return (
-    <Dropdown.Menu className="w-auto max-w-75 overflow-visible">
-      <Dropdown.Menu.List>
-        <Dropdown.Menu.List.Item
-          as={NavLink}
+    <ActionMenu.Content className="w-auto max-w-75 overflow-visible">
+      <ActionMenu.Item as={DarkModeSwitch} />
+
+      <ActionMenu.Divider />
+
+      <ActionMenu.Group label="Bruker">
+        <ActionMenu.Item
+          as={Link}
           to="/innstillinger"
           data-testid="innstillinger-link"
-          className={`${LINK_CLASSES} text-text-action`}
+          className="cursor-pointer"
+          icon={<CogIcon />}
         >
-          <CogIcon /> Innstillinger
-        </Dropdown.Menu.List.Item>
+          Innstillinger
+        </ActionMenu.Item>
 
-        <Dropdown.Menu.List.Item
+        <ActionMenu.Item
           as="a"
           href="/oauth2/logout"
           data-testid="logout-link"
           onClick={() => pushEvent('logout', 'user-menu')}
-          className={`${LINK_CLASSES} text-text-danger`}
+          className="cursor-pointer text-ax-text-danger"
+          variant="danger"
+          icon={<LeaveIcon />}
         >
-          <LeaveIcon /> Logg ut
-        </Dropdown.Menu.List.Item>
+          Logg ut
+        </ActionMenu.Item>
+      </ActionMenu.Group>
 
-        <Dropdown.Menu.Divider />
+      <ActionMenu.Divider />
 
+      <ActionMenu.Group label="System">
         <Tooltip content={isUpToDate ? 'Du bruker siste versjon av Kabal' : 'Laster Kabal på nytt'} placement="left">
-          <Dropdown.Menu.List.Item
-            as={Button}
+          <ActionMenu.Item
             icon={isUpToDate ? <CheckmarkCircleIcon aria-hidden /> : <ArrowCirclepathIcon aria-hidden />}
-            size="small"
-            className="justify-start"
-            onClick={isUpToDate ? undefined : () => window.location.reload()}
+            className="cursor-pointer"
+            onSelect={isUpToDate ? undefined : () => window.location.reload()}
           >
             {isUpToDate ? 'Kabal er oppdatert' : 'Oppdater Kabal'}
-          </Dropdown.Menu.List.Item>
+          </ActionMenu.Item>
         </Tooltip>
 
         <Tooltip content="Kopierer versjonsnummeret til versjonen du bruker nå" placement="left">
-          <Dropdown.Menu.List.Item
-            as={CopyButton}
+          <ActionMenu.Item
             title="Klikk for å kopiere versjonsnummeret"
-            copyText={version}
-            text={`Kabal-versjon: ${version}`}
-            size="small"
-            className="justify-start whitespace-nowrap bg-bg-default hover:bg-surface-action-subtle-hover active:bg-surface-action-active"
             icon={<BranchingIcon aria-hidden />}
+            onSelect={() => navigator.clipboard.writeText(version)}
+            className="cursor-pointer"
           >
-            {null}
-          </Dropdown.Menu.List.Item>
+            Kabal-versjon: {version}
+          </ActionMenu.Item>
         </Tooltip>
 
-        <DebugButton />
-      </Dropdown.Menu.List>
-    </Dropdown.Menu>
+        <SendDebugInfoButton />
+      </ActionMenu.Group>
+    </ActionMenu.Content>
   );
 };
-
-const LINK_CLASSES =
-  'flex gap-2 items-center cursor-pointer hover:bg-surface-action-subtle-hover active:bg-surface-action-active active:text-text-on-action';

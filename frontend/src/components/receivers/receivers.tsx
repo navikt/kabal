@@ -144,7 +144,7 @@ export const Receivers = ({
     firstReachableReceiver !== undefined;
 
   return (
-    <VStack gap="4 0" position="relative" as="section">
+    <VStack gap="4 0" position="relative" as="section" overflow="hidden">
       <DefaultReceivers
         selectedIds={mottakerList.map((m) => m.part.id)}
         addMottakere={addMottakere}

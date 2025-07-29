@@ -1,13 +1,13 @@
-import { PlateElement, withRef } from 'platejs/react';
+import { PlateElement, type PlateElementProps } from 'platejs/react';
 
-export const TableRowElement = withRef<typeof PlateElement>(({ children, ...props }, ref) => (
+export const TableRowElement = ({ children, ref, ...props }: PlateElementProps) => (
   <PlateElement
     as="tr"
     ref={ref}
     {...props}
-    className="bg-surface-subtle even:bg-surface-default"
+    className="odd:bg-ax-bg-neutral-soft-a even:bg-transparent"
     style={{ position: 'static' }}
   >
     {children}
   </PlateElement>
-));
+);

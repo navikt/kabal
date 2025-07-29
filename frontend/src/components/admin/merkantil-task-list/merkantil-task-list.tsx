@@ -6,7 +6,7 @@ import { ENVIRONMENT } from '@app/environment';
 import { type Task, useGetMerkantilTasksQuery } from '@app/redux-api/internal';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ArrowsCirclepathIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, CopyButton, Heading, HStack, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
+import { Alert, BoxNew, Button, CopyButton, Heading, HStack, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ export const MerkantilTaskList = () => {
   const { isLoading, isFetching, refetch } = useGetMerkantilTasksQuery();
 
   return (
-    <Box as="section" shadow="medium" padding="4">
+    <BoxNew as="section" shadow="dialog" padding="4">
       <Heading level="1" size="medium" spacing>
         <HStack>
           <span>Merkantile oppgaver</span>
@@ -31,7 +31,7 @@ export const MerkantilTaskList = () => {
       </Heading>
 
       <TaskList />
-    </Box>
+    </BoxNew>
   );
 };
 
@@ -60,7 +60,7 @@ const TaskList = () => {
             <Heading level="2" size="small" spacing>
               Noe gikk galt
             </Heading>
-            <code className="block whitespace-pre-wrap rounded-lg bg-surface-neutral-subtle p-4">
+            <code className="block whitespace-pre-wrap rounded-lg bg-ax-bg-neutral-moderate p-4">
               {JSON.stringify(error, null, 2)}
             </code>
           </Alert>

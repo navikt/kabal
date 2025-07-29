@@ -1,9 +1,18 @@
 import { isoDateTimeToPretty } from '@app/domain/date';
-import type { TimelineTypes } from '@app/types/arkiverte-documents';
-import { ChevronRightIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { Button, Detail, Label, Popover, VStack } from '@navikt/ds-react';
+import { TimelineTypes } from '@app/types/arkiverte-documents';
+import {
+  ArrowUndoIcon,
+  ChevronRightIcon,
+  EnvelopeClosedIcon,
+  FileCheckmarkIcon,
+  FolderFileIcon,
+  GlassesIcon,
+  HddUpIcon,
+  PrinterSmallIcon,
+  XMarkOctagonIcon,
+} from '@navikt/aksel-icons';
+import { BoxNew, type BoxNewProps, Button, Detail, Label, Popover, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { BACKGROUND_COLOR, DATOTYPE_NAME, ICON } from './helpers';
 
 interface RelevantDateTimelineItemProps {
   timestamp: string;
@@ -20,17 +29,16 @@ export const RelevantDateTimelineItem = ({ type, ...rest }: RelevantDateTimeline
       {...rest}
       icon={<Icon aria-hidden />}
       title={DATOTYPE_NAME[type] ?? type}
-      color={BACKGROUND_COLOR[type] ?? 'var(--a-gray-50)'}
+      background={BACKGROUND_COLOR[type] ?? 'neutral-soft'}
     />
   );
 };
 
-interface TimelineItemProps {
+interface TimelineItemProps extends Pick<BoxNewProps, 'background'> {
   title: string;
   icon: React.ReactNode;
   timestamp: string;
   hideNext?: boolean;
-  color: string;
   popover?: {
     content: React.ReactNode;
     buttonText: string;
@@ -41,27 +49,22 @@ export const TimelineItem = ({
   icon,
   title,
   timestamp,
-  color,
+  background,
   popover = null,
   hideNext = false,
 }: TimelineItemProps) => (
-  <VStack
-    as="li"
-    position={'relative'}
-    gap="1 0"
-    padding="2"
-    style={{ backgroundColor: color }}
-    className="whitespace-nowrap rounded-medium border border-default"
-  >
-    <Label size="small" className="flex items-center gap-1">
-      {icon} <span>{title}</span>
-    </Label>
-    <Detail>{isoDateTimeToPretty(timestamp)}</Detail>
-    {popover === null ? null : <TimelinePopover buttonText={popover.buttonText}>{popover.content}</TimelinePopover>}
-    {hideNext ? null : (
-      <ChevronRightIcon aria-hidden className="-translate-y-1/2 -translate-x-[22.5%] absolute top-1/2 left-full" />
-    )}
-  </VStack>
+  <BoxNew asChild borderRadius="medium" borderWidth="1" borderColor="neutral" background={background} padding="2">
+    <VStack as="li" position="relative" gap="1 0" className="whitespace-nowrap">
+      <Label size="small" className="flex items-center gap-1">
+        {icon} <span>{title}</span>
+      </Label>
+      <Detail>{isoDateTimeToPretty(timestamp)}</Detail>
+      {popover === null ? null : <TimelinePopover buttonText={popover.buttonText}>{popover.content}</TimelinePopover>}
+      {hideNext ? null : (
+        <ChevronRightIcon aria-hidden className="-translate-y-1/2 -translate-x-[22.5%] absolute top-1/2 left-full" />
+      )}
+    </VStack>
+  </BoxNew>
 );
 
 interface TimelinePopoverProps {
@@ -83,4 +86,34 @@ const TimelinePopover = ({ children, buttonText }: TimelinePopoverProps) => {
       </Popover>
     </div>
   );
+};
+
+const BACKGROUND_COLOR: Record<TimelineTypes, BoxNewProps['background']> = {
+  [TimelineTypes.OPPRETTET]: 'meta-lime-soft',
+  [TimelineTypes.SENDT_PRINT]: 'warning-soft',
+  [TimelineTypes.EKSPEDERT]: 'brand-blue-soft',
+  [TimelineTypes.JOURNALFOERT]: 'accent-soft',
+  [TimelineTypes.REGISTRERT]: 'meta-purple-soft',
+  [TimelineTypes.AVSENDER_RETUR]: 'danger-soft',
+  [TimelineTypes.LEST]: 'success-soft',
+};
+
+const DATOTYPE_NAME: Record<TimelineTypes, string> = {
+  [TimelineTypes.OPPRETTET]: 'Opprettet',
+  [TimelineTypes.SENDT_PRINT]: 'Sendt print',
+  [TimelineTypes.EKSPEDERT]: 'Ekspedert',
+  [TimelineTypes.JOURNALFOERT]: 'Journalført',
+  [TimelineTypes.REGISTRERT]: 'Registrert',
+  [TimelineTypes.AVSENDER_RETUR]: 'Avsender retur',
+  [TimelineTypes.LEST]: 'Lest',
+};
+
+const ICON: Record<TimelineTypes, React.FC> = {
+  [TimelineTypes.OPPRETTET]: FileCheckmarkIcon,
+  [TimelineTypes.SENDT_PRINT]: PrinterSmallIcon,
+  [TimelineTypes.EKSPEDERT]: EnvelopeClosedIcon,
+  [TimelineTypes.JOURNALFOERT]: FolderFileIcon,
+  [TimelineTypes.REGISTRERT]: HddUpIcon,
+  [TimelineTypes.AVSENDER_RETUR]: ArrowUndoIcon,
+  [TimelineTypes.LEST]: GlassesIcon,
 };

@@ -18,7 +18,7 @@ export const SakenGjelderName = ({ oppgaveId }: Props) => {
 
   return (
     <Tooltip content={name}>
-      <span className="inline-block min-w-full max-w-20 overflow-hidden text-ellipsis whitespace-nowrap">{name}</span>
+      <span className="inline-block min-w-full max-w-20 truncate">{name}</span>
     </Tooltip>
   );
 };

@@ -2,7 +2,6 @@ import { useSelection } from '@app/plate/hooks/use-selection';
 import type { RichTextEditor } from '@app/plate/types';
 import { Button } from '@navikt/ds-react';
 import type { Value } from 'platejs';
-import { styled } from 'styled-components';
 import { insertGodFormulering } from './insert';
 
 interface AddButtonProps {
@@ -18,18 +17,15 @@ export const AddButton = ({ editor, content, children, title = children, disable
   const disabled = selection === null;
 
   return (
-    <StyledButton
+    <Button
       size="xsmall"
       variant="primary"
       title={disabled ? disabledTitle : title}
       onClick={() => insertGodFormulering(editor, content)}
       disabled={disabled}
+      className="shrink-0"
     >
       {children}
-    </StyledButton>
+    </Button>
   );
 };
-
-const StyledButton = styled(Button)`
-  flex-shrink: 0;
-`;

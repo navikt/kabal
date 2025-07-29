@@ -18,7 +18,6 @@ import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import type { skipToken } from '@reduxjs/toolkit/query';
 import { DocumentPageBreak, TextDescription, Wand } from '@styled-icons/fluentui-system-regular';
 import { BaseParagraphPlugin } from 'platejs';
-import { styled } from 'styled-components';
 
 interface Props {
   oppgaveId?: string | typeof skipToken;
@@ -42,7 +41,7 @@ export const DefaultToolbarButtons = ({ oppgaveId }: Props) => {
       <ToolbarIconButton
         label="Gjenopprett"
         keys={[MOD_KEY_TEXT, 'Shift', 'Z']}
-        icon={<Redo aria-hidden />}
+        icon={<ArrowUndoIcon aria-hidden className="-scale-x-100" />}
         onClick={editor.redo}
       />
 
@@ -90,7 +89,3 @@ export const DefaultToolbarButtons = ({ oppgaveId }: Props) => {
     </>
   );
 };
-
-const Redo = styled(ArrowUndoIcon)`
-  transform: scaleX(-1);
-`;

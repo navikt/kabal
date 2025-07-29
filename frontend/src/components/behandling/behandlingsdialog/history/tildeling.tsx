@@ -1,5 +1,5 @@
 import { employeeName, QUEUE, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
-import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
+import { HistoryColor, HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
 import { useInnsendingshjemlerMap } from '@app/simple-api-state/use-kodeverk';
 import type { INavEmployee } from '@app/types/bruker';
 import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
@@ -106,7 +106,7 @@ const FromSelf = ({ actor, fradelingReasonId, previousHjemmelIdList, hjemmelIdLi
     <HistoryEvent
       tag="Fradeling"
       type={HistoryEventTypes.TILDELING}
-      color="--a-surface-warning-moderate"
+      borderColor={HistoryColor.WARNING_STRONG}
       timestamp={timestamp}
       icon={ArrowUndoIcon}
     >
@@ -125,7 +125,7 @@ const FromOther = ({ actor, previousSaksbehandler, timestamp }: FromOtherProps) 
   <HistoryEvent
     tag="Fradeling"
     type={HistoryEventTypes.TILDELING}
-    color="--a-gray-200"
+    borderColor={HistoryColor.NEUTRAL_SUBTLE}
     timestamp={timestamp}
     icon={ArrowUndoIcon}
   >

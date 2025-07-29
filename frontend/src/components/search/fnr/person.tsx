@@ -1,6 +1,5 @@
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { ErrorAlert } from '@app/components/search/common/error-alert';
-import { StyledFnr, StyledName } from '@app/components/search/common/styled-components';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import type { staggeredBaseQuery } from '@app/redux-api/common';
 import type { SearchPersonResponse } from '@app/types/oppgave-common';
@@ -46,10 +45,10 @@ export const Person = ({ data, isLoading, isFetching, error, fnr, refetch }: Per
 
   return (
     <HStack align="center" gap="0 4" paddingInline="4" data-testid="search-result-person">
-      <StyledName>{data.name}</StyledName>
-      <StyledFnr>
+      <span className="justify-self-start truncate">{data.name}</span>
+      <span className="justify-self-start">
         <CopyIdButton id={data.id} />
-      </StyledFnr>
+      </span>
       <Button
         variant="secondary"
         size="small"

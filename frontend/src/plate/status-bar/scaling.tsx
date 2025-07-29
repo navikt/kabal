@@ -3,9 +3,8 @@ import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { Keys } from '@app/keys';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, HStack, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 export const Scaling = () => {
   const { scale, setScale, scaleUp, scaleDown } = useContext(ScaleContext);
@@ -17,33 +16,26 @@ export const Scaling = () => {
     <HStack align="center" gap="2">
       <HStack align="center">
         <Button icon={<MinusIcon aria-hidden />} size="xsmall" variant="tertiary-neutral" onClick={scaleDown} />
-        <Slider
+        <input
           type="range"
           min={MIN}
           max={MAX}
           step={STEP}
           value={scale}
           onChange={(e) => setScale(Number.parseInt(e.target.value, 10))}
+          className="w-52"
         />
         <Button icon={<PlusIcon aria-hidden />} size="xsmall" variant="tertiary-neutral" onClick={scaleUp} />
       </HStack>
-      <ScaleSelectorContainer ref={ref}>
+      <div ref={ref} className="relative">
         <Button onClick={() => setIsOpen((o) => !o)} size="xsmall" variant="tertiary-neutral">
           {scale} %
         </Button>
         {isOpen ? <ScaleSelector close={() => setIsOpen(false)} /> : null}
-      </ScaleSelectorContainer>
+      </div>
     </HStack>
   );
 };
-
-const Slider = styled.input`
-  width: 200px;
-`;
-
-const ScaleSelectorContainer = styled.div`
-  position: relative;
-`;
 
 const PRESETS: string[] = ['75', '90', '100', '125', '150', '200'];
 const CUSTOM = 'CUSTOM';
@@ -92,7 +84,7 @@ const ScaleSelector = ({ close }: ScaleSelectorProps) => {
 
   return (
     <VStack asChild position="absolute" gap="2" className="bottom-full whitespace-nowrap">
-      <Box background="bg-default" padding="2" borderRadius="medium" shadow="medium">
+      <BoxNew background="default" padding="2" borderRadius="medium" shadow="dialog">
         <RadioGroup legend="Skalering" onChange={handleChange} value={radioValue} size="small">
           {PRESETS.map((p) => (
             <Radio key={p} value={p} size="small">
@@ -141,7 +133,7 @@ const ScaleSelector = ({ close }: ScaleSelectorProps) => {
           />
           <span>%</span>
         </HStack>
-      </Box>
+      </BoxNew>
     </VStack>
   );
 };

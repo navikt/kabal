@@ -110,10 +110,13 @@ export class ServerSentEventManager {
   }
 
   private createEventSource(): EventSource {
-    const url =
-      this.lastEventId === null
-        ? `${this.url}?${getQueryParams()}`
-        : `${this.url}?lastEventId=${this.lastEventId}&${getQueryParams()}`;
+    const params = getQueryParams();
+
+    if (this.lastEventId !== null) {
+      params.set('lastEventId', this.lastEventId);
+    }
+
+    const url = `${this.url}?${params.toString()}`;
 
     const events = new EventSource(url, {
       withCredentials: IS_LOCALHOST,

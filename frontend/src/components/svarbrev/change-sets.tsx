@@ -1,6 +1,5 @@
 import { BEHANDLINGSTID_UNIT_TYPE_NAMES, type BehandlingstidUnitType, type SvarbrevSetting } from '@app/types/svarbrev';
 import { BodyShort } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 export interface InitialVersion extends Pick<SvarbrevSetting, 'id' | 'modified' | 'modifiedBy'> {
   behandlingstidUnits: SvarbrevSetting['behandlingstidUnits'];
@@ -75,7 +74,7 @@ export const getChangeSetText = ({
     return (
       <>
         <span>Svarbrev opprettet med standardinnstillinger;</span>
-        <StyledVersionList>
+        <ul className="pl-4">
           <li>
             <strong>{shouldSend ? 'Aktivert' : 'Deaktivert'}</strong>
           </li>
@@ -91,7 +90,7 @@ export const getChangeSetText = ({
           <li>
             Svartid: <strong>{formatSvartid(behandlingstidUnits, behandlingstidUnitTypeId)}</strong>
           </li>
-        </StyledVersionList>
+        </ul>
       </>
     );
   }
@@ -130,14 +129,8 @@ export const getChangeSetText = ({
     return <BodyShort>Ingen endring.</BodyShort>;
   }
 
-  return <StyledVersionList>{parts}</StyledVersionList>;
+  return <ul className="pl-4">{parts}</ul>;
 };
-
-const StyledVersionList = styled.ul`
-  margin: 0;
-  padding: 0;
-  padding-left: var(--a-spacing-4);
-`;
 
 const formatSvartid = (behandlingstidUnits: number, behandlingstidUnitTypeId: BehandlingstidUnitType) =>
   `${behandlingstidUnits} ${BEHANDLINGSTID_UNIT_TYPE_NAMES[behandlingstidUnitTypeId]}`;

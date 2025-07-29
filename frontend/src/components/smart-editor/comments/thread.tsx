@@ -3,7 +3,7 @@ import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { usePostReplyMutation } from '@app/redux-api/smart-editor-comments';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
-import { Box, Button, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
 import { CommentList } from './comment-list';
@@ -43,13 +43,13 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isExpanded 
       onClick={onClick}
       style={style}
     >
-      <Box
+      <BoxNew
         as="section"
-        background="surface-default"
+        background="default"
         borderWidth="1"
-        borderColor="border-divider"
+        borderColor="neutral"
         borderRadius="medium"
-        shadow={isExpanded ? 'medium' : undefined}
+        shadow={isExpanded ? 'dialog' : undefined}
         className={isExpanded ? EXPANDED_CLASSES : COLLAPSED_CLASSES}
         style={{ zIndex: isEditing || focusedThreadId === thread.id ? 999 : zIndex }}
       >
@@ -58,7 +58,7 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isExpanded 
           <div className="text-right text-base text-gray-700 italic">{thread.comments.length} svar</div>
         )}
         {isEditing ? null : <AddComment threadId={thread.id} />}
-      </Box>
+      </BoxNew>
     </VStack>
   );
 };

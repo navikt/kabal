@@ -30,7 +30,7 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
           style={{ gridArea: Fields.Tema }}
           className="group relative justify-start whitespace-nowrap"
         >
-          <span className="select-none overflow-hidden text-ellipsis">{temaName}</span>
+          <span className="select-none truncate">{temaName}</span>
 
           <CopyButton
             copyText={temaName}
@@ -50,10 +50,7 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
       ) : null}
 
       {columns.AVSENDER_MOTTAKER ? (
-        <div
-          style={{ gridArea: Fields.AvsenderMottaker }}
-          className="group relative select-none overflow-hidden text-ellipsis whitespace-nowrap"
-        >
+        <div style={{ gridArea: Fields.AvsenderMottaker }} className="group relative select-none truncate">
           <span>{formatAvsenderMottaker(avsenderMottaker)}</span>
 
           <CopyButton
@@ -102,7 +99,7 @@ const Saksnummer = ({ saksnummer }: SaksnummerProps) => {
       style={{ gridArea: Fields.Saksnummer }}
       className="group relative select-none justify-start whitespace-nowrap pr-6"
     >
-      <span className="overflow-hidden text-ellipsis">{saksnummer}</span>
+      <span className="truncate">{saksnummer}</span>
 
       <CopyButton
         copyText={saksnummer}

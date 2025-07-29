@@ -33,7 +33,7 @@ export const ReadOnlyDeadline = ({ frist, timesPreviouslyExtended }: ReadOnlyDea
 
   return (
     <HStack align="center" gap="2" wrap={false}>
-      <time className={fristExceeded ? 'text-text-danger' : 'text-text-default'} dateTime={frist ?? ''}>
+      <time className={fristExceeded ? 'text-ax-text-danger' : 'text-ax-text-neutral'} dateTime={frist ?? ''}>
         {isoDateToPretty(frist) ?? 'Ikke satt'}
       </time>
       <TimesPreviouslyExtended timesPreviouslyExtended={timesPreviouslyExtended} />
@@ -57,7 +57,7 @@ const EditableDeadline = ({ frist, id }: IOppgave) => {
   const children = isOpen ? (
     <EditDeadline frist={frist} oppgaveId={id} closeCalendar={closeCalendar} setUserFrist={setUserFrist} />
   ) : (
-    <time className={fristExceeded ? 'text-text-danger' : 'text-text-default'} dateTime={userFrist ?? ''}>
+    <time className={fristExceeded ? 'text-ax-text-danger' : 'text-ax-text-neutral'} dateTime={userFrist ?? ''}>
       {isoDateToPretty(userFrist) ?? 'Ikke satt'}
     </time>
   );

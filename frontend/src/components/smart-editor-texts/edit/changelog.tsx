@@ -4,7 +4,6 @@ import type { IPublishedText, IText } from '@app/types/texts/responses';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { Button, Modal, Table } from '@navikt/ds-react';
 import { Fragment, useCallback, useRef } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   versions: IText[];
@@ -58,16 +57,12 @@ export const Changelog = ({ versions }: Props) => {
 };
 
 const Version = ({ publishedByActor, publishedDateTime }: IPublishedText) => (
-  <VersionRow>
+  <Table.Row className="font-bold">
     <Table.DataCell>{isoDateTimeToPretty(publishedDateTime)}</Table.DataCell>
     <Table.DataCell>Publisert</Table.DataCell>
     <Table.DataCell>{publishedByActor.navn}</Table.DataCell>
-  </VersionRow>
+  </Table.Row>
 );
-
-const VersionRow = styled(Table.Row)`
-  font-weight: bold;
-`;
 
 const CHANGE_TYPE_NAMES: Record<TextChangeType, string> = {
   [TextChangeType.PLAIN_TEXT_NB]: 'Endret tekst (bokmål)',

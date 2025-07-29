@@ -131,7 +131,7 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
   );
 };
 
-const TITLE_CLASSES = 'overflow-hidden text-ellipsis whitespace-nowrap cursor-text';
+const TITLE_CLASSES = 'truncate cursor-text';
 
 const getIsFocused = ({ current }: React.RefObject<HTMLElement | null>) =>
   current?.contains(document.activeElement) ?? false;

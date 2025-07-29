@@ -1,5 +1,5 @@
 import { merge } from '@app/functions/classes';
-import { HStack } from '@navikt/ds-react';
+import { BoxNew, type BoxNewProps, HStack } from '@navikt/ds-react';
 import { useCallback, useRef, useState } from 'react';
 
 interface DropZoneProps extends React.HTMLAttributes<HTMLDivElement>, OverlayContentProps {
@@ -105,10 +105,10 @@ interface OverlayProps extends OverlayContentProps {
 const Overlay = ({ danger, isDragOver, icon, label, className }: OverlayProps) => {
   const outlineClassname = danger ? 'outline-border-danger' : 'outline-border-action';
   const textStrokeClassname = danger ? 'text-stroke-text-on-danger' : 'text-stroke-text-on-action';
-  const backgroundClassname = getBackgroundClassname(isDragOver, danger);
 
   return (
     <HStack
+      asChild
       role="presentation"
       position="absolute"
       align="center"
@@ -120,19 +120,21 @@ const Overlay = ({ danger, isDragOver, icon, label, className }: OverlayProps) =
       gap="1"
       wrap={false}
       className={merge(
-        `rounded-medium font-bold outline-dashed outline-2 backdrop-blur-[2px] ${textStrokeClassname} ${outlineClassname} ${backgroundClassname}`,
+        `font-bold outline-dashed outline-2 backdrop-blur-[2px] ${textStrokeClassname} ${outlineClassname}`,
         className,
       )}
     >
-      {icon} <span>{label}</span>
+      <BoxNew borderRadius="medium" background={getBackgroundClassname(isDragOver, danger)}>
+        {icon} <span>{label}</span>
+      </BoxNew>
     </HStack>
   );
 };
 
-const getBackgroundClassname = (isDragOver: boolean, danger: boolean) => {
+const getBackgroundClassname = (isDragOver: boolean, danger: boolean): BoxNewProps['background'] => {
   if (danger) {
-    return isDragOver ? 'bg-drop-background-danger-hover' : 'bg-drop-background-danger';
+    return isDragOver ? 'danger-moderateA' : 'danger-softA';
   }
 
-  return isDragOver ? 'bg-drop-background-hover' : 'bg-drop-background';
+  return isDragOver ? 'accent-moderateA' : 'neutral-moderateA';
 };

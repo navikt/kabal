@@ -36,8 +36,10 @@ export const Filter = <T extends string>({
       title={children}
       value={filterId}
     >
-      <HStack align="center" gap="0 1">
-        <span title={children}>{children}</span>
+      <HStack align="center" gap="0 1" wrap={false}>
+        <span title={children} className="truncate">
+          {children}
+        </span>
         {tags}
       </HStack>
     </Checkbox>

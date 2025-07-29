@@ -79,7 +79,7 @@ export const DocumentModalContent = ({ document, access }: Props) => {
   return (
     <>
       <Modal.Body className="flex h-[80vh] w-full gap-4 overflow-hidden">
-        <VStack gap="4" minWidth="400px" flexShrink="0" overflowY="auto">
+        <VStack gap="4" width="400px" height="100%" flexShrink="0" overflow="visible">
           <HStack align="center" gap="2">
             <Tag variant="info" size="small">
               {DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId]}

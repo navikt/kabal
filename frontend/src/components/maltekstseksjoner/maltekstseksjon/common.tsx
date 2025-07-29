@@ -1,40 +1,40 @@
-import { Heading, VStack, type VStackProps } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { BoxNew, HGrid, VStack, type VStackProps } from '@navikt/ds-react';
 
-export const Container = styled.section`
-  display: grid;
-  grid-template-rows: min-content 1fr;
-  grid-template-columns: 440px 882px;
-  grid-template-areas:
-    'header header'
-    'sidebar text-list';
-  row-gap: var(--a-spacing-2);
-  column-gap: var(--a-spacing-2);
-  overflow-y: hidden;
-  height: 100%;
-  border-radius: var(--a-border-radius-medium);
-  box-shadow: var(--a-shadow-medium);
-  flex-grow: 1;
-  overflow: hidden;
-`;
+interface ElementProps {
+  children: React.ReactNode;
+}
 
-export const Header = styled.header`
-  grid-area: header;
-  display: grid;
-  gap: var(--a-spacing-2);
-  grid-template-areas:
-    'title actions'
-    'metadata actions'
-    'filters actions'
-    'tags tags';
-  grid-template-columns: 1fr fit-content;
-  padding-right: var(--a-spacing-2);
-  padding-top: var(--a-spacing-1);
-`;
+export const Container = ({ children }: ElementProps) => (
+  <HGrid
+    asChild
+    columns="440px 882px"
+    gap="space-8"
+    style={{ gridTemplateRows: 'min-content 1fr', gridTemplateAreas: "'header header' 'sidebar text-list'" }}
+  >
+    <BoxNew as="section" borderRadius="medium" shadow="dialog" overflow="hidden" flexGrow="1" height="100%">
+      {children}
+    </BoxNew>
+  </HGrid>
+);
 
-export const StyledHeading = styled(Heading)`
-  white-space: nowrap;
-`;
+export const Header = ({ children }: ElementProps) => (
+  <HGrid
+    gap="space-8"
+    paddingBlock="space-4 space-0"
+    paddingInline="space-0 space-8"
+    columns="1fr fit-content"
+    style={{
+      gridArea: 'header',
+      gridTemplateAreas: `
+        'title actions'
+        'metadata actions'
+        'filters actions'
+        'tags tags'`,
+    }}
+  >
+    {children}
+  </HGrid>
+);
 
 export const SidebarContainer = (props: VStackProps) => (
   <VStack
@@ -49,11 +49,10 @@ export const SidebarContainer = (props: VStackProps) => (
   />
 );
 
-export const List = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  white-space: nowrap;
-  overflow-x: hidden;
-  overflow-y: auto;
-`;
+interface ListProps {
+  children: React.ReactNode;
+}
+
+export const List = ({ children }: ListProps) => (
+  <ul className="m-0 list-none overflow-y-auto overflow-x-hidden whitespace-nowrap p-0">{children}</ul>
+);

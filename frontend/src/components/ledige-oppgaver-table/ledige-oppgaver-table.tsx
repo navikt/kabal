@@ -13,7 +13,6 @@ import { Role } from '@app/types/bruker';
 import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { BodyShort, Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { styled } from 'styled-components';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
@@ -77,11 +76,9 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
         defaultRekkefoelge={SortOrderEnum.ASC}
         defaultSortering={SortFieldEnum.FRIST}
       />
-      <StyledCount size="small">Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}</StyledCount>
+      <BodyShort size="small" className="mt-4">
+        Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}
+      </BodyShort>
     </section>
   );
 };
-
-const StyledCount = styled(BodyShort)`
-  margin-top: 1rem;
-`;

@@ -1,9 +1,10 @@
 import { toast } from '@app/components/toast/store';
 import { Details } from '@app/components/toast/toast-content/fetch-error-toast';
+import { useDarkMode } from '@app/darkmode';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { type ApiError, isApiError } from '@app/types/errors';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, BoxNew, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -27,6 +28,7 @@ const useFixPdf = (refresh: () => void): [() => Promise<void>, boolean] => {
 
 export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
   const [fixPdf, isLoading] = useFixPdf(refresh);
+  const darkMode = useDarkMode();
 
   if (error !== undefined) {
     return (
@@ -44,7 +46,7 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
             <Button variant="secondary" size="small" icon={<ArrowsCirclepathIcon aria-hidden />} onClick={refresh}>
               Last PDF på nytt
             </Button>
-            <code className="border-2 border-border-default bg-gray-200 p-2 text-xs">{error}</code>
+            <code className="border-2 border-ax-border-neutral bg-ax-bg-neutral-moderate p-2 text-xs">{error}</code>
           </HStack>
         </Alert>
       </div>
@@ -54,16 +56,23 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
   return (
     <div className="relative flex w-full grow">
       {loading ? (
-        <Box
-          background="surface-neutral-moderate"
+        <BoxNew
+          background="neutral-moderate"
           height="100%"
           width="100%"
           className="absolute flex items-center justify-center"
         >
           <Loader size="3xlarge" />
-        </Box>
+        </BoxNew>
       ) : null}
-      <object data={data} aria-label="PDF" type="application/pdf" name="pdf-viewer" className="w-full" />
+      <object
+        data={data}
+        aria-label="PDF"
+        type="application/pdf"
+        name="pdf-viewer"
+        className="w-full"
+        style={{ filter: darkMode ? 'hue-rotate(180deg) invert(1)' : 'none' }}
+      />
     </div>
   );
 };

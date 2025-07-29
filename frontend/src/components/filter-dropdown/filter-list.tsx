@@ -1,5 +1,4 @@
 import { CheckboxGroup } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 import { Filter } from './option';
 import type { BaseProps } from './props';
 
@@ -9,13 +8,13 @@ interface Props<T extends string> extends BaseProps<T> {
 }
 
 export const FilterList = <T extends string>({ selected, options, focused, onChange, className, error }: Props<T>) => (
-  <StyledCheckboxGroup
+  <CheckboxGroup
     legend="Velg hjemler"
     hideLegend
     data-testid="filter-list"
     onChange={onChange}
     value={selected}
-    className={className}
+    className={`px-2 pt-2 ${className}`}
     error={error}
   >
     {options.map(({ value, label, disabled, tags }) => (
@@ -31,11 +30,5 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
         {label}
       </Filter>
     ))}
-  </StyledCheckboxGroup>
+  </CheckboxGroup>
 );
-
-const StyledCheckboxGroup = styled(CheckboxGroup)`
-  padding-left: var(--a-spacing-2);
-  padding-right: var(--a-spacing-2);
-  padding-top: var(--a-spacing-2);
-`;

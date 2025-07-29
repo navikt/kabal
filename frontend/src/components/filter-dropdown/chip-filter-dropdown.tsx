@@ -1,7 +1,7 @@
 import { Popup, type PopupProps } from '@app/components/filter-dropdown/popup';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { Box, Button, Chips, HGrid } from '@navikt/ds-react';
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { BoxNew, Button, Chips, HGrid } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { Dropdown } from './dropdown';
 import type { BaseProps } from './props';
@@ -36,32 +36,29 @@ export const ChipFilterDropdown = <T extends string>({
     setOpen(false);
   };
 
-  const chevron = <ChevronDownIcon aria-hidden fontSize={24} />;
-
-  const shadow = open ? 'shadow-[var(--a-shadow-focus)]' : 'shadow-none';
-
   return (
     <div className="relative" ref={containerRef}>
       {selected.length === 0 ? (
-        <Button
-          ref={buttonRef}
-          size="small"
-          iconPosition="right"
-          icon={<ChevronDownIcon aria-hidden fontSize={24} />}
-          onClick={() => setOpen(!open)}
-          variant="secondary-neutral"
-          className={`${shadow} hover:!border-[var(--a-border-action)] w-full justify-between border-1 pl-2 hover:bg-transparent active:text-[var(--a-text-default)]`}
-          style={{ borderColor: 'var(--a-border-default)', paddingRight: 7.5 }}
-        >
-          <span className="font-normal">{children}</span>
-        </Button>
+        <BoxNew asChild borderWidth="1" borderColor="neutral" width="100%">
+          <Button
+            ref={buttonRef}
+            size="small"
+            iconPosition="right"
+            icon={open ? <ChevronUpIcon aria-hidden fontSize={24} /> : <ChevronDownIcon aria-hidden fontSize={24} />}
+            onClick={() => setOpen(!open)}
+            variant="secondary-neutral"
+            className="justify-between bg-ax-bg-input pr-[9px] pl-2 shadow-none hover:border-ax-border-accent"
+          >
+            <span className="font-normal">{children}</span>
+          </Button>
+        </BoxNew>
       ) : (
-        <Box
+        <BoxNew
           ref={boxRef}
           borderRadius="medium"
-          borderColor="border-default"
+          borderColor="neutral"
           borderWidth="1"
-          className={`${shadow} cursor-pointer pl-1 hover:border-[var(--a-border-action)]`}
+          className="cursor-pointer pl-1 hover:border-ax-border-accent"
           onClick={() => setOpen(!open)}
         >
           <HGrid columns="auto min-content">
@@ -84,11 +81,10 @@ export const ChipFilterDropdown = <T extends string>({
               size="small"
               className="hover:bg-transparent focus:shadow-none"
               style={{ paddingRight: 5.5, paddingLeft: 5.5 }}
-            >
-              {chevron}
-            </Button>
+              icon={open ? <ChevronUpIcon aria-hidden fontSize={24} /> : <ChevronDownIcon aria-hidden fontSize={24} />}
+            />
           </HGrid>
-        </Box>
+        </BoxNew>
       )}
 
       <Popup isOpen={open} direction={direction} maxWidth={maxWidth} maxHeight={maxHeight}>

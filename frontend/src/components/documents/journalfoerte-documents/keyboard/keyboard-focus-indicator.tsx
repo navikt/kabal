@@ -40,8 +40,8 @@ const Focus = memo(
 
 Focus.displayName = 'Focus';
 
-const BASE_CLASSES = 'pointer-events-none absolute top-0 right-0 h-8 select-none rounded-medium ';
-const FOCUS_CLASSES = `${BASE_CLASSES} outline-2 -outline-offset-2 outline-border-focus transition-[transform,left] duration-25 ease-in-out`;
+const BASE_CLASSES = 'pointer-events-none absolute top-0 right-0 h-8 select-none rounded-sm';
+const FOCUS_CLASSES = `${BASE_CLASSES} outline-2 -outline-offset-2 outline-ax-border-focus transition-[transform,left] duration-25 ease-in-out`;
 const getLeft = (isVedlegg: boolean) => (isVedlegg ? '62px' : '0');
 
 interface FocusHighlightProps {
@@ -62,7 +62,7 @@ const FocusHighlight = ({ globalTop, isVedlegg }: FocusHighlightProps) => {
   );
 };
 
-const SELECTION_CLASSES = `${BASE_CLASSES} bg-surface-active`;
+const SELECTION_CLASSES = `${BASE_CLASSES} bg-ax-bg-neutral-moderate-a`;
 
 interface SelectionProps {
   dokumenterList: DokumentRenderData[];

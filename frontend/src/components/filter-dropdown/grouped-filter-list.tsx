@@ -1,6 +1,5 @@
-import { Box, VStack } from '@navikt/ds-react';
+import { BoxNew, VStack } from '@navikt/ds-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { FilterList } from './filter-list';
 import { Header } from './header';
 import type { BaseProps, DropdownProps, IOption } from './props';
@@ -111,7 +110,7 @@ export const GroupedFilterList = <T extends string>({
       className={`z-2 scroll-mb-4 ${isDown ? 'top-full left-0' : 'top-0 left-full'}`}
       ref={ref}
     >
-      <Box background="bg-default" borderRadius="medium" borderWidth="1" borderColor="border-subtle" shadow="medium">
+      <BoxNew background="default" borderRadius="medium" borderWidth="1" borderColor="neutral-subtle" shadow="dialog">
         <Header
           onFocusChange={setFocused}
           onFilterChange={setFilter}
@@ -122,7 +121,7 @@ export const GroupedFilterList = <T extends string>({
           close={close}
           showFjernAlle={showFjernAlle}
         />
-        <GroupList data-testid="group-filter-list" data-type={testType}>
+        <VStack as="ul" gap="4" paddingBlock="4" data-testid="group-filter-list" data-type={testType}>
           {filteredOptions.map(({ sectionHeader, sectionOptions }) => (
             <li
               key={sectionHeader.id}
@@ -130,40 +129,22 @@ export const GroupedFilterList = <T extends string>({
               data-groupid={sectionHeader.id}
               data-groupname={sectionHeader.name}
             >
-              <GroupHeader header={sectionHeader.name} />
+              {sectionHeader.name === undefined ? null : <GroupHeader header={sectionHeader.name} />}
               <FilterList options={sectionOptions} selected={selected} onChange={onChange} focused={focusedOption} />
             </li>
           ))}
-        </GroupList>
-      </Box>
+        </VStack>
+      </BoxNew>
     </VStack>
   );
 };
 
 interface GroupHeaderProps {
-  header?: string | undefined;
+  header: string;
 }
 
-const GroupHeader = ({ header }: GroupHeaderProps) => {
-  if (typeof header !== 'string') {
-    return null;
-  }
-
-  return <StyledGroupHeader data-testid="group-title">{header}</StyledGroupHeader>;
-};
-
-const StyledGroupHeader = styled.h3`
-  font-size: var(--a-spacing-4);
-  font-weight: 600;
-  margin-left: var(--a-spacing-4);
-  margin-top: var(--a-spacing-4);
-  margin-bottom: var(--a-spacing-2);
-`;
-
-const GroupList = styled.ul`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-overflow: ellipsis;
-  flex: 1;
-`;
+const GroupHeader = ({ header }: GroupHeaderProps) => (
+  <h3 className="mb-2 font-ax-bold text-base" data-testid="group-title">
+    {header}
+  </h3>
+);

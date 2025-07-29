@@ -1,3 +1,4 @@
+import { MaltekstseksjonListItem } from '@app/components/maltekstseksjoner/maltekstseksjon-list-item';
 import { isDraft } from '@app/components/smart-editor-texts/functions/status-helpers';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
@@ -5,7 +6,6 @@ import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/par
 import { useContext } from 'react';
 import { DragAndDropContext } from '../drag-and-drop/drag-context';
 import { useDragState } from '../drag-and-drop/use-drag-state';
-import { ListItem } from '../styled-components';
 
 interface MaltekstListItemProps {
   maltekstseksjonId: string;
@@ -14,7 +14,12 @@ interface MaltekstListItemProps {
   children: React.ReactNode;
 }
 
-export const MaltekstseksjontListItem = ({ maltekstseksjonId, activeId, query, children }: MaltekstListItemProps) => {
+export const MaltekstseksjontLinkListItem = ({
+  maltekstseksjonId,
+  activeId,
+  query,
+  children,
+}: MaltekstListItemProps) => {
   const { data: maltekstseksjon } = useGetMaltekstseksjonQuery(maltekstseksjonId);
   const [updateTextIdList] = useUpdateTextIdListMutation({ fixedCacheKey: maltekstseksjonId });
   const { draggedTextId, clearDragState } = useContext(DragAndDropContext);
@@ -36,10 +41,10 @@ export const MaltekstseksjontListItem = ({ maltekstseksjonId, activeId, query, c
   };
 
   return (
-    <ListItem
-      $isActive={id === activeId}
-      $isDropTarget={isDraft(maltekstseksjon) && draggedTextId !== null && !textIdList.includes(draggedTextId)}
-      $isDragOver={isDragOver}
+    <MaltekstseksjonListItem
+      isActive={id === activeId}
+      isDropTarget={isDraft(maltekstseksjon) && draggedTextId !== null && !textIdList.includes(draggedTextId)}
+      isDragOver={isDragOver}
       draggable={false}
       onDrop={onDrop}
       onDragEnter={onDragEnter}
@@ -52,9 +57,9 @@ export const MaltekstseksjontListItem = ({ maltekstseksjonId, activeId, query, c
         e.preventDefault();
         e.stopPropagation();
       }}
-      data-dragovertext={`Legg til «${title}»`}
+      dragOverText={`Legg til «${title}»`}
     >
       {children}
-    </ListItem>
+    </MaltekstseksjonListItem>
   );
 };

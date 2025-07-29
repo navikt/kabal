@@ -2,7 +2,7 @@ import { setKeyboardActive } from '@app/components/documents/journalfoerte-docum
 import { EVENT_DOMAIN, useKeyboard } from '@app/components/documents/journalfoerte-documents/keyboard/use-keyboard';
 import { isMetaKey, Keys } from '@app/keys';
 import { pushEvent } from '@app/observability';
-import { Box } from '@navikt/ds-react';
+import { BoxNew } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 
 interface KeyboardBoundaryProps {
@@ -51,7 +51,7 @@ export const KeyboardBoundary = ({ children, ref }: KeyboardBoundaryProps) => {
   };
 
   return (
-    <Box
+    <BoxNew
       position="relative"
       minHeight="100%"
       flexShrink="0"
@@ -61,7 +61,7 @@ export const KeyboardBoundary = ({ children, ref }: KeyboardBoundaryProps) => {
       marginBlock="0 8"
       overflow="hidden"
     >
-      <Box
+      <BoxNew
         borderRadius="medium"
         minHeight="100%"
         flexShrink="0"
@@ -75,8 +75,8 @@ export const KeyboardBoundary = ({ children, ref }: KeyboardBoundaryProps) => {
         aria-keyshortcuts={ARIA_KEYSHORTCUTS_STRING}
       >
         {children}
-      </Box>
-    </Box>
+      </BoxNew>
+    </BoxNew>
   );
 };
 

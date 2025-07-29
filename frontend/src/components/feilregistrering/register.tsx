@@ -1,9 +1,8 @@
 import { isMetaKey, Keys, MOD_KEY_TEXT } from '@app/keys';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { FileXMarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, Textarea } from '@navikt/ds-react';
+import { BodyShort, BoxNew, Button, HStack, Textarea } from '@navikt/ds-react';
 import { useCallback, useContext, useState } from 'react';
-import { styled } from 'styled-components';
 import { Context } from './context';
 import type { OppgaveId } from './types';
 
@@ -47,6 +46,7 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
           }
         }}
       />
+
       <HStack align="center" justify="space-between" gap="0 4">
         <Button
           size="small"
@@ -58,6 +58,7 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
         >
           Feilregistrer
         </Button>
+
         <Button size="small" variant="secondary" onClick={close} loading={isLoading} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
@@ -66,16 +67,27 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
   );
 };
 
-const Code = styled.code`
-  background-color: var(--a-bg-subtle);
-  padding: var(--a-spacing-05) var(--a-spacing-1);
-  border-radius: var(--a-border-radius-medium);
-  font-size: 13px;
-`;
+interface CodeProps {
+  children: React.ReactNode;
+}
+
+const Code = ({ children }: CodeProps) => (
+  <BoxNew
+    as="code"
+    background="sunken"
+    paddingBlock="05"
+    paddingInline="1"
+    marginInline="05"
+    borderRadius="medium"
+    className="inline whitespace-nowrap text-sm"
+  >
+    {children}
+  </BoxNew>
+);
 
 const Description = (
   <BodyShort>
-    Skriv inn årsak og trykk <strong>Feilregistrer</strong> (<Code>{MOD_KEY_TEXT} + Enter</Code>) eller{' '}
-    <strong>Avbryt</strong> (<Code>Escape</Code>) for å avbryte.
+    Skriv inn årsak og trykk <strong>Feilregistrer</strong> <Code>{MOD_KEY_TEXT} + Enter</Code> eller{' '}
+    <strong>Avbryt</strong> <Code>Escape</Code> for å avbryte.
   </BodyShort>
 );

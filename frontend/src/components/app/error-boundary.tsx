@@ -1,7 +1,7 @@
 import { VERSION_CHECKER } from '@app/components/version-checker/version-checker';
 import { ENVIRONMENT } from '@app/environment';
 import { pushError } from '@app/observability';
-import { Alert, Box, Button, CopyButton, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Alert, BoxNew, Button, CopyButton, Heading, HStack, VStack } from '@navikt/ds-react';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 interface Props {
@@ -42,13 +42,13 @@ export class AppErrorBoundary extends Component<Props, State> {
       const copyText = `${versionText}\n\n${this.state.error.message}\n\n${this.state.error.stack}`;
 
       return (
-        <Box
+        <BoxNew
           as="section"
-          background="bg-default"
+          background="default"
           padding="4"
           width="fit-content"
           overflowY="auto"
-          shadow="medium"
+          shadow="dialog"
           marginBlock="8"
           marginInline="auto"
           className={className}
@@ -80,7 +80,7 @@ export class AppErrorBoundary extends Component<Props, State> {
               <CopyButton copyText={copyText} text="Kopier feilmeldingen" variant="action" />
             </HStack>
           </VStack>
-        </Box>
+        </BoxNew>
       );
     }
 
@@ -93,16 +93,16 @@ interface CodeProps {
 }
 
 const Code = ({ children }: CodeProps) => (
-  <Box
+  <BoxNew
     as="code"
-    background="bg-subtle"
+    background="neutral-soft"
     borderWidth="1"
-    borderColor="border-divider"
+    borderColor="neutral"
     borderRadius="medium"
     paddingInline="1"
   >
     {children}
-  </Box>
+  </BoxNew>
 );
 
 interface CodeBlockProps {
@@ -110,15 +110,15 @@ interface CodeBlockProps {
 }
 
 const CodeBlock = ({ children }: CodeBlockProps) => (
-  <Box
+  <BoxNew
     as="code"
-    background="bg-subtle"
+    background="neutral-soft"
     borderWidth="1"
-    borderColor="border-divider"
+    borderColor="neutral"
     borderRadius="medium"
     padding="4"
     className="wrap-break-word block whitespace-pre-wrap"
   >
     {children}
-  </Box>
+  </BoxNew>
 );

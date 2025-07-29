@@ -71,7 +71,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
         <SectionContainer
           data-element={element.type}
           data-section={element.section}
-          $sectionType={SectionTypeEnum.MALTEKST}
+          sectionType={SectionTypeEnum.MALTEKST}
         >
           <Loader title="Laster..." />
         </SectionContainer>
@@ -102,7 +102,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
       <SectionContainer
         data-element={element.type}
         data-section={element.section}
-        $sectionType={SectionTypeEnum.MALTEKST}
+        sectionType={SectionTypeEnum.MALTEKST}
         onDragStart={(event) => event.preventDefault()}
         onDrop={(event) => {
           event.preventDefault();

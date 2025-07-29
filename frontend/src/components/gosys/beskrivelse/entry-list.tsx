@@ -1,31 +1,23 @@
 import { Entry } from '@app/components/gosys/beskrivelse/entry';
 import type { GosysBeskrivelseEntry } from '@app/components/gosys/beskrivelse/parsing/type';
-import { StyledEntryList } from '@app/components/gosys/beskrivelse/styled-entry-list';
-import { styled } from 'styled-components';
+import { BoxNew, VStack } from '@navikt/ds-react';
 
 interface Props {
   entries: GosysBeskrivelseEntry[];
 }
 
 export const EntryList = ({ entries }: Props) => (
-  <StyledEntryList $marginTop>
+  <VStack as="ul" gap="2" marginBlock="2 0">
     {entries.map((entry) => (
-      <Container key={entry.id}>
+      <BoxNew
+        as="li"
+        key={entry.id}
+        padding="2"
+        borderRadius="medium"
+        className="odd:bg-ax-bg-sunken even:bg-ax-bg-neutral-soft"
+      >
         <Entry {...entry} />
-      </Container>
+      </BoxNew>
     ))}
-  </StyledEntryList>
+  </VStack>
 );
-
-const Container = styled.li`
-  padding: var(--a-spacing-2);
-  border-radius: var(--a-border-radius-medium);
-
-  &:nth-child(odd) {
-    background-color: var(--a-surface-subtle);
-  }
-
-  &:nth-child(even) {
-    background-color: var(--a-surface-active);
-  }
-`;

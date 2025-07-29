@@ -1,48 +1,4 @@
-import { Box, HStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
-
-export const ValidationSummaryContainer = styled.article`
-  margin: 0;
-  margin-top: 10px;
-  padding: 0;
-`;
-
-export const StyledFieldList = styled.ul`
-  margin: 0;
-  padding: 0;
-  padding-left: 1em;
-`;
-
-export const SectionTitle = styled.h1`
-  margin: 0;
-  font-size: 18px;
-`;
-
-export const StyledSection = styled.section`
-  margin-top: 10px;
-`;
-
-export const StyledPopup = styled.div`
-  position: absolute;
-  width: 400px;
-  bottom: 100%;
-  right: 0;
-  margin-bottom: var(--a-spacing-2);
-`;
-
-export const StyledButton = styled.button`
-  background-color: transparent;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-`;
-
-export const StyledIconButton = styled(StyledButton)`
-  position: absolute;
-  right: 0;
-  padding: var(--a-spacing-4);
-`;
+import { BoxNew, type BoxNewProps, HStack } from '@navikt/ds-react';
 
 export enum FooterType {
   FINISHED = 0,
@@ -54,35 +10,35 @@ export enum FooterType {
 const getBorderColor = (type: FooterType) => {
   switch (type) {
     case FooterType.FINISHED:
-      return 'border-success';
+      return 'success';
     case FooterType.UNFINISHED_NO_ERRORS:
-      return 'border-info';
+      return 'info';
     case FooterType.UNFINISHED_WITH_ERRORS:
-      return 'border-warning';
+      return 'warning';
     case FooterType.SATT_PAA_VENT:
-      return 'border-default';
+      return 'neutral';
   }
 };
 
-const getBackgroundColor = (type: FooterType) => {
+const getBackgroundColor = (type: FooterType): BoxNewProps['background'] => {
   switch (type) {
     case FooterType.FINISHED:
-      return 'surface-success-subtle';
+      return 'success-moderate';
     case FooterType.UNFINISHED_NO_ERRORS:
-      return 'surface-info-subtle';
+      return 'info-moderate';
     case FooterType.UNFINISHED_WITH_ERRORS:
-      return 'surface-warning-subtle';
+      return 'warning-moderate';
     case FooterType.SATT_PAA_VENT:
-      return 'bg-subtle';
+      return 'neutral-moderate';
   }
 };
 
 interface StyledFooterProps {
-  $type: FooterType;
+  type: FooterType;
   children?: React.ReactNode;
 }
 
-export const StyledFooter = ({ $type, children }: StyledFooterProps) => (
+export const StyledFooter = ({ type, children }: StyledFooterProps) => (
   <HStack
     asChild
     position="sticky"
@@ -96,8 +52,8 @@ export const StyledFooter = ({ $type, children }: StyledFooterProps) => (
     width="100%"
     className="z-23"
   >
-    <Box background={getBackgroundColor($type)} borderWidth="1 0 0 0" borderColor={getBorderColor($type)}>
+    <BoxNew background={getBackgroundColor(type)} borderWidth="1 0 0 0" borderColor={getBorderColor(type)}>
       {children}
-    </Box>
+    </BoxNew>
   </HStack>
 );

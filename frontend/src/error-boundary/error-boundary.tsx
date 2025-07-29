@@ -1,7 +1,6 @@
 import { pushError } from '@app/observability';
-import { Button, type ButtonProps } from '@navikt/ds-react';
-import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { styled } from 'styled-components';
+import { BoxNew, Button, type ButtonProps } from '@navikt/ds-react';
+import { Component, type ErrorInfo, type FragmentProps, type ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -35,7 +34,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
     if (this.state.error !== null) {
       return (
-        <ErrorContainer className={className}>
+        <BoxNew className={className} background="default" width="100%" padding="4" overflowY="auto" shadow="dialog">
           <h1>Ooops, noe gikk galt :(</h1>
           {errorComponent(this.state.error)}
           {typeof actionButton === 'undefined' ? null : (
@@ -50,8 +49,16 @@ export class ErrorBoundary extends Component<Props, State> {
             />
           )}
           <h2>Feilmelding</h2>
-          <StyledErrorMessage>{this.state.error.message}</StyledErrorMessage>
-        </ErrorContainer>
+          <BoxNew
+            as="code"
+            padding="4"
+            borderRadius="medium"
+            marginBlock="0 4"
+            className="whitespace-pre-wrap break-words"
+          >
+            {this.state.error.message}
+          </BoxNew>
+        </BoxNew>
       );
     }
 
@@ -71,40 +78,23 @@ const ActionButton = ({ buttonText, buttonIcon, ...rest }: ActionButtonProps) =>
   </Button>
 );
 
-const ErrorContainer = styled.section`
-  display: block;
-  width: 100%;
-  background-color: var(--a-bg-default);
-  padding: var(--a-spacing-4);
-  overflow-y: auto;
-  box-shadow: var(--a-shadow-medium);
-`;
+export const StyledDescriptionTerm = ({ children }: FragmentProps) => (
+  <BoxNew as="dt" marginBlock="4 0" className="font-bold">
+    {children}
+  </BoxNew>
+);
 
-export const StyledDescriptionTerm = styled.dt`
-  font-weight: bold;
-  margin-top: var(--a-spacing-4);
-`;
-
-export const StyledPreDescriptionDetails = styled.dd`
-  display: block;
-  padding: var(--a-spacing-2);
-  background-color: var(--a-surface-subtle);
-  border: 1px solid var(--a-border-divider);
-  border-radius: var(--a-border-radius-medium);
-  margin-left: 0;
-  margin-top: var(--a-spacing-1);
-  white-space: pre-wrap;
-  word-break: break-all;
-`;
-
-const StyledErrorMessage = styled.code`
-  display: block;
-  padding: var(--a-spacing-4);
-  background-color: var(--a-surface-subtle);
-  border: 1px solid var(--a-border-divider);
-  border-radius: var(--a-border-radius-medium);
-  margin-bottom: var(--a-spacing-4);
-  white-space: pre-wrap;
-  word-break: normal;
-  overflow-wrap: break-word;
-`;
+export const StyledPreDescriptionDetails = ({ children }: FragmentProps) => (
+  <BoxNew
+    as="dd"
+    marginBlock="1 0"
+    padding="4"
+    borderRadius="medium"
+    background="neutral-moderate"
+    borderColor="neutral"
+    borderWidth="1"
+    className="whitespace-pre-wrap break-all text-ax-text-neutral"
+  >
+    {children}
+  </BoxNew>
+);

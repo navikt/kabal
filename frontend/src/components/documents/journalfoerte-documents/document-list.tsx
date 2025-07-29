@@ -9,7 +9,7 @@ import { setShowVedlegg } from '@app/components/documents/journalfoerte-document
 import { VedleggList } from '@app/components/documents/journalfoerte-documents/vedlegg-list';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { Box, Loader } from '@navikt/ds-react';
+import { BoxNew, Loader } from '@navikt/ds-react';
 import { StyledDocumentList } from '../styled-components/document-list';
 import { Document } from './document/document';
 
@@ -54,7 +54,7 @@ export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onSc
     const selected = isPathSelected(index);
 
     list.push(
-      <Box
+      <BoxNew
         as="li"
         data-testid="oppgavebehandling-documents-all-list-item"
         data-documentname={tittel}
@@ -120,7 +120,7 @@ export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onSc
         {showVedlegg ? (
           <VedleggList list={vedleggList} minTop={minTop} maxTop={maxTop} dokument={dokument} documentIndex={index} />
         ) : null}
-      </Box>,
+      </BoxNew>,
     );
   }
 

@@ -1,39 +1,22 @@
-import { Skeleton, VStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { BoxNew, Skeleton, VStack } from '@navikt/ds-react';
 
 export const SkeletonThread = () => (
-  <StyledThread>
-    <VStack gap="1 0">
-      <Skeleton variant="text" height={21} width="50%" />
-      <Skeleton variant="text" height={19} width={115} />
-      <Skeleton variant="text" height={21} width="80%" />
+  <BoxNew
+    asChild
+    background="default"
+    borderWidth="1"
+    borderColor="neutral-subtle"
+    borderRadius="medium"
+    className="select-none snap-start opacity-50 transition-shadow duration-200 ease-in-out hover:shadow-ax-dialog"
+  >
+    <VStack as="section" gap="4" marginInline="3" padding="4">
+      <VStack gap="1 0">
+        <Skeleton variant="text" height={21} width="50%" />
+        <Skeleton variant="text" height={19} width={115} />
+        <Skeleton variant="text" height={21} width="80%" />
+      </VStack>
+
+      <Skeleton variant="text" height={21} width={40} className="self-end" />
     </VStack>
-    <RightSkeleton variant="text" height={21} width={40} />
-  </StyledThread>
+  </BoxNew>
 );
-
-const StyledThread = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-4);
-  background-color: var(--a-bg-default);
-  padding: var(--a-spacing-4);
-  border: 1px solid #c9c9c9;
-  border-radius: var(--a-border-radius-medium);
-  margin-left: var(--a-spacing-3);
-  margin-right: var(--a-spacing-3);
-  user-select: none;
-  opacity: 0.5;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-in-out;
-  transition-property: box-shadow;
-  scroll-snap-align: start;
-
-  &:hover {
-    box-shadow: var(--a-shadow-medium);
-  }
-`;
-
-const RightSkeleton = styled(Skeleton)`
-  align-self: flex-end;
-`;

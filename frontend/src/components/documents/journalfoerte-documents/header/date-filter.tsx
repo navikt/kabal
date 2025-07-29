@@ -1,25 +1,13 @@
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
 import type { DateRangeSetting } from '@app/hooks/settings/use-setting';
-import { Button } from '@navikt/ds-react';
 import { formatISO, parseISO } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
-import { styled } from 'styled-components';
 import type { Fields } from '../grid';
 
 interface Props extends DateRangeSetting {
   label: string;
   gridArea: Fields;
 }
-
-const StyledButton = styled(Button)`
-  border: 1px solid var(--a-border-default);
-  height: var(--a-spacing-8);
-  font-weight: normal;
-
-  .navds-label {
-    font-size: var(--a-font-size-small);
-  }
-`;
 
 export const DateFilter = ({ value, setValue, remove, label, gridArea }: Props) => {
   const [fromDateString, toDateString] = value;
@@ -39,13 +27,6 @@ export const DateFilter = ({ value, setValue, remove, label, gridArea }: Props) 
   };
 
   return (
-    <DatePickerRange
-      onChange={onChange}
-      selected={{ from, to }}
-      buttonLabel={label}
-      gridArea={gridArea}
-      ButtonComponent={StyledButton}
-      neutral
-    />
+    <DatePickerRange onChange={onChange} selected={{ from, to }} buttonLabel={label} gridArea={gridArea} neutral />
   );
 };

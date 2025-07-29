@@ -1,7 +1,10 @@
 import { DateTime } from '@app/components/datetime/datetime';
 import { getTitle } from '@app/components/editable-title/editable-title';
+import { Container, Header, List, SidebarContainer } from '@app/components/maltekstseksjoner/maltekstseksjon/common';
+import { LoadTextListItem } from '@app/components/maltekstseksjoner/maltekstseksjon/list-item';
 import { MaltekstseksjonTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/texts';
 import { UnpublishMaltekstseksjonButton } from '@app/components/maltekstseksjoner/maltekstseksjon/unpublish-maltekstseksjon-button';
+import { TextListItem } from '@app/components/maltekstseksjoner/text-list-item';
 import { DuplicateSectionButton } from '@app/components/smart-editor-texts/duplicate-section-button';
 import {
   TagContainer,
@@ -14,12 +17,9 @@ import { useCreateDraftFromVersionMutation } from '@app/redux-api/maltekstseksjo
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IPublishedMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { CalendarIcon, PlusIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, Label, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, Label, Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
 import { useParams } from 'react-router';
-import { TextListItem } from '../styled-components';
-import { Container, Header, List, SidebarContainer, StyledHeading } from './common';
-import { LoadTextListItem } from './list-item';
 
 interface MaltekstProps {
   maltekstseksjon: IPublishedMaltekstseksjon;
@@ -54,9 +54,9 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
   return (
     <Container>
       <Header>
-        <StyledHeading level="1" size="small" className="[grid-area:title]">
+        <Heading level="1" size="small" className="whitespace-nowrap [grid-area:title]">
           {getTitle(title)}
-        </StyledHeading>
+        </Heading>
 
         <HStack gap="2" align="center" className="[grid-area:metadata]">
           <HStack gap="1" align="center">
@@ -133,7 +133,7 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
       <SidebarContainer>
         <List>
           {textIdList.map((textId) => (
-            <TextListItem key={textId} $isActive={textId === activeTextId} $isDragging={false} data-dragovertext="">
+            <TextListItem key={textId} isActive={textId === activeTextId} isDragging={false}>
               <LoadTextListItem textId={textId} maltekstseksjon={maltekstseksjon} query={query} />
             </TextListItem>
           ))}

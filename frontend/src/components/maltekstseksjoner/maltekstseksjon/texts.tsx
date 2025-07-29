@@ -5,7 +5,6 @@ import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { DocPencilIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Tabs, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;
@@ -41,23 +40,13 @@ export const MaltekstseksjonTexts = ({ maltekstseksjon, query }: Props) => {
           <Tabs.Tab value={TabsEnum.EDIT} label="Redigering" icon={<DocPencilIcon aria-hidden />} />
           <Tabs.Tab value={TabsEnum.PREVIEW} label="Forhåndsvisning" icon={<MagnifyingGlassIcon aria-hidden />} />
         </Tabs.List>
-        <StyledTabPanel value={TabsEnum.PREVIEW}>
+        <Tabs.Panel value={TabsEnum.PREVIEW} className='flex flex-row overflow-y-auto data-[state="active"]:grow'>
           <MaltekstseksjonPreview maltekstseksjon={maltekstseksjon} />
-        </StyledTabPanel>
-        <StyledTabPanel value={TabsEnum.EDIT}>
+        </Tabs.Panel>
+        <Tabs.Panel value={TabsEnum.EDIT} className='flex flex-row overflow-y-auto data-[state="active"]:grow'>
           <TextList maltekstseksjon={maltekstseksjon} query={query} />
-        </StyledTabPanel>
+        </Tabs.Panel>
       </Tabs>
     </VStack>
   );
 };
-
-const StyledTabPanel = styled(Tabs.Panel)`
-  display: flex;
-  flex-direction: row;
-  overflow-y: auto;
-
-  &[data-state='active'] {
-    flex-grow: 1;
-  }
-`;

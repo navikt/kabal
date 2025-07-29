@@ -58,7 +58,6 @@ export const Vedtaket = () => {
         error={validationError}
         onChange={onChange}
         id={VEDTAKET_ID}
-        size="small"
       >
         <HStack gap="4" width="100%">
           <Radio value={Radiovalg.BRA} disabled={!canEdit}>

@@ -2,7 +2,7 @@ import { MAX, MIN, STEP, USER_STEP } from '@app/components/settings/pdf-scale/co
 import { ScaleSelect } from '@app/components/settings/pdf-scale/scale-select';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack } from '@navikt/ds-react';
+import { BoxNew, Button, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 
 interface Props {
@@ -19,7 +19,7 @@ export const CustomScale = ({ scale, onChange }: Props) => {
   const scaleUp = () => onChange(snapUp(scale));
 
   return (
-    <Box asChild background="bg-default" padding="1" borderRadius="medium" marginBlock="0 2" marginInline="2">
+    <BoxNew asChild background="default" padding="1" borderRadius="medium" marginBlock="0 2" marginInline="2">
       <HStack align="center" justify="center" gap="2">
         <HStack align="center">
           <Button icon={<MinusIcon aria-hidden />} size="xsmall" variant="tertiary-neutral" onClick={scaleDown} />
@@ -49,7 +49,7 @@ export const CustomScale = ({ scale, onChange }: Props) => {
           ) : null}
         </div>
       </HStack>
-    </Box>
+    </BoxNew>
   );
 };
 

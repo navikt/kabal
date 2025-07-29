@@ -7,10 +7,9 @@ import {
 } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocumentOrAttachment, ISmartDocumentVersion } from '@app/types/documents/documents';
 import { ChevronRightIcon, ClockDashedIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, Heading, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   oppgaveId: string;
@@ -30,15 +29,9 @@ export const History = ({ smartDocument, oppgaveId }: Props) => {
           </Heading>
         </HStack>
         <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
-          <Box
-            as="ul"
-            shadow="xlarge"
-            borderRadius="medium"
-            background="surface-default"
-            style={{ whiteSpace: 'nowrap' }}
-          >
+          <BoxNew as="ul" shadow="dialog" borderRadius="medium" background="default" style={{ whiteSpace: 'nowrap' }}>
             <Loader />
-          </Box>
+          </BoxNew>
         </VStack>
       </VStack>
     );
@@ -53,15 +46,9 @@ export const History = ({ smartDocument, oppgaveId }: Props) => {
           </Heading>
         </HStack>
         <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
-          <Box
-            as="ul"
-            shadow="xlarge"
-            borderRadius="medium"
-            background="surface-default"
-            style={{ whiteSpace: 'nowrap' }}
-          >
+          <BoxNew as="ul" shadow="dialog" borderRadius="medium" background="default" style={{ whiteSpace: 'nowrap' }}>
             <li>Ingen versioner</li>
-          </Box>
+          </BoxNew>
         </VStack>
       </VStack>
     );
@@ -95,13 +82,7 @@ const LoadedHistory = ({ versions, smartDocument, oppgaveId }: LoadedHistoryProp
           </Heading>
         </HStack>
         <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
-          <Box
-            as="ul"
-            shadow="xlarge"
-            borderRadius="medium"
-            background="surface-default"
-            style={{ whiteSpace: 'nowrap' }}
-          >
+          <BoxNew as="ul" shadow="dialog" borderRadius="medium" background="default" style={{ whiteSpace: 'nowrap' }}>
             {versions.map((v) => (
               <HistoryItem
                 key={v.version}
@@ -110,7 +91,7 @@ const LoadedHistory = ({ versions, smartDocument, oppgaveId }: LoadedHistoryProp
                 isActive={v.version === selectedVersion}
               />
             ))}
-          </Box>
+          </BoxNew>
         </VStack>
       </VStack>
 
@@ -132,36 +113,20 @@ const HistoryItem = ({ documentVersion, isActive, setSelectedVersion }: HistoryI
 
   return (
     <li>
-      <StyledButton
+      <Button
         variant={isActive ? 'tertiary' : 'tertiary-neutral'}
         onClick={() => setSelectedVersion(version)}
         size="xsmall"
         iconPosition="right"
         icon={<ChevronRightIcon aria-hidden />}
+        className="flex w-full justify-between p-2 text-left"
       >
         <Tag variant="alt3" size="xsmall">
           <ClockDashedIcon aria-hidden /> Versjon: {version}
         </Tag>
-        <StyledHistoryItemAuthor>{formatEmployeeNameAndIdFallback(author, 'Ukjent forfatter')}</StyledHistoryItemAuthor>
-        <StyledHistoryItemTimestamp>{isoDateTimeToPretty(timestamp)}</StyledHistoryItemTimestamp>
-      </StyledButton>
+        <div className="font-bold">{formatEmployeeNameAndIdFallback(author, 'Ukjent forfatter')}</div>
+        <div className="text-ax-small italic">{isoDateTimeToPretty(timestamp)}</div>
+      </Button>
     </li>
   );
 };
-
-const StyledButton = styled(Button)`
-  display: flex;
-  justify-content: space-between;
-  text-align: left;
-  width: 100%;
-  padding: var(--a-spacing-2);
-`;
-
-const StyledHistoryItemAuthor = styled.div`
-  font-weight: bold;
-`;
-
-const StyledHistoryItemTimestamp = styled.div`
-  font-size: var(--a-font-size-small);
-  font-style: italic;
-`;

@@ -2,12 +2,12 @@ import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
-import { ptToEm, pxToEm } from '@app/plate/components/get-scaled-em';
+import { pxToEm } from '@app/plate/components/get-scaled-em';
 import { MedunderskriverSignature, SaksbehandlerSignature } from '@app/plate/components/signature/individual-signature';
 import type { SignatureElement } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { HStack } from '@navikt/ds-react';
+import { BoxNew, HStack } from '@navikt/ds-react';
 import { useEditorReadOnly } from '@platejs/core/react';
 import type { SetNodesOptions } from 'platejs';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
@@ -60,7 +60,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
     <PlateElement<SignatureElement> {...props} attributes={{ ...props.attributes, contentEditable: false }}>
       <SectionContainer
         data-element={element.type}
-        $sectionType={SectionTypeEnum.SIGNATURE}
+        sectionType={SectionTypeEnum.SIGNATURE}
         onDragStart={(event) => event.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
@@ -68,74 +68,76 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
         }}
       >
         {hideAll || !hasWriteAccess ? null : (
-          <HStack
-            marginInline="auto"
-            wrap
-            justify="center"
-            className="select-none self-center whitespace-nowrap rounded-medium border-dashed"
+          <BoxNew
+            asChild
+            borderRadius="medium"
+            className="border-dashed"
+            borderColor="neutral"
             style={{
               marginTop: pxToEm(16),
               marginBottom: pxToEm(8),
-              borderWidth: ptToEm(2),
               padding: pxToEm(8),
               gap: pxToEm(8),
+              borderWidth: pxToEm(2),
             }}
           >
-            {showEnableCheckbox ? (
-              <Checkbox
-                disabled={isReadOnly}
-                checked={element.enabled}
-                onChange={(enabled) => setSignatureProp({ enabled })}
-              >
-                Inkluder signatur
-              </Checkbox>
-            ) : null}
+            <HStack marginInline="auto" wrap justify="center" className="select-none self-center whitespace-nowrap">
+              {showEnableCheckbox ? (
+                <Checkbox
+                  disabled={isReadOnly}
+                  checked={element.enabled}
+                  onChange={(enabled) => setSignatureProp({ enabled })}
+                >
+                  Inkluder signatur
+                </Checkbox>
+              ) : null}
 
-            {showForkortedeNavnCheckbox ? (
-              <Checkbox
-                disabled={disabledCheckbox}
-                checked={element.useShortName}
-                onChange={(useShortName) => setSignatureProp({ useShortName })}
-              >
-                Bruk forkortede navn
-              </Checkbox>
-            ) : null}
+              {showForkortedeNavnCheckbox ? (
+                <Checkbox
+                  disabled={disabledCheckbox}
+                  checked={element.useShortName}
+                  onChange={(useShortName) => setSignatureProp({ useShortName })}
+                >
+                  Bruk forkortede navn
+                </Checkbox>
+              ) : null}
 
-            {showMedunderskriverCheckbox ? (
-              <Checkbox
-                disabled={disabledCheckbox}
-                checked={element.includeMedunderskriver}
-                onChange={(includeMedunderskriver) => setSignatureProp({ includeMedunderskriver })}
-              >
-                Inkluder medunderskriver
-              </Checkbox>
-            ) : null}
+              {showMedunderskriverCheckbox ? (
+                <Checkbox
+                  disabled={disabledCheckbox}
+                  checked={element.includeMedunderskriver}
+                  onChange={(includeMedunderskriver) => setSignatureProp({ includeMedunderskriver })}
+                >
+                  Inkluder medunderskriver
+                </Checkbox>
+              ) : null}
 
-            {showSuffixCheckbox ? (
-              <Checkbox
-                disabled={disabledCheckbox || signature?.anonymous === true}
-                checked={element.useSuffix}
-                onChange={(useSuffix) => setSignatureProp({ useSuffix })}
-              >
-                Bruk «/saksbehandler»-tittel
-              </Checkbox>
-            ) : null}
+              {showSuffixCheckbox ? (
+                <Checkbox
+                  disabled={disabledCheckbox || signature?.anonymous === true}
+                  checked={element.useSuffix}
+                  onChange={(useSuffix) => setSignatureProp({ useSuffix })}
+                >
+                  Bruk «/saksbehandler»-tittel
+                </Checkbox>
+              ) : null}
 
-            {showUseMyNameCheckbox ? (
-              <Checkbox
-                disabled={
-                  disabledCheckbox ||
-                  (user.navIdent === creator && (overriddenWithSelf || element.overriddenSaksbehandler === undefined))
-                }
-                checked={
-                  overriddenWithSelf || (user.navIdent === creator && element.overriddenSaksbehandler === undefined)
-                }
-                onChange={(checked) => setOverriddenSaksbehandler(checked ? user.navIdent : undefined)}
-              >
-                Signer med mitt navn
-              </Checkbox>
-            ) : null}
-          </HStack>
+              {showUseMyNameCheckbox ? (
+                <Checkbox
+                  disabled={
+                    disabledCheckbox ||
+                    (user.navIdent === creator && (overriddenWithSelf || element.overriddenSaksbehandler === undefined))
+                  }
+                  checked={
+                    overriddenWithSelf || (user.navIdent === creator && element.overriddenSaksbehandler === undefined)
+                  }
+                  onChange={(checked) => setOverriddenSaksbehandler(checked ? user.navIdent : undefined)}
+                >
+                  Signer med mitt navn
+                </Checkbox>
+              ) : null}
+            </HStack>
+          </BoxNew>
         )}
 
         <HStack justify="space-between" wrap={false} marginBlock="4">
