@@ -13,17 +13,16 @@ import type { DocumentAccess } from '@app/hooks/dua-access/use-document-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import {
-  DISTRIBUTION_TYPE_NAMES,
   DistribusjonsType,
   DocumentTypeEnum,
   type IDocument,
   type IFileDocument,
   type IParentDocument,
 } from '@app/types/documents/documents';
-import { HGrid, Tag } from '@navikt/ds-react';
+import { HGrid } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useCallback, useContext, useRef, useState } from 'react';
-import { SetDocumentType } from './set-type';
+import { DocumentTypeTag, SetDocumentType } from './set-type';
 import { DocumentTitle } from './title';
 
 interface Props {
@@ -101,9 +100,7 @@ export const NewDocument = memo(
         {access.changeType === DocumentAccessEnum.ALLOWED ? (
           <SetDocumentType document={document} />
         ) : (
-          <Tag variant="info" size="small">
-            {DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId]}
-          </Tag>
+          <DocumentTypeTag dokumentTypeId={document.dokumentTypeId} />
         )}
 
         {document.isMarkertAvsluttet ? (
