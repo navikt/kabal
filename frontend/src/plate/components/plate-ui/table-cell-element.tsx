@@ -1,15 +1,13 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
-import { useMyPlateEditorRef } from '@app/plate/types';
+import { MAX_WIDTH } from '@app/plate/toolbar/table/with-overrides';
 import { type ResizeEvent, ResizeHandle } from '@platejs/resizable';
-import { setTableColSize } from '@platejs/table';
-import { TablePlugin, useTableCellElement, useTableCellElementResizable } from '@platejs/table/react';
+import { TablePlugin, useTableCellElement, useTableCellElementResizable, useTableColSizes } from '@platejs/table/react';
 import { PlateElement, useEditorPlugin, useReadOnly, withRef } from 'platejs/react';
-import type { MouseEvent } from 'react';
-import { useCallback, useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 
-const BASE_CLASSES = 'min-w-12 relative align-top ';
+const BASE_CLASSES = 'relative align-top ';
 const REMOVE_P_PLACEHOLDER = "[&>p::before]:content-['']";
 const REMOVE_P_MARGIN_TOP = '[&>*:first-child]:mt-0!';
 const ALL_CLASSES = `${BASE_CLASSES} ${REMOVE_P_PLACEHOLDER} ${REMOVE_P_MARGIN_TOP}`;
@@ -23,12 +21,13 @@ export const TableCellElement = withRef<typeof PlateElement>(({ children, classN
     rowSpan: api.table.getRowSpan(props.element),
   };
 
-  const style = {
+  const style: React.CSSProperties = {
     ...props.style,
     width,
     minHeight,
     padding: PADDING,
     border: `${ptToEm(1.25)} solid var(--a-border-default)`,
+    wordBreak: 'break-all',
   };
 
   return (
@@ -44,16 +43,11 @@ const Resize = () => {
   const readOnly = useReadOnly();
   const { colIndex, isSelectingCell, ...state } = useTableCellElement();
   const { rightProps } = useTableCellElementResizable({ colIndex, ...state });
-  const editor = useMyPlateEditorRef();
+  const colSizes = useTableColSizes();
 
-  const onDblClick = useCallback(
-    (e: MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setTableColSize(editor, { colIndex, width: 0 });
-    },
-    [colIndex, editor],
-  );
+  const scaleFactor = useMemo(() => scale / 100, [scale]);
+  const scaledColSizes = useMemo(() => colSizes.map((size) => size * scaleFactor), [colSizes, scaleFactor]);
+  const scaledMaxWidth = useMemo(() => MAX_WIDTH * scaleFactor, [scaleFactor]);
 
   if (isSelectingCell || readOnly) {
     return null;
@@ -64,25 +58,28 @@ const Resize = () => {
   const scaledOptions = {
     ...options,
     onResize: (e: ResizeEvent) => {
-      const scaleFactor = scale / 100;
+      const delta = Math.round(e.delta * scaleFactor);
+      const initialSize = Math.round(e.initialSize * scaleFactor);
 
-      return options?.onResize?.({
-        ...e,
-        initialSize: Math.round(e.initialSize / scaleFactor),
-        delta: Math.round(e.delta / scaleFactor),
-      });
+      const nextCol = scaledColSizes[colIndex + 1];
+
+      // Last column
+      if (nextCol === undefined) {
+        const rest = scaledColSizes.filter((_, i) => i !== colIndex);
+        const widthOfRest = rest.reduce((a, b) => a + b, 0);
+        const totalSize = widthOfRest + delta + initialSize;
+
+        // Attempted to be resized outside bounds
+        if (totalSize >= scaledMaxWidth && delta > 0) {
+          return options?.onResize?.({ ...e, initialSize: 0, delta: scaledMaxWidth - widthOfRest });
+        }
+      }
+
+      return options?.onResize?.({ ...e, initialSize, delta });
     },
   };
 
-  return (
-    <StyledRightHandle
-      contentEditable={false}
-      suppressContentEditableWarning
-      onDoubleClick={onDblClick}
-      {...rest}
-      options={scaledOptions}
-    />
-  );
+  return <StyledRightHandle contentEditable={false} suppressContentEditableWarning {...rest} options={scaledOptions} />;
 };
 
 const PADDING = ptToEm(6);

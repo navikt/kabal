@@ -16,6 +16,7 @@ import {
 import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@app/plate/plugins/fullmektig';
 import { LabelContentPlugin } from '@app/plate/plugins/label-content';
 import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
+import { MAX_WIDTH } from '@app/plate/toolbar/table/with-overrides';
 import {
   type BulletListElement,
   type CurrentDateElement,
@@ -191,6 +192,7 @@ export const createTableCell = (text = ''): TableCellElement => ({
 export const createTable = (rows: number, columns: number): TableElement => ({
   type: BaseTablePlugin.key,
   children: Array.from({ length: rows }, () => createTableRow(Array.from({ length: columns }, createTableCell))),
+  colSizes: Array.from({ length: columns }, () => Math.floor(MAX_WIDTH / columns)),
 });
 
 export const createPlaceHolder = (

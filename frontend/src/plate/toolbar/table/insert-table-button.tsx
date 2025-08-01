@@ -267,7 +267,7 @@ const BackgroundGrid = memo(() => (
 
 const MIN_COLUMNS = 4;
 const MIN_ROWS = 4;
-const MAX_COLUMNS_COUNT = 12;
+export const MAX_COLUMNS_COUNT = 12;
 const MAX_ROWS_COUNT = 16;
 const COLUMNS = Array.from({ length: MAX_COLUMNS_COUNT }).map((_, i) => i);
 const ROWS = Array.from({ length: MAX_ROWS_COUNT }).map((_, i) => i);

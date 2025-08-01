@@ -11,6 +11,7 @@ import { PageBreakPlugin } from '@app/plate/plugins/page-break';
 import { PastePlugin } from '@app/plate/plugins/paste';
 import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { SelectionPlugin } from '@app/plate/plugins/selection';
+import { withOverrides } from '@app/plate/toolbar/table/with-overrides';
 import { AutoformatPlugin } from '@platejs/autoformat';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BoldPlugin, HeadingPlugin, ItalicPlugin, UnderlinePlugin } from '@platejs/basic-nodes/react';
@@ -49,7 +50,9 @@ export const defaultPlugins = [
   BoldPlugin.configure({ render: { node: BoldLeaf } }),
   ItalicPlugin.configure({ render: { node: ItalicLeaf } }),
   UnderlinePlugin.configure({ render: { node: UnderlineLeaf } }),
-  TablePlugin.configure({ options: { disableMarginLeft: true } }).withComponent(TableElement),
+  TablePlugin.configure({ options: { disableMarginLeft: true } })
+    .withComponent(TableElement)
+    .overrideEditor(withOverrides),
   TableCellPlugin.withComponent(TableCellElement),
   TableRowPlugin.withComponent(TableRowElement),
   ListPlugin,

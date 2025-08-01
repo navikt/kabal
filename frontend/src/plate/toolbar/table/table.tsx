@@ -10,11 +10,18 @@ import { DeleteColumnIcon } from '@app/plate/toolbar/table/icons/delete-column';
 import { DeleteRowIcon } from '@app/plate/toolbar/table/icons/delete-row';
 import { MergeCellsIcon } from '@app/plate/toolbar/table/icons/merge-cells';
 import { SplitCellsIcon } from '@app/plate/toolbar/table/icons/split-cells';
+import { MAX_WIDTH } from '@app/plate/toolbar/table/with-overrides';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { useMyPlateEditorRef } from '@app/plate/types';
+import { type TableCellElement, type TableElement, useMyPlateEditorState } from '@app/plate/types';
 import { isOfElementTypeFn, nextPath } from '@app/plate/utils/queries';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { BaseTablePlugin, deleteTable, getTableGridAbove, isTableRectangular } from '@platejs/table';
+import {
+  BaseTableCellPlugin,
+  BaseTablePlugin,
+  deleteTable,
+  getTableGridAbove,
+  isTableRectangular,
+} from '@platejs/table';
 import { TablePlugin, TableProvider } from '@platejs/table/react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
 import { ElementApi } from 'platejs';
@@ -23,7 +30,9 @@ import { useEditorPlugin, useEditorSelector, usePluginOption, useReadOnly, withH
 export const TableButtons = withHOC(TableProvider, () => {
   const { tf } = useEditorPlugin(TablePlugin);
 
-  const editor = useMyPlateEditorRef();
+  const editor = useMyPlateEditorState();
+  console.log(editor.children);
+
   const unchangeable = useIsUnchangeable();
   const { canMerge, canSplit } = useTableMergeState();
 
@@ -36,6 +45,42 @@ export const TableButtons = withHOC(TableProvider, () => {
   if (activeNode === undefined) {
     return null;
   }
+
+  const insertColum = (before: boolean) => () => {
+    editor.tf.withoutNormalizing(() => {
+      const tableCellEntry = editor.api.node({ match: { type: BaseTableCellPlugin.node.type } });
+
+      if (tableCellEntry === undefined) {
+        return;
+      }
+
+      const [, path] = tableCellEntry;
+
+      const colNum = path.pop();
+
+      if (colNum === undefined) {
+        return;
+      }
+
+      tf.insert.tableColumn({ before, select: true });
+
+      const tableEntry = editor.api.node<TableElement>({ match: { type: BaseTablePlugin.node.type } });
+
+      if (tableEntry === undefined) {
+        return;
+      }
+
+      const [tableNode, tablePath] = tableEntry;
+
+      if (tableNode.colSizes === undefined) {
+        return;
+      }
+
+      const colSizes = adjustColSizes(tableNode.colSizes, colNum, before);
+
+      editor.tf.setNodes<TableCellElement>({ colSizes }, { at: tablePath });
+    });
+  };
 
   return (
     <>
@@ -54,14 +99,14 @@ export const TableButtons = withHOC(TableProvider, () => {
 
       <ToolbarIconButton
         label="Legg til kolonne til venstre"
-        onClick={() => tf.insert.tableColumn({ before: true })}
+        onClick={insertColum(true)}
         onMouseDown={(e) => e.preventDefault()}
         icon={<AddColumnLeftIcon aria-hidden />}
       />
 
       <ToolbarIconButton
         label="Legg til kolonne til høyre"
-        onClick={() => tf.insert.tableColumn({ before: false })}
+        onClick={insertColum(false)}
         onMouseDown={(e) => e.preventDefault()}
         icon={<AddColumnRightIcon aria-hidden />}
       />
@@ -191,4 +236,26 @@ export const useTableMergeState = () => {
     (api.table.getColSpan(firstCellEtnry) > 1 || api.table.getRowSpan(firstCellEtnry) > 1);
 
   return { canMerge, canSplit };
+};
+
+export const adjustColSizes = (colSizes: number[], colNum: number, before: boolean, maxWidth = MAX_WIDTH) => {
+  const totalWidth = colSizes.reduce((a, b) => a + b, 0);
+  const availableWidth = maxWidth - totalWidth;
+  const neighbourColSize = colSizes[colNum + (before ? 1 : 0)];
+
+  if (neighbourColSize === undefined) {
+    return colSizes;
+  }
+
+  if (neighbourColSize < availableWidth) {
+    return [
+      ...colSizes.slice(0, colNum + (before ? 0 : 1)),
+      neighbourColSize,
+      ...colSizes.slice(colNum + (before ? 1 : 2)),
+    ];
+  }
+
+  const colSize = Math.floor((availableWidth + neighbourColSize) / 2);
+
+  return [...colSizes.slice(0, colNum), colSize, colSize, ...colSizes.slice(colNum + 2)];
 };
