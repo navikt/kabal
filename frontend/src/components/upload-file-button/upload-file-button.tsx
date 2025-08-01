@@ -118,7 +118,7 @@ export const UploadFileButton = ({
           loading={isLoading}
           data-testid={`${dataTestId}-button`}
         >
-          {children}
+          {children === undefined ? null : <span className="font-normal">{children}</span>}
         </Button>
       </Tooltip>
     </>

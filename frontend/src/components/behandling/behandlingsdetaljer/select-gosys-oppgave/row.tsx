@@ -46,7 +46,7 @@ export const Row = ({ gosysOppgave, selectedGosysOppgave, oppgaveId, showFerdigs
       expandOnRowClick
       className={
         !selected && gosysOppgave.status === GosysStatus.FEILREGISTRERT
-          ? 'bg-surface-danger-subtle hover:bg-surface-danger-subtle-hover'
+          ? 'bg-ax-bg-danger-moderate hover:bg-ax-bg-danger-moderate-hover'
           : undefined
       }
     >

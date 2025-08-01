@@ -64,7 +64,7 @@ export const OppgaveTable = ({
   return (
     <Table {...rest} zebraStripes sort={sort} onSortChange={onSortChange}>
       <Table.Header data-testid={`${rest['data-testid']}-header`}>
-        <Table.Row>
+        <Table.Row className="whitespace-nowrap">
           <TableFilterHeaders
             tableKey={tableKey}
             columnKeys={columns}

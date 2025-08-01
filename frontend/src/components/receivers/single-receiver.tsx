@@ -26,7 +26,7 @@ export const SingleReceiver = ({ receiver, changeMottaker, templateId }: Props) 
         Mottaker fra saken
       </Label>
 
-      <StyledReceiver $accent="var(--a-border-success)">
+      <StyledReceiver accent="success">
         <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
           <HStack align="center" gap="1">
             <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>

@@ -9,8 +9,7 @@ import type { IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Label, Tag, Tooltip } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { BoxNew, Button, HStack, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
 
 interface Props {
   mottakerList: IMottaker[];
@@ -31,7 +30,7 @@ export const CustomReceivers = ({
   sendErrors,
   templateId,
 }: Props) => (
-  <section>
+  <VStack overflow="hidden">
     <Label size="small" htmlFor={EXTRA_RECEIVERS_ID}>
       Ekstra mottakere
     </Label>
@@ -50,7 +49,7 @@ export const CustomReceivers = ({
       sendErrors={sendErrors}
       templateId={templateId}
     />
-  </section>
+  </VStack>
 );
 
 interface ReceiversProps {
@@ -67,13 +66,13 @@ const Receivers = ({ mottakerList, removeMottakere, changeMottaker, sendErrors, 
   }
 
   return (
-    <StyledReceiverList>
+    <BoxNew as="ul" marginBlock="space-4 space-0" overflowY="auto" overflowX="hidden">
       {mottakerList.map(({ part, handling, overriddenAddress }) => {
         const error = sendErrors.find((e) => e.field === part.id)?.reason ?? null;
         const isPerson = part.type === IdType.FNR;
 
         return (
-          <StyledReceiver key={part.id} as="li" $accent="var(--a-border-success)">
+          <StyledReceiver key={part.id} as="li" accent="success">
             <HStack align="center" gap="1">
               <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
                 <HStack align="center" gap="1" paddingBlock="1">
@@ -112,13 +111,6 @@ const Receivers = ({ mottakerList, removeMottakere, changeMottaker, sendErrors, 
           </StyledReceiver>
         );
       })}
-    </StyledReceiverList>
+    </BoxNew>
   );
 };
-
-const StyledReceiverList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  margin-top: var(--a-spacing-1);
-`;

@@ -6,7 +6,7 @@ import { Role } from '@app/types/bruker';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, Radio, RadioGroup, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, HStack, Radio, RadioGroup, VStack } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Direction } from './direction';
@@ -74,7 +74,7 @@ export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direc
       className={`z-10 ${direction === Direction.UP ? 'bottom-full' : 'top-full'}`}
       data-testid="deassign-oppgave-popup"
     >
-      <Box background="bg-default" borderRadius="medium" shadow="medium" borderWidth="1" borderColor="border-divider">
+      <BoxNew background="default" borderRadius="medium" shadow="dialog" borderWidth="1" borderColor="neutral">
         <RadioGroup value={reasonId} onChange={setReasonId} legend="Årsak for å legge tilbake" size="small">
           <Radio value={FradelReason.FEIL_HJEMMEL}>{FradelReasonText[FradelReason.FEIL_HJEMMEL]}</Radio>
           <Radio value={FradelReason.MANGLER_KOMPETANSE}>{FradelReasonText[FradelReason.MANGLER_KOMPETANSE]}</Radio>
@@ -118,7 +118,7 @@ export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direc
             Legg tilbake
           </Button>
         </HStack>
-      </Box>
+      </BoxNew>
     </VStack>
   );
 };

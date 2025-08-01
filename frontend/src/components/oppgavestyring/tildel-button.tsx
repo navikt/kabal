@@ -5,7 +5,6 @@ import { Role } from '@app/types/bruker';
 import type { IOppgave } from '@app/types/oppgaver';
 import { Button } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { styled } from 'styled-components';
 import { useTildel } from './use-tildel';
 
 interface Props extends IOppgave {
@@ -48,7 +47,7 @@ export const TildelButton = ({
   const isLoading = isTildeling || isFradeling;
 
   return (
-    <StyledButton
+    <Button
       variant="secondary"
       size="small"
       loading={isLoading}
@@ -56,13 +55,9 @@ export const TildelButton = ({
       data-testid="behandling-tildel-button"
       data-klagebehandlingid={id}
       onClick={() => tildel({ navIdent, navn })}
+      className="whitespace-nowrap [grid-area:tildel]"
     >
       {children}
-    </StyledButton>
+    </Button>
   );
 };
-
-const StyledButton = styled(Button)`
-  grid-area: tildel;
-  white-space: nowrap;
-`;

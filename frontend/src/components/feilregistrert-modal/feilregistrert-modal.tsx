@@ -4,7 +4,6 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useFagsystemName } from '@app/hooks/use-fagsystem-name';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { BodyLong, BodyShort, Button, Heading, Loader, Modal } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 interface Props extends ContentProps {
   isOpen: boolean;
@@ -47,7 +46,9 @@ const Content = ({ close }: ContentProps) => {
         <Heading level="2" size="small" spacing>
           Årsak
         </Heading>
-        <StyledBodyLong spacing>{oppgave.feilregistrering.reason}</StyledBodyLong>
+        <BodyLong spacing className="border-ax-border-neutral-subtle border-l-6 pl-4">
+          {oppgave.feilregistrering.reason}
+        </BodyLong>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" size="small" icon={<XMarkIcon aria-hidden />} onClick={close}>
@@ -57,8 +58,3 @@ const Content = ({ close }: ContentProps) => {
     </>
   );
 };
-
-const StyledBodyLong = styled(BodyLong)`
-  border-left: 6px solid var(--a-border-subtle);
-  padding-left: 1rem;
-`;

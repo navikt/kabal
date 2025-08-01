@@ -1,14 +1,13 @@
-import { Box, type BoxProps, Fieldset, Heading, HStack, VStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { BoxNew, type BoxNewProps, Heading, HStack, VStack } from '@navikt/ds-react';
 
-type Props = Omit<BoxProps, 'asChild' | 'padding' | 'borderRadius' | 'shadow' | 'height'>;
+type Props = Omit<BoxNewProps, 'asChild' | 'padding' | 'borderRadius' | 'shadow' | 'height'>;
 
 export const SettingsSection = ({ children, ...rest }: Props) => (
-  <Box asChild padding="6" borderRadius="medium" shadow="medium" height="fit" {...rest}>
+  <BoxNew asChild padding="6" borderRadius="medium" shadow="dialog" height="fit" {...rest}>
     <VStack as="section" align="start">
       {children}
     </VStack>
-  </Box>
+  </BoxNew>
 );
 
 export const SectionHeader = ({ children }: { children: React.ReactNode }) => (
@@ -18,9 +17,3 @@ export const SectionHeader = ({ children }: { children: React.ReactNode }) => (
     </HStack>
   </Heading>
 );
-
-export const StyledFieldset = styled(Fieldset)`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 300px);
-  width: 100%;
-`;

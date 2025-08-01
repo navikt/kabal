@@ -1,9 +1,8 @@
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { Keys } from '@app/keys';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, Search } from '@navikt/ds-react';
+import { BoxNew, Button, HStack, Search } from '@navikt/ds-react';
 import { type KeyboardEventHandler, useRef } from 'react';
-import { styled } from 'styled-components';
 
 interface HeaderProps {
   focused: number;
@@ -76,7 +75,7 @@ export const Header = ({
 
   return (
     <HStack asChild justify="space-between" position="sticky" top="0" padding="2" wrap={false} className="z-1">
-      <Box borderWidth="0 0 1 0" borderColor="border-divider" background="bg-default">
+      <BoxNew borderWidth="0 0 1 0" borderColor="neutral" background="default">
         <Search
           onChange={onInputChange}
           defaultValue=""
@@ -91,16 +90,17 @@ export const Header = ({
           data-testid="header-filter"
         />
         {showFjernAlle && (
-          <StyledButton size="xsmall" variant="danger" onClick={onReset} icon={<TrashIcon aria-hidden />}>
+          <Button
+            size="xsmall"
+            variant="danger"
+            onClick={onReset}
+            icon={<TrashIcon aria-hidden />}
+            className="ml-2 shrink-0"
+          >
             Fjern alle
-          </StyledButton>
+          </Button>
         )}
-      </Box>
+      </BoxNew>
     </HStack>
   );
 };
-
-const StyledButton = styled(Button)`
-  margin-left: 0.5em;
-  flex-shrink: 0;
-`;

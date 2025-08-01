@@ -2,7 +2,6 @@ import { ModalContext } from '@app/components/documents/new-documents/modal/moda
 import { DocumentValidationErrorType } from '@app/types/documents/validation';
 import { Button, ErrorMessage, Heading, Label, List } from '@navikt/ds-react';
 import { useContext, useMemo } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   updatePdf: () => void;
@@ -27,12 +26,12 @@ export const Errors = ({ updatePdf }: Props) => {
   }
 
   return (
-    <Section>
+    <section className="mt-2">
       <Heading level="1" size="xsmall">
         Følgende feil må rettes
       </Heading>
 
-      <StyledOuterList>
+      <List>
         {validationErrors
           .filter((e) => e.errors.length > 0)
           .map((e) => (
@@ -47,7 +46,7 @@ export const Errors = ({ updatePdf }: Props) => {
               </List>
             </List.Item>
           ))}
-      </StyledOuterList>
+      </List>
 
       {hasFinishErrors ? (
         <Button
@@ -72,16 +71,6 @@ export const Errors = ({ updatePdf }: Props) => {
           Oppdater
         </Button>
       ) : null}
-    </Section>
+    </section>
   );
 };
-
-const StyledOuterList = styled(List)`
-  > ul {
-    margin-block-end: 0;
-  }
-`;
-
-const Section = styled.section`
-  margin-top: var(--a-spacing-2);
-`;

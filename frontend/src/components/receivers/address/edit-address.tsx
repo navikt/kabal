@@ -145,7 +145,7 @@ export const EditAddress = ({ address, overriddenAddress, onSave, onCancel }: Ed
   );
 
   return (
-    <Container $state={addressState} onKeyDown={onKeyDown}>
+    <Container state={addressState} onKeyDown={onKeyDown}>
       <AddressField
         id={LINE1_ID}
         label="Adresselinje 1"

@@ -7,7 +7,7 @@ import {
   InformationSquareIcon,
   PrinterSmallIcon,
 } from '@navikt/aksel-icons';
-import { CopyButton, Heading, VStack } from '@navikt/ds-react';
+import { type BoxNewProps, CopyButton, Heading, VStack } from '@navikt/ds-react';
 import { RelevantDateTimelineItem, TimelineItem } from './timeline-item';
 
 interface Props extends Pick<IArkivertDocument, 'utsendingsinfo' | 'kanal' | 'kanalnavn'> {
@@ -71,14 +71,14 @@ interface VarselInfoProps {
 }
 
 const OtherVarselInfo = ({ dato, kanal, kanalnavn, isLast }: VarselInfoProps) => {
-  const { icon: Icon, title, info, color } = getOtherVarselData(kanal);
+  const { icon: Icon, title, info, background: color } = getOtherVarselData(kanal);
 
   return (
     <TimelineItem
       timestamp={dato}
       title={title}
       icon={<BellIcon aria-hidden />}
-      color={color}
+      background={color}
       popover={{
         buttonText: 'Vis forklaring',
         content: (
@@ -92,35 +92,42 @@ const OtherVarselInfo = ({ dato, kanal, kanalnavn, isLast }: VarselInfoProps) =>
   );
 };
 
-const getOtherVarselData = (kanal: Kanal) => {
+interface VarselData {
+  icon: typeof EnvelopeClosedIcon;
+  title: string;
+  info: string;
+  background: BoxNewProps['background'];
+}
+
+const getOtherVarselData = (kanal: Kanal): VarselData => {
   switch (kanal) {
     case Kanal.SENTRAL_UTSKRIFT:
       return {
         icon: EnvelopeClosedIcon,
         title: 'Ingen varsling',
         info: 'Dokumentet er sendt til mottakers fysiske postkasse.',
-        color: 'var(--a-gray-50)',
+        background: 'neutral-soft',
       };
     case Kanal.LOKAL_UTSKRIFT:
       return {
         icon: PrinterSmallIcon,
         title: 'Ingen varsling',
         info: 'Dokumentet er skrevet ut lokalt.',
-        color: 'var(--a-gray-50)',
+        background: 'neutral-soft',
       };
     case Kanal.NAV_NO:
       return {
         icon: InformationSquareIcon,
         title: 'Info om varsling mangler',
         info: 'Ikke alle journalposter har informasjon om varsling. Nav jobber med å utvide dette.',
-        color: 'var(--a-gray-50)',
+        background: 'neutral-soft',
       };
     default:
       return {
         icon: FingerMobileIcon,
         title: 'Ekstern varsling',
         info: 'Dokumentet er sendt til brukeren via en ekstern tjeneste.',
-        color: 'var(--a-gray-50)',
+        background: 'neutral-soft',
       };
   }
 };

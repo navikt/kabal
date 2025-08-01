@@ -1,10 +1,10 @@
 import { formatLongDate, zeroPad } from '@app/domain/date';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import type { CurrentDateElement } from '@app/plate/types';
+import { BoxNew } from '@navikt/ds-react';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
-import { styled } from 'styled-components';
 
 type Props = PlateElementProps<CurrentDateElement>;
 
@@ -58,9 +58,23 @@ const RenderCurrentDate = memo<Props & DateParts>(
         }}
       >
         {children}
-        <CurrentDateContainer dateTime={isoDate} $isFocused={isSelected} contentEditable={false}>
+        <BoxNew
+          as="time"
+          dateTime={isoDate}
+          contentEditable={false}
+          width="100%"
+          borderRadius="medium"
+          background={isSelected ? 'neutral-soft' : undefined}
+          style={{
+            marginTop: '1em',
+            outlineWidth: ptToEm(6),
+            outlineStyle: 'solid',
+            outlineColor: isSelected ? 'var(--ax-bg-neutral-soft)' : 'transparent',
+          }}
+          className="block text-right transition-colors duration-200 ease-in-out"
+        >
           <span>Dato: {formatLongDate(year, month, day)}</span>
-        </CurrentDateContainer>
+        </BoxNew>
       </PlateElement>
     );
   },
@@ -69,18 +83,3 @@ const RenderCurrentDate = memo<Props & DateParts>(
 );
 
 RenderCurrentDate.displayName = 'RenderCurrentDate';
-
-const CurrentDateContainer = styled.time<{ $isFocused: boolean }>`
-  display: block;
-  text-align: right;
-  width: 100%;
-  border-radius: var(--a-spacing-05);
-  transition:
-    background-color 0.2s ease-in-out,
-    outline-color 0.2s ease-in-out;
-  background-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
-  outline-color: ${({ $isFocused }) => ($isFocused ? '#f5f5f5' : 'transparent')};
-  outline-style: solid;
-  outline-width: ${ptToEm(6)};
-  margin-top: 1em;
-`;

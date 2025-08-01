@@ -1,10 +1,3 @@
-import {
-  CenterLoader,
-  ModalBody,
-  PdfWithLoader,
-  StyledPDF,
-  StyledTime,
-} from '@app/components/svarbrev/modal/styled-components';
 import { usePdfUrl } from '@app/components/svarbrev/modal/use-pdf-url';
 import { Warning } from '@app/components/svarbrev/modal/warning';
 import { TimeInput } from '@app/components/svarbrev/time-input';
@@ -61,77 +54,90 @@ export const PdfModal = ({
     return null;
   }
 
+  const heading = getTitle(typeId);
+
   return (
     <Modal
-      header={{ heading: getTitle(typeId) }}
+      header={{ heading }}
       size="small"
       closeOnBackdropClick
-      width="0min(90vw, 1100px)"
       open={isOpen}
       onClose={close}
+      width="1100px"
+      className="max-w-[90vw]"
     >
-      <ModalBody>
-        <VStack gap="4">
-          <HStack align="center" gap="0 1" className="text-base italic">
-            <span>
-              Sist endret <Time dateTime={modified} /> av <User {...modifiedBy} />.
-            </span>
-            {hasChanges ? (
-              <Tag variant="warning" size="small">
-                Utkast
-              </Tag>
-            ) : (
-              <Tag variant="info" size="small">
-                Lagret
-              </Tag>
+      <VStack asChild gap="4" width="100%">
+        <Modal.Body>
+          <VStack gap="4">
+            <HStack align="center" gap="0 1" className="text-base italic">
+              <span>
+                Sist endret <Time dateTime={modified} /> av <User {...modifiedBy} />.
+              </span>
+              {hasChanges ? (
+                <Tag variant="warning" size="small">
+                  Utkast
+                </Tag>
+              ) : (
+                <Tag variant="info" size="small">
+                  Lagret
+                </Tag>
+              )}
+            </HStack>
+            <HStack align="center" gap="0 4">
+              <Switch size="small" checked={shouldSend} onChange={({ target }) => setShouldSend(target.checked)}>
+                Aktiv
+              </Switch>
+              <Tooltip content="Ytelse">
+                <span>{ytelseNameIsLoading ? 'Laster...' : (ytelseName ?? `Ukjent ytelse med ID «${ytelseId}»`)}</span>
+              </Tooltip>
+              <Tooltip content="Saksbehandlingstid">
+                <HStack align="center" gap="0 2">
+                  <TimeInput
+                    value={behandlingstidUnits}
+                    onChange={setBehandlingstidUnits}
+                    unit={behandlingstidUnitTypeId}
+                    setUnit={setBehandlingstidUnitTypeId}
+                  />
+                </HStack>
+              </Tooltip>
+              <Tooltip content="Tekst til svarbrev (valgfri)">
+                <div className="grow">
+                  <TextField
+                    size="small"
+                    label="Tekst (valgfri)"
+                    placeholder="Tekst til svarbrev (valgfri)"
+                    hideLabel
+                    value={customText ?? ''}
+                    onChange={({ target }) => setCustomText(target.value)}
+                  />
+                </div>
+              </Tooltip>
+            </HStack>
+          </VStack>
+
+          {hasChanges ? (
+            <Warning behandlingstidUnits={behandlingstidUnits} behandlingstidUnitTypeId={behandlingstidUnitTypeId} />
+          ) : null}
+
+          <div className="relative h-[1500px] max-h-[90vh] w-full">
+            <div className="-translate-1/2 absolute top-1/2 left-1/2 z-0">
+              <Loader size="3xlarge" />
+            </div>
+
+            {pdfUrl === null ? null : (
+              // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: PDF
+              <object
+                role="document"
+                type="application/pdf"
+                name="pdf-viewer"
+                data={pdfUrl}
+                className="absolute z-1 h-full w-full"
+                aria-label={heading}
+              />
             )}
-          </HStack>
-          <HStack align="center" gap="0 4">
-            <Switch size="small" checked={shouldSend} onChange={({ target }) => setShouldSend(target.checked)}>
-              Aktiv
-            </Switch>
-            <Tooltip content="Ytelse">
-              <span>{ytelseNameIsLoading ? 'Laster...' : (ytelseName ?? `Ukjent ytelse med ID «${ytelseId}»`)}</span>
-            </Tooltip>
-            <Tooltip content="Saksbehandlingstid">
-              <HStack align="center" gap="0 2">
-                <TimeInput
-                  value={behandlingstidUnits}
-                  onChange={setBehandlingstidUnits}
-                  unit={behandlingstidUnitTypeId}
-                  setUnit={setBehandlingstidUnitTypeId}
-                />
-              </HStack>
-            </Tooltip>
-            <Tooltip content="Tekst til svarbrev (valgfri)">
-              <div className="grow">
-                <TextField
-                  size="small"
-                  label="Tekst (valgfri)"
-                  placeholder="Tekst til svarbrev (valgfri)"
-                  hideLabel
-                  value={customText ?? ''}
-                  onChange={({ target }) => setCustomText(target.value)}
-                />
-              </div>
-            </Tooltip>
-          </HStack>
-        </VStack>
-
-        {hasChanges ? (
-          <Warning behandlingstidUnits={behandlingstidUnits} behandlingstidUnitTypeId={behandlingstidUnitTypeId} />
-        ) : null}
-
-        <PdfWithLoader>
-          <CenterLoader>
-            <Loader size="3xlarge" />
-          </CenterLoader>
-
-          {pdfUrl === null ? null : (
-            <StyledPDF role="document" type="application/pdf" name="pdf-viewer" data={pdfUrl} />
-          )}
-        </PdfWithLoader>
-      </ModalBody>
+          </div>
+        </Modal.Body>
+      </VStack>
 
       <Modal.Footer>
         {hasChanges || isLoading ? (
@@ -189,5 +195,7 @@ const getTitle = (type: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE) => {
 const User = ({ navn, navIdent }: INavEmployee) => `${navn} (${navIdent})`;
 
 const Time = ({ dateTime }: { dateTime: string }) => (
-  <StyledTime dateTime={dateTime}>{isoDateTimeToPretty(dateTime)}</StyledTime>
+  <time dateTime={dateTime} className="font-bold">
+    {isoDateTimeToPretty(dateTime)}
+  </time>
 );

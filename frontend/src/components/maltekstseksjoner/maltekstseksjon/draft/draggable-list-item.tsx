@@ -18,7 +18,7 @@ export const DraggableListItem = ({ textId, maltekst, onDragEnter, onDrop, query
   const { textId: activeTextId } = useParams<{ textId: string }>();
   const { draggedTextId } = useContext(DragAndDropContext);
 
-  const cancelDragEvent = useCallback((e: React.DragEvent<HTMLLIElement>) => {
+  const cancelDragEvent = useCallback((e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
   }, []);
@@ -29,8 +29,8 @@ export const DraggableListItem = ({ textId, maltekst, onDragEnter, onDrop, query
     <TextListItem
       data-isactive={(draggedTextId === null && textId === activeTextId).toString()}
       data-isdragging={isDragging.toString()}
-      $isActive={draggedTextId === null && textId === activeTextId}
-      $isDragging={isDragging}
+      isActive={draggedTextId === null && textId === activeTextId}
+      isDragging={isDragging}
       onDragEnter={(e) => {
         cancelDragEvent(e);
         onDragEnter();

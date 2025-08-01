@@ -33,8 +33,14 @@ export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProp
 
   return (
     <Table.ColumnHeader className="relative" ref={ref}>
-      <ToggleButton onClick={toggleOpen} data-testid="lovhjemmel-button" $open={open}>
-        {TABLE_HEADERS[columnKey]} ({registreringshjemler?.length ?? 0}) {chevron}
+      <ToggleButton
+        onClick={toggleOpen}
+        data-testid="lovhjemmel-button"
+        open={open}
+        icon={chevron}
+        iconPosition="right"
+      >
+        {TABLE_HEADERS[columnKey]} ({registreringshjemler?.length ?? 0})
       </ToggleButton>
 
       {open ? (

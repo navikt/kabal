@@ -12,7 +12,7 @@ import { RedaktoerToolbar } from '@app/plate/toolbar/toolbars/redaktoer-toolbar'
 import { RedaktoerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
-import { Box, VStack } from '@navikt/ds-react';
+import { BoxNew, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@platejs/core/react';
 import { useContext, useImperativeHandle, useRef } from 'react';
 
@@ -65,18 +65,18 @@ export const RedaktoerRichText = ({
       }}
     >
       <Plate<RichTextEditor> editor={editor} onValueChange={onChange} readOnly={readOnly}>
-        <VStack asChild padding="4" minWidth="calc(210mm + var(--a-spacing-8))" onKeyDown={onKeyDown}>
-          <Box background="surface-subtle" position="relative" overflowX="hidden" overflowY="auto" flexGrow="1">
+        <VStack asChild padding="4" minWidth="calc(210mm + var(--ax-space-32))" onKeyDown={onKeyDown}>
+          <BoxNew background="neutral-soft" position="relative" overflowX="hidden" overflowY="auto" flexGrow="1">
             {readOnly === true ? null : <RedaktoerToolbar />}
 
-            <Sheet ref={ref} $minHeight={false}>
+            <Sheet ref={ref} minHeight={false}>
               <FloatingRedaktoerToolbar container={ref.current} editorId={editorId} />
 
               <RedaktoerTableToolbar container={ref.current} editorId={editorId} />
 
               <KabalPlateEditor id={editorId} readOnly={readOnly} onFocus={onFocus} lang={lang} />
             </Sheet>
-          </Box>
+          </BoxNew>
         </VStack>
 
         <StatusBar>{status === undefined ? null : <SavedStatus {...status} />}</StatusBar>

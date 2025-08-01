@@ -5,10 +5,8 @@ import type {
   IKvalitetsvurderingBooleans,
   IKvalitetsvurderingSaksdataHjemler,
 } from '@app/types/kaka-kvalitetsvurdering/v2';
-import { BodyShort, Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import { BodyShort, BoxNew, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { useEffect } from 'react';
-import { styled } from 'styled-components';
-import { SubSection } from './styled-components';
 import { useKvalitetsvurderingV2 } from './use-kvalitetsvurdering-v2';
 import { useValidationError } from './use-validation-error';
 
@@ -72,7 +70,7 @@ export const Oppgavehjemler = ({ field, parentKey }: Props) => {
   const value = kvalitetsvurdering[field];
 
   return (
-    <SubSection>
+    <BoxNew marginBlock="0 4" marginInline="8 0">
       <CheckboxGroup
         legend="Hjemler"
         onChange={onChange}
@@ -85,7 +83,7 @@ export const Oppgavehjemler = ({ field, parentKey }: Props) => {
       >
         <HjemmelCheckboxes hjemmelIdList={hjemler} />
       </CheckboxGroup>
-    </SubSection>
+    </BoxNew>
   );
 };
 
@@ -97,7 +95,11 @@ const HjemmelCheckboxes = ({ hjemmelIdList }: HjemmelCheckboxesProps) => {
   const { data: registreringshjemlerMap, isLoading } = useRegistreringshjemlerMap();
 
   if (hjemmelIdList.length === 0 || isLoading || typeof registreringshjemlerMap === 'undefined') {
-    return <ItalicBodyShort size="small">Ingen hjemler valgt under behandling.</ItalicBodyShort>;
+    return (
+      <BodyShort size="small" className="italic">
+        Ingen hjemler valgt under behandling.
+      </BodyShort>
+    );
   }
 
   return (
@@ -118,7 +120,3 @@ const hjemmelIdListsEquals = (a: string[] = [], b: string[] = []) => {
 
   return a.every((id) => b.includes(id));
 };
-
-const ItalicBodyShort = styled(BodyShort)`
-  font-style: italic;
-`;

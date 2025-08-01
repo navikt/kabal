@@ -7,7 +7,6 @@ import type { ExtraUtfallEvent } from '@app/redux-api/server-sent-events/types';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Tag } from '@navikt/ds-react';
-import { styled } from 'styled-components';
 
 export const handleExtraUtfallEvent =
   (_: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
@@ -23,19 +22,19 @@ export const handleExtraUtfallEvent =
         const removed = oldUtfall.filter((u) => !utfallIdList.includes(u));
 
         const addedTags = (
-          <TagContainer>
+          <span className="inline-flex flex-wrap gap-2">
             {added.map((u) => (
               <UtfallTag utfall={u} key={u} />
             ))}
-          </TagContainer>
+          </span>
         );
 
         const removedTags = (
-          <TagContainer>
+          <span className="inline-flex flex-wrap gap-2">
             {removed.map((u) => (
               <UtfallTag utfall={u} key={u} />
             ))}
-          </TagContainer>
+          </span>
         );
 
         if (added.length > 0 && removed.length > 0) {
@@ -78,9 +77,3 @@ const UtfallTag = ({ utfall }: Props) => {
     </Tag>
   );
 };
-
-const TagContainer = styled.span`
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: var(--a-spacing-2);
-`;

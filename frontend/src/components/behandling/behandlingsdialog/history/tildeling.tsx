@@ -106,7 +106,7 @@ const FromSelf = ({ actor, fradelingReasonId, previousHjemmelIdList, hjemmelIdLi
     <HistoryEvent
       tag="Fradeling"
       type={HistoryEventTypes.TILDELING}
-      color="--a-surface-warning-moderate"
+      borderColorClassName="border-ax-border-warning-strong"
       timestamp={timestamp}
       icon={ArrowUndoIcon}
     >
@@ -125,7 +125,7 @@ const FromOther = ({ actor, previousSaksbehandler, timestamp }: FromOtherProps) 
   <HistoryEvent
     tag="Fradeling"
     type={HistoryEventTypes.TILDELING}
-    color="--a-gray-200"
+    borderColorClassName="border-ax-border-neutral-subtle"
     timestamp={timestamp}
     icon={ArrowUndoIcon}
   >

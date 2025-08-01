@@ -3,9 +3,8 @@ import { SuggestedEnhet } from '@app/components/oppgavebehandling-footer/update-
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import type { Enhet, IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Alert, Button, ErrorMessage, Search, Tooltip, VStack } from '@navikt/ds-react';
+import { Alert, BoxNew, Button, ErrorMessage, HStack, Search, Tooltip, VStack } from '@navikt/ds-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import styled, { css } from 'styled-components';
 
 interface Props {
   selectedEnhet: string | null;
@@ -69,8 +68,8 @@ export const ReceivingEnhet = ({ selectedEnhet, setSelectedEnhet, enheter, error
         typeId={typeId}
         gosysOppgaveId={gosysOppgaveId}
       />
-      <Fieldset>
-        <Legend>Velg enhet som skal motta oppgaven</Legend>
+      <VStack as="fieldset" gap="1">
+        <legend className="mb-2 font-bold">Velg enhet som skal motta oppgaven</legend>
 
         <Search
           style={{ width: 600 }}
@@ -85,25 +84,27 @@ export const ReceivingEnhet = ({ selectedEnhet, setSelectedEnhet, enheter, error
         />
 
         {filteredEnheter.length === 0 ? (
-          <Empty>
+          <Container>
             <Alert variant="info" size="small" inline>
               Ingen enheter funnet
             </Alert>
-          </Empty>
+          </Container>
         ) : (
-          <List>
-            {filteredEnheter.map((enhet) => (
-              <SelectableListItem
-                {...enhet}
-                selected={selectedEnhet}
-                setSelected={setSelectedEnhet}
-                key={enhet.enhetsnr}
-              />
-            ))}
-          </List>
+          <Container>
+            <VStack as="ul">
+              {filteredEnheter.map((enhet) => (
+                <SelectableListItem
+                  {...enhet}
+                  selected={selectedEnhet}
+                  setSelected={setSelectedEnhet}
+                  key={enhet.enhetsnr}
+                />
+              ))}
+            </VStack>
+          </Container>
         )}
         {error === null ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
-      </Fieldset>
+      </VStack>
     </VStack>
   );
 };
@@ -129,12 +130,21 @@ const SelectableListItem = ({ enhetsnr, navn, selected, setSelected }: SelectBut
   const label = isSelected ? 'Fjern valgt enhet' : 'Velg enhet';
 
   const children = (
-    <ListItem ref={ref} onClick={() => setSelected(isSelected ? null : enhetsnr)}>
-      <StyledButton size="small" variant="tertiary" title={label} aria-label={label}>
-        {isSelected ? <CheckmarkCircleFillIconColored aria-hidden fontSize={20} /> : 'Velg'}
-      </StyledButton>
+    <HStack
+      as="li"
+      gap="2"
+      align="center"
+      ref={ref}
+      onClick={() => setSelected(isSelected ? null : enhetsnr)}
+      className="cursor-pointer hover:bg-ax-bg-accent-moderate"
+    >
+      <Button size="small" variant="tertiary" title={label} aria-label={label} className="w-12">
+        <HStack align="center" justify="center">
+          {isSelected ? <CheckmarkCircleFillIconColored aria-hidden fontSize={20} /> : 'Velg'}
+        </HStack>
+      </Button>
       {enhetsnr} - {navn}
-    </ListItem>
+    </HStack>
   );
 
   if (isSelected) {
@@ -148,59 +158,21 @@ const SelectableListItem = ({ enhetsnr, navn, selected, setSelected }: SelectBut
   return children;
 };
 
-const StyledButton = styled(Button)`
-  width: 45px;
+interface EmptyProps {
+  children: React.ReactElement;
+}
 
-  > span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
-
-const Legend = styled.legend`
-  font-weight: bold;
-  margin-bottom: var(--a-spacing-2);
-`;
-
-const Fieldset = styled.fieldset`
-  border: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--a-spacing-1);
-`;
-
-const listStyle = css`
-  height: 202px;
-  overflow-y: scroll;
-  overflow-x: auto;
-  border: 1px solid var(--a-border-default);
-  border-radius: var(--a-border-radius-medium);
-  padding: var(--a-spacing-1);
-`;
-
-const Empty = styled.div`
-  ${listStyle}
-`;
-
-const List = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex ;
-  flex-direction: column;
-  ${listStyle}
-`;
-
-const ListItem = styled.li`
-  display: flex;
-  gap: var(--a-spacing-2);
-  align-items: center;
-  cursor: pointer;
-
-  &:hover {
-    background-color: var(--a-surface-hover);
-  }
-`;
+const Container = ({ children }: EmptyProps) => (
+  <BoxNew
+    asChild
+    height="202px"
+    overflowY="scroll"
+    overflowX="auto"
+    borderWidth="1"
+    borderColor="neutral"
+    borderRadius="medium"
+    padding="1"
+  >
+    {children}
+  </BoxNew>
+);

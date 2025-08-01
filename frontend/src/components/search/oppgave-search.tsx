@@ -9,7 +9,6 @@ import {
 import { ErrorMessage, HStack, Search, type SearchProps, ToggleGroup, VStack } from '@navikt/ds-react';
 import { dnr, fnr } from '@navikt/fnrvalidator';
 import { useState } from 'react';
-import { styled } from 'styled-components';
 
 enum SearchType {
   SAKSNR = 'SAKSNR',
@@ -140,7 +139,7 @@ const SearchField = ({
   onKeyDown: () => void;
   children: SearchProps['children'];
 }) => (
-  <StyledSearch
+  <Search
     size="medium"
     variant="simple"
     onChange={onChange}
@@ -152,11 +151,8 @@ const SearchField = ({
         onKeyDown();
       }
     }}
+    className="w-[270px]"
   >
     {children}
-  </StyledSearch>
+  </Search>
 );
-
-const StyledSearch = styled(Search)`
-  width: 270px;
-`;

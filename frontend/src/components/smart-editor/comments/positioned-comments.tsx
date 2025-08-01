@@ -7,8 +7,8 @@ import {
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 import { useMyPlateEditorState } from '@app/plate/types';
+import { BoxNew } from '@navikt/ds-react';
 import { useContext, useMemo } from 'react';
-import { styled } from 'styled-components';
 import { useThreads } from '../comments/use-threads';
 import { ExpandableThread } from './expandable-thread';
 
@@ -40,7 +40,15 @@ export const PositionedComments = () => {
   }, [showAnnotationsAtOrigin, attached, editor, sheetRef, orphans.length]);
 
   return (
-    <Container style={{ width: maxCount * ITEM_OFFSET + ITEM_WIDTH + MIN_OFFSET }}>
+    <BoxNew
+      position="relative"
+      style={{
+        width: maxCount * ITEM_OFFSET + ITEM_WIDTH + MIN_OFFSET,
+        gridArea: 'comments',
+        fontSize: `calc(var(${EDITOR_SCALE_CSS_VAR}) * ${BASE_FONT_SIZE}pt)`,
+      }}
+      className="z-0"
+    >
       {positionedItems.map(({ data, top, floorIndex }, zIndex) => (
         <ExpandableThread
           key={data.id}
@@ -51,14 +59,6 @@ export const PositionedComments = () => {
           isAbsolute
         />
       ))}
-    </Container>
+    </BoxNew>
   );
 };
-
-const Container = styled.section`
-  grid-area: comments;
-  position: relative;
-  z-index: 0;
-  margin-left: 0;
-  font-size: calc(var(${EDITOR_SCALE_CSS_VAR}) * ${BASE_FONT_SIZE}pt);
-`;

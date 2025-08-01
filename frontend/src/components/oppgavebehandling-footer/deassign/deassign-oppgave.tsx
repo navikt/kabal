@@ -9,7 +9,6 @@ import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebeh
 import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { styled } from 'styled-components';
 import { Popup } from '../../deassign/popup';
 
 interface Props {
@@ -43,9 +42,16 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
   if (oppgaveActionsIsLoading) {
     return (
       <HStack position="relative">
-        <StyledButton variant="secondary" size="small" disabled loading icon={<FolderFileIcon aria-hidden />}>
+        <Button
+          variant="secondary"
+          size="small"
+          disabled
+          loading
+          icon={<FolderFileIcon aria-hidden />}
+          className="min-w-[275px]"
+        >
           Legg tilbake
-        </StyledButton>
+        </Button>
       </HStack>
     );
   }
@@ -100,7 +106,3 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
     </HStack>
   );
 };
-
-const StyledButton = styled(Button)`
-  min-width: 275px;
-`;

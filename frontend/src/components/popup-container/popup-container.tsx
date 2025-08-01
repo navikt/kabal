@@ -1,5 +1,5 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { Box, VStack } from '@navikt/ds-react';
+import { BoxNew, VStack } from '@navikt/ds-react';
 import { useRef } from 'react';
 
 export enum Direction {
@@ -28,9 +28,9 @@ export const PopupContainer = ({ children, close, direction }: Props) => {
       className="bottom-full"
       ref={ref}
     >
-      <Box position="absolute" background="bg-default" shadow="medium" padding="4">
+      <BoxNew position="absolute" background="default" shadow="dialog" padding="4">
         {children}
-      </Box>
+      </BoxNew>
     </VStack>
   );
 };

@@ -7,7 +7,6 @@ import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
 import { Tag } from '@navikt/ds-react';
 import { useMemo, useRef, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   selected: string[];
@@ -167,8 +166,8 @@ export const HjemlerSelect = ({
   const toggleOpen = () => setIsOpen(!isOpen);
 
   return (
-    <Container ref={ref}>
-      <ToggleButton $open={isOpen} onClick={toggleOpen}>
+    <div className="relative" ref={ref}>
+      <ToggleButton open={isOpen} onClick={toggleOpen} size="small">
         Ytelser og hjemler ({selected.length})
       </ToggleButton>
       <Popup isOpen={isOpen}>
@@ -179,12 +178,8 @@ export const HjemlerSelect = ({
           data-testid="edit-text-hjemler-select"
         />
       </Popup>
-    </Container>
+    </div>
   );
 };
 
 const createHjemmelValue = (ytelseId: string, hjemmelId: string) => `${ytelseId}${LIST_DELIMITER}${hjemmelId}`;
-
-const Container = styled.div`
-  position: relative;
-`;

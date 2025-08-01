@@ -30,7 +30,7 @@ const Sort = ({ sortering, rekkefoelge, onSortChange, sortKey, children }: SortP
       icon={<Icon fontSize={16} />}
       onClick={() => onSortChange(sortKey)}
       iconPosition="right"
-      className={`whitespace-nowrap rounded-md px-3 py-4 ${sorted ? 'bg-surface-selected' : 'bg-transparent'}`}
+      className={`whitespace-nowrap rounded-md px-3 py-4 ${sorted ? 'bg-ax-bg-accent-soft' : 'bg-transparent'}`}
     >
       {children}
     </Button>

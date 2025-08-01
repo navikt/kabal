@@ -6,7 +6,7 @@ import {
   useSetReasonNoLetterMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
 import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
-import { Alert, Box, Checkbox, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
+import { Alert, BoxNew, Checkbox, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 
@@ -21,13 +21,13 @@ export const DoNotSendLetter = () => {
 
   return (
     <VStack gap="4">
-      <Box
-        background="surface-info-subtle"
-        borderColor="border-info"
+      <BoxNew
+        background="info-soft"
+        borderColor="info"
         padding="2"
         borderRadius="medium"
         borderWidth="1"
-        shadow="small"
+        shadow="dialog"
       >
         <Checkbox
           onChange={({ target }) => setDoNotSendLetter({ id, doNotSendLetter: target.checked })}
@@ -38,7 +38,7 @@ export const DoNotSendLetter = () => {
         >
           {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.DoNotSendLetter]}
         </Checkbox>
-      </Box>
+      </BoxNew>
       {data.doNotSendLetter ? (
         <>
           <Alert size="small" variant="info" inline>

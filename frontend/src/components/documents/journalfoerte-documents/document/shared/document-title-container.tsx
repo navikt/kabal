@@ -14,7 +14,7 @@ export const DocumentTitleContainer = ({
     height="100%"
     margin="0"
     wrap={false}
-    className="group overflow-hidden whitespace-nowrap font-normal text-large"
+    className="group overflow-hidden whitespace-nowrap font-normal text-ax-large"
     style={{ gridArea: Fields.Title }}
   >
     {children}

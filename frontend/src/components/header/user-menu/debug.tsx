@@ -6,22 +6,89 @@ import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents'
 import { useUtfall, useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 import { user } from '@app/static-data/static-data';
 import type { INavEmployee } from '@app/types/bruker';
-import { BugIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button, Dropdown, Tooltip } from '@navikt/ds-react';
+import { BugIcon, CheckmarkCircleIcon } from '@navikt/aksel-icons';
+import { ActionMenu, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
-export const DebugButton = () => {
+export const SendDebugInfoButton = () => {
   const { oppgaveId } = useParams();
 
-  return oppgaveId !== undefined ? <BehandlingDebug /> : <SimpleDebug />;
+  return oppgaveId === undefined ? <GeneralDebugInfo /> : <BehandlingDebugInfo />;
 };
 
-export const SimpleDebug = () => {
+const GeneralDebugInfo = () => {
+  const { sendDebugInfo, loading, success } = useSendDebugInfoState(useGetGeneralDebugInfo());
+
+  return <UserMenuItem sendDebugInfo={sendDebugInfo} loading={loading} success={success} />;
+};
+
+const BehandlingDebugInfo = () => {
+  const { sendDebugInfo, loading, success } = useSendDebugInfoState(useGetBehandlingDebugInfo());
+
+  return <UserMenuItem sendDebugInfo={sendDebugInfo} loading={loading} success={success} />;
+};
+
+interface MenuItemProps {
+  sendDebugInfo: () => Promise<void>;
+  loading: boolean;
+  success: boolean;
+}
+
+const UserMenuItem = ({ sendDebugInfo, loading, success }: MenuItemProps) => (
+  <Tooltip content="Sender teknisk informasjon direkte til Team Klage" placement="left">
+    <ActionMenu.Item
+      icon={<DebugIcon loading={loading} success={success} />}
+      onSelect={sendDebugInfo}
+      disabled={loading}
+      className="cursor-pointer"
+    >
+      Send teknisk informasjon
+    </ActionMenu.Item>
+  </Tooltip>
+);
+
+interface DebugIconProps {
+  loading: boolean;
+  success: boolean;
+}
+
+const DebugIcon = ({ loading, success }: DebugIconProps) => {
+  if (loading) {
+    return <Loader aria-hidden size="small" />;
+  }
+
+  if (success) {
+    return <CheckmarkCircleIcon aria-hidden />;
+  }
+
+  return <BugIcon aria-hidden />;
+};
+
+export const useSendDebugInfoState = (getDebugInfo: () => Promise<string | null>) => {
+  const { sendDebugInfo, success, loading } = useSendDebugInfo();
+
+  return {
+    sendDebugInfo: async () => {
+      const data = await getDebugInfo();
+
+      if (data === null) {
+        console.error('No debug data available');
+        return;
+      }
+
+      sendDebugInfo(data);
+    },
+    success,
+    loading,
+  };
+};
+
+const useGetGeneralDebugInfo = () => {
   const reporter = useReporter();
 
-  const getData = useCallback(
+  return useCallback(
     async (): Promise<string> =>
       JSON.stringify(
         {
@@ -34,22 +101,16 @@ export const SimpleDebug = () => {
       ),
     [reporter],
   );
-
-  return (
-    <Dropdown.Menu.List.Item as={SendButton} getData={getData}>
-      Send teknisk informasjon
-    </Dropdown.Menu.List.Item>
-  );
 };
 
-export const BehandlingDebug = () => {
+const useGetBehandlingDebugInfo = () => {
   const reporter = useReporter();
   const { data: oppgave } = useOppgave();
   const { data: documents } = useGetDocumentsQuery(oppgave?.id ?? skipToken);
   const { value: selectedTab = null } = useSmartEditorActiveDocument();
   const { data: utfallList = [] } = useUtfall();
 
-  const getData = useCallback(async () => {
+  return useCallback(async () => {
     if (oppgave === undefined) {
       console.error('No behandling loaded');
       return null;
@@ -85,12 +146,6 @@ export const BehandlingDebug = () => {
       2,
     );
   }, [oppgave, documents, selectedTab, reporter, utfallList]);
-
-  return (
-    <Dropdown.Menu.List.Item as={SendButton} getData={getData}>
-      Send teknisk informasjon
-    </Dropdown.Menu.List.Item>
-  );
 };
 
 const useReporter = async () => {
@@ -114,41 +169,6 @@ const useReporter = async () => {
       return `${ytelse.navn} (${ytelse.id})`;
     }),
   };
-};
-
-interface SendButtonProps {
-  getData: () => Promise<string | null>;
-  children?: React.ReactNode;
-  className?: string;
-}
-
-const SendButton = ({ getData, children, className }: SendButtonProps) => {
-  const { sendDebugInfo, success, loading } = useSendDebugInfo();
-
-  const onClick = async () => {
-    const data = await getData();
-
-    if (data === null) {
-      return;
-    }
-
-    sendDebugInfo(data);
-  };
-
-  return (
-    <Tooltip content="Sender teknisk informasjon direkte til Team Klage" placement="left">
-      <Button
-        variant="tertiary"
-        size="small"
-        onClick={onClick}
-        loading={loading}
-        icon={success ? <CheckmarkIcon aria-hidden /> : <BugIcon aria-hidden />}
-        className={`${className} justify-start`}
-      >
-        {children}
-      </Button>
-    </Tooltip>
-  );
 };
 
 const employeeToUser = (employee: INavEmployee | null = null) =>

@@ -1,8 +1,7 @@
 import { MaltekstseksjonReadOnly } from '@app/components/maltekstseksjoner/maltekstseksjon/read-only';
 import { TextPreview } from '@app/components/maltekstseksjoner/texts/preview';
-import { Table, Tabs } from '@navikt/ds-react';
-import { useState } from 'react';
-import { styled } from 'styled-components';
+import { BoxNew, Table, Tabs } from '@navikt/ds-react';
+import { type FragmentProps, useState } from 'react';
 
 interface Props {
   textId: string;
@@ -60,9 +59,8 @@ export const Row = ({ textId, draftMaltekstseksjonIdList, publishedMaltekstseksj
   );
 };
 
-const List = styled.ul`
-  list-style: none;
-  padding: 0;
-  padding-left: var(--a-spacing-4);
-  margin: 0;
-`;
+const List = ({ children }: FragmentProps) => (
+  <BoxNew as="ul" paddingInline="4 0">
+    {children}
+  </BoxNew>
+);

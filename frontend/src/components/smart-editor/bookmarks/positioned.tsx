@@ -11,13 +11,14 @@ import { pushEvent } from '@app/observability';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { BookmarkFillIcon, TrashFillIcon } from '@navikt/aksel-icons';
-import { Tooltip } from '@navikt/ds-react';
+import { BoxNew, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';
-import { styled } from 'styled-components';
 
 const ITEM_WIDTH = 1.5;
 const ITEM_GAP = 0.2;
 const ITEM_OFFSET = ITEM_WIDTH + ITEM_GAP;
+
+const FONT_SIZE = `calc(var(${EDITOR_SCALE_CSS_VAR}) * ${BASE_FONT_SIZE}pt)`;
 
 export const PositionedBookmarks = () => {
   const { sheetRef } = useContext(SmartEditorContext);
@@ -52,7 +53,14 @@ export const PositionedBookmarks = () => {
   }
 
   return (
-    <Container style={{ width: `${maxCount * ITEM_WIDTH + (maxCount - 1) * ITEM_GAP}em` }}>
+    <section
+      className="relative"
+      style={{
+        width: `${maxCount * ITEM_WIDTH + (maxCount - 1) * ITEM_GAP}em`,
+        fontSize: FONT_SIZE,
+        gridArea: 'bookmarks',
+      }}
+    >
       {positionedItems.map(({ data, top, floorIndex }) => (
         <Bookmark
           key={data.id}
@@ -61,7 +69,7 @@ export const PositionedBookmarks = () => {
           onDelete={onDelete}
         />
       ))}
-    </Container>
+    </section>
   );
 };
 
@@ -88,43 +96,26 @@ const Bookmark = ({ bookmark, style, onDelete }: BookmarkProps) => {
 
   return (
     <Tooltip content="Fjern bokmerke" placement="top">
-      <BookmarkItem
+      <BoxNew
+        as="button"
+        type="button"
+        position="absolute"
+        borderRadius="medium"
+        height="1.5em"
+        width="1.5em"
         key={id}
-        style={style}
         onClick={() => onDelete(id)}
-        $color={color}
         onMouseEnter={() => sethover(true)}
         onMouseLeave={() => sethover(false)}
+        style={{ ...style, color }}
+        className="z-1 flex cursor-pointer items-center justify-center text-[length:inherit]"
       >
         {hover ? (
           <TrashFillIcon aria-hidden width="100%" height="100%" />
         ) : (
           <BookmarkFillIcon aria-hidden width="100%" height="100%" />
         )}
-      </BookmarkItem>
+      </BoxNew>
     </Tooltip>
   );
 };
-
-const BookmarkItem = styled.button<{ $color: string }>`
-  cursor: pointer;
-  position: absolute;
-  z-index: 1;
-  border: none;
-  border-radius: var(--a-border-radius-medium);
-  background-color: transparent;
-  color: ${({ $color }) => $color};
-  height: 1.5em;
-  width: 1.5em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  font-size: inherit;
-`;
-
-const Container = styled.section`
-  grid-area: bookmarks;
-  position: relative;
-  font-size: calc(var(${EDITOR_SCALE_CSS_VAR}) * ${BASE_FONT_SIZE}pt);
-`;

@@ -1,8 +1,7 @@
 import { Keys } from '@app/keys';
 import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage, TextField } from '@navikt/ds-react';
+import { Button, ErrorMessage, HGrid, TextField } from '@navikt/ds-react';
 import { type KeyboardEventHandler, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   short: string;
@@ -61,7 +60,7 @@ export const Abbreviation = ({
 
   return (
     <div>
-      <StyledAbbreviation>
+      <HGrid columns="250px 500px min-content min-content" gap="2" align="start">
         <TextField
           size="small"
           label="Kortform"
@@ -111,7 +110,7 @@ export const Abbreviation = ({
             className={showLabels ? 'mt-7' : undefined}
           />
         )}
-      </StyledAbbreviation>
+      </HGrid>
 
       {error === undefined ? null : (
         <ErrorMessage size="small" className="[grid-area:error]" spacing>
@@ -121,13 +120,6 @@ export const Abbreviation = ({
     </div>
   );
 };
-
-const StyledAbbreviation = styled.div`
-  display: grid;
-  gap: var(--a-spacing-2);
-  grid-template-columns: 250px 500px min-content min-content;
-  align-items: start;
-`;
 
 const getErrorMessage = (isDuplicate: boolean, containsSpace: boolean) => {
   if (isDuplicate) {

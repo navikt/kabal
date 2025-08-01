@@ -6,7 +6,7 @@ import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-do
 import { useDocumentsWidth } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { BoxNew, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-documents';
 import { NewDocuments } from './new-documents/new-documents-list/new-documents';
@@ -119,10 +119,10 @@ export const ExpandedDocuments = () => {
         aria-labelledby={HEADING_ID}
       >
         <HStack asChild align="start" justify="start" gap="0 2" position="relative">
-          <Box
+          <BoxNew
             as="header"
             borderWidth="0 0 1 0"
-            borderColor="border-divider"
+            borderColor="neutral"
             paddingInline="4"
             paddingBlock="2"
             marginBlock="0 2"
@@ -154,7 +154,7 @@ export const ExpandedDocuments = () => {
             <UploadFile />
 
             <ToggleExpandedButton />
-          </Box>
+          </BoxNew>
         </HStack>
 
         <NewDocuments />

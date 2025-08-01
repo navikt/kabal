@@ -5,7 +5,7 @@ import { DocumentTitleContainer } from '@app/components/documents/journalfoerte-
 import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import { SetFilename } from '@app/components/documents/set-filename';
-import { DocumentLink, EllipsisTitle } from '@app/components/documents/styled-components/document-link';
+import { DocumentLink } from '@app/components/documents/styled-components/document-link';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
@@ -179,7 +179,7 @@ const DocumentTitleInternal = memo(
           download={isDownload}
           tabIndex={-1}
         >
-          <EllipsisTitle title={tittel}>{tittel}</EllipsisTitle>
+          {tittel}
         </DocumentLink>
 
         <DocumentWarnings varianter={varianter} />

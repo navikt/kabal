@@ -1,9 +1,9 @@
-import { getColors } from '@app/components/smart-editor/tabbed-editors/cursors/cursor-colors';
+import { getColorClasses } from '@app/components/smart-editor/tabbed-editors/cursors/cursor-colors';
+import { BoxNew } from '@navikt/ds-react';
 import { type CursorData, type CursorProps, type CursorState, useCursorOverlayPositions } from '@platejs/cursor';
 import type { RelativeRange } from '@slate-yjs/core';
 import { createZustandStore, type UnknownObject } from 'platejs';
 import { useEffect, useMemo, useRef } from 'react';
-import { styled } from 'styled-components';
 
 export interface UserCursor extends CursorData, UnknownObject {
   navn: string;
@@ -25,7 +25,10 @@ const Cursor = ({ caretPosition, data, disableCaret, disableSelection, selection
 
   const labelRef = useRef<HTMLDivElement>(null);
 
-  const { caretColor, selectionColor } = useMemo(() => getColors(tabId ?? ''), [tabId]);
+  const { caretBackgroundColorClass, selectionBackgroundColorClass } = useMemo(
+    () => getColorClasses(tabId ?? ''),
+    [tabId],
+  );
 
   // Use the previous caret position if the current caret position is null.
   // This is to avoid flickering of the caret. It may lag behind a little instead.
@@ -43,45 +46,30 @@ const Cursor = ({ caretPosition, data, disableCaret, disableSelection, selection
       {disableSelection === true
         ? null
         : selectionRects.map((selectionPosition) => (
-            <StyledSelection
-              key={`${selectionColor}-${selectionPosition.left}-${selectionPosition.top}-${selectionPosition.width}-${selectionPosition.height}-${tabId}`}
-              style={{ ...selectionStyle, ...selectionPosition, backgroundColor: selectionColor }}
+            <div
+              className={`pointer-events-none absolute z-10 ${selectionBackgroundColorClass}`}
+              key={`${selectionBackgroundColorClass}-${selectionPosition.left}-${selectionPosition.top}-${selectionPosition.width}-${selectionPosition.height}-${tabId}`}
+              style={{ ...selectionStyle, ...selectionPosition }}
             />
           ))}
       {disableCaret === true || safeCaretPosition === null ? null : (
-        <StyledCaret style={{ ...safeCaretPosition, ...style, backgroundColor: caretColor }}>
-          <CaretLabel ref={labelRef} style={{ backgroundColor: caretColor }}>
+        <div
+          className={`pointer-events-none absolute z-10 w-[1px] ${caretBackgroundColorClass}`}
+          style={{ ...safeCaretPosition, ...style }}
+        >
+          <BoxNew
+            position="absolute"
+            left="0"
+            className={`bottom-full whitespace-nowrap rounded-l-sm rounded-br-sm p-[.25em] text-[.75em] text-ax-text-neutral ${caretBackgroundColorClass}`}
+            ref={labelRef}
+          >
             {navn} ({navIdent})
-          </CaretLabel>
-        </StyledCaret>
+          </BoxNew>
+        </div>
       )}
     </>
   );
 };
-
-const BaseCursor = styled.div`
-  pointer-events: none;
-  position: absolute;
-  z-index: 10;
-`;
-
-const StyledSelection = styled(BaseCursor)``;
-
-const StyledCaret = styled(BaseCursor)`
-  width: 1px;
-`;
-
-const CaretLabel = styled.div`
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-  color: white;
-  font-size: 0.75em;
-  padding: 0.25em;
-  border-radius: var(--a-border-radius-medium);
-  border-bottom-left-radius: 0;
-  white-space: nowrap;
-`;
 
 export const cursorStore = createZustandStore<Record<string, CursorState<UserCursor>>>(
   {},

@@ -1,7 +1,7 @@
 import { Popup, type PopupProps } from '@app/components/filter-dropdown/popup';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { Box, Button, Chips, HGrid } from '@navikt/ds-react';
+import { BoxNew, Button, Chips, HGrid } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { Dropdown } from './dropdown';
 import type { BaseProps } from './props';
@@ -56,10 +56,10 @@ export const ChipFilterDropdown = <T extends string>({
           <span className="font-normal">{children}</span>
         </Button>
       ) : (
-        <Box
+        <BoxNew
           ref={boxRef}
           borderRadius="medium"
-          borderColor="border-default"
+          borderColor="neutral"
           borderWidth="1"
           className={`${shadow} cursor-pointer pl-1 hover:border-[var(--a-border-action)]`}
           onClick={() => setOpen(!open)}
@@ -88,7 +88,7 @@ export const ChipFilterDropdown = <T extends string>({
               {chevron}
             </Button>
           </HGrid>
-        </Box>
+        </BoxNew>
       )}
 
       <Popup isOpen={open} direction={direction} maxWidth={maxWidth} maxHeight={maxHeight}>

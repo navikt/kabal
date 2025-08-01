@@ -5,7 +5,7 @@ import { toast } from '@app/components/toast/store';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { type IFullmektig, Utsendingskanal } from '@app/types/oppgave-common';
-import { Box, type BoxProps, Button, ErrorSummary, HStack, Tag, TextField, VStack } from '@navikt/ds-react';
+import { BoxNew, type BoxNewProps, Button, ErrorSummary, HStack, Tag, TextField, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext, useState } from 'react';
 
@@ -153,7 +153,7 @@ export const WithoutId = ({ part, onClose }: Props) => {
   };
 
   return (
-    <Box
+    <BoxNew
       background={getBackgroundColor(isSaved, isError)}
       padding="4"
       borderWidth="1"
@@ -232,24 +232,24 @@ export const WithoutId = ({ part, onClose }: Props) => {
           </Button>
         </HStack>
       </VStack>
-    </Box>
+    </BoxNew>
   );
 };
 
-const getBackgroundColor = (isSaved: boolean, isError: boolean): BoxProps['background'] => {
+const getBackgroundColor = (isSaved: boolean, isError: boolean): BoxNewProps['background'] => {
   if (isError) {
-    return 'surface-danger-subtle';
+    return 'danger-soft';
   }
 
-  return isSaved ? 'surface-success-subtle' : 'surface-action-subtle';
+  return isSaved ? 'success-soft' : 'accent-soft';
 };
 
-const getBorderColor = (isSaved: boolean, isError: boolean): BoxProps['borderColor'] => {
+const getBorderColor = (isSaved: boolean, isError: boolean): BoxNewProps['borderColor'] => {
   if (isError) {
-    return 'border-danger';
+    return 'danger';
   }
 
-  return isSaved ? 'border-success' : 'border-action';
+  return isSaved ? 'success' : 'accent';
 };
 
 const RequiredTag = ({ children }: { children: string }) => (

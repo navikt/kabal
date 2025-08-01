@@ -2,7 +2,6 @@ import { SortOrder } from '@app/types/sort';
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { useSearchParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 
 type Icon = typeof ArrowUpIcon | typeof ArrowDownIcon | typeof ArrowsUpDownIcon;
 
@@ -41,17 +40,31 @@ export const SortableHeader = ({ label, sortKey, querySortKey, querySortOrder, t
 
   if (title === undefined) {
     return (
-      <StyledButton onClick={onClick} variant="tertiary" iconPosition="right" icon={<Icon aria-hidden />} size="small">
+      <Button
+        onClick={onClick}
+        variant="tertiary"
+        iconPosition="right"
+        icon={<Icon aria-hidden />}
+        size="small"
+        className="justify-start px-0"
+      >
         {label}
-      </StyledButton>
+      </Button>
     );
   }
 
   return (
     <Tooltip content={title}>
-      <StyledButton onClick={onClick} variant="tertiary" iconPosition="right" icon={<Icon aria-hidden />} size="small">
+      <Button
+        onClick={onClick}
+        variant="tertiary"
+        iconPosition="right"
+        icon={<Icon aria-hidden />}
+        size="small"
+        className="justify-start px-0"
+      >
         {label}
-      </StyledButton>
+      </Button>
     </Tooltip>
   );
 };
@@ -66,9 +79,3 @@ const getIcon = (order: SortOrder | null): Icon => {
       return ArrowsUpDownIcon;
   }
 };
-
-const StyledButton = styled(Button)`
-  justify-content: flex-start;
-  padding-left: 0;
-  padding-right: 0;
-`;

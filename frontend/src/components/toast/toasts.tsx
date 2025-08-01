@@ -32,7 +32,7 @@ export const Toasts = () => {
       gap="2 0"
       paddingInline="0 2"
       marginBlock="2 0"
-      maxHeight="calc(100% - var(--a-spacing-4))"
+      maxHeight="calc(100% - var(--ax-space-16))"
       overflowY="auto"
       overflowX="visible"
       className="z-1000"

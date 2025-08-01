@@ -2,7 +2,6 @@ import { StaticDataContext } from '@app/components/app/static-data-context';
 import { AddressField } from '@app/components/receivers/address/field';
 import { BodyShort, HStack, Label, VStack } from '@navikt/ds-react';
 import { useContext, useId } from 'react';
-import { styled } from 'styled-components';
 
 interface Props {
   value: string | null;
@@ -34,25 +33,13 @@ export const Postnummer = ({ value, originalValue, onChange, error }: Props) => 
         htmlSize={8}
       />
       <VStack justify="start" gap="2">
-        <StyledLabel size="small" htmlFor={poststedElementId}>
+        <Label size="small" htmlFor={poststedElementId} className="flex min-h-6 items-center">
           Poststed
-        </StyledLabel>
-        <Poststed size="medium" id={poststedElementId}>
+        </Label>
+        <BodyShort size="medium" id={poststedElementId} className="flex h-8 items-center">
           {value === null ? 'Postnummer mangler' : (getPoststed(value) ?? 'Ukjent')}
-        </Poststed>
+        </BodyShort>
       </VStack>
     </HStack>
   );
 };
-
-const StyledLabel = styled(Label)`
-  display: flex;
-  align-items: center;
-  min-height: var(--a-spacing-6);
-`;
-
-const Poststed = styled(BodyShort)`
-  display: flex;
-  align-items: center;
-  height: var(--a-spacing-8);
-`;
