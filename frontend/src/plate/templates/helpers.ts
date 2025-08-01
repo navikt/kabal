@@ -51,6 +51,7 @@ import { BaseParagraphPlugin } from '@platejs/core';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { TemplateSections } from '../template-sections';
+import { MAX_TABLE_WIDTH } from '../toolbar/table/constants';
 import { LabelContentSource } from '../types';
 
 export const createLabelContent = (source: LabelContentSource): LabelContentElement => ({
@@ -191,6 +192,7 @@ export const createTableCell = (text = ''): TableCellElement => ({
 export const createTable = (rows: number, columns: number): TableElement => ({
   type: BaseTablePlugin.key,
   children: Array.from({ length: rows }, () => createTableRow(Array.from({ length: columns }, createTableCell))),
+  colSizes: Array.from({ length: columns }, () => Math.floor(MAX_TABLE_WIDTH / columns)),
 });
 
 export const createPlaceHolder = (

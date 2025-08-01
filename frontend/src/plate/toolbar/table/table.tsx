@@ -10,20 +10,29 @@ import { DeleteColumnIcon } from '@app/plate/toolbar/table/icons/delete-column';
 import { DeleteRowIcon } from '@app/plate/toolbar/table/icons/delete-row';
 import { MergeCellsIcon } from '@app/plate/toolbar/table/icons/merge-cells';
 import { SplitCellsIcon } from '@app/plate/toolbar/table/icons/split-cells';
+import { getDefaultColSizes } from '@app/plate/toolbar/table/with-overrides';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { useMyPlateEditorRef } from '@app/plate/types';
+import { type TableElement, useMyPlateEditorState } from '@app/plate/types';
 import { isOfElementTypeFn, nextPath } from '@app/plate/utils/queries';
-import { TrashIcon } from '@navikt/aksel-icons';
-import { BaseTablePlugin, deleteTable, getTableGridAbove, isTableRectangular } from '@platejs/table';
+import { SpaceHorizontalIcon, TrashIcon } from '@navikt/aksel-icons';
+import {
+  BaseTableCellPlugin,
+  BaseTablePlugin,
+  deleteTable,
+  getTableGridAbove,
+  isTableRectangular,
+} from '@platejs/table';
 import { TablePlugin, TableProvider } from '@platejs/table/react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
 import { ElementApi } from 'platejs';
 import { useEditorPlugin, useEditorSelector, usePluginOption, useReadOnly, withHOC } from 'platejs/react';
+import { MAX_TABLE_WIDTH } from './constants';
 
 export const TableButtons = withHOC(TableProvider, () => {
   const { tf } = useEditorPlugin(TablePlugin);
 
-  const editor = useMyPlateEditorRef();
+  const editor = useMyPlateEditorState();
+
   const unchangeable = useIsUnchangeable();
   const { canMerge, canSplit } = useTableMergeState();
 
@@ -36,6 +45,44 @@ export const TableButtons = withHOC(TableProvider, () => {
   if (activeNode === undefined) {
     return null;
   }
+
+  const insertColumn = (before: boolean) => () => {
+    editor.tf.withoutNormalizing(() => {
+      const tableCellEntry = editor.api.node({ match: { type: BaseTableCellPlugin.node.type } });
+
+      if (tableCellEntry === undefined) {
+        return;
+      }
+
+      const [, path] = tableCellEntry;
+
+      const colNum = path.at(-1);
+
+      if (colNum === undefined) {
+        return;
+      }
+
+      tf.insert.tableColumn({ before, select: true });
+
+      const tableEntry = editor.api.node<TableElement>({ match: { type: BaseTablePlugin.node.type } });
+
+      if (tableEntry === undefined) {
+        return;
+      }
+
+      const [tableNode, tablePath] = tableEntry;
+
+      if (tableNode.colSizes === undefined) {
+        return;
+      }
+
+      const colSizes = tableNode.colSizes ?? getDefaultColSizes(tableNode);
+
+      const newColSizes = adjustColSizes(colSizes, colNum, before);
+
+      editor.tf.setNodes({ colSizes: newColSizes }, { at: tablePath });
+    });
+  };
 
   return (
     <>
@@ -54,14 +101,14 @@ export const TableButtons = withHOC(TableProvider, () => {
 
       <ToolbarIconButton
         label="Legg til kolonne til venstre"
-        onClick={() => tf.insert.tableColumn({ before: true })}
+        onClick={insertColumn(true)}
         onMouseDown={(e) => e.preventDefault()}
         icon={<AddColumnLeftIcon aria-hidden />}
       />
 
       <ToolbarIconButton
         label="Legg til kolonne til høyre"
-        onClick={() => tf.insert.tableColumn({ before: false })}
+        onClick={insertColumn(false)}
         onMouseDown={(e) => e.preventDefault()}
         icon={<AddColumnRightIcon aria-hidden />}
       />
@@ -94,6 +141,29 @@ export const TableButtons = withHOC(TableProvider, () => {
         onMouseDown={(e) => e.preventDefault()}
         icon={<SplitCellsIcon aria-hidden />}
         disabled={!canSplit}
+      />
+
+      <ToolbarIconButton
+        label="Gjør alle kolonner like brede"
+        onClick={() => {
+          const tableEntry = editor.api.node<TableElement>({ match: { type: BaseTablePlugin.node.type } });
+
+          if (tableEntry === undefined) {
+            return;
+          }
+
+          const [tableNode, tablePath] = tableEntry;
+
+          if (tableNode.colSizes === undefined) {
+            return;
+          }
+
+          const colSizes = getDefaultColSizes(tableNode);
+
+          editor.tf.setNodes({ colSizes }, { at: tablePath });
+        }}
+        onMouseDown={(e) => e.preventDefault()}
+        icon={<SpaceHorizontalIcon aria-hidden />}
       />
 
       <ToolbarSeparator />
@@ -191,4 +261,46 @@ export const useTableMergeState = () => {
     (api.table.getColSpan(firstCellEtnry) > 1 || api.table.getRowSpan(firstCellEtnry) > 1);
 
   return { canMerge, canSplit };
+};
+
+/**
+ *
+ * @param colSizes - Col sizes with the new column (temporarily) inserted with size 0
+ * @param colNum - Index of column we inserted from, NOT index of the new column
+ * @param before - Whether the new column was inserted before or after the given index
+ * @param maxWidth - Maximum width of the table (only set explicitly in tests for easier math)
+ * @returns - Adjusted column sizes
+ */
+export const adjustColSizes = (colSizes: number[], colNum: number, before: boolean, maxWidth = MAX_TABLE_WIDTH) => {
+  const colSizesWithoutNewCol = colSizes.filter((_, i) => i !== colNum + (before ? 0 : 1));
+
+  const totalWidth = colSizesWithoutNewCol.reduce((a, b) => a + b, 0);
+  const availableWidth = maxWidth - totalWidth;
+  const neighbourColSize = colSizesWithoutNewCol[colNum];
+
+  if (neighbourColSize === undefined) {
+    return colSizes;
+  }
+
+  const spacedEvenly = colSizesWithoutNewCol.every((s) => s === neighbourColSize);
+
+  // Space all columns evenly if they were evenly spaced before
+  if (spacedEvenly) {
+    if (availableWidth >= neighbourColSize) {
+      return Array.from({ length: colSizes.length }, () => neighbourColSize);
+    }
+
+    return Array.from({ length: colSizes.length }, () => Math.floor(maxWidth / colSizes.length));
+  }
+
+  // Add new column with same width as neighbour column if there is space
+  if (neighbourColSize < availableWidth) {
+    return [...colSizesWithoutNewCol.slice(0, colNum), neighbourColSize, ...colSizesWithoutNewCol.slice(colNum)];
+  }
+
+  const colSize = Math.floor((availableWidth + neighbourColSize) / 2);
+
+  // If there is not enough space to copy from neighbour column,
+  // use half of the available space for both the neighbour and the new column
+  return [...colSizesWithoutNewCol.slice(0, colNum), colSize, colSize, ...colSizesWithoutNewCol.slice(colNum + 1)];
 };
