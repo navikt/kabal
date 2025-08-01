@@ -1,34 +1,44 @@
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
-import { useMyPlateEditorRef } from '@app/plate/types';
+import { MAX_TABLE_WIDTH } from '@app/plate/toolbar/table/constants';
 import { type ResizeEvent, ResizeHandle } from '@platejs/resizable';
-import { setTableColSize } from '@platejs/table';
-import { TablePlugin, useTableCellElement, useTableCellElementResizable } from '@platejs/table/react';
+import { TablePlugin, useTableCellElement, useTableCellElementResizable, useTableColSizes } from '@platejs/table/react';
 import { PlateElement, useEditorPlugin, useReadOnly, withRef } from 'platejs/react';
-import type { MouseEvent } from 'react';
-import { useCallback, useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { styled } from 'styled-components';
 
-const BASE_CLASSES = 'min-w-12 relative align-top ';
+const BASE_CLASSES = 'relative align-top';
 const REMOVE_P_PLACEHOLDER = "[&>p::before]:content-['']";
 const REMOVE_P_MARGIN_TOP = '[&>*:first-child]:mt-0!';
 const ALL_CLASSES = `${BASE_CLASSES} ${REMOVE_P_PLACEHOLDER} ${REMOVE_P_MARGIN_TOP}`;
 
 export const TableCellElement = withRef<typeof PlateElement>(({ children, className, ...props }, ref) => {
   const { api } = useEditorPlugin(TablePlugin);
-  const { minHeight, width } = useTableCellElement();
+  const { minHeight, width: rawWidth } = useTableCellElement();
+  const { scale: percentage } = useContext(ScaleContext);
+  const colSizes = useTableColSizes();
+
+  const totalWidth = useMemo(() => colSizes.reduce((a, b) => a + b, 0), [colSizes]);
 
   const spans = {
     colSpan: api.table.getColSpan(props.element),
     rowSpan: api.table.getRowSpan(props.element),
   };
 
-  const style = {
+  const scale = percentage / 100;
+
+  // Width should always be a number unless something weird has happened
+  const width =
+    typeof rawWidth === 'number' ? Math.floor(rawWidth * scale) : Math.floor((MAX_TABLE_WIDTH - totalWidth) * scale);
+
+  const style: React.CSSProperties = {
     ...props.style,
     width,
+    maxWidth: width,
     minHeight,
     padding: PADDING,
     border: `${ptToEm(1.25)} solid var(--a-border-default)`,
+    overflowWrap: 'anywhere',
   };
 
   return (
@@ -44,16 +54,9 @@ const Resize = () => {
   const readOnly = useReadOnly();
   const { colIndex, isSelectingCell, ...state } = useTableCellElement();
   const { rightProps } = useTableCellElementResizable({ colIndex, ...state });
-  const editor = useMyPlateEditorRef();
+  const colSizes = useTableColSizes();
 
-  const onDblClick = useCallback(
-    (e: MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setTableColSize(editor, { colIndex, width: 0 });
-    },
-    [colIndex, editor],
-  );
+  const scaleFactor = useMemo(() => scale / 100, [scale]);
 
   if (isSelectingCell || readOnly) {
     return null;
@@ -64,25 +67,28 @@ const Resize = () => {
   const scaledOptions = {
     ...options,
     onResize: (e: ResizeEvent) => {
-      const scaleFactor = scale / 100;
+      const delta = Math.floor(e.delta / scaleFactor);
+      const initialSize = Math.floor(e.initialSize / scaleFactor);
 
-      return options?.onResize?.({
-        ...e,
-        initialSize: Math.round(e.initialSize / scaleFactor),
-        delta: Math.round(e.delta / scaleFactor),
-      });
+      const nextCol = colSizes[colIndex + 1];
+
+      // Last column
+      if (nextCol === undefined) {
+        const rest = colSizes.filter((_, i) => i !== colIndex);
+        const widthOfRest = rest.reduce((a, b) => a + b, 0);
+        const totalSize = widthOfRest + delta + initialSize;
+
+        // Attempted to be resized outside bounds
+        if (totalSize >= MAX_TABLE_WIDTH && delta > 0) {
+          return options?.onResize?.({ ...e, initialSize: 0, delta: MAX_TABLE_WIDTH - widthOfRest });
+        }
+      }
+
+      return options?.onResize?.({ ...e, initialSize, delta });
     },
   };
 
-  return (
-    <StyledRightHandle
-      contentEditable={false}
-      suppressContentEditableWarning
-      onDoubleClick={onDblClick}
-      {...rest}
-      options={scaledOptions}
-    />
-  );
+  return <StyledRightHandle contentEditable={false} suppressContentEditableWarning {...rest} options={scaledOptions} />;
 };
 
 const PADDING = ptToEm(6);
