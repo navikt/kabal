@@ -32,7 +32,7 @@ const ANNEN_INNGAAENDE_POST = {
 const UPLOADED_OPTIONS = [...SMART_DOCUMENT_OPTIONS, KJENNELSE_FRA_TRYGDERETTEN, ANNEN_INNGAAENDE_POST];
 
 interface Result {
-  options: Option[];
+  options: DistribusjonsTypeOption[];
   explanation: string;
 }
 
@@ -50,7 +50,7 @@ export const useDistribusjonstypeOptions = (type: DocumentTypeEnum): Result => {
   };
 };
 
-export interface Option {
+export interface DistribusjonsTypeOption {
   label: string;
   value: DistribusjonsType;
 }

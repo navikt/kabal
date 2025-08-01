@@ -1,8 +1,13 @@
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useDistribusjonstypeOptions } from '@app/hooks/use-distribusjonstype-options';
+import { type DistribusjonsTypeOption, useDistribusjonstypeOptions } from '@app/hooks/use-distribusjonstype-options';
 import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DISTRIBUSJONSTYPER, type DistribusjonsType, type IDocument } from '@app/types/documents/documents';
-import { Select, Tooltip } from '@navikt/ds-react';
+import {
+  DISTRIBUSJONSTYPER,
+  DISTRIBUTION_TYPE_NAMES,
+  type DistribusjonsType,
+  type IDocument,
+} from '@app/types/documents/documents';
+import { Select, Tag, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 interface Props {
@@ -10,11 +15,25 @@ interface Props {
   showLabel?: boolean;
 }
 
-export const SetDocumentType = ({ document, showLabel = false }: Props) => {
+export const SetDocumentType = ({ document, showLabel }: Props) => {
+  const { options, explanation } = useDistribusjonstypeOptions(document.type);
+
+  if (options.some(({ value }) => value === document.dokumentTypeId)) {
+    return <Options options={options} explanation={explanation} document={document} showLabel={showLabel} />;
+  }
+
+  return <DocumentTypeTag dokumentTypeId={document.dokumentTypeId} />;
+};
+
+interface IsOptionProps extends Props {
+  options: DistribusjonsTypeOption[];
+  explanation: string;
+}
+
+const Options = ({ options, explanation, document, showLabel = false }: IsOptionProps) => {
   const { id, dokumentTypeId } = document;
   const [setType] = useSetTypeMutation();
   const oppgaveId = useOppgaveId();
-  const { options, explanation } = useDistribusjonstypeOptions(document.type);
 
   const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
     if (isDocumentType(target.value) && oppgaveId !== skipToken) {
@@ -43,3 +62,17 @@ export const SetDocumentType = ({ document, showLabel = false }: Props) => {
 };
 
 const isDocumentType = (type: string): type is DistribusjonsType => DISTRIBUSJONSTYPER.some((t) => t === type);
+
+interface TypeTagProps {
+  dokumentTypeId: DistribusjonsType;
+}
+
+export const DocumentTypeTag = ({ dokumentTypeId }: TypeTagProps) => (
+  <Tooltip content={DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}>
+    <Tag variant="info" size="small">
+      <span className="overflow-hidden text-ellipsis whitespace-nowrap text-left">
+        {DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}
+      </span>
+    </Tag>
+  </Tooltip>
+);
