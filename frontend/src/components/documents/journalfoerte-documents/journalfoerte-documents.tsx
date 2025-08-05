@@ -45,14 +45,6 @@ export const JournalfoerteDocuments = () => {
     return journalpostIdList;
   }, [documents]);
 
-  useEffect(() => {
-    setShowVedlegg((prev) => {
-      const added = documentsWithVedleggIdList.filter((id) => !prev.includes(id));
-
-      return added.length > 0 ? [...prev, ...added] : prev;
-    });
-  }, [documentsWithVedleggIdList]);
-
   const showVedleggIdList = useShowVedlegg();
 
   // IDs of vedlegg with logiske vedlegg.
