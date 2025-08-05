@@ -5,7 +5,7 @@ import { getInitalHandling } from '@app/components/receivers/functions';
 import type { IErrorProperty } from '@app/components/receivers/is-send-error';
 import { Options } from '@app/components/receivers/options';
 import { StyledReceiver } from '@app/components/receivers/styled-components';
-import type { IMottaker } from '@app/types/documents/documents';
+import type { IdentifikatorMottaker, IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
@@ -13,9 +13,9 @@ import { Button, HStack, Label, Tag, Tooltip } from '@navikt/ds-react';
 import { styled } from 'styled-components';
 
 interface Props {
-  mottakerList: IMottaker[];
-  addMottakere: (mottakere: IMottaker[]) => void;
-  removeMottakere: (ids: string[]) => void;
+  mottakerList: IdentifikatorMottaker[];
+  addMottakere: (mottakere: IdentifikatorMottaker[]) => void;
+  removeMottaker: (id: string) => void;
   changeMottaker: (mottaker: IMottaker) => void;
   sendErrors: IErrorProperty[];
   templateId: TemplateIdEnum | undefined;
@@ -26,7 +26,7 @@ const EXTRA_RECEIVERS_ID = 'extra-receivers';
 export const CustomReceivers = ({
   mottakerList,
   addMottakere,
-  removeMottakere,
+  removeMottaker,
   changeMottaker,
   sendErrors,
   templateId,
@@ -45,7 +45,7 @@ export const CustomReceivers = ({
     />
     <Receivers
       mottakerList={mottakerList}
-      removeMottakere={removeMottakere}
+      removeMottaker={removeMottaker}
       changeMottaker={changeMottaker}
       sendErrors={sendErrors}
       templateId={templateId}
@@ -54,14 +54,14 @@ export const CustomReceivers = ({
 );
 
 interface ReceiversProps {
-  mottakerList: IMottaker[];
-  removeMottakere: (ids: string[]) => void;
+  mottakerList: IdentifikatorMottaker[];
+  removeMottaker: (id: string) => void;
   changeMottaker: (mottaker: IMottaker) => void;
   sendErrors: IErrorProperty[];
   templateId: TemplateIdEnum | undefined;
 }
 
-const Receivers = ({ mottakerList, removeMottakere, changeMottaker, sendErrors, templateId }: ReceiversProps) => {
+const Receivers = ({ mottakerList, removeMottaker, changeMottaker, sendErrors, templateId }: ReceiversProps) => {
   if (mottakerList.length === 0) {
     return null;
   }
@@ -73,7 +73,7 @@ const Receivers = ({ mottakerList, removeMottakere, changeMottaker, sendErrors, 
         const isPerson = part.type === IdType.FNR;
 
         return (
-          <StyledReceiver key={part.id} as="li" $accent="var(--a-border-success)">
+          <StyledReceiver key={part.identifikator} as="li" $accent="var(--a-border-success)">
             <HStack align="center" gap="1">
               <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
                 <HStack align="center" gap="1" paddingBlock="1">
@@ -83,7 +83,7 @@ const Receivers = ({ mottakerList, removeMottakere, changeMottaker, sendErrors, 
                       variant="tertiary-neutral"
                       title="Fjern"
                       icon={<TrashIcon color="var(--a-surface-danger)" aria-hidden />}
-                      onClick={() => removeMottakere([part.id])}
+                      onClick={() => removeMottaker(part.identifikator)}
                     />
                   </Tooltip>
                   <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>

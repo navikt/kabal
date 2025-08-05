@@ -4,7 +4,7 @@ import { SingleReceiver } from '@app/components/receivers/single-receiver';
 import { SuggestedReceivers } from '@app/components/receivers/suggested-receivers';
 import { UnreachableSuggestedReceivers } from '@app/components/receivers/unreachable-suggested-receivers';
 import { type IBrevmottaker, useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
-import { DistribusjonsType, type IMottaker } from '@app/types/documents/documents';
+import { DistribusjonsType, type IdentifikatorMottaker, type IMottaker } from '@app/types/documents/documents';
 import { PartStatusEnum } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Alert, VStack } from '@navikt/ds-react';
@@ -44,7 +44,9 @@ export const Receivers = ({
           : [...mottakerList];
 
       for (const mottaker of mottakere) {
-        if (newMottakere.some((m) => m.part.id === mottaker.part.id)) {
+        const { id, identifikator } = mottaker.part;
+
+        if (newMottakere.some((m) => m.part.id === id && m.part.identifikator === identifikator)) {
           continue;
         }
 
@@ -56,9 +58,22 @@ export const Receivers = ({
     [mottakerList, setMottakerList, reachableSuggestedReceivers, dokumentTypeId],
   );
 
-  const removeMottakere = useCallback(
+  const removePartMottakere = useCallback(
     (ids: string[]) => {
       const newMottakere = mottakerList.filter((m) => !ids.includes(m.part.id));
+
+      if (newMottakere.length === mottakerList.length) {
+        return;
+      }
+
+      setMottakerList(newMottakere);
+    },
+    [mottakerList, setMottakerList],
+  );
+
+  const removeCustomMottaker = useCallback(
+    (identifikator: string) => {
+      const newMottakere = mottakerList.filter((m) => m.part.identifikator !== identifikator);
 
       if (newMottakere.length === mottakerList.length) {
         return;
@@ -114,11 +129,13 @@ export const Receivers = ({
     );
 
     if (unreachableReceivers.length > 0) {
-      removeMottakere(unreachableReceivers.map((r) => r.part.id));
+      removePartMottakere(unreachableReceivers.map((r) => r.part.id));
     }
-  }, [mottakerList, removeMottakere]);
+  }, [mottakerList, removePartMottakere]);
 
-  const customReceivers = mottakerList.filter((m) => suggestedBrevmottakere.every((s) => s.part.id !== m.part.id));
+  const customReceivers = mottakerList
+    .filter(isIdentifikatorMottaker)
+    .filter((m) => suggestedBrevmottakere.every((s) => s.part.id !== m.part.id));
   const unreachableSuggestedReceivers = suggestedBrevmottakere.filter((s) => !s.reachable);
   const [firstReachableReceiver, ...restReachableSuggestedReceivers] = reachableSuggestedReceivers;
   const onlyOneReachableReceiver =
@@ -131,7 +148,7 @@ export const Receivers = ({
       <DefaultReceivers
         selectedIds={mottakerList.map((m) => m.part.id)}
         addMottakere={addMottakere}
-        removeMottakere={removeMottakere}
+        removeMottakere={removePartMottakere}
         changeMottaker={changeMottaker}
         sendErrors={sendErrors}
         templateId={templateId}
@@ -146,7 +163,7 @@ export const Receivers = ({
       <CustomReceivers
         mottakerList={customReceivers}
         addMottakere={addMottakere}
-        removeMottakere={removeMottakere}
+        removeMottaker={removeCustomMottaker}
         changeMottaker={changeMottaker}
         sendErrors={sendErrors}
         templateId={templateId}
@@ -201,3 +218,6 @@ const DefaultReceivers = ({ onlyOneReachable, receivers, dokumentTypeId, ...prop
 
   return <SuggestedReceivers {...props} receivers={onlyOneReachable ? rest : receivers} />;
 };
+
+const isIdentifikatorMottaker = (mottaker: IMottaker): mottaker is IdentifikatorMottaker =>
+  mottaker.part.identifikator !== null && mottaker.part.type !== null && mottaker.part.statusList !== null;

@@ -95,6 +95,10 @@ export interface IMottaker {
   overriddenAddress: IAddress | null;
 }
 
+export interface IdentifikatorMottaker extends Omit<IMottaker, 'part'> {
+  part: IdentifikatorPart;
+}
+
 export interface IFileDocument<P extends UUID | null> extends IBaseDocument<P> {
   type: DocumentTypeEnum.UPLOADED;
   isSmartDokument: false;
