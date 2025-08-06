@@ -15,6 +15,7 @@ import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/gr
 import { Fullmektig } from '@app/components/part/fullmektig/fullmektig';
 import { Part } from '@app/components/part/part';
 import { Type } from '@app/components/type/type';
+import { TRYGDERETTEN_ORGNR } from '@app/constants';
 import { isoDateToPretty } from '@app/domain/date';
 import { useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import type { IBehandlingEtterTryderettenOpphevet as IBehandlingEtterTrOpphevet } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -58,6 +59,12 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
             part={oppgavebehandling.klager}
             onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
             isLoading={klagerIsLoading}
+            invalidReceivers={[
+              {
+                id: TRYGDERETTEN_ORGNR,
+                message: 'Trygderetten kan ikke settes som opprinnelig klager / ankende part.',
+              },
+            ]}
           />
 
           <Fullmektig part={prosessfullmektig} />

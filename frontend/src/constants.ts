@@ -1,0 +1,1 @@
+export const TRYGDERETTEN_ORGNR = '974761084';

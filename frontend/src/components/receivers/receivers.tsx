@@ -43,17 +43,22 @@ export const Receivers = ({
             ]
           : [...mottakerList];
 
-      for (const mottaker of mottakere) {
-        const { id, identifikator } = mottaker.part;
+      let added = false;
 
-        if (newMottakere.some((m) => m.part.id === id && m.part.identifikator === identifikator)) {
+      for (const mottaker of mottakere) {
+        const { identifikator } = mottaker.part;
+
+        if (newMottakere.some((m) => m.part.identifikator === identifikator)) {
           continue;
         }
 
         newMottakere.push(mottaker);
+        added = true;
       }
 
-      setMottakerList(newMottakere);
+      if (added) {
+        setMottakerList(newMottakere);
+      }
     },
     [mottakerList, setMottakerList, reachableSuggestedReceivers, dokumentTypeId],
   );
@@ -167,6 +172,7 @@ export const Receivers = ({
         changeMottaker={changeMottaker}
         sendErrors={sendErrors}
         templateId={templateId}
+        dokumentTypeId={dokumentTypeId}
       />
 
       {reachableSuggestedReceivers.length === 0 && customReceivers.length === 0 ? (

@@ -26,16 +26,24 @@ interface ResultProps {
   isLoading: boolean;
   buttonText?: string;
   allowUnreachable?: boolean;
+  validate?: (part: IdentifikatorPart) => string | null;
 }
 
-const Result = ({ part, isLoading, onChange, buttonText = 'Bruk', allowUnreachable = false }: ResultProps) => {
+const Result = ({
+  part,
+  isLoading,
+  onChange,
+  buttonText = 'Bruk',
+  allowUnreachable = false,
+  validate,
+}: ResultProps) => {
   const isReachable =
     allowUnreachable ||
     part.statusList === null ||
     !part.statusList.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED);
 
   return (
-    <VStack asChild gap="2" align="start" marginBlock="space-16" paddingInline="space-12" paddingBlock="space-8">
+    <VStack asChild gap="2" align="start" paddingInline="space-12" paddingBlock="space-8">
       <Tag variant={part.type === IdType.FNR ? 'info' : 'neutral'} size="medium">
         <BodyShort>
           <PartNameAndIdentifikator identifikator={part.identifikator} name={part.name} />
@@ -43,17 +51,51 @@ const Result = ({ part, isLoading, onChange, buttonText = 'Bruk', allowUnreachab
 
         <PartStatusList statusList={part.statusList} size="xsmall" />
 
-        {isReachable ? (
-          <Button onClick={() => onChange(part)} loading={isLoading} size="small" variant="secondary">
-            {buttonText}
-          </Button>
-        ) : (
-          <Alert size="small" variant="warning">
-            Parten kan ikke velges som mottaker fordi {getUnreachableText(part.statusList)}.
-          </Alert>
-        )}
+        <ActionOrError
+          isReachable={isReachable}
+          buttonText={buttonText}
+          onClick={() => onChange(part)}
+          loading={isLoading}
+          part={part}
+          validate={validate}
+        />
       </Tag>
     </VStack>
+  );
+};
+
+interface ActionOrErrorProps {
+  isReachable: boolean;
+  buttonText: string;
+  onClick: () => void;
+  loading?: boolean;
+  part: IdentifikatorPart;
+  validate?: (part: IdentifikatorPart) => string | null;
+}
+
+const ActionOrError = ({ isReachable, buttonText, onClick, loading, part, validate }: ActionOrErrorProps) => {
+  const error = validate?.(part) ?? null;
+
+  if (error !== null) {
+    return (
+      <Alert size="small" variant="info" inline>
+        {error}
+      </Alert>
+    );
+  }
+
+  if (isReachable) {
+    return (
+      <Button size="small" variant="secondary" onClick={onClick} loading={loading}>
+        {buttonText}
+      </Button>
+    );
+  }
+
+  return (
+    <Alert size="small" variant="warning" inline>
+      Parten kan ikke velges som mottaker fordi {getUnreachableText(part.statusList)}.
+    </Alert>
   );
 };
 
