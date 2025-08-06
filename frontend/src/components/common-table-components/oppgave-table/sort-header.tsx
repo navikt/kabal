@@ -10,17 +10,37 @@ interface Props {
   onSortChange: (sortKey: string) => void;
 }
 
-export const SortHeader = ({ sortKey, children, sortering, rekkefoelge, onSortChange }: Props) => (
-  <Table.HeaderCell aria-sort={sortering === sortKey ? SORT_MAP[rekkefoelge] : 'none'}>
-    <Button
-      variant="tertiary"
-      size="medium"
-      onClick={() => onSortChange(sortKey)}
-      icon={<SortIcon sortKey={sortKey} sortering={sortering} rekkefoelge={rekkefoelge} />}
-    >
-      {children}
-    </Button>
+export const SortHeader = ({ sortKey, sortering, rekkefoelge, ...rest }: Props) => (
+  <Table.HeaderCell aria-sort={getAriaSort(sortKey, sortering, rekkefoelge)}>
+    <SortButton sortKey={sortKey} sortering={sortering} rekkefoelge={rekkefoelge} {...rest} />
   </Table.HeaderCell>
+);
+
+export const getAriaSort = (
+  sortKey: SortFieldEnum,
+  sortering: SortFieldEnum,
+  rekkefoelge: SortOrderEnum,
+): 'ascending' | 'descending' | 'none' => {
+  if (sortering !== sortKey) {
+    return 'none';
+  }
+  return rekkefoelge === SortOrderEnum.ASC ? 'ascending' : 'descending';
+};
+
+export interface SortButtonProps extends Props {
+  className?: string;
+}
+
+export const SortButton = ({ sortKey, children, sortering, rekkefoelge, onSortChange, className }: SortButtonProps) => (
+  <Button
+    variant="tertiary"
+    size="medium"
+    onClick={() => onSortChange(sortKey)}
+    icon={<SortIcon sortKey={sortKey} sortering={sortering} rekkefoelge={rekkefoelge} />}
+    className={className}
+  >
+    {children}
+  </Button>
 );
 
 interface SortIconProps {
@@ -39,9 +59,4 @@ const SortIcon = ({ sortKey, sortering, rekkefoelge }: SortIconProps) => {
   }
 
   return <SortDownIcon aria-hidden role="presentation" />;
-};
-
-const SORT_MAP: Record<SortOrderEnum, 'ascending' | 'descending'> = {
-  [SortOrderEnum.ASC]: 'ascending',
-  [SortOrderEnum.DESC]: 'descending',
 };
