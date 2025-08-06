@@ -1,5 +1,6 @@
 import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
 import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
+import { SortHeader } from '@app/components/common-table-components/oppgave-table/sort-header';
 import {
   useOppgaveTableFerdigstilt,
   useOppgaveTableFrist,
@@ -55,9 +56,9 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         return <Registreringshjemler key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Age:
         return (
-          <Table.ColumnHeader key={key} sortable sortKey={SortFieldEnum.ALDER}>
+          <SortHeader key={key} sortKey={SortFieldEnum.ALDER} {...sortProps}>
             {TABLE_HEADERS[key]}
-          </Table.ColumnHeader>
+          </SortHeader>
         );
       case ColumnKeyEnum.Deadline:
         return (
@@ -73,9 +74,9 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         );
       case ColumnKeyEnum.PaaVentTil:
         return (
-          <Table.ColumnHeader key={key} sortable sortKey={SortFieldEnum.PAA_VENT_TO}>
+          <SortHeader key={key} sortKey={SortFieldEnum.PAA_VENT_TO} {...sortProps}>
             {TABLE_HEADERS[key]}
-          </Table.ColumnHeader>
+          </SortHeader>
         );
       case ColumnKeyEnum.TildelingWithFilter:
       case ColumnKeyEnum.Oppgavestyring:
