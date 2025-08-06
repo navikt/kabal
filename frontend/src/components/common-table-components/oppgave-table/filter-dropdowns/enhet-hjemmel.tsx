@@ -11,7 +11,7 @@ export const EnhetHjemmel = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const [hjemler, setHjemler] = useOppgaveTableHjemler(tableKey);
 
   return (
-    <Table.ColumnHeader>
+    <Table.ColumnHeader aria-sort="none">
       <FilterDropdown
         selected={hjemler ?? []}
         onChange={setHjemler}

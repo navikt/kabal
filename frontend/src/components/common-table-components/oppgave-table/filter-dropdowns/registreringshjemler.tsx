@@ -32,7 +32,7 @@ export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProp
   const chevron = open ? <ChevronUpIcon aria-hidden fontSize={20} /> : <ChevronDownIcon aria-hidden fontSize={20} />;
 
   return (
-    <Table.ColumnHeader className="relative" ref={ref}>
+    <Table.ColumnHeader className="relative" aria-sort="none" ref={ref}>
       <ToggleButton
         onClick={toggleOpen}
         data-testid="lovhjemmel-button"

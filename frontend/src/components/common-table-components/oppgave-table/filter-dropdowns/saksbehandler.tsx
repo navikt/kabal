@@ -16,7 +16,7 @@ export const Saksbehandler = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const [tildelteSaksbehandlere, setTildelteSaksbehandlere] = useOppgaveTableTildelteSaksbehandlere(tableKey);
 
   return (
-    <Table.ColumnHeader>
+    <Table.ColumnHeader aria-sort="none">
       <FilterDropdown
         selected={tildelteSaksbehandlere ?? []}
         onChange={setTildelteSaksbehandlere}

@@ -14,7 +14,7 @@ export const Rol = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const [tildelteRol, setTildelteRol] = useOppgaveTableTildelteRol(tableKey);
 
   return (
-    <Table.ColumnHeader>
+    <Table.ColumnHeader aria-sort="none">
       <FilterDropdown selected={tildelteRol ?? []} onChange={setTildelteRol} options={options} data-testid="filter-rol">
         {TABLE_HEADERS[columnKey]}
       </FilterDropdown>

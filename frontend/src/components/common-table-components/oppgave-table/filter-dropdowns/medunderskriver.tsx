@@ -16,7 +16,7 @@ export const Medunderskriver = ({ tableKey, columnKey }: FilterDropdownProps) =>
   const [medunderskrivere, setMedunderskrivere] = useOppgaveTableMedunderskrivere(tableKey);
 
   return (
-    <Table.ColumnHeader>
+    <Table.ColumnHeader aria-sort="none">
       <FilterDropdown
         selected={medunderskrivere ?? []}
         onChange={setMedunderskrivere}
