@@ -15,7 +15,7 @@ export const Sakstype = ({ columnKey, tableKey }: FilterDropdownProps) => {
   const [typer, setTyper] = useOppgaveTableTyper(tableKey);
 
   return (
-    <Table.ColumnHeader>
+    <Table.ColumnHeader aria-sort="none">
       <FilterDropdown<SaksTypeEnum>
         selected={typer ?? []}
         onChange={setTyper}
@@ -32,7 +32,7 @@ export const SakstypeWithAnkeITrygderetten = ({ columnKey, tableKey }: FilterDro
   const [typer, setTyper] = useOppgaveTableTyper(tableKey);
 
   return (
-    <Table.ColumnHeader>
+    <Table.ColumnHeader aria-sort="none">
       <FilterDropdown<SaksTypeEnum>
         selected={typer ?? []}
         onChange={setTyper}

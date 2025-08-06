@@ -11,7 +11,7 @@ export const Hjemmel = ({ columnKey, tableKey }: FilterDropdownProps) => {
   const [hjemler, setHjemler] = useOppgaveTableHjemler(tableKey);
 
   return (
-    <Table.ColumnHeader>
+    <Table.ColumnHeader aria-sort="none">
       <FilterDropdown
         selected={hjemler ?? []}
         onChange={setHjemler}

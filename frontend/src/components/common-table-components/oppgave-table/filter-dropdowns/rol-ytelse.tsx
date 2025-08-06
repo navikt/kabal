@@ -12,7 +12,7 @@ export const RolYtelse = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const [ytelser, setYtelser] = useOppgaveTableYtelser(tableKey);
 
   return (
-    <Table.ColumnHeader>
+    <Table.ColumnHeader aria-sort="none">
       <FilterDropdown
         selected={ytelser ?? []}
         onChange={setYtelser}
