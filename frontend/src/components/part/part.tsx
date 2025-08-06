@@ -1,6 +1,6 @@
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { EditPart } from '@app/components/part/edit-part';
+import { EditPart, type InvalidReceiver } from '@app/components/part/edit-part';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import type { IPart } from '@app/types/oppgave-common';
@@ -10,23 +10,34 @@ import { useState } from 'react';
 import { BehandlingSection } from '../behandling/behandlingsdetaljer/behandling-section';
 import { DeleteButton } from './delete-button';
 
-interface DeletableProps {
-  isDeletable: true;
+interface CommonProps {
   label: string;
+  isLoading: boolean;
+  invalidReceivers?: InvalidReceiver[];
+  warningReceivers?: InvalidReceiver[];
+}
+
+interface DeletableProps extends CommonProps {
+  isDeletable: true;
   part: IPart | null;
   onChange: (part: IPart | null) => void;
-  isLoading: boolean;
 }
 
-interface NonDeletableProps {
+interface NonDeletableProps extends CommonProps {
   isDeletable: false;
-  label: string;
   part: IPart;
   onChange: (part: IPart) => void;
-  isLoading: boolean;
 }
 
-export const Part = ({ part, isDeletable, label, onChange, isLoading }: DeletableProps | NonDeletableProps) => {
+export const Part = ({
+  part,
+  isDeletable,
+  label,
+  onChange,
+  isLoading,
+  invalidReceivers,
+  warningReceivers,
+}: DeletableProps | NonDeletableProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const canEdit = useCanEditBehandling();
 
@@ -51,6 +62,8 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
             }}
             isLoading={isLoading}
             autoFocus
+            invalidReceivers={invalidReceivers}
+            warningReceivers={warningReceivers}
           />
         ) : null}
       </BehandlingSection>
@@ -96,6 +109,7 @@ export const Part = ({ part, isDeletable, label, onChange, isLoading }: Deletabl
           isLoading={isLoading}
           autoFocus
           allowUnreachable
+          invalidReceivers={invalidReceivers}
         />
       ) : null}
     </BehandlingSection>

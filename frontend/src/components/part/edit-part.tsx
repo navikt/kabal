@@ -10,6 +10,11 @@ import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { Lookup } from './lookup';
 
+export interface InvalidReceiver {
+  id: string;
+  message: string;
+}
+
 interface EditPartProps {
   onChange: (part: IdentifikatorPart) => void;
   onClose?: () => void;
@@ -18,12 +23,25 @@ interface EditPartProps {
   autoFocus?: boolean;
   id?: string;
   allowUnreachable?: boolean;
+  validate?: (part: IdentifikatorPart) => string | null;
+  invalidReceivers?: InvalidReceiver[];
+  warningReceivers?: InvalidReceiver[];
 }
 
-export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPartProps) => {
+export const EditPart = ({
+  onChange,
+  autoFocus,
+  onClose,
+  id,
+  invalidReceivers = [],
+  warningReceivers = [],
+  ...props
+}: EditPartProps) => {
   const { data: oppgave } = useOppgave();
   const [rawValue, setValue] = useState('');
   const [inputError, setInputError] = useState<string>();
+  const [invalidReceiver, setInvalidReceiver] = useState<InvalidReceiver | null>(null);
+  const [warningReceiver, setWarningReceiver] = useState<InvalidReceiver | null>(null);
   const [search, { data, isLoading, isFetching, isError, error }] = useLazySearchpartwithutsendingskanalQuery();
 
   if (oppgave === undefined) {
@@ -31,15 +49,31 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
   }
 
   const onSearchChange = (value: string) => {
+    setInvalidReceiver(null);
+    setWarningReceiver(null);
+
     const [identifikator, validationError] = cleanAndValidate(value);
 
     if (validationError !== undefined) {
       return;
     }
 
-    const { ytelseId } = oppgave;
+    const invalidReceiver = invalidReceivers.find((r) => r.id === identifikator);
 
-    search({ identifikator, sakenGjelderId: oppgave.sakenGjelder.identifikator, ytelseId });
+    if (invalidReceiver !== undefined) {
+      setInvalidReceiver(invalidReceiver);
+      return;
+    }
+
+    const warningReceiver = warningReceivers.find((r) => r.id === identifikator);
+
+    if (warningReceiver !== undefined) {
+      setWarningReceiver(warningReceiver);
+    }
+
+    const { ytelseId, sakenGjelder } = oppgave;
+
+    search({ identifikator, sakenGjelderId: sakenGjelder.identifikator, ytelseId });
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -62,7 +96,7 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
   const isSearching = isLoading || isFetching;
 
   return (
-    <VStack gap="2 0" id={id}>
+    <VStack gap="4 0" id={id}>
       <Search
         label="Søk"
         size="small"
@@ -90,18 +124,31 @@ export const EditPart = ({ onChange, autoFocus, onClose, id, ...props }: EditPar
           loading={isSearching}
         />
       </Search>
-      <Result
-        part={data}
-        search={rawValue}
-        onChange={(p) => {
-          setValue('');
-          onChange(p);
-        }}
-        isSearching={isSearching}
-        isError={isError}
-        error={error}
-        {...props}
-      />
+
+      {warningReceiver !== null ? (
+        <Alert variant="info" size="small">
+          {warningReceiver.message}
+        </Alert>
+      ) : null}
+
+      {invalidReceiver === null ? (
+        <Result
+          part={data}
+          search={rawValue}
+          onChange={(p) => {
+            setValue('');
+            onChange(p);
+          }}
+          isSearching={isSearching}
+          isError={isError}
+          error={error}
+          {...props}
+        />
+      ) : (
+        <Alert variant="warning" size="small">
+          {invalidReceiver.message}
+        </Alert>
+      )}
     </VStack>
   );
 };
@@ -116,6 +163,7 @@ interface ResultProps {
   buttonText?: string;
   allowUnreachable?: boolean;
   error: SerializedError | FetchBaseQueryError | undefined;
+  validate?: (part: IdentifikatorPart) => string | null;
 }
 
 const Result = ({ part, search, isError, error, ...props }: ResultProps) => {

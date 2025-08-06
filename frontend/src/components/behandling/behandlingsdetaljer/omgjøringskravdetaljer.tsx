@@ -8,6 +8,7 @@ import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domai
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
 import { Fullmektig } from '@app/components/part/fullmektig/fullmektig';
 import { Type } from '@app/components/type/type';
+import { TRYGDERETTEN_ORGNR } from '@app/constants';
 import { useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOmgjøringskravbehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -45,6 +46,12 @@ export const Omgjøringskravdetaljer = ({ oppgavebehandling }: Props) => {
             part={oppgavebehandling.klager}
             onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
             isLoading={klagerIsLoading}
+            invalidReceivers={[
+              {
+                id: TRYGDERETTEN_ORGNR,
+                message: 'Trygderetten kan ikke settes som den som krever omgjøring.',
+              },
+            ]}
           />
 
           <Fullmektig part={prosessfullmektig} />

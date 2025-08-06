@@ -2,6 +2,7 @@ import { BehandlingSection } from '@app/components/behandling/behandlingsdetalje
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { EditPart } from '@app/components/part/edit-part';
 import { WithoutId } from '@app/components/part/fullmektig/without-id';
+import { TRYGDERETTEN_ORGNR } from '@app/constants';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
@@ -108,6 +109,12 @@ export const Fullmektig = ({ part }: Props) => {
               id={part?.id}
               isLoading={isLoading}
               autoFocus
+              invalidReceivers={[
+                {
+                  id: TRYGDERETTEN_ORGNR,
+                  message: 'Trygderetten kan ikke settes som fullmektig.',
+                },
+              ]}
             />
           ) : null}
           {value === Option.ADDRESS ? <WithoutId part={part} onClose={onClose} /> : null}
