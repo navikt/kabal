@@ -10,7 +10,7 @@ interface ITabContext {
 
 export const TabContext = createContext<ITabContext>({
   getTabRef: () => undefined,
-  setTabRef: () => {},
+  setTabRef: () => undefined,
 });
 
 interface Props {

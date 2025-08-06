@@ -30,7 +30,7 @@ import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { createContext, useCallback, useContext, useState } from 'react';
 
-const NOOP = () => {};
+const NOOP = () => undefined;
 
 interface KeyboardContextType {
   // Navigation

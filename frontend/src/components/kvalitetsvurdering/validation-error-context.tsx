@@ -8,7 +8,7 @@ interface IValidationErrorContext {
 
 export const ValidationErrorContext = createContext<IValidationErrorContext>({
   validationSectionErrors: [],
-  setValidationSectionErrors: () => {},
+  setValidationSectionErrors: () => undefined,
 });
 
 interface Props {

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.1.3/schema.json",
   "root": true,
   "vcs": {
     "enabled": true,
@@ -29,13 +29,13 @@
     "rules": {
       "recommended": true,
       "performance": {
-        "noDelete": "warn",
-        "noBarrelFile": "warn",
-        "noAccumulatingSpread": "warn",
-        "useTopLevelRegex": "warn",
-        "noDynamicNamespaceImportAccess": "warn",
-        "noNamespaceImport": "warn",
-        "noReExportAll": "warn"
+        "noDelete": "error",
+        "noBarrelFile": "error",
+        "noAccumulatingSpread": "error",
+        "useTopLevelRegex": "error",
+        "noDynamicNamespaceImportAccess": "error",
+        "noNamespaceImport": "error",
+        "noReExportAll": "error"
       },
       "a11y": {
         "recommended": true
@@ -44,19 +44,19 @@
         "recommended": true
       },
       "nursery": {
-        "noSecrets": { "level": "off", "options": {} },
-        "useExplicitType": { "level": "off" },
-        "noImportCycles": {  "level": "on" },
-        "useSortedClasses": { "level": "on", "fix": "safe", "options": { } }
+        "noSecrets": "off",
+        "useExplicitType": "off",
+        "noImportCycles": "on",
+        "useSortedClasses": { "level": "on", "fix": "safe", "options": {} }
       },
       "correctness": {
         "useImportExtensions": { "level": "off", "fix": "none", "options": {} },
-        "noUnusedImports": { "level": "error", "fix": "safe" }
+        "noUnusedImports": { "level": "error", "fix": "safe", "options": {} }
       },
       "style": {
-        "noImplicitBoolean": { "level": "off", "fix": "none" },
-        "useDefaultSwitchClause": { "level": "off" },
-        "useNamingConvention": { "level": "off", "fix": "none", "options": {} },
+        "noImplicitBoolean": { "level": "off", "fix": "none", "options": {} },
+        "useDefaultSwitchClause": "off",
+        "useNamingConvention": { "level": "off",  "options": {} },
         "noParameterAssign": "error",
         "useAsConstAssertion": "error",
         "useDefaultParameterLast": "error",
@@ -67,21 +67,21 @@
         "useNumberNamespace": "error",
         "noInferrableTypes": "error",
         "noUselessElse": "error",
-        "useComponentExportOnlyModules": { "level": "off", "options": {} },
-        "noEnum": { "level": "off" },
-        "useConsistentMemberAccessibility": { "level": "off", "options": {} },
-        "useConsistentCurlyBraces": { "level": "off", "fix": "none" }
+        "useComponentExportOnlyModules": "off",
+        "noEnum": "off",
+        "useConsistentMemberAccessibility": "off",
+        "useConsistentCurlyBraces": { "level": "off", "fix": "none", "options": {} }
       },
       "suspicious": {
-        "noConsole": { "level": "off", "options": { "allow": ["debug", "info", "warn", "error"] } },
-        "noReactSpecificProps": { "level": "off" },
-        "noEmptyBlockStatements": { "level": "off" },
+        "noConsole": { "level": "error", "options": { "allow": ["debug", "info", "warn", "error", "[level]"] } },
+        "noReactSpecificProps": "off",
+        "noEmptyBlockStatements": "error",
         "noFocusedTests": "error"
       },
       "complexity": {
-        "useSimplifiedLogicExpression": { "level": "off" },
-        "noExcessiveCognitiveComplexity": { "level": "warn", "options": { "maxAllowedComplexity": 25 } },
-        "noUselessFragments": {  "level": "on", "fix": "safe" }
+        "useSimplifiedLogicExpression": "off",
+        "noExcessiveCognitiveComplexity": { "level": "error", "options": { "maxAllowedComplexity": 25 } },
+        "noUselessFragments": {  "level": "on", "fix": "safe", "options": {} }
       }
     }
   },

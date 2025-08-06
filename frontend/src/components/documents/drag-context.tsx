@@ -14,12 +14,12 @@ interface IDragAndDropContext {
 
 export const DragAndDropContext = createContext<IDragAndDropContext>({
   draggedJournalfoertDocuments: [],
-  setDraggedJournalfoertDocuments: () => {},
+  setDraggedJournalfoertDocuments: () => undefined,
   draggedDocument: null,
-  setDraggedDocument: () => {},
-  clearDragState: () => {},
+  setDraggedDocument: () => undefined,
+  clearDragState: () => undefined,
   draggingEnabled: true,
-  setDraggingEnabled: () => {},
+  setDraggingEnabled: () => undefined,
 });
 
 interface Props {

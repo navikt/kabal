@@ -11,7 +11,7 @@ interface IModalContext {
   setValidationErrors: (errors: ValidationError[]) => void;
 }
 
-const noop = () => {};
+const noop = () => undefined;
 
 export const ModalContext = createContext<IModalContext>({
   document: null,
