@@ -2,7 +2,7 @@ import { EDITOR_SCALE_CSS_VAR, useScaleState } from '@app/components/smart-edito
 import { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { createContext, type ReactNode, useEffect } from 'react';
 
-const NOOP = () => {};
+const NOOP = () => undefined;
 
 interface ScaleContextType extends ReturnType<typeof useScaleState> {
   scalingGroup: ScalingGroup;

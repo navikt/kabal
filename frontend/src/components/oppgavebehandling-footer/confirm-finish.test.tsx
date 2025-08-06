@@ -56,7 +56,7 @@ describe('ConfirmFinish', () => {
 
     test.each(cases)('Requires Gosys oppgave: %p', async (requiresGosysOppgave) => {
       mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, requiresGosysOppgave);
-      render(<ConfirmFinish cancel={() => {}} show />);
+      render(<ConfirmFinish cancel={() => undefined} show />);
 
       const buttonText = requiresGosysOppgave ? 'Oppdater oppgaven i Gosys og fullfør' : 'Fullfør';
       const finishButton = screen.getByRole('button', { name: buttonText });
@@ -84,7 +84,7 @@ describe('ConfirmFinish', () => {
 
       test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, utfall, false);
-        render(<ConfirmFinish cancel={() => {}} show />);
+        render(<ConfirmFinish cancel={() => undefined} show />);
 
         const buttonText = 'Fullfør';
         const finishButton = screen.getByRole('button', { name: buttonText });
@@ -101,7 +101,7 @@ describe('ConfirmFinish', () => {
     describe('Requires Gosys oppgave', async () => {
       test('Medhold etter forvaltningsloven § 35', async () => {
         mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35, true);
-        render(<ConfirmFinish cancel={() => {}} show />);
+        render(<ConfirmFinish cancel={() => undefined} show />);
 
         const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
         const finishButton = screen.getByRole('button', { name: buttonText });
@@ -118,7 +118,7 @@ describe('ConfirmFinish', () => {
 
       test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, utfall, true);
-        render(<ConfirmFinish cancel={() => {}} show />);
+        render(<ConfirmFinish cancel={() => undefined} show />);
 
         const buttonText = 'Fullfør';
         const finishButton = screen.getByRole('button', { name: buttonText });
@@ -147,7 +147,7 @@ describe('ConfirmFinish', () => {
 
       test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, false);
-        render(<ConfirmFinish cancel={() => {}} show />);
+        render(<ConfirmFinish cancel={() => undefined} show />);
         const buttonText = 'Fullfør';
         expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
 
@@ -160,7 +160,7 @@ describe('ConfirmFinish', () => {
 
       test('Opphevet', async () => {
         mockOppgave(type, UtfallEnum.OPPHEVET, false);
-        render(<ConfirmFinish cancel={() => {}} show />);
+        render(<ConfirmFinish cancel={() => undefined} show />);
         const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal.';
         const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
         expect(screen.getByRole('button', { name: button1 })).toBeVisible();
@@ -175,7 +175,7 @@ describe('ConfirmFinish', () => {
 
       test('Henvist', async () => {
         mockOppgave(type, UtfallEnum.HENVIST, false);
-        render(<ConfirmFinish cancel={() => {}} show />);
+        render(<ConfirmFinish cancel={() => undefined} show />);
         const button = 'Fullfør';
         expect(screen.getByRole('button', { name: button })).toBeVisible();
 
@@ -192,7 +192,7 @@ describe('ConfirmFinish', () => {
     describe('Requires Gosys oppgave', async () => {
       test('Opphevet', async () => {
         mockOppgave(type, UtfallEnum.OPPHEVET, true);
-        render(<ConfirmFinish cancel={() => {}} show />);
+        render(<ConfirmFinish cancel={() => undefined} show />);
         const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal. Husk å sende oppgave i Gosys.';
         const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
         expect(screen.getByRole('button', { name: button1 })).toBeVisible();
@@ -215,7 +215,7 @@ describe('ConfirmFinish', () => {
 
       test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, true);
-        render(<ConfirmFinish cancel={() => {}} show />);
+        render(<ConfirmFinish cancel={() => undefined} show />);
         const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
         expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
 

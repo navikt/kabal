@@ -12,7 +12,7 @@ import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { TRange } from 'platejs';
 import { createContext, type RefObject, useRef, useState } from 'react';
 
-const noop = () => {};
+const noop = () => undefined;
 
 interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'templateId' | 'dokumentTypeId'> {
   showGodeFormuleringer: boolean;

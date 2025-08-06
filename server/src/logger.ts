@@ -90,7 +90,20 @@ const logDefined = (message: string | undefined, level: Level): void => {
     return;
   }
 
-  console[level](message);
+  switch (level) {
+    case 'debug':
+      console.debug(message);
+      break;
+    case 'info':
+      console.info(message);
+      break;
+    case 'warn':
+      console.warn(message);
+      break;
+    case 'error':
+      console.error(message);
+      break;
+  }
 };
 
 const getLog = (

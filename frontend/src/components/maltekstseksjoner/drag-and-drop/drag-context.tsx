@@ -10,10 +10,10 @@ interface IDragAndDropContext {
 
 export const DragAndDropContext = createContext<IDragAndDropContext>({
   draggedTextId: '',
-  setDraggedTextId: () => {},
-  clearDragState: () => {},
+  setDraggedTextId: () => undefined,
+  clearDragState: () => undefined,
   draggingEnabled: true,
-  setDraggingEnabled: () => {},
+  setDraggingEnabled: () => undefined,
 });
 
 interface Props {

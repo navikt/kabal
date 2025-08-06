@@ -151,7 +151,7 @@ const optimisticUpdate = async ({ id, ...update }: Update, queryFulfilled: Query
   await pessimisticUpdate(id, queryFulfilled, patchResult.undo);
 };
 
-const pessimisticUpdate = async (id: string, queryFulfilled: QueryFulfiled, undo = () => {}) => {
+const pessimisticUpdate = async (id: string, queryFulfilled: QueryFulfiled, undo = (): void => undefined) => {
   try {
     const { data } = await queryFulfilled;
 

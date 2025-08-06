@@ -5,7 +5,7 @@ export const createDragUI = (
   e: React.DragEvent,
 ): cleanFn => {
   if (dragElementRef.current === null) {
-    return () => {};
+    return () => undefined;
   }
 
   const width = dragElementRef.current.offsetWidth;

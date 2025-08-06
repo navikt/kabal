@@ -5,4 +5,4 @@ interface ContextProps {
   close: () => void;
 }
 
-export const Context = createContext<ContextProps>({ isOpen: false, close: () => {} });
+export const Context = createContext<ContextProps>({ isOpen: false, close: () => undefined });
