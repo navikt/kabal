@@ -3,7 +3,7 @@ import { adjustColSizes } from '@app/plate/toolbar/table/table';
 
 const MAX_WIDTH = 10;
 
-describe.only('adjustColSizes', () => {
+describe('adjustColSizes', () => {
   describe('with adding column to the right', () => {
     const before = false;
 

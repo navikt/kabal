@@ -75,7 +75,8 @@
       "suspicious": {
         "noConsole": { "level": "off", "options": { "allow": ["debug", "info", "warn", "error"] } },
         "noReactSpecificProps": { "level": "off" },
-        "noEmptyBlockStatements": { "level": "off" }
+        "noEmptyBlockStatements": { "level": "off" },
+        "noFocusedTests": "error"
       },
       "complexity": {
         "useSimplifiedLogicExpression": { "level": "off" },
