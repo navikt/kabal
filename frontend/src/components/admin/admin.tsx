@@ -1,6 +1,7 @@
 import { InsertHjemlerInSettings } from '@app/components/admin/insert-hjemler-in-settings';
 import { MerkantilTaskList } from '@app/components/admin/merkantil-task-list/merkantil-task-list';
 import {
+  useLazyLogInaccessibleQuery,
   useRecreateElasticAdminMutation,
   useRefillElasticAdminMutation,
   useResendDvhMutation,
@@ -19,6 +20,7 @@ export const Admin = () => (
         <ApiButton useApi={useRecreateElasticAdminMutation}>KABAL-SEARCH OPENSEARCH RECREATE</ApiButton>
         <ApiButton useApi={useRefillElasticAdminMutation}>KABAL-API KAFKA REFILL</ApiButton>
         <ApiButton useApi={useResendDvhMutation}>KABAL-API DVH RESEND</ApiButton>
+        <ApiButton useApi={useLazyLogInaccessibleQuery}>KABAL-API LOG INACCESSIBLE</ApiButton>
       </HStack>
     </BoxNew>
 

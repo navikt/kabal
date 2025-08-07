@@ -93,6 +93,9 @@ export const kabalInternalApi = createApi({
         body,
       }),
     }),
+    logInaccessible: builder.query<void, void>({
+      query: () => '/kabal-api/internal/log-inaccessible',
+    }),
   }),
 });
 
@@ -103,4 +106,5 @@ export const {
   useGetMerkantilTasksQuery,
   useInsertHjemlerInSettingsMutation,
   useCompleteMerkantilTaskMutation,
+  useLazyLogInaccessibleQuery,
 } = kabalInternalApi;
