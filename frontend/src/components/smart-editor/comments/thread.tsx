@@ -45,7 +45,7 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isExpanded 
     >
       <BoxNew
         as="section"
-        background="default"
+        background="input"
         borderWidth="1"
         borderColor="neutral"
         borderRadius="medium"

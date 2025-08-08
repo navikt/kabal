@@ -10,9 +10,10 @@ import { useContext, useState } from 'react';
 interface DeleteButtonProps {
   id: string;
   title: string;
+  className?: string;
 }
 
-export const DeleteButton = ({ id, title }: DeleteButtonProps) => {
+export const DeleteButton = ({ id, title, className }: DeleteButtonProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { data: oppgave } = useOppgave();
   const { dokumentId } = useContext(SmartEditorContext);
@@ -43,7 +44,7 @@ export const DeleteButton = ({ id, title }: DeleteButtonProps) => {
         onClick={() => setShowConfirm(true)}
         disabled={isDeleting}
         title={title}
-        className="justify-start"
+        className={className}
       />
     );
   }
@@ -57,7 +58,7 @@ export const DeleteButton = ({ id, title }: DeleteButtonProps) => {
         onClick={onDelete}
         loading={isDeleting}
         title={title}
-        className="justify-start"
+        className={className}
       />
       <Button
         size="xsmall"
@@ -66,7 +67,7 @@ export const DeleteButton = ({ id, title }: DeleteButtonProps) => {
         onClick={() => setShowConfirm(false)}
         disabled={isDeleting}
         title="Avbryt"
-        className="justify-start"
+        className={className}
       />
     </>
   );
