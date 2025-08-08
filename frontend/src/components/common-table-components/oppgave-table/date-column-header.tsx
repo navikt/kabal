@@ -1,11 +1,7 @@
-import {
-  getAriaSort,
-  SortButton,
-  type SortButtonProps,
-} from '@app/components/common-table-components/oppgave-table/sort-header';
+import { getAriaSort, SortButton, type SortButtonProps } from '@app/components/common-table-components/sort-header';
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
-import { BoxNew, HStack, Table } from '@navikt/ds-react';
+import { BoxNew, type ButtonProps, HStack, Table } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 
@@ -13,9 +9,10 @@ interface FilterProps {
   from: string | undefined;
   to: string | undefined;
   setDateRange: (from: string | undefined, to: string | undefined) => void;
+  size?: ButtonProps['size'];
 }
 
-const Filter = ({ from, to, setDateRange }: FilterProps) => {
+const Filter = ({ from, to, setDateRange, size }: FilterProps) => {
   const onChange = (range: DateRange | undefined) => {
     if (range === undefined) {
       setDateRange(undefined, undefined);
@@ -28,10 +25,12 @@ const Filter = ({ from, to, setDateRange }: FilterProps) => {
     );
   };
 
-  return <DatePickerRange onChange={onChange} selected={{ from, to }} buttonClassName="rounded-l-none" />;
+  return (
+    <DatePickerRange onChange={onChange} selected={{ from, to }} buttonSize={size} buttonClassName="rounded-l-none" />
+  );
 };
 
-interface DateColumnHeaderProps extends FilterProps, SortButtonProps {
+interface DateColumnHeaderProps extends FilterProps, Omit<SortButtonProps, 'size'> {
   interactive?: boolean;
 }
 
@@ -51,7 +50,7 @@ export const DateColumnHeader = ({
       width="fit-content"
       className="-outline-offset-2 hover:outline-2 hover:outline-ax-bg-accent-moderate-hover"
     >
-      <HStack align="stretch" gap="1" wrap={false}>
+      <HStack align="stretch" wrap={false}>
         {interactive ? (
           <>
             <SortButton

@@ -6,7 +6,7 @@ import {
 } from '@app/redux-api/access-rights';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import type { IYtelse } from '@app/types/kodeverk';
-import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { ArrowUndoIcon, FloppydiskIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack, Loader } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { Body } from './body';
@@ -80,10 +80,10 @@ const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
         </table>
       </div>
       <HStack gap="4">
-        <Button variant="primary" size="small" onClick={save} loading={isLoading} icon={<CheckmarkIcon aria-hidden />}>
+        <Button variant="primary" size="small" onClick={save} loading={isLoading} icon={<FloppydiskIcon aria-hidden />}>
           Lagre
         </Button>
-        <Button variant="danger" size="small" onClick={reset} icon={<XMarkIcon aria-hidden />}>
+        <Button variant="danger" size="small" onClick={reset} icon={<ArrowUndoIcon aria-hidden />}>
           Avbryt
         </Button>
       </HStack>

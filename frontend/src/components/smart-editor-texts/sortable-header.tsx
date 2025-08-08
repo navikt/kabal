@@ -36,17 +36,18 @@ export const SortableHeader = ({ label, sortKey, querySortKey, querySortOrder, t
     setSearchParams(searchParams);
   };
 
-  const Icon = getIcon(querySortKey === sortKey ? querySortOrder : null);
+  const active = querySortKey === sortKey;
+  const Icon = getIcon(active ? querySortOrder : null);
 
   if (title === undefined) {
     return (
       <Button
         onClick={onClick}
-        variant="tertiary"
+        variant={active ? 'primary' : 'tertiary'}
         iconPosition="right"
         icon={<Icon aria-hidden />}
         size="small"
-        className="justify-start px-0"
+        className="justify-start"
       >
         {label}
       </Button>
@@ -57,11 +58,11 @@ export const SortableHeader = ({ label, sortKey, querySortKey, querySortOrder, t
     <Tooltip content={title}>
       <Button
         onClick={onClick}
-        variant="tertiary"
+        variant={active ? 'primary' : 'tertiary'}
         iconPosition="right"
         icon={<Icon aria-hidden />}
         size="small"
-        className="justify-start px-0"
+        className="justify-start"
       >
         {label}
       </Button>

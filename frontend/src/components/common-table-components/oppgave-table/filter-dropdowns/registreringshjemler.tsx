@@ -39,6 +39,7 @@ export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProp
         open={open}
         icon={chevron}
         iconPosition="right"
+        active={registreringshjemler !== undefined && registreringshjemler.length > 0}
       >
         {TABLE_HEADERS[columnKey]} ({registreringshjemler?.length ?? 0})
       </ToggleButton>

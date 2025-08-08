@@ -15,7 +15,15 @@ interface OppgaverPageWrapperProps {
 export const OppgaverPageWrapper = ({ children, title, testId }: OppgaverPageWrapperProps): React.JSX.Element => (
   <VStack flexGrow="1" width="100%" overflow="hidden" data-testid={`${testId}-container`}>
     {title === undefined ? null : (
-      <BoxNew as={Heading} level="1" size="medium" data-testid={`${testId}-title`} padding="4" shadow="dialog">
+      <BoxNew
+        as={Heading}
+        level="1"
+        size="medium"
+        data-testid={`${testId}-title`}
+        padding="4"
+        borderWidth="0 0 1 0"
+        borderColor="neutral"
+      >
         {title}
       </BoxNew>
     )}

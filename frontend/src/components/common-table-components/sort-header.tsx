@@ -1,11 +1,11 @@
-import { type SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { SortOrderEnum } from '@app/types/oppgaver';
 import { ArrowsUpDownIcon, SortDownIcon, SortUpIcon } from '@navikt/aksel-icons';
-import { Button, Table } from '@navikt/ds-react';
+import { Button, type ButtonProps, Table } from '@navikt/ds-react';
 
 interface Props {
-  sortKey: SortFieldEnum;
+  sortKey: string;
   children: React.ReactNode;
-  sortering: SortFieldEnum;
+  sortering: string;
   rekkefoelge: SortOrderEnum;
   onSortChange: (sortKey: string) => void;
 }
@@ -17,8 +17,8 @@ export const SortHeader = ({ sortKey, sortering, rekkefoelge, ...rest }: Props) 
 );
 
 export const getAriaSort = (
-  sortKey: SortFieldEnum,
-  sortering: SortFieldEnum,
+  sortKey: string,
+  sortering: string,
   rekkefoelge: SortOrderEnum,
 ): 'ascending' | 'descending' | 'none' => {
   if (sortering !== sortKey) {
@@ -29,23 +29,33 @@ export const getAriaSort = (
 
 export interface SortButtonProps extends Props {
   className?: string;
+  size?: ButtonProps['size'];
 }
 
-export const SortButton = ({ sortKey, children, sortering, rekkefoelge, onSortChange, className }: SortButtonProps) => (
+export const SortButton = ({
+  sortKey,
+  children,
+  sortering,
+  rekkefoelge,
+  onSortChange,
+  className,
+  size,
+}: SortButtonProps) => (
   <Button
-    variant="tertiary"
-    size="medium"
+    variant={sortering === sortKey ? 'primary-neutral' : 'tertiary-neutral'}
+    size={size}
     onClick={() => onSortChange(sortKey)}
     icon={<SortIcon sortKey={sortKey} sortering={sortering} rekkefoelge={rekkefoelge} />}
     className={className}
+    iconPosition="right"
   >
     {children}
   </Button>
 );
 
 interface SortIconProps {
-  sortKey: SortFieldEnum;
-  sortering: SortFieldEnum;
+  sortKey: string;
+  sortering: string;
   rekkefoelge: SortOrderEnum;
 }
 

@@ -26,6 +26,7 @@ export const OppgaveSearch = () => {
 
   const toggleGroup = (
     <ToggleGroup
+      size="small"
       value={searchType}
       onChange={(v) => {
         if (isSearchType(v)) {
@@ -128,20 +129,17 @@ const SaksnrSearch = ({ children }: Props) => {
   );
 };
 
-const SearchField = ({
-  onChange,
-  onKeyDown,
-  label,
-  children,
-}: {
+interface SearchFieldProps {
   onChange: SearchProps['onChange'];
   label: string;
   onKeyDown: () => void;
   children: SearchProps['children'];
-}) => (
+}
+
+const SearchField = ({ onChange, onKeyDown, label, children }: SearchFieldProps) => (
   <Search
-    size="medium"
-    variant="simple"
+    size="small"
+    variant="primary"
     onChange={onChange}
     data-testid="search-input"
     placeholder={label}

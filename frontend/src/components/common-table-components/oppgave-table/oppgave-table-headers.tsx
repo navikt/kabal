@@ -1,6 +1,5 @@
 import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
 import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
-import { SortHeader } from '@app/components/common-table-components/oppgave-table/sort-header';
 import {
   useOppgaveTableFerdigstilt,
   useOppgaveTableFrist,
@@ -8,6 +7,7 @@ import {
   useOppgaveTableVarsletFrist,
 } from '@app/components/common-table-components/oppgave-table/state/use-date-range';
 import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
+import { SortHeader } from '@app/components/common-table-components/sort-header';
 import { ColumnKeyEnum, TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';

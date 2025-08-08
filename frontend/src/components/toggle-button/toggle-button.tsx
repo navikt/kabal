@@ -4,10 +4,11 @@ interface Props extends ButtonProps {
   open: boolean;
   minHeight?: string;
   error?: boolean;
+  active: boolean;
   ref?: React.Ref<HTMLButtonElement>;
 }
 
-export const ToggleButton = ({ open, error, minHeight, icon, size, ...props }: Props) => (
+export const ToggleButton = ({ open, error = false, active, minHeight, icon, size, ...props }: Props) => (
   <HStack asChild align="center" wrap={false}>
     <BoxNew
       asChild
@@ -18,7 +19,7 @@ export const ToggleButton = ({ open, error, minHeight, icon, size, ...props }: P
     >
       <Button
         type="button"
-        variant={error ? 'danger' : 'tertiary'}
+        variant={getVariant(error, active)}
         size={size}
         icon={icon}
         iconPosition="right"
@@ -27,3 +28,15 @@ export const ToggleButton = ({ open, error, minHeight, icon, size, ...props }: P
     </BoxNew>
   </HStack>
 );
+
+const getVariant = (error: boolean, active: boolean): ButtonProps['variant'] => {
+  if (error) {
+    return 'danger';
+  }
+
+  if (active) {
+    return 'primary';
+  }
+
+  return 'tertiary';
+};

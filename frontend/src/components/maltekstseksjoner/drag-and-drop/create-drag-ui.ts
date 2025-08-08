@@ -10,10 +10,12 @@ export const createDragUI = (
 
   const width = dragElementRef.current.offsetWidth;
   const dragElement = dragElementRef.current.cloneNode(true) as HTMLAnchorElement;
+  dragElement.classList.add('aksel-theme', 'dark');
+  dragElement.style.backgroundColor = 'var(--ax-bg-accent-moderate)';
+  dragElement.style.color = 'var(--ax-text-neutral)';
   dragElement.style.width = `${width}px`;
-  dragElement.style.backgroundColor = 'var(--ax-bg-accent-soft)';
+  dragElement.style.whiteSpace = 'nowrap';
   dragElement.style.opacity = '0.5';
-  dragElement.style.transform = 'rotate(3deg)';
 
   // Hide the element.
   dragElement.style.position = 'fixed';

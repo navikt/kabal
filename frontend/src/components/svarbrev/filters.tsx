@@ -39,8 +39,8 @@ export const Filters = ({
   activeFilter,
   setActiveFilter,
 }: FilterProps) => (
-  <HStack asChild wrap={false} gap="4" width="100%" position="sticky" top="0" className="z-1">
-    <BoxNew background="default" paddingInline="0 1" paddingBlock="0 4">
+  <HStack asChild wrap={false} gap="4" width="100%" position="sticky" top="0" className="-top-4 z-1">
+    <BoxNew background="default" paddingInline="0 1" paddingBlock="4">
       <ToggleGroup
         size="small"
         value={activeFilter}

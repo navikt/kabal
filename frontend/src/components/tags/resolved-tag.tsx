@@ -1,9 +1,9 @@
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
-import { BoxNew, type BoxNewProps, Tag } from '@navikt/ds-react';
+import { Tag, type TagProps } from '@navikt/ds-react';
 
 interface BaseProps {
   useName: (id: string) => string;
-  variant: keyof typeof BACKGROUND;
+  variant: keyof IGetMaltekstseksjonParams;
 }
 
 interface Props extends BaseProps {
@@ -26,27 +26,18 @@ export const ResolvedTags = ({ ids, ...props }: ListProps) => (
 
 interface CustomTagProps {
   children: string;
-  variant: keyof typeof BACKGROUND;
+  variant: keyof IGetMaltekstseksjonParams;
 }
 
 export const CustomTag = ({ children, variant }: CustomTagProps) => (
-  <BoxNew asChild height="fit-content" borderWidth="1" background={BACKGROUND[variant]} borderColor={BORDER[variant]}>
-    <Tag variant="info" size="small" title={children}>
-      {children}
-    </Tag>
-  </BoxNew>
+  <Tag variant={TAG_VARIANT[variant]} size="small" title={children}>
+    {children}
+  </Tag>
 );
 
-const BACKGROUND: Record<keyof IGetMaltekstseksjonParams, BoxNewProps['background']> = {
-  templateSectionIdList: 'danger-moderate',
-  ytelseHjemmelIdList: 'accent-moderate',
-  utfallIdList: 'meta-lime-moderate',
-  enhetIdList: 'meta-purple-moderate',
-};
-
-const BORDER: Record<keyof IGetMaltekstseksjonParams, BoxNewProps['borderColor']> = {
-  templateSectionIdList: 'accent',
-  ytelseHjemmelIdList: 'accent',
-  utfallIdList: 'meta-lime',
-  enhetIdList: 'meta-purple',
+const TAG_VARIANT: Record<keyof IGetMaltekstseksjonParams, TagProps['variant']> = {
+  templateSectionIdList: 'error',
+  ytelseHjemmelIdList: 'info',
+  utfallIdList: 'alt2',
+  enhetIdList: 'alt1',
 };

@@ -152,7 +152,7 @@ const NestedDropDown = ({ children, selected, onChange, options, 'data-testid': 
 
   return (
     <div ref={ref} className="relative">
-      <ToggleButton open={isOpen} onClick={toggleOpen} size="small">
+      <ToggleButton open={isOpen} onClick={toggleOpen} size="small" active={selected.length > 0}>
         {children} ({selected.length})
       </ToggleButton>
       {isOpen ? (

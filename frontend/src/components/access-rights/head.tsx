@@ -26,7 +26,7 @@ export const Head = ({ saksbehandlere, setFocusedCell, focusedCell: [focusedColu
     <tr>
       <th className="sticky top-0 z-2 bg-ax-bg-default">Ytelse</th>
       <th
-        className={`${ANGLED_TH_CLASSES} ${focusedColumn === 0 ? 'bg-ax-accent-200' : 'odd:bg-ax-bg-neutral-moderate'}`}
+        className={`${ANGLED_TH_CLASSES} ${focusedColumn === 0 ? 'bg-ax-bg-neutral-strong text-ax-text-neutral-contrast' : 'text-ax-text-neutral odd:bg-ax-bg-neutral-moderate'}`}
         style={{ height: CONTAINER_HEIGHT, transform: 'skew(-45deg)' }}
         onMouseEnter={() => setFocusedCell([0, -1])}
       >
@@ -44,7 +44,7 @@ export const Head = ({ saksbehandlere, setFocusedCell, focusedCell: [focusedColu
       </th>
       {saksbehandlere.map(({ saksbehandlerName, saksbehandlerIdent, ytelseIdList }, i) => (
         <th
-          className={`${ANGLED_TH_CLASSES} ${focusedColumn === i + 1 ? 'bg-ax-accent-200' : 'odd:bg-ax-bg-neutral-moderate'}`}
+          className={`${ANGLED_TH_CLASSES} ${focusedColumn === i + 1 ? 'bg-ax-bg-neutral-strong text-ax-text-neutral-contrast' : 'text-ax-text-neutral odd:bg-ax-bg-neutral-moderate'}`}
           style={{ height: CONTAINER_HEIGHT, transform: 'skew(-45deg)' }}
           key={saksbehandlerIdent}
           onMouseEnter={() => setFocusedCell([i + 1, -1])}
