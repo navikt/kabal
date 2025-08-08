@@ -1,3 +1,4 @@
+import type { Bookmark } from '@app/components/smart-editor/bookmarks/use-bookmarks';
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { pushEvent } from '@app/observability';
@@ -5,7 +6,7 @@ import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
-import { BookmarkFillIcon, BookmarkIcon } from '@navikt/aksel-icons';
+import { BookmarkFillIcon, BookmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BoxNew, Button, HStack, Tooltip } from '@navikt/ds-react';
 import { TextApi } from 'platejs';
 import { useRef, useState } from 'react';
@@ -16,9 +17,10 @@ export const BookmarkButton = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const setBookmark = (bookmark: string) => {
+  const setBookmark = (variant: BookmarkVariantEnum) => {
+    pushEvent('set-bookmark', 'smart-editor', { color: variant });
     const id = BOOKMARK_PREFIX + Date.now();
-    editor.tf.setNodes({ [BookmarkPlugin.key]: true, [id]: bookmark }, { match: TextApi.isText, split: true });
+    editor.tf.setNodes({ [BookmarkPlugin.key]: true, [id]: variant }, { match: TextApi.isText, split: true });
 
     const entries = editor.nodes<FormattedText>({ match: (n) => TextApi.isText(n) && id in n });
     const nodes: FormattedText[] = [];
@@ -26,6 +28,16 @@ export const BookmarkButton = () => {
     for (const [node] of entries) {
       nodes.push(node);
     }
+  };
+
+  const removeBookmark = (bookmark: Omit<Bookmark, 'nodes'>) => {
+    pushEvent('remove-bookmark', 'smart-editor', { color: bookmark.variant });
+    editor.tf.unsetNodes<FormattedText>([BookmarkPlugin.key, bookmark.key], {
+      match: (n) => TextApi.isText(n) && bookmark.key in n,
+      mode: 'lowest',
+      at: [],
+      split: true,
+    });
   };
 
   const activeEntry = editor.api.node<FormattedText>({
@@ -41,62 +53,82 @@ export const BookmarkButton = () => {
   });
 
   const active = activeBookmark !== null;
-  const Icon = active ? BookmarkFillIcon : BookmarkIcon;
-  const label = active ? 'Bytt bokmerke' : 'Sett bokmerke';
+  const label = active ? 'Fjern hele bokmerket' : 'Sett bokmerke';
 
   return (
-    <div ref={ref} className="relative text-[12pt]">
+    <HStack ref={ref} position="relative" align="center">
       <ToolbarIconButton
         label={label}
-        icon={<Icon style={{ color: activeBookmark ?? 'inherit' }} />}
-        onClick={() => setIsOpen(!isOpen)}
+        icon={<Icon active={active} />}
+        onClick={() => (active ? removeBookmark(activeBookmark) : setIsOpen(!isOpen))}
         active={active}
         disabled={disabled}
+        className={active ? `group/variant ${BOOKMARK_VARIANT_TO_CLASSNAME[activeBookmark.variant]}` : undefined}
         variant="tertiary-neutral"
       />
       {isOpen ? (
-        <HStack asChild position="absolute" right="0" style={{ top: '100%' }}>
-          <BoxNew background="default" padding="1" shadow="dialog" borderRadius="medium">
-            {BOOKMARKS.map((option) => (
-              <Bookmark key={option.id} option={option} setIsOpen={setIsOpen} setBookmark={setBookmark} />
+        <HStack asChild position="absolute" left="0" style={{ top: '100%' }}>
+          <BoxNew background="default" padding="0" shadow="dialog" borderRadius="medium">
+            {BOOKMARK_VARIANTS.map((option) => (
+              <BookmarkVariantButton
+                key={option.variant}
+                option={option}
+                onClick={() => {
+                  setIsOpen(false);
+                  setBookmark(option.variant);
+                }}
+              />
             ))}
           </BoxNew>
         </HStack>
       ) : null}
-    </div>
+    </HStack>
   );
 };
 
-const getActiveBookmark = (text: FormattedText | undefined): string | null => {
+interface IconProps {
+  active: boolean;
+}
+
+const Icon = ({ active }: IconProps) =>
+  active ? (
+    <div className="relative">
+      <BookmarkFillIcon aria-hidden className="opacity-100 group-hover/variant:opacity-0" />
+      <XMarkIcon aria-hidden className="absolute top-0 left-0 opacity-0 group-hover/variant:opacity-100" />
+    </div>
+  ) : (
+    <BookmarkIcon aria-hidden />
+  );
+
+const getActiveBookmark = (text: FormattedText | undefined): Omit<Bookmark, 'nodes'> | null => {
   if (text === undefined) {
     return null;
   }
 
   for (const key in text) {
     if (key.startsWith(BOOKMARK_PREFIX)) {
-      const value = text[key];
+      const variant = text[key];
 
-      return typeof value === 'string' ? value : null;
+      if (typeof variant === 'string' && isBookmarkVariant(variant)) {
+        return { key, variant };
+      }
+
+      return null;
     }
   }
 
   return null;
 };
 
-interface BookmarkProps {
-  option: BookmarkOption;
-  setIsOpen: (open: boolean) => void;
-  setBookmark: (color: string) => void;
+interface BookmarkVariantButtonProps {
+  option: BookmarkVariant;
+  onClick: () => void;
 }
 
-const Bookmark = ({ option, setIsOpen, setBookmark }: BookmarkProps) => (
-  <Tooltip content={option.name} key={option.id}>
+const BookmarkVariantButton = ({ option, onClick }: BookmarkVariantButtonProps) => (
+  <Tooltip content={option.name} key={option.variant} placement="left">
     <Button
-      onClick={() => {
-        pushEvent('set-bookmark', 'smart-editor', { color: option.name });
-        setBookmark(option.id);
-        setIsOpen(false);
-      }}
+      onClick={onClick}
       size="small"
       variant="tertiary-neutral"
       icon={<BookmarkFillIcon aria-hidden className={option.className} />}
@@ -104,40 +136,43 @@ const Bookmark = ({ option, setIsOpen, setBookmark }: BookmarkProps) => (
   </Tooltip>
 );
 
-interface BookmarkOption {
-  id: string;
+export enum BookmarkVariantEnum {
+  RED = '1',
+  GREEN = '2',
+  PURPLE = '3',
+}
+
+const BOOKMARK_VARIANT_VALUES = Object.values(BookmarkVariantEnum);
+
+export const isBookmarkVariant = (value: string): value is BookmarkVariantEnum =>
+  BOOKMARK_VARIANT_VALUES.includes(value as BookmarkVariantEnum);
+
+interface BookmarkVariant {
+  variant: BookmarkVariantEnum;
   name: string;
   className: string;
 }
 
-const BOOKMARKS: [BookmarkOption, BookmarkOption, BookmarkOption] = [
+const BOOKMARK_VARIANTS: [BookmarkVariant, BookmarkVariant, BookmarkVariant] = [
   {
-    id: '1',
+    variant: BookmarkVariantEnum.RED,
     name: 'Rød',
-    className: 'text-ax-text-danger-decoration bg-ax-bg-danger-soft-a rounded-sm hover:bg-ax-bg-danger-moderate',
+    className: 'text-ax-text-danger-decoration bg-ax-bg-danger-soft-a hover:bg-ax-bg-danger-moderate-a',
   },
   {
-    id: '2',
+    variant: BookmarkVariantEnum.GREEN,
     name: 'Grønn',
-    className: 'text-ax-text-success-decoration bg-ax-bg-success-soft-a rounded-sm hover:bg-ax-bg-success-moderate',
+    className: 'text-ax-text-success-decoration bg-ax-bg-success-soft-a hover:bg-ax-bg-success-moderate-a',
   },
   {
-    id: '3',
+    variant: BookmarkVariantEnum.PURPLE,
     name: 'Lilla',
-    className:
-      'text-ax-text-meta-purple-decoration bg-ax-bg-meta-purple-soft-a rounded-sm hover:bg-ax-bg-meta-purple-moderate',
+    className: 'text-ax-text-meta-purple-decoration bg-ax-bg-meta-purple-soft-a hover:bg-ax-bg-meta-purple-moderate-a',
   },
 ];
 
-export const BOOKMARK_ID_TO_COLOR: Record<string, string> = Object.fromEntries(
-  BOOKMARKS.map(({ id, className: color }) => [id, color]),
-);
-
-export const LEGACY_COLOR_TO_NEW: Record<string, string> = {
-  'var(--ax-bg-danger-strong)': BOOKMARKS[0].className,
-  'var(--ax-bg-success-strong)': BOOKMARKS[1].className,
-  'var(--ax-bg-accent-strong)': BOOKMARKS[2].className,
-  'var(--a-red-600)': BOOKMARKS[0].className,
-  'var(--a-green-600)': BOOKMARKS[1].className,
-  'var(--a-blue-600)': BOOKMARKS[2].className,
+export const BOOKMARK_VARIANT_TO_CLASSNAME: Record<BookmarkVariantEnum, string> = {
+  [BookmarkVariantEnum.RED]: BOOKMARK_VARIANTS[0].className,
+  [BookmarkVariantEnum.GREEN]: BOOKMARK_VARIANTS[1].className,
+  [BookmarkVariantEnum.PURPLE]: BOOKMARK_VARIANTS[2].className,
 };

@@ -1,16 +1,13 @@
+import { ExpandableThread } from '@app/components/smart-editor/comments/expandable-thread';
+import { type FocusedComment, useThreads } from '@app/components/smart-editor/comments/use-threads';
+import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import {
-  getPositionedItems,
-  ItemType,
-  type ThreadData,
-} from '@app/components/smart-editor/functions/get-positioned-items';
+import { getPositionedItems, type ItemToPosition } from '@app/components/smart-editor/functions/get-positioned-items';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 import { useMyPlateEditorState } from '@app/plate/types';
 import { BoxNew } from '@navikt/ds-react';
 import { useContext, useMemo } from 'react';
-import { useThreads } from '../comments/use-threads';
-import { ExpandableThread } from './expandable-thread';
 
 const ITEM_WIDTH = 350;
 const ITEM_OFFSET = 32;
@@ -28,8 +25,8 @@ export const PositionedComments = () => {
     }
 
     const threads = attached
-      .map<ThreadData>((a) => ({ ...a, type: ItemType.THREAD }))
-      .toSorted((a, b) => a.created.localeCompare(b.created));
+      .toSorted((a, b) => a.created.localeCompare(b.created))
+      .map<ItemToPosition<FocusedComment>>((thread) => ({ key: `${COMMENT_PREFIX}${thread.id}`, data: thread }));
 
     const p = getPositionedItems(editor, threads, sheetRef.current);
 

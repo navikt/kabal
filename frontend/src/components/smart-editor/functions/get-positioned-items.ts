@@ -1,7 +1,7 @@
+import type { Bookmark } from '@app/components/smart-editor/bookmarks/use-bookmarks';
 import type { FocusedComment } from '@app/components/smart-editor/comments/use-threads';
-import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { calculateRangePosition } from '@app/plate/functions/range-position';
-import type { FormattedText, RichTextEditor } from '@app/plate/types';
+import type { RichTextEditor } from '@app/plate/types';
 import { TextApi } from 'platejs';
 
 export enum ItemType {
@@ -9,31 +9,26 @@ export enum ItemType {
   BOOKMARK = 'bookmark',
 }
 
-export interface BookmarkData {
-  id: string;
-  nodes: FormattedText[];
-  type: ItemType.BOOKMARK;
-}
-
-export interface ThreadData extends FocusedComment {
-  type: ItemType.THREAD;
-}
-
-export interface PositionedItem<T extends ThreadData | BookmarkData> {
+export interface PositionedItem<T extends FocusedComment | Bookmark> {
   data: T;
   /** em */
   top: number;
   floorIndex: number;
 }
 
-interface Positioned<T extends ThreadData | BookmarkData> {
+interface Positioned<T extends FocusedComment | Bookmark> {
   positionedItems: PositionedItem<T>[];
   maxCount: number;
 }
 
-export const getPositionedItems = <T extends ThreadData | BookmarkData>(
+export interface ItemToPosition<T> {
+  key: string;
+  data: T;
+}
+
+export const getPositionedItems = <T extends FocusedComment | Bookmark>(
   editor: RichTextEditor,
-  list: T[],
+  list: ItemToPosition<T>[],
   ref: HTMLElement | null,
 ): Positioned<T> => {
   const positionedItems = new Array<PositionedItem<T>>(list.length);
@@ -47,9 +42,7 @@ export const getPositionedItems = <T extends ThreadData | BookmarkData>(
       continue;
     }
 
-    const mark = item.type === ItemType.THREAD ? `${COMMENT_PREFIX}${item.id}` : item.id;
-
-    const leafEntry = editor.api.node({ at: [], match: (n) => TextApi.isText(n) && Object.hasOwn(n, mark) });
+    const leafEntry = editor.api.node({ at: [], match: (n) => TextApi.isText(n) && Object.hasOwn(n, item.key) });
 
     if (leafEntry === undefined) {
       continue;
@@ -71,7 +64,7 @@ export const getPositionedItems = <T extends ThreadData | BookmarkData>(
       maxCount = floorIndex + 1;
     }
 
-    positionedItems[i] = { data: item, top, floorIndex };
+    positionedItems[i] = { data: item.data, top, floorIndex };
   }
 
   return { positionedItems, maxCount };
