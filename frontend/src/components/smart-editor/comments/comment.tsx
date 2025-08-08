@@ -12,12 +12,11 @@ import { useContext } from 'react';
 import { EditButton } from './edit-comment';
 
 interface Props {
-  isExpanded: boolean;
   isMain?: boolean;
   comment: ISmartEditorComment;
 }
 
-export const Comment = ({ isExpanded, isMain, comment }: Props) => {
+export const Comment = ({ isMain, comment }: Props) => {
   const { author, modified, text, id } = comment;
   const { user } = useContext(StaticDataContext);
   const { editingComment, setEditingComment } = useContext(SmartEditorContext);
@@ -26,8 +25,8 @@ export const Comment = ({ isExpanded, isMain, comment }: Props) => {
 
   const isAuthor = author.ident === user.navIdent;
   const isEditing = editingComment?.id === id;
-  const canEditComment = isAuthor && isExpanded;
-  const canDeleteComment = (isAuthor || isSaksbehandler) && isExpanded;
+  const canEditComment = isAuthor;
+  const canDeleteComment = isAuthor || isSaksbehandler;
 
   return (
     <BoxNew
@@ -35,12 +34,18 @@ export const Comment = ({ isExpanded, isMain, comment }: Props) => {
       paddingInline="2 0"
       borderWidth="0 0 0 4"
       borderColor="neutral-subtle"
-      className="first:border-l-0 first:pl-0"
+      className="group/comment first:border-l-0 first:pl-0"
     >
       <VStack as="article" position="relative">
         <HStack gap="2" align="center" justify="space-between" wrap={false}>
           <div className="w-full grow truncate text-ax-medium">{author.name}</div>
-          {canDeleteComment ? <DeleteButton id={id} title={isMain ? 'Slett tråd' : 'Slett svar'} /> : null}
+          {canDeleteComment ? (
+            <DeleteButton
+              id={id}
+              title={isMain ? 'Slett tråd' : 'Slett svar'}
+              className="justify-start opacity-0 transition-opacity duration-200 focus:opacity-100 group-focus-within/comment:opacity-100 group-hover/comment:opacity-100"
+            />
+          ) : null}
         </HStack>
 
         <SavedStatus
@@ -62,7 +67,11 @@ export const Comment = ({ isExpanded, isMain, comment }: Props) => {
             </BodyLong>
 
             {canEditComment ? (
-              <EditButton isEditing={isEditing} setIsEditing={() => setEditingComment(comment)} />
+              <EditButton
+                isEditing={isEditing}
+                setIsEditing={() => setEditingComment(comment)}
+                className="opacity-0 transition-opacity duration-200 focus:opacity-100 group-focus-within/comment:opacity-100 group-hover/comment:opacity-100"
+              />
             ) : null}
           </HStack>
         )}

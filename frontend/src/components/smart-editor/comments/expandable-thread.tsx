@@ -1,6 +1,5 @@
 import { Thread } from '@app/components/smart-editor/comments/thread';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useSmartEditorExpandedThreads } from '@app/hooks/settings/use-setting';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
@@ -21,7 +20,6 @@ const DONT_WAIT_FOR_TRANSITION = window.matchMedia('(prefers-reduced-motion: red
 export const ExpandableThread = ({ thread, isFocused, style, isOrphan = false, isAbsolute = false, zIndex }: Props) => {
   const { setFocusedThreadId, focusedThreadId } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorRef();
-  const { value: expandedThreads = true } = useSmartEditorExpandedThreads();
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -82,7 +80,7 @@ export const ExpandableThread = ({ thread, isFocused, style, isOrphan = false, i
       ref={ref}
       thread={thread}
       isAbsolute={isAbsolute}
-      isExpanded={expandedThreads || isFocused}
+      isFocused={isFocused}
       onClick={open}
       style={{ ...style, transform: isFocused ? 'translateX(-10px)' : 'translateX(0px)' }}
       zIndex={zIndex ?? 0}

@@ -58,11 +58,11 @@ const useCommentIds = (leaf: FormattedText) =>
 
 const getCommentClasses = (hasComment: boolean, isFocused: boolean): string | undefined => {
   if (isFocused) {
-    return /* @tw */ 'bg-ax-bg-warning-moderate-pressed outline outline-ax-border-warning rounded-sm';
+    return /* @tw */ 'bg-ax-bg-warning-moderate-pressed underline underline-offset-2 decoration-ax-border-warning-strong decoration-4 rounded-sm';
   }
 
   if (hasComment) {
-    return /* @tw */ 'bg-ax-bg-warning-moderate hover:bg-ax-bg-warning-moderate-hover outline outline-ax-border-warning rounded-sm';
+    return /* @tw */ 'bg-ax-bg-warning-moderate hover:bg-ax-bg-warning-moderate-hover underline underline-offset-2 decoration-ax-border-warning-strong decoration-2 rounded-sm';
   }
 
   return undefined;

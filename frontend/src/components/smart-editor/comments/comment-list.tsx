@@ -4,13 +4,12 @@ import { Comment } from './comment';
 
 interface CommentListProps {
   comments: ISmartEditorComment[];
-  isExpanded: boolean;
 }
 
-export const CommentList = ({ comments, isExpanded }: CommentListProps) => (
-  <VStack as="ul" gap="4" padding="0" margin="0" className="list-none text-base">
+export const CommentList = ({ comments }: CommentListProps) => (
+  <VStack as="ul" gap="4" padding="0" margin="0">
     {comments.map((comment, index) => (
-      <Comment key={comment.id} isExpanded={isExpanded} comment={comment} isMain={index === 0} />
+      <Comment key={comment.id} comment={comment} isMain={index === 0} />
     ))}
   </VStack>
 );

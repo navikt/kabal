@@ -63,7 +63,7 @@ export const BookmarkPlugin = createPlatePlugin({
 const migrateBookmarks = (editor: PlateEditor, [node, path]: NodeEntry, bookmarks: [string, unknown][]) => {
   for (const [key, value] of bookmarks) {
     if (typeof value !== 'string') {
-      editor.tf.removeMark(key);
+      editor.tf.unsetNodes(key, { match: (n) => n === node });
       continue;
     }
 
