@@ -71,6 +71,7 @@ export const onKeyDown = (editor: PlateEditor, e: React.KeyboardEvent) => {
   pushEvent('smart-editor-insert-abbreviation', 'smart-editor', {
     short,
     long,
+    saved: (long.length - short.length).toString(10),
     trigger: key,
     marks: numberOfMarks.toString(10),
   });
