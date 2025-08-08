@@ -138,7 +138,7 @@ const SelectableListItem = ({ enhetsnr, navn, selected, setSelected }: SelectBut
       onClick={() => setSelected(isSelected ? null : enhetsnr)}
       className="cursor-pointer hover:bg-ax-bg-accent-moderate"
     >
-      <Button size="small" variant="tertiary" title={label} aria-label={label} className="w-12">
+      <Button size="small" variant="tertiary-neutral" title={label} aria-label={label} className="w-12">
         <HStack align="center" justify="center">
           {isSelected ? <CheckmarkCircleFillIconColored aria-hidden fontSize={20} /> : 'Velg'}
         </HStack>

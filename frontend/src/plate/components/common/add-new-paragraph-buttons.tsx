@@ -36,7 +36,7 @@ export const AddNewParagraphBelow = ({ editor, element }: Props) => (
 
         editor.tf.insertNodes(createSimpleParagraph(), { at: nextPath(entry[1]) });
       }}
-      variant="tertiary"
+      variant="tertiary-neutral"
       size="xsmall"
       contentEditable={false}
     />
@@ -56,7 +56,7 @@ export const AddNewParagraphAbove = ({ editor, element }: Props) => (
 
         editor.tf.insertNodes(createSimpleParagraph(), { at: entry[1] });
       }}
-      variant="tertiary"
+      variant="tertiary-neutral"
       size="xsmall"
       contentEditable={false}
     />

@@ -21,7 +21,7 @@ export const KeyboardHelpButton = () => {
   return (
     <Tooltip content={TITLE} placement="top">
       <Button
-        variant="tertiary"
+        variant="tertiary-neutral"
         size="small"
         className="mr-auto"
         aria-label={TITLE}

@@ -71,7 +71,7 @@ const Hjemler = ({ ytelse, selectedHjemler, setSelectedHjemler }: HjemlerProps) 
       <HStack gap="2">
         <Button
           size="small"
-          variant="secondary"
+          variant="secondary-neutral"
           onClick={() => setSelectedHjemler(foundYtelse.innsendingshjemler.map(({ id }) => id))}
           className="shrink"
         >
@@ -80,7 +80,7 @@ const Hjemler = ({ ytelse, selectedHjemler, setSelectedHjemler }: HjemlerProps) 
 
         <Button
           size="small"
-          variant="secondary"
+          variant="secondary-neutral"
           onClick={() => setSelectedHjemler([])}
           disabled={selectedHjemler.length === 0}
         >

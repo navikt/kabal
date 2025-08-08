@@ -20,7 +20,7 @@ export const ToolbarButtonWithConfirm = ({ onClick, icon, tooltip, loading, ...r
           style={showConfirm ? { ...rest.style, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : rest.style}
           icon={icon}
           onClick={() => setShowConfirm(!showConfirm)}
-          variant="tertiary"
+          variant="tertiary-neutral"
           size="xsmall"
           loading={loading}
         />
@@ -33,7 +33,7 @@ export const ToolbarButtonWithConfirm = ({ onClick, icon, tooltip, loading, ...r
               <Button
                 icon={<CheckmarkIcon aria-hidden />}
                 onClick={onClick}
-                variant="tertiary"
+                variant="tertiary-neutral"
                 size="xsmall"
                 loading={loading}
               />
@@ -42,7 +42,7 @@ export const ToolbarButtonWithConfirm = ({ onClick, icon, tooltip, loading, ...r
               <Button
                 icon={<XMarkIcon aria-hidden />}
                 onClick={() => setShowConfirm(false)}
-                variant="tertiary"
+                variant="tertiary-neutral"
                 size="xsmall"
                 loading={loading}
               />

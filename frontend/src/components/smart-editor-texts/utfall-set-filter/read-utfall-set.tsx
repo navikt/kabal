@@ -21,13 +21,19 @@ export const ReadUtfallSet = ({ utfallSet, onDelete, editUtfallSet }: ReadUtfall
     </HStack>
     <HStack align="start" wrap={false} className="self-start">
       <Button
-        variant="tertiary"
+        variant="tertiary-neutral"
         size="xsmall"
         icon={<PencilIcon aria-hidden />}
         onClick={editUtfallSet}
         title="Endre"
       />
-      <Button variant="tertiary" size="xsmall" icon={<TrashIcon aria-hidden />} onClick={onDelete} title="Slett" />
+      <Button
+        variant="tertiary-neutral"
+        size="xsmall"
+        icon={<TrashIcon aria-hidden />}
+        onClick={onDelete}
+        title="Slett"
+      />
     </HStack>
   </HStack>
 );

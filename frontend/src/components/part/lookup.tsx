@@ -86,7 +86,7 @@ const ActionOrError = ({ isReachable, buttonText, onClick, loading, part, valida
 
   if (isReachable) {
     return (
-      <Button size="small" variant="secondary" onClick={onClick} loading={loading}>
+      <Button size="small" variant="secondary-neutral" onClick={onClick} loading={loading}>
         {buttonText}
       </Button>
     );

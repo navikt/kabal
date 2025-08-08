@@ -48,7 +48,7 @@ export const DateColumnHeader = ({
       asChild
       borderRadius="large"
       width="fit-content"
-      className="-outline-offset-2 hover:outline-2 hover:outline-ax-bg-accent-moderate-hover"
+      className="-outline-offset-2 hover:outline-2 hover:outline-ax-bg-neutral-moderate-hover"
     >
       <HStack align="stretch" wrap={false}>
         {interactive ? (

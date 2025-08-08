@@ -133,7 +133,7 @@ const ShowMore = ({ isExpanded, setIsExpanded }: ShowMoreProps) => (
   <Button
     onClick={() => setIsExpanded(!isExpanded)}
     size="xsmall"
-    variant="tertiary"
+    variant="tertiary-neutral"
     iconPosition="right"
     icon={isExpanded ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
   >

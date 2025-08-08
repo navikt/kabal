@@ -8,7 +8,7 @@ interface Props {
 
 export const Preview = ({ id }: Props) => (
   <ModalButton
-    variant="secondary"
+    variant="secondary-neutral"
     size="small"
     tooltip="Forhåndsvisning"
     icon={<FileSearchIcon aria-hidden />}

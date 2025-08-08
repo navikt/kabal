@@ -100,7 +100,7 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
           ) : null}
         </VStack>
         {isAddingSet ? null : (
-          <Button size="small" variant="secondary" onClick={toggleIsAddingSet} icon={<PlusIcon aria-hidden />}>
+          <Button size="small" variant="secondary-neutral" onClick={toggleIsAddingSet} icon={<PlusIcon aria-hidden />}>
             Legg til nytt utfallsett
           </Button>
         )}

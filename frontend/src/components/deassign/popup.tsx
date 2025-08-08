@@ -97,7 +97,7 @@ export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direc
 
         <HStack justify="space-between" gap="2">
           <Button
-            variant="secondary"
+            variant="secondary-neutral"
             size="small"
             disabled={isLoading}
             onClick={close}

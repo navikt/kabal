@@ -22,6 +22,7 @@ export const SendToRol = ({ oppgaveId, isSaksbehandler, rol }: Props) => {
   return (
     <Button
       size="small"
+      variant="secondary-neutral"
       onClick={() => setRolState({ oppgaveId, flowState: FlowState.SENT })}
       icon={<PaperplaneIcon aria-hidden />}
       loading={isLoading || isSettingRol}

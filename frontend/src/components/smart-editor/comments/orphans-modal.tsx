@@ -20,7 +20,7 @@ export const OrphansModal = () => {
   return (
     <>
       <Tooltip content={ORPHAN_HELP_TEXT}>
-        <Button variant="tertiary" size="xsmall" onClick={() => modalRef.current?.showModal()}>
+        <Button variant="tertiary-neutral" size="xsmall" onClick={() => modalRef.current?.showModal()}>
           <HStack as="span" align="center" wrap={false}>
             ({orphansCount} <LinkBrokenIcon aria-hidden />)
           </HStack>

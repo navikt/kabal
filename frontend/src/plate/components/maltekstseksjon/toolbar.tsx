@@ -23,7 +23,7 @@ export const Toolbar = ({ editor, element, path, isInRegelverk, isFetching, upda
       <Button
         icon={<ArrowCirclepathIcon aria-hidden />}
         onClick={update}
-        variant="tertiary"
+        variant="tertiary-neutral"
         size="xsmall"
         contentEditable={false}
         loading={isFetching}

@@ -56,7 +56,13 @@ export const SmartEditorTexts = ({ textType }: Props) => {
       overflowY="hidden"
     >
       <HStack gap="4" justify="start" className="[grid-area:header]">
-        <Button size="small" variant="secondary" loading={isAdding} onClick={onClick} icon={<PlusIcon aria-hidden />}>
+        <Button
+          size="small"
+          variant="secondary-neutral"
+          loading={isAdding}
+          onClick={onClick}
+          icon={<PlusIcon aria-hidden />}
+        >
           Legg til ny
         </Button>
 

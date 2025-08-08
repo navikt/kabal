@@ -20,7 +20,7 @@ export const PaaVentWarning = ({ onConfirm, isOpen, close }: PaaVentWarningProps
         stå som &quot;satt på vent&quot;. Bekreft at du fortsatt ikke venter på noe.
       </Alert>
       <HStack align="center" gap="2">
-        <Button variant="secondary" size="small" onClick={close} icon={<XMarkIcon aria-hidden />}>
+        <Button variant="secondary-neutral" size="small" onClick={close} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
         <Button variant="primary" size="small" onClick={onConfirm} icon={<FolderFileIcon aria-hidden />}>

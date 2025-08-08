@@ -73,14 +73,14 @@ const Enabled = ({ dokumentInfoId, journalpostId }: EnabledProps) => {
 
   const { variant, title } = useMemo<{ variant: ButtonProps['variant']; title: string }>(() => {
     if (checked) {
-      return { variant: 'primary', title: 'Ekskluder fra saken' };
+      return { variant: 'primary-neutral', title: 'Ekskluder fra saken' };
     }
 
     if (indeterminate) {
-      return { variant: 'secondary', title: 'Inkluder i saken.\nEtt eller flere vedlegg er inkludert.' };
+      return { variant: 'secondary-neutral', title: 'Inkluder i saken.\nEtt eller flere vedlegg er inkludert.' };
     }
 
-    return { variant: 'tertiary', title: 'Inkluder i saken' };
+    return { variant: 'tertiary-neutral', title: 'Inkluder i saken' };
   }, [indeterminate, checked]);
 
   return (

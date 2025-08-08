@@ -142,7 +142,7 @@ export const Row = ({ modal, ...setting }: Props) => {
                   <Button
                     onClick={() => cancel()}
                     size="small"
-                    variant="secondary"
+                    variant="secondary-neutral"
                     icon={<ArrowUndoIcon aria-hidden />}
                   />
                 </Tooltip>

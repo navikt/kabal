@@ -32,7 +32,7 @@ export const FradelingReason = ({ oppgaveId }: Props) => {
         onClick={() => setOpenState(!openState)}
         aria-expanded={openState}
         icon={<InformationSquareIcon aria-hidden />}
-        variant="tertiary"
+        variant="tertiary-neutral"
         size="small"
       />
 

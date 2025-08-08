@@ -80,7 +80,7 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
       </Heading>
 
       <Button
-        variant="tertiary"
+        variant="tertiary-neutral"
         size="small"
         onClick={() => {
           ref.current?.focus();

@@ -70,7 +70,7 @@ export const DeleteDocumentButton = ({ document }: Props) => {
         <Button
           className={BUTTON_CLASSES}
           size="small"
-          variant="secondary"
+          variant="secondary-neutral"
           onClick={() => setShowConfirm(false)}
           data-testid="document-delete-cancel"
           icon={<ArrowUndoIcon aria-hidden />}

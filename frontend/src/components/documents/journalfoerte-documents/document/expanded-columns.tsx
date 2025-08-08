@@ -68,7 +68,7 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
 
       <Tooltip placement="left" content={showMetadata ? 'Skjul informasjon' : 'Vis informasjon'} keys={['I']}>
         <Button
-          variant={showMetadata ? 'primary' : 'tertiary'}
+          variant={showMetadata ? 'primary-neutral' : 'tertiary-neutral'}
           size="small"
           icon={<InformationSquareIcon aria-hidden />}
           onClick={(e) => {

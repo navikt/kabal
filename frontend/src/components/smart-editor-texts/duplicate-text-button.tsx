@@ -18,7 +18,13 @@ export const DuplicateTextButton = ({ id, versionId, title, textType }: IText) =
 
   return (
     <Tooltip content="Opprett ny tekst basert på denne versjonen.">
-      <Button size="small" variant="secondary" onClick={onClick} icon={<FilesIcon aria-hidden />} loading={isLoading}>
+      <Button
+        size="small"
+        variant="secondary-neutral"
+        onClick={onClick}
+        icon={<FilesIcon aria-hidden />}
+        loading={isLoading}
+      >
         Dupliser
       </Button>
     </Tooltip>

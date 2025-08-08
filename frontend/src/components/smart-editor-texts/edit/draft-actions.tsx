@@ -80,7 +80,7 @@ const DeleteLanguageVersion = ({ deleteTranslation }: DeleteLanguageVersionProps
         <Button variant="danger" size="small" onClick={deleteTranslation} icon={<TrashIcon aria-hidden />}>
           Slett versjon for {LANGUAGE_NAMES[language].toLowerCase()}
         </Button>
-        <Button size="small" variant="secondary" onClick={() => setConfirm(false)}>
+        <Button size="small" variant="secondary-neutral" onClick={() => setConfirm(false)}>
           Avbryt
         </Button>
       </>

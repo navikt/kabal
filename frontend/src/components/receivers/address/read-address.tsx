@@ -35,7 +35,7 @@ export const ReadAddress = ({ part, address, overriddenAddress, onEdit }: Props)
 
         {onEdit === undefined ? null : (
           <Tooltip content="Overstyr adressen kun for dette dokumentet.">
-            <Button size="xsmall" variant="tertiary" onClick={onEdit} icon={<PencilIcon aria-hidden />}>
+            <Button size="xsmall" variant="tertiary-neutral" onClick={onEdit} icon={<PencilIcon aria-hidden />}>
               Endre
             </Button>
           </Tooltip>

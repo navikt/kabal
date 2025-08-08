@@ -156,7 +156,7 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
         <Tooltip placement="top" content="Avbryt" keys={['Esc']}>
           <Button
             size="small"
-            variant="secondary"
+            variant="secondary-neutral"
             icon={<XMarkIcon aria-hidden />}
             onClick={() => modalRef.current?.close()}
             disabled={isLoading}

@@ -45,7 +45,7 @@ export const Innsendingshjemler = ({ oppgavebehandling }: Props) => {
           <Tooltip content="Endre innsendingshjemler">
             <Button
               size="small"
-              variant="tertiary"
+              variant="tertiary-neutral"
               onClick={() => setIsOpen((o) => !o)}
               icon={<PencilIcon aria-hidden />}
               className="ml-auto self-start"

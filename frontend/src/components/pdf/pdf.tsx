@@ -43,7 +43,12 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
               </Button>
               .
             </BodyShort>
-            <Button variant="secondary" size="small" icon={<ArrowsCirclepathIcon aria-hidden />} onClick={refresh}>
+            <Button
+              variant="secondary-neutral"
+              size="small"
+              icon={<ArrowsCirclepathIcon aria-hidden />}
+              onClick={refresh}
+            >
               Last PDF på nytt
             </Button>
             <code className="border-2 border-ax-border-neutral bg-ax-bg-neutral-moderate p-2 text-xs">{error}</code>

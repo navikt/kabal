@@ -183,7 +183,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
           <Button size="small" variant="primary" onClick={handleFinish} loading={isFinishing || isSettingGosysOppgave}>
             Oppdater og fullfør
           </Button>
-          <Button size="small" variant="secondary" disabled={isFinishing} onClick={() => setIsOpen(false)}>
+          <Button size="small" variant="secondary-neutral" disabled={isFinishing} onClick={() => setIsOpen(false)}>
             Avbryt
           </Button>
         </Modal.Footer>

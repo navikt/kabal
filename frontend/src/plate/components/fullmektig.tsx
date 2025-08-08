@@ -86,7 +86,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
             className="-translate-y-1/2 absolute top-1/2 right-full hidden group-hover/placeholder:block"
             contentEditable
             suppressContentEditableWarning
-            variant="tertiary"
+            variant="tertiary-neutral"
             size="small"
             title='Tilbakestill tittel til "Fullmektig"'
             onClick={() => {

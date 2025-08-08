@@ -110,7 +110,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
 const CancelButton = ({ cancel }: CancelButtonProps) => (
   <Button
     className="ml-auto shrink-0"
-    variant="secondary"
+    variant="secondary-neutral"
     type="button"
     size="small"
     onClick={cancel}

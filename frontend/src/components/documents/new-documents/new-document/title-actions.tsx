@@ -35,7 +35,7 @@ export const TitleActions = ({
           data-testid="document-title-edit-save-button"
           size="xsmall"
           icon={<Icon aria-hidden />}
-          variant="tertiary"
+          variant="tertiary-neutral"
           title="Endre dokumentnavn"
         />
       ) : (

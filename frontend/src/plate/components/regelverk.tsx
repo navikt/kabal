@@ -100,7 +100,7 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
               <Button
                 icon={<GavelSoundBlockIcon aria-hidden />}
                 onClick={insertRegelverk}
-                variant="tertiary"
+                variant="tertiary-neutral"
                 size="xsmall"
                 contentEditable={false}
                 disabled={loading}

@@ -22,7 +22,7 @@ export const CreateDraftTextButton = ({ text, onDraftCreated, query }: Props) =>
 
   return (
     <Tooltip content="Opprett et utkast basert på denne versjonen.">
-      <Button size="small" variant="secondary" onClick={createDraftAndNotify} icon={<PlusIcon aria-hidden />}>
+      <Button size="small" variant="secondary-neutral" onClick={createDraftAndNotify} icon={<PlusIcon aria-hidden />}>
         Nytt utkast
       </Button>
     </Tooltip>

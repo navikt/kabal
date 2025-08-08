@@ -17,7 +17,7 @@ export const ConfirmEditButton = ({ setEditMode }: ConfirmProps) => (
     data-testid="document-title-edit-save-button"
     title="Endre"
     size="xsmall"
-    variant="tertiary"
+    variant="tertiary-neutral"
   />
 );
 
@@ -41,7 +41,7 @@ export const DocumentTitleActions = ({ setEditMode, hasAccess, tittel }: Props) 
         data-testid="document-title-edit-save-button"
         title="Endre"
         size="xsmall"
-        variant="tertiary"
+        variant="tertiary-neutral"
       />
 
       <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />

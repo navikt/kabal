@@ -164,7 +164,7 @@ export const PdfModal = ({
         {hasChanges ? (
           <Button
             type="button"
-            variant="secondary"
+            variant="secondary-neutral"
             size="small"
             onClick={() => {
               cancel();
@@ -175,7 +175,7 @@ export const PdfModal = ({
           </Button>
         ) : null}
 
-        <Button type="button" variant="secondary" size="small" onClick={close}>
+        <Button type="button" variant="secondary-neutral" size="small" onClick={close}>
           Lukk
         </Button>
       </Modal.Footer>

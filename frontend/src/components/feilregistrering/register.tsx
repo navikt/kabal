@@ -59,7 +59,13 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
           Feilregistrer
         </Button>
 
-        <Button size="small" variant="secondary" onClick={close} loading={isLoading} icon={<XMarkIcon aria-hidden />}>
+        <Button
+          size="small"
+          variant="secondary-neutral"
+          onClick={close}
+          loading={isLoading}
+          icon={<XMarkIcon aria-hidden />}
+        >
           Avbryt
         </Button>
       </HStack>

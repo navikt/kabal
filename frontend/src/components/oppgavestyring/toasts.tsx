@@ -36,7 +36,7 @@ const Tildelt = ({
     <HStack justify="space-between" gap="0 2">
       <CountdownButton
         size="small"
-        variant="tertiary"
+        variant="tertiary-neutral"
         onClick={() => onChange(fromNavIdent, toNavIdent)}
         seconds={Math.floor((timestamp + 10_000 - Date.now()) / 1_000)}
       >
@@ -53,7 +53,7 @@ export const errorToast = ({ testId, fromNavIdent, label, name, onChange, oppgav
         Kunne ikke sette {name} ({toNavIdent}) som {label}.
       </span>
       <HStack justify="space-between" gap="0 2">
-        <Button size="small" variant="tertiary" onClick={() => onChange(toNavIdent, fromNavIdent)}>
+        <Button size="small" variant="tertiary-neutral" onClick={() => onChange(toNavIdent, fromNavIdent)}>
           Prøv igjen
         </Button>
       </HStack>

@@ -117,7 +117,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
               <Button
                 icon={<ArrowCirclepathIcon aria-hidden />}
                 onClick={refetch}
-                variant="tertiary"
+                variant="tertiary-neutral"
                 size="xsmall"
                 contentEditable={false}
                 loading={isLoading || isFetching}

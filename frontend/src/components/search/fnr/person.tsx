@@ -50,7 +50,7 @@ export const Person = ({ data, isLoading, isFetching, error, fnr, refetch }: Per
         <CopyIdButton id={data.id} />
       </span>
       <Button
-        variant="secondary"
+        variant="secondary-neutral"
         size="small"
         onClick={refetch}
         loading={isFetching}

@@ -9,7 +9,7 @@ import type { Path } from 'slate';
 const DummyButton = ({ loading }: { loading?: boolean }) => (
   <Button
     icon={<TrashIcon aria-hidden />}
-    variant="tertiary"
+    variant="tertiary-neutral"
     size="xsmall"
     contentEditable={false}
     disabled
@@ -85,7 +85,7 @@ const IsChanged = ({ onConfirm, isChangedWarning, side = 'left' }: IsChangedProp
     <HStack position="relative" gap="1" ref={ref} contentEditable={false}>
       <Button
         icon={<TrashIcon aria-hidden />}
-        variant="tertiary"
+        variant="tertiary-neutral"
         size="xsmall"
         onClick={() => setShowConfirm(!showConfirm)}
       />
@@ -97,13 +97,13 @@ const IsChanged = ({ onConfirm, isChangedWarning, side = 'left' }: IsChangedProp
         >
           {isChangedWarning}
           <HStack gap="1" wrap={false}>
-            <Button icon={<CheckmarkIcon aria-hidden />} onClick={onConfirm} variant="tertiary" size="xsmall">
+            <Button icon={<CheckmarkIcon aria-hidden />} onClick={onConfirm} variant="tertiary-neutral" size="xsmall">
               Ja
             </Button>
             <Button
               icon={<XMarkIcon aria-hidden />}
               onClick={() => setShowConfirm(false)}
-              variant="tertiary"
+              variant="tertiary-neutral"
               size="xsmall"
               style={{ whiteSpace: 'nowrap' }}
             >

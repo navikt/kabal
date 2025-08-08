@@ -35,7 +35,7 @@ export const Confirm = ({ setIsConfirmed }: ConfirmProps) => {
           Jeg forstår, gå til feilregistrering.
         </Button>
 
-        <Button size="small" variant="secondary" onClick={close} icon={<XMarkIcon aria-hidden />}>
+        <Button size="small" variant="secondary-neutral" onClick={close} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
       </HStack>

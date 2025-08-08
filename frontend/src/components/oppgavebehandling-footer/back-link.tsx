@@ -6,7 +6,7 @@ export const BackLink = () => (
   <Button
     to="/mineoppgaver"
     as={NavLink}
-    variant="secondary"
+    variant="secondary-neutral"
     size="small"
     data-testid="footer-button-back"
     icon={<ChevronLeftIcon aria-hidden />}

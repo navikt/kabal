@@ -158,6 +158,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
               <Switch
                 checked={isLocked}
                 size="small"
+                data-color="neutral"
                 loading={isTextTypeUpdating}
                 onChange={({ target }) => {
                   const newTextType = target.checked ? RichTextTypes.MALTEKST : RichTextTypes.REDIGERBAR_MALTEKST;

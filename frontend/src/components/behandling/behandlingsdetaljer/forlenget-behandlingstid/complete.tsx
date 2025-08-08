@@ -67,7 +67,7 @@ export const Complete = ({ id, onClose, setError }: Props) => {
           >
             Bekreft endring av frist{data.doNotSendLetter ? '' : ' og send brev'}
           </Button>
-          <Button size="small" variant="secondary" onClick={() => setShowConfirm(false)} disabled={isLoading}>
+          <Button size="small" variant="secondary-neutral" onClick={() => setShowConfirm(false)} disabled={isLoading}>
             Avbryt
           </Button>
         </>

@@ -143,7 +143,7 @@ const TaskList = () => {
                   <Button
                     as={Link}
                     to={getPath(behandlingId, typeId)}
-                    variant="secondary"
+                    variant="secondary-neutral"
                     size="small"
                     target="_blank"
                     icon={<ExternalLinkIcon aria-hidden />}

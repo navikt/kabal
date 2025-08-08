@@ -28,7 +28,7 @@ export const UnfinishedFooter = () => {
       <HStack align="center" justify="space-between" gap="4">
         <FinishButton />
         <SendToSaksbehandler oppgaveId={oppgave.id} isSaksbehandler={isSaksbehandler} />
-        <TakeFromSaksbehandler oppgaveId={oppgave.id} variant="secondary" />
+        <TakeFromSaksbehandler oppgaveId={oppgave.id} variant="secondary-neutral" />
         <VentButton />
         <BackLink />
         <DeassignOppgave oppgave={oppgave} />

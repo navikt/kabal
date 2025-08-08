@@ -116,7 +116,7 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
             <VStack>
               <Tooltip content="Flytt opp">
                 <Button
-                  variant="tertiary"
+                  variant="tertiary-neutral"
                   size="small"
                   disabled={i === 0}
                   onClick={() => moveUp(textId)}
@@ -127,7 +127,7 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
               </Tooltip>
               <Tooltip content="Flytt ned">
                 <Button
-                  variant="tertiary"
+                  variant="tertiary-neutral"
                   size="small"
                   disabled={i === lastIndex}
                   onClick={() => moveDown(textId)}

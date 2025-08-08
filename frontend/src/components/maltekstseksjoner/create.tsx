@@ -36,7 +36,13 @@ export const CreateMaltekstseksjon = ({ query }: Props) => {
   }, [createMaltekstseksjon, query, setPath]);
 
   return (
-    <Button variant="secondary" size="small" onClick={create} loading={isLoading} icon={<PlusIcon aria-hidden />}>
+    <Button
+      variant="secondary-neutral"
+      size="small"
+      onClick={create}
+      loading={isLoading}
+      icon={<PlusIcon aria-hidden />}
+    >
       Legg til ny
     </Button>
   );
@@ -75,7 +81,7 @@ export const CreateText = ({ query, textType, maltekstseksjon }: CreateTextProps
 
   return (
     <Button
-      variant="tertiary"
+      variant="tertiary-neutral"
       size="small"
       onClick={create}
       loading={isLoading || isMaltekstLoading}

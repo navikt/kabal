@@ -104,7 +104,7 @@ export const SelectGosysOppgaveModal = ({ hasGosysOppgave }: SelectGosysOppgaveM
 
   return (
     <>
-      <Button variant="secondary" size="small" onClick={onClick}>
+      <Button variant="secondary-neutral" size="small" onClick={onClick}>
         {text}
       </Button>
 
@@ -121,7 +121,7 @@ export const SelectGosysOppgaveModal = ({ hasGosysOppgave }: SelectGosysOppgaveM
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" size="small" onClick={() => setIsOpen(false)} className="self-start">
+          <Button variant="secondary-neutral" size="small" onClick={() => setIsOpen(false)} className="self-start">
             Lukk
           </Button>
         </Modal.Footer>
@@ -224,7 +224,7 @@ const SelectGosysOppgave = () => {
     <>
       <HStack gap="4">
         <Button
-          variant="secondary"
+          variant="secondary-neutral"
           size="small"
           onClick={onShowOpenClick}
           className="self-start"
@@ -235,7 +235,7 @@ const SelectGosysOppgave = () => {
 
         {showOpen ? (
           <Button
-            variant="secondary"
+            variant="secondary-neutral"
             size="small"
             onClick={onShowOtherClick}
             className="self-start"

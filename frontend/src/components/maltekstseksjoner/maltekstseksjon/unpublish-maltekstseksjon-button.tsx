@@ -33,7 +33,7 @@ export const UnpublishMaltekstseksjonButton = ({ publishedMaltekstseksjon, query
         />
         <Button
           size="small"
-          variant="secondary"
+          variant="secondary-neutral"
           onClick={() => setIsOpen(false)}
           disabled={isLoading}
           icon={<XMarkIcon aria-hidden />}

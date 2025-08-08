@@ -43,7 +43,7 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
     return (
       <HStack position="relative">
         <Button
-          variant="secondary"
+          variant="secondary-neutral"
           size="small"
           disabled
           loading
@@ -82,7 +82,7 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
     <HStack position="relative" ref={ref}>
       <Button
         disabled={disabled}
-        variant="secondary"
+        variant="secondary-neutral"
         size="small"
         onClick={onClick}
         loading={isLoading}
