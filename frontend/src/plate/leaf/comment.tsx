@@ -18,12 +18,7 @@ export const CommentLeaf = (props: PlateLeafProps<FormattedText>) => {
   return (
     <PlateLeaf
       {...props}
-      style={{
-        backgroundColor:
-          leaf.selected === true
-            ? 'var(--ax-bg-success-moderate)'
-            : getBackgroundColor(commentIds.length, isCommentFocused),
-      }}
+      className={getCommentClasses(commentIds.length > 0, isCommentFocused)}
       data-selected={leaf.selected}
       attributes={{
         ...props.attributes,
@@ -61,18 +56,14 @@ const useCommentIds = (leaf: FormattedText) =>
     return commentIds;
   }, [leaf]);
 
-const getBackgroundColor = (commentCount: number, isCommentActive: boolean): React.CSSProperties['backgroundColor'] => {
-  if (isCommentActive) {
-    return commentCount === 1 ? 'var(--ax-bg-success-moderate)' : 'var(--ax-bg-success-moderate-hover)';
+const getCommentClasses = (hasComment: boolean, isFocused: boolean): string | undefined => {
+  if (isFocused) {
+    return /* @tw */ 'bg-ax-bg-warning-moderate-pressed outline outline-ax-border-warning rounded-sm';
   }
 
-  if (commentCount === 0) {
-    return 'transparent';
+  if (hasComment) {
+    return /* @tw */ 'bg-ax-bg-warning-moderate hover:bg-ax-bg-warning-moderate-hover outline outline-ax-border-warning rounded-sm';
   }
 
-  if (commentCount === 1) {
-    return 'var(--ax-bg-warning-soft)';
-  }
-
-  return 'var(--ax-bg-warning-moderate)';
+  return undefined;
 };
