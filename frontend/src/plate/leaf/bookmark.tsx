@@ -1,4 +1,5 @@
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
+import { BOOKMARK_ID_TO_COLOR, LEGACY_COLOR_TO_NEW } from '@app/plate/toolbar/bookmark-button';
 import type { FormattedText } from '@app/plate/types';
 import { PlateLeaf, type PlateLeafProps } from 'platejs/react';
 import { useMemo } from 'react';
@@ -7,10 +8,12 @@ export const BookmarkLeaf = (props: PlateLeafProps<FormattedText>) => {
   const { leaf, children } = props;
   const bookmarks = useBookmarks(leaf);
 
+  const [bookmark] = bookmarks;
+
   return (
     <PlateLeaf
       {...props}
-      style={{ color: bookmarks[0]?.color }}
+      className={bookmark?.color}
       data-selected={leaf.selected}
       attributes={{ ...props.attributes, suppressContentEditableWarning: true }}
     >
@@ -27,10 +30,16 @@ const useBookmarks = (leaf: FormattedText) =>
 
     for (const key of keys) {
       if (key.startsWith(BOOKMARK_PREFIX)) {
-        const bookmarkColor = leaf[key];
+        const bookmarkId = leaf[key];
 
-        if (typeof bookmarkColor === 'string') {
-          bookmarks.push({ key, color: bookmarkColor });
+        if (typeof bookmarkId !== 'string') {
+          continue;
+        }
+
+        const color = BOOKMARK_ID_TO_COLOR[bookmarkId] ?? LEGACY_COLOR_TO_NEW[bookmarkId];
+
+        if (color !== undefined) {
+          bookmarks.push({ key, color });
         }
       }
     }

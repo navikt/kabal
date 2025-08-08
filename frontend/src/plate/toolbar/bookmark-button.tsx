@@ -58,7 +58,7 @@ export const BookmarkButton = () => {
         <HStack asChild position="absolute" right="0" style={{ top: '100%' }}>
           <BoxNew background="default" padding="1" shadow="dialog" borderRadius="medium">
             {BOOKMARKS.map((option) => (
-              <Bookmark key={option.value} color={option} setIsOpen={setIsOpen} setBookmark={setBookmark} />
+              <Bookmark key={option.id} option={option} setIsOpen={setIsOpen} setBookmark={setBookmark} />
             ))}
           </BoxNew>
         </HStack>
@@ -84,42 +84,60 @@ const getActiveBookmark = (text: FormattedText | undefined): string | null => {
 };
 
 interface BookmarkProps {
-  color: BookmarkOption;
+  option: BookmarkOption;
   setIsOpen: (open: boolean) => void;
   setBookmark: (color: string) => void;
 }
 
-const Bookmark = ({ color, setIsOpen, setBookmark }: BookmarkProps) => (
-  <Tooltip content={color.name} key={color.value}>
+const Bookmark = ({ option, setIsOpen, setBookmark }: BookmarkProps) => (
+  <Tooltip content={option.name} key={option.id}>
     <Button
       onClick={() => {
-        pushEvent('set-bookmark', 'smart-editor', { color: color.name });
-        setBookmark(color.value);
+        pushEvent('set-bookmark', 'smart-editor', { color: option.name });
+        setBookmark(option.id);
         setIsOpen(false);
       }}
       size="small"
       variant="tertiary-neutral"
-      icon={<BookmarkFillIcon aria-hidden color={color.value} />}
+      icon={<BookmarkFillIcon aria-hidden className={option.className} />}
     />
   </Tooltip>
 );
 
 interface BookmarkOption {
+  id: string;
   name: string;
-  value: string;
+  className: string;
 }
 
 const BOOKMARKS: [BookmarkOption, BookmarkOption, BookmarkOption] = [
   {
+    id: '1',
     name: 'Rød',
-    value: 'var(--ax-bg-danger-strong)',
+    className: 'text-ax-text-danger-decoration bg-ax-bg-danger-soft-a rounded-sm hover:bg-ax-bg-danger-moderate',
   },
   {
+    id: '2',
     name: 'Grønn',
-    value: 'var(--ax-bg-success-strong)',
+    className: 'text-ax-text-success-decoration bg-ax-bg-success-soft-a rounded-sm hover:bg-ax-bg-success-moderate',
   },
   {
-    name: 'Blå',
-    value: 'var(--ax-bg-accent-strong)',
+    id: '3',
+    name: 'Lilla',
+    className:
+      'text-ax-text-meta-purple-decoration bg-ax-bg-meta-purple-soft-a rounded-sm hover:bg-ax-bg-meta-purple-moderate',
   },
 ];
+
+export const BOOKMARK_ID_TO_COLOR: Record<string, string> = Object.fromEntries(
+  BOOKMARKS.map(({ id, className: color }) => [id, color]),
+);
+
+export const LEGACY_COLOR_TO_NEW: Record<string, string> = {
+  'var(--ax-bg-danger-strong)': BOOKMARKS[0].className,
+  'var(--ax-bg-success-strong)': BOOKMARKS[1].className,
+  'var(--ax-bg-accent-strong)': BOOKMARKS[2].className,
+  'var(--a-red-600)': BOOKMARKS[0].className,
+  'var(--a-green-600)': BOOKMARKS[1].className,
+  'var(--a-blue-600)': BOOKMARKS[2].className,
+};
