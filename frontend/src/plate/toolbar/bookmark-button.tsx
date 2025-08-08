@@ -52,7 +52,7 @@ export const BookmarkButton = () => {
         onClick={() => setIsOpen(!isOpen)}
         active={active}
         disabled={disabled}
-        activeVariant={activeBookmarkVariant}
+        className={activeBookmarkVariant === null ? undefined : BOOKMARK_VARIANT_TO_CLASSNAME[activeBookmarkVariant]}
         variant="tertiary-neutral"
       />
       {isOpen ? (
