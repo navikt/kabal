@@ -8,7 +8,17 @@ export const querystringParser = (query: string): Record<string, string> =>
     const [key, value] = q.split('=');
 
     if (key !== undefined && value !== undefined) {
-      acc[key] = value;
+      acc[decode(key, 'key')] = decode(value, 'value');
     }
+
     return acc;
   }, {});
+
+const decode = (value: string, name: string): string => {
+  try {
+    return decodeURIComponent(value);
+  } catch (e) {
+    console.warn(`Failed to decode query ${name}: "${value}"`, e);
+    return value; // Return the original value if decoding fails
+  }
+};
