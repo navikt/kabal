@@ -75,7 +75,7 @@ export const Header = ({
       <Tooltip content={tooltip} placement="top">
         <Button
           size="small"
-          variant="tertiary"
+          variant="tertiary-neutral"
           icon={<ChevronRightDoubleIcon aria-hidden className={showsAnyVedlegg ? 'rotate-90' : 'rotate-0'} />}
           style={{ gridArea: Fields.ToggleVedlegg }}
           onClick={() => toggleShowAllVedlegg()}

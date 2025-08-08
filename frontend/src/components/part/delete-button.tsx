@@ -22,7 +22,7 @@ export const DeleteButton = ({ onDelete }: Props) => {
       <>
         <Button variant="danger" icon={<TrashIcon aria-hidden />} onClick={onDelete} size="small" />
         <Button
-          variant="secondary"
+          variant="secondary-neutral"
           icon={<ArrowUndoIcon aria-hidden />}
           onClick={() => setShowConfirm(false)}
           size="small"

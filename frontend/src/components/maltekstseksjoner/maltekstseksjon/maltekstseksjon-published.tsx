@@ -113,7 +113,7 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
           <Tooltip content="Opprett utkast basert på denne versjonen av maltekstseksjonen.">
             <Button
               size="small"
-              variant="secondary"
+              variant="secondary-neutral"
               onClick={onCreateDraft}
               loading={isLoading}
               icon={<PlusIcon aria-hidden />}

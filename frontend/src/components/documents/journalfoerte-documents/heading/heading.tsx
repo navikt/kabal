@@ -58,7 +58,7 @@ export const JournalfoertHeading = memo(
 
         <KeyboardHelpButton />
 
-        <Button onClick={() => unselectAll()} variant="secondary" size="small">
+        <Button onClick={() => unselectAll()} variant="secondary-neutral" size="small">
           Nullstill valg
         </Button>
 
@@ -81,7 +81,7 @@ const RemoveFilters = ({ resetFilters, noFiltersActive }: RemoveFiltersProps) =>
   }
 
   return (
-    <Button size="small" variant="secondary" onClick={resetFilters} icon={<ArrowCirclepathIcon aria-hidden />}>
+    <Button size="small" variant="secondary-neutral" onClick={resetFilters} icon={<ArrowCirclepathIcon aria-hidden />}>
       Nullstill filtre
     </Button>
   );

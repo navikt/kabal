@@ -44,7 +44,7 @@ export const AddressField = ({
             <Tooltip content={`Tilbakestill til «${originalValue}»`}>
               <Button
                 size="xsmall"
-                variant="tertiary"
+                variant="tertiary-neutral"
                 onClick={() => onChange(originalValue)}
                 icon={<ArrowUndoIcon aria-hidden />}
               />

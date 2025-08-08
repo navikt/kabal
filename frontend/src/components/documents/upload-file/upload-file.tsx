@@ -24,7 +24,7 @@ export const UploadFile = () => {
       <SetDistributionType distributionType={distributionType} setDistributionType={onChangeDocumentType} />
 
       <UploadFileButton
-        variant="secondary"
+        variant="secondary-neutral"
         size="small"
         data-testid="upload-document"
         distributionType={distributionType}

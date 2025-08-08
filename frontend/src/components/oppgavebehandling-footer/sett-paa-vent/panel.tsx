@@ -101,7 +101,13 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
           >
             Sett på vent
           </Button>
-          <Button type="button" variant="secondary" size="small" onClick={close} icon={<XMarkIcon aria-hidden />}>
+          <Button
+            type="button"
+            variant="secondary-neutral"
+            size="small"
+            onClick={close}
+            icon={<XMarkIcon aria-hidden />}
+          >
             Avbryt
           </Button>
         </HStack>

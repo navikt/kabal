@@ -66,7 +66,7 @@ export const Errors = ({ updatePdf }: Props) => {
                 .filter(({ errors }) => errors.length > 0),
             );
           }}
-          variant="secondary"
+          variant="secondary-neutral"
         >
           Oppdater
         </Button>

@@ -22,7 +22,7 @@ export const DeleteDraftButton = ({ id, title, onDraftDeleted, children, tooltip
       <>
         <Button
           size="small"
-          variant="secondary"
+          variant="secondary-neutral"
           onClick={() => setIsOpen(false)}
           disabled={isLoading}
           icon={<XMarkIcon aria-hidden />}

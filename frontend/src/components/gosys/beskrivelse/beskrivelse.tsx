@@ -48,7 +48,7 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
           ) : null}
         </VStack>
 
-        <Button variant="tertiary" size="small" onClick={onOpenClick}>
+        <Button variant="tertiary-neutral" size="small" onClick={onOpenClick}>
           Vis alle ({entries.length})
         </Button>
       </VStack>

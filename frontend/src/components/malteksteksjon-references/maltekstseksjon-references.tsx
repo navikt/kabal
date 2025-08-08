@@ -92,7 +92,7 @@ export const MaltekstseksjonReferences = ({
 
             ref.current?.showModal();
           }}
-          variant="tertiary"
+          variant="tertiary-neutral"
           icon={icon}
           iconPosition="right"
           className="whitespace-nowrap"
@@ -140,7 +140,7 @@ const ListItem = ({ id, onClick, selected }: ListItemProps) => {
       <HStack align="center" gap="05" className={selected ? 'font-bold' : 'font-normal'}>
         <Button
           onClick={onClick}
-          variant="tertiary"
+          variant="tertiary-neutral"
           size="xsmall"
           icon={selected ? <EyeIcon aria-hidden /> : <FileSearchIcon aria-hidden />}
           title={selected ? 'Forhåndsvisning åpnet' : 'Forhåndsvis'}

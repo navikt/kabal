@@ -172,7 +172,7 @@ const EditButton = ({ onClick, isEditing }: EditButtonProps) => {
 
   return (
     <Tooltip content="Endre eller fjern fullmektig">
-      <Button variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />
+      <Button variant="tertiary-neutral" icon={<Icon aria-hidden />} onClick={onClick} size="small" />
     </Tooltip>
   );
 };

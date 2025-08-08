@@ -129,7 +129,7 @@ const Selection = ({ gosysOppgave, selected, onSelect, isSelecting }: SelectionP
   }
 
   return (
-    <Button size="small" variant="tertiary" onClick={onSelect} loading={isSelecting}>
+    <Button size="small" variant="tertiary-neutral" onClick={onSelect} loading={isSelecting}>
       Velg
     </Button>
   );

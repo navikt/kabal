@@ -2,7 +2,7 @@ import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CalendarIcon } from '@navikt/aksel-icons';
 import { Alert, BoxNew, Button, type ButtonProps, DatePicker, HStack } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 
 type DateStringISO = string;
@@ -15,20 +15,11 @@ interface Props {
   onChange: (date: DateRange | undefined) => void;
   buttonLabel?: string;
   gridArea?: string;
-  neutral?: boolean;
   buttonClassName?: string;
   buttonSize?: ButtonProps['size'];
 }
 
-export const DatePickerRange = ({
-  onChange,
-  selected,
-  buttonLabel,
-  gridArea,
-  buttonClassName,
-  buttonSize,
-  neutral,
-}: Props) => {
+export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea, buttonClassName, buttonSize }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const onClick = useCallback(() => setIsOpen((o) => !o), []);
   const ref = useRef(null);
@@ -40,13 +31,7 @@ export const DatePickerRange = ({
 
   const active = from !== undefined || to !== undefined;
 
-  const variant: ButtonProps['variant'] = useMemo(() => {
-    if (neutral) {
-      return active ? 'primary-neutral' : 'tertiary-neutral';
-    }
-
-    return active ? 'primary' : 'tertiary';
-  }, [active, neutral]);
+  const variant: ButtonProps['variant'] = active ? 'primary-neutral' : 'tertiary-neutral';
 
   return (
     <HStack className="relative" style={{ gridArea }} ref={ref}>
@@ -74,7 +59,7 @@ export const DatePickerRange = ({
             </Button>
             <Button
               size="small"
-              variant="secondary"
+              variant="secondary-neutral"
               onClick={() => {
                 onChange(undefined);
                 setIsOpen(false);

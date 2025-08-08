@@ -22,7 +22,13 @@ export const DuplicateSectionButton = ({ id, versionId, query }: Props) => {
 
   return (
     <Tooltip content="Opprett ny maltekstseksjon basert på denne versjonen.">
-      <Button size="small" variant="secondary" onClick={onClick} icon={<FilesIcon aria-hidden />} loading={isLoading}>
+      <Button
+        size="small"
+        variant="secondary-neutral"
+        onClick={onClick}
+        icon={<FilesIcon aria-hidden />}
+        loading={isLoading}
+      >
         Dupliser
       </Button>
     </Tooltip>

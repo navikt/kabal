@@ -27,6 +27,7 @@ export const OppgaveSearch = () => {
   const toggleGroup = (
     <ToggleGroup
       size="small"
+      variant="neutral"
       value={searchType}
       onChange={(v) => {
         if (isSearchType(v)) {

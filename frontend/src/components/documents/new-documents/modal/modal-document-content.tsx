@@ -99,7 +99,7 @@ export const DocumentModalContent = ({ document, access }: Props) => {
               />
               <Button
                 size="small"
-                variant="secondary"
+                variant="secondary-neutral"
                 icon={<CheckmarkIcon aria-hidden />}
                 title="Endre dokumentnavn"
                 data-testid="document-title-edit-save-button"

@@ -43,7 +43,7 @@ export const SortableHeader = ({ label, sortKey, querySortKey, querySortOrder, t
     return (
       <Button
         onClick={onClick}
-        variant={active ? 'primary' : 'tertiary'}
+        variant={active ? 'primary-neutral' : 'tertiary-neutral'}
         iconPosition="right"
         icon={<Icon aria-hidden />}
         size="small"
@@ -58,7 +58,7 @@ export const SortableHeader = ({ label, sortKey, querySortKey, querySortOrder, t
     <Tooltip content={title}>
       <Button
         onClick={onClick}
-        variant={active ? 'primary' : 'tertiary'}
+        variant={active ? 'primary-neutral' : 'tertiary-neutral'}
         iconPosition="right"
         icon={<Icon aria-hidden />}
         size="small"

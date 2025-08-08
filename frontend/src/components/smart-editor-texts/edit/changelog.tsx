@@ -22,7 +22,7 @@ export const Changelog = ({ versions }: Props) => {
 
   return (
     <>
-      <Button onClick={openModal} size="xsmall" variant="tertiary" icon={<ClockDashedIcon aria-hidden />}>
+      <Button onClick={openModal} size="xsmall" variant="tertiary-neutral" icon={<ClockDashedIcon aria-hidden />}>
         Vis endringslogg
       </Button>
       <Modal header={{ heading: 'Endringslogg' }} ref={ref} closeOnBackdropClick>

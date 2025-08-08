@@ -43,6 +43,7 @@ export const Filters = ({
     <BoxNew background="default" paddingInline="0 1" paddingBlock="4">
       <ToggleGroup
         size="small"
+        variant="neutral"
         value={activeFilter}
         onChange={(a) => setActiveFilter(isActiveValue(a) ? a : activeFilter)}
       >
@@ -51,7 +52,12 @@ export const Filters = ({
         <ToggleGroup.Item value={ActiveEnum.INACTIVE}>Inaktive</ToggleGroup.Item>
       </ToggleGroup>
 
-      <ToggleGroup size="small" value={typeFilter} onChange={(t) => setTypeFilter(isTypeFilter(t) ? t : typeFilter)}>
+      <ToggleGroup
+        size="small"
+        variant="neutral"
+        value={typeFilter}
+        onChange={(t) => setTypeFilter(isTypeFilter(t) ? t : typeFilter)}
+      >
         <ToggleGroup.Item value={ALL_TYPES}>Alle</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
         <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>

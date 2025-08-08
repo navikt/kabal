@@ -50,7 +50,7 @@ export const Confirm = ({ onFinish, onValidate, actionText, isValidating, isFini
       <Button
         type="button"
         size="small"
-        variant="secondary"
+        variant="secondary-neutral"
         onClick={() => setShowConfirm(false)}
         data-testid="document-finish-cancel"
         disabled={isFinishing || isValidating}

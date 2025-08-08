@@ -130,7 +130,7 @@ const Tildelt = ({
     fromSaksbehandler !== null || canDeassignOthers ? (
       <CountdownButton
         seconds={Math.floor((timestamp + 10_000 - Date.now()) / 1_000)}
-        variant="tertiary"
+        variant="tertiary-neutral"
         size="small"
         onClick={() => {
           if (fromSaksbehandler !== null) {
@@ -152,7 +152,7 @@ const Tildelt = ({
       primary={
         <OpenOppgavebehandling
           size="small"
-          variant="secondary"
+          variant="secondary-neutral"
           id={oppgaveId}
           typeId={oppgaveType}
           ytelseId={ytelseId}
@@ -178,7 +178,7 @@ const Fradelt = ({ oppgaveId, sakenGjelder, fromSaksbehandler, oppgaveType, ytel
 
   const primary =
     fromSaksbehandler === null ? null : (
-      <Button variant="tertiary" size="small" onClick={() => tildel(fromSaksbehandler)}>
+      <Button variant="tertiary-neutral" size="small" onClick={() => tildel(fromSaksbehandler)}>
         Angre
       </Button>
     );

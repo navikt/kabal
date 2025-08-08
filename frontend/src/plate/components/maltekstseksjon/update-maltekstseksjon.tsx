@@ -70,7 +70,7 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes, ignore }: Props) => 
           />
         )}
 
-        <Button size={BUTTON_SIZE} icon={<XMarkIcon aria-hidden />} variant="secondary" onClick={ignore}>
+        <Button size={BUTTON_SIZE} icon={<XMarkIcon aria-hidden />} variant="secondary-neutral" onClick={ignore}>
           Behold eksisterende tekst
         </Button>
 

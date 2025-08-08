@@ -69,7 +69,7 @@ export const FradelButton = (props: IOppgave) => {
   if (tildeltSaksbehandlerident !== null && undoSecondsLeft > 0) {
     return (
       <Button
-        variant="secondary"
+        variant="secondary-neutral"
         size="small"
         loading={isLoading}
         onClick={async () => {
@@ -129,7 +129,7 @@ const Deassign = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave
   return (
     <HStack position="relative" className="[grid-area:tildel]" ref={ref}>
       <Button
-        variant="secondary"
+        variant="secondary-neutral"
         type="button"
         size="small"
         onClick={onLeggTilbake}

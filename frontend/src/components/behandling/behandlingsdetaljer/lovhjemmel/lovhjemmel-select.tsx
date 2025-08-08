@@ -65,7 +65,7 @@ export const LovhjemmelSelect = ({
       <div className="relative" ref={ref} data-testid="lovhjemmel-select" data-selected={selected.join(',')}>
         <Button
           size="small"
-          variant="secondary"
+          variant="secondary-neutral"
           onClick={toggleOpen}
           disabled={disabled}
           data-testid="lovhjemmel-button"

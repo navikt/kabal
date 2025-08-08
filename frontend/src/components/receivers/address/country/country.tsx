@@ -126,7 +126,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
               <Tooltip content={`Tilbakestill til «${originalCountryName}»`}>
                 <Button
                   size="xsmall"
-                  variant="tertiary"
+                  variant="tertiary-neutral"
                   onClick={() => {
                     countryNameRef.current = originalCountryName;
                     onChange(originalValue);

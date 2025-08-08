@@ -92,7 +92,7 @@ export const EditUtfallSet = ({ utfallSet, onChange, onCancel, title, icon }: Ed
         >
           Legg til
         </Button>
-        <Button size="small" variant="secondary" onClick={onCancel} icon={<XMarkIcon aria-hidden />}>
+        <Button size="small" variant="secondary-neutral" onClick={onCancel} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
       </HStack>

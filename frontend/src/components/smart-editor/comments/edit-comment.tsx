@@ -10,7 +10,7 @@ export const EditButton = ({ isEditing, setIsEditing }: EditButtonProps) => (
   <Button
     size="xsmall"
     icon={isEditing ? <CheckmarkIcon aria-hidden /> : <PencilIcon aria-hidden />}
-    variant="tertiary"
+    variant="tertiary-neutral"
     onClick={setIsEditing}
     title={isEditing ? 'Lagre' : 'Rediger kommentar'}
   />

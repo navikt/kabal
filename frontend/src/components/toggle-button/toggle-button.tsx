@@ -35,8 +35,8 @@ const getVariant = (error: boolean, active: boolean): ButtonProps['variant'] => 
   }
 
   if (active) {
-    return 'primary';
+    return 'primary-neutral';
   }
 
-  return 'tertiary';
+  return 'tertiary-neutral';
 };

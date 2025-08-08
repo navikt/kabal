@@ -57,7 +57,7 @@ const SettPaaVent = ({ id }: { id: string }) => {
       {showPopup ? <SettPaaVentPanel oppgaveId={id} close={() => setShowPopup(false)} /> : null}
       <Button
         type="button"
-        variant="secondary"
+        variant="secondary-neutral"
         size="small"
         onClick={() => setShowPopup(!showPopup)}
         loading={isLoading}
@@ -87,7 +87,7 @@ const AvsluttVenteperiode = ({ id }: { id: string }) => {
   return (
     <div className="relative" ref={ref}>
       <Button
-        variant="secondary"
+        variant="secondary-neutral"
         size="small"
         onClick={() => setShowConfirm(!showConfirm)}
         icon={<XMarkIcon aria-hidden />}

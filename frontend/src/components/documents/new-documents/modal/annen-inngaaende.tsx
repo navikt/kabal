@@ -55,7 +55,7 @@ export const AnnenInngaaende = ({ document, hasAccess }: Props) => {
           {hasAccess && document.avsender !== null ? (
             <Button
               size="xsmall"
-              variant="tertiary"
+              variant="tertiary-neutral"
               onClick={() => setEditAvsender(!editAvsender)}
               icon={editAvsender ? <XMarkIcon aria-hidden /> : <PencilIcon aria-hidden />}
             />

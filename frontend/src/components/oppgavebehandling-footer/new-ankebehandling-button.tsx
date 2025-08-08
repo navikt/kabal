@@ -24,7 +24,7 @@ export const NewAnkebehandlingButton = () => {
     <div className="relative">
       <Button
         icon={<FolderPlusIcon aria-hidden />}
-        variant="secondary"
+        variant="secondary-neutral"
         size="small"
         loading={validateIsLoading || validateIsFetching}
         onClick={async () => {
@@ -80,7 +80,7 @@ const Popup = ({ show, close, oppgaveId }: PopupProps) => {
         >
           Ny behandling
         </Button>
-        <Button className="whitespace-nowrap" variant="secondary" size="small" onClick={close}>
+        <Button className="whitespace-nowrap" variant="secondary-neutral" size="small" onClick={close}>
           Avbryt
         </Button>
       </HStack>

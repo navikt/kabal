@@ -52,7 +52,7 @@ export const Body = ({ texts, usedIds, onAdd, onRemove }: Props) => {
               </Table.DataCell>
               <Table.DataCell>{score.toFixed(2)} %</Table.DataCell>
               <Table.DataCell>
-                <Button size="xsmall" variant="tertiary" onClick={() => (isUsed ? onRemove(id) : onAdd(id))}>
+                <Button size="xsmall" variant="tertiary-neutral" onClick={() => (isUsed ? onRemove(id) : onAdd(id))}>
                   {isUsed ? 'Fjern' : 'Legg til'}
                 </Button>
               </Table.DataCell>

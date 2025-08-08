@@ -59,7 +59,7 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
               <Button
                 icon={<ArrowCirclepathIcon aria-hidden />}
                 onClick={reload}
-                variant="tertiary"
+                variant="tertiary-neutral"
                 size="xsmall"
                 contentEditable={false}
                 loading={isFetching}

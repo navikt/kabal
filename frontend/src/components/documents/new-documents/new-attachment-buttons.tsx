@@ -43,7 +43,7 @@ const Upload = ({ document }: Props) => {
 
   return (
     <UploadFileButton
-      variant="tertiary"
+      variant="tertiary-neutral"
       size="xsmall"
       distributionType={document.dokumentTypeId}
       parentId={document.id}
@@ -80,7 +80,13 @@ const NewRolAnswerDocumentButton = ({ document }: Props) => {
     });
 
   return (
-    <Button variant="tertiary" size="xsmall" icon={<Chat2Icon aria-hidden />} onClick={onClick} loading={isLoading}>
+    <Button
+      variant="tertiary-neutral"
+      size="xsmall"
+      icon={<Chat2Icon aria-hidden />}
+      onClick={onClick}
+      loading={isLoading}
+    >
       <span className="font-normal">Opprett svardokument</span>
     </Button>
   );

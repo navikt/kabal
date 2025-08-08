@@ -125,7 +125,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
                 title="Tilbakestill tekst"
                 icon={<ArrowCirclepathIcon aria-hidden />}
                 onClick={insertRedigerbarMaltekst}
-                variant="tertiary"
+                variant="tertiary-neutral"
                 size="xsmall"
                 contentEditable={false}
               />

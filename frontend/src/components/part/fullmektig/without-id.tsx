@@ -161,7 +161,7 @@ export const WithoutId = ({ part, onClose }: Props) => {
       borderRadius="medium"
     >
       <VStack onKeyDown={onKeyDown} gap="4">
-        <Button size="small" variant="secondary" onClick={reset} style={{ width: 'min-content' }}>
+        <Button size="small" variant="secondary-neutral" onClick={reset} style={{ width: 'min-content' }}>
           Nullstill
         </Button>
         <TextField
@@ -227,7 +227,7 @@ export const WithoutId = ({ part, onClose }: Props) => {
           <Button size="small" variant="primary" onClick={save} loading={isLoading}>
             Lagre
           </Button>
-          <Button size="small" variant="secondary" onClick={onClose} loading={isLoading}>
+          <Button size="small" variant="secondary-neutral" onClick={onClose} loading={isLoading}>
             Avbryt
           </Button>
         </HStack>

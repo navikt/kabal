@@ -74,7 +74,7 @@ export class AppErrorBoundary extends Component<Props, State> {
             <CodeBlock>{this.state.error.message}</CodeBlock>
             <CodeBlock>{this.state.error.stack}</CodeBlock>
             <HStack gap="2">
-              <Button onClick={() => window.location.reload()} variant="secondary">
+              <Button onClick={() => window.location.reload()} variant="secondary-neutral">
                 Last Kabal på nytt
               </Button>
               <CopyButton copyText={copyText} text="Kopier feilmeldingen" variant="action" />

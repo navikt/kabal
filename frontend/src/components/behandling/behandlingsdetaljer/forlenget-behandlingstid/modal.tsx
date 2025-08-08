@@ -60,7 +60,7 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
       <Modal.Footer>
         {isOpen ? <Complete id={oppgaveId} onClose={onClose} setError={setError} /> : null}
 
-        <Button size="small" variant="secondary" onClick={onClose}>
+        <Button size="small" variant="secondary-neutral" onClick={onClose}>
           Lukk
         </Button>
       </Modal.Footer>

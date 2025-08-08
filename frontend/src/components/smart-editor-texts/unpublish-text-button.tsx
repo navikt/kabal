@@ -34,7 +34,7 @@ export const UnpublishTextButton = ({ publishedText, textType }: Props) => {
         <ConfirmUnpublishTextButton publishedText={publishedText} textDraft={draft} textType={textType} />
         <Button
           size="small"
-          variant="secondary"
+          variant="secondary-neutral"
           onClick={() => setIsOpen(false)}
           disabled={isLoading}
           icon={<XMarkIcon aria-hidden />}

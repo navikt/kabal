@@ -70,7 +70,7 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props
   return (
     <div className="relative" ref={ref}>
       <HStack wrap gap="1" marginBlock="1 0">
-        <Button variant="secondary" onClick={() => setIsOpen((o) => !o)} size="small" disabled={disabled}>
+        <Button variant="secondary-neutral" onClick={() => setIsOpen((o) => !o)} size="small" disabled={disabled}>
           Sett ekstra utfall for tilpasset tekst
         </Button>
         <HelpText>

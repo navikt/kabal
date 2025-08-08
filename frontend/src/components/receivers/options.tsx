@@ -65,7 +65,7 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
           <Tooltip content={`Tilbakestill til "${UTSENDINGSKANAL[part.utsendingskanal]}"`}>
             <Button
               size="small"
-              variant="tertiary"
+              variant="tertiary-neutral"
               onClick={() => onHandlingChange(HandlingEnum.AUTO)}
               icon={<ArrowUndoIcon aria-hidden />}
             />

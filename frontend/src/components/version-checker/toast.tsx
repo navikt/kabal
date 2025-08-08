@@ -14,7 +14,7 @@ export const VersionToast = ({ isRequired = false }: Props) => (
       <BodyShort size="small">Det er viktig at du oppdaterer så raskt som mulig.</BodyShort>
     ) : (
       <Button
-        variant="secondary"
+        variant="secondary-neutral"
         size="small"
         onClick={(e) => {
           pushEvent('close_update_toast', 'update', { required: isRequired ? 'true' : 'false' });

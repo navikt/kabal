@@ -62,7 +62,7 @@ export const DeleteButton = ({ id, title }: DeleteButtonProps) => {
       <Button
         size="xsmall"
         icon={<XMarkIcon aria-hidden />}
-        variant="tertiary"
+        variant="tertiary-neutral"
         onClick={() => setShowConfirm(false)}
         disabled={isDeleting}
         title="Avbryt"

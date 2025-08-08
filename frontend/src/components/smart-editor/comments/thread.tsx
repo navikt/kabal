@@ -77,7 +77,7 @@ const AddComment = ({ threadId }: { threadId: string }) => {
     <Button
       loading={isLoading}
       size="small"
-      variant="tertiary"
+      variant="tertiary-neutral"
       onClick={async () => {
         const comment = await postReply({
           oppgaveId,

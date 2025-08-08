@@ -16,6 +16,7 @@ export const SetStandaloneTextLanguage = ({ textType }: Props) => {
     <ToggleGroup
       value={language}
       size="small"
+      variant="neutral"
       onChange={(lang) => {
         if (isLanguage(lang)) {
           navigate({ lang });

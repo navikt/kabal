@@ -92,7 +92,7 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
       <HStack gap="0 2" position="absolute" top="0" right="0">
         <Button
           type="button"
-          variant="secondary"
+          variant="secondary-neutral"
           size="small"
           onClick={removeAll}
           data-testid={`${settingKey}-remove-all`}
@@ -102,7 +102,7 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
         </Button>
         <Button
           type="button"
-          variant="secondary"
+          variant="secondary-neutral"
           size="small"
           onClick={selectAll}
           data-testid={`${settingKey}-select-all`}

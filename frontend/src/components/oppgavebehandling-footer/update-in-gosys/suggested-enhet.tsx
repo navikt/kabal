@@ -75,7 +75,7 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
           Valgt
         </Button>
       ) : (
-        <Button size="small" variant="tertiary" onClick={() => setSelectedEnhet(suggestedEnhetsnr)}>
+        <Button size="small" variant="tertiary-neutral" onClick={() => setSelectedEnhet(suggestedEnhetsnr)}>
           Velg
         </Button>
       )}

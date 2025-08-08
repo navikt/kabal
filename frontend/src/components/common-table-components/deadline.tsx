@@ -88,7 +88,7 @@ const EditButton = ({ isOpen, setIsOpen }: EditButtonProps) => {
       size="xsmall"
       icon={<PencilIcon aria-hidden />}
       title="Endre frist for behandling i klageinstans"
-      variant="tertiary"
+      variant="tertiary-neutral"
       onClick={toggleOpen}
     />
   );

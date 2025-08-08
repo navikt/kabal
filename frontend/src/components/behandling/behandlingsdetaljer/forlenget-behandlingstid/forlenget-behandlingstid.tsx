@@ -31,7 +31,7 @@ export const ForlengetBehandlingstid = ({ oppgavebehandling, children }: Props) 
         {canEdit || hasOppgavestyringRole ? (
           <HStack gap="2" align="center">
             <Button
-              variant="secondary"
+              variant="secondary-neutral"
               size="small"
               icon={<PencilIcon aria-hidden />}
               onClick={() => setIsOpen(!isOpen)}

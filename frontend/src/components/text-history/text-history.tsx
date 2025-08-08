@@ -40,7 +40,7 @@ export const TextHistory = ({
   return (
     <HStack align="center" position="relative" ref={ref}>
       <Button
-        variant="tertiary"
+        variant="tertiary-neutral"
         size="xsmall"
         onClick={() => {
           const enabled = !showEdits;

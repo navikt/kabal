@@ -56,7 +56,12 @@ export const TimedToast = forwardRef<HTMLDivElement, Props>(
 
     return (
       <TimedToastContainer type={type} ref={ref} key={id} duration={duration}>
-        <StyledCloseButton variant="tertiary" size="xsmall" onClick={slideOut} icon={<XMarkIcon aria-hidden />} />
+        <StyledCloseButton
+          variant="tertiary-neutral"
+          size="xsmall"
+          onClick={slideOut}
+          icon={<XMarkIcon aria-hidden />}
+        />
         <Container>
           <Icon type={type} />
           <VStack gap="2 0">{content}</VStack>

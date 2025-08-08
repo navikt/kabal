@@ -78,7 +78,7 @@ export const WriteMessage = () => {
         <Button
           type="button"
           size="small"
-          variant="secondary"
+          variant="secondary-neutral"
           onClick={post}
           loading={messageIsLoading}
           data-testid="send-message-button"

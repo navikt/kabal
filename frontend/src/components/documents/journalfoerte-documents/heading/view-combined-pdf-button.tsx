@@ -115,7 +115,7 @@ export const ViewCombinedPDF = () => {
     <Tooltip content={`Trykk med musehjulet / midterste knapp eller ${MOD_KEY_TEXT} + klikk for å åpne i ny fane.`}>
       <Button
         as="a"
-        variant="secondary"
+        variant="secondary-neutral"
         size="small"
         icon={<FilePdfIcon />}
         onClick={onClick}

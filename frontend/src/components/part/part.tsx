@@ -124,5 +124,5 @@ interface EditButtonProps {
 const EditButton = ({ onClick, isEditing }: EditButtonProps) => {
   const Icon = isEditing ? XMarkIcon : PencilIcon;
 
-  return <Button variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />;
+  return <Button variant="tertiary-neutral" icon={<Icon aria-hidden />} onClick={onClick} size="small" />;
 };

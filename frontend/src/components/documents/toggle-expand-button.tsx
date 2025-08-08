@@ -20,7 +20,7 @@ export const ToggleExpandedButton = () => {
   return (
     <Button
       className="ml-auto"
-      variant="secondary"
+      variant="secondary-neutral"
       size="small"
       onClick={onToggle}
       data-testid="documents-collapse-view-button"
