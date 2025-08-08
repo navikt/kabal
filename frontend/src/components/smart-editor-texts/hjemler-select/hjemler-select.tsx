@@ -167,7 +167,7 @@ export const HjemlerSelect = ({
 
   return (
     <div className="relative" ref={ref}>
-      <ToggleButton open={isOpen} onClick={toggleOpen} size="small">
+      <ToggleButton open={isOpen} onClick={toggleOpen} size="small" active={selected.length > 0}>
         Ytelser og hjemler ({selected.length})
       </ToggleButton>
       <Popup isOpen={isOpen}>

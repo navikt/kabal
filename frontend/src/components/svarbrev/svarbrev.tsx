@@ -1,3 +1,4 @@
+import { SortHeader } from '@app/components/common-table-components/sort-header';
 import { type FilterProps, Filters } from '@app/components/svarbrev/filters';
 import { clearPdfCache } from '@app/components/svarbrev/modal/get-pdf-url';
 import { type ModalEnum, Row } from '@app/components/svarbrev/row/row';
@@ -11,51 +12,72 @@ import {
   useSvarbrevSearchParams,
 } from '@app/components/svarbrev/use-search-params';
 import { useGetSvarbrevSettingsQuery } from '@app/redux-api/svarbrev';
-import { BoxNew, Heading, type SortState, Table, VStack } from '@navikt/ds-react';
+import { SortOrderEnum } from '@app/types/oppgaver';
+import { Heading, type SortState, Table, VStack } from '@navikt/ds-react';
 import { type ReactNode, useCallback, useEffect } from 'react';
 
-const TableHeaders = () => (
-  <BoxNew asChild position="sticky" top="8" background="default">
-    <Table.Header className="z-1 whitespace-nowrap">
-      <Table.Row>
-        <Table.HeaderCell>Aktiv</Table.HeaderCell>
-        <Table.HeaderCell>Type</Table.HeaderCell>
-        <Table.ColumnHeader sortable sortKey={SortKey.YTELSE}>
-          Ytelse
-        </Table.ColumnHeader>
-        <Table.ColumnHeader sortable sortKey={SortKey.TIME}>
-          Saksbehandlingstid
-        </Table.ColumnHeader>
-        <Table.HeaderCell className="w-full">Tekst til svarbrev (valgfri)</Table.HeaderCell>
-        <Table.ColumnHeader sortable sortKey={SortKey.MODIFIED}>
-          Sist endret
-        </Table.ColumnHeader>
-        <Table.HeaderCell />
-      </Table.Row>
-    </Table.Header>
-  </BoxNew>
+interface TableHeadersProps {
+  sortering: string;
+  rekkefoelge: SortOrderEnum;
+  onSortChange: (sortKey: string) => void;
+}
+
+const TableHeaders = (props: TableHeadersProps) => (
+  <Table.Header className="sticky top-12 z-1 whitespace-nowrap bg-ax-bg-default">
+    <Table.Row>
+      <Table.HeaderCell>Aktiv</Table.HeaderCell>
+
+      <Table.HeaderCell>Type</Table.HeaderCell>
+
+      <SortHeader sortKey={SortKey.YTELSE} {...props}>
+        Ytelse
+      </SortHeader>
+
+      <SortHeader sortKey={SortKey.TIME} {...props}>
+        Saksbehandlingstid
+      </SortHeader>
+
+      <Table.HeaderCell className="w-full">Tekst til svarbrev (valgfri)</Table.HeaderCell>
+
+      <SortHeader sortKey={SortKey.MODIFIED} {...props}>
+        Sist endret
+      </SortHeader>
+
+      <Table.HeaderCell />
+    </Table.Row>
+  </Table.Header>
 );
 
 interface ContainerProps extends FilterProps {
   children: ReactNode;
-  sort: SortState | undefined;
-  onSortChange: (sortKey: string | undefined) => void;
+  sort: SortState;
+  onSortChange: (sortKey: string) => void;
 }
 
 const Container = ({ children, sort, onSortChange, ...filterProps }: ContainerProps) => (
-  <VStack maxHeight="100%" maxWidth="2000px" overflow="auto">
-    <Heading level="1" size="medium" spacing>
+  <VStack maxWidth="2000px">
+    <Heading level="1" size="medium">
       Svarbrev
     </Heading>
 
     <Filters {...filterProps} />
 
-    <Table size="small" zebraStripes sort={sort} onSortChange={onSortChange} className="relative">
-      <TableHeaders />
+    <Table size="small" zebraStripes sort={sort} onSortChange={onSortChange}>
+      <TableHeaders
+        sortering={sort.orderBy}
+        rekkefoelge={DIRECTION_TO_REKKEFOELGE[sort.direction]}
+        onSortChange={onSortChange}
+      />
       {children}
     </Table>
   </VStack>
 );
+
+const DIRECTION_TO_REKKEFOELGE: Record<SortState['direction'], SortOrderEnum> = {
+  [SortDirection.ASCENDING]: SortOrderEnum.ASC,
+  [SortDirection.DESCENDING]: SortOrderEnum.DESC,
+  none: SortOrderEnum.ASC,
+};
 
 interface Props {
   modal?: ModalEnum;

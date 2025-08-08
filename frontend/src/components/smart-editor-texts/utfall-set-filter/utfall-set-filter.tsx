@@ -31,7 +31,7 @@ export const UtfallSetFilter = ({ selected, onChange }: Props) => {
 
   return (
     <div className="relative" ref={ref}>
-      <ToggleButton open={isOpen} onClick={() => setIsOpen(!isOpen)} size="small">
+      <ToggleButton open={isOpen} onClick={() => setIsOpen(!isOpen)} size="small" active={selected.length > 0}>
         Utfallsett ({selected.length})
       </ToggleButton>
       {isOpen ? <UtfallSets onChange={_onChange} utfallSets={utfallSets} /> : null}

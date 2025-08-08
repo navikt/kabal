@@ -38,12 +38,25 @@ export const TextHistory = ({
   useOnClickOutside(ref, () => setShowEdits(false));
 
   return (
-    <HStack align="center" position="relative" ref={ref} data-qqqqq>
+    <HStack align="center" position="relative" ref={ref}>
+      <Button
+        variant="tertiary"
+        size="xsmall"
+        onClick={() => {
+          const enabled = !showEdits;
+          pushEvent('toggle-text-history', 'texts', { enabled: enabled.toString() });
+          setShowEdits(enabled);
+        }}
+        icon={<ClockDashedIcon aria-hidden />}
+      >
+        {showEdits ? 'Skjul' : 'Vis'} historikk
+      </Button>
+
       {showEdits && (
         <VStack asChild position="absolute" right="0" gap="1 0" style={{ top: '100%', zIndex: 1, listStyle: 'none' }}>
-          <BoxNew as="ul" background="default" shadow="dialog" borderRadius="medium" padding="2" margin="0">
+          <BoxNew as="ul" background="raised" shadow="dialog" borderRadius="medium" padding="2" margin="0">
             {publishedDateTime !== null ? (
-              <HStack as="li" align="center" wrap={false} style={{ whiteSpace: 'pre' }}>
+              <HStack as="li" align="center" wrap={false} className="whitespace-nowrap" gap="1">
                 <StyledTag variant="info" size="xsmall">
                   <UploadIcon aria-hidden />
                   Publisert
@@ -79,24 +92,12 @@ export const TextHistory = ({
           </BoxNew>
         </VStack>
       )}
-      <Button
-        variant="tertiary"
-        size="xsmall"
-        onClick={() => {
-          const enabled = !showEdits;
-          pushEvent('toggle-text-history', 'texts', { enabled: enabled.toString() });
-          setShowEdits(enabled);
-        }}
-        icon={<ClockDashedIcon aria-hidden />}
-      >
-        {showEdits ? 'Skjul' : 'Vis'} historikk
-      </Button>
     </HStack>
   );
 };
 
 const StyledTag = (props: TagProps) => (
-  <HStack asChild align="center" gap="1">
+  <HStack asChild align="center" gap="1" wrap={false}>
     <Tag {...props} />
   </HStack>
 );

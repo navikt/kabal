@@ -16,8 +16,8 @@ import { useAllTemaer } from '@app/hooks/use-all-temaer';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { Journalposttype } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
-import { Button, HStack } from '@navikt/ds-react';
+import { ArrowsUpDownIcon, SortDownIcon, SortUpIcon } from '@navikt/aksel-icons';
+import { Button, type ButtonProps, HStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { DateFilter } from './date-filter';
 import type { useFilters } from './use-filters';
@@ -89,14 +89,14 @@ export const ExpandedHeaders = ({
 
       {columns.DATO_OPPRETTET ? (
         <HStack align="center" as="section" style={{ gridArea: Fields.DatoOpprettet }} wrap={false}>
-          <SortButton column={ArchivedDocumentsColumn.DATO_OPPRETTET} sort={sort} setSort={setSort} />
+          <SortButton column={ArchivedDocumentsColumn.DATO_OPPRETTET} sort={sort} setSort={setSort} size="small" />
           <DateFilter {...datoOpprettetSetting} label="Dato opprettet" gridArea={Fields.DatoOpprettet} />
         </HStack>
       ) : null}
 
       {columns.DATO_SORTERING ? (
         <HStack align="center" as="section" style={{ gridArea: Fields.DatoSortering }} wrap={false}>
-          <SortButton column={ArchivedDocumentsColumn.DATO_SORTERING} sort={sort} setSort={setSort} />
+          <SortButton column={ArchivedDocumentsColumn.DATO_SORTERING} sort={sort} setSort={setSort} size="small" />
           <DateFilter {...datoSorteringSetting} label="Dato reg./sendt" gridArea={Fields.DatoSortering} />
         </HStack>
       ) : null}
@@ -156,12 +156,13 @@ interface SortButtonProps {
   column: ArchivedDocumentsSortColumn;
   sort: ArchivedDocumentsSort;
   setSort: (sort: ArchivedDocumentsSort) => void;
+  size?: ButtonProps['size'];
 }
-const SortButton = ({ column, sort, setSort }: SortButtonProps) => (
+const SortButton = ({ column, sort, setSort, size }: SortButtonProps) => (
   <Button
     icon={getSortIcon(sort, column)}
     variant="tertiary-neutral"
-    size="small"
+    size={size}
     onClick={() =>
       setSort({
         order: column === sort.orderBy && sort.order === SortOrder.DESC ? SortOrder.ASC : SortOrder.DESC,
@@ -173,7 +174,7 @@ const SortButton = ({ column, sort, setSort }: SortButtonProps) => (
 
 const getSortIcon = (sort: ArchivedDocumentsSort, column: ArchivedDocumentsSortColumn) => {
   if (sort.orderBy === column) {
-    return sort.order === 'desc' ? <ArrowDownIcon aria-hidden /> : <ArrowUpIcon aria-hidden />;
+    return sort.order === 'desc' ? <SortDownIcon aria-hidden /> : <SortUpIcon aria-hidden />;
   }
 
   return <ArrowsUpDownIcon aria-hidden />;

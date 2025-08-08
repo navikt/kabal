@@ -97,7 +97,7 @@ export const StandaloneTextList = ({ filter, data, isLoading, style, textType }:
 
               <StatusTag publishedDateTime={publishedDateTime} published={published} />
               <DateTime dateTime={modified} />
-              <span>{score.toFixed(0)} %</span>
+              <span className="text-center">{score.toFixed(0)} %</span>
             </CustomLink>
           </BoxNew>
         ))}
@@ -189,7 +189,7 @@ const MaltekstseksjonItem = ({ maltekstseksjonId, score }: MaltekstseksjonItemPr
 
         <StatusTag publishedDateTime={publishedDateTime} published={published} />
         <DateTime dateTime={modifiedOrTextsModified} />
-        <span>{score.toFixed(0)} %</span>
+        <span className="text-center">{score.toFixed(0)} %</span>
       </CustomLink>
     </MaltekstseksjontLinkListItem>
   );
@@ -201,7 +201,7 @@ const Headers = () => {
 
   return (
     <HGrid asChild columns={COLUMNS} gap="2" position="sticky" top="0" className="z-1">
-      <BoxNew background="default" shadow="dialog" borderRadius="0 0 medium medium" paddingInline="2">
+      <BoxNew background="default" shadow="dialog" borderRadius="0 0 medium medium">
         <SortableHeader label="Tittel" sortKey={SortKey.TITLE} querySortKey={sort} querySortOrder={order} />
         <StatusFilter />
         <SortableHeader label="Sist endret" sortKey={SortKey.MODIFIED} querySortKey={sort} querySortOrder={order} />
@@ -221,7 +221,7 @@ const Headers = () => {
   );
 };
 
-const COLUMNS = '1fr 120px 135px 48px';
+const COLUMNS = '1fr 120px 135px 70px';
 
 interface CustomLinkProps {
   children: React.ReactNode;

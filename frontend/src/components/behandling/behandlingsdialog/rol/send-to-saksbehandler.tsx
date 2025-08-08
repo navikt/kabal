@@ -30,6 +30,7 @@ export const SendToSaksbehandler = ({ oppgaveId, isSaksbehandler }: Props) => {
   return (
     <Button
       size="small"
+      variant="primary"
       onClick={() => setRolState({ oppgaveId, flowState: FlowState.RETURNED })}
       icon={<PaperplaneIcon aria-hidden />}
       loading={isLoading}

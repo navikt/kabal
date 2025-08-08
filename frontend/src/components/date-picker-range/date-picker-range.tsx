@@ -15,9 +15,9 @@ interface Props {
   onChange: (date: DateRange | undefined) => void;
   buttonLabel?: string;
   gridArea?: string;
-  ButtonComponent?: React.ComponentType<ButtonProps>;
   neutral?: boolean;
   buttonClassName?: string;
+  buttonSize?: ButtonProps['size'];
 }
 
 export const DatePickerRange = ({
@@ -25,8 +25,9 @@ export const DatePickerRange = ({
   selected,
   buttonLabel,
   gridArea,
-  neutral = false,
   buttonClassName,
+  buttonSize,
+  neutral,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const onClick = useCallback(() => setIsOpen((o) => !o), []);
@@ -51,7 +52,7 @@ export const DatePickerRange = ({
     <HStack className="relative" style={{ gridArea }} ref={ref}>
       <Button
         onClick={onClick}
-        size="small"
+        size={buttonSize}
         variant={variant}
         icon={<CalendarIcon aria-hidden />}
         className={buttonClassName}

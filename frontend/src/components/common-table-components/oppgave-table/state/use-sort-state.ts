@@ -7,7 +7,6 @@ import {
   SORT_FIELD_TO_SHORT,
   SORT_ORDER_TO_SHORT,
 } from '@app/components/common-table-components/oppgave-table/state/short-names';
-import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import type { SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router';
@@ -15,7 +14,7 @@ import { useSearchParams } from 'react-router';
 const SORTING_SEPARATOR = '-';
 
 export const useOppgaveTableSorting = (
-  tableKey: OppgaveTableKey,
+  tableKey: string,
   defaultSortField: SortFieldEnum,
   defaultSortOrder: SortOrderEnum,
 ) => {

@@ -55,6 +55,7 @@ export const FilterDropdown = <T extends string>({
         data-testid="toggle-button"
         icon={chevron}
         size={size}
+        active={selected.length > 0}
       >
         {children} ({selected.length})
       </ToggleButton>

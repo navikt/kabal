@@ -27,6 +27,12 @@ export const DateFilter = ({ value, setValue, remove, label, gridArea }: Props) 
   };
 
   return (
-    <DatePickerRange onChange={onChange} selected={{ from, to }} buttonLabel={label} gridArea={gridArea} neutral />
+    <DatePickerRange
+      onChange={onChange}
+      selected={{ from, to }}
+      buttonLabel={label}
+      gridArea={gridArea}
+      buttonSize="small"
+    />
   );
 };

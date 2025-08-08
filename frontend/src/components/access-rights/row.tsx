@@ -23,12 +23,12 @@ export const Row = ({
   const numberOfSaksbehandlerePerYtelse = useNumberOfSaksbehandlerePerYtelse(ytelse.id, accessRights);
 
   const ytelseTitle = `(${numberOfSaksbehandlerePerYtelse}/${accessRights.length}) ${ytelse.navn} `;
-  const isFocused = rowIndex === focusedRow;
+  const isRowFocused = rowIndex === focusedRow;
 
   return (
     <tr key={ytelse.id}>
       <th
-        className={`relative z-1 m-0 h-8 max-w-64 border-ax-border-neutral border-x border-b ${isFocused ? 'bg-ax-accent-200' : 'bg-ax-bg-default'} p-0`}
+        className={`relative z-1 m-0 h-8 max-w-64 border-ax-border-neutral border-x border-b ${isRowFocused ? 'bg-ax-bg-neutral-strong text-ax-text-neutral-contrast' : 'text-ax-text-neutral'} p-0`}
         title={ytelseTitle}
         onMouseEnter={() => setFocusedCell([-1, rowIndex])}
       >
@@ -41,8 +41,8 @@ export const Row = ({
         onCheck={(checked) => onCheck(checked, ytelse.id, null)}
         onFocus={() => setFocusedCell([0, rowIndex])}
         isCurrentColumn={focusedColumn === 0 && (rowIndex < focusedRow || focusedRow === -1)}
-        isCurrentRow={isFocused}
-        isFocused={focusedColumn === 0 && isFocused}
+        isCurrentRow={isRowFocused}
+        isFocused={isRowFocused && focusedColumn === 0}
       >
         {`Alle saksbehandlere / ${ytelse.navn}`}
       </Cell>
@@ -53,10 +53,10 @@ export const Row = ({
           onCheck={(checked) => onCheck(checked, ytelse.id, saksbehandlerIdent)}
           onFocus={() => setFocusedCell([columnIndex + 1, rowIndex])}
           isCurrentColumn={columnIndex + 1 === focusedColumn && (rowIndex < focusedRow || focusedRow === -1)}
-          isCurrentRow={isFocused && (columnIndex + 1 < focusedColumn || focusedColumn === -1)}
-          isFocused={focusedColumn === columnIndex + 1 && isFocused}
+          isCurrentRow={isRowFocused && (columnIndex + 1 < focusedColumn || focusedColumn === -1)}
+          isFocused={isRowFocused && focusedColumn === columnIndex + 1}
         >
-          {`${saksbehandlerName} / ${ytelse.navn}`}
+          {`${ytelseIdList.includes(ytelse.id) ? 'Fjern' : 'Legg til'} ${saksbehandlerName} / ${ytelse.navn}`}
         </Cell>
       ))}
     </tr>
