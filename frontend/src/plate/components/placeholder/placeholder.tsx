@@ -181,7 +181,7 @@ const Placeholder = ({ hasWriteAccess, ...props }: PlaceholderProps) => {
               position="absolute"
               top="0"
               left="0"
-              className="inline-flex cursor-pointer items-center text-ax-text-danger hover:bg-ax-bg-neutral-moderate active:bg-ax-bg-neutral-strong"
+              className="inline-flex cursor-pointer items-center text-ax-text-danger-decoration hover:bg-ax-bg-neutral-moderate active:bg-ax-bg-neutral-strong"
             >
               <button type="button" onClick={deletePlaceholder}>
                 <TrashIcon aria-hidden />
