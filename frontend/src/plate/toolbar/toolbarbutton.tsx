@@ -1,3 +1,4 @@
+import { merge } from '@app/functions/classes';
 import { BOOKMARK_VARIANT_TO_CLASSNAME, type BookmarkVariantEnum } from '@app/plate/toolbar/bookmark-button';
 import { Button, type ButtonProps, Tooltip } from '@navikt/ds-react';
 
@@ -13,7 +14,7 @@ export const ToolbarIconButton = ({ active, label, keys, className, activeVarian
     <Button
       size="small"
       variant={active === true ? 'primary' : 'tertiary-neutral'}
-      className={activeVariant === null ? className : `${className} ${BOOKMARK_VARIANT_TO_CLASSNAME[activeVariant]}`}
+      className={activeVariant === null ? className : merge(className, BOOKMARK_VARIANT_TO_CLASSNAME[activeVariant])}
       {...rest}
       aria-label={label}
       onMouseDown={(e) => e.preventDefault()} // Prevents editor from losing focus.
