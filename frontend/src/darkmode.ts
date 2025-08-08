@@ -59,8 +59,10 @@ export const getDarkMode = () => darkModeStore.get();
 userDarkModeStore.subscribe((userDarkMode) => {
   if (userDarkMode === null) {
     darkModeStore.set(getSystemDarkMode());
+    localStorage.removeItem(LOCALSTORAGE_KEY);
   } else {
     darkModeStore.set(userDarkMode);
+    localStorage.setItem(LOCALSTORAGE_KEY, userDarkMode ? 'true' : 'false');
   }
 });
 
