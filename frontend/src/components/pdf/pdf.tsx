@@ -1,6 +1,6 @@
+import { AppTheme, useAppTheme } from '@app/app-theme';
 import { toast } from '@app/components/toast/store';
 import { Details } from '@app/components/toast/toast-content/fetch-error-toast';
-import { useDarkMode } from '@app/darkmode';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { type ApiError, isApiError } from '@app/types/errors';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
@@ -28,7 +28,7 @@ const useFixPdf = (refresh: () => void): [() => Promise<void>, boolean] => {
 
 export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
   const [fixPdf, isLoading] = useFixPdf(refresh);
-  const darkMode = useDarkMode();
+  const appTheme = useAppTheme();
 
   if (error !== undefined) {
     return (
@@ -71,7 +71,7 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
         type="application/pdf"
         name="pdf-viewer"
         className="w-full"
-        style={{ filter: darkMode ? 'hue-rotate(180deg) invert(1)' : 'none' }}
+        style={{ filter: appTheme === AppTheme.DARK ? 'hue-rotate(180deg) invert(1)' : 'none' }}
       />
     </div>
   );
