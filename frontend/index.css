@@ -140,6 +140,11 @@
   --a-font-family: "Source Sans 3", Arial, sans-serif;
 }
 
+::selection {
+  color: var(--ax-text-accent-contrast);
+  background-color: var(--ax-bg-accent-strong);
+}
+
 html {
   box-sizing: border-box;
 }
