@@ -1,4 +1,11 @@
-import { darkModeStore, getDarkMode } from '@app/darkmode';
+import {
+  appThemeStore,
+  getAppTheme,
+  getSystemTheme,
+  getUserTheme,
+  systemThemeStore,
+  userThemeStore,
+} from '@app/app-theme';
 import { ENVIRONMENT } from '@app/environment';
 import { getQueryParams } from '@app/headers';
 import { pushError } from '@app/observability';
@@ -26,7 +33,9 @@ class VersionChecker {
   private updateRequest: UpdateRequest = UpdateRequest.NONE;
   private updateRequestListeners: UpdateRequestListenerFn[] = [];
   private eventSource: EventSource;
-  private darkmode: boolean = getDarkMode();
+  private appTheme = getAppTheme();
+  private userTheme = getUserTheme();
+  private systemTheme = getSystemTheme();
 
   constructor() {
     console.info('CURRENT VERSION', ENVIRONMENT.version);
@@ -37,10 +46,26 @@ class VersionChecker {
       this.onUpdateRequest(new MessageEvent(UPDATE_REQUEST_EVENT, { data }));
     };
 
-    // Listen for dark mode changes
-    darkModeStore.subscribe((darkMode) => {
-      if (this.darkmode !== darkMode) {
-        this.darkmode = darkMode;
+    // Listen for app theme changes
+    appThemeStore.subscribe((appTheme) => {
+      if (this.appTheme !== appTheme) {
+        this.appTheme = appTheme;
+        this.reopenEventSource();
+      }
+    });
+
+    // Listen for user theme changes
+    userThemeStore.subscribe((userTheme) => {
+      if (this.userTheme !== userTheme) {
+        this.userTheme = userTheme;
+        this.reopenEventSource();
+      }
+    });
+
+    // Listen for system theme changes
+    systemThemeStore.subscribe((systemTheme) => {
+      if (this.systemTheme !== systemTheme) {
+        this.systemTheme = systemTheme;
         this.reopenEventSource();
       }
     });
@@ -58,7 +83,9 @@ class VersionChecker {
 
   private createEventSource = () => {
     const params = getQueryParams();
-    params.set('theme', this.darkmode ? 'dark' : 'light');
+    params.set('theme', this.appTheme);
+    params.set('user_theme', this.userTheme);
+    params.set('system_theme', this.systemTheme);
 
     const events = new EventSource(`/version?${params.toString()}`);
 

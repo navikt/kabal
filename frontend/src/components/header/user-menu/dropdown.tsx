@@ -1,4 +1,4 @@
-import { DarkModeSwitch } from '@app/components/header/user-menu/dark-mode';
+import { AppThemeSwitcher } from '@app/components/header/user-menu/app-theme';
 import { SendDebugInfoButton } from '@app/components/header/user-menu/debug';
 import { useIsUpToDate } from '@app/components/version-checker/version-checker';
 import { ENVIRONMENT } from '@app/environment';
@@ -13,7 +13,9 @@ export const UserDropdown = (): React.JSX.Element | null => {
 
   return (
     <ActionMenu.Content className="w-auto max-w-75 overflow-visible">
-      <ActionMenu.Item as={DarkModeSwitch} />
+      <ActionMenu.Group label="Tema">
+        <ActionMenu.Item as={AppThemeSwitcher} />
+      </ActionMenu.Group>
 
       <ActionMenu.Divider />
 

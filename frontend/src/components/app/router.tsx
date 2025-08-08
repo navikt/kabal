@@ -1,10 +1,10 @@
+import { useAppTheme } from '@app/app-theme';
 import { NotFoundPage } from '@app/components/app/not-found-page';
 import { ProtectedRoute } from '@app/components/app/protected-route';
 import { NavHeader } from '@app/components/header/header';
 import { ModalEnum } from '@app/components/svarbrev/row/row';
 import { Toasts } from '@app/components/toast/toasts';
 import { VersionCheckerStatus } from '@app/components/version-checker/version-checker-status';
-import { useDarkMode } from '@app/darkmode';
 import { TEXT_TYPE_BASE_PATH } from '@app/domain/redaktør-paths';
 import { AccessRightsPage } from '@app/pages/access-rights/access-rights';
 import { AdminPage } from '@app/pages/admin/admin';
@@ -156,10 +156,10 @@ export const Router = () => (
 );
 
 const AppWrapper = () => {
-  const darkMode = useDarkMode();
+  const theme = useAppTheme();
 
   return (
-    <Theme theme={darkMode ? 'dark' : 'light'} className="h-full w-full">
+    <Theme theme={theme} className="h-full w-full">
       <VStack height="100%" width="100%" overflow="hidden">
         <NavHeader />
         <Outlet />
