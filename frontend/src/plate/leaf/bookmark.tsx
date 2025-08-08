@@ -1,5 +1,6 @@
+import type { Bookmark } from '@app/components/smart-editor/bookmarks/use-bookmarks';
 import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
-import { BOOKMARK_ID_TO_COLOR, LEGACY_COLOR_TO_NEW } from '@app/plate/toolbar/bookmark-button';
+import { BOOKMARK_VARIANT_TO_CLASSNAME, isBookmarkVariant } from '@app/plate/toolbar/bookmark-button';
 import type { FormattedText } from '@app/plate/types';
 import { PlateLeaf, type PlateLeafProps } from 'platejs/react';
 import { useMemo } from 'react';
@@ -13,7 +14,7 @@ export const BookmarkLeaf = (props: PlateLeafProps<FormattedText>) => {
   return (
     <PlateLeaf
       {...props}
-      className={bookmark?.color}
+      className={bookmark === undefined ? undefined : `${BOOKMARK_VARIANT_TO_CLASSNAME[bookmark.variant]} rounded-sm`}
       data-selected={leaf.selected}
       attributes={{ ...props.attributes, suppressContentEditableWarning: true }}
     >
@@ -24,23 +25,17 @@ export const BookmarkLeaf = (props: PlateLeafProps<FormattedText>) => {
 
 const useBookmarks = (leaf: FormattedText) =>
   useMemo(() => {
-    const bookmarks: { key: string; color: string }[] = [];
+    const bookmarks: Omit<Bookmark, 'nodes'>[] = [];
 
-    const keys = Object.keys(leaf);
+    const entries = Object.entries(leaf);
 
-    for (const key of keys) {
+    for (const [key, variant] of entries) {
       if (key.startsWith(BOOKMARK_PREFIX)) {
-        const bookmarkId = leaf[key];
-
-        if (typeof bookmarkId !== 'string') {
+        if (typeof variant !== 'string' || !isBookmarkVariant(variant)) {
           continue;
         }
 
-        const color = BOOKMARK_ID_TO_COLOR[bookmarkId] ?? LEGACY_COLOR_TO_NEW[bookmarkId];
-
-        if (color !== undefined) {
-          bookmarks.push({ key, color });
-        }
+        bookmarks.push({ key, variant });
       }
     }
 

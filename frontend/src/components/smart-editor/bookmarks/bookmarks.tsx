@@ -2,8 +2,9 @@ import { useBookmarks } from '@app/components/smart-editor/bookmarks/use-bookmar
 import { hasOwn } from '@app/functions/object';
 import { pushEvent } from '@app/observability';
 import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
+import { BOOKMARK_VARIANT_TO_CLASSNAME } from '@app/plate/toolbar/bookmark-button';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
-import { BookmarkFillIcon, TrashIcon } from '@navikt/aksel-icons';
+import { BookmarkFillIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, VStack } from '@navikt/ds-react';
 import { NodeApi, type TNode } from 'platejs';
 
@@ -23,29 +24,24 @@ export const Bookmarks = ({ editorId }: Props) => {
 
   return (
     <VStack as="ul" position="relative" justify="start" width="100%" paddingInline="space-16" maxWidth="350px">
-      {bookmarks.map(([key, nodes]) => {
+      {bookmarks.map(({ key, variant, nodes }) => {
         const [node] = nodes;
 
         if (node === undefined) {
           return null;
         }
 
-        const color = node[key];
-
-        if (typeof color !== 'string') {
-          return null;
-        }
+        const className = BOOKMARK_VARIANT_TO_CLASSNAME[variant];
 
         const content = nodes.map((n) => NodeApi.string(n)).join('');
 
         return (
-          <HStack as="li" key={key} wrap={false}>
+          <HStack as="li" key={key} wrap={false} className="group/bookmark">
             <Button
               size="xsmall"
               variant="tertiary-neutral"
               onClick={() => onClick(node)}
-              icon={<BookmarkFillIcon aria-hidden />}
-              style={{ color }}
+              icon={<BookmarkFillIcon aria-hidden className={className} />}
               className="grow justify-start overflow-hidden"
             >
               <span className="truncate">{content}</span>
@@ -62,7 +58,12 @@ export const Bookmarks = ({ editorId }: Props) => {
                   split: true,
                 });
               }}
-              icon={<TrashIcon aria-hidden />}
+              icon={
+                <XMarkIcon
+                  aria-hidden
+                  className="opacity-0 transition-opacity duration-200 group-focus-within/bookmark:opacity-100 group-hover/bookmark:opacity-100"
+                />
+              }
             />
           </HStack>
         );
