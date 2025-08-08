@@ -27,7 +27,7 @@ export const NewDocumentsHeader = ({ headingId }: Props) => {
         Dokumenter under arbeid
       </Heading>
       {typeof errorMessage === 'string' ? (
-        <ExclamationmarkTriangleIcon title={errorMessage} className="text-ax-text-danger" />
+        <ExclamationmarkTriangleIcon title={errorMessage} className="text-ax-text-danger-decoration" />
       ) : null}
       {isExpanded ? <DeleteDropArea /> : null}
     </HStack>
