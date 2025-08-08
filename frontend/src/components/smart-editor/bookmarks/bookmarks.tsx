@@ -39,7 +39,7 @@ export const Bookmarks = ({ editorId }: Props) => {
         const content = nodes.map((n) => NodeApi.string(n)).join('');
 
         return (
-          <HStack as="li" key={key}>
+          <HStack as="li" key={key} wrap={false}>
             <Button
               size="xsmall"
               variant="tertiary-neutral"
