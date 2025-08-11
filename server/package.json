@@ -29,7 +29,7 @@
     "redis": "5.8.0"
   },
   "devDependencies": {
-    "@types/node": "24.2.0",
+    "@types/node": "24.2.1",
     "@types/uuid": "10.0.0"
   }
 }
