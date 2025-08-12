@@ -84,7 +84,11 @@ export const SendButtons = ({ document }: FinishProps) => {
 
   const onFinish = async () => {
     try {
-      if (mottakerList.length === 0 && reachableSuggestedReceivers.length === 1) {
+      if (
+        mottakerList.length === 0 &&
+        reachableSuggestedReceivers.length === 1 &&
+        dokumentTypeId !== DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN
+      ) {
         await setMottakerList({
           oppgaveId: data.id,
           dokumentId,
