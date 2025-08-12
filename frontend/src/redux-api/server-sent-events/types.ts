@@ -7,7 +7,7 @@ import type {
   IJournalfoertDokumentId,
   IOrganizationPart,
   IPersonPart,
-  IVenteperiode,
+  ISattPåVent,
 } from '@app/types/oppgave-common';
 import type { BehandlingGosysOppgave, IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type { FradelReason } from '@app/types/oppgaver';
@@ -112,7 +112,7 @@ export interface VarsletFristEvent extends BaseEvent {
 }
 
 export interface SattPaaVentEvent extends BaseEvent {
-  sattPaaVent: IVenteperiode | null;
+  sattPaaVent: ISattPåVent | null;
 }
 
 export interface TilbakekrevingEvent extends BaseEvent {

@@ -1,6 +1,6 @@
 import type { INavEmployee } from '@app/types/bruker';
 import type { UtfallEnum } from '@app/types/kodeverk';
-import type { FlowState, IMedunderskriverRol, ISakenGjelder } from '@app/types/oppgave-common';
+import type { FlowState, IMedunderskriverRol, ISakenGjelder, ISattPåVent } from '@app/types/oppgave-common';
 import type { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type { FradelReason } from '@app/types/oppgaver';
 import type { BehandlingstidUnitType } from '@app/types/svarbrev';
@@ -102,12 +102,6 @@ export interface RolEvent {
   flow: FlowState;
 }
 
-export interface SattPaaVentEvent {
-  from: string; // Date
-  to: string; // Date
-  reason: string;
-}
-
 interface FeilregistrertEvent {
   reason: string;
 }
@@ -147,7 +141,7 @@ export type IMedunderskriverEvent = WithPrevious<MedunderskriverEvent, HistoryEv
 export type IRolEvent = WithPrevious<RolEvent, HistoryEventTypes.ROL>;
 export type IKlagerEvent = WithPrevious<KlagerEvent, HistoryEventTypes.KLAGER>;
 export type IFullmektigEvent = WithPrevious<FullmektigEvent, HistoryEventTypes.FULLMEKTIG>;
-export type ISattPaaVentEvent = WithPrevious<SattPaaVentEvent | null, HistoryEventTypes.SATT_PAA_VENT>;
+export type ISattPaaVentEvent = WithPrevious<ISattPåVent | null, HistoryEventTypes.SATT_PAA_VENT>;
 export type IFerdigstiltEvent = WithPrevious<FerdigstiltEvent | null, HistoryEventTypes.FERDIGSTILT>;
 export type IFeilregistrertEvent = WithPrevious<FeilregistrertEvent | null, HistoryEventTypes.FEILREGISTRERT>;
 export type IVarsletBehandlingstidEvent = WithPrevious<

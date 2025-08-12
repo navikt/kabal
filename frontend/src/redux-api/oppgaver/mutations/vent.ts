@@ -14,14 +14,14 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: IS_LOCALHOST,
   endpoints: (builder) => ({
     sattPaaVent: builder.mutation<IModifiedResponse, ISettPaaVentParams>({
-      query: ({ oppgaveId, ...body }) => ({
+      query: ({ oppgaveId, sattPaaVent }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/sattpaavent`,
         method: 'POST',
-        body,
+        body: sattPaaVent,
       }),
-      onQueryStarted: async ({ oppgaveId, ...rest }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, sattPaaVent }, { dispatch, queryFulfilled }) => {
         const now = new Date();
-        const venteperiode = { from: format(now, ISO_FORMAT), ...rest };
+        const venteperiode = { from: format(now, ISO_FORMAT), ...sattPaaVent };
 
         const behandlingPatchResult = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {

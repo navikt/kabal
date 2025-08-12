@@ -14,6 +14,7 @@ interface Props {
   id?: string;
   label: React.ReactNode;
   onChange: (date: string | null) => void;
+  onErrorChange?: (date: string | null) => void;
   size: 'small' | 'medium';
   toDate?: Date;
   value: string | null;
@@ -31,6 +32,7 @@ export const DatePicker = ({
   id,
   label,
   onChange,
+  onErrorChange,
   toDate = new Date(),
   value,
   size,
@@ -71,20 +73,24 @@ export const DatePicker = ({
 
       if (!validFormat) {
         setInputError('Ugyldig dato');
+        onErrorChange?.(null);
 
         return;
       }
 
+      const formatted = format(date, FORMAT);
+
       if (!validRange) {
         setInputError(`Dato må være mellom ${format(fromDate, PRETTY_FORMAT)} og ${format(toDate, PRETTY_FORMAT)}`);
+        onErrorChange?.(formatted);
 
         return;
       }
 
       setInputError(undefined);
-      onChange(format(date, FORMAT));
+      onChange(formatted);
     },
-    [fromDate, onChange, toDate],
+    [fromDate, onChange, onErrorChange, toDate],
   );
 
   const onInputChange = useCallback(() => {

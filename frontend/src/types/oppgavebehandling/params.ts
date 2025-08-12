@@ -1,6 +1,6 @@
 import type { INavEmployee } from '@app/types/bruker';
 import type { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import type { FlowState, IFullmektig, IJournalfoertDokumentId, IPart } from '../oppgave-common';
+import type { BaseSattPåVent, FlowState, IFullmektig, IJournalfoertDokumentId, IPart } from '../oppgave-common';
 
 export interface IOppgavebehandlingBaseParams {
   oppgaveId: string;
@@ -96,8 +96,7 @@ export interface ISetFeilregistrertParams extends IOppgavebehandlingBaseParams {
 }
 
 export interface ISettPaaVentParams extends IOppgavebehandlingBaseParams {
-  to: string; // LocalDate
-  reason: string;
+  sattPaaVent: BaseSattPåVent;
 }
 
 export enum ValidationType {
