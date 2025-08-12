@@ -7,12 +7,8 @@ export const handleDocumentFinishedEvent = (oppgaveId: string, userId: string) =
   handleJournalpostAddedEvent(oppgaveId, userId)(event);
 
   reduxStore.dispatch(
-    documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (documents) => {
-      if (documents === undefined) {
-        return documents;
-      }
-
-      return documents.filter((document) => document.id !== event.id);
-    }),
+    documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (documents) =>
+      documents.filter((document) => document.id !== event.id && document.parentId !== event.id),
+    ),
   );
 };
