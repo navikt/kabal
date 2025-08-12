@@ -1,6 +1,6 @@
 import type { INavEmployee } from '@app/types/bruker';
 import type { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import type { IHelper, IVenteperiode } from '@app/types/oppgave-common';
+import type { IHelper, ISattPåVent } from '@app/types/oppgave-common';
 
 /** DateTime */
 type DateString = string;
@@ -19,9 +19,9 @@ export interface UtgaatteApiResponse {
   antall: number;
 }
 
-interface IOppgaveRowVenteperiode extends IVenteperiode {
+export type IOppgaveRowVenteperiode = ISattPåVent & {
   isExpired: boolean;
-}
+};
 
 export interface IOppgave {
   /** Age in days. */

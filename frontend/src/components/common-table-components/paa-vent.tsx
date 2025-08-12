@@ -1,5 +1,8 @@
 import { isoDateToPretty } from '@app/domain/date';
+import { usePaaVentReasons } from '@app/simple-api-state/use-kodeverk';
+import { PaaVentReasonEnum } from '@app/types/kodeverk';
 import type { IOppgave } from '@app/types/oppgaver';
+import { Loader } from '@navikt/ds-react';
 
 type Props = Pick<IOppgave, 'sattPaaVent'>;
 
@@ -22,13 +25,24 @@ export const PaaVentTil = ({ sattPaaVent }: Props) => {
 };
 
 export const PaaVentReason = ({ sattPaaVent }: Props) => {
+  const { data = [], isLoading } = usePaaVentReasons();
+
   if (sattPaaVent === null) {
     return null;
   }
 
+  if (isLoading) {
+    return <Loader aria-label="Laster..." size="small" />;
+  }
+
+  const reason: string =
+    sattPaaVent.reasonId === PaaVentReasonEnum.ANNET
+      ? (sattPaaVent.reason ?? 'Annet - ingen forklaring')
+      : (data.find((r) => r.id === sattPaaVent.reasonId)?.beskrivelse ?? 'Ukjent årsak');
+
   return (
-    <div className="max-w-32 truncate" title={sattPaaVent.reason}>
-      {sattPaaVent.reason}
+    <div className="max-w-60 truncate" title={reason}>
+      {reason}
     </div>
   );
 };

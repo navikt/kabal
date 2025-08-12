@@ -75,3 +75,11 @@ export interface IKlageenhet extends IKodeverkSimpleValue {
 export interface ISakstyperToUtfall extends IKodeverkSimpleValue<SaksTypeEnum> {
   utfall: IKodeverkSimpleValue<UtfallEnum>[];
 }
+
+export enum PaaVentReasonEnum {
+  VENTER_PAA_TILSVAR = '1',
+  VENTER_PAA_DOKUMENTASJON = '2',
+  VENTER_PAA_AVKLARING_OM_DOEDSBO = '3',
+  SATT_I_BERO = '4',
+  ANNET = '5',
+}

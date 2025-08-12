@@ -1,13 +1,6 @@
 import type { INavEmployee } from '../bruker';
 import type { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import type {
-  IFullmektig,
-  IMedunderskriverRol,
-  IPart,
-  ISakenGjelder,
-  IVedlegg,
-  IVenteperiode,
-} from '../oppgave-common';
+import type { IFullmektig, IMedunderskriverRol, IPart, ISakenGjelder, ISattPåVent, IVedlegg } from '../oppgave-common';
 
 type UUID = string;
 
@@ -118,7 +111,7 @@ export interface IOppgavebehandlingBase {
   resultat: Resultat;
   rol: IMedunderskriverRol;
   sakenGjelder: ISakenGjelder;
-  sattPaaVent: IVenteperiode | null;
+  sattPaaVent: ISattPåVent | null;
   sendTilbakemelding: boolean | null;
   strengtFortrolig: boolean;
   vergemaalEllerFremtidsfullmakt: boolean;

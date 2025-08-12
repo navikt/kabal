@@ -1,10 +1,22 @@
 import { ISO_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
 import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
+import { usePaaVentReasons } from '@app/simple-api-state/use-kodeverk';
+import { PaaVentReasonEnum } from '@app/types/kodeverk';
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, ErrorSummary, HStack, Textarea, VStack } from '@navikt/ds-react';
-import { addDays, addWeeks, differenceInWeeks, format, isPast, isValid, parseISO } from 'date-fns';
-import { useMemo, useState } from 'react';
+import { BoxNew, Button, ErrorSummary, HStack, Radio, RadioGroup, Textarea, VStack } from '@navikt/ds-react';
+import {
+  addDays,
+  addMonths,
+  addWeeks,
+  differenceInMonths,
+  differenceInWeeks,
+  format,
+  isPast,
+  isValid,
+  parseISO,
+} from 'date-fns';
+import { useState } from 'react';
 
 interface Props {
   oppgaveId: string;
@@ -15,44 +27,82 @@ const MAX_LENGTH = 100;
 const PÅ_VENT_REASON_ID = 'paa-vent-reason';
 const PÅ_VENT_DATE_ID = 'paa-vent-date';
 
+const NOW = new Date();
+const DEFAULT_DATES: [number, Date][] = [
+  [1, addWeeks(NOW, 1)],
+  [2, addWeeks(NOW, 2)],
+  [3, addWeeks(NOW, 3)],
+  [4, addWeeks(NOW, 4)],
+  [5, addWeeks(NOW, 5)],
+];
+
+const BERO_DATES: [number, Date][] = [
+  [1, addMonths(NOW, 1)],
+  [2, addMonths(NOW, 2)],
+  [3, addMonths(NOW, 3)],
+  [4, addMonths(NOW, 4)],
+];
+
 export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
   const [to, setTo] = useState<string | null>(null);
   const [reason, setReason] = useState<string>('');
   const [settPaaVent, { isLoading }] = useSattPaaVentMutation();
   const [dateError, setDateError] = useState<string | null>(null);
   const [reasonError, setReasonError] = useState<string | null>(null);
+  const { data: reasonIds = [] } = usePaaVentReasons();
+  const [reasonId, setReasonId] = useState<PaaVentReasonEnum | null>(null);
 
-  const today = new Date();
-  const fromDate = addDays(today, 1);
+  const options = reasonIds.map((reason) => (
+    <Radio key={reason.id} value={reason.id}>
+      {reason.beskrivelse}
+    </Radio>
+  ));
 
-  const dates: [[number, Date], [number, Date], [number, Date], [number, Date], [number, Date]] = useMemo(() => {
-    const now = new Date();
+  const fromDate = addDays(NOW, 1);
 
-    return [
-      [1, addWeeks(now, 1)],
-      [2, addWeeks(now, 2)],
-      [3, addWeeks(now, 3)],
-      [4, addWeeks(now, 4)],
-      [5, addWeeks(now, 5)],
-    ];
-  }, []);
+  const dates = reasonId === PaaVentReasonEnum.SATT_I_BERO ? BERO_DATES : DEFAULT_DATES;
 
   return (
-    <VStack asChild gap="4 0" left="0" position="absolute" className="bottom-full z-1">
-      <BoxNew padding="4" background="default" borderRadius="medium" shadow="dialog" width="400px">
+    <VStack asChild gap="7" left="0" position="absolute" className="bottom-full z-1">
+      <BoxNew padding="6" background="raised" borderRadius="medium" shadow="dialog" width="400px">
+        <RadioGroup onChange={setReasonId} value={reasonId} legend="Grunn" size="small">
+          {options}
+        </RadioGroup>
+
+        {reasonId === PaaVentReasonEnum.ANNET ? (
+          <Textarea
+            label="Forklaring"
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            maxLength={MAX_LENGTH}
+            size="small"
+            id={PÅ_VENT_REASON_ID}
+            placeholder="Skriv kort hvorfor saken skal settes på vent"
+          />
+        ) : null}
+
         <DatePicker
           label="Frist"
           value={to}
           fromDate={fromDate}
           toDate={dates.at(-1)?.[1]}
           onChange={setTo}
+          onErrorChange={setTo}
           id={PÅ_VENT_DATE_ID}
           size="small"
         />
-        <VStack gap="2">
-          {dates.map(([weeks, date]) => {
+        <VStack gap="3">
+          {dates.map(([units, date]) => {
             const formattedDate = format(date, ISO_FORMAT);
             const isActive = to === formattedDate;
+            const label =
+              reasonId === PaaVentReasonEnum.SATT_I_BERO
+                ? units === 1
+                  ? 'måned'
+                  : 'måneder'
+                : units === 1
+                  ? 'uke'
+                  : 'uker';
 
             return (
               <Button
@@ -64,36 +114,32 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
                 disabled={isLoading}
                 aria-pressed={isActive}
               >
-                {weeks} {weeks !== 1 ? 'uker' : 'uke'}
+                {units} {label}
                 <br />({format(date, PRETTY_FORMAT)})
               </Button>
             );
           })}
         </VStack>
-        <Textarea
-          label="Grunn (stikkord)"
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-          maxLength={MAX_LENGTH}
-          size="small"
-          id={PÅ_VENT_REASON_ID}
-          placeholder="Skriv kort hvorfor saken skal settes på vent. F.eks. «Venter på tilsvar»."
-        />
+
         <Errors dateError={dateError} reasonError={reasonError} />
-        <HStack align="center" gap="0 4">
+
+        <HStack align="center" justify="space-between">
           <Button
             type="button"
             variant="primary"
             size="small"
             onClick={() => {
-              const newDateError = validateDate(to);
-              const newReasonError = validateReason(reason);
+              const newDateError = validateDate(reasonId, to);
+              const newReasonError = validateReason(reasonId, reason);
 
               setDateError(newDateError);
               setReasonError(newReasonError);
 
-              if (newDateError === null && newReasonError === null && to !== null) {
-                settPaaVent({ to, oppgaveId, reason });
+              if (newDateError === null && newReasonError === null && to !== null && reasonId !== null) {
+                const sattPaaVent =
+                  reasonId === PaaVentReasonEnum.ANNET ? { to, reason, reasonId } : { to, reason: null, reasonId };
+
+                settPaaVent({ oppgaveId, sattPaaVent });
               }
             }}
             loading={isLoading}
@@ -142,7 +188,7 @@ const Errors = ({ dateError, reasonError }: ErrorsProps) => {
   );
 };
 
-const validateDate = (date: string | null): string | null => {
+const validateDate = (reasonId: PaaVentReasonEnum | null, date: string | null): string | null => {
   if (date === null) {
     return 'Velg en frist.';
   }
@@ -157,20 +203,28 @@ const validateDate = (date: string | null): string | null => {
     return 'Sett en frist frem i tid.';
   }
 
-  if (differenceInWeeks(parsedDate, new Date()) > 5) {
-    return 'Sett en frist innen 5 uker.';
+  if (reasonId === PaaVentReasonEnum.SATT_I_BERO) {
+    return differenceInMonths(parsedDate, NOW) >= 4 ? 'Sett en frist innen fire måneder.' : null;
+  }
+
+  if (differenceInWeeks(parsedDate, NOW) >= 5) {
+    return 'Sett en frist innen fem uker.';
   }
 
   return null;
 };
 
-const validateReason = (reason: string): string | null => {
-  if (reason.length === 0) {
-    return 'Skriv en grunn.';
+const validateReason = (reasonId: PaaVentReasonEnum | null, reason: string): string | null => {
+  if (reasonId === null) {
+    return 'Velg en grunn.';
+  }
+
+  if (reasonId === PaaVentReasonEnum.ANNET && reason.length === 0) {
+    return 'Skriv en forklaring.';
   }
 
   if (reason.length > MAX_LENGTH) {
-    return 'Skriv en grunn på maks 100 tegn.';
+    return `Skriv en forklaring på maks ${MAX_LENGTH} tegn.`;
   }
 
   return null;

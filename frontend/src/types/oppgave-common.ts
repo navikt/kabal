@@ -1,5 +1,5 @@
 import type { IAddress } from '@app/types/documents/receivers';
-import type { SexEnum } from '@app/types/kodeverk';
+import type { PaaVentReasonEnum, SexEnum } from '@app/types/kodeverk';
 import type { Language } from '@app/types/texts/language';
 import type { INavEmployee } from './bruker';
 
@@ -142,11 +142,23 @@ export interface ISakenGjelder extends IPersonPart {
   language: Language;
 }
 
-export interface IVenteperiode {
+type Reason =
+  | {
+      reasonId: PaaVentReasonEnum.ANNET;
+      reason: string;
+    }
+  | {
+      reasonId: Exclude<PaaVentReasonEnum, PaaVentReasonEnum.ANNET>;
+      reason: null;
+    };
+
+export type BaseSattPåVent = Reason & {
+  to: string; // LocalDate
+};
+
+export type ISattPåVent = BaseSattPåVent & {
   from: string; // LocalDate;
-  to: string; // LocalDate;
-  reason: string;
-}
+};
 
 export enum FlowState {
   NOT_SENT = 'NOT_SENT',

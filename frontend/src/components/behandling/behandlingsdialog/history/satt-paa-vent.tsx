@@ -1,12 +1,11 @@
 import { isoDateToPretty } from '@app/domain/date';
+import { usePaaVentReasons } from '@app/simple-api-state/use-kodeverk';
 import type { INavEmployee } from '@app/types/bruker';
-import {
-  HistoryEventTypes,
-  type ISattPaaVentEvent,
-  type SattPaaVentEvent,
-} from '@app/types/oppgavebehandling/response';
+import { PaaVentReasonEnum } from '@app/types/kodeverk';
+import type { ISattPåVent } from '@app/types/oppgave-common';
+import { HistoryEventTypes, type ISattPaaVentEvent } from '@app/types/oppgavebehandling/response';
 import { PauseIcon, PlayIcon } from '@navikt/aksel-icons';
-import { Label } from '@navikt/ds-react';
+import { Label, Loader } from '@navikt/ds-react';
 import { useId } from 'react';
 import { employeeName, Reason, toKey } from './common';
 import { HistoryEvent } from './event';
@@ -24,12 +23,18 @@ export const getSattPaaVent = (e: ISattPaaVentEvent) => {
 
 interface StartProps {
   actor: INavEmployee | null;
-  event: SattPaaVentEvent;
+  event: ISattPåVent;
   timestamp: string;
 }
 
 const Start = ({ actor, event, timestamp }: StartProps) => {
   const id = useId();
+  const { data = [], isLoading } = usePaaVentReasons();
+
+  const reason: string =
+    event.reasonId === PaaVentReasonEnum.ANNET
+      ? (event.reason ?? 'Annet - ingen forklaring')
+      : (data.find((r) => r.id === event.reasonId)?.beskrivelse ?? 'Ukjent årsak');
 
   return (
     <HistoryEvent tag="Venteperiode" type={HistoryEventTypes.SATT_PAA_VENT} timestamp={timestamp} icon={PauseIcon}>
@@ -43,7 +48,7 @@ const Start = ({ actor, event, timestamp }: StartProps) => {
       <Label size="small" htmlFor={id}>
         Årsak
       </Label>
-      <Reason id={id}>{event.reason}</Reason>
+      {isLoading ? <Loader aria-label="Laster..." /> : <Reason id={id}>{reason}</Reason>}
     </HistoryEvent>
   );
 };
