@@ -1,5 +1,6 @@
 import { CLIENT_VERSION_HEADER } from '@app/headers';
 import { CLIENT_VERSION_QUERY, getHeaderOrQueryValue } from '@app/helpers/get-header-query';
+import type { Querystring } from '@app/helpers/query-parser';
 import type { FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 
@@ -15,7 +16,7 @@ export const clientVersionPlugin = fastifyPlugin(
   async (app) => {
     app.decorateRequest('client_version', '');
 
-    app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
+    app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Querystring }>) => {
       const client_version = getHeaderOrQueryValue(req, CLIENT_VERSION_HEADER, CLIENT_VERSION_QUERY);
 
       if (client_version !== undefined) {

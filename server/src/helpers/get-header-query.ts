@@ -1,10 +1,11 @@
+import type { Querystring } from '@app/helpers/query-parser';
 import type { FastifyRequest } from 'fastify';
 
 export const TAB_ID_QUERY = 'tabId';
 export const CLIENT_VERSION_QUERY = 'version';
 
 export const getHeaderOrQueryValue = (
-  req: FastifyRequest<{ Querystring: Record<string, string | undefined> }>,
+  req: FastifyRequest<{ Querystring: Querystring }>,
   headerKey: string,
   queryKey: string,
 ): string | undefined => {
