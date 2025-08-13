@@ -29,6 +29,8 @@ const INITIAL_STATE: SelectionRange[] = [];
 
 const selectionRangesStore = new Observable<readonly SelectionRange[]>(INITIAL_STATE, mergeRanges);
 
+export const resetSelectionRanges = () => selectionRangesStore.set(INITIAL_STATE);
+
 export const useSelectionRangesState = () =>
   useSyncExternalStore(selectionRangesStore.subscribe, selectionRangesStore.get);
 

@@ -26,6 +26,8 @@ const INITIAL_STATE: DocumentIndexesState = Object.freeze([]);
 
 const state = new Observable<DocumentIndexesState>(INITIAL_STATE);
 
+export const resetDocumentIndexes = () => state.set(INITIAL_STATE);
+
 export const FIRST_ACCESSIBLE_DOCUMENT_INDEX = 0;
 
 export const getLastAccessibleDocumentIndex = () => getLastIndex(state.get());
