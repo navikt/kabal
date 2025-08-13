@@ -1,5 +1,6 @@
 import { TAB_ID_HEADER } from '@app/headers';
 import { getHeaderOrQueryValue, TAB_ID_QUERY } from '@app/helpers/get-header-query';
+import type { Querystring } from '@app/helpers/query-parser';
 import type { FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 
@@ -15,7 +16,7 @@ export const tabIdPlugin = fastifyPlugin(
   async (app) => {
     app.decorateRequest('tab_id', '');
 
-    app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
+    app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Querystring }>) => {
       const tab_id = getHeaderOrQueryValue(req, TAB_ID_HEADER, TAB_ID_QUERY);
 
       if (tab_id !== undefined) {

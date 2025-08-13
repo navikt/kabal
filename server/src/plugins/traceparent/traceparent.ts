@@ -1,3 +1,4 @@
+import type { Querystring } from '@app/helpers/query-parser';
 import {
   generateSpanId,
   generateTraceId,
@@ -23,7 +24,7 @@ export const traceparentPlugin = fastifyPlugin(
     app.decorateRequest('trace_id', '');
     app.decorateRequest('span_id', '');
 
-    app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
+    app.addHook('preHandler', async (req: FastifyRequest<{ Querystring: Querystring }>) => {
       const { trace_id, span_id, traceparent } = getTraceIdAndSpanId(req);
       req.trace_id = trace_id;
       req.span_id = span_id;
@@ -40,7 +41,7 @@ const getTraceIdAndSpanId = ({
   headers,
   query,
   client_version: clientVersion,
-}: FastifyRequest<{ Querystring: Record<string, string | undefined> }>) => {
+}: FastifyRequest<{ Querystring: Querystring }>) => {
   const traceparentHeader = headers[TRACEPARENT_HEADER];
 
   if (typeof traceparentHeader === 'string' && traceparentHeader.length > 0) {
