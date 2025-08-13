@@ -7,6 +7,7 @@ import { DeleteSection } from '@app/plate/components/common/delete-section';
 import { useIsChanged } from '@app/plate/components/maltekstseksjon/use-is-changed';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
+import { ELEMENT_REGELVERK } from '@app/plate/plugins/element-types';
 import { type RegelverkContainerElement, type RegelverkElement, useMyPlateEditorRef } from '@app/plate/types';
 import { isNodeEmpty } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
@@ -20,27 +21,15 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 
 const isRegelverk = (text: IConsumerText): text is IConsumerRegelverkText => text.textType === REGELVERK_TYPE;
 
-export const Regelverk = (props: PlateElementProps<RegelverkElement>) => {
-  const { hasWriteAccess } = useContext(SmartEditorContext);
-  const { children, element } = props;
-
-  return (
-    <PlateElement<RegelverkElement>
-      {...props}
-      as="div"
-      attributes={{ ...props.attributes, onDragStart: onPlateContainerDragStart }}
-    >
-      <SectionContainer sectionType={SectionTypeEnum.REGELVERK} data-element={element.type}>
-        {children}
-        {hasWriteAccess ? (
-          <SectionToolbar contentEditable={false} className="top-8">
-            <DeleteRegelverk element={element} />
-          </SectionToolbar>
-        ) : null}
-      </SectionContainer>
-    </PlateElement>
-  );
-};
+export const Regelverk = (props: PlateElementProps<RegelverkElement>) => (
+  <PlateElement<RegelverkElement>
+    {...props}
+    as="div"
+    attributes={{ ...props.attributes, onDragStart: onPlateContainerDragStart }}
+  >
+    {props.children}
+  </PlateElement>
+);
 
 export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerElement>) => {
   const [loading, setLoading] = useState(false);
@@ -96,6 +85,7 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
         ) : null}
         {hasWriteAccess ? (
           <SectionToolbar contentEditable={false}>
+            <DeleteRegelverkButton element={element} />
             <Tooltip content={loading ? 'Oppdaterer regelverk...' : 'Oppdater regelverk'} delay={0}>
               <Button
                 icon={<GavelSoundBlockIcon aria-hidden />}
@@ -111,6 +101,18 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
       </SectionContainer>
     </PlateElement>
   );
+};
+
+interface DeleteRegelverkButtonProps {
+  element: RegelverkContainerElement;
+}
+
+const DeleteRegelverkButton = ({ element }: DeleteRegelverkButtonProps) => {
+  const editor = useMyPlateEditorRef();
+  const at = editor.api.findPath(element);
+  const entry = editor.api.node<RegelverkElement>({ at: at, match: { type: ELEMENT_REGELVERK } });
+
+  return entry === undefined ? null : <DeleteRegelverk element={entry[0]} />;
 };
 
 interface DeleteRegelverkProps {
