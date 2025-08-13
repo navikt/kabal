@@ -1,12 +1,8 @@
 import { Observable } from '@app/observable';
-import { useSyncExternalStore } from 'react';
 
 const keyboardActiveStore = new Observable<boolean>(false);
 
-export const useKeyboardActiveState = () =>
-  useSyncExternalStore(keyboardActiveStore.subscribe, keyboardActiveStore.get);
-
-export const getKeyboardActive = () => keyboardActiveStore.get();
+export const resetKeyboardActive = () => keyboardActiveStore.set(false);
 
 let setTimeoutId: NodeJS.Timeout | null = null;
 

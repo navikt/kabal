@@ -3,6 +3,8 @@ import { useSyncExternalStore } from 'react';
 
 const isKeyboardHelpModalOpenStore = new Observable(false);
 
+export const resetKeyboardHelpModal = () => isKeyboardHelpModalOpenStore.set(false);
+
 export const useIsKeyboardHelpModalOpen = () =>
   useSyncExternalStore(isKeyboardHelpModalOpenStore.subscribe, isKeyboardHelpModalOpenStore.get);
 

@@ -12,6 +12,7 @@ import { useCallback, useEffect, useId, useRef } from 'react';
 export const KeyboardHelpModal = () => {
   const ref = useRef<HTMLDialogElement>(null);
   const isOpen = useIsKeyboardHelpModalOpen();
+
   const { setValue: setHasSeenKeyboardShortcuts } = useHasSeenKeyboardShortcuts();
   const modalHeadingId = useId();
 
