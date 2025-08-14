@@ -11,6 +11,12 @@
     "source.removeUnusedImports": "never"
   },
   "editor.acceptSuggestionOnCommitCharacter": false,
+  "search.exclude": {
+    "node_modules/**": true,
+    "dist/**": true,
+    ".tsbuildinfo": true,
+    "bun.lock": true
+  },
   "typescript.validate.enable": true,
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.preferences.importModuleSpecifier": "non-relative",
