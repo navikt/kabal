@@ -8,27 +8,27 @@
         "@grafana/faro-web-sdk": "1.19.0",
         "@grafana/faro-web-tracing": "1.19.0",
         "@hocuspocus/provider": "3.2.3",
-        "@navikt/aksel-icons": "7.27.1",
-        "@navikt/ds-css": "7.27.1",
-        "@navikt/ds-react": "7.27.1",
-        "@navikt/ds-tailwind": "7.27.1",
+        "@navikt/aksel-icons": "7.28.0",
+        "@navikt/ds-css": "7.28.0",
+        "@navikt/ds-react": "7.28.0",
+        "@navikt/ds-tailwind": "7.28.0",
         "@navikt/fnrvalidator": "2.1.5",
         "@platejs/autoformat": "49.0.0",
         "@platejs/basic-nodes": "49.0.0",
         "@platejs/basic-styles": "49.0.0",
-        "@platejs/core": "49.2.9",
+        "@platejs/core": "49.2.12",
         "@platejs/cursor": "49.0.0",
         "@platejs/docx": "49.0.0",
         "@platejs/indent": "49.0.0",
         "@platejs/list-classic": "49.1.0",
         "@platejs/resizable": "49.0.0",
         "@platejs/table": "49.1.13",
-        "@platejs/utils": "49.2.9",
+        "@platejs/utils": "49.2.12",
         "@platejs/yjs": "49.0.0",
         "@reduxjs/toolkit": "2.8.2",
         "@slate-yjs/core": "1.0.2",
         "@styled-icons/fluentui-system-regular": "10.47.0",
-        "platejs": "49.2.9",
+        "platejs": "49.2.12",
         "qs": "6.14.0",
         "react": "19.1.1",
         "react-dom": "19.1.1",
@@ -41,10 +41,10 @@
         "@happy-dom/global-registrator": "18.0.1",
         "@tailwindcss/vite": "4.1.11",
         "@testing-library/dom": "10.4.1",
-        "@testing-library/jest-dom": "6.6.4",
+        "@testing-library/jest-dom": "6.7.0",
         "@testing-library/react": "16.3.0",
         "@types/qs": "6.14.0",
-        "@types/react": "19.1.9",
+        "@types/react": "19.1.10",
         "@types/react-dom": "19.1.7",
         "@types/react-redux": "7.1.34",
         "@vitejs/plugin-react": "5.0.0",
@@ -153,15 +153,15 @@
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.0.3", "", { "dependencies": { "@emnapi/core": "^1.4.5", "@emnapi/runtime": "^1.4.5", "@tybys/wasm-util": "^0.10.0" } }, "sha512-rZxtMsLwjdXkMUGC3WwsPwLNVqVqnTJT6MNIB6e+5fhMcSCPP0AOsNWuMQ5mdCq6HNjs/ZeWAEchpqeprqBD2Q=="],
 
-    "@navikt/aksel-icons": ["@navikt/aksel-icons@7.27.1", "https://npm.pkg.github.com/download/@navikt/aksel-icons/7.27.1/4ea08e7aefff24137cbbb6ad63173ffae1916036", {}, "sha512-XfV2hqkwcAe3b+tPSrt1aLJH19SOLUyvJ5QaMPs3HzcA/lPztcoyc3R+w9Gz8fwJjCqopinvI2j2vkmUDrk55w=="],
+    "@navikt/aksel-icons": ["@navikt/aksel-icons@7.28.0", "https://npm.pkg.github.com/download/@navikt/aksel-icons/7.28.0/a5061ee5fadb1c6fec24968c9f9cb548137629a6", {}, "sha512-EnaeT+7X0bPgGJ4fL3Ylgm/Uruft7r8+ki0aiJXdQtauo9G2/CY4rBJ6A6kVctPZqitanoJxxl1QxPNAwGhwmg=="],
 
-    "@navikt/ds-css": ["@navikt/ds-css@7.27.1", "https://npm.pkg.github.com/download/@navikt/ds-css/7.27.1/727dc8480b1e4230c25d739f3f7a503018a05e77", {}, "sha512-jALDOt1ftEzWO6OK7yzt38aebKECIG1GMwuHUTgX05SRNejqz6j7y5v8WhHLMkxVHffivXkIIbAcKwHdP7pCOw=="],
+    "@navikt/ds-css": ["@navikt/ds-css@7.28.0", "https://npm.pkg.github.com/download/@navikt/ds-css/7.28.0/ad6813acddc8c7f47adf8ec76e1c763a7e1b51f3", {}, "sha512-tPAvUy/JBAvgVPjfqP9Pyc64V01ubQOuhJN//dIRA0AUWz+p/houWRLg1EyBo+GNrZAktQxnthy/k6m+Lw+fNQ=="],
 
-    "@navikt/ds-react": ["@navikt/ds-react@7.27.1", "https://npm.pkg.github.com/download/@navikt/ds-react/7.27.1/f70a62fe4eed94b7e2a82725abf3069ac613af17", { "dependencies": { "@floating-ui/react": "0.27.8", "@floating-ui/react-dom": "^2.0.9", "@navikt/aksel-icons": "^7.27.1", "@navikt/ds-tokens": "^7.27.1", "clsx": "^2.1.0", "date-fns": "^4.0.0", "react-day-picker": "9.7.0" }, "peerDependencies": { "@types/react": ">=17.0.30", "react": ">=17.0.0 || >19.0.0-rc" } }, "sha512-cNUC1xqUdgWOL3JcNZyy1z4LsJiN3i2DnVBEvJ5lLeJgrFd3OdYBwjLBNKFXndJw5efxiZHWPEbb7F9CG4m74A=="],
+    "@navikt/ds-react": ["@navikt/ds-react@7.28.0", "https://npm.pkg.github.com/download/@navikt/ds-react/7.28.0/1fe176dcac5cbe9036367ab31bd74627f4e1580f", { "dependencies": { "@floating-ui/react": "0.27.8", "@floating-ui/react-dom": "^2.0.9", "@navikt/aksel-icons": "^7.28.0", "@navikt/ds-tokens": "^7.28.0", "clsx": "^2.1.0", "date-fns": "^4.0.0", "react-day-picker": "9.7.0" }, "peerDependencies": { "@types/react": ">=17.0.30", "react": ">=17.0.0 || >19.0.0-rc" } }, "sha512-769kNe1QhSEtuVBzwya1f6e/pohibz+xE0avRItccWcPqOX8flBUFSZ7tqfCLtOZ+K5CeafdxNXRTjhhvJwjAw=="],
 
-    "@navikt/ds-tailwind": ["@navikt/ds-tailwind@7.27.1", "https://npm.pkg.github.com/download/@navikt/ds-tailwind/7.27.1/628726fa42d6ba34bed30035336be54fdd6b07fc", {}, "sha512-6gUf9RJKtjYA3tQYN/FVl4UaLnunGomv3fyZviHSxRhGMbQfdtwi6ZObZJoVfyYv4byiTav4/TU3FdIhX9DRRQ=="],
+    "@navikt/ds-tailwind": ["@navikt/ds-tailwind@7.28.0", "https://npm.pkg.github.com/download/@navikt/ds-tailwind/7.28.0/bf4052b145206f225d09dd8b3cf09dc81591927a", {}, "sha512-TWGfUE3vn2PG4ia1K8n/6SR1dYlhGcVs72q1ZGafGXU2auEdC4Gz8OaUQ94YwZf1KC5d/La35tej9IC5nfXAVQ=="],
 
-    "@navikt/ds-tokens": ["@navikt/ds-tokens@7.27.1", "https://npm.pkg.github.com/download/@navikt/ds-tokens/7.27.1/09aea167403a44872f282bb595d0c1cbf3193943", {}, "sha512-sJu/bQkPPKD3JB62fFCsm3uOttfsKS0C9JFJ9Xi7ZcsYhXSU9eeWxlVKBnTwR5WGDWVnwwM+I58pnPLgQjKHDg=="],
+    "@navikt/ds-tokens": ["@navikt/ds-tokens@7.28.0", "https://npm.pkg.github.com/download/@navikt/ds-tokens/7.28.0/4bbc825585bb5eb1e6d7f7be79a4b46fa4eb29d0", {}, "sha512-T+30eAyPWRZrrzItuRLoVaNFQgud4PwsQMtomSA/RQMKUUhmjPDY9/OzuDf2wBt1gsrtlkTJ2JZctSoHin7kag=="],
 
     "@navikt/fnrvalidator": ["@navikt/fnrvalidator@2.1.5", "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.1.5/e33cbc5693b14419bbcf4d5daee2ac9eeec532e5", {}, "sha512-uHzoL3ZTYwrF7OTKaihNf9xHH6S9WnGqz420HX4lEX+yu5367l+dYxI5OIRVT5MKWEDQ4DCVSAuJhoWValv6Fw=="],
 
@@ -205,7 +205,7 @@
 
     "@platejs/basic-styles": ["@platejs/basic-styles@49.0.0", "", { "peerDependencies": { "platejs": ">=49.0.0", "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-MjbQj+LjflUBhd1DPZqnlodHZiX7kJo0LpJ7wHRUI515nNJ7zMQJHocCHo1EYfAU2VtV1j5CpZ7wxHUw3nuHmA=="],
 
-    "@platejs/core": ["@platejs/core@49.2.9", "", { "dependencies": { "@platejs/slate": "49.2.4", "@udecode/react-hotkeys": "37.0.0", "@udecode/react-utils": "49.0.15", "@udecode/utils": "47.2.7", "clsx": "^2.1.1", "html-entities": "^2.6.0", "is-hotkey": "^0.2.0", "jotai": "~2.8.4", "jotai-optics": "0.4.0", "jotai-x": "2.3.3", "lodash": "^4.17.21", "nanoid": "^5.1.5", "optics-ts": "2.4.1", "slate-hyperscript": "0.100.0", "slate-react": "0.117.1", "use-deep-compare": "^1.3.0", "zustand": "^5.0.5", "zustand-x": "6.1.0" }, "peerDependencies": { "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-iX10jlyYAgQE6cT9DDLNCJVzaFuIg+2WgReQS00sIEXh2nv9UewV+3fqoHDodfh+CEgWZWv5bXfbTOgr6D8DBQ=="],
+    "@platejs/core": ["@platejs/core@49.2.12", "", { "dependencies": { "@platejs/slate": "49.2.4", "@udecode/react-hotkeys": "37.0.0", "@udecode/react-utils": "49.0.15", "@udecode/utils": "47.2.7", "clsx": "^2.1.1", "html-entities": "^2.6.0", "is-hotkey": "^0.2.0", "jotai": "~2.8.4", "jotai-optics": "0.4.0", "jotai-x": "2.3.3", "lodash": "^4.17.21", "nanoid": "^5.1.5", "optics-ts": "2.4.1", "slate-hyperscript": "0.100.0", "slate-react": "0.117.1", "use-deep-compare": "^1.3.0", "zustand": "^5.0.5", "zustand-x": "6.1.0" }, "peerDependencies": { "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-dtNyRWnYSAqHiZB3BrFcGC7r1ILSmbaIaDbomZzJ9egZ4P/6gf1cxxiizO40fMca7+xuCgLTaLeS5uOsgWagTA=="],
 
     "@platejs/cursor": ["@platejs/cursor@49.0.0", "", { "peerDependencies": { "platejs": ">=49.0.0", "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-v9qUQf3H05p5rETAzmn37745zfoRiIVi5IQFJisjMVabpd/PMh1t/kQU2VWEIx7P2/RWu8SmdlUqvqK2193wVw=="],
 
@@ -221,7 +221,7 @@
 
     "@platejs/table": ["@platejs/table@49.1.13", "", { "dependencies": { "@platejs/resizable": "49.0.0", "lodash": "^4.17.21" }, "peerDependencies": { "platejs": ">=49.1.13", "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-af3/Fcp/YINA7wfXJ5SILwtFDc7yW8n+LMmk/XDeFfQDfZZoKsqxjc0l+emgUxTKtg2ZVxZAodrjCNc3h+mUyw=="],
 
-    "@platejs/utils": ["@platejs/utils@49.2.9", "", { "dependencies": { "@platejs/core": "49.2.9", "@platejs/slate": "49.2.4", "@udecode/react-utils": "49.0.15", "@udecode/utils": "47.2.7", "clsx": "^2.1.1", "lodash": "^4.17.21" }, "peerDependencies": { "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-yV1NgawwVWtViAJD/nzlObu8rlDIpihpl6zfeKbnuMjLoUjGUJbmUaQTiXo7+IO+XjILaolmLGH5/f3vXJ6Gkw=="],
+    "@platejs/utils": ["@platejs/utils@49.2.12", "", { "dependencies": { "@platejs/core": "49.2.12", "@platejs/slate": "49.2.4", "@udecode/react-utils": "49.0.15", "@udecode/utils": "47.2.7", "clsx": "^2.1.1", "lodash": "^4.17.21" }, "peerDependencies": { "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-8ISyYlhx8hbzO9DlDVLRU2gbSRzGZlCdUgEqPKs3LuDsU+tVOPksIvA32tjuJHNa9lQlKduY4JJUuco10JUTZA=="],
 
     "@platejs/yjs": ["@platejs/yjs@49.0.0", "", { "dependencies": { "@slate-yjs/core": "^1.0.2", "yjs": "^13.6.27" }, "peerDependencies": { "@hocuspocus/provider": "^2.15.2", "platejs": ">=49.0.0", "react": ">=18.0.0", "react-dom": ">=18.0.0", "y-webrtc": "10.3.0" } }, "sha512-20tCnuc9eN3Jr7KUB30NZ41fN2ZYVFZNHatB2mfko9ETzW2hOsHl/IZvvPvj6jS0ONGthkH/DZaq2sLZ1G3pGw=="],
 
@@ -323,7 +323,7 @@
 
     "@testing-library/dom": ["@testing-library/dom@10.4.1", "", { "dependencies": { "@babel/code-frame": "^7.10.4", "@babel/runtime": "^7.12.5", "@types/aria-query": "^5.0.1", "aria-query": "5.3.0", "dom-accessibility-api": "^0.5.9", "lz-string": "^1.5.0", "picocolors": "1.1.1", "pretty-format": "^27.0.2" } }, "sha512-o4PXJQidqJl82ckFaXUeoAW+XysPLauYI43Abki5hABd853iMhitooc6znOnczgbTYmEP6U6/y1ZyKAIsvMKGg=="],
 
-    "@testing-library/jest-dom": ["@testing-library/jest-dom@6.6.4", "", { "dependencies": { "@adobe/css-tools": "^4.4.0", "aria-query": "^5.0.0", "css.escape": "^1.5.1", "dom-accessibility-api": "^0.6.3", "lodash": "^4.17.21", "picocolors": "^1.1.1", "redent": "^3.0.0" } }, "sha512-xDXgLjVunjHqczScfkCJ9iyjdNOVHvvCdqHSSxwM9L0l/wHkTRum67SDc020uAlCoqktJplgO2AAQeLP1wgqDQ=="],
+    "@testing-library/jest-dom": ["@testing-library/jest-dom@6.7.0", "", { "dependencies": { "@adobe/css-tools": "^4.4.0", "aria-query": "^5.0.0", "css.escape": "^1.5.1", "dom-accessibility-api": "^0.6.3", "picocolors": "^1.1.1", "redent": "^3.0.0" } }, "sha512-RI2e97YZ7MRa+vxP4UUnMuMFL2buSsf0ollxUbTgrbPLKhMn8KVTx7raS6DYjC7v1NDVrioOvaShxsguLNISCA=="],
 
     "@testing-library/react": ["@testing-library/react@16.3.0", "", { "dependencies": { "@babel/runtime": "^7.12.5" }, "peerDependencies": { "@testing-library/dom": "^10.0.0", "@types/react": "^18.0.0 || ^19.0.0", "@types/react-dom": "^18.0.0 || ^19.0.0", "react": "^18.0.0 || ^19.0.0", "react-dom": "^18.0.0 || ^19.0.0" }, "optionalPeers": ["@types/react", "@types/react-dom"] }, "sha512-kFSyxiEDwv1WLl2fgsq6pPBbw5aWKrsY2/noi1Id0TK0UParSF62oFQFGHXIyaG4pp2tEub/Zlel+fjjZILDsw=="],
 
@@ -345,7 +345,7 @@
 
     "@types/qs": ["@types/qs@6.14.0", "", {}, "sha512-eOunJqu0K1923aExK6y8p6fsihYEn/BYuQ4g0CxAAgFc4b/ZLN4CrsRZ55srTdqoiLzU2B2evC+apEIxprEzkQ=="],
 
-    "@types/react": ["@types/react@19.1.9", "", { "dependencies": { "csstype": "^3.0.2" } }, "sha512-WmdoynAX8Stew/36uTSVMcLJJ1KRh6L3IZRx1PZ7qJtBqT3dYTgyDTx8H1qoRghErydW7xw9mSJ3wS//tCRpFA=="],
+    "@types/react": ["@types/react@19.1.10", "", { "dependencies": { "csstype": "^3.0.2" } }, "sha512-EhBeSYX0Y6ye8pNebpKrwFJq7BoQ8J5SO6NlvNwwHjSj6adXJViPQrKlsyPw7hLBLvckEMO1yxeGdR82YBBlDg=="],
 
     "@types/react-dom": ["@types/react-dom@19.1.7", "", { "peerDependencies": { "@types/react": "^19.0.0" } }, "sha512-i5ZzwYpqjmrKenzkoLM2Ibzt6mAsM7pxB6BCIouEVVmgiqaMj1TjaK7hnA36hbW5aZv20kx7Lw6hWzPWg0Rurw=="],
 
@@ -569,7 +569,7 @@
 
     "picomatch": ["picomatch@4.0.3", "", {}, "sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q=="],
 
-    "platejs": ["platejs@49.2.9", "", { "dependencies": { "@platejs/core": "49.2.9", "@platejs/slate": "49.2.4", "@platejs/utils": "49.2.9", "@udecode/react-hotkeys": "37.0.0", "@udecode/react-utils": "49.0.15", "@udecode/utils": "47.2.7" }, "peerDependencies": { "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-qRe65Ar9YRRaKw3SbiJwD8+eWmJVkHl1OXptQbpkJ6442OAquLRYzhhCNmdu7L0P9NqjrCmhPb18L0HFHpdxNQ=="],
+    "platejs": ["platejs@49.2.12", "", { "dependencies": { "@platejs/core": "49.2.12", "@platejs/slate": "49.2.4", "@platejs/utils": "49.2.12", "@udecode/react-hotkeys": "37.0.0", "@udecode/react-utils": "49.0.15", "@udecode/utils": "47.2.7" }, "peerDependencies": { "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-qLskXutKxU5HhwI2UQ2BiLpqVkrgMhovAz5cZ7U1ZnnMWJSBy/Dd6aGTdrw7t1D5OS/P+9ikCyATCFI9jqIPKw=="],
 
     "postcss": ["postcss@8.5.6", "", { "dependencies": { "nanoid": "^3.3.11", "picocolors": "^1.1.1", "source-map-js": "^1.2.1" } }, "sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg=="],
 
