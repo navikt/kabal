@@ -18,16 +18,16 @@ interface Props {
 const DONT_WAIT_FOR_TRANSITION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export const ExpandableThread = ({ thread, isFocused, style, isOrphan = false, isAbsolute = false, zIndex }: Props) => {
-  const { setFocusedThreadId, focusedThreadId } = useContext(SmartEditorContext);
+  const { setFocusedThreadId, focusedThreadId, editingComment } = useContext(SmartEditorContext);
   const editor = useMyPlateEditorRef();
 
   const ref = useRef<HTMLDivElement>(null);
 
   const close = useCallback(() => {
-    if (focusedThreadId === thread.id) {
+    if (editingComment === null && focusedThreadId === thread.id) {
       setFocusedThreadId(null);
     }
-  }, [focusedThreadId, setFocusedThreadId, thread.id]);
+  }, [focusedThreadId, setFocusedThreadId, thread.id, editingComment]);
 
   useOnClickOutside(ref, close);
 
