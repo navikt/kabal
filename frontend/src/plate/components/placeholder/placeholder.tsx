@@ -152,7 +152,7 @@ const Placeholder = ({ hasWriteAccess, ...props }: PlaceholderProps) => {
       as="span"
       attributes={{
         ...props.attributes,
-        contentEditable: true,
+        contentEditable: !isReadOnly,
         suppressContentEditableWarning: true,
       }}
     >
