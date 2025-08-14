@@ -7,7 +7,7 @@ export const VERSION_QUERY_STRING_SCHEMA = Type.Object({
   tabId: Type.Optional(Type.String()),
   traceparent: Type.Optional(Type.String()),
   theme: Type.Optional(THEME_SCHEMA),
-  user_theme: Type.Optional(THEME_SCHEMA),
+  user_theme: Type.Optional(Type.Union([THEME_SCHEMA, Type.Literal('system')])),
   system_theme: Type.Optional(THEME_SCHEMA),
 });
 
