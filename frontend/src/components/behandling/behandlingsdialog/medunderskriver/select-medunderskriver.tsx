@@ -5,11 +5,13 @@ import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-me
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { BodyShort, Select } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { getTitleCapitalized, getTitlePlural } from './get-title';
 
 interface Props {
@@ -19,14 +21,17 @@ interface Props {
 }
 
 export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Props) => {
-  const { data } = useGetPotentialMedunderskrivereQuery(oppgaveId);
-  const isSaksbehandler = useIsTildeltSaksbehandler();
+  const [, { isLoading }] = useTildelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
+  const isTildeltSaksbehandler = useIsTildeltSaksbehandler();
+  const { data } = useGetPotentialMedunderskrivereQuery(isTildeltSaksbehandler && !isLoading ? oppgaveId : skipToken);
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const { onChange, isUpdating } = useSetMedunderskriver(oppgaveId, data?.medunderskrivere);
   const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
 
   const canChange =
-    isSaksbehandler || isMedunderskriver || (hasOppgavestyringRole && medunderskriver.flowState === FlowState.SENT);
+    isTildeltSaksbehandler ||
+    isMedunderskriver ||
+    (hasOppgavestyringRole && medunderskriver.flowState === FlowState.SENT);
 
   if (!canChange) {
     return <MedunderskriverReadOnly medunderskriver={medunderskriver} typeId={typeId} />;
