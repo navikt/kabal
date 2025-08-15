@@ -2,7 +2,7 @@ import { ContainerWithHelpText } from '@app/components/kvalitetsvurdering/v2/com
 import type { TextParams } from '@app/components/kvalitetsvurdering/v2/common/types';
 import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
 import { SavedStatus } from '@app/components/saved-status/saved-status';
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import type { IKvalitetsvurderingBooleans } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { BodyLong, HStack, Label, Textarea, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
@@ -13,7 +13,7 @@ interface Props extends TextParams {
 
 export const KvalitetsskjemaTextarea = (props: Props) => {
   const { kvalitetsvurdering, isLoading } = useKvalitetsvurderingV2();
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
 
   if (isLoading) {
     return null;

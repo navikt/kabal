@@ -1,5 +1,5 @@
 import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
-import { NewDocument, useNewSmartDocumentTemplates } from '@app/components/smart-editor/new-document/new-document';
+import { NewDocument } from '@app/components/smart-editor/new-document/new-document';
 import { TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
@@ -7,12 +7,10 @@ import {
   useSmartEditorGodeFormuleringerOpen,
   useSmartEditorHistoryOpen,
 } from '@app/hooks/settings/use-setting';
-import { useHasDocumentsAccess } from '@app/hooks/use-has-documents-access';
 import { useSmartDocuments } from '@app/hooks/use-smart-documents';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
-import { Alert, Heading, Tabs, Tooltip } from '@navikt/ds-react';
-import { useEffect } from 'react';
+import { Tabs, Tooltip } from '@navikt/ds-react';
 
 const NEW_TAB_ID = 'NEW_TAB_ID';
 
@@ -32,42 +30,15 @@ interface TabbedProps {
 }
 
 const Tabbed = ({ documents }: TabbedProps) => {
-  const canCreateMainDocuments = useHasDocumentsAccess();
-
   const [firstDocument] = documents;
   const firstDocumentId = firstDocument?.id;
 
   const { value: editorId = firstDocumentId, setValue: setEditorId } = useSmartEditorActiveDocument();
 
-  const defaultEditorId = canCreateMainDocuments ? NEW_TAB_ID : undefined;
-
-  const activeEditorId =
-    editorId !== undefined && documents.some(({ id }) => id === editorId) ? editorId : defaultEditorId;
+  const activeEditorId = editorId !== undefined && documents.some(({ id }) => id === editorId) ? editorId : NEW_TAB_ID;
 
   const { value: showGodeFormuleringer = false } = useSmartEditorGodeFormuleringerOpen();
   const { value: showHistory = false } = useSmartEditorHistoryOpen();
-
-  // If the user does not have access to create documents, select the first document, if any.
-  useEffect(() => {
-    if (!canCreateMainDocuments && firstDocumentId !== undefined && activeEditorId === defaultEditorId) {
-      setEditorId(firstDocumentId ?? defaultEditorId);
-    }
-  }, [activeEditorId, firstDocumentId, canCreateMainDocuments, setEditorId, defaultEditorId]);
-
-  if (documents.length === 0 && !canCreateMainDocuments) {
-    return (
-      <PanelContainer>
-        <div className="bg-bg-default p-4">
-          <Heading level="1" size="medium" spacing>
-            Ingen dokumenter.
-          </Heading>
-          <Alert variant="info" size="small">
-            Ingen dokumenter å vise. Om du forventet å se noen dokumenter her, be saksbehandler om å opprette dem.
-          </Alert>
-        </div>
-      </PanelContainer>
-    );
-  }
 
   return (
     <PanelContainer>
@@ -76,7 +47,10 @@ const Tabbed = ({ documents }: TabbedProps) => {
           {documents.map(({ id, tittel }) => (
             <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
           ))}
-          <TabNew />
+
+          <Tooltip content="Opprett nytt dokument">
+            <Tabs.Tab value={NEW_TAB_ID} icon={<TabsAddIcon aria-hidden />} />
+          </Tooltip>
         </Tabs.List>
 
         <div className="grow overflow-hidden">
@@ -84,42 +58,12 @@ const Tabbed = ({ documents }: TabbedProps) => {
             <TabPanel key={d.id} smartDocument={d} />
           ))}
 
-          <TabPanelNew onCreate={setEditorId} />
+          <Tabs.Panel className="h-full overflow-hidden" value={NEW_TAB_ID}>
+            <NewDocument onCreate={setEditorId} />
+          </Tabs.Panel>
         </div>
       </Tabs>
     </PanelContainer>
-  );
-};
-
-const TabNew = () => {
-  const templates = useNewSmartDocumentTemplates();
-
-  if (templates.length === 0) {
-    return null;
-  }
-
-  return (
-    <Tooltip content="Opprett nytt dokument">
-      <Tabs.Tab value={NEW_TAB_ID} icon={<TabsAddIcon aria-hidden />} />
-    </Tooltip>
-  );
-};
-
-interface TabPanelNewProps {
-  onCreate: (documentId: string) => void;
-}
-
-const TabPanelNew = ({ onCreate }: TabPanelNewProps) => {
-  const templates = useNewSmartDocumentTemplates();
-
-  if (templates.length === 0) {
-    return null;
-  }
-
-  return (
-    <Tabs.Panel className="h-full overflow-hidden" value={NEW_TAB_ID}>
-      <NewDocument onCreate={onCreate} />
-    </Tabs.Panel>
   );
 };
 

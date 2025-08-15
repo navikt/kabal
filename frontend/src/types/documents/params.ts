@@ -1,9 +1,8 @@
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import type { HandlingEnum, IAddress } from '@app/types/documents/receivers';
-import type { INavEmployee } from '../bruker';
-import type { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
+import type { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import type { IDocumentParams } from './common-params';
-import type { CreatorRole, DistribusjonsType, IMottaker, UUID } from './documents';
+import type { DistribusjonsType, IMottaker, UUID } from './documents';
 
 export interface ISetParentParams extends IDocumentParams {
   parentId: UUID | null;
@@ -12,10 +11,6 @@ export interface ISetParentParams extends IDocumentParams {
 export interface ICreateVedleggParams extends IOppgavebehandlingBaseParams {
   parentId: UUID;
   journalfoerteDokumenter: IArkivertDocument[];
-  creator: {
-    employee: INavEmployee;
-    creatorRole: CreatorRole.KABAL_SAKSBEHANDLING | CreatorRole.KABAL_ROL;
-  };
   isFinished: boolean;
 }
 

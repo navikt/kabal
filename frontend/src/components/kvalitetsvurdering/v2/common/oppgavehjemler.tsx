@@ -1,4 +1,4 @@
-import { useCanEdit } from '@app/hooks/use-can-edit';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { usePrevious } from '@app/hooks/use-previous';
 import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
 import type {
@@ -20,7 +20,7 @@ const EMPTY_ARRAY: string[] = [];
 export const Oppgavehjemler = ({ field, parentKey }: Props) => {
   const { hjemler, kvalitetsvurdering, update, isLoading } = useKvalitetsvurderingV2();
   const { data: registreringshjemlerMap, isLoading: registreringshjemlerMapIsLoading } = useRegistreringshjemlerMap();
-  const canEdit = useCanEdit();
+  const canEdit = useIsTildeltSaksbehandler();
   const validationError = useValidationError(field);
 
   const previousHjemler = usePrevious(hjemler);

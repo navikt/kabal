@@ -12,14 +12,8 @@ import { isSendError } from '@app/components/receivers/is-send-error';
 import { Receivers } from '@app/components/receivers/receivers';
 import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
-import {
-  CHANGE_TYPE_ACCESS_ENUM_TO_TEXT,
-  type DocumentAccessEnumMap,
-  FINISH_ACCESS_ENUM_TO_TEXT,
-  REMOVE_ACCESS_ENUM_TO_TEXT,
-} from '@app/hooks/dua-access/document-messages';
-import type { DocumentAccess } from '@app/hooks/dua-access/use-document-access';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useDuaAccessList } from '@app/hooks/dua-access/use-dua-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
 import {
@@ -33,6 +27,7 @@ import {
   DOCUMENT_TYPE_NAMES,
   DocumentTypeEnum,
   type IDocument,
+  type IParentDocument,
 } from '@app/types/documents/documents';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
@@ -42,11 +37,10 @@ import { useMemo, useState } from 'react';
 import { DeleteDocumentButton } from './delete-button';
 
 interface Props {
-  document: IDocument;
-  access: DocumentAccess;
+  document: IParentDocument;
 }
 
-export const DocumentModalContent = ({ document, access }: Props) => {
+export const DocumentModalContent = ({ document }: Props) => {
   const [setMottakerList, { isLoading }] = useSetMottakerListMutation();
   const [, { error: finishError }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const sendErrors = useMemo(
@@ -65,6 +59,11 @@ export const DocumentModalContent = ({ document, access }: Props) => {
       : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
   const { refresh, ...pdfData } = usePdfData(pdfUrl);
   const [innsendingshjemlerConfirmed, setInnsendingshjemlerConfirmed] = useState(false);
+
+  const [renameAccess = null, changeTypeAccess = null, removeAccess = null, finishAccess = null] = useDuaAccessList(
+    document,
+    [DuaActionEnum.RENAME, DuaActionEnum.CHANGE_TYPE, DuaActionEnum.REMOVE, DuaActionEnum.FINISH],
+  );
 
   if (oppgaveId === skipToken) {
     return null;
@@ -90,7 +89,7 @@ export const DocumentModalContent = ({ document, access }: Props) => {
             <OpprettetTag document={document} />
           </HStack>
 
-          {access.rename === DocumentAccessEnum.ALLOWED ? (
+          {renameAccess === null ? (
             <HStack align="end" gap="2" wrap={false}>
               <SetFilename
                 className="max-w-lg flex-grow"
@@ -107,21 +106,19 @@ export const DocumentModalContent = ({ document, access }: Props) => {
             </HStack>
           ) : null}
 
-          {access.changeType === DocumentAccessEnum.ALLOWED ? (
+          {changeTypeAccess === null ? (
             <SetDocumentType document={document} showLabel />
           ) : (
-            <AccessAlert access={access.changeType} TEXT={CHANGE_TYPE_ACCESS_ENUM_TO_TEXT} />
+            <AccessAlert access={changeTypeAccess} />
           )}
 
-          {access.finish === DocumentAccessEnum.ALLOWED && isInngående ? (
-            <MottattDato document={document} oppgaveId={oppgaveId} />
-          ) : null}
+          {finishAccess === null && isInngående ? <MottattDato document={document} oppgaveId={oppgaveId} /> : null}
 
           {document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST ? (
-            <AnnenInngaaende document={document} hasAccess={access.finish === DocumentAccessEnum.ALLOWED} />
+            <AnnenInngaaende document={document} hasAccess={finishAccess === null} />
           ) : null}
 
-          {access.finish === DocumentAccessEnum.ALLOWED && !isNotat && !isInngående ? (
+          {finishAccess === null && !isNotat && !isInngående ? (
             <Receivers
               setMottakerList={(mottakerList) => setMottakerList({ oppgaveId, dokumentId: document.id, mottakerList })}
               mottakerList={document.mottakerList}
@@ -146,16 +143,12 @@ export const DocumentModalContent = ({ document, access }: Props) => {
       </Modal.Body>
 
       <Modal.Footer className="items-center">
-        {access.remove === DocumentAccessEnum.ALLOWED ? (
-          <DeleteDocumentButton document={document} />
-        ) : (
-          <AccessAlert access={access.remove} TEXT={REMOVE_ACCESS_ENUM_TO_TEXT} />
-        )}
+        {removeAccess === null ? <DeleteDocumentButton document={document} /> : <AccessAlert access={removeAccess} />}
 
-        {access.finish === DocumentAccessEnum.ALLOWED ? (
+        {finishAccess === null ? (
           <FinishButton document={document} innsendingshjemlerConfirmed={innsendingshjemlerConfirmed} />
         ) : (
-          <AccessAlert access={access.finish} TEXT={FINISH_ACCESS_ENUM_TO_TEXT} />
+          <AccessAlert access={finishAccess} />
         )}
       </Modal.Footer>
     </>
@@ -177,20 +170,17 @@ const OpprettetTag = ({ document }: { document: IDocument }) => {
 };
 
 interface AccessAlertProps {
-  access: DocumentAccessEnum;
-  TEXT: DocumentAccessEnumMap;
+  access: string | null;
 }
 
-const AccessAlert = ({ access, TEXT }: AccessAlertProps) => {
-  const text = TEXT[access];
-
-  if (text === null) {
+const AccessAlert = ({ access }: AccessAlertProps) => {
+  if (access === null) {
     return null;
   }
 
   return (
     <Alert variant="info" size="small" inline>
-      {text}
+      {access}
     </Alert>
   );
 };

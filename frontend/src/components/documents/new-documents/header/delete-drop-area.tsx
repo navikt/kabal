@@ -1,11 +1,8 @@
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { DropZone } from '@app/components/documents/new-documents/shared/drop-zone';
-import { AttachmentAccessEnum } from '@app/hooks/dua-access/attachment-access';
-import { DocumentAccessEnum } from '@app/hooks/dua-access/document-access';
-import { useAttachmentAccess } from '@app/hooks/dua-access/use-attachment-access';
-import { useDocumentAccess } from '@app/hooks/dua-access/use-document-access';
+import { DuaActionEnum } from '@app/hooks/dua-access/access';
+import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useParentDocument } from '@app/hooks/use-parent-document';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import {
@@ -58,12 +55,12 @@ interface DocumentProps {
 }
 
 const DocumentDeleteDropArea = ({ draggedDocument, onDrop, isLoading }: DocumentProps) => {
-  const access = useDocumentAccess(draggedDocument);
+  const removeAccess = useDuaAccess(draggedDocument, DuaActionEnum.REMOVE);
 
   return (
     <DropZone
       onDrop={() => onDrop(draggedDocument)}
-      active={access.remove === DocumentAccessEnum.ALLOWED || isLoading}
+      active={removeAccess === null || isLoading}
       label="Slett"
       icon={isLoading ? <Loader size="xsmall" /> : <TrashIcon aria-hidden />}
       danger
@@ -79,13 +76,12 @@ interface AttachmentProps {
 }
 
 const AttachmentDeleteDropArea = ({ draggedDocument, onDrop, isLoading }: AttachmentProps) => {
-  const parentDocument = useParentDocument(draggedDocument.parentId);
-  const access = useAttachmentAccess(draggedDocument, parentDocument);
+  const removeAccessError = useDuaAccess(draggedDocument, DuaActionEnum.REMOVE);
 
   return (
     <DropZone
       onDrop={() => onDrop(draggedDocument)}
-      active={access.remove === AttachmentAccessEnum.ALLOWED || isLoading}
+      active={removeAccessError === null || isLoading}
       label="Slett"
       icon={isLoading ? <Loader size="xsmall" /> : <TrashIcon aria-hidden />}
       danger
