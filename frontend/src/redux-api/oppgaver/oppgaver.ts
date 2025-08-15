@@ -26,6 +26,9 @@ export enum DokumenterListTagTypes {
 
 export enum OppgaveTagTypes {
   OPPGAVEBEHANDLING = 'oppgavebehandling',
+  SAKSBEHANDLERE = 'saksbehandlere',
+  MEDUNDERSKRIVERE = 'medunderskrivere',
+  ROLS = 'rols',
 }
 
 export const oppgaverApi = createApi({

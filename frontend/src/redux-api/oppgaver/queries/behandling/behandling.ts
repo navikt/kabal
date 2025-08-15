@@ -212,12 +212,15 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
       }),
     }),
     getPotentialSaksbehandlere: builder.query<ISaksbehandlere, string>({
+      providesTags: (_res, _err, oppgaveId) => [{ type: OppgaveTagTypes.SAKSBEHANDLERE, id: oppgaveId }],
       query: (id) => `/kabal-api/behandlinger/${id}/potentialsaksbehandlere`,
     }),
     getPotentialMedunderskrivere: builder.query<IMedunderskrivereResponse, string>({
+      providesTags: (_res, _err, oppgaveId) => [{ type: OppgaveTagTypes.MEDUNDERSKRIVERE, id: oppgaveId }],
       query: (id) => `/kabal-api/behandlinger/${id}/potentialmedunderskrivere`,
     }),
     getPotentialRol: builder.query<IRols, string>({
+      providesTags: (_res, _err, oppgaveId) => [{ type: OppgaveTagTypes.ROLS, id: oppgaveId }],
       query: (id) => `/kabal-api/behandlinger/${id}/potentialrol`,
     }),
     getFradelingReason: builder.query<ITildelingEvent | null, string>({

@@ -14,7 +14,7 @@ import {
 } from '@app/types/oppgaver';
 import { format } from 'date-fns';
 import { IS_LOCALHOST } from '../../common';
-import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
+import { OppgaveListTagTypes, OppgaveTagTypes, oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const tildelMutationSlice = oppgaverApi.injectEndpoints({
@@ -26,6 +26,7 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
         method: 'PUT',
         body: { navIdent: employee.navIdent },
       }),
+      invalidatesTags: (_result, _error, { oppgaveId }) => [{ type: OppgaveTagTypes.MEDUNDERSKRIVERE, id: oppgaveId }],
       onQueryStarted: async ({ oppgaveId, employee }, { dispatch, queryFulfilled }) => {
         const optimisticBehandling = dispatch(
           behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {

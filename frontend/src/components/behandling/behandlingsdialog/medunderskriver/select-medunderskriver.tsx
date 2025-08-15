@@ -19,7 +19,7 @@ interface Props {
 }
 
 export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Props) => {
-  const { data } = useGetPotentialMedunderskrivereQuery(oppgaveId);
+  const { data, isSuccess } = useGetPotentialMedunderskrivereQuery(oppgaveId);
   const isSaksbehandler = useIsTildeltSaksbehandler();
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const { onChange, isUpdating } = useSetMedunderskriver(oppgaveId, data?.medunderskrivere);
@@ -32,7 +32,7 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
     return <MedunderskriverReadOnly medunderskriver={medunderskriver} typeId={typeId} />;
   }
 
-  if (typeof data === 'undefined') {
+  if (!isSuccess) {
     return SELECT_SKELETON;
   }
 
