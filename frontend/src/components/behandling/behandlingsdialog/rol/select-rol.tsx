@@ -1,13 +1,11 @@
 import { NONE } from '@app/components/behandling/behandlingsdialog/rol/constants';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/rol/skeleton';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
+import { useIsAssignedRol, useIsAssignedRolAndSent, useIsKrolUser } from '@app/hooks/use-is-rol';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { useGetPotentialRolQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { Role } from '@app/types/bruker';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -21,12 +19,13 @@ interface Props {
 export const SelectRol = ({ oppgaveId, rol, isSaksbehandler }: Props) => {
   const [, { isLoading }] = useTildelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
   const isTildeltSaksbehandler = useIsTildeltSaksbehandler();
+  const isTildeltRol = useIsAssignedRol();
+  const isKrol = useIsKrolUser();
   const { data: potentialRol, isLoading: potentialRolIsLoading } = useGetPotentialRolQuery(
-    isTildeltSaksbehandler && !isLoading ? oppgaveId : skipToken,
+    (isTildeltSaksbehandler || isTildeltRol || isKrol) && !isLoading ? oppgaveId : skipToken,
   );
   const [setRol, { isLoading: setRolIsLoading }] = useSetRolMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
   const isRol = useIsAssignedRolAndSent();
-  const isKrol = useHasRole(Role.KABAL_KROL);
 
   const onChange = (newValue: string) => {
     const employee = newValue === NONE ? null : (potentialRol?.rols.find((r) => r.navIdent === newValue) ?? null);

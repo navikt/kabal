@@ -3,7 +3,7 @@ import { MedunderskriverReadOnly } from '@app/components/behandling/behandlingsd
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
 import { useHasRole } from '@app/hooks/use-has-role';
-import { useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
+import { useIsAssignedMedunderskriver, useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
@@ -23,8 +23,11 @@ interface Props {
 export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Props) => {
   const [, { isLoading }] = useTildelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
   const isTildeltSaksbehandler = useIsTildeltSaksbehandler();
-  const { data } = useGetPotentialMedunderskrivereQuery(isTildeltSaksbehandler && !isLoading ? oppgaveId : skipToken);
+  const isTildeltMu = useIsAssignedMedunderskriver();
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
+  const { data } = useGetPotentialMedunderskrivereQuery(
+    (isTildeltSaksbehandler || isTildeltMu || hasOppgavestyringRole) && !isLoading ? oppgaveId : skipToken,
+  );
   const { onChange, isUpdating } = useSetMedunderskriver(oppgaveId, data?.medunderskrivere);
   const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
 
