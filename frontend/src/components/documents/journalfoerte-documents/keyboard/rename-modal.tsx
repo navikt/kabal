@@ -1,5 +1,4 @@
 import { useLazyFocusedDocumentAndVedlegg } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/focused-document';
-import { useCanEditDocument } from '@app/components/documents/journalfoerte-documents/use-can-edit';
 import { toast } from '@app/components/toast/store';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { Keys } from '@app/keys';
@@ -18,7 +17,6 @@ interface Props {
 
 export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
   const oppgaveId = useOppgaveId();
-  const canEdit = useCanEditDocument();
   const [updateTitle, { isLoading }] = useSetTitleMutation();
   const [originalTitle, setOriginalTitle] = useState('');
   const [title, setTitle] = useState('');
@@ -134,7 +132,7 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
           value={title}
           onChange={({ target }) => setTitle(target.value)}
           onKeyDown={onKeyDown}
-          disabled={!canEdit || isLoading}
+          disabled={isLoading}
           ref={inputRef}
         />
       </Modal.Body>
@@ -147,7 +145,6 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
             icon={<CheckmarkIcon aria-hidden />}
             onClick={onSave}
             loading={isLoading}
-            disabled={!canEdit}
           >
             Lagre
           </Button>
