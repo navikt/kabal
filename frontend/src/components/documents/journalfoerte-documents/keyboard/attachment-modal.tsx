@@ -5,7 +5,6 @@ import {
 import { getDocument } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
 import { decrement, increment } from '@app/components/documents/journalfoerte-documents/keyboard/increment-decrement';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { useCanEditDocument } from '@app/components/documents/journalfoerte-documents/use-can-edit';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { isMetaKey, Keys } from '@app/keys';
@@ -38,7 +37,6 @@ interface Props {
 export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => {
   const [focused, setFocused] = useState(0);
   const oppgaveId = useOppgaveId();
-  const canEdit = useCanEditDocument();
   const { getSelectedDocuments } = useContext(SelectContext);
   const selectedDocuments = getSelectedDocuments();
   const options = useOptions(selectedDocuments);
@@ -66,7 +64,7 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
 
   const documents = useMemo(() => (open ? getDocuments() : []), [open, getDocuments]);
 
-  if (!open || !canEdit || attachToDua === null) {
+  if (!open || attachToDua === null) {
     return null;
   }
 
