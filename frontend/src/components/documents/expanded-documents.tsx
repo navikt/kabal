@@ -5,7 +5,7 @@ import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { useDocumentsWidth } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
-import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
+import { ChevronLeftFirstIcon, ChevronRightLastIcon } from '@navikt/aksel-icons';
 import { BoxNew, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-documents';
@@ -136,7 +136,7 @@ export const ExpandedDocuments = () => {
               <Button
                 variant="tertiary-neutral"
                 size="xsmall"
-                icon={<MinusIcon aria-hidden />}
+                icon={<ChevronLeftFirstIcon aria-hidden />}
                 onClick={() => setWidth(Math.max(minWidth, width - 50))}
                 disabled={width <= minWidth}
                 title="Forminsk dokumenter"
@@ -145,7 +145,7 @@ export const ExpandedDocuments = () => {
               <Button
                 variant="tertiary-neutral"
                 size="xsmall"
-                icon={<PlusIcon aria-hidden />}
+                icon={<ChevronRightLastIcon aria-hidden />}
                 onClick={() => setWidth(width + 50)}
                 title="Forstørr dokumenter"
               />
