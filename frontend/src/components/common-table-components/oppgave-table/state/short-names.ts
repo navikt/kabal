@@ -13,6 +13,7 @@ export enum ShortParamKey {
   RETURNERT = 'r',
   FRIST = 'f',
   VARSLET_FRIST = 'v',
+  PAA_VENT_REASONS = 'pvr',
   // "p" is reserved for page. Used in the usePage() hook.
 }
 

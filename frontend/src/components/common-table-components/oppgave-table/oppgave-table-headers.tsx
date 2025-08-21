@@ -1,4 +1,5 @@
 import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
+import { PaaVentReasons } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/paa-vent-reason';
 import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
 import {
   useOppgaveTableFerdigstilt,
@@ -101,6 +102,8 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         return <RolYtelse key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.RolInnsendingshjemler:
         return <RolHjemmel key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.PaaVentReason:
+        return <PaaVentReasons key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Navn:
       case ColumnKeyEnum.Fnr:
       case ColumnKeyEnum.FlowStates:
@@ -109,7 +112,6 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
       case ColumnKeyEnum.Tildeling:
       case ColumnKeyEnum.OppgavestyringNonFilterable:
       case ColumnKeyEnum.Utfall:
-      case ColumnKeyEnum.PaaVentReason:
       case ColumnKeyEnum.Feilregistrert:
       case ColumnKeyEnum.Saksnummer:
       case ColumnKeyEnum.RolTildeling:
