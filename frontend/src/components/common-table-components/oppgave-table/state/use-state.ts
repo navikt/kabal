@@ -49,6 +49,9 @@ export const useOppgaveTableMedunderskrivere = (tableKey: OppgaveTableKey, defau
 export const useOppgaveTableTildelteRol = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
   useUrlQueryParam(`${tableKey}.${ShortParamKey.TILDELTE_ROL}`, fromArrayParam, setArrayQuery, defaultValue);
 
+export const useOppgaveTablePaaVentReasons = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
+  useUrlQueryParam(`${tableKey}.${ShortParamKey.PAA_VENT_REASONS}`, fromArrayParam, setArrayQuery, defaultValue);
+
 // Helper functions for URL parameter management
 
 const setArrayQuery = (query: URLSearchParams, key: string, value: string[] | undefined) => {
