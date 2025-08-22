@@ -20,7 +20,7 @@ import {
   type IAttachmentDocument,
   type IParentDocument,
 } from '@app/types/documents/documents';
-import { FlowState } from '@app/types/oppgave-common';
+import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { useCallback, useContext, useMemo } from 'react';
@@ -114,14 +114,11 @@ const getDuaAccessUser = (user: IUserData, oppgave: IOppgavebehandling): DuaAcce
   const { rol, medunderskriver, saksbehandler, isAvsluttetAvSaksbehandler } = oppgave;
 
   if (!isAvsluttetAvSaksbehandler) {
-    if (
-      (rol.flowState === FlowState.SENT || rol.flowState === FlowState.RETURNED) &&
-      rol.employee?.navIdent === user.navIdent
-    ) {
+    if ((isWith(rol) || isReturnedFrom(rol)) && rol.employee?.navIdent === user.navIdent) {
       return DuaAccessUser.TILDELT_ROL;
     }
 
-    if (medunderskriver.flowState === FlowState.SENT && medunderskriver.employee?.navIdent === user.navIdent) {
+    if (isWith(medunderskriver) && medunderskriver.employee?.navIdent === user.navIdent) {
       return DuaAccessUser.TILDELT_MEDUNDERSKRIVER;
     }
 
@@ -155,51 +152,54 @@ const getCaseStatus = ({
     return DuaAccessCaseStatus.LEDIG;
   }
 
-  const withSaksbehandler =
-    (medunderskriver.employee === null || medunderskriver.flowState !== FlowState.SENT) &&
-    (rol.employee === null || rol.flowState === FlowState.NOT_SENT);
-
-  if (withSaksbehandler) {
+  if (isWithSaksbehandler(medunderskriver, rol)) {
     return DuaAccessCaseStatus.WITH_SAKSBEHANDLER;
   }
 
-  const withMedunderskriver = medunderskriver.employee !== null && medunderskriver.flowState === FlowState.SENT;
-  const withRol = rol.employee !== null && rol.flowState === FlowState.SENT;
-  const returnedFromRol = rol.employee !== null && rol.flowState === FlowState.RETURNED;
-
-  if (withMedunderskriver) {
-    if (withRol) {
+  if (isWith(medunderskriver)) {
+    if (isWith(rol)) {
       return DuaAccessCaseStatus.WITH_MU_AND_ROL;
     }
 
-    if (returnedFromRol) {
+    if (isReturnedFrom(rol)) {
       return DuaAccessCaseStatus.WITH_MU_AND_RETURNED_FROM_ROL;
     }
 
     return DuaAccessCaseStatus.WITH_MU;
   }
 
-  if (withRol) {
+  if (isWith(rol)) {
     return DuaAccessCaseStatus.WITH_ROL;
   }
 
-  if (returnedFromRol) {
+  if (isReturnedFrom(rol)) {
     return DuaAccessCaseStatus.RETURNED_FROM_ROL;
   }
 
   return DuaAccessCaseStatus.LEDIG;
 };
 
-const getDocumentType = (document: Dua): DuaAccessDocumentType => {
-  switch (document.type) {
+const isWithSaksbehandler = (mu: IMedunderskriverRol, rol: IMedunderskriverRol) =>
+  (mu.employee === null || mu.flowState !== FlowState.SENT) &&
+  (rol.employee === null || rol.flowState === FlowState.NOT_SENT);
+
+const isWith = (part: IMedunderskriverRol) => hasFlow(part, FlowState.SENT);
+
+const isReturnedFrom = (part: IMedunderskriverRol) => hasFlow(part, FlowState.RETURNED);
+
+const hasFlow = ({ employee, flowState }: IMedunderskriverRol, flow: FlowState) =>
+  employee !== null && flowState === flow;
+
+const getDocumentType = ({ type, templateId }: Dua): DuaAccessDocumentType => {
+  switch (type) {
     case DocumentTypeEnum.JOURNALFOERT:
       return DuaAccessDocumentType.JOURNALFOERT;
     case DocumentTypeEnum.SMART: {
-      if (document.templateId === TemplateIdEnum.ROL_QUESTIONS) {
+      if (templateId === TemplateIdEnum.ROL_QUESTIONS) {
         return DuaAccessDocumentType.ROL_QUESTIONS;
       }
 
-      if (document.templateId === TemplateIdEnum.ROL_ANSWERS) {
+      if (templateId === TemplateIdEnum.ROL_ANSWERS) {
         return DuaAccessDocumentType.ROL_ANSWERS;
       }
 
