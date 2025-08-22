@@ -4,7 +4,7 @@ import { fromSortingParam } from '@app/components/common-table-components/oppgav
 import { fromArrayParam, fromTyperParam } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import type { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 
 export const useOppgaveTableState = (
@@ -18,15 +18,11 @@ export const useOppgaveTableState = (
     parseParams(new URLSearchParams(search), tableKey, defaultSortField, defaultSortOrder),
   );
 
-  const prefix = useMemo(() => `${tableKey}.`, [tableKey]);
-
   useEffect(() => {
     const query = new URLSearchParams(search);
 
-    if (query.keys().find((key) => key.startsWith(prefix))) {
-      setParams(parseParams(query, tableKey, defaultSortField, defaultSortOrder));
-    }
-  }, [search, tableKey, prefix, defaultSortField, defaultSortOrder]);
+    setParams(parseParams(query, tableKey, defaultSortField, defaultSortOrder));
+  }, [search, tableKey, defaultSortField, defaultSortOrder]);
 
   return params;
 };
