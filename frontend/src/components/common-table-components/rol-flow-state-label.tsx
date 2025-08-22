@@ -13,7 +13,7 @@ export const RolFlowStateLabel = ({ rol }: Props) => {
 
   if (rol.employee === null && rol.flowState === FlowState.SENT) {
     return (
-      <Tag className={TAG_CLASSES} variant="alt3" title="I felles kø for rådgivende overlege">
+      <Tag className={TAG_CLASSES} variant="neutral" title="I felles kø for rådgivende overlege">
         I felles kø for ROL
       </Tag>
     );
@@ -23,7 +23,7 @@ export const RolFlowStateLabel = ({ rol }: Props) => {
 
   if (isRol && rol.flowState === FlowState.SENT) {
     return (
-      <Tag className={TAG_CLASSES} variant="alt3" title="Rådgivende overlege">
+      <Tag className={TAG_CLASSES} variant="alt2" title="Rådgivende overlege">
         ROL
       </Tag>
     );
@@ -31,7 +31,7 @@ export const RolFlowStateLabel = ({ rol }: Props) => {
 
   if (!isRol && rol.flowState === FlowState.SENT) {
     return (
-      <Tag className={TAG_CLASSES} variant="alt3" title="Sendt til rådgivende overlege">
+      <Tag className={TAG_CLASSES} variant="info" title="Sendt til rådgivende overlege">
         Sendt til ROL
       </Tag>
     );
@@ -39,7 +39,7 @@ export const RolFlowStateLabel = ({ rol }: Props) => {
 
   if (!isRol && rol.flowState === FlowState.RETURNED) {
     return (
-      <Tag className={TAG_CLASSES} variant="info" title="Tilbake fra rådgivende overlege">
+      <Tag className={TAG_CLASSES} variant="warning" title="Tilbake fra rådgivende overlege">
         Tilbake fra ROL
       </Tag>
     );
