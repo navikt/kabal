@@ -117,6 +117,7 @@ export interface CommonOppgaverParams extends FromDateSortKeys, ToDateSortKeys {
   sortering: SortFieldEnum;
   rekkefoelge: SortOrderEnum;
   tildelteRol?: string[];
+  sattPaaVentReasonIds?: string[];
 }
 
 export type CommonOppgaverParamsKey = keyof CommonOppgaverParams;
