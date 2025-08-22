@@ -22,9 +22,9 @@ export const Type = ({ type, size = 'small' }: Props) => {
 };
 
 const VARIANT: Record<SaksTypeEnum, TagProps['variant']> = {
-  [SaksTypeEnum.KLAGE]: 'info-filled',
-  [SaksTypeEnum.ANKE]: 'alt1-filled',
-  [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: 'neutral-filled',
-  [SaksTypeEnum.OMGJØRINGSKRAV]: 'warning-filled',
+  [SaksTypeEnum.KLAGE]: 'alt1-filled',
+  [SaksTypeEnum.ANKE]: 'success-filled',
+  [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: 'error-filled',
+  [SaksTypeEnum.OMGJØRINGSKRAV]: 'info-filled',
   [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: 'alt2-filled',
 };
