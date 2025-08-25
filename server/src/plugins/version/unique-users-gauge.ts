@@ -30,19 +30,6 @@ export const uniqueUsersGauge = new Gauge({
   registers: [proxyRegister],
 });
 
-type StopTimerFn = () => void;
-export const stopTimerList: StopTimerFn[] = [];
-
-export const resetClientsAndUniqueUsersMetrics = async () => {
-  for (const stopTimer of stopTimerList) {
-    stopTimer();
-  }
-  uniqueUsersGauge.reset();
-
-  // Wait for metrics to be collected.
-  return new Promise<void>((resolve) => setTimeout(resolve, 2000));
-};
-
 /** Parses the user ID from the JWT. */
 export const startUserSession = (req: FastifyRequest<{ Querystring: VersionQueryString }>): (() => void) => {
   const { navIdent, trace_id, span_id } = req;
