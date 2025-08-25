@@ -72,13 +72,13 @@ export const Part = ({
 
   return (
     <BehandlingSection label={label}>
-      <HStack align="center" justify="space-between" wrap={false}>
+      <HStack align="start" justify="space-between" wrap={false}>
         <VStack align="start" justify="start">
           <HStack align="center" gap="1" wrap>
             {part.name === null ? (
               <span>Navn mangler</span>
             ) : (
-              <CopyButton size="small" copyText={part.name} text={part.name} activeText={part.name} />
+              <CopyButton size="small" copyText={part.name} text={part.name} activeText={part.name} wrap />
             )}
             {part.identifikator === null ? null : <CopyIdButton size="small" id={part.identifikator} />}
           </HStack>

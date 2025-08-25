@@ -8,6 +8,8 @@ interface Props {
   icon?: React.ReactNode;
   size?: CopyButtonProps['size'];
   activeText?: string;
+  wrap?: boolean;
+  disabled?: boolean;
 }
 
 export const CopyButton = ({
@@ -18,6 +20,8 @@ export const CopyButton = ({
   icon,
   size = 'small',
   activeText,
+  wrap = false,
+  disabled = false,
 }: Props) => {
   if (
     copyText === null ||
@@ -32,13 +36,14 @@ export const CopyButton = ({
 
   return (
     <InternalCopyBytton
-      className={`whitespace-nowrap border-none bg-ax-bg-neutral-moderate hover:bg-ax-bg-neutral-moderate-hover ${className}`}
+      className={`${wrap ? 'whitespace-normal' : 'whitespace-nowrap'} wrap-anywhere hyphens-auto border-none bg-ax-bg-neutral-moderate text-left hover:bg-ax-bg-neutral-moderate-hover ${className}`}
       activeText={activeText}
       copyText={copyText}
       title={title}
       size={size}
       text={text}
       icon={icon}
+      disabled={disabled}
     />
   );
 };
