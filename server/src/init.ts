@@ -2,7 +2,6 @@ import { getAzureADClient } from '@app/auth/get-auth-client';
 import { isDeployed } from '@app/config/env';
 import { formatDuration, getDuration } from '@app/helpers/duration';
 import { getLogger } from '@app/logger';
-import { resetClientsAndUniqueUsersMetrics } from '@app/plugins/version/unique-users-gauge';
 import { EmojiIcons, sendToSlack } from '@app/slack';
 
 const log = getLogger('init');
@@ -18,8 +17,6 @@ export const init = async () => {
       log.info({ msg: `Azure AD client initialized in ${formatDuration(time)}`, data: { time } });
     }
   } catch (e) {
-    await resetClientsAndUniqueUsersMetrics();
-
     if (e instanceof Error) {
       log.error({ error: e, msg: 'Server crashed' });
       await sendToSlack(`Server crashed: ${e.message}`, EmojiIcons.Broken);
