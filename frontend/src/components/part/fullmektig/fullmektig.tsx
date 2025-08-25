@@ -1,4 +1,5 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
+import { CopyButton } from '@app/components/copy-button/copy-button';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
 import { EditPart } from '@app/components/part/edit-part';
 import { WithoutId } from '@app/components/part/fullmektig/without-id';
@@ -8,7 +9,7 @@ import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import type { IFullmektig } from '@app/types/oppgave-common';
 import { ArrowUndoIcon, PencilIcon, TrashFillIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton, HStack, Tag, ToggleGroup, Tooltip, VStack } from '@navikt/ds-react';
+import { Button, HStack, ToggleGroup, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 
@@ -54,23 +55,14 @@ export const Fullmektig = ({ part }: Props) => {
     <BehandlingSection label="Fullmektig">
       <VStack gap="1">
         <HStack gap="1" align="start" justify="space-between" wrap={false}>
-          {hasName ? (
-            <Tag
-              size="small"
-              variant="neutral-moderate"
-              className="mr-auto justify-start hyphens-auto break-words py-[7px]"
-            >
-              {name}
-            </Tag>
-          ) : (
-            'Ikke satt'
-          )}
-
-          {hasName ? (
-            <Tooltip content="Kopier navn">
-              <CopyButton size="small" copyText={name} />
-            </Tooltip>
-          ) : null}
+          <CopyButton
+            size="small"
+            copyText={name}
+            text={name}
+            activeText={name ?? 'Ikke satt'}
+            disabled={!hasName}
+            wrap
+          />
 
           {canEdit ? (
             <HStack gap="1" wrap={false} align="center">
