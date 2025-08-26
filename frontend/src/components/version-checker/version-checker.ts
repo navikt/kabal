@@ -6,6 +6,7 @@ import {
   systemThemeStore,
   userThemeStore,
 } from '@app/app-theme';
+import { USER_ACTIVITY } from '@app/components/version-checker/user-activity';
 import { ENVIRONMENT } from '@app/environment';
 import { getQueryParams } from '@app/headers';
 import { pushError } from '@app/observability';
@@ -36,12 +37,14 @@ class VersionChecker {
   private appTheme = getAppTheme();
   private userTheme = getUserTheme();
   private systemTheme = getSystemTheme();
+  private active = !document.hidden;
 
   constructor() {
     console.info('CURRENT VERSION', ENVIRONMENT.version);
 
     this.eventSource = this.createEventSource();
 
+    // Expose a method to manually trigger an update request. Used for testing and debugging. Available in all environments.
     window.sendUpdateRequest = (data: UpdateRequest) => {
       this.onUpdateRequest(new MessageEvent(UPDATE_REQUEST_EVENT, { data }));
     };
@@ -69,6 +72,13 @@ class VersionChecker {
         this.reopenEventSource();
       }
     });
+
+    USER_ACTIVITY.addListener((active) => {
+      if (this.active !== active) {
+        this.active = active;
+        this.reopenEventSource();
+      }
+    });
   }
 
   public getUpdateRequest = (): UpdateRequest => this.updateRequest;
@@ -86,6 +96,7 @@ class VersionChecker {
     params.set('theme', this.appTheme);
     params.set('user_theme', this.userTheme);
     params.set('system_theme', this.systemTheme);
+    params.set('active', this.active ? 'true' : 'false');
 
     const events = new EventSource(`/version?${params.toString()}`);
 

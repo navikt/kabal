@@ -9,6 +9,7 @@ export const VERSION_QUERY_STRING_SCHEMA = Type.Object({
   theme: Type.Optional(THEME_SCHEMA),
   user_theme: Type.Optional(Type.Union([THEME_SCHEMA, Type.Literal('system')])),
   system_theme: Type.Optional(THEME_SCHEMA),
+  active: Type.Optional(Type.String()),
 });
 
 export type VersionQueryString = Static<typeof VERSION_QUERY_STRING_SCHEMA>;

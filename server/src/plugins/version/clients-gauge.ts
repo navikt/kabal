@@ -19,6 +19,7 @@ const labelNames = [
   'theme',
   'user_theme',
   'system_theme',
+  'active',
 ] as const;
 
 type LabelNames = (typeof labelNames)[number];
@@ -55,6 +56,7 @@ export const startClientSession = (req: FastifyRequest<{ Querystring: VersionQue
     theme: query.theme ?? 'light',
     user_theme: query.user_theme ?? 'system',
     system_theme: query.system_theme ?? 'light',
+    active: query.active === 'true' ? 'true' : 'false',
   };
 
   clientsGauge.set(labels, 1);
