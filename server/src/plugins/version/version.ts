@@ -1,9 +1,9 @@
 import { PROXY_VERSION } from '@app/config/config';
 import { formatDuration, getDuration } from '@app/helpers/duration';
 import { getLogger } from '@app/logger';
+import { startClientSession } from '@app/plugins/version/clients-gauge';
 import { VERSION_QUERY_STRING_SCHEMA, type VersionQueryString } from '@app/plugins/version/query';
 import { histogram } from '@app/plugins/version/session-histogram';
-import { startUserSession } from '@app/plugins/version/unique-users-gauge';
 import { getUpdateRequest } from '@app/plugins/version/update-request';
 import fastifyPlugin from 'fastify-plugin';
 
@@ -38,11 +38,11 @@ export const versionPlugin = fastifyPlugin(
         log.debug({ msg: 'Version connection opened', trace_id, span_id, data: { sse: true } });
 
         const stopTimer = histogram.startTimer();
-        const endUserSession = startUserSession(req);
+        const endClientSession = startClientSession(req);
 
         const onClose = () => {
           stopTimer();
-          endUserSession();
+          endClientSession();
 
           req.raw.destroy();
         };
