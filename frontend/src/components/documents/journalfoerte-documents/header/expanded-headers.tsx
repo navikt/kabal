@@ -47,7 +47,10 @@ export const ExpandedHeaders = ({
 
   const avsenderMottakerOptions = useMemo(
     () =>
-      (data?.avsenderMottakerList ?? []).map(({ id, navn }) => ({ label: navn ?? 'Ukjent', value: id ?? 'UNKNOWN' })),
+      (data?.avsenderMottakerList ?? []).map(({ id, navn }) => ({
+        label: navn ?? 'Ukjent',
+        value: id ?? navn ?? 'UNKNOWN',
+      })),
     [data],
   );
 
