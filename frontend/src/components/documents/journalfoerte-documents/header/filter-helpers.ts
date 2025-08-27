@@ -58,7 +58,7 @@ export const useFilteredDocuments = (
           if (
             checkList(selectedTemaer, tema) &&
             checkList(selectedTypes, journalposttype) &&
-            checkListWithNone(selectedAvsenderMottakere, avsenderMottaker?.id ?? 'UNKNOWN') &&
+            checkListWithNone(selectedAvsenderMottakere, avsenderMottaker?.id ?? avsenderMottaker?.navn ?? 'UNKNOWN') &&
             checkListWithNone(selectedSaksIds, sak?.fagsakId ?? 'UNKNOWN') &&
             checkDateInterval(datoOpprettet, selectedDateRange)
           ) {
