@@ -5,7 +5,7 @@ import { proxyRegister } from '@app/prometheus/types';
 import type { FastifyRequest } from 'fastify';
 import { Gauge, type LabelValues } from 'prom-client';
 
-const log = getLogger('active-clients');
+const log = getLogger('clients');
 
 const labelNames = [
   'nav_ident',
@@ -23,16 +23,19 @@ const labelNames = [
 
 type LabelNames = (typeof labelNames)[number];
 
-export const uniqueUsersGauge = new Gauge({
-  name: 'active_users',
-  help: 'Number of active unique users. All timestamps are Unix timestamps in milliseconds (UTC). "start_time" is when the session started. "app_start_time" is when the app started.',
+const clientsGauge = new Gauge({
+  name: 'clients',
+  help: 'Number of clients. All timestamps are Unix timestamps in milliseconds (UTC). "start_time" is when the session started. "app_start_time" is when the app started.',
   labelNames,
   registers: [proxyRegister],
 });
 
-/** Parses the user ID from the JWT. */
-export const startUserSession = (req: FastifyRequest<{ Querystring: VersionQueryString }>): (() => void) => {
-  const { navIdent, trace_id, span_id } = req;
+const NOOP = () => undefined;
+
+type EndFn = () => void;
+
+export const startClientSession = (req: FastifyRequest<{ Querystring: VersionQueryString }>): EndFn => {
+  const { navIdent, client_version, trace_id, span_id, headers, query } = req;
 
   if (navIdent.length === 0) {
     log.warn({ msg: 'No NAV-ident related to the session', trace_id, span_id });
@@ -40,19 +43,8 @@ export const startUserSession = (req: FastifyRequest<{ Querystring: VersionQuery
     return NOOP;
   }
 
-  return start(navIdent, req);
-};
-
-const NOOP = () => undefined;
-
-type EndFn = () => void;
-
-const start = (
-  nav_ident: string,
-  { client_version, trace_id, span_id, headers, query }: FastifyRequest<{ Querystring: VersionQueryString }>,
-): EndFn => {
   const labels: LabelValues<LabelNames> = {
-    nav_ident,
+    nav_ident: navIdent,
     client_version: client_version ?? 'UNKNOWN',
     up_to_date_client: client_version === PROXY_VERSION ? 'true' : 'false',
     start_time: Date.now().toString(10),
@@ -65,7 +57,7 @@ const start = (
     system_theme: query.system_theme ?? 'light',
   };
 
-  uniqueUsersGauge.set(labels, 1);
+  clientsGauge.set(labels, 1);
 
-  return () => uniqueUsersGauge.remove(labels);
+  return () => clientsGauge.remove(labels);
 };
