@@ -1,6 +1,7 @@
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { reduxStore } from '@app/redux/configure-store';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { isKabalApiErrorData } from '@app/types/errors';
+import { isApiRejectionError } from '@app/types/errors';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type {
   IFristParams,
@@ -34,10 +35,16 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           updateBehandling(oppgaveId, [['modified', data.modified]]);
           successToast('Frist', date);
-        } catch (e) {
-          errorToast(e, 'frist');
+        } catch (error) {
           undoBehandling();
           undoOppgaveData();
+
+          const heading = 'Kunne ikke oppdatere frist';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -55,10 +62,16 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           updateBehandling(oppgaveId, [['modified', data.modified]]);
           successToast('Mottatt klageinstans', mottattKlageinstans);
-        } catch (e) {
-          errorToast(e, 'Mottatt klageinstans');
+        } catch (error) {
           undoBehandling();
           undoOppgaveData();
+
+          const heading = 'Kunne ikke oppdatere mottatt klageinstans';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -75,9 +88,15 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           updateBehandling(oppgaveId, [['modified', data.modified]]);
           successToast('Mottatt vedtaksinstans', mottattVedtaksinstans);
-        } catch (e) {
-          errorToast(e, 'Mottatt vedtaksinstans');
+        } catch (error) {
           undo();
+
+          const heading = 'Kunne ikke oppdatere mottatt vedtaksinstans';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -100,9 +119,15 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           updateBehandling(oppgaveId, [['modified', data.modified]]);
           successToast('Kjennelse mottatt', kjennelseMottatt);
-        } catch (e) {
-          errorToast(e, 'Kjennelse mottatt');
+        } catch (error) {
           patchResult.undo();
+
+          const heading = 'Kunne ikke oppdatere kjennelse mottatt';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -125,9 +150,15 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           updateBehandling(oppgaveId, [['modified', data.modified]]);
           successToast('Sendt til Trygderetten', sendtTilTrygderetten);
-        } catch (e) {
-          errorToast(e, 'Sendt til Trygderetten');
+        } catch (error) {
           patchResult.undo();
+
+          const heading = 'Kunne ikke oppdatere sendt til Trygderetten';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -169,16 +200,6 @@ const successToast = (name: string, dateString: string | null) => {
       ? `${formattedName} fjernet`
       : `${formattedName} oppdatert til ${isoDateToPretty(dateString) ?? dateString}`,
   );
-};
-
-const errorToast = (e: unknown, name: string) => {
-  const formattedName = name.includes(' ') ? `"${name}"` : name;
-
-  if (isKabalApiErrorData(e)) {
-    toast.error(`Feil ved oppdatering av ${formattedName}: ${e.detail}`);
-  } else {
-    toast.error(`Feil ved oppdatering av ${formattedName}`);
-  }
 };
 
 export const {

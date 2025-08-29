@@ -1,5 +1,7 @@
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import type { INavEmployee } from '@app/types/bruker';
+import { isApiRejectionError } from '@app/types/errors';
 import type { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { format } from 'date-fns';
@@ -71,8 +73,16 @@ export const messagesApi = createApi({
               }),
             ),
           );
-        } catch {
+        } catch (error) {
           patchResult.undo();
+
+          const heading = 'Kunne ikke sende melding';
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),

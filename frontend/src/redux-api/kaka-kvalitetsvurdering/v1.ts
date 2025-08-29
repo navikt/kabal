@@ -1,3 +1,5 @@
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { isApiRejectionError } from '@app/types/errors';
 import type {
   IKvalitetsvurderingBooleans,
   IKvalitetsvurderingRadio,
@@ -47,8 +49,16 @@ export const kvalitetsvurderingV1Api = createApi({
               draft.modified = data.modified;
             }),
           );
-        } catch {
+        } catch (error) {
           patchResult.undo();
+
+          const heading = 'Kunne ikke oppdatere kvalitetsvurdering';
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),

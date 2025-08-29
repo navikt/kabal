@@ -20,8 +20,16 @@ export const brukerApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (error) {
           patchResult.undo();
+
+          const heading = 'Kunne ikke endre innstillinger';
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -44,9 +52,17 @@ export const brukerApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (error) {
           myPatchResult.undo();
           ansattPatchResult.undo();
+
+          const heading = 'Kunne ikke endre signatur';
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -61,8 +77,16 @@ export const brukerApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (error) {
           myPatchResult.undo();
+
+          const heading = 'Kunne ikke endre anonymitet';
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -113,8 +137,16 @@ export const brukerApi = createApi({
           await queryFulfilled;
           toast.success('Forkortelse slettet');
           ABBREVIATIONS.removeAbbreviation(id);
-        } catch {
+        } catch (error) {
           patchResult.undo();
+
+          const heading = 'Kunne ikke slette forkortelse';
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
