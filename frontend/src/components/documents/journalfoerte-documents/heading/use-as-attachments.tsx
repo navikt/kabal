@@ -5,10 +5,7 @@ import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
 import { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import {
-  useCreateVedleggFromJournalfoertDocumentMutation,
-  useDeleteDocumentMutation,
-} from '@app/redux-api/oppgaver/mutations/documents';
+import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { DistribusjonsType, DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
@@ -90,23 +87,4 @@ export const useAttachVedleggFn = () => {
       journalfoerteDokumenter: vedlegg,
       isFinished,
     });
-};
-
-export const useRemoveVedleggFn = () => {
-  const oppgaveId = useOppgaveId();
-  const [deleteDocument] = useDeleteDocumentMutation();
-
-  if (oppgaveId === skipToken) {
-    return null;
-  }
-
-  return (...ids: string[]) =>
-    Promise.all(
-      ids.map((dokumentId) =>
-        deleteDocument({
-          oppgaveId,
-          dokumentId,
-        }),
-      ),
-    );
 };
