@@ -1,5 +1,5 @@
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
-import { errorToast, successToast } from '@app/components/oppgavestyring/toasts';
+import { successToast } from '@app/components/oppgavestyring/toasts';
 import type { OnChange } from '@app/components/oppgavestyring/types';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
@@ -34,15 +34,7 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
           timestamp,
         });
       } catch {
-        errorToast({
-          testId: 'oppgave-set-rol-error-toast',
-          oppgaveId,
-          label: 'rådgivende overlege',
-          fromNavIdent,
-          toNavIdent,
-          onChange,
-          name,
-        });
+        // Error already handled in RTKQ file.
       }
     },
     [rol, oppgaveId, setRol],
