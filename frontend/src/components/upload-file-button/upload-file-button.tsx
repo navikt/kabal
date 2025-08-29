@@ -1,10 +1,11 @@
 import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { BYTES_PER_KB, formatFileSize } from '@app/functions/format-file-size';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUploadFileDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import type { DistribusjonsType } from '@app/types/documents/documents';
 import { UploadIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, Heading, Tooltip } from '@navikt/ds-react';
+import { Button, type ButtonProps, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useRef } from 'react';
 
@@ -71,7 +72,7 @@ export const UploadFileButton = ({
           displayError(
             `«${file.name}» (${formatFileSize(
               file.size,
-            )} MiB) er større enn maksgrensen på ${MAX_SIZE_MIB.toLocaleString()} MiB.`,
+            )}) er større enn maksgrensen på ${MAX_SIZE_MIB.toLocaleString()} MiB.`,
           );
           continue;
         }
