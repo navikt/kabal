@@ -1,4 +1,5 @@
 import { getHeaders } from '@app/headers';
+import { IS_LOCALHOST } from '@app/redux-api/common';
 
 export const loadStaticData = async <T>(url: string, name: string, attempt = 0): Promise<T> => {
   const res = await fetch(url, {
@@ -7,7 +8,10 @@ export const loadStaticData = async <T>(url: string, name: string, attempt = 0):
   });
 
   if (res.status === 401) {
-    window.location.assign('/oauth2/login');
+    if (!IS_LOCALHOST) {
+      window.location.assign('/oauth2/login');
+    }
+
     throw new Error('Ikke innlogget');
   }
 

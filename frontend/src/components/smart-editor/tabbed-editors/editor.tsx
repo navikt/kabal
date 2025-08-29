@@ -23,6 +23,7 @@ import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floati
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
+import { IS_LOCALHOST } from '@app/redux-api/common';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -82,7 +83,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           return;
         }
 
-        if (event.code === 4401) {
+        if (event.code === 4401 && !IS_LOCALHOST) {
           return window.location.assign('/oauth2/login');
         }
 
