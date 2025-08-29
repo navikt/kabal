@@ -96,8 +96,6 @@ export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
 
       return true;
     } catch {
-      toast.error('Kunne ikke fradele saksbehandler.');
-
       return false;
     } finally {
       setIsLoading(false);

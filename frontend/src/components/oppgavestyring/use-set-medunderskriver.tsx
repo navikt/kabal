@@ -1,5 +1,5 @@
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
-import { errorToast, successToast } from '@app/components/oppgavestyring/toasts';
+import { successToast } from '@app/components/oppgavestyring/toasts';
 import type { OnChange } from '@app/components/oppgavestyring/types';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
@@ -47,15 +47,7 @@ export const useSetMedunderskriver = (
           timestamp,
         });
       } catch {
-        errorToast({
-          testId: 'oppgave-set-medunderskriver-error-toast',
-          oppgaveId,
-          label: 'medunderskriver',
-          fromNavIdent,
-          toNavIdent,
-          onChange,
-          name,
-        });
+        // Error already handled in RTKQ file.
       }
     },
     [medunderskrivere, oppgaveId, setMedunderskriver],

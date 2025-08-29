@@ -21,15 +21,7 @@ interface Props extends Pick<ButtonProps, 'variant' | 'size' | 'children'> {
 const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 const INPUT_ACCEPT = ALLOWED_FILE_TYPES.join(', ');
 
-const displayError = (error: string) =>
-  toast.error(
-    <>
-      <Heading size="xsmall" level="1">
-        Kunne ikke laste opp dokument
-      </Heading>
-      <span>{error}</span>
-    </>,
-  );
+const displayError = (error: string) => apiErrorToast('Kunne ikke laste opp dokument', error);
 
 export const UploadFileButton = ({
   variant,
@@ -88,7 +80,7 @@ export const UploadFileButton = ({
           await uploadFile({ file, dokumentTypeId: distributionType, oppgaveId, parentId }).unwrap();
           toast.success(`«${file.name}» (${formatFileSize(file.size)}) ble lastet opp.`);
         } catch {
-          displayError(`Kunne ikke laste opp «${file.name}» (${formatFileSize(file.size)}).`);
+          // Error already handled in RTKQ file.
         }
       }
 
