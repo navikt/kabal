@@ -1,39 +1,38 @@
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type { FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 import { isGenericObject } from './types';
 
-export interface ApiError {
+export interface KabalApiErrorData {
   type: string; // about:blank
   title: string; // Bad Request
   status: number; // 400
   detail: string; // Failed to read request
-  instance: string; // /behandlinger/:id/mottattklageinstans
 }
 
 interface ApiDataError {
-  data: ApiError;
+  data: KabalApiErrorData;
 }
 
 export const isApiDataError = (error: unknown): error is ApiDataError =>
-  isGenericObject(error) && 'data' in error && isApiError(error.data);
+  isGenericObject(error) && 'data' in error && isKabalApiErrorData(error.data);
 
-export const isApiError = (error: unknown): error is ApiError =>
-  isGenericObject(error) &&
-  'type' in error &&
-  'title' in error &&
-  'status' in error &&
-  'instance' in error &&
-  typeof error.type === 'string' &&
-  typeof error.title === 'string' &&
-  typeof error.status === 'number' &&
-  typeof error.instance === 'string';
+export const isKabalApiErrorData = (data: unknown): data is KabalApiErrorData =>
+  isGenericObject(data) &&
+  'type' in data &&
+  'title' in data &&
+  'status' in data &&
+  'detail' in data &&
+  typeof data.type === 'string' &&
+  typeof data.title === 'string' &&
+  typeof data.status === 'number' &&
+  typeof data.detail === 'string';
 
-interface IApiRejectionError {
+export interface ApiRejectionError {
   error: FetchBaseQueryError;
   isUnhandledError: true;
-  meta: unknown;
+  meta: FetchBaseQueryMeta;
 }
 
-export const isApiRejectionError = (error: unknown): error is IApiRejectionError =>
+export const isApiRejectionError = (error: unknown): error is ApiRejectionError =>
   isGenericObject(error) &&
   'error' in error &&
   isGenericObject(error.error) &&

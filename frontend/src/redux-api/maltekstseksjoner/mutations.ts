@@ -1,5 +1,5 @@
 import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import type { KabalValue } from '@app/plate/types';
 import { reduxStore } from '@app/redux/configure-store';
@@ -180,13 +180,13 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
               }),
             ),
           );
-        } catch (e) {
-          const message = 'Kunne ikke fullføre publisere maltekstseksjon.';
+        } catch (error) {
+          const heading = 'Kunne ikke publisere maltekstseksjon';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },

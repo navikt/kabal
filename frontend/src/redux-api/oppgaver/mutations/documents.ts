@@ -1,6 +1,7 @@
 import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
+import { formatFileSize } from '@app/functions/format-file-size';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { reduxStore } from '@app/redux/configure-store';
 import { user } from '@app/static-data/static-data';
@@ -86,15 +87,16 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
-        } catch (e) {
+        } catch (error) {
           undo();
 
-          const message = 'Kunne ikke endre tittel.';
+          const heading = 'Kunne ikke endre tittel';
+          const description = `Kunne ikke endre tittel til «${title}».`;
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error, description);
           } else {
-            toast.error(message);
+            apiErrorToast(heading, description);
           }
         }
       },
@@ -196,13 +198,13 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
               `${data.duplicateJournalfoerteDokumenter.length} av dokumentene er allerede lagt til som vedlegg.`,
             );
           }
-        } catch (e) {
-          const message = 'Kunne ikke endre hoveddokument.';
+        } catch (error) {
+          const heading = 'Kunne ikke endre hoveddokument';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
           documentsPatchResult.undo();
         }
@@ -267,17 +269,17 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch (e) {
+        } catch (error) {
           documentsPatchResult.undo();
           smartEditorPatchResult.undo();
           smartEditorsPatchResult.undo();
 
-          const message = 'Kunne ikke slette dokumentet.';
+          const heading = 'Kunne ikke slette dokumentet';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },
@@ -298,7 +300,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           body: formData,
         };
       },
-      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, file }, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
           dispatch(
@@ -306,13 +308,14 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
               draft.some((d) => d.id === data.id) ? draft : [data, ...draft],
             ),
           );
-        } catch (e) {
-          const message = 'Kunne ikke laste opp dokument.';
+        } catch (error) {
+          const heading = 'Kunne ikke laste opp dokument';
+          const description = `Kunne ikke laste opp «${file.name}» (${formatFileSize(file.size)}).`;
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error, description);
           } else {
-            toast.error(message);
+            apiErrorToast(heading, description);
           }
         }
       },
@@ -425,15 +428,33 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
               `${data.duplicateJournalfoerteDokumenter.length} av dokumentene er allerede lagt til som vedlegg.`,
             );
           }
-        } catch (e) {
+        } catch (error) {
           getDocumentsPatchResult.undo();
 
-          const message = 'Kunne ikke sette journalpost(er) som vedlegg.';
+          const heading = 'Kunne ikke legge til journalpost(er) som vedlegg';
+          const titles: string[] = [];
+          let titlesLength = 0;
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          for (const { tittel } of journalfoerteDokumenter) {
+            if (tittel === null) {
+              continue;
+            }
+
+            titles.push(`- «${tittel}»`);
+            titlesLength += tittel.length + 2; // 2 for the « and »
+
+            if (titlesLength > 100) {
+              titles.push(`...og ${journalfoerteDokumenter.length - titles.length} til.`);
+              break;
+            }
+          }
+
+          const description = titles.join('\n');
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error, description);
           } else {
-            toast.error(message);
+            apiErrorToast(heading, description);
           }
         }
       },

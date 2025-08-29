@@ -1,6 +1,6 @@
 import type { IDocument } from '@app/types/documents/documents';
 import { DocumentValidationErrorType, type NO_RECEIVERS_ERROR } from '@app/types/documents/validation';
-import { type ApiError, isApiDataError } from '@app/types/errors';
+import { isApiDataError, type KabalApiErrorData } from '@app/types/errors';
 
 export interface FinishProps extends React.RefAttributes<HTMLDivElement> {
   document: IDocument;
@@ -28,7 +28,7 @@ interface DocumentError {
   type: DocumentValidationErrorType;
 }
 
-interface FinishValidationError extends ApiError {
+interface FinishValidationError extends KabalApiErrorData {
   documents: {
     dokumentId: string;
     errors: DocumentError[];

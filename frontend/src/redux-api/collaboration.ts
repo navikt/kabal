@@ -1,5 +1,4 @@
-import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { PROXY_BASE_QUERY } from '@app/redux-api/common';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
@@ -17,7 +16,7 @@ export const collaborationApi = createApi({
         method: 'POST',
         body,
       }),
-      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ oppgaveId, templateId, tittel }, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
 
@@ -28,13 +27,14 @@ export const collaborationApi = createApi({
           );
 
           dispatch(documentsQuerySlice.util.upsertQueryData('getDocument', { dokumentId: data.id, oppgaveId }, data));
-        } catch (e) {
-          const message = 'Kunne ikke opprette dokument.';
+        } catch (error) {
+          const heading = 'Kunne ikke opprette dokument';
+          const description = `Kunne ikke opprette smartdokument med navn «${tittel}» og mal «${templateId}».`;
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error, description);
           } else {
-            toast.error(message);
+            apiErrorToast(heading, description);
           }
         }
       },
