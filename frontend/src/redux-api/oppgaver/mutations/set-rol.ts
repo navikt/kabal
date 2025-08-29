@@ -1,5 +1,5 @@
-import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { formatEmployeeNameAndId } from '@app/domain/employee-name';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
 import { FlowState } from '@app/types/oppgave-common';
@@ -51,15 +51,19 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
               draft.rol.returnertDate = null;
             }),
           );
-        } catch (e) {
+        } catch (error) {
           patchResult.undo();
 
-          const message = 'Kunne ikke oppdatere rådgivende overlege.';
+          const isRemove = employee === null;
+          const heading = isRemove ? 'Kunne ikke fjerne rådgivende overlege' : 'Kunne ikke endre rådgivende overlege';
+          const description = isRemove
+            ? undefined
+            : `Kunne ikke sette ${formatEmployeeNameAndId(employee)} som rådgivende overlege.`;
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error, description);
           } else {
-            toast.error(message);
+            apiErrorToast(heading, description);
           }
         }
       },

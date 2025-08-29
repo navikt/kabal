@@ -1,5 +1,5 @@
 import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import {
   isListGodFormulering,
   isListPlainText,
@@ -339,17 +339,17 @@ const textsMutationSlice = textsApi.injectEndpoints({
           }
 
           invalidateConsumerText(id);
-        } catch (e) {
+        } catch (error) {
           idPatchResult.undo();
           listPatchResult.undo();
           versionsPatchResult.undo();
 
-          const message = 'Kunne ikke avpublisere tekst.';
+          const heading = 'Kunne ikke avpublisere tekst';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },

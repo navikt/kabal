@@ -68,8 +68,6 @@ export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
 
       return true;
     } catch {
-      toast.error('Kunne ikke tildele saksbehandler');
-
       return false;
     } finally {
       setIsLoading(false);

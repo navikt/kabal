@@ -1,5 +1,4 @@
-import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { isApiRejectionError } from '@app/types/errors';
 import type { BehandlingGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { IS_LOCALHOST } from '../../common';
@@ -27,13 +26,13 @@ const setGosysOppgaveMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async (_, { queryFulfilled }) => {
         try {
           await queryFulfilled;
-        } catch (e) {
-          const message = 'Kunne ikke oppdatere Gosysoppgave.';
+        } catch (error) {
+          const heading = 'Kunne ikke oppdatere Gosysoppgave';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },

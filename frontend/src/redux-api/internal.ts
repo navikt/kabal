@@ -1,6 +1,5 @@
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
-import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
@@ -76,12 +75,12 @@ export const kabalInternalApi = createApi({
         } catch (error) {
           patchResult.undo();
 
-          const message = 'Kunne ikke fullføre oppgave.';
+          const heading = 'Kunne ikke fullføre oppgave';
 
           if (isApiRejectionError(error)) {
-            apiErrorToast(message, error.error);
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },

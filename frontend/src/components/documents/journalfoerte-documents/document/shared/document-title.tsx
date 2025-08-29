@@ -99,7 +99,7 @@ const DocumentTitleInternal = memo(
             hideLabel
             setFilename={(filename) => {
               if (oppgaveId !== skipToken) {
-                setTitle({ journalpostId, dokumentInfoId, tittel: filename, oppgaveId });
+                setTitle({ journalpostId, dokumentInfoId, tittel: filename, oppgaveId, originalTitle: tittel });
               }
             }}
             autoFocus

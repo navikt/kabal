@@ -1,5 +1,4 @@
-import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { isApiRejectionError } from '@app/types/errors';
 import type { IOppgavebehandlingHjemlerUpdateParams } from '@app/types/oppgavebehandling/params';
 import { IS_LOCALHOST } from '../../common';
@@ -29,15 +28,15 @@ const setRegistreringshjemlerMutationSlice = oppgaverApi.injectEndpoints({
               draft.modified = data.modified;
             }),
           );
-        } catch (e) {
+        } catch (error) {
           patchResult.undo();
 
-          const message = 'Kunne ikke oppdatere hjemler.';
+          const heading = 'Kunne ikke oppdatere hjemler';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },

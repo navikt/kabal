@@ -1,6 +1,6 @@
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { KABAL_API_BASE_QUERY } from '@app/redux-api/common';
 import { isApiRejectionError } from '@app/types/errors';
 import type { SvarbrevSetting, UpdateSvarbrevSettingParams } from '@app/types/svarbrev';
@@ -36,12 +36,12 @@ export const svarbrevApi = createApi({
           );
         } catch (error) {
           patchResult.undo();
-          const message = 'Oppdatering av innstilling feilet';
+          const heading = 'Oppdatering av innstilling feilet';
 
           if (isApiRejectionError(error)) {
-            apiErrorToast(message, error.error);
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },

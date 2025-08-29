@@ -1,5 +1,4 @@
-import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { isApiRejectionError } from '@app/types/errors';
 import { createApi } from '@reduxjs/toolkit/query/react';
@@ -11,6 +10,7 @@ interface ISetTitleUpdate {
   dokumentInfoId: string;
   oppgaveId: string;
   tittel: string;
+  originalTitle: string;
 }
 
 interface ISetTitleResponse {
@@ -27,7 +27,7 @@ export const journalposterApi = createApi({
         method: 'PUT',
         body: { tittel },
       }),
-      onQueryStarted: async ({ tittel, dokumentInfoId, oppgaveId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ tittel, dokumentInfoId, oppgaveId, originalTitle }, { dispatch, queryFulfilled }) => {
         const journalfoertePatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
             for (let i = draft.dokumenter.length - 1; i >= 0; i--) {
@@ -70,13 +70,14 @@ export const journalposterApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch (e) {
-          const message = 'Kunne ikke oppdatere tittel.';
+        } catch (error) {
+          const heading = 'Kunne ikke oppdatere dokumentnavn';
+          const description = `Kunne ikke oppdatere dokumentnavn fra «${originalTitle}» til «${tittel}».`;
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error, description);
           } else {
-            toast.error(message);
+            apiErrorToast(heading, description);
           }
 
           journalfoertePatchResult.undo();
