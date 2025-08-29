@@ -79,7 +79,6 @@ export const Abbreviation = () => {
       pushEvent('smart-editor-add-abbreviation', 'smart-editor', { short, long });
     } catch (error) {
       console.error('Failed to add abbreviation:', error);
-      toast.error('Kunne ikke legge til forkortelse.');
     }
   };
 
