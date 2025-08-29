@@ -1,8 +1,8 @@
 import { AppTheme, useAppTheme } from '@app/app-theme';
 import { toast } from '@app/components/toast/store';
-import { Details } from '@app/components/toast/toast-content/fetch-error-toast';
+import { Section } from '@app/components/toast/toast-content/api-error-toast';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
-import { type ApiError, isApiError } from '@app/types/errors';
+import { isKabalApiErrorData, type KabalApiErrorData } from '@app/types/errors';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, BoxNew, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -113,7 +113,7 @@ export const usePdfData = (url: string | undefined, query?: Record<string, strin
       if (!response.ok) {
         const json = await response.json();
 
-        if (isApiError(json)) {
+        if (isKabalApiErrorData(json)) {
           setError(`${json.title}: ${json.status} - ${json.detail}`);
           toast.error(<ErrorMessage error={json} />);
         } else {
@@ -158,7 +158,7 @@ export const usePdfData = (url: string | undefined, query?: Record<string, strin
 
 const PDFparams = '#toolbar=1&view=fitH&zoom=page-width';
 
-const ErrorMessage = ({ error }: { error: string | ApiError }) => (
+const ErrorMessage = ({ error }: { error: string | KabalApiErrorData }) => (
   <VStack>
     <Heading size="xsmall" level="1" spacing>
       Feil ved henting av PDF
@@ -168,14 +168,14 @@ const ErrorMessage = ({ error }: { error: string | ApiError }) => (
       Ta kontakt med Team Klage på Teams.
     </BodyShort>
 
-    {isApiError(error) ? (
+    {isKabalApiErrorData(error) ? (
       <>
-        <Details label="Tittel">{error.title}</Details>
-        <Details label="Statuskode">{error.status}</Details>
-        <Details label="Detaljer">{error.detail}</Details>
+        <Section heading="Tittel">{error.title}</Section>
+        <Section heading="Statuskode">{error.status}</Section>
+        <Section heading="Detaljer">{error.detail}</Section>
       </>
     ) : (
-      <Details label="Detaljer">{error}</Details>
+      <Section heading="Detaljer">{error}</Section>
     )}
   </VStack>
 );

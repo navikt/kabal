@@ -26,7 +26,7 @@ export const staggeredBaseQuery = (baseUrl: string) => {
       const status = result.meta?.response?.status;
 
       if (status === undefined) {
-        retry.fail(result.error);
+        retry.fail(result.error, result.meta);
       }
 
       if (status === 401) {
@@ -34,17 +34,17 @@ export const staggeredBaseQuery = (baseUrl: string) => {
           window.location.assign('/oauth2/login');
         }
 
-        retry.fail(result.error);
+        retry.fail(result.error, result.meta);
       }
 
       if (status >= 400 && status < 500) {
-        retry.fail(result.error);
+        retry.fail(result.error, result.meta);
       }
 
       return result;
     },
     {
-      maxRetries: 10,
+      maxRetries: 2,
       backoff: (attempt) => new Promise((resolve) => setTimeout(resolve, 1000 * attempt)),
     },
   );

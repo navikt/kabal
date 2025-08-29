@@ -80,13 +80,19 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
     const { journalpostId } = focusedDocument;
 
     try {
-      const { tittel } = await updateTitle({ oppgaveId, journalpostId, dokumentInfoId, tittel: trimmedTitle }).unwrap();
+      const { tittel } = await updateTitle({
+        oppgaveId,
+        journalpostId,
+        dokumentInfoId,
+        tittel: trimmedTitle,
+        originalTitle,
+      }).unwrap();
+
       setTitle(tittel);
       modalRef.current?.close();
       toast.success(`Dokumentnavn oppdatert fra «${originalTitle}» til «${tittel}»`);
     } catch {
       setTitle(originalTitle);
-      toast.error(`Kunne ikke oppdatere dokumentnavn fra «${originalTitle}» til «${title}»`);
     }
   };
 

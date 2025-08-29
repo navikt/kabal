@@ -1,7 +1,7 @@
 import { CountdownButton } from '@app/components/countdown-button/countdown-button';
 import type { OnChange } from '@app/components/oppgavestyring/types';
 import { toast } from '@app/components/toast/store';
-import { Button, HStack } from '@navikt/ds-react';
+import { HStack } from '@navikt/ds-react';
 
 interface ToastProps {
   testId: string;
@@ -45,18 +45,3 @@ const Tildelt = ({
     </HStack>
   </div>
 );
-
-export const errorToast = ({ testId, fromNavIdent, label, name, onChange, oppgaveId, toNavIdent }: ToastProps) => {
-  toast.error(
-    <div data-testid={testId} data-oppgaveid={oppgaveId}>
-      <span>
-        Kunne ikke sette {name} ({toNavIdent}) som {label}.
-      </span>
-      <HStack justify="space-between" gap="0 2">
-        <Button size="small" variant="tertiary-neutral" onClick={() => onChange(toNavIdent, fromNavIdent)}>
-          Prøv igjen
-        </Button>
-      </HStack>
-    </div>,
-  );
-};

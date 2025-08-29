@@ -1,6 +1,6 @@
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
 import type { ISettPaaVentParams } from '@app/types/oppgavebehandling/params';
@@ -38,10 +38,16 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
         try {
           await queryFulfilled;
           toast.success('Oppgaven er satt på vent');
-        } catch {
+        } catch (error) {
           behandlingPatchResult.undo();
           oppgavePatchResult.undo();
-          toast.error('Kunne ikke sette på vent.');
+
+          const heading = 'Kunne ikke sette på vent';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -65,15 +71,15 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
             }),
           );
           toast.success('Venteperiode avsluttet.');
-        } catch (e) {
+        } catch (error) {
           patchResult.undo();
 
-          const message = 'Kunne ikke fjerne satt på vent.';
+          const heading = 'Kunne ikke fjerne satt på vent';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },

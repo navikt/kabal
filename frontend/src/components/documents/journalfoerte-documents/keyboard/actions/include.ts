@@ -89,7 +89,7 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
             await removeAllIncludedDocuments({ oppgaveId }).unwrap();
             toast.success(`Ekskluderte ${d(selectedAndIncluded.length)}. Ingen dokumenter er nå inkluderte.`);
           } catch {
-            toast.error(`Kunne ikke ekskludere ${d(selectedAndIncluded.length)}.`);
+            // Error already handled in RTKQ file.
           }
           return;
         }
@@ -104,7 +104,7 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
             await removeIncludedDocuments({ oppgaveId, documentIdList }).unwrap();
             toast.success(`Ekskluderte ${d(selectedAndIncluded.length)}.`);
           } catch {
-            toast.error(`Kunne ikke ekskludere ${d(selectedAndIncluded.length)}.`);
+            // Error already handled in RTKQ file.
           }
 
           return;
@@ -120,7 +120,7 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
             await tilknyttDocuments({ oppgaveId, documentIdList }).unwrap();
             toast.success(`Inkluderte ${d(selectedAndIncludable.length)}.`);
           } catch {
-            toast.error(`Kunne ikke inkludere ${d(selectedAndIncludable.length)}.`);
+            // Error already handled in RTKQ file.
           }
         }
 

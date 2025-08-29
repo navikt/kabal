@@ -1,5 +1,4 @@
-import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import type { IApiValidationResponse } from '@app/functions/error-type-guard';
 import { IS_LOCALHOST, KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
 import { OppgaveTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
@@ -63,13 +62,13 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async (_, { queryFulfilled }) => {
         try {
           await queryFulfilled;
-        } catch (e) {
-          const message = 'Kunne ikke hente oppgavebehandling.';
+        } catch (error) {
+          const heading = 'Kunne ikke hente oppgavebehandling';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },
@@ -178,13 +177,13 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
               }
             }),
           );
-        } catch (e) {
-          const message = 'Kunne ikke hente saksbehandler.';
+        } catch (error) {
+          const heading = 'Kunne ikke hente saksbehandler';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },
@@ -194,13 +193,13 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async (_, { queryFulfilled }) => {
         try {
           await queryFulfilled;
-        } catch (e) {
-          const message = 'Kunne ikke hente saken gjelder.';
+        } catch (error) {
+          const heading = 'Kunne ikke hente saken gjelder';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },

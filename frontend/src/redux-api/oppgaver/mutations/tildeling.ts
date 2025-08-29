@@ -1,6 +1,6 @@
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
-import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { formatEmployeeNameAndId } from '@app/domain/employee-name';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
@@ -65,15 +65,16 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
               saksbehandler: data.saksbehandler,
             })),
           );
-        } catch (e) {
+        } catch (error) {
           optimisticBehandling.undo();
 
-          const message = 'Kunne ikke tildele oppgave.';
+          const heading = 'Kunne ikke tildele oppgaven';
+          const description = `Kunne ikke tildele oppgaven til ${formatEmployeeNameAndId(employee)}.`;
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error, description);
           } else {
-            toast.error(message);
+            apiErrorToast(heading, description);
           }
         }
       },
@@ -169,16 +170,16 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
               saksbehandler: null,
             })),
           );
-        } catch (e) {
+        } catch (error) {
           optimisticBehandling.undo();
           optimisticFradelingReason.undo();
 
-          const message = 'Kunne ikke fradele oppgave.';
+          const heading = 'Kunne ikke fradele oppgaven';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },

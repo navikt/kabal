@@ -1,10 +1,11 @@
 import { toast } from '@app/components/toast/store';
+import { apiErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { BYTES_PER_KB, formatFileSize } from '@app/functions/format-file-size';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUploadFileDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import type { DistribusjonsType } from '@app/types/documents/documents';
 import { UploadIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, Heading, Tooltip } from '@navikt/ds-react';
+import { Button, type ButtonProps, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useRef } from 'react';
 
@@ -21,15 +22,7 @@ interface Props extends Pick<ButtonProps, 'variant' | 'size' | 'children'> {
 const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 const INPUT_ACCEPT = ALLOWED_FILE_TYPES.join(', ');
 
-const displayError = (error: string) =>
-  toast.error(
-    <>
-      <Heading size="xsmall" level="1">
-        Kunne ikke laste opp dokument
-      </Heading>
-      <span>{error}</span>
-    </>,
-  );
+const displayError = (error: string) => apiErrorToast('Kunne ikke laste opp dokument', error);
 
 export const UploadFileButton = ({
   variant,
@@ -79,7 +72,7 @@ export const UploadFileButton = ({
           displayError(
             `«${file.name}» (${formatFileSize(
               file.size,
-            )} MiB) er større enn maksgrensen på ${MAX_SIZE_MIB.toLocaleString()} MiB.`,
+            )}) er større enn maksgrensen på ${MAX_SIZE_MIB.toLocaleString()} MiB.`,
           );
           continue;
         }
@@ -88,7 +81,7 @@ export const UploadFileButton = ({
           await uploadFile({ file, dokumentTypeId: distributionType, oppgaveId, parentId }).unwrap();
           toast.success(`«${file.name}» (${formatFileSize(file.size)}) ble lastet opp.`);
         } catch {
-          displayError(`Kunne ikke laste opp «${file.name}» (${formatFileSize(file.size)}).`);
+          // Error already handled in RTKQ file.
         }
       }
 
