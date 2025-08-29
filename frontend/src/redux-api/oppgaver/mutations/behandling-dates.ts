@@ -1,6 +1,6 @@
 import { reduxStore } from '@app/redux/configure-store';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { isApiError } from '@app/types/errors';
+import { isKabalApiErrorData } from '@app/types/errors';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type {
   IFristParams,
@@ -174,7 +174,7 @@ const successToast = (name: string, dateString: string | null) => {
 const errorToast = (e: unknown, name: string) => {
   const formattedName = name.includes(' ') ? `"${name}"` : name;
 
-  if (isApiError(e)) {
+  if (isKabalApiErrorData(e)) {
     toast.error(`Feil ved oppdatering av ${formattedName}: ${e.detail}`);
   } else {
     toast.error(`Feil ved oppdatering av ${formattedName}`);

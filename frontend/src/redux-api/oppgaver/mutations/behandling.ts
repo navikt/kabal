@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { formatIdNumber } from '@app/functions/format-id';
 import { reduxStore } from '@app/redux/configure-store';
@@ -9,7 +9,6 @@ import { forlengetBehandlingstidApi } from '@app/redux-api/forlenget-behandlings
 import { getFullmektigBody, getFullmektigMessage } from '@app/redux-api/oppgaver/mutations/fullmektig-helpers';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
-import type { IFullmektig } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type {
   IFinishOppgavebehandlingParams,
@@ -77,13 +76,13 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       }),
       extraOptions: { maxRetries: 0 },
       onQueryStarted: ({ oppgaveId, kvalitetsvurderingId }, { queryFulfilled }) => {
-        const catchFn = (e: unknown) => {
-          const message = 'Kunne ikke fullføre behandling.';
+        const catchFn = (error: unknown) => {
+          const heading = 'Kunne ikke fullføre behandling';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         };
 
@@ -98,18 +97,18 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       }),
       extraOptions: { maxRetries: 0 },
       onQueryStarted: ({ oppgaveId, kvalitetsvurderingId }, { queryFulfilled }) => {
-        const catchFn = (e: unknown) => {
-          const message = 'Kunne ikke fullføre behandling.';
+        const catchFn = (error: unknown) => {
+          const heading = 'Kunne ikke fullføre behandling';
 
-          if (isApiRejectionError(e)) {
+          if (isApiRejectionError(error)) {
             // These will be shown inline in the modal
-            if (isReduxValidationResponse(e.error)) {
+            if (isReduxValidationResponse(error.error)) {
               return;
             }
 
-            apiErrorToast(message, e.error);
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         };
 
@@ -123,8 +122,7 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         body: getFullmektigBody(fullmektig),
       }),
       onQueryStarted: async ({ oppgaveId, fullmektig }, { queryFulfilled, dispatch }) => {
-        const fm: IFullmektig | null = fullmektig === null ? null : { ...fullmektig, id: fullmektig.id ?? 'temp' };
-        const undo = update(oppgaveId, { prosessfullmektig: fm });
+        const undo = update(oppgaveId, { prosessfullmektig: fullmektig });
 
         const forlengetBehandlingstidPatchResult = dispatch(
           forlengetBehandlingstidApi.util.updateQueryData('getOrCreate', oppgaveId, (draft) => {
@@ -137,15 +135,20 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           update(oppgaveId, data);
 
           toast.success(getFullmektigMessage(fullmektig));
-        } catch (e) {
+        } catch (error) {
           undo();
           forlengetBehandlingstidPatchResult.undo();
-          const message = 'Kunne ikke endre fullmektig.';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          const isRemove = fullmektig === null;
+          const heading = isRemove ? 'Kunne ikke fjerne fullmektig' : 'Kunne ikke endre fullmektig';
+          const description = isRemove
+            ? undefined
+            : `Kunne ikke endre fullmektig til ${fullmektig.name ?? '<Uten navn>'} (${fullmektig.identifikator ?? '<Uten ID>'}).`;
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error, description);
           } else {
-            toast.error(message);
+            apiErrorToast(heading, description);
           }
         }
       },
@@ -162,15 +165,16 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           update(oppgaveId, data);
-          toast.success(`Klager endret til ${klager.name} (${formatIdNumber(klager.identifikator)})`);
-        } catch (e) {
+          toast.success(`Klager endret til «${klager.name}» (${formatIdNumber(klager.identifikator)})`);
+        } catch (error) {
           undo();
-          const message = 'Kunne ikke endre klager.';
+          const heading = 'Kunne ikke endre klager';
+          const description = `Kunne ikke endre klager til «${klager.name ?? '<Uten navn>'}» (${formatIdNumber(klager.identifikator)}).`;
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error, description);
           } else {
-            toast.error(message);
+            apiErrorToast(heading, description);
           }
         }
       },
@@ -188,14 +192,14 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           update(oppgaveId, data);
           toast.success('Innsendingshjemler oppdatert');
-        } catch (e) {
+        } catch (error) {
           undo();
-          const message = 'Kunne ikke oppdatere innsendingshjemler.';
+          const heading = 'Kunne ikke oppdatere innsendingshjemler';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },
@@ -218,13 +222,13 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
             }),
           );
           toast.success('Oppgave feilregistrert');
-        } catch (e) {
-          const message = 'Kunne ikke feilregistrere.';
+        } catch (error) {
+          const heading = 'Kunne ikke feilregistrere oppgave';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },
@@ -240,15 +244,15 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         try {
           await queryFulfilled;
           toast.success('Ny ankebehandling opprettet');
-        } catch (e) {
+        } catch (error) {
           undo();
 
-          const message = 'Feil ved oppretting av ny ankebehandling.';
+          const heading = 'Kunne ikke opprette ny ankebehandling';
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },

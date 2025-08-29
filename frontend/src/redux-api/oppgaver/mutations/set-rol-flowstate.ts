@@ -1,5 +1,4 @@
-import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
 import { FlowState } from '@app/types/oppgave-common';
@@ -43,15 +42,15 @@ const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
               draft.rol.returnertDate = null;
             }),
           );
-        } catch (e) {
+        } catch (error) {
           oppgavePatchResult.undo();
 
-          const message = ERRORS[flowState];
+          const heading = ERRORS[flowState];
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },
@@ -60,9 +59,9 @@ const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
 });
 
 const ERRORS: Record<FlowState, string> = {
-  [FlowState.SENT]: 'Kunne ikke sende til rådgivende overlege.',
-  [FlowState.RETURNED]: 'Kunne ikke returnere til saksbehandler.',
-  [FlowState.NOT_SENT]: 'Kunne ikke sette tilbake til ikke sendt.',
+  [FlowState.SENT]: 'Kunne ikke sende til rådgivende overlege',
+  [FlowState.RETURNED]: 'Kunne ikke returnere til saksbehandler',
+  [FlowState.NOT_SENT]: 'Kunne ikke sette tilbake til ikke sendt',
 };
 
 export const { useSetRolStateMutation } = setRolStateMutationSlice;

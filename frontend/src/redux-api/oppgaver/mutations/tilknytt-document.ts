@@ -1,5 +1,4 @@
-import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/fetch-error-toast';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { isApiRejectionError } from '@app/types/errors';
 import type { IBatchDocumentParams } from '@app/types/oppgavebehandling/params';
@@ -42,15 +41,15 @@ const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch (e) {
+        } catch (error) {
           detailsResult.undo();
 
-          const message = `Kunne ikke tilknytte ${documentIdList.length === 1 ? 'dokument' : 'dokumenter'}.`;
+          const heading = `Kunne ikke tilknytte ${documentIdList.length === 1 ? 'dokument' : 'dokumenter'}`;
 
-          if (isApiRejectionError(e)) {
-            apiErrorToast(message, e.error);
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
           } else {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },

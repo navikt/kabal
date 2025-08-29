@@ -9,7 +9,7 @@ export interface ErrorMessage {
 }
 
 export const getErrorData = (error: FetchBaseQueryError | SerializedError | undefined): ErrorMessage => {
-  if (typeof error === 'undefined') {
+  if (error === undefined) {
     return { title: 'Ukjent feil' };
   }
 
