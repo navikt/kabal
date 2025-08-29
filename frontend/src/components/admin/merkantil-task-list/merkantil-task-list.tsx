@@ -40,16 +40,14 @@ const TaskList = () => {
   const [filter, setFilter] = useState(StatusFilter.ALL);
 
   const tasks = useMemo(() => {
-    return data.filter((task) => {
-      switch (filter) {
-        case StatusFilter.ALL:
-          return true;
-        case StatusFilter.HANDLED:
-          return task.dateHandled !== null;
-        case StatusFilter.UNHANDLED:
-          return task.dateHandled === null;
-      }
-    });
+    switch (filter) {
+      case StatusFilter.ALL:
+        return data;
+      case StatusFilter.HANDLED:
+        return data.filter((task) => task.dateHandled !== null);
+      case StatusFilter.UNHANDLED:
+        return data.filter((task) => task.dateHandled === null);
+    }
   }, [data, filter]);
 
   if (isError) {
