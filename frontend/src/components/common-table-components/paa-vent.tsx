@@ -15,10 +15,13 @@ export const PaaVentTil = ({ sattPaaVent }: Props) => {
 
   const prettyFrom = isoDateToPretty(from) ?? 'Ukjent dato';
   const prettyTo = isoDateToPretty(to) ?? 'Ukjent dato';
-  const className = isExpired ? EXPIRED_TEXT_CLASS : undefined;
 
   return (
-    <time className={className} dateTime={to} title={`Satt på vent fra ${prettyFrom}`}>
+    <time
+      className={isExpired ? 'text-ax-text-danger-decoration' : undefined}
+      dateTime={to}
+      title={`Satt på vent fra ${prettyFrom}`}
+    >
       {prettyTo}
     </time>
   );
@@ -46,5 +49,3 @@ export const PaaVentReason = ({ sattPaaVent }: Props) => {
     </div>
   );
 };
-
-const EXPIRED_TEXT_CLASS = 'text-surface-danger';
