@@ -1,0 +1,55 @@
+import { NAIS_CLUSTER_NAME } from '@app/config/config';
+import { requiredEnvString } from '@app/config/env-var';
+import { getLogger } from '@app/logger';
+import { type Static, Type } from '@sinclair/typebox';
+import { TypeCompiler } from '@sinclair/typebox/compiler';
+
+const TOKEN_ENDPOINT = requiredEnvString('NAIS_TOKEN_ENDPOINT');
+
+const target = `api://${NAIS_CLUSTER_NAME}.klage.kabal-api/.default`;
+
+const log = getLogger('azure-token');
+
+export const getToken = async (): Promise<TokenResponse> => {
+  const start = performance.now();
+
+  const res = await fetch(TOKEN_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      identity_provider: 'azuread',
+      target,
+    }),
+  });
+
+  const duration = performance.now() - start;
+
+  if (!res.ok) {
+    log.error({ msg: 'Failed to fetch Azure token', data: { status: res.status, duration } });
+
+    throw new Error(`Failed to fetch Azure token: ${res.statusText}`);
+  }
+
+  const data = await res.json();
+
+  if (!CHECKER.Check(data)) {
+    const errors = [...CHECKER.Errors(data)].join(', ');
+    log.error({ msg: 'Invalid Azure token response', data: { status: res.status, duration, errors } });
+
+    throw new Error(`Invalid Azure token response: ${errors}`);
+  }
+
+  return data;
+};
+
+const RESPONSE_TYPE = Type.Object({
+  access_token: Type.String(),
+  expires_in: Type.Number(),
+  token_type: Type.String(),
+});
+
+const CHECKER = TypeCompiler.Compile(RESPONSE_TYPE);
+
+type TokenResponse = Static<typeof RESPONSE_TYPE>;

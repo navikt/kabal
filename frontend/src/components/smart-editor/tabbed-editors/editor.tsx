@@ -28,7 +28,7 @@ import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documen
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { isObject } from '@grafana/faro-web-sdk';
-import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon } from '@navikt/aksel-icons';
+import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, EyeIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { BoxNew, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from '@platejs/core/react';
 import type { YjsProviderConfig } from '@platejs/yjs';
@@ -72,12 +72,18 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const { newCommentSelection, hasWriteAccess } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
   const [isConnected, setIsConnected] = useState(false);
+  const [readOnly, setReadOnly] = useState(!hasWriteAccess);
 
   const provider: YjsProviderConfig = {
     type: 'hocuspocus',
     options: {
       url: `/collaboration/behandlinger/${oppgave.id}/dokumenter/${id}`,
       name: id,
+      token: user.navIdent,
+      onAuthenticated(data) {
+        console.log('User authenticated:', data.scope);
+        setReadOnly(data.scope === 'readonly');
+      },
       onClose: async ({ event }) => {
         if (event.code === 1000 || event.code === 1001 || event.code === 1005) {
           return;
@@ -173,7 +179,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     >
       <Plate<RichTextEditor>
         editor={editor}
-        readOnly={!hasWriteAccess}
+        readOnly={!hasWriteAccess || readOnly}
         decorate={({ entry }) => {
           const [node, path] = entry;
           if (newCommentSelection === null || RangeApi.isCollapsed(newCommentSelection) || !TextApi.isText(node)) {
@@ -201,7 +207,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           return [];
         }}
       >
-        <PlateContext smartDocument={smartDocument} oppgave={oppgave} isConnected={isConnected} />
+        <PlateContext smartDocument={smartDocument} oppgave={oppgave} isConnected={isConnected} readOnly={readOnly} />
       </Plate>
     </VStack>
   );
@@ -211,6 +217,7 @@ interface PlateContextProps {
   smartDocument: ISmartDocumentOrAttachment;
   oppgave: IOppgavebehandling;
   isConnected: boolean;
+  readOnly: boolean;
 }
 
 // Copy-paste from Plate docs
@@ -224,7 +231,7 @@ const useMounted = () => {
   return mounted;
 };
 
-const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps) => {
+const PlateContext = ({ smartDocument, oppgave, isConnected, readOnly }: PlateContextProps) => {
   const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { showAnnotationsAtOrigin, showHistory } = useContext(SmartEditorContext);
@@ -250,7 +257,7 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
                 size: 'small',
               }}
             >
-              <EditorWithNewCommentAndFloatingToolbar id={id} isConnected={isConnected} />
+              <EditorWithNewCommentAndFloatingToolbar id={id} isConnected={isConnected} readonly={readOnly} />
             </ErrorBoundary>
           </VStack>
 
@@ -263,9 +270,21 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
       </HStack>
 
       <StatusBar>
+        <Tooltip content={readOnly ? 'Lesemodus' : 'Skrivemodus'}>
+          <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="2">
+            <BoxNew as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="auto 0">
+              {readOnly ? (
+                <EyeIcon aria-hidden role="presentation" fontSize={24} color="var(--ax-text-neutral)" />
+              ) : (
+                <PencilWritingIcon aria-hidden role="presentation" fontSize={24} color="var(--ax-text-neutral)" />
+              )}
+            </BoxNew>
+          </HStack>
+        </Tooltip>
+
         <Tooltip content={isConnected ? 'Tilkoblet' : 'Frakoblet'}>
           <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="2">
-            <BoxNew as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="auto 2">
+            <BoxNew as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="0 2">
               {isConnected ? (
                 <CloudFillIcon
                   aria-hidden
@@ -284,6 +303,7 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
             </BoxNew>
           </HStack>
         </Tooltip>
+
         <VersionStatus oppgaveId={oppgave.id} dokumentId={id} />
       </StatusBar>
     </>
@@ -293,9 +313,14 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
 interface EditorWithNewCommentAndFloatingToolbarProps {
   id: string;
   isConnected: boolean;
+  readonly: boolean;
 }
 
-const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithNewCommentAndFloatingToolbarProps) => {
+const EditorWithNewCommentAndFloatingToolbar = ({
+  id,
+  isConnected,
+  readonly,
+}: EditorWithNewCommentAndFloatingToolbarProps) => {
   const { sheetRef, hasWriteAccess } = useContext(SmartEditorContext);
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const lang = useSmartEditorSpellCheckLanguage();
@@ -309,7 +334,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id, isConnected }: EditorWithN
       <FloatingSaksbehandlerToolbar container={containerElement} editorId={id} />
       <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
 
-      <KabalPlateEditor id={id} readOnly={!(hasWriteAccess && isConnected)} lang={lang} />
+      <KabalPlateEditor id={id} readOnly={!(hasWriteAccess && isConnected) || readonly} lang={lang} />
     </Sheet>
   );
 };

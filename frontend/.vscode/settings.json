@@ -21,6 +21,7 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "workbench.editor.closeOnFileDelete": true,
+  "biome.lsp.bin": "../node_modules/.bin/biome",
   "npm-intellisense.importQuotes": "'",
   "npm-intellisense.importES6": true,
   "npm-intellisense.showBuildInLibs": true,

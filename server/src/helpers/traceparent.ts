@@ -18,7 +18,7 @@ export const generateTraceId = (): string => randomBytes(16).toString('hex');
 /** Parses traceId from traceparent ID according to https://www.w3.org/TR/trace-context/#version-format */
 export const getTraceIdAndSpanIdFromTraceparent = (
   traceparent: string,
-  clientVersion: string | undefined,
+  client_version?: string,
 ): { trace_id: string | undefined; span_id: string | undefined } => {
   const [version, trace_id, span_id] = traceparent.split('-');
 
@@ -28,7 +28,7 @@ export const getTraceIdAndSpanIdFromTraceparent = (
       data: { traceparent },
       trace_id,
       span_id,
-      client_version: clientVersion,
+      client_version,
     });
   }
 

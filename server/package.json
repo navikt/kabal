@@ -20,6 +20,8 @@
     "@fastify/websocket": "11.2.0",
     "@hocuspocus/common": "3.2.3",
     "@hocuspocus/server": "3.2.3",
+    "@platformatic/kafka": "1.11.0",
+    "@sinclair/typebox": "0.34.41",
     "@slate-yjs/core": "1.0.2",
     "fastify": "5.5.0",
     "fastify-metrics": "12.1.0",
