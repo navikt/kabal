@@ -1,5 +1,6 @@
-import { toast } from '@app/components/toast/store';
+import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import type { IDocumentParams } from '@app/types/documents/common-params';
+import { isApiRejectionError } from '@app/types/errors';
 import type { Language } from '@app/types/texts/language';
 import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
@@ -31,10 +32,16 @@ const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (error) {
           getDocumentPatchResult.undo();
           getDocumentsPatchResult.undo();
-          toast.error('Feil ved endring av språk.');
+
+          const heading = 'Kunne ikke endre språk';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
