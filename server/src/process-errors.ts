@@ -1,3 +1,4 @@
+import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
 import { getLogger } from '@app/logger';
 import { EmojiIcons, sendToSlack } from '@app/slack';
 
@@ -15,6 +16,7 @@ export const processErrors = () => {
       log.error({ error, msg: `Process ${process.pid} received a uncaughtException signal` }),
     )
     .on('SIGTERM', async (signal) => {
+      await SMART_DOCUMENT_WRITE_ACCESS.close();
       log.info({ msg: `Process ${process.pid} received a ${signal} signal. Shutting down now.` });
       process.exit(0);
     })

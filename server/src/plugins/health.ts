@@ -1,5 +1,6 @@
 import { oboCache } from '@app/auth/cache/cache';
 import { getIsAzureClientReady } from '@app/auth/get-auth-client';
+import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
 import { getLogger } from '@app/logger';
 import fastifyPlugin from 'fastify-plugin';
 
@@ -30,6 +31,11 @@ export const healthPlugin = fastifyPlugin(
         log.info({ msg: 'Azure Client not ready' });
 
         return reply.status(503).type('text/plain').send('Azure Client not ready');
+      }
+
+      if (!SMART_DOCUMENT_WRITE_ACCESS.isProcessing()) {
+        log.info({ msg: 'Document Write Access Kafka Consumer is not processing' });
+        return reply.status(503).type('text/plain').send('Document Write Access Kafka Consumer is not processing');
       }
 
       return reply.status(200).type('text/plain').send('Ready');

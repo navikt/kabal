@@ -1,5 +1,6 @@
 import { getAzureADClient } from '@app/auth/get-auth-client';
 import { isDeployed } from '@app/config/env';
+import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
 import { formatDuration, getDuration } from '@app/helpers/duration';
 import { getLogger } from '@app/logger';
 import { EmojiIcons, sendToSlack } from '@app/slack';
@@ -9,12 +10,10 @@ const log = getLogger('init');
 export const init = async () => {
   try {
     if (isDeployed) {
-      const start = performance.now();
-
-      await getAzureADClient();
-
-      const time = getDuration(start);
-      log.info({ msg: `Azure AD client initialized in ${formatDuration(time)}`, data: { time } });
+      await Promise.all([
+        logTimedAsyncFn(async () => await getAzureADClient(), 'Azure AD client'),
+        logTimedAsyncFn(async () => await SMART_DOCUMENT_WRITE_ACCESS.init(), 'Smart Document Write Access'),
+      ]);
     }
   } catch (e) {
     if (e instanceof Error) {
@@ -27,4 +26,14 @@ export const init = async () => {
     }
     process.exit(1);
   }
+};
+
+const logTimedAsyncFn = async (fn: () => Promise<unknown>, name: string) => {
+  const start = performance.now();
+
+  await fn();
+
+  const duration = getDuration(start);
+
+  log.info({ msg: `${name} initialized in ${formatDuration(duration)}`, data: { time: duration } });
 };

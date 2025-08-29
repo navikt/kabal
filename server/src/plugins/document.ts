@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ApiClientEnum } from '@app/config/config';
-import { isDeployed } from '@app/config/env';
 import { getDuration } from '@app/helpers/duration';
 import { getProxyRequestHeaders } from '@app/helpers/prepare-request-headers';
 import { getLogger } from '@app/logger';
+import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
 import { type Static, Type, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
@@ -36,7 +36,7 @@ type Metadata = IArchivedMetadata | INewMetadata | ICombinedMetadata;
 
 const log = getLogger('document-routes');
 
-const METADATA_BASE_URL = isDeployed ? 'http://kabal-api' : 'https://kabal.intern.dev.nav.no/api/kabal-api';
+const METADATA_BASE_URL = KABAL_API_URL;
 
 const TEMPLATE = fs.readFileSync(path.join(process.cwd(), './src/templates/document-template.html'), {
   encoding: 'utf8',

@@ -1,10 +1,11 @@
 import { getCacheKey, oboCache } from '@app/auth/cache/cache';
 import { ApiClientEnum } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
+import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
 import { hasOwn, isObject } from '@app/functions/functions';
 import { isNotNull } from '@app/functions/guards';
 import { parseTokenPayload } from '@app/helpers/token-parser';
-import { getLogger, getTeamLogger, type Level } from '@app/logger';
+import { type AnyObject, getLogger, getTeamLogger, type Level } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
 import { getDocumentJson, setDocument } from '@app/plugins/crdt/api/set-document';
 import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
@@ -16,14 +17,14 @@ import { applyUpdateV2 } from 'yjs';
 const log = getLogger('collaboration');
 const teamLog = getTeamLogger('collaboration');
 
-const logContext = (msg: string, context: ConnectionContext, level: Level = 'info') => {
+const logContext = (msg: string, context: ConnectionContext, level: Level = 'info', extra?: AnyObject) => {
   log[level]({
     msg,
     trace_id: context.trace_id,
     span_id: context.span_id,
     tab_id: context.tab_id,
     client_version: context.client_version,
-    data: { behandlingId: context.behandlingId, dokumentId: context.dokumentId },
+    data: { behandlingId: context.behandlingId, dokumentId: context.dokumentId, ...extra },
   });
 };
 
@@ -137,7 +138,27 @@ export const collaborationServer = new Hocuspocus({
   debounce: 3_000,
   maxDebounce: 15_000,
 
-  onConnect: async ({ context }) => {
+  onAuthenticate: async ({ context, connectionConfig }) => {
+    if (!isConnectionContext(context)) {
+      log.error({ msg: 'Tried to authenticate collaboration connection without context' });
+      throw getCloseEvent('INVALID_CONTEXT', 4401);
+    }
+
+    const { dokumentId, navIdent, behandlingId } = context;
+
+    const hasWriteAccess = await getHasWriteAccess(context, true);
+
+    connectionConfig.readOnly = !hasWriteAccess;
+
+    logContext(
+      `Authenticated collaboration socket for ${dokumentId} in ${behandlingId} for user ${navIdent} ${hasWriteAccess ? 'User has write access' : 'User does not have write access'}.`,
+      context,
+      'debug',
+      { readOnly: !hasWriteAccess, nav_ident: navIdent },
+    );
+  },
+
+  onConnect: async ({ context, connectionConfig }) => {
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to establish collaboration connection without context' });
       throw getCloseEvent('INVALID_CONTEXT', 4401);
@@ -153,6 +174,19 @@ export const collaborationServer = new Hocuspocus({
     );
 
     await createRefreshTimeout(context, expiresIn);
+
+    const { dokumentId, navIdent, behandlingId } = context;
+
+    const hasWriteAccess = await getHasWriteAccess(context, true);
+
+    connectionConfig.readOnly = !hasWriteAccess;
+
+    logContext(
+      `Connected collaboration socket for ${dokumentId} in ${behandlingId} for user ${navIdent}. ${hasWriteAccess ? 'User has write access' : 'User does not have write access'}.`,
+      context,
+      'debug',
+      { readOnly: !hasWriteAccess, nav_ident: navIdent },
+    );
   },
 
   onDisconnect: ({ context }) => {
@@ -169,7 +203,7 @@ export const collaborationServer = new Hocuspocus({
     throw getCloseEvent('INVALID_CONTEXT', 4401);
   },
 
-  beforeHandleMessage: async ({ context }) => {
+  beforeHandleMessage: async ({ context, connection }) => {
     if (!isDeployed) {
       return;
     }
@@ -196,16 +230,31 @@ export const collaborationServer = new Hocuspocus({
       logContext(`OBO token expired ${expiresIn} seconds ago.`, context, 'warn');
       throw getCloseEvent('OBO_TOKEN_EXPIRED', 4401);
     }
+
+    const hasWriteAccess = await getHasWriteAccess(context);
+
+    connection.readOnly = !hasWriteAccess;
   },
 
-  onLoadDocument: async ({ context, document }) => {
+  onLoadDocument: async ({ context, document, connectionConfig }) => {
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to load document without context' });
       throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
+    const { dokumentId, navIdent } = context;
+
+    const hasWriteAccess = await getHasWriteAccess(context, true);
+
     if (!document.isEmpty('content')) {
-      logContext('Document already loaded', context);
+      logContext(
+        `Document ${dokumentId} already loaded for user ${navIdent}. User ${hasWriteAccess ? 'has' : 'does not have'} write access.`,
+        context,
+        'debug',
+        { readOnly: !hasWriteAccess, nav_ident: navIdent },
+      );
+
+      connectionConfig.readOnly = !hasWriteAccess;
 
       return document;
     }
@@ -219,6 +268,15 @@ export const collaborationServer = new Hocuspocus({
     applyUpdateV2(document, update);
 
     logContext('Loaded state/update applied', context, 'debug');
+
+    connectionConfig.readOnly = !hasWriteAccess;
+
+    logContext(
+      `Document ${dokumentId} loaded for user ${navIdent}. User ${hasWriteAccess ? 'has' : 'does not have'} write access.`,
+      context,
+      'debug',
+      { readOnly: !hasWriteAccess, nav_ident: navIdent },
+    );
   },
 
   onStoreDocument: async ({ context, document }) => {
@@ -273,4 +331,21 @@ const getTokenExpiresIn = async (context: ConnectionContext, method: string) => 
   }
 
   return Math.floor(payload.exp - Date.now() / 1_000);
+};
+
+const getHasWriteAccess = async (context: ConnectionContext, allowApiFetching?: boolean) => {
+  const { dokumentId, navIdent, trace_id, span_id, tab_id, client_version, behandlingId } = context;
+
+  return SMART_DOCUMENT_WRITE_ACCESS.hasAccess(
+    dokumentId,
+    navIdent,
+    {
+      trace_id,
+      span_id,
+      tab_id,
+      client_version,
+      behandling_id: behandlingId,
+    },
+    allowApiFetching,
+  );
 };
