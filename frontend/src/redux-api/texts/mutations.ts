@@ -129,8 +129,16 @@ const textsMutationSlice = textsApi.injectEndpoints({
           }
 
           invalidateConsumerText(id);
-        } catch {
+        } catch (error) {
           idPatchResult.undo();
+
+          const heading = 'Kunne ikke publisere teksten';
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -189,11 +197,18 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, { textType: newTextType });
-        } catch {
+        } catch (error) {
           idPatchResult.undo();
           movedToListPatchResult.undo();
           movedFromListPatchResult.undo();
           versionPatchResult.undo();
+
+          const heading = 'Kunne ikke endre teksttype';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -209,9 +224,16 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query);
-        } catch {
+        } catch (error) {
           undo();
           undoList();
+
+          const heading = 'Kunne ikke endre tittel';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -222,40 +244,50 @@ const textsMutationSlice = textsApi.injectEndpoints({
         body: { versionId },
       }),
       onQueryStarted: async ({ id, title, query }, { queryFulfilled, dispatch }) => {
-        const { data } = await queryFulfilled;
+        try {
+          const { data } = await queryFulfilled;
 
-        toast.success(`Nytt utkast for «${title}» opprettet.`);
+          toast.success(`Nytt utkast for «${title}» opprettet.`);
 
-        dispatch(
-          textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) => [
-            data,
-            ...draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
-          ]),
-        );
+          dispatch(
+            textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) => [
+              data,
+              ...draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
+            ]),
+          );
 
-        dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => data));
+          dispatch(textsQuerySlice.util.updateQueryData('getTextById', id, () => data));
 
-        dispatch(
-          textsQuerySlice.util.updateQueryData('getTexts', { ...query }, (draft) => draft.filter((t) => t.id !== id)),
-        );
+          dispatch(
+            textsQuerySlice.util.updateQueryData('getTexts', { ...query }, (draft) => draft.filter((t) => t.id !== id)),
+          );
 
-        dispatch(
-          textsQuerySlice.util.updateQueryData('getTexts', { ...query }, (draft) => {
-            let found = false;
+          dispatch(
+            textsQuerySlice.util.updateQueryData('getTexts', { ...query }, (draft) => {
+              let found = false;
 
-            const updated = draft.map((text) => {
-              if (text.id === id) {
-                found = true;
+              const updated = draft.map((text) => {
+                if (text.id === id) {
+                  found = true;
 
-                return data;
-              }
+                  return data;
+                }
 
-              return text;
-            });
+                return text;
+              });
 
-            return found ? updated : [data, ...draft];
-          }),
-        );
+              return found ? updated : [data, ...draft];
+            }),
+          );
+        } catch (error) {
+          const heading = 'Kunne ikke opprette utkast';
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
+        }
       },
     }),
     duplicateVersion: builder.mutation<IText, IDuplicateVersionParams>({
@@ -265,13 +297,23 @@ const textsMutationSlice = textsApi.injectEndpoints({
         body: { versionId },
       }),
       onQueryStarted: async ({ title, query }, { queryFulfilled, dispatch }) => {
-        const { data } = await queryFulfilled;
+        try {
+          const { data } = await queryFulfilled;
 
-        toast.success(`Duplikat av «${title}» opprettet.`);
+          toast.success(`Duplikat av «${title}» opprettet.`);
 
-        dispatch(textsQuerySlice.util.updateQueryData('getTexts', { ...query }, (draft) => [data, ...draft]));
-        dispatch(textsQuerySlice.util.updateQueryData('getTextById', data.id, () => data));
-        dispatch(textsQuerySlice.util.upsertQueryData('getTextVersions', data.id, [data]));
+          dispatch(textsQuerySlice.util.updateQueryData('getTexts', { ...query }, (draft) => [data, ...draft]));
+          dispatch(textsQuerySlice.util.updateQueryData('getTextById', data.id, () => data));
+          dispatch(textsQuerySlice.util.upsertQueryData('getTextVersions', data.id, [data]));
+        } catch (error) {
+          const heading = 'Kunne ikke opprette duplikat';
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
+        }
       },
     }),
     addText: builder.mutation<IText, { text: INewTextParams; query: IGetTextsParams }>({
@@ -281,12 +323,22 @@ const textsMutationSlice = textsApi.injectEndpoints({
         body: text,
       }),
       onQueryStarted: async ({ query }, { queryFulfilled, dispatch }) => {
-        const { data } = await queryFulfilled;
+        try {
+          const { data } = await queryFulfilled;
 
-        toast.success('Ny tekst opprettet.');
+          toast.success('Ny tekst opprettet.');
 
-        dispatch(textsQuerySlice.util.updateQueryData('getTexts', { ...query }, (draft) => [data, ...draft]));
-        dispatch(textsQuerySlice.util.updateQueryData('getTextById', data.id, () => data));
+          dispatch(textsQuerySlice.util.updateQueryData('getTexts', { ...query }, (draft) => [data, ...draft]));
+          dispatch(textsQuerySlice.util.updateQueryData('getTextById', data.id, () => data));
+        } catch (error) {
+          const heading = 'Kunne ikke opprette tekst';
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
+        }
       },
     }),
     // Unpublish text. Preserve draft.
@@ -399,10 +451,17 @@ const textsMutationSlice = textsApi.injectEndpoints({
               ),
             );
           }
-        } catch {
+        } catch (error) {
           versionsPatchResult.undo();
           idPatchResult.undo();
           listPatchResult.undo();
+
+          const heading = 'Kunne ikke slette utkast';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -447,9 +506,16 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query, false);
-        } catch {
+        } catch (error) {
           undo();
           undoList();
+
+          const heading = 'Kunne ikke oppdatere tekst';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -469,9 +535,16 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query, false);
-        } catch {
+        } catch (error) {
           undo();
           undoList();
+
+          const heading = 'Kunne ikke oppdatere tekst';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -487,8 +560,15 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query);
-        } catch {
+        } catch (error) {
           undo();
+
+          const heading = 'Kunne ikke oppdatere tekst';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -504,8 +584,15 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query);
-        } catch {
+        } catch (error) {
           undo();
+
+          const heading = 'Kunne ikke oppdatere tekst';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -521,8 +608,15 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query);
-        } catch {
+        } catch (error) {
           undo();
+
+          const heading = 'Kunne ikke oppdatere tekst';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -538,8 +632,15 @@ const textsMutationSlice = textsApi.injectEndpoints({
 
         try {
           pessimisticUpdate(id, (await queryFulfilled).data, query);
-        } catch {
+        } catch (error) {
           undo();
+
+          const heading = 'Kunne ikke oppdatere tekst';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),

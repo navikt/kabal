@@ -51,9 +51,15 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
-        } catch {
+        } catch (error) {
           undo();
-          toast.error('Kunne ikke endre mottakere.');
+
+          const heading = 'Kunne ikke oppdatere mottakere';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -69,9 +75,15 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
-        } catch {
+        } catch (error) {
           undo();
-          toast.error('Kunne ikke endre dokumenttype.');
+
+          const heading = 'Kunne ikke oppdatere dokumenttype';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -232,11 +244,11 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
             })),
           );
         } catch (e) {
-          const message = 'Kunne ikke ferdigstille dokumentet.';
+          const heading = 'Kunne ikke ferdigstille dokumentet';
 
           // API error is shown in modal
           if (!isApiRejectionError(e)) {
-            toast.error(message);
+            apiErrorToast(heading);
           }
         }
       },
@@ -492,10 +504,16 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (error) {
           collectionPatchResult.undo();
           documentPatchResult.undo();
-          toast.error('Kunne ikke endre dato mottatt.');
+
+          const heading = 'Kunne ikke endre dato mottatt';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -527,10 +545,16 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (error) {
           collectionPatchResult.undo();
           documentPatchResult.undo();
-          toast.error('Kunne ikke endre inngående kanal.');
+
+          const heading = 'Kunne ikke oppdatere inngående kanal';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
@@ -559,10 +583,16 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch {
+        } catch (error) {
           collectionPatchResult.undo();
           documentPatchResult.undo();
-          toast.error('Kunne ikke endre avsender.');
+
+          const heading = 'Kunne ikke endre avsender';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),

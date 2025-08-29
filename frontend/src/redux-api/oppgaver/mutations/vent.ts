@@ -38,10 +38,16 @@ const ventMutationSlice = oppgaverApi.injectEndpoints({
         try {
           await queryFulfilled;
           toast.success('Oppgaven er satt på vent');
-        } catch {
+        } catch (error) {
           behandlingPatchResult.undo();
           oppgavePatchResult.undo();
-          toast.error('Kunne ikke sette på vent.');
+
+          const heading = 'Kunne ikke sette på vent';
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
         }
       },
     }),
