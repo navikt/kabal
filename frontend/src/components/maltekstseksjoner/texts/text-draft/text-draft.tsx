@@ -68,7 +68,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
           const localRichText = _richTexts[lang];
 
           if (areDescendantsEqual(localRichText ?? [], text.richText[lang] ?? [])) {
-            return;
+            return undefined;
           }
 
           isUpdating.current = true;
