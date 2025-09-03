@@ -1,3 +1,4 @@
+import { ENVIRONMENT } from '@app/environment';
 import type { SearchPersonResponse } from '@app/types/oppgave-common';
 import type {
   ApiResponse,
@@ -10,11 +11,10 @@ import type {
   RelevantOppgaverResponse,
   UtgaatteApiResponse,
 } from '@app/types/oppgaver';
-import { IS_LOCALHOST } from '../../common';
 import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
 
 const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     getMineFerdigstilteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (params) => ({ url: '/kabal-api/oppgaver/ferdigstilte', params }),

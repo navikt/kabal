@@ -1,13 +1,13 @@
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 import { isApiRejectionError } from '@app/types/errors';
 import type { SetTilbakekrevingParams } from '@app/types/oppgavebehandling/params';
 import type { IModifiedResponse } from '@app/types/oppgavebehandling/response';
-import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setTilbakekrevingMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     setTilbakekreving: builder.mutation<IModifiedResponse, SetTilbakekrevingParams>({
       query: ({ oppgaveId, tilbakekreving }) => ({

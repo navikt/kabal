@@ -1,7 +1,7 @@
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 import { isApiRejectionError } from '@app/types/errors';
 import type { BehandlingGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 
 interface SetGosysOppgaveResponse {
@@ -15,7 +15,7 @@ interface SetGosysOppgaveParams {
 }
 
 const setGosysOppgaveMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     setGosysOppgave: builder.mutation<SetGosysOppgaveResponse, SetGosysOppgaveParams>({
       query: ({ oppgaveId, gosysOppgaveId }) => ({

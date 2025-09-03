@@ -1,11 +1,11 @@
 import type { IShownArchivedDocument } from '@app/components/view-pdf/types';
+import { ENVIRONMENT } from '@app/environment';
 import type { KabalValue } from '@app/plate/types';
 import type { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
 import type { IDocumentParams } from '@app/types/documents/common-params';
 import type { IDocument, IMergedDocumentsResponse, ISmartDocumentVersion } from '@app/types/documents/documents';
 import type { IGetVersionParams } from '@app/types/documents/params';
 import type { IValidateDocumentResponse } from '@app/types/documents/validation';
-import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
 
@@ -17,7 +17,7 @@ const dokumenterListTags = (type: DokumenterListTagTypes) => (result: IArkiverte
         .concat({ type, id: ListTagTypes.PARTIAL_LIST });
 
 export const documentsQuerySlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     getDocument: builder.query<IDocument, IDocumentParams>({
       query: ({ oppgaveId, dokumentId }) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}`,

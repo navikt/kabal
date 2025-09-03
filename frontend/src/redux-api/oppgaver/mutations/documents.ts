@@ -1,6 +1,7 @@
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
+import { ENVIRONMENT } from '@app/environment';
 import { formatFileSize } from '@app/functions/format-file-size';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { reduxStore } from '@app/redux/configure-store';
@@ -32,12 +33,11 @@ import type {
 } from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
 import type { IdentifikatorPart } from '@app/types/oppgave-common';
-import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';
 
 const documentsMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     setMottakerList: builder.mutation<IModifiedDocumentResponse, ISetMottakerListParams>({
       query: ({ oppgaveId, dokumentId, mottakerList }) => ({

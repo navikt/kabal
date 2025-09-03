@@ -1,16 +1,16 @@
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { formatEmployeeNameAndId } from '@app/domain/employee-name';
+import { ENVIRONMENT } from '@app/environment';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
 import { FlowState } from '@app/types/oppgave-common';
 import type { ISetRolParams } from '@app/types/oppgavebehandling/params';
 import type { ISetRolResponse } from '@app/types/oppgavebehandling/response';
-import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setRolMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     setRol: builder.mutation<ISetRolResponse, ISetRolParams>({
       query: ({ oppgaveId, employee }) => ({

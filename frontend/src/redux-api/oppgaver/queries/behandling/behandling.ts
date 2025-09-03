@@ -1,6 +1,7 @@
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 import type { IApiValidationResponse } from '@app/functions/error-type-guard';
-import { IS_LOCALHOST, KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
+import { KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
 import { OppgaveTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
 import { handleDocumentFinishedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/document-finished';
 import { handleDocumentsAddedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/documents-added';
@@ -55,7 +56,7 @@ import type {
 import type { IRols, ISaksbehandlere } from '@app/types/oppgaver';
 
 export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     getOppgavebehandling: builder.query<IOppgavebehandling, string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/detaljer`,
