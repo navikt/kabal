@@ -19,12 +19,16 @@ if (kafkaBrokers.length === 0) {
   throw new Error('KAFKA_BROKERS must contain at least one broker');
 }
 
+type HasAccessListener = (hasWriteAccess: boolean) => void;
+
 class SmartDocumentWriteAccess {
   /**
    * Map of document IDs to their access lists.
    * An access list is a list of Nav-ident strings.
    */
   #accessMap = new SmartDocumentAccessMap();
+
+  #hasAccessListeners: Map<string, HasAccessListener[]> = new Map();
 
   #consumer = new Consumer({
     groupId: crypto.randomUUID(),

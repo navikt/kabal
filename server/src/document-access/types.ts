@@ -23,5 +23,5 @@ export interface Metadata {
   span_id: string | undefined;
   tab_id: string | undefined;
   client_version: string | undefined;
-  behandling_id: string;
+  behandling_id?: string;
 }
