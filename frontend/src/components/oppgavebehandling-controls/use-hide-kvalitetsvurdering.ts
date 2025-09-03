@@ -27,6 +27,7 @@ export const useHideKvalitetsvurdering = (): boolean => {
     resultat.utfallId === UtfallEnum.TRUKKET ||
     resultat.utfallId === UtfallEnum.RETUR ||
     resultat.utfallId === UtfallEnum.UGUNST ||
+    resultat.utfallId === UtfallEnum.HENLAGT ||
     oppgave?.feilregistrering !== null
   );
 };
