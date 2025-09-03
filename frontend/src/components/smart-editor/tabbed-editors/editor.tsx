@@ -7,6 +7,7 @@ import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { VersionStatus } from '@app/components/smart-editor/tabbed-editors/version-status';
+import { toast } from '@app/components/toast/store';
 import { ENVIRONMENT } from '@app/environment';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
@@ -25,6 +26,7 @@ import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { ServerSentEventManager } from '@app/server-sent-events';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { isObject } from '@grafana/faro-web-sdk';
@@ -44,7 +46,6 @@ interface EditorProps {
 
 export const Editor = (props: EditorProps) => {
   const [, { isLoading }] = useLazyGetDocumentQuery();
-
   const { data: oppgave } = useOppgave();
 
   if (oppgave === undefined) {
@@ -67,6 +68,10 @@ interface LoadedEditorProps extends EditorProps {
   oppgave: IOppgavebehandling;
 }
 
+enum EventNames {
+  WRITE_ACCESS = 'write-access',
+}
+
 const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProps) => {
   const { id } = smartDocument;
   const { newCommentSelection, hasWriteAccess } = useContext(SmartEditorContext);
@@ -74,16 +79,19 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const [isConnected, setIsConnected] = useState(false);
   const [readOnly, setReadOnly] = useState(!hasWriteAccess);
 
+  useEffect(() => {
+    const sse = new ServerSentEventManager(`/smart-document-write-access/${id}`);
+
+    return sse.addEventListener(EventNames.WRITE_ACCESS, ({ data }) => setReadOnly(data !== 'read-write'));
+  }, [id]);
+
   const provider: YjsProviderConfig = {
     type: 'hocuspocus',
     options: {
       url: `/collaboration/behandlinger/${oppgave.id}/dokumenter/${id}`,
       name: id,
-      token: user.navIdent,
-      onAuthenticated(data) {
-        console.log('User authenticated:', data.scope);
-        setReadOnly(data.scope === 'readonly');
-      },
+      token: user.navIdent, // There must be a token defined for the server auth hook to run.
+      onAuthenticated: ({ scope }) => setReadOnly(scope !== 'read-write'),
       onClose: async ({ event }) => {
         if (event.code === 1000 || event.code === 1001 || event.code === 1005) {
           return;
@@ -94,6 +102,12 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         }
 
         setIsConnected(false);
+
+        if (event.code === 4403) {
+          toast.info(`Du har mistet skrivetilgangen til «${smartDocument.tittel}».`);
+          yjs.connect(); // Reconnect immediately to regain access, with new access rights.
+          return;
+        }
 
         try {
           const res = await fetch('/oauth2/session', { credentials: 'include' });

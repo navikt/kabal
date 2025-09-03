@@ -14,7 +14,6 @@ export const getAccessListFromApi = async (documentId: string, metadata: Metadat
   const headers = new Headers({
     accept: 'application/json',
     traceparent: generateTraceparent(trace_id, span_id),
-    'x-behandling-id': behandling_id,
     Authorization: `Bearer ${access_token}`,
   });
 
@@ -24,6 +23,10 @@ export const getAccessListFromApi = async (documentId: string, metadata: Metadat
 
   if (client_version !== undefined) {
     headers.set('x-client-version', client_version);
+  }
+
+  if (behandling_id !== undefined) {
+    headers.set('x-behandling-id', behandling_id);
   }
 
   const start = performance.now();
