@@ -1,63 +1,17 @@
+import { ENVIRONMENT } from '@app/environment';
 import { parseJSON } from '@app/functions/parse-json';
 import { getQueryParams } from '@app/headers';
-import { IS_LOCALHOST } from '../common';
-
-export enum ServerSentEventType {
-  // Dokumenter under arbeid
-  DOCUMENT_FINISHED = 'DOCUMENT_FINISHED',
-  DOCUMENTS_ADDED = 'DOCUMENTS_ADDED',
-  DOCUMENTS_REMOVED = 'DOCUMENTS_REMOVED',
-  DOCUMENTS_CHANGED = 'DOCUMENTS_CHANGED',
-
-  /** Smartdokumenter */
-  SMART_DOCUMENT_LANGUAGE = 'SMART_DOCUMENT_LANGUAGE',
-  // New version created
-  SMART_DOCUMENT_VERSIONED = 'SMART_DOCUMENT_VERSIONED',
-  // New comment or reply
-  SMART_DOCUMENT_COMMENT_ADDED = 'SMART_DOCUMENT_COMMENT_ADDED',
-  // Comment or reply removed
-  SMART_DOCUMENT_COMMENT_REMOVED = 'SMART_DOCUMENT_COMMENT_REMOVED',
-  // Comment or reply changed
-  SMART_DOCUMENT_COMMENT_CHANGED = 'SMART_DOCUMENT_COMMENT_CHANGED',
-
-  // Journalførte dokumenter
-  JOURNALFOERT_DOCUMENT_MODIFIED = 'JOURNALFOERT_DOCUMENT_MODIFIED',
-  JOURNALPOST_ADDED = 'JOURNALPOST_ADDED',
-  INCLUDED_DOCUMENTS_ADDED = 'INCLUDED_DOCUMENTS_ADDED',
-  INCLUDED_DOCUMENTS_REMOVED = 'INCLUDED_DOCUMENTS_REMOVED',
-  INCLUDED_DOCUMENTS_CLEARED = 'INCLUDED_DOCUMENTS_CLEARED',
-
-  // Behandlingsdetaljer
-  TILDELING = 'TILDELING',
-  ROL = 'ROL',
-  MEDUNDERSKRIVER = 'MEDUNDERSKRIVER',
-  KLAGER = 'KLAGER',
-  FULLMEKTIG = 'FULLMEKTIG',
-  GOSYSOPPGAVE = 'GOSYSOPPGAVE',
-  /** Added or changed */
-  MESSAGE = 'MESSAGE',
-  UTFALL = 'UTFALL',
-  EXTRA_UTFALL = 'EXTRA_UTFALL',
-  REGISTRERINGSHJEMLER = 'REGISTRERINGSHJEMLER',
-  INNSENDINGSHJEMLER = 'INNSENDINGSHJEMLER',
-  MOTTATT_VEDTAKSINSTANS = 'MOTTATT_VEDTAKSINSTANS',
-  SATT_PAA_VENT = 'SATT_PAA_VENT',
-  FERDIGSTILT = 'FERDIGSTILT',
-  FEILREGISTRERING = 'FEILREGISTRERING',
-  TILBAKEKREVING = 'TILBAKEKREVING',
-  VARSLET_FRIST = 'VARSLET_FRIST',
-}
 
 type ServerSentEvent = MessageEvent<string>;
 
 type ListenerFn<T> = (event: T) => void;
 type JsonListenerFn<T> = (data: T, event: ServerSentEvent) => void;
 type EventListenerFn = (event: Event) => void;
-type EventListener = [ServerSentEventType, EventListenerFn];
+type EventListener<E> = [E, EventListenerFn];
 
-export class ServerSentEventManager {
+export class ServerSentEventManager<E extends string = string> {
   private events: EventSource;
-  private listeners: EventListener[] = [];
+  private listeners: EventListener<E>[] = [];
   private url: string;
   private lastEventId: string | null = null;
 
@@ -69,7 +23,7 @@ export class ServerSentEventManager {
     this.events = this.createEventSource();
   }
 
-  public addEventListener(eventName: ServerSentEventType, listener: ListenerFn<ServerSentEvent>) {
+  public addEventListener(eventName: E, listener: ListenerFn<ServerSentEvent>) {
     const eventListener: EventListenerFn = (event) => {
       if (isServerSentEvent(event)) {
         this.lastEventId = event.lastEventId;
@@ -80,11 +34,11 @@ export class ServerSentEventManager {
     this.listeners.push([eventName, eventListener]);
     this.events?.addEventListener(eventName, eventListener);
 
-    return this;
+    return () => this.removeEventListener(eventName, eventListener);
   }
 
-  public addJsonEventListener<T>(eventName: ServerSentEventType, listener: JsonListenerFn<T>) {
-    this.addEventListener(eventName, (event) => {
+  public addJsonEventListener<T>(eventName: E, listener: JsonListenerFn<T>) {
+    const jsonListener: ListenerFn<ServerSentEvent> = (event) => {
       if (event.data.length === 0) {
         return;
       }
@@ -96,12 +50,21 @@ export class ServerSentEventManager {
       }
 
       return listener(parsed, event);
-    });
+    };
 
-    return this;
+    this.addEventListener(eventName, jsonListener);
+
+    return () => this.removeEventListener(eventName, jsonListener);
   }
 
-  private removeAllEventListeners() {
+  private removeEventListener(eventName: E, listener: ListenerFn<ServerSentEvent>) {
+    this.listeners = this.listeners.filter(([event, l]) => event !== eventName || l !== listener);
+    this.events.removeEventListener(eventName, listener);
+
+    return;
+  }
+
+  private removeAllEventSourceListeners() {
     if (this.events !== undefined) {
       for (const [event, listener] of this.listeners) {
         this.events.removeEventListener(event, listener);
@@ -119,7 +82,7 @@ export class ServerSentEventManager {
     const url = `${this.url}?${params.toString()}`;
 
     const events = new EventSource(url, {
-      withCredentials: IS_LOCALHOST,
+      withCredentials: ENVIRONMENT.isLocal,
     });
 
     events.addEventListener('error', () => {
@@ -146,7 +109,7 @@ export class ServerSentEventManager {
 
   public close() {
     this.events?.close();
-    this.removeAllEventListeners();
+    this.removeAllEventSourceListeners();
   }
 }
 
