@@ -1,13 +1,13 @@
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { isApiRejectionError } from '@app/types/errors';
 import type { IBatchDocumentParams } from '@app/types/oppgavebehandling/params';
-import { IS_LOCALHOST } from '../../common';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
 
 const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     tilknyttDocuments: builder.mutation<void, IBatchDocumentParams>({
       query: ({ oppgaveId, documentIdList }) => ({

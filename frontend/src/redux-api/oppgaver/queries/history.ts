@@ -1,9 +1,9 @@
+import { ENVIRONMENT } from '@app/environment';
 import type { IHistoryResponse } from '@app/types/oppgavebehandling/response';
-import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 
 export const historyQuerySlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     getHistory: builder.query<IHistoryResponse, string>({
       query: (id) => `/kabal-api/behandlinger/${id}/history`,

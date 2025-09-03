@@ -1,12 +1,12 @@
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 import { isApiRejectionError } from '@app/types/errors';
 import type { IOppgavebehandlingHjemlerUpdateParams } from '@app/types/oppgavebehandling/params';
-import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setRegistreringshjemlerMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     updateRegistreringshjemler: builder.mutation<{ modified: string }, IOppgavebehandlingHjemlerUpdateParams>({
       query: ({ oppgaveId, hjemmelIdSet }) => ({

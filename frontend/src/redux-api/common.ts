@@ -1,10 +1,9 @@
+import { ENVIRONMENT } from '@app/environment';
 import { queryStringify } from '@app/functions/query-string';
 import { setHeaders } from '@app/headers';
 import { type FetchArgs, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
 
-export const IS_LOCALHOST = window.location.hostname === 'localhost';
-
-const mode: RequestMode | undefined = IS_LOCALHOST ? 'cors' : undefined;
+const mode: RequestMode | undefined = ENVIRONMENT.isLocal ? 'cors' : undefined;
 
 export const staggeredBaseQuery = (baseUrl: string) => {
   const fetch = fetchBaseQuery({
@@ -30,7 +29,7 @@ export const staggeredBaseQuery = (baseUrl: string) => {
       }
 
       if (status === 401) {
-        if (!IS_LOCALHOST) {
+        if (!ENVIRONMENT.isLocal) {
           window.location.assign('/oauth2/login');
         }
 

@@ -2,6 +2,7 @@
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { formatIdNumber } from '@app/functions/format-id';
 import { reduxStore } from '@app/redux/configure-store';
@@ -25,7 +26,6 @@ import type {
   IVedtakFullfoertResponse,
 } from '@app/types/oppgavebehandling/response';
 import { format } from 'date-fns';
-import { IS_LOCALHOST } from '../../common';
 import { kvalitetsvurderingV1Api } from '../../kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '../../kaka-kvalitetsvurdering/v2';
 import { OppgaveTagTypes, oppgaverApi } from '../oppgaver';
@@ -67,7 +67,7 @@ const finishOppgaveOnQueryStarted = async ({
 };
 
 const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     finishOppgavebehandling: builder.mutation<IVedtakFullfoertResponse, IFinishOppgavebehandlingParams>({
       query: ({ oppgaveId, nyBehandling }) => ({

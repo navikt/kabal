@@ -1,13 +1,13 @@
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 import type { IDocumentParams } from '@app/types/documents/common-params';
 import { isApiRejectionError } from '@app/types/errors';
 import type { Language } from '@app/types/texts/language';
-import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';
 
 const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     setLanguage: builder.mutation<void, IDocumentParams & { language: Language }>({
       query: ({ dokumentId, oppgaveId, language }) => ({

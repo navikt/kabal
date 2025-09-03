@@ -1,6 +1,7 @@
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { formatEmployeeNameAndId } from '@app/domain/employee-name';
+import { ENVIRONMENT } from '@app/environment';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
@@ -13,12 +14,11 @@ import {
   type TildelSaksbehandlerParams,
 } from '@app/types/oppgaver';
 import { format } from 'date-fns';
-import { IS_LOCALHOST } from '../../common';
 import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const tildelMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     tildelSaksbehandler: builder.mutation<ITildelingResponse, TildelSaksbehandlerParams>({
       query: ({ oppgaveId, employee }) => ({

@@ -1,15 +1,15 @@
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
 import { FlowState } from '@app/types/oppgave-common';
 import type { ISetFlowStateParams } from '@app/types/oppgavebehandling/params';
 import type { ISetFlowStateResponse } from '@app/types/oppgavebehandling/response';
-import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     setRolState: builder.mutation<ISetFlowStateResponse, ISetFlowStateParams>({
       query: ({ oppgaveId, flowState }) => ({

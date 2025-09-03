@@ -1,4 +1,5 @@
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
 import type {
@@ -6,12 +7,11 @@ import type {
   IOppgavebehandlingUtfallUpdateParams,
 } from '@app/types/oppgavebehandling/params';
 import type { ISetExtraUtfallResponse, ISetUtfallResponse } from '@app/types/oppgavebehandling/response';
-import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     updateUtfall: builder.mutation<ISetUtfallResponse, IOppgavebehandlingUtfallUpdateParams>({
       query: ({ oppgaveId, utfallId }) => ({

@@ -1,4 +1,5 @@
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 import { reduxStore } from '@app/redux/configure-store';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
@@ -14,12 +15,11 @@ import type { IModifiedResponse } from '@app/types/oppgavebehandling/response';
 import type { IOppgave } from '@app/types/oppgaver';
 import { toast } from './../../../components/toast/store';
 import { isoDateToPretty } from './../../../domain/date';
-import { IS_LOCALHOST } from '../../common';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
-  overrideExisting: IS_LOCALHOST,
+  overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     setFrist: builder.mutation<IModifiedResponse, IFristParams>({
       query: ({ oppgaveId, date }) => ({

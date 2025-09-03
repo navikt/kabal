@@ -7,6 +7,7 @@ import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { VersionStatus } from '@app/components/smart-editor/tabbed-editors/version-status';
+import { ENVIRONMENT } from '@app/environment';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { hasOwn } from '@app/functions/object';
@@ -23,7 +24,6 @@ import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floati
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
-import { IS_LOCALHOST } from '@app/redux-api/common';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
@@ -89,7 +89,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           return;
         }
 
-        if (event.code === 4401 && !IS_LOCALHOST) {
+        if (event.code === 4401 && !ENVIRONMENT.isLocal) {
           return window.location.assign('/oauth2/login');
         }
 
