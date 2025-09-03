@@ -38,7 +38,8 @@ import { handleTilbakekrevingEvent } from '@app/redux-api/oppgaver/queries/behan
 import { handleTildelingEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/tildeling';
 import { handleUtfallEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/utfall';
 import { handleVarsletFristEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/varslet-frist';
-import { ServerSentEventManager, ServerSentEventType } from '@app/redux-api/server-sent-events/server-sent-events';
+import { ServerSentEventType } from '@app/redux-api/server-sent-events/event-types';
+import { ServerSentEventManager } from '@app/server-sent-events';
 import { user } from '@app/static-data/static-data';
 import { isApiRejectionError } from '@app/types/errors';
 import type { ISakenGjelder } from '@app/types/oppgave-common';
@@ -79,7 +80,9 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
 
           const { navIdent } = await user;
 
-          const events = new ServerSentEventManager(`${KABAL_BEHANDLINGER_BASE_PATH}/${oppgaveId}/events`);
+          const events = new ServerSentEventManager<ServerSentEventType>(
+            `${KABAL_BEHANDLINGER_BASE_PATH}/${oppgaveId}/events`,
+          );
 
           events.addJsonEventListener(ServerSentEventType.MESSAGE, handleMessageEvent(oppgaveId, navIdent));
 
