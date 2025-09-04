@@ -36,7 +36,7 @@ import { Plate, useEditorReadOnly, usePlateEditor } from '@platejs/core/react';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
 import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 
 interface EditorProps {
@@ -172,12 +172,12 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
   const { yjs } = editor.getApi(YjsPlugin);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!mounted || isInitialized.current) {
       return;
     }
 
-    yjs.init({ id });
+    yjs.init({ id, autoConnect: true });
     isInitialized.current = true;
 
     return () => yjs.destroy();
