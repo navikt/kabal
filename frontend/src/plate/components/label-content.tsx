@@ -1,4 +1,3 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { formatFoedselsnummer } from '@app/functions/format-id';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
@@ -7,14 +6,14 @@ import { type LabelContentElement, LabelContentSource } from '@app/plate/types';
 import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
-import { useContext, useEffect, useMemo } from 'react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
+import { useEffect, useMemo } from 'react';
 
 export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   const { children, element, editor, path } = props;
   const content = useContent(element.source);
   const label = useLabel(element.source);
-  const { hasWriteAccess } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
 
   useEffect(() => {
     editor.tf.setNodes({ result: content }, { at: path });
@@ -45,7 +44,7 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
           </span>
         )}
         {children}
-        {hasWriteAccess ? (
+        {readOnly ? null : (
           <SectionToolbar>
             <ToolbarButtonWithConfirm
               onClick={() => editor.tf.removeNodes({ match: (n) => n === element, at: [] })}
@@ -53,7 +52,7 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
               tooltip={`Slett ${label?.toLowerCase()}`}
             />
           </SectionToolbar>
-        ) : null}
+        )}
       </SectionContainer>
     </PlateElement>
   );

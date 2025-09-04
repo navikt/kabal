@@ -3,6 +3,7 @@ import { getName } from '@app/plate/components/signature/functions';
 import { useMainSignature, useMedunderskriverSignature } from '@app/plate/components/signature/hooks';
 import { type SignatureElement, useMyPlateEditorRef } from '@app/plate/types';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { useEditorReadOnly } from 'platejs/react';
 import { useContext, useEffect, useMemo } from 'react';
 import { MISSING_TITLE, Title } from './title';
 
@@ -13,11 +14,11 @@ interface Props {
 export const SaksbehandlerSignature = ({ element }: Props) => {
   const editor = useMyPlateEditorRef();
   const signature = useMainSignature(element);
-  const { hasWriteAccess } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
 
   useEffect(() => {
     if (
-      !hasWriteAccess ||
+      readOnly ||
       signature === element.saksbehandler ||
       (signature?.name === element.saksbehandler?.name && signature?.title === element.saksbehandler?.title)
     ) {
@@ -25,7 +26,7 @@ export const SaksbehandlerSignature = ({ element }: Props) => {
     }
 
     editor.tf.setNodes({ saksbehandler: signature }, { at: [], match: (n) => n === element });
-  }, [editor, element, signature, hasWriteAccess]);
+  }, [editor, element, signature, readOnly]);
 
   if (signature === undefined) {
     return null;
@@ -46,7 +47,8 @@ interface MedunderskriverSignatureProps {
 export const MedunderskriverSignature = ({ element }: MedunderskriverSignatureProps) => {
   const editor = useMyPlateEditorRef();
   const medunderskriverSignature = useMedunderskriverSignature();
-  const { templateId, hasWriteAccess } = useContext(SmartEditorContext);
+  const { templateId } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
 
   const noMedunderskriver = useMemo(
     () => medunderskriverSignature === null || templateId === TemplateIdEnum.ROL_ANSWERS,
@@ -65,7 +67,7 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
   );
 
   useEffect(() => {
-    if (!hasWriteAccess) {
+    if (readOnly) {
       return;
     }
 
@@ -94,7 +96,7 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
     };
 
     editor.tf.setNodes(data, { match: (n) => n === element, at: [] });
-  }, [editor, element, noMedunderskriver, signature, hasWriteAccess]);
+  }, [editor, element, noMedunderskriver, signature, readOnly]);
 
   if (noMedunderskriver || signature === undefined) {
     return null;

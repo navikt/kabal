@@ -1,4 +1,3 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -8,15 +7,15 @@ import { type FullmektigElement, type PlaceholderElement, useMyPlateEditorRef } 
 import { isOfElementType } from '@app/plate/utils/queries';
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Loader } from '@navikt/ds-react';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
-import { useContext, useEffect } from 'react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
+import { useEffect } from 'react';
 
 export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
   const { data: oppgave, isLoading, isSuccess } = useOppgave();
   const { element, children } = props;
   const { id, show } = element;
   const editor = useMyPlateEditorRef();
-  const { hasWriteAccess } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
 
   const at = editor.api.findPath(element);
 
@@ -112,7 +111,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
         {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
         <Editable>{children[0][3]}</Editable>
 
-        {hasWriteAccess ? (
+        {readOnly ? null : (
           <SectionToolbar>
             <ToolbarButtonWithConfirm
               onClick={() => editor.tf.removeNodes({ match: (n) => n === props.element, at: [] })}
@@ -137,7 +136,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
               />
             )}
           </SectionToolbar>
-        ) : null}
+        )}
       </SectionContainer>
     </PlateElement>
   );

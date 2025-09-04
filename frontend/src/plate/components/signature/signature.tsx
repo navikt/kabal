@@ -16,10 +16,10 @@ import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-com
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const Signature = (props: PlateElementProps<SignatureElement>) => {
-  const isReadOnly = useEditorReadOnly();
+  const readOnly = useEditorReadOnly();
   const { data: signature } = useGetMySignatureQuery();
   const { data: oppgave } = useOppgave();
-  const { hasWriteAccess, templateId, creator } = useContext(SmartEditorContext);
+  const { templateId, creator } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
 
   if (oppgave === undefined || signature === undefined) {
@@ -54,7 +54,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   const setOverriddenSaksbehandler = (overriddenSaksbehandler: string | undefined) =>
     editor.tf.setNodes({ overriddenSaksbehandler }, options);
 
-  const disabledCheckbox = element.enabled === false || isReadOnly;
+  const disabledCheckbox = element.enabled === false || readOnly;
 
   return (
     <PlateElement<SignatureElement> {...props} attributes={{ ...props.attributes, contentEditable: false }}>
@@ -67,7 +67,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
           e.stopPropagation();
         }}
       >
-        {hideAll || !hasWriteAccess ? null : (
+        {readOnly || hideAll ? null : (
           <BoxNew
             asChild
             borderRadius="medium"
@@ -84,7 +84,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
             <HStack marginInline="auto" wrap justify="center" className="select-none self-center whitespace-nowrap">
               {showEnableCheckbox ? (
                 <Checkbox
-                  disabled={isReadOnly}
+                  disabled={readOnly}
                   checked={element.enabled}
                   onChange={(enabled) => setSignatureProp({ enabled })}
                 >
@@ -147,11 +147,11 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
 
         {children}
 
-        {hasWriteAccess ? (
+        {readOnly ? null : (
           <SectionToolbar>
             <AddNewParagraphs editor={editor} element={element} />
           </SectionToolbar>
-        ) : null}
+        )}
       </SectionContainer>
     </PlateElement>
   );

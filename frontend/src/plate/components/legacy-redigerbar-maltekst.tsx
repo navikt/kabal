@@ -14,7 +14,7 @@ import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 
 const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
@@ -32,7 +32,8 @@ const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
  */
 export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstElement>) => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const { hasWriteAccess, templateId } = useContext(SmartEditorContext);
+  const { templateId } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
 
   const { children, element, editor } = props;
 
@@ -117,7 +118,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
         sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
       >
         {children}
-        {hasWriteAccess ? (
+        {readOnly ? null : (
           <SectionToolbar contentEditable={false}>
             <AddNewParagraphs editor={editor} element={element} />
             <Tooltip content="Tilbakestill tekst" delay={0}>
@@ -131,7 +132,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
               />
             </Tooltip>
           </SectionToolbar>
-        ) : null}
+        )}
       </SectionContainer>
     </PlateElement>
   );

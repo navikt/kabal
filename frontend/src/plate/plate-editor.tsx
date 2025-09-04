@@ -2,7 +2,13 @@ import { merge } from '@app/functions/classes';
 import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { FormattedText } from '@app/plate/types';
-import { PlateContent, type PlateContentProps, type PlateEditor, useEditorRef } from '@platejs/core/react';
+import {
+  PlateContent,
+  type PlateContentProps,
+  type PlateEditor,
+  useEditorReadOnly,
+  useEditorRef,
+} from '@platejs/core/react';
 import { NodeApi } from 'platejs';
 import type { HTMLAttributes } from 'react';
 
@@ -10,8 +16,9 @@ interface Props extends PlateContentProps {
   lang: SpellCheckLanguage;
 }
 
-export const KabalPlateEditor = ({ className, spellCheck = true, readOnly = false, ...props }: Props) => {
+export const KabalPlateEditor = ({ className, spellCheck = true, ...props }: Props) => {
   const editor = useEditorRef();
+  const readOnly = useEditorReadOnly();
 
   return (
     <PlateContent

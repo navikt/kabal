@@ -12,7 +12,7 @@ import { DistribusjonsType } from '@app/types/documents/documents';
 import type { IConsumerPlainText, IConsumerText } from '@app/types/texts/consumer';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 
 const lexSpecialis = (enhetId: string, texts: IConsumerPlainText[]): IConsumerPlainText | null => {
@@ -53,7 +53,7 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
 
   const editor = useMyPlateEditorRef();
   const query = useHeaderFooterQuery(textType);
-  const { hasWriteAccess } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
 
   const loadMaltekst = useCallback(
     async (e: ElementTypes) => {
@@ -113,11 +113,11 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
       <SectionContainer data-element={element.type} sectionType={SectionTypeEnum.FOOTER}>
         <HeaderFooterContent text={text} isLoading={isLoading && isUninitialized} type={element.type} />
         {children}
-        {hasWriteAccess ? (
+        {readOnly ? null : (
           <SectionToolbar>
             <AddNewParagraph editor={editor} element={element} />
           </SectionToolbar>
-        ) : null}
+        )}
       </SectionContainer>
     </PlateElement>
   );

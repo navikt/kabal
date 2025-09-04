@@ -1,4 +1,3 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { LegacyRedigerbarMaltekst } from '@app/plate/components/legacy-redigerbar-maltekst';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -8,13 +7,12 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
-import { useContext } from 'react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 
 export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstElement>) => {
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
   const language = useSmartEditorLanguage();
-  const { hasWriteAccess } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
 
   const { children, element, editor } = props;
 
@@ -43,8 +41,6 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
     return <LegacyRedigerbarMaltekst {...props}>{children}</LegacyRedigerbarMaltekst>;
   }
 
-  const readOnly = editor.api.isReadOnly();
-
   return (
     <PlateElement<RedigerbarMaltekstElement> {...props} as="div">
       <SectionContainer
@@ -53,7 +49,7 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
         sectionType={SectionTypeEnum.REDIGERBAR_MALTEKST}
       >
         {children}
-        {readOnly || !hasWriteAccess ? null : (
+        {readOnly ? null : (
           <SectionToolbar contentEditable={false}>
             <Tooltip content="Tilbakestill tekst" delay={0}>
               <Button

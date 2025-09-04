@@ -1,17 +1,16 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { PlaceholderElement, SaksnummerElement } from '@app/plate/types';
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
-import { useContext, useEffect, useMemo } from 'react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
+import { useEffect, useMemo } from 'react';
 
 export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
   const { data: oppgave } = useOppgave();
   const { editor, children, element } = props;
-  const { hasWriteAccess } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
 
   const at = useMemo(() => editor.api.findPath(element), [editor, element]);
   const placeholder = useMemo(
@@ -45,7 +44,7 @@ export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
         {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
         {children[0][1]}
 
-        {hasWriteAccess ? (
+        {readOnly ? null : (
           <SectionToolbar>
             <ToolbarButtonWithConfirm
               onClick={() => editor.tf.removeNodes({ match: (n) => n === element, at: [] })}
@@ -60,7 +59,7 @@ export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
               tooltip={`Tilbakestill til saksnummer fra behandlingen (${oppgave.saksnummer})`}
             />
           </SectionToolbar>
-        ) : null}
+        )}
       </SectionContainer>
     </PlateElement>
   );

@@ -14,7 +14,7 @@ import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { ElementApi } from 'platejs';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useContext, useEffect } from 'react';
 
 /**
@@ -23,7 +23,8 @@ import { useContext, useEffect } from 'react';
 export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
   const { children, element, editor } = props;
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const { hasWriteAccess, templateId } = useContext(SmartEditorContext);
+  const { templateId } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
   const query = useQuery({ textType: RichTextTypes.MALTEKST, section: element.section, templateId });
   const { data, isLoading, isFetching, refetch } = useGetConsumerTextsQuery(query);
 
@@ -110,7 +111,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
         }}
       >
         {children}
-        {hasWriteAccess ? (
+        {readOnly ? null : (
           <SectionToolbar contentEditable={false}>
             <AddNewParagraphs editor={editor} element={element} />
             <Tooltip content="Oppdater til siste versjon" delay={0} placement="bottom">
@@ -124,7 +125,7 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
               />
             </Tooltip>
           </SectionToolbar>
-        ) : null}
+        )}
       </SectionContainer>
     </PlateElement>
   );

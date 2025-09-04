@@ -20,14 +20,15 @@ import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { type SkipToken, skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useCallback, useContext, useMemo } from 'react';
 
 export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>) => {
   const { children, element, editor } = props;
   const oppgave = useRequiredOppgave();
   const language = useSmartEditorLanguage();
-  const { hasWriteAccess, templateId } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
+  const { templateId } = useContext(SmartEditorContext);
   const query = useMaltekstseksjonQuery(templateId, element.section);
   const path = usePath(editor, element);
   const queryChanged = useMemo(
@@ -56,7 +57,6 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
     oppgave.resultat,
     setUpdated,
     queryChanged,
-    hasWriteAccess,
   );
 
   const isInRegelverk = useMemo(() => getIsInRegelverk(editor, element), [editor, element]);
@@ -77,7 +77,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
       as="div"
       attributes={{
         ...props.attributes,
-        contentEditable: !editor.api.isReadOnly(),
+        contentEditable: !readOnly,
         suppressContentEditableWarning: true,
         onDragStart: onPlateContainerDragStart,
       }}
@@ -88,7 +88,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
         data-language={element.language}
         data-maltekstseksjon-id={element.id}
       >
-        {!hasWriteAccess || isFetching || manualUpdate === undefined || queryChanged ? null : (
+        {readOnly || isFetching || manualUpdate === undefined || queryChanged ? null : (
           <UpdateMaltekstseksjon
             next={manualUpdate}
             ignore={setUpdated}
@@ -99,7 +99,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
           />
         )}
         {children}
-        {hasWriteAccess && elementIsEmpty && maltekstseksjon === null && oppgave !== undefined ? (
+        {!readOnly && elementIsEmpty && maltekstseksjon === null && oppgave !== undefined ? (
           <Information
             isUpdating={false}
             oppgave={oppgave}
@@ -108,7 +108,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
             tiedList={tiedList}
           />
         ) : null}
-        {hasWriteAccess ? (
+        {readOnly ? null : (
           <Toolbar
             editor={editor}
             element={element}
@@ -117,7 +117,7 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
             isFetching={isFetching}
             update={() => update(false)}
           />
-        ) : null}
+        )}
       </MaltekstseksjonContainer>
     </PlateElement>
   );
