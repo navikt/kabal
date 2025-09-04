@@ -1,4 +1,3 @@
-import { useHasWriteAccess } from '@app/components/smart-editor/hooks/use-has-write-access';
 import {
   GodeFormuleringerExpandState,
   useSmartEditorAnnotationsAtOrigin,
@@ -29,7 +28,6 @@ interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'template
   showAnnotationsAtOrigin: boolean;
   setShowAnnotationsAtOrigin: (show: boolean) => void;
   sheetRef: RefObject<HTMLDivElement | null>;
-  hasWriteAccess: boolean;
   creator: string;
   editingComment: ISmartEditorComment | null;
   setEditingComment: (comment: ISmartEditorComment | null) => void;
@@ -52,7 +50,6 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   showAnnotationsAtOrigin: false,
   setShowAnnotationsAtOrigin: noop,
   sheetRef: { current: null },
-  hasWriteAccess: false,
   creator: '',
   editingComment: null,
   setEditingComment: noop,
@@ -77,7 +74,6 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
   const { value: showAnnotationsAtOrigin = false, setValue: setShowAnnotationsAtOrigin } =
     useSmartEditorAnnotationsAtOrigin();
   const sheetRef = useRef<HTMLDivElement | null>(null);
-  const hasWriteAccess = useHasWriteAccess(smartDocument);
   const [editingComment, setEditingComment] = useState<ISmartEditorComment | null>(null);
 
   return (
@@ -99,7 +95,6 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
         showAnnotationsAtOrigin,
         setShowAnnotationsAtOrigin,
         sheetRef,
-        hasWriteAccess,
         creator: creator.employee.navIdent,
         editingComment,
         setEditingComment,
