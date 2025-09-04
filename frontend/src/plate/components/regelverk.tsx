@@ -1,4 +1,3 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useRegelverkQuery } from '@app/components/smart-editor/hooks/use-query';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -16,8 +15,8 @@ import type { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/con
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { BoxNew, Button, HStack, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
+import { useCallback, useEffect, useState } from 'react';
 
 const isRegelverk = (text: IConsumerText): text is IConsumerRegelverkText => text.textType === REGELVERK_TYPE;
 
@@ -35,7 +34,7 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
   const [loading, setLoading] = useState(false);
   const { data: oppgave } = useOppgave();
   const query = useRegelverkQuery();
-  const { hasWriteAccess } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
 
   const [getTexts] = useLazyGetConsumerTextsQuery();
 
@@ -83,7 +82,7 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
             </HStack>
           </BoxNew>
         ) : null}
-        {hasWriteAccess ? (
+        {readOnly ? null : (
           <SectionToolbar contentEditable={false}>
             <DeleteRegelverkButton element={element} />
             <Tooltip content={loading ? 'Oppdaterer regelverk...' : 'Oppdater regelverk'} delay={0}>
@@ -97,7 +96,7 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
               />
             </Tooltip>
           </SectionToolbar>
-        ) : null}
+        )}
       </SectionContainer>
     </PlateElement>
   );

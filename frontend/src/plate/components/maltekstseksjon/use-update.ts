@@ -16,6 +16,7 @@ import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { type SkipToken, skipToken } from '@reduxjs/toolkit/query';
+import { useEditorReadOnly } from 'platejs/react';
 import { useCallback, useEffect, useState } from 'react';
 
 interface Result {
@@ -39,10 +40,10 @@ export const useUpdateMaltekstseksjon = (
   resultat: IOppgavebehandling['resultat'],
   onUpdate: () => void,
   queryChanged: boolean,
-  canManage: boolean,
 ): Result => {
   const editor = useMyPlateEditorRef(editorId);
   const language = useSmartEditorLanguage();
+  const readOnly = useEditorReadOnly();
   const path = usePath(editor, element);
   const [tiedList, setTiedList] = useState<ScoredList>(NO_TIED_LIST);
   const [manualUpdate, setManualUpdate] = useState<MaltekstseksjonUpdate | null | undefined>(undefined);
@@ -56,7 +57,7 @@ export const useUpdateMaltekstseksjon = (
 
   const update = useCallback(
     async (preferCache = true) => {
-      if (!canManage || query === skipToken) {
+      if (readOnly || query === skipToken) {
         return;
       }
 
@@ -111,7 +112,7 @@ export const useUpdateMaltekstseksjon = (
       }
     },
     [
-      canManage,
+      readOnly,
       editor,
       element,
       fetchMaltekstseksjonTexts,
@@ -128,14 +129,14 @@ export const useUpdateMaltekstseksjon = (
   );
 
   useEffect(() => {
-    if (queryChanged || maltekstseksjonIsFetching || textsAreFetching || !canManage || query === skipToken) {
+    if (queryChanged || maltekstseksjonIsFetching || textsAreFetching || readOnly || query === skipToken) {
       return;
     }
 
     update().catch((error) => {
       console.error('Failed to update maltekstseksjon:', error);
     });
-  }, [canManage, queryChanged, maltekstseksjonIsFetching, query, textsAreFetching, update]);
+  }, [readOnly, queryChanged, maltekstseksjonIsFetching, query, textsAreFetching, update]);
 
   return {
     isFetching: maltekstseksjonIsFetching || textsAreFetching,

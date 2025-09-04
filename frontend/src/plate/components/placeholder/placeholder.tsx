@@ -1,4 +1,3 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import {
   cleanText,
@@ -18,27 +17,18 @@ import { BoxNew, Tooltip } from '@navikt/ds-react';
 import { useEditorReadOnly } from '@platejs/core/react';
 import { PathApi } from 'platejs';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
-import { type MouseEvent, useCallback, useContext, useEffect, useMemo } from 'react';
+import { type MouseEvent, useCallback, useEffect, useMemo } from 'react';
 
-export const RedaktørPlaceholder = (props: PlateElementProps<PlaceholderElement>) => (
-  <Placeholder {...props} hasWriteAccess />
-);
+export const RedaktørPlaceholder = (props: PlateElementProps<PlaceholderElement>) => <Placeholder {...props} />;
 
-export const SaksbehandlerPlaceholder = (props: PlateElementProps<PlaceholderElement>) => {
-  const { hasWriteAccess } = useContext(SmartEditorContext);
+export const SaksbehandlerPlaceholder = (props: PlateElementProps<PlaceholderElement>) => <Placeholder {...props} />;
 
-  return <Placeholder {...props} hasWriteAccess={hasWriteAccess} />;
-};
-
-interface PlaceholderProps extends PlateElementProps<PlaceholderElement> {
-  hasWriteAccess: boolean;
-}
-
-const Placeholder = ({ hasWriteAccess, ...props }: PlaceholderProps) => {
+const Placeholder = (props: PlateElementProps<PlaceholderElement>) => {
   const { children, element, editor } = props;
   const text: string = useMemo(() => element.children.map((c) => c.text).join(''), [element.children]);
   const hasNoVisibleText = useMemo(() => getHasNoVisibleText(text), [text]);
-  const isReadOnly = useEditorReadOnly();
+  const hasVisibleText = !hasNoVisibleText;
+  const readOnly = useEditorReadOnly();
   const isDragging = window.getSelection()?.isCollapsed === false;
   const containsEmptyChar = getContainsEmptyChar(text);
 
@@ -140,11 +130,9 @@ const Placeholder = ({ hasWriteAccess, ...props }: PlaceholderProps) => {
     const path = editor.api.findPath(element);
 
     return (
-      !(hasWriteAccess && hasNoVisibleText) ||
-      lonePlaceholderInMaltekst(editor, element, path) ||
-      element.deletable === false
+      readOnly || hasVisibleText || lonePlaceholderInMaltekst(editor, element, path) || element.deletable === false
     );
-  }, [editor, element, hasNoVisibleText, hasWriteAccess]);
+  }, [editor, element, hasVisibleText, readOnly]);
 
   return (
     <PlateElement
@@ -152,7 +140,7 @@ const Placeholder = ({ hasWriteAccess, ...props }: PlaceholderProps) => {
       as="span"
       attributes={{
         ...props.attributes,
-        contentEditable: !isReadOnly,
+        contentEditable: !readOnly,
         suppressContentEditableWarning: true,
       }}
     >
@@ -164,13 +152,13 @@ const Placeholder = ({ hasWriteAccess, ...props }: PlaceholderProps) => {
           data-raw-placeholder={element.placeholder}
           data-placeholder={hasNoVisibleText ? element.placeholder : undefined}
           style={{
-            paddingLeft: hideDeleteButton || isReadOnly ? '0' : '1em',
+            paddingLeft: hideDeleteButton || readOnly ? '0' : '1em',
           }}
           className={`inline-block text-ax-text-neutral ${isFocused ? 'bg-ax-accent-200' : 'bg-ax-neutral-200'} after:cursor-text after:select-none after:text-ax-text-neutral-subtle after:content-[attr(data-placeholder)]`}
           onClick={onClick}
         >
           {children}
-          {hideDeleteButton || isReadOnly ? null : (
+          {hideDeleteButton || readOnly ? null : (
             <BoxNew
               asChild
               title="Slett innfyllingsfelt"

@@ -32,7 +32,7 @@ import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebeh
 import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, FileTextIcon } from '@navikt/aksel-icons';
 import { BoxNew, HStack, Tooltip, VStack } from '@navikt/ds-react';
-import { Plate, usePlateEditor } from '@platejs/core/react';
+import { Plate, useEditorReadOnly, usePlateEditor } from '@platejs/core/react';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
 import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
@@ -74,10 +74,10 @@ enum EventNames {
 
 const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProps) => {
   const { id } = smartDocument;
-  const { newCommentSelection, hasWriteAccess } = useContext(SmartEditorContext);
+  const { newCommentSelection } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
   const [isConnected, setIsConnected] = useState(false);
-  const [readOnly, setReadOnly] = useState(!hasWriteAccess);
+  const [readOnly, setReadOnly] = useState(true); // Start in read-only mode until we know otherwise.
 
   useEffect(() => {
     const sse = new ServerSentEventManager(`/smart-document-write-access/${id}`);
@@ -164,7 +164,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     id,
     plugins,
     override: { components },
-    skipInitialization: false, // Should be true according to Plate docs, but doesn't in platejs@49.0.4-49.0.6
+    skipInitialization: true,
   });
 
   const mounted = useMounted();
@@ -177,11 +177,11 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
       return;
     }
 
-    yjs.init();
+    yjs.init({ id });
     isInitialized.current = true;
 
-    return yjs.destroy;
-  }, [mounted, yjs]);
+    return () => yjs.destroy();
+  }, [mounted, yjs, id]);
 
   return (
     <VStack
@@ -193,7 +193,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     >
       <Plate<RichTextEditor>
         editor={editor}
-        readOnly={!hasWriteAccess || readOnly}
+        readOnly={readOnly}
         decorate={({ entry }) => {
           const [node, path] = entry;
           if (newCommentSelection === null || RangeApi.isCollapsed(newCommentSelection) || !TextApi.isText(node)) {
@@ -221,7 +221,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           return [];
         }}
       >
-        <PlateContext smartDocument={smartDocument} oppgave={oppgave} isConnected={isConnected} readOnly={readOnly} />
+        <PlateContext smartDocument={smartDocument} oppgave={oppgave} isConnected={isConnected} />
       </Plate>
     </VStack>
   );
@@ -231,7 +231,6 @@ interface PlateContextProps {
   smartDocument: ISmartDocumentOrAttachment;
   oppgave: IOppgavebehandling;
   isConnected: boolean;
-  readOnly: boolean;
 }
 
 // Copy-paste from Plate docs
@@ -245,10 +244,11 @@ const useMounted = () => {
   return mounted;
 };
 
-const PlateContext = ({ smartDocument, oppgave, isConnected, readOnly }: PlateContextProps) => {
+const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps) => {
   const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { showAnnotationsAtOrigin, showHistory } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
 
   return (
     <>
@@ -271,7 +271,7 @@ const PlateContext = ({ smartDocument, oppgave, isConnected, readOnly }: PlateCo
                 size: 'small',
               }}
             >
-              <EditorWithNewCommentAndFloatingToolbar id={id} isConnected={isConnected} readonly={readOnly} />
+              <EditorWithNewCommentAndFloatingToolbar id={id} />
             </ErrorBoundary>
           </VStack>
 
@@ -326,16 +326,10 @@ const PlateContext = ({ smartDocument, oppgave, isConnected, readOnly }: PlateCo
 
 interface EditorWithNewCommentAndFloatingToolbarProps {
   id: string;
-  isConnected: boolean;
-  readonly: boolean;
 }
 
-const EditorWithNewCommentAndFloatingToolbar = ({
-  id,
-  isConnected,
-  readonly,
-}: EditorWithNewCommentAndFloatingToolbarProps) => {
-  const { sheetRef, hasWriteAccess } = useContext(SmartEditorContext);
+const EditorWithNewCommentAndFloatingToolbar = ({ id }: EditorWithNewCommentAndFloatingToolbarProps) => {
+  const { sheetRef } = useContext(SmartEditorContext);
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const lang = useSmartEditorSpellCheckLanguage();
 
@@ -348,7 +342,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({
       <FloatingSaksbehandlerToolbar container={containerElement} editorId={id} />
       <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
 
-      <KabalPlateEditor id={id} readOnly={!(hasWriteAccess && isConnected) || readonly} lang={lang} />
+      <KabalPlateEditor id={id} lang={lang} />
     </Sheet>
   );
 };

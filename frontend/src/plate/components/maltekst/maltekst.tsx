@@ -1,4 +1,3 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
 import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
@@ -12,15 +11,15 @@ import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer
 import { ArrowCirclepathIcon, PadlockUnlockedIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { ElementApi } from 'platejs';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
-import { useContext, useMemo } from 'react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
+import { useMemo } from 'react';
 
 export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
   const { children, element, editor } = props;
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();
   const language = useSmartEditorLanguage();
   const isInRegelverk = useMemo(() => getIsInRegelverk(editor, element), [editor, element]);
-  const { hasWriteAccess } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
 
   // TODO: Remove this when all smart documents in prod use maltekstseksjon
   if (element.id === undefined) {
@@ -59,8 +58,6 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
 
   const unlock = () => editor.tf.unwrapNodes({ match: (n) => n === element, at: [] });
 
-  const readOnly = editor.api.isReadOnly();
-
   return (
     <PlateElement<MaltekstElement>
       {...props}
@@ -82,7 +79,7 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
         sectionType={SectionTypeEnum.MALTEKST}
       >
         {children}
-        {readOnly || !hasWriteAccess ? null : (
+        {readOnly ? null : (
           <SectionToolbar contentEditable={false}>
             <Tooltip content="Oppdater til siste versjon" delay={0}>
               <Button

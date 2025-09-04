@@ -13,10 +13,12 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { isLanguage, Language } from '@app/types/texts/language';
 import { CogIcon } from '@navikt/aksel-icons';
 import { Heading, Modal, ToggleGroup, VStack } from '@navikt/ds-react';
+import { useEditorReadOnly } from 'platejs/react';
 import { useCallback, useContext, useId, useRef, useState } from 'react';
 
 export const SaksbehandlerSettings = () => {
-  const { hasWriteAccess, showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } = useContext(SmartEditorContext);
+  const { showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
   const { value: expandedThreads = true, setValue: setExpandedThreads } = useSmartEditorExpandedThreads();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -61,7 +63,7 @@ export const SaksbehandlerSettings = () => {
           </Heading>
         </Modal.Header>
         <Modal.Body className="flex flex-col gap-y-4">
-          {hasWriteAccess ? (
+          {readOnly ? null : (
             <section aria-labelledby={langHeadingId}>
               <Heading level="2" size="small" spacing id={langHeadingId}>
                 Språk
@@ -71,7 +73,7 @@ export const SaksbehandlerSettings = () => {
                 <ToggleGroup.Item value={Language.NN}>Nynorsk</ToggleGroup.Item>
               </ToggleGroup>
             </section>
-          ) : null}
+          )}
 
           <Capitalise />
 

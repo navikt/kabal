@@ -1,4 +1,3 @@
-import { useHasWriteAccess } from '@app/components/smart-editor/hooks/use-has-write-access';
 import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
@@ -10,7 +9,7 @@ import { Sheet } from '@app/plate/sheet';
 import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { Button, VStack } from '@navikt/ds-react';
-import { Plate, usePlateEditor } from '@platejs/core/react';
+import { Plate, useEditorReadOnly, usePlateEditor } from '@platejs/core/react';
 import type { Value } from 'platejs';
 import { memo, useEffect } from 'react';
 
@@ -23,7 +22,7 @@ interface Props {
 export const HistoryEditor = memo(
   ({ smartDocument, version, versionId }: Props) => {
     const mainEditor = useMyPlateEditorRef(smartDocument.id);
-    const canManage = useHasWriteAccess(smartDocument);
+    const readOnly = useEditorReadOnly(smartDocument.id);
 
     const id = `${smartDocument.id}-${versionId}`;
 
@@ -56,7 +55,7 @@ export const HistoryEditor = memo(
             restore(mainEditor, version);
           }}
           size="small"
-          disabled={!canManage}
+          disabled={readOnly}
           className="sticky top-0 z-1 mb-5 w-[210mm]"
         >
           Gjenopprett denne versjonen
