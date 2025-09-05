@@ -1,3 +1,4 @@
+import type { OutgoingHttpHeaders } from 'node:http2';
 import { getCacheKey } from '@app/auth/cache/cache';
 import { getAzureADClient } from '@app/auth/get-auth-client';
 import { refreshOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
@@ -91,7 +92,7 @@ export const crdtPlugin = fastifyPlugin(
 
           const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter`, {
             method: 'POST',
-            headers: { ...headers, 'content-type': 'application/json' },
+            headers: { ...headers, 'content-type': 'application/json', 'accept-encoding': 'identity' },
             body: JSON.stringify({ ...body, data }),
           });
 
@@ -102,7 +103,13 @@ export const crdtPlugin = fastifyPlugin(
             logReq(msg, req, { behandlingId, statusCode: res.status }, 'error');
           }
 
-          return reply.send(res);
+          const responseHeaders: OutgoingHttpHeaders = {};
+
+          for (const [key, value] of Object.entries(res.headers)) {
+            responseHeaders[key] = value;
+          }
+
+          return reply.headers(responseHeaders).send(res.body);
         } catch (error) {
           logReq('Failed to save document', req, { behandlingId }, 'error', error);
 
