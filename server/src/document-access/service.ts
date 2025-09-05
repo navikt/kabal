@@ -2,6 +2,7 @@ import { requiredEnvString } from '@app/config/env-var';
 import { SmartDocumentAccessMap } from '@app/document-access/access-map';
 import { getAccessListFromApi } from '@app/document-access/api/access-list';
 import { getAccessListsFromApi } from '@app/document-access/api/access-lists';
+import { parseKafkaMessageValue } from '@app/document-access/kafka';
 import type { Metadata } from '@app/document-access/types';
 import { generateTraceId, getTraceIdAndSpanIdFromTraceparent } from '@app/helpers/traceparent';
 import { getLogger } from '@app/logger';
@@ -42,21 +43,7 @@ class SmartDocumentWriteAccess {
     metrics: { registry: proxyRegister, client },
     deserializers: {
       key: (data) => data?.toString('utf-8'),
-      value: (data) => {
-        log.debug({
-          msg: 'Deserializing Kafka message value',
-          trace_id: this.#lifecycle_trace_id,
-          data: { data: data === undefined ? '<undefined>' : data.toJSON() },
-        });
-
-        if (data === undefined) {
-          return null;
-        }
-
-        const value = data.toString('utf-8');
-
-        return value.split(',').filter((s) => s.length !== 0);
-      },
+      value: (data) => data?.toString('utf-8'),
       headerKey: (data) => data?.toString('utf-8'),
       headerValue: (data) => data?.toString('utf-8'),
     },
@@ -118,11 +105,13 @@ class SmartDocumentWriteAccess {
 
       log.debug({ msg: 'Kafka consumer stream listener starting...', trace_id });
 
-      stream.on('data', ({ key: documentId, value: payload, timestamp, headers }) => {
+      stream.on('data', ({ key: documentId, value, timestamp, headers }) => {
         const traceparent = headers.get('traceparent');
 
         const message_trace_id =
           traceparent === undefined ? undefined : getTraceIdAndSpanIdFromTraceparent(traceparent)?.trace_id;
+
+        const payload = parseKafkaMessageValue(value, message_trace_id ?? trace_id);
 
         if (payload === null) {
           log.debug({
