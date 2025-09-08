@@ -64,10 +64,13 @@ class SmartDocumentWriteAccess {
     log.debug({ msg: 'Initializing Smart Document Write Access...', trace_id });
 
     const initTimestamp = Date.now();
-    // Sync initial state from API.
-    await this.#syncFromApi();
 
     try {
+      // Sync initial state from API.
+      log.debug({ msg: 'Syncing initial state from API...', trace_id });
+      await this.#syncFromApi();
+      log.debug({ msg: 'Initial state synced from API', trace_id });
+
       log.debug({ msg: 'Connecting to Kafka brokers...', trace_id });
       await this.#consumer.connectToBrokers();
       log.debug({ msg: 'Kafka consumer connected to brokers', trace_id });
