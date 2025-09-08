@@ -50,7 +50,7 @@ class SmartDocumentWriteAccess {
   });
 
   #closeStream: (() => Promise<void>) | undefined;
-
+  #initialApiSyncDone = false;
   #lifecycle_trace_id = generateTraceId();
 
   /**
@@ -69,6 +69,7 @@ class SmartDocumentWriteAccess {
       // Sync initial state from API.
       log.debug({ msg: 'Syncing initial state from API...', trace_id });
       await this.#syncFromApi();
+      this.#initialApiSyncDone = true;
       log.debug({ msg: 'Initial state synced from API', trace_id });
 
       log.debug({ msg: 'Connecting to Kafka brokers...', trace_id });
@@ -262,6 +263,10 @@ class SmartDocumentWriteAccess {
 
     const errors: string[] = [];
 
+    if (!this.#initialApiSyncDone) {
+      errors.push('Initial API sync has not completed');
+    }
+
     if (!this.#consumer.isConnected()) {
       errors.push('Kafka consumer is not connected');
     }
@@ -321,7 +326,7 @@ class SmartDocumentWriteAccess {
    * It is not necessary for this to succeed.
    */
   #syncFromApi = async (): Promise<void> => {
-    const response = await getAccessListsFromApi();
+    const response = await getAccessListsFromApi(this.#lifecycle_trace_id);
 
     if (response === null) {
       return;

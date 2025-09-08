@@ -6,13 +6,14 @@ import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 
 const log = getLogger('document-write-access-api');
 
-export const getAccessListsFromApi = async (): Promise<AccessLists | null> => {
-  const { access_token } = await getToken();
-
-  const trace_id = generateTraceId();
+export const getAccessListsFromApi = async (trace_id = generateTraceId()): Promise<AccessLists | null> => {
   const span_id = generateSpanId();
 
+  const { access_token } = await getToken(trace_id);
+
   const start = performance.now();
+
+  log.debug({ msg: 'Fetching access lists from API...', trace_id, span_id });
 
   const response = await fetch(`${KABAL_API_URL}/smart-document-write-access`, {
     method: 'GET',
@@ -48,7 +49,7 @@ export const getAccessListsFromApi = async (): Promise<AccessLists | null> => {
   }
 
   log.debug({
-    msg: 'Successfully fetched access lists',
+    msg: `Successfully fetched access lists in ${duration}ms`,
     data: {
       accessLists: Object.fromEntries(
         accessLists.smartDocumentWriteAccessList.map(({ documentId, navIdents }) => [documentId, navIdents]),

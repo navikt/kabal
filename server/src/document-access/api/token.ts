@@ -1,5 +1,6 @@
 import { NAIS_CLUSTER_NAME } from '@app/config/config';
 import { requiredEnvString } from '@app/config/env-var';
+import { generateSpanId, generateTraceId } from '@app/helpers/traceparent';
 import { getLogger } from '@app/logger';
 import { type Static, Type } from '@sinclair/typebox';
 import { TypeCompiler } from '@sinclair/typebox/compiler';
@@ -10,7 +11,11 @@ const target = `api://${NAIS_CLUSTER_NAME}.klage.kabal-api/.default`;
 
 const log = getLogger('azure-token');
 
-export const getToken = async (): Promise<TokenResponse> => {
+export const getToken = async (trace_id = generateTraceId()): Promise<TokenResponse> => {
+  const span_id = generateSpanId();
+
+  log.debug({ msg: 'Fetching Azure token...', trace_id, span_id });
+
   const start = performance.now();
 
   const res = await fetch(TOKEN_ENDPOINT, {
@@ -27,16 +32,24 @@ export const getToken = async (): Promise<TokenResponse> => {
   const duration = performance.now() - start;
 
   if (!res.ok) {
-    log.error({ msg: 'Failed to fetch Azure token', data: { status: res.status, duration } });
+    log.error({ msg: 'Failed to fetch Azure token', data: { status: res.status, duration, trace_id, span_id } });
 
     throw new Error(`Failed to fetch Azure token: ${res.statusText}`);
   }
+
+  log.debug({
+    msg: `Successfully fetched Azure token in ${duration}ms`,
+    data: { status: res.status, duration, trace_id, span_id },
+  });
 
   const data = await res.json();
 
   if (!CHECKER.Check(data)) {
     const errors = [...CHECKER.Errors(data)].join(', ');
-    log.error({ msg: 'Invalid Azure token response', data: { status: res.status, duration, errors } });
+    log.error({
+      msg: 'Invalid Azure token response',
+      data: { status: res.status, duration, errors, trace_id, span_id },
+    });
 
     throw new Error(`Invalid Azure token response: ${errors}`);
   }
