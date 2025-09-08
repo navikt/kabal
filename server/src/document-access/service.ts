@@ -1,7 +1,6 @@
 import { requiredEnvString } from '@app/config/env-var';
 import { SmartDocumentAccessMap } from '@app/document-access/access-map';
 import { getAccessListFromApi } from '@app/document-access/api/access-list';
-import { getAccessListsFromApi } from '@app/document-access/api/access-lists';
 import { parseKafkaMessageValue } from '@app/document-access/kafka';
 import type { Metadata } from '@app/document-access/types';
 import { generateTraceId, getTraceIdAndSpanIdFromTraceparent } from '@app/helpers/traceparent';
@@ -50,7 +49,6 @@ class SmartDocumentWriteAccess {
   });
 
   #closeStream: (() => Promise<void>) | undefined;
-  #initialApiSyncDone = false;
   #lifecycle_trace_id = generateTraceId();
 
   /**
@@ -66,12 +64,6 @@ class SmartDocumentWriteAccess {
     const initTimestamp = Date.now();
 
     try {
-      // Sync initial state from API.
-      log.debug({ msg: 'Syncing initial state from API...', trace_id });
-      await this.#syncFromApi();
-      this.#initialApiSyncDone = true;
-      log.debug({ msg: 'Initial state synced from API', trace_id });
-
       log.debug({ msg: 'Connecting to Kafka brokers...', trace_id });
       await this.#consumer.connectToBrokers();
       log.debug({ msg: 'Kafka consumer connected to brokers', trace_id });
@@ -263,10 +255,6 @@ class SmartDocumentWriteAccess {
 
     const errors: string[] = [];
 
-    if (!this.#initialApiSyncDone) {
-      errors.push('Initial API sync has not completed');
-    }
-
     if (!this.#consumer.isConnected()) {
       errors.push('Kafka consumer is not connected');
     }
@@ -319,22 +307,6 @@ class SmartDocumentWriteAccess {
     this.#accessMap.set(documentId, accessList.navIdents);
 
     return accessList;
-  };
-
-  /**
-   * Sync the initial state from the API. This is just an optimization.
-   * It is not necessary for this to succeed.
-   */
-  #syncFromApi = async (): Promise<void> => {
-    const response = await getAccessListsFromApi(this.#lifecycle_trace_id);
-
-    if (response === null) {
-      return;
-    }
-
-    for (const { documentId, navIdents } of response.smartDocumentWriteAccessList) {
-      this.#accessMap.set(documentId, navIdents);
-    }
   };
 }
 
