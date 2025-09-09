@@ -43,7 +43,7 @@ const useRelevantSmartDocuments = (oppgaveId: string | typeof skipToken): ISmart
     return sortedSmartDocuments.filter((d) => d.creator.creatorRole === CreatorRole.KABAL_ROL);
   }
 
-  return sortedSmartDocuments;
+  return sortedSmartDocuments.filter((d) => d.creator.creatorRole !== CreatorRole.KABAL_ROL);
 };
 
 interface TabbedProps {
