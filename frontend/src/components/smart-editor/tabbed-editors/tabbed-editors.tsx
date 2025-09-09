@@ -7,22 +7,43 @@ import {
   useSmartEditorGodeFormuleringerOpen,
   useSmartEditorHistoryOpen,
 } from '@app/hooks/settings/use-setting';
-import { useSmartDocuments } from '@app/hooks/use-smart-documents';
-import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
+import { useIsRolOrKrolUser } from '@app/hooks/use-is-rol';
+import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { CreatorRole, type ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
 import { Tabs, Tooltip } from '@navikt/ds-react';
+import type { skipToken } from '@reduxjs/toolkit/query';
 
 const NEW_TAB_ID = 'NEW_TAB_ID';
 
 export const TabbedEditors = () => {
   const oppgaveId = useOppgaveId();
-  const documents = useSmartDocuments(oppgaveId);
+  const documents = useRelevantSmartDocuments(oppgaveId);
 
   if (documents === undefined) {
     return null;
   }
 
   return <Tabbed documents={documents} />;
+};
+
+const useRelevantSmartDocuments = (oppgaveId: string | typeof skipToken): ISmartDocumentOrAttachment[] | undefined => {
+  const { data } = useGetDocumentsQuery(oppgaveId);
+  const isRolOrKrol = useIsRolOrKrolUser();
+
+  const sortedSmartDocuments = data
+    ?.filter((d) => d.isSmartDokument)
+    .toSorted((a, b) => a.created.localeCompare(b.created));
+
+  if (sortedSmartDocuments === undefined) {
+    return undefined;
+  }
+
+  if (isRolOrKrol) {
+    return sortedSmartDocuments.filter((d) => d.creator.creatorRole === CreatorRole.KABAL_ROL);
+  }
+
+  return sortedSmartDocuments;
 };
 
 interface TabbedProps {
