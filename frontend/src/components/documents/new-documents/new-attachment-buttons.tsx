@@ -3,6 +3,7 @@ import { DuaActionEnum } from '@app/hooks/dua-access/access';
 import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
 import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { ROL_ANSWERS_TEMPLATE } from '@app/plate/templates/simple-templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
@@ -69,13 +70,14 @@ const NewRolAnswerDocumentButton = ({ document }: Props) => {
     DuaActionEnum.CREATE,
     document,
   );
+  const { setValue: setActiveDocument } = useSmartEditorActiveDocument();
 
   if (oppgaveId === skipToken || createAccessError !== null) {
     return null;
   }
 
-  const onClick = () =>
-    create({
+  const onClick = async () => {
+    const { id } = await create({
       oppgaveId: oppgaveId,
       parentId: document.id,
       tittel: 'Svar fra rådgivende overlege',
@@ -83,8 +85,10 @@ const NewRolAnswerDocumentButton = ({ document }: Props) => {
       dokumentTypeId: ROL_ANSWERS_TEMPLATE.dokumentTypeId,
       templateId: ROL_ANSWERS_TEMPLATE.templateId,
       language: Language.NB,
-    });
+    }).unwrap();
 
+    setActiveDocument(id);
+  };
   return (
     <Button
       variant="tertiary-neutral"
