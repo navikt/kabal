@@ -4,6 +4,7 @@ import { DuaActionEnum } from '@app/hooks/dua-access/access';
 import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
 import { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
+import { Journalstatus } from '@app/types/arkiverte-documents';
 import {
   DistribusjonsType,
   DocumentTypeEnum,
@@ -33,6 +34,11 @@ export const useCanDropOnDocument = (targetDocument: IDocument): boolean => {
       targetDocument.dokumentTypeId !== DistribusjonsType.NOTAT
     ) {
       // Journalførte dokumenter med varianter som ikke kan distribueres, kan kun legges som vedlegg til dokumenter av typen NOTAT.
+      return false;
+    }
+
+    if (draggedJournalfoertDocuments.some((d) => !d.hasAccess || d.journalstatus === Journalstatus.MOTTATT)) {
+      // Journalførte dokumenter som ikke har tilgang eller har status MOTTATT kan ikke legges til som vedlegg.
       return false;
     }
 
