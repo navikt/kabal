@@ -28,16 +28,16 @@ export const TabbedEditors = () => {
 };
 
 const useRelevantSmartDocuments = (oppgaveId: string | typeof skipToken): ISmartDocumentOrAttachment[] | undefined => {
-  const { data } = useGetDocumentsQuery(oppgaveId);
+  const { data, isSuccess } = useGetDocumentsQuery(oppgaveId);
   const isRolOrKrol = useIsRolOrKrolUser();
 
-  const sortedSmartDocuments = data
-    ?.filter((d) => d.isSmartDokument)
-    .toSorted((a, b) => a.created.localeCompare(b.created));
-
-  if (sortedSmartDocuments === undefined) {
+  if (!isSuccess) {
     return undefined;
   }
+
+  const sortedSmartDocuments = data
+    .filter((d): d is ISmartDocumentOrAttachment => d.isSmartDokument && !d.isMarkertAvsluttet)
+    .toSorted((a, b) => a.created.localeCompare(b.created));
 
   if (isRolOrKrol) {
     return sortedSmartDocuments.filter((d) => d.creator.creatorRole === CreatorRole.KABAL_ROL);
