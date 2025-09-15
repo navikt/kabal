@@ -2,139 +2,24 @@ import { getCacheKey, oboCache } from '@app/auth/cache/cache';
 import { ApiClientEnum } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
 import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
-import { hasOwn, isObject } from '@app/functions/functions';
 import { isNotNull } from '@app/functions/guards';
 import { parseTokenPayload } from '@app/helpers/token-parser';
-import { type AnyObject, getLogger, getTeamLogger, type Level } from '@app/logger';
+import { getTeamLogger } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
 import { getDocumentJson, setDocument } from '@app/plugins/crdt/api/set-document';
+import { getCloseEvent } from '@app/plugins/crdt/close-event';
 import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
+import { log, logContext } from '@app/plugins/crdt/log-context';
+import { createRefreshTimer } from '@app/plugins/crdt/refresh';
 import { getValkeyExtension } from '@app/plugins/crdt/valkey';
-import type { CloseEvent } from '@hocuspocus/common';
 import { Hocuspocus } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
 
-const log = getLogger('collaboration');
 const teamLog = getTeamLogger('collaboration');
 
-const logContext = (msg: string, context: ConnectionContext, level: Level = 'info', extra?: AnyObject) => {
-  log[level]({
-    msg,
-    trace_id: context.trace_id,
-    span_id: context.span_id,
-    tab_id: context.tab_id,
-    client_version: context.client_version,
-    data: { behandlingId: context.behandlingId, dokumentId: context.dokumentId, ...extra },
-  });
-};
-
-const refresh = async (context: ConnectionContext, retries = 2): Promise<number> => {
-  const { abortController, cookie } = context;
-
-  if (abortController === undefined) {
-    throw new RefreshError(500, 'Missing abort controller');
-  }
-
-  if (cookie === undefined) {
-    throw new RefreshError(401, 'Missing session cookie');
-  }
-
-  try {
-    // Refresh OBO token directly through Wonderwall.
-    const res = await fetch('http://localhost:7564/collaboration/refresh-obo-access-token', {
-      method: 'GET',
-      headers: { Cookie: cookie },
-      signal: abortController.signal,
-    });
-
-    if (!res.ok) {
-      const text = await res.text();
-      throw new RefreshError(res.status, `Wonderwall responded with status code ${res.status}: ${text}`);
-    }
-
-    const parsed = await res.json();
-
-    if (isObject(parsed) && hasOwn(parsed, 'exp') && typeof parsed.exp === 'number') {
-      const expiresIn = Math.floor(parsed.exp - Date.now() / 1_000);
-
-      logContext(`OBO token refreshed. Expires in ${expiresIn} seconds`, context, 'debug');
-
-      return expiresIn;
-    }
-
-    logContext('Invalid OBO token refresh response', context, 'warn');
-
-    throw new RefreshError(500, 'Invalid OBO token refresh response');
-  } catch (err) {
-    if (err instanceof DOMException && err.name === 'AbortError') {
-      logContext('OBO token refresh request aborted', context, 'debug');
-
-      return 0;
-    }
-
-    if (retries === 0) {
-      throw new RefreshError(500, `Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`);
-    }
-
-    return refresh(context, retries - 1);
-  }
-};
-
-const REFRESH_TOKEN_LIMIT = 120; // Highest token expiration time Wonderwall will give new token for.
-
-const createRefreshTimeout = async (context: ConnectionContext, expiresIn: number): Promise<void> => {
-  if (expiresIn <= REFRESH_TOKEN_LIMIT) {
-    try {
-      // Refresh OBO token immediately if it's missing or about to expire.
-      const newExpiresIn = await refresh(context);
-      // Start a new timeout to refresh the new token when it expires.
-      return createRefreshTimeout(context, newExpiresIn);
-    } catch (err) {
-      logContext(`Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`, context, 'warn');
-
-      if (err instanceof RefreshError) {
-        throw getCloseEvent('INVALID_SESSION', 4000 + err.status);
-      }
-
-      throw getCloseEvent('INVALID_SESSION', 4500);
-    }
-  }
-
-  // Refresh OBO token 30 seconds before it expires.
-  const timeout = setTimeout(
-    async () => {
-      // Clear previous timeout reference.
-      context.timeout = undefined;
-
-      try {
-        const newExpiresIn = await refresh(context);
-        // Start a new timeout to refresh the new token when it expires.
-        await createRefreshTimeout(context, newExpiresIn);
-      } catch (err) {
-        if (err instanceof RefreshError || err instanceof Error) {
-          logContext(err.message, context, 'warn');
-        } else {
-          logContext(`Failed to refresh OBO token. Error: ${err}`, context, 'warn');
-        }
-      }
-    },
-    (expiresIn - REFRESH_TOKEN_LIMIT) * 1_000,
-  );
-
-  context.timeout = timeout;
-
-  const abortController = new AbortController();
-
-  abortController.signal.addEventListener('abort', () => {
-    logContext('Aborted refresh OBO token timeout', context, 'debug');
-    clearTimeout(timeout);
-    context.timeout = undefined;
-  });
-
-  context.abortController = abortController;
-};
-
 export const collaborationServer = new Hocuspocus({
+  name: 'kabal-collaboration-server',
+  timeout: 5_000,
   debounce: 3_000,
   maxDebounce: 15_000,
 
@@ -148,13 +33,14 @@ export const collaborationServer = new Hocuspocus({
 
     const hasWriteAccess = await getHasWriteAccess(context, true);
 
+    context.hasWriteAccess = hasWriteAccess;
+
     connectionConfig.readOnly = !hasWriteAccess;
 
     logContext(
       `Authenticated collaboration socket for ${dokumentId} in ${behandlingId} for user ${navIdent} ${hasWriteAccess ? 'User has write access' : 'User does not have write access'}.`,
       context,
       'debug',
-      { readOnly: !hasWriteAccess, nav_ident: navIdent },
     );
   },
 
@@ -173,7 +59,7 @@ export const collaborationServer = new Hocuspocus({
       'debug',
     );
 
-    await createRefreshTimeout(context, expiresIn);
+    await createRefreshTimer(context, expiresIn);
 
     const { dokumentId, navIdent, behandlingId } = context;
 
@@ -185,22 +71,45 @@ export const collaborationServer = new Hocuspocus({
       `Connected collaboration socket for ${dokumentId} in ${behandlingId} for user ${navIdent}. ${hasWriteAccess ? 'User has write access' : 'User does not have write access'}.`,
       context,
       'debug',
-      { readOnly: !hasWriteAccess, nav_ident: navIdent },
     );
   },
 
-  onDisconnect: ({ context }) => {
-    if (isConnectionContext(context)) {
-      // navIdent is not defined locally.
-      logContext(`Collaboration connection closed for ${context.navIdent}.`, context, 'debug');
-
-      context.abortController?.abort();
-
-      return Promise.resolve();
+  connected: async ({ context, connection, documentName }) => {
+    if (!isConnectionContext(context)) {
+      log.error({ msg: 'Tried to establish collaboration connection without context' });
+      throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
-    log.error({ msg: 'Tried to close collaboration connection without context' });
-    throw getCloseEvent('INVALID_CONTEXT', 4401);
+    logContext('New collaboration connection established', context, 'debug');
+
+    const { navIdent, trace_id, span_id, tab_id, client_version } = context;
+
+    context.removeHasAccessListener = SMART_DOCUMENT_WRITE_ACCESS.addHasAccessListener(
+      documentName,
+      navIdent,
+      { trace_id, span_id, tab_id, client_version },
+      (hasWriteAccess) => {
+        connection.sendStateless(hasWriteAccess ? 'read-write' : 'readonly');
+      },
+    );
+  },
+
+  onDisconnect: async ({ context }) => {
+    if (!isConnectionContext(context)) {
+      log.error({ msg: 'Tried to close collaboration connection without context' });
+      throw getCloseEvent('INVALID_CONTEXT', 4401);
+    }
+
+    // navIdent is not defined locally.
+    logContext(`Collaboration connection closed for ${context.navIdent}.`, context, 'debug');
+
+    if (context.tokenRefreshTimer !== undefined) {
+      clearTimeout(context.tokenRefreshTimer);
+      context.tokenRefreshTimer = undefined;
+      logContext('Refresh OBO token timer cleared', context, 'debug');
+    }
+
+    context.removeHasAccessListener?.();
   },
 
   beforeHandleMessage: async ({ context, connection }) => {
@@ -218,10 +127,10 @@ export const collaborationServer = new Hocuspocus({
       throw getCloseEvent('MISSING_COOKIE', 4401);
     }
 
-    if (context.timeout === undefined) {
+    if (context.tokenRefreshTimer === undefined) {
       const expiresIn = await getTokenExpiresIn(context, 'beforeHandleMessage');
-      logContext('Missing refresh OBO token timeout. Starting timeout.', context, 'warn');
-      await createRefreshTimeout(context, expiresIn);
+      logContext('Missing refresh OBO token timer. Starting timer.', context, 'warn');
+      await createRefreshTimer(context, expiresIn);
     }
 
     const expiresIn = await getTokenExpiresIn(context, 'beforeHandleMessage');
@@ -251,7 +160,6 @@ export const collaborationServer = new Hocuspocus({
         `Document ${dokumentId} already loaded for user ${navIdent}. User ${hasWriteAccess ? 'has' : 'does not have'} write access.`,
         context,
         'debug',
-        { readOnly: !hasWriteAccess, nav_ident: navIdent },
       );
 
       connectionConfig.readOnly = !hasWriteAccess;
@@ -275,7 +183,6 @@ export const collaborationServer = new Hocuspocus({
       `Document ${dokumentId} loaded for user ${navIdent}. User ${hasWriteAccess ? 'has' : 'does not have'} write access.`,
       context,
       'debug',
-      { readOnly: !hasWriteAccess, nav_ident: navIdent },
     );
   },
 
@@ -301,17 +208,6 @@ export const collaborationServer = new Hocuspocus({
 
   extensions: isDeployed ? [getValkeyExtension()].filter(isNotNull) : [],
 });
-
-const getCloseEvent = (reason: string, code: number): CloseEvent => ({ reason, code });
-
-class RefreshError extends Error {
-  public readonly status: number;
-
-  constructor(status: number, message: string) {
-    super(message);
-    this.status = status;
-  }
-}
 
 const getTokenExpiresIn = async (context: ConnectionContext, method: string) => {
   const oboAccessToken = await oboCache.get(getCacheKey(context.navIdent, ApiClientEnum.KABAL_API));
