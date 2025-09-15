@@ -23,7 +23,7 @@ export const KabalPlateEditor = ({ className, spellCheck = true, ...props }: Pro
   return (
     <PlateContent
       {...props}
-      readOnly={readOnly}
+      readOnly={readOnly || props.readOnly}
       className={merge('min-h-full outline-none', className)}
       spellCheck={spellCheck}
       renderLeaf={({ attributes, children, text }) => (
