@@ -1,6 +1,6 @@
 import { Fields } from '@app/components/documents/new-documents/grid';
 import { useFinishValidationErrors } from '@app/components/documents/new-documents/hooks/use-finish-access';
-import { useRemoveDocumentAccessError as useRemoveDocumentAccessErrors } from '@app/components/documents/new-documents/hooks/use-remove-access';
+import { useRemoveDocumentAccessErrors } from '@app/components/documents/new-documents/hooks/use-remove-access';
 import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { DocumentModalContent } from '@app/components/documents/new-documents/modal/modal-document-content';
