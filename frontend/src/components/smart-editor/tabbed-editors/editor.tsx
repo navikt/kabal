@@ -7,7 +7,6 @@ import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { VersionStatus } from '@app/components/smart-editor/tabbed-editors/version-status';
-import { toast } from '@app/components/toast/store';
 import { ENVIRONMENT } from '@app/environment';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
@@ -80,9 +79,11 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const [readOnly, setReadOnly] = useState(true); // Start in read-only mode until we know otherwise.
 
   useEffect(() => {
-    const sse = new ServerSentEventManager(`/smart-document-write-access/${id}`);
+    const sse = new ServerSentEventManager<EventNames>(`/smart-document-write-access/${id}`);
 
-    return sse.addEventListener(EventNames.WRITE_ACCESS, ({ data }) => setReadOnly(data !== 'read-write'));
+    return sse.addEventListener(EventNames.WRITE_ACCESS, ({ data }) => {
+      setReadOnly(data !== 'read-write');
+    });
   }, [id]);
 
   const provider: YjsProviderConfig = {
@@ -104,7 +105,6 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         setIsConnected(false);
 
         if (event.code === 4403) {
-          toast.info(`Du har mistet skrivetilgangen til «${smartDocument.tittel}».`);
           yjs.connect(); // Reconnect immediately to regain access, with new access rights.
           return;
         }
@@ -148,11 +148,23 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           editor.tf.removeNodes({ at: [0] });
         }
       },
+      onConnect: () => {
+        setIsConnected(true);
+      },
       onDisconnect: () => {
         setIsConnected(false);
       },
-      onConnect: () => {
-        setIsConnected(true);
+      onAuthenticationFailed: () => {
+        console.error('Authentication failed');
+        setReadOnly(true);
+        setIsConnected(false);
+      },
+      onStateless: ({ payload }) => {
+        if (payload === 'readonly') {
+          setReadOnly(true);
+        } else if (payload === 'read-write') {
+          setReadOnly(false);
+        }
       },
     },
   };

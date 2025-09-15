@@ -90,6 +90,7 @@ export const collaborationServer = new Hocuspocus({
       { trace_id, span_id, tab_id, client_version },
       (hasWriteAccess) => {
         connection.sendStateless(hasWriteAccess ? 'read-write' : 'readonly');
+        connection.readOnly = !hasWriteAccess;
       },
     );
   },
