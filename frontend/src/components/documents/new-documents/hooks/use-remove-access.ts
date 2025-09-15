@@ -8,7 +8,7 @@ interface Result {
   removeAttachmentsAccessErrors: string[];
 }
 
-export const useRemoveDocumentAccessError = ({ id, type, templateId, creator }: IParentDocument): Result => {
+export const useRemoveDocumentAccessErrors = ({ id, type, templateId, creator }: IParentDocument): Result => {
   const removeDocumentAccessError = useDuaAccess({ creator, type, templateId }, DuaActionEnum.REMOVE);
 
   const { pdfOrSmartDocuments, journalfoerteDocuments } = useAttachments(id);

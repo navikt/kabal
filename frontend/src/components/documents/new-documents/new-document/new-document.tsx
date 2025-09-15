@@ -1,6 +1,7 @@
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/new-documents/grid';
+import { useRemoveDocumentAccessErrors } from '@app/components/documents/new-documents/hooks/use-remove-access';
 import { DocumentModal } from '@app/components/documents/new-documents/modal/document-modal';
 import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
@@ -37,8 +38,10 @@ export const NewDocument = memo(
 
     const renameAccessError = useDuaAccess(document, DuaActionEnum.RENAME);
     const changeTypeAccessError = useDuaAccess(document, DuaActionEnum.CHANGE_TYPE);
+    const { removeDocumentAccessError, removeAttachmentsAccessErrors } = useRemoveDocumentAccessErrors(document);
 
-    const isDraggable = draggingEnabled && !modalOpen;
+    const isDraggable =
+      draggingEnabled && !modalOpen && removeDocumentAccessError === null && removeAttachmentsAccessErrors.length === 0;
 
     const onDragStart = useCallback(
       async (e: React.DragEvent<HTMLDivElement>) => {
