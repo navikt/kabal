@@ -61,7 +61,7 @@ export const HistoryEditor = memo(
           Gjenopprett denne versjonen
         </Button>
         <ErrorBoundary errorComponent={() => <ErrorComponent textId={id} />} className="w-[210mm]">
-          <Plate<RichTextEditor> editor={editor}>
+          <Plate<RichTextEditor> editor={editor} readOnly>
             <HistoryContent id={id} version={version} />
           </Plate>
         </ErrorBoundary>
