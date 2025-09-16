@@ -12,25 +12,30 @@ interface Props {
 
 const SHEET_CLASSES = 'first-of-type:mt-0';
 
-export const Sheet = ({ minHeight = false, children, ref, className, scaleCssVar = EDITOR_SCALE_CSS_VAR }: Props) => (
-  <BoxNew
-    position="relative"
-    background="input"
-    flexShrink="0"
-    marginBlock="space-16 0"
-    shadow="dialog"
-    className={className === undefined ? SHEET_CLASSES : `${SHEET_CLASSES} ${className}`}
-    style={{
-      width: `calc(var(${scaleCssVar}) * 210mm)`,
-      minHeight: minHeight ? `calc(var(${scaleCssVar}) * 297mm)` : 'unset',
-      paddingInline: `calc(var(${scaleCssVar}) * 20mm)`,
-      paddingBottom: `calc(var(${scaleCssVar}) * 20mm)`,
-      paddingTop: `calc(var(${scaleCssVar}) * 15mm)`,
-      fontSize: `calc(var(${scaleCssVar}) * ${BASE_FONT_SIZE}pt)`,
-    }}
-    ref={ref}
-    data-element="sheet"
-  >
-    {children}
-  </BoxNew>
-);
+export const Sheet = ({ minHeight = false, children, ref, className, scaleCssVar = EDITOR_SCALE_CSS_VAR }: Props) => {
+  // Generated pdf will have a tiny extra margin, so we add it as well to make the document look the same on both sides
+  const pdfOffset = `var(${scaleCssVar}) * 2px`;
+
+  return (
+    <BoxNew
+      position="relative"
+      background="input"
+      flexShrink="0"
+      marginBlock="space-16 0"
+      shadow="dialog"
+      className={className === undefined ? SHEET_CLASSES : `${SHEET_CLASSES} ${className}`}
+      style={{
+        width: `calc(var(${scaleCssVar}) * 210mm)`,
+        minHeight: minHeight ? `calc(var(${scaleCssVar}) * 297mm)` : 'unset',
+        paddingInline: `calc(var(${scaleCssVar}) * 20mm + ${pdfOffset})`,
+        paddingBottom: `calc(var(${scaleCssVar}) * 20mm + ${pdfOffset})`,
+        paddingTop: `calc(var(${scaleCssVar}) * 15mm + ${pdfOffset})`,
+        fontSize: `calc(var(${scaleCssVar}) * ${BASE_FONT_SIZE}pt)`,
+      }}
+      ref={ref}
+      data-element="sheet"
+    >
+      {children}
+    </BoxNew>
+  );
+};
