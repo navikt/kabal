@@ -63,10 +63,9 @@ export class ValkeyExtension implements Extension {
       });
   }
 
-  onConfigure({ instance }: onConfigurePayload) {
+  async onConfigure({ instance }: onConfigurePayload) {
     log.debug({ msg: 'Configuring ValkeyExtension', data: { identifier: this.#identifier } });
     this.instance = instance;
-    return Promise.resolve();
   }
 
   #getKey = (documentName: string) => `${this.#prefix}:${documentName}`;
@@ -233,12 +232,10 @@ export class ValkeyExtension implements Extension {
 
   public async onChange({ documentName, document, transactionOrigin }: onChangePayload): Promise<void> {
     if (transactionOrigin === this.#valkeyTransactionOrigin) {
-      return Promise.resolve();
+      return;
     }
 
     await this.#publishFirstSyncStep(documentName, document);
-
-    return Promise.resolve();
   }
 
   public async onDisconnect({ documentName, document }: onDisconnectPayload): Promise<void> {
@@ -315,13 +312,11 @@ export class ValkeyExtension implements Extension {
     this.#pub.publish(this.#getKey(documentName), this.#encodeMessage(message.toUint8Array()));
   }
 
-  public onDestroy() {
+  public async onDestroy() {
     log.debug({ msg: 'Destroying ValkeyExtension', data: { identifier: this.#identifier } });
 
     this.#pub.disconnect();
     this.#sub.disconnect();
-
-    return Promise.resolve();
   }
 }
 
