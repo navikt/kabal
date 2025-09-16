@@ -19,6 +19,7 @@ export const Paragraph = (props: RenderProps) => {
         textAlign: element.align,
         fontSize: '1em',
         marginTop: '1em',
+        lineHeight: 1.5,
       }}
       className="mb-0 whitespace-pre-wrap before:absolute before:cursor-text before:text-ax-text-neutral-decoration before:content-[attr(data-placeholder)]"
       attributes={{ ...props.attributes, 'data-placeholder': isEmpty(element) ? 'Avsnitt' : '' }}
