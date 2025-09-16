@@ -315,8 +315,8 @@ export class ValkeyExtension implements Extension {
   public async onDestroy() {
     log.debug({ msg: 'Destroying ValkeyExtension', data: { identifier: this.#identifier } });
 
-    this.#pub.disconnect();
-    this.#sub.disconnect();
+    this.#pub.destroy();
+    this.#sub.destroy();
   }
 }
 
