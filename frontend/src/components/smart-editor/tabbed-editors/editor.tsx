@@ -25,7 +25,6 @@ import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { ServerSentEventManager } from '@app/server-sent-events';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { isObject } from '@grafana/faro-web-sdk';
@@ -67,24 +66,12 @@ interface LoadedEditorProps extends EditorProps {
   oppgave: IOppgavebehandling;
 }
 
-enum EventNames {
-  WRITE_ACCESS = 'write-access',
-}
-
 const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProps) => {
   const { id } = smartDocument;
   const { newCommentSelection } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
   const [isConnected, setIsConnected] = useState(false);
   const [readOnly, setReadOnly] = useState(true); // Start in read-only mode until we know otherwise.
-
-  useEffect(() => {
-    const sse = new ServerSentEventManager<EventNames>(`/smart-document-write-access/${id}`);
-
-    return sse.addEventListener(EventNames.WRITE_ACCESS, ({ data }) => {
-      setReadOnly(data !== 'read-write');
-    });
-  }, [id]);
 
   const provider: YjsProviderConfig = {
     type: 'hocuspocus',
