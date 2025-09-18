@@ -53,12 +53,16 @@ export const ViewPDF = () => {
       doc.varianter.some(({ hasAccess, format }) => hasAccess && format === VariantFormat.ARKIV),
   );
   const [showRedacted, setShowRedacted] = useState(hasRedactedDocuments);
+
   useEffect(() => {
-    setShowRedacted(hasRedactedDocuments);
+    if (hasRedactedDocuments) {
+      setShowRedacted(true);
+    }
   }, [hasRedactedDocuments]);
+
   const { mergedDocument, mergedDocumentIsError, mergedDocumentIsLoading } = useMergedDocument(showDocumentList);
   const { inlineUrl, tabUrl, tabId } = useShownDocumentMetadata(oppgaveId, mergedDocument, showDocumentList);
-  const format = showRedacted ? VariantFormat.SLADDET : VariantFormat.ARKIV;
+  const format = showRedacted && hasRedactedDocuments ? VariantFormat.SLADDET : VariantFormat.ARKIV;
   const formatQuery = useMemo(() => ({ format }), [format]);
   const { loading, data, refresh, error } = usePdfData(inlineUrl, formatQuery);
 
