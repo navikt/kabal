@@ -186,15 +186,6 @@ class SmartDocumentWriteAccess {
       return fromApi.navIdents.includes(navIdent);
     }
 
-    log.error({
-      msg: `Missing access list for smart document "${documentId}"`,
-      trace_id,
-      span_id,
-      tab_id,
-      client_version,
-      data: { behandling_id, document_id: documentId, nav_ident: navIdent, allow_api_fetching: allowApiFetching },
-    });
-
     return false;
   };
 

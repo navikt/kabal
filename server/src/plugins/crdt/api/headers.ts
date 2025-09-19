@@ -31,7 +31,7 @@ const IGNORED_HEADERS = [
   'content-length',
 ];
 
-const getLocalHeaders: GetHeadersFn = (req) => {
+const getLocalHeaders: GetHeadersFn = async (req) => {
   const headers: Record<string, string | string[]> = {
     host: 'kabal.intern.dev.nav.no',
     origin: 'https://kabal.intern.dev.nav.no',
@@ -44,13 +44,13 @@ const getLocalHeaders: GetHeadersFn = (req) => {
   }
 
   if ('traceparent' in req.headers) {
-    return Promise.resolve(headers);
+    return headers;
   }
 
-  return Promise.resolve({
+  return {
     ...headers,
     traceparent: generateTraceparent(),
-  });
+  };
 };
 
 export const getHeaders: GetHeadersFn = isDeployed ? getDeployedHeaders : getLocalHeaders;

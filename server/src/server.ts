@@ -19,7 +19,6 @@ import { proxyVersionPlugin } from '@app/plugins/proxy-version';
 import { serveAssetsPlugin } from '@app/plugins/serve-assets';
 import { serveIndexPlugin } from '@app/plugins/serve-index';
 import { serverTimingPlugin } from '@app/plugins/server-timing';
-import { smartDocumentWriteAccessPlugin } from '@app/plugins/smart-document';
 import { tabIdPlugin } from '@app/plugins/tab-id';
 import { traceparentPlugin } from '@app/plugins/traceparent/traceparent';
 import { versionPlugin } from '@app/plugins/version/version';
@@ -66,7 +65,6 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
   .register(serveAssetsPlugin)
   .register(serveIndexPlugin)
   .register(httpLoggerPlugin)
-  .register(smartDocumentWriteAccessPlugin)
   .register(crdtPlugin)
   .register(debugPlugin)
 
