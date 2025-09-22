@@ -44,7 +44,6 @@
     "@platejs/docx": "49.0.0",
     "@platejs/indent": "49.0.0",
     "@platejs/list-classic": "49.1.0",
-    "@platejs/markdown": "50.1.2",
     "@platejs/resizable": "49.0.0",
     "@platejs/table": "49.1.13",
     "@platejs/utils": "49.2.21",

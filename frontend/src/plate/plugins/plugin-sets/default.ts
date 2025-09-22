@@ -20,7 +20,6 @@ import { NodeIdPlugin } from '@platejs/core';
 import { DocxPlugin } from '@platejs/docx';
 import { IndentPlugin } from '@platejs/indent/react';
 import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@platejs/list-classic/react';
-import { MarkdownPlugin } from '@platejs/markdown';
 import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@platejs/table/react';
 import { ExitBreakPlugin } from '@platejs/utils';
 import { type NodeEntry, ParserPlugin } from 'platejs';
@@ -94,7 +93,7 @@ export const defaultPlugins = [
     },
   }),
   DocxPlugin,
-  MarkdownPlugin,
+
   // Custom plugins
   PageBreakPlugin,
   ProhibitDeletionPlugin,
