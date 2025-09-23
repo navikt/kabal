@@ -102,7 +102,7 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
 
   if (textIdList.length === 0) {
     return (
-      <Alert variant="warning" size="small" className="mt-2">
+      <Alert variant="warning" size="small" className="mt-2 h-fit">
         Ingen tekster funnet
       </Alert>
     );
