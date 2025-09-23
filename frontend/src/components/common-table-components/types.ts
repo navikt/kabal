@@ -14,7 +14,6 @@ export enum ColumnKeyEnum {
   VarsletFrist = 12,
   Medunderskriver = 13,
   Rol = 14,
-  FlowStates = 15,
   Open = 16,
   OpenWithYtelseAccess = 17,
   TildelingWithFilter = 18,
@@ -33,6 +32,8 @@ export enum ColumnKeyEnum {
   FradelingReason = 31,
   PreviousSaksbehandler = 32,
   DatoSendtTilTr = 33,
+  FlowStatesWithoutSelf = 34,
+  FlowStatesWithSelf = 35,
 }
 
 export const TABLE_HEADERS = {
@@ -51,7 +52,8 @@ export const TABLE_HEADERS = {
   [ColumnKeyEnum.VarsletFrist]: 'Varslet frist',
   [ColumnKeyEnum.Medunderskriver]: 'Medunderskriver',
   [ColumnKeyEnum.Rol]: 'Rådgivende overlege',
-  [ColumnKeyEnum.FlowStates]: null,
+  [ColumnKeyEnum.FlowStatesWithoutSelf]: 'Status',
+  [ColumnKeyEnum.FlowStatesWithSelf]: 'Status',
   [ColumnKeyEnum.Open]: null,
   [ColumnKeyEnum.OpenWithYtelseAccess]: null,
   [ColumnKeyEnum.Tildeling]: 'Tildeling',

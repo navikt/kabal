@@ -1,3 +1,8 @@
+import {
+  CommonHelperStatus,
+  type HelperStatus,
+  HelperStatusSelf,
+} from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
 import { ShortParamKey } from '@app/components/common-table-components/oppgave-table/state/short-names';
 import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { isSaksTypeEnum, type SaksTypeEnum } from '@app/types/kodeverk';
@@ -52,6 +57,14 @@ export const useOppgaveTableTildelteRol = (tableKey: OppgaveTableKey, defaultVal
 export const useOppgaveTablePaaVentReasons = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
   useUrlQueryParam(`${tableKey}.${ShortParamKey.PAA_VENT_REASONS}`, fromArrayParam, setArrayQuery, defaultValue);
 
+export const useOppgaveTableHelperStatusWithoutSelf = (
+  tableKey: OppgaveTableKey,
+  defaultValue?: CommonHelperStatus[],
+) => useUrlQueryParam(`${tableKey}.${ShortParamKey.HELPER_STATUS}`, fromHelperStatusQuery, setArrayQuery, defaultValue);
+
+export const useOppgaveTableHelperStatusWithSelf = (tableKey: OppgaveTableKey, defaultValue?: HelperStatus[]) =>
+  useUrlQueryParam(`${tableKey}.${ShortParamKey.HELPER_STATUS}`, fromHelperStatusQuery, setArrayQuery, defaultValue);
+
 // Helper functions for URL parameter management
 
 const setArrayQuery = (query: URLSearchParams, key: string, value: string[] | undefined) => {
@@ -65,7 +78,20 @@ const setArrayQuery = (query: URLSearchParams, key: string, value: string[] | un
 export const fromTyperParam = (value: string | null): SaksTypeEnum[] | undefined =>
   value !== null ? value.split(ARRAY_SEPARATOR).filter(isSaksTypeEnum) : undefined;
 
+export const fromCommonHelperStatusQuery = (value: string | null): CommonHelperStatus[] | undefined =>
+  value !== null ? value.split(ARRAY_SEPARATOR).filter(isCommonHelperStatus) : undefined;
+
+export const fromHelperStatusQuery = (value: string | null): HelperStatus[] | undefined =>
+  value !== null ? value.split(ARRAY_SEPARATOR).filter(isHelperStatus) : undefined;
+
 export const fromArrayParam = (value: string | null): string[] | undefined =>
   value !== null ? value.split(ARRAY_SEPARATOR) : undefined;
 
 const ARRAY_SEPARATOR = '~';
+
+const COMMON_HELPER_STATUSES: CommonHelperStatus[] = Object.values(CommonHelperStatus);
+const HELPER_STATUSES: HelperStatus[] = [...COMMON_HELPER_STATUSES, ...Object.values(HelperStatusSelf)];
+
+const isHelperStatus = (value: string): value is HelperStatus => HELPER_STATUSES.some((state) => state === value);
+const isCommonHelperStatus = (value: string): value is CommonHelperStatus =>
+  COMMON_HELPER_STATUSES.some((state) => state === value);

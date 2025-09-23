@@ -53,6 +53,7 @@ const parseParams = (
     medunderskrivere: fromArrayParam(query.get(`${tableKey}.${ShortParamKey.MEDUNDERSKRIVERE}`)),
     tildelteRol: fromArrayParam(query.get(`${tableKey}.${ShortParamKey.TILDELTE_ROL}`)),
     sattPaaVentReasonIds: fromArrayParam(query.get(`${tableKey}.${ShortParamKey.PAA_VENT_REASONS}`)),
+    helperStatusList: fromArrayParam(query.get(`${tableKey}.${ShortParamKey.HELPER_STATUS}`)),
     rekkefoelge,
     sortering,
     ferdigstiltFrom,

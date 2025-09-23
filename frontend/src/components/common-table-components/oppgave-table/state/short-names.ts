@@ -14,6 +14,7 @@ export enum ShortParamKey {
   FRIST = 'f',
   VARSLET_FRIST = 'v',
   PAA_VENT_REASONS = 'pvr',
+  HELPER_STATUS = 'hs',
   // "p" is reserved for page. Used in the usePage() hook.
 }
 

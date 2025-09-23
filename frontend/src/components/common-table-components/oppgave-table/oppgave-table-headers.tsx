@@ -1,4 +1,8 @@
 import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
+import {
+  HelperStatusWithoutSelf,
+  HelperStatusWithSelf,
+} from '@app/components/common-table-components/oppgave-table/filter-dropdowns/helper-status';
 import { PaaVentReasons } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/paa-vent-reason';
 import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
 import {
@@ -104,9 +108,12 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         return <RolHjemmel key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.PaaVentReason:
         return <PaaVentReasons key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.FlowStatesWithSelf:
+        return <HelperStatusWithSelf key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.FlowStatesWithoutSelf:
+        return <HelperStatusWithoutSelf key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Navn:
       case ColumnKeyEnum.Fnr:
-      case ColumnKeyEnum.FlowStates:
       case ColumnKeyEnum.Open:
       case ColumnKeyEnum.OpenWithYtelseAccess:
       case ColumnKeyEnum.Tildeling:

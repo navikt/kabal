@@ -11,16 +11,12 @@ import { useContext } from 'react';
 
 type Props = Pick<IOppgave, 'medunderskriver' | 'typeId'>;
 
-export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Props) => {
+export const MUFlowStateLabelWithSelf = ({ medunderskriver, typeId }: Props) => {
   const { user } = useContext(StaticDataContext);
 
-  if (medunderskriver.employee === null) {
-    return null;
-  }
+  const isMu = medunderskriver.employee?.navIdent === user.navIdent;
 
-  const isMedunderskriver = medunderskriver.employee.navIdent === user.navIdent;
-
-  if (isMedunderskriver && medunderskriver.flowState === FlowState.SENT) {
+  if (isMu && medunderskriver.flowState === FlowState.SENT) {
     return (
       <Tag className="truncate" variant="alt1" title={getTitleCapitalized(typeId)}>
         {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'Fagansvarlig' : 'MU'}
@@ -28,21 +24,37 @@ export const MedudunderskriverFlowStateLabel = ({ medunderskriver, typeId }: Pro
     );
   }
 
-  if (!isMedunderskriver && medunderskriver.flowState === FlowState.SENT) {
-    return (
-      <Tag className="truncate" variant="success" title={`Sendt til ${getTitleLowercase(typeId)}`}>
-        Sendt til {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
-      </Tag>
-    );
+  if (!isMu && medunderskriver.flowState === FlowState.SENT) {
+    return <Sendt typeId={typeId} />;
   }
 
-  if (!isMedunderskriver && medunderskriver.flowState === FlowState.RETURNED) {
-    return (
-      <Tag className="truncate" variant="error" title={`Tilbake fra ${getTitleLowercase(typeId)}`}>
-        Tilbake fra {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
-      </Tag>
-    );
+  if (!isMu && medunderskriver.flowState === FlowState.RETURNED) {
+    return <Tilbake typeId={typeId} />;
   }
 
   return null;
 };
+
+export const MUFlowStateLabelWithoutSelf = ({ medunderskriver, typeId }: Props) => {
+  if (medunderskriver.flowState === FlowState.SENT) {
+    return <Sendt typeId={typeId} />;
+  }
+
+  if (medunderskriver.flowState === FlowState.RETURNED) {
+    return <Tilbake typeId={typeId} />;
+  }
+
+  return null;
+};
+
+const Sendt = ({ typeId }: { typeId: SaksTypeEnum }) => (
+  <Tag className="truncate" variant="success" title={`Sendt til ${getTitleLowercase(typeId)}`}>
+    Sendt til {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
+  </Tag>
+);
+
+const Tilbake = ({ typeId }: { typeId: SaksTypeEnum }) => (
+  <Tag className="truncate" variant="error" title={`Tilbake fra ${getTitleLowercase(typeId)}`}>
+    Tilbake fra {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
+  </Tag>
+);
