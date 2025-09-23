@@ -59,7 +59,7 @@ const VersionsLoaded = ({ versions, firstText, id, textType }: VersionsLoadedPro
   const hasDraft = versions.some((v) => v.publishedDateTime === null);
 
   return (
-    <VStack asChild height="100%" overflow="hidden" flexGrow="1">
+    <VStack asChild height="100%" overflow="hidden">
       <VersionTabs<IDraft, IPublishedText>
         first={firstText}
         versions={versions}

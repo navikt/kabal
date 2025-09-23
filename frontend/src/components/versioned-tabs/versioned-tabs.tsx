@@ -77,7 +77,7 @@ export const VersionTabs = <D extends DraftVersion, P extends PublishedVersion>(
       onChange={setSelectedTabId}
       {...rest}
       ref={setRef}
-      className="flex flex-col overflow-hidden"
+      className="flex grow flex-col overflow-hidden"
     >
       <Tabs.List className="w-[760px] whitespace-nowrap">{tabs}</Tabs.List>
       {panels}
