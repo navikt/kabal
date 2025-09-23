@@ -22,7 +22,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.VarsletFrist,
-  ColumnKeyEnum.FlowStates,
+  ColumnKeyEnum.FlowStatesWithSelf,
   ColumnKeyEnum.Open,
   ColumnKeyEnum.OppgavestyringNonFilterable,
 ];

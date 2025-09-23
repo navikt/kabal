@@ -4,7 +4,10 @@ import { FradelingReason } from '@app/components/common-table-components/fradeli
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { LoadingRow } from '@app/components/common-table-components/loading-row';
 import { Medunderskriver } from '@app/components/common-table-components/medunderskriver';
-import { MedudunderskriverFlowStateLabel } from '@app/components/common-table-components/medunderskriver-flow-state-label';
+import {
+  MUFlowStateLabelWithoutSelf,
+  MUFlowStateLabelWithSelf,
+} from '@app/components/common-table-components/medunderskriver-flow-state-label';
 import { Name } from '@app/components/common-table-components/name';
 import { OpenOppgavebehandling } from '@app/components/common-table-components/open';
 import { PaaVentReason, PaaVentTil } from '@app/components/common-table-components/paa-vent';
@@ -121,11 +124,20 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             />
           </Table.DataCell>
         );
-      case ColumnKeyEnum.FlowStates:
+      case ColumnKeyEnum.FlowStatesWithSelf:
         return (
           <Table.DataCell key={key}>
             <HStack wrap gap="2">
-              <MedudunderskriverFlowStateLabel typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
+              <MUFlowStateLabelWithSelf typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
+              <RolFlowStateLabel rol={oppgave.rol} />
+            </HStack>
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.FlowStatesWithoutSelf:
+        return (
+          <Table.DataCell key={key}>
+            <HStack wrap gap="2">
+              <MUFlowStateLabelWithoutSelf typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
               <RolFlowStateLabel rol={oppgave.rol} />
             </HStack>
           </Table.DataCell>
