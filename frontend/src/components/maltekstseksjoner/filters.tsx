@@ -35,12 +35,11 @@ export const Filters = ({ maltekst, query }: Props) => {
       >
         Maler og seksjoner
       </TemplateSectionSelect>
-
       <HjemlerSelect
         selected={maltekst.ytelseHjemmelIdList}
         onChange={(ytelseHjemmelIdList) => updateYtelseHjemmel({ id: maltekst.id, ytelseHjemmelIdList, query })}
+        ytelserSelectable
       />
-
       <UtfallSetFilter
         selected={maltekst.utfallIdList}
         onChange={(utfallIdList) => updateUtfall({ id: maltekst.id, utfallIdList, query })}
