@@ -2,6 +2,7 @@ import { BehandlingSection } from '@app/components/behandling/behandlingsdetalje
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
 import { Gosys } from '@app/components/behandling/behandlingsdetaljer/gosys';
 import { Innsendingshjemmel } from '@app/components/behandling/behandlingsdetaljer/innsendingshjemmel';
+import { Klager } from '@app/components/behandling/behandlingsdetaljer/klager';
 import { Lovhjemmel } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel';
 import { MeldingFraVedtaksinstans } from '@app/components/behandling/behandlingsdetaljer/melding-fra-vedtaksinstans';
 import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/read-only-date';
@@ -13,7 +14,6 @@ import { StyledBehandlingSection } from '@app/components/behandling/styled-compo
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domain';
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
 import { Fullmektig } from '@app/components/part/fullmektig/fullmektig';
-import { Part } from '@app/components/part/part';
 import { Type } from '@app/components/type/type';
 import { TRYGDERETTEN_ORGNR } from '@app/constants';
 import { isoDateToPretty } from '@app/domain/date';
@@ -53,10 +53,8 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
           Behandling
         </Heading>
         <VStack gap="4">
-          <Part
-            isDeletable={false}
-            label="Opprinnelig klager / ankende part"
-            part={oppgavebehandling.klager}
+          <Klager
+            klager={oppgavebehandling.klager}
             onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
             isLoading={klagerIsLoading}
             invalidReceivers={[
@@ -65,6 +63,7 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
                 message: 'Trygderetten kan ikke settes som opprinnelig klager / ankende part.',
               },
             ]}
+            typeId={typeId}
           />
 
           <Fullmektig part={prosessfullmektig} />

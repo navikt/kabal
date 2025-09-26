@@ -2,6 +2,7 @@ import { BehandlingSection } from '@app/components/behandling/behandlingsdetalje
 import { Gosys } from '@app/components/behandling/behandlingsdetaljer/gosys';
 import { Innsendingshjemmel } from '@app/components/behandling/behandlingsdetaljer/innsendingshjemmel';
 import { KjennelseMottatt } from '@app/components/behandling/behandlingsdetaljer/kjennelse-mottatt';
+import { OrgWarning } from '@app/components/behandling/behandlingsdetaljer/klager';
 import { Lovhjemmel } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
@@ -35,7 +36,10 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
         </Heading>
         <VStack gap="4">
           <BehandlingSection label="Den ankende part">
-            {oppgavebehandling.klager.name ?? 'Navn mangler'}
+            <VStack gap="2">
+              {oppgavebehandling.klager.name ?? 'Navn mangler'}
+              <OrgWarning identifikator={oppgavebehandling.klager.identifikator} label="ankende part" />
+            </VStack>
           </BehandlingSection>
 
           <Fullmektig part={prosessfullmektig} />
