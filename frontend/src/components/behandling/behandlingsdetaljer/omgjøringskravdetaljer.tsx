@@ -1,6 +1,7 @@
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
 import { ForlengetBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/forlenget-behandlingstid';
 import { Gosys } from '@app/components/behandling/behandlingsdetaljer/gosys';
+import { Klager } from '@app/components/behandling/behandlingsdetaljer/klager';
 import { MottattDato } from '@app/components/behandling/behandlingsdetaljer/mottatt-klageinstans';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
@@ -13,7 +14,6 @@ import { useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behan
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOmgjøringskravbehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Heading, VStack } from '@navikt/ds-react';
-import { Part } from '../../part/part';
 import { StyledBehandlingSection } from '../styled-components';
 import { BehandlingSection } from './behandling-section';
 import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
@@ -40,10 +40,8 @@ export const Omgjøringskravdetaljer = ({ oppgavebehandling }: Props) => {
         </Heading>
 
         <VStack gap="4">
-          <Part
-            isDeletable={false}
-            label="Den som krever omgjøring"
-            part={oppgavebehandling.klager}
+          <Klager
+            klager={oppgavebehandling.klager}
             onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
             isLoading={klagerIsLoading}
             invalidReceivers={[
@@ -52,6 +50,7 @@ export const Omgjøringskravdetaljer = ({ oppgavebehandling }: Props) => {
                 message: 'Trygderetten kan ikke settes som den som krever omgjøring.',
               },
             ]}
+            typeId={typeId}
           />
 
           <Fullmektig part={prosessfullmektig} />

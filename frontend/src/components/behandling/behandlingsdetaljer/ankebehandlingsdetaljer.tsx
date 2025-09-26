@@ -3,6 +3,7 @@ import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extr
 import { ForlengetBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/forlenget-behandlingstid';
 import { Gosys } from '@app/components/behandling/behandlingsdetaljer/gosys';
 import { Innsendingshjemmel } from '@app/components/behandling/behandlingsdetaljer/innsendingshjemmel';
+import { Klager } from '@app/components/behandling/behandlingsdetaljer/klager';
 import { Lovhjemmel } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel';
 import { MottattDato } from '@app/components/behandling/behandlingsdetaljer/mottatt-klageinstans';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
@@ -14,7 +15,6 @@ import { StyledBehandlingSection } from '@app/components/behandling/styled-compo
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domain';
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
 import { Fullmektig } from '@app/components/part/fullmektig/fullmektig';
-import { Part } from '@app/components/part/part';
 import { Type } from '@app/components/type/type';
 import { useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { SaksTypeEnum } from '@app/types/kodeverk';
@@ -41,12 +41,11 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
         </Heading>
 
         <VStack gap="4">
-          <Part
-            isDeletable={false}
-            label="Den ankende part"
-            part={oppgavebehandling.klager}
+          <Klager
+            klager={oppgavebehandling.klager}
             onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}
             isLoading={klagerIsLoading}
+            typeId={typeId}
           />
 
           <Fullmektig part={prosessfullmektig} />
