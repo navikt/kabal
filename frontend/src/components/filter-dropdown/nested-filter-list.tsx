@@ -152,15 +152,7 @@ const ListItem = ({ option, selected, level, filter, onCheck, hasFilter }: ListI
             className="h-8 [grid-area:expand]"
           />
         ) : null}
-        <CheckboxOrGroup
-          option={option}
-          selected={selected}
-          onCheck={(id) => {
-            setIsExpaded(true);
-            onCheck(id);
-          }}
-          subSelectionCount={subSelectionCount}
-        >
+        <CheckboxOrGroup option={option} selected={selected} onCheck={onCheck} subSelectionCount={subSelectionCount}>
           <span>{label}</span>
           {tags}
         </CheckboxOrGroup>
