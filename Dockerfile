@@ -12,5 +12,5 @@ WORKDIR /usr/src/app/server
 ARG VERSION
 ENV VERSION=$VERSION
 
-CMD ["node", "dist/server.js"]
+CMD ["node", "--enable-source-maps", "dist/server.js"]
 EXPOSE 8080

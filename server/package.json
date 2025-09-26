@@ -8,8 +8,8 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "start": "bun run build --watch & node --watch --trace-warnings dist/server.js",
-    "build": "bun build ./src/server.ts --target node --format esm --sourcemap=external --outdir dist",
+    "start": "bun run build --watch & node --watch --trace-warnings --enable-source-maps dist/server.js",
+    "build": "bun build ./src/server.ts --target node --format esm --sourcemap=linked --outdir dist",
     "lint": "biome check",
     "typecheck": "tsc --noEmit"
   },
