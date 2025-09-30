@@ -1,3 +1,4 @@
+import { getShowVedlegg, setShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { useLazyIsTilknyttetDokument } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
@@ -82,6 +83,12 @@ export const useFilteredDocuments = (
               }
 
               if (score > 0) {
+                const shown = getShowVedlegg();
+
+                if (!shown.includes(journalpostId)) {
+                  setShowVedlegg([...shown, journalpostId]);
+                }
+
                 filteredVedlegg.push({ ...v, score });
               }
             }
@@ -93,7 +100,7 @@ export const useFilteredDocuments = (
             if (hasSearch) {
               const score = hasSearch ? fuzzySearch(splitSearch, (tittel ?? '') + journalpostId) : 0;
 
-              if (score <= 0) {
+              if (score <= 0 && filteredVedlegg.length === 0) {
                 continue;
               }
 
