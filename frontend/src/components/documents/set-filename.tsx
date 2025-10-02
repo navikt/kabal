@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 interface Props {
   tittel: string;
-  setFilename: (filename: string) => void;
+  setFilename: (filename: string) => Promise<void>;
   autoFocus?: boolean;
   hideLabel?: boolean;
   className?: string;
@@ -25,16 +25,22 @@ export const SetFilename = ({
   disabled,
   ref,
 }: Props) => {
+  const [isSaving, setIsSaving] = useState(false);
   const [localFilename, setLocalFilename] = useState(tittel ?? '');
 
-  const save = () => {
+  const save = async () => {
+    if (isSaving) {
+      return;
+    }
+
+    setIsSaving(true);
+    await setFilename(localFilename);
     close?.();
+    setIsSaving(false);
 
     if (localFilename === tittel) {
       return;
     }
-
-    setFilename(localFilename);
   };
 
   return (
@@ -60,6 +66,7 @@ export const SetFilename = ({
       tabIndex={tabIndex}
       disabled={disabled}
       ref={ref}
+      readOnly={isSaving}
     />
   );
 };

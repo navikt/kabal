@@ -68,12 +68,12 @@ export const DocumentTitle = memo(
             hideLabel
             tittel={document.tittel}
             close={() => setEditMode(false)}
-            setFilename={(title) => {
+            setFilename={async (title) => {
               if (oppgaveId === skipToken) {
                 return;
               }
 
-              setTitle({ oppgaveId, dokumentId: document.id, title });
+              await setTitle({ oppgaveId, dokumentId: document.id, title });
             }}
           />
           <TitleActions {...titleActionsProps} />

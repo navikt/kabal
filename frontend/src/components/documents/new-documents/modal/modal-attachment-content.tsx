@@ -51,7 +51,9 @@ export const AttachmentModalContent = ({ document, renameAccess, removeAccess }:
               <SetFilename
                 className="max-w-lg flex-grow"
                 tittel={document.tittel}
-                setFilename={(title) => setTitle({ oppgaveId, dokumentId: document.id, title })}
+                setFilename={async (title) => {
+                  await setTitle({ oppgaveId, dokumentId: document.id, title });
+                }}
                 disabled={renameAccess !== null}
               />
               <Button
