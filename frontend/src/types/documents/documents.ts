@@ -1,9 +1,9 @@
 import type { KabalValue } from '@app/plate/types';
+import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import type { INavEmployee } from '@app/types/bruker';
 import type { HandlingEnum, IAddress } from '@app/types/documents/receivers';
 import type { IdentifikatorPart, IJournalfoertDokumentId, IPart } from '@app/types/oppgave-common';
 import type { Language } from '@app/types/texts/language';
-import type { DokumentInfo, Journalpost } from './../arkiverte-documents';
 import type { TemplateIdEnum } from '../smart-editor/template-enums';
 
 export type UUID = string;
@@ -124,8 +124,7 @@ export type ISmartDocumentOrAttachment = ISmartDocument<null> | ISmartDocument<s
 
 export interface JournalfoertDokumentReference
   extends IJournalfoertDokumentId,
-    Pick<DokumentInfo, 'hasAccess'>,
-    Pick<Journalpost, 'datoOpprettet' | 'varianter'> {
+    Pick<IArkivertDocument, 'hasAccess' | 'datoOpprettet' | 'varianter' | 'temaId'> {
   sortKey: string;
 }
 

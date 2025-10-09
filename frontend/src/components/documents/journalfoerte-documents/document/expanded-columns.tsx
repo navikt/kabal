@@ -15,9 +15,9 @@ interface Props {
 }
 
 export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: Props) => {
-  const { tema, avsenderMottaker, sak, journalposttype } = document;
+  const { temaId, avsenderMottaker, sak, journalposttype } = document;
 
-  const temaName = useFullTemaNameFromIdOrLoading(tema);
+  const temaName = useFullTemaNameFromIdOrLoading(temaId);
   const { columns } = useArchivedDocumentsColumns();
 
   return (

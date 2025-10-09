@@ -11,7 +11,7 @@ interface State {
 interface Props {
   logiskeVedlegg: LogiskVedlegg[];
   customValue: string;
-  temaId: string | null;
+  temaId: string;
 }
 
 export const useSuggestions = ({ logiskeVedlegg, customValue, temaId }: Props): State => {

@@ -72,9 +72,9 @@ export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) =
           return list;
         }, []);
 
-        const temaIdList = journalpostList.reduce<string[]>((list, { tema }) => {
-          if (tema !== null && !list.includes(tema)) {
-            list.push(tema);
+        const temaIdList = journalpostList.reduce<string[]>((list, { temaId }) => {
+          if (!list.includes(temaId)) {
+            list.push(temaId);
           }
 
           return list;
@@ -103,7 +103,7 @@ export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) =
       let { fromDate, toDate } = archiveResponse;
 
       for (const journalpost of journalpostList) {
-        const { avsenderMottaker, sak, tema, datoOpprettet, journalposttype } = journalpost;
+        const { avsenderMottaker, sak, temaId, datoOpprettet, journalposttype } = journalpost;
 
         if (fromDate === null || datoOpprettet < fromDate) {
           fromDate = datoOpprettet;
@@ -113,8 +113,8 @@ export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) =
           toDate = datoOpprettet;
         }
 
-        if (tema !== null && !temaIdList.includes(tema)) {
-          temaIdList.push(tema);
+        if (!temaIdList.includes(temaId)) {
+          temaIdList.push(temaId);
         }
 
         if (avsenderMottaker !== null && !avsenderMottakerList.some(({ id }) => avsenderMottaker.id === id)) {

@@ -10,7 +10,7 @@ interface Props {
   index: number;
   top: number;
   logiskeVedlegg: LogiskVedlegg[];
-  temaId: string | null;
+  temaId: string;
   dokumentInfoId: string;
 }
 

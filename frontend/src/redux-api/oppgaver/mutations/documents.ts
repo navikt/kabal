@@ -383,6 +383,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                   datoOpprettet: doc.datoOpprettet,
                   varianter: doc.varianter,
                   sortKey: doc.sortKey,
+                  temaId: doc.temaId,
                 },
                 creator: { creatorRole: CreatorRole.KABAL_SAKSBEHANDLING, employee: { navIdent, navn } },
                 mottakerList: [],

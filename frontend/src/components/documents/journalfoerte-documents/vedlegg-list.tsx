@@ -81,7 +81,7 @@ export const VedleggList = ({ list, minTop, maxTop, dokument, documentIndex }: P
             left={65}
             dokumentInfoId={dokumentInfoId}
             logiskeVedlegg={logiskeVedlegg}
-            temaId={dokument.tema}
+            temaId={dokument.temaId}
           />
         ) : null}
       </AttachmentListItem>,
