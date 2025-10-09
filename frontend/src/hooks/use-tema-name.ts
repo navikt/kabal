@@ -1,7 +1,7 @@
 import { useTema } from '@app/simple-api-state/use-kodeverk';
 import { useMemo } from 'react';
 
-export const useTemaName = (temaId?: string | null): [string | undefined, boolean] => {
+export const useTemaName = (temaId: string): [string | undefined, boolean] => {
   const { data, isLoading } = useTema();
 
   return useMemo(() => {

@@ -15,7 +15,7 @@ interface Props {
   left?: number;
   hasVedlegg?: boolean;
   logiskeVedlegg: LogiskVedlegg[];
-  temaId: string | null;
+  temaId: string;
   dokumentInfoId: string;
 }
 

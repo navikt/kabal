@@ -48,7 +48,7 @@ export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onSc
       continue;
     }
 
-    const { journalpostId, dokumentInfoId, tittel, vedlegg, logiskeVedlegg, tema } = dokument;
+    const { journalpostId, dokumentInfoId, tittel, vedlegg, logiskeVedlegg, temaId } = dokument;
     const hasVedlegg = vedlegg.length > 0;
 
     const selected = isPathSelected(index);
@@ -113,7 +113,7 @@ export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onSc
             hasVedlegg={hasVedlegg}
             dokumentInfoId={dokumentInfoId}
             logiskeVedlegg={logiskeVedlegg}
-            temaId={tema}
+            temaId={temaId}
           />
         ) : null}
 

@@ -12,7 +12,7 @@ interface Props {
   dokumentInfoId: string;
   logiskVedlegg: LogiskVedlegg;
   logiskeVedlegg: LogiskVedlegg[];
-  temaId: string | null;
+  temaId: string;
 }
 
 export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVedlegg, temaId }: Props) => {

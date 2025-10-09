@@ -141,12 +141,6 @@ export enum Filtype {
 export interface Journalpost {
   /** Unik identifikator per journalpost */
   journalpostId: string;
-  /**
-   * Temaet/Fagområdet som journalposten og tilhørende sak tilhører, f.eks. "FOR".
-   * For sakstilknyttede journalposter, er det tema på SAK- eller PSAK-saken som er gjeldende tema.
-   * For journalposter som enda ikke har fått sakstilknytning, returneres tema på journalposten.inneholder Joark informasjon om antatt tema for journalposten.
-   */
-  tema: string | null;
   /** Sier hvorvidt journalposten er et inngående dokument, et utgående dokument eller et notat. */
   journalposttype: Journalposttype | null;
   /**
@@ -259,9 +253,10 @@ interface TimelineItem {
 }
 
 /** Kabal */
-interface KabalProperties {
+export interface KabalProperties {
   sortKey: string;
   timeline: TimelineItem[];
+  temaId: string;
 }
 
 /** Archived Kabal document */

@@ -14,7 +14,7 @@ interface Props {
   onClose: () => void;
   isLoading: boolean;
   placeholder?: string;
-  temaId: string | null;
+  temaId: string;
 }
 
 export const EditLogiskVedlegg = ({

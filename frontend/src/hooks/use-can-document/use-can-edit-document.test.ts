@@ -55,6 +55,7 @@ const BASE_JD_REFERENCE: JournalfoertDokumentReference = {
   sortKey: '1',
   journalpostId: '1',
   dokumentInfoId: '1',
+  temaId: '1',
 };
 
 const BASE_JD: JournalfoertDokument = {

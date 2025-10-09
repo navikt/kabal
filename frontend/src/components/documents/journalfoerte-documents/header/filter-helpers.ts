@@ -48,7 +48,7 @@ export const useFilteredDocuments = (
             journalpostId,
             dokumentInfoId,
             tittel,
-            tema,
+            temaId,
             journalposttype,
             avsenderMottaker,
             datoOpprettet,
@@ -57,7 +57,7 @@ export const useFilteredDocuments = (
           } = document;
 
           if (
-            checkList(selectedTemaer, tema) &&
+            checkList(selectedTemaer, temaId) &&
             checkList(selectedTypes, journalposttype) &&
             checkListWithNone(selectedAvsenderMottakere, avsenderMottaker?.id ?? avsenderMottaker?.navn ?? 'UNKNOWN') &&
             checkListWithNone(selectedSaksIds, sak?.fagsakId ?? 'UNKNOWN') &&

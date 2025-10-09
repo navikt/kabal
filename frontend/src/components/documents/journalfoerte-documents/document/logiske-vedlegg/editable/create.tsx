@@ -9,7 +9,7 @@ interface Props {
   dokumentInfoId: string;
   logiskeVedlegg: LogiskVedlegg[];
   onClose: () => void;
-  temaId: string | null;
+  temaId: string;
 }
 
 export const CreateLogiskVedlegg = ({ dokumentInfoId, logiskeVedlegg, onClose, temaId }: Props) => {
