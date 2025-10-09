@@ -11,7 +11,7 @@ import type { SaksTypeEnum } from '@app/types/kodeverk';
 const useFullTemaNameFromId = (temaId: string | null): string | undefined => {
   const { data, isLoading } = useTema();
 
-  if (isLoading || typeof data === 'undefined') {
+  if (isLoading || data === undefined) {
     return undefined;
   }
 
@@ -28,7 +28,7 @@ export const useFullTemaNameFromIdOrLoading = (temaId: string | null): string =>
 export const useFullYtelseNameFromId = (ytelseId?: string): string | undefined => {
   const { data, isLoading } = useSimpleYtelser();
 
-  if (isLoading || typeof data === 'undefined' || ytelseId === undefined) {
+  if (isLoading || data === undefined || ytelseId === undefined) {
     return undefined;
   }
 
@@ -38,7 +38,7 @@ export const useFullYtelseNameFromId = (ytelseId?: string): string | undefined =
 export const useTypeNameFromId = (type: SaksTypeEnum): string | undefined => {
   const { data, isLoading } = useSakstyper();
 
-  if (isLoading || typeof data === 'undefined') {
+  if (isLoading || data === undefined) {
     return undefined;
   }
 
@@ -48,7 +48,7 @@ export const useTypeNameFromId = (type: SaksTypeEnum): string | undefined => {
 export const useEnhetNameFromIdOrLoading = (enhetId?: string | null): string => {
   const { data, isLoading } = useEnheter();
 
-  if (isLoading || typeof data === 'undefined') {
+  if (isLoading || data === undefined) {
     return 'Laster...';
   }
 
@@ -67,7 +67,7 @@ export interface HjemmelNameAndId {
 export const useInnsendingshjemlerFromIds = (hjemmelIdList: string[]): HjemmelNameAndId[] | undefined => {
   const { data, isLoading } = useInnsendingshjemlerMap();
 
-  if (isLoading || typeof data === 'undefined') {
+  if (isLoading || data === undefined) {
     return undefined;
   }
 
@@ -77,7 +77,7 @@ export const useInnsendingshjemlerFromIds = (hjemmelIdList: string[]): HjemmelNa
 export const useRegistreringshjemlerFromIds = (hjemmelIdList: string[]): HjemmelNameAndId[] | undefined => {
   const { data, isLoading } = useRegistreringshjemlerMap();
 
-  if (isLoading || typeof data === 'undefined') {
+  if (isLoading || data === undefined) {
     return undefined;
   }
 
