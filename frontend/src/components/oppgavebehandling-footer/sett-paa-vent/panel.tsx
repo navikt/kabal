@@ -1,7 +1,8 @@
 import { ISO_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
 import { DatePicker } from '@app/components/date-picker/date-picker';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
-import { usePaaVentReasons } from '@app/simple-api-state/use-kodeverk';
+import { useSakstyperToPåVentReasons } from '@app/simple-api-state/use-kodeverk';
 import { PaaVentReasonEnum } from '@app/types/kodeverk';
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BoxNew, Button, ErrorSummary, HStack, Radio, RadioGroup, Textarea, VStack } from '@navikt/ds-react';
@@ -16,7 +17,7 @@ import {
   isValid,
   parseISO,
 } from 'date-fns';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 interface Props {
   oppgaveId: string;
@@ -49,14 +50,27 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
   const [settPaaVent, { isLoading }] = useSattPaaVentMutation();
   const [dateError, setDateError] = useState<string | null>(null);
   const [reasonError, setReasonError] = useState<string | null>(null);
-  const { data: reasonIds = [] } = usePaaVentReasons();
+  const { data: oppgave } = useOppgave();
+  const { data: sakstypeToPåVentReasons = [] } = useSakstyperToPåVentReasons();
   const [reasonId, setReasonId] = useState<PaaVentReasonEnum | null>(null);
 
-  const options = reasonIds.map((reason) => (
-    <Radio key={reason.id} value={reason.id}>
-      {reason.beskrivelse}
-    </Radio>
-  ));
+  const options = useMemo(() => {
+    if (oppgave === undefined) {
+      return [];
+    }
+
+    const sakstype = sakstypeToPåVentReasons.find(({ id }) => id === oppgave.typeId);
+
+    if (sakstype === undefined) {
+      return [];
+    }
+
+    return sakstype.sattPaaVentReasons.map((reason) => (
+      <Radio key={reason.id} value={reason.id}>
+        {reason.beskrivelse}
+      </Radio>
+    ));
+  }, [oppgave, sakstypeToPåVentReasons]);
 
   const fromDate = addDays(NOW, 1);
 

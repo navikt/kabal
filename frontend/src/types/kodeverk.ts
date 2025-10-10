@@ -82,5 +82,10 @@ export enum PaaVentReasonEnum {
   VENTER_PAA_DOKUMENTASJON = '2',
   VENTER_PAA_AVKLARING_OM_DOEDSBO = '3',
   SATT_I_BERO = '4',
+  ANNET_TIL_FORELEGGELSE = '6',
   ANNET = '5',
+}
+
+export interface SakstypeToPåVentReason extends IKodeverkSimpleValue<SaksTypeEnum> {
+  sattPaaVentReasons: IKodeverkValue<PaaVentReasonEnum>[];
 }

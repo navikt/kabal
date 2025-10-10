@@ -6,6 +6,7 @@ import type {
   ISakstyperToUtfall,
   IYtelse,
   PaaVentReasonEnum,
+  SakstypeToPåVentReason,
   UtfallEnum,
 } from '@app/types/kodeverk';
 import { SimpleApiState, useSimpleApiState } from './simple-api-state';
@@ -47,6 +48,9 @@ const lovkildeToRegistreringshjemler = new SimpleApiState<ILovKildeToRegistrerin
   `${API_PREFIX}/lovkildetoregistreringshjemler`,
 );
 const paaVentReasons = new SimpleApiState<IKodeverkValue<PaaVentReasonEnum>[]>(`${API_PREFIX}/satt-paa-vent-reasons`);
+const sakstyperToPåVentReasons = new SimpleApiState<SakstypeToPåVentReason[]>(
+  `${API_PREFIX}/sakstyper-to-satt-paa-vent-reasons`,
+);
 
 export const useSakstyper = () => useSimpleApiState(sakstyper);
 export const useEnheter = () => useSimpleApiState(enheter);
@@ -67,3 +71,4 @@ export const useFagsystemer = () => useSimpleApiState(fagsystemer);
 export const useYtelserAll = () => useSimpleApiState(ytelserAll);
 export const useLovKildeToRegistreringshjemler = () => useSimpleApiState(lovkildeToRegistreringshjemler);
 export const usePaaVentReasons = () => useSimpleApiState(paaVentReasons);
+export const useSakstyperToPåVentReasons = () => useSimpleApiState(sakstyperToPåVentReasons);
