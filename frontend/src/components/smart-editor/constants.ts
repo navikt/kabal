@@ -9,7 +9,7 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections | DeprecatedTemplat
   [TemplateSections.INTRODUCTION_V2]: 'Introduksjon',
   [TemplateSections.AVGJOERELSE]: 'Avgjørelse',
   [TemplateSections.ANFOERSLER]: 'Anførsler',
-  [TemplateSections.VURDERINGEN]: 'Vurderingen vår',
+  [TemplateSections.VURDERINGEN]: 'Begrunnelsen vår',
   [TemplateSections.OPPLYSNINGER]: 'Vektlagte dokumenter',
   [TemplateSections.ANKEINFO]: 'Ankeinfo',
   [TemplateSections.GENERELL_INFO]: 'Generell informasjon',
