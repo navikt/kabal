@@ -10,7 +10,7 @@ import { SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { Heading } from '@navikt/ds-react';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeWithAnkeITrygderetten,
+  ColumnKeyEnum.TypeWithTrygderetten,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Registreringshjemler,
   ColumnKeyEnum.Navn,

@@ -58,6 +58,22 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   );
 };
 
+const getKlagerLabel = (sakstype: SaksTypeEnum): string => {
+  switch (sakstype) {
+    case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
+    case SaksTypeEnum.KLAGE:
+      return 'Klager';
+    case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+      return 'Den ankende part';
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+      return 'Den som begjærer gjenopptak';
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+      return 'Den som krever omgjøring';
+  }
+};
+
 const useLabel = (source: LabelContentSource): string | undefined => {
   const { data: oppgave } = useOppgave();
 
@@ -76,14 +92,7 @@ const useLabel = (source: LabelContentSource): string | undefined => {
         return 'Fødselsnummer';
       case LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME:
       case LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME: {
-        switch (oppgave.typeId) {
-          case SaksTypeEnum.ANKE:
-            return 'Den ankende part';
-          case SaksTypeEnum.OMGJØRINGSKRAV:
-            return 'Den som krever omgjøring';
-          default:
-            return 'Klager';
-        }
+        return getKlagerLabel(oppgave.typeId);
       }
       case LabelContentSource.SAKSNUMMER:
         return 'Saksnummer';

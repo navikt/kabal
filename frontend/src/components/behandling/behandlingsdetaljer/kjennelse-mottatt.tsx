@@ -9,6 +9,7 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useSetKjennelseMottattMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { subDays } from 'date-fns';
+import { useState } from 'react';
 
 const ID = 'kjennelse-mottatt';
 
@@ -16,10 +17,11 @@ export const KjennelseMottatt = () => {
   const canEdit = useCanEditBehandling();
   const { data } = useOppgave();
   const error = useValidationError('kjennelseMottatt');
+  const [localError, setLocalError] = useState<string | null>(null);
   const label = useFieldName('kjennelseMottatt');
   const [setKjennelseMottatt] = useSetKjennelseMottattMutation();
 
-  if (data?.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (data?.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN && data?.typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR) {
     return null;
   }
 
@@ -30,9 +32,23 @@ export const KjennelseMottatt = () => {
   }
 
   const onChange = (kjennelseMottatt: string | null) => {
-    if (kjennelseMottatt !== value) {
-      setKjennelseMottatt({ oppgaveId: data.id, kjennelseMottatt, typeId: data.typeId });
+    setLocalError(null);
+
+    if (kjennelseMottatt === value) {
+      return;
     }
+
+    if (kjennelseMottatt === null) {
+      return setKjennelseMottatt({ oppgaveId: data.id, kjennelseMottatt, typeId: data.typeId });
+    }
+
+    const sendtTilTrygderetten = data.sendtTilTrygderetten?.split('T')[0] ?? null;
+
+    if (sendtTilTrygderetten !== null && sendtTilTrygderetten >= kjennelseMottatt) {
+      setLocalError('Kjennelse mottatt må være etter Sendt til Trygderetten.');
+    }
+
+    setKjennelseMottatt({ oppgaveId: data.id, kjennelseMottatt, typeId: data.typeId });
   };
 
   return (
@@ -42,7 +58,7 @@ export const KjennelseMottatt = () => {
         disabled={!canEdit}
         onChange={onChange}
         value={value}
-        error={error}
+        error={localError || error}
         id={ID}
         size="small"
         centuryThreshold={CURRENT_YEAR_IN_CENTURY}

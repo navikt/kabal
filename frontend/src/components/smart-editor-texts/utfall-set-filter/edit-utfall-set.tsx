@@ -107,7 +107,15 @@ const useUtfall = () => {
     () =>
       sakstyperToUtfall?.map((s) => ({
         ...s,
-        utfall: s.utfall.filter((u) => u.id !== UtfallEnum.HEVET && u.id !== UtfallEnum.HENVIST),
+        utfall: s.utfall.filter(
+          (u) =>
+            u.id !== UtfallEnum.HEVET &&
+            u.id !== UtfallEnum.HENVIST &&
+            u.id !== UtfallEnum.GJENOPPTATT_DELVIS_ELLER_FULLT_MEDHOLD &&
+            u.id !== UtfallEnum.GJENOPPTATT_OPPHEVET &&
+            u.id !== UtfallEnum.GJENOPPTATT_STADFESTET &&
+            u.id !== UtfallEnum.IKKE_GJENOPPTATT,
+        ),
       })),
     [sakstyperToUtfall],
   );

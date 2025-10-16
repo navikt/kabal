@@ -14,7 +14,6 @@ import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebeh
 import type {
   IFinishOppgavebehandlingParams,
   IFinishWithUpdateInGosys,
-  IOppgavebehandlingBaseParams,
   ISetFeilregistrertParams,
   ISetFullmektigParams,
   ISetInnsendingshjemlerParams,
@@ -233,9 +232,9 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    newAnkebehandling: builder.mutation<void, IOppgavebehandlingBaseParams>({
-      query: ({ oppgaveId }) => ({ url: `/kabal-api/behandlinger/${oppgaveId}/nyankebehandlingka`, method: 'POST' }),
-      onQueryStarted: async ({ oppgaveId }, { queryFulfilled }) => {
+    newAnkebehandling: builder.mutation<void, string>({
+      query: (oppgaveId) => ({ url: `/kabal-api/behandlinger/${oppgaveId}/nyankebehandlingka`, method: 'POST' }),
+      onQueryStarted: async (oppgaveId, { queryFulfilled }) => {
         const undo = update(oppgaveId, {
           isAvsluttetAvSaksbehandler: true,
           avsluttetAvSaksbehandlerDate: format(new Date(), ISO_FORMAT),
@@ -248,6 +247,33 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           undo();
 
           const heading = 'Kunne ikke opprette ny ankebehandling';
+
+          if (isApiRejectionError(error)) {
+            apiRejectionErrorToast(heading, error);
+          } else {
+            apiErrorToast(heading);
+          }
+        }
+      },
+    }),
+    newBehandlingFromTRBehandling: builder.mutation<void, string>({
+      query: (oppgaveId) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/nybehandlingfratrygderettbehandling`,
+        method: 'POST',
+      }),
+      onQueryStarted: async (oppgaveId, { queryFulfilled }) => {
+        const undo = update(oppgaveId, {
+          isAvsluttetAvSaksbehandler: true,
+          avsluttetAvSaksbehandlerDate: format(new Date(), ISO_FORMAT),
+        });
+
+        try {
+          await queryFulfilled;
+          toast.success('Ny behandling opprettet');
+        } catch (error) {
+          undo();
+
+          const heading = 'Kunne ikke opprette ny behandling';
 
           if (isApiRejectionError(error)) {
             apiRejectionErrorToast(heading, error);
@@ -278,4 +304,5 @@ export const {
   useSetInnsendingshjemlerMutation,
   useSetFeilregistrertMutation,
   useNewAnkebehandlingMutation,
+  useNewBehandlingFromTRBehandlingMutation,
 } = behandlingerMutationSlice;

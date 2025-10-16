@@ -1,7 +1,8 @@
 import type { IOption } from '@app/components/filter-dropdown/props';
+import { SAKSTYPE_TO_TAG_VARIANT } from '@app/components/type/sakstype-to-tag-variant';
 import { useKlageenheter, useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
-import { SaksTypeEnum, type UtfallEnum } from '@app/types/kodeverk';
-import { Tag, type TagProps } from '@navikt/ds-react';
+import type { UtfallEnum } from '@app/types/kodeverk';
+import { Tag } from '@navikt/ds-react';
 import { useMemo } from 'react';
 
 const EMPTY_ARRAY: [] = [];
@@ -29,14 +30,14 @@ export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
             value: u.id,
             label: u.navn,
             tags: [
-              <Tag size="xsmall" variant={sakstypeToTagVariant(id)} key={id} className="whitespace-nowrap">
+              <Tag size="xsmall" variant={SAKSTYPE_TO_TAG_VARIANT[id]} key={id} className="whitespace-nowrap">
                 {navn}
               </Tag>,
             ],
           });
         } else {
           const tag = (
-            <Tag size="xsmall" variant={sakstypeToTagVariant(id)} key={id} className="whitespace-nowrap">
+            <Tag size="xsmall" variant={SAKSTYPE_TO_TAG_VARIANT[id]} key={id} className="whitespace-nowrap">
               {navn}
             </Tag>
           );
@@ -52,23 +53,6 @@ export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
 
     return utfallList.sort((a, b) => Number.parseInt(a.value, 10) - Number.parseInt(b.value, 10));
   }, [shortNames]);
-};
-
-const sakstypeToTagVariant = (type: SaksTypeEnum): TagProps['variant'] => {
-  switch (type) {
-    case SaksTypeEnum.KLAGE:
-      return 'info';
-    case SaksTypeEnum.ANKE:
-      return 'warning';
-    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
-      return 'error';
-    case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
-      return 'alt1';
-    case SaksTypeEnum.OMGJØRINGSKRAV:
-      return 'alt2';
-    default:
-      return 'info';
-  }
 };
 
 export const useKlageenheterOptions = (): IOption<string>[] => {

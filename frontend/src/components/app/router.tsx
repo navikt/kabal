@@ -47,6 +47,8 @@ export const Router = () => (
         <Route path="trygderettsankebehandling/:oppgaveId" element={<OppgavebehandlingPage />} />
         <Route path="behandling-etter-tr-opphevet/:oppgaveId" element={<OppgavebehandlingPage />} />
         <Route path="omgjøringskravbehandling/:oppgaveId" element={<OppgavebehandlingPage />} />
+        <Route path="begjaering-om-gjenopptak-behandling/:oppgaveId" element={<OppgavebehandlingPage />} />
+        <Route path="begjaering-om-gjenopptak-i-tr-behandling/:oppgaveId" element={<OppgavebehandlingPage />} />
       </Route>
 
       <Route element={<ProtectedRoute roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]} />}>

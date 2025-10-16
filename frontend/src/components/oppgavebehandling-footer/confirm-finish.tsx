@@ -18,11 +18,6 @@ interface FinishProps extends CancelButtonProps {
   show: boolean;
 }
 
-const getFinishText = (requiresGosysOppgave: boolean) =>
-  requiresGosysOppgave
-    ? 'Nei, fullfør uten å opprette ny behandling i Kabal. Husk å sende oppgave i Gosys.'
-    : 'Nei, fullfør uten å opprette ny behandling i Kabal.';
-
 const Buttons = ({ cancel }: CancelButtonProps) => {
   const { data: oppgave } = useOppgave();
 
@@ -37,6 +32,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
     case SaksTypeEnum.KLAGE:
     case SaksTypeEnum.ANKE:
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       return (
         <HStack align="center" gap="2" width="400px">
           {oppgave.requiresGosysOppgave ? (
@@ -70,6 +66,34 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
           );
       }
     }
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+      switch (utfallId) {
+        case UtfallEnum.GJENOPPTATT_OPPHEVET:
+          return (
+            <HStack align="center" gap="2" width="650px">
+              <FinishButton nyBehandling>Ja, fullfør og opprett ny behandling i Kabal</FinishButton>
+
+              {oppgave.requiresGosysOppgave ? (
+                <UpdateInGosys>Nei, fullfør uten å opprette ny behandling i Kabal</UpdateInGosys>
+              ) : (
+                <FinishButton>Nei, fullfør uten å opprette ny behandling i Kabal</FinishButton>
+              )}
+
+              <CancelButton cancel={cancel} />
+            </HStack>
+          );
+        default:
+          return (
+            <HStack align="center" gap="2" width="400px">
+              {oppgave.requiresGosysOppgave ? (
+                <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+              ) : (
+                <FinishButton>Fullfør</FinishButton>
+              )}
+              <CancelButton cancel={cancel} />
+            </HStack>
+          );
+      }
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN: {
       switch (utfallId) {
         case UtfallEnum.MEDHOLD:
@@ -91,7 +115,13 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
           return (
             <HStack align="center" gap="2" width="650px">
               <FinishButton nyBehandling>Ja, fullfør og opprett ny behandling i Kabal</FinishButton>
-              <UpdateInGosys>{getFinishText(oppgave.requiresGosysOppgave)}</UpdateInGosys>
+
+              {oppgave.requiresGosysOppgave ? (
+                <UpdateInGosys>Nei, fullfør uten å opprette ny behandling i Kabal</UpdateInGosys>
+              ) : (
+                <FinishButton>Nei, fullfør uten å opprette ny behandling i Kabal</FinishButton>
+              )}
+
               <CancelButton cancel={cancel} />
             </HStack>
           );
@@ -179,6 +209,23 @@ const useText = (): string => {
       return 'Du fullfører nå behandlingen. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Du fullfører nå behandlingen av omgjøringskravet. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK: {
+      if (
+        utfallId === UtfallEnum.INNSTILLING_GJENOPPTAS ||
+        utfallId === UtfallEnum.INNSTILLING_IKKE_GJENOPPTAS ||
+        utfallId === UtfallEnum.INNSTILLING_AVVIST
+      ) {
+        return 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen av begjæringen om gjenopptak i Kabal. Behandlingen kan ikke redigeres når den er fullført.';
+      }
+
+      return 'Du fullfører nå behandlingen av begjæringen om gjenopptak. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
+    }
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+      if (utfallId === UtfallEnum.GJENOPPTATT_OPPHEVET) {
+        return 'Du har valgt «opphevet» som resultat fra Trygderetten. Du fullfører nå registrering av resultatet. Skal klageinstansen behandle saken på nytt?';
+      }
+
+      return 'Du fullfører nå registrering av utfall/resultat fra Trygderetten. Registreringen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre registreringen.';
   }
 };
 
@@ -199,7 +246,9 @@ const FinishButton = ({ children, nyBehandling = false }: FinishButtonProps) => 
 
   const finish = async () => {
     const params: IFinishOppgavebehandlingParams =
-      oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && oppgave.resultat.utfallId === UtfallEnum.OPPHEVET
+      (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && oppgave.resultat.utfallId === UtfallEnum.OPPHEVET) ||
+      (oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR &&
+        oppgave.resultat.utfallId === UtfallEnum.GJENOPPTATT_OPPHEVET)
         ? {
             oppgaveId: oppgave.id,
             typeId: oppgave.typeId,

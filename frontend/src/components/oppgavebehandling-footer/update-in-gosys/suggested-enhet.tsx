@@ -39,7 +39,10 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
     return null;
   }
 
-  const suggestedEnhetsnr = typeId === SaksTypeEnum.ANKE ? tildeltEnhetsnr : opprettetAvEnhet?.enhetsnr;
+  const suggestedEnhetsnr =
+    typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK
+      ? tildeltEnhetsnr
+      : opprettetAvEnhet?.enhetsnr;
 
   const suggestedEnhetName =
     typeId === SaksTypeEnum.ANKE

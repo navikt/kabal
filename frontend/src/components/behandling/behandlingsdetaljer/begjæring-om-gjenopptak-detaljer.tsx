@@ -25,7 +25,7 @@ interface Props {
   oppgavebehandling: IOppgavebehandling;
 }
 
-export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
+export const BegjæringOmGjenopptakDetaljer = ({ oppgavebehandling }: Props) => {
   const [updateKlager, { isLoading: klagerIsLoading }] = useUpdateKlagerMutation();
 
   const { typeId, fraNAVEnhetNavn, fraNAVEnhet, resultat, ytelseId, prosessfullmektig, saksnummer, id } =
@@ -60,7 +60,7 @@ export const Ankebehandlingsdetaljer = ({ oppgavebehandling }: Props) => {
 
           <PreviousSaksbehandler
             previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
-            type={SaksTypeEnum.ANKE}
+            type={SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK}
           />
 
           <Saksnummer saksnummer={saksnummer} />

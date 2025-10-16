@@ -96,5 +96,23 @@ export const OpenOppgavebehandling = ({
           data-omgjøringskravid={id}
         />
       );
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+      return (
+        <Button
+          {...commonProps}
+          to={`/begjaering-om-gjenopptak-behandling/${id}`}
+          data-testid="begjæring-om-gjenopptak-behandling-open-link"
+          data-begjæring-om-gjenopptak-behandlingid={id}
+        />
+      );
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+      return (
+        <Button
+          {...commonProps}
+          to={`/begjaering-om-gjenopptak-i-tr-behandling/${id}`}
+          data-testid="begjæring-om-gjenopptak-i-tr-behandling-open-link"
+          data-begjæring-om-gjenopptak-i-tr-behandlingid={id}
+        />
+      );
   }
 };

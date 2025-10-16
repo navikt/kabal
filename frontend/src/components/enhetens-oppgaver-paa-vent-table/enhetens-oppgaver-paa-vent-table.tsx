@@ -12,7 +12,7 @@ import { Heading } from '@navikt/ds-react';
 import { useContext } from 'react';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeWithAnkeITrygderetten,
+  ColumnKeyEnum.TypeWithTrygderetten,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.RelevantOppgaver,
