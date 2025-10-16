@@ -67,7 +67,8 @@ interface ToSelfProps {
 const ToSelf = ({ actor, previousSaksbehandler, timestamp }: ToSelfProps) => (
   <HistoryEvent tag="Tildeling" type={HistoryEventTypes.TILDELING} timestamp={timestamp} icon={PlusIcon}>
     <p>
-      {employeeName(actor)} tildelte seg saken fra {employeeName(previousSaksbehandler)}.
+      {employeeName(actor)} tildelte seg saken fra
+      {previousSaksbehandler === null ? ' felles kø.' : ` ${employeeName(previousSaksbehandler)}.`}
     </p>
   </HistoryEvent>
 );
