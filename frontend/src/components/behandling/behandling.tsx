@@ -1,3 +1,5 @@
+import { BegjæringOmGjenopptakDetaljer } from '@app/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-detaljer';
+import { BegjæringOmGjenopptakITrDetaljer } from '@app/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-i-tr-detaljer';
 import { BehandlingEtterTrOpphevetDetaljer } from '@app/components/behandling/behandlingsdetaljer/behandling-etter-tr-opphevet-detaljer';
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { Omgjøringskravdetaljer } from '@app/components/behandling/behandlingsdetaljer/omgjøringskravdetaljer';
@@ -71,5 +73,9 @@ const Behandlingsdetaljer = () => {
       return <BehandlingEtterTrOpphevetDetaljer oppgavebehandling={oppgave} />;
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return <Omgjøringskravdetaljer oppgavebehandling={oppgave} />;
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+      return <BegjæringOmGjenopptakDetaljer oppgavebehandling={oppgave} />;
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+      return <BegjæringOmGjenopptakITrDetaljer oppgavebehandling={oppgave} />;
   }
 };

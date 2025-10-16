@@ -73,6 +73,7 @@ const getSmartDocumentTitle = (templateId: TemplateIdEnum, fallback: string) => 
     case TemplateIdEnum.KLAGEVEDTAK_V2:
       return 'Klagevedtak';
     case TemplateIdEnum.ANKEVEDTAK:
+    case TemplateIdEnum.GJENOPPTAKSBEGJÆRING_VEDTAK:
       return 'Omgjøring av klagevedtak';
     default:
       return fallback;

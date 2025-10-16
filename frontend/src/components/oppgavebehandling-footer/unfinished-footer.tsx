@@ -5,6 +5,7 @@ import { FinishButton } from '@app/components/oppgavebehandling-footer/finish-bu
 import { NewAnkebehandlingButton } from '@app/components/oppgavebehandling-footer/new-ankebehandling-button';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import { HStack } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
@@ -32,7 +33,12 @@ export const UnfinishedFooter = () => {
         <VentButton />
         <BackLink />
         <DeassignOppgave oppgave={oppgave} />
-        <NewAnkebehandlingButton />
+
+        {oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+        oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR ? (
+          <NewAnkebehandlingButton typeId={oppgave.typeId} oppgaveId={oppgave.id} />
+        ) : null}
+
         <FeilregistrerButton />
       </HStack>
       <ValidationSummaryPopup />

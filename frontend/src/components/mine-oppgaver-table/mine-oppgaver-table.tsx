@@ -12,7 +12,7 @@ import { Heading } from '@navikt/ds-react';
 const TEST_ID = 'mine-oppgaver-table';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeWithAnkeITrygderetten,
+  ColumnKeyEnum.TypeWithTrygderetten,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Innsendingshjemler,
   ColumnKeyEnum.Navn,

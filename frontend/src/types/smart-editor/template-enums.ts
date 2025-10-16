@@ -16,4 +16,9 @@ export enum TemplateIdEnum {
   VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE = 'varsel-om-omgjøring-til-ugunst',
   EKSPEDISJONSBREV_TIL_TRYGDERETTEN = 'ekspedisjonsbrev-til-trygderetten',
   ETTERSENDING_TIL_TRYGDERETTEN = 'ettersending-til-trygderetten',
+  GJENOPPTAKSBEGJÆRING_VEDTAK = 'gjenopptakelsesbegjæring-vedtak',
+  GJENOPPTAKSBEGJÆRING_TILSVARSBREV_MED_OVERSENDELSESBREV = 'gjenopptakelsesbegjæring-tilsvarsbrev-med-oversendelsesbrev',
+  GJENOPPTAKSBEGJÆRING_EKSPEDISJONSBREV_TIL_TR = 'gjenopptakelsesbegjæring-ekspedisjonsbrev-til-tr',
+  GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_DIREKTE_TIL_TR = 'gjenopptakelsesbegjæring-orientering-om-tilsvar-direkte-til-tr',
+  GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR = 'gjenopptakelsesbegjæring-ettersending-til-tr',
 }

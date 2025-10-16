@@ -56,5 +56,10 @@ const getLabel = (typeId: SaksTypeEnum): [string, string] => {
       return ['Opprinnelig klager / ankende part', 'opprinnelig klager / ankende part'];
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return ['Den som krever omgjøring', 'den som krever omgjøring'];
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+      return ['Den som begjærer gjenopptak', 'den som begjærer gjenopptak'];
+    default:
+      return ['Klager', 'klager'];
   }
 };

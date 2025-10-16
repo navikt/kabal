@@ -16,7 +16,9 @@ export const useHideKvalitetsvurdering = (): boolean => {
   if (
     typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
     typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET ||
-    typeId === SaksTypeEnum.OMGJØRINGSKRAV
+    typeId === SaksTypeEnum.OMGJØRINGSKRAV ||
+    typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ||
+    typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR
   ) {
     return true;
   }

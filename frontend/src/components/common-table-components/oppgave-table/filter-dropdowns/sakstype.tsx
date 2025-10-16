@@ -9,6 +9,7 @@ const OPTIONS = [
   { value: SaksTypeEnum.KLAGE, label: 'Klage' },
   { value: SaksTypeEnum.ANKE, label: 'Anke' },
   { value: SaksTypeEnum.OMGJØRINGSKRAV, label: 'Omgjøringskrav' },
+  { value: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK, label: 'Begjæring om gjenopptak' },
 ];
 
 export const Sakstype = ({ columnKey, tableKey }: FilterDropdownProps) => {
@@ -28,7 +29,7 @@ export const Sakstype = ({ columnKey, tableKey }: FilterDropdownProps) => {
   );
 };
 
-export const SakstypeWithAnkeITrygderetten = ({ columnKey, tableKey }: FilterDropdownProps) => {
+export const SakstypeWithTrygderetten = ({ columnKey, tableKey }: FilterDropdownProps) => {
   const [typer, setTyper] = useOppgaveTableTyper(tableKey);
 
   return (
@@ -36,7 +37,12 @@ export const SakstypeWithAnkeITrygderetten = ({ columnKey, tableKey }: FilterDro
       <FilterDropdown<SaksTypeEnum>
         selected={typer ?? []}
         onChange={setTyper}
-        options={[...OPTIONS, { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN, label: 'Anke i Trygderetten' }]}
+        options={[
+          ...OPTIONS,
+          { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN, label: 'Anke i Trygderetten' },
+          { value: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR, label: 'Begjæring om gjenopptak i Trygderetten' },
+          { value: SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET, label: 'Behandling etter Trygderetten opphevet' },
+        ]}
         data-testid="filter-type"
       >
         {TABLE_HEADERS[columnKey]}

@@ -7,6 +7,7 @@ import { useValidationError } from '@app/hooks/use-validation-error';
 import { useSetSendtTilTrygderettenMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { subDays } from 'date-fns';
+import { useState } from 'react';
 import { CURRENT_YEAR_IN_CENTURY } from '../../date-picker/constants';
 import { DatePicker } from '../../date-picker/date-picker';
 
@@ -16,10 +17,11 @@ export const SendtTilTrygderetten = () => {
   const canEdit = useCanEditBehandling();
   const { data } = useOppgave();
   const error = useValidationError('sendtTilTrygderetten');
+  const [localError, setLocalError] = useState<string | null>(null);
   const label = useFieldName('sendtTilTrygderetten');
   const [setSendtTilTrygderetten] = useSetSendtTilTrygderettenMutation();
 
-  if (data?.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (data?.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN && data?.typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR) {
     return null;
   }
 
@@ -35,12 +37,22 @@ export const SendtTilTrygderetten = () => {
         label={label}
         disabled={!canEdit}
         onChange={(sendtTilTrygderetten) => {
-          if (sendtTilTrygderetten !== null && sendtTilTrygderetten !== value) {
-            setSendtTilTrygderetten({ oppgaveId: data.id, sendtTilTrygderetten, typeId: data.typeId });
+          setLocalError(null);
+
+          if (sendtTilTrygderetten === null || sendtTilTrygderetten === value) {
+            return;
           }
+
+          const kjennelseMottatt = data.kjennelseMottatt?.split('T')[0] ?? null;
+
+          if (kjennelseMottatt !== null && sendtTilTrygderetten >= kjennelseMottatt) {
+            setLocalError('Sendt til Trygderetten må være før Kjennelse mottatt.');
+          }
+
+          setSendtTilTrygderetten({ oppgaveId: data.id, sendtTilTrygderetten, typeId: data.typeId });
         }}
         value={value}
-        error={error}
+        error={localError || error}
         id={ID}
         size="small"
         centuryThreshold={CURRENT_YEAR_IN_CENTURY}

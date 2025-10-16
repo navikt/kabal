@@ -1,5 +1,6 @@
+import { SAKSTYPE_TO_TAG_VARIANT } from '@app/components/type/sakstype-to-tag-variant';
 import { useTypeNameFromId } from '@app/hooks/use-kodeverk-ids';
-import { SaksTypeEnum } from '@app/types/kodeverk';
+import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { Skeleton, Tag, type TagProps } from '@navikt/ds-react';
 
 interface Props {
@@ -15,16 +16,8 @@ export const Type = ({ type, size = 'small' }: Props) => {
   }
 
   return (
-    <Tag variant={VARIANT[type]} size={size} className="truncate">
+    <Tag variant={SAKSTYPE_TO_TAG_VARIANT[type]} size={size} className="truncate">
       {typeName}
     </Tag>
   );
-};
-
-const VARIANT: Record<SaksTypeEnum, TagProps['variant']> = {
-  [SaksTypeEnum.KLAGE]: 'alt1-filled',
-  [SaksTypeEnum.ANKE]: 'success-filled',
-  [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: 'error-filled',
-  [SaksTypeEnum.OMGJØRINGSKRAV]: 'info-filled',
-  [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: 'alt2-filled',
 };

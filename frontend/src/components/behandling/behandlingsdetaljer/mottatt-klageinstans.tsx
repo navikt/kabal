@@ -19,7 +19,11 @@ export const MottattDato = () => {
   const label = useFieldName('mottattKlageinstans');
   const [setMottattKlageinstans] = useSetMottattKlageinstansMutation();
 
-  if (data?.typeId !== SaksTypeEnum.ANKE && data?.typeId !== SaksTypeEnum.OMGJØRINGSKRAV) {
+  if (
+    data?.typeId !== SaksTypeEnum.ANKE &&
+    data?.typeId !== SaksTypeEnum.OMGJØRINGSKRAV &&
+    data?.typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK
+  ) {
     return null;
   }
 

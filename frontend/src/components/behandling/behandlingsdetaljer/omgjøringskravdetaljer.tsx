@@ -63,12 +63,10 @@ export const Omgjøringskravdetaljer = ({ oppgavebehandling }: Props) => {
             <Ytelse ytelseId={ytelseId} />
           </BehandlingSection>
 
-          <BehandlingSection label="Behandlingen som kreves omgjort er tidligere fullført av">
-            <PreviousSaksbehandler
-              previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
-              type={SaksTypeEnum.OMGJØRINGSKRAV}
-            />
-          </BehandlingSection>
+          <PreviousSaksbehandler
+            previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
+            type={SaksTypeEnum.OMGJØRINGSKRAV}
+          />
 
           <Saksnummer saksnummer={saksnummer} />
 

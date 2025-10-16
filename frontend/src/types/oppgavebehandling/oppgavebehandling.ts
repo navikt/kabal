@@ -162,12 +162,24 @@ export interface IOmgjøringskravbehandling extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.OMGJØRINGSKRAV;
 }
 
+export interface IBegjæringOmGjenopptakBehandling extends IOppgavebehandlingBase {
+  typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;
+}
+
+export interface IBegjæringOmGjenopptakITRBehandling extends IOppgavebehandlingBase {
+  kjennelseMottatt: string | null; // LocalDate
+  sendtTilTrygderetten: string | null; // LocalDate
+  typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+}
+
 export type IOppgavebehandling =
   | IKlagebehandling
   | IAnkebehandling
   | ITrygderettsankebehandling
   | IBehandlingEtterTryderettenOpphevet
-  | IOmgjøringskravbehandling;
+  | IOmgjøringskravbehandling
+  | IBegjæringOmGjenopptakBehandling
+  | IBegjæringOmGjenopptakITRBehandling;
 
 interface Resultat {
   file: IVedlegg | null;

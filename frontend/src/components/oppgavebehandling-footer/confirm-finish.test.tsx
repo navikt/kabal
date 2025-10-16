@@ -161,7 +161,7 @@ describe('ConfirmFinish', () => {
       test('Opphevet', async () => {
         mockOppgave(type, UtfallEnum.OPPHEVET, false);
         render(<ConfirmFinish cancel={() => undefined} show />);
-        const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal.';
+        const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal';
         const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
         expect(screen.getByRole('button', { name: button1 })).toBeVisible();
         expect(screen.getByRole('button', { name: button2 })).toBeVisible();
@@ -170,7 +170,9 @@ describe('ConfirmFinish', () => {
         expect(items).toHaveLength(3);
 
         fireEvent.click(screen.getByRole('button', { name: button1 }));
-        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
+        expect(
+          screen.queryByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' }),
+        ).not.toBeInTheDocument();
       });
 
       test('Henvist', async () => {
@@ -193,7 +195,7 @@ describe('ConfirmFinish', () => {
       test('Opphevet', async () => {
         mockOppgave(type, UtfallEnum.OPPHEVET, true);
         render(<ConfirmFinish cancel={() => undefined} show />);
-        const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal. Husk å sende oppgave i Gosys.';
+        const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal';
         const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
         expect(screen.getByRole('button', { name: button1 })).toBeVisible();
         expect(screen.getByRole('button', { name: button2 })).toBeVisible();
@@ -201,8 +203,8 @@ describe('ConfirmFinish', () => {
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(3);
 
-        fireEvent.click(screen.getByRole('button', { name: button2 }));
-        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).not.toBeVisible();
+        fireEvent.click(screen.getByRole('button', { name: button1 }));
+        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
       });
 
       const cases = [
@@ -212,6 +214,80 @@ describe('ConfirmFinish', () => {
         UtfallEnum.AVVIST,
         UtfallEnum.HEVET,
       ];
+
+      test.each(cases)('Utfall id: %s', async (utfall) => {
+        mockOppgave(type, utfall, true);
+        render(<ConfirmFinish cancel={() => undefined} show />);
+        const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
+        expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
+
+        const items = await screen.findAllByRole('button');
+        expect(items).toHaveLength(2);
+
+        fireEvent.click(screen.getByRole('button', { name: buttonText }));
+        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
+      });
+    });
+  });
+
+  describe('Begjæring om gjenopptak i Trygderetten', () => {
+    const type = SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+
+    const cases = [
+      UtfallEnum.HEVET,
+      UtfallEnum.AVVIST,
+      UtfallEnum.GJENOPPTATT_DELVIS_ELLER_FULLT_MEDHOLD,
+      UtfallEnum.GJENOPPTATT_STADFESTET,
+      UtfallEnum.INNSTILLING_IKKE_GJENOPPTAS,
+    ];
+
+    describe('Does not require Gosys oppgave', async () => {
+      test.each(cases)('Utfall id: %s', async (utfall) => {
+        mockOppgave(type, utfall, false);
+        render(<ConfirmFinish cancel={() => undefined} show />);
+        const buttonText = 'Fullfør';
+        expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
+
+        const items = await screen.findAllByRole('button');
+        expect(items).toHaveLength(2);
+
+        fireEvent.click(screen.getByRole('button', { name: buttonText }));
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+
+      test('Gjenopptatt - Opphevet', async () => {
+        mockOppgave(type, UtfallEnum.GJENOPPTATT_OPPHEVET, false);
+        render(<ConfirmFinish cancel={() => undefined} show />);
+        const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal';
+        const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
+        expect(screen.getByRole('button', { name: button1 })).toBeVisible();
+        expect(screen.getByRole('button', { name: button2 })).toBeVisible();
+
+        const items = await screen.findAllByRole('button');
+        expect(items).toHaveLength(3);
+
+        fireEvent.click(screen.getByRole('button', { name: button1 }));
+        expect(
+          screen.queryByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' }),
+        ).not.toBeInTheDocument();
+      });
+    });
+
+    describe('Requires Gosys oppgave', async () => {
+      test('Gjenopptatt - Opphevet', async () => {
+        mockOppgave(type, UtfallEnum.GJENOPPTATT_OPPHEVET, true);
+        render(<ConfirmFinish cancel={() => undefined} show />);
+        const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal';
+        const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
+        expect(screen.getByRole('button', { name: button1 })).toBeVisible();
+        expect(screen.getByRole('button', { name: button2 })).toBeVisible();
+
+        const items = await screen.findAllByRole('button');
+        expect(items).toHaveLength(3);
+
+        fireEvent.click(screen.getByRole('button', { name: button1 }));
+        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
+      });
 
       test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, true);

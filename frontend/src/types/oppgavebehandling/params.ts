@@ -33,12 +33,12 @@ export interface IOppgavebehandlingHjemlerUpdateParams extends IOppgavebehandlin
 
 export interface IKjennelseMottattParams extends IOppgavebehandlingBaseParams {
   kjennelseMottatt: string | null; // LocalDate
-  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
+  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
 }
 
 export interface ISendtTilTrygderettenParams extends IOppgavebehandlingBaseParams {
   sendtTilTrygderetten: string; // LocalDate
-  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
+  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
 }
 
 export type ICheckDocumentParams = IJournalfoertDokumentId & IOppgavebehandlingBaseParams;
@@ -69,7 +69,8 @@ export interface SetTilbakekrevingParams extends IOppgavebehandlingBaseParams {
 
 export type IFinishOppgavebehandlingParams =
   | IDefaultFinishOppgavebehandlingParams
-  | IFinishOppgavebehandlingOpphevetTRParams;
+  | IFinishOppgavebehandlingOpphevetTRParams
+  | IFinishOppgavebehandlingBegjæringOmGjenopptakITRParams;
 
 export interface IFinishWithUpdateInGosys extends Omit<IDefaultFinishOppgavebehandlingParams, 'nyBehandling'> {
   gosysOppgaveUpdate: {
@@ -91,6 +92,12 @@ interface IFinishOppgavebehandlingOpphevetTRParams extends Omit<IDefaultFinishOp
   nyBehandling: boolean;
 }
 
+interface IFinishOppgavebehandlingBegjæringOmGjenopptakITRParams
+  extends Omit<IDefaultFinishOppgavebehandlingParams, 'nyBehandling'> {
+  typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+  nyBehandling: boolean;
+}
+
 export interface ISetFeilregistrertParams extends IOppgavebehandlingBaseParams {
   reason: string;
 }
@@ -103,6 +110,7 @@ export enum ValidationType {
   FINISH = 'fullfoer',
   FEILREGISTRERING = 'feilregistrer',
   NEW_ANKEBEHANDLING = 'nyankebehandling',
+  NEW_BEHANDLING_FROM_TR_BEHANDLING = 'nybehandlingfratrygderettbehandling',
 }
 
 export interface IValidationParams extends IOppgavebehandlingBaseParams {
