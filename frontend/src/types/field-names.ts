@@ -42,6 +42,7 @@ export const DEFAULT_FIELD_NAMES = {
   avsender: 'Avsender',
   gosysOppgaveInput: 'Oppgaven fra Gosys er ferdigstilt',
   gosysOppgave: 'Oppgave fra Gosys',
+  gosysOppgaveUpdate: 'Oppdatering av oppgave fra Gosys',
 };
 
 const ANKE_I_TRYGDERETTEN_FIELD_NAMES = {
