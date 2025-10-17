@@ -1,8 +1,12 @@
 import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
 import { DatePicker } from '@app/components/date-picker/date-picker';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
-import { useSetMottattKlageinstansMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
+import {
+  useSetKjennelseMottattMutation,
+  useSetMottattKlageinstansMutation,
+} from '@app/redux-api/oppgaver/mutations/behandling-dates';
 import { Role } from '@app/types/bruker';
+import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOppgave } from '@app/types/oppgaver';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
@@ -21,14 +25,20 @@ export const Age = (oppgave: IOppgave) => {
   return <EditableAge {...oppgave} />;
 };
 
-const EditableAge = ({ ageKA, mottatt, id }: IOppgave) => {
+const EditableAge = ({ ageKA, mottatt, id, typeId }: IOppgave) => {
   const [userAge, setUserAge] = useState(ageKA);
   const [isOpen, setIsOpen] = useState(false);
 
   const closeCalendar = () => setIsOpen(false);
 
   const children = isOpen ? (
-    <EditAge mottattDate={mottatt} oppgaveId={id} closeCalendar={closeCalendar} setUserAge={setUserAge} />
+    <EditAge
+      mottattDate={mottatt}
+      oppgaveId={id}
+      closeCalendar={closeCalendar}
+      setUserAge={setUserAge}
+      typeId={typeId}
+    />
   ) : (
     <span className="truncate">
       {userAge} {userAge === 1 ? 'dag' : 'dager'}
@@ -72,12 +82,14 @@ interface EditAgeProps {
   oppgaveId: string;
   closeCalendar: () => void;
   setUserAge: (age: number) => void;
+  typeId: SaksTypeEnum;
 }
 
 const DATE_PICKER_ID = 'edit-age';
 
-const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge }: EditAgeProps) => {
-  const [setMottattklage] = useSetMottattKlageinstansMutation();
+const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge, typeId }: EditAgeProps) => {
+  const [setMottattklageinstans] = useSetMottattKlageinstansMutation();
+  const [setKjennelseMottatt] = useSetKjennelseMottattMutation();
 
   const onChange = (date: string | null) => {
     if (date === null || date === mottattDate) {
@@ -86,7 +98,12 @@ const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge }: EditAgeP
 
     setUserAge(differenceInDays(new Date(), parseISO(date)));
 
-    setMottattklage({ mottattKlageinstans: date, oppgaveId });
+    if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR) {
+      setKjennelseMottatt({ kjennelseMottatt: date, oppgaveId, typeId });
+    } else {
+      setMottattklageinstans({ mottattKlageinstans: date, oppgaveId });
+    }
+
     closeCalendar();
   };
 
