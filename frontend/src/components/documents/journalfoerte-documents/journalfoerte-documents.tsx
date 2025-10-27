@@ -19,7 +19,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFilters } from './header/use-filters';
 
 const EMPTY_ARRAY: IArkivertDocument[] = [];
-const EMPTY_ID_LIST: string[] = [];
 
 export const JournalfoerteDocuments = () => {
   const oppgaveId = useOppgaveId();
@@ -65,12 +64,16 @@ export const JournalfoerteDocuments = () => {
   const showLogiskeVedleggIdList = useShowLogiskeVedlegg();
 
   useEffect(() => {
-    if (showLogiskeVedleggIdList !== EMPTY_ID_LIST || vedleggWithLogiskeVedleggIdList.length === 0) {
-      return;
+    if (documentsWithVedleggIdList.length !== 0) {
+      setShowVedlegg((e) => (e.length !== 0 ? e : documentsWithVedleggIdList));
     }
+  }, [documentsWithVedleggIdList]);
 
-    setShowLogiskeVedlegg(vedleggWithLogiskeVedleggIdList);
-  }, [showLogiskeVedleggIdList, vedleggWithLogiskeVedleggIdList]);
+  useEffect(() => {
+    if (vedleggWithLogiskeVedleggIdList.length !== 0) {
+      setShowLogiskeVedlegg((e) => (e.length !== 0 ? e : vedleggWithLogiskeVedleggIdList));
+    }
+  }, [vedleggWithLogiskeVedleggIdList]);
 
   const showsAnyVedlegg = showVedleggIdList.length > 0 || showLogiskeVedleggIdList.length > 0;
 
