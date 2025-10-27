@@ -7,6 +7,7 @@ type UUID = string;
 export enum KvalitetsvurderingVersion {
   V1 = 1,
   V2 = 2,
+  V3 = 3,
 }
 
 export enum GosysStatus {

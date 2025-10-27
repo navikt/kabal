@@ -7,6 +7,7 @@ import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { formatIdNumber } from '@app/functions/format-id';
 import { reduxStore } from '@app/redux/configure-store';
 import { forlengetBehandlingstidApi } from '@app/redux-api/forlenget-behandlingstid';
+import { kvalitetsvurderingV3Api } from '@app/redux-api/kaka-kvalitetsvurdering/v3';
 import { getFullmektigBody, getFullmektigMessage } from '@app/redux-api/oppgaver/mutations/fullmektig-helpers';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiRejectionError } from '@app/types/errors';
@@ -57,6 +58,7 @@ const finishOppgaveOnQueryStarted = async ({
     reduxStore.dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
 
     if (id !== null) {
+      reduxStore.dispatch(kvalitetsvurderingV3Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
       reduxStore.dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
       reduxStore.dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
     }

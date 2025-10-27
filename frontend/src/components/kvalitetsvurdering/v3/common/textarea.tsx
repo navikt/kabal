@@ -1,19 +1,20 @@
 import { ContainerWithHelpText } from '@app/components/kvalitetsvurdering/common/container-with-helptext';
-import type { TextParams } from '@app/components/kvalitetsvurdering/v2/common/types';
-import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import type { TextParams } from '@app/components/kvalitetsvurdering/v3/common/types';
+import { useKvalitetsvurderingV3 } from '@app/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useValidationError } from '@app/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { SavedStatus } from '@app/components/saved-status/saved-status';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import type { IKvalitetsvurderingBooleans } from '@app/types/kaka-kvalitetsvurdering/v2';
-import { BodyLong, HStack, Label, Textarea, VStack } from '@navikt/ds-react';
+import { useCanEditBehandling } from '@app/hooks/use-can-edit';
+import type { KvalitetsvurderingV3Boolean } from '@app/types/kaka-kvalitetsvurdering/v3';
+import { BodyLong, HStack, Label, Textarea } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 
 interface Props extends TextParams {
-  parentKey?: keyof IKvalitetsvurderingBooleans;
+  parentKey?: keyof KvalitetsvurderingV3Boolean;
 }
 
 export const KvalitetsskjemaTextarea = (props: Props) => {
-  const { kvalitetsvurdering, isLoading } = useKvalitetsvurderingV2();
-  const canEdit = useIsTildeltSaksbehandler();
+  const { kvalitetsvurdering, isLoading } = useKvalitetsvurderingV3();
+  const canEdit = useCanEditBehandling();
 
   if (isLoading) {
     return null;
@@ -25,9 +26,7 @@ export const KvalitetsskjemaTextarea = (props: Props) => {
     return (
       <div>
         <ContainerWithHelpText helpText={helpText}>
-          <Label size="small" htmlFor={field}>
-            {label}
-          </Label>
+          <Label htmlFor={field}>{label}</Label>
         </ContainerWithHelpText>
         <BodyLong id={field} className="border-ax-border-neutral-subtle border-l-2 pl-2">
           {kvalitetsvurdering[field]}
@@ -51,8 +50,9 @@ const KvalitetsskjemaTextareaInternal = ({
   description,
   initialValue,
 }: InternalProps) => {
-  const { kvalitetsvurdering, isLoading, update, updateStatus } = useKvalitetsvurderingV2();
+  const { kvalitetsvurdering, isLoading, update, updateStatus } = useKvalitetsvurderingV3();
   const [localValue, setLocalValue] = useState<string>(initialValue);
+  const error = useValidationError(field);
 
   useEffect(() => {
     if (
@@ -72,24 +72,24 @@ const KvalitetsskjemaTextareaInternal = ({
     return null;
   }
 
-  const show = parentKey === undefined ? true : kvalitetsvurdering[parentKey] === true;
+  const show = parentKey === undefined ? true : kvalitetsvurdering[parentKey];
 
   if (!show) {
     return null;
   }
 
   return (
-    <VStack gap="2">
+    <>
       <Textarea
-        size="small"
         label={<ContainerWithHelpText helpText={helpText}>{label}</ContainerWithHelpText>}
         value={localValue}
         onChange={({ target }) => setLocalValue(target.value)}
         description={description}
+        error={error}
       />
       <HStack align="center" justify="end" marginBlock="1 0" height="21px">
         <SavedStatus {...updateStatus} />
       </HStack>
-    </VStack>
+    </>
   );
 };
