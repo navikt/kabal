@@ -1,3 +1,4 @@
+import { KvalitetsskjemaV3 } from '@app/components/kvalitetsvurdering/v3/kvalitetsskjema';
 import { useHideKvalitetsvurdering } from '@app/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
 import { SECTION_KEY } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -21,7 +22,7 @@ export const Kvalitetsvurdering = (): React.JSX.Element | null => {
 
   return (
     <PanelContainer data-testid="kvalitetsvurdering-panel">
-      <div className="w-100 p-4">
+      <div className="w-165 p-4">
         <Heading level="1" size="medium" spacing>
           {header}
         </Heading>
@@ -44,5 +45,7 @@ const Kvalitetsskjema = () => {
       return <KvalitetsskjemaV1 />;
     case KvalitetsvurderingVersion.V2:
       return <KvalitetsskjemaV2 />;
+    case KvalitetsvurderingVersion.V3:
+      return <KvalitetsskjemaV3 />;
   }
 };
