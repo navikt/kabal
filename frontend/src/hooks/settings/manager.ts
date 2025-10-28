@@ -12,7 +12,7 @@ class SettingsManager {
   private syncedSettings: Set<string> = new Set();
 
   constructor() {
-    addEventListener('storage', (event: StorageEvent) => {
+    window.addEventListener('storage', (event: StorageEvent) => {
       if (event.storageArea !== window.localStorage) {
         return;
       }
@@ -78,23 +78,25 @@ class SettingsManager {
   };
 
   public set = (key: string, value: Setter): void => {
-    const newValue = typeof value === 'function' ? value(this.settings[key]) : value;
+    const oldValue = this.settings[key];
+    const newValue = typeof value === 'function' ? value(oldValue) : value;
 
     if (newValue === this.settings[key]) {
       return;
     }
 
-    this.notify(key, newValue);
-
     this.settings[key] = newValue;
-    setTimeout(() => window.localStorage.setItem(key, newValue), 0);
+
+    window.localStorage.setItem(key, newValue);
+
+    this.notify(key, newValue);
   };
 
   public remove = (key: string): void => {
     this.notify(key, undefined);
 
     delete this.settings[key];
-    setTimeout(() => window.localStorage.removeItem(key), 0);
+    window.localStorage.removeItem(key);
   };
 
   public subscribe = (key: string, callback: ListenerFn): UnsubscribeFn => {

@@ -5,7 +5,7 @@ import { isPathSelected } from '@app/components/documents/journalfoerte-document
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
 import { setShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
 import { setShowMetadata } from '@app/components/documents/journalfoerte-documents/state/show-metadata';
-import { setShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
+import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { VedleggList } from '@app/components/documents/journalfoerte-documents/vedlegg-list';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
@@ -25,6 +25,7 @@ const OVERSCAN = 32;
 
 export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onScrollTo }: Props) => {
   const [isExpandedListView] = useIsExpanded();
+  const { setValue: setShowVedleggIdList } = useShowVedlegg();
 
   const dokumenter = useDokumentPositions(documents);
 
@@ -86,7 +87,9 @@ export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onSc
           showVedlegg={showVedlegg}
           hasVedlegg={hasVedlegg || logiskeVedlegg.length > 0}
           toggleShowVedlegg={() => {
-            setShowVedlegg((ids) => (showVedlegg ? ids.filter((id) => id !== journalpostId) : [...ids, journalpostId]));
+            setShowVedleggIdList((ids = []) =>
+              showVedlegg ? ids.filter((id) => id !== journalpostId) : [...ids, journalpostId],
+            );
 
             const vedleggWithLogiskeVedlegg = dokument.vedlegg.filter((v) => v.logiskeVedlegg.length > 0);
 

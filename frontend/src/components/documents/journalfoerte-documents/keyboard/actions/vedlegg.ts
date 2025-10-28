@@ -8,12 +8,13 @@ import {
   getIsInVedleggList,
   setFocusIndex,
 } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import { getShowVedlegg, setShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
+import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useCallback } from 'react';
 
 export const useCollapseVedlegg = (filteredDocuments: IArkivertDocument[]) => {
   const getDocument = useGetDocument(filteredDocuments);
+  const { value: showVedleggIdList, setValue: setShowVedleggIdList } = useShowVedlegg();
 
   return useCallback(() => {
     if (getIsInVedleggList()) {
@@ -36,13 +37,14 @@ export const useCollapseVedlegg = (filteredDocuments: IArkivertDocument[]) => {
 
     if (focusedDocument !== undefined) {
       // Collapse vedlegg list.
-      setShowVedlegg(getShowVedlegg().filter((id) => id !== focusedDocument.journalpostId));
+      setShowVedleggIdList(showVedleggIdList.filter((id) => id !== focusedDocument.journalpostId));
     }
-  }, [getDocument]);
+  }, [getDocument, setShowVedleggIdList, showVedleggIdList]);
 };
 
 export const useExpandVedlegg = (filteredDocuments: IArkivertDocument[]) => {
   const getDocument = useGetDocument(filteredDocuments);
+  const { value: showVedleggIdList, setValue: setShowVedleggIdList } = useShowVedlegg();
 
   return useCallback(() => {
     if (getIsInVedleggList()) {
@@ -50,18 +52,24 @@ export const useExpandVedlegg = (filteredDocuments: IArkivertDocument[]) => {
     }
 
     const focusedDocument = getDocument();
-    const showVedleggIdList = getShowVedlegg();
 
     if (focusedDocument !== undefined && !showVedleggIdList.includes(focusedDocument.journalpostId)) {
-      setShowVedlegg([...showVedleggIdList, focusedDocument.journalpostId]);
+      setShowVedleggIdList([...showVedleggIdList, focusedDocument.journalpostId]);
     }
-  }, [getDocument]);
+  }, [getDocument, setShowVedleggIdList, showVedleggIdList]);
 };
 
-export const collapseAllVedlegg = () => setShowVedlegg([]);
+export const useCollapseAllVedlegg = () => {
+  const { setValue: setShowVedleggIdList } = useShowVedlegg();
 
-export const useExpandAllVedlegg = (filteredDocuments: IArkivertDocument[]) =>
-  useCallback(
-    () => setShowVedlegg(filteredDocuments.filter((d) => d.vedlegg.length > 0).map((d) => d.journalpostId)),
-    [filteredDocuments],
+  return useCallback(() => setShowVedleggIdList([]), [setShowVedleggIdList]);
+};
+
+export const useExpandAllVedlegg = (filteredDocuments: IArkivertDocument[]) => {
+  const { setValue: setShowVedleggIdList } = useShowVedlegg();
+
+  return useCallback(
+    () => setShowVedleggIdList(filteredDocuments.filter((d) => d.vedlegg.length > 0).map((d) => d.journalpostId)),
+    [filteredDocuments, setShowVedleggIdList],
   );
+};

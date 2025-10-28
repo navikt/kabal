@@ -5,7 +5,6 @@ import { resetKeyboardActive } from '@app/components/documents/journalfoerte-doc
 import { resetSelectionRanges } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { resetShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
 import { resetShowMetadata } from '@app/components/documents/journalfoerte-documents/state/show-metadata';
-import { resetShowVedleggIdList } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useEffect } from 'react';
 import { ValidationErrorProvider } from '../kvalitetsvurdering/validation-error-context';
@@ -26,7 +25,6 @@ export const Oppgavebehandling = () => {
       resetSelectionRanges();
       resetShowLogiskeVedlegg();
       resetShowMetadata();
-      resetShowVedleggIdList();
     },
     [oppgaveId],
   );

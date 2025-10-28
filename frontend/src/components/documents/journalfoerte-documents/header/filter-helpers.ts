@@ -1,4 +1,4 @@
-import { getShowVedlegg, setShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
+import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { useLazyIsTilknyttetDokument } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
@@ -34,6 +34,7 @@ export const useFilteredDocuments = (
 ): ScoredArkivertDocument[] => {
   const [result, setResult] = useState<ScoredArkivertDocument[]>(EMPTY_ARRAY);
   const isTilknyttet = useLazyIsTilknyttetDokument();
+  const { value: showVedleggIdList, setValue: setShowVedleggIdList } = useShowVedlegg();
 
   useEffect(() => {
     const callback = requestIdleCallback(
@@ -83,10 +84,8 @@ export const useFilteredDocuments = (
               }
 
               if (score > 0) {
-                const shown = getShowVedlegg();
-
-                if (!shown.includes(journalpostId)) {
-                  setShowVedlegg([...shown, journalpostId]);
+                if (!showVedleggIdList.includes(journalpostId)) {
+                  setShowVedleggIdList([...showVedleggIdList, journalpostId]);
                 }
 
                 filteredVedlegg.push({ ...v, score });
@@ -143,6 +142,8 @@ export const useFilteredDocuments = (
     sort.order,
     sort.orderBy,
     isTilknyttet,
+    setShowVedleggIdList,
+    showVedleggIdList,
   ]);
 
   return result;
