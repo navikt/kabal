@@ -45,7 +45,7 @@ interface DokumentListRenderData extends Position {
 
 export const useDokumentPositions = (documents: readonly IArkivertDocument[]) => {
   const { value: showVedleggIdList } = useShowVedlegg();
-  const showLogiskeVedlegg = useShowLogiskeVedlegg();
+  const { value: showLogiskeVedlegg } = useShowLogiskeVedlegg();
   const showMetadataIdList = useShowMetadata();
 
   return useMemo(

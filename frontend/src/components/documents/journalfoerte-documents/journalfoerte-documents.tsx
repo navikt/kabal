@@ -4,10 +4,7 @@ import { JournalfoertHeading } from '@app/components/documents/journalfoerte-doc
 import { KeyboardBoundary } from '@app/components/documents/journalfoerte-documents/keyboard/boundary';
 import { KeyboardContextElement } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-context';
 import { SelectContextElement } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import {
-  setShowLogiskeVedlegg,
-  useShowLogiskeVedlegg,
-} from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
+import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
 import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { clamp } from '@app/functions/clamp';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -73,13 +70,13 @@ export const JournalfoerteDocuments = () => {
     setShowVedleggIdList((e) => (e !== undefined && e.length !== 0 ? e : documentsWithVedleggIdList));
   }, [documentsWithVedleggIdList, setShowVedleggIdList]);
 
-  const showLogiskeVedleggIdList = useShowLogiskeVedlegg();
+  const { value: showLogiskeVedleggIdList, setValue: setShowLogiskeVedleggIdList } = useShowLogiskeVedlegg();
 
   useEffect(() => {
     if (vedleggWithLogiskeVedleggIdList !== undefined) {
-      setShowLogiskeVedlegg((e) => (e.length !== 0 ? e : vedleggWithLogiskeVedleggIdList));
+      setShowLogiskeVedleggIdList((e) => (e !== undefined && e.length !== 0 ? e : vedleggWithLogiskeVedleggIdList));
     }
-  }, [vedleggWithLogiskeVedleggIdList]);
+  }, [vedleggWithLogiskeVedleggIdList, setShowLogiskeVedleggIdList]);
 
   const showsAnyVedlegg = showVedleggIdList.length > 0 || showLogiskeVedleggIdList.length > 0;
 
@@ -89,9 +86,15 @@ export const JournalfoerteDocuments = () => {
     }
 
     if (vedleggWithLogiskeVedleggIdList !== undefined) {
-      setShowLogiskeVedlegg(showsAnyVedlegg ? [] : vedleggWithLogiskeVedleggIdList);
+      setShowLogiskeVedleggIdList(showsAnyVedlegg ? [] : vedleggWithLogiskeVedleggIdList);
     }
-  }, [documentsWithVedleggIdList, showsAnyVedlegg, vedleggWithLogiskeVedleggIdList, setShowVedleggIdList]);
+  }, [
+    documentsWithVedleggIdList,
+    showsAnyVedlegg,
+    vedleggWithLogiskeVedleggIdList,
+    setShowVedleggIdList,
+    setShowLogiskeVedleggIdList,
+  ]);
 
   const [scrollTop, setScrollTop] = useState(0);
   const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(({ currentTarget }) => {

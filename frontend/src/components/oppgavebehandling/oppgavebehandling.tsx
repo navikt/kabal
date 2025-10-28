@@ -3,7 +3,6 @@ import { resetFocusIndex } from '@app/components/documents/journalfoerte-documen
 import { resetKeyboardHelpModal } from '@app/components/documents/journalfoerte-documents/keyboard/state/help-modal';
 import { resetKeyboardActive } from '@app/components/documents/journalfoerte-documents/keyboard/state/keyboard-active';
 import { resetSelectionRanges } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { resetShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
 import { resetShowMetadata } from '@app/components/documents/journalfoerte-documents/state/show-metadata';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useEffect } from 'react';
@@ -23,7 +22,6 @@ export const Oppgavebehandling = () => {
       resetKeyboardHelpModal();
       resetKeyboardActive();
       resetSelectionRanges();
-      resetShowLogiskeVedlegg();
       resetShowMetadata();
     },
     [oppgaveId],
