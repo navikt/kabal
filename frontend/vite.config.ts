@@ -1,9 +1,9 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, type ProxyOptions } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-const PROXY = {
+const PROXY: ProxyOptions = {
   target: 'https://kabal.intern.dev.nav.no',
   changeOrigin: true,
 };
