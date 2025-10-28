@@ -8,7 +8,7 @@ import {
   setShowLogiskeVedlegg,
   useShowLogiskeVedlegg,
 } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
-import { setShowVedlegg, useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
+import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { clamp } from '@app/functions/clamp';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -27,12 +27,16 @@ export const JournalfoerteDocuments = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const keyboardBoundaryRef = useRef<HTMLDivElement>(null);
 
-  const documents = data?.dokumenter ?? EMPTY_ARRAY;
+  const documents = data?.dokumenter;
 
-  const filters = useFilters(documents);
+  const filters = useFilters(documents ?? EMPTY_ARRAY);
   const { resetFilters, noFiltersActive, totalFilteredDocuments } = filters;
 
-  const documentsWithVedleggIdList = useMemo<string[]>(() => {
+  const documentsWithVedleggIdList = useMemo<string[] | undefined>(() => {
+    if (documents === undefined) {
+      return undefined;
+    }
+
     const journalpostIdList: string[] = [];
 
     for (const d of documents) {
@@ -44,12 +48,10 @@ export const JournalfoerteDocuments = () => {
     return journalpostIdList;
   }, [documents]);
 
-  const showVedleggIdList = useShowVedlegg();
-
   // IDs of vedlegg with logiske vedlegg.
-  const vedleggWithLogiskeVedleggIdList = useMemo<string[]>(
+  const vedleggWithLogiskeVedleggIdList = useMemo<string[] | undefined>(
     () =>
-      documents.reduce<string[]>((dokumentInfoIdList, d) => {
+      documents?.reduce<string[]>((dokumentInfoIdList, d) => {
         for (const vedlegg of d.vedlegg) {
           if (vedlegg.logiskeVedlegg.length > 0 && !dokumentInfoIdList.includes(vedlegg.dokumentInfoId)) {
             dokumentInfoIdList.push(`${d.journalpostId}-${vedlegg.dokumentInfoId}`);
@@ -61,16 +63,20 @@ export const JournalfoerteDocuments = () => {
     [documents],
   );
 
+  const { value: showVedleggIdList, setValue: setShowVedleggIdList } = useShowVedlegg();
+
+  useEffect(() => {
+    if (documentsWithVedleggIdList === undefined) {
+      return;
+    }
+
+    setShowVedleggIdList((e) => (e !== undefined && e.length !== 0 ? e : documentsWithVedleggIdList));
+  }, [documentsWithVedleggIdList, setShowVedleggIdList]);
+
   const showLogiskeVedleggIdList = useShowLogiskeVedlegg();
 
   useEffect(() => {
-    if (documentsWithVedleggIdList.length !== 0) {
-      setShowVedlegg((e) => (e.length !== 0 ? e : documentsWithVedleggIdList));
-    }
-  }, [documentsWithVedleggIdList]);
-
-  useEffect(() => {
-    if (vedleggWithLogiskeVedleggIdList.length !== 0) {
+    if (vedleggWithLogiskeVedleggIdList !== undefined) {
       setShowLogiskeVedlegg((e) => (e.length !== 0 ? e : vedleggWithLogiskeVedleggIdList));
     }
   }, [vedleggWithLogiskeVedleggIdList]);
@@ -78,9 +84,14 @@ export const JournalfoerteDocuments = () => {
   const showsAnyVedlegg = showVedleggIdList.length > 0 || showLogiskeVedleggIdList.length > 0;
 
   const onToggle = useCallback(() => {
-    setShowVedlegg(showsAnyVedlegg ? [] : documentsWithVedleggIdList);
-    setShowLogiskeVedlegg(showsAnyVedlegg ? [] : vedleggWithLogiskeVedleggIdList);
-  }, [documentsWithVedleggIdList, showsAnyVedlegg, vedleggWithLogiskeVedleggIdList]);
+    if (documentsWithVedleggIdList !== undefined) {
+      setShowVedleggIdList(showsAnyVedlegg ? [] : documentsWithVedleggIdList);
+    }
+
+    if (vedleggWithLogiskeVedleggIdList !== undefined) {
+      setShowLogiskeVedlegg(showsAnyVedlegg ? [] : vedleggWithLogiskeVedleggIdList);
+    }
+  }, [documentsWithVedleggIdList, showsAnyVedlegg, vedleggWithLogiskeVedleggIdList, setShowVedleggIdList]);
 
   const [scrollTop, setScrollTop] = useState(0);
   const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(({ currentTarget }) => {
@@ -131,7 +142,7 @@ export const JournalfoerteDocuments = () => {
   const searchRef = useRef<HTMLInputElement>(null);
 
   return (
-    <SelectContextElement allDocumentsList={documents} filteredDocumentsList={totalFilteredDocuments}>
+    <SelectContextElement allDocumentsList={documents ?? EMPTY_ARRAY} filteredDocumentsList={totalFilteredDocuments}>
       <VStack
         as="section"
         aria-labelledby="journalfoerte-dokumenter-heading"
@@ -143,7 +154,7 @@ export const JournalfoerteDocuments = () => {
         data-testid="oppgavebehandling-documents-all"
       >
         <JournalfoertHeading
-          allDocuments={documents}
+          allDocuments={documents ?? EMPTY_ARRAY}
           totalLengthOfMainDocuments={data?.totaltAntall ?? 0}
           noFiltersActive={noFiltersActive}
           resetFilters={resetFilters}
@@ -152,7 +163,7 @@ export const JournalfoerteDocuments = () => {
 
         <Header
           filters={filters}
-          documentIdList={documentsWithVedleggIdList}
+          documentIdList={documentsWithVedleggIdList ?? []}
           listHeight={listHeight}
           showsAnyVedlegg={showsAnyVedlegg}
           toggleShowAllVedlegg={onToggle}

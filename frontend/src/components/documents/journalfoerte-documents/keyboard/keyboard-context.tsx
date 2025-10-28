@@ -10,7 +10,7 @@ import {
 } from '@app/components/documents/journalfoerte-documents/keyboard/actions/select';
 import { useUp } from '@app/components/documents/journalfoerte-documents/keyboard/actions/up';
 import {
-  collapseAllVedlegg,
+  useCollapseAllVedlegg,
   useCollapseVedlegg,
   useExpandAllVedlegg,
   useExpandVedlegg,
@@ -130,6 +130,7 @@ export const KeyboardContextElement = ({ children, filteredDocuments, searchRef 
   const selectEnd = useSelectEnd(filteredDocuments);
 
   const collapseVedlegg = useCollapseVedlegg(filteredDocuments);
+  const collapseAllVedlegg = useCollapseAllVedlegg();
   const expandVedlegg = useExpandVedlegg(filteredDocuments);
   const expandAllVedlegg = useExpandAllVedlegg(filteredDocuments);
 

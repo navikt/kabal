@@ -1,4 +1,5 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { parseJSON } from '@app/functions/parse-json';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useOppgaveId } from '../oppgavebehandling/use-oppgave-id';
@@ -127,17 +128,27 @@ export const useRestrictedNumberSetting = (
 };
 
 export const useJsonSetting = <T>(property: string): Setting<T> => {
-  const { value, setValue, ...rest } = useSetting(property);
+  const { value, setValue, remove } = useSetting(property);
 
-  const parsedValue = useMemo(() => (value === undefined ? undefined : (JSON.parse(value) as T)), [value]);
+  const parsedValue = useMemo(() => (value === undefined ? undefined : (parseJSON<T>(value) ?? undefined)), [value]);
 
   return {
     value: parsedValue,
     setValue: useCallback(
-      (newValue) => setValue(JSON.stringify(isFunction(newValue) ? newValue(parsedValue) : newValue)),
-      [parsedValue, setValue],
+      (newValue) => {
+        if (!isFunction(newValue)) {
+          return setValue(JSON.stringify(newValue));
+        }
+
+        return setValue((oldValue) => {
+          const parsedValue = oldValue === undefined ? undefined : (parseJSON<T>(oldValue) ?? undefined);
+
+          return JSON.stringify(newValue(parsedValue));
+        });
+      },
+      [setValue],
     ),
-    ...rest,
+    remove,
   };
 };
 
