@@ -3,7 +3,7 @@ import { ExpandedDocument } from '@app/components/documents/journalfoerte-docume
 import { KeyboardFocusIndicator } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-focus-indicator';
 import { isPathSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
-import { setShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
+import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
 import { setShowMetadata } from '@app/components/documents/journalfoerte-documents/state/show-metadata';
 import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { VedleggList } from '@app/components/documents/journalfoerte-documents/vedlegg-list';
@@ -26,6 +26,7 @@ const OVERSCAN = 32;
 export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onScrollTo }: Props) => {
   const [isExpandedListView] = useIsExpanded();
   const { setValue: setShowVedleggIdList } = useShowVedlegg();
+  const { setValue: setShowLogiskeVedleggIdList } = useShowLogiskeVedlegg();
 
   const dokumenter = useDokumentPositions(documents);
 
@@ -99,7 +100,7 @@ export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onSc
 
             const vedleggIds = vedleggWithLogiskeVedlegg.map((v) => `${journalpostId}-${v.dokumentInfoId}`);
 
-            setShowLogiskeVedlegg((ids) =>
+            setShowLogiskeVedleggIdList((ids = []) =>
               showVedlegg ? ids.filter((id) => !vedleggIds.includes(id)) : [...ids, ...vedleggIds],
             );
           }}

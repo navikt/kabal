@@ -3,10 +3,7 @@ import { ROW_HEIGHT } from '@app/components/documents/journalfoerte-documents/co
 import { AttachmentListItem } from '@app/components/documents/journalfoerte-documents/document/attachments/attachment-list';
 import { isPathSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
-import {
-  setShowLogiskeVedlegg,
-  useShowLogiskeVedlegg,
-} from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
+import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { VStack } from '@navikt/ds-react';
 
@@ -19,7 +16,7 @@ interface Props {
 }
 
 export const VedleggList = ({ list, minTop, maxTop, dokument, documentIndex }: Props) => {
-  const showLogiskeVedlegg = useShowLogiskeVedlegg();
+  const { value: showLogiskeVedlegg, setValue: setShowLogiskeVedleggIdList } = useShowLogiskeVedlegg();
 
   if (list.globalTop + list.height < minTop || list.globalTop > maxTop) {
     return null;
@@ -65,7 +62,7 @@ export const VedleggList = ({ list, minTop, maxTop, dokument, documentIndex }: P
         documentIndex={documentIndex}
         index={index}
         toggleShowVedlegg={() =>
-          setShowLogiskeVedlegg((ids) =>
+          setShowLogiskeVedleggIdList((ids = []) =>
             ids.includes(vedleggId) ? ids.filter((id) => id !== vedleggId) : [...ids, vedleggId],
           )
         }

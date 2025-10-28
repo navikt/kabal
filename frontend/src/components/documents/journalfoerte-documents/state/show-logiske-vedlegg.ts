@@ -1,16 +1,28 @@
-import { Observable } from '@app/observable';
-import { useSyncExternalStore } from 'react';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useJsonSetting } from '@app/hooks/settings/helpers';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useCallback } from 'react';
 
-type Value = string[];
+type Value = readonly string[];
 
 const INITIAL_ID_LIST: Value = [];
 
-const store = new Observable<Value>(INITIAL_ID_LIST);
+const KEY_PREFIX = 'journalførte-dokumenter/logiske-vedlegg';
 
-export const useShowLogiskeVedlegg = () => useSyncExternalStore(store.subscribe, store.get);
+export const useShowLogiskeVedlegg = () => {
+  const oppgaveId = useOppgaveId();
 
-export const resetShowLogiskeVedlegg = () => store.set(INITIAL_ID_LIST);
+  if (oppgaveId === skipToken) {
+    throw new Error('useShowLogiskeVedlegg must be used within an oppgave context');
+  }
 
-export const getShowLogiskeVedlegg = store.get;
+  const { value = INITIAL_ID_LIST, ...rest } = useJsonSetting<readonly string[]>(`${KEY_PREFIX}/${oppgaveId}`);
 
-export const setShowLogiskeVedlegg = store.set;
+  return { value, ...rest };
+};
+
+export const useResetShowLogiskeVedlegg = () => {
+  const { setValue } = useShowLogiskeVedlegg();
+
+  return useCallback(() => setValue(INITIAL_ID_LIST), [setValue]);
+};
