@@ -3,7 +3,7 @@ import { BoxNew } from '@navikt/ds-react';
 import { type CursorData, type CursorProps, type CursorState, useCursorOverlayPositions } from '@platejs/cursor';
 import type { RelativeRange } from '@slate-yjs/core';
 import { createZustandStore, type UnknownObject } from 'platejs';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 
 export interface UserCursor extends CursorData, UnknownObject {
   navn: string;
@@ -81,8 +81,7 @@ interface CursorOverlayProps {
 }
 
 export const CursorOverlay = ({ containerElement }: CursorOverlayProps) => {
-  const { useStore } = cursorStore;
-  const yjsCursors = useStore();
+  const yjsCursors = useSyncExternalStore(cursorStore.subscribe, () => cursorStore.store.getState());
   const containerRef = useRef(containerElement);
   const { cursors, refresh } = useCursorOverlayPositions({ containerRef, cursors: yjsCursors });
 

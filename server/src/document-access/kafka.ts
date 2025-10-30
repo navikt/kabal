@@ -1,11 +1,11 @@
 import { getLogger } from '@app/logger';
-import { Type } from '@sinclair/typebox';
-import { TypeCompiler } from '@sinclair/typebox/compiler';
+import { Type } from 'typebox';
+import { Compile } from 'typebox/compile';
 
 const log = getLogger('document-write-access-kafka-parser');
 
 const PayloadType = Type.Array(Type.String());
-const PayloadTypeChecked = TypeCompiler.Compile(PayloadType);
+const PayloadTypeChecked = Compile(PayloadType);
 
 export const parseKafkaMessageValue = (value: string, trace_id: string): string[] | null => {
   if (value.length === 0) {

@@ -2,8 +2,8 @@ import { NAIS_CLUSTER_NAME } from '@app/config/config';
 import { requiredEnvString } from '@app/config/env-var';
 import { generateSpanId, generateTraceId } from '@app/helpers/traceparent';
 import { getLogger } from '@app/logger';
-import { type Static, Type } from '@sinclair/typebox';
-import { TypeCompiler } from '@sinclair/typebox/compiler';
+import { type Static, Type } from 'typebox';
+import { Compile } from 'typebox/compile';
 
 const TOKEN_ENDPOINT = requiredEnvString('NAIS_TOKEN_ENDPOINT');
 
@@ -63,6 +63,6 @@ const RESPONSE_TYPE = Type.Object({
   token_type: Type.String(),
 });
 
-const CHECKER = TypeCompiler.Compile(RESPONSE_TYPE);
+const CHECKER = Compile(RESPONSE_TYPE);
 
 type TokenResponse = Static<typeof RESPONSE_TYPE>;
