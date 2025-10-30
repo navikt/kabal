@@ -36,6 +36,15 @@ const logReq = (msg: string, req: FastifyRequest, data: AnyObject, level: Level 
   log[level](body);
 };
 
+const TextNode = Type.Object({
+  text: Type.String(),
+});
+
+const Descendant = Type.Cyclic(
+  { Descendant: Type.Union([Type.Object({ children: Type.Array(Type.Ref('Descendant')) }), TextNode]) },
+  'Descendant',
+);
+
 export const crdtPlugin = fastifyPlugin(
   async (app) => {
     app.withTypeProvider<TypeBoxTypeProvider>().post(
@@ -45,16 +54,7 @@ export const crdtPlugin = fastifyPlugin(
           tags: ['collaboration'],
           params: Type.Object({ behandlingId: Type.String() }),
           body: Type.Object({
-            content: Type.Array(
-              Type.Recursive((This) =>
-                Type.Union([
-                  Type.Object({ text: Type.String() }),
-                  Type.Object({
-                    children: Type.Array(This),
-                  }),
-                ]),
-              ),
-            ),
+            content: Type.Array(Descendant),
             templateId: Type.String(),
             tittel: Type.String(),
             dokumentTypeId: Type.String(),

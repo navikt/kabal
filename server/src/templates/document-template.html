@@ -7,9 +7,9 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
 
-  <title>{{title}}</title>
+  <document-title />
 
-  <script type="application/json" id="document-id-list">{{document-id-list}}</script>
+  <document-id-list />
 
   <script>
     const DOCUMENT_ID_LIST = JSON.parse(document.getElementById('document-id-list')?.textContent ?? '[]');
@@ -111,7 +111,6 @@
   </script>
 </head>
 
-<body style="height: 100%; width: 100%; overflow: hidden; margin: 0; background-color: rgb(82, 86, 89);">
-</body>
+<body style="height: 100%; width: 100%; overflow: hidden; margin: 0; background-color: rgb(82, 86, 89);"></body>
 
 </html>

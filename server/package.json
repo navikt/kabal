@@ -16,22 +16,22 @@
   "dependencies": {
     "@fastify/cors": "11.1.0",
     "@fastify/http-proxy": "11.3.0",
-    "@fastify/type-provider-typebox": "5.2.0",
+    "@fastify/type-provider-typebox": "6.1.0",
     "@fastify/websocket": "11.2.0",
-    "@hocuspocus/common": "3.2.3",
-    "@hocuspocus/server": "3.2.3",
-    "@platformatic/kafka": "1.11.0",
-    "@sinclair/typebox": "0.34.41",
+    "@hocuspocus/common": "3.4.0",
+    "@hocuspocus/server": "3.4.0",
+    "@platformatic/kafka": "1.20.0",
+    "typebox": "1.0.49",
     "@slate-yjs/core": "1.0.2",
-    "fastify": "5.6.0",
+    "fastify": "5.6.1",
     "fastify-metrics": "12.1.0",
     "jose": "5.9.1",
     "openid-client": "5.7.1",
     "prom-client": "15.1.3",
-    "redis": "5.8.2"
+    "redis": "5.9.0"
   },
   "devDependencies": {
-    "@types/node": "24.5.0",
-    "@types/uuid": "10.0.0"
+    "@types/node": "24.10.0",
+    "@types/uuid": "11.0.0"
   }
 }
