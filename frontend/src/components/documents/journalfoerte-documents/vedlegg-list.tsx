@@ -86,7 +86,6 @@ export const VedleggList = ({ list, minTop, maxTop, dokument, documentIndex }: P
   }
 
   return (
-    // biome-ignore lint/a11y/useSemanticElements: Keyboard navigation.
     <VStack
       as="ul"
       role="group"

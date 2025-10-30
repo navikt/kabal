@@ -18,7 +18,7 @@
     "bun.lock": true
   },
   "typescript.validate.enable": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.tsdk": "../node_modules/typescript/lib",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "workbench.editor.closeOnFileDelete": true,
   "biome.lsp.bin": "../node_modules/.bin/biome",

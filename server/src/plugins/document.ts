@@ -225,8 +225,11 @@ export const documentPlugin = fastifyPlugin(
 
 const send = (reply: FastifyReply, url: string, documentIdList: string, title: string, navIdent: string) => {
   const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
-    .replace('{{document-id-list}}', documentIdList)
-    .replace('{{title}}', title)
+    .replace(
+      '<!-- {{document-id-list}} -->',
+      `<script type="application/json" id="document-id-list">${documentIdList}</script>`,
+    )
+    .replace('<!-- {{title}} -->', `<title>${title}</title>`)
     .replace('{{navIdent}}', navIdent);
 
   return reply.type('text/html').status(200).send(templateResult);

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.2/schema.json",
   "root": true,
   "vcs": {
     "enabled": true,
@@ -41,10 +41,10 @@
         "recommended": true
       },
       "security": {
-        "recommended": true
+        "recommended": true,
+        "noSecrets": "off"
       },
       "nursery": {
-        "noSecrets": "off",
         "useExplicitType": "off",
         "noImportCycles": "on",
         "useSortedClasses": { "level": "on", "fix": "safe", "options": {} }
@@ -56,7 +56,7 @@
       "style": {
         "noImplicitBoolean": { "level": "off", "fix": "none", "options": {} },
         "useDefaultSwitchClause": "off",
-        "useNamingConvention": { "level": "off",  "options": {} },
+        "useNamingConvention": { "level": "off", "options": {} },
         "noParameterAssign": "error",
         "useAsConstAssertion": "error",
         "useDefaultParameterLast": "error",
@@ -73,7 +73,11 @@
         "useConsistentCurlyBraces": { "level": "off", "fix": "none", "options": {} }
       },
       "suspicious": {
-        "noConsole": { "level": "error", "fix": "unsafe", "options": { "allow": ["debug", "info", "warn", "error", "[level]"] } },
+        "noConsole": {
+          "level": "error",
+          "fix": "unsafe",
+          "options": { "allow": ["debug", "info", "warn", "error", "[level]"] }
+        },
         "noReactSpecificProps": "off",
         "noEmptyBlockStatements": "error",
         "noFocusedTests": "error"
@@ -81,7 +85,7 @@
       "complexity": {
         "useSimplifiedLogicExpression": "off",
         "noExcessiveCognitiveComplexity": { "level": "error", "options": { "maxAllowedComplexity": 25 } },
-        "noUselessFragments": {  "level": "on", "fix": "safe", "options": {} }
+        "noUselessFragments": { "level": "on", "fix": "safe", "options": {} }
       }
     }
   },
@@ -91,12 +95,28 @@
     "linter": { "enabled": true }
   },
   "json": {
-    "formatter": { "enabled": true, "trailingCommas": "none", "indentStyle": "space", "lineWidth": 120, "indentWidth": 2, "bracketSpacing": true, "expand": "auto", "lineEnding": "lf" },
+    "formatter": {
+      "enabled": true,
+      "trailingCommas": "none",
+      "indentStyle": "space",
+      "lineWidth": 120,
+      "indentWidth": 2,
+      "bracketSpacing": true,
+      "expand": "auto",
+      "lineEnding": "lf"
+    },
     "linter": { "enabled": true },
     "assist": { "enabled": true }
   },
   "css": {
-    "formatter": { "enabled": true, "indentStyle": "space", "lineWidth": 120, "indentWidth": 2, "lineEnding": "lf", "quoteStyle": "double" },
+    "formatter": {
+      "enabled": true,
+      "indentStyle": "space",
+      "lineWidth": 120,
+      "indentWidth": 2,
+      "lineEnding": "lf",
+      "quoteStyle": "double"
+    },
     "linter": { "enabled": true },
     "assist": { "enabled": true }
   },
