@@ -157,7 +157,7 @@ const useContent = (source: LabelContentSource): string | null => {
     }
 
     if (source === LabelContentSource.ANKEMOTPART) {
-      return 'Nav klageinstans\n';
+      return 'Arbeids- og velferdsdirektoratet Klageinstans\n';
     }
 
     return 'Verdi mangler\n';
