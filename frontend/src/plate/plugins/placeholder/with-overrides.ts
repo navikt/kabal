@@ -5,8 +5,9 @@ import {
   handleDeleteForwardFromOutside,
 } from '@app/plate/plugins/placeholder/delete';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
+import { isPlaceholderActive } from '@app/plate/utils/queries';
 import type { OverrideEditor } from '@platejs/core/react';
-import { type Descendant, ElementApi, type TRange, type TText } from 'platejs';
+import { type Descendant, ElementApi, type TText } from 'platejs';
 import { Path } from 'slate';
 import type { MaltekstElement, PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';
@@ -67,9 +68,8 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
   };
 
   editor.tf.insertBreak = () => {
-    const placeholder = getPlaceholderEntry(editor);
-
-    if (placeholder !== undefined) {
+    if (isPlaceholderActive(editor)) {
+      console.log('Insert break prevented in placeholder');
       return;
     }
 
@@ -77,9 +77,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
   };
 
   editor.tf.insertSoftBreak = () => {
-    const placeholder = getPlaceholderEntry(editor);
-
-    if (placeholder !== undefined) {
+    if (isPlaceholderActive(editor)) {
       return;
     }
 
@@ -87,9 +85,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
   };
 
   editor.tf.insertNode = (node) => {
-    const placeholder = getPlaceholderEntry(editor);
-
-    if (placeholder !== undefined) {
+    if (isPlaceholderActive(editor)) {
       return;
     }
 
@@ -120,12 +116,12 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
 
   // Chrome: Marking content from start to end (with Shift + Ctrl/nd) would leave a selection hanging outside the placeholder,
   // causing it to seemingly not be deletable
-  editor.tf.setSelection = ({ anchor, focus }) => {
-    if (anchor === undefined || focus === undefined) {
-      return setSelection({ anchor, focus });
-    }
+  editor.tf.setSelection = (range) => {
+    const { anchor, focus } = range;
 
-    const range: TRange = { anchor, focus };
+    if (anchor === undefined || focus === undefined) {
+      return setSelection(range);
+    }
 
     const placeholder = getPlaceholderEntry(editor);
 
@@ -137,6 +133,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
 
     if (isPlaceholderInMaltekst(editor, path)) {
       if (Path.equals(anchor.path, focus.path)) {
+        console.trace('Set selection in placeholder');
         return setSelection(range);
       }
 
@@ -145,6 +142,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
       const offset = node.children[lastIndex]?.text.length ?? 0;
       const newPath = anchor.path.slice(0, -1).concat(lastIndex);
 
+      console.trace('Set selection to end of placeholder');
       return setSelection({ anchor, focus: { path: newPath, offset } });
     }
 

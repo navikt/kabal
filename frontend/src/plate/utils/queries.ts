@@ -110,8 +110,19 @@ export const isUnchangeable = (editor: PlateEditor) => {
   return false;
 };
 
-export const isPlaceholderActive = (editor: PlateEditor) =>
-  editor.api.some({ match: { type: SaksbehandlerPlaceholderPlugin.key } });
+export const isPlaceholderActive = (editor: PlateEditor) => {
+  console.trace(
+    'Checking if placeholder is active',
+    editor.api.node({ match: { type: SaksbehandlerPlaceholderPlugin.key } }),
+    editor.selection,
+  );
+
+  return editor.api.some({
+    match: { type: SaksbehandlerPlaceholderPlugin.key },
+    at: editor.selection ?? undefined,
+    mode: 'lowest',
+  });
+};
 
 export const getIsInRegelverk = (editor: PlateEditor, element: TNode): boolean => {
   const path = editor.api.findPath(element);

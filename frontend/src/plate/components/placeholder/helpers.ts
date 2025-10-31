@@ -1,4 +1,5 @@
 import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
+import { useSelection } from '@app/plate/hooks/use-selection';
 import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
 import type { EditorDescendant, FormattedText, MaltekstElement, PlaceholderElement } from '@app/plate/types';
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
@@ -89,6 +90,16 @@ export const getIsFocused = (editor: PlateEditor, path: Path | undefined): boole
   }
 
   return Path.isParent(path, editor.selection.focus.path);
+};
+
+export const useIsFocused = (path: Path | undefined): boolean => {
+  const selection = useSelection();
+
+  if (selection === null || path === undefined) {
+    return false;
+  }
+
+  return Path.isParent(path, selection.focus.path);
 };
 
 const getMaltekstElement = (editor: PlateEditor, path: Path | undefined): MaltekstElement | undefined => {

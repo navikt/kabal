@@ -5,7 +5,7 @@ import type { RedigerbarMaltekstElement } from '@app/plate/types';
 import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
-import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
+import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 
@@ -53,7 +53,7 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
           <SectionToolbar contentEditable={false}>
             <Tooltip content="Tilbakestill tekst" delay={0}>
               <Button
-                icon={<ArrowCirclepathIcon aria-hidden />}
+                icon={<ArrowCirclepathReverseIcon aria-hidden />}
                 onClick={reload}
                 variant="tertiary-neutral"
                 size="xsmall"

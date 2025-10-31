@@ -1,6 +1,6 @@
 import { isMetaKey, Keys } from '@app/keys';
 import { PageBreak } from '@app/plate/components/page-break';
-import { isInTable } from '@app/plate/utils/queries';
+import { isInTable, isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPageBreak } from '@app/plate/utils/transforms';
 import { createPlatePlugin } from '@platejs/core/react';
 import { ELEMENT_PAGE_BREAK } from './element-types';
@@ -14,7 +14,7 @@ export const PageBreakPlugin = createPlatePlugin({
   },
   handlers: {
     onKeyDown: ({ editor, event }) => {
-      if (isMetaKey(event) && event.key === Keys.Enter) {
+      if (isMetaKey(event) && event.key === Keys.Enter && !isPlaceholderActive(editor)) {
         event.preventDefault();
         insertPageBreak(editor);
       }

@@ -1,10 +1,9 @@
-import { isMetaKey } from '@app/keys';
+import { isMetaKey, Keys } from '@app/keys';
 import { SaksbehandlerPlaceholder } from '@app/plate/components/placeholder/placeholder';
 import { handleArrows } from '@app/plate/plugins/placeholder/arrows';
 import { parsers } from '@app/plate/plugins/placeholder/html-parsers';
-import { isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
-import { isOfElementType } from '@app/plate/utils/queries';
+import { isPlaceholderActive } from '@app/plate/utils/queries';
 import { createPlatePlugin, type PlateEditor } from '@platejs/core/react';
 import { ElementApi, NodeApi, type NodeEntry, TextApi } from 'platejs';
 import type { BasePoint } from 'slate';
@@ -26,7 +25,8 @@ export const SaksbehandlerPlaceholderPlugin = createPlatePlugin({
         return;
       }
 
-      if (event.key === 'Enter') {
+      if (event.key === Keys.Enter && isPlaceholderActive(editor)) {
+        console.log('Enter pressed in SaksbehandlerPlaceholder');
         event.preventDefault();
         event.stopPropagation();
 
@@ -37,8 +37,6 @@ export const SaksbehandlerPlaceholderPlugin = createPlatePlugin({
 
         const [, currentPath] = current;
 
-        // Find and go to next editable node.
-
         const next = editor.api.next({
           at: currentPath,
           mode: 'lowest',
@@ -47,12 +45,10 @@ export const SaksbehandlerPlaceholderPlugin = createPlatePlugin({
               return false;
             }
 
-            isPlaceholderInMaltekst;
-
             const ancestors = NodeApi.ancestors(editor, p);
 
             for (const [ancestor] of ancestors) {
-              if (isOfElementType(ancestor, ELEMENT_MALTEKST)) {
+              if (ancestor.type === ELEMENT_MALTEKST) {
                 return false;
               }
             }
@@ -76,18 +72,18 @@ export const SaksbehandlerPlaceholderPlugin = createPlatePlugin({
         editor.tf.select(nextStartPoint, { next: true });
 
         console.table({
-          currentPath: currentPath.join(','),
+          placeholderPath: currentPath.join(','),
           nextStartPointPath: nextStartPoint.path.join(','),
           nextStartPointOffset: nextStartPoint.offset,
-          path: editor.selection?.focus.path.join(','),
-          offset: editor.selection?.focus.offset,
-          node: JSON.stringify(editor.api.node({ at: editor.selection?.focus, mode: 'lowest' })?.[0], null, 2),
+          selectionPath: editor.selection?.focus.path.join(','),
+          selectionOffset: editor.selection?.focus.offset,
+          selectionNode: JSON.stringify(editor.api.node({ at: editor.selection?.focus, mode: 'lowest' })?.[0]),
         });
 
         return;
       }
 
-      if (isMetaKey(event) && event.key.toLowerCase() === 'j') {
+      if (isMetaKey(event) && event.key.toLowerCase() === Keys.J) {
         event.preventDefault();
         event.stopPropagation();
 
