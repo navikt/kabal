@@ -2,17 +2,15 @@ import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-
 import { NewDocument } from '@app/components/smart-editor/new-document/new-document';
 import { TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import {
-  useSmartEditorActiveDocument,
-  useSmartEditorGodeFormuleringerOpen,
-  useSmartEditorHistoryOpen,
-} from '@app/hooks/settings/use-setting';
+import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
+import { useElementWidth } from '@app/hooks/use-element-width';
 import { useIsRolOrKrolUser } from '@app/hooks/use-is-rol';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { CreatorRole, type ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
 import { Tabs, Tooltip } from '@navikt/ds-react';
 import type { skipToken } from '@reduxjs/toolkit/query';
+import { useRef } from 'react';
 
 const NEW_TAB_ID = 'NEW_TAB_ID';
 
@@ -58,23 +56,25 @@ const Tabbed = ({ documents }: TabbedProps) => {
 
   const activeEditorId = editorId !== undefined && documents.some(({ id }) => id === editorId) ? editorId : NEW_TAB_ID;
 
-  const { value: showGodeFormuleringer = false } = useSmartEditorGodeFormuleringerOpen();
-  const { value: showHistory = false } = useSmartEditorHistoryOpen();
+  const ref = useRef<HTMLDivElement>(null);
+  const width = useElementWidth(ref);
 
   return (
     <PanelContainer>
       <Tabs className="flex h-full flex-col overflow-hidden" value={activeEditorId} onChange={setEditorId} size="small">
-        <Tabs.List className="whitespace-nowrap" style={{ maxWidth: getMaxWidth(showGodeFormuleringer, showHistory) }}>
-          {documents.map(({ id, tittel }) => (
-            <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
-          ))}
+        <div style={{ maxWidth: width }}>
+          <Tabs.List className="whitespace-nowrap">
+            {documents.map(({ id, tittel }) => (
+              <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
+            ))}
 
-          <Tooltip content="Opprett nytt dokument">
-            <Tabs.Tab value={NEW_TAB_ID} icon={<TabsAddIcon aria-hidden />} />
-          </Tooltip>
-        </Tabs.List>
+            <Tooltip content="Opprett nytt dokument">
+              <Tabs.Tab value={NEW_TAB_ID} icon={<TabsAddIcon aria-hidden />} />
+            </Tooltip>
+          </Tabs.List>
+        </div>
 
-        <div className="grow overflow-hidden">
+        <div className="w-fit overflow-hidden" style={{ height: 'calc(100% - 32px)' }} ref={ref}>
           {documents.map((d) => (
             <TabPanel key={d.id} smartDocument={d} />
           ))}
@@ -86,27 +86,4 @@ const Tabbed = ({ documents }: TabbedProps) => {
       </Tabs>
     </PanelContainer>
   );
-};
-
-const ONLY_DOCUMENT = 762;
-const HISTORY = 1_110;
-const GODE_FORMULERINGER = 350;
-const ALL = ONLY_DOCUMENT + HISTORY + GODE_FORMULERINGER;
-const DOCUMENT_AND_HISTORY = ONLY_DOCUMENT + HISTORY;
-const DOCUMENT_AND_GODE_FORMULERINGER = ONLY_DOCUMENT + GODE_FORMULERINGER;
-
-const getMaxWidth = (showGodeFormuleringer: boolean, showHistory: boolean) => {
-  if (showHistory && showGodeFormuleringer) {
-    return ALL;
-  }
-
-  if (showGodeFormuleringer) {
-    return DOCUMENT_AND_GODE_FORMULERINGER;
-  }
-
-  if (showHistory) {
-    return DOCUMENT_AND_HISTORY;
-  }
-
-  return ONLY_DOCUMENT;
 };
