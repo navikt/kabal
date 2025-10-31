@@ -6,6 +6,7 @@ import { kabalInternalApi } from '@app/redux-api/internal';
 import { journalposterApi } from '@app/redux-api/journalposter';
 import { kvalitetsvurderingV1Api } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '@app/redux-api/kaka-kvalitetsvurdering/v2';
+import { kvalitetsvurderingV3Api } from '@app/redux-api/kaka-kvalitetsvurdering/v3';
 import { logiskeVedleggApi } from '@app/redux-api/logiske-vedlegg';
 import { consumerMaltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/consumer';
 import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/maltekstseksjoner';
@@ -24,6 +25,7 @@ export const rootReducer = combineReducers({
   [messagesApi.reducerPath]: messagesApi.reducer,
   [kvalitetsvurderingV1Api.reducerPath]: kvalitetsvurderingV1Api.reducer,
   [kvalitetsvurderingV2Api.reducerPath]: kvalitetsvurderingV2Api.reducer,
+  [kvalitetsvurderingV3Api.reducerPath]: kvalitetsvurderingV3Api.reducer,
   [kabalInternalApi.reducerPath]: kabalInternalApi.reducer,
   [smartEditorCommentsApi.reducerPath]: smartEditorCommentsApi.reducer,
   [textsApi.reducerPath]: textsApi.reducer,

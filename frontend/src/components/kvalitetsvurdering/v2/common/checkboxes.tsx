@@ -3,7 +3,7 @@ import { KvalitetsskjemaTextarea } from '@app/components/kvalitetsvurdering/v2/c
 import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { BoxNew, CheckboxGroup } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { KvalitetsskjemaCheckbox } from './kvalitetsvurdering-checkbox';
+import { KvalitetsskjemaCheckbox } from '../../common/kvalitetsvurdering-checkbox';
 import { Oppgavehjemler } from './oppgavehjemler';
 import { type CheckboxParams, type InputParams, KvalitetsvurderingInput } from './types';
 import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
