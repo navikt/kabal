@@ -71,7 +71,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const { newCommentSelection } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
   const [isConnected, setIsConnected] = useState(false);
-  const [readOnly, setReadOnly] = useState(true); // Start in read-only mode until we know otherwise.
+  const [readOnly, setReadOnly] = useState(!ENVIRONMENT.isLocal); // Start in read-only mode until we know otherwise. Must start as writable (readOnly=false) on localhost to get write access at all.
 
   const provider: YjsProviderConfig = {
     type: 'hocuspocus',
