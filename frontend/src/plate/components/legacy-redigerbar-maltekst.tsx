@@ -11,7 +11,7 @@ import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
-import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
+import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
@@ -124,7 +124,7 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
             <Tooltip content="Tilbakestill tekst" delay={0}>
               <Button
                 title="Tilbakestill tekst"
-                icon={<ArrowCirclepathIcon aria-hidden />}
+                icon={<ArrowCirclepathReverseIcon aria-hidden />}
                 onClick={insertRedigerbarMaltekst}
                 variant="tertiary-neutral"
                 size="xsmall"
