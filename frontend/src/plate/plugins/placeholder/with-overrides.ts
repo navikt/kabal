@@ -6,7 +6,7 @@ import {
 } from '@app/plate/plugins/placeholder/delete';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
 import type { OverrideEditor } from '@platejs/core/react';
-import { type Descendant, ElementApi, type TRange, type TText } from 'platejs';
+import { type Descendant, ElementApi, type TText } from 'platejs';
 import { Path } from 'slate';
 import type { MaltekstElement, PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';
@@ -120,12 +120,12 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
 
   // Chrome: Marking content from start to end (with Shift + Ctrl/nd) would leave a selection hanging outside the placeholder,
   // causing it to seemingly not be deletable
-  editor.tf.setSelection = ({ anchor, focus }) => {
-    if (anchor === undefined || focus === undefined) {
-      return setSelection({ anchor, focus });
-    }
+  editor.tf.setSelection = (range) => {
+    const { anchor, focus } = range;
 
-    const range: TRange = { anchor, focus };
+    if (anchor === undefined || focus === undefined) {
+      return setSelection(range);
+    }
 
     const placeholder = getPlaceholderEntry(editor);
 
