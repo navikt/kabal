@@ -6,17 +6,16 @@ import {
   getContainsEmptyChar,
   getHasNoVisibleText,
   getHasZeroChars,
-  getIsFocused,
   insertEmptyChar,
   lonePlaceholderInMaltekst,
+  useIsFocused,
 } from '@app/plate/components/placeholder/helpers';
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { PlaceholderElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { BoxNew, Tooltip } from '@navikt/ds-react';
-import { useEditorReadOnly } from '@platejs/core/react';
 import { PathApi } from 'platejs';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { type MouseEvent, useCallback, useEffect, useMemo } from 'react';
 
 export const RedaktørPlaceholder = (props: PlateElementProps<PlaceholderElement>) => <Placeholder {...props} />;
@@ -51,7 +50,7 @@ const Placeholder = (props: PlateElementProps<PlaceholderElement>) => {
     [containsEmptyChar, editor, element, hasNoVisibleText],
   );
 
-  const isFocused = getIsFocused(editor, editor.api.findPath(element));
+  const isFocused = useIsFocused(editor.api.findPath(element));
 
   useEffect(() => {
     const path = editor.api.findPath(element);
