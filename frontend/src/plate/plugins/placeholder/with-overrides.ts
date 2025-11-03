@@ -5,6 +5,7 @@ import {
   handleDeleteForwardFromOutside,
 } from '@app/plate/plugins/placeholder/delete';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
+import { isPlaceholderActive } from '@app/plate/utils/queries';
 import type { OverrideEditor } from '@platejs/core/react';
 import { type Descendant, ElementApi, type TText } from 'platejs';
 import { Path } from 'slate';
@@ -67,9 +68,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
   };
 
   editor.tf.insertBreak = () => {
-    const placeholder = getPlaceholderEntry(editor);
-
-    if (placeholder !== undefined) {
+    if (isPlaceholderActive(editor)) {
       return;
     }
 
@@ -77,9 +76,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
   };
 
   editor.tf.insertSoftBreak = () => {
-    const placeholder = getPlaceholderEntry(editor);
-
-    if (placeholder !== undefined) {
+    if (isPlaceholderActive(editor)) {
       return;
     }
 
@@ -87,9 +84,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
   };
 
   editor.tf.insertNode = (node) => {
-    const placeholder = getPlaceholderEntry(editor);
-
-    if (placeholder !== undefined) {
+    if (isPlaceholderActive(editor)) {
       return;
     }
 
