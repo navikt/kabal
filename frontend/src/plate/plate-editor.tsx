@@ -1,7 +1,6 @@
 import { merge } from '@app/functions/classes';
 import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import type { FormattedText } from '@app/plate/types';
+import { isEditableTextNode } from '@app/plate/functions/is-editable-text';
 import {
   PlateContent,
   type PlateContentProps,
@@ -9,8 +8,7 @@ import {
   useEditorReadOnly,
   useEditorRef,
 } from '@platejs/core/react';
-import { NodeApi } from 'platejs';
-import type { HTMLAttributes } from 'react';
+import type { TText } from 'platejs';
 
 interface Props extends PlateContentProps {
   lang: SpellCheckLanguage;
@@ -27,7 +25,11 @@ export const KabalPlateEditor = ({ className, spellCheck = true, ...props }: Pro
       className={merge('min-h-full outline-none', className)}
       spellCheck={spellCheck}
       renderLeaf={({ attributes, children, text }) => (
-        <span {...attributes} contentEditable={contentEditable(editor, readOnly, text)} suppressContentEditableWarning>
+        <span
+          {...attributes}
+          contentEditable={readOnly ? false : getContentEditable(editor, text)}
+          suppressContentEditableWarning
+        >
           {children}
         </span>
       )}
@@ -35,36 +37,12 @@ export const KabalPlateEditor = ({ className, spellCheck = true, ...props }: Pro
   );
 };
 
-const contentEditable = (
-  editor: PlateEditor,
-  isReadOnly: boolean,
-  text: FormattedText,
-): HTMLAttributes<HTMLSpanElement>['contentEditable'] => {
-  if (isReadOnly) {
-    return undefined;
-  }
-
-  const path = editor.api.findPath(text);
+const getContentEditable = (editor: PlateEditor, textNode: TText) => {
+  const path = editor.api.findPath(textNode);
 
   if (path === undefined) {
     return false;
   }
 
-  const ancestorEntries = NodeApi.ancestors(editor, path, { reverse: true });
-
-  if (ancestorEntries === undefined) {
-    return false;
-  }
-
-  for (const [node] of ancestorEntries) {
-    if (node.type === ELEMENT_PLACEHOLDER) {
-      return true;
-    }
-
-    if (node.type === ELEMENT_MALTEKST) {
-      return false;
-    }
-  }
-
-  return true;
+  return isEditableTextNode(editor, path);
 };
