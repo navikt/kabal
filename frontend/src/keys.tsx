@@ -12,7 +12,7 @@ interface KeyEvent {
   ctrlKey: boolean;
 }
 
-export const isMetaKey = (event: KeyEvent) => (IS_MAC ? event.metaKey : event.ctrlKey);
+export const isMetaKey: (event: KeyEvent) => boolean = IS_MAC ? (event) => event.metaKey : (event) => event.ctrlKey;
 
 export enum Keys {
   Enter = 'Enter',
