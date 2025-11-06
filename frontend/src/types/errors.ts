@@ -5,7 +5,7 @@ export interface KabalApiErrorData {
   type: string; // about:blank
   title: string; // Bad Request
   status: number; // 400
-  detail: string; // Failed to read request
+  detail?: string; // Failed to read request
 }
 
 interface ApiDataError {
@@ -20,11 +20,9 @@ export const isKabalApiErrorData = (data: unknown): data is KabalApiErrorData =>
   'type' in data &&
   'title' in data &&
   'status' in data &&
-  'detail' in data &&
   typeof data.type === 'string' &&
   typeof data.title === 'string' &&
-  typeof data.status === 'number' &&
-  typeof data.detail === 'string';
+  typeof data.status === 'number';
 
 export interface ApiRejectionError {
   error: FetchBaseQueryError;
