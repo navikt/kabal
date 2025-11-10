@@ -1,9 +1,9 @@
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { Alert, Checkbox, Heading, HStack, Radio } from '@navikt/ds-react';
+import { ContainerWithHelpText } from '../common/container-with-helptext';
+import { StyledRadioGroup } from '../common/styled-components';
 import { Checkboxes } from './common/checkboxes';
-import { ContainerWithHelpText } from './common/container-with-helptext';
-import { StyledRadioGroup } from './common/styled-components';
 import { type InputParams, KvalitetsvurderingInput } from './common/types';
 import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
 import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
