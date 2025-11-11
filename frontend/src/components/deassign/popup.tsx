@@ -1,3 +1,5 @@
+import { StaticDataContext } from '@app/components/app/static-data-context';
+import { useUnreadBehandlingCount } from '@app/components/header/notifications/api';
 import { HjemmelList } from '@app/components/oppgavebehandling-footer/deassign/hjemmel-list';
 import { useFradel } from '@app/components/oppgavestyring/use-tildel';
 import { areArraysEqual } from '@app/functions/are-arrays-equal';
@@ -6,8 +8,18 @@ import { Role } from '@app/types/bruker';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, HStack, Radio, RadioGroup, VStack } from '@navikt/ds-react';
-import { useCallback, useState } from 'react';
+import {
+  BodyLong,
+  BoxNew,
+  Button,
+  HStack,
+  InlineMessage,
+  LocalAlert,
+  Radio,
+  RadioGroup,
+  VStack,
+} from '@navikt/ds-react';
+import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Direction } from './direction';
 
@@ -16,21 +28,36 @@ interface Props {
   typeId: SaksTypeEnum;
   ytelseId: string;
   hjemmelIdList: string[];
+  tildeltSaksbehandler: string | null;
   close: () => void;
   direction: Direction;
   redirect?: boolean;
 }
 
-export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direction, redirect = false }: Props) => {
+export const Popup = ({
+  oppgaveId,
+  typeId,
+  ytelseId,
+  hjemmelIdList,
+  tildeltSaksbehandler,
+  close,
+  direction,
+  redirect = false,
+}: Props) => {
   const navigate = useNavigate();
   const [reasonId, setReasonId] = useState<FradelReason | null>(null);
   const [selectedHjemmelIdList, setSelectedHjemmelIdList] = useState<string[]>(hjemmelIdList);
   const [fradel, { isLoading }] = useFradel(oppgaveId, typeId, ytelseId);
   const [hjemmelError, setHjemmelError] = useState<string | null>(null);
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
+  const { user } = useContext(StaticDataContext);
+  const isTildeltSaksbehandler = tildeltSaksbehandler === user.navIdent;
+  const { unreadMessageCount, isFetching: isUnreadCountFetching } = useUnreadBehandlingCount(oppgaveId);
+  const hasUnread = unreadMessageCount !== null && unreadMessageCount !== 0;
+  const disabledByNotifications = (isTildeltSaksbehandler && hasUnread) || (!hasOppgavestyringRole && hasUnread);
 
   const onClick = useCallback(async () => {
-    if (reasonId === null) {
+    if (reasonId === null || disabledByNotifications) {
       return;
     }
 
@@ -61,7 +88,7 @@ export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direc
     if (redirect && success) {
       navigate('/mineoppgaver');
     }
-  }, [reasonId, fradel, redirect, selectedHjemmelIdList, hjemmelIdList, navigate]);
+  }, [reasonId, fradel, redirect, selectedHjemmelIdList, hjemmelIdList, navigate, disabledByNotifications]);
 
   return (
     <VStack
@@ -85,6 +112,7 @@ export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direc
             <Radio value={FradelReason.LEDER}>{FradelReasonText[FradelReason.LEDER]}</Radio>
           ) : null}
         </RadioGroup>
+
         {reasonId === FradelReason.FEIL_HJEMMEL ? (
           <HjemmelList
             selected={selectedHjemmelIdList}
@@ -95,11 +123,38 @@ export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direc
           />
         ) : null}
 
+        {hasUnread && !isUnreadCountFetching ? (
+          <LocalAlert status={isTildeltSaksbehandler ? 'error' : 'warning'} size="small">
+            <LocalAlert.Header>
+              <LocalAlert.Title>Uleste varsler</LocalAlert.Title>
+            </LocalAlert.Header>
+
+            <LocalAlert.Content>
+              <BodyLong size="small" spacing>
+                Det er {unreadMessageCount} {unreadMessageCount === 1 ? 'ulest varsel' : 'uleste varsler'} knyttet til
+                behandlingen.
+              </BodyLong>
+
+              <BodyLong size="small">
+                {isTildeltSaksbehandler
+                  ? 'Alle varsler må markeres som lest før du kan legge den tilbake.'
+                  : 'Alle varsler vil bli slettet om du legger den tilbake.'}
+              </BodyLong>
+            </LocalAlert.Content>
+          </LocalAlert>
+        ) : null}
+
+        {reasonId === null ? (
+          <InlineMessage status="warning" size="small" className="ml-auto">
+            Velg årsak
+          </InlineMessage>
+        ) : null}
+
         <HStack justify="space-between" gap="2">
           <Button
             variant="secondary-neutral"
             size="small"
-            disabled={isLoading}
+            loading={isLoading}
             onClick={close}
             icon={<XMarkIcon aria-hidden />}
           >
@@ -112,7 +167,6 @@ export const Popup = ({ oppgaveId, typeId, ytelseId, hjemmelIdList, close, direc
             loading={isLoading}
             onClick={onClick}
             icon={<FolderFileIcon aria-hidden />}
-            disabled={reasonId === null}
             title={reasonId === null ? 'Velg årsak' : undefined}
           >
             Legg tilbake

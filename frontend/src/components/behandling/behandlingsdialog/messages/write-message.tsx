@@ -1,12 +1,17 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { toast } from '@app/components/toast/store';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useHasSaksbehandler } from '@app/hooks/use-has-saksbehandler';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { isMetaKey, Keys } from '@app/keys';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostMessageMutation } from '@app/redux-api/messages';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
-import { Button, Loader, Textarea, VStack } from '@navikt/ds-react';
+import { Button, Checkbox, HStack, Loader, Textarea, Tooltip, VStack } from '@navikt/ds-react';
 import { useContext, useEffect, useState } from 'react';
+
+const SEND_FAILED_MESSAGE = 'Kunne ikke sende melding. Prøv igjen senere.';
 
 export const WriteMessage = () => {
   const isFullfoert = useIsFullfoert();
@@ -14,9 +19,12 @@ export const WriteMessage = () => {
   const { navIdent, navn } = user;
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [postMessage, { isSuccess, isLoading: messageIsLoading }] = usePostMessageMutation();
+  const [postMessage, { isSuccess, isLoading: messageIsSending }] = usePostMessageMutation();
   const oppgaveId = useOppgaveId();
   const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
+  const hasSaksbehandler = useHasSaksbehandler();
+  const [notify, setNotify] = useState<boolean>(false);
 
   useEffect(() => {
     if (isSuccess) {
@@ -24,7 +32,7 @@ export const WriteMessage = () => {
     }
   }, [isSuccess]);
 
-  if (signatureIsLoading || typeof signature === 'undefined') {
+  if (signatureIsLoading || signature === undefined) {
     return <Loader size="xlarge" />;
   }
 
@@ -32,8 +40,8 @@ export const WriteMessage = () => {
     return null;
   }
 
-  const post = () => {
-    if (messageIsLoading || typeof oppgaveId !== 'string') {
+  const post = async () => {
+    if (messageIsSending || typeof oppgaveId !== 'string') {
       return;
     }
 
@@ -43,11 +51,21 @@ export const WriteMessage = () => {
       return;
     }
 
-    postMessage({
-      oppgaveId,
-      text: message.trim(),
-      author: { navIdent, navn },
-    });
+    try {
+      await postMessage({
+        oppgaveId,
+        text: message.trim(),
+        author: { navIdent, navn },
+        notify,
+      });
+
+      if (notify) {
+        setNotify(false);
+      }
+    } catch {
+      setErrorMessage(SEND_FAILED_MESSAGE);
+      toast.error(SEND_FAILED_MESSAGE);
+    }
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -61,6 +79,8 @@ export const WriteMessage = () => {
     setMessage(event.target.value);
   };
 
+  const onNotifyChange = () => setNotify((p) => !p);
+
   return (
     <VStack>
       <Textarea
@@ -68,25 +88,44 @@ export const WriteMessage = () => {
         onKeyDown={onKeyDown}
         value={message}
         onChange={onChange}
-        maxLength={0}
         error={errorMessage}
-        data-testid="message-textarea"
         label="Skriv en melding"
         hideLabel
       />
-      <div className="mt-2 self-end">
+
+      <HStack marginBlock="2 0" justify="space-between" align="center" gap="2">
+        <Tooltip content={getTooltip(isSaksbehandler, hasSaksbehandler)} describesChild>
+          <span>
+            <Checkbox
+              size="small"
+              checked={hasSaksbehandler ? notify : false}
+              onChange={onNotifyChange}
+              disabled={!hasSaksbehandler} // Cannot send notification if no saksbehandler is assigned
+            >
+              Send varsel
+            </Checkbox>
+          </span>
+        </Tooltip>
+
         <Button
           type="button"
           size="small"
           variant="secondary-neutral"
           onClick={post}
-          loading={messageIsLoading}
-          data-testid="send-message-button"
+          loading={messageIsSending}
           icon={<PaperplaneIcon aria-hidden />}
         >
           Legg til melding
         </Button>
-      </div>
+      </HStack>
     </VStack>
   );
+};
+
+const getTooltip = (isSaksbehandler: boolean, hasSaksbehandler: boolean): string => {
+  if (!hasSaksbehandler) {
+    return 'Kan ikke sende varsel når ingen saksbehandler er tildelt';
+  }
+
+  return isSaksbehandler ? 'Send varsel til deg selv' : 'Send varsel til saksbehandler';
 };

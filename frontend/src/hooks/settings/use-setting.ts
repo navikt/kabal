@@ -150,3 +150,11 @@ export const useNewTabPdfScaleMode = () => useJsonSetting<PdfScaleMode>('pdf/new
 export const useNewTabPdfCustomScale = () => useNumberSetting('pdf/new_tab/custom_scale');
 
 export const useHasSeenKeyboardShortcuts = () => useBooleanSetting('has_seen_keyboard_shortcuts');
+
+export enum NotificationsGrouping {
+  TYPE = 'TYPE',
+  BEHANDLING = 'BEHANDLING',
+}
+
+export const useNotificationsOverviewGrouping = () =>
+  useJsonSetting<NotificationsGrouping>('notifications/overview/grouping');
