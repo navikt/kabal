@@ -9,7 +9,7 @@ import {
   MUFlowStateLabelWithSelf,
 } from '@app/components/common-table-components/medunderskriver-flow-state-label';
 import { Name } from '@app/components/common-table-components/name';
-import { OpenOppgavebehandling } from '@app/components/common-table-components/open';
+import { OpenForRoleAccess, OpenForYtelseAccess } from '@app/components/common-table-components/open';
 import { PaaVentReason, PaaVentTil } from '@app/components/common-table-components/paa-vent';
 import { Rol } from '@app/components/common-table-components/rol';
 import { RolFlowStateLabel } from '@app/components/common-table-components/rol-flow-state-label';
@@ -152,15 +152,18 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.OpenWithYtelseAccess:
         return (
           <Table.DataCell key={key}>
-            <OpenOppgavebehandling
-              id={oppgave.id}
-              ytelseId={oppgave.ytelseId}
-              typeId={oppgave.typeId}
-              tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
-              medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null}
-              rol={oppgave.rol}
-              applyYtelseAccess={key === ColumnKeyEnum.OpenWithYtelseAccess}
-            />
+            {key === ColumnKeyEnum.OpenWithYtelseAccess ? (
+              <OpenForYtelseAccess id={oppgave.id} ytelseId={oppgave.ytelseId} typeId={oppgave.typeId} />
+            ) : (
+              <OpenForRoleAccess
+                id={oppgave.id}
+                ytelseId={oppgave.ytelseId}
+                typeId={oppgave.typeId}
+                tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
+                medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null}
+                rol={oppgave.rol}
+              />
+            )}
           </Table.DataCell>
         );
       case ColumnKeyEnum.Oppgavestyring:
