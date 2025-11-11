@@ -1,7 +1,7 @@
 import { isoDateTimeToPretty } from '@app/domain/date';
 import type { IEdit } from '@app/types/common-text-types';
 import { CalendarIcon, ClockIcon } from '@navikt/aksel-icons';
-import { BodyShort, HStack } from '@navikt/ds-react';
+import { BodyShort, HStack, type StackProps } from '@navikt/ds-react';
 
 interface Props {
   created: string;
@@ -26,15 +26,22 @@ export const ModifiedCreatedDateTime = ({ id, lastEdit, created }: Props) => {
   );
 };
 
-interface DateTimeProps {
+interface DateTimeProps extends Omit<StackProps, 'direction' | 'asChild' | 'children'> {
   dateTime: string;
   icon?: React.ReactNode;
-  title?: string;
   id?: string;
 }
 
-export const DateTime = ({ dateTime, title, icon, id }: DateTimeProps) => (
-  <HStack as="time" align="center" gap="1" dateTime={dateTime} title={title} id={id} className="whitespace-nowrap">
+export const DateTime = ({ dateTime, icon, id, className, ...rest }: DateTimeProps) => (
+  <HStack
+    as="time"
+    align="center"
+    gap="1"
+    dateTime={dateTime}
+    id={id}
+    className={className === undefined ? 'whitespace-nowrap' : `whitespace-nowrap ${className}`}
+    {...rest}
+  >
     {icon}
     {isoDateTimeToPretty(dateTime)}
   </HStack>
