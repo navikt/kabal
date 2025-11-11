@@ -9,36 +9,34 @@ import { Button, type ButtonProps } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-interface Props
-  extends Pick<ButtonProps, 'variant' | 'size'>,
-    Pick<IOppgave, 'id' | 'tildeltSaksbehandlerident' | 'ytelseId' | 'typeId'> {
+interface BaseProps extends Pick<ButtonProps, 'variant' | 'size' | 'className'> {
   children?: string;
-  medunderskriverident: string | null;
-  rol: IHelper | null;
-  /** Whether only access to the ytelse is enough to be allowed to open the case. */
-  applyYtelseAccess?: boolean;
 }
 
-export const OpenOppgavebehandling = ({
+interface RoleAccessedProps
+  extends BaseProps,
+    Pick<IOppgave, 'id' | 'tildeltSaksbehandlerident' | 'ytelseId' | 'typeId'> {
+  medunderskriverident: string | null;
+  rol: IHelper | null;
+}
+
+export const OpenForRoleAccess = ({
   id,
   tildeltSaksbehandlerident,
   medunderskriverident,
-  ytelseId,
   typeId,
   rol,
   children = 'Åpne',
   variant = 'primary',
   size = 'small',
-  applyYtelseAccess = false,
-}: Props) => {
+  className,
+}: RoleAccessedProps) => {
   const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
-  const hasYtelseAccess = useHasYtelseAccess(ytelseId);
   const { user } = useContext(StaticDataContext);
   const isKrol = useHasRole(Role.KABAL_KROL);
 
   const canOpen =
     isMerkantil ||
-    (applyYtelseAccess && hasYtelseAccess) ||
     user.navIdent === tildeltSaksbehandlerident ||
     user.navIdent === medunderskriverident ||
     (rol !== null && user.navIdent === rol.employee?.navIdent) ||
@@ -48,71 +46,59 @@ export const OpenOppgavebehandling = ({
     return null;
   }
 
-  const commonProps = { as: Link, variant, size, children, 'data-oppgavebehandlingid': id };
+  return (
+    <Button
+      as={Link}
+      variant={variant}
+      size={size}
+      to={`${BEHANDLING_PATH_PREFIX[typeId]}/${id}`}
+      className={className}
+    >
+      {children}
+    </Button>
+  );
+};
 
-  switch (typeId) {
-    case SaksTypeEnum.KLAGE:
-      return (
-        <Button
-          {...commonProps}
-          to={`/klagebehandling/${id}`}
-          data-testid="klagebehandling-open-link"
-          data-klagebehandlingid={id}
-        />
-      );
-    case SaksTypeEnum.ANKE:
-      return (
-        <Button
-          {...commonProps}
-          to={`/ankebehandling/${id}`}
-          data-testid="ankebehandling-open-link"
-          data-ankebehandlingid={id}
-        />
-      );
-    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
-      return (
-        <Button
-          {...commonProps}
-          to={`/trygderettsankebehandling/${id}`}
-          data-testid="trygderettsankebehandling-open-link"
-          data-trygderettsankebehandlingid={id}
-        />
-      );
-    case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
-      return (
-        <Button
-          {...commonProps}
-          to={`/behandling-etter-tr-opphevet/${id}`}
-          data-testid="behandling-etter-tr-opphevet-open-link"
-          data-behandling-etter-tr-opphevet-id={id}
-        />
-      );
-    case SaksTypeEnum.OMGJØRINGSKRAV:
-      return (
-        <Button
-          {...commonProps}
-          to={`/omgjøringskravbehandling/${id}`}
-          data-testid="omgjøringskravbehandling-open-link"
-          data-omgjøringskravid={id}
-        />
-      );
-    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
-      return (
-        <Button
-          {...commonProps}
-          to={`/begjaering-om-gjenopptak-behandling/${id}`}
-          data-testid="begjæring-om-gjenopptak-behandling-open-link"
-          data-begjæring-om-gjenopptak-behandlingid={id}
-        />
-      );
-    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
-      return (
-        <Button
-          {...commonProps}
-          to={`/begjaering-om-gjenopptak-i-tr-behandling/${id}`}
-          data-testid="begjæring-om-gjenopptak-i-tr-behandling-open-link"
-          data-begjæring-om-gjenopptak-i-tr-behandlingid={id}
-        />
-      );
+interface YtelseAccessedProps extends BaseProps, Pick<IOppgave, 'id' | 'ytelseId' | 'typeId'> {}
+
+/** Only access to the ytelse is enough to be allowed to open the case. */
+export const OpenForYtelseAccess = ({
+  id,
+  ytelseId,
+  typeId,
+  children = 'Åpne',
+  variant = 'primary',
+  size = 'small',
+  className,
+}: YtelseAccessedProps) => {
+  const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
+  const hasYtelseAccess = useHasYtelseAccess(ytelseId);
+
+  const canOpen = isMerkantil || hasYtelseAccess;
+
+  if (!canOpen) {
+    return null;
   }
+
+  return (
+    <Button
+      as={Link}
+      variant={variant}
+      size={size}
+      to={`${BEHANDLING_PATH_PREFIX[typeId]}/${id}`}
+      className={className}
+    >
+      {children}
+    </Button>
+  );
+};
+
+const BEHANDLING_PATH_PREFIX: Record<SaksTypeEnum, string> = {
+  [SaksTypeEnum.KLAGE]: '/klagebehandling',
+  [SaksTypeEnum.ANKE]: '/ankebehandling',
+  [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: '/trygderettsankebehandling',
+  [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: '/behandling-etter-tr-opphevet',
+  [SaksTypeEnum.OMGJØRINGSKRAV]: '/omgjøringskravbehandling',
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: '/begjaering-om-gjenopptak-behandling',
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: '/begjaering-om-gjenopptak-i-tr-behandling',
 };
