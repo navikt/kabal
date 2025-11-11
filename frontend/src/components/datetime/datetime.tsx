@@ -31,10 +31,19 @@ interface DateTimeProps {
   icon?: React.ReactNode;
   title?: string;
   id?: string;
+  className?: string;
 }
 
-export const DateTime = ({ dateTime, title, icon, id }: DateTimeProps) => (
-  <HStack as="time" align="center" gap="1" dateTime={dateTime} title={title} id={id} className="whitespace-nowrap">
+export const DateTime = ({ dateTime, title, icon, id, className }: DateTimeProps) => (
+  <HStack
+    as="time"
+    align="center"
+    gap="1"
+    dateTime={dateTime}
+    title={title}
+    id={id}
+    className={`whitespace-nowrap ${className}`}
+  >
     {icon}
     {isoDateTimeToPretty(dateTime)}
   </HStack>
