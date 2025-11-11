@@ -62,6 +62,7 @@ export type RolEvent = BaseEvent & Rol;
 export interface NewMessageEvent extends BaseEvent {
   id: string;
   text: string;
+  notify: boolean;
 }
 
 export interface TildelingEvent extends BaseEvent {

@@ -1,10 +1,8 @@
-import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import type { INavEmployee } from '@app/types/bruker';
 import { isApiRejectionError } from '@app/types/errors';
 import type { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { format } from 'date-fns';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 import { ListTagTypes } from './tag-types';
 
@@ -12,20 +10,20 @@ export interface IMessage {
   author: INavEmployee;
   created: string;
   id: string;
-  modified: string;
+  modified: string | null;
   text: string;
+  notify: boolean;
 }
 
 interface IPostMessage {
   text: string;
   author: INavEmployee;
+  notify: boolean;
 }
 
 enum MessageListTagTypes {
   MESSAGES = 'messages',
 }
-
-export const OPTIMISTIC_MESSAGE_ID_PREFIX = 'new-message-optimistic-id';
 
 const messagesListTags = (messages: IMessage[] | undefined) =>
   typeof messages === 'undefined'
@@ -44,38 +42,22 @@ export const messagesApi = createApi({
       providesTags: messagesListTags,
     }),
     postMessage: builder.mutation<IMessage, IPostMessage & IOppgavebehandlingBaseParams>({
-      query: ({ oppgaveId, text }) => ({
+      query: ({ oppgaveId, text, notify }) => ({
         method: 'POST',
         url: `/${oppgaveId}/meldinger`,
-        body: { text },
+        body: { text, notify },
       }),
-      onQueryStarted: async ({ oppgaveId, ...newMessage }, { dispatch, queryFulfilled }) => {
-        const now = format(new Date(), ISO_DATETIME_FORMAT);
-        const newMessageId = `${OPTIMISTIC_MESSAGE_ID_PREFIX}-${now}`;
-
-        const patchResult = dispatch(
-          messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => [
-            { ...newMessage, created: now, modified: now, id: newMessageId },
-            ...messages,
-          ]),
-        );
-
+      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
           dispatch(
             messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) =>
-              messages.map((m) => {
-                if (m.id === newMessageId) {
-                  return data;
-                }
-
-                return m;
-              }),
+              messages.some((m) => m.id === data.id)
+                ? messages
+                : [data, ...messages].toSorted((a, b) => b.created.localeCompare(a.created)),
             ),
           );
         } catch (error) {
-          patchResult.undo();
-
           const heading = 'Kunne ikke sende melding';
 
           if (isApiRejectionError(error)) {

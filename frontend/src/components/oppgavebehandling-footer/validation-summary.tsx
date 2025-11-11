@@ -1,6 +1,5 @@
-import type { IValidationError, IValidationSection } from '@app/functions/error-type-guard';
+import { type IValidationError, type IValidationSection, SECTION_TITLES } from '@app/functions/error-type-guard';
 import { useFieldName } from '@app/hooks/use-field-name';
-import { useSectionTitle } from '@app/hooks/use-section-title';
 import { Alert, Heading, VStack } from '@navikt/ds-react';
 
 interface Props {
@@ -32,7 +31,7 @@ export const ValidationSummary = ({ sections }: Props) => {
 const Section = ({ section, properties }: IValidationSection) => (
   <section>
     <Heading level="2" size="xsmall">
-      {useSectionTitle(section)}
+      {SECTION_TITLES[section]}
     </Heading>
 
     <ul className="pl-4">
