@@ -24,13 +24,15 @@ const VarsletBehandlingstid = (props: IVarsletBehandlingstidEvent) => (
   >
     <p>Varslet behandlingstid ble satt.</p>
 
+    <Begrunnelse {...props} />
+
     <ChangedFrist {...props} />
     <ChangedMottakere {...props} />
   </HistoryEvent>
 );
 
 const ChangedMottakere = ({ event }: IVarsletBehandlingstidEvent) => {
-  if (event === null) {
+  if (event === null || event.doNotSendLetter) {
     return null;
   }
 
@@ -116,4 +118,16 @@ const getUnits = (units: number | null, unitTypeId: BehandlingstidUnitType | nul
   if (units === null && unitTypeId === null) {
     return '<Ikke satt>';
   }
+};
+
+const Begrunnelse = ({ event }: IVarsletBehandlingstidEvent) => {
+  if (event === null || event.reasonNoLetter === null) {
+    return null;
+  }
+
+  return (
+    <p>
+      Begrunnelse for hvorfor det ikke ble sendt brev: <i>{event.reasonNoLetter}</i>
+    </p>
+  );
 };

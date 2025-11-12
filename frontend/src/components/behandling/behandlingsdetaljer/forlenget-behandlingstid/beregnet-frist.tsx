@@ -1,33 +1,34 @@
-import { PRETTY_FORMAT } from '@app/components/date-picker/constants';
-import { BehandlingstidUnitType } from '@app/types/svarbrev';
-import { Label, VStack } from '@navikt/ds-react';
-import { addMonths, addWeeks, format, isValid } from 'date-fns';
+import { XMarkOctagonFillIconColored } from '@app/components/colored-icons/colored-icons';
+import { isoDateToPretty } from '@app/domain/date';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetOrCreateQuery } from '@app/redux-api/forlenget-behandlingstid';
+import { Label, Loader, VStack } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 
-interface Props {
-  units: number;
-  typeId: BehandlingstidUnitType;
-}
+export const BeregnetFrist = () => {
+  const id = useOppgaveId();
+  const { data, isSuccess, isLoading, isError } = useGetOrCreateQuery(id ?? skipToken);
 
-export const BeregnetFrist = ({ units, typeId }: Props) => (
-  <VStack>
-    <Label size="small">Beregnet frist</Label>
-    <div className="mt-3">{Number.isNaN(units) ? '-' : getNewDate(units, typeId)}</div>
-  </VStack>
-);
-
-const NOW = new Date();
-
-const getNewDate = (units: number, typeId: BehandlingstidUnitType): string => {
-  const date = getRawDate(units, typeId);
-
-  return isValid(date) ? format(date, PRETTY_FORMAT) : '-';
-};
-
-const getRawDate = (units: number, typeId: BehandlingstidUnitType): Date => {
-  switch (typeId) {
-    case BehandlingstidUnitType.WEEKS:
-      return addWeeks(NOW, units);
-    case BehandlingstidUnitType.MONTHS:
-      return addMonths(NOW, units);
+  if (isLoading) {
+    return <Loader title="Laster..." size="small" />;
   }
+
+  if (isError) {
+    return <XMarkOctagonFillIconColored title="Feil ved henting av beregnet frist" />;
+  }
+
+  if (!isSuccess) {
+    return null;
+  }
+
+  const { calculatedFrist } = data.behandlingstid;
+
+  return (
+    <VStack>
+      <Label size="small">Beregnet frist</Label>
+      <time className="mt-3" dateTime={calculatedFrist ?? undefined}>
+        {calculatedFrist === null ? '-' : isoDateToPretty(calculatedFrist)}
+      </time>
+    </VStack>
+  );
 };

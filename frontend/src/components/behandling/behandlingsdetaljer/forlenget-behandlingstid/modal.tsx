@@ -27,6 +27,7 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
   const { varsletFrist } = oppgavebehandling;
   const oppgaveId = useOppgaveId();
   const heading = useHeading(isOpen);
+  const [behandlingstidError, setBehandlingstidError] = useState<string>();
 
   if (oppgaveId === skipToken) {
     return;
@@ -38,7 +39,9 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
         <VStack width="780px" padding="1" overflowY="auto" flexShrink="0" gap="4">
           <VStack gap="4">
             {isOpen ? <TimesPreviouslyExtended /> : null}
-            {isOpen ? <DoNotSendLetter /> : null}
+            {isOpen ? (
+              <DoNotSendLetter varsletFrist={varsletFrist} setBehandlingstidError={setBehandlingstidError} />
+            ) : null}
           </VStack>
 
           <HStack gap="4">
@@ -49,7 +52,9 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
             </BehandlingSection>
           </HStack>
 
-          {isOpen ? <Inputs /> : null}
+          {isOpen ? (
+            <Inputs behandlingstidError={behandlingstidError} setBehandlingstidError={setBehandlingstidError} />
+          ) : null}
 
           <Errors sections={error} />
         </VStack>
