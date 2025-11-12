@@ -7,7 +7,7 @@ import {
   useSetBehandlingstidUnitsMutation,
   useSetBehandlingstidUnitTypeMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
-import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
+import { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
 import {
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES_SINGULAR,
@@ -25,9 +25,18 @@ interface Props {
   id: string;
   error: string | undefined;
   setError: (error: string | undefined) => void;
+  varselTypeIsOriginal: boolean;
 }
 
-export const SetBehandlingstid = ({ id, typeId, units, varsletFrist, error, setError }: Props) => {
+export const SetBehandlingstid = ({
+  id,
+  typeId,
+  units,
+  varsletFrist,
+  error,
+  setError,
+  varselTypeIsOriginal,
+}: Props) => {
   const [setUnitType] = useSetBehandlingstidUnitTypeMutation({
     fixedCacheKey: id,
   });
@@ -44,7 +53,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist, error, setE
 
   const parsed = Number.parseInt(tempValue, 10);
   const skip = Number.isNaN(parsed) || parsed === units || (tempValue === '' && units === null);
-  useDebounce(() => setUnits({ varsletBehandlingstidUnits: parsed, id }), skip, parsed, 500);
+  useDebounce(() => setUnits({ varsletBehandlingstidUnits: parsed, id }).unwrap(), skip, parsed, 500);
 
   if (oppgave === undefined) {
     return null;
@@ -54,7 +63,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist, error, setE
     <HStack gap="2">
       <VStack gap="1" as="section">
         <Heading size="xsmall" style={{ fontSize: 16 }}>
-          {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.Behandlingstid]}
+          {varselTypeIsOriginal ? 'Opprinnelig behandlingstid' : 'Ny behandlingstid'}
         </Heading>
 
         <HStack align="end" gap="2" as="section" id={UtvidetBehandlingstidFieldName.Behandlingstid}>
@@ -78,7 +87,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist, error, setE
                 return setError(`Antall ${BEHANDLINGSTID_UNIT_TYPE_NAMES[typeId]} må være et heltall`);
               }
 
-              setError(validateUnits(parsed, typeId, oppgave.varsletFrist));
+              setError(validateUnits(parsed, typeId, oppgave.varsletFrist, varselTypeIsOriginal));
             }}
           />
 
@@ -92,7 +101,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist, error, setE
                 return;
               }
 
-              setError(validateUnits(units, typeId, oppgave.varsletFrist));
+              setError(validateUnits(units, typeId, oppgave.varsletFrist, varselTypeIsOriginal));
 
               setUnitType({ varsletBehandlingstidUnitTypeId: typeId, id }).unwrap();
             }}
@@ -110,7 +119,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist, error, setE
         </HStack>
         {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
       </VStack>
-      <BeregnetFrist units={parsed} typeId={typeId} />
+      <BeregnetFrist />
     </HStack>
   );
 };

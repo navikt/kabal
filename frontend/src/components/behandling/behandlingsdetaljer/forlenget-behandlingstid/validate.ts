@@ -16,13 +16,19 @@ export const validateBehandlingstid = (
     varsletFrist,
   }: IForlengetBehandlingstid['behandlingstid'],
   prevVarsletFrist: string | null,
+  varselTypeIsOriginal: boolean,
 ): string | undefined => {
   if (varsletFrist !== null) {
     return validateDate(varsletFrist, prevVarsletFrist);
   }
 
   if (varsletBehandlingstidUnits !== null) {
-    return validateUnits(varsletBehandlingstidUnits, varsletBehandlingstidUnitTypeId, prevVarsletFrist);
+    return validateUnits(
+      varsletBehandlingstidUnits,
+      varsletBehandlingstidUnitTypeId,
+      prevVarsletFrist,
+      varselTypeIsOriginal,
+    );
   }
 
   return undefined;
@@ -32,6 +38,7 @@ export const validateUnits = (
   units: number | null,
   typeId: BehandlingstidUnitType,
   prevVarsletFrist: string | null,
+  varselTypeIsOriginal: boolean,
 ): string | undefined => {
   if (units === null) {
     return undefined;
@@ -47,6 +54,10 @@ export const validateUnits = (
     if (typeId === BehandlingstidUnitType.MONTHS && !isAfter(addMonths(NOW, units), prevVarsletFristDate)) {
       return PREV_FRIST_ERROR;
     }
+  }
+
+  if (varselTypeIsOriginal) {
+    return undefined;
   }
 
   if (typeId === BehandlingstidUnitType.WEEKS && isAfter(addWeeks(NOW, units), MAX_DATE)) {
