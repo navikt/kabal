@@ -4,6 +4,7 @@ import {
   useGetOrCreateQuery,
   useSetDoNotSendBrevMutation,
   useSetReasonNoLetterMutation,
+  useSetVarselTypeIsOriginalMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
 import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
 import { Alert, BoxNew, Checkbox, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
@@ -14,6 +15,7 @@ export const DoNotSendLetter = () => {
   const id = useOppgaveId();
   const { data, isSuccess } = useGetOrCreateQuery(id ?? skipToken);
   const [setDoNotSendLetter, { isLoading }] = useSetDoNotSendBrevMutation();
+  const [setVarselTypeIsOriginal] = useSetVarselTypeIsOriginalMutation();
 
   if (id === skipToken || !isSuccess) {
     return null;
@@ -45,6 +47,15 @@ export const DoNotSendLetter = () => {
             Husk at du må varsle bruker om endret varslet frist. Du bør kun endre varslet frist uten å sende brev dersom
             du allerede har varslet på annen måte.
           </Alert>
+          <Checkbox
+            onChange={({ target }) => setVarselTypeIsOriginal({ id, varselTypeIsOriginal: target.checked })}
+            size="small"
+            checked={data.varselTypeIsOriginal}
+            disabled={isLoading}
+            id={UtvidetBehandlingstidFieldName.VarselTypeIsOriginal}
+          >
+            {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.VarselTypeIsOriginal]}
+          </Checkbox>
           <ReasonNoLetter value={data.reasonNoLetter} id={id} />
         </>
       ) : null}

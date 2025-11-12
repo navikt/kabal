@@ -129,6 +129,8 @@ interface VarsletBehandlingstidEvent {
   varsletBehandlingstidUnitTypeId: BehandlingstidUnitType | null;
   varsletFrist: string | null; // DateTime
   mottakere: IPart[] | null;
+  reasonNoLetter: string | null;
+  doNotSendLetter: boolean;
 }
 
 interface ForlengetBehandlingstidEvent extends VarsletBehandlingstidEvent {
