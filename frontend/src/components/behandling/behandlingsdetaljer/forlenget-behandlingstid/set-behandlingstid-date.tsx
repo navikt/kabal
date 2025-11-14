@@ -12,7 +12,7 @@ interface Props {
   id: string;
   error: string | undefined;
   setError: (error: string | undefined) => void;
-  varselTypeIsOriginal: boolean
+  varselTypeIsOriginal: boolean;
 }
 
 export const SetBehandlingstidDate = ({ value, id, error, setError, varselTypeIsOriginal }: Props) => {

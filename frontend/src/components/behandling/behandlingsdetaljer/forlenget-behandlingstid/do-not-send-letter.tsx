@@ -1,4 +1,5 @@
 import { useDebounce } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
+import { validateUnits } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
   useGetOrCreateQuery,
@@ -13,9 +14,10 @@ import { useState } from 'react';
 
 interface Props {
   varsletFrist: string | null;
+  setBehandlingstidError: (error: string | undefined) => void;
 }
 
-export const DoNotSendLetter = ({ varsletFrist }: Props) => {
+export const DoNotSendLetter = ({ varsletFrist, setBehandlingstidError }: Props) => {
   const id = useOppgaveId();
   const { data, isSuccess } = useGetOrCreateQuery(id ?? skipToken);
   const [setDoNotSendLetter, { isLoading }] = useSetDoNotSendBrevMutation();
@@ -53,7 +55,16 @@ export const DoNotSendLetter = ({ varsletFrist }: Props) => {
           </Alert>
           {varsletFrist === null ? (
             <Checkbox
-              onChange={({ target }) => setVarselTypeIsOriginal({ id, varselTypeIsOriginal: target.checked })}
+              onChange={({ target }) => {
+                const { varsletBehandlingstidUnits: units, varsletBehandlingstidUnitTypeId: typeId } =
+                  data.behandlingstid;
+
+                if (units !== null && typeId !== null) {
+                  setBehandlingstidError(validateUnits(units, typeId, varsletFrist, target.checked));
+                }
+
+                setVarselTypeIsOriginal({ id, varselTypeIsOriginal: target.checked });
+              }}
               size="small"
               checked={data.varselTypeIsOriginal}
               disabled={isLoading}
