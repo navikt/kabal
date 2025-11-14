@@ -1,10 +1,8 @@
-import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import type { INavEmployee } from '@app/types/bruker';
 import { isApiRejectionError } from '@app/types/errors';
 import type { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { format } from 'date-fns';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
 import { ListTagTypes } from './tag-types';
 
@@ -51,33 +49,11 @@ export const messagesApi = createApi({
         url: `/${oppgaveId}/meldinger`,
         body: { text, notify },
       }),
-      onQueryStarted: async ({ oppgaveId, ...newMessage }, { dispatch, queryFulfilled }) => {
-        const now = format(new Date(), ISO_DATETIME_FORMAT);
-        const newMessageId = `${OPTIMISTIC_MESSAGE_ID_PREFIX}-${now}`;
-
-        const patchResult = dispatch(
-          messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => [
-            { ...newMessage, created: now, modified: now, id: newMessageId },
-            ...messages,
-          ]),
-        );
-
+      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
-          dispatch(
-            messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) =>
-              messages.map((m) => {
-                if (m.id === newMessageId) {
-                  return data;
-                }
-
-                return m;
-              }),
-            ),
-          );
+          dispatch(messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => [...messages, data]));
         } catch (error) {
-          patchResult.undo();
-
           const heading = 'Kunne ikke sende melding';
 
           if (isApiRejectionError(error)) {
