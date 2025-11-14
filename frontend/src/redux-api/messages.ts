@@ -14,11 +14,13 @@ export interface IMessage {
   id: string;
   modified: string;
   text: string;
+  notify: boolean;
 }
 
 interface IPostMessage {
   text: string;
   author: INavEmployee;
+  notify: boolean;
 }
 
 enum MessageListTagTypes {
@@ -44,10 +46,10 @@ export const messagesApi = createApi({
       providesTags: messagesListTags,
     }),
     postMessage: builder.mutation<IMessage, IPostMessage & IOppgavebehandlingBaseParams>({
-      query: ({ oppgaveId, text }) => ({
+      query: ({ oppgaveId, text, notify }) => ({
         method: 'POST',
         url: `/${oppgaveId}/meldinger`,
-        body: { text },
+        body: { text, notify },
       }),
       onQueryStarted: async ({ oppgaveId, ...newMessage }, { dispatch, queryFulfilled }) => {
         const now = format(new Date(), ISO_DATETIME_FORMAT);

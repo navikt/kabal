@@ -17,13 +17,14 @@ export const handleMessageEvent = (oppgaveId: string, userId: string) => (event:
 
   reduxStore.dispatch(
     messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) => {
-      const { id, text, timestamp, actor } = event;
+      const { id, text, timestamp, actor, notify } = event;
       const message: IMessage = {
         author: actor,
         id,
         text,
         created: timestamp,
         modified: timestamp,
+        notify,
       };
 
       if (messages === undefined) {

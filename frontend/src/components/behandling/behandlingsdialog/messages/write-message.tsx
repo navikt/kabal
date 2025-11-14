@@ -1,12 +1,19 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { isMetaKey, Keys } from '@app/keys';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { usePostMessageMutation } from '@app/redux-api/messages';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
-import { Button, Loader, Textarea, VStack } from '@navikt/ds-react';
+import { Button, Checkbox, type CheckboxProps, HStack, Loader, Textarea, Tooltip, VStack } from '@navikt/ds-react';
 import { useContext, useEffect, useState } from 'react';
+
+enum NotifyEnum {
+  UNSET = -1,
+  NO = 0,
+  YES = 1,
+}
 
 export const WriteMessage = () => {
   const isFullfoert = useIsFullfoert();
@@ -17,6 +24,9 @@ export const WriteMessage = () => {
   const [postMessage, { isSuccess, isLoading: messageIsLoading }] = usePostMessageMutation();
   const oppgaveId = useOppgaveId();
   const { data: signature, isLoading: signatureIsLoading } = useGetMySignatureQuery();
+  const isSaksbehandler = useIsTildeltSaksbehandler();
+  const [notify, setNotify] = useState<NotifyEnum>(isSaksbehandler ? NotifyEnum.NO : NotifyEnum.UNSET);
+  const [notifyError, setNotifyError] = useState<boolean>(false);
 
   useEffect(() => {
     if (isSuccess) {
@@ -33,6 +43,12 @@ export const WriteMessage = () => {
   }
 
   const post = () => {
+    if (notify === NotifyEnum.UNSET) {
+      setNotifyError(true);
+
+      return;
+    }
+
     if (messageIsLoading || typeof oppgaveId !== 'string') {
       return;
     }
@@ -47,6 +63,7 @@ export const WriteMessage = () => {
       oppgaveId,
       text: message.trim(),
       author: { navIdent, navn },
+      notify: notify === NotifyEnum.YES,
     });
   };
 
@@ -59,6 +76,11 @@ export const WriteMessage = () => {
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setErrorMessage(null);
     setMessage(event.target.value);
+  };
+
+  const onNotifyChange = () => {
+    setNotifyError(false);
+    setNotify(notify === NotifyEnum.YES ? NotifyEnum.NO : NotifyEnum.YES);
   };
 
   return (
@@ -74,7 +96,28 @@ export const WriteMessage = () => {
         label="Skriv en melding"
         hideLabel
       />
-      <div className="mt-2 self-end">
+
+      <HStack marginBlock="2 0" justify="space-between" align="center" gap="2">
+        <Tooltip
+          content={
+            isSaksbehandler ? 'Kan ikke sende varsel til deg selv' : 'Om det skal sendes varsel til saksbehandler'
+          }
+          describesChild
+        >
+          <span>
+            <Checkbox
+              checked={CHECKED[notify]}
+              indeterminate={notify === NotifyEnum.UNSET}
+              onChange={onNotifyChange}
+              size="small"
+              error={notifyError}
+              disabled={isSaksbehandler}
+            >
+              Send varsel
+            </Checkbox>
+          </span>
+        </Tooltip>
+
         <Button
           type="button"
           size="small"
@@ -86,7 +129,13 @@ export const WriteMessage = () => {
         >
           Legg til melding
         </Button>
-      </div>
+      </HStack>
     </VStack>
   );
+};
+
+const CHECKED: Record<NotifyEnum, CheckboxProps['checked']> = {
+  [NotifyEnum.UNSET]: undefined,
+  [NotifyEnum.NO]: false,
+  [NotifyEnum.YES]: true,
 };
