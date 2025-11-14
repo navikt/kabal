@@ -13,6 +13,7 @@ export enum UtvidetBehandlingstidFieldName {
   ReasonNoLetter = 'reasonNoLetter',
   Mottakere = 'mottakere',
   Title = 'title',
+  VarselTypeIsOriginal = 'varselTypeIsOriginal',
 }
 export const UTVIDET_BEHANDLINGSTID_FIELD_NAMES: Record<UtvidetBehandlingstidFieldName, string> = {
   [UtvidetBehandlingstidFieldName.Behandling]: 'Behandling',
@@ -22,6 +23,7 @@ export const UTVIDET_BEHANDLINGSTID_FIELD_NAMES: Record<UtvidetBehandlingstidFie
   [UtvidetBehandlingstidFieldName.ReasonNoLetter]: 'Hvordan du har varslet på annen måte',
   [UtvidetBehandlingstidFieldName.Mottakere]: 'Mottakere',
   [UtvidetBehandlingstidFieldName.Title]: 'Tittel',
+  [UtvidetBehandlingstidFieldName.VarselTypeIsOriginal]: 'Dette er den opprinnelige varslede fristen',
 };
 
 export const DEFAULT_FIELD_NAMES = {

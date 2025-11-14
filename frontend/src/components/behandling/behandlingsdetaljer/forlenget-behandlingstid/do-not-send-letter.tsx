@@ -1,19 +1,27 @@
 import { useDebounce } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
+import { validateUnits } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
   useGetOrCreateQuery,
   useSetDoNotSendBrevMutation,
   useSetReasonNoLetterMutation,
+  useSetVarselTypeIsOriginalMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
 import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
 import { Alert, BoxNew, Checkbox, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 
-export const DoNotSendLetter = () => {
+interface Props {
+  varsletFrist: string | null;
+  setBehandlingstidError: (error: string | undefined) => void;
+}
+
+export const DoNotSendLetter = ({ varsletFrist, setBehandlingstidError }: Props) => {
   const id = useOppgaveId();
   const { data, isSuccess } = useGetOrCreateQuery(id ?? skipToken);
   const [setDoNotSendLetter, { isLoading }] = useSetDoNotSendBrevMutation();
+  const [setVarselTypeIsOriginal] = useSetVarselTypeIsOriginalMutation();
 
   if (id === skipToken || !isSuccess) {
     return null;
@@ -45,6 +53,26 @@ export const DoNotSendLetter = () => {
             Husk at du må varsle bruker om endret varslet frist. Du bør kun endre varslet frist uten å sende brev dersom
             du allerede har varslet på annen måte.
           </Alert>
+          {varsletFrist === null ? (
+            <Checkbox
+              onChange={({ target }) => {
+                const { varsletBehandlingstidUnits: units, varsletBehandlingstidUnitTypeId: typeId } =
+                  data.behandlingstid;
+
+                if (units !== null && typeId !== null) {
+                  setBehandlingstidError(validateUnits(units, typeId, varsletFrist, target.checked));
+                }
+
+                setVarselTypeIsOriginal({ id, varselTypeIsOriginal: target.checked });
+              }}
+              size="small"
+              checked={data.varselTypeIsOriginal}
+              disabled={isLoading}
+              id={UtvidetBehandlingstidFieldName.VarselTypeIsOriginal}
+            >
+              {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.VarselTypeIsOriginal]}
+            </Checkbox>
+          ) : null}
           <ReasonNoLetter value={data.reasonNoLetter} id={id} />
         </>
       ) : null}
@@ -52,12 +80,12 @@ export const DoNotSendLetter = () => {
   );
 };
 
-interface Props {
+interface ReasonNoLetterProps {
   value: string | null;
   id: string;
 }
 
-const ReasonNoLetter = ({ value, id }: Props) => {
+const ReasonNoLetter = ({ value, id }: ReasonNoLetterProps) => {
   const [setValue] = useSetReasonNoLetterMutation();
   const [tempValue, setTempValue] = useState(value ?? '');
   const [error, setError] = useState<string>();

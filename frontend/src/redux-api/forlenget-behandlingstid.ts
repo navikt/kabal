@@ -18,11 +18,13 @@ export interface IForlengetBehandlingstid {
     varsletBehandlingstidUnitTypeId: BehandlingstidUnitType;
     varsletBehandlingstidUnits: number | null;
     varsletFrist: string | null;
+    calculatedFrist: string | null;
   };
   receivers: IMottaker[];
   doNotSendLetter: boolean;
   reasonNoLetter: string | null;
   timesPreviouslyExtended: number;
+  varselTypeIsOriginal: boolean;
 }
 
 const getPath = (id: string, subPath?: string) =>
@@ -107,10 +109,26 @@ export const forlengetBehandlingstidApi = createApi({
     }),
     setDoNotSendBrev: builder.mutation<IForlengetBehandlingstid, { doNotSendLetter: boolean; id: string }>({
       query: ({ id, ...body }) => ({ url: getPath(id, 'do-not-send-letter'), method: 'PUT', body }),
-      onQueryStarted: (params, { queryFulfilled }) => optimisticUpdate(params, queryFulfilled),
+      onQueryStarted: async ({ id, doNotSendLetter }, { queryFulfilled }) => {
+        const patchResult = reduxStore.dispatch(
+          updateQueryData('getOrCreate', id, (draft) => {
+            return {
+              ...draft,
+              doNotSendLetter,
+              varselTypeIsOriginal: doNotSendLetter === false ? false : draft.varselTypeIsOriginal,
+            };
+          }),
+        );
+
+        await pessimisticUpdate(id, queryFulfilled, patchResult.undo);
+      },
     }),
     setReasonNoLetter: builder.mutation<IForlengetBehandlingstid, { reasonNoLetter: string | null; id: string }>({
       query: ({ id, ...body }) => ({ url: getPath(id, 'reason-no-letter'), method: 'PUT', body }),
+      onQueryStarted: (params, { queryFulfilled }) => optimisticUpdate(params, queryFulfilled),
+    }),
+    setVarselTypeIsOriginal: builder.mutation<IForlengetBehandlingstid, { varselTypeIsOriginal: boolean; id: string }>({
+      query: ({ id, ...body }) => ({ url: getPath(id, 'varsel-type-is-original'), method: 'PUT', body }),
       onQueryStarted: (params, { queryFulfilled }) => optimisticUpdate(params, queryFulfilled),
     }),
     complete: builder.mutation<void, { id: string; doNotSendLetter: boolean; onClose: () => void }>({
@@ -174,5 +192,6 @@ export const {
   useSetPreviousBehandlingstidInfoMutation,
   useSetDoNotSendBrevMutation,
   useSetReasonNoLetterMutation,
+  useSetVarselTypeIsOriginalMutation,
   useCompleteMutation,
 } = forlengetBehandlingstidApi;

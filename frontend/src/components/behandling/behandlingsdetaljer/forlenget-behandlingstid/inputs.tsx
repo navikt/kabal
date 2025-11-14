@@ -12,10 +12,14 @@ import { Alert, HStack, Skeleton, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 
-export const Inputs = () => {
+interface Props {
+  behandlingstidError: string | undefined;
+  setBehandlingstidError: (error: string | undefined) => void;
+}
+
+export const Inputs = ({ behandlingstidError, setBehandlingstidError }: Props) => {
   const { data: oppgave, isSuccess: oppgaveIsSuccess } = useOppgave();
   const { data, isLoading, isError, isSuccess } = useGetOrCreateQuery(oppgave?.id ?? skipToken);
-  const [behandlingstidError, setBehandlingstidError] = useState<string>();
   const [dateError, setDateError] = useState<string>();
 
   if (isLoading) {
@@ -70,6 +74,7 @@ export const Inputs = () => {
           units={data.behandlingstid.varsletBehandlingstidUnits}
           varsletFrist={data.behandlingstid.varsletFrist}
           error={behandlingstidError}
+          varselTypeIsOriginal={data.varselTypeIsOriginal}
           setError={(e) => {
             setDateError(undefined);
             setBehandlingstidError(e);
@@ -82,6 +87,7 @@ export const Inputs = () => {
           id={id}
           value={data.behandlingstid.varsletFrist}
           error={dateError}
+          varselTypeIsOriginal={data.varselTypeIsOriginal}
           setError={(e) => {
             setBehandlingstidError(undefined);
             setDateError(e);

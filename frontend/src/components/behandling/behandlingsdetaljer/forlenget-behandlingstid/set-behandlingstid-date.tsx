@@ -12,13 +12,14 @@ interface Props {
   id: string;
   error: string | undefined;
   setError: (error: string | undefined) => void;
+  varselTypeIsOriginal: boolean;
 }
 
-export const SetBehandlingstidDate = ({ value, id, error, setError }: Props) => {
+export const SetBehandlingstidDate = ({ value, id, error, setError, varselTypeIsOriginal }: Props) => {
   const [setDate] = useSetBehandlingstidDateMutation({ fixedCacheKey: id });
   const { data } = useOppgave();
 
-  if (data === undefined) {
+  if (varselTypeIsOriginal || data === undefined) {
     return null;
   }
 

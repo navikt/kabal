@@ -25,9 +25,18 @@ interface Props {
   id: string;
   error: string | undefined;
   setError: (error: string | undefined) => void;
+  varselTypeIsOriginal: boolean;
 }
 
-export const SetBehandlingstid = ({ id, typeId, units, varsletFrist, error, setError }: Props) => {
+export const SetBehandlingstid = ({
+  id,
+  typeId,
+  units,
+  varsletFrist,
+  error,
+  setError,
+  varselTypeIsOriginal,
+}: Props) => {
   const [setUnitType] = useSetBehandlingstidUnitTypeMutation({
     fixedCacheKey: id,
   });
@@ -78,7 +87,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist, error, setE
                 return setError(`Antall ${BEHANDLINGSTID_UNIT_TYPE_NAMES[typeId]} må være et heltall`);
               }
 
-              setError(validateUnits(parsed, typeId, oppgave.varsletFrist));
+              setError(validateUnits(parsed, typeId, oppgave.varsletFrist, varselTypeIsOriginal));
             }}
           />
 
@@ -92,7 +101,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist, error, setE
                 return;
               }
 
-              setError(validateUnits(units, typeId, oppgave.varsletFrist));
+              setError(validateUnits(units, typeId, oppgave.varsletFrist, varselTypeIsOriginal));
 
               setUnitType({ varsletBehandlingstidUnitTypeId: typeId, id }).unwrap();
             }}
@@ -110,7 +119,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist, error, setE
         </HStack>
         {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
       </VStack>
-      <BeregnetFrist units={parsed} typeId={typeId} />
+      <BeregnetFrist />
     </HStack>
   );
 };

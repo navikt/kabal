@@ -51,7 +51,7 @@ export const Pdf = ({ id, varsletFrist }: VarsletFristProps) => {
     return <PdfPlaceholder>Fyll inn ny behandlingstid eller ny frist for å generere en forhåndsvisning</PdfPlaceholder>;
   }
 
-  const error = validateBehandlingstid(data.behandlingstid, varsletFrist);
+  const error = validateBehandlingstid(data.behandlingstid, varsletFrist, data.varselTypeIsOriginal);
 
   if (error !== undefined) {
     return <PdfPlaceholder>{error}</PdfPlaceholder>;
