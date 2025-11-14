@@ -110,7 +110,7 @@ export const SetBehandlingstid = ({ id, typeId, units, varsletFrist, error, setE
         </HStack>
         {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
       </VStack>
-      <BeregnetFrist units={parsed} typeId={typeId} />
+      <BeregnetFrist />
     </HStack>
   );
 };

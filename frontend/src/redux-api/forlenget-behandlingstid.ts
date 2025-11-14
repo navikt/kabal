@@ -18,6 +18,7 @@ export interface IForlengetBehandlingstid {
     varsletBehandlingstidUnitTypeId: BehandlingstidUnitType;
     varsletBehandlingstidUnits: number | null;
     varsletFrist: string | null;
+    calculatedFrist: string | null;
   };
   receivers: IMottaker[];
   doNotSendLetter: boolean;

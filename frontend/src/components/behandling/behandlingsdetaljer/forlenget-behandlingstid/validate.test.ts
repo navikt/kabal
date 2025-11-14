@@ -13,6 +13,7 @@ const createBehandlingstid = ({
   varsletBehandlingstidUnitTypeId,
   varsletBehandlingstidUnits,
   varsletFrist,
+  calculatedFrist: null,
 });
 
 const { MONTHS, WEEKS } = BehandlingstidUnitType;
