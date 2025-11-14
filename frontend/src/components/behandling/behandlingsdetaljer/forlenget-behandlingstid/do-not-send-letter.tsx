@@ -11,7 +11,11 @@ import { Alert, BoxNew, Checkbox, ErrorMessage, Textarea, VStack } from '@navikt
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 
-export const DoNotSendLetter = () => {
+interface Props {
+  varsletFrist: string | null;
+}
+
+export const DoNotSendLetter = ({ varsletFrist }: Props) => {
   const id = useOppgaveId();
   const { data, isSuccess } = useGetOrCreateQuery(id ?? skipToken);
   const [setDoNotSendLetter, { isLoading }] = useSetDoNotSendBrevMutation();
@@ -47,15 +51,17 @@ export const DoNotSendLetter = () => {
             Husk at du må varsle bruker om endret varslet frist. Du bør kun endre varslet frist uten å sende brev dersom
             du allerede har varslet på annen måte.
           </Alert>
-          <Checkbox
-            onChange={({ target }) => setVarselTypeIsOriginal({ id, varselTypeIsOriginal: target.checked })}
-            size="small"
-            checked={data.varselTypeIsOriginal}
-            disabled={isLoading}
-            id={UtvidetBehandlingstidFieldName.VarselTypeIsOriginal}
-          >
-            {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.VarselTypeIsOriginal]}
-          </Checkbox>
+          {varsletFrist === null ? (
+            <Checkbox
+              onChange={({ target }) => setVarselTypeIsOriginal({ id, varselTypeIsOriginal: target.checked })}
+              size="small"
+              checked={data.varselTypeIsOriginal}
+              disabled={isLoading}
+              id={UtvidetBehandlingstidFieldName.VarselTypeIsOriginal}
+            >
+              {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.VarselTypeIsOriginal]}
+            </Checkbox>
+          ) : null}
           <ReasonNoLetter value={data.reasonNoLetter} id={id} />
         </>
       ) : null}
@@ -63,12 +69,12 @@ export const DoNotSendLetter = () => {
   );
 };
 
-interface Props {
+interface ReasonNoLetterProps {
   value: string | null;
   id: string;
 }
 
-const ReasonNoLetter = ({ value, id }: Props) => {
+const ReasonNoLetter = ({ value, id }: ReasonNoLetterProps) => {
   const [setValue] = useSetReasonNoLetterMutation();
   const [tempValue, setTempValue] = useState(value ?? '');
   const [error, setError] = useState<string>();

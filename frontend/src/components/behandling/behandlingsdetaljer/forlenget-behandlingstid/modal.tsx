@@ -38,7 +38,7 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
         <VStack width="780px" padding="1" overflowY="auto" flexShrink="0" gap="4">
           <VStack gap="4">
             {isOpen ? <TimesPreviouslyExtended /> : null}
-            {isOpen ? <DoNotSendLetter /> : null}
+            {isOpen ? <DoNotSendLetter varsletFrist={varsletFrist} /> : null}
           </VStack>
 
           <HStack gap="4">
