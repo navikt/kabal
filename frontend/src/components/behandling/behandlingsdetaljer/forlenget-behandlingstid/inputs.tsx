@@ -82,6 +82,7 @@ export const Inputs = () => {
           id={id}
           value={data.behandlingstid.varsletFrist}
           error={dateError}
+          varselTypeIsOriginal={data.varselTypeIsOriginal}
           setError={(e) => {
             setBehandlingstidError(undefined);
             setDateError(e);
