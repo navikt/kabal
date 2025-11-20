@@ -1,7 +1,7 @@
 import { useInsertHjemlerInSettingsMutation } from '@app/redux-api/internal';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
-import { Alert, BoxNew, Button, Checkbox, CheckboxGroup, Heading, HStack, Select, VStack } from '@navikt/ds-react';
+import { Alert, Button, Checkbox, CheckboxGroup, Heading, HStack, Select, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 
 export const InsertHjemlerInSettings = () => {
@@ -16,25 +16,23 @@ export const InsertHjemlerInSettings = () => {
   ));
 
   return (
-    <BoxNew shadow="dialog" padding="4" asChild>
-      <VStack gap="4">
-        <Heading size="small">Sett inn innsendingshjemler i innstillinger</Heading>
+    <VStack as="section" gap="4">
+      <Heading size="small">Sett inn innsendingshjemler i innstillinger</Heading>
 
-        <Select
-          size="small"
-          label="Ytelse"
-          value={selectedYtelse}
-          onChange={({ target }) => setSelectedYtelse(target.value)}
-          className="w-160"
-        >
-          {options}
-        </Select>
+      <Select
+        size="small"
+        label="Ytelse"
+        value={selectedYtelse}
+        onChange={({ target }) => setSelectedYtelse(target.value)}
+        className="w-160"
+      >
+        {options}
+      </Select>
 
-        {selectedYtelse === undefined ? null : (
-          <Hjemler ytelse={selectedYtelse} selectedHjemler={selectedHjemler} setSelectedHjemler={setSelectedHjemler} />
-        )}
-      </VStack>
-    </BoxNew>
+      {selectedYtelse === undefined ? null : (
+        <Hjemler ytelse={selectedYtelse} selectedHjemler={selectedHjemler} setSelectedHjemler={setSelectedHjemler} />
+      )}
+    </VStack>
   );
 };
 
