@@ -153,12 +153,11 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             {key === ColumnKeyEnum.OpenWithYtelseAccess ? (
-              <OpenForYtelseAccess id={oppgave.id} ytelseId={oppgave.ytelseId} typeId={oppgave.typeId} />
+              <OpenForYtelseAccess id={oppgave.id} ytelseId={oppgave.ytelseId} />
             ) : (
               <OpenForRoleAccess
                 id={oppgave.id}
                 ytelseId={oppgave.ytelseId}
-                typeId={oppgave.typeId}
                 tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
                 medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null}
                 rol={oppgave.rol}

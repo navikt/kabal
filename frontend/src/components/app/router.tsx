@@ -32,7 +32,12 @@ import {
   RichTextTypes,
 } from '@app/types/common-text-types';
 import { Theme, VStack } from '@navikt/ds-react';
-import { Outlet, Route, Routes as Switch } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes as Switch, useParams } from 'react-router-dom';
+
+const RedirectToBehandling = () => {
+  const { oppgaveId } = useParams();
+  return <Navigate to={`/behandling/${oppgaveId}`} replace />;
+};
 
 export const Router = () => (
   <Switch>
@@ -42,13 +47,15 @@ export const Router = () => (
       <Route element={<ProtectedRoute roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]} />}>
         <Route path="oppgaver" element={<OppgaverPage />} />
         <Route path="mineoppgaver" element={<MineOppgaverPage />} />
-        <Route path="klagebehandling/:oppgaveId" element={<OppgavebehandlingPage />} />
-        <Route path="ankebehandling/:oppgaveId" element={<OppgavebehandlingPage />} />
-        <Route path="trygderettsankebehandling/:oppgaveId" element={<OppgavebehandlingPage />} />
-        <Route path="behandling-etter-tr-opphevet/:oppgaveId" element={<OppgavebehandlingPage />} />
-        <Route path="omgjøringskravbehandling/:oppgaveId" element={<OppgavebehandlingPage />} />
-        <Route path="begjaering-om-gjenopptak-behandling/:oppgaveId" element={<OppgavebehandlingPage />} />
-        <Route path="begjaering-om-gjenopptak-i-tr-behandling/:oppgaveId" element={<OppgavebehandlingPage />} />
+        <Route path="behandling/:oppgaveId" element={<OppgavebehandlingPage />} />
+
+        <Route path="klagebehandling/:oppgaveId" element={<RedirectToBehandling />} />
+        <Route path="ankebehandling/:oppgaveId" element={<RedirectToBehandling />} />
+        <Route path="trygderettsankebehandling/:oppgaveId" element={<RedirectToBehandling />} />
+        <Route path="behandling-etter-tr-opphevet/:oppgaveId" element={<RedirectToBehandling />} />
+        <Route path="omgjøringskravbehandling/:oppgaveId" element={<RedirectToBehandling />} />
+        <Route path="begjaering-om-gjenopptak-behandling/:oppgaveId" element={<RedirectToBehandling />} />
+        <Route path="begjaering-om-gjenopptak-i-tr-behandling/:oppgaveId" element={<RedirectToBehandling />} />
       </Route>
 
       <Route element={<ProtectedRoute roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]} />}>

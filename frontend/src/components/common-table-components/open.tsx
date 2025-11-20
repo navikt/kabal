@@ -2,20 +2,17 @@ import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useHasYtelseAccess } from '@app/hooks/use-has-ytelse-access';
 import { Role } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, type IHelper } from '@app/types/oppgave-common';
 import type { IOppgave } from '@app/types/oppgaver';
 import { Button, type ButtonProps } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-interface BaseProps extends Pick<ButtonProps, 'variant' | 'size' | 'className'> {
+interface BaseProps extends Omit<ButtonProps, 'id' | 'children'> {
   children?: string;
 }
 
-interface RoleAccessedProps
-  extends BaseProps,
-    Pick<IOppgave, 'id' | 'tildeltSaksbehandlerident' | 'ytelseId' | 'typeId'> {
+interface RoleAccessedProps extends BaseProps, Pick<IOppgave, 'id' | 'tildeltSaksbehandlerident' | 'ytelseId'> {
   medunderskriverident: string | null;
   rol: IHelper | null;
 }
@@ -24,12 +21,11 @@ export const OpenForRoleAccess = ({
   id,
   tildeltSaksbehandlerident,
   medunderskriverident,
-  typeId,
   rol,
   children = 'Åpne',
   variant = 'primary',
   size = 'small',
-  className,
+  ...buttonProps
 }: RoleAccessedProps) => {
   const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const { user } = useContext(StaticDataContext);
@@ -47,29 +43,22 @@ export const OpenForRoleAccess = ({
   }
 
   return (
-    <Button
-      as={Link}
-      variant={variant}
-      size={size}
-      to={`${BEHANDLING_PATH_PREFIX[typeId]}/${id}`}
-      className={className}
-    >
+    <Button as={Link} variant={variant} size={size} to={`/behandling/${id}`} {...buttonProps}>
       {children}
     </Button>
   );
 };
 
-interface YtelseAccessedProps extends BaseProps, Pick<IOppgave, 'id' | 'ytelseId' | 'typeId'> {}
+interface YtelseAccessedProps extends BaseProps, Pick<IOppgave, 'id' | 'ytelseId'> {}
 
 /** Only access to the ytelse is enough to be allowed to open the case. */
 export const OpenForYtelseAccess = ({
   id,
   ytelseId,
-  typeId,
   children = 'Åpne',
   variant = 'primary',
   size = 'small',
-  className,
+  ...buttonProps
 }: YtelseAccessedProps) => {
   const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const hasYtelseAccess = useHasYtelseAccess(ytelseId);
@@ -81,24 +70,8 @@ export const OpenForYtelseAccess = ({
   }
 
   return (
-    <Button
-      as={Link}
-      variant={variant}
-      size={size}
-      to={`${BEHANDLING_PATH_PREFIX[typeId]}/${id}`}
-      className={className}
-    >
+    <Button as={Link} variant={variant} size={size} to={`/behandling/${id}`} {...buttonProps}>
       {children}
     </Button>
   );
-};
-
-const BEHANDLING_PATH_PREFIX: Record<SaksTypeEnum, string> = {
-  [SaksTypeEnum.KLAGE]: '/klagebehandling',
-  [SaksTypeEnum.ANKE]: '/ankebehandling',
-  [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: '/trygderettsankebehandling',
-  [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: '/behandling-etter-tr-opphevet',
-  [SaksTypeEnum.OMGJØRINGSKRAV]: '/omgjøringskravbehandling',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: '/begjaering-om-gjenopptak-behandling',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: '/begjaering-om-gjenopptak-i-tr-behandling',
 };

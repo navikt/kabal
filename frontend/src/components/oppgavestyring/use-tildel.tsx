@@ -150,7 +150,6 @@ const Tildelt = ({
           size="small"
           variant="secondary-neutral"
           id={oppgaveId}
-          typeId={oppgaveType}
           ytelseId={ytelseId}
           tildeltSaksbehandlerident={toSaksbehandler?.navIdent ?? null}
           medunderskriverident={null}
