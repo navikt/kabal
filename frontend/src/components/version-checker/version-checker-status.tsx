@@ -146,7 +146,7 @@ const getIgnoredAt = () => {
   return parsed;
 };
 
-const NON_DISTURB_PATHS = ['/klagebehandling/', '/ankebehandling/', '/trygderettsankebehandling/'];
+const NON_DISTURB_PATHS = ['/behandling/'];
 
 const getIsNonDisturbPage = () => {
   const { pathname } = window.location;

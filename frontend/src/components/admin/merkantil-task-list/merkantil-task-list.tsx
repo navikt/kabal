@@ -4,7 +4,6 @@ import { Type } from '@app/components/type/type';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { ENVIRONMENT } from '@app/environment';
 import { type Task, useGetMerkantilTasksQuery } from '@app/redux-api/internal';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { ArrowsCirclepathIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Alert, BoxNew, Button, CopyButton, Heading, HStack, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
@@ -140,7 +139,7 @@ const TaskList = () => {
                 <Table.DataCell>
                   <Button
                     as={Link}
-                    to={getPath(behandlingId, typeId)}
+                    to={`/behandling/${behandlingId}`}
                     variant="secondary-neutral"
                     size="small"
                     target="_blank"
@@ -184,19 +183,4 @@ const SkeletonRow = ({ height }: { height: number }) => (
 );
 const DOMAIN = ENVIRONMENT.isProduction ? 'https://kabal.intern.nav.no' : 'https://kabal.intern.dev.nav.no';
 
-const TYPE_TO_PATH: Record<SaksTypeEnum, string> = {
-  [SaksTypeEnum.KLAGE]: 'klagebehandling',
-  [SaksTypeEnum.ANKE]: 'ankebehandling',
-  [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: 'trygderettsankebehandling',
-  [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: 'behandling-etter-tr-opphevet',
-  [SaksTypeEnum.OMGJØRINGSKRAV]: 'omgjøringskravbehandling',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: 'begjaering-om-gjenopptak-behandling',
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: 'begjaering-om-gjenopptak-i-tr-behandling',
-};
-
-const toCopyLine = ({ typeId, behandlingId, reason }: Task) => `${getUrl(behandlingId, typeId)} - ${reason}`;
-
-type UrlFn = (id: string, typeId: SaksTypeEnum) => string;
-
-const getUrl: UrlFn = (...args) => `${DOMAIN}${getPath(...args)}`;
-const getPath: UrlFn = (id, typeId) => `/${TYPE_TO_PATH[typeId]}/${id}`;
+const toCopyLine = ({ behandlingId, reason }: Task) => `${DOMAIN}/behandling/${behandlingId} - ${reason}`;
