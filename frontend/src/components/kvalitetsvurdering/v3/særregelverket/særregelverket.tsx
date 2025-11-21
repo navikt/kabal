@@ -60,7 +60,7 @@ export const Særregelverket = () => {
       >
         <HStack gap="4" width="100%">
           <Radio value={Radiovalg.BRA} disabled={!canEdit}>
-            Riktig / Ikke kvalitetsavvik
+            Riktig / ikke kvalitetsavvik
           </Radio>
           <Radio value={Radiovalg.MANGELFULLT} disabled={!canEdit}>
             Mangelfullt/kvalitetsavvik
@@ -74,7 +74,7 @@ export const Særregelverket = () => {
           update={update}
           childList={CHECKBOXES}
           groupErrorField={SærregelverketErrorFields.saerregelverkGroup}
-          label="Hva er mangelfullt/kvalitetsavvik?"
+          label="Hva er mangelfullt/kvalitetsavviket?"
         />
       ) : null}
     </section>
@@ -84,6 +84,7 @@ export const Særregelverket = () => {
 const CHECKBOXES: CheckboxParams[] = [
   getCheckbox({
     field: SærregelverketBoolean.saerregelverkLovenErTolketEllerAnvendtFeil,
+    groupErrorField: SærregelverketErrorFields.saerregelverkLovenErTolketEllerAnvendtFeilGroup,
     childList: [
       getCheckbox({
         field: SærregelverketBoolean.saerregelverkVedtaketByggerPaaFeilHjemmelEllerLovtolkning,

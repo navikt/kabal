@@ -11,6 +11,7 @@ import type {
 interface BaseParams {
   label: string;
   helpText?: string;
+  groupErrorField?: GroupErrorField;
 }
 
 export type GroupErrorField = SærregelverketErrorFields | SaksbehandlingsregleneErrorFields | TrygdemedisinErrorFields;

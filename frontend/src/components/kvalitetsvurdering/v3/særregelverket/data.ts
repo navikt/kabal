@@ -50,11 +50,11 @@ export const SÆRREGELVERKET_LABELS: Record<Fields, string> = {
     'Vedtaket bygger på feil konkret rettsanvendelse eller skjønnsutøvelse',
   [SærregelverketBoolean.saerregelverkDetErLagtTilGrunnFeilFaktum]: 'Det er lagt til grunn feil faktum i vedtaket',
   [SærregelverketHjemlerFromYtelseList.saerregelverkVedtaketByggerPaaFeilHjemmelEllerLovtolkningHjemlerList]:
-    'Vedtaket bygger på feil hjemmel eller lovtolkning',
+    'Hjemler for «Vedtaket bygger på feil hjemmel eller lovtolkning»',
   [SærregelverketSaksdataHjemlerList.saerregelverkVedtaketByggerPaaFeilKonkretRettsanvendelseEllerSkjoennHjemlerList]:
-    'Vedtaket bygger på feil konkret rettsanvendelse eller skjønnsutøvelse',
+    'Hjemler for «Vedtaket bygger på feil konkret rettsanvendelse eller skjønnsutøvelse»',
   [SærregelverketSaksdataHjemlerList.saerregelverkDetErLagtTilGrunnFeilFaktumHjemlerList]:
-    'Vedtaket er lagt til grunn feil faktum i vedtaket',
+    'Hjemler for «Vedtaket er lagt til grunn feil faktum i vedtaket»',
 };
 
 export const SÆRREGELVERKET_ERROR_LABELS: Record<SærregelverketErrorFields, string> = {

@@ -73,15 +73,7 @@ export type AllSaksbehandlingsregleneBoolean =
   | OmgjoeringBoolean
   | KlartSpraakBoolean;
 
-type Fields =
-  | VeiledningspliktenBoolean
-  | UtredningspliktenBoolean
-  | ForeleggelsespliktenBoolean
-  | BegrunnelsespliktenBoolean
-  | KlageOgKlageforberedelsenBoolean
-  | OmgjoeringBoolean
-  | JournalfoeringspliktenBoolean
-  | KlartSpraakBoolean;
+type Fields = AllSaksbehandlingsregleneBoolean | BegrunnelsespliktenSaksdataHjemlerLists;
 
 const FIELDS = Object.values({
   ...VeiledningspliktenBoolean,
@@ -92,6 +84,7 @@ const FIELDS = Object.values({
   ...OmgjoeringBoolean,
   ...JournalfoeringspliktenBoolean,
   ...KlartSpraakBoolean,
+  ...BegrunnelsespliktenSaksdataHjemlerLists,
 });
 
 export const isSaksbehandlingsregleneField = (value: string): value is Fields => FIELDS.some((f) => f === value);
@@ -189,6 +182,13 @@ export const SAKSBEHANDLINGSREGLENE_LABELS: Record<Fields, string> = {
     'Språket i vedtaket er ikke klart nok',
   [KlartSpraakBoolean.saksbehandlingsreglerBruddPaaKlartSprakSpraketIOversendelsesbrevetsErIkkeKlartNok]:
     'Språket i oversendelsesbrevet er ikke klart nok',
+
+  [BegrunnelsespliktenSaksdataHjemlerLists.saksbehandlingsreglerBegrunnelsespliktenBegrunnelsenViserIkkeTilRegelverketHjemlerList]:
+    'Hjemler for «Begrunnelsen viser ikke til regelverket som vedtaket bygger på»',
+  [BegrunnelsespliktenSaksdataHjemlerLists.saksbehandlingsreglerBegrunnelsespliktenBegrunnelsenNevnerIkkeFaktumHjemlerList]:
+    'Hjemler for «Begrunnelsen nevner ikke hvilket faktum som vedtaket bygger på»',
+  [BegrunnelsespliktenSaksdataHjemlerLists.saksbehandlingsreglerBegrunnelsespliktenBegrunnelsenNevnerIkkeAvgjoerendeHensynHjemlerList]:
+    'Hjemler for «Begrunnelsen nevner ikke de hensyn som har vært avgjørende for den konkrete rettsanvendelsen eller skjønnsutøvelsen som vedtaket bygger på»',
 };
 
 export const SAKSBEHANDLINGSREGLENE_ERROR_LABELS: Record<SaksbehandlingsregleneErrorFields, string> = {
