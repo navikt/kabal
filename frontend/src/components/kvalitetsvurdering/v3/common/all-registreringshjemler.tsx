@@ -1,5 +1,6 @@
 import { LovhjemmelSelect } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel-select';
 import { SelectedHjemlerList } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/selected-hjemler-list';
+import { useValidationError } from '@app/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import type {
   KvalitetsvurderingAllRegistreringshjemlerV3,
@@ -17,6 +18,7 @@ interface AllRegistreringshjemlerProps {
 export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshjemlerProps) => {
   const { update, isLoading, kvalitetsvurdering } = useKvalitetsvurderingV3();
   const canEdit = useCanEditBehandling();
+  const error = useValidationError(field);
 
   if (isLoading) {
     return null;
@@ -35,7 +37,7 @@ export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshj
   return (
     <div style={{ width: 400 }}>
       {canEdit ? (
-        <LovhjemmelSelect onChange={onChange} selected={selected} showFjernAlle show openDirection="down">
+        <LovhjemmelSelect onChange={onChange} selected={selected} showFjernAlle show openDirection="down" error={error}>
           Velg hjemmel/hjemler
         </LovhjemmelSelect>
       ) : null}

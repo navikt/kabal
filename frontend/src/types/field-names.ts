@@ -3,6 +3,10 @@ import {
   KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES,
   KVALITETSVURDERING_V2_FIELD_NAMES,
 } from '@app/components/kvalitetsvurdering/v2/common/use-field-name';
+import {
+  KVALITETSVURDERING_V3_CHECKBOX_GROUP_NAMES,
+  KVALITETSVURDERING_V3_FIELD_NAMES,
+} from '@app/components/kvalitetsvurdering/v3/common/use-field-name';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 
 export enum UtvidetBehandlingstidFieldName {
@@ -29,7 +33,9 @@ export const UTVIDET_BEHANDLINGSTID_FIELD_NAMES: Record<UtvidetBehandlingstidFie
 export const DEFAULT_FIELD_NAMES = {
   ...KVALITETSVURDERING_V1_FIELD_NAMES,
   ...KVALITETSVURDERING_V2_FIELD_NAMES,
+  ...KVALITETSVURDERING_V3_FIELD_NAMES,
   ...KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES,
+  ...KVALITETSVURDERING_V3_CHECKBOX_GROUP_NAMES,
   ...UTVIDET_BEHANDLINGSTID_FIELD_NAMES,
   vedtaksdokument: 'Vedtaksdokument',
   utfall: 'Utfall/resultat',

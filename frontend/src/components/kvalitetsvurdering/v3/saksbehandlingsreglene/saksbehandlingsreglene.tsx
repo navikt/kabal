@@ -50,7 +50,7 @@ export const Saksbehandlingsreglene = () => {
       >
         <HStack gap="4" width="100%" wrap={false}>
           <Radio value={Radiovalg.BRA} disabled={!canEdit}>
-            Riktig/Ikke kvalitetsavvik
+            Riktig / ikke kvalitetsavvik
           </Radio>
           <Radio value={Radiovalg.MANGELFULLT} disabled={!canEdit}>
             Mangelfullt/kvalitetsavvik
@@ -64,7 +64,7 @@ export const Saksbehandlingsreglene = () => {
           update={update}
           childList={CHECKBOXES}
           groupErrorField={SaksbehandlingsregleneErrorFields.saksbehandlingsreglerGroup}
-          label="Hva er mangelfullt/kvalitetsavvik?"
+          label="Hva er mangelfullt/kvalitetsavviket?"
         />
       ) : null}
     </section>
