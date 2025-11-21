@@ -9,9 +9,9 @@ on:
         default: true
         type: boolean
       e2e_tag:
-        description: "Tag of E2E image to run"
+        description: "Git ref (branch, tag or commit) of E2E image to run"
         required: false
-        default: latest
+        default: main
         type: string
     secrets:
       STATUS_API_KEY:
@@ -31,9 +31,9 @@ on:
         default: false
         type: boolean
       e2e_tag:
-        description: "Tag of E2E image to run"
+        description: "Git ref (branch, tag or commit) of E2E image to run"
         required: false
-        default: latest
+        default: main
         type: string
 
 run-name: Dev deploy of ${{ github.ref_name }}
