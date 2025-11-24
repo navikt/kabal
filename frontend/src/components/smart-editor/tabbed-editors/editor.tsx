@@ -339,7 +339,7 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: EditorWithNewCommentAndF
     <Sheet ref={setContainerElement} minHeight data-component="sheet" className="mr-4">
       <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
 
-      <KabalPlateEditor id={id} lang={lang} />
+      <KabalPlateEditor id={id} lang={lang} contentEditable="dynamic" />
     </Sheet>
   );
 };

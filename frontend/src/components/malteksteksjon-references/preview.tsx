@@ -90,7 +90,7 @@ const LoadedPreview = ({ id, value, maltekstseksjon }: LoadedPreviewProps) => {
           data-element="sheet"
         >
           <Plate<RichTextEditor> editor={editor} readOnly>
-            <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[lang]} />
+            <KabalPlateEditor id={id} contentEditable={false} lang={SPELL_CHECK_LANGUAGES[lang]} />
           </Plate>
         </BoxNew>
       </BoxNew>
