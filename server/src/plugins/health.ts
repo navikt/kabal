@@ -10,7 +10,14 @@ const log = getLogger('liveness');
 
 export const healthPlugin = fastifyPlugin(
   async (app) => {
-    app.get('/isAlive', (__, reply) => reply.status(200).type('text/plain').send('Alive'));
+    app.get('/isAlive', (__, reply) => {
+      if (!SMART_DOCUMENT_WRITE_ACCESS.isProcessing()) {
+        log.info({ msg: 'Document Write Access Kafka Consumer is not processing' });
+        return reply.status(503).type('text/plain').send('Document Write Access Kafka Consumer is not processing');
+      }
+
+      return reply.status(200).type('text/plain').send('Ready');
+    });
 
     app.get('/isReady', async (__, reply) => {
       const isAzureClientReady = getIsAzureClientReady();
