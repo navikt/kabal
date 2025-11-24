@@ -6,30 +6,28 @@ import {
   PlateContent,
   type PlateContentProps,
   type PlateEditor,
-  useEditorReadOnly,
   useEditorRef,
 } from '@platejs/core/react';
 import type { TText } from 'platejs';
 
-interface Props extends PlateContentProps {
+interface Props extends Omit<PlateContentProps, 'contentEditable'> {
   lang: SpellCheckLanguage;
+  contentEditable?: boolean | undefined | 'dynamic';
 }
 
-export const KabalPlateEditor = ({ className, spellCheck = true, ...props }: Props) => {
+export const KabalPlateEditor = ({ className, contentEditable, spellCheck = true, ...props }: Props) => {
   const editor = useEditorRef();
-  const readOnly = useEditorReadOnly();
 
   return (
     <PlateContainer>
       <PlateContent
         {...props}
-        readOnly={readOnly || props.readOnly}
         className={merge('min-h-full outline-none', className)}
         spellCheck={spellCheck}
         renderLeaf={({ attributes, children, text }) => (
           <span
             {...attributes}
-            contentEditable={readOnly ? false : getContentEditable(editor, text)}
+            contentEditable={contentEditable === 'dynamic' ? getContentEditable(editor, text) : contentEditable}
             suppressContentEditableWarning
           >
             {children}
