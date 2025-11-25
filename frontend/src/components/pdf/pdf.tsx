@@ -1,6 +1,7 @@
 import { AppTheme, useAppTheme } from '@app/app-theme';
 import { toast } from '@app/components/toast/store';
 import { Section } from '@app/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@app/environment';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { isKabalApiErrorData, type KabalApiErrorData } from '@app/types/errors';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
@@ -110,25 +111,48 @@ export const usePdfData = (url: string | undefined, query?: Record<string, strin
 
       const response = await fetch(`${url}?${params.toString()}`, { signal });
 
-      if (!response.ok) {
-        const json = await response.json();
+      if (response.ok) {
+        const blob = await response.blob();
 
-        if (isKabalApiErrorData(json)) {
-          setError(`${json.title}: ${json.status} - ${json.detail}`);
-          toast.error(<ErrorMessage error={json} />);
-        } else {
-          const text = await response.text();
-
-          setError(text);
-          toast.error(<ErrorMessage error={text} />);
-        }
-
-        return undefined;
+        return `${URL.createObjectURL(blob)}${PDFparams}`;
       }
 
-      const blob = await response.blob();
+      const { status } = response;
 
-      return `${URL.createObjectURL(blob)}${PDFparams}`;
+      if (status === 401) {
+        setError('Ikke innlogget');
+        toast.error(<ErrorMessage error="Ikke innlogget" />);
+
+        if (ENVIRONMENT.isDeployed) {
+          window.location.assign('/oauth2/login');
+        }
+
+        return;
+      }
+
+      if (!(response.headers.get('content-type')?.includes('application/json') ?? false)) {
+        const text = await response.text();
+
+        setError(text);
+        toast.error(<ErrorMessage error={text} />);
+
+        return;
+      }
+
+      const json = await response.json();
+
+      if (isKabalApiErrorData(json)) {
+        setError(`${json.title}: ${json.status} - ${json.detail}`);
+        toast.error(<ErrorMessage error={json} />);
+
+        return;
+      }
+
+      const text = JSON.stringify(json);
+      setError(`Ukjent feil (${status}) - ${text}`);
+      toast.error(<ErrorMessage error={{ status, title: 'Ukjent feil', type: 'about:blank', detail: text }} />);
+
+      return;
     } catch (e) {
       if (e instanceof DOMException && e.name === 'AbortError') {
         return;
