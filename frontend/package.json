@@ -47,7 +47,7 @@
     "@platejs/resizable": "51.0.0",
     "@platejs/table": "51.0.0",
     "@platejs/utils": "51.0.0",
-    "@platejs/yjs": "51.0.0",
+    "@platejs/yjs": "51.1.0",
     "@reduxjs/toolkit": "2.10.0",
     "@slate-yjs/core": "1.0.2",
     "@styled-icons/fluentui-system-regular": "10.47.0",

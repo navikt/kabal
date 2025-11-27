@@ -24,7 +24,7 @@
         "@platejs/resizable": "51.0.0",
         "@platejs/table": "51.0.0",
         "@platejs/utils": "51.0.0",
-        "@platejs/yjs": "51.0.0",
+        "@platejs/yjs": "51.1.0",
         "@reduxjs/toolkit": "2.10.0",
         "@slate-yjs/core": "1.0.2",
         "@styled-icons/fluentui-system-regular": "10.47.0",
@@ -221,7 +221,7 @@
 
     "@platejs/utils": ["@platejs/utils@51.0.0", "", { "dependencies": { "@platejs/core": "51.0.0", "@platejs/slate": "49.2.21", "@udecode/react-utils": "49.0.15", "@udecode/utils": "47.2.7", "clsx": "^2.1.1", "lodash": "^4.17.21" }, "peerDependencies": { "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-Ze6vtP1+OkmEONRXoco8lLfpTPUvfY9pNiyo+zjb82QPgvOwZI7IJvMCA3PCB7LnoQnXP/1oTP8DVmkvk81gag=="],
 
-    "@platejs/yjs": ["@platejs/yjs@51.0.0", "", { "dependencies": { "@slate-yjs/core": "^1.0.2", "yjs": "^13.6.27" }, "peerDependencies": { "@hocuspocus/provider": "^2.15.2", "platejs": ">=51.0.0", "react": ">=18.0.0", "react-dom": ">=18.0.0", "y-webrtc": "10.3.0" } }, "sha512-yJ+tWlXB9uWezKYbhe1xPG0nM1iLWIvHPZFlHj220m3M7biDENOQU+tti9+iEKOclOEVlcZxZw2vj+grs0/QIg=="],
+    "@platejs/yjs": ["@platejs/yjs@51.1.0", "", { "dependencies": { "@slate-yjs/core": "^1.0.2", "yjs": "^13.6.27" }, "peerDependencies": { "@hocuspocus/provider": "^2.15.2", "platejs": ">=51.0.0", "react": ">=18.0.0", "react-dom": ">=18.0.0", "y-webrtc": "10.3.0" } }, "sha512-GoPviwDz/qB3FEL0YZxssxuWQGs2DA392xOhBWa3+w9LqBldAAp+7j9AN8YxFeGMMOuVIrFAzeTKHhKsOImElQ=="],
 
     "@protobufjs/aspromise": ["@protobufjs/aspromise@1.1.2", "", {}, "sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ=="],
 
