@@ -10,7 +10,7 @@
         "@hocuspocus/provider": "3.4.0",
         "@navikt/aksel-icons": "7.33.0",
         "@navikt/ds-css": "7.33.0",
-        "@navikt/ds-react": "7.33.0",
+        "@navikt/ds-react": "7.33.5",
         "@navikt/ds-tailwind": "7.33.0",
         "@navikt/fnrvalidator": "2.1.5",
         "@platejs/autoformat": "51.0.0",
@@ -155,11 +155,11 @@
 
     "@navikt/ds-css": ["@navikt/ds-css@7.33.0", "https://npm.pkg.github.com/download/@navikt/ds-css/7.33.0/7b85136c9fa05cee3e4c0ccc191e2f3758df4069", {}, "sha512-lEsQLHeq0WBSHt0O3YTBmViE1MrCAjkYjtUWDAWrbpdTX7mQRV2HP+LF5VcARQqgFmiFOILEWHbGo9lw3NApUw=="],
 
-    "@navikt/ds-react": ["@navikt/ds-react@7.33.0", "https://npm.pkg.github.com/download/@navikt/ds-react/7.33.0/50269f2d3762a9e0e510221b0a1f98f9f0946c15", { "dependencies": { "@floating-ui/react": "0.27.8", "@floating-ui/react-dom": "^2.1.6", "@navikt/aksel-icons": "^7.33.0", "@navikt/ds-tokens": "^7.33.0", "clsx": "^2.1.0", "date-fns": "^4.0.0", "react-day-picker": "9.7.0" }, "peerDependencies": { "@types/react": "^17.0.30 || ^18 || ^19", "react": "^17 || ^18 || ^19", "react-dom": "^17 || ^18 || ^19" } }, "sha512-BlOMH4iFaM6A2ztZfcU/YyZSIdaDp2Yw39RB1mw4SlPl1G3rLJerCdQfT/UcVw+LzQbECYjdgpIyrIlBtS0J9A=="],
+    "@navikt/ds-react": ["@navikt/ds-react@7.33.5", "https://npm.pkg.github.com/download/@navikt/ds-react/7.33.5/79ed6e20360cfa7dbe4a590f3d917de43b2772bc", { "dependencies": { "@floating-ui/react": "0.27.8", "@floating-ui/react-dom": "^2.1.6", "@navikt/aksel-icons": "^7.33.5", "@navikt/ds-tokens": "^7.33.5", "clsx": "^2.1.0", "date-fns": "^4.0.0", "react-day-picker": "9.7.0" }, "peerDependencies": { "@types/react": "^17.0.30 || ^18 || ^19", "react": "^17 || ^18 || ^19", "react-dom": "^17 || ^18 || ^19" } }, "sha512-+vsxfg7uEsF89eYoAhj9MHZ76a8t2ZAxBTYfsLzCZx1S2KtXHfydX3FiRqDls3rPkn5vEWeUExlZPyJd/DevhQ=="],
 
     "@navikt/ds-tailwind": ["@navikt/ds-tailwind@7.33.0", "https://npm.pkg.github.com/download/@navikt/ds-tailwind/7.33.0/fa97b7c31e710b3d29b2586b999bd67f69b62f99", {}, "sha512-X4SeSx/eKp+qF6qGxR0Jo2vp3/C57dqxgPT0rcVAnMkUabciHgSXlL7avC84lqfaMc1c7X1b3ZSMgb3bmig0TA=="],
 
-    "@navikt/ds-tokens": ["@navikt/ds-tokens@7.33.0", "https://npm.pkg.github.com/download/@navikt/ds-tokens/7.33.0/10a85aa9e28008862113acf6e8da12153de256b8", {}, "sha512-WKYiD2vz8SPaNjwHKOw/ZmIRoMdyVy8tMZZy4jM0eVr2wQR+nQQy8sVx9SHBue84Ysz3JPtNf0ozLj2RCpZpHA=="],
+    "@navikt/ds-tokens": ["@navikt/ds-tokens@7.34.0", "https://npm.pkg.github.com/download/@navikt/ds-tokens/7.34.0/aea8f6932bdf5aec384d1fbbeb5930c2c69dc6d1", {}, "sha512-herwHP6JZ3eSrJxIHuG/q8P105uCIH5wdPl0Wc1NasGO1poljDgFvtETyKXZ+8vDCMamxj9XYEDXGtp7PB9vfQ=="],
 
     "@navikt/fnrvalidator": ["@navikt/fnrvalidator@2.1.5", "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.1.5/e33cbc5693b14419bbcf4d5daee2ac9eeec532e5", {}, "sha512-uHzoL3ZTYwrF7OTKaihNf9xHH6S9WnGqz420HX4lEX+yu5367l+dYxI5OIRVT5MKWEDQ4DCVSAuJhoWValv6Fw=="],
 
@@ -726,6 +726,8 @@
     "@jridgewell/gen-mapping/@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.4", "", {}, "sha512-VT2+G1VQs/9oz078bLrYbecdZKs912zQlkelYpuf+SXF+QvZDYJlbx/LSx+meSAwdDFnF8FVXW92AVjjkVmgFw=="],
 
     "@jridgewell/trace-mapping/@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.4", "", {}, "sha512-VT2+G1VQs/9oz078bLrYbecdZKs912zQlkelYpuf+SXF+QvZDYJlbx/LSx+meSAwdDFnF8FVXW92AVjjkVmgFw=="],
+
+    "@navikt/ds-react/@navikt/aksel-icons": ["@navikt/aksel-icons@7.34.0", "https://npm.pkg.github.com/download/@navikt/aksel-icons/7.34.0/e0ec5f786c00d1ec4c24973b10c52b15f62ed988", {}, "sha512-WS7VHZxTu5qU2Bm2RtYYPH3NYs5M10xv/vuefZ+VfbKJQ/zeyY0Kgi9nqY4mkwmcA8YbYuA+1irU6gCriedi2Q=="],
 
     "@reduxjs/toolkit/redux": ["redux@5.0.1", "", {}, "sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w=="],
 

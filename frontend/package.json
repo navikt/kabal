@@ -33,7 +33,7 @@
     "@hocuspocus/provider": "3.4.0",
     "@navikt/aksel-icons": "7.33.0",
     "@navikt/ds-css": "7.33.0",
-    "@navikt/ds-react": "7.33.0",
+    "@navikt/ds-react": "7.33.5",
     "@navikt/ds-tailwind": "7.33.0",
     "@navikt/fnrvalidator": "2.1.5",
     "@platejs/autoformat": "51.0.0",
