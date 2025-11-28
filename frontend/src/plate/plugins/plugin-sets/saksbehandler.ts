@@ -8,6 +8,7 @@ import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { CommentsPlugin } from '@app/plate/plugins/comments';
 import { CurrentDatePlugin } from '@app/plate/plugins/current-date';
 import { EmptyVoidPlugin } from '@app/plate/plugins/empty-void';
+import { FloatingSaksbehandlerToolbarPlugin } from '@app/plate/plugins/floating-toolbar';
 import { FullmektigPlugin } from '@app/plate/plugins/fullmektig';
 import { FooterPlugin, HeaderPlugin } from '@app/plate/plugins/header-footer';
 import { LabelContentPlugin } from '@app/plate/plugins/label-content';
@@ -43,7 +44,7 @@ export const components = {
   [BaseTableRowPlugin.key]: TableRowElement,
 };
 
-export const saksbehandlerPlugins = [
+export const historyPlugins = [
   ...defaultPlugins,
   SaksbehandlerPlaceholderPlugin,
   MaltekstseksjonPlugin,
@@ -62,3 +63,5 @@ export const saksbehandlerPlugins = [
   BookmarkPlugin,
   SaksnummerPlugin,
 ];
+
+export const saksbehandlerPlugins = [...historyPlugins, FloatingSaksbehandlerToolbarPlugin];

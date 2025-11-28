@@ -42,6 +42,7 @@
     "@platejs/core": "51.0.0",
     "@platejs/cursor": "51.0.0",
     "@platejs/docx": "51.0.0",
+    "@platejs/floating": "52.0.1",
     "@platejs/indent": "51.0.0",
     "@platejs/list-classic": "51.0.0",
     "@platejs/resizable": "51.0.0",

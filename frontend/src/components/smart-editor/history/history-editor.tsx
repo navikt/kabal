@@ -4,7 +4,7 @@ import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushEvent } from '@app/observability';
 import { KabalPlateEditor } from '@app/plate/plate-editor';
-import { components, saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
+import { components, historyPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
@@ -26,9 +26,9 @@ export const HistoryEditor = memo(
 
     const id = `${smartDocument.id}-${versionId}`;
 
-    const editor = usePlateEditor<KabalValue, (typeof saksbehandlerPlugins)[0]>({
+    const editor = usePlateEditor<KabalValue, (typeof historyPlugins)[0]>({
       id,
-      plugins: saksbehandlerPlugins,
+      plugins: historyPlugins,
       override: {
         components: components,
       },

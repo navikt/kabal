@@ -3,7 +3,7 @@ import { BASE_FONT_SIZE_PX } from '@app/plate/components/get-scaled-em';
 import type { RichTextEditor } from '@app/plate/types';
 import type { BasePoint } from 'slate';
 
-export interface IRangePosition {
+interface IRangePosition {
   /** em */
   top: number;
   /** em */
