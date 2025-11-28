@@ -73,7 +73,7 @@ export const RedaktoerRichText = ({
             <Sheet ref={ref} minHeight={false} scaleCssVar={getScaleVarName(ScalingGroup.REDAKTØR)}>
               <RedaktoerTableToolbar container={ref.current} editorId={editorId} />
 
-              <KabalPlateEditor id={editorId} readOnly={readOnly} onFocus={onFocus} lang={lang} />
+              <KabalPlateEditor id={editorId} contentEditable={!readOnly} onFocus={onFocus} lang={lang} />
             </Sheet>
           </BoxNew>
         </VStack>

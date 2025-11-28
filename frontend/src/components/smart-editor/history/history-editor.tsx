@@ -89,7 +89,7 @@ const HistoryContent = ({ id, version }: HistoryContentProps) => {
 
   return (
     <Sheet minHeight>
-      <KabalPlateEditor id={id} readOnly lang={lang} />
+      <KabalPlateEditor id={id} contentEditable={false} lang={lang} />
     </Sheet>
   );
 };

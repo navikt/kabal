@@ -106,7 +106,7 @@ export const GodFormulering = ({
               className={`after:absolute after:bottom-0 after:left-0 after:h-10 after:w-full after:bg-linear-to-t after:from-ax-bg-neutral-soft after:via-20% after:via-ax-bg-neutral-soft after:to-transparent [&>:first-child]:mt-0 ${isFullRichText ? 'after:hidden' : 'after:block'}`}
             >
               <Plate<RichTextEditor> editor={editor} readOnly>
-                <KabalPlateEditor id={id} readOnly lang={SPELL_CHECK_LANGUAGES[language]} />
+                <KabalPlateEditor id={id} contentEditable={undefined} lang={SPELL_CHECK_LANGUAGES[language]} />
               </Plate>
             </BoxNew>
             <ShowMore
