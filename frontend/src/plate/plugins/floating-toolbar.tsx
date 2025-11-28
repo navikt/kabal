@@ -55,6 +55,7 @@ const FloatingToolbar = ({ children }: { children: ReactNode }) => {
   return (
     <BoxNew
       {...props}
+      style={{ ...props.style, zIndex: 21 }}
       ref={ref}
       as="section"
       shadow="dialog"
