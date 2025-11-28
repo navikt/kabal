@@ -2,6 +2,7 @@ import { merge } from '@app/functions/classes';
 import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { isEditableTextNode } from '@app/plate/functions/is-editable-text';
 import {
+  PlateContainer,
   PlateContent,
   type PlateContentProps,
   type PlateEditor,
@@ -19,21 +20,23 @@ export const KabalPlateEditor = ({ className, spellCheck = true, ...props }: Pro
   const readOnly = useEditorReadOnly();
 
   return (
-    <PlateContent
-      {...props}
-      readOnly={readOnly || props.readOnly}
-      className={merge('min-h-full outline-none', className)}
-      spellCheck={spellCheck}
-      renderLeaf={({ attributes, children, text }) => (
-        <span
-          {...attributes}
-          contentEditable={readOnly ? false : getContentEditable(editor, text)}
-          suppressContentEditableWarning
-        >
-          {children}
-        </span>
-      )}
-    />
+    <PlateContainer>
+      <PlateContent
+        {...props}
+        readOnly={readOnly || props.readOnly}
+        className={merge('min-h-full outline-none', className)}
+        spellCheck={spellCheck}
+        renderLeaf={({ attributes, children, text }) => (
+          <span
+            {...attributes}
+            contentEditable={readOnly ? false : getContentEditable(editor, text)}
+            suppressContentEditableWarning
+          >
+            {children}
+          </span>
+        )}
+      />
+    </PlateContainer>
   );
 };
 

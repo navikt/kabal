@@ -20,7 +20,6 @@ import { components, saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets
 import { Sheet } from '@app/plate/sheet';
 import { getScaleVar } from '@app/plate/status-bar/scale-context';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
-import { FloatingSaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
@@ -338,7 +337,6 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: EditorWithNewCommentAndF
 
   return (
     <Sheet ref={setContainerElement} minHeight data-component="sheet" className="mr-4">
-      <FloatingSaksbehandlerToolbar container={containerElement} editorId={id} />
       <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
 
       <KabalPlateEditor id={id} lang={lang} />

@@ -9,7 +9,6 @@ import { redaktørComponents, redaktørPlugins } from '@app/plate/plugins/plugin
 import { Sheet } from '@app/plate/sheet';
 import { getScaleVarName } from '@app/plate/status-bar/scale-context';
 import { StatusBar } from '@app/plate/status-bar/status-bar';
-import { FloatingRedaktoerToolbar } from '@app/plate/toolbar/toolbars/floating-toolbar';
 import { RedaktoerToolbar } from '@app/plate/toolbar/toolbars/redaktoer-toolbar';
 import { RedaktoerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
@@ -72,8 +71,6 @@ export const RedaktoerRichText = ({
             {readOnly === true ? null : <RedaktoerToolbar />}
 
             <Sheet ref={ref} minHeight={false} scaleCssVar={getScaleVarName(ScalingGroup.REDAKTØR)}>
-              <FloatingRedaktoerToolbar container={ref.current} editorId={editorId} />
-
               <RedaktoerTableToolbar container={ref.current} editorId={editorId} />
 
               <KabalPlateEditor id={editorId} readOnly={readOnly} onFocus={onFocus} lang={lang} />
