@@ -1,5 +1,5 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import { OpenOppgavebehandling } from '@app/components/common-table-components/open';
+import { OpenForRoleAccess } from '@app/components/common-table-components/open';
 import { CountdownButton } from '@app/components/countdown-button/countdown-button';
 import { ActionToast } from '@app/components/toast/action-toast';
 import { toast } from '@app/components/toast/store';
@@ -146,18 +146,17 @@ const Tildelt = ({
     <ActionToast
       attrs={{ 'data-oppgaveid': oppgaveId, 'data-testid': 'oppgave-tildelt-toast' }}
       primary={
-        <OpenOppgavebehandling
+        <OpenForRoleAccess
           size="small"
           variant="secondary-neutral"
           id={oppgaveId}
-          typeId={oppgaveType}
           ytelseId={ytelseId}
           tildeltSaksbehandlerident={toSaksbehandler?.navIdent ?? null}
           medunderskriverident={null}
           rol={null}
         >
           Åpne
-        </OpenOppgavebehandling>
+        </OpenForRoleAccess>
       }
       secondary={secondary}
     >

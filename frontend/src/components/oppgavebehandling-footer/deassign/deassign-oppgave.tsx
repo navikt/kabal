@@ -100,6 +100,7 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
           typeId={oppgave.typeId}
           ytelseId={oppgave.ytelseId}
           hjemmelIdList={oppgave.hjemmelIdList}
+          tildeltSaksbehandler={oppgave.saksbehandler?.navIdent ?? null}
           redirect
         />
       ) : null}

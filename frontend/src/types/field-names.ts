@@ -51,6 +51,9 @@ export const DEFAULT_FIELD_NAMES = {
   gosysOppgaveInput: 'Oppgaven fra Gosys er ferdigstilt',
   gosysOppgave: 'Oppgave fra Gosys',
   gosysOppgaveUpdate: 'Oppdatering av oppgave fra Gosys',
+  rol: 'Rådgivende overlege',
+  medunderskriver: 'Medunderskriver',
+  notifications: 'Varsler',
 };
 
 const ANKE_I_TRYGDERETTEN_FIELD_NAMES = {

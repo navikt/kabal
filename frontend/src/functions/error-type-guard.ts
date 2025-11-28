@@ -6,15 +6,24 @@ export interface IValidationError {
   field: keyof typeof DEFAULT_FIELD_NAMES;
 }
 
-export enum SECTION_KEY {
+export enum SectionKey {
   BEHANDLING = 'behandling',
   KVALITETSVURDERING = 'kvalitetsvurdering',
   DOKUMENTER = 'dokumenter',
   FORLENGET_BEHANDLINGSTID_DRAFT = 'forlengetBehandlingstidDraft',
+  NOTIFICATIONS = 'notifications',
 }
 
+export const SECTION_TITLES: Record<SectionKey, string> = {
+  [SectionKey.BEHANDLING]: 'Behandling',
+  [SectionKey.KVALITETSVURDERING]: 'Kvalitetsvurdering',
+  [SectionKey.DOKUMENTER]: 'Dokumenter',
+  [SectionKey.FORLENGET_BEHANDLINGSTID_DRAFT]: 'Endre frist',
+  [SectionKey.NOTIFICATIONS]: 'Varsler',
+};
+
 export interface IValidationSection extends GenericObject {
-  section: SECTION_KEY;
+  section: SectionKey;
   properties: IValidationError[];
 }
 

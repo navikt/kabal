@@ -53,6 +53,7 @@ spec:
         - application: kabal-innstillinger
         - application: klage-kodeverk-api
         - application: kabal-text-templates
+        - application: klage-notifications-api
         - application: logging
           namespace: nais-system
       external:

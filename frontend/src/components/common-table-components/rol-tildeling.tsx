@@ -1,5 +1,5 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
-import { OpenOppgavebehandling } from '@app/components/common-table-components/open';
+import { OpenForRoleAccess } from '@app/components/common-table-components/open';
 import { ActionToast } from '@app/components/toast/action-toast';
 import { toast } from '@app/components/toast/store';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
@@ -24,7 +24,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
   }
 
   const OpenButton = (
-    <OpenOppgavebehandling {...oppgave} medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null} />
+    <OpenForRoleAccess {...oppgave} medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null} />
   );
 
   const fradel = async () => {

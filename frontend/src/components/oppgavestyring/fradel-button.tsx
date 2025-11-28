@@ -94,7 +94,14 @@ export const FradelButton = (props: IOppgave) => {
   return null;
 };
 
-const Deassign = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave): React.JSX.Element | null => {
+const Deassign = ({
+  id,
+  typeId,
+  ytelseId,
+  sattPaaVent,
+  hjemmelIdList,
+  tildeltSaksbehandlerident,
+}: IOppgave): React.JSX.Element | null => {
   const [, { isLoading }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
   const [paaVentWarningIsOpen, setPaaVentWarningIsOpen] = useState(false);
   const [reasonPopupDirection, setReasonPopupDirection] = useState<Direction | null>(null);
@@ -155,6 +162,7 @@ const Deassign = ({ id, typeId, ytelseId, sattPaaVent, hjemmelIdList }: IOppgave
           typeId={typeId}
           ytelseId={ytelseId}
           hjemmelIdList={hjemmelIdList}
+          tildeltSaksbehandler={tildeltSaksbehandlerident}
         />
       ) : null}
     </HStack>

@@ -16,7 +16,7 @@ export const Type = ({ type, size = 'small' }: Props) => {
   }
 
   return (
-    <Tag variant={SAKSTYPE_TO_TAG_VARIANT[type]} size={size} className="truncate">
+    <Tag variant={SAKSTYPE_TO_TAG_VARIANT[type]} size={size}>
       {typeName}
     </Tag>
   );

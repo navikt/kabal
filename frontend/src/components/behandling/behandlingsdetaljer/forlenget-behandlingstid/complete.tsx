@@ -1,4 +1,4 @@
-import { type IValidationSection, isReduxValidationResponse, SECTION_KEY } from '@app/functions/error-type-guard';
+import { type IValidationSection, isReduxValidationResponse, SectionKey } from '@app/functions/error-type-guard';
 import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import {
   useCompleteMutation,
@@ -55,7 +55,7 @@ export const Complete = ({ id, onClose, setError }: Props) => {
                 } else {
                   setError([
                     {
-                      section: SECTION_KEY.FORLENGET_BEHANDLINGSTID_DRAFT,
+                      section: SectionKey.FORLENGET_BEHANDLINGSTID_DRAFT,
                       properties: [
                         { reason: 'Ukjent feil', field: UtvidetBehandlingstidFieldName.ForlengetBehandlingstidDraft },
                       ],
