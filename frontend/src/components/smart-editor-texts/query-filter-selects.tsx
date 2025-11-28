@@ -1,3 +1,4 @@
+import { Filter } from '@app/components/filter-dropdown/filter';
 import { NestedFilterList, type NestedOption } from '@app/components/filter-dropdown/nested-filter-list';
 import type { IOption } from '@app/components/filter-dropdown/props';
 import { useKlageenheterOptions } from '@app/components/smart-editor-texts/hooks/use-options';
@@ -7,7 +8,6 @@ import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
 import { getTemplateOptions } from './get-template-options';
 
 interface UtfallSelectProps {
@@ -28,15 +28,9 @@ export const UtfallSelect = ({ children, selected, onChange, options }: UtfallSe
   );
 
   return (
-    <FilterDropdown
-      options={_options}
-      selected={_selected}
-      onChange={_onChange}
-      data-testid="filter-utfall"
-      size="small"
-    >
+    <Filter options={_options} selected={_selected} onChange={_onChange} data-testid="filter-utfall">
       {children}
-    </FilterDropdown>
+    </Filter>
   );
 };
 
@@ -100,9 +94,9 @@ export const KlageenhetSelect = ({
   const options = includeNoneOption ? [NONE_OPTION, ...enheter] : enheter;
 
   return (
-    <FilterDropdown options={options} selected={selected} onChange={onChange} data-testid="filter-klageenhet">
+    <Filter options={options} selected={selected} onChange={onChange} data-testid="filter-klageenhet">
       {children}
-    </FilterDropdown>
+    </Filter>
   );
 };
 

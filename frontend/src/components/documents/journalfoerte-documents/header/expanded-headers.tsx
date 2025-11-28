@@ -1,5 +1,5 @@
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { Filter } from '@app/components/filter-dropdown/filter';
 import { kodeverkValuesToDropdownOptions } from '@app/components/filter-dropdown/functions';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
@@ -22,10 +22,6 @@ import { useMemo } from 'react';
 import { DateFilter } from './date-filter';
 import type { useFilters } from './use-filters';
 
-interface ExpandedHeadersProps extends ReturnType<typeof useFilters> {
-  listHeight: number;
-}
-
 export const ExpandedHeaders = ({
   selectedTemaer,
   setSelectedTemaer,
@@ -35,10 +31,9 @@ export const ExpandedHeaders = ({
   setSelectedSaksIds,
   selectedTypes,
   setSelectedTypes,
-  listHeight,
   sort,
   setSort,
-}: ExpandedHeadersProps) => {
+}: ReturnType<typeof useFilters>) => {
   const oppgaveId = useOppgaveId();
   const { data } = useGetArkiverteDokumenterQuery(oppgaveId);
   const { columns } = useArchivedDocumentsColumns();
@@ -75,19 +70,15 @@ export const ExpandedHeaders = ({
   return (
     <>
       {columns.TEMA ? (
-        <FilterDropdown
+        <Filter
           options={kodeverkValuesToDropdownOptions(allTemaer)}
           onChange={setSelectedTemaer}
           selected={selectedTemaer}
-          direction="left"
-          maxWidth="410px"
-          maxHeight={listHeight}
           style={{ gridArea: Fields.Tema }}
           data-testid="filter-tema"
-          size="small"
         >
           Tema
-        </FilterDropdown>
+        </Filter>
       ) : null}
 
       {columns.DATO_OPPRETTET ? (
@@ -105,51 +96,39 @@ export const ExpandedHeaders = ({
       ) : null}
 
       {columns.AVSENDER_MOTTAKER ? (
-        <FilterDropdown
+        <Filter
           options={avsenderMottakerOptions}
           onChange={setSelectedAvsenderMottakere}
           selected={selectedAvsenderMottakere}
-          direction="left"
-          maxWidth="410px"
-          maxHeight={listHeight}
           style={{ gridArea: Fields.AvsenderMottaker }}
           data-testid="filter-avsender-mottaker"
-          size="small"
         >
           Avsender/mottaker
-        </FilterDropdown>
+        </Filter>
       ) : null}
 
       {columns.SAKSNUMMER ? (
-        <FilterDropdown
+        <Filter
           options={saksIdOptions}
           onChange={setSelectedSaksIds}
           selected={selectedSaksIds}
-          direction="left"
-          maxWidth="410px"
-          maxHeight={listHeight}
           style={{ gridArea: Fields.Saksnummer }}
           data-testid="filter-saksnummer"
-          size="small"
         >
           Saksnummer
-        </FilterDropdown>
+        </Filter>
       ) : null}
 
       {columns.TYPE ? (
-        <FilterDropdown
+        <Filter
           options={JOURNALPOSTTYPE_OPTIONS}
           onChange={(types) => setSelectedTypes(types.filter(isJournalpostType))}
           selected={selectedTypes}
-          direction="left"
-          maxWidth="410px"
-          maxHeight={listHeight}
           style={{ gridArea: Fields.Type }}
           data-testid="filter-type"
-          size="small"
         >
           Type
-        </FilterDropdown>
+        </Filter>
       ) : null}
     </>
   );

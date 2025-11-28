@@ -1,4 +1,4 @@
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { Filter } from '@app/components/filter-dropdown/filter';
 import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-language/set-maltekstseksjon-language';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
@@ -142,15 +142,14 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
                     Maltekstseksjoner
                   </Table.ColumnHeader>
                   <Table.HeaderCell>
-                    <FilterDropdown<Status>
+                    <Filter<Status>
                       data-testid="filter-status"
                       selected={filteredStatuses}
                       options={STATUS_OPTIONS}
                       onChange={setFilteredStatuses}
-                      size="small"
                     >
                       Status
-                    </FilterDropdown>
+                    </Filter>
                   </Table.HeaderCell>
                   <Table.ColumnHeader>%</Table.ColumnHeader>
                   <Table.HeaderCell />

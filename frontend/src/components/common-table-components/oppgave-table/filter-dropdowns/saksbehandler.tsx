@@ -2,7 +2,7 @@ import { StaticDataContext } from '@app/components/app/static-data-context';
 import { navEmployeesToOptions } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/helpers';
 import { useOppgaveTableTildelteSaksbehandlere } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { Filter } from '@app/components/filter-dropdown/filter';
 import type { IOption } from '@app/components/filter-dropdown/props';
 import { useGetSaksbehandlereInEnhetQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Table } from '@navikt/ds-react';
@@ -17,14 +17,14 @@ export const Saksbehandler = ({ tableKey, columnKey }: FilterDropdownProps) => {
 
   return (
     <Table.ColumnHeader aria-sort="none">
-      <FilterDropdown
+      <Filter
         selected={tildelteSaksbehandlere ?? []}
         onChange={setTildelteSaksbehandlere}
         options={options}
         data-testid="filter-saksbehandler"
       >
         {TABLE_HEADERS[columnKey]}
-      </FilterDropdown>
+      </Filter>
     </Table.ColumnHeader>
   );
 };

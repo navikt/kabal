@@ -1,6 +1,6 @@
 import { useOppgaveTableTyper } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { Filter } from '@app/components/filter-dropdown/filter';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Table } from '@navikt/ds-react';
 import type { FilterDropdownProps } from './types';
@@ -17,14 +17,9 @@ export const Sakstype = ({ columnKey, tableKey }: FilterDropdownProps) => {
 
   return (
     <Table.ColumnHeader aria-sort="none">
-      <FilterDropdown<SaksTypeEnum>
-        selected={typer ?? []}
-        onChange={setTyper}
-        options={OPTIONS}
-        data-testid="filter-type"
-      >
+      <Filter<SaksTypeEnum> selected={typer ?? []} onChange={setTyper} options={OPTIONS} data-testid="filter-type">
         {TABLE_HEADERS[columnKey]}
-      </FilterDropdown>
+      </Filter>
     </Table.ColumnHeader>
   );
 };
@@ -34,7 +29,7 @@ export const SakstypeWithTrygderetten = ({ columnKey, tableKey }: FilterDropdown
 
   return (
     <Table.ColumnHeader aria-sort="none">
-      <FilterDropdown<SaksTypeEnum>
+      <Filter<SaksTypeEnum>
         selected={typer ?? []}
         onChange={setTyper}
         options={[
@@ -46,7 +41,7 @@ export const SakstypeWithTrygderetten = ({ columnKey, tableKey }: FilterDropdown
         data-testid="filter-type"
       >
         {TABLE_HEADERS[columnKey]}
-      </FilterDropdown>
+      </Filter>
     </Table.ColumnHeader>
   );
 };

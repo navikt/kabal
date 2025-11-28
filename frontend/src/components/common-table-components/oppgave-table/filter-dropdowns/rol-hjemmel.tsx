@@ -1,6 +1,6 @@
 import { useOppgaveTableHjemler } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { Filter } from '@app/components/filter-dropdown/filter';
 import type { IOption } from '@app/components/filter-dropdown/props';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
@@ -28,9 +28,9 @@ export const RolHjemmel = ({ tableKey, columnKey }: FilterDropdownProps) => {
 
   return (
     <Table.ColumnHeader aria-sort="none">
-      <FilterDropdown selected={hjemler ?? []} onChange={setHjemler} options={options} data-testid="filter-hjemler">
+      <Filter selected={hjemler ?? []} onChange={setHjemler} options={options} data-testid="filter-hjemler">
         {TABLE_HEADERS[columnKey]}
-      </FilterDropdown>
+      </Filter>
     </Table.ColumnHeader>
   );
 };

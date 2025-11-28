@@ -35,7 +35,7 @@ export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshj
   return (
     <>
       {canEdit ? (
-        <LovhjemmelSelect onChange={onChange} selected={selected} showFjernAlle show openDirection="down">
+        <LovhjemmelSelect onChange={onChange} selected={selected}>
           Velg hjemmel/hjemler
         </LovhjemmelSelect>
       ) : null}

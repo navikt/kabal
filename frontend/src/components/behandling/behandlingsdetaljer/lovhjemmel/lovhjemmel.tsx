@@ -31,16 +31,15 @@ export const Lovhjemmel = () => {
           formuleringer du kan sette inn i brevet, og hvilket regelverk som dukker opp i vedlegget nederst.
         </HelpText>
       </HStack>
-      <LovhjemmelSelect
-        disabled={!canEdit}
-        selected={oppgave.resultat.hjemmelIdSet}
-        onChange={onLovhjemmelChange}
-        error={validationError}
-        showFjernAlle={false}
-        show={canEdit}
-      >
-        Hjemmel
-      </LovhjemmelSelect>
+      {canEdit ? (
+        <LovhjemmelSelect
+          selected={oppgave.resultat.hjemmelIdSet}
+          onChange={onLovhjemmelChange}
+          error={validationError}
+        >
+          Hjemmel
+        </LovhjemmelSelect>
+      ) : null}
       <SelectedHjemlerList selected={selected} />
     </>
   );

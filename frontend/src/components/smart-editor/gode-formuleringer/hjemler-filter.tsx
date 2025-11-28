@@ -1,4 +1,4 @@
-import { ChipFilterDropdown } from '@app/components/filter-dropdown/chip-filter-dropdown';
+import { Filter } from '@app/components/filter-dropdown/filter';
 import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
@@ -26,8 +26,8 @@ export const HjemlerFilter = ({ selected, setSelected }: Props) => {
     .toSorted((a, b) => sortWithOrdinals(a.label, b.label));
 
   return (
-    <ChipFilterDropdown selected={selected} options={options} onChange={setSelected}>
+    <Filter selected={selected} options={options} onChange={setSelected}>
       Filtrer på hjemler
-    </ChipFilterDropdown>
+    </Filter>
   );
 };
