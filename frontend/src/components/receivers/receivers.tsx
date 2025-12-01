@@ -33,15 +33,7 @@ export const Receivers = ({
 
   const addMottakere = useCallback(
     (mottakere: IMottaker[]) => {
-      const newMottakere =
-        mottakerList.length === 0 &&
-        reachableSuggestedReceivers.length === 1 &&
-        dokumentTypeId !== DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN
-          ? [
-              ...reachableSuggestedReceivers.filter((s) => !mottakerList.some((m) => m.part.id === s.part.id)),
-              ...mottakerList,
-            ]
-          : [...mottakerList];
+      const newMottakere = [...mottakerList];
 
       let added = false;
 
@@ -60,7 +52,7 @@ export const Receivers = ({
         setMottakerList(newMottakere);
       }
     },
-    [mottakerList, setMottakerList, reachableSuggestedReceivers, dokumentTypeId],
+    [mottakerList, setMottakerList],
   );
 
   const removePartMottakere = useCallback(
@@ -150,30 +142,37 @@ export const Receivers = ({
 
   return (
     <VStack gap="4 0" position="relative" as="section" overflow="hidden">
-      <DefaultReceivers
-        selectedIds={mottakerList.map((m) => m.part.id)}
-        addMottakere={addMottakere}
-        removeMottakere={removePartMottakere}
-        changeMottaker={changeMottaker}
-        sendErrors={sendErrors}
-        templateId={templateId}
-        onlyOneReachable={onlyOneReachableReceiver}
-        receivers={reachableSuggestedReceivers}
-        dokumentTypeId={dokumentTypeId}
-        isLoading={isLoading}
-      />
+      {dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN ? (
+        <Alert variant="info" size="small" inline>
+          Forhåndsvalgt mottaker: Trygderetten
+        </Alert>
+      ) : (
+        <>
+          <DefaultReceivers
+            selectedIds={mottakerList.map((m) => m.part.id)}
+            addMottakere={addMottakere}
+            removeMottakere={removePartMottakere}
+            changeMottaker={changeMottaker}
+            sendErrors={sendErrors}
+            templateId={templateId}
+            onlyOneReachable={onlyOneReachableReceiver}
+            receivers={reachableSuggestedReceivers}
+            dokumentTypeId={dokumentTypeId}
+            isLoading={isLoading}
+          />
 
-      <UnreachableSuggestedReceivers receivers={unreachableSuggestedReceivers} />
+          <UnreachableSuggestedReceivers receivers={unreachableSuggestedReceivers} />
 
-      <CustomReceivers
-        mottakerList={customReceivers}
-        addMottakere={addMottakere}
-        removeMottaker={removeCustomMottaker}
-        changeMottaker={changeMottaker}
-        sendErrors={sendErrors}
-        templateId={templateId}
-        dokumentTypeId={dokumentTypeId}
-      />
+          <CustomReceivers
+            mottakerList={customReceivers}
+            addMottakere={addMottakere}
+            removeMottaker={removeCustomMottaker}
+            changeMottaker={changeMottaker}
+            sendErrors={sendErrors}
+            templateId={templateId}
+          />
+        </>
+      )}
 
       {reachableSuggestedReceivers.length === 0 && customReceivers.length === 0 ? (
         <Alert variant="warning" size="small">
@@ -204,18 +203,6 @@ interface DefaultReceiversProps {
 }
 
 const DefaultReceivers = ({ onlyOneReachable, receivers, dokumentTypeId, ...props }: DefaultReceiversProps) => {
-  if (dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN) {
-    return (
-      <>
-        <Alert variant="info" size="small" inline>
-          Forhåndsvalgt mottaker: Trygderetten
-        </Alert>
-
-        <SuggestedReceivers {...props} receivers={receivers} />
-      </>
-    );
-  }
-
   const [first, ...rest] = receivers;
 
   if (onlyOneReachable && first !== undefined) {
