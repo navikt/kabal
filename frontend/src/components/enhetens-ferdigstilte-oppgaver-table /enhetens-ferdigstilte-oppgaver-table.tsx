@@ -15,6 +15,7 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithTrygderetten,
   ColumnKeyEnum.Ytelse,
   ColumnKeyEnum.Registreringshjemler,
+  ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Finished,
   ColumnKeyEnum.Utfall,
   ColumnKeyEnum.PreviousSaksbehandler,
