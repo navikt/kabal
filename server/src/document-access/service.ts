@@ -6,7 +6,7 @@ import type { Metadata } from '@app/document-access/types';
 import { generateTraceId, getTraceIdAndSpanIdFromTraceparent } from '@app/helpers/traceparent';
 import { getLogger } from '@app/logger';
 import { proxyRegister } from '@app/prometheus/types';
-import { Consumer } from '@platformatic/kafka';
+import { Consumer, type MessagesStream } from '@platformatic/kafka';
 import client from 'prom-client';
 
 const log = getLogger('document-write-access-kafka-consumer');
@@ -48,8 +48,9 @@ class SmartDocumentWriteAccess {
     },
   });
 
-  #closeStream: (() => Promise<void>) | undefined;
+  #stream: MessagesStream<string, string, string, string> | null = null;
   #lifecycle_trace_id = generateTraceId();
+  #initTimestamp = Date.now();
 
   /**
    * Initializes the access list service.
@@ -57,11 +58,10 @@ class SmartDocumentWriteAccess {
    * 2. Create a Kafka consumer to listen for future changes.
    */
   async init(): Promise<void> {
+    this.#initTimestamp = Date.now();
     const trace_id = this.#lifecycle_trace_id;
 
     log.debug({ msg: 'Initializing Smart Document Write Access...', trace_id });
-
-    const initTimestamp = Date.now();
 
     try {
       log.debug({ msg: 'Connecting to Kafka brokers...', trace_id });
@@ -72,77 +72,17 @@ class SmartDocumentWriteAccess {
       const groupId = await this.#consumer.joinGroup({});
       log.debug({ msg: `Kafka consumer joined group ${groupId}`, trace_id, data: { group_id: groupId } });
 
-      log.debug({ msg: 'Kafka consumer starting stream...', trace_id });
-
       // Create a consumer stream to listen for future changes.
-      const stream = await this.#consumer.consume({
-        autocommit: false,
-        topics: ['klage.smart-document-write-access.v1'],
-        sessionTimeout: 10_000,
-        heartbeatInterval: 500,
-        mode: 'latest',
-      });
+      const initialStream = await this.#startConsumer(0);
 
       log.info({ msg: 'Kafka consumer stream started', trace_id });
 
-      this.#closeStream = async () => {
-        log.debug({ msg: 'Closing Kafka consumer stream...', trace_id });
-        await stream.close();
-        log.debug({ msg: 'Kafka consumer stream closed', trace_id });
-        this.#closeStream = undefined;
-      };
-
       const readyPromise = new Promise<void>((resolve) => {
-        stream.once('readable', () => {
+        initialStream.once('readable', () => {
           log.debug({ msg: 'Kafka stream readable', trace_id });
           resolve();
         });
       });
-
-      log.debug({ msg: 'Kafka consumer stream listener starting...', trace_id });
-
-      stream.on('data', ({ key: documentId, value, timestamp, headers }) => {
-        const traceparent = headers.get('traceparent');
-
-        const message_trace_id =
-          traceparent === undefined ? undefined : getTraceIdAndSpanIdFromTraceparent(traceparent)?.trace_id;
-
-        const payload = parseKafkaMessageValue(value, message_trace_id ?? trace_id);
-
-        if (payload === null) {
-          log.debug({
-            msg: 'Received tombstone message from Kafka, deleting access list entry',
-            trace_id: message_trace_id ?? trace_id,
-            data: { key: documentId },
-          });
-
-          this.#accessMap.delete(documentId);
-
-          this.#notifyHasAccessListeners(documentId, null);
-
-          return;
-        }
-
-        if (timestamp < initTimestamp && this.#accessMap.has(documentId)) {
-          return log.debug({
-            msg: 'Received outdated message from Kafka',
-            trace_id: message_trace_id ?? trace_id,
-            data: { key: documentId, payload },
-          });
-        }
-
-        log.debug({
-          msg: 'Received update message from Kafka',
-          trace_id: message_trace_id ?? trace_id,
-          data: { key: documentId, payload },
-        });
-
-        this.#accessMap.set(documentId, payload);
-
-        this.#notifyHasAccessListeners(documentId, payload);
-      });
-
-      log.debug({ msg: 'Kafka consumer stream listener started', trace_id });
 
       return readyPromise;
     } catch (error) {
@@ -151,6 +91,113 @@ class SmartDocumentWriteAccess {
       throw error;
     }
   }
+
+  #startConsumer = async (restartCount: number) => {
+    const trace_id = this.#lifecycle_trace_id;
+
+    log.debug({ msg: `Kafka consumer starting stream #${restartCount}...`, trace_id });
+
+    const stream = await this.#consumer.consume({
+      autocommit: false,
+      topics: ['klage.smart-document-write-access.v1'],
+      sessionTimeout: 10_000,
+      heartbeatInterval: 500,
+      mode: 'committed',
+    });
+
+    this.#stream = stream;
+
+    stream.on('error', async (err) => {
+      log.error({
+        msg: `Kafka consumer stream error, restarting consumer (${restartCount + 1})...`,
+        trace_id,
+        error: err,
+      });
+
+      await closeStream(stream, trace_id); // Close the old stream
+      await delay(5_000 * restartCount);
+      await this.#startConsumer(restartCount + 1); // Start a new stream
+      log.debug({ msg: 'Kafka consumer stream restarted', trace_id });
+    });
+
+    log.debug({ msg: 'Kafka consumer stream listener starting...', trace_id });
+
+    stream.on('data', async ({ key: documentId, value, timestamp, headers, commit }) => {
+      const traceparent = headers.get('traceparent');
+
+      const message_trace_id =
+        traceparent === undefined ? undefined : getTraceIdAndSpanIdFromTraceparent(traceparent)?.trace_id;
+
+      const payload = parseKafkaMessageValue(value, message_trace_id ?? trace_id);
+
+      if (payload === null) {
+        log.debug({
+          msg: 'Received tombstone message from Kafka, deleting access list entry',
+          trace_id: message_trace_id ?? trace_id,
+          data: { key: documentId },
+        });
+
+        this.#accessMap.delete(documentId);
+        this.#notifyHasAccessListeners(documentId, null);
+
+        try {
+          await commit();
+        } catch (error) {
+          log.error({
+            msg: 'Failed to commit tombstone message offset',
+            trace_id: message_trace_id ?? trace_id,
+            data: { key: documentId },
+            error,
+          });
+        }
+
+        return;
+      }
+
+      if (timestamp < this.#initTimestamp && this.#accessMap.has(documentId)) {
+        try {
+          await commit();
+        } catch (error) {
+          log.error({
+            msg: 'Failed to commit outdated message offset',
+            trace_id: message_trace_id ?? trace_id,
+            data: { key: documentId, payload },
+            error,
+          });
+        }
+
+        return log.debug({
+          msg: 'Received outdated message from Kafka',
+          trace_id: message_trace_id ?? trace_id,
+          data: { key: documentId, payload },
+        });
+      }
+
+      log.debug({
+        msg: 'Received update message from Kafka',
+        trace_id: message_trace_id ?? trace_id,
+        data: { key: documentId, payload },
+      });
+
+      this.#accessMap.set(documentId, payload);
+      this.#notifyHasAccessListeners(documentId, payload);
+
+      try {
+        await commit();
+      } catch (error) {
+        log.error({
+          msg: 'Failed to commit message offset',
+          trace_id: message_trace_id ?? trace_id,
+          data: { key: documentId, payload },
+          error,
+        });
+      }
+    });
+
+    log.debug({ msg: 'Kafka consumer stream listener started', trace_id });
+
+    return stream;
+  };
 
   hasAccess = async (
     documentId: string,
@@ -254,8 +301,12 @@ class SmartDocumentWriteAccess {
       errors.push('Kafka consumer is not active');
     }
 
-    if (this.#closeStream === undefined) {
+    if (this.#stream === null) {
       errors.push('Stream is not initialized');
+    }
+
+    if (this.#stream?.closed === true) {
+      errors.push('Stream is closed');
     }
 
     if (errors.length === 0) {
@@ -277,10 +328,10 @@ class SmartDocumentWriteAccess {
 
     log.debug({ msg: 'Closing Kafka consumer...', trace_id });
 
-    if (this.#closeStream === undefined) {
+    if (this.#stream === null) {
       log.debug({ msg: 'Kafka consumer stream not initialized, nothing to close', trace_id });
     } else {
-      await this.#closeStream?.();
+      await closeStream(this.#stream, trace_id);
     }
 
     log.debug({ msg: 'Kafka consumer leaving group...', trace_id });
@@ -300,5 +351,14 @@ class SmartDocumentWriteAccess {
     return accessList;
   };
 }
+
+const closeStream = async (stream: MessagesStream<string, string, string, string>, trace_id: string) => {
+  log.debug({ msg: 'Closing Kafka consumer stream...', trace_id });
+  stream.removeAllListeners();
+  await stream.close();
+  log.debug({ msg: 'Kafka consumer stream closed', trace_id });
+};
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const SMART_DOCUMENT_WRITE_ACCESS = new SmartDocumentWriteAccess();
