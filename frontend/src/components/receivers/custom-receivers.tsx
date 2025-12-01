@@ -6,7 +6,7 @@ import type { IErrorProperty } from '@app/components/receivers/is-send-error';
 import { Options } from '@app/components/receivers/options';
 import { StyledReceiver } from '@app/components/receivers/styled-components';
 import { TRYGDERETTEN_ORGNR } from '@app/constants';
-import { DistribusjonsType, type IdentifikatorMottaker, type IMottaker } from '@app/types/documents/documents';
+import type { IdentifikatorMottaker, IMottaker } from '@app/types/documents/documents';
 import { IdType } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
@@ -19,7 +19,6 @@ interface Props {
   changeMottaker: (mottaker: IMottaker) => void;
   sendErrors: IErrorProperty[];
   templateId: TemplateIdEnum | undefined;
-  dokumentTypeId?: DistribusjonsType;
 }
 
 const EXTRA_RECEIVERS_ID = 'extra-receivers';
@@ -31,7 +30,6 @@ export const CustomReceivers = ({
   changeMottaker,
   sendErrors,
   templateId,
-  dokumentTypeId,
 }: Props) => (
   <VStack overflow="hidden">
     <Label size="small" htmlFor={EXTRA_RECEIVERS_ID}>
@@ -44,29 +42,16 @@ export const CustomReceivers = ({
         addMottakere([{ part, handling: getInitalHandling(part, templateId), overriddenAddress: null }])
       }
       buttonText="Legg til mottaker"
-      validate={(part) => {
-        if (
-          dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN &&
-          part.identifikator === TRYGDERETTEN_ORGNR
-        ) {
-          return 'Mottaker er allerede lagt til.';
-        }
-
-        return mottakerList.some((m) => m.part.identifikator === part.identifikator)
-          ? 'Mottaker er allerede lagt til.'
-          : null;
-      }}
-      warningReceivers={
-        dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN
-          ? []
-          : [
-              {
-                id: TRYGDERETTEN_ORGNR,
-                message:
-                  'Du skal kun bruke denne brevmalen dersom Trygderetten er arbeidsgiver i saken. Skal du sende til Trygderetten som ankeorgan, må du velge Ekspedisjonsbrev til Trygderetten eller Ettersending til Trygderetten.',
-              },
-            ]
+      validate={(part) =>
+        mottakerList.some((m) => m.part.identifikator === part.identifikator) ? 'Mottaker er allerede lagt til.' : null
       }
+      warningReceivers={[
+        {
+          id: TRYGDERETTEN_ORGNR,
+          message:
+            'Du skal kun bruke denne brevmalen dersom Trygderetten er arbeidsgiver i saken. Skal du sende til Trygderetten som ankeorgan, må du velge Ekspedisjonsbrev til Trygderetten eller Ettersending til Trygderetten.',
+        },
+      ]}
     />
 
     <Receivers

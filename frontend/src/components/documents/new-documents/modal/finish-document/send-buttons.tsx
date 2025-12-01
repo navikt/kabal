@@ -35,7 +35,7 @@ export const SendButtons = ({ document, disabled, ...rest }: FinishProps) => {
 
     setValidationErrors([]);
 
-    // Ekspedisjonsbrev til trygderetten will always have Trygderetten as a receiver
+    // Ekspedisjonsbrev til trygderetten will always have Trygderetten as only receiver
     if (mottakerList.length === 0 && dokumentTypeId !== DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN) {
       if (reachableSuggestedReceivers.length !== 1) {
         setValidationErrors([
