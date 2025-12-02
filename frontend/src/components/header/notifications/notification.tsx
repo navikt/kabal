@@ -7,14 +7,25 @@ import { Type, Ytelse } from '@app/components/header/notifications/common';
 import { useNotificationsContext } from '@app/components/header/notifications/state';
 import {
   type BehandlingInfo,
+  type GainedAccessNotification,
   getHasBehandling,
   type KabalNotification,
+  type LostAccessNotification,
   type MessageNotification,
+  NOTIFICATION_TYPE_LABELS,
   NotificationType,
   type SystemNotification,
 } from '@app/components/header/notifications/types';
 import type { INavEmployee } from '@app/types/bruker';
-import { BellDotFillIcon, ChatAddIcon, ClockIcon, EnvelopeClosedIcon, EnvelopeOpenIcon } from '@navikt/aksel-icons';
+import {
+  BellDotFillIcon,
+  ChatAddIcon,
+  CircleSlashIcon,
+  ClockIcon,
+  EnvelopeClosedIcon,
+  EnvelopeOpenIcon,
+  KeyHorizontalIcon,
+} from '@navikt/aksel-icons';
 import {
   BodyLong,
   BoxNew,
@@ -40,7 +51,6 @@ interface Props {
 const Container = ({ title, icon, notification, children }: Props) => {
   const { id, createdAt, read, type } = notification;
   const { borderColor, background, iconColor } = VARIANTS[type];
-  const hasBehandling = getHasBehandling(notification);
   const theme = useAppTheme();
 
   return (
@@ -79,7 +89,9 @@ const Container = ({ title, icon, notification, children }: Props) => {
         {children}
 
         <HGrid gap="1" className="auto-cols-[1fr] grid-flow-col" flexGrow="1">
-          {hasBehandling ? <Open {...notification.behandling} /> : null}
+          {notification.type !== NotificationType.LOST_ACCESS && getHasBehandling(notification) ? (
+            <Open {...notification.behandling} />
+          ) : null}
 
           <MarkAsReadButton id={id} isRead={read} />
         </HGrid>
@@ -117,15 +129,25 @@ interface VariantData {
 }
 
 const VARIANTS: Record<NotificationType, VariantData> = {
-  [NotificationType.SYSTEM]: {
-    borderColor: 'danger',
-    background: 'danger-strong',
-    iconColor: 'text-ax-text-danger-contrast',
-  },
   [NotificationType.MESSAGE]: {
     borderColor: 'accent',
     background: 'accent-strong',
     iconColor: 'text-ax-text-accent-contrast',
+  },
+  [NotificationType.LOST_ACCESS]: {
+    borderColor: 'danger',
+    background: 'danger-strong',
+    iconColor: 'text-ax-text-danger-contrast',
+  },
+  [NotificationType.GAINED_ACCESS]: {
+    borderColor: 'success',
+    background: 'success-strong',
+    iconColor: 'text-ax-text-success-contrast',
+  },
+  [NotificationType.SYSTEM]: {
+    borderColor: 'danger',
+    background: 'danger-strong',
+    iconColor: 'text-ax-text-danger-contrast',
   },
 };
 
@@ -143,6 +165,38 @@ const Message = ({ notification, children }: NotificationEntryProps<MessageNotif
     <BoxNew asChild borderWidth="0 0 0 2" borderColor="neutral" paddingInline="2 0">
       <BodyLong size="small" className="wrap-break-word whitespace-pre-line italic">
         {notification.message.content}
+      </BodyLong>
+    </BoxNew>
+  </Container>
+);
+
+const LostAccess = ({ notification, children }: NotificationEntryProps<LostAccessNotification>) => (
+  <Container
+    title={NOTIFICATION_TYPE_LABELS[NotificationType.LOST_ACCESS]}
+    icon={<CircleSlashIcon aria-hidden />}
+    notification={notification}
+  >
+    {children}
+
+    <BoxNew asChild borderWidth="0 0 0 2" borderColor="neutral" paddingInline="2 0">
+      <BodyLong size="small" className="wrap-break-word whitespace-pre-line italic">
+        {notification.message}
+      </BodyLong>
+    </BoxNew>
+  </Container>
+);
+
+const GainedAccess = ({ notification, children }: NotificationEntryProps<GainedAccessNotification>) => (
+  <Container
+    title={NOTIFICATION_TYPE_LABELS[NotificationType.GAINED_ACCESS]}
+    icon={<KeyHorizontalIcon aria-hidden />}
+    notification={notification}
+  >
+    {children}
+
+    <BoxNew asChild borderWidth="0 0 0 2" borderColor="neutral" paddingInline="2 0">
+      <BodyLong size="small" className="wrap-break-word whitespace-pre-line italic">
+        {notification.message}
       </BodyLong>
     </BoxNew>
   </Container>
@@ -166,6 +220,10 @@ export const KabalNotificationEntry = (notification: KabalNotification): JSX.Ele
   switch (notification.type) {
     case NotificationType.MESSAGE:
       return <Message notification={notification} />;
+    case NotificationType.LOST_ACCESS:
+      return <LostAccess notification={notification} />;
+    case NotificationType.GAINED_ACCESS:
+      return <GainedAccess notification={notification} />;
     case NotificationType.SYSTEM:
       return <System notification={notification} />;
   }
@@ -178,6 +236,18 @@ export const KabalNotificationWithCaseDataEntry = (notification: KabalNotificati
         <Message notification={notification}>
           <CaseData {...notification.behandling} />
         </Message>
+      );
+    case NotificationType.LOST_ACCESS:
+      return (
+        <LostAccess notification={notification}>
+          <CaseData {...notification.behandling} />
+        </LostAccess>
+      );
+    case NotificationType.GAINED_ACCESS:
+      return (
+        <GainedAccess notification={notification}>
+          <CaseData {...notification.behandling} />
+        </GainedAccess>
       );
     case NotificationType.SYSTEM:
       return <System notification={notification} />;
