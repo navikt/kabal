@@ -120,6 +120,6 @@
     "assist": { "enabled": true }
   },
   "files": {
-    "includes": ["**", "!**/*.css", "!.bruno"]
+    "includes": ["**", "!.bruno"]
   }
 }
