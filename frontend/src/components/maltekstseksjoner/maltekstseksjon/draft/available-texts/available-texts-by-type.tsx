@@ -1,4 +1,4 @@
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-language/set-maltekstseksjon-language';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
@@ -131,7 +131,7 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
                 <Table.Row>
                   <Table.HeaderCell />
                   <Table.HeaderCell>Tittel</Table.HeaderCell>
-                  <Table.ColumnHeader sortKey={SortKey.MODIFIED} sortable>
+                  <Table.ColumnHeader sortKey={SortKey.MODIFIED} sortable className="whitespace-nowrap">
                     Sist endret
                   </Table.ColumnHeader>
                   <Table.ColumnHeader
@@ -142,15 +142,14 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
                     Maltekstseksjoner
                   </Table.ColumnHeader>
                   <Table.HeaderCell>
-                    <FilterDropdown<Status>
+                    <FlatMultiSelectDropdown<Status>
                       data-testid="filter-status"
                       selected={filteredStatuses}
                       options={STATUS_OPTIONS}
                       onChange={setFilteredStatuses}
-                      size="small"
                     >
                       Status
-                    </FilterDropdown>
+                    </FlatMultiSelectDropdown>
                   </Table.HeaderCell>
                   <Table.ColumnHeader>%</Table.ColumnHeader>
                   <Table.HeaderCell />

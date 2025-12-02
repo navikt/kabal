@@ -1,7 +1,7 @@
 import { useOppgaveTablePaaVentReasons } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
 import { kodeverkValuesToDropdownOptions } from '@app/components/filter-dropdown/functions';
+import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import { usePaaVentReasons } from '@app/simple-api-state/use-kodeverk';
 import { Table } from '@navikt/ds-react';
 import type { FilterDropdownProps } from './types';
@@ -12,14 +12,14 @@ export const PaaVentReasons = ({ columnKey, tableKey }: FilterDropdownProps) => 
 
   return (
     <Table.ColumnHeader aria-sort="none">
-      <FilterDropdown
+      <FlatMultiSelectDropdown
         selected={reasons ?? []}
         onChange={setReasons}
         options={kodeverkValuesToDropdownOptions(data)}
         data-testid="filter-paa-vent-reason"
       >
         {TABLE_HEADERS[columnKey]}
-      </FilterDropdown>
+      </FlatMultiSelectDropdown>
     </Table.ColumnHeader>
   );
 };

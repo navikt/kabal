@@ -167,7 +167,6 @@ export const JournalfoerteDocuments = () => {
         <Header
           filters={filters}
           documentIdList={documentsWithVedleggIdList ?? []}
-          listHeight={listHeight}
           showsAnyVedlegg={showsAnyVedlegg}
           toggleShowAllVedlegg={onToggle}
           searchRef={searchRef}

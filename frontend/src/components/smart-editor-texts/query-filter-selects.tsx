@@ -1,13 +1,11 @@
-import { NestedFilterList, type NestedOption } from '@app/components/filter-dropdown/nested-filter-list';
+import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
+import { NestedFilterList } from '@app/components/filter-dropdown/nested-filter-list';
 import type { IOption } from '@app/components/filter-dropdown/props';
 import { useKlageenheterOptions } from '@app/components/smart-editor-texts/hooks/use-options';
 import { NONE, NONE_OPTION, type NONE_TYPE, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
-import { ToggleButton } from '@app/components/toggle-button/toggle-button';
 import { isUtfall } from '@app/functions/is-utfall';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import type { UtfallEnum } from '@app/types/kodeverk';
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { FilterDropdown } from '../filter-dropdown/filter-dropdown';
+import { useCallback, useMemo } from 'react';
 import { getTemplateOptions } from './get-template-options';
 
 interface UtfallSelectProps {
@@ -28,15 +26,9 @@ export const UtfallSelect = ({ children, selected, onChange, options }: UtfallSe
   );
 
   return (
-    <FilterDropdown
-      options={_options}
-      selected={_selected}
-      onChange={_onChange}
-      data-testid="filter-utfall"
-      size="small"
-    >
+    <FlatMultiSelectDropdown options={_options} selected={_selected} onChange={_onChange} data-testid="filter-utfall">
       {children}
-    </FilterDropdown>
+    </FlatMultiSelectDropdown>
   );
 };
 
@@ -100,9 +92,9 @@ export const KlageenhetSelect = ({
   const options = includeNoneOption ? [NONE_OPTION, ...enheter] : enheter;
 
   return (
-    <FilterDropdown options={options} selected={selected} onChange={onChange} data-testid="filter-klageenhet">
+    <FlatMultiSelectDropdown options={options} selected={selected} onChange={onChange} data-testid="filter-klageenhet">
       {children}
-    </FilterDropdown>
+    </FlatMultiSelectDropdown>
   );
 };
 
@@ -129,35 +121,13 @@ export const TemplateSectionSelect = ({
   );
 
   return (
-    <NestedDropDown options={templates} selected={selected} onChange={onChange} data-testid="edit-text-template-select">
+    <NestedFilterList
+      options={templates}
+      selected={selected}
+      onChange={onChange}
+      data-testid="edit-text-template-select"
+    >
       {children}
-    </NestedDropDown>
-  );
-};
-
-interface NestedDropDownProps {
-  children: string;
-  selected: string[];
-  onChange: (value: string[]) => void;
-  options: NestedOption[];
-  'data-testid': string;
-}
-
-const NestedDropDown = ({ children, selected, onChange, options, 'data-testid': testId }: NestedDropDownProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleOpen = useCallback(() => setIsOpen((prev) => !prev), []);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useOnClickOutside(ref, () => setIsOpen(false));
-
-  return (
-    <div ref={ref} className="relative">
-      <ToggleButton open={isOpen} onClick={toggleOpen} size="small" active={selected.length > 0}>
-        {children} ({selected.length})
-      </ToggleButton>
-      {isOpen ? (
-        <NestedFilterList options={options} selected={selected} onChange={onChange} data-testid={testId} />
-      ) : null}
-    </div>
+    </NestedFilterList>
   );
 };

@@ -1,7 +1,7 @@
 import { Checkbox, HStack } from '@navikt/ds-react';
 import { useEffect, useRef } from 'react';
 
-interface FilterProps<T extends string> {
+interface Props<T extends string> {
   filterId: T;
   children: string;
   focused: boolean;
@@ -9,13 +9,13 @@ interface FilterProps<T extends string> {
   tags?: React.ReactNode[];
 }
 
-export const Filter = <T extends string>({
+export const Option = <T extends string>({
   filterId,
   children,
   focused,
   disabled,
   tags,
-}: FilterProps<T>): React.JSX.Element => {
+}: Props<T>): React.JSX.Element => {
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -45,5 +45,3 @@ export const Filter = <T extends string>({
     </Checkbox>
   );
 };
-
-Filter.displayName = 'Filter';

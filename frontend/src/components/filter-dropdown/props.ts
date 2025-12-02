@@ -12,7 +12,3 @@ export interface BaseProps<T extends string, O = IOption<T>> {
   onChange: (selected: T[]) => void;
   focused?: IOption<T> | null;
 }
-
-export interface DropdownProps {
-  close: () => void;
-}
