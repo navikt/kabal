@@ -1,7 +1,8 @@
+import { MultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
 import { stringToRegExp } from '@app/functions/string-to-regex';
-import { BulletListIcon, ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, BoxNew, Button, Checkbox, HGrid, HStack, Search, Tag, VStack } from '@navikt/ds-react';
+import { BulletListIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Checkbox, HGrid, HStack, Tag, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { BaseProps, IOption } from './props';
 
@@ -17,18 +18,24 @@ export interface NestedOption extends IOption<string> {
 }
 
 interface NestedDropdownProps extends BaseProps<string, NestedOption> {
-  showFjernAlle?: boolean;
   'data-testid': string;
+  children: string;
 }
 
 const WILDCARD_REGEX = /.*/;
+
+const mapNested = (nestedOption: NestedOption): string[] => {
+  const self = nestedOption.type === OptionType.OPTION ? [nestedOption.value] : [];
+  const children = nestedOption.options === undefined ? [] : nestedOption.options.flatMap((no) => mapNested(no));
+
+  return [...self, ...children];
+};
 
 export const NestedFilterList = ({
   selected,
   options,
   onChange,
-  showFjernAlle = true,
-  'data-testid': testId,
+  children,
 }: NestedDropdownProps): React.JSX.Element | null => {
   const [filter, setFilter] = useState<RegExp>(WILDCARD_REGEX);
   const [rawFilter, setRawFilter] = useState<string>('');
@@ -39,51 +46,24 @@ export const NestedFilterList = ({
     return () => cancelIdleCallback(callback);
   }, [rawFilter]);
 
-  const reset = useCallback(() => onChange([]), [onChange]);
   const toggle = useCallback(
     (id: string) => onChange(selected.includes(id) ? selected.filter((s) => s !== id) : [...selected, id]),
     [onChange, selected],
   );
 
-  return (
-    <VStack
-      asChild
-      width="600px"
-      maxHeight="70vh"
-      overflowY="auto"
-      position="absolute"
-      style={{ top: '100%', whiteSpace: 'nowrap', zIndex: 22 }}
-      data-testid={testId}
-      data-asdasdasf
-    >
-      <BoxNew padding="2" background="default" shadow="dialog">
-        <HStack asChild justify="space-between" padding="2" top="0" position="sticky" wrap={false}>
-          <BoxNew background="default" borderWidth="0 0 1 0" borderColor="neutral">
-            <Search
-              value={rawFilter}
-              onChange={setRawFilter}
-              placeholder="Søk"
-              label="Søk"
-              hideLabel
-              autoFocus
-              size="small"
-              variant="simple"
-              data-testid="header-filter"
-            />
-            {showFjernAlle && (
-              <Button
-                size="xsmall"
-                variant="danger"
-                onClick={reset}
-                icon={<TrashIcon aria-hidden />}
-                className="ml-2 shrink-0"
-              >
-                Fjern alle
-              </Button>
-            )}
-          </BoxNew>
-        </HStack>
+  const allOptions = useMemo(() => options.flatMap((o) => mapNested(o)), [options]);
 
+  return (
+    <MultiSelectDropdown
+      selected={selected}
+      onChange={onChange}
+      options={options}
+      label={children}
+      value={rawFilter}
+      setValue={setRawFilter}
+      allOptions={allOptions}
+    >
+      <div className="overflow-y-auto">
         <OptionsList
           options={options}
           selected={selected}
@@ -91,8 +71,8 @@ export const NestedFilterList = ({
           filter={filter}
           hasFilter={rawFilter.length > 0}
         />
-      </BoxNew>
-    </VStack>
+      </div>
+    </MultiSelectDropdown>
   );
 };
 
@@ -106,7 +86,7 @@ interface ListProps {
 }
 
 const OptionsList = ({ options, level = 0, ...rest }: ListProps) => (
-  <VStack as="ul" overflowY="auto" paddingInline={level === 0 ? '0 0' : '6 0'}>
+  <VStack as="ul" paddingInline={level === 0 ? '0 0' : '6 0'}>
     {options.map((o) => (
       <ListItem key={o.value} {...rest} option={o} level={level} />
     ))}

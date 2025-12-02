@@ -6,7 +6,7 @@ import {
   useOppgaveTableTyper,
 } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Table } from '@navikt/ds-react';
 import { useMemo } from 'react';
@@ -38,14 +38,14 @@ export const HelperStatusWithoutSelf = ({ columnKey, tableKey }: FilterDropdownP
 
   return (
     <Table.ColumnHeader aria-sort="none">
-      <FilterDropdown<HelperStatus>
+      <FlatMultiSelectDropdown<HelperStatus>
         selected={statuses ?? []}
         onChange={setStatuses}
         options={[...options, ...COMMON_ROL_OPTIONS]}
         data-testid="filter-type"
       >
         {TABLE_HEADERS[columnKey]}
-      </FilterDropdown>
+      </FlatMultiSelectDropdown>
     </Table.ColumnHeader>
   );
 };
@@ -72,14 +72,14 @@ export const HelperStatusWithSelf = ({ columnKey, tableKey }: FilterDropdownProp
 
   return (
     <Table.ColumnHeader aria-sort="none">
-      <FilterDropdown<HelperStatus>
+      <FlatMultiSelectDropdown<HelperStatus>
         selected={statuses ?? []}
         onChange={setStatuses}
         options={[...options, ...COMMON_ROL_OPTIONS]}
         data-testid="filter-type"
       >
         {TABLE_HEADERS[columnKey]}
-      </FilterDropdown>
+      </FlatMultiSelectDropdown>
     </Table.ColumnHeader>
   );
 };

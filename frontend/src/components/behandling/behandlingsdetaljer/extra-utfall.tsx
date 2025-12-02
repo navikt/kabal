@@ -1,14 +1,13 @@
 import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/warnings';
-import { Dropdown } from '@app/components/filter-dropdown/dropdown';
+import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useUpdateExtraUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
 import { type SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { Button, HelpText, HStack, Label, Tag, VStack } from '@navikt/ds-react';
-import { type ReactNode, useMemo, useRef, useState } from 'react';
+import { HelpText, HStack, InlineMessage, Label, Tag, VStack } from '@navikt/ds-react';
+import { useMemo } from 'react';
 
 interface TagsProps {
   utfallIdSet: UtfallEnum[];
@@ -41,11 +40,7 @@ export const ExtraUtfall = (props: Props) => {
 
 const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props) => {
   const [updateUtfall] = useUpdateExtraUtfallMutation();
-  const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
   const [utfallKodeverk] = useUtfall(typeId);
-
-  useOnClickOutside(ref, () => setIsOpen(false), true);
 
   const options = useMemo(
     () =>
@@ -68,27 +63,25 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props
   const disabled = mainUtfall === null;
 
   return (
-    <div className="relative" ref={ref}>
-      <HStack wrap gap="1" marginBlock="1 0">
-        <Button variant="secondary-neutral" onClick={() => setIsOpen((o) => !o)} size="small" disabled={disabled}>
-          Sett ekstra utfall for tilpasset tekst
-        </Button>
-        <HelpText>
-          <VStack width="300px">
-            {disabled ? <strong>Du må velge utfall/resultat først.</strong> : null}
-            <span>Her kan du velge flere utfall for å få opp maltekst som passer til flere utfall.</span>
-          </VStack>
-        </HelpText>
-      </HStack>
-      <Popup isOpen={isOpen && !disabled}>
-        <Dropdown
+    <HStack align="center" gap="2" wrap={false}>
+      {disabled ? (
+        <InlineMessage status="info">
+          Du må velge utfall/resultat før du kan sette ekstra utfall for tilpasset tekst.
+        </InlineMessage>
+      ) : (
+        <FlatMultiSelectDropdown
           selected={selected}
-          onChange={(newList) => updateUtfall({ oppgaveId, extraUtfallIdSet: newList.filter(isUtfall) })}
           options={options}
-          close={() => setIsOpen(false)}
-        />
-      </Popup>
-    </div>
+          onChange={(newList) => updateUtfall({ oppgaveId, extraUtfallIdSet: newList.filter(isUtfall) })}
+          showCounter={false}
+          variant="secondary-neutral"
+        >
+          Ekstra utfall for tilpasset tekst
+        </FlatMultiSelectDropdown>
+      )}
+
+      <HelpText>Her kan du velge flere utfall for å få opp maltekst som passer til flere utfall.</HelpText>
+    </HStack>
   );
 };
 
@@ -136,12 +129,4 @@ const Tags = ({ utfallIdSet, mainUtfall, typeId }: TagsProps) => {
       </HStack>
     </>
   );
-};
-
-const Popup = ({ isOpen, children }: { isOpen: boolean; children: ReactNode }) => {
-  if (!isOpen) {
-    return null;
-  }
-
-  return <div className="absolute z-1">{children}</div>;
 };

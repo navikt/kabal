@@ -2,7 +2,7 @@ import { StaticDataContext } from '@app/components/app/static-data-context';
 import { navEmployeesToOptions } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/helpers';
 import { useOppgaveTableMedunderskrivere } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import type { IOption } from '@app/components/filter-dropdown/props';
 import { useGetMedunderskrivereForEnhetQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Table } from '@navikt/ds-react';
@@ -17,14 +17,14 @@ export const Medunderskriver = ({ tableKey, columnKey }: FilterDropdownProps) =>
 
   return (
     <Table.ColumnHeader aria-sort="none">
-      <FilterDropdown
+      <FlatMultiSelectDropdown
         selected={medunderskrivere ?? []}
         onChange={setMedunderskrivere}
         options={options}
         data-testid="filter-medunderskriver"
       >
         {TABLE_HEADERS[columnKey]}
-      </FilterDropdown>
+      </FlatMultiSelectDropdown>
     </Table.ColumnHeader>
   );
 };

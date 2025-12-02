@@ -1,12 +1,9 @@
 import { NestedFilterList, type NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
 import { isIndeterminate } from '@app/components/smart-editor-texts/hjemler-select/is-indeterminate';
-import { Popup } from '@app/components/smart-editor-texts/hjemler-select/popup';
 import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@app/components/smart-editor-texts/types';
-import { ToggleButton } from '@app/components/toggle-button/toggle-button';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
 import { Tag } from '@navikt/ds-react';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo } from 'react';
 
 interface Props {
   selected: string[];
@@ -25,10 +22,7 @@ export const HjemlerSelect = ({
   ytelserSelectable = false,
   ytelseIsWildcard = false,
 }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
   const { data: ytelser = [] } = useKabalYtelserLatest();
-  const ref = useRef<HTMLDivElement>(null);
-  useOnClickOutside(ref, () => setIsOpen(false));
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const generelleHjemler = useMemo(() => {
@@ -163,22 +157,10 @@ export const HjemlerSelect = ({
     [includeNoneOption, ytelseOptions],
   );
 
-  const toggleOpen = () => setIsOpen(!isOpen);
-
   return (
-    <div className="relative" ref={ref}>
-      <ToggleButton open={isOpen} onClick={toggleOpen} size="small" active={selected.length > 0}>
-        Ytelser og hjemler ({selected.length})
-      </ToggleButton>
-      <Popup isOpen={isOpen}>
-        <NestedFilterList
-          options={options}
-          selected={selected}
-          onChange={onChange}
-          data-testid="edit-text-hjemler-select"
-        />
-      </Popup>
-    </div>
+    <NestedFilterList options={options} selected={selected} onChange={onChange} data-testid="edit-text-hjemler-select">
+      Ytelser og hjemler
+    </NestedFilterList>
   );
 };
 

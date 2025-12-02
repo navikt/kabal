@@ -1,5 +1,5 @@
 import { CheckboxGroup } from '@navikt/ds-react';
-import { Filter } from './option';
+import { Option } from './option';
 import type { BaseProps } from './props';
 
 interface Props<T extends string> extends BaseProps<T> {
@@ -18,7 +18,7 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
     error={error}
   >
     {options.map(({ value, label, disabled, tags }) => (
-      <Filter
+      <Option
         key={value}
         data-testid="filter-list-item"
         data-filterid={value}
@@ -28,7 +28,7 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
         disabled={disabled}
       >
         {label}
-      </Filter>
+      </Option>
     ))}
   </CheckboxGroup>
 );

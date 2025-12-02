@@ -1,4 +1,4 @@
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import {
   type Filterable,
   isDepublished,
@@ -11,15 +11,14 @@ export const StatusFilter = () => {
   const [filteredStatuses, setFilteredStatuses] = useStatusFilter();
 
   return (
-    <FilterDropdown<Status>
+    <FlatMultiSelectDropdown<Status>
       data-testid="filter-status"
       selected={filteredStatuses}
       options={STATUS_OPTIONS}
       onChange={setFilteredStatuses}
-      size="small"
     >
       Status
-    </FilterDropdown>
+    </FlatMultiSelectDropdown>
   );
 };
 

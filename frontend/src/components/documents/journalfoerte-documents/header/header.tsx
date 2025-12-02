@@ -14,7 +14,6 @@ import type { useFilters } from './use-filters';
 interface Props {
   documentIdList: string[];
   filters: ReturnType<typeof useFilters>;
-  listHeight: number;
   showsAnyVedlegg: boolean;
   toggleShowAllVedlegg: () => void;
   searchRef: React.RefObject<HTMLInputElement | null>;
@@ -24,14 +23,7 @@ interface Props {
 const BASE_CLASSES = 'z-1 whitespace-nowrap bg-ax-bg-default border-b border-ax-border-neutral';
 const CLASSES = IS_WINDOWS ? `${BASE_CLASSES} mr-[13px]` : BASE_CLASSES;
 
-export const Header = ({
-  filters,
-  listHeight,
-  showsAnyVedlegg,
-  toggleShowAllVedlegg,
-  searchRef,
-  keyboardBoundaryRef,
-}: Props) => {
+export const Header = ({ filters, showsAnyVedlegg, toggleShowAllVedlegg, searchRef, keyboardBoundaryRef }: Props) => {
   const [isExpanded] = useIsExpanded();
   const { columns } = useArchivedDocumentsColumns();
 
@@ -84,7 +76,7 @@ export const Header = ({
 
       <DocumentSearch setSearch={setSearch} search={search} ref={searchRef} keyboardBoundaryRef={keyboardBoundaryRef} />
 
-      {isExpanded ? <ExpandedHeaders {...filters} listHeight={listHeight} /> : null}
+      {isExpanded ? <ExpandedHeaders {...filters} /> : null}
 
       <HStack style={{ gridArea: Fields.ToggleMetadata }} align="center" justify="center" padding="1-alt">
         <InformationSquareIcon aria-hidden className="h-full w-full" />

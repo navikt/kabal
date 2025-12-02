@@ -1,7 +1,7 @@
 import { navEmployeesToOptions } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/helpers';
 import { useOppgaveTableTildelteRol } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { FilterDropdown } from '@app/components/filter-dropdown/filter-dropdown';
+import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import type { IOption } from '@app/components/filter-dropdown/props';
 import { useGetRolsInEnhetQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
 import { Table } from '@navikt/ds-react';
@@ -15,9 +15,14 @@ export const Rol = ({ tableKey, columnKey }: FilterDropdownProps) => {
 
   return (
     <Table.ColumnHeader aria-sort="none">
-      <FilterDropdown selected={tildelteRol ?? []} onChange={setTildelteRol} options={options} data-testid="filter-rol">
+      <FlatMultiSelectDropdown
+        selected={tildelteRol ?? []}
+        onChange={setTildelteRol}
+        options={options}
+        data-testid="filter-rol"
+      >
         {TABLE_HEADERS[columnKey]}
-      </FilterDropdown>
+      </FlatMultiSelectDropdown>
     </Table.ColumnHeader>
   );
 };
