@@ -185,7 +185,14 @@ export const collaborationServer = new Hocuspocus({
       context,
       'debug',
     );
+
+    context.removeDeletedListener = SMART_DOCUMENT_WRITE_ACCESS.addDeletedListener(dokumentId, () => {
+      collaborationServer.unloadDocument(document);
+      logContext('Document deleted and loaded', context, 'info');
+    });
   },
+
+  afterUnloadDocument: async ({ documentName }) => SMART_DOCUMENT_WRITE_ACCESS.removeDeletedListeners(documentName),
 
   onStoreDocument: async ({ context, document }) => {
     if (!isConnectionContext(context)) {

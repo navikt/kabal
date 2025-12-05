@@ -29,6 +29,7 @@ class SmartDocumentWriteAccess {
   #accessMap = new SmartDocumentAccessMap();
 
   #hasAccessListeners: Map<string, HasAccessListener[]> = new Map();
+  #onDeletedListeners: Map<string, (() => void)[]> = new Map();
 
   #consumer = new Consumer({
     groupId: crypto.randomUUID(),
@@ -139,6 +140,7 @@ class SmartDocumentWriteAccess {
 
         this.#accessMap.delete(documentId);
         this.#notifyHasAccessListeners(documentId, null);
+        this.#notifyDeletedListeners(documentId);
 
         try {
           await commit();
@@ -285,6 +287,41 @@ class SmartDocumentWriteAccess {
       for (const listener of listeners) {
         listener(navIdents?.includes(navIdent) ?? false);
       }
+    }
+  };
+
+  addDeletedListener = (documentId: string, listener: () => void) => {
+    const listeners = this.#onDeletedListeners.get(documentId) ?? [];
+    listeners.push(listener);
+    this.#onDeletedListeners.set(documentId, listeners);
+
+    return () => this.removeDeletedListener(documentId, listener);
+  };
+
+  removeDeletedListener = (documentId: string, listener: () => void) => {
+    const listeners = this.#onDeletedListeners.get(documentId);
+
+    if (listeners === undefined) {
+      return;
+    }
+
+    this.#onDeletedListeners.set(
+      documentId,
+      listeners.filter((l) => l !== listener),
+    );
+  };
+
+  removeDeletedListeners = (documentId: string) => this.#onDeletedListeners.delete(documentId);
+
+  #notifyDeletedListeners = (documentId: string) => {
+    const listeners = this.#onDeletedListeners.get(documentId);
+
+    if (listeners === undefined) {
+      return;
+    }
+
+    for (const listener of listeners) {
+      listener();
     }
   };
 

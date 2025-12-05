@@ -12,6 +12,7 @@ export interface ConnectionContext {
   hasWriteAccess?: boolean;
   tokenRefreshTimer?: Timer;
   removeHasAccessListener?: () => void;
+  removeDeletedListener?: () => void;
 }
 
 export const isConnectionContext = (data: unknown): data is ConnectionContext =>
