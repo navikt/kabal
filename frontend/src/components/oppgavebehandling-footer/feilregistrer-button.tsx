@@ -36,6 +36,7 @@ const Feilregistrert = () => {
     <>
       <Button
         onClick={() => setIsOpen((o) => !o)}
+        className="flex"
         variant="primary"
         size="small"
         icon={<InformationSquareIcon aria-hidden />}
