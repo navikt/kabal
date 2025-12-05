@@ -186,13 +186,32 @@ export const collaborationServer = new Hocuspocus({
       'debug',
     );
 
-    context.removeDeletedListener = SMART_DOCUMENT_WRITE_ACCESS.addDeletedListener(dokumentId, () => {
-      collaborationServer.unloadDocument(document);
-      logContext('Document deleted and loaded', context, 'info');
-    });
+    // context.removeDeletedListener = SMART_DOCUMENT_WRITE_ACCESS.addDeletedListener(dokumentId, () => {
+    //   collaborationServer.unloadDocument(document);
+    //   logContext(`Document deleted and loaded "${dokumentId}"`, context, 'info');
+    // });
   },
 
-  afterUnloadDocument: async ({ documentName }) => SMART_DOCUMENT_WRITE_ACCESS.removeDeletedListeners(documentName),
+  afterLoadDocument: async ({ context, documentName }) => {
+    logContext(`Document loaded '${documentName}"`, context, 'debug');
+    const ids = collaborationServer.documents
+      .keys()
+      .map((id) => `"${id}"`)
+      .toArray()
+      .join(', ');
+    logContext(`Documents after load ${ids}`, context, 'debug');
+  },
+
+  afterUnloadDocument: async ({ documentName }) => {
+    log.debug({ msg: `Document unloaded: ${documentName}` });
+    const ids = collaborationServer.documents
+      .keys()
+      .map((id) => `"${id}"`)
+      .toArray()
+      .join(', ');
+    log.debug({ msg: `Documents after unload ${ids}` });
+    // SMART_DOCUMENT_WRITE_ACCESS.removeDeletedListeners(documentName);
+  },
 
   onStoreDocument: async ({ context, document }) => {
     if (!isConnectionContext(context)) {
