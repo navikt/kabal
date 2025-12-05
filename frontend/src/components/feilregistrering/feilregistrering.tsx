@@ -55,8 +55,9 @@ const FeilregistrerButton = ({
   useOnClickOutside(ref, () => setIsOpen(false));
 
   return (
-    <div className="relative inline-block" ref={ref}>
+    <div className="relative" ref={ref}>
       <Button
+        className="flex"
         variant={variant}
         size="small"
         onClick={() => setIsOpen((o) => !o)}

@@ -41,6 +41,7 @@ export const FinishButton = () => {
   return (
     <div className="relative">
       <Button
+        className="flex"
         type="button"
         size="small"
         disabled={showConfirmFinishDisplay}
