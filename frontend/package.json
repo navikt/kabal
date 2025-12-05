@@ -46,7 +46,7 @@
     "@platejs/indent": "52.0.1",
     "@platejs/list-classic": "52.0.1",
     "@platejs/resizable": "52.0.1",
-    "@platejs/table": "52.0.1",
+    "@platejs/table": "51.1.2",
     "@platejs/utils": "52.0.8",
     "@platejs/yjs": "52.0.7",
     "@reduxjs/toolkit": "2.11.0",
