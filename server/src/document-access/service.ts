@@ -29,6 +29,7 @@ class SmartDocumentWriteAccess {
   #accessMap = new SmartDocumentAccessMap();
 
   #hasAccessListeners: Map<string, HasAccessListener[]> = new Map();
+  #deletedDocumentListeners: Map<string, (() => void)[]> = new Map();
 
   #consumer = new Consumer({
     groupId: crypto.randomUUID(),
@@ -139,6 +140,7 @@ class SmartDocumentWriteAccess {
 
         this.#accessMap.delete(documentId);
         this.#notifyHasAccessListeners(documentId, null);
+        this.#notifyDeletedDocumentListeners(documentId);
 
         try {
           await commit();
@@ -286,6 +288,44 @@ class SmartDocumentWriteAccess {
         listener(navIdents?.includes(navIdent) ?? false);
       }
     }
+  };
+
+  addDeletedDocumentListener = (documentId: string, listener: () => void) => {
+    const listeners = this.#deletedDocumentListeners.get(documentId) ?? [];
+    listeners.push(listener);
+    this.#deletedDocumentListeners.set(documentId, listeners);
+
+    return () => this.removeDeletedDocumentListener(documentId, listener);
+  };
+
+  removeDeletedDocumentListener = (documentId: string, listener: () => void) => {
+    const listeners = this.#deletedDocumentListeners.get(documentId);
+
+    if (listeners === undefined) {
+      return;
+    }
+
+    this.#deletedDocumentListeners.set(
+      documentId,
+      listeners.filter((l) => l !== listener),
+    );
+  };
+
+  removeDeletedDocumentListeners = (documentId: string) => this.#deletedDocumentListeners.delete(documentId);
+
+  #notifyDeletedDocumentListeners = (documentId: string) => {
+    const listeners = this.#deletedDocumentListeners.get(documentId);
+
+    if (listeners === undefined) {
+      return;
+    }
+
+    for (const listener of listeners) {
+      listener();
+    }
+
+    // Remove all listeners after notifying. A document can only be deleted once.
+    this.removeDeletedDocumentListeners(documentId);
   };
 
   isProcessing = () => {
