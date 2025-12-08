@@ -14,6 +14,7 @@ import { hasOwn } from '@app/functions/object';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
+import { pushError, pushLog } from '@app/observability';
 import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { components, saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
@@ -79,8 +80,27 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
       name: id,
       token: user.navIdent, // There must be a token defined for the server auth hook to run.
       onAuthenticated: ({ scope }) => setReadOnly(scope !== 'read-write'),
+      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       onClose: async ({ event }) => {
         if (event.code === 1000 || event.code === 1001 || event.code === 1005) {
+          return;
+        }
+
+        if (event.code === 4410) {
+          console.debug('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.');
+          pushLog('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.');
+          setReadOnly(true);
+          setIsConnected(false);
+          try {
+            yjs.destroy();
+          } catch (e) {
+            console.debug('Code 4410 - Error destroying Yjs instance', e);
+            pushLog('Code 4410 - Error destroying Yjs instance');
+
+            if (e instanceof Error) {
+              pushError(e);
+            }
+          }
           return;
         }
 
@@ -146,10 +166,29 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         setIsConnected(false);
       },
       onStateless: ({ payload }) => {
-        if (payload === 'readonly') {
-          setReadOnly(true);
-        } else if (payload === 'read-write') {
-          setReadOnly(false);
+        switch (payload) {
+          case 'readonly':
+            setReadOnly(true);
+            return;
+          case 'read-write':
+            setReadOnly(false);
+            return;
+          case 'deleted':
+            console.debug('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.');
+            pushLog('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.');
+            setReadOnly(true);
+            setIsConnected(false);
+            try {
+              yjs.destroy();
+            } catch (e) {
+              console.debug('Stateless deleted - Error destroying Yjs instance', e);
+              pushLog('Stateless deleted - Error destroying Yjs instance');
+
+              if (e instanceof Error) {
+                pushError(e);
+              }
+            }
+            return;
         }
       },
     },
@@ -178,7 +217,18 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     yjs.init({ id, autoConnect: true });
     isInitialized.current = true;
 
-    return () => yjs.destroy();
+    return () => {
+      try {
+        yjs.destroy();
+      } catch (e) {
+        console.debug('useEffect - Error destroying Yjs instance', e);
+        pushLog('useEffect - Error destroying Yjs instance');
+
+        if (e instanceof Error) {
+          pushError(e);
+        }
+      }
+    };
   }, [mounted, yjs, id]);
 
   return (
