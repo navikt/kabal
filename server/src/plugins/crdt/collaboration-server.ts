@@ -93,6 +93,12 @@ export const collaborationServer = new Hocuspocus({
         connection.readOnly = !hasWriteAccess;
       },
     );
+
+    context.removeDeletedListener = SMART_DOCUMENT_WRITE_ACCESS.addDeletedDocumentListener(documentName, () => {
+      logContext(`Document deleted and closed "${documentName}"`, context, 'info');
+      connection.sendStateless('deleted');
+      connection.close(getCloseEvent('DOCUMENT_DELETED', 4410));
+    });
   },
 
   onDisconnect: async ({ context }) => {
@@ -111,6 +117,7 @@ export const collaborationServer = new Hocuspocus({
     }
 
     context.removeHasAccessListener?.();
+    context.removeDeletedListener?.();
   },
 
   beforeHandleMessage: async ({ context, connection }) => {
