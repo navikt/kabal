@@ -131,10 +131,16 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
             hasOwn(data.session, 'active') &&
             data.session.active === true
           ) {
+            console.debug('Reconnecting Yjs...');
+            pushLog('Reconnecting Yjs...');
             yjs.connect();
           }
         } catch (err) {
           console.error(err);
+
+          if (err instanceof Error) {
+            pushError(err);
+          }
         }
       },
       onSynced: () => {
