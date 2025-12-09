@@ -114,7 +114,7 @@ const BaseSectionContainer = ({
   <BoxNew
     position="relative"
     style={{ color: color, ['--border-color' as string]: borderColor, ...style }}
-    className={`select-none before:absolute before:top-0 before:bottom-0 before:block before:border-transparent hover:z-1 hover:before:border-(--border-color) ${className}`}
+    className={`before:absolute before:top-0 before:bottom-0 before:block before:border-transparent hover:z-1 hover:before:border-(--border-color) ${className}`}
     {...rest}
   >
     {children}
