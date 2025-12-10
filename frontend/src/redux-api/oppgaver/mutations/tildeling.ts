@@ -14,7 +14,7 @@ import {
   type TildelSaksbehandlerParams,
 } from '@app/types/oppgaver';
 import { format } from 'date-fns';
-import { OppgaveListTagTypes, oppgaverApi } from '../oppgaver';
+import { OPPGAVELIST_TAG_TYPES, OppgaveData, OppgaveListTagTypes, OppgaveTagTypes, oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const tildelMutationSlice = oppgaverApi.injectEndpoints({
@@ -59,12 +59,6 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
               draft.tildeltTimestamp = format(new Date(), ISO_DATETIME_FORMAT);
             }),
           );
-
-          dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getSaksbehandler', oppgaveId, () => ({
-              saksbehandler: data.saksbehandler,
-            })),
-          );
         } catch (error) {
           optimisticBehandling.undo();
 
@@ -88,17 +82,6 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async (params, { dispatch, queryFulfilled }) => {
         const { oppgaveId } = params;
         const isFeilHjemmel = params.reasonId === FradelReason.FEIL_HJEMMEL;
-
-        const optimisticBehandling = dispatch(
-          behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-            draft.saksbehandler = null;
-
-            if (isFeilHjemmel) {
-              draft.hjemmelIdList = params.hjemmelIdList;
-            }
-          }),
-        );
-
         const userData = await user;
 
         const optimisticFradelingReason = dispatch(
@@ -137,33 +120,12 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
               }) satisfies ITildelingEvent,
           ),
         );
-
         try {
-          const { data } = await queryFulfilled;
+          await queryFulfilled;
 
-          oppgaverApi.util.invalidateTags(Object.values(OppgaveListTagTypes));
-
-          dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getSaksbehandler', oppgaveId, () => ({
-              saksbehandler: null,
-            })),
-          );
-          dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-              if (typeof draft !== 'undefined') {
-                draft.saksbehandler = null;
-                draft.modified = data.modified;
-                draft.hjemmelIdList = data.hjemmelIdList;
-              }
-            }),
-          );
-          dispatch(
-            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              draft.tildeltSaksbehandlerident = null;
-              draft.tildeltTimestamp = format(new Date(), ISO_DATETIME_FORMAT);
-              draft.hjemmelIdList = data.hjemmelIdList;
-            }),
-          );
+          dispatch(oppgaverApi.util.invalidateTags(OPPGAVELIST_TAG_TYPES));
+          dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
+          dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveData.OPPGAVE_DATA, id: oppgaveId }]));
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getSaksbehandler', oppgaveId, () => ({
@@ -171,7 +133,6 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
             })),
           );
         } catch (error) {
-          optimisticBehandling.undo();
           optimisticFradelingReason.undo();
 
           const heading = 'Kunne ikke fradele oppgaven';

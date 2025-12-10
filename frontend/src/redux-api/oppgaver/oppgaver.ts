@@ -19,6 +19,12 @@ export enum OppgaveListTagTypes {
   KROLS_VENTENDE = 'krols-ventende',
 }
 
+export const OPPGAVELIST_TAG_TYPES = Object.values(OppgaveListTagTypes);
+
+export enum OppgaveData {
+  OPPGAVE_DATA = 'oppgave-data',
+}
+
 export enum DokumenterListTagTypes {
   DOKUMENTER = 'dokumenter',
   TILKNYTTEDEDOKUMENTER = 'tilknyttedeDokumenter',
@@ -36,6 +42,7 @@ export const oppgaverApi = createApi({
     ...Object.values(OppgaveTagTypes),
     ...Object.values(DokumenterListTagTypes),
     ...Object.values(OppgaveListTagTypes),
+    ...Object.values(OppgaveData),
   ],
   endpoints: () => ({}),
 });
