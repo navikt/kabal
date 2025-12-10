@@ -38,7 +38,7 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
 
-          oppgaverApi.util.invalidateTags(Object.values(OppgaveListTagTypes));
+          dispatch(oppgaverApi.util.invalidateTags(Object.values(OppgaveListTagTypes)));
 
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getSaksbehandler', oppgaveId, () => ({
