@@ -4,6 +4,8 @@ on: [pull_request]
 
 jobs:
   sanity-build:
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
