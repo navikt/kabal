@@ -1,9 +1,10 @@
-import { BoxNew, HStack } from '@navikt/ds-react';
+import { BoxNew, HStack, Tooltip } from '@navikt/ds-react';
 
 interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   active?: boolean;
   disabled?: boolean;
   icon?: React.ReactNode;
+  children: string;
 }
 
 export const DocumentLink = ({ active = false, disabled = false, children, icon, href, ...rest }: Props) => {
@@ -40,13 +41,15 @@ const INACTIVE_CLASSES =
 const ACTIVE_CLASSES = 'bg-ax-bg-accent-moderate text-ax-text-accent';
 
 interface EllipsisTitleProps {
-  children: React.ReactNode;
+  children: string;
   title?: string;
   className?: string;
 }
 
 const EllipsisTitle = ({ children, className, ...rest }: EllipsisTitleProps) => (
-  <span {...rest} className={`w-full truncate font-normal ${className}`}>
-    {children}
-  </span>
+  <Tooltip content={children}>
+    <span {...rest} className={`w-full truncate font-normal ${className}`}>
+      {children}
+    </span>
+  </Tooltip>
 );
