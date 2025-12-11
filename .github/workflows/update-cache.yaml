@@ -7,6 +7,8 @@ on:
 
 jobs:
   update-cache:
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
