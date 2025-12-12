@@ -72,7 +72,7 @@ const toSignature = (
   }
 
   if (signature.anonymous) {
-    return { name: 'Nav klageinstans' };
+    return { name: 'Arbeids- og velferdsdirektoratet Klageinstans' };
   }
 
   return {
