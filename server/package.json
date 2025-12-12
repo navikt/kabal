@@ -14,14 +14,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastify/cors": "11.1.0",
+    "@fastify/cors": "11.2.0",
     "@fastify/http-proxy": "11.4.1",
     "@fastify/type-provider-typebox": "6.1.0",
     "@fastify/websocket": "11.2.0",
     "@hocuspocus/common": "3.4.0",
     "@hocuspocus/server": "3.4.0",
-    "@platformatic/kafka": "1.21.0",
-    "typebox": "1.0.61",
+    "@platformatic/kafka": "1.22.0",
+    "typebox": "1.0.62",
     "@slate-yjs/core": "1.0.2",
     "fastify": "5.6.2",
     "fastify-metrics": "12.1.0",
@@ -31,7 +31,7 @@
     "redis": "5.10.0"
   },
   "devDependencies": {
-    "@types/node": "24.10.1",
+    "@types/node": "24.0.15",
     "@types/uuid": "11.0.0"
   }
 }
