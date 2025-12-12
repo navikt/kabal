@@ -68,7 +68,7 @@ const Anonymous = ({ saksbehandlerSignature }: Pick<SignatureProps, 'saksbehandl
   return (
     <HStack align="end" gap="2" width="100%">
       <Checkbox checked={saksbehandlerSignature.anonymous} onChange={({ target }) => setAnonymous(target.checked)}>
-        Signer anonymt med «Nav klageinstans»
+        Signer anonymt med «Arbeids- og velferdsdirektoratet Klageinstans»
       </Checkbox>
       <Status {...updateStatus} />
     </HStack>
