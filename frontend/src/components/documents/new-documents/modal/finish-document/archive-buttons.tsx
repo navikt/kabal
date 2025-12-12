@@ -1,6 +1,6 @@
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useRemoveDocument } from '@app/hooks/use-remove-document';
+import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { useContext } from 'react';
@@ -15,7 +15,7 @@ export const ArchiveButtons = ({ document, disabled, ...rest }: FinishProps) => 
   const { close, setValidationErrors } = useContext(ModalContext);
   const [validate, { isFetching: isValidating }] = useLazyValidateDocumentQuery();
   const { data: documents = [] } = useGetDocumentsQuery(oppgaveId);
-  const remove = useRemoveDocument();
+  const { value: activeSmartEditor, remove: removeActiveSmartEditor } = useSmartEditorActiveDocument();
 
   const onValidate = async () => {
     if (typeof oppgaveId !== 'string') {
@@ -49,7 +49,9 @@ export const ArchiveButtons = ({ document, disabled, ...rest }: FinishProps) => 
     try {
       await finish({ dokumentId, oppgaveId }).unwrap();
 
-      remove(dokumentId, document);
+      if (dokumentId === activeSmartEditor) {
+        removeActiveSmartEditor();
+      }
       close();
     } catch (e) {
       if (isSmartDocumentValidatonError(e)) {

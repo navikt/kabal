@@ -1,6 +1,6 @@
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useRemoveDocument } from '@app/hooks/use-remove-document';
+import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
 import { useFinishDocumentMutation, useSetMottakerListMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -19,7 +19,7 @@ export const SendButtons = ({ document, disabled, ...rest }: FinishProps) => {
   const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const [validate, { isFetching: isValidating }] = useLazyValidateDocumentQuery();
   const { data: documents = [] } = useGetDocumentsQuery(typeof data !== 'undefined' ? data.id : skipToken);
-  const remove = useRemoveDocument();
+  const { value: activeSmartEditor, remove: removeActiveSmartEditor } = useSmartEditorActiveDocument();
   const { close, setValidationErrors } = useContext(ModalContext);
   const [suggestedBrevmottakere] = useSuggestedBrevmottakere(document.mottakerList, document.templateId);
   const reachableSuggestedReceivers = suggestedBrevmottakere.filter((s) => s.reachable);
@@ -89,7 +89,9 @@ export const SendButtons = ({ document, disabled, ...rest }: FinishProps) => {
 
       await finish({ dokumentId, oppgaveId: data.id }).unwrap();
 
-      remove(dokumentId, document);
+      if (dokumentId === activeSmartEditor) {
+        removeActiveSmartEditor();
+      }
       close();
     } catch (e) {
       if (isSmartDocumentValidatonError(e)) {
