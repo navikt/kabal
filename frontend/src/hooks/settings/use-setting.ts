@@ -1,5 +1,8 @@
 import type { IShownDocument } from '@app/components/view-pdf/types';
+import { parseJSON } from '@app/functions/parse-json';
 import {
+  getOppgavePath,
+  getSettingKey,
   type Setting,
   useBooleanSetting,
   useJsonSetting,
@@ -7,6 +10,7 @@ import {
   useOppgavePath,
   useSetting,
 } from '@app/hooks/settings/helpers';
+import { SETTINGS_MANAGER } from '@app/hooks/settings/manager';
 import type { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import { Journalposttype } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
@@ -19,18 +23,42 @@ export const useSmartEditorEnabled = () => useBooleanSetting(useOppgavePath('tab
 export const useKvalitetsvurderingEnabled = () => useBooleanSetting(useOppgavePath('tabs/kvalitetsvurdering/enabled'));
 
 // Oppgavebehandling documents
+const DOCUMENTS_PDF_VIEWED_SETTING_SUFFIX = 'tabs/documents/pdf/viewed';
 export const useDocumentsPdfViewed = () => {
   const {
     value = [],
     setValue,
     remove,
-  } = useJsonSetting<IShownDocument[]>(useOppgavePath('tabs/documents/pdf/viewed'));
+  } = useJsonSetting<IShownDocument[]>(useOppgavePath(DOCUMENTS_PDF_VIEWED_SETTING_SUFFIX));
 
-  const values = (Array.isArray(value) ? value : [value]).filter(
+  return { value: enforceShownDocumentsStructure(value), setValue, remove };
+};
+export const getDocumentsPdfViewed = (oppgaveId: string, navIdent: string): IShownDocument[] => {
+  const key = getOppgavePath(oppgaveId, DOCUMENTS_PDF_VIEWED_SETTING_SUFFIX);
+  const setting = getSettingKey(navIdent, key);
+  const raw = SETTINGS_MANAGER.get(setting);
+
+  if (raw === undefined) {
+    return [];
+  }
+
+  const parsed = parseJSON<IShownDocument[]>(raw);
+
+  if (parsed === null) {
+    return [];
+  }
+
+  return enforceShownDocumentsStructure(parsed);
+};
+const enforceShownDocumentsStructure = (value: IShownDocument[]): IShownDocument[] =>
+  (Array.isArray(value) ? value : [value]).filter(
     (d) => d.type !== DocumentTypeEnum.JOURNALFOERT || 'varianter' in d, // Validate that archived documents have variants.
   );
 
-  return { value: values, setValue, remove };
+export const setDocumentsPdfViewed = (oppgaveId: string, navIdent: string, documents: IShownDocument[]) => {
+  const key = getOppgavePath(oppgaveId, DOCUMENTS_PDF_VIEWED_SETTING_SUFFIX);
+  const setting = getSettingKey(navIdent, key);
+  SETTINGS_MANAGER.set(setting, JSON.stringify(documents));
 };
 export const useDocumentsPdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/pdf/width'));
 export const useDocumentsArchivePdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/modal/pdf/width'));

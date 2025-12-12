@@ -16,7 +16,7 @@ export interface Setting<T = string, D = undefined> {
 export const useSetting = (property: string, syncBetweenTabs = false): Setting => {
   const { user } = useContext(StaticDataContext);
 
-  const key = `${user.navIdent}/${property}`;
+  const key = getSettingKey(user.navIdent, property);
 
   const getSnapshot = useCallback(() => SETTINGS_MANAGER.get(key), [key]);
 
@@ -59,6 +59,8 @@ export const useSetting = (property: string, syncBetweenTabs = false): Setting =
 
   return { value, setValue, remove };
 };
+
+export const getSettingKey = (navIdent: string, property: string): string => `${navIdent}/${property}`;
 
 const booleanToString = (value: boolean): string => (value ? 'true' : 'false');
 const stringToBoolean = (value: string | undefined): boolean | undefined =>
@@ -161,5 +163,7 @@ export const useOppgavePath = (property: string): string => {
     throw new Error('Cannot use useOppgavePath outside of oppgave context');
   }
 
-  return `oppgaver/${oppgaveId}/${property}`;
+  return getOppgavePath(oppgaveId, property);
 };
+
+export const getOppgavePath = (oppgaveId: string, property: string): string => `oppgaver/${oppgaveId}/${property}`;
