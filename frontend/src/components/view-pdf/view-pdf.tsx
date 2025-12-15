@@ -37,7 +37,7 @@ export const ViewPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
   const { value: pdfWidth = DEFAULT_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
   const { remove: close } = useDocumentsPdfViewed();
-  const { showDocumentList, title } = useShownDocuments();
+  const { showDocumentList, title, isLoading } = useShownDocuments();
   const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
   const oppgaveId = useOppgaveId();
@@ -115,7 +115,7 @@ export const ViewPDF = () => {
     );
   }
 
-  if (mergedDocumentIsLoading) {
+  if (mergedDocumentIsLoading || isLoading) {
     return (
       <Container minWidth={pdfWidth}>
         <Loader title="Laster dokument" size="3xlarge" />
