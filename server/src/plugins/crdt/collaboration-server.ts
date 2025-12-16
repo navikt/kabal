@@ -214,6 +214,10 @@ export const collaborationServer = new Hocuspocus({
     logContext('Saved document to database', context, 'debug');
   },
 
+  afterUnloadDocument: async ({ documentName }) => {
+    log.debug({ msg: `Document unloaded: ${documentName}`, data: { dokumentId: documentName } });
+  },
+
   extensions: isDeployed ? [getValkeyExtension()].filter(isNotNull) : [],
 });
 
