@@ -7,6 +7,7 @@ import { TableRowElement } from '@app/plate/components/plate-ui/table-row-elemen
 import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { CommentsPlugin } from '@app/plate/plugins/comments';
 import { CurrentDatePlugin } from '@app/plate/plugins/current-date';
+import { CycleCasePlugin } from '@app/plate/plugins/cycle-case/cycle-case';
 import { EmptyVoidPlugin } from '@app/plate/plugins/empty-void';
 import { FloatingSaksbehandlerToolbarPlugin } from '@app/plate/plugins/floating-toolbar';
 import { FullmektigPlugin } from '@app/plate/plugins/fullmektig';
@@ -62,6 +63,7 @@ export const historyPlugins = [
   CommentsPlugin,
   BookmarkPlugin,
   SaksnummerPlugin,
+  CycleCasePlugin,
 ];
 
 export const saksbehandlerPlugins = [...historyPlugins, FloatingSaksbehandlerToolbarPlugin];

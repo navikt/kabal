@@ -69,6 +69,7 @@ export enum Keys {
   Zero = '0',
   // Function keys
   F2 = 'F2',
+  F3 = 'F3',
 }
 
 export const MOD_KEY = IS_MAC ? Keys.Cmd : Keys.Ctrl;
@@ -130,4 +131,5 @@ export const KEY_ICONS: Record<Keys, React.ReactNode> = {
   [Keys.V]: 'V',
   [Keys.Zero]: '0',
   [Keys.F2]: 'F2',
+  [Keys.F3]: 'F3',
 };
