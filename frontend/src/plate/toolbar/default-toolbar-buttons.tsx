@@ -2,7 +2,7 @@ import { MOD_KEY_TEXT } from '@app/keys';
 import { useIsElementActive } from '@app/plate/hooks/use-is-element-active';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { Align } from '@app/plate/toolbar/align';
-import { fixDocument } from '@app/plate/toolbar/fix-document';
+import { CycleCaseButton } from '@app/plate/toolbar/cycle-case-button';
 import { Headings } from '@app/plate/toolbar/headings';
 import { Indent } from '@app/plate/toolbar/indent';
 import { Lists } from '@app/plate/toolbar/lists';
@@ -15,15 +15,10 @@ import { useIsInTable } from '@app/plate/toolbar/use-is-in-table';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { insertPageBreak } from '@app/plate/utils/transforms';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import type { skipToken } from '@reduxjs/toolkit/query';
-import { DocumentPageBreak, TextDescription, Wand } from '@styled-icons/fluentui-system-regular';
+import { DocumentPageBreak, TextDescription } from '@styled-icons/fluentui-system-regular';
 import { BaseParagraphPlugin } from 'platejs';
 
-interface Props {
-  oppgaveId?: string | typeof skipToken;
-}
-
-export const DefaultToolbarButtons = ({ oppgaveId }: Props) => {
+export const DefaultToolbarButtons = () => {
   const editor = useMyPlateEditorRef();
   const unchangeable = useIsUnchangeable();
   const inList = useIsInList();
@@ -45,15 +40,11 @@ export const DefaultToolbarButtons = ({ oppgaveId }: Props) => {
         onClick={editor.redo}
       />
 
-      <ToolbarIconButton
-        label="Reparer dokument"
-        icon={<Wand width={24} aria-hidden />}
-        onClick={() => fixDocument(editor, oppgaveId)}
-      />
-
       <ToolbarSeparator />
 
       <Marks />
+
+      <CycleCaseButton />
 
       <ToolbarSeparator />
 

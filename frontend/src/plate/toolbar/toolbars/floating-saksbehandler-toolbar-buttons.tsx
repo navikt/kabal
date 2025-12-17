@@ -3,6 +3,7 @@ import { SaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/s
 import { Abbreviation } from '@app/plate/toolbar/abbreviation';
 import { CommentsButton } from '@app/plate/toolbar/add-comment';
 import { BookmarkButton } from '@app/plate/toolbar/bookmark-button';
+import { CycleCaseButton } from '@app/plate/toolbar/cycle-case-button';
 import { Headings } from '@app/plate/toolbar/headings';
 import { Indent } from '@app/plate/toolbar/indent';
 import { Marks } from '@app/plate/toolbar/marks';
@@ -37,6 +38,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
     return (
       <>
         <Marks />
+        <CycleCaseButton />
         <ToolbarSeparator />
         <Headings />
         <ToolbarSeparator />
@@ -51,6 +53,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
     return (
       <>
         <Marks />
+        <CycleCaseButton />
         <ToolbarSeparator />
         <Headings />
         <ToolbarSeparator />
@@ -66,6 +69,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
   if (type === BaseH1Plugin.key || type === BaseH2Plugin.key || type === BaseH3Plugin.key) {
     return (
       <>
+        <CycleCaseButton />
         <ParagraphButton />
         <Headings />
         <ToolbarSeparator />
@@ -80,6 +84,7 @@ export const FloatingSaksbehandlerToolbarButtons = () => {
     return (
       <>
         <Marks />
+        <CycleCaseButton />
         <ToolbarSeparator />
         <BookmarkButton />
         <CommentsButton />

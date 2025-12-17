@@ -7,6 +7,7 @@ import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-elem
 import { TableElement } from '@app/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
 import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
+import { CycleCasePlugin } from '@app/plate/plugins/cycle-case/cycle-case';
 import { FloatingRedaktørToolbarPlugin } from '@app/plate/plugins/floating-toolbar';
 import { PageBreakPlugin } from '@app/plate/plugins/page-break';
 import { RedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redaktoer';
@@ -45,4 +46,5 @@ export const redaktørPlugins = ({ navIdent }: IUserData) => [
   RedaktoerPlaceholderPlugin,
   FloatingRedaktørToolbarPlugin,
   createCapitalisePlugin(navIdent),
+  CycleCasePlugin,
 ];
