@@ -1,7 +1,1 @@
-import { BoxNew, HStack } from '@navikt/ds-react';
-
-export const ToolbarSeparator = () => (
-  <HStack asChild width="1px" height="8" marginInline="1">
-    <BoxNew background="neutral-soft" />
-  </HStack>
-);
+export const ToolbarSeparator = () => <div className="m-1 h-7 self-center border-ax-neutral-500 border-l" />;
