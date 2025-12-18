@@ -143,5 +143,5 @@ export const shouldCapitaliseFirstLetter = (editor: PlateEditor, at: TRange, sta
   return prevText[0].text.endsWith(' ');
 };
 
-const CAPITALISE_FIRST_LETTER_REGEX = /(^|\s)(\w)/g;
-const CAPITALISE_AFTER_SPACE_REGEX = /(\s)(\w)/g;
+const CAPITALISE_FIRST_LETTER_REGEX = /(^|\s)(\p{L})/gu;
+const CAPITALISE_AFTER_SPACE_REGEX = /(\s)(\p{L})/gu;
