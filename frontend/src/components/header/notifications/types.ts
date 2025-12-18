@@ -6,12 +6,14 @@ export enum NotificationType {
   LOST_ACCESS = 'LOST_ACCESS',
   GAINED_ACCESS = 'GAINED_ACCESS',
   MESSAGE = 'MESSAGE',
+  JOURNALPOST = 'JOURNALPOST',
 }
 
 export const NOTIFICATION_TYPES = Object.values(NotificationType);
 
 export const NOTIFICATION_TYPE_LABELS: Record<NotificationType, string> = {
   [NotificationType.MESSAGE]: 'Melding',
+  [NotificationType.JOURNALPOST]: 'Journalpost',
   [NotificationType.LOST_ACCESS]: 'Mistet tilgang',
   [NotificationType.GAINED_ACCESS]: 'Fått tilbake tilgang',
   [NotificationType.SYSTEM]: 'System',
@@ -65,6 +67,17 @@ export interface MessageNotification
   };
 }
 
+export interface JournalpostNotification extends BaseKabalNotification<NotificationType.JOURNALPOST>, WithBehandling {
+  journalpost: {
+    /** The ID of the related journal post */
+    id: string;
+    /** The ID of the related tema */
+    temaId: string;
+    /** Names of documents in the journalpost. The first document is the main document. */
+    documentNames: string[];
+  };
+}
+
 export interface LostAccessNotification extends BaseKabalNotification<NotificationType.LOST_ACCESS>, WithBehandling {
   message: string;
 }
@@ -84,6 +97,7 @@ export interface SystemNotification extends BaseKabalNotification<NotificationTy
 
 export type KabalNotification =
   | MessageNotification
+  | JournalpostNotification
   | LostAccessNotification
   | GainedAccessNotification
   | SystemNotification;
