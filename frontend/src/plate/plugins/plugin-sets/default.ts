@@ -16,13 +16,12 @@ import { AutoformatPlugin } from '@platejs/autoformat';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BoldPlugin, HeadingPlugin, ItalicPlugin, UnderlinePlugin } from '@platejs/basic-nodes/react';
 import { TextAlignPlugin } from '@platejs/basic-styles/react';
-import { NodeIdPlugin } from '@platejs/core';
 import { DocxPlugin } from '@platejs/docx';
 import { IndentPlugin } from '@platejs/indent/react';
 import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@platejs/list-classic/react';
 import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@platejs/table/react';
 import { ExitBreakPlugin } from '@platejs/utils';
-import { type NodeEntry, ParserPlugin } from 'platejs';
+import { type NodeEntry, NodeIdPlugin, ParserPlugin } from 'platejs';
 import { ParagraphPlugin } from 'platejs/react';
 
 export const defaultPlugins = [

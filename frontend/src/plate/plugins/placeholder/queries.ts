@@ -1,5 +1,5 @@
-import type { PlateEditor } from '@platejs/core/react';
 import { NodeApi } from 'platejs';
+import type { PlateEditor } from 'platejs/react';
 import type { Path } from 'slate';
 import type { PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';

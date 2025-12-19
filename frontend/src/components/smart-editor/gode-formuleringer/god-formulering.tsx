@@ -9,7 +9,7 @@ import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { CalendarIcon, ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { BoxNew, Button, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
-import { Plate, usePlateEditor } from '@platejs/core/react';
+import { Plate, usePlateEditor } from 'platejs/react';
 import { useEffect, useRef } from 'react';
 
 type Props = NonNullableGodFormulering & {
@@ -31,7 +31,6 @@ export const GodFormulering = ({
   setExpandState,
 }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
-  // const [showPreview, setShowPreview] = useState(false);
   const mainEditor = useMyPlateEditorRef();
   const primaryLanguage = useSmartEditorLanguage();
 

@@ -8,7 +8,7 @@ import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-set
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { FileSearchIcon } from '@navikt/aksel-icons';
 import { BoxNew, Button, type ButtonProps, HStack } from '@navikt/ds-react';
-import { Plate, usePlateEditor } from '@platejs/core/react';
+import { Plate, usePlateEditor } from 'platejs/react';
 import { useRef, useState } from 'react';
 
 type OpenSide = 'left' | 'right';

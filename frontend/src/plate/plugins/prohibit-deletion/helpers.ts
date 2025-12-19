@@ -1,6 +1,6 @@
 import { ELEMENT_LABEL_CONTENT, ELEMENT_REGELVERK, UNCHANGEABLE, UNDELETABLE } from '@app/plate/plugins/element-types';
-import type { PlateEditor } from '@platejs/core/react';
 import { ElementApi, NodeApi, type NodeEntry, type NodeOf } from 'platejs';
+import type { PlateEditor } from 'platejs/react';
 
 export const isInUnchangeableElement = (editor: PlateEditor): boolean => {
   if (editor.selection === null) {

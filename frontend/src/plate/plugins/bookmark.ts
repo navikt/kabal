@@ -4,8 +4,8 @@ import { Keys } from '@app/keys';
 import { BookmarkLeaf } from '@app/plate/leaf/bookmark';
 import { BookmarkVariantEnum, isBookmarkVariant } from '@app/plate/toolbar/bookmark-button';
 import type { FormattedText } from '@app/plate/types';
-import { createPlatePlugin, type PlateEditor } from '@platejs/core/react';
 import { type NodeEntry, RangeApi, TextApi } from 'platejs';
+import { createPlatePlugin, type PlateEditor } from 'platejs/react';
 
 export const BookmarkPlugin = createPlatePlugin({
   key: 'bookmark',

@@ -9,8 +9,8 @@ import { Sheet } from '@app/plate/sheet';
 import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { Button, VStack } from '@navikt/ds-react';
-import { Plate, useEditorReadOnly, usePlateEditor } from '@platejs/core/react';
 import type { Value } from 'platejs';
+import { Plate, useEditorReadOnly, usePlateEditor } from 'platejs/react';
 import { memo, useEffect } from 'react';
 
 interface Props {

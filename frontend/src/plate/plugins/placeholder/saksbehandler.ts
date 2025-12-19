@@ -4,8 +4,8 @@ import { handleNavigation } from '@app/plate/plugins/placeholder/handle-navigati
 import { parsers } from '@app/plate/plugins/placeholder/html-parsers';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
 import { withOverrides } from '@app/plate/plugins/placeholder/with-overrides';
-import { createPlatePlugin, type PlateEditor } from '@platejs/core/react';
 import { ElementApi, type NodeEntry } from 'platejs';
+import { createPlatePlugin, type PlateEditor } from 'platejs/react';
 import type { BasePoint } from 'slate';
 import type { PlaceholderElement } from '../../types';
 import { ELEMENT_PLACEHOLDER } from '../element-types';

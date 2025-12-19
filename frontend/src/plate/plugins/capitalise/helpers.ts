@@ -1,8 +1,8 @@
 import { ABBREVIATIONS } from '@app/plate/plugins/capitalise/abbreviations';
 import { isOfElementType } from '@app/plate/utils/queries';
-import type { PlateEditor } from '@platejs/core/react';
 import { ListItemContentPlugin } from '@platejs/list-classic/react';
 import { type Descendant, ElementApi, PathApi, type Point, RangeApi, TextApi } from 'platejs';
+import type { PlateEditor } from 'platejs/react';
 
 const LOWERCASE_CHAR_AND_DASH_REGEX = /^[\p{Ll}-]+$/u;
 export const isSingleWord = (text: string) => LOWERCASE_CHAR_AND_DASH_REGEX.test(text);

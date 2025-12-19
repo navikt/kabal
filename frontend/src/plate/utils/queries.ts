@@ -13,10 +13,10 @@ import type {
   RichTextEditorElement,
 } from '@app/plate/types';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import type { PlateEditor } from '@platejs/core/react';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTablePlugin } from '@platejs/table';
 import { type Descendant, ElementApi, NodeApi, type TElement, TextApi, type TNode, type TText } from 'platejs';
+import type { PlateEditor } from 'platejs/react';
 
 // Ensures a next-path even though original path is at end
 export const nextPath = (path: number[]) => {

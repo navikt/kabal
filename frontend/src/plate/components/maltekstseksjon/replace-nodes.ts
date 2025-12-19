@@ -1,6 +1,6 @@
 import { createEmptyVoid } from '@app/plate/templates/helpers';
 import type { MaltekstElement, MaltekstseksjonElement, RedigerbarMaltekstElement } from '@app/plate/types';
-import type { PlateEditor } from '@platejs/core/react';
+import type { PlateEditor } from 'platejs/react';
 import type { Path } from 'slate';
 
 export const replaceNodes = (

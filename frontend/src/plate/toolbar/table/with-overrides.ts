@@ -1,9 +1,9 @@
 import { MAX_TABLE_WIDTH } from '@app/plate/toolbar/table/constants';
 import type { TableElement, TableRowElement } from '@app/plate/types';
 import { isOfElementType } from '@app/plate/utils/queries';
-import type { OverrideEditor } from '@platejs/core/react';
 import { BaseTablePlugin, type TableConfig } from '@platejs/table';
 import type { Descendant } from 'platejs';
+import type { OverrideEditor } from 'platejs/react';
 
 export const withOverrides: OverrideEditor<TableConfig> = ({ editor }) => {
   const {

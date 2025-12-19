@@ -12,8 +12,8 @@ import {
   BaseItalicPlugin,
   BaseUnderlinePlugin,
 } from '@platejs/basic-nodes';
-import { getPluginType } from '@platejs/core';
 import { ClearFormatting, TextBold, TextItalic, TextUnderline } from '@styled-icons/fluentui-system-regular';
+import { getPluginType } from 'platejs';
 import { useMarkToolbarButton, useMarkToolbarButtonState } from 'platejs/react';
 
 export const Marks = () => {

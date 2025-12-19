@@ -21,7 +21,6 @@ import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text
 import type { Language } from '@app/types/texts/language';
 import type { AutoformatRule } from '@platejs/autoformat';
 import type { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import { type PlateEditor, useEditorRef, useEditorState } from '@platejs/core/react';
 import type {
   BaseBulletedListPlugin,
   BaseListItemContentPlugin,
@@ -32,6 +31,7 @@ import type { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@
 import type { PlateYjsEditorProps } from '@platejs/yjs';
 import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
 import type { BaseParagraphPlugin, TElement, TTableCellElement, TTableElement, TTableRowElement, TText } from 'platejs';
+import { type PlateEditor, useEditorRef, useEditorState } from 'platejs/react';
 import type { TemplateSections } from './template-sections';
 
 export enum TextAlign {

@@ -3,8 +3,8 @@ import { useSelection } from '@app/plate/hooks/use-selection';
 import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
 import type { EditorDescendant, FormattedText, MaltekstElement, PlaceholderElement } from '@app/plate/types';
 import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
-import type { PlateEditor } from '@platejs/core/react';
 import { ElementApi, NodeApi, type TElement } from 'platejs';
+import type { PlateEditor } from 'platejs/react';
 import { Path } from 'slate';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
