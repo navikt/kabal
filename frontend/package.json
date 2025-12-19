@@ -40,19 +40,18 @@
     "@platejs/basic-nodes": "52.0.1",
     "@platejs/basic-styles": "52.0.1",
     "@platejs/core": "52.0.8",
-    "@platejs/cursor": "52.0.1",
-    "@platejs/docx": "52.0.1",
-    "@platejs/floating": "52.0.1",
-    "@platejs/indent": "52.0.1",
-    "@platejs/list-classic": "52.0.1",
-    "@platejs/resizable": "52.0.1",
+    "@platejs/cursor": "52.0.11",
+    "@platejs/docx": "52.0.11",
+    "@platejs/floating": "52.0.11",
+    "@platejs/indent": "52.0.11",
+    "@platejs/list-classic": "52.0.11",
+    "@platejs/resizable": "52.0.11",
     "@platejs/table": "51.1.2",
     "@platejs/utils": "52.0.8",
     "@platejs/yjs": "52.0.7",
     "@reduxjs/toolkit": "2.11.2",
     "@slate-yjs/core": "1.0.2",
     "@styled-icons/fluentui-system-regular": "10.47.0",
-    "platejs": "52.0.8",
     "qs": "6.14.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -62,6 +61,7 @@
     "y-webrtc": "10.3.0"
   },
   "overrides": {
-    "yjs": "13.6.27"
+    "yjs": "13.6.27",
+    "platejs": "52.0.11"
   }
 }
