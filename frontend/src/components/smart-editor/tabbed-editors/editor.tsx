@@ -73,10 +73,16 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const [isConnected, setIsConnected] = useState(false);
   const [readOnly, setReadOnly] = useState(!ENVIRONMENT.isLocal); // Start in read-only mode until we know otherwise. Must start as writable (readOnly=false) on localhost to get write access at all.
 
+  const url = `/collaboration/behandlinger/${oppgave.id}/dokumenter/${id}`;
+
   const provider: YjsProviderConfig = {
     type: 'hocuspocus',
+    wsOptions: {
+      url,
+      maxAttempts: 1,
+    },
     options: {
-      url: `/collaboration/behandlinger/${oppgave.id}/dokumenter/${id}`,
+      url,
       name: id,
       token: user.navIdent, // There must be a token defined for the server auth hook to run.
       onAuthenticated: ({ scope }) => setReadOnly(scope !== 'read-write'),
