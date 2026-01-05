@@ -88,17 +88,21 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
         if (event.code === 4410) {
           console.debug('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.');
-          pushLog('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.');
+          pushLog('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.', {
+            context: { dokumentId: id, oppgaveId: oppgave.id },
+          });
           setReadOnly(true);
           setIsConnected(false);
           try {
             yjs.destroy();
           } catch (e) {
             console.debug('Code 4410 - Error destroying Yjs instance', e);
-            pushLog('Code 4410 - Error destroying Yjs instance');
+            pushLog('Code 4410 - Error destroying Yjs instance', {
+              context: { dokumentId: id, oppgaveId: oppgave.id },
+            });
 
             if (e instanceof Error) {
-              pushError(e);
+              pushError(e, { context: { dokumentId: id, oppgaveId: oppgave.id } });
             }
           }
           return;
@@ -139,7 +143,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           console.error(err);
 
           if (err instanceof Error) {
-            pushError(err);
+            pushError(err, { context: { dokumentId: id, oppgaveId: oppgave.id } });
           }
         }
       },
@@ -181,17 +185,21 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
             return;
           case 'deleted':
             console.debug('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.');
-            pushLog('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.');
+            pushLog('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.', {
+              context: { dokumentId: id, oppgaveId: oppgave.id },
+            });
             setReadOnly(true);
             setIsConnected(false);
             try {
               yjs.destroy();
             } catch (e) {
               console.debug('Stateless deleted - Error destroying Yjs instance', e);
-              pushLog('Stateless deleted - Error destroying Yjs instance');
+              pushLog('Stateless deleted - Error destroying Yjs instance', {
+                context: { dokumentId: id, oppgaveId: oppgave.id },
+              });
 
               if (e instanceof Error) {
-                pushError(e);
+                pushError(e, { context: { dokumentId: id, oppgaveId: oppgave.id } });
               }
             }
             return;
@@ -228,10 +236,10 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         yjs.destroy();
       } catch (e) {
         console.debug('useEffect - Error destroying Yjs instance', e);
-        pushLog('useEffect - Error destroying Yjs instance');
+        pushLog('useEffect - Error destroying Yjs instance', { context: { dokumentId: id } });
 
         if (e instanceof Error) {
-          pushError(e);
+          pushError(e, { context: { dokumentId: id } });
         }
       }
     };
