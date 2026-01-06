@@ -234,7 +234,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
       return;
     }
 
-    yjs.init({ id, autoConnect: true });
+    yjs.init({ id, autoConnect: false });
     isInitialized.current = true;
 
     return () => {
