@@ -261,7 +261,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     >
       <Plate<RichTextEditor>
         editor={editor}
-        readOnly={readOnly}
+        readOnly={readOnly || !isConnected}
         decorate={({ entry }) => {
           const [node, path] = entry;
           if (newCommentSelection === null || RangeApi.isCollapsed(newCommentSelection) || !TextApi.isText(node)) {
