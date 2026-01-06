@@ -1,5 +1,5 @@
 import { onKeyDown } from '@app/plate/plugins/custom-abbreviations/on-key-down';
-import { createPlatePlugin } from '@platejs/core/react';
+import { createPlatePlugin } from 'platejs/react';
 
 const KEY_CUSTOM_ABBREVIATIONS = 'custom-abbreviations';
 

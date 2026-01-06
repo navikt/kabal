@@ -14,9 +14,9 @@ import { RedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redak
 import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
 import type { IUserData } from '@app/types/bruker';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import { BaseParagraphPlugin } from '@platejs/core';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
+import { BaseParagraphPlugin } from 'platejs';
 
 export const redaktørComponents = {
   [BaseParagraphPlugin.key]: Paragraph,

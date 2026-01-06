@@ -6,8 +6,8 @@ import {
 } from '@app/plate/plugins/placeholder/delete';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
 import { isPlaceholderActive } from '@app/plate/utils/queries';
-import type { OverrideEditor } from '@platejs/core/react';
 import { type Descendant, ElementApi, type TText } from 'platejs';
+import type { OverrideEditor } from 'platejs/react';
 import { Path } from 'slate';
 import type { MaltekstElement, PlaceholderElement } from '../../types';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';

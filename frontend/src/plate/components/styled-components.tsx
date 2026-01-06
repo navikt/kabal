@@ -1,5 +1,5 @@
 import { BoxNew, HGrid } from '@navikt/ds-react';
-import { useEditorReadOnly } from '@platejs/core/react';
+import { useEditorReadOnly } from 'platejs/react';
 import type { HtmlHTMLAttributes } from 'react';
 
 export enum SectionTypeEnum {

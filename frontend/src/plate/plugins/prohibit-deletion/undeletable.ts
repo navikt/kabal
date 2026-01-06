@@ -1,8 +1,8 @@
 import { UNDELETABLE_BUT_EDITABLE } from '@app/plate/plugins/element-types';
 import type { EditorDescendant } from '@app/plate/types';
 import { isInList } from '@app/plate/utils/queries';
-import type { PlateEditor } from '@platejs/core/react';
 import { ElementApi, type NodeOf } from 'platejs';
+import type { PlateEditor } from 'platejs/react';
 
 const match = (n: NodeOf<EditorDescendant>) => ElementApi.isElement(n) && UNDELETABLE_BUT_EDITABLE.includes(n.type);
 

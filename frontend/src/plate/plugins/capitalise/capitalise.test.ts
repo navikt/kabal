@@ -9,8 +9,8 @@ import {
 } from '@app/plate/templates/helpers';
 import { type KabalValue, type ParagraphElement, TextAlign } from '@app/plate/types';
 import { BaseH1Plugin } from '@platejs/basic-nodes';
-import { BaseParagraphPlugin } from '@platejs/core';
-import { createPlateEditor, type PlateEditor } from '@platejs/core/react';
+import { BaseParagraphPlugin } from 'platejs';
+import { createPlateEditor, type PlateEditor } from 'platejs/react';
 import type { Point, Selection } from 'slate';
 
 const plugins = [createCapitalisePlugin('some user')];

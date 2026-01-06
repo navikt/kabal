@@ -9,9 +9,9 @@ import {
   BaseH5Plugin,
   BaseH6Plugin,
 } from '@platejs/basic-nodes';
-import { createPlatePlugin, ParagraphPlugin } from '@platejs/core/react';
 import { ListItemContentPlugin } from '@platejs/list-classic/react';
 import type { TElement } from 'platejs';
+import { createPlatePlugin, ParagraphPlugin } from 'platejs/react';
 
 export const PastePlugin = createPlatePlugin({
   key: 'paste',

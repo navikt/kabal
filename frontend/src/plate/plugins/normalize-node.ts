@@ -41,8 +41,6 @@ import { MALTEKSTSEKSJON_TYPE, PlainTextTypes, REGELVERK_TYPE, RichTextTypes } f
 import { isGenericObject } from '@app/types/types';
 import { LogLevel } from '@grafana/faro-web-sdk';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import { BaseParagraphPlugin } from '@platejs/core';
-import { createPlatePlugin, type OverrideEditor, ParagraphPlugin, type PlateEditor } from '@platejs/core/react';
 import {
   BaseBulletedListPlugin,
   BaseListItemContentPlugin,
@@ -52,7 +50,8 @@ import {
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { TableCellPlugin } from '@platejs/table/react';
 import type { TElement, TNode } from 'platejs';
-import { ElementApi, NodeApi } from 'platejs';
+import { BaseParagraphPlugin, ElementApi, NodeApi } from 'platejs';
+import { createPlatePlugin, type OverrideEditor, ParagraphPlugin, type PlateEditor } from 'platejs/react';
 import { isEditor, type Path, Scrubber } from 'slate';
 
 const module = 'normalize';

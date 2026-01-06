@@ -1,10 +1,10 @@
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { getPluginType } from '@platejs/core';
-import { useEditorRef } from '@platejs/core/react';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { useListToolbarButton, useListToolbarButtonState } from '@platejs/list-classic/react';
 import { TextBulletListLtr, TextNumberListLtr } from '@styled-icons/fluentui-system-regular';
+import { getPluginType } from 'platejs';
+import { useEditorRef } from 'platejs/react';
 
 export const Lists = () => {
   const editor = useEditorRef();
