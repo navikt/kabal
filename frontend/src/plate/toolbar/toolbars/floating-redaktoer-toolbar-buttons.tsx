@@ -8,9 +8,9 @@ import { Marks } from '@app/plate/toolbar/marks';
 import { ParagraphButton } from '@app/plate/toolbar/paragraph-button';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import { useEditorState } from '@platejs/core/react';
 import { BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseParagraphPlugin, ElementApi } from 'platejs';
+import { useEditorState } from 'platejs/react';
 
 export const FloatingRedaktoerToolbarButtons = () => {
   const editor = useEditorState();

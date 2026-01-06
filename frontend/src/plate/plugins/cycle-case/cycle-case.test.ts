@@ -2,8 +2,8 @@ import { describe, expect, it, test } from 'bun:test';
 import { cycleCase } from '@app/plate/plugins/cycle-case/cycle-case';
 import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { type KabalValue, type ParagraphElement, TextAlign } from '@app/plate/types';
-import { BaseParagraphPlugin } from '@platejs/core';
-import { createPlateEditor } from '@platejs/core/react';
+import { BaseParagraphPlugin } from 'platejs';
+import { createPlateEditor } from 'platejs/react';
 import type { Point, Selection } from 'slate';
 
 const createP = (children: ParagraphElement['children']): ParagraphElement => ({

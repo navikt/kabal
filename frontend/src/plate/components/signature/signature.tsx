@@ -8,9 +8,8 @@ import type { SignatureElement } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { BoxNew, HStack } from '@navikt/ds-react';
-import { useEditorReadOnly } from '@platejs/core/react';
 import type { SetNodesOptions } from 'platejs';
-import { PlateElement, type PlateElementProps } from 'platejs/react';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useContext, useId } from 'react';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '../styled-components';
 

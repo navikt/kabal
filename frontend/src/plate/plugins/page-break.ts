@@ -2,7 +2,7 @@ import { isMetaKey, Keys } from '@app/keys';
 import { PageBreak } from '@app/plate/components/page-break';
 import { isInTable, isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPageBreak } from '@app/plate/utils/transforms';
-import { createPlatePlugin } from '@platejs/core/react';
+import { createPlatePlugin } from 'platejs/react';
 import { ELEMENT_PAGE_BREAK } from './element-types';
 
 export const PageBreakPlugin = createPlatePlugin({

@@ -10,9 +10,8 @@ import {
 } from '@app/plate/plugins/capitalise/helpers';
 import type { FormattedText } from '@app/plate/types';
 import { isText } from '@app/plate/utils/queries';
-import { createPlatePlugin } from '@platejs/core/react';
 import { type Descendant, type InsertTextOptions, PathApi, RangeApi } from 'platejs';
-import { PlateLeaf, type PlateLeafProps } from 'platejs/react';
+import { createPlatePlugin, PlateLeaf, type PlateLeafProps } from 'platejs/react';
 
 const AutoCapitalisedLeaf = (props: PlateLeafProps<FormattedText>) => (
   <PlateLeaf

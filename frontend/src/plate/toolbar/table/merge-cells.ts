@@ -1,8 +1,8 @@
 import { getCurrentRow } from '@app/plate/toolbar/table/helpers';
 import type { ParagraphElement, RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
 import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
-import { BaseParagraphPlugin } from '@platejs/core';
 import { BaseTableCellPlugin, BaseTableRowPlugin } from '@platejs/table';
+import { BaseParagraphPlugin } from 'platejs';
 
 export const mergeCells = (
   editor: RichTextEditor,

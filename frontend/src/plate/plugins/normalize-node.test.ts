@@ -16,9 +16,9 @@ import {
   TextAlign,
 } from '@app/plate/types';
 import { RichTextTypes } from '@app/types/common-text-types';
-import { createPlateEditor, ParagraphPlugin } from '@platejs/core/react';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseParagraphPlugin } from 'platejs';
+import { createPlateEditor, ParagraphPlugin } from 'platejs/react';
 
 const createEditor = (value: KabalValue) => createPlateEditor({ plugins: [normalizeNodePlugin], value });
 

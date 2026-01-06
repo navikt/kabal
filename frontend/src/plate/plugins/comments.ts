@@ -3,8 +3,8 @@ import { hasOwn } from '@app/functions/object';
 import { Keys } from '@app/keys';
 import { CommentLeaf } from '@app/plate/leaf/comment';
 import type { FormattedText } from '@app/plate/types';
-import { createPlatePlugin, type PlateEditor } from '@platejs/core/react';
 import { TextApi } from 'platejs';
+import { createPlatePlugin, type PlateEditor } from 'platejs/react';
 
 export const CommentsPlugin = createPlatePlugin({
   key: 'comments',

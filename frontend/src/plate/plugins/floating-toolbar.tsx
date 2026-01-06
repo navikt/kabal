@@ -1,9 +1,14 @@
 import { FloatingRedaktoerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-redaktoer-toolbar-buttons';
 import { FloatingSaksbehandlerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-saksbehandler-toolbar-buttons';
 import { BoxNew } from '@navikt/ds-react';
-import { createPlatePlugin, useEditorContainerRef, useEditorId, useEventEditorValue } from '@platejs/core/react';
 import { flip, offset, useFloatingToolbar, useFloatingToolbarState } from '@platejs/floating';
-import { useComposedRef } from 'platejs/react';
+import {
+  createPlatePlugin,
+  useComposedRef,
+  useEditorContainerRef,
+  useEditorId,
+  useEventEditorValue,
+} from 'platejs/react';
 import { type ReactNode, useEffect, useState } from 'react';
 
 export const FloatingSaksbehandlerToolbarPlugin = createPlatePlugin({

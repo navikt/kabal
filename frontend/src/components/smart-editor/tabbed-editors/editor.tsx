@@ -30,10 +30,10 @@ import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebeh
 import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, FileTextIcon } from '@navikt/aksel-icons';
 import { BoxNew, HStack, Tooltip, VStack } from '@navikt/ds-react';
-import { Plate, useEditorReadOnly, usePlateEditor } from '@platejs/core/react';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
 import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
+import { Plate, useEditorReadOnly, usePlateEditor } from 'platejs/react';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 

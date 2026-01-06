@@ -1,14 +1,10 @@
 import { merge } from '@app/functions/classes';
 import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { isEditableTextNode } from '@app/plate/functions/is-editable-text';
-import {
-  PlateContainer,
-  PlateContent,
-  type PlateContentProps,
-  type PlateEditor,
-  useEditorRef,
-} from '@platejs/core/react';
+import { useMyPlateEditorRef } from '@app/plate/types';
 import type { TText } from 'platejs';
+import type { PlateEditor } from 'platejs/react';
+import { PlateContainer, PlateContent, type PlateContentProps } from 'platejs/react';
 
 interface Props extends Omit<PlateContentProps, 'contentEditable'> {
   lang: SpellCheckLanguage;
@@ -16,7 +12,7 @@ interface Props extends Omit<PlateContentProps, 'contentEditable'> {
 }
 
 export const KabalPlateEditor = ({ className, contentEditable, spellCheck = true, ...props }: Props) => {
-  const editor = useEditorRef();
+  const editor = useMyPlateEditorRef();
 
   return (
     <PlateContainer>

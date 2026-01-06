@@ -47,9 +47,9 @@ import {
 } from '@app/plate/types';
 import { Language } from '@app/types/texts/language';
 import { BaseH1Plugin, BaseH2Plugin } from '@platejs/basic-nodes';
-import { BaseParagraphPlugin } from '@platejs/core';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
+import { BaseParagraphPlugin } from 'platejs';
 import { TemplateSections } from '../template-sections';
 import { MAX_TABLE_WIDTH } from '../toolbar/table/constants';
 import { LabelContentSource } from '../types';

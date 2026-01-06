@@ -11,9 +11,9 @@ import { SaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/s
 import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
 import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import { BaseParagraphPlugin } from '@platejs/core';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
+import { BaseParagraphPlugin } from 'platejs';
 
 export const previewPlugins = [
   ...defaultPlugins,

@@ -3,8 +3,8 @@ import { UNCHANGEABLE } from '@app/plate/plugins/element-types';
 import type { PageBreakElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { BoxNew, Button } from '@navikt/ds-react';
-import type { PlateEditor } from '@platejs/core/react';
 import { ElementApi, type NodeEntry } from 'platejs';
+import type { PlateEditor } from 'platejs/react';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
 
 const parentIsUnchangeable = (editor: PlateEditor, entry: NodeEntry<PageBreakElement> | undefined): boolean => {
