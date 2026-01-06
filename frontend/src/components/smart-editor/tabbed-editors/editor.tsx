@@ -251,6 +251,17 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     };
   }, [mounted, yjs, id]);
 
+  // Set read-only mode when disconnected for 10 seconds.
+  useEffect(() => {
+    if (isConnected) {
+      return;
+    }
+
+    const timeout = setTimeout(() => setReadOnly(true), 10_000);
+
+    return () => clearTimeout(timeout);
+  }, [isConnected]);
+
   return (
     <VStack
       align="start"
@@ -261,7 +272,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     >
       <Plate<RichTextEditor>
         editor={editor}
-        readOnly={readOnly || !isConnected}
+        readOnly={readOnly}
         decorate={({ entry }) => {
           const [node, path] = entry;
           if (newCommentSelection === null || RangeApi.isCollapsed(newCommentSelection) || !TextApi.isText(node)) {
