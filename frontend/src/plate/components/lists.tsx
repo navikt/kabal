@@ -22,7 +22,7 @@ export const UnorderedList = ({ children, element, ...props }: PlateElementProps
     {...props}
     element={element}
     style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}
-    className={`${LIST_CLASSES} list-disc`}
+    className={`${LIST_CLASSES} list-disc [&_ul]:list-[circle] [&_ul_ul]:list-[square] [&_ul_ul_ul]:list-disc [&_ul_ul_ul_ul]:list-[circle] [&_ul_ul_ul_ul_ul]:list-[square] [&_ul_ul_ul_ul_ul_ul]:list-disc [&_ul_ul_ul_ul_ul_ul_ul]:list-[circle] [&_ul_ul_ul_ul_ul_ul_ul_ul]:list-[square]`}
   >
     {children}
   </PlateElement>
