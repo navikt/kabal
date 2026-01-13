@@ -31,6 +31,8 @@ interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'template
   creator: string;
   editingComment: ISmartEditorComment | null;
   setEditingComment: (comment: ISmartEditorComment | null) => void;
+  showSearchReplace: boolean;
+  setShowSearchReplace: (show: boolean) => void;
 }
 
 export const SmartEditorContext = createContext<ISmartEditorContext>({
@@ -53,6 +55,8 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   creator: '',
   editingComment: null,
   setEditingComment: noop,
+  showSearchReplace: false,
+  setShowSearchReplace: noop,
 });
 
 interface Props {
@@ -75,6 +79,7 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
     useSmartEditorAnnotationsAtOrigin();
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const [editingComment, setEditingComment] = useState<ISmartEditorComment | null>(null);
+  const [showSearchReplace, setShowSearchReplace] = useState(false);
 
   return (
     <SmartEditorContext.Provider
@@ -98,6 +103,8 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
         creator: creator.employee.navIdent,
         editingComment,
         setEditingComment,
+        showSearchReplace,
+        setShowSearchReplace,
       }}
     >
       {children}
