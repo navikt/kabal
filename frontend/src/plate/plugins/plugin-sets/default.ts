@@ -3,6 +3,7 @@ import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-elem
 import { TableElement } from '@app/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
 import { BoldLeaf, ItalicLeaf, UnderlineLeaf } from '@app/plate/leaf/marks';
+import { AllSearchHitsHighlightLeaf, ReplaceOneHighlightLeaf } from '@app/plate/leaf/search-replace';
 import { autoformatRules } from '@app/plate/plugins/autoformat/rules';
 import { CopyPlugin } from '@app/plate/plugins/copy/copy';
 import { CustomAbbreviationPlugin } from '@app/plate/plugins/custom-abbreviations/create-custom-abbreviation-plugin';
@@ -10,6 +11,7 @@ import { normalizeNodePlugin } from '@app/plate/plugins/normalize-node';
 import { PageBreakPlugin } from '@app/plate/plugins/page-break';
 import { PastePlugin } from '@app/plate/plugins/paste';
 import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
+import { ReplaceOneHighlightPlugin, SearchReplacePlugin } from '@app/plate/plugins/search-replace/search-replace';
 import { SelectionPlugin } from '@app/plate/plugins/selection';
 import { withOverrides } from '@app/plate/toolbar/table/with-overrides';
 import { AutoformatPlugin } from '@platejs/autoformat';
@@ -101,4 +103,6 @@ export const defaultPlugins = [
   normalizeNodePlugin,
   CustomAbbreviationPlugin,
   PastePlugin,
+  ReplaceOneHighlightPlugin.configure({ render: { node: ReplaceOneHighlightLeaf } }),
+  SearchReplacePlugin.configure({ render: { node: AllSearchHitsHighlightLeaf } }),
 ];
