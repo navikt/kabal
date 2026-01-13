@@ -12,8 +12,14 @@ interface Props {
 
 export const Content = ({ children }: Props) => {
   const editor = useMyPlateEditorRef();
-  const { showGodeFormuleringer, setShowGodeFormuleringer, setNewCommentSelection, showAnnotationsAtOrigin } =
-    useContext(SmartEditorContext);
+  const {
+    showGodeFormuleringer,
+    setShowGodeFormuleringer,
+    setNewCommentSelection,
+    showAnnotationsAtOrigin,
+    setShowSearchReplace,
+    showSearchReplace,
+  } = useContext(SmartEditorContext);
   const { scaleUp, scaleDown, setScale } = useContext(ScaleContext);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -56,6 +62,15 @@ export const Content = ({ children }: Props) => {
     if (event.key === Keys.Zero) {
       event.preventDefault();
       setScale(DEFAULT);
+
+      return;
+    }
+
+    if ((event.metaKey || event.ctrlKey) && (lowerCaseKey === Keys.F || lowerCaseKey === Keys.R)) {
+      event.preventDefault();
+      setShowSearchReplace(!showSearchReplace);
+
+      return;
     }
   };
 
