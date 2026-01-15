@@ -6,13 +6,13 @@ import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/
 import { setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
 import {
   addOne,
-  getSelectedDocuments,
   isPathSelected,
   isSelected,
   selectRangeTo,
   unselectOne,
   useIsPathSelected,
 } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { findDocument } from '@app/domain/find-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -55,6 +55,7 @@ export const Attachment = memo(
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
     const cleanDragUI = useRef<() => void>(() => undefined);
     const { setDraggedJournalfoertDocuments, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
+    const { getSelectedDocuments } = useContext(SelectContext);
     const isSaksbehandler = useIsTildeltSaksbehandler();
     const isRol = useIsAssignedRolAndSent();
     const isFeilregistrert = useIsFeilregistrert();
@@ -66,7 +67,7 @@ export const Attachment = memo(
     const onDragStart = useCallback(
       (e: React.DragEvent<HTMLDivElement>) => {
         if (isPathSelected(documentIndex, index)) {
-          const docs = getSelectedDocuments(documents);
+          const docs = getSelectedDocuments();
 
           cleanDragUI.current = createDragUI(
             docs.map((d) => d.tittel ?? 'Ukjent dokument'),
@@ -92,7 +93,15 @@ export const Attachment = memo(
         e.dataTransfer.dropEffect = 'link';
         setDraggedJournalfoertDocuments([doc]);
       },
-      [documentIndex, index, documents, dokumentInfoId, journalpostId, setDraggedJournalfoertDocuments],
+      [
+        documentIndex,
+        index,
+        getSelectedDocuments,
+        documents,
+        dokumentInfoId,
+        journalpostId,
+        setDraggedJournalfoertDocuments,
+      ],
     );
 
     const onDoubleClick = useCallback(() => {

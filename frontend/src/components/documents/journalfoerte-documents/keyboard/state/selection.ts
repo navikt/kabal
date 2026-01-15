@@ -18,7 +18,6 @@ import {
   type SelectionRange,
 } from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
 import type { SelectedMap } from '@app/components/documents/journalfoerte-documents/select-context/types';
-import { findDocument } from '@app/domain/find-document';
 import { isMetaKey } from '@app/keys';
 import { Observable } from '@app/observable';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
@@ -152,27 +151,4 @@ export const getSelectedDocumentsMap = (filteredDocumentsList: IArkivertDocument
 
     return map;
   }, new Map());
-};
-
-export const getSelectedDocuments = (filteredDocumentsList: IArkivertDocument[]) => {
-  const selectedDocuments = getSelectedDocumentsMap(filteredDocumentsList);
-
-  if (selectedDocuments.size === 0) {
-    return [];
-  }
-
-  const selectedDocumentsArray: IArkivertDocument[] = new Array<IArkivertDocument>(selectedDocuments.size);
-
-  let index = 0;
-  for (const [, { journalpostId, dokumentInfoId }] of selectedDocuments) {
-    const doc = findDocument(journalpostId, dokumentInfoId, filteredDocumentsList);
-
-    if (doc !== undefined) {
-      selectedDocumentsArray[index] = doc;
-    }
-
-    index++;
-  }
-
-  return selectedDocumentsArray;
 };
