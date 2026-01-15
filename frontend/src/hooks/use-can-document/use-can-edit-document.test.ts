@@ -51,7 +51,7 @@ const BASE_JD_REFERENCE: JournalfoertDokumentReference = {
       skjerming: null,
     },
   ],
-  datoOpprettet: '2021-01-01',
+  datoSortering: '2021-01-01T23:59:00',
   sortKey: '1',
   journalpostId: '1',
   dokumentInfoId: '1',

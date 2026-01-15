@@ -1,3 +1,4 @@
+import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
 import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
@@ -33,6 +34,7 @@ import type {
 } from '@app/types/documents/response';
 import { isApiRejectionError } from '@app/types/errors';
 import type { IdentifikatorPart } from '@app/types/oppgave-common';
+import { format } from 'date-fns';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';
 
@@ -346,6 +348,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
       }),
       onQueryStarted: async ({ oppgaveId, parentId, journalfoerteDokumenter }, { dispatch, queryFulfilled }) => {
         const { navIdent, navn } = await user;
+        const now = format(new Date(), ISO_DATETIME_FORMAT);
 
         const getDocumentsPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
@@ -372,15 +375,15 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
                 isSmartDokument: false,
                 dokumentTypeId:
                   doc.journalposttype === Journalposttype.NOTAT ? DistribusjonsType.NOTAT : DistribusjonsType.BREV,
-                created: doc.datoOpprettet,
-                modified: doc.datoOpprettet,
+                created: now,
+                modified: now,
                 tittel: doc.tittel ?? 'Ukjent',
                 type: DocumentTypeEnum.JOURNALFOERT,
                 journalfoertDokumentReference: {
                   journalpostId: doc.journalpostId,
                   dokumentInfoId: doc.dokumentInfoId,
                   hasAccess: doc.hasAccess,
-                  datoOpprettet: doc.datoOpprettet,
+                  datoSortering: doc.datoSortering,
                   varianter: doc.varianter,
                   sortKey: doc.sortKey,
                   temaId: doc.temaId,

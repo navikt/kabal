@@ -124,7 +124,7 @@ export type ISmartDocumentOrAttachment = ISmartDocument<null> | ISmartDocument<s
 
 export interface JournalfoertDokumentReference
   extends IJournalfoertDokumentId,
-    Pick<IArkivertDocument, 'hasAccess' | 'datoOpprettet' | 'varianter' | 'temaId'> {
+    Pick<IArkivertDocument, 'hasAccess' | 'datoSortering' | 'varianter' | 'temaId'> {
   sortKey: string;
 }
 

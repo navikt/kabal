@@ -7,7 +7,7 @@ interface Props extends Omit<HTMLAttributes<HTMLTimeElement>, 'dateTime'> {
 }
 
 export const DocumentDate = ({ document, ...attrs }: Props) => (
-  <time {...attrs} dateTime={document.journalfoertDokumentReference.datoOpprettet}>
-    {isoDateTimeToPrettyDate(document.journalfoertDokumentReference.datoOpprettet)}
+  <time {...attrs} dateTime={document.journalfoertDokumentReference.datoSortering}>
+    {isoDateTimeToPrettyDate(document.journalfoertDokumentReference.datoSortering)}
   </time>
 );
