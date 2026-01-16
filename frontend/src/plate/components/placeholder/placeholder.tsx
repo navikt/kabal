@@ -145,6 +145,7 @@ const Placeholder = (props: PlateElementProps<PlaceholderElement>) => {
     >
       <Tooltip content={element.placeholder} maxChar={Number.POSITIVE_INFINITY} contentEditable={false}>
         <BoxNew
+          as="span"
           position="relative"
           borderRadius="medium"
           data-node-type={ELEMENT_PLACEHOLDER}
