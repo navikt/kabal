@@ -1,4 +1,5 @@
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
+import { ToolbarDropdown } from '@app/plate/toolbar/toolbar-dropdown';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useIsInList } from '@app/plate/toolbar/use-is-in-list';
 import { TextAlignPlugin } from '@platejs/basic-styles/react';
@@ -17,29 +18,29 @@ export const Align = () => {
   const disabled = unchangeable || isInList || isInHeading;
 
   return (
-    <>
+    <ToolbarDropdown icon={<TextAlignLeft aria-hidden width={24} />} title="Tekstjustering" disabled={disabled}>
       <ToolbarIconButton
         label="Venstrejuster"
         onClick={() => tf.textAlign.setNodes('left')}
         icon={<TextAlignLeft aria-hidden width={24} />}
         active={value === 'left'}
-        disabled={disabled}
+        placement="right"
       />
       <ToolbarIconButton
         label="Midtstill"
         onClick={() => tf.textAlign.setNodes('center')}
         icon={<TextAlignCenter aria-hidden width={24} />}
         active={value === 'center'}
-        disabled={disabled}
+        placement="right"
       />
       <ToolbarIconButton
         label="Høyrejuster"
         onClick={() => tf.textAlign.setNodes('right')}
         icon={<TextAlignRight aria-hidden width={24} />}
         active={value === 'right'}
-        disabled={disabled}
+        placement="right"
       />
-    </>
+    </ToolbarDropdown>
   );
 };
 

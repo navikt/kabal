@@ -6,6 +6,7 @@ import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { StyledToolbar } from '@app/plate/toolbar/styled-components';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { SaksbehandlerSettings } from '@app/plate/toolbar/toolbars/saksbehandler-settings';
+import { SearchReplaceToolbarButton } from '@app/plate/toolbar/toolbars/search-replace-toolbar-button';
 import { ClockDashedIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import { useContext } from 'react';
 
@@ -18,6 +19,8 @@ export const SaksbehandlerToolbar = () => {
       <DefaultToolbarButtons />
 
       <ToolbarSeparator />
+
+      <SearchReplaceToolbarButton />
 
       <ToolbarIconButton
         label="Vis gode formuleringer"

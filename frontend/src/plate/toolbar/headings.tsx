@@ -1,5 +1,6 @@
 import { useIsElementActive } from '@app/plate/hooks/use-is-element-active';
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
+import { ToolbarDropdown } from '@app/plate/toolbar/toolbar-dropdown';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useIsInList } from '@app/plate/toolbar/use-is-in-list';
 import { useIsInTable } from '@app/plate/toolbar/use-is-in-table';
@@ -15,14 +16,22 @@ export const Headings = () => {
   const disabled = unchangeable || inList || inTable;
 
   return (
-    <>
+    <ToolbarDropdown
+      icon={
+        <span aria-hidden className="text-[24px]">
+          H
+        </span>
+      }
+      title="Overskrifter"
+      disabled={disabled}
+    >
       <ToolbarIconButton
         label="Dokumenttittel / Overskrift 1"
         keys={['# + mellomrom']}
         onClick={() => editor.tf.setNodes({ type: BaseH1Plugin.key })}
         icon={<TextHeader1 width={24} aria-hidden />}
         active={useIsElementActive(BaseH1Plugin.key)}
-        disabled={disabled}
+        placement="right"
       />
 
       <ToolbarIconButton
@@ -31,7 +40,7 @@ export const Headings = () => {
         onClick={() => editor.tf.setNodes({ type: BaseH2Plugin.key })}
         icon={<TextHeader2 width={24} aria-hidden />}
         active={useIsElementActive(BaseH2Plugin.key)}
-        disabled={disabled}
+        placement="right"
       />
 
       <ToolbarIconButton
@@ -40,8 +49,8 @@ export const Headings = () => {
         onClick={() => editor.tf.setNodes({ type: BaseH3Plugin.key })}
         icon={<TextHeader3 width={24} aria-hidden />}
         active={useIsElementActive(BaseH3Plugin.key)}
-        disabled={disabled}
+        placement="right"
       />
-    </>
+    </ToolbarDropdown>
   );
 };

@@ -47,9 +47,7 @@ export const createCapitalisePlugin = (ident: string) => {
         return insertText(text, options);
       }
 
-      // Strip the autoCapitalised mark from the marks object.
-      // biome-ignore lint/correctness/noUnusedVariables: Omit
-      const { autoCapitalised, ...marksWithoutAutoCapitalised } = marks;
+      const { autoCapitalised: _, ...marksWithoutAutoCapitalised } = marks;
 
       // Insert the text with the remaining marks.
       return editor.tf.insertNode<FormattedText>({ ...marksWithoutAutoCapitalised, text });
@@ -93,7 +91,12 @@ export const createCapitalisePlugin = (ident: string) => {
         editor.tf.insertNode({ text: uppercaseFirstChar, ...marks, autoCapitalised: true });
 
         if (text.length > 1) {
-          editor.tf.insertNode({ text: text.slice(1), ...marks });
+          if (marks === null) {
+            editor.tf.insertNode({ text: text.slice(1) });
+          } else {
+            const { autoCapitalised: _, ...marksWithoutAutoCapitalised } = marks;
+            editor.tf.insertNode({ text: text.slice(1), ...marksWithoutAutoCapitalised });
+          }
         }
       });
     };
