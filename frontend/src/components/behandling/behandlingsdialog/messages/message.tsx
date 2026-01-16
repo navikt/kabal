@@ -42,6 +42,7 @@ export const Message = ({
     borderWidth="1"
     position="relative"
     width="fit-content"
+    maxWidth="100%"
     minWidth="80px"
     className="group/bubble opacity-100 starting:opacity-0 duration-200"
   >
