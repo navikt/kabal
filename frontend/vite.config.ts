@@ -26,6 +26,7 @@ export default defineConfig({
       '/smart-document-write-access': PROXY,
       '/version': PROXY,
       '/oauth': PROXY,
+      '/feature-toggle': PROXY,
     },
   },
 });

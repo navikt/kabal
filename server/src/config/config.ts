@@ -12,6 +12,7 @@ export enum ApiClientEnum {
   KLAGE_KODEVERK_API = 'klage-kodeverk-api',
   KABAL_TEXT_TEMPLATES = 'kabal-text-templates',
   KLAGE_NOTIFICATIONS_API = 'klage-notifications-api',
+  KLAGE_UNLEASH_PROXY = 'klage-unleash-proxy',
 }
 
 export const API_CLIENT_IDS = [
@@ -40,10 +41,12 @@ export const PROXY_VERSION = requiredEnvString('VERSION', defaultValue);
 export const PORT = requiredEnvString('PORT', '8080');
 export const NAIS_CLUSTER_NAME = requiredEnvString('NAIS_CLUSTER_NAME', defaultValue);
 export const START_TIME = Date.now();
+export const NAIS_APP_NAME = requiredEnvString('NAIS_APP_NAME', defaultValue);
+export const NAIS_POD_NAME = requiredEnvString('NAIS_POD_NAME', isTest || isLocal ? '' : undefined);
 
-export const TEAM_LOG_PARMS = {
+export const TEAM_LOG_PARAMS = {
   google_cloud_project: requiredEnvString('GOOGLE_CLOUD_PROJECT', isTest || isLocal ? '' : undefined),
   nais_namespace_name: requiredEnvString('NAIS_NAMESPACE', isTest || isLocal ? '' : undefined),
-  nais_pod_name: requiredEnvString('HOSTNAME', isTest || isLocal ? '' : undefined),
+  nais_pod_name: NAIS_POD_NAME,
   nais_container_name: requiredEnvString('NAIS_APP_NAME', isTest || isLocal ? '' : undefined),
 };
