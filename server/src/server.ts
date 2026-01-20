@@ -21,6 +21,7 @@ import { serveIndexPlugin } from '@app/plugins/serve-index';
 import { serverTimingPlugin } from '@app/plugins/server-timing';
 import { tabIdPlugin } from '@app/plugins/tab-id';
 import { traceparentPlugin } from '@app/plugins/traceparent/traceparent';
+import { unleashProxyPlugin } from '@app/plugins/unleash-proxy';
 import { versionPlugin } from '@app/plugins/version/version';
 import { processErrors } from '@app/process-errors';
 import { EmojiIcons, sendToSlack } from '@app/slack';
@@ -67,6 +68,7 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
   .register(httpLoggerPlugin)
   .register(crdtPlugin)
   .register(debugPlugin)
+  .register(unleashProxyPlugin)
 
   // Start server.
   .listen({ host: '0.0.0.0', port: serverConfig.port });

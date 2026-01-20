@@ -1,4 +1,4 @@
-import { TEAM_LOG_PARMS } from '@app/config/config';
+import { TEAM_LOG_PARAMS } from '@app/config/config';
 import { hasOwn } from '@app/functions/functions';
 import { isDeployed } from './config/env';
 
@@ -132,7 +132,7 @@ const getLog = (
   }
 
   if (isDeployed) {
-    return JSON.stringify(isTeamLog ? { ...TEAM_LOG_PARMS, ...log, severity: level.toUpperCase() } : log);
+    return JSON.stringify(isTeamLog ? { ...TEAM_LOG_PARAMS, ...log, severity: level.toUpperCase() } : log);
   }
 
   if (
