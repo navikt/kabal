@@ -1,4 +1,5 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { InsertPlugin } from '@app/plate/plugins/capitalise/capitalise';
 import {
   getAllDecorations,
   mergeRanges,
@@ -9,6 +10,7 @@ import {
 import { useMyPlateEditorState } from '@app/plate/types';
 import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { BodyShort, BoxNew, Button, HStack, TextField, VStack } from '@navikt/ds-react';
+import { TextChangeCase } from '@styled-icons/fluentui-system-regular';
 import { useEditorPlugin, usePluginOption } from 'platejs/react';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -37,6 +39,7 @@ export const SearchReplaceDialog = () => {
   const [replaceString, setReplaceString] = useState('');
   const { setShowSearchReplace } = useContext(SmartEditorContext);
   const [hitIndex, setHitIndex] = useState(0);
+  const [autoCapitalise, setAutoCapitalise] = useState(false);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Must also be recalculated when searchString changes
   const completeMatchRanges = useMemo(
@@ -86,7 +89,9 @@ export const SearchReplaceDialog = () => {
       return;
     }
 
-    editor.tf.insertText(replaceString, { at });
+    const { insertCapitalised } = editor.getTransforms(InsertPlugin);
+
+    autoCapitalise ? insertCapitalised(replaceString, { at }) : editor.tf.insertText(replaceString, { at });
 
     const nextIndex = hitIndex > completeMatchRanges.length - 1 ? 0 : hitIndex;
 
@@ -98,7 +103,7 @@ export const SearchReplaceDialog = () => {
   };
 
   const replaceAll = () => {
-    replaceText(editor, searchString, replaceString);
+    replaceText(editor, searchString, replaceString, autoCapitalise);
     setHighlightOption('highlight', []);
   };
 
@@ -143,19 +148,32 @@ export const SearchReplaceDialog = () => {
           }}
         />
 
-        <TextField
-          size="small"
-          label="Erstatt med"
-          hideLabel
-          placeholder="Erstatt med"
-          value={replaceString}
-          onChange={(e) => setReplaceString(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.metaKey || e.ctrlKey ? replaceAll() : replaceNext();
-            }
-          }}
-        />
+        <HStack gap="1">
+          <TextField
+            className="grow"
+            size="small"
+            label="Erstatt med"
+            hideLabel
+            placeholder="Erstatt med"
+            value={replaceString}
+            onChange={(e) => setReplaceString(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.metaKey || e.ctrlKey ? replaceAll() : replaceNext();
+              }
+            }}
+          />
+
+          <Button
+            icon={<TextChangeCase aria-hidden width={24} />}
+            title="Automatisk stor forbokstav"
+            role="switch"
+            aria-checked={autoCapitalise}
+            size="xsmall"
+            onClick={() => setAutoCapitalise(!autoCapitalise)}
+            variant={autoCapitalise ? 'primary' : 'tertiary-neutral'}
+          />
+        </HStack>
 
         <BodyShort size="small" align="end">
           {completeMatchRanges.length > 0 ? `Treff ${hitIndex + 1} av ${completeMatchRanges.length}` : 'Ingen treff'}

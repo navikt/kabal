@@ -43,10 +43,10 @@ const createSelection = (point: Point): Selection => ({ anchor: point, focus: po
 const createEditor = (value: KabalValue, selection?: Selection) =>
   createPlateEditor({ plugins: [...saksbehandlerPlugins, createCapitalisePlugin('some user')], value, selection });
 
-const doSearchReplace = (editor: PlateEditor, search: string, replace: string) => {
+const doSearchReplace = (editor: PlateEditor, search: string, replace: string, autoCapitalise: boolean) => {
   const { setOption } = getEditorPlugin(editor, SearchReplacePlugin);
   setOption('search', search);
-  replaceText(editor, search, replace);
+  replaceText(editor, search, replace, autoCapitalise);
 };
 
 const createSeksjon = (children: (TText | PlaceholderElement)[], redigerbar = false) =>
@@ -67,11 +67,7 @@ const type = (editor: PlateEditor, text: string) => {
 
 describe('search-replace', () => {
   beforeAll(() => {
-    mock.module('@app/hooks/settings/manager', () => ({
-      SETTINGS_MANAGER: {
-        get: () => 'true',
-      },
-    }));
+    mock.module('@app/hooks/settings/manager', () => ({ SETTINGS_MANAGER: { get: () => 'true' } }));
   });
 
   afterAll(async () => {
@@ -79,200 +75,328 @@ describe('search-replace', () => {
     mock.module('@app/hooks/settings/manager', () => originalSettingsManager);
   });
 
-  it('should replace simple text correctly', () => {
-    const text = createText('replace keep replace keep replace keep');
-    const editor = createEditor([createP([text])]);
+  describe('without auto-capitalising words that originally were not capitalised', () => {
+    const autoCapitalise = false;
 
-    doSearchReplace(editor, 'replace', 'REPLACED');
-    expect(editor.api.string([])).toBe('REPLACED keep REPLACED keep REPLACED keep');
-    expect(editor.children).toEqual([createP([createText('REPLACED keep REPLACED keep REPLACED keep')])]);
+    it('should replace simple text correctly', () => {
+      const text = createText('replace keep replace keep replace keep');
+      const editor = createEditor([createP([text])]);
+
+      doSearchReplace(editor, 'replace', 'REPLACED', autoCapitalise);
+      expect(editor.api.string([])).toBe('REPLACED keep REPLACED keep REPLACED keep');
+      expect(editor.children).toEqual([createP([createText('REPLACED keep REPLACED keep REPLACED keep')])]);
+    });
+
+    it('should replace text spanning multiple text nodes', () => {
+      const a = createText('re', { bold: true });
+      const b = createText('pl', { underline: true });
+      const c = createText('ace', { italic: true });
+      const d = createText(' keep ');
+      const e = createText('re', { bold: true });
+      const f = createText('pl', { underline: true });
+      const g = createText('ace', { italic: true });
+      const h = createText(' keep');
+
+      const editor = createEditor([createP([a, b, c, d, e, f, g, h])]);
+
+      doSearchReplace(editor, 'replace', 'REPLACED', autoCapitalise);
+
+      expect(editor.api.string([])).toBe('REPLACED keep REPLACED keep');
+
+      expect(editor.children).toEqual([
+        createP([
+          createText('REPLACED', { bold: true }),
+          createText(' keep '),
+          createText('REPLACED', { bold: true }),
+          createText(' keep'),
+        ]),
+      ]);
+    });
+
+    it('should work with auto-capitalised text', () => {
+      const editor = createEditor([createP([{ text: '' }])], createSelection({ path: [0, 0], offset: 0 }));
+      type(editor, 'test. test.');
+
+      expect(editor.api.string([])).toBe('Test. Test.');
+
+      doSearchReplace(editor, 'test', 'replaced', autoCapitalise);
+      expect(editor.api.string([])).toBe('Replaced. Replaced.');
+      expect(editor.children).toEqual([
+        createP([
+          createText('R', { autoCapitalised: true }),
+          createText('eplaced. '),
+          createText('R', { autoCapitalised: true }),
+          createText('eplaced.'),
+        ]),
+      ]);
+    });
+
+    it('should replace text in redigerbar maltekst', () => {
+      const maltekstseksjon = createSeksjon([createText('replace keep replace keep replace keep')], true);
+      const editor = createEditor([maltekstseksjon]);
+
+      doSearchReplace(editor, 'replace', 'REPLACED', autoCapitalise);
+
+      expect(editor.api.string([])).toBe('REPLACED keep REPLACED keep REPLACED keep');
+      expect(editor.children).toEqual([createSeksjon([createText('REPLACED keep REPLACED keep REPLACED keep')], true)]);
+    });
+
+    it('should only replace value (not label) in saksnummer', () => {
+      const editor = createEditor([
+        {
+          type: ELEMENT_SAKSNUMMER,
+          isInitialized: true,
+          children: [{ text: '' }, createPlaceHolder('Saksnummer', true, [{ text: 'replace me' }]), { text: '1234' }],
+        },
+      ]);
+
+      doSearchReplace(editor, 'Saksnummer', 'REPLACED LABEL', autoCapitalise);
+      doSearchReplace(editor, 'replace me', 'REPLACED VALUE', autoCapitalise);
+
+      expect(editor.children).toEqual([
+        {
+          type: ELEMENT_SAKSNUMMER,
+          isInitialized: true,
+          children: [
+            { text: '' },
+            createPlaceHolder('Saksnummer', true, [{ text: 'REPLACED VALUE' }]),
+            { text: '1234' },
+          ],
+        },
+      ]);
+    });
+
+    it('should replace text in placeholder inside non-redigerbar maltekst', () => {
+      const editor = createEditor([
+        createSeksjon([
+          createText('keep keep keep '),
+          createPlaceHolder('Placeholder', true, [{ text: 'replace me' }]),
+          createText(' keep keep keep'),
+        ]),
+      ]);
+
+      doSearchReplace(editor, 'keep', 'REPLACED', autoCapitalise);
+      doSearchReplace(editor, 'replace me', 'REPLACED', autoCapitalise);
+
+      expect(editor.api.string([])).toBe('keep keep keep REPLACED keep keep keep');
+
+      expect(editor.children).toEqual([
+        createSeksjon([
+          createText('keep keep keep '),
+          createPlaceHolder('Placeholder', true, [{ text: 'REPLACED' }]),
+          createText(' keep keep keep'),
+        ]),
+      ]);
+    });
   });
 
-  it('should replace text spanning multiple text nodes', () => {
-    const a = createText('re', { bold: true });
-    const b = createText('pl', { underline: true });
-    const c = createText('ace', { italic: true });
-    const d = createText(' keep ');
-    const e = createText('re', { bold: true });
-    const f = createText('pl', { underline: true });
-    const g = createText('ace', { italic: true });
-    const h = createText(' keep');
+  describe.each([[true], [false]])('unchangable elements', (autoCapitalise) => {
+    it('should not replace text in (non-redigerbar) maltekst', () => {
+      const editor = createEditor([createSeksjon([createText('dont replace this')])]);
 
-    const editor = createEditor([createP([a, b, c, d, e, f, g, h])]);
+      doSearchReplace(editor, 'dont replace this', 'REPLACED', autoCapitalise);
 
-    doSearchReplace(editor, 'replace', 'REPLACED');
+      expect(editor.api.string([])).toBe('dont replace this');
+      expect(editor.children).toEqual([createSeksjon([createText('dont replace this')])]);
+    });
 
-    expect(editor.api.string([])).toBe('REPLACED keep REPLACED keep');
+    it('should not replace text in header', () => {
+      const editor = createEditor([{ type: ELEMENT_HEADER, children: [{ text: '' }], content: 'dont replace this' }]);
 
-    expect(editor.children).toEqual([
-      createP([
-        createText('REPLACED', { bold: true }),
-        createText(' keep '),
-        createText('REPLACED', { bold: true }),
-        createText(' keep'),
-      ]),
-    ]);
+      doSearchReplace(editor, 'dont replace this', 'REPLACED', autoCapitalise);
+
+      expect(editor.children).toEqual([
+        { type: ELEMENT_HEADER, children: [{ text: '' }], content: 'dont replace this' },
+      ]);
+    });
+
+    it('should not replace text in footer', () => {
+      const editor = createEditor([{ type: ELEMENT_FOOTER, children: [{ text: '' }], content: 'dont replace this' }]);
+
+      doSearchReplace(editor, 'dont replace this', 'REPLACED', autoCapitalise);
+
+      expect(editor.children).toEqual([
+        { type: ELEMENT_FOOTER, children: [{ text: '' }], content: 'dont replace this' },
+      ]);
+    });
+
+    it('should not replace text in date field', () => {
+      const editor = createEditor([{ ...createSignature(), saksbehandler: { name: 'dont replace this' } }]);
+
+      doSearchReplace(editor, 'dont replace this', 'REPLACED', autoCapitalise);
+
+      expect(editor.children).toEqual([{ ...createSignature(), saksbehandler: { name: 'dont replace this' } }]);
+    });
+
+    it('should not replace text in label-content', () => {
+      const editor = createEditor([
+        { ...createLabelContent(LabelContentSource.SAKEN_GJELDER_NAME), label: 'Saken gjelder', result: '1337' },
+      ]);
+
+      doSearchReplace(editor, 'Saken gjelder', 'REPLACED', autoCapitalise);
+
+      expect(editor.children).toEqual([
+        { ...createLabelContent(LabelContentSource.SAKEN_GJELDER_NAME), label: 'Saken gjelder', result: '1337' },
+      ]);
+    });
+
+    it('should not replace maltekst hits that are only partly inside placeholder', () => {
+      const editor = createEditor([
+        createSeksjon([
+          createText('keep this, '),
+          createPlaceHolder('Placeholder', true, [{ text: 'replace this' }]),
+          createText(' and keep this. ', { bold: true }),
+
+          createText('dont r'),
+          createPlaceHolder('Placeholder', true, [{ text: 'eplace this' }]),
+          createText(', but keep this. ', { italic: true }),
+
+          createText('keep this, dont '),
+          createPlaceHolder('Placeholder', true, [{ text: 'replace thi' }]),
+          createText('s, and keep this.'),
+        ]),
+      ]);
+
+      doSearchReplace(editor, 'keep', 'REPLACED', autoCapitalise);
+      doSearchReplace(editor, 'replace this', 'REPLACED', autoCapitalise);
+
+      expect(editor.api.string([])).toBe(
+        'keep this, REPLACED and keep this. dont replace this, but keep this. keep this, dont replace this, and keep this.',
+      );
+
+      expect(editor.children).toEqual([
+        createSeksjon([
+          createText('keep this, '),
+          createPlaceHolder('Placeholder', true, [{ text: 'REPLACED' }]),
+          createText(' and keep this. ', { bold: true }),
+
+          createText('dont r'),
+          createPlaceHolder('Placeholder', true, [{ text: 'eplace this' }]),
+          createText(', but keep this. ', { italic: true }),
+
+          createText('keep this, dont '),
+          createPlaceHolder('Placeholder', true, [{ text: 'replace thi' }]),
+          createText('s, and keep this.'),
+        ]),
+      ]);
+    });
   });
 
-  it('should work with auto-capitalised text', () => {
-    const editor = createEditor([createP([{ text: '' }])], createSelection({ path: [0, 0], offset: 0 }));
-    type(editor, 'test. test.');
+  describe('with auto-capitalising words that originally were not capitalised', () => {
+    const autoCapitalise = true;
 
-    expect(editor.api.string([])).toBe('Test. Test.');
+    it('should replace simple text correctly', () => {
+      const text = createText('replace keep');
+      const editor = createEditor([createP([text])]);
 
-    doSearchReplace(editor, 'test', 'replaced');
-    expect(editor.api.string([])).toBe('Replaced. Replaced.');
-    expect(editor.children).toEqual([
-      createP([
-        createText('R', { autoCapitalised: true }),
-        createText('eplaced. '),
-        createText('R', { autoCapitalised: true }),
-        createText('eplaced.'),
-      ]),
-    ]);
-  });
+      doSearchReplace(editor, 'replace', 'switched', autoCapitalise);
+      expect(editor.api.string([])).toBe('Switched keep');
+      expect(editor.children).toEqual([
+        createP([createText('S', { autoCapitalised: true }), createText('witched keep')]),
+      ]);
+    });
 
-  it('should replace text in redigerbar maltekst', () => {
-    const maltekstseksjon = createSeksjon([createText('replace keep replace keep replace keep')], true);
-    const editor = createEditor([maltekstseksjon]);
+    it('should replace text spanning multiple text nodes', () => {
+      const a = createText('re', { bold: true });
+      const b = createText('pl', { underline: true });
+      const c = createText('ace', { italic: true });
+      const d = createText(' keep ');
+      const e = createText('re', { bold: true });
+      const f = createText('pl', { underline: true });
+      const g = createText('ace', { italic: true });
+      const h = createText(' keep');
 
-    doSearchReplace(editor, 'replace', 'REPLACED');
+      const editor = createEditor([createP([a, b, c, d, e, f, g, h])]);
 
-    expect(editor.api.string([])).toBe('REPLACED keep REPLACED keep REPLACED keep');
-    expect(editor.children).toEqual([createSeksjon([createText('REPLACED keep REPLACED keep REPLACED keep')], true)]);
-  });
+      doSearchReplace(editor, 'replace', 'switched', autoCapitalise);
 
-  it('should not replace text in (non-redigerbar) maltekst', () => {
-    const editor = createEditor([createSeksjon([createText('dont replace this')])]);
+      expect(editor.api.string([])).toBe('Switched keep switched keep');
 
-    doSearchReplace(editor, 'dont replace this', 'REPLACED');
+      expect(editor.children).toEqual([
+        createP([
+          createText('S', { bold: true, autoCapitalised: true }),
+          createText('witched', { bold: true }),
+          createText(' keep '),
+          createText('switched', { bold: true }),
+          createText(' keep'),
+        ]),
+      ]);
+    });
 
-    expect(editor.api.string([])).toBe('dont replace this');
-    expect(editor.children).toEqual([createSeksjon([createText('dont replace this')])]);
-  });
+    it('should work with auto-capitalised text', () => {
+      const editor = createEditor([createP([{ text: '' }])], createSelection({ path: [0, 0], offset: 0 }));
+      type(editor, 'test. test.');
 
-  it('should not replace text in header', () => {
-    const editor = createEditor([{ type: ELEMENT_HEADER, children: [{ text: '' }], content: 'dont replace this' }]);
+      expect(editor.api.string([])).toBe('Test. Test.');
 
-    doSearchReplace(editor, 'dont replace this', 'REPLACED');
+      doSearchReplace(editor, 'test', 'replaced', autoCapitalise);
+      expect(editor.api.string([])).toBe('Replaced. Replaced.');
+      expect(editor.children).toEqual([
+        createP([
+          createText('R', { autoCapitalised: true }),
+          createText('eplaced. '),
+          createText('R', { autoCapitalised: true }),
+          createText('eplaced.'),
+        ]),
+      ]);
+    });
 
-    expect(editor.children).toEqual([{ type: ELEMENT_HEADER, children: [{ text: '' }], content: 'dont replace this' }]);
-  });
+    it('should replace text in redigerbar maltekst', () => {
+      const maltekstseksjon = createSeksjon([createText('replace keep replace keep replace keep')], true);
+      const editor = createEditor([maltekstseksjon]);
 
-  it('should not replace text in footer', () => {
-    const editor = createEditor([{ type: ELEMENT_FOOTER, children: [{ text: '' }], content: 'dont replace this' }]);
+      doSearchReplace(editor, 'replace', 'switched', autoCapitalise);
 
-    doSearchReplace(editor, 'dont replace this', 'REPLACED');
+      expect(editor.api.string([])).toBe('Switched keep switched keep switched keep');
+      expect(editor.children).toEqual([
+        createSeksjon(
+          [createText('S', { autoCapitalised: true }), createText('witched keep switched keep switched keep')],
+          true,
+        ),
+      ]);
+    });
 
-    expect(editor.children).toEqual([{ type: ELEMENT_FOOTER, children: [{ text: '' }], content: 'dont replace this' }]);
-  });
+    it('should replace uncapitalised value (not label) in saksnummer', () => {
+      const editor = createEditor([
+        {
+          type: ELEMENT_SAKSNUMMER,
+          isInitialized: true,
+          children: [{ text: '' }, createPlaceHolder('Saksnummer', true, [{ text: 'replace me' }]), { text: '1234' }],
+        },
+      ]);
 
-  it('should not replace text in date field', () => {
-    const editor = createEditor([{ ...createSignature(), saksbehandler: { name: 'dont replace this' } }]);
+      doSearchReplace(editor, 'Saksnummer', 'REPLACED LABEL', autoCapitalise);
+      doSearchReplace(editor, 'replace me', 'switched', autoCapitalise);
 
-    doSearchReplace(editor, 'dont replace this', 'REPLACED');
+      expect(editor.children).toEqual([
+        {
+          type: ELEMENT_SAKSNUMMER,
+          isInitialized: true,
+          children: [{ text: '' }, createPlaceHolder('Saksnummer', true, [{ text: 'switched' }]), { text: '1234' }],
+        },
+      ]);
+    });
 
-    expect(editor.children).toEqual([{ ...createSignature(), saksbehandler: { name: 'dont replace this' } }]);
-  });
+    it('should replace text in placeholder inside non-redigerbar maltekst', () => {
+      const editor = createEditor([
+        createSeksjon([
+          createPlaceHolder('Placeholder', true, [{ text: 'replace me' }]),
+          createText(' keep keep keep'),
+        ]),
+      ]);
 
-  it('should not replace text in label-content', () => {
-    const editor = createEditor([
-      { ...createLabelContent(LabelContentSource.SAKEN_GJELDER_NAME), label: 'Saken gjelder', result: '1337' },
-    ]);
+      doSearchReplace(editor, 'keep', 'REPLACED', autoCapitalise);
+      doSearchReplace(editor, 'replace me', 'switched', autoCapitalise);
 
-    doSearchReplace(editor, 'Saken gjelder', 'REPLACED');
+      expect(editor.api.string([])).toBe('Switched keep keep keep');
 
-    expect(editor.children).toEqual([
-      { ...createLabelContent(LabelContentSource.SAKEN_GJELDER_NAME), label: 'Saken gjelder', result: '1337' },
-    ]);
-  });
-
-  it('should only replace value (not label) in saksnummer', () => {
-    const editor = createEditor([
-      {
-        type: ELEMENT_SAKSNUMMER,
-        isInitialized: true,
-        children: [{ text: '' }, createPlaceHolder('Saksnummer', false, [{ text: 'replace me' }]), { text: '1234' }],
-      },
-    ]);
-
-    doSearchReplace(editor, 'Saksnummer', 'REPLACED LABEL');
-    doSearchReplace(editor, 'replace me', 'REPLACED VALUE');
-
-    expect(editor.children).toEqual([
-      {
-        type: ELEMENT_SAKSNUMMER,
-        isInitialized: true,
-        children: [
-          { text: '' },
-          createPlaceHolder('Saksnummer', false, [{ text: 'REPLACED VALUE' }]),
-          { text: '1234' },
-        ],
-      },
-    ]);
-  });
-
-  it('should replace text in placeholder inside non-redigerbar maltekst', () => {
-    const editor = createEditor([
-      createSeksjon([
-        createText('keep keep keep '),
-        createPlaceHolder('Placeholder', false, [{ text: 'replace me' }]),
-        createText(' keep keep keep'),
-      ]),
-    ]);
-
-    doSearchReplace(editor, 'keep', 'REPLACED');
-    doSearchReplace(editor, 'replace me', 'REPLACED');
-
-    expect(editor.api.string([])).toBe('keep keep keep REPLACED keep keep keep');
-
-    expect(editor.children).toEqual([
-      createSeksjon([
-        createText('keep keep keep '),
-        createPlaceHolder('Placeholder', false, [{ text: 'REPLACED' }]),
-        createText(' keep keep keep'),
-      ]),
-    ]);
-  });
-
-  it('should not replace maltekst hits that are only partly inside placeholder', () => {
-    const editor = createEditor([
-      createSeksjon([
-        createText('keep this, '),
-        createPlaceHolder('Placeholder', false, [{ text: 'replace this' }]),
-        createText(' and keep this. ', { bold: true }),
-
-        createText('dont r'),
-        createPlaceHolder('Placeholder', false, [{ text: 'eplace this' }]),
-        createText(', but keep this. ', { italic: true }),
-
-        createText('keep this, dont '),
-        createPlaceHolder('Placeholder', false, [{ text: 'replace thi' }]),
-        createText('s, and keep this.'),
-      ]),
-    ]);
-
-    doSearchReplace(editor, 'keep', 'REPLACED');
-    doSearchReplace(editor, 'replace this', 'REPLACED');
-
-    expect(editor.api.string([])).toBe(
-      'keep this, REPLACED and keep this. dont replace this, but keep this. keep this, dont replace this, and keep this.',
-    );
-
-    expect(editor.children).toEqual([
-      createSeksjon([
-        createText('keep this, '),
-        createPlaceHolder('Placeholder', false, [{ text: 'REPLACED' }]),
-        createText(' and keep this. ', { bold: true }),
-
-        createText('dont r'),
-        createPlaceHolder('Placeholder', false, [{ text: 'eplace this' }]),
-        createText(', but keep this. ', { italic: true }),
-
-        createText('keep this, dont '),
-        createPlaceHolder('Placeholder', false, [{ text: 'replace thi' }]),
-        createText('s, and keep this.'),
-      ]),
-    ]);
+      expect(editor.children).toEqual([
+        createSeksjon([
+          createText(''),
+          createPlaceHolder('Placeholder', true, [createText('S', { autoCapitalised: true }), { text: 'witched' }]),
+          createText(' keep keep keep'),
+        ]),
+      ]);
+    });
   });
 });
