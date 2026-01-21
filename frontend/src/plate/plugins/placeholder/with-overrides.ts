@@ -6,7 +6,7 @@ import {
 } from '@app/plate/plugins/placeholder/delete';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
 import { isPlaceholderActive } from '@app/plate/utils/queries';
-import { type Descendant, ElementApi, type TText } from 'platejs';
+import { type Descendant, ElementApi, TextApi, type TText } from 'platejs';
 import type { OverrideEditor } from 'platejs/react';
 import { Path } from 'slate';
 import type { MaltekstElement, PlaceholderElement } from '../../types';
@@ -84,6 +84,10 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
   };
 
   editor.tf.insertNode = (node) => {
+    if (TextApi.isText(node)) {
+      return insertNode(node);
+    }
+
     if (isPlaceholderActive(editor)) {
       return;
     }
