@@ -20,6 +20,79 @@ const AutoCapitalisedLeaf = (props: PlateLeafProps<FormattedText>) => (
   />
 );
 
+// Needed so that other plugins can choose when to insert capitalised or uncapitalised
+export const InsertPlugin = createPlatePlugin({
+  key: 'insert-plugin',
+}).extendEditorTransforms(({ editor }) => {
+  const { insertText } = editor.tf;
+
+  const insertUncapitalised = (text: string, options: InsertTextOptions | undefined) => {
+    if (options?.marks === false) {
+      // If marks are explicitly ignored, the default behaviour is to insert the text without any marks.
+      // No need to manually remove the autoCapitalised mark.
+      // Default value for `options.marks` is `true`.
+      return insertText(text, options);
+    }
+
+    // Get the marks that would be applied to the text.
+    const marks = editor.api.marks();
+
+    if (marks === null || marks.autoCapitalised !== true) {
+      // If there is no autoCapitalised mark, or if the autoCapitalised mark is not true, there is no need to manually remove it.
+      return insertText(text, options);
+    }
+
+    const { autoCapitalised: _, ...marksWithoutAutoCapitalised } = marks;
+
+    // Insert the text with the remaining marks.
+    return editor.tf.insertNode<FormattedText>({ ...marksWithoutAutoCapitalised, text });
+  };
+
+  const insertCapitalised = (text: string, options: InsertTextOptions | undefined) => {
+    if (editor.selection === null) {
+      return insertUncapitalised(text, options);
+    }
+
+    const firstChar = text.charAt(0);
+    const uppercaseFirstChar = firstChar.toUpperCase();
+
+    if (firstChar === uppercaseFirstChar) {
+      // If the first character has no uppercase or is already uppercase, insert the text as is.
+      // Otherwise, some autoformatting plugins (e.g. lists) will not work.
+      return insertUncapitalised(text, options);
+    }
+
+    if (!isSingleWord(text)) {
+      return insertUncapitalised(text, options);
+    }
+
+    if (skipCapitalisation(editor)) {
+      return insertUncapitalised(text, options);
+    }
+
+    if (isOrdinalOrAbbreviation(editor)) {
+      return insertUncapitalised(text, options);
+    }
+
+    const marks = editor.api.marks();
+
+    editor.tf.withNewBatch(() => {
+      editor.tf.insertNode({ text: uppercaseFirstChar, ...marks, autoCapitalised: true });
+
+      if (text.length > 1) {
+        if (marks === null) {
+          editor.tf.insertNode({ text: text.slice(1) });
+        } else {
+          const { autoCapitalised: _, ...marksWithoutAutoCapitalised } = marks;
+          editor.tf.insertNode({ text: text.slice(1), ...marksWithoutAutoCapitalised });
+        }
+      }
+    });
+  };
+
+  return { insertUncapitalised, insertCapitalised };
+});
+
 export const createCapitalisePlugin = (ident: string) => {
   const settingsKey = `${ident}/${CAPITALISE_SETTING_KEY}`;
 
@@ -28,77 +101,15 @@ export const createCapitalisePlugin = (ident: string) => {
     render: { node: AutoCapitalisedLeaf },
     node: { isLeaf: true },
   }).overrideEditor(({ editor }) => {
-    const { insertText, insertFragment, deleteBackward } = editor.tf;
+    const { insertFragment, deleteBackward, insertUncapitalised, insertCapitalised } =
+      editor.getTransforms(InsertPlugin);
 
     // If next to capitalised node, create new node that is uncapitalised
-    const insertUncapitalised = (text: string, options: InsertTextOptions | undefined) => {
-      if (options?.marks === false) {
-        // If marks are explicitly ignored, the default behaviour is to insert the text without any marks.
-        // No need to manually remove the autoCapitalised mark.
-        // Default value for `options.marks` is `true`.
-        return insertText(text, options);
-      }
-
-      // Get the marks that would be applied to the text.
-      const marks = editor.api.marks();
-
-      if (marks === null || marks.autoCapitalised !== true) {
-        // If there is no autoCapitalised mark, or if the autoCapitalised mark is not true, there is no need to manually remove it.
-        return insertText(text, options);
-      }
-
-      const { autoCapitalised: _, ...marksWithoutAutoCapitalised } = marks;
-
-      // Insert the text with the remaining marks.
-      return editor.tf.insertNode<FormattedText>({ ...marksWithoutAutoCapitalised, text });
-    };
 
     editor.tf.insertText = (text, options) => {
       const enabled = SETTINGS_MANAGER.get(settingsKey);
 
-      if (enabled !== 'true') {
-        return insertUncapitalised(text, options);
-      }
-
-      if (editor.selection === null) {
-        return insertUncapitalised(text, options);
-      }
-
-      const firstChar = text.charAt(0);
-      const uppercaseFirstChar = firstChar.toUpperCase();
-
-      if (firstChar === uppercaseFirstChar) {
-        // If the first character has no uppercase or is already uppercase, insert the text as is.
-        // Otherwise, some autoformatting plugins (e.g. lists) will not work.
-        return insertUncapitalised(text, options);
-      }
-
-      if (!isSingleWord(text)) {
-        return insertUncapitalised(text, options);
-      }
-
-      if (skipCapitalisation(editor)) {
-        return insertUncapitalised(text, options);
-      }
-
-      if (isOrdinalOrAbbreviation(editor)) {
-        return insertUncapitalised(text, options);
-      }
-
-      const marks = editor.api.marks();
-
-      editor.tf.withNewBatch(() => {
-        editor.tf.insertNode({ text: uppercaseFirstChar, ...marks, autoCapitalised: true });
-
-        if (text.length > 1) {
-          if (marks === null) {
-            editor.tf.insertNode({ text: text.slice(1) });
-          } else {
-            const { autoCapitalised: _, ...marksWithoutAutoCapitalised } = marks;
-            editor.tf.insertNode({ text: text.slice(1), ...marksWithoutAutoCapitalised });
-          }
-        }
-      });
+      enabled === 'true' ? insertCapitalised(text, options) : insertUncapitalised(text, options);
     };
 
     editor.tf.deleteBackward = (unit) => {

@@ -1,10 +1,12 @@
 import { afterAll, beforeAll, describe, expect, it, mock } from 'bun:test';
 import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
+import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { TemplateSections } from '@app/plate/template-sections';
 import {
   createHeadingOne,
   createMaltekstseksjon,
   createRedigerbarMaltekst,
+  createSimpleBulletList,
   createSimpleParagraph,
 } from '@app/plate/templates/helpers';
 import { type KabalValue, type ParagraphElement, TextAlign } from '@app/plate/types';
@@ -13,7 +15,7 @@ import { BaseParagraphPlugin } from 'platejs';
 import { createPlateEditor, type PlateEditor } from 'platejs/react';
 import type { Point, Selection } from 'slate';
 
-const plugins = [createCapitalisePlugin('some user')];
+const plugins = [...saksbehandlerPlugins, createCapitalisePlugin('some user')];
 
 const createEditor = (value: string) =>
   createPlateEditor<KabalValue, (typeof plugins)[0]>({
@@ -101,7 +103,7 @@ describe('capitalise', () => {
 
     it('should capitalise if at start of a new block (heading 1)', () => {
       const editor = createPlateEditor({
-        plugins: [createCapitalisePlugin('some user')],
+        plugins: [...saksbehandlerPlugins, createCapitalisePlugin('some user')],
         value: [createHeadingOne('')],
         selection: createSelection({ path: [0, 0], offset: 0 }),
       });
@@ -304,19 +306,9 @@ describe('capitalise', () => {
     it('should not capitalise when pasting nested multiple blocks', () => {
       const editor = createEditor('');
 
-      editor.tf.insertFragment([
-        createRedigerbarMaltekst(TemplateSections.ANFOERSLER, [
-          createSimpleParagraph('hello'),
-          createSimpleParagraph('world'),
-        ]),
-      ]);
+      editor.tf.insertFragment([createSimpleBulletList('hello', 'world')]);
 
-      expect(editor.children).toEqual([
-        createRedigerbarMaltekst(TemplateSections.ANFOERSLER, [
-          createSimpleParagraph('hello'),
-          createSimpleParagraph('world'),
-        ]),
-      ]);
+      expect(editor.children).toEqual([createSimpleParagraph(''), createSimpleBulletList('hello', 'world')]);
     });
 
     it('should uncapitalise if backspace is pressed after pasting fragment from smart-editor', () => {

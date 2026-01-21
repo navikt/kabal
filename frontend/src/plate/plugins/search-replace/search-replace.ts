@@ -1,3 +1,4 @@
+import { InsertPlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { decorate } from '@app/plate/plugins/search-replace/decorate';
 import type { FindReplaceConfig } from '@platejs/find-replace';
@@ -47,19 +48,26 @@ export const ReplaceOneHighlightPlugin = createTSlatePlugin<HighlightSearchConfi
   },
 });
 
-export const replaceText = (editor: PlateEditor, search: string | undefined, replace: string): void => {
+export const replaceText = (
+  editor: PlateEditor,
+  search: string | undefined,
+  replace: string,
+  autoCapitalise: boolean,
+): void => {
   if (search === undefined || search.length === 0) {
     return;
   }
 
   const decorations = getAllDecorations(editor);
   const completeMatchRanges = mergeRanges(editor, decorations);
+  const { insertCapitalised } = editor.getTransforms(InsertPlugin);
 
   editor.tf.withoutNormalizing(() => {
     // Traverse in reverse order to avoid messing up the positions of earlier ranges
     for (const at of completeMatchRanges.toReversed()) {
-      editor.tf.setSelection(at);
-      editor.tf.insertText(replace, { at });
+      editor.tf.select(at);
+
+      autoCapitalise ? insertCapitalised(replace, { at }) : editor.tf.insertText(replace, { at });
     }
   });
 };

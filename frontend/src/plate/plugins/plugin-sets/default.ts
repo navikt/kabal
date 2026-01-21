@@ -5,6 +5,7 @@ import { TableRowElement } from '@app/plate/components/plate-ui/table-row-elemen
 import { BoldLeaf, ItalicLeaf, UnderlineLeaf } from '@app/plate/leaf/marks';
 import { AllSearchHitsHighlightLeaf, ReplaceOneHighlightLeaf } from '@app/plate/leaf/search-replace';
 import { autoformatRules } from '@app/plate/plugins/autoformat/rules';
+import { InsertPlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { CopyPlugin } from '@app/plate/plugins/copy/copy';
 import { CustomAbbreviationPlugin } from '@app/plate/plugins/custom-abbreviations/create-custom-abbreviation-plugin';
 import { normalizeNodePlugin } from '@app/plate/plugins/normalize-node';
@@ -105,4 +106,5 @@ export const defaultPlugins = [
   PastePlugin,
   ReplaceOneHighlightPlugin.configure({ render: { node: ReplaceOneHighlightLeaf } }),
   SearchReplacePlugin.configure({ render: { node: AllSearchHitsHighlightLeaf } }),
+  InsertPlugin,
 ];
