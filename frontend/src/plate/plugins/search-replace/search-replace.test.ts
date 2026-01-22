@@ -188,6 +188,27 @@ describe('search-replace', () => {
         ]),
       ]);
     });
+
+    it('should replace text in node with placeholder (non-text-node) alongside text', () => {
+      const editor = createEditor([
+        createP([
+          createText('replace this, '),
+          createPlaceHolder('Placeholder', true, [{ text: 'replace this' }]),
+          createText(' and replace this'),
+        ]),
+      ]);
+
+      doSearchReplace(editor, 'replace this', 'REPLACED', autoCapitalise);
+
+      expect(editor.api.string([])).toBe('REPLACED, REPLACED and REPLACED');
+      expect(editor.children).toEqual([
+        createP([
+          createText('REPLACED, '),
+          createPlaceHolder('Placeholder', true, [{ text: 'REPLACED' }]),
+          createText(' and REPLACED'),
+        ]),
+      ]);
+    });
   });
 
   describe.each([[true], [false]])('unchangable elements', (autoCapitalise) => {
@@ -395,6 +416,28 @@ describe('search-replace', () => {
           createText(''),
           createPlaceHolder('Placeholder', true, [createText('S', { autoCapitalised: true }), { text: 'witched' }]),
           createText(' keep keep keep'),
+        ]),
+      ]);
+    });
+
+    it('should replace text in node with placeholder (non-text-node) alongside text', () => {
+      const editor = createEditor([
+        createP([
+          createText('replace this. '),
+          createPlaceHolder('Placeholder', true, [{ text: 'replace this. ' }]),
+          createText('and replace this.'),
+        ]),
+      ]);
+
+      doSearchReplace(editor, 'replace this', 'switched', autoCapitalise);
+
+      expect(editor.api.string([])).toBe('Switched. Switched. and switched.');
+      expect(editor.children).toEqual([
+        createP([
+          createText('S', { autoCapitalised: true }),
+          createText('witched. '),
+          createPlaceHolder('Placeholder', true, [createText('S', { autoCapitalised: true }), createText('witched. ')]),
+          createText('and switched.'),
         ]),
       ]);
     });

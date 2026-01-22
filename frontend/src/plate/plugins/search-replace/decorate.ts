@@ -6,8 +6,8 @@ import {
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
 import { type FindReplaceConfig, groupRanges } from '@app/plate/plugins/search-replace/search-replace';
-import type { Decorate, TRange } from 'platejs';
-import { ElementApi, TextApi } from 'platejs';
+import type { Decorate, Path, TRange } from 'platejs';
+import { ElementApi, NodeApi, TextApi } from 'platejs';
 
 const NON_EDITABLE_ELEMENTS = [
   ELEMENT_HEADER,
@@ -35,14 +35,26 @@ export const decorate: Decorate<FindReplaceConfig> = (props) => {
   return groupRanges(editor, decorations ?? []).flat();
 };
 
-export const decorateFindReplace: Decorate<FindReplaceConfig> = ({ entry: [node, path], getOptions, type }) => {
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Copy-pasta from @platejs/find-replace
+const decorateFindReplace: Decorate<FindReplaceConfig> = ({ entry: [node, path], getOptions, type }) => {
   const { search } = getOptions();
 
-  if (!(search && ElementApi.isElement(node) && node.children.every(TextApi.isText))) {
+  if (search.length === 0 || !ElementApi.isElement(node)) {
     return [];
   }
 
-  const texts = node.children.map((it) => it.text);
+  const children = NodeApi.children(node, []);
+
+  const texts: string[] = [];
+  const paths: Path[] = [];
+
+  for (const [child, childPath] of children) {
+    if (TextApi.isText(child)) {
+      texts.push(child.text);
+      paths.push(path.concat(childPath));
+    }
+  }
+
   const str = texts.join('').toLowerCase();
   const searchLower = search.toLowerCase();
 
@@ -70,9 +82,22 @@ export const decorateFindReplace: Decorate<FindReplaceConfig> = ({ entry: [node,
     const textStart = cumulativePosition;
     const textEnd = textStart + text.length;
 
+    const matchStart = matches[matchIndex];
+
+    if (matchStart === undefined) {
+      break;
+    }
+
     // Process matches that overlap with the current text node
-    while (matchIndex < matches.length && matches[matchIndex] < textEnd) {
+    while (matchIndex < matches.length && matchStart < textEnd) {
       const matchStart = matches[matchIndex];
+
+      // Should never happen
+      if (matchStart === undefined) {
+        matchIndex++;
+        continue;
+      }
+
       const matchEnd = matchStart + search.length;
 
       // If the match ends before the start of the current text, move to the next match
@@ -94,7 +119,13 @@ export const decorateFindReplace: Decorate<FindReplaceConfig> = ({ entry: [node,
         const searchOverlapStart = overlapStart - matchStart;
         const searchOverlapEnd = overlapEnd - matchStart;
 
-        const textNodePath = [...path, textIndex];
+        const textNodePath = paths[textIndex];
+
+        // Should never happen
+        if (textNodePath === undefined) {
+          matchIndex++;
+          continue;
+        }
 
         ranges.push({
           anchor: {
