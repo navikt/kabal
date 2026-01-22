@@ -5,10 +5,9 @@ import {
   ELEMENT_LABEL_CONTENT,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
-import { groupRanges } from '@app/plate/plugins/search-replace/search-replace';
-import { decorateFindReplace, type FindReplaceConfig } from '@platejs/find-replace';
-import type { Decorate } from 'platejs';
-import { ElementApi } from 'platejs';
+import { type FindReplaceConfig, groupRanges } from '@app/plate/plugins/search-replace/search-replace';
+import type { Decorate, TRange } from 'platejs';
+import { ElementApi, TextApi } from 'platejs';
 
 const NON_EDITABLE_ELEMENTS = [
   ELEMENT_HEADER,
@@ -35,3 +34,96 @@ export const decorate: Decorate<FindReplaceConfig> = (props) => {
 
   return groupRanges(editor, decorations ?? []).flat();
 };
+
+export const decorateFindReplace: Decorate<FindReplaceConfig> = ({ entry: [node, path], getOptions, type }) => {
+  const { search } = getOptions();
+
+  if (!(search && ElementApi.isElement(node) && node.children.every(TextApi.isText))) {
+    return [];
+  }
+
+  const texts = node.children.map((it) => it.text);
+  const str = texts.join('').toLowerCase();
+  const searchLower = search.toLowerCase();
+
+  let start = 0;
+  const matches: number[] = [];
+
+  while (true) {
+    start = str.indexOf(searchLower, start);
+
+    if (start === -1) break;
+
+    matches.push(start);
+    start += searchLower.length;
+  }
+
+  if (matches.length === 0) {
+    return [];
+  }
+
+  const ranges: SearchRange[] = [];
+  let cumulativePosition = 0;
+  let matchIndex = 0; // index in the matches array
+
+  for (const [textIndex, text] of texts.entries()) {
+    const textStart = cumulativePosition;
+    const textEnd = textStart + text.length;
+
+    // Process matches that overlap with the current text node
+    while (matchIndex < matches.length && matches[matchIndex] < textEnd) {
+      const matchStart = matches[matchIndex];
+      const matchEnd = matchStart + search.length;
+
+      // If the match ends before the start of the current text, move to the next match
+      if (matchEnd <= textStart) {
+        matchIndex++;
+
+        continue;
+      }
+
+      // Calculate overlap between the text and the current match
+      const overlapStart = Math.max(matchStart, textStart);
+      const overlapEnd = Math.min(matchEnd, textEnd);
+
+      if (overlapStart < overlapEnd) {
+        const anchorOffset = overlapStart - textStart;
+        const focusOffset = overlapEnd - textStart;
+
+        // Corresponding offsets within the search string
+        const searchOverlapStart = overlapStart - matchStart;
+        const searchOverlapEnd = overlapEnd - matchStart;
+
+        const textNodePath = [...path, textIndex];
+
+        ranges.push({
+          anchor: {
+            offset: anchorOffset,
+            path: textNodePath,
+          },
+          focus: {
+            offset: focusOffset,
+            path: textNodePath,
+          },
+          search: search.slice(searchOverlapStart, searchOverlapEnd),
+          [type]: true,
+        });
+      }
+      // If the match ends within the current text, move to the next match
+      if (matchEnd <= textEnd) {
+        matchIndex++;
+      } else {
+        // The match continues in the next text node
+        break;
+      }
+    }
+
+    cumulativePosition = textEnd;
+  }
+
+  return ranges;
+};
+
+type SearchRange = {
+  search: string;
+} & TRange;
