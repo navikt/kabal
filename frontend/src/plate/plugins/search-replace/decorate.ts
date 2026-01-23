@@ -37,7 +37,7 @@ export const decorate: Decorate<FindReplaceConfig> = (props) => {
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Copy-pasta from @platejs/find-replace
 const decorateFindReplace: Decorate<FindReplaceConfig> = ({ entry: [node, path], getOptions, type }) => {
-  const { search } = getOptions();
+  const { search, caseSensitive } = getOptions();
 
   if (search.length === 0 || !ElementApi.isElement(node)) {
     return [];
@@ -55,8 +55,10 @@ const decorateFindReplace: Decorate<FindReplaceConfig> = ({ entry: [node, path],
     }
   }
 
-  const str = texts.join('').toLowerCase();
-  const searchLower = search.toLowerCase();
+  const joinedText = texts.join('');
+
+  const str = caseSensitive ? joinedText : joinedText.toLowerCase();
+  const searchLower = caseSensitive ? search : search.toLowerCase();
 
   let start = 0;
   const matches: number[] = [];

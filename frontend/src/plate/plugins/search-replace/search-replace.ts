@@ -1,7 +1,6 @@
 import { InsertPlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { decorate } from '@app/plate/plugins/search-replace/decorate';
-import type { FindReplaceConfig } from '@platejs/find-replace';
 import {
   createTSlatePlugin,
   type DecoratedRange,
@@ -21,10 +20,18 @@ import type { PlateEditor } from 'platejs/react';
 
 const SEARCH_REPLACE_KEY = 'search_highlight';
 
+export type FindReplaceConfig = PluginConfig<
+  typeof SEARCH_REPLACE_KEY,
+  {
+    search: string;
+    caseSensitive: boolean;
+  }
+>;
+
 export const SearchReplacePlugin = createTSlatePlugin<FindReplaceConfig>({
   key: SEARCH_REPLACE_KEY,
   node: { isLeaf: true },
-  options: { search: '' },
+  options: { search: '', caseSensitive: false },
   decorate,
 });
 
