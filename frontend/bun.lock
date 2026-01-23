@@ -19,7 +19,6 @@
         "@platejs/basic-styles": "52.0.11",
         "@platejs/cursor": "52.0.11",
         "@platejs/docx": "52.0.11",
-        "@platejs/find-replace": "52.0.11",
         "@platejs/floating": "52.0.11",
         "@platejs/indent": "52.0.11",
         "@platejs/list-classic": "52.0.11",
@@ -210,8 +209,6 @@
     "@platejs/cursor": ["@platejs/cursor@52.0.11", "", { "dependencies": { "react-compiler-runtime": "^1.0.0" }, "peerDependencies": { "platejs": ">=52.0.11", "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-YpVdv7u+Wr6arOEsgS/y+5XQ8vgOrZBv41bB3z4OFKA8kq+TsorXZOZ8S9bMgH+p/2LAXCjRpczOCi7d19snfg=="],
 
     "@platejs/docx": ["@platejs/docx@52.0.11", "", { "dependencies": { "react-compiler-runtime": "^1.0.0", "validator": "^13.15.15" }, "peerDependencies": { "platejs": ">=52.0.11", "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-RlKVa6NVYSyEugeHYKS+3cSWUgZvn9BOBHHWuu8cqBp/243edR48ZrYKFOYwb8IERlVrkMC/gIrNhcDFS1DT6w=="],
-
-    "@platejs/find-replace": ["@platejs/find-replace@52.0.11", "", { "dependencies": { "react-compiler-runtime": "^1.0.0" }, "peerDependencies": { "platejs": ">=52.0.11", "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-EZLl1SLZd8Iof9TqD3L7p5usGrcgjoW7/xlnCb7nzLGbe2+JdVIXop49ncgztTCCVAZvrMUw6U7BItt6dq/9Tw=="],
 
     "@platejs/floating": ["@platejs/floating@52.0.11", "", { "dependencies": { "@floating-ui/core": "^1.7.1", "@floating-ui/react": "^0.27.12", "react-compiler-runtime": "^1.0.0" }, "peerDependencies": { "platejs": ">=52.0.11", "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-ApNpw4KWml+kuK+XTTpji+f/7GxTR4nRzlnfJMvGBrJpLPQ4elS5MABm3oUi81DZn+aub5HvsyH7UqCw7F76IA=="],
 

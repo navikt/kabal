@@ -10,7 +10,7 @@ import {
 import { useMyPlateEditorState } from '@app/plate/types';
 import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { BodyShort, BoxNew, Button, HStack, TextField, VStack } from '@navikt/ds-react';
-import { TextChangeCase } from '@styled-icons/fluentui-system-regular';
+import { TextCaseTitle, TextChangeCase } from '@styled-icons/fluentui-system-regular';
 import { useEditorPlugin, usePluginOption } from 'platejs/react';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -36,6 +36,7 @@ export const SearchReplaceDialog = () => {
   const { setOption: setSearchReplaceOption } = useEditorPlugin(SearchReplacePlugin);
   const { setOption: setHighlightOption } = useEditorPlugin(ReplaceOneHighlightPlugin);
   const searchString = usePluginOption(SearchReplacePlugin, 'search');
+  const caseSensitive = usePluginOption(SearchReplacePlugin, 'caseSensitive');
   const [replaceString, setReplaceString] = useState('');
   const { setShowSearchReplace } = useContext(SmartEditorContext);
   const [hitIndex, setHitIndex] = useState(0);
@@ -44,7 +45,7 @@ export const SearchReplaceDialog = () => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: Must also be recalculated when searchString changes
   const completeMatchRanges = useMemo(
     () => mergeRanges(editor, getAllDecorations(editor)),
-    [editor.children, searchString],
+    [editor.children, searchString, caseSensitive],
   );
 
   const close = useCallback(() => {
@@ -127,26 +128,41 @@ export const SearchReplaceDialog = () => {
           }
         }}
       >
-        <TextField
-          autoFocus
-          size="small"
-          label="Søk etter"
-          hideLabel
-          placeholder="Søk etter"
-          className="grow"
-          value={searchString}
-          onChange={(e) => {
-            setHighlightOption('highlight', []);
-            setSearchReplaceOption('search', e.target.value);
-            setHitIndex(0);
-            selectRange(0);
-          }}
-          onKeyDown={({ key, shiftKey }) => {
-            if (key === 'Enter') {
-              shiftKey ? findPrevious() : findNext();
-            }
-          }}
-        />
+        <HStack gap="1">
+          <TextField
+            autoFocus
+            size="small"
+            label="Søk etter"
+            hideLabel
+            placeholder="Søk etter"
+            className="grow"
+            value={searchString}
+            onChange={(e) => {
+              setHighlightOption('highlight', []);
+              setSearchReplaceOption('search', e.target.value);
+              setHitIndex(0);
+              selectRange(0);
+            }}
+            onKeyDown={({ key, shiftKey }) => {
+              if (key === 'Enter') {
+                shiftKey ? findPrevious() : findNext();
+              }
+            }}
+          />
+          <Button
+            icon={<TextChangeCase aria-hidden width={24} />}
+            title="Krev nøyaktig samsvar med store og små bokstaver"
+            size="xsmall"
+            role="switch"
+            aria-checked={caseSensitive}
+            onClick={() => {
+              setSearchReplaceOption('caseSensitive', !caseSensitive);
+              setHitIndex(0);
+              selectRange(0);
+            }}
+            variant={caseSensitive ? 'primary' : 'tertiary-neutral'}
+          />
+        </HStack>
 
         <HStack gap="1">
           <TextField
@@ -165,8 +181,8 @@ export const SearchReplaceDialog = () => {
           />
 
           <Button
-            icon={<TextChangeCase aria-hidden width={24} />}
-            title="Automatisk stor forbokstav"
+            icon={<TextCaseTitle aria-hidden width={24} />}
+            title="Sett inn med automatisk stor forbokstav"
             role="switch"
             aria-checked={autoCapitalise}
             size="xsmall"
