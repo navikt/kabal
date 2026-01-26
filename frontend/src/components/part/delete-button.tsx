@@ -20,9 +20,16 @@ export const DeleteButton = ({ onDelete }: Props) => {
   if (showConfirm) {
     return (
       <>
-        <Button variant="danger" icon={<TrashIcon aria-hidden />} onClick={onDelete} size="small" />
         <Button
-          variant="secondary-neutral"
+          data-color="danger"
+          variant="primary"
+          icon={<TrashIcon aria-hidden />}
+          onClick={onDelete}
+          size="small"
+        />
+        <Button
+          data-color="neutral"
+          variant="secondary"
           icon={<ArrowUndoIcon aria-hidden />}
           onClick={() => setShowConfirm(false)}
           size="small"
@@ -31,5 +38,13 @@ export const DeleteButton = ({ onDelete }: Props) => {
     );
   }
 
-  return <Button variant="danger" icon={<TrashIcon aria-hidden />} onClick={toggleConfirm} size="small" />;
+  return (
+    <Button
+      data-color="danger"
+      variant="primary"
+      icon={<TrashIcon aria-hidden />}
+      onClick={toggleConfirm}
+      size="small"
+    />
+  );
 };

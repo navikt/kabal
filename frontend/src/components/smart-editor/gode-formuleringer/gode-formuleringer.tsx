@@ -15,7 +15,7 @@ import { useMyPlateEditorRef } from '@app/plate/types';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LightBulbIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, HStack, VStack } from '@navikt/ds-react';
+import { Box, Button, HStack, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Filter } from './filter';
 import { insertGodFormulering } from './insert';
@@ -157,20 +157,28 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
   }
 
   return (
-    <VStack asChild position="sticky" top="0" gap="4" ref={containerRef} onKeyDown={onKeyDown}>
-      <BoxNew as="section" background="default" paddingInline="3 0" paddingBlock="4 0" width="350px" height="100%">
-        <VStack gap="2 0" paddingInline="1 4" flexShrink="0">
+    <VStack asChild position="sticky" top="space-0" gap="space-16" ref={containerRef} onKeyDown={onKeyDown}>
+      <Box
+        as="section"
+        background="default"
+        paddingInline="space-12 space-0"
+        paddingBlock="space-16 space-0"
+        width="350px"
+        height="100%"
+      >
+        <VStack gap="space-8 space-0" paddingInline="space-4 space-16" flexShrink="0">
           <HStack as="header" align="center" justify="space-between" wrap={false}>
-            <HStack as="h1" align="center" gap="2" margin="0" className="text-xl" wrap={false}>
+            <HStack as="h1" align="center" gap="space-8" margin="space-0" className="text-xl" wrap={false}>
               <LightBulbIcon />
               Gode formuleringer ({texts.length})
             </HStack>
             <HStack>
               <SetGlobalExpandState expandState={expandState} />
               <Button
+                data-color="neutral"
                 title="Skjul gode formuleringer"
                 size="small"
-                variant="tertiary-neutral"
+                variant="tertiary"
                 icon={<XMarkIcon aria-hidden />}
                 onClick={() => setShowGodeFormuleringer(false)}
               />
@@ -181,7 +189,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
           <HjemlerFilter selected={selectedHjemler} setSelected={setSelectedHjemler} />
         </VStack>
 
-        <VStack overflowY="auto" flexGrow="1" gap="4 0" paddingInline="1 4">
+        <VStack overflowY="auto" flexGrow="1" gap="space-16 space-0" paddingInline="space-4 space-16">
           <GodeFormuleringerList
             texts={texts}
             isLoading={isLoading}
@@ -191,7 +199,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
             setExpandState={setExpandState}
           />
         </VStack>
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };

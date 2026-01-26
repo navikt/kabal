@@ -5,7 +5,7 @@ import { FooterType, StyledFooter } from './styled-components';
 
 export const FinishedFooter = () => (
   <StyledFooter type={FooterType.FINISHED}>
-    <HStack align="center" justify="space-between" gap="4">
+    <HStack align="center" justify="space-between" gap="space-16">
       <Button
         variant="primary"
         type="button"

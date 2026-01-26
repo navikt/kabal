@@ -104,7 +104,7 @@ const PublishedVersion = ({ text, hasDraft, setTabId }: PublishedVersionProps) =
   }
 
   return (
-    <VStack gap="2" padding="4" height="100%">
+    <VStack gap="space-8" padding="space-16" height="100%">
       <PublishedRichText text={text} hasDraft={hasDraft} setTabId={setTabId} />
     </VStack>
   );

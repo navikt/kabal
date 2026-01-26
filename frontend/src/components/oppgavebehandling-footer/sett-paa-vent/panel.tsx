@@ -5,7 +5,7 @@ import { useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
 import { useSakstyperToPåVentReasons } from '@app/simple-api-state/use-kodeverk';
 import { PaaVentReasonEnum } from '@app/types/kodeverk';
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, ErrorSummary, HStack, Radio, RadioGroup, Textarea, VStack } from '@navikt/ds-react';
+import { Box, Button, ErrorSummary, HStack, Radio, RadioGroup, Textarea, VStack } from '@navikt/ds-react';
 import {
   addDays,
   addMonths,
@@ -77,8 +77,8 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
   const dates = reasonId === PaaVentReasonEnum.SATT_I_BERO ? BERO_DATES : DEFAULT_DATES;
 
   return (
-    <VStack asChild gap="7" left="0" position="absolute" className="bottom-full z-1">
-      <BoxNew padding="6" background="raised" borderRadius="medium" shadow="dialog" width="400px">
+    <VStack asChild gap="space-28" left="space-0" position="absolute" className="bottom-full z-1">
+      <Box padding="space-24" background="raised" borderRadius="4" shadow="dialog" width="400px">
         <RadioGroup onChange={setReasonId} value={reasonId} legend="Grunn" size="small">
           {options}
         </RadioGroup>
@@ -105,7 +105,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
           id={PÅ_VENT_DATE_ID}
           size="small"
         />
-        <VStack gap="3">
+        <VStack gap="space-12">
           {dates.map(([units, date]) => {
             const formattedDate = format(date, ISO_FORMAT);
             const isActive = to === formattedDate;
@@ -162,8 +162,9 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
             Sett på vent
           </Button>
           <Button
+            data-color="neutral"
             type="button"
-            variant="secondary-neutral"
+            variant="secondary"
             size="small"
             onClick={close}
             icon={<XMarkIcon aria-hidden />}
@@ -171,7 +172,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
             Avbryt
           </Button>
         </HStack>
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };

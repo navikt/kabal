@@ -7,7 +7,7 @@ import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
 import { useAddAbbreviationMutation } from '@app/redux-api/bruker';
 import { PlusIcon, TagIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, HStack, TextField, Tooltip } from '@navikt/ds-react';
+import { Box, Button, HStack, TextField, Tooltip } from '@navikt/ds-react';
 import { useEffect, useRef, useState } from 'react';
 
 export const Abbreviation = () => {
@@ -100,8 +100,8 @@ export const Abbreviation = () => {
         keys={['Ctrl', 'Shift', 'F']}
       />
       {isOpen ? (
-        <HStack asChild gap="0 1" position="absolute" right="0" className="top-full" wrap={false}>
-          <BoxNew background="default" padding="1" borderRadius="medium" shadow="dialog">
+        <HStack asChild gap="space-0 space-4" position="absolute" right="space-0" className="top-full" wrap={false}>
+          <Box background="default" padding="space-4" borderRadius="4" shadow="dialog">
             <Tooltip content="Den korte teksten du vil skal ekspandere til markert tekst">
               <TextField
                 autoFocus
@@ -131,7 +131,7 @@ export const Abbreviation = () => {
             <Tooltip content="Legg til forkortelse">
               <Button size="small" variant="primary" onClick={onAdd} icon={<PlusIcon aria-hidden />} />
             </Tooltip>
-          </BoxNew>
+          </Box>
         </HStack>
       ) : null}
     </div>

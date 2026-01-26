@@ -137,13 +137,13 @@ const handleToast = (document: IDocument, update: Update, actor: Actor, draft: I
 
   if (document.dokumentTypeId !== update.dokumentTypeId) {
     const from = (
-      <Tag size="xsmall" variant="info">
+      <Tag data-color="info" size="xsmall" variant="outline">
         {DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId]}
       </Tag>
     );
 
     const to = (
-      <Tag size="xsmall" variant="info">
+      <Tag data-color="info" size="xsmall" variant="outline">
         {DISTRIBUTION_TYPE_NAMES[update.dokumentTypeId]}
       </Tag>
     );

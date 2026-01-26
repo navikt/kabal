@@ -83,9 +83,10 @@ export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
           <SectionToolbar contentEditable={false}>
             <Tooltip content="Oppdater til siste versjon" delay={0}>
               <Button
+                data-color="neutral"
                 icon={<ArrowCirclepathIcon aria-hidden />}
                 onClick={reload}
-                variant="tertiary-neutral"
+                variant="tertiary"
                 size="xsmall"
                 contentEditable={false}
                 loading={isFetching}

@@ -125,7 +125,7 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
       }}
     >
       <Modal.Body>
-        <HStack align="center" gap="2" marginBlock="0 4">
+        <HStack align="center" gap="space-8" marginBlock="space-0 space-1">
           <Label>Originalt navn:</Label>
 
           <BodyShort>"{originalTitle}"</BodyShort>
@@ -142,7 +142,6 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
           ref={inputRef}
         />
       </Modal.Body>
-
       <Modal.Footer>
         <Tooltip placement="top" content="Lagre" keys={['Enter']}>
           <Button
@@ -158,8 +157,9 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
 
         <Tooltip placement="top" content="Avbryt" keys={['Esc']}>
           <Button
+            data-color="neutral"
             size="small"
-            variant="secondary-neutral"
+            variant="secondary"
             icon={<XMarkIcon aria-hidden />}
             onClick={() => modalRef.current?.close()}
             disabled={isLoading}

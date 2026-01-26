@@ -37,7 +37,7 @@ export const Ytelse = ({ ytelseId }: Props) => {
 
   return (
     <Tooltip content={ytelse}>
-      <Tag variant="alt3" size="small" className="truncate">
+      <Tag data-color="info" variant="outline" size="small" className="truncate">
         <span className="truncate">{ytelse}</span>
       </Tag>
     </Tooltip>

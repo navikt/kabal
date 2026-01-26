@@ -7,7 +7,7 @@ import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, BookmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, HStack, Tooltip } from '@navikt/ds-react';
+import { Box, Button, HStack, Tooltip } from '@navikt/ds-react';
 import { TextApi } from 'platejs';
 import { useRef, useState } from 'react';
 
@@ -67,8 +67,8 @@ export const BookmarkButton = () => {
         variant="tertiary-neutral"
       />
       {isOpen ? (
-        <HStack asChild position="absolute" left="0" style={{ top: '100%' }}>
-          <BoxNew background="default" padding="0" shadow="dialog" borderRadius="medium">
+        <HStack asChild position="absolute" left="space-0" style={{ top: '100%' }}>
+          <Box background="default" padding="space-0" shadow="dialog" borderRadius="4">
             {BOOKMARK_VARIANTS.map((option) => (
               <BookmarkVariantButton
                 key={option.variant}
@@ -79,7 +79,7 @@ export const BookmarkButton = () => {
                 }}
               />
             ))}
-          </BoxNew>
+          </Box>
         </HStack>
       ) : null}
     </HStack>
@@ -128,9 +128,10 @@ interface BookmarkVariantButtonProps {
 const BookmarkVariantButton = ({ option, onClick }: BookmarkVariantButtonProps) => (
   <Tooltip content={option.name} key={option.variant} placement="left">
     <Button
+      data-color="neutral"
       onClick={onClick}
       size="small"
-      variant="tertiary-neutral"
+      variant="tertiary"
       icon={<BookmarkFillIcon aria-hidden className={option.className} />}
     />
   </Tooltip>

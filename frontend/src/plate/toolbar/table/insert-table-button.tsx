@@ -14,7 +14,7 @@ import {
   useMyPlateEditorRef,
 } from '@app/plate/types';
 import { isNodeEmpty, isOfElementTypesFn, nextPath } from '@app/plate/utils/queries';
-import { BoxNew, HGrid, HStack } from '@navikt/ds-react';
+import { Box, HGrid, HStack } from '@navikt/ds-react';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { TableAdd } from '@styled-icons/fluentui-system-regular';
@@ -87,41 +87,40 @@ const TableGrid = ({ close }: TableGridProps) => {
   const maxColumns = clamp(hoveredColumn + 2, MIN_COLUMNS, MAX_COLUMNS_COUNT);
 
   return (
-    <BoxNew
+    <Box
       position="absolute"
       background="default"
       borderWidth="1"
       borderColor="neutral"
-      borderRadius="medium"
+      borderRadius="4"
       shadow="dialog"
-      padding="2"
+      padding="space-8"
       className="-left-28"
     >
-      <BoxNew style={{ width: getWidth(maxColumns), height: getHeight(maxRows) }} overflow="hidden" position="relative">
-        <BoxNew
+      <Box style={{ width: getWidth(maxColumns), height: getHeight(maxRows) }} overflow="hidden" position="relative">
+        <Box
           position="absolute"
-          top="0"
-          left="0"
+          top="space-0"
+          left="space-0"
           overflow="hidden"
           style={{ width: getWidth(hoveredColumn + 1), height: getHeight(hoveredRow + 1) }}
           role="presentation"
           aria-hidden
         >
           <BackgroundGrid />
-        </BoxNew>
+        </Box>
 
         <Grid close={close} onClick={onClick} onFocus={setHoveredCell} />
-      </BoxNew>
-
+      </Box>
       <HStack justify="end">
-        <HGrid columns="min-content min-content" gap="0 space-8" className="font-bold text-small">
+        <HGrid columns="min-content min-content" gap="space-0 space-8" className="font-ax-bold text-ax-small">
           <span>Rader:</span>
           <span>{hoveredRow === -1 ? '?' : hoveredRow + 1}</span>
           <span>Kolonner:</span>
           <span>{hoveredColumn === -1 ? '?' : hoveredColumn + 1}</span>
         </HGrid>
       </HStack>
-    </BoxNew>
+    </Box>
   );
 };
 
@@ -138,19 +137,19 @@ const Grid = memo(({ close, onClick, onFocus }: GridProps) => (
     overflow="hidden"
     columns={MAX_COLUMNS_COUNT}
     position="absolute"
-    left="0"
-    top="0"
+    left="space-0"
+    top="space-0"
   >
     {ROWS.map((row) =>
       COLUMNS.map((col) => (
-        <BoxNew
+        <Box
           key={`${row}-${col}`}
           aria-label={`Sett inn tabell med ${row + 1} ${row > 0 ? 'rader' : 'rad'} og ${col + 1} ${col > 0 ? 'kolonner' : 'kolonne'}`}
           as="button"
           type="button"
           borderWidth="1"
           borderColor="neutral"
-          borderRadius="small"
+          borderRadius="2"
           onClick={() => {
             onClick(row + 1, col + 1);
             close();
@@ -167,7 +166,7 @@ const Grid = memo(({ close, onClick, onFocus }: GridProps) => (
 const BackgroundGrid = memo(() => (
   <HGrid gap="space-2" width="max-content" overflow="hidden" className="z-0" columns={MAX_COLUMNS_COUNT}>
     {ROWS.map((row) =>
-      COLUMNS.map((col) => <BoxNew key={`${row}-${col}`} background="accent-strong" className="h-6 w-6" />),
+      COLUMNS.map((col) => <Box key={`${row}-${col}`} background="accent-strong" className="h-6 w-6" />),
     )}
   </HGrid>
 ));

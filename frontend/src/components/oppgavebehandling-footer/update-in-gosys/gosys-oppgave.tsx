@@ -31,14 +31,14 @@ export const GosysOppgave = ({ oppgavebehandling }: Props) => {
         <Table.ExpandableRow content={<GosysBeskrivelseTabs beskrivelse={data.beskrivelse} />} expandOnRowClick>
           <Table.DataCell>
             {data.gjelder === null ? null : (
-              <Tag size="small" variant="success">
+              <Tag data-color="success" size="small" variant="outline">
                 {data.gjelder}
               </Tag>
             )}
           </Table.DataCell>
 
           <Table.DataCell>
-            <Tag size="small" variant="alt1">
+            <Tag data-color="meta-purple" size="small" variant="outline">
               {temaName}
             </Tag>
           </Table.DataCell>
@@ -48,7 +48,7 @@ export const GosysOppgave = ({ oppgavebehandling }: Props) => {
           <DateCell date={data.fristFerdigstillelse} />
 
           <Table.DataCell>
-            <Tag size="small" variant="info">
+            <Tag data-color="info" size="small" variant="outline">
               {data.oppgavetype}
             </Tag>
           </Table.DataCell>
@@ -59,7 +59,7 @@ export const GosysOppgave = ({ oppgavebehandling }: Props) => {
 
           <Table.DataCell>
             {data.opprettetAvEnhet === null ? null : (
-              <Tag size="small" variant="alt1">
+              <Tag data-color="meta-purple" size="small" variant="outline">
                 {data.opprettetAvEnhet.navn} ({data.opprettetAvEnhet.enhetsnr})
               </Tag>
             )}

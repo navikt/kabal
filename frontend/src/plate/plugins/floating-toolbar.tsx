@@ -1,6 +1,6 @@
 import { FloatingRedaktoerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-redaktoer-toolbar-buttons';
 import { FloatingSaksbehandlerToolbarButtons } from '@app/plate/toolbar/toolbars/floating-saksbehandler-toolbar-buttons';
-import { BoxNew } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 import { flip, offset, useFloatingToolbar, useFloatingToolbarState } from '@platejs/floating';
 import {
   createPlatePlugin,
@@ -58,18 +58,18 @@ const FloatingToolbar = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <BoxNew
+    <Box
       {...props}
       style={{ ...props.style, zIndex: 21 }}
       ref={ref}
       as="section"
       shadow="dialog"
       background="default"
-      padding="05"
+      padding="space-2"
       className="flex flex-nowrap"
     >
       {children}
-    </BoxNew>
+    </Box>
   );
 };
 

@@ -1,6 +1,6 @@
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
-import { BoxNew, HStack, VStack } from '@navikt/ds-react';
+import { Box, HStack, VStack } from '@navikt/ds-react';
 
 interface Props {
   type: HistoryEventTypes;
@@ -21,11 +21,11 @@ export const HistoryEvent = ({
 }: Props) => {
   return (
     <VStack asChild>
-      <BoxNew
+      <Box
         as="li"
-        borderRadius="medium"
+        borderRadius="4"
         borderWidth="1"
-        paddingBlock="0 2"
+        paddingBlock="space-0 space-8"
         overflow="hidden"
         position="relative"
         className="pl-[2px] before:absolute before:top-0 before:bottom-0 before:left-0 before:rounded-l-sm before:border-inherit before:border-l-3"
@@ -33,14 +33,14 @@ export const HistoryEvent = ({
           borderColor: `var(${borderColor})`,
         }}
       >
-        <HStack align="start" justify="space-between" marginBlock="0 2" paddingInline="0 1">
-          <HStack asChild align="center" gap="05">
-            <BoxNew
+        <HStack align="start" justify="space-between" marginBlock="space-0 space-8" paddingInline="space-0 space-4">
+          <HStack asChild align="center" gap="space-2">
+            <Box
               as="span"
-              borderRadius="medium 0 medium 0"
+              borderRadius="8 0 8 0"
               borderWidth="2"
-              paddingInline="0 2"
-              paddingBlock="0 space-1"
+              paddingInline="space-0 space-8"
+              paddingBlock="space-0 space-1"
               className={`leading-none ${TEXT_COLORS[borderColor]}`}
               style={{
                 backgroundColor: `var(${borderColor})`,
@@ -49,7 +49,7 @@ export const HistoryEvent = ({
             >
               <Icon aria-hidden />
               {tag}
-            </BoxNew>
+            </Box>
           </HStack>
 
           <time className="pt-0.5 pr-[3px] font-normal text-sm italic leading-none" dateTime={timestamp}>
@@ -57,10 +57,10 @@ export const HistoryEvent = ({
           </time>
         </HStack>
 
-        <VStack gap="1" paddingInline="2">
+        <VStack gap="space-4" paddingInline="space-8">
           {children}
         </VStack>
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };

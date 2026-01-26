@@ -38,10 +38,11 @@ export const TableFooter = ({
     <Table.Row>
       <Table.DataCell colSpan={columnCount}>
         <HStack align="center" justify="space-between" width="100%">
-          <HStack align="center" gap="1">
+          <HStack align="center" gap="space-4">
             <Button
+              data-color="neutral"
               size="small"
-              variant="tertiary-neutral"
+              variant="tertiary"
               onClick={() => {
                 pushEvent('refresh-oppgave-list', testId);
                 onRefresh();

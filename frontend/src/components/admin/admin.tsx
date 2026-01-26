@@ -8,18 +8,18 @@ import {
   useRefillElasticAdminMutation,
   useResendDvhMutation,
 } from '@app/redux-api/internal';
-import { BoxNew, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { ApiButton } from './api-button';
 
 export const Admin = () => (
-  <VStack gap="4" width="100%">
+  <VStack gap="space-16" width="100%">
     <Heading level="1" size="large">
       Administrasjon
     </Heading>
 
-    <BoxNew shadow="dialog" padding="4" asChild>
-      <HGrid gap="8" columns="1fr 1fr 1fr">
-        <VStack as="section" gap="4">
+    <Box shadow="dialog" padding="space-16" asChild>
+      <HGrid gap="space-32" columns="1fr 1fr 1fr">
+        <VStack as="section" gap="space-16">
           <ApiButton useApi={useRecreateElasticAdminMutation}>KABAL-SEARCH OPENSEARCH RECREATE</ApiButton>
           <ApiButton useApi={useRefillElasticAdminMutation}>KABAL-API KAFKA REFILL</ApiButton>
           <ApiButton useApi={useResendDvhMutation}>KABAL-API DVH RESEND</ApiButton>
@@ -28,13 +28,13 @@ export const Admin = () => (
 
         <InsertHjemlerInSettings />
 
-        <VStack gap="4">
+        <VStack gap="space-16">
           <CreateSystemNotification />
 
           <ListSystemNotifications />
         </VStack>
       </HGrid>
-    </BoxNew>
+    </Box>
 
     <MerkantilTaskList />
   </VStack>

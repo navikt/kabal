@@ -17,8 +17,8 @@ export const NewDocumentsHeader = ({ headingId }: Props) => {
       as="header"
       justify="space-between"
       align="center"
-      gap="2"
-      paddingBlock="0 2"
+      gap="space-8"
+      paddingBlock="space-0 space-8"
       flexGrow="1"
       wrap={false}
       className="border-ax-border-neutral border-b"

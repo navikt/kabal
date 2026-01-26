@@ -30,11 +30,12 @@ export const UnpublishTextButton = ({ publishedText, textType }: Props) => {
 
   if (isOpen) {
     return (
-      <HStack gap="2" align="center">
+      <HStack gap="space-8" align="center">
         <ConfirmUnpublishTextButton publishedText={publishedText} textDraft={draft} textType={textType} />
         <Button
+          data-color="neutral"
           size="small"
-          variant="secondary-neutral"
+          variant="secondary"
           onClick={() => setIsOpen(false)}
           disabled={isLoading}
           icon={<XMarkIcon aria-hidden />}
@@ -47,8 +48,14 @@ export const UnpublishTextButton = ({ publishedText, textType }: Props) => {
   }
 
   return (
-    <HStack gap="2" align="center">
-      <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
+    <HStack gap="space-8" align="center">
+      <Button
+        data-color="danger"
+        size="small"
+        variant="primary"
+        onClick={() => setIsOpen(true)}
+        icon={<TrashIcon aria-hidden />}
+      >
         Avpubliser
       </Button>
       <Explainer />
@@ -86,7 +93,14 @@ const ConfirmUnpublishTextButton = ({
   return (
     <>
       <Warning {...publishedText} />
-      <Button size="small" variant="danger" loading={isLoading} onClick={onClick} icon={<TrashIcon aria-hidden />}>
+      <Button
+        data-color="danger"
+        size="small"
+        variant="primary"
+        loading={isLoading}
+        onClick={onClick}
+        icon={<TrashIcon aria-hidden />}
+      >
         Bekreft avpublisering
       </Button>
     </>

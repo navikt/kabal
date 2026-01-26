@@ -27,7 +27,7 @@ export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified, fa
 
   if (isLoading) {
     return (
-      <HStack align="center" gap="1" className={CLASSNAMES}>
+      <HStack align="center" gap="space-4" className={CLASSNAMES}>
         {lastSaved}
 
         <Tooltip content="Lagrer..." delay={0}>
@@ -39,7 +39,7 @@ export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified, fa
 
   if (isSuccess) {
     return (
-      <HStack align="center" gap="1" className={CLASSNAMES}>
+      <HStack align="center" gap="space-4" className={CLASSNAMES}>
         {lastSaved}
 
         <Tooltip content="Lagret!" delay={0}>
@@ -51,7 +51,7 @@ export const SavedStatus = ({ isLoading, isSuccess, isError, error, modified, fa
 
   if (isError) {
     return (
-      <HStack align="center" gap="1" className={CLASSNAMES}>
+      <HStack align="center" gap="space-4" className={CLASSNAMES}>
         Feil ved lagring
         <Tooltip content={`Feil ved lagring:\n${formatErrorMessage(getErrorData(error))}`} delay={0}>
           <XMarkOctagonFillIconColored />

@@ -27,7 +27,7 @@ import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { Language } from '@app/types/texts/language';
 import type { Immutable } from '@app/types/types';
-import { Alert, BoxNew, Heading, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
+import { Alert, Box, Heading, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { getTitle } from './get-title';
 
@@ -68,19 +68,18 @@ export const NewDocument = ({ onCreate }: Props) => {
   };
 
   return (
-    <BoxNew
+    <Box
       as="section"
       width="826px"
       height="100%"
-      paddingBlock="4"
-      paddingInline="8"
+      paddingBlock="space-16"
+      paddingInline="space-32"
       background="default"
       overflowY="auto"
     >
       <Heading level="1" size="xsmall" spacing>
         Opprett nytt dokument
       </Heading>
-
       <HStack as="section" wrap>
         {templates.map((template) => (
           <TemplateButton
@@ -96,7 +95,7 @@ export const NewDocument = ({ onCreate }: Props) => {
           </Alert>
         ) : null}
       </HStack>
-    </BoxNew>
+    </Box>
   );
 };
 
@@ -160,7 +159,7 @@ const TemplateButton = ({ template, loading, onClick }: TemplateButtonProps) => 
 
   return (
     <ErrorWrapper noAccessMessage={noAccessMessage}>
-      <BoxNew asChild padding="4" borderRadius="medium" width="25%" minWidth="190px">
+      <Box asChild padding="space-16" borderRadius="4" width="25%" minWidth="190px">
         <VStack
           as="button"
           type="button"
@@ -175,9 +174,9 @@ const TemplateButton = ({ template, loading, onClick }: TemplateButtonProps) => 
 
           <GeneratedIcon template={template} />
 
-          <span className="font-bold text-ax-medium">{template.tittel}</span>
+          <span className="font-ax-bold text-ax-medium">{template.tittel}</span>
         </VStack>
-      </BoxNew>
+      </Box>
     </ErrorWrapper>
   );
 };
@@ -201,9 +200,9 @@ const ErrorWrapper = ({ children, noAccessMessage }: ErrorWrapperProps) => {
 
 const LoadingOverlay = ({ loading }: { loading: boolean }) =>
   loading ? (
-    <HStack asChild align="center" justify="center" position="absolute" top="0">
-      <BoxNew background="neutral-soft" height="100%" width="100%">
+    <HStack asChild align="center" justify="center" position="absolute" top="space-0">
+      <Box background="neutral-soft" height="100%" width="100%">
         <Loader size="xlarge" />
-      </BoxNew>
+      </Box>
     </HStack>
   ) : null;

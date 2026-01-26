@@ -79,7 +79,7 @@ const KvalitetsskjemaTextareaInternal = ({
   }
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <Textarea
         size="small"
         label={<ContainerWithHelpText helpText={helpText}>{label}</ContainerWithHelpText>}
@@ -87,7 +87,7 @@ const KvalitetsskjemaTextareaInternal = ({
         onChange={({ target }) => setLocalValue(target.value)}
         description={description}
       />
-      <HStack align="center" justify="end" marginBlock="1 0" height="21px">
+      <HStack align="center" justify="end" marginBlock="space-4 space-0" height="21px">
         <SavedStatus {...updateStatus} />
       </HStack>
     </VStack>

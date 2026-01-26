@@ -1,9 +1,9 @@
 import { ToastType } from '@app/components/toast/types';
-import { BoxNew, type BoxNewProps, Button, type ButtonProps, HGrid, VStack } from '@navikt/ds-react';
+import { Box, type BoxProps, Button, type ButtonProps, HGrid, VStack } from '@navikt/ds-react';
 import type { FragmentProps } from 'react';
 
 export const Container = ({ children }: FragmentProps) => (
-  <HGrid columns="var(--ax-space-24) 1fr" align="center" gap="2" className="hyphens-auto whitespace-pre-wrap">
+  <HGrid columns="var(--ax-space-24) 1fr" align="center" gap="space-8" className="hyphens-auto whitespace-pre-wrap">
     {children}
   </HGrid>
 );
@@ -20,17 +20,17 @@ interface ToastContainerProps extends FragmentProps {
 
 export const ToastContainer = ({ children, className, type, ...rest }: ToastContainerProps) => (
   <VStack asChild position="relative" width="300px" {...rest}>
-    <BoxNew
+    <Box
       as="section"
       background={TYPE_TO_BACKGROUND_COLOR[type]}
       borderColor={TYPE_TO_BORDER_COLOR[type]}
       borderWidth="1"
-      borderRadius="medium"
+      borderRadius="4"
       padding="space-16"
       className={`text-ax-text-neutral ${className}`}
     >
       {children}
-    </BoxNew>
+    </Box>
   </VStack>
 );
 
@@ -51,13 +51,13 @@ interface TimerProps {
 }
 
 const Timer = ({ duration, type }: TimerProps) => (
-  <BoxNew
+  <Box
     role="presentation"
     aria-hidden
     position="absolute"
-    bottom="0"
-    left="0"
-    right="0"
+    bottom="space-0"
+    left="space-0"
+    right="space-0"
     width="100%"
     borderWidth="0 0 4 0"
     borderColor={TYPE_TO_BORDER_COLOR[type]}
@@ -68,14 +68,14 @@ const Timer = ({ duration, type }: TimerProps) => (
   />
 );
 
-const TYPE_TO_BACKGROUND_COLOR: Record<ToastType, BoxNewProps['background']> = {
+const TYPE_TO_BACKGROUND_COLOR: Record<ToastType, BoxProps['background']> = {
   [ToastType.SUCCESS]: 'success-moderate',
   [ToastType.ERROR]: 'danger-moderate',
   [ToastType.INFO]: 'info-moderate',
   [ToastType.WARNING]: 'warning-moderate',
 };
 
-const TYPE_TO_BORDER_COLOR: Record<ToastType, BoxNewProps['borderColor']> = {
+const TYPE_TO_BORDER_COLOR: Record<ToastType, BoxProps['borderColor']> = {
   [ToastType.SUCCESS]: 'success',
   [ToastType.ERROR]: 'danger',
   [ToastType.INFO]: 'info',

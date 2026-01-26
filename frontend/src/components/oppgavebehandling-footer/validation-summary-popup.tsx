@@ -1,6 +1,6 @@
 import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Alert, BoxNew, Button, HStack } from '@navikt/ds-react';
+import { Alert, Box, Button, HStack } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { ValidationSummary } from './validation-summary';
 
@@ -28,9 +28,9 @@ export const ValidationSummaryPopup = () => {
 
   return (
     <>
-      <Button variant="tertiary-neutral" size="small" icon={<Icon />} onClick={toggleOpen}>
+      <Button data-color="neutral" variant="tertiary" size="small" icon={<Icon />} onClick={toggleOpen}>
         <Alert variant={statusType} size="small" inline>
-          <HStack align="center" gap="2">
+          <HStack align="center" gap="space-8">
             <span>{statusText}</span>
           </HStack>
         </Alert>
@@ -54,17 +54,24 @@ const Popup = ({ open, setOpen, hasErrors }: PopupProps) => {
   }
 
   return (
-    <BoxNew position="absolute" right="0" marginBlock="0 1" marginInline="0 1" maxWidth="500px" className="bottom-full">
+    <Box
+      position="absolute"
+      right="space-0"
+      marginBlock="space-0 space-4"
+      marginInline="space-0 space-4"
+      maxWidth="500px"
+      className="bottom-full"
+    >
       <Button
-        variant="tertiary-neutral"
+        data-color="neutral"
+        variant="tertiary"
         size="small"
         type="button"
         onClick={() => setOpen(false)}
         className="absolute top-3 right-3 cursor-pointer"
         icon={<ChevronDownIcon />}
       />
-
       <ValidationSummary sections={validationSectionErrors} />
-    </BoxNew>
+    </Box>
   );
 };

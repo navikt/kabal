@@ -39,7 +39,7 @@ const ChangedMottakere = ({ event }: IVarsletBehandlingstidEvent) => {
   const to: IPart[] = event.mottakere ?? [];
 
   return (
-    <VStack gap="1" as="section" aria-label="Mottakere">
+    <VStack gap="space-4" as="section" aria-label="Mottakere">
       Mottakere av varsel:
       <Mottakere mottakere={to} />
     </VStack>

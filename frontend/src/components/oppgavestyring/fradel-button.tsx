@@ -69,7 +69,8 @@ export const FradelButton = (props: IOppgave) => {
   if (tildeltSaksbehandlerident !== null && undoSecondsLeft > 0) {
     return (
       <Button
-        variant="secondary-neutral"
+        data-color="neutral"
+        variant="secondary"
         size="small"
         loading={isLoading}
         onClick={async () => {
@@ -136,7 +137,8 @@ const Deassign = ({
   return (
     <HStack position="relative" className="[grid-area:tildel]" ref={ref}>
       <Button
-        variant="secondary-neutral"
+        data-color="neutral"
+        variant="secondary"
         type="button"
         size="small"
         onClick={onLeggTilbake}
@@ -147,13 +149,11 @@ const Deassign = ({
       >
         Legg tilbake
       </Button>
-
       <PaaVentWarning
         close={() => setPaaVentWarningIsOpen(false)}
         onConfirm={onConfirm}
         isOpen={paaVentWarningIsOpen}
       />
-
       {reasonPopupDirection !== null ? (
         <Popup
           direction={reasonPopupDirection}

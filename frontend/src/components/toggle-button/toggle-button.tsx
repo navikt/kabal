@@ -1,4 +1,4 @@
-import { BoxNew, Button, type ButtonProps, HStack } from '@navikt/ds-react';
+import { Box, Button, type ButtonProps, HStack } from '@navikt/ds-react';
 
 interface Props extends ButtonProps {
   open: boolean;
@@ -10,7 +10,7 @@ interface Props extends ButtonProps {
 
 export const ToggleButton = ({ open, error = false, active, minHeight, icon, size, ...props }: Props) => (
   <HStack asChild align="center" wrap={false}>
-    <BoxNew
+    <Box
       asChild
       position="relative"
       minHeight={minHeight === undefined ? '2rem' : minHeight}
@@ -25,7 +25,7 @@ export const ToggleButton = ({ open, error = false, active, minHeight, icon, siz
         iconPosition="right"
         {...props}
       />
-    </BoxNew>
+    </Box>
   </HStack>
 );
 

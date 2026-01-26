@@ -22,7 +22,13 @@ export const Changelog = ({ versions }: Props) => {
 
   return (
     <>
-      <Button onClick={openModal} size="xsmall" variant="tertiary-neutral" icon={<ClockDashedIcon aria-hidden />}>
+      <Button
+        data-color="neutral"
+        onClick={openModal}
+        size="xsmall"
+        variant="tertiary"
+        icon={<ClockDashedIcon aria-hidden />}
+      >
         Vis endringslogg
       </Button>
       <Modal header={{ heading: 'Endringslogg' }} ref={ref} closeOnBackdropClick>
@@ -57,7 +63,7 @@ export const Changelog = ({ versions }: Props) => {
 };
 
 const Version = ({ publishedByActor, publishedDateTime }: IPublishedText) => (
-  <Table.Row className="font-bold">
+  <Table.Row className="font-ax-bold">
     <Table.DataCell>{isoDateTimeToPretty(publishedDateTime)}</Table.DataCell>
     <Table.DataCell>Publisert</Table.DataCell>
     <Table.DataCell>{publishedByActor.navn}</Table.DataCell>

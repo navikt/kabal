@@ -20,7 +20,7 @@ export const OrphansModal = () => {
   return (
     <>
       <Tooltip content={ORPHAN_HELP_TEXT}>
-        <Button variant="tertiary-neutral" size="xsmall" onClick={() => modalRef.current?.showModal()}>
+        <Button data-color="neutral" variant="tertiary" size="xsmall" onClick={() => modalRef.current?.showModal()}>
           <HStack as="span" align="center" wrap={false}>
             ({orphansCount} <LinkBrokenIcon aria-hidden />)
           </HStack>
@@ -36,7 +36,7 @@ export const OrphansModal = () => {
           <Alert variant="info" size="small">
             {ORPHAN_HELP_TEXT}
           </Alert>
-          <HStack as="section" wrap align="start" gap="4" marginBlock="4 0">
+          <HStack as="section" wrap align="start" gap="space-16" marginBlock="space-16 space-0">
             {orphans.map((o) => (
               <Thread key={o.id} thread={o} isFocused zIndex={0} />
             ))}

@@ -1,14 +1,14 @@
 import { merge } from '@app/functions/classes';
-import { BoxNew } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 
 export const StyledAttachmentListItem = ({ className, children, ...rest }: React.HTMLAttributes<HTMLElement>) => (
-  <BoxNew
+  <Box
     as="li"
-    borderRadius="medium"
+    borderRadius="4"
     position="absolute"
-    left="0"
-    right="0"
-    paddingInline="4 0"
+    left="space-0"
+    right="space-0"
+    paddingInline="space-16 space-0"
     className={merge(
       'before:absolute before:top-4 before:left-0 before:block before:w-3 before:border-ax-border-neutral-subtle before:border-b',
       className,
@@ -16,7 +16,7 @@ export const StyledAttachmentListItem = ({ className, children, ...rest }: React
     {...rest}
   >
     {children}
-  </BoxNew>
+  </Box>
 );
 
 interface LogiskeVedleggListItemStyleProps extends Omit<React.HTMLAttributes<HTMLLIElement>, 'className'> {

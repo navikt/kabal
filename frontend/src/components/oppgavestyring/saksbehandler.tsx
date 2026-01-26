@@ -3,7 +3,7 @@ import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import type { IOppgave } from '@app/types/oppgaver';
-import { BoxNew, ErrorMessage, HStack, Select, Tooltip } from '@navikt/ds-react';
+import { Box, ErrorMessage, HStack, Select, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useTildel } from './use-tildel';
 
@@ -121,18 +121,18 @@ interface SaksbehandlerNameProps {
 
 const SaksbehandlerName = ({ children }: SaksbehandlerNameProps) => (
   <Tooltip content={children}>
-    <BoxNew
+    <Box
       as="span"
       width="100%"
       overflow="hidden"
       padding="space-4"
       borderWidth="1"
       borderColor="neutral"
-      borderRadius="medium"
+      borderRadius="4"
       background="default"
       className="truncate"
     >
       {children}
-    </BoxNew>
+    </Box>
   </Tooltip>
 );

@@ -65,7 +65,7 @@ export const PdfScale = () => {
         </HelpText>
       </SectionHeader>
 
-      <VStack gap="4">
+      <VStack gap="space-16">
         <PdfScaleModeToggle
           value={scaleMode}
           onChange={onScaleModeChange}

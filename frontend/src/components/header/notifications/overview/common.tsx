@@ -4,7 +4,7 @@ import {
   KabalNotificationWithCaseDataEntry,
 } from '@app/components/header/notifications/notification';
 import type { KabalNotification } from '@app/components/header/notifications/types';
-import { BodyShort, BoxNew, HGrid, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, HGrid, VStack } from '@navikt/ds-react';
 
 interface GroupedGridProps {
   columns: number;
@@ -12,7 +12,7 @@ interface GroupedGridProps {
 }
 
 export const GroupedGrid = ({ columns, children }: GroupedGridProps) => (
-  <HGrid gap="4" overflowY="hidden" columns={`repeat(${columns}, 350px)`} height="100%">
+  <HGrid gap="space-16" overflowY="hidden" columns={`repeat(${columns}, 350px)`} height="100%">
     {children}
   </HGrid>
 );
@@ -23,19 +23,19 @@ interface GroupContainerProps {
 }
 
 export const GroupContainer = ({ children, highlight = false }: GroupContainerProps) => (
-  <BoxNew
+  <Box
     asChild
     background="default"
-    paddingBlock="2"
-    marginBlock="2"
-    borderRadius="medium"
+    paddingBlock="space-8"
+    marginBlock="space-8"
+    borderRadius="4"
     shadow="dialog"
     className={highlight ? 'outline-2 outline-ax-border-accent' : undefined}
   >
     <VStack as="section" overflowY="hidden" className="group/notifications">
       {children}
     </VStack>
-  </BoxNew>
+  </Box>
 );
 
 interface NotificationsGroupProps {
@@ -52,13 +52,21 @@ export const NotificationsGroup = ({ notifications, showCaseData = false }: Noti
 
   return (
     <>
-      <VStack as="ol" gap="4" height="100%" overflowY="auto" marginBlock="0 4" paddingBlock="2 0" paddingInline="2">
+      <VStack
+        as="ol"
+        gap="space-16"
+        height="100%"
+        overflowY="auto"
+        marginBlock="space-0 space-1"
+        paddingBlock="space-8 space-0"
+        paddingInline="space-8"
+      >
         {notifications.map((notification) => (
           <Entry key={notification.id} {...notification} />
         ))}
       </VStack>
 
-      <VStack gap="2">
+      <VStack gap="space-8">
         <MarkManyAsRead notifications={notifications} className="mx-2" />
 
         <MarkManyAsUnread notifications={notifications} className="mx-2" />

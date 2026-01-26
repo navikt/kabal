@@ -79,11 +79,11 @@ const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
           />
         </table>
       </div>
-      <HStack gap="4">
+      <HStack gap="space-16">
         <Button variant="primary" size="small" onClick={save} loading={isLoading} icon={<FloppydiskIcon aria-hidden />}>
           Lagre
         </Button>
-        <Button variant="danger" size="small" onClick={reset} icon={<ArrowUndoIcon aria-hidden />}>
+        <Button data-color="danger" variant="primary" size="small" onClick={reset} icon={<ArrowUndoIcon aria-hidden />}>
           Avbryt
         </Button>
       </HStack>

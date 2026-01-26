@@ -1,6 +1,6 @@
 import { ScalePreviewSvg } from '@app/components/settings/pdf-scale/preview-svg';
 import type { PdfScaleMode } from '@app/hooks/settings/use-setting';
-import { BodyShort, BoxNew, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, HStack, VStack } from '@navikt/ds-react';
 
 interface Option {
   label: string;
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const PdfScaleModeToggle = ({ value, onChange, options }: Props) => (
-  <HStack role="radiogroup" wrap justify="start" gap="1">
+  <HStack role="radiogroup" wrap justify="start" gap="space-4">
     {options.map((o) => (
       <ToggleButton key={o.scaleMode} {...o} selected={value === o.scaleMode} onClick={() => onChange(o.scaleMode)} />
     ))}
@@ -39,9 +39,9 @@ const ToggleButton = ({
   interactiveContent,
   ...rest
 }: ToggleButtonProps) => (
-  <BoxNew
+  <Box
     asChild
-    borderRadius="medium"
+    borderRadius="4"
     borderWidth="1"
     borderColor="neutral"
     width="340px"
@@ -61,8 +61,8 @@ const ToggleButton = ({
         aria-checked={selected}
         tabIndex={0}
       >
-        <VStack gap="2" height="100%">
-          <HStack align="center" justify="center" gap="1" className="font-bold">
+        <VStack gap="space-8" height="100%">
+          <HStack align="center" justify="center" gap="space-4" className="font-ax-bold">
             {icon}
             <span>{label}</span>
           </HStack>
@@ -77,5 +77,5 @@ const ToggleButton = ({
 
       {interactiveContent}
     </VStack>
-  </BoxNew>
+  </Box>
 );

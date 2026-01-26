@@ -1,6 +1,6 @@
 import { RoleItem } from '@app/components/role-list/role-list-item';
 import type { Role } from '@app/types/bruker';
-import { BodyShort, Heading, List, type TagProps } from '@navikt/ds-react';
+import { BodyShort, Box, Heading, List, type TagProps } from '@navikt/ds-react';
 
 interface Props {
   roles: Role[];
@@ -34,13 +34,19 @@ export const RoleList = ({ roles, variant, title, description }: Props) => {
         </BodyShort>
       )}
 
-      <List size="small" title={title} description={description} className="w-fit">
-        {roles.map((r) => (
-          <List.Item key={r} className="w-fit">
-            <RoleItem key={r} role={r} variant={variant} />
-          </List.Item>
-        ))}
-      </List>
+      <div>
+        <Heading size="small">{title}</Heading>
+        <BodyShort>{description}</BodyShort>
+        <Box marginBlock="space-16" asChild>
+          <List size="small" className="w-fit">
+            {roles.map((r) => (
+              <List.Item key={r} className="w-fit">
+                <RoleItem key={r} role={r} variant={variant} />
+              </List.Item>
+            ))}
+          </List>
+        </Box>
+      </div>
     </section>
   );
 };

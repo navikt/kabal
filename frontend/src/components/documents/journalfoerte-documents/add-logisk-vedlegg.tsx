@@ -42,7 +42,8 @@ export const AddLogiskVedlegg = ({ hasVedlegg, index, top, dokumentInfoId, logis
         />
       ) : (
         <Button
-          variant="tertiary-neutral"
+          data-color="neutral"
+          variant="tertiary"
           size="xsmall"
           icon={<PlusCircleIcon aria-hidden />}
           onClick={() => setIsAdding(true)}

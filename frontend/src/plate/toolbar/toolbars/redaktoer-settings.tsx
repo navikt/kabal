@@ -40,12 +40,12 @@ export const RedkatoerSettings = () => {
           </Heading>
         </Modal.Header>
 
-        <VStack asChild gap="4">
+        <VStack asChild gap="space-16">
           <Modal.Body>
             <Capitalise />
 
             <section>
-              <HStack asChild gap="2" align="center">
+              <HStack asChild gap="space-8" align="center">
                 <Heading level="2" size="small" spacing>
                   <AbbreviationsHeadingContent />
                 </Heading>

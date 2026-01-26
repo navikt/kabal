@@ -1,4 +1,4 @@
-import { BoxNew, HGrid, VStack, type VStackProps } from '@navikt/ds-react';
+import { Box, HGrid, VStack, type VStackProps } from '@navikt/ds-react';
 
 interface ElementProps {
   children: React.ReactNode;
@@ -11,9 +11,9 @@ export const Container = ({ children }: ElementProps) => (
     gap="space-8"
     style={{ gridTemplateRows: 'min-content 1fr', gridTemplateAreas: "'header header' 'sidebar text-list'" }}
   >
-    <BoxNew as="section" borderRadius="medium" shadow="dialog" overflow="hidden" flexGrow="1" height="100%">
+    <Box as="section" borderRadius="4" shadow="dialog" overflow="hidden" flexGrow="1" height="100%">
       {children}
-    </BoxNew>
+    </Box>
   </HGrid>
 );
 
@@ -39,12 +39,12 @@ export const Header = ({ children }: ElementProps) => (
 export const SidebarContainer = (props: VStackProps) => (
   <VStack
     position="sticky"
-    top="0"
+    top="space-0"
     height="fit-content"
     overflow="auto"
     className="[grid-area:sidebar]"
-    gap="2"
-    paddingBlock="1 0"
+    gap="space-8"
+    paddingBlock="space-4 space-0"
     {...props}
   />
 );

@@ -10,7 +10,7 @@ import type { IdentifikatorMottaker, IMottaker } from '@app/types/documents/docu
 import { IdType } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, HStack, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { Box, Button, HStack, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
 
 interface Props {
   mottakerList: IdentifikatorMottaker[];
@@ -78,19 +78,20 @@ const Receivers = ({ mottakerList, removeMottaker, changeMottaker, sendErrors, t
   }
 
   return (
-    <BoxNew as="ul" marginBlock="space-4 space-0" overflowY="auto" overflowX="hidden">
+    <Box as="ul" marginBlock="space-4 space-0" overflowY="auto" overflowX="hidden">
       {mottakerList.map(({ part, handling, overriddenAddress }) => {
         const error = sendErrors.find((e) => e.field === part.id)?.reason ?? null;
         const isPerson = part.type === IdType.FNR;
 
         return (
           <StyledReceiver key={part.identifikator} as="li" accent="success">
-            <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
-              <HStack align="center" gap="1" paddingBlock="1">
+            <HStack align="center" gap="space-8" flexShrink="0" paddingInline="space-8" minHeight="8">
+              <HStack align="center" gap="space-4" paddingBlock="space-4">
                 <Tooltip content="Fjern mottaker">
                   <Button
+                    data-color="neutral"
                     size="xsmall"
-                    variant="tertiary-neutral"
+                    variant="tertiary"
                     title="Fjern"
                     icon={<TrashIcon color="var(--ax-text-danger-decoration)" aria-hidden />}
                     onClick={() => removeMottaker(part.identifikator)}
@@ -99,13 +100,13 @@ const Receivers = ({ mottakerList, removeMottaker, changeMottaker, sendErrors, t
                 <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
                   {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
                 </Tooltip>
-                <HStack align="center" gap="0 1">
+                <HStack align="center" gap="space-0 space-4">
                   <span>{part.name}</span>
                   {part.identifikator === null ? null : <CopyIdButton id={part.identifikator} size="xsmall" />}
                 </HStack>
                 <PartStatusList statusList={part.statusList} size="xsmall" />
                 {error === null ? null : (
-                  <Tag variant="error" size="xsmall">
+                  <Tag data-color="danger" variant="outline" size="xsmall">
                     {error}
                   </Tag>
                 )}
@@ -121,6 +122,6 @@ const Receivers = ({ mottakerList, removeMottaker, changeMottaker, sendErrors, t
           </StyledReceiver>
         );
       })}
-    </BoxNew>
+    </Box>
   );
 };

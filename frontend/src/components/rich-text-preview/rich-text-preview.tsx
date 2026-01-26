@@ -7,7 +7,7 @@ import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { FileSearchIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, type ButtonProps, HStack } from '@navikt/ds-react';
+import { Box, Button, type ButtonProps, HStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { useRef, useState } from 'react';
 
@@ -59,13 +59,12 @@ export const RichTextPreview = ({
       >
         {buttonText}
       </Button>
-
       {viewContent ? (
-        <BoxNew
+        <Box
           position="absolute"
           background="default"
           shadow="dialog"
-          padding="2"
+          padding="space-8"
           style={{
             left: openLeft ? 'auto' : '0',
             right: openLeft ? '0' : 'auto',
@@ -79,7 +78,7 @@ export const RichTextPreview = ({
           <Plate<RichTextEditor> editor={editor} readOnly>
             <KabalPlateEditor id={id} contentEditable={false} lang={SPELL_CHECK_LANGUAGES[lang]} />
           </Plate>
-        </BoxNew>
+        </Box>
       ) : null}
     </HStack>
   );

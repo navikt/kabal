@@ -11,7 +11,7 @@ import {
   PrinterSmallIcon,
   XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
-import { BoxNew, type BoxNewProps, Button, Detail, Label, Popover, VStack } from '@navikt/ds-react';
+import { Box, type BoxProps, Button, Detail, Label, Popover, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 
 interface RelevantDateTimelineItemProps {
@@ -34,7 +34,7 @@ export const RelevantDateTimelineItem = ({ type, ...rest }: RelevantDateTimeline
   );
 };
 
-interface TimelineItemProps extends Pick<BoxNewProps, 'background'> {
+interface TimelineItemProps extends Pick<BoxProps, 'background'> {
   title: string;
   icon: React.ReactNode;
   timestamp: string;
@@ -53,8 +53,8 @@ export const TimelineItem = ({
   popover = null,
   hideNext = false,
 }: TimelineItemProps) => (
-  <BoxNew asChild borderRadius="medium" borderWidth="1" borderColor="neutral" background={background} padding="2">
-    <VStack as="li" position="relative" gap="1 0" className="whitespace-nowrap">
+  <Box asChild borderRadius="4" borderWidth="1" borderColor="neutral" background={background} padding="space-8">
+    <VStack as="li" position="relative" gap="space-4 space-0" className="whitespace-nowrap">
       <Label size="small" className="flex items-center gap-1">
         {icon} <span>{title}</span>
       </Label>
@@ -64,7 +64,7 @@ export const TimelineItem = ({
         <ChevronRightIcon aria-hidden className="-translate-y-1/2 -translate-x-[22.5%] absolute top-1/2 left-full" />
       )}
     </VStack>
-  </BoxNew>
+  </Box>
 );
 
 interface TimelinePopoverProps {
@@ -78,7 +78,7 @@ const TimelinePopover = ({ children, buttonText }: TimelinePopoverProps) => {
 
   return (
     <div className="whitespace-normal">
-      <Button ref={ref} onClick={() => setIsOpen(!isOpen)} size="xsmall" variant="tertiary-neutral">
+      <Button data-color="neutral" ref={ref} onClick={() => setIsOpen(!isOpen)} size="xsmall" variant="tertiary">
         {buttonText}
       </Button>
       <Popover open={isOpen} onClose={() => setIsOpen(false)} anchorEl={ref.current}>
@@ -88,7 +88,7 @@ const TimelinePopover = ({ children, buttonText }: TimelinePopoverProps) => {
   );
 };
 
-const BACKGROUND_COLOR: Record<TimelineTypes, BoxNewProps['background']> = {
+const BACKGROUND_COLOR: Record<TimelineTypes, BoxProps['background']> = {
   [TimelineTypes.OPPRETTET]: 'meta-lime-soft',
   [TimelineTypes.SENDT_PRINT]: 'warning-soft',
   [TimelineTypes.EKSPEDERT]: 'brand-blue-soft',

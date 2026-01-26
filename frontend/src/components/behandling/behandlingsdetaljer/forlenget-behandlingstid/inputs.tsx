@@ -24,12 +24,12 @@ export const Inputs = ({ behandlingstidError, setBehandlingstidError }: Props) =
 
   if (isLoading) {
     return (
-      <VStack gap="4">
+      <VStack gap="space-16">
         <HStack justify="space-between">
-          <HStack gap="3">
+          <HStack gap="space-12">
             <Skeleton width="100px" height="32px" variant="rectangle" />
 
-            <HStack gap="1">
+            <HStack gap="space-4">
               <Skeleton width="60px" height="32px" variant="rectangle" />
               <Skeleton width="60px" height="32px" variant="rectangle" />
             </HStack>
@@ -66,8 +66,8 @@ export const Inputs = ({ behandlingstidError, setBehandlingstidError }: Props) =
   const { id, prosessfullmektig } = oppgave;
 
   return (
-    <VStack gap="4">
-      <HStack gap="6" wrap={false}>
+    <VStack gap="space-16">
+      <HStack gap="space-24" wrap={false}>
         <SetBehandlingstid
           id={id}
           typeId={data.behandlingstid.varsletBehandlingstidUnitTypeId}

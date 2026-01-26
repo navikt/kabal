@@ -30,7 +30,6 @@ export const Errors = ({ updatePdf }: Props) => {
       <Heading level="1" size="xsmall">
         Følgende feil må rettes
       </Heading>
-
       <List>
         {validationErrors
           .filter((e) => e.errors.length > 0)
@@ -47,9 +46,9 @@ export const Errors = ({ updatePdf }: Props) => {
             </List.Item>
           ))}
       </List>
-
       {hasFinishErrors ? (
         <Button
+          data-color="neutral"
           size="xsmall"
           onClick={() => {
             updatePdf();
@@ -66,7 +65,7 @@ export const Errors = ({ updatePdf }: Props) => {
                 .filter(({ errors }) => errors.length > 0),
             );
           }}
-          variant="secondary-neutral"
+          variant="secondary"
         >
           Oppdater
         </Button>

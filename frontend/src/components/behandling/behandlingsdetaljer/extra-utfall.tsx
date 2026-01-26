@@ -30,7 +30,7 @@ export const ExtraUtfall = (props: Props) => {
   const includesRetur = oppgave.resultat.extraUtfallIdSet.some((u) => u === UtfallEnum.RETUR);
 
   return (
-    <VStack gap="2" marginBlock="0 4">
+    <VStack gap="space-8" marginBlock="space-0 space-1">
       {canEdit ? <ExtraUtfallButton {...props} /> : null}
       <Tags {...props} />
       {canEdit && includesRetur ? <ReturWarning /> : null}
@@ -63,7 +63,7 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props
   const disabled = mainUtfall === null;
 
   return (
-    <HStack align="center" gap="2" wrap={false}>
+    <HStack align="center" gap="space-8" wrap={false}>
       {disabled ? (
         <InlineMessage status="info">
           Du må velge utfall/resultat før du kan sette ekstra utfall for tilpasset tekst.
@@ -93,7 +93,7 @@ const ReadOnlyLabel = () => {
   }
 
   return (
-    <HStack align="center" gap="2">
+    <HStack align="center" gap="space-8">
       <Label htmlFor={TAGSCONTAINER_ID} size="small">
         Ekstra utfall for tilpasset tekst
       </Label>
@@ -113,15 +113,15 @@ const Tags = ({ utfallIdSet, mainUtfall, typeId }: TagsProps) => {
   return (
     <>
       <ReadOnlyLabel />
-      <HStack wrap gap="1" marginBlock="1 0" id={TAGSCONTAINER_ID}>
+      <HStack wrap gap="space-4" marginBlock="space-4 space-0" id={TAGSCONTAINER_ID}>
         {mainUtfall === null || !canEdit ? null : (
-          <Tag size="small" variant="alt1">
+          <Tag data-color="meta-purple" size="small" variant="outline">
             {utfallKodeverk.find((u) => u.id === mainUtfall)?.navn ?? `Ukjent utfall (${mainUtfall})`} (hovedutfall)
           </Tag>
         )}
         {utfallIdSet.map((utfall) =>
           utfall === mainUtfall ? null : (
-            <Tag key={utfall} size="small" variant="info">
+            <Tag data-color="info" key={utfall} size="small" variant="outline">
               {utfallKodeverk.find((u) => u.id === utfall)?.navn ?? `Ukjent utfall (${utfall})`}
             </Tag>
           ),

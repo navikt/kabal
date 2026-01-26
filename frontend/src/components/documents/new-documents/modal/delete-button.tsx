@@ -56,10 +56,11 @@ export const DeleteDocumentButton = ({ document, disabled = false, ...rest }: Pr
 
   if (showConfirm) {
     return (
-      <HStack justify="end" gap="0 4" {...rest}>
+      <HStack justify="end" gap="space-0 space-16" {...rest}>
         <Button
+          data-color="danger"
           className={BUTTON_CLASSES}
-          variant="danger"
+          variant="primary"
           size="small"
           loading={isLoading}
           disabled={disabled}
@@ -70,9 +71,10 @@ export const DeleteDocumentButton = ({ document, disabled = false, ...rest }: Pr
           {text}
         </Button>
         <Button
+          data-color="neutral"
           className={BUTTON_CLASSES}
           size="small"
-          variant="secondary-neutral"
+          variant="secondary"
           onClick={() => setShowConfirm(false)}
           data-testid="document-delete-cancel"
           icon={<ArrowUndoIcon aria-hidden />}
@@ -84,10 +86,11 @@ export const DeleteDocumentButton = ({ document, disabled = false, ...rest }: Pr
   }
 
   return (
-    <HStack justify="end" gap="0 4" {...rest}>
+    <HStack justify="end" gap="space-0 space-16" {...rest}>
       <Button
+        data-color="danger"
         className={BUTTON_CLASSES}
-        variant="danger"
+        variant="primary"
         size="small"
         onClick={() => setShowConfirm(true)}
         data-testid="document-delete-button"

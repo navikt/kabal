@@ -1,4 +1,4 @@
-import { BoxNew, HStack } from '@navikt/ds-react';
+import { Box, HStack } from '@navikt/ds-react';
 import type { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLElement> {
@@ -18,9 +18,9 @@ export const MaltekstseksjonListItem = ({
   children,
   ...rest
 }: Props) => (
-  <BoxNew
+  <Box
     position="relative"
-    borderRadius="medium"
+    borderRadius="4"
     background={isActive ? 'accent-moderate' : undefined}
     style={{
       opacity: isDragging ? 0.5 : 1,
@@ -33,26 +33,26 @@ export const MaltekstseksjonListItem = ({
     {isDropTarget ? (
       <HStack
         asChild
-        top="0"
-        left="0"
-        right="0"
-        bottom="0"
+        top="space-0"
+        left="space-0"
+        right="space-0"
+        bottom="space-0"
         width="100%"
         height="100%"
         align="center"
         justify="center"
         position="absolute"
       >
-        <BoxNew
-          borderRadius="medium"
+        <Box
+          borderRadius="4"
           borderWidth="2"
           borderColor="accent"
           background={isDragOver ? 'accent-moderateA' : 'neutral-moderateA'}
           className="border-dashed text-shadow-[1px_1px_white,_-1px_-1px_var(--ax-bg-default)] backdrop-blur-[2px]"
         >
           {dragOverText}
-        </BoxNew>
+        </Box>
       </HStack>
     ) : null}
-  </BoxNew>
+  </Box>
 );

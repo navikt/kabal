@@ -34,7 +34,7 @@ export const MaltekstseksjonTexts = ({ maltekstseksjon, query }: Props) => {
   );
 
   return (
-    <VStack asChild overflow="hidden" paddingInline="0 2" className="[grid-area:text-list]">
+    <VStack asChild overflow="hidden" paddingInline="space-0 space-8" className="[grid-area:text-list]">
       <Tabs value={activeTab} onChange={onChange}>
         <Tabs.List>
           <Tabs.Tab value={TabsEnum.EDIT} label="Redigering" icon={<DocPencilIcon aria-hidden />} />

@@ -55,8 +55,9 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
     <>
       <Tooltip content={tooltip}>
         <Button
+          data-color="neutral"
           size={size}
-          variant="tertiary-neutral"
+          variant="tertiary"
           loading={isLoading}
           onClick={() => {
             pushEvent('open-relevant-oppgaver', 'oppgave-lists', { enabled: 'true' });
@@ -67,7 +68,6 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
           {totalCount.toString(10)}
         </Button>
       </Tooltip>
-
       <Modal header={{ heading }} width="2000px" closeOnBackdropClick ref={modalRef}>
         <Modal.Body className="flex flex-col gap-y-4">
           {isOppgaveLoading || sakenGjelder === undefined ? (

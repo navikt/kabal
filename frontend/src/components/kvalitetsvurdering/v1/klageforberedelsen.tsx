@@ -73,7 +73,7 @@ export const Klageforberedelsen = () => {
 
   return (
     <FormSection>
-      <HStack align="center" gap="2">
+      <HStack align="center" gap="space-8">
         <Heading level="2" size="small">
           {header}
         </Heading>

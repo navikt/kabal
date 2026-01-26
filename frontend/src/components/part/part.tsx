@@ -74,7 +74,7 @@ export const Part = ({
     <BehandlingSection label={label}>
       <HStack align="start" justify="space-between" wrap={false}>
         <VStack align="start" justify="start">
-          <HStack align="center" gap="1" wrap>
+          <HStack align="center" gap="space-4" wrap>
             {part.name === null ? (
               <span>Navn mangler</span>
             ) : (
@@ -124,5 +124,5 @@ interface EditButtonProps {
 const EditButton = ({ onClick, isEditing }: EditButtonProps) => {
   const Icon = isEditing ? XMarkIcon : PencilIcon;
 
-  return <Button variant="tertiary-neutral" icon={<Icon aria-hidden />} onClick={onClick} size="small" />;
+  return <Button data-color="neutral" variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />;
 };

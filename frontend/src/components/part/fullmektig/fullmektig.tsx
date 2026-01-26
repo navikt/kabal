@@ -53,8 +53,8 @@ export const Fullmektig = ({ part }: Props) => {
 
   return (
     <BehandlingSection label="Fullmektig">
-      <VStack gap="1">
-        <HStack gap="1" align="start" justify="space-between" wrap={false}>
+      <VStack gap="space-4">
+        <HStack gap="space-4" align="start" justify="space-between" wrap={false}>
           <CopyButton
             size="small"
             copyText={name}
@@ -65,7 +65,7 @@ export const Fullmektig = ({ part }: Props) => {
           />
 
           {canEdit ? (
-            <HStack gap="1" wrap={false} align="center">
+            <HStack gap="space-4" wrap={false} align="center">
               {isEditing && part !== null ? <Delete onClose={onClose} id={part.id} /> : null}
 
               <EditButton onClick={() => setIsEditing(!isEditing)} isEditing={isEditing} />
@@ -77,7 +77,7 @@ export const Fullmektig = ({ part }: Props) => {
       </VStack>
 
       {isEditing ? (
-        <VStack gap="4" marginBlock="4 0">
+        <VStack gap="space-16" marginBlock="space-16 space-0">
           <ToggleGroup
             size="small"
             onChange={(v) => {
@@ -130,8 +130,9 @@ const Delete = ({ onClose, id }: { onClose: () => void; id: string }) => {
       {showConfirm ? (
         <Tooltip content="Fjern fullmektig">
           <Button
+            data-color="danger"
             icon={<TrashFillIcon />}
-            variant="danger"
+            variant="primary"
             size="small"
             loading={isLoading}
             onClick={async () => {
@@ -141,7 +142,6 @@ const Delete = ({ onClose, id }: { onClose: () => void; id: string }) => {
           />
         </Tooltip>
       ) : null}
-
       <Tooltip content={showConfirm ? 'Avbryt' : 'Fjern fullmektig'}>
         <Button
           icon={showConfirm ? <ArrowUndoIcon aria-hidden /> : <TrashFillIcon aria-hidden />}
@@ -164,7 +164,7 @@ const EditButton = ({ onClick, isEditing }: EditButtonProps) => {
 
   return (
     <Tooltip content="Endre eller fjern fullmektig">
-      <Button variant="tertiary-neutral" icon={<Icon aria-hidden />} onClick={onClick} size="small" />
+      <Button data-color="neutral" variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />
     </Tooltip>
   );
 };

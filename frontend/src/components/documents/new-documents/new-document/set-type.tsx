@@ -73,7 +73,7 @@ interface TypeTagProps extends React.RefAttributes<HTMLSpanElement> {
 
 export const DocumentTypeTag = ({ dokumentTypeId, ...rest }: TypeTagProps) => (
   <Tooltip content={DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}>
-    <Tag variant="info" size="small" {...rest}>
+    <Tag data-color="info" variant="outline" size="small" {...rest}>
       <span className="truncate text-left">{DISTRIBUTION_TYPE_NAMES[dokumentTypeId]}</span>
     </Tag>
   </Tooltip>

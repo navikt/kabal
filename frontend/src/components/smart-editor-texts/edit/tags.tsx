@@ -182,7 +182,7 @@ const useYtelseLovkildeAndHjemmelName = (selected: string): string => {
 export const TagContainer = (props: { children: React.ReactNode }) => (
   <HStack
     data-element="tag-container"
-    gap="2"
+    gap="space-8"
     wrap
     align="center"
     flexGrow="0"

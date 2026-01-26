@@ -40,7 +40,7 @@ const Start = ({ actor, event, timestamp }: StartProps) => {
     <HistoryEvent tag="Venteperiode" type={HistoryEventTypes.SATT_PAA_VENT} timestamp={timestamp} icon={PauseIcon}>
       <p>
         {employeeName(actor)} satte behandlingen på vent til{' '}
-        <time className="font-bold" dateTime={event.to}>
+        <time className="font-ax-bold" dateTime={event.to}>
           {isoDateToPretty(event.to)}
         </time>
         .

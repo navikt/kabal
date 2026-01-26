@@ -72,7 +72,7 @@ const UtfallTag = ({ utfall }: Props) => {
   const name = useUtfallNameOrLoading(utfall);
 
   return (
-    <Tag size="small" variant="alt1">
+    <Tag data-color="meta-purple" size="small" variant="outline">
       {name}
     </Tag>
   );

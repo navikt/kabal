@@ -43,7 +43,7 @@ const Result = ({
     !part.statusList.some((s) => s.status === PartStatusEnum.DEAD || s.status === PartStatusEnum.DELETED);
 
   return (
-    <VStack asChild gap="2" align="start" paddingInline="space-12" paddingBlock="space-8">
+    <VStack asChild gap="space-8" align="start" paddingInline="space-12" paddingBlock="space-8">
       <Tag variant={part.type === IdType.FNR ? 'info' : 'neutral'} size="medium">
         <BodyShort>
           <PartNameAndIdentifikator identifikator={part.identifikator} name={part.name} />
@@ -86,7 +86,7 @@ const ActionOrError = ({ isReachable, buttonText, onClick, loading, part, valida
 
   if (isReachable) {
     return (
-      <Button size="small" variant="secondary-neutral" onClick={onClick} loading={loading}>
+      <Button data-color="neutral" size="small" variant="secondary" onClick={onClick} loading={loading}>
         {buttonText}
       </Button>
     );

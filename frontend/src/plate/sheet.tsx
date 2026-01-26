@@ -1,6 +1,6 @@
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
-import { BoxNew } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 
 interface Props {
   minHeight?: boolean;
@@ -17,11 +17,11 @@ export const Sheet = ({ minHeight = false, children, ref, className, scaleCssVar
   const pdfOffset = `var(${scaleCssVar}) * 2px`;
 
   return (
-    <BoxNew
+    <Box
       position="relative"
       background="input"
       flexShrink="0"
-      marginBlock="space-16 0"
+      marginBlock="space-16 space-0"
       shadow="dialog"
       className={className === undefined ? SHEET_CLASSES : `${SHEET_CLASSES} ${className}`}
       style={{
@@ -36,6 +36,6 @@ export const Sheet = ({ minHeight = false, children, ref, className, scaleCssVar
       data-element="sheet"
     >
       {children}
-    </BoxNew>
+    </Box>
   );
 };

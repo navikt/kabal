@@ -4,7 +4,7 @@ import { pushEvent } from '@app/observability';
 import type { INavEmployee } from '@app/types/bruker';
 import type { IEditor } from '@app/types/maltekstseksjoner/responses';
 import { CalendarIcon, ClockDashedIcon, PencilWritingIcon, UploadIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, HStack, Tag, type TagProps, VStack } from '@navikt/ds-react';
+import { Box, Button, HStack, Tag, type TagProps, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 
 interface PublishedProps {
@@ -40,7 +40,8 @@ export const TextHistory = ({
   return (
     <HStack align="center" position="relative" ref={ref}>
       <Button
-        variant="tertiary-neutral"
+        data-color="neutral"
+        variant="tertiary"
         size="xsmall"
         onClick={() => {
           const enabled = !showEdits;
@@ -51,12 +52,17 @@ export const TextHistory = ({
       >
         {showEdits ? 'Skjul' : 'Vis'} historikk
       </Button>
-
       {showEdits && (
-        <VStack asChild position="absolute" right="0" gap="1 0" style={{ top: '100%', zIndex: 1, listStyle: 'none' }}>
-          <BoxNew as="ul" background="raised" shadow="dialog" borderRadius="medium" padding="2" margin="0">
+        <VStack
+          asChild
+          position="absolute"
+          right="space-0"
+          gap="space-4 space-0"
+          style={{ top: '100%', zIndex: 1, listStyle: 'none' }}
+        >
+          <Box as="ul" background="raised" shadow="dialog" borderRadius="4" padding="space-8" margin="space-0">
             {publishedDateTime !== null ? (
-              <HStack as="li" align="center" wrap={false} className="whitespace-nowrap" gap="1">
+              <HStack as="li" align="center" wrap={false} className="whitespace-nowrap" gap="space-4">
                 <StyledTag variant="info" size="xsmall">
                   <UploadIcon aria-hidden />
                   Publisert
@@ -89,7 +95,7 @@ export const TextHistory = ({
                 av {createdByActor.navn} {isoDateTimeToPretty(created)}
               </span>
             </HStack>
-          </BoxNew>
+          </Box>
         </VStack>
       )}
     </HStack>
@@ -97,7 +103,7 @@ export const TextHistory = ({
 };
 
 const StyledTag = (props: TagProps) => (
-  <HStack asChild align="center" gap="1" wrap={false}>
+  <HStack asChild align="center" gap="space-4" wrap={false}>
     <Tag {...props} />
   </HStack>
 );

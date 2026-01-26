@@ -24,13 +24,13 @@ export const Menu = () => {
   return (
     <Dropdown>
       <Button
+        data-color="neutral"
         as={Dropdown.Toggle}
         icon={<MenuHamburgerIcon aria-hidden />}
         size="xsmall"
         title="Verktøy for visning"
-        variant="tertiary-neutral"
+        variant="tertiary"
       />
-
       <Dropdown.Menu className="w-96">
         <SelectedMenu />
 

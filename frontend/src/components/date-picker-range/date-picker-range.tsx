@@ -1,6 +1,6 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CalendarIcon } from '@navikt/aksel-icons';
-import { Alert, BoxNew, Button, type ButtonProps, DatePicker, HStack } from '@navikt/ds-react';
+import { Alert, Box, Button, type ButtonProps, DatePicker, HStack } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
 import { useCallback, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
@@ -45,21 +45,22 @@ export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea, but
         {buttonLabel}
       </Button>
       {isOpen ? (
-        <BoxNew
+        <Box
           background="default"
           shadow="dialog"
-          borderRadius="medium"
+          borderRadius="4"
           position="absolute"
-          right="0"
+          right="space-0"
           className="top-full z-1 font-normal"
         >
-          <HStack justify="end" padding="3" gap="3">
+          <HStack justify="end" padding="space-12" gap="space-12">
             <Button size="small" variant="primary" onClick={() => setIsOpen(false)}>
               Lukk
             </Button>
             <Button
+              data-color="neutral"
               size="small"
-              variant="secondary-neutral"
+              variant="secondary"
               onClick={() => {
                 onChange(undefined);
                 setIsOpen(false);
@@ -70,7 +71,7 @@ export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea, but
           </HStack>
           <div className="h-8 w-full px-3">{formatDateRange(from, to)}</div>
           <DatePicker.Standalone selected={{ from, to }} mode="range" onSelect={onChange} />
-        </BoxNew>
+        </Box>
       ) : null}
     </HStack>
   );

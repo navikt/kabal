@@ -1,5 +1,5 @@
 import { merge } from '@app/functions/classes';
-import { BoxNew, type BoxNewProps, HStack } from '@navikt/ds-react';
+import { Box, type BoxProps, HStack } from '@navikt/ds-react';
 import { useCallback, useRef, useState } from 'react';
 
 interface DropZoneProps extends React.HTMLAttributes<HTMLDivElement>, OverlayContentProps {
@@ -103,7 +103,7 @@ interface OverlayProps extends OverlayContentProps {
 }
 
 const Overlay = ({ danger, isDragOver, icon, label, className }: OverlayProps) => {
-  const outlineClassname = danger ? 'outline-border-danger' : 'outline-border-action';
+  const outlineClassname = danger ? 'outline-ax-border-danger' : 'outline-ax-border-accent';
   const textStrokeClassname = danger ? 'text-stroke-text-on-danger' : 'text-stroke-text-on-action';
 
   return (
@@ -113,25 +113,25 @@ const Overlay = ({ danger, isDragOver, icon, label, className }: OverlayProps) =
       position="absolute"
       align="center"
       justify="center"
-      top="0"
-      left="0"
-      right="0"
-      bottom="0"
-      gap="1"
+      top="space-0"
+      left="space-0"
+      right="space-0"
+      bottom="space-0"
+      gap="space-4"
       wrap={false}
       className={merge(
-        `font-bold outline-dashed outline-2 backdrop-blur-[2px] ${textStrokeClassname} ${outlineClassname}`,
+        `font-ax-bold outline-dashed outline-2 backdrop-blur-[2px] ${textStrokeClassname} ${outlineClassname}`,
         className,
       )}
     >
-      <BoxNew borderRadius="medium" background={getBackgroundClassname(isDragOver, danger)}>
+      <Box borderRadius="4" background={getBackgroundClassname(isDragOver, danger)}>
         {icon} <span>{label}</span>
-      </BoxNew>
+      </Box>
     </HStack>
   );
 };
 
-const getBackgroundClassname = (isDragOver: boolean, danger: boolean): BoxNewProps['background'] => {
+const getBackgroundClassname = (isDragOver: boolean, danger: boolean): BoxProps['background'] => {
   if (danger) {
     return isDragOver ? 'danger-moderateA' : 'danger-softA';
   }

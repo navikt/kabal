@@ -11,7 +11,7 @@ import {
 } from '@app/components/settings/pdf-scale/constants';
 import { useScreenSize } from '@app/components/settings/pdf-scale/screen-size-hook';
 import { PdfScaleMode } from '@app/hooks/settings/use-setting';
-import { BoxNew, HStack } from '@navikt/ds-react';
+import { Box, HStack } from '@navikt/ds-react';
 import { type JSX, useCallback, useMemo } from 'react';
 
 interface Props {
@@ -25,11 +25,11 @@ export const ScalePreviewSvg = ({ title, customScale, scaleMode }: Props) => {
   const aspectRatio = `${screen.width / screen.height}`;
 
   return (
-    <BoxNew padding="1" background="neutral-soft" overflow="hidden" width="100%" shadow="dialog">
+    <Box padding="space-4" background="neutral-soft" overflow="hidden" width="100%" shadow="dialog">
       <HStack align="center" justify="center" position="relative" style={{ aspectRatio }}>
         <PdfContent title={title} customScale={customScale} scaleMode={scaleMode} />
       </HStack>
-    </BoxNew>
+    </Box>
   );
 };
 

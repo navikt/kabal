@@ -37,7 +37,8 @@ export const CreateMaltekstseksjon = ({ query }: Props) => {
 
   return (
     <Button
-      variant="secondary-neutral"
+      data-color="neutral"
+      variant="secondary"
       size="small"
       onClick={create}
       loading={isLoading}
@@ -81,14 +82,15 @@ export const CreateText = ({ query, textType, maltekstseksjon }: CreateTextProps
 
   return (
     <Button
-      variant="tertiary-neutral"
+      data-color="neutral"
+      variant="tertiary"
       size="small"
       onClick={create}
       loading={isLoading || isMaltekstLoading}
       icon={<Icon aria-hidden />}
       className="justify-start"
     >
-      Opprett ny {textName} tekst
+      Opprett ny {textName}tekst
     </Button>
   );
 };

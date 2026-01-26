@@ -40,7 +40,7 @@ export const BegjæringOmGjenopptakDetaljer = ({ oppgavebehandling }: Props) => 
           Behandling
         </Heading>
 
-        <VStack gap="4">
+        <VStack gap="space-16">
           <Klager
             klager={oppgavebehandling.klager}
             onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}

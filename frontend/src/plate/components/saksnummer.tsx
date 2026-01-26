@@ -38,7 +38,7 @@ export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
   return (
     <PlateElement<SaksnummerElement> {...props} as="div">
       <SectionContainer data-element={element.type} sectionType={SectionTypeEnum.LABEL}>
-        <span className="font-bold text-gray-700" contentEditable={false}>
+        <span className="font-ax-bold text-ax-neutral-800" contentEditable={false}>
           Saksnummer:{' '}
         </span>
         {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}

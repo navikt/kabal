@@ -7,7 +7,7 @@ import {
 } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocumentOrAttachment, ISmartDocumentVersion } from '@app/types/documents/documents';
 import { ChevronRightIcon, ClockDashedIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, Heading, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
+import { Box, Button, Heading, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 
@@ -22,16 +22,24 @@ export const History = ({ smartDocument, oppgaveId }: Props) => {
 
   if (versions === undefined) {
     return (
-      <VStack align="center" marginBlock="0 4" minWidth="300px" top="0" position="sticky">
-        <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="6 5">
+      <VStack align="center" marginBlock="space-0 space-1" minWidth="300px" top="space-0" position="sticky">
+        <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="space-24 space-20">
           <Heading level="1" size="xsmall">
             Tidligere versjoner
           </Heading>
         </HStack>
-        <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
-          <BoxNew as="ul" shadow="dialog" borderRadius="medium" background="default" style={{ whiteSpace: 'nowrap' }}>
+        <VStack
+          asChild
+          overflowY="auto"
+          overflowX="hidden"
+          margin="space-0"
+          padding="space-0"
+          gap="space-8 space-0"
+          width="100%"
+        >
+          <Box as="ul" shadow="dialog" borderRadius="4" background="default" style={{ whiteSpace: 'nowrap' }}>
             <Loader />
-          </BoxNew>
+          </Box>
         </VStack>
       </VStack>
     );
@@ -39,16 +47,24 @@ export const History = ({ smartDocument, oppgaveId }: Props) => {
 
   if (!hasVersions(versions)) {
     return (
-      <VStack align="center" marginBlock="0 4" minWidth="300px" top="0" position="sticky">
-        <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="6 5">
+      <VStack align="center" marginBlock="space-0 space-1" minWidth="300px" top="space-0" position="sticky">
+        <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="space-24 space-20">
           <Heading level="1" size="xsmall">
             Tidligere versjoner
           </Heading>
         </HStack>
-        <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
-          <BoxNew as="ul" shadow="dialog" borderRadius="medium" background="default" style={{ whiteSpace: 'nowrap' }}>
+        <VStack
+          asChild
+          overflowY="auto"
+          overflowX="hidden"
+          margin="space-0"
+          padding="space-0"
+          gap="space-8 space-0"
+          width="100%"
+        >
+          <Box as="ul" shadow="dialog" borderRadius="4" background="default" style={{ whiteSpace: 'nowrap' }}>
             <li>Ingen versioner</li>
-          </BoxNew>
+          </Box>
         </VStack>
       </VStack>
     );
@@ -75,14 +91,22 @@ const LoadedHistory = ({ versions, smartDocument, oppgaveId }: LoadedHistoryProp
 
   return (
     <>
-      <VStack align="center" marginBlock="0 4" minWidth="300px" top="0" position="sticky">
-        <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="6 5">
+      <VStack align="center" marginBlock="space-0 space-1" minWidth="300px" top="space-0" position="sticky">
+        <HStack align="center" flexShrink="0" width="100%" wrap={false} paddingBlock="space-24 space-20">
           <Heading level="1" size="xsmall">
             Tidligere versjoner
           </Heading>
         </HStack>
-        <VStack asChild overflowY="auto" overflowX="hidden" margin="0" padding="0" gap="2 0" width="100%">
-          <BoxNew as="ul" shadow="dialog" borderRadius="medium" background="default" style={{ whiteSpace: 'nowrap' }}>
+        <VStack
+          asChild
+          overflowY="auto"
+          overflowX="hidden"
+          margin="space-0"
+          padding="space-0"
+          gap="space-8 space-0"
+          width="100%"
+        >
+          <Box as="ul" shadow="dialog" borderRadius="4" background="default" style={{ whiteSpace: 'nowrap' }}>
             {versions.map((v) => (
               <HistoryItem
                 key={v.version}
@@ -91,10 +115,9 @@ const LoadedHistory = ({ versions, smartDocument, oppgaveId }: LoadedHistoryProp
                 isActive={v.version === selectedVersion}
               />
             ))}
-          </BoxNew>
+          </Box>
         </VStack>
       </VStack>
-
       {selectedVersion === null || version === undefined ? null : (
         <HistoryEditor smartDocument={smartDocument} versionId={selectedVersion} version={version} />
       )}
@@ -121,10 +144,10 @@ const HistoryItem = ({ documentVersion, isActive, setSelectedVersion }: HistoryI
         icon={<ChevronRightIcon aria-hidden />}
         className="flex w-full justify-between p-2 text-left"
       >
-        <Tag variant="alt3" size="xsmall">
+        <Tag data-color="info" variant="outline" size="xsmall">
           <ClockDashedIcon aria-hidden /> Versjon: {version}
         </Tag>
-        <div className="font-bold">{formatEmployeeNameAndIdFallback(author, 'Ukjent forfatter')}</div>
+        <div className="font-ax-bold">{formatEmployeeNameAndIdFallback(author, 'Ukjent forfatter')}</div>
         <div className="text-ax-small italic">{isoDateTimeToPretty(timestamp)}</div>
       </Button>
     </li>

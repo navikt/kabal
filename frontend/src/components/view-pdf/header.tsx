@@ -1,13 +1,13 @@
-import { BoxNew, HStack } from '@navikt/ds-react';
+import { Box, HStack } from '@navikt/ds-react';
 
 interface HeaderProps {
   children: React.ReactNode;
 }
 
 export const Header = ({ children }: HeaderProps) => (
-  <HStack asChild align="center" justify="start" gap="0 1" position="relative" width="100%" wrap={false}>
-    <BoxNew background="success-soft" padding="2" className="z-1">
+  <HStack asChild align="center" justify="start" gap="space-0 space-4" position="relative" width="100%" wrap={false}>
+    <Box background="success-soft" padding="space-8" className="z-1">
       {children}
-    </BoxNew>
+    </Box>
   </HStack>
 );

@@ -54,10 +54,10 @@ export const EditUtfallSet = ({ utfallSet, onChange, onCancel, title, icon }: Ed
   const addDisabled = newUtfallSet.length === 0;
 
   return (
-    <VStack as="section" gap="2 0">
+    <VStack as="section" gap="space-8 space-0">
       <CheckboxGroup
         legend={
-          <HStack as="span" align="center" gap="0 2">
+          <HStack as="span" align="center" gap="space-0 space-8">
             {icon}
             {title}
           </HStack>
@@ -73,7 +73,7 @@ export const EditUtfallSet = ({ utfallSet, onChange, onCancel, title, icon }: Ed
             <Checkbox value={u.id} key={u.id} disabled={disabled} title={disabled ? disabledText : undefined}>
               {u.navn}{' '}
               {disabled ? (
-                <Tag variant="warning" size="xsmall">
+                <Tag data-color="warning" variant="outline" size="xsmall">
                   Ugyldig kombinasjon
                 </Tag>
               ) : null}
@@ -81,7 +81,7 @@ export const EditUtfallSet = ({ utfallSet, onChange, onCancel, title, icon }: Ed
           );
         })}
       </CheckboxGroup>
-      <HStack gap="0 2">
+      <HStack gap="space-0 space-8">
         <Button
           size="small"
           variant="primary"
@@ -92,7 +92,13 @@ export const EditUtfallSet = ({ utfallSet, onChange, onCancel, title, icon }: Ed
         >
           Legg til
         </Button>
-        <Button size="small" variant="secondary-neutral" onClick={onCancel} icon={<XMarkIcon aria-hidden />}>
+        <Button
+          data-color="neutral"
+          size="small"
+          variant="secondary"
+          onClick={onCancel}
+          icon={<XMarkIcon aria-hidden />}
+        >
           Avbryt
         </Button>
       </HStack>

@@ -173,7 +173,7 @@ const Fradelt = ({ oppgaveId, sakenGjelder, fromSaksbehandler, oppgaveType, ytel
 
   const primary =
     fromSaksbehandler === null ? null : (
-      <Button variant="tertiary-neutral" size="small" onClick={() => tildel(fromSaksbehandler)}>
+      <Button data-color="neutral" variant="tertiary" size="small" onClick={() => tildel(fromSaksbehandler)}>
         Angre
       </Button>
     );

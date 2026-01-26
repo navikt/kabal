@@ -199,7 +199,7 @@ const InvalidBody = ({ invalidDocuments }: InvalidBodyProps) => (
   <Modal.Body>
     <Alert variant="warning" size="small" className="mb-4">
       Journalposter med status{' '}
-      <Tag variant="neutral" size="xsmall">
+      <Tag data-color="neutral" variant="outline" size="xsmall">
         mottatt
       </Tag>{' '}
       kan ikke brukes som vedlegg.
@@ -213,7 +213,7 @@ const InvalidBody = ({ invalidDocuments }: InvalidBodyProps) => (
       {invalidDocuments.map((d) => (
         <List.Item key={`${d.journalpostId}-${d.dokumentInfoId}`}>
           {d.tittel}{' '}
-          <Tag size="small" variant="info">
+          <Tag data-color="info" size="small" variant="outline">
             {isoDateTimeToPretty(d.datoOpprettet)}
           </Tag>
         </List.Item>
@@ -222,7 +222,7 @@ const InvalidBody = ({ invalidDocuments }: InvalidBodyProps) => (
 
     <BodyShort spacing>
       Fjern dokumentene med status{' '}
-      <Tag variant="neutral" size="xsmall">
+      <Tag data-color="neutral" variant="outline" size="xsmall">
         mottatt
       </Tag>{' '}
       og prøv igjen.
@@ -255,7 +255,7 @@ const ValidBody = ({
     <Modal.Body>
       <BodyShort spacing>{getDescription(validDocumentsCount)}</BodyShort>
 
-      <VStack as="ol" marginBlock="0 4">
+      <VStack as="ol" marginBlock="space-0 space-1">
         {options.map(({ id, tittel }, index) => {
           const vedlegg = allVedlegg.filter((v) => v.parentId === id);
           const isAttached = getIsAttached(id);
@@ -271,8 +271,8 @@ const ValidBody = ({
                 onClick={() => (isAttached ? remove(id) : attach(id))}
                 className="flex w-full grow justify-start text-left *:w-full"
               >
-                <HStack align="center" justify="space-between" gap="2" wrap={false}>
-                  <HStack gap="1" align="center" wrap={false}>
+                <HStack align="center" justify="space-between" gap="space-8" wrap={false}>
+                  <HStack gap="space-4" align="center" wrap={false}>
                     {isAttached ? <TrashIcon aria-hidden /> : <PlusCircleIcon aria-hidden />}
                     <span>
                       {isAttached ? 'Fjern fra' : 'Legg til'} "{tittel}"

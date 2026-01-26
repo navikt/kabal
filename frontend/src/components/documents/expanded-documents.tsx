@@ -6,7 +6,7 @@ import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-do
 import { useDocumentsWidth } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
 import { ChevronLeftFirstIcon, ChevronRightLastIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { JournalfoerteDocuments } from './journalfoerte-documents/journalfoerte-documents';
 import { NewDocuments } from './new-documents/new-documents-list/new-documents';
@@ -118,14 +118,14 @@ export const ExpandedDocuments = () => {
         ref={ref}
         aria-labelledby={HEADING_ID}
       >
-        <HStack asChild align="start" justify="start" gap="0 2" position="relative">
-          <BoxNew
+        <HStack asChild align="start" justify="start" gap="space-0 space-8" position="relative">
+          <Box
             as="header"
             borderWidth="0 0 1 0"
             borderColor="neutral"
-            paddingInline="4"
-            paddingBlock="2"
-            marginBlock="0 2"
+            paddingInline="space-16"
+            paddingBlock="space-8"
+            marginBlock="space-0 space-8"
             aria-labelledby={HEADING_ID}
           >
             <Heading size="medium" level="1" id={HEADING_ID}>
@@ -134,7 +134,8 @@ export const ExpandedDocuments = () => {
 
             <HStack align="center" height="100%">
               <Button
-                variant="tertiary-neutral"
+                data-color="neutral"
+                variant="tertiary"
                 size="xsmall"
                 icon={<ChevronLeftFirstIcon aria-hidden />}
                 onClick={() => setWidth(Math.max(minWidth, width - 50))}
@@ -143,7 +144,8 @@ export const ExpandedDocuments = () => {
               />
 
               <Button
-                variant="tertiary-neutral"
+                data-color="neutral"
+                variant="tertiary"
                 size="xsmall"
                 icon={<ChevronRightLastIcon aria-hidden />}
                 onClick={() => setWidth(width + 50)}
@@ -154,7 +156,7 @@ export const ExpandedDocuments = () => {
             <UploadFile />
 
             <ToggleExpandedButton />
-          </BoxNew>
+          </Box>
         </HStack>
 
         <NewDocuments />

@@ -111,7 +111,6 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
       <Button variant="primary" size="small" onClick={() => setIsOpen(true)}>
         {children}
       </Button>
-
       <Modal
         aria-label="Oppdater oppgaven i Gosys og fullfør"
         open={isOpen}
@@ -120,13 +119,13 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
         width="0min(90vw, 1100px)"
       >
         <Modal.Body>
-          <VStack gap="6">
+          <VStack gap="space-24">
             <GrafanaDomainProvider domain="oppgave-finish">
               <GosysOppgave oppgavebehandling={oppgavebehandling} />
             </GrafanaDomainProvider>
 
             {gosysOppgaveIsOpen ? (
-              <VStack gap="3" width="min-content">
+              <VStack gap="space-12" width="min-content">
                 {oppgavebehandling.typeId === SaksTypeEnum.ANKE &&
                 (oppgavebehandling.resultat.utfallId === UtfallEnum.DELVIS_MEDHOLD ||
                   oppgavebehandling.resultat.extraUtfallIdSet.includes(UtfallEnum.DELVIS_MEDHOLD)) ? (
@@ -183,7 +182,13 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
           <Button size="small" variant="primary" onClick={handleFinish} loading={isFinishing || isSettingGosysOppgave}>
             Oppdater og fullfør
           </Button>
-          <Button size="small" variant="secondary-neutral" disabled={isFinishing} onClick={() => setIsOpen(false)}>
+          <Button
+            data-color="neutral"
+            size="small"
+            variant="secondary"
+            disabled={isFinishing}
+            onClick={() => setIsOpen(false)}
+          >
             Avbryt
           </Button>
         </Modal.Footer>

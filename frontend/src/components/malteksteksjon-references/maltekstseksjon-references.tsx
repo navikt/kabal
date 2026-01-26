@@ -81,9 +81,10 @@ export const MaltekstseksjonReferences = ({
   const icon = type === MaltekstseksjonType.DRAFT ? <DocPencilIcon aria-hidden /> : <UploadIcon aria-hidden />;
 
   return (
-    <HStack align="center" gap="1" position="relative" className={className}>
+    <HStack align="center" gap="space-4" position="relative" className={className}>
       <Tooltip content={tooltip}>
         <Button
+          data-color="neutral"
           size="xsmall"
           onClick={() => {
             if (noReferences) {
@@ -92,7 +93,7 @@ export const MaltekstseksjonReferences = ({
 
             ref.current?.showModal();
           }}
-          variant="tertiary-neutral"
+          variant="tertiary"
           icon={icon}
           iconPosition="right"
           className="whitespace-nowrap"
@@ -100,7 +101,6 @@ export const MaltekstseksjonReferences = ({
           {children}
         </Button>
       </Tooltip>
-
       <Modal ref={ref} header={{ heading }} width={900} closeOnBackdropClick>
         <Modal.Body>
           <List>
@@ -137,10 +137,11 @@ const ListItem = ({ id, onClick, selected }: ListItemProps) => {
 
   return (
     <List.Item>
-      <HStack align="center" gap="05" className={selected ? 'font-bold' : 'font-normal'}>
+      <HStack align="center" gap="space-2" className={selected ? 'font-ax-bold' : 'font-normal'}>
         <Button
+          data-color="neutral"
           onClick={onClick}
-          variant="tertiary-neutral"
+          variant="tertiary"
           size="xsmall"
           icon={selected ? <EyeIcon aria-hidden /> : <FileSearchIcon aria-hidden />}
           title={selected ? 'Forhåndsvisning åpnet' : 'Forhåndsvis'}

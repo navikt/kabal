@@ -7,7 +7,7 @@ import { type GroupErrorField, TypeEnum } from '@app/components/kvalitetsvurderi
 import { useKvalitetsvurderingV3 } from '@app/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { useValidationError } from '@app/components/kvalitetsvurdering/v3/common/use-validation-error';
 import type { KvalitetsvurderingDataV3, KvalitetsvurderingV3Boolean } from '@app/types/kaka-kvalitetsvurdering/v3';
-import { BoxNew, CheckboxGroup } from '@navikt/ds-react';
+import { Box, CheckboxGroup } from '@navikt/ds-react';
 import { useMemo } from 'react';
 
 interface Props {
@@ -46,7 +46,7 @@ export const Checkboxes = ({
   };
 
   return (
-    <BoxNew marginBlock="0 4" marginInline="8 0">
+    <Box marginBlock="space-0 space-1" marginInline="space-32 space-0">
       <CheckboxGroup
         legend={label}
         hideLegend={hideLegend}
@@ -63,7 +63,7 @@ export const Checkboxes = ({
           return <KvalitetsskjemaTextarea key={m.field} {...m} parentKey={parentKey} />;
         })}
       </CheckboxGroup>
-    </BoxNew>
+    </Box>
   );
 };
 

@@ -42,7 +42,7 @@ export const Trygdemedisin = () => {
         onChange={onChange}
         id="trygdemedisin"
       >
-        <HStack gap="4" width="100%" wrap={false}>
+        <HStack gap="space-16" width="100%" wrap={false}>
           <HelpTextRadio
             helpText="Du registrerer her dersom den konkrete saken ikke gjelder trygdemedisinske spørsmål."
             value={RadiovalgExtended.IKKE_AKTUELT}

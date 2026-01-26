@@ -58,8 +58,8 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
           {getTitle(title)}
         </Heading>
 
-        <HStack gap="2" align="center" className="[grid-area:metadata]">
-          <HStack gap="1" align="center">
+        <HStack gap="space-8" align="center" className="[grid-area:metadata]">
+          <HStack gap="space-4" align="center">
             <Label size="small" htmlFor={publishedFieldId}>
               Publisert:
             </Label>
@@ -72,8 +72,8 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
           </HStack>
 
           {published ? (
-            <HStack gap="1" align="center">
-              <HStack gap="1" align="center">
+            <HStack gap="space-4" align="center">
+              <HStack gap="space-4" align="center">
                 <Label size="small" htmlFor={modifiedFieldId}>
                   Sist endret:
                 </Label>
@@ -85,8 +85,8 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
               </HStack>
             </HStack>
           ) : (
-            <HStack gap="1" align="center">
-              <HStack gap="1" align="center">
+            <HStack gap="space-4" align="center">
+              <HStack gap="space-4" align="center">
                 <Label size="small" htmlFor={depublishedFieldId}>
                   Avpublisert:
                 </Label>
@@ -109,11 +109,12 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
           <UtfallTagList utfallIdList={maltekstseksjon.utfallIdList} />
         </TagContainer>
 
-        <HStack className="[grid-area:actions]" gap="2" justify="end" align="start">
+        <HStack className="[grid-area:actions]" gap="space-8" justify="end" align="start">
           <Tooltip content="Opprett utkast basert på denne versjonen av maltekstseksjonen.">
             <Button
+              data-color="neutral"
               size="small"
-              variant="secondary-neutral"
+              variant="secondary"
               onClick={onCreateDraft}
               loading={isLoading}
               icon={<PlusIcon aria-hidden />}
@@ -129,7 +130,6 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
           ) : null}
         </HStack>
       </Header>
-
       <SidebarContainer>
         <List>
           {textIdList.map((textId) => (
@@ -139,7 +139,6 @@ export const PublishedMaltekstSection = ({ maltekstseksjon, query, onDraftCreate
           ))}
         </List>
       </SidebarContainer>
-
       <MaltekstseksjonTexts maltekstseksjon={maltekstseksjon} query={query} />
     </Container>
   );

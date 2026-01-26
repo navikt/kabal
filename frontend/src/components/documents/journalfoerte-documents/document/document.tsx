@@ -154,9 +154,8 @@ export const Document = ({
   return (
     <HGrid
       as="article"
-      gap="0 2"
+      gap="space-0 space-8"
       align="center"
-      paddingInline="1-alt"
       columns={isExpandedListView ? getFieldSizes(fields) : getFieldSizes(COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS)}
       ref={ref}
       data-testid="document-journalfoert"
@@ -172,7 +171,7 @@ export const Document = ({
       onClick={onClick}
       onDoubleClick={hasAccess ? onDoubleClick : undefined}
       tabIndex={-1}
-      className={`${DOCUMENT_CLASSES} ${className}`}
+      className={`${DOCUMENT_CLASSES} ${className} pr-1.5 pl-1.5`}
       style={{
         gridTemplateAreas: `"${isExpandedListView ? getFieldNames(fields) : getFieldNames(COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS)}"`,
       }}

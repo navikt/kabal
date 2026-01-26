@@ -6,7 +6,7 @@ import { DateTime } from '@app/components/datetime/datetime';
 import { KLAGE_NOTIFICATIONS_BASE_PATH } from '@app/components/header/notifications/constants';
 import { toast } from '@app/components/toast/store';
 import { ChatAddIcon, ClockIcon, TrashIcon } from '@navikt/aksel-icons';
-import { BodyLong, BodyShort, BoxNew, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 
 export const ListSystemNotifications = () => {
@@ -31,7 +31,7 @@ export const ListSystemNotifications = () => {
         Systemvarsler
       </Heading>
 
-      <VStack as="ol" gap="4" marginBlock="0 4">
+      <VStack as="ol" gap="space-16" marginBlock="space-0 space-1">
         {isLoading ? (
           <BodyShort size="small" className="text-center text-ax-text-neutral-subtle italic">
             Laster systemvarsler...
@@ -54,9 +54,9 @@ export const ListSystemNotifications = () => {
 
 const Notification = ({ id, title, message, createdAt }: AdminSystemNotification) => {
   return (
-    <BoxNew
+    <Box
       as="li"
-      borderRadius="medium"
+      borderRadius="4"
       borderWidth="1 1 1 4"
       borderColor="danger"
       background="neutral-soft"
@@ -64,13 +64,13 @@ const Notification = ({ id, title, message, createdAt }: AdminSystemNotification
         'opacity-100 starting:opacity-0 transition-[opacity,background-color] duration-200 hover:bg-ax-bg-default'
       }
     >
-      <HStack wrap={false} gap="1" align="start" width="100%" paddingBlock="0 2">
-        <BoxNew asChild borderRadius="0 0 medium 0" paddingInline="0 1" background="danger-strong">
-          <HStack as="span" align="center" gap="1" wrap={false} className="whitespace-nowrap">
+      <HStack wrap={false} gap="space-4" align="start" width="100%" paddingBlock="space-0 space-8">
+        <Box asChild borderRadius="0 0 8 0" paddingInline="space-0 space-4" background="danger-strong">
+          <HStack as="span" align="center" gap="space-4" wrap={false} className="whitespace-nowrap">
             <ChatAddIcon aria-hidden color="text-ax-text-danger-contrast" />
             Systemvarsel
           </HStack>
-        </BoxNew>
+        </Box>
 
         <DateTime
           dateTime={createdAt}
@@ -79,8 +79,7 @@ const Notification = ({ id, title, message, createdAt }: AdminSystemNotification
           className="ml-auto whitespace-nowrap pr-1 text-ax-small italic"
         />
       </HStack>
-
-      <VStack gap="2" paddingInline="2" paddingBlock="0 2" flexGrow="1">
+      <VStack gap="space-8" paddingInline="space-8" paddingBlock="space-0 space-8" flexGrow="1">
         <Heading size="xsmall" level="1">
           {title}
         </Heading>
@@ -91,7 +90,7 @@ const Notification = ({ id, title, message, createdAt }: AdminSystemNotification
 
         <DeleteButton id={id} />
       </VStack>
-    </BoxNew>
+    </Box>
   );
 };
 
@@ -109,7 +108,14 @@ const DeleteButton = ({ id }: DeleteButtonProps) => {
   };
 
   return (
-    <Button variant="danger" size="small" onClick={handleDelete} icon={<TrashIcon aria-hidden />} loading={isDeleting}>
+    <Button
+      data-color="danger"
+      variant="primary"
+      size="small"
+      onClick={handleDelete}
+      icon={<TrashIcon aria-hidden />}
+      loading={isDeleting}
+    >
       Slett
     </Button>
   );
@@ -130,7 +136,8 @@ const DeleteAllButton = ({ systemNotifications }: DeleteAllButtonProps) => {
 
   return (
     <Button
-      variant="secondary-neutral"
+      data-color="neutral"
+      variant="secondary"
       size="small"
       onClick={handleDeleteAll}
       icon={<TrashIcon aria-hidden />}

@@ -8,10 +8,10 @@ export const AppThemeSwitcher = () => {
 
   return (
     <ToggleGroup
+      data-color="neutral"
       value={userTheme}
       onChange={(value) => setUserTheme(isValidUserTheme(value) ? value : UserTheme.SYSTEM)}
       size="small"
-      variant="neutral"
       className="whitespace-nowrap"
       aria-label="Velg tema"
     >

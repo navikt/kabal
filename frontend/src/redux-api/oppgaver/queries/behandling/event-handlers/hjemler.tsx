@@ -66,7 +66,7 @@ interface Props {
 const Toast = ({ actor, newHjemler, oldHjemler, type }: Props) => {
   const from =
     oldHjemler.length === 0 ? (
-      <Tag size="xsmall" variant="alt1">
+      <Tag data-color="meta-purple" size="xsmall" variant="outline">
         Ingen
       </Tag>
     ) : (
@@ -74,7 +74,7 @@ const Toast = ({ actor, newHjemler, oldHjemler, type }: Props) => {
     );
   const to =
     newHjemler.length === 0 ? (
-      <Tag size="xsmall" variant="alt1">
+      <Tag data-color="meta-purple" size="xsmall" variant="outline">
         Ingen
       </Tag>
     ) : (
@@ -97,9 +97,9 @@ const HjemmelList = ({ hjemler }: { hjemler: string[] }) => {
   const { data: hjemmelMap } = useRegistreringshjemlerMap();
 
   return (
-    <HStack as="span" gap="1" wrap>
+    <HStack as="span" gap="space-4" wrap>
       {hjemler.map((hjemmel) => (
-        <Tag key={hjemmel} size="xsmall" variant="alt1">
+        <Tag data-color="meta-purple" key={hjemmel} size="xsmall" variant="outline">
           {hjemmelMap?.[hjemmel]?.hjemmelnavn ?? hjemmel}
         </Tag>
       ))}

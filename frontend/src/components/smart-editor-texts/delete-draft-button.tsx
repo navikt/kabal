@@ -21,8 +21,9 @@ export const DeleteDraftButton = ({ id, title, onDraftDeleted, children, tooltip
     return (
       <>
         <Button
+          data-color="neutral"
           size="small"
-          variant="secondary-neutral"
+          variant="secondary"
           onClick={() => setIsOpen(false)}
           disabled={isLoading}
           icon={<XMarkIcon aria-hidden />}
@@ -38,7 +39,13 @@ export const DeleteDraftButton = ({ id, title, onDraftDeleted, children, tooltip
 
   if (tooltip === undefined) {
     return (
-      <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
+      <Button
+        data-color="danger"
+        size="small"
+        variant="primary"
+        onClick={() => setIsOpen(true)}
+        icon={<TrashIcon aria-hidden />}
+      >
         {children}
       </Button>
     );
@@ -46,7 +53,13 @@ export const DeleteDraftButton = ({ id, title, onDraftDeleted, children, tooltip
 
   return (
     <Tooltip content={tooltip}>
-      <Button size="small" variant="danger" onClick={() => setIsOpen(true)} icon={<TrashIcon aria-hidden />}>
+      <Button
+        data-color="danger"
+        size="small"
+        variant="primary"
+        onClick={() => setIsOpen(true)}
+        icon={<TrashIcon aria-hidden />}
+      >
         {children}
       </Button>
     </Tooltip>
@@ -65,7 +78,14 @@ const ConfirmDeleteDraftButton = ({ id, title, onDraftDeleted, children, tooltip
 
   if (tooltip === undefined) {
     return (
-      <Button size="small" variant="danger" loading={isLoading} onClick={onClick} icon={<TrashIcon aria-hidden />}>
+      <Button
+        data-color="danger"
+        size="small"
+        variant="primary"
+        loading={isLoading}
+        onClick={onClick}
+        icon={<TrashIcon aria-hidden />}
+      >
         {children}
       </Button>
     );
@@ -73,7 +93,14 @@ const ConfirmDeleteDraftButton = ({ id, title, onDraftDeleted, children, tooltip
 
   return (
     <Tooltip content={tooltip}>
-      <Button size="small" variant="danger" loading={isLoading} onClick={onClick} icon={<TrashIcon aria-hidden />}>
+      <Button
+        data-color="danger"
+        size="small"
+        variant="primary"
+        loading={isLoading}
+        onClick={onClick}
+        icon={<TrashIcon aria-hidden />}
+      >
         {children}
       </Button>
     </Tooltip>

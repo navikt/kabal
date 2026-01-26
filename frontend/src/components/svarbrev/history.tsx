@@ -8,7 +8,7 @@ import {
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { useGetSvarbrevSettingHistoryQuery } from '@app/redux-api/svarbrev';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
-import { BoxNew, type BoxNewProps, Button, HStack, Modal, Skeleton, Tooltip, VStack } from '@navikt/ds-react';
+import { Box, type BoxProps, Button, HStack, Modal, Skeleton, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
@@ -29,9 +29,10 @@ export const SvarbrevSettingHistory = ({ id, isOpen, close }: Props) => {
     <>
       <Tooltip content="Vis endringshistorikk" placement="top">
         <Button
+          data-color="neutral"
           as={Link}
           size="small"
-          variant="secondary-neutral"
+          variant="secondary"
           icon={<ClockDashedIcon aria-hidden />}
           to={{
             pathname: `${id}/historikk`,
@@ -42,7 +43,7 @@ export const SvarbrevSettingHistory = ({ id, isOpen, close }: Props) => {
       </Tooltip>
       <Modal open={isOpen} onClose={close} header={{ heading: 'Historikk' }} closeOnBackdropClick width={600}>
         <Modal.Body>
-          <VStack margin="0" padding="0" gap="2 0" style={{ listStyle: 'none' }}>
+          <VStack margin="space-0" padding="space-0" gap="space-8 space-0" style={{ listStyle: 'none' }}>
             {isLoading ? (
               <SkeletinListItems />
             ) : (
@@ -72,8 +73,8 @@ const SkeletonListItem = () => (
 const HistoryEntry = (changeSet: InitialVersion | ChangeSet) => {
   const { user } = useContext(StaticDataContext);
   const isMine = user.navIdent === changeSet.modifiedBy.navIdent;
-  const backgroundColor: BoxNewProps['background'] = isMine ? 'meta-purple-moderate' : 'warning-moderate';
-  const borderColor: BoxNewProps['borderColor'] = isMine ? 'meta-purple-subtle' : 'warning-subtle';
+  const backgroundColor: BoxProps['background'] = isMine ? 'meta-purple-moderate' : 'warning-moderate';
+  const borderColor: BoxProps['borderColor'] = isMine ? 'meta-purple-subtle' : 'warning-subtle';
 
   return (
     <VStack
@@ -83,40 +84,40 @@ const HistoryEntry = (changeSet: InitialVersion | ChangeSet) => {
       style={{ ['--after-background-color' as string]: `var(--ax-bg-${backgroundColor})` }}
       className="before:absolute before:top-[-1px] before:bottom-[-1px] before:left-[-1px] before:w-1 before:rounded-l-sm before:bg-(--after-background-color)"
     >
-      <BoxNew
+      <Box
         as="li"
         borderColor={borderColor}
-        borderRadius="medium"
+        borderRadius="4"
         borderWidth="1"
-        paddingBlock="0 space-8"
+        paddingBlock="space-0 space-8"
         className="pl-[3px]"
       >
-        <HStack align="start" justify="space-between" marginBlock="0 2">
-          <HStack asChild align="center" gap="1" paddingInline="0 2" paddingBlock="0 05">
-            <BoxNew
+        <HStack align="start" justify="space-between" marginBlock="space-0 space-8">
+          <HStack asChild align="center" gap="space-4" paddingInline="space-0 space-8" paddingBlock="space-0 space-2">
+            <Box
               as="span"
               background={backgroundColor}
-              borderRadius="0 0 medium 0"
+              borderRadius="0 0 8 0"
               style={{ fontWeight: 'normal', fontSize: 'var(--ax-space-16)' }}
             >
               {changeSet.modifiedBy.navn} ({changeSet.modifiedBy.navIdent})
-            </BoxNew>
+            </Box>
           </HStack>
 
-          <BoxNew
+          <Box
             as="time"
             dateTime={changeSet.modified}
-            paddingBlock="05 0"
+            paddingBlock="space-2 space-0"
             className="pr-[3px] font-normal text-ax-small italic leading-none"
           >
             {isoDateTimeToPretty(changeSet.modified)}
-          </BoxNew>
+          </Box>
         </HStack>
 
-        <VStack gap="1" paddingInline="2">
+        <VStack gap="space-4" paddingInline="space-8">
           {getChangeSetText(changeSet)}
         </VStack>
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };

@@ -88,9 +88,10 @@ interface RedirectLinkProps {
 
 const AppLink = ({ appName, url, eventName }: RedirectLinkProps) => (
   <Button
+    data-color="neutral"
     as={Link}
     size="small"
-    variant="tertiary-neutral"
+    variant="tertiary"
     href={url}
     target="_blank"
     aria-label={getTitle(appName)}
@@ -127,8 +128,9 @@ const AsyncCopyLink = ({ baseUrl, eventName, appName }: AsyncCopyLinkProps) => {
   return (
     <Tooltip content={getTooltipContent(appName)} placement="bottom">
       <Button
+        data-color="neutral"
         size="small"
-        variant="tertiary-neutral"
+        variant="tertiary"
         aria-label={getTitle(appName)}
         onClick={onClick}
         onAnimationEnd={() => setCopied(false)}

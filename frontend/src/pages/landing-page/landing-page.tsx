@@ -5,7 +5,7 @@ import { useLandingPagePath } from '@app/hooks/use-landing-page-path';
 import { pushEvent } from '@app/observability';
 import { PageWrapper } from '@app/pages/page-wrapper';
 import { ALL_PUBLIC_ROLES } from '@app/types/bruker';
-import { BodyShort, BoxNew, Heading } from '@navikt/ds-react';
+import { BodyShort, Box, Heading } from '@navikt/ds-react';
 import { useContext, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 
@@ -35,7 +35,7 @@ export const LandingPage = () => {
 
   return (
     <PageWrapper>
-      <BoxNew marginInline="auto" width="fit-content" maxWidth="500px">
+      <Box marginInline="auto" width="fit-content" maxWidth="500px">
         <Heading level="1" size="medium" spacing>
           Velkommen til Kabal
         </Heading>
@@ -51,7 +51,7 @@ export const LandingPage = () => {
           roles={ALL_PUBLIC_ROLES.filter((r) => !user.roller.includes(r))}
           variant="neutral-moderate"
         />
-      </BoxNew>
+      </Box>
     </PageWrapper>
   );
 };

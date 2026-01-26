@@ -22,25 +22,21 @@ export const DocumentWarnings = ({ varianter }: Props) => {
   }
 
   return (
-    <HStack wrap={false} gap="2" className="empty:hidden">
+    <HStack wrap={false} gap="space-8" className="empty:hidden">
       {canDistribute(variant) ? null : (
         <Tooltip content={`Filtype ${FILE_TYPE_NAMES[variant.filtype]} kan ikke distribueres`}>
-          <ExclamationmarkTriangleIcon aria-hidden className="text-icon-danger" />
+          <ExclamationmarkTriangleIcon aria-hidden className="text-ax-text-danger-decoration" />
         </Tooltip>
       )}
-
       {canOpenInKabal(varianter) ? null : <FileType varianter={varianter} />}
-
       {hasRedactedVariant(varianter) ? (
         <Tooltip content="Dokumentet har sladdet versjon">
-          <Tag size="xsmall" variant="alt1-filled">
+          <Tag data-color="meta-purple" size="xsmall" variant="strong">
             <EyeObfuscatedIcon aria-hidden />
           </Tag>
         </Tooltip>
       ) : null}
-
       {variant.skjerming === Skjerming.POL ? <PolTag /> : null}
-
       {variant.skjerming === Skjerming.FEIL ? <FeilTag /> : null}
     </HStack>
   );
@@ -48,7 +44,7 @@ export const DocumentWarnings = ({ varianter }: Props) => {
 
 export const PolTag = () => (
   <Tooltip content="Dokumentet er begrenset basert på personopplysningsloven">
-    <Tag size="xsmall" variant="warning-filled">
+    <Tag data-color="warning" size="xsmall" variant="strong">
       Begrenset
     </Tag>
   </Tooltip>
@@ -56,7 +52,7 @@ export const PolTag = () => (
 
 export const FeilTag = () => (
   <Tooltip content="Dokumentet er markert for sletting">
-    <Tag size="xsmall" variant="error-filled">
+    <Tag data-color="danger" size="xsmall" variant="strong">
       Slettes
     </Tag>
   </Tooltip>

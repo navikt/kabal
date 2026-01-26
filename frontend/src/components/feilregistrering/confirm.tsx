@@ -23,8 +23,7 @@ export const Confirm = ({ setIsConfirmed }: ConfirmProps) => {
       <Alert variant="info" inline>
         {text}
       </Alert>
-
-      <HStack align="center" justify="space-between" gap="0 4" wrap={false}>
+      <HStack align="center" justify="space-between" gap="space-0 space-16" wrap={false}>
         <Button
           size="small"
           variant="primary"
@@ -35,7 +34,7 @@ export const Confirm = ({ setIsConfirmed }: ConfirmProps) => {
           Jeg forstår, gå til feilregistrering.
         </Button>
 
-        <Button size="small" variant="secondary-neutral" onClick={close} icon={<XMarkIcon aria-hidden />}>
+        <Button data-color="neutral" size="small" variant="secondary" onClick={close} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
       </HStack>

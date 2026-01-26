@@ -24,7 +24,7 @@ export const Lovhjemmel = () => {
 
   return (
     <>
-      <HStack align="center" gap="2" marginBlock="0 2">
+      <HStack align="center" gap="space-8" marginBlock="space-0 space-8">
         <Label size="small">Utfallet er basert på lovhjemmel</Label>
         <HelpText>
           Her setter du hjemlene som utfallet i saken er basert på. Hjemlene du setter her påvirker også hvilke gode

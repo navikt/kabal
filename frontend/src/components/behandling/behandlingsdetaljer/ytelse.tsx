@@ -13,7 +13,7 @@ export const Ytelse = ({ ytelseId }: Props) => {
   }
 
   return (
-    <Tag variant="alt3" size="small">
+    <Tag data-color="info" variant="outline" size="small">
       {ytelse}
     </Tag>
   );

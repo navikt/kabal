@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const HeadingWithHelpText = ({ children, helpText, size = 'small', placement = 'right' }: Props) => (
-  <HStack asChild align="center" gap="2">
+  <HStack asChild align="center" gap="space-8">
     <Heading size={size}>
       {children}
       <HelpText placement={placement}>{helpText}</HelpText>

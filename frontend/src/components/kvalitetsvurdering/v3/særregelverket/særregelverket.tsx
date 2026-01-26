@@ -58,7 +58,7 @@ export const Særregelverket = () => {
         onChange={onChange}
         id={MainReason.Særregelverket}
       >
-        <HStack gap="4" width="100%">
+        <HStack gap="space-16" width="100%">
           <Radio value={Radiovalg.BRA} disabled={!canEdit}>
             Riktig / ikke kvalitetsavvik
           </Radio>

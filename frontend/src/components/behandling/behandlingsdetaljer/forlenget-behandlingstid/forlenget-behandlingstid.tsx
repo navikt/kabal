@@ -29,9 +29,10 @@ export const ForlengetBehandlingstid = ({ oppgavebehandling, children }: Props) 
         </HStack>
 
         {canEdit || hasOppgavestyringRole ? (
-          <HStack gap="2" align="center">
+          <HStack gap="space-8" align="center">
             <Button
-              variant="secondary-neutral"
+              data-color="neutral"
+              variant="secondary"
               size="small"
               icon={<PencilIcon aria-hidden />}
               onClick={() => setIsOpen(!isOpen)}
@@ -42,7 +43,6 @@ export const ForlengetBehandlingstid = ({ oppgavebehandling, children }: Props) 
           </HStack>
         ) : null}
       </BehandlingSection>
-
       <VarsletFristModal oppgavebehandling={oppgavebehandling} isOpen={isOpen} onClose={() => setIsOpen(false)}>
         {children}
       </VarsletFristModal>

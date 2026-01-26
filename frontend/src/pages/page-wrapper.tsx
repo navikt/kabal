@@ -1,4 +1,4 @@
-import { BoxNew, Heading, VStack } from '@navikt/ds-react';
+import { Box, Heading, VStack } from '@navikt/ds-react';
 
 interface Props {
   children: React.ReactNode;
@@ -15,20 +15,20 @@ interface OppgaverPageWrapperProps {
 export const OppgaverPageWrapper = ({ children, title, testId }: OppgaverPageWrapperProps): React.JSX.Element => (
   <VStack flexGrow="1" width="100%" overflow="hidden" data-testid={`${testId}-container`}>
     {title === undefined ? null : (
-      <BoxNew
+      <Box
         as={Heading}
         level="1"
         size="medium"
         data-testid={`${testId}-title`}
-        padding="4"
+        padding="space-16"
         borderWidth="0 0 1 0"
         borderColor="neutral"
       >
         {title}
-      </BoxNew>
+      </Box>
     )}
 
-    <VStack gap="16 0" overflow="auto" width="100%" flexGrow="1" padding="4" data-testid={testId}>
+    <VStack gap="space-64 space-0" overflow="auto" width="100%" flexGrow="1" padding="space-16" data-testid={testId}>
       {children}
     </VStack>
   </VStack>

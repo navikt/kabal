@@ -64,7 +64,7 @@ export const TimedToast = forwardRef<HTMLDivElement, Props>(
         />
         <Container>
           <Icon type={type} />
-          <VStack gap="2 0">{content}</VStack>
+          <VStack gap="space-8 space-0">{content}</VStack>
         </Container>
       </TimedToastContainer>
     );

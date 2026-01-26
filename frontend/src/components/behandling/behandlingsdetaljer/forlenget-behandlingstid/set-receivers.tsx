@@ -16,7 +16,7 @@ export const SetReceivers = ({ value, id }: Props) => {
   const [error, setError] = useState<string>();
 
   return (
-    <VStack gap="2" id={UtvidetBehandlingstidFieldName.Mottakere} as="section">
+    <VStack gap="space-8" id={UtvidetBehandlingstidFieldName.Mottakere} as="section">
       <Heading size="xsmall">{UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.Mottakere]}</Heading>
       <Receivers
         mottakerList={value}

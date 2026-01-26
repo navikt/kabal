@@ -16,15 +16,15 @@ interface Props {
 
 export const AbbrevationExample = ({ title, children, examples, recommended = false }: Props) => (
   <section>
-    <HStack asChild align="center" gap="2">
+    <HStack asChild align="center" gap="space-8">
       <Heading size="small" spacing>
         {title}
         {recommended ? (
-          <Tag variant="success" size="xsmall">
+          <Tag data-color="success" variant="outline" size="xsmall">
             Anbefalt
           </Tag>
         ) : (
-          <Tag variant="warning" size="xsmall">
+          <Tag data-color="warning" variant="outline" size="xsmall">
             Ikke anbefalt
           </Tag>
         )}
@@ -39,7 +39,7 @@ export const AbbrevationExample = ({ title, children, examples, recommended = fa
         <List.Item key={example.short}>
           <ExpandingExample key={example.short} {...example} />
           {example.tag === undefined ? null : (
-            <Tag variant="neutral" size="xsmall">
+            <Tag data-color="neutral" variant="outline" size="xsmall">
               {example.tag}
             </Tag>
           )}
@@ -90,26 +90,26 @@ const isExampleData = (data: ExpandingExampleData | ErrorExampleData): data is E
 
 const AutoCap = () => (
   <Tooltip content="Automatisk stor forbokstav på starten av en setning.">
-    <Tag variant="info" size="xsmall">
+    <Tag data-color="info" variant="outline" size="xsmall">
       Automatisk stor forbokstav
     </Tag>
   </Tooltip>
 );
 
 const AlwaysCap = () => (
-  <Tag variant="info" size="xsmall">
+  <Tag data-color="info" variant="outline" size="xsmall">
     Alltid stor forbokstav
   </Tag>
 );
 
 const AlwaysAllCaps = () => (
-  <Tag variant="info" size="xsmall">
+  <Tag data-color="info" variant="outline" size="xsmall">
     Alltid bare store bokstaver
   </Tag>
 );
 
 const ErrorTag = () => (
-  <Tag variant="error" size="xsmall">
+  <Tag data-color="danger" variant="outline" size="xsmall">
     Ikke gjenkjent
   </Tag>
 );

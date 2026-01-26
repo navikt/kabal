@@ -6,7 +6,7 @@ import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useDeleteSattPaaVentMutation, useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
 import { Role } from '@app/types/bruker';
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, BoxNew, Button, HStack } from '@navikt/ds-react';
+import { Alert, Box, Button, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 
 const useCanEditSetPaaVent = () => {
@@ -54,9 +54,10 @@ const SettPaaVent = ({ id }: { id: string }) => {
     <div ref={ref} className="relative">
       {showPopup ? <SettPaaVentPanel oppgaveId={id} close={() => setShowPopup(false)} /> : null}
       <Button
+        data-color="neutral"
         type="button"
         className="flex"
-        variant="secondary-neutral"
+        variant="secondary"
         size="small"
         onClick={() => setShowPopup(!showPopup)}
         loading={isLoading}
@@ -86,8 +87,9 @@ const AvsluttVenteperiode = ({ id }: { id: string }) => {
   return (
     <div className="relative" ref={ref}>
       <Button
+        data-color="neutral"
         className="flex"
-        variant="secondary-neutral"
+        variant="secondary"
         size="small"
         onClick={() => setShowConfirm(!showConfirm)}
         icon={<XMarkIcon aria-hidden />}
@@ -95,11 +97,10 @@ const AvsluttVenteperiode = ({ id }: { id: string }) => {
       >
         Avslutt venteperiode
       </Button>
-
       {showConfirm ? (
-        <BoxNew
-          padding="3"
-          borderRadius="medium"
+        <Box
+          padding="space-12"
+          borderRadius="4"
           shadow="dialog"
           background="default"
           className="absolute bottom-full flex flex-col gap-2"
@@ -108,15 +109,21 @@ const AvsluttVenteperiode = ({ id }: { id: string }) => {
             Avslutt venteperiode?
           </Alert>
 
-          <HStack gap="2">
+          <HStack gap="space-8">
             <Button variant="primary" size="small" onClick={onAvslutt} loading={isLoading}>
               Bekreft
             </Button>
-            <Button variant="danger" size="small" onClick={() => setShowConfirm(false)} disabled={isLoading}>
+            <Button
+              data-color="danger"
+              variant="primary"
+              size="small"
+              onClick={() => setShowConfirm(false)}
+              disabled={isLoading}
+            >
               Avbryt
             </Button>
           </HStack>
-        </BoxNew>
+        </Box>
       ) : null}
     </div>
   );

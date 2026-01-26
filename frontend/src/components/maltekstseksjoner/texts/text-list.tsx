@@ -4,7 +4,7 @@ import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mu
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
-import { Alert, BoxNew, Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { TextVersions } from './text-versions';
@@ -109,14 +109,15 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
   }
 
   return (
-    <VStack gap="4 0" overflowY="auto" overflowX="hidden">
+    <VStack gap="space-16 space-0" overflowY="auto" overflowX="hidden">
       {textIdList.map((textId, i) => (
         <HStack flexGrow="1" width="100%" key={textId}>
           {isPublished ? null : (
             <VStack>
               <Tooltip content="Flytt opp">
                 <Button
-                  variant="tertiary-neutral"
+                  data-color="neutral"
+                  variant="tertiary"
                   size="small"
                   disabled={i === 0}
                   onClick={() => moveUp(textId)}
@@ -127,7 +128,8 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
               </Tooltip>
               <Tooltip content="Flytt ned">
                 <Button
-                  variant="tertiary-neutral"
+                  data-color="neutral"
+                  variant="tertiary"
                   size="small"
                   disabled={i === lastIndex}
                   onClick={() => moveDown(textId)}
@@ -138,15 +140,15 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
               </Tooltip>
             </VStack>
           )}
-          <BoxNew
+          <Box
             asChild
-            borderRadius="medium"
+            borderRadius="4"
             shadow="dialog"
             borderWidth="4"
             borderColor={textId === activeTextId ? 'accent' : undefined}
             flexGrow="1"
-            padding="1"
-            marginInline="1"
+            padding="space-4"
+            marginInline="space-4"
             className="last:mb-1"
           >
             <TextVersions
@@ -155,7 +157,7 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
               setActive={setActive}
               maltekstseksjonId={maltekstseksjon.id}
             />
-          </BoxNew>
+          </Box>
         </HStack>
       ))}
     </VStack>

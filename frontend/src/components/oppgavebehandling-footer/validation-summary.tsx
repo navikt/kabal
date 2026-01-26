@@ -21,7 +21,7 @@ export const ValidationSummary = ({ sections }: Props) => {
         Kan ikke fullføre behandlingen
       </Heading>
 
-      <VStack as="article" gap="4">
+      <VStack as="article" gap="space-16">
         {errorMessages}
       </VStack>
     </Alert>

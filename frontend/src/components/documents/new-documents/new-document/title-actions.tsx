@@ -24,17 +24,17 @@ export const TitleActions = ({ setEditMode, editMode, document, renameAccessErro
     >
       {renameAccessError === null ? (
         <Button
+          data-color="neutral"
           onClick={() => setEditMode(!editMode)}
           data-testid="document-title-edit-save-button"
           size="xsmall"
           icon={<Icon aria-hidden />}
-          variant="tertiary-neutral"
+          variant="tertiary"
           title="Endre dokumentnavn"
         />
       ) : (
         <Padlock>{renameAccessError}</Padlock>
       )}
-
       {editMode ? null : (
         <Tooltip content="Kopier dokumentnavn">
           <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />

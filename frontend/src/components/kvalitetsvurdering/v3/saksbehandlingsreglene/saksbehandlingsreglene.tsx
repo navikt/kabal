@@ -48,7 +48,7 @@ export const Saksbehandlingsreglene = () => {
         onChange={onChange}
         id="saksbehandlingsreglene"
       >
-        <HStack gap="4" width="100%" wrap={false}>
+        <HStack gap="space-16" width="100%" wrap={false}>
           <Radio value={Radiovalg.BRA} disabled={!canEdit}>
             Riktig / ikke kvalitetsavvik
           </Radio>

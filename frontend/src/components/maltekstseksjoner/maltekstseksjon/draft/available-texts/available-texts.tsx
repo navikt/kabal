@@ -15,7 +15,8 @@ export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: Available
   return (
     <>
       <Button
-        variant="tertiary-neutral"
+        data-color="neutral"
+        variant="tertiary"
         size="small"
         onClick={() => setOpen(!open)}
         icon={<Icon aria-hidden />}
@@ -23,7 +24,6 @@ export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: Available
       >
         Legg til eksisterende {typeLabel} tekst
       </Button>
-
       <Modal
         header={{ heading: textType === RichTextTypes.MALTEKST ? 'Låste tekster' : 'Redigerbare tekster' }}
         width={1500}
@@ -38,7 +38,13 @@ export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: Available
           ) : null}
         </Modal.Body>
         <Modal.Footer>
-          <Button size="small" variant="secondary-neutral" onClick={onClose} icon={<XMarkIcon aria-hidden />}>
+          <Button
+            data-color="neutral"
+            size="small"
+            variant="secondary"
+            onClick={onClose}
+            icon={<XMarkIcon aria-hidden />}
+          >
             Lukk
           </Button>
         </Modal.Footer>

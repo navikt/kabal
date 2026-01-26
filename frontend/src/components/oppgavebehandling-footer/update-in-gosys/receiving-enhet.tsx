@@ -3,7 +3,7 @@ import { SuggestedEnhet } from '@app/components/oppgavebehandling-footer/update-
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import type { Enhet, IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Alert, BoxNew, Button, ErrorMessage, HStack, Search, Tooltip, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorMessage, HStack, Search, Tooltip, VStack } from '@navikt/ds-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface Props {
@@ -60,7 +60,7 @@ export const ReceivingEnhet = ({ selectedEnhet, setSelectedEnhet, enheter, error
   };
 
   return (
-    <VStack gap="1">
+    <VStack gap="space-4">
       <SuggestedEnhet
         selectedEnhet={selectedEnhet}
         setSelectedEnhet={setSelectedEnhet}
@@ -68,8 +68,8 @@ export const ReceivingEnhet = ({ selectedEnhet, setSelectedEnhet, enheter, error
         typeId={typeId}
         gosysOppgaveId={gosysOppgaveId}
       />
-      <VStack as="fieldset" gap="1">
-        <legend className="mb-2 font-bold">Velg enhet som skal motta oppgaven</legend>
+      <VStack as="fieldset" gap="space-4">
+        <legend className="mb-2 font-ax-bold">Velg enhet som skal motta oppgaven</legend>
 
         <Search
           style={{ width: 600 }}
@@ -132,13 +132,13 @@ const SelectableListItem = ({ enhetsnr, navn, selected, setSelected }: SelectBut
   const children = (
     <HStack
       as="li"
-      gap="2"
+      gap="space-8"
       align="center"
       ref={ref}
       onClick={() => setSelected(isSelected ? null : enhetsnr)}
       className="cursor-pointer hover:bg-ax-bg-accent-moderate"
     >
-      <Button size="small" variant="tertiary-neutral" title={label} aria-label={label} className="w-12">
+      <Button data-color="neutral" size="small" variant="tertiary" title={label} aria-label={label} className="w-12">
         <HStack align="center" justify="center">
           {isSelected ? <CheckmarkCircleFillIconColored aria-hidden fontSize={20} /> : 'Velg'}
         </HStack>
@@ -163,16 +163,16 @@ interface EmptyProps {
 }
 
 const Container = ({ children }: EmptyProps) => (
-  <BoxNew
+  <Box
     asChild
     height="202px"
     overflowY="scroll"
     overflowX="auto"
     borderWidth="1"
     borderColor="neutral"
-    borderRadius="medium"
-    padding="1"
+    borderRadius="4"
+    padding="space-4"
   >
     {children}
-  </BoxNew>
+  </Box>
 );

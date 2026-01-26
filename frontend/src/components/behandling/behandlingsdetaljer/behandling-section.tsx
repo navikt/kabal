@@ -9,7 +9,7 @@ interface Props {
 export const BehandlingSection = ({ label, children, testid }: Props) => {
   if (typeof label === 'undefined') {
     return (
-      <VStack marginBlock="0 4" gap="1" className="whitespace-break-spaces" data-testid={testid}>
+      <VStack marginBlock="space-0 space-1" gap="space-4" className="whitespace-break-spaces" data-testid={testid}>
         {children}
       </VStack>
     );
@@ -18,7 +18,7 @@ export const BehandlingSection = ({ label, children, testid }: Props) => {
   const id = `behandling-section-${label.toLowerCase().replaceAll(/\s/g, '-')}`;
 
   return (
-    <VStack gap="1" className="whitespace-break-spaces" data-testid={testid}>
+    <VStack gap="space-4" className="whitespace-break-spaces" data-testid={testid}>
       <Label htmlFor={id} size="small">
         {label}
       </Label>

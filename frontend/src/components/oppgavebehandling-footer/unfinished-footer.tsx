@@ -26,7 +26,7 @@ export const UnfinishedFooter = () => {
 
   return (
     <StyledFooter type={footerType}>
-      <HStack align="center" justify="space-between" gap="4">
+      <HStack align="center" justify="space-between" gap="space-16">
         <FinishButton />
         <SendToSaksbehandler oppgaveId={oppgave.id} isSaksbehandler={isSaksbehandler} />
         <TakeFromSaksbehandler oppgaveId={oppgave.id} variant="secondary-neutral" />

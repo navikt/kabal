@@ -9,8 +9,8 @@ interface TabLabelProps {
 export const TabLabel = ({ isDraft, isPublished, children }: TabLabelProps) => {
   if (isPublished) {
     return (
-      <HStack align="center" gap="1" wrap={false}>
-        <Tag size="xsmall" variant="info">
+      <HStack align="center" gap="space-4" wrap={false}>
+        <Tag data-color="info" size="xsmall" variant="outline">
           Aktiv
         </Tag>
         Versjon {children}
@@ -20,8 +20,8 @@ export const TabLabel = ({ isDraft, isPublished, children }: TabLabelProps) => {
 
   if (isDraft) {
     return (
-      <HStack align="center" gap="1" wrap={false}>
-        <Tag size="xsmall" variant="warning">
+      <HStack align="center" gap="space-4" wrap={false}>
+        <Tag data-color="warning" size="xsmall" variant="outline">
           Utkast
         </Tag>
         Versjon {children}
@@ -30,8 +30,8 @@ export const TabLabel = ({ isDraft, isPublished, children }: TabLabelProps) => {
   }
 
   return (
-    <HStack align="center" gap="1" wrap={false}>
-      <Tag size="xsmall" variant="neutral">
+    <HStack align="center" gap="space-4" wrap={false}>
+      <Tag data-color="neutral" size="xsmall" variant="outline">
         Inaktiv
       </Tag>
       Versjon {children}

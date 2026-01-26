@@ -18,7 +18,7 @@ export const SetTitle = ({ value, id }: Props) => {
   useDebounce(() => setValue({ id, title: tempValue }), skip, tempValue, 500);
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <TextField
         id={UtvidetBehandlingstidFieldName.Title}
         label={UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.Title]}

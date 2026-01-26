@@ -24,7 +24,7 @@ export const Confirm = ({
 
   if (!showConfirm) {
     return (
-      <HStack justify="start" gap="0 4" {...rest}>
+      <HStack justify="start" gap="space-0 space-16" {...rest}>
         <Button
           type="button"
           size="small"
@@ -45,7 +45,7 @@ export const Confirm = ({
   }
 
   return (
-    <HStack justify="start" gap="0 4" {...rest}>
+    <HStack justify="start" gap="space-0 space-16" {...rest}>
       <Button
         type="button"
         size="small"
@@ -58,9 +58,10 @@ export const Confirm = ({
         {actionText}
       </Button>
       <Button
+        data-color="neutral"
         type="button"
         size="small"
-        variant="secondary-neutral"
+        variant="secondary"
         onClick={() => setShowConfirm(false)}
         data-testid="document-finish-cancel"
         disabled={isFinishing || isValidating}

@@ -144,39 +144,39 @@ const getToastContent = (
       case FradelReason.FEIL_HJEMMEL: {
         return (
           <InfoToast title="Fradelt">
-            {employeeName(actor)} la saken tilbake i {QUEUE} {fromText}.
-            <HStack align="center" gap="1">
+            {employeeName(actor)}la saken tilbake i {QUEUE} {fromText}.
+            <HStack align="center" gap="space-4">
               <Label size="small" htmlFor={labelId}>
                 Årsak
               </Label>
-              <Tag size="xsmall" variant="info-moderate" id={labelId}>
+              <Tag data-color="info" size="xsmall" variant="moderate" id={labelId}>
                 Feil {oldHjemler !== null && oldHjemler.length === 1 ? 'hjemmel' : 'hjemler'}
               </Tag>
             </HStack>
-            <HStack align="center" gap="1">
+            <HStack align="center" gap="space-4">
               <Label size="small" id={labelId}>
                 Gamle
               </Label>
               {oldHjemler?.map((h) => (
-                <Tag size="xsmall" variant="neutral" key={h} aria-labelledby={labelId}>
+                <Tag data-color="neutral" size="xsmall" variant="outline" key={h} aria-labelledby={labelId}>
                   {h}
                 </Tag>
               )) ?? (
-                <Tag size="xsmall" variant="neutral" aria-labelledby={labelId}>
+                <Tag data-color="neutral" size="xsmall" variant="outline" aria-labelledby={labelId}>
                   ingen
                 </Tag>
               )}
             </HStack>
-            <HStack align="center" gap="1">
+            <HStack align="center" gap="space-4">
               <Label size="small" id={labelId}>
                 Nye
               </Label>
               {newHjemler?.map((h) => (
-                <Tag size="xsmall" variant="success" key={h} aria-labelledby={labelId}>
+                <Tag data-color="success" size="xsmall" variant="outline" key={h} aria-labelledby={labelId}>
                   {h}
                 </Tag>
               )) ?? (
-                <Tag size="xsmall" variant="neutral" aria-labelledby={labelId}>
+                <Tag data-color="neutral" size="xsmall" variant="outline" aria-labelledby={labelId}>
                   ingen
                 </Tag>
               )}

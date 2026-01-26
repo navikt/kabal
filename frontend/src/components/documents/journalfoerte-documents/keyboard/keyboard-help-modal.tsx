@@ -5,7 +5,7 @@ import {
 import { useHasSeenKeyboardShortcuts } from '@app/hooks/settings/use-setting';
 import { KEY_ICONS, Keys, MOD_KEY } from '@app/keys';
 import { pushEvent } from '@app/observability';
-import { BoxNew, Heading, HGrid, HStack, Modal } from '@navikt/ds-react';
+import { Box, Heading, HGrid, HStack, Modal } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
 import { useCallback, useEffect, useId, useRef } from 'react';
 
@@ -44,7 +44,7 @@ export const KeyboardHelpModal = () => {
       onClose={closeKeyboardHelpModal}
     >
       <Modal.Header closeButton>
-        <HStack as={Heading} gap="1" align="center" level="1" size="small">
+        <HStack as={Heading} gap="space-4" align="center" level="1" size="small">
           <Keyboard size={24} aria-hidden />
 
           <span id={modalHeadingId}>Tastaturstyring i journalførte dokumenter</span>
@@ -52,7 +52,7 @@ export const KeyboardHelpModal = () => {
       </Modal.Header>
 
       <Modal.Body>
-        <HGrid as="dl" gap="1 2" columns="min-content 1fr">
+        <HGrid as="dl" gap="space-4 space-8" columns="min-content 1fr">
           <ShortcutHeading>Grunnleggende</ShortcutHeading>
 
           <Shortcut keys={[[Keys.ArrowUp], [Keys.ArrowDown]]}>Naviger mellom dokumenter og vedlegg</Shortcut>
@@ -141,22 +141,28 @@ interface ShortcutProps {
 
 const Shortcut = ({ keys, children: description }: ShortcutProps) => (
   <>
-    <HStack as="dt" gap="1" wrap={false} align="center" justify="end" className="text-sm">
+    <HStack as="dt" gap="space-4" wrap={false} align="center" justify="end" className="text-sm">
       {keys.map((combo) => (
-        <HStack gap="1" align="center" wrap={false} key={combo.join('+')} className='not-last:after:content-["eller"]'>
+        <HStack
+          gap="space-4"
+          align="center"
+          wrap={false}
+          key={combo.join('+')}
+          className='not-last:after:content-["eller"]'
+        >
           {combo.map((k) => (
-            <BoxNew
+            <Box
               key={k}
-              paddingInline="1"
-              paddingBlock="05"
+              paddingInline="space-4"
+              paddingBlock="space-2"
               background="sunken"
-              borderRadius="medium"
+              borderRadius="4"
               minWidth="24px"
               minHeight="24px"
               className="flex items-center justify-center"
             >
               {KEY_ICONS[k]}
-            </BoxNew>
+            </Box>
           ))}
         </HStack>
       ))}

@@ -39,9 +39,9 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
   const isNonReferencedText = textType === GOD_FORMULERING_TYPE || textType === REGELVERK_TYPE;
 
   return (
-    <VStack ref={containerRef} position="relative" paddingBlock="2 0" flexGrow="1" overflowY="auto">
-      <VStack as="header" gap="2" marginBlock="0 2">
-        <HStack gap="2" justify="space-between" align="center" paddingInline="0 2">
+    <VStack ref={containerRef} position="relative" paddingBlock="space-8 space-0" flexGrow="1" overflowY="auto">
+      <VStack as="header" gap="space-8" marginBlock="space-0 space-8">
+        <HStack gap="space-8" justify="space-between" align="center" paddingInline="space-0 space-8">
           <Heading level="1" size="small">
             {getTitle(text.title)}
           </Heading>
@@ -49,7 +49,7 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
           {getIcon(text.textType)}
         </HStack>
 
-        <HStack align="center" gap="1">
+        <HStack align="center" gap="space-4">
           <Label size="small" htmlFor={publishedId}>
             Publisert:
           </Label>
@@ -72,7 +72,7 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
             currentMaltekstseksjonId={maltekstseksjonId}
           />
 
-          <HStack gap="2" justify="end" marginInline="auto 0">
+          <HStack gap="space-8" justify="end" marginInline="auto space-0">
             {hasDraft ? null : <CreateDraftTextButton text={text} onDraftCreated={setTabId} query={query} />}
 
             <DuplicateTextButton {...text} />

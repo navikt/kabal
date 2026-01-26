@@ -22,7 +22,7 @@ export const EventHistory = () => {
 
   if (isLoading || data === undefined) {
     return (
-      <VStack gap="2" as="section">
+      <VStack gap="space-8" as="section">
         <Heading level="1" size="xsmall">
           Hendelseslogg
         </Heading>
@@ -137,7 +137,7 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
   }, [nodeCategories]);
 
   return (
-    <VStack gap="2" as="section">
+    <VStack gap="space-8" as="section">
       <Heading level="1" size="xsmall">
         Hendelseslogg ({totalCount})
       </Heading>

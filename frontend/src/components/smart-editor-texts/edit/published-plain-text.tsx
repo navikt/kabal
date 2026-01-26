@@ -6,7 +6,7 @@ import { TextModified } from '@app/components/smart-editor-texts/modified';
 import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import type { IPublishedPlainText } from '@app/types/texts/responses';
-import { BodyLong, BoxNew, Heading, HStack, VStack } from '@navikt/ds-react';
+import { BodyLong, Box, Heading, HStack, VStack } from '@navikt/ds-react';
 
 interface Props {
   text: IPublishedPlainText;
@@ -20,28 +20,24 @@ export const PublishedPlainText = ({ text, hasDraft, setTabId }: Props) => {
   const { textType } = text;
 
   return (
-    <VStack gap="2" padding="4">
+    <VStack gap="space-8" padding="space-16">
       <Heading level="1" size="small" spacing>
         {text.title}
       </Heading>
-
       <TextModified {...text} />
-
       <Tags {...text} />
-
-      <HStack gap="2" justify="end" marginInline="auto 0">
+      <HStack gap="space-8" justify="end" marginInline="auto space-0">
         {hasDraft ? null : <CreateDraftTextButton text={text} onDraftCreated={setTabId} query={query} />}
 
         <DuplicateTextButton {...text} />
 
         <UnpublishTextButton publishedText={text} textType={textType} />
       </HStack>
-
-      <BoxNew background="neutral-moderate" padding="4" borderRadius="medium">
-        <BoxNew as={BodyLong} background="default" padding="4" borderRadius="medium" shadow="dialog">
+      <Box background="neutral-moderate" padding="space-16" borderRadius="4">
+        <Box as={BodyLong} background="default" padding="space-16" borderRadius="4" shadow="dialog">
           {text.plainText[lang]}
-        </BoxNew>
-      </BoxNew>
+        </Box>
+      </Box>
     </VStack>
   );
 };

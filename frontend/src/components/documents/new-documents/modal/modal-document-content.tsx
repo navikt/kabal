@@ -91,19 +91,19 @@ export const DocumentModalContent = ({
   return (
     <>
       <Modal.Body className="flex h-[80vh] w-full gap-4 overflow-hidden">
-        <VStack gap="4" width="400px" height="100%" flexShrink="0" overflow="visible">
-          <HStack align="center" gap="2">
-            <Tag variant="info" size="small">
+        <VStack gap="space-16" width="400px" height="100%" flexShrink="0" overflow="visible">
+          <HStack align="center" gap="space-8">
+            <Tag data-color="info" variant="outline" size="small">
               {DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId]}
             </Tag>
-            <Tag variant="info" size="small" title="Dokumenttype">
+            <Tag data-color="info" variant="outline" size="small" title="Dokumenttype">
               {icon}&nbsp;{DOCUMENT_TYPE_NAMES[document.type]}
             </Tag>
             <OpprettetTag document={document} />
           </HStack>
 
           {renameAccess === null ? (
-            <HStack align="end" gap="2" wrap={false}>
+            <HStack align="end" gap="space-8" wrap={false}>
               <SetFilename
                 className="max-w-lg flex-grow"
                 tittel={document.tittel}
@@ -112,8 +112,9 @@ export const DocumentModalContent = ({
                 }}
               />
               <Button
+                data-color="neutral"
                 size="small"
-                variant="secondary-neutral"
+                variant="secondary"
                 icon={<CheckmarkIcon aria-hidden />}
                 title="Endre dokumentnavn"
                 data-testid="document-title-edit-save-button"
@@ -154,7 +155,6 @@ export const DocumentModalContent = ({
 
         <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />
       </Modal.Body>
-
       <Modal.Footer className="items-center">
         <AccessErrorsSummary
           documentErrors={removeAccess === null ? [] : [removeAccess]}
@@ -184,9 +184,8 @@ const OpprettetTag = ({ document }: { document: IDocument }) => {
   }
 
   return (
-    <Tag variant="alt3" size="small" title="Opprettet">
+    <Tag data-color="info" variant="outline" size="small" title="Opprettet">
       <CalendarIcon aria-hidden />
-      &nbsp;
       <DocumentDate document={document} />
     </Tag>
   );

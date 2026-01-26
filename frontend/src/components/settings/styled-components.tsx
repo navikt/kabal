@@ -1,18 +1,18 @@
-import { BoxNew, type BoxNewProps, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Box, type BoxProps, Heading, HStack, VStack } from '@navikt/ds-react';
 
-type Props = Omit<BoxNewProps, 'asChild' | 'padding' | 'borderRadius' | 'shadow' | 'height'>;
+type Props = Omit<BoxProps, 'asChild' | 'padding' | 'borderRadius' | 'shadow' | 'height'>;
 
 export const SettingsSection = ({ children, ...rest }: Props) => (
-  <BoxNew asChild padding="6" borderRadius="medium" shadow="dialog" height="fit" {...rest}>
+  <Box asChild padding="space-24" borderRadius="4" shadow="dialog" height="fit" {...rest}>
     <VStack as="section" align="start">
       {children}
     </VStack>
-  </BoxNew>
+  </Box>
 );
 
 export const SectionHeader = ({ children }: { children: React.ReactNode }) => (
   <Heading level="1" size="medium" spacing>
-    <HStack align="center" gap="2">
+    <HStack align="center" gap="space-8">
       {children}
     </HStack>
   </Heading>

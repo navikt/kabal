@@ -4,9 +4,10 @@ import { NavLink } from 'react-router-dom';
 
 export const BackLink = () => (
   <Button
+    data-color="neutral"
     to="/mineoppgaver"
     as={NavLink}
-    variant="secondary-neutral"
+    variant="secondary"
     size="small"
     data-testid="footer-button-back"
     icon={<ChevronLeftIcon aria-hidden />}

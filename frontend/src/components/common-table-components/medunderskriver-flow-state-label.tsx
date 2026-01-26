@@ -18,7 +18,7 @@ export const MUFlowStateLabelWithSelf = ({ medunderskriver, typeId }: Props) => 
 
   if (isMu && medunderskriver.flowState === FlowState.SENT) {
     return (
-      <Tag className="truncate" variant="alt1" title={getTitleCapitalized(typeId)}>
+      <Tag data-color="meta-purple" className="truncate" variant="outline" title={getTitleCapitalized(typeId)}>
         {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'Fagansvarlig' : 'MU'}
       </Tag>
     );
@@ -48,13 +48,13 @@ export const MUFlowStateLabelWithoutSelf = ({ medunderskriver, typeId }: Props) 
 };
 
 const Sendt = ({ typeId }: { typeId: SaksTypeEnum }) => (
-  <Tag className="truncate" variant="success" title={`Sendt til ${getTitleLowercase(typeId)}`}>
+  <Tag data-color="success" className="truncate" variant="outline" title={`Sendt til ${getTitleLowercase(typeId)}`}>
     Sendt til {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
   </Tag>
 );
 
 const Tilbake = ({ typeId }: { typeId: SaksTypeEnum }) => (
-  <Tag className="truncate" variant="error" title={`Tilbake fra ${getTitleLowercase(typeId)}`}>
+  <Tag data-color="danger" className="truncate" variant="outline" title={`Tilbake fra ${getTitleLowercase(typeId)}`}>
     Tilbake fra {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
   </Tag>
 );

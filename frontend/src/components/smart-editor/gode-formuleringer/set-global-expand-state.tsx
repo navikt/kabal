@@ -38,8 +38,9 @@ export const SetGlobalExpandState = ({ expandState }: Props) => {
 
   return (
     <Button
+      data-color="neutral"
       size="small"
-      variant="tertiary-neutral"
+      variant="tertiary"
       title={nextTitle(mostUsedState)}
       icon={<NextExpandStateIcon state={mostUsedState} />}
       onClick={() => setGodeFormuleringerExpandState(nextExpandState(mostUsedState))}

@@ -3,7 +3,7 @@ import { Entry } from '@app/components/gosys/beskrivelse/entry';
 import { splitBeskrivelse } from '@app/components/gosys/beskrivelse/parsing/split-beskrivelse';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { usePushEvent } from '@app/observability';
-import { BoxNew, Button, Modal, VStack } from '@navikt/ds-react';
+import { Box, Button, Modal, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useMemo, useRef } from 'react';
 
@@ -34,25 +34,24 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
 
   return (
     <>
-      <VStack gap="2">
-        <VStack as="ul" gap="2">
-          <BoxNew background="neutral-soft" padding="2" borderRadius="medium">
+      <VStack gap="space-8">
+        <VStack as="ul" gap="space-8">
+          <Box background="neutral-soft" padding="space-8" borderRadius="4">
             <Entry {...firstEntry} />
-          </BoxNew>
+          </Box>
           {secondEntry !== undefined ? (
             <div className="relative z-1 h-12 overflow-hidden after:pointer-events-none after:absolute after:right-0 after:bottom-0 after:left-0 after:h-12 after:bg-gradient-to-t after:from-ax-bg-default after:to-transparent">
-              <BoxNew background="neutral-soft" padding="2" borderRadius="medium">
+              <Box background="neutral-soft" padding="space-8" borderRadius="4">
                 <Entry {...secondEntry} />
-              </BoxNew>
+              </Box>
             </div>
           ) : null}
         </VStack>
 
-        <Button variant="tertiary-neutral" size="small" onClick={onOpenClick}>
+        <Button data-color="neutral" variant="tertiary" size="small" onClick={onOpenClick}>
           Vis alle ({entries.length})
         </Button>
       </VStack>
-
       <Modal header={{ heading: 'Beskrivelse fra Gosys', closeButton: true }} ref={modalRef} closeOnBackdropClick>
         <Modal.Body className="h-[80vh] overflow-hidden">
           <GosysBeskrivelseTabs beskrivelse={trimmedBeskrivelse} entries={entries} />

@@ -7,7 +7,7 @@ import {
   InformationSquareIcon,
   PrinterSmallIcon,
 } from '@navikt/aksel-icons';
-import { type BoxNewProps, CopyButton, Heading, VStack } from '@navikt/ds-react';
+import { type BoxProps, CopyButton, Heading, VStack } from '@navikt/ds-react';
 import { RelevantDateTimelineItem, TimelineItem } from './timeline-item';
 
 interface Props extends Pick<IArkivertDocument, 'utsendingsinfo' | 'kanal' | 'kanalnavn'> {
@@ -96,7 +96,7 @@ interface VarselData {
   icon: typeof EnvelopeClosedIcon;
   title: string;
   info: string;
-  background: BoxNewProps['background'];
+  background: BoxProps['background'];
 }
 
 const getOtherVarselData = (kanal: Kanal): VarselData => {

@@ -59,7 +59,7 @@ const handleToast = (
     const vedleggCount = removedVedlegg.length;
 
     const tag = (
-      <Tag size="xsmall" variant="info">
+      <Tag data-color="info" size="xsmall" variant="outline">
         Vedlegg
       </Tag>
     );
@@ -91,7 +91,7 @@ const handleToast = (
 
       const type = DOCUMENT_TYPE_NAMES[d.type];
       const distType = (
-        <Tag size="xsmall" variant="info">
+        <Tag data-color="info" size="xsmall" variant="outline">
           {DISTRIBUTION_TYPE_NAMES[d.dokumentTypeId]}
         </Tag>
       );
@@ -106,7 +106,7 @@ const handleToast = (
         );
       } else {
         const tag = (
-          <Tag size="xsmall" variant="info">
+          <Tag data-color="info" size="xsmall" variant="outline">
             Vedlegg
           </Tag>
         );

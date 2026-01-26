@@ -8,7 +8,7 @@ export interface StatusTagProps {
 export const StatusTag = ({ publishedDateTime, published }: StatusTagProps) => {
   if (published) {
     return (
-      <Tag size="xsmall" variant="info">
+      <Tag data-color="info" size="xsmall" variant="outline">
         Publisert
       </Tag>
     );
@@ -16,14 +16,14 @@ export const StatusTag = ({ publishedDateTime, published }: StatusTagProps) => {
 
   if (publishedDateTime === null) {
     return (
-      <Tag size="xsmall" variant="warning">
+      <Tag data-color="warning" size="xsmall" variant="outline">
         Utkast
       </Tag>
     );
   }
 
   return (
-    <Tag size="xsmall" variant="neutral">
+    <Tag data-color="neutral" size="xsmall" variant="outline">
       Avpublisert
     </Tag>
   );

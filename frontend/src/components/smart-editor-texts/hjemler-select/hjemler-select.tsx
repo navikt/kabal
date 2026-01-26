@@ -58,7 +58,7 @@ export const HjemlerSelect = ({
                   value: hjemmedOptionId,
                   label: hjemmel.navn,
                   tags: [
-                    <Tag size="xsmall" variant="info-filled" key={hjemmel.id}>
+                    <Tag data-color="info" size="xsmall" variant="strong" key={hjemmel.id}>
                       {`${count} ytelser`}
                     </Tag>,
                   ],
@@ -73,7 +73,7 @@ export const HjemlerSelect = ({
                 value: hjemmedOptionId,
                 label: hjemmel.navn,
                 tags: [
-                  <Tag size="xsmall" variant="info-filled" key={hjemmel.id}>
+                  <Tag data-color="info" size="xsmall" variant="strong" key={hjemmel.id}>
                     {`${count} ytelser`}
                   </Tag>,
                 ],
@@ -86,7 +86,7 @@ export const HjemlerSelect = ({
               value: hjemmedOptionId,
               label: hjemmel.navn,
               tags: [
-                <Tag size="xsmall" variant="info-filled" key={hjemmel.id}>
+                <Tag data-color="info" size="xsmall" variant="strong" key={hjemmel.id}>
                   {`${count} ytelser`}
                 </Tag>,
               ],

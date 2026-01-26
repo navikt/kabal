@@ -3,7 +3,7 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
 import type { MaltekstElement, RedigerbarMaltekstElement } from '@app/plate/types';
 import { FileTextIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, type ButtonProps, HelpText, HStack } from '@navikt/ds-react';
+import { Box, Button, type ButtonProps, HelpText, HStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useState } from 'react';
 
 interface Props {
@@ -44,14 +44,20 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes, ignore }: Props) => 
   return (
     <HStack
       asChild
-      gap="0 2"
+      gap="space-0 space-8"
       align="center"
       contentEditable={false}
       onClick={(e) => e.stopPropagation()}
       onSelect={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
     >
-      <BoxNew borderRadius="medium" marginBlock="0 2" paddingBlock="6 0" width="100%" className="select-none">
+      <Box
+        borderRadius="4"
+        marginBlock="space-0 space-8"
+        paddingBlock="space-24 space-0"
+        width="100%"
+        className="select-none"
+      >
         <Button size={BUTTON_SIZE} icon={<FileTextIcon aria-hidden />} onClick={replaceMaltekstseksjonContent}>
           {willRemove ? 'Fjern tekst' : 'Erstatt tekst'}
         </Button>
@@ -70,12 +76,18 @@ export const UpdateMaltekstseksjon = ({ next, replaceNodes, ignore }: Props) => 
           />
         )}
 
-        <Button size={BUTTON_SIZE} icon={<XMarkIcon aria-hidden />} variant="secondary-neutral" onClick={ignore}>
+        <Button
+          data-color="neutral"
+          size={BUTTON_SIZE}
+          icon={<XMarkIcon aria-hidden />}
+          variant="secondary"
+          onClick={ignore}
+        >
           Behold eksisterende tekst
         </Button>
 
         <Explainer />
-      </BoxNew>
+      </Box>
     </HStack>
   );
 };

@@ -179,7 +179,6 @@ export const EditLogiskVedlegg = ({
           {initialValue}
         </EditableTag>
       </Tooltip>
-
       <Suggestions suggestions={suggestions} activeIndex={activeIndex} onSelect={onSelect} customValue={customValue} />
     </div>
   );

@@ -27,7 +27,7 @@ export const Saksbehandler = () => {
   const { saksbehandler } = oppgave;
 
   return (
-    <VStack gap="2" marginBlock="0 4">
+    <VStack gap="space-8" marginBlock="space-0 space-1">
       {showSelect ? (
         <SelectSaksbehandler oppgave={oppgave} />
       ) : (

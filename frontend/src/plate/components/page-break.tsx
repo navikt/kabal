@@ -2,7 +2,7 @@ import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-sca
 import { UNCHANGEABLE } from '@app/plate/plugins/element-types';
 import type { PageBreakElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button } from '@navikt/ds-react';
+import { Box, Button } from '@navikt/ds-react';
 import { ElementApi, type NodeEntry } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
@@ -52,7 +52,7 @@ export const PageBreak = (props: PlateElementProps<PageBreakElement>) => {
 
   return (
     <PlateElement<PageBreakElement> {...props} as="div" attributes={{ ...props.attributes, contentEditable: false }}>
-      <BoxNew
+      <Box
         background="default"
         position="relative"
         height={`calc(var(${EDITOR_SCALE_CSS_VAR}) + 1px)`}
@@ -65,9 +65,10 @@ export const PageBreak = (props: PlateElementProps<PageBreakElement>) => {
       >
         {disableDelete ? null : (
           <Button
+            data-color="neutral"
             onClick={onClick}
             title="Fjern sideskift"
-            variant="tertiary-neutral"
+            variant="tertiary"
             size="xsmall"
             icon={<TrashIcon aria-hidden />}
             className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 z-1 w-fit grow-0 self-center opacity-0 transition-opacity duration-200 ease-in-out focus:opacity-100 group-hover:opacity-100"
@@ -76,7 +77,7 @@ export const PageBreak = (props: PlateElementProps<PageBreakElement>) => {
           </Button>
         )}
         {children}
-      </BoxNew>
+      </Box>
     </PlateElement>
   );
 };

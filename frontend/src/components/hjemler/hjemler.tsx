@@ -37,11 +37,11 @@ const HjemmelList = ({ hjemmelList, size, loading, fallback }: HjemmelNamesProps
   hjemmelList === undefined ? (
     loading
   ) : (
-    <HStack wrap gap="2">
+    <HStack wrap gap="space-8">
       {hjemmelList.length === 0
         ? fallback
         : hjemmelList.map(({ id, name }) => (
-            <Tag variant="alt1" size={size} key={id} className="truncate">
+            <Tag data-color="meta-purple" variant="outline" size={size} key={id} className="truncate">
               {name}
             </Tag>
           ))}

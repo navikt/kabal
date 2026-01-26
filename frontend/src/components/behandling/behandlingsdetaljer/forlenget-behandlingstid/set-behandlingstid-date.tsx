@@ -24,7 +24,7 @@ export const SetBehandlingstidDate = ({ value, id, error, setError, varselTypeIs
   }
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <DatePicker
         label="Ny frist"
         onChange={(date) => {

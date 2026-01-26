@@ -21,7 +21,7 @@ export const Oppgaver = ({ data, isFetching, isLoading, error, refetch }: Oppgav
 
   if (error !== undefined) {
     return (
-      <HStack margin="4">
+      <HStack margin="space-16">
         <ErrorAlert error={error} refetch={refetch} isFetching={isFetching}>
           Feil ved henting av oppgaver
         </ErrorAlert>

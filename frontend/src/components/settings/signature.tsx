@@ -66,7 +66,7 @@ const Anonymous = ({ saksbehandlerSignature }: Pick<SignatureProps, 'saksbehandl
   }
 
   return (
-    <HStack align="end" gap="2" width="100%">
+    <HStack align="end" gap="space-8" width="100%">
       <Checkbox checked={saksbehandlerSignature.anonymous} onChange={({ target }) => setAnonymous(target.checked)}>
         Signer anonymt med «Arbeids- og velferdsdirektoratet Klageinstans»
       </Checkbox>
@@ -91,7 +91,7 @@ const SignatureValue = ({ infoKey, saksbehandlerSignature, label, navIdent }: Si
   }, [value, savedValue, navIdent, infoKey, setInfo]);
 
   return (
-    <HStack align="end" gap="2" width="100%">
+    <HStack align="end" gap="space-8" width="100%">
       <TextField
         label={label}
         value={value}
@@ -138,7 +138,7 @@ interface StatusProps {
 const Status = ({ isError, isLoading, isSuccess }: StatusProps) => {
   if (isLoading) {
     return (
-      <HStack align="center" marginBlock="0 3" gap="2">
+      <HStack align="center" marginBlock="space-0 space-12" gap="space-8">
         <Loader size="xsmall" />
         <StatusText>Lagrer ...</StatusText>
       </HStack>
@@ -147,7 +147,7 @@ const Status = ({ isError, isLoading, isSuccess }: StatusProps) => {
 
   if (isSuccess) {
     return (
-      <HStack align="center" marginBlock="0 3" gap="2">
+      <HStack align="center" marginBlock="space-0 space-12" gap="space-8">
         <CheckmarkCircleIcon aria-hidden className="text-ax-text-success" />
         <StatusText>Lagret!</StatusText>
       </HStack>
@@ -156,7 +156,7 @@ const Status = ({ isError, isLoading, isSuccess }: StatusProps) => {
 
   if (isError) {
     return (
-      <HStack align="center" marginBlock="0 3" gap="2">
+      <HStack align="center" marginBlock="space-0 space-12" gap="space-8">
         <XMarkOctagonIcon aria-hidden className="text-ax-text-error" />
         <StatusText>Ikke lagret</StatusText>
       </HStack>

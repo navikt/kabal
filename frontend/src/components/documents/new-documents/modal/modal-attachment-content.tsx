@@ -35,19 +35,19 @@ export const AttachmentModalContent = ({ document, renameAccess, removeAccess }:
   return (
     <>
       <Modal.Body className={`flex w-full gap-4 overflow-hidden ${'h-auto'}`}>
-        <VStack gap="4" minWidth="400px" flexShrink="0">
-          <HStack align="center" gap="2">
-            <Tag variant="info" size="small">
+        <VStack gap="space-16" minWidth="400px" flexShrink="0">
+          <HStack align="center" gap="space-8">
+            <Tag data-color="info" variant="outline" size="small">
               Vedlegg
             </Tag>
-            <Tag variant="info" size="small" title="Dokumenttype">
+            <Tag data-color="info" variant="outline" size="small" title="Dokumenttype">
               {icon}&nbsp;{DOCUMENT_TYPE_NAMES[document.type]}
             </Tag>
             <OpprettetTag document={document} />
           </HStack>
 
           <AccessErrorsSummary documentErrors={renameAccess === null ? [] : [renameAccess]}>
-            <HStack align="end" gap="2" wrap={false}>
+            <HStack align="end" gap="space-8" wrap={false}>
               <SetFilename
                 className="max-w-lg flex-grow"
                 tittel={document.tittel}
@@ -57,8 +57,9 @@ export const AttachmentModalContent = ({ document, renameAccess, removeAccess }:
                 disabled={renameAccess !== null}
               />
               <Button
+                data-color="neutral"
                 size="small"
-                variant="secondary-neutral"
+                variant="secondary"
                 icon={<CheckmarkIcon aria-hidden />}
                 title="Endre dokumentnavn"
                 data-testid="document-title-edit-save-button"
@@ -72,7 +73,6 @@ export const AttachmentModalContent = ({ document, renameAccess, removeAccess }:
           </AccessErrorsSummary>
         </VStack>
       </Modal.Body>
-
       <Modal.Footer className="items-center">
         <AccessErrorsSummary documentErrors={removeAccess === null ? [] : [removeAccess]}>
           <DeleteDocumentButton document={document} disabled={removeAccess !== null} />
@@ -88,9 +88,8 @@ const OpprettetTag = ({ document }: { document: IDocument }) => {
   }
 
   return (
-    <Tag variant="alt3" size="small" title="Opprettet">
+    <Tag data-color="info" variant="outline" size="small" title="Opprettet">
       <CalendarIcon aria-hidden />
-      &nbsp;
       <DocumentDate document={document} />
     </Tag>
   );

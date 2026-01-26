@@ -8,7 +8,7 @@ import {
   useSetVarselTypeIsOriginalMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
 import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
-import { Alert, BoxNew, Checkbox, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
+import { Alert, Box, Checkbox, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 
@@ -28,15 +28,8 @@ export const DoNotSendLetter = ({ varsletFrist, setBehandlingstidError }: Props)
   }
 
   return (
-    <VStack gap="4">
-      <BoxNew
-        background="info-soft"
-        borderColor="info"
-        padding="2"
-        borderRadius="medium"
-        borderWidth="1"
-        shadow="dialog"
-      >
+    <VStack gap="space-16">
+      <Box background="info-soft" borderColor="info" padding="space-8" borderRadius="4" borderWidth="1" shadow="dialog">
         <Checkbox
           onChange={({ target }) => setDoNotSendLetter({ id, doNotSendLetter: target.checked })}
           size="small"
@@ -46,7 +39,7 @@ export const DoNotSendLetter = ({ varsletFrist, setBehandlingstidError }: Props)
         >
           {UTVIDET_BEHANDLINGSTID_FIELD_NAMES[UtvidetBehandlingstidFieldName.DoNotSendLetter]}
         </Checkbox>
-      </BoxNew>
+      </Box>
       {data.doNotSendLetter ? (
         <>
           <Alert size="small" variant="info" inline>
@@ -95,7 +88,7 @@ const ReasonNoLetter = ({ value, id }: ReasonNoLetterProps) => {
   useDebounce(action, skip, tempValue, 500);
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <Textarea
         id={UtvidetBehandlingstidFieldName.ReasonNoLetter}
         minRows={3}

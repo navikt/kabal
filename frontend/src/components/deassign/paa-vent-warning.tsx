@@ -19,8 +19,8 @@ export const PaaVentWarning = ({ onConfirm, isOpen, close }: PaaVentWarningProps
         Du legger nå en oppgave som er satt på vent tilbake i felles kø. Dersom du gjør dette, vil oppgaven ikke lenger
         stå som &quot;satt på vent&quot;. Bekreft at du fortsatt ikke venter på noe.
       </Alert>
-      <HStack align="center" gap="2">
-        <Button variant="secondary-neutral" size="small" onClick={close} icon={<XMarkIcon aria-hidden />}>
+      <HStack align="center" gap="space-8">
+        <Button data-color="neutral" variant="secondary" size="small" onClick={close} icon={<XMarkIcon aria-hidden />}>
           Avbryt
         </Button>
         <Button variant="primary" size="small" onClick={onConfirm} icon={<FolderFileIcon aria-hidden />}>

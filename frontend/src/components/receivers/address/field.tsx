@@ -28,23 +28,24 @@ export const AddressField = ({
     <TextField
       size="small"
       label={
-        <HStack align="center" gap="0 1" minHeight="6" as="span">
+        <HStack align="center" gap="space-0 space-4" minHeight="6" as="span">
           {label}
           {required ? (
-            <Tag size="xsmall" variant="info">
+            <Tag data-color="info" size="xsmall" variant="outline">
               Påkrevd
             </Tag>
           ) : null}
           {isOverridden ? (
-            <Tag size="xsmall" variant="warning">
+            <Tag data-color="warning" size="xsmall" variant="outline">
               Overstyrt
             </Tag>
           ) : null}
           {isOverridden ? (
             <Tooltip content={`Tilbakestill til «${originalValue}»`}>
               <Button
+                data-color="neutral"
                 size="xsmall"
-                variant="tertiary-neutral"
+                variant="tertiary"
                 onClick={() => onChange(originalValue)}
                 icon={<ArrowUndoIcon aria-hidden />}
               />

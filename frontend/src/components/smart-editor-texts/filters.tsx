@@ -41,7 +41,7 @@ export const Filters = ({ textType, className }: Props) => {
   };
 
   return (
-    <HStack className={className} gap="2">
+    <HStack className={className} gap="space-8">
       {hasTemplateSectionFilter ? (
         <TemplateSectionSelect
           selected={templateSectionIdList ?? []}

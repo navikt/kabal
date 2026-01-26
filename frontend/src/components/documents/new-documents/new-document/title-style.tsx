@@ -8,7 +8,7 @@ interface Props {
 export const StyledDocumentTitle = ({ children }: Props) => (
   <HStack
     as="h1"
-    gap="2"
+    gap="space-8"
     overflow="hidden"
     wrap={false}
     height="100%"

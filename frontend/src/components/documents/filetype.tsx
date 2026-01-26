@@ -61,7 +61,7 @@ export const FileType = ({ varianter, className, ref }: FiletypeProps) => {
 
   return (
     <Tooltip content={`Filtype ${FILE_TYPE_NAMES[variant.filtype]} kan ikke åpnes i Kabal. Må lastes ned.`}>
-      <Tag variant="neutral-filled" size="xsmall" className={className} ref={ref}>
+      <Tag data-color="neutral" variant="strong" size="xsmall" className={className} ref={ref}>
         {FILE_TYPE_NAMES[variant.filtype]}
       </Tag>
     </Tooltip>

@@ -42,7 +42,7 @@ export const HistoryEditor = memo(
         height="max-content"
         minWidth="210mm"
         paddingInline="space-16"
-        paddingBlock="space-16 0"
+        paddingBlock="space-16 space-0"
         className="after:pb-[calc(20mm*var(--kabal-editor-scale)+100px)]"
       >
         <Button

@@ -8,17 +8,7 @@ import { Role } from '@app/types/bruker';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
-import {
-  BodyLong,
-  BoxNew,
-  Button,
-  HStack,
-  InlineMessage,
-  LocalAlert,
-  Radio,
-  RadioGroup,
-  VStack,
-} from '@navikt/ds-react';
+import { BodyLong, Box, Button, HStack, InlineMessage, LocalAlert, Radio, RadioGroup, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Direction } from './direction';
@@ -94,14 +84,14 @@ export const Popup = ({
     <VStack
       asChild
       position="absolute"
-      right="0"
-      gap="2"
-      padding="4"
+      right="space-0"
+      gap="space-8"
+      padding="space-16"
       width="280px"
       className={`z-10 ${direction === Direction.UP ? 'bottom-full' : 'top-full'}`}
       data-testid="deassign-oppgave-popup"
     >
-      <BoxNew background="default" borderRadius="medium" shadow="dialog" borderWidth="1" borderColor="neutral">
+      <Box background="default" borderRadius="4" shadow="dialog" borderWidth="1" borderColor="neutral">
         <RadioGroup value={reasonId} onChange={setReasonId} legend="Årsak for å legge tilbake" size="small">
           <Radio value={FradelReason.FEIL_HJEMMEL}>{FradelReasonText[FradelReason.FEIL_HJEMMEL]}</Radio>
           <Radio value={FradelReason.MANGLER_KOMPETANSE}>{FradelReasonText[FradelReason.MANGLER_KOMPETANSE]}</Radio>
@@ -150,9 +140,10 @@ export const Popup = ({
           </InlineMessage>
         ) : null}
 
-        <HStack justify="space-between" gap="2">
+        <HStack justify="space-between" gap="space-8">
           <Button
-            variant="secondary-neutral"
+            data-color="neutral"
+            variant="secondary"
             size="small"
             loading={isLoading}
             onClick={close}
@@ -172,7 +163,7 @@ export const Popup = ({
             Legg tilbake
           </Button>
         </HStack>
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };

@@ -92,8 +92,7 @@ export const WriteMessage = () => {
         label="Skriv en melding"
         hideLabel
       />
-
-      <HStack marginBlock="2 0" justify="space-between" align="center" gap="2">
+      <HStack marginBlock="space-8 space-0" justify="space-between" align="center" gap="space-8">
         <Tooltip content={getTooltip(isSaksbehandler, hasSaksbehandler)} describesChild>
           <span>
             <Checkbox
@@ -108,9 +107,10 @@ export const WriteMessage = () => {
         </Tooltip>
 
         <Button
+          data-color="neutral"
           type="button"
           size="small"
-          variant="secondary-neutral"
+          variant="secondary"
           onClick={post}
           loading={messageIsSending}
           icon={<PaperplaneIcon aria-hidden />}

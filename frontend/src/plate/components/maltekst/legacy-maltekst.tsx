@@ -116,9 +116,10 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
             <AddNewParagraphs editor={editor} element={element} />
             <Tooltip content="Oppdater til siste versjon" delay={0} placement="bottom">
               <Button
+                data-color="neutral"
                 icon={<ArrowCirclepathIcon aria-hidden />}
                 onClick={refetch}
-                variant="tertiary-neutral"
+                variant="tertiary"
                 size="xsmall"
                 contentEditable={false}
                 loading={isLoading || isFetching}

@@ -37,7 +37,7 @@ export const DraftTextActions = ({
         currentMaltekstseksjonId={maltekstseksjonId}
       />
 
-      <HStack gap="2" justify="end" marginInline="auto 0">
+      <HStack gap="space-8" justify="end" marginInline="auto space-0">
         <Button
           variant="primary"
           size="small"

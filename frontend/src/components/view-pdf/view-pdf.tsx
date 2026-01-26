@@ -12,18 +12,7 @@ import { useShownDocuments } from '@app/hooks/use-shown-documents';
 import { Skjerming, VariantFormat } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
-import {
-  Alert,
-  BoxNew,
-  Button,
-  type ButtonProps,
-  HStack,
-  Loader,
-  Switch,
-  Tag,
-  Tooltip,
-  VStack,
-} from '@navikt/ds-react';
+import { Alert, Box, Button, type ButtonProps, HStack, Loader, Switch, Tag, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useMergedDocument } from './use-merged-document';
@@ -151,7 +140,7 @@ export const ViewPDF = () => {
           showRedacted={showRedacted}
           setShowRedacted={setShowRedacted}
         />
-        <h1 className="m-0 truncate border-ax-border-neutral border-l py-1 pl-1 font-bold text-base">
+        <h1 className="m-0 truncate border-ax-border-neutral border-l py-1 pl-1 font-ax-bold text-base">
           {title ?? mergedDocument?.title ?? 'Ukjent dokument'}
         </h1>
         <Button
@@ -189,7 +178,7 @@ interface VariantProps extends RedactedSwitchProps {
 
 const Variant = ({ showsPol, showsFeil, ...props }: VariantProps) => {
   return (
-    <HStack gap="1" wrap={false}>
+    <HStack gap="space-4" wrap={false}>
       <RedactedSwitch {...props} />
 
       {showsPol ? <PolTag /> : null}
@@ -213,7 +202,7 @@ const RedactedSwitch = ({
     return (
       <Tooltip content="Du har ikke tilgang til å se usladdet versjon" placement="top">
         <div className={LEFT_DIVIDER_CLASSES}>
-          <Tag variant="alt1-filled" size="small">
+          <Tag data-color="meta-purple" variant="strong" size="small">
             Sladdet
           </Tag>
         </div>
@@ -251,8 +240,8 @@ const Container = ({ minWidth, children }: ContainerProps) => (
     justify="center"
     data-testid="show-document"
   >
-    <BoxNew as="section" background="default" shadow="dialog" borderRadius="medium" position="relative">
+    <Box as="section" background="default" shadow="dialog" borderRadius="4" position="relative">
       {children}
-    </BoxNew>
+    </Box>
   </VStack>
 );

@@ -31,7 +31,15 @@ export const GroupedByBehandlingNotifications = ({ notifications }: GroupedNotif
 
       {groupedAndSorted.map(({ behandling, notifications }) => (
         <GroupContainer key={behandling.id} highlight={behandling.id === oppgaveId}>
-          <HStack asChild gap="1" align="center" justify="start" paddingInline="2" wrap={false} marginBlock="0 2">
+          <HStack
+            asChild
+            gap="space-4"
+            align="center"
+            justify="start"
+            paddingInline="space-8"
+            wrap={false}
+            marginBlock="space-0 space-8"
+          >
             <Heading level="1" size="xsmall">
               <Type typeId={behandling.typeId} />
               <Ytelse ytelseId={behandling.ytelseId} />

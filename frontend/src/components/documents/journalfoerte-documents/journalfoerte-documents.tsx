@@ -149,8 +149,8 @@ export const JournalfoerteDocuments = () => {
       <VStack
         as="section"
         aria-labelledby="journalfoerte-dokumenter-heading"
-        paddingInline="4"
-        paddingBlock="0 2"
+        paddingInline="space-16"
+        paddingBlock="space-0 space-8"
         flexGrow="1"
         justify="space-between"
         overflow="hidden"

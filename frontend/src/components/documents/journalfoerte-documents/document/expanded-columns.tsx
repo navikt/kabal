@@ -24,7 +24,8 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
     <>
       {columns.TEMA ? (
         <Tag
-          variant="info"
+          data-color="info"
+          variant="outline"
           size="small"
           title={temaName}
           style={{ gridArea: Fields.Tema }}
@@ -40,15 +41,12 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
           />
         </Tag>
       ) : null}
-
       {columns.DATO_OPPRETTET ? (
         <DocumentDate date={document.datoOpprettet} style={{ gridArea: Fields.DatoOpprettet }} />
       ) : null}
-
       {columns.DATO_SORTERING ? (
         <DocumentDate date={document.datoSortering} style={{ gridArea: Fields.DatoSortering }} />
       ) : null}
-
       {columns.AVSENDER_MOTTAKER ? (
         <div style={{ gridArea: Fields.AvsenderMottaker }} className="group relative select-none truncate">
           <span>{formatAvsenderMottaker(avsenderMottaker)}</span>
@@ -61,11 +59,8 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
           />
         </div>
       ) : null}
-
       {columns.SAKSNUMMER ? <Saksnummer saksnummer={sak?.fagsakId} /> : null}
-
       {columns.TYPE ? <JournalposttypeTag type={journalposttype} /> : null}
-
       <Tooltip placement="left" content={showMetadata ? 'Skjul informasjon' : 'Vis informasjon'} keys={['I']}>
         <Button
           variant={showMetadata ? 'primary-neutral' : 'tertiary-neutral'}
@@ -94,13 +89,13 @@ const Saksnummer = ({ saksnummer }: SaksnummerProps) => {
 
   return (
     <Tag
-      variant="neutral"
+      data-color="neutral"
+      variant="outline"
       size="small"
       style={{ gridArea: Fields.Saksnummer }}
       className="group relative select-none justify-start whitespace-nowrap pr-6"
     >
       <span className="truncate">{saksnummer}</span>
-
       <CopyButton
         copyText={saksnummer}
         title="Kopier saksnummer"

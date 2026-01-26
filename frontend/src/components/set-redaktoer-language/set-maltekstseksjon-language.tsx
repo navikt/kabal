@@ -9,9 +9,9 @@ export const SetMaltekstseksjonLanguage = () => {
 
   return (
     <ToggleGroup
+      data-color="neutral"
       value={language}
       size="small"
-      variant="neutral"
       onChange={(lang) => {
         if (isLanguage(lang)) {
           navigate({ lang });

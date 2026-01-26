@@ -25,7 +25,7 @@ export const Gosys = ({ oppgavebehandling }: Props) => {
 
   return (
     <BehandlingSection label="Oppgave fra Gosys">
-      <VStack gap="2">
+      <VStack gap="space-8">
         <SelectGosysOppgaveModal hasGosysOppgave={hasGosysOppgave} />
 
         <Warning hasGosysOppgave={hasGosysOppgave} status={gosysOppgave?.status} />

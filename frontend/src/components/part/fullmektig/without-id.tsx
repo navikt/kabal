@@ -5,7 +5,7 @@ import { toast } from '@app/components/toast/store';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { type IFullmektig, Utsendingskanal } from '@app/types/oppgave-common';
-import { BoxNew, type BoxNewProps, Button, ErrorSummary, HStack, Tag, TextField, VStack } from '@navikt/ds-react';
+import { Box, type BoxProps, Button, ErrorSummary, HStack, Tag, TextField, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext, useState } from 'react';
 
@@ -153,15 +153,15 @@ export const WithoutId = ({ part, onClose }: Props) => {
   };
 
   return (
-    <BoxNew
+    <Box
       background={getBackgroundColor(isSaved, isError)}
-      padding="4"
+      padding="space-16"
       borderWidth="1"
       borderColor={getBorderColor(isSaved, isError)}
-      borderRadius="medium"
+      borderRadius="4"
     >
-      <VStack onKeyDown={onKeyDown} gap="4">
-        <Button size="small" variant="secondary-neutral" onClick={reset} style={{ width: 'min-content' }}>
+      <VStack onKeyDown={onKeyDown} gap="space-16">
+        <Button data-color="neutral" size="small" variant="secondary" onClick={reset} style={{ width: 'min-content' }}>
           Nullstill
         </Button>
         <TextField
@@ -223,20 +223,20 @@ export const WithoutId = ({ part, onClose }: Props) => {
           </ErrorSummary>
         ) : null}
 
-        <HStack gap="2">
+        <HStack gap="space-8">
           <Button size="small" variant="primary" onClick={save} loading={isLoading}>
             Lagre
           </Button>
-          <Button size="small" variant="secondary-neutral" onClick={onClose} loading={isLoading}>
+          <Button data-color="neutral" size="small" variant="secondary" onClick={onClose} loading={isLoading}>
             Avbryt
           </Button>
         </HStack>
       </VStack>
-    </BoxNew>
+    </Box>
   );
 };
 
-const getBackgroundColor = (isSaved: boolean, isError: boolean): BoxNewProps['background'] => {
+const getBackgroundColor = (isSaved: boolean, isError: boolean): BoxProps['background'] => {
   if (isError) {
     return 'danger-soft';
   }
@@ -244,7 +244,7 @@ const getBackgroundColor = (isSaved: boolean, isError: boolean): BoxNewProps['ba
   return isSaved ? 'success-soft' : 'accent-soft';
 };
 
-const getBorderColor = (isSaved: boolean, isError: boolean): BoxNewProps['borderColor'] => {
+const getBorderColor = (isSaved: boolean, isError: boolean): BoxProps['borderColor'] => {
   if (isError) {
     return 'danger';
   }
@@ -253,9 +253,9 @@ const getBorderColor = (isSaved: boolean, isError: boolean): BoxNewProps['border
 };
 
 const RequiredTag = ({ children }: { children: string }) => (
-  <HStack gap="2">
+  <HStack gap="space-8">
     {children}
-    <Tag variant="info" size="xsmall">
+    <Tag data-color="info" variant="outline" size="xsmall">
       Påkrevd
     </Tag>
   </HStack>

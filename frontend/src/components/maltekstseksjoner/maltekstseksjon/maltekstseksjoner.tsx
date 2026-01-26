@@ -10,7 +10,7 @@ import { useGetMaltekstseksjonerQuery } from '@app/redux-api/maltekstseksjoner/q
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { SortOrder } from '@app/types/sort';
 import { PuzzlePieceIcon } from '@navikt/aksel-icons';
-import { BoxNew, HGrid, HStack, Search, VStack } from '@navikt/ds-react';
+import { Box, HGrid, HStack, Search, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 
@@ -37,17 +37,15 @@ export const Maltekstseksjoner = () => {
         gridTemplateRows: 'min-content min-content min-content 1fr',
         gridTemplateAreas: '"header content" "filters content" "search content" "list content"',
       }}
-      gap="1 2"
+      gap="space-4 space-8"
       height="100%"
       overflowY="hidden"
     >
-      <HStack as="header" justify="start" align="center" gap="4" className="[grid-area:header]">
+      <HStack as="header" justify="start" align="center" gap="space-16" className="[grid-area:header]">
         <CreateMaltekstseksjon query={query} />
         <SetMaltekstseksjonLanguage />
       </HStack>
-
       <Filters />
-
       <Search
         variant="simple"
         size="small"
@@ -84,9 +82,9 @@ export const Maltekstseksjoner = () => {
             minWidth="1330px"
             width="fit-content"
           >
-            <BoxNew borderRadius="medium" shadow="dialog" marginBlock="1" className="text-ax-text-neutral-decoration">
+            <Box borderRadius="4" shadow="dialog" marginBlock="space-4" className="text-ax-text-neutral-decoration">
               <PuzzlePieceIcon aria-hidden fontSize={400} />
-            </BoxNew>
+            </Box>
           </VStack>
         )}
       </DragAndDropContextElement>

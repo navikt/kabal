@@ -5,7 +5,7 @@ import { useCanFeilregistrere } from '@app/components/feilregistrering/use-can-f
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { FileXMarkIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, VStack } from '@navikt/ds-react';
+import { Box, Button, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { Context } from './context';
 import type { Children, OppgaveId, Position, Variant } from './types';
@@ -81,13 +81,13 @@ const FeilregistrerPanel = ({ oppgaveId, position, align }: OppgaveId & Position
     <VStack
       asChild
       className={`z-1 ${isOver ? 'bottom-full' : 'top-full'} ${isLeft ? 'left-0' : 'right-0'}`}
-      gap="4 0"
+      gap="space-16 space-0"
       minWidth="400px"
       position="absolute"
     >
-      <BoxNew background="default" padding="4" shadow="dialog" borderRadius="medium">
+      <Box background="default" padding="space-16" shadow="dialog" borderRadius="4">
         {isConfirmed ? <Register oppgaveId={oppgaveId} /> : <Confirm setIsConfirmed={() => setIsConfirmed(true)} />}
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };

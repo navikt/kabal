@@ -24,7 +24,7 @@ export const Filters = () => {
   };
 
   return (
-    <HStack gap="0 2" className="[grid-area:filters]">
+    <HStack gap="space-0 space-8" className="[grid-area:filters]">
       <TemplateSectionSelect
         selected={templateSectionIdList ?? []}
         onChange={(value) => setFilter('templateSectionIdList', value)}

@@ -16,7 +16,7 @@ export const RoleItem = ({ role, variant }: Props) => {
         as="button"
         type="button"
         onClick={() => navigator.clipboard.writeText(formattedRole)}
-        gap="2"
+        gap="space-8"
         align="center"
         className="cursor-pointer"
       >

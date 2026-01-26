@@ -12,7 +12,7 @@ export const PanelSwitches = () => {
   const { value: documentsEnabled = true, setValue: setDocumentsEnabled } = useDocumentsEnabled();
 
   return (
-    <HStack gap="0 4" data-testid="behandling-panel-switches" align="center">
+    <HStack gap="space-0 space-16" data-testid="behandling-panel-switches" align="center">
       <TogglePanelButton
         checked={documentsEnabled}
         togglePanel={() => {

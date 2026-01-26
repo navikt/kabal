@@ -9,7 +9,7 @@ import {
 } from '@app/plate/plugins/search-replace/search-replace';
 import { useMyPlateEditorState } from '@app/plate/types';
 import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
-import { BodyShort, BoxNew, Button, HStack, TextField, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, TextField, VStack } from '@navikt/ds-react';
 import { TextCaseTitle, TextChangeCase } from '@styled-icons/fluentui-system-regular';
 import { useEditorPlugin, usePluginOption } from 'platejs/react';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -112,12 +112,12 @@ export const SearchReplaceDialog = () => {
 
   return (
     <VStack asChild className="right-0 bottom-auto z-30 gap-2 opacity-90" position="absolute">
-      <BoxNew
-        marginBlock="1 0"
+      <Box
+        marginBlock="space-1 space-0"
         background="raised"
-        borderRadius="large"
+        borderRadius="12"
         shadow="dialog"
-        padding="2"
+        padding="space-8"
         width="320px"
         tabIndex={-1}
         onKeyDown={(e) => {
@@ -128,7 +128,7 @@ export const SearchReplaceDialog = () => {
           }
         }}
       >
-        <HStack gap="1">
+        <HStack gap="space-4">
           <TextField
             autoFocus
             size="small"
@@ -164,7 +164,7 @@ export const SearchReplaceDialog = () => {
           />
         </HStack>
 
-        <HStack gap="1">
+        <HStack gap="space-4">
           <TextField
             className="grow"
             size="small"
@@ -196,7 +196,7 @@ export const SearchReplaceDialog = () => {
         </BodyShort>
 
         <HStack
-          gap="2"
+          gap="space-8"
           justify="end"
           onKeyDown={(e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
@@ -208,32 +208,34 @@ export const SearchReplaceDialog = () => {
           }}
         >
           <Button
+            data-color="neutral"
             title="Finn neste"
             size="xsmall"
             onClick={findNext}
             disabled={disabled}
             icon={<ArrowDownIcon />}
-            variant="tertiary-neutral"
+            variant="tertiary"
           />
 
           <Button
+            data-color="neutral"
             title="Finn forrige"
             size="xsmall"
             onClick={findPrevious}
             disabled={disabled}
-            variant="tertiary-neutral"
+            variant="tertiary"
             icon={<ArrowUpIcon />}
           />
 
-          <Button disabled={disabled} size="xsmall" variant="secondary-neutral" onClick={replaceNext}>
+          <Button data-color="neutral" disabled={disabled} size="xsmall" variant="secondary" onClick={replaceNext}>
             Erstatt neste
           </Button>
 
-          <Button disabled={disabled} size="xsmall" variant="secondary-neutral" onClick={replaceAll}>
+          <Button data-color="neutral" disabled={disabled} size="xsmall" variant="secondary" onClick={replaceAll}>
             Erstatt alle
           </Button>
         </HStack>
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };

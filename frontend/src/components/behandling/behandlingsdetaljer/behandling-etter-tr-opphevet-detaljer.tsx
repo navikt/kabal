@@ -52,7 +52,7 @@ export const BehandlingEtterTrOpphevetDetaljer = ({ oppgavebehandling }: Props) 
         <Heading level="1" size="medium" spacing>
           Behandling
         </Heading>
-        <VStack gap="4">
+        <VStack gap="space-16">
           <Klager
             klager={oppgavebehandling.klager}
             onChange={(klager) => updateKlager({ klager, oppgaveId: oppgavebehandling.id })}

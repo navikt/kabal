@@ -75,9 +75,8 @@ export const NewDocument = memo(
     return (
       <HGrid
         as="article"
-        gap="0 2"
+        gap="space-0 space-8"
         align="center"
-        paddingInline="1-alt 0"
         columns={getFieldSizes(EXPANDED_NEW_DOCUMENT_FIELDS)}
         data-documentname={document.tittel}
         data-documentid={document.id}
@@ -89,7 +88,7 @@ export const NewDocument = memo(
           clearDragState();
         }}
         draggable={isDraggable}
-        className={DOCUMENT_CLASSES}
+        className={`${DOCUMENT_CLASSES} pl-1.5`}
         style={{
           gridTemplateAreas: `"${getFieldNames(EXPANDED_NEW_DOCUMENT_FIELDS)}"`,
         }}

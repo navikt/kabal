@@ -135,11 +135,10 @@ interface StlyedNewAttachmentProps extends HTMLAttributes<HTMLDivElement> {
 export const StyledNewAttachment = ({ children, className, ...props }: StlyedNewAttachmentProps) => (
   <HGrid
     as="article"
-    gap="0 2"
+    gap="space-0 space-8"
     align="center"
-    paddingInline="1-alt 0"
     columns={getFieldSizes(EXPANDED_NEW_ATTACHMENT_FIELDS)}
-    className={merge(DOCUMENT_CLASSES, className)}
+    className={merge(DOCUMENT_CLASSES, className, 'pl-1.5')}
     style={{
       gridTemplateAreas: `"${getFieldNames(EXPANDED_NEW_ATTACHMENT_FIELDS)}"`,
     }}

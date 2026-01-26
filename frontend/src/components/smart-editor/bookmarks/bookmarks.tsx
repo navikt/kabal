@@ -38,8 +38,9 @@ export const Bookmarks = ({ editorId }: Props) => {
         return (
           <HStack as="li" key={key} wrap={false} className="group/bookmark">
             <Button
+              data-color="neutral"
               size="xsmall"
-              variant="tertiary-neutral"
+              variant="tertiary"
               onClick={() => onClick(node)}
               icon={<BookmarkFillIcon aria-hidden className={className} />}
               className="grow justify-start overflow-hidden"
@@ -47,8 +48,9 @@ export const Bookmarks = ({ editorId }: Props) => {
               <span className="truncate">{content}</span>
             </Button>
             <Button
+              data-color="neutral"
               size="xsmall"
-              variant="tertiary-neutral"
+              variant="tertiary"
               onClick={() => {
                 pushEvent('remove-bookmark', 'smart-editor');
                 editor.tf.unsetNodes<FormattedText>([BookmarkPlugin.key, key], {

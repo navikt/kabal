@@ -51,14 +51,14 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
 
   if (isLoading) {
     return (
-      <HStack align="center" gap="1">
+      <HStack align="center" gap="space-4">
         <BodyShort size="small">
           <b>Foreslått enhet som skal motta oppgaven:</b>{' '}
-          <Tag size="small" variant="alt1">
+          <Tag data-color="meta-purple" size="small" variant="outline">
             Laster...
           </Tag>
         </BodyShort>
-        <Button size="small" variant="tertiary-neutral" loading>
+        <Button data-color="neutral" size="small" variant="tertiary" loading>
           Valgt
         </Button>
       </HStack>
@@ -66,19 +66,24 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
   }
 
   return (
-    <HStack align="center" gap="1">
+    <HStack align="center" gap="space-4">
       <BodyShort size="small">
         <b>Foreslått enhet som skal motta oppgaven:</b>{' '}
-        <Tag size="small" variant="alt1">
+        <Tag data-color="meta-purple" size="small" variant="outline">
           {suggestedEnhetsnr} - {suggestedEnhetName}
         </Tag>
       </BodyShort>
       {suggestedEnhetsnr === selectedEnhet ? (
-        <Button size="small" variant="tertiary-neutral" disabled icon={<CheckmarkCircleFillIconColored />}>
+        <Button data-color="neutral" size="small" variant="tertiary" disabled icon={<CheckmarkCircleFillIconColored />}>
           Valgt
         </Button>
       ) : (
-        <Button size="small" variant="tertiary-neutral" onClick={() => setSelectedEnhet(suggestedEnhetsnr)}>
+        <Button
+          data-color="neutral"
+          size="small"
+          variant="tertiary"
+          onClick={() => setSelectedEnhet(suggestedEnhetsnr)}
+        >
           Velg
         </Button>
       )}

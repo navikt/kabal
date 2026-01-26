@@ -15,7 +15,7 @@ JournalposttypeTag.displayName = 'JournalposttypeTag';
 const getJournalposttype = (type: Journalposttype | null) => {
   if (type === null) {
     return (
-      <Tag size="small" variant="error" title="Journalposttype mangler">
+      <Tag data-color="danger" size="small" variant="outline" title="Journalposttype mangler">
         Ingen
       </Tag>
     );
@@ -24,19 +24,19 @@ const getJournalposttype = (type: Journalposttype | null) => {
   switch (type) {
     case Journalposttype.INNGAAENDE:
       return (
-        <Tag className="w-6" size="small" variant="alt2" title="Inngående">
+        <Tag data-color="meta-lime" className="w-6" size="small" variant="outline" title="Inngående">
           I
         </Tag>
       );
     case Journalposttype.UTGAAENDE:
       return (
-        <Tag className="w-6" size="small" variant="alt3" title="Utgående">
+        <Tag data-color="info" className="w-6" size="small" variant="outline" title="Utgående">
           U
         </Tag>
       );
     case Journalposttype.NOTAT:
       return (
-        <Tag className="w-6" size="small" variant="alt1" title="Notat">
+        <Tag data-color="meta-purple" className="w-6" size="small" variant="outline" title="Notat">
           N
         </Tag>
       );

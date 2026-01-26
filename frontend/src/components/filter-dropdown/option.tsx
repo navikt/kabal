@@ -36,7 +36,7 @@ export const Option = <T extends string>({
       title={children}
       value={filterId}
     >
-      <HStack align="center" gap="0 1" wrap={false}>
+      <HStack align="center" gap="space-0 space-4" wrap={false}>
         <span title={children} className="truncate">
           {children}
         </span>

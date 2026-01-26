@@ -82,7 +82,7 @@ export const SaksbehandlerSettings = () => {
               Kommentarer og bokmerker
             </Heading>
 
-            <VStack gap="3">
+            <VStack gap="space-12">
               <ToggleGroup
                 size="small"
                 defaultValue={Placement.RELATIVE}
