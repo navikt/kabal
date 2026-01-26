@@ -10,7 +10,7 @@ import { isoDateTimeToPretty } from '@app/domain/date';
 import { useYtelseName } from '@app/hooks/use-kodeverk-value';
 import { usePrevious } from '@app/hooks/use-previous';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, Detail, HStack, Skeleton, Switch, Table, Tooltip } from '@navikt/ds-react';
+import { Box, Button, Detail, HStack, Skeleton, Switch, Table, Tooltip } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -71,7 +71,7 @@ export const Row = ({ modal, ...setting }: Props) => {
   }, [isActive, wasActive]);
 
   return (
-    <BoxNew
+    <Box
       asChild
       style={{
         ['--hover-background' as string]: hasChanges ? 'var(--ax-bg-warning-moderate)' : undefined,
@@ -106,7 +106,7 @@ export const Row = ({ modal, ...setting }: Props) => {
         </Table.DataCell>
 
         <Table.DataCell>
-          <HStack align="center" gap="1" width="max-content" wrap={false}>
+          <HStack align="center" gap="space-4" width="max-content" wrap={false}>
             <TimeInput
               value={localBehandlingstidUnits}
               onChange={setLocalBehandlingstidUnits}
@@ -132,7 +132,7 @@ export const Row = ({ modal, ...setting }: Props) => {
         </Table.DataCell>
 
         <Table.DataCell>
-          <HStack align="center" gap="0 1" min-width={`${3 * 32 + 2 * 4}px`} wrap={false}>
+          <HStack align="center" gap="space-0 space-4" min-width={`${3 * 32 + 2 * 4}px`} wrap={false}>
             <SvarbrevSettingHistory id={setting.id} isOpen={showHistory} close={() => navigate('/svarbrev')} />
 
             {hasChanges ? (
@@ -140,9 +140,10 @@ export const Row = ({ modal, ...setting }: Props) => {
                 <Submit id={setting.id} />
                 <Tooltip content="Angre endringer" placement="top">
                   <Button
+                    data-color="neutral"
                     onClick={() => cancel()}
                     size="small"
-                    variant="secondary-neutral"
+                    variant="secondary"
                     icon={<ArrowUndoIcon aria-hidden />}
                   />
                 </Tooltip>
@@ -168,6 +169,6 @@ export const Row = ({ modal, ...setting }: Props) => {
           </HStack>
         </Table.DataCell>
       </Table.Row>
-    </BoxNew>
+    </Box>
   );
 };

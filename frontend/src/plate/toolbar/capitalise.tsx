@@ -9,7 +9,7 @@ export const Capitalise = () => {
 
   return (
     <section aria-labelledby={id}>
-      <HStack asChild align="center" gap="1" wrap={false}>
+      <HStack asChild align="center" gap="space-4" wrap={false}>
         <Heading level="2" size="small" spacing id={id}>
           <span>Automatisk stor forbokstav</span>
 
@@ -27,7 +27,7 @@ export const Capitalise = () => {
 
             <BodyShort size="small">
               <span>Bruk </span>
-              <Tag variant="neutral" size="xsmall">
+              <Tag data-color="neutral" variant="outline" size="xsmall">
                 backspace
               </Tag>
               <span> for å gjøre om til liten bokstav igjen.</span>
@@ -35,7 +35,6 @@ export const Capitalise = () => {
           </HelpText>
         </Heading>
       </HStack>
-
       <ToggleGroup
         size="small"
         defaultValue="false"

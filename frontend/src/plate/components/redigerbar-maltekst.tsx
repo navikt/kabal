@@ -53,9 +53,10 @@ export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstEl
           <SectionToolbar contentEditable={false}>
             <Tooltip content="Tilbakestill tekst" delay={0}>
               <Button
+                data-color="neutral"
                 icon={<ArrowCirclepathReverseIcon aria-hidden />}
                 onClick={reload}
-                variant="tertiary-neutral"
+                variant="tertiary"
                 size="xsmall"
                 contentEditable={false}
                 loading={isFetching}

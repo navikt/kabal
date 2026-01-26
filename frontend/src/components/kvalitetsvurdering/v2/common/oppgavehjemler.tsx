@@ -5,7 +5,7 @@ import type {
   IKvalitetsvurderingBooleans,
   IKvalitetsvurderingSaksdataHjemler,
 } from '@app/types/kaka-kvalitetsvurdering/v2';
-import { BodyShort, BoxNew, Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { useEffect } from 'react';
 import { useKvalitetsvurderingV2 } from './use-kvalitetsvurdering-v2';
 import { useValidationError } from './use-validation-error';
@@ -70,7 +70,7 @@ export const Oppgavehjemler = ({ field, parentKey }: Props) => {
   const value = kvalitetsvurdering[field];
 
   return (
-    <BoxNew marginBlock="0 4" marginInline="8 0">
+    <Box marginBlock="space-0 space-1" marginInline="space-32 space-0">
       <CheckboxGroup
         legend="Hjemler"
         onChange={onChange}
@@ -83,7 +83,7 @@ export const Oppgavehjemler = ({ field, parentKey }: Props) => {
       >
         <HjemmelCheckboxes hjemmelIdList={hjemler} />
       </CheckboxGroup>
-    </BoxNew>
+    </Box>
   );
 };
 

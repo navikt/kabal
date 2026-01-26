@@ -60,7 +60,7 @@ export const Abbreviation = ({
 
   return (
     <div>
-      <HGrid columns="250px 500px min-content min-content" gap="2" align="start">
+      <HGrid columns="250px 500px min-content min-content" gap="space-8" align="start">
         <TextField
           size="small"
           label="Kortform"
@@ -100,8 +100,9 @@ export const Abbreviation = ({
 
         {onDelete === undefined ? null : (
           <Button
+            data-color="danger"
             size="small"
-            variant="danger"
+            variant="primary"
             icon={<TrashIcon aria-hidden />}
             onClick={onDelete}
             loading={isDeleting}
@@ -111,7 +112,6 @@ export const Abbreviation = ({
           />
         )}
       </HGrid>
-
       {error === undefined ? null : (
         <ErrorMessage size="small" className="[grid-area:error]" spacing>
           {error}

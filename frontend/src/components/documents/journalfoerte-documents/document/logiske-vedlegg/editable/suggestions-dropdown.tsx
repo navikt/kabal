@@ -1,5 +1,5 @@
 import { merge } from '@app/functions/classes';
-import { BoxNew, Button, type ButtonProps } from '@navikt/ds-react';
+import { Box, Button, type ButtonProps } from '@navikt/ds-react';
 import { type HTMLAttributes, useEffect, useRef } from 'react';
 
 interface BaseProps {
@@ -57,22 +57,22 @@ const Suggestion = ({ suggestion, isActive, onSelect }: SuggestionProps) => {
 };
 
 const Container = ({ children }: { children: React.ReactNode }) => (
-  <BoxNew
+  <Box
     as="ul"
     position="absolute"
-    right="0"
-    left="0"
-    margin="0"
-    padding="0"
+    right="space-0"
+    left="space-0"
+    margin="space-0"
+    padding="space-0"
     overflowY="auto"
     overflowX="hidden"
-    borderRadius="medium"
+    borderRadius="4"
     background="default"
     shadow="dialog"
     className="top-full z-1 max-h-50 w-fit max-w-100 list-none"
   >
     {children}
-  </BoxNew>
+  </Box>
 );
 
 const Option = ({ children, ...rest }: Omit<ButtonProps, 'className'>) => (

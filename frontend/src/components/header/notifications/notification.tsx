@@ -26,18 +26,7 @@ import {
   EnvelopeOpenIcon,
   KeyHorizontalIcon,
 } from '@navikt/aksel-icons';
-import {
-  BodyLong,
-  BoxNew,
-  type BoxNewProps,
-  Button,
-  Heading,
-  HGrid,
-  HStack,
-  Label,
-  Tooltip,
-  VStack,
-} from '@navikt/ds-react';
+import { BodyLong, Box, type BoxProps, Button, Heading, HGrid, HStack, Label, Tooltip, VStack } from '@navikt/ds-react';
 import type { JSX } from 'react';
 import { useLocation } from 'react-router';
 
@@ -54,28 +43,28 @@ const Container = ({ title, icon, notification, children }: Props) => {
   const theme = useAppTheme();
 
   return (
-    <BoxNew
+    <Box
       as="li"
-      borderRadius="medium"
+      borderRadius="4"
       borderWidth="1 1 1 4"
       borderColor={borderColor}
       background="neutral-soft"
       className={`${read ? 'opacity-60 hover:opacity-100' : 'opacity-100'} starting:opacity-0 transition-[opacity,background-color] duration-200 focus-within:opacity-100 hover:bg-ax-bg-default`}
     >
-      <HStack wrap={false} gap="1" align="start" width="100%" paddingBlock="0 2">
-        <BoxNew
+      <HStack wrap={false} gap="space-4" align="start" width="100%" paddingBlock="space-0 space-8">
+        <Box
           asChild
-          borderRadius="0 0 medium 0"
-          paddingInline="0 1"
+          borderRadius="0 0 8 0"
+          paddingInline="space-0 space-4"
           background={background}
           className={theme === AppTheme.LIGHT ? 'text-ax-text-neutral-contrast' : 'text-ax-text-neutral'}
         >
-          <HStack as="span" align="center" gap="1" wrap={false} className="whitespace-nowrap">
+          <HStack as="span" align="center" gap="space-4" wrap={false} className="whitespace-nowrap">
             {icon}
             {title}
             {read ? null : <UnreadMarker color={`var(--${iconColor})`} />}
           </HStack>
-        </BoxNew>
+        </Box>
 
         <DateTime
           dateTime={createdAt}
@@ -84,11 +73,10 @@ const Container = ({ title, icon, notification, children }: Props) => {
           className="ml-auto whitespace-nowrap pr-1 text-ax-small italic"
         />
       </HStack>
-
-      <VStack gap="2" paddingInline="2" paddingBlock="0 2" flexGrow="1">
+      <VStack gap="space-8" paddingInline="space-8" paddingBlock="space-0 space-8" flexGrow="1">
         {children}
 
-        <HGrid gap="1" className="auto-cols-[1fr] grid-flow-col" flexGrow="1">
+        <HGrid gap="space-4" className="auto-cols-[1fr] grid-flow-col" flexGrow="1">
           {notification.type !== NotificationType.LOST_ACCESS && getHasBehandling(notification) ? (
             <Open {...notification.behandling} />
           ) : null}
@@ -96,7 +84,7 @@ const Container = ({ title, icon, notification, children }: Props) => {
           <MarkAsReadButton id={id} isRead={read} />
         </HGrid>
       </VStack>
-    </BoxNew>
+    </Box>
   );
 };
 
@@ -123,8 +111,8 @@ const Open = ({ id, ytelseId }: BehandlingInfo) => {
 };
 
 interface VariantData {
-  borderColor: BoxNewProps['borderColor'];
-  background: BoxNewProps['background'];
+  borderColor: BoxProps['borderColor'];
+  background: BoxProps['background'];
   iconColor: `text-ax-text-${string}`;
 }
 
@@ -162,11 +150,11 @@ const Message = ({ notification, children }: NotificationEntryProps<MessageNotif
 
     <Actor {...notification.actor} />
 
-    <BoxNew asChild borderWidth="0 0 0 2" borderColor="neutral" paddingInline="2 0">
+    <Box asChild borderWidth="0 0 0 2" borderColor="neutral" paddingInline="space-8 space-0">
       <BodyLong size="small" className="wrap-break-word whitespace-pre-line italic">
         {notification.message.content}
       </BodyLong>
-    </BoxNew>
+    </Box>
   </Container>
 );
 
@@ -178,11 +166,11 @@ const LostAccess = ({ notification, children }: NotificationEntryProps<LostAcces
   >
     {children}
 
-    <BoxNew asChild borderWidth="0 0 0 2" borderColor="neutral" paddingInline="2 0">
+    <Box asChild borderWidth="0 0 0 2" borderColor="neutral" paddingInline="space-8 space-0">
       <BodyLong size="small" className="wrap-break-word whitespace-pre-line italic">
         {notification.message}
       </BodyLong>
-    </BoxNew>
+    </Box>
   </Container>
 );
 
@@ -194,11 +182,11 @@ const GainedAccess = ({ notification, children }: NotificationEntryProps<GainedA
   >
     {children}
 
-    <BoxNew asChild borderWidth="0 0 0 2" borderColor="neutral" paddingInline="2 0">
+    <Box asChild borderWidth="0 0 0 2" borderColor="neutral" paddingInline="space-8 space-0">
       <BodyLong size="small" className="wrap-break-word whitespace-pre-line italic">
         {notification.message}
       </BodyLong>
-    </BoxNew>
+    </Box>
   </Container>
 );
 
@@ -255,7 +243,7 @@ export const KabalNotificationWithCaseDataEntry = (notification: KabalNotificati
 };
 
 const CaseData = ({ typeId, ytelseId, saksnummer }: BehandlingInfo) => (
-  <HStack wrap={false} align="center" gap="1" width="100%">
+  <HStack wrap={false} align="center" gap="space-4" width="100%">
     <Type typeId={typeId} />
     <Ytelse ytelseId={ytelseId} />
     <CopyButton text={saksnummer} activeText={saksnummer} size="xsmall" className="shrink-0" />
@@ -290,7 +278,8 @@ const MarkAsReadButton = ({ id, isRead }: MarkAsReadButtonProps) => {
   return (
     <Tooltip content={isRead ? 'Marker som ulest' : 'Marker som lest'}>
       <Button
-        variant="tertiary-neutral"
+        data-color="neutral"
+        variant="tertiary"
         size="small"
         onClick={() => (isRead ? markAsUnread(id) : markAsRead(id))}
         loading={markAsReadLoading || markAsUnreadLoading}

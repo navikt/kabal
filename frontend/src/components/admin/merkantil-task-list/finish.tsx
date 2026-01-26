@@ -1,7 +1,7 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useCompleteMerkantilTaskMutation } from '@app/redux-api/internal';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, Textarea, VStack } from '@navikt/ds-react';
+import { Box, Button, Textarea, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 
 interface Props {
@@ -25,20 +25,19 @@ export const Finish = ({ id, dateHandled }: Props) => {
       <Button onClick={() => setIsOpen(!isOpen)} variant="primary" size="small" icon={<CheckmarkIcon aria-hidden />}>
         Fullfør med kommentar
       </Button>
-
       {isOpen ? (
-        <BoxNew
+        <Box
           className="right-full z-1"
-          top="0"
+          top="space-0"
           position="absolute"
           background="default"
           width="400px"
           shadow="dialog"
-          borderRadius="medium"
-          padding="4"
+          borderRadius="4"
+          padding="space-16"
           asChild
         >
-          <VStack gap="2">
+          <VStack gap="space-8">
             <Textarea
               label="Kommentar"
               value={comment}
@@ -61,7 +60,7 @@ export const Finish = ({ id, dateHandled }: Props) => {
               Fullfør
             </Button>
           </VStack>
-        </BoxNew>
+        </Box>
       ) : null}
     </div>
   );

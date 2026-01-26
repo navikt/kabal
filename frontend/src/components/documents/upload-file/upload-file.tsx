@@ -26,7 +26,7 @@ export const UploadFile = () => {
   }
 
   return (
-    <HStack align="center" gap="2">
+    <HStack align="center" gap="space-8">
       <SetDistributionType distributionType={distributionType} setDistributionType={onChangeDocumentType} />
 
       <UploadFileButton

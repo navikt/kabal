@@ -4,7 +4,7 @@ import { PlateElement, type PlateElementProps } from 'platejs/react';
 import type { H1Element, H2Element, H3Element, PlaceholderElement } from '../types';
 
 const CLASSNAMES =
-  'font-semibold mt-4 mb-0 before:absolute before:text-gray-500 before:cursor-text before:content-[attr(data-placeholder)] ';
+  'font-semibold mt-4 mb-0 before:absolute before:text-ax-neutral-600 before:cursor-text before:content-[attr(data-placeholder)] ';
 
 export const HeadingOne = ({ children, element, ...props }: PlateElementProps<H1Element>) => (
   <PlateElement

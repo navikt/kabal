@@ -14,7 +14,7 @@ export const Ytelse = ({ ytelseId }: Props) => {
   }
 
   return (
-    <Tag variant="alt3" className="truncate">
+    <Tag data-color="info" variant="outline" className="truncate">
       {ytelseName ?? 'Ukjent'}
     </Tag>
   );

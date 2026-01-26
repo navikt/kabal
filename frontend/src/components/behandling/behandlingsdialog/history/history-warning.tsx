@@ -25,7 +25,7 @@ interface TimeProps {
 }
 
 const Time = ({ dateTime }: TimeProps) => (
-  <time className="font-bold" dateTime={dateTime}>
+  <time className="font-ax-bold" dateTime={dateTime}>
     {isoDateTimeToPretty(dateTime)}
   </time>
 );

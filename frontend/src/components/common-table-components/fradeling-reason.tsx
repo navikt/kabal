@@ -28,14 +28,14 @@ export const FradelingReason = ({ oppgaveId }: Props) => {
   return (
     <>
       <Button
+        data-color="neutral"
         ref={buttonRef}
         onClick={() => setOpenState(!openState)}
         aria-expanded={openState}
         icon={<InformationSquareIcon aria-hidden />}
-        variant="tertiary-neutral"
+        variant="tertiary"
         size="small"
       />
-
       <Popover open={openState} onClose={() => setOpenState(false)} anchorEl={buttonRef.current}>
         <Popover.Content>
           <p className="m-0">

@@ -3,7 +3,7 @@ import { Message } from '@app/components/behandling/behandlingsdialog/messages/m
 import { SKELETON } from '@app/components/behandling/behandlingsdialog/messages/skeleton';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { type IMessage, useGetMessagesQuery } from '@app/redux-api/messages';
-import { BodyShort, type BoxNewProps, Button, Heading, VStack } from '@navikt/ds-react';
+import { BodyShort, type BoxProps, Button, Heading, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { WriteMessage } from './write-message';
 
@@ -51,14 +51,14 @@ export const UnfinishedCaseMessages = () => {
         </BodyShort>
       ) : null}
 
-      <VStack gap="6" marginBlock="2 0">
+      <VStack gap="space-24" marginBlock="space-8 space-0">
         {(showAll ? messageGroups : relevantGroups).map(({ group, author }) => {
           const mine = author.navIdent === user.navIdent;
-          const borderRadius: BoxNewProps['borderRadius'] = mine ? 'large large 0 large' : 'large large large 0';
-          const background: BoxNewProps['background'] = mine ? 'neutral-moderate' : 'accent-moderate';
+          const borderRadius: BoxProps['borderRadius'] = mine ? '12 12 0 12' : '12 12 12 0';
+          const background: BoxProps['background'] = mine ? 'neutral-moderate' : 'accent-moderate';
 
           return (
-            <VStack as="section" key={getGroupKey(group)} gap="2" align={mine ? 'end' : 'start'}>
+            <VStack as="section" key={getGroupKey(group)} gap="space-8" align={mine ? 'end' : 'start'}>
               {group.map((message, index) => (
                 <Message
                   key={message.id}

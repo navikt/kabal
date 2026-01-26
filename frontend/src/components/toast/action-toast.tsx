@@ -13,7 +13,12 @@ interface Props {
 export const ActionToast = ({ children, primary, secondary, attrs }: Props) => (
   <div {...attrs}>
     <span>{children}</span>
-    <Stack direction="row-reverse" justify="space-between" gap="0 2" onClick={({ target }) => sendCloseEvent(target)}>
+    <Stack
+      direction="row-reverse"
+      justify="space-between"
+      gap="space-0 space-8"
+      onClick={({ target }) => sendCloseEvent(target)}
+    >
       {secondary}
       {primary}
     </Stack>

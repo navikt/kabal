@@ -26,6 +26,7 @@ export const AddNewParagraphs = ({ editor, element }: Props) => {
 export const AddNewParagraphBelow = ({ editor, element }: Props) => (
   <Tooltip content="Legg til nytt avsnitt under" delay={0}>
     <Button
+      data-color="neutral"
       icon={<TextAddSpaceAfter size={20} aria-hidden />}
       onClick={() => {
         const entry = editor.api.descendant({ at: [], match: (n) => n === element });
@@ -36,7 +37,7 @@ export const AddNewParagraphBelow = ({ editor, element }: Props) => (
 
         editor.tf.insertNodes(createSimpleParagraph(), { at: nextPath(entry[1]) });
       }}
-      variant="tertiary-neutral"
+      variant="tertiary"
       size="xsmall"
       contentEditable={false}
     />
@@ -46,6 +47,7 @@ export const AddNewParagraphBelow = ({ editor, element }: Props) => (
 export const AddNewParagraphAbove = ({ editor, element }: Props) => (
   <Tooltip content="Legg til nytt avsnitt over" delay={0}>
     <Button
+      data-color="neutral"
       icon={<TextAddSpaceBefore size={20} aria-hidden />}
       onClick={() => {
         const entry = editor.api.descendant<RootElement>({ at: [], match: (n) => n === element });
@@ -56,7 +58,7 @@ export const AddNewParagraphAbove = ({ editor, element }: Props) => (
 
         editor.tf.insertNodes(createSimpleParagraph(), { at: entry[1] });
       }}
-      variant="tertiary-neutral"
+      variant="tertiary"
       size="xsmall"
       contentEditable={false}
     />

@@ -167,8 +167,7 @@ export const Attachment = memo(
     return (
       <HGrid
         as="article"
-        gap="0 2"
-        paddingInline="1-alt"
+        gap="space-0 space-8"
         columns={getFieldSizes(VEDLEGG_FIELDS)}
         ref={ref}
         key={journalpostId + dokumentInfoId}
@@ -182,7 +181,7 @@ export const Attachment = memo(
           clearDragState();
         }}
         draggable={draggingIsEnabled}
-        className={DOCUMENT_CLASSES}
+        className={`${DOCUMENT_CLASSES} pr-1.5 pl-1.5`}
         style={{ gridTemplateAreas: `"${getFieldNames(VEDLEGG_FIELDS)}"` }}
         onClick={onClick}
         onDoubleClick={hasAccess ? onDoubleClick : undefined}

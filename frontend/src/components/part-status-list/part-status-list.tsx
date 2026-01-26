@@ -18,7 +18,7 @@ export const PartStatusList = ({ statusList, size, variant }: Props) => {
   }
 
   return (
-    <HStack gap="1" wrap>
+    <HStack gap="space-4" wrap>
       {statusList.map((status) => (
         <PartStatus status={status} size={size} variant={variant} key={status.status} />
       ))}

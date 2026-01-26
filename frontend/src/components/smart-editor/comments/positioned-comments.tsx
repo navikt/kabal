@@ -6,7 +6,7 @@ import { getPositionedItems, type ItemToPosition } from '@app/components/smart-e
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 import { useMyPlateEditorState } from '@app/plate/types';
-import { BoxNew } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 import { useContext, useMemo } from 'react';
 
 const ITEM_WIDTH = 350;
@@ -37,7 +37,7 @@ export const PositionedComments = () => {
   }, [showAnnotationsAtOrigin, attached, editor, sheetRef, orphans.length]);
 
   return (
-    <BoxNew
+    <Box
       position="relative"
       style={{
         width: maxCount * ITEM_OFFSET + ITEM_WIDTH + MIN_OFFSET,
@@ -56,6 +56,6 @@ export const PositionedComments = () => {
           isAbsolute
         />
       ))}
-    </BoxNew>
+    </Box>
   );
 };

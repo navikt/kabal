@@ -12,7 +12,7 @@ import {
 } from '@app/plate/plugins/element-types';
 import { LabelContentPlugin } from '@app/plate/plugins/label-content';
 import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { BoxNew } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTablePlugin } from '@platejs/table';
@@ -184,7 +184,7 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
   }
 
   return (
-    <BoxNew
+    <Box
       as="svg"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -192,13 +192,13 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
       shadow="dialog"
       borderWidth="1"
       borderColor="neutral"
-      borderRadius="medium"
-      marginBlock="0 2"
+      borderRadius="4"
+      marginBlock="space-0 space-8"
       width="100%"
       background="input"
     >
       {rects}
-    </BoxNew>
+    </Box>
   );
 };
 

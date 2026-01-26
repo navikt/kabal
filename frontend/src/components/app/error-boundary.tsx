@@ -1,7 +1,7 @@
 import { VERSION_CHECKER } from '@app/components/version-checker/version-checker';
 import { ENVIRONMENT } from '@app/environment';
 import { pushError } from '@app/observability';
-import { Alert, BoxNew, Button, CopyButton, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, CopyButton, Heading, HStack, VStack } from '@navikt/ds-react';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 interface Props {
@@ -42,14 +42,14 @@ export class AppErrorBoundary extends Component<Props, State> {
       const copyText = `${versionText}\n\n${this.state.error.message}\n\n${this.state.error.stack}`;
 
       return (
-        <BoxNew
+        <Box
           as="section"
           background="default"
-          padding="4"
+          padding="space-16"
           width="fit-content"
           overflowY="auto"
           shadow="dialog"
-          marginBlock="8"
+          marginBlock="space-32"
           marginInline="auto"
           className={className}
         >
@@ -70,17 +70,17 @@ export class AppErrorBoundary extends Component<Props, State> {
           <Heading level="2" size="medium" spacing>
             Feilmelding
           </Heading>
-          <VStack align="start" justify="start" gap="2">
+          <VStack align="start" justify="start" gap="space-8">
             <CodeBlock>{this.state.error.message}</CodeBlock>
             <CodeBlock>{this.state.error.stack}</CodeBlock>
-            <HStack gap="2">
-              <Button onClick={() => window.location.reload()} variant="secondary-neutral">
+            <HStack gap="space-8">
+              <Button data-color="neutral" onClick={() => window.location.reload()} variant="secondary">
                 Last Kabal på nytt
               </Button>
               <CopyButton copyText={copyText} text="Kopier feilmeldingen" variant="action" />
             </HStack>
           </VStack>
-        </BoxNew>
+        </Box>
       );
     }
 
@@ -93,16 +93,16 @@ interface CodeProps {
 }
 
 const Code = ({ children }: CodeProps) => (
-  <BoxNew
+  <Box
     as="code"
     background="neutral-soft"
     borderWidth="1"
     borderColor="neutral"
-    borderRadius="medium"
-    paddingInline="1"
+    borderRadius="4"
+    paddingInline="space-4"
   >
     {children}
-  </BoxNew>
+  </Box>
 );
 
 interface CodeBlockProps {
@@ -110,15 +110,15 @@ interface CodeBlockProps {
 }
 
 const CodeBlock = ({ children }: CodeBlockProps) => (
-  <BoxNew
+  <Box
     as="code"
     background="neutral-soft"
     borderWidth="1"
     borderColor="neutral"
-    borderRadius="medium"
-    padding="4"
+    borderRadius="4"
+    padding="space-16"
     className="wrap-break-word block whitespace-pre-wrap"
   >
     {children}
-  </BoxNew>
+  </Box>
 );

@@ -38,9 +38,10 @@ export const DeleteButton = ({ id, title, className }: DeleteButtonProps) => {
   if (!showConfirm) {
     return (
       <Button
+        data-color="danger"
         size="xsmall"
         icon={<TrashIcon aria-hidden />}
-        variant="danger"
+        variant="primary"
         onClick={() => setShowConfirm(true)}
         disabled={isDeleting}
         title={title}
@@ -52,18 +53,20 @@ export const DeleteButton = ({ id, title, className }: DeleteButtonProps) => {
   return (
     <>
       <Button
+        data-color="danger"
         size="xsmall"
         icon={<TrashIcon aria-hidden />}
-        variant="danger"
+        variant="primary"
         onClick={onDelete}
         loading={isDeleting}
         title={title}
         className={className}
       />
       <Button
+        data-color="neutral"
         size="xsmall"
         icon={<XMarkIcon aria-hidden />}
-        variant="tertiary-neutral"
+        variant="tertiary"
         onClick={() => setShowConfirm(false)}
         disabled={isDeleting}
         title="Avbryt"

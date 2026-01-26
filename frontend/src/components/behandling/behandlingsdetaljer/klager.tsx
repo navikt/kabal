@@ -17,7 +17,7 @@ export const Klager = ({ klager, isLoading, onChange, typeId, invalidReceivers }
   const [heading, inlineLabel] = getLabel(typeId);
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <Part
         isDeletable={false}
         label={heading}

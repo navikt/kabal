@@ -1,6 +1,6 @@
 import { MaltekstseksjonReadOnly } from '@app/components/maltekstseksjoner/maltekstseksjon/read-only';
 import { TextPreview } from '@app/components/maltekstseksjoner/texts/preview';
-import { BoxNew, Table, Tabs } from '@navikt/ds-react';
+import { Box, Table, Tabs } from '@navikt/ds-react';
 import { type FragmentProps, useState } from 'react';
 
 interface Props {
@@ -60,7 +60,7 @@ export const Row = ({ textId, draftMaltekstseksjonIdList, publishedMaltekstseksj
 };
 
 const List = ({ children }: FragmentProps) => (
-  <BoxNew as="ul" paddingInline="4 0">
+  <Box as="ul" paddingInline="space-16 space-0">
     {children}
-  </BoxNew>
+  </Box>
 );

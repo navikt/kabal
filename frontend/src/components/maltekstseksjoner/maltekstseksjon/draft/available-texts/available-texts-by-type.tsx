@@ -14,7 +14,7 @@ import { useGetTextsQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { ListRichText } from '@app/types/texts/common';
 import type { IRichText, IText, ListText } from '@app/types/texts/responses';
-import { BoxNew, HStack, Loader, Search, Table, VStack } from '@navikt/ds-react';
+import { Box, HStack, Loader, Search, Table, VStack } from '@navikt/ds-react';
 import { useCallback, useMemo, useState } from 'react';
 import { Body } from './body';
 
@@ -109,8 +109,8 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
   }, [data, filter, lang, sort, filteredStatuses]);
 
   return (
-    <VStack gap="2" marginBlock="4 0" overflowY="hidden" height="75vh">
-      <HStack gap="1">
+    <VStack gap="space-8" marginBlock="space-16 space-0" overflowY="hidden" height="75vh">
+      <HStack gap="space-4">
         <Search
           value={filter}
           onChange={setFilter}
@@ -124,9 +124,9 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
       {isFetching ? (
         <Loader title="Laster..." />
       ) : (
-        <BoxNew position="relative" overflowY="auto" flexGrow="1">
+        <Box position="relative" overflowY="auto" flexGrow="1">
           <Table size="small" zebraStripes onSortChange={onSortChange} sort={sort}>
-            <BoxNew asChild position="sticky" top="0" background="default" className="z-1">
+            <Box asChild position="sticky" top="space-0" background="default" className="z-1">
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell />
@@ -155,10 +155,10 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
                   <Table.HeaderCell />
                 </Table.Row>
               </Table.Header>
-            </BoxNew>
+            </Box>
             <Body texts={filteredAndSortedData} onAdd={onAdd} onRemove={onRemove} usedIds={usedIds} />
           </Table>
-        </BoxNew>
+        </Box>
       )}
     </VStack>
   );

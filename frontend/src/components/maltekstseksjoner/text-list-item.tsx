@@ -1,4 +1,4 @@
-import { BoxNew, HStack } from '@navikt/ds-react';
+import { Box, HStack } from '@navikt/ds-react';
 import type { HTMLAttributes } from 'react';
 
 interface TextListItemProps {
@@ -20,9 +20,9 @@ export const TextListItem = ({
     className="transition-colors duration-200 ease-in-out"
     wrap={false}
   >
-    <BoxNew
+    <Box
       as="li"
-      borderRadius="medium"
+      borderRadius="4"
       background={isActive ? 'accent-moderate' : undefined}
       style={{
         opacity: isDragging ? 0.6 : 1,

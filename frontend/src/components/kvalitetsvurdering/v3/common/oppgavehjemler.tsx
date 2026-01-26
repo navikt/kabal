@@ -6,7 +6,7 @@ import type {
   KvalitetsvurderingSaksdataHjemlerV3,
   KvalitetsvurderingV3Boolean,
 } from '@app/types/kaka-kvalitetsvurdering/v3';
-import { BodyShort, BoxNew, Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useValidationError } from './use-validation-error';
@@ -71,7 +71,7 @@ export const Oppgavehjemler = ({ field, parentKey }: SaksdatahjemlerProps) => {
   const value = kvalitetsvurdering[field];
 
   return (
-    <BoxNew marginBlock="0 4" marginInline="8 0">
+    <Box marginBlock="space-0 space-1" marginInline="space-32 space-0">
       <CheckboxGroup
         size="small"
         legend="Hjemler"
@@ -84,7 +84,7 @@ export const Oppgavehjemler = ({ field, parentKey }: SaksdatahjemlerProps) => {
       >
         <HjemmelCheckboxes hjemmelIdList={hjemler} />
       </CheckboxGroup>
-    </BoxNew>
+    </Box>
   );
 };
 

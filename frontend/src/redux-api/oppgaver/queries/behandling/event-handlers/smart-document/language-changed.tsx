@@ -30,13 +30,13 @@ export const handleSmartDocumentLanguageChangedEvent =
 
           if (event.actor.navIdent !== userId) {
             const from = (
-              <Tag key="from" variant="info" size="xsmall">
+              <Tag data-color="info" key="from" variant="outline" size="xsmall">
                 {LANGUAGE_NAMES[document.language]}
               </Tag>
             );
 
             const to = (
-              <Tag key="to" variant="info" size="xsmall">
+              <Tag data-color="info" key="to" variant="outline" size="xsmall">
                 {LANGUAGE_NAMES[event.document.language]}
               </Tag>
             );

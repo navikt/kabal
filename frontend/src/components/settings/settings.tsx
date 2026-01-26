@@ -5,7 +5,7 @@ import { Filters } from './filters';
 import { Signature } from './signature';
 
 export const Settings = () => (
-  <VStack gap="4" className="@container">
+  <VStack gap="space-16" className="@container">
     <PdfScale />
 
     <div
@@ -18,7 +18,7 @@ export const Settings = () => (
     >
       <Filters />
 
-      <VStack gap="4" gridColumn="other">
+      <VStack gap="space-16" gridColumn="other">
         <Abbreviations />
         <Signature />
       </VStack>

@@ -12,8 +12,8 @@ import { BodyLong, Heading, HStack, Tag, Tooltip, VStack } from '@navikt/ds-reac
 import { format } from 'date-fns';
 
 export const Entry = ({ author, content, date }: GosysBeskrivelseEntry) => (
-  <VStack gap="1" as="section">
-    <HStack as="header" gap="1" wrap={false} overflow="hidden">
+  <VStack gap="space-4" as="section">
+    <HStack as="header" gap="space-4" wrap={false} overflow="hidden">
       <Header author={author} />
     </HStack>
 
@@ -33,7 +33,7 @@ const Header = ({ author }: Pick<GosysBeskrivelseEntry, 'author'>) => {
     return (
       <>
         <System name="Ukjent" />
-        <Tag size="xsmall" variant="warning" className="w-min whitespace-nowrap">
+        <Tag data-color="warning" size="xsmall" variant="outline" className="w-min whitespace-nowrap">
           Ukjent
         </Tag>
       </>
@@ -44,7 +44,7 @@ const Header = ({ author }: Pick<GosysBeskrivelseEntry, 'author'>) => {
     return (
       <>
         <System {...author} />
-        <Tag size="xsmall" variant="neutral-filled" className="w-min whitespace-nowrap">
+        <Tag data-color="neutral" size="xsmall" variant="strong" className="w-min whitespace-nowrap">
           System
         </Tag>
       </>
@@ -63,8 +63,8 @@ const Enhet = ({ enhet }: Pick<GosysEntryEmployee, 'enhet'>) => {
   const { data: enheter } = useKlageenheter();
 
   return (
-    <Tag size="xsmall" variant="alt1" className="w-min whitespace-nowrap">
-      {enheter?.find((e) => e.id === enhet)?.navn ?? 'Ukjent enhet'} ({enhet})
+    <Tag data-color="meta-purple" size="xsmall" variant="outline" className="w-min whitespace-nowrap">
+      {enheter?.find((e) => e.id === enhet)?.navn ?? 'Ukjent enhet'}({enhet})
     </Tag>
   );
 };

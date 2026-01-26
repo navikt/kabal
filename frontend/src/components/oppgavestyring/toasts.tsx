@@ -33,7 +33,7 @@ const Tildelt = ({
     <span>
       {label} {name}.
     </span>
-    <HStack justify="space-between" gap="0 2">
+    <HStack justify="space-between" gap="space-0 space-8">
       <CountdownButton
         size="small"
         variant="tertiary-neutral"

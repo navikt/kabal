@@ -13,7 +13,7 @@ import {
 import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { PlaceholderElement } from '@app/plate/types';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { BoxNew, Tooltip } from '@navikt/ds-react';
+import { Box, Tooltip } from '@navikt/ds-react';
 import { PathApi } from 'platejs';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { type MouseEvent, useCallback, useEffect, useMemo } from 'react';
@@ -144,10 +144,10 @@ const Placeholder = (props: PlateElementProps<PlaceholderElement>) => {
       }}
     >
       <Tooltip content={element.placeholder} maxChar={Number.POSITIVE_INFINITY} contentEditable={false}>
-        <BoxNew
+        <Box
           as="span"
           position="relative"
-          borderRadius="medium"
+          borderRadius="4"
           data-node-type={ELEMENT_PLACEHOLDER}
           data-raw-placeholder={element.placeholder}
           data-placeholder={hasNoVisibleText ? element.placeholder : undefined}
@@ -159,24 +159,24 @@ const Placeholder = (props: PlateElementProps<PlaceholderElement>) => {
         >
           {children}
           {hideDeleteButton || readOnly ? null : (
-            <BoxNew
+            <Box
               asChild
               title="Slett innfyllingsfelt"
               contentEditable={false}
-              borderRadius="medium"
+              borderRadius="4"
               height="1.333em"
               width="1em"
               position="absolute"
-              top="0"
-              left="0"
+              top="space-0"
+              left="space-0"
               className="inline-flex cursor-pointer items-center text-ax-text-danger-decoration hover:bg-ax-bg-neutral-moderate active:bg-ax-bg-neutral-strong"
             >
               <button type="button" onClick={deletePlaceholder}>
                 <TrashIcon aria-hidden />
               </button>
-            </BoxNew>
+            </Box>
           )}
-        </BoxNew>
+        </Box>
       </Tooltip>
     </PlateElement>
   );

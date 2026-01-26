@@ -1,14 +1,21 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { BoxNew, HStack } from '@navikt/ds-react';
+import { Box, HStack } from '@navikt/ds-react';
 import { AaRegisteret, Ainntekt, KunnskapsbankTrygdemedisin, Modia } from './external-links';
 import { PanelSwitches } from './panel-switches';
 import { UserInfo } from './user-info';
 
 export const OppgavebehandlingControls = () => (
-  <HStack asChild gap="2 4" paddingInline="4" paddingBlock="2" wrap data-testid="behandling-control-panel">
-    <BoxNew background="default" borderWidth="0 0 1 0" borderColor="neutral" as="header">
+  <HStack
+    asChild
+    gap="space-8 space-16"
+    paddingInline="space-16"
+    paddingBlock="space-8"
+    wrap
+    data-testid="behandling-control-panel"
+  >
+    <Box background="default" borderWidth="0 0 1 0" borderColor="neutral" as="header">
       <Content />
-    </BoxNew>
+    </Box>
   </HStack>
 );
 
@@ -24,7 +31,7 @@ const Content = () => {
     <>
       <UserInfo {...oppgave} />
       <PanelSwitches />
-      <HStack align="center" marginInline="auto 0" gap="0 4">
+      <HStack align="center" marginInline="auto space-0" gap="space-0 space-16">
         <KunnskapsbankTrygdemedisin />
         <Modia sakenGjelder={sakenGjelder} />
         <AaRegisteret />

@@ -33,8 +33,8 @@ export const UnreachableSuggestedReceivers = ({ receivers }: ReceiversProps) => 
 
           return (
             <StyledReceiver key={id} as="li" accent="danger">
-              <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
-                <HStack align="center" gap="1">
+              <HStack align="center" gap="space-8" flexShrink="0" paddingInline="space-8" minHeight="8">
+                <HStack align="center" gap="space-4">
                   <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>
                     {isPerson ? <PersonIcon aria-hidden /> : <Buildings3Icon aria-hidden />}
                   </Tooltip>
@@ -48,16 +48,16 @@ export const UnreachableSuggestedReceivers = ({ receivers }: ReceiversProps) => 
                   <PartStatusList statusList={statusList} size="xsmall" />
                 </HStack>
               </HStack>
-              <HStack align="center" gap="0 2" paddingInline="2" paddingBlock="0 1">
+              <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
                 {identifikator === null ? null : (
                   <CopyButton size="xsmall" copyText={id} text={formatIdNumber(identifikator)} />
                 )}
               </HStack>
               <Address part={part} address={part.address} overriddenAddress={overriddenAddress} handling={handling} />
               {alertText === null ? null : (
-                <HStack align="center" gap="0 2" paddingInline="2" paddingBlock="0 1">
+                <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
                   <Alert variant="warning" size="small">
-                    <HStack align="center" gap="2">
+                    <HStack align="center" gap="space-8">
                       Parten kan ikke velges som mottaker fordi {alertText}.
                       {helpText === null ? null : <HelpText>{helpText}</HelpText>}
                     </HStack>

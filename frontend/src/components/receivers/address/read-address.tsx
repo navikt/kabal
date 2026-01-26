@@ -24,7 +24,7 @@ export const ReadAddress = ({ part, address, overriddenAddress, onEdit }: Props)
 
   return (
     <Container state={isOverridden ? AddressState.OVERRIDDEN : AddressState.SAVED}>
-      <HStack align="center" gap="1">
+      <HStack align="center" gap="space-4">
         <span>{noAddress ? 'Ingen adresse' : addressLines.join(', ')}</span>
 
         {noAddress ? null : (
@@ -35,14 +35,20 @@ export const ReadAddress = ({ part, address, overriddenAddress, onEdit }: Props)
 
         {onEdit === undefined ? null : (
           <Tooltip content="Overstyr adressen kun for dette dokumentet.">
-            <Button size="xsmall" variant="tertiary-neutral" onClick={onEdit} icon={<PencilIcon aria-hidden />}>
+            <Button
+              data-color="neutral"
+              size="xsmall"
+              variant="tertiary"
+              onClick={onEdit}
+              icon={<PencilIcon aria-hidden />}
+            >
               Endre
             </Button>
           </Tooltip>
         )}
 
         {isOverridden ? (
-          <Tag variant="warning" size="small">
+          <Tag data-color="warning" variant="outline" size="small">
             Overstyrt
           </Tag>
         ) : null}

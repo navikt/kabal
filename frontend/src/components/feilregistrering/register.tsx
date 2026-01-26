@@ -1,7 +1,7 @@
 import { isMetaKey, Keys, MOD_KEY_TEXT } from '@app/keys';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { FileXMarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, BoxNew, Button, HStack, Textarea } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, Textarea } from '@navikt/ds-react';
 import { useCallback, useContext, useState } from 'react';
 import { Context } from './context';
 import type { OppgaveId } from './types';
@@ -46,11 +46,11 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
           }
         }}
       />
-
-      <HStack align="center" justify="space-between" gap="0 4">
+      <HStack align="center" justify="space-between" gap="space-0 space-16">
         <Button
+          data-color="danger"
           size="small"
-          variant="danger"
+          variant="primary"
           onClick={() => save(oppgaveId, reason)}
           loading={isLoading}
           icon={<FileXMarkIcon aria-hidden />}
@@ -60,8 +60,9 @@ export const Register = ({ oppgaveId }: OppgaveId) => {
         </Button>
 
         <Button
+          data-color="neutral"
           size="small"
-          variant="secondary-neutral"
+          variant="secondary"
           onClick={close}
           loading={isLoading}
           icon={<XMarkIcon aria-hidden />}
@@ -78,17 +79,17 @@ interface CodeProps {
 }
 
 const Code = ({ children }: CodeProps) => (
-  <BoxNew
+  <Box
     as="code"
     background="sunken"
-    paddingBlock="05"
-    paddingInline="1"
-    marginInline="05"
-    borderRadius="medium"
+    paddingBlock="space-2"
+    paddingInline="space-4"
+    marginInline="space-2"
+    borderRadius="4"
     className="inline whitespace-nowrap text-sm"
   >
     {children}
-  </BoxNew>
+  </Box>
 );
 
 const Description = (

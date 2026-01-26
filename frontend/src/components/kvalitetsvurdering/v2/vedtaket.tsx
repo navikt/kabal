@@ -30,7 +30,7 @@ export const Vedtaket = () => {
 
   return (
     <section>
-      <HStack asChild align="center" gap="2">
+      <HStack asChild align="center" gap="space-8">
         <Heading size="small">{header}</Heading>
       </HStack>
 
@@ -59,7 +59,7 @@ export const Vedtaket = () => {
         onChange={onChange}
         id={VEDTAKET_ID}
       >
-        <HStack gap="4" width="100%">
+        <HStack gap="space-16" width="100%">
           <Radio value={Radiovalg.BRA} disabled={!canEdit}>
             Bra/godt nok
           </Radio>

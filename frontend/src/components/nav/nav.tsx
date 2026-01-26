@@ -21,7 +21,7 @@ import { NavLink, type NavLinkProps } from 'react-router-dom';
 
 export const Nav = () => (
   <HStack as="nav" flexGrow="1" overflowX="auto" aria-label="Meny" data-testid="oppgaver-nav">
-    <HStack as="ol" align="center" gap="4" wrap={false} height="100%" paddingInline="4">
+    <HStack as="ol" align="center" gap="space-16" wrap={false} height="100%" paddingInline="space-16">
       <NavItem to="/oppgaver" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
         <BulletListIcon /> Oppgaver
       </NavItem>

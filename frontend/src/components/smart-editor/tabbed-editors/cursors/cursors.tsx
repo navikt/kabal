@@ -1,5 +1,5 @@
 import { getColorClasses } from '@app/components/smart-editor/tabbed-editors/cursors/cursor-colors';
-import { BoxNew } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 import { type CursorData, type CursorProps, type CursorState, useCursorOverlayPositions } from '@platejs/cursor';
 import type { RelativeRange } from '@slate-yjs/core';
 import { createZustandStore, type UnknownObject } from 'platejs';
@@ -57,14 +57,14 @@ const Cursor = ({ caretPosition, data, disableCaret, disableSelection, selection
           className={`pointer-events-none absolute z-10 w-[1px] ${caretBackgroundColorClass}`}
           style={{ ...safeCaretPosition, ...style }}
         >
-          <BoxNew
+          <Box
             position="absolute"
-            left="0"
+            left="space-0"
             className={`bottom-full whitespace-nowrap rounded-l-sm rounded-br-sm p-[.25em] text-[.75em] text-ax-text-neutral ${caretBackgroundColorClass}`}
             ref={labelRef}
           >
             {navn} ({navIdent})
-          </BoxNew>
+          </Box>
         </div>
       )}
     </>

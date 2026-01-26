@@ -87,7 +87,7 @@ const KvalitetsskjemaTextareaInternal = ({
         description={description}
         error={error}
       />
-      <HStack align="center" justify="end" marginBlock="1 0" height="21px">
+      <HStack align="center" justify="end" marginBlock="space-4 space-0" height="21px">
         <SavedStatus {...updateStatus} />
       </HStack>
     </>

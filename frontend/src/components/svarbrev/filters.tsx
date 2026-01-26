@@ -1,5 +1,5 @@
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { BoxNew, HStack, Search, ToggleGroup, Tooltip } from '@navikt/ds-react';
+import { Box, HStack, Search, ToggleGroup, Tooltip } from '@navikt/ds-react';
 
 export enum ActiveEnum {
   ALL = '0',
@@ -39,11 +39,11 @@ export const Filters = ({
   activeFilter,
   setActiveFilter,
 }: FilterProps) => (
-  <HStack asChild wrap={false} gap="4" width="100%" position="sticky" top="0" className="-top-4 z-1">
-    <BoxNew background="default" paddingInline="0 1" paddingBlock="4">
+  <HStack asChild wrap={false} gap="space-16" width="100%" position="sticky" top="space-0" className="-top-4 z-1">
+    <Box background="default" paddingInline="space-0 space-4" paddingBlock="space-16">
       <ToggleGroup
+        data-color="neutral"
         size="small"
-        variant="neutral"
         value={activeFilter}
         onChange={(a) => setActiveFilter(isActiveValue(a) ? a : activeFilter)}
       >
@@ -53,8 +53,8 @@ export const Filters = ({
       </ToggleGroup>
 
       <ToggleGroup
+        data-color="neutral"
         size="small"
-        variant="neutral"
         value={typeFilter}
         onChange={(t) => setTypeFilter(isTypeFilter(t) ? t : typeFilter)}
       >
@@ -90,6 +90,6 @@ export const Filters = ({
           />
         </Tooltip>
       </div>
-    </BoxNew>
+    </Box>
   </HStack>
 );

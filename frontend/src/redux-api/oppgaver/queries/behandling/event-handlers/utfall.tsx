@@ -22,11 +22,11 @@ export const handleUtfallEvent =
         toast.info(
           <InfoToast title="Utfall endret">
             {formatEmployeeName(actor)} har endret utfall fra:{' '}
-            <Tag size="xsmall" variant="alt1">
+            <Tag data-color="meta-purple" size="xsmall" variant="outline">
               {oldUtfall === null ? 'Ikke valgt' : <UtfallName utfall={oldUtfall} />}
             </Tag>{' '}
             til:{' '}
-            <Tag size="xsmall" variant="alt1">
+            <Tag data-color="meta-purple" size="xsmall" variant="outline">
               {utfallId === null ? 'Ikke valgt' : <UtfallName utfall={utfallId} />}
             </Tag>
             .

@@ -1,5 +1,5 @@
 import { pushError } from '@app/observability';
-import { BoxNew, Button, type ButtonProps } from '@navikt/ds-react';
+import { Box, Button, type ButtonProps } from '@navikt/ds-react';
 import { Component, type ErrorInfo, type FragmentProps, type ReactNode } from 'react';
 
 interface Props {
@@ -34,7 +34,14 @@ export class ErrorBoundary extends Component<Props, State> {
 
     if (this.state.error !== null) {
       return (
-        <BoxNew className={className} background="default" width="100%" padding="4" overflowY="auto" shadow="dialog">
+        <Box
+          className={className}
+          background="default"
+          width="100%"
+          padding="space-16"
+          overflowY="auto"
+          shadow="dialog"
+        >
           <h1>Ooops, noe gikk galt :(</h1>
           {errorComponent(this.state.error)}
           {typeof actionButton === 'undefined' ? null : (
@@ -49,16 +56,16 @@ export class ErrorBoundary extends Component<Props, State> {
             />
           )}
           <h2>Feilmelding</h2>
-          <BoxNew
+          <Box
             as="code"
-            padding="4"
-            borderRadius="medium"
-            marginBlock="0 4"
+            padding="space-16"
+            borderRadius="4"
+            marginBlock="space-0 space-1"
             className="whitespace-pre-wrap break-words"
           >
             {this.state.error.message}
-          </BoxNew>
-        </BoxNew>
+          </Box>
+        </Box>
       );
     }
 
@@ -79,22 +86,22 @@ const ActionButton = ({ buttonText, buttonIcon, ...rest }: ActionButtonProps) =>
 );
 
 export const StyledDescriptionTerm = ({ children }: FragmentProps) => (
-  <BoxNew as="dt" marginBlock="4 0" className="font-bold">
+  <Box as="dt" marginBlock="space-16 space-0" className="font-ax-bold">
     {children}
-  </BoxNew>
+  </Box>
 );
 
 export const StyledPreDescriptionDetails = ({ children }: FragmentProps) => (
-  <BoxNew
+  <Box
     as="dd"
-    marginBlock="1 0"
-    padding="4"
-    borderRadius="medium"
+    marginBlock="space-4 space-0"
+    padding="space-16"
+    borderRadius="4"
     background="neutral-moderate"
     borderColor="neutral"
     borderWidth="1"
     className="whitespace-pre-wrap break-all text-ax-text-neutral"
   >
     {children}
-  </BoxNew>
+  </Box>
 );

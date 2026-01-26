@@ -9,7 +9,7 @@ import {
 } from '@app/redux-api/oppgaver/mutations/documents';
 import type { IDocument, IParentDocument } from '@app/types/documents/documents';
 import { PaperclipIcon } from '@navikt/aksel-icons';
-import { BoxNew } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext } from 'react';
 import { AttachmentList, type ListProps } from './attachment-list';
@@ -58,13 +58,13 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
   ]);
 
   return (
-    <BoxNew
+    <Box
       as="li"
       position="absolute"
-      marginInline="05"
-      borderRadius="medium"
-      left="0"
-      right="0"
+      marginInline="space-2"
+      borderRadius="4"
+      left="space-0"
+      right="space-0"
       data-testid="new-documents-list-item"
       data-documentname={document.tittel}
       data-documentid={document.id}
@@ -81,7 +81,7 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
 
         <AttachmentList parentDocument={document} {...listProps} />
       </DropZone>
-    </BoxNew>
+    </Box>
   );
 };
 

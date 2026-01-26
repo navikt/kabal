@@ -31,7 +31,7 @@ export const TextLink = ({
       <GridLink ref={ref} to={to} {...dragProps} title={children}>
         {icon}
         <span className="truncate">Laster...</span>
-        <Tag size="xsmall" variant="neutral">
+        <Tag data-color="neutral" size="xsmall" variant="outline">
           Laster
         </Tag>
         <time>Laster...</time>
@@ -63,11 +63,11 @@ const GridLink = ({ children, title, ref, to, ...dragProps }: GridLinkProps) => 
   <HGrid
     as={Link}
     columns="min-content 1fr 85px min-content"
-    gap="2"
-    padding="2"
+    gap="space-8"
+    padding="space-8"
     align="center"
     width="100%"
-    className="rounded-medium text-inherit"
+    className="rounded-sm text-inherit"
     ref={ref}
     to={to}
     {...dragProps}

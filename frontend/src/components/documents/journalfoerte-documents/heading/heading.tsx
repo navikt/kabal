@@ -35,12 +35,12 @@ export const JournalfoertHeading = memo(
         direction={isExpanded ? 'row' : 'column'}
         align={isExpanded ? 'center' : 'start'}
         justify="space-between"
-        paddingBlock="1"
-        paddingInline="1 2"
-        gap="2"
+        paddingBlock="space-4"
+        paddingInline="space-4 space-8"
+        gap="space-8"
         flexShrink="0"
       >
-        <HStack align="center" gap="2">
+        <HStack align="center" gap="space-8">
           {isExpanded ? <Menu /> : null}
 
           <Tooltip
@@ -55,13 +55,10 @@ export const JournalfoertHeading = memo(
           </Tooltip>
           {isExpanded ? null : <Menu />}
         </HStack>
-
         <KeyboardHelpButton />
-
-        <Button onClick={() => unselectAll()} variant="secondary-neutral" size="small">
+        <Button data-color="neutral" onClick={() => unselectAll()} variant="secondary" size="small">
           Nullstill valg
         </Button>
-
         <RemoveFilters resetFilters={resetFilters} noFiltersActive={noFiltersActive} />
       </Stack>
     );
@@ -81,7 +78,13 @@ const RemoveFilters = ({ resetFilters, noFiltersActive }: RemoveFiltersProps) =>
   }
 
   return (
-    <Button size="small" variant="secondary-neutral" onClick={resetFilters} icon={<ArrowCirclepathIcon aria-hidden />}>
+    <Button
+      data-color="neutral"
+      size="small"
+      variant="secondary"
+      onClick={resetFilters}
+      icon={<ArrowCirclepathIcon aria-hidden />}
+    >
       Nullstill filtre
     </Button>
   );

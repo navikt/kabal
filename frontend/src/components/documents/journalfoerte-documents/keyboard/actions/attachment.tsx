@@ -14,7 +14,7 @@ export const useSetAsAttachmentTo = (filteredDocuments: IArkivertDocument[], ope
       toast.error(
         <>
           Kan ikke bruke journalpost med status{' '}
-          <Tag variant="neutral" size="xsmall">
+          <Tag data-color="neutral" variant="outline" size="xsmall">
             mottatt
           </Tag>{' '}
           som vedlegg.

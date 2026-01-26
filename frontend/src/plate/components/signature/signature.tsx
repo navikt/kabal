@@ -7,7 +7,7 @@ import { MedunderskriverSignature, SaksbehandlerSignature } from '@app/plate/com
 import type { SignatureElement } from '@app/plate/types';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { BoxNew, HStack } from '@navikt/ds-react';
+import { Box, HStack } from '@navikt/ds-react';
 import type { SetNodesOptions } from 'platejs';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useContext, useId } from 'react';
@@ -67,9 +67,9 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
         }}
       >
         {readOnly || hideAll ? null : (
-          <BoxNew
+          <Box
             asChild
-            borderRadius="medium"
+            borderRadius="4"
             className="border-dashed"
             borderColor="neutral"
             style={{
@@ -136,10 +136,10 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
                 </Checkbox>
               ) : null}
             </HStack>
-          </BoxNew>
+          </Box>
         )}
 
-        <HStack justify="space-between" wrap={false} marginBlock="4">
+        <HStack justify="space-between" wrap={false} marginBlock="space-16">
           <MedunderskriverSignature element={element} />
           <SaksbehandlerSignature element={element} />
         </HStack>

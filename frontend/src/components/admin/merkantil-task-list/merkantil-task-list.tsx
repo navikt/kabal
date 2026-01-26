@@ -5,7 +5,7 @@ import { isoDateTimeToPretty } from '@app/domain/date';
 import { ENVIRONMENT } from '@app/environment';
 import { type Task, useGetMerkantilTasksQuery } from '@app/redux-api/internal';
 import { ArrowsCirclepathIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Alert, BoxNew, Button, CopyButton, Heading, HStack, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, CopyButton, Heading, HStack, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -13,24 +13,24 @@ export const MerkantilTaskList = () => {
   const { isLoading, isFetching, refetch } = useGetMerkantilTasksQuery();
 
   return (
-    <BoxNew as="section" shadow="dialog" padding="4">
+    <Box as="section" shadow="dialog" padding="space-16">
       <Heading level="1" size="medium" spacing>
         <HStack>
           <span>Merkantile oppgaver</span>
           <Tooltip content="Oppdater">
             <Button
+              data-color="neutral"
               onClick={refetch}
               loading={isLoading || isFetching}
               size="small"
-              variant="tertiary-neutral"
+              variant="tertiary"
               icon={<ArrowsCirclepathIcon aria-hidden />}
             />
           </Tooltip>
         </HStack>
       </Heading>
-
       <TaskList />
-    </BoxNew>
+    </Box>
   );
 };
 
@@ -51,8 +51,8 @@ const TaskList = () => {
 
   if (isError) {
     return (
-      <VStack gap="4">
-        <HStack gap="4">
+      <VStack gap="space-16">
+        <HStack gap="space-16">
           <Alert variant="error" size="small">
             <Heading level="2" size="small" spacing>
               Noe gikk galt
@@ -68,8 +68,8 @@ const TaskList = () => {
 
   if (isLoading) {
     return (
-      <VStack gap="4">
-        <HStack gap="4">
+      <VStack gap="space-16">
+        <HStack gap="space-16">
           <Skeleton variant="rounded" height={32} width={120} />
           <Skeleton variant="rounded" height={32} width={200} />
         </HStack>
@@ -91,8 +91,8 @@ const TaskList = () => {
   }
 
   return (
-    <VStack gap="4">
-      <HStack gap="4">
+    <VStack gap="space-16">
+      <HStack gap="space-16">
         <SetStatusFilter filter={filter} setFilter={setFilter} />
         <CopyButton size="small" copyText={tasks.map(toCopyLine).join('\n')} text="Kopier alle" variant="action" />
         <CopyButton
@@ -138,9 +138,10 @@ const TaskList = () => {
                 <Table.DataCell>{comment}</Table.DataCell>
                 <Table.DataCell>
                   <Button
+                    data-color="neutral"
                     as={Link}
                     to={`/behandling/${behandlingId}`}
-                    variant="secondary-neutral"
+                    variant="secondary"
                     size="small"
                     target="_blank"
                     icon={<ExternalLinkIcon aria-hidden />}
@@ -167,7 +168,7 @@ const TaskList = () => {
 };
 
 const SkeletonRow = ({ height }: { height: number }) => (
-  <HStack gap="2" wrap={false}>
+  <HStack gap="space-8" wrap={false}>
     <Skeleton variant="text" height={height} width={162} />
     <Skeleton variant="text" height={height} width={62} />
     <Skeleton variant="text" height={height} width={352} />

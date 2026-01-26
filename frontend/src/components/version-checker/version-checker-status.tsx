@@ -122,7 +122,7 @@ export const VersionCheckerStatus = () => {
         >
           Oppdater Kabal
         </Button>
-        <Button variant="secondary-neutral" onClick={onIgnoreModal} size="medium">
+        <Button data-color="neutral" variant="secondary" onClick={onIgnoreModal} size="medium">
           Ignorer i {ENVIRONMENT.isProduction ? '1 time' : '10 sekunder'}
         </Button>
       </Modal.Footer>

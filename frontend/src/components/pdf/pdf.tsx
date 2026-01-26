@@ -5,7 +5,7 @@ import { ENVIRONMENT } from '@app/environment';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { isKabalApiErrorData, type KabalApiErrorData } from '@app/types/errors';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, BoxNew, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -35,7 +35,7 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
     return (
       <div className="grow p-5">
         <Alert variant="error" size="small">
-          <HStack gap="4" align="center">
+          <HStack gap="space-16" align="center">
             <Heading size="small">Feil ved lasting av PDF</Heading>
             <BodyShort>
               Hvis dette er et brev som er skrevet i Kabal kan det hende det hjelper å{' '}
@@ -45,7 +45,8 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
               .
             </BodyShort>
             <Button
-              variant="secondary-neutral"
+              data-color="neutral"
+              variant="secondary"
               size="small"
               icon={<ArrowsCirclepathIcon aria-hidden />}
               onClick={refresh}
@@ -62,14 +63,14 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
   return (
     <div className="relative flex w-full grow">
       {loading ? (
-        <BoxNew
+        <Box
           background="neutral-moderate"
           height="100%"
           width="100%"
           className="absolute flex items-center justify-center"
         >
           <Loader size="3xlarge" />
-        </BoxNew>
+        </Box>
       ) : null}
       <object
         data={data}

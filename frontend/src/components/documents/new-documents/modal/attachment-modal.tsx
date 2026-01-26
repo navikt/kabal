@@ -41,9 +41,10 @@ export const AttachmentModal = ({
     <>
       <AccessErrorsSummary documentErrors={[removeAccessError, renameAccessError].filter(isNotNull)} placement="left">
         <Button
+          data-color="neutral"
           onClick={() => setIsOpen(!isOpen)}
           data-testid="document-actions-button"
-          variant="tertiary-neutral"
+          variant="tertiary"
           size="small"
           icon={<MenuElipsisVerticalIcon aria-hidden />}
           style={{ gridArea: Fields.Action }}

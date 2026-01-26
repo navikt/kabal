@@ -32,7 +32,7 @@ export const ReadOnlyDeadline = ({ frist, timesPreviouslyExtended }: ReadOnlyDea
   const fristExceeded = useMemo(() => (frist === null ? false : isPast(addDays(parseISO(frist), 1))), [frist]);
 
   return (
-    <HStack align="center" gap="2" wrap={false}>
+    <HStack align="center" gap="space-8" wrap={false}>
       <time
         className={fristExceeded ? 'text-ax-text-danger-decoration' : 'text-ax-text-neutral'}
         dateTime={frist ?? ''}
@@ -69,7 +69,7 @@ const EditableDeadline = ({ frist, id }: IOppgave) => {
   );
 
   return (
-    <HStack align="center" gap="2" wrap={false}>
+    <HStack align="center" gap="space-8" wrap={false}>
       {children}
       <EditButton isOpen={isOpen} setIsOpen={setIsOpen} />
     </HStack>
@@ -91,10 +91,11 @@ const EditButton = ({ isOpen, setIsOpen }: EditButtonProps) => {
 
   return (
     <Button
+      data-color="neutral"
       size="xsmall"
       icon={<PencilIcon aria-hidden />}
       title="Endre frist for behandling i klageinstans"
-      variant="tertiary-neutral"
+      variant="tertiary"
       onClick={toggleOpen}
     />
   );

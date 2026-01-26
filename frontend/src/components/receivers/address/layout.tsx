@@ -1,4 +1,4 @@
-import { BoxNew, type BoxNewProps, VStack } from '@navikt/ds-react';
+import { Box, type BoxProps, VStack } from '@navikt/ds-react';
 
 export enum AddressState {
   SAVED = 0,
@@ -22,11 +22,11 @@ export const Container = ({ children, state, onKeyDown }: ContainerProps) => (
     padding="space-8"
     onKeyDown={onKeyDown}
   >
-    <BoxNew background={getBackgroundColor(state)}>{children}</BoxNew>
+    <Box background={getBackgroundColor(state)}>{children}</Box>
   </VStack>
 );
 
-const getBackgroundColor = (state: AddressState): BoxNewProps['background'] => {
+const getBackgroundColor = (state: AddressState): BoxProps['background'] => {
   switch (state) {
     case AddressState.SAVED:
       return undefined;

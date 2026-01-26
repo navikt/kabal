@@ -34,7 +34,7 @@ export const TextModified = ({ id, created, textType, edits }: IText) => {
   const [lastEdit] = filteredEdits;
 
   return (
-    <HStack gap="2" align="center" data-element="text-modified">
+    <HStack gap="space-8" align="center" data-element="text-modified">
       <Label size="small" htmlFor={modifiedId}>
         Sist endret:
       </Label>

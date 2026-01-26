@@ -168,41 +168,38 @@ const getReason = (
           <p>
             {employeeName(actor)} la saken tilbake i {QUEUE}.
           </p>
-
           <FlexRowContainer>
             <Label size="small" htmlFor={labelId}>
               Årsak
             </Label>
-            <Tag size="xsmall" variant="info-moderate" id={labelId}>
+            <Tag data-color="info" size="xsmall" variant="moderate" id={labelId}>
               Feil {oldHjemler !== null && oldHjemler.length === 1 ? 'hjemmel' : 'hjemler'}
             </Tag>
           </FlexRowContainer>
-
           <FlexRowContainer>
             <Label size="small" id={labelId}>
               Gamle
             </Label>
             {oldHjemler?.map((h) => (
-              <Tag size="xsmall" variant="neutral" key={h} aria-labelledby={labelId}>
+              <Tag data-color="neutral" size="xsmall" variant="outline" key={h} aria-labelledby={labelId}>
                 {h}
               </Tag>
             )) ?? (
-              <Tag size="xsmall" variant="neutral" aria-labelledby={labelId}>
+              <Tag data-color="neutral" size="xsmall" variant="outline" aria-labelledby={labelId}>
                 ingen
               </Tag>
             )}
           </FlexRowContainer>
-
           <FlexRowContainer>
             <Label size="small" id={labelId}>
               Nye
             </Label>
             {newHjemler?.map((h) => (
-              <Tag size="xsmall" variant="success" key={h} aria-labelledby={labelId}>
+              <Tag data-color="success" size="xsmall" variant="outline" key={h} aria-labelledby={labelId}>
                 {h}
               </Tag>
             )) ?? (
-              <Tag size="xsmall" variant="neutral" aria-labelledby={labelId}>
+              <Tag data-color="neutral" size="xsmall" variant="outline" aria-labelledby={labelId}>
                 ingen
               </Tag>
             )}
@@ -248,7 +245,7 @@ interface FlexRowContainerProps {
 }
 
 const FlexRowContainer = ({ children }: FlexRowContainerProps) => (
-  <HStack align="center" gap="1">
+  <HStack align="center" gap="space-4">
     {children}
   </HStack>
 );

@@ -56,7 +56,7 @@ export const Tilbakekreving = () => {
   const showWarning = !tilbakekreving && TILBAKEKREVING_IDS.some((tid) => hjemmelIdSet.includes(tid));
 
   const legend = (
-    <HStack align="center" gap="1">
+    <HStack align="center" gap="space-4">
       Velg om det gjelder en tilbakekrevingssak
       <HelpText>
         Du skal huke av for at det gjelder en tilbakekrevingssak uavhengig av ytelse eller hjemmel for tilbakekreving.

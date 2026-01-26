@@ -62,7 +62,7 @@ export const SelectHjemler = ({
 
         <ActionMenu.Divider />
 
-        <VStack gap="2">{filteredItems}</VStack>
+        <VStack gap="space-8">{filteredItems}</VStack>
       </ActionMenu.Content>
     </ActionMenu>
   );

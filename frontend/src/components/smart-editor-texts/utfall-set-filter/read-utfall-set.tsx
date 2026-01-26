@@ -12,7 +12,7 @@ interface ReadUtfallSetProps {
 
 export const ReadUtfallSet = ({ utfallSet, onDelete, editUtfallSet }: ReadUtfallSetProps) => (
   <HStack justify="space-between">
-    <HStack align="center" gap="1" wrap>
+    <HStack align="center" gap="space-4" wrap>
       {utfallSet.length === 0 ? (
         <CustomTag variant="utfallIdList">Alle utfall</CustomTag>
       ) : (
@@ -21,14 +21,16 @@ export const ReadUtfallSet = ({ utfallSet, onDelete, editUtfallSet }: ReadUtfall
     </HStack>
     <HStack align="start" wrap={false} className="self-start">
       <Button
-        variant="tertiary-neutral"
+        data-color="neutral"
+        variant="tertiary"
         size="xsmall"
         icon={<PencilIcon aria-hidden />}
         onClick={editUtfallSet}
         title="Endre"
       />
       <Button
-        variant="tertiary-neutral"
+        data-color="neutral"
+        variant="tertiary"
         size="xsmall"
         icon={<TrashIcon aria-hidden />}
         onClick={onDelete}

@@ -18,7 +18,7 @@ export const Postnummer = ({ value, originalValue, onChange, error }: Props) => 
   const { getPoststed } = useContext(StaticDataContext);
 
   return (
-    <HStack align="center" gap="1">
+    <HStack align="center" gap="space-4">
       <AddressField
         id={POSTNUMMER_ID}
         label="Postnummer"
@@ -32,7 +32,7 @@ export const Postnummer = ({ value, originalValue, onChange, error }: Props) => 
         pattern="^[0-9]{0,4}$"
         htmlSize={8}
       />
-      <VStack justify="start" gap="2">
+      <VStack justify="start" gap="space-8">
         <Label size="small" htmlFor={poststedElementId} className="flex min-h-6 items-center">
           Poststed
         </Label>

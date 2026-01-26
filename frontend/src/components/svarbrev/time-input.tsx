@@ -28,10 +28,10 @@ export const TimeInput = ({ value, onChange, unit, setUnit }: Props) => (
     />
 
     <ToggleGroup
+      data-color="neutral"
       value={unit}
       onChange={(v) => setUnit(isBehandlingstidUnitType(v) ? v : unit)}
       size="small"
-      variant="neutral"
     >
       {BEHANDLINGSTID_UNIT_TYPES.map((type) => (
         <ToggleGroup.Item key={type} value={type} label={BEHANDLINGSTID_UNIT_TYPE_NAMES[type]} />

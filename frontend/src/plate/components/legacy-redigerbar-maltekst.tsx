@@ -123,10 +123,11 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
             <AddNewParagraphs editor={editor} element={element} />
             <Tooltip content="Tilbakestill tekst" delay={0}>
               <Button
+                data-color="neutral"
                 title="Tilbakestill tekst"
                 icon={<ArrowCirclepathReverseIcon aria-hidden />}
                 onClick={insertRedigerbarMaltekst}
-                variant="tertiary-neutral"
+                variant="tertiary"
                 size="xsmall"
                 contentEditable={false}
               />

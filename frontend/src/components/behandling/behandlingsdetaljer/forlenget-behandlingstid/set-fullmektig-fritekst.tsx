@@ -17,7 +17,7 @@ export const SetFullmektigFritekst = ({ value, id }: Props) => {
   useDebounce(action, skip, tempValue, 500);
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <TextField
         label="Navn på fullmektig i brevet"
         size="small"

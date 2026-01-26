@@ -50,7 +50,7 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
 
   return (
     <>
-      <HStack align="center" gap="0 2" paddingInline="2" paddingBlock="0 1">
+      <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
         <ToggleGroup size="small" value={handling} onChange={onHandlingChange}>
           <ToggleGroup.Item value={HandlingEnum.AUTO}>{UTSENDINGSKANAL[part.utsendingskanal]}</ToggleGroup.Item>
           {part.utsendingskanal !== Utsendingskanal.SENTRAL_UTSKRIFT ? (
@@ -64,15 +64,16 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
         {handling === HandlingEnum.AUTO ? null : (
           <Tooltip content={`Tilbakestill til "${UTSENDINGSKANAL[part.utsendingskanal]}"`}>
             <Button
+              data-color="neutral"
               size="small"
-              variant="tertiary-neutral"
+              variant="tertiary"
               onClick={() => onHandlingChange(HandlingEnum.AUTO)}
               icon={<ArrowUndoIcon aria-hidden />}
             />
           </Tooltip>
         )}
       </HStack>
-      <HStack align="center" gap="0 2" paddingInline="2" paddingBlock="0 1">
+      <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
         {isLocalPrint ? (
           <Alert size="small" variant="info">
             <BodyShort size="small">Du må skrive ut dokumentet selv og legge det til utsending.</BodyShort>

@@ -19,7 +19,8 @@ export const MarkManyAsRead = ({ notifications, className }: MarkManyAsReadProps
 
   return (
     <Button
-      variant="tertiary-neutral"
+      data-color="neutral"
+      variant="tertiary"
       size="small"
       onClick={() => markManyAsRead(unreadNotifications.map((n) => n.id))}
       loading={loading}
@@ -47,7 +48,8 @@ export const MarkManyAsUnread = ({ notifications, className }: MarkManyAsUnreadP
 
   return (
     <Button
-      variant="tertiary-neutral"
+      data-color="neutral"
+      variant="tertiary"
       size="small"
       onClick={() => markManyAsUnread(readNotifications.map((n) => n.id))}
       loading={loading}

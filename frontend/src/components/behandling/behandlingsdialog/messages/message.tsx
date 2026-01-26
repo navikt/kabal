@@ -8,7 +8,7 @@ import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { KABAL_API_BASE_PATH } from '@app/redux-api/common';
 import type { IMessage } from '@app/redux-api/messages';
 import { BellFillIcon, BellIcon } from '@navikt/aksel-icons';
-import { BodyLong, BoxNew, type BoxNewProps, Button, HStack, Tooltip } from '@navikt/ds-react';
+import { BodyLong, Box, type BoxProps, Button, HStack, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { format, isToday } from 'date-fns';
 import { useContext, useState } from 'react';
@@ -16,8 +16,8 @@ import { useContext, useState } from 'react';
 interface Props extends IMessage {
   mine: boolean;
   isFirst: boolean;
-  background: BoxNewProps['background'];
-  borderRadius: BoxNewProps['borderRadius'];
+  background: BoxProps['background'];
+  borderRadius: BoxProps['borderRadius'];
 }
 
 export const Message = ({
@@ -32,10 +32,10 @@ export const Message = ({
   background,
   borderRadius,
 }: Props) => (
-  <BoxNew
+  <Box
     key={id}
     borderRadius={borderRadius}
-    paddingBlock="2"
+    paddingBlock="space-8"
     paddingInline={getPaddingInline(mine, notify)}
     background={background}
     borderColor="neutral-subtle"
@@ -58,23 +58,23 @@ export const Message = ({
 
     <HStack
       position="absolute"
-      top="0"
-      left={mine ? '0' : undefined}
-      right={mine ? undefined : '0'}
-      bottom="0"
+      top="space-0"
+      left={mine ? 'space-0' : undefined}
+      right={mine ? undefined : 'space-0'}
+      bottom="space-0"
       align="center"
     >
       <Notify id={id} created={created} modified={modified} notify={notify} mine={mine} />
     </HStack>
-  </BoxNew>
+  </Box>
 );
 
-const getPaddingInline = (mine: boolean, notify: boolean): BoxNewProps['paddingInline'] => {
+const getPaddingInline = (mine: boolean, notify: boolean): BoxProps['paddingInline'] => {
   if (!mine && !notify) {
-    return '2';
+    return 'space-8';
   }
 
-  return mine ? '7 2' : '2 7';
+  return mine ? 'space-28 space-8' : 'space-8 space-28';
 };
 
 interface MessageHeaderProps extends Pick<IMessage, 'author' | 'created'> {
@@ -86,7 +86,7 @@ const MessageHeader = ({ author, created }: MessageHeaderProps) => {
   const name = author.navIdent === user.navIdent ? 'Meg' : formatEmployeeName(author);
 
   return (
-    <HStack asChild wrap={false} align="center" justify="space-between" gap="2">
+    <HStack asChild wrap={false} align="center" justify="space-between" gap="space-8">
       <h1 className="mb-2 overflow-hidden text-ax-small">
         <Tooltip content={name}>
           <span className="truncate text-ax-text-neutral-subtle">{name}</span>
@@ -95,7 +95,7 @@ const MessageHeader = ({ author, created }: MessageHeaderProps) => {
         <HStack
           wrap={false}
           align="center"
-          gap="1"
+          gap="space-4"
           flexShrink="0"
           className="shrink-0 text-ax-small text-ax-text-neutral-subtle"
         >
@@ -110,7 +110,7 @@ const MessageHeader = ({ author, created }: MessageHeaderProps) => {
 
 interface MessageTimeProps extends Pick<IMessage, 'created'> {
   mine: boolean;
-  background: BoxNewProps['background'];
+  background: BoxProps['background'];
 }
 
 const MessageTime = ({ created, mine, background }: MessageTimeProps) => (
@@ -118,15 +118,15 @@ const MessageTime = ({ created, mine, background }: MessageTimeProps) => (
     asChild
     wrap={false}
     position="absolute"
-    top="2"
+    top="space-0"
     align="center"
-    gap="1"
+    gap="space-4"
     flexShrink="0"
     className={mine ? '-right-0.5 flex-row-reverse' : '-left-0.5'}
   >
-    <BoxNew
-      paddingInline="1"
-      borderRadius="medium"
+    <Box
+      paddingInline="space-4"
+      borderRadius="4"
       background={background}
       shadow="dialog"
       className="-translate-y-full text-ax-text-neutral-subtle opacity-0 transition-opacity duration-200 group-hover/bubble:opacity-100"
@@ -134,7 +134,7 @@ const MessageTime = ({ created, mine, background }: MessageTimeProps) => (
       <Tooltip content={isoDateTimeToPretty(created) ?? created}>
         <time dateTime={created}>{displayTime(created)}</time>
       </Tooltip>
-    </BoxNew>
+    </Box>
   </HStack>
 );
 
@@ -187,7 +187,8 @@ const SendNotificationButton = ({ id, placement }: SendNotificationButtonProps) 
       describesChild
     >
       <Button
-        variant="tertiary-neutral"
+        data-color="neutral"
+        variant="tertiary"
         size="xsmall"
         onClick={onClick}
         className={`h-full cursor-pointer ${placement === Placement.RIGHT ? 'rounded-l-none' : 'rounded-r-none'} opacity-0 transition-opacity duration-200 group-hover/bubble:opacity-100`}
@@ -227,7 +228,7 @@ interface MessageNotificationProps {
 
 const MessageNotification = ({ at, placement }: MessageNotificationProps) => (
   <Tooltip content={`Varsel ble sendt ${isoDateTimeToPretty(at)}`} placement={placement} describesChild>
-    <HStack align="center" height="100%" paddingInline="05">
+    <HStack align="center" height="100%" paddingInline="space-2">
       <BellFillIcon aria-hidden role="presentation" className="text-ax-medium" />
     </HStack>
   </Tooltip>

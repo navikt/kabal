@@ -29,7 +29,7 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
   const opacityClass = isLoading ? OPACITY_50_CLASS : OPACITY_100_CLASS;
 
   return (
-    <HStack gap="2" align="center" className="[grid-area:title]">
+    <HStack gap="space-8" align="center" className="[grid-area:title]">
       <Heading
         level="1"
         size={SIZE}
@@ -77,9 +77,9 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
       >
         {getTitle(title)}
       </Heading>
-
       <Button
-        variant="tertiary-neutral"
+        data-color="neutral"
+        variant="tertiary"
         size="small"
         onClick={() => {
           ref.current?.focus();

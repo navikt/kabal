@@ -16,7 +16,7 @@ import { createPlatePlugin, PlateLeaf, type PlateLeafProps } from 'platejs/react
 const AutoCapitalisedLeaf = (props: PlateLeafProps<FormattedText>) => (
   <PlateLeaf
     {...props}
-    className="underline decoration-auto decoration-text-action decoration-dotted underline-offset-1"
+    className="underline decoration-auto decoration-ax-text-accent-subtle decoration-dotted underline-offset-1"
   />
 );
 

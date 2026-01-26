@@ -1,6 +1,6 @@
 import { stringToRegExp } from '@app/functions/string-to-regex';
 import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';
-import { BoxNew, Heading, Loader, Search, VStack } from '@navikt/ds-react';
+import { Box, Heading, Loader, Search, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { Direction } from '../../deassign/direction';
 import { FilterList } from '../../filter-dropdown/filter-list';
@@ -34,15 +34,15 @@ export const HjemmelList = ({ selected, ytelseId, direction, onChange, error }: 
   return (
     <VStack
       asChild
-      gap="2"
-      padding="2"
+      gap="space-8"
+      padding="space-8"
       minWidth="200px"
       position="absolute"
-      bottom={isUp ? '0' : undefined}
-      top={isUp ? undefined : '0'}
+      bottom={isUp ? 'space-0' : undefined}
+      top={isUp ? undefined : 'space-0'}
       className="left-full"
     >
-      <BoxNew background="default" borderRadius="medium" borderColor="neutral" borderWidth="1" shadow="dialog">
+      <Box background="default" borderRadius="4" borderColor="neutral" borderWidth="1" shadow="dialog">
         <Heading level="1" size="small">
           Endre hjemmel?
         </Heading>
@@ -70,7 +70,7 @@ export const HjemmelList = ({ selected, ytelseId, direction, onChange, error }: 
             className="max-h-[min(50vh,400px)] overflow-y-auto"
           />
         )}
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };

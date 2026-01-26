@@ -86,7 +86,7 @@ interface ListProps {
 }
 
 const OptionsList = ({ options, level = 0, ...rest }: ListProps) => (
-  <VStack as="ul" paddingInline={level === 0 ? '0 0' : '6 0'}>
+  <VStack as="ul" paddingInline={level === 0 ? 'space-0 space-0' : 'space-24 space-0'}>
     {options.map((o) => (
       <ListItem key={o.value} {...rest} option={o} level={level} />
     ))}
@@ -125,7 +125,8 @@ const ListItem = ({ option, selected, level, filter, onCheck, hasFilter }: ListI
       <HGrid columns="32px auto" align="start" style={{ gridTemplateAreas: '"expand checkbox"' }}>
         {isSubInFilter ? (
           <Button
-            variant="tertiary-neutral"
+            data-color="neutral"
+            variant="tertiary"
             size="xsmall"
             onClick={() => setIsExpaded(!isExpanded)}
             icon={isExpanded ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
@@ -137,7 +138,6 @@ const ListItem = ({ option, selected, level, filter, onCheck, hasFilter }: ListI
           {tags}
         </CheckboxOrGroup>
       </HGrid>
-
       {isSubInFilter && hasOptionsOrGroups && isExpanded ? (
         <OptionsList
           options={options}
@@ -176,7 +176,7 @@ const CheckboxOrGroup = ({ option, children, selected, onCheck, subSelectionCoun
 
   if (type === OptionType.GROUP) {
     return (
-      <HStack as={BodyShort} align="center" gap="2" height="100%" overflow="hidden" size="small">
+      <HStack as={BodyShort} align="center" gap="space-8" height="100%" overflow="hidden" size="small">
         <BulletListIcon aria-hidden height={20} width={20} style={{ flexShrink: 0 }} />
         <OptionLabel options={options} subOptionSelectedCount={subSelectionCount} totalOptions={totalOptions}>
           {children}
@@ -196,7 +196,7 @@ const CheckboxOrGroup = ({ option, children, selected, onCheck, subSelectionCoun
       onChange={() => onCheck(value)}
       className="[grid-area:checkbox]"
     >
-      <HStack align="center" gap="0 2">
+      <HStack align="center" gap="space-0 space-8">
         <OptionLabel options={options} subOptionSelectedCount={subSelectionCount} totalOptions={totalOptions}>
           {children}
         </OptionLabel>
@@ -213,7 +213,7 @@ interface OptionLabelProps {
 }
 
 const OptionLabel = ({ children, subOptionSelectedCount, options, totalOptions }: OptionLabelProps) => (
-  <HStack as="span" align="center" gap="1" overflow="hidden" className="truncate">
+  <HStack as="span" align="center" gap="space-4" overflow="hidden" className="truncate">
     {children}
     {options !== undefined && options.length > 0 ? (
       <Tag

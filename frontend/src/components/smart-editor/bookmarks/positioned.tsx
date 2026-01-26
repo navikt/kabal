@@ -11,7 +11,7 @@ import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 import { BOOKMARK_VARIANT_TO_CLASSNAME } from '@app/plate/toolbar/bookmark-button';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { BookmarkFillIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BoxNew, Tooltip } from '@navikt/ds-react';
+import { Box, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo } from 'react';
 
 const ITEM_WIDTH = 6 * 4;
@@ -92,11 +92,11 @@ const BookmarkItem = ({ bookmark, style, onDelete }: BookmarkProps) => {
 
   return (
     <Tooltip content="Fjern bokmerke" placement="top">
-      <BoxNew
+      <Box
         as="button"
         type="button"
         position="absolute"
-        borderRadius="medium"
+        borderRadius="4"
         key={key}
         onClick={() => onDelete(key)}
         style={style}
@@ -114,7 +114,7 @@ const BookmarkItem = ({ bookmark, style, onDelete }: BookmarkProps) => {
           height="100%"
           className="absolute top-0 left-0 opacity-100 group-hover/bookmark:opacity-0"
         />
-      </BoxNew>
+      </Box>
     </Tooltip>
   );
 };

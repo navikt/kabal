@@ -15,7 +15,7 @@ import { StyledBehandlingSection } from './styled-components';
 
 export const Behandling = () => (
   <PanelContainer data-testid="behandling-panel">
-    <HGrid columns="50% 50%" width="750px" flexGrow="1" gap="05" className="bg-ax-border-neutral-subtle">
+    <HGrid columns="50% 50%" width="750px" flexGrow="1" gap="space-2" className="bg-ax-border-neutral-subtle">
       <Behandlingsdetaljer />
       <Behandlingsdialog />
     </HGrid>

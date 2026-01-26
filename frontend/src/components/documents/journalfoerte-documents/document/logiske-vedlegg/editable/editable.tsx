@@ -76,7 +76,6 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
       className="group ml-1.5 min-w-[88px]"
     >
       <span className={`${TITLE_CLASSES} group-hover:opacity-0 ${hideOnFocusClasses}`}>{logiskVedlegg.tittel}</span>
-
       <span
         className={`absolute right-20 left-2 group-hover:opacity-100 ${TITLE_CLASSES} ${showOnFocusClasses}`}
         aria-hidden
@@ -84,8 +83,11 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
       >
         {logiskVedlegg.tittel}
       </span>
-
-      <HStack position="absolute" right="2" className={`select-none group-hover:opacity-100 ${showOnFocusClasses}`}>
+      <HStack
+        position="absolute"
+        right="space-8"
+        className={`select-none group-hover:opacity-100 ${showOnFocusClasses}`}
+      >
         <Tooltip content="Kopier" placement="top">
           <CopyButton
             size="xsmall"
@@ -100,8 +102,9 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
 
         <Tooltip content="Endre" placement="top">
           <Button
+            data-color="neutral"
             size="xsmall"
-            variant="tertiary-neutral"
+            variant="tertiary"
             onClick={onEditClick}
             icon={<PencilIcon aria-hidden />}
             loading={isUpdating}
@@ -115,8 +118,9 @@ export const EditableLogiskVedlegg = ({ dokumentInfoId, logiskVedlegg, logiskeVe
 
         <Tooltip content="Slett" placement="top">
           <Button
+            data-color="neutral"
             size="xsmall"
-            variant="tertiary-neutral"
+            variant="tertiary"
             onClick={onRemove}
             icon={<TrashIcon aria-hidden />}
             loading={isRemoving}

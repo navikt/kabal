@@ -48,11 +48,11 @@ export const Header = ({ filters, showsAnyVedlegg, toggleShowAllVedlegg, searchR
   return (
     <HGrid
       as="div"
-      gap="0 2"
+      gap="space-0 space-8"
       align="center"
       flexShrink="0"
-      paddingBlock="1 2"
-      paddingInline="2"
+      paddingBlock="space-4 space-8"
+      paddingInline="space-8"
       overflow="visible"
       columns={isExpanded ? getFieldSizes(fields) : getFieldSizes(COLLAPSED_JOURNALFOERTE_DOCUMENT_HEADER_FIELDS)}
       className={CLASSES}
@@ -63,25 +63,21 @@ export const Header = ({ filters, showsAnyVedlegg, toggleShowAllVedlegg, searchR
       }}
     >
       <SelectAll />
-
       <Tooltip content={tooltip} placement="top">
         <Button
+          data-color="neutral"
           size="small"
-          variant="tertiary-neutral"
+          variant="tertiary"
           icon={<ChevronRightDoubleIcon aria-hidden className={showsAnyVedlegg ? 'rotate-90' : 'rotate-0'} />}
           style={{ gridArea: Fields.ToggleVedlegg }}
           onClick={() => toggleShowAllVedlegg()}
         />
       </Tooltip>
-
       <DocumentSearch setSearch={setSearch} search={search} ref={searchRef} keyboardBoundaryRef={keyboardBoundaryRef} />
-
       {isExpanded ? <ExpandedHeaders {...filters} /> : null}
-
-      <HStack style={{ gridArea: Fields.ToggleMetadata }} align="center" justify="center" padding="1-alt">
+      <HStack style={{ gridArea: Fields.ToggleMetadata }} align="center" justify="center" className="p-1.5">
         <InformationSquareIcon aria-hidden className="h-full w-full" />
       </HStack>
-
       <IncludedFilter />
     </HGrid>
   );

@@ -32,14 +32,14 @@ const ReadOnlyUtfall = ({ utfall }: UtfallResultatProps) => {
   const utfallName = useUtfallNameOrLoading(utfall ?? NOT_SELECTED_LABEL);
 
   return (
-    <VStack align="start" gap="2" marginBlock="0 4" data-testid={CONTAINER_ID}>
-      <HStack align="center" gap="2">
+    <VStack align="start" gap="space-8" marginBlock="space-0 space-1" data-testid={CONTAINER_ID}>
+      <HStack align="center" gap="space-8">
         <Label size="small" htmlFor={SELECT_ID}>
           {utfallLabel}
         </Label>
         <HelpText>Det utfallet som passet best for saken.</HelpText>
       </HStack>
-      <Tag size="small" variant="alt1">
+      <Tag data-color="meta-purple" size="small" variant="outline">
         {utfallName}
       </Tag>
     </VStack>
@@ -72,8 +72,8 @@ const EditUtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: Utf
   const options = utfallKodeverk.map(({ id, navn }) => <option key={id} value={id} label={navn} />);
 
   return (
-    <VStack align="start" gap="2" marginBlock="0 4" data-testid={CONTAINER_ID}>
-      <HStack align="center" gap="2">
+    <VStack align="start" gap="space-8" marginBlock="space-0 space-1" data-testid={CONTAINER_ID}>
+      <HStack align="center" gap="space-8">
         <Label size="small" htmlFor={SELECT_ID}>
           {utfallLabel}
         </Label>

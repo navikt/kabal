@@ -15,14 +15,14 @@ const SkeletonRow = () => (
     </Table.DataCell>
 
     <Table.DataCell>
-      <HStack align="center" gap="0 1">
+      <HStack align="center" gap="space-0 space-4">
         <Skeleton variant="rounded" width={60} />
         <Skeleton variant="rounded" width={180} />
       </HStack>
     </Table.DataCell>
 
     <Table.DataCell>
-      <HStack align="center" gap="0 1">
+      <HStack align="center" gap="space-0 space-4">
         <Skeleton variant="rounded" width="100%" />
         <Skeleton variant="rounded" width={28} />
       </HStack>
@@ -33,7 +33,7 @@ const SkeletonRow = () => (
     </Table.DataCell>
 
     <Table.DataCell>
-      <HStack align="center" gap="0 1" minWidth={`${3 * 32 + 2 * 4}px`}>
+      <HStack align="center" gap="space-0 space-4" minWidth={`${3 * 32 + 2 * 4}px`}>
         <Skeleton variant="rounded" width={28} height={28} />
         <Skeleton variant="rounded" width={28} height={28} />
       </HStack>

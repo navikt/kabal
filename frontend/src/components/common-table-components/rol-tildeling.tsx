@@ -45,7 +45,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
   };
 
   const UndoTildelButton = (
-    <Button size="small" variant="secondary-neutral" onClick={fradel}>
+    <Button data-color="neutral" size="small" variant="secondary" onClick={fradel}>
       Angre
     </Button>
   );
@@ -69,7 +69,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
   };
 
   const UndoFradelAction = (
-    <Button size="small" variant="secondary-neutral" onClick={tildel}>
+    <Button data-color="neutral" size="small" variant="secondary" onClick={tildel}>
       Angre
     </Button>
   );
@@ -84,7 +84,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
 
   if (employee.navIdent === user.navIdent) {
     return (
-      <Button onClick={fradel} loading={isLoading} size="small" variant="secondary-neutral">
+      <Button data-color="neutral" onClick={fradel} loading={isLoading} size="small" variant="secondary">
         Legg i felles kø
       </Button>
     );

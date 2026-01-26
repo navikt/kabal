@@ -18,7 +18,8 @@ export const MarkAllAsReadButton = ({ unreadCount }: MarkAllAsReadButtonProps) =
 
   return (
     <Button
-      variant="tertiary-neutral"
+      data-color="neutral"
+      variant="tertiary"
       size="small"
       onClick={onClick}
       icon={<EnvelopeOpenIcon aria-hidden />}

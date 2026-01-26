@@ -14,7 +14,7 @@ export const TextInput = ({ value, onChange, hasChanges, settingId }: Props) => 
   const navigate = useSvarbrevNavigate();
 
   return (
-    <HStack align="center" gap="0 1">
+    <HStack align="center" gap="space-0 space-4">
       <div className="grow">
         <TextField
           size="small"
@@ -32,15 +32,14 @@ export const TextInput = ({ value, onChange, hasChanges, settingId }: Props) => 
           spellCheck
         />
       </div>
-
       <Tooltip content="Kopier">
         <CopyButton copyText={value} size="small" />
       </Tooltip>
-
       <Tooltip content="Lim inn">
         <Button
+          data-color="neutral"
           size="small"
-          variant="tertiary-neutral"
+          variant="tertiary"
           icon={<ClipboardIcon aria-hidden />}
           onClick={async () => {
             const text = await navigator.clipboard.readText();

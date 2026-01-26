@@ -81,11 +81,12 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
       <SectionContainer data-element={props.element.type} sectionType={SectionTypeEnum.LABEL}>
         <span className="group/placeholder relative">
           <Button
+            data-color="neutral"
             style={{}}
             className="-translate-y-1/2 absolute top-1/2 right-full hidden group-hover/placeholder:block"
             contentEditable
             suppressContentEditableWarning
-            variant="tertiary-neutral"
+            variant="tertiary"
             size="small"
             title='Tilbakestill tittel til "Fullmektig"'
             onClick={() => {

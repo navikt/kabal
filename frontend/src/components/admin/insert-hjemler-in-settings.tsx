@@ -16,7 +16,7 @@ export const InsertHjemlerInSettings = () => {
   ));
 
   return (
-    <VStack as="section" gap="4">
+    <VStack as="section" gap="space-16">
       <Heading size="small">Sett inn innsendingshjemler i innstillinger</Heading>
 
       <Select
@@ -66,10 +66,11 @@ const Hjemler = ({ ytelse, selectedHjemler, setSelectedHjemler }: HjemlerProps) 
 
   return (
     <>
-      <HStack gap="2">
+      <HStack gap="space-8">
         <Button
+          data-color="neutral"
           size="small"
-          variant="secondary-neutral"
+          variant="secondary"
           onClick={() => setSelectedHjemler(foundYtelse.innsendingshjemler.map(({ id }) => id))}
           className="shrink"
         >
@@ -77,15 +78,15 @@ const Hjemler = ({ ytelse, selectedHjemler, setSelectedHjemler }: HjemlerProps) 
         </Button>
 
         <Button
+          data-color="neutral"
           size="small"
-          variant="secondary-neutral"
+          variant="secondary"
           onClick={() => setSelectedHjemler([])}
           disabled={selectedHjemler.length === 0}
         >
           Fjern alle
         </Button>
       </HStack>
-
       <CheckboxGroup legend="Velg hjemler" size="small" value={selectedHjemler} onChange={setSelectedHjemler}>
         <div className="flex max-h-200 flex-col flex-wrap gap-x-6 overflow-x-auto overflow-y-hidden">
           {foundYtelse.innsendingshjemler.map(({ id, navn }) => (
@@ -95,7 +96,6 @@ const Hjemler = ({ ytelse, selectedHjemler, setSelectedHjemler }: HjemlerProps) 
           ))}
         </div>
       </CheckboxGroup>
-
       <div>
         <Button
           size="small"

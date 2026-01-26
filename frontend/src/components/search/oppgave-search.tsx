@@ -26,8 +26,8 @@ export const OppgaveSearch = () => {
 
   const toggleGroup = (
     <ToggleGroup
+      data-color="neutral"
       size="small"
-      variant="neutral"
       value={searchType}
       onChange={(v) => {
         if (isSearchType(v)) {
@@ -76,8 +76,8 @@ const FnrSearch = ({ children }: Props) => {
 
   return (
     <>
-      <VStack gap="2" padding="4">
-        <HStack gap="05">
+      <VStack gap="space-8" padding="space-16">
+        <HStack gap="space-2">
           {children}
 
           <SearchField
@@ -116,8 +116,8 @@ const SaksnrSearch = ({ children }: Props) => {
   const search = () => fetchOppgaver(query);
 
   return (
-    <VStack gap="2" padding="4">
-      <HStack gap="05">
+    <VStack gap="space-8" padding="space-16">
+      <HStack gap="space-2">
         {children}
 
         <SearchField label="Søk på saksnummer" onChange={setRawQuery} onKeyDown={search}>

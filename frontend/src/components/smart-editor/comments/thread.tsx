@@ -5,7 +5,7 @@ import { useSmartEditorExpandedThreads } from '@app/hooks/settings/use-setting';
 import { usePostReplyMutation } from '@app/redux-api/smart-editor-comments';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { Chat2Icon } from '@navikt/aksel-icons';
-import { BoxNew, Button, VStack } from '@navikt/ds-react';
+import { Box, Button, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
 import { CommentList } from './comment-list';
@@ -39,20 +39,20 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isFocused =
   return (
     <VStack
       asChild
-      gap="0"
+      gap="space-0"
       width={`${THREAD_WIDTH}px`}
       position={isAbsolute ? 'absolute' : 'static'}
-      padding="4"
+      padding="space-16"
       ref={ref}
       onClick={onClick}
       style={style}
     >
-      <BoxNew
+      <Box
         as="section"
         background="raised"
         borderWidth="1"
         borderColor="neutral"
-        borderRadius="medium"
+        borderRadius="4"
         shadow={isExpanded ? 'dialog' : undefined}
         className={isExpanded ? EXPANDED_CLASSES : COLLAPSED_CLASSES}
         style={{ zIndex: isEditing || focusedThreadId === thread.id ? 999 : zIndex }}
@@ -64,7 +64,7 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isFocused =
           </div>
         )}
         {isEditing ? null : <AddComment threadId={thread.id} />}
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };
@@ -85,9 +85,10 @@ const AddComment = ({ threadId }: AddCommentProps) => {
 
   return (
     <Button
+      data-color="neutral"
       loading={isLoading}
       size="small"
-      variant="secondary-neutral"
+      variant="secondary"
       className="opacity-0 group-focus-within/thread:opacity-100 group-hover/thread:opacity-100"
       icon={<Chat2Icon aria-hidden />}
       onClick={async () => {

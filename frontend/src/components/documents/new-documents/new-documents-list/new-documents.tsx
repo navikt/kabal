@@ -81,7 +81,7 @@ export const NewDocuments = () => {
   if (isError) {
     return (
       <Wrapper>
-        <HStack height="12" align="center" padding="2">
+        <HStack height="12" align="center" padding="space-8">
           <Alert variant="error" inline>
             Kunne ikke hente dokumenter
           </Alert>
@@ -93,7 +93,7 @@ export const NewDocuments = () => {
   if (!isSuccess) {
     return (
       <Wrapper>
-        <HStack height="12" align="center" padding="2">
+        <HStack height="12" align="center" padding="space-8">
           <Loader size="xlarge" />
         </HStack>
       </Wrapper>
@@ -112,7 +112,7 @@ export const NewDocuments = () => {
           }}
         >
           {documentMap.size === 0 ? (
-            <HStack height="12" align="center" paddingInline="2">
+            <HStack height="12" align="center" paddingInline="space-8">
               <Alert variant="info" inline>
                 Ingen dokumenter
               </Alert>
@@ -140,8 +140,8 @@ interface WrapperProps {
 const Wrapper = ({ children }: WrapperProps) => (
   <VStack
     as="section"
-    paddingInline="4"
-    paddingBlock="0"
+    paddingInline="space-16"
+    paddingBlock="space-0"
     height="fit-content"
     maxHeight="calc(50% - 200px)"
     data-testid="new-documents-section"

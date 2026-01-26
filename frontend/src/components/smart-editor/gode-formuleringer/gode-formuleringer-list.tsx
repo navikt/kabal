@@ -2,7 +2,7 @@ import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodFormulering } from '@app/components/smart-editor/gode-formuleringer/god-formulering';
 import { GodeFormuleringerExpandState } from '@app/hooks/settings/use-setting';
 import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
-import { Alert, BoxNew } from '@navikt/ds-react';
+import { Alert, Box } from '@navikt/ds-react';
 import { useContext, useEffect } from 'react';
 
 interface ListProps {
@@ -31,29 +31,27 @@ export const GodeFormuleringerList = ({
   if (isLoading) {
     return (
       <>
-        <BoxNew
+        <Box
           background="neutral-soft"
           borderWidth="4"
           className="border-transparent"
-          borderRadius="medium"
+          borderRadius="4"
           shadow="dialog"
           height="316px"
         />
-
-        <BoxNew
+        <Box
           background="neutral-soft"
           borderWidth="4"
           className="border-transparent"
-          borderRadius="medium"
+          borderRadius="4"
           shadow="dialog"
           height="316px"
         />
-
-        <BoxNew
+        <Box
           background="neutral-soft"
           borderWidth="4"
           className="mb-96 border-transparent"
-          borderRadius="medium"
+          borderRadius="4"
           shadow="dialog"
           height="316px"
         />

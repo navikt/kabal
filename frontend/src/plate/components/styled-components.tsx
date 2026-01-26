@@ -1,4 +1,4 @@
-import { BoxNew, HGrid } from '@navikt/ds-react';
+import { Box, HGrid } from '@navikt/ds-react';
 import { useEditorReadOnly } from 'platejs/react';
 import type { HtmlHTMLAttributes } from 'react';
 
@@ -36,10 +36,10 @@ const BORDER_COLOR_MAP: Record<SectionTypeEnum, string> = {
 };
 
 const BaseToolbarStyle = ({ style, className, ...rest }: HtmlHTMLAttributes<HTMLDivElement>) => (
-  <BoxNew
+  <Box
     position="absolute"
-    top="0"
-    bottom="0"
+    top="space-0"
+    bottom="space-0"
     {...rest}
     style={style}
     className={`text-[12pt] opacity-0 transition-opacity duration-200 focus:opacity-100 ${className}`}
@@ -92,9 +92,9 @@ interface StickyContentProps {
 
 const StickyContent = ({ children }: StickyContentProps) => (
   <HGrid asChild position="sticky" columns="auto auto" top="space-48" gap="space-4">
-    <BoxNew background="sunken" shadow="dialog" className="text-ax-text-accent">
+    <Box background="sunken" shadow="dialog" className="text-ax-text-accent">
       {children}
-    </BoxNew>
+    </Box>
   </HGrid>
 );
 
@@ -111,14 +111,14 @@ const BaseSectionContainer = ({
   children,
   ...rest
 }: BaseSectionContainerProps) => (
-  <BoxNew
+  <Box
     position="relative"
     style={{ color: color, ['--border-color' as string]: borderColor, ...style }}
     className={`before:absolute before:top-0 before:bottom-0 before:block before:border-transparent hover:z-1 hover:before:border-(--border-color) ${className}`}
     {...rest}
   >
     {children}
-  </BoxNew>
+  </Box>
 );
 
 interface SectionContainerProps extends HtmlHTMLAttributes<HTMLDivElement> {

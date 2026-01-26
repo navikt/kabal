@@ -52,41 +52,36 @@ export const Row = ({ gosysOppgave, selectedGosysOppgave, oppgaveId, showFerdigs
     >
       <Table.DataCell>
         {gosysOppgave.gjelder === null ? null : (
-          <Tag size="small" variant="success">
+          <Tag data-color="success" size="small" variant="outline">
             {gosysOppgave.gjelder}
           </Tag>
         )}
       </Table.DataCell>
       <Table.DataCell>
-        <Tag size="small" variant="alt1">
+        <Tag data-color="meta-purple" size="small" variant="outline">
           {temaName}
         </Tag>
       </Table.DataCell>
-
       {showFerdigstilt ? <TimeCell time={gosysOppgave.ferdigstiltTidspunkt} /> : null}
       <DateCell date={gosysOppgave.fristFerdigstillelse} />
-
       <Table.DataCell>
-        <Tag size="small" variant="info">
+        <Tag data-color="info" size="small" variant="outline">
           {gosysOppgave.oppgavetype}
         </Tag>
       </Table.DataCell>
-
       <Table.DataCell>
         <Employee employee={gosysOppgave.opprettetAv} />
       </Table.DataCell>
       <Table.DataCell>
         {gosysOppgave.opprettetAvEnhet === null ? null : (
-          <Tag size="small" variant="alt1">
+          <Tag data-color="meta-purple" size="small" variant="outline">
             {gosysOppgave.opprettetAvEnhet.navn} ({gosysOppgave.opprettetAvEnhet.enhetsnr})
           </Tag>
         )}
       </Table.DataCell>
-
       <Table.DataCell>
         <Enhet enhet={gosysOppgave.tildeltEnhetsnr} />
       </Table.DataCell>
-
       <Table.DataCell>
         <Selection selected={selected} gosysOppgave={gosysOppgave} onSelect={onSelect} isSelecting={isLoading} />
       </Table.DataCell>
@@ -129,7 +124,7 @@ const Selection = ({ gosysOppgave, selected, onSelect, isSelecting }: SelectionP
   }
 
   return (
-    <Button size="small" variant="tertiary-neutral" onClick={onSelect} loading={isSelecting}>
+    <Button data-color="neutral" size="small" variant="tertiary" onClick={onSelect} loading={isSelecting}>
       Velg
     </Button>
   );
@@ -140,7 +135,7 @@ export const Enhet = ({ enhet }: { enhet: string }) => {
 
   if (enheter === undefined) {
     return (
-      <Tag size="small" variant="alt1">
+      <Tag data-color="meta-purple" size="small" variant="outline">
         Laster...
       </Tag>
     );
@@ -150,14 +145,14 @@ export const Enhet = ({ enhet }: { enhet: string }) => {
 
   if (resolvedEnhet !== undefined) {
     return (
-      <Tag size="small" variant="alt1">
-        {resolvedEnhet.navn ?? 'Ukjent enhet'} ({enhet})
+      <Tag data-color="meta-purple" size="small" variant="outline">
+        {resolvedEnhet.navn ?? 'Ukjent enhet'}({enhet})
       </Tag>
     );
   }
 
   return (
-    <Tag size="small" variant="neutral">
+    <Tag data-color="neutral" size="small" variant="outline">
       {enhet}
     </Tag>
   );

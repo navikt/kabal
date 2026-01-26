@@ -66,24 +66,24 @@ export const PdfModal = ({
       width="1100px"
       className="max-w-[90vw]"
     >
-      <VStack asChild gap="4" width="100%">
+      <VStack asChild gap="space-16" width="100%">
         <Modal.Body>
-          <VStack gap="4">
-            <HStack align="center" gap="0 1" className="text-base italic">
+          <VStack gap="space-16">
+            <HStack align="center" gap="space-0 space-4" className="text-base italic">
               <span>
                 Sist endret <Time dateTime={modified} /> av <User {...modifiedBy} />.
               </span>
               {hasChanges ? (
-                <Tag variant="warning" size="small">
+                <Tag data-color="warning" variant="outline" size="small">
                   Utkast
                 </Tag>
               ) : (
-                <Tag variant="info" size="small">
+                <Tag data-color="info" variant="outline" size="small">
                   Lagret
                 </Tag>
               )}
             </HStack>
-            <HStack align="center" gap="0 4">
+            <HStack align="center" gap="space-0 space-16">
               <Switch size="small" checked={shouldSend} onChange={({ target }) => setShouldSend(target.checked)}>
                 Aktiv
               </Switch>
@@ -91,7 +91,7 @@ export const PdfModal = ({
                 <span>{ytelseNameIsLoading ? 'Laster...' : (ytelseName ?? `Ukjent ytelse med ID «${ytelseId}»`)}</span>
               </Tooltip>
               <Tooltip content="Saksbehandlingstid">
-                <HStack align="center" gap="0 2">
+                <HStack align="center" gap="space-0 space-8">
                   <TimeInput
                     value={behandlingstidUnits}
                     onChange={setBehandlingstidUnits}
@@ -138,7 +138,6 @@ export const PdfModal = ({
           </div>
         </Modal.Body>
       </VStack>
-
       <Modal.Footer>
         {hasChanges || isLoading ? (
           <Button
@@ -163,8 +162,9 @@ export const PdfModal = ({
 
         {hasChanges ? (
           <Button
+            data-color="neutral"
             type="button"
-            variant="secondary-neutral"
+            variant="secondary"
             size="small"
             onClick={() => {
               cancel();
@@ -175,7 +175,7 @@ export const PdfModal = ({
           </Button>
         ) : null}
 
-        <Button type="button" variant="secondary-neutral" size="small" onClick={close}>
+        <Button data-color="neutral" type="button" variant="secondary" size="small" onClick={close}>
           Lukk
         </Button>
       </Modal.Footer>
@@ -195,7 +195,7 @@ const getTitle = (type: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE) => {
 const User = ({ navn, navIdent }: INavEmployee) => `${navn} (${navIdent})`;
 
 const Time = ({ dateTime }: { dateTime: string }) => (
-  <time dateTime={dateTime} className="font-bold">
+  <time dateTime={dateTime} className="font-ax-bold">
     {isoDateTimeToPretty(dateTime)}
   </time>
 );

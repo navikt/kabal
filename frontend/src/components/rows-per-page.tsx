@@ -15,18 +15,18 @@ export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Pro
   const { value = pageSize, setValue } = useRestrictedNumberSetting(settingKey, restrictPageSize);
 
   return (
-    <HStack align="center" justify="end" gap="2">
+    <HStack align="center" justify="end" gap="space-8">
       <Label id={id} size="small">
         Rader per side
       </Label>
       <ToggleGroup
+        data-color="neutral"
         value={value.toString(10)}
         onChange={(v) => {
           pushEvent('change-rows-per-page', 'oppgave-lists', { value: v });
           setValue(Number.parseInt(v, 10));
         }}
         size="small"
-        variant="neutral"
         aria-describedby={id}
         data-testid={testId}
       >

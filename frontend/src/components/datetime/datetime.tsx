@@ -36,7 +36,7 @@ export const DateTime = ({ dateTime, icon, id, className, ...rest }: DateTimePro
   <HStack
     as="time"
     align="center"
-    gap="1"
+    gap="space-4"
     dateTime={dateTime}
     id={id}
     className={className === undefined ? 'whitespace-nowrap' : `whitespace-nowrap ${className}`}

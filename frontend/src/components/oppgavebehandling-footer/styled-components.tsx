@@ -1,4 +1,4 @@
-import { BoxNew, type BoxNewProps, HStack } from '@navikt/ds-react';
+import { Box, type BoxProps, HStack } from '@navikt/ds-react';
 
 export enum FooterType {
   FINISHED = 0,
@@ -20,7 +20,7 @@ const getBorderColor = (type: FooterType) => {
   }
 };
 
-const getBackgroundColor = (type: FooterType): BoxNewProps['background'] => {
+const getBackgroundColor = (type: FooterType): BoxProps['background'] => {
   switch (type) {
     case FooterType.FINISHED:
       return 'success-moderate';
@@ -42,18 +42,18 @@ export const StyledFooter = ({ type, children }: StyledFooterProps) => (
   <HStack
     asChild
     position="sticky"
-    left="0"
-    bottom="0"
+    left="space-0"
+    bottom="space-0"
     align="center"
     justify="space-between"
-    gap="4"
-    paddingInline="4"
-    paddingBlock="2"
+    gap="space-16"
+    paddingInline="space-16"
+    paddingBlock="space-8"
     width="100%"
     className="z-23"
   >
-    <BoxNew background={getBackgroundColor(type)} borderWidth="1 0 0 0" borderColor={getBorderColor(type)}>
+    <Box background={getBackgroundColor(type)} borderWidth="1 0 0 0" borderColor={getBorderColor(type)}>
       {children}
-    </BoxNew>
+    </Box>
   </HStack>
 );

@@ -70,7 +70,7 @@ const handleToast = (documents: IDocument[], actor: INavEmployee) => {
     const action = ACTION[document.type];
     const distType = document.parentId === null ? DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId] : 'Vedlegg';
     const distTypeTag = (
-      <Tag size="xsmall" variant="info">
+      <Tag data-color="info" size="xsmall" variant="outline">
         {distType}
       </Tag>
     );

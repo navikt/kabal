@@ -154,7 +154,7 @@ export const Sidebar = ({ maltekstseksjon, query }: Props) => {
         ))}
       </List>
 
-      <VStack as="section" gap="2" marginBlock="2 0" width="100%">
+      <VStack as="section" gap="space-8" marginBlock="space-8 space-0" width="100%">
         <Heading level="1" size="xsmall">
           Legg til tekst i denne maltekstseksjonen
         </Heading>

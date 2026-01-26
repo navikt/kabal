@@ -96,7 +96,7 @@ export const EditPart = ({
   const isSearching = isLoading || isFetching;
 
   return (
-    <VStack gap="4 0" id={id}>
+    <VStack gap="space-16 space-0" id={id}>
       <Search
         label="Søk"
         size="small"
@@ -176,7 +176,11 @@ const Result = ({ part, search, isError, error, ...props }: ResultProps) => {
   }
 
   if (isError) {
-    return <Tag variant="warning">Ingen treff</Tag>;
+    return (
+      <Tag data-color="warning" variant="outline">
+        Ingen treff
+      </Tag>
+    );
   }
 
   if (part === undefined || search.length === 0) {

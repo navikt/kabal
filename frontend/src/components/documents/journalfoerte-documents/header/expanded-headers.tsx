@@ -142,8 +142,9 @@ interface SortButtonProps {
 }
 const SortButton = ({ column, sort, setSort, size }: SortButtonProps) => (
   <Button
+    data-color="neutral"
     icon={getSortIcon(sort, column)}
-    variant="tertiary-neutral"
+    variant="tertiary"
     size={size}
     onClick={() =>
       setSort({

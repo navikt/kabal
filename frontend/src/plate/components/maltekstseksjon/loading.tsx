@@ -11,7 +11,7 @@ export const Loading = ({ section }: Props) => (
     <Heading size="xsmall" level="1">
       {MALTEKST_SECTION_NAMES[section]}
     </Heading>
-    <HStack align="center" gap="1">
+    <HStack align="center" gap="space-4">
       <Loader size="xsmall" /> Laster tekst...
     </HStack>
   </Alert>

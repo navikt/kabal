@@ -34,9 +34,9 @@ export const Trygderettsankebehandlingsdetaljer = ({ oppgavebehandling }: Props)
         <Heading level="1" size="medium" spacing>
           Behandling
         </Heading>
-        <VStack gap="4">
+        <VStack gap="space-16">
           <BehandlingSection label="Den ankende part">
-            <VStack gap="2">
+            <VStack gap="space-8">
               {oppgavebehandling.klager.name ?? 'Navn mangler'}
               <OrgWarning identifikator={oppgavebehandling.klager.identifikator} label="ankende part" />
             </VStack>

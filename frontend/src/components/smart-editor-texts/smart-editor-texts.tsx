@@ -51,14 +51,15 @@ export const SmartEditorTexts = ({ textType }: Props) => {
         gridTemplateRows: 'min-content min-content min-content 1fr',
         gridTemplateAreas: "'header content' 'filters content' 'search content' 'list content'",
       }}
-      gap="1 2"
+      gap="space-4 space-8"
       height="100%"
       overflowY="hidden"
     >
-      <HStack gap="4" justify="start" className="[grid-area:header]">
+      <HStack gap="space-16" justify="start" className="[grid-area:header]">
         <Button
+          data-color="neutral"
           size="small"
-          variant="secondary-neutral"
+          variant="secondary"
           loading={isAdding}
           onClick={onClick}
           icon={<PlusIcon aria-hidden />}
@@ -68,9 +69,7 @@ export const SmartEditorTexts = ({ textType }: Props) => {
 
         <SetStandaloneTextLanguage textType={textType} />
       </HStack>
-
       <Filters textType={textType} className="[grid-area:filters]" />
-
       <Search
         value={filter}
         onChange={(v) => {
@@ -90,7 +89,6 @@ export const SmartEditorTexts = ({ textType }: Props) => {
         spellCheck
         className="[grid-area:search]"
       />
-
       <StandaloneTextList
         filter={filter}
         data={data}
@@ -98,7 +96,6 @@ export const SmartEditorTexts = ({ textType }: Props) => {
         textType={textType}
         style={{ gridArea: 'list' }}
       />
-
       <LoadText />
     </HGrid>
   );

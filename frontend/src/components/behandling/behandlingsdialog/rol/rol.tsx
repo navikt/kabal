@@ -67,7 +67,7 @@ interface ContainerProps {
 }
 
 const Container = ({ children }: ContainerProps) => (
-  <VStack gap="2" marginBlock="0 4">
+  <VStack gap="space-8" marginBlock="space-0 space-1">
     {children}
   </VStack>
 );

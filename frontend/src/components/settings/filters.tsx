@@ -46,7 +46,7 @@ export const Filters = () => {
     <SettingsSection gridColumn="filters">
       <SectionHeader>Velg hvilke ytelser og hjemler du har kompetanse til å behandle</SectionHeader>
 
-      <VStack gap="5" width="100%">
+      <VStack gap="space-20" width="100%">
         <SettingsFilter label="Ytelser" options={ytelserOptions} selected={settings.ytelser} settingKey="ytelser" />
         <SettingsFilter label="Hjemler" options={hjemler} selected={settings.hjemler} settingKey="hjemler" />
       </VStack>
@@ -89,10 +89,11 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
 
   return (
     <section className="relative">
-      <HStack gap="0 2" position="absolute" top="0" right="0">
+      <HStack gap="space-0 space-8" position="absolute" top="space-0" right="space-0">
         <Button
+          data-color="neutral"
           type="button"
-          variant="secondary-neutral"
+          variant="secondary"
           size="small"
           onClick={removeAll}
           data-testid={`${settingKey}-remove-all`}
@@ -101,8 +102,9 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           Fjern alle
         </Button>
         <Button
+          data-color="neutral"
           type="button"
-          variant="secondary-neutral"
+          variant="secondary"
           size="small"
           onClick={selectAll}
           data-testid={`${settingKey}-select-all`}
@@ -111,7 +113,6 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           Velg alle
         </Button>
       </HStack>
-
       <HGrid asChild width="100%" columns="repeat(auto-fit, 300px)">
         <Fieldset data-testid={`${settingKey}-settings`} legend={legend}>
           {options.map(({ id, navn }) => (

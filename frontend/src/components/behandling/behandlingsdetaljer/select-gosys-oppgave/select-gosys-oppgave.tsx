@@ -104,10 +104,9 @@ export const SelectGosysOppgaveModal = ({ hasGosysOppgave }: SelectGosysOppgaveM
 
   return (
     <>
-      <Button variant="secondary-neutral" size="small" onClick={onClick}>
+      <Button data-color="neutral" variant="secondary" size="small" onClick={onClick}>
         {text}
       </Button>
-
       <Modal
         aria-label={text}
         open={isOpen}
@@ -121,7 +120,13 @@ export const SelectGosysOppgaveModal = ({ hasGosysOppgave }: SelectGosysOppgaveM
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary-neutral" size="small" onClick={() => setIsOpen(false)} className="self-start">
+          <Button
+            data-color="neutral"
+            variant="secondary"
+            size="small"
+            onClick={() => setIsOpen(false)}
+            className="self-start"
+          >
             Lukk
           </Button>
         </Modal.Footer>
@@ -222,9 +227,10 @@ const SelectGosysOppgave = () => {
 
   return (
     <>
-      <HStack gap="4">
+      <HStack gap="space-16">
         <Button
-          variant="secondary-neutral"
+          data-color="neutral"
+          variant="secondary"
           size="small"
           onClick={onShowOpenClick}
           className="self-start"
@@ -235,7 +241,8 @@ const SelectGosysOppgave = () => {
 
         {showOpen ? (
           <Button
-            variant="secondary-neutral"
+            data-color="neutral"
+            variant="secondary"
             size="small"
             onClick={onShowOtherClick}
             className="self-start"
@@ -247,7 +254,6 @@ const SelectGosysOppgave = () => {
           </Button>
         ) : null}
       </HStack>
-
       <SortableTable
         heading={
           showOpen || selectedGosysOppgave === undefined ? `Åpne oppgaver (${openOppgaveList.length})` : 'Valgt oppgave'
@@ -259,7 +265,6 @@ const SelectGosysOppgave = () => {
         refetch={showOpen || selectedGosysOppgave === undefined ? refetch : undefined}
         isFetching={isFetching}
       />
-
       {showOther ? (
         <SortableTable
           heading={`Ferdigstilte og feilregistrerte oppgaver (${otherOppgaveList.length})`}
@@ -358,11 +363,12 @@ interface HeaderProps {
 
 const Header = ({ children, refetch, isFetching = false }: HeaderProps) => (
   <Heading level="1" size="xsmall" spacing>
-    <HStack align="center" justify="start" gap="2">
+    <HStack align="center" justify="start" gap="space-8">
       <span>{children}</span>
       {refetch === undefined ? null : (
         <Button
-          variant="tertiary-neutral"
+          data-color="neutral"
+          variant="tertiary"
           size="xsmall"
           onClick={refetch}
           loading={isFetching}

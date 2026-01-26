@@ -34,7 +34,7 @@ export const TextDraftActions = ({ text, onDraftDeleted, onPublish, deleteTransl
   const isDraft = text.publishedDateTime === null;
 
   return (
-    <HStack gap="2" justify="end" marginInline="auto 0">
+    <HStack gap="space-8" justify="end" marginInline="auto space-0">
       {error === undefined ? null : <ErrorMessage size="small">{error}</ErrorMessage>}
       <Button onClick={onPublish} icon={<UploadIcon aria-hidden />} size="small" loading={publishIsLoading}>
         Publiser
@@ -77,10 +77,16 @@ const DeleteLanguageVersion = ({ deleteTranslation }: DeleteLanguageVersionProps
   if (confirm) {
     return (
       <>
-        <Button variant="danger" size="small" onClick={deleteTranslation} icon={<TrashIcon aria-hidden />}>
+        <Button
+          data-color="danger"
+          variant="primary"
+          size="small"
+          onClick={deleteTranslation}
+          icon={<TrashIcon aria-hidden />}
+        >
           Slett versjon for {LANGUAGE_NAMES[language].toLowerCase()}
         </Button>
-        <Button size="small" variant="secondary-neutral" onClick={() => setConfirm(false)}>
+        <Button data-color="neutral" size="small" variant="secondary" onClick={() => setConfirm(false)}>
           Avbryt
         </Button>
       </>
@@ -88,7 +94,13 @@ const DeleteLanguageVersion = ({ deleteTranslation }: DeleteLanguageVersionProps
   }
 
   return (
-    <Button variant="danger" size="small" onClick={() => setConfirm(!confirm)} icon={<TrashIcon aria-hidden />}>
+    <Button
+      data-color="danger"
+      variant="primary"
+      size="small"
+      onClick={() => setConfirm(!confirm)}
+      icon={<TrashIcon aria-hidden />}
+    >
       Slett {LANGUAGE_NAMES[language].toLowerCase()}versjon
     </Button>
   );

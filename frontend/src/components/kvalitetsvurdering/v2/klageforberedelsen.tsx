@@ -40,7 +40,7 @@ export const Klageforberedelsen = () => {
         onChange={onChange}
         id={KLAGEFORBEREDELSEN_FIELD}
       >
-        <HStack gap="4" width="100%" wrap={false}>
+        <HStack gap="space-16" width="100%" wrap={false}>
           <Radio value={Radiovalg.BRA} disabled={!canEdit}>
             Bra/godt nok
           </Radio>

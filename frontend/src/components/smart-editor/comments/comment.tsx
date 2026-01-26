@@ -7,7 +7,7 @@ import { isoDateTimeToPretty } from '@app/domain/date';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useUpdateCommentOrReplyMutation } from '@app/redux-api/smart-editor-comments';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
-import { BodyLong, BoxNew, HStack, VStack } from '@navikt/ds-react';
+import { BodyLong, Box, HStack, VStack } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { EditButton } from './edit-comment';
 
@@ -29,15 +29,15 @@ export const Comment = ({ isMain, comment }: Props) => {
   const canDeleteComment = isAuthor || isSaksbehandler;
 
   return (
-    <BoxNew
+    <Box
       as="li"
-      paddingInline="2 0"
+      paddingInline="space-8 space-0"
       borderWidth="0 0 0 4"
       borderColor="neutral-subtle"
       className="group/comment first:border-l-0 first:pl-0"
     >
       <VStack as="article" position="relative">
-        <HStack gap="2" align="center" justify="space-between" wrap={false}>
+        <HStack gap="space-8" align="center" justify="space-between" wrap={false}>
           <div className="w-full grow truncate text-ax-medium">{author.name}</div>
           {canDeleteComment ? (
             <DeleteButton
@@ -52,7 +52,7 @@ export const Comment = ({ isMain, comment }: Props) => {
           {...status}
           modified={modified}
           fallback={
-            <HStack className="text-ax-small text-ax-text-neutral-subtle" gap="1" align="center">
+            <HStack className="text-ax-small text-ax-text-neutral-subtle" gap="space-4" align="center">
               Sist lagret: <time dateTime={modified}>{isoDateTimeToPretty(modified)}</time>
             </HStack>
           }
@@ -61,7 +61,7 @@ export const Comment = ({ isMain, comment }: Props) => {
         {isEditing ? (
           <WriteComment comment={editingComment} label="Rediger kommentar" />
         ) : (
-          <HStack gap="2" justify="space-between" align="start" wrap={false}>
+          <HStack gap="space-8" justify="space-between" align="start" wrap={false}>
             <BodyLong size="small" className="wrap-break-word overflow-hidden whitespace-break-spaces">
               {text}
             </BodyLong>
@@ -76,6 +76,6 @@ export const Comment = ({ isMain, comment }: Props) => {
           </HStack>
         )}
       </VStack>
-    </BoxNew>
+    </Box>
   );
 };

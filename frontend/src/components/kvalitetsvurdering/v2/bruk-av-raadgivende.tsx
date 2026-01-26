@@ -30,7 +30,7 @@ export const BrukAvRaadgivendeLege = () => {
 
   return (
     <section>
-      <HStack asChild align="center" gap="2">
+      <HStack asChild align="center" gap="space-8">
         <Heading size="small">{header}</Heading>
       </HStack>
       <StyledRadioGroup

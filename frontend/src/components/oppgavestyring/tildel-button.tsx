@@ -48,7 +48,8 @@ export const TildelButton = ({
 
   return (
     <Button
-      variant="secondary-neutral"
+      data-color="neutral"
+      variant="secondary"
       size="small"
       loading={isLoading}
       disabled={isLoading}

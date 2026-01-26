@@ -29,7 +29,7 @@ import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents'
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, FileTextIcon } from '@navikt/aksel-icons';
-import { BoxNew, HStack, Tooltip, VStack } from '@navikt/ds-react';
+import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
 import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
@@ -361,23 +361,22 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
 
         {showHistory ? <History oppgaveId={oppgave.id} smartDocument={smartDocument} /> : null}
       </HStack>
-
       <StatusBar>
         <Tooltip content={readOnly ? 'Lesemodus' : 'Skrivemodus'}>
-          <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="2">
-            <BoxNew as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="auto 0">
+          <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="space-8">
+            <Box as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="auto space-0">
               {readOnly ? (
                 <FileTextIcon aria-hidden role="presentation" fontSize={24} color="var(--ax-text-neutral)" />
               ) : (
                 <DocPencilIcon aria-hidden role="presentation" fontSize={24} color="var(--ax-text-neutral)" />
               )}
-            </BoxNew>
+            </Box>
           </HStack>
         </Tooltip>
 
         <Tooltip content={isConnected ? 'Tilkoblet' : 'Frakoblet'}>
-          <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="2">
-            <BoxNew as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="0 2">
+          <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="space-8">
+            <Box as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="space-0 space-8">
               {isConnected ? (
                 <CloudFillIcon
                   aria-hidden
@@ -393,7 +392,7 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
                   color="var(--ax-text-danger-decoration)"
                 />
               )}
-            </BoxNew>
+            </Box>
           </HStack>
         </Tooltip>
 

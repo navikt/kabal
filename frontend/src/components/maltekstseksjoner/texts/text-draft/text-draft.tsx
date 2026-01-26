@@ -141,10 +141,10 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
   const modifiedId = `${text.id}-modified`;
 
   return (
-    <VStack ref={containerRef} position="relative" paddingBlock="2 0" flexGrow="1">
-      <VStack as="header" gap="2" marginBlock="0 2">
-        <HStack gap="2" align="center" justify="space-between" flexGrow="1">
-          <HStack gap="2" align="center">
+    <VStack ref={containerRef} position="relative" paddingBlock="space-8 space-0" flexGrow="1">
+      <VStack as="header" gap="space-8" marginBlock="space-0 space-8">
+        <HStack gap="space-8" align="center" justify="space-between" flexGrow="1">
+          <HStack gap="space-8" align="center">
             <EditableTitle
               label="Teksttittel"
               title={text.title}
@@ -153,7 +153,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
             />
           </HStack>
 
-          <HStack gap="2" align="center">
+          <HStack gap="space-8" align="center">
             <Tooltip content={isLocked ? 'Lås opp' : 'Lås igjen'}>
               <Switch
                 checked={isLocked}
@@ -177,7 +177,7 @@ export const DraftText = ({ text, isActive, setActive, ...rest }: Props) => {
           </HStack>
         </HStack>
 
-        <HStack align="center" gap="1">
+        <HStack align="center" gap="space-4">
           <Label size="small" htmlFor={modifiedId}>
             Sist endret:
           </Label>

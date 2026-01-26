@@ -1,7 +1,7 @@
 import { TimelineItem } from '@app/components/documents/journalfoerte-documents/document/timeline/timeline-item';
 import type { Utsendingsinfo } from '@app/types/arkiverte-documents';
 import { BellIcon, EnvelopeClosedIcon, MobileSmallIcon } from '@navikt/aksel-icons';
-import { BoxNew, Label } from '@navikt/ds-react';
+import { Box, Label } from '@navikt/ds-react';
 import type { HTMLAttributes } from 'react';
 
 interface VarslerProps {
@@ -109,21 +109,21 @@ const EmailContent = ({ varslingstekst }: { varslingstekst: string | undefined }
     <MessageContainer
       // biome-ignore lint/security/noDangerouslySetInnerHtml: This content is trusted.
       dangerouslySetInnerHTML={{ __html }}
-      className="[&_h1]:text-heading-medium [&_h2]:text-heading-small [&_h3,h4,h5,h6]:text-base [&_ol,ul]:pl-4 [&_p,ol,ul,li,h1,h2,h3]:mt-0 [&_p,ol,ul,li,h1,h2,h3]:mb-1"
+      className="[&_h1]:text-ax-heading-medium [&_h2]:text-ax-heading-small [&_h3,h4,h5,h6]:text-base [&_ol,ul]:pl-4 [&_p,ol,ul,li,h1,h2,h3]:mt-0 [&_p,ol,ul,li,h1,h2,h3]:mb-1"
     />
   );
 };
 
 const MessageContainer = ({ children, ...rest }: HTMLAttributes<HTMLDivElement>) => (
-  <BoxNew
+  <Box
     as="blockquote"
     borderWidth="0 0 0 1"
     borderColor="neutral"
-    paddingInline="1 0"
-    borderRadius="medium"
-    marginBlock="2 0"
+    paddingInline="space-4 space-0"
+    borderRadius="4"
+    marginBlock="space-8 space-0"
     {...rest}
   >
     {children}
-  </BoxNew>
+  </Box>
 );

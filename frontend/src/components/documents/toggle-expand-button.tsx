@@ -19,8 +19,9 @@ export const ToggleExpandedButton = () => {
 
   return (
     <Button
+      data-color="neutral"
       className="ml-auto"
-      variant="secondary-neutral"
+      variant="secondary"
       size="small"
       onClick={onToggle}
       data-testid="documents-collapse-view-button"

@@ -9,10 +9,10 @@ export const DocumentTitleContainer = ({
     {...props}
     as="h1"
     align="center"
-    gap="2"
+    gap="space-8"
     overflow="hidden"
     height="100%"
-    margin="0"
+    margin="space-0"
     wrap={false}
     className="group overflow-hidden whitespace-nowrap font-normal text-ax-large"
     style={{ gridArea: Fields.Title }}

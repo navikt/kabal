@@ -35,7 +35,7 @@ export const Innsendingshjemler = ({ oppgavebehandling }: Props) => {
         size="small"
         hjemmelIdList={oppgavebehandling.hjemmelIdList}
         fallback={
-          <Tag size="small" variant="neutral">
+          <Tag data-color="neutral" size="small" variant="outline">
             Ingen hjemler
           </Tag>
         }
@@ -44,8 +44,9 @@ export const Innsendingshjemler = ({ oppgavebehandling }: Props) => {
         <div className="relative z-10 w-min shrink-0 grow-0 self-start" ref={ref}>
           <Tooltip content="Endre innsendingshjemler">
             <Button
+              data-color="neutral"
               size="small"
-              variant="tertiary-neutral"
+              variant="tertiary"
               onClick={() => setIsOpen((o) => !o)}
               icon={<PencilIcon aria-hidden />}
               className="ml-auto self-start"

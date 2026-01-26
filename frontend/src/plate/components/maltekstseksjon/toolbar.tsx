@@ -21,9 +21,10 @@ export const Toolbar = ({ editor, element, path, isInRegelverk, isFetching, upda
     <AddNewParagraphs editor={editor} element={element} />
     <Tooltip content="Oppdater til siste versjon" delay={0}>
       <Button
+        data-color="neutral"
         icon={<ArrowCirclepathIcon aria-hidden />}
         onClick={update}
-        variant="tertiary-neutral"
+        variant="tertiary"
         size="xsmall"
         contentEditable={false}
         loading={isFetching}

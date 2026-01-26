@@ -1,7 +1,7 @@
 import { formatLongDate, zeroPad } from '@app/domain/date';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
 import type { CurrentDateElement } from '@app/plate/types';
-import { BoxNew } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
@@ -58,12 +58,12 @@ const RenderCurrentDate = memo<Props & DateParts>(
         }}
       >
         {children}
-        <BoxNew
+        <Box
           as="time"
           dateTime={isoDate}
           contentEditable={false}
           width="100%"
-          borderRadius="medium"
+          borderRadius="4"
           background={isSelected ? 'neutral-soft' : undefined}
           style={{
             marginTop: '1em',
@@ -74,7 +74,7 @@ const RenderCurrentDate = memo<Props & DateParts>(
           className="block text-right transition-colors duration-200 ease-in-out"
         >
           <span>Dato: {formatLongDate(year, month, day)}</span>
-        </BoxNew>
+        </Box>
       </PlateElement>
     );
   },

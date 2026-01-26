@@ -44,18 +44,18 @@ export const AnnenInngaaende = ({ document, hasAccess }: Props) => {
         <Radio value={InngaaendeKanal.ALTINN}>Altinn Innboks</Radio>
         <Radio value={InngaaendeKanal.E_POST}>E-post</Radio>
       </RadioGroup>
-
       <div>
         <Label size="small" htmlFor={AVSENDER_ID}>
           Avsender
         </Label>
-        <HStack align="center" gap="2">
+        <HStack align="center" gap="space-8">
           <BodyShort size="small">{document.avsender?.name ?? 'Ikke satt'}</BodyShort>
           <PartStatusList statusList={document.avsender?.statusList ?? []} size="xsmall" />
           {hasAccess && document.avsender !== null ? (
             <Button
+              data-color="neutral"
               size="xsmall"
-              variant="tertiary-neutral"
+              variant="tertiary"
               onClick={() => setEditAvsender(!editAvsender)}
               icon={editAvsender ? <XMarkIcon aria-hidden /> : <PencilIcon aria-hidden />}
             />

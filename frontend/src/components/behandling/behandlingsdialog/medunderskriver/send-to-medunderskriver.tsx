@@ -24,8 +24,9 @@ export const SendToMedunderskriver = ({ oppgaveId, typeId, medunderskriver }: Pr
 
   return (
     <Button
+      data-color="neutral"
       size="small"
-      variant="secondary-neutral"
+      variant="secondary"
       type="button"
       onClick={() => setMedunderskriverFlowState({ oppgaveId, flowState: FlowState.SENT })}
       disabled={medunderskriver.employee === null}

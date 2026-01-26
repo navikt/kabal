@@ -4,7 +4,7 @@ import { PageWrapper } from '../page-wrapper';
 
 export const AccessRightsPage = () => (
   <PageWrapper>
-    <VStack gap="4 0" overflow="hidden" maxHeight="100%">
+    <VStack gap="space-16 space-0" overflow="hidden" maxHeight="100%">
       <AccessRights />
     </VStack>
   </PageWrapper>

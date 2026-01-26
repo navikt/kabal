@@ -1,7 +1,7 @@
 import { MAX, MIN } from '@app/components/settings/pdf-scale/constants';
 import { clamp } from '@app/functions/clamp';
 import { Keys } from '@app/keys';
-import { BoxNew, HStack, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
+import { Box, HStack, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
 
 const PRESETS: string[] = ['75', '90', '100', '125', '150', '200', '300'];
@@ -66,10 +66,10 @@ export const ScaleSelect = ({ scale, setScale, scaleUp, scaleDown, close }: Scal
     <VStack
       asChild
       position="absolute"
-      gap="2"
+      gap="space-8"
       className="top-full right-0 z-10 whitespace-nowrap text-ax-text-default not-italic"
     >
-      <BoxNew background="default" padding="2" borderRadius="medium" shadow="dialog">
+      <Box background="default" padding="space-8" borderRadius="4" shadow="dialog">
         <RadioGroup legend="Skalering" onChange={onRadioChange} value={radioValue} size="small">
           {PRESETS.map((p) => (
             <Radio key={p} value={p} size="small">
@@ -80,7 +80,7 @@ export const ScaleSelect = ({ scale, setScale, scaleUp, scaleDown, close }: Scal
             Egendefinert
           </Radio>
         </RadioGroup>
-        <HStack align="center" gap="2" wrap={false}>
+        <HStack align="center" gap="space-8" wrap={false}>
           <TextField
             value={inputValue}
             onChange={(e) => {
@@ -120,7 +120,7 @@ export const ScaleSelect = ({ scale, setScale, scaleUp, scaleDown, close }: Scal
           />
           <span>%</span>
         </HStack>
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };

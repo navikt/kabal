@@ -92,8 +92,8 @@ export const VedleggList = ({ list, minTop, maxTop, dokument, documentIndex }: P
       aria-setsize={list.list.length}
       data-testid="oppgavebehandling-documents-all-vedlegg-list"
       position="absolute"
-      right="0"
-      left="0"
+      right="space-0"
+      left="space-0"
       style={{
         height: list.height,
         top: list.top,

@@ -10,7 +10,7 @@ import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IRichText, IText } from '@app/types/texts/responses';
-import { BoxNew, Heading, Loader, VStack } from '@navikt/ds-react';
+import { Box, Heading, Loader, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { useCallback, useEffect, useState } from 'react';
@@ -76,13 +76,13 @@ const LoadedPreview = ({ id, value, maltekstseksjon }: LoadedPreviewProps) => {
     value: value,
   });
   return (
-    <VStack asChild align="center" gap="4" padding="4">
-      <BoxNew borderRadius="medium" background="neutral-soft">
+    <VStack asChild align="center" gap="space-16" padding="space-16">
+      <Box borderRadius="4" background="neutral-soft">
         <Heading level="1" size="xsmall">
           Forhåndsvisning av {getTitle(maltekstseksjon.title)}
         </Heading>
 
-        <BoxNew
+        <Box
           shadow="dialog"
           background="input"
           width="210mm"
@@ -92,8 +92,8 @@ const LoadedPreview = ({ id, value, maltekstseksjon }: LoadedPreviewProps) => {
           <Plate<RichTextEditor> editor={editor} readOnly>
             <KabalPlateEditor id={id} contentEditable={false} lang={SPELL_CHECK_LANGUAGES[lang]} />
           </Plate>
-        </BoxNew>
-      </BoxNew>
+        </Box>
+      </Box>
     </VStack>
   );
 };

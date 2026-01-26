@@ -53,8 +53,8 @@ export const OverviewModal = ({ ref, notifications, icon, unreadCount }: Overvie
       onClose={() => setIsModalOpen(false)}
     >
       <Modal.Header>
-        <HStack gap="4" align="center" wrap={false}>
-          <HStack asChild gap="1" align="center" wrap={false}>
+        <HStack gap="space-16" align="center" wrap={false}>
+          <HStack asChild gap="space-4" align="center" wrap={false}>
             <Heading level="1" size="small">
               {icon}
               Varsler ({unreadCount})

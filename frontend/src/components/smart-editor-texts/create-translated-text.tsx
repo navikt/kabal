@@ -15,7 +15,7 @@ export const CreateTranslatedRichText = ({ id }: Props) => {
   const language = useRedaktoerLanguage();
 
   return (
-    <HStack padding="4" justify="center">
+    <HStack padding="space-16" justify="center">
       <Button
         size="small"
         onClick={() => updateRichText({ query, richText: [createSimpleParagraph()], id, language })}
@@ -33,7 +33,7 @@ export const CreateTranslatedPlainText = ({ id }: Props) => {
   const language = useRedaktoerLanguage();
 
   return (
-    <HStack padding="4" justify="center">
+    <HStack padding="space-16" justify="center">
       <Button size="small" onClick={() => updatePlainText({ query, plainText: '', id, language })} loading={isLoading}>
         Opprett versjon på {LANGUAGE_NAMES[language].toLowerCase()}
       </Button>

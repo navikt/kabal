@@ -1,7 +1,7 @@
 import { getAriaSort, SortButton, type SortButtonProps } from '@app/components/common-table-components/sort-header';
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
-import { BoxNew, type ButtonProps, HStack, Table } from '@navikt/ds-react';
+import { Box, type ButtonProps, HStack, Table } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 
@@ -44,9 +44,9 @@ export const DateColumnHeader = ({
   ...filterProps
 }: DateColumnHeaderProps) => (
   <Table.ColumnHeader className="whitespace-nowrap p-0" aria-sort={getAriaSort(sortKey, sortering, rekkefoelge)}>
-    <BoxNew
+    <Box
       asChild
-      borderRadius="large"
+      borderRadius="12"
       width="fit-content"
       className="-outline-offset-2 hover:outline-2 hover:outline-ax-bg-neutral-moderate-hover"
     >
@@ -69,6 +69,6 @@ export const DateColumnHeader = ({
           children
         )}
       </HStack>
-    </BoxNew>
+    </Box>
   </Table.ColumnHeader>
 );

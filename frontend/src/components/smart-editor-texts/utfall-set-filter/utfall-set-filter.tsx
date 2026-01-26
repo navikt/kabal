@@ -6,7 +6,7 @@ import { isUtfall } from '@app/functions/is-utfall';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, VStack } from '@navikt/ds-react';
+import { Box, Button, VStack } from '@navikt/ds-react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 interface Props {
@@ -59,22 +59,22 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
   );
 
   return (
-    <VStack asChild gap="2 0" width="400px" position="absolute" left="0" className="top-full z-100">
-      <BoxNew
+    <VStack asChild gap="space-8 space-0" width="400px" position="absolute" left="space-0" className="top-full z-100">
+      <Box
         background="default"
-        padding="2"
+        padding="space-8"
         shadow="dialog"
         borderWidth="1"
         borderColor="neutral"
-        borderRadius="medium"
+        borderRadius="4"
         overflow="auto"
       >
-        <VStack as="ul" gap="1 0" padding="0" margin="0" className="list-none">
+        <VStack as="ul" gap="space-4 space-0" padding="space-0" margin="space-0" className="list-none">
           {utfallSets.map((utfallSet, index) => (
-            <BoxNew
+            <Box
               as="li"
               key={utfallSet.join('-')}
-              borderRadius="medium"
+              borderRadius="4"
               padding="space-8"
               className="odd:bg-ax-bg-neutral-moderate"
             >
@@ -85,10 +85,10 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
                 isEditing={index === editingIndex}
                 toggleIsEditing={() => toggleIsEditing(index)}
               />
-            </BoxNew>
+            </Box>
           ))}
           {isAddingSet ? (
-            <BoxNew key="add-set" borderRadius="medium" padding="space-8" background="accent-moderate">
+            <Box key="add-set" borderRadius="4" padding="space-8" background="accent-moderate">
               <EditUtfallSet
                 title="Legg til nytt utfallsett"
                 icon={<PlusIcon aria-hidden />}
@@ -96,15 +96,21 @@ const UtfallSets = ({ utfallSets, onChange }: UtfallSetsProps) => {
                 onChange={onAddSet}
                 onCancel={toggleIsAddingSet}
               />
-            </BoxNew>
+            </Box>
           ) : null}
         </VStack>
         {isAddingSet ? null : (
-          <Button size="small" variant="secondary-neutral" onClick={toggleIsAddingSet} icon={<PlusIcon aria-hidden />}>
+          <Button
+            data-color="neutral"
+            size="small"
+            variant="secondary"
+            onClick={toggleIsAddingSet}
+            icon={<PlusIcon aria-hidden />}
+          >
             Legg til nytt utfallsett
           </Button>
         )}
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };

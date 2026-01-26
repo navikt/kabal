@@ -46,7 +46,7 @@ const EditableAge = ({ ageKA, mottatt, id, typeId }: IOppgave) => {
   );
 
   return (
-    <HStack align="center" gap="2" wrap={false}>
+    <HStack align="center" gap="space-8" wrap={false}>
       {children}
       <EditButton isOpen={isOpen} setIsOpen={setIsOpen} />
     </HStack>
@@ -68,10 +68,11 @@ const EditButton = ({ isOpen, setIsOpen }: EditButtonProps) => {
 
   return (
     <Button
+      data-color="neutral"
       size="xsmall"
       icon={<PencilIcon aria-hidden />}
       title="Endre dato for mottatt klageinstans"
-      variant="tertiary-neutral"
+      variant="tertiary"
       onClick={toggleOpen}
     />
   );

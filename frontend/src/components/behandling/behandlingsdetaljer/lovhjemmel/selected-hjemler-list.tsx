@@ -1,7 +1,7 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useAllLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
 import type { ILovKildeToRegistreringshjemmel } from '@app/types/kodeverk';
-import { BoxNew, Loader } from '@navikt/ds-react';
+import { Box, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 
@@ -32,9 +32,15 @@ export const SelectedHjemlerList = ({ selected }: Props) => {
   }
 
   return (
-    <BoxNew paddingBlock="2" paddingInline="1 0" marginBlock="2 0" borderWidth="0 0 0 2" borderColor="neutral">
+    <Box
+      paddingBlock="space-8"
+      paddingInline="space-4 space-0"
+      marginBlock="space-8 space-0"
+      borderWidth="0 0 0 2"
+      borderColor="neutral"
+    >
       <SelectedChildren registreringshjemmelIdList={list} />
-    </BoxNew>
+    </Box>
   );
 };
 
@@ -51,7 +57,7 @@ const SelectedChildren = ({
     <section data-testid="selected-hjemler-list">
       {registreringshjemmelIdList.map(({ lovkilde, registreringshjemler }) => (
         <div className="not-first-of-type:pt-1" key={lovkilde.id}>
-          <h3 className="font-bold text-base">{lovkilde.navn}</h3>
+          <h3 className="font-ax-bold text-base">{lovkilde.navn}</h3>
 
           <ul className="m-0 list-none pl-2">
             {registreringshjemler.map(({ navn, id }) => (

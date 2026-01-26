@@ -34,7 +34,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       return (
-        <HStack align="center" gap="2" width="400px">
+        <HStack align="center" gap="space-8" width="400px">
           {oppgave.requiresGosysOppgave ? (
             <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
           ) : (
@@ -47,7 +47,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
       switch (utfallId) {
         case UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35:
           return (
-            <HStack align="center" gap="2" width="400px">
+            <HStack align="center" gap="space-8" width="400px">
               {oppgave.requiresGosysOppgave ? (
                 <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
               ) : (
@@ -59,7 +59,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
 
         default:
           return (
-            <HStack align="center" gap="2" width="400px">
+            <HStack align="center" gap="space-8" width="400px">
               <FinishButton>Fullfør</FinishButton>
               <CancelButton cancel={cancel} />
             </HStack>
@@ -70,7 +70,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
       switch (utfallId) {
         case UtfallEnum.GJENOPPTATT_OPPHEVET:
           return (
-            <HStack align="center" gap="2" width="650px">
+            <HStack align="center" gap="space-8" width="650px">
               <FinishButton nyBehandling>Ja, fullfør og opprett ny behandling i Kabal</FinishButton>
 
               {oppgave.requiresGosysOppgave ? (
@@ -84,7 +84,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
           );
         default:
           return (
-            <HStack align="center" gap="2" width="400px">
+            <HStack align="center" gap="space-8" width="400px">
               {oppgave.requiresGosysOppgave ? (
                 <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
               ) : (
@@ -102,7 +102,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
         case UtfallEnum.AVVIST:
         case UtfallEnum.HEVET:
           return (
-            <HStack align="center" gap="2" width="400px">
+            <HStack align="center" gap="space-8" width="400px">
               {oppgave.requiresGosysOppgave ? (
                 <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
               ) : (
@@ -113,7 +113,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
           );
         case UtfallEnum.OPPHEVET:
           return (
-            <HStack align="center" gap="2" width="650px">
+            <HStack align="center" gap="space-8" width="650px">
               <FinishButton nyBehandling>Ja, fullfør og opprett ny behandling i Kabal</FinishButton>
 
               {oppgave.requiresGosysOppgave ? (
@@ -127,7 +127,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
           );
         case UtfallEnum.HENVIST:
           return (
-            <HStack align="center" gap="2" width="400px">
+            <HStack align="center" gap="space-8" width="400px">
               <FinishButton>Fullfør</FinishButton>
               <CancelButton cancel={cancel} />
             </HStack>
@@ -139,8 +139,9 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
 
 const CancelButton = ({ cancel }: CancelButtonProps) => (
   <Button
+    data-color="neutral"
     className="ml-auto shrink-0"
-    variant="secondary-neutral"
+    variant="secondary"
     type="button"
     size="small"
     onClick={cancel}

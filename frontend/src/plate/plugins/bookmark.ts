@@ -103,7 +103,7 @@ const LEGACY_COLOR_TO_VARIANT: Record<string, BookmarkVariantEnum> = {
   'var(--ax-bg-danger-strong)': BookmarkVariantEnum.RED,
   'var(--ax-bg-success-strong)': BookmarkVariantEnum.GREEN,
   'var(--ax-bg-accent-strong)': BookmarkVariantEnum.PURPLE,
-  'var(--a-red-600)': BookmarkVariantEnum.RED,
-  'var(--a-green-600)': BookmarkVariantEnum.GREEN,
-  'var(--a-blue-600)': BookmarkVariantEnum.PURPLE,
+  'var(--ax-danger-700)': BookmarkVariantEnum.RED,
+  'var(--ax-success-700)': BookmarkVariantEnum.GREEN,
+  'var(--ax-accent-700)': BookmarkVariantEnum.PURPLE,
 };

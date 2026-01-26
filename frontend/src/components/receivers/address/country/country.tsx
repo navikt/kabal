@@ -3,7 +3,7 @@ import { Option } from '@app/components/receivers/address/country/option';
 import { Keys } from '@app/keys';
 import type { CountryCode } from '@app/types/common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, HStack, Search, Tag, Tooltip } from '@navikt/ds-react';
+import { Box, Button, HStack, Search, Tag, Tooltip } from '@navikt/ds-react';
 import { type CSSProperties, useCallback, useContext, useMemo, useRef, useState } from 'react';
 
 interface Props {
@@ -112,21 +112,22 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
         style={{ width }}
         size="small"
         label={
-          <HStack align="center" gap="0 1" minHeight="6" as="span">
+          <HStack align="center" gap="space-0 space-4" minHeight="6" as="span">
             Land
-            <Tag size="xsmall" variant="info">
+            <Tag data-color="info" size="xsmall" variant="outline">
               Påkrevd
             </Tag>
             {isOverridden ? (
-              <Tag size="xsmall" variant="warning">
+              <Tag data-color="warning" size="xsmall" variant="outline">
                 Overstyrt
               </Tag>
             ) : null}
             {isOverridden ? (
               <Tooltip content={`Tilbakestill til «${originalCountryName}»`}>
                 <Button
+                  data-color="neutral"
                   size="xsmall"
-                  variant="tertiary-neutral"
+                  variant="tertiary"
                   onClick={() => {
                     countryNameRef.current = originalCountryName;
                     onChange(originalValue);
@@ -160,13 +161,13 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
         ref={searchRef}
       />
       {showCountryList ? (
-        <BoxNew
+        <Box
           as="ul"
           position="absolute"
-          left="0"
-          padding="0"
+          left="space-0"
+          padding="space-0"
           background="default"
-          borderRadius="medium"
+          borderRadius="4"
           shadow="dialog"
           maxHeight="200"
           overflowX="auto"
@@ -182,7 +183,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
               onClick={onSelect}
             />
           ))}
-        </BoxNew>
+        </Box>
       ) : null}
     </div>
   );

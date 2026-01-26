@@ -127,7 +127,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.FlowStatesWithSelf:
         return (
           <Table.DataCell key={key}>
-            <HStack wrap gap="2">
+            <HStack wrap gap="space-8">
               <MUFlowStateLabelWithSelf typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
               <RolFlowStateLabel rol={oppgave.rol} />
             </HStack>
@@ -136,7 +136,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.FlowStatesWithoutSelf:
         return (
           <Table.DataCell key={key}>
-            <HStack wrap gap="2">
+            <HStack wrap gap="space-8">
               <MUFlowStateLabelWithoutSelf typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
               <RolFlowStateLabel rol={oppgave.rol} />
             </HStack>

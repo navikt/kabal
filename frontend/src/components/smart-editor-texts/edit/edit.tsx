@@ -44,7 +44,7 @@ export const Edit = ({ text, onDraftDeleted, children, onPublish, deleteTranslat
 
   return (
     <VStack height="100%">
-      <VStack gap="2" paddingBlock="4" paddingInline="4">
+      <VStack gap="space-8" paddingBlock="space-16" paddingInline="space-16">
         <EditableTitle
           title={title}
           onChange={(t) => updateTitle({ id, query, title: t })}
@@ -56,7 +56,7 @@ export const Edit = ({ text, onDraftDeleted, children, onPublish, deleteTranslat
 
         {hasAnyFilter ? <Filters text={text} query={query} filters={filters} /> : null}
 
-        <HStack gap="2" align="center" justify="space-between">
+        <HStack gap="space-8" align="center" justify="space-between">
           {isPlainText(text) ? null : (
             <AllMaltekstseksjonReferences
               textType={textType}
@@ -98,7 +98,7 @@ const Filters = ({ text, query, filters }: FiltersProps) => {
 
   return (
     <>
-      <HStack gap="2" align="center">
+      <HStack gap="space-8" align="center">
         {hasTemplateSectionFilter ? (
           <TemplateSectionSelect
             selected={templateSectionIdList}

@@ -78,9 +78,9 @@ export const SuggestedReceivers = ({
 
         return (
           <StyledReceiver key={id} accent={isChecked ? 'success' : 'info'}>
-            <HStack align="center" gap="2" flexShrink="0" paddingInline="2" minHeight="8">
+            <HStack align="center" gap="space-8" flexShrink="0" paddingInline="space-8" minHeight="8">
               <Checkbox size="small" value={id} data-testid="document-send-receiver" error={error !== null}>
-                <HStack align="center" gap="1">
+                <HStack align="center" gap="space-4">
                   <Tooltip content={getTooltip(part.type)}>
                     <span>
                       <Icon type={part.type} />
@@ -91,7 +91,7 @@ export const SuggestedReceivers = ({
                   </span>
                   <PartStatusList statusList={statusList} size="xsmall" />
                   {error === null ? null : (
-                    <Tag variant="error" size="xsmall">
+                    <Tag data-color="danger" variant="outline" size="xsmall">
                       {error}
                     </Tag>
                   )}

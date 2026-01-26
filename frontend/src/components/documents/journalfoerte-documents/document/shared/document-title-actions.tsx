@@ -12,12 +12,13 @@ interface Props extends ConfirmProps {
 
 export const ConfirmEditButton = ({ setEditMode }: ConfirmProps) => (
   <Button
+    data-color="neutral"
     onClick={() => setEditMode(false)}
-    icon={<CheckmarkIcon aria-hidden className="text-large" />}
+    icon={<CheckmarkIcon aria-hidden className="text-ax-large" />}
     data-testid="document-title-edit-save-button"
     title="Endre"
     size="xsmall"
-    variant="tertiary-neutral"
+    variant="tertiary"
   />
 );
 
@@ -36,14 +37,14 @@ export const DocumentTitleActions = ({ setEditMode, hasAccess, tittel }: Props) 
       className="focus-within:w-fit group-hover:w-fit"
     >
       <Button
+        data-color="neutral"
         onClick={() => setEditMode(true)}
-        icon={<PencilIcon aria-hidden className="text-large" />}
+        icon={<PencilIcon aria-hidden className="text-ax-large" />}
         data-testid="document-title-edit-save-button"
         title="Endre"
         size="xsmall"
-        variant="tertiary-neutral"
+        variant="tertiary"
       />
-
       <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />
     </HStack>
   );

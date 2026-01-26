@@ -8,7 +8,7 @@ export const SELECT_SKELETON = (
 );
 
 export const SKELETON = (
-  <VStack gap="2">
+  <VStack gap="space-8">
     {SELECT_SKELETON}
     <Skeleton variant="text" width="125px" />
     <Skeleton variant="rounded" width="100%" height="32px" />

@@ -28,13 +28,12 @@ export const Complete = ({ id, onClose, setError }: Props) => {
   }
 
   return (
-    <HStack gap="2" align="center">
+    <HStack gap="space-8" align="center">
       {showConfirm ? null : (
         <Button onClick={() => setShowConfirm(true)} size="small" variant="primary">
           Endre frist{data.doNotSendLetter ? '' : ' og send brev'}
         </Button>
       )}
-
       {showConfirm ? (
         <>
           <Button
@@ -67,7 +66,13 @@ export const Complete = ({ id, onClose, setError }: Props) => {
           >
             Bekreft endring av frist{data.doNotSendLetter ? '' : ' og send brev'}
           </Button>
-          <Button size="small" variant="secondary-neutral" onClick={() => setShowConfirm(false)} disabled={isLoading}>
+          <Button
+            data-color="neutral"
+            size="small"
+            variant="secondary"
+            onClick={() => setShowConfirm(false)}
+            disabled={isLoading}
+          >
             Avbryt
           </Button>
         </>

@@ -2,7 +2,7 @@ import { MAX, MIN, STEP, USER_STEP } from '@app/components/settings/pdf-scale/co
 import { ScaleSelect } from '@app/components/settings/pdf-scale/scale-select';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, HStack } from '@navikt/ds-react';
+import { Box, Button, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 
 interface Props {
@@ -19,10 +19,23 @@ export const CustomScale = ({ scale, onChange }: Props) => {
   const scaleUp = () => onChange(snapUp(scale));
 
   return (
-    <BoxNew asChild background="default" padding="1" borderRadius="medium" marginBlock="0 2" marginInline="2">
-      <HStack align="center" justify="center" gap="2">
+    <Box
+      asChild
+      background="default"
+      padding="space-4"
+      borderRadius="4"
+      marginBlock="space-0 space-8"
+      marginInline="space-8"
+    >
+      <HStack align="center" justify="center" gap="space-8">
         <HStack align="center">
-          <Button icon={<MinusIcon aria-hidden />} size="xsmall" variant="tertiary-neutral" onClick={scaleDown} />
+          <Button
+            data-color="neutral"
+            icon={<MinusIcon aria-hidden />}
+            size="xsmall"
+            variant="tertiary"
+            onClick={scaleDown}
+          />
           <input
             type="range"
             min={MIN}
@@ -31,11 +44,23 @@ export const CustomScale = ({ scale, onChange }: Props) => {
             value={scale}
             onChange={(e) => onChange(Number.parseInt(e.target.value, 10))}
           />
-          <Button icon={<PlusIcon aria-hidden />} size="xsmall" variant="tertiary-neutral" onClick={scaleUp} />
+          <Button
+            data-color="neutral"
+            icon={<PlusIcon aria-hidden />}
+            size="xsmall"
+            variant="tertiary"
+            onClick={scaleUp}
+          />
         </HStack>
 
         <div ref={ref} className="relative">
-          <Button onClick={() => setIsOpen((o) => !o)} size="xsmall" variant="tertiary-neutral" className="w-16">
+          <Button
+            data-color="neutral"
+            onClick={() => setIsOpen((o) => !o)}
+            size="xsmall"
+            variant="tertiary"
+            className="w-16"
+          >
             {scale} %
           </Button>
           {isOpen ? (
@@ -49,7 +74,7 @@ export const CustomScale = ({ scale, onChange }: Props) => {
           ) : null}
         </div>
       </HStack>
-    </BoxNew>
+    </Box>
   );
 };
 

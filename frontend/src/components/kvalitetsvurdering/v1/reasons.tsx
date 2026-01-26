@@ -48,7 +48,7 @@ export const Reasons = ({ error, show = true, legendText = '', reasons }: Reason
 
           return (
             <Fragment key={String(reason.id)}>
-              <HStack gap="2" width="100%" position="relative">
+              <HStack gap="space-8" width="100%" position="relative">
                 <Checkbox
                   className="whitespace-normal"
                   size="small"

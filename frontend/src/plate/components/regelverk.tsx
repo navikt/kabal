@@ -13,7 +13,7 @@ import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
 import { REGELVERK_TYPE } from '@app/types/common-text-types';
 import type { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/consumer';
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, HStack, Loader, Tooltip } from '@navikt/ds-react';
+import { Box, Button, HStack, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useCallback, useEffect, useState } from 'react';
@@ -76,20 +76,29 @@ export const RegelverkContainer = (props: PlateElementProps<RegelverkContainerEl
       <SectionContainer sectionType={SectionTypeEnum.REGELVERK} data-element={element.type} aria-disabled={loading}>
         {children}
         {loading ? (
-          <BoxNew asChild position="absolute" top="0" left="0" right="0" bottom="0" background="neutral-strong">
+          <Box
+            asChild
+            position="absolute"
+            top="space-0"
+            left="space-0"
+            right="space-0"
+            bottom="space-0"
+            background="neutral-strong"
+          >
             <HStack align="center" justify="center">
               <Loader title="Laster..." size="2xlarge" />
             </HStack>
-          </BoxNew>
+          </Box>
         ) : null}
         {readOnly ? null : (
           <SectionToolbar contentEditable={false}>
             <DeleteRegelverkButton element={element} />
             <Tooltip content={loading ? 'Oppdaterer regelverk...' : 'Oppdater regelverk'} delay={0}>
               <Button
+                data-color="neutral"
                 icon={<GavelSoundBlockIcon aria-hidden />}
                 onClick={insertRegelverk}
-                variant="tertiary-neutral"
+                variant="tertiary"
                 size="xsmall"
                 contentEditable={false}
                 disabled={loading}

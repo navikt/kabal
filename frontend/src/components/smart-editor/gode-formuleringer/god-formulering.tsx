@@ -8,7 +8,7 @@ import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/
 import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { CalendarIcon, ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { BoxNew, Button, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
+import { Box, Button, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { useEffect, useRef } from 'react';
 
@@ -50,24 +50,25 @@ export const GodFormulering = ({
   const isFullRichText = expandState === GodeFormuleringerExpandState.FULL_RICH_TEXT;
 
   return (
-    <BoxNew
+    <Box
       asChild
       background="neutral-soft"
       borderWidth="4"
       className={`last:mb-96 ${isFocused ? 'border-ax-border-focus' : 'border-transparent'}`}
-      borderRadius="medium"
+      borderRadius="4"
       shadow="dialog"
       flexShrink="0"
     >
-      <VStack ref={ref} onClick={onClick} tabIndex={0} padding="2">
+      <VStack ref={ref} onClick={onClick} tabIndex={0} padding="space-8">
         <HStack wrap={false} align="start" justify="space-between">
           <Heading title={title} level="1" size="xsmall">
             {title}
           </Heading>
 
           <Button
+            data-color="neutral"
             size="small"
-            variant="tertiary-neutral"
+            variant="tertiary"
             title={nextTitle(expandState)}
             icon={<NextExpandStateIcon state={expandState} />}
             onClick={() => setExpandState(nextExpandState(expandState))}
@@ -75,10 +76,10 @@ export const GodFormulering = ({
         </HStack>
 
         <HStack align="center" justify="space-between" wrap={false}>
-          <HStack gap="1">
+          <HStack gap="space-4">
             <DateTime dateTime={publishedDateTime} title="Sist endret" icon={<CalendarIcon aria-hidden />} />
             {primaryLanguage === language ? null : (
-              <Tag size="xsmall" variant="warning">
+              <Tag data-color="warning" size="xsmall" variant="outline">
                 {LANGUAGE_NAMES[language]}
               </Tag>
             )}
@@ -94,12 +95,12 @@ export const GodFormulering = ({
         </HStack>
 
         {expandState === GodeFormuleringerExpandState.COLLAPSED ? null : (
-          <VStack gap="1" className="mt-2">
-            <BoxNew
+          <VStack gap="space-4" className="mt-2">
+            <Box
               position="relative"
               background="default"
-              borderRadius="medium"
-              paddingInline="2"
+              borderRadius="4"
+              paddingInline="space-8"
               overflow="hidden"
               maxHeight={isFullRichText ? 'unset' : '200px'}
               className={`after:absolute after:bottom-0 after:left-0 after:h-10 after:w-full after:bg-linear-to-t after:from-ax-bg-neutral-soft after:via-20% after:via-ax-bg-neutral-soft after:to-transparent [&>:first-child]:mt-0 ${isFullRichText ? 'after:hidden' : 'after:block'}`}
@@ -107,7 +108,7 @@ export const GodFormulering = ({
               <Plate<RichTextEditor> editor={editor} readOnly>
                 <KabalPlateEditor id={id} contentEditable={undefined} lang={SPELL_CHECK_LANGUAGES[language]} />
               </Plate>
-            </BoxNew>
+            </Box>
             <ShowMore
               isExpanded={isFullRichText}
               setIsExpanded={() =>
@@ -119,7 +120,7 @@ export const GodFormulering = ({
           </VStack>
         )}
       </VStack>
-    </BoxNew>
+    </Box>
   );
 };
 
@@ -130,9 +131,10 @@ interface ShowMoreProps {
 
 const ShowMore = ({ isExpanded, setIsExpanded }: ShowMoreProps) => (
   <Button
+    data-color="neutral"
     onClick={() => setIsExpanded(!isExpanded)}
     size="xsmall"
-    variant="tertiary-neutral"
+    variant="tertiary"
     iconPosition="right"
     icon={isExpanded ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
   >

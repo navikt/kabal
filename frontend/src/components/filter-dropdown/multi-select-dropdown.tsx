@@ -141,7 +141,7 @@ export const Header = <T extends string | number>({
       Velg alle
     </Button>
 
-    <Button onClick={() => onChange([])} size="small" variant="danger">
+    <Button data-color="danger" onClick={() => onChange([])} size="small" variant="primary">
       Fjern alle
     </Button>
   </HStack>

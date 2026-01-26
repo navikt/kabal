@@ -56,8 +56,9 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
     () => (
       <Tooltip content="Fjern tekst fra maltekstseksjon">
         <Button
+          data-color="danger"
           size="xsmall"
-          variant="danger"
+          variant="primary"
           icon={<LinkBrokenIcon aria-hidden />}
           onClick={onRemove}
           loading={isRemoving}
@@ -83,7 +84,7 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
     return (
       <>
         {unlink}
-        <HStack align="center" gap="2" marginInline="2 0">
+        <HStack align="center" gap="space-8" marginInline="space-8 space-0">
           <XMarkOctagonFillIconColored aria-hidden />
           Feil ved lasting
           {helpText}
@@ -133,7 +134,7 @@ export const LoadTextListItem = ({ textId, maltekstseksjon, query }: LoadTextLis
 };
 
 const SkeletonItem = () => (
-  <HStack align="center" gap="2" width="100%">
+  <HStack align="center" gap="space-8" width="100%">
     <Skeleton width={20} />
     <Skeleton className="grow" />
     <Skeleton width={85} />

@@ -1,4 +1,4 @@
-import { BoxNew, HStack, Tooltip } from '@navikt/ds-react';
+import { Box, HStack, Tooltip } from '@navikt/ds-react';
 
 interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   active?: boolean;
@@ -19,19 +19,19 @@ export const DocumentLink = ({ active = false, disabled = false, children, icon,
   return (
     <HStack
       asChild
-      gap="2"
+      gap="space-8"
       align="center"
       overflow="hidden"
       height="100%"
       wrap={false}
       className={active ? ACTIVE_CLASSES : INACTIVE_CLASSES}
     >
-      <BoxNew asChild overflow="hidden" borderRadius="medium" paddingInline="05 1">
+      <Box asChild overflow="hidden" borderRadius="4" paddingInline="space-2 space-4">
         <a {...rest} href={href} className="h-fit cursor-pointer self-center text-ax-text-accent-subtle">
           {icon}
           <EllipsisTitle>{children}</EllipsisTitle>
         </a>
-      </BoxNew>
+      </Box>
     </HStack>
   );
 };

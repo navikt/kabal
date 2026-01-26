@@ -1,6 +1,6 @@
 import { EXPANDED_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
 import { type IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
-import { BoxNew, CopyButton, HelpText, HStack, Label, VStack } from '@navikt/ds-react';
+import { Box, CopyButton, HelpText, HStack, Label, VStack } from '@navikt/ds-react';
 import { Timeline } from './timeline/timeline';
 
 interface ExpandedDocumentProps {
@@ -11,9 +11,21 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
   const { journalstatus, kanalnavn, opprettetAvNavn, journalpostId } = document;
 
   return (
-    <VStack asChild gap="4 0" height={`${EXPANDED_HEIGHT}px`} width="calc(100% - var(--ax-space-16))" overflowX="auto">
-      <BoxNew paddingBlock="2" paddingInline="4 2" marginInline="4 0" borderWidth="0 0 0 1" borderColor="neutral">
-        <HStack gap="0 4" position="sticky" left="0" className="whitespace-nowrap" wrap={false}>
+    <VStack
+      asChild
+      gap="space-16 space-0"
+      height={`${EXPANDED_HEIGHT}px`}
+      width="calc(100% - var(--ax-space-16))"
+      overflowX="auto"
+    >
+      <Box
+        paddingBlock="space-8"
+        paddingInline="space-16 space-8"
+        marginInline="space-16 space-0"
+        borderWidth="0 0 0 1"
+        borderColor="neutral"
+      >
+        <HStack gap="space-0 space-16" position="sticky" left="space-0" className="whitespace-nowrap" wrap={false}>
           <Section>
             <Label size="small">Status</Label>
             <Data>
@@ -37,10 +49,10 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
             <Data title={opprettetAvNavn ?? undefined}>{opprettetAvNavn}</Data>
           </Section>
         </HStack>
-        <HStack gap="8">
+        <HStack gap="space-32">
           <Timeline {...document} />
         </HStack>
-      </BoxNew>
+      </Box>
     </VStack>
   );
 };
@@ -70,7 +82,16 @@ interface DetailsProps {
 }
 
 const Data = ({ children, title }: DetailsProps) => (
-  <HStack as="p" title={title} gap="05" align="center" height="6" wrap={false} overflow="hidden" className="truncate">
+  <HStack
+    as="p"
+    title={title}
+    gap="space-2"
+    align="center"
+    height="6"
+    wrap={false}
+    overflow="hidden"
+    className="truncate"
+  >
     {children}
   </HStack>
 );

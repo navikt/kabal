@@ -2,7 +2,7 @@ import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { formatIdNumber } from '@app/functions/format-id';
 import type { INavEmployee } from '@app/types/bruker';
 import type { IHistory, IPart } from '@app/types/oppgavebehandling/response';
-import { BoxNew } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 
 type KeySource = Pick<IHistory, 'type' | 'timestamp'>;
 
@@ -28,7 +28,14 @@ interface ReasonProps {
 }
 
 export const Reason = ({ id, children }: ReasonProps) => (
-  <BoxNew as="p" id={id} className="italic" paddingInline="1 0" borderWidth="0 0 0 4" borderColor="neutral-subtle">
+  <Box
+    as="p"
+    id={id}
+    className="italic"
+    paddingInline="space-4 space-0"
+    borderWidth="0 0 0 4"
+    borderColor="neutral-subtle"
+  >
     {children}
-  </BoxNew>
+  </Box>
 );

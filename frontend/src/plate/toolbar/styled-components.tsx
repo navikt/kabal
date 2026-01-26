@@ -1,13 +1,21 @@
-import { BoxNew, HStack } from '@navikt/ds-react';
+import { Box, HStack } from '@navikt/ds-react';
 
 interface StyledToolbarProps {
   children: React.ReactNode;
 }
 
 export const StyledToolbar = ({ children }: StyledToolbarProps) => (
-  <HStack asChild position="sticky" wrap={false} top="4" left="0" className="z-22" marginBlock="0 4">
-    <BoxNew background="raised" shadow="dialog" padding="05" width="210mm" className="[grid-area:toolbar]">
+  <HStack
+    asChild
+    position="sticky"
+    wrap={false}
+    top="space-16"
+    left="space-0"
+    className="z-22"
+    marginBlock="space-0 space-1"
+  >
+    <Box background="raised" shadow="dialog" padding="space-2" width="210mm" className="[grid-area:toolbar]">
       {children}
-    </BoxNew>
+    </Box>
   </HStack>
 );

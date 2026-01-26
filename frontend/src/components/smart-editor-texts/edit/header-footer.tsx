@@ -27,7 +27,7 @@ export const HeaderFooterEditor = ({ type, initialValue, update, status }: Props
         }}
         className="mx-4"
       />
-      <HStack marginBlock="2 0" paddingInline="4" justify="end">
+      <HStack marginBlock="space-8 space-0" paddingInline="space-16" justify="end">
         <SavedStatus {...status} />
       </HStack>
     </div>

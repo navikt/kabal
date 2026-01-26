@@ -39,7 +39,7 @@ export const Enhetmappe = ({ enhetId, selectedMappe, setSelectedMappe, oppgavebe
   }, [typeId, utfallId]);
 
   return (
-    <HStack align="end" gap="2">
+    <HStack align="end" gap="space-8">
       {showEnhetmappeInfo ? (
         <Alert variant="info" size="small">
           Velg enhetsmappen «Sendt til Trygderetten».

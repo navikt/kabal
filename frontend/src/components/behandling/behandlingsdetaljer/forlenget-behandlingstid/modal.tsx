@@ -36,15 +36,15 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
   return (
     <Modal header={{ heading }} width="2000px" closeOnBackdropClick open={isOpen} onClose={onClose}>
       <Modal.Body className="flex h-[80vh] w-full gap-9">
-        <VStack width="780px" padding="1" overflowY="auto" flexShrink="0" gap="4">
-          <VStack gap="4">
+        <VStack width="780px" padding="space-4" overflowY="auto" flexShrink="0" gap="space-16">
+          <VStack gap="space-16">
             {isOpen ? <TimesPreviouslyExtended /> : null}
             {isOpen ? (
               <DoNotSendLetter varsletFrist={varsletFrist} setBehandlingstidError={setBehandlingstidError} />
             ) : null}
           </VStack>
 
-          <HStack gap="4">
+          <HStack gap="space-16">
             {children}
 
             <BehandlingSection label="Varslet frist">
@@ -61,11 +61,10 @@ export const VarsletFristModal = ({ oppgavebehandling, children, isOpen, onClose
 
         {isOpen ? <Pdf id={oppgaveId} varsletFrist={varsletFrist} /> : null}
       </Modal.Body>
-
       <Modal.Footer>
         {isOpen ? <Complete id={oppgaveId} onClose={onClose} setError={setError} /> : null}
 
-        <Button size="small" variant="secondary-neutral" onClick={onClose}>
+        <Button data-color="neutral" size="small" variant="secondary" onClick={onClose}>
           Lukk
         </Button>
       </Modal.Footer>

@@ -27,11 +27,11 @@ export const Toasts = () => {
   return (
     <VStack
       position="fixed"
-      bottom="2"
-      right="0"
-      gap="2 0"
-      paddingInline="0 2"
-      marginBlock="2 0"
+      bottom="space-8"
+      right="space-0"
+      gap="space-8 space-0"
+      paddingInline="space-0 space-8"
+      marginBlock="space-8 space-0"
       maxHeight="calc(100% - var(--ax-space-16))"
       overflowY="auto"
       overflowX="visible"

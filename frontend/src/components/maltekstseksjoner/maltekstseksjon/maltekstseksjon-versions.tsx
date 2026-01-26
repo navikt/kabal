@@ -88,7 +88,7 @@ const Loaded = ({ versions, first, query }: LoadedProps) => {
       createDraftPanel={(version) => (
         <VStack
           flexGrow="1"
-          marginBlock="2 0"
+          marginBlock="space-8 space-0"
           overflow="hidden"
           style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(ScalingGroup.REDAKTØR) }}
         >
@@ -98,7 +98,7 @@ const Loaded = ({ versions, first, query }: LoadedProps) => {
       createPublishedPanel={(version) => (
         <VStack
           flexGrow="1"
-          marginBlock="2 0"
+          marginBlock="space-8 space-0"
           overflow="hidden"
           style={{ [EDITOR_SCALE_CSS_VAR.toString()]: getScaleVar(ScalingGroup.REDAKTØR) }}
         >

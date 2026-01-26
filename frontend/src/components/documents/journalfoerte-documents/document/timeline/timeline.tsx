@@ -7,7 +7,7 @@ export const Timeline = ({ timeline, journalposttype, utsendingsinfo, kanal, kan
   const lastIndex = timeline.length - 1;
 
   return (
-    <HStack wrap={false} gap="2" as="ol">
+    <HStack wrap={false} gap="space-8" as="ol">
       {timeline.map(({ type, timestamp }, index) => {
         const key = `${type}-${timestamp}`;
         const isLast = index === lastIndex;

@@ -17,7 +17,7 @@ export const SetPreviousBehandlingstidInfo = ({ value, id }: Props) => {
   useDebounce(action, skip, tempValue, 500);
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <Textarea
         minRows={2}
         maxRows={2}

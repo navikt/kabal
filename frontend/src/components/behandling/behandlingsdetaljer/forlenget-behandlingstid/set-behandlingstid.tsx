@@ -60,13 +60,13 @@ export const SetBehandlingstid = ({
   }
 
   return (
-    <HStack gap="2">
-      <VStack gap="1" as="section">
+    <HStack gap="space-8">
+      <VStack gap="space-4" as="section">
         <Heading size="xsmall" style={{ fontSize: 16 }}>
           {varselTypeIsOriginal ? 'Opprinnelig behandlingstid' : 'Ny behandlingstid'}
         </Heading>
 
-        <HStack align="end" gap="2" as="section" id={UtvidetBehandlingstidFieldName.Behandlingstid}>
+        <HStack align="end" gap="space-8" as="section" id={UtvidetBehandlingstidFieldName.Behandlingstid}>
           <TextField
             label={`Antall ${BEHANDLINGSTID_UNIT_TYPE_NAMES[typeId]}`}
             hideLabel
@@ -92,10 +92,10 @@ export const SetBehandlingstid = ({
           />
 
           <ToggleGroup
+            data-color="neutral"
             style={{ width: 180 }}
             value={typeId}
             size="small"
-            variant="neutral"
             onChange={(typeId) => {
               if (!isBehandlingstidUnitType(typeId)) {
                 return;

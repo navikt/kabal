@@ -59,7 +59,7 @@ export const CreateSystemNotification = () => {
   };
 
   return (
-    <VStack as="section" gap="4">
+    <VStack as="section" gap="space-16">
       <VStack>
         <Heading level="2" size="small" spacing>
           Opprett systemvarsel

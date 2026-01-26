@@ -21,7 +21,7 @@ type PersonProps = PersonQuery & { fnr: string };
 export const Person = ({ data, isLoading, isFetching, error, fnr, refetch }: PersonProps) => {
   if (isLoading) {
     return (
-      <HStack gap="4" marginInline="4 0">
+      <HStack gap="space-16" marginInline="space-16 space-0">
         <Skeleton height={32} width={200} />
         <Skeleton height={32} width={100} />
         <Skeleton height={32} width={80} />
@@ -31,7 +31,7 @@ export const Person = ({ data, isLoading, isFetching, error, fnr, refetch }: Per
 
   if (error !== undefined) {
     return (
-      <HStack align="center" gap="0 4" paddingInline="4">
+      <HStack align="center" gap="space-0 space-16" paddingInline="space-16">
         <ErrorAlert error={error} refetch={refetch} isFetching={isFetching}>
           {`Kunne ikke hente person med ID-nummer ${formatFoedselsnummer(fnr)}`}
         </ErrorAlert>
@@ -44,13 +44,14 @@ export const Person = ({ data, isLoading, isFetching, error, fnr, refetch }: Per
   }
 
   return (
-    <HStack align="center" gap="0 4" paddingInline="4" data-testid="search-result-person">
+    <HStack align="center" gap="space-0 space-16" paddingInline="space-16" data-testid="search-result-person">
       <span className="justify-self-start truncate">{data.name}</span>
       <span className="justify-self-start">
         <CopyIdButton id={data.id} />
       </span>
       <Button
-        variant="secondary-neutral"
+        data-color="neutral"
+        variant="secondary"
         size="small"
         onClick={refetch}
         loading={isFetching}

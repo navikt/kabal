@@ -3,7 +3,7 @@ import { DEFAULT, EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hook
 import { isMetaKey, Keys } from '@app/keys';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { useMyPlateEditorRef } from '@app/plate/types';
-import { BoxNew, HGrid } from '@navikt/ds-react';
+import { Box, HGrid } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 
 interface Props {
@@ -102,7 +102,13 @@ export const Content = ({ children }: Props) => {
   }, [onWheel]);
 
   return (
-    <BoxNew asChild background="default" paddingBlock="space-16 0" paddingInline="space-16 0" height="max-content">
+    <Box
+      asChild
+      background="default"
+      paddingBlock="space-16 space-0"
+      paddingInline="space-16 space-0"
+      height="max-content"
+    >
       <HGrid
         position="relative"
         overflow="visible"
@@ -127,6 +133,6 @@ export const Content = ({ children }: Props) => {
           className="h-0"
         />
       </HGrid>
-    </BoxNew>
+    </Box>
   );
 };

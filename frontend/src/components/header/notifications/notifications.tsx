@@ -10,7 +10,7 @@ import { BellFillIcon, BellIcon, ChevronDownIcon, ChevronUpIcon, SidebarBothIcon
 import {
   ActionMenu,
   BodyShort,
-  BoxNew,
+  Box,
   Button,
   Heading,
   HStack,
@@ -47,21 +47,21 @@ export const Notifications = () => {
                 className={hasUnreadNotifications ? 'animate-wiggle' : undefined}
               />
 
-              <BoxNew
+              <Box
                 as="span"
                 position="absolute"
                 background={hasUnreadNotifications ? 'danger-strong' : 'neutral-strong'}
-                top="1"
-                right="1"
-                paddingBlock="05"
-                paddingInline="1"
+                top="space-4"
+                right="space-4"
+                paddingBlock="space-2"
+                paddingInline="space-4"
                 borderRadius="full"
                 shadow="dialog"
                 aria-label="Antall uleste varsler"
                 className="font-ax-bold text-ax-small leading-none"
               >
                 {unreadCount > 999 ? '999+' : unreadCount}
-              </BoxNew>
+              </Box>
             </InternalHeader.Button>
           </ActionMenu.Trigger>
         </Tooltip>
@@ -84,7 +84,6 @@ export const Notifications = () => {
           </ActionMenu.Content>
         </Theme>
       </ActionMenu>
-
       <Theme theme={theme}>
         <OverviewModal
           ref={modalRef}
@@ -119,7 +118,7 @@ const OppgaveNotifications = ({ notifications, oppgaveId }: OppgaveNotifications
   }, [oppgaveId, notifications.filter, notifications]);
 
   return (
-    <VStack gap="4">
+    <VStack gap="space-16">
       <Group notifications={current} title="Åpen oppgave" />
       <ExpandableGroup notifications={other} title="Andre oppgaver" />
     </VStack>
@@ -132,7 +131,7 @@ interface GroupProps {
 }
 
 const Group = ({ title, notifications }: GroupProps) => (
-  <VStack as="section" gap="2">
+  <VStack as="section" gap="space-8">
     <Heading size="xsmall">
       {title} ({notifications.length})
     </Heading>
@@ -145,7 +144,7 @@ const ExpandableGroup = ({ title, notifications }: GroupProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <VStack as="section" gap="2">
+    <VStack as="section" gap="space-8">
       <HStack asChild justify="space-between" align="center" className="cursor-pointer">
         <Heading
           size="xsmall"
@@ -153,10 +152,14 @@ const ExpandableGroup = ({ title, notifications }: GroupProps) => {
           textColor={notifications.length === 0 ? 'subtle' : 'default'}
         >
           {title} ({notifications.length})
-          <Button variant="tertiary-neutral" size="small" icon={isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />} />
+          <Button
+            data-color="neutral"
+            variant="tertiary"
+            size="small"
+            icon={isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
+          />
         </Heading>
       </HStack>
-
       {isExpanded ? <Content notifications={notifications} /> : null}
     </VStack>
   );
@@ -177,7 +180,7 @@ const Content = ({ notifications }: ContentProps) => {
 
   return (
     <>
-      <VStack as="ol" gap="4">
+      <VStack as="ol" gap="space-16">
         {notifications.map((notification) => (
           <KabalNotificationWithCaseDataEntry key={notification.id} {...notification} />
         ))}

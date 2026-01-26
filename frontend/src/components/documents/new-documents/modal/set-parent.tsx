@@ -73,12 +73,12 @@ interface RadioOptionProps {
 
 const RadioOption = ({ value, type, distType, text }: RadioOptionProps) => (
   <Radio key={value} value={value} title={text}>
-    <HStack align="center" justify="start" gap="0 1">
+    <HStack align="center" justify="start" gap="space-0 space-4">
       <DocumentIcon type={type} />
 
       <span className="truncate">{text}</span>
 
-      <Tag size="xsmall" variant="info">
+      <Tag data-color="info" size="xsmall" variant="outline">
         {DISTRIBUTION_TYPE_NAMES[distType]}
       </Tag>
     </HStack>

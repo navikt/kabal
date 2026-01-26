@@ -5,7 +5,7 @@ import { Marks } from '@app/plate/toolbar/marks';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { TableButtons } from '@app/plate/toolbar/table/table';
 import { type TableElement, useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
-import { BoxNew, HStack } from '@navikt/ds-react';
+import { Box, HStack } from '@navikt/ds-react';
 import { BaseTablePlugin } from '@platejs/table';
 import { useContext, useEffect, useState } from 'react';
 
@@ -46,9 +46,9 @@ const TableToolbar = ({ editorId, container, children }: TableToolbarProps) => {
       style={{ top, left, willChange: 'left, top' }}
       wrap={false}
     >
-      <BoxNew as="section" shadow="dialog" background="default" padding="05">
+      <Box as="section" shadow="dialog" background="default" padding="space-2">
         {children}
-      </BoxNew>
+      </Box>
     </HStack>
   );
 };

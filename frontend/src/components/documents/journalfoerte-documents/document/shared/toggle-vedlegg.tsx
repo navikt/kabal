@@ -14,7 +14,8 @@ export const ToggleVedleggButton = ({ hasVedlegg, showVedlegg, toggleShowVedlegg
 
   return (
     <Button
-      variant="tertiary-neutral"
+      data-color="neutral"
+      variant="tertiary"
       size="small"
       icon={<Icon aria-hidden className={showVedlegg ? 'rotate-90' : 'rotate-0'} />}
       onClick={(e) => {
