@@ -2,7 +2,6 @@ import type { FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/q
 import { isGenericObject } from './types';
 
 export interface KabalApiErrorData {
-  type: string; // about:blank
   title: string; // Bad Request
   status: number; // 400
   detail?: string; // Failed to read request
@@ -17,10 +16,8 @@ export const isApiDataError = (error: unknown): error is ApiDataError =>
 
 export const isKabalApiErrorData = (data: unknown): data is KabalApiErrorData =>
   isGenericObject(data) &&
-  'type' in data &&
   'title' in data &&
   'status' in data &&
-  typeof data.type === 'string' &&
   typeof data.title === 'string' &&
   typeof data.status === 'number';
 

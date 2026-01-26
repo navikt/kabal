@@ -150,7 +150,7 @@ export const usePdfData = (url: string | undefined, query?: Record<string, strin
 
       const text = JSON.stringify(json);
       setError(`Ukjent feil (${status}) - ${text}`);
-      toast.error(<ErrorMessage error={{ status, title: 'Ukjent feil', type: 'about:blank', detail: text }} />);
+      toast.error(<ErrorMessage error={{ status, title: 'Ukjent feil', detail: text }} />);
 
       return;
     } catch (e) {
