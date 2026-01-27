@@ -1,7 +1,6 @@
 import { validateBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
-import { usePdfData } from '@app/components/pdf/pdf';
+import { usePdfData } from '@app/components/pdf/use-pdf-data';
 import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
-import { useForlengetFristPdfWidth } from '@app/hooks/settings/use-setting';
 import {
   useGetOrCreateQuery,
   useSetBehandlingstidDateMutation,
@@ -72,8 +71,6 @@ const PdfPlaceholder = ({ children }: { children: string }) => (
 );
 
 const PdfBody = ({ id }: { id: string }) => {
-  const { value: width, setValue: setWidth } = useForlengetFristPdfWidth();
-
   const units = useFulfilledTimestamp(useSetBehandlingstidUnitsMutation({ fixedCacheKey: id })[1]);
   const typeId = useFulfilledTimestamp(useSetBehandlingstidUnitTypeMutation({ fixedCacheKey: id })[1]);
   const date = useFulfilledTimestamp(useSetBehandlingstidDateMutation({ fixedCacheKey: id })[1]);
@@ -92,7 +89,7 @@ const PdfBody = ({ id }: { id: string }) => {
     pdfData.refresh();
   }, [id, units, typeId, date, title, fullmektig, prevInfo, reason, customText]);
 
-  return <SimplePdfPreview {...pdfData} width={width} setWidth={setWidth} />;
+  return <SimplePdfPreview {...pdfData} />;
 };
 
 interface Props {

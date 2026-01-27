@@ -1,34 +1,27 @@
 import { FeilTag, PolTag } from '@app/components/documents/document-warnings';
 import { TabContext } from '@app/components/documents/tab-context';
-import { Pdf, usePdfData } from '@app/components/pdf/pdf';
+import { Pdf } from '@app/components/pdf/pdf';
+import { usePdfData } from '@app/components/pdf/use-pdf-data';
 import { toast } from '@app/components/toast/store';
 import { Header } from '@app/components/view-pdf/header';
 import { ReloadButton } from '@app/components/view-pdf/reload-button';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
 import { useShownDocumentMetadata } from '@app/components/view-pdf/use-shown-document-metadata';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useShownDocuments } from '@app/hooks/use-shown-documents';
 import { Skjerming, VariantFormat } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
-import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
+import { ExternalLinkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, type ButtonProps, HStack, Loader, Switch, Tag, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useMergedDocument } from './use-merged-document';
 
-const DEFAULT_PDF_WIDTH = 800;
-const MIN_PDF_WIDTH = 400;
-const ZOOM_STEP = 150;
-const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
-
 export const ViewPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
-  const { value: pdfWidth = DEFAULT_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
   const { remove: close } = useDocumentsPdfViewed();
   const { showDocumentList, title, isLoading } = useShownDocuments();
-  const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
-  const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
   const oppgaveId = useOppgaveId();
   const showsArchivedDocument = showDocumentList.some((doc) => doc.type === DocumentTypeEnum.JOURNALFOERT);
   const hasRedactedDocuments = showDocumentList.some(
@@ -96,7 +89,7 @@ export const ViewPDF = () => {
 
   if (mergedDocumentIsError || inlineUrl === undefined) {
     return (
-      <Container minWidth={pdfWidth}>
+      <Container>
         <Alert variant="error" size="small">
           Kunne ikke vise dokument(er)
         </Alert>
@@ -106,7 +99,7 @@ export const ViewPDF = () => {
 
   if (mergedDocumentIsLoading || isLoading) {
     return (
-      <Container minWidth={pdfWidth}>
+      <Container>
         <Loader title="Laster dokument" size="3xlarge" />
       </Container>
     );
@@ -125,11 +118,11 @@ export const ViewPDF = () => {
   );
 
   return (
-    <Container minWidth={pdfWidth}>
+    <Container>
       <Header>
         <Button onClick={close} title="Lukk forhåndsvisning" icon={<XMarkIcon aria-hidden />} {...BUTTON_PROPS} />
-        <Button onClick={decrease} title="Smalere PDF" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
-        <Button onClick={increase} title="Bredere PDF" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />
+        {/*<Button onClick={decrease} title="Smalere PDF" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
+        <Button onClick={increase} title="Bredere PDF" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />*/}
         <ReloadButton isLoading={loading} onClick={refresh} />
         <Variant
           showsArchivedDocument={showsArchivedDocument}
@@ -164,8 +157,6 @@ export const ViewPDF = () => {
 };
 
 interface RedactedSwitchProps {
-  showsArchivedDocument: boolean;
-  hasRedactedDocuments: boolean;
   hasAccessToArchivedDocuments: boolean;
   showRedacted: boolean;
   setShowRedacted: (showRedacted: boolean) => void;
@@ -174,12 +165,20 @@ interface RedactedSwitchProps {
 interface VariantProps extends RedactedSwitchProps {
   showsPol: boolean;
   showsFeil: boolean;
+  showsArchivedDocument: boolean;
+  hasRedactedDocuments: boolean;
 }
 
-const Variant = ({ showsPol, showsFeil, ...props }: VariantProps) => {
+const Variant = ({ showsPol, showsFeil, showsArchivedDocument, hasRedactedDocuments, ...props }: VariantProps) => {
+  const showRedactedSwitch = showsArchivedDocument && hasRedactedDocuments;
+
+  if (!showRedactedSwitch && !showsPol && !showsFeil) {
+    return null;
+  }
+
   return (
     <HStack gap="space-4" wrap={false}>
-      <RedactedSwitch {...props} />
+      {showRedactedSwitch ? <RedactedSwitch {...props} /> : null}
 
       {showsPol ? <PolTag /> : null}
       {showsFeil ? <FeilTag /> : null}
@@ -187,17 +186,7 @@ const Variant = ({ showsPol, showsFeil, ...props }: VariantProps) => {
   );
 };
 
-const RedactedSwitch = ({
-  showsArchivedDocument,
-  hasRedactedDocuments,
-  hasAccessToArchivedDocuments,
-  showRedacted,
-  setShowRedacted,
-}: RedactedSwitchProps) => {
-  if (!showsArchivedDocument || !hasRedactedDocuments) {
-    return null;
-  }
-
+const RedactedSwitch = ({ hasAccessToArchivedDocuments, showRedacted, setShowRedacted }: RedactedSwitchProps) => {
   if (!hasAccessToArchivedDocuments) {
     return (
       <Tooltip content="Du har ikke tilgang til å se usladdet versjon" placement="top">
@@ -227,14 +216,13 @@ const BUTTON_PROPS: ButtonProps = {
 };
 
 interface ContainerProps {
-  minWidth: number;
   children: React.ReactNode | React.ReactNode[];
 }
 
-const Container = ({ minWidth, children }: ContainerProps) => (
+const Container = ({ children }: ContainerProps) => (
   <VStack
     asChild
-    minWidth={`${minWidth}px`}
+    width="min-content"
     className="snap-start"
     align="center"
     justify="center"
