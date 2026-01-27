@@ -1,8 +1,8 @@
 import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
-import { useDocumentsPdfViewed, useSmartEditorActiveDocument } from './settings/use-setting';
+import { useFilesViewed, useSmartEditorActiveDocument } from './settings/use-setting';
 
 export const useRemoveDocument = () => {
-  const { value: viewedPdf, remove: removeViewedPdf } = useDocumentsPdfViewed();
+  const { value: pdfViewed, remove: removeViewedPdf } = useFilesViewed();
   const { value: activeSmartEditor, remove: removeActiveSmartEditor } = useSmartEditorActiveDocument();
 
   return (smartEditorId: string, document: IDocument) => {
@@ -10,24 +10,20 @@ export const useRemoveDocument = () => {
       removeActiveSmartEditor();
     }
 
-    if (viewedPdf.length === 1) {
-      const [first] = viewedPdf;
+    if (document.type === DocumentTypeEnum.JOURNALFOERT) {
+      const isViewed =
+        pdfViewed.archivedFiles?.length === 1 &&
+        pdfViewed.archivedFiles[0]?.dokumentInfoId === document.journalfoertDokumentReference.dokumentInfoId &&
+        pdfViewed.archivedFiles[0]?.journalpostId === document.journalfoertDokumentReference.journalpostId;
 
-      if (first !== undefined) {
-        const archiveMatch =
-          first.type === DocumentTypeEnum.JOURNALFOERT &&
-          document.type === DocumentTypeEnum.JOURNALFOERT &&
-          first.dokumentInfoId === document.journalfoertDokumentReference.dokumentInfoId &&
-          first.journalpostId === document.journalfoertDokumentReference.journalpostId;
+      if (isViewed) {
+        removeViewedPdf();
+      }
+    } else {
+      const isViewed = pdfViewed.newDocument === document.id || pdfViewed.vedleggsoversikt === document.id;
 
-        const nonArchiveMatch =
-          first.type !== DocumentTypeEnum.JOURNALFOERT &&
-          document.type !== DocumentTypeEnum.JOURNALFOERT &&
-          first.documentId === document.id;
-
-        if (archiveMatch || nonArchiveMatch) {
-          removeViewedPdf();
-        }
+      if (isViewed) {
+        removeViewedPdf();
       }
     }
   };

@@ -36,6 +36,7 @@
     "@navikt/ds-react": "8.6.0",
     "@navikt/ds-tailwind": "8.6.0",
     "@navikt/fnrvalidator": "2.2.1",
+    "@navikt/klage-file-viewer": "0.0.55",
     "@platejs/autoformat": "52.0.11",
     "@platejs/basic-nodes": "52.0.11",
     "@platejs/basic-styles": "52.0.11",

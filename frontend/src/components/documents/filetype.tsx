@@ -28,7 +28,7 @@ export const canDistribute = ({ filtype }: Variant): boolean => filtype === Filt
 export const canDistributeAny = (varianter: Variants): boolean => varianter.some((v) => canDistribute(v));
 
 export const canOpenInKabal = (varianter: Variants): boolean =>
-  varianter.some(({ filtype }) => filtype === Filtype.PDF);
+  varianter.some(({ filtype }) => filtype === Filtype.PDF || filtype === Filtype.XLSX);
 
 export const hasRedactedVariant = (varianter: Variants): boolean =>
   varianter.some(({ format }) => format === VariantFormat.SLADDET);

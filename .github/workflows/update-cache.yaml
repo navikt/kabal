@@ -15,6 +15,8 @@ jobs:
         apps: [frontend, server]
     name: Update TypeScript ${{ matrix.apps }} shared cache
     runs-on: ubuntu-latest
+    env:
+      BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -24,22 +26,21 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Configure @navikt scope
+        shell: bash
+        run: |
+          for dir in . ${{ matrix.apps }}; do
+            echo -e '\n[install.scopes]\n"@navikt" = { token = "$BUN_AUTH_TOKEN", url = "https://npm.pkg.github.com/" }' >> "$dir/bunfig.toml"
+          done
+
       - name: Install common dependencies
         shell: bash
-        env:
-          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-        run: |
-          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
-          bun install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Install ${{ matrix.apps }} dependencies
         shell: bash
-        env:
-          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-        run: |
-          cd ${{ matrix.apps }}
-          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
-          bun install --frozen-lockfile
+        working-directory: ${{ matrix.apps }}
+        run: bun install --frozen-lockfile
 
       - name: Restore cache for ${{ matrix.apps }}
         uses: actions/cache/restore@v4
@@ -51,9 +52,8 @@ jobs:
 
       - name: Typecheck ${{ matrix.apps }}
         shell: bash
-        run: |
-          cd ${{ matrix.apps }}
-          bun run typecheck
+        working-directory: ${{ matrix.apps }}
+        run: bun run typecheck
 
       - name: Save shared cache for ${{ matrix.apps }}
         uses: actions/cache/save@v4

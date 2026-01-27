@@ -1,4 +1,3 @@
-import { PdfScale } from '@app/components/settings/pdf-scale/pdf-scale';
 import { VStack } from '@navikt/ds-react';
 import { Abbreviations } from './abbreviations/abbreviations';
 import { Filters } from './filters';
@@ -6,8 +5,6 @@ import { Signature } from './signature';
 
 export const Settings = () => (
   <VStack gap="space-16" className="@container">
-    <PdfScale />
-
     <div
       style={{
         gridTemplateColumns: '1fr minmax(1030px, 1fr)',

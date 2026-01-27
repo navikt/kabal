@@ -45,6 +45,8 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    env:
+      BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
       version: ${{ steps.version.outputs.version }}
@@ -57,57 +59,58 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Configure @navikt scope
+        shell: bash
+        run: |
+          for dir in . frontend file-viewer server; do
+            echo -e '\n[install.scopes]\n"@navikt" = { token = "$BUN_AUTH_TOKEN", url = "https://npm.pkg.github.com/" }' >> "$dir/bunfig.toml"
+          done
+
       - name: Install common dependencies
         shell: bash
-        env:
-          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-        run: |
-          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
-          bun install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Install frontend dependencies
         shell: bash
-        env:
-          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-        run: |
-          cd frontend
-          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
-          bun install --frozen-lockfile
+        working-directory: frontend
+        run: bun install --frozen-lockfile
 
       - name: Build frontend
         shell: bash
+        working-directory: frontend
         env:
           VERSION: ${{ github.sha }}
-        run: |
-          cd frontend
-          bun run build
+        run: bun run build
 
       - name: Test frontend
         shell: bash
-        run: |
-          cd frontend
-          bun test
+        working-directory: frontend
+        run: bun test
+
+      - name: Install file-viewer dependencies
+        shell: bash
+        working-directory: file-viewer
+        run: bun install --frozen-lockfile
+
+      - name: Build file-viewer
+        shell: bash
+        working-directory: file-viewer
+        run: bun run build
 
       - name: Install server dependencies
         shell: bash
-        env:
-          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-        run: |
-          cd server
-          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
-          bun install --frozen-lockfile
+        working-directory: server
+        run: bun install --frozen-lockfile
 
       - name: Test server
         shell: bash
-        run: |
-          cd server
-          bun test
+        working-directory: server
+        run: bun test
 
       - name: Build server
         shell: bash
-        run: |
-          cd server
-          bun run build
+        working-directory: server
+        run: bun run build
 
       - name: Generate version number
         id: version

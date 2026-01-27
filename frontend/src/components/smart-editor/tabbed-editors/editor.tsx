@@ -3,10 +3,7 @@ import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
 import { History } from '@app/components/smart-editor/history/history';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
-import {
-  cleanupLocalStorageBackups,
-  createLocalStorageBackup,
-} from '@app/components/smart-editor/tabbed-editors/backup';
+import { createLocalStorageBackup } from '@app/components/smart-editor/tabbed-editors/backup';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
@@ -469,7 +466,3 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: EditorWithNewCommentAndF
     </Sheet>
   );
 };
-
-if (typeof window !== 'undefined' && window.localStorage !== undefined) {
-  cleanupLocalStorageBackups(window.localStorage);
-}
