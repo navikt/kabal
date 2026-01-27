@@ -1,4 +1,3 @@
-import type { IShownArchivedDocument } from '@app/components/view-pdf/types';
 import { ENVIRONMENT } from '@app/environment';
 import type { KabalValue } from '@app/plate/types';
 import { DokumenterListTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
@@ -8,6 +7,7 @@ import type { IDocumentParams } from '@app/types/documents/common-params';
 import type { IDocument, IMergedDocumentsResponse, ISmartDocumentVersion } from '@app/types/documents/documents';
 import type { IGetVersionParams } from '@app/types/documents/params';
 import type { IValidateDocumentResponse } from '@app/types/documents/validation';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 const dokumenterListTags = (type: DokumenterListTagTypes) => (result: IArkiverteDocumentsResponse | undefined) =>
   typeof result === 'undefined'
@@ -48,7 +48,7 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
     validateDocument: builder.query<IValidateDocumentResponse, IDocumentParams>({
       query: ({ oppgaveId, dokumentId }) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/validate`,
     }),
-    mergedDocumentsReference: builder.query<IMergedDocumentsResponse, IShownArchivedDocument[]>({
+    mergedDocumentsReference: builder.query<IMergedDocumentsResponse, IJournalfoertDokumentId[]>({
       query: (body) => ({
         url: '/kabal-api/journalposter/mergedocuments',
         method: 'POST',

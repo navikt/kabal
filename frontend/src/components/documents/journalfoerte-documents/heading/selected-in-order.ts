@@ -1,9 +1,7 @@
 import { canOpenInKabal } from '@app/components/documents/filetype';
 import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
 import type { SelectedMap } from '@app/components/documents/journalfoerte-documents/select-context/types';
-import type { IShownArchivedDocument } from '@app/components/view-pdf/types';
 import type { IArkivertDocument, Variants } from '@app/types/arkiverte-documents';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
 import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 
 interface DownloadableDocument extends IJournalfoertDokumentId {
@@ -12,7 +10,7 @@ interface DownloadableDocument extends IJournalfoertDokumentId {
 }
 
 interface Result {
-  toOpen: IShownArchivedDocument[];
+  toOpen: IJournalfoertDokumentId[];
   toDownload: DownloadableDocument[];
 }
 
@@ -20,7 +18,7 @@ export const getSelectedDocumentsInOrder = (
   selectedDocuments: SelectedMap,
   archivedDocuments: IArkivertDocument[],
 ): Result => {
-  const toOpen: IShownArchivedDocument[] = [];
+  const toOpen: IJournalfoertDokumentId[] = [];
   const toDownload: DownloadableDocument[] = [];
 
   interface ToAdd {
@@ -36,7 +34,7 @@ export const getSelectedDocumentsInOrder = (
     }
 
     if (canOpenInKabal(varianter)) {
-      toOpen.push({ ...ids, varianter, type: DocumentTypeEnum.JOURNALFOERT });
+      toOpen.push(ids);
     } else {
       toDownload.push({ ...ids, tittel: tittel ?? ids.journalpostId, varianter });
     }

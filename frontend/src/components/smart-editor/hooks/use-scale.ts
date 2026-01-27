@@ -1,3 +1,4 @@
+import { snapDown, snapUp } from '@app/functions/snap';
 import { type ScalingGroup, useSmartEditorScale } from '@app/hooks/settings/use-setting';
 import { useCallback } from 'react';
 
@@ -20,7 +21,7 @@ export const useScaleState = (settingPrefix: ScalingGroup) => {
   const scaleUp = useCallback(
     () =>
       setValue((v = DEFAULT) => {
-        const snapped = snapUp(v);
+        const snapped = snapUp(v, USER_STEP, MAX);
         CURRENT_SCALE = snapped / 100;
 
         return snapped;
@@ -30,7 +31,7 @@ export const useScaleState = (settingPrefix: ScalingGroup) => {
   const scaleDown = useCallback(
     () =>
       setValue((v = DEFAULT) => {
-        const snapped = snapDown(v);
+        const snapped = snapDown(v, USER_STEP, MIN);
         CURRENT_SCALE = snapped / 100;
 
         return snapped;
@@ -39,26 +40,4 @@ export const useScaleState = (settingPrefix: ScalingGroup) => {
   );
 
   return { scaleUp, scaleDown, setScale: setValue, scale: value };
-};
-
-const snapUp = (value: number) => {
-  if (value === MAX) {
-    return value;
-  }
-
-  return value + USER_STEP - (value % USER_STEP);
-};
-
-const snapDown = (value: number) => {
-  if (value === MIN) {
-    return value;
-  }
-
-  const rest = value % USER_STEP;
-
-  if (rest === 0) {
-    return value - USER_STEP;
-  }
-
-  return value - rest;
 };

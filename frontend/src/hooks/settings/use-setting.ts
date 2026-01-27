@@ -1,4 +1,4 @@
-import type { IShownDocument } from '@app/components/view-pdf/types';
+import type { IFilesViewed } from '@app/components/file-viewer/types';
 import { parseJSON } from '@app/functions/parse-json';
 import {
   getOppgavePath,
@@ -13,55 +13,61 @@ import {
 import { SETTINGS_MANAGER } from '@app/hooks/settings/manager';
 import type { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
 import { Journalposttype } from '@app/types/arkiverte-documents';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import type { SortOrder } from '@app/types/sort';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 // Oppgavebehandling tabs
 export const useDocumentsEnabled = () => useBooleanSetting(useOppgavePath('tabs/documents/enabled'));
 export const useSmartEditorEnabled = () => useBooleanSetting(useOppgavePath('tabs/smart-editor/enabled'));
 export const useKvalitetsvurderingEnabled = () => useBooleanSetting(useOppgavePath('tabs/kvalitetsvurdering/enabled'));
 
+const FILES_VIEWED_SETTING_SUFFIX = 'tabs/documents/file-viewer/files';
+
+export const DEFAULT_FILES_VIEWED: IFilesViewed = { archivedFiles: [] };
+
 // Oppgavebehandling documents
-const DOCUMENTS_PDF_VIEWED_SETTING_SUFFIX = 'tabs/documents/pdf/viewed';
-export const useDocumentsPdfViewed = () => {
+export const useFilesViewed = () => {
   const {
-    value = [],
+    value = DEFAULT_FILES_VIEWED,
     setValue,
     remove,
-  } = useJsonSetting<IShownDocument[]>(useOppgavePath(DOCUMENTS_PDF_VIEWED_SETTING_SUFFIX));
+  } = useJsonSetting<IFilesViewed>(useOppgavePath(FILES_VIEWED_SETTING_SUFFIX));
 
-  return { value: enforceShownDocumentsStructure(value), setValue, remove };
+  const setNewDocument = useCallback((documentId: string) => setValue({ newDocument: documentId }), [setValue]);
+
+  const setArchivedFiles = useCallback(
+    (files: readonly IJournalfoertDokumentId[]) => setValue({ archivedFiles: [...files] }),
+    [setValue],
+  );
+
+  const setVedleggsoversikt = useCallback(
+    (documentId: string) => setValue({ vedleggsoversikt: documentId }),
+    [setValue],
+  );
+
+  return { value, setValue, setNewDocument, setArchivedFiles, setVedleggsoversikt, remove };
 };
-export const getDocumentsPdfViewed = (oppgaveId: string, navIdent: string): IShownDocument[] => {
-  const key = getOppgavePath(oppgaveId, DOCUMENTS_PDF_VIEWED_SETTING_SUFFIX);
+
+export const getFilesViewed = (oppgaveId: string, navIdent: string): IFilesViewed => {
+  const key = getOppgavePath(oppgaveId, FILES_VIEWED_SETTING_SUFFIX);
   const setting = getSettingKey(navIdent, key);
   const raw = SETTINGS_MANAGER.get(setting);
 
   if (raw === undefined) {
-    return [];
+    return DEFAULT_FILES_VIEWED;
   }
 
-  const parsed = parseJSON<IShownDocument[]>(raw);
-
-  if (parsed === null) {
-    return [];
-  }
-
-  return enforceShownDocumentsStructure(parsed);
+  return parseJSON<IFilesViewed>(raw) ?? DEFAULT_FILES_VIEWED;
 };
-const enforceShownDocumentsStructure = (value: IShownDocument[]): IShownDocument[] =>
-  (Array.isArray(value) ? value : [value]).filter(
-    (d) => d.type !== DocumentTypeEnum.JOURNALFOERT || 'varianter' in d, // Validate that archived documents have variants.
-  );
 
-export const setDocumentsPdfViewed = (oppgaveId: string, navIdent: string, documents: IShownDocument[]) => {
-  const key = getOppgavePath(oppgaveId, DOCUMENTS_PDF_VIEWED_SETTING_SUFFIX);
+export const setFilesViewed = (oppgaveId: string, navIdent: string, documents: IFilesViewed) => {
+  const key = getOppgavePath(oppgaveId, FILES_VIEWED_SETTING_SUFFIX);
   const setting = getSettingKey(navIdent, key);
   SETTINGS_MANAGER.set(setting, JSON.stringify(documents));
 };
-export const useDocumentsPdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/pdf/width'));
-export const useDocumentsArchivePdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/modal/pdf/width'));
+
+export const useFileViewerWidth = () => useNumberSetting(useOppgavePath('tabs/documents/file-viewer/width'));
 export const useDocumentsExpanded = () => useBooleanSetting(useOppgavePath('tabs/documents/expanded'));
 export const useDocumentsWidth = () => useNumberSetting(useOppgavePath('tabs/documents/width'));
 
@@ -158,25 +164,6 @@ export enum GodeFormuleringerExpandState {
   FULL_RICH_TEXT = 'FULL_RICH_TEXT',
 }
 
-/**
- * Enum for PDF scale modes.
- * All:     zoom=137
- * Firefox: zoom=page-width|page-height|page-fit|page-actual|auto
- * Chrome:  view=fitH|fitV|fitB|fitBH|fitBV|fit
- * @external
- * @see https://github.com/chromium/chromium/blob/main/chrome/browser/resources/pdf/open_pdf_params_parser.ts#L21
- */
-export enum PdfScaleMode {
-  PAGE_FIT = 'page-fit',
-  PAGE_WIDTH = 'page-width',
-  PAGE_HEIGHT = 'page-height',
-  CUSTOM = 'custom',
-  NONE = 'none',
-}
-
-export const useNewTabPdfScaleMode = () => useJsonSetting<PdfScaleMode>('pdf/new_tab/scale_mode');
-export const useNewTabPdfCustomScale = () => useNumberSetting('pdf/new_tab/custom_scale');
-
 export const useHasSeenKeyboardShortcuts = () => useBooleanSetting('has_seen_keyboard_shortcuts');
 
 export enum NotificationsGrouping {
@@ -186,3 +173,9 @@ export enum NotificationsGrouping {
 
 export const useNotificationsOverviewGrouping = () =>
   useJsonSetting<NotificationsGrouping>('notifications/overview/grouping');
+
+export const usePdfRotation = (url: string, pageNumber: number) => {
+  const encoded = new TextEncoder().encode(url).toBase64();
+
+  return useJsonSetting<0 | 90 | 180 | 270>(`pdf/${encoded}/page/${pageNumber.toString(10)}/rotation`);
+};

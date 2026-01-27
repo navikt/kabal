@@ -1,12 +1,14 @@
+import { TTL_DAYS } from '@app/components/smart-editor/tabbed-editors/backup';
 import { BACKUP_DATE_FORMAT, KEY_PREFIX } from '@app/components/smart-editor/tabbed-editors/constants';
 import { toast } from '@app/components/toast/store';
-import { isValid, parse } from 'date-fns';
+import { isBefore, isSameDay, isValid, parse, subDays } from 'date-fns';
 
 export interface LocalStorage {
   length: number;
   key(index: number): string | null;
   removeItem(key: string): void;
   setItem(key: string, value: string): void;
+  getItem(key: string): string | null;
 }
 
 export const setLocalStorageItem = (
@@ -76,5 +78,38 @@ export const deleteOldestBackups = (ls: LocalStorage, count: number) => {
     }
   } catch (error) {
     console.error('Failed to delete oldest localStorage backups', error);
+  }
+};
+
+export const cleanLocalStorage = (ls: LocalStorage) => {
+  // Keep 30 days of backups in localStorage
+  try {
+    const cutoff = subDays(new Date(), TTL_DAYS);
+
+    // Iterate backwards to avoid index shifting issues when removing items
+    for (let i = ls.length - 1; i >= 0; i--) {
+      const key = ls.key(i);
+
+      if (key === null) {
+        continue;
+      }
+
+      if (key.startsWith(KEY_PREFIX)) {
+        const datePart = key.split('/').at(-1);
+
+        if (datePart === undefined) {
+          ls.removeItem(key);
+          continue;
+        }
+
+        const backupDate = parse(datePart, BACKUP_DATE_FORMAT, new Date());
+
+        if (!isValid(backupDate) || (isBefore(backupDate, cutoff) && !isSameDay(backupDate, cutoff))) {
+          ls.removeItem(key);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Failed to clean up localStorage backups', error);
   }
 };
