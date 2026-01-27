@@ -1,0 +1,13 @@
+node_modules
+src
+*.ts
+*.tsx
+*.css
+*.html
+tsconfig.json
+vite.config.ts
+tailwind.config.js
+biome.json
+vite-env.d.ts
+.tsbuildinfo
+.gitignore

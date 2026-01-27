@@ -1,8 +1,8 @@
-export const getNewDocumentTabUrl = (oppgaveId: string, documentId: string, parentId: string | null) =>
-  parentId === null ? `/nytt-dokument/${oppgaveId}/${documentId}` : `/nytt-dokumentvedlegg/${oppgaveId}/${documentId}`;
+export const getNewDocumentTabUrl = (oppgaveId: string, documentId: string, _parentId: string | null) =>
+  `/file-viewer/dua/${oppgaveId}/${documentId}`;
 
 export const getJournalfoertDocumentTabUrl = (journalpostId: string, dokumentInfoId: string) =>
-  `/arkivert-dokument/${journalpostId}/${dokumentInfoId}`;
+  `/file-viewer/archived/${journalpostId}:${dokumentInfoId}`;
 
 export const getMergedDocumentTabUrl = (mergedDocumentId: string) => `/kombinert-dokument/${mergedDocumentId}`;
 
@@ -15,6 +15,6 @@ export const getJournalfoertDocumentTabId = (journalpostId: string, dokumentInfo
 export const getMergedDocumentTabId = (mergedDocumentId: string) => `combined-document-${mergedDocumentId}`;
 
 export const getAttachmentsOverviewTabUrl = (oppgaveId: string, documentId: string) =>
-  `/vedleggsoversikt/${oppgaveId}/${documentId}`;
+  `/file-viewer/dua/${oppgaveId}/${documentId}/vedleggsoversikt`;
 
 export const getAttachmentsOverviewTabId = (documentId: string) => `attachments-overview-${documentId}`;
