@@ -1,11 +1,12 @@
 import { canOpenInKabal } from '@app/components/documents/filetype';
-import type { IShownArchivedDocument, IShownDocument } from '@app/components/view-pdf/types';
+import type { IShownDocument } from '@app/components/file-viewer/types';
 import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IArkivertDocument, Variants } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
-import { useEffect, useMemo } from 'react';
+import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { useMemo } from 'react';
 import { useOppgaveId } from './oppgavebehandling/use-oppgave-id';
-import { useDocumentsPdfViewed } from './settings/use-setting';
+import { useFilesViewed } from './settings/use-setting';
 
 interface ShowDocumentResult {
   showDocumentList: IShownDocument[];
@@ -19,32 +20,64 @@ const EMPTY_ARCHIVED_LIST: IArkivertDocument[] = [];
 
 export const useShownDocuments = (): ShowDocumentResult => {
   const oppgaveId = useOppgaveId();
-  const { value: showDocumentList = EMPTY_SHOWN_LIST, setValue: setDocumentList } = useDocumentsPdfViewed();
+  const { value: pdfViewed } = useFilesViewed();
   const { data: documentsInProgress = EMPTY_MAIN_LIST, isLoading: isDuaLoading } = useGetDocumentsQuery(oppgaveId);
   const { data: journalposter, isLoading: isJournalposterLoading } = useGetArkiverteDokumenterQuery(oppgaveId);
 
+  const isLoading = isDuaLoading || isJournalposterLoading;
   const journalpostDocuments = journalposter?.dokumenter ?? EMPTY_ARCHIVED_LIST;
 
-  // Filter the showDocumentList to only include documents that still exist and are accessible
-  const filteredDocumentList = useMemo(() => {
-    if (isDuaLoading || isJournalposterLoading) {
-      return showDocumentList;
+  // Filter stored IDs and hydrate into IShownDocument[] in a single pass to avoid redundant lookups.
+  const showDocumentList = useMemo((): IShownDocument[] => {
+    if (isLoading) {
+      return EMPTY_SHOWN_LIST;
     }
 
-    return showDocumentList.filter((doc) =>
-      doc.type === DocumentTypeEnum.JOURNALFOERT
-        ? hasAccessToShownArchivedDocument(doc, journalpostDocuments)
-        : documentsInProgress.some((d) => d.id === doc.documentId),
-    );
-  }, [documentsInProgress, journalpostDocuments, showDocumentList, isDuaLoading, isJournalposterLoading]);
+    if (pdfViewed.vedleggsoversikt !== undefined) {
+      const exists = documentsInProgress.some((d) => d.id === pdfViewed.vedleggsoversikt);
+
+      if (!exists) {
+        return EMPTY_SHOWN_LIST;
+      }
+
+      return [{ type: DocumentTypeEnum.VEDLEGGSOVERSIKT, documentId: pdfViewed.vedleggsoversikt, parentId: null }];
+    }
+
+    if (pdfViewed.newDocument !== undefined) {
+      const found = documentsInProgress.find((d) => d.id === pdfViewed.newDocument);
+
+      if (found === undefined || found.type === DocumentTypeEnum.JOURNALFOERT) {
+        return EMPTY_SHOWN_LIST;
+      }
+
+      return [{ type: found.type, documentId: found.id, parentId: found.parentId }];
+    }
+
+    const docs: IShownDocument[] = [];
+
+    for (const ref of pdfViewed.archivedFiles) {
+      const varianter = findAccessibleVarianter(ref, journalpostDocuments);
+
+      if (varianter !== undefined) {
+        docs.push({
+          type: DocumentTypeEnum.JOURNALFOERT,
+          journalpostId: ref.journalpostId,
+          dokumentInfoId: ref.dokumentInfoId,
+          varianter,
+        });
+      }
+    }
+
+    return docs;
+  }, [pdfViewed, documentsInProgress, journalpostDocuments, isLoading]);
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   const title = useMemo(() => {
-    if (filteredDocumentList.length !== 1) {
+    if (showDocumentList.length !== 1) {
       return null;
     }
 
-    const [onlyDocument] = filteredDocumentList;
+    const [onlyDocument] = showDocumentList;
 
     if (onlyDocument === undefined) {
       return null;
@@ -81,48 +114,40 @@ export const useShownDocuments = (): ShowDocumentResult => {
     }
 
     return null;
-  }, [documentsInProgress, journalpostDocuments, filteredDocumentList]);
-
-  useEffect(() => {
-    if (!isDuaLoading && !isJournalposterLoading) {
-      setDocumentList((current) => (current?.length === filteredDocumentList.length ? current : filteredDocumentList)); // Update the stored document list
-    }
-  }, [filteredDocumentList, setDocumentList, isDuaLoading, isJournalposterLoading]);
+  }, [documentsInProgress, journalpostDocuments, showDocumentList]);
 
   return {
-    showDocumentList: isDuaLoading || isJournalposterLoading ? EMPTY_SHOWN_LIST : filteredDocumentList,
+    showDocumentList: isLoading ? EMPTY_SHOWN_LIST : showDocumentList,
     title,
-    isLoading: isDuaLoading || isJournalposterLoading,
+    isLoading,
   };
 };
 
-const hasAccessToShownArchivedDocument = (
-  showDocument: IShownArchivedDocument,
+/**
+ * Finds the varianter for a document reference, but only if the document is accessible.
+ * Returns undefined if the document is not found or the user does not have access.
+ */
+const findAccessibleVarianter = (
+  ref: IJournalfoertDokumentId,
   journalpostDocuments: IArkivertDocument[],
-): boolean => {
+): Variants | undefined => {
   for (const j of journalpostDocuments) {
-    if (j.journalpostId !== showDocument.journalpostId) {
-      // Not the right journalpost, continue searching.
+    if (j.journalpostId !== ref.journalpostId) {
       continue;
     }
 
-    if (j.dokumentInfoId === showDocument.dokumentInfoId) {
-      // Main document, return access.
-      return j.hasAccess;
+    if (j.dokumentInfoId === ref.dokumentInfoId) {
+      return j.hasAccess ? j.varianter : undefined;
     }
 
-    // Check attachments.
     for (const v of j.vedlegg) {
-      if (v.dokumentInfoId === showDocument.dokumentInfoId) {
-        // Attachment found, return access.
-        return v.hasAccess;
+      if (v.dokumentInfoId === ref.dokumentInfoId) {
+        return v.hasAccess ? v.varianter : undefined;
       }
     }
 
-    // Document or attachment does not exist anymore.
-    return false;
+    return undefined;
   }
 
-  // Journalpost does not exist anymore.
-  return false;
+  return undefined;
 };

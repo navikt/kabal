@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "@navikt/ds-css" layer(components);
 @import "./fonts.css" layer(fonts);
+@import "@navikt/klage-file-viewer/styles.css";
 @config "./tailwind.config.js";
 
 @layer components {
@@ -136,21 +137,23 @@
   }
 }
 
-:root {
-  --a-font-family: "Source Sans 3", Arial, sans-serif;
-}
+@layer kabal {
+  :root {
+    --a-font-family: "Source Sans 3", Arial, sans-serif;
+  }
 
-::selection {
-  color: var(--ax-text-accent-contrast);
-  background-color: var(--ax-bg-accent-strong);
-}
+  ::selection {
+    color: var(--ax-text-accent-contrast);
+    background-color: var(--ax-bg-accent-strong);
+  }
 
-html {
-  box-sizing: border-box;
-}
+  html {
+    box-sizing: border-box;
+  }
 
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
 }

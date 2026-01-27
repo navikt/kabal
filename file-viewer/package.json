@@ -1,0 +1,30 @@
+{
+  "name": "file-viewer",
+  "version": "1.0.0",
+  "description": "Kabal File Viewer - Standalone file viewer",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@navikt/ds-css": "8.5.2",
+    "@navikt/ds-react": "8.5.2",
+    "@navikt/ds-tailwind": "8.5.2",
+    "@navikt/klage-file-viewer": "0.0.30",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.2.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.1.4",
+    "tailwindcss": "4.2.0",
+    "vite": "npm:rolldown-vite@latest",
+    "vite-tsconfig-paths": "6.1.1"
+  }
+}
