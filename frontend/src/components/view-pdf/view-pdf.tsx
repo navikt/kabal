@@ -1,34 +1,22 @@
-import { FeilTag, PolTag } from '@app/components/documents/document-warnings';
 import { TabContext } from '@app/components/documents/tab-context';
-import { Pdf, usePdfData } from '@app/components/pdf/pdf';
+import { PdfDocumentViewer } from '@app/components/pdf/pdf-document-viewer';
 import { toast } from '@app/components/toast/store';
-import { Header } from '@app/components/view-pdf/header';
-import { ReloadButton } from '@app/components/view-pdf/reload-button';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
-import { useShownDocumentMetadata } from '@app/components/view-pdf/use-shown-document-metadata';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useShownDocuments } from '@app/hooks/use-shown-documents';
 import { Skjerming, VariantFormat } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
-import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, type ButtonProps, HStack, Loader, Switch, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { Alert, Box, Loader, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useMergedDocument } from './use-merged-document';
-
-const DEFAULT_PDF_WIDTH = 800;
-const MIN_PDF_WIDTH = 400;
-const ZOOM_STEP = 150;
-const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
+import { useShownDocumentMetadata } from './use-shown-document-metadata';
 
 export const ViewPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
-  const { value: pdfWidth = DEFAULT_PDF_WIDTH, setValue: setPdfWidth } = useDocumentsPdfWidth();
-  const { remove: close } = useDocumentsPdfViewed();
+  const { remove: closePdfViewer } = useDocumentsPdfViewed();
   const { showDocumentList, title, isLoading } = useShownDocuments();
-  const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
-  const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
   const oppgaveId = useOppgaveId();
   const showsArchivedDocument = showDocumentList.some((doc) => doc.type === DocumentTypeEnum.JOURNALFOERT);
   const hasRedactedDocuments = showDocumentList.some(
@@ -52,8 +40,6 @@ export const ViewPDF = () => {
   const { mergedDocument, mergedDocumentIsError, mergedDocumentIsLoading } = useMergedDocument(showDocumentList);
   const { inlineUrl, tabUrl, tabId } = useShownDocumentMetadata(oppgaveId, mergedDocument, showDocumentList);
   const format = showRedacted && hasRedactedDocuments ? VariantFormat.SLADDET : VariantFormat.ARKIV;
-  const formatQuery = useMemo(() => ({ format }), [format]);
-  const { loading, data, refresh, error } = usePdfData(inlineUrl, formatQuery);
 
   useMarkVisited(tabUrl);
 
@@ -96,7 +82,7 @@ export const ViewPDF = () => {
 
   if (mergedDocumentIsError || inlineUrl === undefined) {
     return (
-      <Container minWidth={pdfWidth}>
+      <Container>
         <Alert variant="error" size="small">
           Kunne ikke vise dokument(er)
         </Alert>
@@ -106,7 +92,7 @@ export const ViewPDF = () => {
 
   if (mergedDocumentIsLoading || isLoading) {
     return (
-      <Container minWidth={pdfWidth}>
+      <Container>
         <Loader title="Laster dokument" size="3xlarge" />
       </Container>
     );
@@ -124,117 +110,48 @@ export const ViewPDF = () => {
       d.varianter.some((v) => v.hasAccess && v.format === format && v.skjerming === Skjerming.FEIL),
   );
 
-  return (
-    <Container minWidth={pdfWidth}>
-      <Header>
-        <Button onClick={close} title="Lukk forhåndsvisning" icon={<XMarkIcon aria-hidden />} {...BUTTON_PROPS} />
-        <Button onClick={decrease} title="Smalere PDF" icon={<ZoomMinusIcon aria-hidden />} {...BUTTON_PROPS} />
-        <Button onClick={increase} title="Bredere PDF" icon={<ZoomPlusIcon aria-hidden />} {...BUTTON_PROPS} />
-        <ReloadButton isLoading={loading} onClick={refresh} />
-        <Variant
-          showsArchivedDocument={showsArchivedDocument}
-          showsPol={showsPol}
-          showsFeil={showsFeil}
-          hasRedactedDocuments={hasRedactedDocuments}
-          hasAccessToArchivedDocuments={hasAccessToArchivedDocuments}
-          showRedacted={showRedacted}
-          setShowRedacted={setShowRedacted}
-        />
-        <h1 className="m-0 truncate border-ax-border-neutral border-l py-1 pl-1 font-ax-bold text-base">
-          {title ?? mergedDocument?.title ?? 'Ukjent dokument'}
-        </h1>
-        <Button
-          as="a"
-          href={
-            showsArchivedDocument && hasRedactedDocuments && hasAccessToArchivedDocuments
-              ? `${tabUrl}?format=${format}`
-              : tabUrl
-          }
-          target={tabId}
-          title="Åpne i ny fane"
-          icon={<ExternalLinkIcon aria-hidden />}
-          onClick={onNewTabClick}
-          onAuxClick={onNewTabClick}
-          {...BUTTON_PROPS}
-        />
-      </Header>
-      <Pdf data={data} loading={loading} error={error} refresh={refresh} />
-    </Container>
-  );
-};
+  const heading = title ?? mergedDocument?.title ?? 'Ukjent dokument';
 
-interface RedactedSwitchProps {
-  showsArchivedDocument: boolean;
-  hasRedactedDocuments: boolean;
-  hasAccessToArchivedDocuments: boolean;
-  showRedacted: boolean;
-  setShowRedacted: (showRedacted: boolean) => void;
-}
-
-interface VariantProps extends RedactedSwitchProps {
-  showsPol: boolean;
-  showsFeil: boolean;
-}
-
-const Variant = ({ showsPol, showsFeil, ...props }: VariantProps) => {
-  return (
-    <HStack gap="space-4" wrap={false}>
-      <RedactedSwitch {...props} />
-
-      {showsPol ? <PolTag /> : null}
-      {showsFeil ? <FeilTag /> : null}
-    </HStack>
-  );
-};
-
-const RedactedSwitch = ({
-  showsArchivedDocument,
-  hasRedactedDocuments,
-  hasAccessToArchivedDocuments,
-  showRedacted,
-  setShowRedacted,
-}: RedactedSwitchProps) => {
-  if (!showsArchivedDocument || !hasRedactedDocuments) {
-    return null;
-  }
-
-  if (!hasAccessToArchivedDocuments) {
-    return (
-      <Tooltip content="Du har ikke tilgang til å se usladdet versjon" placement="top">
-        <div className={LEFT_DIVIDER_CLASSES}>
-          <Tag data-color="meta-purple" variant="strong" size="small">
-            Sladdet
-          </Tag>
-        </div>
-      </Tooltip>
-    );
-  }
+  const newTabUrl =
+    showsArchivedDocument && hasRedactedDocuments && hasAccessToArchivedDocuments
+      ? `${tabUrl}?format=${format}`
+      : tabUrl;
 
   return (
-    <div className={LEFT_DIVIDER_CLASSES}>
-      <Switch size="small" checked={showRedacted} onChange={() => setShowRedacted(!showRedacted)} className="py-0">
-        Sladdet
-      </Switch>
-    </div>
+    <PdfDocumentViewer
+      url={inlineUrl}
+      onClose={closePdfViewer}
+      title={heading}
+      newTab={
+        tabUrl !== undefined && tabId !== undefined
+          ? {
+              url: newTabUrl,
+              id: tabId,
+              onClick: onNewTabClick,
+            }
+          : undefined
+      }
+      variant={{
+        showsArchivedDocument,
+        showsPol,
+        showsFeil,
+        hasRedactedDocuments,
+        hasAccessToArchivedDocuments,
+        showRedacted,
+        setShowRedacted,
+      }}
+    />
   );
-};
-
-const LEFT_DIVIDER_CLASSES = 'border-ax-border-neutral border-l pl-1';
-
-const BUTTON_PROPS: ButtonProps = {
-  size: 'xsmall',
-  variant: 'tertiary-neutral',
 };
 
 interface ContainerProps {
-  minWidth: number;
   children: React.ReactNode | React.ReactNode[];
 }
 
-const Container = ({ minWidth, children }: ContainerProps) => (
+const Container = ({ children }: ContainerProps) => (
   <VStack
     asChild
-    minWidth={`${minWidth}px`}
+    width="min-content"
     className="snap-start"
     align="center"
     justify="center"

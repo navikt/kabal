@@ -1,14 +1,17 @@
-import { AppTheme, useAppTheme } from '@app/app-theme';
-import { toast } from '@app/components/toast/store';
-import { Section } from '@app/components/toast/toast-content/api-error-toast';
-import { ENVIRONMENT } from '@app/environment';
+import { PdfViewer } from '@app/components/pdf/pdf-viewer';
+import type { RotationDegrees, SetRotation } from '@app/components/pdf/rotation';
+import type { UsePdfData } from '@app/components/pdf/use-pdf-data';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
-import { isKabalApiErrorData, type KabalApiErrorData } from '@app/types/errors';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Alert, BodyShort, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
+import { GlobalWorkerOptions, getDocument, type PDFDocumentProxy } from 'pdfjs-dist';
+import { useEffect, useState } from 'react';
+
+// Configure pdfjs worker
+GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).href;
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const useFixPdf = (refresh: () => void): [() => Promise<void>, boolean] => {
   const { setValue } = useSmartEditorEnabled();
   const [isLoading, setIsLoading] = useState(false);
@@ -27,11 +30,57 @@ const useFixPdf = (refresh: () => void): [() => Promise<void>, boolean] => {
   ];
 };
 
-export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
-  const [fixPdf, isLoading] = useFixPdf(refresh);
-  const appTheme = useAppTheme();
+interface Props extends UsePdfData {
+  rotation: RotationDegrees;
+  setRotation: SetRotation;
+}
 
-  if (error !== undefined) {
+export const Pdf = ({ loading, data, error, refresh, rotation, setRotation }: Props) => {
+  const [fixPdf, isLoading] = useFixPdf(refresh);
+  const [pdfDocument, setPdfDocument] = useState<PDFDocumentProxy | null>(null);
+  const [pdfError, setPdfError] = useState<string | null>(null);
+  const [loadedData, setLoadedData] = useState<Blob | null>(null);
+
+  useEffect(() => {
+    if (data === null) {
+      setPdfDocument(null);
+      setLoadedData(null);
+
+      return;
+    }
+
+    const loadPdf = async () => {
+      setPdfError(null);
+
+      try {
+        const loadingTask = getDocument(await data.arrayBuffer());
+        const pdf = await loadingTask.promise;
+        setPdfDocument(pdf);
+        setLoadedData(data);
+      } catch (e) {
+        const message = e instanceof Error ? e.message : 'Kunne ikke laste PDF';
+        setPdfError(message);
+        setLoadedData(data);
+        console.error('Error loading PDF:', e);
+      }
+    };
+
+    loadPdf();
+  }, [data]);
+
+  useEffect(() => {
+    return () => {
+      if (pdfDocument !== null) {
+        pdfDocument.destroy();
+      }
+    };
+  }, [pdfDocument]);
+
+  const displayError = error ?? pdfError;
+  const pdfLoading = data !== null && data !== loadedData;
+  const isLoaderVisible = loading || pdfLoading;
+
+  if (displayError !== undefined && displayError !== null) {
     return (
       <div className="grow p-5">
         <Alert variant="error" size="small">
@@ -53,7 +102,9 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
             >
               Last PDF på nytt
             </Button>
-            <code className="border-2 border-ax-border-neutral bg-ax-bg-neutral-moderate p-2 text-xs">{error}</code>
+            <code className="border-2 border-ax-border-neutral bg-ax-bg-neutral-moderate p-2 text-xs">
+              {displayError}
+            </code>
           </HStack>
         </Alert>
       </div>
@@ -61,25 +112,18 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
   }
 
   return (
-    <div className="relative flex w-full grow">
-      {loading ? (
-        <Box
-          background="neutral-moderate"
-          height="100%"
-          width="100%"
-          className="absolute flex items-center justify-center"
-        >
-          <Loader size="3xlarge" />
-        </Box>
+    <div className="relative flex min-h-0 w-full grow overflow-hidden">
+      {isLoaderVisible ? (
+        <div className="absolute top-0 left-0 z-10 flex h-full w-full items-center justify-center bg-ax-bg-neutral-moderate/70 backdrop-blur-xs">
+          <VStack align="center" gap="space-8">
+            <Loader size="3xlarge" />
+            <BodyShort>{loading ? 'Laster PDF ...' : 'Tegner PDF ...'}</BodyShort>
+          </VStack>
+        </div>
       ) : null}
-      <object
-        data={data}
-        aria-label="PDF"
-        type="application/pdf"
-        name="pdf-viewer"
-        className="w-full"
-        style={{ filter: appTheme === AppTheme.DARK ? 'hue-rotate(180deg) invert(1)' : 'none' }}
-      />
+      {pdfDocument !== null ? (
+        <PdfViewer pdfDocument={pdfDocument} rotation={rotation} setRotation={setRotation} />
+      ) : null}
     </div>
   );
 };

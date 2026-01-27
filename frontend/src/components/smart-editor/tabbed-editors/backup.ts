@@ -1,8 +1,8 @@
 import { BACKUP_DATE_FORMAT, KEY_PREFIX } from '@app/components/smart-editor/tabbed-editors/constants';
-import { type LocalStorage, setLocalStorageItem } from '@app/localstorage';
+import { setLocalStorageItem } from '@app/localstorage';
 import { pushError } from '@app/observability';
 import type { KabalValue } from '@app/plate/types';
-import { format, isBefore, isSameDay, isValid, parse, subDays } from 'date-fns';
+import { format } from 'date-fns';
 
 export const TTL_DAYS = 30;
 
@@ -31,32 +31,3 @@ export const createLocalStorageBackup = (oppgaveId: string, documentId: string, 
     },
     { timeout: 100 },
   );
-
-// Keep 30 days of backups in localStorage
-export const cleanupLocalStorageBackups = (ls: LocalStorage) => {
-  try {
-    const cutoff = subDays(new Date(), TTL_DAYS);
-
-    // Iterate backwards to avoid index shifting issues when removing items
-    for (let i = ls.length - 1; i >= 0; i--) {
-      const key = ls.key(i);
-
-      if (key?.startsWith(KEY_PREFIX) === true) {
-        const datePart = key.split('/').at(-1);
-
-        if (datePart === undefined) {
-          ls.removeItem(key);
-          continue;
-        }
-
-        const backupDate = parse(datePart, BACKUP_DATE_FORMAT, new Date());
-
-        if (!isValid(backupDate) || (isBefore(backupDate, cutoff) && !isSameDay(backupDate, cutoff))) {
-          ls.removeItem(key);
-        }
-      }
-    }
-  } catch (error) {
-    console.error('Failed to clean up localStorage backups', error);
-  }
-};

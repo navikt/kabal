@@ -186,3 +186,9 @@ export enum NotificationsGrouping {
 
 export const useNotificationsOverviewGrouping = () =>
   useJsonSetting<NotificationsGrouping>('notifications/overview/grouping');
+
+export const usePdfRotation = (url: string) => {
+  const encoded = new TextEncoder().encode(url).toBase64();
+
+  return useJsonSetting<0 | 90 | 180 | 270>(`pdf/${encoded}/rotation`);
+};
