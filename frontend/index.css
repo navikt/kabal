@@ -1,6 +1,7 @@
 @import "tailwindcss";
-@import "@navikt/ds-css" layer(components);
+@import "@navikt/ds-css" layer(aksel);
 @import "./fonts.css" layer(fonts);
+@import "pdfjs-dist/web/pdf_viewer.css" layer(pdfjs);
 @config "./tailwind.config.js";
 
 @layer components {
@@ -136,21 +137,28 @@
   }
 }
 
-:root {
-  --a-font-family: "Source Sans 3", Arial, sans-serif;
-}
+@layer kabal {
+  :root {
+    --a-font-family: "Source Sans 3", Arial, sans-serif;
+  }
 
-::selection {
-  color: var(--ax-text-accent-contrast);
-  background-color: var(--ax-bg-accent-strong);
-}
+  ::selection {
+    color: var(--ax-text-accent-contrast);
+    background-color: var(--ax-bg-accent-strong);
+  }
 
-html {
-  box-sizing: border-box;
-}
+  .textLayer ::selection {
+    color: transparent;
+    background-color: color-mix(in oklab, var(--ax-bg-accent-strong) 50%, transparent);
+  }
 
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
+  html {
+    box-sizing: border-box;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
 }

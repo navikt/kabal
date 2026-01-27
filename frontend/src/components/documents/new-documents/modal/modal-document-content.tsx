@@ -8,13 +8,12 @@ import { SetDocumentType } from '@app/components/documents/new-documents/new-doc
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@app/components/documents/set-filename';
-import { usePdfData } from '@app/components/pdf/pdf';
+import { usePdfData } from '@app/components/pdf/use-pdf-data';
 import { isSendError } from '@app/components/receivers/is-send-error';
 import { Receivers } from '@app/components/receivers/receivers';
 import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
 import {
   useFinishDocumentMutation,
   useSetMottakerListMutation,
@@ -69,7 +68,6 @@ export const DocumentModalContent = ({
         : [],
     [finishError],
   );
-  const { value: pdfWidth, setValue: setPdfWidth } = useDocumentsArchivePdfWidth();
   const [setTitle] = useSetTitleMutation();
   const oppgaveId = useOppgaveId();
   const pdfUrl =
@@ -153,7 +151,7 @@ export const DocumentModalContent = ({
           <Errors updatePdf={refresh} />
         </VStack>
 
-        <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />
+        <SimplePdfPreview {...pdfData} refresh={refresh} />
       </Modal.Body>
       <Modal.Footer className="items-center">
         <AccessErrorsSummary
