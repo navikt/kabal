@@ -1,4 +1,9 @@
-import { AnkeDelvisMedholWarning, ReturWarning } from '@app/components/behandling/behandlingsdetaljer/warnings';
+import {
+  AnkeDelvisMedholdWarning,
+  AnkeITRHenvistWarning,
+  AnkeITROpphevetWarning,
+  ReturWarning,
+} from '@app/components/behandling/behandlingsdetaljer/warnings';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
@@ -96,7 +101,11 @@ const EditUtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: Utf
         {options}
       </Select>
       {utfall === UtfallEnum.RETUR ? <ReturWarning /> : null}
-      {typeId === SaksTypeEnum.ANKE && utfall === UtfallEnum.DELVIS_MEDHOLD ? <AnkeDelvisMedholWarning /> : null}
+      {typeId === SaksTypeEnum.ANKE && utfall === UtfallEnum.DELVIS_MEDHOLD ? <AnkeDelvisMedholdWarning /> : null}
+      {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && utfall === UtfallEnum.HENVIST ? <AnkeITRHenvistWarning /> : null}
+      {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && utfall === UtfallEnum.OPPHEVET ? (
+        <AnkeITROpphevetWarning />
+      ) : null}
     </VStack>
   );
 };
