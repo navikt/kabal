@@ -1,12 +1,10 @@
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
 import { formatEmployeeName } from '@app/domain/employee-name';
-import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import type { UtfallEvent } from '@app/redux-api/server-sent-events/types';
-import type { UtfallEnum } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Tag } from '@navikt/ds-react';
 
 export const handleUtfallEvent =
   (userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
@@ -22,14 +20,8 @@ export const handleUtfallEvent =
         toast.info(
           <InfoToast title="Utfall endret">
             {formatEmployeeName(actor)} har endret utfall fra:{' '}
-            <Tag data-color="meta-purple" size="xsmall" variant="outline">
-              {oldUtfall === null ? 'Ikke valgt' : <UtfallName utfall={oldUtfall} />}
-            </Tag>{' '}
-            til:{' '}
-            <Tag data-color="meta-purple" size="xsmall" variant="outline">
-              {utfallId === null ? 'Ikke valgt' : <UtfallName utfall={utfallId} />}
-            </Tag>
-            .
+            <UtfallTag utfallId={oldUtfall} size="xsmall" fallback="Ikke valgt" /> til:{' '}
+            <UtfallTag utfallId={utfallId} size="xsmall" fallback="Ikke valgt" />.
           </InfoToast>,
         );
       }
@@ -42,9 +34,3 @@ export const handleUtfallEvent =
       draft.modified = timestamp;
     });
   };
-
-const UtfallName = ({ utfall }: { utfall: UtfallEnum }) => {
-  const name = useUtfallNameOrLoading(utfall);
-
-  return <>{name}</>;
-};

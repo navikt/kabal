@@ -1,4 +1,6 @@
-import { Alert, Tag } from '@navikt/ds-react';
+import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
+import { UtfallEnum } from '@app/types/kodeverk';
+import { Alert } from '@navikt/ds-react';
 
 export const ReturWarning = () => (
   <Alert variant="warning" size="small">
@@ -17,35 +19,18 @@ export const AnkeDelvisMedholdWarning = () => (
 
 export const AnkeITRHenvistWarning = () => (
   <Alert variant="warning" size="small">
-    Du har valgt utfall{' '}
-    <Tag data-color="meta-purple" size="small" variant="outline">
-      Henvist
-    </Tag>
-    . Kabal vil opprette en ny ankeoppgave som du skal behandle. Vær oppmerksom på at du kun skal velge dette utfallet
-    om saken skal tilbake til Trygderetten igjen. Skal du gjøre en ny vurdering i vedtak, må du velge utfall{' '}
-    <Tag data-color="meta-purple" size="small" variant="outline">
-      Opphevet
-    </Tag>
-    .
+    Du har valgt utfall <UtfallTag utfallId={UtfallEnum.HENVIST} />. Kabal vil opprette en ny ankeoppgave som du skal
+    behandle. Vær oppmerksom på at du kun skal velge dette utfallet om saken skal tilbake til Trygderetten igjen. Skal
+    du gjøre en ny vurdering i vedtak, må du velge utfall <UtfallTag utfallId={UtfallEnum.OPPHEVET} />.
   </Alert>
 );
 
 export const AnkeITROpphevetWarning = () => (
   <Alert variant="warning" size="small">
-    Du har valgt utfall{' '}
-    <Tag data-color="meta-purple" size="small" variant="outline">
-      Opphevet
-    </Tag>
-    . Ved fullføring vil du få mulighet til å velge å opprette ny behandling i Kabal. Vær oppmerksom på at du kun skal
-    velge utfall{' '}
-    <Tag data-color="meta-purple" size="small" variant="outline">
-      Opphevet
-    </Tag>{' '}
+    Du har valgt utfall <UtfallTag utfallId={UtfallEnum.OPPHEVET} />. Ved fullføring vil du få mulighet til å velge å
+    opprette ny behandling i Kabal. Vær oppmerksom på at du kun skal velge utfall{' '}
+    <UtfallTag utfallId={UtfallEnum.OPPHEVET} />
     dersom saken ikke skal tilbake til Trygderetten igjen, men du skal gjøre vurdering i vedtak. Dersom saken skal
-    tilbake til Trygderetten igjen, velger du{' '}
-    <Tag data-color="meta-purple" size="small" variant="outline">
-      Henvist
-    </Tag>
-    .
+    tilbake til Trygderetten igjen, velger du <UtfallTag utfallId={UtfallEnum.HENVIST} />.
   </Alert>
 );
