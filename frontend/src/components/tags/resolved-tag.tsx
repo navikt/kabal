@@ -38,6 +38,6 @@ export const CustomTag = ({ children, variant }: CustomTagProps) => (
 const TAG_VARIANT: Record<keyof IGetMaltekstseksjonParams, TagProps['variant']> = {
   templateSectionIdList: 'error',
   ytelseHjemmelIdList: 'info',
-  utfallIdList: 'alt2',
-  enhetIdList: 'alt1',
+  utfallIdList: 'alt1',
+  enhetIdList: 'alt2',
 };

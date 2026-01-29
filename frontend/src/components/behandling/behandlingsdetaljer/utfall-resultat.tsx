@@ -4,15 +4,15 @@ import {
   AnkeITROpphevetWarning,
   ReturWarning,
 } from '@app/components/behandling/behandlingsdetaljer/warnings';
+import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useUtfall } from '@app/hooks/use-utfall';
-import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateExtraUtfallMutation, useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { HelpText, HStack, Label, Select, Tag, VStack } from '@navikt/ds-react';
+import { HelpText, HStack, Label, Select, VStack } from '@navikt/ds-react';
 
 interface UtfallResultatProps {
   utfall: UtfallEnum | null;
@@ -34,7 +34,6 @@ export const UtfallResultat = (props: UtfallResultatProps) => {
 
 const ReadOnlyUtfall = ({ utfall }: UtfallResultatProps) => {
   const utfallLabel = useFieldName('utfall');
-  const utfallName = useUtfallNameOrLoading(utfall ?? NOT_SELECTED_LABEL);
 
   return (
     <VStack align="start" gap="space-8" marginBlock="space-0 space-1" data-testid={CONTAINER_ID}>
@@ -44,9 +43,7 @@ const ReadOnlyUtfall = ({ utfall }: UtfallResultatProps) => {
         </Label>
         <HelpText>Det utfallet som passet best for saken.</HelpText>
       </HStack>
-      <Tag data-color="meta-purple" size="small" variant="outline">
-        {utfallName}
-      </Tag>
+      <UtfallTag utfallId={utfall} size="small" fallback={NOT_SELECTED_LABEL} />
     </VStack>
   );
 };

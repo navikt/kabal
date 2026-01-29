@@ -1,4 +1,4 @@
-import { useHideKvalitetsvurdering } from '@app/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
+import { useKvalitetsvurderingSupported } from '@app/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import {
   useDocumentsEnabled,
@@ -6,6 +6,7 @@ import {
   useSmartEditorEnabled,
 } from '@app/hooks/settings/use-setting';
 import { pushEvent } from '@app/observability';
+import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { HStack, Switch } from '@navikt/ds-react';
 
 export const PanelSwitches = () => {
@@ -55,10 +56,16 @@ const Brevutforming = () => {
 };
 
 const Kvalitetsvurdering = () => {
-  const { value = true, setValue } = useKvalitetsvurderingEnabled();
-  const hideKvalitetsvurdering = useHideKvalitetsvurdering();
+  const { data: oppgave } = useOppgave();
 
-  if (hideKvalitetsvurdering) {
+  return oppgave === undefined ? null : <KvalitetsvurderingLoaded oppgave={oppgave} />;
+};
+
+const KvalitetsvurderingLoaded = ({ oppgave }: { oppgave: IOppgavebehandling }) => {
+  const { featureEnabled, panelDefaultEnabled } = useKvalitetsvurderingSupported(oppgave);
+  const { value = panelDefaultEnabled, setValue } = useKvalitetsvurderingEnabled();
+
+  if (!featureEnabled) {
     return null;
   }
 

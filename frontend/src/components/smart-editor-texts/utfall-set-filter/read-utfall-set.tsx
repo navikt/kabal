@@ -1,5 +1,5 @@
 import { CustomTag } from '@app/components/tags/resolved-tag';
-import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
+import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
@@ -39,9 +39,3 @@ export const ReadUtfallSet = ({ utfallSet, onDelete, editUtfallSet }: ReadUtfall
     </HStack>
   </HStack>
 );
-
-const UtfallTag = ({ utfallId }: { utfallId: UtfallEnum }) => {
-  const name = useUtfallNameOrLoading(utfallId);
-
-  return <CustomTag variant="utfallIdList">{name}</CustomTag>;
-};

@@ -1,12 +1,10 @@
 import { InfoToast } from '@app/components/toast/info-toast';
 import { toast } from '@app/components/toast/store';
+import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
 import { formatEmployeeName } from '@app/domain/employee-name';
-import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
 import type { ExtraUtfallEvent } from '@app/redux-api/server-sent-events/types';
-import type { UtfallEnum } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Tag } from '@navikt/ds-react';
 
 export const handleExtraUtfallEvent =
   (_: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
@@ -24,7 +22,7 @@ export const handleExtraUtfallEvent =
         const addedTags = (
           <span className="inline-flex flex-wrap gap-2">
             {added.map((u) => (
-              <UtfallTag utfall={u} key={u} />
+              <UtfallTag utfallId={u} key={u} />
             ))}
           </span>
         );
@@ -32,7 +30,7 @@ export const handleExtraUtfallEvent =
         const removedTags = (
           <span className="inline-flex flex-wrap gap-2">
             {removed.map((u) => (
-              <UtfallTag utfall={u} key={u} />
+              <UtfallTag utfallId={u} key={u} />
             ))}
           </span>
         );
@@ -63,17 +61,3 @@ export const handleExtraUtfallEvent =
       draft.modified = timestamp;
     });
   };
-
-interface Props {
-  utfall: UtfallEnum;
-}
-
-const UtfallTag = ({ utfall }: Props) => {
-  const name = useUtfallNameOrLoading(utfall);
-
-  return (
-    <Tag data-color="meta-purple" size="small" variant="outline">
-      {name}
-    </Tag>
-  );
-};
