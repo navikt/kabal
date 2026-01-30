@@ -1,4 +1,5 @@
 import { AppTheme, useAppTheme } from '@app/app-theme';
+import { INITIAL_SCALE } from '@app/components/pdf/constants';
 import type { UsePdfData } from '@app/components/pdf/use-pdf-data';
 import { PdfViewer } from '@app/components/pdf/viewer';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
@@ -114,6 +115,7 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
           height="100%"
           width="100%"
           className="absolute flex items-center justify-center"
+          minWidth={`${INITIAL_SCALE * 6}px`}
         >
           <Loader size="3xlarge" />
         </Box>

@@ -117,24 +117,27 @@ export const ViewPDF = () => {
       d.varianter.some((v) => v.hasAccess && v.format === format && v.skjerming === Skjerming.FEIL),
   );
 
+  const heading = title ?? mergedDocument?.title ?? 'Ukjent dokument';
+
   return (
     <Container>
       <Header>
         <HStack wrap={false} justify="start" align="center">
-          <Button
-            onClick={closePdfViewer}
-            title="Lukk forhåndsvisning"
-            icon={<XMarkIcon aria-hidden />}
-            size="xsmall"
-            variant="tertiary"
-            data-color="neutral"
-          />
+          <Tooltip content="Lukk dokumentet" describesChild>
+            <Button
+              onClick={closePdfViewer}
+              icon={<XMarkIcon aria-hidden />}
+              size="xsmall"
+              variant="tertiary"
+              data-color="neutral"
+            />
+          </Tooltip>
 
           <ReloadButton isLoading={loading} onClick={refresh} />
 
-          <h1 className="truncate pl-1 font-ax-bold text-base">
-            {title ?? mergedDocument?.title ?? 'Ukjent dokument'}
-          </h1>
+          <Tooltip content={heading}>
+            <h1 className="truncate pl-1 font-ax-bold text-base">{heading}</h1>
+          </Tooltip>
 
           <Tooltip content="Åpne dokument i ny fane" describesChild>
             <Button
