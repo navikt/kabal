@@ -6,7 +6,7 @@ import { isNotNull } from '@app/functions/guards';
 import { parseTokenPayload } from '@app/helpers/token-parser';
 import { getTeamLogger } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
-import { getDocumentJson, setDocument } from '@app/plugins/crdt/api/set-document';
+import { getDocumentJson, isResponseError, setDocument } from '@app/plugins/crdt/api/set-document';
 import { getCloseEvent } from '@app/plugins/crdt/close-event';
 import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
 import { log, logContext } from '@app/plugins/crdt/log-context';
@@ -209,9 +209,17 @@ export const collaborationServer = new Hocuspocus({
       throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
-    await setDocument(context, document);
+    try {
+      await setDocument(context, document);
 
-    logContext('Saved document to database', context, 'debug');
+      logContext('Saved document to database', context, 'debug');
+    } catch (error) {
+      if (isResponseError(error)) {
+        throw getCloseEvent('FAILED_TO_SAVE', 4000 + error.statusCode);
+      }
+
+      throw getCloseEvent('FAILED_TO_SAVE', 4500);
+    }
   },
 
   afterUnloadDocument: async ({ documentName }) => {
