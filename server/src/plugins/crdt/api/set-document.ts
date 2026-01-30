@@ -18,36 +18,67 @@ export const getDocumentJson = (document: Document) => {
 
 export const setDocument = async (context: ConnectionContext, document: Document) => {
   const { behandlingId, dokumentId, navIdent, trace_id, span_id, tab_id, client_version } = context;
-  const update = Buffer.from(encodeStateAsUpdateV2(document));
-  const data = update.toString('base64url');
 
-  const content = getDocumentJson(document);
+  try {
+    const update = Buffer.from(encodeStateAsUpdateV2(document));
+    const data = update.toString('base64url');
 
-  const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
-      traceparent: generateTraceparent(trace_id),
-    },
-    body: JSON.stringify({ content, data }),
-  });
+    const content = getDocumentJson(document);
 
-  if (!res.ok) {
-    const msg = `Failed to save document. API responded with status code ${res.status}.`;
-    const text = await res.text();
+    const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
+        traceparent: generateTraceparent(trace_id),
+      },
+      body: JSON.stringify({ content, data }),
+    });
+
+    if (!res.ok) {
+      const msg = `Failed to save document. API responded with status code ${res.status}.`;
+      const text = await res.text();
+
+      log.error({
+        msg,
+        trace_id,
+        span_id,
+        tab_id,
+        client_version,
+        data: { behandlingId, dokumentId, statusCode: res.status, response: text },
+      });
+
+      throw new ResponseError(`${msg} - ${text}`, res.status);
+    }
+
+    return res;
+  } catch (error) {
+    if (isResponseError(error)) {
+      // Do not double log ResponseError
+      throw error;
+    }
 
     log.error({
-      msg,
+      msg: 'Error while saving document to Kabal API',
       trace_id,
       span_id,
       tab_id,
       client_version,
-      data: { behandlingId, dokumentId, statusCode: res.status, response: text },
+      data: { behandlingId, dokumentId },
+      error,
     });
 
-    throw new Error(`${msg} - ${text}`);
+    throw error;
   }
-
-  return res;
 };
+
+class ResponseError extends Error {
+  constructor(
+    message: string,
+    public statusCode: number,
+  ) {
+    super(message);
+  }
+}
+
+export const isResponseError = (error: unknown): error is ResponseError => error instanceof ResponseError;
