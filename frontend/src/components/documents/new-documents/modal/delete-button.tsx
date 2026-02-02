@@ -1,4 +1,3 @@
-import { count } from '@app/functions/count';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
@@ -40,14 +39,32 @@ export const DeleteDocumentButton = ({ document, disabled = false, ...rest }: Pr
       return document.type === DocumentTypeEnum.JOURNALFOERT ? 'Fjern vedlegg' : 'Slett vedlegg';
     }
 
-    const vedleggCount = count(data, ({ parentId }) => parentId === document.id);
-
-    // If the document has attatchments.
-    if (vedleggCount > 0) {
-      return `Slett dokument og ${vedleggCount} vedlegg`;
+    if (data === undefined) {
+      return 'Slett dokument';
     }
 
-    return 'Slett dokument';
+    const journalførteVedlegg: Set<string> = new Set(); // Do not count duplicates.
+    let otherVedleggCount = 0;
+
+    for (const doc of data) {
+      if (doc.parentId !== document.id) {
+        continue;
+      }
+
+      if (doc.type === DocumentTypeEnum.JOURNALFOERT) {
+        journalførteVedlegg.add(doc.journalfoertDokumentReference.dokumentInfoId);
+      } else {
+        otherVedleggCount++;
+      }
+    }
+
+    if (journalførteVedlegg.size === 0 && otherVedleggCount === 0) {
+      return 'Slett dokument';
+    }
+
+    const totalCount = journalførteVedlegg.size + otherVedleggCount;
+
+    return `Slett dokument og ${totalCount === 1 ? 'ett unikt' : `${totalCount} unike`} vedlegg`;
   }, [data, document.id, document.type, isAttachment]);
 
   if (!isSuccess) {
