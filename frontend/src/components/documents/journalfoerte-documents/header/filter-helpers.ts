@@ -1,7 +1,10 @@
 import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { useLazyIsTilknyttetDokument } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
-import { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
+import {
+  ArchivedDocumentsColumn,
+  useArchivedDocumentsColumns,
+} from '@app/hooks/settings/use-archived-documents-setting';
 import type { ArchivedDocumentsSort, DateRange } from '@app/hooks/settings/use-setting';
 import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
@@ -36,6 +39,7 @@ export const useFilteredDocuments = (
   const [result, setResult] = useState<ScoredArkivertDocument[]>(EMPTY_ARRAY);
   const isTilknyttet = useLazyIsTilknyttetDokument();
   const { value: showVedleggIdList, setValue: setShowVedleggIdList } = useShowVedlegg();
+  const { columns } = useArchivedDocumentsColumns();
 
   useEffect(() => {
     const callback = requestIdleCallback(
@@ -60,12 +64,16 @@ export const useFilteredDocuments = (
           } = document;
 
           if (
-            checkList(selectedTemaer, temaId) &&
-            checkList(selectedTypes, journalposttype) &&
-            checkListWithNone(selectedAvsenderMottakere, avsenderMottaker?.id ?? avsenderMottaker?.navn ?? 'UNKNOWN') &&
-            checkListWithNone(selectedSaksIds, sak?.fagsakId ?? 'UNKNOWN') &&
-            checkDateInterval(datoOpprettet, selectedDatoOpprettet) &&
-            checkDateInterval(datoSortering, selectedDatoRegSendt)
+            (!columns.TEMA || checkList(selectedTemaer, temaId)) &&
+            (!columns.TYPE || checkList(selectedTypes, journalposttype)) &&
+            (!columns.AVSENDER_MOTTAKER ||
+              checkListWithNone(
+                selectedAvsenderMottakere,
+                avsenderMottaker?.id ?? avsenderMottaker?.navn ?? 'UNKNOWN',
+              )) &&
+            (!columns.SAKSNUMMER || checkListWithNone(selectedSaksIds, sak?.fagsakId ?? 'UNKNOWN')) &&
+            (!columns.DATO_OPPRETTET || checkDateInterval(datoOpprettet, selectedDatoOpprettet)) &&
+            (!columns.DATO_SORTERING || checkDateInterval(datoSortering, selectedDatoRegSendt))
           ) {
             const filteredVedlegg: ScoredArkvertDocumentVedlegg[] = [];
             let highestVedleggScore = 0;
@@ -148,6 +156,7 @@ export const useFilteredDocuments = (
     isTilknyttet,
     setShowVedleggIdList,
     showVedleggIdList,
+    columns,
   ]);
 
   return result;
