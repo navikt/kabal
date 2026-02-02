@@ -7,6 +7,7 @@ import {
   type ArchivedDocumentsSort,
   useDocumentsAvsenderMottaker,
   useDocumentsFilterDatoOpprettet,
+  useDocumentsFilterDatoSortering,
   useDocumentsFilterSaksId,
   useDocumentsFilterTema,
   useDocumentsFilterType,
@@ -32,7 +33,8 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     setValue: setSelectedTypes,
     remove: resetTypes,
   } = useDocumentsFilterType();
-  const { value: selectedDateRange, remove: resetDateRange } = useDocumentsFilterDatoOpprettet();
+  const { value: selectedDatoOpprettet, remove: resetDatoOpprettet } = useDocumentsFilterDatoOpprettet();
+  const { value: selectedDatoRegSendt, remove: resetDatoRegSendt } = useDocumentsFilterDatoSortering();
   const { value: onlyIncluded = false, setValue: setIncluded } = useDocumentsOnlyIncluded();
 
   const {
@@ -58,7 +60,8 @@ export const useFilters = (documents: IArkivertDocument[]) => {
   const totalFilteredDocuments = useFilteredDocuments(
     documents,
     selectedAvsenderMottakere,
-    selectedDateRange,
+    selectedDatoOpprettet,
+    selectedDatoRegSendt,
     selectedSaksIds,
     selectedTemaer,
     selectedTypes,
@@ -79,12 +82,14 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     resetTypes();
     resetAvsenderMottakere();
     resetSaksId();
-    resetDateRange();
+    resetDatoOpprettet();
+    resetDatoRegSendt();
     setIncluded(!isExpanded);
   }, [
     isExpanded,
     resetAvsenderMottakere,
-    resetDateRange,
+    resetDatoOpprettet,
+    resetDatoRegSendt,
     resetSaksId,
     resetTemaer,
     resetTitle,
@@ -98,7 +103,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
       selectedTypes.length === 0 &&
       selectedAvsenderMottakere.length === 0 &&
       selectedSaksIds.length === 0 &&
-      selectedDateRange === undefined &&
+      selectedDatoOpprettet === undefined &&
       (isExpanded ? onlyIncluded === false : onlyIncluded === true) &&
       search === '',
     [
@@ -106,7 +111,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
       isExpanded,
       search,
       selectedAvsenderMottakere.length,
-      selectedDateRange,
+      selectedDatoOpprettet,
       selectedSaksIds.length,
       selectedTemaer.length,
       selectedTypes.length,
@@ -121,7 +126,8 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     setSearch,
     selectedTypes,
     setSelectedTypes,
-    selectedDateRange,
+    selectedDatoOpprettet,
+    selectedDatoRegSendt,
     selectedTemaer,
     setSelectedTemaer,
     selectedAvsenderMottakere,

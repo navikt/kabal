@@ -24,7 +24,8 @@ const EMPTY_ARRAY: ScoredArkivertDocument[] = [];
 export const useFilteredDocuments = (
   documents: IArkivertDocument[],
   selectedAvsenderMottakere: string[],
-  selectedDateRange: DateRange,
+  selectedDatoOpprettet: DateRange,
+  selectedDatoRegSendt: DateRange,
   selectedSaksIds: string[],
   selectedTemaer: string[],
   selectedTypes: string[],
@@ -55,6 +56,7 @@ export const useFilteredDocuments = (
             datoOpprettet,
             sak,
             vedlegg,
+            datoSortering,
           } = document;
 
           if (
@@ -62,7 +64,8 @@ export const useFilteredDocuments = (
             checkList(selectedTypes, journalposttype) &&
             checkListWithNone(selectedAvsenderMottakere, avsenderMottaker?.id ?? avsenderMottaker?.navn ?? 'UNKNOWN') &&
             checkListWithNone(selectedSaksIds, sak?.fagsakId ?? 'UNKNOWN') &&
-            checkDateInterval(datoOpprettet, selectedDateRange)
+            checkDateInterval(datoOpprettet, selectedDatoOpprettet) &&
+            checkDateInterval(datoSortering, selectedDatoRegSendt)
           ) {
             const filteredVedlegg: ScoredArkvertDocumentVedlegg[] = [];
             let highestVedleggScore = 0;
@@ -134,7 +137,8 @@ export const useFilteredDocuments = (
     onlyIncluded,
     search,
     selectedAvsenderMottakere,
-    selectedDateRange,
+    selectedDatoOpprettet,
+    selectedDatoRegSendt,
     selectedSaksIds,
     selectedTemaer,
     selectedTypes,
