@@ -1,7 +1,5 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
 import type { IDocumentParams } from '@app/types/documents/common-params';
-import { isApiRejectionError } from '@app/types/errors';
 import type { Language } from '@app/types/texts/language';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';
@@ -32,16 +30,9 @@ const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           getDocumentPatchResult.undo();
           getDocumentsPatchResult.undo();
-
-          const heading = 'Kunne ikke endre språk';
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),

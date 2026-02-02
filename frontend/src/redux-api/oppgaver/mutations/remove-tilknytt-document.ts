@@ -1,7 +1,5 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
 import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { isApiRejectionError } from '@app/types/errors';
 import type { IBatchDocumentParams } from '@app/types/oppgavebehandling/params';
 import { ListTagTypes } from '../../tag-types';
 import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
@@ -34,16 +32,8 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = `Kunne ikke fjerne ${documentIdList.length === 1 ? 'dokument' : 'dokumenter'}`;
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -63,16 +53,8 @@ const removeTilknyttDocumentMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const message = 'Kunne ikke fjerne dokumenter';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(message, error);
-          } else {
-            apiErrorToast(message);
-          }
         }
       },
     }),

@@ -85,7 +85,6 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
         journalpostId,
         dokumentInfoId,
         tittel: trimmedTitle,
-        originalTitle,
       }).unwrap();
 
       setTitle(tittel);

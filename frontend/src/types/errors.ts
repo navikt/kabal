@@ -7,6 +7,22 @@ export interface KabalApiErrorData {
   detail?: string; // Failed to read request
 }
 
+export interface BFFError {
+  statusCode: number;
+  error: string;
+  message: string;
+  code?: string;
+}
+
+export const isBFFError = (data: unknown): data is BFFError =>
+  isGenericObject(data) &&
+  'statusCode' in data &&
+  'error' in data &&
+  'message' in data &&
+  typeof data.statusCode === 'number' &&
+  typeof data.error === 'string' &&
+  typeof data.message === 'string';
+
 interface ApiDataError {
   data: KabalApiErrorData;
 }

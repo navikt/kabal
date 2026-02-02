@@ -1,7 +1,5 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { isApiRejectionError } from '@app/types/errors';
 import type {
   IOppgavebehandlingUtfallSetUpdateParams,
   IOppgavebehandlingUtfallUpdateParams,
@@ -52,17 +50,9 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
               draft.utfallId = data.utfallId;
             }),
           );
-        } catch (error) {
+        } catch {
           oppgavebehandlingPatchResult.undo();
           oppgavePatchResult.undo();
-
-          const heading = 'Kunne ikke endre utfall';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -87,16 +77,8 @@ const setUtfallMutationSlice = oppgaverApi.injectEndpoints({
               draft.modified = data.modified;
             }),
           );
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke endre ekstra utfall';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),

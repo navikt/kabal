@@ -1,9 +1,7 @@
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
 import { ENVIRONMENT } from '@app/environment';
-import { formatFileSize } from '@app/functions/format-file-size';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { reduxStore } from '@app/redux/configure-store';
 import { user } from '@app/static-data/static-data';
@@ -32,13 +30,12 @@ import type {
   IModifiedDocumentResponse,
   ISetParentResponse,
 } from '@app/types/documents/response';
-import { isApiRejectionError } from '@app/types/errors';
 import type { IdentifikatorPart } from '@app/types/oppgave-common';
 import { format } from 'date-fns';
 import { oppgaverApi } from '../oppgaver';
 import { documentsQuerySlice } from '../queries/documents';
 
-const documentsMutationSlice = oppgaverApi.injectEndpoints({
+export const documentsMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     setMottakerList: builder.mutation<IModifiedDocumentResponse, ISetMottakerListParams>({
@@ -53,15 +50,8 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
-        } catch (error) {
+        } catch {
           undo();
-
-          const heading = 'Kunne ikke oppdatere mottakere';
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -77,15 +67,8 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
-        } catch (error) {
+        } catch {
           undo();
-
-          const heading = 'Kunne ikke oppdatere dokumenttype';
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -101,17 +84,8 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
-        } catch (error) {
+        } catch {
           undo();
-
-          const heading = 'Kunne ikke endre tittel';
-          const description = `Kunne ikke endre tittel til «${title}».`;
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error, description);
-          } else {
-            apiErrorToast(heading, description);
-          }
         }
       },
     }),
@@ -212,14 +186,7 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
               `${data.duplicateJournalfoerteDokumenter.length} av dokumentene er allerede lagt til som vedlegg.`,
             );
           }
-        } catch (error) {
-          const heading = 'Kunne ikke endre hoveddokument';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
+        } catch {
           documentsPatchResult.undo();
         }
       },
@@ -230,29 +197,20 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
         method: 'POST',
       }),
       onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled }) => {
-        try {
-          const { data } = await queryFulfilled;
+        const { data } = await queryFulfilled;
 
-          dispatch(
-            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-              draft.map((doc) => (doc.id === dokumentId ? { ...doc, ...data } : doc)),
-            ),
-          );
+        dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+            draft.map((doc) => (doc.id === dokumentId ? { ...doc, ...data } : doc)),
+          ),
+        );
 
-          dispatch(
-            documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => ({
-              ...draft,
-              ...data,
-            })),
-          );
-        } catch (e) {
-          const heading = 'Kunne ikke ferdigstille dokumentet';
-
-          // API error is shown in modal
-          if (!isApiRejectionError(e)) {
-            apiErrorToast(heading);
-          }
-        }
+        dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => ({
+            ...draft,
+            ...data,
+          })),
+        );
       },
     }),
     deleteDocument: builder.mutation<void, IDocumentParams>({
@@ -283,18 +241,10 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           documentsPatchResult.undo();
           smartEditorPatchResult.undo();
           smartEditorsPatchResult.undo();
-
-          const heading = 'Kunne ikke slette dokumentet';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -314,24 +264,13 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
           body: formData,
         };
       },
-      onQueryStarted: async ({ oppgaveId, file }, { dispatch, queryFulfilled }) => {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(
-            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-              draft.some((d) => d.id === data.id) ? draft : [data, ...draft],
-            ),
-          );
-        } catch (error) {
-          const heading = 'Kunne ikke laste opp dokument';
-          const description = `Kunne ikke laste opp «${file.name}» (${formatFileSize(file.size)}).`;
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error, description);
-          } else {
-            apiErrorToast(heading, description);
-          }
-        }
+      onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
+        const { data } = await queryFulfilled;
+        dispatch(
+          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+            draft.some((d) => d.id === data.id) ? draft : [data, ...draft],
+          ),
+        );
       },
     }),
     createVedleggFromJournalfoertDocument: builder.mutation<ICreateVedleggResponse, ICreateVedleggParams>({
@@ -444,34 +383,8 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
               `${data.duplicateJournalfoerteDokumenter.length} av dokumentene er allerede lagt til som vedlegg.`,
             );
           }
-        } catch (error) {
+        } catch {
           getDocumentsPatchResult.undo();
-
-          const heading = 'Kunne ikke legge til journalpost(er) som vedlegg';
-          const titles: string[] = [];
-          let titlesLength = 0;
-
-          for (const { tittel } of journalfoerteDokumenter) {
-            if (tittel === null) {
-              continue;
-            }
-
-            titles.push(`- «${tittel}»`);
-            titlesLength += tittel.length + 2; // 2 for the « and »
-
-            if (titlesLength > 100) {
-              titles.push(`...og ${journalfoerteDokumenter.length - titles.length} til.`);
-              break;
-            }
-          }
-
-          const description = titles.join('\n');
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error, description);
-          } else {
-            apiErrorToast(heading, description);
-          }
         }
       },
     }),
@@ -508,16 +421,9 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           collectionPatchResult.undo();
           documentPatchResult.undo();
-
-          const heading = 'Kunne ikke endre dato mottatt';
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -549,16 +455,9 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           collectionPatchResult.undo();
           documentPatchResult.undo();
-
-          const heading = 'Kunne ikke oppdatere inngående kanal';
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -587,16 +486,9 @@ const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           collectionPatchResult.undo();
           documentPatchResult.undo();
-
-          const heading = 'Kunne ikke endre avsender';
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),

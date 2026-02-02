@@ -1,6 +1,4 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import type { INavEmployee } from '@app/types/bruker';
-import { isApiRejectionError } from '@app/types/errors';
 import type { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
@@ -48,24 +46,14 @@ export const messagesApi = createApi({
         body: { text, notify },
       }),
       onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(
-            messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) =>
-              messages.some((m) => m.id === data.id)
-                ? messages
-                : [data, ...messages].toSorted((a, b) => b.created.localeCompare(a.created)),
-            ),
-          );
-        } catch (error) {
-          const heading = 'Kunne ikke sende melding';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
-        }
+        const { data } = await queryFulfilled;
+        dispatch(
+          messagesApi.util.updateQueryData('getMessages', oppgaveId, (messages) =>
+            messages.some((m) => m.id === data.id)
+              ? messages
+              : [data, ...messages].toSorted((a, b) => b.created.localeCompare(a.created)),
+          ),
+        );
       },
     }),
   }),

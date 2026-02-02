@@ -1,8 +1,5 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { isApiRejectionError } from '@app/types/errors';
-import { FlowState } from '@app/types/oppgave-common';
 import type { ISetFlowStateParams } from '@app/types/oppgavebehandling/params';
 import type { ISetFlowStateResponse } from '@app/types/oppgavebehandling/response';
 import { oppgaverApi } from '../oppgaver';
@@ -42,26 +39,12 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
               draft.medunderskriver.returnertDate = null;
             }),
           );
-        } catch (error) {
+        } catch {
           oppgavePatchResult.undo();
-
-          const heading = ERRORS[flowState];
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
   }),
 });
-
-const ERRORS: Record<FlowState, string> = {
-  [FlowState.SENT]: 'Kunne ikke sende til medunderskriver',
-  [FlowState.RETURNED]: 'Kunne ikke returnere til saksbehandler',
-  [FlowState.NOT_SENT]: 'Kunne ikke sette tilbake til ikke sendt',
-};
 
 export const { useSetMedunderskriverFlowStateMutation } = setMedunderskriverMutationSlice;

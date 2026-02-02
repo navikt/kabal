@@ -1,6 +1,4 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
-import { isApiRejectionError } from '@app/types/errors';
 import type { SetTilbakekrevingParams } from '@app/types/oppgavebehandling/params';
 import type { IModifiedResponse } from '@app/types/oppgavebehandling/response';
 import { oppgaverApi } from '../oppgaver';
@@ -30,16 +28,8 @@ const setTilbakekrevingMutationSlice = oppgaverApi.injectEndpoints({
               draft.modified = data.modified;
             }),
           );
-        } catch (error) {
+        } catch {
           oppgavePatchResult.undo();
-
-          const heading = 'Kunne ikke endre tilbakekreving';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),

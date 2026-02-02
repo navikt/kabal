@@ -1,6 +1,4 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
-import { isApiRejectionError } from '@app/types/errors';
 import type { BehandlingGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { oppgaverApi } from '../oppgaver';
 
@@ -24,17 +22,7 @@ const setGosysOppgaveMutationSlice = oppgaverApi.injectEndpoints({
         body: { gosysOppgaveId },
       }),
       onQueryStarted: async (_, { queryFulfilled }) => {
-        try {
-          await queryFulfilled;
-        } catch (error) {
-          const heading = 'Kunne ikke oppdatere Gosysoppgave';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
-        }
+        await queryFulfilled;
       },
     }),
   }),

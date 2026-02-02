@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from 'bun:test';
 import { ConfirmFinish } from '@app/components/oppgavebehandling-footer/confirm-finish';
-import { fireEvent, render, screen } from '@app/test-utils';
+import { act, fireEvent, render, screen } from '@app/test-utils';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 
 const mockOppgave = (typeId: SaksTypeEnum, utfallId: UtfallEnum, requiresGosysOppgave: boolean) => {
@@ -12,9 +12,21 @@ const mockOppgave = (typeId: SaksTypeEnum, utfallId: UtfallEnum, requiresGosysOp
   }));
 };
 
+const MUTATION_MOCK = [
+  () => null,
+  {
+    data: { isAvsluttetAvSaksbehandler: true, modified: new Date().toISOString() },
+    isSuccess: true,
+  },
+];
+
 describe('ConfirmFinish', () => {
   beforeAll(() => {
     mock.module('@app/redux-api/search', () => ({ useSearchEnheterQuery: () => ({ data: [], isSuccess: true }) }));
+    mock.module('@app/redux-api/oppgaver/mutations/behandling', () => ({
+      useFinishOppgavebehandlingMutation: () => MUTATION_MOCK,
+      useFinishOppgavebehandlingWithUpdateInGosysMutation: () => MUTATION_MOCK,
+    }));
 
     mock.module('@app/simple-api-state/use-kodeverk', () => ({
       useUtfall: () => ({
@@ -45,10 +57,12 @@ describe('ConfirmFinish', () => {
     const originalUseOppgave = await import('@app/hooks/oppgavebehandling/use-oppgave');
     const originalSearch = await import('@app/redux-api/search');
     const originalKodeverk = await import('@app/simple-api-state/use-kodeverk');
+    const originalBehandling = await import('@app/redux-api/oppgaver/mutations/behandling');
 
     mock.module('@app/redux-api/search', () => originalSearch);
     mock.module('@app/simple-api-state/use-kodeverk', () => originalKodeverk);
     mock.module('@app/hooks/oppgavebehandling/use-oppgave', () => originalUseOppgave);
+    mock.module('@app/redux-api/oppgaver/mutations/behandling', () => originalBehandling);
   });
 
   describe('Klage', () => {
@@ -64,7 +78,7 @@ describe('ConfirmFinish', () => {
       expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
       expect(await screen.findAllByRole('button')).toHaveLength(2);
 
-      fireEvent.click(finishButton);
+      await act(async () => fireEvent.click(finishButton));
 
       if (requiresGosysOppgave) {
         expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
@@ -92,7 +106,7 @@ describe('ConfirmFinish', () => {
         expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
         expect(await screen.findAllByRole('button')).toHaveLength(2);
 
-        fireEvent.click(finishButton);
+        await act(async () => fireEvent.click(finishButton));
 
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       });
@@ -109,7 +123,7 @@ describe('ConfirmFinish', () => {
         expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
         expect(await screen.findAllByRole('button')).toHaveLength(2);
 
-        fireEvent.click(finishButton);
+        await act(async () => fireEvent.click(finishButton));
 
         expect(screen.queryByRole('dialog')).toBeVisible();
       });
@@ -126,7 +140,7 @@ describe('ConfirmFinish', () => {
         expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
         expect(await screen.findAllByRole('button')).toHaveLength(2);
 
-        fireEvent.click(finishButton);
+        await act(async () => fireEvent.click(finishButton));
 
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       });
@@ -154,7 +168,7 @@ describe('ConfirmFinish', () => {
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(2);
 
-        fireEvent.click(screen.getByRole('button', { name: buttonText }));
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: buttonText })));
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       });
 
@@ -169,7 +183,7 @@ describe('ConfirmFinish', () => {
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(3);
 
-        fireEvent.click(screen.getByRole('button', { name: button1 }));
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: button1 })));
         expect(
           screen.queryByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' }),
         ).not.toBeInTheDocument();
@@ -184,7 +198,7 @@ describe('ConfirmFinish', () => {
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(2);
 
-        fireEvent.click(screen.getByRole('button', { name: button }));
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: button })));
         expect(
           screen.queryByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' }),
         ).not.toBeInTheDocument();
@@ -203,7 +217,7 @@ describe('ConfirmFinish', () => {
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(3);
 
-        fireEvent.click(screen.getByRole('button', { name: button1 }));
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: button1 })));
         expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
       });
 
@@ -224,7 +238,7 @@ describe('ConfirmFinish', () => {
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(2);
 
-        fireEvent.click(screen.getByRole('button', { name: buttonText }));
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: buttonText })));
         expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
       });
     });
@@ -251,7 +265,7 @@ describe('ConfirmFinish', () => {
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(2);
 
-        fireEvent.click(screen.getByRole('button', { name: buttonText }));
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: buttonText })));
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       });
 
@@ -266,7 +280,7 @@ describe('ConfirmFinish', () => {
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(3);
 
-        fireEvent.click(screen.getByRole('button', { name: button1 }));
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: button1 })));
         expect(
           screen.queryByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' }),
         ).not.toBeInTheDocument();
@@ -285,7 +299,7 @@ describe('ConfirmFinish', () => {
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(3);
 
-        fireEvent.click(screen.getByRole('button', { name: button1 }));
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: button1 })));
         expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
       });
 
@@ -298,7 +312,7 @@ describe('ConfirmFinish', () => {
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(2);
 
-        fireEvent.click(screen.getByRole('button', { name: buttonText }));
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: buttonText })));
         expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
       });
     });

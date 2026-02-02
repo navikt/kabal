@@ -1,6 +1,4 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
-import { isApiRejectionError } from '@app/types/errors';
 import type { IOppgavebehandlingHjemlerUpdateParams } from '@app/types/oppgavebehandling/params';
 import { oppgaverApi } from '../oppgaver';
 import { behandlingerQuerySlice } from '../queries/behandling/behandling';
@@ -28,16 +26,8 @@ const setRegistreringshjemlerMutationSlice = oppgaverApi.injectEndpoints({
               draft.modified = data.modified;
             }),
           );
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke oppdatere hjemler';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),

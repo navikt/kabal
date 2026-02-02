@@ -1,6 +1,4 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
-import { isApiRejectionError } from '@app/types/errors';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { KABAL_API_BASE_QUERY } from './common';
 import { documentsQuerySlice } from './oppgaver/queries/documents';
@@ -10,7 +8,6 @@ interface ISetTitleUpdate {
   dokumentInfoId: string;
   oppgaveId: string;
   tittel: string;
-  originalTitle: string;
 }
 
 interface ISetTitleResponse {
@@ -27,7 +24,7 @@ export const journalposterApi = createApi({
         method: 'PUT',
         body: { tittel },
       }),
-      onQueryStarted: async ({ tittel, dokumentInfoId, oppgaveId, originalTitle }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ tittel, dokumentInfoId, oppgaveId }, { dispatch, queryFulfilled }) => {
         const journalfoertePatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
             for (let i = draft.dokumenter.length - 1; i >= 0; i--) {
@@ -70,16 +67,7 @@ export const journalposterApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch (error) {
-          const heading = 'Kunne ikke oppdatere dokumentnavn';
-          const description = `Kunne ikke oppdatere dokumentnavn fra «${originalTitle}» til «${tittel}».`;
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error, description);
-          } else {
-            apiErrorToast(heading, description);
-          }
-
+        } catch {
           journalfoertePatchResult.undo();
           underArbeidPatchResult.undo();
         }

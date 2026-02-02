@@ -1,5 +1,5 @@
 import { toast } from '@app/components/toast/store';
-import { apiErrorToast } from '@app/components/toast/toast-content/api-error-toast';
+import { genericErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { BYTES_PER_KB, formatFileSize } from '@app/functions/format-file-size';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useUploadFileDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
@@ -22,7 +22,7 @@ interface Props extends Pick<ButtonProps, 'variant' | 'size' | 'children'> {
 const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 const INPUT_ACCEPT = ALLOWED_FILE_TYPES.join(', ');
 
-const displayError = (error: string) => apiErrorToast('Kunne ikke laste opp dokument', error);
+const displayError = (error: string) => genericErrorToast('Kunne ikke laste opp dokument', error);
 
 export const UploadFileButton = ({
   variant,

@@ -1,5 +1,3 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
-import { isApiRejectionError } from '@app/types/errors';
 import type { IKvalitetsvurdering, KvalitetsvurderingDataV3 } from '@app/types/kaka-kvalitetsvurdering/v3';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { KAKA_KVALITETSVURDERING_BASE_QUERY } from '../common';
@@ -36,16 +34,8 @@ export const kvalitetsvurderingV3Api = createApi({
               draft.modified = data.modified;
             }),
           );
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke oppdatere kvalitetsvurdering';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),

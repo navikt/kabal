@@ -1,8 +1,6 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
 import { reduxStore } from '@app/redux/configure-store';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { isApiRejectionError } from '@app/types/errors';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type {
   IFristParams,
@@ -35,16 +33,9 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           updateBehandling(oppgaveId, [['modified', data.modified]]);
           successToast('Frist', date);
-        } catch (error) {
+        } catch {
           undoBehandling();
           undoOppgaveData();
-
-          const heading = 'Kunne ikke oppdatere frist';
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -62,16 +53,9 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           updateBehandling(oppgaveId, [['modified', data.modified]]);
           successToast('Mottatt klageinstans', mottattKlageinstans);
-        } catch (error) {
+        } catch {
           undoBehandling();
           undoOppgaveData();
-
-          const heading = 'Kunne ikke oppdatere mottatt klageinstans';
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -88,15 +72,8 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           updateBehandling(oppgaveId, [['modified', data.modified]]);
           successToast('Mottatt vedtaksinstans', mottattVedtaksinstans);
-        } catch (error) {
+        } catch {
           undo();
-
-          const heading = 'Kunne ikke oppdatere mottatt vedtaksinstans';
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -119,15 +96,8 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           updateBehandling(oppgaveId, [['modified', data.modified]]);
           successToast('Kjennelse mottatt', kjennelseMottatt);
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke oppdatere kjennelse mottatt';
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -150,15 +120,8 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           updateBehandling(oppgaveId, [['modified', data.modified]]);
           successToast('Sendt til Trygderetten', sendtTilTrygderetten);
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke oppdatere sendt til Trygderetten';
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),

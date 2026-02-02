@@ -1,4 +1,3 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
 import type { IApiValidationResponse } from '@app/functions/error-type-guard';
 import { KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
@@ -41,7 +40,6 @@ import { handleVarsletFristEvent } from '@app/redux-api/oppgaver/queries/behandl
 import { ServerSentEventType } from '@app/redux-api/server-sent-events/event-types';
 import { ServerSentEventManager } from '@app/server-sent-events';
 import { user } from '@app/static-data/static-data';
-import { isApiRejectionError } from '@app/types/errors';
 import type { ISakenGjelder } from '@app/types/oppgave-common';
 import type {
   BehandlingGosysOppgave,
@@ -62,17 +60,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
     getOppgavebehandling: builder.query<IOppgavebehandling, string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/detaljer`,
       onQueryStarted: async (_, { queryFulfilled }) => {
-        try {
-          await queryFulfilled;
-        } catch (error) {
-          const heading = 'Kunne ikke hente oppgavebehandling';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
-        }
+        await queryFulfilled;
       },
       onCacheEntryAdded: async (oppgaveId, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) => {
         try {
@@ -171,41 +159,21 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
     getSaksbehandler: builder.query<ISaksbehandlerResponse, string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/saksbehandler`,
       onQueryStarted: async (oppgaveId, { dispatch, queryFulfilled }) => {
-        try {
-          const { data } = await queryFulfilled;
+        const { data } = await queryFulfilled;
 
-          dispatch(
-            behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
-              if (typeof draft !== 'undefined') {
-                draft.saksbehandler = data.saksbehandler;
-              }
-            }),
-          );
-        } catch (error) {
-          const heading = 'Kunne ikke hente saksbehandler';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
-        }
+        dispatch(
+          behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
+            if (typeof draft !== 'undefined') {
+              draft.saksbehandler = data.saksbehandler;
+            }
+          }),
+        );
       },
     }),
     getSakenGjelder: builder.query<ISakenGjelder, string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/sakengjelder`,
       onQueryStarted: async (_, { queryFulfilled }) => {
-        try {
-          await queryFulfilled;
-        } catch (error) {
-          const heading = 'Kunne ikke hente saken gjelder';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
-        }
+        await queryFulfilled;
       },
     }),
     validate: builder.query<IApiValidationResponse, IValidationParams>({

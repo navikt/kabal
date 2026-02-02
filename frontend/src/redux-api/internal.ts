@@ -1,7 +1,5 @@
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { user } from '@app/static-data/static-data';
-import { isApiRejectionError } from '@app/types/errors';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { format } from 'date-fns';
@@ -72,16 +70,8 @@ export const kabalInternalApi = createApi({
           kabalInternalApi.util.updateQueryData('getMerkantilTasks', undefined, (draft) =>
             draft.map((task) => (task.id === taskId ? { ...task, ...data } : task)),
           );
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke fullføre oppgave';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
