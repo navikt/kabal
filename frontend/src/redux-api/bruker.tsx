@@ -1,8 +1,6 @@
 import { toast } from '@app/components/toast/store';
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
 import type { CustomAbbrevation, ISetCustomInfoParams, ISettings, ISignatureResponse } from '@app/types/bruker';
-import { isApiRejectionError } from '@app/types/errors';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { INNSTILLINGER_BASE_QUERY } from './common';
 
@@ -20,16 +18,8 @@ export const brukerApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke endre innstillinger';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -52,17 +42,9 @@ export const brukerApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           myPatchResult.undo();
           ansattPatchResult.undo();
-
-          const heading = 'Kunne ikke endre signatur';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -77,16 +59,8 @@ export const brukerApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           myPatchResult.undo();
-
-          const heading = 'Kunne ikke endre anonymitet';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -110,17 +84,8 @@ export const brukerApi = createApi({
           );
 
           ABBREVIATIONS.updateAbbreviation(params);
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke oppdatere forkortelse';
-          const description = `Kunne ikke endre forkortelse «${params.short}» til «${params.long}».`;
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error, description);
-          } else {
-            apiErrorToast(heading, description);
-          }
         }
       },
     }),
@@ -137,54 +102,35 @@ export const brukerApi = createApi({
           await queryFulfilled;
           toast.success('Forkortelse slettet');
           ABBREVIATIONS.removeAbbreviation(id);
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke slette forkortelse';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
     addAbbreviation: builder.mutation<CustomAbbrevation, Omit<CustomAbbrevation, 'id'>>({
       query: (body) => ({ url: '/me/abbreviations', method: 'POST', body }),
       onQueryStarted: async (params, { dispatch, queryFulfilled }) => {
-        try {
-          const { data } = await queryFulfilled;
+        const { data } = await queryFulfilled;
 
-          toast.success(
-            <span>
-              Forkortelse <b>{params.short}</b>: <i>{params.long}</i> lagt til
-            </span>,
-          );
+        toast.success(
+          <span>
+            Forkortelse <b>{params.short}</b>: <i>{params.long}</i> lagt til
+          </span>,
+        );
 
-          dispatch(
-            brukerApi.util.updateQueryData('getAbbreviations', undefined, (draft) => {
-              if (draft !== undefined) {
-                draft.push(data);
+        dispatch(
+          brukerApi.util.updateQueryData('getAbbreviations', undefined, (draft) => {
+            if (draft !== undefined) {
+              draft.push(data);
 
-                return;
-              }
+              return;
+            }
 
-              return [data];
-            }),
-          );
+            return [data];
+          }),
+        );
 
-          ABBREVIATIONS.addAbbreviation(data);
-        } catch (error) {
-          const heading = 'Kunne ikke legge til forkortelse';
-          const description = `Kunne ikke legge til forkortelse «${params.short}» → «${params.long}».`;
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error, description);
-          } else {
-            apiErrorToast(heading, description);
-          }
-        }
+        ABBREVIATIONS.addAbbreviation(data);
       },
     }),
   }),

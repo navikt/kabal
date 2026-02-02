@@ -1,39 +1,46 @@
 import { toast } from '@app/components/toast/store';
-import { getErrorData } from '@app/functions/get-error-data';
-import type { ApiRejectionError } from '@app/types/errors';
+import type { BFFError, KabalApiErrorData } from '@app/types/errors';
 import { BodyLong, Heading, Label } from '@navikt/ds-react';
 
-export const apiRejectionErrorToast = (heading: string, error: ApiRejectionError, description?: React.ReactNode) => {
-  const { title, detail } = getErrorData(error.error);
-
-  apiErrorToast(
-    heading,
-    description,
-    <>
-      <Section heading="Årsak">{title}</Section>
-
-      {title === detail || detail === undefined ? null : <Section heading="Detaljer">{detail}</Section>}
-    </>,
-  );
-
-  error.isUnhandledError = true;
-
-  return error;
-};
-
-export const apiErrorToast = (heading: string, description?: React.ReactNode, extra?: React.ReactNode) => {
+export const genericErrorToast = (heading: string, description: string) =>
   toast.error(
     <>
       <Heading size="xsmall" level="1">
         {heading}
       </Heading>
 
-      {description === undefined ? null : <Section heading="Beskrivelse">{description}</Section>}
-
-      {extra}
+      <Section heading="Beskrivelse">{description}</Section>
     </>,
   );
-};
+
+export const kabalErrorToast = (heading: string, { status, title, detail }: KabalApiErrorData) =>
+  toast.error(
+    <>
+      <Heading size="xsmall" level="1">
+        {heading}
+      </Heading>
+
+      <Section heading="Tittel">{title}</Section>
+      <Section heading="Status">{status}</Section>
+
+      {detail === undefined ? null : <Section heading="Detaljer">{detail}</Section>}
+    </>,
+  );
+
+export const bffErrorToast = (heading: string, { statusCode, error, message, code }: BFFError) =>
+  toast.error(
+    <>
+      <Heading size="xsmall" level="1">
+        {heading}
+      </Heading>
+
+      <Section heading="Status">{statusCode}</Section>
+      <Section heading="Error">{error}</Section>
+      <Section heading="Melding">{message}</Section>
+
+      {code === undefined ? null : <Section heading="Detaljer">{code}</Section>}
+    </>,
+  );
 
 interface SectionProps {
   children: React.ReactNode;

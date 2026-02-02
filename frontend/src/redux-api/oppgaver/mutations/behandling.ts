@@ -1,16 +1,13 @@
 /* eslint-disable max-lines */
 import { ISO_FORMAT } from '@app/components/date-picker/constants';
 import { toast } from '@app/components/toast/store';
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
-import { isReduxValidationResponse } from '@app/functions/error-type-guard';
 import { formatIdNumber } from '@app/functions/format-id';
 import { reduxStore } from '@app/redux/configure-store';
 import { forlengetBehandlingstidApi } from '@app/redux-api/forlenget-behandlingstid';
 import { kvalitetsvurderingV3Api } from '@app/redux-api/kaka-kvalitetsvurdering/v3';
 import { getFullmektigBody, getFullmektigMessage } from '@app/redux-api/oppgaver/mutations/fullmektig-helpers';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { isApiRejectionError } from '@app/types/errors';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type {
   IFinishOppgavebehandlingParams,
@@ -35,39 +32,33 @@ const finishOppgaveOnQueryStarted = async ({
   kvalitetsvurderingId: id,
   oppgaveId,
   queryFulfilled,
-  catchFn,
 }: {
   oppgaveId: string;
   kvalitetsvurderingId: string | null;
   queryFulfilled: Promise<{ data: IVedtakFullfoertResponse }>;
-  catchFn: (e: unknown) => void;
 }) => {
-  try {
-    const { data } = await queryFulfilled;
-    update(oppgaveId, data);
+  const { data } = await queryFulfilled;
+  update(oppgaveId, data);
 
-    reduxStore.dispatch(
-      oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-        draft.isAvsluttetAvSaksbehandler = true;
-        draft.avsluttetAvSaksbehandlerDate = data.modified;
+  reduxStore.dispatch(
+    oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+      draft.isAvsluttetAvSaksbehandler = true;
+      draft.avsluttetAvSaksbehandlerDate = data.modified;
 
-        return draft;
-      }),
-    );
+      return draft;
+    }),
+  );
 
-    reduxStore.dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
+  reduxStore.dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
 
-    if (id !== null) {
-      reduxStore.dispatch(kvalitetsvurderingV3Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
-      reduxStore.dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
-      reduxStore.dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
-    }
-  } catch (e) {
-    catchFn(e);
+  if (id !== null) {
+    reduxStore.dispatch(kvalitetsvurderingV3Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+    reduxStore.dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+    reduxStore.dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
   }
 };
 
-const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
+export const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
     finishOppgavebehandling: builder.mutation<IVedtakFullfoertResponse, IFinishOppgavebehandlingParams>({
@@ -76,19 +67,8 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         method: 'POST',
       }),
       extraOptions: { maxRetries: 0 },
-      onQueryStarted: ({ oppgaveId, kvalitetsvurderingId }, { queryFulfilled }) => {
-        const catchFn = (error: unknown) => {
-          const heading = 'Kunne ikke fullføre behandling';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
-        };
-
-        return finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled, catchFn });
-      },
+      onQueryStarted: ({ oppgaveId, kvalitetsvurderingId }, { queryFulfilled }) =>
+        finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled }),
     }),
     finishOppgavebehandlingWithUpdateInGosys: builder.mutation<IVedtakFullfoertResponse, IFinishWithUpdateInGosys>({
       query: ({ oppgaveId, gosysOppgaveUpdate, ignoreGosysOppgave }) => ({
@@ -97,24 +77,8 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         body: { gosysOppgaveUpdate, ignoreGosysOppgave },
       }),
       extraOptions: { maxRetries: 0 },
-      onQueryStarted: ({ oppgaveId, kvalitetsvurderingId }, { queryFulfilled }) => {
-        const catchFn = (error: unknown) => {
-          const heading = 'Kunne ikke fullføre behandling';
-
-          if (isApiRejectionError(error)) {
-            // These will be shown inline in the modal
-            if (isReduxValidationResponse(error.error)) {
-              return;
-            }
-
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
-        };
-
-        return finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled, catchFn });
-      },
+      onQueryStarted: ({ oppgaveId, kvalitetsvurderingId }, { queryFulfilled }) =>
+        finishOppgaveOnQueryStarted({ oppgaveId, kvalitetsvurderingId, queryFulfilled }),
     }),
     updateFullmektig: builder.mutation<IModifiedResponse, ISetFullmektigParams>({
       query: ({ oppgaveId, fullmektig }) => ({
@@ -136,21 +100,9 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           update(oppgaveId, data);
 
           toast.success(getFullmektigMessage(fullmektig));
-        } catch (error) {
+        } catch {
           undo();
           forlengetBehandlingstidPatchResult.undo();
-
-          const isRemove = fullmektig === null;
-          const heading = isRemove ? 'Kunne ikke fjerne fullmektig' : 'Kunne ikke endre fullmektig';
-          const description = isRemove
-            ? undefined
-            : `Kunne ikke endre fullmektig til ${fullmektig.name ?? '<Uten navn>'} (${fullmektig.identifikator ?? '<Uten ID>'}).`;
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error, description);
-          } else {
-            apiErrorToast(heading, description);
-          }
         }
       },
     }),
@@ -167,16 +119,8 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           update(oppgaveId, data);
           toast.success(`Klager endret til «${klager.name}» (${formatIdNumber(klager.identifikator)})`);
-        } catch (error) {
+        } catch {
           undo();
-          const heading = 'Kunne ikke endre klager';
-          const description = `Kunne ikke endre klager til «${klager.name ?? '<Uten navn>'}» (${formatIdNumber(klager.identifikator)}).`;
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error, description);
-          } else {
-            apiErrorToast(heading, description);
-          }
         }
       },
     }),
@@ -193,15 +137,8 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
           const { data } = await queryFulfilled;
           update(oppgaveId, data);
           toast.success('Innsendingshjemler oppdatert');
-        } catch (error) {
+        } catch {
           undo();
-          const heading = 'Kunne ikke oppdatere innsendingshjemler';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -212,26 +149,16 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         body,
       }),
       onQueryStarted: async ({ oppgaveId }, { queryFulfilled, dispatch }) => {
-        try {
-          const { data } = await queryFulfilled;
-          update(oppgaveId, data);
-          dispatch(
-            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              draft.feilregistrert = data.feilregistrering.registered;
+        const { data } = await queryFulfilled;
+        update(oppgaveId, data);
+        dispatch(
+          oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+            draft.feilregistrert = data.feilregistrering.registered;
 
-              return draft;
-            }),
-          );
-          toast.success('Oppgave feilregistrert');
-        } catch (error) {
-          const heading = 'Kunne ikke feilregistrere oppgave';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
-        }
+            return draft;
+          }),
+        );
+        toast.success('Oppgave feilregistrert');
       },
     }),
     newAnkebehandling: builder.mutation<void, string>({
@@ -245,16 +172,8 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         try {
           await queryFulfilled;
           toast.success('Ny ankebehandling opprettet');
-        } catch (error) {
+        } catch {
           undo();
-
-          const heading = 'Kunne ikke opprette ny ankebehandling';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -272,16 +191,8 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         try {
           await queryFulfilled;
           toast.success('Ny behandling opprettet');
-        } catch (error) {
+        } catch {
           undo();
-
-          const heading = 'Kunne ikke opprette ny behandling';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),

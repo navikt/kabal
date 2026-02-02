@@ -1,10 +1,7 @@
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
-import { formatEmployeeNameAndId } from '@app/domain/employee-name';
 import { ENVIRONMENT } from '@app/environment';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { user } from '@app/static-data/static-data';
-import { isApiRejectionError } from '@app/types/errors';
 import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
 import {
   FradelReason,
@@ -59,17 +56,8 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
               draft.tildeltTimestamp = format(new Date(), ISO_DATETIME_FORMAT);
             }),
           );
-        } catch (error) {
+        } catch {
           optimisticBehandling.undo();
-
-          const heading = 'Kunne ikke tildele oppgaven';
-          const description = `Kunne ikke tildele oppgaven til ${formatEmployeeNameAndId(employee)}.`;
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error, description);
-          } else {
-            apiErrorToast(heading, description);
-          }
         }
       },
     }),
@@ -132,16 +120,8 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
               saksbehandler: null,
             })),
           );
-        } catch (error) {
+        } catch {
           optimisticFradelingReason.undo();
-
-          const heading = 'Kunne ikke fradele oppgaven';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),

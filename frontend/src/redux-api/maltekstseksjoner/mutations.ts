@@ -1,5 +1,4 @@
 import { toast } from '@app/components/toast/store';
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import type { KabalValue } from '@app/plate/types';
 import { reduxStore } from '@app/redux/configure-store';
@@ -13,7 +12,6 @@ import { getLastPublishedVersion } from '@app/redux-api/redaktoer-helpers';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { user } from '@app/static-data/static-data';
 import type { IGetMaltekstseksjonParams, PublishedTextReadOnlyMetadata } from '@app/types/common-text-types';
-import { isApiRejectionError } from '@app/types/errors';
 import type {
   ICreateDraftFromMaltekstseksjonVersionParams,
   IDeleteMaltekstDraftParams,
@@ -71,17 +69,8 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           const { data } = await queryFulfilled;
           update(id, data, query);
           toast.success(`Maltekstseksjonen «${data.title}» sin tittel ble oppdatert.`);
-        } catch (error) {
+        } catch {
           undo();
-
-          const heading = 'Kunne ikke endre maltekstseksjonstittel';
-          const description = `Kunne ikke endre maltekstseksjonstittelen til «${title}».`;
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error, description);
-          } else {
-            apiErrorToast(heading, description);
-          }
         }
       },
     }),
@@ -98,16 +87,8 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           const { data } = await queryFulfilled;
           toast.success(`Maltekstseksjonen «${data.title}» ble oppdatert.`);
           update(id, data, query);
-        } catch (error) {
+        } catch {
           undo();
-
-          const heading = 'Kunne ikke oppdatere maltekstseksjonen';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -124,16 +105,8 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           const { data } = await queryFulfilled;
           toast.success(`Maltekstseksjonen «${data.title}» ble oppdatert.`);
           update(id, data, query);
-        } catch (error) {
+        } catch {
           undo();
-
-          const heading = 'Kunne ikke oppdatere maltekstseksjonen';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -150,16 +123,8 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           const { data } = await queryFulfilled;
           toast.success(`Maltekstseksjonen «${data.title}» ble oppdatert.`);
           update(id, data, query);
-        } catch (error) {
+        } catch {
           undo();
-
-          const heading = 'Kunne ikke oppdatere maltekstseksjonen';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -176,16 +141,8 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           const { data } = await queryFulfilled;
           toast.success(`Maltekstseksjonen «${data.title}» ble oppdatert.`);
           update(id, data, query);
-        } catch (error) {
+        } catch {
           undo();
-
-          const heading = 'Kunne ikke oppdatere maltekstseksjonen';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -195,41 +152,31 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         url: `/maltekstseksjoner/${id}/publish`,
       }),
       onQueryStarted: async ({ id, query }, { queryFulfilled, dispatch }) => {
-        try {
-          const { data } = await queryFulfilled;
+        const { data } = await queryFulfilled;
 
-          toast.success('Maltekstseksjon publisert.');
+        toast.success('Maltekstseksjon publisert.');
 
-          dispatch(
-            maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
-              draft.map((t) => (t.id === id ? data : t)),
-            ),
-          );
-          dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', id, () => data));
-          dispatch(
-            maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjonVersions', id, (draft) =>
-              draft.map((v) => {
-                if (v.versionId === data.versionId) {
-                  return data;
-                }
+        dispatch(
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
+            draft.map((t) => (t.id === id ? data : t)),
+          ),
+        );
+        dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', id, () => data));
+        dispatch(
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjonVersions', id, (draft) =>
+            draft.map((v) => {
+              if (v.versionId === data.versionId) {
+                return data;
+              }
 
-                if (v.published) {
-                  return { ...v, published: false };
-                }
+              if (v.published) {
+                return { ...v, published: false };
+              }
 
-                return v;
-              }),
-            ),
-          );
-        } catch (error) {
-          const heading = 'Kunne ikke publisere maltekstseksjon';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
-        }
+              return v;
+            }),
+          ),
+        );
       },
     }),
     publishWithTexts: builder.mutation<IPublishWithTextsResponse, IUpdateBaseParams>({
@@ -388,14 +335,6 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           for (const textPatch of textPatches) {
             textPatch.undo();
           }
-
-          const heading = 'Kunne ikke publisere maltekstseksjonen';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -406,28 +345,15 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         body: { versionId },
       }),
       onQueryStarted: async ({ query }, { queryFulfilled, dispatch }) => {
-        try {
-          const { data } = await queryFulfilled;
+        const { data } = await queryFulfilled;
 
-          toast.success('Duplikat av maltekstseksjon er opprettet.');
+        toast.success('Duplikat av maltekstseksjon er opprettet.');
 
-          dispatch(
-            maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) => [
-              data,
-              ...draft,
-            ]),
-          );
-          dispatch(maltekstseksjonerQuerySlice.util.upsertQueryData('getMaltekstseksjonVersions', data.id, [data]));
-          dispatch(maltekstseksjonerQuerySlice.util.upsertQueryData('getMaltekstseksjon', data.id, data));
-        } catch (error) {
-          const heading = 'Kunne ikke duplisere maltekstseksjonen';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
-        }
+        dispatch(
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) => [data, ...draft]),
+        );
+        dispatch(maltekstseksjonerQuerySlice.util.upsertQueryData('getMaltekstseksjonVersions', data.id, [data]));
+        dispatch(maltekstseksjonerQuerySlice.util.upsertQueryData('getMaltekstseksjon', data.id, data));
       },
     }),
     createDraftFromVersion: builder.mutation<IDraftMaltekstseksjon, ICreateDraftFromMaltekstseksjonVersionParams>({
@@ -437,50 +363,40 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         body: { versionId },
       }),
       onQueryStarted: async ({ id, query }, { queryFulfilled, dispatch }) => {
-        try {
-          const { data } = await queryFulfilled;
-          toast.success('Nytt utkast til maltekstseksjon opprettet.');
-          dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', id, () => data));
+        const { data } = await queryFulfilled;
+        toast.success('Nytt utkast til maltekstseksjon opprettet.');
+        dispatch(maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjon', id, () => data));
 
-          dispatch(
-            maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
-              draft.filter((t) => t.id !== id),
-            ),
-          );
+        dispatch(
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) =>
+            draft.filter((t) => t.id !== id),
+          ),
+        );
 
-          dispatch(
-            maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) => {
-              let found = false;
+        dispatch(
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjoner', query, (draft) => {
+            let found = false;
 
-              const updated = draft.map((text) => {
-                if (text.id === id) {
-                  found = true;
+            const updated = draft.map((text) => {
+              if (text.id === id) {
+                found = true;
 
-                  return data;
-                }
+                return data;
+              }
 
-                return text;
-              });
+              return text;
+            });
 
-              return found ? updated : [data, ...draft];
-            }),
-          );
+            return found ? updated : [data, ...draft];
+          }),
+        );
 
-          dispatch(
-            maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjonVersions', id, (draft) => [
-              data,
-              ...draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
-            ]),
-          );
-        } catch (error) {
-          const heading = 'Kunne ikke opprette nytt utkast til maltekstseksjonen';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
-        }
+        dispatch(
+          maltekstseksjonerQuerySlice.util.updateQueryData('getMaltekstseksjonVersions', id, (draft) => [
+            data,
+            ...draft.filter(({ publishedDateTime }) => publishedDateTime !== null),
+          ]),
+        );
       },
     }),
     deleteDraftVersion: builder.mutation<void, IDeleteMaltekstDraftParams>({
@@ -519,18 +435,10 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
           }
 
           toast.success(`Utkast for maltekstseksjon «${title}» ble slettet.`);
-        } catch (error) {
+        } catch {
           versionsPatchResult.undo();
           listPatchResult.undo();
           idPatchResult.undo();
-
-          const heading = 'Kunne ikke slette utkast for maltekstseksjonen';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -576,18 +484,10 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         try {
           await queryFulfilled;
           toast.success(`Maltekstseksjonen «${title}» ble avpublisert.`);
-        } catch (error) {
+        } catch {
           idPatchResult.undo();
           listPatchResult.undo();
           versionsPatchResult.undo();
-
-          const heading = 'Kunne ikke avpublisere maltekstseksjonen';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),

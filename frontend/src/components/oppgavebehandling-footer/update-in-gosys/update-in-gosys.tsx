@@ -91,7 +91,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
 
         const gosysOppgaveUpdate = { kommentar: beskrivelse, tildeltEnhet: selectedEnhet, mappeId: selectedMappe };
 
-        await finish({ kvalitetsvurderingId, oppgaveId, gosysOppgaveUpdate, ignoreGosysOppgave });
+        await finish({ kvalitetsvurderingId, oppgaveId, gosysOppgaveUpdate, ignoreGosysOppgave }).unwrap();
 
         setIsOpen(false);
       } else {

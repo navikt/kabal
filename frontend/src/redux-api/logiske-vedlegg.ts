@@ -1,8 +1,6 @@
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
 import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
-import { isApiRejectionError } from '@app/types/errors';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { format } from 'date-fns';
 import { KABAL_API_BASE_QUERY } from './common';
@@ -78,16 +76,8 @@ export const logiskeVedleggApi = createApi({
               }
             }),
           );
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke legge til logisk vedlegg';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -116,16 +106,8 @@ export const logiskeVedleggApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke endre logisk vedlegg';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),
@@ -153,16 +135,8 @@ export const logiskeVedleggApi = createApi({
 
         try {
           await queryFulfilled;
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const heading = 'Kunne ikke slette logisk vedlegg';
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error);
-          } else {
-            apiErrorToast(heading);
-          }
         }
       },
     }),

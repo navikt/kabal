@@ -1,8 +1,5 @@
-import { apiErrorToast, apiRejectionErrorToast } from '@app/components/toast/toast-content/api-error-toast';
-import { formatEmployeeNameAndId } from '@app/domain/employee-name';
 import { ENVIRONMENT } from '@app/environment';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { isApiRejectionError } from '@app/types/errors';
 import { FlowState } from '@app/types/oppgave-common';
 import type { ISetMedunderskriverParams } from '@app/types/oppgavebehandling/params';
 import type { ISetMedunderskriverResponse } from '@app/types/oppgavebehandling/response';
@@ -53,20 +50,8 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
               draft.medunderskriver.returnertDate = null;
             }),
           );
-        } catch (error) {
+        } catch {
           patchResult.undo();
-
-          const isRemove = employee === null;
-          const heading = isRemove ? 'Kunne ikke fjerne medunderskriver' : 'Kunne ikke sette medunderskriver';
-          const description = isRemove
-            ? undefined
-            : `Kunne ikke sette ${formatEmployeeNameAndId(employee)} som medunderskriver.`;
-
-          if (isApiRejectionError(error)) {
-            apiRejectionErrorToast(heading, error, description);
-          } else {
-            apiErrorToast(heading, description);
-          }
         }
       },
     }),

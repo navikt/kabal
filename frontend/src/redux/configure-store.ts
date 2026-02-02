@@ -1,3 +1,4 @@
+import { errorToastMiddleware } from '@app/redux/error-toast-middleware';
 import { accessRightsApi } from '@app/redux-api/access-rights';
 import { brukerApi } from '@app/redux-api/bruker';
 import { collaborationApi } from '@app/redux-api/collaboration';
@@ -48,6 +49,7 @@ export const reduxStore = configureStore({
       svarbrevApi.middleware,
       collaborationApi.middleware,
       forlengetBehandlingstidApi.middleware,
+      errorToastMiddleware,
     ]),
 });
 
