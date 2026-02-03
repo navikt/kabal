@@ -23,7 +23,7 @@ export const ARCHIVED_DOCUMENTS_COLUMN_OPTIONS = Object.values(ArchivedDocuments
 
 const DEFAULT_ARCHIVED_DOCUMENTS_COLUMNS: ArchivedDocumentsColumn[] = [
   ArchivedDocumentsColumn.TEMA,
-  ArchivedDocumentsColumn.DATO_OPPRETTET,
+  ArchivedDocumentsColumn.DATO_SORTERING,
   ArchivedDocumentsColumn.AVSENDER_MOTTAKER,
   ArchivedDocumentsColumn.SAKSNUMMER,
   ArchivedDocumentsColumn.TYPE,
