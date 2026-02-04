@@ -21,4 +21,5 @@ export enum TemplateIdEnum {
   GJENOPPTAKSBEGJÆRING_EKSPEDISJONSBREV_TIL_TR = 'gjenopptakelsesbegjæring-ekspedisjonsbrev-til-tr',
   GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_DIREKTE_TIL_TR = 'gjenopptakelsesbegjæring-orientering-om-tilsvar-direkte-til-tr',
   GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR = 'gjenopptakelsesbegjæring-ettersending-til-tr',
+  TIL_FORELEGGELSE = 'til-foreleggelse',
 }
