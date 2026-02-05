@@ -20,7 +20,7 @@ export const setLocalStorageItem = (
   } catch (error) {
     if (error instanceof DOMException && error.name === 'QuotaExceededError') {
       deleteOldestBackups(ls, 10); // Try to free up space by deleting old backups
-      console.error(
+      console.warn(
         'localStorage quota exceeded when setting key "%s" (%s). Deleted oldest backups to free up space.',
         key,
         value.length,
