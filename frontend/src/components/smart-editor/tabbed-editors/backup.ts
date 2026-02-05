@@ -1,9 +1,9 @@
+import { BACKUP_DATE_FORMAT, KEY_PREFIX } from '@app/components/smart-editor/tabbed-editors/constants';
+import { type LocalStorage, setLocalStorageItem } from '@app/localstorage';
 import { pushError } from '@app/observability';
 import type { KabalValue } from '@app/plate/types';
 import { format, isBefore, isSameDay, isValid, parse, subDays } from 'date-fns';
 
-export const BACKUP_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm";
-export const KEY_PREFIX = 'smart-document-backup/';
 export const TTL_DAYS = 30;
 
 export const createLocalStorageBackup = (oppgaveId: string, documentId: string, content: KabalValue) =>
@@ -15,7 +15,7 @@ export const createLocalStorageBackup = (oppgaveId: string, documentId: string, 
       now.setSeconds(0);
       now.setMilliseconds(0);
       try {
-        localStorage.setItem(
+        setLocalStorageItem(
           `${KEY_PREFIX}${oppgaveId}/${documentId}/${format(now, BACKUP_DATE_FORMAT)}`,
           JSON.stringify(content),
         );
@@ -32,12 +32,6 @@ export const createLocalStorageBackup = (oppgaveId: string, documentId: string, 
     { timeout: 100 },
   );
 
-interface LocalStorage {
-  length: number;
-  key(index: number): string | null;
-  removeItem(key: string): void;
-}
-
 // Keep 30 days of backups in localStorage
 export const cleanupLocalStorageBackups = (ls: LocalStorage) => {
   try {
@@ -51,6 +45,7 @@ export const cleanupLocalStorageBackups = (ls: LocalStorage) => {
         const datePart = key.split('/').at(-1);
 
         if (datePart === undefined) {
+          ls.removeItem(key);
           continue;
         }
 

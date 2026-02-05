@@ -1,3 +1,4 @@
+import { setLocalStorageItem } from '@app/localstorage';
 import { Observable } from '@app/observable';
 import { user } from '@app/static-data/static-data';
 import { useSyncExternalStore } from 'react';
@@ -99,7 +100,7 @@ export const getAppTheme = () => appThemeStore.get();
 
 userThemeStore.subscribe((userTheme) => {
   appThemeStore.set(userTheme === UserTheme.SYSTEM ? getSystemTheme() : USER_TO_APP_THEME[userTheme]);
-  localStorage.setItem(LOCALSTORAGE_KEY, userTheme);
+  setLocalStorageItem(LOCALSTORAGE_KEY, userTheme);
 });
 
 systemThemeStore.subscribe((systemTheme) => {

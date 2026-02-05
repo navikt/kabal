@@ -1,13 +1,14 @@
 import { describe, expect, it } from 'bun:test';
-import {
-  BACKUP_DATE_FORMAT,
-  cleanupLocalStorageBackups,
-  KEY_PREFIX,
-  TTL_DAYS,
-} from '@app/components/smart-editor/tabbed-editors/backup';
+import { cleanupLocalStorageBackups, TTL_DAYS } from '@app/components/smart-editor/tabbed-editors/backup';
+import { BACKUP_DATE_FORMAT, KEY_PREFIX } from '@app/components/smart-editor/tabbed-editors/constants';
+import type { LocalStorage } from '@app/localstorage';
 import { format, subDays } from 'date-fns';
 
-const createMockLocalStorage = (items: Record<string, string>) => {
+interface TestLocalStorage extends LocalStorage {
+  getItems: () => Record<string, string>;
+}
+
+const createMockLocalStorage = (items: Record<string, string>): TestLocalStorage => {
   const storage = { ...items };
 
   return {
@@ -19,6 +20,9 @@ const createMockLocalStorage = (items: Record<string, string>) => {
     },
     removeItem(key: string): void {
       delete storage[key];
+    },
+    setItem(key: string, value: string): void {
+      storage[key] = value;
     },
     getItems() {
       return { ...storage };

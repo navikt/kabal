@@ -1,6 +1,7 @@
 import { toast } from '@app/components/toast/store';
 import { VersionToast } from '@app/components/version-checker/toast';
 import { ENVIRONMENT } from '@app/environment';
+import { setLocalStorageItem } from '@app/localstorage';
 import { pushEvent } from '@app/observability';
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Modal } from '@navikt/ds-react';
@@ -82,7 +83,7 @@ export const VersionCheckerStatus = () => {
 
     if (ENVIRONMENT.version !== lastViewedVersion) {
       toast.success('Kabal er oppdatert.', UPDATED_TOAST_TIMEOUT);
-      localStorage.setItem('lastViewedVersion', ENVIRONMENT.version);
+      setLocalStorageItem('lastViewedVersion', ENVIRONMENT.version);
     }
   }, []);
 
@@ -90,7 +91,7 @@ export const VersionCheckerStatus = () => {
     pushEvent('close_update_modal', 'update');
     const now = Date.now();
     setIgnoredAt(now);
-    window.localStorage.setItem(IGNORE_UPDATE_KEY, now.toString(10));
+    setLocalStorageItem(IGNORE_UPDATE_KEY, now.toString(10));
     showToast(true);
   }, [showToast]);
 
