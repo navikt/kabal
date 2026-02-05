@@ -27,9 +27,10 @@ import { RelevantOppgaver } from '@app/components/relevant-oppgaver/relevant-opp
 import { Type } from '@app/components/type/type';
 import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
+import { isApiDataError } from '@app/types/errors';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgave } from '@app/types/oppgaver';
-import { HStack, Table } from '@navikt/ds-react';
+import { HStack, InlineMessage, Table } from '@navikt/ds-react';
 
 interface Props {
   oppgaveId: string;
@@ -38,10 +39,33 @@ interface Props {
 }
 
 export const OppgaveRow = ({ oppgaveId, columns, testId }: Props): React.JSX.Element => {
-  const { data: oppgave, isLoading } = useGetOppgaveQuery(oppgaveId, {
+  const {
+    data: oppgave,
+    isLoading,
+    error,
+  } = useGetOppgaveQuery(oppgaveId, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
+
+  if (error !== undefined) {
+    return (
+      <Table.Row>
+        <Table.DataCell colSpan={columns.length}>
+          {isApiDataError(error) ? (
+            <InlineMessage status="error" size="small">
+              Kunne ikke laste oppgave: {error.data.title}
+              {error.data.detail === undefined ? ' ' : ` (${error.data.detail}) `} - status: {error.data.status}
+            </InlineMessage>
+          ) : (
+            <InlineMessage status="error" size="small">
+              Kunne ikke laste oppgave. {`(${JSON.stringify(error)})`}
+            </InlineMessage>
+          )}
+        </Table.DataCell>
+      </Table.Row>
+    );
+  }
 
   if (isLoading || typeof oppgave === 'undefined') {
     return <LoadingRow columnCount={columns.length} testId={testId} behandlingid={oppgaveId} />;

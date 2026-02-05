@@ -2,11 +2,13 @@ import { bffErrorToast, genericErrorToast, kabalErrorToast } from '@app/componen
 import { isObject } from '@app/functions/object';
 import { behandlingerMutationSlice } from '@app/redux-api/oppgaver/mutations/behandling';
 import { documentsMutationSlice } from '@app/redux-api/oppgaver/mutations/documents';
+import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isBFFError, isKabalApiErrorData } from '@app/types/errors';
 import { isRejectedWithValue, type Middleware } from '@reduxjs/toolkit';
 
 const { finishOppgavebehandlingWithUpdateInGosys } = behandlingerMutationSlice.endpoints;
 const { finishDocument } = documentsMutationSlice.endpoints;
+const { getOppgave } = oppgaveDataQuerySlice.endpoints;
 
 export const errorToastMiddleware: Middleware = () => (next) => (action) => {
   if (!isRejectedWithValue(action)) {
@@ -15,14 +17,9 @@ export const errorToastMiddleware: Middleware = () => (next) => (action) => {
 
   const { payload, meta } = action;
 
-  // Don't show error toasts for specific validation errors - they spawn their own error components
-  if (isPayload(payload) && payload.status === 400 && isArg(meta.arg)) {
-    if (
-      meta.arg.endpointName === finishOppgavebehandlingWithUpdateInGosys.name ||
-      meta.arg.endpointName === finishDocument.name
-    ) {
-      return next(action);
-    }
+  // Don't show error toasts for specific errors - they spawn their own error components
+  if (isArg(meta.arg) && handleError(payload, meta.arg)) {
+    return next(action);
   }
 
   if (isObject(payload) && 'data' in payload) {
@@ -42,6 +39,26 @@ export const errorToastMiddleware: Middleware = () => (next) => (action) => {
   genericErrorToast('Ukjent feil', `Detaljer: ${JSON.stringify(payload)}`);
 
   return next(action);
+};
+
+const handleError = (payload: unknown, arg: Arg): boolean => {
+  if (!isPayload(payload)) {
+    return false;
+  }
+
+  if (arg.endpointName === finishOppgavebehandlingWithUpdateInGosys.name && payload.status === 400) {
+    return true;
+  }
+
+  if (arg.endpointName === finishDocument.name && payload.status === 400) {
+    return true;
+  }
+
+  if (arg.endpointName === getOppgave.name && payload.status === 403) {
+    return true;
+  }
+
+  return false;
 };
 
 type Arg = { endpointName: string };
