@@ -1,3 +1,5 @@
+import { setLocalStorageItem } from '@app/localstorage';
+
 type ListenerFn = (value: string | undefined) => void;
 type ListenerMap = Record<string, ListenerFn[]>;
 
@@ -87,7 +89,7 @@ class SettingsManager {
 
     this.settings[key] = newValue;
 
-    window.localStorage.setItem(key, newValue);
+    setLocalStorageItem(key, newValue);
 
     this.notify(key, newValue);
   };
