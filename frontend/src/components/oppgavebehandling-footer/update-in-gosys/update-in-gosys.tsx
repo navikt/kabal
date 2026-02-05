@@ -214,7 +214,6 @@ const ConfirmIgnoreOrRequiredWarning = ({ gosysOppgave, ignoreGosysOppgave, setI
           Velg oppgave over. Dersom du ikke finner riktig oppgave, må du gå inn i Gosys og opprette en der, som du
           deretter kan velge i Kabal.
         </BodyShort>
-        <BodyShort size="small">Trykk på ikon </BodyShort>
       </Alert>
     );
   }
