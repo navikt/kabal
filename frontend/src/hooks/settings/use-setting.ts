@@ -22,8 +22,9 @@ export const useDocumentsEnabled = () => useBooleanSetting(useOppgavePath('tabs/
 export const useSmartEditorEnabled = () => useBooleanSetting(useOppgavePath('tabs/smart-editor/enabled'));
 export const useKvalitetsvurderingEnabled = () => useBooleanSetting(useOppgavePath('tabs/kvalitetsvurdering/enabled'));
 
-// Oppgavebehandling documents
 const DOCUMENTS_PDF_VIEWED_SETTING_SUFFIX = 'tabs/documents/pdf/viewed';
+
+// Oppgavebehandling documents
 export const useDocumentsPdfViewed = () => {
   const {
     value = [],
@@ -33,6 +34,7 @@ export const useDocumentsPdfViewed = () => {
 
   return { value: enforceShownDocumentsStructure(value), setValue, remove };
 };
+
 export const getDocumentsPdfViewed = (oppgaveId: string, navIdent: string): IShownDocument[] => {
   const key = getOppgavePath(oppgaveId, DOCUMENTS_PDF_VIEWED_SETTING_SUFFIX);
   const setting = getSettingKey(navIdent, key);
@@ -187,8 +189,8 @@ export enum NotificationsGrouping {
 export const useNotificationsOverviewGrouping = () =>
   useJsonSetting<NotificationsGrouping>('notifications/overview/grouping');
 
-export const usePdfRotation = (url: string) => {
+export const usePdfRotation = (url: string, pageNumber: number) => {
   const encoded = new TextEncoder().encode(url).toBase64();
 
-  return useJsonSetting<0 | 90 | 180 | 270>(`pdf/${encoded}/rotation`);
+  return useJsonSetting<0 | 90 | 180 | 270>(`pdf/${encoded}/page/${pageNumber.toString(10)}/rotation`);
 };

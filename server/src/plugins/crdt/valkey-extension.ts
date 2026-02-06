@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { getLogger } from '@app/logger';
-import type { ValkeyOptions } from '@app/plugins/crdt/valkey-extension/types';
+import type { ValkeyOptions } from '@app/valkey/types';
+import { createValkeyClient, type ValkeyClientType } from '@app/valkey/valkey-client';
 import {
   type afterLoadDocumentPayload,
   type afterStoreDocumentPayload,
@@ -16,7 +17,6 @@ import {
   type onConfigurePayload,
   type onDisconnectPayload,
 } from '@hocuspocus/server';
-import { createClient, type RedisClientType as ValkeyClientType } from 'redis';
 
 const log = getLogger('valkey-extension');
 
@@ -37,12 +37,9 @@ export class ValkeyExtension implements Extension {
   public constructor(options: ValkeyOptions) {
     log.debug({ msg: 'Creating ValkeyExtension', data: { identifier: this.#identifier } });
 
-    this.#pub = createClient({ ...options, pingInterval: 30_000 });
+    this.#pub = createValkeyClient(options);
     this.#sub = this.#pub.duplicate();
 
-    this.#pub.on('error', (error) =>
-      log.error({ msg: 'Valkey publish client error', error, data: { identifier: this.#identifier } }),
-    );
     this.#sub.on('error', (error) =>
       log.error({ msg: 'Valkey subscribe client error', error, data: { identifier: this.#identifier } }),
     );

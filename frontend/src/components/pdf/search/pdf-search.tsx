@@ -1,6 +1,6 @@
-import type { RotationDegrees } from '@app/components/pdf/rotation';
 import { computeHighlights } from '@app/components/pdf/search/search';
 import type { PageHighlights, SearchMatch } from '@app/components/pdf/search/types';
+import type { RotationDegrees } from '@app/components/pdf/types';
 import { isMetaKey, Keys, MOD_KEY_TEXT } from '@app/keys';
 import { ChevronLeftIcon, ChevronRightIcon, MagnifyingGlassIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, Tooltip } from '@navikt/ds-react';

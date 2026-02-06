@@ -89,7 +89,11 @@ const PdfBody = ({ id }: { id: string }) => {
 
   const pdfUrl = `/api/kabal-api/behandlinger/${id}/forlenget-behandlingstid-draft/pdf`;
 
-  return <PdfDocumentViewer url={pdfUrl} query={{ refreshKey: refreshKey.toString(10) }} />;
+  return (
+    <PdfDocumentViewer
+      pdfs={[{ title: 'Forlenget behandlingstid', url: pdfUrl, query: { refreshKey: refreshKey.toString(10) } }]}
+    />
+  );
 };
 
 interface Props {

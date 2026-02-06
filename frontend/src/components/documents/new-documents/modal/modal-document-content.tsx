@@ -149,7 +149,7 @@ export const DocumentModalContent = ({
           <Errors />
         </VStack>
 
-        {pdfUrl === undefined ? null : <PdfDocumentViewer url={pdfUrl} />}
+        {pdfUrl === undefined ? null : <PdfDocumentViewer pdfs={[{ title: document.tittel, url: pdfUrl }]} />}
       </Modal.Body>
       <Modal.Footer className="items-center">
         <AccessErrorsSummary

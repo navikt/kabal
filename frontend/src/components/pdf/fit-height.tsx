@@ -2,34 +2,82 @@ import { MAX_SCALE, MIN_SCALE } from '@app/components/pdf/constants';
 import { clamp } from '@app/functions/clamp';
 import { ChevronUpDownIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import type { PDFPageProxy } from 'pdfjs-dist';
 import { useCallback } from 'react';
 
 interface Props {
   scrollContainerRef: React.RefObject<HTMLDivElement | null>;
-  pages: PDFPageProxy[];
-  currentPage: number;
-  rotation: number;
+  scale: number;
   padding: number;
   onFitToHeight: (scale: number) => void;
 }
 
-export const FitHeight = ({ scrollContainerRef, pages, currentPage, rotation, padding, onFitToHeight }: Props) => {
+/**
+ * Find the page element (`[data-page-number]`) that is most visible inside the scroll container.
+ * Returns `null` when no page elements exist.
+ */
+const getMostVisiblePage = (scrollContainer: HTMLDivElement): HTMLDivElement | null => {
+  const pages = scrollContainer.querySelectorAll<HTMLDivElement>('[data-page-number]');
+
+  if (pages.length === 0) {
+    return null;
+  }
+
+  const containerRect = scrollContainer.getBoundingClientRect();
+  let bestElement: HTMLDivElement | null = null;
+  let bestVisibleArea = 0;
+
+  for (const page of pages) {
+    const pageRect = page.getBoundingClientRect();
+
+    const overlapTop = Math.max(containerRect.top, pageRect.top);
+    const overlapBottom = Math.min(containerRect.bottom, pageRect.bottom);
+    const overlapLeft = Math.max(containerRect.left, pageRect.left);
+    const overlapRight = Math.min(containerRect.right, pageRect.right);
+
+    const visibleHeight = Math.max(0, overlapBottom - overlapTop);
+    const visibleWidth = Math.max(0, overlapRight - overlapLeft);
+    const visibleArea = visibleHeight * visibleWidth;
+
+    if (visibleArea > bestVisibleArea) {
+      bestVisibleArea = visibleArea;
+      bestElement = page;
+    }
+  }
+
+  return bestElement;
+};
+
+export const FitHeight = ({ scrollContainerRef, scale, padding, onFitToHeight }: Props) => {
   const handleFitToHeight = useCallback(() => {
     const scrollContainer = scrollContainerRef.current;
-    const currentPageData = pages[currentPage - 1];
 
-    if (scrollContainer === null || currentPageData === undefined) {
+    if (scrollContainer === null) {
       return;
     }
 
-    const viewport = currentPageData.getViewport({ scale: 1, rotation });
-    const pageHeight = viewport.height;
+    const pageElement = getMostVisiblePage(scrollContainer);
+
+    if (pageElement === null) {
+      return;
+    }
+
+    const renderedHeight = pageElement.offsetHeight;
+
+    if (renderedHeight === 0) {
+      return;
+    }
+
+    const unscaledHeight = renderedHeight / (scale / 100);
     const scrollContainerHeight = scrollContainer.clientHeight - padding;
-    const fitScale = Math.floor((scrollContainerHeight / pageHeight) * 100);
+    const fitScale = Math.floor((scrollContainerHeight / unscaledHeight) * 100);
     const clampedScale = clamp(fitScale, MIN_SCALE, MAX_SCALE);
+
     onFitToHeight(clampedScale);
-  }, [pages, currentPage, rotation, scrollContainerRef, padding, onFitToHeight]);
+
+    requestAnimationFrame(() => {
+      pageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, [scrollContainerRef, scale, padding, onFitToHeight]);
 
   return (
     <Tooltip content="Tilpass høyden" placement="top" describesChild>

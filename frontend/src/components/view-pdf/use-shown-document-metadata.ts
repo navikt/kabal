@@ -2,7 +2,6 @@ import type { IShownDocument } from '@app/components/view-pdf/types';
 import {
   getAttachmentsOverviewInlineUrl,
   getJournalfoertDocumentInlineUrl,
-  getMergedDocumentInlineUrl,
   getNewDocumentInlineUrl,
 } from '@app/domain/inline-document-url';
 import {
@@ -10,58 +9,55 @@ import {
   getAttachmentsOverviewTabUrl,
   getJournalfoertDocumentTabId,
   getJournalfoertDocumentTabUrl,
-  getMergedDocumentTabId,
-  getMergedDocumentTabUrl,
   getNewDocumentTabId,
   getNewDocumentTabUrl,
 } from '@app/domain/tabbed-document-url';
-import { DocumentTypeEnum, type IMergedDocumentsResponse } from '@app/types/documents/documents';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 
-type DocumentData =
-  | { inlineUrl: string; tabUrl: string; tabId: string }
-  | { inlineUrl: undefined; tabUrl: undefined; tabId: undefined };
+export interface DocumentMetadata {
+  inlineUrl: string;
+  tabUrl: string;
+  tabId: string;
+}
 
 export const useShownDocumentMetadata = (
   oppgaveId: string | typeof skipToken,
-  mergedDocument: IMergedDocumentsResponse | undefined,
   showDocumentList: IShownDocument[],
-) =>
-  useMemo<DocumentData>(() => {
-    if (mergedDocument !== undefined) {
-      return {
-        tabUrl: getMergedDocumentTabUrl(mergedDocument.reference),
-        inlineUrl: getMergedDocumentInlineUrl(mergedDocument.reference),
-        tabId: getMergedDocumentTabId(mergedDocument.reference),
-      };
+): DocumentMetadata[] =>
+  useMemo(() => {
+    if (oppgaveId === skipToken) {
+      return [];
     }
 
-    const [onlyDocument] = showDocumentList;
+    return showDocumentList.flatMap((doc) => {
+      const metadata = getDocumentMetadata(doc, oppgaveId);
 
-    if (onlyDocument === undefined || oppgaveId === skipToken) {
-      return { tabUrl: undefined, inlineUrl: undefined, tabId: undefined };
-    }
+      return metadata === undefined ? [] : [metadata];
+    });
+  }, [oppgaveId, showDocumentList]);
 
-    if (onlyDocument.type === DocumentTypeEnum.JOURNALFOERT) {
-      return {
-        tabUrl: getJournalfoertDocumentTabUrl(onlyDocument.journalpostId, onlyDocument.dokumentInfoId),
-        inlineUrl: getJournalfoertDocumentInlineUrl(onlyDocument.journalpostId, onlyDocument.dokumentInfoId),
-        tabId: getJournalfoertDocumentTabId(onlyDocument.journalpostId, onlyDocument.dokumentInfoId),
-      };
-    }
-
-    if (onlyDocument.type === DocumentTypeEnum.VEDLEGGSOVERSIKT) {
-      return {
-        tabUrl: getAttachmentsOverviewTabUrl(oppgaveId, onlyDocument.documentId),
-        inlineUrl: getAttachmentsOverviewInlineUrl(oppgaveId, onlyDocument.documentId),
-        tabId: getAttachmentsOverviewTabId(onlyDocument.documentId),
-      };
-    }
-
+const getDocumentMetadata = (doc: IShownDocument, oppgaveId: string): DocumentMetadata | undefined => {
+  if (doc.type === DocumentTypeEnum.JOURNALFOERT) {
     return {
-      tabUrl: getNewDocumentTabUrl(oppgaveId, onlyDocument.documentId, onlyDocument.parentId),
-      inlineUrl: getNewDocumentInlineUrl(oppgaveId, onlyDocument.documentId, onlyDocument.parentId),
-      tabId: getNewDocumentTabId(onlyDocument.documentId, onlyDocument.parentId),
+      tabUrl: getJournalfoertDocumentTabUrl(doc.journalpostId, doc.dokumentInfoId),
+      inlineUrl: getJournalfoertDocumentInlineUrl(doc.journalpostId, doc.dokumentInfoId),
+      tabId: getJournalfoertDocumentTabId(doc.journalpostId, doc.dokumentInfoId),
     };
-  }, [mergedDocument, oppgaveId, showDocumentList]);
+  }
+
+  if (doc.type === DocumentTypeEnum.VEDLEGGSOVERSIKT) {
+    return {
+      tabUrl: getAttachmentsOverviewTabUrl(oppgaveId, doc.documentId),
+      inlineUrl: getAttachmentsOverviewInlineUrl(oppgaveId, doc.documentId),
+      tabId: getAttachmentsOverviewTabId(doc.documentId),
+    };
+  }
+
+  return {
+    tabUrl: getNewDocumentTabUrl(oppgaveId, doc.documentId, doc.parentId),
+    inlineUrl: getNewDocumentInlineUrl(oppgaveId, doc.documentId),
+    tabId: getNewDocumentTabId(doc.documentId, doc.parentId),
+  };
+};

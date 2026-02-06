@@ -11,6 +11,7 @@ import { clientVersionPlugin } from '@app/plugins/client-version';
 import { crdtPlugin } from '@app/plugins/crdt/crdt';
 import { debugPlugin } from '@app/plugins/debug/debug';
 import { documentPlugin } from '@app/plugins/document';
+import { documentSetPlugin } from '@app/plugins/document-set';
 import { healthPlugin } from '@app/plugins/health';
 import { httpLoggerPlugin } from '@app/plugins/http-logger';
 import { navIdentPlugin } from '@app/plugins/nav-ident';
@@ -63,6 +64,7 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
   .register(versionPlugin)
   .register(apiProxyPlugin, { appNames: API_CLIENT_IDS, prefix: '/api' })
   .register(documentPlugin)
+  .register(documentSetPlugin)
   .register(serveAssetsPlugin)
   .register(serveIndexPlugin)
   .register(httpLoggerPlugin)
