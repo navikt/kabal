@@ -38,7 +38,7 @@ interface NotJournalfoertProps extends BaseProps {
 type Props = JournalfoertProps | NotJournalfoertProps;
 
 export const SharedDocumentTitle = (props: Props) => {
-  const { title, url, documentId, icon, disabled = false, children, ...rest } = props;
+  const { title, url, documentId, icon, disabled = false, children, type, journalfoertDokumentReference } = props;
   const { value, setValue } = useDocumentsPdfViewed();
   const { getTabRef, setTabRef } = useContext(TabContext);
 
@@ -49,28 +49,28 @@ export const SharedDocumentTitle = (props: Props) => {
   const isInlineOpen = useMemo(
     () =>
       value.some((v) => {
-        if (rest.type === DocumentTypeEnum.JOURNALFOERT) {
+        if (type === DocumentTypeEnum.JOURNALFOERT) {
           return (
             v.type === DocumentTypeEnum.JOURNALFOERT &&
-            v.dokumentInfoId === rest.journalfoertDokumentReference.dokumentInfoId
+            v.dokumentInfoId === journalfoertDokumentReference.dokumentInfoId
           );
         }
 
-        return v.type === rest.type && v.documentId === documentId;
+        return v.type === type && v.documentId === documentId;
       }),
-    [documentId, rest.journalfoertDokumentReference, rest.type, value],
+    [documentId, value, type, journalfoertDokumentReference?.dokumentInfoId],
   );
 
   const setViewedDocument = () => {
-    if (rest.type === DocumentTypeEnum.JOURNALFOERT) {
-      if (canOpenInKabal(rest.journalfoertDokumentReference.varianter)) {
-        return setValue([{ type: rest.type, ...rest.journalfoertDokumentReference }]);
+    if (type === DocumentTypeEnum.JOURNALFOERT) {
+      if (canOpenInKabal(journalfoertDokumentReference.varianter)) {
+        return setValue([{ type, ...journalfoertDokumentReference }]);
       }
 
-      return downloadDocuments({ ...rest.journalfoertDokumentReference, tittel: title });
+      return downloadDocuments({ ...journalfoertDokumentReference, tittel: title });
     }
 
-    setValue([{ type: rest.type, documentId, parentId: rest.parentId }]);
+    setValue([{ type, documentId, parentId: props.parentId }]);
   };
 
   const onClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {

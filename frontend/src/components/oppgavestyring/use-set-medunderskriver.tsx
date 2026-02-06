@@ -5,7 +5,7 @@ import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
 import type { INavEmployee } from '@app/types/bruker';
 import { parseISO } from 'date-fns';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 
 export interface Return {
   onChange: OnChange;
@@ -21,6 +21,8 @@ export const useSetMedunderskriver = (
   const [setMedunderskriver, { isLoading: isUpdating }] = useSetMedunderskriverMutation({
     fixedCacheKey: getFixedCacheKey(oppgaveId),
   });
+
+  const onChangeRef = useRef<OnChange>(() => Promise.resolve());
 
   const onChange: OnChange = useCallback(
     async (toNavIdent, fromNavIdent) => {
@@ -42,7 +44,7 @@ export const useSetMedunderskriver = (
           label: 'Medunderskriver',
           fromNavIdent,
           toNavIdent,
-          onChange,
+          onChange: onChangeRef.current,
           name,
           timestamp,
         });
@@ -52,6 +54,8 @@ export const useSetMedunderskriver = (
     },
     [medunderskrivere, oppgaveId, setMedunderskriver],
   );
+
+  onChangeRef.current = onChange;
 
   return { onChange, isUpdating };
 };

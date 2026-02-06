@@ -68,16 +68,17 @@ const stringToBoolean = (value: string | undefined): boolean | undefined =>
 
 export const useBooleanSetting = (property: string): Setting<boolean> => {
   const setting = useSetting(property);
+  const { setValue: setSettingValue } = setting;
 
   const setValue = useCallback(
     (newValue: boolean | SetterFn<boolean>) => {
-      setting.setValue((prev) => {
+      setSettingValue((prev) => {
         const nextValue = typeof newValue === 'boolean' ? newValue : newValue(stringToBoolean(prev));
 
         return booleanToString(nextValue);
       });
     },
-    [setting.setValue],
+    [setSettingValue],
   );
 
   return {

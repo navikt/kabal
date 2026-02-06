@@ -23,6 +23,8 @@ export const DropZone = ({
   onDrop,
   children,
   overlayClassName,
+  onDragEnter: externalOnDragEnter,
+  onDragLeave: externalOnDragLeave,
   ...rest
 }: DropZoneProps) => {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -49,9 +51,9 @@ export const DropZone = ({
       dragEnterCount.current += 1;
 
       setIsDragOver(active);
-      rest.onDragEnter?.(e);
+      externalOnDragEnter?.(e);
     },
-    [active, rest.onDragEnter],
+    [active, externalOnDragEnter],
   );
 
   const onDragLeave = useCallback(
@@ -64,9 +66,9 @@ export const DropZone = ({
       if (dragEnterCount.current === 0) {
         setIsDragOver(false);
       }
-      rest.onDragLeave?.(e);
+      externalOnDragLeave?.(e);
     },
-    [rest.onDragLeave],
+    [externalOnDragLeave],
   );
 
   return (

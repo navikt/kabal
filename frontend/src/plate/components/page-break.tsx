@@ -71,7 +71,7 @@ export const PageBreak = (props: PlateElementProps<PageBreakElement>) => {
             variant="tertiary"
             size="xsmall"
             icon={<TrashIcon aria-hidden />}
-            className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 z-1 w-fit grow-0 self-center opacity-0 transition-opacity duration-200 ease-in-out focus:opacity-100 group-hover:opacity-100"
+            className="absolute top-1/2 left-1/2 z-1 w-fit grow-0 -translate-x-1/2 -translate-y-1/2 self-center opacity-0 transition-opacity duration-200 ease-in-out focus:opacity-100 group-hover:opacity-100"
           >
             Fjern sideskift
           </Button>
