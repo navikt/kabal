@@ -10,18 +10,11 @@ interface RedactedSwitchProps {
 export interface VariantProps extends RedactedSwitchProps {
   showsPol: boolean;
   showsFeil: boolean;
-  showsArchivedDocument: boolean;
   hasRedactedDocuments: boolean;
 }
 
-export const Variant = ({
-  showsPol,
-  showsFeil,
-  showsArchivedDocument,
-  hasRedactedDocuments,
-  ...props
-}: VariantProps) => {
-  const showRedactedSwitch = showsArchivedDocument && hasRedactedDocuments;
+export const Variant = ({ showsPol, showsFeil, hasRedactedDocuments, ...props }: VariantProps) => {
+  const showRedactedSwitch = hasRedactedDocuments;
 
   if (!showRedactedSwitch && !showsPol && !showsFeil) {
     return null;

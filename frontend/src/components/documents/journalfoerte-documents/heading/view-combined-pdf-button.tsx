@@ -1,5 +1,6 @@
 import { showDownloadDocumentsToast } from '@app/components/documents/journalfoerte-documents/download-toast';
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
+import { matchDocuments } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
@@ -19,7 +20,7 @@ import { useContext, useMemo } from 'react';
 
 export const ViewCombinedPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
-  const { value, setValue } = useDocumentsPdfViewed();
+  const { value, setArchivedDocuments } = useDocumentsPdfViewed();
   const { selectedDocuments } = useContext(SelectContext);
   const { data: archivedList, isLoading: archivedIsLoading } = useGetArkiverteDokumenterQuery(useOppgaveId());
 
@@ -32,14 +33,16 @@ export const ViewCombinedPDF = () => {
   );
 
   const isInlineOpen = useMemo(() => {
-    if (value.length !== toOpen.length) {
+    const archivedDocuments = value.archivedDocuments;
+
+    if (archivedDocuments === undefined || archivedDocuments.length !== toOpen.length) {
       return false;
     }
 
-    return value.every((v, i) => {
+    return archivedDocuments.every((v, i) => {
       const d = toOpen[i];
 
-      return d !== undefined && d.type === v.type && v.dokumentInfoId === d.dokumentInfoId;
+      return d !== undefined && matchDocuments(v, d);
     });
   }, [toOpen, value]);
 
@@ -75,7 +78,7 @@ export const ViewCombinedPDF = () => {
     }
 
     if (!shouldOpenInNewTab) {
-      setValue(toOpen);
+      setArchivedDocuments(toOpen);
       return;
     }
 

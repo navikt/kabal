@@ -1,22 +1,27 @@
 import { AppTheme, useAppTheme } from '@app/app-theme';
-import type { FetchErrorInfo, PdfViewerConfig } from '@app/components/pdf/context';
-import { PdfDocumentViewer, type PdfDocumentViewerProps } from '@app/components/pdf/pdf-document-viewer';
 import { toast } from '@app/components/toast/store';
 import { Section } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { isKabalApiErrorData, type KabalApiErrorData } from '@app/types/errors';
 import { BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
+import {
+  type FetchErrorInfo,
+  KlagePdfViewer as KlagePdfViewerComponent,
+  type KlagePdfViewerProps,
+  type PdfViewerConfig,
+} from '@navikt/klage-pdf-viewer';
+// @ts-expect-error — Vite `?url` import: returns the resolved public URL as a string.
+import WORKER_SRC from '@navikt/klage-pdf-viewer/pdf-worker?url';
 import { useMemo, useState } from 'react';
 
-export type { PdfDocumentViewerProps } from '@app/components/pdf/pdf-document-viewer';
-
-const WORKER_SRC = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).href;
+export type { KlagePdfViewerProps } from '@navikt/klage-pdf-viewer';
 
 export const KabalPdfViewer = ({
   config,
+  documentSetUrl: _documentSetUrl,
   ...props
-}: Omit<PdfDocumentViewerProps, 'workerSrc'> & { workerSrc?: string }) => {
+}: Omit<KlagePdfViewerProps, 'workerSrc'> & { workerSrc?: string; documentSetUrl?: string | null }) => {
   const appTheme = useAppTheme();
 
   const kabalConfig = useMemo<Partial<PdfViewerConfig>>(
@@ -29,7 +34,7 @@ export const KabalPdfViewer = ({
     [appTheme, config],
   );
 
-  return <PdfDocumentViewer workerSrc={WORKER_SRC} {...props} config={kabalConfig} />;
+  return <KlagePdfViewerComponent workerSrc={WORKER_SRC} {...props} config={kabalConfig} />;
 };
 
 // ---------- error handling with toast + auth redirect ----------

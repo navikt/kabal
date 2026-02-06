@@ -1,10 +1,20 @@
 import { canOpenInKabal } from '@app/components/documents/filetype';
-import { TabContext } from '@app/components/documents/tab-context';
 import { KabalPdfViewer } from '@app/components/kabal-pdf-viewer';
-import type { PdfEntry } from '@app/components/pdf/pdf-document-viewer';
-import { toast } from '@app/components/toast/store';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
 import { Variant } from '@app/components/view-pdf/variant';
+import {
+  getAttachmentsOverviewInlineUrl,
+  getJournalfoertDocumentInlineUrl,
+  getNewDocumentInlineUrl,
+} from '@app/domain/inline-document-url';
+import {
+  getAttachmentsOverviewTabId,
+  getAttachmentsOverviewTabUrl,
+  getJournalfoertDocumentTabId,
+  getJournalfoertDocumentTabUrl,
+  getNewDocumentTabId,
+  getNewDocumentTabUrl,
+} from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useShownDocuments } from '@app/hooks/use-shown-documents';
@@ -13,16 +23,18 @@ import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { Skjerming, VariantFormat } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum, type IDocument, type JournalfoertDokument } from '@app/types/documents/documents';
 import { Alert, Box, Loader, VStack } from '@navikt/ds-react';
+import type { PdfEntry } from '@navikt/klage-pdf-viewer';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { IShownArchivedDocument, IShownDocument } from './types';
-import { type DocumentMetadata, useShownDocumentMetadata } from './use-shown-document-metadata';
+import { useDocumentSetUrl } from './use-document-set-url';
 
 export const ViewPDF = () => {
-  const { getTabRef, setTabRef } = useContext(TabContext);
   const { remove: closePdfViewer } = useDocumentsPdfViewed();
   const { showDocumentList, isLoading } = useShownDocuments();
   const oppgaveId = useOppgaveId();
+
+  const documentSetUrl = useDocumentSetUrl();
 
   const { data: documentsInProgress = EMPTY_DOCUMENTS } = useGetDocumentsQuery(oppgaveId);
   const { data: journalposter } = useGetArkiverteDokumenterQuery(oppgaveId);
@@ -30,10 +42,10 @@ export const ViewPDF = () => {
 
   const [redactedState, setRedactedState] = useState<Map<string, boolean>>(new Map());
 
-  const setShowRedactedForDoc = useCallback((tabId: string, showRedacted: boolean) => {
+  const setShowRedactedForDoc = useCallback((docKey: string, showRedacted: boolean) => {
     setRedactedState((prev) => {
       const next = new Map(prev);
-      next.set(tabId, showRedacted);
+      next.set(docKey, showRedacted);
 
       return next;
     });
@@ -44,76 +56,74 @@ export const ViewPDF = () => {
     [showDocumentList, documentsInProgress],
   );
 
-  const documentMetadataList = useShownDocumentMetadata(oppgaveId, expandedDocumentList);
+  const { pdfs, tabUrls } = useMemo(() => {
+    if (oppgaveId === skipToken) {
+      return EMPTY_PDFS_AND_TAB_URLS;
+    }
 
-  const tabUrls = useMemo(() => documentMetadataList.map((meta) => meta.tabUrl), [documentMetadataList]);
+    const entries: PdfEntry[] = [];
+    const urls: string[] = [];
+
+    for (const doc of expandedDocumentList) {
+      const { inlineUrl, tabUrl, tabId, key } = getDocumentInfo(doc, oppgaveId);
+
+      if (inlineUrl === undefined) {
+        continue;
+      }
+
+      const title = getDocumentTitle(doc, journalpostDocuments, documentsInProgress);
+      const isArchived = doc.type === DocumentTypeEnum.JOURNALFOERT;
+
+      const docHasRedacted = isArchived && doc.varianter.some(({ format: f }) => f === VariantFormat.SLADDET);
+      const docHasAccessToArchive =
+        isArchived && doc.varianter.some(({ hasAccess, format: f }) => hasAccess && f === VariantFormat.ARKIV);
+
+      const docShowRedacted = redactedState.get(key) ?? docHasRedacted;
+      const docFormat = docShowRedacted && docHasRedacted ? VariantFormat.SLADDET : VariantFormat.ARKIV;
+
+      const showsPol =
+        isArchived && doc.varianter.some((v) => v.hasAccess && v.format === docFormat && v.skjerming === Skjerming.POL);
+
+      const showsFeil =
+        isArchived &&
+        doc.varianter.some((v) => v.hasAccess && v.format === docFormat && v.skjerming === Skjerming.FEIL);
+
+      const newTabUrl =
+        isArchived && docHasRedacted && docHasAccessToArchive ? `${tabUrl}?format=${docFormat}` : tabUrl;
+
+      urls.push(tabUrl);
+
+      entries.push({
+        title,
+        url: inlineUrl,
+        newTab: {
+          url: newTabUrl,
+          id: tabId,
+        },
+        headerExtra: isArchived ? (
+          <Variant
+            showsPol={showsPol}
+            showsFeil={showsFeil}
+            hasRedactedDocuments={docHasRedacted}
+            hasAccessToArchivedDocuments={docHasAccessToArchive}
+            showRedacted={docShowRedacted}
+            setShowRedacted={(value: boolean) => setShowRedactedForDoc(key, value)}
+          />
+        ) : undefined,
+      });
+    }
+
+    return { pdfs: entries, tabUrls: urls };
+  }, [
+    oppgaveId,
+    expandedDocumentList,
+    journalpostDocuments,
+    documentsInProgress,
+    redactedState,
+    setShowRedactedForDoc,
+  ]);
 
   useMarkVisited(tabUrls);
-
-  const pdfs: PdfEntry[] = useMemo(
-    () =>
-      documentMetadataList.map((meta, index) => {
-        const doc = expandedDocumentList[index];
-
-        if (doc === undefined) {
-          return createFallbackEntry(meta);
-        }
-
-        const title = getDocumentTitle(doc, journalpostDocuments, documentsInProgress);
-        const isArchived = doc.type === DocumentTypeEnum.JOURNALFOERT;
-
-        const docHasRedacted = isArchived && doc.varianter.some(({ format: f }) => f === VariantFormat.SLADDET);
-        const docHasAccessToArchive =
-          isArchived && doc.varianter.some(({ hasAccess, format: f }) => hasAccess && f === VariantFormat.ARKIV);
-
-        const docShowRedacted = redactedState.get(meta.tabId) ?? docHasRedacted;
-        const docFormat = docShowRedacted && docHasRedacted ? VariantFormat.SLADDET : VariantFormat.ARKIV;
-
-        const showsPol =
-          isArchived &&
-          doc.varianter.some((v) => v.hasAccess && v.format === docFormat && v.skjerming === Skjerming.POL);
-
-        const showsFeil =
-          isArchived &&
-          doc.varianter.some((v) => v.hasAccess && v.format === docFormat && v.skjerming === Skjerming.FEIL);
-
-        const newTabUrl =
-          isArchived && docHasRedacted && docHasAccessToArchive ? `${meta.tabUrl}?format=${docFormat}` : meta.tabUrl;
-
-        const { tabId } = meta;
-
-        return {
-          title,
-          url: meta.inlineUrl,
-          newTab: {
-            url: newTabUrl,
-            id: tabId,
-            onClick: createNewTabClickHandler(tabId, newTabUrl, getTabRef, setTabRef),
-          },
-          headerExtra: isArchived ? (
-            <Variant
-              showsArchivedDocument
-              showsPol={showsPol}
-              showsFeil={showsFeil}
-              hasRedactedDocuments={docHasRedacted}
-              hasAccessToArchivedDocuments={docHasAccessToArchive}
-              showRedacted={docShowRedacted}
-              setShowRedacted={(value: boolean) => setShowRedactedForDoc(tabId, value)}
-            />
-          ) : undefined,
-        };
-      }),
-    [
-      documentMetadataList,
-      expandedDocumentList,
-      journalpostDocuments,
-      documentsInProgress,
-      redactedState,
-      setShowRedactedForDoc,
-      getTabRef,
-      setTabRef,
-    ],
-  );
 
   if (showDocumentList.length === 0 || oppgaveId === skipToken) {
     return null;
@@ -137,11 +147,47 @@ export const ViewPDF = () => {
     );
   }
 
-  return <KabalPdfViewer pdfs={pdfs} onClose={closePdfViewer} />;
+  return <KabalPdfViewer pdfs={pdfs} onClose={closePdfViewer} documentSetUrl={documentSetUrl} />;
 };
 
 const EMPTY_DOCUMENTS: IDocument[] = [];
 const EMPTY_ARCHIVED: IArkivertDocument[] = [];
+const EMPTY_PDFS_AND_TAB_URLS: { pdfs: PdfEntry[]; tabUrls: string[] } = { pdfs: [], tabUrls: [] };
+
+interface DocumentInfo {
+  inlineUrl: string | undefined;
+  tabUrl: string;
+  tabId: string;
+  key: string;
+}
+
+/** Returns the inline URL, tab URL, tab ID, and stable key for a document. */
+const getDocumentInfo = (doc: IShownDocument, oppgaveId: string): DocumentInfo => {
+  if (doc.type === DocumentTypeEnum.JOURNALFOERT) {
+    return {
+      inlineUrl: getJournalfoertDocumentInlineUrl(doc.journalpostId, doc.dokumentInfoId),
+      tabUrl: getJournalfoertDocumentTabUrl(doc.journalpostId, doc.dokumentInfoId),
+      tabId: getJournalfoertDocumentTabId(doc.journalpostId, doc.dokumentInfoId),
+      key: `${doc.journalpostId}:${doc.dokumentInfoId}`,
+    };
+  }
+
+  if (doc.type === DocumentTypeEnum.VEDLEGGSOVERSIKT) {
+    return {
+      inlineUrl: getAttachmentsOverviewInlineUrl(oppgaveId, doc.documentId),
+      tabUrl: getAttachmentsOverviewTabUrl(oppgaveId, doc.documentId),
+      tabId: getAttachmentsOverviewTabId(doc.documentId),
+      key: `vedleggsoversikt:${doc.documentId}`,
+    };
+  }
+
+  return {
+    inlineUrl: getNewDocumentInlineUrl(oppgaveId, doc.documentId),
+    tabUrl: getNewDocumentTabUrl(oppgaveId, doc.documentId, doc.parentId),
+    tabId: getNewDocumentTabId(doc.documentId, doc.parentId),
+    key: doc.documentId,
+  };
+};
 
 const expandDocumentList = (showDocumentList: IShownDocument[], documentsInProgress: IDocument[]): IShownDocument[] =>
   showDocumentList.flatMap((doc) => {
@@ -187,48 +233,6 @@ const attachmentToShownDocument = (doc: IDocument): IShownDocument => {
     type: doc.type,
     documentId: doc.id,
     parentId: doc.parentId,
-  };
-};
-
-const createFallbackEntry = (meta: DocumentMetadata): PdfEntry => ({
-  title: 'Ukjent dokument',
-  url: meta.inlineUrl,
-  newTab: {
-    url: meta.tabUrl,
-    id: meta.tabId,
-  },
-});
-
-const createNewTabClickHandler = (
-  tabId: string,
-  tabUrl: string,
-  getTabRef: (id: string) => WindowProxy | undefined,
-  setTabRef: (id: string, ref: WindowProxy) => void,
-): React.MouseEventHandler<HTMLButtonElement> => {
-  return (e) => {
-    if (e.button !== 1 && e.button !== 0) {
-      return;
-    }
-
-    e.preventDefault();
-
-    const tabRef = getTabRef(tabId);
-
-    if (tabRef !== undefined && !tabRef.closed) {
-      tabRef.focus();
-
-      return;
-    }
-
-    const ref = window.open(tabUrl, tabId);
-
-    if (ref === null) {
-      toast.error('Kunne ikke åpne dokumentet i ny fane');
-
-      return;
-    }
-
-    setTabRef(tabId, ref);
   };
 };
 
