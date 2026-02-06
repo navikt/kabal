@@ -138,7 +138,6 @@ export const createCapitalisePlugin = (ident: string) => {
         return deleteBackward(unit);
       }
 
-      // biome-ignore lint/correctness/noUnusedVariables: Omit
       const { text, autoCapitalised, ...marks } = capitalisedNode;
 
       editor.tf.withNewBatch(() => {

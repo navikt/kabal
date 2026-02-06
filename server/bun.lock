@@ -11,7 +11,7 @@
         "@fastify/websocket": "11.2.0",
         "@hocuspocus/common": "3.4.4",
         "@hocuspocus/server": "3.4.4",
-        "@platformatic/kafka": "1.24.0",
+        "@platformatic/kafka": "1.26.0",
         "@slate-yjs/core": "1.0.2",
         "fastify": "5.7.4",
         "fastify-metrics": "12.1.0",
@@ -23,7 +23,7 @@
         "yjs": "13.6.29",
       },
       "devDependencies": {
-        "@types/node": "25.2.0",
+        "@types/node": "25.2.2",
         "@types/uuid": "11.0.0",
       },
     },
@@ -163,7 +163,7 @@
 
     "@pinojs/redact": ["@pinojs/redact@0.4.0", "", {}, "sha512-k2ENnmBugE/rzQfEcdWHcCY+/FM3VLzH9cYEsbdsoqrvzAKRhUZeRNhAZvB8OitQJ1TBed3yqWtdjzS6wJKBwg=="],
 
-    "@platformatic/kafka": ["@platformatic/kafka@1.24.0", "", { "dependencies": { "ajv": "^8.17.1", "debug": "^4.4.3", "fastq": "^1.19.1", "mnemonist": "^0.40.3", "scule": "^1.3.0" }, "optionalDependencies": { "@node-rs/crc32": "^1.10.6", "lz4-napi": "^2.9.0", "snappy": "^7.3.3" } }, "sha512-6l2TbTVIN7blMUbEHHzPAE5eDcZ0OeIUgFvOhMYhIwmFXE9JZIr/ucayou55RtlzPQU8Dw2UzoHDANJ5lJFzqg=="],
+    "@platformatic/kafka": ["@platformatic/kafka@1.26.0", "", { "dependencies": { "ajv": "^8.17.1", "debug": "^4.4.3", "fastq": "^1.19.1", "mnemonist": "^0.40.3", "scule": "^1.3.0" }, "optionalDependencies": { "@node-rs/crc32": "^1.10.6", "lz4-napi": "^2.9.0", "snappy": "^7.3.3" } }, "sha512-kUlzdoP6UUhKAfD4IT0oN2z15JPkSA/bzcn4kLXdOd04WU9LYv6V5OP8bSG3LRnNZhJEu9bZbCyfH8mk37BSfw=="],
 
     "@redis/bloom": ["@redis/bloom@5.10.0", "", { "peerDependencies": { "@redis/client": "^5.10.0" } }, "sha512-doIF37ob+l47n0rkpRNgU8n4iacBlKM9xLiP1LtTZTvz8TloJB8qx/MgvhMhKdYG+CvCY2aPBnN2706izFn/4A=="],
 
@@ -179,7 +179,7 @@
 
     "@tybys/wasm-util": ["@tybys/wasm-util@0.10.1", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg=="],
 
-    "@types/node": ["@types/node@25.2.0", "", { "dependencies": { "undici-types": "~7.16.0" } }, "sha512-DZ8VwRFUNzuqJ5khrvwMXHmvPe+zGayJhr2CDNiKB1WBE1ST8Djl00D0IC4vvNmHMdj6DlbYRIaFE7WHjlDl5w=="],
+    "@types/node": ["@types/node@25.2.2", "", { "dependencies": { "undici-types": "~7.16.0" } }, "sha512-BkmoP5/FhRYek5izySdkOneRyXYN35I860MFAGupTdebyE66uZaR+bXLHq8k4DirE5DwQi3NuhvRU1jqTVwUrQ=="],
 
     "@types/uuid": ["@types/uuid@11.0.0", "", { "dependencies": { "uuid": "*" } }, "sha512-HVyk8nj2m+jcFRNazzqyVKiZezyhDKrGUA3jlEcg/nZ6Ms+qHwocba1Y/AaVaznJTAM9xpdFSh+ptbNrhOGvZA=="],
 

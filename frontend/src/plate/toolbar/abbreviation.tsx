@@ -18,11 +18,13 @@ export const Abbreviation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [localShort, setLocalShort] = useState('');
 
+  const { focus } = editorRef.tf;
+
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       if (e.key === Keys.Escape) {
         setIsOpen(false);
-        editorRef.tf.focus();
+        focus();
       }
 
       if (e.shiftKey && isMetaKey(e) && e.key.toLowerCase() === 'f') {
@@ -34,7 +36,7 @@ export const Abbreviation = () => {
     window.addEventListener('keydown', listener);
 
     return () => window.removeEventListener('keydown', listener);
-  }, [editorRef.tf.focus]);
+  }, [focus]);
 
   const onAdd = async () => {
     const short = localShort.trim();

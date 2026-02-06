@@ -5,13 +5,15 @@ import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
 import type { INavEmployee } from '@app/types/bruker';
 import { parseISO } from 'date-fns';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { EMPTY_MEDUNDERSKRIVERE, type Return } from './use-set-medunderskriver';
 
 export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDERSKRIVERE): Return => {
   const [setRol, { isLoading: isUpdating }] = useSetRolMutation({
     fixedCacheKey: getFixedCacheKey(oppgaveId),
   });
+
+  const onChangeRef = useRef<OnChange>(() => Promise.resolve());
 
   const onChange: OnChange = useCallback(
     async (toNavIdent, fromNavIdent) => {
@@ -29,7 +31,7 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
           label: 'Rådgivende overlege',
           fromNavIdent,
           toNavIdent,
-          onChange,
+          onChange: onChangeRef.current,
           name,
           timestamp,
         });
@@ -39,6 +41,8 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
     },
     [rol, oppgaveId, setRol],
   );
+
+  onChangeRef.current = onChange;
 
   return { onChange, isUpdating };
 };

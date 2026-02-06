@@ -48,7 +48,7 @@ export const EditLogiskVedlegg = ({
     }
   }, []);
 
-  useEffect(setCaretAtEnd, []);
+  useEffect(setCaretAtEnd, [setCaretAtEnd]);
 
   const setContent = useCallback((content: string) => {
     if (ref.current !== null) {

@@ -61,7 +61,7 @@ export const TimelineItem = ({
       <Detail>{isoDateTimeToPretty(timestamp)}</Detail>
       {popover === null ? null : <TimelinePopover buttonText={popover.buttonText}>{popover.content}</TimelinePopover>}
       {hideNext ? null : (
-        <ChevronRightIcon aria-hidden className="-translate-y-1/2 -translate-x-[22.5%] absolute top-1/2 left-full" />
+        <ChevronRightIcon aria-hidden className="absolute top-1/2 left-full -translate-x-[22.5%] -translate-y-1/2" />
       )}
     </VStack>
   </Box>

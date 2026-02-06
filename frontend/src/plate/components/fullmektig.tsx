@@ -83,7 +83,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
           <Button
             data-color="neutral"
             style={{}}
-            className="-translate-y-1/2 absolute top-1/2 right-full hidden group-hover/placeholder:block"
+            className="absolute top-1/2 right-full hidden -translate-y-1/2 group-hover/placeholder:block"
             contentEditable
             suppressContentEditableWarning
             variant="tertiary"
