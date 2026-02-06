@@ -1,5 +1,5 @@
 import { validateBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
-import { PdfDocumentViewer } from '@app/components/pdf/pdf-document-viewer';
+import { KabalPdfViewer } from '@app/components/kabal-pdf-viewer';
 import {
   useGetOrCreateQuery,
   useSetBehandlingstidDateMutation,
@@ -90,7 +90,7 @@ const PdfBody = ({ id }: { id: string }) => {
   const pdfUrl = `/api/kabal-api/behandlinger/${id}/forlenget-behandlingstid-draft/pdf`;
 
   return (
-    <PdfDocumentViewer
+    <KabalPdfViewer
       pdfs={[{ title: 'Forlenget behandlingstid', url: pdfUrl, query: { refreshKey: refreshKey.toString(10) } }]}
     />
   );

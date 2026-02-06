@@ -1,11 +1,11 @@
-import { computeHighlights } from '@app/components/pdf/search/search';
-import type { PageHighlights, SearchMatch } from '@app/components/pdf/search/types';
-import type { RotationDegrees } from '@app/components/pdf/types';
-import { isMetaKey, Keys, MOD_KEY_TEXT } from '@app/keys';
 import { ChevronLeftIcon, ChevronRightIcon, MagnifyingGlassIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, Tooltip } from '@navikt/ds-react';
-import { TextChangeCase } from '@styled-icons/fluentui-system-regular';
 import { type Dispatch, type KeyboardEvent, type SetStateAction, useCallback, useEffect, useState } from 'react';
+import { CaseSensitiveIcon } from '../lib/case-sensitive-icon';
+import { isMetaKey, Keys, MOD_KEY_TEXT } from '../lib/keys';
+import type { RotationDegrees } from '../types';
+import { computeHighlights } from './search';
+import type { PageHighlights, SearchMatch } from './types';
 
 type PdfSearchProps = {
   isSearchOpen: boolean;
@@ -235,7 +235,7 @@ const PdfSearchUI = ({
 
       <Tooltip content="Krev nøyaktig samsvar med store og små bokstaver">
         <Button
-          icon={<TextChangeCase aria-hidden width={20} />}
+          icon={<CaseSensitiveIcon aria-hidden width={20} />}
           size="xsmall"
           role="switch"
           aria-checked={caseSensitive}

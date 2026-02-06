@@ -1,17 +1,14 @@
-import { getA4Dimensions } from '@app/components/pdf/pdf-section-placeholder';
-import { RotatablePage } from '@app/components/pdf/rotatable-page';
-import type { HighlightRect } from '@app/components/pdf/search/types';
-import { StickyHeader } from '@app/components/pdf/sticky-header';
-import type { PdfEntry } from '@app/components/pdf/types';
-import { usePdfData } from '@app/components/pdf/use-pdf-data';
-import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
-import { GlobalWorkerOptions, getDocument, type PDFDocumentProxy, type PDFPageProxy } from 'pdfjs-dist';
+import { getDocument, type PDFDocumentProxy, type PDFPageProxy } from 'pdfjs-dist';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
-// Ensure pdfjs worker is configured (idempotent)
-GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).href;
+import { usePdfViewerConfig } from './context';
+import { getA4Dimensions } from './pdf-section-placeholder';
+import { RotatablePage } from './rotatable-page';
+import type { HighlightRect } from './search/types';
+import { StickyHeader } from './sticky-header';
+import type { PdfEntry } from './types';
+import { usePdfData } from './use-pdf-data';
 
 interface LoadedPdfSectionProps {
   pdf: PdfEntry;
@@ -32,12 +29,12 @@ export const LoadedPdfSection = ({
   highlightsByPage,
   currentMatchIndex,
 }: LoadedPdfSectionProps) => {
+  const { ErrorActions } = usePdfViewerConfig();
   const { data, loading, error, refresh } = usePdfData(pdf.url, pdf.query);
   const [pdfDocument, setPdfDocument] = useState<PDFDocumentProxy | null>(null);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [loadedData, setLoadedData] = useState<Blob | null>(null);
   const [pages, setPages] = useState<PDFPageProxy[]>([]);
-  const [fixPdf, isFixing] = useFixPdf(refresh);
   const [currentPage, setCurrentPage] = useState(1);
   const internalPageRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
@@ -172,7 +169,7 @@ export const LoadedPdfSection = ({
           currentPage={null}
           numPages={null}
           newTab={pdf.newTab}
-          variant={pdf.variant}
+          headerExtra={pdf.headerExtra}
           isLoading={loading}
           refresh={refresh}
         />
@@ -181,13 +178,7 @@ export const LoadedPdfSection = ({
           <Alert variant="error" size="small">
             <HStack gap="space-16" align="center">
               <Heading size="small">Feil ved lasting av PDF</Heading>
-              <BodyShort>
-                Hvis dette er et brev som er skrevet i Kabal kan det hende det hjelper å{' '}
-                <Button size="small" variant="primary" onClick={fixPdf} loading={isFixing}>
-                  Åpne brevutformingen på nytt
-                </Button>
-                .
-              </BodyShort>
+              {ErrorActions !== undefined ? <ErrorActions refresh={refresh} /> : null}
               <Button
                 data-color="neutral"
                 variant="secondary"
@@ -220,7 +211,7 @@ export const LoadedPdfSection = ({
         currentPage={currentPage}
         numPages={numPages}
         newTab={pdf.newTab}
-        variant={pdf.variant}
+        headerExtra={pdf.headerExtra}
         isLoading={loading}
         refresh={refresh}
       />
@@ -253,26 +244,4 @@ export const LoadedPdfSection = ({
       </div>
     </>
   );
-};
-
-// ---------- helpers ----------
-
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const useFixPdf = (refresh: () => void): [() => Promise<void>, boolean] => {
-  const { setValue } = useSmartEditorEnabled();
-  const [isLoading, setIsLoading] = useState(false);
-
-  return [
-    async () => {
-      setIsLoading(true);
-      setValue(false);
-      await wait(200);
-      setValue(true);
-      await wait(5000);
-      refresh();
-      setIsLoading(false);
-    },
-    isLoading,
-  ];
 };

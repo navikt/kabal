@@ -1,8 +1,10 @@
 import { canOpenInKabal } from '@app/components/documents/filetype';
 import { TabContext } from '@app/components/documents/tab-context';
-import { PdfDocumentViewer, type PdfEntry } from '@app/components/pdf/pdf-document-viewer';
+import { KabalPdfViewer } from '@app/components/kabal-pdf-viewer';
+import type { PdfEntry } from '@app/components/pdf/pdf-document-viewer';
 import { toast } from '@app/components/toast/store';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
+import { Variant } from '@app/components/view-pdf/variant';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useShownDocuments } from '@app/hooks/use-shown-documents';
@@ -88,17 +90,17 @@ export const ViewPDF = () => {
             id: tabId,
             onClick: createNewTabClickHandler(tabId, newTabUrl, getTabRef, setTabRef),
           },
-          variant: isArchived
-            ? {
-                showsArchivedDocument: true,
-                showsPol,
-                showsFeil,
-                hasRedactedDocuments: docHasRedacted,
-                hasAccessToArchivedDocuments: docHasAccessToArchive,
-                showRedacted: docShowRedacted,
-                setShowRedacted: (value: boolean) => setShowRedactedForDoc(tabId, value),
-              }
-            : undefined,
+          headerExtra: isArchived ? (
+            <Variant
+              showsArchivedDocument
+              showsPol={showsPol}
+              showsFeil={showsFeil}
+              hasRedactedDocuments={docHasRedacted}
+              hasAccessToArchivedDocuments={docHasAccessToArchive}
+              showRedacted={docShowRedacted}
+              setShowRedacted={(value: boolean) => setShowRedactedForDoc(tabId, value)}
+            />
+          ) : undefined,
         };
       }),
     [
@@ -135,7 +137,7 @@ export const ViewPDF = () => {
     );
   }
 
-  return <PdfDocumentViewer pdfs={pdfs} onClose={closePdfViewer} />;
+  return <KabalPdfViewer pdfs={pdfs} onClose={closePdfViewer} />;
 };
 
 const EMPTY_DOCUMENTS: IDocument[] = [];

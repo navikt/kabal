@@ -8,7 +8,7 @@ import { SetDocumentType } from '@app/components/documents/new-documents/new-doc
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@app/components/documents/set-filename';
-import { PdfDocumentViewer } from '@app/components/pdf/pdf-document-viewer';
+import { KabalPdfViewer } from '@app/components/kabal-pdf-viewer';
 import { isSendError } from '@app/components/receivers/is-send-error';
 import { Receivers } from '@app/components/receivers/receivers';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
@@ -149,7 +149,7 @@ export const DocumentModalContent = ({
           <Errors />
         </VStack>
 
-        {pdfUrl === undefined ? null : <PdfDocumentViewer pdfs={[{ title: document.tittel, url: pdfUrl }]} />}
+        {pdfUrl === undefined ? null : <KabalPdfViewer pdfs={[{ title: document.tittel, url: pdfUrl }]} />}
       </Modal.Body>
       <Modal.Footer className="items-center">
         <AccessErrorsSummary

@@ -1,8 +1,8 @@
-import { MAX_SCALE, MIN_SCALE } from '@app/components/pdf/constants';
-import { clamp } from '@app/functions/clamp';
 import { ChevronUpDownIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
+import { MAX_SCALE, MIN_SCALE } from './constants';
+import { clamp } from './lib/clamp';
 
 interface Props {
   scrollContainerRef: React.RefObject<HTMLDivElement | null>;

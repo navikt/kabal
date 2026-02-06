@@ -1,26 +1,45 @@
-import { INITIAL_SCALE } from '@app/components/pdf/constants';
-import { useLazyLoading } from '@app/components/pdf/hooks/use-lazy-loading';
-import { useSectionVisibility } from '@app/components/pdf/hooks/use-section-visibility';
-import { useZoom } from '@app/components/pdf/hooks/use-zoom';
-import { PdfSection } from '@app/components/pdf/pdf-section';
-import { PdfToolbar } from '@app/components/pdf/pdf-toolbar';
-import type { HighlightRect, PageHighlights } from '@app/components/pdf/search/types';
-import type { PdfEntry } from '@app/components/pdf/types';
 import { Box, VStack } from '@navikt/ds-react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { GlobalWorkerOptions } from 'pdfjs-dist';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { INITIAL_SCALE } from './constants';
+import { type PdfViewerConfig, PdfViewerProvider } from './context';
+import { useLazyLoading } from './hooks/use-lazy-loading';
+import { useSectionVisibility } from './hooks/use-section-visibility';
+import { useZoom } from './hooks/use-zoom';
+import { PdfSection } from './pdf-section';
+import { PdfToolbar } from './pdf-toolbar';
+import type { HighlightRect, PageHighlights } from './search/types';
+import type { PdfEntry } from './types';
 
-export type { NewTabProps, PdfEntry } from '@app/components/pdf/types';
+export type { PdfViewerConfig } from './context';
+export type { NewTabProps, PdfEntry } from './types';
 
 export interface PdfDocumentViewerProps {
   /** List of PDFs to render in sequence */
   pdfs: PdfEntry[];
+  /** URL to the PDF.js worker script (e.g. `new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).href`). */
+  workerSrc: string;
   /** Shows close button when provided — called when the user clicks the close button */
   onClose?: () => void;
+  /** Optional configuration overrides for dark mode, rotation persistence, error handling, etc. */
+  config?: Partial<PdfViewerConfig>;
 }
 
 const PADDING = 16;
 
-export const PdfDocumentViewer = ({ pdfs, onClose }: PdfDocumentViewerProps) => {
+export const PdfDocumentViewer = ({ pdfs, workerSrc, onClose, config }: PdfDocumentViewerProps) => (
+  <PdfViewerProvider config={config}>
+    <PdfDocumentViewerInner pdfs={pdfs} workerSrc={workerSrc} onClose={onClose} />
+  </PdfViewerProvider>
+);
+
+interface PdfDocumentViewerInnerProps {
+  pdfs: PdfEntry[];
+  workerSrc: string;
+  onClose?: () => void;
+}
+
+const PdfDocumentViewerInner = ({ pdfs, workerSrc, onClose }: PdfDocumentViewerInnerProps) => {
   const [scale, setScale] = useState(INITIAL_SCALE);
   const [searchHighlights, setSearchHighlights] = useState<PageHighlights[]>([]);
   const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
@@ -29,6 +48,11 @@ export const PdfDocumentViewer = ({ pdfs, onClose }: PdfDocumentViewerProps) => 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const pageRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Configure PDF.js worker (idempotent — safe to call on every render).
+  useEffect(() => {
+    GlobalWorkerOptions.workerSrc = workerSrc;
+  }, [workerSrc]);
 
   const isSinglePdf = pdfs.length === 1;
 

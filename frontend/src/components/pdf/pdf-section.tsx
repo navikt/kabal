@@ -1,9 +1,9 @@
-import { LoadedPdfSection } from '@app/components/pdf/loaded-pdf-section';
-import { PdfSectionPlaceholder } from '@app/components/pdf/pdf-section-placeholder';
-import type { HighlightRect } from '@app/components/pdf/search/types';
-import type { PdfEntry } from '@app/components/pdf/types';
+import { LoadedPdfSection } from './loaded-pdf-section';
+import { PdfSectionPlaceholder } from './pdf-section-placeholder';
+import type { HighlightRect } from './search/types';
+import type { PdfEntry } from './types';
 
-export type { NewTabProps, PdfEntry } from '@app/components/pdf/types';
+export type { NewTabProps, PdfEntry } from './types';
 
 interface PdfSectionProps {
   pdf: PdfEntry;

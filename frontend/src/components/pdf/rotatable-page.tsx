@@ -1,12 +1,12 @@
-import { PdfPage } from '@app/components/pdf/page';
-import { HighlightLayer } from '@app/components/pdf/search/highlight-layer';
-import type { HighlightRect } from '@app/components/pdf/search/types';
-import type { RotationDegrees } from '@app/components/pdf/types';
-import { usePdfRotation } from '@app/hooks/settings/use-setting';
 import { RotateLeftIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import type { PDFPageProxy } from 'pdfjs-dist';
 import { type RefCallback, useCallback } from 'react';
+import { useRotation } from './hooks/use-rotation';
+import { PdfPage } from './page';
+import { HighlightLayer } from './search/highlight-layer';
+import type { HighlightRect } from './search/types';
+import type { RotationDegrees } from './types';
 
 interface RotatablePageProps {
   page: PDFPageProxy;
@@ -18,7 +18,7 @@ interface RotatablePageProps {
 }
 
 export const RotatablePage = ({ page, url, scale, highlights, currentMatchIndex, setPageRef }: RotatablePageProps) => {
-  const { value: rotation = 0, setValue: setRotation } = usePdfRotation(url, page.pageNumber);
+  const { rotation, setRotation } = useRotation(url, page.pageNumber);
 
   const refCallback: RefCallback<HTMLDivElement> = useCallback(
     (el) => {
@@ -28,7 +28,7 @@ export const RotatablePage = ({ page, url, scale, highlights, currentMatchIndex,
   );
 
   const handleRotate = useCallback(() => {
-    setRotation((prev = 0) => ((prev - 90 + 360) % 360) as RotationDegrees);
+    setRotation((prev) => ((prev - 90 + 360) % 360) as RotationDegrees);
   }, [setRotation]);
 
   const hasHighlights = highlights !== undefined && highlights.length > 0;

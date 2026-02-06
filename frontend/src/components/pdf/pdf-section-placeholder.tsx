@@ -1,5 +1,5 @@
-import { StickyHeader } from '@app/components/pdf/sticky-header';
 import { BodyShort, Loader, VStack } from '@navikt/ds-react';
+import { StickyHeader } from './sticky-header';
 
 /** A4 page width in PDF points (72 DPI). */
 export const A4_WIDTH_PT = 595;

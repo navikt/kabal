@@ -1,4 +1,4 @@
-import type { HighlightRect, PageHighlights, SearchMatch } from '@app/components/pdf/search/types';
+import type { HighlightRect, PageHighlights, SearchMatch } from './types';
 
 const ESCAPE_QUERY_REGEX = /[.*+?^${}()|[\]\\]/g;
 

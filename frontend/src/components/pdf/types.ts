@@ -1,5 +1,3 @@
-import type { VariantProps } from '@app/components/view-pdf/variant';
-
 export type RotationDegrees = 0 | 90 | 180 | 270;
 
 export interface NewTabProps {
@@ -17,6 +15,6 @@ export interface PdfEntry {
   query?: Record<string, string>;
   /** New-tab link configuration */
   newTab?: NewTabProps;
-  /** Variant / redaction display */
-  variant?: VariantProps;
+  /** Optional extra content rendered in the sticky header (e.g. variant tags, redaction switches) */
+  headerExtra?: React.ReactNode;
 }

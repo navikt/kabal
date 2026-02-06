@@ -1,7 +1,7 @@
-import { MAX_SCALE, MIN_SCALE, SCALE_STEP, SCROLL_STEP } from '@app/components/pdf/constants';
-import { snapDown, snapUp } from '@app/functions/snap';
-import { isMetaKey, Keys } from '@app/keys';
 import { useCallback, useEffect } from 'react';
+import { MAX_SCALE, MIN_SCALE, SCALE_STEP, SCROLL_STEP } from '../constants';
+import { isMetaKey, Keys } from '../lib/keys';
+import { snapDown, snapUp } from '../lib/snap';
 
 interface UseZoomParams {
   /** Ref to the container element that captures keyboard and wheel events. */

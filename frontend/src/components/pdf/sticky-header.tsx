@@ -1,15 +1,14 @@
-import type { NewTabProps } from '@app/components/pdf/types';
-import { ReloadButton } from '@app/components/view-pdf/reload-button';
-import { Variant, type VariantProps } from '@app/components/view-pdf/variant';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Tag, Tooltip } from '@navikt/ds-react';
+import { ReloadButton } from './reload-button';
+import type { NewTabProps } from './types';
 
 interface StickyHeaderProps {
   title: string;
   currentPage: number | null;
   numPages: number | null;
   newTab?: NewTabProps;
-  variant?: VariantProps;
+  headerExtra?: React.ReactNode;
   isLoading: boolean;
   refresh: () => void;
 }
@@ -19,7 +18,7 @@ export const StickyHeader = ({
   currentPage,
   numPages,
   newTab,
-  variant,
+  headerExtra,
   isLoading,
   refresh,
 }: StickyHeaderProps) => (
@@ -50,7 +49,7 @@ export const StickyHeader = ({
       </HStack>
 
       <HStack gap="space-4" align="center" wrap={false}>
-        {variant !== undefined ? <Variant {...variant} /> : null}
+        {headerExtra !== undefined ? headerExtra : null}
 
         <Tag data-color="brand-blue" variant="strong" size="xsmall">
           {currentPage === null || numPages === null

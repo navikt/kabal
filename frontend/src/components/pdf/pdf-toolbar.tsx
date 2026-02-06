@@ -1,10 +1,10 @@
-import { FitHeight } from '@app/components/pdf/fit-height';
-import { Scale } from '@app/components/pdf/scale';
-import { PdfSearch } from '@app/components/pdf/search/pdf-search';
-import type { PageHighlights } from '@app/components/pdf/search/types';
-import type { RotationDegrees } from '@app/components/pdf/types';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Tag, Tooltip } from '@navikt/ds-react';
+import { FitHeight } from './fit-height';
+import { Scale } from './scale';
+import { PdfSearch } from './search/pdf-search';
+import type { PageHighlights } from './search/types';
+import type { RotationDegrees } from './types';
 
 interface PdfToolbarProps {
   scale: number;
