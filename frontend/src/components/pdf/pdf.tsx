@@ -38,7 +38,7 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
           <HStack gap="space-16" align="center">
             <Heading size="small">Feil ved lasting av PDF</Heading>
             <BodyShort>
-              Hvis dette er et brev som er skrevet i Kabal kan det hende det hjelper å{' '}
+              Hvis dette er et brev som er skrevet i Kabal kan det hende det hjelper å:{' '}
               <Button size="small" variant="primary" onClick={fixPdf} loading={isLoading}>
                 Åpne brevutformingen på nytt
               </Button>
@@ -118,42 +118,7 @@ export const usePdfData = (url: string | undefined, query?: Record<string, strin
         return `${URL.createObjectURL(blob)}${PDFparams}`;
       }
 
-      const { status } = response;
-
-      if (status === 401) {
-        setError('Ikke innlogget');
-        toast.error(<ErrorMessage error="Ikke innlogget" />);
-
-        if (ENVIRONMENT.isDeployed) {
-          window.location.assign('/oauth2/login');
-        }
-
-        return;
-      }
-
-      if (!(response.headers.get('content-type')?.includes('application/json') ?? false)) {
-        const text = await response.text();
-
-        setError(text);
-        toast.error(<ErrorMessage error={text} />);
-
-        return;
-      }
-
-      const json = await response.json();
-
-      if (isKabalApiErrorData(json)) {
-        setError(`${json.title}: ${json.status} - ${json.detail}`);
-        toast.error(<ErrorMessage error={json} />);
-
-        return;
-      }
-
-      const text = JSON.stringify(json);
-      setError(`Ukjent feil (${status}) - ${text}`);
-      toast.error(<ErrorMessage error={{ status, title: 'Ukjent feil', detail: text }} />);
-
-      return;
+      await handleError(response, setError);
     } catch (e) {
       if (e instanceof DOMException && e.name === 'AbortError') {
         return;
@@ -189,18 +154,53 @@ const ErrorMessage = ({ error }: { error: string | KabalApiErrorData }) => (
       Feil ved henting av PDF
     </Heading>
 
-    <BodyShort size="small" spacing>
-      Ta kontakt med Team Klage på Teams.
-    </BodyShort>
-
     {isKabalApiErrorData(error) ? (
-      <>
+      <VStack gap="space-8">
         <Section heading="Tittel">{error.title}</Section>
+        {error.detail === undefined ? null : <Section heading="Detaljer">{error.detail}</Section>}
         <Section heading="Statuskode">{error.status}</Section>
-        <Section heading="Detaljer">{error.detail}</Section>
-      </>
+      </VStack>
     ) : (
       <Section heading="Detaljer">{error}</Section>
     )}
   </VStack>
 );
+
+const handleError = async (response: Response, setError: (error: string) => void) => {
+  const { status } = response;
+
+  if (status === 401) {
+    setError('Ikke innlogget');
+    toast.error(<ErrorMessage error="Ikke innlogget" />);
+
+    if (ENVIRONMENT.isDeployed) {
+      window.location.assign('/oauth2/login');
+    }
+
+    return;
+  }
+
+  const contentType = response.headers.get('content-type') ?? '';
+
+  if (contentType.includes('application/json') || contentType.includes('application/problem+json')) {
+    const json = await response.json();
+
+    if (isKabalApiErrorData(json)) {
+      setError(`${json.title} (${json.status})${json.detail === undefined ? '' : `: ${json.detail}`}`);
+      toast.error(<ErrorMessage error={json} />);
+
+      return;
+    }
+
+    const text = JSON.stringify(json);
+    setError(`Ukjent feil (${status}) - ${text}`);
+    toast.error(<ErrorMessage error={{ status, title: 'Ukjent feil', detail: text }} />);
+
+    return;
+  }
+
+  const text = await response.text();
+
+  setError(text);
+  toast.error(<ErrorMessage error={text} />);
+};
