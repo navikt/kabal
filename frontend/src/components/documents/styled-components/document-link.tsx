@@ -49,19 +49,19 @@ interface EllipsisTitleProps {
 const EllipsisTitle = ({ children, className, ...rest }: EllipsisTitleProps) => {
   const shouldShowTooltip = children.length > 35;
 
+  const span = (
+    <span {...rest} className={`w-full truncate font-normal ${className}`}>
+      {children}
+    </span>
+  );
+
   if (!shouldShowTooltip) {
-    return (
-      <span {...rest} className={`w-full truncate font-normal ${className}`}>
-        {children}
-      </span>
-    );
+    return span;
   }
 
   return (
     <Tooltip content={children} delay={500}>
-      <span {...rest} className={`w-full truncate font-normal ${className}`}>
-        {children}
-      </span>
+      {span}
     </Tooltip>
   );
 };
