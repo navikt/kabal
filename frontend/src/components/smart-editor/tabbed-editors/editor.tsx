@@ -28,7 +28,8 @@ import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
 import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
-import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { reduxStore } from '@app/redux/configure-store';
+import { documentsQuerySlice, useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { isObject } from '@grafana/faro-web-sdk';
@@ -127,6 +128,19 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         if (event.code === 4403) {
           yjs.connect(); // Reconnect immediately to regain access, with new access rights.
           return;
+        }
+
+        if (event.code === 4404) {
+          console.debug('Code 4404 - Document not found. Destroying Yjs connection.');
+          setReadOnly(true);
+          setIsConnected(false);
+          yjs.destroy();
+
+          reduxStore.dispatch(
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgave.id, (documents) =>
+              documents.filter((document) => document.id !== id && document.parentId !== id),
+            ),
+          );
         }
 
         try {
