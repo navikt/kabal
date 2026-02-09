@@ -59,7 +59,7 @@ interface MultiSelectDropdownProps<T extends string | number> extends CommonProp
 export const MultiSelectDropdown = <T extends string | number>({
   selected,
   onChange,
-  options,
+  options: _options,
   children,
   style,
   className,
@@ -71,9 +71,9 @@ export const MultiSelectDropdown = <T extends string | number>({
   'data-testid': testId,
   showCounter = true,
 }: MultiSelectDropdownProps<T>) => {
-  const selectedOptions = useMemo(
-    () => (selected || []).map((id) => options.find((option) => option.value === id)).filter((v) => v !== undefined),
-    [options, selected],
+  const selectedCount = useMemo(
+    () => (selected || []).filter((id) => allOptions.includes(id)).length,
+    [allOptions, selected],
   );
 
   return (
@@ -81,7 +81,7 @@ export const MultiSelectDropdown = <T extends string | number>({
       <ActionMenu>
         <Trigger variant={variant}>
           {label}
-          {showCounter ? ` (${selectedOptions.length})` : null}
+          {showCounter ? ` (${selectedCount})` : null}
         </Trigger>
 
         <ActionMenu.Content className="relative max-h-[90vh]">
