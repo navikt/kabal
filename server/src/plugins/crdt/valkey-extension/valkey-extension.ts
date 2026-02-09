@@ -105,12 +105,12 @@ export class ValkeyExtension implements Extension {
     }
 
     if (this.instance !== undefined && !this.instance.documents.has(documentName)) {
-      log.warn({
+      log.debug({
         msg: 'Loaded document was not in documents map. Adding to documents map.',
         data: { document: documentName, method: 'afterLoadDocument', identifier: this.#identifier },
       });
 
-      this.instance?.documents.set(documentName, document);
+      this.instance.documents.set(documentName, document);
     }
 
     // On document creation the node will connect to pub and sub channels for the document.
