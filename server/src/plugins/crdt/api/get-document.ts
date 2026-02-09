@@ -4,6 +4,7 @@ import { isObject } from '@app/functions/functions';
 import { generateTraceparent } from '@app/helpers/traceparent';
 import { getLogger } from '@app/logger';
 import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
+import { getCloseEvent } from '@app/plugins/crdt/close-event';
 import type { ConnectionContext } from '@app/plugins/crdt/context';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import type { Node } from 'slate';
@@ -23,7 +24,21 @@ export const getDocument = async (context: ConnectionContext): Promise<DocumentR
   });
 
   if (!res.ok) {
+    if (res.status === 404) {
+      log.error({
+        msg: 'Document not found. Closing connection.',
+        trace_id,
+        span_id,
+        tab_id,
+        client_version,
+        data: { behandlingId, dokumentId, statusCode: res.status },
+      });
+
+      throw getCloseEvent('DOCUMENT_NOT_FOUND', 4404);
+    }
+
     const msg = `Failed to fetch document. API responded with status code ${res.status}.`;
+
     log.error({
       msg,
       trace_id,
@@ -32,6 +47,7 @@ export const getDocument = async (context: ConnectionContext): Promise<DocumentR
       client_version,
       data: { behandlingId, dokumentId, statusCode: res.status },
     });
+
     throw new Error(msg);
   }
 
