@@ -62,7 +62,6 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
         upstream,
         prefix,
         cacheURLs: 10_000,
-        websocket: true,
         proxyPayloads: true,
         preHandler: async (req, reply) => {
           log.debug({
