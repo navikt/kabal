@@ -12,6 +12,7 @@ import { crdtPlugin } from '@app/plugins/crdt/crdt';
 import { debugPlugin } from '@app/plugins/debug/debug';
 import { documentPlugin } from '@app/plugins/document';
 import { documentSetPlugin } from '@app/plugins/document-set';
+import { serveDocumentViewerAssetsPlugin } from '@app/plugins/serve-document-viewer-assets';
 import { healthPlugin } from '@app/plugins/health';
 import { httpLoggerPlugin } from '@app/plugins/http-logger';
 import { navIdentPlugin } from '@app/plugins/nav-ident';
@@ -66,6 +67,7 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
   .register(documentPlugin)
   .register(documentSetPlugin)
   .register(serveAssetsPlugin)
+  .register(serveDocumentViewerAssetsPlugin)
   .register(serveIndexPlugin)
   .register(httpLoggerPlugin)
   .register(crdtPlugin)

@@ -1,40 +1,39 @@
-import { AppTheme, useAppTheme } from '@app/app-theme';
+import { useAppTheme } from '@app/app-theme';
 import { toast } from '@app/components/toast/store';
 import { Section } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
+import { parseJSON } from '@app/functions/parse-json';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { isKabalApiErrorData, type KabalApiErrorData } from '@app/types/errors';
 import { BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
-import {
-  type FetchErrorInfo,
-  KlagePdfViewer as KlagePdfViewerComponent,
-  type KlagePdfViewerProps,
-  type PdfViewerConfig,
-} from '@navikt/klage-pdf-viewer';
+import { type FetchErrorInfo, KlageFileViewer, type KlageFileViewerProps } from '@navikt/klage-file-viewer';
 // @ts-expect-error — Vite `?url` import: returns the resolved public URL as a string.
-import WORKER_SRC from '@navikt/klage-pdf-viewer/pdf-worker?url';
-import { useMemo, useState } from 'react';
+import EXCEL_WORKER_SRC from '@navikt/klage-file-viewer/excel-worker?url';
+// @ts-expect-error — Vite `?url` import: returns the resolved public URL as a string.
+import WORKER_SRC from '@navikt/klage-file-viewer/pdf-worker?url';
+import { useState } from 'react';
 
-export type { KlagePdfViewerProps } from '@navikt/klage-pdf-viewer';
+export type { FileEntry, KlageFileViewerProps } from '@navikt/klage-file-viewer';
 
 export const KabalPdfViewer = ({
-  config,
-  documentSetUrl: _documentSetUrl,
-  ...props
-}: Omit<KlagePdfViewerProps, 'workerSrc'> & { workerSrc?: string; documentSetUrl?: string | null }) => {
+  files,
+  onClose,
+  newTab,
+}: Pick<KlageFileViewerProps, 'files' | 'onClose' | 'newTab'>) => {
   const appTheme = useAppTheme();
 
-  const kabalConfig = useMemo<Partial<PdfViewerConfig>>(
-    () => ({
-      invertColors: appTheme === AppTheme.DARK,
-      onFetchError: handleKabalFetchError,
-      ErrorActions: KabalErrorActions,
-      ...config,
-    }),
-    [appTheme, config],
+  return (
+    <KlageFileViewer
+      files={files}
+      onClose={onClose}
+      newTab={newTab}
+      workerSrc={WORKER_SRC}
+      excelWorkerSrc={EXCEL_WORKER_SRC}
+      onFetchError={handleKabalFetchError}
+      errorComponent={KabalErrorActions}
+      theme={appTheme}
+    />
   );
-
-  return <KlagePdfViewerComponent workerSrc={WORKER_SRC} {...props} config={kabalConfig} />;
 };
 
 // ---------- error handling with toast + auth redirect ----------
@@ -50,7 +49,7 @@ const handleKabalFetchError = ({ status, body }: FetchErrorInfo): void => {
     return;
   }
 
-  const contentType = tryParseJson(body);
+  const contentType = parseJSON(body);
 
   if (contentType !== null && isKabalApiErrorData(contentType)) {
     toast.error(<ErrorToast error={contentType} />);
@@ -62,18 +61,10 @@ const handleKabalFetchError = ({ status, body }: FetchErrorInfo): void => {
   toast.error(<ErrorToast error={errorMessage} />);
 };
 
-const tryParseJson = (text: string): unknown => {
-  try {
-    return JSON.parse(text) as unknown;
-  } catch {
-    return null;
-  }
-};
-
 const ErrorToast = ({ error }: { error: string | KabalApiErrorData }) => (
   <VStack>
     <Heading size="xsmall" level="1" spacing>
-      Feil ved henting av PDF
+      Feil ved henting av fil
     </Heading>
 
     <BodyShort size="small" spacing>

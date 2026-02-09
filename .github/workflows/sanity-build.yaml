@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        apps: [frontend, server]
+        apps: [frontend, server, document-viewer]
     name: ${{ matrix.apps }} Sanity Build
     runs-on: ubuntu-latest
     steps:

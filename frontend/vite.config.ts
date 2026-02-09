@@ -23,6 +23,8 @@ export default defineConfig({
       '/kombinert-dokument': PROXY,
       '/nytt-dokument': PROXY,
       '/vedleggsoversikt': PROXY,
+      '/document-set': PROXY,
+      '/document-viewer': PROXY,
       '/smart-document-write-access': PROXY,
       '/version': PROXY,
       '/oauth': PROXY,

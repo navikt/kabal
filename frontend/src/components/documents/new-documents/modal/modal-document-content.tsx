@@ -149,7 +149,9 @@ export const DocumentModalContent = ({
           <Errors />
         </VStack>
 
-        {pdfUrl === undefined ? null : <KabalPdfViewer pdfs={[{ title: document.tittel, url: pdfUrl }]} />}
+        {pdfUrl === undefined ? null : (
+          <KabalPdfViewer files={[{ type: 'pdf', title: document.tittel, url: pdfUrl }]} />
+        )}
       </Modal.Body>
       <Modal.Footer className="items-center">
         <AccessErrorsSummary

@@ -88,6 +88,21 @@ jobs:
           cd frontend
           bun test
 
+      - name: Install document-viewer dependencies
+        shell: bash
+        env:
+          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: |
+          cd document-viewer
+          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
+          bun install --frozen-lockfile
+
+      - name: Build document-viewer
+        shell: bash
+        run: |
+          cd document-viewer
+          bun run build
+
       - name: Install server dependencies
         shell: bash
         env:

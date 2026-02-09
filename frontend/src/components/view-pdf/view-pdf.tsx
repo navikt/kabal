@@ -23,18 +23,18 @@ import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { Skjerming, VariantFormat } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum, type IDocument, type JournalfoertDokument } from '@app/types/documents/documents';
 import { Alert, Box, Loader, VStack } from '@navikt/ds-react';
-import type { PdfEntry } from '@navikt/klage-pdf-viewer';
+import type { FileEntry } from '@navikt/klage-file-viewer';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useMemo, useState } from 'react';
 import type { IShownArchivedDocument, IShownDocument } from './types';
-import { useDocumentSetUrl } from './use-document-set-url';
+import { useDocumentSet } from './use-document-set';
 
 export const ViewPDF = () => {
   const { remove: closePdfViewer } = useDocumentsPdfViewed();
   const { showDocumentList, isLoading } = useShownDocuments();
   const oppgaveId = useOppgaveId();
 
-  const documentSetUrl = useDocumentSetUrl();
+  const documentSet = useDocumentSet();
 
   const { data: documentsInProgress = EMPTY_DOCUMENTS } = useGetDocumentsQuery(oppgaveId);
   const { data: journalposter } = useGetArkiverteDokumenterQuery(oppgaveId);
@@ -56,12 +56,12 @@ export const ViewPDF = () => {
     [showDocumentList, documentsInProgress],
   );
 
-  const { pdfs, tabUrls } = useMemo(() => {
+  const { files, tabUrls } = useMemo(() => {
     if (oppgaveId === skipToken) {
-      return EMPTY_PDFS_AND_TAB_URLS;
+      return EMPTY_FILES_AND_TAB_URLS;
     }
 
-    const entries: PdfEntry[] = [];
+    const entries: FileEntry[] = [];
     const urls: string[] = [];
 
     for (const doc of expandedDocumentList) {
@@ -94,6 +94,7 @@ export const ViewPDF = () => {
       urls.push(tabUrl);
 
       entries.push({
+        type: 'pdf',
         title,
         url: inlineUrl,
         newTab: {
@@ -113,7 +114,7 @@ export const ViewPDF = () => {
       });
     }
 
-    return { pdfs: entries, tabUrls: urls };
+    return { files: entries, tabUrls: urls };
   }, [
     oppgaveId,
     expandedDocumentList,
@@ -137,7 +138,7 @@ export const ViewPDF = () => {
     );
   }
 
-  if (pdfs.length === 0) {
+  if (files.length === 0) {
     return (
       <Container>
         <Alert variant="error" size="small">
@@ -147,12 +148,12 @@ export const ViewPDF = () => {
     );
   }
 
-  return <KabalPdfViewer pdfs={pdfs} onClose={closePdfViewer} documentSetUrl={documentSetUrl} />;
+  return <KabalPdfViewer files={files} onClose={closePdfViewer} newTab={documentSet ?? undefined} />;
 };
 
 const EMPTY_DOCUMENTS: IDocument[] = [];
 const EMPTY_ARCHIVED: IArkivertDocument[] = [];
-const EMPTY_PDFS_AND_TAB_URLS: { pdfs: PdfEntry[]; tabUrls: string[] } = { pdfs: [], tabUrls: [] };
+const EMPTY_FILES_AND_TAB_URLS: { files: FileEntry[]; tabUrls: string[] } = { files: [], tabUrls: [] };
 
 interface DocumentInfo {
   inlineUrl: string | undefined;

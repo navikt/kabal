@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { ApiClientEnum } from '@app/config/config';
 import { getDuration } from '@app/helpers/duration';
 import { getProxyRequestHeaders } from '@app/helpers/prepare-request-headers';
@@ -6,12 +8,35 @@ import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
 import { SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
 import { Type, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import type { FastifyReply } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import { Value } from 'typebox/value';
 
 const log = getLogger('document-set');
 
 const METADATA_BASE_URL = KABAL_API_URL;
+
+// --- Document viewer template ---
+
+const TEMPLATE_PATH = path.join(process.cwd(), '../document-viewer/dist/index.html');
+
+const TEMPLATE = fs.existsSync(TEMPLATE_PATH)
+  ? fs.readFileSync(TEMPLATE_PATH, { encoding: 'utf8' })
+  : null;
+
+if (TEMPLATE === null) {
+  log.warn({ msg: 'Document viewer template not found. Document-set endpoints will return 503.', data: { path: TEMPLATE_PATH } });
+}
+
+// --- Embedded metadata types ---
+
+interface DocumentViewerMetadata {
+  navIdent: string;
+  documents: Array<{
+    title: string;
+    url: string;
+  }>;
+}
 
 // --- Archived document schemas ---
 
@@ -36,11 +61,6 @@ const ARCHIVED_PARAMS = Type.Object({
   ids: Type.String({ description: 'Encoded archived document IDs' }),
 });
 
-// TODO: Add variants to the archived document response when the API supports it.
-const ARCHIVED_RESPONSE = Type.Object({
-  documents: Type.Array(ArchivedApiDocumentSchema),
-});
-
 // --- DUA document schemas ---
 
 const DuaApiDocumentSchema = Type.Object({
@@ -55,18 +75,9 @@ interface IDuaApiDocument {
   parentId: string | null;
 }
 
-const DuaDocumentSchema = Type.Object({
-  id: Type.String(),
-  tittel: Type.String(),
-});
-
 const DUA_PARAMS = Type.Object({
   behandlingId: Type.String({ format: 'uuid' }),
   id: Type.String({ format: 'uuid' }),
-});
-
-const DUA_RESPONSE = Type.Object({
-  documents: Type.Array(DuaDocumentSchema),
 });
 
 // --- Vedleggsoversikt schemas ---
@@ -76,14 +87,40 @@ const VEDLEGGSOVERSIKT_PARAMS = Type.Object({
   id: Type.String({ format: 'uuid' }),
 });
 
-const VedleggsoversiktDocumentSchema = Type.Object({
-  id: Type.String(),
-  tittel: Type.Literal('Vedleggsoversikt'),
-});
+// --- HTML rendering ---
 
-const VEDLEGGSOVERSIKT_RESPONSE = Type.Object({
-  documents: Type.Array(VedleggsoversiktDocumentSchema),
-});
+const renderHtml = (reply: FastifyReply, title: string, metadata: DocumentViewerMetadata): ReturnType<FastifyReply['send']> => {
+  if (TEMPLATE === null) {
+    return reply.status(503).type('text/plain').send('Document viewer is not available.');
+  }
+
+  const metadataJson = JSON.stringify(metadata);
+
+  const html = TEMPLATE
+    .replace('<title>Dokumentvisning</title>', `<title>${escapeHtml(title)}</title>`)
+    .replace(
+      '<script type="application/json" id="document-viewer-metadata"></script>',
+      `<script type="application/json" id="document-viewer-metadata">${metadataJson}</script>`,
+    );
+
+  return reply.status(200).type('text/html').send(html);
+};
+
+const escapeHtml = (text: string): string =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+// --- PDF URL helpers ---
+
+const getArchivedPdfUrl = (journalpostId: string, dokumentInfoId: string): string =>
+  `/api/kabal-api/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}/pdf`;
+
+const getDuaPdfUrl = (behandlingId: string, documentId: string): string =>
+  `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/pdf`;
+
+const getVedleggsoversiktPdfUrl = (behandlingId: string, documentId: string): string =>
+  `/api/kabal-api/behandlinger/${behandlingId}/dokumenter/${documentId}/vedleggsoversikt/pdf`;
+
+// --- Plugin ---
 
 export const documentSetPlugin = fastifyPlugin(
   async (app) => {
@@ -97,15 +134,17 @@ export const documentSetPlugin = fastifyPlugin(
           schema: {
             tags: ['dokumenter'],
             params: ARCHIVED_PARAMS,
-            produces: ['application/json'],
-            response: { 200: ARCHIVED_RESPONSE },
+            produces: ['text/html'],
           },
         },
         async (req, reply) => {
           const references = decodeArchivedDocumentIds(req.params.ids);
 
           if (references.length === 0) {
-            return reply.status(200).send({ documents: [] });
+            return renderHtml(reply, 'Ingen dokumenter', {
+              navIdent: req.navIdent,
+              documents: [],
+            });
           }
 
           const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API, reply);
@@ -154,11 +193,21 @@ export const documentSetPlugin = fastifyPlugin(
 
           reply.addServerTiming('metadata_request_time', getDuration(metadataStart), 'Metadata Request Time');
 
-          const documents = metadataResults.filter(
+          const accessibleDocuments = metadataResults.filter(
             (metadata): metadata is IArchivedApiDocument => metadata?.hasAccess === true,
           );
 
-          return reply.status(200).send({ documents });
+          const documents = accessibleDocuments.map((doc) => ({
+            title: doc.title,
+            url: getArchivedPdfUrl(doc.journalpostId, doc.dokumentInfoId),
+          }));
+
+          const pageTitle = documents[0]?.title ?? 'Dokumentvisning';
+
+          return renderHtml(reply, pageTitle, {
+            navIdent: req.navIdent,
+            documents,
+          });
         },
       )
 
@@ -169,11 +218,7 @@ export const documentSetPlugin = fastifyPlugin(
           schema: {
             tags: ['dokumenter'],
             params: DUA_PARAMS,
-            produces: ['application/json'],
-            response: {
-              200: DUA_RESPONSE,
-              404: Type.Object({ error: Type.String() }),
-            },
+            produces: ['text/html'],
           },
         },
         async (req, reply) => {
@@ -197,7 +242,7 @@ export const documentSetPlugin = fastifyPlugin(
                 data: { status: response.status, behandlingId, id },
               });
 
-              return reply.status(404).send({ error: 'Failed to fetch documents in progress' });
+              return reply.status(404).type('text/plain').send('Failed to fetch documents in progress');
             }
 
             const json: unknown = await response.json();
@@ -208,7 +253,7 @@ export const documentSetPlugin = fastifyPlugin(
                 data: { behandlingId, id },
               });
 
-              return reply.status(404).send({ error: 'Invalid documents in progress response' });
+              return reply.status(404).type('text/plain').send('Invalid documents in progress response');
             }
 
             const allDocuments = json as IDuaApiDocument[];
@@ -216,17 +261,27 @@ export const documentSetPlugin = fastifyPlugin(
             const document = allDocuments.find((doc) => doc.id === id);
 
             if (document === undefined) {
-              return reply.status(404).send({ error: 'Document not found' });
+              return reply.status(404).type('text/plain').send('Document not found');
             }
 
             // If the document is a parent (no parentId), include it and all its attachments.
             // If the document is an attachment, include only that document.
             const isParent = document.parentId === null;
 
-            const documents = isParent ? [document, ...allDocuments.filter((doc) => doc.parentId === id)] : [document];
+            const matchedDocuments = isParent
+              ? [document, ...allDocuments.filter((doc) => doc.parentId === id)]
+              : [document];
 
-            return reply.status(200).send({
-              documents: documents.map(({ id, tittel }) => ({ id, tittel })),
+            const documents = matchedDocuments.map(({ id: docId, tittel }) => ({
+              title: tittel,
+              url: getDuaPdfUrl(behandlingId, docId),
+            }));
+
+            const pageTitle = documents[0]?.title ?? 'Dokumentvisning';
+
+            return renderHtml(reply, pageTitle, {
+              navIdent: req.navIdent,
+              documents,
             });
           } catch (error) {
             log.warn({
@@ -234,7 +289,7 @@ export const documentSetPlugin = fastifyPlugin(
               data: { behandlingId, id, error: String(error) },
             });
 
-            return reply.status(404).send({ error: 'Error fetching documents in progress' });
+            return reply.status(404).type('text/plain').send('Error fetching documents in progress');
           }
         },
       )
@@ -246,12 +301,24 @@ export const documentSetPlugin = fastifyPlugin(
           schema: {
             tags: ['dokumenter'],
             params: VEDLEGGSOVERSIKT_PARAMS,
-            produces: ['application/json'],
-            response: { 200: VEDLEGGSOVERSIKT_RESPONSE },
+            produces: ['text/html'],
           },
         },
-        async (req, reply) =>
-          reply.status(200).send({ documents: [{ id: req.params.id, tittel: 'Vedleggsoversikt' as const }] }),
+        async (req, reply) => {
+          const { behandlingId, id } = req.params;
+
+          const documents = [
+            {
+              title: 'Vedleggsoversikt',
+              url: getVedleggsoversiktPdfUrl(behandlingId, id),
+            },
+          ];
+
+          return renderHtml(reply, 'Vedleggsoversikt', {
+            navIdent: req.navIdent,
+            documents,
+          });
+        },
       );
   },
   { fastify: '5', name: 'document-set', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },

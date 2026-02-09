@@ -91,7 +91,9 @@ const PdfBody = ({ id }: { id: string }) => {
 
   return (
     <KabalPdfViewer
-      pdfs={[{ title: 'Forlenget behandlingstid', url: pdfUrl, query: { refreshKey: refreshKey.toString(10) } }]}
+      files={[
+        { type: 'pdf', title: 'Forlenget behandlingstid', url: pdfUrl, query: { refreshKey: refreshKey.toString(10) } },
+      ]}
     />
   );
 };

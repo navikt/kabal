@@ -6,6 +6,7 @@ ENV NPM_CONFIG_CACHE=/tmp
 WORKDIR /usr/src/app
 COPY server server
 COPY frontend frontend
+COPY document-viewer document-viewer
 
 WORKDIR /usr/src/app/server
 
