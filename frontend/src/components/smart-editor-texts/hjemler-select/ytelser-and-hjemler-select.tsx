@@ -75,7 +75,7 @@ export const YtelserAndHjemlerSelect = ({
   const label = `Ytelser (${ytelserCount}) og hjemler (${hjemlerCount})`;
 
   return (
-    <NestedFilterList options={options} selected={selected} onChange={onChange} data-testid="edit-text-hjemler-select">
+    <NestedFilterList options={options} selected={selected} onChange={onChange}>
       {label}
     </NestedFilterList>
   );

@@ -68,7 +68,7 @@ export const HjemlerSelect = ({ selected, onChange, includeNoneOption = false }:
   const label = `Hjemler (${hjemlerCount})`;
 
   return (
-    <NestedFilterList options={options} selected={selected} onChange={onChange} data-testid="edit-text-hjemler-select">
+    <NestedFilterList options={options} selected={selected} onChange={onChange}>
       {label}
     </NestedFilterList>
   );
