@@ -13,7 +13,7 @@ export const httpLoggerPlugin = fastifyPlugin(
     app.addHook('onResponse', async (req, res) => {
       const { url } = req;
 
-      if (url.endsWith('/isAlive') || url.endsWith('/isReady') || url.endsWith('/metrics')) {
+      if (url.endsWith('/isAlive') || url.endsWith('/isStarted') || url.endsWith('/metrics')) {
         return;
       }
 

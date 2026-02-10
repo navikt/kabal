@@ -49,7 +49,7 @@ fastify({ trustProxy: true, querystringParser, bodyLimit })
   .register(metricsPlugin, {
     endpoint: '/metrics',
     routeMetrics: {
-      routeBlacklist: ['/metrics', '/isAlive', '/isReady', '/swagger', '/swagger.json'],
+      routeBlacklist: ['/metrics', '/isAlive', '/isStarted', '/swagger', '/swagger.json'],
     },
   })
   .register(proxyVersionPlugin)

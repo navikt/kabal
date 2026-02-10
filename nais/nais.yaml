@@ -73,12 +73,12 @@ spec:
       access: readwrite
   liveness:
     path: /isAlive
-    initialDelay: 3
+    initialDelay: 0
     periodSeconds: 1
     timeout: 1
     failureThreshold: 10
-  readiness:
-    path: /isReady
+  startup:
+    path: /isStarted
     initialDelay: 3
     periodSeconds: 1
     timeout: 1
