@@ -8,7 +8,7 @@ import {
 import type { IGetMaltekstseksjonParams, TextTypes } from '@app/types/common-text-types';
 import { HStack } from '@navikt/ds-react';
 import { useSearchParams } from 'react-router-dom';
-import { HjemlerSelect } from './hjemler-select/hjemler-select';
+import { YtelserAndHjemlerSelect } from './hjemler-select/ytelser-and-hjemler-select';
 import { useTextQuery } from './hooks/use-text-query';
 
 interface Props {
@@ -47,19 +47,15 @@ export const Filters = ({ textType, className }: Props) => {
           selected={templateSectionIdList ?? []}
           onChange={(value) => setFilter('templateSectionIdList', value)}
           includeNoneOption
-          templatesSelectable
           includeDeprecated
-        >
-          Maler og seksjoner
-        </TemplateSectionSelect>
+        />
       ) : null}
 
       {hasYtelseHjemmelFilter ? (
-        <HjemlerSelect
+        <YtelserAndHjemlerSelect
           selected={ytelseHjemmelIdList ?? []}
           onChange={(value: string[]) => setFilter('ytelseHjemmelIdList', value)}
           includeNoneOption
-          ytelserSelectable
           ytelseIsWildcard
         />
       ) : null}

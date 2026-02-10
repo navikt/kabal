@@ -1,20 +1,26 @@
 import { NestedFilterList, type NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
 import { isIndeterminate } from '@app/components/smart-editor-texts/hjemler-select/is-indeterminate';
-import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
+import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@app/components/smart-editor-texts/types';
 import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
 import { useMemo } from 'react';
 import { COMMON_HJEMMEL_THRESHOLD, createHjemmelValue, useCounts, useGenerelleHjemler, useNoneOption } from './hooks';
 
-interface HjemlerSelectProps {
+interface YtelserAndHjemlerSelectProps {
   selected: string[];
   onChange: (selected: string[]) => void;
   includeNoneOption?: boolean;
+  ytelseIsWildcard?: boolean;
 }
 
-export const HjemlerSelect = ({ selected, onChange, includeNoneOption = false }: HjemlerSelectProps) => {
+export const YtelserAndHjemlerSelect = ({
+  selected,
+  onChange,
+  includeNoneOption = false,
+  ytelseIsWildcard = false,
+}: YtelserAndHjemlerSelectProps) => {
   const { data: ytelser = [] } = useKabalYtelserLatest();
   const generelleHjemler = useGenerelleHjemler();
-  const { hjemlerCount } = useCounts(selected);
+  const { ytelserCount, hjemlerCount } = useCounts(selected);
 
   const isGlobalSelected = selected.includes(GLOBAL);
 
@@ -22,8 +28,9 @@ export const HjemlerSelect = ({ selected, onChange, includeNoneOption = false }:
     () =>
       ytelser
         .map<NestedOption>(({ id: ytelseId, navn: ytelsenavn, lovKildeToRegistreringshjemler }) => {
+          const ytelseValue = ytelseIsWildcard ? `${ytelseId}${LIST_DELIMITER}${WILDCARD}` : ytelseId;
           const indeterminate =
-            !selected.includes(ytelseId) &&
+            !(ytelseIsWildcard || selected.includes(ytelseValue)) &&
             (isGlobalSelected ||
               lovKildeToRegistreringshjemler.some(({ registreringshjemler }) =>
                 registreringshjemler.some(
@@ -33,9 +40,9 @@ export const HjemlerSelect = ({ selected, onChange, includeNoneOption = false }:
               ));
 
           return {
-            type: OptionType.GROUP,
+            type: OptionType.OPTION,
             label: ytelsenavn,
-            value: ytelseId,
+            value: ytelseValue,
             indeterminate,
             filterValue: ytelsenavn,
             options: lovKildeToRegistreringshjemler.map<NestedOption>(({ id, navn, registreringshjemler }) => ({
@@ -46,7 +53,7 @@ export const HjemlerSelect = ({ selected, onChange, includeNoneOption = false }:
               options: registreringshjemler.map<NestedOption>((h) => ({
                 type: OptionType.OPTION,
                 value: createHjemmelValue(ytelseId, h.id),
-                indeterminate: isIndeterminate(selected, h.id, ytelseId),
+                indeterminate: !ytelseIsWildcard && isIndeterminate(selected, h.id, ytelseId),
                 label: h.navn,
                 filterValue: `${ytelsenavn} ${navn} ${h.navn}`,
               })),
@@ -60,12 +67,12 @@ export const HjemlerSelect = ({ selected, onChange, includeNoneOption = false }:
           filterValue: GLOBAL,
           options: generelleHjemler,
         }),
-    [generelleHjemler, isGlobalSelected, selected, ytelser],
+    [generelleHjemler, isGlobalSelected, selected, ytelseIsWildcard, ytelser],
   );
 
   const options = useNoneOption(ytelseOptions, includeNoneOption);
 
-  const label = `Hjemler (${hjemlerCount})`;
+  const label = `Ytelser (${ytelserCount}) og hjemler (${hjemlerCount})`;
 
   return (
     <NestedFilterList options={options} selected={selected} onChange={onChange} data-testid="edit-text-hjemler-select">

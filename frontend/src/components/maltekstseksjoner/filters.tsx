@@ -1,5 +1,5 @@
-import { HjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/hjemler-select';
-import { TemplateSectionSelect } from '@app/components/smart-editor-texts/query-filter-selects';
+import { YtelserAndHjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
+import { SectionSelect } from '@app/components/smart-editor-texts/query-filter-selects';
 import { UtfallSetFilter } from '@app/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
 import {
   useUpdateTemplateSectionIdListMutation,
@@ -28,17 +28,14 @@ export const Filters = ({ maltekst, query }: Props) => {
 
   return (
     <HStack gap="space-8" className="[grid-area:filters]">
-      <TemplateSectionSelect
+      <SectionSelect
         selected={maltekst.templateSectionIdList}
         onChange={(templateSectionIdList) => updateTemplateSection({ id: maltekst.id, templateSectionIdList, query })}
         includeDeprecated
-      >
-        Maler og seksjoner
-      </TemplateSectionSelect>
-      <HjemlerSelect
+      />
+      <YtelserAndHjemlerSelect
         selected={maltekst.ytelseHjemmelIdList}
         onChange={(ytelseHjemmelIdList) => updateYtelseHjemmel({ id: maltekst.id, ytelseHjemmelIdList, query })}
-        ytelserSelectable
       />
       <UtfallSetFilter
         selected={maltekst.utfallIdList}

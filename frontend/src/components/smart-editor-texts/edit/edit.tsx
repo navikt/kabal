@@ -3,6 +3,7 @@ import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-ref
 import { TextDraftActions } from '@app/components/smart-editor-texts/edit/draft-actions';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
 import { HjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/hjemler-select';
+import { YtelserAndHjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
 import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { TextModified } from '@app/components/smart-editor-texts/modified';
@@ -103,19 +104,22 @@ const Filters = ({ text, query, filters }: FiltersProps) => {
           <TemplateSectionSelect
             selected={templateSectionIdList}
             onChange={(v) => updateTemplateSectionIdList({ id, query, templateSectionIdList: v })}
-            templatesSelectable
             includeDeprecated
-          >
-            Maler og seksjoner
-          </TemplateSectionSelect>
+          />
         ) : null}
 
         {hasYtelseHjemmelFilter ? (
-          <HjemlerSelect
-            selected={ytelseHjemmelIdList}
-            onChange={(value) => updateYtelseHjemmelIdList({ id, query, ytelseHjemmelIdList: value })}
-            ytelserSelectable={textType !== REGELVERK_TYPE}
-          />
+          textType === REGELVERK_TYPE ? (
+            <HjemlerSelect
+              selected={ytelseHjemmelIdList}
+              onChange={(value) => updateYtelseHjemmelIdList({ id, query, ytelseHjemmelIdList: value })}
+            />
+          ) : (
+            <YtelserAndHjemlerSelect
+              selected={ytelseHjemmelIdList}
+              onChange={(value) => updateYtelseHjemmelIdList({ id, query, ytelseHjemmelIdList: value })}
+            />
+          )
         ) : null}
 
         {hasUtfallFilter ? (

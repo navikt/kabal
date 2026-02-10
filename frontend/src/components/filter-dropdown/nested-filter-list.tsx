@@ -19,7 +19,7 @@ export interface NestedOption extends IOption<string> {
 
 interface NestedDropdownProps extends BaseProps<string, NestedOption> {
   'data-testid': string;
-  children: string;
+  children: string | React.ReactNode;
 }
 
 const WILDCARD_REGEX = /.*/;
@@ -62,6 +62,7 @@ export const NestedFilterList = ({
       value={rawFilter}
       setValue={setRawFilter}
       allOptions={allOptions}
+      showCounter={false}
     >
       <div className="overflow-y-auto">
         <OptionsList

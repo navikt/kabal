@@ -50,7 +50,7 @@ export const FlatMultiSelectDropdown = <T extends string | number>(props: MultiS
 
 interface MultiSelectDropdownProps<T extends string | number> extends CommonProps<T> {
   children: ReactNode;
-  label: string;
+  label: string | ReactNode;
   value: string;
   setValue: (value: string) => void;
   allOptions: T[];
@@ -76,13 +76,17 @@ export const MultiSelectDropdown = <T extends string | number>({
     [options, selected],
   );
 
+  const labelWithCounter = useMemo(() => {
+    if (typeof label === 'string') {
+      return showCounter ? `${label} (${selectedOptions.length})` : label;
+    }
+    return label;
+  }, [label, selectedOptions.length, showCounter]);
+
   return (
     <div style={style} className={className} data-testid={testId}>
       <ActionMenu>
-        <Trigger variant={variant}>
-          {label}
-          {showCounter ? ` (${selectedOptions.length})` : null}
-        </Trigger>
+        <Trigger variant={variant}>{labelWithCounter}</Trigger>
 
         <ActionMenu.Content className="relative max-h-[90vh]">
           <Header<T> label={label} value={value} setValue={setValue} onChange={onChange} allOptions={allOptions} />
@@ -111,7 +115,7 @@ export const Trigger = ({ children, variant }: { children: ReactNode; variant: B
 );
 
 interface HeaderProps<T extends string | number> {
-  label: string;
+  label: string | ReactNode;
   value: string;
   setValue: (value: string) => void;
   onChange: (filters: T[]) => void;
@@ -124,25 +128,29 @@ export const Header = <T extends string | number>({
   setValue,
   onChange,
   allOptions: all,
-}: HeaderProps<T>) => (
-  <HStack wrap={false} className="sticky top-0 z-1 gap-2 bg-ax-bg-default">
-    <TextField
-      size="small"
-      autoFocus
-      className="grow"
-      placeholder="Filtrer"
-      label={label}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      hideLabel
-    />
+}: HeaderProps<T>) => {
+  const labelString = typeof label === 'string' ? label : 'Filter';
 
-    <Button onClick={() => onChange(all)} size="small" variant="secondary">
-      Velg alle
-    </Button>
+  return (
+    <HStack wrap={false} className="sticky top-0 z-1 gap-2 bg-ax-bg-default">
+      <TextField
+        size="small"
+        autoFocus
+        className="grow"
+        placeholder="Filtrer"
+        label={labelString}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        hideLabel
+      />
 
-    <Button data-color="danger" onClick={() => onChange([])} size="small" variant="primary">
-      Fjern alle
-    </Button>
-  </HStack>
-);
+      <Button onClick={() => onChange(all)} size="small" variant="secondary">
+        Velg alle
+      </Button>
+
+      <Button data-color="danger" onClick={() => onChange([])} size="small" variant="primary">
+        Fjern alle
+      </Button>
+    </HStack>
+  );
+};
