@@ -1,4 +1,4 @@
-import { HjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/hjemler-select';
+import { YtelserAndHjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
 import { useUtfallOptions } from '@app/components/smart-editor-texts/hooks/use-options';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { TemplateSectionSelect, UtfallSelect } from '@app/components/smart-editor-texts/query-filter-selects';
@@ -29,17 +29,13 @@ export const Filters = () => {
         selected={templateSectionIdList ?? []}
         onChange={(value) => setFilter('templateSectionIdList', value)}
         includeNoneOption
-        templatesSelectable
         includeDeprecated
-      >
-        Maler og seksjoner
-      </TemplateSectionSelect>
+      />
 
-      <HjemlerSelect
+      <YtelserAndHjemlerSelect
         selected={ytelseHjemmelIdList ?? []}
         onChange={(value: string[]) => setFilter('ytelseHjemmelIdList', value)}
         includeNoneOption
-        ytelserSelectable
         ytelseIsWildcard
       />
 
