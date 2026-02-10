@@ -93,7 +93,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
       onAuthenticated: ({ scope }) => setReadOnly(scope !== 'read-write'),
       // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       onClose: async ({ event }) => {
-        if (event.code === 1000 || event.code === 1001 || event.code === 1005) {
+        if (event.code === 1000 || event.code === 1005) {
           return;
         }
 
@@ -125,9 +125,10 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
         setIsConnected(false);
 
-        if (event.code === 4403) {
-          yjs.connect(); // Reconnect immediately to regain access, with new access rights.
-          return;
+        // 4403: Reconnect immediately to regain access, with new access rights.
+        // 1001: Pod gracefully closed the connection, likely due to a redeploy. Reconnect immediately.
+        if (event.code === 4403 || event.code === 1001) {
+          return yjs.connect(); //
         }
 
         if (event.code === 4404) {

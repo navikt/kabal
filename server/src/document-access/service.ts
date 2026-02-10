@@ -209,10 +209,12 @@ class SmartDocumentWriteAccess {
   ): Promise<boolean> => {
     const { trace_id, span_id, tab_id, client_version, behandling_id } = metadata;
 
-    if (!this.isProcessing()) {
+    const errors = this.getErrors();
+
+    if (errors.length > 0) {
       // If the consumer is not processing messages, we cannot be sure the access is up to date.
       log.error({
-        msg: 'Smart Document Write Access is not processing Kafka messages.',
+        msg: `Smart Document Write Access is not processing Kafka messages: ${errors.join(', ')}`,
         trace_id,
         span_id,
         tab_id,
@@ -328,9 +330,7 @@ class SmartDocumentWriteAccess {
     this.removeDeletedDocumentListeners(documentId);
   };
 
-  isProcessing = () => {
-    const trace_id = this.#lifecycle_trace_id;
-
+  getErrors = (): string[] => {
     const errors: string[] = [];
 
     if (!this.#consumer.isConnected()) {
@@ -349,18 +349,7 @@ class SmartDocumentWriteAccess {
       errors.push('Stream is closed');
     }
 
-    if (errors.length === 0) {
-      // If there are no errors, we are processing.
-      return true;
-    }
-
-    log.warn({
-      msg: `Smart Document Write Access is not processing - ${errors.join(', ')}`,
-      trace_id,
-      data: { errors, trace_id },
-    });
-
-    return false;
+    return errors;
   };
 
   close = async () => {
