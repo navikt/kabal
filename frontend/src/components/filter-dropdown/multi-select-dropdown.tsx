@@ -88,7 +88,7 @@ export const MultiSelectDropdown = <T extends string | number>({
       <ActionMenu>
         <Trigger variant={variant}>{labelWithCounter}</Trigger>
 
-        <ActionMenu.Content className="relative max-h-[90vh]">
+        <ActionMenu.Content className="relative">
           <Header<T> label={label} value={value} setValue={setValue} onChange={onChange} allOptions={allOptions} />
 
           <ActionMenu.Divider />
