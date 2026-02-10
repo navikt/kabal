@@ -64,15 +64,13 @@ export const NestedFilterList = ({
       allOptions={allOptions}
       showCounter={false}
     >
-      <div className="overflow-y-auto">
-        <OptionsList
-          options={options}
-          selected={selected}
-          onCheck={toggle}
-          filter={filter}
-          hasFilter={rawFilter.length > 0}
-        />
-      </div>
+      <OptionsList
+        options={options}
+        selected={selected}
+        onCheck={toggle}
+        filter={filter}
+        hasFilter={rawFilter.length > 0}
+      />
     </MultiSelectDropdown>
   );
 };

@@ -89,9 +89,11 @@ export const MultiSelectDropdown = <T extends string | number>({
         <Trigger variant={variant}>{labelWithCounter}</Trigger>
 
         <ActionMenu.Content className="relative">
-          <Header<T> label={label} value={value} setValue={setValue} onChange={onChange} allOptions={allOptions} />
+          <div className="sticky -top-2 z-1 -mx-2 -mt-2 flex flex-col gap-2 bg-ax-bg-raised p-2">
+            <Header<T> label={label} value={value} setValue={setValue} onChange={onChange} allOptions={allOptions} />
 
-          <ActionMenu.Divider />
+            <ActionMenu.Divider />
+          </div>
 
           {children}
         </ActionMenu.Content>
@@ -132,7 +134,7 @@ export const Header = <T extends string | number>({
   const labelString = typeof label === 'string' ? label : 'Filter';
 
   return (
-    <HStack wrap={false} className="sticky top-0 z-1 gap-2 bg-ax-bg-default">
+    <HStack wrap={false} gap="space-8">
       <TextField
         size="small"
         autoFocus
