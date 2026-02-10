@@ -148,12 +148,7 @@ export const TemplateSectionSelect = ({
   const label = `Maler (${templatesCount}) og seksjoner (${sectionsCount})`;
 
   return (
-    <NestedFilterList
-      options={templates}
-      selected={selected}
-      onChange={onChange}
-      data-testid="edit-text-template-select"
-    >
+    <NestedFilterList options={templates} selected={selected} onChange={onChange}>
       {label}
     </NestedFilterList>
   );
@@ -175,12 +170,7 @@ export const SectionSelect = ({
   const label = `Seksjoner (${sectionsCount})`;
 
   return (
-    <NestedFilterList
-      options={templates}
-      selected={selected}
-      onChange={onChange}
-      data-testid="edit-text-template-select"
-    >
+    <NestedFilterList options={templates} selected={selected} onChange={onChange}>
       {label}
     </NestedFilterList>
   );

@@ -18,7 +18,6 @@ export interface NestedOption extends IOption<string> {
 }
 
 interface NestedDropdownProps extends BaseProps<string, NestedOption> {
-  'data-testid': string;
   children: string | React.ReactNode;
 }
 
