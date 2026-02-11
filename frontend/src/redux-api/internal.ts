@@ -85,6 +85,9 @@ export const kabalInternalApi = createApi({
     logInaccessible: builder.mutation<void, void>({
       query: () => '/kabal-api/internal/log-inaccessible',
     }),
+    evictCache: builder.mutation<void, void>({
+      query: () => '/klage-lookup/admin/evict-cache',
+    }),
   }),
 });
 
@@ -96,4 +99,5 @@ export const {
   useInsertHjemlerInSettingsMutation,
   useCompleteMerkantilTaskMutation,
   useLogInaccessibleMutation,
+  useEvictCacheMutation,
 } = kabalInternalApi;

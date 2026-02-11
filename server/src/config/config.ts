@@ -13,6 +13,7 @@ export enum ApiClientEnum {
   KABAL_TEXT_TEMPLATES = 'kabal-text-templates',
   KLAGE_NOTIFICATIONS_API = 'klage-notifications-api',
   KLAGE_UNLEASH_PROXY = 'klage-unleash-proxy',
+  KLAGE_LOOKUP = 'klage-lookup',
 }
 
 export const API_CLIENT_IDS = [
@@ -24,6 +25,7 @@ export const API_CLIENT_IDS = [
   ApiClientEnum.KLAGE_KODEVERK_API,
   ApiClientEnum.KABAL_TEXT_TEMPLATES,
   ApiClientEnum.KLAGE_NOTIFICATIONS_API,
+  ApiClientEnum.KLAGE_LOOKUP,
 ];
 
 const cwd = process.cwd(); // This will be the server folder, as long as the paths in the NPM scripts are not changed.
