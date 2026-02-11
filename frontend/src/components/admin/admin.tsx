@@ -3,6 +3,7 @@ import { MerkantilTaskList } from '@app/components/admin/merkantil-task-list/mer
 import { CreateSystemNotification } from '@app/components/admin/system-notifications/create';
 import { ListSystemNotifications } from '@app/components/admin/system-notifications/list';
 import {
+  useEvictCacheMutation,
   useLogInaccessibleMutation,
   useRecreateElasticAdminMutation,
   useRefillElasticAdminMutation,
@@ -24,6 +25,7 @@ export const Admin = () => (
           <ApiButton useApi={useRefillElasticAdminMutation}>KABAL-API KAFKA REFILL</ApiButton>
           <ApiButton useApi={useResendDvhMutation}>KABAL-API DVH RESEND</ApiButton>
           <ApiButton useApi={useLogInaccessibleMutation}>KABAL-API LOG INACCESSIBLE</ApiButton>
+          <ApiButton useApi={useEvictCacheMutation}>KLAGE-LOOKUP EVICT CACHE</ApiButton>
         </VStack>
 
         <InsertHjemlerInSettings />

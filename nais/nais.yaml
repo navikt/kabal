@@ -54,6 +54,7 @@ spec:
         - application: kabal-text-templates
         - application: klage-notifications-api
         - application: klage-unleash-proxy
+        - application: klage-lookup
         - application: logging
           namespace: nais-system
       external:
