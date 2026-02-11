@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { ApiClientEnum } from '@app/config/config';
+import { ApiClientEnum, frontendDistDirectoryPath } from '@app/config/config';
 import { getDuration } from '@app/helpers/duration';
 import { getProxyRequestHeaders } from '@app/helpers/prepare-request-headers';
 import { getLogger } from '@app/logger';
@@ -38,9 +38,15 @@ const log = getLogger('document-routes');
 
 const METADATA_BASE_URL = KABAL_API_URL;
 
-const TEMPLATE = fs.readFileSync(path.join(process.cwd(), './src/templates/document-template.html'), {
-  encoding: 'utf8',
-});
+const INDEX_HTML = fs.readFileSync(path.join(frontendDistDirectoryPath, 'index.html'), { encoding: 'utf8' });
+const LINK_ELEMENTS =
+  INDEX_HTML.match(/<link[^>]*>/g)
+    ?.filter((link) => !link.includes('rel="stylesheet"'))
+    .join('\n  ') ?? '';
+
+const TEMPLATE = fs
+  .readFileSync(path.join(process.cwd(), './src/templates/document-template.html'), { encoding: 'utf8' })
+  .replace('{LINK_ELEMENTS}', LINK_ELEMENTS);
 
 const QUERYSTRING = Type.Object({
   version: Type.Optional(Type.String()),
@@ -225,6 +231,7 @@ export const documentPlugin = fastifyPlugin(
 
 const send = (reply: FastifyReply, url: string, documentIdList: string, title: string, navIdent: string) => {
   const templateResult = TEMPLATE.replace('{{pdfUrl}}', url)
+
     .replace('<document-title />', `<title>${title}</title>`)
     .replace('<document-id-list />', `<script type="application/json" id="document-id-list">${documentIdList}</script>`)
     .replace('{{navIdent}}', navIdent);
