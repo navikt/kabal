@@ -1,9 +1,11 @@
-import { getCacheKey, oboCache } from '@app/auth/cache/cache';
+import type { IncomingHttpHeaders } from 'node:http';
 import { ApiClientEnum } from '@app/config/config';
 import { generateTraceparent } from '@app/helpers/traceparent';
 import { getLogger } from '@app/logger';
 import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
+import { getCloseEvent } from '@app/plugins/crdt/close-event';
 import type { ConnectionContext } from '@app/plugins/crdt/context';
+import { getOboToken } from '@app/plugins/obo-token';
 import type { Document } from '@hocuspocus/server';
 import { yTextToSlateElement } from '@slate-yjs/core';
 import { encodeStateAsUpdateV2, XmlText } from 'yjs';
@@ -16,8 +18,25 @@ export const getDocumentJson = (document: Document) => {
   return yTextToSlateElement(sharedRoot).children;
 };
 
-export const setDocument = async (context: ConnectionContext, document: Document) => {
-  const { behandlingId, dokumentId, navIdent, trace_id, span_id, tab_id, client_version } = context;
+export const setDocument = async (context: ConnectionContext, document: Document, headers: IncomingHttpHeaders) => {
+  const { behandlingId, dokumentId, trace_id, span_id, tab_id, client_version } = context;
+
+  const accessToken = headers.authorization;
+
+  if (accessToken === undefined) {
+    log.error({
+      msg: 'Missing authorization header. Closing connection.',
+      trace_id,
+      span_id,
+      tab_id,
+      client_version,
+      data: { behandlingId, dokumentId },
+    });
+
+    throw getCloseEvent('MISSING_AUTHORIZATION', 4401);
+  }
+
+  const authorization = `Bearer ${await getOboToken(ApiClientEnum.KABAL_API, { ...context, accessToken })}`;
 
   try {
     const update = Buffer.from(encodeStateAsUpdateV2(document));
@@ -29,7 +48,7 @@ export const setDocument = async (context: ConnectionContext, document: Document
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
+        authorization,
         traceparent: generateTraceparent(trace_id),
       },
       body: JSON.stringify({ content, data }),
