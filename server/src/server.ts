@@ -42,7 +42,7 @@ if (isDeployed) {
 
 const bodyLimit = 300 * 1024 * 1024; // 300 MB
 
-fastify({ trustProxy: true, querystringParser, bodyLimit })
+fastify({ trustProxy: true, bodyLimit, routerOptions: { querystringParser } })
   .register(fastifyWebsocket)
   .register(cors, corsOptions)
   .register(healthPlugin)
