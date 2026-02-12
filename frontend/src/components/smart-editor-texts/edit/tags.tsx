@@ -5,7 +5,7 @@ import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@app/components/smart-editor-t
 import { useEnhetNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
 import { useUtfallNameOrLoading } from '@app/hooks/use-utfall-name';
 import { TEMPLATE_MAP } from '@app/plate/templates/templates';
-import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
+import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
 import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import type { IText } from '@app/types/texts/responses';
 import { HStack } from '@navikt/ds-react';
@@ -52,7 +52,7 @@ export const Tags = ({ ytelseHjemmelIdList, utfallIdList, enhetIdList, templateS
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const useExpandedYtelseHjemmelIdList = (selectedList: string[]): string[] => {
-  const { data: ytelser = [] } = useKabalYtelserLatest();
+  const { data: ytelser = [] } = useYtelserAll();
   const result: string[] = [];
 
   for (const selected of selectedList) {
@@ -130,7 +130,7 @@ const getTemaplateAndSectionName = (selected: string): string => {
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const useYtelseLovkildeAndHjemmelName = (selected: string): string => {
-  const { data, isLoading } = useKabalYtelserLatest();
+  const { data, isLoading } = useYtelserAll();
   const [ytelseId, hjemmelId] = selected.split(LIST_DELIMITER);
   const hasHjemmel = hjemmelId !== undefined;
 
@@ -144,10 +144,10 @@ const useYtelseLovkildeAndHjemmelName = (selected: string): string => {
     }
 
     for (const ytelse of data) {
-      for (const lovkilde of ytelse.lovKildeToRegistreringshjemler) {
-        for (const hjemmel of lovkilde.registreringshjemler) {
+      for (const lovKildeToRegistreringshjemler of ytelse.lovKildeToRegistreringshjemler) {
+        for (const hjemmel of lovKildeToRegistreringshjemler.registreringshjemler) {
           if (hjemmel.id === hjemmelId) {
-            return `Alle ytelser - ${lovkilde.navn} - ${hjemmel.navn}`;
+            return `Alle ytelser - ${lovKildeToRegistreringshjemler.lovkilde.navn} - ${hjemmel.navn}`;
           }
         }
       }
@@ -165,10 +165,10 @@ const useYtelseLovkildeAndHjemmelName = (selected: string): string => {
       return ytelse.navn;
     }
 
-    for (const lovkilde of ytelse.lovKildeToRegistreringshjemler) {
-      for (const hjemmel of lovkilde.registreringshjemler) {
+    for (const lovKildeToRegistreringshjemler of ytelse.lovKildeToRegistreringshjemler) {
+      for (const hjemmel of lovKildeToRegistreringshjemler.registreringshjemler) {
         if (hjemmel.id === hjemmelId) {
-          return `${ytelse.navn} - ${lovkilde.navn} - ${hjemmel.navn}`;
+          return `${ytelse.navn} - ${lovKildeToRegistreringshjemler.lovkilde.navn} - ${hjemmel.navn}`;
         }
       }
     }
