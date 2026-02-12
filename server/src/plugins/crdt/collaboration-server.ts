@@ -4,7 +4,7 @@ import { isDeployed } from '@app/config/env';
 import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
 import { isNotNull } from '@app/functions/guards';
 import { parseTokenPayload } from '@app/helpers/token-parser';
-import { getTeamLogger } from '@app/logger';
+import { getLogger, getTeamLogger } from '@app/logger';
 import { getDocument } from '@app/plugins/crdt/api/get-document';
 import { getDocumentJson, isResponseError, setDocument } from '@app/plugins/crdt/api/set-document';
 import { getCloseEvent } from '@app/plugins/crdt/close-event';
@@ -16,6 +16,7 @@ import { Hocuspocus } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
 
 const teamLog = getTeamLogger('collaboration');
+const debug = getLogger('collaboration-server-debug');
 
 export const collaborationServer = new Hocuspocus({
   name: 'kabal-collaboration-server',
@@ -44,7 +45,8 @@ export const collaborationServer = new Hocuspocus({
     );
   },
 
-  onConnect: async ({ context, connectionConfig }) => {
+  onConnect: async ({ context, connectionConfig, requestHeaders, request }) => {
+    debug.debug({ msg: 'onConnect called', data: { requestHeaders, request: request.headers } });
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to establish collaboration connection without context' });
       throw getCloseEvent('INVALID_CONTEXT', 4401);
@@ -120,7 +122,9 @@ export const collaborationServer = new Hocuspocus({
     context.removeDeletedListener?.();
   },
 
-  beforeHandleMessage: async ({ context, connection }) => {
+  beforeHandleMessage: async ({ context, connection, requestHeaders }) => {
+    debug.debug({ msg: 'beforeHandleMessage called', data: { requestHeaders } });
+
     if (!isDeployed) {
       return;
     }
