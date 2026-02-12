@@ -1,4 +1,4 @@
-import { getCacheKey, oboCache } from '@app/auth/cache/cache';
+import type { IncomingHttpHeaders } from 'node:http';
 import { ApiClientEnum } from '@app/config/config';
 import { isDeployed } from '@app/config/env';
 import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
@@ -12,6 +12,7 @@ import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/c
 import { log, logContext } from '@app/plugins/crdt/log-context';
 import { createRefreshTimer } from '@app/plugins/crdt/refresh';
 import { getValkeyExtension } from '@app/plugins/crdt/valkey';
+import { getOboToken } from '@app/plugins/obo-token';
 import { Hocuspocus } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
 
@@ -44,13 +45,13 @@ export const collaborationServer = new Hocuspocus({
     );
   },
 
-  onConnect: async ({ context, connectionConfig }) => {
+  onConnect: async ({ context, connectionConfig, requestHeaders }) => {
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to establish collaboration connection without context' });
       throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
-    const expiresIn = await getTokenExpiresIn(context, 'onConnect');
+    const expiresIn = await getTokenExpiresIn(context, requestHeaders, 'onConnect');
 
     // navIdent is not defined when server is run without Wonderwall (ie. locally).
     logContext(
@@ -120,7 +121,7 @@ export const collaborationServer = new Hocuspocus({
     context.removeDeletedListener?.();
   },
 
-  beforeHandleMessage: async ({ context, connection }) => {
+  beforeHandleMessage: async ({ context, connection, requestHeaders }) => {
     if (!isDeployed) {
       return;
     }
@@ -136,12 +137,12 @@ export const collaborationServer = new Hocuspocus({
     }
 
     if (context.tokenRefreshTimer === undefined) {
-      const expiresIn = await getTokenExpiresIn(context, 'beforeHandleMessage');
+      const expiresIn = await getTokenExpiresIn(context, requestHeaders, 'beforeHandleMessage');
       logContext('Missing refresh OBO token timer. Starting timer.', context, 'warn');
       await createRefreshTimer(context, expiresIn);
     }
 
-    const expiresIn = await getTokenExpiresIn(context, 'beforeHandleMessage');
+    const expiresIn = await getTokenExpiresIn(context, requestHeaders, 'beforeHandleMessage');
 
     if (expiresIn <= 0) {
       logContext(`OBO token expired ${expiresIn} seconds ago.`, context, 'warn');
@@ -153,7 +154,7 @@ export const collaborationServer = new Hocuspocus({
     connection.readOnly = !hasWriteAccess;
   },
 
-  onLoadDocument: async ({ context, document, connectionConfig }) => {
+  onLoadDocument: async ({ context, document, connectionConfig, requestHeaders }) => {
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to load document without context' });
       throw getCloseEvent('INVALID_CONTEXT', 4401);
@@ -175,7 +176,7 @@ export const collaborationServer = new Hocuspocus({
       return document;
     }
 
-    const res = await getDocument(context);
+    const res = await getDocument(context, requestHeaders);
 
     logContext('Loaded state/update', context, 'debug');
 
@@ -194,7 +195,7 @@ export const collaborationServer = new Hocuspocus({
     );
   },
 
-  onStoreDocument: async ({ context, document }) => {
+  onStoreDocument: async ({ context, document, requestHeaders }) => {
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to store document without context' });
 
@@ -210,7 +211,7 @@ export const collaborationServer = new Hocuspocus({
     }
 
     try {
-      await setDocument(context, document);
+      await setDocument(context, document, requestHeaders);
 
       logContext('Saved document to database', context, 'debug');
     } catch (error) {
@@ -229,10 +230,18 @@ export const collaborationServer = new Hocuspocus({
   extensions: isDeployed ? [getValkeyExtension()].filter(isNotNull) : [],
 });
 
-const getTokenExpiresIn = async (context: ConnectionContext, method: string) => {
-  const oboAccessToken = await oboCache.get(getCacheKey(context.navIdent, ApiClientEnum.KABAL_API));
+const getTokenExpiresIn = async (context: ConnectionContext, headers: IncomingHttpHeaders, method: string) => {
+  const { authorization } = headers;
 
-  if (oboAccessToken === null) {
+  if (authorization === undefined) {
+    logContext(`Missing Authorization header: ${method}`, context, 'warn');
+
+    return 0;
+  }
+
+  const oboAccessToken = await getOboToken(ApiClientEnum.KABAL_API, { ...context, accessToken: authorization });
+
+  if (oboAccessToken === undefined) {
     logContext(`Missing OBO token: ${method}`, context, 'warn');
 
     return 0;

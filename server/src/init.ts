@@ -1,4 +1,3 @@
-import { getAzureADClient } from '@app/auth/get-auth-client';
 import { isDeployed } from '@app/config/env';
 import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
 import { formatDuration, getDuration } from '@app/helpers/duration';
@@ -11,7 +10,6 @@ export const init = async () => {
   try {
     if (isDeployed) {
       await Promise.all([
-        logTimedAsyncFn(async () => await getAzureADClient(), 'Azure AD client'),
         logTimedAsyncFn(async () => await SMART_DOCUMENT_WRITE_ACCESS.init(), 'Smart Document Write Access'),
       ]);
     }
