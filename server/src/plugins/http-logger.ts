@@ -1,4 +1,5 @@
 import fastifyPlugin from 'fastify-plugin';
+import { API_CLIENT_IDS } from '@/config/config';
 import { getDuration } from '@/helpers/duration';
 import { type AnyObject, getLogger } from '@/logger';
 import { PROXY_VERSION_PLUGIN_ID } from '@/plugins/proxy-version';
@@ -12,7 +13,7 @@ export const httpLoggerPlugin = fastifyPlugin(
     app.addHook('onResponse', async (req, res) => {
       const { url } = req;
 
-      if (url.endsWith('/isAlive') || url.endsWith('/isStarted') || url.endsWith('/metrics')) {
+      if (url.endsWith('/isAlive') || url.endsWith('/isStarted') || url.endsWith('/metrics') || isExternalApi(url)) {
         return;
       }
 
@@ -68,4 +69,14 @@ const logHttpRequest = ({ client_version, tab_id, ...data }: HttpData) => {
   }
 
   httpLogger.debug({ msg, data, client_version, tab_id });
+};
+
+const isExternalApi = (url: string): boolean => {
+  for (const clientId of API_CLIENT_IDS) {
+    if (url.includes(`/api/${clientId}/`)) {
+      return true;
+    }
+  }
+
+  return false;
 };
