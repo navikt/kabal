@@ -128,7 +128,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         // 4403: Reconnect immediately to regain access, with new access rights.
         // 1001: Pod gracefully closed the connection, likely due to a redeploy. Reconnect immediately.
         if (event.code === 4403 || event.code === 1001) {
-          return yjs.connect(); //
+          return yjs.connect();
         }
 
         if (event.code === 4404) {
@@ -138,9 +138,17 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           yjs.destroy();
 
           reduxStore.dispatch(
-            documentsQuerySlice.util.updateQueryData('getDocuments', oppgave.id, (documents) =>
-              documents.filter((document) => document.id !== id && document.parentId !== id),
-            ),
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgave.id, (documents) => {
+              const before = documents.map((d) => d.id).toString();
+              const filtered = documents.filter((document) => document.id !== id && document.parentId !== id);
+              const after = filtered.map((d) => d.id).toString();
+
+              pushLog('Code 4404 - Document not found. Destroying Yjs connection and removing document from store.', {
+                context: { dokumentId: id, oppgaveId: oppgave.id, before, after },
+              });
+
+              return filtered;
+            }),
           );
         }
 
