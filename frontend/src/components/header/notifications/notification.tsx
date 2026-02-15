@@ -9,6 +9,7 @@ import {
   type BehandlingInfo,
   type GainedAccessNotification,
   getHasBehandling,
+  type JournalpostNotification,
   type KabalNotification,
   type LostAccessNotification,
   type MessageNotification,
@@ -24,9 +25,22 @@ import {
   ClockIcon,
   EnvelopeClosedIcon,
   EnvelopeOpenIcon,
+  FilePlusIcon,
   KeyHorizontalIcon,
 } from '@navikt/aksel-icons';
-import { BodyLong, Box, type BoxProps, Button, Heading, HGrid, HStack, Label, Tooltip, VStack } from '@navikt/ds-react';
+import {
+  BodyLong,
+  Box,
+  type BoxProps,
+  Button,
+  Heading,
+  HGrid,
+  HStack,
+  Label,
+  Tag,
+  Tooltip,
+  VStack,
+} from '@navikt/ds-react';
 import type { JSX } from 'react';
 import { useLocation } from 'react-router';
 
@@ -122,6 +136,11 @@ const VARIANTS: Record<NotificationType, VariantData> = {
     background: 'accent-strong',
     iconColor: 'text-ax-text-accent-contrast',
   },
+  [NotificationType.JOURNALPOST]: {
+    borderColor: 'warning',
+    background: 'warning-strong',
+    iconColor: 'text-ax-text-warning-contrast',
+  },
   [NotificationType.LOST_ACCESS]: {
     borderColor: 'danger',
     background: 'danger-strong',
@@ -157,6 +176,23 @@ const Message = ({ notification, children }: NotificationEntryProps<MessageNotif
     </Box>
   </Container>
 );
+
+const Journalpost = ({ notification, children }: NotificationEntryProps<JournalpostNotification>) => {
+  const [documentName, ...attachmentNames] = notification.journalpost.documentNames;
+
+  return (
+    <Container title="Ny journalpost" icon={<FilePlusIcon aria-hidden />} notification={notification}>
+      {children}
+
+      <BodyLong size="small">
+        <Tag variant="moderate" data-color="neutral" size="xsmall">
+          {documentName ?? 'Ukjent dokument'}
+        </Tag>
+        {attachmentNames.length === 0 ? ' uten vedlegg' : `, med ${attachmentNames.length} vedlegg.`}
+      </BodyLong>
+    </Container>
+  );
+};
 
 const LostAccess = ({ notification, children }: NotificationEntryProps<LostAccessNotification>) => (
   <Container
@@ -208,6 +244,8 @@ export const KabalNotificationEntry = (notification: KabalNotification): JSX.Ele
   switch (notification.type) {
     case NotificationType.MESSAGE:
       return <Message notification={notification} />;
+    case NotificationType.JOURNALPOST:
+      return <Journalpost notification={notification} />;
     case NotificationType.LOST_ACCESS:
       return <LostAccess notification={notification} />;
     case NotificationType.GAINED_ACCESS:
@@ -224,6 +262,12 @@ export const KabalNotificationWithCaseDataEntry = (notification: KabalNotificati
         <Message notification={notification}>
           <CaseData {...notification.behandling} />
         </Message>
+      );
+    case NotificationType.JOURNALPOST:
+      return (
+        <Journalpost notification={notification}>
+          <CaseData {...notification.behandling} />
+        </Journalpost>
       );
     case NotificationType.LOST_ACCESS:
       return (
