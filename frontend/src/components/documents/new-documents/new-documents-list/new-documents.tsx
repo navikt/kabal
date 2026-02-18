@@ -142,11 +142,11 @@ const Wrapper = ({ children }: WrapperProps) => (
     as="section"
     paddingInline="space-16"
     paddingBlock="space-0"
-    height="fit-content"
+    minHeight="80px"
     maxHeight="calc(50% - 200px)"
     data-testid="new-documents-section"
     aria-labelledby="dua-heading"
-    className="border-ax-border-neutral border-b-1"
+    className="border-ax-border-neutral border-b"
   >
     <NewDocumentsHeader headingId="dua-heading" />
 
