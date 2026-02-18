@@ -184,9 +184,5 @@ export const BEGJÆRING_OM_GJENOPPTAK_I_TR_TEMPLATES_WITH_EKSPEDISJONSBREV = [
 ];
 
 export const getFinishedBehandlingTemplates = (navIdent: string) => {
-  return [
-    getGenereltBrevTemplate(false, navIdent),
-    getNotatTemplate(false, navIdent),
-    SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE,
-  ];
+  return [getGenereltBrevTemplate(navIdent), getNotatTemplate(navIdent), SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE];
 };

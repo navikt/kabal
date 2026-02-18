@@ -17,10 +17,7 @@ import {
   createSimpleParagraph,
 } from './helpers';
 
-export const getGenereltBrevTemplate = (
-  includeMedunderskriver: boolean,
-  overriddenSaksbehandler?: string,
-): Immutable<IMutableSmartEditorTemplate> =>
+export const getGenereltBrevTemplate = (overriddenSaksbehandler?: string): Immutable<IMutableSmartEditorTemplate> =>
   deepFreeze({
     templateId: TemplateIdEnum.GENERELT_BREV,
     tittel: 'Generelt brev',
@@ -30,19 +27,16 @@ export const getGenereltBrevTemplate = (
       createMaltekstseksjon(TemplateSections.TITLE),
       ...createSaksinfo(),
       createSimpleParagraph(),
-      createSignature(includeMedunderskriver, overriddenSaksbehandler),
+      createSignature(false, overriddenSaksbehandler),
       createFooter(),
     ],
     dokumentTypeId: DistribusjonsType.BREV,
     deprecatedSections: [],
   });
 
-export const GENERELT_BREV_TEMPLATE = getGenereltBrevTemplate(true);
+export const GENERELT_BREV_TEMPLATE = getGenereltBrevTemplate();
 
-export const getNotatTemplate = (
-  includeMedunderskriver: boolean,
-  overriddenSaksbehandler?: string,
-): Immutable<IMutableSmartEditorTemplate> =>
+export const getNotatTemplate = (overriddenSaksbehandler?: string): Immutable<IMutableSmartEditorTemplate> =>
   deepFreeze({
     templateId: TemplateIdEnum.NOTAT,
     tittel: 'Notat',
@@ -50,13 +44,13 @@ export const getNotatTemplate = (
       createCurrentDate(),
       ...createSaksinfo(),
       createSimpleParagraph(),
-      createSignature(includeMedunderskriver, overriddenSaksbehandler),
+      createSignature(false, overriddenSaksbehandler),
     ],
     dokumentTypeId: DistribusjonsType.NOTAT,
     deprecatedSections: [],
   });
 
-export const NOTAT_TEMPLATE = getNotatTemplate(true);
+export const NOTAT_TEMPLATE = getNotatTemplate();
 
 export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ROL_QUESTIONS,
@@ -72,7 +66,7 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
 
     createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
     createMaltekstseksjon(TemplateSections.FREMLEGG),
-    createSignature(),
+    createSignature(false),
   ],
   dokumentTypeId: DistribusjonsType.NOTAT,
   deprecatedSections: [],
