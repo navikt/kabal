@@ -2,7 +2,8 @@ import { KvalitetsskjemaV1 } from '@app/components/kvalitetsvurdering/v1/kvalite
 import { KvalitetsskjemaV2 } from '@app/components/kvalitetsvurdering/v2/kvalitetsskjema';
 import { KvalitetsskjemaV3 } from '@app/components/kvalitetsvurdering/v3/kvalitetsskjema';
 import { useKvalitetsvurderingSupported } from '@app/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
-import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
+import { PanelContainer } from '@app/components/oppgavebehandling-panels/panel-container';
+import { useFocusPanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
 import { SECTION_TITLES, SectionKey } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurderingEnabled } from '@app/hooks/settings/use-setting';
@@ -62,6 +63,14 @@ const Kvalitetsskjema = () => {
 
 const Content = ({ children }: { children: ReactElement }) => (
   <PanelContainer data-testid="kvalitetsvurdering-panel">
+    <ContentInner>{children}</ContentInner>
+  </PanelContainer>
+);
+
+const ContentInner = ({ children }: { children: ReactElement }) => {
+  useFocusPanelShortcut(6);
+
+  return (
     <div className="w-165 p-4">
       <Heading level="1" size="medium" spacing>
         {SECTION_TITLES[SectionKey.KVALITETSVURDERING]}
@@ -69,5 +78,5 @@ const Content = ({ children }: { children: ReactElement }) => (
 
       {children}
     </div>
-  </PanelContainer>
-);
+  );
+};

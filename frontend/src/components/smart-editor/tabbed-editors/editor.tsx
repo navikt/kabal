@@ -5,6 +5,7 @@ import { History } from '@app/components/smart-editor/history/history';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { createLocalStorageBackup } from '@app/components/smart-editor/tabbed-editors/backup';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
+import { useSetEditorPanelFocus } from '@app/components/smart-editor/tabbed-editors/editor-panel-focus-context';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
 import { VersionStatus } from '@app/components/smart-editor/tabbed-editors/version-status';
@@ -16,8 +17,10 @@ import { parseJSON } from '@app/functions/parse-json';
 import { getQueryParams } from '@app/headers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@app/hooks/settings/use-setting';
+import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushError, pushLog } from '@app/observability';
+import { isEditableTextNode } from '@app/plate/functions/is-editable-text';
 import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { components, saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
@@ -37,9 +40,9 @@ import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, File
 import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
-import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
-import { Plate, useEditorReadOnly, usePlateEditor } from 'platejs/react';
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { BaseParagraphPlugin, RangeApi, TextApi, type TText } from 'platejs';
+import { Plate, type PlateEditor, useEditorReadOnly, useEditorRef, usePlateEditor } from 'platejs/react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 
 interface EditorProps {
@@ -377,6 +380,28 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { showAnnotationsAtOrigin, showHistory } = useContext(SmartEditorContext);
   const readOnly = useEditorReadOnly();
+  const editor = useEditorRef();
+  const { value: activeEditorId } = useSmartEditorActiveDocument();
+  const isActive = id === activeEditorId;
+  const focusEditor = useCallback(() => {
+    const at = editor.selection ?? getFirstEditableTextStart(editor);
+
+    try {
+      if (at !== undefined) {
+        editor.tf.focus({ at, retries: 3 });
+      } else {
+        editor.tf.focus({ retries: 3 });
+      }
+    } catch {
+      // Failed to set focus at the correct position after retries.
+      console.debug('Failed to focus editor.', {
+        selection: editor.selection,
+        firstEditableText: getFirstEditableTextStart(editor),
+      });
+    }
+  }, [editor]);
+
+  useSetEditorPanelFocus(isActive ? focusEditor : null);
 
   return (
     <>
@@ -449,6 +474,21 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
       </StatusBar>
     </>
   );
+};
+
+const getFirstEditableTextStart = (editor: PlateEditor): BasePoint | undefined => {
+  const first = editor.api.next<TText>({
+    at: [0],
+    mode: 'lowest',
+    text: true,
+    match: (n, p) => TextApi.isText(n) && isEditableTextNode(editor, p),
+  });
+
+  if (first === undefined) {
+    return undefined;
+  }
+
+  return editor.api.start(first[1]);
 };
 
 interface EditorWithNewCommentAndFloatingToolbarProps {
