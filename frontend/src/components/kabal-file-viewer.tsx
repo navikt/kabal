@@ -8,10 +8,15 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 import { isKabalApiErrorData, type KabalApiErrorData } from '@app/types/errors';
 import { BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
-import { type FetchErrorInfo, KlageFileViewer, type KlageFileViewerProps } from '@navikt/klage-file-viewer';
+import {
+  type FetchErrorInfo,
+  KlageFileViewer,
+  type KlageFileViewerHandle,
+  type KlageFileViewerProps,
+} from '@navikt/klage-file-viewer';
 // @ts-expect-error — Vite `?url` import: returns the resolved public URL as a string.
 import WORKER_SRC from '@navikt/klage-file-viewer/pdf-worker?url';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 export type { FileEntry, KlageFileViewerProps } from '@navikt/klage-file-viewer';
 
@@ -22,6 +27,7 @@ export const KabalFileViewer = ({
 }: Pick<KlageFileViewerProps, 'files' | 'onClose' | 'newTabUrl'>) => {
   const appTheme = useAppTheme();
   const { data: oppgave } = useOppgave();
+  const fileViewerRef = useRef<KlageFileViewerHandle>(null);
 
   const sakenGjelder = oppgave?.sakenGjelder;
   const klager = oppgave?.klager;
@@ -48,6 +54,7 @@ export const KabalFileViewer = ({
       errorComponent={KabalErrorActions}
       theme={appTheme}
       commonPasswords={commonPasswords}
+      handleRef={fileViewerRef}
     />
   );
 };
