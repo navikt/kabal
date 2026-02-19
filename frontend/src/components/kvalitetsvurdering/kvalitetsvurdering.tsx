@@ -1,13 +1,13 @@
 import { KvalitetsskjemaV3 } from '@app/components/kvalitetsvurdering/v3/kvalitetsskjema';
 import { useKvalitetsvurderingSupported } from '@app/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
-import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
+import { useFocusPanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
 import { SECTION_TITLES, SectionKey } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurderingEnabled } from '@app/hooks/settings/use-setting';
 import { type IOppgavebehandling, KvalitetsvurderingVersion } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Heading, InfoCard } from '@navikt/ds-react';
-import { type ReactElement, useCallback, useRef } from 'react';
-import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
+import type { ReactElement } from 'react';
+import { PanelContainer } from '../oppgavebehandling-panels/panel-container';
 import { KvalitetsskjemaV1 } from './v1/kvalitetsskjema';
 import { KvalitetsskjemaV2 } from './v2/kvalitetsskjema';
 
@@ -61,20 +61,22 @@ const Kvalitetsskjema = () => {
   }
 };
 
-const Content = ({ children }: { children: ReactElement }) => {
-  const ref = useRef<HTMLElement>(null);
-  const focusKvalitetsvurdering = useCallback(() => ref.current?.focus(), []);
-  usePanelShortcut(6, focusKvalitetsvurdering);
+const Content = ({ children }: { children: ReactElement }) => (
+  <PanelContainer data-testid="kvalitetsvurdering-panel">
+    <ContentInner>{children}</ContentInner>
+  </PanelContainer>
+);
+
+const ContentInner = ({ children }: { children: ReactElement }) => {
+  useFocusPanelShortcut(6);
 
   return (
-    <PanelContainer ref={ref} tabIndex={-1} data-testid="kvalitetsvurdering-panel">
-      <div className="w-165 p-4">
-        <Heading level="1" size="medium" spacing>
-          {SECTION_TITLES[SectionKey.KVALITETSVURDERING]}
-        </Heading>
+    <div className="w-165 p-4">
+      <Heading level="1" size="medium" spacing>
+        {SECTION_TITLES[SectionKey.KVALITETSVURDERING]}
+      </Heading>
 
-        {children}
-      </div>
-    </PanelContainer>
+      {children}
+    </div>
   );
 };

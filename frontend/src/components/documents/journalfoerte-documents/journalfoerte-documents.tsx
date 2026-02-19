@@ -6,6 +6,7 @@ import { KeyboardContextElement } from '@app/components/documents/journalfoerte-
 import { SelectContextElement } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
 import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
+import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
 import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
 import { clamp } from '@app/functions/clamp';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -144,9 +145,10 @@ export const JournalfoerteDocuments = () => {
   }, []);
 
   const searchRef = useRef<HTMLInputElement>(null);
+  const panelContainerRef = usePanelContainerRef();
 
   const focusDocumentList = useCallback(() => keyboardBoundaryRef.current?.focus(), []);
-  usePanelShortcut(1, focusDocumentList);
+  usePanelShortcut(1, focusDocumentList, panelContainerRef);
 
   return (
     <SelectContextElement allDocumentsList={documents ?? EMPTY_ARRAY} filteredDocumentsList={totalFilteredDocuments}>

@@ -1,4 +1,5 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
 import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
@@ -18,6 +19,7 @@ import type { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushError, pushLog } from '@app/observability';
+import { isEditableTextNode } from '@app/plate/functions/is-editable-text';
 import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { components, saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
@@ -36,8 +38,8 @@ import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, File
 import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
-import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
-import { Plate, useEditorReadOnly, useEditorRef, usePlateEditor } from 'platejs/react';
+import { BaseParagraphPlugin, ElementApi, RangeApi, TextApi } from 'platejs';
+import { Plate, type PlateEditor, useEditorReadOnly, useEditorRef, usePlateEditor } from 'platejs/react';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 
@@ -371,12 +373,25 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
   const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { showAnnotationsAtOrigin, showHistory } = useContext(SmartEditorContext);
+  const panelContainerRef = usePanelContainerRef();
   const readOnly = useEditorReadOnly();
   const editor = useEditorRef();
   const { value: activeEditorId } = useSmartEditorActiveDocument();
   const isActive = id === activeEditorId;
-  const focusEditor = useCallback(() => editor.tf.focus(), [editor]);
-  usePanelShortcut(3, isActive ? focusEditor : null);
+  const focusEditor = useCallback(() => {
+    const at = editor.selection ?? getFirstEditableParagraphEnd(editor);
+
+    try {
+      if (at !== undefined) {
+        editor.tf.focus({ at, retries: 3 });
+      } else {
+        editor.tf.focus({ retries: 3 });
+      }
+    } catch {
+      // Editor DOM is not available yet, ignore.
+    }
+  }, [editor]);
+  usePanelShortcut(3, isActive ? focusEditor : null, panelContainerRef);
 
   return (
     <>
@@ -449,6 +464,21 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
       </StatusBar>
     </>
   );
+};
+
+const getFirstEditableParagraphEnd = (editor: PlateEditor): BasePoint | undefined => {
+  const paragraphs = editor.api.nodes({
+    at: [],
+    match: (node) => ElementApi.isElement(node) && node.type === BaseParagraphPlugin.key,
+  });
+
+  for (const [, path] of paragraphs) {
+    if (isEditableTextNode(editor, [...path, 0])) {
+      return editor.api.end(path);
+    }
+  }
+
+  return undefined;
 };
 
 interface EditorWithNewCommentAndFloatingToolbarProps {

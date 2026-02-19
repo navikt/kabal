@@ -1,4 +1,6 @@
 import { useAppTheme } from '@app/app-theme';
+import { PanelContainer } from '@app/components/oppgavebehandling-panels/panel-container';
+import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
 import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
 import { toast } from '@app/components/toast/store';
 import { Section } from '@app/components/toast/toast-content/api-error-toast';
@@ -25,13 +27,24 @@ export const KabalFileViewer = ({
   files,
   onClose,
   newTabUrl,
+}: Pick<KlageFileViewerProps, 'files' | 'onClose' | 'newTabUrl'>) => (
+  <PanelContainer>
+    <KabalFileViewerContent files={files} onClose={onClose} newTabUrl={newTabUrl} />
+  </PanelContainer>
+);
+
+const KabalFileViewerContent = ({
+  files,
+  onClose,
+  newTabUrl,
 }: Pick<KlageFileViewerProps, 'files' | 'onClose' | 'newTabUrl'>) => {
   const appTheme = useAppTheme();
   const { data: oppgave } = useOppgave();
   const fileViewerRef = useRef<KlageFileViewerHandle>(null);
+  const panelContainerRef = usePanelContainerRef();
 
   const focusFileViewer = useCallback(() => fileViewerRef.current?.focus(), []);
-  usePanelShortcut(2, focusFileViewer);
+  usePanelShortcut(2, focusFileViewer, panelContainerRef);
 
   const sakenGjelder = oppgave?.sakenGjelder;
   const klager = oppgave?.klager;

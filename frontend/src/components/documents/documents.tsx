@@ -1,7 +1,7 @@
 import { ExpandedDocuments } from '@app/components/documents/expanded-documents';
 import { TabContextElement } from '@app/components/documents/tab-context';
 import { FileViewer } from '@app/components/file-viewer/file-viewer';
-import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
+import { PanelContainer } from '@app/components/oppgavebehandling-panels/panel-container';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useDocumentsEnabled } from '@app/hooks/settings/use-setting';
 import { Loader } from '@navikt/ds-react';
