@@ -10,6 +10,7 @@ import { ValidationErrorProvider } from '../kvalitetsvurdering/validation-error-
 import { OppgavebehandlingControls } from '../oppgavebehandling-controls/oppgavebehandling-controls';
 import { Footer } from '../oppgavebehandling-footer/footer';
 import { OppgavebehandlingPanels } from '../oppgavebehandling-panels/oppgavebehandling-panels';
+import { PanelShortcutsProvider } from '../oppgavebehandling-panels/panel-shortcuts-context';
 
 export const Oppgavebehandling = () => {
   const oppgaveId = useOppgaveId();
@@ -28,10 +29,12 @@ export const Oppgavebehandling = () => {
   );
 
   return (
-    <ValidationErrorProvider>
-      <OppgavebehandlingControls />
-      <OppgavebehandlingPanels />
-      <Footer />
-    </ValidationErrorProvider>
+    <PanelShortcutsProvider>
+      <ValidationErrorProvider>
+        <OppgavebehandlingControls />
+        <OppgavebehandlingPanels />
+        <Footer />
+      </ValidationErrorProvider>
+    </PanelShortcutsProvider>
   );
 };

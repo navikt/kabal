@@ -1,4 +1,5 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
 import { History } from '@app/components/smart-editor/history/history';
@@ -14,6 +15,7 @@ import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { hasOwn } from '@app/functions/object';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@app/hooks/settings/use-setting';
+import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushError, pushLog } from '@app/observability';
 import { KabalPlateEditor } from '@app/plate/plate-editor';
@@ -35,8 +37,8 @@ import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
 import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
-import { Plate, useEditorReadOnly, usePlateEditor } from 'platejs/react';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { Plate, useEditorReadOnly, useEditorRef, usePlateEditor } from 'platejs/react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 
 interface EditorProps {
@@ -370,6 +372,11 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { showAnnotationsAtOrigin, showHistory } = useContext(SmartEditorContext);
   const readOnly = useEditorReadOnly();
+  const editor = useEditorRef();
+  const { value: activeEditorId } = useSmartEditorActiveDocument();
+  const isActive = id === activeEditorId;
+  const focusEditor = useCallback(() => editor.tf.focus(), [editor]);
+  usePanelShortcut(3, isActive ? focusEditor : null);
 
   return (
     <>

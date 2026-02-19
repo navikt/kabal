@@ -6,6 +6,7 @@ import { KeyboardContextElement } from '@app/components/documents/journalfoerte-
 import { SelectContextElement } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
 import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
+import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
 import { clamp } from '@app/functions/clamp';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -143,6 +144,9 @@ export const JournalfoerteDocuments = () => {
   }, []);
 
   const searchRef = useRef<HTMLInputElement>(null);
+
+  const focusDocumentList = useCallback(() => keyboardBoundaryRef.current?.focus(), []);
+  usePanelShortcut(1, focusDocumentList);
 
   return (
     <SelectContextElement allDocumentsList={documents ?? EMPTY_ARRAY} filteredDocumentsList={totalFilteredDocuments}>
