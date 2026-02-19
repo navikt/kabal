@@ -1,4 +1,4 @@
-import { IS_MAC, isMetaKey, Keys } from '@app/keys';
+import { Keys } from '@app/keys';
 import { createContext, type RefObject, useCallback, useContext, useEffect, useRef } from 'react';
 import { usePanelContainerRef } from './panel-container-ref-context';
 
@@ -28,16 +28,16 @@ const getSortedRegisteredPanels = (registry: PanelRegistry): PanelNumber[] =>
   [...registry.keys()].sort((a, b) => a - b);
 
 /**
- * On macOS the navigate shortcut is Option+Arrow.
- * On Windows/Linux using Alt would hijack browser history (Alt+Arrow), so
- * the navigate shortcut is Ctrl+Arrow.
+ * The navigate shortcut is Ctrl+, / Ctrl+. on all platforms.
+ *
+ * Using comma/period avoids conflicts with word-jump (Option/Ctrl+Arrow)
+ * in text editors and browser history navigation (Alt+Arrow).
  */
-const isNavigateShortcut: (e: KeyboardEvent) => boolean = IS_MAC
-  ? (e) => e.altKey && !e.metaKey && !e.ctrlKey
-  : (e) => e.ctrlKey && !e.altKey && !e.metaKey;
+const isNavigateShortcut = (e: KeyboardEvent): boolean => e.ctrlKey && !e.altKey && !e.metaKey;
 
-const isArrowLeftOrRight = (key: string): key is Keys.ArrowLeft | Keys.ArrowRight =>
-  key === Keys.ArrowLeft || key === Keys.ArrowRight;
+type NavigateDirection = Keys.Comma | Keys.Period;
+
+const isCommaOrPeriod = (key: string): key is NavigateDirection => key === Keys.Comma || key === Keys.Period;
 
 const navigateToPanel = (registry: PanelRegistry, panel: PanelNumber): PanelNumber | null => {
   const focusFn = registry.get(panel);
@@ -54,7 +54,7 @@ const navigateToPanel = (registry: PanelRegistry, panel: PanelNumber): PanelNumb
 const handleNavigatePanel = (
   registry: PanelRegistry,
   lastFocusedPanel: PanelNumber | null,
-  direction: Keys.ArrowLeft | Keys.ArrowRight,
+  direction: NavigateDirection,
 ): PanelNumber | null => {
   const sortedPanels = getSortedRegisteredPanels(registry);
 
@@ -65,7 +65,7 @@ const handleNavigatePanel = (
   const currentIndex = lastFocusedPanel === null ? -1 : sortedPanels.indexOf(lastFocusedPanel);
 
   const nextIndex =
-    direction === Keys.ArrowRight
+    direction === Keys.Period
       ? (currentIndex + 1) % sortedPanels.length
       : (currentIndex - 1 + sortedPanels.length) % sortedPanels.length;
 
@@ -97,8 +97,7 @@ export const PanelShortcutsProvider = ({ children }: PanelShortcutsProviderProps
       }
 
       // Navigate to previous/next panel.
-      // macOS: Option+Arrow | Windows/Linux: Ctrl+Arrow
-      if (isNavigateShortcut(e) && isArrowLeftOrRight(e.key)) {
+      if (isNavigateShortcut(e) && isCommaOrPeriod(e.key)) {
         e.preventDefault();
 
         const result = handleNavigatePanel(registryRef.current, lastFocusedPanelRef.current, e.key);
@@ -110,8 +109,8 @@ export const PanelShortcutsProvider = ({ children }: PanelShortcutsProviderProps
         return;
       }
 
-      // Ctrl/Cmd+1-6: focus specific panel (no Alt modifier).
-      if (!isMetaKey(e) || e.altKey) {
+      // Ctrl+1-6: focus specific panel (no Alt modifier).
+      if (!e.ctrlKey || e.altKey || e.metaKey) {
         return;
       }
 
@@ -123,11 +122,11 @@ export const PanelShortcutsProvider = ({ children }: PanelShortcutsProviderProps
       }
 
       if (num === 0) {
-        // Ctrl/Cmd+0 is commonly used to reset zoom level in browsers, so we want to allow that through and not interfere with it.
+        // Ctrl+0 is commonly used to reset zoom level in browsers, so we want to allow that through and not interfere with it.
         return;
       }
 
-      e.preventDefault(); // Prevent browser shortcuts for Ctrl/Cmd+1-9.
+      e.preventDefault(); // Prevent browser shortcuts for Ctrl+1-9.
 
       const result = handleDirectPanel(registryRef.current, num);
 

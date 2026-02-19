@@ -188,7 +188,7 @@ export const JournalfoerteDocuments = () => {
           ref={scrollContainerRef}
         >
           <KeyboardContextElement filteredDocuments={totalFilteredDocuments} searchRef={searchRef}>
-            <KeyboardBoundary ref={keyboardBoundaryRef}>
+            <KeyboardBoundary ref={keyboardBoundaryRef} scrollRef={panelContainerRef}>
               <DocumentList
                 documents={totalFilteredDocuments}
                 isLoading={isLoading}

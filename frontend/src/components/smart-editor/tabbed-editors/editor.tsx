@@ -38,7 +38,7 @@ import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, File
 import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
-import { BaseParagraphPlugin, ElementApi, RangeApi, TextApi } from 'platejs';
+import { BaseParagraphPlugin, RangeApi, TextApi, type TText } from 'platejs';
 import { Plate, type PlateEditor, useEditorReadOnly, useEditorRef, usePlateEditor } from 'platejs/react';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
@@ -379,7 +379,7 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
   const { value: activeEditorId } = useSmartEditorActiveDocument();
   const isActive = id === activeEditorId;
   const focusEditor = useCallback(() => {
-    const at = editor.selection ?? getFirstEditableParagraphEnd(editor);
+    const at = editor.selection ?? getFirstEditableTextStart(editor);
 
     try {
       if (at !== undefined) {
@@ -388,9 +388,14 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
         editor.tf.focus({ retries: 3 });
       }
     } catch {
-      // Editor DOM is not available yet, ignore.
+      // Failed to set focus at the correct position after retries.
+      console.debug('Failed to focus editor.', {
+        selection: editor.selection,
+        firstEditableText: getFirstEditableTextStart(editor),
+      });
     }
   }, [editor]);
+
   usePanelShortcut(3, isActive ? focusEditor : null, panelContainerRef);
 
   return (
@@ -466,19 +471,19 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
   );
 };
 
-const getFirstEditableParagraphEnd = (editor: PlateEditor): BasePoint | undefined => {
-  const paragraphs = editor.api.nodes({
-    at: [],
-    match: (node) => ElementApi.isElement(node) && node.type === BaseParagraphPlugin.key,
+const getFirstEditableTextStart = (editor: PlateEditor): BasePoint | undefined => {
+  const first = editor.api.next<TText>({
+    at: [0],
+    mode: 'lowest',
+    text: true,
+    match: (n, p) => TextApi.isText(n) && isEditableTextNode(editor, p),
   });
 
-  for (const [, path] of paragraphs) {
-    if (isEditableTextNode(editor, [...path, 0])) {
-      return editor.api.end(path);
-    }
+  if (first === undefined) {
+    return undefined;
   }
 
-  return undefined;
+  return editor.api.start(first[1]);
 };
 
 interface EditorWithNewCommentAndFloatingToolbarProps {
