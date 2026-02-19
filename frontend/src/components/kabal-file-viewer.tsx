@@ -1,5 +1,8 @@
 import { useAppTheme } from '@app/app-theme';
 import { addFileViewerHandle, removeFileViewerHandle } from '@app/components/file-viewer/file-viewer-handle-store';
+import { PanelContainer } from '@app/components/oppgavebehandling-panels/panel-container';
+import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
+import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
 import { toast } from '@app/components/toast/store';
 import { Section } from '@app/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@app/environment';
@@ -17,11 +20,21 @@ import {
 } from '@navikt/klage-file-viewer';
 // @ts-expect-error — Vite `?url` import: returns the resolved public URL as a string.
 import WORKER_SRC from '@navikt/klage-file-viewer/pdf-worker?url';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export type { FileEntry, KlageFileViewerProps } from '@navikt/klage-file-viewer';
 
 export const KabalFileViewer = ({
+  files,
+  onClose,
+  newTabUrl,
+}: Pick<KlageFileViewerProps, 'files' | 'onClose' | 'newTabUrl'>) => (
+  <PanelContainer>
+    <KabalFileViewerContent files={files} onClose={onClose} newTabUrl={newTabUrl} />
+  </PanelContainer>
+);
+
+const KabalFileViewerContent = ({
   files,
   onClose,
   newTabUrl,
@@ -42,6 +55,10 @@ export const KabalFileViewer = ({
 
     return () => removeFileViewerHandle(handle);
   }, []);
+
+  const panelContainerRef = usePanelContainerRef();
+  const focusFileViewer = useCallback(() => fileViewerRef.current?.focus(), []);
+  usePanelShortcut(2, focusFileViewer, panelContainerRef);
 
   const sakenGjelder = oppgave?.sakenGjelder;
   const klager = oppgave?.klager;
@@ -68,6 +85,7 @@ export const KabalFileViewer = ({
       errorComponent={KabalErrorActions}
       theme={appTheme}
       commonPasswords={commonPasswords}
+      handleRef={fileViewerRef}
     />
   );
 };

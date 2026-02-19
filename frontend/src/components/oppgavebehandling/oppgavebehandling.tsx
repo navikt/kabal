@@ -8,6 +8,7 @@ import { ValidationErrorProvider } from '@app/components/kvalitetsvurdering/vali
 import { OppgavebehandlingControls } from '@app/components/oppgavebehandling-controls/oppgavebehandling-controls';
 import { Footer } from '@app/components/oppgavebehandling-footer/footer';
 import { OppgavebehandlingPanels } from '@app/components/oppgavebehandling-panels/oppgavebehandling-panels';
+import { PanelShortcutsProvider } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useEffect } from 'react';
 
@@ -28,10 +29,12 @@ export const Oppgavebehandling = () => {
   );
 
   return (
-    <ValidationErrorProvider>
-      <OppgavebehandlingControls />
-      <OppgavebehandlingPanels />
-      <Footer />
-    </ValidationErrorProvider>
+    <PanelShortcutsProvider>
+      <ValidationErrorProvider>
+        <OppgavebehandlingControls />
+        <OppgavebehandlingPanels />
+        <Footer />
+      </ValidationErrorProvider>
+    </PanelShortcutsProvider>
   );
 };

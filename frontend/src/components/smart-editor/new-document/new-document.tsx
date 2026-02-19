@@ -25,13 +25,14 @@ import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@app/typ
 import { Language } from '@app/types/texts/language';
 import type { Immutable } from '@app/types/types';
 import { Box, Heading, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { type Ref, useContext, useState } from 'react';
 
 interface Props {
   onCreate: (id: string) => void;
+  ref?: Ref<HTMLElement>;
 }
 
-export const NewDocument = ({ onCreate }: Props) => {
+export const NewDocument = ({ onCreate, ref }: Props) => {
   const oppgaveId = useOppgaveId();
   const [createSmartDocument, { isLoading }] = useCreateSmartDocumentMutation();
   const [loadingTemplate, setLoadingTemplate] = useState<string | null>(null);
@@ -65,6 +66,7 @@ export const NewDocument = ({ onCreate }: Props) => {
 
   return (
     <Box
+      ref={ref}
       as="section"
       width="826px"
       height="100%"
@@ -150,7 +152,7 @@ const TemplateButton = ({ template, loading, onClick }: TemplateButtonProps) => 
           align="center"
           position="relative"
           style={{ opacity: hasAccess ? 1 : 0.5, cursor: hasAccess ? 'pointer' : 'not-allowed' }}
-          className="hover:bg-ax-bg-neutral-moderate-hover"
+          className="hover:bg-ax-bg-neutral-moderate-hover focus:rounded focus:outline-2 focus:outline-ax-border-focus focus:-outline-offset-2"
         >
           <LoadingOverlay loading={loading} />
 
