@@ -1,4 +1,4 @@
-import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
+import { PanelContainer } from '@app/components/oppgavebehandling-panels/panel-container';
 import { NewDocument } from '@app/components/smart-editor/new-document/new-document';
 import { TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
