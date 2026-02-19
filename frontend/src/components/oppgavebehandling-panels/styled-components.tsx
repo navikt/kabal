@@ -1,8 +1,14 @@
-import { Box, VStack } from '@navikt/ds-react';
-import type { HTMLAttributes } from 'react';
+import { Box, VStack, type VStackProps } from '@navikt/ds-react';
 
-export const PanelContainer = ({ children, ...props }: HTMLAttributes<HTMLDivElement>) => (
-  <VStack asChild height="100%" maxHeight="100%" minWidth="fit-content" position="relative" {...props}>
+export const PanelContainer = ({
+  children,
+  position = 'relative',
+  height = '100%',
+  maxHeight = '100%',
+  minWidth = 'fit-content',
+  ...props
+}: VStackProps) => (
+  <VStack asChild height={height} maxHeight={maxHeight} minWidth={minWidth} position={position} {...props}>
     <Box background="default" shadow="dialog" borderRadius="4" overflowX="hidden" as="section">
       {children}
     </Box>
