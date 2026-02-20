@@ -18,7 +18,7 @@ export const PaaVentTil = ({ sattPaaVent }: Props) => {
 
   return (
     <time
-      className={isExpired ? 'text-ax-text-danger-decoration' : undefined}
+      className={isExpired ? 'text-ax-text-danger-subtle' : undefined}
       dateTime={to}
       title={`Satt på vent fra ${prettyFrom}`}
     >

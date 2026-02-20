@@ -72,7 +72,6 @@ export const AttachmentList = ({
         position="relative"
         data-testid="new-attachments-list"
         style={{ height: attachmentListHeight, gridColumnEnd: 'action-end', gridColumnStart: 'title-start' }}
-        aria-rowcount={totalRowCount}
         className="ml-4"
       >
         {hasOverview ? <AttachmentsOverview documentId={parentDocument.id} parentId={parentDocument.parentId} /> : null}
@@ -82,6 +81,8 @@ export const AttachmentList = ({
             attachment={attachment}
             parentDocument={parentDocument}
             top={(index + pdfStart) * ROW_HEIGHT + overviewHeight}
+            setSize={totalRowCount}
+            posInSet={index + 1}
           />
         ))}
 
@@ -93,6 +94,8 @@ export const AttachmentList = ({
             attachment={attachment}
             parentDocument={parentDocument}
             top={(index + journalfoertStart) * ROW_HEIGHT + pdfHeight + separatorHeight + overviewHeight}
+            setSize={totalRowCount}
+            posInSet={index + pdfLength + overviewCount + 1}
           />
         ))}
       </VStack>
@@ -104,9 +107,11 @@ interface AttachmentProps {
   attachment: IAttachmentDocument;
   parentDocument: IParentDocument;
   top: number;
+  setSize: number;
+  posInSet: number;
 }
 
-const Attachment = ({ attachment, parentDocument, top }: AttachmentProps) => (
+const Attachment = ({ attachment, parentDocument, top, setSize, posInSet }: AttachmentProps) => (
   <StyledAttachmentListItem
     key={attachment.id}
     data-testid="new-attachments-list-item"
@@ -114,6 +119,8 @@ const Attachment = ({ attachment, parentDocument, top }: AttachmentProps) => (
     data-documentid={attachment.id}
     data-documenttype="attachment"
     style={{ top }}
+    aria-setsize={setSize}
+    aria-posinset={posInSet}
   >
     <NewAttachment document={attachment} parentDocument={parentDocument} />
   </StyledAttachmentListItem>
@@ -122,7 +129,7 @@ const Attachment = ({ attachment, parentDocument, top }: AttachmentProps) => (
 const ListSeparator = ({ top }: { top: number }) => (
   <div
     data-label="Journalførte dokumenter"
-    className="absolute right-0 left-0 my-3 ml-0 border-ax-border-neutral-subtle border-b after:absolute after:top-1/2 after:left-5 after:-translate-y-1/2 after:bg-ax-bg-default after:px-1 after:text-ax-small after:content-[attr(data-label)]"
+    className="after:-translate-y-1/2 absolute right-0 left-0 my-3 ml-0 border-ax-border-neutral-subtle border-b after:absolute after:top-1/2 after:left-5 after:bg-ax-bg-default after:px-1 after:text-ax-small after:content-[attr(data-label)]"
     style={{ top }}
   />
 );

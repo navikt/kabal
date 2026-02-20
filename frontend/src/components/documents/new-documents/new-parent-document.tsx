@@ -18,9 +18,11 @@ import { NewDocument } from './new-document/new-document';
 interface Props extends ListProps {
   document: IParentDocument;
   style: React.CSSProperties;
+  setSize: number;
+  posInSet: number;
 }
 
-export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
+export const NewParentDocument = ({ document, style, setSize, posInSet, ...listProps }: Props) => {
   const oppgaveId = useOppgaveId();
   const [createVedlegg] = useCreateVedleggFromJournalfoertDocumentMutation({
     fixedCacheKey: `createVedlegg-${document.id}`,
@@ -60,6 +62,8 @@ export const NewParentDocument = ({ document, style, ...listProps }: Props) => {
   return (
     <Box
       as="li"
+      aria-setsize={setSize}
+      aria-posinset={posInSet}
       position="absolute"
       marginInline="space-2"
       borderRadius="4"

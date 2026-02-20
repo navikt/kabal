@@ -125,7 +125,7 @@ export const SharedDocumentTitle = (props: Props) => {
       <DocumentLink
         active={isInlineOpen || isTabOpen}
         disabled={disabled}
-        aria-pressed={isInlineOpen || isTabOpen}
+        aria-current={isInlineOpen || isTabOpen}
         onClick={onClick}
         onAuxClick={onClick}
         data-testid="document-open-button"

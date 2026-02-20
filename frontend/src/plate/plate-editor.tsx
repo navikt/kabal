@@ -20,6 +20,7 @@ export const KabalPlateEditor = ({ className, contentEditable, spellCheck = true
         {...props}
         className={merge('min-h-full outline-none', className)}
         spellCheck={spellCheck}
+        aria-label="Brevutforming"
         renderLeaf={({ attributes, children, text }) => (
           <span
             {...attributes}

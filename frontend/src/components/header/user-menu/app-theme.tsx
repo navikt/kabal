@@ -15,12 +15,12 @@ export const AppThemeSwitcher = () => {
       className="whitespace-nowrap"
       aria-label="Velg tema"
     >
-      <ToggleGroup.Item value={UserTheme.LIGHT} label="Lyst" icon={<SunFillIcon />} />
-      <ToggleGroup.Item value={UserTheme.DARK} label="Mørkt" icon={<MoonIcon />} />
+      <ToggleGroup.Item value={UserTheme.LIGHT} label="Lyst" icon={<SunFillIcon aria-hidden />} />
+      <ToggleGroup.Item value={UserTheme.DARK} label="Mørkt" icon={<MoonIcon aria-hidden />} />
       <ToggleGroup.Item
         value={UserTheme.SYSTEM}
         label="System"
-        icon={systemTheme === AppTheme.DARK ? <MonitorIcon /> : <MonitorFillIcon />}
+        icon={systemTheme === AppTheme.DARK ? <MonitorIcon aria-hidden /> : <MonitorFillIcon aria-hidden />}
       />
     </ToggleGroup>
   );

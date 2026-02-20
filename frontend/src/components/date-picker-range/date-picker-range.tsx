@@ -1,6 +1,6 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CalendarIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, type ButtonProps, DatePicker, HStack } from '@navikt/ds-react';
+import { Alert, Box, Button, type ButtonProps, DatePicker, HStack, Tooltip } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
 import { useCallback, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
@@ -35,15 +35,17 @@ export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea, but
 
   return (
     <HStack className="relative" style={{ gridArea }} ref={ref}>
-      <Button
-        onClick={onClick}
-        size={buttonSize}
-        variant={variant}
-        icon={<CalendarIcon aria-hidden />}
-        className={buttonClassName}
-      >
-        {buttonLabel}
-      </Button>
+      <Tooltip content="Filtrer på dato">
+        <Button
+          onClick={onClick}
+          size={buttonSize}
+          variant={variant}
+          icon={<CalendarIcon aria-hidden />}
+          className={buttonClassName}
+        >
+          {buttonLabel}
+        </Button>
+      </Tooltip>
       {isOpen ? (
         <Box
           background="default"
