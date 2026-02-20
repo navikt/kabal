@@ -44,10 +44,6 @@ export const versionPlugin = fastifyPlugin(
           stopTimer();
           endClientSession();
 
-          if (!reply.raw.writableEnded) {
-            reply.raw.end();
-          }
-
           req.raw.destroy();
         };
 
@@ -79,23 +75,11 @@ export const versionPlugin = fastifyPlugin(
             onClose();
           });
 
-        req.socket.on('error', (error) => {
-          log.warn({
-            msg: 'Socket error on version SSE connection',
-            trace_id,
-            span_id,
-            error,
-            data: { sse: true },
-          });
-        });
-
         if (reply.raw.headersSent) {
           log.warn({ msg: 'Version connection opened after headers sent', trace_id, span_id, data: { sse: true } });
 
           return;
         }
-
-        reply.hijack();
 
         reply.raw.writeHead(200, {
           'content-type': 'text/event-stream',
