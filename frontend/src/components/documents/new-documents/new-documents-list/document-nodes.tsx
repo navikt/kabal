@@ -21,6 +21,7 @@ export const useDocumentNodes = (
   isFeilregistrert: boolean,
   getUploadAccessError: ReturnType<typeof useLazyDuaAccess>,
   creatorRole: CreatorRole,
+  setSize: number,
 ) => {
   const _documentNodes = new Array<React.ReactNode>(documentMap.size);
 
@@ -98,6 +99,8 @@ export const useDocumentNodes = (
         journalfoertStart={journalfoertStart}
         hasAttachments={hasAttachments}
         hasSeparator={hasSeparator}
+        setSize={setSize}
+        posInSet={i + 1}
       />
     );
 

@@ -71,6 +71,7 @@ export const NewDocuments = () => {
     isFeilregistrert,
     getUploadAccessError,
     creatorRole,
+    documentMap.size,
   );
 
   const onRef = useCallback((ref: HTMLDivElement | null) => {
@@ -122,7 +123,6 @@ export const NewDocuments = () => {
               data-testid="new-documents-list"
               className="relative overflow-y-hidden"
               style={{ height: listHeight }}
-              aria-setsize={documentMap.size}
             >
               {documentNodes}
             </StyledDocumentList>

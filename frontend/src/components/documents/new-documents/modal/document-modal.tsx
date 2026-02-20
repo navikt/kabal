@@ -11,7 +11,7 @@ import { DuaActionEnum } from '@app/hooks/dua-access/access';
 import { type Dua, useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
 import { DistribusjonsType, type IParentDocument } from '@app/types/documents/documents';
 import { MenuElipsisVerticalIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
-import { Button, Modal } from '@navikt/ds-react';
+import { Button, Modal, Tooltip } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 
 interface Props {
@@ -69,15 +69,17 @@ export const DocumentModal = ({ document, isOpen, setIsOpen }: DocumentProps) =>
         attachmentErrors={removeAttachmentsAccessErrors}
         placement="left"
       >
-        <Button
-          data-color="neutral"
-          onClick={() => setIsOpen(!isOpen)}
-          data-testid="document-actions-button"
-          variant="tertiary"
-          size="small"
-          icon={<MenuElipsisVerticalIcon aria-hidden />}
-          style={{ gridArea: Fields.Action }}
-        />
+        <Tooltip content="Åpne flere valg for dokument">
+          <Button
+            data-color="neutral"
+            onClick={() => setIsOpen(!isOpen)}
+            data-testid="document-actions-button"
+            variant="tertiary"
+            size="small"
+            icon={<MenuElipsisVerticalIcon aria-hidden />}
+            style={{ gridArea: Fields.Action }}
+          />
+        </Tooltip>
       </AccessErrorsSummary>
       {isOpen ? (
         <Modal

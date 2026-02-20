@@ -4,7 +4,7 @@ import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useGetFradelingReasonQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Button, Loader, Popover } from '@navikt/ds-react';
+import { Button, Loader, Popover, Tooltip } from '@navikt/ds-react';
 import { useContext, useRef, useState } from 'react';
 
 interface Props {
@@ -27,15 +27,17 @@ export const FradelingReason = ({ oppgaveId }: Props) => {
 
   return (
     <>
-      <Button
-        data-color="neutral"
-        ref={buttonRef}
-        onClick={() => setOpenState(!openState)}
-        aria-expanded={openState}
-        icon={<InformationSquareIcon aria-hidden />}
-        variant="tertiary"
-        size="small"
-      />
+      <Tooltip content="Årsak til fradeling">
+        <Button
+          data-color="neutral"
+          ref={buttonRef}
+          onClick={() => setOpenState(!openState)}
+          aria-expanded={openState}
+          icon={<InformationSquareIcon aria-hidden />}
+          variant="tertiary"
+          size="small"
+        />
+      </Tooltip>
       <Popover open={openState} onClose={() => setOpenState(false)} anchorEl={buttonRef.current}>
         <Popover.Content>
           <p className="m-0">

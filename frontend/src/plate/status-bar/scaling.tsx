@@ -1,9 +1,9 @@
 import { MAX, MIN, STEP } from '@app/components/smart-editor/hooks/use-scale';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { Keys } from '@app/keys';
+import { Keys, MOD_KEY_TEXT } from '@app/keys';
 import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
+import { Box, Button, HStack, Radio, RadioGroup, TextField, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 export const Scaling = () => {
@@ -15,13 +15,15 @@ export const Scaling = () => {
   return (
     <HStack align="center" gap="space-8">
       <HStack align="center">
-        <Button
-          data-color="neutral"
-          icon={<MinusIcon aria-hidden />}
-          size="xsmall"
-          variant="tertiary"
-          onClick={scaleDown}
-        />
+        <Tooltip content="Zoom ut" keys={[MOD_KEY_TEXT, Keys.Dash]}>
+          <Button
+            data-color="neutral"
+            icon={<MinusIcon aria-hidden />}
+            size="xsmall"
+            variant="tertiary"
+            onClick={scaleDown}
+          />
+        </Tooltip>
         <input
           type="range"
           min={MIN}
@@ -31,13 +33,15 @@ export const Scaling = () => {
           onChange={(e) => setScale(Number.parseInt(e.target.value, 10))}
           className="w-52"
         />
-        <Button
-          data-color="neutral"
-          icon={<PlusIcon aria-hidden />}
-          size="xsmall"
-          variant="tertiary"
-          onClick={scaleUp}
-        />
+        <Tooltip content="Zoom inn" keys={[MOD_KEY_TEXT, Keys.Plus]}>
+          <Button
+            data-color="neutral"
+            icon={<PlusIcon aria-hidden />}
+            size="xsmall"
+            variant="tertiary"
+            onClick={scaleUp}
+          />
+        </Tooltip>
       </HStack>
       <div ref={ref} className="relative">
         <Button data-color="neutral" onClick={() => setIsOpen((o) => !o)} size="xsmall" variant="tertiary">

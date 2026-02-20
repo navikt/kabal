@@ -23,11 +23,11 @@ export const Nav = () => (
   <HStack as="nav" flexGrow="1" overflowX="auto" aria-label="Meny" data-testid="oppgaver-nav">
     <HStack as="ol" align="center" gap="space-16" wrap={false} height="100%" paddingInline="space-16">
       <NavItem to="/oppgaver" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
-        <BulletListIcon /> Oppgaver
+        <BulletListIcon aria-hidden /> Oppgaver
       </NavItem>
 
       <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
-        <TasklistIcon /> Mine Oppgaver
+        <TasklistIcon aria-hidden /> Mine Oppgaver
       </NavItem>
 
       <NavItem
@@ -35,7 +35,7 @@ export const Nav = () => (
         testId="search-nav-link"
         roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER, Role.KABAL_ROL, Role.KABAL_ROL]}
       >
-        <MagnifyingGlassIcon /> Søk på person
+        <MagnifyingGlassIcon aria-hidden /> Søk på person
       </NavItem>
 
       <NavItem
@@ -43,7 +43,7 @@ export const Nav = () => (
         testId="oppgavestyring-nav-link"
         roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]}
       >
-        <Buildings3Icon /> Oppgavestyring
+        <Buildings3Icon aria-hidden /> Oppgavestyring
       </NavItem>
 
       <NavItem
@@ -51,7 +51,7 @@ export const Nav = () => (
         testId="maltekstseksjoner-nav-link"
         roles={[Role.KABAL_MALTEKSTREDIGERING]}
       >
-        <PuzzlePieceIcon /> Maltekstseksjoner
+        <PuzzlePieceIcon aria-hidden /> Maltekstseksjoner
       </NavItem>
 
       <NavItem
@@ -59,7 +59,7 @@ export const Nav = () => (
         testId="maltekster-nav-link"
         roles={[Role.KABAL_MALTEKSTREDIGERING]}
       >
-        <FileIcon /> Maltekster
+        <FileIcon aria-hidden /> Maltekster
       </NavItem>
 
       <NavItem
@@ -67,7 +67,7 @@ export const Nav = () => (
         testId="redigerbare-maltekster-nav-link"
         roles={[Role.KABAL_MALTEKSTREDIGERING]}
       >
-        <FileTextIcon /> Redigerbare maltekster
+        <FileTextIcon aria-hidden /> Redigerbare maltekster
       </NavItem>
 
       <NavItem
@@ -75,7 +75,7 @@ export const Nav = () => (
         testId="gode-formuleringer-nav-link"
         roles={[Role.KABAL_FAGTEKSTREDIGERING]}
       >
-        <LightBulbIcon /> Gode formuleringer
+        <LightBulbIcon aria-hidden /> Gode formuleringer
       </NavItem>
 
       <NavItem
@@ -83,7 +83,7 @@ export const Nav = () => (
         testId="regelverk-nav-link"
         roles={[Role.KABAL_FAGTEKSTREDIGERING]}
       >
-        <GavelSoundBlockIcon /> Regelverk
+        <GavelSoundBlockIcon aria-hidden /> Regelverk
       </NavItem>
 
       <NavItem
@@ -103,11 +103,11 @@ export const Nav = () => (
       </NavItem>
 
       <NavItem to="/svarbrev" testId="svarbrev-nav-link" roles={[Role.KABAL_SVARBREVINNSTILLINGER]}>
-        <EnvelopeClosedIcon /> Svarbrev
+        <EnvelopeClosedIcon aria-hidden /> Svarbrev
       </NavItem>
 
       <NavItem to="/tilgangsstyring" testId="access-rights-nav-link" roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]}>
-        <PadlockLockedIcon /> Tilgangsstyring
+        <PadlockLockedIcon aria-hidden /> Tilgangsstyring
       </NavItem>
     </HStack>
   </HStack>

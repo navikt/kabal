@@ -169,7 +169,7 @@ const DocumentTitleInternal = memo(
       <DocumentTitleContainer>
         <DocumentLink
           active={isInlineOpen || isTabOpen}
-          aria-pressed={isInlineOpen || isTabOpen}
+          aria-current={isInlineOpen || isTabOpen ? 'true' : undefined}
           disabled={!hasAccess}
           onClick={onClick}
           onAuxClick={onClick}

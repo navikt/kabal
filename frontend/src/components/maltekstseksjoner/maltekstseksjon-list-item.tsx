@@ -19,6 +19,7 @@ export const MaltekstseksjonListItem = ({
   ...rest
 }: Props) => (
   <Box
+    as="li"
     position="relative"
     borderRadius="4"
     background={isActive ? 'accent-moderate' : undefined}
