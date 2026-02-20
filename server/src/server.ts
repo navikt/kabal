@@ -42,7 +42,17 @@ if (isDeployed) {
 
 const bodyLimit = 300 * 1024 * 1024; // 300 MB
 
-fastify({ trustProxy: true, bodyLimit, routerOptions: { querystringParser } })
+const app = fastify({ trustProxy: true, bodyLimit, routerOptions: { querystringParser } });
+
+/* Set keepAliveTimeout higher than Wonderwall's idle connection timeout (5s) to prevent
+  the server from closing keep-alive connections while Wonderwall still expects them to be open.
+  This prevents "unexpected EOF" errors from the reverse proxy sidecar.
+  
+  https://github.com/nais/wonderwall/blob/master/internal/http/transport.go#L21
+*/
+app.server.keepAliveTimeout = 10_000;
+
+app
   .register(fastifyWebsocket)
   .register(cors, corsOptions)
   .register(healthPlugin)
