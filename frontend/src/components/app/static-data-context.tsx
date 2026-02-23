@@ -1,4 +1,5 @@
 import { AppLoader } from '@app/components/app/loader';
+import { runMigrations } from '@app/components/app/migrations';
 import { countryCodes, postalCodes, user } from '@app/static-data/static-data';
 import type { IUserData } from '@app/types/bruker';
 import type { CountryCode, PostalCode } from '@app/types/common';
@@ -39,7 +40,10 @@ export const StaticDataLoader = ({ children }: Props) => {
   const [postalCodeList, setPostalCodeList] = useState<PostalCode[]>([]);
 
   useEffect(() => {
-    user.then(setUserData);
+    user.then((data) => {
+      runMigrations(data.navIdent);
+      setUserData(data);
+    });
     countryCodes.then((list) => setCountryCodeList(list.toSorted((a, b) => a.land.localeCompare(b.land, 'no-nb'))));
     postalCodes.then(setPostalCodeList);
   }, []);
