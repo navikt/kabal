@@ -7,6 +7,7 @@ import {
   EnvelopeClosedIcon,
   FileIcon,
   FileTextIcon,
+  GavelIcon,
   GavelSoundBlockIcon,
   LightBulbIcon,
   MagnifyingGlassIcon,
@@ -44,6 +45,10 @@ export const Nav = () => (
         roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]}
       >
         <Buildings3Icon aria-hidden /> Oppgavestyring
+      </NavItem>
+
+      <NavItem to="/saker-i-tr" roles={[Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]}>
+        <GavelIcon aria-hidden /> Saker i Trygderetten
       </NavItem>
 
       <NavItem

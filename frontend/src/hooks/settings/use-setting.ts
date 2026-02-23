@@ -147,6 +147,9 @@ export enum OppgaveTableRowsPerPage {
   SEARCH_VENTENDE = 'oppgaver/search_ventende/rows_per_page',
   RELEVANT_ACTIVE = 'oppgaver/relevant_active/rows_per_page',
   RELEVANT_VENTENDE = 'oppgaver/relevant_ventende/rows_per_page',
+  SAKER_I_TR_LEDIGE = 'oppgaver/saker_i_tr_ledige/rows_per_page',
+  SAKER_I_TR_VENTENDE = 'oppgaver/saker_i_tr_ventende/rows_per_page',
+  SAKER_I_TR_UFERDIGE = 'oppgaver/saker_i_tr_uferdige/rows_per_page',
 }
 
 export const useGosysBeskrivelseTab = () => useSetting('oppgavebehandling/gosys/beskrivelse/tab');
