@@ -99,6 +99,18 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getRelevantOppgaver: builder.query<RelevantOppgaverResponse, string>({
       query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/relevant`,
     }),
+    getTildelteOppgaverITR: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/oppgaver-i-tr/tildelte', params }),
+      providesTags: [OppgaveListTagTypes.TR_TILDELTE],
+    }),
+    getLedigeOppgaverITR: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/oppgaver-i-tr/ledige', params }),
+      providesTags: [OppgaveListTagTypes.TR_LEDIGE],
+    }),
+    getVentendeOppgaverITR: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/oppgaver-i-tr/paa-vent', params }),
+      providesTags: [OppgaveListTagTypes.TR_VENTENDE],
+    }),
   }),
 });
 
@@ -125,4 +137,7 @@ export const {
   useGetRolUferdigeOppgaverQuery,
   useGetRolsInEnhetQuery,
   useGetRelevantOppgaverQuery,
+  useGetTildelteOppgaverITRQuery,
+  useGetLedigeOppgaverITRQuery,
+  useGetVentendeOppgaverITRQuery,
 } = oppgaverQuerySlice;

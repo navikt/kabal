@@ -11,6 +11,9 @@ export enum OppgaveTableKey {
   ROL_VENTENDE = 'rv',
   ROL_RETURNERTE = 'rr',
   ROL_FERDIGE = 'rf',
+  SAKER_I_TR_LEDIGE = 'stl',
+  SAKER_I_TR_VENTENDE = 'stv',
+  SAKER_I_TR_UFERDIGE = 'stu',
 }
 
 export enum StaticOppgaveTableKey {
