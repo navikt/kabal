@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import type { FilterDropdownProps } from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
 import { useOppgaveTableTyper } from '@/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
+import type { FilterType } from '@/components/filter-dropdown/multi-select-dropdown';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import { SaksTypeEnum } from '@/types/kodeverk';
 
@@ -18,53 +19,45 @@ const OPTIONS: SaksTypeOption[] = [
   { value: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK, label: 'Begjæring om gjenopptak' },
 ];
 
-const OPTIONS_WITH_TRYGDERETTEN: SaksTypeOption[] = [
-  ...OPTIONS,
-  { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN, label: 'Anke i Trygderetten' },
-  { value: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR, label: 'Begjæring om gjenopptak i Trygderetten' },
-  { value: SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET, label: 'Behandling etter Trygderetten opphevet' },
-];
-
 const optionValueKey = (option: SaksTypeOption): string => option.value;
 const optionFilterText = (option: SaksTypeOption): string => option.label;
 const optionFormatOption = (option: SaksTypeOption): string => option.label;
 
-export const Sakstype = ({ columnKey, tableKey }: FilterDropdownProps) => {
+export const Sakstype = (props: FilterDropdownProps) => <Filter {...props} options={OPTIONS} />;
+
+export const SakstypeWithTrygderetten = (props: FilterDropdownProps) => (
+  <Filter
+    {...props}
+    options={[
+      ...OPTIONS,
+      { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN, label: 'Anke i Trygderetten' },
+      { value: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR, label: 'Begjæring om gjenopptak i Trygderetten' },
+      { value: SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET, label: 'Behandling etter Trygderetten opphevet' },
+    ]}
+  />
+);
+
+export const SakstypeForSakerITR = (props: FilterDropdownProps) => (
+  <Filter
+    {...props}
+    options={[
+      { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN, label: 'Anke i Trygderetten' },
+      { value: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR, label: 'Begjæring om gjenopptak i TR' },
+    ]}
+  />
+);
+
+const Filter = ({ columnKey, tableKey, options }: FilterDropdownProps & { options: FilterType<SaksTypeEnum>[] }) => {
   const [typer, setTyper] = useOppgaveTableTyper(tableKey);
 
-  const selected = useSelectedOptions(typer, OPTIONS);
+  const selected = useSelectedOptions(typer, options);
   const onChange = useOnChange(setTyper);
 
   return (
     <Table.ColumnHeader aria-sort="none">
       <SearchableMultiSelect
         label={TABLE_HEADERS[columnKey] ?? ''}
-        options={OPTIONS}
-        value={selected}
-        valueKey={optionValueKey}
-        formatOption={optionFormatOption}
-        emptyLabel={TABLE_HEADERS[columnKey] ?? ''}
-        filterText={optionFilterText}
-        onChange={onChange}
-        triggerVariant="tertiary"
-        triggerSize="medium"
-        triggerDisplay="count"
-      />
-    </Table.ColumnHeader>
-  );
-};
-
-export const SakstypeWithTrygderetten = ({ columnKey, tableKey }: FilterDropdownProps) => {
-  const [typer, setTyper] = useOppgaveTableTyper(tableKey);
-
-  const selected = useSelectedOptions(typer, OPTIONS_WITH_TRYGDERETTEN);
-  const onChange = useOnChange(setTyper);
-
-  return (
-    <Table.ColumnHeader aria-sort="none">
-      <SearchableMultiSelect
-        label={TABLE_HEADERS[columnKey] ?? ''}
-        options={OPTIONS_WITH_TRYGDERETTEN}
+        options={options}
         value={selected}
         valueKey={optionValueKey}
         formatOption={optionFormatOption}

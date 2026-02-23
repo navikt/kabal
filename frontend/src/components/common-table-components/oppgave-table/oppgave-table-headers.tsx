@@ -15,6 +15,7 @@ import { RolYtelse } from '@/components/common-table-components/oppgave-table/fi
 import { Saksbehandler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/saksbehandler';
 import {
   Sakstype,
+  SakstypeForSakerITR,
   SakstypeWithTrygderetten,
 } from '@/components/common-table-components/oppgave-table/filter-dropdowns/sakstype';
 import { Ytelse } from '@/components/common-table-components/oppgave-table/filter-dropdowns/ytelse';
@@ -54,6 +55,8 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         return <Sakstype key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.TypeWithTrygderetten:
         return <SakstypeWithTrygderetten key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.TypeForSakerITR:
+        return <SakstypeForSakerITR key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Ytelse:
         return <Ytelse key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Innsendingshjemler:

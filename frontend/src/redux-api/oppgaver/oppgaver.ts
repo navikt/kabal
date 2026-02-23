@@ -17,6 +17,9 @@ export enum OppgaveListTagTypes {
   KROLS_UFERDIGE = 'krols-uferdige',
   KROLS_FERDIGE = 'krols-ferdige',
   KROLS_VENTENDE = 'krols-ventende',
+  TR_TILDELTE = 'tr-tildelte',
+  TR_LEDIGE = 'tr-ledige',
+  TR_VENTENDE = 'tr-ventende',
 }
 
 export const OPPGAVELIST_TAG_TYPES = Object.values(OppgaveListTagTypes);
