@@ -114,7 +114,6 @@ export interface IOppgavebehandlingBase {
   sakenGjelder: ISakenGjelder;
   sattPaaVent: ISattPåVent | null;
   sendTilbakemelding: boolean | null;
-  strengtFortrolig: boolean;
   vergemaalEllerFremtidsfullmakt: boolean;
   /** DateTime */
   dead: string | null;

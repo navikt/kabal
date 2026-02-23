@@ -4,7 +4,7 @@ import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { VStack } from '@navikt/ds-react';
+import { LocalAlert, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { MedunderskriverReadOnly } from './read-only';
 import { SelectMedunderskriver } from './select-medunderskriver';
@@ -23,8 +23,17 @@ export const Medunderskriver = () => {
     return SKELETON;
   }
 
-  if (oppgave.strengtFortrolig === true) {
-    return null;
+  if (oppgave.fortrolig) {
+    return (
+      <LocalAlert status="warning" size="small" className="mt-2 mb-2">
+        <LocalAlert.Header>
+          <LocalAlert.Title>Medunderskriver</LocalAlert.Title>
+        </LocalAlert.Header>
+        <LocalAlert.Content>
+          Du kan ikke sende til medunderskriver fordi saken gjelder en bruker med fortrolig adresse.
+        </LocalAlert.Content>
+      </LocalAlert>
+    );
   }
 
   const { typeId, medunderskriver } = oppgave;
