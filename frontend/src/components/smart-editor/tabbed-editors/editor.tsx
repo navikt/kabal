@@ -407,21 +407,21 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
         {showHistory ? <History oppgaveId={oppgave.id} smartDocument={smartDocument} /> : null}
       </HStack>
       <StatusBar>
-        <Tooltip content={readOnly ? 'Lesemodus' : 'Skrivemodus'}>
-          <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="space-8">
-            <Box as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="auto space-0">
+        <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="space-8">
+          <Box as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="auto space-0">
+            <Tooltip content={readOnly ? 'Lesemodus' : 'Skrivemodus'}>
               {readOnly ? (
                 <FileTextIcon aria-hidden role="presentation" fontSize={24} color="var(--ax-text-neutral)" />
               ) : (
                 <DocPencilIcon aria-hidden role="presentation" fontSize={24} color="var(--ax-text-neutral)" />
               )}
-            </Box>
-          </HStack>
-        </Tooltip>
+            </Tooltip>
+          </Box>
+        </HStack>
 
-        <Tooltip content={isConnected ? 'Tilkoblet' : 'Frakoblet'}>
-          <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="space-8">
-            <Box as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="space-0 space-8">
+        <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="space-8">
+          <Box as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="space-0 space-8">
+            <Tooltip content={isConnected ? 'Tilkoblet' : 'Frakoblet'}>
               {isConnected ? (
                 <CloudFillIcon
                   aria-hidden
@@ -437,9 +437,9 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
                   color="var(--ax-text-danger-decoration)"
                 />
               )}
-            </Box>
-          </HStack>
-        </Tooltip>
+            </Tooltip>
+          </Box>
+        </HStack>
 
         <VersionStatus oppgaveId={oppgave.id} dokumentId={id} />
       </StatusBar>
