@@ -12,7 +12,7 @@ import { useIsAssignedRol } from '@app/hooks/use-is-rol';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { VStack } from '@navikt/ds-react';
+import { LocalAlert, VStack } from '@navikt/ds-react';
 import { RolReadOnly } from './read-only';
 
 export const Rol = () => {
@@ -31,7 +31,7 @@ const RolInternal = ({ oppgave }: Props) => {
   const isFinished = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
 
-  const { rol } = oppgave;
+  const { rol, fortrolig } = oppgave;
 
   const canEdit =
     !isFinished &&
@@ -47,6 +47,19 @@ const RolInternal = ({ oppgave }: Props) => {
       <Container>
         <RolReadOnly rol={rol} />
       </Container>
+    );
+  }
+
+  if (fortrolig) {
+    return (
+      <LocalAlert status="warning" size="small" className="my-2">
+        <LocalAlert.Header>
+          <LocalAlert.Title>Rådgivende overlege</LocalAlert.Title>
+        </LocalAlert.Header>
+        <LocalAlert.Content>
+          Du kan ikke sende til rådgivende overlege fordi saken gjelder en bruker med fortrolig adresse.
+        </LocalAlert.Content>
+      </LocalAlert>
     );
   }
 
