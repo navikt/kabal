@@ -23,19 +23,6 @@ export const Medunderskriver = () => {
     return SKELETON;
   }
 
-  if (oppgave.fortrolig) {
-    return (
-      <LocalAlert status="warning" size="small" className="mt-2 mb-2">
-        <LocalAlert.Header>
-          <LocalAlert.Title>Medunderskriver</LocalAlert.Title>
-        </LocalAlert.Header>
-        <LocalAlert.Content>
-          Du kan ikke sende til medunderskriver fordi saken gjelder en bruker med fortrolig adresse.
-        </LocalAlert.Content>
-      </LocalAlert>
-    );
-  }
-
   const { typeId, medunderskriver } = oppgave;
 
   const isReadOnly = isFinished || isFeilregistrert;
@@ -49,6 +36,19 @@ export const Medunderskriver = () => {
       <Container>
         <MedunderskriverReadOnly typeId={typeId} medunderskriver={medunderskriver} />
       </Container>
+    );
+  }
+
+  if (oppgave.fortrolig) {
+    return (
+      <LocalAlert status="warning" size="small" className="my-2">
+        <LocalAlert.Header>
+          <LocalAlert.Title>Medunderskriver</LocalAlert.Title>
+        </LocalAlert.Header>
+        <LocalAlert.Content>
+          Du kan ikke sende til medunderskriver fordi saken gjelder en bruker med fortrolig adresse.
+        </LocalAlert.Content>
+      </LocalAlert>
     );
   }
 
