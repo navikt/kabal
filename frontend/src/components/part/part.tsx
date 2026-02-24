@@ -5,7 +5,7 @@ import { PartStatusList } from '@app/components/part-status-list/part-status-lis
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import type { IPart } from '@app/types/oppgave-common';
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, HStack, VStack } from '@navikt/ds-react';
+import { Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { BehandlingSection } from '../behandling/behandlingsdetaljer/behandling-section';
 import { DeleteButton } from './delete-button';
@@ -124,5 +124,9 @@ interface EditButtonProps {
 const EditButton = ({ onClick, isEditing }: EditButtonProps) => {
   const Icon = isEditing ? XMarkIcon : PencilIcon;
 
-  return <Button data-color="neutral" variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />;
+  return (
+    <Tooltip content={isEditing ? 'Avbryt' : 'Rediger'}>
+      <Button data-color="neutral" variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />
+    </Tooltip>
+  );
 };

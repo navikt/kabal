@@ -24,15 +24,17 @@ export const Scaling = () => {
             onClick={scaleDown}
           />
         </Tooltip>
-        <input
-          type="range"
-          min={MIN}
-          max={MAX}
-          step={STEP}
-          value={scale}
-          onChange={(e) => setScale(Number.parseInt(e.target.value, 10))}
-          className="w-52"
-        />
+        <Tooltip content="Zoom">
+          <input
+            type="range"
+            min={MIN}
+            max={MAX}
+            step={STEP}
+            value={scale}
+            onChange={(e) => setScale(Number.parseInt(e.target.value, 10))}
+            className="w-52"
+          />
+        </Tooltip>
         <Tooltip content="Zoom inn" keys={[MOD_KEY_TEXT, Keys.Plus]}>
           <Button
             data-color="neutral"
