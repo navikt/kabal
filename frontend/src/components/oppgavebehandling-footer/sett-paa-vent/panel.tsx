@@ -44,6 +44,13 @@ const BERO_DATES: [number, Date][] = [
   [4, addMonths(NOW, 4)],
 ];
 
+const AVGJOERELSE_OM_SOEKSMAAL_GJENOPPTAKSBEGJAERING_DATES: [number, Date][] = [
+  [1, addMonths(NOW, 1)],
+  [2, addMonths(NOW, 2)],
+  [3, addMonths(NOW, 3)],
+  [6, addMonths(NOW, 6)],
+];
+
 export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
   const [to, setTo] = useState<string | null>(null);
   const [reason, setReason] = useState<string>('');
@@ -74,7 +81,7 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
 
   const fromDate = addDays(NOW, 1);
 
-  const dates = reasonId === PaaVentReasonEnum.SATT_I_BERO ? BERO_DATES : DEFAULT_DATES;
+  const dates = getDatePresets(reasonId);
 
   return (
     <VStack asChild gap="space-28" left="space-0" position="absolute" className="bottom-full z-1">
@@ -109,14 +116,8 @@ export const SettPaaVentPanel = ({ oppgaveId, close }: Props) => {
           {dates.map(([units, date]) => {
             const formattedDate = format(date, ISO_FORMAT);
             const isActive = to === formattedDate;
-            const label =
-              reasonId === PaaVentReasonEnum.SATT_I_BERO
-                ? units === 1
-                  ? 'måned'
-                  : 'måneder'
-                : units === 1
-                  ? 'uke'
-                  : 'uker';
+            const { singular, plural } = getLabels(reasonId);
+            const label = units === 1 ? singular : plural;
 
             return (
               <Button
@@ -222,6 +223,10 @@ const validateDate = (reasonId: PaaVentReasonEnum | null, date: string | null): 
     return differenceInMonths(parsedDate, NOW) >= 4 ? 'Sett en frist innen fire måneder.' : null;
   }
 
+  if (reasonId === PaaVentReasonEnum.VENTER_PAA_AVGJOERELSE_OM_SOEKSMAAL_GJENOPPTAKSBEGJAERING) {
+    return differenceInMonths(parsedDate, NOW) >= 6 ? 'Sett en frist innen seks måneder.' : null;
+  }
+
   if (differenceInWeeks(parsedDate, NOW) >= 5) {
     return 'Sett en frist innen fem uker.';
   }
@@ -243,4 +248,25 @@ const validateReason = (reasonId: PaaVentReasonEnum | null, reason: string): str
   }
 
   return null;
+};
+
+const getDatePresets = (reasonId: PaaVentReasonEnum | null) => {
+  switch (reasonId) {
+    case PaaVentReasonEnum.SATT_I_BERO:
+      return BERO_DATES;
+    case PaaVentReasonEnum.VENTER_PAA_AVGJOERELSE_OM_SOEKSMAAL_GJENOPPTAKSBEGJAERING:
+      return AVGJOERELSE_OM_SOEKSMAAL_GJENOPPTAKSBEGJAERING_DATES;
+    default:
+      return DEFAULT_DATES;
+  }
+};
+
+const getLabels = (reasonId: PaaVentReasonEnum | null): { singular: string; plural: string } => {
+  switch (reasonId) {
+    case PaaVentReasonEnum.SATT_I_BERO:
+    case PaaVentReasonEnum.VENTER_PAA_AVGJOERELSE_OM_SOEKSMAAL_GJENOPPTAKSBEGJAERING:
+      return { singular: 'måned', plural: 'måneder' };
+    default:
+      return { singular: 'uke', plural: 'uker' };
+  }
 };
