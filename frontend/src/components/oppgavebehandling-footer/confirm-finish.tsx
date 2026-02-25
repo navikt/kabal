@@ -186,11 +186,11 @@ const useText = (): string => {
       }
 
       if (utfallId === UtfallEnum.INNSTILLING_STADFESTELSE || utfallId === UtfallEnum.INNSTILLING_AVVIST) {
-        return 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.';
+        return 'Bekreft at du har gjennomført overføring til Trygderetten før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.';
       }
 
       if (utfallId === UtfallEnum.DELVIS_MEDHOLD) {
-        return 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys for den delen av saken du ikke har omgjort, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.';
+        return 'Bekreft at du har gjennomført overføring til Trygderetten for den delen av saken du ikke har omgjort, før du fullfører behandlingen i Kabal. Ankebehandlingen kan ikke redigeres når den er fullført.';
       }
 
       return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
