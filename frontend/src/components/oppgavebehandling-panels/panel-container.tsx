@@ -34,6 +34,7 @@ export const PanelContainer = ({
           overflowX="hidden"
           as="section"
           height="100%"
+          className="scroll-mx-8"
         >
           {children}
         </Box>
