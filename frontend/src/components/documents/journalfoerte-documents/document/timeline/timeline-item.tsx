@@ -78,7 +78,14 @@ const TimelinePopover = ({ children, buttonText }: TimelinePopoverProps) => {
 
   return (
     <div className="whitespace-normal">
-      <Button data-color="neutral" ref={ref} onClick={() => setIsOpen(!isOpen)} size="xsmall" variant="tertiary">
+      <Button
+        data-color="neutral"
+        ref={ref}
+        onClick={() => setIsOpen(!isOpen)}
+        size="xsmall"
+        variant="tertiary"
+        tabIndex={-1}
+      >
         {buttonText}
       </Button>
       <Popover open={isOpen} onClose={() => setIsOpen(false)} anchorEl={ref.current}>

@@ -38,6 +38,7 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
             title="Kopier tema"
             size="xsmall"
             className="absolute top-0 right-0 opacity-0 group-hover:opacity-100"
+            tabIndex={-1}
           />
         </Tag>
       ) : null}
@@ -56,6 +57,7 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
             title="Kopier avsender/mottaker"
             size="xsmall"
             className="absolute top-0 right-0 opacity-0 group-hover:opacity-100"
+            tabIndex={-1}
           />
         </div>
       ) : null}
@@ -101,6 +103,7 @@ const Saksnummer = ({ saksnummer }: SaksnummerProps) => {
         title="Kopier saksnummer"
         size="xsmall"
         className="absolute right-0 opacity-0 group-hover:opacity-100"
+        tabIndex={-1}
       />
     </Tag>
   );

@@ -19,6 +19,7 @@ export const ConfirmEditButton = ({ setEditMode }: ConfirmProps) => (
     title="Endre"
     size="xsmall"
     variant="tertiary"
+    tabIndex={-1}
   />
 );
 
@@ -44,8 +45,9 @@ export const DocumentTitleActions = ({ setEditMode, hasAccess, tittel }: Props) 
         title="Endre"
         size="xsmall"
         variant="tertiary"
+        tabIndex={-1}
       />
-      <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" />
+      <CopyButton copyText={tittel} title="Kopier dokumentnavn" size="xsmall" tabIndex={-1} />
     </HStack>
   );
 };
