@@ -1,25 +1,9 @@
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
-import { DocumentValidationErrorType } from '@app/types/documents/validation';
-import { Button, ErrorMessage, Heading, Label, List } from '@navikt/ds-react';
-import { useContext, useMemo } from 'react';
+import { ErrorMessage, Heading, Label, List } from '@navikt/ds-react';
+import { useContext } from 'react';
 
-interface Props {
-  updatePdf: () => void;
-}
-
-export const Errors = ({ updatePdf }: Props) => {
-  const { validationErrors, setValidationErrors } = useContext(ModalContext);
-
-  const hasFinishErrors = useMemo(
-    () =>
-      validationErrors.some(({ errors }) =>
-        errors.some(
-          ({ type }) =>
-            type === DocumentValidationErrorType.DOCUMENT_MODIFIED || type === DocumentValidationErrorType.WRONG_DATE,
-        ),
-      ),
-    [validationErrors],
-  );
+export const Errors = () => {
+  const { validationErrors } = useContext(ModalContext);
 
   if (validationErrors.length === 0) {
     return null;
@@ -46,30 +30,6 @@ export const Errors = ({ updatePdf }: Props) => {
             </List.Item>
           ))}
       </List>
-      {hasFinishErrors ? (
-        <Button
-          data-color="neutral"
-          size="xsmall"
-          onClick={() => {
-            updatePdf();
-            setValidationErrors(
-              validationErrors
-                .map(({ errors, ...rest }) => ({
-                  ...rest,
-                  errors: errors.filter(
-                    ({ type }) =>
-                      type !== DocumentValidationErrorType.DOCUMENT_MODIFIED &&
-                      type !== DocumentValidationErrorType.WRONG_DATE,
-                  ),
-                }))
-                .filter(({ errors }) => errors.length > 0),
-            );
-          }}
-          variant="secondary"
-        >
-          Oppdater
-        </Button>
-      ) : null}
     </section>
   );
 };

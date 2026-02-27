@@ -8,12 +8,18 @@ import { useCallback, useEffect } from 'react';
 interface KeyboardBoundaryProps {
   children: React.ReactNode;
   ref: React.RefObject<HTMLDivElement | null>;
+  scrollRef: React.RefObject<HTMLElement | null>;
 }
 
-export const KeyboardBoundary = ({ children, ref }: KeyboardBoundaryProps) => {
+export const KeyboardBoundary = ({ children, ref, scrollRef }: KeyboardBoundaryProps) => {
   const onKeyDown = useKeyboard();
 
-  const focus = useCallback(() => ref.current?.focus({ preventScroll: true }), [ref]);
+  const focus = useCallback(() => {
+    ref.current?.focus({ preventScroll: true });
+    requestAnimationFrame(() => {
+      scrollRef.current?.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+    });
+  }, [ref, scrollRef]);
 
   useEffect(() => {
     // Set the initial keyboard active state based on the current focused element.

@@ -41,7 +41,13 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
 
           <Section>
             <Label size="small">Journalpost-ID</Label>
-            <CopyButton copyText={journalpostId} activeText="Kopiert!" size="xsmall" text={journalpostId} />
+            <CopyButton
+              copyText={journalpostId}
+              activeText="Kopiert!"
+              size="xsmall"
+              text={journalpostId}
+              tabIndex={-1}
+            />
           </Section>
 
           <Section>
@@ -58,7 +64,7 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
 };
 
 const MottattHelpText = () => (
-  <HelpText>
+  <HelpText tabIndex={-1}>
     <p className="m-0 whitespace-normal text-base">
       Denne journalposten har status «Mottatt» og har ikke blitt journalført. Sørg for å få dokumentet journalført
       riktig før du bruker det i saksbehandlingen din.

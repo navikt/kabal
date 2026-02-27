@@ -40,6 +40,7 @@ export const EkspedertItems = ({ utsendingsinfo, type, timestamp, kanal, kanalna
                       copyText={utsendingsinfo.fysiskpostSendt.adressetekstKonvolutt}
                       text="Kopier adresse"
                       size="small"
+                      tabIndex={-1}
                     />
                   </PopupContainer>
                 ),

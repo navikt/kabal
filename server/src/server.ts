@@ -11,12 +11,14 @@ import { clientVersionPlugin } from '@app/plugins/client-version';
 import { crdtPlugin } from '@app/plugins/crdt/crdt';
 import { debugPlugin } from '@app/plugins/debug/debug';
 import { documentPlugin } from '@app/plugins/document';
+import { fileViewerPlugin } from '@app/plugins/file-viewer/file-viewer';
 import { healthPlugin } from '@app/plugins/health';
 import { httpLoggerPlugin } from '@app/plugins/http-logger';
 import { navIdentPlugin } from '@app/plugins/nav-ident';
 import { oboAccessTokenPlugin } from '@app/plugins/obo-token';
 import { proxyVersionPlugin } from '@app/plugins/proxy-version';
 import { serveAssetsPlugin } from '@app/plugins/serve-assets';
+import { serveDocumentViewerAssetsPlugin } from '@app/plugins/serve-file-viewer-assets';
 import { serveIndexPlugin } from '@app/plugins/serve-index';
 import { serverTimingPlugin } from '@app/plugins/server-timing';
 import { tabIdPlugin } from '@app/plugins/tab-id';
@@ -63,7 +65,9 @@ fastify({ trustProxy: true, bodyLimit, routerOptions: { querystringParser } })
   .register(versionPlugin)
   .register(apiProxyPlugin, { appNames: API_CLIENT_IDS, prefix: '/api' })
   .register(documentPlugin)
+  .register(fileViewerPlugin)
   .register(serveAssetsPlugin)
+  .register(serveDocumentViewerAssetsPlugin)
   .register(serveIndexPlugin)
   .register(httpLoggerPlugin)
   .register(crdtPlugin)

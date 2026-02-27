@@ -1,16 +1,16 @@
 import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
+import { SearchableNavEmployeeSelect } from '@app/components/searchable-select/searchable-nav-employee-select';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { type INavEmployee, Role } from '@app/types/bruker';
-import { Select, Skeleton } from '@navikt/ds-react';
-import { useMemo } from 'react';
+import { Skeleton } from '@navikt/ds-react';
+import { useCallback, useMemo } from 'react';
 
 interface Props {
   oppgaveId: string;
   medunderskriverIdent: string | null;
 }
 
-const NONE_SELECTED = 'NONE_SELECTED';
 const EMPTY_LIST: INavEmployee[] = [];
 
 export const Medunderskriver = ({ oppgaveId, medunderskriverIdent }: Props) => {
@@ -21,15 +21,24 @@ export const Medunderskriver = ({ oppgaveId, medunderskriverIdent }: Props) => {
 
   const { onChange, isUpdating } = useSetMedunderskriver(oppgaveId, medunderskrivere);
 
-  const options = useMemo(
-    () =>
-      medunderskrivere.map(({ navIdent, navn }) => (
-        <option key={navIdent} value={navIdent}>
-          {navn}
-        </option>
-      )),
-    [medunderskrivere],
+  const selectedValue = useMemo(
+    (): INavEmployee | null =>
+      medunderskriverIdent === null
+        ? null
+        : (medunderskrivere.find(({ navIdent }) => navIdent === medunderskriverIdent) ?? null),
+    [medunderskrivere, medunderskriverIdent],
   );
+
+  const handleChange = useCallback(
+    (employee: INavEmployee) => {
+      onChange(employee.navIdent, medunderskriverIdent);
+    },
+    [onChange, medunderskriverIdent],
+  );
+
+  const handleClear = useCallback(() => {
+    onChange(null, medunderskriverIdent);
+  }, [onChange, medunderskriverIdent]);
 
   if (!hasAccess) {
     return null;
@@ -40,16 +49,15 @@ export const Medunderskriver = ({ oppgaveId, medunderskriverIdent }: Props) => {
   }
 
   return (
-    <Select
+    <SearchableNavEmployeeSelect
       label="Medunderskriver"
-      size="small"
-      hideLabel
-      value={medunderskriverIdent ?? NONE_SELECTED}
-      onChange={({ target }) => onChange(target.value === NONE_SELECTED ? null : target.value, medunderskriverIdent)}
+      options={medunderskrivere}
+      value={selectedValue}
+      onChange={handleChange}
+      onClear={handleClear}
       disabled={isUpdating}
-    >
-      <option value={NONE_SELECTED}>Ingen</option>
-      {options}
-    </Select>
+      nullLabel="Ingen"
+      confirmLabel="Sett medunderskriver"
+    />
   );
 };

@@ -1,12 +1,11 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
+import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
 import { History } from '@app/components/smart-editor/history/history';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
-import {
-  cleanupLocalStorageBackups,
-  createLocalStorageBackup,
-} from '@app/components/smart-editor/tabbed-editors/backup';
+import { createLocalStorageBackup } from '@app/components/smart-editor/tabbed-editors/backup';
 import { Content } from '@app/components/smart-editor/tabbed-editors/content';
 import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
 import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
@@ -18,8 +17,10 @@ import { hasOwn } from '@app/functions/object';
 import { parseJSON } from '@app/functions/parse-json';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@app/hooks/settings/use-setting';
+import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushError, pushLog } from '@app/observability';
+import { isEditableTextNode } from '@app/plate/functions/is-editable-text';
 import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { components, saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
@@ -39,9 +40,9 @@ import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, File
 import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
-import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
-import { Plate, useEditorReadOnly, usePlateEditor } from 'platejs/react';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { BaseParagraphPlugin, RangeApi, TextApi, type TText } from 'platejs';
+import { Plate, type PlateEditor, useEditorReadOnly, useEditorRef, usePlateEditor } from 'platejs/react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 
 interface EditorProps {
@@ -373,7 +374,30 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
   const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
   const { showAnnotationsAtOrigin, showHistory } = useContext(SmartEditorContext);
+  const panelContainerRef = usePanelContainerRef();
   const readOnly = useEditorReadOnly();
+  const editor = useEditorRef();
+  const { value: activeEditorId } = useSmartEditorActiveDocument();
+  const isActive = id === activeEditorId;
+  const focusEditor = useCallback(() => {
+    const at = editor.selection ?? getFirstEditableTextStart(editor);
+
+    try {
+      if (at !== undefined) {
+        editor.tf.focus({ at, retries: 3 });
+      } else {
+        editor.tf.focus({ retries: 3 });
+      }
+    } catch {
+      // Failed to set focus at the correct position after retries.
+      console.debug('Failed to focus editor.', {
+        selection: editor.selection,
+        firstEditableText: getFirstEditableTextStart(editor),
+      });
+    }
+  }, [editor]);
+
+  usePanelShortcut(3, isActive ? focusEditor : null, panelContainerRef);
 
   return (
     <>
@@ -448,6 +472,21 @@ const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps
   );
 };
 
+const getFirstEditableTextStart = (editor: PlateEditor): BasePoint | undefined => {
+  const first = editor.api.next<TText>({
+    at: [0],
+    mode: 'lowest',
+    text: true,
+    match: (n, p) => TextApi.isText(n) && isEditableTextNode(editor, p),
+  });
+
+  if (first === undefined) {
+    return undefined;
+  }
+
+  return editor.api.start(first[1]);
+};
+
 interface EditorWithNewCommentAndFloatingToolbarProps {
   id: string;
 }
@@ -469,7 +508,3 @@ const EditorWithNewCommentAndFloatingToolbar = ({ id }: EditorWithNewCommentAndF
     </Sheet>
   );
 };
-
-if (typeof window !== 'undefined' && window.localStorage !== undefined) {
-  cleanupLocalStorageBackups(window.localStorage);
-}

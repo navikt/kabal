@@ -15,6 +15,7 @@ export const DocumentDate = ({ date, ...attrs }: Props) => (
       title="Kopier dato"
       size="xsmall"
       className="opacity-0 group-hover:opacity-100"
+      tabIndex={-1}
     />
   </HStack>
 );

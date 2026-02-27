@@ -1,13 +1,12 @@
-import { NONE } from '@app/components/behandling/behandlingsdialog/rol/constants';
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/rol/skeleton';
+import { SearchableNavEmployeeSelectWithLabel } from '@app/components/searchable-select/searchable-nav-employee-select-with-label';
 import { useIsAssignedRol, useIsAssignedRolAndSent, useIsKrolUser } from '@app/hooks/use-is-rol';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
 import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
 import { useGetPotentialRolQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
-import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 interface Props {
@@ -27,11 +26,6 @@ export const SelectRol = ({ oppgaveId, rol, isSaksbehandler }: Props) => {
   const [setRol, { isLoading: setRolIsLoading }] = useSetRolMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
   const isRol = useIsAssignedRolAndSent();
 
-  const onChange = (newValue: string) => {
-    const employee = newValue === NONE ? null : (potentialRol?.rols.find((r) => r.navIdent === newValue) ?? null);
-    setRol({ oppgaveId, employee });
-  };
-
   const canSelect = isSaksbehandler || isRol || isKrol;
 
   if (!canSelect) {
@@ -42,20 +36,18 @@ export const SelectRol = ({ oppgaveId, rol, isSaksbehandler }: Props) => {
     return SELECT_SKELETON;
   }
 
-  const options = potentialRol.rols.map(({ navIdent, navn }) => (
-    <option key={navIdent} value={navIdent} label={navn} />
-  ));
+  const noneLabel = rol.flowState === FlowState.SENT ? 'Felles kø' : 'Ingen / felles kø';
 
   return (
-    <Select
-      disabled={setRolIsLoading}
+    <SearchableNavEmployeeSelectWithLabel
       label="Rådgivende overlege"
-      onChange={({ target }) => onChange(target.value)}
-      size="small"
-      value={rol.employee?.navIdent ?? NONE}
-    >
-      <option value={NONE}>{rol.flowState === FlowState.SENT ? 'Felles kø' : 'Ingen / felles kø'}</option>
-      {options}
-    </Select>
+      onChange={(employee) => setRol({ oppgaveId, employee })}
+      onClear={() => setRol({ oppgaveId, employee: null })}
+      value={rol.employee}
+      disabled={setRolIsLoading}
+      options={potentialRol.rols}
+      nullLabel={noneLabel}
+      confirmLabel="Sett rådgivende overlege"
+    />
   );
 };

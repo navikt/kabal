@@ -1,13 +1,14 @@
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
+import { SearchableNavEmployeeSelect } from '@app/components/searchable-select/searchable-nav-employee-select';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
+import type { INavEmployee } from '@app/types/bruker';
 import type { IOppgave } from '@app/types/oppgaver';
-import { Box, ErrorMessage, HStack, Select, Tooltip } from '@navikt/ds-react';
+import { Box, ErrorMessage, HStack, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { useMemo } from 'react';
 import { useTildel } from './use-tildel';
-
-const NOT_SELECTED = 'NOT_SELECTED';
 
 export const Saksbehandler = (oppgave: IOppgave) => (
   <HStack align="center" justify="start" height="34px" width="100%" className="[grid-area:saksbehandler]">
@@ -64,54 +65,54 @@ const SelectSaksbehandler = ({
   } = useGetPotentialSaksbehandlereQuery(id);
   const [tildel, { isLoading }] = useTildel(id, typeId, ytelseId);
 
+  const options = useMemo((): INavEmployee[] => {
+    if (data === undefined) {
+      return [];
+    }
+
+    const isCurrentInList =
+      tildeltSaksbehandlerident === null ||
+      data.saksbehandlere.some(({ navIdent }) => navIdent === tildeltSaksbehandlerident);
+
+    if (isCurrentInList) {
+      return data.saksbehandlere;
+    }
+
+    return [
+      ...data.saksbehandlere,
+      {
+        navIdent: tildeltSaksbehandlerident,
+        navn: tildeltSaksbehandlerNavn ?? 'Ugyldig saksbehandler',
+      },
+    ];
+  }, [data, tildeltSaksbehandlerident, tildeltSaksbehandlerNavn]);
+
+  const selectedValue = useMemo((): INavEmployee | null => {
+    if (tildeltSaksbehandlerident === null) {
+      return null;
+    }
+
+    return options.find(({ navIdent }) => navIdent === tildeltSaksbehandlerident) ?? null;
+  }, [options, tildeltSaksbehandlerident]);
+
   if (saksbehandlereIsError) {
     return <ErrorMessage className="w-full truncate">Feil ved lasting</ErrorMessage>;
   }
 
-  if (potentialSaksbehandlereIsLoading || typeof data === 'undefined') {
+  if (potentialSaksbehandlereIsLoading || data === undefined) {
     return <LoadingCellContent variant="rectangle" />;
   }
 
-  const options = data.saksbehandlere.map(({ navIdent, navn }) => (
-    <option key={navIdent} value={navIdent}>
-      {navn} ({navIdent})
-    </option>
-  ));
-
-  const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
-    const employee = data.saksbehandlere.find(({ navIdent }) => navIdent === target.value);
-
-    if (employee !== undefined) {
-      tildel(employee);
-    }
-  };
-
-  const saksbehandler =
-    tildeltSaksbehandlerident === null
-      ? undefined
-      : `${tildeltSaksbehandlerNavn ?? 'Laster...'} (${tildeltSaksbehandlerident})`;
-
-  const valid =
-    tildeltSaksbehandlerident === null ||
-    data.saksbehandlere.some(({ navIdent }) => navIdent === tildeltSaksbehandlerident);
-
   return (
-    <Select
+    <SearchableNavEmployeeSelect
       label="Velg saksbehandler"
-      hideLabel
-      size="small"
-      value={tildeltSaksbehandlerident ?? NOT_SELECTED}
-      onChange={onChange}
+      options={options}
+      value={selectedValue}
+      onChange={tildel}
       disabled={isLoading}
-      title={saksbehandler}
-      className="w-full"
-    >
-      {tildeltSaksbehandlerident === null ? <option value={NOT_SELECTED}>Ikke tildelt</option> : null}
-      {options}
-      {valid ? null : (
-        <option value={tildeltSaksbehandlerident}>Ugyldig saksbehandler ({tildeltSaksbehandlerident})</option>
-      )}
-    </Select>
+      nullLabel="Ikke tildelt"
+      confirmLabel="Tildel"
+    />
   );
 };
 

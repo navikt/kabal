@@ -1,5 +1,11 @@
 import { jest, mock } from 'bun:test';
 import { GlobalRegistrator } from '@happy-dom/global-registrator';
+import React from 'react';
+
+// styled-components CJS bundle references global `React.createContext` instead of using its local require("react").
+// This is needed for @styled-icons/fluentui-system-regular which depends on styled-components via @styled-icons/styled-icon.
+globalThis.React = React;
+
 import type { IUserData } from './types/bruker';
 import type { CountryCode, PostalCode } from './types/common';
 

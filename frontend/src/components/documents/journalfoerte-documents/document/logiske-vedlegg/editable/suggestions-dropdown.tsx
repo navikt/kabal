@@ -76,7 +76,7 @@ const Container = ({ children }: { children: React.ReactNode }) => (
 );
 
 const Option = ({ children, ...rest }: Omit<ButtonProps, 'className'>) => (
-  <Button className="w-full cursor-pointer justify-start overflow-hidden" {...rest}>
+  <Button className="w-full cursor-pointer justify-start overflow-hidden" tabIndex={-1} {...rest}>
     {children}
   </Button>
 );
