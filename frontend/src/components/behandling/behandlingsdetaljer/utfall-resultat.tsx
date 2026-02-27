@@ -4,15 +4,16 @@ import {
   AnkeITROpphevetWarning,
   ReturWarning,
 } from '@app/components/behandling/behandlingsdetaljer/warnings';
+import { SearchableSelect } from '@app/components/searchable-select/searchable-select';
 import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
-import { isUtfall } from '@app/functions/is-utfall';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useFieldName } from '@app/hooks/use-field-name';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateExtraUtfallMutation, useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
-import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { HelpText, HStack, Label, Select, VStack } from '@navikt/ds-react';
+import { type IKodeverkSimpleValue, SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import { HelpText, HStack, Label, VStack } from '@navikt/ds-react';
+import { useMemo } from 'react';
 
 interface UtfallResultatProps {
   utfall: UtfallEnum | null;
@@ -21,7 +22,6 @@ interface UtfallResultatProps {
   typeId: SaksTypeEnum;
 }
 
-const NOT_SELECTED_VALUE = 'NOT_SELECTED';
 const NOT_SELECTED_LABEL = 'Ikke valgt';
 const SELECT_ID = 'select-utfall';
 const CONTAINER_ID = 'utfall-section';
@@ -48,6 +48,8 @@ const ReadOnlyUtfall = ({ utfall }: UtfallResultatProps) => {
   );
 };
 
+type UtfallEntry = IKodeverkSimpleValue<UtfallEnum>;
+
 const EditUtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: UtfallResultatProps) => {
   const [updateUtfall] = useUpdateUtfallMutation();
   const [updateEkstraUtfall] = useUpdateExtraUtfallMutation();
@@ -56,22 +58,18 @@ const EditUtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: Utf
 
   const [utfallKodeverk, isLoading] = useUtfall(typeId);
 
-  const onUtfallResultatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
+  const selectedUtfall = useMemo(
+    () => (utfall === null ? null : (utfallKodeverk.find((u) => u.id === utfall) ?? null)),
+    [utfall, utfallKodeverk],
+  );
 
-    if (isUtfall(value)) {
-      updateUtfall({ oppgaveId, utfallId: value });
+  const onUtfallChange = (entry: UtfallEntry) => {
+    updateUtfall({ oppgaveId, utfallId: entry.id });
 
-      if (extraUtfallIdSet.includes(value)) {
-        updateEkstraUtfall({ oppgaveId, extraUtfallIdSet: extraUtfallIdSet.filter((id) => id !== value) });
-      }
-    } else if (value === NOT_SELECTED_VALUE) {
-      // BE will handle extra utfall for this case
-      updateUtfall({ oppgaveId, utfallId: null });
+    if (extraUtfallIdSet.includes(entry.id)) {
+      updateEkstraUtfall({ oppgaveId, extraUtfallIdSet: extraUtfallIdSet.filter((id) => id !== entry.id) });
     }
   };
-
-  const options = utfallKodeverk.map(({ id, navn }) => <option key={id} value={id} label={navn} />);
 
   return (
     <VStack align="start" gap="space-8" marginBlock="space-0 space-1" data-testid={CONTAINER_ID}>
@@ -82,21 +80,20 @@ const EditUtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: Utf
         <HelpText>Du kan kun velge ett utfall i saken. Velg det utfallet som passer best.</HelpText>
       </HStack>
 
-      <Select
+      <SearchableSelect
         disabled={isLoading}
         label={utfallLabel}
-        hideLabel
         size="small"
-        onChange={onUtfallResultatChange}
-        value={utfall ?? NOT_SELECTED_VALUE}
-        id={SELECT_ID}
-        data-testid={SELECT_ID}
-        data-ready={!isLoading}
+        onChange={onUtfallChange}
+        onClear={() => updateUtfall({ oppgaveId, utfallId: null })}
+        value={selectedUtfall}
+        options={utfallKodeverk}
+        valueKey={utfallValueKey}
+        formatLabel={utfallFormatLabel}
+        filterOption={utfallFilterOption}
         error={validationError}
-      >
-        <option value={NOT_SELECTED_VALUE} label={NOT_SELECTED_LABEL} />
-        {options}
-      </Select>
+        confirmLabel="Sett utfall"
+      />
       {utfall === UtfallEnum.RETUR ? <ReturWarning /> : null}
       {typeId === SaksTypeEnum.ANKE && utfall === UtfallEnum.DELVIS_MEDHOLD ? <AnkeDelvisMedholdWarning /> : null}
       {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && utfall === UtfallEnum.HENVIST ? <AnkeITRHenvistWarning /> : null}
@@ -106,3 +103,11 @@ const EditUtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: Utf
     </VStack>
   );
 };
+
+const utfallValueKey = (entry: UtfallEntry): string => entry.id;
+
+const utfallFormatLabel = (entry: UtfallEntry | null): React.ReactNode =>
+  entry === null ? NOT_SELECTED_LABEL : entry.navn;
+
+const utfallFilterOption = (entry: UtfallEntry, search: string): boolean =>
+  entry.navn.toLowerCase().includes(search.toLowerCase());
