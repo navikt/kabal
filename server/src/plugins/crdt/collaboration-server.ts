@@ -11,7 +11,6 @@ import { getCloseEvent } from '@app/plugins/crdt/close-event';
 import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
 import { log, logContext } from '@app/plugins/crdt/log-context';
 import { createRefreshTimer } from '@app/plugins/crdt/refresh';
-import { sendStateless } from '@app/plugins/crdt/send-stateless';
 import { getValkeyExtension } from '@app/plugins/crdt/valkey';
 import { Hocuspocus } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
@@ -90,18 +89,14 @@ export const collaborationServer = new Hocuspocus({
       navIdent,
       { trace_id, span_id, tab_id, client_version },
       (hasWriteAccess) => {
-        sendStateless(connection.sendStateless, client_version, hasWriteAccess ? 'read-write' : 'readonly', {
-          trace_id,
-          span_id,
-          tab_id,
-        });
+        connection.sendStateless(hasWriteAccess ? 'read-write' : 'readonly');
         connection.readOnly = !hasWriteAccess;
       },
     );
 
     context.removeDeletedListener = SMART_DOCUMENT_WRITE_ACCESS.addDeletedDocumentListener(documentName, () => {
       logContext(`Document deleted and closed "${documentName}"`, context, 'info');
-      sendStateless(connection.sendStateless, client_version, 'deleted', { trace_id, span_id, tab_id });
+      connection.sendStateless('deleted');
       connection.close(getCloseEvent('DOCUMENT_DELETED', 4410));
     });
   },

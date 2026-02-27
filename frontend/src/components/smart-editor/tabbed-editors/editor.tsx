@@ -15,7 +15,6 @@ import { ENVIRONMENT } from '@app/environment';
 import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { hasOwn } from '@app/functions/object';
-import { parseJSON } from '@app/functions/parse-json';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
@@ -33,8 +32,7 @@ import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice, useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import type { GenericObject } from '@app/types/types';
-import { isObject, LogLevel } from '@grafana/faro-web-sdk';
+import { isObject } from '@grafana/faro-web-sdk';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, FileTextIcon } from '@navikt/aksel-icons';
 import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import type { YjsProviderConfig } from '@platejs/yjs';
@@ -82,8 +80,6 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
   const url = `/collaboration/behandlinger/${oppgave.id}/dokumenter/${id}`;
 
-  const context = { dokumentId: id, oppgaveId: oppgave.id };
-
   const provider: YjsProviderConfig = {
     type: 'hocuspocus',
     wsOptions: {
@@ -95,6 +91,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
       name: id,
       token: user.navIdent, // There must be a token defined for the server auth hook to run.
       onAuthenticated: ({ scope }) => setReadOnly(scope !== 'read-write'),
+      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       onClose: async ({ event }) => {
         if (event.code === 1000 || event.code === 1005) {
           return;
@@ -102,9 +99,23 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
         if (event.code === 4410) {
           console.debug('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.');
-          pushLog('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.', { context });
-          destroyAndDelete();
+          pushLog('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.', {
+            context: { dokumentId: id, oppgaveId: oppgave.id },
+          });
+          setReadOnly(true);
+          setIsConnected(false);
+          try {
+            yjs.destroy();
+          } catch (e) {
+            console.debug('Code 4410 - Error destroying Yjs instance', e);
+            pushLog('Code 4410 - Error destroying Yjs instance', {
+              context: { dokumentId: id, oppgaveId: oppgave.id },
+            });
 
+            if (e instanceof Error) {
+              pushError(e, { context: { dokumentId: id, oppgaveId: oppgave.id } });
+            }
+          }
           return;
         }
 
@@ -122,10 +133,23 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
         if (event.code === 4404) {
           console.debug('Code 4404 - Document not found. Destroying Yjs connection.');
-          pushLog('Code 4404 - Document not found. Destroying Yjs connection.', { context });
-          destroyAndDelete();
+          setReadOnly(true);
+          setIsConnected(false);
+          yjs.destroy();
 
-          return;
+          reduxStore.dispatch(
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgave.id, (documents) => {
+              const before = documents.map((d) => d.id).toString();
+              const filtered = documents.filter((document) => document.id !== id && document.parentId !== id);
+              const after = filtered.map((d) => d.id).toString();
+
+              pushLog('Code 4404 - Document not found. Destroying Yjs connection and removing document from store.', {
+                context: { dokumentId: id, oppgaveId: oppgave.id, before, after },
+              });
+
+              return filtered;
+            }),
+          );
         }
 
         try {
@@ -152,7 +176,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           console.error(err);
 
           if (err instanceof Error) {
-            pushError(err, { context });
+            pushError(err, { context: { dokumentId: id, oppgaveId: oppgave.id } });
           }
         }
       },
@@ -185,38 +209,33 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         setIsConnected(false);
       },
       onStateless: ({ payload }) => {
-        const parsed = parseJSON<{ type: string } & GenericObject>(payload);
-
-        if (parsed === null) {
-          pushLog(`Received stateless event with invalid JSON payload: ${payload}`, { context }, LogLevel.ERROR);
-
-          return;
-        }
-
-        const { type, ...rest } = parsed;
-
-        switch (type) {
+        switch (payload) {
           case 'readonly':
             setReadOnly(true);
-
-            break;
+            return;
           case 'read-write':
             setReadOnly(false);
-
-            break;
+            return;
           case 'deleted':
-            console.debug('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.', {
-              ...context,
-              ...rest,
-            });
-
+            console.debug('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.');
             pushLog('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.', {
-              context: { ...context, ...rest },
+              context: { dokumentId: id, oppgaveId: oppgave.id },
             });
+            setReadOnly(true);
+            setIsConnected(false);
+            try {
+              yjs.destroy();
+            } catch (e) {
+              console.debug('Stateless deleted - Error destroying Yjs instance', e);
+              pushLog('Stateless deleted - Error destroying Yjs instance', {
+                context: { dokumentId: id, oppgaveId: oppgave.id },
+              });
 
-            destroyAndDelete();
-
-            break;
+              if (e instanceof Error) {
+                pushError(e, { context: { dokumentId: id, oppgaveId: oppgave.id } });
+              }
+            }
+            return;
         }
       },
     },
@@ -236,26 +255,6 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const isInitialized = useRef(false);
 
   const { yjs } = editor.getApi(YjsPlugin);
-
-  const destroyAndDelete = () => {
-    setReadOnly(true);
-    setIsConnected(false);
-    yjs.destroy();
-
-    reduxStore.dispatch(
-      documentsQuerySlice.util.updateQueryData('getDocuments', oppgave.id, (documents) => {
-        const before = documents.map((d) => d.id).toString();
-        const filtered = documents.filter((document) => document.id !== id && document.parentId !== id);
-        const after = filtered.map((d) => d.id).toString();
-
-        pushLog('Document removed from store', {
-          context: { dokumentId: id, oppgaveId: oppgave.id, before, after },
-        });
-
-        return filtered;
-      }),
-    );
-  };
 
   useEffect(() => {
     if (!mounted || isInitialized.current) {
