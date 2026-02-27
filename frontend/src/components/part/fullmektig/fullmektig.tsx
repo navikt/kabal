@@ -1,41 +1,20 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { EditPart } from '@app/components/part/edit-part';
-import { WithoutId } from '@app/components/part/fullmektig/without-id';
+import { FullmektigLookup } from '@app/components/part-lookup/fullmektig-lookup';
 import { TRYGDERETTEN_ORGNR } from '@app/constants';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import type { IFullmektig } from '@app/types/oppgave-common';
-import { ArrowUndoIcon, PencilIcon, TrashFillIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, HStack, ToggleGroup, Tooltip, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useState } from 'react';
-
-enum Option {
-  ID = 'id',
-  ADDRESS = 'address',
-}
-
-const OPTIONS = Object.values(Option);
-const isOption = (value: string): value is Option => OPTIONS.some((option) => option === value);
-
-const getInitialValue = (part: IFullmektig | null): Option => {
-  if (part === null) {
-    return Option.ID;
-  }
-
-  return part.identifikator === null ? Option.ADDRESS : Option.ID;
-};
 
 interface Props {
   part: IFullmektig | null;
 }
 
 export const Fullmektig = ({ part }: Props) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState(getInitialValue(part));
   const canEdit = useCanEditBehandling();
   const [updateFullmektig, { isLoading }] = useUpdateFullmektigMutation({ fixedCacheKey: part?.id });
   const oppgaveId = useOppgaveId();
@@ -44,8 +23,6 @@ export const Fullmektig = ({ part }: Props) => {
     return null;
   }
 
-  const onClose = () => setIsEditing(false);
-
   const name = part?.name;
   const id = part?.identifikator;
   const hasName = typeof name === 'string' && name.length > 0;
@@ -53,118 +30,42 @@ export const Fullmektig = ({ part }: Props) => {
 
   return (
     <BehandlingSection label="Fullmektig">
-      <VStack gap="space-4">
-        <HStack gap="space-4" align="start" justify="space-between" wrap={false}>
-          <CopyButton
-            size="small"
-            copyText={name}
-            text={name}
-            activeText={name ?? 'Ikke satt'}
-            disabled={!hasName}
-            wrap
-          />
-
-          {canEdit ? (
-            <HStack gap="space-4" wrap={false} align="center">
-              {isEditing && part !== null ? <Delete onClose={onClose} id={part.id} /> : null}
-
-              <EditButton onClick={() => setIsEditing(!isEditing)} isEditing={isEditing} />
-            </HStack>
-          ) : null}
-        </HStack>
-
-        {hasId ? <CopyIdButton size="small" id={id} className="self-start" /> : null}
-      </VStack>
-
-      {isEditing ? (
-        <VStack gap="space-16" marginBlock="space-16 space-0">
-          <ToggleGroup
-            size="small"
-            onChange={(v) => {
-              if (isOption(v)) {
-                setValue(v);
-              }
-            }}
-            value={value}
-          >
-            <ToggleGroup.Item value={Option.ID}>ID-nummer</ToggleGroup.Item>
-            <ToggleGroup.Item value={Option.ADDRESS}>Navn og adresse</ToggleGroup.Item>
-          </ToggleGroup>
-
-          {value === Option.ID ? (
-            <EditPart
-              onChange={async (fullmektig) => {
-                await updateFullmektig({ oppgaveId, fullmektig }).unwrap();
-
-                onClose();
-              }}
-              id={part?.id}
-              isLoading={isLoading}
-              autoFocus
-              invalidReceivers={[
-                {
-                  id: TRYGDERETTEN_ORGNR,
-                  message: 'Trygderetten kan ikke settes som fullmektig.',
-                },
-              ]}
+      <HStack align="center" justify="space-between" wrap={false}>
+        <VStack align="start" justify="start">
+          <HStack align="center" gap="space-4" wrap>
+            <CopyButton
+              size="small"
+              copyText={name}
+              text={name}
+              activeText={name ?? 'Ikke satt'}
+              disabled={!hasName}
+              wrap
             />
-          ) : null}
-          {value === Option.ADDRESS ? <WithoutId part={part} onClose={onClose} /> : null}
+            {hasId ? <CopyIdButton size="small" id={id} /> : null}
+          </HStack>
         </VStack>
-      ) : null}
-    </BehandlingSection>
-  );
-};
 
-const Delete = ({ onClose, id }: { onClose: () => void; id: string }) => {
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [updateFullmektig, { isLoading }] = useUpdateFullmektigMutation({ fixedCacheKey: id });
-  const oppgaveId = useOppgaveId();
-
-  if (oppgaveId === skipToken) {
-    return null;
-  }
-
-  return (
-    <>
-      {showConfirm ? (
-        <Tooltip content="Fjern fullmektig">
-          <Button
-            data-color="danger"
-            icon={<TrashFillIcon />}
-            variant="primary"
-            size="small"
-            loading={isLoading}
-            onClick={async () => {
-              await updateFullmektig({ oppgaveId, fullmektig: null }).unwrap();
-              onClose();
+        {canEdit ? (
+          <FullmektigLookup
+            label="Endre eller fjern fullmektig"
+            part={part}
+            onChange={async (fullmektig) => {
+              await updateFullmektig({ oppgaveId, fullmektig }).unwrap();
             }}
+            onClear={async () => {
+              await updateFullmektig({ oppgaveId, fullmektig: null }).unwrap();
+            }}
+            isLoading={isLoading}
+            isClearLoading={isLoading}
+            invalidReceivers={[
+              {
+                id: TRYGDERETTEN_ORGNR,
+                message: 'Trygderetten kan ikke settes som fullmektig.',
+              },
+            ]}
           />
-        </Tooltip>
-      ) : null}
-      <Tooltip content={showConfirm ? 'Avbryt' : 'Fjern fullmektig'}>
-        <Button
-          icon={showConfirm ? <ArrowUndoIcon aria-hidden /> : <TrashFillIcon aria-hidden />}
-          variant={showConfirm ? 'tertiary' : 'danger'}
-          size="small"
-          onClick={() => setShowConfirm(!showConfirm)}
-        />
-      </Tooltip>
-    </>
-  );
-};
-
-interface EditButtonProps {
-  onClick: () => void;
-  isEditing: boolean;
-}
-
-const EditButton = ({ onClick, isEditing }: EditButtonProps) => {
-  const Icon = isEditing ? XMarkIcon : PencilIcon;
-
-  return (
-    <Tooltip content="Endre eller fjern fullmektig">
-      <Button data-color="neutral" variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />
-    </Tooltip>
+        ) : null}
+      </HStack>
+    </BehandlingSection>
   );
 };

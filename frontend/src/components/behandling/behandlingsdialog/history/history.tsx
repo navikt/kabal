@@ -1,6 +1,6 @@
 import { getFeilregistrertEvent } from '@app/components/behandling/behandlingsdialog/history/feilregistrert';
 import { getFerdigstiltEvent } from '@app/components/behandling/behandlingsdialog/history/ferdigstilt';
-import { ALL, Filter } from '@app/components/behandling/behandlingsdialog/history/filter';
+import { Filter } from '@app/components/behandling/behandlingsdialog/history/filter';
 import { getForlengetBehandlingstidEvent } from '@app/components/behandling/behandlingsdialog/history/forlenget-behandlingstid';
 import { getFullmektig } from '@app/components/behandling/behandlingsdialog/history/fullmektig';
 import { MissingHistoryWarning } from '@app/components/behandling/behandlingsdialog/history/history-warning';
@@ -13,7 +13,7 @@ import { getVarsletBehandlingstidEvent } from '@app/components/behandling/behand
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetHistoryQuery } from '@app/redux-api/oppgaver/queries/history';
 import { HistoryEventTypes, type IHistory, type IHistoryResponse } from '@app/types/oppgavebehandling/response';
-import { Heading, Select, VStack } from '@navikt/ds-react';
+import { Heading, Skeleton, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 
 export const EventHistory = () => {
@@ -27,11 +27,13 @@ export const EventHistory = () => {
           Hendelseslogg
         </Heading>
 
-        <Select label="Filter" size="small" hideLabel disabled value={ALL}>
-          <option value={ALL}>Alle hendelser</option>
-        </Select>
+        <Skeleton variant="rounded" height="2rem" />
 
-        <span className="block italic">Laster hendelser...</span>
+        <Skeleton variant="rounded" height="87px" />
+        <Skeleton variant="rounded" height="87px" />
+        <Skeleton variant="rounded" height="87px" />
+        <Skeleton variant="rounded" height="87px" />
+        <Skeleton variant="rounded" height="87px" />
       </VStack>
     );
   }
@@ -44,7 +46,7 @@ interface EventHistoryProps {
 }
 
 const LoadedEventHistory = ({ data }: EventHistoryProps) => {
-  const [filter, setFilter] = useState<keyof IHistoryResponse | typeof ALL>(ALL);
+  const [filters, setFilters] = useState<(keyof IHistoryResponse)[]>([]);
 
   const nodeCategories: Record<keyof IHistoryResponse, NodesCategory[]> = useMemo(
     () => ({
@@ -62,39 +64,13 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
     [data],
   );
 
-  const filteredNodes = useMemo(() => {
-    const {
-      feilregistrert,
-      ferdigstilt,
-      klager,
-      medunderskriver,
-      rol,
-      sattPaaVent,
-      tildeling,
-      fullmektig,
-      varsletBehandlingstid,
-      forlengetBehandlingstid,
-    } = nodeCategories;
-
-    if (filter === ALL) {
-      return [
-        ...feilregistrert,
-        ...ferdigstilt,
-        ...klager,
-        ...medunderskriver,
-        ...rol,
-        ...sattPaaVent,
-        ...tildeling,
-        ...fullmektig,
-        ...varsletBehandlingstid,
-        ...forlengetBehandlingstid,
-      ]
-        .sort((a, b) => b.timestamp.localeCompare(a.timestamp))
-        .map(({ node }) => node);
-    }
-
-    return nodeCategories[filter].toSorted((a, b) => b.timestamp.localeCompare(a.timestamp)).map(({ node }) => node);
-  }, [filter, nodeCategories]);
+  const filteredNodes = useMemo(
+    () =>
+      (filters.length === 0 ? Object.values(nodeCategories).flat() : filters.flatMap((f) => nodeCategories[f]))
+        .toSorted((a, b) => b.timestamp.localeCompare(a.timestamp))
+        .map(({ node }) => node),
+    [filters, nodeCategories],
+  );
 
   const { counts, totalCount } = useMemo(() => {
     const {
@@ -142,7 +118,7 @@ const LoadedEventHistory = ({ data }: EventHistoryProps) => {
         Hendelseslogg ({totalCount})
       </Heading>
 
-      <Filter filter={filter} setFilter={setFilter} counts={counts} totalCount={totalCount} />
+      <Filter filters={filters} setFilters={setFilters} counts={counts} totalCount={totalCount} />
 
       <ul className="m-0 flex list-none flex-col gap-y-2 p-0">
         {filteredNodes}

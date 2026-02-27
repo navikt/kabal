@@ -1,13 +1,14 @@
 import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/warnings';
-import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
+import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
+import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import { isUtfall } from '@app/functions/is-utfall';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useUtfall } from '@app/hooks/use-utfall';
 import { useUpdateExtraUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
-import { type SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { HelpText, HStack, InlineMessage, Label, Tag, VStack } from '@navikt/ds-react';
-import { useMemo } from 'react';
+import { type IKodeverkSimpleValue, type SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import { HelpText, HStack, InlineMessage, Label, VStack } from '@navikt/ds-react';
+import { useCallback, useId, useMemo } from 'react';
 
 interface TagsProps {
   utfallIdSet: UtfallEnum[];
@@ -32,101 +33,65 @@ export const ExtraUtfall = (props: Props) => {
   return (
     <VStack gap="space-8" marginBlock="space-0 space-1">
       {canEdit ? <ExtraUtfallButton {...props} /> : null}
-      <Tags {...props} />
       {canEdit && includesRetur ? <ReturWarning /> : null}
     </VStack>
   );
 };
 
 const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props) => {
+  const containerRef = usePanelContainerRef();
   const [updateUtfall] = useUpdateExtraUtfallMutation();
   const [utfallKodeverk] = useUtfall(typeId);
 
-  const options = useMemo(
-    () =>
-      utfallKodeverk.map(({ id, navn }) => ({
-        value: id,
-        label: navn,
-        disabled: id === mainUtfall,
-      })),
-    [utfallKodeverk, mainUtfall],
+  const options = useMemo(() => utfallKodeverk.filter(({ id }) => id !== mainUtfall), [utfallKodeverk, mainUtfall]);
+
+  const value = useMemo(() => options.filter(({ id }) => utfallIdSet.includes(id)), [options, utfallIdSet]);
+
+  const onChange = useCallback(
+    (selected: IKodeverkSimpleValue<UtfallEnum>[]) => {
+      const selectedIds = selected.map(({ id }) => id).filter(isUtfall);
+      const extraUtfallIdSet = mainUtfall !== null ? [...new Set([mainUtfall, ...selectedIds])] : selectedIds;
+      updateUtfall({ oppgaveId, extraUtfallIdSet });
+    },
+    [mainUtfall, oppgaveId, updateUtfall],
   );
 
-  const selected = useMemo(() => {
-    if (mainUtfall === null) {
-      return utfallIdSet;
-    }
-
-    return utfallIdSet.includes(mainUtfall) ? utfallIdSet : [...utfallIdSet, mainUtfall];
-  }, [utfallIdSet, mainUtfall]);
+  const selectId = useId();
 
   const disabled = mainUtfall === null;
 
   return (
-    <HStack align="center" gap="space-8" wrap={false}>
+    <VStack align="start">
+      <HStack align="center" gap="space-8" marginBlock="space-0 space-8">
+        <Label size="small" htmlFor={selectId}>
+          Ekstra utfall for tilpasset tekst
+        </Label>
+
+        <HelpText>Her kan du velge flere utfall for å få opp maltekst som passer til flere utfall.</HelpText>
+      </HStack>
+
       {disabled ? (
         <InlineMessage status="info">
           Du må velge utfall/resultat før du kan sette ekstra utfall for tilpasset tekst.
         </InlineMessage>
       ) : (
-        <FlatMultiSelectDropdown
-          selected={selected}
+        <SearchableMultiSelect
+          id={selectId}
+          label="Ekstra utfall for tilpasset tekst"
           options={options}
-          onChange={(newList) => updateUtfall({ oppgaveId, extraUtfallIdSet: newList.filter(isUtfall) })}
-          showCounter={false}
-          variant="secondary-neutral"
-        >
-          Ekstra utfall for tilpasset tekst
-        </FlatMultiSelectDropdown>
+          value={value}
+          valueKey={utfallValueKey}
+          formatOption={formatUtfallOption}
+          emptyLabel="Velg ekstra utfall"
+          filterText={utfallFilterText}
+          onChange={onChange}
+          scrollContainerRef={containerRef}
+        />
       )}
-
-      <HelpText>Her kan du velge flere utfall for å få opp maltekst som passer til flere utfall.</HelpText>
-    </HStack>
+    </VStack>
   );
 };
 
-const ReadOnlyLabel = () => {
-  const canEdit = useCanEditBehandling();
-
-  if (canEdit) {
-    return null;
-  }
-
-  return (
-    <HStack align="center" gap="space-8">
-      <Label htmlFor={TAGSCONTAINER_ID} size="small">
-        Ekstra utfall for tilpasset tekst
-      </Label>
-      <HelpText>
-        <VStack width="300px">Valg av flere utfall for å få opp maltekst som passer til flere utfall.</VStack>
-      </HelpText>
-    </HStack>
-  );
-};
-
-const TAGSCONTAINER_ID = 'tags-container';
-
-const Tags = ({ utfallIdSet, mainUtfall, typeId }: TagsProps) => {
-  const [utfallKodeverk] = useUtfall(typeId);
-  const canEdit = useCanEditBehandling();
-
-  return (
-    <>
-      <ReadOnlyLabel />
-      <HStack wrap gap="space-4" marginBlock="space-4 space-0" id={TAGSCONTAINER_ID}>
-        {mainUtfall === null || !canEdit ? null : (
-          <Tag data-color="meta-purple" size="small" variant="outline">
-            {utfallKodeverk.find((u) => u.id === mainUtfall)?.navn ?? `Ukjent utfall (${mainUtfall})`} (hovedutfall)
-          </Tag>
-        )}
-        {utfallIdSet.map((utfall) =>
-          utfall === mainUtfall ? null : (
-            <Tag data-color="info" key={utfall} size="small" variant="outline">
-              {utfallKodeverk.find((u) => u.id === utfall)?.navn ?? `Ukjent utfall (${utfall})`}
-            </Tag>
-          ),
-        )}
-      </HStack>
-    </>
-  );
-};
+const utfallValueKey = (option: IKodeverkSimpleValue<UtfallEnum>): string => option.id;
+const formatUtfallOption = (option: IKodeverkSimpleValue<UtfallEnum>) => option.navn;
+const utfallFilterText = (option: IKodeverkSimpleValue<UtfallEnum>): string => option.navn;

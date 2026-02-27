@@ -5,7 +5,7 @@ interface BehandlingSectionProps {
 }
 
 export const StyledBehandlingSection = ({ children }: BehandlingSectionProps) => (
-  <Box padding="space-16" minHeight="100%" background="default">
+  <Box padding="space-16" minHeight="100%" background="default" className="pb-180">
     {children}
   </Box>
 );
