@@ -102,7 +102,7 @@ export const collaborationServer = new Hocuspocus({
     context.removeDeletedListener = SMART_DOCUMENT_WRITE_ACCESS.addDeletedDocumentListener(documentName, () => {
       logContext(`Document deleted and closed "${documentName}"`, context, 'info');
       sendStateless(connection.sendStateless, client_version, 'deleted', { trace_id, span_id, tab_id });
-      connection.close(getCloseEvent('DOCUMENT_DELETED', 4410));
+      // connection.close(getCloseEvent('DOCUMENT_DELETED', 4410));
     });
   },
 
