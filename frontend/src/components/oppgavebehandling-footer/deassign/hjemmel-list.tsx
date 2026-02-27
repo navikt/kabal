@@ -32,13 +32,15 @@ export const HjemmelList = ({ ytelseId, ...props }: CommonProps & { ytelseId: st
   return <HjemmelListContent {...props} ytelse={ytelse} />;
 };
 
-export const HjemmelListContent = ({
-  selected,
-  direction,
-  onChange,
-  error,
-  ytelse,
-}: CommonProps & { ytelse: IYtelse }) => {
+interface InnerProps {
+  selected: string[];
+  onChange: (hjemler: string[]) => void;
+  error: string | null;
+  ytelse: IYtelse;
+}
+
+/** Inner content of the hjemmel list without positioning or box wrapper. Suitable for use inside a Popover. */
+export const HjemmelListInner = ({ selected, onChange, error, ytelse }: InnerProps) => {
   const [search, setSearch] = useState('');
   const filterRegex = useMemo(() => stringToRegExp(search), [search]);
 
@@ -72,44 +74,84 @@ export const HjemmelListContent = ({
   );
 
   const hasFilter = options.length > 10;
+
+  return (
+    <VStack gap="space-8" minWidth="200px">
+      <Heading level="1" size="small">
+        Endre hjemmel?
+      </Heading>
+      {hasFilter ? (
+        <>
+          <Search
+            label="Filtrer hjemlene"
+            placeholder="Filtrer hjemlene"
+            onChange={setSearch}
+            value={search}
+            size="small"
+            variant="simple"
+          />
+          <hr className="m-0 border-ax-border-neutral border-b" />
+        </>
+      ) : null}
+      <FilterList
+        options={filteredOptions}
+        selected={selected}
+        onChange={onChange}
+        error={error}
+        className="max-h-[min(50vh,400px)] overflow-y-auto"
+      />
+    </VStack>
+  );
+};
+
+interface PopoverContentProps {
+  selected: string[];
+  onChange: (hjemler: string[]) => void;
+  error: string | null;
+  ytelseId: string;
+}
+
+/** HjemmelList content without positioning or box wrapper. Suitable for use inside a Popover. */
+export const HjemmelListPopoverContent = ({ ytelseId, ...props }: PopoverContentProps) => {
+  const [ytelse, isLoading] = useKodeverkYtelse(ytelseId);
+
+  if (isLoading) {
+    return (
+      <VStack>
+        <Loader title="Laster..." className="m-2" />
+      </VStack>
+    );
+  }
+
+  if (ytelse === undefined) {
+    return <ErrorMessage>Kunne ikke finne ytelse med id: {ytelseId}</ErrorMessage>;
+  }
+
+  return <HjemmelListInner {...props} ytelse={ytelse} />;
+};
+
+export const HjemmelListContent = ({
+  selected,
+  direction,
+  onChange,
+  error,
+  ytelse,
+}: CommonProps & { ytelse: IYtelse }) => {
   const isUp = direction === Direction.UP;
 
   return (
-    <VStack
-      asChild
-      gap="space-8"
-      padding="space-8"
-      minWidth="200px"
+    <Box
       position="absolute"
       bottom={isUp ? 'space-0' : undefined}
       top={isUp ? undefined : 'space-0'}
       className="left-full"
+      background="default"
+      borderRadius="4"
+      borderColor="neutral"
+      borderWidth="1"
+      shadow="dialog"
     >
-      <Box background="default" borderRadius="4" borderColor="neutral" borderWidth="1" shadow="dialog">
-        <Heading level="1" size="small">
-          Endre hjemmel?
-        </Heading>
-        {hasFilter ? (
-          <>
-            <Search
-              label="Filtrer hjemlene"
-              placeholder="Filtrer hjemlene"
-              onChange={setSearch}
-              value={search}
-              size="small"
-              variant="simple"
-            />
-            <hr className="m-0 border-ax-border-neutral border-b" />
-          </>
-        ) : null}
-        <FilterList
-          options={filteredOptions}
-          selected={selected}
-          onChange={onChange}
-          error={error}
-          className="max-h-[min(50vh,400px)] overflow-y-auto"
-        />
-      </Box>
-    </VStack>
+      <HjemmelListInner selected={selected} onChange={onChange} error={error} ytelse={ytelse} />
+    </Box>
   );
 };

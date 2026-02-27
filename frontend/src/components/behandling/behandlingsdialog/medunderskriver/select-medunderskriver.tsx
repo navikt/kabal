@@ -1,11 +1,12 @@
-import { NONE } from '@app/components/behandling/behandlingsdialog/medunderskriver/constants';
 import {
   getTitleCapitalized,
+  getTitleLowercase,
   getTitlePlural,
 } from '@app/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { MedunderskriverReadOnly } from '@app/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
+import { SearchableNavEmployeeSelectWithLabel } from '@app/components/searchable-select/searchable-single-select/searchable-nav-employee-select-with-label';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsAssignedMedunderskriver, useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
@@ -14,7 +15,7 @@ import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/qu
 import { Role } from '@app/types/bruker';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
-import { BodyShort, Select } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 interface Props {
@@ -53,23 +54,18 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
     return <BodyShort>Fant ingen {getTitlePlural(typeId)}</BodyShort>;
   }
 
+  const fromNavIdent = medunderskriver.employee?.navIdent ?? null;
+
   return (
-    <Select
-      size="small"
-      label={`${getTitleCapitalized(typeId)}`}
-      onChange={({ target }) =>
-        onChange(target.value === NONE ? null : target.value, medunderskriver.employee?.navIdent ?? null)
-      }
-      value={medunderskriver.employee?.navIdent ?? NONE}
-      data-testid="select-medunderskriver"
+    <SearchableNavEmployeeSelectWithLabel
+      label={getTitleCapitalized(typeId)}
+      onChange={(employee) => onChange(employee.navIdent, fromNavIdent)}
+      onClear={() => onChange(null, fromNavIdent)}
+      value={medunderskriver.employee}
       disabled={isUpdating}
-    >
-      <option value={NONE}>Ingen</option>
-      {medunderskrivere.map(({ navn, navIdent }) => (
-        <option key={navIdent} value={navIdent}>
-          {navn}
-        </option>
-      ))}
-    </Select>
+      options={medunderskrivere}
+      nullLabel="Ingen"
+      confirmLabel={`Send til ${getTitleLowercase(typeId)}`}
+    />
   );
 };

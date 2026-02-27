@@ -6,6 +6,8 @@ import { TabbedEditors } from '@app/components/smart-editor/tabbed-editors/tabbe
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
 
+const WIDTH = '450px';
+
 export const SmartEditorPanel = () => {
   const { value: shown = true } = useSmartEditorEnabled();
   const { data: oppgave } = useOppgave();
@@ -18,11 +20,11 @@ export const SmartEditorPanel = () => {
     <>
       <TabbedEditors />
 
-      <PanelContainer data-testid="behandling-panel" minWidth="400px" maxWidth="400px">
+      <PanelContainer data-testid="behandling-panel" minWidth={WIDTH} maxWidth={WIDTH}>
         <BehandlingPanelContent />
       </PanelContainer>
 
-      <PanelContainer data-testid="behandlingsdialog-panel" minWidth="400px" maxWidth="400px">
+      <PanelContainer data-testid="behandlingsdialog-panel" minWidth={WIDTH} maxWidth={WIDTH}>
         <BehandlingsdialogPanelContent />
       </PanelContainer>
     </>

@@ -3,7 +3,9 @@ import { successToast } from '@app/components/oppgavestyring/toasts';
 import type { OnChange } from '@app/components/oppgavestyring/types';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
+import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
 import type { INavEmployee } from '@app/types/bruker';
+import { FlowState } from '@app/types/oppgave-common';
 import { parseISO } from 'date-fns';
 import { useCallback, useRef } from 'react';
 
@@ -18,9 +20,12 @@ export const useSetMedunderskriver = (
   oppgaveId: string,
   medunderskrivere: INavEmployee[] = EMPTY_MEDUNDERSKRIVERE,
 ): Return => {
-  const [setMedunderskriver, { isLoading: isUpdating }] = useSetMedunderskriverMutation({
+  const [setMedunderskriver, { isLoading: isSettingEmployee }] = useSetMedunderskriverMutation({
     fixedCacheKey: getFixedCacheKey(oppgaveId),
   });
+  const [setMedunderskriverFlowState, { isLoading: isSettingFlowState }] = useSetMedunderskriverFlowStateMutation();
+
+  const isUpdating = isSettingEmployee || isSettingFlowState;
 
   const onChangeRef = useRef<OnChange>(() => Promise.resolve());
 
@@ -38,6 +43,10 @@ export const useSetMedunderskriver = (
         const { modified } = await setMedunderskriver({ oppgaveId, employee: toMedunderskriver }).unwrap();
         const timestamp = parseISO(modified).getTime();
 
+        if (toMedunderskriver !== null) {
+          await setMedunderskriverFlowState({ oppgaveId, flowState: FlowState.SENT }).unwrap();
+        }
+
         successToast({
           testId: 'oppgave-set-medunderskriver-success-toast',
           oppgaveId,
@@ -52,7 +61,7 @@ export const useSetMedunderskriver = (
         // Error already handled in RTKQ file.
       }
     },
-    [medunderskrivere, oppgaveId, setMedunderskriver],
+    [medunderskrivere, oppgaveId, setMedunderskriver, setMedunderskriverFlowState],
   );
 
   onChangeRef.current = onChange;
