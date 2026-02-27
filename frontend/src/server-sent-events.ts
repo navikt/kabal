@@ -1,6 +1,7 @@
 import { ENVIRONMENT } from '@app/environment';
 import { parseJSON } from '@app/functions/parse-json';
 import { getQueryParams } from '@app/headers';
+import { pushLog } from '@app/observability';
 
 type ServerSentEvent = MessageEvent<string>;
 
@@ -14,12 +15,14 @@ export class ServerSentEventManager<E extends string = string> {
   private listeners: EventListener<E>[] = [];
   private url: string;
   private lastEventId: string | null = null;
+  private metadata: Record<string, string> = {};
 
   public isConnected = false;
 
-  constructor(url: string, initialEventId: string | null = null) {
+  constructor(url: string, initialEventId: string | null = null, metadata?: Record<string, string>) {
     this.url = url;
     this.lastEventId = initialEventId;
+    this.metadata = metadata ?? {};
     this.events = this.createEventSource();
   }
 
@@ -37,8 +40,12 @@ export class ServerSentEventManager<E extends string = string> {
     return () => this.removeEventListener(eventName, eventListener);
   }
 
-  public addJsonEventListener<T>(eventName: E, listener: JsonListenerFn<T>) {
+  public addJsonEventListener<T>(eventName: E, listener: JsonListenerFn<T>, log = false) {
     const jsonListener: ListenerFn<ServerSentEvent> = (event) => {
+      if (log) {
+        pushLog('Received event', { context: { eventName, ...this.metadata } });
+      }
+
       if (event.data.length === 0) {
         return;
       }
