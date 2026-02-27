@@ -191,7 +191,7 @@ const SendNotificationButton = ({ id, placement }: SendNotificationButtonProps) 
         variant="tertiary"
         size="xsmall"
         onClick={onClick}
-        className={`h-full cursor-pointer ${placement === Placement.RIGHT ? 'rounded-l-none' : 'rounded-r-none'} opacity-0 transition-opacity duration-200 group-hover/bubble:opacity-100`}
+        className={`h-full cursor-pointer ${placement === Placement.RIGHT ? 'rounded-l-none' : 'rounded-r-none'} opacity-0 transition-opacity duration-200 focus:opacity-100 group-hover/bubble:opacity-100`}
         loading={isLoading}
         icon={<BellIcon aria-hidden className="text-ax-medium" />}
       />
