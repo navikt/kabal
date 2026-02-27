@@ -6,7 +6,7 @@ const OLD_VERSION = '2026-02-25T09:43:48';
 const log = getLogger('send-stateless');
 
 export const sendStateless = (
-  sendStateless: Connection['sendStateless'],
+  connection: Connection,
   client_version: string | undefined,
   type: string,
   metadata: { trace_id: string | undefined; span_id: string | undefined; tab_id: string | undefined },
@@ -18,10 +18,10 @@ export const sendStateless = (
   }
 
   if (client_version <= OLD_VERSION) {
-    sendStateless(type);
+    connection.sendStateless(type);
 
     return;
   }
 
-  sendStateless(JSON.stringify({ type, ...metadata }));
+  connection.sendStateless(JSON.stringify({ type, ...metadata }));
 };
