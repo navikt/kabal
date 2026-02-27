@@ -11,6 +11,7 @@ export const sendStateless = (
   type: string,
   metadata: { trace_id: string | undefined; span_id: string | undefined; tab_id: string | undefined },
 ) => {
+  log.debug({ msg: `Send stateless message for client version: ${client_version}`, ...metadata });
   if (client_version === undefined) {
     log.error({ msg: 'Client version is undefined', ...metadata, data: { type } });
 
