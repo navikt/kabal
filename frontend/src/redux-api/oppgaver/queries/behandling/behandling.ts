@@ -70,6 +70,8 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
 
           const events = new ServerSentEventManager<ServerSentEventType>(
             `${KABAL_BEHANDLINGER_BASE_PATH}/${oppgaveId}/events`,
+            null,
+            { oppgaveId },
           );
 
           events.addJsonEventListener(ServerSentEventType.MESSAGE, handleMessageEvent(oppgaveId, navIdent));
@@ -115,8 +117,8 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
 
           events.addJsonEventListener(ServerSentEventType.DOCUMENTS_ADDED, documentsAdded);
           events.addJsonEventListener(ServerSentEventType.DOCUMENTS_CHANGED, documentsChanged);
-          events.addJsonEventListener(ServerSentEventType.DOCUMENTS_REMOVED, documentsRemoved);
-          events.addJsonEventListener(ServerSentEventType.DOCUMENT_FINISHED, documentFinished);
+          events.addJsonEventListener(ServerSentEventType.DOCUMENTS_REMOVED, documentsRemoved, true);
+          events.addJsonEventListener(ServerSentEventType.DOCUMENT_FINISHED, documentFinished, true);
 
           // Smart documents
           const smartDocumentVersioned = handleSmartDocumentVersionedEvent(oppgaveId);
