@@ -19,6 +19,7 @@ import { OppgaverPage } from '@app/pages/oppgaver/oppgaver';
 import { OppgavestyringPage } from '@app/pages/oppgavestyring/oppgavestyring';
 import { RedigerbareMalteksterPage } from '@app/pages/redigerbare-maltekster/redigerbare-maltekster';
 import { RegelverkPage } from '@app/pages/regelverk/regelverk';
+import { SakerITRPage } from '@app/pages/saker-i-tr/saker-i-tr';
 import { SearchPage } from '@app/pages/search/search';
 import { SettingsPage } from '@app/pages/settings/settings';
 import { SvarbrevPage } from '@app/pages/svarbrev/svarbrev';
@@ -60,6 +61,10 @@ export const Router = () => (
 
       <Route element={<ProtectedRoute roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]} />}>
         <Route path="oppgavestyring" element={<OppgavestyringPage />} />
+      </Route>    
+      
+        <Route element={<ProtectedRoute roles={[Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]} />}>
+        <Route path="saker-i-tr" element={<SakerITRPage />} />
       </Route>
 
       <Route

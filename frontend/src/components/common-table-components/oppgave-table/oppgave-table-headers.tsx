@@ -25,7 +25,7 @@ import { Rol } from './filter-dropdowns/rol';
 import { RolHjemmel } from './filter-dropdowns/rol-hjemmel';
 import { RolYtelse } from './filter-dropdowns/rol-ytelse';
 import { Saksbehandler } from './filter-dropdowns/saksbehandler';
-import { Sakstype, SakstypeWithTrygderetten } from './filter-dropdowns/sakstype';
+import { SakertypeForSakerITR, Sakstype, SakstypeWithTrygderetten } from './filter-dropdowns/sakstype';
 import { Ytelse } from './filter-dropdowns/ytelse';
 
 interface TablePlainHeadersProps {
@@ -51,6 +51,8 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         return <Sakstype key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.TypeWithTrygderetten:
         return <SakstypeWithTrygderetten key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.TypeForSakerITR:
+        return <SakertypeForSakerITR key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Ytelse:
         return <Ytelse key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Innsendingshjemler:

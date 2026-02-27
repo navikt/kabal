@@ -34,11 +34,13 @@ export enum ColumnKeyEnum {
   DatoSendtTilTr = 33,
   FlowStatesWithoutSelf = 34,
   FlowStatesWithSelf = 35,
+  TypeForSakerITR = 36,
 }
 
 export const TABLE_HEADERS = {
   [ColumnKeyEnum.Type]: 'Type',
   [ColumnKeyEnum.TypeWithTrygderetten]: 'Type',
+  [ColumnKeyEnum.TypeForSakerITR]: 'Type',
   [ColumnKeyEnum.Ytelse]: 'Ytelse',
   [ColumnKeyEnum.RolYtelse]: 'Ytelse',
   [ColumnKeyEnum.Innsendingshjemler]: 'Hjemmel',
