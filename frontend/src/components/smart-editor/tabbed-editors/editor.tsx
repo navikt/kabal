@@ -100,6 +100,8 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
       token: user.navIdent, // There must be a token defined for the server auth hook to run.
       onAuthenticated: ({ scope }) => setReadOnly(scope !== 'read-write'),
       onClose: async ({ event }) => {
+        pushLog(`WebSocket closed with code ${event.code} and reason: ${event.reason}`, { context });
+
         if (event.code === 1000 || event.code === 1005) {
           return;
         }
