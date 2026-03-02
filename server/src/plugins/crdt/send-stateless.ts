@@ -17,6 +17,12 @@ export const sendStateless = (
     return;
   }
 
+  log.debug({
+    msg: `Sending stateless message for client version: ${client_version}. client_version <= OLD_VERSION ? ${client_version <= OLD_VERSION}`,
+    ...metadata,
+    data: { type, client_version },
+  });
+
   if (client_version <= OLD_VERSION) {
     connection.sendStateless(type);
 
