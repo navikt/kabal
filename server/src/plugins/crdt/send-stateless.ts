@@ -23,7 +23,7 @@ export const sendStateless = (
     data: { type, client_version },
   });
 
-  if (client_version <= OLD_VERSION) {
+  if (client_version.length > 0 &&client_version <= OLD_VERSION) {
     connection.sendStateless(type);
 
     return;
