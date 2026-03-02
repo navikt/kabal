@@ -1,33 +1,9 @@
-import { getLogger } from '@app/logger';
 import type { Connection } from '@hocuspocus/server';
-
-const OLD_VERSION = '2026-02-25T09:43:48';
-
-const log = getLogger('send-stateless');
 
 export const sendStateless = (
   connection: Connection,
-  client_version: string | undefined,
   type: string,
   metadata: { trace_id: string | undefined; span_id: string | undefined; tab_id: string | undefined },
 ) => {
-  if (client_version === undefined) {
-    log.error({ msg: 'Client version is undefined', ...metadata, data: { type } });
-
-    return;
-  }
-
-  log.debug({
-    msg: `Sending stateless message for client version: ${client_version}. client_version <= OLD_VERSION ? ${client_version <= OLD_VERSION}`,
-    ...metadata,
-    data: { type, client_version },
-  });
-
-  if (client_version.length > 0 &&client_version <= OLD_VERSION) {
-    connection.sendStateless(type);
-
-    return;
-  }
-
   connection.sendStateless(JSON.stringify({ type, ...metadata }));
 };
