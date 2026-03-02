@@ -6,7 +6,7 @@ export interface ConnectionContext {
   readonly trace_id?: string;
   readonly span_id?: string;
   readonly tab_id?: string;
-  readonly client_version?: string;
+  readonly client_version: string;
   readonly navIdent: string;
   readonly cookie: string | undefined;
   hasWriteAccess?: boolean;

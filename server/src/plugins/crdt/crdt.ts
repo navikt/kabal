@@ -7,6 +7,7 @@ import { isObject } from '@app/functions/functions';
 import { parseTokenPayload } from '@app/helpers/token-parser';
 import { type AnyObject, getLogger, type Level, type LogArgs } from '@app/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
+import { CLIENT_VERSION_PLUGIN_ID } from '@app/plugins/client-version';
 import { getHeaders } from '@app/plugins/crdt/api/headers';
 import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
 import { collaborationServer } from '@app/plugins/crdt/collaboration-server';
@@ -221,6 +222,7 @@ export const crdtPlugin = fastifyPlugin(
       TRACEPARENT_PLUGIN_ID,
       TAB_ID_PLUGIN_ID,
       NAV_IDENT_PLUGIN_ID,
+      CLIENT_VERSION_PLUGIN_ID,
     ],
   },
 );

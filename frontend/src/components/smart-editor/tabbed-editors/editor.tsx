@@ -16,6 +16,7 @@ import { DocumentErrorComponent } from '@app/error-boundary/document-error';
 import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { hasOwn } from '@app/functions/object';
 import { parseJSON } from '@app/functions/parse-json';
+import { getQueryParams } from '@app/headers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
@@ -41,7 +42,7 @@ import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
 import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
 import { Plate, useEditorReadOnly, usePlateEditor } from 'platejs/react';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 
 interface EditorProps {
@@ -80,7 +81,10 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const [isConnected, setIsConnected] = useState(false);
   const [readOnly, setReadOnly] = useState(!ENVIRONMENT.isLocal); // Start in read-only mode until we know otherwise. Must start as writable (readOnly=false) on localhost to get write access at all.
 
-  const url = `/collaboration/behandlinger/${oppgave.id}/dokumenter/${id}`;
+  const url = useMemo(
+    () => `/collaboration/behandlinger/${oppgave.id}/dokumenter/${id}?${getQueryParams().toString()}`,
+    [oppgave.id, id],
+  );
 
   const context = { dokumentId: id, oppgaveId: oppgave.id };
 
