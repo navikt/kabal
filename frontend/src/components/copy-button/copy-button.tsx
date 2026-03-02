@@ -16,7 +16,7 @@ export const CopyButton = ({
   text,
   copyText = text,
   title = 'Klikk for å kopiere',
-  className,
+  className = '',
   icon,
   size = 'small',
   activeText,
