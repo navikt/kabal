@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { Address } from '@app/components/receivers/address/address';
 import { getTypeNames } from '@app/components/receivers/functions';
@@ -6,7 +7,7 @@ import { formatIdNumber } from '@app/functions/format-id';
 import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
 import { IdType, type IPart, PartStatusEnum } from '@app/types/oppgave-common';
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
-import { Alert, CopyButton, HelpText, HStack, Label, Tooltip } from '@navikt/ds-react';
+import { CopyButton, HelpText, HStack, Label, Tooltip } from '@navikt/ds-react';
 
 interface ReceiversProps {
   receivers: IBrevmottaker[];
@@ -56,7 +57,7 @@ export const UnreachableSuggestedReceivers = ({ receivers }: ReceiversProps) => 
               <Address part={part} address={part.address} overriddenAddress={overriddenAddress} handling={handling} />
               {alertText === null ? null : (
                 <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
-                  <Alert variant="warning" size="small">
+                  <Alert variant="warning">
                     <HStack align="center" gap="space-8">
                       Parten kan ikke velges som mottaker fordi {alertText}.
                       {helpText === null ? null : <HelpText>{helpText}</HelpText>}

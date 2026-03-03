@@ -1,4 +1,4 @@
-import { Alert } from '@navikt/ds-react';
+import { Alert } from '@app/components/alert/alert';
 import { isAfter } from 'date-fns';
 
 interface Props {
@@ -16,7 +16,7 @@ export const Warning = ({ date, threshhold }: Props) => {
   }
 
   return (
-    <Alert className="mt-2" variant="warning" size="small">
+    <Alert className="mt-2" variant="warning">
       Du har satt en dato som ligger langt tilbake i tid. Er du sikker på at du har fylt ut riktig dato?
     </Alert>
   );

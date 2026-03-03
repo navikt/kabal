@@ -1,5 +1,5 @@
+import { Alert } from '@app/components/alert/alert';
 import type { ISikkerhetstiltak } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Alert } from '@navikt/ds-react';
 
 interface Props {
   sikkerhetstiltak: ISikkerhetstiltak | null;
@@ -10,9 +10,5 @@ export const Sikkerhetstiltak = ({ sikkerhetstiltak }: Props) => {
     return null;
   }
 
-  return (
-    <Alert variant="warning" size="small">
-      {sikkerhetstiltak.beskrivelse}
-    </Alert>
-  );
+  return <Alert variant="warning">{sikkerhetstiltak.beskrivelse}</Alert>;
 };

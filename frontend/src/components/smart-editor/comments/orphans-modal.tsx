@@ -1,7 +1,8 @@
+import { Alert } from '@app/components/alert/alert';
 import { THREAD_WIDTH, Thread } from '@app/components/smart-editor/comments/thread';
 import { useThreads } from '@app/components/smart-editor/comments/use-threads';
 import { LinkBrokenIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Heading, HStack, Modal, Tooltip } from '@navikt/ds-react';
+import { Button, Heading, HStack, Modal, Tooltip } from '@navikt/ds-react';
 import { useId, useRef } from 'react';
 
 const ORPHAN_HELP_TEXT = 'Teksten som kommentarene var knyttet til finnes ikke lenger i dokumentet.';
@@ -33,9 +34,7 @@ export const OrphansModal = () => {
           </Heading>
         </Modal.Header>
         <Modal.Body>
-          <Alert variant="info" size="small">
-            {ORPHAN_HELP_TEXT}
-          </Alert>
+          <Alert variant="info">{ORPHAN_HELP_TEXT}</Alert>
           <HStack as="section" wrap align="start" gap="space-16" marginBlock="space-16 space-0">
             {orphans.map((o) => (
               <Thread key={o.id} thread={o} isFocused zIndex={0} />

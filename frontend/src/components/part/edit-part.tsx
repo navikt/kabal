@@ -1,10 +1,11 @@
+import { Alert } from '@app/components/alert/alert';
 import { cleanAndValidate } from '@app/components/part/validate';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { Keys } from '@app/keys';
 import { useLazySearchpartwithutsendingskanalQuery } from '@app/redux-api/search';
 import { isApiDataError } from '@app/types/errors';
 import type { IdentifikatorPart } from '@app/types/oppgave-common';
-import { Alert, Search, Tag, VStack } from '@navikt/ds-react';
+import { Search, Tag, VStack } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
@@ -125,11 +126,7 @@ export const EditPart = ({
         />
       </Search>
 
-      {warningReceiver !== null ? (
-        <Alert variant="info" size="small">
-          {warningReceiver.message}
-        </Alert>
-      ) : null}
+      {warningReceiver !== null ? <Alert variant="info">{warningReceiver.message}</Alert> : null}
 
       {invalidReceiver === null ? (
         <Result
@@ -145,9 +142,7 @@ export const EditPart = ({
           {...props}
         />
       ) : (
-        <Alert variant="warning" size="small">
-          {invalidReceiver.message}
-        </Alert>
+        <Alert variant="warning">{invalidReceiver.message}</Alert>
       )}
     </VStack>
   );
@@ -168,11 +163,7 @@ interface ResultProps {
 
 const Result = ({ part, search, isError, error, ...props }: ResultProps) => {
   if (isApiDataError(error)) {
-    return (
-      <Alert variant="warning" size="small">
-        {error.data.title}
-      </Alert>
-    );
+    return <Alert variant="warning">{error.data.title}</Alert>;
   }
 
   if (isError) {

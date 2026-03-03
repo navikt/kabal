@@ -1,6 +1,7 @@
+import { Alert } from '@app/components/alert/alert';
 import { type IValidationError, type IValidationSection, SECTION_TITLES } from '@app/functions/error-type-guard';
 import { useFieldName } from '@app/hooks/use-field-name';
-import { Alert, Heading, VStack } from '@navikt/ds-react';
+import { Heading, VStack } from '@navikt/ds-react';
 
 interface Props {
   sections: IValidationSection[];
@@ -16,7 +17,7 @@ export const ValidationSummary = ({ sections }: Props) => {
   ));
 
   return (
-    <Alert variant="warning" size="small" data-testid="validation-summary">
+    <Alert variant="warning" data-testid="validation-summary">
       <Heading level="1" size="xsmall" spacing className="pr-8">
         Kan ikke fullføre behandlingen
       </Heading>

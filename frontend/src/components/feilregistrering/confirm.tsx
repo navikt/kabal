@@ -1,6 +1,6 @@
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, HStack } from '@navikt/ds-react';
+import { Button, HStack, InlineMessage } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { Context } from './context';
 
@@ -20,9 +20,7 @@ export const Confirm = ({ setIsConfirmed }: ConfirmProps) => {
 
   return (
     <>
-      <Alert variant="info" inline>
-        {text}
-      </Alert>
+      <InlineMessage status="info">{text}</InlineMessage>
       <HStack align="center" justify="space-between" gap="space-0 space-16" wrap={false}>
         <Button
           size="small"

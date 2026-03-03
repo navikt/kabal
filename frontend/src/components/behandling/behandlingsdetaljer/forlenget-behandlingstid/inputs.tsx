@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { SetBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-behandlingstid';
 import { SetBehandlingstidDate } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-behandlingstid-date';
 import { SetCustomText } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-custom-text';
@@ -8,7 +9,7 @@ import { SetReceivers } from '@app/components/behandling/behandlingsdetaljer/for
 import { SetTitle } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-title';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useGetOrCreateQuery } from '@app/redux-api/forlenget-behandlingstid';
-import { Alert, HStack, Skeleton, VStack } from '@navikt/ds-react';
+import { HStack, Skeleton, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 
@@ -56,11 +57,7 @@ export const Inputs = ({ behandlingstidError, setBehandlingstidError }: Props) =
   }
 
   if (isError || !isSuccess || !oppgaveIsSuccess) {
-    return (
-      <Alert size="small" variant="error">
-        Kunne ikke hente data for forlenget saksbehandlingstid
-      </Alert>
-    );
+    return <Alert variant="error">Kunne ikke hente data for forlenget saksbehandlingstid</Alert>;
   }
 
   const { id, prosessfullmektig } = oppgave;

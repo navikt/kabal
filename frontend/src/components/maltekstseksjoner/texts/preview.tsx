@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
 import { isRichText } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
@@ -10,7 +11,7 @@ import {
   RichTextTypes,
 } from '@app/types/common-text-types';
 import { LANGUAGE_NAMES } from '@app/types/texts/language';
-import { Alert, ErrorMessage, Heading, HStack, Loader, Tag, type TagProps } from '@navikt/ds-react';
+import { ErrorMessage, Heading, HStack, Loader, Tag, type TagProps } from '@navikt/ds-react';
 
 interface Props {
   textId: string;
@@ -49,9 +50,7 @@ export const TextPreview = ({ textId, className }: Props) => {
       </HStack>
 
       {savedContent === null ? (
-        <Alert variant="info" size="small">
-          Tekst for {LANGUAGE_NAMES[language].toLowerCase()} mangler
-        </Alert>
+        <Alert variant="info">Tekst for {LANGUAGE_NAMES[language].toLowerCase()} mangler</Alert>
       ) : (
         <RedaktoerRichText
           editorId={textId}

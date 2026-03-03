@@ -11,7 +11,7 @@ import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
 import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { Alert, HStack, Loader, VStack } from '@navikt/ds-react';
+import { HStack, InlineMessage, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyledDocumentList } from '../../styled-components/document-list';
 
@@ -83,9 +83,7 @@ export const NewDocuments = () => {
     return (
       <Wrapper>
         <HStack height="12" align="center" padding="space-8">
-          <Alert variant="error" inline>
-            Kunne ikke hente dokumenter
-          </Alert>
+          <InlineMessage status="error">Kunne ikke hente dokumenter</InlineMessage>
         </HStack>
       </Wrapper>
     );
@@ -114,9 +112,7 @@ export const NewDocuments = () => {
         >
           {documentMap.size === 0 ? (
             <HStack height="12" align="center" paddingInline="space-8">
-              <Alert variant="info" inline>
-                Ingen dokumenter
-              </Alert>
+              <InlineMessage status="info">Ingen dokumenter</InlineMessage>
             </HStack>
           ) : (
             <StyledDocumentList

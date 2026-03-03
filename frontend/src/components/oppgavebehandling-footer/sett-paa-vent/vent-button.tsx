@@ -6,7 +6,7 @@ import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useDeleteSattPaaVentMutation, useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
 import { Role } from '@app/types/bruker';
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, HStack } from '@navikt/ds-react';
+import { Box, Button, HStack, InlineMessage } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 
 const useCanEditSetPaaVent = () => {
@@ -105,9 +105,9 @@ const AvsluttVenteperiode = ({ id }: { id: string }) => {
           background="default"
           className="absolute bottom-full flex flex-col gap-2"
         >
-          <Alert inline variant="info" className="text-nowrap">
+          <InlineMessage status="info" className="text-nowrap">
             Avslutt venteperiode?
-          </Alert>
+          </InlineMessage>
 
           <HStack gap="space-8">
             <Button variant="primary" size="small" onClick={onAvslutt} loading={isLoading}>

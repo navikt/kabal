@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { validateBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
 import { usePdfData } from '@app/components/pdf/pdf';
 import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
@@ -14,7 +15,7 @@ import {
   useSetTitleMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
 import { FilePdfIcon } from '@navikt/aksel-icons';
-import { Alert, HStack, Loader, VStack } from '@navikt/ds-react';
+import { HStack, InlineMessage, Loader, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 
 interface VarsletFristProps {
@@ -36,9 +37,7 @@ export const Pdf = ({ id, varsletFrist }: VarsletFristProps) => {
   if (isError || !isSuccess) {
     return (
       <div>
-        <Alert size="small" variant="error">
-          Kunne ikke hente forhåndsvisning PDF for forlenget saksbehandlingstid
-        </Alert>
+        <Alert variant="error">Kunne ikke hente forhåndsvisning PDF for forlenget saksbehandlingstid</Alert>
       </div>
     );
   }
@@ -64,9 +63,9 @@ const PdfPlaceholder = ({ children }: { children: string }) => (
   <HStack align="center" justify="center" width="100%">
     <VStack align="center">
       <FilePdfIcon fontSize={300} color="var(--ax-text-neutral-decoration)" />
-      <Alert variant="info" inline size="small">
+      <InlineMessage status="info" size="small">
         {children}
-      </Alert>
+      </InlineMessage>
     </VStack>
   </HStack>
 );

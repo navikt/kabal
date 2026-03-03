@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { pushError } from '@app/observability';
@@ -5,7 +6,7 @@ import type { ScoredText } from '@app/plate/functions/lex-specialis/lex-speciali
 import type { TemplateSections } from '@app/plate/template-sections';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Alert, BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, Heading } from '@navikt/ds-react';
 import { useEffect } from 'react';
 
 interface DebugData {
@@ -29,7 +30,7 @@ export const Instructions = ({ oppgave, section, tiedList, templateId }: Props) 
 
   if (text !== null) {
     return (
-      <Alert size="small" variant="info" contentEditable={false} className="my-4">
+      <Alert variant="info" contentEditable={false} className="my-4">
         {heading}
         {text}
       </Alert>
@@ -41,7 +42,7 @@ export const Instructions = ({ oppgave, section, tiedList, templateId }: Props) 
   }
 
   return (
-    <Alert size="small" variant="warning" contentEditable={false} className="my-4">
+    <Alert variant="warning" contentEditable={false} className="my-4">
       {heading}
       <TieText {...oppgave.resultat} section={section} templateId={templateId} tiedList={tiedList} />
     </Alert>

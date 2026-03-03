@@ -8,7 +8,7 @@ import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import type { TextTypes } from '@app/types/common-text-types';
 import type { IText } from '@app/types/texts/responses';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, HelpText, HStack } from '@navikt/ds-react';
+import { Button, HelpText, HStack, InlineMessage } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { useTextQuery } from './hooks/use-text-query';
 
@@ -123,7 +123,7 @@ const Warning = ({
   }
 
   return (
-    <Alert inline size="small" variant="warning">
+    <InlineMessage size="small" status="warning">
       Denne teksten er referert til i
       <MaltekstseksjonReferences
         maltekstseksjonIdList={draftList}
@@ -143,7 +143,7 @@ const Warning = ({
         {publishedList.length.toString(10)} {publishedList.length === 1 ? 'publisering' : 'publiseringer'}
       </MaltekstseksjonReferences>
       og vil ikke lenger være tilgjengelig for {getSuffix(draftList, publishedList)}.
-    </Alert>
+    </InlineMessage>
   );
 };
 

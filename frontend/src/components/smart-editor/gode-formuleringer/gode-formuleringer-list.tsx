@@ -1,8 +1,9 @@
+import { Alert } from '@app/components/alert/alert';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { GodFormulering } from '@app/components/smart-editor/gode-formuleringer/god-formulering';
 import { GodeFormuleringerExpandState } from '@app/hooks/settings/use-setting';
 import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
-import { Alert, Box } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 import { useContext, useEffect } from 'react';
 
 interface ListProps {
@@ -64,9 +65,7 @@ export const GodeFormuleringerList = ({
   };
 
   return texts.length === 0 ? (
-    <Alert variant="info" size="small">
-      Ingen gode formuleringer funnet.
-    </Alert>
+    <Alert variant="info">Ingen gode formuleringer funnet.</Alert>
   ) : (
     texts.map((t, i) => (
       <GodFormulering

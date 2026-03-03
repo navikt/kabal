@@ -1,8 +1,9 @@
+import { Alert } from '@app/components/alert/alert';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
 import { useMyPlateEditorRef } from '@app/plate/types';
 import { CheckmarkIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, Button, HStack, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, Tooltip } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import type { Path } from 'slate';
 
@@ -94,7 +95,6 @@ const IsChanged = ({ onConfirm, isChangedWarning, side = 'left' }: IsChangedProp
       {showConfirm ? (
         <Alert
           variant="warning"
-          size="small"
           className={`absolute top-0 text-ax-text-neutral ${isLeft ? 'left-full' : 'right-full'}`}
         >
           {isChangedWarning}

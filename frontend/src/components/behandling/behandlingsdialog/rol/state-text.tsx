@@ -1,5 +1,5 @@
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
-import { Alert } from '@navikt/ds-react';
+import { InlineMessage } from '@navikt/ds-react';
 
 interface Props {
   rol: IMedunderskriverRol;
@@ -10,9 +10,9 @@ export const RolStateText = ({ rol, isSaksbehandler }: Props) => {
   const text = useText(rol, isSaksbehandler);
 
   return (
-    <Alert variant="info" size="small" inline>
+    <InlineMessage status="info" size="small">
       {text}
-    </Alert>
+    </InlineMessage>
   );
 };
 

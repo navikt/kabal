@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { Address } from '@app/components/receivers/address/address';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import type { IMottaker } from '@app/types/documents/documents';
@@ -5,7 +6,7 @@ import { HandlingEnum, type IAddress } from '@app/types/documents/receivers';
 import { UTSENDINGSKANAL, Utsendingskanal } from '@app/types/oppgave-common';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
 
 interface Props extends IMottaker {
@@ -75,7 +76,7 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
       </HStack>
       <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
         {isLocalPrint ? (
-          <Alert size="small" variant="info">
+          <Alert variant="info">
             <BodyShort size="small">Du må skrive ut dokumentet selv og legge det til utsending.</BodyShort>
             {templateId === TemplateIdEnum.OVERSENDELSESBREV ? (
               <BodyShort size="small">

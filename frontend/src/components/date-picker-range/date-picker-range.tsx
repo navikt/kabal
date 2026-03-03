@@ -1,6 +1,6 @@
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CalendarIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, type ButtonProps, DatePicker, HStack, Tooltip } from '@navikt/ds-react';
+import { Box, Button, type ButtonProps, DatePicker, HStack, InlineMessage, Tooltip } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
 import { useCallback, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
@@ -82,9 +82,9 @@ export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea, but
 const formatDateRange = (from: Date | undefined, to: Date | undefined) => {
   if (from === undefined || to === undefined) {
     return (
-      <Alert size="small" variant="info" inline>
+      <InlineMessage size="small" status="info">
         Ingen periode valgt
-      </Alert>
+      </InlineMessage>
     );
   }
 

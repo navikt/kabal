@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { CustomReceivers } from '@app/components/receivers/custom-receivers';
 import type { IErrorProperty } from '@app/components/receivers/is-send-error';
 import { SingleReceiver } from '@app/components/receivers/single-receiver';
@@ -7,7 +8,7 @@ import { type IBrevmottaker, useSuggestedBrevmottakere } from '@app/hooks/use-su
 import { DistribusjonsType, type IdentifikatorMottaker, type IMottaker } from '@app/types/documents/documents';
 import { PartStatusEnum } from '@app/types/oppgave-common';
 import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Alert, VStack } from '@navikt/ds-react';
+import { InlineMessage, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 
 interface Props {
@@ -143,9 +144,9 @@ export const Receivers = ({
   return (
     <VStack gap="space-16 space-0" position="relative" as="section" overflow="hidden">
       {dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN ? (
-        <Alert variant="info" size="small" inline>
+        <InlineMessage status="info" size="small">
           Forhåndsvalgt mottaker: Trygderetten
-        </Alert>
+        </InlineMessage>
       ) : (
         <>
           <DefaultReceivers
@@ -175,16 +176,10 @@ export const Receivers = ({
       )}
 
       {reachableSuggestedReceivers.length === 0 && customReceivers.length === 0 ? (
-        <Alert variant="warning" size="small">
-          Ingen gyldige mottakere.
-        </Alert>
+        <Alert variant="warning">Ingen gyldige mottakere.</Alert>
       ) : null}
 
-      {sendErrors.length === 0 ? null : (
-        <Alert variant="error" size="small">
-          Brevet er ikke sendt til noen. Se feil over.
-        </Alert>
-      )}
+      {sendErrors.length === 0 ? null : <Alert variant="error">Brevet er ikke sendt til noen. Se feil over.</Alert>}
     </VStack>
   );
 };
