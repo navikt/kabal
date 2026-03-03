@@ -1,7 +1,7 @@
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
-import { Alert } from '@navikt/ds-react';
+import { InlineMessage } from '@navikt/ds-react';
 import { getTitleLowercase } from './get-title';
 
 interface Props {
@@ -13,9 +13,9 @@ export const MedunderskriverStateText = ({ medunderskriver, typeId }: Props) => 
   const text = useText(medunderskriver, typeId);
 
   return (
-    <Alert variant="info" size="small" inline>
+    <InlineMessage status="info" size="small">
       {text}
-    </Alert>
+    </InlineMessage>
   );
 };
 

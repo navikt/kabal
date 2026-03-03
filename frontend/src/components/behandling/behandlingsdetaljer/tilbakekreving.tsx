@@ -1,7 +1,8 @@
+import { Alert } from '@app/components/alert/alert';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { useSetTilbakekrevingMutation } from '@app/redux-api/oppgaver/mutations/set-tilbakekreving';
-import { Alert, BodyShort, Checkbox, CheckboxGroup, Heading, HelpText, HStack } from '@navikt/ds-react';
+import { BodyShort, Checkbox, CheckboxGroup, Heading, HelpText, HStack } from '@navikt/ds-react';
 
 const TILBAKEKREVING_IDS = [
   '144',
@@ -84,7 +85,7 @@ export const Tilbakekreving = () => {
 };
 
 const Warning = () => (
-  <Alert variant="warning" size="small">
+  <Alert variant="warning">
     Saken inneholder hjemler som er knyttet til tilbakekreving, men tilbakekreving er ikke huket av for. Er du sikker på
     at dette er riktig?
   </Alert>

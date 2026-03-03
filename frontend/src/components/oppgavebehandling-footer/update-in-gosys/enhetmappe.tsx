@@ -1,7 +1,8 @@
+import { Alert } from '@app/components/alert/alert';
 import { useSearchEnhetmappeQuery } from '@app/redux-api/search';
 import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Alert, HStack, Loader, Select } from '@navikt/ds-react';
+import { HStack, Loader, Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 
@@ -40,11 +41,7 @@ export const Enhetmappe = ({ enhetId, selectedMappe, setSelectedMappe, oppgavebe
 
   return (
     <HStack align="end" gap="space-8">
-      {showEnhetmappeInfo ? (
-        <Alert variant="info" size="small">
-          Velg enhetsmappen «Sendt til Trygderetten».
-        </Alert>
-      ) : null}
+      {showEnhetmappeInfo ? <Alert variant="info">Velg enhetsmappen «Sendt til Trygderetten».</Alert> : null}
 
       <Select
         title={enhetId === null ? 'Velg enhet først' : undefined}

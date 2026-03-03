@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { getTitle } from '@app/components/editable-title/editable-title';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
 import { CreateDraftTextButton } from '@app/components/smart-editor-texts/create-draft-button';
@@ -14,7 +15,7 @@ import { GOD_FORMULERING_TYPE, REGELVERK_TYPE, RichTextTypes } from '@app/types/
 import { LANGUAGE_NAMES, UNTRANSLATED } from '@app/types/texts/language';
 import type { IPublishedGodFormulering, IPublishedRegelverk, IPublishedRichText } from '@app/types/texts/responses';
 import { PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Heading, HStack, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, Label, VStack } from '@navikt/ds-react';
 import { useRef } from 'react';
 import { RedaktoerRichText } from '../../redaktoer-rich-text/redaktoer-rich-text';
 
@@ -83,9 +84,7 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
       </VStack>
 
       {savedContent === null ? (
-        <Alert variant="info" size="small">
-          Tekst for {LANGUAGE_NAMES[lang].toLowerCase()} mangler
-        </Alert>
+        <Alert variant="info">Tekst for {LANGUAGE_NAMES[lang].toLowerCase()} mangler</Alert>
       ) : (
         <RedaktoerRichText
           ref={editorRef}

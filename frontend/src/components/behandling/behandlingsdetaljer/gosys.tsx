@@ -1,7 +1,8 @@
+import { Alert } from '@app/components/alert/alert';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useGetGosysOppgaveQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { GosysStatus, type IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Alert, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { GosysBeskrivelse } from '../../gosys/beskrivelse/beskrivelse';
 import { BehandlingSection } from './behandling-section';
@@ -45,27 +46,15 @@ interface WarningProps {
 
 const Warning = ({ hasGosysOppgave, status }: WarningProps) => {
   if (!hasGosysOppgave) {
-    return (
-      <Alert variant="warning" size="small">
-        Ingen oppgave fra Gosys er valgt.
-      </Alert>
-    );
+    return <Alert variant="warning">Ingen oppgave fra Gosys er valgt.</Alert>;
   }
 
   if (status === GosysStatus.FERDIGSTILT) {
-    return (
-      <Alert variant="warning" size="small">
-        Oppgaven fra Gosys er ferdigstilt.
-      </Alert>
-    );
+    return <Alert variant="warning">Oppgaven fra Gosys er ferdigstilt.</Alert>;
   }
 
   if (status === GosysStatus.FEILREGISTRERT) {
-    return (
-      <Alert variant="warning" size="small">
-        Oppgaven fra Gosys er feilregistrert.
-      </Alert>
-    );
+    return <Alert variant="warning">Oppgaven fra Gosys er feilregistrert.</Alert>;
   }
 
   return null;

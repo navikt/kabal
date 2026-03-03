@@ -1,11 +1,12 @@
 import { Finish } from '@app/components/admin/merkantil-task-list/finish';
 import { SetStatusFilter, StatusFilter } from '@app/components/admin/merkantil-task-list/set-status-filter';
+import { Alert } from '@app/components/alert/alert';
 import { Type } from '@app/components/type/type';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { ENVIRONMENT } from '@app/environment';
 import { type Task, useGetMerkantilTasksQuery } from '@app/redux-api/internal';
 import { ArrowsCirclepathIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, CopyButton, Heading, HStack, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
+import { Box, Button, CopyButton, Heading, HStack, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -53,7 +54,7 @@ const TaskList = () => {
     return (
       <VStack gap="space-16">
         <HStack gap="space-16">
-          <Alert variant="error" size="small">
+          <Alert variant="error">
             <Heading level="2" size="small" spacing>
               Noe gikk galt
             </Heading>

@@ -1,9 +1,10 @@
+import { Alert } from '@app/components/alert/alert';
 import { AddAbbreviation } from '@app/components/settings/abbreviations/add';
 import { ExistingAbbreviation } from '@app/components/settings/abbreviations/existing';
 import { AbbreviationsExplanation } from '@app/components/settings/abbreviations/explanation';
 import { SectionHeader, SettingsSection } from '@app/components/settings/styled-components';
 import { useGetAbbreviationsQuery } from '@app/redux-api/bruker';
-import { Alert, Heading, type HeadingProps, HelpText, Loader } from '@navikt/ds-react';
+import { Heading, type HeadingProps, HelpText, Loader } from '@navikt/ds-react';
 
 export const Abbreviations = () => (
   <SettingsSection>
@@ -64,9 +65,7 @@ export const AbbreviationsContent = ({ headingSize = 'small' }: ContentProps) =>
             ))}
           </ul>
         ) : (
-          <Alert variant="info" size="small">
-            Du har ingen forkortelser ennå.
-          </Alert>
+          <Alert variant="info">Du har ingen forkortelser ennå.</Alert>
         )}
       </section>
     </>

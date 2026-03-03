@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
 import {
@@ -22,7 +23,7 @@ import {
   GosysStatus,
   type IOppgavebehandling,
 } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Alert, BodyShort, Button, ConfirmationPanel, Heading, Modal, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, ConfirmationPanel, Heading, Modal, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { format } from 'date-fns';
 import { useState } from 'react';
@@ -129,7 +130,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
                 {oppgavebehandling.typeId === SaksTypeEnum.ANKE &&
                 (oppgavebehandling.resultat.utfallId === UtfallEnum.DELVIS_MEDHOLD ||
                   oppgavebehandling.resultat.extraUtfallIdSet.includes(UtfallEnum.DELVIS_MEDHOLD)) ? (
-                  <Alert variant="info" size="small">
+                  <Alert variant="info">
                     Oppdater denne oppgaven fra Gosys ved å velge enhetsmappe "Sendt til Trygderetten". Du må i tillegg
                     gå inn i Gosys og opprette en ny oppgave der, som du sender til vedtaksenheten med beskjed om at de
                     kan effektuere det du har gitt delvis medhold i.
@@ -206,7 +207,7 @@ interface ConfirmProps {
 const ConfirmIgnoreOrRequiredWarning = ({ gosysOppgave, ignoreGosysOppgave, setIgnoreGosysOppgave }: ConfirmProps) => {
   if (gosysOppgave === undefined) {
     return (
-      <Alert size="small" variant="warning">
+      <Alert variant="warning">
         <Heading level="2" size="small" spacing>
           Ingen oppgave fra Gosys
         </Heading>

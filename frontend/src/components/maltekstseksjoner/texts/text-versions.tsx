@@ -3,7 +3,7 @@ import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { isApiDataError } from '@app/types/errors';
 import type { IDraftRichText, IPublishedRichText, IRichText, IText } from '@app/types/texts/responses';
-import { Alert, Loader } from '@navikt/ds-react';
+import { InlineMessage, Loader } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { PublishedRichText } from './published-rich-text';
 import { DraftText } from './text-draft/text-draft';
@@ -22,9 +22,9 @@ export const TextVersions = ({ textId, className, ...rest }: Props) => {
   if (isError) {
     return (
       <div className={className}>
-        <Alert variant="error" inline size="small">
+        <InlineMessage status="error" size="small">
           Feil ved lasting: {isApiDataError(error) ? error.data.detail : 'Ukjent feil'}
-        </Alert>
+        </InlineMessage>
       </div>
     );
   }

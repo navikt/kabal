@@ -8,7 +8,7 @@ import {
   useSetVarselTypeIsOriginalMutation,
 } from '@app/redux-api/forlenget-behandlingstid';
 import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
-import { Alert, Box, Checkbox, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
+import { Box, Checkbox, ErrorMessage, InlineMessage, Textarea, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 
@@ -42,10 +42,10 @@ export const DoNotSendLetter = ({ varsletFrist, setBehandlingstidError }: Props)
       </Box>
       {data.doNotSendLetter ? (
         <>
-          <Alert size="small" variant="info" inline>
+          <InlineMessage size="small" status="info">
             Husk at du må varsle bruker om endret varslet frist. Du bør kun endre varslet frist uten å sende brev dersom
             du allerede har varslet på annen måte.
-          </Alert>
+          </InlineMessage>
           {varsletFrist === null ? (
             <Checkbox
               onChange={({ target }) => {

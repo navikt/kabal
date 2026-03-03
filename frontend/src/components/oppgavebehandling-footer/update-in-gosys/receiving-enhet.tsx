@@ -3,7 +3,7 @@ import { SuggestedEnhet } from '@app/components/oppgavebehandling-footer/update-
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import type { Enhet, IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Alert, Box, Button, ErrorMessage, HStack, Search, Tooltip, VStack } from '@navikt/ds-react';
+import { Box, Button, ErrorMessage, HStack, InlineMessage, Search, Tooltip, VStack } from '@navikt/ds-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface Props {
@@ -85,9 +85,9 @@ export const ReceivingEnhet = ({ selectedEnhet, setSelectedEnhet, enheter, error
 
         {filteredEnheter.length === 0 ? (
           <Container>
-            <Alert variant="info" size="small" inline>
+            <InlineMessage status="info" size="small">
               Ingen enheter funnet
-            </Alert>
+            </InlineMessage>
           </Container>
         ) : (
           <Container>

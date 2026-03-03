@@ -1,6 +1,7 @@
+import { Alert } from '@app/components/alert/alert';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
-import { Alert, Checkbox, Heading, HStack, Radio } from '@navikt/ds-react';
+import { Checkbox, Heading, HStack, Radio } from '@navikt/ds-react';
 import { ContainerWithHelpText } from '../common/container-with-helptext';
 import { StyledRadioGroup } from '../common/styled-components';
 import { Checkboxes } from './common/checkboxes';
@@ -34,11 +35,7 @@ export const Vedtaket = () => {
         <Heading size="small">{header}</Heading>
       </HStack>
 
-      {vedtakAutomatiskVedtak === true ? (
-        <Alert variant="info" size="small">
-          {AUTOMATISK_VEDTAK_HELPTEXT}
-        </Alert>
-      ) : null}
+      {vedtakAutomatiskVedtak === true ? <Alert variant="info">{AUTOMATISK_VEDTAK_HELPTEXT}</Alert> : null}
       <ContainerWithHelpText helpText={AUTOMATISK_VEDTAK_HELPTEXT}>
         <Checkbox
           value="vedtakAutomatiskVedtak"

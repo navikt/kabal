@@ -1,5 +1,5 @@
+import { Alert } from '@app/components/alert/alert';
 import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { Alert } from '@navikt/ds-react';
 
 export const MISSING_TITLE = 'TITTEL MANGLER';
 

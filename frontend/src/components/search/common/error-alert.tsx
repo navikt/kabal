@@ -1,6 +1,7 @@
+import { Alert } from '@app/components/alert/alert';
 import { getErrorData } from '@app/functions/get-error-data';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react';
+import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 

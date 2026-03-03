@@ -2,7 +2,7 @@ import { BehandlingSection } from '@app/components/behandling/behandlingsdetalje
 import { formatEmployeeNameAndId } from '@app/domain/employee-name';
 import type { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { Alert } from '@navikt/ds-react';
+import { InlineMessage } from '@navikt/ds-react';
 
 type Type =
   | SaksTypeEnum.ANKE_I_TRYGDERETTEN
@@ -22,9 +22,9 @@ export const PreviousSaksbehandler = ({ previousSaksbehandler, type }: Props) =>
   if (previousSaksbehandler === null) {
     return (
       <BehandlingSection label={heading}>
-        <Alert variant="info" size="small" inline>
+        <InlineMessage status="info" size="small">
           Bruk «Søk på person» for å finne hvem som fullførte tidligere {getTypeName(type)}.
-        </Alert>
+        </InlineMessage>
       </BehandlingSection>
     );
   }

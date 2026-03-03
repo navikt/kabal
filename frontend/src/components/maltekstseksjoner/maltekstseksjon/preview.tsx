@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
 import { isRichText } from '@app/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
@@ -8,7 +9,7 @@ import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
 import { isApiDataError } from '@app/types/errors';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import type { IRichText } from '@app/types/texts/responses';
-import { Alert, Loader, VStack } from '@navikt/ds-react';
+import { InlineMessage, Loader, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 
 interface Props {
@@ -37,9 +38,9 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
   if (error !== null) {
     return (
       <VStack flexGrow="1" position="relative" as="section">
-        <Alert variant="error" size="small" className="mt-2" inline>
+        <InlineMessage status="error" size="small" className="mt-2">
           Feil ved lasting: {error}
-        </Alert>
+        </InlineMessage>
       </VStack>
     );
   }
@@ -81,7 +82,7 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
   if (savedContent.length === 0) {
     return (
       <VStack flexGrow="1" position="relative" as="section">
-        <Alert variant="warning" size="small" className="mt-2">
+        <Alert variant="warning" className="mt-2">
           Ingen tekster funnet
         </Alert>
       </VStack>

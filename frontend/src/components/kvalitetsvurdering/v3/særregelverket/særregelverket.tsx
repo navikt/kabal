@@ -1,3 +1,4 @@
+import { Alert } from '@app/components/alert/alert';
 import { HelpTextCheckBox } from '@app/components/kvalitetsvurdering/common/kvalitetsvurdering-checkbox';
 import { StyledRadioGroup } from '@app/components/kvalitetsvurdering/common/styled-components';
 import { MainReason } from '@app/components/kvalitetsvurdering/v3/data';
@@ -12,7 +13,7 @@ import {
 } from '@app/components/kvalitetsvurdering/v3/særregelverket/data';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
-import { Alert, Heading, HStack, Radio } from '@navikt/ds-react';
+import { Heading, HStack, Radio } from '@navikt/ds-react';
 import { Checkboxes } from '../common/checkboxes';
 import type { CheckboxParams } from '../common/types';
 import { useKvalitetsvurderingV3 } from '../common/use-kvalitetsvurdering-v3';

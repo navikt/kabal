@@ -1,6 +1,6 @@
+import { Alert } from '@app/components/alert/alert';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetOrCreateQuery } from '@app/redux-api/forlenget-behandlingstid';
-import { Alert } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 export const TimesPreviouslyExtended = () => {
@@ -13,14 +13,14 @@ export const TimesPreviouslyExtended = () => {
 
   if (data.timesPreviouslyExtended === 1) {
     return (
-      <Alert size="small" variant="warning">
+      <Alert variant="warning">
         Varslet frist i Kabal har blitt endret <b>1</b> gang.
       </Alert>
     );
   }
 
   return (
-    <Alert size="small" variant="warning">
+    <Alert variant="warning">
       Varslet frist i Kabal har blitt endret <b>{data.timesPreviouslyExtended}</b> ganger.
     </Alert>
   );

@@ -1,7 +1,7 @@
 import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { type IdentifikatorPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
-import { Alert, BodyShort, Button, Loader, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, InlineMessage, Loader, Tag, VStack } from '@navikt/ds-react';
 
 interface LookupProps extends Omit<ResultProps, 'part'> {
   part: IdentifikatorPart | undefined;
@@ -78,9 +78,9 @@ const ActionOrError = ({ isReachable, buttonText, onClick, loading, part, valida
 
   if (error !== null) {
     return (
-      <Alert size="small" variant="info" inline>
+      <InlineMessage size="small" status="info">
         {error}
-      </Alert>
+      </InlineMessage>
     );
   }
 
@@ -93,9 +93,9 @@ const ActionOrError = ({ isReachable, buttonText, onClick, loading, part, valida
   }
 
   return (
-    <Alert size="small" variant="warning" inline>
+    <InlineMessage size="small" status="warning">
       Parten kan ikke velges som mottaker fordi {getUnreachableText(part.statusList)}.
-    </Alert>
+    </InlineMessage>
   );
 };
 

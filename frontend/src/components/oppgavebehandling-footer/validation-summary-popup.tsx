@@ -1,6 +1,6 @@
 import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, HStack } from '@navikt/ds-react';
+import { Box, Button, HStack, InlineMessage } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { ValidationSummary } from './validation-summary';
 
@@ -29,11 +29,11 @@ export const ValidationSummaryPopup = () => {
   return (
     <>
       <Button data-color="neutral" variant="tertiary" size="small" icon={<Icon />} onClick={toggleOpen}>
-        <Alert variant={statusType} size="small" inline>
+        <InlineMessage status={statusType} size="small">
           <HStack align="center" gap="space-8">
             <span>{statusText}</span>
           </HStack>
-        </Alert>
+        </InlineMessage>
       </Button>
       <Popup hasErrors={hasErrors} setOpen={setOpen} open={open} />
     </>

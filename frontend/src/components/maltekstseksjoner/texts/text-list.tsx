@@ -1,10 +1,11 @@
+import { Alert } from '@app/components/alert/alert';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
+import { Box, Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { TextVersions } from './text-versions';
@@ -102,7 +103,7 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
 
   if (textIdList.length === 0) {
     return (
-      <Alert variant="warning" size="small" className="mt-2 h-fit">
+      <Alert variant="warning" className="mt-2 h-fit">
         Ingen tekster funnet
       </Alert>
     );

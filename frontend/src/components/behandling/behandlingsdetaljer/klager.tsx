@@ -1,9 +1,10 @@
+import { Alert } from '@app/components/alert/alert';
 import type { InvalidReceiver } from '@app/components/part/edit-part';
 import { Part } from '@app/components/part/part';
 import { isValidOrgnr } from '@app/domain/orgnr';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IPart } from '@app/types/oppgave-common';
-import { Alert, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 
 interface Props {
   klager: IPart;
@@ -38,7 +39,7 @@ export const OrgWarning = ({ identifikator, label }: { identifikator: string | n
   }
 
   return (
-    <Alert size="small" variant="info">
+    <Alert variant="info">
       Er {label} arbeidsgiver? Da må du låse opp teksten <i>Har du spørsmål?</i> og endre telefonnummeret til 55 55 33
       36.
     </Alert>
