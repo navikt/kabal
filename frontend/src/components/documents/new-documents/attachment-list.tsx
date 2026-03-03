@@ -129,7 +129,7 @@ const Attachment = ({ attachment, parentDocument, top, setSize, posInSet }: Atta
 const ListSeparator = ({ top }: { top: number }) => (
   <div
     data-label="Journalførte dokumenter"
-    className="after:-translate-y-1/2 absolute right-0 left-0 my-3 ml-0 border-ax-border-neutral-subtle border-b after:absolute after:top-1/2 after:left-5 after:bg-ax-bg-default after:px-1 after:text-ax-small after:content-[attr(data-label)]"
+    className="absolute right-0 left-0 my-3 ml-0 border-ax-border-neutral-subtle border-b after:absolute after:top-1/2 after:left-5 after:-translate-y-1/2 after:bg-ax-bg-default after:px-1 after:text-ax-small after:content-[attr(data-label)]"
     style={{ top }}
   />
 );
