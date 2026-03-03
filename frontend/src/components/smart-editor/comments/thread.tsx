@@ -1,8 +1,11 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { useHasWriteAccess } from '@app/components/smart-editor/hooks/use-has-write-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartEditorExpandedThreads } from '@app/hooks/settings/use-setting';
+import { useGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { usePostReplyMutation } from '@app/redux-api/smart-editor-comments';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { Chat2Icon } from '@navikt/aksel-icons';
 import { Box, Button, VStack } from '@navikt/ds-react';
@@ -78,8 +81,11 @@ const AddComment = ({ threadId }: AddCommentProps) => {
   const oppgaveId = useOppgaveId();
   const { user } = useContext(StaticDataContext);
   const { dokumentId, setEditingComment } = useContext(SmartEditorContext);
+  const { data: doc } = useGetDocumentQuery(oppgaveId === skipToken ? skipToken : { oppgaveId, dokumentId });
 
-  if (oppgaveId === skipToken) {
+  const hasWriteAccess = useHasWriteAccess(doc === undefined || doc.type !== DocumentTypeEnum.SMART ? null : doc);
+
+  if (oppgaveId === skipToken || !hasWriteAccess) {
     return null;
   }
 
