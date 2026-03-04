@@ -1,5 +1,6 @@
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
+import { Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 interface Props {
@@ -17,5 +18,11 @@ export const Name = ({ navIdent }: Props) => {
     return <LoadingCellContent />;
   }
 
-  return signature?.customLongName ?? signature?.longName ?? 'Ukjent';
+  const name = signature?.customLongName ?? signature?.longName ?? 'Ukjent';
+
+  return (
+    <Tooltip content={name}>
+      <span className="truncate">{name}</span>
+    </Tooltip>
+  );
 };
