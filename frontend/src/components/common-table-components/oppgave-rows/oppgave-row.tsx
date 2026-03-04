@@ -181,7 +181,6 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             ) : (
               <OpenForRoleAccess
                 id={oppgave.id}
-                ytelseId={oppgave.ytelseId}
                 tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
                 medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null}
                 rol={oppgave.rol}
