@@ -2,7 +2,7 @@ import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { DateFilter } from '@app/components/documents/journalfoerte-documents/header/date-filter';
 import type { useFilters } from '@app/components/documents/journalfoerte-documents/header/use-filters';
 import { kodeverkValuesToDropdownOptions } from '@app/components/filter-dropdown/functions';
-import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
+import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
   ArchivedDocumentsColumn,
@@ -20,7 +20,7 @@ import { Journalposttype } from '@app/types/arkiverte-documents';
 import { SortOrder } from '@app/types/sort';
 import { ArrowsUpDownIcon, SortDownIcon, SortUpIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps, HStack } from '@navikt/ds-react';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export const ExpandedHeaders = ({
   selectedTemaer,
@@ -70,15 +70,13 @@ export const ExpandedHeaders = ({
   return (
     <>
       {columns.TEMA ? (
-        <FlatMultiSelectDropdown
+        <OptionMultiSelect
           options={kodeverkValuesToDropdownOptions(allTemaer)}
           onChange={setSelectedTemaer}
           selected={selectedTemaer}
           style={{ gridArea: Fields.Tema }}
-          data-testid="filter-tema"
-        >
-          Tema
-        </FlatMultiSelectDropdown>
+          label="Tema"
+        />
       ) : null}
 
       {columns.DATO_OPPRETTET ? (
@@ -96,39 +94,33 @@ export const ExpandedHeaders = ({
       ) : null}
 
       {columns.AVSENDER_MOTTAKER ? (
-        <FlatMultiSelectDropdown
+        <OptionMultiSelect
           options={avsenderMottakerOptions}
           onChange={setSelectedAvsenderMottakere}
           selected={selectedAvsenderMottakere}
           style={{ gridArea: Fields.AvsenderMottaker }}
-          data-testid="filter-avsender-mottaker"
-        >
-          Avsender/mottaker
-        </FlatMultiSelectDropdown>
+          label="Avsender/mottaker"
+        />
       ) : null}
 
       {columns.SAKSNUMMER ? (
-        <FlatMultiSelectDropdown
+        <OptionMultiSelect
           options={saksIdOptions}
           onChange={setSelectedSaksIds}
           selected={selectedSaksIds}
           style={{ gridArea: Fields.Saksnummer }}
-          data-testid="filter-saksnummer"
-        >
-          Saksnummer
-        </FlatMultiSelectDropdown>
+          label="Saksnummer"
+        />
       ) : null}
 
       {columns.TYPE ? (
-        <FlatMultiSelectDropdown
+        <OptionMultiSelect
           options={JOURNALPOSTTYPE_OPTIONS}
           onChange={(types) => setSelectedTypes(types.filter(isJournalpostType))}
           selected={selectedTypes}
           style={{ gridArea: Fields.Type }}
-          data-testid="filter-type"
-        >
-          Type
-        </FlatMultiSelectDropdown>
+          label="Type"
+        />
       ) : null}
     </>
   );
@@ -161,6 +153,56 @@ const getSortIcon = (sort: ArchivedDocumentsSort, column: ArchivedDocumentsSortC
   }
 
   return <ArrowsUpDownIcon aria-hidden />;
+};
+
+interface OptionSelectOption {
+  value: string;
+  label: string;
+}
+
+interface OptionMultiSelectProps<T extends string> {
+  options: OptionSelectOption[];
+  selected: T[];
+  onChange: (values: T[]) => void;
+  style?: React.CSSProperties;
+  label: string;
+}
+
+const OptionMultiSelect = <T extends string>({
+  options,
+  selected,
+  onChange,
+  style,
+  label,
+}: OptionMultiSelectProps<T>) => {
+  const selectedOptions = useMemo(
+    () => options.filter((o) => (selected as string[]).includes(o.value)),
+    [options, selected],
+  );
+
+  const handleChange = useCallback(
+    (values: OptionSelectOption[]) => {
+      onChange(values.map((v) => v.value) as T[]);
+    },
+    [onChange],
+  );
+
+  return (
+    <SearchableMultiSelect
+      label={label}
+      options={options}
+      value={selectedOptions}
+      valueKey={(o) => o.value}
+      formatOption={(o) => o.label}
+      emptyLabel={label}
+      filterText={(o) => o.label}
+      onChange={handleChange}
+      style={style}
+      triggerSize="small"
+      triggerVariant="tertiary"
+      triggerDisplay="count"
+    />
+  );
 };
 
 const JOURNALPOSTTYPE_OPTIONS = [
