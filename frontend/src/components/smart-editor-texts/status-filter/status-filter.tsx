@@ -1,24 +1,37 @@
-import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
+import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import {
   type Filterable,
   isDepublished,
   isDraft,
   isPublished,
 } from '@app/components/smart-editor-texts/functions/status-helpers';
+import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 export const StatusFilter = () => {
   const [filteredStatuses, setFilteredStatuses] = useStatusFilter();
 
+  const selectedOptions = useMemo(
+    () => STATUS_OPTIONS.filter((o) => filteredStatuses.includes(o.value)),
+    [filteredStatuses],
+  );
+
+  const handleChange = useCallback(
+    (options: StatusOption[]) => setFilteredStatuses(options.map((o) => o.value)),
+    [setFilteredStatuses],
+  );
+
   return (
-    <FlatMultiSelectDropdown<Status>
-      data-testid="filter-status"
-      selected={filteredStatuses}
+    <SearchableMultiSelect
+      label="Status"
       options={STATUS_OPTIONS}
-      onChange={setFilteredStatuses}
-    >
-      Status
-    </FlatMultiSelectDropdown>
+      value={selectedOptions}
+      valueKey={statusValueKey}
+      formatOption={statusFormatOption}
+      emptyLabel="Alle statuser"
+      filterText={statusFilterText}
+      onChange={handleChange}
+    />
   );
 };
 
@@ -28,11 +41,20 @@ export enum Status {
   DEPUBLISHED = 'depublished',
 }
 
-export const STATUS_OPTIONS = [
+export interface StatusOption {
+  value: Status;
+  label: string;
+}
+
+export const STATUS_OPTIONS: StatusOption[] = [
   { value: Status.PUBLISHED, label: 'Publisert' },
   { value: Status.DRAFT, label: 'Utkast' },
   { value: Status.DEPUBLISHED, label: 'Avpublisert' },
 ];
+
+const statusValueKey = (option: StatusOption) => option.value;
+const statusFormatOption = (option: StatusOption) => option.label;
+const statusFilterText = (option: StatusOption) => option.label;
 
 const STATUS_VALUES = Object.values(Status);
 

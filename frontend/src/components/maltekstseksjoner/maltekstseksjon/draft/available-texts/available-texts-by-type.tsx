@@ -1,5 +1,5 @@
-import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import { Body } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/body';
+import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-language/set-maltekstseksjon-language';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
@@ -8,6 +8,7 @@ import {
   filterByStatus,
   STATUS_OPTIONS,
   type Status,
+  type StatusOption,
 } from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { getTextAsString } from '@app/plate/functions/get-text-string';
@@ -16,6 +17,7 @@ import { RichTextTypes } from '@app/types/common-text-types';
 import type { ListRichText } from '@app/types/texts/common';
 import type { IRichText, IText, ListText } from '@app/types/texts/responses';
 import { Box, HStack, Loader, Search, Table, VStack } from '@navikt/ds-react';
+import type { ReactNode } from 'react';
 import { useCallback, useMemo, useState } from 'react';
 
 export interface AvailableTextsByTypeProps {
@@ -31,6 +33,16 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
   const [filter, setFilter] = useState<string>('');
   const lang = useRedaktoerLanguage();
   const [filteredStatuses, setFilteredStatuses] = useState<Status[]>(DEFAULT_STATUSES);
+
+  const selectedStatusOptions = useMemo(
+    () => STATUS_OPTIONS.filter((o) => filteredStatuses.includes(o.value)),
+    [filteredStatuses],
+  );
+
+  const handleStatusChange = useCallback(
+    (options: StatusOption[]) => setFilteredStatuses(options.map((o) => o.value)),
+    [],
+  );
 
   const onSortChange = useCallback(
     (sortKey: string | undefined) => {
@@ -142,14 +154,18 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
                     Maltekstseksjoner
                   </Table.ColumnHeader>
                   <Table.HeaderCell>
-                    <FlatMultiSelectDropdown<Status>
-                      data-testid="filter-status"
-                      selected={filteredStatuses}
+                    <SearchableMultiSelect
+                      label="Status"
                       options={STATUS_OPTIONS}
-                      onChange={setFilteredStatuses}
-                    >
-                      Status
-                    </FlatMultiSelectDropdown>
+                      value={selectedStatusOptions}
+                      valueKey={statusValueKey}
+                      formatOption={statusFormatOption}
+                      emptyLabel="Status"
+                      filterText={statusFilterText}
+                      onChange={handleStatusChange}
+                      triggerSize="small"
+                      triggerVariant="tertiary"
+                    />
                   </Table.HeaderCell>
                   <Table.ColumnHeader>%</Table.ColumnHeader>
                   <Table.HeaderCell />
@@ -184,3 +200,7 @@ type ScoredRichText = ListRichText & { score: number };
 
 const isRichtext = (text: IText | ListText): text is IRichText =>
   text.textType === RichTextTypes.MALTEKST || text.textType === RichTextTypes.REDIGERBAR_MALTEKST;
+
+const statusValueKey = (option: StatusOption): string => option.value;
+const statusFormatOption = (option: StatusOption): ReactNode => option.label;
+const statusFilterText = (option: StatusOption): string => option.label;
