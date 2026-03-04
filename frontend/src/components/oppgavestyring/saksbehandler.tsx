@@ -15,7 +15,7 @@ export const Saksbehandler = (oppgave: IOppgave) => (
   </HStack>
 );
 
-export const SaksbehandlerContent = (oppgave: IOppgave) => {
+const SaksbehandlerContent = (oppgave: IOppgave) => {
   const [access, isLoading] = useOppgaveActions(
     oppgave.tildeltSaksbehandlerident,
     oppgave.medunderskriver.employee?.navIdent ?? null,
