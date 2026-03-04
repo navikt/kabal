@@ -36,7 +36,6 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
   if (
     resultat.utfallId === UtfallEnum.TRUKKET ||
     resultat.utfallId === UtfallEnum.RETUR ||
-    resultat.utfallId === UtfallEnum.UGUNST ||
     resultat.utfallId === UtfallEnum.HENLAGT
   ) {
     return {
