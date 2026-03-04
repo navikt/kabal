@@ -6,14 +6,10 @@ import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import {
-  ANKE_I_TRYGDERETTEN_TEMPLATES_DEFAULT,
-  ANKE_I_TRYGDERETTEN_TEMPLATES_WITH_EKSPEDISJONSBREV,
-  ANKE_TEMPLATES_DEFAULT,
-  ANKE_TEMPLATES_WITH_EKSPEDISJONSBREV,
-  BEGJÆRING_OM_GJENOPPTAK_I_TR_TEMPLATES_DEFAULT,
-  BEGJÆRING_OM_GJENOPPTAK_I_TR_TEMPLATES_WITH_EKSPEDISJONSBREV,
-  BEGJÆRING_OM_GJENOPPTAK_TEMPLATES_DEFAULT,
-  BEGJÆRING_OM_GJENOPPTAK_TEMPLATES_WITH_EKSPEDISJONSBREV,
+  ANKE_I_TRYGDERETTEN_TEMPLATES,
+  ANKE_TEMPLATES,
+  BEGJÆRING_OM_GJENOPPTAK_I_TR_TEMPLATES,
+  BEGJÆRING_OM_GJENOPPTAK_TEMPLATES,
   BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
   getFinishedBehandlingTemplates,
   KLAGE_TEMPLATES,
@@ -21,7 +17,6 @@ import {
 } from '@app/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { useCreateEkspedisjonsbrevToTRFeatureToggle } from '@app/simple-api-state/feature-toggles';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
@@ -100,7 +95,6 @@ export const NewDocument = ({ onCreate }: Props) => {
 };
 
 export const useNewSmartDocumentTemplates = () => {
-  const { data: ekspedisjonsbrevToTREnabled } = useCreateEkspedisjonsbrevToTRFeatureToggle();
   const { data: oppgave, isSuccess } = useOppgave();
   const { user } = useContext(StaticDataContext);
 
@@ -116,31 +110,18 @@ export const useNewSmartDocumentTemplates = () => {
     return getFinishedBehandlingTemplates(user.navIdent);
   }
 
-  return getTemplates(ekspedisjonsbrevToTREnabled?.enabled === true)[typeId];
+  return TEMPLATES[typeId];
 };
 
-const getTemplates = (
-  ekspedisjonsbrevToTREnabled: boolean,
-): Record<SaksTypeEnum, Immutable<IMutableSmartEditorTemplate>[]> =>
-  ekspedisjonsbrevToTREnabled
-    ? {
-        [SaksTypeEnum.KLAGE]: KLAGE_TEMPLATES,
-        [SaksTypeEnum.ANKE]: ANKE_TEMPLATES_WITH_EKSPEDISJONSBREV,
-        [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: ANKE_I_TRYGDERETTEN_TEMPLATES_WITH_EKSPEDISJONSBREV,
-        [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
-        [SaksTypeEnum.OMGJØRINGSKRAV]: OMGJØRINGSKRAVVEDTAK_TEMPLATES,
-        [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: BEGJÆRING_OM_GJENOPPTAK_TEMPLATES_WITH_EKSPEDISJONSBREV,
-        [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: BEGJÆRING_OM_GJENOPPTAK_I_TR_TEMPLATES_WITH_EKSPEDISJONSBREV,
-      }
-    : {
-        [SaksTypeEnum.KLAGE]: KLAGE_TEMPLATES,
-        [SaksTypeEnum.ANKE]: ANKE_TEMPLATES_DEFAULT,
-        [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: ANKE_I_TRYGDERETTEN_TEMPLATES_DEFAULT,
-        [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
-        [SaksTypeEnum.OMGJØRINGSKRAV]: OMGJØRINGSKRAVVEDTAK_TEMPLATES,
-        [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: BEGJÆRING_OM_GJENOPPTAK_TEMPLATES_DEFAULT,
-        [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: BEGJÆRING_OM_GJENOPPTAK_I_TR_TEMPLATES_DEFAULT,
-      };
+const TEMPLATES: Record<SaksTypeEnum, Immutable<IMutableSmartEditorTemplate>[]> = {
+  [SaksTypeEnum.KLAGE]: KLAGE_TEMPLATES,
+  [SaksTypeEnum.ANKE]: ANKE_TEMPLATES,
+  [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: ANKE_I_TRYGDERETTEN_TEMPLATES,
+  [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
+  [SaksTypeEnum.OMGJØRINGSKRAV]: OMGJØRINGSKRAVVEDTAK_TEMPLATES,
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: BEGJÆRING_OM_GJENOPPTAK_TEMPLATES,
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: BEGJÆRING_OM_GJENOPPTAK_I_TR_TEMPLATES,
+};
 
 interface TemplateButtonProps {
   template: ISmartEditorTemplate;
