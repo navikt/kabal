@@ -12,7 +12,7 @@ interface BaseProps extends Omit<ButtonProps, 'id' | 'children'> {
   children?: string;
 }
 
-interface RoleAccessedProps extends BaseProps, Pick<IOppgave, 'id' | 'tildeltSaksbehandlerident' | 'ytelseId'> {
+interface RoleAccessedProps extends BaseProps, Pick<IOppgave, 'id' | 'tildeltSaksbehandlerident'> {
   medunderskriverident: string | null;
   rol: IHelper | null;
 }
@@ -43,7 +43,7 @@ export const OpenForRoleAccess = ({
   }
 
   return (
-    <Button as={Link} variant={variant} size={size} to={`/behandling/${id}`} {...buttonProps}>
+    <Button as={Link} role="link" variant={variant} size={size} to={`/behandling/${id}`} {...buttonProps}>
       {children}
     </Button>
   );
@@ -70,7 +70,7 @@ export const OpenForYtelseAccess = ({
   }
 
   return (
-    <Button as={Link} variant={variant} size={size} to={`/behandling/${id}`} {...buttonProps}>
+    <Button as={Link} role="link" variant={variant} size={size} to={`/behandling/${id}`} {...buttonProps}>
       {children}
     </Button>
   );
