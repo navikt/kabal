@@ -23,7 +23,10 @@ export const InsertHjemlerInSettings = () => {
         size="small"
         label="Ytelse"
         value={selectedYtelse}
-        onChange={({ target }) => setSelectedYtelse(target.value)}
+        onChange={({ target }) => {
+          setSelectedHjemler([]);
+          setSelectedYtelse(target.value);
+        }}
         className="w-160"
       >
         {options}
