@@ -1,7 +1,9 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { Filter } from '@app/components/smart-editor/gode-formuleringer/filter';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { GodeFormuleringerList } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer-list';
 import { HjemlerFilter } from '@app/components/smart-editor/gode-formuleringer/hjemler-filter';
+import { insertGodFormulering } from '@app/components/smart-editor/gode-formuleringer/insert';
 import { SectionSelect } from '@app/components/smart-editor/gode-formuleringer/section-select';
 import { SetGlobalExpandState } from '@app/components/smart-editor/gode-formuleringer/set-global-expand-state';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
@@ -17,8 +19,6 @@ import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { LightBulbIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Filter } from './filter';
-import { insertGodFormulering } from './insert';
 
 interface Props {
   templateId: TemplateIdEnum;

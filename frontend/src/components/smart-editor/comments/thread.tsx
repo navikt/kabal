@@ -1,4 +1,5 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { CommentList } from '@app/components/smart-editor/comments/comment-list';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useHasWriteAccess } from '@app/components/smart-editor/hooks/use-has-write-access';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -11,7 +12,6 @@ import { Chat2Icon } from '@navikt/aksel-icons';
 import { Box, Button, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
-import { CommentList } from './comment-list';
 
 interface Props {
   thread: ISmartEditorComment;

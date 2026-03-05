@@ -8,8 +8,10 @@ import {
   isRichText,
 } from '@app/functions/is-rich-plain-text';
 import { reduxStore } from '@app/redux/configure-store';
+import { maltekstseksjonerQuerySlice } from '@app/redux-api/maltekstseksjoner/queries';
 import { getLastPublishedVersion } from '@app/redux-api/redaktoer-helpers';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
+import { textsQuerySlice } from '@app/redux-api/texts/queries';
 import { textsApi } from '@app/redux-api/texts/texts';
 import { user } from '@app/static-data/static-data';
 import type { ListGodFormulering, ListPlainText, ListRegelverk, ListRichText } from '@app/types/texts/common';
@@ -42,8 +44,6 @@ import type {
 } from '@app/types/texts/responses';
 import type { IDeleteDraftOrUnpublishTextResponse } from '@app/types/texts/responses-maltekster';
 import { formatISO } from 'date-fns';
-import { maltekstseksjonerQuerySlice } from '../maltekstseksjoner/queries';
-import { textsQuerySlice } from './queries';
 
 const textsMutationSlice = textsApi.injectEndpoints({
   endpoints: (builder) => ({

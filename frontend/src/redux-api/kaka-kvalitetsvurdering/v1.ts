@@ -1,3 +1,4 @@
+import { KAKA_KVALITETSVURDERING_BASE_QUERY } from '@app/redux-api/common';
 import type {
   IKvalitetsvurderingBooleans,
   IKvalitetsvurderingRadio,
@@ -6,7 +7,6 @@ import type {
   IKvalitetsvurderingV1,
 } from '@app/types/kaka-kvalitetsvurdering/v1';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { KAKA_KVALITETSVURDERING_BASE_QUERY } from '../common';
 
 type WithId = Pick<IKvalitetsvurderingV1, 'id'>;
 

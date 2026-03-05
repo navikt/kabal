@@ -1,6 +1,6 @@
 import { SmartEditorTexts } from '@app/components/smart-editor-texts/smart-editor-texts';
+import { PageWrapper } from '@app/pages/page-wrapper';
 import { PlainTextTypes } from '@app/types/common-text-types';
-import { PageWrapper } from '../page-wrapper';
 
 export const BunnteksterPage = () => (
   <PageWrapper>

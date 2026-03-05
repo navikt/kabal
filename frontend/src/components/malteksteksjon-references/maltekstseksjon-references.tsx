@@ -1,10 +1,10 @@
+import { Preview } from '@app/components/malteksteksjon-references/preview';
 import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
 import { GOD_FORMULERING_TYPE, REGELVERK_TYPE } from '@app/types/common-text-types';
 import type { TextType } from '@app/types/texts/common';
 import { DocPencilIcon, ExternalLinkIcon, EyeIcon, FileSearchIcon, UploadIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Link, List, Loader, Modal, Tooltip } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { Preview } from './preview';
 
 interface Props {
   textType: TextType;

@@ -1,4 +1,4 @@
-import type { EditorAutoformatRule } from '../../types';
+import type { EditorAutoformatRule } from '@app/plate/types';
 
 export const autoformatText: EditorAutoformatRule[] = [
   {

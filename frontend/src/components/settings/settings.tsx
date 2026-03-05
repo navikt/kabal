@@ -1,8 +1,8 @@
+import { Abbreviations } from '@app/components/settings/abbreviations/abbreviations';
+import { Filters } from '@app/components/settings/filters';
 import { PdfScale } from '@app/components/settings/pdf-scale/pdf-scale';
+import { Signature } from '@app/components/settings/signature';
 import { VStack } from '@navikt/ds-react';
-import { Abbreviations } from './abbreviations/abbreviations';
-import { Filters } from './filters';
-import { Signature } from './signature';
 
 export const Settings = () => (
   <VStack gap="space-16" className="@container">

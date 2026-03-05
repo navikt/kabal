@@ -1,6 +1,6 @@
+import type { INewSmartEditorMetadata } from '@app/types/smart-editor/metadata';
+import type { GenericObject, Immutable } from '@app/types/types';
 import type { Value } from 'platejs';
-import type { GenericObject, Immutable } from '../types';
-import type { INewSmartEditorMetadata } from './metadata';
 
 interface INewSmartEditor extends INewSmartEditorMetadata {
   richText: Value;

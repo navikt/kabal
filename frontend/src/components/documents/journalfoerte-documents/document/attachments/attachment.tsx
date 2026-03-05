@@ -1,5 +1,7 @@
 import { createDragUI } from '@app/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
+import { DocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title';
+import { IncludeDocument } from '@app/components/documents/journalfoerte-documents/document/shared/include-document';
 import { ToggleVedleggButton } from '@app/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
 import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/journalfoerte-documents/grid';
 import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
@@ -23,8 +25,6 @@ import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/
 import type { IArkivertDocument, IArkivertDocumentVedlegg, Journalstatus } from '@app/types/arkiverte-documents';
 import { Checkbox, HGrid } from '@navikt/ds-react';
 import { memo, useCallback, useContext, useRef } from 'react';
-import { DocumentTitle } from '../shared/document-title';
-import { IncludeDocument } from '../shared/include-document';
 
 interface Props {
   journalpostId: string;

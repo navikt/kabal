@@ -1,8 +1,8 @@
+import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
+import type { PlaceholderElement } from '@app/plate/types';
 import { NodeApi } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 import type { Path } from 'slate';
-import type { PlaceholderElement } from '../../types';
-import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '../element-types';
 
 export const getPlaceholderEntry = (editor: PlateEditor) =>
   editor.api.node<PlaceholderElement>({ match: { type: ELEMENT_PLACEHOLDER } });

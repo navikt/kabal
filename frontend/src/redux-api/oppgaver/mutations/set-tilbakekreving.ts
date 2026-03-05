@@ -1,8 +1,8 @@
 import { ENVIRONMENT } from '@app/environment';
+import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
+import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import type { SetTilbakekrevingParams } from '@app/types/oppgavebehandling/params';
 import type { IModifiedResponse } from '@app/types/oppgavebehandling/response';
-import { oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setTilbakekrevingMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

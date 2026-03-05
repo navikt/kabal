@@ -1,13 +1,13 @@
 import { isMetaKey } from '@app/keys';
 import { RedaktørPlaceholder } from '@app/plate/components/placeholder/placeholder';
+import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { handleNavigation } from '@app/plate/plugins/placeholder/handle-navigation';
 import { parsers } from '@app/plate/plugins/placeholder/html-parsers';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
+import { withOverrides } from '@app/plate/plugins/placeholder/with-overrides';
 import { isPlaceholderActive } from '@app/plate/utils/queries';
 import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
 import { createPlatePlugin } from 'platejs/react';
-import { ELEMENT_PLACEHOLDER } from '../element-types';
-import { withOverrides } from './with-overrides';
 
 export const RedaktoerPlaceholderPlugin = createPlatePlugin({
   key: ELEMENT_PLACEHOLDER,

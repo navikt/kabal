@@ -1,7 +1,7 @@
+import { Row } from '@app/components/access-rights/row';
 import type { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
 import type { IYtelse } from '@app/types/kodeverk';
 import { useMemo } from 'react';
-import { Row } from './row';
 
 interface Props {
   ytelser: IYtelse[];

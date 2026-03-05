@@ -1,12 +1,12 @@
+import { type Reason, Reasons } from '@app/components/kvalitetsvurdering/v1/reasons';
+import { FormSection } from '@app/components/kvalitetsvurdering/v1/styled-components';
+import { useKvalitetsvurderingV1FieldName } from '@app/components/kvalitetsvurdering/v1/use-field-name';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { useValidationError } from '@app/hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
 import { RadiovalgExtended } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react';
-import { type Reason, Reasons } from './reasons';
-import { FormSection } from './styled-components';
-import { useKvalitetsvurderingV1FieldName } from './use-field-name';
 
 export const BrukAvRaadgivendeLege = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();

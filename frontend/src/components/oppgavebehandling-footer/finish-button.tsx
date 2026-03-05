@@ -1,3 +1,5 @@
+import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
+import { ConfirmFinish } from '@app/components/oppgavebehandling-footer/confirm-finish';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
@@ -6,8 +8,6 @@ import { ValidationType } from '@app/types/oppgavebehandling/params';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
-import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
-import { ConfirmFinish } from './confirm-finish';
 
 const TEST_ID = 'complete-button';
 

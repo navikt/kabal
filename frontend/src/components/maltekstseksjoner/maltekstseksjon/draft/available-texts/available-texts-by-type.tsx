@@ -1,4 +1,5 @@
 import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
+import { Body } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/body';
 import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-language/set-maltekstseksjon-language';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
@@ -16,7 +17,6 @@ import type { ListRichText } from '@app/types/texts/common';
 import type { IRichText, IText, ListText } from '@app/types/texts/responses';
 import { Box, HStack, Loader, Search, Table, VStack } from '@navikt/ds-react';
 import { useCallback, useMemo, useState } from 'react';
-import { Body } from './body';
 
 export interface AvailableTextsByTypeProps {
   onAdd: (id: string) => void;

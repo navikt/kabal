@@ -4,6 +4,8 @@ import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/
 import { useRemoveDocumentAccessErrors } from '@app/components/documents/new-documents/hooks/use-remove-access';
 import { DocumentModal } from '@app/components/documents/new-documents/modal/document-modal';
 import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
+import { DocumentTypeTag, SetDocumentType } from '@app/components/documents/new-documents/new-document/set-type';
+import { DocumentTitle } from '@app/components/documents/new-documents/new-document/title';
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { areAddressesEqual } from '@app/functions/are-addresses-equal';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
@@ -21,8 +23,6 @@ import {
 import { HGrid } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useCallback, useContext, useRef, useState } from 'react';
-import { DocumentTypeTag, SetDocumentType } from './set-type';
-import { DocumentTitle } from './title';
 
 interface Props {
   document: IParentDocument;

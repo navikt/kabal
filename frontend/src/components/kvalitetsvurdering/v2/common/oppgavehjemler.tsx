@@ -1,3 +1,5 @@
+import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useValidationError } from '@app/components/kvalitetsvurdering/v2/common/use-validation-error';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { usePrevious } from '@app/hooks/use-previous';
 import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
@@ -7,8 +9,6 @@ import type {
 } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { useEffect } from 'react';
-import { useKvalitetsvurderingV2 } from './use-kvalitetsvurdering-v2';
-import { useValidationError } from './use-validation-error';
 
 interface Props {
   field: keyof IKvalitetsvurderingSaksdataHjemler;

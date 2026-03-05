@@ -1,9 +1,9 @@
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
+import { KABAL_INTERNAL_BASE_QUERY } from '@app/redux-api/common';
 import { user } from '@app/static-data/static-data';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { format } from 'date-fns';
-import { KABAL_INTERNAL_BASE_QUERY } from './common';
 
 export interface Task {
   id: string;

@@ -1,8 +1,8 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { UserDropdown } from '@app/components/header/user-menu/dropdown';
 import { useGetMySignatureQuery } from '@app/redux-api/bruker';
 import { ActionMenu, InternalHeader } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { UserDropdown } from './dropdown';
 
 export const User = () => {
   const { user } = useContext(StaticDataContext);

@@ -1,5 +1,9 @@
 import { DocumentWarnings } from '@app/components/documents/document-warnings';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
+import {
+  TitleActions,
+  type TitleActionsProps,
+} from '@app/components/documents/new-documents/new-document/title-actions';
 import { StyledDocumentTitle } from '@app/components/documents/new-documents/new-document/title-style';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SharedDocumentTitle } from '@app/components/documents/new-documents/shared/title';
@@ -14,7 +18,6 @@ import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents
 import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useCallback, useContext, useMemo, useState } from 'react';
-import { TitleActions, type TitleActionsProps } from './title-actions';
 
 interface Props {
   document: IDocument;

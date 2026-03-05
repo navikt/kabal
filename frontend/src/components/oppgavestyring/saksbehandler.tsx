@@ -1,11 +1,11 @@
 import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
+import { useTildel } from '@app/components/oppgavestyring/use-tildel';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@app/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import type { IOppgave } from '@app/types/oppgaver';
 import { Box, ErrorMessage, HStack, Select, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useTildel } from './use-tildel';
 
 const NOT_SELECTED = 'NOT_SELECTED';
 

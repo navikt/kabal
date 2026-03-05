@@ -1,5 +1,5 @@
 import { Admin } from '@app/components/admin/admin';
-import { PageWrapper } from '../page-wrapper';
+import { PageWrapper } from '@app/pages/page-wrapper';
 
 export const AdminPage = () => (
   <PageWrapper>

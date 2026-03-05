@@ -1,6 +1,7 @@
 import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import { NestedFilterList } from '@app/components/filter-dropdown/nested-filter-list';
 import type { IOption } from '@app/components/filter-dropdown/props';
+import { getTemplateOptions } from '@app/components/smart-editor-texts/get-template-options';
 import { useKlageenheterOptions } from '@app/components/smart-editor-texts/hooks/use-options';
 import {
   GLOBAL,
@@ -14,7 +15,6 @@ import {
 import { isUtfall } from '@app/functions/is-utfall';
 import type { UtfallEnum } from '@app/types/kodeverk';
 import { useCallback, useMemo } from 'react';
-import { getTemplateOptions } from './get-template-options';
 
 interface UtfallSelectProps {
   children: string;

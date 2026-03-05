@@ -1,10 +1,22 @@
 import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
+import { EnhetHjemmel } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/enhet-hjemmel';
 import {
   HelperStatusWithoutSelf,
   HelperStatusWithSelf,
 } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/helper-status';
+import { Hjemmel } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/hjemmel';
+import { Medunderskriver } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/medunderskriver';
 import { PaaVentReasons } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/paa-vent-reason';
 import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
+import { Rol } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/rol';
+import { RolHjemmel } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/rol-hjemmel';
+import { RolYtelse } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/rol-ytelse';
+import { Saksbehandler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/saksbehandler';
+import {
+  Sakstype,
+  SakstypeWithTrygderetten,
+} from '@app/components/common-table-components/oppgave-table/filter-dropdowns/sakstype';
+import { Ytelse } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/ytelse';
 import {
   useOppgaveTableFerdigstilt,
   useOppgaveTableFrist,
@@ -18,15 +30,6 @@ import { useHasRole } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';
 import { SortFieldEnum, type SortOrderEnum } from '@app/types/oppgaver';
 import { Table, type TableProps } from '@navikt/ds-react';
-import { EnhetHjemmel } from './filter-dropdowns/enhet-hjemmel';
-import { Hjemmel } from './filter-dropdowns/hjemmel';
-import { Medunderskriver } from './filter-dropdowns/medunderskriver';
-import { Rol } from './filter-dropdowns/rol';
-import { RolHjemmel } from './filter-dropdowns/rol-hjemmel';
-import { RolYtelse } from './filter-dropdowns/rol-ytelse';
-import { Saksbehandler } from './filter-dropdowns/saksbehandler';
-import { Sakstype, SakstypeWithTrygderetten } from './filter-dropdowns/sakstype';
-import { Ytelse } from './filter-dropdowns/ytelse';
 
 interface TablePlainHeadersProps {
   columnKeys: ColumnKeyEnum[];

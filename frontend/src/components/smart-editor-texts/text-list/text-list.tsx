@@ -1,7 +1,9 @@
+import { DateTime } from '@app/components/datetime/datetime';
 import { MaltekstseksjontLinkListItem } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-link-list-item';
 import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
 import { getPathPrefix } from '@app/components/smart-editor-texts/functions/get-path-prefix';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
+import { SortableHeader, SortKey } from '@app/components/smart-editor-texts/sortable-header';
 import { StatusFilter, useStatusFilter } from '@app/components/smart-editor-texts/status-filter/status-filter';
 import { useFilteredAndSorted, useOrder, useSort } from '@app/components/smart-editor-texts/text-list/hooks';
 import {
@@ -20,8 +22,6 @@ import type { ListText } from '@app/types/texts/responses';
 import { FileTextIcon, PercentIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { Box, HGrid, HStack, Loader, VStack } from '@navikt/ds-react';
 import { Link, useParams } from 'react-router-dom';
-import { DateTime } from '../../datetime/datetime';
-import { SortableHeader, SortKey } from '../sortable-header';
 
 interface StandaloneTextListProps {
   filter: string;

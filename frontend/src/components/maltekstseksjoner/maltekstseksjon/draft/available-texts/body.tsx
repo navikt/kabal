@@ -1,9 +1,9 @@
+import { Row } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/row';
 import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import type { ListRichText } from '@app/types/texts/common';
 import { Button, Table } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { Row } from './row';
 
 type ScoredText = ListRichText & { score: number };
 

@@ -1,5 +1,9 @@
+import { toast } from '@app/components/toast/store';
+import { isoDateToPretty } from '@app/domain/date';
 import { ENVIRONMENT } from '@app/environment';
 import { reduxStore } from '@app/redux/configure-store';
+import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
+import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type {
@@ -11,10 +15,6 @@ import type {
 } from '@app/types/oppgavebehandling/params';
 import type { IModifiedResponse } from '@app/types/oppgavebehandling/response';
 import type { IOppgave } from '@app/types/oppgaver';
-import { toast } from './../../../components/toast/store';
-import { isoDateToPretty } from './../../../domain/date';
-import { oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

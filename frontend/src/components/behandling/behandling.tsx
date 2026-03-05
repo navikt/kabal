@@ -1,17 +1,17 @@
+import { Ankebehandlingsdetaljer } from '@app/components/behandling/behandlingsdetaljer/ankebehandlingsdetaljer';
 import { BegjæringOmGjenopptakDetaljer } from '@app/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-detaljer';
 import { BegjæringOmGjenopptakITrDetaljer } from '@app/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-i-tr-detaljer';
 import { BehandlingEtterTrOpphevetDetaljer } from '@app/components/behandling/behandlingsdetaljer/behandling-etter-tr-opphevet-detaljer';
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
+import { Klagebehandlingsdetaljer } from '@app/components/behandling/behandlingsdetaljer/klagebehandlingsdetaljer';
 import { Omgjøringskravdetaljer } from '@app/components/behandling/behandlingsdetaljer/omgjøringskravdetaljer';
+import { Trygderettsankebehandlingsdetaljer } from '@app/components/behandling/behandlingsdetaljer/trygderettsankebehandlingsdetaljer';
+import { Behandlingsdialog } from '@app/components/behandling/behandlingsdialog/behandlingsdialog';
+import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
+import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Heading, HGrid, Skeleton } from '@navikt/ds-react';
-import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
-import { Ankebehandlingsdetaljer } from './behandlingsdetaljer/ankebehandlingsdetaljer';
-import { Klagebehandlingsdetaljer } from './behandlingsdetaljer/klagebehandlingsdetaljer';
-import { Trygderettsankebehandlingsdetaljer } from './behandlingsdetaljer/trygderettsankebehandlingsdetaljer';
-import { Behandlingsdialog } from './behandlingsdialog/behandlingsdialog';
-import { StyledBehandlingSection } from './styled-components';
 
 export const Behandling = () => (
   <PanelContainer data-testid="behandling-panel">

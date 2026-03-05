@@ -1,14 +1,14 @@
+import { StyledRadioGroup } from '@app/components/kvalitetsvurdering/common/styled-components';
+import { Checkboxes } from '@app/components/kvalitetsvurdering/v2/common/checkboxes';
+import { HeadingWithHelpText } from '@app/components/kvalitetsvurdering/v2/common/heading-with-helptext';
+import { type InputParams, KvalitetsvurderingInput } from '@app/components/kvalitetsvurdering/v2/common/types';
+import { useKvalitetsvurderingV2FieldName } from '@app/components/kvalitetsvurdering/v2/common/use-field-name';
+import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useValidationError } from '@app/components/kvalitetsvurdering/v2/common/use-validation-error';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { HStack, Radio } from '@navikt/ds-react';
-import { StyledRadioGroup } from '../common/styled-components';
-import { Checkboxes } from './common/checkboxes';
-import { HeadingWithHelpText } from './common/heading-with-helptext';
-import { type InputParams, KvalitetsvurderingInput } from './common/types';
-import { useKvalitetsvurderingV2FieldName } from './common/use-field-name';
-import { useKvalitetsvurderingV2 } from './common/use-kvalitetsvurdering-v2';
-import { useValidationError } from './common/use-validation-error';
 
 const KLAGEFORBEREDELSEN_FIELD = 'klageforberedelsen';
 

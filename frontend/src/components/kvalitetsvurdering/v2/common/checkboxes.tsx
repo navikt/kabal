@@ -1,14 +1,18 @@
+import { KvalitetsskjemaCheckbox } from '@app/components/kvalitetsvurdering/common/kvalitetsvurdering-checkbox';
 import { AllRegistreringshjemler } from '@app/components/kvalitetsvurdering/v2/common/all-registreringshjemler';
+import { Oppgavehjemler } from '@app/components/kvalitetsvurdering/v2/common/oppgavehjemler';
 import { KvalitetsskjemaTextarea } from '@app/components/kvalitetsvurdering/v2/common/textarea';
+import {
+  type CheckboxParams,
+  type InputParams,
+  KvalitetsvurderingInput,
+} from '@app/components/kvalitetsvurdering/v2/common/types';
+import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from '@app/components/kvalitetsvurdering/v2/common/use-field-name';
+import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useValidationError } from '@app/components/kvalitetsvurdering/v2/common/use-validation-error';
 import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingData } from '@app/types/kaka-kvalitetsvurdering/v2';
 import { Box, CheckboxGroup } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { KvalitetsskjemaCheckbox } from '../../common/kvalitetsvurdering-checkbox';
-import { Oppgavehjemler } from './oppgavehjemler';
-import { type CheckboxParams, type InputParams, KvalitetsvurderingInput } from './types';
-import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from './use-field-name';
-import { useKvalitetsvurderingV2 } from './use-kvalitetsvurdering-v2';
-import { useValidationError } from './use-validation-error';
 
 interface Props {
   kvalitetsvurdering: IKvalitetsvurderingData;

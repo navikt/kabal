@@ -1,4 +1,5 @@
 import { Alert } from '@app/components/alert/alert';
+import { Lookup } from '@app/components/part/lookup';
 import { cleanAndValidate } from '@app/components/part/validate';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { Keys } from '@app/keys';
@@ -9,7 +10,6 @@ import { Search, Tag, VStack } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
-import { Lookup } from './lookup';
 
 export interface InvalidReceiver {
   id: string;

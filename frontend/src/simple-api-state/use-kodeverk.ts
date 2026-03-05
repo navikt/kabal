@@ -1,3 +1,4 @@
+import { SimpleApiState, useSimpleApiState } from '@app/simple-api-state/simple-api-state';
 import type {
   IKabalYtelse,
   IKlageenhet,
@@ -9,7 +10,6 @@ import type {
   SakstypeToPåVentReason,
   UtfallEnum,
 } from '@app/types/kodeverk';
-import { SimpleApiState, useSimpleApiState } from './simple-api-state';
 
 interface IHjemmelNameWithLovkilde {
   lovkilde: IKodeverkValue;

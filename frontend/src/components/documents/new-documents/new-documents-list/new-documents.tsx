@@ -4,6 +4,7 @@ import { ROW_HEIGHT } from '@app/components/documents/new-documents/new-document
 import { useDocumentNodes } from '@app/components/documents/new-documents/new-documents-list/document-nodes';
 import { getListHeight } from '@app/components/documents/new-documents/new-documents-list/list-height';
 import { useDocumentMap } from '@app/components/documents/new-documents/new-documents-list/use-document-map';
+import { StyledDocumentList } from '@app/components/documents/styled-components/document-list';
 import { clamp } from '@app/functions/clamp';
 import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
 import { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
@@ -13,7 +14,6 @@ import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
 import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { HStack, InlineMessage, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { StyledDocumentList } from '../../styled-components/document-list';
 
 /** Number of rows to render above and below the rendered window. */
 const SCROLL_BUFFER_ROWS = 5;

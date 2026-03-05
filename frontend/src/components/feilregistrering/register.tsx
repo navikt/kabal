@@ -1,10 +1,10 @@
+import { Context } from '@app/components/feilregistrering/context';
+import type { OppgaveId } from '@app/components/feilregistrering/types';
 import { isMetaKey, Keys, MOD_KEY_TEXT } from '@app/keys';
 import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { FileXMarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, HStack, Textarea } from '@navikt/ds-react';
 import { useCallback, useContext, useState } from 'react';
-import { Context } from './context';
-import type { OppgaveId } from './types';
 
 const MAX_LENGTH = 250;
 

@@ -1,3 +1,5 @@
+import { DraftMaltekstSection } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/draft';
+import { PublishedMaltekstSection } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-published';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
 import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
 import { ScalingGroup } from '@app/hooks/settings/use-setting';
@@ -13,8 +15,6 @@ import type {
 import { VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { DraftMaltekstSection } from './draft/draft';
-import { PublishedMaltekstSection } from './maltekstseksjon-published';
 
 interface Props {
   id: string;

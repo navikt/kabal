@@ -1,4 +1,8 @@
 import { NONE } from '@app/components/behandling/behandlingsdialog/medunderskriver/constants';
+import {
+  getTitleCapitalized,
+  getTitlePlural,
+} from '@app/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { MedunderskriverReadOnly } from '@app/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
@@ -12,7 +16,6 @@ import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { BodyShort, Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { getTitleCapitalized, getTitlePlural } from './get-title';
 
 interface Props {
   oppgaveId: string;

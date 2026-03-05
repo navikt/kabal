@@ -1,6 +1,7 @@
 import { UseAsAttachments } from '@app/components/documents/journalfoerte-documents/heading/use-as-attachments';
 import { ViewCombinedPDF } from '@app/components/documents/journalfoerte-documents/heading/view-combined-pdf-button';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
+import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import {
   ARCHIVED_DOCUMENTS_COLUMN_OPTIONS,
   ARCHIVED_DOCUMENTS_COLUMN_OPTIONS_LABELS,
@@ -11,7 +12,6 @@ import { pushEvent } from '@app/observability';
 import { MenuHamburgerIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox, CheckboxGroup, Dropdown } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { useIsExpanded } from '../../use-is-expanded';
 
 export const Menu = () => {
   const [isExpanded] = useIsExpanded();

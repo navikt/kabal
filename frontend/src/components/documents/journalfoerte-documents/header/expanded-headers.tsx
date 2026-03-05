@@ -1,4 +1,6 @@
 import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
+import { DateFilter } from '@app/components/documents/journalfoerte-documents/header/date-filter';
+import type { useFilters } from '@app/components/documents/journalfoerte-documents/header/use-filters';
 import { kodeverkValuesToDropdownOptions } from '@app/components/filter-dropdown/functions';
 import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -19,8 +21,6 @@ import { SortOrder } from '@app/types/sort';
 import { ArrowsUpDownIcon, SortDownIcon, SortUpIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps, HStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { DateFilter } from './date-filter';
-import type { useFilters } from './use-filters';
 
 export const ExpandedHeaders = ({
   selectedTemaer,

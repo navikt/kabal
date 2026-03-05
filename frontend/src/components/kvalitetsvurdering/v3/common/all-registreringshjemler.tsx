@@ -1,12 +1,12 @@
 import { LovhjemmelSelect } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel-select';
 import { SelectedHjemlerList } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/selected-hjemler-list';
+import { useKvalitetsvurderingV3 } from '@app/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { useValidationError } from '@app/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import type {
   KvalitetsvurderingAllRegistreringshjemlerV3,
   KvalitetsvurderingV3Boolean,
 } from '@app/types/kaka-kvalitetsvurdering/v3';
-import { useKvalitetsvurderingV3 } from './use-kvalitetsvurdering-v3';
 
 const EMPTY_ARRAY: string[] = [];
 

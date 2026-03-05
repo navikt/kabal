@@ -1,4 +1,4 @@
-import type { IMaltekstseksjon } from '../maltekstseksjoner/responses';
+import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 
 export interface IDeleteDraftOrUnpublishTextResponse {
   maltekstseksjonVersions: {

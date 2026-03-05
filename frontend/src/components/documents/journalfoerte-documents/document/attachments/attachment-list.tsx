@@ -1,7 +1,7 @@
+import { Attachment } from '@app/components/documents/journalfoerte-documents/document/attachments/attachment';
+import { StyledAttachmentListItem } from '@app/components/documents/styled-components/attachment-list';
 import type { IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
 import type { HTMLProps } from 'react';
-import { StyledAttachmentListItem } from '../../../styled-components/attachment-list';
-import { Attachment } from './attachment';
 
 interface AttachmentListItemProps extends HTMLProps<HTMLLIElement> {
   journalpostId: string;

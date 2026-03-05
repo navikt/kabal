@@ -5,6 +5,7 @@ import { toast } from '@app/components/toast/store';
 import { Header } from '@app/components/view-pdf/header';
 import { ReloadButton } from '@app/components/view-pdf/reload-button';
 import { useMarkVisited } from '@app/components/view-pdf/use-mark-visited';
+import { useMergedDocument } from '@app/components/view-pdf/use-merged-document';
 import { useShownDocumentMetadata } from '@app/components/view-pdf/use-shown-document-metadata';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfViewed, useDocumentsPdfWidth } from '@app/hooks/settings/use-setting';
@@ -15,7 +16,6 @@ import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navik
 import { Alert, Box, Button, type ButtonProps, HStack, Loader, Switch, Tag, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { useMergedDocument } from './use-merged-document';
 
 const DEFAULT_PDF_WIDTH = 800;
 const MIN_PDF_WIDTH = 400;

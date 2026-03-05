@@ -1,7 +1,7 @@
+import { ThreadList } from '@app/components/smart-editor/comments/thread-list';
 import { useThreads } from '@app/components/smart-editor/comments/use-threads';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useContext } from 'react';
-import { ThreadList } from './thread-list';
 
 export const CommentSection = () => {
   const { attached, orphans, isLoading } = useThreads();

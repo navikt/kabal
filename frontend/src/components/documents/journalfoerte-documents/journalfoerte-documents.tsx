@@ -1,5 +1,6 @@
 import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';
 import { Header } from '@app/components/documents/journalfoerte-documents/header/header';
+import { useFilters } from '@app/components/documents/journalfoerte-documents/header/use-filters';
 import { JournalfoertHeading } from '@app/components/documents/journalfoerte-documents/heading/heading';
 import { KeyboardBoundary } from '@app/components/documents/journalfoerte-documents/keyboard/boundary';
 import { KeyboardContextElement } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-context';
@@ -13,7 +14,6 @@ import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useFilters } from './header/use-filters';
 
 const EMPTY_ARRAY: IArkivertDocument[] = [];
 

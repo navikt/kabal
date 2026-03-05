@@ -1,5 +1,7 @@
 import { XMarkOctagonFillIconColored } from '@app/components/colored-icons/colored-icons';
 import { createDragUI } from '@app/components/maltekstseksjoner/drag-and-drop/create-drag-ui';
+import { DragAndDropContext } from '@app/components/maltekstseksjoner/drag-and-drop/drag-context';
+import { TextLink } from '@app/components/maltekstseksjoner/text-link';
 import { useMaltekstseksjonPath } from '@app/hooks/use-navigate-maltekstseksjoner';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
@@ -9,8 +11,6 @@ import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { CircleBrokenIcon, LinkBrokenIcon, PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Button, HelpText, HStack, Skeleton, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useRef } from 'react';
-import { DragAndDropContext } from '../drag-and-drop/drag-context';
-import { TextLink } from '../text-link';
 
 interface LoadTextListItemProps {
   textId: string;

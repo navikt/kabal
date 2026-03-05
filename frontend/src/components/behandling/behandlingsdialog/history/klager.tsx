@@ -1,10 +1,10 @@
+import { employeeName, partName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
+import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { INavEmployee } from '@app/types/bruker';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { HistoryEventTypes, type IKlagerEvent, type IPart } from '@app/types/oppgavebehandling/response';
 import { ArrowRightLeftIcon, PlusIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { employeeName, partName, toKey } from './common';
-import { HistoryEvent } from './event';
 
 export const getKlager = (e: IKlagerEvent) => {
   const key = toKey(e);

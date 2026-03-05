@@ -17,6 +17,7 @@ import type {
   ELEMENT_SAKSNUMMER,
   ELEMENT_SIGNATURE,
 } from '@app/plate/plugins/element-types';
+import type { TemplateSections } from '@app/plate/template-sections';
 import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
 import type { Language } from '@app/types/texts/language';
 import type { AutoformatRule } from '@platejs/autoformat';
@@ -32,7 +33,6 @@ import type { PlateYjsEditorProps } from '@platejs/yjs';
 import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
 import type { BaseParagraphPlugin, TElement, TTableCellElement, TTableElement, TTableRowElement, TText } from 'platejs';
 import { type PlateEditor, useEditorRef, useEditorState } from 'platejs/react';
-import type { TemplateSections } from './template-sections';
 
 export enum TextAlign {
   LEFT = 'left',

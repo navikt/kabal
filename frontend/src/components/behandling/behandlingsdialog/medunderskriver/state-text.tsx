@@ -1,8 +1,8 @@
+import { getTitleLowercase } from '@app/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { InlineMessage } from '@navikt/ds-react';
-import { getTitleLowercase } from './get-title';
 
 interface Props {
   medunderskriver: IMedunderskriverRol;

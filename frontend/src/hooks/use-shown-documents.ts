@@ -1,11 +1,11 @@
 import { canOpenInKabal } from '@app/components/documents/filetype';
 import type { IShownArchivedDocument, IShownDocument } from '@app/components/view-pdf/types';
+import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { useEffect, useMemo } from 'react';
-import { useOppgaveId } from './oppgavebehandling/use-oppgave-id';
-import { useDocumentsPdfViewed } from './settings/use-setting';
 
 interface ShowDocumentResult {
   showDocumentList: IShownDocument[];

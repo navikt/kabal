@@ -1,8 +1,8 @@
+import { getTitleCapitalized } from '@app/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IMedunderskriverRol } from '@app/types/oppgave-common';
 import { BodyShort, Label } from '@navikt/ds-react';
-import { getTitleCapitalized } from './get-title';
 
 interface Props {
   medunderskriver: IMedunderskriverRol;

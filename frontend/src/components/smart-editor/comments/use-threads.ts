@@ -1,3 +1,4 @@
+import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isNotUndefined } from '@app/functions/is-not-type-guards';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -8,7 +9,6 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { ElementApi } from 'platejs';
 import { useContext, useMemo } from 'react';
 import type { Descendant } from 'slate';
-import { COMMENT_PREFIX } from '../constants';
 
 export interface FocusedComment extends ISmartEditorComment {
   isFocused: boolean;

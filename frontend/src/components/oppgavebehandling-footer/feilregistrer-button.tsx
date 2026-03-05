@@ -1,10 +1,10 @@
+import { Feilregistrering } from '@app/components/feilregistrering/feilregistrering';
 import { FeilregistrertModal } from '@app/components/feilregistrert-modal/feilregistrert-modal';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useState } from 'react';
-import { Feilregistrering } from '../feilregistrering/feilregistrering';
 
 export const FeilregistrerButton = () => {
   const { data: oppgave } = useOppgave();

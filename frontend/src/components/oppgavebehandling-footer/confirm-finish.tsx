@@ -1,3 +1,4 @@
+import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
 import { UpdateInGosys } from '@app/components/oppgavebehandling-footer/update-in-gosys/update-in-gosys';
 import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
 import { isReduxValidationResponse } from '@app/functions/error-type-guard';
@@ -8,7 +9,6 @@ import type { IFinishOppgavebehandlingParams } from '@app/types/oppgavebehandlin
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, HStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
-import { ValidationErrorContext } from '../kvalitetsvurdering/validation-error-context';
 
 interface CancelButtonProps {
   cancel: () => void;

@@ -1,3 +1,6 @@
+import { type Reason, Reasons } from '@app/components/kvalitetsvurdering/v1/reasons';
+import { FormSection, StyledHelpText } from '@app/components/kvalitetsvurdering/v1/styled-components';
+import { useKvalitetsvurderingV1FieldName } from '@app/components/kvalitetsvurdering/v1/use-field-name';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
@@ -6,9 +9,6 @@ import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalite
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Heading, HStack, Loader, Radio, RadioGroup } from '@navikt/ds-react';
-import { type Reason, Reasons } from './reasons';
-import { FormSection, StyledHelpText } from './styled-components';
-import { useKvalitetsvurderingV1FieldName } from './use-field-name';
 
 export const Klageforberedelsen = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();

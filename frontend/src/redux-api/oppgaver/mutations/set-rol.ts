@@ -1,10 +1,10 @@
 import { ENVIRONMENT } from '@app/environment';
+import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
+import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { FlowState } from '@app/types/oppgave-common';
 import type { ISetRolParams } from '@app/types/oppgavebehandling/params';
 import type { ISetRolResponse } from '@app/types/oppgavebehandling/response';
-import { oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setRolMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

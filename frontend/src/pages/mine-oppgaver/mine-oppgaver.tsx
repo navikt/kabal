@@ -3,7 +3,7 @@ import { MineOppgaverTable } from '@app/components/mine-oppgaver-table/mine-oppg
 import { OppgaverPaaVentTable } from '@app/components/oppgaver-paa-vent-table/oppgaver-paa-vent-table';
 import { MineRolOppgaverTable } from '@app/components/rol-tables/mine-rol-oppgaver-table';
 import { ReturnerteRolOppgaverTable } from '@app/components/rol-tables/returnerte-rol-oppgaver-table';
-import { OppgaverPageWrapper } from '../page-wrapper';
+import { OppgaverPageWrapper } from '@app/pages/page-wrapper';
 
 export const MineOppgaverPage = () => (
   <OppgaverPageWrapper testId="mine-oppgaver-tables">

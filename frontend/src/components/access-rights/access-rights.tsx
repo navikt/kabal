@@ -1,3 +1,5 @@
+import { Body } from '@app/components/access-rights/body';
+import { Head } from '@app/components/access-rights/head';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import {
   type SaksbehandlerAccessRights,
@@ -9,8 +11,6 @@ import type { IYtelse } from '@app/types/kodeverk';
 import { ArrowUndoIcon, FloppydiskIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack, Loader } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
-import { Body } from './body';
-import { Head } from './head';
 
 const EMPTY_ARRAY: [] = [];
 

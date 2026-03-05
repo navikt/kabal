@@ -1,12 +1,12 @@
 import { toast } from '@app/components/toast/store';
 import { VersionToast } from '@app/components/version-checker/toast';
+import { UpdateRequest, VERSION_CHECKER } from '@app/components/version-checker/version-checker';
 import { ENVIRONMENT } from '@app/environment';
 import { setLocalStorageItem } from '@app/localstorage';
 import { pushEvent } from '@app/observability';
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { UpdateRequest, VERSION_CHECKER } from './version-checker';
 
 const IGNORE_UPDATE_KEY = 'ignoreUpdate';
 const IGNORE_UPDATE_TIMEOUT = ENVIRONMENT.isProduction ? 1_000 * 60 * 60 : 10_000; // 1 hour for production, 10 seconds for development.

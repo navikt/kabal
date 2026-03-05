@@ -1,5 +1,5 @@
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 export const useLazyIsFeilregistrert = () => {
   const { data, isSuccess } = useOppgave();

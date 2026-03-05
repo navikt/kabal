@@ -1,4 +1,5 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { Direction } from '@app/components/deassign/direction';
 import { useUnreadBehandlingCount } from '@app/components/header/notifications/api';
 import { HjemmelList } from '@app/components/oppgavebehandling-footer/deassign/hjemmel-list';
 import { useFradel } from '@app/components/oppgavestyring/use-tildel';
@@ -11,7 +12,6 @@ import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box, Button, HStack, InlineMessage, LocalAlert, Radio, RadioGroup, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Direction } from './direction';
 
 interface Props {
   oppgaveId: string;

@@ -16,6 +16,8 @@ import {
 import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@app/plate/plugins/fullmektig';
 import { LabelContentPlugin } from '@app/plate/plugins/label-content';
 import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
+import { TemplateSections } from '@app/plate/template-sections';
+import { MAX_TABLE_WIDTH } from '@app/plate/toolbar/table/constants';
 import {
   type BulletListElement,
   type CurrentDateElement,
@@ -27,6 +29,7 @@ import {
   type H2Element,
   type HeaderElement,
   type LabelContentElement,
+  LabelContentSource,
   type ListItemContainerElement,
   type ListItemElement,
   type MaltekstElement,
@@ -50,9 +53,6 @@ import { BaseH1Plugin, BaseH2Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
-import { TemplateSections } from '../template-sections';
-import { MAX_TABLE_WIDTH } from '../toolbar/table/constants';
-import { LabelContentSource } from '../types';
 
 export const createLabelContent = (source: LabelContentSource): LabelContentElement => ({
   type: LabelContentPlugin.key,

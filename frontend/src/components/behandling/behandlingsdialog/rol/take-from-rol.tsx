@@ -1,8 +1,8 @@
+import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { getFixedCacheKey } from './helpers';
 
 interface Props {
   oppgaveId: string;

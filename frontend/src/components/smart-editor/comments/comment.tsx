@@ -1,6 +1,7 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SavedStatus } from '@app/components/saved-status/saved-status';
 import { DeleteButton } from '@app/components/smart-editor/comments/delete-button';
+import { EditButton } from '@app/components/smart-editor/comments/edit-comment';
 import { WriteComment } from '@app/components/smart-editor/comments/write-comment/write-comment';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { isoDateTimeToPretty } from '@app/domain/date';
@@ -9,7 +10,6 @@ import { useUpdateCommentOrReplyMutation } from '@app/redux-api/smart-editor-com
 import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { BodyLong, Box, HStack, VStack } from '@navikt/ds-react';
 import { useContext } from 'react';
-import { EditButton } from './edit-comment';
 
 interface Props {
   isMain?: boolean;

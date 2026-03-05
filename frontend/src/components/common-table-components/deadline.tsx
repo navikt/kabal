@@ -1,3 +1,4 @@
+import { DatePicker } from '@app/components/date-picker/date-picker';
 import { TimesPreviouslyExtended } from '@app/components/times-previously-extended/times-previously-extended';
 import { isoDateToPretty } from '@app/domain/date';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
@@ -9,7 +10,6 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { addDays, addYears, isPast, parseISO } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
-import { DatePicker } from '../date-picker/date-picker';
 
 export const Deadline = (oppgave: IOppgave) => {
   if (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {

@@ -1,5 +1,7 @@
+import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
+import { DeleteButton } from '@app/components/part/delete-button';
 import { EditPart, type InvalidReceiver } from '@app/components/part/edit-part';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
@@ -7,8 +9,6 @@ import type { IPart } from '@app/types/oppgave-common';
 import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
-import { BehandlingSection } from '../behandling/behandlingsdetaljer/behandling-section';
-import { DeleteButton } from './delete-button';
 
 interface CommonProps {
   label: string;

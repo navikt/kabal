@@ -1,3 +1,4 @@
+import { SetDistributionType } from '@app/components/documents/upload-file/distribution-type';
 import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
 import { DuaActionEnum } from '@app/hooks/dua-access/access';
 import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
@@ -5,7 +6,6 @@ import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
 import { DISTRIBUSJONSTYPER, type DistribusjonsType, DocumentTypeEnum } from '@app/types/documents/documents';
 import { HStack } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
-import { SetDistributionType } from './distribution-type';
 
 export const UploadFile = () => {
   const creatorRole = useCreatorRole();

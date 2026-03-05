@@ -1,7 +1,7 @@
+import { FemaleIcon } from '@app/components/oppgavebehandling-controls/icons/female';
+import { MaleIcon } from '@app/components/oppgavebehandling-controls/icons/male';
+import { NeutralIcon } from '@app/components/oppgavebehandling-controls/icons/neutral';
 import { SexEnum } from '@app/types/kodeverk';
-import { FemaleIcon } from './icons/female';
-import { MaleIcon } from './icons/male';
-import { NeutralIcon } from './icons/neutral';
 
 interface Props {
   sex: SexEnum;

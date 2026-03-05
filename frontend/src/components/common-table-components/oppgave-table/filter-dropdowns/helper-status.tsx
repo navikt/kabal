@@ -1,3 +1,11 @@
+import type {
+  FilterDropdownProps,
+  HelperStatus,
+} from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
+import {
+  CommonHelperStatus,
+  HelperStatusSelf,
+} from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
 import { ShortParamKey } from '@app/components/common-table-components/oppgave-table/state/short-names';
 import {
   fromTyperParam,
@@ -11,8 +19,6 @@ import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Table } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router';
-import type { FilterDropdownProps, HelperStatus } from './types';
-import { CommonHelperStatus, HelperStatusSelf } from './types';
 
 export const HelperStatusWithoutSelf = ({ columnKey, tableKey }: FilterDropdownProps) => {
   const [statuses, setStatuses] = useOppgaveTableHelperStatusWithoutSelf(tableKey);

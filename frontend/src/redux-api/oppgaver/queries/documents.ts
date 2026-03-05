@@ -1,13 +1,13 @@
 import type { IShownArchivedDocument } from '@app/components/view-pdf/types';
 import { ENVIRONMENT } from '@app/environment';
 import type { KabalValue } from '@app/plate/types';
+import { DokumenterListTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
+import { ListTagTypes } from '@app/redux-api/tag-types';
 import type { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
 import type { IDocumentParams } from '@app/types/documents/common-params';
 import type { IDocument, IMergedDocumentsResponse, ISmartDocumentVersion } from '@app/types/documents/documents';
 import type { IGetVersionParams } from '@app/types/documents/params';
 import type { IValidateDocumentResponse } from '@app/types/documents/validation';
-import { ListTagTypes } from '../../tag-types';
-import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
 
 const dokumenterListTags = (type: DokumenterListTagTypes) => (result: IArkiverteDocumentsResponse | undefined) =>
   typeof result === 'undefined'

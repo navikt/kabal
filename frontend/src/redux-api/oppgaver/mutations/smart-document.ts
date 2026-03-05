@@ -1,8 +1,8 @@
 import { ENVIRONMENT } from '@app/environment';
+import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
+import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import type { IDocumentParams } from '@app/types/documents/common-params';
 import type { Language } from '@app/types/texts/language';
-import { oppgaverApi } from '../oppgaver';
-import { documentsQuerySlice } from '../queries/documents';
 
 const smartDocumentsMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

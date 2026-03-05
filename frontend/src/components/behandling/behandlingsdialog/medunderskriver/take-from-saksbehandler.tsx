@@ -1,9 +1,9 @@
+import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
 import { useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
 import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { ArrowRedoIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { getFixedCacheKey } from './helpers';
 
 interface Props {
   oppgaveId: string;

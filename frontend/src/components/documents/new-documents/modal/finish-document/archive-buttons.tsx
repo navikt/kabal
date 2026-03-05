@@ -1,12 +1,15 @@
+import { Confirm } from '@app/components/documents/new-documents/modal/finish-document/confirm';
+import { VALIDATION_ERROR_MESSAGES } from '@app/components/documents/new-documents/modal/finish-document/error-messages';
+import {
+  type FinishProps,
+  isSmartDocumentValidatonError,
+} from '@app/components/documents/new-documents/modal/finish-document/types';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
 import { useFinishDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { useContext } from 'react';
-import { Confirm } from './confirm';
-import { VALIDATION_ERROR_MESSAGES } from './error-messages';
-import { type FinishProps, isSmartDocumentValidatonError } from './types';
 
 export const ArchiveButtons = ({ document, disabled, ...rest }: FinishProps) => {
   const { id: dokumentId } = document;

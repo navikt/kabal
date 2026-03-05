@@ -1,5 +1,5 @@
+import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { ReadMore } from '@navikt/ds-react';
-import { BehandlingSection } from './behandling-section';
 
 interface Props {
   kommentarFraVedtaksinstans: string | null;

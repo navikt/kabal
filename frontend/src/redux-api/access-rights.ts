@@ -1,6 +1,6 @@
 import { toast } from '@app/components/toast/store';
+import { INNSTILLINGER_BASE_QUERY } from '@app/redux-api/common';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { INNSTILLINGER_BASE_QUERY } from './common';
 
 export interface SaksbehandlerAccessRights {
   saksbehandlerIdent: string;

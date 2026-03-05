@@ -1,10 +1,13 @@
+import {
+  CheckmarkCircleFillIconColored,
+  XMarkOctagonFillIconColored,
+} from '@app/components/colored-icons/colored-icons';
 import { isoDateTimeToPretty } from '@app/domain/date';
 import { type ErrorMessage, getErrorData } from '@app/functions/get-error-data';
 import { HStack, Loader, Tooltip } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import type { ReactNode } from 'react';
-import { CheckmarkCircleFillIconColored, XMarkOctagonFillIconColored } from '../colored-icons/colored-icons';
 
 export interface SavedStatusProps {
   isSuccess: boolean;

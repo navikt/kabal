@@ -1,9 +1,9 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
+import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
 import { Role } from '@app/types/bruker';
 import { FlowState } from '@app/types/oppgave-common';
 import { useContext } from 'react';
-import { useOppgave } from './oppgavebehandling/use-oppgave';
 
 /**
  * If the current user is assigned to the case as a ROL and has been sent to ROL.

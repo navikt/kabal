@@ -1,3 +1,4 @@
+import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useRemoveDocument } from '@app/hooks/use-remove-document';
 import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
@@ -6,7 +7,6 @@ import { DocumentTypeEnum, type IDocument, isAttachmentDocument } from '@app/typ
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
-import { ModalContext } from './modal-context';
 
 interface Props extends React.RefAttributes<HTMLDivElement> {
   document: IDocument;

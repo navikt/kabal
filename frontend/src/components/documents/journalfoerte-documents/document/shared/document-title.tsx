@@ -1,6 +1,10 @@
 import { DocumentWarnings } from '@app/components/documents/document-warnings';
 import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { canOpenInKabal } from '@app/components/documents/filetype';
+import {
+  ConfirmEditButton,
+  DocumentTitleActions,
+} from '@app/components/documents/journalfoerte-documents/document/shared/document-title-actions';
 import { DocumentTitleContainer } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-container';
 import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
@@ -21,7 +25,6 @@ import type { Variants } from '@app/types/arkiverte-documents';
 import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useCallback, useContext, useMemo, useRef, useState } from 'react';
-import { ConfirmEditButton, DocumentTitleActions } from './document-title-actions';
 
 interface Props {
   journalpostId: string;

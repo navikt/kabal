@@ -1,10 +1,5 @@
 import { deepFreeze } from '@app/functions/deep-freeze';
-import { DistribusjonsType } from '@app/types/documents/documents';
-import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { Value } from 'platejs';
-import { TemplateSections } from '../template-sections';
-import { LabelContentSource } from '../types';
+import { TemplateSections } from '@app/plate/template-sections';
 import {
   createCurrentDate,
   createFooter,
@@ -14,7 +9,12 @@ import {
   createMaltekstseksjon,
   createRegelverk,
   createSignature,
-} from './helpers';
+} from '@app/plate/templates/helpers';
+import { LabelContentSource } from '@app/plate/types';
+import { DistribusjonsType } from '@app/types/documents/documents';
+import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
+import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { Value } from 'platejs';
 
 const INITIAL_SLATE_VALUE: Value = [
   createCurrentDate(),

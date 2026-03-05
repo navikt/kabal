@@ -1,10 +1,10 @@
+import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useIsAssignedRol } from '@app/hooks/use-is-rol';
 import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
 import { FlowState } from '@app/types/oppgave-common';
 import { ArrowRedoIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps } from '@navikt/ds-react';
-import { getFixedCacheKey } from './helpers';
 
 interface Props {
   oppgaveId: string;

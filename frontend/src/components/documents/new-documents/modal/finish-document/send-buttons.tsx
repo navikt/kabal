@@ -1,3 +1,9 @@
+import { Confirm } from '@app/components/documents/new-documents/modal/finish-document/confirm';
+import { VALIDATION_ERROR_MESSAGES } from '@app/components/documents/new-documents/modal/finish-document/error-messages';
+import {
+  type FinishProps,
+  isSmartDocumentValidatonError,
+} from '@app/components/documents/new-documents/modal/finish-document/types';
 import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
@@ -8,9 +14,6 @@ import { DistribusjonsType } from '@app/types/documents/documents';
 import { NO_RECEIVERS_ERROR } from '@app/types/documents/validation';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
-import { Confirm } from './confirm';
-import { VALIDATION_ERROR_MESSAGES } from './error-messages';
-import { type FinishProps, isSmartDocumentValidatonError } from './types';
 
 export const SendButtons = ({ document, disabled, ...rest }: FinishProps) => {
   const { id: dokumentId, tittel: documentTitle, mottakerList, dokumentTypeId } = document;
