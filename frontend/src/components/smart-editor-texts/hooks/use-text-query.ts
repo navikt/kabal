@@ -1,7 +1,7 @@
+import { useTextType } from '@app/components/smart-editor-texts/hooks/use-text-type';
 import type { IGetTextsParams } from '@app/types/common-text-types';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useTextType } from './use-text-type';
 
 export const useTextQuery = (): IGetTextsParams => {
   const [params] = useSearchParams();

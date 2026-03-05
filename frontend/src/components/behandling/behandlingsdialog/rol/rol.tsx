@@ -1,3 +1,4 @@
+import { RolReadOnly } from '@app/components/behandling/behandlingsdialog/rol/read-only';
 import { SelectRol } from '@app/components/behandling/behandlingsdialog/rol/select-rol';
 import { SendToRol } from '@app/components/behandling/behandlingsdialog/rol/send-to-rol';
 import { SendToSaksbehandler } from '@app/components/behandling/behandlingsdialog/rol/send-to-saksbehandler';
@@ -13,7 +14,6 @@ import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { LocalAlert, VStack } from '@navikt/ds-react';
-import { RolReadOnly } from './read-only';
 
 export const Rol = () => {
   const { data, isSuccess } = useOppgave();

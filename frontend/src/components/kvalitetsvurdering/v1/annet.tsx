@@ -1,10 +1,10 @@
+import { type Reason, Reasons } from '@app/components/kvalitetsvurdering/v1/reasons';
+import { FormSection } from '@app/components/kvalitetsvurdering/v1/styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Heading, Loader } from '@navikt/ds-react';
-import { type Reason, Reasons } from './reasons';
-import { FormSection } from './styled-components';
 
 export const Annet = () => {
   const { data: oppgave } = useOppgave();

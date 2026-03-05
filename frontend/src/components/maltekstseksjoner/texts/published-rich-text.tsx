@@ -1,6 +1,7 @@
 import { Alert } from '@app/components/alert/alert';
 import { getTitle } from '@app/components/editable-title/editable-title';
 import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
+import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
 import { CreateDraftTextButton } from '@app/components/smart-editor-texts/create-draft-button';
 import { DuplicateTextButton } from '@app/components/smart-editor-texts/duplicate-text-button';
 import { Tags } from '@app/components/smart-editor-texts/edit/tags';
@@ -17,7 +18,6 @@ import type { IPublishedGodFormulering, IPublishedRegelverk, IPublishedRichText 
 import { PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { BodyShort, Heading, HStack, Label, VStack } from '@navikt/ds-react';
 import { useRef } from 'react';
-import { RedaktoerRichText } from '../../redaktoer-rich-text/redaktoer-rich-text';
 
 interface Props {
   text: IPublishedRichText | IPublishedRegelverk | IPublishedGodFormulering;

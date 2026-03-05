@@ -3,13 +3,13 @@ import { DocumentSearch } from '@app/components/documents/journalfoerte-document
 import { ExpandedHeaders } from '@app/components/documents/journalfoerte-documents/header/expanded-headers';
 import { IncludedFilter } from '@app/components/documents/journalfoerte-documents/header/included-filter';
 import { SelectAll } from '@app/components/documents/journalfoerte-documents/header/select-all';
+import type { useFilters } from '@app/components/documents/journalfoerte-documents/header/use-filters';
 import { useIsExpanded } from '@app/components/documents/use-is-expanded';
 import { isNotNull } from '@app/functions/is-not-type-guards';
 import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
 import { IS_WINDOWS } from '@app/keys';
 import { ChevronRightDoubleIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button, HGrid, HStack, Tooltip } from '@navikt/ds-react';
-import type { useFilters } from './use-filters';
 
 interface Props {
   documentIdList: string[];

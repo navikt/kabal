@@ -1,5 +1,5 @@
+import { SimpleApiState } from '@app/simple-api-state/simple-api-state';
 import { stringify } from 'qs';
-import { SimpleApiState } from './simple-api-state';
 
 interface PathParams<Q> {
   query?: Q;

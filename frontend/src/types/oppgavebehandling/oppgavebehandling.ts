@@ -1,6 +1,13 @@
-import type { INavEmployee } from '../bruker';
-import type { SaksTypeEnum, UtfallEnum } from '../kodeverk';
-import type { IFullmektig, IMedunderskriverRol, IPart, ISakenGjelder, ISattPåVent, IVedlegg } from '../oppgave-common';
+import type { INavEmployee } from '@app/types/bruker';
+import type { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import type {
+  IFullmektig,
+  IMedunderskriverRol,
+  IPart,
+  ISakenGjelder,
+  ISattPåVent,
+  IVedlegg,
+} from '@app/types/oppgave-common';
 
 type UUID = string;
 

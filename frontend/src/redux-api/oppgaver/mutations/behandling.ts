@@ -5,8 +5,12 @@ import { ENVIRONMENT } from '@app/environment';
 import { formatIdNumber } from '@app/functions/format-id';
 import { reduxStore } from '@app/redux/configure-store';
 import { forlengetBehandlingstidApi } from '@app/redux-api/forlenget-behandlingstid';
+import { kvalitetsvurderingV1Api } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
+import { kvalitetsvurderingV2Api } from '@app/redux-api/kaka-kvalitetsvurdering/v2';
 import { kvalitetsvurderingV3Api } from '@app/redux-api/kaka-kvalitetsvurdering/v3';
 import { getFullmektigBody, getFullmektigMessage } from '@app/redux-api/oppgaver/mutations/fullmektig-helpers';
+import { OppgaveTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
+import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type {
@@ -23,10 +27,6 @@ import type {
   IVedtakFullfoertResponse,
 } from '@app/types/oppgavebehandling/response';
 import { format } from 'date-fns';
-import { kvalitetsvurderingV1Api } from '../../kaka-kvalitetsvurdering/v1';
-import { kvalitetsvurderingV2Api } from '../../kaka-kvalitetsvurdering/v2';
-import { OppgaveTagTypes, oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const finishOppgaveOnQueryStarted = async ({
   kvalitetsvurderingId: id,

@@ -1,4 +1,4 @@
-import type { IOppgavebehandlingBaseParams } from '../oppgavebehandling/params';
+import type { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 
 export interface IDocumentParams extends IOppgavebehandlingBaseParams {
   dokumentId: string;

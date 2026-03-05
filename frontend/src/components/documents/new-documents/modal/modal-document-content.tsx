@@ -1,5 +1,6 @@
 import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
 import { AnnenInngaaende } from '@app/components/documents/new-documents/modal/annen-inngaaende';
+import { DeleteDocumentButton } from '@app/components/documents/new-documents/modal/delete-button';
 import { FinishButton } from '@app/components/documents/new-documents/modal/finish-button';
 import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
 import { ConfirmInnsendingshjemler } from '@app/components/documents/new-documents/modal/innsendingshjemler';
@@ -33,7 +34,6 @@ import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
-import { DeleteDocumentButton } from './delete-button';
 
 interface Props {
   document: IParentDocument;

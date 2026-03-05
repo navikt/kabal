@@ -6,8 +6,8 @@ import React from 'react';
 // This is needed for @styled-icons/fluentui-system-regular which depends on styled-components via @styled-icons/styled-icon.
 globalThis.React = React;
 
-import type { IUserData } from './types/bruker';
-import type { CountryCode, PostalCode } from './types/common';
+import type { IUserData } from '@app/types/bruker';
+import type { CountryCode, PostalCode } from '@app/types/common';
 
 GlobalRegistrator.register();
 

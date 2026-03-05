@@ -1,8 +1,8 @@
+import { insertGodFormulering } from '@app/components/smart-editor/gode-formuleringer/insert';
 import { useSelection } from '@app/plate/hooks/use-selection';
 import type { RichTextEditor } from '@app/plate/types';
 import { Button } from '@navikt/ds-react';
 import type { Value } from 'platejs';
-import { insertGodFormulering } from './insert';
 
 interface AddButtonProps {
   editor: RichTextEditor;

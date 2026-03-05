@@ -1,4 +1,5 @@
 import { errorToastMiddleware } from '@app/redux/error-toast-middleware';
+import { type RootState, rootReducer } from '@app/redux/root';
 import { accessRightsApi } from '@app/redux-api/access-rights';
 import { brukerApi } from '@app/redux-api/bruker';
 import { collaborationApi } from '@app/redux-api/collaboration';
@@ -20,7 +21,6 @@ import { consumerTextsApi } from '@app/redux-api/texts/consumer';
 import { textsApi } from '@app/redux-api/texts/texts';
 import { configureStore } from '@reduxjs/toolkit';
 import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { type RootState, rootReducer } from './root';
 
 export const reduxStore = configureStore({
   reducer: rootReducer,

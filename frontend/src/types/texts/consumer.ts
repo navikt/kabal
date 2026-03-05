@@ -5,8 +5,8 @@ import {
   type REGELVERK_TYPE,
   type RichTextTypes,
 } from '@app/types/common-text-types';
+import type { INewPlainTextParams, INewRegelverkParams, INewRichTextParams } from '@app/types/texts/common';
 import type { Language } from '@app/types/texts/language';
-import type { INewPlainTextParams, INewRegelverkParams, INewRichTextParams } from './common';
 
 interface ConsumerMetadata {
   id: string;

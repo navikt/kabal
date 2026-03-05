@@ -1,7 +1,7 @@
 import { isMetaKey, Keys } from '@app/keys';
+import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import type { PlateEditor } from 'platejs/react';
 import type { KeyboardEvent } from 'react';
-import { ELEMENT_PLACEHOLDER } from '../element-types';
 
 export const handleSelectAll = (editor: PlateEditor, e: KeyboardEvent) => {
   const lowerCaseKey = e.key.toLowerCase();

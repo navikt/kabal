@@ -1,10 +1,10 @@
 import type { KabalValue } from '@app/plate/types';
-import type { IGetTextsParams, RichTextTypes } from '../common-text-types';
-import type { Language, UNTRANSLATED } from './language';
-import type { IText } from './responses';
+import type { IGetTextsParams, RichTextTypes } from '@app/types/common-text-types';
+import type { Language, UNTRANSLATED } from '@app/types/texts/language';
+import type { IText } from '@app/types/texts/responses';
 
-export type { IGetTextsParams } from '../common-text-types';
-export type { INewPlainTextParams, INewRichTextParams, INewTextParams } from './common';
+export type { IGetTextsParams } from '@app/types/common-text-types';
+export type { INewPlainTextParams, INewRichTextParams, INewTextParams } from '@app/types/texts/common';
 
 /** Update params */
 

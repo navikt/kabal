@@ -1,5 +1,13 @@
 import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
 import { ENVIRONMENT } from '@app/environment';
+import {
+  OPPGAVELIST_TAG_TYPES,
+  OppgaveData,
+  OppgaveListTagTypes,
+  OppgaveTagTypes,
+  oppgaverApi,
+} from '@app/redux-api/oppgaver/oppgaver';
+import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { user } from '@app/static-data/static-data';
 import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
@@ -11,8 +19,6 @@ import {
   type TildelSaksbehandlerParams,
 } from '@app/types/oppgaver';
 import { format } from 'date-fns';
-import { OPPGAVELIST_TAG_TYPES, OppgaveData, OppgaveListTagTypes, OppgaveTagTypes, oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const tildelMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

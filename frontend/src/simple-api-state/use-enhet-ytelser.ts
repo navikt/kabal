@@ -1,6 +1,6 @@
+import { useSimpleApiState } from '@app/simple-api-state/simple-api-state';
+import { getStateFactory } from '@app/simple-api-state/state-factory';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useSimpleApiState } from './simple-api-state';
-import { getStateFactory } from './state-factory';
 
 const getState = getStateFactory<string[], string>('/kabal-api/enheter');
 

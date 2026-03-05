@@ -1,9 +1,9 @@
+import { PositionedBookmarks } from '@app/components/smart-editor/bookmarks/positioned';
+import { NumberOfComments } from '@app/components/smart-editor/comments/number-of-comments';
+import { PositionedComments } from '@app/components/smart-editor/comments/positioned-comments';
 import { useAnnotationsCounts } from '@app/components/smart-editor/comments/use-annotations-counts';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useContext } from 'react';
-import { PositionedBookmarks } from '../bookmarks/positioned';
-import { NumberOfComments } from '../comments/number-of-comments';
-import { PositionedComments } from '../comments/positioned-comments';
 
 export const PositionedRight = () => {
   const { attached, orphans, bookmarks } = useAnnotationsCounts();

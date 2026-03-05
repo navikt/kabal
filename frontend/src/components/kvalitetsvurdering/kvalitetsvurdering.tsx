@@ -1,14 +1,14 @@
+import { KvalitetsskjemaV1 } from '@app/components/kvalitetsvurdering/v1/kvalitetsskjema';
+import { KvalitetsskjemaV2 } from '@app/components/kvalitetsvurdering/v2/kvalitetsskjema';
 import { KvalitetsskjemaV3 } from '@app/components/kvalitetsvurdering/v3/kvalitetsskjema';
 import { useKvalitetsvurderingSupported } from '@app/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
+import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
 import { SECTION_TITLES, SectionKey } from '@app/functions/error-type-guard';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurderingEnabled } from '@app/hooks/settings/use-setting';
 import { type IOppgavebehandling, KvalitetsvurderingVersion } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Heading, InfoCard } from '@navikt/ds-react';
 import type { ReactElement } from 'react';
-import { PanelContainer } from '../oppgavebehandling-panels/styled-components';
-import { KvalitetsskjemaV1 } from './v1/kvalitetsskjema';
-import { KvalitetsskjemaV2 } from './v2/kvalitetsskjema';
 
 export const Kvalitetsvurdering = (): React.JSX.Element | null => {
   const { data: oppgave } = useOppgave();

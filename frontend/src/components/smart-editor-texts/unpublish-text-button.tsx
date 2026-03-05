@@ -2,6 +2,7 @@ import {
   MaltekstseksjonReferences,
   MaltekstseksjonType,
 } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
+import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
 import { useUnpublishTextMutation } from '@app/redux-api/texts/mutations';
 import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
@@ -10,7 +11,6 @@ import type { IText } from '@app/types/texts/responses';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HelpText, HStack, InlineMessage } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
-import { useTextQuery } from './hooks/use-text-query';
 
 interface Props {
   publishedText: IText;

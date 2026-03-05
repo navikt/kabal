@@ -1,3 +1,5 @@
+import { employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
+import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
 import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
 import { isoDateToPretty } from '@app/domain/date';
 import {
@@ -12,8 +14,6 @@ import {
 } from '@app/types/svarbrev';
 import { ClockIcon } from '@navikt/aksel-icons';
 import { BodyShort, VStack } from '@navikt/ds-react';
-import { employeeName, toKey } from './common';
-import { HistoryEvent } from './event';
 
 export const getForlengetBehandlingstidEvent = (props: IForlengetBehandlingstidEvent) => (
   <ForlengetBehandlingstid key={toKey(props)} {...props} />

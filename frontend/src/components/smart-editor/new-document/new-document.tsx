@@ -1,6 +1,7 @@
 import { Alert } from '@app/components/alert/alert';
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { GeneratedIcon } from '@app/components/smart-editor/new-document/generated-icon';
+import { getTitle } from '@app/components/smart-editor/new-document/get-title';
 import { DuaActionEnum } from '@app/hooks/dua-access/access';
 import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
 import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
@@ -25,7 +26,6 @@ import { Language } from '@app/types/texts/language';
 import type { Immutable } from '@app/types/types';
 import { Box, Heading, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
-import { getTitle } from './get-title';
 
 interface Props {
   onCreate: (id: string) => void;

@@ -1,7 +1,7 @@
+import type { INavEmployee } from '@app/types/bruker';
 import type { IAddress } from '@app/types/documents/receivers';
 import type { PaaVentReasonEnum, SexEnum } from '@app/types/kodeverk';
 import type { Language } from '@app/types/texts/language';
-import type { INavEmployee } from './bruker';
 
 export interface IJournalfoertDokumentId {
   readonly journalpostId: string;

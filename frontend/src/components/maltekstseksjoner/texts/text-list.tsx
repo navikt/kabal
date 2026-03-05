@@ -1,4 +1,5 @@
 import { Alert } from '@app/components/alert/alert';
+import { TextVersions } from '@app/components/maltekstseksjoner/texts/text-versions';
 import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
@@ -8,7 +9,6 @@ import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { TextVersions } from './text-versions';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;

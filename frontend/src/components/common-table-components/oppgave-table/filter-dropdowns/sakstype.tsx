@@ -1,9 +1,9 @@
+import type { FilterDropdownProps } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
 import { useOppgaveTableTyper } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Table } from '@navikt/ds-react';
-import type { FilterDropdownProps } from './types';
 
 const OPTIONS = [
   { value: SaksTypeEnum.KLAGE, label: 'Klage' },

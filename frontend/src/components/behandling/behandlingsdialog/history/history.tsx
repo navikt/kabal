@@ -1,3 +1,5 @@
+import { getFeilregistrertEvent } from '@app/components/behandling/behandlingsdialog/history/feilregistrert';
+import { getFerdigstiltEvent } from '@app/components/behandling/behandlingsdialog/history/ferdigstilt';
 import { ALL, Filter } from '@app/components/behandling/behandlingsdialog/history/filter';
 import { getForlengetBehandlingstidEvent } from '@app/components/behandling/behandlingsdialog/history/forlenget-behandlingstid';
 import { getFullmektig } from '@app/components/behandling/behandlingsdialog/history/fullmektig';
@@ -13,8 +15,6 @@ import { useGetHistoryQuery } from '@app/redux-api/oppgaver/queries/history';
 import { HistoryEventTypes, type IHistory, type IHistoryResponse } from '@app/types/oppgavebehandling/response';
 import { Heading, Select, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
-import { getFeilregistrertEvent } from './feilregistrert';
-import { getFerdigstiltEvent } from './ferdigstilt';
 
 export const EventHistory = () => {
   const oppgaveId = useOppgaveId();

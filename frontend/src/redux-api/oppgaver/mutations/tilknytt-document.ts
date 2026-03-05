@@ -1,8 +1,8 @@
 import { ENVIRONMENT } from '@app/environment';
+import { DokumenterListTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
 import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
+import { ListTagTypes } from '@app/redux-api/tag-types';
 import type { IBatchDocumentParams } from '@app/types/oppgavebehandling/params';
-import { ListTagTypes } from '../../tag-types';
-import { DokumenterListTagTypes, oppgaverApi } from '../oppgaver';
 
 const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

@@ -1,12 +1,12 @@
 import { Alert } from '@app/components/alert/alert';
+import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
+import { SelectGosysOppgaveModal } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/select-gosys-oppgave';
+import { GosysBeskrivelse } from '@app/components/gosys/beskrivelse/beskrivelse';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useGetGosysOppgaveQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { GosysStatus, type IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { GosysBeskrivelse } from '../../gosys/beskrivelse/beskrivelse';
-import { BehandlingSection } from './behandling-section';
-import { SelectGosysOppgaveModal } from './select-gosys-oppgave/select-gosys-oppgave';
 
 interface Props {
   oppgavebehandling: IOppgavebehandling;

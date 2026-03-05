@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
+import { type BaseDocument, type BaseTemplate, getTitle } from '@app/components/smart-editor/new-document/get-title';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { type BaseDocument, type BaseTemplate, getTitle } from './get-title';
 
 describe('getTitle', () => {
   it('should use default title when there are no other documents', () => {

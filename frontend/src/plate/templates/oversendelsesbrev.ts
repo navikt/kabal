@@ -1,4 +1,5 @@
 import { deepFreeze } from '@app/functions/deep-freeze';
+import { DeprecatedTemplateSections, TemplateSections } from '@app/plate/template-sections';
 import {
   createCurrentDate,
   createFooter,
@@ -13,7 +14,6 @@ import { DistribusjonsType } from '@app/types/documents/documents';
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { DeprecatedTemplateSections, TemplateSections } from '../template-sections';
 
 export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.OVERSENDELSESBREV,

@@ -10,6 +10,7 @@ import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/malteksts
 import { maltekstseksjonerQuerySlice } from '@app/redux-api/maltekstseksjoner/queries';
 import { getLastPublishedVersion } from '@app/redux-api/redaktoer-helpers';
 import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
+import { textsQuerySlice } from '@app/redux-api/texts/queries';
 import { user } from '@app/static-data/static-data';
 import type { IGetMaltekstseksjonParams, PublishedTextReadOnlyMetadata } from '@app/types/common-text-types';
 import type {
@@ -34,7 +35,6 @@ import type { INewRichTextParams } from '@app/types/texts/common';
 import { LANGUAGES, type Language } from '@app/types/texts/language';
 import { formatISO } from 'date-fns';
 import type { Patch } from 'immer';
-import { textsQuerySlice } from '../texts/queries';
 
 const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
   endpoints: (builder) => ({

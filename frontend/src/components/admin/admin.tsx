@@ -1,3 +1,4 @@
+import { ApiButton } from '@app/components/admin/api-button';
 import { InsertHjemlerInSettings } from '@app/components/admin/insert-hjemler-in-settings';
 import { MerkantilTaskList } from '@app/components/admin/merkantil-task-list/merkantil-task-list';
 import { CreateSystemNotification } from '@app/components/admin/system-notifications/create';
@@ -10,7 +11,6 @@ import {
   useResendDvhMutation,
 } from '@app/redux-api/internal';
 import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
-import { ApiButton } from './api-button';
 
 export const Admin = () => (
   <VStack gap="space-16" width="100%">

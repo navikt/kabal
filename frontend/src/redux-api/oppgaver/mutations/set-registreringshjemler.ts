@@ -1,7 +1,7 @@
 import { ENVIRONMENT } from '@app/environment';
+import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
+import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import type { IOppgavebehandlingHjemlerUpdateParams } from '@app/types/oppgavebehandling/params';
-import { oppgaverApi } from '../oppgaver';
-import { behandlingerQuerySlice } from '../queries/behandling/behandling';
 
 const setRegistreringshjemlerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

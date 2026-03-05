@@ -1,11 +1,11 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { Message } from '@app/components/behandling/behandlingsdialog/messages/message';
 import { SKELETON } from '@app/components/behandling/behandlingsdialog/messages/skeleton';
+import { WriteMessage } from '@app/components/behandling/behandlingsdialog/messages/write-message';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { type IMessage, useGetMessagesQuery } from '@app/redux-api/messages';
 import { BodyShort, type BoxProps, Button, Heading, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
-import { WriteMessage } from './write-message';
 
 export const UnfinishedCaseMessages = () => {
   const oppgaveId = useOppgaveId();

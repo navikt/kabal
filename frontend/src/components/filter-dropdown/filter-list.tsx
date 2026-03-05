@@ -1,6 +1,6 @@
+import { Option } from '@app/components/filter-dropdown/option';
+import type { BaseProps } from '@app/components/filter-dropdown/props';
 import { CheckboxGroup } from '@navikt/ds-react';
-import { Option } from './option';
-import type { BaseProps } from './props';
 
 interface Props<T extends string> extends BaseProps<T> {
   className?: string;

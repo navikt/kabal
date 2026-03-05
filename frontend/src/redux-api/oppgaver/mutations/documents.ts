@@ -4,6 +4,8 @@ import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documen
 import { ENVIRONMENT } from '@app/environment';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { reduxStore } from '@app/redux/configure-store';
+import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
+import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
 import { user } from '@app/static-data/static-data';
 import { Journalposttype } from '@app/types/arkiverte-documents';
 import type { IDocumentParams } from '@app/types/documents/common-params';
@@ -32,8 +34,6 @@ import type {
 } from '@app/types/documents/response';
 import type { IdentifikatorPart } from '@app/types/oppgave-common';
 import { format } from 'date-fns';
-import { oppgaverApi } from '../oppgaver';
-import { documentsQuerySlice } from '../queries/documents';
 
 export const documentsMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

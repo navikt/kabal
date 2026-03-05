@@ -1,5 +1,5 @@
-import { AdminButton } from './admin-button';
-import type { ApiHook } from './types';
+import { AdminButton } from '@app/components/admin/admin-button';
+import type { ApiHook } from '@app/components/admin/types';
 
 interface Props {
   useApi: ApiHook;

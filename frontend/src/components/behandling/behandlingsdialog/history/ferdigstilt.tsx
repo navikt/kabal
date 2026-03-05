@@ -1,7 +1,7 @@
+import { employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
+import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
 import { HistoryEventTypes, type IFerdigstiltEvent } from '@app/types/oppgavebehandling/response';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
-import { employeeName, toKey } from './common';
-import { HistoryEvent } from './event';
 
 export const getFerdigstiltEvent = (props: IFerdigstiltEvent) => <Ferdigstilt key={toKey(props)} {...props} />;
 

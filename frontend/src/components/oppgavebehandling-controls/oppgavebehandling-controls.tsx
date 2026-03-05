@@ -1,8 +1,13 @@
+import {
+  AaRegisteret,
+  Ainntekt,
+  KunnskapsbankTrygdemedisin,
+  Modia,
+} from '@app/components/oppgavebehandling-controls/external-links';
+import { PanelSwitches } from '@app/components/oppgavebehandling-controls/panel-switches';
+import { UserInfo } from '@app/components/oppgavebehandling-controls/user-info';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { Box, HStack } from '@navikt/ds-react';
-import { AaRegisteret, Ainntekt, KunnskapsbankTrygdemedisin, Modia } from './external-links';
-import { PanelSwitches } from './panel-switches';
-import { UserInfo } from './user-info';
 
 export const OppgavebehandlingControls = () => (
   <HStack

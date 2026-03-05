@@ -1,6 +1,6 @@
 import { ENVIRONMENT } from '@app/environment';
+import { OppgaveData, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
 import type { IOppgave } from '@app/types/oppgaver';
-import { OppgaveData, oppgaverApi } from '../oppgaver';
 
 export const oppgaveDataQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

@@ -3,6 +3,7 @@ import { DragAndDropContext } from '@app/components/documents/drag-context';
 import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/new-documents/grid';
 import { AttachmentModal } from '@app/components/documents/new-documents/modal/attachment-modal';
 import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
+import { DocumentTitle } from '@app/components/documents/new-documents/new-document/title';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
 import { merge } from '@app/functions/classes';
@@ -14,7 +15,6 @@ import { DocumentTypeEnum, type IAttachmentDocument, type IParentDocument } from
 import { HGrid } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { type HTMLAttributes, memo, type RefObject, useCallback, useContext, useRef, useState } from 'react';
-import { DocumentTitle } from './title';
 
 interface Props {
   document: IAttachmentDocument;

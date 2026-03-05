@@ -1,4 +1,8 @@
 import { Varsler } from '@app/components/documents/journalfoerte-documents/document/timeline/helpers';
+import {
+  RelevantDateTimelineItem,
+  TimelineItem,
+} from '@app/components/documents/journalfoerte-documents/document/timeline/timeline-item';
 import { type IArkivertDocument, Kanal, type TimelineTypes } from '@app/types/arkiverte-documents';
 import {
   BellIcon,
@@ -8,7 +12,6 @@ import {
   PrinterSmallIcon,
 } from '@navikt/aksel-icons';
 import { type BoxProps, CopyButton, Heading, VStack } from '@navikt/ds-react';
-import { RelevantDateTimelineItem, TimelineItem } from './timeline-item';
 
 interface Props extends Pick<IArkivertDocument, 'utsendingsinfo' | 'kanal' | 'kanalnavn'> {
   type: TimelineTypes;

@@ -1,6 +1,6 @@
+import { preFormat } from '@app/plate/plugins/autoformat/utils';
+import type { EditorAutoformatRule } from '@app/plate/types';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import type { EditorAutoformatRule } from '../../types';
-import { preFormat } from './utils';
 
 export const autoformatBlocks: EditorAutoformatRule[] = [
   {

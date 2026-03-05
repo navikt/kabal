@@ -2,6 +2,7 @@ import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { useSelection } from '@app/plate/hooks/use-selection';
 import { createSimpleParagraph } from '@app/plate/templates/helpers';
 import { ToolbarSeparator } from '@app/plate/toolbar/separator';
+import { MAX_TABLE_WIDTH } from '@app/plate/toolbar/table/constants';
 import { AddColumnLeftIcon } from '@app/plate/toolbar/table/icons/add-column-left';
 import { AddColumnRightIcon } from '@app/plate/toolbar/table/icons/add-column-right';
 import { AddRowAboveIcon } from '@app/plate/toolbar/table/icons/add-row-above';
@@ -26,7 +27,6 @@ import { TablePlugin, TableProvider } from '@platejs/table/react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
 import { ElementApi } from 'platejs';
 import { useEditorPlugin, useEditorSelector, usePluginOption, useReadOnly, withHOC } from 'platejs/react';
-import { MAX_TABLE_WIDTH } from './constants';
 
 export const TableButtons = withHOC(TableProvider, () => {
   const { tf } = useEditorPlugin(TablePlugin);

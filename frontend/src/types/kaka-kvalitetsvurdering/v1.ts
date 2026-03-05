@@ -1,5 +1,5 @@
-import type { IKvalitetsvurderingBase } from './common';
-import type { Radiovalg, RadiovalgExtended } from './radio';
+import type { IKvalitetsvurderingBase } from '@app/types/kaka-kvalitetsvurdering/common';
+import type { Radiovalg, RadiovalgExtended } from '@app/types/kaka-kvalitetsvurdering/radio';
 
 interface Version {
   version: 1;

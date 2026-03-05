@@ -1,5 +1,7 @@
+import { YtelserAndHjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
 import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';
 import { useUtfallOptions } from '@app/components/smart-editor-texts/hooks/use-options';
+import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import {
   KlageenhetSelect,
   TemplateSectionSelect,
@@ -8,8 +10,6 @@ import {
 import type { IGetMaltekstseksjonParams, TextTypes } from '@app/types/common-text-types';
 import { HStack } from '@navikt/ds-react';
 import { useSearchParams } from 'react-router-dom';
-import { YtelserAndHjemlerSelect } from './hjemler-select/ytelser-and-hjemler-select';
-import { useTextQuery } from './hooks/use-text-query';
 
 interface Props {
   textType: TextTypes;

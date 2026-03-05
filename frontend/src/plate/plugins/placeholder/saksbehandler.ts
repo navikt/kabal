@@ -1,14 +1,14 @@
 import { isMetaKey, Keys } from '@app/keys';
 import { SaksbehandlerPlaceholder } from '@app/plate/components/placeholder/placeholder';
+import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { handleNavigation } from '@app/plate/plugins/placeholder/handle-navigation';
 import { parsers } from '@app/plate/plugins/placeholder/html-parsers';
 import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
 import { withOverrides } from '@app/plate/plugins/placeholder/with-overrides';
+import type { PlaceholderElement } from '@app/plate/types';
 import { ElementApi, type NodeEntry } from 'platejs';
 import { createPlatePlugin, type PlateEditor } from 'platejs/react';
 import type { BasePoint } from 'slate';
-import type { PlaceholderElement } from '../../types';
-import { ELEMENT_PLACEHOLDER } from '../element-types';
 
 export const SaksbehandlerPlaceholderPlugin = createPlatePlugin({
   key: ELEMENT_PLACEHOLDER,

@@ -1,10 +1,15 @@
+import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { ExtraUtfall } from '@app/components/behandling/behandlingsdetaljer/extra-utfall';
 import { ForlengetBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/forlenget-behandlingstid';
 import { Gosys } from '@app/components/behandling/behandlingsdetaljer/gosys';
 import { Klager } from '@app/components/behandling/behandlingsdetaljer/klager';
+import { Lovhjemmel } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel';
 import { MottattDato } from '@app/components/behandling/behandlingsdetaljer/mottatt-klageinstans';
 import { PreviousSaksbehandler } from '@app/components/behandling/behandlingsdetaljer/previous-saksbehandler';
 import { Saksnummer } from '@app/components/behandling/behandlingsdetaljer/saksnummer';
+import { UtfallResultat } from '@app/components/behandling/behandlingsdetaljer/utfall-resultat';
+import { Ytelse } from '@app/components/behandling/behandlingsdetaljer/ytelse';
+import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
 import { BEHANDLING_PANEL_DOMAIN } from '@app/components/gosys/beskrivelse/domain';
 import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
 import { Fullmektig } from '@app/components/part/fullmektig/fullmektig';
@@ -14,11 +19,6 @@ import { useUpdateKlagerMutation } from '@app/redux-api/oppgaver/mutations/behan
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { IOmgjøringskravbehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Heading, VStack } from '@navikt/ds-react';
-import { StyledBehandlingSection } from '../styled-components';
-import { BehandlingSection } from './behandling-section';
-import { Lovhjemmel } from './lovhjemmel/lovhjemmel';
-import { UtfallResultat } from './utfall-resultat';
-import { Ytelse } from './ytelse';
 
 interface Props {
   oppgavebehandling: IOmgjøringskravbehandling;

@@ -1,8 +1,8 @@
+import { KABAL_BEHANDLINGER_BASE_QUERY } from '@app/redux-api/common';
+import { ListTagTypes } from '@app/redux-api/tag-types';
 import type { INavEmployee } from '@app/types/bruker';
 import type { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { KABAL_BEHANDLINGER_BASE_QUERY } from './common';
-import { ListTagTypes } from './tag-types';
 
 export interface IMessage {
   author: INavEmployee;

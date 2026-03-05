@@ -1,5 +1,6 @@
 import { Direction } from '@app/components/deassign/direction';
 import { PaaVentWarning } from '@app/components/deassign/paa-vent-warning';
+import { Popup } from '@app/components/deassign/popup';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
@@ -9,7 +10,6 @@ import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebeh
 import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { Popup } from '../../deassign/popup';
 
 interface Props {
   oppgave: IOppgavebehandling;

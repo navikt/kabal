@@ -1,9 +1,9 @@
+import { useSetRol } from '@app/components/oppgavestyring/use-set-rol';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetPotentialRolQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { type INavEmployee, Role } from '@app/types/bruker';
 import { Select, Skeleton } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import { useSetRol } from '../oppgavestyring/use-set-rol';
 
 interface Props {
   oppgaveId: string;

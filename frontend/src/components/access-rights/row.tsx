@@ -1,7 +1,7 @@
+import { Cell } from '@app/components/access-rights/cell';
 import type { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import type { IYtelse } from '@app/types/kodeverk';
-import { Cell } from './cell';
 
 interface Props {
   ytelse: IYtelse;

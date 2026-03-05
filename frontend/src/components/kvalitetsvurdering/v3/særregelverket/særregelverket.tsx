@@ -1,6 +1,10 @@
 import { Alert } from '@app/components/alert/alert';
 import { HelpTextCheckBox } from '@app/components/kvalitetsvurdering/common/kvalitetsvurdering-checkbox';
 import { StyledRadioGroup } from '@app/components/kvalitetsvurdering/common/styled-components';
+import { Checkboxes } from '@app/components/kvalitetsvurdering/v3/common/checkboxes';
+import type { CheckboxParams } from '@app/components/kvalitetsvurdering/v3/common/types';
+import { useKvalitetsvurderingV3 } from '@app/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useValidationError } from '@app/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { MainReason } from '@app/components/kvalitetsvurdering/v3/data';
 import { getCheckbox } from '@app/components/kvalitetsvurdering/v3/helpers';
 import {
@@ -14,10 +18,6 @@ import {
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
 import { Heading, HStack, Radio } from '@navikt/ds-react';
-import { Checkboxes } from '../common/checkboxes';
-import type { CheckboxParams } from '../common/types';
-import { useKvalitetsvurderingV3 } from '../common/use-kvalitetsvurdering-v3';
-import { useValidationError } from '../common/use-validation-error';
 
 const vedtaketAutomatiskVedtakhelpText =
   'Du skal gjøre de samme kvalitetsvurderingene for automatiske vedtak som for andre vedtak. Du kan krysse av for automatisk vedtak dersom det er tydelig merket i vedtaket.';

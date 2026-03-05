@@ -1,5 +1,12 @@
 import { SetStandaloneTextLanguage } from '@app/components/set-redaktoer-language/set-standalone-text-language';
+import { LoadText } from '@app/components/smart-editor-texts/edit/load-text';
 import { Filters } from '@app/components/smart-editor-texts/filters';
+import {
+  getNewGodFormulering,
+  getNewPlainText,
+  getNewRegelverk,
+  getNewRichText,
+} from '@app/components/smart-editor-texts/functions/new-text';
 import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
 import { QueryKey, SortKey } from '@app/components/smart-editor-texts/sortable-header';
 import { StandaloneTextList } from '@app/components/smart-editor-texts/text-list/text-list';
@@ -20,8 +27,6 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { Button, HGrid, HStack, Search } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { LoadText } from './edit/load-text';
-import { getNewGodFormulering, getNewPlainText, getNewRegelverk, getNewRichText } from './functions/new-text';
 
 interface Props {
   textType: TextTypes;

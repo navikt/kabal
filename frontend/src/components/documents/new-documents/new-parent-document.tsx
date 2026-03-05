@@ -1,4 +1,6 @@
 import { DragAndDropContext } from '@app/components/documents/drag-context';
+import { AttachmentList, type ListProps } from '@app/components/documents/new-documents/attachment-list';
+import { NewDocument } from '@app/components/documents/new-documents/new-document/new-document';
 import { DropZone } from '@app/components/documents/new-documents/shared/drop-zone';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useCanDropOnDocument } from '@app/hooks/use-can-document/use-can-drop-on-document';
@@ -12,8 +14,6 @@ import { PaperclipIcon } from '@navikt/aksel-icons';
 import { Box } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext } from 'react';
-import { AttachmentList, type ListProps } from './attachment-list';
-import { NewDocument } from './new-document/new-document';
 
 interface Props extends ListProps {
   document: IParentDocument;

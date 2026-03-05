@@ -1,5 +1,5 @@
 import type { INavEmployee } from '@app/types/bruker';
-import type { IPublishedRichText } from '../texts/responses';
+import type { IPublishedRichText } from '@app/types/texts/responses';
 
 enum MaltekstseksjonChangeType {
   MALTEKSTSEKSJON_TITLE = 'MALTEKSTSEKSJON_TITLE',

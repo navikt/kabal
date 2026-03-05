@@ -1,4 +1,5 @@
 import { PublishedRichText } from '@app/components/maltekstseksjoner/texts/published-rich-text';
+import { DraftPlainText } from '@app/components/smart-editor-texts/edit/draft-plain-text';
 import { DraftRegelverk } from '@app/components/smart-editor-texts/edit/draft-regelverk';
 import { DraftGodFormulering, DraftRichText } from '@app/components/smart-editor-texts/edit/draft-rich-text';
 import { PublishedPlainText } from '@app/components/smart-editor-texts/edit/published-plain-text';
@@ -12,7 +13,6 @@ import type { IDraft, IPlainText, IPublishedText, IText } from '@app/types/texts
 import { Loader, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { useParams } from 'react-router';
-import { DraftPlainText } from './draft-plain-text';
 
 interface Props {
   id: string;

@@ -1,4 +1,5 @@
 import { useKvalitetsvurderingV3 } from '@app/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useValidationError } from '@app/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import { usePrevious } from '@app/hooks/use-previous';
 import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
@@ -9,7 +10,6 @@ import type {
 import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { useEffect } from 'react';
 import { styled } from 'styled-components';
-import { useValidationError } from './use-validation-error';
 
 const EMPTY_ARRAY: string[] = [];
 

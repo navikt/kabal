@@ -1,4 +1,5 @@
 import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
+import { DeleteDocumentButton } from '@app/components/documents/new-documents/modal/delete-button';
 import { SetParentDocument } from '@app/components/documents/new-documents/modal/set-parent';
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
@@ -14,7 +15,6 @@ import {
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { DeleteDocumentButton } from './delete-button';
 
 interface AttachmentProps {
   document: IAttachmentDocument;

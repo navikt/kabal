@@ -1,6 +1,9 @@
 import { DateTime } from '@app/components/datetime/datetime';
 import { EditableTitle } from '@app/components/editable-title/editable-title';
 import { Filters } from '@app/components/maltekstseksjoner/filters';
+import { Container, Header } from '@app/components/maltekstseksjoner/maltekstseksjon/common';
+import { Actions } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/actions';
+import { Sidebar } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/sidebar';
 import { MaltekstseksjonTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/texts';
 import {
   TagContainer,
@@ -18,9 +21,6 @@ import {
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { BodyShort, HStack, Label, Loader } from '@navikt/ds-react';
-import { Container, Header } from '../common';
-import { Actions } from './actions';
-import { Sidebar } from './sidebar';
 
 interface MaltekstProps {
   maltekstseksjon: IDraftMaltekstseksjon;

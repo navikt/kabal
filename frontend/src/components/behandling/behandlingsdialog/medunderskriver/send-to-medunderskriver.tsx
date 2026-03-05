@@ -1,3 +1,4 @@
+import { getTitleLowercase } from '@app/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
 import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
@@ -5,7 +6,6 @@ import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { getTitleLowercase } from './get-title';
 
 interface Props {
   oppgaveId: string;

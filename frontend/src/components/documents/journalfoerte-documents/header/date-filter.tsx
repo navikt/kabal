@@ -1,8 +1,8 @@
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
+import type { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import type { DateRangeSetting } from '@app/hooks/settings/use-setting';
 import { formatISO, parseISO } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
-import type { Fields } from '../grid';
 
 interface Props extends DateRangeSetting {
   label: string;

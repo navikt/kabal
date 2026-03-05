@@ -1,6 +1,7 @@
 import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { useLazyIsTilknyttetDokument } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
+import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
 import {
   ArchivedDocumentsColumn,
   useArchivedDocumentsColumns,
@@ -10,7 +11,6 @@ import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/ark
 import { SortOrder } from '@app/types/sort';
 import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { splitQuery } from './../../../smart-editor/gode-formuleringer/split-query';
 
 export interface ScoredArkvertDocumentVedlegg extends IArkivertDocumentVedlegg {
   score: number;

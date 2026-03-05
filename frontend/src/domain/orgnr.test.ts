@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { isValidOrgnr } from './orgnr';
+import { isValidOrgnr } from '@app/domain/orgnr';
 
 describe('org.nr', () => {
   it('should validate 000000000', () => {

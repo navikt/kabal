@@ -1,3 +1,5 @@
+import { toKey } from '@app/components/behandling/behandlingsdialog/history/common';
+import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
 import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
 import { isoDateToPretty } from '@app/domain/date';
 import { HistoryEventTypes, type IPart, type IVarsletBehandlingstidEvent } from '@app/types/oppgavebehandling/response';
@@ -8,8 +10,6 @@ import {
 } from '@app/types/svarbrev';
 import { ClockIcon } from '@navikt/aksel-icons';
 import { BodyShort, VStack } from '@navikt/ds-react';
-import { toKey } from './common';
-import { HistoryEvent } from './event';
 
 export const getVarsletBehandlingstidEvent = (props: IVarsletBehandlingstidEvent) => (
   <VarsletBehandlingstid key={toKey(props)} {...props} />

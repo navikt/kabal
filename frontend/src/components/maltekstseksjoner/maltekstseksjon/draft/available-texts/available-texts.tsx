@@ -1,8 +1,11 @@
+import {
+  AvailableTextsByType,
+  type AvailableTextsByTypeProps,
+} from '@app/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/available-texts-by-type';
 import { RichTextTypes } from '@app/types/common-text-types';
 import { PadlockLockedIcon, PencilWritingIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Modal } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
-import { AvailableTextsByType, type AvailableTextsByTypeProps } from './available-texts-by-type';
 
 export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: AvailableTextsByTypeProps) => {
   const Icon = textType === RichTextTypes.MALTEKST ? PadlockLockedIcon : PencilWritingIcon;

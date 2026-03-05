@@ -1,10 +1,10 @@
+import { DragAndDropContext } from '@app/components/maltekstseksjoner/drag-and-drop/drag-context';
+import { LoadTextListItem } from '@app/components/maltekstseksjoner/maltekstseksjon/list-item';
 import { TextListItem } from '@app/components/maltekstseksjoner/text-list-item';
 import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { useCallback, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { DragAndDropContext } from '../../drag-and-drop/drag-context';
-import { LoadTextListItem } from '../list-item';
 
 interface DraggableListItemProps {
   textId: string;

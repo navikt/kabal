@@ -1,8 +1,8 @@
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import type { IDocumentParams } from '@app/types/documents/common-params';
+import type { DistribusjonsType, IMottaker, UUID } from '@app/types/documents/documents';
 import type { HandlingEnum, IAddress } from '@app/types/documents/receivers';
 import type { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
-import type { IDocumentParams } from './common-params';
-import type { DistribusjonsType, IMottaker, UUID } from './documents';
 
 export interface ISetParentParams extends IDocumentParams {
   parentId: UUID | null;

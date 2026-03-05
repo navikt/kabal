@@ -1,10 +1,10 @@
+import type { FilterDropdownProps } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
 import { useOppgaveTablePaaVentReasons } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { kodeverkValuesToDropdownOptions } from '@app/components/filter-dropdown/functions';
 import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
 import { usePaaVentReasons } from '@app/simple-api-state/use-kodeverk';
 import { Table } from '@navikt/ds-react';
-import type { FilterDropdownProps } from './types';
 
 export const PaaVentReasons = ({ columnKey, tableKey }: FilterDropdownProps) => {
   const [reasons, setReasons] = useOppgaveTablePaaVentReasons(tableKey);

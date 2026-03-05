@@ -1,12 +1,12 @@
 import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
 import { ToolbarDropdown } from '@app/plate/toolbar/toolbar-dropdown';
 import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
+import { useIsInHeading } from '@app/plate/toolbar/use-is-in-heading';
 import { useIsInList } from '@app/plate/toolbar/use-is-in-list';
 import { TextAlignPlugin } from '@platejs/basic-styles/react';
 import { TextAlignCenter, TextAlignLeft, TextAlignRight } from '@styled-icons/fluentui-system-regular';
 import { type EditorPropOptions, ElementApi } from 'platejs';
 import { ParagraphPlugin, useEditorPlugin, useEditorSelector } from 'platejs/react';
-import { useIsInHeading } from './use-is-in-heading';
 
 export const Align = () => {
   const { tf } = useEditorPlugin(TextAlignPlugin);

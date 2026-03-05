@@ -1,7 +1,7 @@
+import { TextPreview } from '@app/components/maltekstseksjoner/texts/preview';
 import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
 import { Box, Heading, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { TextPreview } from '../texts/preview';
 
 interface Props {
   id: string | null;

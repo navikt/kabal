@@ -4,6 +4,7 @@ import { DraftTextActions } from '@app/components/maltekstseksjoner/texts/text-d
 import { CreateTranslatedRichText } from '@app/components/smart-editor-texts/create-translated-text';
 import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
 import { isoDateTimeToPretty } from '@app/domain/date';
+import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
 import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
 import type { RichTextEditor } from '@app/plate/types';
 import {
@@ -17,7 +18,6 @@ import { isLanguage, LANGUAGES, type Language } from '@app/types/texts/language'
 import type { IDraftRichText } from '@app/types/texts/responses';
 import { BodyShort, HelpText, HStack, Label, Loader, Switch, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { areDescendantsEqual } from '../../../../functions/are-descendants-equal';
 
 interface Props {
   text: IDraftRichText;

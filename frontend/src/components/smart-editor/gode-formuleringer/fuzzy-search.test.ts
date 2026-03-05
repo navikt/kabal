@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
+import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
-import { fuzzySearch } from './fuzzy-search';
 
 const TEXT = 'the quick brown fox jumps over the lazy dog';
 

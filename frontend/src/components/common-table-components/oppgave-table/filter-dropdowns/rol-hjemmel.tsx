@@ -1,3 +1,4 @@
+import type { FilterDropdownProps } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
 import { useOppgaveTableHjemler } from '@app/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@app/components/common-table-components/types';
 import { FlatMultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
@@ -6,7 +7,6 @@ import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-or
 import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { Table } from '@navikt/ds-react';
 import { useMemo } from 'react';
-import type { FilterDropdownProps } from './types';
 
 export const RolHjemmel = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const { data: ytelser = [] } = useLatestYtelser();
