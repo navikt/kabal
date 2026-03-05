@@ -1,3 +1,4 @@
+import { getAvsenderMottakerKey } from '@app/components/documents/journalfoerte-documents/header/avsender-mottaker';
 import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { useLazyIsTilknyttetDokument } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
 import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
@@ -69,7 +70,7 @@ export const useFilteredDocuments = (
             (!columns.AVSENDER_MOTTAKER ||
               checkListWithNone(
                 selectedAvsenderMottakere,
-                avsenderMottaker?.id ?? avsenderMottaker?.navn ?? 'UNKNOWN',
+                avsenderMottaker === null ? null : getAvsenderMottakerKey(avsenderMottaker),
               )) &&
             (!columns.SAKSNUMMER || checkListWithNone(selectedSaksIds, sak?.fagsakId ?? 'UNKNOWN')) &&
             (!columns.DATO_OPPRETTET || checkDateInterval(datoOpprettet, selectedDatoOpprettet)) &&
