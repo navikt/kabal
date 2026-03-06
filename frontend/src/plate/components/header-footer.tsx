@@ -1,6 +1,7 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useHeaderFooterQuery } from '@app/components/smart-editor/hooks/use-query';
+import { useReportDynamicContentLoading } from '@app/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { pxToEm } from '@app/plate/components/get-scaled-em';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -44,6 +45,8 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
   const { children, element } = props;
   const [initialized, setInitialized] = useState(false);
   const { user } = useContext(StaticDataContext);
+
+  useReportDynamicContentLoading(!initialized);
 
   const textType = element.type === ELEMENT_HEADER ? PlainTextTypes.HEADER : PlainTextTypes.FOOTER;
 
