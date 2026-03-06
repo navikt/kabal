@@ -5,6 +5,7 @@ import { NewDocument } from '@app/components/smart-editor/new-document/new-docum
 import {
   EditorPanelFocusProvider,
   useEditorPanelFocusRef,
+  useRequestEditorPanelFocus,
 } from '@app/components/smart-editor/tabbed-editors/editor-panel-focus-context';
 import { TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
@@ -73,6 +74,15 @@ const Tabbed = ({ documents }: TabbedProps) => {
   const firstDocumentId = firstDocument?.id;
 
   const { value: editorId = firstDocumentId, setValue: setEditorId } = useSmartEditorActiveDocument();
+  const requestEditorPanelFocus = useRequestEditorPanelFocus();
+
+  const onCreateDocument = useCallback(
+    (id: string) => {
+      setEditorId(id);
+      requestEditorPanelFocus();
+    },
+    [setEditorId, requestEditorPanelFocus],
+  );
 
   const hasActiveEditor = editorId !== undefined && documents.some(({ id }) => id === editorId);
   const activeEditorId = hasActiveEditor ? editorId : NEW_TAB_ID;
@@ -116,7 +126,7 @@ const Tabbed = ({ documents }: TabbedProps) => {
         ))}
 
         <Tabs.Panel className="h-full overflow-hidden" value={NEW_TAB_ID}>
-          <NewDocument onCreate={setEditorId} ref={newDocumentRef} />
+          <NewDocument onCreate={onCreateDocument} ref={newDocumentRef} />
         </Tabs.Panel>
       </div>
     </Tabs>

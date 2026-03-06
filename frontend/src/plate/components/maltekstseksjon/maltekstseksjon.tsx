@@ -1,5 +1,6 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useMaltekstseksjonQuery } from '@app/components/smart-editor/hooks/use-query';
+import { useReportDynamicContentLoading } from '@app/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
 import { Instructions } from '@app/plate/components/maltekstseksjon/instructions';
@@ -58,6 +59,8 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
     setUpdated,
     queryChanged,
   );
+
+  useReportDynamicContentLoading(isFetching);
 
   const isInRegelverk = useMemo(() => getIsInRegelverk(editor, element), [editor, element]);
 

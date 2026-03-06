@@ -1,31 +1,61 @@
-import { createContext, type RefObject, useContext, useEffect, useRef } from 'react';
+import { createContext, type RefObject, useCallback, useContext, useEffect, useRef } from 'react';
 
 type EditorFocusFn = (() => void) | null;
 
-const EditorPanelFocusContext = createContext<RefObject<EditorFocusFn>>({ current: null });
+interface EditorPanelFocusContextValue {
+  focusRef: RefObject<EditorFocusFn>;
+  pendingFocusRef: RefObject<boolean>;
+}
+
+const EditorPanelFocusContext = createContext<EditorPanelFocusContextValue>({
+  focusRef: { current: null },
+  pendingFocusRef: { current: false },
+});
 
 export const EditorPanelFocusProvider = ({ children }: { children: React.ReactNode }) => {
-  const ref = useRef<EditorFocusFn>(null);
+  const focusRef = useRef<EditorFocusFn>(null);
+  const pendingFocusRef = useRef<boolean>(false);
 
-  return <EditorPanelFocusContext value={ref}>{children}</EditorPanelFocusContext>;
+  return <EditorPanelFocusContext value={{ focusRef, pendingFocusRef }}>{children}</EditorPanelFocusContext>;
 };
 
 export const useSetEditorPanelFocus = (focusFn: EditorFocusFn) => {
-  const ref = useContext(EditorPanelFocusContext);
+  const { focusRef, pendingFocusRef } = useContext(EditorPanelFocusContext);
 
   useEffect(() => {
     if (focusFn === null) {
       return;
     }
 
-    ref.current = focusFn;
+    focusRef.current = focusFn;
+
+    if (pendingFocusRef.current) {
+      pendingFocusRef.current = false;
+      const frameId = requestAnimationFrame(() => focusFn());
+
+      return () => {
+        cancelAnimationFrame(frameId);
+
+        if (focusRef.current === focusFn) {
+          focusRef.current = null;
+        }
+      };
+    }
 
     return () => {
-      if (ref.current === focusFn) {
-        ref.current = null;
+      if (focusRef.current === focusFn) {
+        focusRef.current = null;
       }
     };
-  }, [ref, focusFn]);
+  }, [focusRef, pendingFocusRef, focusFn]);
 };
 
-export const useEditorPanelFocusRef = () => useContext(EditorPanelFocusContext);
+export const useEditorPanelFocusRef = () => useContext(EditorPanelFocusContext).focusRef;
+
+export const useRequestEditorPanelFocus = () => {
+  const { pendingFocusRef } = useContext(EditorPanelFocusContext);
+
+  return useCallback(() => {
+    pendingFocusRef.current = true;
+  }, [pendingFocusRef]);
+};

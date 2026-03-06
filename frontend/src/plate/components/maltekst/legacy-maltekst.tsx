@@ -1,5 +1,6 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
+import { useReportDynamicContentLoading } from '@app/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { nodesEquals } from '@app/plate/components/maltekst/nodes-equals';
@@ -27,6 +28,8 @@ export const LegacyMaltekst = (props: PlateElementProps<MaltekstElement>) => {
   const readOnly = useEditorReadOnly();
   const query = useQuery({ textType: RichTextTypes.MALTEKST, section: element.section, templateId });
   const { data, isLoading, isFetching, refetch } = useGetConsumerTextsQuery(query);
+
+  useReportDynamicContentLoading(isLoading);
 
   useEffect(() => {
     if (isLoading || isFetching || data === undefined || oppgaveIsLoading || oppgave === undefined) {
