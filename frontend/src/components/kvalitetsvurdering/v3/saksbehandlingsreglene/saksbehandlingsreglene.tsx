@@ -9,6 +9,7 @@ import {
   BegrunnelsespliktenBoolean,
   BegrunnelsespliktenSaksdataHjemlerLists,
   ForeleggelsespliktenBoolean,
+  ForhåndsvarslingBoolean,
   HEADER,
   JournalfoeringspliktenBoolean,
   KlageOgKlageforberedelsenBoolean,
@@ -82,6 +83,20 @@ const CHECKBOXES: CheckboxParams[] = [
       }),
       getCheckbox({
         field: VeiledningspliktenBoolean.saksbehandlingsreglerVeiledningspliktenNavHarIkkeGittGodNokVeiledning,
+      }),
+    ],
+  }),
+
+  // Forhåndsvarsling
+  getCheckbox({
+    field: ForhåndsvarslingBoolean.saksbehandlingsreglerBruddPaaRegleneOmForhaandsvarsling,
+    groupErrorField: SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaRegleneOmForhaandsvarslingGroup,
+    childList: [
+      getCheckbox({
+        field: ForhåndsvarslingBoolean.saksbehandlingsreglerForhaandsvarslingPartenIkkeVarsletFoerVedtak,
+      }),
+      getCheckbox({
+        field: ForhåndsvarslingBoolean.saksbehandlingsreglerForhaandsvarslingPartenVarsletMangelfullt,
       }),
     ],
   }),
@@ -175,6 +190,10 @@ const CHECKBOXES: CheckboxParams[] = [
       getCheckbox({
         field:
           KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageUnderKlageforberedelsenErDetIkkeUtredetEllerGjortUndersoekelser,
+      }),
+      getCheckbox({
+        field:
+          KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak,
       }),
     ],
   }),

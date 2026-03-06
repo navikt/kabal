@@ -8,6 +8,12 @@ export enum VeiledningspliktenBoolean {
   saksbehandlingsreglerVeiledningspliktenNavHarIkkeGittGodNokVeiledning = 'saksbehandlingsreglerVeiledningspliktenNavHarIkkeGittGodNokVeiledning',
 }
 
+export enum ForhåndsvarslingBoolean {
+  saksbehandlingsreglerBruddPaaRegleneOmForhaandsvarsling = 'saksbehandlingsreglerBruddPaaRegleneOmForhaandsvarsling',
+  saksbehandlingsreglerForhaandsvarslingPartenIkkeVarsletFoerVedtak = 'saksbehandlingsreglerForhaandsvarslingPartenIkkeVarsletFoerVedtak',
+  saksbehandlingsreglerForhaandsvarslingPartenVarsletMangelfullt = 'saksbehandlingsreglerForhaandsvarslingPartenVarsletMangelfullt',
+}
+
 export enum UtredningspliktenBoolean {
   saksbehandlingsreglerBruddPaaUtredningsplikten = 'saksbehandlingsreglerBruddPaaUtredningsplikten',
   saksbehandlingsreglerUtredningspliktenUtredningenAvMedisinskeForholdHarIkkeVaertGodNok = 'saksbehandlingsreglerUtredningspliktenUtredningenAvMedisinskeForholdHarIkkeVaertGodNok',
@@ -43,6 +49,7 @@ export enum KlageOgKlageforberedelsenBoolean {
   saksbehandlingsreglerBruddPaaKlageKlagefristenEllerOppreisningErIkkeVurdertEllerFeilVurdert = 'saksbehandlingsreglerBruddPaaKlageKlagefristenEllerOppreisningErIkkeVurdertEllerFeilVurdert',
   saksbehandlingsreglerBruddPaaKlageDetErIkkeSoergetForRettingAvFeilIKlagensFormEllerInnhold = 'saksbehandlingsreglerBruddPaaKlageDetErIkkeSoergetForRettingAvFeilIKlagensFormEllerInnhold',
   saksbehandlingsreglerBruddPaaKlageUnderKlageforberedelsenErDetIkkeUtredetEllerGjortUndersoekelser = 'saksbehandlingsreglerBruddPaaKlageUnderKlageforberedelsenErDetIkkeUtredetEllerGjortUndersoekelser',
+  saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak = 'saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak',
 }
 
 export enum OmgjoeringBoolean {
@@ -65,6 +72,7 @@ export enum KlartSpraakBoolean {
 
 export type AllSaksbehandlingsregleneBoolean =
   | VeiledningspliktenBoolean
+  | ForhåndsvarslingBoolean
   | UtredningspliktenBoolean
   | ForeleggelsespliktenBoolean
   | BegrunnelsespliktenBoolean
@@ -77,6 +85,7 @@ type Fields = AllSaksbehandlingsregleneBoolean | BegrunnelsespliktenSaksdataHjem
 
 const FIELDS = Object.values({
   ...VeiledningspliktenBoolean,
+  ...ForhåndsvarslingBoolean,
   ...UtredningspliktenBoolean,
   ...ForeleggelsespliktenBoolean,
   ...BegrunnelsespliktenBoolean,
@@ -92,6 +101,7 @@ export const isSaksbehandlingsregleneField = (value: string): value is Fields =>
 export enum SaksbehandlingsregleneErrorFields {
   saksbehandlingsreglerGroup = 'saksbehandlingsreglerGroup',
   saksbehandlingsreglerBruddPaaVeiledningspliktenGroup = 'saksbehandlingsreglerBruddPaaVeiledningspliktenGroup',
+  saksbehandlingsreglerBruddPaaRegleneOmForhaandsvarslingGroup = 'saksbehandlingsreglerBruddPaaRegleneOmForhaandsvarslingGroup',
   saksbehandlingsreglerBruddPaaUtredningspliktenGroup = 'saksbehandlingsreglerBruddPaaUtredningspliktenGroup',
   saksbehandlingsreglerBruddPaaForeleggelsespliktenGroup = 'saksbehandlingsreglerBruddPaaForeleggelsespliktenGroup',
   saksbehandlingsreglerBruddPaaBegrunnelsespliktenGroup = 'saksbehandlingsreglerBruddPaaBegrunnelsespliktenGroup',
@@ -115,6 +125,14 @@ export const SAKSBEHANDLINGSREGLENE_LABELS: Record<Fields, string> = {
     'Parten har ikke fått svar på henvendelser i saken, eller har fått feil svar.',
   [VeiledningspliktenBoolean.saksbehandlingsreglerVeiledningspliktenNavHarIkkeGittGodNokVeiledning]:
     'Nav har ikke gitt god nok veiledning i saken av eget tiltak.',
+
+    // Forhåndsvarsling
+  [ForhåndsvarslingBoolean.saksbehandlingsreglerBruddPaaRegleneOmForhaandsvarsling]:
+    'Brudd på reglene om forhåndsvarsling, forvaltningsloven § 16',
+  [ForhåndsvarslingBoolean.saksbehandlingsreglerForhaandsvarslingPartenIkkeVarsletFoerVedtak]:
+    'Parten har ikke blitt varslet før det ble fattet vedtak i saken',
+  [ForhåndsvarslingBoolean.saksbehandlingsreglerForhaandsvarslingPartenVarsletMangelfullt]:
+    'Parten har blitt varslet, men varselets innhold er mangelfullt',  
 
   // Utredningsplikten
   [UtredningspliktenBoolean.saksbehandlingsreglerBruddPaaUtredningsplikten]:
@@ -159,6 +177,8 @@ export const SAKSBEHANDLINGSREGLENE_LABELS: Record<Fields, string> = {
     'Det er ikke sørget for retting av feil i klagens form eller innhold',
   [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageUnderKlageforberedelsenErDetIkkeUtredetEllerGjortUndersoekelser]:
     'Under klageforberedelsen er det ikke utredet om klagen faktisk er en klage eller hva i vedtaket som påklages, eller ikke gjort andre undersøkelser som klagen gir grunn til',
+  [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak]:
+    'Reglene for enkeltvedtak er ikke fulgt til tross for at underinstansen i realiteten har fattet et nytt enkeltvedtak i klagesaken',
 
   // Omgjøring
   [OmgjoeringBoolean.saksbehandlingsreglerBruddPaaRegleneOmOmgjoeringUtenforKlageOgAnke]:
@@ -195,6 +215,8 @@ export const SAKSBEHANDLINGSREGLENE_ERROR_LABELS: Record<SaksbehandlingsregleneE
   [SaksbehandlingsregleneErrorFields.saksbehandlingsreglerGroup]: HEADER,
   [SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaVeiledningspliktenGroup]:
     SAKSBEHANDLINGSREGLENE_LABELS[VeiledningspliktenBoolean.saksbehandlingsreglerBruddPaaVeiledningsplikten],
+  [SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaRegleneOmForhaandsvarslingGroup]:
+    SAKSBEHANDLINGSREGLENE_LABELS[ForhåndsvarslingBoolean.saksbehandlingsreglerBruddPaaRegleneOmForhaandsvarsling],
   [SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaUtredningspliktenGroup]:
     SAKSBEHANDLINGSREGLENE_LABELS[UtredningspliktenBoolean.saksbehandlingsreglerBruddPaaUtredningsplikten],
   [SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaForeleggelsespliktenGroup]:
@@ -221,6 +243,12 @@ export const SAKSBEHANDLINGSREGLENE_HELP_TEXTS: Partial<Record<Fields, string>> 
   [VeiledningspliktenBoolean.saksbehandlingsreglerVeiledningspliktenNavHarIkkeGittGodNokVeiledning]:
     'Du velger denne dersom Nav åpenbart skulle gitt veiledning av eget tiltak før det ble fattet vedtak, men dette ikke er gjort, eller Nav har gitt mangelfull eller misvisende veiledning, slik at parten ikke er gitt mulighet til å ivareta interessene sine i saken på en god nok måte.',
 
+  // Forhåndsvarsling
+  [ForhåndsvarslingBoolean.saksbehandlingsreglerForhaandsvarslingPartenIkkeVarsletFoerVedtak]:
+    'Du velger denne dersom parten ikke har startet saken selv, og derfor skulle blitt varslet med mulighet til å uttale seg før vedtaket ble fattet, og det heller ikke er grunn til å gjøre unntak fra varslingsplikten. For eksempel dersom Nav av eget initiativ har fattet vedtak som er til skade for parten, slik som stans, opphør, reduksjon, ugyldiggjøring eller tilbakekreving, uten å forhåndsvarsle. Eller dersom Nav har fattet vedtak etter krav fra én part, uten å forhåndsvarsle motparten.',
+  [ForhåndsvarslingBoolean.saksbehandlingsreglerForhaandsvarslingPartenVarsletMangelfullt]:
+    'Du velger denne dersom varselet ikke forklarer hva saken gjelder, eller ikke gir parten god nok informasjon til å kunne ivareta interessene sine i saken på en forsvarlig måte.',
+
   // Utredningsplikten
   [UtredningspliktenBoolean.saksbehandlingsreglerUtredningspliktenUtredningenAvMedisinskeForholdHarIkkeVaertGodNok]:
     'Du velger denne dersom utredningen av saken ikke har gjort trygdemedisinsk faktum tilstrekkelig klart før det ble fattet vedtak. For eksempel dersom det ikke er gjort tilstrekkelige forsøk på å innhente viktige eller oppdaterte helseopplysninger fra behandler. Se også egne spørsmål om kvalitetsavvik i saker med trygdemedisin.',
@@ -243,11 +271,11 @@ export const SAKSBEHANDLINGSREGLENE_HELP_TEXTS: Partial<Record<Fields, string>> 
 
   // Begrunnelsesplikten
   [BegrunnelsespliktenBoolean.saksbehandlingsreglerBegrunnelsespliktenBegrunnelsenViserIkkeTilRegelverket]:
-    'Du velger denne dersom vedtaket ikke viser til relevant regelverk eller ikke presenterer innholdet av reglene eller de rettslige problemstillingene på en forståelig nok måte. Jo mer komplisert regelverket eller problemstillingene er, desto mer kreves for å presentere regelinnholdet på en forsvarlig måte.',
+    'Du velger denne dersom vedtaket ikke forklarer godt nok relevant regelverk, eller ikke presenterer innholdet av reglene eller de rettslige problemstillingene på en forståelig nok måte. Jo mer komplisert regelverket eller problemstillingene er, desto mer kreves for å presentere regelinnholdet på en forsvarlig måte.',
   [BegrunnelsespliktenBoolean.saksbehandlingsreglerBegrunnelsespliktenBegrunnelsenNevnerIkkeFaktum]:
-    'Du velger denne dersom vedtaket ikke nevner det faktum som er viktig for å ta stilling til de rettslige problemstillingene. Selv om faktum er beskrevet av parten selv i en tidligere framstilling eller i et dokument som parten allerede er gjort kjent med, kan det være uenighet eller tvil om hvordan faktum skal tolkes. Begrunnelsen vil være mangelfull dersom den ikke gjør parten i stand til å forstå hvordan forvaltningen selv har vurdert faktum.',
+    'Du velger denne dersom vedtaket ikke forklarer godt nok det faktum som er viktig for å ta stilling til de rettslige problemstillingene. Selv om faktum er beskrevet av parten selv i en tidligere framstilling eller i et dokument som parten allerede er gjort kjent med, kan det være uenighet eller tvil om hvordan faktum skal tolkes. Begrunnelsen vil være mangelfull dersom den ikke gjør parten i stand til å forstå hvordan forvaltningen selv har vurdert faktum.',
   [BegrunnelsespliktenBoolean.saksbehandlingsreglerBegrunnelsespliktenBegrunnelsenNevnerIkkeAvgjoerendeHensyn]:
-    'Du velger denne dersom vedtaket ikke nevner de hensyn som er avgjørende for den lovbundne skjønnsutøvelsen. Enten ved at det ikke vises til relevante deler av rundskriv, eller ved at det ikke er nevnt andre avgjørende hensyn. Dersom vedtaket er negativt for parten, men det er vektige hensyn som taler for og mot partens syn, er det feil å ikke nevne begge deler.',
+    'Du velger denne dersom vedtaket ikke forklarer godt nok de hensyn som er avgjørende for den lovbundne skjønnsutøvelsen. Enten ved at det ikke vises til relevante deler av rundskriv, eller ved at det ikke er nevnt andre avgjørende hensyn. Dersom vedtaket er negativt for parten, men det er vektige hensyn som taler for og mot partens syn, er det feil å ikke nevne begge deler.',
 
   // Klage og klageforberedelse
   [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageKlagefristenEllerOppreisningErIkkeVurdertEllerFeilVurdert]:
@@ -256,6 +284,8 @@ export const SAKSBEHANDLINGSREGLENE_HELP_TEXTS: Partial<Record<Fields, string>> 
     'Du velger denne dersom underinstansen har oversett kravene som stilles til en klages form og innhold, eller ikke har gitt parten mulighet til å rette slike feil. For eksempel dersom klagen ikke er undertegnet. Eller dersom klagen ikke er formulert på en slik måte at det kan identifiseres hvilken endring av vedtaket parten ønsker.',
   [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageUnderKlageforberedelsenErDetIkkeUtredetEllerGjortUndersoekelser]:
     'Du velger denne dersom en henvendelse fra parten har blitt behandlet som en klage, til tross for at det er usikkert om det faktisk er ment som en klage. Tilsvarende dersom det er usikkert hva i vedtaket som påklages, og dette burde vært undersøkt. Du velger også denne dersom underinstansen ikke har vurdert nye opplysninger som er tilkommet saken før den oversendes klageinstansen.',
+  [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak]:
+    'Du velger denne dersom underinstansen har gjort endringer i det påklagede vedtaket som er bestemmende for partens rettigheter eller plikter, uten at dette er gjort i vedtaks form eller i tråd med underretningsplikten. For eksempel dersom underinstansen har omgjort deler av vedtaket sitt i forbindelse med oversendelse av saken til klageinstansen, og endringene bare går fram av oversendelsesbrevet uten underretning om klageadgang, klagefrist, klageinstans, partsinnsyn, eventuelle sakskostnader mv.',
 
   // Omgjøring
   [OmgjoeringBoolean.saksbehandlingsreglerOmgjoeringUgyldighetOgOmgjoeringErIkkeVurdertEllerFeilVurdert]:
