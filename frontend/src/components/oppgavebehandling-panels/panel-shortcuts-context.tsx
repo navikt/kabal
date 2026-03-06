@@ -1,5 +1,6 @@
+import { togglePanelKeyboardHelpModal } from '@app/components/oppgavebehandling-controls/keyboard-help/state';
 import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { Keys } from '@app/keys';
+import { isMetaKey, Keys } from '@app/keys';
 import { createContext, type RefObject, useCallback, useContext, useEffect, useRef } from 'react';
 
 type PanelNumber = 1 | 2 | 3 | 4 | 5 | 6;
@@ -91,8 +92,17 @@ export const PanelShortcutsProvider = ({ children }: PanelShortcutsProviderProps
   const lastFocusedPanelRef = useRef<PanelNumber | null>(null);
 
   useEffect(() => {
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     const handler = (e: KeyboardEvent) => {
       if (e.shiftKey) {
+        return;
+      }
+
+      // Cmd/Ctrl+H: toggle panel keyboard help modal.
+      if (isMetaKey(e) && e.key === Keys.H) {
+        e.preventDefault();
+        togglePanelKeyboardHelpModal();
+
         return;
       }
 
