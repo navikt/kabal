@@ -95,13 +95,13 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.EnhetInnsendingshjemler:
         return (
           <Table.DataCell key={key}>
-            <InnsendingshjemlerList hjemmelIdList={oppgave.hjemmelIdList} size="medium" />
+            <InnsendingshjemlerList hjemmelIdList={oppgave.hjemmelIdList} size="small" />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Registreringshjemler:
         return (
           <Table.DataCell key={key}>
-            <Registreringshjemler hjemmelIdList={oppgave.registreringshjemmelIdList} size="medium" />
+            <Registreringshjemler hjemmelIdList={oppgave.registreringshjemmelIdList} size="small" />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Navn:
