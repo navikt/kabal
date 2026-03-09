@@ -14,23 +14,21 @@ import { TabContext } from '@app/components/documents/tab-context';
 import { TAB_MANAGER } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
 import {
+  getCombinedDocumentTabId,
+  getCombinedDocumentTabUrl,
   getJournalfoertDocumentTabId,
   getJournalfoertDocumentTabUrl,
-  getMergedDocumentTabId,
-  getMergedDocumentTabUrl,
 } from '@app/domain/tabbed-document-url';
-import { useLazyMergedDocumentsReferenceQuery } from '@app/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useCallback, useContext } from 'react';
 
 export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
-  const [getMergedDocumentRef] = useLazyMergedDocumentsReferenceQuery();
   const { selectedDocuments } = useContext(SelectContext);
   const getDocument = useGetDocument(filteredDocuments);
   const { getTabRef, setTabRef } = useContext(TabContext);
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-  return useCallback(async () => {
+  return useCallback(() => {
     const focusedIndex = getFocusIndex();
     const focusedDocument = getDocument(focusedIndex);
     const hasDocument = focusedDocument !== undefined;
@@ -41,9 +39,8 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
 
     if (selectedDocuments.size > 0 && isSelected(focusedIndex)) {
       const { toOpen, toDownload } = getSelectedDocumentsInOrder(selectedDocuments, filteredDocuments);
-      const { reference } = await getMergedDocumentRef(toOpen).unwrap();
-      const tabUrl = getMergedDocumentTabUrl(reference);
-      const documentId = getMergedDocumentTabId(reference);
+      const tabUrl = getCombinedDocumentTabUrl(toOpen);
+      const documentId = getCombinedDocumentTabId(toOpen);
 
       if (toDownload.length > 0) {
         showDownloadDocumentsToast(...toDownload);
@@ -123,5 +120,5 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
     }
 
     setTabRef(documentId, newTabRef);
-  }, [filteredDocuments, getDocument, getMergedDocumentRef, getTabRef, setTabRef, selectedDocuments]);
+  }, [filteredDocuments, getDocument, getTabRef, setTabRef, selectedDocuments]);
 };

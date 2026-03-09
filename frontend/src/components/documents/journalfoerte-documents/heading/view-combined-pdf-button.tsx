@@ -5,17 +5,13 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
-import { getMergedDocumentTabId, getMergedDocumentTabUrl } from '@app/domain/tabbed-document-url';
+import { getCombinedDocumentTabId, getCombinedDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useFilesViewed } from '@app/hooks/settings/use-setting';
 import { isMetaKey, MOD_KEY_TEXT, MouseButtons } from '@app/keys';
-import {
-  useGetArkiverteDokumenterQuery,
-  useMergedDocumentsReferenceQuery,
-} from '@app/redux-api/oppgaver/queries/documents';
+import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { FilePdfIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext, useMemo } from 'react';
 
 export const ViewCombinedPDF = () => {
@@ -46,25 +42,9 @@ export const ViewCombinedPDF = () => {
     });
   }, [toOpen, value]);
 
-  const {
-    data: mergedDocumentRef,
-    isLoading,
-    isFetching,
-  } = useMergedDocumentsReferenceQuery(toOpen.length === 0 ? skipToken : toOpen);
+  const tabUrl = useMemo(() => (toOpen.length === 0 ? undefined : getCombinedDocumentTabUrl(toOpen)), [toOpen]);
 
-  const { tabUrl, documentId } = useMemo(() => {
-    if (mergedDocumentRef === undefined) {
-      return {
-        tabUrl: undefined,
-        documentId: undefined,
-      };
-    }
-
-    return {
-      tabUrl: getMergedDocumentTabUrl(mergedDocumentRef.reference),
-      documentId: getMergedDocumentTabId(mergedDocumentRef.reference),
-    };
-  }, [mergedDocumentRef]);
+  const documentId = useMemo(() => (toOpen.length === 0 ? undefined : getCombinedDocumentTabId(toOpen)), [toOpen]);
 
   const isTabOpen = useIsTabOpen(documentId);
 
@@ -125,7 +105,7 @@ export const ViewCombinedPDF = () => {
         onClick={onClick}
         onAuxClick={onClick}
         href={tabUrl}
-        loading={isLoading || isFetching || archivedIsLoading}
+        loading={archivedIsLoading}
         className={`mx-4 mb-3 visited:text-ax-text-meta-purple ${
           isTabOpen || isInlineOpen ? '[text-shadow:0_0_1px_var(--ax-bg-neutral-strong)]' : ''
         }`}
