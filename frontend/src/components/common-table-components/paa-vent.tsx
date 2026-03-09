@@ -1,8 +1,9 @@
 import { isoDateToPretty } from '@app/domain/date';
+import { useIsTruncated } from '@app/hooks/use-is-truncated';
 import { usePaaVentReasons } from '@app/simple-api-state/use-kodeverk';
 import { PaaVentReasonEnum } from '@app/types/kodeverk';
 import type { IOppgave } from '@app/types/oppgaver';
-import { Loader } from '@navikt/ds-react';
+import { Loader, Tooltip } from '@navikt/ds-react';
 
 type Props = Pick<IOppgave, 'sattPaaVent'>;
 
@@ -28,6 +29,8 @@ export const PaaVentTil = ({ sattPaaVent }: Props) => {
 };
 
 export const PaaVentReason = ({ sattPaaVent }: Props) => {
+  const isMultiline = sattPaaVent?.reason?.includes('\n') ?? false;
+  const [isTruncated, truncatedRef] = useIsTruncated(isMultiline);
   const { data = [], isLoading } = usePaaVentReasons();
 
   if (sattPaaVent === null) {
@@ -43,9 +46,19 @@ export const PaaVentReason = ({ sattPaaVent }: Props) => {
       ? (sattPaaVent.reason ?? 'Annet - ingen forklaring')
       : (data.find((r) => r.id === sattPaaVent.reasonId)?.beskrivelse ?? 'Ukjent årsak');
 
-  return (
-    <div className="max-w-60 truncate" title={reason}>
+  const span = (
+    <span ref={truncatedRef} className="block max-w-60 truncate text-ax-medium">
       {reason}
-    </div>
+    </span>
+  );
+
+  if (!isTruncated && !isMultiline) {
+    return span;
+  }
+
+  return (
+    <Tooltip content={reason} className="whitespace-pre-wrap">
+      {span}
+    </Tooltip>
   );
 };

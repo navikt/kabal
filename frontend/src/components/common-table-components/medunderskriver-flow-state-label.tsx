@@ -6,7 +6,7 @@ import {
 import { SaksTypeEnum } from '@app/types/kodeverk';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgave } from '@app/types/oppgaver';
-import { Tag } from '@navikt/ds-react';
+import { Tag, Tooltip } from '@navikt/ds-react';
 import { useContext } from 'react';
 
 type Props = Pick<IOppgave, 'medunderskriver' | 'typeId'>;
@@ -18,9 +18,11 @@ export const MUFlowStateLabelWithSelf = ({ medunderskriver, typeId }: Props) => 
 
   if (isMu && medunderskriver.flowState === FlowState.SENT) {
     return (
-      <Tag data-color="meta-purple" className="truncate" variant="outline" title={getTitleCapitalized(typeId)}>
-        {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'Fagansvarlig' : 'MU'}
-      </Tag>
+      <Tooltip content={getTitleCapitalized(typeId)} delay={500}>
+        <Tag data-color="meta-purple" variant="outline" size="small" className="whitespace-nowrap">
+          {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'Fagansvarlig' : 'MU'}
+        </Tag>
+      </Tooltip>
     );
   }
 
@@ -48,13 +50,17 @@ export const MUFlowStateLabelWithoutSelf = ({ medunderskriver, typeId }: Props) 
 };
 
 const Sendt = ({ typeId }: { typeId: SaksTypeEnum }) => (
-  <Tag data-color="success" className="truncate" variant="outline" title={`Sendt til ${getTitleLowercase(typeId)}`}>
-    Sendt til {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
-  </Tag>
+  <Tooltip content={`Sendt til ${getTitleLowercase(typeId)}`} delay={500}>
+    <Tag data-color="success" variant="outline" size="small" className="whitespace-nowrap">
+      Sendt til {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
+    </Tag>
+  </Tooltip>
 );
 
 const Tilbake = ({ typeId }: { typeId: SaksTypeEnum }) => (
-  <Tag data-color="danger" className="truncate" variant="outline" title={`Tilbake fra ${getTitleLowercase(typeId)}`}>
-    Tilbake fra {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
-  </Tag>
+  <Tooltip content={`Tilbake fra ${getTitleLowercase(typeId)}`} delay={500}>
+    <Tag data-color="danger" variant="outline" size="small" className="whitespace-nowrap">
+      Tilbake fra {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
+    </Tag>
+  </Tooltip>
 );
