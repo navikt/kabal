@@ -17,8 +17,8 @@ export const SakenGjelderName = ({ oppgaveId }: Props) => {
   const name = data.name ?? 'Navn mangler';
 
   return (
-    <Tooltip content={name}>
-      <span className="inline-block min-w-full max-w-20 truncate">{name}</span>
+    <Tooltip content={name} delay={500}>
+      <span className="inline-block min-w-full max-w-20 truncate text-ax-medium">{name}</span>
     </Tooltip>
   );
 };

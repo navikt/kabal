@@ -1,3 +1,4 @@
+import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import {
   type HjemmelNameAndId,
   useInnsendingshjemlerFromIds,
@@ -7,10 +8,6 @@ import { HStack, Tag, type TagProps } from '@navikt/ds-react';
 
 interface Props {
   hjemmelIdList: string[];
-  /** Node to render while loading hjemmel names. */
-  loading?: React.ReactNode;
-  /** Node to render if list is empty. */
-  fallback?: React.ReactNode;
   size?: TagProps['size'];
 }
 
@@ -28,22 +25,29 @@ export const Registreringshjemler = ({ hjemmelIdList, ...rest }: Props) => {
 
 interface HjemmelNamesProps {
   hjemmelList: HjemmelNameAndId[] | undefined;
-  loading?: React.ReactNode;
-  fallback?: React.ReactNode;
   size?: TagProps['size'];
 }
 
-const HjemmelList = ({ hjemmelList, size, loading, fallback }: HjemmelNamesProps) =>
-  hjemmelList === undefined ? (
-    loading
-  ) : (
-    <HStack wrap gap="space-8">
-      {hjemmelList.length === 0
-        ? fallback
-        : hjemmelList.map(({ id, name }) => (
-            <Tag data-color="meta-purple" variant="outline" size={size} key={id} className="truncate">
-              {name}
-            </Tag>
-          ))}
+const HjemmelList = ({ hjemmelList, size }: HjemmelNamesProps) => {
+  const hasHjemler = hjemmelList !== undefined && hjemmelList.length > 0;
+
+  if (!hasHjemler) {
+    return <LoadingCellContent />;
+  }
+
+  return (
+    <HStack gap="space-8" maxWidth="500px" wrap>
+      {hjemmelList.length === 0 ? (
+        <Tag data-color="neutral" variant="outline" size={size}>
+          Ingen hjemler
+        </Tag>
+      ) : (
+        hjemmelList.map(({ id, name }) => (
+          <Tag data-color="meta-purple" variant="outline" size={size} key={id}>
+            {name}
+          </Tag>
+        ))
+      )}
     </HStack>
   );
+};
