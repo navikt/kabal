@@ -14,7 +14,7 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
     data-testid="filter-list"
     onChange={onChange}
     value={selected}
-    className={`px-2 pt-2 ${className}`}
+    className={className}
     error={error}
   >
     {options.map(({ value, label, disabled, tags }) => (
