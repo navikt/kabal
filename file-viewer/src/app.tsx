@@ -2,7 +2,7 @@ import { type AppTheme, getAppThemeKey, resolveTheme } from '@app/theme';
 import type { DocumentViewerMetadata } from '@app/types';
 import { Theme } from '@navikt/ds-react';
 import { KlageFileViewer } from '@navikt/klage-file-viewer';
-// @ts-expect-error — Vite `?url` import: returns the resolved public URL as a string.
+// @ts-expect-error - Vite `?url` import: returns the resolved public URL as a string.
 import WORKER_SRC from '@navikt/klage-file-viewer/pdf-worker?url';
 import { useEffect, useState } from 'react';
 

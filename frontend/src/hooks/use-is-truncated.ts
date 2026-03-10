@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  * Works by comparing the element's scrollWidth to its clientWidth, which means it really detects horizontal overflow.
  *
  * The caller is responsible for ensuring the element has CSS truncation styles
- * (e.g. Tailwind's `truncate` — `overflow: hidden; text-overflow: ellipsis; white-space: nowrap`).
+ * (e.g. Tailwind's `truncate` - `overflow: hidden; text-overflow: ellipsis; white-space: nowrap`).
  *
  * Returns a `[isTruncated, ref]` tuple. Attach the ref to the element you want to observe.
  * The boolean updates reactively when the element resizes.

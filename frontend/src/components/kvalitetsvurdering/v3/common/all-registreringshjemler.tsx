@@ -93,7 +93,7 @@ const hjemmelValueKey = (option: HjemmelOption): string => option.id;
 const formatHjemmelOption = (option: HjemmelOption) => (
   <span className="truncate">
     <span className="text-ax-text-neutral-subtle">{option.lovkildeNavn}</span>
-    {' — '}
+    {' - '}
     {option.navn}
   </span>
 );

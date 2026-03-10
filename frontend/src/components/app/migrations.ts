@@ -13,7 +13,7 @@ const KLAGE_FILE_VIEWER_SCALE_VALUE_KEY = 'klage-file-viewer/settings/scale/valu
  * Old custom scale was stored as a plain number string (e.g. `125`), which
  * matches the new format directly.
  *
- * This function is safe to call multiple times — it only migrates if the old
+ * This function is safe to call multiple times - it only migrates if the old
  * keys exist and removes them after migration.
  */
 export const runMigrations = (navIdent: string): void => {
