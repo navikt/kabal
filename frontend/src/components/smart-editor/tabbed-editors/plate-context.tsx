@@ -178,7 +178,7 @@ const useIsDynamicContentLoading = (isSynced: boolean, loadingCount: number): bo
     }
 
     if (loadingCount > 0) {
-      // Components are still loading — cancel any pending settle timer.
+      // Components are still loading - cancel any pending settle timer.
       if (timerRef.current !== null) {
         clearTimeout(timerRef.current);
         timerRef.current = null;
@@ -187,7 +187,7 @@ const useIsDynamicContentLoading = (isSynced: boolean, loadingCount: number): bo
       return;
     }
 
-    // loadingCount is 0 — start grace/settle timer.
+    // loadingCount is 0 - start grace/settle timer.
     // This gives late-mounting component effects time to call registerLoading().
     timerRef.current = setTimeout(() => {
       settledRef.current = true;

@@ -18,7 +18,7 @@ import {
   type KlageFileViewerHandle,
   type KlageFileViewerProps,
 } from '@navikt/klage-file-viewer';
-// @ts-expect-error — Vite `?url` import: returns the resolved public URL as a string.
+// @ts-expect-error - Vite `?url` import: returns the resolved public URL as a string.
 import WORKER_SRC from '@navikt/klage-file-viewer/pdf-worker?url';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
