@@ -1,5 +1,4 @@
 import { useTildel } from '@app/components/oppgavestyring/use-tildel';
-import { SearchableNavEmployeeSelectWithLabel } from '@app/components/searchable-select/searchable-single-select/searchable-nav-employee-select-with-label';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
@@ -8,7 +7,7 @@ import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
 import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Role } from '@app/types/bruker';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { BodyShort, Label, Skeleton, VStack } from '@navikt/ds-react';
+import { BodyShort, Label, Select, Skeleton, VStack } from '@navikt/ds-react';
 
 const ID = 'tildelt-saksbehandler';
 
@@ -43,6 +42,8 @@ export const Saksbehandler = () => {
   );
 };
 
+const NONE = 'NONE';
+
 interface SelectSaksbehandlerProps {
   oppgave: IOppgavebehandling;
 }
@@ -62,13 +63,28 @@ const SelectSaksbehandler = ({ oppgave: { saksbehandler, id, typeId, ytelseId } 
     );
   }
 
+  const onChange = ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
+    const employee = potentialSaksbehandlere.saksbehandlere.find((s) => s.navIdent === target.value);
+
+    if (employee === undefined) {
+      return;
+    }
+
+    tildel(employee);
+  };
+
+  const options = potentialSaksbehandlere.saksbehandlere.map(({ navn, navIdent }) => (
+    <option key={navIdent} value={navIdent}>
+      {navn}
+    </option>
+  ));
+
+  const noneSelectedOption = saksbehandler === null ? <option value={NONE}>Ingen valgt</option> : null;
+
   return (
-    <SearchableNavEmployeeSelectWithLabel
-      label="Saksbehandler"
-      onChange={tildel}
-      value={saksbehandler}
-      options={potentialSaksbehandlere.saksbehandlere}
-      confirmLabel="Tildel"
-    />
+    <Select label="Saksbehandler" size="small" onChange={onChange} value={saksbehandler?.navIdent ?? NONE}>
+      {noneSelectedOption}
+      {options}
+    </Select>
   );
 };

@@ -1,12 +1,12 @@
 import { Abbreviations } from '@app/components/settings/abbreviations/abbreviations';
 import { Filters } from '@app/components/settings/filters';
+import { PdfScale } from '@app/components/settings/pdf-scale/pdf-scale';
 import { Signature } from '@app/components/settings/signature';
 import { VStack } from '@navikt/ds-react';
-import { ScaleSettings } from '@navikt/klage-file-viewer';
 
 export const Settings = () => (
   <VStack gap="space-16" className="@container">
-    <ScaleSettings />
+    <PdfScale />
 
     <div
       style={{

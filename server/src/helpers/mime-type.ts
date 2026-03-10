@@ -9,7 +9,6 @@ export const getMimeType = (fileName: string, quiet = false): string => {
     case 'css':
       return 'text/css';
     case 'js':
-    case 'mjs':
       return 'application/javascript';
     case 'woff2':
       return 'font/woff2';

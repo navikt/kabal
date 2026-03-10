@@ -1,6 +1,5 @@
 import { SmartEditorContext } from '@app/components/smart-editor/context';
 import { useQuery } from '@app/components/smart-editor/hooks/use-query';
-import { useReportDynamicContentLoading } from '@app/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -45,8 +44,6 @@ export const LegacyRedigerbarMaltekst = (props: PlateElementProps<RedigerbarMalt
   const path = editor.api.findPath(element);
 
   const isInitialized = useRef(!isNodeEmpty(element));
-
-  useReportDynamicContentLoading(isLoading);
 
   const insertRedigerbarMaltekst = useCallback(async () => {
     if (query === skipToken || path === undefined || oppgaveIsLoading || oppgave === undefined) {

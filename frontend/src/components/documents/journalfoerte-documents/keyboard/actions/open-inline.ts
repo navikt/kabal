@@ -9,12 +9,13 @@ import {
 import { isSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { useFilesViewed } from '@app/hooks/settings/use-setting';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { useCallback, useContext } from 'react';
 
 export const useOpenInline = (filteredDocuments: IArkivertDocument[]) => {
-  const { value: pdfViewed, setArchivedFiles: setArchivedDocuments, remove } = useFilesViewed();
+  const { value: shownDocuments, setValue: setShownDocuments } = useDocumentsPdfViewed();
   const { selectedDocuments } = useContext(SelectContext);
 
   return useCallback(async () => {
@@ -25,19 +26,16 @@ export const useOpenInline = (filteredDocuments: IArkivertDocument[]) => {
 
       showDownloadDocumentsToast(...toDownload);
 
-      const archivedDocuments = pdfViewed.archivedFiles;
-
       if (
-        archivedDocuments !== undefined &&
-        toOpen.length === archivedDocuments.length &&
-        archivedDocuments.every((d) => selectedDocuments.has(getId(d)))
+        toOpen.length === shownDocuments.length &&
+        shownDocuments.every((d) => d.type === DocumentTypeEnum.JOURNALFOERT && selectedDocuments.has(getId(d)))
       ) {
         // If all selected documents are already open, close them.
-        remove();
+        setShownDocuments([]);
         return;
       }
 
-      setArchivedDocuments(toOpen);
+      setShownDocuments(toOpen);
       return;
     }
 
@@ -71,16 +69,27 @@ export const useOpenInline = (filteredDocuments: IArkivertDocument[]) => {
 
     // If exactly this document is open, and no other, close it.
     const isOpen =
-      pdfViewed.archivedFiles?.length === 1 &&
-      pdfViewed.archivedFiles[0]?.dokumentInfoId === dokumentInfoId &&
-      pdfViewed.archivedFiles[0]?.journalpostId === journalpostId;
+      shownDocuments.length === 1 &&
+      shownDocuments.every(
+        (d) =>
+          d.type === DocumentTypeEnum.JOURNALFOERT &&
+          d.dokumentInfoId === dokumentInfoId &&
+          d.journalpostId === journalpostId,
+      );
 
     if (isOpen) {
-      remove();
+      setShownDocuments([]);
       return;
     }
 
     // If nothing or other documents are open, open this one.
-    setArchivedDocuments([{ journalpostId, dokumentInfoId }]);
-  }, [filteredDocuments, selectedDocuments, setArchivedDocuments, remove, pdfViewed]);
+    setShownDocuments([
+      {
+        type: DocumentTypeEnum.JOURNALFOERT,
+        varianter,
+        dokumentInfoId,
+        journalpostId,
+      },
+    ]);
+  }, [filteredDocuments, selectedDocuments, setShownDocuments, shownDocuments]);
 };

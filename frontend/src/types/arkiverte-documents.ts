@@ -33,7 +33,7 @@ export enum Journalstatus {
   UKJENT = 'UKJENT',
 }
 
-export enum AvsenderMottakerIdType {
+enum AvsenderMottakerIdType {
   FNR = 'FNR',
   ORGNR = 'ORGNR',
   HPRNR = 'HPRNR',
@@ -47,6 +47,8 @@ export interface AvsenderMottaker {
   id: string | null;
   type: AvsenderMottakerIdType | null;
   navn: string | null;
+  land: string | null;
+  erLikBruker: boolean;
 }
 
 /** Sier hvilken sak journalposten er knyttet til. En journalpost kan maksimalt være knyttet til én sak, men et dokument kan være knyttet til flere journalposter og dermed flere saker. */

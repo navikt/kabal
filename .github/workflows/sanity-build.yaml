@@ -9,11 +9,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        apps: [frontend, server, file-viewer]
+        apps: [frontend, server]
     name: ${{ matrix.apps }} Sanity Build
     runs-on: ubuntu-latest
-    env:
-      BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -23,21 +21,22 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Configure @navikt scope
-        shell: bash
-        run: |
-          for dir in . ${{ matrix.apps }}; do
-            echo -e '\n[install.scopes]\n"@navikt" = { token = "$BUN_AUTH_TOKEN", url = "https://npm.pkg.github.com/" }' >> "$dir/bunfig.toml"
-          done
-
       - name: Install common dependencies
         shell: bash
-        run: bun install --frozen-lockfile
+        env:
+          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: |
+          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
+          bun install --frozen-lockfile
 
       - name: Install ${{ matrix.apps }} dependencies
         shell: bash
-        working-directory: ${{ matrix.apps }}
-        run: bun install --frozen-lockfile
+        env:
+          BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+        run: |
+          cd ${{ matrix.apps }}
+          echo -e "\n[install.scopes]\n\"@navikt\" = { token = \"$BUN_AUTH_TOKEN\", url = \"https://npm.pkg.github.com/\" }" >> bunfig.toml
+          bun install --frozen-lockfile
 
       - name: Restore cache for ${{ matrix.apps }}
         uses: actions/cache/restore@v4
@@ -51,18 +50,21 @@ jobs:
 
       - name: Typecheck ${{ matrix.apps }}
         shell: bash
-        working-directory: ${{ matrix.apps }}
-        run: bun run typecheck
+        run: |
+          cd ${{ matrix.apps }}
+          bun run typecheck
 
       - name: Lint ${{ matrix.apps }}
         shell: bash
-        working-directory: ${{ matrix.apps }}
-        run: npm run lint
+        run: |
+          cd ${{ matrix.apps }}
+          npm run lint
 
       - name: Test ${{ matrix.apps }}
         shell: bash
-        working-directory: ${{ matrix.apps }}
-        run: bun test
+        run: |
+          cd ${{ matrix.apps }}
+          bun test
 
       - name: Save cache for ${{ matrix.apps }}
         uses: actions/cache/save@v4

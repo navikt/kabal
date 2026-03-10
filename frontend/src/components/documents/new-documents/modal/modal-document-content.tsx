@@ -9,11 +9,13 @@ import { SetDocumentType } from '@app/components/documents/new-documents/new-doc
 import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@app/components/documents/set-filename';
-import { KabalFileViewer } from '@app/components/kabal-file-viewer';
+import { usePdfData } from '@app/components/pdf/pdf';
 import { isSendError } from '@app/components/receivers/is-send-error';
 import { Receivers } from '@app/components/receivers/receivers';
+import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
 import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentsArchivePdfWidth } from '@app/hooks/settings/use-setting';
 import {
   useFinishDocumentMutation,
   useSetMottakerListMutation,
@@ -67,12 +69,14 @@ export const DocumentModalContent = ({
         : [],
     [finishError],
   );
+  const { value: pdfWidth, setValue: setPdfWidth } = useDocumentsArchivePdfWidth();
   const [setTitle] = useSetTitleMutation();
   const oppgaveId = useOppgaveId();
   const pdfUrl =
     oppgaveId === skipToken
       ? undefined
       : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
+  const { refresh, ...pdfData } = usePdfData(pdfUrl);
 
   if (oppgaveId === skipToken) {
     return null;
@@ -101,7 +105,7 @@ export const DocumentModalContent = ({
           {renameAccess === null ? (
             <HStack align="end" gap="space-8" wrap={false}>
               <SetFilename
-                className="max-w-lg grow"
+                className="max-w-lg flex-grow"
                 tittel={document.tittel}
                 setFilename={async (title) => {
                   await setTitle({ oppgaveId, dokumentId: document.id, title });
@@ -146,12 +150,10 @@ export const DocumentModalContent = ({
             />
           ) : null}
 
-          <Errors />
+          <Errors updatePdf={refresh} />
         </VStack>
 
-        {pdfUrl === undefined ? null : (
-          <KabalFileViewer files={[{ variants: 'PDF', title: document.tittel, url: pdfUrl }]} />
-        )}
+        <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />
       </Modal.Body>
       <Modal.Footer className="items-center">
         <AccessErrorsSummary

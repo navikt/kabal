@@ -1,17 +1,17 @@
 import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { PartLookup } from '@app/components/part-lookup/part-lookup';
-import type { InvalidReceiver } from '@app/components/part-lookup/types';
+import { DeleteButton } from '@app/components/part/delete-button';
+import { EditPart, type InvalidReceiver } from '@app/components/part/edit-part';
 import { PartStatusList } from '@app/components/part-status-list/part-status-list';
 import { useCanEditBehandling } from '@app/hooks/use-can-edit';
 import type { IPart } from '@app/types/oppgave-common';
-import { HStack, VStack } from '@navikt/ds-react';
+import { PencilIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
+import { useState } from 'react';
 
 interface CommonProps {
   label: string;
-  /** Label for the lookup button tooltip and aria-label. */
-  buttonLabel: string;
   isLoading: boolean;
   invalidReceivers?: InvalidReceiver[];
   warningReceivers?: InvalidReceiver[];
@@ -33,65 +33,100 @@ export const Part = ({
   part,
   isDeletable,
   label,
-  buttonLabel,
   onChange,
   isLoading,
   invalidReceivers,
   warningReceivers,
 }: DeletableProps | NonDeletableProps) => {
+  const [isEditing, setIsEditing] = useState(false);
   const canEdit = useCanEditBehandling();
 
-  if (canEdit) {
-    return (
-      <BehandlingSection label={label}>
-        <HStack align="center" justify="space-between" wrap={false}>
-          {part !== null ? <PartContent part={part} /> : <span>Ikke satt</span>}
-
-          <PartLookup
-            label={buttonLabel}
-            onChange={(newPart) => onChange(newPart)}
-            onClear={isDeletable ? () => onChange(null) : undefined}
-            hasValue={part !== null}
-            isLoading={isLoading}
-            allowUnreachable={!isDeletable}
-            invalidReceivers={invalidReceivers}
-            warningReceivers={warningReceivers}
-          />
-        </HStack>
-      </BehandlingSection>
-    );
-  }
+  const toggleEditing = () => setIsEditing(!isEditing);
 
   if (part === null) {
     return (
       <BehandlingSection label={label}>
-        <span>Ikke satt</span>
+        <HStack align="center" justify="space-between">
+          <VStack align="start" justify="start">
+            <span>Ikke satt</span>
+          </VStack>
+
+          <div>{canEdit ? <EditButton onClick={toggleEditing} isEditing={isEditing} /> : null}</div>
+        </HStack>
+
+        {isEditing ? (
+          <EditPart
+            onChange={(newPart) => {
+              onChange(newPart);
+              setIsEditing(false);
+            }}
+            isLoading={isLoading}
+            autoFocus
+            invalidReceivers={invalidReceivers}
+            warningReceivers={warningReceivers}
+          />
+        ) : null}
       </BehandlingSection>
     );
   }
 
   return (
     <BehandlingSection label={label}>
-      <PartContent part={part} />
+      <HStack align="start" justify="space-between" wrap={false}>
+        <VStack align="start" justify="start">
+          <HStack align="center" gap="space-4" wrap>
+            {part.name === null ? (
+              <span>Navn mangler</span>
+            ) : (
+              <CopyButton size="small" copyText={part.name} text={part.name} activeText={part.name} wrap />
+            )}
+            {part.identifikator === null ? null : <CopyIdButton size="small" id={part.identifikator} />}
+          </HStack>
+
+          <PartStatusList statusList={part.statusList} size="xsmall" />
+        </VStack>
+
+        <HStack align="center" wrap={false}>
+          {isDeletable && isEditing ? (
+            <DeleteButton
+              onDelete={() => {
+                onChange(null);
+                setIsEditing(false);
+              }}
+            />
+          ) : null}
+          {canEdit ? <EditButton onClick={toggleEditing} isEditing={isEditing} /> : null}
+        </HStack>
+      </HStack>
+
+      {isEditing ? (
+        <EditPart
+          onChange={(newPart) => {
+            onChange(newPart);
+            setIsEditing(false);
+          }}
+          onClose={() => setIsEditing(false)}
+          isLoading={isLoading}
+          autoFocus
+          allowUnreachable
+          invalidReceivers={invalidReceivers}
+        />
+      ) : null}
     </BehandlingSection>
   );
 };
 
-interface PartContentProps {
-  part: IPart;
+interface EditButtonProps {
+  onClick: () => void;
+  isEditing: boolean;
 }
 
-const PartContent = ({ part }: PartContentProps) => (
-  <VStack align="start" justify="start">
-    <HStack align="center" gap="space-4" wrap>
-      {part.name === null ? (
-        <span>Navn mangler</span>
-      ) : (
-        <CopyButton size="small" copyText={part.name} text={part.name} activeText={part.name} wrap />
-      )}
-      {part.identifikator === null ? null : <CopyIdButton size="small" id={part.identifikator} />}
-    </HStack>
+const EditButton = ({ onClick, isEditing }: EditButtonProps) => {
+  const Icon = isEditing ? XMarkIcon : PencilIcon;
 
-    <PartStatusList statusList={part.statusList} size="xsmall" />
-  </VStack>
-);
+  return (
+    <Tooltip content={isEditing ? 'Avbryt' : 'Rediger'}>
+      <Button data-color="neutral" variant="tertiary" icon={<Icon aria-hidden />} onClick={onClick} size="small" />
+    </Tooltip>
+  );
+};
