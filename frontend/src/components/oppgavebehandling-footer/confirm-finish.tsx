@@ -216,7 +216,7 @@ const useText = (): string => {
         utfallId === UtfallEnum.INNSTILLING_IKKE_GJENOPPTAS ||
         utfallId === UtfallEnum.INNSTILLING_AVVIST
       ) {
-        return 'Bekreft at du har gjennomført overføring til Trygderetten i Gosys, før du fullfører behandlingen av begjæringen om gjenopptak i Kabal. Behandlingen kan ikke redigeres når den er fullført.';
+        return 'Bekreft at du har gjennomført overføring til Trygderetten, før du fullfører behandlingen av begjæringen om gjenopptak i Kabal. Behandlingen kan ikke redigeres når den er fullført.';
       }
 
       return 'Du fullfører nå behandlingen av begjæringen om gjenopptak. Behandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
