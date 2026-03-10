@@ -1,27 +1,15 @@
 import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
 import type { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import { SortButton, type SortButtonProps } from '@app/components/documents/journalfoerte-documents/header/sort-button';
 import type { DateRangeSetting } from '@app/hooks/settings/use-setting';
-import { HStack } from '@navikt/ds-react';
 import { formatISO, parseISO } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 
-export interface DateFilterProps extends DateRangeSetting, SortButtonProps {
+interface Props extends DateRangeSetting {
   label: string;
   gridArea: Fields;
 }
 
-export const DateFilter = ({
-  value,
-  setValue,
-  remove,
-  sort,
-  setSort,
-  label,
-  gridArea,
-  column,
-  size,
-}: DateFilterProps) => {
+export const DateFilter = ({ value, setValue, remove, label, gridArea }: Props) => {
   const [fromDateString, toDateString] = value;
 
   const from = fromDateString === null ? undefined : formatISO(parseISO(fromDateString), { representation: 'date' });
@@ -39,9 +27,12 @@ export const DateFilter = ({
   };
 
   return (
-    <HStack align="center" as="section" style={{ gridArea }} wrap={false}>
-      <SortButton column={column} sort={sort} setSort={setSort} size={size} />
-      <DatePickerRange onChange={onChange} selected={{ from, to }} buttonLabel={label} buttonSize={size} />
-    </HStack>
+    <DatePickerRange
+      onChange={onChange}
+      selected={{ from, to }}
+      buttonLabel={label}
+      gridArea={gridArea}
+      buttonSize="small"
+    />
   );
 };

@@ -1,21 +1,34 @@
 import { StaticDataContext } from '@app/components/app/static-data-context';
 import { SmartEditorContext } from '@app/components/smart-editor/context';
+import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
+import { History } from '@app/components/smart-editor/history/history';
 import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
-import { createLocalStorageBackup } from '@app/components/smart-editor/tabbed-editors/backup';
-import { PlateContextWrapper } from '@app/components/smart-editor/tabbed-editors/plate-context';
-import { useMounted } from '@app/components/smart-editor/tabbed-editors/use-mounted';
+import {
+  cleanupLocalStorageBackups,
+  createLocalStorageBackup,
+} from '@app/components/smart-editor/tabbed-editors/backup';
+import { Content } from '@app/components/smart-editor/tabbed-editors/content';
+import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
+import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
+import { VersionStatus } from '@app/components/smart-editor/tabbed-editors/version-status';
 import { ENVIRONMENT } from '@app/environment';
+import { DocumentErrorComponent } from '@app/error-boundary/document-error';
+import { ErrorBoundary } from '@app/error-boundary/error-boundary';
 import { hasOwn } from '@app/functions/object';
 import { parseJSON } from '@app/functions/parse-json';
 import { getQueryParams } from '@app/headers';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@app/hooks/settings/use-setting';
+import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
 import { pushError, pushLog } from '@app/observability';
+import { KabalPlateEditor } from '@app/plate/plate-editor';
 import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
 import { components, saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@app/plate/sheet';
 import { getScaleVar } from '@app/plate/status-bar/scale-context';
+import { StatusBar } from '@app/plate/status-bar/status-bar';
 import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
+import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { reduxStore } from '@app/redux/configure-store';
 import { documentsQuerySlice, useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
@@ -23,11 +36,12 @@ import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents'
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import type { GenericObject } from '@app/types/types';
 import { isObject, LogLevel } from '@grafana/faro-web-sdk';
-import { VStack } from '@navikt/ds-react';
+import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, FileTextIcon } from '@navikt/aksel-icons';
+import { Box, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
 import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
-import { Plate, usePlateEditor } from 'platejs/react';
+import { Plate, useEditorReadOnly, usePlateEditor } from 'platejs/react';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 
@@ -65,7 +79,6 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const { newCommentSelection } = useContext(SmartEditorContext);
   const { user } = useContext(StaticDataContext);
   const [isConnected, setIsConnected] = useState(false);
-  const [isSynced, setIsSynced] = useState(false);
   const [readOnly, setReadOnly] = useState(!ENVIRONMENT.isLocal); // Start in read-only mode until we know otherwise. Must start as writable (readOnly=false) on localhost to get write access at all.
 
   const url = useMemo(
@@ -106,7 +119,6 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         }
 
         setIsConnected(false);
-        setIsSynced(false);
 
         // 4403: Reconnect immediately to regain access, with new access rights.
         // 1001: Pod gracefully closed the connection, likely due to a redeploy. Reconnect immediately.
@@ -151,7 +163,6 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         }
       },
       onSynced: () => {
-        setIsSynced(true);
         // "Normalize" away empty paragraph that is automatically created between local initialization and Yjs connection.
         const first = editor.children[0];
         const second = editor.children[1];
@@ -173,7 +184,6 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
       },
       onDisconnect: () => {
         setIsConnected(false);
-        setIsSynced(false);
       },
       onAuthenticationFailed: () => {
         console.error('Authentication failed');
@@ -236,7 +246,6 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const destroyAndDelete = () => {
     setReadOnly(true);
     setIsConnected(false);
-    setIsSynced(false);
     yjs.destroy();
 
     reduxStore.dispatch(
@@ -343,13 +352,130 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           return [];
         }}
       >
-        <PlateContextWrapper
-          smartDocument={smartDocument}
-          oppgave={oppgave}
-          isConnected={isConnected}
-          isSynced={isSynced}
-        />
+        <PlateContext smartDocument={smartDocument} oppgave={oppgave} isConnected={isConnected} />
       </Plate>
     </VStack>
   );
 };
+
+interface PlateContextProps {
+  smartDocument: ISmartDocumentOrAttachment;
+  oppgave: IOppgavebehandling;
+  isConnected: boolean;
+}
+
+// Copy-paste from Plate docs
+const useMounted = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return mounted;
+};
+
+const PlateContext = ({ smartDocument, oppgave, isConnected }: PlateContextProps) => {
+  const { id, templateId } = smartDocument;
+  const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
+  const { showAnnotationsAtOrigin, showHistory } = useContext(SmartEditorContext);
+  const readOnly = useEditorReadOnly();
+
+  return (
+    <>
+      <HStack wrap={false} maxHeight="100%" flexShrink="1" overflowY="scroll" className="scroll-pt-16">
+        <GodeFormuleringer templateId={templateId} />
+
+        <Content>
+          <VStack minWidth="210mm" className="[grid-area:content]" data-area="content">
+            <SaksbehandlerToolbar />
+
+            <ErrorBoundary
+              errorComponent={() => <DocumentErrorComponent documentId={id} oppgaveId={oppgave.id} />}
+              actionButton={{
+                onClick: () => getDocument({ dokumentId: id, oppgaveId: oppgave.id }, false).unwrap(),
+                loading: isLoading,
+                disabled: isLoading,
+                buttonText: 'Gjenopprett dokument',
+                buttonIcon: <ClockDashedIcon aria-hidden />,
+                variant: 'primary',
+                size: 'small',
+              }}
+            >
+              <EditorWithNewCommentAndFloatingToolbar id={id} />
+            </ErrorBoundary>
+          </VStack>
+
+          {showAnnotationsAtOrigin ? <PositionedRight /> : null}
+        </Content>
+
+        {showAnnotationsAtOrigin ? null : <StickyRight id={id} />}
+
+        {showHistory ? <History oppgaveId={oppgave.id} smartDocument={smartDocument} /> : null}
+      </HStack>
+      <StatusBar>
+        <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="space-8">
+          <Box as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="auto space-0">
+            <Tooltip content={readOnly ? 'Lesemodus' : 'Skrivemodus'}>
+              {readOnly ? (
+                <FileTextIcon aria-hidden role="presentation" fontSize={24} color="var(--ax-text-neutral)" />
+              ) : (
+                <DocPencilIcon aria-hidden role="presentation" fontSize={24} color="var(--ax-text-neutral)" />
+              )}
+            </Tooltip>
+          </Box>
+        </HStack>
+
+        <HStack asChild wrap={false} flexShrink="0" align="center" justify="center" paddingInline="space-8">
+          <Box as="span" borderWidth="0 1 0 0" borderColor="neutral" marginInline="space-0 space-8">
+            <Tooltip content={isConnected ? 'Tilkoblet' : 'Frakoblet'}>
+              {isConnected ? (
+                <CloudFillIcon
+                  aria-hidden
+                  role="presentation"
+                  fontSize={24}
+                  color="var(--ax-text-success-decoration)"
+                />
+              ) : (
+                <CloudSlashFillIcon
+                  aria-hidden
+                  role="presentation"
+                  fontSize={24}
+                  color="var(--ax-text-danger-decoration)"
+                />
+              )}
+            </Tooltip>
+          </Box>
+        </HStack>
+
+        <VersionStatus oppgaveId={oppgave.id} dokumentId={id} />
+      </StatusBar>
+    </>
+  );
+};
+
+interface EditorWithNewCommentAndFloatingToolbarProps {
+  id: string;
+}
+
+const EditorWithNewCommentAndFloatingToolbar = ({ id }: EditorWithNewCommentAndFloatingToolbarProps) => {
+  const { sheetRef } = useContext(SmartEditorContext);
+  const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
+  const lang = useSmartEditorSpellCheckLanguage();
+
+  useEffect(() => {
+    sheetRef.current = containerElement;
+  }, [containerElement, sheetRef]);
+
+  return (
+    <Sheet ref={setContainerElement} minHeight data-component="sheet" className="mr-4">
+      <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
+
+      <KabalPlateEditor id={id} lang={lang} contentEditable="dynamic" />
+    </Sheet>
+  );
+};
+
+if (typeof window !== 'undefined' && window.localStorage !== undefined) {
+  cleanupLocalStorageBackups(window.localStorage);
+}

@@ -1,5 +1,5 @@
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
-import { useSetRolFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
+import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const TakeFromRol = ({ oppgaveId, isSaksbehandler, rol }: Props) => {
-  const [setRolState, { isLoading }] = useSetRolFlowStateMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
+  const [setRolState, { isLoading }] = useSetRolStateMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
 
   if (!isSaksbehandler || rol.flowState !== FlowState.SENT) {
     return null;
@@ -24,8 +24,7 @@ export const TakeFromRol = ({ oppgaveId, isSaksbehandler, rol }: Props) => {
       loading={isLoading}
       size="small"
       icon={<ArrowUndoIcon aria-hidden />}
-      variant="secondary"
-      data-color="neutral"
+      variant="primary"
       onClick={() => setRolState({ oppgaveId, flowState: FlowState.NOT_SENT })}
     >
       Hent tilbake fra {from}

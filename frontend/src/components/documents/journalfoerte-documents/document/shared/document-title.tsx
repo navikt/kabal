@@ -12,16 +12,17 @@ import { SetFilename } from '@app/components/documents/set-filename';
 import { DocumentLink } from '@app/components/documents/styled-components/document-link';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
-import type { IFilesViewed } from '@app/components/file-viewer/types';
 import { toast } from '@app/components/toast/store';
-import { getJournalfoertDocumentFileUrl } from '@app/domain/file-url';
+import type { IShownDocument } from '@app/components/view-pdf/types';
+import { getJournalfoertDocumentInlineUrl } from '@app/domain/inline-document-url';
 import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@app/domain/tabbed-document-url';
+import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useFilesViewed } from '@app/hooks/settings/use-setting';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { isMetaKey, MouseButtons } from '@app/keys';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
 import type { Variants } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useCallback, useContext, useMemo, useRef, useState } from 'react';
 
@@ -37,14 +38,14 @@ interface Props {
 
 export const DocumentTitle = (props: Props) => {
   // These hooks would cause rerenders if they were used directly in DocumentTitleInternal, even though used values does not change.
-  const { value, setArchivedFiles: setArchivedDocuments } = useFilesViewed();
+  const { value, setValue } = useDocumentsPdfViewed();
 
-  return <DocumentTitleInternal {...props} pdfViewed={value} setArchivedDocuments={setArchivedDocuments} />;
+  return <DocumentTitleInternal {...props} shownDocuments={value} setShownDocuments={setValue} />;
 };
 
 interface DocumentTitleInternalProps extends Props {
-  pdfViewed: IFilesViewed;
-  setArchivedDocuments: (documents: readonly IJournalfoertDokumentId[]) => void;
+  shownDocuments: IShownDocument[];
+  setShownDocuments: (value: IShownDocument[]) => void;
 }
 
 const DocumentTitleInternal = memo(
@@ -54,8 +55,8 @@ const DocumentTitleInternal = memo(
     tittel,
     hasAccess,
     varianter,
-    pdfViewed,
-    setArchivedDocuments,
+    shownDocuments,
+    setShownDocuments,
     documentIndex,
     vedleggIndex = -1,
   }: DocumentTitleInternalProps) => {
@@ -71,8 +72,8 @@ const DocumentTitleInternal = memo(
     const [editMode, _setEditMode] = useState(false);
 
     const isInlineOpen = useMemo(
-      () => pdfViewed.archivedFiles?.some((d) => d.dokumentInfoId === dokumentInfoId) ?? false,
-      [dokumentInfoId, pdfViewed.archivedFiles],
+      () => shownDocuments.some((v) => v.type === DocumentTypeEnum.JOURNALFOERT && v.dokumentInfoId === dokumentInfoId),
+      [dokumentInfoId, shownDocuments],
     );
 
     const setEditMode = useCallback(
@@ -114,7 +115,7 @@ const DocumentTitleInternal = memo(
     }
 
     const href = isDownload
-      ? getJournalfoertDocumentFileUrl(journalpostId, dokumentInfoId)
+      ? getJournalfoertDocumentInlineUrl(journalpostId, dokumentInfoId)
       : getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId);
 
     const onClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
@@ -128,7 +129,14 @@ const DocumentTitleInternal = memo(
       const shouldOpenInNewTab = isMetaKey(e) || e.button === MouseButtons.MIDDLE;
 
       if (!shouldOpenInNewTab) {
-        setArchivedDocuments([{ journalpostId, dokumentInfoId }]);
+        setShownDocuments([
+          {
+            type: DocumentTypeEnum.JOURNALFOERT,
+            varianter,
+            dokumentInfoId,
+            journalpostId,
+          },
+        ]);
 
         return;
       }
@@ -191,8 +199,7 @@ const DocumentTitleInternal = memo(
     prevProps.journalpostId === nextProps.journalpostId &&
     prevProps.documentIndex === nextProps.documentIndex &&
     prevProps.vedleggIndex === nextProps.vedleggIndex &&
-    prevProps.pdfViewed === nextProps.pdfViewed &&
-    prevProps.setArchivedDocuments === nextProps.setArchivedDocuments,
+    areArraysEqual(prevProps.shownDocuments, nextProps.shownDocuments),
 );
 
 DocumentTitleInternal.displayName = 'DocumentTitleInternal';

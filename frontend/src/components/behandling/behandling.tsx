@@ -6,15 +6,26 @@ import { BehandlingSection } from '@app/components/behandling/behandlingsdetalje
 import { Klagebehandlingsdetaljer } from '@app/components/behandling/behandlingsdetaljer/klagebehandlingsdetaljer';
 import { Omgjøringskravdetaljer } from '@app/components/behandling/behandlingsdetaljer/omgjøringskravdetaljer';
 import { Trygderettsankebehandlingsdetaljer } from '@app/components/behandling/behandlingsdetaljer/trygderettsankebehandlingsdetaljer';
+import { Behandlingsdialog } from '@app/components/behandling/behandlingsdialog/behandlingsdialog';
 import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
+import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@app/types/kodeverk';
-import { Heading, Skeleton } from '@navikt/ds-react';
+import { Heading, HGrid, Skeleton } from '@navikt/ds-react';
 
-export const Behandlingsdetaljer = () => {
+export const Behandling = () => (
+  <PanelContainer data-testid="behandling-panel">
+    <HGrid columns="50% 50%" width="750px" flexGrow="1" gap="space-2" className="bg-ax-border-neutral-subtle">
+      <Behandlingsdetaljer />
+      <Behandlingsdialog />
+    </HGrid>
+  </PanelContainer>
+);
+
+const Behandlingsdetaljer = () => {
   const { data: oppgave } = useOppgave();
 
-  if (oppgave === undefined) {
+  if (typeof oppgave === 'undefined') {
     return (
       <StyledBehandlingSection>
         <Heading level="1" size="medium" spacing>

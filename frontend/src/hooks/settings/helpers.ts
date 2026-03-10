@@ -6,11 +6,10 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 type SetterFn<T> = (oldValue: T | undefined) => T;
-export type SettingSetter<T> = (value: T | SetterFn<T>) => void;
 
 export interface Setting<T = string, D = undefined> {
   value: T | D;
-  setValue: SettingSetter<T>;
+  setValue: (value: T | SetterFn<T>) => void;
   remove: () => void;
 }
 
@@ -21,7 +20,7 @@ export const useSetting = (property: string, syncBetweenTabs = false): Setting =
 
   const getSnapshot = useCallback(() => SETTINGS_MANAGER.get(key), [key]);
 
-  const [value, setInternalValue] = useState<string | undefined>(getSnapshot);
+  const [value, subscribe] = useState<string | undefined>(getSnapshot);
 
   useEffect(() => {
     if (key === null) {
@@ -40,10 +39,7 @@ export const useSetting = (property: string, syncBetweenTabs = false): Setting =
       return;
     }
 
-    // Immediately sync the value when the key changes
-    setInternalValue(SETTINGS_MANAGER.get(key));
-
-    return SETTINGS_MANAGER.subscribe(key, setInternalValue);
+    return SETTINGS_MANAGER.subscribe(key, subscribe);
   }, [key]);
 
   const setValue = useCallback(

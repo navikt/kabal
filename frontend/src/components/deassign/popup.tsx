@@ -5,24 +5,12 @@ import { HjemmelList } from '@app/components/oppgavebehandling-footer/deassign/h
 import { useFradel } from '@app/components/oppgavestyring/use-tildel';
 import { areArraysEqual } from '@app/functions/are-arrays-equal';
 import { useHasRole } from '@app/hooks/use-has-role';
-import { isMetaKey, Keys, MOD_KEY_TEXT } from '@app/keys';
 import { Role } from '@app/types/bruker';
 import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
-import {
-  BodyLong,
-  Box,
-  Button,
-  HStack,
-  InlineMessage,
-  LocalAlert,
-  Radio,
-  RadioGroup,
-  Tooltip,
-  VStack,
-} from '@navikt/ds-react';
-import { useCallback, useContext, useRef, useState } from 'react';
+import { BodyLong, Box, Button, HStack, InlineMessage, LocalAlert, Radio, RadioGroup, VStack } from '@navikt/ds-react';
+import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 interface Props {
@@ -57,11 +45,6 @@ export const Popup = ({
   const { unreadMessageCount, isFetching: isUnreadCountFetching } = useUnreadBehandlingCount(oppgaveId);
   const hasUnread = unreadMessageCount !== null && unreadMessageCount !== 0;
   const disabledByNotifications = (isTildeltSaksbehandler && hasUnread) || (!hasOppgavestyringRole && hasUnread);
-  const feilHjemmelRadioRef = useRef<HTMLInputElement>(null);
-
-  const focusFeilHjemmelRadio = useCallback(() => {
-    feilHjemmelRadioRef.current?.focus();
-  }, []);
 
   const onClick = useCallback(async () => {
     if (reasonId === null || disabledByNotifications) {
@@ -97,16 +80,6 @@ export const Popup = ({
     }
   }, [reasonId, fradel, redirect, selectedHjemmelIdList, hjemmelIdList, navigate, disabledByNotifications]);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === Keys.Enter && isMetaKey(e)) {
-        e.preventDefault();
-        onClick();
-      }
-    },
-    [onClick],
-  );
-
   return (
     <VStack
       asChild
@@ -117,13 +90,10 @@ export const Popup = ({
       width="280px"
       className={`z-10 ${direction === Direction.UP ? 'bottom-full' : 'top-full'}`}
       data-testid="deassign-oppgave-popup"
-      onKeyDown={handleKeyDown}
     >
       <Box background="default" borderRadius="4" shadow="dialog" borderWidth="1" borderColor="neutral">
         <RadioGroup value={reasonId} onChange={setReasonId} legend="Årsak for å legge tilbake" size="small">
-          <Radio value={FradelReason.FEIL_HJEMMEL} ref={feilHjemmelRadioRef}>
-            {FradelReasonText[FradelReason.FEIL_HJEMMEL]}
-          </Radio>
+          <Radio value={FradelReason.FEIL_HJEMMEL}>{FradelReasonText[FradelReason.FEIL_HJEMMEL]}</Radio>
           <Radio value={FradelReason.MANGLER_KOMPETANSE}>{FradelReasonText[FradelReason.MANGLER_KOMPETANSE]}</Radio>
           <Radio value={FradelReason.INHABIL}>{FradelReasonText[FradelReason.INHABIL]}</Radio>
           <Radio value={FradelReason.LENGRE_FRAVÆR}>{FradelReasonText[FradelReason.LENGRE_FRAVÆR]}</Radio>
@@ -140,7 +110,6 @@ export const Popup = ({
             ytelseId={ytelseId}
             direction={direction}
             error={hjemmelError}
-            onEscape={focusFeilHjemmelRadio}
           />
         ) : null}
 
@@ -172,31 +141,27 @@ export const Popup = ({
         ) : null}
 
         <HStack justify="space-between" gap="space-8">
-          <Tooltip content="Avbryt" keys={[Keys.Escape]}>
-            <Button
-              data-color="neutral"
-              variant="secondary"
-              size="small"
-              loading={isLoading}
-              onClick={close}
-              icon={<XMarkIcon aria-hidden />}
-            >
-              Avbryt
-            </Button>
-          </Tooltip>
+          <Button
+            data-color="neutral"
+            variant="secondary"
+            size="small"
+            loading={isLoading}
+            onClick={close}
+            icon={<XMarkIcon aria-hidden />}
+          >
+            Avbryt
+          </Button>
 
-          <Tooltip content="Legg tilbake" keys={[MOD_KEY_TEXT, Keys.Enter]}>
-            <Button
-              variant="primary"
-              size="small"
-              loading={isLoading}
-              onClick={onClick}
-              icon={<FolderFileIcon aria-hidden />}
-              title={reasonId === null ? 'Velg årsak' : undefined}
-            >
-              Legg tilbake
-            </Button>
-          </Tooltip>
+          <Button
+            variant="primary"
+            size="small"
+            loading={isLoading}
+            onClick={onClick}
+            icon={<FolderFileIcon aria-hidden />}
+            title={reasonId === null ? 'Velg årsak' : undefined}
+          >
+            Legg tilbake
+          </Button>
         </HStack>
       </Box>
     </VStack>

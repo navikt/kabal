@@ -7,10 +7,9 @@ interface Props {
   utfallId: UtfallEnum | null;
   fallback?: string;
   size?: TagProps['size'];
-  className?: string;
 }
 
-export const UtfallTag = ({ utfallId, size = 'small', fallback, className }: Props) => {
+export const UtfallTag = ({ utfallId, size = 'small', fallback }: Props) => {
   const { data: utfall } = useUtfall();
 
   const name = useMemo(() => {
@@ -26,7 +25,7 @@ export const UtfallTag = ({ utfallId, size = 'small', fallback, className }: Pro
   }, [utfall, utfallId, fallback]);
 
   return (
-    <Tag data-color="meta-purple" size={size} variant="outline" className={className}>
+    <Tag data-color="meta-purple" size={size} variant="outline">
       {name}
     </Tag>
   );

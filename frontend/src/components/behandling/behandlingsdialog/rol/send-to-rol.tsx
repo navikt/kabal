@@ -1,6 +1,6 @@
 import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
 import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
-import { useSetRolFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
+import { useSetRolStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
 import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
@@ -12,10 +12,10 @@ interface Props {
 }
 
 export const SendToRol = ({ oppgaveId, isSaksbehandler, rol }: Props) => {
-  const [setRolState, { isLoading }] = useSetRolFlowStateMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
+  const [setRolState, { isLoading }] = useSetRolStateMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
   const [, { isLoading: isSettingRol }] = useSetRolMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
 
-  if (!isSaksbehandler || rol.employee === null || rol.flowState === FlowState.SENT) {
+  if (!isSaksbehandler || rol.flowState === FlowState.SENT) {
     return null;
   }
 

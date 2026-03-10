@@ -1,22 +1,25 @@
 import { showDownloadDocumentsToast } from '@app/components/documents/journalfoerte-documents/download-toast';
 import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
-import { matchDocuments } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
 import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
-import { getCombinedDocumentTabId, getCombinedDocumentTabUrl } from '@app/domain/tabbed-document-url';
+import { getMergedDocumentTabId, getMergedDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useFilesViewed } from '@app/hooks/settings/use-setting';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { isMetaKey, MOD_KEY_TEXT, MouseButtons } from '@app/keys';
-import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
+import {
+  useGetArkiverteDokumenterQuery,
+  useMergedDocumentsReferenceQuery,
+} from '@app/redux-api/oppgaver/queries/documents';
 import { FilePdfIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext, useMemo } from 'react';
 
 export const ViewCombinedPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
-  const { value, setArchivedFiles: setArchivedDocuments } = useFilesViewed();
+  const { value, setValue } = useDocumentsPdfViewed();
   const { selectedDocuments } = useContext(SelectContext);
   const { data: archivedList, isLoading: archivedIsLoading } = useGetArkiverteDokumenterQuery(useOppgaveId());
 
@@ -29,22 +32,36 @@ export const ViewCombinedPDF = () => {
   );
 
   const isInlineOpen = useMemo(() => {
-    const archivedDocuments = value.archivedFiles;
-
-    if (archivedDocuments === undefined || archivedDocuments.length !== toOpen.length) {
+    if (value.length !== toOpen.length) {
       return false;
     }
 
-    return archivedDocuments.every((v, i) => {
+    return value.every((v, i) => {
       const d = toOpen[i];
 
-      return d !== undefined && matchDocuments(v, d);
+      return d !== undefined && d.type === v.type && v.dokumentInfoId === d.dokumentInfoId;
     });
   }, [toOpen, value]);
 
-  const tabUrl = useMemo(() => (toOpen.length === 0 ? undefined : getCombinedDocumentTabUrl(toOpen)), [toOpen]);
+  const {
+    data: mergedDocumentRef,
+    isLoading,
+    isFetching,
+  } = useMergedDocumentsReferenceQuery(toOpen.length === 0 ? skipToken : toOpen);
 
-  const documentId = useMemo(() => (toOpen.length === 0 ? undefined : getCombinedDocumentTabId(toOpen)), [toOpen]);
+  const { tabUrl, documentId } = useMemo(() => {
+    if (mergedDocumentRef === undefined) {
+      return {
+        tabUrl: undefined,
+        documentId: undefined,
+      };
+    }
+
+    return {
+      tabUrl: getMergedDocumentTabUrl(mergedDocumentRef.reference),
+      documentId: getMergedDocumentTabId(mergedDocumentRef.reference),
+    };
+  }, [mergedDocumentRef]);
 
   const isTabOpen = useIsTabOpen(documentId);
 
@@ -58,7 +75,7 @@ export const ViewCombinedPDF = () => {
     }
 
     if (!shouldOpenInNewTab) {
-      setArchivedDocuments(toOpen);
+      setValue(toOpen);
       return;
     }
 
@@ -105,7 +122,7 @@ export const ViewCombinedPDF = () => {
         onClick={onClick}
         onAuxClick={onClick}
         href={tabUrl}
-        loading={archivedIsLoading}
+        loading={isLoading || isFetching || archivedIsLoading}
         className={`mx-4 mb-3 visited:text-ax-text-meta-purple ${
           isTabOpen || isInlineOpen ? '[text-shadow:0_0_1px_var(--ax-bg-neutral-strong)]' : ''
         }`}

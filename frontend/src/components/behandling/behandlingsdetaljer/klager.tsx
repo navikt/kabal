@@ -15,14 +15,13 @@ interface Props {
 }
 
 export const Klager = ({ klager, isLoading, onChange, typeId, invalidReceivers }: Props) => {
-  const [heading, inlineLabel, buttonLabel] = getLabel(typeId);
+  const [heading, inlineLabel] = getLabel(typeId);
 
   return (
     <VStack gap="space-8">
       <Part
         isDeletable={false}
         label={heading}
-        buttonLabel={buttonLabel}
         part={klager}
         onChange={onChange}
         isLoading={isLoading}
@@ -47,25 +46,21 @@ export const OrgWarning = ({ identifikator, label }: { identifikator: string | n
   );
 };
 
-const getLabel = (typeId: SaksTypeEnum): [string, string, string] => {
+const getLabel = (typeId: SaksTypeEnum): [string, string] => {
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
-      return ['Klager', 'klager', 'Endre klager'];
+      return ['Klager', 'klager'];
     case SaksTypeEnum.ANKE:
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
-      return ['Den ankende part', 'ankende part', 'Endre ankende part'];
+      return ['Den ankende part', 'ankende part'];
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
-      return [
-        'Opprinnelig klager / ankende part',
-        'opprinnelig klager / ankende part',
-        'Endre opprinnelig klager / ankende part',
-      ];
+      return ['Opprinnelig klager / ankende part', 'opprinnelig klager / ankende part'];
     case SaksTypeEnum.OMGJØRINGSKRAV:
-      return ['Den som krever omgjøring', 'den som krever omgjøring', 'Endre den som krever omgjøring'];
+      return ['Den som krever omgjøring', 'den som krever omgjøring'];
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
-      return ['Den som begjærer gjenopptak', 'den som begjærer gjenopptak', 'Endre den som begjærer gjenopptak'];
+      return ['Den som begjærer gjenopptak', 'den som begjærer gjenopptak'];
     default:
-      return ['Klager', 'klager', 'Endre klager'];
+      return ['Klager', 'klager'];
   }
 };

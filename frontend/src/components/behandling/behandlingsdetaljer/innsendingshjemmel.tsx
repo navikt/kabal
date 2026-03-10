@@ -1,11 +1,13 @@
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';
+import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
+import { Direction } from '@app/components/deassign/direction';
+import { InnsendingshjemlerList } from '@app/components/hjemler/hjemler';
+import { HjemmelList } from '@app/components/oppgavebehandling-footer/deassign/hjemmel-list';
+import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { useSetInnsendingshjemlerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import type { IKodeverkValue } from '@app/types/kodeverk';
 import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Label, Loader, VStack } from '@navikt/ds-react';
-import { useCallback, useId, useMemo, useRef } from 'react';
+import { PencilIcon } from '@navikt/aksel-icons';
+import { Button, HStack, Tag, Tooltip } from '@navikt/ds-react';
+import { useRef, useState } from 'react';
 
 interface Props {
   oppgavebehandling: IOppgavebehandling;
@@ -14,95 +16,53 @@ interface Props {
 export const Innsendingshjemmel = ({ oppgavebehandling }: Props) => {
   const hjemmelCount = oppgavebehandling.hjemmelIdList.length;
 
-  const selectId = useId();
-
   return (
-    <VStack align="start">
-      <Label htmlFor={selectId} size="small" spacing>
-        {`Saken er sendt inn med ${hjemmelCount > 1 ? 'lovhjemler' : 'lovhjemmel'}`}
-      </Label>
-
-      <Innsendingshjemler oppgavebehandling={oppgavebehandling} id={selectId} />
-    </VStack>
+    <BehandlingSection label={`Saken er sendt inn med ${hjemmelCount > 1 ? 'lovhjemler' : 'lovhjemmel'}`}>
+      <Innsendingshjemler oppgavebehandling={oppgavebehandling} />
+    </BehandlingSection>
   );
 };
 
-type HjemmelOption = IKodeverkValue & { utfases: boolean };
-
-const hjemmelValueKey = (option: HjemmelOption): string => option.id;
-
-const hjemmelFilterText = (option: HjemmelOption): string => option.navn;
-
-const formatHjemmelOption = (option: HjemmelOption) => (
-  <span className="truncate">
-    {option.navn}
-    {option.utfases ? ' (utfases)' : ''}
-  </span>
-);
-
-interface InnsendingshjemlerProps extends Props {
-  id?: string;
-}
-
-export const Innsendingshjemler = ({ oppgavebehandling, id }: InnsendingshjemlerProps) => {
-  const containerRef = usePanelContainerRef();
+export const Innsendingshjemler = ({ oppgavebehandling }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [setInnsendingshjemler, { isError }] = useSetInnsendingshjemlerMutation();
-  const [ytelse, isLoading] = useKodeverkYtelse(oppgavebehandling.ytelseId);
-
-  const selectedUtfasesIds = useRef(
-    oppgavebehandling.hjemmelIdList.filter(
-      (id) => ytelse?.innsendingshjemler.find((h) => h.id === id)?.utfases === true,
-    ),
-  );
-
-  const options: HjemmelOption[] = useMemo(() => {
-    if (ytelse === undefined) {
-      return [];
-    }
-
-    const activeOptions = ytelse.innsendingshjemler.filter(({ utfases }) => !utfases);
-
-    const selectedUtfasesOptions = selectedUtfasesIds.current
-      .map((id) => ytelse.innsendingshjemler.find((h) => h.id === id))
-      .filter((h): h is HjemmelOption => h !== undefined);
-
-    return [...activeOptions, ...selectedUtfasesOptions].toSorted((a, b) => a.navn.localeCompare(b.navn));
-  }, [ytelse]);
-
-  const selectedOptions = useMemo(
-    () => options.filter((o) => oppgavebehandling.hjemmelIdList.includes(o.id)),
-    [options, oppgavebehandling.hjemmelIdList],
-  );
-
-  const handleChange = useCallback(
-    (values: HjemmelOption[]) => {
-      setInnsendingshjemler({
-        oppgaveId: oppgavebehandling.id,
-        hjemmelIdList: values.map((v) => v.id),
-      });
-    },
-    [setInnsendingshjemler, oppgavebehandling.id],
-  );
-
-  if (isLoading) {
-    return <Loader size="small" title="Laster hjemler..." />;
-  }
+  const ref = useRef<HTMLDivElement>(null);
+  useOnClickOutside(ref, () => setIsOpen(false));
 
   return (
-    <SearchableMultiSelect
-      id={id}
-      label="Endre innsendingshjemler"
-      options={options}
-      value={selectedOptions}
-      valueKey={hjemmelValueKey}
-      formatOption={formatHjemmelOption}
-      emptyLabel="Ingen hjemler valgt"
-      filterText={hjemmelFilterText}
-      onChange={handleChange}
-      error={isError ? 'Kunne ikke sette innsendingshjemler' : undefined}
-      confirmLabel="Sett hjemler"
-      scrollContainerRef={containerRef}
-      readOnly={oppgavebehandling.isAvsluttetAvSaksbehandler}
-    />
+    <HStack align="center" justify="space-between" width="100%" wrap={false}>
+      <InnsendingshjemlerList
+        size="small"
+        hjemmelIdList={oppgavebehandling.hjemmelIdList}
+        fallback={
+          <Tag data-color="neutral" size="small" variant="outline">
+            Ingen hjemler
+          </Tag>
+        }
+      />
+      {oppgavebehandling.isAvsluttetAvSaksbehandler ? null : (
+        <div className="relative z-10 w-min shrink-0 grow-0 self-start" ref={ref}>
+          <Tooltip content="Endre innsendingshjemler">
+            <Button
+              data-color="neutral"
+              size="small"
+              variant="tertiary"
+              onClick={() => setIsOpen((o) => !o)}
+              icon={<PencilIcon aria-hidden />}
+              className="ml-auto self-start"
+            />
+          </Tooltip>
+          {isOpen ? (
+            <HjemmelList
+              onChange={(hjemmelIdList) => setInnsendingshjemler({ oppgaveId: oppgavebehandling.id, hjemmelIdList })}
+              selected={oppgavebehandling.hjemmelIdList}
+              ytelseId={oppgavebehandling.ytelseId}
+              error={isError ? 'Kunne ikke sette innsendingshjemler' : null}
+              direction={Direction.DOWN}
+            />
+          ) : null}
+        </div>
+      )}
+    </HStack>
   );
 };

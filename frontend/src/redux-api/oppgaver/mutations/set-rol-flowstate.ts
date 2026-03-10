@@ -8,7 +8,7 @@ import type { ISetFlowStateResponse } from '@app/types/oppgavebehandling/respons
 const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
-    setRolFlowState: builder.mutation<ISetFlowStateResponse, ISetFlowStateParams>({
+    setRolState: builder.mutation<ISetFlowStateResponse, ISetFlowStateParams>({
       query: ({ oppgaveId, flowState }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/rolflowstate`,
         method: 'PUT',
@@ -47,4 +47,4 @@ const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
   }),
 });
 
-export const { useSetRolFlowStateMutation } = setRolStateMutationSlice;
+export const { useSetRolStateMutation } = setRolStateMutationSlice;

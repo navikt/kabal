@@ -28,8 +28,7 @@ export const TakeFromMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: 
       loading={isLoading}
       size="small"
       icon={<ArrowUndoIcon aria-hidden />}
-      variant="secondary"
-      data-color="neutral"
+      variant="primary"
       onClick={() => setMedunderskriverFlowState({ oppgaveId, flowState: FlowState.NOT_SENT })}
     >
       Hent tilbake fra {getTitleLowercase(typeId)}

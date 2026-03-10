@@ -4,8 +4,6 @@ import {
   KunnskapsbankTrygdemedisin,
   Modia,
 } from '@app/components/oppgavebehandling-controls/external-links';
-import { PanelKeyboardHelpButton } from '@app/components/oppgavebehandling-controls/keyboard-help/keyboard-help-button';
-import { PanelKeyboardHelpModal } from '@app/components/oppgavebehandling-controls/keyboard-help/keyboard-help-modal';
 import { PanelSwitches } from '@app/components/oppgavebehandling-controls/panel-switches';
 import { UserInfo } from '@app/components/oppgavebehandling-controls/user-info';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
@@ -38,8 +36,6 @@ const Content = () => {
     <>
       <UserInfo {...oppgave} />
       <PanelSwitches />
-      <PanelKeyboardHelpButton />
-      <PanelKeyboardHelpModal />
       <HStack align="center" marginInline="auto space-0" gap="space-0 space-16">
         <KunnskapsbankTrygdemedisin />
         <Modia sakenGjelder={sakenGjelder} />

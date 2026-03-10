@@ -1,6 +1,8 @@
 import { Alert } from '@app/components/alert/alert';
 import { validateBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
-import { KabalFileViewer } from '@app/components/kabal-file-viewer';
+import { usePdfData } from '@app/components/pdf/pdf';
+import { SimplePdfPreview } from '@app/components/simple-pdf-preview/simple-pdf-preview';
+import { useForlengetFristPdfWidth } from '@app/hooks/settings/use-setting';
 import {
   useGetOrCreateQuery,
   useSetBehandlingstidDateMutation,
@@ -69,6 +71,8 @@ const PdfPlaceholder = ({ children }: { children: string }) => (
 );
 
 const PdfBody = ({ id }: { id: string }) => {
+  const { value: width, setValue: setWidth } = useForlengetFristPdfWidth();
+
   const units = useFulfilledTimestamp(useSetBehandlingstidUnitsMutation({ fixedCacheKey: id })[1]);
   const typeId = useFulfilledTimestamp(useSetBehandlingstidUnitTypeMutation({ fixedCacheKey: id })[1]);
   const date = useFulfilledTimestamp(useSetBehandlingstidDateMutation({ fixedCacheKey: id })[1]);
@@ -78,28 +82,16 @@ const PdfBody = ({ id }: { id: string }) => {
   const reason = useFulfilledTimestamp(useSetReasonMutation({ fixedCacheKey: id })[1]);
   const customText = useFulfilledTimestamp(useSetCustomTextMutation({ fixedCacheKey: id })[1]);
 
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  // Trigger refresh when any mutation completes successfully
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Refetch PDF when server has responded OK
-  useEffect(() => {
-    setRefreshKey((prev) => prev + 1);
-  }, [id, units, typeId, date, title, fullmektig, prevInfo, reason, customText]);
-
   const pdfUrl = `/api/kabal-api/behandlinger/${id}/forlenget-behandlingstid-draft/pdf`;
 
-  return (
-    <KabalFileViewer
-      files={[
-        {
-          variants: 'PDF',
-          title: 'Forlenget behandlingstid',
-          url: pdfUrl,
-          query: { refreshKey: refreshKey.toString(10) },
-        },
-      ]}
-    />
-  );
+  const pdfData = usePdfData(pdfUrl);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Refetch PDF when server has responded OK
+  useEffect(() => {
+    pdfData.refresh();
+  }, [id, units, typeId, date, title, fullmektig, prevInfo, reason, customText]);
+
+  return <SimplePdfPreview {...pdfData} width={width} setWidth={setWidth} />;
 };
 
 interface Props {

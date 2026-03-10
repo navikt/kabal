@@ -1,16 +1,16 @@
 import { useSetRol } from '@app/components/oppgavestyring/use-set-rol';
-import { SearchableNavEmployeeSelect } from '@app/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
 import { useHasRole } from '@app/hooks/use-has-role';
 import { useGetPotentialRolQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { type INavEmployee, Role } from '@app/types/bruker';
-import { Skeleton } from '@navikt/ds-react';
-import { useCallback, useMemo } from 'react';
+import { Select, Skeleton } from '@navikt/ds-react';
+import { useMemo } from 'react';
 
 interface Props {
   oppgaveId: string;
   rolIdent: string | null;
 }
 
+const NONE_SELECTED = 'NONE_SELECTED';
 const EMPTY_LIST: INavEmployee[] = [];
 
 export const Rol = ({ oppgaveId, rolIdent }: Props) => {
@@ -21,22 +21,15 @@ export const Rol = ({ oppgaveId, rolIdent }: Props) => {
 
   const { onChange, isUpdating } = useSetRol(oppgaveId, rols);
 
-  const selectedValue = useMemo(
-    (): INavEmployee | null =>
-      rolIdent === null ? null : (rols.find(({ navIdent }) => navIdent === rolIdent) ?? null),
-    [rols, rolIdent],
+  const options = useMemo(
+    () =>
+      rols.map(({ navIdent, navn }) => (
+        <option key={navIdent} value={navIdent}>
+          {navn}
+        </option>
+      )),
+    [rols],
   );
-
-  const handleChange = useCallback(
-    (employee: INavEmployee) => {
-      onChange(employee.navIdent, rolIdent);
-    },
-    [onChange, rolIdent],
-  );
-
-  const handleClear = useCallback(() => {
-    onChange(null, rolIdent);
-  }, [onChange, rolIdent]);
 
   if (!hasAccess) {
     return null;
@@ -47,15 +40,16 @@ export const Rol = ({ oppgaveId, rolIdent }: Props) => {
   }
 
   return (
-    <SearchableNavEmployeeSelect
+    <Select
       label="Rådgivende overlege"
-      options={rols}
-      value={selectedValue}
-      onChange={handleChange}
-      onClear={handleClear}
+      size="small"
+      hideLabel
+      value={rolIdent ?? NONE_SELECTED}
+      onChange={({ target }) => onChange(target.value === NONE_SELECTED ? null : target.value, rolIdent)}
       disabled={isUpdating}
-      nullLabel="Felles kø"
-      confirmLabel="Send til rådgivende overlege"
-    />
+    >
+      <option value={NONE_SELECTED}>Felles kø</option>
+      {options}
+    </Select>
   );
 };

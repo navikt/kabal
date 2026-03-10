@@ -32,8 +32,6 @@ const cwd = process.cwd(); // This will be the server folder, as long as the pat
 const serverDirectoryPath = cwd;
 export const frontendDirectoryPath = path.resolve(serverDirectoryPath, '../frontend');
 export const frontendDistDirectoryPath = path.resolve(frontendDirectoryPath, './dist');
-export const fileViewerDirectoryPath = path.resolve(serverDirectoryPath, '../file-viewer');
-export const fileViewerDistDirectoryPath = path.resolve(fileViewerDirectoryPath, './dist');
 
 const defaultValue = isLocal ? 'local' : undefined;
 const localJwk: JWK = { kty: 'RSA' };

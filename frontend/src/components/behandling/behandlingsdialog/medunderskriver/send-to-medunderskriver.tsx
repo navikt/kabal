@@ -18,7 +18,7 @@ export const SendToMedunderskriver = ({ oppgaveId, typeId, medunderskriver }: Pr
   const [, medunderskriverLoader] = useSetMedunderskriverMutation({ fixedCacheKey: oppgaveId });
   const [setMedunderskriverFlowState, loader] = useSetMedunderskriverFlowStateMutation();
 
-  if (!isSaksbehandler || medunderskriver.employee === null || medunderskriver.flowState === FlowState.SENT) {
+  if (!isSaksbehandler || medunderskriver.flowState === FlowState.SENT) {
     return null;
   }
 
@@ -29,6 +29,7 @@ export const SendToMedunderskriver = ({ oppgaveId, typeId, medunderskriver }: Pr
       variant="secondary"
       type="button"
       onClick={() => setMedunderskriverFlowState({ oppgaveId, flowState: FlowState.SENT })}
+      disabled={medunderskriver.employee === null}
       loading={loader.isLoading || medunderskriverLoader.isLoading}
       data-testid="send-to-medunderskriver"
       icon={<PaperplaneIcon aria-hidden />}

@@ -10,10 +10,10 @@ import {
   getJournalfoertDocumentTabId,
   getNewDocumentTabId,
 } from '@app/domain/tabbed-document-url';
-import { useFilesViewed } from '@app/hooks/settings/use-setting';
+import { useDocumentsPdfViewed } from '@app/hooks/settings/use-setting';
 import { isMetaKey, MouseButtons } from '@app/keys';
 import { DocumentTypeEnum, type JournalfoertDokumentReference } from '@app/types/documents/documents';
-import { useCallback, useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 
 interface BaseProps {
   title: string;
@@ -39,55 +39,39 @@ type Props = JournalfoertProps | NotJournalfoertProps;
 
 export const SharedDocumentTitle = (props: Props) => {
   const { title, url, documentId, icon, disabled = false, children, type, journalfoertDokumentReference } = props;
-  const { value, setNewDocument, setArchivedFiles: setArchivedDocuments, setVedleggsoversikt } = useFilesViewed();
+  const { value, setValue } = useDocumentsPdfViewed();
   const { getTabRef, setTabRef } = useContext(TabContext);
 
   const tabId = getTabId(props);
 
   const isTabOpen = useIsTabOpen(tabId);
 
-  const dokumentInfoId = journalfoertDokumentReference?.dokumentInfoId;
+  const isInlineOpen = useMemo(
+    () =>
+      value.some((v) => {
+        if (type === DocumentTypeEnum.JOURNALFOERT) {
+          return (
+            v.type === DocumentTypeEnum.JOURNALFOERT &&
+            v.dokumentInfoId === journalfoertDokumentReference.dokumentInfoId
+          );
+        }
 
-  const isInlineOpen = useMemo(() => {
+        return v.type === type && v.documentId === documentId;
+      }),
+    [documentId, value, type, journalfoertDokumentReference?.dokumentInfoId],
+  );
+
+  const setViewedDocument = () => {
     if (type === DocumentTypeEnum.JOURNALFOERT) {
-      return value.archivedFiles?.some((d) => d.dokumentInfoId === dokumentInfoId) ?? false;
-    }
-
-    if (type === DocumentTypeEnum.VEDLEGGSOVERSIKT) {
-      return value.vedleggsoversikt === documentId;
-    }
-
-    return value.newDocument === documentId;
-  }, [documentId, dokumentInfoId, type, value]);
-
-  const setViewedDocument = useCallback(() => {
-    if (journalfoertDokumentReference !== undefined) {
       if (canOpenInKabal(journalfoertDokumentReference.varianter)) {
-        return setArchivedDocuments([
-          {
-            journalpostId: journalfoertDokumentReference.journalpostId,
-            dokumentInfoId: journalfoertDokumentReference.dokumentInfoId,
-          },
-        ]);
+        return setValue([{ type, ...journalfoertDokumentReference }]);
       }
 
       return downloadDocuments({ ...journalfoertDokumentReference, tittel: title });
     }
 
-    if (type === DocumentTypeEnum.VEDLEGGSOVERSIKT) {
-      return setVedleggsoversikt(documentId);
-    }
-
-    setNewDocument(documentId);
-  }, [
-    journalfoertDokumentReference,
-    title,
-    documentId,
-    type,
-    setNewDocument,
-    setArchivedDocuments,
-    setVedleggsoversikt,
-  ]);
+    setValue([{ type, documentId, parentId: props.parentId }]);
+  };
 
   const onClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     if (disabled || e.button === MouseButtons.RIGHT) {

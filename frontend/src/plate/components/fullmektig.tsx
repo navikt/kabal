@@ -1,4 +1,3 @@
-import { useReportDynamicContentLoading } from '@app/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
 import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
@@ -13,7 +12,6 @@ import { useEffect } from 'react';
 
 export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
   const { data: oppgave, isLoading, isSuccess } = useOppgave();
-  useReportDynamicContentLoading(isLoading);
   const { element, children } = props;
   const { id, show } = element;
   const editor = useMyPlateEditorRef();

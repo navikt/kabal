@@ -1,23 +1,23 @@
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import { pushEvent } from '@app/observability';
 import { HistoryEventTypes, type IHistoryResponse } from '@app/types/oppgavebehandling/response';
-import { useCallback, useMemo } from 'react';
+import { Select } from '@navikt/ds-react';
+import { useMemo } from 'react';
 
-interface Option {
-  label: string;
-  value: keyof IHistoryResponse;
-}
+export const ALL = 'ALL';
 
 interface Props {
   counts: Record<HistoryEventTypes, number>;
   totalCount: number;
-  filters: (keyof IHistoryResponse)[];
-  setFilters: (filters: (keyof IHistoryResponse)[]) => void;
+  filter: keyof IHistoryResponse | typeof ALL;
+  setFilter: (filter: keyof IHistoryResponse | typeof ALL) => void;
 }
 
-export const Filter = ({ counts, totalCount, filters, setFilters }: Props) => {
-  const containerRef = usePanelContainerRef();
+export const Filter = ({ counts, totalCount, filter, setFilter }: Props) => {
+  interface Option {
+    label: string;
+    value: keyof IHistoryResponse;
+  }
+
   const options: Option[] = useMemo(
     () => [
       { label: `Feilregistrert (${counts[HistoryEventTypes.FEILREGISTRERT]})`, value: 'feilregistrert' },
@@ -40,32 +40,41 @@ export const Filter = ({ counts, totalCount, filters, setFilters }: Props) => {
     [counts],
   );
 
-  const value = useMemo(() => options.filter((o) => filters.includes(o.value)), [options, filters]);
-
-  const onChange = useCallback(
-    (selected: Option[]) => {
-      const values = selected.map((o) => o.value);
-      pushEvent('change-history-filter', 'behandling-panel', { value: values.join(',') });
-      setFilters(values);
-    },
-    [setFilters],
-  );
-
   return (
-    <SearchableMultiSelect
+    <Select
       label="Filter"
-      options={options}
-      value={value}
-      valueKey={optionValueKey}
-      formatOption={formatOption}
-      emptyLabel={`Alle hendelser (${totalCount})`}
-      filterText={optionFilterText}
-      onChange={onChange}
-      scrollContainerRef={containerRef}
-    />
+      size="small"
+      hideLabel
+      onChange={({ target }) => {
+        pushEvent('change-history-filter', 'behandling-panel', { value: target.value });
+
+        if (target.value === ALL || isHistoryResponse(target.value)) {
+          setFilter(target.value);
+        }
+      }}
+      value={filter}
+    >
+      <option value={ALL}>Alle hendelser ({totalCount})</option>
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </Select>
   );
 };
 
-const optionValueKey = (option: Option): string => option.value;
-const formatOption = (option: Option) => option.label;
-const optionFilterText = (option: Option): string => option.label;
+const KEYS: Record<keyof IHistoryResponse, undefined> = {
+  feilregistrert: undefined,
+  ferdigstilt: undefined,
+  fullmektig: undefined,
+  klager: undefined,
+  medunderskriver: undefined,
+  rol: undefined,
+  sattPaaVent: undefined,
+  tildeling: undefined,
+  varsletBehandlingstid: undefined,
+  forlengetBehandlingstid: undefined,
+};
+
+const isHistoryResponse = (key: string): key is keyof IHistoryResponse => key in KEYS;

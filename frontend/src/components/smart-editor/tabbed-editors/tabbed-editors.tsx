@@ -1,12 +1,5 @@
-import { PanelContainer } from '@app/components/oppgavebehandling-panels/panel-container';
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
+import { PanelContainer } from '@app/components/oppgavebehandling-panels/styled-components';
 import { NewDocument } from '@app/components/smart-editor/new-document/new-document';
-import {
-  EditorPanelFocusProvider,
-  useEditorPanelFocusRef,
-  useRequestEditorPanelFocus,
-} from '@app/components/smart-editor/tabbed-editors/editor-panel-focus-context';
 import { TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
@@ -17,15 +10,7 @@ import { CreatorRole, type ISmartDocumentOrAttachment } from '@app/types/documen
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
 import { Tabs, Tooltip } from '@navikt/ds-react';
 import type { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useRef } from 'react';
-
-const focusFirstButton = (container: HTMLElement | null) => {
-  const firstButton = container?.querySelector<HTMLButtonElement>('button:not([disabled])');
-
-  if (firstButton !== undefined && firstButton !== null) {
-    firstButton.focus({ preventScroll: true });
-  }
-};
+import { useRef } from 'react';
 
 const NEW_TAB_ID = 'NEW_TAB_ID';
 
@@ -37,13 +22,7 @@ export const TabbedEditors = () => {
     return null;
   }
 
-  return (
-    <PanelContainer>
-      <EditorPanelFocusProvider>
-        <Tabbed documents={documents} />
-      </EditorPanelFocusProvider>
-    </PanelContainer>
-  );
+  return <Tabbed documents={documents} />;
 };
 
 const useRelevantSmartDocuments = (oppgaveId: string | typeof skipToken): ISmartDocumentOrAttachment[] | undefined => {
@@ -74,61 +53,37 @@ const Tabbed = ({ documents }: TabbedProps) => {
   const firstDocumentId = firstDocument?.id;
 
   const { value: editorId = firstDocumentId, setValue: setEditorId } = useSmartEditorActiveDocument();
-  const requestEditorPanelFocus = useRequestEditorPanelFocus();
 
-  const onCreateDocument = useCallback(
-    (id: string) => {
-      setEditorId(id);
-      requestEditorPanelFocus();
-    },
-    [setEditorId, requestEditorPanelFocus],
-  );
-
-  const hasActiveEditor = editorId !== undefined && documents.some(({ id }) => id === editorId);
-  const activeEditorId = hasActiveEditor ? editorId : NEW_TAB_ID;
-
-  const panelContainerRef = usePanelContainerRef();
-  const newDocumentRef = useRef<HTMLElement>(null);
-  const editorFocusRef = useEditorPanelFocusRef();
-
-  const focusPanel = useCallback(() => {
-    const editorFocusFn = editorFocusRef.current;
-
-    if (editorFocusFn !== null) {
-      editorFocusFn();
-    } else {
-      focusFirstButton(newDocumentRef.current);
-    }
-  }, [editorFocusRef]);
-
-  usePanelShortcut(3, focusPanel, panelContainerRef);
+  const activeEditorId = editorId !== undefined && documents.some(({ id }) => id === editorId) ? editorId : NEW_TAB_ID;
 
   const ref = useRef<HTMLDivElement>(null);
   const width = useElementWidth(ref);
 
   return (
-    <Tabs className="flex h-full flex-col overflow-hidden" value={activeEditorId} onChange={setEditorId} size="small">
-      <div style={{ maxWidth: width }}>
-        <Tabs.List className="whitespace-nowrap">
-          {documents.map(({ id, tittel }) => (
-            <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
+    <PanelContainer>
+      <Tabs className="flex h-full flex-col overflow-hidden" value={activeEditorId} onChange={setEditorId} size="small">
+        <div style={{ maxWidth: width }}>
+          <Tabs.List className="whitespace-nowrap">
+            {documents.map(({ id, tittel }) => (
+              <Tabs.Tab key={id} value={id} label={tittel} icon={<DocPencilIcon aria-hidden />} />
+            ))}
+
+            <Tooltip content="Opprett nytt dokument">
+              <Tabs.Tab value={NEW_TAB_ID} icon={<TabsAddIcon aria-hidden />} />
+            </Tooltip>
+          </Tabs.List>
+        </div>
+
+        <div className="w-fit overflow-hidden" style={{ height: 'calc(100% - 32px)' }} ref={ref}>
+          {documents.map((d) => (
+            <TabPanel key={d.id} smartDocument={d} />
           ))}
 
-          <Tooltip content="Opprett nytt dokument">
-            <Tabs.Tab value={NEW_TAB_ID} icon={<TabsAddIcon aria-hidden />} />
-          </Tooltip>
-        </Tabs.List>
-      </div>
-
-      <div className="w-fit overflow-hidden" style={{ height: 'calc(100% - 32px)' }} ref={ref}>
-        {documents.map((d) => (
-          <TabPanel key={d.id} smartDocument={d} />
-        ))}
-
-        <Tabs.Panel className="h-full overflow-hidden" value={NEW_TAB_ID}>
-          <NewDocument onCreate={onCreateDocument} ref={newDocumentRef} />
-        </Tabs.Panel>
-      </div>
-    </Tabs>
+          <Tabs.Panel className="h-full overflow-hidden" value={NEW_TAB_ID}>
+            <NewDocument onCreate={setEditorId} />
+          </Tabs.Panel>
+        </div>
+      </Tabs>
+    </PanelContainer>
   );
 };

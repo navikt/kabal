@@ -1,7 +1,7 @@
 import { Age } from '@app/components/common-table-components/age';
 import { Deadline, ReadOnlyDeadline } from '@app/components/common-table-components/deadline';
 import { FradelingReason } from '@app/components/common-table-components/fradeling-reason';
-import { InnsendingshjemlerList, Registreringshjemler } from '@app/components/common-table-components/hjemler';
+import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { LoadingRow } from '@app/components/common-table-components/loading-row';
 import { Medunderskriver } from '@app/components/common-table-components/medunderskriver';
 import {
@@ -16,20 +16,21 @@ import { RolFlowStateLabel } from '@app/components/common-table-components/rol-f
 import { RolTildeling } from '@app/components/common-table-components/rol-tildeling';
 import { SakenGjelderFnr, SakenGjelderName } from '@app/components/common-table-components/saken-gjelder';
 import { ColumnKeyEnum } from '@app/components/common-table-components/types';
+import { Utfall } from '@app/components/common-table-components/utfall';
 import { Ytelse } from '@app/components/common-table-components/ytelse';
 import { CopyButton } from '@app/components/copy-button/copy-button';
 import { Feilregistrert } from '@app/components/feilregistrering/feilregistrert';
+import { InnsendingshjemlerList, Registreringshjemler } from '@app/components/hjemler/hjemler';
 import { Oppgavestyring } from '@app/components/oppgavestyring/oppgavestyring';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
 import { RelevantOppgaver } from '@app/components/relevant-oppgaver/relevant-oppgaver';
 import { Type } from '@app/components/type/type';
-import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
 import { isoDateToPretty } from '@app/domain/date';
 import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
 import { isApiDataError } from '@app/types/errors';
 import { FlowState } from '@app/types/oppgave-common';
 import type { IOppgave } from '@app/types/oppgaver';
-import { HStack, InlineMessage, Table, Tag } from '@navikt/ds-react';
+import { HStack, InlineMessage, Table } from '@navikt/ds-react';
 
 interface Props {
   oppgaveId: string;
@@ -99,13 +100,13 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.EnhetInnsendingshjemler:
         return (
           <Table.DataCell key={key}>
-            <InnsendingshjemlerList hjemmelIdList={oppgave.hjemmelIdList} size="medium" />
+            <InnsendingshjemlerList hjemmelIdList={oppgave.hjemmelIdList} loading={<LoadingCellContent />} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Registreringshjemler:
         return (
           <Table.DataCell key={key}>
-            <Registreringshjemler hjemmelIdList={oppgave.registreringshjemmelIdList} size="medium" />
+            <Registreringshjemler hjemmelIdList={oppgave.registreringshjemmelIdList} loading={<LoadingCellContent />} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Navn:
@@ -204,7 +205,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Utfall:
         return (
           <Table.DataCell key={key}>
-            <UtfallTag utfallId={oppgave.utfallId} size="medium" className="whitespace-nowrap" />
+            <Utfall utfallId={oppgave.utfallId} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.PaaVentTil:
@@ -264,13 +265,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
 
         return (
           <Table.DataCell key={key}>
-            <div className="flex flex-row gap-2">
-              <span>{oppgave.previousSaksbehandler.navn}</span>
-
-              <Tag variant="strong" data-color="neutral" size="small">
-                {oppgave.previousSaksbehandler.navIdent}
-              </Tag>
-            </div>
+            {oppgave.previousSaksbehandler.navn} ({oppgave.previousSaksbehandler.navIdent})
           </Table.DataCell>
         );
       }
