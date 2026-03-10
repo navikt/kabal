@@ -15,7 +15,7 @@
     "@navikt/ds-css": "8.7.0",
     "@navikt/ds-react": "8.7.0",
     "@navikt/ds-tailwind": "8.7.0",
-    "@navikt/klage-file-viewer": "0.0.60",
+    "@navikt/klage-file-viewer": "0.0.62",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
