@@ -47,6 +47,6 @@ const formatTema = ({ navn, beskrivelse }: IKodeverkValue<string>) => (
   </div>
 );
 
-const getFilterText = ({ beskrivelse }: IKodeverkValue<string>) => beskrivelse;
+const getFilterText = ({ beskrivelse, navn }: IKodeverkValue<string>) => `${beskrivelse} ${navn}`;
 
 const getTemaKey = ({ id }: IKodeverkValue<string>) => id;

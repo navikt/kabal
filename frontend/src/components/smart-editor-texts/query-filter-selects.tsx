@@ -14,7 +14,7 @@ import {
 } from '@app/components/smart-editor-texts/types';
 import { isUtfall } from '@app/functions/is-utfall';
 import type { UtfallEnum } from '@app/types/kodeverk';
-import { type ReactNode, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 interface UtfallSelectProps {
   children: string;
@@ -47,7 +47,7 @@ export const UtfallSelect = ({ children, selected, onChange, options }: UtfallSe
       valueKey={getOptionValue}
       formatOption={getOptionLabel}
       emptyLabel={children}
-      filterText={getOptionLabelString}
+      filterText={getOptionLabel}
       onChange={handleChange}
       triggerSize="small"
       triggerVariant="tertiary"
@@ -131,7 +131,7 @@ export const KlageenhetSelect = ({
       valueKey={getOptionValue}
       formatOption={getOptionLabel}
       emptyLabel={children}
-      filterText={getOptionLabelString}
+      filterText={getOptionLabel}
       onChange={handleChange}
       triggerSize="small"
       triggerVariant="tertiary"
@@ -188,8 +188,7 @@ export const TemplateSectionSelect = ({
 };
 
 const getOptionValue = (option: IOption<string>): string => option.value;
-const getOptionLabel = (option: IOption<string>): ReactNode => option.label;
-const getOptionLabelString = (option: IOption<string>): string => option.label;
+const getOptionLabel = (option: IOption<string>): string => option.label;
 
 export const SectionSelect = ({
   selected,

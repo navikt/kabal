@@ -27,9 +27,9 @@ export const StatusFilter = () => {
       options={STATUS_OPTIONS}
       value={selectedOptions}
       valueKey={statusValueKey}
-      formatOption={statusFormatOption}
+      formatOption={statusFormat}
       emptyLabel="Alle statuser"
-      filterText={statusFilterText}
+      filterText={statusFormat}
       onChange={handleChange}
     />
   );
@@ -53,8 +53,7 @@ export const STATUS_OPTIONS: StatusOption[] = [
 ];
 
 const statusValueKey = (option: StatusOption) => option.value;
-const statusFormatOption = (option: StatusOption) => option.label;
-const statusFilterText = (option: StatusOption) => option.label;
+const statusFormat = (option: StatusOption) => option.label;
 
 const STATUS_VALUES = Object.values(Status);
 

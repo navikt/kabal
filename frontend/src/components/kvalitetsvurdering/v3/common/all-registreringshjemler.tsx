@@ -98,4 +98,4 @@ const formatHjemmelOption = (option: HjemmelOption) => (
   </span>
 );
 
-const hjemmelFilterText = (option: HjemmelOption): string => `${option.lovkildeNavn} ${option.navn}`;
+const hjemmelFilterText = (option: HjemmelOption): string => `${option.lovkildeNavn} - ${option.navn}`;
