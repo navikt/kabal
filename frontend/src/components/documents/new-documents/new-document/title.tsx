@@ -8,12 +8,9 @@ import { StyledDocumentTitle } from '@app/components/documents/new-documents/new
 import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
 import { SharedDocumentTitle } from '@app/components/documents/new-documents/shared/title';
 import { SetFilename } from '@app/components/documents/set-filename';
-import {
-  getJournalfoertDocumentTabId,
-  getJournalfoertDocumentTabUrl,
-  getNewDocumentTabUrl,
-} from '@app/domain/tabbed-document-url';
+import { getJournalfoertDocumentTabId } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentTabUrl } from '@app/hooks/use-document-tab-url';
 import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -31,22 +28,24 @@ export const DocumentTitle = memo(
     const oppgaveId = useOppgaveId();
     const [setTitle] = useSetTitleMutation();
 
+    const { getNewTabUrl, getJournalfoertTabUrl } = useDocumentTabUrl();
+
     const [url, documentId] = useMemo<[string, string] | [undefined, undefined]>(() => {
       if (document.type !== DocumentTypeEnum.JOURNALFOERT) {
         if (oppgaveId === skipToken) {
           return [undefined, undefined];
         }
 
-        return [getNewDocumentTabUrl(oppgaveId, document.id, document.parentId), document.id];
+        return [getNewTabUrl(oppgaveId, document.id, document.parentId), document.id];
       }
 
       const { dokumentInfoId, journalpostId } = document.journalfoertDokumentReference;
 
       return [
-        getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId),
+        getJournalfoertTabUrl(journalpostId, dokumentInfoId),
         getJournalfoertDocumentTabId(journalpostId, dokumentInfoId),
       ];
-    }, [document, oppgaveId]);
+    }, [document, oppgaveId, getNewTabUrl, getJournalfoertTabUrl]);
 
     const setEditMode = useCallback(
       (edit: boolean) => {

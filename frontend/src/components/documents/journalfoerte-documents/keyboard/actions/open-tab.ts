@@ -13,12 +13,8 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { TabContext } from '@app/components/documents/tab-context';
 import { TAB_MANAGER } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
-import {
-  getCombinedDocumentTabId,
-  getCombinedDocumentTabUrl,
-  getJournalfoertDocumentTabId,
-  getJournalfoertDocumentTabUrl,
-} from '@app/domain/tabbed-document-url';
+import { getJournalfoertDocumentTabId } from '@app/domain/tabbed-document-url';
+import { useDocumentTabUrl } from '@app/hooks/use-document-tab-url';
 import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useCallback, useContext } from 'react';
 
@@ -26,6 +22,7 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
   const { selectedDocuments } = useContext(SelectContext);
   const getDocument = useGetDocument(filteredDocuments);
   const { getTabRef, setTabRef } = useContext(TabContext);
+  const { getCombinedTabUrl, getCombinedTabId, getJournalfoertTabUrl } = useDocumentTabUrl();
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   return useCallback(() => {
@@ -39,8 +36,8 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
 
     if (selectedDocuments.size > 0 && isSelected(focusedIndex)) {
       const { toOpen, toDownload } = getSelectedDocumentsInOrder(selectedDocuments, filteredDocuments);
-      const tabUrl = getCombinedDocumentTabUrl(toOpen);
-      const documentId = getCombinedDocumentTabId(toOpen);
+      const tabUrl = getCombinedTabUrl(toOpen);
+      const documentId = getCombinedTabId(toOpen);
 
       if (toDownload.length > 0) {
         showDownloadDocumentsToast(...toDownload);
@@ -108,7 +105,7 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
       return;
     }
 
-    const href = getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId);
+    const href = getJournalfoertTabUrl(journalpostId, dokumentInfoId);
 
     // There is no reference to the tab or it is closed.
     const newTabRef = window.open(href, documentId);
@@ -120,5 +117,14 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
     }
 
     setTabRef(documentId, newTabRef);
-  }, [filteredDocuments, getDocument, getTabRef, setTabRef, selectedDocuments]);
+  }, [
+    filteredDocuments,
+    getDocument,
+    getTabRef,
+    setTabRef,
+    selectedDocuments,
+    getCombinedTabUrl,
+    getCombinedTabId,
+    getJournalfoertTabUrl,
+  ]);
 };

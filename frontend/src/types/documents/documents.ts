@@ -145,6 +145,11 @@ export const isAttachmentDocument = (document: IDocument): document is IAttachme
 
 export const isParentDocument = (document: IDocument): document is IParentDocument => document.parentId === null;
 
+export interface IMergedDocumentsResponse {
+  reference: string;
+  title: string;
+}
+
 export interface ISmartDocumentVersion {
   version: number;
   author: INavEmployee | null;

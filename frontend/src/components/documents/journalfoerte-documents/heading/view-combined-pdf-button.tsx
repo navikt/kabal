@@ -5,9 +5,9 @@ import { SelectContext } from '@app/components/documents/journalfoerte-documents
 import { TabContext } from '@app/components/documents/tab-context';
 import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import { toast } from '@app/components/toast/store';
-import { getCombinedDocumentTabId, getCombinedDocumentTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useFilesViewed } from '@app/hooks/settings/use-setting';
+import { useDocumentTabUrl } from '@app/hooks/use-document-tab-url';
 import { isMetaKey, MOD_KEY_TEXT, MouseButtons } from '@app/keys';
 import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { FilePdfIcon } from '@navikt/aksel-icons';
@@ -42,9 +42,17 @@ export const ViewCombinedPDF = () => {
     });
   }, [toOpen, value]);
 
-  const tabUrl = useMemo(() => (toOpen.length === 0 ? undefined : getCombinedDocumentTabUrl(toOpen)), [toOpen]);
+  const { getCombinedTabUrl, getCombinedTabId } = useDocumentTabUrl();
 
-  const documentId = useMemo(() => (toOpen.length === 0 ? undefined : getCombinedDocumentTabId(toOpen)), [toOpen]);
+  const tabUrl = useMemo(
+    () => (toOpen.length === 0 ? undefined : getCombinedTabUrl(toOpen)),
+    [toOpen, getCombinedTabUrl],
+  );
+
+  const documentId = useMemo(
+    () => (toOpen.length === 0 ? undefined : getCombinedTabId(toOpen)),
+    [toOpen, getCombinedTabId],
+  );
 
   const isTabOpen = useIsTabOpen(documentId);
 

@@ -1,10 +1,11 @@
+import type { IShownArchivedDocument } from '@app/components/view-pdf/types';
 import { ENVIRONMENT } from '@app/environment';
 import type { KabalValue } from '@app/plate/types';
 import { DokumenterListTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
 import { ListTagTypes } from '@app/redux-api/tag-types';
 import type { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
 import type { IDocumentParams } from '@app/types/documents/common-params';
-import type { IDocument, ISmartDocumentVersion } from '@app/types/documents/documents';
+import type { IDocument, IMergedDocumentsResponse, ISmartDocumentVersion } from '@app/types/documents/documents';
 import type { IGetVersionParams } from '@app/types/documents/params';
 import type { IValidateDocumentResponse } from '@app/types/documents/validation';
 
@@ -47,6 +48,13 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
     validateDocument: builder.query<IValidateDocumentResponse, IDocumentParams>({
       query: ({ oppgaveId, dokumentId }) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/validate`,
     }),
+    mergedDocumentsReference: builder.query<IMergedDocumentsResponse, IShownArchivedDocument[]>({
+      query: (body) => ({
+        url: '/kabal-api/journalposter/mergedocuments',
+        method: 'POST',
+        body,
+      }),
+    }),
     getSmartDocumentVersions: builder.query<ISmartDocumentVersion[], IDocumentParams>({
       query: ({ oppgaveId, dokumentId }) =>
         `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}/versions`,
@@ -64,6 +72,7 @@ export const {
   useLazyGetDocumentsQuery,
   useGetArkiverteDokumenterQuery,
   useLazyValidateDocumentQuery,
+  useMergedDocumentsReferenceQuery,
   useLazyGetDocumentQuery,
   useGetSmartDocumentVersionsQuery,
   useGetSmartDocumentVersionQuery,

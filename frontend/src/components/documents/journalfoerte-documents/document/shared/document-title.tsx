@@ -15,9 +15,10 @@ import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
 import type { IFilesViewed } from '@app/components/file-viewer/types';
 import { toast } from '@app/components/toast/store';
 import { getJournalfoertDocumentFileUrl } from '@app/domain/file-url';
-import { getJournalfoertDocumentTabId, getJournalfoertDocumentTabUrl } from '@app/domain/tabbed-document-url';
+import { getJournalfoertDocumentTabId } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useFilesViewed } from '@app/hooks/settings/use-setting';
+import { useDocumentTabUrl } from '@app/hooks/use-document-tab-url';
 import { isMetaKey, MouseButtons } from '@app/keys';
 import { useSetTitleMutation } from '@app/redux-api/journalposter';
 import type { Variants } from '@app/types/arkiverte-documents';
@@ -38,13 +39,22 @@ interface Props {
 export const DocumentTitle = (props: Props) => {
   // These hooks would cause rerenders if they were used directly in DocumentTitleInternal, even though used values does not change.
   const { value, setArchivedFiles: setArchivedDocuments } = useFilesViewed();
+  const { getJournalfoertTabUrl } = useDocumentTabUrl();
 
-  return <DocumentTitleInternal {...props} pdfViewed={value} setArchivedDocuments={setArchivedDocuments} />;
+  return (
+    <DocumentTitleInternal
+      {...props}
+      pdfViewed={value}
+      setArchivedDocuments={setArchivedDocuments}
+      getJournalfoertTabUrl={getJournalfoertTabUrl}
+    />
+  );
 };
 
 interface DocumentTitleInternalProps extends Props {
   pdfViewed: IFilesViewed;
   setArchivedDocuments: (documents: readonly IJournalfoertDokumentId[]) => void;
+  getJournalfoertTabUrl: (journalpostId: string, dokumentInfoId: string) => string;
 }
 
 const DocumentTitleInternal = memo(
@@ -58,6 +68,7 @@ const DocumentTitleInternal = memo(
     setArchivedDocuments,
     documentIndex,
     vedleggIndex = -1,
+    getJournalfoertTabUrl,
   }: DocumentTitleInternalProps) => {
     const { getTabRef, setTabRef } = useContext(TabContext);
     const documentId = getJournalfoertDocumentTabId(journalpostId, dokumentInfoId);
@@ -115,7 +126,7 @@ const DocumentTitleInternal = memo(
 
     const href = isDownload
       ? getJournalfoertDocumentFileUrl(journalpostId, dokumentInfoId)
-      : getJournalfoertDocumentTabUrl(journalpostId, dokumentInfoId);
+      : getJournalfoertTabUrl(journalpostId, dokumentInfoId);
 
     const onClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
       if (!hasAccess || isDownload || e.button === MouseButtons.RIGHT) {
@@ -192,7 +203,8 @@ const DocumentTitleInternal = memo(
     prevProps.documentIndex === nextProps.documentIndex &&
     prevProps.vedleggIndex === nextProps.vedleggIndex &&
     prevProps.pdfViewed === nextProps.pdfViewed &&
-    prevProps.setArchivedDocuments === nextProps.setArchivedDocuments,
+    prevProps.setArchivedDocuments === nextProps.setArchivedDocuments &&
+    prevProps.getJournalfoertTabUrl === nextProps.getJournalfoertTabUrl,
 );
 
 DocumentTitleInternal.displayName = 'DocumentTitleInternal';

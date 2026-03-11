@@ -68,6 +68,9 @@ export const setFilesViewed = (oppgaveId: string, navIdent: string, documents: I
 };
 
 export const useFileViewerWidth = () => useNumberSetting(useOppgavePath('tabs/documents/file-viewer/width'));
+
+export const useDocumentsPdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/pdf/width'));
+
 export const useDocumentsExpanded = () => useBooleanSetting(useOppgavePath('tabs/documents/expanded'));
 export const useDocumentsWidth = () => useNumberSetting(useOppgavePath('tabs/documents/width'));
 
