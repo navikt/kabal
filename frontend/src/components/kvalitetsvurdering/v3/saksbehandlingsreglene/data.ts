@@ -122,17 +122,17 @@ export const SAKSBEHANDLINGSREGLENE_LABELS: Record<Fields, string> = {
   [VeiledningspliktenBoolean.saksbehandlingsreglerBruddPaaVeiledningsplikten]:
     'Brudd på veiledningsplikten, forvaltningsloven § 11',
   [VeiledningspliktenBoolean.saksbehandlingsreglerVeiledningspliktenPartenHarIkkeFaattSvarPaaHenvendelser]:
-    'Parten har ikke fått svar på henvendelser i saken, eller har fått feil svar.',
+    'Parten har ikke fått svar på henvendelser i saken, eller har fått feil svar',
   [VeiledningspliktenBoolean.saksbehandlingsreglerVeiledningspliktenNavHarIkkeGittGodNokVeiledning]:
-    'Nav har ikke gitt god nok veiledning i saken av eget tiltak.',
+    'Nav har ikke gitt god nok veiledning i saken av eget tiltak',
 
-    // Forhåndsvarsling
+  // Forhåndsvarsling
   [ForhåndsvarslingBoolean.saksbehandlingsreglerBruddPaaRegleneOmForhaandsvarsling]:
     'Brudd på reglene om forhåndsvarsling, forvaltningsloven § 16',
   [ForhåndsvarslingBoolean.saksbehandlingsreglerForhaandsvarslingPartenIkkeVarsletFoerVedtak]:
     'Parten har ikke blitt varslet før det ble fattet vedtak i saken',
   [ForhåndsvarslingBoolean.saksbehandlingsreglerForhaandsvarslingPartenVarsletMangelfullt]:
-    'Parten har blitt varslet, men varselets innhold er mangelfullt',  
+    'Parten har blitt varslet, men varselets innhold er mangelfullt',
 
   // Utredningsplikten
   [UtredningspliktenBoolean.saksbehandlingsreglerBruddPaaUtredningsplikten]:
@@ -162,11 +162,11 @@ export const SAKSBEHANDLINGSREGLENE_LABELS: Record<Fields, string> = {
   [BegrunnelsespliktenBoolean.saksbehandlingsreglerBruddPaaBegrunnelsesplikten]:
     'Brudd på begrunnelsesplikten, forvaltningsloven §§ 24 og 25',
   [BegrunnelsespliktenBoolean.saksbehandlingsreglerBegrunnelsespliktenBegrunnelsenViserIkkeTilRegelverket]:
-    'Begrunnelsen viser ikke til regelverket som vedtaket bygger på',
+    'Begrunnelsen forklarer ikke godt nok regelverket som vedtaket bygger på',
   [BegrunnelsespliktenBoolean.saksbehandlingsreglerBegrunnelsespliktenBegrunnelsenNevnerIkkeFaktum]:
-    'Begrunnelsen nevner ikke hvilket faktum som vedtaket bygger på',
+    'Begrunnelsen forklarer ikke godt nok hvilket faktum som vedtaket bygger på',
   [BegrunnelsespliktenBoolean.saksbehandlingsreglerBegrunnelsespliktenBegrunnelsenNevnerIkkeAvgjoerendeHensyn]:
-    'Begrunnelsen nevner ikke de hensyn som har vært avgjørende for den konkrete rettsanvendelsen eller skjønnsutøvelsen som vedtaket bygger på',
+    'Begrunnelsen forklarer ikke godt nok de hensyn som har vært avgjørende for den konkrete rettsanvendelsen eller skjønnsutøvelsen som vedtaket bygger på',
 
   // Klage og klageforberedelse
   [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaRegleneOmKlageOgKlageforberedelse]:
@@ -190,7 +190,7 @@ export const SAKSBEHANDLINGSREGLENE_LABELS: Record<Fields, string> = {
 
   // Journalføringsplikten
   [JournalfoeringspliktenBoolean.saksbehandlingsreglerBruddPaaJournalfoeringsplikten]:
-    'Brudd på journalføringsplikten, arkivloven §§ 6 og 12 og forskrift §§ 9 følgende.',
+    'Brudd på journalføringsplikten, arkivloven §§ 5 og 6 og forskrift § 1 og §§ 14-15',
   [JournalfoeringspliktenBoolean.saksbehandlingsreglerJournalfoeringspliktenRelevanteOpplysningerErIkkeJournalfoert]:
     'Relevante opplysninger er ikke journalført på saken',
   [JournalfoeringspliktenBoolean.saksbehandlingsreglerJournalfoeringspliktenRelevanteOpplysningerHarIkkeGodNokTittelEllerDokumentkvalitet]:
