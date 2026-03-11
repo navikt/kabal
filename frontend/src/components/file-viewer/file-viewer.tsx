@@ -10,9 +10,9 @@ import {
   getNewDocumentFileUrl,
 } from '@app/domain/file-url';
 import {
-  getAttachmentsOverviewTabUrl,
-  getJournalfoertDocumentTabUrl,
-  getNewDocumentTabUrl,
+  getAttachmentsOverviewFileViewerTabUrl,
+  getJournalfoertFileViewerTabUrl,
+  getNewFileViewerTabUrl,
 } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { useFilesViewed } from '@app/hooks/settings/use-setting';
@@ -52,7 +52,7 @@ export const FileViewer = () => {
     for (const file of expandedDocumentList) {
       if (file.type === DocumentTypeEnum.JOURNALFOERT) {
         const fileUrl = getJournalfoertDocumentFileUrl(file.journalpostId, file.dokumentInfoId);
-        const tabUrl = getJournalfoertDocumentTabUrl(file.journalpostId, file.dokumentInfoId);
+        const tabUrl = getJournalfoertFileViewerTabUrl(file.journalpostId, file.dokumentInfoId);
         const title = getArchivedDocumentTitle(file, journalpostDocuments);
         urls.push(tabUrl);
 
@@ -69,7 +69,7 @@ export const FileViewer = () => {
 
       if (file.type === DocumentTypeEnum.VEDLEGGSOVERSIKT) {
         const fileUrl = getAttachmentsOverviewFileUrl(oppgaveId, file.documentId);
-        const newTabUrl = getAttachmentsOverviewTabUrl(oppgaveId, file.documentId);
+        const newTabUrl = getAttachmentsOverviewFileViewerTabUrl(oppgaveId, file.documentId);
         const title = 'Vedleggsoversikt';
 
         urls.push(newTabUrl);
@@ -80,7 +80,7 @@ export const FileViewer = () => {
       }
 
       const fileUrl = getNewDocumentFileUrl(oppgaveId, file.documentId);
-      const newTabUrl = getNewDocumentTabUrl(oppgaveId, file.documentId, file.parentId);
+      const newTabUrl = getNewFileViewerTabUrl(oppgaveId, file.documentId, file.parentId);
       const title = documentsInProgress.find((d) => d.id === file.documentId)?.tittel ?? 'Ukjent dokument';
 
       urls.push(newTabUrl);

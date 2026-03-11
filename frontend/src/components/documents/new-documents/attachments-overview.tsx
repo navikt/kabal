@@ -1,8 +1,8 @@
 import { StyledNewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
 import { SharedDocumentTitle } from '@app/components/documents/new-documents/shared/title';
 import { StyledAttachmentListItem } from '@app/components/documents/styled-components/attachment-list';
-import { getAttachmentsOverviewTabUrl } from '@app/domain/tabbed-document-url';
 import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentTabUrl } from '@app/hooks/use-document-tab-url';
 import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
 import { DOCUMENT_TYPE_NAMES, DocumentTypeEnum } from '@app/types/documents/documents';
 import { BulletListIcon } from '@navikt/aksel-icons';
@@ -20,6 +20,8 @@ export const AttachmentsOverview = ({ documentId, style, parentId }: Props) => {
     fixedCacheKey: `createVedlegg-${documentId}`,
   });
   const title = DOCUMENT_TYPE_NAMES[DocumentTypeEnum.VEDLEGGSOVERSIKT];
+
+  const { getAttachmentsOverviewUrl } = useDocumentTabUrl();
 
   if (oppgaveId === skipToken) {
     return null;
@@ -42,7 +44,7 @@ export const AttachmentsOverview = ({ documentId, style, parentId }: Props) => {
         <SharedDocumentTitle
           title={title}
           parentId={parentId}
-          url={getAttachmentsOverviewTabUrl(oppgaveId, documentId)}
+          url={getAttachmentsOverviewUrl(oppgaveId, documentId)}
           documentId={documentId}
           icon={<BulletListIcon aria-hidden />}
           type={DocumentTypeEnum.VEDLEGGSOVERSIKT}
