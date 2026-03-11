@@ -37,8 +37,8 @@
 
     const NAV_IDENT = '{{navIdent}}';
 
-    const scaleMode = localStorage.getItem(`${NAV_IDENT}/pdf/new_tab/scale_mode`)?.slice(1, -1) ?? 'none';
-    const customScale = localStorage.getItem(`${NAV_IDENT}/pdf/new_tab/custom_scale`) ?? '100';
+    const scaleMode = localStorage.getItem('klage-file-viewer/settings/scale/mode') ?? 'none';
+    const customScale = localStorage.getItem('klage-file-viewer/settings/scale/value') ?? '100';
 
     const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
 
