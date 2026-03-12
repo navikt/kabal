@@ -90,6 +90,8 @@ export const SelectPopover = ({
     }
   }, [open]);
 
+  const triggerWidth = triggerVariant === 'tertiary' ? 'w-fit' : 'w-full';
+
   return (
     <VStack gap="space-4" width="100%" style={style}>
       <Button
@@ -109,7 +111,7 @@ export const SelectPopover = ({
         disabled={disabled}
         iconPosition="right"
         icon={open ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
-        className="flex min-h-8 w-full cursor-pointer items-center justify-between gap-1"
+        className={`flex min-h-8 cursor-pointer items-center justify-between gap-1 ${triggerWidth}`}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={label}
