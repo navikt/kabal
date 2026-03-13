@@ -18,8 +18,6 @@ import {
   type KlageFileViewerHandle,
   type KlageFileViewerProps,
 } from '@navikt/klage-file-viewer';
-// @ts-expect-error - Vite `?url` import: returns the resolved public URL as a string.
-import WORKER_SRC from '@navikt/klage-file-viewer/pdf-worker?url';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export type { FileEntry, KlageFileViewerProps } from '@navikt/klage-file-viewer';
@@ -80,7 +78,6 @@ const KabalFileViewerContent = ({
       files={files}
       onClose={onClose}
       newTabUrl={newTabUrl}
-      workerSrc={WORKER_SRC}
       onFetchError={handleKabalFetchError}
       errorComponent={KabalErrorActions}
       theme={appTheme}

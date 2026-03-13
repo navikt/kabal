@@ -2,8 +2,6 @@ import { type AppTheme, getAppThemeKey, resolveTheme } from '@app/theme';
 import type { DocumentViewerMetadata } from '@app/types';
 import { Theme } from '@navikt/ds-react';
 import { KlageFileViewer } from '@navikt/klage-file-viewer';
-// @ts-expect-error - Vite `?url` import: returns the resolved public URL as a string.
-import WORKER_SRC from '@navikt/klage-file-viewer/pdf-worker?url';
 import { useEffect, useState } from 'react';
 
 // --- Theme ---
@@ -49,7 +47,7 @@ export const App = ({ metadata }: AppProps) => {
 
   return (
     <Theme asChild theme={appTheme}>
-      <KlageFileViewer files={metadata.files} theme={appTheme} workerSrc={WORKER_SRC} standalone />
+      <KlageFileViewer files={metadata.files} theme={appTheme} standalone />
     </Theme>
   );
 };
