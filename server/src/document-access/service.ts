@@ -115,10 +115,14 @@ class SmartDocumentWriteAccess {
         error: err,
       });
 
-      await closeStream(stream, trace_id); // Close the old stream
-      await delay(5_000 * restartCount);
-      await this.#startConsumer(restartCount + 1); // Start a new stream
-      log.debug({ msg: 'Kafka consumer stream restarted', trace_id });
+      try {
+        await closeStream(stream, trace_id); // Close the old stream
+        await delay(5_000 * restartCount);
+        await this.#startConsumer(restartCount + 1); // Start a new stream
+        log.info({ msg: 'Kafka consumer stream restarted', trace_id });
+      } catch (error) {
+        log.error({ msg: 'Failed to restart Kafka consumer stream.', trace_id, error: error });
+      }
     });
 
     log.debug({ msg: 'Kafka consumer stream listener starting...', trace_id });
