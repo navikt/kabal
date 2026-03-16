@@ -383,8 +383,8 @@ class SmartDocumentWriteAccess {
 
 const closeStream = async (stream: MessagesStream<string, string, string, string>, trace_id: string) => {
   log.debug({ msg: 'Closing Kafka consumer stream...', trace_id });
-  stream.removeAllListeners();
   await stream.close();
+  stream.removeAllListeners();
   log.debug({ msg: 'Kafka consumer stream closed', trace_id });
 };
 
