@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback, useImperativeHandle, useRef, useState, useSyncExternalStore } from 'react';
+import { type ReactNode, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 const ITEM_HEIGHT = 32;
 const OVERSCAN = 5;
@@ -73,45 +73,66 @@ export const VirtualizedOptionList = <T,>({
   const maxWidthRef = useRef(0);
   const [minWidth, setMinWidth] = useState(0);
 
-  // Subscribe to scroll and resize events to re-render when visible range changes.
-  const prevSnapshotRef = useRef<[number, number]>([0, 0]);
+  const [scrollTop, setScrollTop] = useState(0);
+  const [clientHeight, setClientHeight] = useState(0);
 
-  const [scrollTop, clientHeight] = useSyncExternalStore<[number, number]>(
-    useCallback((onStoreChange) => {
-      const el = scrollElementRef.current;
+  // Track whether we are currently updating from a ResizeObserver/scroll callback
+  // to avoid re-entrant setState loops.
+  const isUpdatingRef = useRef(false);
 
-      if (el === null) {
-        return () => undefined;
-      }
+  const update = useCallback((el: HTMLDivElement) => {
+    // Guard against re-entrant updates: a setState here triggers a re-render,
+    // which can change children, which can trigger ResizeObserver again
+    // synchronously in some browsers, causing an infinite loop.
+    if (isUpdatingRef.current) {
+      return;
+    }
 
-      el.addEventListener('scroll', onStoreChange, { passive: true });
+    isUpdatingRef.current = true;
 
-      const resizeObserver = new ResizeObserver(onStoreChange);
-      resizeObserver.observe(el);
+    const newScrollTop = el.scrollTop;
+    const newClientHeight = el.clientHeight;
 
-      return () => {
-        el.removeEventListener('scroll', onStoreChange);
-        resizeObserver.disconnect();
-      };
-    }, []),
-    useCallback(() => {
-      const el = scrollElementRef.current;
+    setScrollTop((prev) => (prev === newScrollTop ? prev : newScrollTop));
+    setClientHeight((prev) => (prev === newClientHeight ? prev : newClientHeight));
 
-      const scrollTop = el?.scrollTop ?? 0;
-      const clientHeight = el?.clientHeight ?? 0;
+    // Use microtask to reset the flag after React has processed the state updates
+    // but before the next potential observer callback.
+    queueMicrotask(() => {
+      isUpdatingRef.current = false;
+    });
+  }, []);
 
-      const prev = prevSnapshotRef.current;
+  useEffect(() => {
+    const el = scrollElementRef.current;
 
-      if (prev[0] === scrollTop && prev[1] === clientHeight) {
-        return prev;
-      }
+    if (el === null) {
+      return;
+    }
 
-      const next: [number, number] = [scrollTop, clientHeight];
-      prevSnapshotRef.current = next;
+    // Initial measurement.
+    update(el);
 
-      return next;
-    }, []),
-  );
+    const updateState = () => update(el);
+
+    el.addEventListener('scroll', updateState, { passive: true });
+
+    let requestAnimationFrameHandle = 0;
+
+    const resizeObserver = new ResizeObserver(() => {
+      // ResizeObserver callbacks can fire synchronously during layout in some
+      // browsers. Defer to avoid infinite loops with setState → render → resize → setState.
+      cancelAnimationFrame(requestAnimationFrameHandle);
+      requestAnimationFrameHandle = requestAnimationFrame(updateState);
+    });
+    resizeObserver.observe(el);
+
+    return () => {
+      el.removeEventListener('scroll', updateState);
+      cancelAnimationFrame(requestAnimationFrameHandle);
+      resizeObserver.disconnect();
+    };
+  }, [update]);
 
   const measureElement = useCallback((element: Element | null) => {
     if (element === null) {
