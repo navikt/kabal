@@ -6,6 +6,7 @@ import { OppgaveTableKey } from '@/components/common-table-components/oppgave-ta
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { useHasRole } from '@/hooks/use-has-role';
+import { useTimingMeasurement } from '@/hooks/use-timing-measurement';
 import { useGetSettingsQuery } from '@/redux-api/bruker';
 import {
   useGetAntallLedigeOppgaverMedUtgaatteFristerQuery,
@@ -56,6 +57,8 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
   const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(
     queryParams === skipToken ? skipToken : queryParams,
   );
+
+  useTimingMeasurement('oppgaver_list_load_ms', !isLoading && !isLoadingSettings);
 
   return (
     <section>

@@ -1,3 +1,4 @@
+import type { TracedEvent } from '@/server-sent-events';
 import type { IArkivertDocument } from '@/types/arkiverte-documents';
 import type { INavEmployee } from '@/types/bruker';
 import type { DistribusjonsType, IDocument } from '@/types/documents/documents';
@@ -13,7 +14,7 @@ import type { BehandlingGosysOppgave, IFeilregistrering } from '@/types/oppgaveb
 import type { FradelReason } from '@/types/oppgaver';
 import type { Language } from '@/types/texts/language';
 
-export interface BaseEvent {
+export interface BaseEvent extends TracedEvent {
   actor: INavEmployee;
   timestamp: string;
 }

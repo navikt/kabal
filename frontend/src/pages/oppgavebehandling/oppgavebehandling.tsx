@@ -1,3 +1,6 @@
+import { withFaroProfiler } from '@grafana/faro-react';
 import { Oppgavebehandling } from '@/components/oppgavebehandling/oppgavebehandling';
 
-export const OppgavebehandlingPage = () => <Oppgavebehandling />;
+const OppgavebehandlingPageBase = () => <Oppgavebehandling />;
+
+export const OppgavebehandlingPage = withFaroProfiler(OppgavebehandlingPageBase);

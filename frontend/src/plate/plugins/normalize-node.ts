@@ -1,4 +1,3 @@
-import { LogLevel } from '@grafana/faro-web-sdk';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import {
   BaseBulletedListPlugin,
@@ -13,7 +12,7 @@ import { BaseParagraphPlugin, ElementApi, NodeApi } from 'platejs';
 import { createPlatePlugin, type OverrideEditor, ParagraphPlugin, type PlateEditor } from 'platejs/react';
 import { isEditor, type Path, Scrubber } from 'slate';
 import { isNotUndefined } from '@/functions/is-not-type-guards';
-import { pushEvent, pushLog } from '@/observability';
+import { LogLevel, pushEvent, pushLog } from '@/observability';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,

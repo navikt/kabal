@@ -26,11 +26,11 @@ import { serveFileViewerAssetsPlugin } from '@/plugins/serve-file-viewer-assets'
 import { serveIndexPlugin } from '@/plugins/serve-index';
 import { serverTimingPlugin } from '@/plugins/server-timing';
 import { tabIdPlugin } from '@/plugins/tab-id';
-import { traceparentPlugin } from '@/plugins/traceparent/traceparent';
 import { unleashProxyPlugin } from '@/plugins/unleash-proxy';
 import { versionPlugin } from '@/plugins/version/version';
 import { processErrors } from '@/process-errors';
 import { EmojiIcons, sendToSlack } from '@/slack';
+import { fastifyOtelInstrumentation } from '@/tracing';
 
 processErrors();
 
@@ -44,7 +44,11 @@ if (isDeployed) {
 
 const bodyLimit = 300 * 1024 * 1024; // 300 MB
 
-fastify({ trustProxy: true, bodyLimit, maxParamLength: 20_000, routerOptions: { querystringParser } })
+const app = fastify({ trustProxy: true, bodyLimit, maxParamLength: 20_000, routerOptions: { querystringParser } });
+
+await app.register(fastifyOtelInstrumentation.plugin());
+
+app
   .register(fastifyWebsocket)
   .register(cors, corsOptions)
   .register(healthPlugin)
@@ -55,7 +59,6 @@ fastify({ trustProxy: true, bodyLimit, maxParamLength: 20_000, routerOptions: { 
     },
   })
   .register(proxyVersionPlugin)
-  .register(traceparentPlugin)
   .register(tabIdPlugin)
   .register(clientVersionPlugin)
   .register(serverTimingPlugin, { enableAutoTotal: true })

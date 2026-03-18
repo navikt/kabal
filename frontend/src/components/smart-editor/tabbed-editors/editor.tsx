@@ -1,5 +1,5 @@
-import { isObject, LogLevel } from '@grafana/faro-web-sdk';
 import { VStack } from '@navikt/ds-react';
+import { SpanStatusCode } from '@opentelemetry/api';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { HocuspocusProviderWrapper } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
@@ -14,12 +14,12 @@ import { createLocalStorageBackup } from '@/components/smart-editor/tabbed-edito
 import { PlateContextWrapper } from '@/components/smart-editor/tabbed-editors/plate-context';
 import { useMounted } from '@/components/smart-editor/tabbed-editors/use-mounted';
 import { ENVIRONMENT } from '@/environment';
-import { hasOwn } from '@/functions/object';
+import { hasOwn, isObject } from '@/functions/object';
 import { parseJSON } from '@/functions/parse-json';
 import { getQueryParams } from '@/headers';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@/hooks/settings/use-setting';
-import { pushError, pushLog } from '@/observability';
+import { LogLevel, pushError, pushLog, pushMeasurement } from '@/observability';
 import { createCapitalisePlugin } from '@/plate/plugins/capitalise/capitalise';
 import { components, saksbehandlerPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@/plate/sheet';
@@ -28,6 +28,7 @@ import { SaksbehandlerToolbar } from '@/plate/toolbar/toolbars/saksbehandler-too
 import type { KabalValue, RichTextEditor } from '@/plate/types';
 import { reduxStore } from '@/redux/configure-store';
 import { documentsQuerySlice, useLazyGetDocumentQuery } from '@/redux-api/oppgaver/queries/documents';
+import { tracer } from '@/tracing/tracer';
 import type { ISmartDocumentOrAttachment } from '@/types/documents/documents';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 import type { GenericObject } from '@/types/types';
@@ -69,12 +70,20 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const [isSynced, setIsSynced] = useState(false);
   const [readOnly, setReadOnly] = useState(!ENVIRONMENT.isLocal); // Start in read-only mode until we know otherwise. Must start as writable (readOnly=false) on localhost to get write access at all.
 
+  // Collaboration timing measurement refs
+  const collabConnectStartTime = useRef(performance.now());
+  const collabConnectTime = useRef<number | null>(null);
+  const collabConnectCount = useRef(0);
+  const collabConnectMeasured = useRef(false);
+  const collabSyncMeasured = useRef(false);
+
   const url = useMemo(
     () => `/collaboration/behandlinger/${oppgave.id}/dokumenter/${id}?${getQueryParams().toString()}`,
     [oppgave.id, id],
   );
 
   const context = { dokumentId: id, oppgaveId: oppgave.id };
+  const traceAttrs = { dokument_id: id, behandling_id: oppgave.id };
 
   const provider: YjsProviderConfig = {
     type: 'hocuspocus',
@@ -86,140 +95,256 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
       url,
       name: id,
       token: user.navIdent, // There must be a token defined for the server auth hook to run.
-      onAuthenticated: ({ scope }) => setReadOnly(scope !== 'read-write'),
-      onClose: async ({ event }) => {
-        pushLog(`WebSocket closed with code ${event.code} and reason: ${event.reason}`, { context });
-
-        if (event.code === 1000 || event.code === 1005) {
-          return;
-        }
-
-        if (event.code === 4410) {
-          console.debug('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.');
-          pushLog('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.', { context });
-          destroyAndDelete();
-
-          return;
-        }
-
-        if (event.code === 4401 && !ENVIRONMENT.isLocal) {
-          return window.location.assign('/oauth2/login');
-        }
-
-        setIsConnected(false);
-        setIsSynced(false);
-
-        // 4403: Reconnect immediately to regain access, with new access rights.
-        // 1001: Pod gracefully closed the connection, likely due to a redeploy. Reconnect immediately.
-        if (event.code === 4403 || event.code === 1001) {
-          return yjs.connect();
-        }
-
-        if (event.code === 4404) {
-          console.debug('Code 4404 - Document not found. Destroying Yjs connection.');
-          pushLog('Code 4404 - Document not found. Destroying Yjs connection.', { context });
-          destroyAndDelete();
-
-          return;
-        }
+      onAuthenticated: ({ scope }) => {
+        const span = tracer.startSpan('collaboration.onAuthenticated', {
+          attributes: { ...traceAttrs, 'collaboration.scope': scope ?? 'unknown' },
+        });
 
         try {
-          const res = await fetch('/oauth2/session', { credentials: 'include' });
+          setReadOnly(scope !== 'read-write');
+        } finally {
+          span.end();
+        }
+      },
+      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
+      onClose: async ({ event }) => {
+        const span = tracer.startSpan('collaboration.onClose', {
+          attributes: { ...traceAttrs, 'ws.close_code': event.code, 'ws.close_reason': event.reason },
+        });
 
-          if (!res.ok) {
-            throw new Error(`API responded with error code ${res.status} for /oauth2/session`);
+        try {
+          if (event.code !== 1000 && event.code !== 1005) {
+            span.setStatus({ code: SpanStatusCode.ERROR, message: `WebSocket closed with code ${event.code}` });
           }
 
-          const data: unknown = await res.json();
+          pushLog(`WebSocket closed with code ${event.code} and reason: ${event.reason}`, { context });
 
-          if (
-            isObject(data) &&
-            hasOwn(data, 'session') &&
-            isObject(data.session) &&
-            hasOwn(data.session, 'active') &&
-            data.session.active === true
-          ) {
-            console.debug('Reconnecting Yjs...');
-            pushLog('Reconnecting Yjs...');
-            yjs.connect();
+          if (event.code === 1000 || event.code === 1005) {
+            return;
           }
-        } catch (err) {
-          console.error(err);
 
-          if (err instanceof Error) {
-            pushError(err, { context });
+          if (event.code === 4410) {
+            console.debug('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.');
+            pushLog('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.', { context });
+            span.setAttribute('collaboration.close_action', 'destroy_deleted');
+            destroyAndDelete();
+
+            return;
           }
+
+          if (event.code === 4401 && !ENVIRONMENT.isLocal) {
+            span.setAttribute('collaboration.close_action', 'redirect_login');
+
+            return window.location.assign('/oauth2/login');
+          }
+
+          setIsConnected(false);
+          setIsSynced(false);
+
+          // 4403: Reconnect immediately to regain access, with new access rights.
+          // 1001: Pod gracefully closed the connection, likely due to a redeploy. Reconnect immediately.
+          if (event.code === 4403 || event.code === 1001) {
+            span.setAttribute('collaboration.close_action', 'reconnect_immediate');
+
+            return yjs.connect();
+          }
+
+          if (event.code === 4404) {
+            console.debug('Code 4404 - Document not found. Destroying Yjs connection.');
+            pushLog('Code 4404 - Document not found. Destroying Yjs connection.', { context });
+            span.setAttribute('collaboration.close_action', 'destroy_not_found');
+            destroyAndDelete();
+
+            return;
+          }
+
+          try {
+            const res = await fetch('/oauth2/session', { credentials: 'include' });
+
+            if (!res.ok) {
+              throw new Error(`API responded with error code ${res.status} for /oauth2/session`);
+            }
+
+            const data: unknown = await res.json();
+
+            if (
+              isObject(data) &&
+              hasOwn(data, 'session') &&
+              isObject(data.session) &&
+              hasOwn(data.session, 'active') &&
+              data.session.active === true
+            ) {
+              console.debug('Reconnecting Yjs...');
+              pushLog('Reconnecting Yjs...');
+              span.setAttribute('collaboration.close_action', 'reconnect_after_session_check');
+              yjs.connect();
+            } else {
+              span.setAttribute('collaboration.close_action', 'session_inactive');
+            }
+          } catch (err) {
+            console.error(err);
+
+            if (err instanceof Error) {
+              span.recordException(err);
+              pushError(err, { context });
+            }
+          }
+        } finally {
+          span.end();
         }
       },
       onSynced: () => {
-        setIsSynced(true);
-        // "Normalize" away empty paragraph that is automatically created between local initialization and Yjs connection.
-        const first = editor.children[0];
-        const second = editor.children[1];
+        const span = tracer.startSpan('collaboration.onSynced', { attributes: traceAttrs });
 
-        if (first === undefined || second === undefined) {
-          return;
-        }
+        try {
+          // Measure sync duration (time from connect to synced)
+          if (!collabSyncMeasured.current && collabConnectTime.current !== null) {
+            collabSyncMeasured.current = true;
+            const syncDuration = Math.round(performance.now() - collabConnectTime.current);
 
-        if (
-          first.type === BaseParagraphPlugin.key &&
-          first.children.length === 1 &&
-          first.children.at(0)?.text === ''
-        ) {
-          editor.tf.removeNodes({ at: [0] });
+            pushMeasurement({
+              type: 'collaboration_timing',
+              values: { collaboration_sync_ms: syncDuration },
+            });
+          }
+
+          setIsSynced(true);
+          // "Normalize" away empty paragraph that is automatically created between local initialization and Yjs connection.
+          const first = editor.children[0];
+          const second = editor.children[1];
+
+          if (first === undefined || second === undefined) {
+            return;
+          }
+
+          if (
+            first.type === BaseParagraphPlugin.key &&
+            first.children.length === 1 &&
+            first.children.at(0)?.text === ''
+          ) {
+            span.setAttribute('collaboration.normalized_empty_paragraph', true);
+            editor.tf.removeNodes({ at: [0] });
+          }
+        } finally {
+          span.end();
         }
       },
       onConnect: () => {
-        setIsConnected(true);
+        const span = tracer.startSpan('collaboration.onConnect', { attributes: traceAttrs });
+
+        try {
+          const now = performance.now();
+          collabConnectCount.current += 1;
+
+          // Measure initial connection duration (time from mount to first connect)
+          if (!collabConnectMeasured.current) {
+            collabConnectMeasured.current = true;
+            const connectDuration = Math.round(now - collabConnectStartTime.current);
+
+            pushMeasurement({
+              type: 'collaboration_timing',
+              values: { collaboration_connect_ms: connectDuration },
+            });
+          } else {
+            // This is a reconnection — push the running count
+            pushMeasurement({
+              type: 'collaboration_timing',
+              values: { collaboration_reconnect_count: collabConnectCount.current - 1 },
+            });
+          }
+
+          // Record connect time for sync duration measurement
+          collabConnectTime.current = now;
+
+          setIsConnected(true);
+        } finally {
+          span.end();
+        }
       },
       onDisconnect: () => {
-        setIsConnected(false);
-        setIsSynced(false);
+        const span = tracer.startSpan('collaboration.onDisconnect', { attributes: traceAttrs });
+
+        try {
+          setIsConnected(false);
+          setIsSynced(false);
+        } finally {
+          span.end();
+        }
       },
       onAuthenticationFailed: ({ reason }) => {
-        console.error('Authentication failed', reason);
-        pushLog(`Authentication failed: ${reason}`, { context });
+        const span = tracer.startSpan('collaboration.onAuthenticationFailed', {
+          attributes: { ...traceAttrs, 'collaboration.auth_failure_reason': reason ?? 'unknown' },
+        });
 
-        if (reason === 'DOCUMENT_NOT_FOUND') {
-          destroyAndDelete();
-        } else {
-          setReadOnly(true);
-          setIsConnected(false);
+        try {
+          span.setStatus({ code: SpanStatusCode.ERROR, message: `Authentication failed: ${reason}` });
+          console.error('Authentication failed', reason);
+          pushLog(`Authentication failed: ${reason}`, { context });
+
+          if (reason === 'DOCUMENT_NOT_FOUND') {
+            destroyAndDelete();
+          } else {
+            setReadOnly(true);
+            setIsConnected(false);
+          }
+        } finally {
+          span.end();
         }
       },
       onStateless: ({ payload }) => {
         const parsed = parseJSON<{ type: string } & GenericObject>(payload);
 
         if (parsed === null) {
-          pushLog(`Received stateless event with invalid JSON payload: ${payload}`, { context }, LogLevel.ERROR);
+          const span = tracer.startSpan('collaboration.onStateless', {
+            attributes: { ...traceAttrs, 'collaboration.stateless_type': 'invalid' },
+          });
+
+          try {
+            span.setStatus({ code: SpanStatusCode.ERROR, message: 'Invalid JSON payload' });
+            pushLog(`Received stateless event with invalid JSON payload: ${payload}`, { context }, LogLevel.ERROR);
+          } finally {
+            span.end();
+          }
 
           return;
         }
 
         const { type, ...rest } = parsed;
 
-        switch (type) {
-          case 'readonly':
-            setReadOnly(true);
+        const span = tracer.startSpan('collaboration.onStateless', {
+          attributes: { ...traceAttrs, 'collaboration.stateless_type': type },
+        });
 
-            break;
-          case 'read-write':
-            setReadOnly(false);
+        try {
+          if (type === 'deleted') {
+            span.setStatus({ code: SpanStatusCode.ERROR, message: 'Document deleted remotely' });
+          }
 
-            break;
-          case 'deleted':
-            console.debug('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.', {
-              ...context,
-              ...rest,
-            });
+          switch (type) {
+            case 'readonly':
+              setReadOnly(true);
 
-            pushLog('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.', {
-              context: { ...context, ...rest },
-            });
+              break;
+            case 'read-write':
+              setReadOnly(false);
 
-            destroyAndDelete();
+              break;
+            case 'deleted':
+              console.debug('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.', {
+                ...context,
+                ...rest,
+              });
 
-            break;
+              pushLog('Stateless deleted - Document has been deleted remotely. Destroying Yjs connection.', {
+                context: { ...context, ...rest },
+              });
+
+              destroyAndDelete();
+
+              break;
+          }
+        } finally {
+          span.end();
         }
       },
     },

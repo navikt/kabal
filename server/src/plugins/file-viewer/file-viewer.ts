@@ -5,6 +5,7 @@ import { ApiClientEnum } from '@/config/config';
 import { isNotNull } from '@/functions/guards';
 import { getDuration } from '@/helpers/duration';
 import { getProxyRequestHeaders } from '@/helpers/prepare-request-headers';
+import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 import { KABAL_API_URL } from '@/plugins/crdt/api/url';
 import { decodeArchivedDocumentIds, normalizeVariants } from '@/plugins/file-viewer/encoding';
@@ -61,38 +62,46 @@ export const fileViewerPlugin = fastifyPlugin(
             references.map(async ({ journalpostId, dokumentInfoId }) => {
               const url = `${METADATA_BASE_URL}/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}`;
 
-              try {
-                const response = await fetch(url, { method: 'GET', headers });
+              return withSpan(
+                'file_viewer.get_archived_metadata',
+                { journalpost_id: journalpostId, dokument_info_id: dokumentInfoId },
+                async (span) => {
+                  try {
+                    const response = await fetch(url, { method: 'GET', headers });
 
-                if (!response.ok) {
-                  log.warn({
-                    msg: 'Failed to fetch archived document metadata',
-                    data: { status: response.status, journalpostId, dokumentInfoId },
-                  });
+                    span.setAttribute('http.status_code', response.status);
 
-                  return null;
-                }
+                    if (!response.ok) {
+                      log.warn({
+                        msg: 'Failed to fetch archived document metadata',
+                        data: { status: response.status, journalpostId, dokumentInfoId },
+                      });
 
-                const json: unknown = await response.json();
+                      return null;
+                    }
 
-                if (!Value.Check(ArchivedApiDocumentSchema, json)) {
-                  log.warn({
-                    msg: 'Invalid archived metadata response',
-                    data: { journalpostId, dokumentInfoId },
-                  });
+                    const json: unknown = await response.json();
 
-                  return null;
-                }
+                    if (!Value.Check(ArchivedApiDocumentSchema, json)) {
+                      log.warn({
+                        msg: 'Invalid archived metadata response',
+                        data: { journalpostId, dokumentInfoId },
+                      });
 
-                return json as ArchivedApiDocument;
-              } catch (error) {
-                log.warn({
-                  msg: 'Error fetching archived document metadata',
-                  data: { journalpostId, dokumentInfoId, error: String(error) },
-                });
+                      return null;
+                    }
 
-                return null;
-              }
+                    return json as ArchivedApiDocument;
+                  } catch (error) {
+                    log.warn({
+                      msg: 'Error fetching archived document metadata',
+                      data: { journalpostId, dokumentInfoId, error: String(error) },
+                    });
+
+                    return null;
+                  }
+                },
+              );
             }),
           );
 
@@ -138,67 +147,75 @@ export const fileViewerPlugin = fastifyPlugin(
 
           const url = `${METADATA_BASE_URL}/behandlinger/${behandlingId}/dokumenter`;
 
-          try {
-            const response = await fetch(url, { method: 'GET', headers });
+          return withSpan(
+            'file_viewer.get_dua_metadata',
+            { behandling_id: behandlingId, document_id: id },
+            async (span) => {
+              try {
+                const response = await fetch(url, { method: 'GET', headers });
 
-            reply.addServerTiming('dua_request_time', getDuration(start), 'DUA Request Time');
+                span.setAttribute('http.status_code', response.status);
 
-            if (!response.ok) {
-              log.warn({
-                msg: 'Failed to fetch documents in progress',
-                data: { status: response.status, behandlingId, id },
-              });
+                reply.addServerTiming('dua_request_time', getDuration(start), 'DUA Request Time');
 
-              return reply.status(404).type('text/plain').send('Failed to fetch documents in progress');
-            }
+                if (!response.ok) {
+                  log.warn({
+                    msg: 'Failed to fetch documents in progress',
+                    data: { status: response.status, behandlingId, id },
+                  });
 
-            const json: unknown = await response.json();
+                  return reply.status(404).type('text/plain').send('Failed to fetch documents in progress');
+                }
 
-            if (!Array.isArray(json) || !json.every((item) => Value.Check(DuaApiDocumentSchema, item))) {
-              log.warn({
-                msg: 'Invalid documents in progress response',
-                data: { behandlingId, id },
-              });
+                const json: unknown = await response.json();
 
-              return reply.status(404).type('text/plain').send('Invalid documents in progress response');
-            }
+                if (!Array.isArray(json) || !json.every((item) => Value.Check(DuaApiDocumentSchema, item))) {
+                  log.warn({
+                    msg: 'Invalid documents in progress response',
+                    data: { behandlingId, id },
+                  });
 
-            const allDocuments = json as IDuaApiDocument[];
+                  return reply.status(404).type('text/plain').send('Invalid documents in progress response');
+                }
 
-            const document = allDocuments.find((doc) => doc.id === id);
+                const allDocuments = json as IDuaApiDocument[];
 
-            if (document === undefined) {
-              return reply.status(404).type('text/plain').send('Document not found');
-            }
+                const document = allDocuments.find((doc) => doc.id === id);
 
-            // If the document is a parent (no parentId), include it and all its attachments.
-            // If the document is an attachment, include only that document.
-            const isParent = document.parentId === null;
+                if (document === undefined) {
+                  return reply.status(404).type('text/plain').send('Document not found');
+                }
 
-            const matchedDocuments = isParent
-              ? [document, ...allDocuments.filter((doc) => doc.parentId === id)]
-              : [document];
+                // If the document is a parent (no parentId), include it and all its attachments.
+                // If the document is an attachment, include only that document.
+                const isParent = document.parentId === null;
 
-            const files: FileEntry[] = matchedDocuments.map(({ id: docId, tittel }) => ({
-              title: tittel,
-              url: getDuaPdfUrl(behandlingId, docId),
-              variants: 'PDF',
-            }));
+                const matchedDocuments = isParent
+                  ? [document, ...allDocuments.filter((doc) => doc.parentId === id)]
+                  : [document];
 
-            const pageTitle = files[0]?.title ?? 'Dokumentvisning';
+                const files: FileEntry[] = matchedDocuments.map(({ id: docId, tittel }) => ({
+                  title: tittel,
+                  url: getDuaPdfUrl(behandlingId, docId),
+                  variants: 'PDF',
+                }));
 
-            return renderHtml(reply, pageTitle, {
-              navIdent: req.navIdent,
-              files,
-            });
-          } catch (error) {
-            log.warn({
-              msg: 'Error fetching documents in progress',
-              data: { behandlingId, id, error: String(error) },
-            });
+                const pageTitle = files[0]?.title ?? 'Dokumentvisning';
 
-            return reply.status(404).type('text/plain').send('Error fetching documents in progress');
-          }
+                return renderHtml(reply, pageTitle, {
+                  navIdent: req.navIdent,
+                  files,
+                });
+              } catch (error) {
+                log.warn({
+                  msg: 'Error fetching documents in progress',
+                  data: { behandlingId, id, error: String(error) },
+                });
+
+                return reply.status(404).type('text/plain').send('Error fetching documents in progress');
+              }
+            },
+          );
         },
       )
 

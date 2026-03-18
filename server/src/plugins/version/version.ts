@@ -20,13 +20,9 @@ export const versionPlugin = fastifyPlugin(
       '/version',
       { schema: { querystring: VERSION_QUERY_STRING_SCHEMA } },
       async (req, reply) => {
-        const { trace_id, span_id } = req;
-
         if (req.headers.accept !== 'text/event-stream') {
           log.warn({
             msg: `Version endpoint called with unsupported accept header "${req.headers.accept}"`,
-            trace_id,
-            span_id,
             data: { sse: true, accept: req.headers.accept },
           });
 
@@ -35,7 +31,7 @@ export const versionPlugin = fastifyPlugin(
 
         const start = performance.now();
 
-        log.debug({ msg: 'Version connection opened', trace_id, span_id, data: { sse: true } });
+        log.debug({ msg: 'Version connection opened', data: { sse: true } });
 
         const stopTimer = histogram.startTimer();
         const endClientSession = startClientSession(req);
@@ -57,8 +53,6 @@ export const versionPlugin = fastifyPlugin(
 
             log.debug({
               msg: `Version connection closed after ${formatDuration(duration)} (${reason})`,
-              trace_id,
-              span_id,
               data: { sse: true, duration, reason },
             });
 
@@ -67,8 +61,6 @@ export const versionPlugin = fastifyPlugin(
           .catch((error) => {
             log.error({
               msg: 'Error during version connection close',
-              trace_id,
-              span_id,
               error,
               data: { sse: true },
             });
@@ -76,7 +68,7 @@ export const versionPlugin = fastifyPlugin(
           });
 
         if (reply.raw.headersSent) {
-          log.warn({ msg: 'Version connection opened after headers sent', trace_id, span_id, data: { sse: true } });
+          log.warn({ msg: 'Version connection opened after headers sent', data: { sse: true } });
 
           return;
         }

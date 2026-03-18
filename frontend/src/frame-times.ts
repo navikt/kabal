@@ -1,4 +1,3 @@
-import { faro } from '@grafana/faro-web-sdk';
 import { pushMeasurement } from '@/observability';
 import { user } from '@/static-data/static-data';
 
@@ -103,16 +102,12 @@ class FrameTimes {
   }
 
   private async internalPushMeasurement(max: number, avg: number) {
-    const { navIdent } = await user;
-
-    faro.api.setUser({ id: navIdent });
+    await user;
 
     pushMeasurement({
       type: 'kabal_frame_time',
       values: { kabal_frame_time_max: max, kabal_frame_time_avg: avg },
     });
-
-    faro.api.resetUser();
 
     return this;
   }

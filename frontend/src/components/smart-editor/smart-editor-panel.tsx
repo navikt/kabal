@@ -1,3 +1,4 @@
+import { withFaroProfiler } from '@grafana/faro-react';
 import { Behandlingsdetaljer } from '@/components/behandling/behandling';
 import { Behandlingsdialog } from '@/components/behandling/behandlingsdialog/behandlingsdialog';
 import { PanelContainer } from '@/components/oppgavebehandling-panels/panel-container';
@@ -8,7 +9,7 @@ import { useSmartEditorEnabled } from '@/hooks/settings/use-setting';
 
 const WIDTH = '450px';
 
-export const SmartEditorPanel = () => {
+const SmartEditorPanelComponent = () => {
   const { value: shown = true } = useSmartEditorEnabled();
   const { data: oppgave } = useOppgave();
 
@@ -30,6 +31,8 @@ export const SmartEditorPanel = () => {
     </>
   );
 };
+
+export const SmartEditorPanel = withFaroProfiler(SmartEditorPanelComponent);
 
 const BehandlingPanelContent = () => {
   useFocusPanelShortcut(4);

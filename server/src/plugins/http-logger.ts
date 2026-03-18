@@ -17,7 +17,7 @@ export const httpLoggerPlugin = fastifyPlugin(
         return;
       }
 
-      const { trace_id, span_id, client_version, tab_id, startTime } = req;
+      const { client_version, tab_id, startTime } = req;
 
       const responseTime = getDuration(startTime);
 
@@ -25,8 +25,6 @@ export const httpLoggerPlugin = fastifyPlugin(
         method: req.method,
         url,
         status_code: res.statusCode,
-        trace_id,
-        span_id,
         client_version,
         tab_id,
         responseTime,
@@ -50,27 +48,25 @@ interface HttpData extends AnyObject {
   method: string;
   url: string;
   status_code: number;
-  trace_id: string | undefined;
-  span_id: string | undefined;
   client_version: string | undefined;
   tab_id: string | undefined;
   responseTime: number;
 }
 
-const logHttpRequest = ({ trace_id, span_id, client_version, tab_id, ...data }: HttpData) => {
+const logHttpRequest = ({ client_version, tab_id, ...data }: HttpData) => {
   const msg = `Response ${data.status_code} ${data.method} ${data.url} ${data.responseTime}ms`;
 
   if (data.status_code >= 500) {
-    httpLogger.error({ msg, trace_id, span_id, data, client_version, tab_id });
+    httpLogger.error({ msg, data, client_version, tab_id });
 
     return;
   }
 
   if (data.status_code >= 400) {
-    httpLogger.warn({ msg, trace_id, span_id, data, client_version, tab_id });
+    httpLogger.warn({ msg, data, client_version, tab_id });
 
     return;
   }
 
-  httpLogger.debug({ msg, trace_id, span_id, data, client_version, tab_id });
+  httpLogger.debug({ msg, data, client_version, tab_id });
 };

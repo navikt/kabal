@@ -1,6 +1,7 @@
 import { type BaseClient, Issuer } from 'openid-client';
 import { AZURE_APP_CLIENT_ID, AZURE_APP_JWK, AZURE_APP_WELL_KNOWN_URL } from '@/config/config';
 import { isLocal } from '@/config/env';
+import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 
 const log = getLogger('auth-client');
@@ -12,25 +13,31 @@ export const getAzureADClient = async () => {
     return azureADClient;
   }
 
-  try {
-    const issuer = await Issuer.discover(AZURE_APP_WELL_KNOWN_URL);
+  return withSpan(
+    'auth.oidc_discovery',
+    { well_known_url: AZURE_APP_WELL_KNOWN_URL, client_id: AZURE_APP_CLIENT_ID },
+    async () => {
+      try {
+        const issuer = await Issuer.discover(AZURE_APP_WELL_KNOWN_URL);
 
-    const keys = [AZURE_APP_JWK];
+        const keys = [AZURE_APP_JWK];
 
-    azureADClient = new issuer.Client(
-      {
-        client_id: AZURE_APP_CLIENT_ID,
-        token_endpoint_auth_method: 'private_key_jwt',
-        token_endpoint_auth_signing_alg: 'RS256',
-      },
-      { keys },
-    );
+        azureADClient = new issuer.Client(
+          {
+            client_id: AZURE_APP_CLIENT_ID,
+            token_endpoint_auth_method: 'private_key_jwt',
+            token_endpoint_auth_signing_alg: 'RS256',
+          },
+          { keys },
+        );
 
-    return azureADClient;
-  } catch (error) {
-    log.error({ msg: 'Failed to get Azure AD client', error });
-    throw error;
-  }
+        return azureADClient;
+      } catch (error) {
+        log.error({ msg: 'Failed to get Azure AD client', error });
+        throw error;
+      }
+    },
+  );
 };
 
 export const getIsAzureClientReady = () => isLocal || azureADClient !== null;

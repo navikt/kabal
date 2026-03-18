@@ -13,8 +13,6 @@ const labelNames = [
   'up_to_date_client',
   'start_time',
   'app_start_time',
-  'trace_id',
-  'span_id',
   'domain',
   'theme',
   'user_theme',
@@ -35,10 +33,10 @@ const NOOP = () => undefined;
 type EndFn = () => void;
 
 export const startClientSession = (req: FastifyRequest<{ Querystring: VersionQueryString }>): EndFn => {
-  const { navIdent, client_version, trace_id, span_id, headers, query } = req;
+  const { navIdent, client_version, headers, query } = req;
 
   if (navIdent.length === 0) {
-    log.warn({ msg: 'No NAV-ident related to the session', trace_id, span_id });
+    log.warn({ msg: 'No NAV-ident related to the session' });
 
     return NOOP;
   }
@@ -49,8 +47,6 @@ export const startClientSession = (req: FastifyRequest<{ Querystring: VersionQue
     up_to_date_client: client_version === PROXY_VERSION ? 'true' : 'false',
     start_time: Date.now().toString(10),
     app_start_time: START_TIME,
-    trace_id: trace_id,
-    span_id: span_id,
     domain: headers.host ?? 'UNKNOWN',
     theme: query.theme ?? 'light',
     user_theme: query.user_theme ?? 'system',

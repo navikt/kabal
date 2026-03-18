@@ -1,4 +1,5 @@
 import { hasOwn, isObject } from '@/functions/functions';
+import { withSpan } from '@/helpers/tracing';
 import { getCloseEvent } from '@/plugins/crdt/close-event';
 import type { ConnectionContext } from '@/plugins/crdt/context';
 import { logContext } from '@/plugins/crdt/log-context';
@@ -62,44 +63,59 @@ const refresh = async (context: ConnectionContext, retries = 2): Promise<number>
     throw new RefreshError(401, 'Missing session cookie');
   }
 
-  try {
-    // Refresh OBO token directly through Wonderwall.
-    const res = await fetch('http://localhost:7564/collaboration/refresh-obo-access-token', {
-      method: 'GET',
-      headers: { Cookie: cookie },
-    });
+  return withSpan(
+    'collaboration.refresh_obo_token',
+    {
+      nav_ident: navIdent,
+      attempt: 3 - retries,
+      dokument_id: context.dokumentId,
+      behandling_id: context.behandlingId,
+      tab_id: context.tab_id ?? '',
+      client_version: context.client_version,
+    },
+    async (span) => {
+      try {
+        // Refresh OBO token directly through Wonderwall.
+        const res = await fetch('http://localhost:7564/collaboration/refresh-obo-access-token', {
+          method: 'GET',
+          headers: { Cookie: cookie },
+        });
 
-    if (!res.ok) {
-      const text = await res.text();
-      throw new RefreshError(res.status, `Wonderwall responded with status code ${res.status}: ${text}`);
-    }
+        span.setAttribute('http.status_code', res.status);
 
-    const parsed = await res.json();
+        if (!res.ok) {
+          const text = await res.text();
+          throw new RefreshError(res.status, `Wonderwall responded with status code ${res.status}: ${text}`);
+        }
 
-    if (isObject(parsed) && hasOwn(parsed, 'exp') && typeof parsed.exp === 'number') {
-      const expiresIn = Math.floor(parsed.exp - Date.now() / 1_000);
+        const parsed = await res.json();
 
-      logContext(`OBO token refreshed for ${navIdent}. Expires in ${expiresIn} seconds`, context, 'debug');
+        if (isObject(parsed) && hasOwn(parsed, 'exp') && typeof parsed.exp === 'number') {
+          const expiresIn = Math.floor(parsed.exp - Date.now() / 1_000);
 
-      return expiresIn;
-    }
+          logContext(`OBO token refreshed for ${navIdent}. Expires in ${expiresIn} seconds`, context, 'debug');
 
-    logContext('Invalid OBO token refresh response', context, 'warn');
+          return expiresIn;
+        }
 
-    throw new RefreshError(500, 'Invalid OBO token refresh response');
-  } catch (err) {
-    if (err instanceof DOMException && err.name === 'AbortError') {
-      logContext('OBO token refresh request aborted', context, 'debug');
+        logContext('Invalid OBO token refresh response', context, 'warn');
 
-      return 0;
-    }
+        throw new RefreshError(500, 'Invalid OBO token refresh response');
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          logContext('OBO token refresh request aborted', context, 'debug');
 
-    if (retries === 0) {
-      throw new RefreshError(500, `Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`);
-    }
+          return 0;
+        }
 
-    return refresh(context, retries - 1);
-  }
+        if (retries === 0) {
+          throw new RefreshError(500, `Failed to refresh OBO token. ${err instanceof Error ? err : 'Unknown error.'}`);
+        }
+
+        return refresh(context, retries - 1);
+      }
+    },
+  );
 };
 
 class RefreshError extends Error {

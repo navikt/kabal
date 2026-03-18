@@ -13,5 +13,6 @@ export enum EventName {
 }
 
 export const manager = new ServerSentEventManager<EventName>(
+  'notifications',
   `${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/events`,
 );

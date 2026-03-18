@@ -20,6 +20,7 @@ import { VersionStatus } from '@/components/smart-editor/tabbed-editors/version-
 import { DocumentErrorComponent } from '@/error-boundary/document-error';
 import { ErrorBoundary } from '@/error-boundary/error-boundary';
 import { useSmartEditorActiveDocument } from '@/hooks/settings/use-setting';
+import { useTimingMeasurement } from '@/hooks/use-timing-measurement';
 import { isEditableTextNode } from '@/plate/functions/is-editable-text';
 import { StatusBar } from '@/plate/status-bar/status-bar';
 import { SaksbehandlerToolbar } from '@/plate/toolbar/toolbars/saksbehandler-toolbar';
@@ -51,6 +52,8 @@ const PlateContext = ({ smartDocument, oppgave, isConnected, isSynced }: PlateCo
   const dynamicContentLoadingCount = useDynamicContentLoadingCount();
   const isDynamicContentLoading = useIsDynamicContentLoading(isSynced, dynamicContentLoadingCount);
   const isReady = isSynced && !isDynamicContentLoading;
+
+  useTimingMeasurement('smart_editor_ready_ms', isReady);
 
   const focusEditor = useCallback(() => {
     const at = editor.selection ?? getFirstEditableTextStart(editor);

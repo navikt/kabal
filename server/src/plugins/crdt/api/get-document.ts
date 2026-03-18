@@ -4,7 +4,7 @@ import { Doc, encodeStateAsUpdateV2, XmlText } from 'yjs';
 import { getCacheKey, oboCache } from '@/auth/cache/cache';
 import { ApiClientEnum } from '@/config/config';
 import { isObject } from '@/functions/functions';
-import { generateTraceparent } from '@/helpers/traceparent';
+import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 import { KABAL_API_URL } from '@/plugins/crdt/api/url';
 import { getCloseEvent } from '@/plugins/crdt/close-event';
@@ -13,89 +13,96 @@ import type { ConnectionContext } from '@/plugins/crdt/context';
 const log = getLogger('collaboration');
 
 export const getDocument = async (context: ConnectionContext): Promise<DocumentResponse> => {
-  const { behandlingId, dokumentId, navIdent, trace_id, span_id, tab_id, client_version } = context;
-  const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/dokumenter/${dokumentId}`, {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
-      traceparent: generateTraceparent(trace_id),
-    },
-  });
+  const { behandlingId, dokumentId, navIdent, tab_id, client_version } = context;
 
-  if (!res.ok) {
-    if (res.status === 404) {
-      log.error({
-        msg: 'Document not found. Closing connection.',
-        trace_id,
-        span_id,
-        tab_id,
-        client_version,
-        data: { behandlingId, dokumentId, statusCode: res.status },
+  return withSpan(
+    'collaboration.get_document',
+    {
+      behandling_id: behandlingId,
+      dokument_id: dokumentId,
+      nav_ident: navIdent,
+      tab_id: tab_id ?? '',
+      client_version,
+    },
+    async (span) => {
+      const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/dokumenter/${dokumentId}`, {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
+        },
       });
 
-      context.socket.close(4404, 'DOCUMENT_NOT_FOUND');
+      span.setAttribute('http.status_code', res.status);
 
-      throw getCloseEvent('DOCUMENT_NOT_FOUND', 4404);
-    }
+      if (!res.ok) {
+        if (res.status === 404) {
+          log.error({
+            msg: 'Document not found. Closing connection.',
+            tab_id,
+            client_version,
+            data: { behandlingId, dokumentId, statusCode: res.status },
+          });
 
-    const msg = `Failed to fetch document. API responded with status code ${res.status}.`;
+          context.socket.close(4404, 'DOCUMENT_NOT_FOUND');
 
-    log.error({
-      msg,
-      trace_id,
-      span_id,
-      tab_id,
-      client_version,
-      data: { behandlingId, dokumentId, statusCode: res.status },
-    });
+          throw getCloseEvent('DOCUMENT_NOT_FOUND', 4404);
+        }
 
-    throw new Error(msg);
-  }
+        const msg = `Failed to fetch document. API responded with status code ${res.status}.`;
 
-  const json = await res.json();
+        log.error({
+          msg,
+          tab_id,
+          client_version,
+          data: { behandlingId, dokumentId, statusCode: res.status },
+        });
 
-  if (!isDocumentResponse(json)) {
-    const msg = 'Invalid document response';
-    log.error({
-      msg,
-      trace_id,
-      span_id,
-      tab_id,
-      client_version,
-      data: { response: JSON.stringify(json) },
-    });
+        throw new Error(msg);
+      }
 
-    throw new Error(msg);
-  }
+      const json = await res.json();
 
-  const { content, data } = json;
+      if (!isDocumentResponse(json)) {
+        const msg = 'Invalid document response';
+        log.error({
+          msg,
+          tab_id,
+          client_version,
+          data: { response: JSON.stringify(json) },
+        });
 
-  // If the document has no binary data, create and save it.
-  if (data === null || data.length === 0) {
-    const document = new Doc();
-    const sharedRoot = document.get('content', XmlText);
-    const insertDelta = slateNodesToInsertDelta(content);
-    sharedRoot.applyDelta(insertDelta);
-    const state = encodeStateAsUpdateV2(document);
-    const base64data = Buffer.from(state).toString('base64');
+        throw new Error(msg);
+      }
 
-    // Save the binary data to the database.
-    await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
-        traceparent: generateTraceparent(trace_id),
-      },
-      body: JSON.stringify({ content, data: base64data }),
-    });
+      const { content, data } = json;
 
-    // Return the document and binary data.
-    return { content, data: base64data };
-  }
+      // If the document has no binary data, create and save it.
+      if (data === null || data.length === 0) {
+        const document = new Doc();
+        const sharedRoot = document.get('content', XmlText);
+        const insertDelta = slateNodesToInsertDelta(content);
+        sharedRoot.applyDelta(insertDelta);
+        const state = encodeStateAsUpdateV2(document);
+        const base64data = Buffer.from(state).toString('base64');
 
-  return { content, data };
+        // Save the binary data to the database.
+        await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
+          },
+          body: JSON.stringify({ content, data: base64data }),
+        });
+
+        // Return the document and binary data.
+        return { content, data: base64data };
+      }
+
+      return { content, data };
+    },
+  );
 };
 
 interface DocumentResponse {

@@ -12,8 +12,12 @@ export const removeFileViewerHandle = (handle: KlageFileViewerHandle): void => {
 };
 
 /** Calls `reloadFile` on all registered file viewer handles. */
-export const reloadFileInAllViewers = (url: string): void => {
+export const reloadFileInAllViewers = async (url: string): Promise<void> => {
+  const promises: Promise<boolean>[] = [];
+
   for (const handle of fileViewerHandles) {
-    handle.reloadFile(url);
+    promises.push(handle.reloadFile(url));
   }
+
+  await Promise.all(promises);
 };

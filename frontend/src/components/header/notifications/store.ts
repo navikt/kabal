@@ -1,21 +1,23 @@
 import { EventName, manager } from '@/components/header/notifications/subscription';
 import type {
   KabalNotification,
+  KabalNotificationEvent,
   KabalNotificationId,
   KabalNotificationIds,
+  KabalNotificationListEvent,
 } from '@/components/header/notifications/types';
 import { Observable } from '@/observable';
 
 export const notificationsStore = new Observable<KabalNotification[]>([]);
 
 // Create notifications
-manager.addJsonEventListener<KabalNotification>(EventName.CREATE, (notification) =>
+manager.addJsonEventListener<KabalNotificationEvent>(EventName.CREATE, (notification) =>
   notificationsStore.set((current) =>
     current.some((n) => n.id === notification.id) ? current : [notification, ...current],
   ),
 );
 
-manager.addJsonEventListener<KabalNotification[]>(EventName.CREATE_MULTIPLE, (notifications) => {
+manager.addJsonEventListener<KabalNotificationListEvent>(EventName.CREATE_MULTIPLE, ({ notifications }) => {
   notificationsStore.set((current) => {
     if (current.length === 0) {
       return notifications;

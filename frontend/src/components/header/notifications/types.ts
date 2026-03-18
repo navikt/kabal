@@ -1,3 +1,5 @@
+import type { BaseEvent } from '@/redux-api/server-sent-events/types';
+import type { TracedEvent } from '@/server-sent-events';
 import type { INavEmployee } from '@/types/bruker';
 import type { SaksTypeEnum } from '@/types/kodeverk';
 
@@ -17,7 +19,7 @@ export const NOTIFICATION_TYPE_LABELS: Record<NotificationType, string> = {
   [NotificationType.SYSTEM]: 'System',
 };
 
-export interface BaseKabalNotification<T extends NotificationType> {
+export interface BaseKabalNotification<T extends NotificationType> extends BaseEvent {
   /** The type of the notification */
   type: T;
   /** The unique identifier for the notification */
@@ -88,12 +90,18 @@ export type KabalNotification =
   | GainedAccessNotification
   | SystemNotification;
 
-export interface KabalNotificationId {
+export type KabalNotificationEvent = KabalNotification & TracedEvent;
+
+export interface KabalNotificationListEvent extends TracedEvent {
+  notifications: KabalNotification[];
+}
+
+export interface KabalNotificationId extends TracedEvent {
   /** The unique identifier for the notification */
   id: string;
 }
 
-export interface KabalNotificationIds {
+export interface KabalNotificationIds extends TracedEvent {
   /** The unique identifiers for the notifications */
   ids: string[];
 }

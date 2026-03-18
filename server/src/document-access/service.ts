@@ -1,3 +1,4 @@
+import { propagation, ROOT_CONTEXT, SpanKind, SpanStatusCode, trace } from '@opentelemetry/api';
 import { Consumer, type MessagesStream } from '@platformatic/kafka';
 import client from 'prom-client';
 import { requiredEnvString } from '@/config/env-var';
@@ -5,10 +6,11 @@ import { SmartDocumentAccessMap } from '@/document-access/access-map';
 import { getAccessListFromApi } from '@/document-access/api/access-list';
 import { parseKafkaMessageValue } from '@/document-access/kafka';
 import type { Metadata } from '@/document-access/types';
-import { generateTraceId, getTraceIdAndSpanIdFromTraceparent } from '@/helpers/traceparent';
+import { parseTraceparent } from '@/helpers/traceparent';
 import { getLogger } from '@/logger';
 import { proxyRegister } from '@/prometheus/types';
 import { isShuttingDown } from '@/shutdown';
+import { tracer } from '@/tracing/tracer';
 
 const log = getLogger('document-write-access-kafka-consumer');
 
@@ -51,7 +53,7 @@ class SmartDocumentWriteAccess {
   });
 
   #stream: MessagesStream<string, string, string, string> | null = null;
-  #lifecycle_trace_id = generateTraceId();
+  #lifecycle_trace_id = trace.getActiveSpan()?.spanContext().traceId ?? crypto.randomUUID().replaceAll('-', '');
   #initTimestamp = Date.now();
 
   /**
@@ -129,81 +131,126 @@ class SmartDocumentWriteAccess {
     log.debug({ msg: 'Kafka consumer stream listener starting...', trace_id });
 
     stream.on('data', async ({ key: documentId, value, timestamp, headers, commit }) => {
-      const traceparent = headers.get('traceparent');
-
+      // Extract trace_id from Kafka message headers for log correlation.
+      // Kafka messages are not covered by OTel HTTP instrumentation, so we parse manually.
+      const traceparentHeader = headers.get('traceparent');
       const message_trace_id =
-        traceparent === undefined ? undefined : getTraceIdAndSpanIdFromTraceparent(traceparent)?.trace_id;
+        traceparentHeader === undefined ? trace_id : (parseTraceparent(traceparentHeader).trace_id ?? trace_id);
 
-      const payload = parseKafkaMessageValue(value, message_trace_id ?? trace_id);
+      const parentContext =
+        traceparentHeader === undefined
+          ? ROOT_CONTEXT
+          : propagation.extract(ROOT_CONTEXT, { traceparent: traceparentHeader });
 
-      if (payload === null) {
-        log.debug({
-          msg: 'Received tombstone message from Kafka, deleting access list entry',
-          trace_id: message_trace_id ?? trace_id,
-          data: { key: documentId },
-        });
+      await tracer.startActiveSpan(
+        'kafka.process_document_access',
+        {
+          kind: SpanKind.CONSUMER,
+          attributes: {
+            'messaging.system': 'kafka',
+            'messaging.operation': 'process',
+            'messaging.destination.name': 'klage.smart-document-write-access.v1',
+          },
+        },
+        parentContext,
+        async (span) => {
+          try {
+            await this.#processMessage(documentId, value, timestamp, commit, message_trace_id);
+            span.setStatus({ code: SpanStatusCode.OK });
+          } catch (error) {
+            span.setStatus({ code: SpanStatusCode.ERROR });
 
-        this.#accessMap.delete(documentId);
-        this.#notifyHasAccessListeners(documentId, null);
-        this.#notifyDeletedDocumentListeners(documentId);
+            if (error instanceof Error) {
+              span.recordException(error);
+            }
 
-        try {
-          await commit();
-        } catch (error) {
-          log.error({
-            msg: 'Failed to commit tombstone message offset',
-            trace_id: message_trace_id ?? trace_id,
-            data: { key: documentId },
-            error,
-          });
-        }
-
-        return;
-      }
-
-      if (timestamp < this.#initTimestamp && this.#accessMap.has(documentId)) {
-        try {
-          await commit();
-        } catch (error) {
-          log.error({
-            msg: 'Failed to commit outdated message offset',
-            trace_id: message_trace_id ?? trace_id,
-            data: { key: documentId, payload },
-            error,
-          });
-        }
-
-        return log.debug({
-          msg: 'Received outdated message from Kafka',
-          trace_id: message_trace_id ?? trace_id,
-          data: { key: documentId, payload },
-        });
-      }
-
-      log.debug({
-        msg: 'Received update message from Kafka',
-        trace_id: message_trace_id ?? trace_id,
-        data: { key: documentId, payload },
-      });
-
-      this.#accessMap.set(documentId, payload);
-      this.#notifyHasAccessListeners(documentId, payload);
-
-      try {
-        await commit();
-      } catch (error) {
-        log.error({
-          msg: 'Failed to commit message offset',
-          trace_id: message_trace_id ?? trace_id,
-          data: { key: documentId, payload },
-          error,
-        });
-      }
+            throw error;
+          } finally {
+            span.end();
+          }
+        },
+      );
     });
 
     log.debug({ msg: 'Kafka consumer stream listener started', trace_id });
 
     return stream;
+  };
+
+  #processMessage = async (
+    documentId: string,
+    value: string | undefined,
+    timestamp: bigint,
+    commit: () => void | Promise<void>,
+    message_trace_id: string,
+  ): Promise<void> => {
+    const payload = value === undefined ? null : parseKafkaMessageValue(value);
+
+    if (payload === null) {
+      log.debug({
+        msg: 'Received tombstone message from Kafka, deleting access list entry',
+        trace_id: message_trace_id,
+        data: { key: documentId },
+      });
+
+      this.#accessMap.delete(documentId);
+      this.#notifyHasAccessListeners(documentId, null);
+      this.#notifyDeletedDocumentListeners(documentId);
+
+      try {
+        await commit();
+      } catch (error) {
+        log.error({
+          msg: 'Failed to commit tombstone message offset',
+          trace_id: message_trace_id,
+          data: { key: documentId },
+          error,
+        });
+      }
+
+      return;
+    }
+
+    if (timestamp < this.#initTimestamp && this.#accessMap.has(documentId)) {
+      try {
+        await commit();
+      } catch (error) {
+        log.error({
+          msg: 'Failed to commit outdated message offset',
+          trace_id: message_trace_id,
+          data: { key: documentId, payload },
+          error,
+        });
+      }
+
+      log.debug({
+        msg: 'Received outdated message from Kafka',
+        trace_id: message_trace_id,
+        data: { key: documentId, payload },
+      });
+
+      return;
+    }
+
+    log.debug({
+      msg: 'Received update message from Kafka',
+      trace_id: message_trace_id,
+      data: { key: documentId, payload },
+    });
+
+    this.#accessMap.set(documentId, payload);
+    this.#notifyHasAccessListeners(documentId, payload);
+
+    try {
+      await commit();
+    } catch (error) {
+      log.error({
+        msg: 'Failed to commit message offset',
+        trace_id: message_trace_id,
+        data: { key: documentId, payload },
+        error,
+      });
+    }
   };
 
   hasAccess = async (
@@ -212,7 +259,7 @@ class SmartDocumentWriteAccess {
     metadata: Metadata,
     allowApiFetching = false,
   ): Promise<boolean> => {
-    const { trace_id, span_id, tab_id, client_version, behandling_id } = metadata;
+    const { tab_id, client_version, behandling_id } = metadata;
 
     const errors = this.getErrors();
 
@@ -220,8 +267,6 @@ class SmartDocumentWriteAccess {
       if (!isShuttingDown()) {
         log.error({
           msg: `Smart Document Write Access is not processing Kafka messages: ${errors.join(', ')}`,
-          trace_id,
-          span_id,
           tab_id,
           client_version,
           data: { behandling_id, document_id: documentId, nav_ident: navIdent, allow_api_fetching: allowApiFetching },
