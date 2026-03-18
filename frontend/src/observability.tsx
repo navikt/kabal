@@ -1,58 +1,74 @@
-import { getWebInstrumentations, initializeFaro, ReactIntegration, ReactRouterVersion } from '@grafana/faro-react';
-import { faro, LogLevel, type PushLogOptions } from '@grafana/faro-web-sdk';
-import { TracingInstrumentation } from '@grafana/faro-web-tracing';
+import { LogLevel as FaroLogLevel, faro } from '@grafana/faro-web-sdk';
 import { useCallback } from 'react';
-import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router-dom';
 import { useGrafanaDomain } from '@/components/grafana-domain-context/grafana-domain-context';
-import { ENVIRONMENT } from '@/environment';
 
-const getUrl = () => {
-  if (ENVIRONMENT.isProduction) {
-    return 'https://telemetry.nav.no/collect';
+// --- Log levels (replacing Grafana Faro LogLevel) ---
+
+export enum LogLevel {
+  TRACE = 'TRACE',
+  DEBUG = 'DEBUG',
+  INFO = 'INFO',
+  WARN = 'WARN',
+  ERROR = 'ERROR',
+}
+
+const toFaroLogLevel = (level: LogLevel): FaroLogLevel => {
+  switch (level) {
+    case LogLevel.TRACE:
+      return FaroLogLevel.TRACE;
+    case LogLevel.DEBUG:
+      return FaroLogLevel.DEBUG;
+    case LogLevel.INFO:
+      return FaroLogLevel.INFO;
+    case LogLevel.WARN:
+      return FaroLogLevel.WARN;
+    case LogLevel.ERROR:
+      return FaroLogLevel.ERROR;
   }
-
-  if (ENVIRONMENT.isDevelopment) {
-    return 'https://telemetry.ekstern.dev.nav.no/collect';
-  }
-
-  return '/collect';
 };
 
-initializeFaro({
-  url: getUrl(),
-  app: { name: 'kabal-frontend', version: ENVIRONMENT.version },
-  paused: ENVIRONMENT.isLocal,
-  batching: {
-    enabled: true,
-    sendTimeout: ENVIRONMENT.isProduction ? 250 : 30000,
-    itemLimit: ENVIRONMENT.isProduction ? 50 : 100,
-  },
-  instrumentations: [
-    ...getWebInstrumentations({ captureConsole: false }),
-    new TracingInstrumentation(),
-    new ReactIntegration({
-      router: {
-        version: ReactRouterVersion.V6,
-        dependencies: {
-          createRoutesFromChildren,
-          matchRoutes,
-          Routes,
-          useLocation,
-          useNavigationType,
-        },
-      },
-    }),
-  ],
-});
+// --- Public API (same surface as the old module) ---
 
-export const pushEvent = (name: string, domain: string, attributes?: Record<string, string>) =>
-  faro.api.pushEvent(name, { ...attributes, domain }, domain, { skipDedupe: true });
+export interface PushLogOptions {
+  context?: Record<string, string>;
+  skipDedupe?: boolean;
+}
 
-export const pushLog = (message: string, options?: Omit<PushLogOptions, 'skipDedupe'>, level = LogLevel.DEBUG) =>
-  faro.api.pushLog([message], { ...options, skipDedupe: true, level });
+/**
+ * Push a custom named event.
+ */
+export const pushEvent = (name: string, domain: string, attributes?: Record<string, string>): void => {
+  faro.api?.pushEvent(name, { domain, ...attributes });
+};
 
-export const { pushMeasurement, pushError } = faro.api;
+/**
+ * Push a log message.
+ */
+export const pushLog = (
+  message: string,
+  options?: Omit<PushLogOptions, 'skipDedupe'>,
+  level: LogLevel = LogLevel.DEBUG,
+): void => {
+  faro.api?.pushLog([message], { level: toFaroLogLevel(level), context: options?.context });
+};
 
+/**
+ * Push a measurement with the given type and values.
+ */
+export const pushMeasurement = (measurement: { type: string; values: Record<string, number> }): void => {
+  faro.api?.pushMeasurement({ type: measurement.type, values: measurement.values });
+};
+
+/**
+ * Push an error for observability.
+ */
+export const pushError = (error: Error, options?: { context?: Record<string, string> }): void => {
+  faro.api?.pushError(error, { context: options?.context });
+};
+
+/**
+ * React hook that returns a `pushEvent` function pre-bound to the current Grafana domain.
+ */
 export const usePushEvent = () => {
   const domain = useGrafanaDomain();
 

@@ -6,6 +6,7 @@ import { getAzureADClient } from '@/auth/get-auth-client';
 import { getOnBehalfOfAccessToken } from '@/auth/on-behalf-of';
 import { isDeployed } from '@/config/env';
 import { getDuration } from '@/helpers/duration';
+import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/access-token';
 import { NAV_IDENT_PLUGIN_ID } from '@/plugins/nav-ident';
@@ -75,12 +76,10 @@ export const oboAccessTokenPlugin = fastifyPlugin(
 type GetOboToken = (appName: string, req: FastifyRequest, reply?: FastifyReply) => Promise<string | undefined>;
 
 const getOboToken: GetOboToken = async (appName, req, reply) => {
-  const { trace_id, span_id, accessToken, navIdent, url, client_version, tab_id } = req;
+  const { accessToken, navIdent, url, client_version, tab_id } = req;
 
   log.debug({
     msg: `Getting OBO token for "${appName}".`,
-    trace_id,
-    span_id,
     tab_id,
     client_version,
     data: { route: url },
@@ -90,35 +89,38 @@ const getOboToken: GetOboToken = async (appName, req, reply) => {
     return undefined;
   }
 
-  try {
-    const azureClientStart = performance.now();
-    const authClient = await getAzureADClient();
-    reply?.addServerTiming('azure_client_middleware', getDuration(azureClientStart), 'Azure Client Middleware');
+  return withSpan(
+    'auth.get_obo_token',
+    {
+      app_name: appName,
+      'http.route': url,
+      nav_ident: navIdent,
+      tab_id: tab_id ?? '',
+      client_version: client_version ?? '',
+    },
+    async () => {
+      try {
+        const azureClientStart = performance.now();
+        const authClient = await getAzureADClient();
+        reply?.addServerTiming('azure_client_middleware', getDuration(azureClientStart), 'Azure Client Middleware');
 
-    const oboStart = performance.now();
-    const oboAccessToken = await getOnBehalfOfAccessToken(
-      authClient,
-      accessToken,
-      navIdent,
-      appName,
-      trace_id,
-      span_id,
-    );
+        const oboStart = performance.now();
+        const oboAccessToken = await getOnBehalfOfAccessToken(authClient, accessToken, navIdent, appName);
 
-    const duration = getDuration(oboStart);
-    oboRequestDuration.observe(duration);
-    reply?.addServerTiming('obo_token_middleware', duration, 'OBO Token Middleware');
+        const duration = getDuration(oboStart);
+        oboRequestDuration.observe(duration);
+        reply?.addServerTiming('obo_token_middleware', duration, 'OBO Token Middleware');
 
-    return oboAccessToken;
-  } catch (error) {
-    log.warn({
-      msg: 'Failed to prepare request with OBO token.',
-      error,
-      trace_id,
-      span_id,
-      data: { route: req.url },
-    });
+        return oboAccessToken;
+      } catch (error) {
+        log.warn({
+          msg: 'Failed to prepare request with OBO token.',
+          error,
+          data: { route: req.url },
+        });
 
-    return undefined;
-  }
+        return undefined;
+      }
+    },
+  );
 };

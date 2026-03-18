@@ -1,3 +1,5 @@
+import { SpanStatusCode } from '@opentelemetry/api';
+import { tracer } from '@/tracing/tracer';
 import type { SaksTypeEnum } from '@/types/kodeverk';
 import type { BehandlingstidUnitType } from '@/types/svarbrev';
 
@@ -32,19 +34,41 @@ export const getPdfUrl = async (body: PreviewRequestsBody, signal?: AbortSignal)
     return cached;
   }
 
-  const res = await fetch(`/api/kabal-api/svarbrev-preview/anonymous${PDF_PARAMS}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-    signal,
+  return tracer.startActiveSpan('svarbrev.get_pdf_preview', async (span) => {
+    span.setAttributes({
+      type_id: body.typeId,
+      ytelse_id: body.ytelseId,
+      behandlingstid_units: body.behandlingstidUnits,
+      behandlingstid_unit_type_id: body.behandlingstidUnitTypeId,
+      has_custom_text: body.customText !== null,
+    });
+
+    try {
+      const res = await fetch(`/api/kabal-api/svarbrev-preview/anonymous${PDF_PARAMS}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal,
+      });
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+
+      CACHE.set(key, url);
+
+      return url;
+    } catch (error) {
+      span.setStatus({ code: SpanStatusCode.ERROR });
+
+      if (error instanceof Error) {
+        span.recordException(error);
+      }
+
+      throw error;
+    } finally {
+      span.end();
+    }
   });
-
-  const blob = await res.blob();
-  const url = URL.createObjectURL(blob);
-
-  CACHE.set(key, url);
-
-  return url;
 };
 
 const PDF_PARAMS = '#toolbar=1&view=fitH&zoom=page-width';

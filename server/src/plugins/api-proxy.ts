@@ -34,13 +34,11 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
         return;
       }
 
-      const { method, url, trace_id, span_id, tab_id, client_version, proxyStartTime } = req;
+      const { method, url, tab_id, client_version, proxyStartTime } = req;
       const responseTime = getDuration(proxyStartTime);
 
       log.debug({
         msg: `Proxy response (${appName}) ${reply.statusCode} ${method} ${url} ${responseTime}ms`,
-        trace_id,
-        span_id,
         client_version,
         tab_id,
         data: {
@@ -67,8 +65,6 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
           log.debug({
             msg: `Proxy request (${appName}) ${req.method} ${req.url}`,
             tab_id: req.tab_id,
-            trace_id: req.trace_id,
-            span_id: req.span_id,
             data: {
               method: req.method,
               contentType: req.headers['content-type'],
@@ -90,8 +86,6 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
             log.warn({
               msg: `Proxy error (${appName}): ${error.message}`,
               data: { code, appName },
-              trace_id: reply.request.trace_id,
-              span_id: reply.request.span_id,
             });
 
             reply.code(502).send({ error: 'Bad Gateway', message: `${code ?? error.message}` });

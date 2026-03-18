@@ -1,8 +1,11 @@
 import { SMART_DOCUMENT_WRITE_ACCESS } from '@/document-access/service';
 import { getLogger } from '@/logger';
 import { collaborationServer } from '@/plugins/crdt/collaboration-server';
+import { isConnectionContext } from '@/plugins/crdt/context';
+import { endActivity } from '@/plugins/crdt/crdt-tracing';
 import { setShuttingDown } from '@/shutdown';
 import { EmojiIcons, sendToSlack } from '@/slack';
+import { shutdownTracing } from '@/tracing';
 
 const log = getLogger('process-errors');
 
@@ -27,6 +30,9 @@ export const processErrors = () => {
       for (const [, document] of collaborationServer.documents) {
         for (const [, { connection }] of document.connections) {
           try {
+            if (isConnectionContext(connection.context)) {
+              endActivity(connection.context);
+            }
             connection.close({ code: 1001, reason: 'SERVER_SHUTTING_DOWN' });
           } catch (error) {
             log.error({
@@ -39,11 +45,13 @@ export const processErrors = () => {
 
       await SMART_DOCUMENT_WRITE_ACCESS.close();
       log.info({ msg: `Process ${process.pid} received a ${signal} signal. Shutting down now.` });
+      await shutdownTracing();
       process.exit(0);
     })
     .on('SIGINT', async (signal) => {
       const error = new Error(`Process ${process.pid} has been interrupted, ${signal}. Shutting down now.`);
       log.error({ error });
+      await shutdownTracing();
       process.exit(0);
     })
     .on('beforeExit', async (code) => {

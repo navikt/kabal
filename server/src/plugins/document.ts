@@ -6,6 +6,7 @@ import fastifyPlugin from 'fastify-plugin';
 import { ApiClientEnum, frontendDistDirectoryPath } from '@/config/config';
 import { getDuration } from '@/helpers/duration';
 import { getProxyRequestHeaders } from '@/helpers/prepare-request-headers';
+import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 import { KABAL_API_URL } from '@/plugins/crdt/api/url';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/obo-token';
@@ -245,38 +246,45 @@ const getMetadata = async <T extends Metadata>(
   url: string,
   req: FastifyRequest,
   reply: FastifyReply,
-): Promise<T | null> => {
-  const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API, reply);
+): Promise<T | null> =>
+  withSpan(
+    'document.get_metadata',
+    { 'http.url': url, 'http.method': 'GET', nav_ident: req.navIdent, 'http.route': req.routeOptions.url ?? '' },
+    async (span) => {
+      const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API, reply);
 
-  const headers = getProxyRequestHeaders(req, ApiClientEnum.KABAL_API, oboAccessToken);
+      const headers = getProxyRequestHeaders(req, ApiClientEnum.KABAL_API, oboAccessToken);
 
-  const metadataReqStart = performance.now();
+      const metadataReqStart = performance.now();
 
-  const response = await fetch(url, { method: 'GET', headers });
+      const response = await fetch(url, { method: 'GET', headers });
 
-  reply.addServerTiming('metadata_request_time', getDuration(metadataReqStart), 'Metadata Request Time');
-  const serverTiming = response.headers.get(SERVER_TIMING_HEADER);
+      span.setAttribute('http.status_code', response.status);
 
-  if (serverTiming !== null) {
-    reply.appendServerTimingHeader(serverTiming);
-  }
+      reply.addServerTiming('metadata_request_time', getDuration(metadataReqStart), 'Metadata Request Time');
+      const serverTiming = response.headers.get(SERVER_TIMING_HEADER);
 
-  log.debug({ msg: 'Metadata response', data: { status: response.status, url } });
+      if (serverTiming !== null) {
+        reply.appendServerTimingHeader(serverTiming);
+      }
 
-  if (!response.ok) {
-    log.warn({ msg: 'Failed to fetch metadata', data: { status: response.status, url } });
+      log.debug({ msg: 'Metadata response', data: { status: response.status, url } });
 
-    return null;
-  }
+      if (!response.ok) {
+        log.warn({ msg: 'Failed to fetch metadata', data: { status: response.status, url } });
 
-  const json: unknown = await response.json();
+        return null;
+      }
 
-  if (isMetadataResponse<T>(json)) {
-    return json;
-  }
+      const json: unknown = await response.json();
 
-  return null;
-};
+      if (isMetadataResponse<T>(json)) {
+        return json;
+      }
+
+      return null;
+    },
+  );
 
 const isMetadataResponse = <T extends Metadata>(response: unknown): response is T => {
   if (response === null || typeof response !== 'object') {

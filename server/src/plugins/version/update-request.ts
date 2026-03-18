@@ -29,11 +29,11 @@ if (UPDATE_REQUIRED_THRESHOLD > PROXY_VERSION || UPDATE_OPTIONAL_THRESHOLD > PRO
 }
 
 export const getUpdateRequest = (req: FastifyRequest): UpdateRequest => {
-  const { client_version, trace_id, span_id } = req;
+  const { client_version } = req;
 
   // If the client version is not provided, the client must update.
   if (client_version === undefined) {
-    log.warn({ msg: 'Client version is not provided', trace_id, span_id });
+    log.warn({ msg: 'Client version is not provided' });
 
     return UpdateRequest.REQUIRED;
   }

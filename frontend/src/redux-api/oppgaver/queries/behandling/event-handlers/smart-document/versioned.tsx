@@ -6,7 +6,7 @@ import type { SmartDocumentVersionedEvent } from '@/redux-api/server-sent-events
 
 export const handleSmartDocumentVersionedEvent =
   (oppgaveId: string) =>
-  ({ documentId, author, timestamp, version }: SmartDocumentVersionedEvent) => {
+  async ({ documentId, author, timestamp, version }: SmartDocumentVersionedEvent) => {
     reduxStore.dispatch(
       documentsQuerySlice.util.updateQueryData(
         'getSmartDocumentVersions',
@@ -21,5 +21,5 @@ export const handleSmartDocumentVersionedEvent =
       }),
     );
 
-    reloadFileInAllViewers(getNewDocumentFileUrl(oppgaveId, documentId));
+    await reloadFileInAllViewers(getNewDocumentFileUrl(oppgaveId, documentId));
   };

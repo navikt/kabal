@@ -1,5 +1,6 @@
 import { ENVIRONMENT, isLocal } from '@/config/env';
 import { optionalEnvString, requiredEnvString } from '@/config/env-var';
+import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 
 const log = getLogger('slack');
@@ -33,11 +34,17 @@ export const sendToSlack = async (message: string, icon_emoji: EmojiIcons): Prom
   const body = JSON.stringify({ channel, text, icon_emoji });
 
   try {
-    const res = await fetch(url, { method: 'POST', body });
+    await withSpan('slack.send_message', { channel, icon_emoji, environment: ENVIRONMENT }, async (span) => {
+      const response = await fetch(url, { method: 'POST', body });
 
-    if (!res.ok) {
-      throw new Error(`Slack responded with status code ${res.status}`);
-    }
+      span.setAttribute('http.status_code', response.status);
+
+      if (!response.ok) {
+        throw new Error(`Slack responded with status code ${response.status}`);
+      }
+
+      return response;
+    });
 
     return true;
   } catch (error) {

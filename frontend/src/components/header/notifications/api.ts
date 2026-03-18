@@ -1,6 +1,40 @@
+import { type Attributes, SpanStatusCode } from '@opentelemetry/api';
 import { useCallback, useEffect, useState } from 'react';
 import { KLAGE_NOTIFICATIONS_BASE_PATH } from '@/components/header/notifications/constants';
 import { toast } from '@/components/toast/store';
+import { tracer } from '@/tracing/tracer';
+
+const tracedFetch = async (
+  url: string,
+  options: RequestInit,
+  spanName: string,
+  attributes?: Attributes,
+): Promise<Response> =>
+  tracer.startActiveSpan(spanName, async (span) => {
+    if (attributes !== undefined) {
+      span.setAttributes(attributes);
+    }
+
+    try {
+      const response = await fetch(url, options);
+
+      if (!response.ok) {
+        span.setStatus({ code: SpanStatusCode.ERROR, message: `HTTP ${response.status}` });
+      }
+
+      return response;
+    } catch (error) {
+      span.setStatus({ code: SpanStatusCode.ERROR });
+
+      if (error instanceof Error) {
+        span.recordException(error);
+      }
+
+      throw error;
+    } finally {
+      span.end();
+    }
+  });
 
 export const useMarkAsRead = () => {
   const [loading, setLoading] = useState(false);
@@ -9,10 +43,12 @@ export const useMarkAsRead = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/${id}/read`, {
-        method: 'PATCH',
-        credentials: 'include',
-      });
+      const response = await tracedFetch(
+        `${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/${id}/read`,
+        { method: 'PATCH', credentials: 'include' },
+        'notifications.mark_as_read',
+        { 'notification.id': id },
+      );
 
       return response.ok;
     } catch (e) {
@@ -34,10 +70,12 @@ export const useMarkAsUnread = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/${id}/unread`, {
-        method: 'PATCH',
-        credentials: 'include',
-      });
+      const response = await tracedFetch(
+        `${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/${id}/unread`,
+        { method: 'PATCH', credentials: 'include' },
+        'notifications.mark_as_unread',
+        { 'notification.id': id },
+      );
 
       return response.ok;
     } catch (e) {
@@ -59,12 +97,17 @@ export const useMarkManyAsRead = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/read-multiple`, {
-        method: 'PATCH',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(ids),
-      });
+      const response = await tracedFetch(
+        `${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/read-multiple`,
+        {
+          method: 'PATCH',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ids),
+        },
+        'notifications.mark_many_as_read',
+        { 'notification.ids': ids, 'notification.count': ids.length },
+      );
 
       return response.ok;
     } catch (e) {
@@ -86,12 +129,17 @@ export const useMarkManyAsUnread = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/unread-multiple`, {
-        method: 'PATCH',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(ids),
-      });
+      const response = await tracedFetch(
+        `${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/unread-multiple`,
+        {
+          method: 'PATCH',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ids),
+        },
+        'notifications.mark_many_as_unread',
+        { 'notification.ids': ids, 'notification.count': ids.length },
+      );
 
       return response.ok;
     } catch (e) {
@@ -113,10 +161,11 @@ export const useMarkAllAsRead = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/read-all`, {
-        method: 'PATCH',
-        credentials: 'include',
-      });
+      const response = await tracedFetch(
+        `${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/read-all`,
+        { method: 'PATCH', credentials: 'include' },
+        'notifications.mark_all_as_read',
+      );
 
       return response.ok;
     } catch (e) {
@@ -150,9 +199,11 @@ export const useUnreadBehandlingCount = (behandlingId: string) => {
     setIsFetching(true);
 
     try {
-      const response = await fetch(
+      const response = await tracedFetch(
         `${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/behandling/${behandlingId}/unread-count`,
         { method: 'GET', credentials: 'include' },
+        'notifications.get_unread_count',
+        { behandling_id: behandlingId },
       );
 
       if (response.ok) {

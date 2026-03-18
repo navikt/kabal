@@ -28,6 +28,10 @@ export default defineConfig({
       '/version': PROXY,
       '/oauth': PROXY,
       '/feature-toggle': PROXY,
+      '/collect': {
+        target: 'https://telemetry.ekstern.dev.nav.no',
+        changeOrigin: true,
+      },
     },
   },
 });

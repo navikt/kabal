@@ -1,5 +1,6 @@
+import { FaroRoutes } from '@grafana/faro-react';
 import { Theme, VStack } from '@navikt/ds-react';
-import { Navigate, Outlet, Route, Routes as Switch, useParams } from 'react-router-dom';
+import { Navigate, Outlet, Route, useParams } from 'react-router-dom';
 import { useAppTheme } from '@/app-theme';
 import { NotFoundPage } from '@/components/app/not-found-page';
 import { ProtectedRoute } from '@/components/app/protected-route';
@@ -41,7 +42,7 @@ const RedirectToBehandling = () => {
 };
 
 export const Router = () => (
-  <Switch>
+  <FaroRoutes>
     <Route element={<AppWrapper />}>
       <Route path="/" element={<LandingPage />} />
 
@@ -166,7 +167,7 @@ export const Router = () => (
 
       <Route path="*" element={<NotFoundPage />} />
     </Route>
-  </Switch>
+  </FaroRoutes>
 );
 
 const AppWrapper = () => {

@@ -19,8 +19,6 @@ export type AccessLists = Static<typeof ACCESS_LISTS_TYPE>;
 export const ACCESS_LISTS_CHECKER = Compile(ACCESS_LISTS_TYPE);
 
 export interface Metadata {
-  trace_id: string | undefined;
-  span_id: string | undefined;
   tab_id: string | undefined;
   client_version: string | undefined;
   behandling_id?: string;

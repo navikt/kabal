@@ -8,12 +8,11 @@ export const getProxyRequestHeaders = (
   appName: string,
   oboAccessToken: string | undefined,
 ): Record<string, string> => {
-  const { traceparent, client_version, tab_id } = req;
+  const { client_version, tab_id } = req;
 
   const headers: Record<string, string> = {
     ...omit(req.raw.headers, 'set-cookie'),
     host: isDeployed ? appName : DEV_DOMAIN,
-    traceparent,
     [PROXY_VERSION_HEADER]: PROXY_VERSION,
   };
 

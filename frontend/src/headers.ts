@@ -1,5 +1,5 @@
+import { context, propagation } from '@opentelemetry/api';
 import { ENVIRONMENT } from '@/environment';
-import { generateTraceParent } from '@/functions/generate-request-id';
 
 export const TAB_UUID = crypto.randomUUID();
 
@@ -15,14 +15,29 @@ enum QueryKeys {
   TAB_ID = 'tabId',
 }
 
+const getTraceparent = (): string => {
+  const carrier: Record<string, string> = {};
+  propagation.inject(context.active(), carrier);
+
+  return carrier[HeaderKeys.TRACEPARENT] ?? generateFallbackTraceparent();
+};
+
+/** Fallback traceparent generator when no active OTel context exists. */
+const generateFallbackTraceparent = (): string => {
+  const traceId = crypto.randomUUID().replaceAll('-', '');
+  const parentId = crypto.randomUUID().replaceAll('-', '').substring(0, 16);
+
+  return `00-${traceId}-${parentId}-00`;
+};
+
 export const getHeaders = () => ({
-  [HeaderKeys.TRACEPARENT]: generateTraceParent(),
+  [HeaderKeys.TRACEPARENT]: getTraceparent(),
   [HeaderKeys.VERSION]: ENVIRONMENT.version,
   [HeaderKeys.TAB_ID]: TAB_UUID,
 });
 
 export const setHeaders = (headers: Headers): Headers => {
-  headers.set(HeaderKeys.TRACEPARENT, generateTraceParent());
+  headers.set(HeaderKeys.TRACEPARENT, getTraceparent());
   headers.set(HeaderKeys.VERSION, ENVIRONMENT.version);
   headers.set(HeaderKeys.TAB_ID, TAB_UUID);
 
@@ -31,7 +46,7 @@ export const setHeaders = (headers: Headers): Headers => {
 
 export const getQueryParams = () => {
   const { version } = ENVIRONMENT;
-  const traceParent = generateTraceParent();
+  const traceParent = getTraceparent();
 
   return new URLSearchParams({
     [QueryKeys.VERSION]: version,

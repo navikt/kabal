@@ -10,6 +10,7 @@ import { ApiClientEnum } from '@/config/config';
 import { isDeployed } from '@/config/env';
 import { isObject } from '@/functions/functions';
 import { parseTokenPayload } from '@/helpers/token-parser';
+import { withSpan } from '@/helpers/tracing';
 import { type AnyObject, getLogger, type Level, type LogArgs } from '@/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/access-token';
 import { CLIENT_VERSION_PLUGIN_ID } from '@/plugins/client-version';
@@ -20,15 +21,14 @@ import type { ConnectionContext } from '@/plugins/crdt/context';
 import { NAV_IDENT_PLUGIN_ID } from '@/plugins/nav-ident';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/obo-token';
 import { TAB_ID_PLUGIN_ID } from '@/plugins/tab-id';
-import { TRACEPARENT_PLUGIN_ID } from '@/plugins/traceparent/traceparent';
 
 export const CRDT_PLUGIN_ID = 'crdt';
 
 const log = getLogger(CRDT_PLUGIN_ID);
 
 const logReq = (msg: string, req: FastifyRequest, data: AnyObject, level: Level = 'info', error?: unknown) => {
-  const { trace_id, span_id, tab_id, client_version } = req;
-  const body: LogArgs = { msg, trace_id, span_id, tab_id, client_version, data };
+  const { tab_id, client_version } = req;
+  const body: LogArgs = { msg, tab_id, client_version, data };
 
   if (error !== undefined) {
     body.error = error;
@@ -90,18 +90,33 @@ export const crdtPlugin = fastifyPlugin(
 
           const headers = await getHeaders(req);
 
-          const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter`, {
-            method: 'POST',
-            headers: { ...headers, 'content-type': 'application/json' },
-            body: JSON.stringify({ ...body, data }),
-          });
+          const res = await withSpan(
+            'collaboration.create_document',
+            {
+              behandling_id: behandlingId,
+              nav_ident: req.navIdent,
+              tab_id: req.tab_id ?? '',
+              client_version: req.client_version ?? '',
+            },
+            async (span) => {
+              const response = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter`, {
+                method: 'POST',
+                headers: { ...headers, 'content-type': 'application/json' },
+                body: JSON.stringify({ ...body, data }),
+              });
 
-          if (res.ok) {
-            logReq('Saved new document to database', req, { behandlingId }, 'debug');
-          } else {
-            const msg = `Failed to save document. API responded with status code ${res.status}`;
-            logReq(msg, req, { behandlingId, statusCode: res.status }, 'error');
-          }
+              span.setAttribute('http.status_code', response.status);
+
+              if (response.ok) {
+                logReq('Saved new document to database', req, { behandlingId }, 'debug');
+              } else {
+                const msg = `Failed to save document. API responded with status code ${response.status}`;
+                logReq(msg, req, { behandlingId, statusCode: response.status }, 'error');
+              }
+
+              return response;
+            },
+          );
 
           return reply.send(res);
         } catch (error) {
@@ -116,12 +131,20 @@ export const crdtPlugin = fastifyPlugin(
       '/collaboration/behandlinger/:behandlingId/dokumenter/:dokumentId',
       {
         websocket: true,
+        config: { otel: false },
         schema: {
           tags: ['collaboration'],
           params: Type.Object({ behandlingId: Type.String(), dokumentId: Type.String() }),
+          querystring: Type.Object({ traceparent: Type.Optional(Type.String()) }),
         },
       },
-      async (socket, req) => {
+      async (
+        socket,
+        req: FastifyRequest<{
+          Params: { behandlingId: string; dokumentId: string };
+          Querystring: { traceparent?: string };
+        }>,
+      ) => {
         const { behandlingId, dokumentId } = req.params;
         logReq('Websocket connection init', req, { behandlingId, dokumentId }, 'debug');
 
@@ -136,18 +159,18 @@ export const crdtPlugin = fastifyPlugin(
 
         logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId }, 'debug');
 
-        const { navIdent, trace_id, span_id, tab_id, client_version, headers } = req;
+        const { navIdent, tab_id, client_version, headers } = req;
+        const { traceparent } = req.query;
 
         const context: ConnectionContext = {
           behandlingId,
           dokumentId,
-          trace_id,
-          span_id,
           tab_id,
           client_version,
           navIdent,
           cookie: headers.cookie,
           socket,
+          traceparent,
         };
 
         collaborationServer.handleConnection(socket, req.raw, context);
@@ -188,7 +211,7 @@ export const crdtPlugin = fastifyPlugin(
         },
       },
       async (req, reply) => {
-        const { navIdent, accessToken, trace_id, span_id } = req;
+        const { navIdent, accessToken } = req;
 
         const authClient = await getAzureADClient();
         const cacheKey = getCacheKey(navIdent, ApiClientEnum.KABAL_API);
@@ -198,8 +221,6 @@ export const crdtPlugin = fastifyPlugin(
           accessToken,
           cacheKey,
           ApiClientEnum.KABAL_API,
-          trace_id,
-          span_id,
         );
 
         const parsed = parseTokenPayload(oboAccessToken);
@@ -220,7 +241,6 @@ export const crdtPlugin = fastifyPlugin(
     dependencies: [
       ACCESS_TOKEN_PLUGIN_ID,
       OBO_ACCESS_TOKEN_PLUGIN_ID,
-      TRACEPARENT_PLUGIN_ID,
       TAB_ID_PLUGIN_ID,
       NAV_IDENT_PLUGIN_ID,
       CLIENT_VERSION_PLUGIN_ID,

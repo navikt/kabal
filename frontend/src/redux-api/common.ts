@@ -1,7 +1,31 @@
+import { SpanStatusCode } from '@opentelemetry/api';
 import { type FetchArgs, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
 import { ENVIRONMENT } from '@/environment';
 import { queryStringify } from '@/functions/query-string';
 import { setHeaders } from '@/headers';
+import { tracer } from '@/tracing/tracer';
+
+const classifyNetworkError = (error: unknown): string => {
+  if (error instanceof DOMException && error.name === 'AbortError') {
+    return 'abort';
+  }
+
+  if (error instanceof TypeError) {
+    const message = error.message.toLowerCase();
+
+    if (message.includes('failed to fetch') || message.includes('network')) {
+      return 'network';
+    }
+
+    if (message.includes('cors')) {
+      return 'cors';
+    }
+
+    return 'type-error';
+  }
+
+  return 'unknown';
+};
 
 const mode: RequestMode | undefined = ENVIRONMENT.isLocal ? 'cors' : undefined;
 
@@ -14,7 +38,7 @@ export const staggeredBaseQuery = (baseUrl: string) => {
     prepareHeaders: setHeaders,
   });
 
-  return retry(
+  const retryingFetch = retry(
     async (args: string | FetchArgs, api, extraOptions) => {
       const result = await fetch(args, api, extraOptions);
 
@@ -47,6 +71,39 @@ export const staggeredBaseQuery = (baseUrl: string) => {
       backoff: (attempt) => new Promise((resolve) => setTimeout(resolve, 1000 * attempt)),
     },
   );
+
+  const instrumented: typeof retryingFetch = (args, api, extraOptions) => {
+    return tracer.startActiveSpan(`rtk_query.${api.endpoint}`, async (span) => {
+      span.setAttribute('type', api.type);
+
+      try {
+        try {
+          const result = await retryingFetch(args, api, extraOptions);
+
+          if (result.error !== undefined) {
+            const status = result.meta?.response?.status;
+            span.setStatus({
+              code: SpanStatusCode.ERROR,
+              message: `RTK Query error: ${status?.toString(10) ?? 'unknown'}`,
+            });
+          }
+          return result;
+        } catch (error) {
+          const category = classifyNetworkError(error);
+          span.setAttribute('error.category', category);
+          span.setStatus({ code: SpanStatusCode.ERROR, message: `RTK Query request failed: ${category}` });
+          if (error instanceof Error) {
+            span.recordException(error);
+          }
+          throw error;
+        }
+      } finally {
+        span.end();
+      }
+    });
+  };
+
+  return instrumented;
 };
 
 export const PROXY_BASE_QUERY = staggeredBaseQuery('');

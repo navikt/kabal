@@ -1,6 +1,8 @@
+import { SpanStatusCode } from '@opentelemetry/api';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
 import { getHeaders } from '@/headers';
+import { tracer } from '@/tracing/tracer';
 
 interface State<T> {
   data: T | undefined;
@@ -44,34 +46,45 @@ export class SimpleApiState<T> {
     this.isLoading = true;
     this.onChange();
 
-    try {
-      const response = await fetch(this.url, { method: 'GET', headers: getHeaders() });
+    await tracer.startActiveSpan('simple_api.fetch', async (span) => {
+      span.setAttribute('url', this.url);
 
-      if (!response.ok) {
-        const error = new Error(`${response.status} ${response.statusText}`);
+      try {
+        const response = await fetch(this.url, { method: 'GET', headers: getHeaders() });
+
+        if (!response.ok) {
+          const error = new Error(`${response.status} ${response.statusText}`);
+          this.isError = true;
+          this.error = error;
+          throw error;
+        }
+
+        const contentType = response.headers.get('content-type');
+
+        if (contentType?.includes('application/json')) {
+          this.data = (await response.json()) as T;
+        }
+
+        span.setStatus({ code: SpanStatusCode.OK });
+      } catch (e) {
+        this.data = undefined;
         this.isError = true;
-        this.error = error;
-        throw error;
+
+        if (e instanceof Error) {
+          this.error = e;
+          span.recordException(e);
+        } else {
+          this.error = new Error('Unknown error');
+        }
+
+        span.setStatus({ code: SpanStatusCode.ERROR });
+
+        // Retry after 1 minute.
+        setTimeout(this.fetchData, 60000);
+      } finally {
+        span.end();
       }
-
-      const contentType = response.headers.get('content-type');
-
-      if (contentType?.includes('application/json')) {
-        this.data = (await response.json()) as T;
-      }
-    } catch (e) {
-      this.data = undefined;
-      this.isError = true;
-
-      if (e instanceof Error) {
-        this.error = e;
-      } else {
-        this.error = new Error('Unknown error');
-      }
-
-      // Retry after 1 minute.
-      setTimeout(this.fetchData, 60000);
-    }
+    });
 
     this.isLoading = false;
 

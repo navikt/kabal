@@ -37,7 +37,15 @@ mock.module('@/observability', () => ({
   pushError: jest.fn(),
   pushLog: jest.fn(),
   pushEvent: jest.fn(),
+  pushMeasurement: jest.fn(),
   usePushEvent: jest.fn(),
+  LogLevel: {
+    TRACE: 'TRACE',
+    DEBUG: 'DEBUG',
+    INFO: 'INFO',
+    WARN: 'WARN',
+    ERROR: 'ERROR',
+  },
 }));
 
 mock.module('@/environment', () => ({

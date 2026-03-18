@@ -1,3 +1,4 @@
+import { trace } from '@opentelemetry/api';
 import { TEAM_LOG_PARAMS } from '@/config/config';
 import { hasOwn } from '@/functions/functions';
 import { isDeployed } from './config/env';
@@ -112,6 +113,26 @@ const getLog = (
   { msg: message, trace_id, span_id, client_version, tab_id, error, data }: LogArgs,
   isTeamLog = false,
 ): string | undefined => {
+  // If trace_id/span_id are not explicitly provided, try to get them from the active OTel span.
+  let resolvedTraceId = trace_id;
+  let resolvedSpanId = span_id;
+
+  if (resolvedTraceId === undefined || resolvedSpanId === undefined) {
+    const activeSpan = trace.getActiveSpan();
+
+    if (activeSpan !== undefined) {
+      const spanContext = activeSpan.spanContext();
+
+      if (resolvedTraceId === undefined) {
+        resolvedTraceId = spanContext.traceId;
+      }
+
+      if (resolvedSpanId === undefined) {
+        resolvedSpanId = spanContext.spanId;
+      }
+    }
+  }
+
   const log: Log = {
     ...(typeof data === 'object' && data !== null && !Array.isArray(data) ? data : { data }),
     level,
@@ -120,8 +141,8 @@ const getLog = (
     client_version,
     module,
     tab_id,
-    trace_id,
-    span_id,
+    trace_id: resolvedTraceId,
+    span_id: resolvedSpanId,
   };
 
   if (error instanceof Error) {

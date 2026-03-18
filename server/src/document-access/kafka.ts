@@ -7,11 +7,10 @@ const log = getLogger('document-write-access-kafka-parser');
 const PayloadType = Type.Array(Type.String());
 const PayloadTypeChecked = Compile(PayloadType);
 
-export const parseKafkaMessageValue = (value: string, trace_id: string): string[] | null => {
+export const parseKafkaMessageValue = (value: string): string[] | null => {
   if (value.length === 0) {
     log.debug({
       msg: 'Received empty Kafka message value - interpreting as tombstone',
-      trace_id,
       data: { value, parsed: null },
     });
     /**
@@ -28,7 +27,6 @@ export const parseKafkaMessageValue = (value: string, trace_id: string): string[
     if (!PayloadTypeChecked.Check(parsed)) {
       log.warn({
         msg: 'Invalid Kafka message value',
-        trace_id,
         data: { parsed: JSON.stringify(parsed), value },
       });
 
@@ -38,7 +36,6 @@ export const parseKafkaMessageValue = (value: string, trace_id: string): string[
 
     log.debug({
       msg: 'Deserialized Kafka message value',
-      trace_id,
       data: { parsed, value },
     });
 
@@ -46,7 +43,6 @@ export const parseKafkaMessageValue = (value: string, trace_id: string): string[
   } catch (error) {
     log.error({
       msg: 'Failed to deserialize Kafka message value',
-      trace_id,
       error,
       data: { value },
     });

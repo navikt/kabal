@@ -1,4 +1,3 @@
-import { isElement } from '@grafana/faro-web-sdk';
 import {
   BaseH1Plugin,
   BaseH2Plugin,
@@ -9,6 +8,7 @@ import {
 } from '@platejs/basic-nodes';
 import { ListItemContentPlugin } from '@platejs/list-classic/react';
 import type { TElement } from 'platejs';
+import { ElementApi } from 'platejs';
 import { createPlatePlugin, ParagraphPlugin } from 'platejs/react';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import { type ParagraphElement, TextAlign } from '@/plate/types';
@@ -43,7 +43,7 @@ export const PastePlugin = createPlatePlugin({
 
       const paragraphs = processParagraphs(plainText);
 
-      const currentEntry = editor.api.node<TElement>({ mode: 'lowest', match: isElement });
+      const currentEntry = editor.api.node<TElement>({ mode: 'lowest', match: ElementApi.isElement });
 
       if (currentEntry === undefined) {
         editor.tf.insertFragment<ParagraphElement>(
