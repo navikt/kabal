@@ -1,15 +1,12 @@
-import { convertAccessibleToRealDocumentPaths } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import { useSelectionRangesState } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
-import { rangesToIndexes } from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
-import type {
-  ISelectContext,
-  SelectedMap,
-} from '@app/components/documents/journalfoerte-documents/select-context/types';
-import { findDocument } from '@app/domain/find-document';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { createContext, useCallback, useMemo } from 'react';
+import { convertAccessibleToRealDocumentPaths } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { useSelectionRangesState } from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { getId } from '@/components/documents/journalfoerte-documents/select-context/helpers';
+import { rangesToIndexes } from '@/components/documents/journalfoerte-documents/select-context/range-utils';
+import type { ISelectContext, SelectedMap } from '@/components/documents/journalfoerte-documents/select-context/types';
+import { findDocument } from '@/domain/find-document';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 export const SelectContext = createContext<ISelectContext>({
   selectedDocuments: new Map(),

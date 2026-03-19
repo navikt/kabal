@@ -1,8 +1,8 @@
-import { TAB_ID_HEADER } from '@app/headers';
-import { getHeaderOrQueryValue, TAB_ID_QUERY } from '@app/helpers/get-header-query';
-import type { Querystring } from '@app/helpers/query-parser';
 import type { FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
+import { TAB_ID_HEADER } from '@/headers';
+import { getHeaderOrQueryValue, TAB_ID_QUERY } from '@/helpers/get-header-query';
+import type { Querystring } from '@/helpers/query-parser';
 
 declare module 'fastify' {
   interface FastifyRequest {

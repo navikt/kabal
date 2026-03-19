@@ -1,14 +1,14 @@
-import { InfoToast } from '@app/components/toast/info-toast';
-import { toast } from '@app/components/toast/store';
-import { isoDateToPretty } from '@app/domain/date';
-import { reduxStore } from '@app/redux/configure-store';
-import { employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
-import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
-import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
-import type { SattPaaVentEvent } from '@app/redux-api/server-sent-events/types';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { HistoryEventTypes, type ISattPaaVentEvent } from '@app/types/oppgavebehandling/response';
 import { Label } from '@navikt/ds-react';
+import { InfoToast } from '@/components/toast/info-toast';
+import { toast } from '@/components/toast/store';
+import { isoDateToPretty } from '@/domain/date';
+import { reduxStore } from '@/redux/configure-store';
+import { employeeName } from '@/redux-api/oppgaver/queries/behandling/event-handlers/common';
+import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
+import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
+import type { SattPaaVentEvent } from '@/redux-api/server-sent-events/types';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
+import { HistoryEventTypes, type ISattPaaVentEvent } from '@/types/oppgavebehandling/response';
 
 export const handleSattPaaVentEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>

@@ -1,13 +1,13 @@
-import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
-import { successToast } from '@app/components/oppgavestyring/toasts';
-import type { OnChange } from '@app/components/oppgavestyring/types';
-import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
-import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
-import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
-import type { INavEmployee } from '@app/types/bruker';
-import { FlowState } from '@app/types/oppgave-common';
 import { parseISO } from 'date-fns';
 import { useCallback, useRef } from 'react';
+import { getFixedCacheKey } from '@/components/behandling/behandlingsdialog/medunderskriver/helpers';
+import { successToast } from '@/components/oppgavestyring/toasts';
+import type { OnChange } from '@/components/oppgavestyring/types';
+import { formatEmployeeNameAndIdFallback } from '@/domain/employee-name';
+import { useSetMedunderskriverMutation } from '@/redux-api/oppgaver/mutations/set-medunderskriver';
+import { useSetMedunderskriverFlowStateMutation } from '@/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
+import type { INavEmployee } from '@/types/bruker';
+import { FlowState } from '@/types/oppgave-common';
 
 export interface Return {
   onChange: OnChange;

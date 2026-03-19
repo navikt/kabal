@@ -1,12 +1,12 @@
-import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
-import { CopyButton } from '@app/components/copy-button/copy-button';
-import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { PartLookup } from '@app/components/part-lookup/part-lookup';
-import type { InvalidReceiver } from '@app/components/part-lookup/types';
-import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import type { IPart } from '@app/types/oppgave-common';
 import { HStack, VStack } from '@navikt/ds-react';
+import { BehandlingSection } from '@/components/behandling/behandlingsdetaljer/behandling-section';
+import { CopyButton } from '@/components/copy-button/copy-button';
+import { CopyIdButton } from '@/components/copy-button/copy-id-button';
+import { PartLookup } from '@/components/part-lookup/part-lookup';
+import type { InvalidReceiver } from '@/components/part-lookup/types';
+import { PartStatusList } from '@/components/part-status-list/part-status-list';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import type { IPart } from '@/types/oppgave-common';
 
 interface CommonProps {
   label: string;

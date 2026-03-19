@@ -1,6 +1,6 @@
-import { Alert } from '@app/components/alert/alert';
-import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
-import { UtfallEnum } from '@app/types/kodeverk';
+import { Alert } from '@/components/alert/alert';
+import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
+import { UtfallEnum } from '@/types/kodeverk';
 
 const WarningBox = ({ children }: { children: React.ReactNode }) => (
   <Alert variant="warning" marginBlock="space-16 space-0">

@@ -1,35 +1,35 @@
-import { DateColumnHeader } from '@app/components/common-table-components/oppgave-table/date-column-header';
-import { EnhetHjemmel } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/enhet-hjemmel';
+import { Table, type TableProps } from '@navikt/ds-react';
+import { DateColumnHeader } from '@/components/common-table-components/oppgave-table/date-column-header';
+import { EnhetHjemmel } from '@/components/common-table-components/oppgave-table/filter-dropdowns/enhet-hjemmel';
 import {
   HelperStatusWithoutSelf,
   HelperStatusWithSelf,
-} from '@app/components/common-table-components/oppgave-table/filter-dropdowns/helper-status';
-import { Hjemmel } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/hjemmel';
-import { Medunderskriver } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/medunderskriver';
-import { PaaVentReasons } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/paa-vent-reason';
-import { Registreringshjemler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
-import { Rol } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/rol';
-import { RolHjemmel } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/rol-hjemmel';
-import { RolYtelse } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/rol-ytelse';
-import { Saksbehandler } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/saksbehandler';
+} from '@/components/common-table-components/oppgave-table/filter-dropdowns/helper-status';
+import { Hjemmel } from '@/components/common-table-components/oppgave-table/filter-dropdowns/hjemmel';
+import { Medunderskriver } from '@/components/common-table-components/oppgave-table/filter-dropdowns/medunderskriver';
+import { PaaVentReasons } from '@/components/common-table-components/oppgave-table/filter-dropdowns/paa-vent-reason';
+import { Registreringshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
+import { Rol } from '@/components/common-table-components/oppgave-table/filter-dropdowns/rol';
+import { RolHjemmel } from '@/components/common-table-components/oppgave-table/filter-dropdowns/rol-hjemmel';
+import { RolYtelse } from '@/components/common-table-components/oppgave-table/filter-dropdowns/rol-ytelse';
+import { Saksbehandler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/saksbehandler';
 import {
   Sakstype,
   SakstypeWithTrygderetten,
-} from '@app/components/common-table-components/oppgave-table/filter-dropdowns/sakstype';
-import { Ytelse } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/ytelse';
+} from '@/components/common-table-components/oppgave-table/filter-dropdowns/sakstype';
+import { Ytelse } from '@/components/common-table-components/oppgave-table/filter-dropdowns/ytelse';
 import {
   useOppgaveTableFerdigstilt,
   useOppgaveTableFrist,
   useOppgaveTableReturnert,
   useOppgaveTableVarsletFrist,
-} from '@app/components/common-table-components/oppgave-table/state/use-date-range';
-import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
-import { SortHeader } from '@app/components/common-table-components/sort-header';
-import { ColumnKeyEnum, TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { Role } from '@app/types/bruker';
-import { SortFieldEnum, type SortOrderEnum } from '@app/types/oppgaver';
-import { Table, type TableProps } from '@navikt/ds-react';
+} from '@/components/common-table-components/oppgave-table/state/use-date-range';
+import type { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
+import { SortHeader } from '@/components/common-table-components/sort-header';
+import { ColumnKeyEnum, TABLE_HEADERS } from '@/components/common-table-components/types';
+import { useHasRole } from '@/hooks/use-has-role';
+import { Role } from '@/types/bruker';
+import { SortFieldEnum, type SortOrderEnum } from '@/types/oppgaver';
 
 interface TablePlainHeadersProps {
   columnKeys: ColumnKeyEnum[];

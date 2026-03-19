@@ -1,6 +1,6 @@
-import { ENVIRONMENT } from '@app/environment';
-import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
-import type { IHistoryResponse } from '@app/types/oppgavebehandling/response';
+import { ENVIRONMENT } from '@/environment';
+import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import type { IHistoryResponse } from '@/types/oppgavebehandling/response';
 
 export const historyQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

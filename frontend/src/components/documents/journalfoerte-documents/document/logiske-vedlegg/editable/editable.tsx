@@ -1,12 +1,12 @@
-import { EditLogiskVedlegg } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/edit';
-import { EditableTag } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/editable-tag';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useRemoveLogiskVedleggMutation, useUpdateLogiskVedleggMutation } from '@app/redux-api/logiske-vedlegg';
-import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 import { FilesIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, HStack, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useRef, useState } from 'react';
+import { EditLogiskVedlegg } from '@/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/edit';
+import { EditableTag } from '@/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/editable-tag';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useRemoveLogiskVedleggMutation, useUpdateLogiskVedleggMutation } from '@/redux-api/logiske-vedlegg';
+import type { LogiskVedlegg } from '@/types/arkiverte-documents';
 
 interface Props {
   dokumentInfoId: string;

@@ -1,4 +1,9 @@
-import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Box, Tooltip } from '@navikt/ds-react';
+import { PathApi } from 'platejs';
+import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
+import { type MouseEvent, useCallback, useEffect, useMemo } from 'react';
+import { removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
 import {
   cleanText,
   containsMultipleEmptyCharAndNoText as containsMultipleEmptyChars,
@@ -9,14 +14,9 @@ import {
   insertEmptyChar,
   lonePlaceholderInMaltekst,
   useIsFocused,
-} from '@app/plate/components/placeholder/helpers';
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import type { PlaceholderElement } from '@app/plate/types';
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Box, Tooltip } from '@navikt/ds-react';
-import { PathApi } from 'platejs';
-import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
-import { type MouseEvent, useCallback, useEffect, useMemo } from 'react';
+} from '@/plate/components/placeholder/helpers';
+import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
+import type { PlaceholderElement } from '@/plate/types';
 
 export const RedaktørPlaceholder = (props: PlateElementProps<PlaceholderElement>) => <Placeholder {...props} />;
 

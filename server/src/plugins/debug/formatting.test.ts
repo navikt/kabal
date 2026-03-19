@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { formatMessage, formatUser } from '@app/plugins/debug/formatting';
-import { DataType } from '@app/plugins/debug/types';
+import { formatMessage, formatUser } from '@/plugins/debug/formatting';
+import { DataType } from '@/plugins/debug/types';
 
 describe('debug formatting', () => {
   it('should format user', () => {

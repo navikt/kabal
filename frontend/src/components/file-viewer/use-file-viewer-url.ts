@@ -1,8 +1,8 @@
-import { getFileViewerUrl } from '@app/domain/file-viewer-url';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useFilesViewed } from '@app/hooks/settings/use-setting';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
+import { getFileViewerUrl } from '@/domain/file-viewer-url';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useFilesViewed } from '@/hooks/settings/use-setting';
 
 /** Returns the file-viewer URL for the currently viewed file set, or `null` if nothing is being viewed. */
 export const useFileViewerUrl = (): string | null => {

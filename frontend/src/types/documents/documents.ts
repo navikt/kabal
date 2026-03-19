@@ -1,10 +1,10 @@
-import type { KabalValue } from '@app/plate/types';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import type { INavEmployee } from '@app/types/bruker';
-import type { HandlingEnum, IAddress } from '@app/types/documents/receivers';
-import type { IdentifikatorPart, IJournalfoertDokumentId, IPart } from '@app/types/oppgave-common';
-import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { Language } from '@app/types/texts/language';
+import type { KabalValue } from '@/plate/types';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
+import type { INavEmployee } from '@/types/bruker';
+import type { HandlingEnum, IAddress } from '@/types/documents/receivers';
+import type { IdentifikatorPart, IJournalfoertDokumentId, IPart } from '@/types/oppgave-common';
+import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
+import type { Language } from '@/types/texts/language';
 
 export type UUID = string;
 

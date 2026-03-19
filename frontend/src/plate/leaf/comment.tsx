@@ -1,8 +1,8 @@
-import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import type { FormattedText } from '@app/plate/types';
 import { PlateLeaf, type PlateLeafProps } from 'platejs/react';
 import { useContext, useMemo } from 'react';
+import { COMMENT_PREFIX } from '@/components/smart-editor/constants';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import type { FormattedText } from '@/plate/types';
 
 export const CommentLeaf = (props: PlateLeafProps<FormattedText>) => {
   const { children, leaf } = props;

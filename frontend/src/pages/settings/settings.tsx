@@ -1,5 +1,5 @@
-import { Settings } from '@app/components/settings/settings';
-import { PageWrapper } from '@app/pages/page-wrapper';
+import { Settings } from '@/components/settings/settings';
+import { PageWrapper } from '@/pages/page-wrapper';
 
 export const SettingsPage = () => (
   <PageWrapper>

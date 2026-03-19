@@ -1,5 +1,5 @@
-import { type AnyObject, getLogger, type Level } from '@app/logger';
-import type { ConnectionContext } from '@app/plugins/crdt/context';
+import { type AnyObject, getLogger, type Level } from '@/logger';
+import type { ConnectionContext } from '@/plugins/crdt/context';
 
 export const log = getLogger('collaboration');
 

@@ -1,7 +1,7 @@
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import { Journalposttype } from '@app/types/arkiverte-documents';
 import { Tag } from '@navikt/ds-react';
 import { memo } from 'react';
+import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import { Journalposttype } from '@/types/arkiverte-documents';
 
 export const JournalposttypeTag = memo(
   ({ type }: { type: Journalposttype | null }) => (

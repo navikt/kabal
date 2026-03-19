@@ -1,4 +1,4 @@
-import type { AvsenderMottaker } from '@app/types/arkiverte-documents';
+import type { AvsenderMottaker } from '@/types/arkiverte-documents';
 
 export const formatAvsenderMottaker = (avsenderMottaker: AvsenderMottaker | null): string => {
   if (avsenderMottaker === null) {

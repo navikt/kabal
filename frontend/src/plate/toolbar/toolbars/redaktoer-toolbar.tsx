@@ -1,9 +1,9 @@
-import { DefaultToolbarButtons } from '@app/plate/toolbar/default-toolbar-buttons';
-import { InsertPlaceholder } from '@app/plate/toolbar/insert-placeholder';
-import { ToolbarSeparator } from '@app/plate/toolbar/separator';
-import { StyledToolbar } from '@app/plate/toolbar/styled-components';
-import { RedkatoerSettings } from '@app/plate/toolbar/toolbars/redaktoer-settings';
-import { SearchReplaceToolbarButton } from '@app/plate/toolbar/toolbars/search-replace-toolbar-button';
+import { DefaultToolbarButtons } from '@/plate/toolbar/default-toolbar-buttons';
+import { InsertPlaceholder } from '@/plate/toolbar/insert-placeholder';
+import { ToolbarSeparator } from '@/plate/toolbar/separator';
+import { StyledToolbar } from '@/plate/toolbar/styled-components';
+import { RedkatoerSettings } from '@/plate/toolbar/toolbars/redaktoer-settings';
+import { SearchReplaceToolbarButton } from '@/plate/toolbar/toolbars/search-replace-toolbar-button';
 
 export const RedaktoerToolbar = () => (
   <StyledToolbar>

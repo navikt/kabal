@@ -1,6 +1,6 @@
-import type { IDocument } from '@app/types/documents/documents';
-import { DocumentValidationErrorType, type NO_RECEIVERS_ERROR } from '@app/types/documents/validation';
-import { isApiDataError, type KabalApiErrorData } from '@app/types/errors';
+import type { IDocument } from '@/types/documents/documents';
+import { DocumentValidationErrorType, type NO_RECEIVERS_ERROR } from '@/types/documents/validation';
+import { isApiDataError, type KabalApiErrorData } from '@/types/errors';
 
 export interface FinishProps extends React.RefAttributes<HTMLDivElement> {
   document: IDocument;

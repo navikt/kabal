@@ -1,5 +1,5 @@
-import { useTema } from '@app/simple-api-state/use-kodeverk';
-import type { IKodeverkValue } from '@app/types/kodeverk';
+import { useTema } from '@/simple-api-state/use-kodeverk';
+import type { IKodeverkValue } from '@/types/kodeverk';
 
 export const useAllTemaer = (): IKodeverkValue[] => {
   const { data } = useTema();

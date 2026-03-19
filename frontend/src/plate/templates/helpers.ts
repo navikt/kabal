@@ -1,3 +1,7 @@
+import { BaseH1Plugin, BaseH2Plugin } from '@platejs/basic-nodes';
+import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
+import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
+import { BaseParagraphPlugin } from 'platejs';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
@@ -12,12 +16,12 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SAKSNUMMER,
   ELEMENT_SIGNATURE,
-} from '@app/plate/plugins/element-types';
-import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@app/plate/plugins/fullmektig';
-import { LabelContentPlugin } from '@app/plate/plugins/label-content';
-import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
-import { TemplateSections } from '@app/plate/template-sections';
-import { MAX_TABLE_WIDTH } from '@app/plate/toolbar/table/constants';
+} from '@/plate/plugins/element-types';
+import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@/plate/plugins/fullmektig';
+import { LabelContentPlugin } from '@/plate/plugins/label-content';
+import { MaltekstPlugin } from '@/plate/plugins/maltekst';
+import { TemplateSections } from '@/plate/template-sections';
+import { MAX_TABLE_WIDTH } from '@/plate/toolbar/table/constants';
 import {
   type BulletListElement,
   type CurrentDateElement,
@@ -47,12 +51,8 @@ import {
   type TableElement,
   type TableRowElement,
   TextAlign,
-} from '@app/plate/types';
-import { Language } from '@app/types/texts/language';
-import { BaseH1Plugin, BaseH2Plugin } from '@platejs/basic-nodes';
-import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
-import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
-import { BaseParagraphPlugin } from 'platejs';
+} from '@/plate/types';
+import { Language } from '@/types/texts/language';
 
 export const createLabelContent = (source: LabelContentSource): LabelContentElement => ({
   type: LabelContentPlugin.key,

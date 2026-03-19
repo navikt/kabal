@@ -1,9 +1,4 @@
-import type {
-  IFileDocument,
-  IParentDocument,
-  ISmartDocument,
-  JournalfoertDokument,
-} from '@app/types/documents/documents';
+import type { IFileDocument, IParentDocument, ISmartDocument, JournalfoertDokument } from '@/types/documents/documents';
 
 export interface DocumentWithAttachments {
   mainDocument?: IParentDocument;

@@ -1,7 +1,7 @@
-import { OboMemoryCache } from '@app/auth/cache/memory-cache';
-import { OboPersistentCache } from '@app/auth/cache/persistent-cache';
-import { optionalEnvString } from '@app/config/env-var';
-import { getLogger } from '@app/logger';
+import { OboMemoryCache } from '@/auth/cache/memory-cache';
+import { OboPersistentCache } from '@/auth/cache/persistent-cache';
+import { optionalEnvString } from '@/config/env-var';
+import { getLogger } from '@/logger';
 
 const VALKEY_URI = optionalEnvString('REDIS_URI_OBO_CACHE_KABAL');
 const VALKEY_USERNAME = optionalEnvString('REDIS_USERNAME_OBO_CACHE_KABAL');

@@ -1,15 +1,15 @@
-import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
-import { KabalPlateEditor } from '@app/plate/plate-editor';
-import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
-import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { FileSearchIcon } from '@navikt/aksel-icons';
 import { Box, Button, type ButtonProps, HStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { useRef, useState } from 'react';
+import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { SPELL_CHECK_LANGUAGES } from '@/hooks/use-smart-editor-language';
+import { BASE_FONT_SIZE } from '@/plate/components/get-scaled-em';
+import { KabalPlateEditor } from '@/plate/plate-editor';
+import { previewComponents, previewPlugins } from '@/plate/plugins/plugin-sets/preview';
+import type { KabalValue, RichTextEditor } from '@/plate/types';
 
 type OpenSide = 'left' | 'right';
 type OpenDirection = 'up' | 'down';

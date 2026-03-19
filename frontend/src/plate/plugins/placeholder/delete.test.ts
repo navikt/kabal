@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'bun:test';
-import { EMPTY_CHAR_CODE } from '@app/functions/remove-empty-char-in-text';
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
-import { type KabalValue, type ParagraphElement, type PlaceholderElement, TextAlign } from '@app/plate/types';
 import { BaseParagraphPlugin } from 'platejs';
 import { createPlateEditor } from 'platejs/react';
 import type { Point, Selection, TextUnit } from 'slate';
+import { EMPTY_CHAR_CODE } from '@/functions/remove-empty-char-in-text';
+import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
+import { saksbehandlerPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
+import { type KabalValue, type ParagraphElement, type PlaceholderElement, TextAlign } from '@/plate/types';
 
 const createPlaceholder = (text = String.fromCharCode(EMPTY_CHAR_CODE)): PlaceholderElement => ({
   type: ELEMENT_PLACEHOLDER,

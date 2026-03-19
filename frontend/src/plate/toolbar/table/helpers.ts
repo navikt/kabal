@@ -1,8 +1,8 @@
-import type { RichTextEditor, TableCellElement, TableRowElement } from '@app/plate/types';
-import { isOfElementType, isOfElementTypeFn } from '@app/plate/utils/queries';
 import { BaseTableCellPlugin, BaseTableRowPlugin } from '@platejs/table';
 import type { NodeEntry, TNode } from 'platejs';
 import { Path } from 'slate';
+import type { RichTextEditor, TableCellElement, TableRowElement } from '@/plate/types';
+import { isOfElementType, isOfElementTypeFn } from '@/plate/utils/queries';
 
 const findPath = (editor: RichTextEditor, node: TNode | undefined = undefined): Path | undefined =>
   node === undefined ? undefined : findPath(editor, node);

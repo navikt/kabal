@@ -1,5 +1,5 @@
-import { Observable } from '@app/observable';
 import { useSyncExternalStore } from 'react';
+import { Observable } from '@/observable';
 
 const isPanelKeyboardHelpModalOpenStore = new Observable(false);
 

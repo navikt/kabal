@@ -1,11 +1,11 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { SectionHeader, SettingsSection } from '@app/components/settings/styled-components';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useGetMySignatureQuery, useSetAnonymousMutation, useSetCustomInfoMutation } from '@app/redux-api/bruker';
-import { type ISetCustomInfoParams, type ISignatureResponse, Role } from '@app/types/bruker';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Checkbox, HStack, Loader, Radio, RadioGroup, TextField } from '@navikt/ds-react';
 import { useContext, useEffect, useState } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { SectionHeader, SettingsSection } from '@/components/settings/styled-components';
+import { useHasRole } from '@/hooks/use-has-role';
+import { useGetMySignatureQuery, useSetAnonymousMutation, useSetCustomInfoMutation } from '@/redux-api/bruker';
+import { type ISetCustomInfoParams, type ISignatureResponse, Role } from '@/types/bruker';
 
 export const Signature = () => {
   const { user } = useContext(StaticDataContext);

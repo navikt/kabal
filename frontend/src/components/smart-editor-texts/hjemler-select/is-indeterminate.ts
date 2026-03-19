@@ -1,4 +1,4 @@
-import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
+import { GLOBAL, LIST_DELIMITER } from '@/components/smart-editor-texts/types';
 
 export const isIndeterminate = (selectedList: string[], hjemmelId: string, ytelseId: string): boolean => {
   let isGlobal = false;

@@ -1,7 +1,7 @@
-import { isoDateTimeToPretty } from '@app/domain/date';
-import type { IEdit } from '@app/types/common-text-types';
 import { CalendarIcon, ClockIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, type StackProps } from '@navikt/ds-react';
+import { isoDateTimeToPretty } from '@/domain/date';
+import type { IEdit } from '@/types/common-text-types';
 
 interface Props {
   created: string;

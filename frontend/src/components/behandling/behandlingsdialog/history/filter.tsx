@@ -1,8 +1,8 @@
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { pushEvent } from '@app/observability';
-import { HistoryEventTypes, type IHistoryResponse } from '@app/types/oppgavebehandling/response';
 import { useCallback, useMemo } from 'react';
+import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { pushEvent } from '@/observability';
+import { HistoryEventTypes, type IHistoryResponse } from '@/types/oppgavebehandling/response';
 
 interface Option {
   label: string;

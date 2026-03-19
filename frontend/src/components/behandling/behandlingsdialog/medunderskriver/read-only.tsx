@@ -1,8 +1,8 @@
-import { getTitleCapitalized } from '@app/components/behandling/behandlingsdialog/medunderskriver/get-title';
-import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
-import type { SaksTypeEnum } from '@app/types/kodeverk';
-import type { IMedunderskriverRol } from '@app/types/oppgave-common';
 import { BodyShort, Label } from '@navikt/ds-react';
+import { getTitleCapitalized } from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
+import { formatEmployeeNameAndIdFallback } from '@/domain/employee-name';
+import type { SaksTypeEnum } from '@/types/kodeverk';
+import type { IMedunderskriverRol } from '@/types/oppgave-common';
 
 interface Props {
   medunderskriver: IMedunderskriverRol;

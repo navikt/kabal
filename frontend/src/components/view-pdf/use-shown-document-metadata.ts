@@ -1,10 +1,12 @@
-import type { IShownDocument } from '@app/components/view-pdf/types';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useMemo } from 'react';
+import type { IShownDocument } from '@/components/view-pdf/types';
 import {
   getAttachmentsOverviewInlineUrl,
   getJournalfoertDocumentInlineUrl,
   getMergedDocumentInlineUrl,
   getNewDocumentInlineUrl,
-} from '@app/domain/inline-document-url';
+} from '@/domain/inline-document-url';
 import {
   getAttachmentsOverviewTabId,
   getAttachmentsOverviewTabUrl,
@@ -14,10 +16,8 @@ import {
   getMergedDocumentTabUrl,
   getNewDocumentTabId,
   getNewDocumentTabUrl,
-} from '@app/domain/tabbed-document-url';
-import { DocumentTypeEnum, type IMergedDocumentsResponse } from '@app/types/documents/documents';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useMemo } from 'react';
+} from '@/domain/tabbed-document-url';
+import { DocumentTypeEnum, type IMergedDocumentsResponse } from '@/types/documents/documents';
 
 type DocumentData =
   | { inlineUrl: string; tabUrl: string; tabId: string }

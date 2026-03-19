@@ -1,20 +1,3 @@
-import { Paragraph } from '@app/plate/components/paragraph';
-import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-element';
-import { TableElement } from '@app/plate/components/plate-ui/table-element';
-import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
-import { BoldLeaf, ItalicLeaf, UnderlineLeaf } from '@app/plate/leaf/marks';
-import { AllSearchHitsHighlightLeaf, ReplaceOneHighlightLeaf } from '@app/plate/leaf/search-replace';
-import { autoformatRules } from '@app/plate/plugins/autoformat/rules';
-import { InsertPlugin } from '@app/plate/plugins/capitalise/capitalise';
-import { CopyPlugin } from '@app/plate/plugins/copy/copy';
-import { CustomAbbreviationPlugin } from '@app/plate/plugins/custom-abbreviations/create-custom-abbreviation-plugin';
-import { normalizeNodePlugin } from '@app/plate/plugins/normalize-node';
-import { PageBreakPlugin } from '@app/plate/plugins/page-break';
-import { PastePlugin } from '@app/plate/plugins/paste';
-import { ProhibitDeletionPlugin } from '@app/plate/plugins/prohibit-deletion/prohibit-deletion';
-import { ReplaceOneHighlightPlugin, SearchReplacePlugin } from '@app/plate/plugins/search-replace/search-replace';
-import { SelectionPlugin } from '@app/plate/plugins/selection';
-import { withOverrides } from '@app/plate/toolbar/table/with-overrides';
 import { AutoformatPlugin } from '@platejs/autoformat';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BoldPlugin, HeadingPlugin, ItalicPlugin, UnderlinePlugin } from '@platejs/basic-nodes/react';
@@ -26,6 +9,23 @@ import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@platejs/table/rea
 import { ExitBreakPlugin } from '@platejs/utils';
 import { type NodeEntry, NodeIdPlugin, ParserPlugin } from 'platejs';
 import { ParagraphPlugin } from 'platejs/react';
+import { Paragraph } from '@/plate/components/paragraph';
+import { TableCellElement } from '@/plate/components/plate-ui/table-cell-element';
+import { TableElement } from '@/plate/components/plate-ui/table-element';
+import { TableRowElement } from '@/plate/components/plate-ui/table-row-element';
+import { BoldLeaf, ItalicLeaf, UnderlineLeaf } from '@/plate/leaf/marks';
+import { AllSearchHitsHighlightLeaf, ReplaceOneHighlightLeaf } from '@/plate/leaf/search-replace';
+import { autoformatRules } from '@/plate/plugins/autoformat/rules';
+import { InsertPlugin } from '@/plate/plugins/capitalise/capitalise';
+import { CopyPlugin } from '@/plate/plugins/copy/copy';
+import { CustomAbbreviationPlugin } from '@/plate/plugins/custom-abbreviations/create-custom-abbreviation-plugin';
+import { normalizeNodePlugin } from '@/plate/plugins/normalize-node';
+import { PageBreakPlugin } from '@/plate/plugins/page-break';
+import { PastePlugin } from '@/plate/plugins/paste';
+import { ProhibitDeletionPlugin } from '@/plate/plugins/prohibit-deletion/prohibit-deletion';
+import { ReplaceOneHighlightPlugin, SearchReplacePlugin } from '@/plate/plugins/search-replace/search-replace';
+import { SelectionPlugin } from '@/plate/plugins/selection';
+import { withOverrides } from '@/plate/toolbar/table/with-overrides';
 
 export const defaultPlugins = [
   ParserPlugin,

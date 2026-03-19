@@ -1,5 +1,5 @@
-import { useMyPlateEditorState } from '@app/plate/types';
-import { isInList } from '@app/plate/utils/queries';
+import { useMyPlateEditorState } from '@/plate/types';
+import { isInList } from '@/plate/utils/queries';
 
 export const useIsInList = () => {
   const editor = useMyPlateEditorState();

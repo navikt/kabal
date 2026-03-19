@@ -1,5 +1,5 @@
-import type { FormattedText } from '@app/plate/types';
 import { PlateLeaf, type PlateLeafProps } from 'platejs/react';
+import type { FormattedText } from '@/plate/types';
 
 export const BoldLeaf = (props: PlateLeafProps<FormattedText>) => <PlateLeaf {...props} className="font-ax-bold" />;
 

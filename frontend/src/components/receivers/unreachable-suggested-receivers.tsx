@@ -1,13 +1,13 @@
-import { Alert } from '@app/components/alert/alert';
-import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { Address } from '@app/components/receivers/address/address';
-import { getTypeNames } from '@app/components/receivers/functions';
-import { StyledReceiver } from '@app/components/receivers/styled-components';
-import { formatIdNumber } from '@app/functions/format-id';
-import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
-import { IdType, type IPart, PartStatusEnum } from '@app/types/oppgave-common';
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { CopyButton, HelpText, HStack, Label, Tooltip } from '@navikt/ds-react';
+import { Alert } from '@/components/alert/alert';
+import { PartStatusList } from '@/components/part-status-list/part-status-list';
+import { Address } from '@/components/receivers/address/address';
+import { getTypeNames } from '@/components/receivers/functions';
+import { StyledReceiver } from '@/components/receivers/styled-components';
+import { formatIdNumber } from '@/functions/format-id';
+import type { IBrevmottaker } from '@/hooks/use-suggested-brevmottakere';
+import { IdType, type IPart, PartStatusEnum } from '@/types/oppgave-common';
 
 interface ReceiversProps {
   receivers: IBrevmottaker[];

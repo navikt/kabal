@@ -1,22 +1,22 @@
-import { BeregnetFrist } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/beregnet-frist';
-import { useDebounce } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
-import { validateUnits } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { usePrevious } from '@app/hooks/use-previous';
+import { ErrorMessage, Heading, HStack, TextField, ToggleGroup, VStack } from '@navikt/ds-react';
+import { useEffect, useState } from 'react';
+import { BeregnetFrist } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/beregnet-frist';
+import { useDebounce } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
+import { validateUnits } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { usePrevious } from '@/hooks/use-previous';
 import {
   useSetBehandlingstidUnitsMutation,
   useSetBehandlingstidUnitTypeMutation,
-} from '@app/redux-api/forlenget-behandlingstid';
-import { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
+} from '@/redux-api/forlenget-behandlingstid';
+import { UtvidetBehandlingstidFieldName } from '@/types/field-names';
 import {
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES_SINGULAR,
   BEHANDLINGSTID_UNIT_TYPES,
   type BehandlingstidUnitType,
   isBehandlingstidUnitType,
-} from '@app/types/svarbrev';
-import { ErrorMessage, Heading, HStack, TextField, ToggleGroup, VStack } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
+} from '@/types/svarbrev';
 
 interface Props {
   typeId: BehandlingstidUnitType;

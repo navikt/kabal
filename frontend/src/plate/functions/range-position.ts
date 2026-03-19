@@ -1,7 +1,7 @@
-import { CURRENT_SCALE } from '@app/components/smart-editor/hooks/use-scale';
-import { BASE_FONT_SIZE_PX } from '@app/plate/components/get-scaled-em';
-import type { RichTextEditor } from '@app/plate/types';
 import type { BasePoint } from 'slate';
+import { CURRENT_SCALE } from '@/components/smart-editor/hooks/use-scale';
+import { BASE_FONT_SIZE_PX } from '@/plate/components/get-scaled-em';
+import type { RichTextEditor } from '@/plate/types';
 
 interface IRangePosition {
   /** em */

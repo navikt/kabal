@@ -1,13 +1,13 @@
+import type { Decorate, Path, TRange } from 'platejs';
+import { ElementApi, NodeApi, TextApi } from 'platejs';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_FOOTER,
   ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
   ELEMENT_SIGNATURE,
-} from '@app/plate/plugins/element-types';
-import { type FindReplaceConfig, groupRanges } from '@app/plate/plugins/search-replace/search-replace';
-import type { Decorate, Path, TRange } from 'platejs';
-import { ElementApi, NodeApi, TextApi } from 'platejs';
+} from '@/plate/plugins/element-types';
+import { type FindReplaceConfig, groupRanges } from '@/plate/plugins/search-replace/search-replace';
 
 const NON_EDITABLE_ELEMENTS = [
   ELEMENT_HEADER,

@@ -1,10 +1,7 @@
-import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
-import type { IKvalitetsvurderingV1 } from '@app/types/kaka-kvalitetsvurdering/v1';
-import type {
-  IOppgavebehandlingBase,
-  ITrygderettsankebehandling,
-} from '@app/types/oppgavebehandling/oppgavebehandling';
 import { useContext, useMemo } from 'react';
+import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
+import type { IKvalitetsvurderingV1 } from '@/types/kaka-kvalitetsvurdering/v1';
+import type { IOppgavebehandlingBase, ITrygderettsankebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 type Field =
   | keyof IKvalitetsvurderingV1

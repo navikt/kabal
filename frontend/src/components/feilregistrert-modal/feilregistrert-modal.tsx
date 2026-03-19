@@ -1,9 +1,9 @@
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { formatEmployeeName } from '@app/domain/employee-name';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useFagsystemName } from '@app/hooks/use-fagsystem-name';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { BodyLong, BodyShort, Button, Heading, Loader, Modal } from '@navikt/ds-react';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { formatEmployeeName } from '@/domain/employee-name';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useFagsystemName } from '@/hooks/use-fagsystem-name';
 
 interface Props extends ContentProps {
   isOpen: boolean;

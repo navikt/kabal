@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { areDescendantsEqual, areKeysEqual } from '@app/functions/are-descendants-equal';
 import type { TElement, TText } from 'platejs';
+import { areDescendantsEqual, areKeysEqual } from '@/functions/are-descendants-equal';
 
 describe('are-descendants-equal', () => {
   it('should return false if the two lists are of different lengths', () => {

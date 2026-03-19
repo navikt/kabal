@@ -1,19 +1,19 @@
-import { DragAndDropContext } from '@app/components/documents/drag-context';
-import { AttachmentList, type ListProps } from '@app/components/documents/new-documents/attachment-list';
-import { NewDocument } from '@app/components/documents/new-documents/new-document/new-document';
-import { DropZone } from '@app/components/documents/new-documents/shared/drop-zone';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanDropOnDocument } from '@app/hooks/use-can-document/use-can-drop-on-document';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import {
-  useCreateVedleggFromJournalfoertDocumentMutation,
-  useSetParentMutation,
-} from '@app/redux-api/oppgaver/mutations/documents';
-import type { IDocument, IParentDocument } from '@app/types/documents/documents';
 import { PaperclipIcon } from '@navikt/aksel-icons';
 import { Box } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext } from 'react';
+import { DragAndDropContext } from '@/components/documents/drag-context';
+import { AttachmentList, type ListProps } from '@/components/documents/new-documents/attachment-list';
+import { NewDocument } from '@/components/documents/new-documents/new-document/new-document';
+import { DropZone } from '@/components/documents/new-documents/shared/drop-zone';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useCanDropOnDocument } from '@/hooks/use-can-document/use-can-drop-on-document';
+import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
+import {
+  useCreateVedleggFromJournalfoertDocumentMutation,
+  useSetParentMutation,
+} from '@/redux-api/oppgaver/mutations/documents';
+import type { IDocument, IParentDocument } from '@/types/documents/documents';
 
 interface Props extends ListProps {
   document: IParentDocument;

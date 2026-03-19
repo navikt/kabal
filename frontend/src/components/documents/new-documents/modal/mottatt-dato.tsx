@@ -1,7 +1,7 @@
-import { DatePicker } from '@app/components/date-picker/date-picker';
-import { useSetDatoMottattMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import type { IFileDocumentOrAttachment } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { DatePicker } from '@/components/date-picker/date-picker';
+import { useSetDatoMottattMutation } from '@/redux-api/oppgaver/mutations/documents';
+import type { IFileDocumentOrAttachment } from '@/types/documents/documents';
 
 interface Props {
   document: IFileDocumentOrAttachment;

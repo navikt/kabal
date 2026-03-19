@@ -1,6 +1,6 @@
-import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
 import { ErrorMessage, Heading, Label, List } from '@navikt/ds-react';
 import { useContext } from 'react';
+import { ModalContext } from '@/components/documents/new-documents/modal/modal-context';
 
 export const Errors = () => {
   const { validationErrors } = useContext(ModalContext);

@@ -1,16 +1,16 @@
-import { useSendDebugInfo } from '@app/components/header/user-menu/send-debug-hook';
-import { ENVIRONMENT } from '@app/environment';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { useUtfall, useYtelserAll } from '@app/simple-api-state/use-kodeverk';
-import { user } from '@app/static-data/static-data';
-import type { INavEmployee } from '@app/types/bruker';
 import { BugIcon, CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSendDebugInfo } from '@/components/header/user-menu/send-debug-hook';
+import { ENVIRONMENT } from '@/environment';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useSmartEditorActiveDocument } from '@/hooks/settings/use-setting';
+import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
+import { useUtfall, useYtelserAll } from '@/simple-api-state/use-kodeverk';
+import { user } from '@/static-data/static-data';
+import type { INavEmployee } from '@/types/bruker';
 
 export const SendDebugInfoButton = () => {
   const { oppgaveId } = useParams();

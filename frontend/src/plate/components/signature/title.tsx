@@ -1,5 +1,5 @@
-import { Alert } from '@app/components/alert/alert';
-import { ptToEm } from '@app/plate/components/get-scaled-em';
+import { Alert } from '@/components/alert/alert';
+import { ptToEm } from '@/plate/components/get-scaled-em';
 
 export const MISSING_TITLE = 'TITTEL MANGLER';
 

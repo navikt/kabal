@@ -1,11 +1,11 @@
-import { Keys } from '@app/keys';
-import { Case, cycleCase, getNewCase } from '@app/plate/plugins/cycle-case/cycle-case';
-import { getWordRange } from '@app/plate/plugins/cycle-case/get-word-range';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { useMyPlateEditorState } from '@app/plate/types';
 import { TextCaseLowercase, TextCaseUppercase, TextChangeCase } from '@styled-icons/fluentui-system-regular';
 import { RangeApi } from 'platejs';
 import type { ReactElement } from 'react';
+import { Keys } from '@/keys';
+import { Case, cycleCase, getNewCase } from '@/plate/plugins/cycle-case/cycle-case';
+import { getWordRange } from '@/plate/plugins/cycle-case/get-word-range';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
+import { useMyPlateEditorState } from '@/plate/types';
 
 export const CycleCaseButton = (): ReactElement => {
   const editor = useMyPlateEditorState();

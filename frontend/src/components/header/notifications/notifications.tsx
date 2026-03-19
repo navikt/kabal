@@ -1,11 +1,3 @@
-import { useAppTheme } from '@app/app-theme';
-import { MarkManyAsRead } from '@app/components/header/notifications/mark-many';
-import { KabalNotificationWithCaseDataEntry } from '@app/components/header/notifications/notification';
-import { OverviewModal } from '@app/components/header/notifications/overview/overview';
-import { useNotificationsContext } from '@app/components/header/notifications/state';
-import { notificationsStore } from '@app/components/header/notifications/store';
-import { getHasBehandling, type KabalNotification } from '@app/components/header/notifications/types';
-import { useMaybeOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
 import { BellFillIcon, BellIcon, ChevronDownIcon, ChevronUpIcon, SidebarBothIcon } from '@navikt/aksel-icons';
 import {
   ActionMenu,
@@ -20,6 +12,14 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { useMemo, useState, useSyncExternalStore } from 'react';
+import { useAppTheme } from '@/app-theme';
+import { MarkManyAsRead } from '@/components/header/notifications/mark-many';
+import { KabalNotificationWithCaseDataEntry } from '@/components/header/notifications/notification';
+import { OverviewModal } from '@/components/header/notifications/overview/overview';
+import { useNotificationsContext } from '@/components/header/notifications/state';
+import { notificationsStore } from '@/components/header/notifications/store';
+import { getHasBehandling, type KabalNotification } from '@/components/header/notifications/types';
+import { useMaybeOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 
 export const Notifications = () => {
   const oppgaveId = useMaybeOppgaveId();

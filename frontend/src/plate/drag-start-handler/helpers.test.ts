@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
-import { cleanHtml, containsNoopElements, htmlToString, scrubText } from '@app/plate/drag-start-handler/helpers';
-import { ELEMENT_MALTEKST, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
 import { BaseParagraphPlugin } from 'platejs';
+import { cleanHtml, containsNoopElements, htmlToString, scrubText } from '@/plate/drag-start-handler/helpers';
+import { ELEMENT_MALTEKST, ELEMENT_REDIGERBAR_MALTEKST } from '@/plate/plugins/element-types';
 
 describe('containsNoopElements', () => {
   it('should return false when data-element is not set', () => {

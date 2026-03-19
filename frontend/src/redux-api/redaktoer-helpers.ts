@@ -1,5 +1,5 @@
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import type { IText } from '@app/types/texts/responses';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
+import type { IText } from '@/types/texts/responses';
 
 export const getLastPublishedVersion = <T extends IText | IMaltekstseksjon>(versions: T[]): T | undefined => {
   type Published = T & { publishedDateTime: string };

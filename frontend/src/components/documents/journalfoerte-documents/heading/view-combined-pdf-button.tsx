@@ -1,18 +1,18 @@
-import { showDownloadDocumentsToast } from '@app/components/documents/journalfoerte-documents/download-toast';
-import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
-import { matchDocuments } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { TabContext } from '@app/components/documents/tab-context';
-import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
-import { toast } from '@app/components/toast/store';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useFilesViewed } from '@app/hooks/settings/use-setting';
-import { useDocumentTabUrl } from '@app/hooks/use-document-tab-url';
-import { isMetaKey, MOD_KEY_TEXT, MouseButtons } from '@app/keys';
-import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { FilePdfIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { useContext, useMemo } from 'react';
+import { showDownloadDocumentsToast } from '@/components/documents/journalfoerte-documents/download-toast';
+import { getSelectedDocumentsInOrder } from '@/components/documents/journalfoerte-documents/heading/selected-in-order';
+import { matchDocuments } from '@/components/documents/journalfoerte-documents/select-context/helpers';
+import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
+import { TabContext } from '@/components/documents/tab-context';
+import { useIsTabOpen } from '@/components/documents/use-is-tab-open';
+import { toast } from '@/components/toast/store';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useFilesViewed } from '@/hooks/settings/use-setting';
+import { useDocumentTabUrl } from '@/hooks/use-document-tab-url';
+import { isMetaKey, MOD_KEY_TEXT, MouseButtons } from '@/keys';
+import { useGetArkiverteDokumenterQuery } from '@/redux-api/oppgaver/queries/documents';
 
 export const ViewCombinedPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);

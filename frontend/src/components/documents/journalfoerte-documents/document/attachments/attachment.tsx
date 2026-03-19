@@ -1,11 +1,13 @@
-import { createDragUI } from '@app/components/documents/create-drag-ui';
-import { DragAndDropContext } from '@app/components/documents/drag-context';
-import { DocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title';
-import { IncludeDocument } from '@app/components/documents/journalfoerte-documents/document/shared/include-document';
-import { ToggleVedleggButton } from '@app/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
-import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/journalfoerte-documents/grid';
-import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import { setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { Checkbox, HGrid } from '@navikt/ds-react';
+import { memo, useCallback, useContext, useRef } from 'react';
+import { createDragUI } from '@/components/documents/create-drag-ui';
+import { DragAndDropContext } from '@/components/documents/drag-context';
+import { DocumentTitle } from '@/components/documents/journalfoerte-documents/document/shared/document-title';
+import { IncludeDocument } from '@/components/documents/journalfoerte-documents/document/shared/include-document';
+import { ToggleVedleggButton } from '@/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
+import { Fields, getFieldNames, getFieldSizes } from '@/components/documents/journalfoerte-documents/grid';
+import { convertRealToAccessibleDocumentIndex } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { setFocusIndex } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
 import {
   addOne,
   isPathSelected,
@@ -13,18 +15,16 @@ import {
   selectRangeTo,
   unselectOne,
   useIsPathSelected,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
-import { findDocument } from '@app/domain/find-document';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
-import type { IArkivertDocument, IArkivertDocumentVedlegg, Journalstatus } from '@app/types/arkiverte-documents';
-import { Checkbox, HGrid } from '@navikt/ds-react';
-import { memo, useCallback, useContext, useRef } from 'react';
+} from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
+import { DOCUMENT_CLASSES } from '@/components/documents/styled-components/document';
+import { findDocument } from '@/domain/find-document';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
+import { useIsAssignedRolAndSent } from '@/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useGetArkiverteDokumenterQuery } from '@/redux-api/oppgaver/queries/documents';
+import type { IArkivertDocument, IArkivertDocumentVedlegg, Journalstatus } from '@/types/arkiverte-documents';
 
 interface Props {
   journalpostId: string;

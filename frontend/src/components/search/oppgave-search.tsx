@@ -1,14 +1,14 @@
-import { Oppgaver } from '@app/components/search/common/oppgaver';
-import { Person } from '@app/components/search/fnr/person';
-import { Keys } from '@app/keys';
+import { ErrorMessage, HStack, Search, type SearchProps, ToggleGroup, VStack } from '@navikt/ds-react';
+import { dnr, fnr } from '@navikt/fnrvalidator';
+import { useState } from 'react';
+import { Oppgaver } from '@/components/search/common/oppgaver';
+import { Person } from '@/components/search/fnr/person';
+import { Keys } from '@/keys';
 import {
   useLazySearchOppgaverByFnrQuery,
   useLazySearchOppgaverBySaksnummerQuery,
   useLazySearchPersonByFnrQuery,
-} from '@app/redux-api/oppgaver/queries/oppgaver';
-import { ErrorMessage, HStack, Search, type SearchProps, ToggleGroup, VStack } from '@navikt/ds-react';
-import { dnr, fnr } from '@navikt/fnrvalidator';
-import { useState } from 'react';
+} from '@/redux-api/oppgaver/queries/oppgaver';
 
 enum SearchType {
   SAKSNR = 'SAKSNR',

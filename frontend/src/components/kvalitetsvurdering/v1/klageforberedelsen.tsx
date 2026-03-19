@@ -1,14 +1,14 @@
-import { type Reason, Reasons } from '@app/components/kvalitetsvurdering/v1/reasons';
-import { FormSection, StyledHelpText } from '@app/components/kvalitetsvurdering/v1/styled-components';
-import { useKvalitetsvurderingV1FieldName } from '@app/components/kvalitetsvurdering/v1/use-field-name';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
-import { useValidationError } from '@app/hooks/use-validation-error';
-import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
-import { Radiovalg } from '@app/types/kaka-kvalitetsvurdering/radio';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Heading, HStack, Loader, Radio, RadioGroup } from '@navikt/ds-react';
+import { type Reason, Reasons } from '@/components/kvalitetsvurdering/v1/reasons';
+import { FormSection, StyledHelpText } from '@/components/kvalitetsvurdering/v1/styled-components';
+import { useKvalitetsvurderingV1FieldName } from '@/components/kvalitetsvurdering/v1/use-field-name';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useKvalitetsvurdering } from '@/hooks/use-kvalitetsvurdering';
+import { useValidationError } from '@/hooks/use-validation-error';
+import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/v1';
+import { Radiovalg } from '@/types/kaka-kvalitetsvurdering/radio';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const Klageforberedelsen = () => {
   const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();

@@ -1,8 +1,8 @@
-import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
-import { ValidationSummary } from '@app/components/oppgavebehandling-footer/validation-summary';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, InlineMessage } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useState } from 'react';
+import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
+import { ValidationSummary } from '@/components/oppgavebehandling-footer/validation-summary';
 
 export const ValidationSummaryPopup = () => {
   const { validationSectionErrors } = useContext(ValidationErrorContext);

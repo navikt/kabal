@@ -1,5 +1,5 @@
-import { Scaling } from '@app/plate/status-bar/scaling';
 import { Box, HStack } from '@navikt/ds-react';
+import { Scaling } from '@/plate/status-bar/scaling';
 
 interface Props {
   children?: React.ReactNode;

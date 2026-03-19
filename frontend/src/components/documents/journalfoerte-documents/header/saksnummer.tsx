@@ -1,8 +1,8 @@
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import type { useFilters } from '@app/components/documents/journalfoerte-documents/header/use-filters';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import type { IArkiverteDocumentsResponse } from '@app/types/arkiverte-documents';
 import { useMemo } from 'react';
+import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { IArkiverteDocumentsResponse } from '@/types/arkiverte-documents';
 
 interface SaksnummerProps extends Pick<ReturnType<typeof useFilters>, 'selectedSaksIds' | 'setSelectedSaksIds'> {
   sakList: IArkiverteDocumentsResponse['sakList'];

@@ -1,4 +1,4 @@
-import { pushLog } from '@app/observability';
+import { pushLog } from '@/observability';
 
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/; // 2020-10-29
 const isoTimeRegex = /^\d{2}:\d{2}:\d{2}\.?\d*$/; // 14:25:19.734593

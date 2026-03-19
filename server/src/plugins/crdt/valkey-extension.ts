@@ -1,7 +1,4 @@
 import { randomUUID } from 'node:crypto';
-import { getLogger } from '@app/logger';
-import type { ValkeyOptions } from '@app/valkey/types';
-import { createValkeyClient, type ValkeyClientType } from '@app/valkey/valkey-client';
 import {
   type afterLoadDocumentPayload,
   type afterStoreDocumentPayload,
@@ -17,6 +14,9 @@ import {
   type onConfigurePayload,
   type onDisconnectPayload,
 } from '@hocuspocus/server';
+import { getLogger } from '@/logger';
+import type { ValkeyOptions } from '@/valkey/types';
+import { createValkeyClient, type ValkeyClientType } from '@/valkey/valkey-client';
 
 const log = getLogger('valkey-extension');
 

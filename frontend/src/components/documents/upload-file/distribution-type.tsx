@@ -1,6 +1,6 @@
-import { useDistribusjonstypeOptions } from '@app/hooks/use-distribusjonstype-options';
-import { type DistribusjonsType, DocumentTypeEnum } from '@app/types/documents/documents';
 import { Select, Tooltip } from '@navikt/ds-react';
+import { useDistribusjonstypeOptions } from '@/hooks/use-distribusjonstype-options';
+import { type DistribusjonsType, DocumentTypeEnum } from '@/types/documents/documents';
 
 const NONE = 'NONE';
 const NONE_OPTION = <option value={NONE}>Velg dokumenttype</option>;

@@ -1,14 +1,14 @@
+import { ElementApi } from 'platejs';
+import type { PlateEditor } from 'platejs/react';
+import { isEditor, Path, type TextDirection, type TextUnit } from 'slate';
 import {
   ELEMENT_PLACEHOLDER,
   ELEMENT_REGELVERK_CONTAINER,
   UNDELETABLE_BUT_EDITABLE,
-} from '@app/plate/plugins/element-types';
-import { isInRegelverk, isInUnchangeableElement, isUndeletable } from '@app/plate/plugins/prohibit-deletion/helpers';
-import type { PlaceholderElement } from '@app/plate/types';
-import { isInList } from '@app/plate/utils/queries';
-import { ElementApi } from 'platejs';
-import type { PlateEditor } from 'platejs/react';
-import { isEditor, Path, type TextDirection, type TextUnit } from 'slate';
+} from '@/plate/plugins/element-types';
+import { isInRegelverk, isInUnchangeableElement, isUndeletable } from '@/plate/plugins/prohibit-deletion/helpers';
+import type { PlaceholderElement } from '@/plate/types';
+import { isInList } from '@/plate/utils/queries';
 
 const deleteCurrentNode = (editor: PlateEditor): void => {
   const currentEntry = editor.api.node({ match: (n) => !isEditor(n) });

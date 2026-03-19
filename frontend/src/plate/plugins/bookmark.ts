@@ -1,11 +1,11 @@
-import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
-import { hasOwn } from '@app/functions/object';
-import { Keys } from '@app/keys';
-import { BookmarkLeaf } from '@app/plate/leaf/bookmark';
-import { BookmarkVariantEnum, isBookmarkVariant } from '@app/plate/toolbar/bookmark-button';
-import type { FormattedText } from '@app/plate/types';
 import { type NodeEntry, RangeApi, TextApi } from 'platejs';
 import { createPlatePlugin, type PlateEditor } from 'platejs/react';
+import { BOOKMARK_PREFIX } from '@/components/smart-editor/constants';
+import { hasOwn } from '@/functions/object';
+import { Keys } from '@/keys';
+import { BookmarkLeaf } from '@/plate/leaf/bookmark';
+import { BookmarkVariantEnum, isBookmarkVariant } from '@/plate/toolbar/bookmark-button';
+import type { FormattedText } from '@/plate/types';
 
 export const BookmarkPlugin = createPlatePlugin({
   key: 'bookmark',

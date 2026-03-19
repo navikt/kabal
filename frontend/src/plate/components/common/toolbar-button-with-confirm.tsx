@@ -1,7 +1,7 @@
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, type ButtonProps, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
 
 interface Props extends Omit<ButtonProps, 'variant' | 'size'> {
   tooltip: string;

@@ -1,4 +1,4 @@
-import { cleanHtml, htmlToString } from '@app/plate/drag-start-handler/helpers';
+import { cleanHtml, htmlToString } from '@/plate/drag-start-handler/helpers';
 
 const PARSER = new DOMParser();
 

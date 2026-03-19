@@ -1,5 +1,5 @@
-import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from '@app/redux-api/common';
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { KABAL_TEXT_TEMPLATES_BASE_QUERY } from '@/redux-api/common';
 
 export enum MaltekstseksjonTagTypes {
   MALTEKSTSEKSJON = 'maltekstseksjon',

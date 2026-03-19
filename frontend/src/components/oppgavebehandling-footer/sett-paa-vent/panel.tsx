@@ -1,9 +1,3 @@
-import { ISO_FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
-import { DatePicker } from '@app/components/date-picker/date-picker';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
-import { useSakstyperToPåVentReasons } from '@app/simple-api-state/use-kodeverk';
-import { PaaVentReasonEnum } from '@app/types/kodeverk';
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, ErrorSummary, HStack, Radio, RadioGroup, Textarea, VStack } from '@navikt/ds-react';
 import {
@@ -18,6 +12,12 @@ import {
   parseISO,
 } from 'date-fns';
 import { useMemo, useState } from 'react';
+import { ISO_FORMAT, PRETTY_FORMAT } from '@/components/date-picker/constants';
+import { DatePicker } from '@/components/date-picker/date-picker';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useSattPaaVentMutation } from '@/redux-api/oppgaver/mutations/vent';
+import { useSakstyperToPåVentReasons } from '@/simple-api-state/use-kodeverk';
+import { PaaVentReasonEnum } from '@/types/kodeverk';
 
 interface Props {
   oppgaveId: string;

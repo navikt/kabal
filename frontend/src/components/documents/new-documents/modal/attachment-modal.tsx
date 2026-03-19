@@ -1,13 +1,13 @@
-import { Fields } from '@app/components/documents/new-documents/grid';
-import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
-import { AttachmentModalContent } from '@app/components/documents/new-documents/modal/modal-attachment-content';
-import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
-import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { isNotNull } from '@app/functions/is-not-type-guards';
-import type { IAttachmentDocument } from '@app/types/documents/documents';
 import { MenuElipsisVerticalIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
 import { Button, Modal } from '@navikt/ds-react';
 import { useContext } from 'react';
+import { Fields } from '@/components/documents/new-documents/grid';
+import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
+import { AttachmentModalContent } from '@/components/documents/new-documents/modal/modal-attachment-content';
+import { ModalContext } from '@/components/documents/new-documents/modal/modal-context';
+import { DocumentIcon } from '@/components/documents/new-documents/shared/document-icon';
+import { isNotNull } from '@/functions/is-not-type-guards';
+import type { IAttachmentDocument } from '@/types/documents/documents';
 
 interface Props {
   isOpen: boolean;

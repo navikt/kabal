@@ -1,18 +1,20 @@
 /* eslint-disable max-lines */
-import { ISO_FORMAT } from '@app/components/date-picker/constants';
-import { toast } from '@app/components/toast/store';
-import { ENVIRONMENT } from '@app/environment';
-import { formatIdNumber } from '@app/functions/format-id';
-import { reduxStore } from '@app/redux/configure-store';
-import { forlengetBehandlingstidApi } from '@app/redux-api/forlenget-behandlingstid';
-import { kvalitetsvurderingV1Api } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
-import { kvalitetsvurderingV2Api } from '@app/redux-api/kaka-kvalitetsvurdering/v2';
-import { kvalitetsvurderingV3Api } from '@app/redux-api/kaka-kvalitetsvurdering/v3';
-import { getFullmektigBody, getFullmektigMessage } from '@app/redux-api/oppgaver/mutations/fullmektig-helpers';
-import { OppgaveTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
-import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+
+import { format } from 'date-fns';
+import { ISO_FORMAT } from '@/components/date-picker/constants';
+import { toast } from '@/components/toast/store';
+import { ENVIRONMENT } from '@/environment';
+import { formatIdNumber } from '@/functions/format-id';
+import { reduxStore } from '@/redux/configure-store';
+import { forlengetBehandlingstidApi } from '@/redux-api/forlenget-behandlingstid';
+import { kvalitetsvurderingV1Api } from '@/redux-api/kaka-kvalitetsvurdering/v1';
+import { kvalitetsvurderingV2Api } from '@/redux-api/kaka-kvalitetsvurdering/v2';
+import { kvalitetsvurderingV3Api } from '@/redux-api/kaka-kvalitetsvurdering/v3';
+import { getFullmektigBody, getFullmektigMessage } from '@/redux-api/oppgaver/mutations/fullmektig-helpers';
+import { OppgaveTagTypes, oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import { behandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 import type {
   IFinishOppgavebehandlingParams,
   IFinishWithUpdateInGosys,
@@ -20,13 +22,12 @@ import type {
   ISetFullmektigParams,
   ISetInnsendingshjemlerParams,
   ISetKlagerParams,
-} from '@app/types/oppgavebehandling/params';
+} from '@/types/oppgavebehandling/params';
 import type {
   IModifiedResponse,
   ISetFeilregistrertResponse,
   IVedtakFullfoertResponse,
-} from '@app/types/oppgavebehandling/response';
-import { format } from 'date-fns';
+} from '@/types/oppgavebehandling/response';
 
 const finishOppgaveOnQueryStarted = async ({
   kvalitetsvurderingId: id,

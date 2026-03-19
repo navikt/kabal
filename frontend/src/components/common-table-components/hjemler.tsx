@@ -1,10 +1,10 @@
-import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
+import { HStack, Tag, type TagProps } from '@navikt/ds-react';
+import { LoadingCellContent } from '@/components/common-table-components/loading-cell-content';
 import {
   type HjemmelNameAndId,
   useInnsendingshjemlerFromIds,
   useRegistreringshjemlerFromIds,
-} from '@app/hooks/use-kodeverk-ids';
-import { HStack, Tag, type TagProps } from '@navikt/ds-react';
+} from '@/hooks/use-kodeverk-ids';
 
 interface Props {
   hjemmelIdList: string[];

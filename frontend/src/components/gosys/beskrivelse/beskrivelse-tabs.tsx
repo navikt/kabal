@@ -1,12 +1,12 @@
-import { EntryList } from '@app/components/gosys/beskrivelse/entry-list';
-import { GosysBeskrivelseFormat } from '@app/components/gosys/beskrivelse/format-enum';
-import { splitBeskrivelse } from '@app/components/gosys/beskrivelse/parsing/split-beskrivelse';
-import type { GosysBeskrivelseEntry } from '@app/components/gosys/beskrivelse/parsing/type';
-import { useGosysBeskrivelseTab } from '@app/hooks/settings/use-setting';
-import { usePushEvent } from '@app/observability';
 import { BulletListIcon, CaptionsIcon } from '@navikt/aksel-icons';
 import { BodyLong, Tabs } from '@navikt/ds-react';
 import { useCallback } from 'react';
+import { EntryList } from '@/components/gosys/beskrivelse/entry-list';
+import { GosysBeskrivelseFormat } from '@/components/gosys/beskrivelse/format-enum';
+import { splitBeskrivelse } from '@/components/gosys/beskrivelse/parsing/split-beskrivelse';
+import type { GosysBeskrivelseEntry } from '@/components/gosys/beskrivelse/parsing/type';
+import { useGosysBeskrivelseTab } from '@/hooks/settings/use-setting';
+import { usePushEvent } from '@/observability';
 
 interface Props {
   beskrivelse?: string | null;

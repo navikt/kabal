@@ -1,8 +1,8 @@
-import { type AppTheme, getAppThemeKey, resolveTheme } from '@app/theme';
-import type { DocumentViewerMetadata } from '@app/types';
 import { Theme } from '@navikt/ds-react';
 import { KlageFileViewer } from '@navikt/klage-file-viewer';
 import { useEffect, useState } from 'react';
+import { type AppTheme, getAppThemeKey, resolveTheme } from '@/theme';
+import type { DocumentViewerMetadata } from '@/types';
 
 // --- Theme ---
 

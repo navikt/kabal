@@ -1,7 +1,7 @@
-import { hasOwn, isObject } from '@app/functions/functions';
-import { getCloseEvent } from '@app/plugins/crdt/close-event';
-import type { ConnectionContext } from '@app/plugins/crdt/context';
-import { logContext } from '@app/plugins/crdt/log-context';
+import { hasOwn, isObject } from '@/functions/functions';
+import { getCloseEvent } from '@/plugins/crdt/close-event';
+import type { ConnectionContext } from '@/plugins/crdt/context';
+import { logContext } from '@/plugins/crdt/log-context';
 
 const REFRESH_TOKEN_LIMIT = 120; // Highest token expiration time Wonderwall will give new token for.
 

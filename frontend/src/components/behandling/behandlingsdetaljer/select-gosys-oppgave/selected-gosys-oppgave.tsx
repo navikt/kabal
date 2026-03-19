@@ -1,9 +1,9 @@
-import { Row } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/row';
-import { TableHeader } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/table-header';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetGosysOppgaveQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Loader, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { Row } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/row';
+import { TableHeader } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/table-header';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetGosysOppgaveQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 
 export const SelectedGosysOppgave = () => {
   const id = useOppgaveId();

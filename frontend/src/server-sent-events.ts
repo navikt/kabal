@@ -1,7 +1,7 @@
-import { ENVIRONMENT } from '@app/environment';
-import { parseJSON } from '@app/functions/parse-json';
-import { getQueryParams } from '@app/headers';
-import { pushLog } from '@app/observability';
+import { ENVIRONMENT } from '@/environment';
+import { parseJSON } from '@/functions/parse-json';
+import { getQueryParams } from '@/headers';
+import { pushLog } from '@/observability';
 
 type ServerSentEvent = MessageEvent<string>;
 

@@ -1,6 +1,6 @@
-import { isoDateTimeToPrettyDate } from '@app/domain/date';
-import type { JournalfoertDokument } from '@app/types/documents/documents';
 import type { HTMLAttributes } from 'react';
+import { isoDateTimeToPrettyDate } from '@/domain/date';
+import type { JournalfoertDokument } from '@/types/documents/documents';
 
 interface Props extends Omit<HTMLAttributes<HTMLTimeElement>, 'dateTime'> {
   document: JournalfoertDokument;

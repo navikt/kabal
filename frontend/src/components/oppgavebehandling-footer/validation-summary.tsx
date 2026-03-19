@@ -1,7 +1,7 @@
-import { Alert } from '@app/components/alert/alert';
-import { type IValidationError, type IValidationSection, SECTION_TITLES } from '@app/functions/error-type-guard';
-import { useFieldName } from '@app/hooks/use-field-name';
 import { Heading, VStack } from '@navikt/ds-react';
+import { Alert } from '@/components/alert/alert';
+import { type IValidationError, type IValidationSection, SECTION_TITLES } from '@/functions/error-type-guard';
+import { useFieldName } from '@/hooks/use-field-name';
 
 interface Props {
   sections: IValidationSection[];

@@ -1,19 +1,19 @@
-import { SendToSaksbehandler } from '@app/components/behandling/behandlingsdialog/rol/send-to-saksbehandler';
-import { TakeFromSaksbehandler } from '@app/components/behandling/behandlingsdialog/rol/take-from-saksbehandler';
-import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
-import { BackLink } from '@app/components/oppgavebehandling-footer/back-link';
-import { DeassignOppgave } from '@app/components/oppgavebehandling-footer/deassign/deassign-oppgave';
-import { FeilregistrerButton } from '@app/components/oppgavebehandling-footer/feilregistrer-button';
-import { FinishButton } from '@app/components/oppgavebehandling-footer/finish-button';
-import { NewAnkebehandlingButton } from '@app/components/oppgavebehandling-footer/new-ankebehandling-button';
-import { VentButton } from '@app/components/oppgavebehandling-footer/sett-paa-vent/vent-button';
-import { FooterType, StyledFooter } from '@app/components/oppgavebehandling-footer/styled-components';
-import { ValidationSummaryPopup } from '@app/components/oppgavebehandling-footer/validation-summary-popup';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { HStack } from '@navikt/ds-react';
 import { useContext } from 'react';
+import { SendToSaksbehandler } from '@/components/behandling/behandlingsdialog/rol/send-to-saksbehandler';
+import { TakeFromSaksbehandler } from '@/components/behandling/behandlingsdialog/rol/take-from-saksbehandler';
+import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
+import { BackLink } from '@/components/oppgavebehandling-footer/back-link';
+import { DeassignOppgave } from '@/components/oppgavebehandling-footer/deassign/deassign-oppgave';
+import { FeilregistrerButton } from '@/components/oppgavebehandling-footer/feilregistrer-button';
+import { FinishButton } from '@/components/oppgavebehandling-footer/finish-button';
+import { NewAnkebehandlingButton } from '@/components/oppgavebehandling-footer/new-ankebehandling-button';
+import { VentButton } from '@/components/oppgavebehandling-footer/sett-paa-vent/vent-button';
+import { FooterType, StyledFooter } from '@/components/oppgavebehandling-footer/styled-components';
+import { ValidationSummaryPopup } from '@/components/oppgavebehandling-footer/validation-summary-popup';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const UnfinishedFooter = () => {
   const { data: oppgave, isSuccess } = useOppgave();

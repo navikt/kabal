@@ -1,4 +1,4 @@
-import { getLogger } from '@app/logger';
+import { getLogger } from '@/logger';
 
 const log = getLogger('mime-types');
 

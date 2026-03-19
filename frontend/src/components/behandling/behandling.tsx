@@ -1,15 +1,15 @@
-import { Ankebehandlingsdetaljer } from '@app/components/behandling/behandlingsdetaljer/ankebehandlingsdetaljer';
-import { BegjæringOmGjenopptakDetaljer } from '@app/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-detaljer';
-import { BegjæringOmGjenopptakITrDetaljer } from '@app/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-i-tr-detaljer';
-import { BehandlingEtterTrOpphevetDetaljer } from '@app/components/behandling/behandlingsdetaljer/behandling-etter-tr-opphevet-detaljer';
-import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
-import { Klagebehandlingsdetaljer } from '@app/components/behandling/behandlingsdetaljer/klagebehandlingsdetaljer';
-import { Omgjøringskravdetaljer } from '@app/components/behandling/behandlingsdetaljer/omgjøringskravdetaljer';
-import { Trygderettsankebehandlingsdetaljer } from '@app/components/behandling/behandlingsdetaljer/trygderettsankebehandlingsdetaljer';
-import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { Heading, Skeleton } from '@navikt/ds-react';
+import { Ankebehandlingsdetaljer } from '@/components/behandling/behandlingsdetaljer/ankebehandlingsdetaljer';
+import { BegjæringOmGjenopptakDetaljer } from '@/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-detaljer';
+import { BegjæringOmGjenopptakITrDetaljer } from '@/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-i-tr-detaljer';
+import { BehandlingEtterTrOpphevetDetaljer } from '@/components/behandling/behandlingsdetaljer/behandling-etter-tr-opphevet-detaljer';
+import { BehandlingSection } from '@/components/behandling/behandlingsdetaljer/behandling-section';
+import { Klagebehandlingsdetaljer } from '@/components/behandling/behandlingsdetaljer/klagebehandlingsdetaljer';
+import { Omgjøringskravdetaljer } from '@/components/behandling/behandlingsdetaljer/omgjøringskravdetaljer';
+import { Trygderettsankebehandlingsdetaljer } from '@/components/behandling/behandlingsdetaljer/trygderettsankebehandlingsdetaljer';
+import { StyledBehandlingSection } from '@/components/behandling/styled-components';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const Behandlingsdetaljer = () => {
   const { data: oppgave } = useOppgave();

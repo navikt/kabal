@@ -1,16 +1,3 @@
-import { useAppTheme } from '@app/app-theme';
-import { addFileViewerHandle, removeFileViewerHandle } from '@app/components/file-viewer/file-viewer-handle-store';
-import { PanelContainer } from '@app/components/oppgavebehandling-panels/panel-container';
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
-import { toast } from '@app/components/toast/store';
-import { Section } from '@app/components/toast/toast-content/api-error-toast';
-import { ENVIRONMENT } from '@app/environment';
-import { isNotNullOrUndefined } from '@app/functions/is-not-type-guards';
-import { parseJSON } from '@app/functions/parse-json';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
-import { isKabalApiErrorData, type KabalApiErrorData } from '@app/types/errors';
 import { BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
 import {
   type FetchErrorInfo,
@@ -19,6 +6,19 @@ import {
   type KlageFileViewerProps,
 } from '@navikt/klage-file-viewer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useAppTheme } from '@/app-theme';
+import { addFileViewerHandle, removeFileViewerHandle } from '@/components/file-viewer/file-viewer-handle-store';
+import { PanelContainer } from '@/components/oppgavebehandling-panels/panel-container';
+import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
+import { usePanelShortcut } from '@/components/oppgavebehandling-panels/panel-shortcuts-context';
+import { toast } from '@/components/toast/store';
+import { Section } from '@/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@/environment';
+import { isNotNullOrUndefined } from '@/functions/is-not-type-guards';
+import { parseJSON } from '@/functions/parse-json';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useSmartEditorEnabled } from '@/hooks/settings/use-setting';
+import { isKabalApiErrorData, type KabalApiErrorData } from '@/types/errors';
 
 export type { FileEntry, KlageFileViewerProps } from '@navikt/klage-file-viewer';
 

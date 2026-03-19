@@ -1,7 +1,7 @@
-import { setLocalStorageItem } from '@app/localstorage';
-import { Observable } from '@app/observable';
-import { user } from '@app/static-data/static-data';
 import { useSyncExternalStore } from 'react';
+import { setLocalStorageItem } from '@/localstorage';
+import { Observable } from '@/observable';
+import { user } from '@/static-data/static-data';
 
 // System
 

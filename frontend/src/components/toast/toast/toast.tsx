@@ -1,13 +1,13 @@
-import { CLOSE_TOAST_EVENT_TYPE } from '@app/components/toast/toast/constants';
-import { isTimedToast } from '@app/components/toast/toast/helpers';
-import { Icon } from '@app/components/toast/toast/icon';
-import { Container, SLIDE_DURATION, StyledCloseButton, ToastContainer } from '@app/components/toast/toast/shared';
-import { TimedToast } from '@app/components/toast/toast/timed';
-import type { Message } from '@app/components/toast/types';
-import { useAnimationsEnabled } from '@app/hooks/use-animations-enabled';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { VStack } from '@navikt/ds-react';
 import { memo, useCallback, useEffect, useRef } from 'react';
+import { CLOSE_TOAST_EVENT_TYPE } from '@/components/toast/toast/constants';
+import { isTimedToast } from '@/components/toast/toast/helpers';
+import { Icon } from '@/components/toast/toast/icon';
+import { Container, SLIDE_DURATION, StyledCloseButton, ToastContainer } from '@/components/toast/toast/shared';
+import { TimedToast } from '@/components/toast/toast/timed';
+import type { Message } from '@/components/toast/types';
+import { useAnimationsEnabled } from '@/hooks/use-animations-enabled';
 
 export const Toast = memo(
   (message: Message) => {

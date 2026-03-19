@@ -1,4 +1,4 @@
-import { UtfallEnum } from '@app/types/kodeverk';
+import { UtfallEnum } from '@/types/kodeverk';
 
 const UTFALL = Object.values(UtfallEnum);
 

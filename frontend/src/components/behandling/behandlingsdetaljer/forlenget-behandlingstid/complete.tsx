@@ -1,13 +1,13 @@
-import { type IValidationSection, isReduxValidationResponse, SectionKey } from '@app/functions/error-type-guard';
-import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
+import { Button, HStack } from '@navikt/ds-react';
+import { useState } from 'react';
+import { type IValidationSection, isReduxValidationResponse, SectionKey } from '@/functions/error-type-guard';
+import { useSuggestedBrevmottakere } from '@/hooks/use-suggested-brevmottakere';
 import {
   useCompleteMutation,
   useGetOrCreateQuery,
   useSetReceiversMutation,
-} from '@app/redux-api/forlenget-behandlingstid';
-import { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
-import { Button, HStack } from '@navikt/ds-react';
-import { useState } from 'react';
+} from '@/redux-api/forlenget-behandlingstid';
+import { UtvidetBehandlingstidFieldName } from '@/types/field-names';
 
 interface Props {
   id: string;

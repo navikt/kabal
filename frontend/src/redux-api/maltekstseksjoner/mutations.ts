@@ -1,18 +1,20 @@
-import { toast } from '@app/components/toast/store';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import type { KabalValue } from '@app/plate/types';
-import { reduxStore } from '@app/redux/configure-store';
+import { formatISO } from 'date-fns';
+import type { Patch } from 'immer';
+import { toast } from '@/components/toast/store';
+import { createSimpleParagraph } from '@/plate/templates/helpers';
+import type { KabalValue } from '@/plate/types';
+import { reduxStore } from '@/redux/configure-store';
 import {
   ConsumerMaltekstseksjonerTagTypes,
   consumerMaltekstseksjonerApi,
-} from '@app/redux-api/maltekstseksjoner/consumer';
-import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/maltekstseksjoner';
-import { maltekstseksjonerQuerySlice } from '@app/redux-api/maltekstseksjoner/queries';
-import { getLastPublishedVersion } from '@app/redux-api/redaktoer-helpers';
-import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
-import { textsQuerySlice } from '@app/redux-api/texts/queries';
-import { user } from '@app/static-data/static-data';
-import type { IGetMaltekstseksjonParams, PublishedTextReadOnlyMetadata } from '@app/types/common-text-types';
+} from '@/redux-api/maltekstseksjoner/consumer';
+import { maltekstseksjonerApi } from '@/redux-api/maltekstseksjoner/maltekstseksjoner';
+import { maltekstseksjonerQuerySlice } from '@/redux-api/maltekstseksjoner/queries';
+import { getLastPublishedVersion } from '@/redux-api/redaktoer-helpers';
+import { ConsumerTextsTagTypes, consumerTextsApi } from '@/redux-api/texts/consumer';
+import { textsQuerySlice } from '@/redux-api/texts/queries';
+import { user } from '@/static-data/static-data';
+import type { IGetMaltekstseksjonParams, PublishedTextReadOnlyMetadata } from '@/types/common-text-types';
 import type {
   ICreateDraftFromMaltekstseksjonVersionParams,
   IDeleteMaltekstDraftParams,
@@ -25,16 +27,14 @@ import type {
   IUpdateMaltekstseksjonTitleParams,
   IUpdateMaltekstseksjonUtfallParams,
   IUpdateMaltekstseksjonYtelseHjemmelParams,
-} from '@app/types/maltekstseksjoner/params';
+} from '@/types/maltekstseksjoner/params';
 import type {
   IDraftMaltekstseksjon,
   IPublishedMaltekstseksjon,
   IPublishWithTextsResponse,
-} from '@app/types/maltekstseksjoner/responses';
-import type { INewRichTextParams } from '@app/types/texts/common';
-import { LANGUAGES, type Language } from '@app/types/texts/language';
-import { formatISO } from 'date-fns';
-import type { Patch } from 'immer';
+} from '@/types/maltekstseksjoner/responses';
+import type { INewRichTextParams } from '@/types/texts/common';
+import { LANGUAGES, type Language } from '@/types/texts/language';
 
 const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
   endpoints: (builder) => ({

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { getAdjustedSpans } from '@app/plate/toolbar/table/with-overrides';
+import { getAdjustedSpans } from '@/plate/toolbar/table/with-overrides';
 
 describe('getAdjustedSpans', () => {
   test('nothing to adjust', () => {

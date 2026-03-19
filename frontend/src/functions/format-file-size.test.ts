@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { BYTES_PER_KB, formatFileSize } from '@app/functions/format-file-size';
+import { BYTES_PER_KB, formatFileSize } from '@/functions/format-file-size';
 
 const KB = BYTES_PER_KB;
 const MB = KB * BYTES_PER_KB;

@@ -1,15 +1,15 @@
-import { HistoryEditor } from '@app/components/smart-editor/history/history-editor';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
-import {
-  useGetSmartDocumentVersionQuery,
-  useGetSmartDocumentVersionsQuery,
-} from '@app/redux-api/oppgaver/queries/documents';
-import type { ISmartDocumentOrAttachment, ISmartDocumentVersion } from '@app/types/documents/documents';
 import { ChevronRightIcon, ClockDashedIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
+import { HistoryEditor } from '@/components/smart-editor/history/history-editor';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { formatEmployeeNameAndIdFallback } from '@/domain/employee-name';
+import {
+  useGetSmartDocumentVersionQuery,
+  useGetSmartDocumentVersionsQuery,
+} from '@/redux-api/oppgaver/queries/documents';
+import type { ISmartDocumentOrAttachment, ISmartDocumentVersion } from '@/types/documents/documents';
 
 interface Props {
   oppgaveId: string;

@@ -1,12 +1,12 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import type { FilterDropdownProps } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
-import { useOppgaveTableTildelteSaksbehandlere } from '@app/components/common-table-components/oppgave-table/state/use-state';
-import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { useGetSaksbehandlereInEnhetQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
-import type { INavEmployee } from '@app/types/bruker';
 import { Table, Tag } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import type { FilterDropdownProps } from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
+import { useOppgaveTableTildelteSaksbehandlere } from '@/components/common-table-components/oppgave-table/state/use-state';
+import { TABLE_HEADERS } from '@/components/common-table-components/types';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { useGetSaksbehandlereInEnhetQuery } from '@/redux-api/oppgaver/queries/oppgaver';
+import type { INavEmployee } from '@/types/bruker';
 
 export const Saksbehandler = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const { user } = useContext(StaticDataContext);

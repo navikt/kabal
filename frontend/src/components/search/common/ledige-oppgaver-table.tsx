@@ -1,9 +1,9 @@
-import { Alert } from '@app/components/alert/alert';
-import { StaticOppgaveTableWithPageState } from '@app/components/common-table-components/oppgave-table/static-oppgave-table';
-import { StaticOppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
-import { ColumnKeyEnum } from '@app/components/common-table-components/types';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
 import { Heading } from '@navikt/ds-react';
+import { Alert } from '@/components/alert/alert';
+import { StaticOppgaveTableWithPageState } from '@/components/common-table-components/oppgave-table/static-oppgave-table';
+import { StaticOppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
+import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 
 interface Props {
   oppgaveIds: string[];

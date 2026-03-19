@@ -1,8 +1,8 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { NextExpandStateIcon, nextExpandState } from '@app/components/smart-editor/gode-formuleringer/god-formulering';
-import { GodeFormuleringerExpandState } from '@app/hooks/settings/use-setting';
 import { Button } from '@navikt/ds-react';
 import { useContext, useMemo } from 'react';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { NextExpandStateIcon, nextExpandState } from '@/components/smart-editor/gode-formuleringer/god-formulering';
+import { GodeFormuleringerExpandState } from '@/hooks/settings/use-setting';
 
 interface Props {
   expandState: Map<string, GodeFormuleringerExpandState>;

@@ -1,31 +1,31 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { GodeFormuleringer } from '@app/components/smart-editor/gode-formuleringer/gode-formuleringer';
-import { History } from '@app/components/smart-editor/history/history';
-import { Content } from '@app/components/smart-editor/tabbed-editors/content';
-import {
-  DynamicContentLoadingProvider,
-  useDynamicContentLoadingCount,
-} from '@app/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
-import { useSetEditorPanelFocus } from '@app/components/smart-editor/tabbed-editors/editor-panel-focus-context';
-import { EditorWithNewCommentAndFloatingToolbar } from '@app/components/smart-editor/tabbed-editors/editor-with-toolbar';
-import { PositionedRight } from '@app/components/smart-editor/tabbed-editors/positioned-right';
-import { StickyRight } from '@app/components/smart-editor/tabbed-editors/sticky-right';
-import { VersionStatus } from '@app/components/smart-editor/tabbed-editors/version-status';
-import { DocumentErrorComponent } from '@app/error-boundary/document-error';
-import { ErrorBoundary } from '@app/error-boundary/error-boundary';
-import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
-import { isEditableTextNode } from '@app/plate/functions/is-editable-text';
-import { StatusBar } from '@app/plate/status-bar/status-bar';
-import { SaksbehandlerToolbar } from '@app/plate/toolbar/toolbars/saksbehandler-toolbar';
-import { useLazyGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
-import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, FileTextIcon } from '@navikt/aksel-icons';
 import { Box, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
 import { TextApi, type TText } from 'platejs';
 import { type PlateEditor, useEditorReadOnly, useEditorRef } from 'platejs/react';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import type { BasePoint } from 'slate';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { GodeFormuleringer } from '@/components/smart-editor/gode-formuleringer/gode-formuleringer';
+import { History } from '@/components/smart-editor/history/history';
+import { Content } from '@/components/smart-editor/tabbed-editors/content';
+import {
+  DynamicContentLoadingProvider,
+  useDynamicContentLoadingCount,
+} from '@/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
+import { useSetEditorPanelFocus } from '@/components/smart-editor/tabbed-editors/editor-panel-focus-context';
+import { EditorWithNewCommentAndFloatingToolbar } from '@/components/smart-editor/tabbed-editors/editor-with-toolbar';
+import { PositionedRight } from '@/components/smart-editor/tabbed-editors/positioned-right';
+import { StickyRight } from '@/components/smart-editor/tabbed-editors/sticky-right';
+import { VersionStatus } from '@/components/smart-editor/tabbed-editors/version-status';
+import { DocumentErrorComponent } from '@/error-boundary/document-error';
+import { ErrorBoundary } from '@/error-boundary/error-boundary';
+import { useSmartEditorActiveDocument } from '@/hooks/settings/use-setting';
+import { isEditableTextNode } from '@/plate/functions/is-editable-text';
+import { StatusBar } from '@/plate/status-bar/status-bar';
+import { SaksbehandlerToolbar } from '@/plate/toolbar/toolbars/saksbehandler-toolbar';
+import { useLazyGetDocumentQuery } from '@/redux-api/oppgaver/queries/documents';
+import type { ISmartDocumentOrAttachment } from '@/types/documents/documents';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface PlateContextProps {
   smartDocument: ISmartDocumentOrAttachment;

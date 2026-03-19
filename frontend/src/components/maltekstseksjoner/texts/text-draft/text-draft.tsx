@@ -1,23 +1,23 @@
-import { EditableTitle } from '@app/components/editable-title/editable-title';
-import { LanguageEditor, type RichTexts } from '@app/components/maltekstseksjoner/texts/text-draft/language-editor';
-import { DraftTextActions } from '@app/components/maltekstseksjoner/texts/text-draft-actions';
-import { CreateTranslatedRichText } from '@app/components/smart-editor-texts/create-translated-text';
-import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import type { RichTextEditor } from '@app/plate/types';
+import { BodyShort, HelpText, HStack, Label, Loader, Switch, Tooltip, VStack } from '@navikt/ds-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { EditableTitle } from '@/components/editable-title/editable-title';
+import { LanguageEditor, type RichTexts } from '@/components/maltekstseksjoner/texts/text-draft/language-editor';
+import { DraftTextActions } from '@/components/maltekstseksjoner/texts/text-draft-actions';
+import { CreateTranslatedRichText } from '@/components/smart-editor-texts/create-translated-text';
+import { getLanguageNames } from '@/components/smart-editor-texts/functions/get-language-names';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { areDescendantsEqual } from '@/functions/are-descendants-equal';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import type { RichTextEditor } from '@/plate/types';
 import {
   usePublishMutation,
   useSetTextTitleMutation,
   useSetTextTypeMutation,
   useUpdateRichTextMutation,
-} from '@app/redux-api/texts/mutations';
-import { RichTextTypes } from '@app/types/common-text-types';
-import { isLanguage, LANGUAGES, type Language } from '@app/types/texts/language';
-import type { IDraftRichText } from '@app/types/texts/responses';
-import { BodyShort, HelpText, HStack, Label, Loader, Switch, Tooltip, VStack } from '@navikt/ds-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+} from '@/redux-api/texts/mutations';
+import { RichTextTypes } from '@/types/common-text-types';
+import { isLanguage, LANGUAGES, type Language } from '@/types/texts/language';
+import type { IDraftRichText } from '@/types/texts/responses';
 
 interface Props {
   text: IDraftRichText;

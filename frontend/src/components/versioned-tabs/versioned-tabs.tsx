@@ -1,7 +1,7 @@
-import { TabLabel } from '@app/components/versioned-tabs/tab-label';
 import { DocPencilIcon, FileTextIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { Tabs } from '@navikt/ds-react';
 import { useEffect } from 'react';
+import { TabLabel } from '@/components/versioned-tabs/tab-label';
 
 interface DraftVersion {
   versionId: string;

@@ -1,10 +1,10 @@
-import { Alert } from '@app/components/alert/alert';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { GodFormulering } from '@app/components/smart-editor/gode-formuleringer/god-formulering';
-import { GodeFormuleringerExpandState } from '@app/hooks/settings/use-setting';
-import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
 import { Box } from '@navikt/ds-react';
 import { useContext, useEffect } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { GodFormulering } from '@/components/smart-editor/gode-formuleringer/god-formulering';
+import { GodeFormuleringerExpandState } from '@/hooks/settings/use-setting';
+import type { NonNullableGodFormulering } from '@/types/texts/consumer';
 
 interface ListProps {
   isLoading: boolean;

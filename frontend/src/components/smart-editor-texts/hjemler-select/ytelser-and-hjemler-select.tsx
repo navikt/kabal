@@ -1,15 +1,15 @@
-import { NestedFilterList, type NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
+import { useMemo } from 'react';
+import { NestedFilterList, type NestedOption, OptionType } from '@/components/filter-dropdown/nested-filter-list';
 import {
   COMMON_HJEMMEL_THRESHOLD,
   createHjemmelValue,
   useCounts,
   useGenerelleHjemler,
   useNoneOption,
-} from '@app/components/smart-editor-texts/hjemler-select/hooks';
-import { isIndeterminate } from '@app/components/smart-editor-texts/hjemler-select/is-indeterminate';
-import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@app/components/smart-editor-texts/types';
-import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
-import { useMemo } from 'react';
+} from '@/components/smart-editor-texts/hjemler-select/hooks';
+import { isIndeterminate } from '@/components/smart-editor-texts/hjemler-select/is-indeterminate';
+import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@/components/smart-editor-texts/types';
+import { useKabalYtelserLatest } from '@/simple-api-state/use-kodeverk';
 
 interface YtelserAndHjemlerSelectProps {
   selected: string[];

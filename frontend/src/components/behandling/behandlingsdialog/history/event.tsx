@@ -1,6 +1,6 @@
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { HistoryEventTypes } from '@app/types/oppgavebehandling/response';
 import { Box, HStack, VStack } from '@navikt/ds-react';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { HistoryEventTypes } from '@/types/oppgavebehandling/response';
 
 interface Props {
   type: HistoryEventTypes;

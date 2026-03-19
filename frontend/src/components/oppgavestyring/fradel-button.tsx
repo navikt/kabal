@@ -1,16 +1,16 @@
-import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
-import { Direction } from '@app/components/deassign/direction';
-import { PaaVentWarning } from '@app/components/deassign/paa-vent-warning';
-import { Popup } from '@app/components/deassign/popup';
-import { useFradel } from '@app/components/oppgavestyring/use-tildel';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
-import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import { FradelReason, type IOppgave } from '@app/types/oppgaver';
 import { Button, HStack } from '@navikt/ds-react';
 import { differenceInSeconds, parse } from 'date-fns';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { ISO_DATETIME_FORMAT } from '@/components/date-picker/constants';
+import { Direction } from '@/components/deassign/direction';
+import { PaaVentWarning } from '@/components/deassign/paa-vent-warning';
+import { Popup } from '@/components/deassign/popup';
+import { useFradel } from '@/components/oppgavestyring/use-tildel';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { useOppgaveActions } from '@/hooks/use-oppgave-actions';
+import { useTildelSaksbehandlerMutation } from '@/redux-api/oppgaver/mutations/tildeling';
+import { SaksTypeEnum } from '@/types/kodeverk';
+import { FradelReason, type IOppgave } from '@/types/oppgaver';
 
 const KABAL_HEADER_HEIGHT = 48;
 const UNDO_TIMEOUT_SECONDS = 10;

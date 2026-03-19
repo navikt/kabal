@@ -1,25 +1,25 @@
-import { EditableTitle } from '@app/components/editable-title/editable-title';
-import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
-import { TextDraftActions } from '@app/components/smart-editor-texts/edit/draft-actions';
-import { Tags } from '@app/components/smart-editor-texts/edit/tags';
-import { HjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/hjemler-select';
-import { YtelserAndHjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
-import { useMetadataFilters } from '@app/components/smart-editor-texts/hooks/use-metadata-filters';
-import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { TextModified } from '@app/components/smart-editor-texts/modified';
-import { KlageenhetSelect, TemplateSectionSelect } from '@app/components/smart-editor-texts/query-filter-selects';
-import { UtfallSetFilter } from '@app/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
-import { isPlainText } from '@app/functions/is-rich-plain-text';
+import { HStack, VStack } from '@navikt/ds-react';
+import { EditableTitle } from '@/components/editable-title/editable-title';
+import { AllMaltekstseksjonReferences } from '@/components/malteksteksjon-references/maltekstseksjon-references';
+import { TextDraftActions } from '@/components/smart-editor-texts/edit/draft-actions';
+import { Tags } from '@/components/smart-editor-texts/edit/tags';
+import { HjemlerSelect } from '@/components/smart-editor-texts/hjemler-select/hjemler-select';
+import { YtelserAndHjemlerSelect } from '@/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
+import { useMetadataFilters } from '@/components/smart-editor-texts/hooks/use-metadata-filters';
+import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
+import { TextModified } from '@/components/smart-editor-texts/modified';
+import { KlageenhetSelect, TemplateSectionSelect } from '@/components/smart-editor-texts/query-filter-selects';
+import { UtfallSetFilter } from '@/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
+import { isPlainText } from '@/functions/is-rich-plain-text';
 import {
   useSetTextTitleMutation,
   useUpdateEnhetIdListMutation,
   useUpdateTemplateSectionIdListMutation,
   useUpdateUtfallIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
-} from '@app/redux-api/texts/mutations';
-import { type IGetTextsParams, REGELVERK_TYPE } from '@app/types/common-text-types';
-import type { IText } from '@app/types/texts/responses';
-import { HStack, VStack } from '@navikt/ds-react';
+} from '@/redux-api/texts/mutations';
+import { type IGetTextsParams, REGELVERK_TYPE } from '@/types/common-text-types';
+import type { IText } from '@/types/texts/responses';
 
 interface Props {
   text: IText;

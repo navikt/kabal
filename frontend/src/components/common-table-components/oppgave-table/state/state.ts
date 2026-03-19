@@ -1,11 +1,11 @@
-import { ShortParamKey } from '@app/components/common-table-components/oppgave-table/state/short-names';
-import { fromDateRangeParam } from '@app/components/common-table-components/oppgave-table/state/use-date-range';
-import { fromSortingParam } from '@app/components/common-table-components/oppgave-table/state/use-sort-state';
-import { fromArrayParam, fromTyperParam } from '@app/components/common-table-components/oppgave-table/state/use-state';
-import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
-import type { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
+import { ShortParamKey } from '@/components/common-table-components/oppgave-table/state/short-names';
+import { fromDateRangeParam } from '@/components/common-table-components/oppgave-table/state/use-date-range';
+import { fromSortingParam } from '@/components/common-table-components/oppgave-table/state/use-sort-state';
+import { fromArrayParam, fromTyperParam } from '@/components/common-table-components/oppgave-table/state/use-state';
+import type { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
+import type { CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
 export const useOppgaveTableState = (
   tableKey: OppgaveTableKey,

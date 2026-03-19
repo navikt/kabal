@@ -1,16 +1,16 @@
-import { DateTime } from '@app/components/datetime/datetime';
-import { AddButton } from '@app/components/smart-editor/gode-formuleringer/add-button';
-import { GodeFormuleringerExpandState } from '@app/hooks/settings/use-setting';
-import { SPELL_CHECK_LANGUAGES, useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { KabalPlateEditor } from '@app/plate/plate-editor';
-import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
-import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
-import type { NonNullableGodFormulering } from '@app/types/texts/consumer';
-import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { CalendarIcon, ChevronDownDoubleIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { useEffect, useRef } from 'react';
+import { DateTime } from '@/components/datetime/datetime';
+import { AddButton } from '@/components/smart-editor/gode-formuleringer/add-button';
+import { GodeFormuleringerExpandState } from '@/hooks/settings/use-setting';
+import { SPELL_CHECK_LANGUAGES, useSmartEditorLanguage } from '@/hooks/use-smart-editor-language';
+import { KabalPlateEditor } from '@/plate/plate-editor';
+import { previewComponents, previewPlugins } from '@/plate/plugins/plugin-sets/preview';
+import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@/plate/types';
+import type { NonNullableGodFormulering } from '@/types/texts/consumer';
+import { LANGUAGE_NAMES } from '@/types/texts/language';
 
 type Props = NonNullableGodFormulering & {
   isFocused: boolean;

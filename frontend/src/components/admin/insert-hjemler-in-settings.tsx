@@ -1,9 +1,9 @@
-import { Alert } from '@app/components/alert/alert';
-import { useInsertHjemlerInSettingsMutation } from '@app/redux-api/internal';
-import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox, CheckboxGroup, Heading, HStack, Select, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { useInsertHjemlerInSettingsMutation } from '@/redux-api/internal';
+import { useLatestYtelser } from '@/simple-api-state/use-kodeverk';
 
 export const InsertHjemlerInSettings = () => {
   const { data = [] } = useLatestYtelser();

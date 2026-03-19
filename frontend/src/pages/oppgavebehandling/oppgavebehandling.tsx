@@ -1,3 +1,3 @@
-import { Oppgavebehandling } from '@app/components/oppgavebehandling/oppgavebehandling';
+import { Oppgavebehandling } from '@/components/oppgavebehandling/oppgavebehandling';
 
 export const OppgavebehandlingPage = () => <Oppgavebehandling />;

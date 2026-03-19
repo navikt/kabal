@@ -1,4 +1,4 @@
-import { SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
+import { SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
 export enum ShortParamKey {
   TYPER = 't',

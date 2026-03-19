@@ -1,8 +1,9 @@
-import { NestedFilterList } from '@app/components/filter-dropdown/nested-filter-list';
-import type { IOption } from '@app/components/filter-dropdown/props';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { getTemplateOptions } from '@app/components/smart-editor-texts/get-template-options';
-import { useKlageenheterOptions } from '@app/components/smart-editor-texts/hooks/use-options';
+import { useCallback, useMemo } from 'react';
+import { NestedFilterList } from '@/components/filter-dropdown/nested-filter-list';
+import type { IOption } from '@/components/filter-dropdown/props';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { getTemplateOptions } from '@/components/smart-editor-texts/get-template-options';
+import { useKlageenheterOptions } from '@/components/smart-editor-texts/hooks/use-options';
 import {
   GLOBAL,
   LIST_DELIMITER,
@@ -11,10 +12,9 @@ import {
   type NONE_TYPE,
   SET_DELIMITER,
   WILDCARD,
-} from '@app/components/smart-editor-texts/types';
-import { isUtfall } from '@app/functions/is-utfall';
-import type { UtfallEnum } from '@app/types/kodeverk';
-import { useCallback, useMemo } from 'react';
+} from '@/components/smart-editor-texts/types';
+import { isUtfall } from '@/functions/is-utfall';
+import type { UtfallEnum } from '@/types/kodeverk';
 
 interface UtfallSelectProps {
   children: string;

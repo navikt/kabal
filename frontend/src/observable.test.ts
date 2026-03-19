@@ -1,5 +1,5 @@
 import { describe, expect, it, mock } from 'bun:test';
-import { Observable } from '@app/observable';
+import { Observable } from '@/observable';
 
 describe('Observable', () => {
   it('should create an observable with initial value', () => {

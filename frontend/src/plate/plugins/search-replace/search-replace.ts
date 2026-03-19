@@ -1,6 +1,3 @@
-import { InsertPlugin } from '@app/plate/plugins/capitalise/capitalise';
-import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { decorate } from '@app/plate/plugins/search-replace/decorate';
 import {
   createTSlatePlugin,
   type DecoratedRange,
@@ -17,6 +14,9 @@ import {
   type TText,
 } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
+import { InsertPlugin } from '@/plate/plugins/capitalise/capitalise';
+import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
+import { decorate } from '@/plate/plugins/search-replace/decorate';
 
 const SEARCH_REPLACE_KEY = 'search_highlight';
 

@@ -1,4 +1,4 @@
-import { pushError } from '@app/observability';
+import { pushError } from '@/observability';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_FOOTER,
@@ -10,7 +10,7 @@ import {
   ELEMENT_REGELVERK,
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
-} from '@app/plate/plugins/element-types';
+} from '@/plate/plugins/element-types';
 
 const NOOP_ELEMENTS = [
   ELEMENT_CURRENT_DATE,

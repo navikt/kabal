@@ -1,13 +1,13 @@
-import { ScaleContext } from '@app/plate/status-bar/scale-context';
-import { CommentsButton } from '@app/plate/toolbar/add-comment';
-import { InsertPlaceholder } from '@app/plate/toolbar/insert-placeholder';
-import { Marks } from '@app/plate/toolbar/marks';
-import { ToolbarSeparator } from '@app/plate/toolbar/separator';
-import { TableButtons } from '@app/plate/toolbar/table/table';
-import { type TableElement, useMyPlateEditorRef, useMyPlateEditorState } from '@app/plate/types';
 import { Box, HStack } from '@navikt/ds-react';
 import { BaseTablePlugin } from '@platejs/table';
 import { useContext, useEffect, useState } from 'react';
+import { ScaleContext } from '@/plate/status-bar/scale-context';
+import { CommentsButton } from '@/plate/toolbar/add-comment';
+import { InsertPlaceholder } from '@/plate/toolbar/insert-placeholder';
+import { Marks } from '@/plate/toolbar/marks';
+import { ToolbarSeparator } from '@/plate/toolbar/separator';
+import { TableButtons } from '@/plate/toolbar/table/table';
+import { type TableElement, useMyPlateEditorRef, useMyPlateEditorState } from '@/plate/types';
 
 interface Props {
   editorId: string;

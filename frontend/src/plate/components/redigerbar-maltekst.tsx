@@ -1,13 +1,13 @@
-import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { LegacyRedigerbarMaltekst } from '@app/plate/components/legacy-redigerbar-maltekst';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import type { RedigerbarMaltekstElement } from '@app/plate/types';
-import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
-import { RichTextTypes } from '@app/types/common-text-types';
-import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
+import { useSmartEditorLanguage } from '@/hooks/use-smart-editor-language';
+import { LegacyRedigerbarMaltekst } from '@/plate/components/legacy-redigerbar-maltekst';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
+import type { RedigerbarMaltekstElement } from '@/plate/types';
+import { useLazyGetConsumerTextByIdQuery } from '@/redux-api/texts/consumer';
+import { RichTextTypes } from '@/types/common-text-types';
+import type { IConsumerRichText, IConsumerText } from '@/types/texts/consumer';
 
 export const RedigerbarMaltekst = (props: PlateElementProps<RedigerbarMaltekstElement>) => {
   const [getText, { isFetching }] = useLazyGetConsumerTextByIdQuery();

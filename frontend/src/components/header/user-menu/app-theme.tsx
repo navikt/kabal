@@ -1,6 +1,6 @@
-import { AppTheme, isValidUserTheme, setUserTheme, UserTheme, useSystemTheme, useUserTheme } from '@app/app-theme';
 import { MonitorFillIcon, MonitorIcon, MoonIcon, SunFillIcon } from '@navikt/aksel-icons';
 import { ToggleGroup } from '@navikt/ds-react';
+import { AppTheme, isValidUserTheme, setUserTheme, UserTheme, useSystemTheme, useUserTheme } from '@/app-theme';
 
 export const AppThemeSwitcher = () => {
   const userTheme = useUserTheme();

@@ -1,8 +1,8 @@
+import { Label, VStack } from '@navikt/ds-react';
 import {
   SearchableNavEmployeeSelect,
   type SearchableNavEmployeeSelectProps,
-} from '@app/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
-import { Label, VStack } from '@navikt/ds-react';
+} from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
 
 interface SearchableNavEmployeeSelectWithLabelProps extends SearchableNavEmployeeSelectProps {
   size?: 'small' | 'medium';

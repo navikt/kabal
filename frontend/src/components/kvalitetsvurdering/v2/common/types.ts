@@ -1,10 +1,10 @@
-import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from '@app/components/kvalitetsvurdering/v2/common/use-field-name';
+import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from '@/components/kvalitetsvurdering/v2/common/use-field-name';
 import type {
   IKvalitetsvurderingAllRegistreringshjemler,
   IKvalitetsvurderingBooleans,
   IKvalitetsvurderingSaksdataHjemler,
   IKvalitetsvurderingStrings,
-} from '@app/types/kaka-kvalitetsvurdering/v2';
+} from '@/types/kaka-kvalitetsvurdering/v2';
 
 interface BaseParams {
   groupErrorField?: keyof typeof KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES;

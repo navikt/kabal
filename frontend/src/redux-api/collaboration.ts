@@ -1,8 +1,8 @@
-import { PROXY_BASE_QUERY } from '@app/redux-api/common';
-import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
-import type { ICreateSmartDocumentParams } from '@app/types/smart-editor/params';
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { PROXY_BASE_QUERY } from '@/redux-api/common';
+import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
+import type { ISmartDocumentOrAttachment } from '@/types/documents/documents';
+import type { ICreateSmartDocumentParams } from '@/types/smart-editor/params';
 
 export const collaborationApi = createApi({
   reducerPath: 'collaborationApi',

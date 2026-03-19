@@ -1,10 +1,10 @@
+import { isValid, parse } from 'date-fns';
 import {
   type GosysBeskrivelseEntry,
   GosysEntryAuthorType,
   type GosysEntryEmployee,
   type GosysEntrySystem,
-} from '@app/components/gosys/beskrivelse/parsing/type';
-import { isValid, parse } from 'date-fns';
+} from '@/components/gosys/beskrivelse/parsing/type';
 
 const HEADER_REGEX = /(\d{1,2}\.\d{1,2}\.\d{4} \d{1,2}:\d{1,2})\s+(.*)\(([\w,-\s]+)\)/i;
 

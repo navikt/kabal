@@ -1,8 +1,8 @@
-import { useDebounce } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
-import { useSetTitleMutation } from '@app/redux-api/forlenget-behandlingstid';
-import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
 import { ErrorMessage, TextField, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
+import { useDebounce } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
+import { useSetTitleMutation } from '@/redux-api/forlenget-behandlingstid';
+import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@/types/field-names';
 
 interface Props {
   value: string | null;

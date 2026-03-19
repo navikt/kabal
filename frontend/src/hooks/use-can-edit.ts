@@ -1,5 +1,5 @@
-import { useIsSentToMedunderskriver } from '@app/hooks/use-is-medunderskriver';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { useIsSentToMedunderskriver } from '@/hooks/use-is-medunderskriver';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 
 export const useCanEditBehandling = () => {
   const isSentToMedunderskriver = useIsSentToMedunderskriver();

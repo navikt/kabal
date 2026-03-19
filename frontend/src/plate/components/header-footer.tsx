@@ -1,20 +1,20 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useHeaderFooterQuery } from '@app/components/smart-editor/hooks/use-query';
-import { useReportDynamicContentLoading } from '@app/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
-import { AddNewParagraphAbove, AddNewParagraphBelow } from '@app/plate/components/common/add-new-paragraph-buttons';
-import { pxToEm } from '@app/plate/components/get-scaled-em';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@app/plate/plugins/element-types';
-import { type FooterElement, type HeaderElement, TextAlign, useMyPlateEditorRef } from '@app/plate/types';
-import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
-import { PlainTextTypes } from '@app/types/common-text-types';
-import { DistribusjonsType } from '@app/types/documents/documents';
-import type { IConsumerPlainText, IConsumerText } from '@app/types/texts/consumer';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useCallback, useContext, useEffect, useState } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useHeaderFooterQuery } from '@/components/smart-editor/hooks/use-query';
+import { useReportDynamicContentLoading } from '@/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
+import { AddNewParagraphAbove, AddNewParagraphBelow } from '@/plate/components/common/add-new-paragraph-buttons';
+import { pxToEm } from '@/plate/components/get-scaled-em';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
+import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@/plate/plugins/element-types';
+import { type FooterElement, type HeaderElement, TextAlign, useMyPlateEditorRef } from '@/plate/types';
+import { useLazyGetConsumerTextsQuery } from '@/redux-api/texts/consumer';
+import { PlainTextTypes } from '@/types/common-text-types';
+import { DistribusjonsType } from '@/types/documents/documents';
+import type { IConsumerPlainText, IConsumerText } from '@/types/texts/consumer';
 
 const lexSpecialis = (enhetId: string, texts: IConsumerPlainText[]): IConsumerPlainText | null => {
   const sorted = texts

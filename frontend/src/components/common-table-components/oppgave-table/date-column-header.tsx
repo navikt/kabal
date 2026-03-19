@@ -1,9 +1,9 @@
-import { getAriaSort, SortButton, type SortButtonProps } from '@app/components/common-table-components/sort-header';
-import { ISO_FORMAT } from '@app/components/date-picker/constants';
-import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
 import { Box, type ButtonProps, HStack, Table } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
+import { getAriaSort, SortButton, type SortButtonProps } from '@/components/common-table-components/sort-header';
+import { ISO_FORMAT } from '@/components/date-picker/constants';
+import { DatePickerRange } from '@/components/date-picker-range/date-picker-range';
 
 interface FilterProps {
   from: string | undefined;

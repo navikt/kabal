@@ -1,6 +1,6 @@
-import { AppTheme, useAppTheme } from '@app/app-theme';
 import { PlateLeaf, type PlateLeafProps } from 'platejs/react';
 import type { ReactElement } from 'react';
+import { AppTheme, useAppTheme } from '@/app-theme';
 
 export const AllSearchHitsHighlightLeaf = (props: PlateLeafProps): ReactElement => {
   const theme = useAppTheme();

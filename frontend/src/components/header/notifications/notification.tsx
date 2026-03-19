@@ -1,22 +1,3 @@
-import { AppTheme, useAppTheme } from '@app/app-theme';
-import { OpenForYtelseAccess } from '@app/components/common-table-components/open';
-import { CopyButton } from '@app/components/copy-button/copy-button';
-import { DateTime } from '@app/components/datetime/datetime';
-import { useMarkAsRead, useMarkAsUnread } from '@app/components/header/notifications/api';
-import { Type, Ytelse } from '@app/components/header/notifications/common';
-import { useNotificationsContext } from '@app/components/header/notifications/state';
-import {
-  type BehandlingInfo,
-  type GainedAccessNotification,
-  getHasBehandling,
-  type KabalNotification,
-  type LostAccessNotification,
-  type MessageNotification,
-  NOTIFICATION_TYPE_LABELS,
-  NotificationType,
-  type SystemNotification,
-} from '@app/components/header/notifications/types';
-import type { INavEmployee } from '@app/types/bruker';
 import {
   BellDotFillIcon,
   ChatAddIcon,
@@ -29,6 +10,25 @@ import {
 import { BodyLong, Box, type BoxProps, Button, Heading, HGrid, HStack, Label, Tooltip, VStack } from '@navikt/ds-react';
 import type { JSX } from 'react';
 import { useLocation } from 'react-router';
+import { AppTheme, useAppTheme } from '@/app-theme';
+import { OpenForYtelseAccess } from '@/components/common-table-components/open';
+import { CopyButton } from '@/components/copy-button/copy-button';
+import { DateTime } from '@/components/datetime/datetime';
+import { useMarkAsRead, useMarkAsUnread } from '@/components/header/notifications/api';
+import { Type, Ytelse } from '@/components/header/notifications/common';
+import { useNotificationsContext } from '@/components/header/notifications/state';
+import {
+  type BehandlingInfo,
+  type GainedAccessNotification,
+  getHasBehandling,
+  type KabalNotification,
+  type LostAccessNotification,
+  type MessageNotification,
+  NOTIFICATION_TYPE_LABELS,
+  NotificationType,
+  type SystemNotification,
+} from '@/components/header/notifications/types';
+import type { INavEmployee } from '@/types/bruker';
 
 interface Props {
   title: string;

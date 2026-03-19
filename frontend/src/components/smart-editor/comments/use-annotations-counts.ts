@@ -1,6 +1,6 @@
-import { useBookmarks } from '@app/components/smart-editor/bookmarks/use-bookmarks';
-import { useThreads } from '@app/components/smart-editor/comments/use-threads';
 import { useMemo } from 'react';
+import { useBookmarks } from '@/components/smart-editor/bookmarks/use-bookmarks';
+import { useThreads } from '@/components/smart-editor/comments/use-threads';
 
 export const useAnnotationsCounts = () => {
   const { attached, orphans } = useThreads();

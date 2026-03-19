@@ -1,19 +1,19 @@
 import { afterAll, beforeAll, describe, expect, it, mock } from 'bun:test';
-import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
-import { TemplateSections } from '@app/plate/template-sections';
+import { BaseH1Plugin } from '@platejs/basic-nodes';
+import { BaseParagraphPlugin } from 'platejs';
+import { createPlateEditor, type PlateEditor } from 'platejs/react';
+import type { Point, Selection } from 'slate';
+import { createCapitalisePlugin } from '@/plate/plugins/capitalise/capitalise';
+import { saksbehandlerPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
+import { TemplateSections } from '@/plate/template-sections';
 import {
   createHeadingOne,
   createMaltekstseksjon,
   createRedigerbarMaltekst,
   createSimpleBulletList,
   createSimpleParagraph,
-} from '@app/plate/templates/helpers';
-import { type KabalValue, type ParagraphElement, TextAlign } from '@app/plate/types';
-import { BaseH1Plugin } from '@platejs/basic-nodes';
-import { BaseParagraphPlugin } from 'platejs';
-import { createPlateEditor, type PlateEditor } from 'platejs/react';
-import type { Point, Selection } from 'slate';
+} from '@/plate/templates/helpers';
+import { type KabalValue, type ParagraphElement, TextAlign } from '@/plate/types';
 
 const plugins = [...saksbehandlerPlugins, createCapitalisePlugin('some user')];
 
@@ -28,7 +28,7 @@ const createSelection = (point: Point): Selection => ({ anchor: point, focus: po
 
 describe('capitalise', () => {
   beforeAll(() => {
-    mock.module('@app/hooks/settings/manager', () => ({
+    mock.module('@/hooks/settings/manager', () => ({
       SETTINGS_MANAGER: {
         get: () => 'true',
       },
@@ -36,8 +36,8 @@ describe('capitalise', () => {
   });
 
   afterAll(async () => {
-    const originalSettingsManager = await import('@app/hooks/settings/manager');
-    mock.module('@app/hooks/settings/manager', () => originalSettingsManager);
+    const originalSettingsManager = await import('@/hooks/settings/manager');
+    mock.module('@/hooks/settings/manager', () => originalSettingsManager);
   });
 
   describe('typing / pasting plaintext', () => {

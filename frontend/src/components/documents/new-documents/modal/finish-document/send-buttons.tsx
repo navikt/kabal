@@ -1,19 +1,19 @@
-import { Confirm } from '@app/components/documents/new-documents/modal/finish-document/confirm';
-import { VALIDATION_ERROR_MESSAGES } from '@app/components/documents/new-documents/modal/finish-document/error-messages';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useContext } from 'react';
+import { Confirm } from '@/components/documents/new-documents/modal/finish-document/confirm';
+import { VALIDATION_ERROR_MESSAGES } from '@/components/documents/new-documents/modal/finish-document/error-messages';
 import {
   type FinishProps,
   isSmartDocumentValidatonError,
-} from '@app/components/documents/new-documents/modal/finish-document/types';
-import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
-import { useSuggestedBrevmottakere } from '@app/hooks/use-suggested-brevmottakere';
-import { useFinishDocumentMutation, useSetMottakerListMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DistribusjonsType } from '@app/types/documents/documents';
-import { NO_RECEIVERS_ERROR } from '@app/types/documents/validation';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useContext } from 'react';
+} from '@/components/documents/new-documents/modal/finish-document/types';
+import { ModalContext } from '@/components/documents/new-documents/modal/modal-context';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useSmartEditorActiveDocument } from '@/hooks/settings/use-setting';
+import { useSuggestedBrevmottakere } from '@/hooks/use-suggested-brevmottakere';
+import { useFinishDocumentMutation, useSetMottakerListMutation } from '@/redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@/redux-api/oppgaver/queries/documents';
+import { DistribusjonsType } from '@/types/documents/documents';
+import { NO_RECEIVERS_ERROR } from '@/types/documents/validation';
 
 export const SendButtons = ({ document, disabled, ...rest }: FinishProps) => {
   const { id: dokumentId, tittel: documentTitle, mottakerList, dokumentTypeId } = document;

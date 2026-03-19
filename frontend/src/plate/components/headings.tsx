@@ -1,7 +1,7 @@
-import { ptToEm } from '@app/plate/components/get-scaled-em';
-import type { H1Element, H2Element, H3Element, PlaceholderElement } from '@app/plate/types';
 import { ElementApi } from 'platejs';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
+import { ptToEm } from '@/plate/components/get-scaled-em';
+import type { H1Element, H2Element, H3Element, PlaceholderElement } from '@/plate/types';
 
 const CLASSNAMES =
   'font-semibold mt-4 mb-0 before:absolute before:text-ax-neutral-600 before:cursor-text before:content-[attr(data-placeholder)] ';

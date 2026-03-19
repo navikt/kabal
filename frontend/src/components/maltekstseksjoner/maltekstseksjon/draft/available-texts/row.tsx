@@ -1,7 +1,7 @@
-import { MaltekstseksjonReadOnly } from '@app/components/maltekstseksjoner/maltekstseksjon/read-only';
-import { TextPreview } from '@app/components/maltekstseksjoner/texts/preview';
 import { Box, Table, Tabs } from '@navikt/ds-react';
 import { type FragmentProps, useState } from 'react';
+import { MaltekstseksjonReadOnly } from '@/components/maltekstseksjoner/maltekstseksjon/read-only';
+import { TextPreview } from '@/components/maltekstseksjoner/texts/preview';
 
 interface Props {
   textId: string;

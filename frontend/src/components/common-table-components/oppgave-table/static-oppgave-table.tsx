@@ -1,13 +1,13 @@
-import { TableFooter } from '@app/components/common-table-components/footer';
-import { OppgaveRows } from '@app/components/common-table-components/oppgave-rows/oppgave-rows';
-import { TablePlainHeaders } from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
-import { usePageQueryParam } from '@app/components/common-table-components/oppgave-table/state/use-page';
-import type { StaticOppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
-import type { ColumnKeyEnum } from '@app/components/common-table-components/types';
-import type { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { DEFAULT_PAGE, useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 import { Table, type TableProps } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
+import { TableFooter } from '@/components/common-table-components/footer';
+import { OppgaveRows } from '@/components/common-table-components/oppgave-rows/oppgave-rows';
+import { TablePlainHeaders } from '@/components/common-table-components/oppgave-table/oppgave-table-headers';
+import { usePageQueryParam } from '@/components/common-table-components/oppgave-table/state/use-page';
+import type { StaticOppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
+import type { ColumnKeyEnum } from '@/components/common-table-components/types';
+import type { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
+import { DEFAULT_PAGE, useOppgavePagination } from '@/hooks/use-oppgave-pagination';
 
 interface CommonProps extends TableProps {
   columns: ColumnKeyEnum[];

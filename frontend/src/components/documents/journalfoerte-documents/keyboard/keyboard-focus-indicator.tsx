@@ -1,10 +1,10 @@
-import type { DokumentRenderData } from '@app/components/documents/journalfoerte-documents/calculate';
-import { convertAccessibleToRealDocumentPath } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import { useKeyboardFocusState } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import { useSelectionRangesState } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { rangesToIndexes } from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
-import { isNotNull } from '@app/functions/is-not-type-guards';
 import { memo, useEffect, useMemo, useRef } from 'react';
+import type { DokumentRenderData } from '@/components/documents/journalfoerte-documents/calculate';
+import { convertAccessibleToRealDocumentPath } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { useKeyboardFocusState } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { useSelectionRangesState } from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { rangesToIndexes } from '@/components/documents/journalfoerte-documents/select-context/range-utils';
+import { isNotNull } from '@/functions/is-not-type-guards';
 
 interface Props {
   dokumenterList: DokumentRenderData[];

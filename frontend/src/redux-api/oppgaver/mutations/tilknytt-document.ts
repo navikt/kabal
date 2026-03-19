@@ -1,8 +1,8 @@
-import { ENVIRONMENT } from '@app/environment';
-import { DokumenterListTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
-import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { ListTagTypes } from '@app/redux-api/tag-types';
-import type { IBatchDocumentParams } from '@app/types/oppgavebehandling/params';
+import { ENVIRONMENT } from '@/environment';
+import { DokumenterListTagTypes, oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import { behandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { ListTagTypes } from '@/redux-api/tag-types';
+import type { IBatchDocumentParams } from '@/types/oppgavebehandling/params';
 
 const tilknyttDokumentMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

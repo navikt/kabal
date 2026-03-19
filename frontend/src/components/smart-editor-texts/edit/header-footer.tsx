@@ -1,7 +1,7 @@
-import { SavedStatus, type SavedStatusProps } from '@app/components/saved-status/saved-status';
-import { PlainTextTypes } from '@app/types/common-text-types';
 import { HStack, Textarea } from '@navikt/ds-react';
 import { useState } from 'react';
+import { SavedStatus, type SavedStatusProps } from '@/components/saved-status/saved-status';
+import { PlainTextTypes } from '@/types/common-text-types';
 
 type HeaderFooter = PlainTextTypes.HEADER | PlainTextTypes.FOOTER;
 

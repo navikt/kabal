@@ -1,18 +1,18 @@
-import { InfoToast } from '@app/components/toast/info-toast';
-import { toast } from '@app/components/toast/store';
-import { formatEmployeeName } from '@app/domain/employee-name';
-import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
-import { reduxStore } from '@app/redux/configure-store';
-import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import type { DocumentsAddedEvent } from '@app/redux-api/server-sent-events/types';
-import type { INavEmployee } from '@app/types/bruker';
+import { Tag } from '@navikt/ds-react';
+import { InfoToast } from '@/components/toast/info-toast';
+import { toast } from '@/components/toast/store';
+import { formatEmployeeName } from '@/domain/employee-name';
+import { areJournalfoertDocumentsEqual } from '@/domain/journalfoerte-documents';
+import { reduxStore } from '@/redux/configure-store';
+import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
+import type { DocumentsAddedEvent } from '@/redux-api/server-sent-events/types';
+import type { INavEmployee } from '@/types/bruker';
 import {
   DISTRIBUTION_TYPE_NAMES,
   DOCUMENT_TYPE_NAMES,
   DocumentTypeEnum,
   type IDocument,
-} from '@app/types/documents/documents';
-import { Tag } from '@navikt/ds-react';
+} from '@/types/documents/documents';
 
 export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => (event: DocumentsAddedEvent) => {
   const { actor, documents } = event;

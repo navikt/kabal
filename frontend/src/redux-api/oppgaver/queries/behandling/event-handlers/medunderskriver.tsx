@@ -1,14 +1,14 @@
-import { toast } from '@app/components/toast/store';
-import { reduxStore } from '@app/redux/configure-store';
-import { getMedunderskriverToastContent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/medunderskriver-toast';
-import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
-import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
-import type { MedunderskriverEvent } from '@app/redux-api/server-sent-events/types';
-import type { INavEmployee } from '@app/types/bruker';
-import { FlowState } from '@app/types/oppgave-common';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { HistoryEventTypes, type IMedunderskriverEvent } from '@app/types/oppgavebehandling/response';
 import { BodyLong } from '@navikt/ds-react';
+import { toast } from '@/components/toast/store';
+import { reduxStore } from '@/redux/configure-store';
+import { getMedunderskriverToastContent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/medunderskriver-toast';
+import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
+import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
+import type { MedunderskriverEvent } from '@/redux-api/server-sent-events/types';
+import type { INavEmployee } from '@/types/bruker';
+import { FlowState } from '@/types/oppgave-common';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
+import { HistoryEventTypes, type IMedunderskriverEvent } from '@/types/oppgavebehandling/response';
 
 export const handleMedunderskriverEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>

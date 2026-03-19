@@ -1,8 +1,8 @@
-import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
-import { formatIdNumber } from '@app/functions/format-id';
-import type { INavEmployee } from '@app/types/bruker';
-import type { IHistory, IPart } from '@app/types/oppgavebehandling/response';
 import { Box } from '@navikt/ds-react';
+import { formatEmployeeNameAndIdFallback } from '@/domain/employee-name';
+import { formatIdNumber } from '@/functions/format-id';
+import type { INavEmployee } from '@/types/bruker';
+import type { IHistory, IPart } from '@/types/oppgavebehandling/response';
 
 type KeySource = Pick<IHistory, 'type' | 'timestamp'>;
 

@@ -1,5 +1,5 @@
-import type { IKvalitetsvurderingBase } from '@app/types/kaka-kvalitetsvurdering/common';
-import type { Radiovalg, RadiovalgExtended } from '@app/types/kaka-kvalitetsvurdering/radio';
+import type { IKvalitetsvurderingBase } from '@/types/kaka-kvalitetsvurdering/common';
+import type { Radiovalg, RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
 
 interface SakensDokumenter {
   klageforberedelsenSakensDokumenter: boolean; // Sakens dokumenter.

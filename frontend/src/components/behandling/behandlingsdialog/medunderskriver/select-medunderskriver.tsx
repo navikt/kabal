@@ -1,22 +1,22 @@
+import { BodyShort } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import {
   getTitleCapitalized,
   getTitleLowercase,
   getTitlePlural,
-} from '@app/components/behandling/behandlingsdialog/medunderskriver/get-title';
-import { MedunderskriverReadOnly } from '@app/components/behandling/behandlingsdialog/medunderskriver/read-only';
-import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/medunderskriver/skeleton';
-import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
-import { SearchableNavEmployeeSelectWithLabel } from '@app/components/searchable-select/searchable-single-select/searchable-nav-employee-select-with-label';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useIsAssignedMedunderskriver, useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
-import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { Role } from '@app/types/bruker';
-import type { SaksTypeEnum } from '@app/types/kodeverk';
-import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
-import { BodyShort } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
+} from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
+import { MedunderskriverReadOnly } from '@/components/behandling/behandlingsdialog/medunderskriver/read-only';
+import { SELECT_SKELETON } from '@/components/behandling/behandlingsdialog/medunderskriver/skeleton';
+import { useSetMedunderskriver } from '@/components/oppgavestyring/use-set-medunderskriver';
+import { SearchableNavEmployeeSelectWithLabel } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select-with-label';
+import { useHasRole } from '@/hooks/use-has-role';
+import { useIsAssignedMedunderskriver, useIsAssignedMedunderskriverAndSent } from '@/hooks/use-is-medunderskriver';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useTildelSaksbehandlerMutation } from '@/redux-api/oppgaver/mutations/tildeling';
+import { useGetPotentialMedunderskrivereQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { Role } from '@/types/bruker';
+import type { SaksTypeEnum } from '@/types/kodeverk';
+import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;

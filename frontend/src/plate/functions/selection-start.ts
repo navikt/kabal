@@ -1,7 +1,7 @@
-import type { RichTextEditor, TableElement } from '@app/plate/types';
 import { BaseTablePlugin } from '@platejs/table';
 import { RangeApi, type TRange } from 'platejs';
 import { type BasePoint, Range } from 'slate';
+import type { RichTextEditor, TableElement } from '@/plate/types';
 
 export const getSelectionStart = (editor: RichTextEditor, selection: TRange): BasePoint | null => {
   const table = editor.api.node<TableElement>({ match: { type: BaseTablePlugin.node.type } });

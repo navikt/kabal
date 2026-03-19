@@ -1,5 +1,5 @@
-import { getDuration } from '@app/helpers/duration';
 import fastifyPlugin from 'fastify-plugin';
+import { getDuration } from '@/helpers/duration';
 
 export const serverTimingsKey = Symbol('server-timings');
 export const serverTimingStartsKey = Symbol('server-timing-starts');

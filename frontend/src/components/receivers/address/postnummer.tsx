@@ -1,7 +1,7 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { AddressField } from '@app/components/receivers/address/field';
 import { BodyShort, HStack, Label, VStack } from '@navikt/ds-react';
 import { useContext, useId } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { AddressField } from '@/components/receivers/address/field';
 
 interface Props {
   value: string | null;

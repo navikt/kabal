@@ -1,7 +1,7 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { FlowState } from '@app/types/oppgave-common';
 import { useContext } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { FlowState } from '@/types/oppgave-common';
 
 export const useLazyIsAssignedMedunderskriverAndSent = () => {
   const isAssignedMedunderskriver = useIsAssignedMedunderskriver();

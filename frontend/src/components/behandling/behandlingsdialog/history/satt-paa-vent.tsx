@@ -1,14 +1,14 @@
-import { employeeName, Reason, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
-import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
-import { isoDateToPretty } from '@app/domain/date';
-import { usePaaVentReasons } from '@app/simple-api-state/use-kodeverk';
-import type { INavEmployee } from '@app/types/bruker';
-import { PaaVentReasonEnum } from '@app/types/kodeverk';
-import type { ISattPåVent } from '@app/types/oppgave-common';
-import { HistoryEventTypes, type ISattPaaVentEvent } from '@app/types/oppgavebehandling/response';
 import { PauseIcon, PlayIcon } from '@navikt/aksel-icons';
 import { Label, Loader } from '@navikt/ds-react';
 import { useId } from 'react';
+import { employeeName, Reason, toKey } from '@/components/behandling/behandlingsdialog/history/common';
+import { HistoryEvent } from '@/components/behandling/behandlingsdialog/history/event';
+import { isoDateToPretty } from '@/domain/date';
+import { usePaaVentReasons } from '@/simple-api-state/use-kodeverk';
+import type { INavEmployee } from '@/types/bruker';
+import { PaaVentReasonEnum } from '@/types/kodeverk';
+import type { ISattPåVent } from '@/types/oppgave-common';
+import { HistoryEventTypes, type ISattPaaVentEvent } from '@/types/oppgavebehandling/response';
 
 export const getSattPaaVent = (e: ISattPaaVentEvent) => {
   const key = toKey(e);

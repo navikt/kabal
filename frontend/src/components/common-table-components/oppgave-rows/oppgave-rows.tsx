@@ -1,8 +1,8 @@
-import { LoadingRow } from '@app/components/common-table-components/loading-row';
-// See relevant-oppgaver.tsx for more information about this dependency cycle
-import { OppgaveRow } from '@app/components/common-table-components/oppgave-rows/oppgave-row';
-import type { ColumnKeyEnum } from '@app/components/common-table-components/types';
 import { Table } from '@navikt/ds-react';
+import { LoadingRow } from '@/components/common-table-components/loading-row';
+// See relevant-oppgaver.tsx for more information about this dependency cycle
+import { OppgaveRow } from '@/components/common-table-components/oppgave-rows/oppgave-row';
+import type { ColumnKeyEnum } from '@/components/common-table-components/types';
 
 interface OppgaveRowsProps {
   oppgaver: string[];

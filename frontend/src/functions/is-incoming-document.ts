@@ -1,4 +1,4 @@
-import { DistribusjonsType, type IDocument } from '@app/types/documents/documents';
+import { DistribusjonsType, type IDocument } from '@/types/documents/documents';
 
 export const getIsIncomingDocument = (dokumentTypeId: IDocument['dokumentTypeId'] | undefined): boolean => {
   if (dokumentTypeId === undefined) {

@@ -1,8 +1,8 @@
-import { App } from '@app/components/app/app';
-import { FRAME_TIMES } from '@app/frame-times';
-import { cleanLocalStorage } from '@app/localstorage';
-import { initializeScrubber } from '@app/scrubber';
 import { createRoot } from 'react-dom/client';
+import { App } from '@/components/app/app';
+import { FRAME_TIMES } from '@/frame-times';
+import { cleanLocalStorage } from '@/localstorage';
+import { initializeScrubber } from '@/scrubber';
 
 initializeScrubber();
 

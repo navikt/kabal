@@ -1,8 +1,8 @@
-import { reloadFileInAllViewers } from '@app/components/file-viewer/file-viewer-handle-store';
-import { getNewDocumentFileUrl } from '@app/domain/file-url';
-import { reduxStore } from '@app/redux/configure-store';
-import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import type { SmartDocumentVersionedEvent } from '@app/redux-api/server-sent-events/types';
+import { reloadFileInAllViewers } from '@/components/file-viewer/file-viewer-handle-store';
+import { getNewDocumentFileUrl } from '@/domain/file-url';
+import { reduxStore } from '@/redux/configure-store';
+import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
+import type { SmartDocumentVersionedEvent } from '@/redux-api/server-sent-events/types';
 
 export const handleSmartDocumentVersionedEvent =
   (oppgaveId: string) =>

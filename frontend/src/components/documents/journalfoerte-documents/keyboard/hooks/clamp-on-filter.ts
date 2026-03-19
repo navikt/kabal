@@ -1,10 +1,10 @@
+import { useEffect } from 'react';
 import {
   FIRST_ACCESSIBLE_DOCUMENT_INDEX,
   getLastAccessibleDocumentIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import { getFocusIndex, setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import { clamp } from '@app/functions/clamp';
-import { useEffect } from 'react';
+} from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { getFocusIndex, setFocusIndex } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { clamp } from '@/functions/clamp';
 
 export const useClampOnFilter = () =>
   useEffect(() => {

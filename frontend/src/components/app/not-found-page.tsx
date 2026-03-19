@@ -1,5 +1,5 @@
-import { PageWrapper } from '@app/pages/page-wrapper';
 import { BodyShort, Heading, Tag } from '@navikt/ds-react';
+import { PageWrapper } from '@/pages/page-wrapper';
 
 export const NotFoundPage = () => (
   <PageWrapper>

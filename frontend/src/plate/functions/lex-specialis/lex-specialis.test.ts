@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'bun:test';
-import { GLOBAL, type GLOBAL_TYPE, LIST_DELIMITER, SET_DELIMITER } from '@app/components/smart-editor-texts/types';
-import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
-import { TemplateSections } from '@app/plate/template-sections';
-import { RichTextTypes } from '@app/types/common-text-types';
-import { UtfallEnum } from '@app/types/kodeverk';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { IConsumerRichText } from '@app/types/texts/consumer';
-import { Language } from '@app/types/texts/language';
+import { GLOBAL, type GLOBAL_TYPE, LIST_DELIMITER, SET_DELIMITER } from '@/components/smart-editor-texts/types';
+import { LexSpecialisStatus, lexSpecialis } from '@/plate/functions/lex-specialis/lex-specialis';
+import { TemplateSections } from '@/plate/template-sections';
+import { RichTextTypes } from '@/types/common-text-types';
+import { UtfallEnum } from '@/types/kodeverk';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
+import type { IConsumerRichText } from '@/types/texts/consumer';
+import { Language } from '@/types/texts/language';
 
 const getText = (
   id: string,

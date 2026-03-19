@@ -1,13 +1,13 @@
-import { ErrorAlert } from '@app/components/search/common/error-alert';
-import { FeilregistrerteOppgaverTable } from '@app/components/search/common/feilregistrerte-oppgaver-table';
-import { FullfoerteOppgaverTable } from '@app/components/search/common/fullfoerte-oppgaver-table';
-import { LedigeOppgaverTable } from '@app/components/search/common/ledige-oppgaver-table';
-import { OppgaverPaaVentTable } from '@app/components/search/common/oppgaver-paa-vent-table';
-import { OppgaverPageWrapper } from '@app/pages/page-wrapper';
-import type { staggeredBaseQuery } from '@app/redux-api/common';
-import type { IOppgaverResponse } from '@app/types/oppgaver';
 import { HStack, Skeleton, Table } from '@navikt/ds-react';
 import type { TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react';
+import { ErrorAlert } from '@/components/search/common/error-alert';
+import { FeilregistrerteOppgaverTable } from '@/components/search/common/feilregistrerte-oppgaver-table';
+import { FullfoerteOppgaverTable } from '@/components/search/common/fullfoerte-oppgaver-table';
+import { LedigeOppgaverTable } from '@/components/search/common/ledige-oppgaver-table';
+import { OppgaverPaaVentTable } from '@/components/search/common/oppgaver-paa-vent-table';
+import { OppgaverPageWrapper } from '@/pages/page-wrapper';
+import type { staggeredBaseQuery } from '@/redux-api/common';
+import type { IOppgaverResponse } from '@/types/oppgaver';
 
 // https://github.com/reduxjs/redux-toolkit/issues/1937#issuecomment-1842868277
 // https://redux-toolkit.js.org/rtk-query/usage-with-typescript#typing-query-and-mutation-endpoints

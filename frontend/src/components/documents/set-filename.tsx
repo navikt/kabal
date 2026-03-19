@@ -1,6 +1,6 @@
-import { Keys } from '@app/keys';
 import { TextField } from '@navikt/ds-react';
 import { useState } from 'react';
+import { Keys } from '@/keys';
 
 interface Props {
   tittel: string;

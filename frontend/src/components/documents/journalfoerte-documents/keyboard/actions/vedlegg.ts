@@ -1,16 +1,16 @@
+import { useCallback } from 'react';
 import {
   convertAccessibleToRealDocumentPath,
   convertRealToAccessibleDocumentIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import { useGetDocument } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+} from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { useGetDocument } from '@/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
 import {
   getFocusIndex,
   getIsInVedleggList,
   setFocusIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { useCallback } from 'react';
+} from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { useShowVedlegg } from '@/components/documents/journalfoerte-documents/state/show-vedlegg';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 export const useCollapseVedlegg = (filteredDocuments: IArkivertDocument[]) => {
   const getDocument = useGetDocument(filteredDocuments);

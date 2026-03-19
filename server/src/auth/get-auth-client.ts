@@ -1,7 +1,7 @@
-import { AZURE_APP_CLIENT_ID, AZURE_APP_JWK, AZURE_APP_WELL_KNOWN_URL } from '@app/config/config';
-import { isLocal } from '@app/config/env';
-import { getLogger } from '@app/logger';
 import { type BaseClient, Issuer } from 'openid-client';
+import { AZURE_APP_CLIENT_ID, AZURE_APP_JWK, AZURE_APP_WELL_KNOWN_URL } from '@/config/config';
+import { isLocal } from '@/config/env';
+import { getLogger } from '@/logger';
 
 const log = getLogger('auth-client');
 

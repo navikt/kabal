@@ -1,15 +1,15 @@
-import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { NONE, type NONE_TYPE } from '@app/components/smart-editor-texts/types';
-import { useTemplateSections } from '@app/hooks/use-template-sections';
-import { useSelection } from '@app/plate/hooks/use-selection';
-import { ELEMENT_MALTEKSTSEKSJON } from '@app/plate/plugins/element-types';
-import { TemplateSections } from '@app/plate/template-sections';
-import { type MaltekstseksjonElement, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
-import { isOfElementTypeFn } from '@app/plate/utils/queries';
 import { Select } from '@navikt/ds-react';
 import { useContext, useEffect, useMemo } from 'react';
 import type { Range } from 'slate';
+import { MALTEKST_SECTION_NAMES } from '@/components/smart-editor/constants';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { NONE, type NONE_TYPE } from '@/components/smart-editor-texts/types';
+import { useTemplateSections } from '@/hooks/use-template-sections';
+import { useSelection } from '@/plate/hooks/use-selection';
+import { ELEMENT_MALTEKSTSEKSJON } from '@/plate/plugins/element-types';
+import { TemplateSections } from '@/plate/template-sections';
+import { type MaltekstseksjonElement, type RichTextEditor, useMyPlateEditorRef } from '@/plate/types';
+import { isOfElementTypeFn } from '@/plate/utils/queries';
 
 interface Props {
   activeSection: TemplateSections | NONE_TYPE;

@@ -1,13 +1,13 @@
-import { SettPaaVentPanel } from '@app/components/oppgavebehandling-footer/sett-paa-vent/panel';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { useDeleteSattPaaVentMutation, useSattPaaVentMutation } from '@app/redux-api/oppgaver/mutations/vent';
-import { Role } from '@app/types/bruker';
 import { HourglassIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, InlineMessage } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
+import { SettPaaVentPanel } from '@/components/oppgavebehandling-footer/sett-paa-vent/panel';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useHasRole } from '@/hooks/use-has-role';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { useDeleteSattPaaVentMutation, useSattPaaVentMutation } from '@/redux-api/oppgaver/mutations/vent';
+import { Role } from '@/types/bruker';
 
 const useCanEditSetPaaVent = () => {
   const { data, isSuccess } = useOppgave();

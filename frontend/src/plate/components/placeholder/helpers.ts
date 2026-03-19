@@ -1,11 +1,11 @@
-import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
-import { useSelection } from '@app/plate/hooks/use-selection';
-import { ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
-import type { EditorDescendant, FormattedText, MaltekstElement, PlaceholderElement } from '@app/plate/types';
-import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
 import { ElementApi, NodeApi, type TElement } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 import { Path } from 'slate';
+import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
+import { useSelection } from '@/plate/hooks/use-selection';
+import { ELEMENT_MALTEKST } from '@/plate/plugins/element-types';
+import type { EditorDescendant, FormattedText, MaltekstElement, PlaceholderElement } from '@/plate/types';
+import { isNodeEmpty, isOfElementType } from '@/plate/utils/queries';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
 

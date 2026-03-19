@@ -1,5 +1,5 @@
-import { merge } from '@app/functions/classes';
 import { Box } from '@navikt/ds-react';
+import { merge } from '@/functions/classes';
 
 export const StyledAttachmentListItem = ({ className, children, ...rest }: React.HTMLAttributes<HTMLElement>) => (
   <Box

@@ -1,5 +1,5 @@
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { FIELD_NAMES, type Field } from '@app/types/field-names';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { FIELD_NAMES, type Field } from '@/types/field-names';
 
 export const useFieldName = (field: Field): string => {
   const { data } = useOppgave();

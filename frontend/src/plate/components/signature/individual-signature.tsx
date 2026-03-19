@@ -1,11 +1,11 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { getName } from '@app/plate/components/signature/functions';
-import { useMainSignature, useMedunderskriverSignature } from '@app/plate/components/signature/hooks';
-import { MISSING_TITLE, Title } from '@app/plate/components/signature/title';
-import { type SignatureElement, useMyPlateEditorRef } from '@app/plate/types';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { useEditorReadOnly } from 'platejs/react';
 import { useContext, useEffect, useMemo } from 'react';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { getName } from '@/plate/components/signature/functions';
+import { useMainSignature, useMedunderskriverSignature } from '@/plate/components/signature/hooks';
+import { MISSING_TITLE, Title } from '@/plate/components/signature/title';
+import { type SignatureElement, useMyPlateEditorRef } from '@/plate/types';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 interface Props {
   element: SignatureElement;

@@ -1,8 +1,8 @@
-import { TimelineItem } from '@app/components/documents/journalfoerte-documents/document/timeline/timeline-item';
-import type { Utsendingsinfo } from '@app/types/arkiverte-documents';
 import { BellIcon, EnvelopeClosedIcon, MobileSmallIcon } from '@navikt/aksel-icons';
 import { Box, Label } from '@navikt/ds-react';
 import type { HTMLAttributes } from 'react';
+import { TimelineItem } from '@/components/documents/journalfoerte-documents/document/timeline/timeline-item';
+import type { Utsendingsinfo } from '@/types/arkiverte-documents';
 
 interface VarslerProps {
   isEmailSent: boolean;

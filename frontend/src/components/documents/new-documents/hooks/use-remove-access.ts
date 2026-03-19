@@ -1,7 +1,7 @@
-import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { type DuaParentDocument, useDuaAccess, useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
-import { useAttachments } from '@app/hooks/use-parent-document';
-import type { IParentDocument } from '@app/types/documents/documents';
+import { DuaActionEnum } from '@/hooks/dua-access/access';
+import { type DuaParentDocument, useDuaAccess, useLazyDuaAccess } from '@/hooks/dua-access/use-dua-access';
+import { useAttachments } from '@/hooks/use-parent-document';
+import type { IParentDocument } from '@/types/documents/documents';
 
 interface Result {
   removeDocumentAccessError: string | null;

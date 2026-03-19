@@ -1,14 +1,14 @@
-import { Confirm } from '@app/components/feilregistrering/confirm';
-import { Context } from '@app/components/feilregistrering/context';
-import { Feilregistrert } from '@app/components/feilregistrering/feilregistrert';
-import { Register } from '@app/components/feilregistrering/register';
-import type { Children, OppgaveId, Position, Variant } from '@app/components/feilregistrering/types';
-import { useCanFeilregistrere } from '@app/components/feilregistrering/use-can-feilregistrere';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { useSetFeilregistrertMutation } from '@app/redux-api/oppgaver/mutations/behandling';
 import { FileXMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
+import { Confirm } from '@/components/feilregistrering/confirm';
+import { Context } from '@/components/feilregistrering/context';
+import { Feilregistrert } from '@/components/feilregistrering/feilregistrert';
+import { Register } from '@/components/feilregistrering/register';
+import type { Children, OppgaveId, Position, Variant } from '@/components/feilregistrering/types';
+import { useCanFeilregistrere } from '@/components/feilregistrering/use-can-feilregistrere';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { useSetFeilregistrertMutation } from '@/redux-api/oppgaver/mutations/behandling';
 
 interface Props extends OppgaveId, Variant, Position {
   feilregistrert: string | null;

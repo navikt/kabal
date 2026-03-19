@@ -1,10 +1,10 @@
-import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
-import { useDuplicateVersionMutation } from '@app/redux-api/texts/mutations';
-import type { IText } from '@app/types/texts/responses';
 import { FilesIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
+import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
+import { useNavigateToStandaloneTextVersion } from '@/hooks/use-navigate-to-standalone-text-version';
+import { useDuplicateVersionMutation } from '@/redux-api/texts/mutations';
+import type { IText } from '@/types/texts/responses';
 
 export const DuplicateTextButton = ({ id, versionId, title, textType }: IText) => {
   const query = useTextQuery();

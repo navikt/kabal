@@ -1,10 +1,10 @@
-import { MarkManyAsRead, MarkManyAsUnread } from '@app/components/header/notifications/mark-many';
+import { BodyShort, Box, HGrid, VStack } from '@navikt/ds-react';
+import { MarkManyAsRead, MarkManyAsUnread } from '@/components/header/notifications/mark-many';
 import {
   KabalNotificationEntry,
   KabalNotificationWithCaseDataEntry,
-} from '@app/components/header/notifications/notification';
-import type { KabalNotification } from '@app/components/header/notifications/types';
-import { BodyShort, Box, HGrid, VStack } from '@navikt/ds-react';
+} from '@/components/header/notifications/notification';
+import type { KabalNotification } from '@/components/header/notifications/types';
 
 interface GroupedGridProps {
   columns: number;

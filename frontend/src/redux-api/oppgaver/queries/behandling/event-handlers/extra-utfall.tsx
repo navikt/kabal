@@ -1,10 +1,10 @@
-import { InfoToast } from '@app/components/toast/info-toast';
-import { toast } from '@app/components/toast/store';
-import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
-import { formatEmployeeName } from '@app/domain/employee-name';
-import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
-import type { ExtraUtfallEvent } from '@app/redux-api/server-sent-events/types';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { InfoToast } from '@/components/toast/info-toast';
+import { toast } from '@/components/toast/store';
+import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
+import { formatEmployeeName } from '@/domain/employee-name';
+import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
+import type { ExtraUtfallEvent } from '@/redux-api/server-sent-events/types';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 export const handleExtraUtfallEvent =
   (_: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>

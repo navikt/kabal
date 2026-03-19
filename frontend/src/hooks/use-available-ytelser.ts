@@ -1,9 +1,9 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
-import { useEnhetYtelser } from '@app/simple-api-state/use-enhet-ytelser';
-import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
-import type { IYtelse } from '@app/types/kodeverk';
 import { useContext, useMemo } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { isNotUndefined } from '@/functions/is-not-type-guards';
+import { useEnhetYtelser } from '@/simple-api-state/use-enhet-ytelser';
+import { useLatestYtelser } from '@/simple-api-state/use-kodeverk';
+import type { IYtelse } from '@/types/kodeverk';
 
 const EMPTY_ARRAY: IYtelse[] = [];
 

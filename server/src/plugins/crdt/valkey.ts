@@ -1,6 +1,6 @@
-import { getLogger } from '@app/logger';
-import { ValkeyExtension } from '@app/plugins/crdt/valkey-extension';
-import { getValkeyConfig } from '@app/valkey/valkey-client';
+import { getLogger } from '@/logger';
+import { ValkeyExtension } from '@/plugins/crdt/valkey-extension';
+import { getValkeyConfig } from '@/valkey/valkey-client';
 
 const log = getLogger('collaboration');
 

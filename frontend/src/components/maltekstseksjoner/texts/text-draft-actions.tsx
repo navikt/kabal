@@ -1,10 +1,10 @@
-import { AllMaltekstseksjonReferences } from '@app/components/malteksteksjon-references/maltekstseksjon-references';
-import { DeleteDraftButton } from '@app/components/smart-editor-texts/delete-draft-button';
-import { DuplicateTextButton } from '@app/components/smart-editor-texts/duplicate-text-button';
-import { usePublishMutation } from '@app/redux-api/texts/mutations';
-import type { IDraftRichText } from '@app/types/texts/responses';
 import { UploadIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage, HStack } from '@navikt/ds-react';
+import { AllMaltekstseksjonReferences } from '@/components/malteksteksjon-references/maltekstseksjon-references';
+import { DeleteDraftButton } from '@/components/smart-editor-texts/delete-draft-button';
+import { DuplicateTextButton } from '@/components/smart-editor-texts/duplicate-text-button';
+import { usePublishMutation } from '@/redux-api/texts/mutations';
+import type { IDraftRichText } from '@/types/texts/responses';
 
 interface Props {
   text: IDraftRichText;

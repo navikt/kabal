@@ -1,11 +1,11 @@
-import { InfoToast } from '@app/components/toast/info-toast';
-import { toast } from '@app/components/toast/store';
-import { formatEmployeeName } from '@app/domain/employee-name';
-import { reduxStore } from '@app/redux/configure-store';
-import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import type { SmartDocumentLanguageEvent } from '@app/redux-api/server-sent-events/types';
-import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { Tag } from '@navikt/ds-react';
+import { InfoToast } from '@/components/toast/info-toast';
+import { toast } from '@/components/toast/store';
+import { formatEmployeeName } from '@/domain/employee-name';
+import { reduxStore } from '@/redux/configure-store';
+import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
+import type { SmartDocumentLanguageEvent } from '@/redux-api/server-sent-events/types';
+import { LANGUAGE_NAMES } from '@/types/texts/language';
 
 export const handleSmartDocumentLanguageChangedEvent =
   (oppgaveId: string, userId: string) => (event: SmartDocumentLanguageEvent) => {

@@ -1,17 +1,12 @@
-import { Alert } from '@app/components/alert/alert';
-import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
-import { isRichText } from '@app/functions/is-rich-plain-text';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import { useGetTextByIdQuery } from '@app/redux-api/texts/queries';
-import {
-  GOD_FORMULERING_TYPE,
-  MALTEKSTSEKSJON_TYPE,
-  REGELVERK_TYPE,
-  RichTextTypes,
-} from '@app/types/common-text-types';
-import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { ErrorMessage, Heading, HStack, Loader, Tag, type TagProps } from '@navikt/ds-react';
+import { Alert } from '@/components/alert/alert';
+import { RedaktoerRichText } from '@/components/redaktoer-rich-text/redaktoer-rich-text';
+import { isRichText } from '@/functions/is-rich-plain-text';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { SPELL_CHECK_LANGUAGES } from '@/hooks/use-smart-editor-language';
+import { useGetTextByIdQuery } from '@/redux-api/texts/queries';
+import { GOD_FORMULERING_TYPE, MALTEKSTSEKSJON_TYPE, REGELVERK_TYPE, RichTextTypes } from '@/types/common-text-types';
+import { LANGUAGE_NAMES } from '@/types/texts/language';
 
 interface Props {
   textId: string;

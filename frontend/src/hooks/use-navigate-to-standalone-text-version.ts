@@ -1,9 +1,9 @@
-import { TEXT_TYPE_BASE_PATH } from '@app/domain/redaktør-paths';
-import { REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
-import { Language } from '@app/types/texts/language';
 import { useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
+import { TEXT_TYPE_BASE_PATH } from '@/domain/redaktør-paths';
+import { REGELVERK_TYPE, type TextTypes } from '@/types/common-text-types';
+import { Language } from '@/types/texts/language';
 
 interface Params {
   id?: string | null;

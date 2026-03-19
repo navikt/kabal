@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
 import { renderHook } from '@testing-library/react';
+import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
+import { useOppgavePagination } from '@/hooks/use-oppgave-pagination';
 
 const getPage = (oppgaver: string[], page: number) =>
   renderHook(() => useOppgavePagination(OppgaveTableRowsPerPage.LEDIGE, oppgaver, page));

@@ -1,7 +1,7 @@
-import { useIsAssignedMedunderskriver } from '@app/hooks/use-is-medunderskriver';
-import { useIsAssignedRol } from '@app/hooks/use-is-rol';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { CreatorRole } from '@app/types/documents/documents';
+import { useIsAssignedMedunderskriver } from '@/hooks/use-is-medunderskriver';
+import { useIsAssignedRol } from '@/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { CreatorRole } from '@/types/documents/documents';
 
 export const useCreatorRole = (): CreatorRole => {
   const isRol = useIsAssignedRol();

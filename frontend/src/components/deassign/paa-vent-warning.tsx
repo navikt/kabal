@@ -1,6 +1,6 @@
-import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
 import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, InlineMessage } from '@navikt/ds-react';
+import { Direction, PopupContainer } from '@/components/popup-container/popup-container';
 
 interface PaaVentWarningProps {
   isOpen: boolean;

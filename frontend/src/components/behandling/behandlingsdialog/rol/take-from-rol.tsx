@@ -1,8 +1,8 @@
-import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/rol/helpers';
-import { useSetRolFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
-import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
+import { getFixedCacheKey } from '@/components/behandling/behandlingsdialog/rol/helpers';
+import { useSetRolFlowStateMutation } from '@/redux-api/oppgaver/mutations/set-rol-flowstate';
+import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;

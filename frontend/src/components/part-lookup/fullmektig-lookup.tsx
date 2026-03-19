@@ -1,20 +1,20 @@
-import { cleanAndValidate } from '@app/components/part/validate';
-import { isPartSelectable } from '@app/components/part-lookup/is-part-selectable';
-import { KeyboardHelp } from '@app/components/part-lookup/keyboard-help';
-import { ManualEntry } from '@app/components/part-lookup/manual-entry';
-import { Messages } from '@app/components/part-lookup/messages';
-import { SearchResult } from '@app/components/part-lookup/search-result';
-import { TriggerButton } from '@app/components/part-lookup/trigger-button';
-import type { InvalidReceiver } from '@app/components/part-lookup/types';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { isMetaKey, Keys } from '@app/keys';
-import { useLazySearchpartwithutsendingskanalQuery } from '@app/redux-api/search';
-import type { IdentifikatorPart, IFullmektig } from '@app/types/oppgave-common';
 import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Popover, TextField, ToggleGroup } from '@navikt/ds-react';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { cleanAndValidate } from '@/components/part/validate';
+import { isPartSelectable } from '@/components/part-lookup/is-part-selectable';
+import { KeyboardHelp } from '@/components/part-lookup/keyboard-help';
+import { ManualEntry } from '@/components/part-lookup/manual-entry';
+import { Messages } from '@/components/part-lookup/messages';
+import { SearchResult } from '@/components/part-lookup/search-result';
+import { TriggerButton } from '@/components/part-lookup/trigger-button';
+import type { InvalidReceiver } from '@/components/part-lookup/types';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { isMetaKey, Keys } from '@/keys';
+import { useLazySearchpartwithutsendingskanalQuery } from '@/redux-api/search';
+import type { IdentifikatorPart, IFullmektig } from '@/types/oppgave-common';
 
-export type { InvalidReceiver } from '@app/components/part-lookup/types';
+export type { InvalidReceiver } from '@/components/part-lookup/types';
 
 enum Mode {
   ID = 'id',

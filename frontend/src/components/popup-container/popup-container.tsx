@@ -1,6 +1,6 @@
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { Box, VStack } from '@navikt/ds-react';
 import { useRef } from 'react';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
 
 export enum Direction {
   LEFT = 0,

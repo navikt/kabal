@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'bun:test';
-import { ELEMENT_MALTEKSTSEKSJON, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
-import { normalizeNodePlugin } from '@app/plate/plugins/normalize-node';
-import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
-import { TemplateSections } from '@app/plate/template-sections';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
+import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
+import { BaseParagraphPlugin } from 'platejs';
+import { createPlateEditor, ParagraphPlugin } from 'platejs/react';
+import { ELEMENT_MALTEKSTSEKSJON, ELEMENT_REDIGERBAR_MALTEKST } from '@/plate/plugins/element-types';
+import { normalizeNodePlugin } from '@/plate/plugins/normalize-node';
+import { RedigerbarMaltekstPlugin } from '@/plate/plugins/redigerbar-maltekst';
+import { TemplateSections } from '@/plate/template-sections';
+import { createSimpleParagraph } from '@/plate/templates/helpers';
 import {
   type BulletListElement,
   type H1Element,
@@ -14,11 +17,8 @@ import {
   type ParagraphElement,
   type RedigerbarMaltekstElement,
   TextAlign,
-} from '@app/plate/types';
-import { RichTextTypes } from '@app/types/common-text-types';
-import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
-import { BaseParagraphPlugin } from 'platejs';
-import { createPlateEditor, ParagraphPlugin } from 'platejs/react';
+} from '@/plate/types';
+import { RichTextTypes } from '@/types/common-text-types';
 
 const createEditor = (value: KabalValue) => createPlateEditor({ plugins: [normalizeNodePlugin], value });
 

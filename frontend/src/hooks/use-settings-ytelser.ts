@@ -1,7 +1,7 @@
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
-import { useAvailableYtelser } from '@app/hooks/use-available-ytelser';
-import { useGetSettingsQuery } from '@app/redux-api/bruker';
-import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
+import { isNotUndefined } from '@/functions/is-not-type-guards';
+import { useAvailableYtelser } from '@/hooks/use-available-ytelser';
+import { useGetSettingsQuery } from '@/redux-api/bruker';
+import type { IKodeverkSimpleValue } from '@/types/kodeverk';
 
 export const useSettingsYtelser = (): IKodeverkSimpleValue[] => {
   const { data } = useGetSettingsQuery();

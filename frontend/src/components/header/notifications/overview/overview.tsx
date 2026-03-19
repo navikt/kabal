@@ -1,11 +1,11 @@
-import { MarkAllAsReadButton } from '@app/components/header/notifications/mark-all';
-import { GroupedByBehandlingNotifications } from '@app/components/header/notifications/overview/grouped-by-behandling';
-import { GroupedByTypeNotifications } from '@app/components/header/notifications/overview/grouped-by-type';
-import { useNotificationsContext } from '@app/components/header/notifications/state';
-import type { KabalNotification } from '@app/components/header/notifications/types';
-import { NotificationsGrouping, useNotificationsOverviewGrouping } from '@app/hooks/settings/use-setting';
 import { Heading, HStack, Modal, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
+import { MarkAllAsReadButton } from '@/components/header/notifications/mark-all';
+import { GroupedByBehandlingNotifications } from '@/components/header/notifications/overview/grouped-by-behandling';
+import { GroupedByTypeNotifications } from '@/components/header/notifications/overview/grouped-by-type';
+import { useNotificationsContext } from '@/components/header/notifications/state';
+import type { KabalNotification } from '@/components/header/notifications/types';
+import { NotificationsGrouping, useNotificationsOverviewGrouping } from '@/hooks/settings/use-setting';
 
 interface OverviewModalProps {
   ref: React.RefObject<HTMLDialogElement | null>;

@@ -1,15 +1,15 @@
-import { Alert } from '@app/components/alert/alert';
-import { Lookup } from '@app/components/part/lookup';
-import { cleanAndValidate } from '@app/components/part/validate';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { Keys } from '@app/keys';
-import { useLazySearchpartwithutsendingskanalQuery } from '@app/redux-api/search';
-import { isApiDataError } from '@app/types/errors';
-import type { IdentifikatorPart } from '@app/types/oppgave-common';
 import { Search, Tag, VStack } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { Lookup } from '@/components/part/lookup';
+import { cleanAndValidate } from '@/components/part/validate';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { Keys } from '@/keys';
+import { useLazySearchpartwithutsendingskanalQuery } from '@/redux-api/search';
+import { isApiDataError } from '@/types/errors';
+import type { IdentifikatorPart } from '@/types/oppgave-common';
 
 export interface InvalidReceiver {
   id: string;

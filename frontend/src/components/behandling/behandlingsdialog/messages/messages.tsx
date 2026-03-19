@@ -1,7 +1,7 @@
-import { FinishedCaseMessages } from '@app/components/behandling/behandlingsdialog/messages/finished';
-import { UnfinishedCaseMessages } from '@app/components/behandling/behandlingsdialog/messages/unfinished';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
+import { FinishedCaseMessages } from '@/components/behandling/behandlingsdialog/messages/finished';
+import { UnfinishedCaseMessages } from '@/components/behandling/behandlingsdialog/messages/unfinished';
+import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
+import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
 
 export const Messages = () => {
   const isFullfoert = useIsFullfoert();

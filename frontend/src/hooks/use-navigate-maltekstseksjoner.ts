@@ -1,7 +1,7 @@
-import { Language } from '@app/types/texts/language';
 import { useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
+import { Language } from '@/types/texts/language';
 
 interface PathParams {
   maltekstseksjonId?: string | null;

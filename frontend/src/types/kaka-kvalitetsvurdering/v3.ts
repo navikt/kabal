@@ -1,4 +1,4 @@
-import { AnnetFields, MainReason } from '@app/components/kvalitetsvurdering/v3/data';
+import { AnnetFields, MainReason } from '@/components/kvalitetsvurdering/v3/data';
 import {
   BegrunnelsespliktenBoolean,
   BegrunnelsespliktenSaksdataHjemlerLists,
@@ -10,15 +10,15 @@ import {
   OmgjoeringBoolean,
   UtredningspliktenBoolean,
   VeiledningspliktenBoolean,
-} from '@app/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
+} from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
 import {
   SærregelverketBoolean,
   SærregelverketHjemlerFromYtelseList,
   SærregelverketSaksdataHjemlerList,
-} from '@app/components/kvalitetsvurdering/v3/særregelverket/data';
-import { TrygdemedisinBoolean } from '@app/components/kvalitetsvurdering/v3/trygdemedisin/data';
-import type { IKvalitetsvurderingBase } from '@app/types/kaka-kvalitetsvurdering/common';
-import type { Radiovalg, RadiovalgExtended } from '@app/types/kaka-kvalitetsvurdering/radio';
+} from '@/components/kvalitetsvurdering/v3/særregelverket/data';
+import { TrygdemedisinBoolean } from '@/components/kvalitetsvurdering/v3/trygdemedisin/data';
+import type { IKvalitetsvurderingBase } from '@/types/kaka-kvalitetsvurdering/common';
+import type { Radiovalg, RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
 
 // Kvalitetsavvik i forvaltningen av særregelverket
 interface Særregelverket extends LovenErTolketEllerAnvendtFeilIVedtaket {

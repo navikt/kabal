@@ -1,10 +1,13 @@
-import { ApiClientEnum } from '@app/config/config';
-import { isNotNull } from '@app/functions/guards';
-import { getDuration } from '@app/helpers/duration';
-import { getProxyRequestHeaders } from '@app/helpers/prepare-request-headers';
-import { getLogger } from '@app/logger';
-import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
-import { decodeArchivedDocumentIds, normalizeVariants } from '@app/plugins/file-viewer/encoding';
+import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import fastifyPlugin from 'fastify-plugin';
+import { Value } from 'typebox/value';
+import { ApiClientEnum } from '@/config/config';
+import { isNotNull } from '@/functions/guards';
+import { getDuration } from '@/helpers/duration';
+import { getProxyRequestHeaders } from '@/helpers/prepare-request-headers';
+import { getLogger } from '@/logger';
+import { KABAL_API_URL } from '@/plugins/crdt/api/url';
+import { decodeArchivedDocumentIds, normalizeVariants } from '@/plugins/file-viewer/encoding';
 import {
   ARCHIVED_PARAMS,
   type ArchivedApiDocument,
@@ -13,15 +16,12 @@ import {
   DuaApiDocumentSchema,
   type IDuaApiDocument,
   VEDLEGGSOVERSIKT_PARAMS,
-} from '@app/plugins/file-viewer/schemas';
-import { renderHtml } from '@app/plugins/file-viewer/template';
-import type { FileEntry } from '@app/plugins/file-viewer/types';
-import { getArchivedPdfUrl, getDuaPdfUrl, getVedleggsoversiktPdfUrl } from '@app/plugins/file-viewer/urls';
-import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
-import { SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
-import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import fastifyPlugin from 'fastify-plugin';
-import { Value } from 'typebox/value';
+} from '@/plugins/file-viewer/schemas';
+import { renderHtml } from '@/plugins/file-viewer/template';
+import type { FileEntry } from '@/plugins/file-viewer/types';
+import { getArchivedPdfUrl, getDuaPdfUrl, getVedleggsoversiktPdfUrl } from '@/plugins/file-viewer/urls';
+import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/obo-token';
+import { SERVER_TIMING_PLUGIN_ID } from '@/plugins/server-timing';
 
 const log = getLogger('file-viewer');
 

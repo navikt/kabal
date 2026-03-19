@@ -1,8 +1,3 @@
-import { employeeName, SELF, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
-import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
-import type { INavEmployee } from '@app/types/bruker';
-import { FlowState } from '@app/types/oppgave-common';
-import { HistoryEventTypes, type IRolEvent } from '@app/types/oppgavebehandling/response';
 import {
   ArrowRedoIcon,
   ArrowRightLeftIcon,
@@ -11,6 +6,11 @@ import {
   PaperplaneIcon,
   PlusIcon,
 } from '@navikt/aksel-icons';
+import { employeeName, SELF, toKey } from '@/components/behandling/behandlingsdialog/history/common';
+import { HistoryEvent } from '@/components/behandling/behandlingsdialog/history/event';
+import type { INavEmployee } from '@/types/bruker';
+import { FlowState } from '@/types/oppgave-common';
+import { HistoryEventTypes, type IRolEvent } from '@/types/oppgavebehandling/response';
 
 export const getROLEvent = (e: IRolEvent) => {
   const key = toKey(e);

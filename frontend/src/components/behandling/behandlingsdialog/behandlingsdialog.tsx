@@ -1,10 +1,10 @@
-import { EventHistory } from '@app/components/behandling/behandlingsdialog/history/history';
-import { Medunderskriver } from '@app/components/behandling/behandlingsdialog/medunderskriver/medunderskriver';
-import { Messages } from '@app/components/behandling/behandlingsdialog/messages/messages';
-import { Rol } from '@app/components/behandling/behandlingsdialog/rol/rol';
-import { Saksbehandler } from '@app/components/behandling/behandlingsdialog/saksbehandler';
-import { StyledBehandlingSection } from '@app/components/behandling/styled-components';
 import { Heading } from '@navikt/ds-react';
+import { EventHistory } from '@/components/behandling/behandlingsdialog/history/history';
+import { Medunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/medunderskriver';
+import { Messages } from '@/components/behandling/behandlingsdialog/messages/messages';
+import { Rol } from '@/components/behandling/behandlingsdialog/rol/rol';
+import { Saksbehandler } from '@/components/behandling/behandlingsdialog/saksbehandler';
+import { StyledBehandlingSection } from '@/components/behandling/styled-components';
 
 export const Behandlingsdialog = () => (
   <StyledBehandlingSection>

@@ -1,18 +1,18 @@
-import { PublishedRichText } from '@app/components/maltekstseksjoner/texts/published-rich-text';
-import { DraftPlainText } from '@app/components/smart-editor-texts/edit/draft-plain-text';
-import { DraftRegelverk } from '@app/components/smart-editor-texts/edit/draft-regelverk';
-import { DraftGodFormulering, DraftRichText } from '@app/components/smart-editor-texts/edit/draft-rich-text';
-import { PublishedPlainText } from '@app/components/smart-editor-texts/edit/published-plain-text';
-import type { DraftVersionProps } from '@app/components/smart-editor-texts/types';
-import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
-import { isGodFormulering, isRegelverk, isRichText } from '@app/functions/is-rich-plain-text';
-import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
-import { useGetTextByIdQuery, useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { PlainTextTypes, type TextTypes } from '@app/types/common-text-types';
-import type { IDraft, IPlainText, IPublishedText, IText } from '@app/types/texts/responses';
 import { Loader, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { useParams } from 'react-router';
+import { PublishedRichText } from '@/components/maltekstseksjoner/texts/published-rich-text';
+import { DraftPlainText } from '@/components/smart-editor-texts/edit/draft-plain-text';
+import { DraftRegelverk } from '@/components/smart-editor-texts/edit/draft-regelverk';
+import { DraftGodFormulering, DraftRichText } from '@/components/smart-editor-texts/edit/draft-rich-text';
+import { PublishedPlainText } from '@/components/smart-editor-texts/edit/published-plain-text';
+import type { DraftVersionProps } from '@/components/smart-editor-texts/types';
+import { VersionTabs } from '@/components/versioned-tabs/versioned-tabs';
+import { isGodFormulering, isRegelverk, isRichText } from '@/functions/is-rich-plain-text';
+import { useNavigateToStandaloneTextVersion } from '@/hooks/use-navigate-to-standalone-text-version';
+import { useGetTextByIdQuery, useGetTextVersionsQuery } from '@/redux-api/texts/queries';
+import { PlainTextTypes, type TextTypes } from '@/types/common-text-types';
+import type { IDraft, IPlainText, IPublishedText, IText } from '@/types/texts/responses';
 
 interface Props {
   id: string;

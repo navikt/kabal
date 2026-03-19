@@ -1,6 +1,6 @@
-import { Comment } from '@app/components/smart-editor/comments/comment';
-import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { VStack } from '@navikt/ds-react';
+import { Comment } from '@/components/smart-editor/comments/comment';
+import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 
 interface CommentListProps {
   comments: ISmartEditorComment[];

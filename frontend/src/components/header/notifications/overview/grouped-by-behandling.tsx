@@ -1,14 +1,14 @@
-import { CopyButton } from '@app/components/copy-button/copy-button';
-import { Type, Ytelse } from '@app/components/header/notifications/common';
-import { GroupContainer, GroupedGrid, NotificationsGroup } from '@app/components/header/notifications/overview/common';
+import { Heading, HStack } from '@navikt/ds-react';
+import { CopyButton } from '@/components/copy-button/copy-button';
+import { Type, Ytelse } from '@/components/header/notifications/common';
+import { GroupContainer, GroupedGrid, NotificationsGroup } from '@/components/header/notifications/overview/common';
 import {
   type BehandlingInfo,
   type KabalNotification,
   NOTIFICATION_TYPE_LABELS,
   NotificationType,
-} from '@app/components/header/notifications/types';
-import { useMaybeOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { Heading, HStack } from '@navikt/ds-react';
+} from '@/components/header/notifications/types';
+import { useMaybeOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 
 interface GroupedNotificationsProps {
   notifications: readonly KabalNotification[];

@@ -1,22 +1,22 @@
-import { MOD_KEY_TEXT } from '@app/keys';
-import { useIsElementActive } from '@app/plate/hooks/use-is-element-active';
-import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
-import { Align } from '@app/plate/toolbar/align';
-import { CycleCaseButton } from '@app/plate/toolbar/cycle-case-button';
-import { Headings } from '@app/plate/toolbar/headings';
-import { Indent } from '@app/plate/toolbar/indent';
-import { Lists } from '@app/plate/toolbar/lists';
-import { Marks } from '@app/plate/toolbar/marks';
-import { ToolbarSeparator } from '@app/plate/toolbar/separator';
-import { InsertTableButton } from '@app/plate/toolbar/table/insert-table-button';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { useIsInList } from '@app/plate/toolbar/use-is-in-list';
-import { useIsInTable } from '@app/plate/toolbar/use-is-in-table';
-import { useMyPlateEditorRef } from '@app/plate/types';
-import { insertPageBreak } from '@app/plate/utils/transforms';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { DocumentPageBreak, TextDescription } from '@styled-icons/fluentui-system-regular';
 import { BaseParagraphPlugin } from 'platejs';
+import { MOD_KEY_TEXT } from '@/keys';
+import { useIsElementActive } from '@/plate/hooks/use-is-element-active';
+import { useIsUnchangeable } from '@/plate/hooks/use-is-unchangeable';
+import { Align } from '@/plate/toolbar/align';
+import { CycleCaseButton } from '@/plate/toolbar/cycle-case-button';
+import { Headings } from '@/plate/toolbar/headings';
+import { Indent } from '@/plate/toolbar/indent';
+import { Lists } from '@/plate/toolbar/lists';
+import { Marks } from '@/plate/toolbar/marks';
+import { ToolbarSeparator } from '@/plate/toolbar/separator';
+import { InsertTableButton } from '@/plate/toolbar/table/insert-table-button';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
+import { useIsInList } from '@/plate/toolbar/use-is-in-list';
+import { useIsInTable } from '@/plate/toolbar/use-is-in-table';
+import { useMyPlateEditorRef } from '@/plate/types';
+import { insertPageBreak } from '@/plate/utils/transforms';
 
 export const DefaultToolbarButtons = () => {
   const editor = useMyPlateEditorRef();

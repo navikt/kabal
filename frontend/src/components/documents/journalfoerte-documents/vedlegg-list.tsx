@@ -1,11 +1,11 @@
-import type { VedleggListRenderData } from '@app/components/documents/journalfoerte-documents/calculate';
-import { ROW_HEIGHT } from '@app/components/documents/journalfoerte-documents/contants';
-import { AttachmentListItem } from '@app/components/documents/journalfoerte-documents/document/attachments/attachment-list';
-import { isPathSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
-import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { VStack } from '@navikt/ds-react';
+import type { VedleggListRenderData } from '@/components/documents/journalfoerte-documents/calculate';
+import { ROW_HEIGHT } from '@/components/documents/journalfoerte-documents/contants';
+import { AttachmentListItem } from '@/components/documents/journalfoerte-documents/document/attachments/attachment-list';
+import { isPathSelected } from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { LogiskeVedleggList } from '@/components/documents/journalfoerte-documents/logiske-vedlegg-list';
+import { useShowLogiskeVedlegg } from '@/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 interface Props {
   list: VedleggListRenderData;

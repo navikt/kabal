@@ -1,5 +1,7 @@
-import { SETTINGS_MANAGER } from '@app/hooks/settings/manager';
-import { CAPITALISE_SETTING_KEY } from '@app/hooks/settings/use-setting';
+import { type Descendant, type InsertTextOptions, PathApi, RangeApi } from 'platejs';
+import { createPlatePlugin, PlateLeaf, type PlateLeafProps } from 'platejs/react';
+import { SETTINGS_MANAGER } from '@/hooks/settings/manager';
+import { CAPITALISE_SETTING_KEY } from '@/hooks/settings/use-setting';
 import {
   capitaliseFirstNodeWithText,
   hasMultipleBlocks,
@@ -7,11 +9,9 @@ import {
   isSingleWord,
   nodeContainsSingleWord,
   skipCapitalisation,
-} from '@app/plate/plugins/capitalise/helpers';
-import type { FormattedText } from '@app/plate/types';
-import { isText } from '@app/plate/utils/queries';
-import { type Descendant, type InsertTextOptions, PathApi, RangeApi } from 'platejs';
-import { createPlatePlugin, PlateLeaf, type PlateLeafProps } from 'platejs/react';
+} from '@/plate/plugins/capitalise/helpers';
+import type { FormattedText } from '@/plate/types';
+import { isText } from '@/plate/utils/queries';
 
 const AutoCapitalisedLeaf = (props: PlateLeafProps<FormattedText>) => (
   <PlateLeaf

@@ -1,5 +1,5 @@
-import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
 import { Table } from '@navikt/ds-react';
+import { LoadingCellContent } from '@/components/common-table-components/loading-cell-content';
 
 interface Props {
   testId: string;

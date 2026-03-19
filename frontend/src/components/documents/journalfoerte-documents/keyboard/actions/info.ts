@@ -1,7 +1,7 @@
-import { useGetDocument } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import { setShowMetadata } from '@app/components/documents/journalfoerte-documents/state/show-metadata';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useCallback } from 'react';
+import { useGetDocument } from '@/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import { setShowMetadata } from '@/components/documents/journalfoerte-documents/state/show-metadata';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 export const useToggleInfo = (filteredDocuments: IArkivertDocument[]) => {
   const getDocument = useGetDocument(filteredDocuments);

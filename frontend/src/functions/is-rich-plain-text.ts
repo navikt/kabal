@@ -4,9 +4,9 @@ import {
   REGELVERK_TYPE,
   RichTextTypes,
   type TextTypes,
-} from '@app/types/common-text-types';
-import type { ListGodFormulering, ListPlainText, ListRegelverk, ListRichText } from '@app/types/texts/common';
-import type { IGodFormulering, IPlainText, IRegelverk, IRichText, IText, ListText } from '@app/types/texts/responses';
+} from '@/types/common-text-types';
+import type { ListGodFormulering, ListPlainText, ListRegelverk, ListRichText } from '@/types/texts/common';
+import type { IGodFormulering, IPlainText, IRegelverk, IRichText, IText, ListText } from '@/types/texts/responses';
 
 const PLAIN_TEXT_VALUES = Object.values(PlainTextTypes);
 const RICH_TEXT_VALUES = Object.values(RichTextTypes);

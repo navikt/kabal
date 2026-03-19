@@ -1,6 +1,3 @@
-import { DEFAULT_STATUS_FILTER } from '@app/components/smart-editor-texts/status-filter/status-filter';
-import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
-import { Role } from '@app/types/bruker';
 import {
   Buildings3Icon,
   BulletListIcon,
@@ -18,6 +15,9 @@ import { HStack } from '@navikt/ds-react';
 import { DocumentFooter } from '@styled-icons/fluentui-system-regular/DocumentFooter';
 import { DocumentHeader } from '@styled-icons/fluentui-system-regular/DocumentHeader';
 import { NavLink, type NavLinkProps } from 'react-router-dom';
+import { DEFAULT_STATUS_FILTER } from '@/components/smart-editor-texts/status-filter/status-filter';
+import { useHasAnyOfRoles } from '@/hooks/use-has-role';
+import { Role } from '@/types/bruker';
 
 export const Nav = () => (
   <HStack as="nav" flexGrow="1" overflowX="auto" aria-label="Meny" data-testid="oppgaver-nav">

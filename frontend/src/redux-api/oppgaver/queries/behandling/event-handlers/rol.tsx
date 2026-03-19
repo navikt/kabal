@@ -1,13 +1,13 @@
-import { toast } from '@app/components/toast/store';
-import { reduxStore } from '@app/redux/configure-store';
-import { getRolToastContent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/rol-toast';
-import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
-import { historyQuerySlice } from '@app/redux-api/oppgaver/queries/history';
-import type { RolEvent } from '@app/redux-api/server-sent-events/types';
-import { FlowState } from '@app/types/oppgave-common';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { HistoryEventTypes, type IRolEvent } from '@app/types/oppgavebehandling/response';
 import { BodyLong } from '@navikt/ds-react';
+import { toast } from '@/components/toast/store';
+import { reduxStore } from '@/redux/configure-store';
+import { getRolToastContent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/rol-toast';
+import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
+import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
+import type { RolEvent } from '@/redux-api/server-sent-events/types';
+import { FlowState } from '@/types/oppgave-common';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
+import { HistoryEventTypes, type IRolEvent } from '@/types/oppgavebehandling/response';
 
 export const handleRolEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>

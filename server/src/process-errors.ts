@@ -1,8 +1,8 @@
-import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
-import { getLogger } from '@app/logger';
-import { collaborationServer } from '@app/plugins/crdt/collaboration-server';
-import { setShuttingDown } from '@app/shutdown';
-import { EmojiIcons, sendToSlack } from '@app/slack';
+import { SMART_DOCUMENT_WRITE_ACCESS } from '@/document-access/service';
+import { getLogger } from '@/logger';
+import { collaborationServer } from '@/plugins/crdt/collaboration-server';
+import { setShuttingDown } from '@/shutdown';
+import { EmojiIcons, sendToSlack } from '@/slack';
 
 const log = getLogger('process-errors');
 

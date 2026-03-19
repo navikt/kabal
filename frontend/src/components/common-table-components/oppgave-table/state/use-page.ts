@@ -1,10 +1,7 @@
-import type {
-  OppgaveTableKey,
-  StaticOppgaveTableKey,
-} from '@app/components/common-table-components/oppgave-table/types';
-import { DEFAULT_PAGE } from '@app/hooks/use-oppgave-pagination';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router';
+import type { OppgaveTableKey, StaticOppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
+import { DEFAULT_PAGE } from '@/hooks/use-oppgave-pagination';
 
 export const usePageQueryParam = (
   tableKey: StaticOppgaveTableKey | OppgaveTableKey,

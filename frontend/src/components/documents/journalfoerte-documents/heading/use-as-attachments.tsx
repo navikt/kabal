@@ -1,17 +1,17 @@
-import { canDistributeAny } from '@app/components/documents/filetype';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
-import { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { DistribusjonsType, DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
+import { canDistributeAny } from '@/components/documents/filetype';
+import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
+import { DuaActionEnum } from '@/hooks/dua-access/access';
+import { useCreatorRole } from '@/hooks/dua-access/use-creator-role';
+import { useLazyDuaAccess } from '@/hooks/dua-access/use-dua-access';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
+import { useCreateVedleggFromJournalfoertDocumentMutation } from '@/redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
+import { DistribusjonsType, DocumentTypeEnum, type IDocument } from '@/types/documents/documents';
 
 const NONE_SELECTED = 'NONE_SELECTED';
 

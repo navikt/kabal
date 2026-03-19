@@ -1,14 +1,14 @@
-import { getFixedCacheKey } from '@app/components/behandling/behandlingsdialog/medunderskriver/helpers';
-import { successToast } from '@app/components/oppgavestyring/toasts';
-import type { OnChange } from '@app/components/oppgavestyring/types';
-import { EMPTY_MEDUNDERSKRIVERE, type Return } from '@app/components/oppgavestyring/use-set-medunderskriver';
-import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
-import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
-import { useSetRolFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-rol-flowstate';
-import type { INavEmployee } from '@app/types/bruker';
-import { FlowState } from '@app/types/oppgave-common';
 import { parseISO } from 'date-fns';
 import { useCallback, useRef } from 'react';
+import { getFixedCacheKey } from '@/components/behandling/behandlingsdialog/medunderskriver/helpers';
+import { successToast } from '@/components/oppgavestyring/toasts';
+import type { OnChange } from '@/components/oppgavestyring/types';
+import { EMPTY_MEDUNDERSKRIVERE, type Return } from '@/components/oppgavestyring/use-set-medunderskriver';
+import { formatEmployeeNameAndIdFallback } from '@/domain/employee-name';
+import { useSetRolMutation } from '@/redux-api/oppgaver/mutations/set-rol';
+import { useSetRolFlowStateMutation } from '@/redux-api/oppgaver/mutations/set-rol-flowstate';
+import type { INavEmployee } from '@/types/bruker';
+import { FlowState } from '@/types/oppgave-common';
 
 export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDERSKRIVERE): Return => {
   const [setRol, { isLoading: isSettingEmployee }] = useSetRolMutation({

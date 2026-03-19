@@ -1,5 +1,5 @@
-import type { IValidationSection } from '@app/functions/error-type-guard';
 import { createContext, useState } from 'react';
+import type { IValidationSection } from '@/functions/error-type-guard';
 
 interface IValidationErrorContext {
   validationSectionErrors: IValidationSection[];

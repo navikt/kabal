@@ -1,10 +1,11 @@
-import { DragAndDropContext } from '@app/components/documents/drag-context';
-import { canDistributeAny } from '@app/components/documents/filetype';
-import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
-import { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { Journalstatus } from '@app/types/arkiverte-documents';
+import { useCallback, useContext, useMemo } from 'react';
+import { DragAndDropContext } from '@/components/documents/drag-context';
+import { canDistributeAny } from '@/components/documents/filetype';
+import { DuaActionEnum } from '@/hooks/dua-access/access';
+import { useCreatorRole } from '@/hooks/dua-access/use-creator-role';
+import { useLazyDuaAccess } from '@/hooks/dua-access/use-dua-access';
+import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
+import { Journalstatus } from '@/types/arkiverte-documents';
 import {
   DistribusjonsType,
   DocumentTypeEnum,
@@ -13,8 +14,7 @@ import {
   type IParentDocument,
   isAttachmentDocument,
   isParentDocument,
-} from '@app/types/documents/documents';
-import { useCallback, useContext, useMemo } from 'react';
+} from '@/types/documents/documents';
 
 export const useCanDropOnDocument = (targetDocument: IDocument): boolean => {
   const { draggedDocument, draggedJournalfoertDocuments } = useContext(DragAndDropContext);

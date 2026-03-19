@@ -1,5 +1,5 @@
-import { useFilesViewed, useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
-import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
+import { useFilesViewed, useSmartEditorActiveDocument } from '@/hooks/settings/use-setting';
+import { DocumentTypeEnum, type IDocument } from '@/types/documents/documents';
 
 export const useRemoveDocument = () => {
   const { value: pdfViewed, remove: removeViewedPdf } = useFilesViewed();

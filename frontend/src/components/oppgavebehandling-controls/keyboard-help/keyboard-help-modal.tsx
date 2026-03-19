@@ -1,12 +1,12 @@
-import {
-  closePanelKeyboardHelpModal,
-  useIsPanelKeyboardHelpModalOpen,
-} from '@app/components/oppgavebehandling-controls/keyboard-help/state';
-import { isMetaKey, KEY_ICONS, Keys, MOD_KEY } from '@app/keys';
-import { pushEvent } from '@app/observability';
 import { Box, Heading, HGrid, HStack, Modal } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
 import { useCallback, useEffect, useId, useRef } from 'react';
+import {
+  closePanelKeyboardHelpModal,
+  useIsPanelKeyboardHelpModalOpen,
+} from '@/components/oppgavebehandling-controls/keyboard-help/state';
+import { isMetaKey, KEY_ICONS, Keys, MOD_KEY } from '@/keys';
+import { pushEvent } from '@/observability';
 
 export const PanelKeyboardHelpModal = () => {
   const ref = useRef<HTMLDialogElement>(null);

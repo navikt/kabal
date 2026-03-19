@@ -1,9 +1,9 @@
-import { Alert } from '@app/components/alert/alert';
-import { getErrorData } from '@app/functions/get-error-data';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { Alert } from '@/components/alert/alert';
+import { getErrorData } from '@/functions/get-error-data';
 
 interface ErrorAlertProps {
   error: SerializedError | FetchBaseQueryError | undefined;

@@ -1,12 +1,12 @@
-import { SELECT_SKELETON } from '@app/components/behandling/behandlingsdialog/rol/skeleton';
-import { useSetRol } from '@app/components/oppgavestyring/use-set-rol';
-import { SearchableNavEmployeeSelectWithLabel } from '@app/components/searchable-select/searchable-single-select/searchable-nav-employee-select-with-label';
-import { useIsAssignedRol, useIsAssignedRolAndSent, useIsKrolUser } from '@app/hooks/use-is-rol';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
-import { useGetPotentialRolQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { SELECT_SKELETON } from '@/components/behandling/behandlingsdialog/rol/skeleton';
+import { useSetRol } from '@/components/oppgavestyring/use-set-rol';
+import { SearchableNavEmployeeSelectWithLabel } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select-with-label';
+import { useIsAssignedRol, useIsAssignedRolAndSent, useIsKrolUser } from '@/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useTildelSaksbehandlerMutation } from '@/redux-api/oppgaver/mutations/tildeling';
+import { useGetPotentialRolQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;

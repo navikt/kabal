@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useSearchParams } from 'react-router';
 import {
   isShortSortField,
   isShortSortOrder,
@@ -6,10 +8,8 @@ import {
   ShortParamKey,
   SORT_FIELD_TO_SHORT,
   SORT_ORDER_TO_SHORT,
-} from '@app/components/common-table-components/oppgave-table/state/short-names';
-import type { SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
-import { useState } from 'react';
-import { useSearchParams } from 'react-router';
+} from '@/components/common-table-components/oppgave-table/state/short-names';
+import type { SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
 const SORTING_SEPARATOR = '-';
 

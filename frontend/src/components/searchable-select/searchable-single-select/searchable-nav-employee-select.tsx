@@ -1,7 +1,7 @@
-import { SearchableSelect } from '@app/components/searchable-select/searchable-single-select/searchable-single-select';
-import type { INavEmployee } from '@app/types/bruker';
 import { Tag } from '@navikt/ds-react';
 import { useCallback } from 'react';
+import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
+import type { INavEmployee } from '@/types/bruker';
 
 export interface SearchableNavEmployeeSelectProps {
   label: string;

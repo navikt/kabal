@@ -1,9 +1,9 @@
-import { NAIS_CLUSTER_NAME } from '@app/config/config';
-import { requiredEnvString } from '@app/config/env-var';
-import { generateSpanId, generateTraceId } from '@app/helpers/traceparent';
-import { getLogger } from '@app/logger';
 import { type Static, Type } from 'typebox';
 import { Compile } from 'typebox/compile';
+import { NAIS_CLUSTER_NAME } from '@/config/config';
+import { requiredEnvString } from '@/config/env-var';
+import { generateSpanId, generateTraceId } from '@/helpers/traceparent';
+import { getLogger } from '@/logger';
 
 const TOKEN_ENDPOINT = requiredEnvString('NAIS_TOKEN_ENDPOINT');
 

@@ -1,6 +1,6 @@
-import { getLogger } from '@app/logger';
 import { Type } from 'typebox';
 import { Compile } from 'typebox/compile';
+import { getLogger } from '@/logger';
 
 const log = getLogger('document-write-access-kafka-parser');
 

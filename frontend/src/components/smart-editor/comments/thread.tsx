@@ -1,17 +1,17 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { CommentList } from '@app/components/smart-editor/comments/comment-list';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useHasWriteAccess } from '@app/components/smart-editor/hooks/use-has-write-access';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useSmartEditorExpandedThreads } from '@app/hooks/settings/use-setting';
-import { useGetDocumentQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { usePostReplyMutation } from '@app/redux-api/smart-editor-comments';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
-import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { Chat2Icon } from '@navikt/aksel-icons';
 import { Box, Button, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { CommentList } from '@/components/smart-editor/comments/comment-list';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useHasWriteAccess } from '@/components/smart-editor/hooks/use-has-write-access';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useSmartEditorExpandedThreads } from '@/hooks/settings/use-setting';
+import { useGetDocumentQuery } from '@/redux-api/oppgaver/queries/documents';
+import { usePostReplyMutation } from '@/redux-api/smart-editor-comments';
+import { DocumentTypeEnum } from '@/types/documents/documents';
+import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 
 interface Props {
   thread: ISmartEditorComment;

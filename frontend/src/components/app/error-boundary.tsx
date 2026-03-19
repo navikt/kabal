@@ -1,9 +1,9 @@
-import { Alert } from '@app/components/alert/alert';
-import { VERSION_CHECKER } from '@app/components/version-checker/version-checker';
-import { ENVIRONMENT } from '@app/environment';
-import { pushError } from '@app/observability';
 import { Box, Button, CopyButton, Heading, HStack, VStack } from '@navikt/ds-react';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { VERSION_CHECKER } from '@/components/version-checker/version-checker';
+import { ENVIRONMENT } from '@/environment';
+import { pushError } from '@/observability';
 
 interface Props {
   children: ReactNode;

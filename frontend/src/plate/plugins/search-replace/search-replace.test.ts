@@ -1,9 +1,12 @@
 import { afterAll, beforeAll, describe, expect, it, mock } from 'bun:test';
-import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
-import { ELEMENT_FOOTER, ELEMENT_HEADER, ELEMENT_SAKSNUMMER } from '@app/plate/plugins/element-types';
-import { saksbehandlerPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
-import { replaceText, SearchReplacePlugin } from '@app/plate/plugins/search-replace/search-replace';
-import { TemplateSections } from '@app/plate/template-sections';
+import { BaseParagraphPlugin, type Point, type TText } from 'platejs';
+import { createPlateEditor, getEditorPlugin, type PlateEditor } from 'platejs/react';
+import type { Selection } from 'slate';
+import { createCapitalisePlugin } from '@/plate/plugins/capitalise/capitalise';
+import { ELEMENT_FOOTER, ELEMENT_HEADER, ELEMENT_SAKSNUMMER } from '@/plate/plugins/element-types';
+import { saksbehandlerPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
+import { replaceText, SearchReplacePlugin } from '@/plate/plugins/search-replace/search-replace';
+import { TemplateSections } from '@/plate/template-sections';
 import {
   createLabelContent,
   createMaltekst,
@@ -11,17 +14,14 @@ import {
   createPlaceHolder,
   createRedigerbarMaltekst,
   createSignature,
-} from '@app/plate/templates/helpers';
+} from '@/plate/templates/helpers';
 import {
   type KabalValue,
   LabelContentSource,
   type ParagraphElement,
   type PlaceholderElement,
   TextAlign,
-} from '@app/plate/types';
-import { BaseParagraphPlugin, type Point, type TText } from 'platejs';
-import { createPlateEditor, getEditorPlugin, type PlateEditor } from 'platejs/react';
-import type { Selection } from 'slate';
+} from '@/plate/types';
 
 const createP = (children: ParagraphElement['children']): ParagraphElement => ({
   type: BaseParagraphPlugin.key,
@@ -67,12 +67,12 @@ const type = (editor: PlateEditor, text: string) => {
 
 describe('search-replace', () => {
   beforeAll(() => {
-    mock.module('@app/hooks/settings/manager', () => ({ SETTINGS_MANAGER: { get: () => 'true' } }));
+    mock.module('@/hooks/settings/manager', () => ({ SETTINGS_MANAGER: { get: () => 'true' } }));
   });
 
   afterAll(async () => {
-    const originalSettingsManager = await import('@app/hooks/settings/manager');
-    mock.module('@app/hooks/settings/manager', () => originalSettingsManager);
+    const originalSettingsManager = await import('@/hooks/settings/manager');
+    mock.module('@/hooks/settings/manager', () => originalSettingsManager);
   });
 
   describe('without auto-capitalising words that originally were not capitalised', () => {

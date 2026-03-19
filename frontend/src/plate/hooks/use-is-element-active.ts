@@ -1,5 +1,5 @@
-import { useMyPlateEditorState } from '@app/plate/types';
 import { RangeApi } from 'platejs';
+import { useMyPlateEditorState } from '@/plate/types';
 
 export const useIsElementActive = (element: string) => {
   const editor = useMyPlateEditorState();

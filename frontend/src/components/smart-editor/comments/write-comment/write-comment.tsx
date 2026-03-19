@@ -1,18 +1,18 @@
-import { disconnectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { Keys } from '@app/keys';
-import { useMyPlateEditorRef } from '@app/plate/types';
-import {
-  useDeleteCommentOrThreadMutation,
-  useGetCommentsQuery,
-  useUpdateCommentOrReplyMutation,
-} from '@app/redux-api/smart-editor-comments';
-import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { Textarea } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import type React from 'react';
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { disconnectCommentThread } from '@/components/smart-editor/comments/connect-thread';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { Keys } from '@/keys';
+import { useMyPlateEditorRef } from '@/plate/types';
+import {
+  useDeleteCommentOrThreadMutation,
+  useGetCommentsQuery,
+  useUpdateCommentOrReplyMutation,
+} from '@/redux-api/smart-editor-comments';
+import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 
 interface Props {
   comment: ISmartEditorComment;

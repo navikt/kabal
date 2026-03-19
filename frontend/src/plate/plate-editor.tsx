@@ -1,10 +1,10 @@
-import { merge } from '@app/functions/classes';
-import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import { isEditableTextNode } from '@app/plate/functions/is-editable-text';
-import { useMyPlateEditorRef } from '@app/plate/types';
 import type { TText } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 import { PlateContainer, PlateContent, type PlateContentProps } from 'platejs/react';
+import { merge } from '@/functions/classes';
+import type { SpellCheckLanguage } from '@/hooks/use-smart-editor-language';
+import { isEditableTextNode } from '@/plate/functions/is-editable-text';
+import { useMyPlateEditorRef } from '@/plate/types';
 
 interface Props extends Omit<PlateContentProps, 'contentEditable'> {
   lang: SpellCheckLanguage;

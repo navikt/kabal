@@ -1,8 +1,8 @@
-import { canOpenInKabal } from '@app/components/documents/filetype';
-import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
-import type { SelectedMap } from '@app/components/documents/journalfoerte-documents/select-context/types';
-import type { IArkivertDocument, Variants } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { canOpenInKabal } from '@/components/documents/filetype';
+import { getId } from '@/components/documents/journalfoerte-documents/select-context/helpers';
+import type { SelectedMap } from '@/components/documents/journalfoerte-documents/select-context/types';
+import type { IArkivertDocument, Variants } from '@/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 interface DownloadableDocument extends IJournalfoertDokumentId {
   tittel: string;

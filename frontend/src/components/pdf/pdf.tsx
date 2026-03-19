@@ -1,12 +1,12 @@
-import { AppTheme, useAppTheme } from '@app/app-theme';
-import { toast } from '@app/components/toast/store';
-import { Section } from '@app/components/toast/toast-content/api-error-toast';
-import { ENVIRONMENT } from '@app/environment';
-import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
-import { isKabalApiErrorData, type KabalApiErrorData } from '@app/types/errors';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { AppTheme, useAppTheme } from '@/app-theme';
+import { toast } from '@/components/toast/store';
+import { Section } from '@/components/toast/toast-content/api-error-toast';
+import { ENVIRONMENT } from '@/environment';
+import { useSmartEditorEnabled } from '@/hooks/settings/use-setting';
+import { isKabalApiErrorData, type KabalApiErrorData } from '@/types/errors';
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const useFixPdf = (refresh: () => void): [() => Promise<void>, boolean] => {

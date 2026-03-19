@@ -1,8 +1,8 @@
-import { ApiClientEnum, PROXY_VERSION } from '@app/config/config';
-import { isDeployed } from '@app/config/env';
-import { CLIENT_VERSION_HEADER, PROXY_VERSION_HEADER, TAB_ID_HEADER } from '@app/headers';
-import { generateTraceparent } from '@app/helpers/traceparent';
 import type { FastifyRequest } from 'fastify';
+import { ApiClientEnum, PROXY_VERSION } from '@/config/config';
+import { isDeployed } from '@/config/env';
+import { CLIENT_VERSION_HEADER, PROXY_VERSION_HEADER, TAB_ID_HEADER } from '@/headers';
+import { generateTraceparent } from '@/helpers/traceparent';
 
 type GetHeadersFn = (req: FastifyRequest) => Promise<Record<string, string | string[]>>;
 

@@ -1,12 +1,9 @@
-import { AddLogiskVedlegg } from '@app/components/documents/journalfoerte-documents/add-logisk-vedlegg';
-import type { LogiskeVedleggListRenderData } from '@app/components/documents/journalfoerte-documents/calculate';
-import {
-  LOGISK_VEDLEGG_HEIGHT,
-  LOGISK_VEDLEGG_SPACE,
-} from '@app/components/documents/journalfoerte-documents/contants';
-import { EditableLogiskVedlegg } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/editable';
-import { LogiskeVedleggListItemStyle } from '@app/components/documents/styled-components/attachment-list';
-import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
+import { AddLogiskVedlegg } from '@/components/documents/journalfoerte-documents/add-logisk-vedlegg';
+import type { LogiskeVedleggListRenderData } from '@/components/documents/journalfoerte-documents/calculate';
+import { LOGISK_VEDLEGG_HEIGHT, LOGISK_VEDLEGG_SPACE } from '@/components/documents/journalfoerte-documents/contants';
+import { EditableLogiskVedlegg } from '@/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/editable';
+import { LogiskeVedleggListItemStyle } from '@/components/documents/styled-components/attachment-list';
+import type { LogiskVedlegg } from '@/types/arkiverte-documents';
 
 interface Props {
   list: LogiskeVedleggListRenderData;

@@ -1,26 +1,26 @@
-import { DateTime } from '@app/components/datetime/datetime';
-import { EditableTitle } from '@app/components/editable-title/editable-title';
-import { Filters } from '@app/components/maltekstseksjoner/filters';
-import { Container, Header } from '@app/components/maltekstseksjoner/maltekstseksjon/common';
-import { Actions } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/actions';
-import { Sidebar } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/sidebar';
-import { MaltekstseksjonTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/texts';
+import { BodyShort, HStack, Label, Loader } from '@navikt/ds-react';
+import { DateTime } from '@/components/datetime/datetime';
+import { EditableTitle } from '@/components/editable-title/editable-title';
+import { Filters } from '@/components/maltekstseksjoner/filters';
+import { Container, Header } from '@/components/maltekstseksjoner/maltekstseksjon/common';
+import { Actions } from '@/components/maltekstseksjoner/maltekstseksjon/draft/actions';
+import { Sidebar } from '@/components/maltekstseksjoner/maltekstseksjon/draft/sidebar';
+import { MaltekstseksjonTexts } from '@/components/maltekstseksjoner/maltekstseksjon/texts';
 import {
   TagContainer,
   TemplateSectionTagList,
   UtfallTagList,
   YtelseHjemmelTagList,
-} from '@app/components/smart-editor-texts/edit/tags';
-import { TextHistory } from '@app/components/text-history/text-history';
+} from '@/components/smart-editor-texts/edit/tags';
+import { TextHistory } from '@/components/text-history/text-history';
 import {
   useUpdateMaltekstTitleMutation,
   useUpdateTemplateSectionIdListMutation,
   useUpdateUtfallIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
-} from '@app/redux-api/maltekstseksjoner/mutations';
-import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import type { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { BodyShort, HStack, Label, Loader } from '@navikt/ds-react';
+} from '@/redux-api/maltekstseksjoner/mutations';
+import type { IGetMaltekstseksjonParams } from '@/types/maltekstseksjoner/params';
+import type { IDraftMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
 interface MaltekstProps {
   maltekstseksjon: IDraftMaltekstseksjon;

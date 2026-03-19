@@ -1,5 +1,5 @@
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import type { TagProps } from '@navikt/ds-react';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const SAKSTYPE_TO_TAG_VARIANT: Record<SaksTypeEnum, TagProps['variant']> = {
   [SaksTypeEnum.KLAGE]: 'alt1-filled',

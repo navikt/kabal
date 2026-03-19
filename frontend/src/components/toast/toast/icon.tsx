@@ -3,8 +3,8 @@ import {
   ExclamationmarkTriangleFillIconColored,
   InformationSquareFillIconColored,
   XMarkOctagonFillIconColored,
-} from '@app/components/colored-icons/colored-icons';
-import { ToastType } from '@app/components/toast/types';
+} from '@/components/colored-icons/colored-icons';
+import { ToastType } from '@/components/toast/types';
 
 interface IconProps {
   type: ToastType;

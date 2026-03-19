@@ -1,16 +1,16 @@
-import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { EditPart } from '@app/components/part/edit-part';
-import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { getInitalHandling } from '@app/components/receivers/functions';
-import type { IErrorProperty } from '@app/components/receivers/is-send-error';
-import { Options } from '@app/components/receivers/options';
-import { StyledReceiver } from '@app/components/receivers/styled-components';
-import { TRYGDERETTEN_ORGNR } from '@app/constants';
-import type { IdentifikatorMottaker, IMottaker } from '@app/types/documents/documents';
-import { IdType } from '@app/types/oppgave-common';
-import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Buildings3Icon, PersonIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Label, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { CopyIdButton } from '@/components/copy-button/copy-id-button';
+import { EditPart } from '@/components/part/edit-part';
+import { PartStatusList } from '@/components/part-status-list/part-status-list';
+import { getInitalHandling } from '@/components/receivers/functions';
+import type { IErrorProperty } from '@/components/receivers/is-send-error';
+import { Options } from '@/components/receivers/options';
+import { StyledReceiver } from '@/components/receivers/styled-components';
+import { TRYGDERETTEN_ORGNR } from '@/constants';
+import type { IdentifikatorMottaker, IMottaker } from '@/types/documents/documents';
+import { IdType } from '@/types/oppgave-common';
+import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 interface Props {
   mottakerList: IdentifikatorMottaker[];

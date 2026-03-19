@@ -1,16 +1,16 @@
-import { DragAndDropContext } from '@app/components/documents/drag-context';
-import { DropZone } from '@app/components/documents/new-documents/shared/drop-zone';
-import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useParentDocument } from '@app/hooks/use-parent-document';
-import { useRemoveDocument } from '@app/hooks/use-remove-document';
-import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext } from 'react';
+import { DragAndDropContext } from '@/components/documents/drag-context';
+import { DropZone } from '@/components/documents/new-documents/shared/drop-zone';
+import { DuaActionEnum } from '@/hooks/dua-access/access';
+import { useDuaAccess } from '@/hooks/dua-access/use-dua-access';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useParentDocument } from '@/hooks/use-parent-document';
+import { useRemoveDocument } from '@/hooks/use-remove-document';
+import { useDeleteDocumentMutation } from '@/redux-api/oppgaver/mutations/documents';
+import { DocumentTypeEnum, type IDocument } from '@/types/documents/documents';
 
 export const DeleteDropArea = () => {
   const oppgaveId = useOppgaveId();

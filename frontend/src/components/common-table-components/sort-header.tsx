@@ -1,6 +1,6 @@
-import { SortOrderEnum } from '@app/types/oppgaver';
 import { ArrowsUpDownIcon, SortDownIcon, SortUpIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps, Table } from '@navikt/ds-react';
+import { SortOrderEnum } from '@/types/oppgaver';
 
 interface Props {
   sortKey: string;

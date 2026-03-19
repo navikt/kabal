@@ -1,26 +1,26 @@
-import { createDragUI } from '@app/components/documents/create-drag-ui';
-import { DragAndDropContext } from '@app/components/documents/drag-context';
-import { ExpandedColumns } from '@app/components/documents/journalfoerte-documents/document/expanded-columns';
-import { DocumentTitle } from '@app/components/documents/journalfoerte-documents/document/shared/document-title';
-import { IncludeDocument } from '@app/components/documents/journalfoerte-documents/document/shared/include-document';
-import { ToggleVedleggButton } from '@app/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
-import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/journalfoerte-documents/grid';
-import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import { setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { Checkbox, HGrid } from '@navikt/ds-react';
+import { useCallback, useContext, useRef } from 'react';
+import { createDragUI } from '@/components/documents/create-drag-ui';
+import { DragAndDropContext } from '@/components/documents/drag-context';
+import { ExpandedColumns } from '@/components/documents/journalfoerte-documents/document/expanded-columns';
+import { DocumentTitle } from '@/components/documents/journalfoerte-documents/document/shared/document-title';
+import { IncludeDocument } from '@/components/documents/journalfoerte-documents/document/shared/include-document';
+import { ToggleVedleggButton } from '@/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
+import { Fields, getFieldNames, getFieldSizes } from '@/components/documents/journalfoerte-documents/grid';
+import { convertRealToAccessibleDocumentIndex } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { setFocusIndex } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
 import {
   addOne,
   isSelected,
   selectRangeTo,
   unselectOne,
   useIsPathSelected,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
-import { isNotNull } from '@app/functions/is-not-type-guards';
-import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { Checkbox, HGrid } from '@navikt/ds-react';
-import { useCallback, useContext, useRef } from 'react';
+} from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
+import { DOCUMENT_CLASSES } from '@/components/documents/styled-components/document';
+import { isNotNull } from '@/functions/is-not-type-guards';
+import { useArchivedDocumentsColumns } from '@/hooks/settings/use-archived-documents-setting';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 interface Props {
   document: IArkivertDocument;

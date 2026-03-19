@@ -1,4 +1,4 @@
-import { StyledDescriptionTerm, StyledPreDescriptionDetails } from '@app/error-boundary/error-boundary';
+import { StyledDescriptionTerm, StyledPreDescriptionDetails } from '@/error-boundary/error-boundary';
 
 interface DocumentErrorComponentProps {
   oppgaveId: string;

@@ -1,4 +1,4 @@
-import { isObject } from '@app/functions/functions';
+import { isObject } from '@/functions/functions';
 
 export interface ConnectionContext {
   readonly behandlingId: string;

@@ -1,5 +1,5 @@
-import type { SaksbehandlerAccessRights } from '@app/redux-api/access-rights';
 import { Label } from '@navikt/ds-react';
+import type { SaksbehandlerAccessRights } from '@/redux-api/access-rights';
 
 interface Props {
   saksbehandlere: SaksbehandlerAccessRights[];

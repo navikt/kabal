@@ -1,4 +1,4 @@
-import { DocumentValidationErrorType } from '@app/types/documents/validation';
+import { DocumentValidationErrorType } from '@/types/documents/validation';
 
 export const VALIDATION_ERROR_MESSAGES: Record<DocumentValidationErrorType, string> = {
   [DocumentValidationErrorType.EMPTY_PLACEHOLDER]:

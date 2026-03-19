@@ -1,10 +1,10 @@
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import type { useFilters } from '@app/components/documents/journalfoerte-documents/header/use-filters';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
-import { useAllTemaer } from '@app/hooks/use-all-temaer';
-import type { IKodeverkValue } from '@app/types/kodeverk';
 import { Tag } from '@navikt/ds-react';
+import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { isNotUndefined } from '@/functions/is-not-type-guards';
+import { useAllTemaer } from '@/hooks/use-all-temaer';
+import type { IKodeverkValue } from '@/types/kodeverk';
 
 interface Props extends Pick<ReturnType<typeof useFilters>, 'selectedTemaer' | 'setSelectedTemaer'> {}
 

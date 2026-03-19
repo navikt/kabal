@@ -1,19 +1,19 @@
-import { HeadingOne, HeadingThree, HeadingTwo } from '@app/plate/components/headings';
-import { ListItem, OrderedList, UnorderedList } from '@app/plate/components/lists';
-import { Paragraph } from '@app/plate/components/paragraph';
-import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-element';
-import { TableElement } from '@app/plate/components/plate-ui/table-element';
-import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
-import { EmptyVoidPlugin } from '@app/plate/plugins/empty-void';
-import { LabelContentPlugin } from '@app/plate/plugins/label-content';
-import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
-import { SaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/saksbehandler';
-import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
-import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
+import { HeadingOne, HeadingThree, HeadingTwo } from '@/plate/components/headings';
+import { ListItem, OrderedList, UnorderedList } from '@/plate/components/lists';
+import { Paragraph } from '@/plate/components/paragraph';
+import { TableCellElement } from '@/plate/components/plate-ui/table-cell-element';
+import { TableElement } from '@/plate/components/plate-ui/table-element';
+import { TableRowElement } from '@/plate/components/plate-ui/table-row-element';
+import { EmptyVoidPlugin } from '@/plate/plugins/empty-void';
+import { LabelContentPlugin } from '@/plate/plugins/label-content';
+import { MaltekstPlugin } from '@/plate/plugins/maltekst';
+import { SaksbehandlerPlaceholderPlugin } from '@/plate/plugins/placeholder/saksbehandler';
+import { defaultPlugins } from '@/plate/plugins/plugin-sets/default';
+import { RedigerbarMaltekstPlugin } from '@/plate/plugins/redigerbar-maltekst';
 
 export const previewPlugins = [
   ...defaultPlugins,

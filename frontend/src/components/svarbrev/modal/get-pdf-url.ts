@@ -1,5 +1,5 @@
-import type { SaksTypeEnum } from '@app/types/kodeverk';
-import type { BehandlingstidUnitType } from '@app/types/svarbrev';
+import type { SaksTypeEnum } from '@/types/kodeverk';
+import type { BehandlingstidUnitType } from '@/types/svarbrev';
 
 export interface PreviewRequestsBody {
   typeId: SaksTypeEnum.KLAGE | SaksTypeEnum.ANKE;

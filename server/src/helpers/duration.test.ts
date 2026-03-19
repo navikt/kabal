@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { formatDuration } from '@app/helpers/duration';
+import { formatDuration } from '@/helpers/duration';
 
 describe('format duration', () => {
   it('should format 12.123 ms as 12 ms', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { getTextWidth, processParagraphs, SMART_EDITOR_CONTENT_WIDTH } from '@app/plate/plugins/paste';
+import { getTextWidth, processParagraphs, SMART_EDITOR_CONTENT_WIDTH } from '@/plate/plugins/paste';
 
 describe('paste plugin', () => {
   describe('should calculate text width', () => {

@@ -1,8 +1,8 @@
-import { Keys } from '@app/keys';
-import { getWordRange } from '@app/plate/plugins/cycle-case/get-word-range';
 import { type Path, PathApi, type Point, PointApi, RangeApi, type TRange, type TText } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 import { createPlatePlugin } from 'platejs/react';
+import { Keys } from '@/keys';
+import { getWordRange } from '@/plate/plugins/cycle-case/get-word-range';
 
 export const CycleCasePlugin = createPlatePlugin({
   key: 'cycle-case',

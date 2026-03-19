@@ -1,8 +1,8 @@
-import { Fields } from '@app/components/documents/new-documents/grid';
-import { DistribusjonsType } from '@app/types/documents/documents';
 import { HourglassIcon } from '@navikt/aksel-icons';
 import { HStack } from '@navikt/ds-react';
 import { memo } from 'react';
+import { Fields } from '@/components/documents/new-documents/grid';
+import { DistribusjonsType } from '@/types/documents/documents';
 
 export const ArchivingIcon = memo(
   ({ dokumentTypeId }: { dokumentTypeId: DistribusjonsType }) => (

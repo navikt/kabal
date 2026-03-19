@@ -1,5 +1,5 @@
-import { proxyRegister } from '@app/prometheus/types';
 import { Counter, Gauge, Histogram } from 'prom-client';
+import { proxyRegister } from '@/prometheus/types';
 
 const labelNames = ['hit'] as const;
 

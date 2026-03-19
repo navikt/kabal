@@ -1,15 +1,15 @@
-import { Direction } from '@app/components/deassign/direction';
-import { PaaVentWarning } from '@app/components/deassign/paa-vent-warning';
-import { Popup } from '@app/components/deassign/popup';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
-import { useTildelSaksbehandlerMutation } from '@app/redux-api/oppgaver/mutations/tildeling';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { ChevronUpIcon, FolderFileIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
+import { Direction } from '@/components/deassign/direction';
+import { PaaVentWarning } from '@/components/deassign/paa-vent-warning';
+import { Popup } from '@/components/deassign/popup';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { useOppgaveActions } from '@/hooks/use-oppgave-actions';
+import { useTildelSaksbehandlerMutation } from '@/redux-api/oppgaver/mutations/tildeling';
+import { SaksTypeEnum } from '@/types/kodeverk';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   oppgave: IOppgavebehandling;

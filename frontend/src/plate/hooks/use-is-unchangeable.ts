@@ -1,5 +1,5 @@
-import { useMyPlateEditorState } from '@app/plate/types';
-import { isUnchangeable } from '@app/plate/utils/queries';
+import { useMyPlateEditorState } from '@/plate/types';
+import { isUnchangeable } from '@/plate/utils/queries';
 
 export const useIsUnchangeable = () => {
   const editor = useMyPlateEditorState();

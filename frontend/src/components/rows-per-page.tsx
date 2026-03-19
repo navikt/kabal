@@ -1,8 +1,8 @@
-import { useRestrictedNumberSetting } from '@app/hooks/settings/helpers';
-import { PAGE_SIZE_OPTIONS, restrictPageSize } from '@app/hooks/use-oppgave-pagination';
-import { pushEvent } from '@app/observability';
 import { HStack, Label, ToggleGroup } from '@navikt/ds-react';
 import { useId } from 'react';
+import { useRestrictedNumberSetting } from '@/hooks/settings/helpers';
+import { PAGE_SIZE_OPTIONS, restrictPageSize } from '@/hooks/use-oppgave-pagination';
+import { pushEvent } from '@/observability';
 
 interface Props {
   settingKey: string;

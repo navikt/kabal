@@ -1,5 +1,5 @@
-import type { IOption } from '@app/components/filter-dropdown/props';
-import type { IDraft } from '@app/types/texts/responses';
+import type { IOption } from '@/components/filter-dropdown/props';
+import type { IDraft } from '@/types/texts/responses';
 
 /** `NONE` means it will match texts with no filters set. The user intent here is for these texts to be general. As in not limited to specific options. */
 export const NONE = 'NONE';

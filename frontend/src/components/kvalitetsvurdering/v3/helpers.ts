@@ -1,4 +1,4 @@
-import { type CheckboxParams, type InputParams, TypeEnum } from '@app/components/kvalitetsvurdering/v3/common/types';
+import { type CheckboxParams, type InputParams, TypeEnum } from '@/components/kvalitetsvurdering/v3/common/types';
 import {
   type AllSaksbehandlingsregleneBoolean,
   type BegrunnelsespliktenSaksdataHjemlerLists,
@@ -6,7 +6,7 @@ import {
   SAKSBEHANDLINGSREGLENE_HELP_TEXTS,
   SAKSBEHANDLINGSREGLENE_LABELS,
   type SaksbehandlingsregleneErrorFields,
-} from '@app/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
+} from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
 import {
   isSærregelverketField,
   SÆRREGELVERKET_HELP_TEXTS,
@@ -15,14 +15,14 @@ import {
   type SærregelverketErrorFields,
   type SærregelverketHjemlerFromYtelseList,
   type SærregelverketSaksdataHjemlerList,
-} from '@app/components/kvalitetsvurdering/v3/særregelverket/data';
+} from '@/components/kvalitetsvurdering/v3/særregelverket/data';
 import {
   isTrygdemedisinField,
   TRYGDEMEDISIN_HELP_TEXTS,
   TRYGDEMEDISIN_LABELS,
   type TrygdemedisinBoolean,
   type TrygdemedisinErrorFields,
-} from '@app/components/kvalitetsvurdering/v3/trygdemedisin/data';
+} from '@/components/kvalitetsvurdering/v3/trygdemedisin/data';
 
 type Booleans = TrygdemedisinBoolean | AllSaksbehandlingsregleneBoolean | SærregelverketBoolean;
 

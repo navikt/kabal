@@ -1,13 +1,13 @@
+import { useCallback, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import {
   CommonHelperStatus,
   type HelperStatus,
   HelperStatusSelf,
-} from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
-import { ShortParamKey } from '@app/components/common-table-components/oppgave-table/state/short-names';
-import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
-import { isSaksTypeEnum, type SaksTypeEnum } from '@app/types/kodeverk';
-import { useCallback, useState } from 'react';
-import { useSearchParams } from 'react-router';
+} from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
+import { ShortParamKey } from '@/components/common-table-components/oppgave-table/state/short-names';
+import type { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
+import { isSaksTypeEnum, type SaksTypeEnum } from '@/types/kodeverk';
 
 // Generic hook for URL query parameter management
 const useUrlQueryParam = <T>(

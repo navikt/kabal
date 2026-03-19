@@ -1,5 +1,5 @@
-import { proxyRegister } from '@app/prometheus/types';
 import { Histogram } from 'prom-client';
+import { proxyRegister } from '@/prometheus/types';
 
 export const histogram = new Histogram({
   name: 'session_duration_seconds',

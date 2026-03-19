@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { getMimeType } from '@app/helpers/mime-type';
+import { getMimeType } from '@/helpers/mime-type';
 
 const TEST_CASES: [string, string][] = [
   ['index.js', 'application/javascript'],

@@ -1,7 +1,7 @@
 import path from 'node:path';
-import { isLocal, isTest } from '@app/config/env';
-import { requiredEnvJson, requiredEnvString } from '@app/config/env-var';
 import type { JWK } from 'jose';
+import { isLocal, isTest } from '@/config/env';
+import { requiredEnvJson, requiredEnvString } from '@/config/env-var';
 
 export enum ApiClientEnum {
   KABAL_API = 'kabal-api',

@@ -1,18 +1,13 @@
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { Role } from '@app/types/bruker';
-import {
-  CreatorRole,
-  DocumentTypeEnum,
-  type IDocument,
-  type JournalfoertDokument,
-} from '@app/types/documents/documents';
-import { FlowState } from '@app/types/oppgave-common';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useHasRole } from '@/hooks/use-has-role';
+import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
+import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
+import { useIsAssignedRolAndSent } from '@/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { Role } from '@/types/bruker';
+import { CreatorRole, DocumentTypeEnum, type IDocument, type JournalfoertDokument } from '@/types/documents/documents';
+import { FlowState } from '@/types/oppgave-common';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 export const useCanEditDocument = (document: IDocument | null, parentDocument?: IDocument) => {
   const isRol = useIsAssignedRolAndSent();

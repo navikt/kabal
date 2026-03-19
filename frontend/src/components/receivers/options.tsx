@@ -1,13 +1,13 @@
-import { Alert } from '@app/components/alert/alert';
-import { Address } from '@app/components/receivers/address/address';
-import { areAddressesEqual } from '@app/functions/are-addresses-equal';
-import type { IMottaker } from '@app/types/documents/documents';
-import { HandlingEnum, type IAddress } from '@app/types/documents/receivers';
-import { UTSENDINGSKANAL, Utsendingskanal } from '@app/types/oppgave-common';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { Address } from '@/components/receivers/address/address';
+import { areAddressesEqual } from '@/functions/are-addresses-equal';
+import type { IMottaker } from '@/types/documents/documents';
+import { HandlingEnum, type IAddress } from '@/types/documents/receivers';
+import { UTSENDINGSKANAL, Utsendingskanal } from '@/types/oppgave-common';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 interface Props extends IMottaker {
   templateId: TemplateIdEnum | undefined;

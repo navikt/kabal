@@ -1,10 +1,10 @@
-import { useSetMedunderskriver } from '@app/components/oppgavestyring/use-set-medunderskriver';
-import { SearchableNavEmployeeSelect } from '@app/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useGetPotentialMedunderskrivereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { type INavEmployee, Role } from '@app/types/bruker';
 import { Skeleton } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
+import { useSetMedunderskriver } from '@/components/oppgavestyring/use-set-medunderskriver';
+import { SearchableNavEmployeeSelect } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
+import { useHasRole } from '@/hooks/use-has-role';
+import { useGetPotentialMedunderskrivereQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { type INavEmployee, Role } from '@/types/bruker';
 
 interface Props {
   oppgaveId: string;

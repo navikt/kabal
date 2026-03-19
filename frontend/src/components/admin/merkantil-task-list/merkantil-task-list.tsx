@@ -1,14 +1,14 @@
-import { Finish } from '@app/components/admin/merkantil-task-list/finish';
-import { SetStatusFilter, StatusFilter } from '@app/components/admin/merkantil-task-list/set-status-filter';
-import { Alert } from '@app/components/alert/alert';
-import { Type } from '@app/components/type/type';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { ENVIRONMENT } from '@app/environment';
-import { type Task, useGetMerkantilTasksQuery } from '@app/redux-api/internal';
 import { ArrowsCirclepathIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Box, Button, CopyButton, Heading, HStack, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Finish } from '@/components/admin/merkantil-task-list/finish';
+import { SetStatusFilter, StatusFilter } from '@/components/admin/merkantil-task-list/set-status-filter';
+import { Alert } from '@/components/alert/alert';
+import { Type } from '@/components/type/type';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { ENVIRONMENT } from '@/environment';
+import { type Task, useGetMerkantilTasksQuery } from '@/redux-api/internal';
 
 export const MerkantilTaskList = () => {
   const { isLoading, isFetching, refetch } = useGetMerkantilTasksQuery();

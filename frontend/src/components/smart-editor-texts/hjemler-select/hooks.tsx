@@ -1,9 +1,9 @@
-import { type NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
-import { GLOBAL, LIST_DELIMITER, NONE, NONE_OPTION, WILDCARD } from '@app/components/smart-editor-texts/types';
-import { useKabalYtelserLatest } from '@app/simple-api-state/use-kodeverk';
-import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import { Tag } from '@navikt/ds-react';
 import { useMemo } from 'react';
+import { type NestedOption, OptionType } from '@/components/filter-dropdown/nested-filter-list';
+import { GLOBAL, LIST_DELIMITER, NONE, NONE_OPTION, WILDCARD } from '@/components/smart-editor-texts/types';
+import { useKabalYtelserLatest } from '@/simple-api-state/use-kodeverk';
+import type { IKodeverkSimpleValue } from '@/types/kodeverk';
 
 export const COMMON_HJEMMEL_THRESHOLD = 2;
 

@@ -1,5 +1,18 @@
-import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
-import { CommentsPlugin } from '@app/plate/plugins/comments';
+import type { AutoformatRule } from '@platejs/autoformat';
+import type { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import type {
+  BaseBulletedListPlugin,
+  BaseListItemContentPlugin,
+  BaseListItemPlugin,
+  BaseNumberedListPlugin,
+} from '@platejs/list-classic';
+import type { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
+import type { PlateYjsEditorProps } from '@platejs/yjs';
+import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
+import type { BaseParagraphPlugin, TElement, TTableCellElement, TTableElement, TTableRowElement, TText } from 'platejs';
+import { type PlateEditor, useEditorRef, useEditorState } from 'platejs/react';
+import { BookmarkPlugin } from '@/plate/plugins/bookmark';
+import { CommentsPlugin } from '@/plate/plugins/comments';
 import type {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
@@ -16,23 +29,10 @@ import type {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SAKSNUMMER,
   ELEMENT_SIGNATURE,
-} from '@app/plate/plugins/element-types';
-import type { TemplateSections } from '@app/plate/template-sections';
-import type { IGetConsumerMaltekstseksjonerParams } from '@app/types/common-text-types';
-import type { Language } from '@app/types/texts/language';
-import type { AutoformatRule } from '@platejs/autoformat';
-import type { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import type {
-  BaseBulletedListPlugin,
-  BaseListItemContentPlugin,
-  BaseListItemPlugin,
-  BaseNumberedListPlugin,
-} from '@platejs/list-classic';
-import type { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
-import type { PlateYjsEditorProps } from '@platejs/yjs';
-import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
-import type { BaseParagraphPlugin, TElement, TTableCellElement, TTableElement, TTableRowElement, TText } from 'platejs';
-import { type PlateEditor, useEditorRef, useEditorState } from 'platejs/react';
+} from '@/plate/plugins/element-types';
+import type { TemplateSections } from '@/plate/template-sections';
+import type { IGetConsumerMaltekstseksjonerParams } from '@/types/common-text-types';
+import type { Language } from '@/types/texts/language';
 
 export enum TextAlign {
   LEFT = 'left',

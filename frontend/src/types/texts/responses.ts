@@ -1,4 +1,4 @@
-import type { DraftTextReadOnlyMetadata, PublishedTextReadOnlyMetadata } from '@app/types/common-text-types';
+import type { DraftTextReadOnlyMetadata, PublishedTextReadOnlyMetadata } from '@/types/common-text-types';
 import type {
   INewGodFormuleringParams,
   INewPlainTextParams,
@@ -8,7 +8,7 @@ import type {
   ListPlainText,
   ListRegelverk,
   ListRichText,
-} from '@app/types/texts/common';
+} from '@/types/texts/common';
 
 export type IDraftRichText = INewRichTextParams & DraftTextReadOnlyMetadata;
 type IDraftRegelverk = INewRegelverkParams & DraftTextReadOnlyMetadata;

@@ -1,15 +1,15 @@
-import type { Bookmark } from '@app/components/smart-editor/bookmarks/use-bookmarks';
-import { BOOKMARK_PREFIX } from '@app/components/smart-editor/constants';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { pushEvent } from '@app/observability';
-import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
-import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, BookmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Tooltip } from '@navikt/ds-react';
 import { TextApi } from 'platejs';
 import { useRef, useState } from 'react';
+import type { Bookmark } from '@/components/smart-editor/bookmarks/use-bookmarks';
+import { BOOKMARK_PREFIX } from '@/components/smart-editor/constants';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { pushEvent } from '@/observability';
+import { useIsUnchangeable } from '@/plate/hooks/use-is-unchangeable';
+import { BookmarkPlugin } from '@/plate/plugins/bookmark';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
+import { type FormattedText, useMyPlateEditorState } from '@/plate/types';
 
 export const BookmarkButton = () => {
   const editor = useMyPlateEditorState();

@@ -1,7 +1,7 @@
-import { useSmartEditorCapitalise } from '@app/hooks/settings/use-setting';
-import { pushEvent } from '@app/observability';
 import { BodyShort, Heading, HelpText, HStack, Tag, ToggleGroup } from '@navikt/ds-react';
 import { useId } from 'react';
+import { useSmartEditorCapitalise } from '@/hooks/settings/use-setting';
+import { pushEvent } from '@/observability';
 
 export const Capitalise = () => {
   const { setValue, value } = useSmartEditorCapitalise();

@@ -1,7 +1,7 @@
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useGetKvalitetsvurderingQuery } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
-import type { IKvalitetsvurderingV1 } from '@app/types/kaka-kvalitetsvurdering/v1';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useGetKvalitetsvurderingQuery } from '@/redux-api/kaka-kvalitetsvurdering/v1';
+import type { IKvalitetsvurderingV1 } from '@/types/kaka-kvalitetsvurdering/v1';
 
 export const useKvalitetsvurdering = (): [IKvalitetsvurderingV1 | undefined, boolean] => {
   const { data: oppgave } = useOppgave();

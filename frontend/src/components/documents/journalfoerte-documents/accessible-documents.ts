@@ -1,5 +1,5 @@
-import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { useMemo } from 'react';
+import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@/types/arkiverte-documents';
 
 type AccessibleDocument =
   | {

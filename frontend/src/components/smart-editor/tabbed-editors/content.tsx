@@ -1,10 +1,10 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { DEFAULT, EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
-import { isMetaKey, Keys } from '@app/keys';
-import { ScaleContext } from '@app/plate/status-bar/scale-context';
-import { useMyPlateEditorRef } from '@app/plate/types';
 import { Box, HGrid } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { DEFAULT, EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
+import { isMetaKey, Keys } from '@/keys';
+import { ScaleContext } from '@/plate/status-bar/scale-context';
+import { useMyPlateEditorRef } from '@/plate/types';
 
 interface Props {
   children?: React.ReactNode;

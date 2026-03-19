@@ -1,16 +1,16 @@
-import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
+import { type Descendant, ElementApi, TextApi, type TText } from 'platejs';
+import type { OverrideEditor } from 'platejs/react';
+import { Path } from 'slate';
+import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import {
   handleDeleteBackwardFromInside,
   handleDeleteBackwardFromOutside,
   handleDeleteForwardFromInside,
   handleDeleteForwardFromOutside,
-} from '@app/plate/plugins/placeholder/delete';
-import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@app/plate/plugins/placeholder/queries';
-import type { MaltekstElement, PlaceholderElement } from '@app/plate/types';
-import { isPlaceholderActive } from '@app/plate/utils/queries';
-import { type Descendant, ElementApi, TextApi, type TText } from 'platejs';
-import type { OverrideEditor } from 'platejs/react';
-import { Path } from 'slate';
+} from '@/plate/plugins/placeholder/delete';
+import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@/plate/plugins/placeholder/queries';
+import type { MaltekstElement, PlaceholderElement } from '@/plate/types';
+import { isPlaceholderActive } from '@/plate/utils/queries';
 
 const extractText = (fragment: Descendant[]): TText[] =>
   fragment.flatMap((node, index) => {

@@ -1,10 +1,10 @@
-import { Alert } from '@app/components/alert/alert';
-import { useSearchEnhetmappeQuery } from '@app/redux-api/search';
-import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { HStack, Loader, Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { useSearchEnhetmappeQuery } from '@/redux-api/search';
+import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   enhetId: string | null;

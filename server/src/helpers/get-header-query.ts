@@ -1,5 +1,5 @@
-import type { Querystring } from '@app/helpers/query-parser';
 import type { FastifyRequest } from 'fastify';
+import type { Querystring } from '@/helpers/query-parser';
 
 export const TAB_ID_QUERY = 'tabId';
 export const CLIENT_VERSION_QUERY = 'version';

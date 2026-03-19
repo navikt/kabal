@@ -1,4 +1,4 @@
-import { useFagsystemer } from '@app/simple-api-state/use-kodeverk';
+import { useFagsystemer } from '@/simple-api-state/use-kodeverk';
 
 export const useFagsystemName = (fagsystem: string | undefined): string => {
   const { data } = useFagsystemer();

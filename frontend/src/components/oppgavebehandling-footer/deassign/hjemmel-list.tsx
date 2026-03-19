@@ -1,12 +1,12 @@
-import { Direction } from '@app/components/deassign/direction';
-import { FilterList } from '@app/components/filter-dropdown/filter-list';
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
-import { stringToRegExp } from '@app/functions/string-to-regex';
-import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';
-import { Keys } from '@app/keys';
-import type { IYtelse } from '@app/types/kodeverk';
 import { Box, ErrorMessage, Heading, Loader, Search, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Direction } from '@/components/deassign/direction';
+import { FilterList } from '@/components/filter-dropdown/filter-list';
+import { isNotUndefined } from '@/functions/is-not-type-guards';
+import { stringToRegExp } from '@/functions/string-to-regex';
+import { useKodeverkYtelse } from '@/hooks/use-kodeverk-value';
+import { Keys } from '@/keys';
+import type { IYtelse } from '@/types/kodeverk';
 
 interface CommonProps {
   selected: string[];

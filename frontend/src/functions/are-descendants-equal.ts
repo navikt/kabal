@@ -1,5 +1,5 @@
-import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
 import { type Descendant, ElementApi } from 'platejs';
+import { removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
 
 export const areDescendantsEqual = (listA: Descendant[], listB: Descendant[]): boolean => {
   if (listA.length !== listB.length) {

@@ -1,11 +1,11 @@
-import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
-import { useUnpublishMaltekstseksjonMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HelpText, HStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
+import { useNavigateMaltekstseksjoner } from '@/hooks/use-navigate-maltekstseksjoner';
+import { useUnpublishMaltekstseksjonMutation } from '@/redux-api/maltekstseksjoner/mutations';
+import { useGetMaltekstseksjonVersionsQuery } from '@/redux-api/maltekstseksjoner/queries';
+import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
 interface Props {
   query: IGetMaltekstseksjonParams;

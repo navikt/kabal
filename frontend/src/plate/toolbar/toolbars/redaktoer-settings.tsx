@@ -1,14 +1,11 @@
-import {
-  AbbreviationsContent,
-  AbbreviationsHeadingContent,
-} from '@app/components/settings/abbreviations/abbreviations';
-import { AbbreviationsExplanation } from '@app/components/settings/abbreviations/explanation';
-import { pushEvent } from '@app/observability';
-import { Capitalise } from '@app/plate/toolbar/capitalise';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
 import { CogIcon } from '@navikt/aksel-icons';
 import { Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import { useId, useRef, useState } from 'react';
+import { AbbreviationsContent, AbbreviationsHeadingContent } from '@/components/settings/abbreviations/abbreviations';
+import { AbbreviationsExplanation } from '@/components/settings/abbreviations/explanation';
+import { pushEvent } from '@/observability';
+import { Capitalise } from '@/plate/toolbar/capitalise';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
 
 export const RedkatoerSettings = () => {
   const modalRef = useRef<HTMLDialogElement>(null);

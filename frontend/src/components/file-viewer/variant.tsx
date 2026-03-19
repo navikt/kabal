@@ -1,5 +1,5 @@
-import { FeilTag, PolTag } from '@app/components/documents/document-warnings';
 import { HStack, Switch, Tag, Tooltip } from '@navikt/ds-react';
+import { FeilTag, PolTag } from '@/components/documents/document-warnings';
 
 interface RedactedSwitchProps {
   hasAccessToArchivedDocuments: boolean;

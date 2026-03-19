@@ -1,16 +1,16 @@
-import { ApiButton } from '@app/components/admin/api-button';
-import { InsertHjemlerInSettings } from '@app/components/admin/insert-hjemler-in-settings';
-import { MerkantilTaskList } from '@app/components/admin/merkantil-task-list/merkantil-task-list';
-import { CreateSystemNotification } from '@app/components/admin/system-notifications/create';
-import { ListSystemNotifications } from '@app/components/admin/system-notifications/list';
+import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { ApiButton } from '@/components/admin/api-button';
+import { InsertHjemlerInSettings } from '@/components/admin/insert-hjemler-in-settings';
+import { MerkantilTaskList } from '@/components/admin/merkantil-task-list/merkantil-task-list';
+import { CreateSystemNotification } from '@/components/admin/system-notifications/create';
+import { ListSystemNotifications } from '@/components/admin/system-notifications/list';
 import {
   useEvictCacheMutation,
   useLogInaccessibleMutation,
   useRecreateElasticAdminMutation,
   useRefillElasticAdminMutation,
   useResendDvhMutation,
-} from '@app/redux-api/internal';
-import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
+} from '@/redux-api/internal';
 
 export const Admin = () => (
   <VStack gap="space-16" width="100%">

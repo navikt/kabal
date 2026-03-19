@@ -1,6 +1,6 @@
-import { Signature } from '@app/plate/components/signature/signature';
-import { ELEMENT_SIGNATURE } from '@app/plate/plugins/element-types';
 import { createPlatePlugin } from 'platejs/react';
+import { Signature } from '@/plate/components/signature/signature';
+import { ELEMENT_SIGNATURE } from '@/plate/plugins/element-types';
 
 export const SignaturePlugin = createPlatePlugin({
   key: ELEMENT_SIGNATURE,

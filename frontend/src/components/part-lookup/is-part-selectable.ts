@@ -1,4 +1,4 @@
-import { type IdentifikatorPart, PartStatusEnum } from '@app/types/oppgave-common';
+import { type IdentifikatorPart, PartStatusEnum } from '@/types/oppgave-common';
 
 export const isPartSelectable = (part: IdentifikatorPart, allowUnreachable: boolean): boolean => {
   if (allowUnreachable) {

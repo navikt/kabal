@@ -1,8 +1,8 @@
-import { getToken } from '@app/document-access/api/token';
-import { ACCESS_LIST_CHECKER, type AccessList, type Metadata } from '@app/document-access/types';
-import { generateTraceparent } from '@app/helpers/traceparent';
-import { getLogger } from '@app/logger';
-import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
+import { getToken } from '@/document-access/api/token';
+import { ACCESS_LIST_CHECKER, type AccessList, type Metadata } from '@/document-access/types';
+import { generateTraceparent } from '@/helpers/traceparent';
+import { getLogger } from '@/logger';
+import { KABAL_API_URL } from '@/plugins/crdt/api/url';
 
 const log = getLogger('document-write-access-api');
 

@@ -1,15 +1,15 @@
-import { DatePicker } from '@app/components/date-picker/date-picker';
-import { TimesPreviouslyExtended } from '@app/components/times-previously-extended/times-previously-extended';
-import { isoDateToPretty } from '@app/domain/date';
-import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
-import { useSetFristMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
-import { Role } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import type { IOppgave } from '@app/types/oppgaver';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { addDays, addYears, isPast, parseISO } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
+import { DatePicker } from '@/components/date-picker/date-picker';
+import { TimesPreviouslyExtended } from '@/components/times-previously-extended/times-previously-extended';
+import { isoDateToPretty } from '@/domain/date';
+import { useHasAnyOfRoles } from '@/hooks/use-has-role';
+import { useSetFristMutation } from '@/redux-api/oppgaver/mutations/behandling-dates';
+import { Role } from '@/types/bruker';
+import { SaksTypeEnum } from '@/types/kodeverk';
+import type { IOppgave } from '@/types/oppgaver';
 
 export const Deadline = (oppgave: IOppgave) => {
   if (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {

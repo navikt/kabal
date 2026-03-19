@@ -1,9 +1,9 @@
-import { employeeName, Reason, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
-import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
-import { HistoryEventTypes, type IFeilregistrertEvent } from '@app/types/oppgavebehandling/response';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { Label } from '@navikt/ds-react';
 import { useId } from 'react';
+import { employeeName, Reason, toKey } from '@/components/behandling/behandlingsdialog/history/common';
+import { HistoryEvent } from '@/components/behandling/behandlingsdialog/history/event';
+import { HistoryEventTypes, type IFeilregistrertEvent } from '@/types/oppgavebehandling/response';
 
 export const getFeilregistrertEvent = (props: IFeilregistrertEvent) => <Feilregistrert key={toKey(props)} {...props} />;
 

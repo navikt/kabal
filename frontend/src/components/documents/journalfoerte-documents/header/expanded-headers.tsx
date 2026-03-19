@@ -1,13 +1,13 @@
-import { AvsenderMottakerFilter } from '@app/components/documents/journalfoerte-documents/header/avsender-mottaker';
-import { DatoOpprettet } from '@app/components/documents/journalfoerte-documents/header/dato-opprettet';
-import { DatoSortering } from '@app/components/documents/journalfoerte-documents/header/dato-sortering';
-import { Saksnummer } from '@app/components/documents/journalfoerte-documents/header/saksnummer';
-import { Tema } from '@app/components/documents/journalfoerte-documents/header/tema';
-import { Type } from '@app/components/documents/journalfoerte-documents/header/type';
-import type { useFilters } from '@app/components/documents/journalfoerte-documents/header/use-filters';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
-import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { AvsenderMottakerFilter } from '@/components/documents/journalfoerte-documents/header/avsender-mottaker';
+import { DatoOpprettet } from '@/components/documents/journalfoerte-documents/header/dato-opprettet';
+import { DatoSortering } from '@/components/documents/journalfoerte-documents/header/dato-sortering';
+import { Saksnummer } from '@/components/documents/journalfoerte-documents/header/saksnummer';
+import { Tema } from '@/components/documents/journalfoerte-documents/header/tema';
+import { Type } from '@/components/documents/journalfoerte-documents/header/type';
+import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useArchivedDocumentsColumns } from '@/hooks/settings/use-archived-documents-setting';
+import { useGetArkiverteDokumenterQuery } from '@/redux-api/oppgaver/queries/documents';
 
 type Props = ReturnType<typeof useFilters>;
 

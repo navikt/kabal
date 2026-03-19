@@ -1,10 +1,10 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { DESCRIPTION, HELP_TEXT, LABEL } from '@app/components/kvalitetsvurdering/v3/annet/data';
-import { KvalitetsskjemaTextarea } from '@app/components/kvalitetsvurdering/v3/common/textarea';
-import { TypeEnum } from '@app/components/kvalitetsvurdering/v3/common/types';
-import { AnnetFields } from '@app/components/kvalitetsvurdering/v3/data';
-import { useKlageenheter } from '@app/simple-api-state/use-kodeverk';
 import { useContext } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { DESCRIPTION, HELP_TEXT, LABEL } from '@/components/kvalitetsvurdering/v3/annet/data';
+import { KvalitetsskjemaTextarea } from '@/components/kvalitetsvurdering/v3/common/textarea';
+import { TypeEnum } from '@/components/kvalitetsvurdering/v3/common/types';
+import { AnnetFields } from '@/components/kvalitetsvurdering/v3/data';
+import { useKlageenheter } from '@/simple-api-state/use-kodeverk';
 
 export const Annet = () => {
   const isInKlageenhet = useIsInKlageenhet();

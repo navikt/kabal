@@ -1,22 +1,22 @@
-import { useRegelverkQuery } from '@app/components/smart-editor/hooks/use-query';
-import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { DeleteSection } from '@app/plate/components/common/delete-section';
-import { useIsChanged } from '@app/plate/components/maltekstseksjon/use-is-changed';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { onPlateContainerDragStart } from '@app/plate/drag-start-handler/on-plate-container-drag-start';
-import { ELEMENT_REGELVERK } from '@app/plate/plugins/element-types';
-import { type RegelverkContainerElement, type RegelverkElement, useMyPlateEditorRef } from '@app/plate/types';
-import { isNodeEmpty } from '@app/plate/utils/queries';
-import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
-import { REGELVERK_TYPE } from '@app/types/common-text-types';
-import type { IConsumerRegelverkText, IConsumerText } from '@app/types/texts/consumer';
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useCallback, useEffect, useState } from 'react';
+import { useRegelverkQuery } from '@/components/smart-editor/hooks/use-query';
+import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useSmartEditorLanguage } from '@/hooks/use-smart-editor-language';
+import { DeleteSection } from '@/plate/components/common/delete-section';
+import { useIsChanged } from '@/plate/components/maltekstseksjon/use-is-changed';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
+import { onPlateContainerDragStart } from '@/plate/drag-start-handler/on-plate-container-drag-start';
+import { ELEMENT_REGELVERK } from '@/plate/plugins/element-types';
+import { type RegelverkContainerElement, type RegelverkElement, useMyPlateEditorRef } from '@/plate/types';
+import { isNodeEmpty } from '@/plate/utils/queries';
+import { useLazyGetConsumerTextsQuery } from '@/redux-api/texts/consumer';
+import { REGELVERK_TYPE } from '@/types/common-text-types';
+import type { IConsumerRegelverkText, IConsumerText } from '@/types/texts/consumer';
 
 const isRegelverk = (text: IConsumerText): text is IConsumerRegelverkText => text.textType === REGELVERK_TYPE;
 

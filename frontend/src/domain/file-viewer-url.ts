@@ -1,5 +1,5 @@
-import type { IFilesViewed } from '@app/components/file-viewer/types';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { IFilesViewed } from '@/components/file-viewer/types';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 /** Separator between journalpost groups. */
 const GROUP_SEPARATOR = ';';

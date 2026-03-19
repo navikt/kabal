@@ -1,12 +1,12 @@
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import type { SerializedError } from '@reduxjs/toolkit';
+import { type FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/query';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import {
   useGetKvalitetsvurderingQuery,
   useUpdateKvalitetsvurderingMutation,
-} from '@app/redux-api/kaka-kvalitetsvurdering/v3';
-import type { IKvalitetsvurdering, KvalitetsvurderingDataV3 } from '@app/types/kaka-kvalitetsvurdering/v3';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import type { SerializedError } from '@reduxjs/toolkit';
-import { type FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/query';
+} from '@/redux-api/kaka-kvalitetsvurdering/v3';
+import type { IKvalitetsvurdering, KvalitetsvurderingDataV3 } from '@/types/kaka-kvalitetsvurdering/v3';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface UpdateStatus {
   isLoading: boolean;

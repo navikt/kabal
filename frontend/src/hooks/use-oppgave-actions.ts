@@ -1,8 +1,8 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { useHasYtelseAccess } from '@app/hooks/use-has-ytelse-access';
-import { Role } from '@app/types/bruker';
-import { FlowState } from '@app/types/oppgave-common';
 import { useContext, useMemo } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { useHasYtelseAccess } from '@/hooks/use-has-ytelse-access';
+import { Role } from '@/types/bruker';
+import { FlowState } from '@/types/oppgave-common';
 
 interface Actions {
   open: boolean;

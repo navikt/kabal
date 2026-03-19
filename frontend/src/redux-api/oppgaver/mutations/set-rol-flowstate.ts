@@ -1,9 +1,9 @@
-import { ENVIRONMENT } from '@app/environment';
-import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
-import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import type { ISetFlowStateParams } from '@app/types/oppgavebehandling/params';
-import type { ISetFlowStateResponse } from '@app/types/oppgavebehandling/response';
+import { ENVIRONMENT } from '@/environment';
+import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import { behandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
+import type { ISetFlowStateParams } from '@/types/oppgavebehandling/params';
+import type { ISetFlowStateResponse } from '@/types/oppgavebehandling/response';
 
 const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { decodeArchivedDocumentIds, encodeArchivedDocumentIds, getFileViewerUrl } from '@app/domain/file-viewer-url';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { decodeArchivedDocumentIds, encodeArchivedDocumentIds, getFileViewerUrl } from '@/domain/file-viewer-url';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 describe('encodeArchivedFileIds', () => {
   it('should encode an empty array to an empty string', () => {

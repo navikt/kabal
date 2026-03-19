@@ -1,9 +1,9 @@
-import { isMetaKey, Keys } from '@app/keys';
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { selectNextTextNode } from '@app/plate/plugins/placeholder/select-next-text-node';
-import { selectPreviousTextNode } from '@app/plate/plugins/placeholder/select-previous-text-node';
 import type { PlateEditor } from 'platejs/react';
 import type { KeyboardEvent } from 'react';
+import { isMetaKey, Keys } from '@/keys';
+import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
+import { selectNextTextNode } from '@/plate/plugins/placeholder/select-next-text-node';
+import { selectPreviousTextNode } from '@/plate/plugins/placeholder/select-previous-text-node';
 
 export const handleNavigation = (editor: PlateEditor, event: KeyboardEvent): boolean => {
   if (editor.selection === null || isMetaKey(event) || editor.api.isExpanded()) {

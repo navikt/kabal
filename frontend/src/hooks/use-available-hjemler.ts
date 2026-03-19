@@ -1,6 +1,6 @@
-import { useAvailableYtelserForEnhet } from '@app/hooks/use-available-ytelser';
-import type { IKodeverkValue } from '@app/types/kodeverk';
 import { useMemo } from 'react';
+import { useAvailableYtelserForEnhet } from '@/hooks/use-available-ytelser';
+import type { IKodeverkValue } from '@/types/kodeverk';
 
 export const useAvailableHjemler = () => {
   const ytelser = useAvailableYtelserForEnhet();

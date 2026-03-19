@@ -1,6 +1,6 @@
-import { Innsendingshjemler } from '@app/components/behandling/behandlingsdetaljer/innsendingshjemmel';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { Box, Checkbox } from '@navikt/ds-react';
+import { Innsendingshjemler } from '@/components/behandling/behandlingsdetaljer/innsendingshjemmel';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 
 interface Props {
   setInnsendingshjemlerConfirmed: (confirmed: boolean) => void;

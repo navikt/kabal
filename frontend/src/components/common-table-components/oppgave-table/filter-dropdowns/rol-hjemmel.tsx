@@ -1,11 +1,11 @@
-import type { FilterDropdownProps } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
-import { useOppgaveTableHjemler } from '@app/components/common-table-components/oppgave-table/state/use-state';
-import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
-import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
 import { Table } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
+import type { FilterDropdownProps } from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
+import { useOppgaveTableHjemler } from '@/components/common-table-components/oppgave-table/state/use-state';
+import { TABLE_HEADERS } from '@/components/common-table-components/types';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
+import { useLatestYtelser } from '@/simple-api-state/use-kodeverk';
 
 interface HjemmelOption {
   id: string;

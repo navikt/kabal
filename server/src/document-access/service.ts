@@ -1,13 +1,13 @@
-import { requiredEnvString } from '@app/config/env-var';
-import { SmartDocumentAccessMap } from '@app/document-access/access-map';
-import { getAccessListFromApi } from '@app/document-access/api/access-list';
-import { parseKafkaMessageValue } from '@app/document-access/kafka';
-import type { Metadata } from '@app/document-access/types';
-import { generateTraceId, getTraceIdAndSpanIdFromTraceparent } from '@app/helpers/traceparent';
-import { getLogger } from '@app/logger';
-import { proxyRegister } from '@app/prometheus/types';
 import { Consumer, type MessagesStream } from '@platformatic/kafka';
 import client from 'prom-client';
+import { requiredEnvString } from '@/config/env-var';
+import { SmartDocumentAccessMap } from '@/document-access/access-map';
+import { getAccessListFromApi } from '@/document-access/api/access-list';
+import { parseKafkaMessageValue } from '@/document-access/kafka';
+import type { Metadata } from '@/document-access/types';
+import { generateTraceId, getTraceIdAndSpanIdFromTraceparent } from '@/helpers/traceparent';
+import { getLogger } from '@/logger';
+import { proxyRegister } from '@/prometheus/types';
 
 const log = getLogger('document-write-access-kafka-consumer');
 

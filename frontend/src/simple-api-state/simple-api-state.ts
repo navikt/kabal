@@ -1,6 +1,6 @@
-import { getHeaders } from '@app/headers';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
+import { getHeaders } from '@/headers';
 
 interface State<T> {
   data: T | undefined;

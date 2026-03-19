@@ -1,20 +1,17 @@
+import { useCallback } from 'react';
 import {
   convertAccessibleToRealDocumentPath,
   convertRealToAccessibleDocumentIndex,
   getLastAccessibleDocumentIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import {
-  getLastIndex,
-  increment,
-} from '@app/components/documents/journalfoerte-documents/keyboard/increment-decrement';
+} from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { getLastIndex, increment } from '@/components/documents/journalfoerte-documents/keyboard/increment-decrement';
 import {
   getFocusIndex,
   getIsInVedleggList,
   resetFocusIndex,
   setFocusIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { useCallback } from 'react';
+} from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 export const home = (): number => {
   if (getIsInVedleggList()) {

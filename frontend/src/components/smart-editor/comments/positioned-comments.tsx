@@ -1,13 +1,13 @@
-import { ExpandableThread } from '@app/components/smart-editor/comments/expandable-thread';
-import { type FocusedComment, useThreads } from '@app/components/smart-editor/comments/use-threads';
-import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { getPositionedItems, type ItemToPosition } from '@app/components/smart-editor/functions/get-positioned-items';
-import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
-import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
-import { useMyPlateEditorState } from '@app/plate/types';
 import { Box } from '@navikt/ds-react';
 import { useContext, useMemo } from 'react';
+import { ExpandableThread } from '@/components/smart-editor/comments/expandable-thread';
+import { type FocusedComment, useThreads } from '@/components/smart-editor/comments/use-threads';
+import { COMMENT_PREFIX } from '@/components/smart-editor/constants';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { getPositionedItems, type ItemToPosition } from '@/components/smart-editor/functions/get-positioned-items';
+import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
+import { BASE_FONT_SIZE } from '@/plate/components/get-scaled-em';
+import { useMyPlateEditorState } from '@/plate/types';
 
 const ITEM_WIDTH = 350;
 const ITEM_OFFSET = 32;

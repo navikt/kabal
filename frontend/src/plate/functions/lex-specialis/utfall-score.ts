@@ -1,7 +1,7 @@
-import { SET_DELIMITER } from '@app/components/smart-editor-texts/types';
-import { isUtfall } from '@app/functions/is-utfall';
-import { INCLUDE_THRESHOLD, NEGATIVE_INFINITY } from '@app/plate/functions/lex-specialis/scores';
-import type { UtfallEnum } from '@app/types/kodeverk';
+import { SET_DELIMITER } from '@/components/smart-editor-texts/types';
+import { isUtfall } from '@/functions/is-utfall';
+import { INCLUDE_THRESHOLD, NEGATIVE_INFINITY } from '@/plate/functions/lex-specialis/scores';
+import type { UtfallEnum } from '@/types/kodeverk';
 
 export const MAX_UTFALL_SCORE = 4;
 

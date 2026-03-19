@@ -1,9 +1,9 @@
-import { useCreateDraftFromVersionMutation } from '@app/redux-api/texts/mutations';
-import type { IGetTextsParams } from '@app/types/common-text-types';
-import type { IText } from '@app/types/texts/responses';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
+import { useCreateDraftFromVersionMutation } from '@/redux-api/texts/mutations';
+import type { IGetTextsParams } from '@/types/common-text-types';
+import type { IText } from '@/types/texts/responses';
 
 interface Props {
   text: IText;

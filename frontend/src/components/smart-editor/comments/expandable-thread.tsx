@@ -1,10 +1,10 @@
-import { Thread } from '@app/components/smart-editor/comments/thread';
-import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { useMyPlateEditorRef } from '@app/plate/types';
-import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { useCallback, useContext, useEffect, useRef } from 'react';
+import { Thread } from '@/components/smart-editor/comments/thread';
+import { COMMENT_PREFIX } from '@/components/smart-editor/constants';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { useMyPlateEditorRef } from '@/plate/types';
+import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 
 interface Props {
   thread: ISmartEditorComment;

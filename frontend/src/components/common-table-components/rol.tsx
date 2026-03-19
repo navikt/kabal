@@ -1,10 +1,10 @@
-import { useSetRol } from '@app/components/oppgavestyring/use-set-rol';
-import { SearchableNavEmployeeSelect } from '@app/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useGetPotentialRolQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { type INavEmployee, Role } from '@app/types/bruker';
 import { Skeleton } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
+import { useSetRol } from '@/components/oppgavestyring/use-set-rol';
+import { SearchableNavEmployeeSelect } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
+import { useHasRole } from '@/hooks/use-has-role';
+import { useGetPotentialRolQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { type INavEmployee, Role } from '@/types/bruker';
 
 interface Props {
   oppgaveId: string;

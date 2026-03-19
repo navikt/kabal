@@ -1,24 +1,24 @@
-import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
-import { ENVIRONMENT } from '@app/environment';
+import { format } from 'date-fns';
+import { ISO_DATETIME_FORMAT } from '@/components/date-picker/constants';
+import { ENVIRONMENT } from '@/environment';
 import {
   OPPGAVELIST_TAG_TYPES,
   OppgaveData,
   OppgaveListTagTypes,
   OppgaveTagTypes,
   oppgaverApi,
-} from '@app/redux-api/oppgaver/oppgaver';
-import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { user } from '@app/static-data/static-data';
-import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
+} from '@/redux-api/oppgaver/oppgaver';
+import { behandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
+import { user } from '@/static-data/static-data';
+import { HistoryEventTypes, type ITildelingEvent } from '@/types/oppgavebehandling/response';
 import {
   FradelReason,
   type FradelSaksbehandlerParams,
   type IFradelingResponse,
   type ITildelingResponse,
   type TildelSaksbehandlerParams,
-} from '@app/types/oppgaver';
-import { format } from 'date-fns';
+} from '@/types/oppgaver';
 
 const tildelMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

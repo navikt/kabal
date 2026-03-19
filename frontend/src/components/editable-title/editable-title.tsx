@@ -1,7 +1,7 @@
-import { Keys } from '@app/keys';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
+import { Keys } from '@/keys';
 
 interface Props {
   title: string;

@@ -1,11 +1,11 @@
-import type { FilterDropdownProps } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
-import { useOppgaveTableYtelser } from '@app/components/common-table-components/oppgave-table/state/use-state';
-import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { useSimpleYtelser } from '@app/simple-api-state/use-kodeverk';
-import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import { Table } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
+import type { FilterDropdownProps } from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
+import { useOppgaveTableYtelser } from '@/components/common-table-components/oppgave-table/state/use-state';
+import { TABLE_HEADERS } from '@/components/common-table-components/types';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { useSimpleYtelser } from '@/simple-api-state/use-kodeverk';
+import type { IKodeverkSimpleValue } from '@/types/kodeverk';
 
 const valueKey = (option: IKodeverkSimpleValue): string => option.id;
 const formatOption = (option: IKodeverkSimpleValue): string => option.navn;

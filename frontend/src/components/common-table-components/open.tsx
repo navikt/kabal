@@ -1,12 +1,12 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useHasYtelseAccess } from '@app/hooks/use-has-ytelse-access';
-import { Role } from '@app/types/bruker';
-import { FlowState, type IHelper } from '@app/types/oppgave-common';
-import type { IOppgave } from '@app/types/oppgaver';
 import { Button, type ButtonProps } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { useHasRole } from '@/hooks/use-has-role';
+import { useHasYtelseAccess } from '@/hooks/use-has-ytelse-access';
+import { Role } from '@/types/bruker';
+import { FlowState, type IHelper } from '@/types/oppgave-common';
+import type { IOppgave } from '@/types/oppgaver';
 
 interface BaseProps extends Omit<ButtonProps, 'id' | 'children'> {
   children?: string;

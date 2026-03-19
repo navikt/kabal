@@ -1,10 +1,10 @@
-import { ptToEm } from '@app/plate/components/get-scaled-em';
-import { ScaleContext } from '@app/plate/status-bar/scale-context';
-import { MAX_TABLE_WIDTH } from '@app/plate/toolbar/table/constants';
 import { type ResizeEvent, ResizeHandle } from '@platejs/resizable';
 import { TablePlugin, useTableCellElement, useTableCellElementResizable, useTableColSizes } from '@platejs/table/react';
 import { PlateElement, type PlateElementProps, useEditorPlugin, useReadOnly } from 'platejs/react';
 import { useContext, useMemo } from 'react';
+import { ptToEm } from '@/plate/components/get-scaled-em';
+import { ScaleContext } from '@/plate/status-bar/scale-context';
+import { MAX_TABLE_WIDTH } from '@/plate/toolbar/table/constants';
 
 const BASE_CLASSES = 'relative align-top';
 const REMOVE_P_PLACEHOLDER = "[&>p::before]:content-['']";

@@ -1,5 +1,6 @@
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { useCallback, useMemo } from 'react';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
 import {
   DocumentTypeEnum,
   type IAttachmentDocument,
@@ -9,8 +10,7 @@ import {
   isAttachmentDocument,
   isParentDocument,
   type JournalfoertDokument,
-} from '@app/types/documents/documents';
-import { useCallback, useMemo } from 'react';
+} from '@/types/documents/documents';
 
 export const useLazyParentDocument = () => {
   const oppgaveId = useOppgaveId();

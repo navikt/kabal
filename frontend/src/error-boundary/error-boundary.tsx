@@ -1,6 +1,6 @@
-import { pushError } from '@app/observability';
 import { Box, Button, type ButtonProps } from '@navikt/ds-react';
 import { Component, type ErrorInfo, type FragmentProps, type ReactNode } from 'react';
+import { pushError } from '@/observability';
 
 interface Props {
   children: ReactNode;

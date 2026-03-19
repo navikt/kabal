@@ -1,11 +1,11 @@
-import { format } from '@app/components/settings/abbreviations/format';
+import { BodyShort, Heading, HStack, List, Tag, Tooltip } from '@navikt/ds-react';
+import { format } from '@/components/settings/abbreviations/format';
 import {
   type ErrorExampleData,
   type ExpandingExampleData,
   ExpansionTypeEnum,
-} from '@app/components/settings/abbreviations/types';
-import { hasOwn } from '@app/functions/object';
-import { BodyShort, Heading, HStack, List, Tag, Tooltip } from '@navikt/ds-react';
+} from '@/components/settings/abbreviations/types';
+import { hasOwn } from '@/functions/object';
 
 interface Props {
   title: string;

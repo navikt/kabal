@@ -1,5 +1,6 @@
-import type { IFilesViewed } from '@app/components/file-viewer/types';
-import { parseJSON } from '@app/functions/parse-json';
+import { useCallback, useMemo } from 'react';
+import type { IFilesViewed } from '@/components/file-viewer/types';
+import { parseJSON } from '@/functions/parse-json';
 import {
   getOppgavePath,
   getSettingKey,
@@ -9,13 +10,12 @@ import {
   useNumberSetting,
   useOppgavePath,
   useSetting,
-} from '@app/hooks/settings/helpers';
-import { SETTINGS_MANAGER } from '@app/hooks/settings/manager';
-import type { ArchivedDocumentsColumn } from '@app/hooks/settings/use-archived-documents-setting';
-import { Journalposttype } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import type { SortOrder } from '@app/types/sort';
-import { useCallback, useMemo } from 'react';
+} from '@/hooks/settings/helpers';
+import { SETTINGS_MANAGER } from '@/hooks/settings/manager';
+import type { ArchivedDocumentsColumn } from '@/hooks/settings/use-archived-documents-setting';
+import { Journalposttype } from '@/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
+import type { SortOrder } from '@/types/sort';
 
 // Oppgavebehandling tabs
 export const useDocumentsEnabled = () => useBooleanSetting(useOppgavePath('tabs/documents/enabled'));

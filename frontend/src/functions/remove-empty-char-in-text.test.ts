@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
+import { removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
 
 const EMPTY_CHAR_CODE = 8203;
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b

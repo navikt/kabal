@@ -1,18 +1,18 @@
-import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
-import type { SavedStatusProps } from '@app/components/saved-status/saved-status';
-import { CreateTranslatedRichText } from '@app/components/smart-editor-texts/create-translated-text';
-import { Edit } from '@app/components/smart-editor-texts/edit/edit';
-import { getLanguageNames } from '@app/components/smart-editor-texts/functions/get-language-names';
-import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import type { DraftVersionProps } from '@app/components/smart-editor-texts/types';
-import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import type { KabalValue } from '@app/plate/types';
-import { usePublishMutation, useUpdateRichTextMutation } from '@app/redux-api/texts/mutations';
-import { isLanguage, LANGUAGES, type Language } from '@app/types/texts/language';
-import type { IGodFormulering, IRichText } from '@app/types/texts/responses';
 import { useCallback, useEffect, useState } from 'react';
+import { RedaktoerRichText } from '@/components/redaktoer-rich-text/redaktoer-rich-text';
+import type { SavedStatusProps } from '@/components/saved-status/saved-status';
+import { CreateTranslatedRichText } from '@/components/smart-editor-texts/create-translated-text';
+import { Edit } from '@/components/smart-editor-texts/edit/edit';
+import { getLanguageNames } from '@/components/smart-editor-texts/functions/get-language-names';
+import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
+import type { DraftVersionProps } from '@/components/smart-editor-texts/types';
+import { areDescendantsEqual } from '@/functions/are-descendants-equal';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { SPELL_CHECK_LANGUAGES } from '@/hooks/use-smart-editor-language';
+import type { KabalValue } from '@/plate/types';
+import { usePublishMutation, useUpdateRichTextMutation } from '@/redux-api/texts/mutations';
+import { isLanguage, LANGUAGES, type Language } from '@/types/texts/language';
+import type { IGodFormulering, IRichText } from '@/types/texts/responses';
 
 interface Props extends Omit<DraftVersionProps, 'text'> {
   text: IRichText | IGodFormulering;

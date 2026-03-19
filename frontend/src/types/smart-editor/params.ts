@@ -1,9 +1,9 @@
-import type { DistribusjonsType } from '@app/types/documents/documents';
-import type { IOppgavebehandlingBaseParams } from '@app/types/oppgavebehandling/params';
-import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { Language } from '@app/types/texts/language';
-import type { Immutable } from '@app/types/types';
 import type { Descendant } from 'platejs';
+import type { DistribusjonsType } from '@/types/documents/documents';
+import type { IOppgavebehandlingBaseParams } from '@/types/oppgavebehandling/params';
+import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
+import type { Language } from '@/types/texts/language';
+import type { Immutable } from '@/types/types';
 
 interface IMutableCreateSmartDocumentParams extends IOppgavebehandlingBaseParams {
   tittel: string;

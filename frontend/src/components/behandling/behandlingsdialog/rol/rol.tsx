@@ -1,19 +1,19 @@
-import { RolReadOnly } from '@app/components/behandling/behandlingsdialog/rol/read-only';
-import { SelectRol } from '@app/components/behandling/behandlingsdialog/rol/select-rol';
-import { SendToRol } from '@app/components/behandling/behandlingsdialog/rol/send-to-rol';
-import { SendToSaksbehandler } from '@app/components/behandling/behandlingsdialog/rol/send-to-saksbehandler';
-import { SKELETON } from '@app/components/behandling/behandlingsdialog/rol/skeleton';
-import { RolStateText } from '@app/components/behandling/behandlingsdialog/rol/state-text';
-import { TakeFromRol } from '@app/components/behandling/behandlingsdialog/rol/take-from-rol';
-import { TakeFromSaksbehandler } from '@app/components/behandling/behandlingsdialog/rol/take-from-saksbehandler';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsAssignedRol } from '@app/hooks/use-is-rol';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { FlowState } from '@app/types/oppgave-common';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { LocalAlert, VStack } from '@navikt/ds-react';
+import { RolReadOnly } from '@/components/behandling/behandlingsdialog/rol/read-only';
+import { SelectRol } from '@/components/behandling/behandlingsdialog/rol/select-rol';
+import { SendToRol } from '@/components/behandling/behandlingsdialog/rol/send-to-rol';
+import { SendToSaksbehandler } from '@/components/behandling/behandlingsdialog/rol/send-to-saksbehandler';
+import { SKELETON } from '@/components/behandling/behandlingsdialog/rol/skeleton';
+import { RolStateText } from '@/components/behandling/behandlingsdialog/rol/state-text';
+import { TakeFromRol } from '@/components/behandling/behandlingsdialog/rol/take-from-rol';
+import { TakeFromSaksbehandler } from '@/components/behandling/behandlingsdialog/rol/take-from-saksbehandler';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
+import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
+import { useIsAssignedRol } from '@/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { FlowState } from '@/types/oppgave-common';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 export const Rol = () => {
   const { data, isSuccess } = useOppgave();

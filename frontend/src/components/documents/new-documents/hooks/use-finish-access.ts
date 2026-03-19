@@ -1,5 +1,5 @@
-import { DistribusjonsType, DocumentTypeEnum, type IParentDocument } from '@app/types/documents/documents';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { DistribusjonsType, DocumentTypeEnum, type IParentDocument } from '@/types/documents/documents';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 export const useFinishValidationErrors = (
   document: IParentDocument,

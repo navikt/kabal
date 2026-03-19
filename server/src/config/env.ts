@@ -1,6 +1,6 @@
-import { requiredEnvString } from '@app/config/env-var';
-import { serverConfig } from '@app/config/server-config';
-import { hasOwn } from '@app/functions/functions';
+import { requiredEnvString } from '@/config/env-var';
+import { serverConfig } from '@/config/server-config';
+import { hasOwn } from '@/functions/functions';
 
 const getEnvironmentVersion = <T>(local: T, development: T, production: T): T => {
   if (isDeployedToDev) {

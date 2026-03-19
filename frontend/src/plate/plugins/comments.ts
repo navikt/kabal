@@ -1,10 +1,10 @@
-import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
-import { hasOwn } from '@app/functions/object';
-import { Keys } from '@app/keys';
-import { CommentLeaf } from '@app/plate/leaf/comment';
-import type { FormattedText } from '@app/plate/types';
 import { TextApi } from 'platejs';
 import { createPlatePlugin, type PlateEditor } from 'platejs/react';
+import { COMMENT_PREFIX } from '@/components/smart-editor/constants';
+import { hasOwn } from '@/functions/object';
+import { Keys } from '@/keys';
+import { CommentLeaf } from '@/plate/leaf/comment';
+import type { FormattedText } from '@/plate/types';
 
 export const CommentsPlugin = createPlatePlugin({
   key: 'comments',

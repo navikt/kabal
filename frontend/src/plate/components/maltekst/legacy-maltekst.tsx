@@ -1,22 +1,22 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useQuery } from '@app/components/smart-editor/hooks/use-query';
-import { useReportDynamicContentLoading } from '@app/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
-import { nodesEquals } from '@app/plate/components/maltekst/nodes-equals';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
-import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
-import { createEmptyVoid } from '@app/plate/templates/helpers';
-import type { MaltekstElement } from '@app/plate/types';
-import { useGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
-import { RichTextTypes } from '@app/types/common-text-types';
-import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { ElementApi } from 'platejs';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useContext, useEffect } from 'react';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useQuery } from '@/components/smart-editor/hooks/use-query';
+import { useReportDynamicContentLoading } from '@/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { AddNewParagraphs } from '@/plate/components/common/add-new-paragraph-buttons';
+import { nodesEquals } from '@/plate/components/maltekst/nodes-equals';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
+import { LexSpecialisStatus, lexSpecialis } from '@/plate/functions/lex-specialis/lex-specialis';
+import { ELEMENT_EMPTY_VOID } from '@/plate/plugins/element-types';
+import { createEmptyVoid } from '@/plate/templates/helpers';
+import type { MaltekstElement } from '@/plate/types';
+import { useGetConsumerTextsQuery } from '@/redux-api/texts/consumer';
+import { RichTextTypes } from '@/types/common-text-types';
+import type { IConsumerRichText, IConsumerText } from '@/types/texts/consumer';
 
 /**
  * @deprecated Remove this when all smart documents in prod use maltekstseksjon.

@@ -1,7 +1,7 @@
-import { useSvarbrevNavigate } from '@app/components/svarbrev/navigate';
-import { Keys } from '@app/keys';
 import { ClipboardIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, HStack, TextField, Tooltip } from '@navikt/ds-react';
+import { useSvarbrevNavigate } from '@/components/svarbrev/navigate';
+import { Keys } from '@/keys';
 
 interface Props {
   value: string;

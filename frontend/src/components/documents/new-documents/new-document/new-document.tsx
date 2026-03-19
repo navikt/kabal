@@ -1,28 +1,28 @@
-import { createDragUI } from '@app/components/documents/create-drag-ui';
-import { DragAndDropContext } from '@app/components/documents/drag-context';
-import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/new-documents/grid';
-import { useRemoveDocumentAccessErrors } from '@app/components/documents/new-documents/hooks/use-remove-access';
-import { DocumentModal } from '@app/components/documents/new-documents/modal/document-modal';
-import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
-import { DocumentTypeTag, SetDocumentType } from '@app/components/documents/new-documents/new-document/set-type';
-import { DocumentTitle } from '@app/components/documents/new-documents/new-document/title';
-import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
-import { areAddressesEqual } from '@app/functions/are-addresses-equal';
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { HGrid } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { memo, useCallback, useContext, useRef, useState } from 'react';
+import { createDragUI } from '@/components/documents/create-drag-ui';
+import { DragAndDropContext } from '@/components/documents/drag-context';
+import { Fields, getFieldNames, getFieldSizes } from '@/components/documents/new-documents/grid';
+import { useRemoveDocumentAccessErrors } from '@/components/documents/new-documents/hooks/use-remove-access';
+import { DocumentModal } from '@/components/documents/new-documents/modal/document-modal';
+import { ArchivingIcon } from '@/components/documents/new-documents/new-document/archiving-icon';
+import { DocumentTypeTag, SetDocumentType } from '@/components/documents/new-documents/new-document/set-type';
+import { DocumentTitle } from '@/components/documents/new-documents/new-document/title';
+import { DOCUMENT_CLASSES } from '@/components/documents/styled-components/document';
+import { areAddressesEqual } from '@/functions/are-addresses-equal';
+import { getIsIncomingDocument } from '@/functions/is-incoming-document';
+import { DuaActionEnum } from '@/hooks/dua-access/access';
+import { useDuaAccess } from '@/hooks/dua-access/use-dua-access';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useLazyGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
 import {
   DistribusjonsType,
   DocumentTypeEnum,
   type IDocument,
   type IFileDocument,
   type IParentDocument,
-} from '@app/types/documents/documents';
-import { HGrid } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { memo, useCallback, useContext, useRef, useState } from 'react';
+} from '@/types/documents/documents';
 
 interface Props {
   document: IParentDocument;

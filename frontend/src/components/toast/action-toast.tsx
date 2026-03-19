@@ -1,5 +1,5 @@
-import { sendCloseEvent } from '@app/components/toast/toast/helpers';
 import { Stack } from '@navikt/ds-react';
+import { sendCloseEvent } from '@/components/toast/toast/helpers';
 
 interface Props {
   children: React.ReactNode;

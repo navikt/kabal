@@ -1,8 +1,8 @@
-import { Abbreviations } from '@app/components/settings/abbreviations/abbreviations';
-import { Filters } from '@app/components/settings/filters';
-import { Signature } from '@app/components/settings/signature';
 import { VStack } from '@navikt/ds-react';
 import { ScaleSettings } from '@navikt/klage-file-viewer';
+import { Abbreviations } from '@/components/settings/abbreviations/abbreviations';
+import { Filters } from '@/components/settings/filters';
+import { Signature } from '@/components/settings/signature';
 
 export const Settings = () => (
   <VStack gap="space-16" className="@container">

@@ -1,23 +1,23 @@
-import { accessRightsApi } from '@app/redux-api/access-rights';
-import { brukerApi } from '@app/redux-api/bruker';
-import { collaborationApi } from '@app/redux-api/collaboration';
-import { forlengetBehandlingstidApi } from '@app/redux-api/forlenget-behandlingstid';
-import { kabalInternalApi } from '@app/redux-api/internal';
-import { journalposterApi } from '@app/redux-api/journalposter';
-import { kvalitetsvurderingV1Api } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
-import { kvalitetsvurderingV2Api } from '@app/redux-api/kaka-kvalitetsvurdering/v2';
-import { kvalitetsvurderingV3Api } from '@app/redux-api/kaka-kvalitetsvurdering/v3';
-import { logiskeVedleggApi } from '@app/redux-api/logiske-vedlegg';
-import { consumerMaltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/consumer';
-import { maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/maltekstseksjoner';
-import { messagesApi } from '@app/redux-api/messages';
-import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
-import { searchApi } from '@app/redux-api/search';
-import { smartEditorCommentsApi } from '@app/redux-api/smart-editor-comments';
-import { svarbrevApi } from '@app/redux-api/svarbrev';
-import { consumerTextsApi } from '@app/redux-api/texts/consumer';
-import { textsApi } from '@app/redux-api/texts/texts';
 import { combineReducers } from 'redux';
+import { accessRightsApi } from '@/redux-api/access-rights';
+import { brukerApi } from '@/redux-api/bruker';
+import { collaborationApi } from '@/redux-api/collaboration';
+import { forlengetBehandlingstidApi } from '@/redux-api/forlenget-behandlingstid';
+import { kabalInternalApi } from '@/redux-api/internal';
+import { journalposterApi } from '@/redux-api/journalposter';
+import { kvalitetsvurderingV1Api } from '@/redux-api/kaka-kvalitetsvurdering/v1';
+import { kvalitetsvurderingV2Api } from '@/redux-api/kaka-kvalitetsvurdering/v2';
+import { kvalitetsvurderingV3Api } from '@/redux-api/kaka-kvalitetsvurdering/v3';
+import { logiskeVedleggApi } from '@/redux-api/logiske-vedlegg';
+import { consumerMaltekstseksjonerApi } from '@/redux-api/maltekstseksjoner/consumer';
+import { maltekstseksjonerApi } from '@/redux-api/maltekstseksjoner/maltekstseksjoner';
+import { messagesApi } from '@/redux-api/messages';
+import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import { searchApi } from '@/redux-api/search';
+import { smartEditorCommentsApi } from '@/redux-api/smart-editor-comments';
+import { svarbrevApi } from '@/redux-api/svarbrev';
+import { consumerTextsApi } from '@/redux-api/texts/consumer';
+import { textsApi } from '@/redux-api/texts/texts';
 
 export const rootReducer = combineReducers({
   [oppgaverApi.reducerPath]: oppgaverApi.reducer,

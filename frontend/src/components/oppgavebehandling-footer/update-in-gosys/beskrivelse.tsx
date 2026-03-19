@@ -1,6 +1,6 @@
-import { type IKodeverkSimpleValue, SaksTypeEnum, type UtfallEnum } from '@app/types/kodeverk';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Textarea } from '@navikt/ds-react';
+import { type IKodeverkSimpleValue, SaksTypeEnum, type UtfallEnum } from '@/types/kodeverk';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   beskrivelse: string;

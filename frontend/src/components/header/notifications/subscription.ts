@@ -1,5 +1,5 @@
-import { KLAGE_NOTIFICATIONS_BASE_PATH } from '@app/components/header/notifications/constants';
-import { ServerSentEventManager } from '@app/server-sent-events';
+import { KLAGE_NOTIFICATIONS_BASE_PATH } from '@/components/header/notifications/constants';
+import { ServerSentEventManager } from '@/server-sent-events';
 
 export enum EventName {
   CREATE = 'create',

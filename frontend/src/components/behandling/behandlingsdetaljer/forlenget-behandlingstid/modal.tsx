@@ -1,19 +1,19 @@
-import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
-import { Complete } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/complete';
-import { DoNotSendLetter } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/do-not-send-letter';
-import { Inputs } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/inputs';
-import { Pdf } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/pdf';
-import { TimesPreviouslyExtended } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/times-previously-extended';
-import { isoDateToPretty } from '@app/domain/date';
-import type { IValidationSection } from '@app/functions/error-type-guard';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetOrCreateQuery } from '@app/redux-api/forlenget-behandlingstid';
-import type { UtvidetBehandlingstidFieldName } from '@app/types/field-names';
-import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES } from '@app/types/field-names';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Button, ErrorSummary, HStack, Modal, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useRef, useState } from 'react';
+import { BehandlingSection } from '@/components/behandling/behandlingsdetaljer/behandling-section';
+import { Complete } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/complete';
+import { DoNotSendLetter } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/do-not-send-letter';
+import { Inputs } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/inputs';
+import { Pdf } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/pdf';
+import { TimesPreviouslyExtended } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/times-previously-extended';
+import { isoDateToPretty } from '@/domain/date';
+import type { IValidationSection } from '@/functions/error-type-guard';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetOrCreateQuery } from '@/redux-api/forlenget-behandlingstid';
+import type { UtvidetBehandlingstidFieldName } from '@/types/field-names';
+import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES } from '@/types/field-names';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   oppgavebehandling: IOppgavebehandling;

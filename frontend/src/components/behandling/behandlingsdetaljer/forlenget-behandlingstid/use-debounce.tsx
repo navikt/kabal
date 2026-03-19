@@ -1,5 +1,5 @@
-import { isApiDataError } from '@app/types/errors';
 import { useEffect, useState } from 'react';
+import { isApiDataError } from '@/types/errors';
 
 export const useDebounce = <T extends string | number | null>(
   /** The action to debounce */

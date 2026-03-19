@@ -1,6 +1,6 @@
-import { EDITOR_SCALE_CSS_VAR, useScaleState } from '@app/components/smart-editor/hooks/use-scale';
-import { ScalingGroup } from '@app/hooks/settings/use-setting';
 import { createContext, type ReactNode, useEffect } from 'react';
+import { EDITOR_SCALE_CSS_VAR, useScaleState } from '@/components/smart-editor/hooks/use-scale';
+import { ScalingGroup } from '@/hooks/settings/use-setting';
 
 const NOOP = () => undefined;
 

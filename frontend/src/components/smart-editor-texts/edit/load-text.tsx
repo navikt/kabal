@@ -1,9 +1,9 @@
-import { StandaloneTextVersions } from '@app/components/smart-editor-texts/edit/standalone-text-versions';
-import { ScalingGroup } from '@app/hooks/settings/use-setting';
-import { getScaleVar, ScaleContextComponent } from '@app/plate/status-bar/scale-context';
 import { FileTextIcon } from '@navikt/aksel-icons';
 import { Box, VStack } from '@navikt/ds-react';
 import { useParams } from 'react-router';
+import { StandaloneTextVersions } from '@/components/smart-editor-texts/edit/standalone-text-versions';
+import { ScalingGroup } from '@/hooks/settings/use-setting';
+import { getScaleVar, ScaleContextComponent } from '@/plate/status-bar/scale-context';
 
 const SCALING_VAR = getScaleVar(ScalingGroup.REDAKTØR);
 

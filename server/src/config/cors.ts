@@ -1,5 +1,5 @@
-import { URL } from '@app/config/env';
 import type { FastifyCorsOptions } from '@fastify/cors';
+import { URL } from '@/config/env';
 
 export const corsOptions: FastifyCorsOptions = {
   credentials: true,

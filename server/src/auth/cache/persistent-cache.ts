@@ -1,7 +1,7 @@
-import { memoryCacheGauge, persistentCacheGauge, persistentCacheSizeGauge } from '@app/auth/cache/cache-gauge';
-import type { TokenMessage } from '@app/auth/cache/types';
-import { getLogger } from '@app/logger';
 import { createClient, type RedisClientType as ValkeyClientType } from 'redis';
+import { memoryCacheGauge, persistentCacheGauge, persistentCacheSizeGauge } from '@/auth/cache/cache-gauge';
+import type { TokenMessage } from '@/auth/cache/types';
+import { getLogger } from '@/logger';
 
 const log = getLogger('obo-persistent-cache');
 

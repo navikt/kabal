@@ -1,9 +1,9 @@
-import { SmartEditorContextComponent } from '@app/components/smart-editor/context';
-import { Editor } from '@app/components/smart-editor/tabbed-editors/editor';
-import { ScalingGroup } from '@app/hooks/settings/use-setting';
-import { ScaleContextComponent } from '@app/plate/status-bar/scale-context';
-import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { Tabs } from '@navikt/ds-react';
+import { SmartEditorContextComponent } from '@/components/smart-editor/context';
+import { Editor } from '@/components/smart-editor/tabbed-editors/editor';
+import { ScalingGroup } from '@/hooks/settings/use-setting';
+import { ScaleContextComponent } from '@/plate/status-bar/scale-context';
+import type { ISmartDocumentOrAttachment } from '@/types/documents/documents';
 
 interface TabPanelProps {
   smartDocument: ISmartDocumentOrAttachment;

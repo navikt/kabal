@@ -1,7 +1,7 @@
-import { useDebounce } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
-import { useSetCustomTextMutation } from '@app/redux-api/forlenget-behandlingstid';
 import { Textarea, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
+import { useDebounce } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
+import { useSetCustomTextMutation } from '@/redux-api/forlenget-behandlingstid';
 
 interface Props {
   value: string | null;

@@ -1,20 +1,20 @@
-import { SortHeader } from '@app/components/common-table-components/sort-header';
-import { type FilterProps, Filters } from '@app/components/svarbrev/filters';
-import { clearPdfCache } from '@app/components/svarbrev/modal/get-pdf-url';
-import { type ModalEnum, Row } from '@app/components/svarbrev/row/row';
-import { SkeletonBody } from '@app/components/svarbrev/skeleton';
-import { useFilterSort } from '@app/components/svarbrev/use-filter-sort';
+import { Heading, type SortState, Table, VStack } from '@navikt/ds-react';
+import { type ReactNode, useCallback, useEffect } from 'react';
+import { SortHeader } from '@/components/common-table-components/sort-header';
+import { type FilterProps, Filters } from '@/components/svarbrev/filters';
+import { clearPdfCache } from '@/components/svarbrev/modal/get-pdf-url';
+import { type ModalEnum, Row } from '@/components/svarbrev/row/row';
+import { SkeletonBody } from '@/components/svarbrev/skeleton';
+import { useFilterSort } from '@/components/svarbrev/use-filter-sort';
 import {
   getDefaultSortDirection,
   isSortKey,
   SortDirection,
   SortKey,
   useSvarbrevSearchParams,
-} from '@app/components/svarbrev/use-search-params';
-import { useGetSvarbrevSettingsQuery } from '@app/redux-api/svarbrev';
-import { SortOrderEnum } from '@app/types/oppgaver';
-import { Heading, type SortState, Table, VStack } from '@navikt/ds-react';
-import { type ReactNode, useCallback, useEffect } from 'react';
+} from '@/components/svarbrev/use-search-params';
+import { useGetSvarbrevSettingsQuery } from '@/redux-api/svarbrev';
+import { SortOrderEnum } from '@/types/oppgaver';
 
 interface TableHeadersProps {
   sortering: string;

@@ -1,19 +1,19 @@
-import { LoadingTable } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/loading-table';
-import { Row } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/row';
-import { SelectedGosysOppgave } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/selected-gosys-oppgave';
-import { TableHeader } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/table-header';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { usePushEvent } from '@app/observability';
-import { useGetGosysOppgaveListQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { useSearchEnheterQuery } from '@app/redux-api/search';
-import type { INavEmployee } from '@app/types/bruker';
-import type { Enhet, ListGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { ArrowsCirclepathIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack, Modal, Table } from '@navikt/ds-react';
 import type { SortState } from '@navikt/ds-react/Table';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo, useState } from 'react';
+import { LoadingTable } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/loading-table';
+import { Row } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/row';
+import { SelectedGosysOppgave } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/selected-gosys-oppgave';
+import { TableHeader } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/table-header';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { usePushEvent } from '@/observability';
+import { useGetGosysOppgaveListQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { useSearchEnheterQuery } from '@/redux-api/search';
+import type { INavEmployee } from '@/types/bruker';
+import type { Enhet, ListGosysOppgave } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface ScopedSortState extends SortState {
   orderBy: keyof ListGosysOppgave;

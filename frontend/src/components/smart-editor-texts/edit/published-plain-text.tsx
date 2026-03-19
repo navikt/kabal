@@ -1,12 +1,12 @@
-import { CreateDraftTextButton } from '@app/components/smart-editor-texts/create-draft-button';
-import { DuplicateTextButton } from '@app/components/smart-editor-texts/duplicate-text-button';
-import { Tags } from '@app/components/smart-editor-texts/edit/tags';
-import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { TextModified } from '@app/components/smart-editor-texts/modified';
-import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import type { IPublishedPlainText } from '@app/types/texts/responses';
 import { BodyLong, Box, Heading, HStack, VStack } from '@navikt/ds-react';
+import { CreateDraftTextButton } from '@/components/smart-editor-texts/create-draft-button';
+import { DuplicateTextButton } from '@/components/smart-editor-texts/duplicate-text-button';
+import { Tags } from '@/components/smart-editor-texts/edit/tags';
+import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
+import { TextModified } from '@/components/smart-editor-texts/modified';
+import { UnpublishTextButton } from '@/components/smart-editor-texts/unpublish-text-button';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import type { IPublishedPlainText } from '@/types/texts/responses';
 
 interface Props {
   text: IPublishedPlainText;

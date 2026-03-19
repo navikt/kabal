@@ -1,6 +1,6 @@
-import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK_CONTAINER, UNCHANGEABLE } from '@app/plate/plugins/element-types';
 import { NodeApi, type Path } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
+import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK_CONTAINER, UNCHANGEABLE } from '@/plate/plugins/element-types';
 
 export const isEditableTextNode = (editor: PlateEditor, path: Path): boolean => {
   const parent = editor.api.parent(path);

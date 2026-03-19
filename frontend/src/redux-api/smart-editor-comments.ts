@@ -1,13 +1,13 @@
-import { KABAL_BEHANDLINGER_BASE_QUERY } from '@app/redux-api/common';
-import type { IDocumentParams } from '@app/types/documents/common-params';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { KABAL_BEHANDLINGER_BASE_QUERY } from '@/redux-api/common';
+import type { IDocumentParams } from '@/types/documents/common-params';
 import type {
   IDeleteCommentOrReplyParams,
   IPatchCommentOrReplyParams,
   IPostCommentParams,
   IPostReplyParams,
   ISmartEditorComment,
-} from '@app/types/smart-editor/comments';
-import { createApi } from '@reduxjs/toolkit/query/react';
+} from '@/types/smart-editor/comments';
 
 export const smartEditorCommentsApi = createApi({
   reducerPath: 'smartEditorCommentsApi',

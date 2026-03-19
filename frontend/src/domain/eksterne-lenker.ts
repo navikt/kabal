@@ -1,4 +1,4 @@
-import { ENVIRONMENT } from '@app/environment';
+import { ENVIRONMENT } from '@/environment';
 
 export const EXTERNAL_URL_MODIA = ENVIRONMENT.isProduction
   ? 'https://app.adeo.no/modiapersonoversikt'

@@ -1,16 +1,16 @@
-import { Alert } from '@app/components/alert/alert';
-import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
-import { isRichText } from '@app/functions/is-rich-plain-text';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import type { KabalValue } from '@app/plate/types';
-import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
-import { isApiDataError } from '@app/types/errors';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import type { IRichText } from '@app/types/texts/responses';
 import { InlineMessage, Loader, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { RedaktoerRichText } from '@/components/redaktoer-rich-text/redaktoer-rich-text';
+import { isRichText } from '@/functions/is-rich-plain-text';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { SPELL_CHECK_LANGUAGES } from '@/hooks/use-smart-editor-language';
+import type { KabalValue } from '@/plate/types';
+import { useUpdateTextIdListMutation } from '@/redux-api/maltekstseksjoner/mutations';
+import { useLazyGetTextByIdQuery } from '@/redux-api/texts/queries';
+import { isApiDataError } from '@/types/errors';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
+import type { IRichText } from '@/types/texts/responses';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;

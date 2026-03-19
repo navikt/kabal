@@ -1,18 +1,18 @@
+import { Button, HStack, Table, Tag, Tooltip } from '@navikt/ds-react';
 import {
   CheckmarkCircleFillIconColored,
   ExclamationmarkTriangleFillIconColored,
-} from '@app/components/colored-icons/colored-icons';
-import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { GosysBeskrivelseTabs } from '@app/components/gosys/beskrivelse/beskrivelse-tabs';
-import { isoDateTimeToPretty, isoDateToPretty } from '@app/domain/date';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useFullTemaNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
-import { usePushEvent } from '@app/observability';
-import { useSetGosysOppgaveMutation } from '@app/redux-api/oppgaver/mutations/set-gosys-oppgave';
-import { useSearchEnheterQuery } from '@app/redux-api/search';
-import type { INavEmployee } from '@app/types/bruker';
-import { GosysStatus, type ListGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Button, HStack, Table, Tag, Tooltip } from '@navikt/ds-react';
+} from '@/components/colored-icons/colored-icons';
+import { CopyIdButton } from '@/components/copy-button/copy-id-button';
+import { GosysBeskrivelseTabs } from '@/components/gosys/beskrivelse/beskrivelse-tabs';
+import { isoDateTimeToPretty, isoDateToPretty } from '@/domain/date';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useFullTemaNameFromIdOrLoading } from '@/hooks/use-kodeverk-ids';
+import { usePushEvent } from '@/observability';
+import { useSetGosysOppgaveMutation } from '@/redux-api/oppgaver/mutations/set-gosys-oppgave';
+import { useSearchEnheterQuery } from '@/redux-api/search';
+import type { INavEmployee } from '@/types/bruker';
+import { GosysStatus, type ListGosysOppgave } from '@/types/oppgavebehandling/oppgavebehandling';
 
 export interface Props {
   oppgaveId: string;

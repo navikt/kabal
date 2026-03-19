@@ -1,12 +1,12 @@
-import type { SaksbehandlingsregleneErrorFields } from '@app/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
-import type { SærregelverketErrorFields } from '@app/components/kvalitetsvurdering/v3/særregelverket/data';
-import type { TrygdemedisinErrorFields } from '@app/components/kvalitetsvurdering/v3/trygdemedisin/data';
+import type { SaksbehandlingsregleneErrorFields } from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
+import type { SærregelverketErrorFields } from '@/components/kvalitetsvurdering/v3/særregelverket/data';
+import type { TrygdemedisinErrorFields } from '@/components/kvalitetsvurdering/v3/trygdemedisin/data';
 import type {
   KvalitetsvurderingAllRegistreringshjemlerV3,
   KvalitetsvurderingSaksdataHjemlerV3,
   KvalitetsvurderingStrings,
   KvalitetsvurderingV3Boolean,
-} from '@app/types/kaka-kvalitetsvurdering/v3';
+} from '@/types/kaka-kvalitetsvurdering/v3';
 
 interface BaseParams {
   label: string;

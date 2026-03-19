@@ -1,6 +1,6 @@
-import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
-import { BASE_FONT_SIZE } from '@app/plate/components/get-scaled-em';
 import { Box } from '@navikt/ds-react';
+import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
+import { BASE_FONT_SIZE } from '@/plate/components/get-scaled-em';
 
 interface Props {
   minHeight?: boolean;

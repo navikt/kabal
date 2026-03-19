@@ -1,10 +1,10 @@
-import { bffErrorToast, genericErrorToast, kabalErrorToast } from '@app/components/toast/toast-content/api-error-toast';
-import { isObject } from '@app/functions/object';
-import { behandlingerMutationSlice } from '@app/redux-api/oppgaver/mutations/behandling';
-import { documentsMutationSlice } from '@app/redux-api/oppgaver/mutations/documents';
-import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { isBFFError, isKabalApiErrorData } from '@app/types/errors';
 import { isRejectedWithValue, type Middleware } from '@reduxjs/toolkit';
+import { bffErrorToast, genericErrorToast, kabalErrorToast } from '@/components/toast/toast-content/api-error-toast';
+import { isObject } from '@/functions/object';
+import { behandlingerMutationSlice } from '@/redux-api/oppgaver/mutations/behandling';
+import { documentsMutationSlice } from '@/redux-api/oppgaver/mutations/documents';
+import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
+import { isBFFError, isKabalApiErrorData } from '@/types/errors';
 
 const { finishOppgavebehandlingWithUpdateInGosys } = behandlingerMutationSlice.endpoints;
 const { finishDocument } = documentsMutationSlice.endpoints;

@@ -1,10 +1,10 @@
-import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useGetGosysOppgaveQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { useSearchEnheterQuery } from '@app/redux-api/search';
-import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import { BodyShort, Button, HStack, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { CheckmarkCircleFillIconColored } from '@/components/colored-icons/colored-icons';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useGetGosysOppgaveQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { useSearchEnheterQuery } from '@/redux-api/search';
+import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 
 interface Props {
   id: string;

@@ -1,7 +1,7 @@
-import { useMarkManyAsRead, useMarkManyAsUnread } from '@app/components/header/notifications/api';
-import type { KabalNotification } from '@app/components/header/notifications/types';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
+import { useMarkManyAsRead, useMarkManyAsUnread } from '@/components/header/notifications/api';
+import type { KabalNotification } from '@/components/header/notifications/types';
 
 interface MarkManyAsReadProps {
   notifications: readonly KabalNotification[];

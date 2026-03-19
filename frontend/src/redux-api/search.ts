@@ -1,7 +1,7 @@
-import { KABAL_API_BASE_QUERY } from '@app/redux-api/common';
-import type { IdentifikatorPart } from '@app/types/oppgave-common';
-import type { Enhet } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { KABAL_API_BASE_QUERY } from '@/redux-api/common';
+import type { IdentifikatorPart } from '@/types/oppgave-common';
+import type { Enhet } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface SearchPartWithUtsendingskanalParams {
   identifikator: string;

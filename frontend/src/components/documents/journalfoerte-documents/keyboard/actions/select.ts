@@ -1,8 +1,9 @@
-import { down } from '@app/components/documents/journalfoerte-documents/keyboard/actions/down';
-import { end, home } from '@app/components/documents/journalfoerte-documents/keyboard/actions/home-end';
-import { up } from '@app/components/documents/journalfoerte-documents/keyboard/actions/up';
-import { getLastAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import { getFocusIndex, setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { useCallback, useContext } from 'react';
+import { down } from '@/components/documents/journalfoerte-documents/keyboard/actions/down';
+import { end, home } from '@/components/documents/journalfoerte-documents/keyboard/actions/home-end';
+import { up } from '@/components/documents/journalfoerte-documents/keyboard/actions/up';
+import { getLastAccessibleDocumentIndex } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { getFocusIndex, setFocusIndex } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
 import {
   addOne,
   getSelectionRanges,
@@ -13,17 +14,16 @@ import {
   unselectAll,
   unselectOne,
   useSelectionRangesState,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
+} from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
 import {
   getRange,
   getRangeEnd,
   getRangeStart,
   getRangeStartAndEnd,
   isRangeCollapsed,
-} from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { useCallback, useContext } from 'react';
+} from '@/components/documents/journalfoerte-documents/select-context/range-utils';
+import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 export const useToggleSelectAll = () => {
   const { selectedDocuments } = useContext(SelectContext);

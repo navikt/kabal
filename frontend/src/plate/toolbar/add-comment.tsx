@@ -1,17 +1,17 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { connectCommentThread } from '@app/components/smart-editor/comments/connect-thread';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { MOD_KEY_TEXT } from '@app/keys';
-import { useSelection } from '@app/plate/hooks/use-selection';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { useMyPlateEditorRef } from '@app/plate/types';
-import { usePostCommentMutation } from '@app/redux-api/smart-editor-comments';
-import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { ChatElipsisIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { RangeApi } from 'platejs';
 import { useContext } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { connectCommentThread } from '@/components/smart-editor/comments/connect-thread';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { MOD_KEY_TEXT } from '@/keys';
+import { useSelection } from '@/plate/hooks/use-selection';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
+import { useMyPlateEditorRef } from '@/plate/types';
+import { usePostCommentMutation } from '@/redux-api/smart-editor-comments';
+import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 
 export const CommentsButton = () => {
   const oppgaveId = useOppgaveId();

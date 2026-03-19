@@ -1,13 +1,13 @@
+import type { SortState } from '@navikt/ds-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   filterSort,
   type NamedSvarbrevSetting,
   type ScoredNamedSvarbrevSetting,
-} from '@app/components/svarbrev/filter-sort';
-import type { ActiveEnum, TypeFilter } from '@app/components/svarbrev/filters';
-import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
-import type { SvarbrevSetting } from '@app/types/svarbrev';
-import type { SortState } from '@navikt/ds-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+} from '@/components/svarbrev/filter-sort';
+import type { ActiveEnum, TypeFilter } from '@/components/svarbrev/filters';
+import { useYtelserAll } from '@/simple-api-state/use-kodeverk';
+import type { SvarbrevSetting } from '@/types/svarbrev';
 
 interface FilterSort {
   allSettings: SvarbrevSetting[] | undefined;

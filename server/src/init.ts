@@ -1,9 +1,9 @@
-import { getAzureADClient } from '@app/auth/get-auth-client';
-import { isDeployed } from '@app/config/env';
-import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
-import { formatDuration, getDuration } from '@app/helpers/duration';
-import { getLogger } from '@app/logger';
-import { EmojiIcons, sendToSlack } from '@app/slack';
+import { getAzureADClient } from '@/auth/get-auth-client';
+import { isDeployed } from '@/config/env';
+import { SMART_DOCUMENT_WRITE_ACCESS } from '@/document-access/service';
+import { formatDuration, getDuration } from '@/helpers/duration';
+import { getLogger } from '@/logger';
+import { EmojiIcons, sendToSlack } from '@/slack';
 
 const log = getLogger('init');
 

@@ -1,6 +1,6 @@
-import { convertAccessibleToRealDocumentPath } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import { Observable } from '@app/observable';
 import { useSyncExternalStore } from 'react';
+import { convertAccessibleToRealDocumentPath } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { Observable } from '@/observable';
 
 const INITIAL_INDEX = 0;
 

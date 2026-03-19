@@ -1,15 +1,15 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { toast } from '@app/components/toast/store';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useHasSaksbehandler } from '@app/hooks/use-has-saksbehandler';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { isMetaKey, Keys } from '@app/keys';
-import { useGetMySignatureQuery } from '@app/redux-api/bruker';
-import { usePostMessageMutation } from '@app/redux-api/messages';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox, HStack, Loader, Textarea, Tooltip, VStack } from '@navikt/ds-react';
 import { useContext, useEffect, useState } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { toast } from '@/components/toast/store';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useHasSaksbehandler } from '@/hooks/use-has-saksbehandler';
+import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { isMetaKey, Keys } from '@/keys';
+import { useGetMySignatureQuery } from '@/redux-api/bruker';
+import { usePostMessageMutation } from '@/redux-api/messages';
 
 const SEND_FAILED_MESSAGE = 'Kunne ikke sende melding. Prøv igjen senere.';
 

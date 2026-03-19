@@ -1,21 +1,21 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { SavedStatus, type SavedStatusProps } from '@app/components/saved-status/saved-status';
-import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
-import { ErrorBoundary } from '@app/error-boundary/error-boundary';
-import { ScalingGroup } from '@app/hooks/settings/use-setting';
-import type { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import { KabalPlateEditor } from '@app/plate/plate-editor';
-import { redaktørComponents, redaktørPlugins } from '@app/plate/plugins/plugin-sets/redaktoer';
-import { Sheet } from '@app/plate/sheet';
-import { getScaleVarName } from '@app/plate/status-bar/scale-context';
-import { StatusBar } from '@app/plate/status-bar/status-bar';
-import { RedaktoerToolbar } from '@app/plate/toolbar/toolbars/redaktoer-toolbar';
-import { RedaktoerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
-import type { KabalValue, RichTextEditor } from '@app/plate/types';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { Box, VStack } from '@navikt/ds-react';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { useContext, useImperativeHandle, useRef } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { SavedStatus, type SavedStatusProps } from '@/components/saved-status/saved-status';
+import { ErrorComponent } from '@/components/smart-editor-texts/error-component';
+import { ErrorBoundary } from '@/error-boundary/error-boundary';
+import { ScalingGroup } from '@/hooks/settings/use-setting';
+import type { SpellCheckLanguage } from '@/hooks/use-smart-editor-language';
+import { KabalPlateEditor } from '@/plate/plate-editor';
+import { redaktørComponents, redaktørPlugins } from '@/plate/plugins/plugin-sets/redaktoer';
+import { Sheet } from '@/plate/sheet';
+import { getScaleVarName } from '@/plate/status-bar/scale-context';
+import { StatusBar } from '@/plate/status-bar/status-bar';
+import { RedaktoerToolbar } from '@/plate/toolbar/toolbars/redaktoer-toolbar';
+import { RedaktoerTableToolbar } from '@/plate/toolbar/toolbars/table-toolbar';
+import type { KabalValue, RichTextEditor } from '@/plate/types';
 
 interface Props {
   editorId: string;

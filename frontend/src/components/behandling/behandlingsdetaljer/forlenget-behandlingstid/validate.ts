@@ -1,7 +1,7 @@
-import { MAX_MONTHS_FROM_TODAY } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/constants';
-import type { IForlengetBehandlingstid } from '@app/redux-api/forlenget-behandlingstid';
-import { BehandlingstidUnitType } from '@app/types/svarbrev';
 import { addMonths, addWeeks, isAfter, startOfDay } from 'date-fns';
+import { MAX_MONTHS_FROM_TODAY } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/constants';
+import type { IForlengetBehandlingstid } from '@/redux-api/forlenget-behandlingstid';
+import { BehandlingstidUnitType } from '@/types/svarbrev';
 
 const NOW = startOfDay(new Date());
 const MAX_DATE = addMonths(NOW, MAX_MONTHS_FROM_TODAY);

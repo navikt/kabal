@@ -1,5 +1,5 @@
-import { Filtype, type Variant, VariantFormat, type Variants } from '@app/types/arkiverte-documents';
 import { Tag, Tooltip } from '@navikt/ds-react';
+import { Filtype, type Variant, VariantFormat, type Variants } from '@/types/arkiverte-documents';
 
 export const getDefaultVariant = (varianter: Variants) => {
   const [first, second] = varianter;

@@ -1,12 +1,12 @@
-import { getCacheKey, oboCache } from '@app/auth/cache/cache';
-import { ApiClientEnum } from '@app/config/config';
-import { generateTraceparent } from '@app/helpers/traceparent';
-import { getLogger } from '@app/logger';
-import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
-import type { ConnectionContext } from '@app/plugins/crdt/context';
 import type { Document } from '@hocuspocus/server';
 import { yTextToSlateElement } from '@slate-yjs/core';
 import { encodeStateAsUpdateV2, XmlText } from 'yjs';
+import { getCacheKey, oboCache } from '@/auth/cache/cache';
+import { ApiClientEnum } from '@/config/config';
+import { generateTraceparent } from '@/helpers/traceparent';
+import { getLogger } from '@/logger';
+import { KABAL_API_URL } from '@/plugins/crdt/api/url';
+import type { ConnectionContext } from '@/plugins/crdt/context';
 
 const log = getLogger('collaboration');
 

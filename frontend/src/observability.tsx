@@ -1,10 +1,10 @@
-import { useGrafanaDomain } from '@app/components/grafana-domain-context/grafana-domain-context';
-import { ENVIRONMENT } from '@app/environment';
 import { getWebInstrumentations, initializeFaro, ReactIntegration, ReactRouterVersion } from '@grafana/faro-react';
 import { faro, LogLevel, type PushLogOptions } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import { useCallback } from 'react';
 import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router-dom';
+import { useGrafanaDomain } from '@/components/grafana-domain-context/grafana-domain-context';
+import { ENVIRONMENT } from '@/environment';
 
 const getUrl = () => {
   if (ENVIRONMENT.isProduction) {

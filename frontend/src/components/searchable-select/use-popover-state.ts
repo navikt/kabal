@@ -1,5 +1,5 @@
-import { Keys } from '@app/keys';
 import { useCallback, useRef, useState } from 'react';
+import { Keys } from '@/keys';
 
 interface UsePopoverStateOptions {
   onOpen?: () => void;

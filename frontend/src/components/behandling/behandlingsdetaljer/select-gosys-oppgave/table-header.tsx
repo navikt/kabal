@@ -1,5 +1,5 @@
-import type { ListGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { type ColumnHeaderProps, Table } from '@navikt/ds-react';
+import type { ListGosysOppgave } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   sortable?: boolean;

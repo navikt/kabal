@@ -1,9 +1,9 @@
-import { isoDateToPretty } from '@app/domain/date';
-import { useIsTruncated } from '@app/hooks/use-is-truncated';
-import { usePaaVentReasons } from '@app/simple-api-state/use-kodeverk';
-import { PaaVentReasonEnum } from '@app/types/kodeverk';
-import type { IOppgave } from '@app/types/oppgaver';
 import { Loader, Tooltip } from '@navikt/ds-react';
+import { isoDateToPretty } from '@/domain/date';
+import { useIsTruncated } from '@/hooks/use-is-truncated';
+import { usePaaVentReasons } from '@/simple-api-state/use-kodeverk';
+import { PaaVentReasonEnum } from '@/types/kodeverk';
+import type { IOppgave } from '@/types/oppgaver';
 
 type Props = Pick<IOppgave, 'sattPaaVent'>;
 

@@ -1,5 +1,5 @@
-import type { DEFAULT_FIELD_NAMES } from '@app/types/field-names';
-import { type GenericObject, isGenericObject } from '@app/types/types';
+import type { DEFAULT_FIELD_NAMES } from '@/types/field-names';
+import { type GenericObject, isGenericObject } from '@/types/types';
 
 export interface IValidationError {
   reason: string;

@@ -1,7 +1,7 @@
-import { OrphansModal } from '@app/components/smart-editor/comments/orphans-modal';
-import { useAnnotationsCounts } from '@app/components/smart-editor/comments/use-annotations-counts';
 import { ChatElipsisIcon } from '@navikt/aksel-icons';
 import { Box, HStack } from '@navikt/ds-react';
+import { OrphansModal } from '@/components/smart-editor/comments/orphans-modal';
+import { useAnnotationsCounts } from '@/components/smart-editor/comments/use-annotations-counts';
 
 export const NumberOfComments = () => {
   const { attached, orphans, bookmarks: bookmarksCount } = useAnnotationsCounts();

@@ -1,6 +1,6 @@
-import { FlowState } from '@app/types/oppgave-common';
-import type { IOppgave } from '@app/types/oppgaver';
 import { Tag, Tooltip } from '@navikt/ds-react';
+import { FlowState } from '@/types/oppgave-common';
+import type { IOppgave } from '@/types/oppgaver';
 
 type Props = Pick<IOppgave, 'rol'>;
 

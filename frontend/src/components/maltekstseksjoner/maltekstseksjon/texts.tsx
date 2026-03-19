@@ -1,10 +1,10 @@
-import { MaltekstseksjonPreview } from '@app/components/maltekstseksjoner/maltekstseksjon/preview';
-import { TextList } from '@app/components/maltekstseksjoner/texts/text-list';
-import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { DocPencilIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Tabs, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useState } from 'react';
+import { MaltekstseksjonPreview } from '@/components/maltekstseksjoner/maltekstseksjon/preview';
+import { TextList } from '@/components/maltekstseksjoner/texts/text-list';
+import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;

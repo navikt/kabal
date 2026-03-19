@@ -1,11 +1,11 @@
-import { isDepublished, isPublished } from '@app/components/smart-editor-texts/functions/status-helpers';
-import { useDeleteDraftVersionMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
+import { isDepublished, isPublished } from '@/components/smart-editor-texts/functions/status-helpers';
+import { useDeleteDraftVersionMutation } from '@/redux-api/maltekstseksjoner/mutations';
+import { useGetMaltekstseksjonVersionsQuery } from '@/redux-api/maltekstseksjoner/queries';
+import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
 interface Props {
   id: string;

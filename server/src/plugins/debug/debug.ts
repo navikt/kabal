@@ -1,10 +1,10 @@
-import { isDeployed } from '@app/config/env';
-import { formatMessage } from '@app/plugins/debug/formatting';
-import { BODY_TYPE } from '@app/plugins/debug/types';
-import { NAV_IDENT_PLUGIN_ID } from '@app/plugins/nav-ident';
-import { EmojiIcons, sendToSlack } from '@app/slack';
 import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import fastifyPlugin from 'fastify-plugin';
+import { isDeployed } from '@/config/env';
+import { formatMessage } from '@/plugins/debug/formatting';
+import { BODY_TYPE } from '@/plugins/debug/types';
+import { NAV_IDENT_PLUGIN_ID } from '@/plugins/nav-ident';
+import { EmojiIcons, sendToSlack } from '@/slack';
 
 export const DEBUG_PLUGIN_ID = 'tab-id';
 

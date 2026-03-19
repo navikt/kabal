@@ -1,13 +1,13 @@
-import { employeeName, QUEUE, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
-import { HistoryColor, HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
-import { useInnsendingshjemlerMap } from '@app/simple-api-state/use-kodeverk';
-import type { INavEmployee } from '@app/types/bruker';
-import { HistoryEventTypes, type ITildelingEvent } from '@app/types/oppgavebehandling/response';
-import { FradelReason } from '@app/types/oppgaver';
 import { ArrowUndoIcon, PlusIcon } from '@navikt/aksel-icons';
 import { HStack, Label, Tag } from '@navikt/ds-react';
 import type React from 'react';
 import { useId } from 'react';
+import { employeeName, QUEUE, toKey } from '@/components/behandling/behandlingsdialog/history/common';
+import { HistoryColor, HistoryEvent } from '@/components/behandling/behandlingsdialog/history/event';
+import { useInnsendingshjemlerMap } from '@/simple-api-state/use-kodeverk';
+import type { INavEmployee } from '@/types/bruker';
+import { HistoryEventTypes, type ITildelingEvent } from '@/types/oppgavebehandling/response';
+import { FradelReason } from '@/types/oppgaver';
 
 export const getTildelingEvent = (e: ITildelingEvent) => {
   const key = toKey(e);

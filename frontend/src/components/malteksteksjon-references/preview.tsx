@@ -1,19 +1,19 @@
-import { getTitle } from '@app/components/editable-title/editable-title';
-import { isNotNull } from '@app/functions/is-not-type-guards';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import { KabalPlateEditor } from '@app/plate/plate-editor';
-import { previewComponents, previewPlugins } from '@app/plate/plugins/plugin-sets/preview';
-import type { KabalValue, RichTextEditor } from '@app/plate/types';
-import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
-import { RichTextTypes } from '@app/types/common-text-types';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import type { IRichText, IText } from '@app/types/texts/responses';
 import { Box, Heading, Loader, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { useCallback, useEffect, useState } from 'react';
+import { getTitle } from '@/components/editable-title/editable-title';
+import { isNotNull } from '@/functions/is-not-type-guards';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { SPELL_CHECK_LANGUAGES } from '@/hooks/use-smart-editor-language';
+import { KabalPlateEditor } from '@/plate/plate-editor';
+import { previewComponents, previewPlugins } from '@/plate/plugins/plugin-sets/preview';
+import type { KabalValue, RichTextEditor } from '@/plate/types';
+import { useGetMaltekstseksjonQuery } from '@/redux-api/maltekstseksjoner/queries';
+import { useLazyGetTextByIdQuery } from '@/redux-api/texts/queries';
+import { RichTextTypes } from '@/types/common-text-types';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
+import type { IRichText, IText } from '@/types/texts/responses';
 
 interface Props {
   id: string | null;

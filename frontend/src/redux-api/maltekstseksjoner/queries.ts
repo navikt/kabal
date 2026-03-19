@@ -1,8 +1,8 @@
-import { ENVIRONMENT } from '@app/environment';
-import { MaltekstseksjonTagTypes, maltekstseksjonerApi } from '@app/redux-api/maltekstseksjoner/maltekstseksjoner';
-import { paramsWithGlobalQueries } from '@app/redux-api/redaktør-helpers';
-import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import { ENVIRONMENT } from '@/environment';
+import { MaltekstseksjonTagTypes, maltekstseksjonerApi } from '@/redux-api/maltekstseksjoner/maltekstseksjoner';
+import { paramsWithGlobalQueries } from '@/redux-api/redaktør-helpers';
+import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
 export const maltekstseksjonerQuerySlice = maltekstseksjonerApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

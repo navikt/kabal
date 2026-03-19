@@ -1,12 +1,12 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { Country } from '@app/components/receivers/address/country/country';
-import { POSTNUMMER_ID, Postnummer } from '@app/components/receivers/address/postnummer';
-import { isMetaKey } from '@app/keys';
-import type { IFullmektig } from '@app/types/oppgave-common';
-import { Utsendingskanal } from '@app/types/oppgave-common';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, ErrorSummary, HStack, Tag, TextField, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { Country } from '@/components/receivers/address/country/country';
+import { POSTNUMMER_ID, Postnummer } from '@/components/receivers/address/postnummer';
+import { isMetaKey } from '@/keys';
+import type { IFullmektig } from '@/types/oppgave-common';
+import { Utsendingskanal } from '@/types/oppgave-common';
 
 const NAME_ID = 'fullmektig-name';
 const LINE1_ID = 'fullmektig-adresselinje1';

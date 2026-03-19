@@ -1,5 +1,5 @@
-import { Alert } from '@app/components/alert/alert';
-import { BehandlingstidUnitType } from '@app/types/svarbrev';
+import { Alert } from '@/components/alert/alert';
+import { BehandlingstidUnitType } from '@/types/svarbrev';
 
 interface Props {
   behandlingstidUnitTypeId: BehandlingstidUnitType;

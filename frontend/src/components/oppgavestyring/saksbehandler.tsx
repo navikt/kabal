@@ -1,14 +1,14 @@
-import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
-import { useTildel } from '@app/components/oppgavestyring/use-tildel';
-import { SearchableNavEmployeeSelect } from '@app/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
-import { useOppgaveActions } from '@app/hooks/use-oppgave-actions';
-import { useGetSignatureQuery } from '@app/redux-api/bruker';
-import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import type { INavEmployee } from '@app/types/bruker';
-import type { IOppgave } from '@app/types/oppgaver';
 import { Box, ErrorMessage, HStack, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
+import { LoadingCellContent } from '@/components/common-table-components/loading-cell-content';
+import { useTildel } from '@/components/oppgavestyring/use-tildel';
+import { SearchableNavEmployeeSelect } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
+import { useOppgaveActions } from '@/hooks/use-oppgave-actions';
+import { useGetSignatureQuery } from '@/redux-api/bruker';
+import { useGetPotentialSaksbehandlereQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import type { INavEmployee } from '@/types/bruker';
+import type { IOppgave } from '@/types/oppgaver';
 
 export const Saksbehandler = (oppgave: IOppgave) => (
   <HStack align="center" justify="start" height="34px" width="100%" className="[grid-area:saksbehandler]">

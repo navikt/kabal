@@ -1,11 +1,11 @@
-import { Alert } from '@app/components/alert/alert';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
-import { useMyPlateEditorRef } from '@app/plate/types';
 import { CheckmarkIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Tooltip } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import type { Path } from 'slate';
+import { Alert } from '@/components/alert/alert';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
+import { useMyPlateEditorRef } from '@/plate/types';
 
 const DummyButton = ({ loading }: { loading?: boolean }) => (
   <Button

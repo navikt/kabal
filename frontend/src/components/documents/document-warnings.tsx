@@ -1,3 +1,5 @@
+import { ExclamationmarkTriangleIcon, EyeObfuscatedIcon } from '@navikt/aksel-icons';
+import { HStack, Tag, Tooltip } from '@navikt/ds-react';
 import {
   canDistribute,
   canOpenInKabal,
@@ -5,10 +7,8 @@ import {
   FileType,
   getDefaultVariant,
   hasRedactedVariant,
-} from '@app/components/documents/filetype';
-import { Skjerming, type Variants } from '@app/types/arkiverte-documents';
-import { ExclamationmarkTriangleIcon, EyeObfuscatedIcon } from '@navikt/aksel-icons';
-import { HStack, Tag, Tooltip } from '@navikt/ds-react';
+} from '@/components/documents/filetype';
+import { Skjerming, type Variants } from '@/types/arkiverte-documents';
 
 interface Props {
   varianter: Variants;

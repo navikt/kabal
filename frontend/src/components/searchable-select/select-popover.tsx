@@ -1,5 +1,3 @@
-import { KeyRow } from '@app/components/searchable-select/key-row';
-import { Keys, MOD_KEY_TEXT } from '@app/keys';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import {
   Box,
@@ -14,6 +12,8 @@ import {
 } from '@navikt/ds-react';
 import type { ReactNode, RefObject } from 'react';
 import { useEffect, useId, useRef } from 'react';
+import { KeyRow } from '@/components/searchable-select/key-row';
+import { Keys, MOD_KEY_TEXT } from '@/keys';
 
 interface KeyboardShortcut {
   shortcuts: string[];

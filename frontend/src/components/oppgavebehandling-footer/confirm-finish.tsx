@@ -1,14 +1,14 @@
-import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
-import { UpdateInGosys } from '@app/components/oppgavebehandling-footer/update-in-gosys/update-in-gosys';
-import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
-import { isReduxValidationResponse } from '@app/functions/error-type-guard';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useFinishOppgavebehandlingMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import type { IFinishOppgavebehandlingParams } from '@app/types/oppgavebehandling/params';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, HStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
+import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
+import { UpdateInGosys } from '@/components/oppgavebehandling-footer/update-in-gosys/update-in-gosys';
+import { Direction, PopupContainer } from '@/components/popup-container/popup-container';
+import { isReduxValidationResponse } from '@/functions/error-type-guard';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useFinishOppgavebehandlingMutation } from '@/redux-api/oppgaver/mutations/behandling';
+import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
+import type { IFinishOppgavebehandlingParams } from '@/types/oppgavebehandling/params';
 
 interface CancelButtonProps {
   cancel: () => void;

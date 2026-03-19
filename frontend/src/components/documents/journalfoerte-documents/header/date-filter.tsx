@@ -1,10 +1,10 @@
-import { DatePickerRange } from '@app/components/date-picker-range/date-picker-range';
-import type { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import { SortButton, type SortButtonProps } from '@app/components/documents/journalfoerte-documents/header/sort-button';
-import type { DateRangeSetting } from '@app/hooks/settings/use-setting';
 import { HStack } from '@navikt/ds-react';
 import { formatISO, parseISO } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
+import { DatePickerRange } from '@/components/date-picker-range/date-picker-range';
+import type { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import { SortButton, type SortButtonProps } from '@/components/documents/journalfoerte-documents/header/sort-button';
+import type { DateRangeSetting } from '@/hooks/settings/use-setting';
 
 export interface DateFilterProps extends DateRangeSetting, SortButtonProps {
   label: string;

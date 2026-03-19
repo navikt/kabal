@@ -1,17 +1,17 @@
-import {
-  useHasTilknyttetVedlegg,
-  useIsTilknyttetDokument,
-} from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
-import { Fields } from '@app/components/documents/new-documents/grid';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCheckDocument } from '@app/hooks/use-check-document';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { Journalstatus } from '@app/types/arkiverte-documents';
 import { CircleSlashIcon, FolderPlusIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps, HStack, Tooltip } from '@navikt/ds-react';
 import { memo, useMemo } from 'react';
+import {
+  useHasTilknyttetVedlegg,
+  useIsTilknyttetDokument,
+} from '@/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
+import { Fields } from '@/components/documents/new-documents/grid';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useCheckDocument } from '@/hooks/use-check-document';
+import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
+import { useIsAssignedRolAndSent } from '@/hooks/use-is-rol';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { Journalstatus } from '@/types/arkiverte-documents';
 
 interface Props {
   dokumentInfoId: string;

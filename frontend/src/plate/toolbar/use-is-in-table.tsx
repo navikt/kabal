@@ -1,5 +1,5 @@
-import { useMyPlateEditorState } from '@app/plate/types';
 import { BaseTablePlugin } from '@platejs/table';
+import { useMyPlateEditorState } from '@/plate/types';
 
 export const useIsInTable = () => {
   const editor = useMyPlateEditorState();

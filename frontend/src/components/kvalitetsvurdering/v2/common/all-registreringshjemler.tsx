@@ -1,11 +1,11 @@
-import { LovhjemmelSelect } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel-select';
-import { SelectedHjemlerList } from '@app/components/behandling/behandlingsdetaljer/lovhjemmel/selected-hjemler-list';
-import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
+import { LovhjemmelSelect } from '@/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel-select';
+import { SelectedHjemlerList } from '@/components/behandling/behandlingsdetaljer/lovhjemmel/selected-hjemler-list';
+import { useKvalitetsvurderingV2 } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import type {
   IKvalitetsvurderingAllRegistreringshjemler,
   IKvalitetsvurderingBooleans,
-} from '@app/types/kaka-kvalitetsvurdering/v2';
+} from '@/types/kaka-kvalitetsvurdering/v2';
 
 const EMPTY_ARRAY: string[] = [];
 

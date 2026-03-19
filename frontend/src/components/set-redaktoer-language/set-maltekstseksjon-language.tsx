@@ -1,7 +1,7 @@
-import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { isLanguage, Language } from '@app/types/texts/language';
 import { ToggleGroup } from '@navikt/ds-react';
+import { useNavigateMaltekstseksjoner } from '@/hooks/use-navigate-maltekstseksjoner';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { isLanguage, Language } from '@/types/texts/language';
 
 export const SetMaltekstseksjonLanguage = () => {
   const navigate = useNavigateMaltekstseksjoner();

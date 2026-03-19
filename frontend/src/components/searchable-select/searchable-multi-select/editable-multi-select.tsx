@@ -1,19 +1,19 @@
-import { scrollPopoverIntoView } from '@app/components/searchable-select/scroll-popover-into-view';
-import { setsEqual } from '@app/components/searchable-select/searchable-multi-select/multi-select-utils';
-import { TriggerContent } from '@app/components/searchable-select/searchable-multi-select/trigger-content';
-import type { SearchableMultiSelectProps } from '@app/components/searchable-select/searchable-multi-select/types';
-import { SelectPopover } from '@app/components/searchable-select/select-popover';
-import { useHighlight } from '@app/components/searchable-select/use-highlight';
-import { useKeyboardNavigation } from '@app/components/searchable-select/use-keyboard-navigation';
-import { usePopoverState } from '@app/components/searchable-select/use-popover-state';
+import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import { useCallback, useDeferredValue, useMemo, useRef, useState } from 'react';
+import { scrollPopoverIntoView } from '@/components/searchable-select/scroll-popover-into-view';
+import { setsEqual } from '@/components/searchable-select/searchable-multi-select/multi-select-utils';
+import { TriggerContent } from '@/components/searchable-select/searchable-multi-select/trigger-content';
+import type { SearchableMultiSelectProps } from '@/components/searchable-select/searchable-multi-select/types';
+import { SelectPopover } from '@/components/searchable-select/select-popover';
+import { useHighlight } from '@/components/searchable-select/use-highlight';
+import { useKeyboardNavigation } from '@/components/searchable-select/use-keyboard-navigation';
+import { usePopoverState } from '@/components/searchable-select/use-popover-state';
 import {
   VirtualizedOptionList,
   type VirtualizedOptionListHandle,
-} from '@app/components/searchable-select/virtualized-option-list';
-import { stringToRegExp } from '@app/functions/string-to-regex';
-import { isMetaKey, Keys, MOD_KEY_TEXT } from '@app/keys';
-import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
-import { useCallback, useDeferredValue, useMemo, useRef, useState } from 'react';
+} from '@/components/searchable-select/virtualized-option-list';
+import { stringToRegExp } from '@/functions/string-to-regex';
+import { isMetaKey, Keys, MOD_KEY_TEXT } from '@/keys';
 
 const KEYBOARD_SHORTCUTS = [
   { shortcuts: ['Enter'], description: 'Velg / fjern' },

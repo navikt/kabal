@@ -5,8 +5,8 @@ import {
   useSakstyper,
   useSimpleYtelser,
   useTema,
-} from '@app/simple-api-state/use-kodeverk';
-import type { SaksTypeEnum } from '@app/types/kodeverk';
+} from '@/simple-api-state/use-kodeverk';
+import type { SaksTypeEnum } from '@/types/kodeverk';
 
 const useFullTemaNameFromId = (temaId: string | null): string | undefined => {
   const { data, isLoading } = useTema();

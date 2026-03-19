@@ -1,9 +1,9 @@
-import { oboCache } from '@app/auth/cache/cache';
-import { getIsAzureClientReady } from '@app/auth/get-auth-client';
-import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
-import { getLogger } from '@app/logger';
-import { isShuttingDown } from '@app/shutdown';
 import fastifyPlugin from 'fastify-plugin';
+import { oboCache } from '@/auth/cache/cache';
+import { getIsAzureClientReady } from '@/auth/get-auth-client';
+import { SMART_DOCUMENT_WRITE_ACCESS } from '@/document-access/service';
+import { getLogger } from '@/logger';
+import { isShuttingDown } from '@/shutdown';
 
 export const HEALTH_PLUGIN_ID = 'health';
 

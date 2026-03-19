@@ -1,12 +1,9 @@
-import {
-  type AdminSystemNotification,
-  systemNotificationsStore,
-} from '@app/components/admin/system-notifications/state';
-import { KLAGE_NOTIFICATIONS_BASE_PATH } from '@app/components/header/notifications/constants';
-import { toast } from '@app/components/toast/store';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Heading, Textarea, TextField, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
+import { type AdminSystemNotification, systemNotificationsStore } from '@/components/admin/system-notifications/state';
+import { KLAGE_NOTIFICATIONS_BASE_PATH } from '@/components/header/notifications/constants';
+import { toast } from '@/components/toast/store';
 
 export const CreateSystemNotification = () => {
   const [isLoading, setIsLoading] = useState(false);

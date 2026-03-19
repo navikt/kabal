@@ -1,11 +1,11 @@
-import { AppThemeSwitcher } from '@app/components/header/user-menu/app-theme';
-import { SendDebugInfoButton } from '@app/components/header/user-menu/debug';
-import { useIsUpToDate } from '@app/components/version-checker/version-checker';
-import { ENVIRONMENT } from '@app/environment';
-import { pushEvent } from '@app/observability';
 import { ArrowCirclepathIcon, BranchingIcon, CheckmarkCircleIcon, CogIcon, LeaveIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Tooltip } from '@navikt/ds-react';
 import { Link } from 'react-router-dom';
+import { AppThemeSwitcher } from '@/components/header/user-menu/app-theme';
+import { SendDebugInfoButton } from '@/components/header/user-menu/debug';
+import { useIsUpToDate } from '@/components/version-checker/version-checker';
+import { ENVIRONMENT } from '@/environment';
+import { pushEvent } from '@/observability';
 
 export const UserDropdown = (): React.JSX.Element | null => {
   const { version } = ENVIRONMENT;

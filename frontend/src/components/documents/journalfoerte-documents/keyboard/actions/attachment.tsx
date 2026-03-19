@@ -1,8 +1,8 @@
-import { useGetDocument } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import { toast } from '@app/components/toast/store';
-import { type IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
 import { Tag } from '@navikt/ds-react';
 import { useCallback } from 'react';
+import { useGetDocument } from '@/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import { toast } from '@/components/toast/store';
+import { type IArkivertDocument, Journalstatus } from '@/types/arkiverte-documents';
 
 export const useSetAsAttachmentTo = (filteredDocuments: IArkivertDocument[], openModal: (open: boolean) => void) => {
   const getDocument = useGetDocument(filteredDocuments);

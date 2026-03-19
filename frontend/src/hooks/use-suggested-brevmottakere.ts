@@ -1,11 +1,11 @@
-import { getInitalHandling } from '@app/components/receivers/functions';
-import { isNotNull } from '@app/functions/is-not-type-guards';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import type { IMottaker } from '@app/types/documents/documents';
-import { Brevmottakertype } from '@app/types/kodeverk';
-import { type IFullmektig, type IPart, PartStatusEnum } from '@app/types/oppgave-common';
-import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { useMemo } from 'react';
+import { getInitalHandling } from '@/components/receivers/functions';
+import { isNotNull } from '@/functions/is-not-type-guards';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import type { IMottaker } from '@/types/documents/documents';
+import { Brevmottakertype } from '@/types/kodeverk';
+import { type IFullmektig, type IPart, PartStatusEnum } from '@/types/oppgave-common';
+import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 export interface IBrevmottaker extends IMottaker {
   brevmottakertyper: Brevmottakertype[];

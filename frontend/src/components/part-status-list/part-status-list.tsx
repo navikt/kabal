@@ -1,7 +1,7 @@
-import { isoDateToPretty } from '@app/domain/date';
-import { type IOrganizationStatus, type IPart, type IPersonStatus, PartStatusEnum } from '@app/types/oppgave-common';
 import { FlowerPetalFallingIcon } from '@navikt/aksel-icons';
 import { HStack, Tag, type TagProps } from '@navikt/ds-react';
+import { isoDateToPretty } from '@/domain/date';
+import { type IOrganizationStatus, type IPart, type IPersonStatus, PartStatusEnum } from '@/types/oppgave-common';
 
 interface Props extends Pick<IPart, 'statusList'> {
   size?: TagProps['size'];

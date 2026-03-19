@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from 'react';
 import {
   appThemeStore,
   getAppTheme,
@@ -5,11 +6,10 @@ import {
   getUserTheme,
   systemThemeStore,
   userThemeStore,
-} from '@app/app-theme';
-import { ENVIRONMENT } from '@app/environment';
-import { getQueryParams } from '@app/headers';
-import { pushError } from '@app/observability';
-import { useSyncExternalStore } from 'react';
+} from '@/app-theme';
+import { ENVIRONMENT } from '@/environment';
+import { getQueryParams } from '@/headers';
+import { pushError } from '@/observability';
 
 export enum UpdateRequest {
   REQUIRED = 'REQUIRED',

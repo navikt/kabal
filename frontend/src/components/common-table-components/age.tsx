@@ -1,17 +1,17 @@
-import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
-import { DatePicker } from '@app/components/date-picker/date-picker';
-import { useHasAnyOfRoles } from '@app/hooks/use-has-role';
-import {
-  useSetKjennelseMottattMutation,
-  useSetMottattKlageinstansMutation,
-} from '@app/redux-api/oppgaver/mutations/behandling-dates';
-import { Role } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import type { IOppgave } from '@app/types/oppgaver';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { differenceInDays, parseISO } from 'date-fns';
 import { useState } from 'react';
+import { CURRENT_YEAR_IN_CENTURY } from '@/components/date-picker/constants';
+import { DatePicker } from '@/components/date-picker/date-picker';
+import { useHasAnyOfRoles } from '@/hooks/use-has-role';
+import {
+  useSetKjennelseMottattMutation,
+  useSetMottattKlageinstansMutation,
+} from '@/redux-api/oppgaver/mutations/behandling-dates';
+import { Role } from '@/types/bruker';
+import { SaksTypeEnum } from '@/types/kodeverk';
+import type { IOppgave } from '@/types/oppgaver';
 
 export const Age = (oppgave: IOppgave) => {
   if (oppgave.isAvsluttetAvSaksbehandler) {

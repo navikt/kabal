@@ -1,28 +1,28 @@
+import { useSyncExternalStore } from 'react';
 import {
   convertAccessibleToRealDocumentPaths,
   convertRealToAccessibleDocumentIndex,
   FIRST_ACCESSIBLE_DOCUMENT_INDEX,
   getLastAccessibleDocumentIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+} from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import {
   getFocusIndex,
   resetFocusIndex,
   setFocusIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
+} from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { getId } from '@/components/documents/journalfoerte-documents/select-context/helpers';
 import {
   isInRanges,
   mergeRanges,
   rangesToIndexes,
   removeIndexFromRanges,
   type SelectionRange,
-} from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
-import type { SelectedMap } from '@app/components/documents/journalfoerte-documents/select-context/types';
-import { isMetaKey } from '@app/keys';
-import { Observable } from '@app/observable';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { useSyncExternalStore } from 'react';
+} from '@/components/documents/journalfoerte-documents/select-context/range-utils';
+import type { SelectedMap } from '@/components/documents/journalfoerte-documents/select-context/types';
+import { isMetaKey } from '@/keys';
+import { Observable } from '@/observable';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 const INITIAL_STATE: SelectionRange[] = [];
 

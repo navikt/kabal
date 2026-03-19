@@ -1,4 +1,4 @@
-import type { INavEmployee } from '@app/types/bruker';
+import type { INavEmployee } from '@/types/bruker';
 
 const SYSTEM_USER = 'SYSTEMBRUKER';
 const SYSTEM_USER_NAME = 'Kabal';

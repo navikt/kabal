@@ -1,5 +1,5 @@
-import type { INavEmployee } from '@app/types/bruker';
-import type { SaksTypeEnum } from '@app/types/kodeverk';
+import type { INavEmployee } from '@/types/bruker';
+import type { SaksTypeEnum } from '@/types/kodeverk';
 
 export enum BehandlingstidUnitType {
   WEEKS = '1',

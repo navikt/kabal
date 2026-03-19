@@ -1,6 +1,6 @@
-import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
-import { NEGATIVE_INFINITY } from '@app/plate/functions/lex-specialis/scores';
-import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { GLOBAL, LIST_DELIMITER } from '@/components/smart-editor-texts/types';
+import { NEGATIVE_INFINITY } from '@/plate/functions/lex-specialis/scores';
+import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 const GLOBAL_SECTION_SCORE = 8;
 const TEMPLATE_SECTION_SCORE = 16;

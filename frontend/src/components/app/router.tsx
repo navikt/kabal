@@ -1,38 +1,38 @@
-import { useAppTheme } from '@app/app-theme';
-import { NotFoundPage } from '@app/components/app/not-found-page';
-import { ProtectedRoute } from '@app/components/app/protected-route';
-import { NavHeader } from '@app/components/header/header';
-import { ModalEnum } from '@app/components/svarbrev/row/row';
-import { Toasts } from '@app/components/toast/toasts';
-import { VersionCheckerStatus } from '@app/components/version-checker/version-checker-status';
-import { TEXT_TYPE_BASE_PATH } from '@app/domain/redaktør-paths';
-import { AccessRightsPage } from '@app/pages/access-rights/access-rights';
-import { AdminPage } from '@app/pages/admin/admin';
-import { BunnteksterPage } from '@app/pages/bunntekster/bunntekster';
-import { GodeFormuleringerPage } from '@app/pages/gode-formuleringer/gode-formuleringer';
-import { LandingPage } from '@app/pages/landing-page/landing-page';
-import { MalteksterPage } from '@app/pages/maltekster/maltekster';
-import { MaltekstseksjonerPage } from '@app/pages/maltekstseksjoner/maltekstseksjoner';
-import { MineOppgaverPage } from '@app/pages/mine-oppgaver/mine-oppgaver';
-import { OppgavebehandlingPage } from '@app/pages/oppgavebehandling/oppgavebehandling';
-import { OppgaverPage } from '@app/pages/oppgaver/oppgaver';
-import { OppgavestyringPage } from '@app/pages/oppgavestyring/oppgavestyring';
-import { RedigerbareMalteksterPage } from '@app/pages/redigerbare-maltekster/redigerbare-maltekster';
-import { RegelverkPage } from '@app/pages/regelverk/regelverk';
-import { SearchPage } from '@app/pages/search/search';
-import { SettingsPage } from '@app/pages/settings/settings';
-import { SvarbrevPage } from '@app/pages/svarbrev/svarbrev';
-import { ToppteksterPage } from '@app/pages/topptekster/topptekster';
-import { Role } from '@app/types/bruker';
+import { Theme, VStack } from '@navikt/ds-react';
+import { Navigate, Outlet, Route, Routes as Switch, useParams } from 'react-router-dom';
+import { useAppTheme } from '@/app-theme';
+import { NotFoundPage } from '@/components/app/not-found-page';
+import { ProtectedRoute } from '@/components/app/protected-route';
+import { NavHeader } from '@/components/header/header';
+import { ModalEnum } from '@/components/svarbrev/row/row';
+import { Toasts } from '@/components/toast/toasts';
+import { VersionCheckerStatus } from '@/components/version-checker/version-checker-status';
+import { TEXT_TYPE_BASE_PATH } from '@/domain/redaktør-paths';
+import { AccessRightsPage } from '@/pages/access-rights/access-rights';
+import { AdminPage } from '@/pages/admin/admin';
+import { BunnteksterPage } from '@/pages/bunntekster/bunntekster';
+import { GodeFormuleringerPage } from '@/pages/gode-formuleringer/gode-formuleringer';
+import { LandingPage } from '@/pages/landing-page/landing-page';
+import { MalteksterPage } from '@/pages/maltekster/maltekster';
+import { MaltekstseksjonerPage } from '@/pages/maltekstseksjoner/maltekstseksjoner';
+import { MineOppgaverPage } from '@/pages/mine-oppgaver/mine-oppgaver';
+import { OppgavebehandlingPage } from '@/pages/oppgavebehandling/oppgavebehandling';
+import { OppgaverPage } from '@/pages/oppgaver/oppgaver';
+import { OppgavestyringPage } from '@/pages/oppgavestyring/oppgavestyring';
+import { RedigerbareMalteksterPage } from '@/pages/redigerbare-maltekster/redigerbare-maltekster';
+import { RegelverkPage } from '@/pages/regelverk/regelverk';
+import { SearchPage } from '@/pages/search/search';
+import { SettingsPage } from '@/pages/settings/settings';
+import { SvarbrevPage } from '@/pages/svarbrev/svarbrev';
+import { ToppteksterPage } from '@/pages/topptekster/topptekster';
+import { Role } from '@/types/bruker';
 import {
   GOD_FORMULERING_TYPE,
   MALTEKSTSEKSJON_TYPE,
   PlainTextTypes,
   REGELVERK_TYPE,
   RichTextTypes,
-} from '@app/types/common-text-types';
-import { Theme, VStack } from '@navikt/ds-react';
-import { Navigate, Outlet, Route, Routes as Switch, useParams } from 'react-router-dom';
+} from '@/types/common-text-types';
 
 const RedirectToBehandling = () => {
   const { oppgaveId } = useParams();

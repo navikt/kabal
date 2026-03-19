@@ -1,9 +1,6 @@
-import {
-  getVedlegg,
-  useGetDocument,
-} from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { useCallback } from 'react';
+import { getVedlegg, useGetDocument } from '@/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@/types/arkiverte-documents';
 
 interface FocusedVedlegg {
   focusedDocument: IArkivertDocument;

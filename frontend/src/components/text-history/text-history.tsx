@@ -1,11 +1,11 @@
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { pushEvent } from '@app/observability';
-import type { INavEmployee } from '@app/types/bruker';
-import type { IEditor } from '@app/types/maltekstseksjoner/responses';
 import { CalendarIcon, ClockDashedIcon, PencilWritingIcon, UploadIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Tag, type TagProps, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { pushEvent } from '@/observability';
+import type { INavEmployee } from '@/types/bruker';
+import type { IEditor } from '@/types/maltekstseksjoner/responses';
 
 interface PublishedProps {
   publishedDateTime: string;

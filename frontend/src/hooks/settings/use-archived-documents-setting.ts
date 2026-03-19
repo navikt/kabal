@@ -1,5 +1,5 @@
-import { useJsonSetting } from '@app/hooks/settings/helpers';
 import { useMemo } from 'react';
+import { useJsonSetting } from '@/hooks/settings/helpers';
 
 export enum ArchivedDocumentsColumn {
   TEMA = 'TEMA',

@@ -1,9 +1,9 @@
-import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { useDeleteDraftMutation } from '@app/redux-api/texts/mutations';
-import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
+import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
+import { useDeleteDraftMutation } from '@/redux-api/texts/mutations';
+import { useGetTextVersionsQuery } from '@/redux-api/texts/queries';
 
 interface DeleteDraftProps {
   id: string;

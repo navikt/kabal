@@ -1,14 +1,14 @@
-import { ReadOnlyDate } from '@app/components/behandling/behandlingsdetaljer/read-only-date';
-import { DateContainer } from '@app/components/behandling/styled-components';
-import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
-import { DatePicker } from '@app/components/date-picker/date-picker';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { useFieldName } from '@app/hooks/use-field-name';
-import { useValidationError } from '@app/hooks/use-validation-error';
-import { useSetMottattKlageinstansMutation } from '@app/redux-api/oppgaver/mutations/behandling-dates';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { subDays } from 'date-fns';
+import { ReadOnlyDate } from '@/components/behandling/behandlingsdetaljer/read-only-date';
+import { DateContainer } from '@/components/behandling/styled-components';
+import { CURRENT_YEAR_IN_CENTURY } from '@/components/date-picker/constants';
+import { DatePicker } from '@/components/date-picker/date-picker';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import { useFieldName } from '@/hooks/use-field-name';
+import { useValidationError } from '@/hooks/use-validation-error';
+import { useSetMottattKlageinstansMutation } from '@/redux-api/oppgaver/mutations/behandling-dates';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 const ID = 'mottatt-dato';
 

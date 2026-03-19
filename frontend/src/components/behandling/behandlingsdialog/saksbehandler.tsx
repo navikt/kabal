@@ -1,14 +1,14 @@
-import { useTildel } from '@app/components/oppgavestyring/use-tildel';
-import { SearchableNavEmployeeSelectWithLabel } from '@app/components/searchable-select/searchable-single-select/searchable-nav-employee-select-with-label';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useGetPotentialSaksbehandlereQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { Role } from '@app/types/bruker';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { BodyShort, Label, Skeleton, VStack } from '@navikt/ds-react';
+import { useTildel } from '@/components/oppgavestyring/use-tildel';
+import { SearchableNavEmployeeSelectWithLabel } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select-with-label';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useHasRole } from '@/hooks/use-has-role';
+import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
+import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useGetPotentialSaksbehandlereQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { Role } from '@/types/bruker';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 const ID = 'tildelt-saksbehandler';
 

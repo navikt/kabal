@@ -1,7 +1,7 @@
-import { useMarkAllAsRead } from '@app/components/header/notifications/api';
-import { useNotificationsContext } from '@app/components/header/notifications/state';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
+import { useMarkAllAsRead } from '@/components/header/notifications/api';
+import { useNotificationsContext } from '@/components/header/notifications/state';
 
 interface MarkAllAsReadButtonProps {
   unreadCount: number;

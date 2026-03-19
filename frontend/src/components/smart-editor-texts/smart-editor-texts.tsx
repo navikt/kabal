@@ -1,32 +1,27 @@
-import { SetStandaloneTextLanguage } from '@app/components/set-redaktoer-language/set-standalone-text-language';
-import { LoadText } from '@app/components/smart-editor-texts/edit/load-text';
-import { Filters } from '@app/components/smart-editor-texts/filters';
+import { PlusIcon } from '@navikt/aksel-icons';
+import { Button, HGrid, HStack, Search } from '@navikt/ds-react';
+import { useCallback, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { SetStandaloneTextLanguage } from '@/components/set-redaktoer-language/set-standalone-text-language';
+import { LoadText } from '@/components/smart-editor-texts/edit/load-text';
+import { Filters } from '@/components/smart-editor-texts/filters';
 import {
   getNewGodFormulering,
   getNewPlainText,
   getNewRegelverk,
   getNewRichText,
-} from '@app/components/smart-editor-texts/functions/new-text';
-import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { QueryKey, SortKey } from '@app/components/smart-editor-texts/sortable-header';
-import { StandaloneTextList } from '@app/components/smart-editor-texts/text-list/text-list';
-import {
-  isGodFormuleringType,
-  isPlainTextType,
-  isRegelverkType,
-  isRichTextType,
-} from '@app/functions/is-rich-plain-text';
-import { useNavigateToStandaloneTextVersion } from '@app/hooks/use-navigate-to-standalone-text-version';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { useAddTextMutation } from '@app/redux-api/texts/mutations';
-import { useGetTextsQuery } from '@app/redux-api/texts/queries';
-import type { TextTypes } from '@app/types/common-text-types';
-import { SortOrder } from '@app/types/sort';
-import type { Language } from '@app/types/texts/language';
-import { PlusIcon } from '@navikt/aksel-icons';
-import { Button, HGrid, HStack, Search } from '@navikt/ds-react';
-import { useCallback, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+} from '@/components/smart-editor-texts/functions/new-text';
+import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
+import { QueryKey, SortKey } from '@/components/smart-editor-texts/sortable-header';
+import { StandaloneTextList } from '@/components/smart-editor-texts/text-list/text-list';
+import { isGodFormuleringType, isPlainTextType, isRegelverkType, isRichTextType } from '@/functions/is-rich-plain-text';
+import { useNavigateToStandaloneTextVersion } from '@/hooks/use-navigate-to-standalone-text-version';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { useAddTextMutation } from '@/redux-api/texts/mutations';
+import { useGetTextsQuery } from '@/redux-api/texts/queries';
+import type { TextTypes } from '@/types/common-text-types';
+import { SortOrder } from '@/types/sort';
+import type { Language } from '@/types/texts/language';
 
 interface Props {
   textType: TextTypes;

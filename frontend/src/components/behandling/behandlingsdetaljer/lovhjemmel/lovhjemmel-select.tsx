@@ -1,9 +1,9 @@
-import { SelectHjemler } from '@app/components/filter-dropdown/select-hjemler';
-import { InputError } from '@app/components/input-error/input-error';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
+import { SelectHjemler } from '@/components/filter-dropdown/select-hjemler';
+import { InputError } from '@/components/input-error/input-error';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
 
 interface LovhjemmelSelectProps {
   selected: string[];

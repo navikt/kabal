@@ -1,7 +1,7 @@
-import { Bookmarks } from '@app/components/smart-editor/bookmarks/bookmarks';
-import { CommentSection } from '@app/components/smart-editor/comments/comment-section';
-import { NumberOfComments } from '@app/components/smart-editor/comments/number-of-comments';
 import { VStack } from '@navikt/ds-react';
+import { Bookmarks } from '@/components/smart-editor/bookmarks/bookmarks';
+import { CommentSection } from '@/components/smart-editor/comments/comment-section';
+import { NumberOfComments } from '@/components/smart-editor/comments/number-of-comments';
 
 interface StickyRightProps {
   id: string;

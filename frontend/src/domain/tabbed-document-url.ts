@@ -1,5 +1,5 @@
-import { encodeArchivedDocumentIds } from '@app/domain/file-viewer-url';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { encodeArchivedDocumentIds } from '@/domain/file-viewer-url';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 // File viewer URL functions (new /file-viewer/ paths)
 export const getNewFileViewerTabUrl = (oppgaveId: string, documentId: string, _parentId: string | null) =>

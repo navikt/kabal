@@ -1,6 +1,6 @@
-import { Saksnummer } from '@app/plate/components/saksnummer';
-import { ELEMENT_SAKSNUMMER } from '@app/plate/plugins/element-types';
 import { createPlatePlugin } from 'platejs/react';
+import { Saksnummer } from '@/plate/components/saksnummer';
+import { ELEMENT_SAKSNUMMER } from '@/plate/plugins/element-types';
 
 export const SaksnummerPlugin = createPlatePlugin({
   key: ELEMENT_SAKSNUMMER,

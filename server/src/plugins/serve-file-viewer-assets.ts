@@ -1,8 +1,8 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { getMimeType } from '@app/helpers/mime-type';
-import { getLogger } from '@app/logger';
 import fastifyPlugin from 'fastify-plugin';
+import { getMimeType } from '@/helpers/mime-type';
+import { getLogger } from '@/logger';
 
 const log = getLogger('serve-file-viewer-assets');
 

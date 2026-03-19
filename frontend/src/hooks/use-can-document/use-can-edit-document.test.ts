@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { type CanEditDocumentParams, canEditDocument } from '@app/hooks/use-can-document/use-can-edit-document';
-import { Filtype, VariantFormat } from '@app/types/arkiverte-documents';
+import { type CanEditDocumentParams, canEditDocument } from '@/hooks/use-can-document/use-can-edit-document';
+import { Filtype, VariantFormat } from '@/types/arkiverte-documents';
 import {
   CreatorRole,
   DistribusjonsType,
@@ -9,10 +9,10 @@ import {
   type ISmartDocument,
   type JournalfoertDokument,
   type JournalfoertDokumentReference,
-} from '@app/types/documents/documents';
-import { FlowState } from '@app/types/oppgave-common';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { Language } from '@app/types/texts/language';
+} from '@/types/documents/documents';
+import { FlowState } from '@/types/oppgave-common';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
+import { Language } from '@/types/texts/language';
 
 const EMPLOYEE = { navIdent: 'Z123456', navn: 'Ola Nordmann' };
 

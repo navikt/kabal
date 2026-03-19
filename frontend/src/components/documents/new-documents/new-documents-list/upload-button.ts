@@ -1,5 +1,5 @@
-import { getIsRolQuestions } from '@app/components/documents/new-documents/helpers';
-import type { IDocument } from '@app/types/documents/documents';
+import { getIsRolQuestions } from '@/components/documents/new-documents/helpers';
+import type { IDocument } from '@/types/documents/documents';
 
 export const getHasUploadOrRolAnswersButton = (
   document: IDocument | undefined,
