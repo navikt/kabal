@@ -1,10 +1,9 @@
-import { Annet } from '@app/components/kvalitetsvurdering/v3/annet/annet';
-import { useKvalitetsvurderingV3 } from '@app/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
-import { Saksbehandlingsreglene } from '@app/components/kvalitetsvurdering/v3/saksbehandlingsreglene/saksbehandlingsreglene';
-import { Særregelverket } from '@app/components/kvalitetsvurdering/v3/særregelverket/særregelverket';
-import { Trygdemedisin } from '@app/components/kvalitetsvurdering/v3/trygdemedisin/trygdemedisin';
 import { Skeleton, VStack } from '@navikt/ds-react';
-import { styled } from 'styled-components';
+import { Annet } from '@/components/kvalitetsvurdering/v3/annet/annet';
+import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { Saksbehandlingsreglene } from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/saksbehandlingsreglene';
+import { Særregelverket } from '@/components/kvalitetsvurdering/v3/særregelverket/særregelverket';
+import { Trygdemedisin } from '@/components/kvalitetsvurdering/v3/trygdemedisin/trygdemedisin';
 
 export const KvalitetsskjemaV3 = () => {
   const { isLoading } = useKvalitetsvurderingV3();
@@ -33,17 +32,11 @@ export const KvalitetsskjemaV3 = () => {
   }
 
   return (
-    <StyledKvalitetsskjema data-testid="kvalitetsskjema">
+    <div className="flex flex-col gap-8">
       <Særregelverket />
       <Saksbehandlingsreglene />
       <Trygdemedisin />
       <Annet />
-    </StyledKvalitetsskjema>
+    </div>
   );
 };
-
-const StyledKvalitetsskjema = styled.section`
-  display: flex;
-  flex-direction: column;
-  row-gap: 32px;
-`;

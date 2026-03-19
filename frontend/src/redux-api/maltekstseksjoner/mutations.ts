@@ -1,5 +1,4 @@
 import { formatISO } from 'date-fns';
-import type { Patch } from 'immer';
 import { toast } from '@/components/toast/store';
 import { createSimpleParagraph } from '@/plate/templates/helpers';
 import type { KabalValue } from '@/plate/types';
@@ -185,12 +184,7 @@ const maltekstseksjonerMutationSlice = maltekstseksjonerApi.injectEndpoints({
         url: `/maltekstseksjoner/${id}/publish-with-texts`,
       }),
       onQueryStarted: async ({ id, query }, { queryFulfilled, dispatch }) => {
-        interface PatchResult {
-          undo: () => void;
-          patches: Patch[];
-          inversePatches: Patch[];
-        }
-        const textPatches: PatchResult[] = [];
+        const textPatches: { undo: () => void }[] = [];
 
         const { navIdent, navn } = await user;
 

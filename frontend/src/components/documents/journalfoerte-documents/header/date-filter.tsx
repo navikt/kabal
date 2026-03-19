@@ -1,7 +1,6 @@
 import { HStack } from '@navikt/ds-react';
 import { formatISO, parseISO } from 'date-fns';
-import type { DateRange } from 'react-day-picker';
-import { DatePickerRange } from '@/components/date-picker-range/date-picker-range';
+import { DatePickerRange, type DateRange } from '@/components/date-picker-range/date-picker-range';
 import type { Fields } from '@/components/documents/journalfoerte-documents/grid';
 import { SortButton, type SortButtonProps } from '@/components/documents/journalfoerte-documents/header/sort-button';
 import type { DateRangeSetting } from '@/hooks/settings/use-setting';
