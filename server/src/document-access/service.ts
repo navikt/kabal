@@ -8,6 +8,7 @@ import type { Metadata } from '@/document-access/types';
 import { generateTraceId, getTraceIdAndSpanIdFromTraceparent } from '@/helpers/traceparent';
 import { getLogger } from '@/logger';
 import { proxyRegister } from '@/prometheus/types';
+import { isShuttingDown } from '@/shutdown';
 
 const log = getLogger('document-write-access-kafka-consumer');
 
@@ -216,15 +217,16 @@ class SmartDocumentWriteAccess {
     const errors = this.getErrors();
 
     if (errors.length > 0) {
-      // If the consumer is not processing messages, we cannot be sure the access is up to date.
-      log.error({
-        msg: `Smart Document Write Access is not processing Kafka messages: ${errors.join(', ')}`,
-        trace_id,
-        span_id,
-        tab_id,
-        client_version,
-        data: { behandling_id, document_id: documentId, nav_ident: navIdent, allow_api_fetching: allowApiFetching },
-      });
+      if (!isShuttingDown()) {
+        log.error({
+          msg: `Smart Document Write Access is not processing Kafka messages: ${errors.join(', ')}`,
+          trace_id,
+          span_id,
+          tab_id,
+          client_version,
+          data: { behandling_id, document_id: documentId, nav_ident: navIdent, allow_api_fetching: allowApiFetching },
+        });
+      }
 
       return false;
     }
