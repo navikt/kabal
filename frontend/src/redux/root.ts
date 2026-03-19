@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from '@reduxjs/toolkit';
 import { accessRightsApi } from '@/redux-api/access-rights';
 import { brukerApi } from '@/redux-api/bruker';
 import { collaborationApi } from '@/redux-api/collaboration';

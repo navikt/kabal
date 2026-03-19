@@ -1,15 +1,14 @@
-import { useKvalitetsvurderingV3 } from '@app/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
-import { useValidationError } from '@app/components/kvalitetsvurdering/v3/common/use-validation-error';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { usePrevious } from '@app/hooks/use-previous';
-import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
+import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import { useEffect } from 'react';
+import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import { usePrevious } from '@/hooks/use-previous';
+import { useRegistreringshjemlerMap } from '@/simple-api-state/use-kodeverk';
 import type {
   KvalitetsvurderingSaksdataHjemlerV3,
   KvalitetsvurderingV3Boolean,
-} from '@app/types/kaka-kvalitetsvurdering/v3';
-import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
-import { useEffect } from 'react';
-import { styled } from 'styled-components';
+} from '@/types/kaka-kvalitetsvurdering/v3';
 
 const EMPTY_ARRAY: string[] = [];
 
@@ -96,7 +95,7 @@ const HjemmelCheckboxes = ({ hjemmelIdList }: HjemmelCheckboxesProps) => {
   const { data: registreringshjemlerMap, isLoading } = useRegistreringshjemlerMap();
 
   if (hjemmelIdList.length === 0 || isLoading || typeof registreringshjemlerMap === 'undefined') {
-    return <ItalicBodyShort>Ingen hjemler valgt under saksdata.</ItalicBodyShort>;
+    return <BodyShort className="italic">Ingen hjemler valgt under saksdata.</BodyShort>;
   }
 
   return (
@@ -117,7 +116,3 @@ const hjemmelIdListsEquals = (a: string[] = [], b: string[] = []) => {
 
   return a.every((id) => b.includes(id));
 };
-
-const ItalicBodyShort = styled(BodyShort)`
-  font-style: italic;
-`;
