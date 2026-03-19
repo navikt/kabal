@@ -1,23 +1,23 @@
-import { PanelContainer } from '@app/components/oppgavebehandling-panels/panel-container';
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
-import { NewDocument } from '@app/components/smart-editor/new-document/new-document';
-import {
-  EditorPanelFocusProvider,
-  useEditorPanelFocusRef,
-  useRequestEditorPanelFocus,
-} from '@app/components/smart-editor/tabbed-editors/editor-panel-focus-context';
-import { TabPanel } from '@app/components/smart-editor/tabbed-editors/tab-panel';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
-import { useElementWidth } from '@app/hooks/use-element-width';
-import { useIsRolOrKrolUser } from '@app/hooks/use-is-rol';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { CreatorRole, type ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { DocPencilIcon, TabsAddIcon } from '@navikt/aksel-icons';
 import { Tabs, Tooltip } from '@navikt/ds-react';
 import type { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useRef } from 'react';
+import { PanelContainer } from '@/components/oppgavebehandling-panels/panel-container';
+import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
+import { usePanelShortcut } from '@/components/oppgavebehandling-panels/panel-shortcuts-context';
+import { NewDocument } from '@/components/smart-editor/new-document/new-document';
+import {
+  EditorPanelFocusProvider,
+  useEditorPanelFocusRef,
+  useRequestEditorPanelFocus,
+} from '@/components/smart-editor/tabbed-editors/editor-panel-focus-context';
+import { TabPanel } from '@/components/smart-editor/tabbed-editors/tab-panel';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useSmartEditorActiveDocument } from '@/hooks/settings/use-setting';
+import { useElementWidth } from '@/hooks/use-element-width';
+import { useIsRolOrKrolUser } from '@/hooks/use-is-rol';
+import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
+import { CreatorRole, type ISmartDocumentOrAttachment } from '@/types/documents/documents';
 
 const focusFirstButton = (container: HTMLElement | null) => {
   const firstButton = container?.querySelector<HTMLButtonElement>('button:not([disabled])');

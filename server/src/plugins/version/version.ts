@@ -1,11 +1,11 @@
-import { PROXY_VERSION } from '@app/config/config';
-import { formatDuration, getDuration } from '@app/helpers/duration';
-import { getLogger } from '@app/logger';
-import { startClientSession } from '@app/plugins/version/clients-gauge';
-import { VERSION_QUERY_STRING_SCHEMA, type VersionQueryString } from '@app/plugins/version/query';
-import { histogram } from '@app/plugins/version/session-histogram';
-import { getUpdateRequest } from '@app/plugins/version/update-request';
 import fastifyPlugin from 'fastify-plugin';
+import { PROXY_VERSION } from '@/config/config';
+import { formatDuration, getDuration } from '@/helpers/duration';
+import { getLogger } from '@/logger';
+import { startClientSession } from '@/plugins/version/clients-gauge';
+import { VERSION_QUERY_STRING_SCHEMA, type VersionQueryString } from '@/plugins/version/query';
+import { histogram } from '@/plugins/version/session-histogram';
+import { getUpdateRequest } from '@/plugins/version/update-request';
 
 const log = getLogger('version');
 

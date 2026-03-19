@@ -1,14 +1,14 @@
-import { CreateText } from '@app/components/maltekstseksjoner/create';
-import { DragAndDropContext } from '@app/components/maltekstseksjoner/drag-and-drop/drag-context';
-import { List, SidebarContainer } from '@app/components/maltekstseksjoner/maltekstseksjon/common';
-import { AvailableTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/available-texts';
-import { DraggableListItem } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/draggable-list-item';
-import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { type IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
-import type { IDraftMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { Heading, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
+import { CreateText } from '@/components/maltekstseksjoner/create';
+import { DragAndDropContext } from '@/components/maltekstseksjoner/drag-and-drop/drag-context';
+import { List, SidebarContainer } from '@/components/maltekstseksjoner/maltekstseksjon/common';
+import { AvailableTexts } from '@/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/available-texts';
+import { DraggableListItem } from '@/components/maltekstseksjoner/maltekstseksjon/draft/draggable-list-item';
+import { useUpdateTextIdListMutation } from '@/redux-api/maltekstseksjoner/mutations';
+import { type IGetMaltekstseksjonParams, RichTextTypes } from '@/types/common-text-types';
+import type { IDraftMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
 interface Props {
   maltekstseksjon: IDraftMaltekstseksjon;

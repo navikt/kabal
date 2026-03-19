@@ -1,5 +1,5 @@
-import { merge } from '@app/functions/classes';
 import { HStack, Tag, type TagProps } from '@navikt/ds-react';
+import { merge } from '@/functions/classes';
 
 export const EditableTag = ({ children, className, ...rest }: TagProps & React.RefAttributes<HTMLSpanElement>) => (
   <HStack

@@ -1,6 +1,6 @@
-import { merge } from '@app/functions/classes';
 import { Box, Button, type ButtonProps } from '@navikt/ds-react';
 import { type HTMLAttributes, useEffect, useRef } from 'react';
+import { merge } from '@/functions/classes';
 
 interface BaseProps {
   onSelect: (suggestion: string) => void;

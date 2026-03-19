@@ -1,15 +1,15 @@
+import { Box, HStack } from '@navikt/ds-react';
 import {
   AaRegisteret,
   Ainntekt,
   KunnskapsbankTrygdemedisin,
   Modia,
-} from '@app/components/oppgavebehandling-controls/external-links';
-import { PanelKeyboardHelpButton } from '@app/components/oppgavebehandling-controls/keyboard-help/keyboard-help-button';
-import { PanelKeyboardHelpModal } from '@app/components/oppgavebehandling-controls/keyboard-help/keyboard-help-modal';
-import { PanelSwitches } from '@app/components/oppgavebehandling-controls/panel-switches';
-import { UserInfo } from '@app/components/oppgavebehandling-controls/user-info';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { Box, HStack } from '@navikt/ds-react';
+} from '@/components/oppgavebehandling-controls/external-links';
+import { PanelKeyboardHelpButton } from '@/components/oppgavebehandling-controls/keyboard-help/keyboard-help-button';
+import { PanelKeyboardHelpModal } from '@/components/oppgavebehandling-controls/keyboard-help/keyboard-help-modal';
+import { PanelSwitches } from '@/components/oppgavebehandling-controls/panel-switches';
+import { UserInfo } from '@/components/oppgavebehandling-controls/user-info';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 
 export const OppgavebehandlingControls = () => (
   <HStack

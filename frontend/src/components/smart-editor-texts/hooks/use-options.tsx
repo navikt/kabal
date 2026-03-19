@@ -1,9 +1,9 @@
-import type { IOption } from '@app/components/filter-dropdown/props';
-import { SAKSTYPE_TO_TAG_VARIANT } from '@app/components/type/sakstype-to-tag-variant';
-import { useKlageenheter, useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
-import type { UtfallEnum } from '@app/types/kodeverk';
 import { Tag } from '@navikt/ds-react';
 import { useMemo } from 'react';
+import type { IOption } from '@/components/filter-dropdown/props';
+import { SAKSTYPE_TO_TAG_VARIANT } from '@/components/type/sakstype-to-tag-variant';
+import { useKlageenheter, useSakstyperToUtfall } from '@/simple-api-state/use-kodeverk';
+import type { UtfallEnum } from '@/types/kodeverk';
 
 const EMPTY_ARRAY: [] = [];
 

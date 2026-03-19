@@ -1,7 +1,7 @@
-import { ENVIRONMENT } from '@app/environment';
-import { queryStringify } from '@app/functions/query-string';
-import { setHeaders } from '@app/headers';
 import { type FetchArgs, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
+import { ENVIRONMENT } from '@/environment';
+import { queryStringify } from '@/functions/query-string';
+import { setHeaders } from '@/headers';
 
 const mode: RequestMode | undefined = ENVIRONMENT.isLocal ? 'cors' : undefined;
 

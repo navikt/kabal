@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { ABBREVIATION_REGEX } from '@app/plate/plugins/capitalise/helpers';
+import { ABBREVIATION_REGEX } from '@/plate/plugins/capitalise/helpers';
 
 describe('abbreviaton regex', () => {
   it('should match e.l', () => {

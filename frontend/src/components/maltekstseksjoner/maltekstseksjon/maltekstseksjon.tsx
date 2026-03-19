@@ -1,8 +1,8 @@
-import { MaltekstseksjonVersions } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-versions';
-import { ScalingGroup } from '@app/hooks/settings/use-setting';
-import { ScaleContextComponent } from '@app/plate/status-bar/scale-context';
-import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import { Box, VStack } from '@navikt/ds-react';
+import { MaltekstseksjonVersions } from '@/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-versions';
+import { ScalingGroup } from '@/hooks/settings/use-setting';
+import { ScaleContextComponent } from '@/plate/status-bar/scale-context';
+import type { IGetMaltekstseksjonParams } from '@/types/maltekstseksjoner/params';
 
 interface Props {
   maltekstseksjonId: string;

@@ -1,9 +1,9 @@
-import { AbbrevationExample } from '@app/components/settings/abbreviations/example';
-import { format } from '@app/components/settings/abbreviations/format';
-import { ExpansionTypeEnum } from '@app/components/settings/abbreviations/types';
-import { pushEvent } from '@app/observability';
 import { BodyShort, ReadMore } from '@navikt/ds-react';
 import { useCallback } from 'react';
+import { AbbrevationExample } from '@/components/settings/abbreviations/example';
+import { format } from '@/components/settings/abbreviations/format';
+import { ExpansionTypeEnum } from '@/components/settings/abbreviations/types';
+import { pushEvent } from '@/observability';
 
 export const AbbreviationsExplanation = () => {
   const onOpenChange = useCallback((open: boolean) => {

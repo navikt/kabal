@@ -1,25 +1,19 @@
-import {
-  getVedlegg,
-  useGetDocument,
-} from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import {
-  getFocusIndex,
-  getIsInVedleggList,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import { isSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { useLazyIsTilknyttetDokument } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
-import { toast } from '@app/components/toast/store';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useCallback, useContext } from 'react';
+import { getVedlegg, useGetDocument } from '@/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import { getFocusIndex, getIsInVedleggList } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { isSelected } from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
+import { useLazyIsTilknyttetDokument } from '@/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
+import { toast } from '@/components/toast/store';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import {
   useRemoveAllTilknyttedeDocumentsMutation,
   useRemoveTilknyttedeDocumentsMutation,
-} from '@app/redux-api/oppgaver/mutations/remove-tilknytt-document';
-import { useTilknyttDocumentsMutation } from '@app/redux-api/oppgaver/mutations/tilknytt-document';
-import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { type IArkivertDocument, Journalstatus } from '@app/types/arkiverte-documents';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useContext } from 'react';
+} from '@/redux-api/oppgaver/mutations/remove-tilknytt-document';
+import { useTilknyttDocumentsMutation } from '@/redux-api/oppgaver/mutations/tilknytt-document';
+import { useGetArkiverteDokumenterQuery } from '@/redux-api/oppgaver/queries/documents';
+import { type IArkivertDocument, Journalstatus } from '@/types/arkiverte-documents';
 
 export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
   const oppgaveId = useOppgaveId();

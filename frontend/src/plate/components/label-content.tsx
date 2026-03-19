@@ -1,13 +1,13 @@
-import { formatFoedselsnummer } from '@app/functions/format-id';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { type LabelContentElement, LabelContentSource } from '@app/plate/types';
-import { useYtelserAll } from '@app/simple-api-state/use-kodeverk';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useEffect, useMemo } from 'react';
+import { formatFoedselsnummer } from '@/functions/format-id';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
+import { type LabelContentElement, LabelContentSource } from '@/plate/types';
+import { useYtelserAll } from '@/simple-api-state/use-kodeverk';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   const { children, element, editor, path } = props;

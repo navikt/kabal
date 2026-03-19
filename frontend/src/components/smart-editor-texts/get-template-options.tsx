@@ -1,9 +1,9 @@
-import { type NestedOption, OptionType } from '@app/components/filter-dropdown/nested-filter-list';
-import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
-import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@app/components/smart-editor-texts/types';
-import { getTemplateSections } from '@app/hooks/use-template-sections';
-import { DeprecatedTemplateSections, TemplateSections } from '@app/plate/template-sections';
-import { TEMPLATES } from '@app/plate/templates/templates';
+import { type NestedOption, OptionType } from '@/components/filter-dropdown/nested-filter-list';
+import { MALTEKST_SECTION_NAMES } from '@/components/smart-editor/constants';
+import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@/components/smart-editor-texts/types';
+import { getTemplateSections } from '@/hooks/use-template-sections';
+import { DeprecatedTemplateSections, TemplateSections } from '@/plate/template-sections';
+import { TEMPLATES } from '@/plate/templates/templates';
 
 export const ALL_TEMPLATES_LABEL = 'Alle maler';
 export const DEPRECATED_SECTIONS_LABEL = 'Utgåtte seksjoner';

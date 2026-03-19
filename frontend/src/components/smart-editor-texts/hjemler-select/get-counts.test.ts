@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { getCounts } from '@app/components/smart-editor-texts/hjemler-select/hooks';
-import { GLOBAL, LIST_DELIMITER, NONE, WILDCARD } from '@app/components/smart-editor-texts/types';
+import { getCounts } from '@/components/smart-editor-texts/hjemler-select/hooks';
+import { GLOBAL, LIST_DELIMITER, NONE, WILDCARD } from '@/components/smart-editor-texts/types';
 
 describe('getCounts', () => {
   it('should return zero counts for an empty selection', () => {

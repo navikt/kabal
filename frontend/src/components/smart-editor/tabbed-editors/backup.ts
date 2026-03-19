@@ -1,8 +1,8 @@
-import { BACKUP_DATE_FORMAT, KEY_PREFIX } from '@app/components/smart-editor/tabbed-editors/constants';
-import { setLocalStorageItem } from '@app/localstorage';
-import { pushError } from '@app/observability';
-import type { KabalValue } from '@app/plate/types';
 import { format } from 'date-fns';
+import { BACKUP_DATE_FORMAT, KEY_PREFIX } from '@/components/smart-editor/tabbed-editors/constants';
+import { setLocalStorageItem } from '@/localstorage';
+import { pushError } from '@/observability';
+import type { KabalValue } from '@/plate/types';
 
 export const TTL_DAYS = 30;
 

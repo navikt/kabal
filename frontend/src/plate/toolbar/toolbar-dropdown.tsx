@@ -1,7 +1,7 @@
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CaretDownFillIcon } from '@navikt/aksel-icons';
 import { Button, HStack, VStack } from '@navikt/ds-react';
 import { type ReactNode, useRef, useState } from 'react';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
 
 interface Props {
   icon: ReactNode;

@@ -1,18 +1,18 @@
-import { Fields } from '@app/components/documents/new-documents/grid';
-import { useFinishValidationErrors } from '@app/components/documents/new-documents/hooks/use-finish-access';
-import { useRemoveDocumentAccessErrors } from '@app/components/documents/new-documents/hooks/use-remove-access';
-import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
-import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
-import { DocumentModalContent } from '@app/components/documents/new-documents/modal/modal-document-content';
-import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { isNotNull } from '@app/functions/is-not-type-guards';
-import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { type Dua, useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
-import { DistribusjonsType, type IParentDocument } from '@app/types/documents/documents';
 import { MenuElipsisVerticalIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
 import { Button, Modal, Tooltip } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
+import { Fields } from '@/components/documents/new-documents/grid';
+import { useFinishValidationErrors } from '@/components/documents/new-documents/hooks/use-finish-access';
+import { useRemoveDocumentAccessErrors } from '@/components/documents/new-documents/hooks/use-remove-access';
+import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
+import { ModalContext } from '@/components/documents/new-documents/modal/modal-context';
+import { DocumentModalContent } from '@/components/documents/new-documents/modal/modal-document-content';
+import { DocumentIcon } from '@/components/documents/new-documents/shared/document-icon';
+import { getIsIncomingDocument } from '@/functions/is-incoming-document';
+import { isNotNull } from '@/functions/is-not-type-guards';
+import { DuaActionEnum } from '@/hooks/dua-access/access';
+import { type Dua, useDuaAccess } from '@/hooks/dua-access/use-dua-access';
+import { DistribusjonsType, type IParentDocument } from '@/types/documents/documents';
 
 interface Props {
   isOpen: boolean;

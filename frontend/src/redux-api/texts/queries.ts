@@ -1,9 +1,9 @@
-import { ENVIRONMENT } from '@app/environment';
-import { paramsWithGlobalQueries } from '@app/redux-api/redaktør-helpers';
-import { ListTagTypes } from '@app/redux-api/tag-types';
-import { TextsTagTypes, textsApi } from '@app/redux-api/texts/texts';
-import type { IGetTextsParams } from '@app/types/texts/params';
-import type { IText, ListText } from '@app/types/texts/responses';
+import { ENVIRONMENT } from '@/environment';
+import { paramsWithGlobalQueries } from '@/redux-api/redaktør-helpers';
+import { ListTagTypes } from '@/redux-api/tag-types';
+import { TextsTagTypes, textsApi } from '@/redux-api/texts/texts';
+import type { IGetTextsParams } from '@/types/texts/params';
+import type { IText, ListText } from '@/types/texts/responses';
 
 const textsListTags = (texts: ListText[] | undefined) =>
   texts === undefined

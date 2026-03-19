@@ -1,6 +1,6 @@
-import { Alert } from '@app/components/alert/alert';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { Alert } from '@/components/alert/alert';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 
 const START_DATE = '2023-12-08T15:30:00.00000';
 

@@ -1,6 +1,6 @@
-import { KLAGE_NOTIFICATIONS_BASE_PATH } from '@app/components/header/notifications/constants';
-import { toast } from '@app/components/toast/store';
 import { useCallback, useEffect, useState } from 'react';
+import { KLAGE_NOTIFICATIONS_BASE_PATH } from '@/components/header/notifications/constants';
+import { toast } from '@/components/toast/store';
 
 export const useMarkAsRead = () => {
   const [loading, setLoading] = useState(false);

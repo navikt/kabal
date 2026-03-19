@@ -1,4 +1,9 @@
-import { CurrentDatePlugin } from '@app/plate/plugins/current-date';
+import { Box } from '@navikt/ds-react';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
+import { BaseTablePlugin } from '@platejs/table';
+import { BaseParagraphPlugin } from 'platejs';
+import { CurrentDatePlugin } from '@/plate/plugins/current-date';
 import {
   ELEMENT_EMPTY_VOID,
   ELEMENT_FOOTER,
@@ -9,14 +14,9 @@ import {
   ELEMENT_REDIGERBAR_MALTEKST,
   ELEMENT_REGELVERK,
   ELEMENT_SIGNATURE,
-} from '@app/plate/plugins/element-types';
-import { LabelContentPlugin } from '@app/plate/plugins/label-content';
-import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { Box } from '@navikt/ds-react';
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
-import { BaseTablePlugin } from '@platejs/table';
-import { BaseParagraphPlugin } from 'platejs';
+} from '@/plate/plugins/element-types';
+import { LabelContentPlugin } from '@/plate/plugins/label-content';
+import type { ISmartEditorTemplate } from '@/types/smart-editor/smart-editor';
 
 interface GeneratedIconProps {
   template: ISmartEditorTemplate;

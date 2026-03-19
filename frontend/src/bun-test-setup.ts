@@ -6,8 +6,8 @@ import React from 'react';
 // This is needed for @styled-icons/fluentui-system-regular which depends on styled-components via @styled-icons/styled-icon.
 globalThis.React = React;
 
-import type { IUserData } from '@app/types/bruker';
-import type { CountryCode, PostalCode } from '@app/types/common';
+import type { IUserData } from '@/types/bruker';
+import type { CountryCode, PostalCode } from '@/types/common';
 
 GlobalRegistrator.register();
 
@@ -27,20 +27,20 @@ const user: Promise<IUserData> = Promise.resolve({
 const countryCodes: Promise<CountryCode[]> = Promise.resolve([]);
 const postalCodes: Promise<PostalCode[]> = Promise.resolve([]);
 
-mock.module('@app/static-data/static-data', () => ({
+mock.module('@/static-data/static-data', () => ({
   user,
   countryCodes,
   postalCodes,
 }));
 
-mock.module('@app/observability', () => ({
+mock.module('@/observability', () => ({
   pushError: jest.fn(),
   pushLog: jest.fn(),
   pushEvent: jest.fn(),
   usePushEvent: jest.fn(),
 }));
 
-mock.module('@app/environment', () => ({
+mock.module('@/environment', () => ({
   ENVIRONMENT: {
     isProduction: false,
     isDevelopment: false,

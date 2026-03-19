@@ -5,7 +5,7 @@ import {
   REGELVERK_TYPE,
   RichTextTypes,
   type TextTypes,
-} from '@app/types/common-text-types';
+} from '@/types/common-text-types';
 
 export const getPathPrefix = (textType: TextTypes): string => {
   switch (textType) {

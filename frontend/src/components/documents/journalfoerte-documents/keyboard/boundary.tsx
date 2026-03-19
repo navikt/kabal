@@ -1,9 +1,9 @@
-import { setKeyboardActive } from '@app/components/documents/journalfoerte-documents/keyboard/state/keyboard-active';
-import { EVENT_DOMAIN, useKeyboard } from '@app/components/documents/journalfoerte-documents/keyboard/use-keyboard';
-import { isMetaKey, Keys } from '@app/keys';
-import { pushEvent } from '@app/observability';
 import { Box } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
+import { setKeyboardActive } from '@/components/documents/journalfoerte-documents/keyboard/state/keyboard-active';
+import { EVENT_DOMAIN, useKeyboard } from '@/components/documents/journalfoerte-documents/keyboard/use-keyboard';
+import { isMetaKey, Keys } from '@/keys';
+import { pushEvent } from '@/observability';
 
 interface KeyboardBoundaryProps {
   children: React.ReactNode;

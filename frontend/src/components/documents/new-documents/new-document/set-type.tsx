@@ -1,14 +1,14 @@
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { type DistribusjonsTypeOption, useDistribusjonstypeOptions } from '@app/hooks/use-distribusjonstype-options';
-import { useSetTypeMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { Select, Tag, Tooltip } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { type DistribusjonsTypeOption, useDistribusjonstypeOptions } from '@/hooks/use-distribusjonstype-options';
+import { useSetTypeMutation } from '@/redux-api/oppgaver/mutations/documents';
 import {
   DISTRIBUSJONSTYPER,
   DISTRIBUTION_TYPE_NAMES,
   type DistribusjonsType,
   type IDocument,
-} from '@app/types/documents/documents';
-import { Select, Tag, Tooltip } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
+} from '@/types/documents/documents';
 
 interface Props extends React.RefAttributes<HTMLSpanElement> {
   document: IDocument;

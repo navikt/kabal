@@ -1,12 +1,12 @@
-import { StyledNewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
-import { SharedDocumentTitle } from '@app/components/documents/new-documents/shared/title';
-import { StyledAttachmentListItem } from '@app/components/documents/styled-components/attachment-list';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useDocumentTabUrl } from '@app/hooks/use-document-tab-url';
-import { useCreateVedleggFromJournalfoertDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DOCUMENT_TYPE_NAMES, DocumentTypeEnum } from '@app/types/documents/documents';
 import { BulletListIcon } from '@navikt/aksel-icons';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { StyledNewAttachment } from '@/components/documents/new-documents/new-document/new-attachment';
+import { SharedDocumentTitle } from '@/components/documents/new-documents/shared/title';
+import { StyledAttachmentListItem } from '@/components/documents/styled-components/attachment-list';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentTabUrl } from '@/hooks/use-document-tab-url';
+import { useCreateVedleggFromJournalfoertDocumentMutation } from '@/redux-api/oppgaver/mutations/documents';
+import { DOCUMENT_TYPE_NAMES, DocumentTypeEnum } from '@/types/documents/documents';
 
 interface Props {
   documentId: string;

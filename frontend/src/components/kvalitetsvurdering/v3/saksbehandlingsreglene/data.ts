@@ -1,4 +1,4 @@
-import { MAIN_REASON_LABELS, MainReason } from '@app/components/kvalitetsvurdering/v3/data';
+import { MAIN_REASON_LABELS, MainReason } from '@/components/kvalitetsvurdering/v3/data';
 
 export const HEADER = MAIN_REASON_LABELS[MainReason.Saksbehandlingsreglene];
 

@@ -1,5 +1,5 @@
-import { accessListDocumentCountGauge, accessListUserCountSummary } from '@app/document-access/metrics';
-import { getLogger } from '@app/logger';
+import { accessListDocumentCountGauge, accessListUserCountSummary } from '@/document-access/metrics';
+import { getLogger } from '@/logger';
 
 const log = getLogger('document-write-access-map');
 

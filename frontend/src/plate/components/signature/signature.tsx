@@ -1,17 +1,17 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
-import { pxToEm } from '@app/plate/components/get-scaled-em';
-import { MedunderskriverSignature, SaksbehandlerSignature } from '@app/plate/components/signature/individual-signature';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import type { SignatureElement } from '@app/plate/types';
-import { useGetMySignatureQuery } from '@app/redux-api/bruker';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Box, HStack } from '@navikt/ds-react';
 import type { SetNodesOptions } from 'platejs';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useContext, useId } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { AddNewParagraphs } from '@/plate/components/common/add-new-paragraph-buttons';
+import { pxToEm } from '@/plate/components/get-scaled-em';
+import { MedunderskriverSignature, SaksbehandlerSignature } from '@/plate/components/signature/individual-signature';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
+import type { SignatureElement } from '@/plate/types';
+import { useGetMySignatureQuery } from '@/redux-api/bruker';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 export const Signature = (props: PlateElementProps<SignatureElement>) => {

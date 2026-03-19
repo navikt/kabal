@@ -1,14 +1,14 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useIsFullfoert } from '@app/hooks/use-is-fullfoert';
-import { getName, getTitle } from '@app/plate/components/signature/functions';
-import { MISSING_TITLE } from '@app/plate/components/signature/title';
-import type { ISignature, SignatureElement } from '@app/plate/types';
-import { useGetSignatureQuery } from '@app/redux-api/bruker';
-import type { ISignatureResponse } from '@app/types/bruker';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
+import { getName, getTitle } from '@/plate/components/signature/functions';
+import { MISSING_TITLE } from '@/plate/components/signature/title';
+import type { ISignature, SignatureElement } from '@/plate/types';
+import { useGetSignatureQuery } from '@/redux-api/bruker';
+import type { ISignatureResponse } from '@/types/bruker';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 export const useMedunderskriverSignature = () => {
   const { data: oppgave } = useOppgave();

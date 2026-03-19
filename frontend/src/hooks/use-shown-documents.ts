@@ -1,12 +1,12 @@
-import { canOpenInKabal } from '@app/components/documents/filetype';
-import type { IShownDocument } from '@app/components/file-viewer/types';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useFilesViewed } from '@app/hooks/settings/use-setting';
-import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import type { IArkivertDocument, Variants } from '@app/types/arkiverte-documents';
-import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
 import { useMemo } from 'react';
+import { canOpenInKabal } from '@/components/documents/filetype';
+import type { IShownDocument } from '@/components/file-viewer/types';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useFilesViewed } from '@/hooks/settings/use-setting';
+import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
+import type { IArkivertDocument, Variants } from '@/types/arkiverte-documents';
+import { DocumentTypeEnum, type IDocument } from '@/types/documents/documents';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 interface ShowDocumentResult {
   showDocumentList: IShownDocument[];

@@ -1,10 +1,10 @@
-import { getDuration } from '@app/helpers/duration';
-import { type AnyObject, getLogger } from '@app/logger';
-import { PROXY_VERSION_PLUGIN_ID } from '@app/plugins/proxy-version';
-import { SERVE_ASSETS_PLUGIN_ID } from '@app/plugins/serve-assets';
-import { SERVE_INDEX_PLUGIN_ID } from '@app/plugins/serve-index';
-import { TAB_ID_PLUGIN_ID } from '@app/plugins/tab-id';
 import fastifyPlugin from 'fastify-plugin';
+import { getDuration } from '@/helpers/duration';
+import { type AnyObject, getLogger } from '@/logger';
+import { PROXY_VERSION_PLUGIN_ID } from '@/plugins/proxy-version';
+import { SERVE_ASSETS_PLUGIN_ID } from '@/plugins/serve-assets';
+import { SERVE_INDEX_PLUGIN_ID } from '@/plugins/serve-index';
+import { TAB_ID_PLUGIN_ID } from '@/plugins/tab-id';
 
 export const HTTP_LOGGER_PLUGIN_ID = 'http-logger';
 

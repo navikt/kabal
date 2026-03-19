@@ -1,7 +1,7 @@
-import { BackLink } from '@app/components/oppgavebehandling-footer/back-link';
-import { FooterType, StyledFooter } from '@app/components/oppgavebehandling-footer/styled-components';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, InlineMessage } from '@navikt/ds-react';
+import { BackLink } from '@/components/oppgavebehandling-footer/back-link';
+import { FooterType, StyledFooter } from '@/components/oppgavebehandling-footer/styled-components';
 
 export const FinishedFooter = () => (
   <StyledFooter type={FooterType.FINISHED}>

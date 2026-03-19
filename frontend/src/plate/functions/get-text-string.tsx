@@ -1,8 +1,8 @@
-import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import type { PlaceholderElement } from '@app/plate/types';
-import { isOfElementType } from '@app/plate/utils/queries';
 import { type Descendant, ElementApi, NodeApi, type Value } from 'platejs';
+import { removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
+import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
+import type { PlaceholderElement } from '@/plate/types';
+import { isOfElementType } from '@/plate/utils/queries';
 
 const SPACE_REGEX = /\s+/g;
 

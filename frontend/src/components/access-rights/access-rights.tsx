@@ -1,16 +1,16 @@
-import { Body } from '@app/components/access-rights/body';
-import { Head } from '@app/components/access-rights/head';
-import { StaticDataContext } from '@app/components/app/static-data-context';
+import { ArrowUndoIcon, FloppydiskIcon } from '@navikt/aksel-icons';
+import { Button, Heading, HStack, Loader } from '@navikt/ds-react';
+import { useContext, useState } from 'react';
+import { Body } from '@/components/access-rights/body';
+import { Head } from '@/components/access-rights/head';
+import { StaticDataContext } from '@/components/app/static-data-context';
 import {
   type SaksbehandlerAccessRights,
   useGetAccessRightsQuery,
   useUpdateAccessRightsMutation,
-} from '@app/redux-api/access-rights';
-import { useLatestYtelser } from '@app/simple-api-state/use-kodeverk';
-import type { IYtelse } from '@app/types/kodeverk';
-import { ArrowUndoIcon, FloppydiskIcon } from '@navikt/aksel-icons';
-import { Button, Heading, HStack, Loader } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+} from '@/redux-api/access-rights';
+import { useLatestYtelser } from '@/simple-api-state/use-kodeverk';
+import type { IYtelse } from '@/types/kodeverk';
 
 const EMPTY_ARRAY: [] = [];
 

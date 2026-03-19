@@ -1,12 +1,12 @@
-import { ContainerWithHelpText } from '@app/components/kvalitetsvurdering/common/container-with-helptext';
-import type { TextParams } from '@app/components/kvalitetsvurdering/v3/common/types';
-import { useKvalitetsvurderingV3 } from '@app/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
-import { useValidationError } from '@app/components/kvalitetsvurdering/v3/common/use-validation-error';
-import { SavedStatus } from '@app/components/saved-status/saved-status';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import type { KvalitetsvurderingV3Boolean } from '@app/types/kaka-kvalitetsvurdering/v3';
 import { BodyLong, HStack, Label, Textarea } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
+import { ContainerWithHelpText } from '@/components/kvalitetsvurdering/common/container-with-helptext';
+import type { TextParams } from '@/components/kvalitetsvurdering/v3/common/types';
+import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
+import { SavedStatus } from '@/components/saved-status/saved-status';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import type { KvalitetsvurderingV3Boolean } from '@/types/kaka-kvalitetsvurdering/v3';
 
 interface Props extends TextParams {
   parentKey?: keyof KvalitetsvurderingV3Boolean;

@@ -1,6 +1,6 @@
-import { toast } from '@app/components/toast/store';
-import type { BFFError, KabalApiErrorData } from '@app/types/errors';
 import { BodyLong, Heading, Label } from '@navikt/ds-react';
+import { toast } from '@/components/toast/store';
+import type { BFFError, KabalApiErrorData } from '@/types/errors';
 
 export const genericErrorToast = (heading: string, description: string) =>
   toast.error(

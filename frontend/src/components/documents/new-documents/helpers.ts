@@ -1,5 +1,5 @@
-import type { IDocument, ISmartDocument } from '@app/types/documents/documents';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { IDocument, ISmartDocument } from '@/types/documents/documents';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 export type MaybeRolQuestionsDocument = Pick<IDocument, 'isSmartDokument' | 'templateId'>;
 

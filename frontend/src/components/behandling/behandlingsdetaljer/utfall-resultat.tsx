@@ -1,19 +1,19 @@
+import { HelpText, HStack, Label, VStack } from '@navikt/ds-react';
+import { useId, useMemo } from 'react';
 import {
   AnkeDelvisMedholdWarning,
   AnkeITRHenvistWarning,
   AnkeITROpphevetWarning,
   ReturWarning,
-} from '@app/components/behandling/behandlingsdetaljer/warnings';
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { SearchableSelect } from '@app/components/searchable-select/searchable-single-select/searchable-single-select';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { useFieldName } from '@app/hooks/use-field-name';
-import { useUtfall } from '@app/hooks/use-utfall';
-import { useValidationError } from '@app/hooks/use-validation-error';
-import { useUpdateExtraUtfallMutation, useUpdateUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
-import { type IKodeverkSimpleValue, SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import { HelpText, HStack, Label, VStack } from '@navikt/ds-react';
-import { useId, useMemo } from 'react';
+} from '@/components/behandling/behandlingsdetaljer/warnings';
+import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
+import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import { useFieldName } from '@/hooks/use-field-name';
+import { useUtfall } from '@/hooks/use-utfall';
+import { useValidationError } from '@/hooks/use-validation-error';
+import { useUpdateExtraUtfallMutation, useUpdateUtfallMutation } from '@/redux-api/oppgaver/mutations/set-utfall';
+import { type IKodeverkSimpleValue, SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 
 interface UtfallResultatProps {
   utfall: UtfallEnum | null;

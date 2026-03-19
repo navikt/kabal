@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test';
-import { AppTheme, getAppThemeKey, getSystemTheme, resolveTheme } from '@app/theme';
+import { AppTheme, getAppThemeKey, getSystemTheme, resolveTheme } from '@/theme';
 
 describe('getAppThemeKey', () => {
   test('returns navIdent prefixed key', () => {

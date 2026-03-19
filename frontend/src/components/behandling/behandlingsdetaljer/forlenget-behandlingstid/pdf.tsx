@@ -1,6 +1,9 @@
-import { Alert } from '@app/components/alert/alert';
-import { validateBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
-import { KabalFileViewer } from '@app/components/kabal-file-viewer';
+import { FilePdfIcon } from '@navikt/aksel-icons';
+import { HStack, InlineMessage, Loader, VStack } from '@navikt/ds-react';
+import { useEffect, useState } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { validateBehandlingstid } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
+import { KabalFileViewer } from '@/components/kabal-file-viewer';
 import {
   useGetOrCreateQuery,
   useSetBehandlingstidDateMutation,
@@ -11,10 +14,7 @@ import {
   useSetPreviousBehandlingstidInfoMutation,
   useSetReasonMutation,
   useSetTitleMutation,
-} from '@app/redux-api/forlenget-behandlingstid';
-import { FilePdfIcon } from '@navikt/aksel-icons';
-import { HStack, InlineMessage, Loader, VStack } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
+} from '@/redux-api/forlenget-behandlingstid';
 
 interface VarsletFristProps {
   id: string;

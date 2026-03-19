@@ -1,10 +1,10 @@
-import { Alert } from '@app/components/alert/alert';
-import { AddAbbreviation } from '@app/components/settings/abbreviations/add';
-import { ExistingAbbreviation } from '@app/components/settings/abbreviations/existing';
-import { AbbreviationsExplanation } from '@app/components/settings/abbreviations/explanation';
-import { SectionHeader, SettingsSection } from '@app/components/settings/styled-components';
-import { useGetAbbreviationsQuery } from '@app/redux-api/bruker';
 import { Heading, type HeadingProps, HelpText, Loader } from '@navikt/ds-react';
+import { Alert } from '@/components/alert/alert';
+import { AddAbbreviation } from '@/components/settings/abbreviations/add';
+import { ExistingAbbreviation } from '@/components/settings/abbreviations/existing';
+import { AbbreviationsExplanation } from '@/components/settings/abbreviations/explanation';
+import { SectionHeader, SettingsSection } from '@/components/settings/styled-components';
+import { useGetAbbreviationsQuery } from '@/redux-api/bruker';
 
 export const Abbreviations = () => (
   <SettingsSection>

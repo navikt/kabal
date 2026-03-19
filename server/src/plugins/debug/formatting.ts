@@ -1,4 +1,4 @@
-import { type BehandlingData, DataType, type Document, type Reporter, type User } from '@app/plugins/debug/types';
+import { type BehandlingData, DataType, type Document, type Reporter, type User } from '@/plugins/debug/types';
 
 export const formatMessage = (
   url: string,

@@ -1,18 +1,18 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { InsertPlugin } from '@app/plate/plugins/capitalise/capitalise';
+import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, Button, HStack, TextField, VStack } from '@navikt/ds-react';
+import { TextCaseTitle, TextChangeCase } from '@styled-icons/fluentui-system-regular';
+import { useEditorPlugin, usePluginOption } from 'platejs/react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { InsertPlugin } from '@/plate/plugins/capitalise/capitalise';
 import {
   getAllDecorations,
   mergeRanges,
   ReplaceOneHighlightPlugin,
   replaceText,
   SearchReplacePlugin,
-} from '@app/plate/plugins/search-replace/search-replace';
-import { useMyPlateEditorState } from '@app/plate/types';
-import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, HStack, TextField, VStack } from '@navikt/ds-react';
-import { TextCaseTitle, TextChangeCase } from '@styled-icons/fluentui-system-regular';
-import { useEditorPlugin, usePluginOption } from 'platejs/react';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+} from '@/plate/plugins/search-replace/search-replace';
+import { useMyPlateEditorState } from '@/plate/types';
 
 const useOnUnmount = (callback: () => void) => {
   const isMounted = useRef(true);

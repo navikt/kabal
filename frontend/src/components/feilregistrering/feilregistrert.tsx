@@ -1,4 +1,4 @@
-import { isoDateTimeToPretty } from '@app/domain/date';
+import { isoDateTimeToPretty } from '@/domain/date';
 
 interface Props {
   feilregistrert: string | null;

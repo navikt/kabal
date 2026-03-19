@@ -1,14 +1,14 @@
-import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
-import { VarsletFristModal } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/modal';
-import { TimesPreviouslyExtended } from '@app/components/times-previously-extended/times-previously-extended';
-import { isoDateToPretty } from '@app/domain/date';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { Role } from '@app/types/bruker';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useState } from 'react';
+import { BehandlingSection } from '@/components/behandling/behandlingsdetaljer/behandling-section';
+import { VarsletFristModal } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/modal';
+import { TimesPreviouslyExtended } from '@/components/times-previously-extended/times-previously-extended';
+import { isoDateToPretty } from '@/domain/date';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import { useHasRole } from '@/hooks/use-has-role';
+import { Role } from '@/types/bruker';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   oppgavebehandling: IOppgavebehandling;

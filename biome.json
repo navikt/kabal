@@ -52,6 +52,9 @@
         }
       },
       "correctness": {
+        "noUndeclaredDependencies": {
+          "level": "error"
+        },
         "useImportExtensions": {
           "level": "off",
           "fix": "none",

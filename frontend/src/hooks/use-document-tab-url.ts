@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   getAttachmentsOverviewFileViewerTabUrl,
   getAttachmentsOverviewTabUrl,
@@ -9,10 +10,9 @@ import {
   getMergedDocumentTabUrl,
   getNewDocumentTabUrl,
   getNewFileViewerTabUrl,
-} from '@app/domain/tabbed-document-url';
-import { useNewFileViewerFeatureToggle } from '@app/simple-api-state/feature-toggles';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { useMemo } from 'react';
+} from '@/domain/tabbed-document-url';
+import { useNewFileViewerFeatureToggle } from '@/simple-api-state/feature-toggles';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 interface DocumentTabUrlFunctions {
   getNewTabUrl: (oppgaveId: string, documentId: string, parentId: string | null) => string;

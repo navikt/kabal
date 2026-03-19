@@ -1,30 +1,30 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { OpenForRoleAccess } from '@app/components/common-table-components/open';
-import { CountdownButton } from '@app/components/countdown-button/countdown-button';
-import { ActionToast } from '@app/components/toast/action-toast';
-import { toast } from '@app/components/toast/store';
-import { formatEmployeeNameAndId, formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
-import { useHasRole } from '@app/hooks/use-has-role';
+import { Button } from '@navikt/ds-react';
+import { parseISO } from 'date-fns';
+import { useContext, useState } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { OpenForRoleAccess } from '@/components/common-table-components/open';
+import { CountdownButton } from '@/components/countdown-button/countdown-button';
+import { ActionToast } from '@/components/toast/action-toast';
+import { toast } from '@/components/toast/store';
+import { formatEmployeeNameAndId, formatEmployeeNameAndIdFallback } from '@/domain/employee-name';
+import { useHasRole } from '@/hooks/use-has-role';
 import {
   useFradelSaksbehandlerMutation,
   useTildelSaksbehandlerMutation,
-} from '@app/redux-api/oppgaver/mutations/tildeling';
+} from '@/redux-api/oppgaver/mutations/tildeling';
 import {
   useLazyGetSakenGjelderQuery,
   useLazyGetSaksbehandlerQuery,
-} from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { type INavEmployee, Role } from '@app/types/bruker';
-import type { SaksTypeEnum } from '@app/types/kodeverk';
-import type { ISakenGjelderResponse, ISaksbehandlerResponse } from '@app/types/oppgavebehandling/response';
+} from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { type INavEmployee, Role } from '@/types/bruker';
+import type { SaksTypeEnum } from '@/types/kodeverk';
+import type { ISakenGjelderResponse, ISaksbehandlerResponse } from '@/types/oppgavebehandling/response';
 import {
   FradelReason,
   type FradelWithHjemler,
   type FradelWithoutHjemler,
   type ITildelingResponse,
-} from '@app/types/oppgaver';
-import { Button } from '@navikt/ds-react';
-import { parseISO } from 'date-fns';
-import { useContext, useState } from 'react';
+} from '@/types/oppgaver';
 
 interface Props {
   oppgaveId: string;

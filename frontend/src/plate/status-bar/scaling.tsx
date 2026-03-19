@@ -1,10 +1,10 @@
-import { MAX, MIN, STEP } from '@app/components/smart-editor/hooks/use-scale';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { Keys, MOD_KEY_TEXT } from '@app/keys';
-import { ScaleContext } from '@app/plate/status-bar/scale-context';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Radio, RadioGroup, TextField, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { MAX, MIN, STEP } from '@/components/smart-editor/hooks/use-scale';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { Keys, MOD_KEY_TEXT } from '@/keys';
+import { ScaleContext } from '@/plate/status-bar/scale-context';
 
 export const Scaling = () => {
   const { scale, setScale, scaleUp, scaleDown } = useContext(ScaleContext);

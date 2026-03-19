@@ -1,10 +1,10 @@
-import { formatLongDate, zeroPad } from '@app/domain/date';
-import { ptToEm } from '@app/plate/components/get-scaled-em';
-import type { CurrentDateElement } from '@app/plate/types';
 import { Box } from '@navikt/ds-react';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
+import { formatLongDate, zeroPad } from '@/domain/date';
+import { ptToEm } from '@/plate/components/get-scaled-em';
+import type { CurrentDateElement } from '@/plate/types';
 
 type Props = PlateElementProps<CurrentDateElement>;
 

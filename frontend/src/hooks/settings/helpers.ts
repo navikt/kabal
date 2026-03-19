@@ -1,9 +1,9 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { parseJSON } from '@app/functions/parse-json';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { SETTINGS_MANAGER } from '@app/hooks/settings/manager';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { parseJSON } from '@/functions/parse-json';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { SETTINGS_MANAGER } from '@/hooks/settings/manager';
 
 type SetterFn<T> = (oldValue: T | undefined) => T;
 export type SettingSetter<T> = (value: T | SetterFn<T>) => void;

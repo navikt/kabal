@@ -1,6 +1,11 @@
-import { SaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/saksbehandler';
-import { isInRegelverk, isInUnchangeableElement } from '@app/plate/plugins/prohibit-deletion/helpers';
-import { RegelverkContainerPlugin, RegelverkPlugin } from '@app/plate/plugins/regelverk';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
+import { BaseTablePlugin } from '@platejs/table';
+import { type Descendant, ElementApi, NodeApi, type TElement, TextApi, type TNode, type TText } from 'platejs';
+import type { PlateEditor } from 'platejs/react';
+import { SaksbehandlerPlaceholderPlugin } from '@/plate/plugins/placeholder/saksbehandler';
+import { isInRegelverk, isInUnchangeableElement } from '@/plate/plugins/prohibit-deletion/helpers';
+import { RegelverkContainerPlugin, RegelverkPlugin } from '@/plate/plugins/regelverk';
 import type {
   BulletListElement,
   FormattedText,
@@ -11,12 +16,7 @@ import type {
   ParentOrChildElement,
   RichTextEditor,
   RichTextEditorElement,
-} from '@app/plate/types';
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
-import { BaseTablePlugin } from '@platejs/table';
-import { type Descendant, ElementApi, NodeApi, type TElement, TextApi, type TNode, type TText } from 'platejs';
-import type { PlateEditor } from 'platejs/react';
+} from '@/plate/types';
 
 // Ensures a next-path even though original path is at end
 export const nextPath = (path: number[]) => {

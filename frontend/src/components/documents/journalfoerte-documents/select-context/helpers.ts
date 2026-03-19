@@ -1,5 +1,5 @@
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 export const getId = (document: IJournalfoertDokumentId) => `${document.journalpostId}:${document.dokumentInfoId}`;
 

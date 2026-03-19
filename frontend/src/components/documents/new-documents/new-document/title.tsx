@@ -1,20 +1,17 @@
-import { DocumentWarnings } from '@app/components/documents/document-warnings';
-import { DragAndDropContext } from '@app/components/documents/drag-context';
-import {
-  TitleActions,
-  type TitleActionsProps,
-} from '@app/components/documents/new-documents/new-document/title-actions';
-import { StyledDocumentTitle } from '@app/components/documents/new-documents/new-document/title-style';
-import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { SharedDocumentTitle } from '@app/components/documents/new-documents/shared/title';
-import { SetFilename } from '@app/components/documents/set-filename';
-import { getJournalfoertDocumentTabId } from '@app/domain/tabbed-document-url';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useDocumentTabUrl } from '@app/hooks/use-document-tab-url';
-import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { DocumentTypeEnum, type IDocument } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { memo, useCallback, useContext, useMemo, useState } from 'react';
+import { DocumentWarnings } from '@/components/documents/document-warnings';
+import { DragAndDropContext } from '@/components/documents/drag-context';
+import { TitleActions, type TitleActionsProps } from '@/components/documents/new-documents/new-document/title-actions';
+import { StyledDocumentTitle } from '@/components/documents/new-documents/new-document/title-style';
+import { DocumentIcon } from '@/components/documents/new-documents/shared/document-icon';
+import { SharedDocumentTitle } from '@/components/documents/new-documents/shared/title';
+import { SetFilename } from '@/components/documents/set-filename';
+import { getJournalfoertDocumentTabId } from '@/domain/tabbed-document-url';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentTabUrl } from '@/hooks/use-document-tab-url';
+import { useSetTitleMutation } from '@/redux-api/oppgaver/mutations/documents';
+import { DocumentTypeEnum, type IDocument } from '@/types/documents/documents';
 
 interface Props {
   document: IDocument;

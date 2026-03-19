@@ -1,5 +1,5 @@
-import { isGenericObject } from '@app/types/types';
 import type { FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
+import { isGenericObject } from '@/types/types';
 
 export interface KabalApiErrorData {
   title: string; // Bad Request

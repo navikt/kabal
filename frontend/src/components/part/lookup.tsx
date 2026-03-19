@@ -1,7 +1,7 @@
-import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
-import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { type IdentifikatorPart, IdType, PartStatusEnum } from '@app/types/oppgave-common';
 import { BodyShort, Button, InlineMessage, Loader, Tag, VStack } from '@navikt/ds-react';
+import { PartNameAndIdentifikator } from '@/components/part-name-and-identifikator/part-name-and-identifikator';
+import { PartStatusList } from '@/components/part-status-list/part-status-list';
+import { type IdentifikatorPart, IdType, PartStatusEnum } from '@/types/oppgave-common';
 
 interface LookupProps extends Omit<ResultProps, 'part'> {
   part: IdentifikatorPart | undefined;

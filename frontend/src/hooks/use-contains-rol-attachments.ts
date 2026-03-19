@@ -1,6 +1,6 @@
-import { CreatorRole, type IDocument } from '@app/types/documents/documents';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { useMemo } from 'react';
+import { CreatorRole, type IDocument } from '@/types/documents/documents';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 /**
  * Only checks attachments to ROL question documents.

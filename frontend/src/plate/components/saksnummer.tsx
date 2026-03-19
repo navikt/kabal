@@ -1,11 +1,11 @@
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import type { PlaceholderElement, SaksnummerElement } from '@app/plate/types';
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useEffect, useMemo } from 'react';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
+import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
+import type { PlaceholderElement, SaksnummerElement } from '@/plate/types';
 
 export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
   const { data: oppgave } = useOppgave();

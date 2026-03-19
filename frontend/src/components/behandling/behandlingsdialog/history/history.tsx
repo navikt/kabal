@@ -1,20 +1,20 @@
-import { getFeilregistrertEvent } from '@app/components/behandling/behandlingsdialog/history/feilregistrert';
-import { getFerdigstiltEvent } from '@app/components/behandling/behandlingsdialog/history/ferdigstilt';
-import { Filter } from '@app/components/behandling/behandlingsdialog/history/filter';
-import { getForlengetBehandlingstidEvent } from '@app/components/behandling/behandlingsdialog/history/forlenget-behandlingstid';
-import { getFullmektig } from '@app/components/behandling/behandlingsdialog/history/fullmektig';
-import { MissingHistoryWarning } from '@app/components/behandling/behandlingsdialog/history/history-warning';
-import { getKlager } from '@app/components/behandling/behandlingsdialog/history/klager';
-import { getMedunderskriverEvent } from '@app/components/behandling/behandlingsdialog/history/medunderskriver';
-import { getROLEvent } from '@app/components/behandling/behandlingsdialog/history/rol';
-import { getSattPaaVent } from '@app/components/behandling/behandlingsdialog/history/satt-paa-vent';
-import { getTildelingEvent } from '@app/components/behandling/behandlingsdialog/history/tildeling';
-import { getVarsletBehandlingstidEvent } from '@app/components/behandling/behandlingsdialog/history/varslet-behandlingstid';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetHistoryQuery } from '@app/redux-api/oppgaver/queries/history';
-import { HistoryEventTypes, type IHistory, type IHistoryResponse } from '@app/types/oppgavebehandling/response';
 import { Heading, Skeleton, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
+import { getFeilregistrertEvent } from '@/components/behandling/behandlingsdialog/history/feilregistrert';
+import { getFerdigstiltEvent } from '@/components/behandling/behandlingsdialog/history/ferdigstilt';
+import { Filter } from '@/components/behandling/behandlingsdialog/history/filter';
+import { getForlengetBehandlingstidEvent } from '@/components/behandling/behandlingsdialog/history/forlenget-behandlingstid';
+import { getFullmektig } from '@/components/behandling/behandlingsdialog/history/fullmektig';
+import { MissingHistoryWarning } from '@/components/behandling/behandlingsdialog/history/history-warning';
+import { getKlager } from '@/components/behandling/behandlingsdialog/history/klager';
+import { getMedunderskriverEvent } from '@/components/behandling/behandlingsdialog/history/medunderskriver';
+import { getROLEvent } from '@/components/behandling/behandlingsdialog/history/rol';
+import { getSattPaaVent } from '@/components/behandling/behandlingsdialog/history/satt-paa-vent';
+import { getTildelingEvent } from '@/components/behandling/behandlingsdialog/history/tildeling';
+import { getVarsletBehandlingstidEvent } from '@/components/behandling/behandlingsdialog/history/varslet-behandlingstid';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetHistoryQuery } from '@/redux-api/oppgaver/queries/history';
+import { HistoryEventTypes, type IHistory, type IHistoryResponse } from '@/types/oppgavebehandling/response';
 
 export const EventHistory = () => {
   const oppgaveId = useOppgaveId();

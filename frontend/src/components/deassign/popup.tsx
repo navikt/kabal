@@ -1,14 +1,3 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { Direction } from '@app/components/deassign/direction';
-import { useUnreadBehandlingCount } from '@app/components/header/notifications/api';
-import { HjemmelList } from '@app/components/oppgavebehandling-footer/deassign/hjemmel-list';
-import { useFradel } from '@app/components/oppgavestyring/use-tildel';
-import { areArraysEqual } from '@app/functions/are-arrays-equal';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { isMetaKey, Keys, MOD_KEY_TEXT } from '@app/keys';
-import { Role } from '@app/types/bruker';
-import type { SaksTypeEnum } from '@app/types/kodeverk';
-import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 import { FolderFileIcon, XMarkIcon } from '@navikt/aksel-icons';
 import {
   BodyLong,
@@ -24,6 +13,17 @@ import {
 } from '@navikt/ds-react';
 import { useCallback, useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { Direction } from '@/components/deassign/direction';
+import { useUnreadBehandlingCount } from '@/components/header/notifications/api';
+import { HjemmelList } from '@/components/oppgavebehandling-footer/deassign/hjemmel-list';
+import { useFradel } from '@/components/oppgavestyring/use-tildel';
+import { areArraysEqual } from '@/functions/are-arrays-equal';
+import { useHasRole } from '@/hooks/use-has-role';
+import { isMetaKey, Keys, MOD_KEY_TEXT } from '@/keys';
+import { Role } from '@/types/bruker';
+import type { SaksTypeEnum } from '@/types/kodeverk';
+import { FradelReason, FradelReasonText } from '@/types/oppgaver';
 
 interface Props {
   oppgaveId: string;

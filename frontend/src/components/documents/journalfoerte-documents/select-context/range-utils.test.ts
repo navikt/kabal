@@ -13,7 +13,7 @@ import {
   removeIndexFromRange,
   removeIndexFromRanges,
   type SelectionRange,
-} from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
+} from '@/components/documents/journalfoerte-documents/select-context/range-utils';
 
 describe('getRangeDirection', () => {
   it('should return FORWARD for forward range', () => {

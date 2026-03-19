@@ -1,5 +1,5 @@
-import { deepFreeze } from '@app/functions/deep-freeze';
-import { TemplateSections } from '@app/plate/template-sections';
+import { deepFreeze } from '@/functions/deep-freeze';
+import { TemplateSections } from '@/plate/template-sections';
 import {
   createCurrentDate,
   createFooter,
@@ -10,12 +10,12 @@ import {
   createSaksinfo,
   createSignature,
   createSimpleParagraph,
-} from '@app/plate/templates/helpers';
-import { LabelContentSource } from '@app/plate/types';
-import { DistribusjonsType } from '@app/types/documents/documents';
-import type { IMutableSmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { Immutable } from '@app/types/types';
+} from '@/plate/templates/helpers';
+import { LabelContentSource } from '@/plate/types';
+import { DistribusjonsType } from '@/types/documents/documents';
+import type { IMutableSmartEditorTemplate } from '@/types/smart-editor/smart-editor';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
+import type { Immutable } from '@/types/types';
 
 export const getGenereltBrevTemplate = (overriddenSaksbehandler?: string): Immutable<IMutableSmartEditorTemplate> =>
   deepFreeze({

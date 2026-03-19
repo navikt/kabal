@@ -1,7 +1,7 @@
-import { PROXY_VERSION } from '@app/config/config';
-import { DEV_DOMAIN, isDeployed } from '@app/config/env';
-import { AUTHORIZATION_HEADER, CLIENT_VERSION_HEADER, PROXY_VERSION_HEADER, TAB_ID_HEADER } from '@app/headers';
 import type { FastifyRequest, RawServerBase, RequestGenericInterface } from 'fastify';
+import { PROXY_VERSION } from '@/config/config';
+import { DEV_DOMAIN, isDeployed } from '@/config/env';
+import { AUTHORIZATION_HEADER, CLIENT_VERSION_HEADER, PROXY_VERSION_HEADER, TAB_ID_HEADER } from '@/headers';
 
 export const getProxyRequestHeaders = (
   req: FastifyRequest<RequestGenericInterface, RawServerBase>,

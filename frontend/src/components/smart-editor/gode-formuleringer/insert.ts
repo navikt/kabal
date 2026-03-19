@@ -1,5 +1,5 @@
-import type { RichTextEditor } from '@app/plate/types';
 import type { Value } from 'platejs';
+import type { RichTextEditor } from '@/plate/types';
 
 export const insertGodFormulering = (editor: RichTextEditor, content: Value) => {
   if (editor.selection === null) {

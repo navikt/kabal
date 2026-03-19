@@ -1,4 +1,4 @@
-import { Observable } from '@app/observable';
+import { Observable } from '@/observable';
 
 const keyboardActiveStore = new Observable<boolean>(false);
 

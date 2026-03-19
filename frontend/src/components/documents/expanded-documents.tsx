@@ -1,16 +1,16 @@
-import { DragAndDropContextElement } from '@app/components/documents/drag-context';
-import { Fields, SIZES } from '@app/components/documents/journalfoerte-documents/grid';
-import { JournalfoerteDocuments } from '@app/components/documents/journalfoerte-documents/journalfoerte-documents';
-import { NewDocuments } from '@app/components/documents/new-documents/new-documents-list/new-documents';
-import { ToggleExpandedButton } from '@app/components/documents/toggle-expand-button';
-import { UploadFile } from '@app/components/documents/upload-file/upload-file';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
-import { useDocumentsWidth } from '@app/hooks/settings/use-setting';
-import { pushEvent } from '@app/observability';
 import { ChevronLeftFirstIcon, ChevronRightLastIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { DragAndDropContextElement } from '@/components/documents/drag-context';
+import { Fields, SIZES } from '@/components/documents/journalfoerte-documents/grid';
+import { JournalfoerteDocuments } from '@/components/documents/journalfoerte-documents/journalfoerte-documents';
+import { NewDocuments } from '@/components/documents/new-documents/new-documents-list/new-documents';
+import { ToggleExpandedButton } from '@/components/documents/toggle-expand-button';
+import { UploadFile } from '@/components/documents/upload-file/upload-file';
+import { useIsExpanded } from '@/components/documents/use-is-expanded';
+import { useArchivedDocumentsColumns } from '@/hooks/settings/use-archived-documents-setting';
+import { useDocumentsWidth } from '@/hooks/settings/use-setting';
+import { pushEvent } from '@/observability';
 
 const MIN_WIDTH = 570;
 const HEADING_ID = 'dokumenter-heading';

@@ -1,5 +1,5 @@
-import type { SearchableMultiSelectProps } from '@app/components/searchable-select/searchable-multi-select/types';
 import { BodyShort, Tag } from '@navikt/ds-react';
+import type { SearchableMultiSelectProps } from '@/components/searchable-select/searchable-multi-select/types';
 
 export const ReadOnlyMultiSelect = <T,>({
   id,

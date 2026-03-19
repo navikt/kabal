@@ -1,7 +1,7 @@
-import type { IGetMaltekstseksjonParams, ITextBaseMetadata } from '@app/types/common-text-types';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
+import type { IGetMaltekstseksjonParams, ITextBaseMetadata } from '@/types/common-text-types';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
-export type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
+export type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
 
 /** Create params */
 export interface INewMaltekstseksjonParams {

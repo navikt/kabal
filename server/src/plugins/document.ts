@@ -1,15 +1,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { ApiClientEnum, frontendDistDirectoryPath } from '@app/config/config';
-import { getDuration } from '@app/helpers/duration';
-import { getProxyRequestHeaders } from '@app/helpers/prepare-request-headers';
-import { getLogger } from '@app/logger';
-import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
-import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/obo-token';
-import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
 import { type Static, Type, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
+import { ApiClientEnum, frontendDistDirectoryPath } from '@/config/config';
+import { getDuration } from '@/helpers/duration';
+import { getProxyRequestHeaders } from '@/helpers/prepare-request-headers';
+import { getLogger } from '@/logger';
+import { KABAL_API_URL } from '@/plugins/crdt/api/url';
+import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/obo-token';
+import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@/plugins/server-timing';
 
 interface IBaseMetadata {
   title: string;

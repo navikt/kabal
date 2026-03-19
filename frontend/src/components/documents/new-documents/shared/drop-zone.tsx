@@ -1,6 +1,6 @@
-import { merge } from '@app/functions/classes';
 import { Box, type BoxProps, HStack } from '@navikt/ds-react';
 import { useCallback, useRef, useState } from 'react';
+import { merge } from '@/functions/classes';
 
 interface DropZoneProps extends React.HTMLAttributes<HTMLDivElement>, OverlayContentProps {
   /**

@@ -1,5 +1,5 @@
-import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
-import { INCLUDE_THRESHOLD, NEGATIVE_INFINITY } from '@app/plate/functions/lex-specialis/scores';
+import { GLOBAL, LIST_DELIMITER } from '@/components/smart-editor-texts/types';
+import { INCLUDE_THRESHOLD, NEGATIVE_INFINITY } from '@/plate/functions/lex-specialis/scores';
 
 const GLOBAL_HJEMMEL_SCORE = 1;
 const ONLY_YTELSE_SCORE = 2;

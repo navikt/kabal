@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
-import { BACKUP_DATE_FORMAT, KEY_PREFIX } from '@app/components/smart-editor/tabbed-editors/constants';
-import { cleanLocalStorage, type LocalStorage } from '@app/localstorage';
 import { format, subDays } from 'date-fns';
+import { BACKUP_DATE_FORMAT, KEY_PREFIX } from '@/components/smart-editor/tabbed-editors/constants';
+import { cleanLocalStorage, type LocalStorage } from '@/localstorage';
 
 interface TestLocalStorage extends LocalStorage {
   getItems: () => Record<string, string>;

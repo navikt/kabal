@@ -1,8 +1,8 @@
-import { Alert } from '@app/components/alert/alert';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { useSetTilbakekrevingMutation } from '@app/redux-api/oppgaver/mutations/set-tilbakekreving';
 import { BodyShort, Checkbox, CheckboxGroup, Heading, HelpText, HStack } from '@navikt/ds-react';
+import { Alert } from '@/components/alert/alert';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import { useSetTilbakekrevingMutation } from '@/redux-api/oppgaver/mutations/set-tilbakekreving';
 
 const TILBAKEKREVING_IDS = [
   '144',

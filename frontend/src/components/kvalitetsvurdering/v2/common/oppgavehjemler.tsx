@@ -1,14 +1,14 @@
-import { useKvalitetsvurderingV2 } from '@app/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
-import { useValidationError } from '@app/components/kvalitetsvurdering/v2/common/use-validation-error';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { usePrevious } from '@app/hooks/use-previous';
-import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
+import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import { useEffect } from 'react';
+import { useKvalitetsvurderingV2 } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useValidationError } from '@/components/kvalitetsvurdering/v2/common/use-validation-error';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { usePrevious } from '@/hooks/use-previous';
+import { useRegistreringshjemlerMap } from '@/simple-api-state/use-kodeverk';
 import type {
   IKvalitetsvurderingBooleans,
   IKvalitetsvurderingSaksdataHjemler,
-} from '@app/types/kaka-kvalitetsvurdering/v2';
-import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
-import { useEffect } from 'react';
+} from '@/types/kaka-kvalitetsvurdering/v2';
 
 interface Props {
   field: keyof IKvalitetsvurderingSaksdataHjemler;

@@ -1,19 +1,19 @@
-import { DeleteMaltekstseksjonDraftButton } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/delete-draft-button';
-import { DuplicateSectionButton } from '@app/components/smart-editor-texts/duplicate-section-button';
-import { isRichText } from '@app/functions/is-rich-plain-text';
+import { UploadIcon } from '@navikt/aksel-icons';
+import { Button, type ButtonProps, ErrorMessage, HStack, Tooltip } from '@navikt/ds-react';
+import { useCallback, useState } from 'react';
+import { DeleteMaltekstseksjonDraftButton } from '@/components/maltekstseksjoner/maltekstseksjon/draft/delete-draft-button';
+import { DuplicateSectionButton } from '@/components/smart-editor-texts/duplicate-section-button';
+import { isRichText } from '@/functions/is-rich-plain-text';
 import {
   useDeleteDraftVersionMutation,
   usePublishMutation,
   usePublishWithTextsMutation,
-} from '@app/redux-api/maltekstseksjoner/mutations';
-import { useLazyGetTextByIdQuery } from '@app/redux-api/texts/queries';
-import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { LANGUAGES } from '@app/types/texts/language';
-import type { IRichText } from '@app/types/texts/responses';
-import { UploadIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, ErrorMessage, HStack, Tooltip } from '@navikt/ds-react';
-import { useCallback, useState } from 'react';
+} from '@/redux-api/maltekstseksjoner/mutations';
+import { useLazyGetTextByIdQuery } from '@/redux-api/texts/queries';
+import type { IGetMaltekstseksjonParams } from '@/types/maltekstseksjoner/params';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
+import { LANGUAGES } from '@/types/texts/language';
+import type { IRichText } from '@/types/texts/responses';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;

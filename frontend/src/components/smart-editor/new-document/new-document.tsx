@@ -1,12 +1,14 @@
-import { Alert } from '@app/components/alert/alert';
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { GeneratedIcon } from '@app/components/smart-editor/new-document/generated-icon';
-import { getTitle } from '@app/components/smart-editor/new-document/get-title';
-import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
-import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { Box, Heading, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
+import { type Ref, useContext, useState } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { GeneratedIcon } from '@/components/smart-editor/new-document/generated-icon';
+import { getTitle } from '@/components/smart-editor/new-document/get-title';
+import { DuaActionEnum } from '@/hooks/dua-access/access';
+import { useCreatorRole } from '@/hooks/dua-access/use-creator-role';
+import { useDuaAccess } from '@/hooks/dua-access/use-dua-access';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import {
   ANKE_I_TRYGDERETTEN_TEMPLATES,
   ANKE_TEMPLATES,
@@ -16,16 +18,14 @@ import {
   getFinishedBehandlingTemplates,
   KLAGE_TEMPLATES,
   OMGJØRINGSKRAVVEDTAK_TEMPLATES,
-} from '@app/plate/templates/templates';
-import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { Language } from '@app/types/texts/language';
-import type { Immutable } from '@app/types/types';
-import { Box, Heading, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
-import { type Ref, useContext, useState } from 'react';
+} from '@/plate/templates/templates';
+import { useCreateSmartDocumentMutation } from '@/redux-api/collaboration';
+import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
+import { DocumentTypeEnum } from '@/types/documents/documents';
+import { SaksTypeEnum } from '@/types/kodeverk';
+import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@/types/smart-editor/smart-editor';
+import { Language } from '@/types/texts/language';
+import type { Immutable } from '@/types/types';
 
 interface Props {
   onCreate: (id: string) => void;

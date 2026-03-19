@@ -1,22 +1,22 @@
-import { HeadingOne, HeadingThree, HeadingTwo } from '@app/plate/components/headings';
-import { ListItem, OrderedList, UnorderedList } from '@app/plate/components/lists';
-import { PageBreak } from '@app/plate/components/page-break';
-import { Paragraph } from '@app/plate/components/paragraph';
-import { RedaktørPlaceholder } from '@app/plate/components/placeholder/placeholder';
-import { TableCellElement } from '@app/plate/components/plate-ui/table-cell-element';
-import { TableElement } from '@app/plate/components/plate-ui/table-element';
-import { TableRowElement } from '@app/plate/components/plate-ui/table-row-element';
-import { createCapitalisePlugin } from '@app/plate/plugins/capitalise/capitalise';
-import { CycleCasePlugin } from '@app/plate/plugins/cycle-case/cycle-case';
-import { FloatingRedaktørToolbarPlugin } from '@app/plate/plugins/floating-toolbar';
-import { PageBreakPlugin } from '@app/plate/plugins/page-break';
-import { RedaktoerPlaceholderPlugin } from '@app/plate/plugins/placeholder/redaktoer';
-import { defaultPlugins } from '@app/plate/plugins/plugin-sets/default';
-import type { IUserData } from '@app/types/bruker';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
+import { HeadingOne, HeadingThree, HeadingTwo } from '@/plate/components/headings';
+import { ListItem, OrderedList, UnorderedList } from '@/plate/components/lists';
+import { PageBreak } from '@/plate/components/page-break';
+import { Paragraph } from '@/plate/components/paragraph';
+import { RedaktørPlaceholder } from '@/plate/components/placeholder/placeholder';
+import { TableCellElement } from '@/plate/components/plate-ui/table-cell-element';
+import { TableElement } from '@/plate/components/plate-ui/table-element';
+import { TableRowElement } from '@/plate/components/plate-ui/table-row-element';
+import { createCapitalisePlugin } from '@/plate/plugins/capitalise/capitalise';
+import { CycleCasePlugin } from '@/plate/plugins/cycle-case/cycle-case';
+import { FloatingRedaktørToolbarPlugin } from '@/plate/plugins/floating-toolbar';
+import { PageBreakPlugin } from '@/plate/plugins/page-break';
+import { RedaktoerPlaceholderPlugin } from '@/plate/plugins/placeholder/redaktoer';
+import { defaultPlugins } from '@/plate/plugins/plugin-sets/default';
+import type { IUserData } from '@/types/bruker';
 
 export const redaktørComponents = {
   [BaseParagraphPlugin.key]: Paragraph,

@@ -1,12 +1,12 @@
-import { ModalContext } from '@app/components/documents/new-documents/modal/modal-context';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useRemoveDocument } from '@app/hooks/use-remove-document';
-import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum, type IDocument, isAttachmentDocument } from '@app/types/documents/documents';
 import { ArrowUndoIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useContext, useMemo, useState } from 'react';
+import { ModalContext } from '@/components/documents/new-documents/modal/modal-context';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useRemoveDocument } from '@/hooks/use-remove-document';
+import { useDeleteDocumentMutation } from '@/redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
+import { DocumentTypeEnum, type IDocument, isAttachmentDocument } from '@/types/documents/documents';
 
 interface Props extends React.RefAttributes<HTMLDivElement> {
   document: IDocument;

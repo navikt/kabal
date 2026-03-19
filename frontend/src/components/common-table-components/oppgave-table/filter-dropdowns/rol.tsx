@@ -1,11 +1,11 @@
-import type { FilterDropdownProps } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
-import { useOppgaveTableTildelteRol } from '@app/components/common-table-components/oppgave-table/state/use-state';
-import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { useGetRolsInEnhetQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
-import type { INavEmployee } from '@app/types/bruker';
 import { Table, Tag } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
+import type { FilterDropdownProps } from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
+import { useOppgaveTableTildelteRol } from '@/components/common-table-components/oppgave-table/state/use-state';
+import { TABLE_HEADERS } from '@/components/common-table-components/types';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { useGetRolsInEnhetQuery } from '@/redux-api/oppgaver/queries/oppgaver';
+import type { INavEmployee } from '@/types/bruker';
 
 export const Rol = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const { data } = useGetRolsInEnhetQuery();

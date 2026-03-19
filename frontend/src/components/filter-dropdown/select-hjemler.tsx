@@ -1,7 +1,7 @@
-import { Header, Trigger } from '@app/components/filter-dropdown/multi-select-dropdown';
-import type { IKodeverkSimpleValue, IKodeverkValue } from '@app/types/kodeverk';
 import { ActionMenu, type ButtonProps, Checkbox, CheckboxGroup, VStack } from '@navikt/ds-react';
 import { type ReactNode, useMemo, useState } from 'react';
+import { Header, Trigger } from '@/components/filter-dropdown/multi-select-dropdown';
+import type { IKodeverkSimpleValue, IKodeverkValue } from '@/types/kodeverk';
 
 interface ILovKildeToRegistreringshjemmel extends IKodeverkValue {
   registreringshjemler: IKodeverkSimpleValue[];

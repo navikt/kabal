@@ -1,8 +1,8 @@
-import { DeleteDropArea } from '@app/components/documents/new-documents/header/delete-drop-area';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import { useValidationError } from '@app/hooks/use-validation-error';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Heading, HStack } from '@navikt/ds-react';
+import { DeleteDropArea } from '@/components/documents/new-documents/header/delete-drop-area';
+import { useIsExpanded } from '@/components/documents/use-is-expanded';
+import { useValidationError } from '@/hooks/use-validation-error';
 
 interface Props {
   headingId: string;

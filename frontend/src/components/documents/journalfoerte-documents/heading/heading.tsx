@@ -1,11 +1,11 @@
-import { KeyboardHelpButton } from '@app/components/documents/journalfoerte-documents/header/keyboard-help-button';
-import { Menu } from '@app/components/documents/journalfoerte-documents/heading/menu';
-import { unselectAll } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack, Stack, Tooltip } from '@navikt/ds-react';
 import { memo, useMemo } from 'react';
+import { KeyboardHelpButton } from '@/components/documents/journalfoerte-documents/header/keyboard-help-button';
+import { Menu } from '@/components/documents/journalfoerte-documents/heading/menu';
+import { unselectAll } from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { useIsExpanded } from '@/components/documents/use-is-expanded';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 interface RemoveFiltersProps {
   resetFilters: () => void;

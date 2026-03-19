@@ -1,6 +1,6 @@
-import { DateContainer } from '@app/components/behandling/styled-components';
-import { isoDateToPretty } from '@app/domain/date';
 import { Label } from '@navikt/ds-react';
+import { DateContainer } from '@/components/behandling/styled-components';
+import { isoDateToPretty } from '@/domain/date';
 
 interface Props {
   date: string | null;

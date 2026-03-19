@@ -1,18 +1,18 @@
-import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { ToolbarButtonWithConfirm } from '@app/plate/components/common/toolbar-button-with-confirm';
-import { LegacyMaltekst } from '@app/plate/components/maltekst/legacy-maltekst';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
-import type { MaltekstElement } from '@app/plate/types';
-import { getIsInRegelverk } from '@app/plate/utils/queries';
-import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
-import { RichTextTypes } from '@app/types/common-text-types';
-import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathIcon, PadlockUnlockedIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { ElementApi } from 'platejs';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useMemo } from 'react';
+import { useSmartEditorLanguage } from '@/hooks/use-smart-editor-language';
+import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
+import { LegacyMaltekst } from '@/plate/components/maltekst/legacy-maltekst';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
+import { ELEMENT_EMPTY_VOID } from '@/plate/plugins/element-types';
+import type { MaltekstElement } from '@/plate/types';
+import { getIsInRegelverk } from '@/plate/utils/queries';
+import { useLazyGetConsumerTextByIdQuery } from '@/redux-api/texts/consumer';
+import { RichTextTypes } from '@/types/common-text-types';
+import type { IConsumerRichText, IConsumerText } from '@/types/texts/consumer';
 
 export const Maltekst = (props: PlateElementProps<MaltekstElement>) => {
   const { children, element, editor } = props;

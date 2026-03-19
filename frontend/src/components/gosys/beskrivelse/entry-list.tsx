@@ -1,6 +1,6 @@
-import { Entry } from '@app/components/gosys/beskrivelse/entry';
-import type { GosysBeskrivelseEntry } from '@app/components/gosys/beskrivelse/parsing/type';
 import { Box, VStack } from '@navikt/ds-react';
+import { Entry } from '@/components/gosys/beskrivelse/entry';
+import type { GosysBeskrivelseEntry } from '@/components/gosys/beskrivelse/parsing/type';
 
 interface Props {
   entries: GosysBeskrivelseEntry[];

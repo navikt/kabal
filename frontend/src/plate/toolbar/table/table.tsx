@@ -1,20 +1,3 @@
-import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
-import { useSelection } from '@app/plate/hooks/use-selection';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { ToolbarSeparator } from '@app/plate/toolbar/separator';
-import { MAX_TABLE_WIDTH } from '@app/plate/toolbar/table/constants';
-import { AddColumnLeftIcon } from '@app/plate/toolbar/table/icons/add-column-left';
-import { AddColumnRightIcon } from '@app/plate/toolbar/table/icons/add-column-right';
-import { AddRowAboveIcon } from '@app/plate/toolbar/table/icons/add-row-above';
-import { AddRowBelowIcon } from '@app/plate/toolbar/table/icons/add-row-below';
-import { DeleteColumnIcon } from '@app/plate/toolbar/table/icons/delete-column';
-import { DeleteRowIcon } from '@app/plate/toolbar/table/icons/delete-row';
-import { MergeCellsIcon } from '@app/plate/toolbar/table/icons/merge-cells';
-import { SplitCellsIcon } from '@app/plate/toolbar/table/icons/split-cells';
-import { getDefaultColSizes } from '@app/plate/toolbar/table/with-overrides';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { type TableElement, useMyPlateEditorState } from '@app/plate/types';
-import { isOfElementTypeFn, nextPath } from '@app/plate/utils/queries';
 import { SpaceHorizontalIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
   BaseTableCellPlugin,
@@ -27,6 +10,23 @@ import { TablePlugin, TableProvider } from '@platejs/table/react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
 import { ElementApi } from 'platejs';
 import { useEditorPlugin, useEditorSelector, usePluginOption, useReadOnly, withHOC } from 'platejs/react';
+import { useIsUnchangeable } from '@/plate/hooks/use-is-unchangeable';
+import { useSelection } from '@/plate/hooks/use-selection';
+import { createSimpleParagraph } from '@/plate/templates/helpers';
+import { ToolbarSeparator } from '@/plate/toolbar/separator';
+import { MAX_TABLE_WIDTH } from '@/plate/toolbar/table/constants';
+import { AddColumnLeftIcon } from '@/plate/toolbar/table/icons/add-column-left';
+import { AddColumnRightIcon } from '@/plate/toolbar/table/icons/add-column-right';
+import { AddRowAboveIcon } from '@/plate/toolbar/table/icons/add-row-above';
+import { AddRowBelowIcon } from '@/plate/toolbar/table/icons/add-row-below';
+import { DeleteColumnIcon } from '@/plate/toolbar/table/icons/delete-column';
+import { DeleteRowIcon } from '@/plate/toolbar/table/icons/delete-row';
+import { MergeCellsIcon } from '@/plate/toolbar/table/icons/merge-cells';
+import { SplitCellsIcon } from '@/plate/toolbar/table/icons/split-cells';
+import { getDefaultColSizes } from '@/plate/toolbar/table/with-overrides';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
+import { type TableElement, useMyPlateEditorState } from '@/plate/types';
+import { isOfElementTypeFn, nextPath } from '@/plate/utils/queries';
 
 export const TableButtons = withHOC(TableProvider, () => {
   const { tf } = useEditorPlugin(TablePlugin);

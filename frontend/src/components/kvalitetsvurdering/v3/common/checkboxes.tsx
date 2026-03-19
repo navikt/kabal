@@ -1,14 +1,14 @@
-import { KvalitetsskjemaCheckbox } from '@app/components/kvalitetsvurdering/common/kvalitetsvurdering-checkbox';
-import { AllRegistreringshjemler } from '@app/components/kvalitetsvurdering/v3/common/all-registreringshjemler';
-import { Oppgavehjemler } from '@app/components/kvalitetsvurdering/v3/common/oppgavehjemler';
-import { KvalitetsskjemaTextarea } from '@app/components/kvalitetsvurdering/v3/common/textarea';
-import type { CheckboxParams, InputParams } from '@app/components/kvalitetsvurdering/v3/common/types';
-import { type GroupErrorField, TypeEnum } from '@app/components/kvalitetsvurdering/v3/common/types';
-import { useKvalitetsvurderingV3 } from '@app/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
-import { useValidationError } from '@app/components/kvalitetsvurdering/v3/common/use-validation-error';
-import type { KvalitetsvurderingDataV3, KvalitetsvurderingV3Boolean } from '@app/types/kaka-kvalitetsvurdering/v3';
 import { Box, CheckboxGroup } from '@navikt/ds-react';
 import { useMemo } from 'react';
+import { KvalitetsskjemaCheckbox } from '@/components/kvalitetsvurdering/common/kvalitetsvurdering-checkbox';
+import { AllRegistreringshjemler } from '@/components/kvalitetsvurdering/v3/common/all-registreringshjemler';
+import { Oppgavehjemler } from '@/components/kvalitetsvurdering/v3/common/oppgavehjemler';
+import { KvalitetsskjemaTextarea } from '@/components/kvalitetsvurdering/v3/common/textarea';
+import type { CheckboxParams, InputParams } from '@/components/kvalitetsvurdering/v3/common/types';
+import { type GroupErrorField, TypeEnum } from '@/components/kvalitetsvurdering/v3/common/types';
+import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
+import type { KvalitetsvurderingDataV3, KvalitetsvurderingV3Boolean } from '@/types/kaka-kvalitetsvurdering/v3';
 
 interface Props {
   kvalitetsvurdering: KvalitetsvurderingDataV3;

@@ -1,16 +1,16 @@
-import { XMarkOctagonFillIconColored } from '@app/components/colored-icons/colored-icons';
-import { createDragUI } from '@app/components/maltekstseksjoner/drag-and-drop/create-drag-ui';
-import { DragAndDropContext } from '@app/components/maltekstseksjoner/drag-and-drop/drag-context';
-import { TextLink } from '@app/components/maltekstseksjoner/text-link';
-import { useMaltekstseksjonPath } from '@app/hooks/use-navigate-maltekstseksjoner';
-import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { type IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
-import { isApiDataError } from '@app/types/errors';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { CircleBrokenIcon, LinkBrokenIcon, PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Button, HelpText, HStack, Skeleton, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useRef } from 'react';
+import { XMarkOctagonFillIconColored } from '@/components/colored-icons/colored-icons';
+import { createDragUI } from '@/components/maltekstseksjoner/drag-and-drop/create-drag-ui';
+import { DragAndDropContext } from '@/components/maltekstseksjoner/drag-and-drop/drag-context';
+import { TextLink } from '@/components/maltekstseksjoner/text-link';
+import { useMaltekstseksjonPath } from '@/hooks/use-navigate-maltekstseksjoner';
+import { useUpdateTextIdListMutation } from '@/redux-api/maltekstseksjoner/mutations';
+import { useGetTextVersionsQuery } from '@/redux-api/texts/queries';
+import { type IGetMaltekstseksjonParams, RichTextTypes } from '@/types/common-text-types';
+import { isApiDataError } from '@/types/errors';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
 interface LoadTextListItemProps {
   textId: string;

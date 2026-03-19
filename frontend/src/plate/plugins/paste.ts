@@ -1,5 +1,3 @@
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { type ParagraphElement, TextAlign } from '@app/plate/types';
 import { isElement } from '@grafana/faro-web-sdk';
 import {
   BaseH1Plugin,
@@ -12,6 +10,8 @@ import {
 import { ListItemContentPlugin } from '@platejs/list-classic/react';
 import type { TElement } from 'platejs';
 import { createPlatePlugin, ParagraphPlugin } from 'platejs/react';
+import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
+import { type ParagraphElement, TextAlign } from '@/plate/types';
 
 export const PastePlugin = createPlatePlugin({
   key: 'paste',

@@ -1,10 +1,10 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { MOD_KEY_TEXT } from '@app/keys';
-import { pushEvent } from '@app/observability';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { SearchReplaceDialog } from '@app/plate/toolbar/toolbars/search-replace-dialog';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { useContext } from 'react';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { MOD_KEY_TEXT } from '@/keys';
+import { pushEvent } from '@/observability';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
+import { SearchReplaceDialog } from '@/plate/toolbar/toolbars/search-replace-dialog';
 
 export const SearchReplaceToolbarButton = () => {
   const { showSearchReplace, setShowSearchReplace } = useContext(SmartEditorContext);

@@ -1,14 +1,14 @@
-import { Alert } from '@app/components/alert/alert';
-import { TextVersions } from '@app/components/maltekstseksjoner/texts/text-versions';
-import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Alert } from '@/components/alert/alert';
+import { TextVersions } from '@/components/maltekstseksjoner/texts/text-versions';
+import { useNavigateMaltekstseksjoner } from '@/hooks/use-navigate-maltekstseksjoner';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { useUpdateTextIdListMutation } from '@/redux-api/maltekstseksjoner/mutations';
+import type { IGetMaltekstseksjonParams } from '@/types/maltekstseksjoner/params';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
 interface Props {
   maltekstseksjon: IMaltekstseksjon;

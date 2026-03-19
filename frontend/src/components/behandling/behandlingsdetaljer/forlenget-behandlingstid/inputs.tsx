@@ -1,17 +1,17 @@
-import { Alert } from '@app/components/alert/alert';
-import { SetBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-behandlingstid';
-import { SetBehandlingstidDate } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-behandlingstid-date';
-import { SetCustomText } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-custom-text';
-import { SetFullmektigFritekst } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-fullmektig-fritekst';
-import { SetPreviousBehandlingstidInfo } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-previous-behandlingstid-info';
-import { SetReason } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-reason';
-import { SetReceivers } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-receivers';
-import { SetTitle } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-title';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useGetOrCreateQuery } from '@app/redux-api/forlenget-behandlingstid';
 import { HStack, Skeleton, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { SetBehandlingstid } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-behandlingstid';
+import { SetBehandlingstidDate } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-behandlingstid-date';
+import { SetCustomText } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-custom-text';
+import { SetFullmektigFritekst } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-fullmektig-fritekst';
+import { SetPreviousBehandlingstidInfo } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-previous-behandlingstid-info';
+import { SetReason } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-reason';
+import { SetReceivers } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-receivers';
+import { SetTitle } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-title';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useGetOrCreateQuery } from '@/redux-api/forlenget-behandlingstid';
 
 interface Props {
   behandlingstidError: string | undefined;

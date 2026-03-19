@@ -1,16 +1,16 @@
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import type { useFilters } from '@app/components/documents/journalfoerte-documents/header/use-filters';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { formatFoedselsnummer, formatOrgNum } from '@app/functions/format-id';
-import { isNotNull } from '@app/functions/is-not-type-guards';
+import { Buildings3Icon, PersonIcon, QuestionmarkIcon, StethoscopeIcon } from '@navikt/aksel-icons';
+import { Tag } from '@navikt/ds-react';
+import { useCallback, useMemo } from 'react';
+import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { formatFoedselsnummer, formatOrgNum } from '@/functions/format-id';
+import { isNotNull } from '@/functions/is-not-type-guards';
 import {
   type AvsenderMottaker,
   AvsenderMottakerIdType,
   type IArkiverteDocumentsResponse,
-} from '@app/types/arkiverte-documents';
-import { Buildings3Icon, PersonIcon, QuestionmarkIcon, StethoscopeIcon } from '@navikt/aksel-icons';
-import { Tag } from '@navikt/ds-react';
-import { useCallback, useMemo } from 'react';
+} from '@/types/arkiverte-documents';
 
 interface AvsenderMottakerFilterProps
   extends Pick<ReturnType<typeof useFilters>, 'selectedAvsenderMottakere' | 'setSelectedAvsenderMottakere'> {

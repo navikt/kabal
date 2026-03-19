@@ -1,8 +1,8 @@
-import { toast } from '@app/components/toast/store';
-import { Toast } from '@app/components/toast/toast/toast';
-import type { Message } from '@app/components/toast/types';
 import { VStack } from '@navikt/ds-react';
 import { useEffect, useRef, useState } from 'react';
+import { toast } from '@/components/toast/store';
+import { Toast } from '@/components/toast/toast/toast';
+import type { Message } from '@/components/toast/types';
 
 export const Toasts = () => {
   const [toasts, setToasts] = useState<Message[]>([]);

@@ -1,12 +1,12 @@
-import type { KabalValue } from '@app/plate/types';
+import type { KabalValue } from '@/plate/types';
 import {
   GOD_FORMULERING_TYPE,
   type PlainTextTypes,
   type REGELVERK_TYPE,
   type RichTextTypes,
-} from '@app/types/common-text-types';
-import type { INewPlainTextParams, INewRegelverkParams, INewRichTextParams } from '@app/types/texts/common';
-import type { Language } from '@app/types/texts/language';
+} from '@/types/common-text-types';
+import type { INewPlainTextParams, INewRegelverkParams, INewRichTextParams } from '@/types/texts/common';
+import type { Language } from '@/types/texts/language';
 
 interface ConsumerMetadata {
   id: string;

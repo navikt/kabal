@@ -1,10 +1,10 @@
-import { YtelserAndHjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
-import { useUtfallOptions } from '@app/components/smart-editor-texts/hooks/use-options';
-import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { TemplateSectionSelect, UtfallSelect } from '@app/components/smart-editor-texts/query-filter-selects';
-import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { HStack } from '@navikt/ds-react';
 import { useSearchParams } from 'react-router-dom';
+import { YtelserAndHjemlerSelect } from '@/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
+import { useUtfallOptions } from '@/components/smart-editor-texts/hooks/use-options';
+import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
+import { TemplateSectionSelect, UtfallSelect } from '@/components/smart-editor-texts/query-filter-selects';
+import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
 
 export const Filters = () => {
   const [searchParams, setSearchParams] = useSearchParams();

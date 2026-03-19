@@ -1,19 +1,19 @@
-import { AttachmentsOverview } from '@app/components/documents/new-documents/attachments-overview';
-import { NewAttachmentButtons } from '@app/components/documents/new-documents/new-attachment-buttons';
-import { NewAttachment } from '@app/components/documents/new-documents/new-document/new-attachment';
-import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@app/components/documents/new-documents/new-documents-list/constants';
-import { StyledAttachmentListItem } from '@app/components/documents/styled-components/attachment-list';
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { sortWithNumbers } from '@app/functions/sort-with-numbers/sort-with-numbers';
+import { VStack } from '@navikt/ds-react';
+import { useMemo } from 'react';
+import { AttachmentsOverview } from '@/components/documents/new-documents/attachments-overview';
+import { NewAttachmentButtons } from '@/components/documents/new-documents/new-attachment-buttons';
+import { NewAttachment } from '@/components/documents/new-documents/new-document/new-attachment';
+import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@/components/documents/new-documents/new-documents-list/constants';
+import { StyledAttachmentListItem } from '@/components/documents/styled-components/attachment-list';
+import { getIsIncomingDocument } from '@/functions/is-incoming-document';
+import { sortWithNumbers } from '@/functions/sort-with-numbers/sort-with-numbers';
 import type {
   IAttachmentDocument,
   IFileDocument,
   IParentDocument,
   ISmartDocument,
   JournalfoertDokument,
-} from '@app/types/documents/documents';
-import { VStack } from '@navikt/ds-react';
-import { useMemo } from 'react';
+} from '@/types/documents/documents';
 
 export interface ListProps {
   pdfOrSmartDocuments: (IFileDocument<string> | ISmartDocument<string>)[];

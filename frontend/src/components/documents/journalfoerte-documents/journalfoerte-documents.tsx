@@ -1,21 +1,21 @@
-import { DocumentList } from '@app/components/documents/journalfoerte-documents/document-list';
-import { Header } from '@app/components/documents/journalfoerte-documents/header/header';
-import { useFilters } from '@app/components/documents/journalfoerte-documents/header/use-filters';
-import { JournalfoertHeading } from '@app/components/documents/journalfoerte-documents/heading/heading';
-import { KeyboardBoundary } from '@app/components/documents/journalfoerte-documents/keyboard/boundary';
-import { KeyboardContextElement } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-context';
-import { SelectContextElement } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
-import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { usePanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
-import { clamp } from '@app/functions/clamp';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetArkiverteDokumenterQuery } from '@app/redux-api/oppgaver/queries/documents';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { DocumentList } from '@/components/documents/journalfoerte-documents/document-list';
+import { Header } from '@/components/documents/journalfoerte-documents/header/header';
+import { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
+import { JournalfoertHeading } from '@/components/documents/journalfoerte-documents/heading/heading';
+import { KeyboardBoundary } from '@/components/documents/journalfoerte-documents/keyboard/boundary';
+import { KeyboardContextElement } from '@/components/documents/journalfoerte-documents/keyboard/keyboard-context';
+import { SelectContextElement } from '@/components/documents/journalfoerte-documents/select-context/select-context';
+import { useShowLogiskeVedlegg } from '@/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
+import { useShowVedlegg } from '@/components/documents/journalfoerte-documents/state/show-vedlegg';
+import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
+import { usePanelShortcut } from '@/components/oppgavebehandling-panels/panel-shortcuts-context';
+import { clamp } from '@/functions/clamp';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetArkiverteDokumenterQuery } from '@/redux-api/oppgaver/queries/documents';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 const EMPTY_ARRAY: IArkivertDocument[] = [];
 

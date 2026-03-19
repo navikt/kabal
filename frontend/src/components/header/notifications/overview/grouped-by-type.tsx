@@ -1,6 +1,6 @@
-import { GroupContainer, GroupedGrid, NotificationsGroup } from '@app/components/header/notifications/overview/common';
-import { type KabalNotification, NotificationType } from '@app/components/header/notifications/types';
 import { Heading } from '@navikt/ds-react';
+import { GroupContainer, GroupedGrid, NotificationsGroup } from '@/components/header/notifications/overview/common';
+import { type KabalNotification, NotificationType } from '@/components/header/notifications/types';
 
 interface GroupedNotificationsProps {
   notifications: readonly KabalNotification[];

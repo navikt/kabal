@@ -1,12 +1,12 @@
-import { DocumentDate } from '@app/components/documents/journalfoerte-documents/document/document-date';
-import { formatAvsenderMottaker } from '@app/components/documents/journalfoerte-documents/document/format-avsender-mottaker';
-import { JournalposttypeTag } from '@app/components/documents/journalfoerte-documents/document/journalposttype';
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import { useArchivedDocumentsColumns } from '@app/hooks/settings/use-archived-documents-setting';
-import { useFullTemaNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Tag, Tooltip } from '@navikt/ds-react';
+import { DocumentDate } from '@/components/documents/journalfoerte-documents/document/document-date';
+import { formatAvsenderMottaker } from '@/components/documents/journalfoerte-documents/document/format-avsender-mottaker';
+import { JournalposttypeTag } from '@/components/documents/journalfoerte-documents/document/journalposttype';
+import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import { useArchivedDocumentsColumns } from '@/hooks/settings/use-archived-documents-setting';
+import { useFullTemaNameFromIdOrLoading } from '@/hooks/use-kodeverk-ids';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 interface Props {
   document: IArkivertDocument;

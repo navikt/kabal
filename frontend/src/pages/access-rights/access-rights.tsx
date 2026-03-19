@@ -1,6 +1,6 @@
-import { AccessRights } from '@app/components/access-rights/access-rights';
-import { PageWrapper } from '@app/pages/page-wrapper';
 import { VStack } from '@navikt/ds-react';
+import { AccessRights } from '@/components/access-rights/access-rights';
+import { PageWrapper } from '@/pages/page-wrapper';
 
 export const AccessRightsPage = () => (
   <PageWrapper>

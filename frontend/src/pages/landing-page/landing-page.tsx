@@ -1,13 +1,13 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { RoleList } from '@app/components/role-list/role-list';
-import { ENVIRONMENT } from '@app/environment';
-import { useLandingPagePath } from '@app/hooks/use-landing-page-path';
-import { pushEvent } from '@app/observability';
-import { PageWrapper } from '@app/pages/page-wrapper';
-import { ALL_PUBLIC_ROLES } from '@app/types/bruker';
 import { BodyShort, Box, Heading } from '@navikt/ds-react';
 import { useContext, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { RoleList } from '@/components/role-list/role-list';
+import { ENVIRONMENT } from '@/environment';
+import { useLandingPagePath } from '@/hooks/use-landing-page-path';
+import { pushEvent } from '@/observability';
+import { PageWrapper } from '@/pages/page-wrapper';
+import { ALL_PUBLIC_ROLES } from '@/types/bruker';
 
 const INSTRUCTION = ENVIRONMENT.isProduction
   ? 'Be din leder om å tildele deg nødvendige roller.'

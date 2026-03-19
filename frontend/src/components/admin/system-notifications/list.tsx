@@ -1,13 +1,10 @@
-import {
-  type AdminSystemNotification,
-  systemNotificationsStore,
-} from '@app/components/admin/system-notifications/state';
-import { DateTime } from '@app/components/datetime/datetime';
-import { KLAGE_NOTIFICATIONS_BASE_PATH } from '@app/components/header/notifications/constants';
-import { toast } from '@app/components/toast/store';
 import { ChatAddIcon, ClockIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyLong, BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useEffect, useState, useSyncExternalStore } from 'react';
+import { type AdminSystemNotification, systemNotificationsStore } from '@/components/admin/system-notifications/state';
+import { DateTime } from '@/components/datetime/datetime';
+import { KLAGE_NOTIFICATIONS_BASE_PATH } from '@/components/header/notifications/constants';
+import { toast } from '@/components/toast/store';
 
 export const ListSystemNotifications = () => {
   const systemNotifications = useSyncExternalStore(systemNotificationsStore.subscribe, systemNotificationsStore.get);

@@ -1,13 +1,9 @@
-import { useKvalitetsvurderingSupported } from '@app/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import {
-  useDocumentsEnabled,
-  useKvalitetsvurderingEnabled,
-  useSmartEditorEnabled,
-} from '@app/hooks/settings/use-setting';
-import { pushEvent } from '@app/observability';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { HStack, Switch } from '@navikt/ds-react';
+import { useKvalitetsvurderingSupported } from '@/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useDocumentsEnabled, useKvalitetsvurderingEnabled, useSmartEditorEnabled } from '@/hooks/settings/use-setting';
+import { pushEvent } from '@/observability';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 export const PanelSwitches = () => {
   const { value: documentsEnabled = true, setValue: setDocumentsEnabled } = useDocumentsEnabled();

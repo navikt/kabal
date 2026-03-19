@@ -1,8 +1,8 @@
-import { CustomTag } from '@app/components/tags/resolved-tag';
-import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
-import type { UtfallEnum } from '@app/types/kodeverk';
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
+import { CustomTag } from '@/components/tags/resolved-tag';
+import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
+import type { UtfallEnum } from '@/types/kodeverk';
 
 interface ReadUtfallSetProps {
   utfallSet: UtfallEnum[];

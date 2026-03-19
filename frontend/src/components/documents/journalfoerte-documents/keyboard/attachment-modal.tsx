@@ -1,17 +1,3 @@
-import {
-  useAttachVedleggFn,
-  useOptions,
-} from '@app/components/documents/journalfoerte-documents/heading/use-as-attachments';
-import { getDocument } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import { decrement, increment } from '@app/components/documents/journalfoerte-documents/keyboard/increment-decrement';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { isMetaKey, Keys } from '@app/keys';
-import { useDeleteDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { type IArkivertDocument, type IArkivertDocumentVedlegg, Journalstatus } from '@app/types/arkiverte-documents';
-import { DocumentTypeEnum, type JournalfoertDokument } from '@app/types/documents/documents';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
   Alert,
@@ -27,6 +13,20 @@ import {
 } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useAttachVedleggFn,
+  useOptions,
+} from '@/components/documents/journalfoerte-documents/heading/use-as-attachments';
+import { getDocument } from '@/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import { decrement, increment } from '@/components/documents/journalfoerte-documents/keyboard/increment-decrement';
+import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { isMetaKey, Keys } from '@/keys';
+import { useDeleteDocumentMutation } from '@/redux-api/oppgaver/mutations/documents';
+import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
+import { type IArkivertDocument, type IArkivertDocumentVedlegg, Journalstatus } from '@/types/arkiverte-documents';
+import { DocumentTypeEnum, type JournalfoertDokument } from '@/types/documents/documents';
 
 interface Props {
   open: boolean;

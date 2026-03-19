@@ -1,19 +1,19 @@
-import { NewDocumentsHeader } from '@app/components/documents/new-documents/header/header';
-import { ModalContextElement } from '@app/components/documents/new-documents/modal/modal-context';
-import { ROW_HEIGHT } from '@app/components/documents/new-documents/new-documents-list/constants';
-import { useDocumentNodes } from '@app/components/documents/new-documents/new-documents-list/document-nodes';
-import { getListHeight } from '@app/components/documents/new-documents/new-documents-list/list-height';
-import { useDocumentMap } from '@app/components/documents/new-documents/new-documents-list/use-document-map';
-import { StyledDocumentList } from '@app/components/documents/styled-components/document-list';
-import { clamp } from '@app/functions/clamp';
-import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
-import { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { useIsAssignedRolAndSent } from '@app/hooks/use-is-rol';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
 import { HStack, InlineMessage, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { NewDocumentsHeader } from '@/components/documents/new-documents/header/header';
+import { ModalContextElement } from '@/components/documents/new-documents/modal/modal-context';
+import { ROW_HEIGHT } from '@/components/documents/new-documents/new-documents-list/constants';
+import { useDocumentNodes } from '@/components/documents/new-documents/new-documents-list/document-nodes';
+import { getListHeight } from '@/components/documents/new-documents/new-documents-list/list-height';
+import { useDocumentMap } from '@/components/documents/new-documents/new-documents-list/use-document-map';
+import { StyledDocumentList } from '@/components/documents/styled-components/document-list';
+import { clamp } from '@/functions/clamp';
+import { useCreatorRole } from '@/hooks/dua-access/use-creator-role';
+import { useLazyDuaAccess } from '@/hooks/dua-access/use-dua-access';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
+import { useIsAssignedRolAndSent } from '@/hooks/use-is-rol';
+import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
 
 /** Number of rows to render above and below the rendered window. */
 const SCROLL_BUFFER_ROWS = 5;

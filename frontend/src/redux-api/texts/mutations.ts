@@ -1,4 +1,5 @@
-import { toast } from '@app/components/toast/store';
+import { formatISO } from 'date-fns';
+import { toast } from '@/components/toast/store';
 import {
   isListGodFormulering,
   isListPlainText,
@@ -6,16 +7,16 @@ import {
   isListRichText,
   isPlainText,
   isRichText,
-} from '@app/functions/is-rich-plain-text';
-import { reduxStore } from '@app/redux/configure-store';
-import { maltekstseksjonerQuerySlice } from '@app/redux-api/maltekstseksjoner/queries';
-import { getLastPublishedVersion } from '@app/redux-api/redaktoer-helpers';
-import { ConsumerTextsTagTypes, consumerTextsApi } from '@app/redux-api/texts/consumer';
-import { textsQuerySlice } from '@app/redux-api/texts/queries';
-import { textsApi } from '@app/redux-api/texts/texts';
-import { user } from '@app/static-data/static-data';
-import type { ListGodFormulering, ListPlainText, ListRegelverk, ListRichText } from '@app/types/texts/common';
-import { isLanguage, LANGUAGES, UNTRANSLATED } from '@app/types/texts/language';
+} from '@/functions/is-rich-plain-text';
+import { reduxStore } from '@/redux/configure-store';
+import { maltekstseksjonerQuerySlice } from '@/redux-api/maltekstseksjoner/queries';
+import { getLastPublishedVersion } from '@/redux-api/redaktoer-helpers';
+import { ConsumerTextsTagTypes, consumerTextsApi } from '@/redux-api/texts/consumer';
+import { textsQuerySlice } from '@/redux-api/texts/queries';
+import { textsApi } from '@/redux-api/texts/texts';
+import { user } from '@/static-data/static-data';
+import type { ListGodFormulering, ListPlainText, ListRegelverk, ListRichText } from '@/types/texts/common';
+import { isLanguage, LANGUAGES, UNTRANSLATED } from '@/types/texts/language';
 import type {
   ICreateDraftFromVersionParams,
   IDeleteTextDraftParams,
@@ -31,7 +32,7 @@ import type {
   IUpdateTextTypeParams,
   IUpdateTextUtfallIdListParams,
   IUpdateTextYtelseHjemmelIdListParams,
-} from '@app/types/texts/params';
+} from '@/types/texts/params';
 import type {
   IDraftRichText,
   IGodFormulering,
@@ -41,9 +42,8 @@ import type {
   IRichText,
   IText,
   ListText,
-} from '@app/types/texts/responses';
-import type { IDeleteDraftOrUnpublishTextResponse } from '@app/types/texts/responses-maltekster';
-import { formatISO } from 'date-fns';
+} from '@/types/texts/responses';
+import type { IDeleteDraftOrUnpublishTextResponse } from '@/types/texts/responses-maltekster';
 
 const textsMutationSlice = textsApi.injectEndpoints({
   endpoints: (builder) => ({

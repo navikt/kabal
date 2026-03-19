@@ -1,20 +1,20 @@
-import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
-import { DeleteDocumentButton } from '@app/components/documents/new-documents/modal/delete-button';
-import { SetParentDocument } from '@app/components/documents/new-documents/modal/set-parent';
-import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
-import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { SetFilename } from '@app/components/documents/set-filename';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useSetTitleMutation } from '@app/redux-api/oppgaver/mutations/documents';
+import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
+import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
+import { DeleteDocumentButton } from '@/components/documents/new-documents/modal/delete-button';
+import { SetParentDocument } from '@/components/documents/new-documents/modal/set-parent';
+import { DocumentDate } from '@/components/documents/new-documents/shared/document-date';
+import { DocumentIcon } from '@/components/documents/new-documents/shared/document-icon';
+import { SetFilename } from '@/components/documents/set-filename';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useSetTitleMutation } from '@/redux-api/oppgaver/mutations/documents';
 import {
   DOCUMENT_TYPE_NAMES,
   DocumentTypeEnum,
   type IAttachmentDocument,
   type IDocument,
-} from '@app/types/documents/documents';
-import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
+} from '@/types/documents/documents';
 
 interface AttachmentProps {
   document: IAttachmentDocument;

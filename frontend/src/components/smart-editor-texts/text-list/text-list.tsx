@@ -1,27 +1,22 @@
-import { DateTime } from '@app/components/datetime/datetime';
-import { MaltekstseksjontLinkListItem } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-link-list-item';
-import { StatusTag } from '@app/components/maltekstseksjoner/status-tag';
-import { getPathPrefix } from '@app/components/smart-editor-texts/functions/get-path-prefix';
-import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { SortableHeader, SortKey } from '@app/components/smart-editor-texts/sortable-header';
-import { StatusFilter, useStatusFilter } from '@app/components/smart-editor-texts/status-filter/status-filter';
-import { useFilteredAndSorted, useOrder, useSort } from '@app/components/smart-editor-texts/text-list/hooks';
-import {
-  isListGodFormulering,
-  isListPlainText,
-  isListRegelverk,
-  isListRichText,
-} from '@app/functions/is-rich-plain-text';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { getTextAsString } from '@app/plate/functions/get-text-string';
-import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import { type IGetMaltekstseksjonParams, REGELVERK_TYPE, type TextTypes } from '@app/types/common-text-types';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { type Language, UNTRANSLATED } from '@app/types/texts/language';
-import type { ListText } from '@app/types/texts/responses';
 import { FileTextIcon, PercentIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { Box, HGrid, HStack, Loader, VStack } from '@navikt/ds-react';
 import { Link, useParams } from 'react-router-dom';
+import { DateTime } from '@/components/datetime/datetime';
+import { MaltekstseksjontLinkListItem } from '@/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-link-list-item';
+import { StatusTag } from '@/components/maltekstseksjoner/status-tag';
+import { getPathPrefix } from '@/components/smart-editor-texts/functions/get-path-prefix';
+import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
+import { SortableHeader, SortKey } from '@/components/smart-editor-texts/sortable-header';
+import { StatusFilter, useStatusFilter } from '@/components/smart-editor-texts/status-filter/status-filter';
+import { useFilteredAndSorted, useOrder, useSort } from '@/components/smart-editor-texts/text-list/hooks';
+import { isListGodFormulering, isListPlainText, isListRegelverk, isListRichText } from '@/functions/is-rich-plain-text';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { getTextAsString } from '@/plate/functions/get-text-string';
+import { useGetMaltekstseksjonQuery } from '@/redux-api/maltekstseksjoner/queries';
+import { type IGetMaltekstseksjonParams, REGELVERK_TYPE, type TextTypes } from '@/types/common-text-types';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
+import { type Language, UNTRANSLATED } from '@/types/texts/language';
+import type { ListText } from '@/types/texts/responses';
 
 interface StandaloneTextListProps {
   filter: string;

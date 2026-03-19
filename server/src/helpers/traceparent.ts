@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto';
-import { getLogger } from '@app/logger';
+import { getLogger } from '@/logger';
 
 const log = getLogger('traceparent');
 

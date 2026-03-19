@@ -1,22 +1,22 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useQuery } from '@app/components/smart-editor/hooks/use-query';
-import { useReportDynamicContentLoading } from '@app/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { AddNewParagraphs } from '@app/plate/components/common/add-new-paragraph-buttons';
-import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@app/plate/components/styled-components';
-import { LexSpecialisStatus, lexSpecialis } from '@app/plate/functions/lex-specialis/lex-specialis';
-import { ELEMENT_EMPTY_VOID } from '@app/plate/plugins/element-types';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import type { EmptyVoidElement, RedigerbarMaltekstElement } from '@app/plate/types';
-import { isNodeEmpty, isOfElementType } from '@app/plate/utils/queries';
-import { useLazyGetConsumerTextsQuery } from '@app/redux-api/texts/consumer';
-import { RichTextTypes } from '@app/types/common-text-types';
-import type { IConsumerRichText, IConsumerText } from '@app/types/texts/consumer';
 import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useQuery } from '@/components/smart-editor/hooks/use-query';
+import { useReportDynamicContentLoading } from '@/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { AddNewParagraphs } from '@/plate/components/common/add-new-paragraph-buttons';
+import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
+import { LexSpecialisStatus, lexSpecialis } from '@/plate/functions/lex-specialis/lex-specialis';
+import { ELEMENT_EMPTY_VOID } from '@/plate/plugins/element-types';
+import { createSimpleParagraph } from '@/plate/templates/helpers';
+import type { EmptyVoidElement, RedigerbarMaltekstElement } from '@/plate/types';
+import { isNodeEmpty, isOfElementType } from '@/plate/utils/queries';
+import { useLazyGetConsumerTextsQuery } from '@/redux-api/texts/consumer';
+import { RichTextTypes } from '@/types/common-text-types';
+import type { IConsumerRichText, IConsumerText } from '@/types/texts/consumer';
 
 const consistsOfOnlyEmptyVoid = (element: RedigerbarMaltekstElement) => {
   if (element.children.length !== 1) {

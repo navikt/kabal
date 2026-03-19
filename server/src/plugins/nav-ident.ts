@@ -1,10 +1,10 @@
-import { parseTokenPayload } from '@app/helpers/token-parser';
-import { getLogger } from '@app/logger';
-import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
-import { CLIENT_VERSION_PLUGIN_ID } from '@app/plugins/client-version';
-import { TAB_ID_PLUGIN_ID } from '@app/plugins/tab-id';
-import { TRACEPARENT_PLUGIN_ID } from '@app/plugins/traceparent/traceparent';
 import fastifyPlugin from 'fastify-plugin';
+import { parseTokenPayload } from '@/helpers/token-parser';
+import { getLogger } from '@/logger';
+import { ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/access-token';
+import { CLIENT_VERSION_PLUGIN_ID } from '@/plugins/client-version';
+import { TAB_ID_PLUGIN_ID } from '@/plugins/tab-id';
+import { TRACEPARENT_PLUGIN_ID } from '@/plugins/traceparent/traceparent';
 
 declare module 'fastify' {
   interface FastifyRequest {

@@ -1,16 +1,16 @@
-import { TableFooter } from '@app/components/common-table-components/footer';
-// See relevant-oppgaver.tsx for more information about this dependency cycle
-import { OppgaveRows } from '@app/components/common-table-components/oppgave-rows/oppgave-rows';
-import { TableFilterHeaders } from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
-import { usePageQueryParam } from '@app/components/common-table-components/oppgave-table/state/use-page';
-import { useOppgaveTableSorting } from '@app/components/common-table-components/oppgave-table/state/use-sort-state';
-import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
-import type { ColumnKeyEnum } from '@app/components/common-table-components/types';
-import type { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { useOppgavePagination } from '@app/hooks/use-oppgave-pagination';
-import { SORT_FIELD_ENUM_VALUES, type SortFieldEnum, SortOrderEnum } from '@app/types/oppgaver';
 import { type SortState, Table, type TableProps } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
+import { TableFooter } from '@/components/common-table-components/footer';
+// See relevant-oppgaver.tsx for more information about this dependency cycle
+import { OppgaveRows } from '@/components/common-table-components/oppgave-rows/oppgave-rows';
+import { TableFilterHeaders } from '@/components/common-table-components/oppgave-table/oppgave-table-headers';
+import { usePageQueryParam } from '@/components/common-table-components/oppgave-table/state/use-page';
+import { useOppgaveTableSorting } from '@/components/common-table-components/oppgave-table/state/use-sort-state';
+import type { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
+import type { ColumnKeyEnum } from '@/components/common-table-components/types';
+import type { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
+import { useOppgavePagination } from '@/hooks/use-oppgave-pagination';
+import { SORT_FIELD_ENUM_VALUES, type SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
 interface Props extends TableProps {
   columns: ColumnKeyEnum[];

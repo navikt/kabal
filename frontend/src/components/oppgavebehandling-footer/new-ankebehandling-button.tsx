@@ -1,15 +1,15 @@
-import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
-import { Direction, PopupContainer } from '@app/components/popup-container/popup-container';
-import {
-  useNewAnkebehandlingMutation,
-  useNewBehandlingFromTRBehandlingMutation,
-} from '@app/redux-api/oppgaver/mutations/behandling';
-import { useLazyValidateQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import { ValidationType } from '@app/types/oppgavebehandling/params';
 import { FolderPlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
+import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
+import { Direction, PopupContainer } from '@/components/popup-container/popup-container';
+import {
+  useNewAnkebehandlingMutation,
+  useNewBehandlingFromTRBehandlingMutation,
+} from '@/redux-api/oppgaver/mutations/behandling';
+import { useLazyValidateQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { SaksTypeEnum } from '@/types/kodeverk';
+import { ValidationType } from '@/types/oppgavebehandling/params';
 
 interface Props {
   typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;

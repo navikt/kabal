@@ -1,25 +1,25 @@
-import { DateTime } from '@app/components/datetime/datetime';
-import { getTitle } from '@app/components/editable-title/editable-title';
-import { Container, Header, List, SidebarContainer } from '@app/components/maltekstseksjoner/maltekstseksjon/common';
-import { LoadTextListItem } from '@app/components/maltekstseksjoner/maltekstseksjon/list-item';
-import { MaltekstseksjonTexts } from '@app/components/maltekstseksjoner/maltekstseksjon/texts';
-import { UnpublishMaltekstseksjonButton } from '@app/components/maltekstseksjoner/maltekstseksjon/unpublish-maltekstseksjon-button';
-import { TextListItem } from '@app/components/maltekstseksjoner/text-list-item';
-import { DuplicateSectionButton } from '@app/components/smart-editor-texts/duplicate-section-button';
+import { CalendarIcon, PlusIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Heading, HStack, Label, Tooltip } from '@navikt/ds-react';
+import { useCallback } from 'react';
+import { useParams } from 'react-router';
+import { DateTime } from '@/components/datetime/datetime';
+import { getTitle } from '@/components/editable-title/editable-title';
+import { Container, Header, List, SidebarContainer } from '@/components/maltekstseksjoner/maltekstseksjon/common';
+import { LoadTextListItem } from '@/components/maltekstseksjoner/maltekstseksjon/list-item';
+import { MaltekstseksjonTexts } from '@/components/maltekstseksjoner/maltekstseksjon/texts';
+import { UnpublishMaltekstseksjonButton } from '@/components/maltekstseksjoner/maltekstseksjon/unpublish-maltekstseksjon-button';
+import { TextListItem } from '@/components/maltekstseksjoner/text-list-item';
+import { DuplicateSectionButton } from '@/components/smart-editor-texts/duplicate-section-button';
 import {
   TagContainer,
   TemplateSectionTagList,
   UtfallTagList,
   YtelseHjemmelTagList,
-} from '@app/components/smart-editor-texts/edit/tags';
-import { TextHistory } from '@app/components/text-history/text-history';
-import { useCreateDraftFromVersionMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import type { IPublishedMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { CalendarIcon, PlusIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, HStack, Label, Tooltip } from '@navikt/ds-react';
-import { useCallback } from 'react';
-import { useParams } from 'react-router';
+} from '@/components/smart-editor-texts/edit/tags';
+import { TextHistory } from '@/components/text-history/text-history';
+import { useCreateDraftFromVersionMutation } from '@/redux-api/maltekstseksjoner/mutations';
+import type { IGetMaltekstseksjonParams } from '@/types/maltekstseksjoner/params';
+import type { IPublishedMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
 interface MaltekstProps {
   maltekstseksjon: IPublishedMaltekstseksjon;

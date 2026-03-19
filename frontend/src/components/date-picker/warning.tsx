@@ -1,5 +1,5 @@
-import { Alert } from '@app/components/alert/alert';
 import { isAfter } from 'date-fns';
+import { Alert } from '@/components/alert/alert';
 
 interface Props {
   date: Date | undefined;

@@ -1,11 +1,8 @@
-import { FileType } from '@app/components/documents/filetype';
-import {
-  type DownloadableDocument,
-  downloadDocuments,
-} from '@app/components/documents/journalfoerte-documents/download';
-import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
-import { toast } from '@app/components/toast/store';
 import { BodyShort, Button } from '@navikt/ds-react';
+import { FileType } from '@/components/documents/filetype';
+import { type DownloadableDocument, downloadDocuments } from '@/components/documents/journalfoerte-documents/download';
+import { getId } from '@/components/documents/journalfoerte-documents/select-context/helpers';
+import { toast } from '@/components/toast/store';
 
 export const showDownloadDocumentsToast = (...documents: DownloadableDocument[]) => {
   if (documents.length === 0) {

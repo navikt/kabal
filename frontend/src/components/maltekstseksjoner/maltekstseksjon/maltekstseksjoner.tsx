@@ -1,18 +1,18 @@
-import { CreateMaltekstseksjon } from '@app/components/maltekstseksjoner/create';
-import { DragAndDropContextElement } from '@app/components/maltekstseksjoner/drag-and-drop/drag-context';
-import { Maltekstseksjon } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon';
-import { Filters } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-list-filters';
-import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-language/set-maltekstseksjon-language';
-import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { QueryKey, SortKey } from '@app/components/smart-editor-texts/sortable-header';
-import { MaltekstseksjonList } from '@app/components/smart-editor-texts/text-list/text-list';
-import { useGetMaltekstseksjonerQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
-import { SortOrder } from '@app/types/sort';
 import { PuzzlePieceIcon } from '@navikt/aksel-icons';
 import { Box, HGrid, HStack, Search, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { CreateMaltekstseksjon } from '@/components/maltekstseksjoner/create';
+import { DragAndDropContextElement } from '@/components/maltekstseksjoner/drag-and-drop/drag-context';
+import { Maltekstseksjon } from '@/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon';
+import { Filters } from '@/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-list-filters';
+import { SetMaltekstseksjonLanguage } from '@/components/set-redaktoer-language/set-maltekstseksjon-language';
+import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
+import { QueryKey, SortKey } from '@/components/smart-editor-texts/sortable-header';
+import { MaltekstseksjonList } from '@/components/smart-editor-texts/text-list/text-list';
+import { useGetMaltekstseksjonerQuery } from '@/redux-api/maltekstseksjoner/queries';
+import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
+import { SortOrder } from '@/types/sort';
 
 export const Maltekstseksjoner = () => {
   const { id } = useParams();

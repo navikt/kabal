@@ -1,6 +1,6 @@
-import { PROXY_VERSION } from '@app/config/config';
-import { getLogger } from '@app/logger';
 import type { FastifyRequest } from 'fastify';
+import { PROXY_VERSION } from '@/config/config';
+import { getLogger } from '@/logger';
 
 const log = getLogger('update-request');
 

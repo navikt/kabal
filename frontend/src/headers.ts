@@ -1,5 +1,5 @@
-import { ENVIRONMENT } from '@app/environment';
-import { generateTraceParent } from '@app/functions/generate-request-id';
+import { ENVIRONMENT } from '@/environment';
+import { generateTraceParent } from '@/functions/generate-request-id';
 
 export const TAB_UUID = crypto.randomUUID();
 

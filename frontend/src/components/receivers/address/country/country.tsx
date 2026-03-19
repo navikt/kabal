@@ -1,10 +1,10 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { Option } from '@app/components/receivers/address/country/option';
-import { Keys } from '@app/keys';
-import type { CountryCode } from '@app/types/common';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Search, Tag, Tooltip } from '@navikt/ds-react';
 import { type CSSProperties, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { Option } from '@/components/receivers/address/country/option';
+import { Keys } from '@/keys';
+import type { CountryCode } from '@/types/common';
 
 interface Props {
   value?: string;

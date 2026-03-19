@@ -1,6 +1,6 @@
-import { isApiDataError } from '@app/types/errors';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { isApiDataError } from '@/types/errors';
 
 export interface ErrorMessage {
   title: string;

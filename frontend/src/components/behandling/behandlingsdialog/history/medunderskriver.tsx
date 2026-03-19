@@ -1,8 +1,3 @@
-import { employeeName, SELF, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
-import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
-import type { INavEmployee } from '@app/types/bruker';
-import { FlowState } from '@app/types/oppgave-common';
-import { HistoryEventTypes, type IMedunderskriverEvent } from '@app/types/oppgavebehandling/response';
 import {
   ArrowRedoIcon,
   ArrowRightLeftIcon,
@@ -11,6 +6,11 @@ import {
   PaperplaneIcon,
   XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
+import { employeeName, SELF, toKey } from '@/components/behandling/behandlingsdialog/history/common';
+import { HistoryEvent } from '@/components/behandling/behandlingsdialog/history/event';
+import type { INavEmployee } from '@/types/bruker';
+import { FlowState } from '@/types/oppgave-common';
+import { HistoryEventTypes, type IMedunderskriverEvent } from '@/types/oppgavebehandling/response';
 
 export const getMedunderskriverEvent = (e: IMedunderskriverEvent) => {
   const key = toKey(e);

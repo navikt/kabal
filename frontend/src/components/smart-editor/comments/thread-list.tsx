@@ -1,7 +1,7 @@
-import { ExpandableThread } from '@app/components/smart-editor/comments/expandable-thread';
-import { SkeletonThread } from '@app/components/smart-editor/comments/skeleton-thread';
-import { useThreads } from '@app/components/smart-editor/comments/use-threads';
 import { VStack } from '@navikt/ds-react';
+import { ExpandableThread } from '@/components/smart-editor/comments/expandable-thread';
+import { SkeletonThread } from '@/components/smart-editor/comments/skeleton-thread';
+import { useThreads } from '@/components/smart-editor/comments/use-threads';
 
 export const ThreadList = () => {
   const { attached, isLoading } = useThreads();

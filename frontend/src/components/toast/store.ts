@@ -1,4 +1,4 @@
-import { TOAST_DEFAULT_TIMEOUT } from '@app/components/toast/constants';
+import { TOAST_DEFAULT_TIMEOUT } from '@/components/toast/constants';
 import {
   type CloseFn,
   type ListenerFn,
@@ -6,7 +6,7 @@ import {
   type TimedMessage,
   ToastType,
   type UntimedMessage,
-} from '@app/components/toast/types';
+} from '@/components/toast/types';
 
 class Store {
   private messages: Message[] = [];

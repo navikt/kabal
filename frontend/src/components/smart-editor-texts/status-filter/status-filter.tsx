@@ -1,12 +1,12 @@
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { useCallback, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import {
   type Filterable,
   isDepublished,
   isDraft,
   isPublished,
-} from '@app/components/smart-editor-texts/functions/status-helpers';
-import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+} from '@/components/smart-editor-texts/functions/status-helpers';
 
 export const StatusFilter = () => {
   const [filteredStatuses, setFilteredStatuses] = useStatusFilter();

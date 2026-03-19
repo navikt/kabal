@@ -1,7 +1,7 @@
-import type { DocumentWithAttachments } from '@app/components/documents/new-documents/new-documents-list/types';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum, isParentDocument } from '@app/types/documents/documents';
+import type { DocumentWithAttachments } from '@/components/documents/new-documents/new-documents-list/types';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
+import { DocumentTypeEnum, isParentDocument } from '@/types/documents/documents';
 
 export const useDocumentMap = () => {
   const oppgaveId = useOppgaveId();

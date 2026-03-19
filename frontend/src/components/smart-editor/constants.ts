@@ -1,4 +1,4 @@
-import { DeprecatedTemplateSections, TemplateSections } from '@app/plate/template-sections';
+import { DeprecatedTemplateSections, TemplateSections } from '@/plate/template-sections';
 
 export const BOOKMARK_PREFIX = 'bookmark_';
 export const COMMENT_PREFIX = 'commentThreadId_';

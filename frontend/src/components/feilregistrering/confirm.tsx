@@ -1,8 +1,8 @@
-import { Context } from '@app/components/feilregistrering/context';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, InlineMessage } from '@navikt/ds-react';
 import { useContext } from 'react';
+import { Context } from '@/components/feilregistrering/context';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 
 interface ConfirmProps {
   setIsConfirmed: () => void;

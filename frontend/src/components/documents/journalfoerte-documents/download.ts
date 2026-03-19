@@ -1,6 +1,6 @@
-import { getJournalfoertDocumentFileUrl } from '@app/domain/file-url';
-import type { Variants } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import { getJournalfoertDocumentFileUrl } from '@/domain/file-url';
+import type { Variants } from '@/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 export interface DownloadableDocument extends IJournalfoertDokumentId {
   tittel: string;

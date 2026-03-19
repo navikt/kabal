@@ -1,8 +1,8 @@
-import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { useLazyDuaAccess } from '@app/hooks/dua-access/use-dua-access';
-import { useParentDocument } from '@app/hooks/use-parent-document';
-import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { useMemo } from 'react';
+import { DuaActionEnum } from '@/hooks/dua-access/access';
+import { useLazyDuaAccess } from '@/hooks/dua-access/use-dua-access';
+import { useParentDocument } from '@/hooks/use-parent-document';
+import type { ISmartDocumentOrAttachment } from '@/types/documents/documents';
 
 export const useHasWriteAccess = (props: ISmartDocumentOrAttachment | null): boolean => {
   const parent = useParentDocument(props?.parentId ?? null);

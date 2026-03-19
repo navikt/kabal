@@ -1,17 +1,17 @@
-import { ErrorComponent } from '@app/components/smart-editor-texts/error-component';
-import { ErrorBoundary } from '@app/error-boundary/error-boundary';
-import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
-import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import { pushEvent } from '@app/observability';
-import { KabalPlateEditor } from '@app/plate/plate-editor';
-import { components, historyPlugins } from '@app/plate/plugins/plugin-sets/saksbehandler';
-import { Sheet } from '@app/plate/sheet';
-import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@app/plate/types';
-import type { ISmartDocumentOrAttachment } from '@app/types/documents/documents';
 import { Button, VStack } from '@navikt/ds-react';
 import type { Value } from 'platejs';
 import { Plate, useEditorReadOnly, usePlateEditor } from 'platejs/react';
 import { memo, useEffect } from 'react';
+import { ErrorComponent } from '@/components/smart-editor-texts/error-component';
+import { ErrorBoundary } from '@/error-boundary/error-boundary';
+import { areDescendantsEqual } from '@/functions/are-descendants-equal';
+import { useSmartEditorSpellCheckLanguage } from '@/hooks/use-smart-editor-language';
+import { pushEvent } from '@/observability';
+import { KabalPlateEditor } from '@/plate/plate-editor';
+import { components, historyPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
+import { Sheet } from '@/plate/sheet';
+import { type KabalValue, type RichTextEditor, useMyPlateEditorRef } from '@/plate/types';
+import type { ISmartDocumentOrAttachment } from '@/types/documents/documents';
 
 interface Props {
   versionId: number;

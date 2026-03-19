@@ -1,16 +1,16 @@
-import { useDebounce } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
-import { validateUnits } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { Box, Checkbox, ErrorMessage, InlineMessage, Textarea, VStack } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useState } from 'react';
+import { useDebounce } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
+import { validateUnits } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import {
   useGetOrCreateQuery,
   useSetDoNotSendBrevMutation,
   useSetReasonNoLetterMutation,
   useSetVarselTypeIsOriginalMutation,
-} from '@app/redux-api/forlenget-behandlingstid';
-import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
-import { Box, Checkbox, ErrorMessage, InlineMessage, Textarea, VStack } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useState } from 'react';
+} from '@/redux-api/forlenget-behandlingstid';
+import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@/types/field-names';
 
 interface Props {
   varsletFrist: string | null;

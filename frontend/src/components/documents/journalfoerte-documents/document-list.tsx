@@ -1,17 +1,17 @@
-import { useDokumentPositions } from '@app/components/documents/journalfoerte-documents/calculate';
-import { Document } from '@app/components/documents/journalfoerte-documents/document/document';
-import { ExpandedDocument } from '@app/components/documents/journalfoerte-documents/document/expanded-document';
-import { KeyboardFocusIndicator } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-focus-indicator';
-import { isPathSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { LogiskeVedleggList } from '@app/components/documents/journalfoerte-documents/logiske-vedlegg-list';
-import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
-import { setShowMetadata } from '@app/components/documents/journalfoerte-documents/state/show-metadata';
-import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
-import { VedleggList } from '@app/components/documents/journalfoerte-documents/vedlegg-list';
-import { StyledDocumentList } from '@app/components/documents/styled-components/document-list';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { Box, Loader } from '@navikt/ds-react';
+import { useDokumentPositions } from '@/components/documents/journalfoerte-documents/calculate';
+import { Document } from '@/components/documents/journalfoerte-documents/document/document';
+import { ExpandedDocument } from '@/components/documents/journalfoerte-documents/document/expanded-document';
+import { KeyboardFocusIndicator } from '@/components/documents/journalfoerte-documents/keyboard/keyboard-focus-indicator';
+import { isPathSelected } from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { LogiskeVedleggList } from '@/components/documents/journalfoerte-documents/logiske-vedlegg-list';
+import { useShowLogiskeVedlegg } from '@/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
+import { setShowMetadata } from '@/components/documents/journalfoerte-documents/state/show-metadata';
+import { useShowVedlegg } from '@/components/documents/journalfoerte-documents/state/show-vedlegg';
+import { VedleggList } from '@/components/documents/journalfoerte-documents/vedlegg-list';
+import { StyledDocumentList } from '@/components/documents/styled-components/document-list';
+import { useIsExpanded } from '@/components/documents/use-is-expanded';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 interface Props {
   documents: IArkivertDocument[];

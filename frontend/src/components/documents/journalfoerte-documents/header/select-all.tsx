@@ -1,11 +1,11 @@
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import { useAllSelected } from '@app/components/documents/journalfoerte-documents/keyboard/actions/select';
+import { Checkbox } from '@navikt/ds-react';
+import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import { useAllSelected } from '@/components/documents/journalfoerte-documents/keyboard/actions/select';
 import {
   selectAll,
   unselectAll,
   useSelectionRangesState,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { Checkbox } from '@navikt/ds-react';
+} from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
 
 export const SelectAll = () => {
   const allSelected = useAllSelected();

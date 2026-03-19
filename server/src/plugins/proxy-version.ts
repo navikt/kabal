@@ -1,6 +1,6 @@
-import { PROXY_VERSION } from '@app/config/config';
-import { PROXY_VERSION_HEADER } from '@app/headers';
 import fastifyPlugin from 'fastify-plugin';
+import { PROXY_VERSION } from '@/config/config';
+import { PROXY_VERSION_HEADER } from '@/headers';
 
 export const PROXY_VERSION_PLUGIN_ID = 'proxy-version';
 

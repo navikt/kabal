@@ -1,12 +1,12 @@
-import { ISO_FORMAT } from '@app/components/date-picker/constants';
-import { toast } from '@app/components/toast/store';
-import { reduxStore } from '@app/redux/configure-store';
-import { KABAL_API_BASE_QUERY } from '@app/redux-api/common';
-import type { IMottaker } from '@app/types/documents/documents';
-import { mottakerToInputMottaker } from '@app/types/documents/params';
-import { BehandlingstidUnitType } from '@app/types/svarbrev';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { addMonths, addWeeks, format } from 'date-fns';
+import { ISO_FORMAT } from '@/components/date-picker/constants';
+import { toast } from '@/components/toast/store';
+import { reduxStore } from '@/redux/configure-store';
+import { KABAL_API_BASE_QUERY } from '@/redux-api/common';
+import type { IMottaker } from '@/types/documents/documents';
+import { mottakerToInputMottaker } from '@/types/documents/params';
+import { BehandlingstidUnitType } from '@/types/svarbrev';
 
 export interface IForlengetBehandlingstid {
   title: string | null;

@@ -1,5 +1,5 @@
-import { isLanguage, Language } from '@app/types/texts/language';
 import { useParams } from 'react-router-dom';
+import { isLanguage, Language } from '@/types/texts/language';
 
 export const useRedaktoerLanguage = () => {
   const { lang } = useParams();

@@ -1,6 +1,6 @@
-import { AUTHORIZATION_HEADER } from '@app/headers';
 import type { FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
+import { AUTHORIZATION_HEADER } from '@/headers';
 
 declare module 'fastify' {
   interface FastifyRequest {

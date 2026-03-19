@@ -1,9 +1,9 @@
-import { AppLoader } from '@app/components/app/loader';
-import { runMigrations } from '@app/components/app/migrations';
-import { countryCodes, postalCodes, user } from '@app/static-data/static-data';
-import type { IUserData } from '@app/types/bruker';
-import type { CountryCode, PostalCode } from '@app/types/common';
 import { createContext, useCallback, useEffect, useState } from 'react';
+import { AppLoader } from '@/components/app/loader';
+import { runMigrations } from '@/components/app/migrations';
+import { countryCodes, postalCodes, user } from '@/static-data/static-data';
+import type { IUserData } from '@/types/bruker';
+import type { CountryCode, PostalCode } from '@/types/common';
 
 interface Props {
   children: React.ReactNode;

@@ -1,5 +1,5 @@
-import { TEAM_LOG_PARAMS } from '@app/config/config';
-import { hasOwn } from '@app/functions/functions';
+import { TEAM_LOG_PARAMS } from '@/config/config';
+import { hasOwn } from '@/functions/functions';
 import { isDeployed } from './config/env';
 
 const VERSION: string =

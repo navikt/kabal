@@ -1,12 +1,12 @@
-import { useBookmarks } from '@app/components/smart-editor/bookmarks/use-bookmarks';
-import { hasOwn } from '@app/functions/object';
-import { pushEvent } from '@app/observability';
-import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
-import { BOOKMARK_VARIANT_TO_CLASSNAME } from '@app/plate/toolbar/bookmark-button';
-import { type FormattedText, useMyPlateEditorState } from '@app/plate/types';
 import { BookmarkFillIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, VStack } from '@navikt/ds-react';
 import { NodeApi, type TNode } from 'platejs';
+import { useBookmarks } from '@/components/smart-editor/bookmarks/use-bookmarks';
+import { hasOwn } from '@/functions/object';
+import { pushEvent } from '@/observability';
+import { BookmarkPlugin } from '@/plate/plugins/bookmark';
+import { BOOKMARK_VARIANT_TO_CLASSNAME } from '@/plate/toolbar/bookmark-button';
+import { type FormattedText, useMyPlateEditorState } from '@/plate/types';
 
 interface Props {
   editorId: string;

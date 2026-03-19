@@ -1,9 +1,9 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { Type } from '@app/components/type/type';
-import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
-import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { type ReactElement, useContext } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { Type } from '@/components/type/type';
+import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
+import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 type Supported =
   | { featureEnabled: true; panelDefaultEnabled: true; reason: null } // Kvalitetsvurdering supported

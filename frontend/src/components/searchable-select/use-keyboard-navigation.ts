@@ -1,5 +1,5 @@
-import { isMetaKey, Keys } from '@app/keys';
 import { useCallback } from 'react';
+import { isMetaKey, Keys } from '@/keys';
 
 interface UseKeyboardNavigationOptions {
   filteredOptionsLength: number;

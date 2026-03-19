@@ -1,12 +1,12 @@
-import { PublishedRichText } from '@app/components/maltekstseksjoner/texts/published-rich-text';
-import { DraftText } from '@app/components/maltekstseksjoner/texts/text-draft/text-draft';
-import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
-import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { RichTextTypes } from '@app/types/common-text-types';
-import { isApiDataError } from '@app/types/errors';
-import type { IDraftRichText, IPublishedRichText, IRichText, IText } from '@app/types/texts/responses';
 import { InlineMessage, Loader } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { PublishedRichText } from '@/components/maltekstseksjoner/texts/published-rich-text';
+import { DraftText } from '@/components/maltekstseksjoner/texts/text-draft/text-draft';
+import { VersionTabs } from '@/components/versioned-tabs/versioned-tabs';
+import { useGetTextVersionsQuery } from '@/redux-api/texts/queries';
+import { RichTextTypes } from '@/types/common-text-types';
+import { isApiDataError } from '@/types/errors';
+import type { IDraftRichText, IPublishedRichText, IRichText, IText } from '@/types/texts/responses';
 
 interface Props {
   textId: string;

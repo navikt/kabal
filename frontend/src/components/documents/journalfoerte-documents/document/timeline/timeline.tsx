@@ -1,7 +1,7 @@
-import { EkspedertItems } from '@app/components/documents/journalfoerte-documents/document/timeline/ekspedert-items';
-import { RelevantDateTimelineItem } from '@app/components/documents/journalfoerte-documents/document/timeline/timeline-item';
-import { type IArkivertDocument, Journalposttype, TimelineTypes } from '@app/types/arkiverte-documents';
 import { HStack } from '@navikt/ds-react';
+import { EkspedertItems } from '@/components/documents/journalfoerte-documents/document/timeline/ekspedert-items';
+import { RelevantDateTimelineItem } from '@/components/documents/journalfoerte-documents/document/timeline/timeline-item';
+import { type IArkivertDocument, Journalposttype, TimelineTypes } from '@/types/arkiverte-documents';
 
 export const Timeline = ({ timeline, journalposttype, utsendingsinfo, kanal, kanalnavn }: IArkivertDocument) => {
   const lastIndex = timeline.length - 1;

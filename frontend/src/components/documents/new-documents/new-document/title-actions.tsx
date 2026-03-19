@@ -1,6 +1,6 @@
-import type { IDocument } from '@app/types/documents/documents';
 import { CheckmarkIcon, PadlockLockedIcon, PencilIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, HStack, Tooltip } from '@navikt/ds-react';
+import type { IDocument } from '@/types/documents/documents';
 
 export interface TitleActionsProps {
   document: IDocument;

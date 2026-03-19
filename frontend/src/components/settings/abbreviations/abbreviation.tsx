@@ -1,7 +1,7 @@
-import { Keys } from '@app/keys';
 import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage, HGrid, TextField } from '@navikt/ds-react';
 import { type KeyboardEventHandler, useEffect, useState } from 'react';
+import { Keys } from '@/keys';
 
 interface Props {
   short: string;

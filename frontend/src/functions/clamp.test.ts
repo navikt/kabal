@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { clamp } from '@app/functions/clamp';
+import { clamp } from '@/functions/clamp';
 
 describe('clamp', () => {
   it('should clamp a number between a min and max', () => {

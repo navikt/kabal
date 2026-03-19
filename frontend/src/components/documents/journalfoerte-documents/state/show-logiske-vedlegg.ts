@@ -1,7 +1,7 @@
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useJsonSetting } from '@app/hooks/settings/helpers';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback } from 'react';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useJsonSetting } from '@/hooks/settings/helpers';
 
 type Value = readonly string[];
 

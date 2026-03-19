@@ -1,15 +1,15 @@
-import { getCacheKey, oboCache } from '@app/auth/cache/cache';
-import { oboRequestDuration } from '@app/auth/cache/cache-gauge';
-import { getAzureADClient } from '@app/auth/get-auth-client';
-import { getOnBehalfOfAccessToken } from '@app/auth/on-behalf-of';
-import { isDeployed } from '@app/config/env';
-import { getDuration } from '@app/helpers/duration';
-import { getLogger } from '@app/logger';
-import { ACCESS_TOKEN_PLUGIN_ID } from '@app/plugins/access-token';
-import { NAV_IDENT_PLUGIN_ID } from '@app/plugins/nav-ident';
-import { SERVER_TIMING_PLUGIN_ID } from '@app/plugins/server-timing';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
+import { getCacheKey, oboCache } from '@/auth/cache/cache';
+import { oboRequestDuration } from '@/auth/cache/cache-gauge';
+import { getAzureADClient } from '@/auth/get-auth-client';
+import { getOnBehalfOfAccessToken } from '@/auth/on-behalf-of';
+import { isDeployed } from '@/config/env';
+import { getDuration } from '@/helpers/duration';
+import { getLogger } from '@/logger';
+import { ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/access-token';
+import { NAV_IDENT_PLUGIN_ID } from '@/plugins/nav-ident';
+import { SERVER_TIMING_PLUGIN_ID } from '@/plugins/server-timing';
 
 const log = getLogger('obo-token-plugin');
 

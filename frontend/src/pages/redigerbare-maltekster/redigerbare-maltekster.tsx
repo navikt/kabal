@@ -1,6 +1,6 @@
-import { SmartEditorTexts } from '@app/components/smart-editor-texts/smart-editor-texts';
-import { PageWrapper } from '@app/pages/page-wrapper';
-import { RichTextTypes } from '@app/types/common-text-types';
+import { SmartEditorTexts } from '@/components/smart-editor-texts/smart-editor-texts';
+import { PageWrapper } from '@/pages/page-wrapper';
+import { RichTextTypes } from '@/types/common-text-types';
 
 export const RedigerbareMalteksterPage = () => (
   <PageWrapper>

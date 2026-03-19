@@ -1,8 +1,10 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { GLOBAL, LIST_DELIMITER, SET_DELIMITER, type WILDCARD_TYPE } from '@app/components/smart-editor-texts/types';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import type { TemplateSections } from '@app/plate/template-sections';
+import { type SkipToken, skipToken } from '@reduxjs/toolkit/query';
+import { useContext, useMemo } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { GLOBAL, LIST_DELIMITER, SET_DELIMITER, type WILDCARD_TYPE } from '@/components/smart-editor-texts/types';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useSmartEditorLanguage } from '@/hooks/use-smart-editor-language';
+import type { TemplateSections } from '@/plate/template-sections';
 import {
   GOD_FORMULERING_TYPE,
   type IGetConsumerGodFormuleringParams,
@@ -13,12 +15,10 @@ import {
   type PlainTextTypes,
   REGELVERK_TYPE,
   type TextTypes,
-} from '@app/types/common-text-types';
-import type { UtfallEnum } from '@app/types/kodeverk';
-import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { type Language, UNTRANSLATED } from '@app/types/texts/language';
-import { type SkipToken, skipToken } from '@reduxjs/toolkit/query';
-import { useContext, useMemo } from 'react';
+} from '@/types/common-text-types';
+import type { UtfallEnum } from '@/types/kodeverk';
+import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
+import { type Language, UNTRANSLATED } from '@/types/texts/language';
 
 interface Params {
   templateId?: TemplateIdEnum;

@@ -1,7 +1,7 @@
-import { LoadingCellContent } from '@app/components/common-table-components/loading-cell-content';
-import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { useGetSakenGjelderQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
 import { Tooltip } from '@navikt/ds-react';
+import { LoadingCellContent } from '@/components/common-table-components/loading-cell-content';
+import { CopyIdButton } from '@/components/copy-button/copy-id-button';
+import { useGetSakenGjelderQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 
 interface Props {
   oppgaveId: string;

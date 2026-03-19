@@ -1,17 +1,14 @@
-import { getNewRichText } from '@app/components/smart-editor-texts/functions/new-text';
-import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import {
-  useCreateMaltekstseksjonMutation,
-  useUpdateTextIdListMutation,
-} from '@app/redux-api/maltekstseksjoner/mutations';
-import { useAddTextMutation } from '@app/redux-api/texts/mutations';
-import { type IGetMaltekstseksjonParams, RichTextTypes } from '@app/types/common-text-types';
-import type { INewMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
 import { PadlockLockedIcon, PencilWritingIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useCallback } from 'react';
+import { getNewRichText } from '@/components/smart-editor-texts/functions/new-text';
+import { useNavigateMaltekstseksjoner } from '@/hooks/use-navigate-maltekstseksjoner';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { useCreateMaltekstseksjonMutation, useUpdateTextIdListMutation } from '@/redux-api/maltekstseksjoner/mutations';
+import { useAddTextMutation } from '@/redux-api/texts/mutations';
+import { type IGetMaltekstseksjonParams, RichTextTypes } from '@/types/common-text-types';
+import type { INewMaltekstseksjonParams } from '@/types/maltekstseksjoner/params';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
 interface Props {
   query: IGetMaltekstseksjonParams;

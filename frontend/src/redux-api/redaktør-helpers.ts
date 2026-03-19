@@ -1,5 +1,5 @@
-import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@app/components/smart-editor-texts/types';
-import type { IGetMaltekstseksjonParams, IGetTextsParams } from '@app/types/common-text-types';
+import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@/components/smart-editor-texts/types';
+import type { IGetMaltekstseksjonParams, IGetTextsParams } from '@/types/common-text-types';
 
 type Params = IGetMaltekstseksjonParams | IGetTextsParams;
 

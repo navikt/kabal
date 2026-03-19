@@ -1,5 +1,5 @@
-import { Keys } from '@app/keys';
 import { type RefObject, useEffect } from 'react';
+import { Keys } from '@/keys';
 
 type Callback = (event: MouseEvent | TouchEvent | KeyboardEvent) => void;
 

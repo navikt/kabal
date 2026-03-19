@@ -1,13 +1,13 @@
-import { toast } from '@app/components/toast/store';
-import { genericErrorToast } from '@app/components/toast/toast-content/api-error-toast';
-import { BYTES_PER_KB, formatFileSize } from '@app/functions/format-file-size';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useUploadFileDocumentMutation } from '@app/redux-api/oppgaver/mutations/documents';
-import type { DistribusjonsType } from '@app/types/documents/documents';
 import { UploadIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useRef } from 'react';
+import { toast } from '@/components/toast/store';
+import { genericErrorToast } from '@/components/toast/toast-content/api-error-toast';
+import { BYTES_PER_KB, formatFileSize } from '@/functions/format-file-size';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useUploadFileDocumentMutation } from '@/redux-api/oppgaver/mutations/documents';
+import type { DistribusjonsType } from '@/types/documents/documents';
 
 const MEBI = BYTES_PER_KB * BYTES_PER_KB;
 const MAX_SIZE_MIB = 500;

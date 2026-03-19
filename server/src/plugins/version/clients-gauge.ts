@@ -1,9 +1,9 @@
-import { PROXY_VERSION, START_TIME } from '@app/config/config';
-import { getLogger } from '@app/logger';
-import type { VersionQueryString } from '@app/plugins/version/query';
-import { proxyRegister } from '@app/prometheus/types';
 import type { FastifyRequest } from 'fastify';
 import { Gauge, type LabelValues } from 'prom-client';
+import { PROXY_VERSION, START_TIME } from '@/config/config';
+import { getLogger } from '@/logger';
+import type { VersionQueryString } from '@/plugins/version/query';
+import { proxyRegister } from '@/prometheus/types';
 
 const log = getLogger('clients');
 

@@ -1,10 +1,10 @@
-import { Icon } from '@app/components/toast/toast/icon';
-import { Container, StyledCloseButton, TimedToastContainer } from '@app/components/toast/toast/shared';
-import type { TimedMessage } from '@app/components/toast/types';
-import { useAnimationsEnabled } from '@app/hooks/use-animations-enabled';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { VStack } from '@navikt/ds-react';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import { Icon } from '@/components/toast/toast/icon';
+import { Container, StyledCloseButton, TimedToastContainer } from '@/components/toast/toast/shared';
+import type { TimedMessage } from '@/components/toast/types';
+import { useAnimationsEnabled } from '@/hooks/use-animations-enabled';
 
 interface Props extends TimedMessage {
   slideOut: () => void;

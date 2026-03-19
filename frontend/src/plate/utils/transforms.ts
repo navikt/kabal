@@ -1,11 +1,11 @@
-import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { createPageBreak, createPlaceHolder, createSimpleParagraph } from '@app/plate/templates/helpers';
-import type { PlaceholderElement } from '@app/plate/types';
-import { isInTable, isPlaceholderActive } from '@app/plate/utils/queries';
 import { RangeApi } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 import { Range } from 'slate';
+import { removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
+import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
+import { createPageBreak, createPlaceHolder, createSimpleParagraph } from '@/plate/templates/helpers';
+import type { PlaceholderElement } from '@/plate/types';
+import { isInTable, isPlaceholderActive } from '@/plate/utils/queries';
 
 export const insertPageBreak = (editor: PlateEditor): boolean => {
   if (isInTable(editor)) {

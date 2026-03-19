@@ -1,12 +1,12 @@
-import { INCLUDE_THRESHOLD, NEGATIVE_INFINITY } from '@app/plate/functions/lex-specialis/scores';
-import { getTemplateScore } from '@app/plate/functions/lex-specialis/template-score';
-import { getUtfallScore } from '@app/plate/functions/lex-specialis/utfall-score';
-import { getYtelseScore } from '@app/plate/functions/lex-specialis/ytelse-score';
-import type { TemplateSections } from '@app/plate/template-sections';
-import type { UtfallEnum } from '@app/types/kodeverk';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { IConsumerRichText } from '@app/types/texts/consumer';
+import { INCLUDE_THRESHOLD, NEGATIVE_INFINITY } from '@/plate/functions/lex-specialis/scores';
+import { getTemplateScore } from '@/plate/functions/lex-specialis/template-score';
+import { getUtfallScore } from '@/plate/functions/lex-specialis/utfall-score';
+import { getYtelseScore } from '@/plate/functions/lex-specialis/ytelse-score';
+import type { TemplateSections } from '@/plate/template-sections';
+import type { UtfallEnum } from '@/types/kodeverk';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
+import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
+import type { IConsumerRichText } from '@/types/texts/consumer';
 
 export enum LexSpecialisStatus {
   FOUND = 'FOUND',

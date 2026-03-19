@@ -1,5 +1,5 @@
-import { Keys } from '@app/keys';
 import { HStack, Tooltip } from '@navikt/ds-react';
+import { Keys } from '@/keys';
 
 interface Props {
   isChecked: boolean;

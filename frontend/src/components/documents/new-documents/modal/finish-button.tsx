@@ -1,7 +1,7 @@
-import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
-import { ArchiveButtons } from '@app/components/documents/new-documents/modal/finish-document/archive-buttons';
-import { SendButtons } from '@app/components/documents/new-documents/modal/finish-document/send-buttons';
-import type { IDocument } from '@app/types/documents/documents';
+import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
+import { ArchiveButtons } from '@/components/documents/new-documents/modal/finish-document/archive-buttons';
+import { SendButtons } from '@/components/documents/new-documents/modal/finish-document/send-buttons';
+import type { IDocument } from '@/types/documents/documents';
 
 interface CommonProps extends React.RefAttributes<HTMLDivElement> {
   document: IDocument;

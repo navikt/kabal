@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'bun:test';
-import { validateBehandlingstid } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
-import { ISO_FORMAT } from '@app/components/date-picker/constants';
-import type { IForlengetBehandlingstid } from '@app/redux-api/forlenget-behandlingstid';
-import { BehandlingstidUnitType } from '@app/types/svarbrev';
 import { addDays, addMonths, addWeeks, format, startOfDay } from 'date-fns';
+import { validateBehandlingstid } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
+import { ISO_FORMAT } from '@/components/date-picker/constants';
+import type { IForlengetBehandlingstid } from '@/redux-api/forlenget-behandlingstid';
+import { BehandlingstidUnitType } from '@/types/svarbrev';
 
 const createBehandlingstid = ({
   varsletFrist = null,

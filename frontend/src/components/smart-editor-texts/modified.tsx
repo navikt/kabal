@@ -1,13 +1,13 @@
-import { ModifiedCreatedDateTime } from '@app/components/datetime/datetime';
-import { Changelog } from '@app/components/smart-editor-texts/edit/changelog';
-import { isGodFormuleringType, isRegelverkType, isRichTextType } from '@app/functions/is-rich-plain-text';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { TextChangeType } from '@app/types/common-text-types';
-import { Language } from '@app/types/texts/language';
-import type { IText } from '@app/types/texts/responses';
 import { HStack, Label, useId } from '@navikt/ds-react';
 import { useMemo } from 'react';
+import { ModifiedCreatedDateTime } from '@/components/datetime/datetime';
+import { Changelog } from '@/components/smart-editor-texts/edit/changelog';
+import { isGodFormuleringType, isRegelverkType, isRichTextType } from '@/functions/is-rich-plain-text';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { useGetTextVersionsQuery } from '@/redux-api/texts/queries';
+import { TextChangeType } from '@/types/common-text-types';
+import { Language } from '@/types/texts/language';
+import type { IText } from '@/types/texts/responses';
 
 export const TextModified = ({ id, created, textType, edits }: IText) => {
   const { data: versions = [] } = useGetTextVersionsQuery(id);

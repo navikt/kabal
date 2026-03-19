@@ -1,4 +1,4 @@
-import type { DocumentViewerMetadata } from '@app/types';
+import type { DocumentViewerMetadata } from '@/types';
 
 export const getMetadata = (): DocumentViewerMetadata | null => {
   const element = document.getElementById('file-viewer-metadata');

@@ -1,24 +1,24 @@
-import { Body } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/body';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { SetMaltekstseksjonLanguage } from '@app/components/set-redaktoer-language/set-maltekstseksjon-language';
-import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
-import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
+import { Box, HStack, Loader, Search, Table, VStack } from '@navikt/ds-react';
+import type { ReactNode } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { Body } from '@/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/body';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { SetMaltekstseksjonLanguage } from '@/components/set-redaktoer-language/set-maltekstseksjon-language';
+import { fuzzySearch } from '@/components/smart-editor/gode-formuleringer/fuzzy-search';
+import { splitQuery } from '@/components/smart-editor/gode-formuleringer/split-query';
 import {
   DEFAULT_STATUSES,
   filterByStatus,
   STATUS_OPTIONS,
   type Status,
   type StatusOption,
-} from '@app/components/smart-editor-texts/status-filter/status-filter';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { getTextAsString } from '@app/plate/functions/get-text-string';
-import { useGetTextsQuery } from '@app/redux-api/texts/queries';
-import { RichTextTypes } from '@app/types/common-text-types';
-import type { ListRichText } from '@app/types/texts/common';
-import type { IRichText, IText, ListText } from '@app/types/texts/responses';
-import { Box, HStack, Loader, Search, Table, VStack } from '@navikt/ds-react';
-import type { ReactNode } from 'react';
-import { useCallback, useMemo, useState } from 'react';
+} from '@/components/smart-editor-texts/status-filter/status-filter';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { getTextAsString } from '@/plate/functions/get-text-string';
+import { useGetTextsQuery } from '@/redux-api/texts/queries';
+import { RichTextTypes } from '@/types/common-text-types';
+import type { ListRichText } from '@/types/texts/common';
+import type { IRichText, IText, ListText } from '@/types/texts/responses';
 
 export interface AvailableTextsByTypeProps {
   onAdd: (id: string) => void;

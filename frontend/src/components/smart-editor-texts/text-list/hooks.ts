@@ -1,15 +1,15 @@
-import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
-import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
-import { QueryKey, SortKey } from '@app/components/smart-editor-texts/sortable-header';
-import { filterByStatus, type Status } from '@app/components/smart-editor-texts/status-filter/status-filter';
-import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { SortOrder } from '@app/types/sort';
-import type { Language } from '@app/types/texts/language';
-import type { ListText } from '@app/types/texts/responses';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { fuzzySearch } from '@/components/smart-editor/gode-formuleringer/fuzzy-search';
+import { splitQuery } from '@/components/smart-editor/gode-formuleringer/split-query';
+import { QueryKey, SortKey } from '@/components/smart-editor-texts/sortable-header';
+import { filterByStatus, type Status } from '@/components/smart-editor-texts/status-filter/status-filter';
+import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
+import { SortOrder } from '@/types/sort';
+import type { Language } from '@/types/texts/language';
+import type { ListText } from '@/types/texts/responses';
 
 type RedaktørItem = ListText | IMaltekstseksjon;
 type ScoredText<T extends RedaktørItem> = T & {

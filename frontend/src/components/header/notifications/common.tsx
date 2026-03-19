@@ -1,7 +1,7 @@
-import { SAKSTYPE_TO_TAG_VARIANT } from '@app/components/type/sakstype-to-tag-variant';
-import { useFullYtelseNameFromId, useTypeNameFromId } from '@app/hooks/use-kodeverk-ids';
-import type { SaksTypeEnum } from '@app/types/kodeverk';
 import { Skeleton, Tag, type TagProps, Tooltip } from '@navikt/ds-react';
+import { SAKSTYPE_TO_TAG_VARIANT } from '@/components/type/sakstype-to-tag-variant';
+import { useFullYtelseNameFromId, useTypeNameFromId } from '@/hooks/use-kodeverk-ids';
+import type { SaksTypeEnum } from '@/types/kodeverk';
 
 interface TypeProps {
   typeId: SaksTypeEnum;

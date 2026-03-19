@@ -28,7 +28,7 @@
     "outDir": "./dist",
     "baseUrl": "./src",
     "paths": {
-      "@app/*": ["*"]
+      "@/*": ["*"]
     },
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo"

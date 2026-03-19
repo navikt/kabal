@@ -1,9 +1,9 @@
-import { EditLogiskVedlegg } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/edit';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useAddLogiskVedleggMutation } from '@app/redux-api/logiske-vedlegg';
-import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback } from 'react';
+import { EditLogiskVedlegg } from '@/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/edit';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useAddLogiskVedleggMutation } from '@/redux-api/logiske-vedlegg';
+import type { LogiskVedlegg } from '@/types/arkiverte-documents';
 
 interface Props {
   dokumentInfoId: string;

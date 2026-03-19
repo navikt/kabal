@@ -1,9 +1,9 @@
-import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
-import { useDuplicateVersionMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { FilesIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { useCallback } from 'react';
+import { useNavigateMaltekstseksjoner } from '@/hooks/use-navigate-maltekstseksjoner';
+import { useDuplicateVersionMutation } from '@/redux-api/maltekstseksjoner/mutations';
+import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
 
 interface Props {
   id: string;

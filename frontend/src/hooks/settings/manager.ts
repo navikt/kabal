@@ -1,4 +1,4 @@
-import { setLocalStorageItem } from '@app/localstorage';
+import { setLocalStorageItem } from '@/localstorage';
 
 type ListenerFn = (value: string | undefined) => void;
 type ListenerMap = Record<string, ListenerFn[]>;

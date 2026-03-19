@@ -1,8 +1,8 @@
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useRegistreringshjemlerMap } from '@app/simple-api-state/use-kodeverk';
 import { useCallback, useMemo } from 'react';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useRegistreringshjemlerMap } from '@/simple-api-state/use-kodeverk';
 
 interface HjemmelOption {
   id: string;

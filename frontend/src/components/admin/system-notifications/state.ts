@@ -1,5 +1,5 @@
-import type { SystemNotification } from '@app/components/header/notifications/types';
-import { Observable } from '@app/observable';
+import type { SystemNotification } from '@/components/header/notifications/types';
+import { Observable } from '@/observable';
 
 export type AdminSystemNotification = Omit<SystemNotification, 'read'>;
 

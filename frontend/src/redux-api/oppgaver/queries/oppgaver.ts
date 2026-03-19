@@ -1,6 +1,6 @@
-import { ENVIRONMENT } from '@app/environment';
-import { OppgaveListTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
-import type { SearchPersonResponse } from '@app/types/oppgave-common';
+import { ENVIRONMENT } from '@/environment';
+import { OppgaveListTagTypes, oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import type { SearchPersonResponse } from '@/types/oppgave-common';
 import type {
   ApiResponse,
   CommonOppgaverParams,
@@ -11,7 +11,7 @@ import type {
   ISaksbehandlere,
   RelevantOppgaverResponse,
   UtgaatteApiResponse,
-} from '@app/types/oppgaver';
+} from '@/types/oppgaver';
 
 const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

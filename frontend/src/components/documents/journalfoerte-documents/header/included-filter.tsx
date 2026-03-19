@@ -1,6 +1,6 @@
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';
 import { Checkbox, HStack } from '@navikt/ds-react';
+import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import { useDocumentsOnlyIncluded } from '@/hooks/settings/use-setting';
 
 export const IncludedFilter = () => {
   const { value = false, setValue } = useDocumentsOnlyIncluded();

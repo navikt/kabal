@@ -1,34 +1,34 @@
-import { useDown } from '@app/components/documents/journalfoerte-documents/keyboard/actions/down';
-import { home, useEnd } from '@app/components/documents/journalfoerte-documents/keyboard/actions/home-end';
-import { useToggleInclude } from '@app/components/documents/journalfoerte-documents/keyboard/actions/include';
-import { useToggleInfo } from '@app/components/documents/journalfoerte-documents/keyboard/actions/info';
-import { useOpenInline } from '@app/components/documents/journalfoerte-documents/keyboard/actions/open-inline';
-import { useOpenInNewTab } from '@app/components/documents/journalfoerte-documents/keyboard/actions/open-tab';
+import { createContext, useCallback, useContext, useState } from 'react';
+import { useDown } from '@/components/documents/journalfoerte-documents/keyboard/actions/down';
+import { home, useEnd } from '@/components/documents/journalfoerte-documents/keyboard/actions/home-end';
+import { useToggleInclude } from '@/components/documents/journalfoerte-documents/keyboard/actions/include';
+import { useToggleInfo } from '@/components/documents/journalfoerte-documents/keyboard/actions/info';
+import { useOpenInline } from '@/components/documents/journalfoerte-documents/keyboard/actions/open-inline';
+import { useOpenInNewTab } from '@/components/documents/journalfoerte-documents/keyboard/actions/open-tab';
 import {
   useSelectEnd,
   useToggleSelectAll,
-} from '@app/components/documents/journalfoerte-documents/keyboard/actions/select';
-import { useUp } from '@app/components/documents/journalfoerte-documents/keyboard/actions/up';
+} from '@/components/documents/journalfoerte-documents/keyboard/actions/select';
+import { useUp } from '@/components/documents/journalfoerte-documents/keyboard/actions/up';
 import {
   useCollapseAllVedlegg,
   useCollapseVedlegg,
   useExpandAllVedlegg,
   useExpandVedlegg,
-} from '@app/components/documents/journalfoerte-documents/keyboard/actions/vedlegg';
-import { AttachmentModal } from '@app/components/documents/journalfoerte-documents/keyboard/attachment-modal';
-import { useClampOnFilter } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/clamp-on-filter';
-import { getDocument, getVedlegg } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import { KeyboardHelpModal } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-help-modal';
-import { RenameModal } from '@app/components/documents/journalfoerte-documents/keyboard/rename-modal';
-import { getFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
+} from '@/components/documents/journalfoerte-documents/keyboard/actions/vedlegg';
+import { AttachmentModal } from '@/components/documents/journalfoerte-documents/keyboard/attachment-modal';
+import { useClampOnFilter } from '@/components/documents/journalfoerte-documents/keyboard/hooks/clamp-on-filter';
+import { getDocument, getVedlegg } from '@/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import { KeyboardHelpModal } from '@/components/documents/journalfoerte-documents/keyboard/keyboard-help-modal';
+import { RenameModal } from '@/components/documents/journalfoerte-documents/keyboard/rename-modal';
+import { getFocusIndex } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
 import {
   getSelectionRanges,
   selectRangeTo,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { getRangeStartAndEnd } from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
-import { useDocumentsOnlyIncluded } from '@app/hooks/settings/use-setting';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { createContext, useCallback, useContext, useState } from 'react';
+} from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { getRangeStartAndEnd } from '@/components/documents/journalfoerte-documents/select-context/range-utils';
+import { useDocumentsOnlyIncluded } from '@/hooks/settings/use-setting';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 const NOOP = () => undefined;
 

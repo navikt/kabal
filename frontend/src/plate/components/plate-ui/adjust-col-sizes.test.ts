@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { adjustColSizes } from '@app/plate/toolbar/table/table';
+import { adjustColSizes } from '@/plate/toolbar/table/table';
 
 const MAX_WIDTH = 10;
 

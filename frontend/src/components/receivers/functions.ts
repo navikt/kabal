@@ -1,7 +1,7 @@
-import { HandlingEnum } from '@app/types/documents/receivers';
-import { Brevmottakertype } from '@app/types/kodeverk';
-import { type IFullmektig, type IPart, PartStatusEnum } from '@app/types/oppgave-common';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import { HandlingEnum } from '@/types/documents/receivers';
+import { Brevmottakertype } from '@/types/kodeverk';
+import { type IFullmektig, type IPart, PartStatusEnum } from '@/types/oppgave-common';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 const getTypeName = (type: Brevmottakertype): string => {
   switch (type) {

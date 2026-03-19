@@ -1,12 +1,12 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { OpenForRoleAccess } from '@app/components/common-table-components/open';
-import { ActionToast } from '@app/components/toast/action-toast';
-import { toast } from '@app/components/toast/store';
-import { useSetRolMutation } from '@app/redux-api/oppgaver/mutations/set-rol';
-import { FlowState } from '@app/types/oppgave-common';
-import type { IOppgave } from '@app/types/oppgaver';
 import { Button } from '@navikt/ds-react';
 import { useContext } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { OpenForRoleAccess } from '@/components/common-table-components/open';
+import { ActionToast } from '@/components/toast/action-toast';
+import { toast } from '@/components/toast/store';
+import { useSetRolMutation } from '@/redux-api/oppgaver/mutations/set-rol';
+import { FlowState } from '@/types/oppgave-common';
+import type { IOppgave } from '@/types/oppgaver';
 
 interface Props {
   oppgave: IOppgave;

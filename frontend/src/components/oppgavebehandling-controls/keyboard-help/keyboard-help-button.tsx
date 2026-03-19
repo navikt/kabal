@@ -1,6 +1,6 @@
-import { openPanelKeyboardHelpModal } from '@app/components/oppgavebehandling-controls/keyboard-help/state';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
+import { openPanelKeyboardHelpModal } from '@/components/oppgavebehandling-controls/keyboard-help/state';
 
 const TITLE = 'Vis hjelp for panelnavigering';
 

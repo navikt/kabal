@@ -1,10 +1,10 @@
-import { CheckmarkCircleFillIconColored } from '@app/components/colored-icons/colored-icons';
-import { SuggestedEnhet } from '@app/components/oppgavebehandling-footer/update-in-gosys/suggested-enhet';
-import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
-import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
-import type { Enhet, IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Box, Button, ErrorMessage, HStack, InlineMessage, Search, Tooltip, VStack } from '@navikt/ds-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { CheckmarkCircleFillIconColored } from '@/components/colored-icons/colored-icons';
+import { SuggestedEnhet } from '@/components/oppgavebehandling-footer/update-in-gosys/suggested-enhet';
+import { fuzzySearch } from '@/components/smart-editor/gode-formuleringer/fuzzy-search';
+import { splitQuery } from '@/components/smart-editor/gode-formuleringer/split-query';
+import type { Enhet, IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   selectedEnhet: string | null;

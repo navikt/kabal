@@ -1,14 +1,14 @@
-import { COMMENT_PREFIX } from '@app/components/smart-editor/constants';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useMyPlateEditorState } from '@app/plate/types';
-import { useGetCommentsQuery } from '@app/redux-api/smart-editor-comments';
-import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { ElementApi } from 'platejs';
 import { useContext, useMemo } from 'react';
 import type { Descendant } from 'slate';
+import { COMMENT_PREFIX } from '@/components/smart-editor/constants';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { isNotUndefined } from '@/functions/is-not-type-guards';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useMyPlateEditorState } from '@/plate/types';
+import { useGetCommentsQuery } from '@/redux-api/smart-editor-comments';
+import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 
 export interface FocusedComment extends ISmartEditorComment {
   isFocused: boolean;

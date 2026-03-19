@@ -1,10 +1,10 @@
-import { InfoToast } from '@app/components/toast/info-toast';
-import { toast } from '@app/components/toast/store';
-import { formatEmployeeName } from '@app/domain/employee-name';
-import { reduxStore } from '@app/redux/configure-store';
-import { type IMessage, messagesApi } from '@app/redux-api/messages';
-import type { NewMessageEvent } from '@app/redux-api/server-sent-events/types';
 import { BodyShort } from '@navikt/ds-react';
+import { InfoToast } from '@/components/toast/info-toast';
+import { toast } from '@/components/toast/store';
+import { formatEmployeeName } from '@/domain/employee-name';
+import { reduxStore } from '@/redux/configure-store';
+import { type IMessage, messagesApi } from '@/redux-api/messages';
+import type { NewMessageEvent } from '@/redux-api/server-sent-events/types';
 
 export const handleMessageEvent = (oppgaveId: string, userId: string) => (event: NewMessageEvent) => {
   if (event.actor.navIdent !== userId) {

@@ -1,29 +1,29 @@
-import { Alert } from '@app/components/alert/alert';
-import { canOpenInKabal } from '@app/components/documents/filetype';
-import type { IShownArchivedDocument, IShownDocument } from '@app/components/file-viewer/types';
-import { useFileViewerUrl } from '@app/components/file-viewer/use-file-viewer-url';
-import { useMarkVisited } from '@app/components/file-viewer/use-mark-visited';
-import { KabalFileViewer } from '@app/components/kabal-file-viewer';
-import {
-  getAttachmentsOverviewFileUrl,
-  getJournalfoertDocumentFileUrl,
-  getNewDocumentFileUrl,
-} from '@app/domain/file-url';
-import {
-  getAttachmentsOverviewFileViewerTabUrl,
-  getJournalfoertFileViewerTabUrl,
-  getNewFileViewerTabUrl,
-} from '@app/domain/tabbed-document-url';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useFilesViewed } from '@app/hooks/settings/use-setting';
-import { useShownDocuments } from '@app/hooks/use-shown-documents';
-import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import type { IArkivertDocument, Variants } from '@app/types/arkiverte-documents';
-import { DocumentTypeEnum, type IDocument, type JournalfoertDokument } from '@app/types/documents/documents';
 import { Box, Loader, VStack } from '@navikt/ds-react';
 import type { FileEntry } from '@navikt/klage-file-viewer';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { canOpenInKabal } from '@/components/documents/filetype';
+import type { IShownArchivedDocument, IShownDocument } from '@/components/file-viewer/types';
+import { useFileViewerUrl } from '@/components/file-viewer/use-file-viewer-url';
+import { useMarkVisited } from '@/components/file-viewer/use-mark-visited';
+import { KabalFileViewer } from '@/components/kabal-file-viewer';
+import {
+  getAttachmentsOverviewFileUrl,
+  getJournalfoertDocumentFileUrl,
+  getNewDocumentFileUrl,
+} from '@/domain/file-url';
+import {
+  getAttachmentsOverviewFileViewerTabUrl,
+  getJournalfoertFileViewerTabUrl,
+  getNewFileViewerTabUrl,
+} from '@/domain/tabbed-document-url';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useFilesViewed } from '@/hooks/settings/use-setting';
+import { useShownDocuments } from '@/hooks/use-shown-documents';
+import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
+import type { IArkivertDocument, Variants } from '@/types/arkiverte-documents';
+import { DocumentTypeEnum, type IDocument, type JournalfoertDokument } from '@/types/documents/documents';
 
 export const FileViewer = () => {
   const { remove: closePdfViewer } = useFilesViewed();

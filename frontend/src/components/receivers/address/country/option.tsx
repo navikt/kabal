@@ -1,7 +1,7 @@
-import type { CountryCode } from '@app/types/common';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useEffect, useRef } from 'react';
+import type { CountryCode } from '@/types/common';
 
 interface Props {
   country: CountryCode;

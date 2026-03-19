@@ -1,5 +1,5 @@
-import { Alert } from '@app/components/alert/alert';
 import { Loader } from '@navikt/ds-react';
+import { Alert } from '@/components/alert/alert';
 
 interface MessagesProps {
   warningReceiverMessage: string | null;

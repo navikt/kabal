@@ -1,7 +1,7 @@
-import { optionalEnvString } from '@app/config/env-var';
-import { getLogger } from '@app/logger';
-import type { ValkeyOptions } from '@app/valkey/types';
 import { createClient } from 'redis';
+import { optionalEnvString } from '@/config/env-var';
+import { getLogger } from '@/logger';
+import type { ValkeyOptions } from '@/valkey/types';
 
 export type ValkeyClientType = ReturnType<typeof createClient>;
 

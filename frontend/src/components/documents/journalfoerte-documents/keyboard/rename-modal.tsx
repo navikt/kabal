@@ -1,13 +1,13 @@
-import { useLazyFocusedDocumentAndVedlegg } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/focused-document';
-import { toast } from '@app/components/toast/store';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { Keys } from '@app/keys';
-import { useSetTitleMutation } from '@app/redux-api/journalposter';
-import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, Label, Modal, TextField, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useRef, useState } from 'react';
+import { useLazyFocusedDocumentAndVedlegg } from '@/components/documents/journalfoerte-documents/keyboard/hooks/focused-document';
+import { toast } from '@/components/toast/store';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { Keys } from '@/keys';
+import { useSetTitleMutation } from '@/redux-api/journalposter';
+import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@/types/arkiverte-documents';
 
 interface Props {
   open: boolean;

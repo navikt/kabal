@@ -1,10 +1,10 @@
-import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
-import type { SavedStatusProps } from '@app/components/saved-status/saved-status';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { SPELL_CHECK_LANGUAGES } from '@app/hooks/use-smart-editor-language';
-import type { KabalValue, RichTextEditor } from '@app/plate/types';
-import type { Language } from '@app/types/texts/language';
-import type { IRichText } from '@app/types/texts/responses';
+import { RedaktoerRichText } from '@/components/redaktoer-rich-text/redaktoer-rich-text';
+import type { SavedStatusProps } from '@/components/saved-status/saved-status';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { SPELL_CHECK_LANGUAGES } from '@/hooks/use-smart-editor-language';
+import type { KabalValue, RichTextEditor } from '@/plate/types';
+import type { Language } from '@/types/texts/language';
+import type { IRichText } from '@/types/texts/responses';
 
 export type RichTexts = Record<Language, KabalValue | null>;
 

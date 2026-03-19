@@ -1,7 +1,7 @@
-import { getSuggestions } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/suggestions';
-import { useTemaName } from '@app/hooks/use-tema-name';
-import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 import { useMemo } from 'react';
+import { getSuggestions } from '@/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/suggestions';
+import { useTemaName } from '@/hooks/use-tema-name';
+import type { LogiskVedlegg } from '@/types/arkiverte-documents';
 
 interface State {
   suggestions: string[];

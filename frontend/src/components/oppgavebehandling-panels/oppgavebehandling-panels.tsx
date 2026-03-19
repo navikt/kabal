@@ -1,7 +1,7 @@
-import { Documents } from '@app/components/documents/documents';
-import { Kvalitetsvurdering } from '@app/components/kvalitetsvurdering/kvalitetsvurdering';
-import { SmartEditorPanel } from '@app/components/smart-editor/smart-editor-panel';
 import { Box, HStack } from '@navikt/ds-react';
+import { Documents } from '@/components/documents/documents';
+import { Kvalitetsvurdering } from '@/components/kvalitetsvurdering/kvalitetsvurdering';
+import { SmartEditorPanel } from '@/components/smart-editor/smart-editor-panel';
 
 export const OppgavebehandlingPanels = (): React.JSX.Element => (
   <HStack

@@ -1,44 +1,3 @@
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
-import { pushEvent, pushLog } from '@app/observability';
-import {
-  ELEMENT_CURRENT_DATE,
-  ELEMENT_EMPTY_VOID,
-  ELEMENT_FOOTER,
-  ELEMENT_HEADER,
-  ELEMENT_LABEL_CONTENT,
-  ELEMENT_MALTEKST,
-  ELEMENT_MALTEKSTSEKSJON,
-  ELEMENT_PAGE_BREAK,
-  ELEMENT_PLACEHOLDER,
-  ELEMENT_REDIGERBAR_MALTEKST,
-  ELEMENT_REGELVERK,
-  ELEMENT_REGELVERK_CONTAINER,
-  ELEMENT_SIGNATURE,
-} from '@app/plate/plugins/element-types';
-import { FooterPlugin, HeaderPlugin } from '@app/plate/plugins/header-footer';
-import { MaltekstPlugin } from '@app/plate/plugins/maltekst';
-import { RedigerbarMaltekstPlugin } from '@app/plate/plugins/redigerbar-maltekst';
-import { RegelverkContainerPlugin, RegelverkPlugin } from '@app/plate/plugins/regelverk';
-import {
-  createEmptyVoid,
-  createRegelverkContainer,
-  createSimpleListItem,
-  createSimpleListItemContainer,
-  createSimpleParagraph,
-  createTableCell,
-  createTableRow,
-} from '@app/plate/templates/helpers';
-import {
-  type MaltekstElement,
-  type RedigerbarMaltekstElement,
-  type RegelverkContainerElement,
-  type TableCellElement,
-  TextAlign,
-} from '@app/plate/types';
-import { isOfElementTypesFn } from '@app/plate/utils/queries';
-import { reduxStore } from '@app/redux/configure-store';
-import { MALTEKSTSEKSJON_TYPE, PlainTextTypes, REGELVERK_TYPE, RichTextTypes } from '@app/types/common-text-types';
-import { isGenericObject } from '@app/types/types';
 import { LogLevel } from '@grafana/faro-web-sdk';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import {
@@ -53,6 +12,47 @@ import type { TElement, TNode } from 'platejs';
 import { BaseParagraphPlugin, ElementApi, NodeApi } from 'platejs';
 import { createPlatePlugin, type OverrideEditor, ParagraphPlugin, type PlateEditor } from 'platejs/react';
 import { isEditor, type Path, Scrubber } from 'slate';
+import { isNotUndefined } from '@/functions/is-not-type-guards';
+import { pushEvent, pushLog } from '@/observability';
+import {
+  ELEMENT_CURRENT_DATE,
+  ELEMENT_EMPTY_VOID,
+  ELEMENT_FOOTER,
+  ELEMENT_HEADER,
+  ELEMENT_LABEL_CONTENT,
+  ELEMENT_MALTEKST,
+  ELEMENT_MALTEKSTSEKSJON,
+  ELEMENT_PAGE_BREAK,
+  ELEMENT_PLACEHOLDER,
+  ELEMENT_REDIGERBAR_MALTEKST,
+  ELEMENT_REGELVERK,
+  ELEMENT_REGELVERK_CONTAINER,
+  ELEMENT_SIGNATURE,
+} from '@/plate/plugins/element-types';
+import { FooterPlugin, HeaderPlugin } from '@/plate/plugins/header-footer';
+import { MaltekstPlugin } from '@/plate/plugins/maltekst';
+import { RedigerbarMaltekstPlugin } from '@/plate/plugins/redigerbar-maltekst';
+import { RegelverkContainerPlugin, RegelverkPlugin } from '@/plate/plugins/regelverk';
+import {
+  createEmptyVoid,
+  createRegelverkContainer,
+  createSimpleListItem,
+  createSimpleListItemContainer,
+  createSimpleParagraph,
+  createTableCell,
+  createTableRow,
+} from '@/plate/templates/helpers';
+import {
+  type MaltekstElement,
+  type RedigerbarMaltekstElement,
+  type RegelverkContainerElement,
+  type TableCellElement,
+  TextAlign,
+} from '@/plate/types';
+import { isOfElementTypesFn } from '@/plate/utils/queries';
+import { reduxStore } from '@/redux/configure-store';
+import { MALTEKSTSEKSJON_TYPE, PlainTextTypes, REGELVERK_TYPE, RichTextTypes } from '@/types/common-text-types';
+import { isGenericObject } from '@/types/types';
 
 const module = 'normalize';
 

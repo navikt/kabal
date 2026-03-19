@@ -1,9 +1,9 @@
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
 import { CalendarIcon } from '@navikt/aksel-icons';
 import { Box, Button, type ButtonProps, DatePicker, HStack, InlineMessage, Tooltip } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
 import { useCallback, useRef, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
 
 type DateStringISO = string;
 

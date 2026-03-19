@@ -1,5 +1,5 @@
-import type { EmptyVoidElement } from '@app/plate/types';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
+import type { EmptyVoidElement } from '@/plate/types';
 
 type RenderProps = PlateElementProps<EmptyVoidElement>;
 

@@ -1,5 +1,5 @@
-import type { IOption } from '@app/components/filter-dropdown/props';
-import type { IKodeverkSimpleValue, IKodeverkValue } from '@app/types/kodeverk';
+import type { IOption } from '@/components/filter-dropdown/props';
+import type { IKodeverkSimpleValue, IKodeverkValue } from '@/types/kodeverk';
 
 export const kodeverkValuesToDropdownOptions = <T extends string = string>(
   kodeverkValues: IKodeverkValue<T>[],

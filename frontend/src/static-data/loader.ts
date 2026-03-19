@@ -1,5 +1,5 @@
-import { ENVIRONMENT } from '@app/environment';
-import { getHeaders } from '@app/headers';
+import { ENVIRONMENT } from '@/environment';
+import { getHeaders } from '@/headers';
 
 export const loadStaticData = async <T>(url: string, name: string, attempt = 0): Promise<T> => {
   const res = await fetch(url, {

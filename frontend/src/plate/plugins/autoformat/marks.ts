@@ -1,5 +1,5 @@
-import type { EditorAutoformatRule } from '@app/plate/types';
 import { BaseBoldPlugin, BaseItalicPlugin, BaseUnderlinePlugin } from '@platejs/basic-nodes';
+import type { EditorAutoformatRule } from '@/plate/types';
 
 export const autoformatMarks: EditorAutoformatRule[] = [
   {

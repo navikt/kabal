@@ -1,4 +1,4 @@
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
+import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 
 interface Props {
   element: HTMLElement;

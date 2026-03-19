@@ -1,10 +1,5 @@
-import {
-  CreatorRole,
-  DocumentTypeEnum,
-  type IDocument,
-  type JournalfoertDokument,
-} from '@app/types/documents/documents';
-import { FlowState } from '@app/types/oppgave-common';
+import { CreatorRole, DocumentTypeEnum, type IDocument, type JournalfoertDokument } from '@/types/documents/documents';
+import { FlowState } from '@/types/oppgave-common';
 
 export const canRolEditDocument = (document: IDocument, flowState: FlowState | null) => {
   if (flowState !== FlowState.SENT) {

@@ -1,9 +1,9 @@
-import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import { useUpdatePlainTextMutation, useUpdateRichTextMutation } from '@app/redux-api/texts/mutations';
-import { LANGUAGE_NAMES } from '@app/types/texts/language';
 import { Button, HStack } from '@navikt/ds-react';
+import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { createSimpleParagraph } from '@/plate/templates/helpers';
+import { useUpdatePlainTextMutation, useUpdateRichTextMutation } from '@/redux-api/texts/mutations';
+import { LANGUAGE_NAMES } from '@/types/texts/language';
 
 interface Props {
   id: string;

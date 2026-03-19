@@ -1,10 +1,10 @@
-import { InfoToast } from '@app/components/toast/info-toast';
-import { toast } from '@app/components/toast/store';
-import { formatEmployeeName } from '@app/domain/employee-name';
-import { reduxStore } from '@app/redux/configure-store';
-import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import type { JournalpostAddedEvent } from '@app/redux-api/server-sent-events/types';
-import { type AvsenderMottaker, Journalposttype, type Sak } from '@app/types/arkiverte-documents';
+import { InfoToast } from '@/components/toast/info-toast';
+import { toast } from '@/components/toast/store';
+import { formatEmployeeName } from '@/domain/employee-name';
+import { reduxStore } from '@/redux/configure-store';
+import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
+import type { JournalpostAddedEvent } from '@/redux-api/server-sent-events/types';
+import { type AvsenderMottaker, Journalposttype, type Sak } from '@/types/arkiverte-documents';
 
 export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) => (event: JournalpostAddedEvent) => {
   const { journalpostList, actor } = event;

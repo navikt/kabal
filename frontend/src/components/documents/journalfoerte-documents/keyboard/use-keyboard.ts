@@ -1,15 +1,15 @@
+import { useCallback, useMemo } from 'react';
 import {
   addOrRemoveOne,
   selectDown,
   selectHome,
   selectUp,
-} from '@app/components/documents/journalfoerte-documents/keyboard/actions/select';
-import { useKeyboardContext } from '@app/components/documents/journalfoerte-documents/keyboard/keyboard-context';
-import { openKeyboardHelpModal } from '@app/components/documents/journalfoerte-documents/keyboard/state/help-modal';
-import { unselectAll } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { isMetaKey, Keys } from '@app/keys';
-import { pushEvent } from '@app/observability';
-import { useCallback, useMemo } from 'react';
+} from '@/components/documents/journalfoerte-documents/keyboard/actions/select';
+import { useKeyboardContext } from '@/components/documents/journalfoerte-documents/keyboard/keyboard-context';
+import { openKeyboardHelpModal } from '@/components/documents/journalfoerte-documents/keyboard/state/help-modal';
+import { unselectAll } from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { isMetaKey, Keys } from '@/keys';
+import { pushEvent } from '@/observability';
 
 export const EVENT_DOMAIN = 'journalforte-documents-keyboard-shortcuts';
 

@@ -1,7 +1,7 @@
-import type { ArchivedDocumentsSort, ArchivedDocumentsSortColumn } from '@app/hooks/settings/use-setting';
-import { SortOrder } from '@app/types/sort';
 import { ArrowsUpDownIcon, SortDownIcon, SortUpIcon } from '@navikt/aksel-icons';
 import { Button, type ButtonProps } from '@navikt/ds-react';
+import type { ArchivedDocumentsSort, ArchivedDocumentsSortColumn } from '@/hooks/settings/use-setting';
+import { SortOrder } from '@/types/sort';
 
 export interface SortButtonProps {
   column: ArchivedDocumentsSortColumn;

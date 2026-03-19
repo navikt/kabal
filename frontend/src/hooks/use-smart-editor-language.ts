@@ -1,9 +1,9 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetDocumentQuery, useGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { Language } from '@app/types/texts/language';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetDocumentQuery, useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
+import { Language } from '@/types/texts/language';
 
 export const useSmartEditorLanguage = () => {
   const { dokumentId } = useContext(SmartEditorContext);

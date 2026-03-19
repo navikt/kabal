@@ -1,13 +1,13 @@
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { useLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
-import { useValidationError } from '@app/hooks/use-validation-error';
-import { useUpdateRegistreringshjemlerMutation } from '@app/redux-api/oppgaver/mutations/set-registreringshjemler';
 import { HelpText, HStack, Label, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useId, useMemo } from 'react';
+import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import { useLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
+import { useValidationError } from '@/hooks/use-validation-error';
+import { useUpdateRegistreringshjemlerMutation } from '@/redux-api/oppgaver/mutations/set-registreringshjemler';
 
 interface HjemmelOption {
   id: string;

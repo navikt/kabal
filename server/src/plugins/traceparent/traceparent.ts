@@ -1,12 +1,12 @@
-import type { Querystring } from '@app/helpers/query-parser';
+import type { FastifyRequest } from 'fastify';
+import fastifyPlugin from 'fastify-plugin';
+import type { Querystring } from '@/helpers/query-parser';
 import {
   generateSpanId,
   generateTraceId,
   generateTraceparent,
   getTraceIdAndSpanIdFromTraceparent,
-} from '@app/helpers/traceparent';
-import type { FastifyRequest } from 'fastify';
-import fastifyPlugin from 'fastify-plugin';
+} from '@/helpers/traceparent';
 
 declare module 'fastify' {
   interface FastifyRequest {

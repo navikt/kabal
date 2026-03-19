@@ -1,8 +1,8 @@
-import type { Bookmark } from '@app/components/smart-editor/bookmarks/use-bookmarks';
-import type { FocusedComment } from '@app/components/smart-editor/comments/use-threads';
-import { calculateRangePosition } from '@app/plate/functions/range-position';
-import type { RichTextEditor } from '@app/plate/types';
 import { TextApi } from 'platejs';
+import type { Bookmark } from '@/components/smart-editor/bookmarks/use-bookmarks';
+import type { FocusedComment } from '@/components/smart-editor/comments/use-threads';
+import { calculateRangePosition } from '@/plate/functions/range-position';
+import type { RichTextEditor } from '@/plate/types';
 
 export enum ItemType {
   THREAD = 'thread',

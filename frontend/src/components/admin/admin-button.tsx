@@ -1,5 +1,5 @@
-import { StatusIcon } from '@app/components/admin/status-icon';
 import { Button } from '@navikt/ds-react';
+import { StatusIcon } from '@/components/admin/status-icon';
 
 interface Props {
   isLoading: boolean;

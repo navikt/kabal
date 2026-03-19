@@ -1,15 +1,15 @@
+import type { TRange } from 'platejs';
+import { createContext, type RefObject, useRef, useState } from 'react';
 import {
   GodeFormuleringerExpandState,
   useSmartEditorAnnotationsAtOrigin,
   useSmartEditorGodeFormuleringerExpandstate,
   useSmartEditorGodeFormuleringerOpen,
   useSmartEditorHistoryOpen,
-} from '@app/hooks/settings/use-setting';
-import { DistribusjonsType, type ISmartDocumentOrAttachment } from '@app/types/documents/documents';
-import type { ISmartEditorComment } from '@app/types/smart-editor/comments';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import type { TRange } from 'platejs';
-import { createContext, type RefObject, useRef, useState } from 'react';
+} from '@/hooks/settings/use-setting';
+import { DistribusjonsType, type ISmartDocumentOrAttachment } from '@/types/documents/documents';
+import type { ISmartEditorComment } from '@/types/smart-editor/comments';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 const noop = () => undefined;
 

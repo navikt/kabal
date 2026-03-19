@@ -1,9 +1,9 @@
-import { InfoToast } from '@app/components/toast/info-toast';
-import { toast } from '@app/components/toast/store';
-import { employeeName } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/common';
-import type { UpdateFn } from '@app/redux-api/oppgaver/queries/behandling/types';
-import type { TilbakekrevingEvent } from '@app/redux-api/server-sent-events/types';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { InfoToast } from '@/components/toast/info-toast';
+import { toast } from '@/components/toast/store';
+import { employeeName } from '@/redux-api/oppgaver/queries/behandling/event-handlers/common';
+import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
+import type { TilbakekrevingEvent } from '@/redux-api/server-sent-events/types';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 export const handleTilbakekrevingEvent =
   (userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>

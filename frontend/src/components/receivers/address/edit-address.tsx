@@ -1,15 +1,15 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { Country } from '@app/components/receivers/address/country/country';
-import { AddressField } from '@app/components/receivers/address/field';
-import { AddressState, Container } from '@app/components/receivers/address/layout';
-import { Postnummer } from '@app/components/receivers/address/postnummer';
-import type { Addresses } from '@app/components/receivers/address/types';
-import { areAddressesEqual } from '@app/functions/are-addresses-equal';
-import { isMetaKey, Keys } from '@app/keys';
-import type { IAddress } from '@app/types/documents/receivers';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Button, ErrorSummary, HStack, Tooltip } from '@navikt/ds-react';
 import { useCallback, useContext, useMemo, useState } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { Country } from '@/components/receivers/address/country/country';
+import { AddressField } from '@/components/receivers/address/field';
+import { AddressState, Container } from '@/components/receivers/address/layout';
+import { Postnummer } from '@/components/receivers/address/postnummer';
+import type { Addresses } from '@/components/receivers/address/types';
+import { areAddressesEqual } from '@/functions/are-addresses-equal';
+import { isMetaKey, Keys } from '@/keys';
+import type { IAddress } from '@/types/documents/receivers';
 
 interface EditProps extends Addresses {
   onSave: (address: IAddress | null) => void;

@@ -1,16 +1,16 @@
-import { useKvalitetsvurderingV3 } from '@app/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
-import { useValidationError } from '@app/components/kvalitetsvurdering/v3/common/use-validation-error';
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { useLovkildeToRegistreringshjemmelForYtelse } from '@app/hooks/use-kodeverk-value';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useCallback, useMemo } from 'react';
+import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
+import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import { useLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
 import type {
   KvalitetsvurderingAllRegistreringshjemlerV3,
   KvalitetsvurderingV3Boolean,
-} from '@app/types/kaka-kvalitetsvurdering/v3';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useMemo } from 'react';
+} from '@/types/kaka-kvalitetsvurdering/v3';
 
 const EMPTY_ARRAY: string[] = [];
 

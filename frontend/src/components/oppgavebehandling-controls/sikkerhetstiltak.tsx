@@ -1,5 +1,5 @@
-import { Alert } from '@app/components/alert/alert';
-import type { ISikkerhetstiltak } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { Alert } from '@/components/alert/alert';
+import type { ISikkerhetstiltak } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   sikkerhetstiltak: ISikkerhetstiltak | null;

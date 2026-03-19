@@ -1,15 +1,15 @@
+import { useMemo } from 'react';
 import {
   EXPANDED_HEIGHT,
   LOGISK_VEDLEGG_HEIGHT,
   LOGISK_VEDLEGG_SPACE,
   LOGISKE_VEDLEGG_OFFSET,
   ROW_HEIGHT,
-} from '@app/components/documents/journalfoerte-documents/contants';
-import { useShowLogiskeVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
-import { useShowMetadata } from '@app/components/documents/journalfoerte-documents/state/show-metadata';
-import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
-import type { IArkivertDocument, IArkivertDocumentVedlegg, LogiskVedlegg } from '@app/types/arkiverte-documents';
-import { useMemo } from 'react';
+} from '@/components/documents/journalfoerte-documents/contants';
+import { useShowLogiskeVedlegg } from '@/components/documents/journalfoerte-documents/state/show-logiske-vedlegg';
+import { useShowMetadata } from '@/components/documents/journalfoerte-documents/state/show-metadata';
+import { useShowVedlegg } from '@/components/documents/journalfoerte-documents/state/show-vedlegg';
+import type { IArkivertDocument, IArkivertDocumentVedlegg, LogiskVedlegg } from '@/types/arkiverte-documents';
 
 interface Position {
   height: number;

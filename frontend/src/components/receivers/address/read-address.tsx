@@ -1,13 +1,13 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { AddressState, Container } from '@app/components/receivers/address/layout';
-import type { Addresses } from '@app/components/receivers/address/types';
-import { areAddressesEqual } from '@app/functions/are-addresses-equal';
-import { isNotNull } from '@app/functions/is-not-type-guards';
-import { type IAddress, isNorwegianAddress } from '@app/types/documents/receivers';
-import type { IPart } from '@app/types/oppgave-common';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, HStack, Tag, Tooltip } from '@navikt/ds-react';
 import { useContext } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { AddressState, Container } from '@/components/receivers/address/layout';
+import type { Addresses } from '@/components/receivers/address/types';
+import { areAddressesEqual } from '@/functions/are-addresses-equal';
+import { isNotNull } from '@/functions/is-not-type-guards';
+import { type IAddress, isNorwegianAddress } from '@/types/documents/receivers';
+import type { IPart } from '@/types/oppgave-common';
 
 interface Props extends Addresses {
   part: IPart;

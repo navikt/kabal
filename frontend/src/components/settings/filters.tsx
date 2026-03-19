@@ -1,13 +1,13 @@
-import { SectionHeader, SettingsSection } from '@app/components/settings/styled-components';
-import { useHjemlerFromSettingsYtelser } from '@app/components/settings/use-hjemler-from-settings-ytelser';
-import { useAvailableYtelser } from '@app/hooks/use-available-ytelser';
-import { useHasRole } from '@app/hooks/use-has-role';
-import { useGetSettingsQuery, useUpdateSettingsMutation } from '@app/redux-api/bruker';
-import { type ISettings, Role } from '@app/types/bruker';
-import type { IKodeverkSimpleValue } from '@app/types/kodeverk';
 import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, HGrid, HStack, Switch, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
+import { SectionHeader, SettingsSection } from '@/components/settings/styled-components';
+import { useHjemlerFromSettingsYtelser } from '@/components/settings/use-hjemler-from-settings-ytelser';
+import { useAvailableYtelser } from '@/hooks/use-available-ytelser';
+import { useHasRole } from '@/hooks/use-has-role';
+import { useGetSettingsQuery, useUpdateSettingsMutation } from '@/redux-api/bruker';
+import { type ISettings, Role } from '@/types/bruker';
+import type { IKodeverkSimpleValue } from '@/types/kodeverk';
 
 const EMPTY_SETTINGS: ISettings = {
   ytelser: [],

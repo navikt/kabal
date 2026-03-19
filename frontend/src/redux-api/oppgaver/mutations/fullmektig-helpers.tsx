@@ -1,5 +1,5 @@
-import { formatIdNumber } from '@app/functions/format-id';
-import type { ISetFullmektigParams } from '@app/types/oppgavebehandling/params';
+import { formatIdNumber } from '@/functions/format-id';
+import type { ISetFullmektigParams } from '@/types/oppgavebehandling/params';
 
 export const getFullmektigMessage = (fullmektig: ISetFullmektigParams['fullmektig']) => {
   if (fullmektig === null) {

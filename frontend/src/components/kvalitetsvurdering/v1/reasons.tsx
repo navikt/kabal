@@ -1,11 +1,11 @@
-import { CommentField } from '@app/components/kvalitetsvurdering/v1/comment-field';
-import { StyledHelpText } from '@app/components/kvalitetsvurdering/v1/styled-components';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
-import { useUpdateKvalitetsvurderingMutation } from '@app/redux-api/kaka-kvalitetsvurdering/v1';
-import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingTexts } from '@app/types/kaka-kvalitetsvurdering/v1';
 import { Checkbox, CheckboxGroup, HStack, Loader } from '@navikt/ds-react';
 import { Fragment } from 'react';
+import { CommentField } from '@/components/kvalitetsvurdering/v1/comment-field';
+import { StyledHelpText } from '@/components/kvalitetsvurdering/v1/styled-components';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useKvalitetsvurdering } from '@/hooks/use-kvalitetsvurdering';
+import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/v1';
+import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingTexts } from '@/types/kaka-kvalitetsvurdering/v1';
 
 export interface Reason {
   id: keyof IKvalitetsvurderingBooleans;

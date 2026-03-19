@@ -1,6 +1,6 @@
-import { ENVIRONMENT } from '@app/environment';
-import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
-import type { BehandlingGosysOppgave } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { ENVIRONMENT } from '@/environment';
+import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import type { BehandlingGosysOppgave } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface SetGosysOppgaveResponse {
   modified: string;

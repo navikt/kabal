@@ -1,8 +1,8 @@
-import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
-import { formatEmployeeNameAndId } from '@app/domain/employee-name';
-import type { INavEmployee } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
 import { InlineMessage } from '@navikt/ds-react';
+import { BehandlingSection } from '@/components/behandling/behandlingsdetaljer/behandling-section';
+import { formatEmployeeNameAndId } from '@/domain/employee-name';
+import type { INavEmployee } from '@/types/bruker';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 type Type =
   | SaksTypeEnum.ANKE_I_TRYGDERETTEN

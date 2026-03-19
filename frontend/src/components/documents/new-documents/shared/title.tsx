@@ -1,19 +1,19 @@
-import { canOpenInKabal } from '@app/components/documents/filetype';
-import { downloadDocuments } from '@app/components/documents/journalfoerte-documents/download';
-import { StyledDocumentTitle } from '@app/components/documents/new-documents/new-document/title-style';
-import { DocumentLink } from '@app/components/documents/styled-components/document-link';
-import { TabContext } from '@app/components/documents/tab-context';
-import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
-import { toast } from '@app/components/toast/store';
+import { useCallback, useContext, useMemo } from 'react';
+import { canOpenInKabal } from '@/components/documents/filetype';
+import { downloadDocuments } from '@/components/documents/journalfoerte-documents/download';
+import { StyledDocumentTitle } from '@/components/documents/new-documents/new-document/title-style';
+import { DocumentLink } from '@/components/documents/styled-components/document-link';
+import { TabContext } from '@/components/documents/tab-context';
+import { useIsTabOpen } from '@/components/documents/use-is-tab-open';
+import { toast } from '@/components/toast/store';
 import {
   getAttachmentsOverviewTabId,
   getJournalfoertDocumentTabId,
   getNewDocumentTabId,
-} from '@app/domain/tabbed-document-url';
-import { useFilesViewed } from '@app/hooks/settings/use-setting';
-import { isMetaKey, MouseButtons } from '@app/keys';
-import { DocumentTypeEnum, type JournalfoertDokumentReference } from '@app/types/documents/documents';
-import { useCallback, useContext, useMemo } from 'react';
+} from '@/domain/tabbed-document-url';
+import { useFilesViewed } from '@/hooks/settings/use-setting';
+import { isMetaKey, MouseButtons } from '@/keys';
+import { DocumentTypeEnum, type JournalfoertDokumentReference } from '@/types/documents/documents';
 
 interface BaseProps {
   title: string;

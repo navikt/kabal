@@ -1,10 +1,10 @@
-import { EditableTag } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/editable-tag';
-import { Suggestions } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/suggestions-dropdown';
-import { useSuggestions } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/use-suggestions';
-import { Keys } from '@app/keys';
-import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 import { Tooltip } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { EditableTag } from '@/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/editable-tag';
+import { Suggestions } from '@/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/suggestions-dropdown';
+import { useSuggestions } from '@/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/use-suggestions';
+import { Keys } from '@/keys';
+import type { LogiskVedlegg } from '@/types/arkiverte-documents';
 
 interface Props {
   initialValue?: string;

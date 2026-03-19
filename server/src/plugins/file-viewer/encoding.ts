@@ -1,6 +1,6 @@
-import { getLogger } from '@app/logger';
-import type { ArchivedApiVariants } from '@app/plugins/file-viewer/schemas';
-import type { FileEntry, IJournalfoertDokumentId } from '@app/plugins/file-viewer/types';
+import { getLogger } from '@/logger';
+import type { ArchivedApiVariants } from '@/plugins/file-viewer/schemas';
+import type { FileEntry, IJournalfoertDokumentId } from '@/plugins/file-viewer/types';
 
 const log = getLogger('file-viewer');
 

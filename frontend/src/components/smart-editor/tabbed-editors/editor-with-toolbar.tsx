@@ -1,9 +1,9 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useSmartEditorSpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import { KabalPlateEditor } from '@app/plate/plate-editor';
-import { Sheet } from '@app/plate/sheet';
-import { SaksbehandlerTableToolbar } from '@app/plate/toolbar/toolbars/table-toolbar';
 import { useContext, useEffect, useState } from 'react';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useSmartEditorSpellCheckLanguage } from '@/hooks/use-smart-editor-language';
+import { KabalPlateEditor } from '@/plate/plate-editor';
+import { Sheet } from '@/plate/sheet';
+import { SaksbehandlerTableToolbar } from '@/plate/toolbar/toolbars/table-toolbar';
 
 interface EditorWithNewCommentAndFloatingToolbarProps {
   id: string;

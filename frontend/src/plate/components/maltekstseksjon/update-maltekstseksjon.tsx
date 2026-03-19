@@ -1,10 +1,10 @@
-import { RichTextPreview } from '@app/components/rich-text-preview/rich-text-preview';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import type { MaltekstseksjonUpdate } from '@app/plate/components/maltekstseksjon/types';
-import type { MaltekstElement, RedigerbarMaltekstElement } from '@app/plate/types';
 import { FileTextIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, type ButtonProps, HelpText, HStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useState } from 'react';
+import { RichTextPreview } from '@/components/rich-text-preview/rich-text-preview';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import type { MaltekstseksjonUpdate } from '@/plate/components/maltekstseksjon/types';
+import type { MaltekstElement, RedigerbarMaltekstElement } from '@/plate/types';
 
 interface Props {
   next: MaltekstseksjonUpdate | null;

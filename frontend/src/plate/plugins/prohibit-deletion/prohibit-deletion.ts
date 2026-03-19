@@ -1,20 +1,20 @@
+import { createPlatePlugin, type OverrideEditor } from 'platejs/react';
+import type { EditorFragmentDeletionOptions } from 'slate';
 import {
   handleDeleteBackwardInFullmektig,
   handleDeleteForwardInFullmektig,
-} from '@app/plate/plugins/prohibit-deletion/fullmektig';
+} from '@/plate/plugins/prohibit-deletion/fullmektig';
 import {
   handleDeleteBackwardIntoUnchangeable,
   handleDeleteForwardIntoUnchangeable,
   handleDeleteInsidePlaceholder,
   handleDeleteInsideUnchangeable,
-} from '@app/plate/plugins/prohibit-deletion/unchangeable';
+} from '@/plate/plugins/prohibit-deletion/unchangeable';
 import {
   handleDeleteBackwardInUndeletable,
   handleDeleteForwardInUndeletable,
-} from '@app/plate/plugins/prohibit-deletion/undeletable';
-import { isUnchangeable } from '@app/plate/utils/queries';
-import { createPlatePlugin, type OverrideEditor } from 'platejs/react';
-import type { EditorFragmentDeletionOptions } from 'slate';
+} from '@/plate/plugins/prohibit-deletion/undeletable';
+import { isUnchangeable } from '@/plate/utils/queries';
 
 const withOverrides: OverrideEditor = ({ editor }) => {
   const { deleteBackward, deleteForward, deleteFragment, insertFragment, insertText, addMark, delete: del } = editor.tf;

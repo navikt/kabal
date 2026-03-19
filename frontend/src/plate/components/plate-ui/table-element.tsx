@@ -1,7 +1,7 @@
-import { ptToEm } from '@app/plate/components/get-scaled-em';
-import type { TableElement as ITableElement } from '@app/plate/types';
 import { TableProvider, useTableElement } from '@platejs/table/react';
 import { PlateElement, type PlateElementProps, withHOC } from 'platejs/react';
+import { ptToEm } from '@/plate/components/get-scaled-em';
+import type { TableElement as ITableElement } from '@/plate/types';
 
 export const TableElement = withHOC(TableProvider, ({ children, ref, ...props }: PlateElementProps<ITableElement>) => {
   const { props: tableProps } = useTableElement();

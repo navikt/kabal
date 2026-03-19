@@ -1,14 +1,14 @@
-import { getLastIndex } from '@app/components/documents/journalfoerte-documents/keyboard/increment-decrement';
+import { getLastIndex } from '@/components/documents/journalfoerte-documents/keyboard/increment-decrement';
 import {
   getSelectionRanges,
   setSelectionRanges,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
+} from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
 import {
   indexesToRanges,
   rangesToIndexes,
-} from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
-import { Observable } from '@app/observable';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
+} from '@/components/documents/journalfoerte-documents/select-context/range-utils';
+import { Observable } from '@/observable';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 type Path = readonly [number, number];
 

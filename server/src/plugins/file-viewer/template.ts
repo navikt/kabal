@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { getLogger } from '@app/logger';
-import type { DocumentViewerMetadata } from '@app/plugins/file-viewer/types';
 import type { FastifyReply } from 'fastify';
+import { getLogger } from '@/logger';
+import type { DocumentViewerMetadata } from '@/plugins/file-viewer/types';
 
 const log = getLogger('file-viewer');
 

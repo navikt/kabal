@@ -1,8 +1,8 @@
-import { toast } from '@app/components/toast/store';
-import { ABBREVIATIONS } from '@app/custom-data/abbreviations';
-import { INNSTILLINGER_BASE_QUERY } from '@app/redux-api/common';
-import type { CustomAbbrevation, ISetCustomInfoParams, ISettings, ISignatureResponse } from '@app/types/bruker';
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { toast } from '@/components/toast/store';
+import { ABBREVIATIONS } from '@/custom-data/abbreviations';
+import { INNSTILLINGER_BASE_QUERY } from '@/redux-api/common';
+import type { CustomAbbrevation, ISetCustomInfoParams, ISettings, ISignatureResponse } from '@/types/bruker';
 
 export const brukerApi = createApi({
   reducerPath: 'brukerApi',

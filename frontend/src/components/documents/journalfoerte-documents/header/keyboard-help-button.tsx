@@ -1,7 +1,7 @@
-import { openKeyboardHelpModal } from '@app/components/documents/journalfoerte-documents/keyboard/state/help-modal';
-import { useHasSeenKeyboardShortcuts } from '@app/hooks/settings/use-setting';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
+import { openKeyboardHelpModal } from '@/components/documents/journalfoerte-documents/keyboard/state/help-modal';
+import { useHasSeenKeyboardShortcuts } from '@/hooks/settings/use-setting';
 
 const PING_ANIMATION_CLASSES =
   'relative after:absolute after:top-1.5 after:left-0 after:right-0 after:bottom-1 after:animate-ping motion-reduce:after:animate-ping after:rounded-sm after:border-2 after:border-ax-border-accent';

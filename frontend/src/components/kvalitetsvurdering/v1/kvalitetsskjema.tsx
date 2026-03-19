@@ -1,11 +1,11 @@
-import { Annet } from '@app/components/kvalitetsvurdering/v1/annet';
-import { BrukAvRaadgivendeLege } from '@app/components/kvalitetsvurdering/v1/bruk-av-raadgivende-lege';
-import { Klageforberedelsen } from '@app/components/kvalitetsvurdering/v1/klageforberedelsen';
-import { Utredningen } from '@app/components/kvalitetsvurdering/v1/utredningen';
-import { Vedtaket } from '@app/components/kvalitetsvurdering/v1/vedtaket';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useIsRelevantYtelseForRaadgivende } from '@app/hooks/use-is-relevant-ytelse-for-raadgivende';
-import { useKvalitetsvurdering } from '@app/hooks/use-kvalitetsvurdering';
+import { Annet } from '@/components/kvalitetsvurdering/v1/annet';
+import { BrukAvRaadgivendeLege } from '@/components/kvalitetsvurdering/v1/bruk-av-raadgivende-lege';
+import { Klageforberedelsen } from '@/components/kvalitetsvurdering/v1/klageforberedelsen';
+import { Utredningen } from '@/components/kvalitetsvurdering/v1/utredningen';
+import { Vedtaket } from '@/components/kvalitetsvurdering/v1/vedtaket';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useIsRelevantYtelseForRaadgivende } from '@/hooks/use-is-relevant-ytelse-for-raadgivende';
+import { useKvalitetsvurdering } from '@/hooks/use-kvalitetsvurdering';
 
 export const KvalitetsskjemaV1 = () => {
   const { data: oppgave } = useOppgave();

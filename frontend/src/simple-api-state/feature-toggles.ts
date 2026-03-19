@@ -1,4 +1,4 @@
-import { SimpleApiState, useSimpleApiState } from '@app/simple-api-state/simple-api-state';
+import { SimpleApiState, useSimpleApiState } from '@/simple-api-state/simple-api-state';
 
 type FeatureToggle = {
   enabled: boolean;

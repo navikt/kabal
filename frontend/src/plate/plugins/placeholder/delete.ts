@@ -1,9 +1,9 @@
-import { EMPTY_CHAR_CODE } from '@app/functions/remove-empty-char-in-text';
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { getPlaceholderEntry } from '@app/plate/plugins/placeholder/queries';
-import type { PlaceholderElement } from '@app/plate/types';
-import { isOfElementType } from '@app/plate/utils/queries';
 import type { PlateEditor } from 'platejs/react';
+import { EMPTY_CHAR_CODE } from '@/functions/remove-empty-char-in-text';
+import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
+import { getPlaceholderEntry } from '@/plate/plugins/placeholder/queries';
+import type { PlaceholderElement } from '@/plate/types';
+import { isOfElementType } from '@/plate/utils/queries';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE);
 

@@ -1,9 +1,9 @@
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
-import type { RootElement } from '@app/plate/types';
-import { nextPath } from '@app/plate/utils/queries';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { TextAddSpaceAfter, TextAddSpaceBefore } from '@styled-icons/fluentui-system-regular';
 import { type PlateEditor, useEditorReadOnly } from 'platejs/react';
+import { createSimpleParagraph } from '@/plate/templates/helpers';
+import type { RootElement } from '@/plate/types';
+import { nextPath } from '@/plate/utils/queries';
 
 interface Props {
   element: RootElement;

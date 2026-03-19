@@ -1,6 +1,6 @@
-import { API_BASE_QUERY } from '@app/redux-api/common';
-import { ListTagTypes } from '@app/redux-api/tag-types';
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { API_BASE_QUERY } from '@/redux-api/common';
+import { ListTagTypes } from '@/redux-api/tag-types';
 
 export enum OppgaveListTagTypes {
   MINE_UFERDIGE = 'mine-uferdige',

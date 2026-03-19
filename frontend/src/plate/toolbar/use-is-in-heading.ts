@@ -1,5 +1,5 @@
-import { useMyPlateEditorState } from '@app/plate/types';
-import { isInHeading } from '@app/plate/utils/queries';
+import { useMyPlateEditorState } from '@/plate/types';
+import { isInHeading } from '@/plate/utils/queries';
 
 export const useIsInHeading = () => {
   const editor = useMyPlateEditorState();

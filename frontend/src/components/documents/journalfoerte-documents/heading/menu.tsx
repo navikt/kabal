@@ -1,17 +1,17 @@
-import { UseAsAttachments } from '@app/components/documents/journalfoerte-documents/heading/use-as-attachments';
-import { ViewCombinedPDF } from '@app/components/documents/journalfoerte-documents/heading/view-combined-pdf-button';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { useIsExpanded } from '@app/components/documents/use-is-expanded';
+import { MenuHamburgerIcon } from '@navikt/aksel-icons';
+import { Button, Checkbox, CheckboxGroup, Dropdown } from '@navikt/ds-react';
+import { useContext } from 'react';
+import { UseAsAttachments } from '@/components/documents/journalfoerte-documents/heading/use-as-attachments';
+import { ViewCombinedPDF } from '@/components/documents/journalfoerte-documents/heading/view-combined-pdf-button';
+import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
+import { useIsExpanded } from '@/components/documents/use-is-expanded';
 import {
   ARCHIVED_DOCUMENTS_COLUMN_OPTIONS,
   ARCHIVED_DOCUMENTS_COLUMN_OPTIONS_LABELS,
   type ArchivedDocumentsColumn,
   useArchivedDocumentsColumns,
-} from '@app/hooks/settings/use-archived-documents-setting';
-import { pushEvent } from '@app/observability';
-import { MenuHamburgerIcon } from '@navikt/aksel-icons';
-import { Button, Checkbox, CheckboxGroup, Dropdown } from '@navikt/ds-react';
-import { useContext } from 'react';
+} from '@/hooks/settings/use-archived-documents-setting';
+import { pushEvent } from '@/observability';
 
 export const Menu = () => {
   const [isExpanded] = useIsExpanded();

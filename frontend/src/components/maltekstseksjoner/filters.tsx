@@ -1,14 +1,14 @@
-import { YtelserAndHjemlerSelect } from '@app/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
-import { SectionSelect } from '@app/components/smart-editor-texts/query-filter-selects';
-import { UtfallSetFilter } from '@app/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
+import { HStack } from '@navikt/ds-react';
+import { YtelserAndHjemlerSelect } from '@/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
+import { SectionSelect } from '@/components/smart-editor-texts/query-filter-selects';
+import { UtfallSetFilter } from '@/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
 import {
   useUpdateTemplateSectionIdListMutation,
   useUpdateUtfallIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
-} from '@app/redux-api/maltekstseksjoner/mutations';
-import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { HStack } from '@navikt/ds-react';
+} from '@/redux-api/maltekstseksjoner/mutations';
+import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
 
 interface Props {
   maltekst: IMaltekstseksjon;

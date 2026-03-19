@@ -1,13 +1,13 @@
-import { isMetaKey } from '@app/keys';
-import { RedaktørPlaceholder } from '@app/plate/components/placeholder/placeholder';
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
-import { handleNavigation } from '@app/plate/plugins/placeholder/handle-navigation';
-import { parsers } from '@app/plate/plugins/placeholder/html-parsers';
-import { handleSelectAll } from '@app/plate/plugins/placeholder/select-all';
-import { withOverrides } from '@app/plate/plugins/placeholder/with-overrides';
-import { isPlaceholderActive } from '@app/plate/utils/queries';
-import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
 import { createPlatePlugin } from 'platejs/react';
+import { isMetaKey } from '@/keys';
+import { RedaktørPlaceholder } from '@/plate/components/placeholder/placeholder';
+import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
+import { handleNavigation } from '@/plate/plugins/placeholder/handle-navigation';
+import { parsers } from '@/plate/plugins/placeholder/html-parsers';
+import { handleSelectAll } from '@/plate/plugins/placeholder/select-all';
+import { withOverrides } from '@/plate/plugins/placeholder/with-overrides';
+import { isPlaceholderActive } from '@/plate/utils/queries';
+import { insertPlaceholderFromSelection, removePlaceholder } from '@/plate/utils/transforms';
 
 export const RedaktoerPlaceholderPlugin = createPlatePlugin({
   key: ELEMENT_PLACEHOLDER,

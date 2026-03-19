@@ -1,9 +1,9 @@
-import type { INavEmployee } from '@app/types/bruker';
-import type { UtfallEnum } from '@app/types/kodeverk';
-import type { FlowState, IMedunderskriverRol, ISakenGjelder, ISattPåVent } from '@app/types/oppgave-common';
-import type { IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
-import type { FradelReason } from '@app/types/oppgaver';
-import type { BehandlingstidUnitType } from '@app/types/svarbrev';
+import type { INavEmployee } from '@/types/bruker';
+import type { UtfallEnum } from '@/types/kodeverk';
+import type { FlowState, IMedunderskriverRol, ISakenGjelder, ISattPåVent } from '@/types/oppgave-common';
+import type { IFeilregistrering } from '@/types/oppgavebehandling/oppgavebehandling';
+import type { FradelReason } from '@/types/oppgaver';
+import type { BehandlingstidUnitType } from '@/types/svarbrev';
 
 export type ITilknyttDocumentResponse = IModifiedResponse;
 

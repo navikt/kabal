@@ -1,12 +1,12 @@
-import { useIsElementActive } from '@app/plate/hooks/use-is-element-active';
-import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
-import { ToolbarDropdown } from '@app/plate/toolbar/toolbar-dropdown';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { useIsInList } from '@app/plate/toolbar/use-is-in-list';
-import { useIsInTable } from '@app/plate/toolbar/use-is-in-table';
-import { useMyPlateEditorState } from '@app/plate/types';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { TextHeader1, TextHeader2, TextHeader3 } from '@styled-icons/fluentui-system-regular';
+import { useIsElementActive } from '@/plate/hooks/use-is-element-active';
+import { useIsUnchangeable } from '@/plate/hooks/use-is-unchangeable';
+import { ToolbarDropdown } from '@/plate/toolbar/toolbar-dropdown';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
+import { useIsInList } from '@/plate/toolbar/use-is-in-list';
+import { useIsInTable } from '@/plate/toolbar/use-is-in-table';
+import { useMyPlateEditorState } from '@/plate/types';
 
 export const Headings = () => {
   const editor = useMyPlateEditorState();

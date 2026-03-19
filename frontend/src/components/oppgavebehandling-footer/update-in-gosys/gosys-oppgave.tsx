@@ -1,14 +1,14 @@
+import { Table, Tag } from '@navikt/ds-react';
 import {
   DateCell,
   Employee,
   Enhet,
   TimeCell,
-} from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/row';
-import { GosysBeskrivelseTabs } from '@app/components/gosys/beskrivelse/beskrivelse-tabs';
-import { useFullTemaNameFromIdOrLoading } from '@app/hooks/use-kodeverk-ids';
-import { useGetGosysOppgaveQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { GosysStatus, type IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { Table, Tag } from '@navikt/ds-react';
+} from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/row';
+import { GosysBeskrivelseTabs } from '@/components/gosys/beskrivelse/beskrivelse-tabs';
+import { useFullTemaNameFromIdOrLoading } from '@/hooks/use-kodeverk-ids';
+import { useGetGosysOppgaveQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { GosysStatus, type IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   oppgavebehandling: IOppgavebehandling;

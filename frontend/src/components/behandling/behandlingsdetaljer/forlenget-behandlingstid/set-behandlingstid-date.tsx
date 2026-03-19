@@ -1,11 +1,11 @@
-import { MAX_MONTHS_FROM_TODAY } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/constants';
-import { validateDate } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
-import { CURRENT_YEAR_IN_CENTURY } from '@app/components/date-picker/constants';
-import { DatePicker } from '@app/components/date-picker/date-picker';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useSetBehandlingstidDateMutation } from '@app/redux-api/forlenget-behandlingstid';
 import { ErrorMessage, VStack } from '@navikt/ds-react';
 import { addDays, addMonths } from 'date-fns';
+import { MAX_MONTHS_FROM_TODAY } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/constants';
+import { validateDate } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
+import { CURRENT_YEAR_IN_CENTURY } from '@/components/date-picker/constants';
+import { DatePicker } from '@/components/date-picker/date-picker';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useSetBehandlingstidDateMutation } from '@/redux-api/forlenget-behandlingstid';
 
 interface Props {
   value: string | null;

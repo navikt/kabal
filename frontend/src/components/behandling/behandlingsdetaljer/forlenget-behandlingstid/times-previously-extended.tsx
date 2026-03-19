@@ -1,7 +1,7 @@
-import { Alert } from '@app/components/alert/alert';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useGetOrCreateQuery } from '@app/redux-api/forlenget-behandlingstid';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { Alert } from '@/components/alert/alert';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useGetOrCreateQuery } from '@/redux-api/forlenget-behandlingstid';
 
 export const TimesPreviouslyExtended = () => {
   const id = useOppgaveId();

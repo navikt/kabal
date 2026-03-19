@@ -1,20 +1,17 @@
-import {
-  AbbreviationsContent,
-  AbbreviationsHeadingContent,
-} from '@app/components/settings/abbreviations/abbreviations';
-import { AbbreviationsExplanation } from '@app/components/settings/abbreviations/explanation';
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { useSmartEditorExpandedThreads } from '@app/hooks/settings/use-setting';
-import { useSetSmartEditorLanguage } from '@app/hooks/use-set-smart-editor-language';
-import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { pushEvent } from '@app/observability';
-import { Capitalise } from '@app/plate/toolbar/capitalise';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { isLanguage, Language } from '@app/types/texts/language';
 import { CogIcon } from '@navikt/aksel-icons';
 import { Heading, Modal, ToggleGroup, VStack } from '@navikt/ds-react';
 import { useEditorReadOnly } from 'platejs/react';
 import { useCallback, useContext, useId, useRef, useState } from 'react';
+import { AbbreviationsContent, AbbreviationsHeadingContent } from '@/components/settings/abbreviations/abbreviations';
+import { AbbreviationsExplanation } from '@/components/settings/abbreviations/explanation';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useSmartEditorExpandedThreads } from '@/hooks/settings/use-setting';
+import { useSetSmartEditorLanguage } from '@/hooks/use-set-smart-editor-language';
+import { useSmartEditorLanguage } from '@/hooks/use-smart-editor-language';
+import { pushEvent } from '@/observability';
+import { Capitalise } from '@/plate/toolbar/capitalise';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
+import { isLanguage, Language } from '@/types/texts/language';
 
 export const SaksbehandlerSettings = () => {
   const { showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } = useContext(SmartEditorContext);

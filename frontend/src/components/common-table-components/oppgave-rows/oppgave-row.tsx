@@ -1,35 +1,35 @@
-import { Age } from '@app/components/common-table-components/age';
-import { Deadline, ReadOnlyDeadline } from '@app/components/common-table-components/deadline';
-import { FradelingReason } from '@app/components/common-table-components/fradeling-reason';
-import { InnsendingshjemlerList, Registreringshjemler } from '@app/components/common-table-components/hjemler';
-import { LoadingRow } from '@app/components/common-table-components/loading-row';
-import { Medunderskriver } from '@app/components/common-table-components/medunderskriver';
+import { HStack, InlineMessage, Table, Tag } from '@navikt/ds-react';
+import { Age } from '@/components/common-table-components/age';
+import { Deadline, ReadOnlyDeadline } from '@/components/common-table-components/deadline';
+import { FradelingReason } from '@/components/common-table-components/fradeling-reason';
+import { InnsendingshjemlerList, Registreringshjemler } from '@/components/common-table-components/hjemler';
+import { LoadingRow } from '@/components/common-table-components/loading-row';
+import { Medunderskriver } from '@/components/common-table-components/medunderskriver';
 import {
   MUFlowStateLabelWithoutSelf,
   MUFlowStateLabelWithSelf,
-} from '@app/components/common-table-components/medunderskriver-flow-state-label';
-import { Name } from '@app/components/common-table-components/name';
-import { OpenForRoleAccess, OpenForYtelseAccess } from '@app/components/common-table-components/open';
-import { PaaVentReason, PaaVentTil } from '@app/components/common-table-components/paa-vent';
-import { Rol } from '@app/components/common-table-components/rol';
-import { RolFlowStateLabel } from '@app/components/common-table-components/rol-flow-state-label';
-import { RolTildeling } from '@app/components/common-table-components/rol-tildeling';
-import { SakenGjelderFnr, SakenGjelderName } from '@app/components/common-table-components/saken-gjelder';
-import { ColumnKeyEnum } from '@app/components/common-table-components/types';
-import { Ytelse } from '@app/components/common-table-components/ytelse';
-import { CopyButton } from '@app/components/copy-button/copy-button';
-import { Feilregistrert } from '@app/components/feilregistrering/feilregistrert';
-import { Oppgavestyring } from '@app/components/oppgavestyring/oppgavestyring';
+} from '@/components/common-table-components/medunderskriver-flow-state-label';
+import { Name } from '@/components/common-table-components/name';
+import { OpenForRoleAccess, OpenForYtelseAccess } from '@/components/common-table-components/open';
+import { PaaVentReason, PaaVentTil } from '@/components/common-table-components/paa-vent';
+import { Rol } from '@/components/common-table-components/rol';
+import { RolFlowStateLabel } from '@/components/common-table-components/rol-flow-state-label';
+import { RolTildeling } from '@/components/common-table-components/rol-tildeling';
+import { SakenGjelderFnr, SakenGjelderName } from '@/components/common-table-components/saken-gjelder';
+import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { Ytelse } from '@/components/common-table-components/ytelse';
+import { CopyButton } from '@/components/copy-button/copy-button';
+import { Feilregistrert } from '@/components/feilregistrering/feilregistrert';
+import { Oppgavestyring } from '@/components/oppgavestyring/oppgavestyring';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
-import { RelevantOppgaver } from '@app/components/relevant-oppgaver/relevant-oppgaver';
-import { Type } from '@app/components/type/type';
-import { UtfallTag } from '@app/components/utfall-tag/utfall-tag';
-import { isoDateToPretty } from '@app/domain/date';
-import { useGetOppgaveQuery } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import { isApiDataError } from '@app/types/errors';
-import { FlowState } from '@app/types/oppgave-common';
-import type { IOppgave } from '@app/types/oppgaver';
-import { HStack, InlineMessage, Table, Tag } from '@navikt/ds-react';
+import { RelevantOppgaver } from '@/components/relevant-oppgaver/relevant-oppgaver';
+import { Type } from '@/components/type/type';
+import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
+import { isoDateToPretty } from '@/domain/date';
+import { useGetOppgaveQuery } from '@/redux-api/oppgaver/queries/oppgave-data';
+import { isApiDataError } from '@/types/errors';
+import { FlowState } from '@/types/oppgave-common';
+import type { IOppgave } from '@/types/oppgaver';
 
 interface Props {
   oppgaveId: string;

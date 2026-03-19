@@ -1,9 +1,9 @@
-import { PageInfo } from '@app/components/common-table-components/page-info';
-import { RowsPerPage } from '@app/components/rows-per-page';
-import type { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { pushEvent } from '@app/observability';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Pagination, Table } from '@navikt/ds-react';
+import { PageInfo } from '@/components/common-table-components/page-info';
+import { RowsPerPage } from '@/components/rows-per-page';
+import type { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
+import { pushEvent } from '@/observability';
 
 interface Props {
   page: number;

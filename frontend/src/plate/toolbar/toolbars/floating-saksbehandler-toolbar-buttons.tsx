@@ -1,18 +1,18 @@
-import { ELEMENT_MALTEKST, ELEMENT_REDIGERBAR_MALTEKST } from '@app/plate/plugins/element-types';
-import { SaksbehandlerPlaceholderPlugin } from '@app/plate/plugins/placeholder/saksbehandler';
-import { Abbreviation } from '@app/plate/toolbar/abbreviation';
-import { CommentsButton } from '@app/plate/toolbar/add-comment';
-import { BookmarkButton } from '@app/plate/toolbar/bookmark-button';
-import { CycleCaseButton } from '@app/plate/toolbar/cycle-case-button';
-import { Headings } from '@app/plate/toolbar/headings';
-import { Indent } from '@app/plate/toolbar/indent';
-import { Marks } from '@app/plate/toolbar/marks';
-import { ParagraphButton } from '@app/plate/toolbar/paragraph-button';
-import { ToolbarSeparator } from '@app/plate/toolbar/separator';
 import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import { BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseParagraphPlugin, ElementApi } from 'platejs';
 import { useEditorState } from 'platejs/react';
+import { ELEMENT_MALTEKST, ELEMENT_REDIGERBAR_MALTEKST } from '@/plate/plugins/element-types';
+import { SaksbehandlerPlaceholderPlugin } from '@/plate/plugins/placeholder/saksbehandler';
+import { Abbreviation } from '@/plate/toolbar/abbreviation';
+import { CommentsButton } from '@/plate/toolbar/add-comment';
+import { BookmarkButton } from '@/plate/toolbar/bookmark-button';
+import { CycleCaseButton } from '@/plate/toolbar/cycle-case-button';
+import { Headings } from '@/plate/toolbar/headings';
+import { Indent } from '@/plate/toolbar/indent';
+import { Marks } from '@/plate/toolbar/marks';
+import { ParagraphButton } from '@/plate/toolbar/paragraph-button';
+import { ToolbarSeparator } from '@/plate/toolbar/separator';
 
 export const FloatingSaksbehandlerToolbarButtons = () => {
   const editor = useEditorState();

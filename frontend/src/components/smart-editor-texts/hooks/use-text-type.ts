@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+import { useMatch } from 'react-router';
 import {
   GOD_FORMULERING_TYPE,
   MALTEKSTSEKSJON_TYPE,
@@ -5,9 +7,7 @@ import {
   REGELVERK_TYPE,
   RichTextTypes,
   type TextTypes,
-} from '@app/types/common-text-types';
-import { useMemo } from 'react';
-import { useMatch } from 'react-router';
+} from '@/types/common-text-types';
 
 export const useTextType = (): TextTypes => {
   const maltekstseksjonerMatch = useMatch({ path: '/maltekstseksjoner', end: false });

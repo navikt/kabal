@@ -1,8 +1,8 @@
-import { useSmartEditorLanguage } from '@app/hooks/use-smart-editor-language';
-import { DeleteSection } from '@app/plate/components/common/delete-section';
-import { useIsChanged } from '@app/plate/components/maltekstseksjon/use-is-changed';
-import type { MaltekstseksjonElement } from '@app/plate/types';
 import type { Path } from 'slate';
+import { useSmartEditorLanguage } from '@/hooks/use-smart-editor-language';
+import { DeleteSection } from '@/plate/components/common/delete-section';
+import { useIsChanged } from '@/plate/components/maltekstseksjon/use-is-changed';
+import type { MaltekstseksjonElement } from '@/plate/types';
 
 interface Props {
   element: MaltekstseksjonElement;

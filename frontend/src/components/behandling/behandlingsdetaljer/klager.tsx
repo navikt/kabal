@@ -1,10 +1,10 @@
-import { Alert } from '@app/components/alert/alert';
-import type { InvalidReceiver } from '@app/components/part/edit-part';
-import { Part } from '@app/components/part/part';
-import { isValidOrgnr } from '@app/domain/orgnr';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import type { IPart } from '@app/types/oppgave-common';
 import { VStack } from '@navikt/ds-react';
+import { Alert } from '@/components/alert/alert';
+import type { InvalidReceiver } from '@/components/part/edit-part';
+import { Part } from '@/components/part/part';
+import { isValidOrgnr } from '@/domain/orgnr';
+import { SaksTypeEnum } from '@/types/kodeverk';
+import type { IPart } from '@/types/oppgave-common';
 
 interface Props {
   klager: IPart;

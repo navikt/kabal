@@ -1,6 +1,6 @@
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
 import { ChevronRightDoubleIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
+import { Fields } from '@/components/documents/journalfoerte-documents/grid';
 
 interface Props {
   hasVedlegg: boolean;

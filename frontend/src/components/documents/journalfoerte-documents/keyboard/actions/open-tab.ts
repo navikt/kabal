@@ -1,22 +1,16 @@
-import { showDownloadDocumentsToast } from '@app/components/documents/journalfoerte-documents/download-toast';
-import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
-import {
-  getVedlegg,
-  useGetDocument,
-} from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import {
-  getFocusIndex,
-  getIsInVedleggList,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import { isSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { TabContext } from '@app/components/documents/tab-context';
-import { TAB_MANAGER } from '@app/components/documents/use-is-tab-open';
-import { toast } from '@app/components/toast/store';
-import { getJournalfoertDocumentTabId } from '@app/domain/tabbed-document-url';
-import { useDocumentTabUrl } from '@app/hooks/use-document-tab-url';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useCallback, useContext } from 'react';
+import { showDownloadDocumentsToast } from '@/components/documents/journalfoerte-documents/download-toast';
+import { getSelectedDocumentsInOrder } from '@/components/documents/journalfoerte-documents/heading/selected-in-order';
+import { getVedlegg, useGetDocument } from '@/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import { getFocusIndex, getIsInVedleggList } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { isSelected } from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
+import { TabContext } from '@/components/documents/tab-context';
+import { TAB_MANAGER } from '@/components/documents/use-is-tab-open';
+import { toast } from '@/components/toast/store';
+import { getJournalfoertDocumentTabId } from '@/domain/tabbed-document-url';
+import { useDocumentTabUrl } from '@/hooks/use-document-tab-url';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
   const { selectedDocuments } = useContext(SelectContext);

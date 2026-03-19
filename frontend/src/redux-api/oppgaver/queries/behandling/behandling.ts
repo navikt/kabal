@@ -1,58 +1,58 @@
-import { ENVIRONMENT } from '@app/environment';
-import type { IApiValidationResponse } from '@app/functions/error-type-guard';
-import { KABAL_BEHANDLINGER_BASE_PATH } from '@app/redux-api/common';
-import { OppgaveTagTypes, oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
-import { handleDocumentFinishedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/document-finished';
-import { handleDocumentsAddedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/documents-added';
-import { handleDocumentsChangedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/documents-changed';
-import { handleDocumentsRemovedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/documents-removed';
-import { handleExtraUtfallEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/extra-utfall';
-import { handleFeilregistreringEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/feilregistrering';
-import { handleFerdigstiltEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/ferdigstilt';
-import { handlefullmektigEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/fullmektig';
-import { handleGosysOppgaveEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/gosys-oppgave';
+import { ENVIRONMENT } from '@/environment';
+import type { IApiValidationResponse } from '@/functions/error-type-guard';
+import { KABAL_BEHANDLINGER_BASE_PATH } from '@/redux-api/common';
+import { OppgaveTagTypes, oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import { handleDocumentFinishedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/document-finished';
+import { handleDocumentsAddedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/documents-added';
+import { handleDocumentsChangedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/documents-changed';
+import { handleDocumentsRemovedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/documents-removed';
+import { handleExtraUtfallEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/extra-utfall';
+import { handleFeilregistreringEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/feilregistrering';
+import { handleFerdigstiltEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/ferdigstilt';
+import { handlefullmektigEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/fullmektig';
+import { handleGosysOppgaveEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/gosys-oppgave';
 import {
   handleInnsendingshjemlerEvent,
   handleRegistreringshjemlerEvent,
-} from '@app/redux-api/oppgaver/queries/behandling/event-handlers/hjemler';
+} from '@/redux-api/oppgaver/queries/behandling/event-handlers/hjemler';
 import {
   handleIncludedDocumentsAdded,
   handleIncludedDocumentsCleared,
   handleIncludedDocumentsRemoved,
-} from '@app/redux-api/oppgaver/queries/behandling/event-handlers/included-documents-changed';
-import { handleJournalfoertDocumentModified } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/journalfoert-document-modified';
-import { handleJournalpostAddedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/journalpost-added';
-import { handleKlagerEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/klager';
-import { handleMedunderskriverEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/medunderskriver';
-import { handleMessageEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/message';
-import { handleMottattVedtaksinstansEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/mottatt-vedtaksinstans';
-import { handleRolEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/rol';
-import { handleSattPaaVentEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/satt-paa-vent';
-import { handleSmartDocumentCommentAddedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-added';
-import { handleSmartDocumentCommentChangedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-changed';
-import { handleSmartDocumentCommentRemovedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-removed';
-import { handleSmartDocumentLanguageChangedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/language-changed';
-import { handleSmartDocumentVersionedEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/versioned';
-import { handleTilbakekrevingEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/tilbakekreving';
-import { handleTildelingEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/tildeling';
-import { handleUtfallEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/utfall';
-import { handleVarsletFristEvent } from '@app/redux-api/oppgaver/queries/behandling/event-handlers/varslet-frist';
-import { ServerSentEventType } from '@app/redux-api/server-sent-events/event-types';
-import { ServerSentEventManager } from '@app/server-sent-events';
-import { user } from '@app/static-data/static-data';
-import type { ISakenGjelder } from '@app/types/oppgave-common';
+} from '@/redux-api/oppgaver/queries/behandling/event-handlers/included-documents-changed';
+import { handleJournalfoertDocumentModified } from '@/redux-api/oppgaver/queries/behandling/event-handlers/journalfoert-document-modified';
+import { handleJournalpostAddedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/journalpost-added';
+import { handleKlagerEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/klager';
+import { handleMedunderskriverEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/medunderskriver';
+import { handleMessageEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/message';
+import { handleMottattVedtaksinstansEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/mottatt-vedtaksinstans';
+import { handleRolEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/rol';
+import { handleSattPaaVentEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/satt-paa-vent';
+import { handleSmartDocumentCommentAddedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-added';
+import { handleSmartDocumentCommentChangedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-changed';
+import { handleSmartDocumentCommentRemovedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/comment-removed';
+import { handleSmartDocumentLanguageChangedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/language-changed';
+import { handleSmartDocumentVersionedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/smart-document/versioned';
+import { handleTilbakekrevingEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/tilbakekreving';
+import { handleTildelingEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/tildeling';
+import { handleUtfallEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/utfall';
+import { handleVarsletFristEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/varslet-frist';
+import { ServerSentEventType } from '@/redux-api/server-sent-events/event-types';
+import { ServerSentEventManager } from '@/server-sent-events';
+import { user } from '@/static-data/static-data';
+import type { ISakenGjelder } from '@/types/oppgave-common';
 import type {
   BehandlingGosysOppgave,
   IOppgavebehandling,
   ListGosysOppgave,
-} from '@app/types/oppgavebehandling/oppgavebehandling';
-import type { IValidationParams } from '@app/types/oppgavebehandling/params';
+} from '@/types/oppgavebehandling/oppgavebehandling';
+import type { IValidationParams } from '@/types/oppgavebehandling/params';
 import type {
   IMedunderskrivereResponse,
   ISaksbehandlerResponse,
   ITildelingEvent,
-} from '@app/types/oppgavebehandling/response';
-import type { IRols, ISaksbehandlere } from '@app/types/oppgaver';
+} from '@/types/oppgavebehandling/response';
+import type { IRols, ISaksbehandlere } from '@/types/oppgaver';
 
 export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

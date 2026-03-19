@@ -1,10 +1,10 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from 'bun:test';
-import { ConfirmFinish } from '@app/components/oppgavebehandling-footer/confirm-finish';
-import { act, fireEvent, render, screen } from '@app/test-utils';
-import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import { ConfirmFinish } from '@/components/oppgavebehandling-footer/confirm-finish';
+import { act, fireEvent, render, screen } from '@/test-utils';
+import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 
 const mockOppgave = (typeId: SaksTypeEnum, utfallId: UtfallEnum, requiresGosysOppgave: boolean) => {
-  mock.module('@app/hooks/oppgavebehandling/use-oppgave', () => ({
+  mock.module('@/hooks/oppgavebehandling/use-oppgave', () => ({
     useOppgave: () => ({
       data: { typeId, requiresGosysOppgave, resultat: { utfallId, extraUtfallIdSet: [] } },
       isSuccess: true,
@@ -22,13 +22,13 @@ const MUTATION_MOCK = [
 
 describe('ConfirmFinish', () => {
   beforeAll(() => {
-    mock.module('@app/redux-api/search', () => ({ useSearchEnheterQuery: () => ({ data: [], isSuccess: true }) }));
-    mock.module('@app/redux-api/oppgaver/mutations/behandling', () => ({
+    mock.module('@/redux-api/search', () => ({ useSearchEnheterQuery: () => ({ data: [], isSuccess: true }) }));
+    mock.module('@/redux-api/oppgaver/mutations/behandling', () => ({
       useFinishOppgavebehandlingMutation: () => MUTATION_MOCK,
       useFinishOppgavebehandlingWithUpdateInGosysMutation: () => MUTATION_MOCK,
     }));
 
-    mock.module('@app/simple-api-state/use-kodeverk', () => ({
+    mock.module('@/simple-api-state/use-kodeverk', () => ({
       useUtfall: () => ({
         data: [
           { id: UtfallEnum.TRUKKET, navn: 'Trukket' },
@@ -54,15 +54,15 @@ describe('ConfirmFinish', () => {
 
   // Reset all mocked modules to original implementations.
   afterAll(async () => {
-    const originalUseOppgave = await import('@app/hooks/oppgavebehandling/use-oppgave');
-    const originalSearch = await import('@app/redux-api/search');
-    const originalKodeverk = await import('@app/simple-api-state/use-kodeverk');
-    const originalBehandling = await import('@app/redux-api/oppgaver/mutations/behandling');
+    const originalUseOppgave = await import('@/hooks/oppgavebehandling/use-oppgave');
+    const originalSearch = await import('@/redux-api/search');
+    const originalKodeverk = await import('@/simple-api-state/use-kodeverk');
+    const originalBehandling = await import('@/redux-api/oppgaver/mutations/behandling');
 
-    mock.module('@app/redux-api/search', () => originalSearch);
-    mock.module('@app/simple-api-state/use-kodeverk', () => originalKodeverk);
-    mock.module('@app/hooks/oppgavebehandling/use-oppgave', () => originalUseOppgave);
-    mock.module('@app/redux-api/oppgaver/mutations/behandling', () => originalBehandling);
+    mock.module('@/redux-api/search', () => originalSearch);
+    mock.module('@/simple-api-state/use-kodeverk', () => originalKodeverk);
+    mock.module('@/hooks/oppgavebehandling/use-oppgave', () => originalUseOppgave);
+    mock.module('@/redux-api/oppgaver/mutations/behandling', () => originalBehandling);
   });
 
   describe('Klage', () => {

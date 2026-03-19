@@ -1,8 +1,8 @@
-import { useSakstyperToUtfall } from '@app/simple-api-state/use-kodeverk';
-import { type IKodeverkSimpleValue, type ISakstyperToUtfall, UtfallEnum } from '@app/types/kodeverk';
 import { PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox, CheckboxGroup, HStack, Tag, VStack } from '@navikt/ds-react';
 import { useCallback, useMemo, useState } from 'react';
+import { useSakstyperToUtfall } from '@/simple-api-state/use-kodeverk';
+import { type IKodeverkSimpleValue, type ISakstyperToUtfall, UtfallEnum } from '@/types/kodeverk';
 
 interface EditUtfallSetProps {
   utfallSet: UtfallEnum[];

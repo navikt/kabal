@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from 'bun:test';
-import { getMetadata } from '@app/metadata';
+import { getMetadata } from '@/metadata';
 
 describe('getMetadata', () => {
   afterEach(() => {

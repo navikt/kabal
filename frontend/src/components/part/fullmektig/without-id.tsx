@@ -1,13 +1,13 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { Country } from '@app/components/receivers/address/country/country';
-import { POSTNUMMER_ID, Postnummer } from '@app/components/receivers/address/postnummer';
-import { toast } from '@app/components/toast/store';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import { type IFullmektig, Utsendingskanal } from '@app/types/oppgave-common';
 import { Box, type BoxProps, Button, ErrorSummary, HStack, Tag, TextField, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext, useState } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { Country } from '@/components/receivers/address/country/country';
+import { POSTNUMMER_ID, Postnummer } from '@/components/receivers/address/postnummer';
+import { toast } from '@/components/toast/store';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useUpdateFullmektigMutation } from '@/redux-api/oppgaver/mutations/behandling';
+import { type IFullmektig, Utsendingskanal } from '@/types/oppgave-common';
 
 interface Props {
   onClose: () => void;

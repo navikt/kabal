@@ -1,5 +1,5 @@
-import { Fields } from '@app/components/documents/new-documents/grid';
 import { HStack } from '@navikt/ds-react';
+import { Fields } from '@/components/documents/new-documents/grid';
 
 interface Props {
   children: React.ReactNode;

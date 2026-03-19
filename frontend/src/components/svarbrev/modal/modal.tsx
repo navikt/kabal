@@ -1,13 +1,13 @@
-import { usePdfUrl } from '@app/components/svarbrev/modal/use-pdf-url';
-import { Warning } from '@app/components/svarbrev/modal/warning';
-import { TimeInput } from '@app/components/svarbrev/time-input';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { useYtelseName } from '@app/hooks/use-kodeverk-value';
-import { useUpdateSvarbrevSettingMutation } from '@app/redux-api/svarbrev';
-import type { INavEmployee } from '@app/types/bruker';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import type { BehandlingstidUnitType, SvarbrevSetting } from '@app/types/svarbrev';
 import { Button, HStack, Loader, Modal, Switch, Tag, TextField, Tooltip, VStack } from '@navikt/ds-react';
+import { usePdfUrl } from '@/components/svarbrev/modal/use-pdf-url';
+import { Warning } from '@/components/svarbrev/modal/warning';
+import { TimeInput } from '@/components/svarbrev/time-input';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { useYtelseName } from '@/hooks/use-kodeverk-value';
+import { useUpdateSvarbrevSettingMutation } from '@/redux-api/svarbrev';
+import type { INavEmployee } from '@/types/bruker';
+import { SaksTypeEnum } from '@/types/kodeverk';
+import type { BehandlingstidUnitType, SvarbrevSetting } from '@/types/svarbrev';
 
 interface Props extends SvarbrevSetting {
   isOpen: boolean;

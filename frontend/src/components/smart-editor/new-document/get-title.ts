@@ -1,6 +1,6 @@
-import type { IDocument } from '@app/types/documents/documents';
-import type { ISmartEditorTemplate } from '@app/types/smart-editor/smart-editor';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
+import type { IDocument } from '@/types/documents/documents';
+import type { ISmartEditorTemplate } from '@/types/smart-editor/smart-editor';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 const DOCUMENT_COUNT_REGEX = /^ \((\d+)\)$/;
 

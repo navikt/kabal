@@ -1,17 +1,17 @@
-import { ANKEVEDTAK_TEMPLATE } from '@app/plate/templates/ankevedtak';
-import { GJENOPPTAKSBEGJÆRING_EKSPEDISJONSBREV_TIL_TR_TEMPLATE } from '@app/plate/templates/begjæring-om-gjenopptak/ekspedisjonsbrev-til-tr';
-import { GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR_TEMPLATE } from '@app/plate/templates/begjæring-om-gjenopptak/ettersending-til-tr';
-import { GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_TEMPLATE } from '@app/plate/templates/begjæring-om-gjenopptak/orientering-om-tilsvar-direkte-til-tr';
-import { GJENOPPTAKSBEGJÆRING_TILSVARSBREV_MED_OVERSENDELSESBREV_TEMPLATE } from '@app/plate/templates/begjæring-om-gjenopptak/tilsvarsbrev-med-oversendelsesbrev';
-import { GJENOPPTAKSBEGJÆRINGVEDTAK } from '@app/plate/templates/begjæring-om-gjenopptak/vedtak';
-import { BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATE } from '@app/plate/templates/behandling-etter-tr-opphevet-vedtak';
-import { EKSPEDISJONSBREV_TIL_TRYGDERETTEN_TEMPLATE } from '@app/plate/templates/ekspedisjonsbrev-til-trygderetten';
-import { ETTERSENDING_TIL_TRYGDERETTEN_TEMPLATE } from '@app/plate/templates/ettersending-til-trygderetten';
-import { FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE_TEMPLATE } from '@app/plate/templates/forenklet-beslutning-om-ikke-å-omgjøre';
-import { KLAGEVEDTAK_TEMPLATE } from '@app/plate/templates/klagevedtak';
-import { OMGJØRINGSKRAVVEDTAK_TEMPLATE } from '@app/plate/templates/omgjøringskravvedtak';
-import { ORIENTERING_OM_TILSVAR_TEMPLATE } from '@app/plate/templates/orientering-om-tilsvar-direkte-til-trygderetten';
-import { OVERSENDELSESBREV_TEMPLATE } from '@app/plate/templates/oversendelsesbrev';
+import { ANKEVEDTAK_TEMPLATE } from '@/plate/templates/ankevedtak';
+import { GJENOPPTAKSBEGJÆRING_EKSPEDISJONSBREV_TIL_TR_TEMPLATE } from '@/plate/templates/begjæring-om-gjenopptak/ekspedisjonsbrev-til-tr';
+import { GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR_TEMPLATE } from '@/plate/templates/begjæring-om-gjenopptak/ettersending-til-tr';
+import { GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_TEMPLATE } from '@/plate/templates/begjæring-om-gjenopptak/orientering-om-tilsvar-direkte-til-tr';
+import { GJENOPPTAKSBEGJÆRING_TILSVARSBREV_MED_OVERSENDELSESBREV_TEMPLATE } from '@/plate/templates/begjæring-om-gjenopptak/tilsvarsbrev-med-oversendelsesbrev';
+import { GJENOPPTAKSBEGJÆRINGVEDTAK } from '@/plate/templates/begjæring-om-gjenopptak/vedtak';
+import { BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATE } from '@/plate/templates/behandling-etter-tr-opphevet-vedtak';
+import { EKSPEDISJONSBREV_TIL_TRYGDERETTEN_TEMPLATE } from '@/plate/templates/ekspedisjonsbrev-til-trygderetten';
+import { ETTERSENDING_TIL_TRYGDERETTEN_TEMPLATE } from '@/plate/templates/ettersending-til-trygderetten';
+import { FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE_TEMPLATE } from '@/plate/templates/forenklet-beslutning-om-ikke-å-omgjøre';
+import { KLAGEVEDTAK_TEMPLATE } from '@/plate/templates/klagevedtak';
+import { OMGJØRINGSKRAVVEDTAK_TEMPLATE } from '@/plate/templates/omgjøringskravvedtak';
+import { ORIENTERING_OM_TILSVAR_TEMPLATE } from '@/plate/templates/orientering-om-tilsvar-direkte-til-trygderetten';
+import { OVERSENDELSESBREV_TEMPLATE } from '@/plate/templates/oversendelsesbrev';
 import {
   GENERELT_BREV_TEMPLATE,
   getGenereltBrevTemplate,
@@ -20,10 +20,10 @@ import {
   ROL_ANSWERS_TEMPLATE,
   ROL_QUESTIONS_TEMPLATE,
   ROL_TILSVARSBREV_TEMPLATE,
-} from '@app/plate/templates/simple-templates';
-import { SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE } from '@app/plate/templates/svar-på-innsynsbegjæring';
-import { TIL_FORELEGGELSE_TEMPLATE } from '@app/plate/templates/til-foreleggelse';
-import { VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE } from '@app/plate/templates/varsel-om-omgjøring-til-ugunst';
+} from '@/plate/templates/simple-templates';
+import { SVAR_PÅ_INNSYNSBEGJÆRING_TEMPLATE } from '@/plate/templates/svar-på-innsynsbegjæring';
+import { TIL_FORELEGGELSE_TEMPLATE } from '@/plate/templates/til-foreleggelse';
+import { VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE } from '@/plate/templates/varsel-om-omgjøring-til-ugunst';
 
 export const TEMPLATE_MAP = {
   [GENERELT_BREV_TEMPLATE.templateId]: GENERELT_BREV_TEMPLATE,

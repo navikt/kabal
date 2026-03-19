@@ -1,11 +1,11 @@
-import { DragAndDropContext } from '@app/components/maltekstseksjoner/drag-and-drop/drag-context';
-import { useDragState } from '@app/components/maltekstseksjoner/drag-and-drop/use-drag-state';
-import { MaltekstseksjonListItem } from '@app/components/maltekstseksjoner/maltekstseksjon-list-item';
-import { isDraft } from '@app/components/smart-editor-texts/functions/status-helpers';
-import { useUpdateTextIdListMutation } from '@app/redux-api/maltekstseksjoner/mutations';
-import { useGetMaltekstseksjonQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
 import { useContext } from 'react';
+import { DragAndDropContext } from '@/components/maltekstseksjoner/drag-and-drop/drag-context';
+import { useDragState } from '@/components/maltekstseksjoner/drag-and-drop/use-drag-state';
+import { MaltekstseksjonListItem } from '@/components/maltekstseksjoner/maltekstseksjon-list-item';
+import { isDraft } from '@/components/smart-editor-texts/functions/status-helpers';
+import { useUpdateTextIdListMutation } from '@/redux-api/maltekstseksjoner/mutations';
+import { useGetMaltekstseksjonQuery } from '@/redux-api/maltekstseksjoner/queries';
+import type { IGetMaltekstseksjonParams } from '@/types/maltekstseksjoner/params';
 
 interface MaltekstListItemProps {
   maltekstseksjonId: string;

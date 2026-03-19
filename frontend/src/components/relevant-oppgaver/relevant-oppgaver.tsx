@@ -1,7 +1,11 @@
-import { OppgaveRow } from '@app/components/common-table-components/oppgave-rows/oppgave-row';
-import { TablePlainHeaders } from '@app/components/common-table-components/oppgave-table/oppgave-table-headers';
-import { StaticOppgaveTable } from '@app/components/common-table-components/oppgave-table/static-oppgave-table';
-import { ColumnKeyEnum } from '@app/components/common-table-components/types';
+import { FolderFileIcon } from '@navikt/aksel-icons';
+import { Button, type ButtonProps, Heading, Loader, Modal, Table, Tooltip } from '@navikt/ds-react';
+import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
+import { OppgaveRow } from '@/components/common-table-components/oppgave-rows/oppgave-row';
+import { TablePlainHeaders } from '@/components/common-table-components/oppgave-table/oppgave-table-headers';
+import { StaticOppgaveTable } from '@/components/common-table-components/oppgave-table/static-oppgave-table';
+import { ColumnKeyEnum } from '@/components/common-table-components/types';
 /*
  * We have the following dependency cycle:
  * Relevant oppgaver -> Oppgaver table -> Oppgave table -> Rows -> Row -> Relevant oppgaver
@@ -9,15 +13,11 @@ import { ColumnKeyEnum } from '@app/components/common-table-components/types';
  * This is a recursive structure by nature, and resolving the import cycle does not seem possible without combining everything in one file.
  * Leaving the cycle should be safe however, as the cycle is only between (top-level) React components.
  */
-import { formatFoedselsnummer } from '@app/functions/format-id';
-import { OppgaveTableRowsPerPage } from '@app/hooks/settings/use-setting';
-import { pushEvent } from '@app/observability';
-import { useGetSakenGjelderQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { useGetRelevantOppgaverQuery } from '@app/redux-api/oppgaver/queries/oppgaver';
-import { FolderFileIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, Heading, Loader, Modal, Table, Tooltip } from '@navikt/ds-react';
-import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router';
+import { formatFoedselsnummer } from '@/functions/format-id';
+import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
+import { pushEvent } from '@/observability';
+import { useGetSakenGjelderQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { useGetRelevantOppgaverQuery } from '@/redux-api/oppgaver/queries/oppgaver';
 
 interface Props {
   oppgaveId: string;

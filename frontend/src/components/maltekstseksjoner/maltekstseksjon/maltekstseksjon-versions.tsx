@@ -1,20 +1,20 @@
-import { DraftMaltekstSection } from '@app/components/maltekstseksjoner/maltekstseksjon/draft/draft';
-import { PublishedMaltekstSection } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-published';
-import { EDITOR_SCALE_CSS_VAR } from '@app/components/smart-editor/hooks/use-scale';
-import { VersionTabs } from '@app/components/versioned-tabs/versioned-tabs';
-import { ScalingGroup } from '@app/hooks/settings/use-setting';
-import { useNavigateMaltekstseksjoner } from '@app/hooks/use-navigate-maltekstseksjoner';
-import { getScaleVar } from '@app/plate/status-bar/scale-context';
-import { useGetMaltekstseksjonVersionsQuery } from '@app/redux-api/maltekstseksjoner/queries';
-import type { IGetMaltekstseksjonParams } from '@app/types/maltekstseksjoner/params';
+import { VStack } from '@navikt/ds-react';
+import { useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { DraftMaltekstSection } from '@/components/maltekstseksjoner/maltekstseksjon/draft/draft';
+import { PublishedMaltekstSection } from '@/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-published';
+import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
+import { VersionTabs } from '@/components/versioned-tabs/versioned-tabs';
+import { ScalingGroup } from '@/hooks/settings/use-setting';
+import { useNavigateMaltekstseksjoner } from '@/hooks/use-navigate-maltekstseksjoner';
+import { getScaleVar } from '@/plate/status-bar/scale-context';
+import { useGetMaltekstseksjonVersionsQuery } from '@/redux-api/maltekstseksjoner/queries';
+import type { IGetMaltekstseksjonParams } from '@/types/maltekstseksjoner/params';
 import type {
   IDraftMaltekstseksjon,
   IMaltekstseksjon,
   IPublishedMaltekstseksjon,
-} from '@app/types/maltekstseksjoner/responses';
-import { VStack } from '@navikt/ds-react';
-import { useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+} from '@/types/maltekstseksjoner/responses';
 
 interface Props {
   id: string;

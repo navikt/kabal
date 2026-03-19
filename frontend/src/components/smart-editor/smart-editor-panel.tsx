@@ -1,10 +1,10 @@
-import { Behandlingsdetaljer } from '@app/components/behandling/behandling';
-import { Behandlingsdialog } from '@app/components/behandling/behandlingsdialog/behandlingsdialog';
-import { PanelContainer } from '@app/components/oppgavebehandling-panels/panel-container';
-import { useFocusPanelShortcut } from '@app/components/oppgavebehandling-panels/panel-shortcuts-context';
-import { TabbedEditors } from '@app/components/smart-editor/tabbed-editors/tabbed-editors';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useSmartEditorEnabled } from '@app/hooks/settings/use-setting';
+import { Behandlingsdetaljer } from '@/components/behandling/behandling';
+import { Behandlingsdialog } from '@/components/behandling/behandlingsdialog/behandlingsdialog';
+import { PanelContainer } from '@/components/oppgavebehandling-panels/panel-container';
+import { useFocusPanelShortcut } from '@/components/oppgavebehandling-panels/panel-shortcuts-context';
+import { TabbedEditors } from '@/components/smart-editor/tabbed-editors/tabbed-editors';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useSmartEditorEnabled } from '@/hooks/settings/use-setting';
 
 const WIDTH = '450px';
 

@@ -1,6 +1,6 @@
-import { ToastType } from '@app/components/toast/types';
 import { Box, type BoxProps, Button, type ButtonProps, HGrid, VStack } from '@navikt/ds-react';
 import type { FragmentProps } from 'react';
+import { ToastType } from '@/components/toast/types';
 
 export const Container = ({ children }: FragmentProps) => (
   <HGrid columns="var(--ax-space-24) 1fr" align="center" gap="space-8" className="hyphens-auto whitespace-pre-wrap">

@@ -1,6 +1,6 @@
-import { PanelContainerRefContext } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
 import { Box, VStack, type VStackProps } from '@navikt/ds-react';
 import { useRef } from 'react';
+import { PanelContainerRefContext } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 
 const FOCUS_INDICATOR_CLASSES =
   'relative focus-within:after:content-[""] focus-within:after:absolute focus-within:after:inset-0 focus-within:after:rounded focus-within:after:border-2 focus-within:after:border-solid focus-within:after:border-ax-border-focus focus-within:after:pointer-events-none focus-within:after:z-100';

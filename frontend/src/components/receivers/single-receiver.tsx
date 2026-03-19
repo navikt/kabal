@@ -1,13 +1,13 @@
-import { PartStatusList } from '@app/components/part-status-list/part-status-list';
-import { getTypeNames } from '@app/components/receivers/functions';
-import { Options } from '@app/components/receivers/options';
-import { StyledReceiver } from '@app/components/receivers/styled-components';
-import type { IBrevmottaker } from '@app/hooks/use-suggested-brevmottakere';
-import type { IMottaker } from '@app/types/documents/documents';
-import { IdType } from '@app/types/oppgave-common';
-import type { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { HStack, Label, Tooltip, VStack } from '@navikt/ds-react';
+import { PartStatusList } from '@/components/part-status-list/part-status-list';
+import { getTypeNames } from '@/components/receivers/functions';
+import { Options } from '@/components/receivers/options';
+import { StyledReceiver } from '@/components/receivers/styled-components';
+import type { IBrevmottaker } from '@/hooks/use-suggested-brevmottakere';
+import type { IMottaker } from '@/types/documents/documents';
+import { IdType } from '@/types/oppgave-common';
+import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 interface Props {
   receiver: IBrevmottaker;

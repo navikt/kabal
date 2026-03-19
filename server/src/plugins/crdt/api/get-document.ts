@@ -1,14 +1,14 @@
-import { getCacheKey, oboCache } from '@app/auth/cache/cache';
-import { ApiClientEnum } from '@app/config/config';
-import { isObject } from '@app/functions/functions';
-import { generateTraceparent } from '@app/helpers/traceparent';
-import { getLogger } from '@app/logger';
-import { KABAL_API_URL } from '@app/plugins/crdt/api/url';
-import { getCloseEvent } from '@app/plugins/crdt/close-event';
-import type { ConnectionContext } from '@app/plugins/crdt/context';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import type { Node } from 'slate';
 import { Doc, encodeStateAsUpdateV2, XmlText } from 'yjs';
+import { getCacheKey, oboCache } from '@/auth/cache/cache';
+import { ApiClientEnum } from '@/config/config';
+import { isObject } from '@/functions/functions';
+import { generateTraceparent } from '@/helpers/traceparent';
+import { getLogger } from '@/logger';
+import { KABAL_API_URL } from '@/plugins/crdt/api/url';
+import { getCloseEvent } from '@/plugins/crdt/close-event';
+import type { ConnectionContext } from '@/plugins/crdt/context';
 
 const log = getLogger('collaboration');
 

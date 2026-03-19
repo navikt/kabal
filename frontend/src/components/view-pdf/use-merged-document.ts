@@ -1,9 +1,9 @@
-import { canOpenInKabal } from '@app/components/documents/filetype';
-import type { IShownArchivedDocument, IShownDocument } from '@app/components/view-pdf/types';
-import { useMergedDocumentsReferenceQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum } from '@app/types/documents/documents';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
+import { canOpenInKabal } from '@/components/documents/filetype';
+import type { IShownArchivedDocument, IShownDocument } from '@/components/view-pdf/types';
+import { useMergedDocumentsReferenceQuery } from '@/redux-api/oppgaver/queries/documents';
+import { DocumentTypeEnum } from '@/types/documents/documents';
 
 export const useMergedDocument = (showDocumentList: IShownDocument[]) => {
   const archivedDocuments = useMemo(() => showDocumentList.filter(shouldMerge), [showDocumentList]);

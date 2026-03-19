@@ -1,5 +1,5 @@
-import { MOD_KEY_TEXT } from '@app/keys';
 import { BodyShort, Box } from '@navikt/ds-react';
+import { MOD_KEY_TEXT } from '@/keys';
 
 interface KeyboardHelpProps {
   submitLabel: string;

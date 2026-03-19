@@ -1,5 +1,5 @@
-import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
-import { CopyButton } from '@app/components/copy-button/copy-button';
+import { BehandlingSection } from '@/components/behandling/behandlingsdetaljer/behandling-section';
+import { CopyButton } from '@/components/copy-button/copy-button';
 
 interface Props {
   saksnummer: string;

@@ -1,9 +1,15 @@
-import { clamp } from '@app/functions/clamp';
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { useIsUnchangeable } from '@app/plate/hooks/use-is-unchangeable';
-import { createTable } from '@app/plate/templates/helpers';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { useIsInTable } from '@app/plate/toolbar/use-is-in-table';
+import { Box, HGrid, HStack } from '@navikt/ds-react';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
+import { TableAdd } from '@styled-icons/fluentui-system-regular';
+import { BaseParagraphPlugin } from 'platejs';
+import { memo, useCallback, useRef, useState } from 'react';
+import { clamp } from '@/functions/clamp';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { useIsUnchangeable } from '@/plate/hooks/use-is-unchangeable';
+import { createTable } from '@/plate/templates/helpers';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
+import { useIsInTable } from '@/plate/toolbar/use-is-in-table';
 import {
   type BulletListElement,
   type H1Element,
@@ -12,14 +18,8 @@ import {
   type NumberedListElement,
   type ParagraphElement,
   useMyPlateEditorRef,
-} from '@app/plate/types';
-import { isNodeEmpty, isOfElementTypesFn, nextPath } from '@app/plate/utils/queries';
-import { Box, HGrid, HStack } from '@navikt/ds-react';
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
-import { TableAdd } from '@styled-icons/fluentui-system-regular';
-import { BaseParagraphPlugin } from 'platejs';
-import { memo, useCallback, useRef, useState } from 'react';
+} from '@/plate/types';
+import { isNodeEmpty, isOfElementTypesFn, nextPath } from '@/plate/utils/queries';
 
 export const InsertTableButton = () => {
   const unchangeable = useIsUnchangeable();

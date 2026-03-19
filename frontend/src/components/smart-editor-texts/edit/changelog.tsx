@@ -1,9 +1,9 @@
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { TextChangeType } from '@app/types/common-text-types';
-import type { IPublishedText, IText } from '@app/types/texts/responses';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { Button, Modal, Table } from '@navikt/ds-react';
 import { Fragment, useCallback, useRef } from 'react';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { TextChangeType } from '@/types/common-text-types';
+import type { IPublishedText, IText } from '@/types/texts/responses';
 
 interface Props {
   versions: IText[];

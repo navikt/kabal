@@ -1,6 +1,6 @@
-import { formatList, preFormat } from '@app/plate/plugins/autoformat/utils';
-import type { EditorAutoformatRule } from '@app/plate/types';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
+import { formatList, preFormat } from '@/plate/plugins/autoformat/utils';
+import type { EditorAutoformatRule } from '@/plate/types';
 
 export const autoformatLists: EditorAutoformatRule[] = [
   {

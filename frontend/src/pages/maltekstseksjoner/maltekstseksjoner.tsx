@@ -1,5 +1,5 @@
-import { Maltekstseksjoner } from '@app/components/maltekstseksjoner/maltekstseksjon/maltekstseksjoner';
-import { PageWrapper } from '@app/pages/page-wrapper';
+import { Maltekstseksjoner } from '@/components/maltekstseksjoner/maltekstseksjon/maltekstseksjoner';
+import { PageWrapper } from '@/pages/page-wrapper';
 
 export const MaltekstseksjonerPage = () => (
   <PageWrapper>

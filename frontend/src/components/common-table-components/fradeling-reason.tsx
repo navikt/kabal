@@ -1,11 +1,11 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
-import { useGetFradelingReasonQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { FradelReason, FradelReasonText } from '@app/types/oppgaver';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button, Loader, Popover, Tooltip } from '@navikt/ds-react';
 import { useContext, useRef, useState } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { formatEmployeeNameAndIdFallback } from '@/domain/employee-name';
+import { useGetFradelingReasonQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { FradelReason, FradelReasonText } from '@/types/oppgaver';
 
 interface Props {
   oppgaveId: string;

@@ -1,7 +1,7 @@
-import { togglePanelKeyboardHelpModal } from '@app/components/oppgavebehandling-controls/keyboard-help/state';
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { isMetaKey, Keys } from '@app/keys';
 import { createContext, type RefObject, useCallback, useContext, useEffect, useRef } from 'react';
+import { togglePanelKeyboardHelpModal } from '@/components/oppgavebehandling-controls/keyboard-help/state';
+import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
+import { isMetaKey, Keys } from '@/keys';
 
 type PanelNumber = 1 | 2 | 3 | 4 | 5 | 6;
 

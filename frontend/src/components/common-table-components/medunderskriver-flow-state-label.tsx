@@ -1,13 +1,13 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
+import { Tag, Tooltip } from '@navikt/ds-react';
+import { useContext } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
 import {
   getTitleCapitalized,
   getTitleLowercase,
-} from '@app/components/behandling/behandlingsdialog/medunderskriver/get-title';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import { FlowState } from '@app/types/oppgave-common';
-import type { IOppgave } from '@app/types/oppgaver';
-import { Tag, Tooltip } from '@navikt/ds-react';
-import { useContext } from 'react';
+} from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
+import { SaksTypeEnum } from '@/types/kodeverk';
+import { FlowState } from '@/types/oppgave-common';
+import type { IOppgave } from '@/types/oppgaver';
 
 type Props = Pick<IOppgave, 'medunderskriver' | 'typeId'>;
 

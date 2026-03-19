@@ -1,6 +1,6 @@
-import { isEditableTextNode } from '@app/plate/functions/is-editable-text';
 import { type Path, TextApi, type TText } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
+import { isEditableTextNode } from '@/plate/functions/is-editable-text';
 
 export const selectPreviousTextNode = (editor: PlateEditor, currentPath: Path): boolean => {
   const previous = editor.api.previous<TText>({

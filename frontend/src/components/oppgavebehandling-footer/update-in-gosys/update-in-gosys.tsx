@@ -1,32 +1,29 @@
-import { Alert } from '@app/components/alert/alert';
-import { FORMAT, PRETTY_FORMAT } from '@app/components/date-picker/constants';
-import { GrafanaDomainProvider } from '@app/components/grafana-domain-context/grafana-domain-context';
-import {
-  Beskrivelse,
-  getInitialBeskrivelse,
-} from '@app/components/oppgavebehandling-footer/update-in-gosys/beskrivelse';
-import { Enhetmappe } from '@app/components/oppgavebehandling-footer/update-in-gosys/enhetmappe';
-import { GosysOppgave } from '@app/components/oppgavebehandling-footer/update-in-gosys/gosys-oppgave';
-import { ReceivingEnhet } from '@app/components/oppgavebehandling-footer/update-in-gosys/receiving-enhet';
-import { ValidationSummary } from '@app/components/oppgavebehandling-footer/validation-summary';
-import { type IValidationSection, isReduxValidationResponse } from '@app/functions/error-type-guard';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useFinishOppgavebehandlingWithUpdateInGosysMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import { useSetGosysOppgaveMutation } from '@app/redux-api/oppgaver/mutations/set-gosys-oppgave';
-import { useGetGosysOppgaveQuery } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { useSearchEnheterQuery } from '@app/redux-api/search';
-import { useUtfall } from '@app/simple-api-state/use-kodeverk';
-import { SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
+import { BodyShort, Button, ConfirmationPanel, Heading, Modal, VStack } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { format } from 'date-fns';
+import { useState } from 'react';
+import { Alert } from '@/components/alert/alert';
+import { FORMAT, PRETTY_FORMAT } from '@/components/date-picker/constants';
+import { GrafanaDomainProvider } from '@/components/grafana-domain-context/grafana-domain-context';
+import { Beskrivelse, getInitialBeskrivelse } from '@/components/oppgavebehandling-footer/update-in-gosys/beskrivelse';
+import { Enhetmappe } from '@/components/oppgavebehandling-footer/update-in-gosys/enhetmappe';
+import { GosysOppgave } from '@/components/oppgavebehandling-footer/update-in-gosys/gosys-oppgave';
+import { ReceivingEnhet } from '@/components/oppgavebehandling-footer/update-in-gosys/receiving-enhet';
+import { ValidationSummary } from '@/components/oppgavebehandling-footer/validation-summary';
+import { type IValidationSection, isReduxValidationResponse } from '@/functions/error-type-guard';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useFinishOppgavebehandlingWithUpdateInGosysMutation } from '@/redux-api/oppgaver/mutations/behandling';
+import { useSetGosysOppgaveMutation } from '@/redux-api/oppgaver/mutations/set-gosys-oppgave';
+import { useGetGosysOppgaveQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { useSearchEnheterQuery } from '@/redux-api/search';
+import { useUtfall } from '@/simple-api-state/use-kodeverk';
+import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 import {
   type BehandlingGosysOppgave,
   type Enhet,
   GosysStatus,
   type IOppgavebehandling,
-} from '@app/types/oppgavebehandling/oppgavebehandling';
-import { BodyShort, Button, ConfirmationPanel, Heading, Modal, VStack } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { format } from 'date-fns';
-import { useState } from 'react';
+} from '@/types/oppgavebehandling/oppgavebehandling';
 
 const NOW = new Date();
 

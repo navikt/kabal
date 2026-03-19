@@ -1,10 +1,10 @@
-import { NAIS_APP_NAME, NAIS_POD_NAME } from '@app/config/config';
-import { isDeployed } from '@app/config/env';
-import { getLogger } from '@app/logger';
-import { NAV_IDENT_PLUGIN_ID } from '@app/plugins/nav-ident';
 import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import fastifyPlugin from 'fastify-plugin';
 import { Type } from 'typebox';
+import { NAIS_APP_NAME, NAIS_POD_NAME } from '@/config/config';
+import { isDeployed } from '@/config/env';
+import { getLogger } from '@/logger';
+import { NAV_IDENT_PLUGIN_ID } from '@/plugins/nav-ident';
 
 const log = getLogger('unleash-proxy-plugin');
 

@@ -1,4 +1,5 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
+import { useCallback, useContext, useMemo } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
 import {
   DuaAccessCaseStatus,
   DuaAccessCreator,
@@ -9,21 +10,20 @@ import {
   FEILREGISTRERT_ERROR,
   getDuaAccessError,
   MISSING_ROLES_ERROR,
-} from '@app/hooks/dua-access/access';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { getIsRolUser } from '@app/hooks/use-is-rol';
-import { getIsSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import type { IUserData } from '@app/types/bruker';
+} from '@/hooks/dua-access/access';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { getIsRolUser } from '@/hooks/use-is-rol';
+import { getIsSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import type { IUserData } from '@/types/bruker';
 import {
   CreatorRole,
   DocumentTypeEnum,
   type IAttachmentDocument,
   type IParentDocument,
-} from '@app/types/documents/documents';
-import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { useCallback, useContext, useMemo } from 'react';
+} from '@/types/documents/documents';
+import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 type Creator = Pick<IParentDocument['creator'], 'creatorRole'>;
 

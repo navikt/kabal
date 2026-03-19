@@ -1,11 +1,11 @@
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { useKodeverkYtelse } from '@app/hooks/use-kodeverk-value';
-import { useSetInnsendingshjemlerMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import type { IKodeverkValue } from '@app/types/kodeverk';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { Label, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useId, useMemo, useRef } from 'react';
+import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { useKodeverkYtelse } from '@/hooks/use-kodeverk-value';
+import { useSetInnsendingshjemlerMutation } from '@/redux-api/oppgaver/mutations/behandling';
+import type { IKodeverkValue } from '@/types/kodeverk';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   oppgavebehandling: IOppgavebehandling;

@@ -1,12 +1,12 @@
-import type { KabalValue } from '@app/plate/types';
+import type { KabalValue } from '@/plate/types';
 import type {
   GOD_FORMULERING_TYPE,
   ITextBaseMetadata,
   PlainTextTypes,
   REGELVERK_TYPE,
   RichTextTypes,
-} from '@app/types/common-text-types';
-import { Language, UNTRANSLATED } from '@app/types/texts/language';
+} from '@/types/common-text-types';
+import { Language, UNTRANSLATED } from '@/types/texts/language';
 
 export interface INewRichTextParams extends ITextBaseMetadata {
   textType: RichTextTypes;

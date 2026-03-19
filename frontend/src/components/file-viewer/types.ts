@@ -1,6 +1,6 @@
-import type { Variants } from '@app/types/arkiverte-documents';
-import type { DocumentTypeEnum } from '@app/types/documents/documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { Variants } from '@/types/arkiverte-documents';
+import type { DocumentTypeEnum } from '@/types/documents/documents';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 interface IShownNewDocument {
   documentId: string;

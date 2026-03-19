@@ -1,4 +1,4 @@
-import { useDocumentsExpanded } from '@app/hooks/settings/use-setting';
+import { useDocumentsExpanded } from '@/hooks/settings/use-setting';
 
 type IsExpanded = [boolean, (isExpanded: boolean) => void];
 

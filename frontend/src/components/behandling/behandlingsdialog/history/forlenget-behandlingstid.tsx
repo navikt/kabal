@@ -1,19 +1,15 @@
-import { employeeName, toKey } from '@app/components/behandling/behandlingsdialog/history/common';
-import { HistoryEvent } from '@app/components/behandling/behandlingsdialog/history/event';
-import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
-import { isoDateToPretty } from '@app/domain/date';
-import {
-  HistoryEventTypes,
-  type IForlengetBehandlingstidEvent,
-  type IPart,
-} from '@app/types/oppgavebehandling/response';
+import { ClockIcon } from '@navikt/aksel-icons';
+import { BodyShort, VStack } from '@navikt/ds-react';
+import { employeeName, toKey } from '@/components/behandling/behandlingsdialog/history/common';
+import { HistoryEvent } from '@/components/behandling/behandlingsdialog/history/event';
+import { PartNameAndIdentifikator } from '@/components/part-name-and-identifikator/part-name-and-identifikator';
+import { isoDateToPretty } from '@/domain/date';
+import { HistoryEventTypes, type IForlengetBehandlingstidEvent, type IPart } from '@/types/oppgavebehandling/response';
 import {
   BEHANDLINGSTID_UNIT_TYPE_NAMES,
   BEHANDLINGSTID_UNIT_TYPE_NAMES_SINGULAR,
   type BehandlingstidUnitType,
-} from '@app/types/svarbrev';
-import { ClockIcon } from '@navikt/aksel-icons';
-import { BodyShort, VStack } from '@navikt/ds-react';
+} from '@/types/svarbrev';
 
 export const getForlengetBehandlingstidEvent = (props: IForlengetBehandlingstidEvent) => (
   <ForlengetBehandlingstid key={toKey(props)} {...props} />

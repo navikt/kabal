@@ -1,5 +1,5 @@
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { useGetSmartDocumentVersionsQuery } from '@app/redux-api/oppgaver/queries/documents';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { useGetSmartDocumentVersionsQuery } from '@/redux-api/oppgaver/queries/documents';
 
 interface Props {
   oppgaveId: string;

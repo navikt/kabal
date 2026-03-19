@@ -1,7 +1,7 @@
-import { Alert } from '@app/components/alert/alert';
-import { MALTEKST_SECTION_NAMES } from '@app/components/smart-editor/constants';
-import type { TemplateSections } from '@app/plate/template-sections';
 import { Heading, HStack, Loader } from '@navikt/ds-react';
+import { Alert } from '@/components/alert/alert';
+import { MALTEKST_SECTION_NAMES } from '@/components/smart-editor/constants';
+import type { TemplateSections } from '@/plate/template-sections';
 
 interface Props {
   section: TemplateSections;

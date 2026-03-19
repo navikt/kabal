@@ -1,4 +1,4 @@
-import { hasOwn, isObject } from '@app/functions/functions';
+import { hasOwn, isObject } from '@/functions/functions';
 
 interface TokenPayload {
   aud: string;

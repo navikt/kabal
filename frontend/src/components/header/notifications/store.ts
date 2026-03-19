@@ -1,10 +1,10 @@
-import { EventName, manager } from '@app/components/header/notifications/subscription';
+import { EventName, manager } from '@/components/header/notifications/subscription';
 import type {
   KabalNotification,
   KabalNotificationId,
   KabalNotificationIds,
-} from '@app/components/header/notifications/types';
-import { Observable } from '@app/observable';
+} from '@/components/header/notifications/types';
+import { Observable } from '@/observable';
 
 export const notificationsStore = new Observable<KabalNotification[]>([]);
 

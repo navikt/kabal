@@ -1,17 +1,17 @@
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import type { INavEmployee } from '@app/types/bruker';
-import type { DistribusjonsType, IDocument } from '@app/types/documents/documents';
-import type { UtfallEnum } from '@app/types/kodeverk';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
+import type { INavEmployee } from '@/types/bruker';
+import type { DistribusjonsType, IDocument } from '@/types/documents/documents';
+import type { UtfallEnum } from '@/types/kodeverk';
 import type {
   FlowState,
   IJournalfoertDokumentId,
   IOrganizationPart,
   IPersonPart,
   ISattPåVent,
-} from '@app/types/oppgave-common';
-import type { BehandlingGosysOppgave, IFeilregistrering } from '@app/types/oppgavebehandling/oppgavebehandling';
-import type { FradelReason } from '@app/types/oppgaver';
-import type { Language } from '@app/types/texts/language';
+} from '@/types/oppgave-common';
+import type { BehandlingGosysOppgave, IFeilregistrering } from '@/types/oppgavebehandling/oppgavebehandling';
+import type { FradelReason } from '@/types/oppgaver';
+import type { Language } from '@/types/texts/language';
 
 export interface BaseEvent {
   actor: INavEmployee;

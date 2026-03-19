@@ -1,5 +1,5 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
 import { useContext } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
 
 export const useHasYtelseAccess = (ytelse: string | undefined): boolean => {
   const { user } = useContext(StaticDataContext);

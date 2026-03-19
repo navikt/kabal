@@ -1,5 +1,5 @@
-import { toast } from '@app/components/toast/store';
 import { useCallback, useRef, useState } from 'react';
+import { toast } from '@/components/toast/store';
 
 export const useSendDebugInfo = () => {
   const [loading, setLoading] = useState(false);

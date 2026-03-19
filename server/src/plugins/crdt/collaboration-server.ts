@@ -1,20 +1,20 @@
-import { getCacheKey, oboCache } from '@app/auth/cache/cache';
-import { ApiClientEnum } from '@app/config/config';
-import { isDeployed } from '@app/config/env';
-import { SMART_DOCUMENT_WRITE_ACCESS } from '@app/document-access/service';
-import { isNotNull } from '@app/functions/guards';
-import { parseTokenPayload } from '@app/helpers/token-parser';
-import { getTeamLogger } from '@app/logger';
-import { getDocument } from '@app/plugins/crdt/api/get-document';
-import { getDocumentJson, isResponseError, setDocument } from '@app/plugins/crdt/api/set-document';
-import { getCloseEvent } from '@app/plugins/crdt/close-event';
-import { type ConnectionContext, isConnectionContext } from '@app/plugins/crdt/context';
-import { log, logContext } from '@app/plugins/crdt/log-context';
-import { createRefreshTimer } from '@app/plugins/crdt/refresh';
-import { sendStateless } from '@app/plugins/crdt/send-stateless';
-import { getValkeyExtension } from '@app/plugins/crdt/valkey';
 import { Hocuspocus } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
+import { getCacheKey, oboCache } from '@/auth/cache/cache';
+import { ApiClientEnum } from '@/config/config';
+import { isDeployed } from '@/config/env';
+import { SMART_DOCUMENT_WRITE_ACCESS } from '@/document-access/service';
+import { isNotNull } from '@/functions/guards';
+import { parseTokenPayload } from '@/helpers/token-parser';
+import { getTeamLogger } from '@/logger';
+import { getDocument } from '@/plugins/crdt/api/get-document';
+import { getDocumentJson, isResponseError, setDocument } from '@/plugins/crdt/api/set-document';
+import { getCloseEvent } from '@/plugins/crdt/close-event';
+import { type ConnectionContext, isConnectionContext } from '@/plugins/crdt/context';
+import { log, logContext } from '@/plugins/crdt/log-context';
+import { createRefreshTimer } from '@/plugins/crdt/refresh';
+import { sendStateless } from '@/plugins/crdt/send-stateless';
+import { getValkeyExtension } from '@/plugins/crdt/valkey';
 
 const teamLog = getTeamLogger('collaboration');
 

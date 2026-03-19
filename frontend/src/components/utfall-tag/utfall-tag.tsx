@@ -1,7 +1,7 @@
-import { useUtfall } from '@app/simple-api-state/use-kodeverk';
-import type { UtfallEnum } from '@app/types/kodeverk';
 import { Tag, type TagProps } from '@navikt/ds-react';
 import { useMemo } from 'react';
+import { useUtfall } from '@/simple-api-state/use-kodeverk';
+import type { UtfallEnum } from '@/types/kodeverk';
 
 interface Props {
   utfallId: UtfallEnum | null;

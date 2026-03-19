@@ -1,5 +1,5 @@
-import { ELEMENT_PLACEHOLDER } from '@app/plate/plugins/element-types';
 import { NodeApi, TextApi, type TNode } from 'platejs';
+import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 
 export const nodesEquals = (a: TNode[], b: TNode[]): boolean => {
   if (a.length !== b.length) {

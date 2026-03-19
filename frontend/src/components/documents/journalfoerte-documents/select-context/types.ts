@@ -1,6 +1,6 @@
-import type { Path } from '@app/components/documents/journalfoerte-documents/select-context/range-utils';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
+import type { Path } from '@/components/documents/journalfoerte-documents/select-context/range-utils';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 export type SelectedMap = Map<string, IJournalfoertDokumentId>;
 

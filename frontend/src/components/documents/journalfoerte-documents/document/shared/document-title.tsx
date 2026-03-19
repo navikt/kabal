@@ -1,30 +1,30 @@
-import { DocumentWarnings } from '@app/components/documents/document-warnings';
-import { DragAndDropContext } from '@app/components/documents/drag-context';
-import { canOpenInKabal } from '@app/components/documents/filetype';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { memo, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { DocumentWarnings } from '@/components/documents/document-warnings';
+import { DragAndDropContext } from '@/components/documents/drag-context';
+import { canOpenInKabal } from '@/components/documents/filetype';
 import {
   ConfirmEditButton,
   DocumentTitleActions,
-} from '@app/components/documents/journalfoerte-documents/document/shared/document-title-actions';
-import { DocumentTitleContainer } from '@app/components/documents/journalfoerte-documents/document/shared/document-title-container';
-import { convertRealToAccessibleDocumentIndex } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
-import { setFocusIndex } from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import { SetFilename } from '@app/components/documents/set-filename';
-import { DocumentLink } from '@app/components/documents/styled-components/document-link';
-import { TabContext } from '@app/components/documents/tab-context';
-import { useIsTabOpen } from '@app/components/documents/use-is-tab-open';
-import type { IFilesViewed } from '@app/components/file-viewer/types';
-import { toast } from '@app/components/toast/store';
-import { getJournalfoertDocumentFileUrl } from '@app/domain/file-url';
-import { getJournalfoertDocumentTabId } from '@app/domain/tabbed-document-url';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useFilesViewed } from '@app/hooks/settings/use-setting';
-import { useDocumentTabUrl } from '@app/hooks/use-document-tab-url';
-import { isMetaKey, MouseButtons } from '@app/keys';
-import { useSetTitleMutation } from '@app/redux-api/journalposter';
-import type { Variants } from '@app/types/arkiverte-documents';
-import type { IJournalfoertDokumentId } from '@app/types/oppgave-common';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { memo, useCallback, useContext, useMemo, useRef, useState } from 'react';
+} from '@/components/documents/journalfoerte-documents/document/shared/document-title-actions';
+import { DocumentTitleContainer } from '@/components/documents/journalfoerte-documents/document/shared/document-title-container';
+import { convertRealToAccessibleDocumentIndex } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { setFocusIndex } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { SetFilename } from '@/components/documents/set-filename';
+import { DocumentLink } from '@/components/documents/styled-components/document-link';
+import { TabContext } from '@/components/documents/tab-context';
+import { useIsTabOpen } from '@/components/documents/use-is-tab-open';
+import type { IFilesViewed } from '@/components/file-viewer/types';
+import { toast } from '@/components/toast/store';
+import { getJournalfoertDocumentFileUrl } from '@/domain/file-url';
+import { getJournalfoertDocumentTabId } from '@/domain/tabbed-document-url';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useFilesViewed } from '@/hooks/settings/use-setting';
+import { useDocumentTabUrl } from '@/hooks/use-document-tab-url';
+import { isMetaKey, MouseButtons } from '@/keys';
+import { useSetTitleMutation } from '@/redux-api/journalposter';
+import type { Variants } from '@/types/arkiverte-documents';
+import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 interface Props {
   journalpostId: string;

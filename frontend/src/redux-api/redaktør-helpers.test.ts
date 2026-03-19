@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
-import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@app/components/smart-editor-texts/types';
-import { getListWithGlobal, paramsWithGlobalQueries } from '@app/redux-api/redaktør-helpers';
-import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
+import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@/components/smart-editor-texts/types';
+import { getListWithGlobal, paramsWithGlobalQueries } from '@/redux-api/redaktør-helpers';
+import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
 
 describe('getListWithGlobal', () => {
   it('should add global items to list', () => {

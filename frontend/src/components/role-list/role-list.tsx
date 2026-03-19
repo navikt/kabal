@@ -1,6 +1,6 @@
-import { RoleItem } from '@app/components/role-list/role-list-item';
-import type { Role } from '@app/types/bruker';
 import { BodyShort, Box, Heading, List, type TagProps } from '@navikt/ds-react';
+import { RoleItem } from '@/components/role-list/role-list-item';
+import type { Role } from '@/types/bruker';
 
 interface Props {
   roles: Role[];

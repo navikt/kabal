@@ -1,6 +1,6 @@
-import { isoDateTimeToPrettyDate } from '@app/domain/date';
 import { CopyButton, HStack } from '@navikt/ds-react';
 import type { HTMLAttributes } from 'react';
+import { isoDateTimeToPrettyDate } from '@/domain/date';
 
 interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'className'> {
   date: string;

@@ -1,20 +1,20 @@
-import { createDragUI } from '@app/components/documents/create-drag-ui';
-import { DragAndDropContext } from '@app/components/documents/drag-context';
-import { Fields, getFieldNames, getFieldSizes } from '@app/components/documents/new-documents/grid';
-import { AttachmentModal } from '@app/components/documents/new-documents/modal/attachment-modal';
-import { ArchivingIcon } from '@app/components/documents/new-documents/new-document/archiving-icon';
-import { DocumentTitle } from '@app/components/documents/new-documents/new-document/title';
-import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
-import { DOCUMENT_CLASSES } from '@app/components/documents/styled-components/document';
-import { merge } from '@app/functions/classes';
-import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useLazyGetDocumentsQuery } from '@app/redux-api/oppgaver/queries/documents';
-import { DocumentTypeEnum, type IAttachmentDocument, type IParentDocument } from '@app/types/documents/documents';
 import { HGrid } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { type HTMLAttributes, memo, type RefObject, useCallback, useContext, useRef, useState } from 'react';
+import { createDragUI } from '@/components/documents/create-drag-ui';
+import { DragAndDropContext } from '@/components/documents/drag-context';
+import { Fields, getFieldNames, getFieldSizes } from '@/components/documents/new-documents/grid';
+import { AttachmentModal } from '@/components/documents/new-documents/modal/attachment-modal';
+import { ArchivingIcon } from '@/components/documents/new-documents/new-document/archiving-icon';
+import { DocumentTitle } from '@/components/documents/new-documents/new-document/title';
+import { DocumentDate } from '@/components/documents/new-documents/shared/document-date';
+import { DOCUMENT_CLASSES } from '@/components/documents/styled-components/document';
+import { merge } from '@/functions/classes';
+import { DuaActionEnum } from '@/hooks/dua-access/access';
+import { useDuaAccess } from '@/hooks/dua-access/use-dua-access';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useLazyGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
+import { DocumentTypeEnum, type IAttachmentDocument, type IParentDocument } from '@/types/documents/documents';
 
 interface Props {
   document: IAttachmentDocument;

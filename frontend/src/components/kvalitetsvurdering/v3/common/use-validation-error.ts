@@ -1,7 +1,7 @@
-import type { GroupErrorField } from '@app/components/kvalitetsvurdering/v3/common/types';
-import { ValidationErrorContext } from '@app/components/kvalitetsvurdering/validation-error-context';
-import type { KvalitetsvurderingDataV3 } from '@app/types/kaka-kvalitetsvurdering/v3';
 import { useContext, useMemo } from 'react';
+import type { GroupErrorField } from '@/components/kvalitetsvurdering/v3/common/types';
+import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
+import type { KvalitetsvurderingDataV3 } from '@/types/kaka-kvalitetsvurdering/v3';
 
 type Field = keyof KvalitetsvurderingDataV3 | GroupErrorField;
 

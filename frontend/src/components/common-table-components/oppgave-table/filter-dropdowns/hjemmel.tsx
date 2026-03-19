@@ -1,11 +1,11 @@
-import type { FilterDropdownProps } from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
-import { useOppgaveTableHjemler } from '@app/components/common-table-components/oppgave-table/state/use-state';
-import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { useSettingsHjemler } from '@app/hooks/use-settings-hjemler';
-import type { IKodeverkValue } from '@app/types/kodeverk';
 import { Table } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
+import type { FilterDropdownProps } from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
+import { useOppgaveTableHjemler } from '@/components/common-table-components/oppgave-table/state/use-state';
+import { TABLE_HEADERS } from '@/components/common-table-components/types';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { useSettingsHjemler } from '@/hooks/use-settings-hjemler';
+import type { IKodeverkValue } from '@/types/kodeverk';
 
 export const Hjemmel = ({ columnKey, tableKey }: FilterDropdownProps) => {
   const hjemlerOptions = useSettingsHjemler();

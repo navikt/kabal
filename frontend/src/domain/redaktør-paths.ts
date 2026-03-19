@@ -1,4 +1,4 @@
-import type { TextTypes } from '@app/types/common-text-types';
+import type { TextTypes } from '@/types/common-text-types';
 
 export const TEXT_TYPE_BASE_PATH: Record<TextTypes, string> = {
   MALTEKST: 'maltekster',

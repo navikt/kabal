@@ -1,6 +1,6 @@
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import type { TilknyttetDokument } from '@app/types/oppgavebehandling/oppgavebehandling';
 import { useCallback, useMemo } from 'react';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import type { TilknyttetDokument } from '@/types/oppgavebehandling/oppgavebehandling';
 
 const EMPTY_ARRAY: TilknyttetDokument[] = [];
 

@@ -1,17 +1,14 @@
-import { getAvsenderMottakerKey } from '@app/components/documents/journalfoerte-documents/header/avsender-mottaker';
-import { useShowVedlegg } from '@app/components/documents/journalfoerte-documents/state/show-vedlegg';
-import { useLazyIsTilknyttetDokument } from '@app/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
-import { fuzzySearch } from '@app/components/smart-editor/gode-formuleringer/fuzzy-search';
-import { splitQuery } from '@app/components/smart-editor/gode-formuleringer/split-query';
-import {
-  ArchivedDocumentsColumn,
-  useArchivedDocumentsColumns,
-} from '@app/hooks/settings/use-archived-documents-setting';
-import type { ArchivedDocumentsSort, DateRange } from '@app/hooks/settings/use-setting';
-import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@app/types/arkiverte-documents';
-import { SortOrder } from '@app/types/sort';
 import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
 import { useEffect, useState } from 'react';
+import { getAvsenderMottakerKey } from '@/components/documents/journalfoerte-documents/header/avsender-mottaker';
+import { useShowVedlegg } from '@/components/documents/journalfoerte-documents/state/show-vedlegg';
+import { useLazyIsTilknyttetDokument } from '@/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
+import { fuzzySearch } from '@/components/smart-editor/gode-formuleringer/fuzzy-search';
+import { splitQuery } from '@/components/smart-editor/gode-formuleringer/split-query';
+import { ArchivedDocumentsColumn, useArchivedDocumentsColumns } from '@/hooks/settings/use-archived-documents-setting';
+import type { ArchivedDocumentsSort, DateRange } from '@/hooks/settings/use-setting';
+import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@/types/arkiverte-documents';
+import { SortOrder } from '@/types/sort';
 
 export interface ScoredArkvertDocumentVedlegg extends IArkivertDocumentVedlegg {
   score: number;

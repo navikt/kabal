@@ -1,6 +1,6 @@
-import { DOCUMENT_TYPE_NAMES, DocumentTypeEnum } from '@app/types/documents/documents';
 import { DocPencilIcon, FilePdfIcon, FilesIcon } from '@navikt/aksel-icons';
 import { memo } from 'react';
+import { DOCUMENT_TYPE_NAMES, DocumentTypeEnum } from '@/types/documents/documents';
 
 export type ModalDocumentType = DocumentTypeEnum.SMART | DocumentTypeEnum.UPLOADED | DocumentTypeEnum.JOURNALFOERT;
 

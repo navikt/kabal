@@ -1,7 +1,7 @@
-import type { MaltekstseksjonElement } from '@app/plate/types';
 import type { PlateEditor } from 'platejs/react';
 import { useEffect, useRef } from 'react';
 import { Path } from 'slate';
+import type { MaltekstseksjonElement } from '@/plate/types';
 
 export const usePath = (editor: PlateEditor, element: MaltekstseksjonElement) => {
   const path = editor.api.findPath(element);

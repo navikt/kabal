@@ -1,4 +1,4 @@
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 
 export const useLazyIsTildelt = () => {
   const { data, isSuccess } = useOppgave();

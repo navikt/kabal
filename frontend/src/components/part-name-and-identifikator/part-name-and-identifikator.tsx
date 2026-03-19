@@ -1,4 +1,4 @@
-import { formatIdNumber } from '@app/functions/format-id';
+import { formatIdNumber } from '@/functions/format-id';
 
 interface Props {
   identifikator: string | null;

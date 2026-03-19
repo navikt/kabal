@@ -1,10 +1,10 @@
-import { convertAccessibleToRealDocumentPath } from '@app/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
+import { useCallback } from 'react';
+import { convertAccessibleToRealDocumentPath } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import {
   getFocusedVedleggIndex,
   getFocusIndex,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
-import { useCallback } from 'react';
+} from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 export const useGetDocument = (filteredDocuments: IArkivertDocument[]) =>
   useCallback(

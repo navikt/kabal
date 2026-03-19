@@ -1,24 +1,28 @@
-import { AccessErrorsSummary } from '@app/components/documents/new-documents/modal/access-errors-summary';
-import { AnnenInngaaende } from '@app/components/documents/new-documents/modal/annen-inngaaende';
-import { DeleteDocumentButton } from '@app/components/documents/new-documents/modal/delete-button';
-import { FinishButton } from '@app/components/documents/new-documents/modal/finish-button';
-import { Errors } from '@app/components/documents/new-documents/modal/finish-document/errors';
-import { ConfirmInnsendingshjemler } from '@app/components/documents/new-documents/modal/innsendingshjemler';
-import { MottattDato } from '@app/components/documents/new-documents/modal/mottatt-dato';
-import { SetDocumentType } from '@app/components/documents/new-documents/new-document/set-type';
-import { DocumentDate } from '@app/components/documents/new-documents/shared/document-date';
-import { DocumentIcon } from '@app/components/documents/new-documents/shared/document-icon';
-import { SetFilename } from '@app/components/documents/set-filename';
-import { KabalFileViewer } from '@app/components/kabal-file-viewer';
-import { isSendError } from '@app/components/receivers/is-send-error';
-import { Receivers } from '@app/components/receivers/receivers';
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
+import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
+import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useMemo } from 'react';
+import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
+import { AnnenInngaaende } from '@/components/documents/new-documents/modal/annen-inngaaende';
+import { DeleteDocumentButton } from '@/components/documents/new-documents/modal/delete-button';
+import { FinishButton } from '@/components/documents/new-documents/modal/finish-button';
+import { Errors } from '@/components/documents/new-documents/modal/finish-document/errors';
+import { ConfirmInnsendingshjemler } from '@/components/documents/new-documents/modal/innsendingshjemler';
+import { MottattDato } from '@/components/documents/new-documents/modal/mottatt-dato';
+import { SetDocumentType } from '@/components/documents/new-documents/new-document/set-type';
+import { DocumentDate } from '@/components/documents/new-documents/shared/document-date';
+import { DocumentIcon } from '@/components/documents/new-documents/shared/document-icon';
+import { SetFilename } from '@/components/documents/set-filename';
+import { KabalFileViewer } from '@/components/kabal-file-viewer';
+import { isSendError } from '@/components/receivers/is-send-error';
+import { Receivers } from '@/components/receivers/receivers';
+import { getIsIncomingDocument } from '@/functions/is-incoming-document';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import {
   useFinishDocumentMutation,
   useSetMottakerListMutation,
   useSetTitleMutation,
-} from '@app/redux-api/oppgaver/mutations/documents';
+} from '@/redux-api/oppgaver/mutations/documents';
 import {
   DISTRIBUTION_TYPE_NAMES,
   DistribusjonsType,
@@ -26,12 +30,8 @@ import {
   DocumentTypeEnum,
   type IDocument,
   type IParentDocument,
-} from '@app/types/documents/documents';
-import { TemplateIdEnum } from '@app/types/smart-editor/template-enums';
-import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useMemo } from 'react';
+} from '@/types/documents/documents';
+import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 interface Props {
   document: IParentDocument;

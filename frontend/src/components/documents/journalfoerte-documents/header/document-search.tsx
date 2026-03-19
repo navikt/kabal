@@ -1,9 +1,9 @@
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import { EVENT_DOMAIN } from '@app/components/documents/journalfoerte-documents/keyboard/use-keyboard';
-import { Keys } from '@app/keys';
-import { pushEvent } from '@app/observability';
 import { HStack, Search } from '@navikt/ds-react';
 import { memo, useCallback, useEffect, useState } from 'react';
+import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import { EVENT_DOMAIN } from '@/components/documents/journalfoerte-documents/keyboard/use-keyboard';
+import { Keys } from '@/keys';
+import { pushEvent } from '@/observability';
 
 interface Props {
   setSearch: (value: string) => void;

@@ -1,5 +1,5 @@
-import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { InlineMessage } from '@navikt/ds-react';
+import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
 
 interface Props {
   rol: IMedunderskriverRol;

@@ -6,7 +6,7 @@ import {
   type SplitQuery,
   splitQuery,
   WORD_SCORE,
-} from '@app/components/smart-editor/gode-formuleringer/split-query';
+} from '@/components/smart-editor/gode-formuleringer/split-query';
 
 describe('split query', () => {
   it('should handle empty queries', () => {

@@ -1,5 +1,5 @@
-import type { IGetMaltekstseksjonParams } from '@app/types/common-text-types';
 import { Tag, type TagProps } from '@navikt/ds-react';
+import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
 
 interface BaseProps {
   useName: (id: string) => string;

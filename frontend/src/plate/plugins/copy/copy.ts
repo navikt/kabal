@@ -1,8 +1,12 @@
-import { BOOKMARK_PREFIX, COMMENT_PREFIX } from '@app/components/smart-editor/constants';
-import { formatLongDate } from '@app/domain/date';
-import { BookmarkPlugin } from '@app/plate/plugins/bookmark';
-import { CommentsPlugin } from '@app/plate/plugins/comments';
-import { trimFragment } from '@app/plate/plugins/copy/trim-fragment';
+import { ElementApi, NodeApi, RangeApi, TextApi, type TText } from 'platejs';
+import type { OverrideEditor, PlateEditor } from 'platejs/react';
+import { createPlatePlugin } from 'platejs/react';
+import { type Descendant, type NodeEntry, Range } from 'slate';
+import { BOOKMARK_PREFIX, COMMENT_PREFIX } from '@/components/smart-editor/constants';
+import { formatLongDate } from '@/domain/date';
+import { BookmarkPlugin } from '@/plate/plugins/bookmark';
+import { CommentsPlugin } from '@/plate/plugins/comments';
+import { trimFragment } from '@/plate/plugins/copy/trim-fragment';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
@@ -15,8 +19,8 @@ import {
   ELEMENT_REGELVERK,
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
-} from '@app/plate/plugins/element-types';
-import { createSimpleParagraph } from '@app/plate/templates/helpers';
+} from '@/plate/plugins/element-types';
+import { createSimpleParagraph } from '@/plate/templates/helpers';
 import type {
   CurrentDateElement,
   FooterElement,
@@ -24,12 +28,8 @@ import type {
   HeaderElement,
   LabelContentElement,
   SignatureElement,
-} from '@app/plate/types';
-import { isOfElementType } from '@app/plate/utils/queries';
-import { ElementApi, NodeApi, RangeApi, TextApi, type TText } from 'platejs';
-import type { OverrideEditor, PlateEditor } from 'platejs/react';
-import { createPlatePlugin } from 'platejs/react';
-import { type Descendant, type NodeEntry, Range } from 'slate';
+} from '@/plate/types';
+import { isOfElementType } from '@/plate/utils/queries';
 
 const cleanNodes = (editor: PlateEditor, node: Descendant | Descendant[]): Descendant | Descendant[] => {
   if (Array.isArray(node)) {

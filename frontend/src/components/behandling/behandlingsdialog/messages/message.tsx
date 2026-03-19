@@ -1,17 +1,17 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import { PRETTY_FORMAT, PRETTY_TIME } from '@app/components/date-picker/constants';
-import { toast } from '@app/components/toast/store';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { formatEmployeeName } from '@app/domain/employee-name';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { KABAL_API_BASE_PATH } from '@app/redux-api/common';
-import type { IMessage } from '@app/redux-api/messages';
 import { BellFillIcon, BellIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box, type BoxProps, Button, HStack, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { format, isToday } from 'date-fns';
 import { useContext, useState } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import { PRETTY_FORMAT, PRETTY_TIME } from '@/components/date-picker/constants';
+import { toast } from '@/components/toast/store';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { formatEmployeeName } from '@/domain/employee-name';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { KABAL_API_BASE_PATH } from '@/redux-api/common';
+import type { IMessage } from '@/redux-api/messages';
 
 interface Props extends IMessage {
   mine: boolean;

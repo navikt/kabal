@@ -1,11 +1,11 @@
-import { getTitleLowercase } from '@app/components/behandling/behandlingsdialog/medunderskriver/get-title';
-import { useIsTildeltSaksbehandler } from '@app/hooks/use-is-saksbehandler';
-import { useSetMedunderskriverMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver';
-import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
-import type { SaksTypeEnum } from '@app/types/kodeverk';
-import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
+import { getTitleLowercase } from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useSetMedunderskriverMutation } from '@/redux-api/oppgaver/mutations/set-medunderskriver';
+import { useSetMedunderskriverFlowStateMutation } from '@/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
+import type { SaksTypeEnum } from '@/types/kodeverk';
+import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;

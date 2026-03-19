@@ -1,15 +1,15 @@
-import { RedaktoerRichText } from '@app/components/redaktoer-rich-text/redaktoer-rich-text';
-import { Edit } from '@app/components/smart-editor-texts/edit/edit';
-import { useTextQuery } from '@app/components/smart-editor-texts/hooks/use-text-query';
-import type { DraftVersionProps } from '@app/components/smart-editor-texts/types';
-import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
-import { SpellCheckLanguage } from '@app/hooks/use-smart-editor-language';
-import type { KabalValue } from '@app/plate/types';
-import { usePublishMutation, useUpdateRichTextMutation } from '@app/redux-api/texts/mutations';
-import { UNTRANSLATED } from '@app/types/texts/language';
-import type { IRegelverk } from '@app/types/texts/responses';
 import { ErrorMessage } from '@navikt/ds-react';
 import { useCallback, useEffect, useState } from 'react';
+import { RedaktoerRichText } from '@/components/redaktoer-rich-text/redaktoer-rich-text';
+import { Edit } from '@/components/smart-editor-texts/edit/edit';
+import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
+import type { DraftVersionProps } from '@/components/smart-editor-texts/types';
+import { areDescendantsEqual } from '@/functions/are-descendants-equal';
+import { SpellCheckLanguage } from '@/hooks/use-smart-editor-language';
+import type { KabalValue } from '@/plate/types';
+import { usePublishMutation, useUpdateRichTextMutation } from '@/redux-api/texts/mutations';
+import { UNTRANSLATED } from '@/types/texts/language';
+import type { IRegelverk } from '@/types/texts/responses';
 
 interface Props extends Omit<DraftVersionProps, 'text'> {
   text: IRegelverk;

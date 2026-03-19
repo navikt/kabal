@@ -1,17 +1,14 @@
-import { canOpenInKabal } from '@app/components/documents/filetype';
-import { showDownloadDocumentsToast } from '@app/components/documents/journalfoerte-documents/download-toast';
-import { getSelectedDocumentsInOrder } from '@app/components/documents/journalfoerte-documents/heading/selected-in-order';
-import { getDocument, getVedlegg } from '@app/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
-import {
-  getFocusIndex,
-  getIsInVedleggList,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/focus';
-import { isSelected } from '@app/components/documents/journalfoerte-documents/keyboard/state/selection';
-import { getId } from '@app/components/documents/journalfoerte-documents/select-context/helpers';
-import { SelectContext } from '@app/components/documents/journalfoerte-documents/select-context/select-context';
-import { useFilesViewed } from '@app/hooks/settings/use-setting';
-import type { IArkivertDocument } from '@app/types/arkiverte-documents';
 import { useCallback, useContext } from 'react';
+import { canOpenInKabal } from '@/components/documents/filetype';
+import { showDownloadDocumentsToast } from '@/components/documents/journalfoerte-documents/download-toast';
+import { getSelectedDocumentsInOrder } from '@/components/documents/journalfoerte-documents/heading/selected-in-order';
+import { getDocument, getVedlegg } from '@/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
+import { getFocusIndex, getIsInVedleggList } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { isSelected } from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { getId } from '@/components/documents/journalfoerte-documents/select-context/helpers';
+import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
+import { useFilesViewed } from '@/hooks/settings/use-setting';
+import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
 export const useOpenInline = (filteredDocuments: IArkivertDocument[]) => {
   const { value: pdfViewed, setArchivedFiles: setArchivedDocuments, remove } = useFilesViewed();

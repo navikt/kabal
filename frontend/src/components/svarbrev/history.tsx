@@ -1,17 +1,17 @@
-import { StaticDataContext } from '@app/components/app/static-data-context';
-import {
-  type ChangeSet,
-  getChangeSets,
-  getChangeSetText,
-  type InitialVersion,
-} from '@app/components/svarbrev/change-sets';
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { useGetSvarbrevSettingHistoryQuery } from '@app/redux-api/svarbrev';
 import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { Box, type BoxProps, Button, HStack, Modal, Skeleton, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { StaticDataContext } from '@/components/app/static-data-context';
+import {
+  type ChangeSet,
+  getChangeSets,
+  getChangeSetText,
+  type InitialVersion,
+} from '@/components/svarbrev/change-sets';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { useGetSvarbrevSettingHistoryQuery } from '@/redux-api/svarbrev';
 
 interface Props {
   id: string;

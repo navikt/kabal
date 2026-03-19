@@ -1,5 +1,5 @@
-import { isNotNull } from '@app/functions/is-not-type-guards';
-import { isGenericObject } from '@app/types/types';
+import { isNotNull } from '@/functions/is-not-type-guards';
+import { isGenericObject } from '@/types/types';
 
 export const queryStringify = (query: object): string => {
   if (!isGenericObject(query)) {

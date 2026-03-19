@@ -1,6 +1,6 @@
-import { Fullmektig } from '@app/plate/components/fullmektig';
-import { ELEMENT_FULLMEKTIG } from '@app/plate/plugins/element-types';
 import { createPlatePlugin } from 'platejs/react';
+import { Fullmektig } from '@/plate/components/fullmektig';
+import { ELEMENT_FULLMEKTIG } from '@/plate/plugins/element-types';
 
 export const FullmektigPlugin = createPlatePlugin({
   key: ELEMENT_FULLMEKTIG,

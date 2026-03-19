@@ -1,14 +1,14 @@
-import { ReturWarning } from '@app/components/behandling/behandlingsdetaljer/warnings';
-import { usePanelContainerRef } from '@app/components/oppgavebehandling-panels/panel-container-ref-context';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { isUtfall } from '@app/functions/is-utfall';
-import { useOppgave } from '@app/hooks/oppgavebehandling/use-oppgave';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { useUtfall } from '@app/hooks/use-utfall';
-import { useUpdateExtraUtfallMutation } from '@app/redux-api/oppgaver/mutations/set-utfall';
-import { type IKodeverkSimpleValue, type SaksTypeEnum, UtfallEnum } from '@app/types/kodeverk';
 import { HelpText, HStack, InlineMessage, Label, VStack } from '@navikt/ds-react';
 import { useCallback, useId, useMemo } from 'react';
+import { ReturWarning } from '@/components/behandling/behandlingsdetaljer/warnings';
+import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { isUtfall } from '@/functions/is-utfall';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import { useUtfall } from '@/hooks/use-utfall';
+import { useUpdateExtraUtfallMutation } from '@/redux-api/oppgaver/mutations/set-utfall';
+import { type IKodeverkSimpleValue, type SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 
 interface TagsProps {
   utfallIdSet: UtfallEnum[];

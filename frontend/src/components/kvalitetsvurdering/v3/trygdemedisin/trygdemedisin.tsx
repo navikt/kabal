@@ -1,20 +1,20 @@
-import { HelpTextRadio } from '@app/components/kvalitetsvurdering/common/kvalitetsvurdering-checkbox';
-import { StyledRadioGroup } from '@app/components/kvalitetsvurdering/common/styled-components';
-import { Checkboxes } from '@app/components/kvalitetsvurdering/v3/common/checkboxes';
-import type { CheckboxParams } from '@app/components/kvalitetsvurdering/v3/common/types';
-import { useKvalitetsvurderingV3 } from '@app/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
-import { useValidationError } from '@app/components/kvalitetsvurdering/v3/common/use-validation-error';
-import { MainReason } from '@app/components/kvalitetsvurdering/v3/data';
-import { getCheckbox } from '@app/components/kvalitetsvurdering/v3/helpers';
+import { Heading, HStack, Radio } from '@navikt/ds-react';
+import { HelpTextRadio } from '@/components/kvalitetsvurdering/common/kvalitetsvurdering-checkbox';
+import { StyledRadioGroup } from '@/components/kvalitetsvurdering/common/styled-components';
+import { Checkboxes } from '@/components/kvalitetsvurdering/v3/common/checkboxes';
+import type { CheckboxParams } from '@/components/kvalitetsvurdering/v3/common/types';
+import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
+import { MainReason } from '@/components/kvalitetsvurdering/v3/data';
+import { getCheckbox } from '@/components/kvalitetsvurdering/v3/helpers';
 import {
   HEADER,
   TrygdemedisinBoolean,
   TrygdemedisinErrorFields,
-} from '@app/components/kvalitetsvurdering/v3/trygdemedisin/data';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { useIsRelevantYtelseForRaadgivende } from '@app/hooks/use-is-relevant-ytelse-for-raadgivende';
-import { RadiovalgExtended } from '@app/types/kaka-kvalitetsvurdering/radio';
-import { Heading, HStack, Radio } from '@navikt/ds-react';
+} from '@/components/kvalitetsvurdering/v3/trygdemedisin/data';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import { useIsRelevantYtelseForRaadgivende } from '@/hooks/use-is-relevant-ytelse-for-raadgivende';
+import { RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
 
 export const Trygdemedisin = () => {
   const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV3();

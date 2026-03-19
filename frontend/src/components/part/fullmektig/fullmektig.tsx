@@ -1,14 +1,14 @@
-import { BehandlingSection } from '@app/components/behandling/behandlingsdetaljer/behandling-section';
-import { CopyButton } from '@app/components/copy-button/copy-button';
-import { CopyIdButton } from '@app/components/copy-button/copy-id-button';
-import { FullmektigLookup } from '@app/components/part-lookup/fullmektig-lookup';
-import { TRYGDERETTEN_ORGNR } from '@app/constants';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useCanEditBehandling } from '@app/hooks/use-can-edit';
-import { useUpdateFullmektigMutation } from '@app/redux-api/oppgaver/mutations/behandling';
-import type { IFullmektig } from '@app/types/oppgave-common';
 import { HStack, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { BehandlingSection } from '@/components/behandling/behandlingsdetaljer/behandling-section';
+import { CopyButton } from '@/components/copy-button/copy-button';
+import { CopyIdButton } from '@/components/copy-button/copy-id-button';
+import { FullmektigLookup } from '@/components/part-lookup/fullmektig-lookup';
+import { TRYGDERETTEN_ORGNR } from '@/constants';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import { useUpdateFullmektigMutation } from '@/redux-api/oppgaver/mutations/behandling';
+import type { IFullmektig } from '@/types/oppgave-common';
 
 interface Props {
   part: IFullmektig | null;

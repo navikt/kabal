@@ -1,16 +1,16 @@
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { Keys, MOD_KEY_TEXT } from '@app/keys';
-import { useSelection } from '@app/plate/hooks/use-selection';
-import { createPlaceHolder } from '@app/plate/templates/helpers';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { useMyPlateEditorRef } from '@app/plate/types';
-import { isPlaceholderActive } from '@app/plate/utils/queries';
-import { insertPlaceholderFromSelection, removePlaceholder } from '@app/plate/utils/transforms';
 import { PencilWritingIcon, PlusIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, TextField } from '@navikt/ds-react';
 import { RangeApi } from 'platejs';
 import { useEditorRef } from 'platejs/react';
 import { useRef, useState } from 'react';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { Keys, MOD_KEY_TEXT } from '@/keys';
+import { useSelection } from '@/plate/hooks/use-selection';
+import { createPlaceHolder } from '@/plate/templates/helpers';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
+import { useMyPlateEditorRef } from '@/plate/types';
+import { isPlaceholderActive } from '@/plate/utils/queries';
+import { insertPlaceholderFromSelection, removePlaceholder } from '@/plate/utils/transforms';
 
 export const InsertPlaceholder = () => {
   const editor = useEditorRef();

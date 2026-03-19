@@ -1,18 +1,18 @@
-import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
-import { areFromPlaceholdersSafeToReplaceWithToPlaceholders } from '@app/plate/components/maltekstseksjon/get-children';
-import { ELEMENT_EMPTY_VOID, ELEMENT_MALTEKST } from '@app/plate/plugins/element-types';
+import { useCallback } from 'react';
+import { areDescendantsEqual } from '@/functions/are-descendants-equal';
+import { areFromPlaceholdersSafeToReplaceWithToPlaceholders } from '@/plate/components/maltekstseksjon/get-children';
+import { ELEMENT_EMPTY_VOID, ELEMENT_MALTEKST } from '@/plate/plugins/element-types';
 import type {
   EmptyVoidElement,
   MaltekstElement,
   MaltekstseksjonElement,
   RedigerbarMaltekstElement,
-} from '@app/plate/types';
-import { isOfElementType } from '@app/plate/utils/queries';
-import { useLazyGetConsumerTextByIdQuery } from '@app/redux-api/texts/consumer';
-import type { IMaltekstseksjon } from '@app/types/maltekstseksjoner/responses';
-import { isConsumerRichText } from '@app/types/texts/consumer';
-import { LANGUAGES } from '@app/types/texts/language';
-import { useCallback } from 'react';
+} from '@/plate/types';
+import { isOfElementType } from '@/plate/utils/queries';
+import { useLazyGetConsumerTextByIdQuery } from '@/redux-api/texts/consumer';
+import type { IMaltekstseksjon } from '@/types/maltekstseksjoner/responses';
+import { isConsumerRichText } from '@/types/texts/consumer';
+import { LANGUAGES } from '@/types/texts/language';
 
 export enum ReplaceMethod {
   AUTO = 0,

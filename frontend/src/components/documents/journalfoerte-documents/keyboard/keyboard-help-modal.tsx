@@ -1,13 +1,13 @@
-import {
-  closeKeyboardHelpModal,
-  useIsKeyboardHelpModalOpen,
-} from '@app/components/documents/journalfoerte-documents/keyboard/state/help-modal';
-import { useHasSeenKeyboardShortcuts } from '@app/hooks/settings/use-setting';
-import { KEY_ICONS, Keys, MOD_KEY } from '@app/keys';
-import { pushEvent } from '@app/observability';
 import { Box, Heading, HGrid, HStack, Modal } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
 import { useCallback, useEffect, useId, useRef } from 'react';
+import {
+  closeKeyboardHelpModal,
+  useIsKeyboardHelpModalOpen,
+} from '@/components/documents/journalfoerte-documents/keyboard/state/help-modal';
+import { useHasSeenKeyboardShortcuts } from '@/hooks/settings/use-setting';
+import { KEY_ICONS, Keys, MOD_KEY } from '@/keys';
+import { pushEvent } from '@/observability';
 
 export const KeyboardHelpModal = () => {
   const ref = useRef<HTMLDialogElement>(null);

@@ -1,29 +1,29 @@
-import { areDescendantsEqual } from '@app/functions/are-descendants-equal';
-import { isNotNull } from '@app/functions/is-not-type-guards';
-import { removeEmptyCharInText } from '@app/functions/remove-empty-char-in-text';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
+import { BaseTablePlugin } from '@platejs/table';
+import { BaseParagraphPlugin, ElementApi, NodeApi, type TElement } from 'platejs';
+import { areDescendantsEqual } from '@/functions/are-descendants-equal';
+import { isNotNull } from '@/functions/is-not-type-guards';
+import { removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
 import {
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
   ELEMENT_PLACEHOLDER,
   ELEMENT_REDIGERBAR_MALTEKST,
-} from '@app/plate/plugins/element-types';
-import type { TemplateSections } from '@app/plate/template-sections';
-import { createMaltekst, createRedigerbarMaltekst } from '@app/plate/templates/helpers';
+} from '@/plate/plugins/element-types';
+import type { TemplateSections } from '@/plate/template-sections';
+import { createMaltekst, createRedigerbarMaltekst } from '@/plate/templates/helpers';
 import type {
   MaltekstElement,
   MaltekstseksjonElement,
   ParentOrChildElement,
   PlaceholderElement,
   RedigerbarMaltekstElement,
-} from '@app/plate/types';
-import { isOfElementType, isOfElementTypesFn } from '@app/plate/utils/queries';
-import { RichTextTypes } from '@app/types/common-text-types';
-import type { IConsumerRichText } from '@app/types/texts/consumer';
-import type { Language } from '@app/types/texts/language';
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
-import { BaseTablePlugin } from '@platejs/table';
-import { BaseParagraphPlugin, ElementApi, NodeApi, type TElement } from 'platejs';
+} from '@/plate/types';
+import { isOfElementType, isOfElementTypesFn } from '@/plate/utils/queries';
+import { RichTextTypes } from '@/types/common-text-types';
+import type { IConsumerRichText } from '@/types/texts/consumer';
+import type { Language } from '@/types/texts/language';
 
 export const getNewChildren = (
   texts: IConsumerRichText[],

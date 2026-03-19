@@ -1,20 +1,20 @@
-import { toast } from '@app/components/toast/store';
-import { isoDateToPretty } from '@app/domain/date';
-import { ENVIRONMENT } from '@app/environment';
-import { reduxStore } from '@app/redux/configure-store';
-import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
-import { behandlingerQuerySlice } from '@app/redux-api/oppgaver/queries/behandling/behandling';
-import { oppgaveDataQuerySlice } from '@app/redux-api/oppgaver/queries/oppgave-data';
-import type { IOppgavebehandling } from '@app/types/oppgavebehandling/oppgavebehandling';
+import { toast } from '@/components/toast/store';
+import { isoDateToPretty } from '@/domain/date';
+import { ENVIRONMENT } from '@/environment';
+import { reduxStore } from '@/redux/configure-store';
+import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import { behandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
+import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 import type {
   IFristParams,
   IKjennelseMottattParams,
   IMottattKlageinstansParams,
   IMottattVedtaksinstansParams,
   ISendtTilTrygderettenParams,
-} from '@app/types/oppgavebehandling/params';
-import type { IModifiedResponse } from '@app/types/oppgavebehandling/response';
-import type { IOppgave } from '@app/types/oppgaver';
+} from '@/types/oppgavebehandling/params';
+import type { IModifiedResponse } from '@/types/oppgavebehandling/response';
+import type { IOppgave } from '@/types/oppgaver';
 
 const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

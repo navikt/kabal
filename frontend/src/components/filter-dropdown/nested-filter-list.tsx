@@ -1,10 +1,10 @@
-import { MultiSelectDropdown } from '@app/components/filter-dropdown/multi-select-dropdown';
-import type { BaseProps, IOption } from '@app/components/filter-dropdown/props';
-import { GLOBAL, LIST_DELIMITER } from '@app/components/smart-editor-texts/types';
-import { stringToRegExp } from '@app/functions/string-to-regex';
 import { BulletListIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Checkbox, HGrid, HStack, Tag, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { MultiSelectDropdown } from '@/components/filter-dropdown/multi-select-dropdown';
+import type { BaseProps, IOption } from '@/components/filter-dropdown/props';
+import { GLOBAL, LIST_DELIMITER } from '@/components/smart-editor-texts/types';
+import { stringToRegExp } from '@/functions/string-to-regex';
 
 export enum OptionType {
   GROUP = 'group',

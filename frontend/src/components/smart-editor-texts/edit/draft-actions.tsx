@@ -1,15 +1,15 @@
-import { DeleteDraftButton } from '@app/components/smart-editor-texts/delete-draft-button';
-import { DuplicateTextButton } from '@app/components/smart-editor-texts/duplicate-text-button';
-import { isDepublished, isPublished } from '@app/components/smart-editor-texts/functions/status-helpers';
-import { UnpublishTextButton } from '@app/components/smart-editor-texts/unpublish-text-button';
-import { useRedaktoerLanguage } from '@app/hooks/use-redaktoer-language';
-import { usePublishMutation } from '@app/redux-api/texts/mutations';
-import { useGetTextVersionsQuery } from '@app/redux-api/texts/queries';
-import { LANGUAGE_NAMES } from '@app/types/texts/language';
-import type { IText } from '@app/types/texts/responses';
 import { TrashIcon, UploadIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage, HStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
+import { DeleteDraftButton } from '@/components/smart-editor-texts/delete-draft-button';
+import { DuplicateTextButton } from '@/components/smart-editor-texts/duplicate-text-button';
+import { isDepublished, isPublished } from '@/components/smart-editor-texts/functions/status-helpers';
+import { UnpublishTextButton } from '@/components/smart-editor-texts/unpublish-text-button';
+import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
+import { usePublishMutation } from '@/redux-api/texts/mutations';
+import { useGetTextVersionsQuery } from '@/redux-api/texts/queries';
+import { LANGUAGE_NAMES } from '@/types/texts/language';
+import type { IText } from '@/types/texts/responses';
 
 interface Props {
   text: IText;

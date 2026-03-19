@@ -1,10 +1,10 @@
-import { setErrorMessage } from '@app/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
-import { Receivers } from '@app/components/receivers/receivers';
-import { useSetReceiversMutation } from '@app/redux-api/forlenget-behandlingstid';
-import type { IMottaker } from '@app/types/documents/documents';
-import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@app/types/field-names';
 import { ErrorMessage, Heading, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
+import { setErrorMessage } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/use-debounce';
+import { Receivers } from '@/components/receivers/receivers';
+import { useSetReceiversMutation } from '@/redux-api/forlenget-behandlingstid';
+import type { IMottaker } from '@/types/documents/documents';
+import { UTVIDET_BEHANDLINGSTID_FIELD_NAMES, UtvidetBehandlingstidFieldName } from '@/types/field-names';
 
 interface Props {
   value: IMottaker[];

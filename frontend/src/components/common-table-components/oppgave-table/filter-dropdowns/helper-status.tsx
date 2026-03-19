@@ -1,24 +1,24 @@
+import { Table } from '@navikt/ds-react';
+import { useCallback, useMemo } from 'react';
+import { useSearchParams } from 'react-router';
 import type {
   FilterDropdownProps,
   HelperStatus,
-} from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
+} from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
 import {
   CommonHelperStatus,
   HelperStatusSelf,
-} from '@app/components/common-table-components/oppgave-table/filter-dropdowns/types';
-import { ShortParamKey } from '@app/components/common-table-components/oppgave-table/state/short-names';
+} from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
+import { ShortParamKey } from '@/components/common-table-components/oppgave-table/state/short-names';
 import {
   fromTyperParam,
   useOppgaveTableHelperStatusWithoutSelf,
   useOppgaveTableHelperStatusWithSelf,
   useOppgaveTableTyper,
-} from '@app/components/common-table-components/oppgave-table/state/use-state';
-import { TABLE_HEADERS } from '@app/components/common-table-components/types';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { SaksTypeEnum } from '@app/types/kodeverk';
-import { Table } from '@navikt/ds-react';
-import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router';
+} from '@/components/common-table-components/oppgave-table/state/use-state';
+import { TABLE_HEADERS } from '@/components/common-table-components/types';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 interface StatusOption {
   value: HelperStatus;

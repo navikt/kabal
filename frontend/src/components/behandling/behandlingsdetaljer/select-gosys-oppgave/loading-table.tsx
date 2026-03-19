@@ -1,5 +1,5 @@
-import { TableHeader } from '@app/components/behandling/behandlingsdetaljer/select-gosys-oppgave/table-header';
 import { Skeleton, Table } from '@navikt/ds-react';
+import { TableHeader } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/table-header';
 
 export const LoadingTable = () => (
   <Table size="small" zebraStripes>

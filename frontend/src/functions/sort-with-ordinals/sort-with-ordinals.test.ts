@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { sortWithOrdinals } from '@app/functions/sort-with-ordinals/sort-with-ordinals';
+import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
 
 const sortStrings = (texts: string[]) => texts.sort((a, b) => sortWithOrdinals(a, b));
 

@@ -1,17 +1,17 @@
-import { UploadFileButton } from '@app/components/upload-file-button/upload-file-button';
-import { DuaActionEnum } from '@app/hooks/dua-access/access';
-import { useCreatorRole } from '@app/hooks/dua-access/use-creator-role';
-import { useDuaAccess } from '@app/hooks/dua-access/use-dua-access';
-import { useOppgaveId } from '@app/hooks/oppgavebehandling/use-oppgave-id';
-import { useSmartEditorActiveDocument } from '@app/hooks/settings/use-setting';
-import { useIsFeilregistrert } from '@app/hooks/use-is-feilregistrert';
-import { ROL_ANSWERS_TEMPLATE } from '@app/plate/templates/simple-templates';
-import { useCreateSmartDocumentMutation } from '@app/redux-api/collaboration';
-import { DocumentTypeEnum, type IParentDocument } from '@app/types/documents/documents';
-import { Language } from '@app/types/texts/language';
 import { Chat2Icon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { UploadFileButton } from '@/components/upload-file-button/upload-file-button';
+import { DuaActionEnum } from '@/hooks/dua-access/access';
+import { useCreatorRole } from '@/hooks/dua-access/use-creator-role';
+import { useDuaAccess } from '@/hooks/dua-access/use-dua-access';
+import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useSmartEditorActiveDocument } from '@/hooks/settings/use-setting';
+import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
+import { ROL_ANSWERS_TEMPLATE } from '@/plate/templates/simple-templates';
+import { useCreateSmartDocumentMutation } from '@/redux-api/collaboration';
+import { DocumentTypeEnum, type IParentDocument } from '@/types/documents/documents';
+import { Language } from '@/types/texts/language';
 
 interface Props {
   document: IParentDocument;

@@ -1,8 +1,8 @@
-import { useOnClickOutside } from '@app/hooks/use-on-click-outside';
-import { useCompleteMerkantilTaskMutation } from '@app/redux-api/internal';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, Textarea, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { useCompleteMerkantilTaskMutation } from '@/redux-api/internal';
 
 interface Props {
   id: string;

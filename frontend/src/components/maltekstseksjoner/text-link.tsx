@@ -1,7 +1,7 @@
-import { StatusTag, type StatusTagProps } from '@app/components/maltekstseksjoner/status-tag';
-import { isoDateTimeToPretty } from '@app/domain/date';
 import { HGrid, Tag } from '@navikt/ds-react';
 import { Link } from 'react-router-dom';
+import { StatusTag, type StatusTagProps } from '@/components/maltekstseksjoner/status-tag';
+import { isoDateTimeToPretty } from '@/domain/date';
 
 interface TextLinkProps extends StatusTagProps {
   children: string;

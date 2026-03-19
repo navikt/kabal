@@ -1,5 +1,3 @@
-import { isoDateTimeToPretty } from '@app/domain/date';
-import { TimelineTypes } from '@app/types/arkiverte-documents';
 import {
   ArrowUndoIcon,
   ChevronRightIcon,
@@ -13,6 +11,8 @@ import {
 } from '@navikt/aksel-icons';
 import { Box, type BoxProps, Button, Detail, Label, Popover, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
+import { isoDateTimeToPretty } from '@/domain/date';
+import { TimelineTypes } from '@/types/arkiverte-documents';
 
 interface RelevantDateTimelineItemProps {
   timestamp: string;

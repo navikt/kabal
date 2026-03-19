@@ -1,14 +1,14 @@
-import { SmartEditorContext } from '@app/components/smart-editor/context';
-import { MOD_KEY_TEXT } from '@app/keys';
-import { pushEvent } from '@app/observability';
-import { DefaultToolbarButtons } from '@app/plate/toolbar/default-toolbar-buttons';
-import { ToolbarSeparator } from '@app/plate/toolbar/separator';
-import { StyledToolbar } from '@app/plate/toolbar/styled-components';
-import { ToolbarIconButton } from '@app/plate/toolbar/toolbarbutton';
-import { SaksbehandlerSettings } from '@app/plate/toolbar/toolbars/saksbehandler-settings';
-import { SearchReplaceToolbarButton } from '@app/plate/toolbar/toolbars/search-replace-toolbar-button';
 import { ClockDashedIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import { useContext } from 'react';
+import { SmartEditorContext } from '@/components/smart-editor/context';
+import { MOD_KEY_TEXT } from '@/keys';
+import { pushEvent } from '@/observability';
+import { DefaultToolbarButtons } from '@/plate/toolbar/default-toolbar-buttons';
+import { ToolbarSeparator } from '@/plate/toolbar/separator';
+import { StyledToolbar } from '@/plate/toolbar/styled-components';
+import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
+import { SaksbehandlerSettings } from '@/plate/toolbar/toolbars/saksbehandler-settings';
+import { SearchReplaceToolbarButton } from '@/plate/toolbar/toolbars/search-replace-toolbar-button';
 
 export const SaksbehandlerToolbar = () => {
   const { showGodeFormuleringer, setShowGodeFormuleringer, showHistory, setShowHistory } =

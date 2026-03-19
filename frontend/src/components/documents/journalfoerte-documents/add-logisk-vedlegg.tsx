@@ -1,9 +1,9 @@
-import { CreateLogiskVedlegg } from '@app/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/create';
-import { LogiskeVedleggListItemStyle } from '@app/components/documents/styled-components/attachment-list';
-import type { LogiskVedlegg } from '@app/types/arkiverte-documents';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useCallback, useRef, useState } from 'react';
+import { CreateLogiskVedlegg } from '@/components/documents/journalfoerte-documents/document/logiske-vedlegg/editable/create';
+import { LogiskeVedleggListItemStyle } from '@/components/documents/styled-components/attachment-list';
+import type { LogiskVedlegg } from '@/types/arkiverte-documents';
 
 interface Props {
   hasVedlegg: boolean;

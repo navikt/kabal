@@ -1,14 +1,15 @@
-import { ISO_DATETIME_FORMAT } from '@app/components/date-picker/constants';
-import { toast } from '@app/components/toast/store';
-import { areJournalfoertDocumentsEqual } from '@app/domain/journalfoerte-documents';
-import { ENVIRONMENT } from '@app/environment';
-import { getIsIncomingDocument } from '@app/functions/is-incoming-document';
-import { reduxStore } from '@app/redux/configure-store';
-import { oppgaverApi } from '@app/redux-api/oppgaver/oppgaver';
-import { documentsQuerySlice } from '@app/redux-api/oppgaver/queries/documents';
-import { user } from '@app/static-data/static-data';
-import { Journalposttype } from '@app/types/arkiverte-documents';
-import type { IDocumentParams } from '@app/types/documents/common-params';
+import { format } from 'date-fns';
+import { ISO_DATETIME_FORMAT } from '@/components/date-picker/constants';
+import { toast } from '@/components/toast/store';
+import { areJournalfoertDocumentsEqual } from '@/domain/journalfoerte-documents';
+import { ENVIRONMENT } from '@/environment';
+import { getIsIncomingDocument } from '@/functions/is-incoming-document';
+import { reduxStore } from '@/redux/configure-store';
+import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
+import { user } from '@/static-data/static-data';
+import { Journalposttype } from '@/types/arkiverte-documents';
+import type { IDocumentParams } from '@/types/documents/common-params';
 import {
   CreatorRole,
   DistribusjonsType,
@@ -16,7 +17,7 @@ import {
   type IDocument,
   type IFileDocument,
   type InngaaendeKanal,
-} from '@app/types/documents/documents';
+} from '@/types/documents/documents';
 import {
   type ICreateFileDocumentParams,
   type ICreateVedleggParams,
@@ -26,14 +27,9 @@ import {
   type ISetParentParams,
   type ISetTypeParams,
   mottakerToInputMottaker,
-} from '@app/types/documents/params';
-import type {
-  ICreateVedleggResponse,
-  IModifiedDocumentResponse,
-  ISetParentResponse,
-} from '@app/types/documents/response';
-import type { IdentifikatorPart } from '@app/types/oppgave-common';
-import { format } from 'date-fns';
+} from '@/types/documents/params';
+import type { ICreateVedleggResponse, IModifiedDocumentResponse, ISetParentResponse } from '@/types/documents/response';
+import type { IdentifikatorPart } from '@/types/oppgave-common';
 
 export const documentsMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,

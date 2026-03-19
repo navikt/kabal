@@ -1,8 +1,8 @@
-import { Fields } from '@app/components/documents/journalfoerte-documents/grid';
-import type { useFilters } from '@app/components/documents/journalfoerte-documents/header/use-filters';
-import { SearchableMultiSelect } from '@app/components/searchable-select/searchable-multi-select/searchable-multi-select';
-import { isNotUndefined } from '@app/functions/is-not-type-guards';
-import { Journalposttype } from '@app/types/arkiverte-documents';
+import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
+import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import { isNotUndefined } from '@/functions/is-not-type-guards';
+import { Journalposttype } from '@/types/arkiverte-documents';
 
 interface Props extends Pick<ReturnType<typeof useFilters>, 'selectedTypes' | 'setSelectedTypes'> {}
 

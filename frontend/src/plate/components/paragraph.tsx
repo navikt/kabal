@@ -1,7 +1,7 @@
-import { ptToEm } from '@app/plate/components/get-scaled-em';
-import type { ParagraphElement, PlaceholderElement } from '@app/plate/types';
 import { TextApi } from 'platejs';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
+import { ptToEm } from '@/plate/components/get-scaled-em';
+import type { ParagraphElement, PlaceholderElement } from '@/plate/types';
 
 type RenderProps = PlateElementProps<ParagraphElement>;
 

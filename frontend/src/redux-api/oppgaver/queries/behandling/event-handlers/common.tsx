@@ -1,6 +1,6 @@
-import { PartNameAndIdentifikator } from '@app/components/part-name-and-identifikator/part-name-and-identifikator';
-import { formatEmployeeNameAndIdFallback } from '@app/domain/employee-name';
-import type { INavEmployee } from '@app/types/bruker';
+import { PartNameAndIdentifikator } from '@/components/part-name-and-identifikator/part-name-and-identifikator';
+import { formatEmployeeNameAndIdFallback } from '@/domain/employee-name';
+import type { INavEmployee } from '@/types/bruker';
 
 interface Props {
   identifikator: string | null;

@@ -1,8 +1,8 @@
-import { useIsAssignedMedunderskriverAndSent } from '@app/hooks/use-is-medunderskriver';
-import { useSetMedunderskriverFlowStateMutation } from '@app/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
-import { FlowState, type IMedunderskriverRol } from '@app/types/oppgave-common';
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
+import { useIsAssignedMedunderskriverAndSent } from '@/hooks/use-is-medunderskriver';
+import { useSetMedunderskriverFlowStateMutation } from '@/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
+import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;

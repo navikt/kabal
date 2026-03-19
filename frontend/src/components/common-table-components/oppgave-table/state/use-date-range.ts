@@ -1,7 +1,7 @@
-import { ShortParamKey } from '@app/components/common-table-components/oppgave-table/state/short-names';
-import type { OppgaveTableKey } from '@app/components/common-table-components/oppgave-table/types';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router';
+import { ShortParamKey } from '@/components/common-table-components/oppgave-table/state/short-names';
+import type { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 
 const DATE_SEPARATOR = '_';
 
