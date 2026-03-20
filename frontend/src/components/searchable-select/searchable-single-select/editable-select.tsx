@@ -37,27 +37,27 @@ export const EditableSelect = <T,>({
 }: SearchableSelectProps<T>) => {
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
-  const [pendingValue, setPendingValue] = useState<T | null | undefined>(undefined);
+  const [draftValue, setDraftValue] = useState<T | null | undefined>(undefined);
   const virtualizedOptionListHandle = useRef<VirtualizedOptionListHandle>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef<number>(null);
   const savedScrollTopRef = useRef<number | null>(null);
 
-  const pendingValueRef = useRef<T | null | undefined>(undefined);
-  pendingValueRef.current = pendingValue;
+  const draftValueRef = useRef<T | null | undefined>(undefined);
+  draftValueRef.current = draftValue;
 
   const { highlightedIndex, setHighlightedIndex, highlightedIndexRef } = useHighlight(deferredSearch);
 
-  const confirmPending = useCallback(
-    (pending: T | null | undefined) => {
-      if (pending === undefined || optionsMatch(pending, value, valueKey)) {
+  const confirmDraft = useCallback(
+    (draft: T | null | undefined) => {
+      if (draft === undefined || optionsMatch(draft, value, valueKey)) {
         return;
       }
 
-      if (pending === null) {
+      if (draft === null) {
         onClear?.();
       } else {
-        onChange(pending);
+        onChange(draft);
       }
     },
     [value, onChange, onClear, valueKey],
@@ -68,7 +68,7 @@ export const EditableSelect = <T,>({
       savedScrollTopRef.current = scrollContainerRef?.current?.scrollTop ?? null;
       setSearch('');
       setHighlightedIndex(0);
-      setPendingValue(undefined);
+      setDraftValue(undefined);
 
       requestAnimationFrame(() => {
         scrolledRef.current = scrollPopoverIntoView(scrollContainerRef, popoverRef);
@@ -76,10 +76,10 @@ export const EditableSelect = <T,>({
     },
     onClose: () => {
       if (!requireConfirmation) {
-        confirmPending(pendingValueRef.current);
+        confirmDraft(draftValueRef.current);
       }
 
-      setPendingValue(undefined);
+      setDraftValue(undefined);
 
       // Restore scroll position after focus, so the browser's auto-scroll from focus() doesn't override the restore.
       requestAnimationFrame(() => {
@@ -119,9 +119,9 @@ export const EditableSelect = <T,>({
   }, [onClear, options, deferredSearch, filterOption]);
 
   const handleConfirm = useCallback(() => {
-    confirmPending(pendingValue);
+    confirmDraft(draftValue);
     handleClose();
-  }, [pendingValue, confirmPending, handleClose]);
+  }, [draftValue, confirmDraft, handleClose]);
 
   const scrollToIndex = useCallback((index: number) => {
     virtualizedOptionListHandle.current?.scrollToIndex(index);
@@ -151,10 +151,10 @@ export const EditableSelect = <T,>({
         return;
       }
 
-      requestAnimationFrame(() => confirmPending(option));
+      requestAnimationFrame(() => confirmDraft(option));
       handleClose();
     },
-    [confirmPending, handleClose],
+    [confirmDraft, handleClose],
   );
 
   const handleKeyDown = useCallback(
@@ -163,7 +163,7 @@ export const EditableSelect = <T,>({
         e.preventDefault();
 
         if (requireConfirmation) {
-          confirmAndClose(pendingValueRef.current);
+          confirmAndClose(draftValueRef.current);
         } else {
           const option = getHighlightedOption(filteredOptions);
           confirmAndClose(option);
@@ -185,7 +185,7 @@ export const EditableSelect = <T,>({
         }
 
         if (requireConfirmation) {
-          setPendingValue(option);
+          setDraftValue(option);
         } else {
           confirmAndClose(option);
         }
@@ -198,7 +198,7 @@ export const EditableSelect = <T,>({
     (newValue: string) => {
       if (newValue === NULL_KEY) {
         if (requireConfirmation) {
-          setPendingValue(null);
+          setDraftValue(null);
         } else {
           confirmAndClose(null);
         }
@@ -210,7 +210,7 @@ export const EditableSelect = <T,>({
         }
 
         if (requireConfirmation) {
-          setPendingValue(option);
+          setDraftValue(option);
         } else {
           confirmAndClose(option);
         }
@@ -219,8 +219,8 @@ export const EditableSelect = <T,>({
     [optionsByKey, requireConfirmation, confirmAndClose],
   );
 
-  const hasPendingChange = pendingValue !== undefined && !optionsMatch(pendingValue, value, valueKey);
-  const displayKey = pendingValue !== undefined ? getKey(pendingValue) : getKey(value);
+  const hasDraftChange = draftValue !== undefined && !optionsMatch(draftValue, value, valueKey);
+  const displayKey = draftValue !== undefined ? getKey(draftValue) : getKey(value);
 
   return (
     <SelectPopover
@@ -237,7 +237,7 @@ export const EditableSelect = <T,>({
       onButtonKeyDown={onButtonKeyDown}
       onClose={handleClose}
       onPopoverKeyDown={handleKeyDown}
-      hasPendingChange={hasPendingChange}
+      hasDraftChange={hasDraftChange}
       confirmLabel={confirmLabel}
       onConfirm={handleConfirm}
       keyboardShortcuts={
