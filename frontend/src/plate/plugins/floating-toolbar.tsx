@@ -1,5 +1,11 @@
 import { Box } from '@navikt/ds-react';
-import { flip, offset, useFloatingToolbar, useFloatingToolbarState } from '@platejs/floating';
+import {
+  flip,
+  getDOMSelectionBoundingClientRect,
+  offset,
+  useFloatingToolbar,
+  useFloatingToolbarState,
+} from '@platejs/floating';
 import {
   createPlatePlugin,
   useComposedRef,
@@ -45,6 +51,7 @@ const FloatingToolbar = ({ children }: { children: ReactNode }) => {
     floatingOptions: {
       placement: 'top-start',
       middleware: [offset({ mainAxis: OFFSET_TOP }), flip({ fallbackPlacements: ['top-end'] })],
+      getBoundingClientRect: getDOMSelectionBoundingClientRect,
     },
     showWhenReadOnly: false,
   });

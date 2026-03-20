@@ -1,5 +1,6 @@
 import { Box, HStack } from '@navikt/ds-react';
 import { BaseTablePlugin } from '@platejs/table';
+import { useEventEditorValue } from 'platejs/react';
 import { useContext, useEffect, useState } from 'react';
 import { ScaleContext } from '@/plate/status-bar/scale-context';
 import { CommentsButton } from '@/plate/toolbar/add-comment';
@@ -7,7 +8,7 @@ import { InsertPlaceholder } from '@/plate/toolbar/insert-placeholder';
 import { Marks } from '@/plate/toolbar/marks';
 import { ToolbarSeparator } from '@/plate/toolbar/separator';
 import { TableButtons } from '@/plate/toolbar/table/table';
-import { type TableElement, useMyPlateEditorRef, useMyPlateEditorState } from '@/plate/types';
+import { type TableElement, useMyPlateEditorState } from '@/plate/types';
 
 interface Props {
   editorId: string;
@@ -25,11 +26,12 @@ const TableToolbar = ({ editorId, container, children }: TableToolbarProps) => {
 
   const position = useTablePosition(table, container);
 
+  const focusedEditorId = useEventEditorValue('focus');
+  const isFocused = editorId === focusedEditorId;
+
   if (position === null) {
     return null;
   }
-
-  const isFocused = editor.api.isFocused();
 
   if (!isFocused) {
     return null;
@@ -78,7 +80,6 @@ const ROW_HEIGHT = 32;
 const TABLE_TOOLBAR_OFFSET = 8;
 
 const useTablePosition = (table: TableElement | null, container: HTMLDivElement | null) => {
-  const editor = useMyPlateEditorRef();
   const [position, setPosition] = useState<[number, number] | null>(null);
   const { scale } = useContext(ScaleContext);
 
@@ -91,9 +92,17 @@ const useTablePosition = (table: TableElement | null, container: HTMLDivElement 
 
     const handle = requestIdleCallback(
       () => {
-        const domNode = editor.api.toDOMNode(table);
+        const { id } = table;
 
-        if (domNode === undefined) {
+        if (id === undefined) {
+          setPosition(null);
+
+          return;
+        }
+
+        const domNode = document.getElementById(id);
+
+        if (domNode === null) {
           setPosition(null);
 
           return;
@@ -114,7 +123,7 @@ const useTablePosition = (table: TableElement | null, container: HTMLDivElement 
     );
 
     return () => cancelIdleCallback(handle);
-  }, [container, editor, table, scale]);
+  }, [container, table, scale]);
 
   return position;
 };

@@ -8,7 +8,7 @@ export const TableElement = withHOC(TableProvider, ({ children, ref, ...props }:
 
   return (
     <PlateElement style={{ marginLeft: ptToEm(24 * (props.element.indent ?? 0)) }} {...props}>
-      <table className="mt-4 max-w-full border-collapse" ref={ref} {...tableProps}>
+      <table className="mt-4 max-w-full border-collapse" ref={ref} {...tableProps} id={props.element.id}>
         <tbody>{children}</tbody>
       </table>
     </PlateElement>

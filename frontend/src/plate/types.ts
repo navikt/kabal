@@ -112,6 +112,7 @@ export interface ListItemElement extends BlockElement {
 export interface TableElement extends TTableElement, BlockElement, IndentableStyleProps {
   type: typeof BaseTablePlugin.key;
   children: TableRowElement[];
+  id?: string;
 }
 
 export interface TableRowElement extends BlockElement, TTableRowElement {
