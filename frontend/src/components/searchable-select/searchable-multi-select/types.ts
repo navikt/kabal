@@ -22,13 +22,22 @@ export interface SearchableMultiSelectProps<T> {
   /** Called when the user confirms a new selection. */
   onChange: (values: T[]) => void;
   disabled?: boolean;
-  /** When true, renders the selected values as static pills without any interactive controls. */
+  /**
+   * When `true`, renders the selected values as static pills without any interactive controls.
+   * @default false
+   */
   readOnly?: boolean;
   error?: string;
   confirmLabel?: string;
-  /** When `true`, the user must explicitly confirm via the button or keyboard shortcut. When `false`, the selection is applied automatically when the popover closes. */
+  /**
+   * When `true`, the user must explicitly confirm via the button or keyboard shortcut. When `false`, the selection is applied automatically when the popover closes.
+   * @default false
+   */
   requireConfirmation?: boolean;
-  /** Whether the popover should flip its placement when it reaches the viewport edge. */
+  /**
+   * Whether the popover should flip its placement when it reaches the viewport edge.
+   * @default false
+   */
   flip?: boolean;
   /** Ref to the nearest scrollable ancestor. When provided, the container is scrolled to reveal the popover on open. */
   scrollContainerRef?: RefObject<HTMLElement | null>;
