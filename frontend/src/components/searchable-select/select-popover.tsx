@@ -38,6 +38,8 @@ interface SelectPopoverProps {
   hasPendingChange: boolean;
   confirmLabel: string;
   onConfirm: () => void;
+  /** Whether to show the confirm button and its keyboard shortcut row. Defaults to `true`. */
+  showConfirm?: boolean;
   keyboardShortcuts: KeyboardShortcut[];
   /** The trigger button content. */
   trigger: ReactNode;
@@ -70,6 +72,7 @@ export const SelectPopover = ({
   hasPendingChange,
   confirmLabel,
   onConfirm,
+  showConfirm = true,
   keyboardShortcuts,
   trigger,
   flip,
@@ -80,7 +83,6 @@ export const SelectPopover = ({
 }: SelectPopoverProps) => {
   const searchRef = useRef<HTMLInputElement>(null);
   const popoverId = useId();
-  const confirmShortcut = `${MOD_KEY_TEXT} + Enter`;
 
   useEffect(() => {
     if (open) {
@@ -152,23 +154,25 @@ export const SelectPopover = ({
 
           {children}
 
-          <Tooltip content={confirmLabel} keys={[MOD_KEY_TEXT, 'Enter']}>
-            <Button
-              size="small"
-              variant={hasPendingChange ? 'primary' : 'secondary-neutral'}
-              onClick={onConfirm}
-              disabled={!hasPendingChange}
-              className="w-full"
-            >
-              <div className="flex gap-2">
-                <span>{confirmLabel}</span>
+          {showConfirm ? (
+            <Tooltip content={confirmLabel} keys={[MOD_KEY_TEXT, 'Enter']}>
+              <Button
+                size="small"
+                variant={hasPendingChange ? 'primary' : 'secondary-neutral'}
+                onClick={onConfirm}
+                disabled={!hasPendingChange}
+                className="w-full"
+              >
+                <div className="flex gap-2">
+                  <span>{confirmLabel}</span>
 
-                <Tag variant="strong" data-color="neutral" size="xsmall">
-                  {confirmShortcut}
-                </Tag>
-              </div>
-            </Button>
-          </Tooltip>
+                  <Tag variant="strong" data-color="neutral" size="xsmall">
+                    {CONFIRM_SHORTCUT}
+                  </Tag>
+                </div>
+              </Button>
+            </Tooltip>
+          ) : null}
 
           <Box
             as="dl"
@@ -184,7 +188,7 @@ export const SelectPopover = ({
             {keyboardShortcuts.map(({ shortcuts, description }) => (
               <KeyRow key={shortcuts.join('+')} shortcuts={shortcuts} description={description} />
             ))}
-            <KeyRow shortcuts={[confirmShortcut]} description={confirmLabel} />
+            {showConfirm ? <KeyRow shortcuts={[CONFIRM_SHORTCUT]} description={confirmLabel} /> : null}
             <KeyRow shortcuts={['Esc']} description="Lukk" />
           </Box>
         </Popover.Content>
@@ -192,3 +196,5 @@ export const SelectPopover = ({
     </VStack>
   );
 };
+
+const CONFIRM_SHORTCUT = `${MOD_KEY_TEXT} + Enter`;

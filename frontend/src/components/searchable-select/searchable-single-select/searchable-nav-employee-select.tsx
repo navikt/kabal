@@ -56,6 +56,7 @@ export const SearchableNavEmployeeSelect = ({
       filterOption={employeeFilterOption}
       confirmLabel={confirmLabel}
       flip={flip}
+      requireConfirmation
     />
   );
 };

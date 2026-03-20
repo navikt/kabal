@@ -21,6 +21,8 @@ export interface SearchableSelectProps<T> {
   size?: 'small' | 'medium';
   error?: string;
   confirmLabel: string;
+  /** When `true`, the user must explicitly confirm via the button or keyboard shortcut. When `false`, the selection is applied automatically when the popover closes. */
+  requireConfirmation?: boolean;
   /** Whether the popover should flip its placement when it reaches the viewport edge. */
   flip?: boolean;
   /** Ref to the nearest scrollable ancestor. When provided, the container is scrolled to reveal the popover on open. */
