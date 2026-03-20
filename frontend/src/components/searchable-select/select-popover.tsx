@@ -35,7 +35,7 @@ interface SelectPopoverProps {
   onButtonKeyDown: (e: React.KeyboardEvent) => void;
   onClose: () => void;
   onPopoverKeyDown: (e: React.KeyboardEvent) => void;
-  hasPendingChange: boolean;
+  hasDraftChange: boolean;
   confirmLabel: string;
   onConfirm: () => void;
   /** Whether to show the confirm button and its keyboard shortcut row. Defaults to `true`. */
@@ -69,7 +69,7 @@ export const SelectPopover = ({
   onButtonKeyDown,
   onClose,
   onPopoverKeyDown,
-  hasPendingChange,
+  hasDraftChange,
   confirmLabel,
   onConfirm,
   showConfirm = true,
@@ -158,9 +158,9 @@ export const SelectPopover = ({
             <Tooltip content={confirmLabel} keys={[MOD_KEY_TEXT, 'Enter']}>
               <Button
                 size="small"
-                variant={hasPendingChange ? 'primary' : 'secondary-neutral'}
+                variant={hasDraftChange ? 'primary' : 'secondary-neutral'}
                 onClick={onConfirm}
-                disabled={!hasPendingChange}
+                disabled={!hasDraftChange}
                 className="w-full"
               >
                 <div className="flex gap-2">

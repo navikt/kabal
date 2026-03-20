@@ -43,7 +43,7 @@ export const EditableMultiSelect = <T,>({
 }: SearchableMultiSelectProps<T>) => {
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
-  const [pendingKeys, setPendingKeys] = useState<Set<string> | undefined>(undefined);
+  const [draftKeys, setDraftKeys] = useState<Set<string> | undefined>(undefined);
   const virtualizedOptionListHandle = useRef<VirtualizedOptionListHandle>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef<number>(null);
@@ -68,19 +68,19 @@ export const EditableMultiSelect = <T,>({
       savedScrollTopRef.current = scrollContainerRef?.current?.scrollTop ?? null;
       setSearch('');
       setHighlightedIndex(0);
-      setPendingKeys(undefined);
+      setDraftKeys(undefined);
 
       requestAnimationFrame(() => {
         scrolledRef.current = scrollPopoverIntoView(scrollContainerRef, popoverRef);
       });
     },
     onClose: () => {
-      if (!requireConfirmation && pendingKeys !== undefined && !setsEqual(pendingKeys, currentKeys)) {
-        const selectedOptions = options.filter((o) => pendingKeys.has(valueKey(o)));
+      if (!requireConfirmation && draftKeys !== undefined && !setsEqual(draftKeys, currentKeys)) {
+        const selectedOptions = options.filter((o) => draftKeys.has(valueKey(o)));
         onChange(selectedOptions);
       }
 
-      setPendingKeys(undefined);
+      setDraftKeys(undefined);
 
       // Restore scroll position after focus, so the browser's auto-scroll from focus() doesn't override the restore.
       requestAnimationFrame(() => {
@@ -100,9 +100,9 @@ export const EditableMultiSelect = <T,>({
     },
   });
 
-  const activeKeys = pendingKeys ?? currentKeys;
+  const activeKeys = draftKeys ?? currentKeys;
 
-  const hasPendingChange = pendingKeys !== undefined && !setsEqual(pendingKeys, currentKeys);
+  const hasDraftChange = draftKeys !== undefined && !setsEqual(draftKeys, currentKeys);
 
   const filteredSelectedCount = filteredOptions.filter((o) => activeKeys.has(valueKey(o))).length;
   const allFilteredSelected = filteredSelectedCount === filteredOptions.length && filteredOptions.length > 0;
@@ -111,7 +111,7 @@ export const EditableMultiSelect = <T,>({
     (option: T) => {
       const key = valueKey(option);
 
-      setPendingKeys((prev) => {
+      setDraftKeys((prev) => {
         const base = prev ?? new Set(currentKeys);
         const next = new Set(base);
 
@@ -127,27 +127,27 @@ export const EditableMultiSelect = <T,>({
     [valueKey, currentKeys],
   );
 
-  const confirmPending = useCallback(() => {
-    if (pendingKeys === undefined || setsEqual(pendingKeys, currentKeys)) {
+  const confirmDraft = useCallback(() => {
+    if (draftKeys === undefined || setsEqual(draftKeys, currentKeys)) {
       return;
     }
 
-    const selectedOptions = options.filter((o) => pendingKeys.has(valueKey(o)));
+    const selectedOptions = options.filter((o) => draftKeys.has(valueKey(o)));
     onChange(selectedOptions);
-  }, [pendingKeys, currentKeys, options, valueKey, onChange]);
+  }, [draftKeys, currentKeys, options, valueKey, onChange]);
 
-  const pendingKeysRef = useRef<Set<string> | undefined>(undefined);
-  pendingKeysRef.current = pendingKeys;
+  const draftKeysRef = useRef<Set<string> | undefined>(undefined);
+  draftKeysRef.current = draftKeys;
 
   const handleConfirm = useCallback(() => {
-    confirmPending();
+    confirmDraft();
     handleClose();
-  }, [confirmPending, handleClose]);
+  }, [confirmDraft, handleClose]);
 
   const selectAll = useCallback(() => {
     const allKeys = new Set(filteredOptions.map(valueKey));
 
-    setPendingKeys((prev) => {
+    setDraftKeys((prev) => {
       const base = prev ?? new Set(currentKeys);
       const next = new Set(base);
 
@@ -162,7 +162,7 @@ export const EditableMultiSelect = <T,>({
   const deselectAll = useCallback(() => {
     const allFilteredKeys = new Set(filteredOptions.map(valueKey));
 
-    setPendingKeys((prev) => {
+    setDraftKeys((prev) => {
       const base = prev ?? new Set(currentKeys);
       const next = new Set(base);
 
@@ -175,8 +175,8 @@ export const EditableMultiSelect = <T,>({
   }, [filteredOptions, valueKey, currentKeys]);
 
   const confirmAndClose = useCallback(() => {
-    if (pendingKeysRef.current !== undefined && !setsEqual(pendingKeysRef.current, currentKeys)) {
-      const selected = options.filter((o) => pendingKeysRef.current?.has(valueKey(o)) === true);
+    if (draftKeysRef.current !== undefined && !setsEqual(draftKeysRef.current, currentKeys)) {
+      const selected = options.filter((o) => draftKeysRef.current?.has(valueKey(o)) === true);
       onChange(selected);
     }
 
@@ -258,7 +258,7 @@ export const EditableMultiSelect = <T,>({
         }
       }
 
-      setPendingKeys(newSet);
+      setDraftKeys(newSet);
     },
     [activeKeys, filteredKeySet],
   );
@@ -281,7 +281,7 @@ export const EditableMultiSelect = <T,>({
       onButtonKeyDown={onButtonKeyDown}
       onClose={handleClose}
       onPopoverKeyDown={handleKeyDown}
-      hasPendingChange={hasPendingChange}
+      hasDraftChange={hasDraftChange}
       confirmLabel={confirmLabel}
       onConfirm={handleConfirm}
       showConfirm={requireConfirmation}
