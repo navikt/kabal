@@ -84,6 +84,18 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
         },
         retryMethods: ['GET'], // Only retry GET requests. All others are not idempotent.
         replyOptions: {
+          onError: (reply, { error }) => {
+            const code = 'code' in error && typeof error.code === 'string' ? error.code : undefined;
+
+            log.warn({
+              msg: `Proxy error (${appName}): ${error.message}`,
+              data: { code, appName },
+              trace_id: reply.request.trace_id,
+              span_id: reply.request.span_id,
+            });
+
+            reply.code(502).send({ error: 'Bad Gateway', message: `${code ?? error.message}` });
+          },
           rewriteRequestHeaders: (req) => getProxyRequestHeaders(req, appName, req.getCachedOboAccessToken(appName)),
           rewriteHeaders: (headers, req) => {
             const serverTiming = headers[SERVER_TIMING_HEADER];
