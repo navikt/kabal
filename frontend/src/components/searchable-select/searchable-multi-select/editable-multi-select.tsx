@@ -39,6 +39,7 @@ export const EditableMultiSelect = <T,>({
   triggerSize,
   triggerVariant,
   triggerDisplay = 'pills',
+  requireConfirmation = false,
 }: SearchableMultiSelectProps<T>) => {
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
@@ -74,6 +75,11 @@ export const EditableMultiSelect = <T,>({
       });
     },
     onClose: () => {
+      if (!requireConfirmation && pendingKeys !== undefined && !setsEqual(pendingKeys, currentKeys)) {
+        const selectedOptions = options.filter((o) => pendingKeys.has(valueKey(o)));
+        onChange(selectedOptions);
+      }
+
       setPendingKeys(undefined);
 
       // Restore scroll position after focus, so the browser's auto-scroll from focus() doesn't override the restore.
@@ -278,6 +284,7 @@ export const EditableMultiSelect = <T,>({
       hasPendingChange={hasPendingChange}
       confirmLabel={confirmLabel}
       onConfirm={handleConfirm}
+      showConfirm={requireConfirmation}
       keyboardShortcuts={KEYBOARD_SHORTCUTS}
       trigger={
         <TriggerContent

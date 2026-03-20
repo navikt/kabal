@@ -13,7 +13,7 @@ import {
 } from '@/components/searchable-select/virtualized-option-list';
 import { isMetaKey, Keys } from '@/keys';
 
-const KEYBOARD_SHORTCUTS = [{ shortcuts: ['Enter'], description: 'Velg' }];
+const CONFIRM_KEYBOARD_SHORTCUTS = [{ shortcuts: ['Enter'], description: 'Velg' }];
 
 export const EditableSelect = <T,>({
   id,
@@ -28,6 +28,7 @@ export const EditableSelect = <T,>({
   disabled = false,
   error,
   confirmLabel,
+  requireConfirmation = false,
   flip,
   scrollContainerRef,
   triggerSize,
@@ -42,7 +43,25 @@ export const EditableSelect = <T,>({
   const scrolledRef = useRef<number>(null);
   const savedScrollTopRef = useRef<number | null>(null);
 
+  const pendingValueRef = useRef<T | null | undefined>(undefined);
+  pendingValueRef.current = pendingValue;
+
   const { highlightedIndex, setHighlightedIndex, highlightedIndexRef } = useHighlight(deferredSearch);
+
+  const confirmPending = useCallback(
+    (pending: T | null | undefined) => {
+      if (pending === undefined || optionsMatch(pending, value, valueKey)) {
+        return;
+      }
+
+      if (pending === null) {
+        onClear?.();
+      } else {
+        onChange(pending);
+      }
+    },
+    [value, onChange, onClear, valueKey],
+  );
 
   const { open, buttonRef, handleClose, handleButtonClick, onButtonKeyDown } = usePopoverState({
     onOpen: () => {
@@ -56,6 +75,10 @@ export const EditableSelect = <T,>({
       });
     },
     onClose: () => {
+      if (!requireConfirmation) {
+        confirmPending(pendingValueRef.current);
+      }
+
       setPendingValue(undefined);
 
       // Restore scroll position after focus, so the browser's auto-scroll from focus() doesn't override the restore.
@@ -95,26 +118,10 @@ export const EditableSelect = <T,>({
     return [...nullOption, ...filtered];
   }, [onClear, options, deferredSearch, filterOption]);
 
-  const confirmPending = useCallback(
-    (pending: T | null | undefined) => {
-      if (pending !== undefined && !optionsMatch(pending, value, valueKey)) {
-        if (pending === null) {
-          onClear?.();
-        } else {
-          onChange(pending);
-        }
-      }
-    },
-    [value, onChange, onClear, valueKey],
-  );
-
   const handleConfirm = useCallback(() => {
     confirmPending(pendingValue);
     handleClose();
   }, [pendingValue, confirmPending, handleClose]);
-
-  const pendingValueRef = useRef<T | null | undefined>(undefined);
-  pendingValueRef.current = pendingValue;
 
   const scrollToIndex = useCallback((index: number) => {
     virtualizedOptionListHandle.current?.scrollToIndex(index);
@@ -127,12 +134,40 @@ export const EditableSelect = <T,>({
     scrollToIndex,
   });
 
+  const getHighlightedOption = useCallback(
+    (filteredOptions: (T | null)[]) => {
+      const idx = highlightedIndexRef.current;
+
+      if (idx >= 0 && idx < filteredOptions.length) {
+        return filteredOptions[idx];
+      }
+    },
+    [highlightedIndexRef],
+  );
+
+  const confirmAndClose = useCallback(
+    (option: T | null | undefined) => {
+      if (option === undefined) {
+        return;
+      }
+
+      requestAnimationFrame(() => confirmPending(option));
+      handleClose();
+    },
+    [confirmPending, handleClose],
+  );
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === Keys.Enter && isMetaKey(e)) {
         e.preventDefault();
-        confirmPending(pendingValueRef.current);
-        handleClose();
+
+        if (requireConfirmation) {
+          confirmAndClose(pendingValueRef.current);
+        } else {
+          const option = getHighlightedOption(filteredOptions);
+          confirmAndClose(option);
+        }
 
         return;
       }
@@ -143,33 +178,45 @@ export const EditableSelect = <T,>({
 
       if (e.key === Keys.Enter) {
         e.preventDefault();
-        const idx = highlightedIndexRef.current;
+        const option = getHighlightedOption(filteredOptions);
 
-        if (idx >= 0 && idx < filteredOptions.length) {
-          const option = filteredOptions[idx];
+        if (option === undefined) {
+          return;
+        }
 
-          if (option !== undefined) {
-            setPendingValue(option);
-          }
+        if (requireConfirmation) {
+          setPendingValue(option);
+        } else {
+          confirmAndClose(option);
         }
       }
     },
-    [filteredOptions, confirmPending, handleClose, handleNavigation, highlightedIndexRef],
+    [filteredOptions, handleNavigation, requireConfirmation, getHighlightedOption, confirmAndClose],
   );
 
   const handleRadioGroupChange = useCallback(
     (newValue: string) => {
       if (newValue === NULL_KEY) {
-        setPendingValue(null);
+        if (requireConfirmation) {
+          setPendingValue(null);
+        } else {
+          confirmAndClose(null);
+        }
       } else {
         const option = optionsByKey.get(newValue);
 
-        if (option !== undefined) {
+        if (option === undefined) {
+          return;
+        }
+
+        if (requireConfirmation) {
           setPendingValue(option);
+        } else {
+          confirmAndClose(option);
         }
       }
     },
-    [optionsByKey],
+    [optionsByKey, requireConfirmation, confirmAndClose],
   );
 
   const hasPendingChange = pendingValue !== undefined && !optionsMatch(pendingValue, value, valueKey);
@@ -193,12 +240,15 @@ export const EditableSelect = <T,>({
       hasPendingChange={hasPendingChange}
       confirmLabel={confirmLabel}
       onConfirm={handleConfirm}
-      keyboardShortcuts={KEYBOARD_SHORTCUTS}
+      keyboardShortcuts={
+        requireConfirmation ? CONFIRM_KEYBOARD_SHORTCUTS : [{ shortcuts: ['Enter'], description: confirmLabel }]
+      }
       flip={flip}
       trigger={formatLabel(value)}
       triggerSize={triggerSize}
       triggerVariant={triggerVariant}
       style={style}
+      showConfirm={requireConfirmation}
     >
       {filteredOptions.length === 0 ? (
         <div className="px-3 py-2 italic">Ingen treff</div>
