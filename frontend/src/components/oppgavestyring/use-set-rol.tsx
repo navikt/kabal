@@ -24,15 +24,11 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
     async (toNavIdent, fromNavIdent) => {
       const toROL = toNavIdent === null ? null : (rol.find((m) => m.navIdent === toNavIdent) ?? null);
 
-      const name = toROL === null ? 'fjernet' : `satt til ${formatEmployeeNameAndIdFallback(toROL, 'felles kø')}`;
-
       try {
         const { modified } = await setRol({ oppgaveId, employee: toROL }).unwrap();
         const timestamp = parseISO(modified).getTime();
 
-        if (toROL !== null) {
-          await setRolState({ oppgaveId, flowState: FlowState.SENT }).unwrap();
-        }
+        await setRolState({ oppgaveId, flowState: FlowState.SENT }).unwrap();
 
         successToast({
           testId: 'oppgave-set-rol-success-toast',
@@ -41,7 +37,7 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
           fromNavIdent,
           toNavIdent,
           onChange: onChangeRef.current,
-          name,
+          name: `satt til ${formatEmployeeNameAndIdFallback(toROL, 'felles kø')}`,
           timestamp,
         });
       } catch {

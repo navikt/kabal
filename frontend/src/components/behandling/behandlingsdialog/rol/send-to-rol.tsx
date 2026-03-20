@@ -15,7 +15,7 @@ export const SendToRol = ({ oppgaveId, isSaksbehandler, rol }: Props) => {
   const [setRolState, { isLoading }] = useSetRolFlowStateMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
   const [, { isLoading: isSettingRol }] = useSetRolMutation({ fixedCacheKey: getFixedCacheKey(oppgaveId) });
 
-  if (!isSaksbehandler || rol.employee === null || rol.flowState === FlowState.SENT) {
+  if (!isSaksbehandler || rol.flowState === FlowState.SENT) {
     return null;
   }
 

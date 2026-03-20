@@ -6,7 +6,7 @@ import { useIsAssignedRol, useIsAssignedRolAndSent, useIsKrolUser } from '@/hook
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useTildelSaksbehandlerMutation } from '@/redux-api/oppgaver/mutations/tildeling';
 import { useGetPotentialRolQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
-import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
+import type { IMedunderskriverRol } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;
@@ -37,8 +37,6 @@ export const SelectRol = ({ oppgaveId, rol, isSaksbehandler }: Props) => {
 
   const fromNavIdent = rol.employee?.navIdent ?? null;
 
-  const noneLabel = rol.flowState === FlowState.SENT ? 'Felles kø' : 'Ingen / felles kø';
-
   return (
     <SearchableNavEmployeeSelectWithLabel
       label="Rådgivende overlege"
@@ -47,7 +45,7 @@ export const SelectRol = ({ oppgaveId, rol, isSaksbehandler }: Props) => {
       value={rol.employee}
       disabled={isUpdating}
       options={potentialRol.rols}
-      nullLabel={noneLabel}
+      nullLabel="Felles kø"
       confirmLabel="Send til rådgivende overlege"
     />
   );
