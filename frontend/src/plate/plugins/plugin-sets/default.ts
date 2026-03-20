@@ -31,7 +31,7 @@ export const defaultPlugins = [
   ParserPlugin,
   NodeIdPlugin.configure({
     options: {
-      allow: [TableCellPlugin.key, TableRowPlugin.key],
+      allow: [TableCellPlugin.key, TableRowPlugin.key, TablePlugin.key],
       filter: ([node]: NodeEntry) => Object.isExtensible(node),
     },
   }),
