@@ -166,7 +166,7 @@ export const VirtualizedOptionList = <T,>({
   const virtualItems = enabled ? getVirtualItems(scrollTop, clientHeight, options.length) : [];
 
   return (
-    <div ref={scrollElementRef} className="overflow-y-auto" style={{ maxHeight: MAX_HEIGHT }}>
+    <div ref={scrollElementRef} className="overflow-y-auto" style={{ maxHeight: MAX_HEIGHT }} tabIndex={-1}>
       <div style={{ height: totalHeight, minWidth, position: 'relative' }}>
         {virtualItems.map((virtualItem) => {
           const option = options[virtualItem.index];

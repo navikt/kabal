@@ -262,7 +262,7 @@ export const EditableSelect = <T,>({
             onHighlight={setHighlightedIndex}
             handleRef={virtualizedOptionListHandle}
             renderOption={(option) => (
-              <Radio value={getKey(option)} className="w-full">
+              <Radio value={getKey(option)} className="w-full" tabIndex={-1}>
                 {formatLabel(option)}
               </Radio>
             )}

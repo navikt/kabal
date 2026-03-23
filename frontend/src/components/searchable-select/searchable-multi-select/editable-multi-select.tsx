@@ -318,7 +318,7 @@ export const EditableMultiSelect = <T,>({
             onHighlight={setHighlightedIndex}
             handleRef={virtualizedOptionListHandle}
             renderOption={(option) => (
-              <Checkbox value={valueKey(option)} className="w-full overflow-clip py-1.5">
+              <Checkbox value={valueKey(option)} className="w-full overflow-clip py-1.5" tabIndex={-1}>
                 {formatOption(option)}
               </Checkbox>
             )}
