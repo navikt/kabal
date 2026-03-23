@@ -17,6 +17,14 @@ interface VirtualizedOptionListProps<T> {
   renderOption: (option: T, index: number) => ReactNode;
   handleRef?: React.Ref<VirtualizedOptionListHandle>;
   enabled: boolean;
+  /** Unique id for the listbox element. Used by combobox `aria-controls`. */
+  listboxId: string;
+  /** When true, sets `aria-multiselectable="true"` on the listbox. */
+  multiselectable?: boolean;
+  /** Set of currently selected option keys. Used to set `aria-selected` on each option. */
+  selectedKeys: Set<string>;
+  /** Called when an option is clicked. */
+  onSelect?: (option: T) => void;
 }
 
 interface VirtualItem {
@@ -60,6 +68,9 @@ const scrollToIndex = (scrollElement: HTMLDivElement, index: number, count: numb
   }
 };
 
+/** Generate a stable DOM id for an option element, derived from the listbox id. */
+export const getOptionId = (listboxId: string, key: string): string => `${listboxId}-option-${key}`;
+
 export const VirtualizedOptionList = <T,>({
   options,
   optionKey,
@@ -68,6 +79,10 @@ export const VirtualizedOptionList = <T,>({
   renderOption,
   handleRef,
   enabled,
+  listboxId,
+  multiselectable,
+  selectedKeys,
+  onSelect,
 }: VirtualizedOptionListProps<T>) => {
   const scrollElementRef = useRef<HTMLDivElement>(null);
   const maxWidthRef = useRef(0);
@@ -166,7 +181,15 @@ export const VirtualizedOptionList = <T,>({
   const virtualItems = enabled ? getVirtualItems(scrollTop, clientHeight, options.length) : [];
 
   return (
-    <div ref={scrollElementRef} className="overflow-y-auto" style={{ maxHeight: MAX_HEIGHT }} tabIndex={-1}>
+    <div
+      ref={scrollElementRef}
+      className="overflow-y-auto"
+      style={{ maxHeight: MAX_HEIGHT }}
+      tabIndex={-1}
+      role="listbox"
+      id={listboxId}
+      aria-multiselectable={multiselectable === true ? true : undefined}
+    >
       <div style={{ height: totalHeight, minWidth, position: 'relative' }}>
         {virtualItems.map((virtualItem) => {
           const option = options[virtualItem.index];
@@ -177,12 +200,19 @@ export const VirtualizedOptionList = <T,>({
 
           const key = optionKey(option);
           const isHighlighted = virtualItem.index === highlightedIndex;
+          const isSelected = selectedKeys.has(key);
+          const optionElementId = getOptionId(listboxId, key);
 
           return (
-            // biome-ignore lint/a11y/noStaticElementInteractions: onMouseEnter is only used for visual hover highlighting, not interactive behavior.
+            // biome-ignore lint/a11y/useKeyWithClickEvents: Keyboard selection is handled at the popover level via aria-activedescendant and onKeyDown.
             <div
               key={key}
               ref={measureElement}
+              id={optionElementId}
+              role="option"
+              aria-selected={isSelected}
+              tabIndex={-1}
+              onClick={() => onSelect?.(option)}
               data-index={virtualItem.index}
               style={{
                 position: 'absolute',
@@ -195,7 +225,7 @@ export const VirtualizedOptionList = <T,>({
               className={`rounded-sm px-1 ${isHighlighted ? HIGHLIGHT : ''}`}
               onMouseEnter={() => onHighlight(virtualItem.index)}
             >
-              {renderOption(option, virtualItem.index)}
+              <div aria-hidden="true">{renderOption(option, virtualItem.index)}</div>
             </div>
           );
         })}

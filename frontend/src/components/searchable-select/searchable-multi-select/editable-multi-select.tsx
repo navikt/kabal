@@ -1,6 +1,6 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react';
-import { useCallback, useDeferredValue, useMemo, useRef, useState } from 'react';
+import { useCallback, useDeferredValue, useId, useMemo, useRef, useState } from 'react';
 import { scrollPopoverIntoView } from '@/components/searchable-select/scroll-popover-into-view';
 import { setsEqual } from '@/components/searchable-select/searchable-multi-select/multi-select-utils';
 import { TriggerContent } from '@/components/searchable-select/searchable-multi-select/trigger-content';
@@ -10,6 +10,7 @@ import { useHighlight } from '@/components/searchable-select/use-highlight';
 import { useKeyboardNavigation } from '@/components/searchable-select/use-keyboard-navigation';
 import { usePopoverState } from '@/components/searchable-select/use-popover-state';
 import {
+  getOptionId,
   VirtualizedOptionList,
   type VirtualizedOptionListHandle,
 } from '@/components/searchable-select/virtualized-option-list';
@@ -47,6 +48,8 @@ export const EditableMultiSelect = <T,>({
   const popoverRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef<number>(null);
   const savedScrollTopRef = useRef<number | null>(null);
+
+  const listboxId = useId();
 
   const currentKeys = useMemo(() => new Set(value.map(valueKey)), [value, valueKey]);
 
@@ -252,6 +255,36 @@ export const EditableMultiSelect = <T,>({
 
   const activeKeysArray = useMemo(() => [...activeKeys], [activeKeys]);
 
+  // Compute the active descendant id for the currently highlighted option.
+  const activeDescendantId = useMemo(() => {
+    if (highlightedIndex < 0 || highlightedIndex >= filteredOptions.length) {
+      return undefined;
+    }
+
+    const option = filteredOptions[highlightedIndex];
+
+    if (option === undefined) {
+      return undefined;
+    }
+
+    return getOptionId(listboxId, valueKey(option));
+  }, [highlightedIndex, filteredOptions, listboxId, valueKey]);
+
+  // Status message for screen readers announcing the number of filtered results.
+  const statusMessage = useMemo(() => {
+    if (deferredSearch.length === 0) {
+      return undefined;
+    }
+
+    const count = filteredOptions.length;
+
+    if (count === 0) {
+      return 'Ingen treff';
+    }
+
+    return `${count} ${count === 1 ? 'resultat' : 'resultater'}`;
+  }, [deferredSearch, filteredOptions.length]);
+
   return (
     <SelectPopover
       id={id}
@@ -285,6 +318,9 @@ export const EditableMultiSelect = <T,>({
       flip={flip}
       triggerSize={triggerSize}
       triggerVariant={triggerVariant}
+      listboxId={listboxId}
+      activeDescendantId={activeDescendantId}
+      statusMessage={statusMessage}
     >
       {filteredOptions.length === 0 ? (
         <div className="px-3 py-2 italic">Ingen treff</div>
@@ -296,7 +332,6 @@ export const EditableMultiSelect = <T,>({
             size="small"
             value={activeKeysArray}
             onChange={handleCheckboxGroupChange}
-            aria-setsize={filteredOptions.length}
             tabIndex={-1}
           >
             <VirtualizedOptionList
@@ -306,6 +341,9 @@ export const EditableMultiSelect = <T,>({
               highlightedIndex={highlightedIndex}
               onHighlight={setHighlightedIndex}
               handleRef={virtualizedOptionListHandle}
+              listboxId={listboxId}
+              multiselectable
+              selectedKeys={activeKeys}
               renderOption={(option) => (
                 <Checkbox value={valueKey(option)} className="w-full overflow-clip py-1.5" tabIndex={-1}>
                   {formatOption(option)}

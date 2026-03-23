@@ -53,6 +53,12 @@ interface SelectPopoverProps {
   style?: React.CSSProperties;
   /** The option list (CheckboxGroup / RadioGroup). */
   children: ReactNode;
+  /** The id of the listbox element inside children, used for aria-controls on the combobox input. */
+  listboxId?: string;
+  /** The id of the currently highlighted option, used for aria-activedescendant on the combobox input. */
+  activeDescendantId?: string | undefined;
+  /** Text announced via a live region when the filter results change (e.g. "5 resultater"). */
+  statusMessage?: string;
 }
 
 export const SelectPopover = ({
@@ -80,6 +86,9 @@ export const SelectPopover = ({
   triggerVariant = 'secondary',
   style,
   children,
+  listboxId,
+  activeDescendantId,
+  statusMessage,
 }: SelectPopoverProps) => {
   const searchRef = useRef<HTMLInputElement>(null);
   const popoverId = useId();
@@ -114,7 +123,7 @@ export const SelectPopover = ({
         iconPosition="right"
         icon={open ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
         className={`flex min-h-8 cursor-pointer items-center justify-between gap-1 ${triggerWidth}`}
-        aria-haspopup="listbox"
+        aria-haspopup="dialog"
         aria-expanded={open}
         aria-label={label}
         aria-controls={open ? popoverId : undefined}
@@ -150,9 +159,20 @@ export const SelectPopover = ({
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             autoComplete="off"
+            role="combobox"
+            aria-expanded={open}
+            aria-controls={listboxId}
+            aria-activedescendant={activeDescendantId}
+            aria-autocomplete="list"
           />
 
           {children}
+
+          {statusMessage !== undefined ? (
+            <div className="sr-only" aria-live="polite" aria-atomic="true">
+              {statusMessage}
+            </div>
+          ) : null}
 
           {showConfirm ? (
             <Tooltip content={confirmLabel} keys={[MOD_KEY_TEXT, 'Enter']}>
