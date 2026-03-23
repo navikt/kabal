@@ -1,13 +1,13 @@
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Button, HStack } from '@navikt/ds-react';
+import { Button, HStack, Tooltip } from '@navikt/ds-react';
 import { differenceInDays, parseISO } from 'date-fns';
 import { useState } from 'react';
 import { CURRENT_YEAR_IN_CENTURY } from '@/components/date-picker/constants';
 import { DatePicker } from '@/components/date-picker/date-picker';
 import { useHasAnyOfRoles } from '@/hooks/use-has-role';
 import {
-  useSetKjennelseMottattMutation,
   useSetMottattKlageinstansMutation,
+  useSetSendtTilTrygderettenMutation,
 } from '@/redux-api/oppgaver/mutations/behandling-dates';
 import { Role } from '@/types/bruker';
 import { SaksTypeEnum } from '@/types/kodeverk';
@@ -48,7 +48,7 @@ const EditableAge = ({ ageKA, mottatt, id, typeId }: IOppgave) => {
   return (
     <HStack align="center" gap="space-8" wrap={false}>
       {children}
-      <EditButton isOpen={isOpen} setIsOpen={setIsOpen} />
+      <EditButton isOpen={isOpen} setIsOpen={setIsOpen} typeId={typeId} />
     </HStack>
   );
 };
@@ -56,9 +56,10 @@ const EditableAge = ({ ageKA, mottatt, id, typeId }: IOppgave) => {
 interface EditButtonProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  typeId: SaksTypeEnum;
 }
 
-const EditButton = ({ isOpen, setIsOpen }: EditButtonProps) => {
+const EditButton = ({ isOpen, setIsOpen, typeId }: EditButtonProps) => {
   const show = useHasAnyOfRoles([Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]);
   const toggleOpen = () => setIsOpen(!isOpen);
 
@@ -67,14 +68,21 @@ const EditButton = ({ isOpen, setIsOpen }: EditButtonProps) => {
   }
 
   return (
-    <Button
-      data-color="neutral"
-      size="xsmall"
-      icon={<PencilIcon aria-hidden />}
-      title="Endre dato for mottatt klageinstans"
-      variant="tertiary"
-      onClick={toggleOpen}
-    />
+    <Tooltip
+      content={
+        typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR
+          ? 'Endre dato for sendt til Trygderetten'
+          : 'Endre dato for mottatt klageinstans'
+      }
+    >
+      <Button
+        data-color="neutral"
+        size="xsmall"
+        icon={<PencilIcon aria-hidden />}
+        variant="tertiary"
+        onClick={toggleOpen}
+      />
+    </Tooltip>
   );
 };
 
@@ -90,7 +98,7 @@ const DATE_PICKER_ID = 'edit-age';
 
 const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge, typeId }: EditAgeProps) => {
   const [setMottattklageinstans] = useSetMottattKlageinstansMutation();
-  const [setKjennelseMottatt] = useSetKjennelseMottattMutation();
+  const [setSendtTilTR] = useSetSendtTilTrygderettenMutation();
 
   const onChange = (date: string | null) => {
     if (date === null || date === mottattDate) {
@@ -100,7 +108,7 @@ const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge, typeId }: 
     setUserAge(differenceInDays(new Date(), parseISO(date)));
 
     if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR) {
-      setKjennelseMottatt({ kjennelseMottatt: date, oppgaveId, typeId });
+      setSendtTilTR({ sendtTilTrygderetten: date, oppgaveId, typeId });
     } else {
       setMottattklageinstans({ mottattKlageinstans: date, oppgaveId });
     }
