@@ -344,6 +344,7 @@ export const EditableMultiSelect = <T,>({
               listboxId={listboxId}
               multiselectable
               selectedKeys={activeKeys}
+              onSelect={toggleOption}
               renderOption={(option) => (
                 <Checkbox value={valueKey(option)} className="w-full overflow-clip py-1.5" tabIndex={-1}>
                   {formatOption(option)}
