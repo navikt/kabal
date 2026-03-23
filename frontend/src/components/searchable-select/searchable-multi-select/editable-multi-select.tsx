@@ -236,24 +236,6 @@ export const EditableMultiSelect = <T,>({
     [handleNavigation, toggleHighlighted, confirmAndClose],
   );
 
-  const filteredKeySet = useMemo(() => new Set(filteredOptions.map(valueKey)), [filteredOptions, valueKey]);
-
-  const handleCheckboxGroupChange = useCallback(
-    (newValues: string[]) => {
-      const newSet = new Set(newValues);
-
-      // Preserve selections for options that are not currently visible due to filtering.
-      for (const key of activeKeys) {
-        if (!filteredKeySet.has(key)) {
-          newSet.add(key);
-        }
-      }
-
-      setDraftKeys(newSet);
-    },
-    [activeKeys, filteredKeySet],
-  );
-
   const activeKeysArray = useMemo(() => [...activeKeys], [activeKeys]);
 
   // Compute the active descendant id for the currently highlighted option.
@@ -328,14 +310,7 @@ export const EditableMultiSelect = <T,>({
         <div className="px-3 py-2 italic">Ingen treff</div>
       ) : (
         <>
-          <CheckboxGroup
-            legend={label}
-            hideLegend
-            size="small"
-            value={activeKeysArray}
-            onChange={handleCheckboxGroupChange}
-            tabIndex={-1}
-          >
+          <CheckboxGroup legend={label} hideLegend size="small" value={activeKeysArray} tabIndex={-1}>
             <VirtualizedOptionList
               enabled={open}
               options={filteredOptions}

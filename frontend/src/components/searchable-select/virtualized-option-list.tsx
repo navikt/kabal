@@ -225,7 +225,9 @@ export const VirtualizedOptionList = <T,>({
               className={`rounded-sm px-1 ${isHighlighted ? HIGHLIGHT : ''}`}
               onMouseEnter={() => onHighlight(virtualItem.index)}
             >
-              <div aria-hidden="true">{renderOption(option, virtualItem.index)}</div>
+              <div aria-hidden="true" className="pointer-events-none">
+                {renderOption(option, virtualItem.index)}
+              </div>
             </div>
           );
         })}
