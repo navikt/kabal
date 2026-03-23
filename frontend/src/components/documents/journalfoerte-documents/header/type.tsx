@@ -20,6 +20,7 @@ export const Type = ({ selectedTypes, setSelectedTypes }: Props) => (
     triggerSize="small"
     triggerVariant="tertiary"
     triggerDisplay="count"
+    showSelectAll
   />
 );
 

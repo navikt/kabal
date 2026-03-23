@@ -71,6 +71,7 @@ export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProp
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"
+        showSelectAll
       />
     </Table.ColumnHeader>
   );

@@ -31,6 +31,7 @@ export const Tema = ({ selectedTemaer, setSelectedTemaer }: Props) => {
       triggerSize="small"
       triggerVariant="tertiary"
       triggerDisplay="count"
+      showSelectAll
     />
   );
 };

@@ -51,4 +51,9 @@ export interface SearchableMultiSelectProps<T> {
    * - `"count"`: shows the label with a count suffix, e.g. "Hjemmel (3)". Useful for compact spaces like table headers.
    */
   triggerDisplay?: 'pills' | 'count';
+  /**
+   * When `true`, the popover will show buttons for selection all and none.
+   * @default false
+   */
+  showSelectAll?: boolean;
 }

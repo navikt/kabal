@@ -31,6 +31,7 @@ export const StatusFilter = () => {
       emptyLabel="Alle statuser"
       filterText={statusFormat}
       onChange={handleChange}
+      showSelectAll
     />
   );
 };

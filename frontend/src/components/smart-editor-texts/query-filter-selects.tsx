@@ -51,6 +51,7 @@ export const UtfallSelect = ({ children, selected, onChange, options }: UtfallSe
       onChange={handleChange}
       triggerSize="small"
       triggerVariant="tertiary"
+      showSelectAll
     />
   );
 };
@@ -135,6 +136,7 @@ export const KlageenhetSelect = ({
       onChange={handleChange}
       triggerSize="small"
       triggerVariant="tertiary"
+      showSelectAll
     />
   );
 };
