@@ -27,6 +27,7 @@ export const EditableSelect = <T,>({
   onChange,
   onClear,
   disabled = false,
+  loading = false,
   error,
   confirmLabel,
   requireConfirmation = false,
@@ -267,6 +268,7 @@ export const EditableSelect = <T,>({
       label={label}
       open={open}
       disabled={disabled}
+      loading={loading}
       error={error}
       search={search}
       onSearchChange={setSearch}

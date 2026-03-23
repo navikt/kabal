@@ -53,7 +53,7 @@ export const Rol = ({ oppgaveId, rolIdent }: Props) => {
       value={selectedValue}
       onChange={handleChange}
       onClear={handleClear}
-      disabled={isUpdating}
+      loading={isUpdating}
       nullLabel="Felles kø"
       confirmLabel="Send til rådgivende overlege"
     />

@@ -31,6 +31,7 @@ export const EditableMultiSelect = <T,>({
   filterText,
   onChange,
   disabled = false,
+  loading = false,
   error,
   confirmLabel = 'Bekreft',
   flip,
@@ -292,6 +293,7 @@ export const EditableMultiSelect = <T,>({
       style={style}
       open={open}
       disabled={disabled}
+      loading={loading}
       error={error}
       search={search}
       onSearchChange={setSearch}

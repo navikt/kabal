@@ -11,6 +11,7 @@ export interface SearchableNavEmployeeSelectProps {
   onClear?: () => void;
   nullLabel?: string;
   disabled?: boolean;
+  loading?: boolean;
   confirmLabel: string;
   /** Whether the popover should flip its placement when it reaches the viewport edge. */
   flip?: boolean;
@@ -24,6 +25,7 @@ export const SearchableNavEmployeeSelect = ({
   onClear,
   nullLabel = 'Ingen valgt',
   disabled,
+  loading,
   confirmLabel,
   flip,
 }: SearchableNavEmployeeSelectProps) => {
@@ -51,6 +53,7 @@ export const SearchableNavEmployeeSelect = ({
       onChange={onChange}
       onClear={onClear}
       disabled={disabled}
+      loading={loading}
       valueKey={employeeValueKey}
       formatLabel={formatLabel}
       filterOption={employeeFilterOption}

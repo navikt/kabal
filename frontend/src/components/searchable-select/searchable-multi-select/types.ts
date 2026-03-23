@@ -22,6 +22,8 @@ export interface SearchableMultiSelectProps<T> {
   /** Called when the user confirms a new selection. */
   onChange: (values: T[]) => void;
   disabled?: boolean;
+  /** When true, shows a loading spinner on the trigger button to indicate a pending operation. */
+  loading?: boolean;
   /**
    * When `true`, renders the selected values as static pills without any interactive controls.
    * @default false

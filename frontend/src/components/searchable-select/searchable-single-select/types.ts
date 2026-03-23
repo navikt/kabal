@@ -16,6 +16,8 @@ export interface SearchableSelectProps<T> {
   onChange: (value: T) => void;
   onClear?: () => void;
   disabled?: boolean;
+  /** When true, shows a loading spinner on the trigger button to indicate a pending operation. */
+  loading?: boolean;
   /**
    * When true, renders the selected value as static text without any interactive controls.
    * @default false

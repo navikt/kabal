@@ -26,6 +26,7 @@ interface SelectPopoverProps {
   label: string;
   open: boolean;
   disabled: boolean;
+  loading?: boolean;
   error?: string;
   search: string;
   onSearchChange: (value: string) => void;
@@ -66,6 +67,7 @@ export const SelectPopover = ({
   label,
   open,
   disabled,
+  loading = false,
   error,
   search,
   onSearchChange,
@@ -120,6 +122,7 @@ export const SelectPopover = ({
           onButtonKeyDown(e);
         }}
         disabled={disabled}
+        loading={loading}
         iconPosition="right"
         icon={open ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
         className={`flex min-h-8 cursor-pointer items-center justify-between gap-1 ${triggerWidth}`}

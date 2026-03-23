@@ -55,7 +55,7 @@ export const Medunderskriver = ({ oppgaveId, medunderskriverIdent }: Props) => {
       value={selectedValue}
       onChange={handleChange}
       onClear={handleClear}
-      disabled={isUpdating}
+      loading={isUpdating}
       nullLabel="Ingen"
       confirmLabel="Send til medunderskriver"
       flip
