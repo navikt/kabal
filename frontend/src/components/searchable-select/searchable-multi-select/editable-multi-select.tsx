@@ -13,12 +13,9 @@ import {
   type VirtualizedOptionListHandle,
 } from '@/components/searchable-select/virtualized-option-list';
 import { stringToRegExp } from '@/functions/string-to-regex';
-import { isMetaKey, Keys, MOD_KEY_TEXT } from '@/keys';
+import { isMetaKey, Keys } from '@/keys';
 
-const KEYBOARD_SHORTCUTS = [
-  { shortcuts: ['Enter'], description: 'Velg / fjern' },
-  { shortcuts: [`${MOD_KEY_TEXT} + A`], description: 'Velg alle treff' },
-];
+const KEYBOARD_SHORTCUTS = [{ shortcuts: ['Enter'], description: 'Velg / fjern' }];
 
 export const EditableMultiSelect = <T,>({
   id,
@@ -233,16 +230,9 @@ export const EditableMultiSelect = <T,>({
           toggleHighlighted();
           break;
         }
-        case Keys.A: {
-          if (isMetaKey(e)) {
-            e.preventDefault();
-            toggleAll();
-          }
-          break;
-        }
       }
     },
-    [handleNavigation, toggleHighlighted, toggleAll, confirmAndClose],
+    [handleNavigation, toggleHighlighted, confirmAndClose],
   );
 
   const filteredKeySet = useMemo(() => new Set(filteredOptions.map(valueKey)), [filteredOptions, valueKey]);
