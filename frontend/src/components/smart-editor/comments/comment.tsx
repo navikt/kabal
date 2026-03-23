@@ -14,9 +14,10 @@ import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 interface Props {
   isMain?: boolean;
   comment: ISmartEditorComment;
+  hasWriteAccess: boolean;
 }
 
-export const Comment = ({ isMain, comment }: Props) => {
+export const Comment = ({ isMain, comment, hasWriteAccess }: Props) => {
   const { author, modified, text, id } = comment;
   const { user } = useContext(StaticDataContext);
   const { editingComment, setEditingComment } = useContext(SmartEditorContext);
@@ -25,8 +26,8 @@ export const Comment = ({ isMain, comment }: Props) => {
 
   const isAuthor = author.ident === user.navIdent;
   const isEditing = editingComment?.id === id;
-  const canEditComment = isAuthor;
-  const canDeleteComment = isAuthor || isSaksbehandler;
+  const canEditComment = isAuthor && hasWriteAccess;
+  const canDeleteComment = (isAuthor || isSaksbehandler) && hasWriteAccess;
 
   return (
     <Box

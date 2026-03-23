@@ -5,12 +5,10 @@ import { useContext } from 'react';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { CommentList } from '@/components/smart-editor/comments/comment-list';
 import { SmartEditorContext } from '@/components/smart-editor/context';
-import { useHasWriteAccess } from '@/components/smart-editor/hooks/use-has-write-access';
+import { useHasSmartEditorWriteAccess } from '@/components/smart-editor/hooks/use-has-smart-editor-write-access';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartEditorExpandedThreads } from '@/hooks/settings/use-setting';
-import { useGetDocumentQuery } from '@/redux-api/oppgaver/queries/documents';
 import { usePostReplyMutation } from '@/redux-api/smart-editor-comments';
-import { DocumentTypeEnum } from '@/types/documents/documents';
 import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 
 interface Props {
@@ -36,7 +34,7 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isFocused =
   const isExpanded = threadsAlwaysExpanded || isFocused;
   const comments: ISmartEditorComment[] = isExpanded ? [thread, ...thread.comments] : [thread];
   const { editingComment, focusedThreadId } = useContext(SmartEditorContext);
-
+  const hasWriteAccess = useHasSmartEditorWriteAccess();
   const isEditing = thread.comments.some((comment) => comment.id === editingComment?.id);
 
   return (
@@ -60,13 +58,13 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isFocused =
         className={isExpanded ? EXPANDED_CLASSES : COLLAPSED_CLASSES}
         style={{ zIndex: isEditing || focusedThreadId === thread.id ? 999 : zIndex }}
       >
-        <CommentList comments={comments} />
+        <CommentList comments={comments} hasWriteAccess={hasWriteAccess} />
         {isExpanded ? null : (
           <div className="text-center text-ax-small text-ax-text-neutral-subtle italic">
             {thread.comments.length} svar
           </div>
         )}
-        {isEditing ? null : <AddComment threadId={thread.id} />}
+        {isEditing ? null : <AddComment threadId={thread.id} hasWriteAccess={hasWriteAccess} />}
       </Box>
     </VStack>
   );
@@ -74,16 +72,14 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isFocused =
 
 interface AddCommentProps {
   threadId: string;
+  hasWriteAccess: boolean;
 }
 
-const AddComment = ({ threadId }: AddCommentProps) => {
+const AddComment = ({ threadId, hasWriteAccess }: AddCommentProps) => {
   const [postReply, { isLoading }] = usePostReplyMutation();
   const oppgaveId = useOppgaveId();
   const { user } = useContext(StaticDataContext);
   const { dokumentId, setEditingComment } = useContext(SmartEditorContext);
-  const { data: doc } = useGetDocumentQuery(oppgaveId === skipToken ? skipToken : { oppgaveId, dokumentId });
-
-  const hasWriteAccess = useHasWriteAccess(doc === undefined || doc.type !== DocumentTypeEnum.SMART ? null : doc);
 
   if (oppgaveId === skipToken || !hasWriteAccess) {
     return null;
