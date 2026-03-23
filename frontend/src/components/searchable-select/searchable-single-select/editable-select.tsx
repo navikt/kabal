@@ -197,14 +197,21 @@ export const EditableSelect = <T,>({
     [filteredOptions, handleNavigation, requireConfirmation, getHighlightedOption, confirmAndClose],
   );
 
+  const handleOptionSelect = useCallback(
+    (option: T | null) => {
+      if (requireConfirmation) {
+        setDraftValue(option);
+      } else {
+        confirmAndClose(option);
+      }
+    },
+    [requireConfirmation, confirmAndClose],
+  );
+
   const handleRadioGroupChange = useCallback(
     (newValue: string) => {
       if (newValue === NULL_KEY) {
-        if (requireConfirmation) {
-          setDraftValue(null);
-        } else {
-          confirmAndClose(null);
-        }
+        handleOptionSelect(null);
       } else {
         const option = optionsByKey.get(newValue);
 
@@ -212,14 +219,10 @@ export const EditableSelect = <T,>({
           return;
         }
 
-        if (requireConfirmation) {
-          setDraftValue(option);
-        } else {
-          confirmAndClose(option);
-        }
+        handleOptionSelect(option);
       }
     },
-    [optionsByKey, requireConfirmation, confirmAndClose],
+    [optionsByKey, handleOptionSelect],
   );
 
   const hasDraftChange = draftValue !== undefined && !optionsMatch(draftValue, value, valueKey);
@@ -302,6 +305,7 @@ export const EditableSelect = <T,>({
             handleRef={virtualizedOptionListHandle}
             listboxId={listboxId}
             selectedKeys={selectedKeys}
+            onSelect={handleOptionSelect}
             renderOption={(option) => (
               <Radio value={getKey(option)} className="w-full" tabIndex={-1}>
                 {formatLabel(option)}
