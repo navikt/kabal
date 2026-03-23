@@ -43,7 +43,7 @@ export const SelectRol = ({ oppgaveId, rol, isSaksbehandler }: Props) => {
       onChange={(employee) => onChange(employee.navIdent, fromNavIdent)}
       onClear={() => onChange(null, fromNavIdent)}
       value={rol.employee}
-      disabled={isUpdating}
+      loading={isUpdating}
       options={potentialRol.rols}
       nullLabel="Felles kø"
       confirmLabel="Send til rådgivende overlege"

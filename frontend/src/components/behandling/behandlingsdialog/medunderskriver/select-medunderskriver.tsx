@@ -62,7 +62,7 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
       onChange={(employee) => onChange(employee.navIdent, fromNavIdent)}
       onClear={() => onChange(null, fromNavIdent)}
       value={medunderskriver.employee}
-      disabled={isUpdating}
+      loading={isUpdating}
       options={medunderskrivere}
       nullLabel="Ingen"
       confirmLabel={`Send til ${getTitleLowercase(typeId)}`}
