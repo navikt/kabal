@@ -72,11 +72,6 @@ export const EditableMultiSelect = <T,>({
       });
     },
     onClose: () => {
-      if (!requireConfirmation && draftKeys !== undefined && !setsEqual(draftKeys, currentKeys)) {
-        const selectedOptions = options.filter((o) => draftKeys.has(valueKey(o)));
-        onChange(selectedOptions);
-      }
-
       setDraftKeys(undefined);
 
       // Restore scroll position after focus, so the browser's auto-scroll from focus() doesn't override the restore.
@@ -136,10 +131,19 @@ export const EditableMultiSelect = <T,>({
   const draftKeysRef = useRef<Set<string> | undefined>(undefined);
   draftKeysRef.current = draftKeys;
 
+  const confirmAndClose = useCallback(() => {
+    if (!requireConfirmation && draftKeysRef.current !== undefined && !setsEqual(draftKeysRef.current, currentKeys)) {
+      const selected = options.filter((o) => draftKeysRef.current?.has(valueKey(o)) === true);
+      onChange(selected);
+    }
+
+    handleClose();
+  }, [currentKeys, options, valueKey, onChange, handleClose, requireConfirmation]);
+
   const handleConfirm = useCallback(() => {
     confirmDraft();
-    handleClose();
-  }, [confirmDraft, handleClose]);
+    confirmAndClose();
+  }, [confirmDraft, confirmAndClose]);
 
   const selectAll = useCallback(() => {
     const allKeys = new Set(filteredOptions.map(valueKey));
@@ -170,15 +174,6 @@ export const EditableMultiSelect = <T,>({
       return next;
     });
   }, [filteredOptions, valueKey, currentKeys]);
-
-  const confirmAndClose = useCallback(() => {
-    if (draftKeysRef.current !== undefined && !setsEqual(draftKeysRef.current, currentKeys)) {
-      const selected = options.filter((o) => draftKeysRef.current?.has(valueKey(o)) === true);
-      onChange(selected);
-    }
-
-    handleClose();
-  }, [currentKeys, options, valueKey, onChange, handleClose]);
 
   const toggleAll = useCallback(() => {
     if (allFilteredSelected) {
@@ -269,7 +264,7 @@ export const EditableMultiSelect = <T,>({
       popoverRef={popoverRef}
       onButtonClick={handleButtonClick}
       onButtonKeyDown={onButtonKeyDown}
-      onClose={handleClose}
+      onClose={confirmAndClose}
       onPopoverKeyDown={handleKeyDown}
       hasDraftChange={hasDraftChange}
       confirmLabel={confirmLabel}
