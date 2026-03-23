@@ -24,7 +24,7 @@ interface VirtualizedOptionListProps<T> {
   /** Set of currently selected option keys. Used to set `aria-selected` on each option. */
   selectedKeys: Set<string>;
   /** Called when an option is clicked. */
-  onSelect?: (option: T) => void;
+  onSelect: (option: T) => void;
 }
 
 interface VirtualItem {
@@ -212,7 +212,7 @@ export const VirtualizedOptionList = <T,>({
               role="option"
               aria-selected={isSelected}
               tabIndex={-1}
-              onClick={() => onSelect?.(option)}
+              onClick={() => onSelect(option)}
               data-index={virtualItem.index}
               style={{
                 position: 'absolute',
