@@ -62,6 +62,7 @@ export const AvsenderMottakerFilter = ({
       triggerSize="small"
       triggerVariant="tertiary"
       triggerDisplay="count"
+      showSelectAll
     />
   );
 };

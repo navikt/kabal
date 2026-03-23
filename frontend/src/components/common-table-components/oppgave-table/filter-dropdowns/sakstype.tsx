@@ -67,6 +67,7 @@ const Filter = ({ columnKey, tableKey, options }: FilterDropdownProps & { option
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"
+        showSelectAll
       />
     </Table.ColumnHeader>
   );

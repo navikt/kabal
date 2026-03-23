@@ -41,6 +41,7 @@ export const Medunderskriver = ({ tableKey, columnKey }: FilterDropdownProps) =>
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"
+        showSelectAll
       />
     </Table.ColumnHeader>
   );

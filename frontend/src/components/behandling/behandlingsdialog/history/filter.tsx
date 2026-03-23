@@ -62,6 +62,7 @@ export const Filter = ({ counts, totalCount, filters, setFilters }: Props) => {
       filterText={optionFilterText}
       onChange={onChange}
       scrollContainerRef={containerRef}
+      showSelectAll
     />
   );
 };

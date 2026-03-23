@@ -37,6 +37,7 @@ export const Hjemmel = ({ columnKey, tableKey }: FilterDropdownProps) => {
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"
+        showSelectAll
       />
     </Table.ColumnHeader>
   );

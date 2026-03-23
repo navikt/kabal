@@ -66,6 +66,7 @@ export const HelperStatusWithoutSelf = ({ columnKey, tableKey }: FilterDropdownP
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"
+        showSelectAll
       />
     </Table.ColumnHeader>
   );
@@ -106,6 +107,7 @@ export const HelperStatusWithSelf = ({ columnKey, tableKey }: FilterDropdownProp
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"
+        showSelectAll
       />
     </Table.ColumnHeader>
   );

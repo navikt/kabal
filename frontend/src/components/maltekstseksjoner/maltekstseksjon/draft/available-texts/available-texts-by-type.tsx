@@ -165,6 +165,7 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
                       onChange={handleStatusChange}
                       triggerSize="small"
                       triggerVariant="tertiary"
+                      showSelectAll
                     />
                   </Table.HeaderCell>
                   <Table.ColumnHeader>%</Table.ColumnHeader>

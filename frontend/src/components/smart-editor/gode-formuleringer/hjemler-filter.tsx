@@ -70,6 +70,7 @@ export const HjemlerFilter = ({ selected, setSelected }: Props) => {
       onChange={handleChange}
       triggerVariant="secondary"
       triggerDisplay="count"
+      showSelectAll
     />
   );
 };

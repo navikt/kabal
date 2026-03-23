@@ -41,6 +41,7 @@ export const Saksbehandler = ({ tableKey, columnKey }: FilterDropdownProps) => {
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"
+        showSelectAll
       />
     </Table.ColumnHeader>
   );

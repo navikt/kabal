@@ -39,6 +39,7 @@ export const Saksnummer = ({ sakList, selectedSaksIds, setSelectedSaksIds }: Sak
       triggerSize="small"
       triggerVariant="tertiary"
       triggerDisplay="count"
+      showSelectAll
     />
   );
 };

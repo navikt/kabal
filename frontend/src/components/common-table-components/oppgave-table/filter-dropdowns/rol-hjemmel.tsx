@@ -69,6 +69,7 @@ export const RolHjemmel = ({ tableKey, columnKey }: FilterDropdownProps) => {
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"
+        showSelectAll
       />
     </Table.ColumnHeader>
   );

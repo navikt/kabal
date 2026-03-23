@@ -37,6 +37,7 @@ export const PaaVentReasons = ({ columnKey, tableKey }: FilterDropdownProps) => 
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"
+        showSelectAll
       />
     </Table.ColumnHeader>
   );

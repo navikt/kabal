@@ -1,4 +1,5 @@
-import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { useCallback, useDeferredValue, useMemo, useRef, useState } from 'react';
 import { scrollPopoverIntoView } from '@/components/searchable-select/scroll-popover-into-view';
 import { setsEqual } from '@/components/searchable-select/searchable-multi-select/multi-select-utils';
@@ -37,6 +38,7 @@ export const EditableMultiSelect = <T,>({
   triggerVariant,
   triggerDisplay = 'pills',
   requireConfirmation = false,
+  showSelectAll = false,
 }: SearchableMultiSelectProps<T>) => {
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
@@ -97,7 +99,7 @@ export const EditableMultiSelect = <T,>({
   const hasDraftChange = draftKeys !== undefined && !setsEqual(draftKeys, currentKeys);
 
   const filteredSelectedCount = filteredOptions.filter((o) => activeKeys.has(valueKey(o))).length;
-  const allFilteredSelected = filteredSelectedCount === filteredOptions.length && filteredOptions.length > 0;
+  const anyFilteredSelected = filteredSelectedCount !== 0;
 
   const toggleOption = useCallback(
     (option: T) => {
@@ -176,12 +178,12 @@ export const EditableMultiSelect = <T,>({
   }, [filteredOptions, valueKey, currentKeys]);
 
   const toggleAll = useCallback(() => {
-    if (allFilteredSelected) {
+    if (anyFilteredSelected) {
       deselectAll();
     } else {
       selectAll();
     }
-  }, [allFilteredSelected, deselectAll, selectAll]);
+  }, [anyFilteredSelected, deselectAll, selectAll]);
 
   const toggleHighlighted = useCallback(() => {
     const idx = highlightedIndexRef.current;
@@ -287,28 +289,43 @@ export const EditableMultiSelect = <T,>({
       {filteredOptions.length === 0 ? (
         <div className="px-3 py-2 italic">Ingen treff</div>
       ) : (
-        <CheckboxGroup
-          legend={label}
-          hideLegend
-          size="small"
-          value={activeKeysArray}
-          onChange={handleCheckboxGroupChange}
-          aria-setsize={filteredOptions.length}
-        >
-          <VirtualizedOptionList
-            enabled={open}
-            options={filteredOptions}
-            optionKey={valueKey}
-            highlightedIndex={highlightedIndex}
-            onHighlight={setHighlightedIndex}
-            handleRef={virtualizedOptionListHandle}
-            renderOption={(option) => (
-              <Checkbox value={valueKey(option)} className="w-full overflow-clip py-1.5" tabIndex={-1}>
-                {formatOption(option)}
-              </Checkbox>
-            )}
-          />
-        </CheckboxGroup>
+        <>
+          <CheckboxGroup
+            legend={label}
+            hideLegend
+            size="small"
+            value={activeKeysArray}
+            onChange={handleCheckboxGroupChange}
+            aria-setsize={filteredOptions.length}
+            tabIndex={-1}
+          >
+            <VirtualizedOptionList
+              enabled={open}
+              options={filteredOptions}
+              optionKey={valueKey}
+              highlightedIndex={highlightedIndex}
+              onHighlight={setHighlightedIndex}
+              handleRef={virtualizedOptionListHandle}
+              renderOption={(option) => (
+                <Checkbox value={valueKey(option)} className="w-full overflow-clip py-1.5" tabIndex={-1}>
+                  {formatOption(option)}
+                </Checkbox>
+              )}
+            />
+          </CheckboxGroup>
+
+          {showSelectAll ? (
+            <Button
+              variant="secondary"
+              size="xsmall"
+              data-color="neutral"
+              onClick={toggleAll}
+              icon={anyFilteredSelected ? <XMarkIcon aria-hidden /> : <CheckmarkIcon aria-hidden />}
+            >
+              {anyFilteredSelected ? `Fjern alle (${filteredSelectedCount})` : `Velg alle (${filteredOptions.length})`}
+            </Button>
+          ) : null}
+        </>
       )}
     </SelectPopover>
   );
