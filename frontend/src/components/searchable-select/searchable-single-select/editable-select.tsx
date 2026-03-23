@@ -1,5 +1,5 @@
 import { Radio, RadioGroup } from '@navikt/ds-react';
-import { useCallback, useDeferredValue, useMemo, useRef, useState } from 'react';
+import { useCallback, useDeferredValue, useId, useMemo, useRef, useState } from 'react';
 import { scrollPopoverIntoView } from '@/components/searchable-select/scroll-popover-into-view';
 import { optionsMatch } from '@/components/searchable-select/searchable-single-select/single-select-utils';
 import { NULL_KEY, type SearchableSelectProps } from '@/components/searchable-select/searchable-single-select/types';
@@ -8,6 +8,7 @@ import { useHighlight } from '@/components/searchable-select/use-highlight';
 import { useKeyboardNavigation } from '@/components/searchable-select/use-keyboard-navigation';
 import { usePopoverState } from '@/components/searchable-select/use-popover-state';
 import {
+  getOptionId,
   VirtualizedOptionList,
   type VirtualizedOptionListHandle,
 } from '@/components/searchable-select/virtualized-option-list';
@@ -45,6 +46,8 @@ export const EditableSelect = <T,>({
 
   const draftValueRef = useRef<T | null | undefined>(undefined);
   draftValueRef.current = draftValue;
+
+  const listboxId = useId();
 
   const { highlightedIndex, setHighlightedIndex, highlightedIndexRef } = useHighlight(deferredSearch);
 
@@ -99,7 +102,7 @@ export const EditableSelect = <T,>({
     },
   });
 
-  const getKey = (option: T | null): string => (option === null ? NULL_KEY : valueKey(option));
+  const getKey = useCallback((option: T | null): string => (option === null ? NULL_KEY : valueKey(option)), [valueKey]);
 
   const optionsByKey = useMemo(() => {
     const map = new Map<string, T>();
@@ -222,6 +225,39 @@ export const EditableSelect = <T,>({
   const hasDraftChange = draftValue !== undefined && !optionsMatch(draftValue, value, valueKey);
   const displayKey = draftValue !== undefined ? getKey(draftValue) : getKey(value);
 
+  // Build the set of selected keys for aria-selected on option elements.
+  const selectedKeys = useMemo(() => new Set([displayKey]), [displayKey]);
+
+  // Compute the active descendant id for the currently highlighted option.
+  const activeDescendantId = useMemo(() => {
+    if (highlightedIndex < 0 || highlightedIndex >= filteredOptions.length) {
+      return undefined;
+    }
+
+    const option = filteredOptions[highlightedIndex];
+
+    if (option === undefined) {
+      return undefined;
+    }
+
+    return getOptionId(listboxId, getKey(option));
+  }, [highlightedIndex, filteredOptions, listboxId, getKey]);
+
+  // Status message for screen readers announcing the number of filtered results.
+  const statusMessage = useMemo(() => {
+    if (deferredSearch.length === 0) {
+      return undefined;
+    }
+
+    const count = filteredOptions.length;
+
+    if (count === 0) {
+      return 'Ingen treff';
+    }
+
+    return `${count} ${count === 1 ? 'resultat' : 'resultater'}`;
+  }, [deferredSearch, filteredOptions.length]);
+
   return (
     <SelectPopover
       id={id}
@@ -249,6 +285,9 @@ export const EditableSelect = <T,>({
       triggerVariant={triggerVariant}
       style={style}
       showConfirm={requireConfirmation}
+      listboxId={listboxId}
+      activeDescendantId={activeDescendantId}
+      statusMessage={statusMessage}
     >
       {filteredOptions.length === 0 ? (
         <div className="px-3 py-2 italic">Ingen treff</div>
@@ -261,6 +300,8 @@ export const EditableSelect = <T,>({
             highlightedIndex={highlightedIndex}
             onHighlight={setHighlightedIndex}
             handleRef={virtualizedOptionListHandle}
+            listboxId={listboxId}
+            selectedKeys={selectedKeys}
             renderOption={(option) => (
               <Radio value={getKey(option)} className="w-full" tabIndex={-1}>
                 {formatLabel(option)}
