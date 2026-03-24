@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "start": "bun run build --watch & node --watch --trace-warnings --enable-source-maps dist/server.js",
-    "build": "bun build ./src/server.ts --target node --format esm --sourcemap=linked --outdir dist && bun run copy-assets",
+    "build": "bun build ./src/server.ts --target node --format esm --sourcemap=linked --outdir dist",
     "copy-assets": "cp node_modules/@platformatic/wasm-utils/dist/native.wasm dist/",
     "lint": "biome check",
     "typecheck": "tsc --noEmit"
@@ -21,7 +21,7 @@
     "@fastify/websocket": "11.2.0",
     "@hocuspocus/common": "3.4.4",
     "@hocuspocus/server": "3.4.4",
-    "@platformatic/kafka": "1.31.0",
+    "@platformatic/kafka": "1.26.0",
     "@slate-yjs/core": "1.0.2",
     "fastify": "5.8.2",
     "fastify-metrics": "12.1.0",
