@@ -67,7 +67,6 @@ export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProp
         emptyLabel={TABLE_HEADERS[columnKey] ?? 'Registreringshjemler'}
         filterText={hjemmelFilterText}
         onChange={handleChange}
-        confirmLabel="Bekreft"
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"

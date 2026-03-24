@@ -30,7 +30,6 @@ export interface SearchableMultiSelectProps<T> {
    */
   readOnly?: boolean;
   error?: string;
-  confirmLabel?: string;
   /**
    * When `true`, the user must explicitly confirm via the button or keyboard shortcut. When `false`, the selection is applied automatically when the popover closes.
    * @default false

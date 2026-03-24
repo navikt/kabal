@@ -40,7 +40,6 @@ export const RolYtelse = ({ tableKey, columnKey }: FilterDropdownProps) => {
         filterText={filterText}
         emptyLabel={TABLE_HEADERS[columnKey] ?? ''}
         onChange={handleChange}
-        confirmLabel="Bekreft"
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"

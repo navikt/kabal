@@ -29,7 +29,7 @@ export const EditableSelect = <T,>({
   disabled = false,
   loading = false,
   error,
-  confirmLabel,
+  confirmLabel = 'Velg',
   requireConfirmation = false,
   flip,
   scrollContainerRef,
@@ -282,7 +282,9 @@ export const EditableSelect = <T,>({
       confirmLabel={confirmLabel}
       onConfirm={handleConfirm}
       keyboardShortcuts={
-        requireConfirmation ? CONFIRM_KEYBOARD_SHORTCUTS : [{ shortcuts: ['Enter'], description: confirmLabel }]
+        requireConfirmation
+          ? CONFIRM_KEYBOARD_SHORTCUTS
+          : [{ shortcuts: ['Enter'], description: `${confirmLabel} og lukk` }]
       }
       flip={flip}
       trigger={formatLabel(value)}

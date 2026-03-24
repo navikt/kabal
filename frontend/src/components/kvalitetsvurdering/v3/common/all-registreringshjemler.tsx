@@ -81,7 +81,6 @@ export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshj
       filterText={hjemmelFilterText}
       onChange={handleChange}
       error={error}
-      confirmLabel="Sett hjemler"
       scrollContainerRef={containerRef}
       readOnly={!canEdit}
     />

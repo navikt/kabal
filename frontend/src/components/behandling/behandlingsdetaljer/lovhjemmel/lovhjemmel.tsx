@@ -80,7 +80,6 @@ export const Lovhjemmel = () => {
         filterText={hjemmelFilterText}
         onChange={handleChange}
         error={validationError}
-        confirmLabel="Sett hjemler"
         scrollContainerRef={containerRef}
         readOnly={!canEdit}
       />

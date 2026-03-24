@@ -74,7 +74,6 @@ export const UtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: 
         formatLabel={utfallFormatLabel}
         filterOption={utfallFilterOption}
         error={validationError}
-        confirmLabel="Sett utfall"
         scrollContainerRef={containerRef}
         readOnly={!canEdit}
       />

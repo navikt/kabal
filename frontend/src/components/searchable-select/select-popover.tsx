@@ -211,7 +211,7 @@ export const SelectPopover = ({
             {keyboardShortcuts.map(({ shortcuts, description }) => (
               <KeyRow key={shortcuts.join('+')} shortcuts={shortcuts} description={description} />
             ))}
-            {showConfirm ? <KeyRow shortcuts={[CONFIRM_SHORTCUT]} description={confirmLabel} /> : null}
+            {showConfirm ? <KeyRow shortcuts={[CONFIRM_SHORTCUT]} description={`${confirmLabel} og lukk`} /> : null}
             <KeyRow shortcuts={['Esc']} description="Avbryt og lukk" />
           </Box>
         </Popover.Content>
@@ -220,4 +220,4 @@ export const SelectPopover = ({
   );
 };
 
-const CONFIRM_SHORTCUT = `${MOD_KEY_TEXT} + Enter`;
+export const CONFIRM_SHORTCUT = `${MOD_KEY_TEXT} + Enter`;
