@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react';
 import { Fields } from '@/components/documents/journalfoerte-documents/grid';
 import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { formatFoedselsnummer, formatOrgNum } from '@/functions/format-id';
 import { isNotNull } from '@/functions/is-not-type-guards';
 import {
@@ -22,7 +23,7 @@ export const AvsenderMottakerFilter = ({
   selectedAvsenderMottakere,
   setSelectedAvsenderMottakere,
 }: AvsenderMottakerFilterProps) => {
-  const options = useMemo(() => {
+  const options = useMemo<Entry<AvsenderMottaker>[]>(() => {
     const unique = new Map<string, AvsenderMottaker>();
 
     for (const avsenderMottaker of avsenderMottakerList) {
@@ -33,16 +34,24 @@ export const AvsenderMottakerFilter = ({
       }
     }
 
-    return unique.values().toArray();
+    return unique
+      .values()
+      .toArray()
+      .map((am) => ({
+        value: am,
+        key: getAvsenderMottakerKey(am),
+        label: formatAvsenderMottaker(am),
+        plainText: [am.navn, am.id].filter(isNotNull).join(' '),
+      }));
   }, [avsenderMottakerList]);
 
-  const selectedOptions = useMemo(
-    () => options.filter((o) => selectedAvsenderMottakere.some((s) => s === getAvsenderMottakerKey(o))),
+  const selectedOptions = useMemo<Entry<AvsenderMottaker>[]>(
+    () => options.filter((o) => selectedAvsenderMottakere.some((s) => s === o.key)),
     [options, selectedAvsenderMottakere],
   );
 
   const handleChange = useCallback(
-    (values: IArkiverteDocumentsResponse['avsenderMottakerList']) => {
+    (values: AvsenderMottaker[]) => {
       setSelectedAvsenderMottakere(values.map(getAvsenderMottakerKey));
     },
     [setSelectedAvsenderMottakere],
@@ -53,10 +62,7 @@ export const AvsenderMottakerFilter = ({
       label="Avsender/mottaker"
       options={options}
       value={selectedOptions}
-      valueKey={getAvsenderMottakerKey}
-      formatOption={formatAvsenderMottaker}
       emptyLabel="Avsender/mottaker"
-      filterText={getFilterText}
       onChange={handleChange}
       style={{ gridArea: Fields.AvsenderMottaker }}
       triggerSize="small"
@@ -83,8 +89,6 @@ const formatAvsenderMottaker = ({ navn, id, type }: AvsenderMottaker) => (
     )}
   </div>
 );
-
-const getFilterText = ({ navn, id }: AvsenderMottaker) => [navn, id].filter(isNotNull).join(' ');
 
 const formatAvsenderId = (id: string, type: AvsenderMottakerIdType | null) => {
   switch (type) {

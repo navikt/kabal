@@ -1,5 +1,4 @@
 import { Box, HStack, Loader, Search, Table, VStack } from '@navikt/ds-react';
-import type { ReactNode } from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { Body } from '@/components/maltekstseksjoner/maltekstseksjon/draft/available-texts/body';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
@@ -35,7 +34,7 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
   const [filteredStatuses, setFilteredStatuses] = useState<Status[]>(DEFAULT_STATUSES);
 
   const selectedStatusOptions = useMemo(
-    () => STATUS_OPTIONS.filter((o) => filteredStatuses.includes(o.value)),
+    () => STATUS_OPTIONS.filter((entry) => filteredStatuses.includes(entry.value.value)),
     [filteredStatuses],
   );
 
@@ -158,10 +157,7 @@ export const AvailableTextsByType = ({ onAdd, onRemove, usedIds, textType }: Ava
                       label="Status"
                       options={STATUS_OPTIONS}
                       value={selectedStatusOptions}
-                      valueKey={statusValueKey}
-                      formatOption={statusFormatOption}
                       emptyLabel="Status"
-                      filterText={statusFilterText}
                       onChange={handleStatusChange}
                       triggerSize="small"
                       triggerVariant="tertiary"
@@ -201,7 +197,3 @@ type ScoredRichText = ListRichText & { score: number };
 
 const isRichtext = (text: IText | ListText): text is IRichText =>
   text.textType === RichTextTypes.MALTEKST || text.textType === RichTextTypes.REDIGERBAR_MALTEKST;
-
-const statusValueKey = (option: StatusOption): string => option.value;
-const statusFormatOption = (option: StatusOption): ReactNode => option.label;
-const statusFilterText = (option: StatusOption): string => option.label;

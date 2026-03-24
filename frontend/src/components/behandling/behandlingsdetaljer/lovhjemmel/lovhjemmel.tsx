@@ -3,6 +3,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useId, useMemo } from 'react';
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
@@ -23,21 +24,32 @@ export const Lovhjemmel = () => {
   const validationError = useValidationError('hjemmel');
   const lovKildeToRegistreringshjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
 
-  const options = useMemo<HjemmelOption[]>(
+  const options = useMemo<Entry<HjemmelOption>[]>(
     () =>
       lovKildeToRegistreringshjemler.flatMap(({ lovkilde, registreringshjemler }) =>
-        registreringshjemler.map(({ id, navn }) => ({
-          id,
-          navn,
-          lovkildeNavn: lovkilde.navn,
-        })),
+        registreringshjemler.map(({ id, navn }) => {
+          const hjemmel: HjemmelOption = { id, navn, lovkildeNavn: lovkilde.navn };
+
+          return {
+            value: hjemmel,
+            key: id,
+            plainText: `${lovkilde.navn} - ${navn}`,
+            label: (
+              <span className="truncate">
+                <span className="text-ax-text-neutral-subtle">{lovkilde.navn}</span>
+                {' - '}
+                {navn}
+              </span>
+            ),
+          };
+        }),
       ),
     [lovKildeToRegistreringshjemler],
   );
 
   const selected = oppgave?.resultat.hjemmelIdSet;
 
-  const value = useMemo(() => options.filter(({ id }) => selected?.includes(id) === true), [options, selected]);
+  const value = useMemo(() => options.filter(({ key }) => selected?.includes(key) === true), [options, selected]);
 
   const handleChange = useCallback(
     (values: HjemmelOption[]) => {
@@ -74,10 +86,7 @@ export const Lovhjemmel = () => {
         label="Hjemmel"
         options={options}
         value={value}
-        valueKey={hjemmelValueKey}
-        formatOption={formatHjemmelOption}
         emptyLabel="Velg hjemler"
-        filterText={hjemmelFilterText}
         onChange={handleChange}
         error={validationError}
         scrollContainerRef={containerRef}
@@ -86,15 +95,3 @@ export const Lovhjemmel = () => {
     </VStack>
   );
 };
-
-const hjemmelValueKey = (option: HjemmelOption): string => option.id;
-
-const formatHjemmelOption = (option: HjemmelOption) => (
-  <span className="truncate">
-    <span className="text-ax-text-neutral-subtle">{option.lovkildeNavn}</span>
-    {' - '}
-    {option.navn}
-  </span>
-);
-
-const hjemmelFilterText = (option: HjemmelOption): string => `${option.lovkildeNavn} - ${option.navn}`;

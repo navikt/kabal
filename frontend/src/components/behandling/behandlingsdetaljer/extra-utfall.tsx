@@ -3,6 +3,7 @@ import { useCallback, useId, useMemo } from 'react';
 import { ReturWarning } from '@/components/behandling/behandlingsdetaljer/warnings';
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { isUtfall } from '@/functions/is-utfall';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
@@ -43,9 +44,21 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props
   const [updateUtfall] = useUpdateExtraUtfallMutation();
   const [utfallKodeverk] = useUtfall(typeId);
 
-  const options = useMemo(() => utfallKodeverk.filter(({ id }) => id !== mainUtfall), [utfallKodeverk, mainUtfall]);
+  const options = useMemo(() => {
+    const result: Entry<IKodeverkSimpleValue<UtfallEnum>>[] = [];
 
-  const value = useMemo(() => options.filter(({ id }) => utfallIdSet.includes(id)), [options, utfallIdSet]);
+    for (const utfall of utfallKodeverk) {
+      if (utfall.id === mainUtfall) {
+        continue;
+      }
+
+      result.push({ value: utfall, key: utfall.id, label: utfall.navn, plainText: utfall.navn });
+    }
+
+    return result;
+  }, [utfallKodeverk, mainUtfall]);
+
+  const value = useMemo(() => options.filter(({ value: { id } }) => utfallIdSet.includes(id)), [options, utfallIdSet]);
 
   const onChange = useCallback(
     (selected: IKodeverkSimpleValue<UtfallEnum>[]) => {
@@ -80,10 +93,7 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props
           label="Ekstra utfall for tilpasset tekst"
           options={options}
           value={value}
-          valueKey={utfallValueKey}
-          formatOption={formatUtfallOption}
           emptyLabel="Velg ekstra utfall"
-          filterText={utfallFilterText}
           onChange={onChange}
           scrollContainerRef={containerRef}
         />
@@ -91,7 +101,3 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props
     </VStack>
   );
 };
-
-const utfallValueKey = (option: IKodeverkSimpleValue<UtfallEnum>): string => option.id;
-const formatUtfallOption = (option: IKodeverkSimpleValue<UtfallEnum>) => option.navn;
-const utfallFilterText = (option: IKodeverkSimpleValue<UtfallEnum>): string => option.navn;

@@ -5,8 +5,23 @@ import type { FilterDropdownProps } from '@/components/common-table-components/o
 import { useOppgaveTableTildelteSaksbehandlere } from '@/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useGetSaksbehandlereInEnhetQuery } from '@/redux-api/oppgaver/queries/oppgaver';
 import type { INavEmployee } from '@/types/bruker';
+
+const toEntry = (e: INavEmployee): Entry<INavEmployee> => ({
+  value: e,
+  key: e.navIdent,
+  label: (
+    <div className="flex grow flex-row items-center justify-between gap-2 whitespace-nowrap">
+      <span>{e.navn}</span>
+      <Tag size="xsmall" variant="strong" data-color="neutral" className="font-mono">
+        {e.navIdent}
+      </Tag>
+    </div>
+  ),
+  plainText: `${e.navn} ${e.navIdent}`,
+});
 
 export const Saksbehandler = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const { user } = useContext(StaticDataContext);
@@ -14,9 +29,11 @@ export const Saksbehandler = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const employees = useMemo(() => data?.saksbehandlere ?? [], [data]);
   const [tildelteSaksbehandlere, setTildelteSaksbehandlere] = useOppgaveTableTildelteSaksbehandlere(tableKey);
 
-  const selectedEmployees = useMemo(
-    () => employees.filter((e) => tildelteSaksbehandlere?.includes(e.navIdent) === true),
-    [employees, tildelteSaksbehandlere],
+  const options = useMemo(() => employees.map(toEntry), [employees]);
+
+  const selectedEntries = useMemo(
+    () => options.filter((entry) => tildelteSaksbehandlere?.includes(entry.key) === true),
+    [options, tildelteSaksbehandlere],
   );
 
   const handleChange = useCallback(
@@ -30,12 +47,9 @@ export const Saksbehandler = ({ tableKey, columnKey }: FilterDropdownProps) => {
     <Table.ColumnHeader aria-sort="none">
       <SearchableMultiSelect
         label={TABLE_HEADERS[columnKey] ?? ''}
-        options={employees}
-        value={selectedEmployees}
-        valueKey={employeeValueKey}
-        formatOption={formatEmployeeOption}
+        options={options}
+        value={selectedEntries}
         emptyLabel={TABLE_HEADERS[columnKey] ?? ''}
-        filterText={employeeFilterText}
         onChange={handleChange}
         triggerVariant="tertiary"
         triggerSize="medium"
@@ -45,17 +59,3 @@ export const Saksbehandler = ({ tableKey, columnKey }: FilterDropdownProps) => {
     </Table.ColumnHeader>
   );
 };
-
-const employeeValueKey = (employee: INavEmployee): string => employee.navIdent;
-
-const formatEmployeeOption = (employee: INavEmployee) => (
-  <div className="flex grow flex-row items-center justify-between gap-2 whitespace-nowrap">
-    <span>{employee.navn}</span>
-
-    <Tag size="xsmall" variant="strong" data-color="neutral" className="font-mono">
-      {employee.navIdent}
-    </Tag>
-  </div>
-);
-
-const employeeFilterText = (employee: INavEmployee): string => `${employee.navn} ${employee.navIdent}`;

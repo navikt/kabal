@@ -4,6 +4,7 @@ import type { FilterDropdownProps } from '@/components/common-table-components/o
 import { useOppgaveTableRegistreringshjemler } from '@/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
 import { useLovKildeToRegistreringshjemler } from '@/simple-api-state/use-kodeverk';
 
@@ -17,7 +18,7 @@ export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProp
   const { data: lovkilder = [] } = useLovKildeToRegistreringshjemler();
   const [registreringshjemler, setRegistreringshjemler] = useOppgaveTableRegistreringshjemler(tableKey);
 
-  const options = useMemo<FlatRegistreringshjemmel[]>(() => {
+  const options = useMemo<Entry<FlatRegistreringshjemmel>[]>(() => {
     const flat: FlatRegistreringshjemmel[] = [];
 
     for (const lovkilde of lovkilder) {
@@ -28,25 +29,23 @@ export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProp
       }
     }
 
-    return flat.sort((a, b) => sortWithOrdinals(a.navn, b.navn));
+    flat.sort((a, b) => sortWithOrdinals(a.navn, b.navn));
+
+    return flat.map((h) => ({
+      value: h,
+      key: h.id,
+      label: (
+        <span>
+          <span className="text-ax-text-neutral-subtle">{h.lovkilde}</span> - {h.navn}
+        </span>
+      ),
+      plainText: `${h.lovkilde} - ${h.navn}`,
+    }));
   }, [lovkilder]);
 
-  const optionsByKey = useMemo(() => {
-    const map = new Map<string, FlatRegistreringshjemmel>();
-
-    for (const option of options) {
-      map.set(option.id, option);
-    }
-
-    return map;
-  }, [options]);
-
-  const value = useMemo(
-    () =>
-      (registreringshjemler ?? [])
-        .map((id) => optionsByKey.get(id))
-        .filter((v): v is FlatRegistreringshjemmel => v !== undefined),
-    [registreringshjemler, optionsByKey],
+  const value = useMemo<Entry<FlatRegistreringshjemmel>[]>(
+    () => options.filter((entry) => registreringshjemler?.includes(entry.key) === true),
+    [registreringshjemler, options],
   );
 
   const handleChange = useCallback(
@@ -62,10 +61,7 @@ export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProp
         label={TABLE_HEADERS[columnKey] ?? 'Registreringshjemler'}
         options={options}
         value={value}
-        valueKey={hjemmelValueKey}
-        formatOption={formatHjemmelOption}
         emptyLabel={TABLE_HEADERS[columnKey] ?? 'Registreringshjemler'}
-        filterText={hjemmelFilterText}
         onChange={handleChange}
         triggerVariant="tertiary"
         triggerSize="medium"
@@ -75,13 +71,3 @@ export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProp
     </Table.ColumnHeader>
   );
 };
-
-const hjemmelValueKey = (option: FlatRegistreringshjemmel): string => option.id;
-
-const formatHjemmelOption = (option: FlatRegistreringshjemmel) => (
-  <span>
-    <span className="text-ax-text-neutral-subtle">{option.lovkilde}</span> - {option.navn}
-  </span>
-);
-
-const hjemmelFilterText = (option: FlatRegistreringshjemmel): string => `${option.lovkilde} - ${option.navn}`;

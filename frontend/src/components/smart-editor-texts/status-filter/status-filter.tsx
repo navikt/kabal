@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import {
   type Filterable,
   isDepublished,
@@ -12,7 +13,7 @@ export const StatusFilter = () => {
   const [filteredStatuses, setFilteredStatuses] = useStatusFilter();
 
   const selectedOptions = useMemo(
-    () => STATUS_OPTIONS.filter((o) => filteredStatuses.includes(o.value)),
+    () => STATUS_OPTIONS.filter((o) => filteredStatuses.includes(o.value.value)),
     [filteredStatuses],
   );
 
@@ -26,10 +27,7 @@ export const StatusFilter = () => {
       label="Status"
       options={STATUS_OPTIONS}
       value={selectedOptions}
-      valueKey={statusValueKey}
-      formatOption={statusFormat}
       emptyLabel="Alle statuser"
-      filterText={statusFormat}
       onChange={handleChange}
       showSelectAll
     />
@@ -47,14 +45,21 @@ export interface StatusOption {
   label: string;
 }
 
-export const STATUS_OPTIONS: StatusOption[] = [
-  { value: Status.PUBLISHED, label: 'Publisert' },
-  { value: Status.DRAFT, label: 'Utkast' },
-  { value: Status.DEPUBLISHED, label: 'Avpublisert' },
+export const STATUS_OPTIONS: Entry<StatusOption>[] = [
+  {
+    value: { value: Status.PUBLISHED, label: 'Publisert' },
+    key: Status.PUBLISHED,
+    label: 'Publisert',
+    plainText: 'Publisert',
+  },
+  { value: { value: Status.DRAFT, label: 'Utkast' }, key: Status.DRAFT, label: 'Utkast', plainText: 'Utkast' },
+  {
+    value: { value: Status.DEPUBLISHED, label: 'Avpublisert' },
+    key: Status.DEPUBLISHED,
+    label: 'Avpublisert',
+    plainText: 'Avpublisert',
+  },
 ];
-
-const statusValueKey = (option: StatusOption) => option.value;
-const statusFormat = (option: StatusOption) => option.label;
 
 const STATUS_VALUES = Object.values(Status);
 

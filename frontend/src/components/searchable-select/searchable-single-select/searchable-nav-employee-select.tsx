@@ -1,14 +1,30 @@
 import { Tag } from '@navikt/ds-react';
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import type { INavEmployee } from '@/types/bruker';
+
+export const toNavEmployeeEntry = (employee: INavEmployee): Entry<INavEmployee> => ({
+  value: employee,
+  key: employee.navIdent,
+  plainText: `${employee.navn} ${employee.navIdent}`,
+  label: (
+    <div className="flex grow flex-row items-center justify-between gap-2 whitespace-nowrap">
+      <span>{employee.navn}</span>
+
+      <Tag size="xsmall" variant="strong" data-color="neutral" className="font-mono">
+        {employee.navIdent}
+      </Tag>
+    </div>
+  ),
+});
 
 export interface SearchableNavEmployeeSelectProps {
   label: string;
   options: INavEmployee[];
   value: INavEmployee | null;
   onChange: (employee: INavEmployee) => void;
-  onClear?: () => void;
+  /** Text shown on the trigger button when no value is selected. */
   nullLabel?: string;
   disabled?: boolean;
   loading?: boolean;
@@ -22,69 +38,31 @@ export const SearchableNavEmployeeSelect = ({
   options,
   value,
   onChange,
-  onClear,
-  nullLabel = 'Ingen valgt',
+  nullLabel,
   disabled,
   loading,
   confirmLabel,
   flip,
 }: SearchableNavEmployeeSelectProps) => {
-  const formatLabel = useCallback(
-    (option: INavEmployee | null): React.ReactNode =>
-      option === null ? (
-        nullLabel
-      ) : (
-        <div className="flex grow flex-row items-center justify-between gap-2 whitespace-nowrap">
-          <span>{option.navn}</span>
+  const entries = useMemo(() => options.map(toNavEmployeeEntry), [options]);
 
-          <Tag size="xsmall" variant="strong" data-color="neutral" className="font-mono">
-            {option.navIdent}
-          </Tag>
-        </div>
-      ),
-    [nullLabel],
+  const selectedEntry = useMemo(
+    (): Entry<INavEmployee> | null => (value === null ? null : (entries.find((e) => e.key === value.navIdent) ?? null)),
+    [value, entries],
   );
 
   return (
     <SearchableSelect
       label={label}
-      options={options}
-      value={value}
+      options={entries}
+      value={selectedEntry}
       onChange={onChange}
-      onClear={onClear}
+      nullLabel={nullLabel}
       disabled={disabled}
       loading={loading}
-      valueKey={employeeValueKey}
-      formatLabel={formatLabel}
-      filterOption={employeeFilterOption}
       confirmLabel={confirmLabel}
       flip={flip}
       requireConfirmation
     />
   );
-};
-
-const employeeValueKey = (option: INavEmployee): string => option.navIdent;
-
-const employeeFilterOption = (option: INavEmployee, search: string): boolean => {
-  const target = `${option.navn} ${option.navIdent}`.toLowerCase();
-
-  return fuzzyMatch(target, search.toLowerCase());
-};
-
-/** Returns true if all characters of `query` appear in `target` in order. */
-const fuzzyMatch = (target: string, query: string): boolean => {
-  let ti = 0;
-
-  for (const ch of query) {
-    const idx = target.indexOf(ch, ti);
-
-    if (idx === -1) {
-      return false;
-    }
-
-    ti = idx + 1;
-  }
-
-  return true;
 };

@@ -4,6 +4,7 @@ import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/comm
 import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
@@ -33,13 +34,20 @@ export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshj
   const { data: oppgave } = useOppgave();
   const lovKildeToRegistreringshjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
 
-  const options = useMemo<HjemmelOption[]>(
+  const options = useMemo<Entry<HjemmelOption>[]>(
     () =>
       lovKildeToRegistreringshjemler.flatMap(({ lovkilde, registreringshjemler }) =>
         registreringshjemler.map(({ id, navn }) => ({
-          id,
-          navn,
-          lovkildeNavn: lovkilde.navn,
+          value: { id, navn, lovkildeNavn: lovkilde.navn },
+          key: id,
+          label: (
+            <span className="truncate">
+              <span className="text-ax-text-neutral-subtle">{lovkilde.navn}</span>
+              {' - '}
+              {navn}
+            </span>
+          ),
+          plainText: `${lovkilde.navn} - ${navn}`,
         })),
       ),
     [lovKildeToRegistreringshjemler],
@@ -47,7 +55,7 @@ export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshj
 
   const selected = isLoading ? EMPTY_ARRAY : (kvalitetsvurdering[field] ?? EMPTY_ARRAY);
 
-  const value = useMemo(() => options.filter(({ id }) => selected.includes(id)), [options, selected]);
+  const value = useMemo(() => options.filter((entry) => selected.includes(entry.key)), [options, selected]);
 
   const handleChange = useCallback(
     (values: HjemmelOption[]) => {
@@ -75,10 +83,7 @@ export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshj
       label="Velg hjemmel/hjemler"
       options={options}
       value={value}
-      valueKey={hjemmelValueKey}
-      formatOption={formatHjemmelOption}
       emptyLabel="Velg hjemler"
-      filterText={hjemmelFilterText}
       onChange={handleChange}
       error={error}
       scrollContainerRef={containerRef}
@@ -86,15 +91,3 @@ export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshj
     />
   );
 };
-
-const hjemmelValueKey = (option: HjemmelOption): string => option.id;
-
-const formatHjemmelOption = (option: HjemmelOption) => (
-  <span className="truncate">
-    <span className="text-ax-text-neutral-subtle">{option.lovkildeNavn}</span>
-    {' - '}
-    {option.navn}
-  </span>
-);
-
-const hjemmelFilterText = (option: HjemmelOption): string => `${option.lovkildeNavn} - ${option.navn}`;

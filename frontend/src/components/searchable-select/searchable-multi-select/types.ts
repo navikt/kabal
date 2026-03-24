@@ -1,5 +1,6 @@
 import type { ButtonProps } from '@navikt/ds-react';
-import type { ReactNode, RefObject } from 'react';
+import type { RefObject } from 'react';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 
 export interface SearchableMultiSelectProps<T> {
   /** Optional id applied to the trigger element, enabling external `<label htmlFor={id}>` association. */
@@ -8,17 +9,11 @@ export interface SearchableMultiSelectProps<T> {
   label: string;
   /** Inline styles applied to the outermost wrapper element. */
   style?: React.CSSProperties;
-  options: T[];
+  options: Entry<T>[];
   /** Currently selected values (controlled). */
-  value: T[];
-  /** Unique key for each option. */
-  valueKey: (option: T) => string;
-  /** How to render an option in the dropdown list and as a pill in the trigger. */
-  formatOption: (option: T) => ReactNode;
+  value: Entry<T>[];
   /** Text to show in the trigger when nothing is selected. */
   emptyLabel: string;
-  /** Return the text to fuzzy-match against when filtering. */
-  filterText: (option: T) => string;
   /** Called when the user confirms a new selection. */
   onChange: (values: T[]) => void;
   disabled?: boolean;

@@ -5,17 +5,33 @@ import type { FilterDropdownProps } from '@/components/common-table-components/o
 import { useOppgaveTableMedunderskrivere } from '@/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useGetMedunderskrivereForEnhetQuery } from '@/redux-api/oppgaver/queries/oppgaver';
 import type { INavEmployee } from '@/types/bruker';
+
+const toEmployeeEntry = (e: INavEmployee): Entry<INavEmployee> => ({
+  value: e,
+  key: e.navIdent,
+  label: (
+    <div className="flex grow flex-row items-center justify-between gap-2 whitespace-nowrap">
+      <span>{e.navn}</span>
+      <Tag size="xsmall" variant="strong" data-color="neutral" className="font-mono">
+        {e.navIdent}
+      </Tag>
+    </div>
+  ),
+  plainText: `${e.navn} ${e.navIdent}`,
+});
 
 export const Medunderskriver = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const { user } = useContext(StaticDataContext);
   const { data } = useGetMedunderskrivereForEnhetQuery(user.ansattEnhet.id);
-  const options = useMemo<INavEmployee[]>(() => data?.medunderskrivere ?? [], [data]);
   const [medunderskrivere, setMedunderskrivere] = useOppgaveTableMedunderskrivere(tableKey);
 
-  const selectedEmployees = useMemo(
-    () => options.filter((e) => medunderskrivere?.includes(e.navIdent) === true),
+  const options = useMemo<Entry<INavEmployee>[]>(() => (data?.medunderskrivere ?? []).map(toEmployeeEntry), [data]);
+
+  const selectedEntries = useMemo(
+    () => options.filter((entry) => medunderskrivere?.includes(entry.key) === true),
     [options, medunderskrivere],
   );
 
@@ -31,11 +47,8 @@ export const Medunderskriver = ({ tableKey, columnKey }: FilterDropdownProps) =>
       <SearchableMultiSelect
         label={TABLE_HEADERS[columnKey] ?? ''}
         options={options}
-        value={selectedEmployees}
-        valueKey={employeeValueKey}
-        formatOption={formatEmployeeOption}
+        value={selectedEntries}
         emptyLabel={TABLE_HEADERS[columnKey] ?? ''}
-        filterText={employeeFilterText}
         onChange={handleChange}
         triggerVariant="tertiary"
         triggerSize="medium"
@@ -45,16 +58,3 @@ export const Medunderskriver = ({ tableKey, columnKey }: FilterDropdownProps) =>
     </Table.ColumnHeader>
   );
 };
-
-const employeeValueKey = (employee: INavEmployee): string => employee.navIdent;
-
-const formatEmployeeOption = (employee: INavEmployee) => (
-  <div className="flex grow flex-row items-center justify-between gap-2 whitespace-nowrap">
-    <span>{employee.navn}</span>
-    <Tag size="xsmall" variant="strong" data-color="neutral" className="font-mono">
-      {employee.navIdent}
-    </Tag>
-  </div>
-);
-
-const employeeFilterText = (employee: INavEmployee): string => `${employee.navn} ${employee.navIdent}`;

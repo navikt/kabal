@@ -4,6 +4,7 @@ import type { FilterDropdownProps } from '@/components/common-table-components/o
 import { useOppgaveTableHjemler } from '@/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useSettingsHjemler } from '@/hooks/use-settings-hjemler';
 import type { IKodeverkValue } from '@/types/kodeverk';
 
@@ -11,9 +12,20 @@ export const Hjemmel = ({ columnKey, tableKey }: FilterDropdownProps) => {
   const hjemlerOptions = useSettingsHjemler();
   const [hjemler, setHjemler] = useOppgaveTableHjemler(tableKey);
 
-  const selectedValues = useMemo(
-    () => hjemlerOptions.filter((o) => hjemler?.includes(o.id) === true),
-    [hjemlerOptions, hjemler],
+  const options = useMemo<Entry<IKodeverkValue>[]>(
+    () =>
+      hjemlerOptions.map((o) => ({
+        value: o,
+        key: o.id,
+        label: o.beskrivelse,
+        plainText: o.beskrivelse,
+      })),
+    [hjemlerOptions],
+  );
+
+  const selectedValues = useMemo<Entry<IKodeverkValue>[]>(
+    () => options.filter((o) => hjemler?.includes(o.key) === true),
+    [options, hjemler],
   );
 
   const handleChange = useCallback(
@@ -27,12 +39,9 @@ export const Hjemmel = ({ columnKey, tableKey }: FilterDropdownProps) => {
     <Table.ColumnHeader aria-sort="none">
       <SearchableMultiSelect
         label={TABLE_HEADERS[columnKey] ?? 'Hjemmel'}
-        options={hjemlerOptions}
+        options={options}
         value={selectedValues}
-        valueKey={hjemmelValueKey}
-        formatOption={formatHjemmelOption}
         emptyLabel={TABLE_HEADERS[columnKey] ?? 'Hjemmel'}
-        filterText={hjemmelFilterText}
         onChange={handleChange}
         triggerVariant="tertiary"
         triggerSize="medium"
@@ -42,9 +51,3 @@ export const Hjemmel = ({ columnKey, tableKey }: FilterDropdownProps) => {
     </Table.ColumnHeader>
   );
 };
-
-const hjemmelValueKey = (option: IKodeverkValue): string => option.id;
-
-const formatHjemmelOption = (option: IKodeverkValue): string => option.beskrivelse;
-
-const hjemmelFilterText = (option: IKodeverkValue): string => option.beskrivelse;
