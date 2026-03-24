@@ -65,7 +65,6 @@ export const RolHjemmel = ({ tableKey, columnKey }: FilterDropdownProps) => {
         filterText={hjemmelFilterText}
         emptyLabel={TABLE_HEADERS[columnKey] ?? 'Hjemmel'}
         onChange={handleChange}
-        confirmLabel="Bekreft"
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"

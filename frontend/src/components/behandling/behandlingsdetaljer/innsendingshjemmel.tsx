@@ -100,7 +100,6 @@ export const Innsendingshjemler = ({ oppgavebehandling, id }: Innsendingshjemler
       filterText={hjemmelFilterText}
       onChange={handleChange}
       error={isError ? 'Kunne ikke sette innsendingshjemler' : undefined}
-      confirmLabel="Sett hjemler"
       scrollContainerRef={containerRef}
       readOnly={oppgavebehandling.isAvsluttetAvSaksbehandler}
     />

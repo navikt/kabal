@@ -5,7 +5,7 @@ import { scrollPopoverIntoView } from '@/components/searchable-select/scroll-pop
 import { setsEqual } from '@/components/searchable-select/searchable-multi-select/multi-select-utils';
 import { TriggerContent } from '@/components/searchable-select/searchable-multi-select/trigger-content';
 import type { SearchableMultiSelectProps } from '@/components/searchable-select/searchable-multi-select/types';
-import { SelectPopover } from '@/components/searchable-select/select-popover';
+import { CONFIRM_SHORTCUT, SelectPopover } from '@/components/searchable-select/select-popover';
 import { useHighlight } from '@/components/searchable-select/use-highlight';
 import { useKeyboardNavigation } from '@/components/searchable-select/use-keyboard-navigation';
 import { usePopoverState } from '@/components/searchable-select/use-popover-state';
@@ -33,7 +33,6 @@ export const EditableMultiSelect = <T,>({
   disabled = false,
   loading = false,
   error,
-  confirmLabel = 'Bekreft',
   flip,
   scrollContainerRef,
   triggerSize,
@@ -286,10 +285,14 @@ export const EditableMultiSelect = <T,>({
       onClose={confirmAndClose}
       onPopoverKeyDown={handleKeyDown}
       hasDraftChange={hasDraftChange}
-      confirmLabel={confirmLabel}
+      confirmLabel="Bekreft"
       onConfirm={handleConfirm}
       showConfirm={requireConfirmation}
-      keyboardShortcuts={KEYBOARD_SHORTCUTS}
+      keyboardShortcuts={
+        requireConfirmation
+          ? KEYBOARD_SHORTCUTS
+          : [...KEYBOARD_SHORTCUTS, { shortcuts: [CONFIRM_SHORTCUT], description: 'Bekreft og lukk' }]
+      }
       trigger={
         <TriggerContent
           display={triggerDisplay}

@@ -37,7 +37,6 @@ export const Medunderskriver = ({ tableKey, columnKey }: FilterDropdownProps) =>
         emptyLabel={TABLE_HEADERS[columnKey] ?? ''}
         filterText={employeeFilterText}
         onChange={handleChange}
-        confirmLabel="Bekreft"
         triggerVariant="tertiary"
         triggerSize="medium"
         triggerDisplay="count"
