@@ -1,5 +1,6 @@
 import type { ButtonProps } from '@navikt/ds-react';
-import type { ReactNode, RefObject } from 'react';
+import type { RefObject } from 'react';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 
 export const NULL_KEY = '__searchable_select_null__';
 
@@ -8,13 +9,9 @@ export interface SearchableSelectProps<T> {
   id?: string;
   /** Used for aria-label on the trigger button and internal fields. Not rendered visually. */
   label: string;
-  options: T[];
-  value: T | null;
-  valueKey: (option: T) => string;
-  formatLabel: (option: T | null) => ReactNode;
-  filterOption: (option: T, search: string) => boolean;
+  options: Entry<T>[];
+  value: Entry<T> | null;
   onChange: (value: T) => void;
-  onClear?: () => void;
   disabled?: boolean;
   /** When true, shows a loading spinner on the trigger button to indicate a pending operation. */
   loading?: boolean;
@@ -42,6 +39,8 @@ export interface SearchableSelectProps<T> {
   triggerSize?: ButtonProps['size'];
   /** Variant of the trigger button. Defaults to `"secondary"`. */
   triggerVariant?: ButtonProps['variant'];
+  /** Text shown on the trigger button and in read-only mode when no value is selected. */
+  nullLabel?: string;
   /** Inline styles applied to the outermost wrapper element. */
   style?: React.CSSProperties;
 }

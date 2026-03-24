@@ -1,17 +1,19 @@
-import { Radio, RadioGroup } from '@navikt/ds-react';
 import { useCallback, useDeferredValue, useId, useMemo, useRef, useState } from 'react';
 import { scrollPopoverIntoView } from '@/components/searchable-select/scroll-popover-into-view';
-import { optionsMatch } from '@/components/searchable-select/searchable-single-select/single-select-utils';
-import { NULL_KEY, type SearchableSelectProps } from '@/components/searchable-select/searchable-single-select/types';
+import { optionEntriesMatch } from '@/components/searchable-select/searchable-single-select/single-select-utils';
+import type { SearchableSelectProps } from '@/components/searchable-select/searchable-single-select/types';
 import { SelectPopover } from '@/components/searchable-select/select-popover';
 import { useHighlight } from '@/components/searchable-select/use-highlight';
 import { useKeyboardNavigation } from '@/components/searchable-select/use-keyboard-navigation';
 import { usePopoverState } from '@/components/searchable-select/use-popover-state';
 import {
+  type Entry,
   getOptionId,
   VirtualizedOptionList,
   type VirtualizedOptionListHandle,
 } from '@/components/searchable-select/virtualized-option-list';
+import { VisualRadio } from '@/components/searchable-select/visual-radio';
+import { fuzzyMatch } from '@/functions/fuzzy-match';
 import { isMetaKey, Keys } from '@/keys';
 
 const CONFIRM_KEYBOARD_SHORTCUTS = [{ shortcuts: ['Enter'], description: 'Velg' }];
@@ -21,11 +23,7 @@ export const EditableSelect = <T,>({
   label,
   options,
   value,
-  valueKey,
-  formatLabel,
-  filterOption,
   onChange,
-  onClear,
   disabled = false,
   loading = false,
   error,
@@ -36,16 +34,17 @@ export const EditableSelect = <T,>({
   triggerSize,
   triggerVariant,
   style,
+  nullLabel,
 }: SearchableSelectProps<T>) => {
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
-  const [draftValue, setDraftValue] = useState<T | null | undefined>(undefined);
+  const [draftValue, setDraftValue] = useState<Entry<T> | null>(null);
   const virtualizedOptionListHandle = useRef<VirtualizedOptionListHandle>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef<number>(null);
   const savedScrollTopRef = useRef<number | null>(null);
 
-  const draftValueRef = useRef<T | null | undefined>(undefined);
+  const draftValueRef = useRef<Entry<T> | null>(null);
   draftValueRef.current = draftValue;
 
   const listboxId = useId();
@@ -53,18 +52,14 @@ export const EditableSelect = <T,>({
   const { highlightedIndex, setHighlightedIndex, highlightedIndexRef } = useHighlight(deferredSearch);
 
   const confirmDraft = useCallback(
-    (draft: T | null | undefined) => {
-      if (draft === undefined || optionsMatch(draft, value, valueKey)) {
+    (draft: Entry<T> | null) => {
+      if (draft === null || optionEntriesMatch(draft, value)) {
         return;
       }
 
-      if (draft === null) {
-        onClear?.();
-      } else {
-        onChange(draft);
-      }
+      onChange(draft.value);
     },
-    [value, onChange, onClear, valueKey],
+    [value, onChange],
   );
 
   const { open, buttonRef, handleClose, handleButtonClick, onButtonKeyDown } = usePopoverState({
@@ -72,7 +67,7 @@ export const EditableSelect = <T,>({
       savedScrollTopRef.current = scrollContainerRef?.current?.scrollTop ?? null;
       setSearch('');
       setHighlightedIndex(0);
-      setDraftValue(undefined);
+      setDraftValue(null);
 
       requestAnimationFrame(() => {
         scrolledRef.current = scrollPopoverIntoView(scrollContainerRef, popoverRef);
@@ -83,7 +78,7 @@ export const EditableSelect = <T,>({
         confirmDraft(draftValueRef.current);
       }
 
-      setDraftValue(undefined);
+      setDraftValue(null);
 
       // Restore scroll position after focus, so the browser's auto-scroll from focus() doesn't override the restore.
       requestAnimationFrame(() => {
@@ -103,24 +98,10 @@ export const EditableSelect = <T,>({
     },
   });
 
-  const getKey = useCallback((option: T | null): string => (option === null ? NULL_KEY : valueKey(option)), [valueKey]);
-
-  const optionsByKey = useMemo(() => {
-    const map = new Map<string, T>();
-
-    for (const option of options) {
-      map.set(valueKey(option), option);
-    }
-
-    return map;
-  }, [options, valueKey]);
-
-  const filteredOptions: (T | null)[] = useMemo(() => {
-    const nullOption: (T | null)[] = onClear !== undefined ? [null] : [];
-    const filtered = deferredSearch.length === 0 ? options : options.filter((o) => filterOption(o, deferredSearch));
-
-    return [...nullOption, ...filtered];
-  }, [onClear, options, deferredSearch, filterOption]);
+  const filteredOptions: Entry<T>[] = useMemo(
+    () => (deferredSearch.length === 0 ? options : options.filter((o) => fuzzyMatch(o.plainText, deferredSearch))),
+    [options, deferredSearch],
+  );
 
   const handleConfirm = useCallback(() => {
     confirmDraft(draftValue);
@@ -139,7 +120,7 @@ export const EditableSelect = <T,>({
   });
 
   const getHighlightedOption = useCallback(
-    (filteredOptions: (T | null)[]) => {
+    (filteredOptions: (Entry<T> | null)[]) => {
       const idx = highlightedIndexRef.current;
 
       if (idx >= 0 && idx < filteredOptions.length) {
@@ -150,7 +131,7 @@ export const EditableSelect = <T,>({
   );
 
   const confirmAndClose = useCallback(
-    (option: T | null | undefined) => {
+    (option: Entry<T> | null | undefined) => {
       if (option === undefined) {
         return;
       }
@@ -199,7 +180,7 @@ export const EditableSelect = <T,>({
   );
 
   const handleOptionSelect = useCallback(
-    (option: T | null) => {
+    (option: Entry<T> | null) => {
       if (requireConfirmation) {
         setDraftValue(option);
       } else {
@@ -209,28 +190,14 @@ export const EditableSelect = <T,>({
     [requireConfirmation, confirmAndClose],
   );
 
-  const handleRadioGroupChange = useCallback(
-    (newValue: string) => {
-      if (newValue === NULL_KEY) {
-        handleOptionSelect(null);
-      } else {
-        const option = optionsByKey.get(newValue);
-
-        if (option === undefined) {
-          return;
-        }
-
-        handleOptionSelect(option);
-      }
-    },
-    [optionsByKey, handleOptionSelect],
-  );
-
-  const hasDraftChange = draftValue !== undefined && !optionsMatch(draftValue, value, valueKey);
-  const displayKey = draftValue !== undefined ? getKey(draftValue) : getKey(value);
+  const hasDraftChange = !optionEntriesMatch(draftValue, value);
+  const displayKey = draftValue !== null ? draftValue.key : value?.key;
 
   // Build the set of selected keys for aria-selected on option elements.
-  const selectedKeys = useMemo(() => new Set([displayKey]), [displayKey]);
+  const selectedKeys = useMemo<Set<string>>(
+    () => (displayKey === undefined ? new Set() : new Set([displayKey])),
+    [displayKey],
+  );
 
   // Compute the active descendant id for the currently highlighted option.
   const activeDescendantId = useMemo(() => {
@@ -244,8 +211,8 @@ export const EditableSelect = <T,>({
       return undefined;
     }
 
-    return getOptionId(listboxId, getKey(option));
-  }, [highlightedIndex, filteredOptions, listboxId, getKey]);
+    return getOptionId(listboxId, option.key);
+  }, [highlightedIndex, filteredOptions, listboxId]);
 
   // Status message for screen readers announcing the number of filtered results.
   const statusMessage = useMemo(() => {
@@ -287,7 +254,7 @@ export const EditableSelect = <T,>({
           : [{ shortcuts: ['Enter'], description: `${confirmLabel} og lukk` }]
       }
       flip={flip}
-      trigger={formatLabel(value)}
+      trigger={value?.label ?? nullLabel}
       triggerSize={triggerSize}
       triggerVariant={triggerVariant}
       style={style}
@@ -299,24 +266,21 @@ export const EditableSelect = <T,>({
       {filteredOptions.length === 0 ? (
         <div className="px-3 py-2 italic">Ingen treff</div>
       ) : (
-        <RadioGroup legend={label} hideLegend size="small" value={displayKey} onChange={handleRadioGroupChange}>
-          <VirtualizedOptionList
-            enabled={open}
-            options={filteredOptions}
-            optionKey={getKey}
-            highlightedIndex={highlightedIndex}
-            onHighlight={setHighlightedIndex}
-            handleRef={virtualizedOptionListHandle}
-            listboxId={listboxId}
-            selectedKeys={selectedKeys}
-            onSelect={handleOptionSelect}
-            renderOption={(option) => (
-              <Radio value={getKey(option)} className="w-full" tabIndex={-1}>
-                {formatLabel(option)}
-              </Radio>
-            )}
-          />
-        </RadioGroup>
+        <VirtualizedOptionList
+          enabled={open}
+          options={filteredOptions}
+          highlightedIndex={highlightedIndex}
+          onHighlight={setHighlightedIndex}
+          handleRef={virtualizedOptionListHandle}
+          listboxId={listboxId}
+          selectedKeys={selectedKeys}
+          onSelect={handleOptionSelect}
+          renderOption={(option) => (
+            <VisualRadio checked={selectedKeys.has(option.key)} className="w-full">
+              {option.label}
+            </VisualRadio>
+          )}
+        />
       )}
     </SelectPopover>
   );

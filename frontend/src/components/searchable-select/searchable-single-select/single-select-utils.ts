@@ -1,4 +1,6 @@
-export const optionsMatch = <T>(a: T | null, b: T | null, vk: (o: T) => string): boolean => {
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
+
+export const optionEntriesMatch = <T>(a: Entry<T> | null, b: Entry<T> | null): boolean => {
   if (a === null) {
     return b === null;
   }
@@ -7,5 +9,5 @@ export const optionsMatch = <T>(a: T | null, b: T | null, vk: (o: T) => string):
     return false;
   }
 
-  return vk(a) === vk(b);
+  return a.key === b.key;
 };

@@ -1,5 +1,5 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { useCallback, useDeferredValue, useId, useMemo, useRef, useState } from 'react';
 import { scrollPopoverIntoView } from '@/components/searchable-select/scroll-popover-into-view';
 import { setsEqual } from '@/components/searchable-select/searchable-multi-select/multi-select-utils';
@@ -10,11 +10,13 @@ import { useHighlight } from '@/components/searchable-select/use-highlight';
 import { useKeyboardNavigation } from '@/components/searchable-select/use-keyboard-navigation';
 import { usePopoverState } from '@/components/searchable-select/use-popover-state';
 import {
+  type Entry,
   getOptionId,
   VirtualizedOptionList,
   type VirtualizedOptionListHandle,
 } from '@/components/searchable-select/virtualized-option-list';
-import { stringToRegExp } from '@/functions/string-to-regex';
+import { VisualCheckbox } from '@/components/searchable-select/visual-checkbox';
+import { fuzzyMatch } from '@/functions/fuzzy-match';
 import { isMetaKey, Keys } from '@/keys';
 
 const KEYBOARD_SHORTCUTS = [{ shortcuts: ['Enter'], description: 'Velg / fjern' }];
@@ -25,10 +27,7 @@ export const EditableMultiSelect = <T,>({
   style,
   options,
   value,
-  valueKey,
-  formatOption,
   emptyLabel,
-  filterText,
   onChange,
   disabled = false,
   loading = false,
@@ -51,17 +50,23 @@ export const EditableMultiSelect = <T,>({
 
   const listboxId = useId();
 
-  const currentKeys = useMemo(() => new Set(value.map(valueKey)), [value, valueKey]);
-
-  const filterRegex = useMemo(() => stringToRegExp(deferredSearch), [deferredSearch]);
+  const currentKeys = useMemo(() => new Set(value.map((v) => v.key)), [value]);
 
   const filteredOptions = useMemo(() => {
     if (deferredSearch.length === 0) {
       return options;
     }
 
-    return options.filter((o) => filterRegex.test(filterText(o)));
-  }, [options, deferredSearch, filterRegex, filterText]);
+    const result: Entry<T>[] = [];
+
+    for (const option of options) {
+      if (fuzzyMatch(option.plainText, deferredSearch)) {
+        result.push(option);
+      }
+    }
+
+    return result;
+  }, [options, deferredSearch]);
 
   const { highlightedIndex, setHighlightedIndex, highlightedIndexRef } = useHighlight(deferredSearch);
 
@@ -101,12 +106,12 @@ export const EditableMultiSelect = <T,>({
 
   const hasDraftChange = draftKeys !== undefined && !setsEqual(draftKeys, currentKeys);
 
-  const filteredSelectedCount = filteredOptions.filter((o) => activeKeys.has(valueKey(o))).length;
+  const filteredSelectedCount = filteredOptions.filter((o) => activeKeys.has(o.key)).length;
   const anyFilteredSelected = filteredSelectedCount !== 0;
 
   const toggleOption = useCallback(
-    (option: T) => {
-      const key = valueKey(option);
+    (option: Entry<T>) => {
+      const { key } = option;
 
       setDraftKeys((prev) => {
         const base = prev ?? new Set(currentKeys);
@@ -121,7 +126,7 @@ export const EditableMultiSelect = <T,>({
         return next;
       });
     },
-    [valueKey, currentKeys],
+    [currentKeys],
   );
 
   const confirmDraft = useCallback(() => {
@@ -129,21 +134,21 @@ export const EditableMultiSelect = <T,>({
       return;
     }
 
-    const selectedOptions = options.filter((o) => draftKeys.has(valueKey(o)));
-    onChange(selectedOptions);
-  }, [draftKeys, currentKeys, options, valueKey, onChange]);
+    const selectedOptions = options.filter((o) => draftKeys.has(o.key));
+    onChange(selectedOptions.map((v) => v.value));
+  }, [draftKeys, currentKeys, options, onChange]);
 
   const draftKeysRef = useRef<Set<string> | undefined>(undefined);
   draftKeysRef.current = draftKeys;
 
   const confirmAndClose = useCallback(() => {
     if (!requireConfirmation && draftKeysRef.current !== undefined && !setsEqual(draftKeysRef.current, currentKeys)) {
-      const selected = options.filter((o) => draftKeysRef.current?.has(valueKey(o)) === true);
-      onChange(selected);
+      const selected = options.filter((o) => draftKeysRef.current?.has(o.key) === true);
+      onChange(selected.map((v) => v.value));
     }
 
     handleClose();
-  }, [currentKeys, options, valueKey, onChange, handleClose, requireConfirmation]);
+  }, [currentKeys, options, onChange, handleClose, requireConfirmation]);
 
   const handleConfirm = useCallback(() => {
     confirmDraft();
@@ -151,7 +156,7 @@ export const EditableMultiSelect = <T,>({
   }, [confirmDraft, confirmAndClose]);
 
   const selectAll = useCallback(() => {
-    const allKeys = new Set(filteredOptions.map(valueKey));
+    const allKeys = new Set(filteredOptions.map((v) => v.key));
 
     setDraftKeys((prev) => {
       const base = prev ?? new Set(currentKeys);
@@ -163,10 +168,10 @@ export const EditableMultiSelect = <T,>({
 
       return next;
     });
-  }, [filteredOptions, valueKey, currentKeys]);
+  }, [filteredOptions, currentKeys]);
 
   const deselectAll = useCallback(() => {
-    const allFilteredKeys = new Set(filteredOptions.map(valueKey));
+    const allFilteredKeys = new Set(filteredOptions.map((v) => v.key));
 
     setDraftKeys((prev) => {
       const base = prev ?? new Set(currentKeys);
@@ -178,7 +183,7 @@ export const EditableMultiSelect = <T,>({
 
       return next;
     });
-  }, [filteredOptions, valueKey, currentKeys]);
+  }, [filteredOptions, currentKeys]);
 
   const toggleAll = useCallback(() => {
     if (anyFilteredSelected) {
@@ -235,8 +240,6 @@ export const EditableMultiSelect = <T,>({
     [handleNavigation, toggleHighlighted, confirmAndClose],
   );
 
-  const activeKeysArray = useMemo(() => [...activeKeys], [activeKeys]);
-
   // Compute the active descendant id for the currently highlighted option.
   const activeDescendantId = useMemo(() => {
     if (highlightedIndex < 0 || highlightedIndex >= filteredOptions.length) {
@@ -249,8 +252,8 @@ export const EditableMultiSelect = <T,>({
       return undefined;
     }
 
-    return getOptionId(listboxId, valueKey(option));
-  }, [highlightedIndex, filteredOptions, listboxId, valueKey]);
+    return getOptionId(listboxId, option.key);
+  }, [highlightedIndex, filteredOptions, listboxId]);
 
   // Status message for screen readers announcing the number of filtered results.
   const statusMessage = useMemo(() => {
@@ -293,15 +296,7 @@ export const EditableMultiSelect = <T,>({
           ? KEYBOARD_SHORTCUTS
           : [...KEYBOARD_SHORTCUTS, { shortcuts: [CONFIRM_SHORTCUT], description: 'Bekreft og lukk' }]
       }
-      trigger={
-        <TriggerContent
-          display={triggerDisplay}
-          value={value}
-          valueKey={valueKey}
-          formatOption={formatOption}
-          emptyLabel={emptyLabel}
-        />
-      }
+      trigger={<TriggerContent display={triggerDisplay} value={value} emptyLabel={emptyLabel} />}
       flip={flip}
       triggerSize={triggerSize}
       triggerVariant={triggerVariant}
@@ -313,25 +308,22 @@ export const EditableMultiSelect = <T,>({
         <div className="px-3 py-2 italic">Ingen treff</div>
       ) : (
         <>
-          <CheckboxGroup legend={label} hideLegend size="small" value={activeKeysArray} tabIndex={-1}>
-            <VirtualizedOptionList
-              enabled={open}
-              options={filteredOptions}
-              optionKey={valueKey}
-              highlightedIndex={highlightedIndex}
-              onHighlight={setHighlightedIndex}
-              handleRef={virtualizedOptionListHandle}
-              listboxId={listboxId}
-              multiselectable
-              selectedKeys={activeKeys}
-              onSelect={toggleOption}
-              renderOption={(option) => (
-                <Checkbox value={valueKey(option)} className="w-full overflow-clip py-1.5" tabIndex={-1}>
-                  {formatOption(option)}
-                </Checkbox>
-              )}
-            />
-          </CheckboxGroup>
+          <VirtualizedOptionList<T>
+            enabled={open}
+            options={filteredOptions}
+            highlightedIndex={highlightedIndex}
+            onHighlight={setHighlightedIndex}
+            handleRef={virtualizedOptionListHandle}
+            listboxId={listboxId}
+            multiselectable
+            selectedKeys={activeKeys}
+            onSelect={toggleOption}
+            renderOption={(option) => (
+              <VisualCheckbox checked={activeKeys.has(option.key)} className="w-full overflow-clip py-1.5">
+                {option.label}
+              </VisualCheckbox>
+            )}
+          />
 
           {showSelectAll ? (
             <Button

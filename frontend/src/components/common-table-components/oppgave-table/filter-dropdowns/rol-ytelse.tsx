@@ -4,21 +4,28 @@ import type { FilterDropdownProps } from '@/components/common-table-components/o
 import { useOppgaveTableYtelser } from '@/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useSimpleYtelser } from '@/simple-api-state/use-kodeverk';
 import type { IKodeverkSimpleValue } from '@/types/kodeverk';
 
-const valueKey = (option: IKodeverkSimpleValue): string => option.id;
-const formatOption = (option: IKodeverkSimpleValue): string => option.navn;
-const filterText = (option: IKodeverkSimpleValue): string => option.navn;
-
 export const RolYtelse = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const { data } = useSimpleYtelser();
-  const ytelseOptions = useMemo(() => data ?? [], [data]);
   const [ytelser, setYtelser] = useOppgaveTableYtelser(tableKey);
 
-  const selectedOptions = useMemo(
-    () => ytelseOptions.filter((option) => ytelser?.includes(option.id) === true),
-    [ytelseOptions, ytelser],
+  const options = useMemo<Entry<IKodeverkSimpleValue>[]>(
+    () =>
+      (data ?? []).map((o) => ({
+        value: o,
+        key: o.id,
+        label: o.navn,
+        plainText: o.navn,
+      })),
+    [data],
+  );
+
+  const selectedEntries = useMemo(
+    () => options.filter((entry) => ytelser?.includes(entry.key) === true),
+    [options, ytelser],
   );
 
   const handleChange = useCallback(
@@ -33,11 +40,8 @@ export const RolYtelse = ({ tableKey, columnKey }: FilterDropdownProps) => {
     <Table.ColumnHeader aria-sort="none">
       <SearchableMultiSelect
         label={TABLE_HEADERS[columnKey] ?? ''}
-        options={ytelseOptions}
-        value={selectedOptions}
-        valueKey={valueKey}
-        formatOption={formatOption}
-        filterText={filterText}
+        options={options}
+        value={selectedEntries}
         emptyLabel={TABLE_HEADERS[columnKey] ?? ''}
         onChange={handleChange}
         triggerVariant="tertiary"

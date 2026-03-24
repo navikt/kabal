@@ -2,6 +2,7 @@ import { Label, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useId, useMemo, useRef } from 'react';
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useKodeverkYtelse } from '@/hooks/use-kodeverk-value';
 import { useSetInnsendingshjemlerMutation } from '@/redux-api/oppgaver/mutations/behandling';
 import type { IKodeverkValue } from '@/types/kodeverk';
@@ -29,17 +30,6 @@ export const Innsendingshjemmel = ({ oppgavebehandling }: Props) => {
 
 type HjemmelOption = IKodeverkValue & { utfases: boolean };
 
-const hjemmelValueKey = (option: HjemmelOption): string => option.id;
-
-const hjemmelFilterText = (option: HjemmelOption): string => option.navn;
-
-const formatHjemmelOption = (option: HjemmelOption) => (
-  <span className="truncate">
-    {option.navn}
-    {option.utfases ? ' (utfases)' : ''}
-  </span>
-);
-
 interface InnsendingshjemlerProps extends Props {
   id?: string;
 }
@@ -55,7 +45,7 @@ export const Innsendingshjemler = ({ oppgavebehandling, id }: Innsendingshjemler
     ),
   );
 
-  const options: HjemmelOption[] = useMemo(() => {
+  const options: Entry<HjemmelOption>[] = useMemo(() => {
     if (ytelse === undefined) {
       return [];
     }
@@ -66,11 +56,23 @@ export const Innsendingshjemler = ({ oppgavebehandling, id }: Innsendingshjemler
       .map((id) => ytelse.innsendingshjemler.find((h) => h.id === id))
       .filter((h): h is HjemmelOption => h !== undefined);
 
-    return [...activeOptions, ...selectedUtfasesOptions].toSorted((a, b) => a.navn.localeCompare(b.navn));
+    return [...activeOptions, ...selectedUtfasesOptions]
+      .toSorted((a, b) => a.navn.localeCompare(b.navn))
+      .map((option) => ({
+        value: option,
+        key: option.id,
+        label: (
+          <span className="truncate">
+            {option.navn}
+            {option.utfases ? ' (utfases)' : ''}
+          </span>
+        ),
+        plainText: option.navn,
+      }));
   }, [ytelse]);
 
-  const selectedOptions = useMemo(
-    () => options.filter((o) => oppgavebehandling.hjemmelIdList.includes(o.id)),
+  const value = useMemo(
+    () => options.filter(({ value: { id } }) => oppgavebehandling.hjemmelIdList.includes(id)),
     [options, oppgavebehandling.hjemmelIdList],
   );
 
@@ -93,11 +95,8 @@ export const Innsendingshjemler = ({ oppgavebehandling, id }: Innsendingshjemler
       id={id}
       label="Endre innsendingshjemler"
       options={options}
-      value={selectedOptions}
-      valueKey={hjemmelValueKey}
-      formatOption={formatHjemmelOption}
+      value={value}
       emptyLabel="Ingen hjemler valgt"
-      filterText={hjemmelFilterText}
       onChange={handleChange}
       error={isError ? 'Kunne ikke sette innsendingshjemler' : undefined}
       scrollContainerRef={containerRef}

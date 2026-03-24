@@ -3,12 +3,22 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 import { LoadingCellContent } from '@/components/common-table-components/loading-cell-content';
 import { useTildel } from '@/components/oppgavestyring/use-tildel';
-import { SearchableNavEmployeeSelect } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
+import { toNavEmployeeEntry } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
+import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useOppgaveActions } from '@/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import type { INavEmployee } from '@/types/bruker';
 import type { IOppgave } from '@/types/oppgaver';
+
+const NONE_LABEL = 'Ikke tildelt';
+const NONE_ENTRY: Entry<INavEmployee | null> = {
+  value: null,
+  key: '__none__',
+  plainText: NONE_LABEL,
+  label: NONE_LABEL,
+};
 
 export const Saksbehandler = (oppgave: IOppgave) => (
   <HStack align="center" justify="start" height="34px" width="100%" className="[grid-area:saksbehandler]">
@@ -65,34 +75,38 @@ const SelectSaksbehandler = ({
   } = useGetPotentialSaksbehandlereQuery(id);
   const [tildel, { isLoading }] = useTildel(id, typeId, ytelseId);
 
-  const options = useMemo((): INavEmployee[] => {
+  const options = useMemo((): Entry<INavEmployee | null>[] => {
     if (data === undefined) {
-      return [];
+      return [NONE_ENTRY];
     }
 
-    const isCurrentInList =
-      tildeltSaksbehandlerident === null ||
-      data.saksbehandlere.some(({ navIdent }) => navIdent === tildeltSaksbehandlerident);
+    const employees = (() => {
+      const isCurrentInList =
+        tildeltSaksbehandlerident === null ||
+        data.saksbehandlere.some(({ navIdent }) => navIdent === tildeltSaksbehandlerident);
 
-    if (isCurrentInList) {
-      return data.saksbehandlere;
-    }
+      if (isCurrentInList) {
+        return data.saksbehandlere;
+      }
 
-    return [
-      ...data.saksbehandlere,
-      {
-        navIdent: tildeltSaksbehandlerident,
-        navn: tildeltSaksbehandlerNavn ?? 'Ugyldig saksbehandler',
-      },
-    ];
+      return [
+        ...data.saksbehandlere,
+        {
+          navIdent: tildeltSaksbehandlerident,
+          navn: tildeltSaksbehandlerNavn ?? 'Ugyldig saksbehandler',
+        },
+      ];
+    })();
+
+    return [NONE_ENTRY, ...employees.map(toNavEmployeeEntry)];
   }, [data, tildeltSaksbehandlerident, tildeltSaksbehandlerNavn]);
 
-  const selectedValue = useMemo((): INavEmployee | null => {
+  const selectedEntry = useMemo((): Entry<INavEmployee | null> | null => {
     if (tildeltSaksbehandlerident === null) {
       return null;
     }
 
-    return options.find(({ navIdent }) => navIdent === tildeltSaksbehandlerident) ?? null;
+    return options.find((e) => e.key === tildeltSaksbehandlerident) ?? null;
   }, [options, tildeltSaksbehandlerident]);
 
   if (saksbehandlereIsError) {
@@ -104,15 +118,20 @@ const SelectSaksbehandler = ({
   }
 
   return (
-    <SearchableNavEmployeeSelect
+    <SearchableSelect
       label="Velg saksbehandler"
       options={options}
-      value={selectedValue}
-      onChange={tildel}
+      value={selectedEntry}
+      onChange={(employee) => {
+        if (employee !== null) {
+          tildel(employee);
+        }
+      }}
       disabled={isLoading}
-      nullLabel="Ikke tildelt"
+      nullLabel={NONE_LABEL}
       confirmLabel="Tildel"
       flip
+      requireConfirmation
     />
   );
 };

@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useRegistreringshjemlerMap } from '@/simple-api-state/use-kodeverk';
@@ -19,7 +20,7 @@ export const HjemlerFilter = ({ selected, setSelected }: Props) => {
   const { data: hjemmelMap = {} } = useRegistreringshjemlerMap();
   const { data: oppgave } = useOppgave();
 
-  const options = useMemo(() => {
+  const entries = useMemo<Entry<HjemmelOption>[]>(() => {
     if (oppgave === undefined) {
       return [];
     }
@@ -28,28 +29,39 @@ export const HjemlerFilter = ({ selected, setSelected }: Props) => {
       .map((id) => {
         const hjemmel = hjemmelMap[id];
 
-        return {
+        const value = {
           id,
           navn: hjemmel === undefined ? id : hjemmel.hjemmelnavn,
           lovkilde: hjemmel === undefined ? '' : hjemmel.lovkilde.beskrivelse,
         };
+
+        return {
+          value,
+          key: id,
+          label: (
+            <span>
+              <span className="text-ax-text-neutral-subtle">{value.lovkilde}</span> - {value.navn}
+            </span>
+          ),
+          plainText: `${value.lovkilde} - ${value.navn}`,
+        };
       })
-      .toSorted((a, b) => sortWithOrdinals(a.navn, b.navn));
+      .toSorted((a, b) => sortWithOrdinals(a.value.navn, b.value.navn));
   }, [oppgave, hjemmelMap]);
 
-  const optionsByKey = useMemo(() => {
-    const map = new Map<string, HjemmelOption>();
+  const entriesByKey = useMemo(() => {
+    const map = new Map<string, Entry<HjemmelOption>>();
 
-    for (const option of options) {
-      map.set(option.id, option);
+    for (const entry of entries) {
+      map.set(entry.key, entry);
     }
 
     return map;
-  }, [options]);
+  }, [entries]);
 
-  const selectedOptions = useMemo(
-    () => selected.map((id) => optionsByKey.get(id)).filter((v): v is HjemmelOption => v !== undefined),
-    [selected, optionsByKey],
+  const selectedEntries = useMemo(
+    () => selected.map((id) => entriesByKey.get(id)).filter((v): v is Entry<HjemmelOption> => v !== undefined),
+    [selected, entriesByKey],
   );
 
   const handleChange = useCallback((values: HjemmelOption[]) => setSelected(values.map((v) => v.id)), [setSelected]);
@@ -61,12 +73,9 @@ export const HjemlerFilter = ({ selected, setSelected }: Props) => {
   return (
     <SearchableMultiSelect
       label="Filtrer på hjemler"
-      options={options}
-      value={selectedOptions}
-      valueKey={hjemmelValueKey}
-      formatOption={formatHjemmelOption}
+      options={entries}
+      value={selectedEntries}
       emptyLabel="Filtrer på hjemler"
-      filterText={hjemmelFilterText}
       onChange={handleChange}
       triggerVariant="secondary"
       triggerDisplay="count"
@@ -74,13 +83,3 @@ export const HjemlerFilter = ({ selected, setSelected }: Props) => {
     />
   );
 };
-
-const hjemmelValueKey = (option: HjemmelOption): string => option.id;
-
-const formatHjemmelOption = (option: HjemmelOption) => (
-  <span>
-    <span className="text-ax-text-neutral-subtle">{option.lovkilde}</span> - {option.navn}
-  </span>
-);
-
-const hjemmelFilterText = (option: HjemmelOption): string => `${option.lovkilde} - ${option.navn}`;

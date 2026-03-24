@@ -18,6 +18,7 @@ import {
 } from '@/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { SaksTypeEnum } from '@/types/kodeverk';
 
 interface StatusOption {
@@ -25,9 +26,12 @@ interface StatusOption {
   label: string;
 }
 
-const statusValueKey = (option: StatusOption): string => option.value;
-const statusFormatOption = (option: StatusOption): string => option.label;
-const statusFilterText = (option: StatusOption): string => option.label;
+const toEntry = (option: StatusOption): Entry<StatusOption> => ({
+  value: option,
+  key: option.value,
+  label: option.label,
+  plainText: option.label,
+});
 
 export const HelperStatusWithoutSelf = ({ columnKey, tableKey }: FilterDropdownProps) => {
   const [statuses, setStatuses] = useOppgaveTableHelperStatusWithoutSelf(tableKey);
@@ -38,7 +42,7 @@ export const HelperStatusWithoutSelf = ({ columnKey, tableKey }: FilterDropdownP
   const allOptions = useMemo(() => getOptionsWithoutSelf(typer), [typer]);
 
   const selectedOptions = useMemo(
-    () => allOptions.filter((o) => statuses?.includes(o.value) === true),
+    () => allOptions.filter((entry) => statuses?.includes(entry.value.value) === true),
     [allOptions, statuses],
   );
 
@@ -58,10 +62,7 @@ export const HelperStatusWithoutSelf = ({ columnKey, tableKey }: FilterDropdownP
         label={label}
         options={allOptions}
         value={selectedOptions}
-        valueKey={statusValueKey}
-        formatOption={statusFormatOption}
         emptyLabel={label}
-        filterText={statusFilterText}
         onChange={handleChange}
         triggerVariant="tertiary"
         triggerSize="medium"
@@ -79,7 +80,7 @@ export const HelperStatusWithSelf = ({ columnKey, tableKey }: FilterDropdownProp
   const allOptions = useMemo(() => getOptionsWithSelf(typer), [typer]);
 
   const selectedOptions = useMemo(
-    () => allOptions.filter((o) => statuses?.includes(o.value) === true),
+    () => allOptions.filter((entry) => statuses?.includes(entry.value.value) === true),
     [allOptions, statuses],
   );
 
@@ -99,10 +100,7 @@ export const HelperStatusWithSelf = ({ columnKey, tableKey }: FilterDropdownProp
         label={label}
         options={allOptions}
         value={selectedOptions}
-        valueKey={statusValueKey}
-        formatOption={statusFormatOption}
         emptyLabel={label}
-        filterText={statusFilterText}
         onChange={handleChange}
         triggerVariant="tertiary"
         triggerSize="medium"
@@ -113,32 +111,32 @@ export const HelperStatusWithSelf = ({ columnKey, tableKey }: FilterDropdownProp
   );
 };
 
-const COMMON_ROL_OPTIONS: StatusOption[] = [
+const COMMON_ROL_OPTIONS: Entry<StatusOption>[] = [
   { value: CommonHelperStatus.SENDT_TIL_FELLES_ROL_KOE, label: 'I felles kø for ROL' },
   { value: CommonHelperStatus.SENDT_TIL_ROL, label: 'Sendt til ROL' },
   { value: CommonHelperStatus.RETURNERT_FRA_ROL, label: 'Tilbake fra ROL' },
-];
+].map(toEntry);
 
-const COMMON_NON_ANKE_I_TR_MU_OPTIONS: StatusOption[] = [
+const COMMON_NON_ANKE_I_TR_MU_OPTIONS: Entry<StatusOption>[] = [
   { value: CommonHelperStatus.SENDT_TIL_MU, label: 'Sendt til MU' },
   { value: CommonHelperStatus.RETURNERT_FRA_MU, label: 'Tilbake fra MU' },
-];
+].map(toEntry);
 
-const COMMON_ANKE_I_TR_MU_OPTIONS: StatusOption[] = [
+const COMMON_ANKE_I_TR_MU_OPTIONS: Entry<StatusOption>[] = [
   { value: CommonHelperStatus.SENDT_TIL_MU, label: 'Sendt til fagansvarlig' },
   { value: CommonHelperStatus.RETURNERT_FRA_MU, label: 'Tilbake fra fagansvarlig' },
-];
+].map(toEntry);
 
-const COMMON_COMBO_MU_OPTIONS: StatusOption[] = [
+const COMMON_COMBO_MU_OPTIONS: Entry<StatusOption>[] = [
   { value: CommonHelperStatus.SENDT_TIL_MU, label: 'Sendt til MU/fagansvarlig' },
   { value: CommonHelperStatus.RETURNERT_FRA_MU, label: 'Tilbake fra MU/fagansvarlig' },
-];
+].map(toEntry);
 
-const NON_ANKE_I_TR_MU_OPTION: StatusOption = { value: HelperStatusSelf.MU, label: 'MU' };
-const ANKE_I_TR_MU_OPTION: StatusOption = { value: HelperStatusSelf.MU, label: 'Fagansvarlig' };
-const COMBO_MU_OPTION: StatusOption = { value: HelperStatusSelf.MU, label: 'MU/fagansvarlig' };
+const NON_ANKE_I_TR_MU_OPTION: Entry<StatusOption> = toEntry({ value: HelperStatusSelf.MU, label: 'MU' });
+const ANKE_I_TR_MU_OPTION: Entry<StatusOption> = toEntry({ value: HelperStatusSelf.MU, label: 'Fagansvarlig' });
+const COMBO_MU_OPTION: Entry<StatusOption> = toEntry({ value: HelperStatusSelf.MU, label: 'MU/fagansvarlig' });
 
-const getMuOptions = (typer: SaksTypeEnum[]): StatusOption[] => {
+const getMuOptions = (typer: SaksTypeEnum[]): Entry<StatusOption>[] => {
   if (typer.length === 0) {
     return COMMON_COMBO_MU_OPTIONS;
   }
@@ -154,7 +152,7 @@ const getMuOptions = (typer: SaksTypeEnum[]): StatusOption[] => {
   return COMMON_COMBO_MU_OPTIONS;
 };
 
-const getSelfOption = (typer: SaksTypeEnum[]): StatusOption => {
+const getSelfOption = (typer: SaksTypeEnum[]): Entry<StatusOption> => {
   if (typer.length === 0) {
     return COMBO_MU_OPTION;
   }
@@ -170,12 +168,12 @@ const getSelfOption = (typer: SaksTypeEnum[]): StatusOption => {
   return COMBO_MU_OPTION;
 };
 
-const getOptionsWithoutSelf = (typer: SaksTypeEnum[]): StatusOption[] => [
+const getOptionsWithoutSelf = (typer: SaksTypeEnum[]): Entry<StatusOption>[] => [
   ...getMuOptions(typer),
   ...COMMON_ROL_OPTIONS,
 ];
 
-const getOptionsWithSelf = (typer: SaksTypeEnum[]): StatusOption[] => [
+const getOptionsWithSelf = (typer: SaksTypeEnum[]): Entry<StatusOption>[] => [
   getSelfOption(typer),
   ...getMuOptions(typer),
   ...COMMON_ROL_OPTIONS,

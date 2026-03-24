@@ -4,16 +4,31 @@ import type { FilterDropdownProps } from '@/components/common-table-components/o
 import { useOppgaveTableTildelteRol } from '@/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useGetRolsInEnhetQuery } from '@/redux-api/oppgaver/queries/oppgaver';
 import type { INavEmployee } from '@/types/bruker';
 
+const toEmployeeEntry = (employee: INavEmployee): Entry<INavEmployee> => ({
+  value: employee,
+  key: employee.navIdent,
+  label: (
+    <div className="flex grow flex-row items-center justify-between gap-2 whitespace-nowrap">
+      <span>{employee.navn}</span>
+      <Tag size="xsmall" variant="strong" data-color="neutral" className="font-mono">
+        {employee.navIdent}
+      </Tag>
+    </div>
+  ),
+  plainText: `${employee.navn} ${employee.navIdent}`,
+});
+
 export const Rol = ({ tableKey, columnKey }: FilterDropdownProps) => {
   const { data } = useGetRolsInEnhetQuery();
-  const options = useMemo<INavEmployee[]>(() => data?.rolList ?? [], [data]);
+  const options = useMemo<Entry<INavEmployee>[]>(() => (data?.rolList ?? []).map(toEmployeeEntry), [data]);
   const [tildelteRol, setTildelteRol] = useOppgaveTableTildelteRol(tableKey);
 
-  const selectedEmployees = useMemo(
-    () => options.filter((e) => tildelteRol?.includes(e.navIdent) === true),
+  const selectedEntries = useMemo(
+    () => options.filter((entry) => tildelteRol?.includes(entry.key) === true),
     [options, tildelteRol],
   );
 
@@ -30,11 +45,8 @@ export const Rol = ({ tableKey, columnKey }: FilterDropdownProps) => {
       <SearchableMultiSelect
         label={TABLE_HEADERS[columnKey] ?? ''}
         options={options}
-        value={selectedEmployees}
-        valueKey={employeeValueKey}
-        formatOption={formatEmployeeOption}
+        value={selectedEntries}
         emptyLabel={TABLE_HEADERS[columnKey] ?? ''}
-        filterText={employeeFilterText}
         onChange={handleChange}
         triggerVariant="tertiary"
         triggerSize="medium"
@@ -44,16 +56,3 @@ export const Rol = ({ tableKey, columnKey }: FilterDropdownProps) => {
     </Table.ColumnHeader>
   );
 };
-
-const employeeValueKey = (employee: INavEmployee): string => employee.navIdent;
-
-const employeeFilterText = (employee: INavEmployee): string => `${employee.navn} ${employee.navIdent}`;
-
-const formatEmployeeOption = (employee: INavEmployee) => (
-  <div className="flex grow flex-row items-center justify-between gap-2 whitespace-nowrap">
-    <span>{employee.navn}</span>
-    <Tag size="xsmall" variant="strong" data-color="neutral" className="font-mono">
-      {employee.navIdent}
-    </Tag>
-  </div>
-);

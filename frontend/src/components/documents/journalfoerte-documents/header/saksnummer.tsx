@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Fields } from '@/components/documents/journalfoerte-documents/grid';
 import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import type { IArkiverteDocumentsResponse } from '@/types/arkiverte-documents';
 
 interface SaksnummerProps extends Pick<ReturnType<typeof useFilters>, 'selectedSaksIds' | 'setSelectedSaksIds'> {
@@ -9,7 +10,7 @@ interface SaksnummerProps extends Pick<ReturnType<typeof useFilters>, 'selectedS
 }
 
 export const Saksnummer = ({ sakList, selectedSaksIds, setSelectedSaksIds }: SaksnummerProps) => {
-  const options = useMemo<string[]>(() => {
+  const options = useMemo<Entry<string>[]>(() => {
     if (sakList.length === 0) {
       return [];
     }
@@ -22,18 +23,23 @@ export const Saksnummer = ({ sakList, selectedSaksIds, setSelectedSaksIds }: Sak
       }
     }
 
-    return set.values().toArray();
+    return set
+      .values()
+      .toArray()
+      .map((s) => ({ value: s, key: s, label: s, plainText: s }));
   }, [sakList]);
+
+  const value = useMemo<Entry<string>[]>(
+    () => options.filter((o) => selectedSaksIds.includes(o.key)),
+    [options, selectedSaksIds],
+  );
 
   return (
     <SearchableMultiSelect
       label="Saksnummer"
       options={options}
-      value={selectedSaksIds}
-      valueKey={getSaksnummer}
-      formatOption={getSaksnummer}
+      value={value}
       emptyLabel="Saksnummer"
-      filterText={getSaksnummer}
       onChange={setSelectedSaksIds}
       style={{ gridArea: Fields.Saksnummer }}
       triggerSize="small"
@@ -43,5 +49,3 @@ export const Saksnummer = ({ sakList, selectedSaksIds, setSelectedSaksIds }: Sak
     />
   );
 };
-
-const getSaksnummer = (saksnummer: string) => saksnummer;

@@ -4,6 +4,7 @@ import type { FilterDropdownProps } from '@/components/common-table-components/o
 import { useOppgaveTablePaaVentReasons } from '@/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { usePaaVentReasons } from '@/simple-api-state/use-kodeverk';
 import type { IKodeverkValue } from '@/types/kodeverk';
 
@@ -11,10 +12,18 @@ export const PaaVentReasons = ({ columnKey, tableKey }: FilterDropdownProps) => 
   const [reasons, setReasons] = useOppgaveTablePaaVentReasons(tableKey);
   const { data = [] } = usePaaVentReasons();
 
-  const selectedOptions = useMemo(
-    () => data.filter((option) => reasons?.includes(option.id) === true),
-    [data, reasons],
+  const options = useMemo<Entry<IKodeverkValue>[]>(
+    () =>
+      data.map((o) => ({
+        value: o,
+        key: o.id,
+        label: o.beskrivelse,
+        plainText: o.beskrivelse,
+      })),
+    [data],
   );
+
+  const selectedValues = useMemo(() => options.filter((o) => reasons?.includes(o.key) === true), [options, reasons]);
 
   const handleChange = useCallback(
     (values: IKodeverkValue[]) => {
@@ -27,12 +36,9 @@ export const PaaVentReasons = ({ columnKey, tableKey }: FilterDropdownProps) => 
     <Table.ColumnHeader aria-sort="none">
       <SearchableMultiSelect
         label={TABLE_HEADERS[columnKey] ?? ''}
-        options={data}
-        value={selectedOptions}
-        valueKey={kodeverkValueKey}
-        formatOption={formatKodeverkOption}
+        options={options}
+        value={selectedValues}
         emptyLabel={TABLE_HEADERS[columnKey] ?? ''}
-        filterText={kodeverkFilterText}
         onChange={handleChange}
         triggerVariant="tertiary"
         triggerSize="medium"
@@ -42,9 +48,3 @@ export const PaaVentReasons = ({ columnKey, tableKey }: FilterDropdownProps) => 
     </Table.ColumnHeader>
   );
 };
-
-const kodeverkValueKey = (option: IKodeverkValue): string => option.id;
-
-const formatKodeverkOption = (option: IKodeverkValue) => option.beskrivelse;
-
-const kodeverkFilterText = (option: IKodeverkValue): string => option.beskrivelse;

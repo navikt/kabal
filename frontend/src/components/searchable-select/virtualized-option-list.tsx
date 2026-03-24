@@ -9,12 +9,22 @@ export interface VirtualizedOptionListHandle {
   scrollToIndex: (index: number) => void;
 }
 
+export interface Entry<T> {
+  /** Underlying raw data */
+  value: T;
+  /** Unique key for the entry. Suitable for use as React key and as an ID. */
+  key: string;
+  /** Accessibility label and text to fuzzy-match against when filtering. */
+  plainText: string;
+  /** UI component in the list  */
+  label: React.ReactNode;
+}
+
 interface VirtualizedOptionListProps<T> {
-  options: T[];
-  optionKey: (option: T) => string;
+  options: Entry<T>[];
   highlightedIndex: number;
   onHighlight: (index: number) => void;
-  renderOption: (option: T, index: number) => ReactNode;
+  renderOption: (option: Entry<T>, index: number) => ReactNode;
   handleRef?: React.Ref<VirtualizedOptionListHandle>;
   enabled: boolean;
   /** Unique id for the listbox element. Used by combobox `aria-controls`. */
@@ -24,7 +34,7 @@ interface VirtualizedOptionListProps<T> {
   /** Set of currently selected option keys. Used to set `aria-selected` on each option. */
   selectedKeys: Set<string>;
   /** Called when an option is clicked. */
-  onSelect: (option: T) => void;
+  onSelect: (option: Entry<T>) => void;
 }
 
 interface VirtualItem {
@@ -73,10 +83,9 @@ export const getOptionId = (listboxId: string, key: string): string => `${listbo
 
 export const VirtualizedOptionList = <T,>({
   options,
-  optionKey,
+  renderOption,
   highlightedIndex,
   onHighlight,
-  renderOption,
   handleRef,
   enabled,
   listboxId,
@@ -198,7 +207,7 @@ export const VirtualizedOptionList = <T,>({
             return null;
           }
 
-          const key = optionKey(option);
+          const { key, plainText } = option;
           const isHighlighted = virtualItem.index === highlightedIndex;
           const isSelected = selectedKeys.has(key);
           const optionElementId = getOptionId(listboxId, key);
@@ -224,6 +233,7 @@ export const VirtualizedOptionList = <T,>({
               }}
               className={`rounded-sm px-1 ${isHighlighted ? HIGHLIGHT : ''}`}
               onMouseEnter={() => onHighlight(virtualItem.index)}
+              aria-label={plainText}
             >
               <div aria-hidden="true" className="pointer-events-none">
                 {renderOption(option, virtualItem.index)}

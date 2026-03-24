@@ -1,5 +1,5 @@
 import { HelpText, HStack, Label, VStack } from '@navikt/ds-react';
-import { useId, useMemo } from 'react';
+import { useCallback, useId, useMemo } from 'react';
 import {
   AnkeDelvisMedholdWarning,
   AnkeITRHenvistWarning,
@@ -8,6 +8,7 @@ import {
 } from '@/components/behandling/behandlingsdetaljer/warnings';
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useFieldName } from '@/hooks/use-field-name';
 import { useUtfall } from '@/hooks/use-utfall';
@@ -24,6 +25,7 @@ interface UtfallResultatProps {
 
 const NOT_SELECTED_LABEL = 'Ikke valgt';
 const CONTAINER_ID = 'utfall-section';
+const NULL_UTFALL_KEY = '__no_utfall__';
 
 type UtfallEntry = IKodeverkSimpleValue<UtfallEnum>;
 
@@ -37,18 +39,46 @@ export const UtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: 
 
   const [utfallKodeverk, isLoading] = useUtfall(typeId);
 
-  const selectedUtfall = useMemo(
-    () => (utfall === null ? null : (utfallKodeverk.find((u) => u.id === utfall) ?? null)),
-    [utfall, utfallKodeverk],
-  );
+  const options = useMemo((): Entry<UtfallEntry | null>[] => {
+    const entries: Entry<UtfallEntry | null>[] = [
+      { value: null, key: NULL_UTFALL_KEY, plainText: NOT_SELECTED_LABEL, label: NOT_SELECTED_LABEL },
+    ];
 
-  const onUtfallChange = (entry: UtfallEntry) => {
-    updateUtfall({ oppgaveId, utfallId: entry.id });
-
-    if (extraUtfallIdSet.includes(entry.id)) {
-      updateEkstraUtfall({ oppgaveId, extraUtfallIdSet: extraUtfallIdSet.filter((id) => id !== entry.id) });
+    for (const u of utfallKodeverk) {
+      entries.push({
+        value: u,
+        key: u.id,
+        plainText: u.navn,
+        label: u.navn,
+      });
     }
-  };
+
+    return entries;
+  }, [utfallKodeverk]);
+
+  const selectedEntry = useMemo((): Entry<UtfallEntry | null> | null => {
+    if (utfall === null) {
+      return null;
+    }
+
+    return options.find((o) => o.key === utfall) ?? null;
+  }, [utfall, options]);
+
+  const onUtfallChange = useCallback(
+    (entry: UtfallEntry | null) => {
+      if (entry === null) {
+        updateUtfall({ oppgaveId, utfallId: null });
+        return;
+      }
+
+      updateUtfall({ oppgaveId, utfallId: entry.id });
+
+      if (extraUtfallIdSet.includes(entry.id)) {
+        updateEkstraUtfall({ oppgaveId, extraUtfallIdSet: extraUtfallIdSet.filter((id) => id !== entry.id) });
+      }
+    },
+    [oppgaveId, extraUtfallIdSet, updateUtfall, updateEkstraUtfall],
+  );
 
   const selectId = useId();
 
@@ -67,12 +97,9 @@ export const UtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: 
         disabled={isLoading}
         label={utfallLabel}
         onChange={onUtfallChange}
-        onClear={() => updateUtfall({ oppgaveId, utfallId: null })}
-        value={selectedUtfall}
-        options={utfallKodeverk}
-        valueKey={utfallValueKey}
-        formatLabel={utfallFormatLabel}
-        filterOption={utfallFilterOption}
+        value={selectedEntry}
+        options={options}
+        nullLabel={NOT_SELECTED_LABEL}
         error={validationError}
         scrollContainerRef={containerRef}
         readOnly={!canEdit}
@@ -86,11 +113,3 @@ export const UtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: 
     </VStack>
   );
 };
-
-const utfallValueKey = (entry: UtfallEntry): string => entry.id;
-
-const utfallFormatLabel = (entry: UtfallEntry | null): React.ReactNode =>
-  entry === null ? NOT_SELECTED_LABEL : entry.navn;
-
-const utfallFilterOption = (entry: UtfallEntry, search: string): boolean =>
-  entry.navn.toLowerCase().includes(search.toLowerCase());

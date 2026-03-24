@@ -1,15 +1,13 @@
 import { BodyShort, Tag } from '@navikt/ds-react';
-import type { ReactNode } from 'react';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 
 interface TriggerContentProps<T> {
   display: 'pills' | 'count';
-  value: T[];
-  valueKey: (option: T) => string;
-  formatOption: (option: T) => ReactNode;
+  value: Entry<T>[];
   emptyLabel: string;
 }
 
-export const TriggerContent = <T,>({ display, value, valueKey, formatOption, emptyLabel }: TriggerContentProps<T>) => {
+export const TriggerContent = <T,>({ display, value, emptyLabel }: TriggerContentProps<T>) => {
   if (display === 'count') {
     return <span className="truncate">{value.length === 0 ? emptyLabel : `${emptyLabel} (${value.length})`}</span>;
   }
@@ -22,8 +20,8 @@ export const TriggerContent = <T,>({ display, value, valueKey, formatOption, emp
         </BodyShort>
       ) : (
         value.map((option) => (
-          <Tag key={valueKey(option)} data-color="info" size="xsmall" variant="outline" className="truncate">
-            {formatOption(option)}
+          <Tag key={option.key} data-color="info" size="xsmall" variant="outline" className="truncate">
+            {option.label}
           </Tag>
         ))
       )}

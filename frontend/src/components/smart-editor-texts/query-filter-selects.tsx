@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { NestedFilterList } from '@/components/filter-dropdown/nested-filter-list';
 import type { IOption } from '@/components/filter-dropdown/props';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
+import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { getTemplateOptions } from '@/components/smart-editor-texts/get-template-options';
 import { useKlageenheterOptions } from '@/components/smart-editor-texts/hooks/use-options';
 import {
@@ -16,6 +17,13 @@ import {
 import { isUtfall } from '@/functions/is-utfall';
 import type { UtfallEnum } from '@/types/kodeverk';
 
+const toEntry = <T extends string>(option: IOption<T>): Entry<IOption<T>> => ({
+  value: option,
+  key: option.value,
+  label: option.label,
+  plainText: option.label,
+});
+
 interface UtfallSelectProps {
   children: string;
   selected: string | undefined;
@@ -24,12 +32,15 @@ interface UtfallSelectProps {
 }
 
 export const UtfallSelect = ({ children, selected, onChange, options }: UtfallSelectProps) => {
-  const allOptions = useMemo(() => [NONE_OPTION, ...options], [options]);
+  const allEntries = useMemo<Entry<IOption<UtfallEnum | NONE_TYPE>>[]>(
+    () => [toEntry(NONE_OPTION), ...options.map(toEntry)],
+    [options],
+  );
   const selectedKeys = useMemo(() => utfallQueryToSelected(selected), [selected]);
 
-  const selectedOptions = useMemo(
-    () => allOptions.filter((o) => selectedKeys.includes(o.value)),
-    [allOptions, selectedKeys],
+  const selectedEntries = useMemo(
+    () => allEntries.filter((e) => selectedKeys.includes(e.value.value)),
+    [allEntries, selectedKeys],
   );
 
   const handleChange = useCallback(
@@ -42,12 +53,9 @@ export const UtfallSelect = ({ children, selected, onChange, options }: UtfallSe
   return (
     <SearchableMultiSelect
       label={children}
-      options={allOptions}
-      value={selectedOptions}
-      valueKey={getOptionValue}
-      formatOption={getOptionLabel}
+      options={allEntries}
+      value={selectedEntries}
       emptyLabel={children}
-      filterText={getOptionLabel}
       onChange={handleChange}
       triggerSize="small"
       triggerVariant="tertiary"
@@ -115,7 +123,9 @@ export const KlageenhetSelect = ({
   const enheter = [...klageenheter, STYRINGSENHETEN];
   const options: IOption<string>[] = includeNoneOption ? [NONE_OPTION, ...enheter] : enheter;
 
-  const selectedOptions = useMemo(() => options.filter((o) => selected.includes(o.value)), [options, selected]);
+  const entries = useMemo<Entry<IOption<string>>[]>(() => options.map(toEntry), [options]);
+
+  const selectedEntries = useMemo(() => entries.filter((e) => selected.includes(e.value.value)), [entries, selected]);
 
   const handleChange = useCallback(
     (values: IOption<string>[]) => {
@@ -127,12 +137,9 @@ export const KlageenhetSelect = ({
   return (
     <SearchableMultiSelect
       label={children}
-      options={options}
-      value={selectedOptions}
-      valueKey={getOptionValue}
-      formatOption={getOptionLabel}
+      options={entries}
+      value={selectedEntries}
       emptyLabel={children}
-      filterText={getOptionLabel}
       onChange={handleChange}
       triggerSize="small"
       triggerVariant="tertiary"
@@ -188,9 +195,6 @@ export const TemplateSectionSelect = ({
     </NestedFilterList>
   );
 };
-
-const getOptionValue = (option: IOption<string>): string => option.value;
-const getOptionLabel = (option: IOption<string>): string => option.label;
 
 export const SectionSelect = ({
   selected,
