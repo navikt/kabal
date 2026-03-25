@@ -14,15 +14,19 @@ import { DocumentDate } from '@/components/documents/new-documents/shared/docume
 import { DocumentIcon } from '@/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@/components/documents/set-filename';
 import { KabalFileViewer } from '@/components/kabal-file-viewer';
+import { usePdfData } from '@/components/pdf/pdf';
 import { isSendError } from '@/components/receivers/is-send-error';
 import { Receivers } from '@/components/receivers/receivers';
+import { SimplePdfPreview } from '@/components/simple-pdf-preview/simple-pdf-preview';
 import { getIsIncomingDocument } from '@/functions/is-incoming-document';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useDocumentsPdfWidth } from '@/hooks/settings/use-setting';
 import {
   useFinishDocumentMutation,
   useSetMottakerListMutation,
   useSetTitleMutation,
 } from '@/redux-api/oppgaver/mutations/documents';
+import { useNewFileViewerFeatureToggle } from '@/simple-api-state/feature-toggles';
 import {
   DISTRIBUTION_TYPE_NAMES,
   DistribusjonsType,
@@ -60,6 +64,7 @@ export const DocumentModalContent = ({
 }: Props) => {
   const [setMottakerList, { isLoading }] = useSetMottakerListMutation();
   const [, { error: finishError }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
+  const useNewFileViewer = useNewFileViewerFeatureToggle();
   const sendErrors = useMemo(
     () =>
       isSendError(finishError)
@@ -73,6 +78,8 @@ export const DocumentModalContent = ({
     oppgaveId === skipToken
       ? undefined
       : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
+  const { refresh, ...pdfData } = usePdfData(pdfUrl);
+  const { value: pdfWidth, setValue: setPdfWidth } = useDocumentsPdfWidth();
 
   if (oppgaveId === skipToken) {
     return null;
@@ -150,7 +157,12 @@ export const DocumentModalContent = ({
         </VStack>
 
         {pdfUrl === undefined ? null : (
-          <KabalFileViewer files={[{ variants: 'PDF', title: document.tittel, url: pdfUrl }]} />
+          <>
+            <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />
+            {useNewFileViewer.data?.enabled === true ? (
+              <KabalFileViewer files={[{ variants: 'PDF', title: document.tittel, url: pdfUrl }]} />
+            ) : null}
+          </>
         )}
       </Modal.Body>
       <Modal.Footer className="items-center">
