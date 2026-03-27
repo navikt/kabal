@@ -1,10 +1,11 @@
 import { isObject, LogLevel } from '@grafana/faro-web-sdk';
 import { VStack } from '@navikt/ds-react';
 import type { YjsProviderConfig } from '@platejs/yjs';
+import { HocuspocusProviderWrapper } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
 import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
 import { Plate, usePlateEditor } from 'platejs/react';
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { type BasePoint, Path, Range } from 'slate';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { SmartEditorContext } from '@/components/smart-editor/context';
@@ -175,10 +176,16 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         setIsConnected(false);
         setIsSynced(false);
       },
-      onAuthenticationFailed: () => {
-        console.error('Authentication failed');
-        setReadOnly(true);
-        setIsConnected(false);
+      onAuthenticationFailed: ({ reason }) => {
+        console.error('Authentication failed', reason);
+        pushLog(`Authentication failed: ${reason}`, { context });
+
+        if (reason === 'DOCUMENT_NOT_FOUND') {
+          destroyAndDelete();
+        } else {
+          setReadOnly(true);
+          setIsConnected(false);
+        }
       },
       onStateless: ({ payload }) => {
         const parsed = parseJSON<{ type: string } & GenericObject>(payload);
@@ -233,11 +240,28 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
   const { yjs } = editor.getApi(YjsPlugin);
 
+  const forceDestroyProviders = useCallback(() => {
+    const { _providers } = editor.getOptions(YjsPlugin);
+
+    for (const wrapper of _providers) {
+      try {
+        if (wrapper instanceof HocuspocusProviderWrapper) {
+          wrapper.provider.destroy();
+        } else {
+          wrapper.destroy();
+        }
+      } catch (e) {
+        console.debug('Error destroying provider', e);
+      }
+    }
+  }, [editor]);
+
   const destroyAndDelete = () => {
     setReadOnly(true);
     setIsConnected(false);
     setIsSynced(false);
     yjs.destroy();
+    forceDestroyProviders();
 
     reduxStore.dispatch(
       documentsQuerySlice.util.updateQueryData('getDocuments', oppgave.id, (documents) => {
@@ -264,7 +288,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
     return () => {
       try {
-        yjs.destroy();
+        forceDestroyProviders();
       } catch (e) {
         console.debug('useEffect - Error destroying Yjs instance', e);
         pushLog('useEffect - Error destroying Yjs instance', { context: { dokumentId: id } });
@@ -274,7 +298,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
         }
       }
     };
-  }, [mounted, yjs, id]);
+  }, [mounted, yjs, id, forceDestroyProviders]);
 
   // Set read-only mode when disconnected for 10 seconds.
   useEffect(() => {

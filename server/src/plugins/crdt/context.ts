@@ -9,6 +9,7 @@ export interface ConnectionContext {
   readonly client_version: string;
   readonly navIdent: string;
   readonly cookie: string | undefined;
+  readonly socket: { close(code?: number, reason?: string): void };
   hasWriteAccess?: boolean;
   tokenRefreshTimer?: Timer;
   removeHasAccessListener?: () => void;

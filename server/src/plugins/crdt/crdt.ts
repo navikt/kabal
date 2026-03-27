@@ -147,6 +147,7 @@ export const crdtPlugin = fastifyPlugin(
           client_version,
           navIdent,
           cookie: headers.cookie,
+          socket,
         };
 
         collaborationServer.handleConnection(socket, req.raw, context);
