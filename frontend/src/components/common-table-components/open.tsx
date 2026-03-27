@@ -2,7 +2,7 @@ import { Button, type ButtonProps } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { StaticDataContext } from '@/components/app/static-data-context';
-import { useHasRole } from '@/hooks/use-has-role';
+import { useHasAnyOfRoles, useHasRole } from '@/hooks/use-has-role';
 import { useHasYtelseAccess } from '@/hooks/use-has-ytelse-access';
 import { Role } from '@/types/bruker';
 import { FlowState, type IHelper } from '@/types/oppgave-common';
@@ -61,9 +61,11 @@ export const OpenForYtelseAccess = ({
   ...buttonProps
 }: YtelseAccessedProps) => {
   const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
+  // https://nav-it.slack.com/archives/G01CTUC8LSU/p1774602742178699?thread_ts=1774601710.392819&cid=G01CTUC8LSU
+  const isRolOrKrol = useHasAnyOfRoles([Role.KABAL_KROL, Role.KABAL_ROL]);
   const hasYtelseAccess = useHasYtelseAccess(ytelseId);
 
-  const canOpen = isMerkantil || hasYtelseAccess;
+  const canOpen = isMerkantil || hasYtelseAccess || isRolOrKrol;
 
   if (!canOpen) {
     return null;
