@@ -13,6 +13,9 @@ import { Role } from '@/types/bruker';
 import { SaksTypeEnum } from '@/types/kodeverk';
 import type { IOppgave } from '@/types/oppgaver';
 
+const isSakITR = (typeId: SaksTypeEnum) =>
+  typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+
 export const Age = (oppgave: IOppgave) => {
   if (oppgave.isAvsluttetAvSaksbehandler) {
     return (
@@ -25,7 +28,7 @@ export const Age = (oppgave: IOppgave) => {
   return <EditableAge {...oppgave} />;
 };
 
-const EditableAge = ({ ageKA, mottatt, id, typeId }: IOppgave) => {
+const EditableAge = ({ ageKA, mottatt, id, typeId, datoSendtTilTR }: IOppgave) => {
   const [userAge, setUserAge] = useState(ageKA);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,7 +36,7 @@ const EditableAge = ({ ageKA, mottatt, id, typeId }: IOppgave) => {
 
   const children = isOpen ? (
     <EditAge
-      mottattDate={mottatt}
+      mottattDate={isSakITR(typeId) ? datoSendtTilTR : mottatt}
       oppgaveId={id}
       closeCalendar={closeCalendar}
       setUserAge={setUserAge}
@@ -69,11 +72,7 @@ const EditButton = ({ isOpen, setIsOpen, typeId }: EditButtonProps) => {
 
   return (
     <Tooltip
-      content={
-        typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR
-          ? 'Endre dato for sendt til Trygderetten'
-          : 'Endre dato for mottatt klageinstans'
-      }
+      content={isSakITR(typeId) ? 'Endre dato for sendt til Trygderetten' : 'Endre dato for mottatt klageinstans'}
     >
       <Button
         data-color="neutral"
@@ -87,7 +86,7 @@ const EditButton = ({ isOpen, setIsOpen, typeId }: EditButtonProps) => {
 };
 
 interface EditAgeProps {
-  mottattDate: string;
+  mottattDate: string | null;
   oppgaveId: string;
   closeCalendar: () => void;
   setUserAge: (age: number) => void;
@@ -107,7 +106,7 @@ const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge, typeId }: 
 
     setUserAge(differenceInDays(new Date(), parseISO(date)));
 
-    if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR) {
+    if (isSakITR(typeId)) {
       setSendtTilTR({ sendtTilTrygderetten: date, oppgaveId, typeId });
     } else {
       setMottattklageinstans({ mottattKlageinstans: date, oppgaveId });
