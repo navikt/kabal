@@ -34,6 +34,8 @@ export const getDocument = async (context: ConnectionContext): Promise<DocumentR
         data: { behandlingId, dokumentId, statusCode: res.status },
       });
 
+      context.socket.close(4404, 'DOCUMENT_NOT_FOUND');
+
       throw getCloseEvent('DOCUMENT_NOT_FOUND', 4404);
     }
 
