@@ -40,9 +40,6 @@ spec:
     enabled: true
     path: /metrics
   accessPolicy:
-    inbound:
-      rules:
-        - application: kabal-e2e-tests
     outbound:
       rules:
         - application: kabal-api
