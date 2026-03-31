@@ -21,8 +21,6 @@ import { httpLoggerPlugin } from '@/plugins/http-logger';
 import { navIdentPlugin } from '@/plugins/nav-ident';
 import { oboAccessTokenPlugin } from '@/plugins/obo-token';
 import { proxyVersionPlugin } from '@/plugins/proxy-version';
-import { serveAssetsPlugin } from '@/plugins/serve-assets';
-import { serveFileViewerAssetsPlugin } from '@/plugins/serve-file-viewer-assets';
 import { serveIndexPlugin } from '@/plugins/serve-index';
 import { serverTimingPlugin } from '@/plugins/server-timing';
 import { tabIdPlugin } from '@/plugins/tab-id';
@@ -69,8 +67,10 @@ app
   .register(apiProxyPlugin, { appNames: API_CLIENT_IDS, prefix: '/api' })
   .register(documentPlugin)
   .register(fileViewerPlugin)
-  .register(serveAssetsPlugin)
-  .register(serveFileViewerAssetsPlugin)
+  .register(async (app) => {
+    app.get('/assets/*', async (_, reply) => reply.code(404).send());
+    app.get('/file-viewer/assets/*', async (_, reply) => reply.code(404).send());
+  })
   .register(serveIndexPlugin)
   .register(httpLoggerPlugin)
   .register(crdtPlugin)

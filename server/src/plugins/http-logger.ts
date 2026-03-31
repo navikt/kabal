@@ -2,7 +2,6 @@ import fastifyPlugin from 'fastify-plugin';
 import { getDuration } from '@/helpers/duration';
 import { type AnyObject, getLogger } from '@/logger';
 import { PROXY_VERSION_PLUGIN_ID } from '@/plugins/proxy-version';
-import { SERVE_ASSETS_PLUGIN_ID } from '@/plugins/serve-assets';
 import { SERVE_INDEX_PLUGIN_ID } from '@/plugins/serve-index';
 import { TAB_ID_PLUGIN_ID } from '@/plugins/tab-id';
 
@@ -38,7 +37,7 @@ export const httpLoggerPlugin = fastifyPlugin(
   {
     fastify: '5',
     name: HTTP_LOGGER_PLUGIN_ID,
-    dependencies: [PROXY_VERSION_PLUGIN_ID, SERVE_INDEX_PLUGIN_ID, SERVE_ASSETS_PLUGIN_ID, TAB_ID_PLUGIN_ID],
+    dependencies: [PROXY_VERSION_PLUGIN_ID, SERVE_INDEX_PLUGIN_ID, TAB_ID_PLUGIN_ID],
   },
 );
 

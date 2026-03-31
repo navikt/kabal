@@ -66,6 +66,10 @@ jobs:
             echo -e '\n[install.scopes]\n"@navikt" = { token = "$BUN_AUTH_TOKEN", url = "https://npm.pkg.github.com/" }' >> "$dir/bunfig.toml"
           done
 
+      - name: Generate version number
+        id: version
+        run: echo "version=$(TZ="Europe/Oslo" git show -s --format=%cd --date='format-local:%Y-%m-%dT%H:%M:%S')" >> "$GITHUB_OUTPUT"
+
       - name: Install common dependencies
         shell: bash
         run: bun install --frozen-lockfile
@@ -79,7 +83,7 @@ jobs:
         shell: bash
         working-directory: frontend
         env:
-          VERSION: ${{ github.sha }}
+          VERSION: ${{ steps.version.outputs.version }}
         run: bun run build
 
       - name: Test frontend
@@ -95,6 +99,8 @@ jobs:
       - name: Build file-viewer
         shell: bash
         working-directory: file-viewer
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: bun run build
 
       - name: Install server dependencies
@@ -112,9 +118,23 @@ jobs:
         working-directory: server
         run: bun run build
 
-      - name: Generate version number
-        id: version
-        run: echo "version=$(TZ="Europe/Oslo" git show -s --format=%cd --date='format-local:%Y-%m-%dT%H:%M:%S')" >> "$GITHUB_OUTPUT"
+      - name: Upload frontend assets to CDN
+        uses: nais/deploy/actions/cdn-upload/v2@master
+        with:
+          team: klage
+          source: ./frontend/dist/assets/
+          destination: kabal
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+
+      - name: Upload file-viewer assets to CDN
+        uses: nais/deploy/actions/cdn-upload/v2@master
+        with:
+          team: klage
+          source: ./file-viewer/dist/assets/
+          destination: kabal/file-viewer
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
       - name: Build & push Docker image
         uses: nais/docker-build-push@v0

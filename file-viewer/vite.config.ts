@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-export default defineConfig({
-  base: '/file-viewer/',
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? 'https://cdn.nav.no/klage/kabal/file-viewer/' : '/',
   plugins: [tsconfigPaths(), react(), tailwindcss()],
   define: {
     __APP_VERSION__: JSON.stringify(process.env.VERSION ?? 'local'),
@@ -12,4 +12,4 @@ export default defineConfig({
   build: {
     sourcemap: true,
   },
-});
+}));
