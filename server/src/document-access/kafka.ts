@@ -4,14 +4,14 @@ import { getLogger } from '@/logger';
 
 const log = getLogger('document-write-access-kafka-parser');
 
-const PayloadType = Type.Array(Type.String());
-const PayloadTypeChecked = Compile(PayloadType);
+const PayloadSchema = Type.Array(Type.String());
+const PayloadType = Compile(PayloadSchema);
 
 export const parseKafkaMessageValue = (value: string): string[] => {
   try {
     const parsed = JSON.parse(value);
 
-    if (!PayloadTypeChecked.Check(parsed)) {
+    if (!PayloadType.Check(parsed)) {
       log.warn({
         msg: 'Invalid Kafka message value',
         data: { parsed: JSON.stringify(parsed), value },
