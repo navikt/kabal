@@ -9,8 +9,7 @@
   "type": "module",
   "scripts": {
     "start": "bun run build --watch & node --watch --trace-warnings --enable-source-maps dist/server.js",
-    "build": "bun build ./src/server.ts --target node --format esm --sourcemap=linked --outdir dist",
-    "copy-assets": "cp node_modules/@platformatic/wasm-utils/dist/native.wasm dist/",
+    "build": "bun build ./src/server.ts --target node --format esm --sourcemap=linked --outdir dist --external @platformatic/wasm-utils",
     "lint": "biome check",
     "typecheck": "tsc --noEmit"
   },
@@ -33,7 +32,7 @@
     "@opentelemetry/sdk-node": "0.214.0",
     "@opentelemetry/sdk-trace-node": "2.6.1",
     "@opentelemetry/semantic-conventions": "1.40.0",
-    "@platformatic/kafka": "1.26.0",
+    "@platformatic/kafka": "1.31.0",
     "@slate-yjs/core": "1.0.2",
     "fastify": "5.8.4",
     "fastify-metrics": "12.1.0",
