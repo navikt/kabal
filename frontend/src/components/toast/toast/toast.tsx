@@ -51,7 +51,9 @@ export const Toast = memo(
         />
         <Container>
           <Icon type={type} />
-          <VStack gap="space-8 space-0">{content}</VStack>
+          <VStack gap="space-8 space-0" className="min-w-0 overflow-hidden">
+            {content}
+          </VStack>
         </Container>
       </ToastContainer>
     );
