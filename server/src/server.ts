@@ -44,7 +44,7 @@ if (isDeployed) {
 
 const bodyLimit = 300 * 1024 * 1024; // 300 MB
 
-const app = fastify({ trustProxy: true, bodyLimit, maxParamLength: 20_000, routerOptions: { querystringParser } });
+const app = fastify({ trustProxy: true, bodyLimit, routerOptions: { maxParamLength: 20_000, querystringParser } });
 
 await app.register(fastifyOtelInstrumentation.plugin());
 
