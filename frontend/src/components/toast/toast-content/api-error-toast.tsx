@@ -1,4 +1,4 @@
-import { BodyLong, CopyButton, Heading, HStack, Label, Tag } from '@navikt/ds-react';
+import { BodyLong, Box, CopyButton, Heading, HStack, Label, Tag } from '@navikt/ds-react';
 import { toast } from '@/components/toast/store';
 import type { BFFError, KabalApiErrorData } from '@/types/errors';
 
@@ -9,7 +9,11 @@ export const genericErrorToast = (heading: string, description: string, traceId?
         {heading}
       </Heading>
 
-      <Section heading="Beskrivelse">{description}</Section>
+      <Section heading="Beskrivelse">
+        <Box background="neutral-moderateA" padding="space-8" borderRadius="4">
+          {description}
+        </Box>
+      </Section>
 
       <TraceIdSection traceId={traceId} />
     </>,

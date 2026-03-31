@@ -10,7 +10,7 @@ const { finishOppgavebehandlingWithUpdateInGosys } = behandlingerMutationSlice.e
 const { finishDocument } = documentsMutationSlice.endpoints;
 const { getOppgave } = oppgaveDataQuerySlice.endpoints;
 
-/** Extract the trace ID (32 hex chars) from a W3C traceparent header value. */
+/** Extract the trace ID (32 hex chars) from the request's traceparent header. */
 const extractTraceId = (meta: unknown): string | undefined => {
   if (!isObject(meta) || !('baseQueryMeta' in meta) || !isObject(meta.baseQueryMeta)) {
     return undefined;
@@ -59,7 +59,7 @@ export const errorToastMiddleware: Middleware = () => (next) => (action) => {
     }
   }
 
-  genericErrorToast('Ukjent feil', `Detaljer: ${JSON.stringify(payload)}`, traceId);
+  genericErrorToast('Ukjent feil', JSON.stringify(payload, null, 2), traceId);
 
   return next(action);
 };
