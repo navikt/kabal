@@ -8,8 +8,9 @@ const PROXY: ProxyOptions = {
   changeOrigin: true,
 };
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [tsconfigPaths(), react(), tailwindcss()],
+  base: command === 'build' ? 'https://cdn.nav.no/klage/kabal/' : '/',
   build: {
     sourcemap: true,
   },
@@ -34,4 +35,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

@@ -30,7 +30,6 @@ spec:
       enabled: true
       autoLogin: true
       autoLoginIgnorePaths:
-        - /assets/*
         - /*.js.map
         - /*.js
         - /*.html
