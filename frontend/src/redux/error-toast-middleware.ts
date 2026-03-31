@@ -10,6 +10,27 @@ const { finishOppgavebehandlingWithUpdateInGosys } = behandlingerMutationSlice.e
 const { finishDocument } = documentsMutationSlice.endpoints;
 const { getOppgave } = oppgaveDataQuerySlice.endpoints;
 
+/** Extract the trace ID (32 hex chars) from a W3C traceparent header value. */
+const extractTraceId = (meta: unknown): string | undefined => {
+  if (!isObject(meta) || !('baseQueryMeta' in meta) || !isObject(meta.baseQueryMeta)) {
+    return undefined;
+  }
+
+  const { baseQueryMeta } = meta;
+
+  if (!('request' in baseQueryMeta) || !(baseQueryMeta.request instanceof Request)) {
+    return undefined;
+  }
+
+  const traceparent = baseQueryMeta.request.headers.get('traceparent');
+
+  if (traceparent === null) {
+    return undefined;
+  }
+
+  return traceparent.split('-')[1];
+};
+
 export const errorToastMiddleware: Middleware = () => (next) => (action) => {
   if (!isRejectedWithValue(action)) {
     return next(action);
@@ -22,21 +43,23 @@ export const errorToastMiddleware: Middleware = () => (next) => (action) => {
     return next(action);
   }
 
+  const traceId = extractTraceId(meta);
+
   if (isObject(payload) && 'data' in payload) {
     if (isKabalApiErrorData(payload.data)) {
-      kabalErrorToast('En feil oppstod', payload.data);
+      kabalErrorToast('En feil oppstod', payload.data, traceId);
 
       return next(action);
     }
 
     if (isBFFError(payload.data)) {
-      bffErrorToast('En feil oppstod', payload.data);
+      bffErrorToast('En feil oppstod', payload.data, traceId);
 
       return next(action);
     }
   }
 
-  genericErrorToast('Ukjent feil', `Detaljer: ${JSON.stringify(payload)}`);
+  genericErrorToast('Ukjent feil', `Detaljer: ${JSON.stringify(payload)}`, traceId);
 
   return next(action);
 };
