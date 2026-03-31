@@ -7,20 +7,7 @@ const log = getLogger('document-write-access-kafka-parser');
 const PayloadType = Type.Array(Type.String());
 const PayloadTypeChecked = Compile(PayloadType);
 
-export const parseKafkaMessageValue = (value: string): string[] | null => {
-  if (value.length === 0) {
-    log.debug({
-      msg: 'Received empty Kafka message value - interpreting as tombstone',
-      data: { value, parsed: null },
-    });
-    /**
-     * Workaround for a bug in the Kafka library; it does not differentiate between empty string and tombstone (null) values.
-     * Since we need tombstones, we treat empty strings as tombstones.
-     * The producer will send null values for tombstones and never send empty strings.
-     */
-    return null;
-  }
-
+export const parseKafkaMessageValue = (value: string): string[] => {
   try {
     const parsed = JSON.parse(value);
 
