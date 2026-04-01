@@ -30,5 +30,5 @@
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo"
   },
-  "include": ["src"]
+  "include": ["src", "vite-env.d.ts"]
 }
