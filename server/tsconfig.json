@@ -2,6 +2,7 @@
   "compilerOptions": {
     // enable latest features
     "lib": ["ESNext"],
+    "types": ["@types/bun"],
     "target": "ESNext",
     "module": "ESNext",
     "moduleDetection": "force",
@@ -26,13 +27,12 @@
     "isolatedModules": true,
     "rootDir": "./src",
     "outDir": "./dist",
-    "baseUrl": "./src",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["./src/*"]
     },
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo"
   },
-  "include": ["src/**/*"],
+  "include": ["src"],
   "exclude": ["./dist/**"]
 }
