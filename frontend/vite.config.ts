@@ -11,6 +11,9 @@ const PROXY: ProxyOptions = {
 export default defineConfig(({ command }) => ({
   plugins: [tsconfigPaths(), react(), tailwindcss()],
   base: command === 'build' ? 'https://cdn.nav.no/klage/kabal/' : '/',
+  define: {
+    __APP_VERSION__: JSON.stringify(process.env.VERSION ?? 'local'),
+  },
   build: {
     sourcemap: true,
   },

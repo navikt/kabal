@@ -24,7 +24,7 @@ class Environment implements EnvironmentVariables {
 
   constructor() {
     this.environment = this.getEnvironment();
-    this.version = this.getVersion();
+    this.version = __APP_VERSION__;
     this.isProduction = this.environment === EnvString.PROD;
     this.isDevelopment = this.environment === EnvString.DEV;
     this.isLocal = this.environment === EnvString.LOCAL;
@@ -40,16 +40,6 @@ class Environment implements EnvironmentVariables {
     }
 
     return EnvString.LOCAL;
-  }
-
-  private getVersion(): string {
-    const version = document.documentElement.getAttribute('data-version');
-
-    if (version === null || version === '{{VERSION}}') {
-      return EnvString.LOCAL;
-    }
-
-    return version;
   }
 
   private getIsAnsattDomain(): boolean {
