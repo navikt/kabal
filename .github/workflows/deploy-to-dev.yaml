@@ -68,7 +68,9 @@ jobs:
 
       - name: Generate version number
         id: version
-        run: echo "version=$(TZ="Europe/Oslo" git show -s --format=%cd --date='format-local:%Y-%m-%dT%H:%M:%S')" >> "$GITHUB_OUTPUT"
+        env:
+          TZ: Europe/Oslo
+        run: echo "version=$(git show -s --format=%cd --date='format-local:%Y-%m-%dT%H:%M:%S')" >> "$GITHUB_OUTPUT"
 
       - name: Install common dependencies
         shell: bash
