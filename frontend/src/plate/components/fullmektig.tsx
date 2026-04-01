@@ -6,8 +6,11 @@ import { useReportDynamicContentLoading } from '@/components/smart-editor/tabbed
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
-import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
-import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@/plate/plugins/fullmektig';
+import {
+  ELEMENT_PLACEHOLDER,
+  FULLMEKTIG_LABEL_PLACEHOLDER,
+  FULLMEKTIG_VALUE_PLACEHOLDER,
+} from '@/plate/plugins/element-types';
 import { type FullmektigElement, type PlaceholderElement, useMyPlateEditorRef } from '@/plate/types';
 import { isOfElementType } from '@/plate/utils/queries';
 

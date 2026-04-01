@@ -1,6 +1,6 @@
 import { TextApi } from 'platejs';
 import { BOOKMARK_PREFIX } from '@/components/smart-editor/constants';
-import { type BookmarkVariantEnum, isBookmarkVariant } from '@/plate/toolbar/bookmark-button';
+import { type BookmarkVariantEnum, isBookmarkVariant } from '@/plate/toolbar/bookmark-types';
 import { type FormattedText, useMyPlateEditorState } from '@/plate/types';
 
 export interface Bookmark {

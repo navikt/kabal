@@ -7,7 +7,13 @@ import { BOOKMARK_PREFIX } from '@/components/smart-editor/constants';
 import { useOnClickOutside } from '@/hooks/use-on-click-outside';
 import { pushEvent } from '@/observability';
 import { useIsUnchangeable } from '@/plate/hooks/use-is-unchangeable';
-import { BookmarkPlugin } from '@/plate/plugins/bookmark';
+import {
+  BOOKMARK_VARIANT_TO_CLASSNAME,
+  BOOKMARK_VARIANTS,
+  type BookmarkVariant,
+  type BookmarkVariantEnum,
+  isBookmarkVariant,
+} from '@/plate/toolbar/bookmark-types';
 import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
 import { type FormattedText, useMyPlateEditorState } from '@/plate/types';
 
@@ -20,7 +26,7 @@ export const BookmarkButton = () => {
   const setBookmark = (variant: BookmarkVariantEnum) => {
     pushEvent('set-bookmark', 'smart-editor', { color: variant });
     const id = BOOKMARK_PREFIX + Date.now();
-    editor.tf.setNodes({ [BookmarkPlugin.key]: true, [id]: variant }, { match: TextApi.isText, split: true });
+    editor.tf.setNodes({ bookmark: true, [id]: variant }, { match: TextApi.isText, split: true });
 
     const entries = editor.nodes<FormattedText>({ match: (n) => TextApi.isText(n) && id in n });
     const nodes: FormattedText[] = [];
@@ -32,7 +38,7 @@ export const BookmarkButton = () => {
 
   const removeBookmark = (bookmark: Omit<Bookmark, 'nodes'>) => {
     pushEvent('remove-bookmark', 'smart-editor', { color: bookmark.variant });
-    editor.tf.unsetNodes<FormattedText>([BookmarkPlugin.key, bookmark.key], {
+    editor.tf.unsetNodes<FormattedText>(['bookmark', bookmark.key], {
       match: (n) => TextApi.isText(n) && bookmark.key in n,
       mode: 'lowest',
       at: [],
@@ -136,44 +142,3 @@ const BookmarkVariantButton = ({ option, onClick }: BookmarkVariantButtonProps) 
     />
   </Tooltip>
 );
-
-export enum BookmarkVariantEnum {
-  RED = '1',
-  GREEN = '2',
-  PURPLE = '3',
-}
-
-const BOOKMARK_VARIANT_VALUES = Object.values(BookmarkVariantEnum);
-
-export const isBookmarkVariant = (value: string): value is BookmarkVariantEnum =>
-  BOOKMARK_VARIANT_VALUES.includes(value as BookmarkVariantEnum);
-
-interface BookmarkVariant {
-  variant: BookmarkVariantEnum;
-  name: string;
-  className: string;
-}
-
-const BOOKMARK_VARIANTS: [BookmarkVariant, BookmarkVariant, BookmarkVariant] = [
-  {
-    variant: BookmarkVariantEnum.RED,
-    name: 'Rød',
-    className: 'text-ax-text-danger-decoration bg-ax-bg-danger-soft-a hover:bg-ax-bg-danger-moderate-a',
-  },
-  {
-    variant: BookmarkVariantEnum.GREEN,
-    name: 'Grønn',
-    className: 'text-ax-text-success-decoration bg-ax-bg-success-soft-a hover:bg-ax-bg-success-moderate-a',
-  },
-  {
-    variant: BookmarkVariantEnum.PURPLE,
-    name: 'Lilla',
-    className: 'text-ax-text-meta-purple-decoration bg-ax-bg-meta-purple-soft-a hover:bg-ax-bg-meta-purple-moderate-a',
-  },
-];
-
-export const BOOKMARK_VARIANT_TO_CLASSNAME: Record<BookmarkVariantEnum, string> = {
-  [BookmarkVariantEnum.RED]: BOOKMARK_VARIANTS[0].className,
-  [BookmarkVariantEnum.GREEN]: BOOKMARK_VARIANTS[1].className,
-  [BookmarkVariantEnum.PURPLE]: BOOKMARK_VARIANTS[2].className,
-};

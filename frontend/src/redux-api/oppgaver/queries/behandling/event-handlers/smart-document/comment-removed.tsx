@@ -1,9 +1,9 @@
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import type { SmartDocumentCommentEvent } from '@/redux-api/server-sent-events/types';
 import { smartEditorCommentsApi } from '@/redux-api/smart-editor-comments';
 
 export const handleSmartDocumentCommentRemovedEvent = (oppgaveId: string) => (event: SmartDocumentCommentEvent) => {
-  reduxStore.dispatch(
+  getReduxStore().dispatch(
     smartEditorCommentsApi.util.updateQueryData('getComments', { oppgaveId, dokumentId: event.documentId }, (draft) => {
       const { parentId, commentId } = event;
 

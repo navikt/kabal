@@ -1,7 +1,7 @@
 import { HStack, Label, Tag } from '@navikt/ds-react';
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { employeeName, QUEUE, SELF } from '@/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
@@ -45,7 +45,7 @@ export const handleTildelingEvent =
       draft.saksbehandler = saksbehandler;
       draft.modified = timestamp;
 
-      reduxStore.dispatch(
+      getReduxStore().dispatch(
         historyQuerySlice.util.updateQueryData('getHistory', oppgaveId, (history) => {
           if (history === undefined) {
             return;

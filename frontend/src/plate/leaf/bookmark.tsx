@@ -2,7 +2,7 @@ import { PlateLeaf, type PlateLeafProps } from 'platejs/react';
 import { useMemo } from 'react';
 import type { Bookmark } from '@/components/smart-editor/bookmarks/use-bookmarks';
 import { BOOKMARK_PREFIX } from '@/components/smart-editor/constants';
-import { BOOKMARK_VARIANT_TO_CLASSNAME, isBookmarkVariant } from '@/plate/toolbar/bookmark-button';
+import { BOOKMARK_VARIANT_TO_CLASSNAME, isBookmarkVariant } from '@/plate/toolbar/bookmark-types';
 import type { FormattedText } from '@/plate/types';
 
 export const BookmarkLeaf = (props: PlateLeafProps<FormattedText>) => {

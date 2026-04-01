@@ -4,7 +4,7 @@ import { toast } from '@/components/toast/store';
 import { areJournalfoertDocumentsEqual } from '@/domain/journalfoerte-documents';
 import { ENVIRONMENT } from '@/environment';
 import { getIsIncomingDocument } from '@/functions/is-incoming-document';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import { user } from '@/static-data/static-data';
@@ -391,7 +391,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         method: 'PUT',
       }),
       onQueryStarted: async ({ dokumentId, datoMottatt, oppgaveId }, { queryFulfilled }) => {
-        const collectionPatchResult = reduxStore.dispatch(
+        const collectionPatchResult = getReduxStore().dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
             draft.map((doc) =>
               doc.id === dokumentId &&
@@ -403,7 +403,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
           ),
         );
 
-        const documentPatchResult = reduxStore.dispatch(
+        const documentPatchResult = getReduxStore().dispatch(
           documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
             if (
               draft !== null &&
@@ -433,7 +433,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         method: 'PUT',
       }),
       onQueryStarted: async ({ dokumentId, inngaaendeKanal, oppgaveId }, { queryFulfilled }) => {
-        const collectionPatchResult = reduxStore.dispatch(
+        const collectionPatchResult = getReduxStore().dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
             draft.map((doc) =>
               doc.id === dokumentId && doc.type === DocumentTypeEnum.UPLOADED ? { ...doc, inngaaendeKanal } : doc,
@@ -441,7 +441,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
           ),
         );
 
-        const documentPatchResult = reduxStore.dispatch(
+        const documentPatchResult = getReduxStore().dispatch(
           documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
             if (draft.type === DocumentTypeEnum.UPLOADED) {
               draft.inngaaendeKanal = inngaaendeKanal;
@@ -464,7 +464,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         method: 'PUT',
       }),
       onQueryStarted: async ({ dokumentId, avsender, oppgaveId }, { queryFulfilled }) => {
-        const collectionPatchResult = reduxStore.dispatch(
+        const collectionPatchResult = getReduxStore().dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
             draft.map((doc) =>
               doc.id === dokumentId && doc.type === DocumentTypeEnum.UPLOADED ? { ...doc, avsender } : doc,
@@ -472,7 +472,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
           ),
         );
 
-        const documentPatchResult = reduxStore.dispatch(
+        const documentPatchResult = getReduxStore().dispatch(
           documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
             if (draft.type === DocumentTypeEnum.UPLOADED) {
               draft.avsender = avsender;
@@ -497,13 +497,13 @@ const optimisticUpdate = <K extends keyof IDocument>(
   key: K,
   value: IDocument[K],
 ) => {
-  const documentsPatchResult = reduxStore.dispatch(
+  const documentsPatchResult = getReduxStore().dispatch(
     documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
       draft.map((doc) => (doc.id === dokumentId ? { ...doc, [key]: value } : doc)),
     ),
   );
 
-  const smartEditorPatchResult = reduxStore.dispatch(
+  const smartEditorPatchResult = getReduxStore().dispatch(
     documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
       if (draft !== null) {
         return { ...draft, [key]: value };

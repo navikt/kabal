@@ -1,6 +1,6 @@
 import { BodyLong } from '@navikt/ds-react';
 import { toast } from '@/components/toast/store';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { getRolToastContent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/rol-toast';
 import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
@@ -43,7 +43,7 @@ export const handleRolEvent =
       draft.rol.flowState = flowState;
       draft.modified = timestamp;
 
-      reduxStore.dispatch(
+      getReduxStore().dispatch(
         historyQuerySlice.util.updateQueryData('getHistory', oppgaveId, (history) => {
           if (history === undefined) {
             return;

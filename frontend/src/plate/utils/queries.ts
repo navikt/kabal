@@ -3,9 +3,8 @@ import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-cl
 import { BaseTablePlugin } from '@platejs/table';
 import { type Descendant, ElementApi, NodeApi, type TElement, TextApi, type TNode, type TText } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
-import { SaksbehandlerPlaceholderPlugin } from '@/plate/plugins/placeholder/saksbehandler';
+import { ELEMENT_PLACEHOLDER, ELEMENT_REGELVERK, ELEMENT_REGELVERK_CONTAINER } from '@/plate/plugins/element-types';
 import { isInRegelverk, isInUnchangeableElement } from '@/plate/plugins/prohibit-deletion/helpers';
-import { RegelverkContainerPlugin, RegelverkPlugin } from '@/plate/plugins/regelverk';
 import type {
   BulletListElement,
   FormattedText,
@@ -100,18 +99,17 @@ const isContained = (editor: PlateEditor, type: string) => {
 
 export const isUnchangeable = (editor: PlateEditor) => {
   if (isInRegelverk(editor)) {
-    return !isContained(editor, RegelverkContainerPlugin.key);
+    return !isContained(editor, ELEMENT_REGELVERK_CONTAINER);
   }
 
   if (isInUnchangeableElement(editor)) {
-    return !isContained(editor, SaksbehandlerPlaceholderPlugin.key);
+    return !isContained(editor, ELEMENT_PLACEHOLDER);
   }
 
   return false;
 };
 
-export const isPlaceholderActive = (editor: PlateEditor) =>
-  editor.api.some({ match: { type: SaksbehandlerPlaceholderPlugin.key } });
+export const isPlaceholderActive = (editor: PlateEditor) => editor.api.some({ match: { type: ELEMENT_PLACEHOLDER } });
 
 export const getIsInRegelverk = (editor: PlateEditor, element: TNode): boolean => {
   const path = editor.api.findPath(element);
@@ -123,7 +121,7 @@ export const getIsInRegelverk = (editor: PlateEditor, element: TNode): boolean =
   const ancestors = NodeApi.ancestors(editor, path);
 
   for (const ancestor of ancestors) {
-    if (isOfElementType(ancestor[0], RegelverkPlugin.key)) {
+    if (isOfElementType(ancestor[0], ELEMENT_REGELVERK)) {
       return true;
     }
   }

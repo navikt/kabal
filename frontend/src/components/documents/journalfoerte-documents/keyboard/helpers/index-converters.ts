@@ -1,8 +1,5 @@
 import { getLastIndex } from '@/components/documents/journalfoerte-documents/keyboard/increment-decrement';
-import {
-  getSelectionRanges,
-  setSelectionRanges,
-} from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { selectionRangesStore } from '@/components/documents/journalfoerte-documents/keyboard/state/selection-store';
 import {
   indexesToRanges,
   rangesToIndexes,
@@ -62,7 +59,7 @@ export const setAccessibleToRealDocumentPaths = (
   showVedleggIdList: readonly string[],
 ) => {
   const nextState = getNextState(filteredDocuments, showVedleggIdList);
-  const ranges = getSelectionRanges();
+  const ranges = selectionRangesStore.get();
 
   const nextIndexes: number[] = [];
 
@@ -84,7 +81,7 @@ export const setAccessibleToRealDocumentPaths = (
 
   state.set(nextState);
 
-  setSelectionRanges(indexesToRanges(nextIndexes));
+  selectionRangesStore.set(indexesToRanges(nextIndexes));
 };
 
 const getNextState = (

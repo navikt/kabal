@@ -14,6 +14,9 @@ export const ELEMENT_SIGNATURE = 'signature';
 export const ELEMENT_EMPTY_VOID = 'empty-void';
 export const ELEMENT_SAKSNUMMER = 'saksnummer';
 
+export const FULLMEKTIG_LABEL_PLACEHOLDER = 'Fullmektigetikett';
+export const FULLMEKTIG_VALUE_PLACEHOLDER = 'Fullmektig';
+
 export const UNCHANGEABLE = [
   ELEMENT_HEADER,
   ELEMENT_FOOTER,

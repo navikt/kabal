@@ -1,14 +1,16 @@
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
-import { behandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { getReduxStore } from '@/redux/store-ref';
+import { getBehandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/query-slice-ref';
 import type { BaseEvent, IncludedDocumentsChangedEvent } from '@/redux-api/server-sent-events/types';
 import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 export const handleIncludedDocumentsAdded =
   (oppgaveId: string, userId: string) => (event: IncludedDocumentsChangedEvent) => {
-    reduxStore.dispatch(
+    const behandlingerQuerySlice = getBehandlingerQuerySlice();
+
+    getReduxStore().dispatch(
       behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
         for (const added of event.journalfoertDokumentReferenceSet) {
           if (!draft.tilknyttedeDokumenter.some((d) => match(d, added))) {
@@ -36,7 +38,9 @@ export const handleIncludedDocumentsAdded =
 
 export const handleIncludedDocumentsRemoved =
   (oppgaveId: string, userId: string) => (event: IncludedDocumentsChangedEvent) => {
-    reduxStore.dispatch(
+    const behandlingerQuerySlice = getBehandlingerQuerySlice();
+
+    getReduxStore().dispatch(
       behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => {
         const tilknyttedeDokumenter = draft.tilknyttedeDokumenter.filter((d) =>
           event.journalfoertDokumentReferenceSet.every((r) => !match(d, r)),
@@ -61,7 +65,9 @@ export const handleIncludedDocumentsRemoved =
   };
 
 export const handleIncludedDocumentsCleared = (oppgaveId: string, userId: string) => (event: BaseEvent) => {
-  reduxStore.dispatch(
+  const behandlingerQuerySlice = getBehandlingerQuerySlice();
+
+  getReduxStore().dispatch(
     behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) => ({
       ...draft,
       tilknyttedeDokumenter: [],

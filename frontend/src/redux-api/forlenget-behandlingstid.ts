@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { addMonths, addWeeks, format } from 'date-fns';
 import { ISO_FORMAT } from '@/components/date-picker/constants';
 import { toast } from '@/components/toast/store';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { KABAL_API_BASE_QUERY } from '@/redux-api/common';
 import type { IMottaker } from '@/types/documents/documents';
 import { mottakerToInputMottaker } from '@/types/documents/params';
@@ -76,7 +76,7 @@ export const forlengetBehandlingstidApi = createApi({
     >({
       query: ({ id, ...body }) => ({ url: getPath(id, 'behandlingstid-unit-type-id'), method: 'PUT', body }),
       onQueryStarted: async ({ id, varsletBehandlingstidUnitTypeId }, { queryFulfilled }) => {
-        const patchResult = reduxStore.dispatch(
+        const patchResult = getReduxStore().dispatch(
           updateQueryData('getOrCreate', id, (draft) => {
             if (draft.behandlingstid.varsletBehandlingstidUnits === null) {
               return { ...draft, behandlingstid: { ...draft.behandlingstid, varsletBehandlingstidUnitTypeId } };
@@ -110,7 +110,7 @@ export const forlengetBehandlingstidApi = createApi({
     setDoNotSendBrev: builder.mutation<IForlengetBehandlingstid, { doNotSendLetter: boolean; id: string }>({
       query: ({ id, ...body }) => ({ url: getPath(id, 'do-not-send-letter'), method: 'PUT', body }),
       onQueryStarted: async ({ id, doNotSendLetter }, { queryFulfilled }) => {
-        const patchResult = reduxStore.dispatch(
+        const patchResult = getReduxStore().dispatch(
           updateQueryData('getOrCreate', id, (draft) => {
             return {
               ...draft,
@@ -168,7 +168,9 @@ type Update = Partial<IForlengetBehandlingstid> & { id: string };
 const { updateQueryData } = forlengetBehandlingstidApi.util;
 
 const optimisticUpdate = async ({ id, ...update }: Update, queryFulfilled: QueryFulfiled) => {
-  const patchResult = reduxStore.dispatch(updateQueryData('getOrCreate', id, (draft) => ({ ...draft, ...update })));
+  const patchResult = getReduxStore().dispatch(
+    updateQueryData('getOrCreate', id, (draft) => ({ ...draft, ...update })),
+  );
 
   await pessimisticUpdate(id, queryFulfilled, patchResult.undo);
 };
@@ -177,7 +179,7 @@ const pessimisticUpdate = async (id: string, queryFulfilled: QueryFulfiled, undo
   try {
     const { data } = await queryFulfilled;
 
-    reduxStore.dispatch(updateQueryData('getOrCreate', id, (draft) => ({ ...draft, ...data })));
+    getReduxStore().dispatch(updateQueryData('getOrCreate', id, (draft) => ({ ...draft, ...data })));
   } catch {
     undo();
   }

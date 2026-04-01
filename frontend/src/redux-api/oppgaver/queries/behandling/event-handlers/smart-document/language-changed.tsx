@@ -2,14 +2,14 @@ import { Tag } from '@navikt/ds-react';
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { SmartDocumentLanguageEvent } from '@/redux-api/server-sent-events/types';
 import { LANGUAGE_NAMES } from '@/types/texts/language';
 
 export const handleSmartDocumentLanguageChangedEvent =
   (oppgaveId: string, userId: string) => (event: SmartDocumentLanguageEvent) => {
-    reduxStore.dispatch(
+    getReduxStore().dispatch(
       documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId: event.document.id }, (draft) => {
         if (!draft.isSmartDokument) {
           return draft;
@@ -21,7 +21,7 @@ export const handleSmartDocumentLanguageChangedEvent =
       }),
     );
 
-    reduxStore.dispatch(
+    getReduxStore().dispatch(
       documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
         draft.map((document) => {
           if (!document.isSmartDokument || document.id !== event.document.id) {

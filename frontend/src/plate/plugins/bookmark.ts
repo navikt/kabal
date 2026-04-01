@@ -4,7 +4,7 @@ import { BOOKMARK_PREFIX } from '@/components/smart-editor/constants';
 import { hasOwn } from '@/functions/object';
 import { Keys } from '@/keys';
 import { BookmarkLeaf } from '@/plate/leaf/bookmark';
-import { BookmarkVariantEnum, isBookmarkVariant } from '@/plate/toolbar/bookmark-button';
+import { BookmarkVariantEnum, isBookmarkVariant } from '@/plate/toolbar/bookmark-types';
 import type { FormattedText } from '@/plate/types';
 
 export const BookmarkPlugin = createPlatePlugin({

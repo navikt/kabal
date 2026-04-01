@@ -1,13 +1,13 @@
 import { reloadFileInAllViewers } from '@/components/file-viewer/file-viewer-handle-store';
 import { getNewDocumentFileUrl } from '@/domain/file-url';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { SmartDocumentVersionedEvent } from '@/redux-api/server-sent-events/types';
 
 export const handleSmartDocumentVersionedEvent =
   (oppgaveId: string) =>
   async ({ documentId, author, timestamp, version }: SmartDocumentVersionedEvent) => {
-    reduxStore.dispatch(
+    getReduxStore().dispatch(
       documentsQuerySlice.util.updateQueryData(
         'getSmartDocumentVersions',
         { oppgaveId, dokumentId: documentId },
@@ -15,7 +15,7 @@ export const handleSmartDocumentVersionedEvent =
       ),
     );
 
-    reduxStore.dispatch(
+    getReduxStore().dispatch(
       documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId: documentId }, (draft) => {
         draft.modified = timestamp;
       }),

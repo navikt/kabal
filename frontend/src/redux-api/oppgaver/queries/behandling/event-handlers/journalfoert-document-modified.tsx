@@ -1,14 +1,14 @@
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { JournalfoertDocumentModifiedEvent } from '@/redux-api/server-sent-events/types';
 import { DocumentTypeEnum } from '@/types/documents/documents';
 
 export const handleJournalfoertDocumentModified =
   (oppgaveId: string, userId: string) => (event: JournalfoertDocumentModifiedEvent) => {
-    reduxStore.dispatch(
+    getReduxStore().dispatch(
       // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (draft) => {
         if (draft === undefined) {
@@ -49,7 +49,7 @@ export const handleJournalfoertDocumentModified =
       }),
     );
 
-    reduxStore.dispatch(
+    getReduxStore().dispatch(
       documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
         if (draft === undefined) {
           return draft;

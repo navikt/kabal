@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { errorToastMiddleware } from '@/redux/error-toast-middleware';
 import { type RootState, rootReducer } from '@/redux/root';
+import { setStoreRef } from '@/redux/store-ref';
 import { accessRightsApi } from '@/redux-api/access-rights';
 import { brukerApi } from '@/redux-api/bruker';
 import { collaborationApi } from '@/redux-api/collaboration';
@@ -52,6 +53,8 @@ export const reduxStore = configureStore({
       errorToastMiddleware,
     ]),
 });
+
+setStoreRef(reduxStore);
 
 export type AppDispatch = typeof reduxStore.dispatch;
 

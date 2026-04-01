@@ -1,0 +1,28 @@
+## Key finding: types.ts imports BookmarkPlugin and CommentsPlugin
+
+types.ts:
+  imports: BookmarkPlugin, CommentsPlugin (from plugins/)
+  exports: FormattedText, and all element types
+
+plugins/bookmark.ts:
+  imports: BookmarkLeaf (from leaf/), types (for FormattedText)
+  exports: BookmarkPlugin
+
+leaf/bookmark.tsx:
+  imports: types (for FormattedText), toolbar/bookmark-button
+  exports: BookmarkLeaf
+
+plugins/fullmektig.ts:
+  imports: Fullmektig (from components/)
+  exports: FullmektigPlugin
+
+components/fullmektig.tsx:
+  imports: types (for FullmektigElement, PlaceholderElement, useMyPlateEditorRef)
+           plugins/fullmektig (for FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER)
+  exports: Fullmektig component
+
+Cycle Pattern:
+1. types.ts -> BookmarkPlugin -> leaf/bookmark.tsx -> BookmarkVariant from toolbar/bookmark-button
+2. types.ts -> plugins/fullmektig -> components/fullmektig -> types
+3. plugins/maltekst -> components/maltekst -> types
+4. plugins/regelverk -> components/regelverk -> types

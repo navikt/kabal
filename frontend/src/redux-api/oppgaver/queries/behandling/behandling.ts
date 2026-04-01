@@ -37,6 +37,7 @@ import { handleTilbakekrevingEvent } from '@/redux-api/oppgaver/queries/behandli
 import { handleTildelingEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/tildeling';
 import { handleUtfallEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/utfall';
 import { handleVarsletFristEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/varslet-frist';
+import { setBehandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/query-slice-ref';
 import { ServerSentEventType } from '@/redux-api/server-sent-events/event-types';
 import { ServerSentEventManager } from '@/server-sent-events';
 import { user } from '@/static-data/static-data';
@@ -207,6 +208,8 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
     }),
   }),
 });
+
+setBehandlingerQuerySlice(behandlingerQuerySlice);
 
 export const {
   useGetOppgavebehandlingQuery,

@@ -1,7 +1,7 @@
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { JournalpostAddedEvent } from '@/redux-api/server-sent-events/types';
 import { type AvsenderMottaker, Journalposttype, type Sak } from '@/types/arkiverte-documents';
@@ -30,7 +30,7 @@ export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) =
     }
   }
 
-  reduxStore.dispatch(
+  getReduxStore().dispatch(
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
     documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (archiveResponse) => {
       if (archiveResponse === undefined) {

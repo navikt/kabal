@@ -3,7 +3,7 @@ import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
 import { areJournalfoertDocumentsEqual } from '@/domain/journalfoerte-documents';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { DocumentsAddedEvent } from '@/redux-api/server-sent-events/types';
 import type { INavEmployee } from '@/types/bruker';
@@ -21,7 +21,7 @@ export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => 
     handleToast(documents, actor);
   }
 
-  reduxStore.dispatch(
+  getReduxStore().dispatch(
     documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
       if (draft === undefined) {
         return event.documents;

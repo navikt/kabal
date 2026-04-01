@@ -1,8 +1,8 @@
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
-import { reduxStore } from '@/redux/configure-store';
-import { behandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/behandling';
+import { getReduxStore } from '@/redux/store-ref';
 import { employeeName } from '@/redux-api/oppgaver/queries/behandling/event-handlers/common';
+import { getBehandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/query-slice-ref';
 import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
 import type { GosysOppgaveEvent } from '@/redux-api/server-sent-events/types';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
@@ -10,7 +10,9 @@ import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehand
 export const handleGosysOppgaveEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
   async ({ actor, timestamp, gosysOppgave }: GosysOppgaveEvent) => {
-    reduxStore.dispatch(
+    const behandlingerQuerySlice = getBehandlingerQuerySlice();
+
+    getReduxStore().dispatch(
       behandlingerQuerySlice.util.updateQueryData('getGosysOppgaveList', oppgaveId, (draft) => {
         for (const oppgave of draft) {
           if (oppgave.id === gosysOppgave.id) {
@@ -22,7 +24,9 @@ export const handleGosysOppgaveEvent =
       }),
     );
 
-    await reduxStore.dispatch(behandlingerQuerySlice.util.upsertQueryData('getGosysOppgave', oppgaveId, gosysOppgave)); // Wait for this to prevent fetching the same data again from the API.
+    await getReduxStore().dispatch(
+      behandlingerQuerySlice.util.upsertQueryData('getGosysOppgave', oppgaveId, gosysOppgave),
+    ); // Wait for this to prevent fetching the same data again from the API.
 
     updateCachedData((draft) => {
       if (draft === undefined) {

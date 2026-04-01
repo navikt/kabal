@@ -5,7 +5,7 @@ import { useBookmarks } from '@/components/smart-editor/bookmarks/use-bookmarks'
 import { hasOwn } from '@/functions/object';
 import { pushEvent } from '@/observability';
 import { BookmarkPlugin } from '@/plate/plugins/bookmark';
-import { BOOKMARK_VARIANT_TO_CLASSNAME } from '@/plate/toolbar/bookmark-button';
+import { BOOKMARK_VARIANT_TO_CLASSNAME } from '@/plate/toolbar/bookmark-types';
 import { type FormattedText, useMyPlateEditorState } from '@/plate/types';
 
 interface Props {

@@ -2,7 +2,7 @@ import { Tag } from '@navikt/ds-react';
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { DocumentsChangedEvent } from '@/redux-api/server-sent-events/types';
 import {
@@ -15,7 +15,7 @@ import {
 } from '@/types/documents/documents';
 
 export const handleDocumentsChangedEvent = (oppgaveId: string, userId: string) => (event: DocumentsChangedEvent) => {
-  reduxStore.dispatch(
+  getReduxStore().dispatch(
     documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
       // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       draft.map((document) => {

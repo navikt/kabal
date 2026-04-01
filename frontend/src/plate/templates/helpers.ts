@@ -8,6 +8,8 @@ import {
   ELEMENT_FOOTER,
   ELEMENT_FULLMEKTIG,
   ELEMENT_HEADER,
+  ELEMENT_LABEL_CONTENT,
+  ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
   ELEMENT_PAGE_BREAK,
   ELEMENT_PLACEHOLDER,
@@ -16,10 +18,9 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SAKSNUMMER,
   ELEMENT_SIGNATURE,
+  FULLMEKTIG_LABEL_PLACEHOLDER,
+  FULLMEKTIG_VALUE_PLACEHOLDER,
 } from '@/plate/plugins/element-types';
-import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@/plate/plugins/fullmektig';
-import { LabelContentPlugin } from '@/plate/plugins/label-content';
-import { MaltekstPlugin } from '@/plate/plugins/maltekst';
 import { TemplateSections } from '@/plate/template-sections';
 import { MAX_TABLE_WIDTH } from '@/plate/toolbar/table/constants';
 import {
@@ -55,7 +56,7 @@ import {
 import { Language } from '@/types/texts/language';
 
 export const createLabelContent = (source: LabelContentSource): LabelContentElement => ({
-  type: LabelContentPlugin.key,
+  type: ELEMENT_LABEL_CONTENT,
   children: [{ text: '' }],
   source,
   threadIds: [],
@@ -82,7 +83,7 @@ export const createMaltekst = (
   children: ParentOrChildElement[] = [createSimpleParagraph()],
   id?: string,
   language: Language = Language.NB,
-): MaltekstElement => ({ type: MaltekstPlugin.key, section, id, language, children });
+): MaltekstElement => ({ type: ELEMENT_MALTEKST, section, id, language, children });
 
 export const createRedigerbarMaltekst = (
   section: TemplateSections,

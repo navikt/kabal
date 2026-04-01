@@ -6,7 +6,6 @@ import { OppgaveRow } from '@/components/common-table-components/oppgave-rows/op
 import { TablePlainHeaders } from '@/components/common-table-components/oppgave-table/oppgave-table-headers';
 import { StaticOppgaveTable } from '@/components/common-table-components/oppgave-table/static-oppgave-table';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
-import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 /*
  * We have the following dependency cycle:
  * Relevant oppgaver -> Oppgaver table -> Oppgave table -> Rows -> Row -> Relevant oppgaver
@@ -14,6 +13,8 @@ import { SectionWithHeading } from '@/components/section-with-heading/section-wi
  * This is a recursive structure by nature, and resolving the import cycle does not seem possible without combining everything in one file.
  * Leaving the cycle should be safe however, as the cycle is only between (top-level) React components.
  */
+import { setRelevantOppgaverComponent } from '@/components/relevant-oppgaver/relevant-oppgaver-slot';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { formatFoedselsnummer } from '@/functions/format-id';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { pushEvent } from '@/observability';
@@ -142,3 +143,5 @@ const VENTENDE_COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.OpenWithYtelseAccess,
   ColumnKeyEnum.OppgavestyringNonFilterable,
 ];
+
+setRelevantOppgaverComponent(RelevantOppgaver);

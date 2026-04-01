@@ -1,6 +1,6 @@
 import { BodyLong } from '@navikt/ds-react';
 import { toast } from '@/components/toast/store';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { getMedunderskriverToastContent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/medunderskriver-toast';
 import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
@@ -40,7 +40,7 @@ export const handleMedunderskriverEvent =
       draft.medunderskriver.flowState = flowState;
       draft.modified = timestamp;
 
-      reduxStore.dispatch(
+      getReduxStore().dispatch(
         historyQuerySlice.util.updateQueryData('getHistory', oppgaveId, (history) => {
           if (history === undefined) {
             return;

@@ -10,30 +10,24 @@ import {
   resetFocusIndex,
   setFocusIndex,
 } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
+import { selectionRangesStore } from '@/components/documents/journalfoerte-documents/keyboard/state/selection-store';
 import { getId } from '@/components/documents/journalfoerte-documents/select-context/helpers';
 import {
   isInRanges,
-  mergeRanges,
   rangesToIndexes,
   removeIndexFromRanges,
-  type SelectionRange,
 } from '@/components/documents/journalfoerte-documents/select-context/range-utils';
 import type { SelectedMap } from '@/components/documents/journalfoerte-documents/select-context/types';
 import { isMetaKey } from '@/keys';
-import { Observable } from '@/observable';
 import type { IArkivertDocument } from '@/types/arkiverte-documents';
 import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
-const INITIAL_STATE: SelectionRange[] = [];
-
-const selectionRangesStore = new Observable<readonly SelectionRange[]>(INITIAL_STATE, mergeRanges);
-
-export const resetSelectionRanges = () => selectionRangesStore.set(INITIAL_STATE);
+export const resetSelectionRanges = () => selectionRangesStore.set([]);
 
 export const useSelectionRangesState = () =>
   useSyncExternalStore(selectionRangesStore.subscribe, selectionRangesStore.get);
 
-export const unselectAll = () => selectionRangesStore.set(INITIAL_STATE);
+export const unselectAll = () => selectionRangesStore.set([]);
 export const getSelectionRanges = () => selectionRangesStore.get();
 export const setSelectionRanges: typeof selectionRangesStore.set = (selectionRanges) =>
   selectionRangesStore.set(selectionRanges);

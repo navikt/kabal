@@ -7,7 +7,7 @@ import {
   ELEMENT_LABEL_CONTENT,
   ELEMENT_SIGNATURE,
 } from '@/plate/plugins/element-types';
-import { type FindReplaceConfig, groupRanges } from '@/plate/plugins/search-replace/search-replace';
+import { type FindReplaceConfig, groupRanges } from '@/plate/plugins/search-replace/group-ranges';
 
 const NON_EDITABLE_ELEMENTS = [
   ELEMENT_HEADER,

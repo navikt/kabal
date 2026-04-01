@@ -5,7 +5,7 @@ import { ISO_FORMAT } from '@/components/date-picker/constants';
 import { toast } from '@/components/toast/store';
 import { ENVIRONMENT } from '@/environment';
 import { formatIdNumber } from '@/functions/format-id';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { forlengetBehandlingstidApi } from '@/redux-api/forlenget-behandlingstid';
 import { kvalitetsvurderingV1Api } from '@/redux-api/kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '@/redux-api/kaka-kvalitetsvurdering/v2';
@@ -41,7 +41,7 @@ const finishOppgaveOnQueryStarted = async ({
   const { data } = await queryFulfilled;
   update(oppgaveId, data);
 
-  reduxStore.dispatch(
+  getReduxStore().dispatch(
     oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
       draft.isAvsluttetAvSaksbehandler = true;
       draft.avsluttetAvSaksbehandlerDate = data.modified;
@@ -50,12 +50,14 @@ const finishOppgaveOnQueryStarted = async ({
     }),
   );
 
-  reduxStore.dispatch(oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]));
+  getReduxStore().dispatch(
+    oppgaverApi.util.invalidateTags([{ type: OppgaveTagTypes.OPPGAVEBEHANDLING, id: oppgaveId }]),
+  );
 
   if (id !== null) {
-    reduxStore.dispatch(kvalitetsvurderingV3Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
-    reduxStore.dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
-    reduxStore.dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+    getReduxStore().dispatch(kvalitetsvurderingV3Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+    getReduxStore().dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+    getReduxStore().dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
   }
 };
 
@@ -201,7 +203,7 @@ export const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
 });
 
 const update = (oppgaveId: string, upd: Partial<IOppgavebehandling>) => {
-  const patchResult = reduxStore.dispatch(
+  const patchResult = getReduxStore().dispatch(
     behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, (draft) =>
       Object.assign(draft, upd),
     ),

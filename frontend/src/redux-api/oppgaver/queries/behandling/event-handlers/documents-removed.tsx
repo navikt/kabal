@@ -2,7 +2,7 @@ import { Tag } from '@navikt/ds-react';
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { DocumentsRemovedEvent } from '@/redux-api/server-sent-events/types';
 import type { INavEmployee } from '@/types/bruker';
@@ -15,7 +15,7 @@ import {
 } from '@/types/documents/documents';
 
 export const handleDocumentsRemovedEvent = (oppgaveId: string, userId: string) => (event: DocumentsRemovedEvent) => {
-  reduxStore.dispatch(
+  getReduxStore().dispatch(
     documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (documents) => {
       if (documents === undefined) {
         return documents;

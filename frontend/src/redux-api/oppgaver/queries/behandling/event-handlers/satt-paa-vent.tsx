@@ -2,7 +2,7 @@ import { Label } from '@navikt/ds-react';
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { isoDateToPretty } from '@/domain/date';
-import { reduxStore } from '@/redux/configure-store';
+import { getReduxStore } from '@/redux/store-ref';
 import { employeeName } from '@/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
@@ -46,7 +46,7 @@ export const handleSattPaaVentEvent =
       draft.sattPaaVent = sattPaaVent;
       draft.modified = timestamp;
 
-      reduxStore.dispatch(
+      getReduxStore().dispatch(
         historyQuerySlice.util.updateQueryData('getHistory', oppgaveId, (history) => {
           if (history === undefined) {
             return;

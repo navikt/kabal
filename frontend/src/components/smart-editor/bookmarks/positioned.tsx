@@ -11,7 +11,7 @@ import {
 import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
 import { pushEvent } from '@/observability';
 import { BASE_FONT_SIZE } from '@/plate/components/get-scaled-em';
-import { BOOKMARK_VARIANT_TO_CLASSNAME } from '@/plate/toolbar/bookmark-button';
+import { BOOKMARK_VARIANT_TO_CLASSNAME } from '@/plate/toolbar/bookmark-types';
 import { useMyPlateEditorRef } from '@/plate/types';
 
 const ITEM_WIDTH = 6 * 4;
