@@ -74,7 +74,7 @@ export const App = ({ metadata }: AppProps) => {
   useReloadOnBroadcast(handleRef);
 
   return (
-    <Theme asChild theme={appTheme}>
+    <Theme theme={appTheme} className="h-full w-full">
       <KlageFileViewer files={metadata.files} theme={appTheme} standalone handleRef={handleRef} />
     </Theme>
   );
