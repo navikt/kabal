@@ -1,8 +1,10 @@
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
 import cors from '@fastify/cors';
 import fastifyWebsocket from '@fastify/websocket';
 import { fastify } from 'fastify';
 import metricsPlugin from 'fastify-metrics';
-import { API_CLIENT_IDS } from '@/config/config';
+import { API_CLIENT_IDS, frontendDistDirectoryPath } from '@/config/config';
 import { corsOptions } from '@/config/cors';
 import { isDeployed } from '@/config/env';
 import { serverConfig } from '@/config/server-config';
@@ -70,6 +72,15 @@ app
   .register(async (app) => {
     app.get('/assets/*', async (_, reply) => reply.code(404).send());
     app.get('/file-viewer/assets/*', async (_, reply) => reply.code(404).send());
+
+    const faviconPath = path.join(frontendDistDirectoryPath, 'favicon.ico');
+    const faviconBuffer = existsSync(faviconPath) ? readFileSync(faviconPath) : null;
+
+    if (faviconBuffer === null) {
+      app.get('/favicon.ico', async (_, reply) => reply.code(404).send());
+    } else {
+      app.get('/favicon.ico', async (_, reply) => reply.header('content-type', 'image/x-icon').send(faviconBuffer));
+    }
   })
   .register(serveIndexPlugin)
   .register(httpLoggerPlugin)
