@@ -12,6 +12,7 @@
         "@fastify/websocket": "11.2.0",
         "@hocuspocus/common": "3.4.4",
         "@hocuspocus/server": "3.4.4",
+        "@navikt/oasis": "3.7.0",
         "@opentelemetry/api": "1.9.1",
         "@opentelemetry/exporter-trace-otlp-grpc": "0.214.0",
         "@opentelemetry/instrumentation-dns": "0.57.0",
@@ -28,8 +29,6 @@
         "fastify": "5.8.5",
         "fastify-metrics": "13.2.0",
         "fastify-plugin": "5.1.0",
-        "jose": "5.9.1",
-        "openid-client": "5.7.1",
         "prom-client": "15.1.3",
         "redis": "5.11.0",
         "slate": "0.124.1",
@@ -84,6 +83,8 @@
     "@js-sdsl/ordered-map": ["@js-sdsl/ordered-map@4.4.2", "", {}, "sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw=="],
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@0.2.12", "", { "dependencies": { "@emnapi/core": "^1.4.3", "@emnapi/runtime": "^1.4.3", "@tybys/wasm-util": "^0.10.0" } }, "sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ=="],
+
+    "@navikt/oasis": ["@navikt/oasis@3.7.0", "https://npm.pkg.github.com/download/@navikt/oasis/3.7.0/751fcd04f8bd873590fc8ad516f906012caaf9ef", { "dependencies": { "jose": "^5.2.3", "openid-client": "^5.6.5", "prom-client": "^15.1.0" } }, "sha512-Arf3/k0ZDUsmT7gKOkVvEDYyAegFUznc0TQ1OlzV0O6wJ2qbmSnBHe6lea0J5zxRud+OZ6rgYj0ujsGrIiPPBQ=="],
 
     "@node-rs/crc32": ["@node-rs/crc32@1.10.6", "", { "optionalDependencies": { "@node-rs/crc32-android-arm-eabi": "1.10.6", "@node-rs/crc32-android-arm64": "1.10.6", "@node-rs/crc32-darwin-arm64": "1.10.6", "@node-rs/crc32-darwin-x64": "1.10.6", "@node-rs/crc32-freebsd-x64": "1.10.6", "@node-rs/crc32-linux-arm-gnueabihf": "1.10.6", "@node-rs/crc32-linux-arm64-gnu": "1.10.6", "@node-rs/crc32-linux-arm64-musl": "1.10.6", "@node-rs/crc32-linux-x64-gnu": "1.10.6", "@node-rs/crc32-linux-x64-musl": "1.10.6", "@node-rs/crc32-wasm32-wasi": "1.10.6", "@node-rs/crc32-win32-arm64-msvc": "1.10.6", "@node-rs/crc32-win32-ia32-msvc": "1.10.6", "@node-rs/crc32-win32-x64-msvc": "1.10.6" } }, "sha512-+llXfqt+UzgoDzT9of5vPQPGqTAVCohU74I9zIBkNo5TH6s2P31DFJOGsJQKN207f0GHnYv5pV3wh3BCY/un/A=="],
 
@@ -321,7 +322,7 @@
 
     "isomorphic.js": ["isomorphic.js@0.2.5", "", {}, "sha512-PIeMbHqMt4DnUP3MA/Flc0HElYjMXArsw1qwJZcm9sqR8mq3l8NYizFMty0pWwE/tzIGH3EKK5+jes5mAr85yw=="],
 
-    "jose": ["jose@5.9.1", "", {}, "sha512-8verKvy4GThlXSRe1qOcHGcRW9tKVv0YrLildFf6q3RQh3V/OxCXAkVsLhsw9tNOXFJ/EsIGOxWMmISBd/osTQ=="],
+    "jose": ["jose@5.10.0", "", {}, "sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg=="],
 
     "json-schema-ref-resolver": ["json-schema-ref-resolver@3.0.0", "", { "dependencies": { "dequal": "^2.0.3" } }, "sha512-hOrZIVL5jyYFjzk7+y7n5JDzGlU8rfWDuYyHwGa2WA8/pcmMHezp2xsVwxrebD/Q9t8Nc5DboieySDpCp4WG4A=="],
 

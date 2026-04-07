@@ -3,9 +3,6 @@ import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import type { FastifyRequest } from 'fastify/types/request';
 import fastifyPlugin from 'fastify-plugin';
 import { Doc, encodeStateAsUpdateV2, XmlText } from 'yjs';
-import { getCacheKey } from '@/auth/cache/cache';
-import { getAzureADClient } from '@/auth/get-auth-client';
-import { refreshOnBehalfOfAccessToken } from '@/auth/on-behalf-of';
 import { ApiClientEnum } from '@/config/config';
 import { isDeployed } from '@/config/env';
 import { isObject } from '@/functions/functions';
@@ -19,7 +16,7 @@ import { KABAL_API_URL } from '@/plugins/crdt/api/url';
 import { collaborationServer } from '@/plugins/crdt/collaboration-server';
 import type { ConnectionContext } from '@/plugins/crdt/context';
 import { NAV_IDENT_PLUGIN_ID } from '@/plugins/nav-ident';
-import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/obo-token';
+import { getOboToken, OBO_ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/obo-token';
 import { TAB_ID_PLUGIN_ID } from '@/plugins/tab-id';
 
 export const CRDT_PLUGIN_ID = 'crdt';
@@ -211,17 +208,11 @@ export const crdtPlugin = fastifyPlugin(
         },
       },
       async (req, reply) => {
-        const { navIdent, accessToken } = req;
+        const oboAccessToken = await getOboToken(ApiClientEnum.KABAL_API, req, reply);
 
-        const authClient = await getAzureADClient();
-        const cacheKey = getCacheKey(navIdent, ApiClientEnum.KABAL_API);
-
-        const oboAccessToken = await refreshOnBehalfOfAccessToken(
-          authClient,
-          accessToken,
-          cacheKey,
-          ApiClientEnum.KABAL_API,
-        );
+        if (oboAccessToken === undefined) {
+          return reply.status(400).send('Failed to refresh OBO token');
+        }
 
         const parsed = parseTokenPayload(oboAccessToken);
 

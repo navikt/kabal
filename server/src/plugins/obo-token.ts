@@ -1,9 +1,8 @@
-import type { FastifyReply, FastifyRequest } from 'fastify';
+import { requestOboToken, validateToken } from '@navikt/oasis';
+import type { FastifyReply } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
-import { getCacheKey, oboCache } from '@/auth/cache/cache';
-import { oboRequestDuration } from '@/auth/cache/cache-gauge';
-import { getAzureADClient } from '@/auth/get-auth-client';
-import { getOnBehalfOfAccessToken } from '@/auth/on-behalf-of';
+import { Histogram } from 'prom-client';
+import { ApiClientEnum, NAIS_CLUSTER_NAME } from '@/config/config';
 import { isDeployed } from '@/config/env';
 import { getDuration } from '@/helpers/duration';
 import { withSpan } from '@/helpers/tracing';
@@ -11,6 +10,7 @@ import { getLogger } from '@/logger';
 import { ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/access-token';
 import { NAV_IDENT_PLUGIN_ID } from '@/plugins/nav-ident';
 import { SERVER_TIMING_PLUGIN_ID } from '@/plugins/server-timing';
+import { proxyRegister } from '@/prometheus/types';
 
 const log = getLogger('obo-token-plugin');
 
@@ -23,6 +23,8 @@ declare module 'fastify' {
     getCachedOboAccessToken(appName: string): string | undefined;
   }
 }
+
+const NO_OBO = [ApiClientEnum.KLAGE_KODEVERK_API.toString()];
 
 const ASYNC_NOOP = async () => undefined;
 const SYNC_NOOP = () => undefined;
@@ -39,6 +41,10 @@ export const oboAccessTokenPlugin = fastifyPlugin(
 
     if (isDeployed) {
       app.decorateRequest('getOboAccessToken', async function (appName: string, reply?: FastifyReply) {
+        if (NO_OBO.includes(appName)) {
+          return undefined;
+        }
+
         const requestOboAccessToken = this.oboAccessTokenMap.get(appName);
 
         if (requestOboAccessToken !== undefined) {
@@ -57,9 +63,7 @@ export const oboAccessTokenPlugin = fastifyPlugin(
       });
 
       app.decorateRequest('getCachedOboAccessToken', function (appName: string) {
-        return (
-          this.oboAccessTokenMap.get(appName) ?? oboCache.getCached(getCacheKey(this.navIdent, appName)) ?? undefined
-        );
+        return this.oboAccessTokenMap.get(appName);
       });
     } else {
       app.decorateRequest('getOboAccessToken', ASYNC_NOOP);
@@ -73,19 +77,35 @@ export const oboAccessTokenPlugin = fastifyPlugin(
   },
 );
 
-type GetOboToken = (appName: string, req: FastifyRequest, reply?: FastifyReply) => Promise<string | undefined>;
+type GetOboToken = (appName: string, params: Params, reply?: FastifyReply) => Promise<string | undefined>;
+type Params = {
+  accessToken: string;
+  url?: string;
+  client_version?: string;
+  tab_id?: string;
+  navIdent: string;
+};
 
-const getOboToken: GetOboToken = async (appName, req, reply) => {
-  const { accessToken, navIdent, url, client_version, tab_id } = req;
+export const getOboToken: GetOboToken = async (appName, params, reply) => {
+  const { accessToken, url, client_version, tab_id, navIdent } = params;
+  const logParams = { client_version, tab_id, data: { route: url } };
 
-  log.debug({
-    msg: `Getting OBO token for "${appName}".`,
-    tab_id,
-    client_version,
-    data: { route: url },
-  });
+  log.debug({ msg: `Getting OBO token for "${appName}".`, ...logParams });
 
   if (accessToken.length === 0) {
+    log.warn({ msg: 'No access token provided.', ...logParams });
+
+    return undefined;
+  }
+
+  const validation = await validateToken(accessToken);
+
+  if (!validation.ok) {
+    log.warn({
+      msg: `Invalid access token: ${validation.error.name} - ${validation.error.message} (${validation.errorType})`,
+      ...logParams,
+    });
+
     return undefined;
   }
 
@@ -100,27 +120,43 @@ const getOboToken: GetOboToken = async (appName, req, reply) => {
     },
     async () => {
       try {
-        const azureClientStart = performance.now();
-        const authClient = await getAzureADClient();
-        reply?.addServerTiming('azure_client_middleware', getDuration(azureClientStart), 'Azure Client Middleware');
-
         const oboStart = performance.now();
-        const oboAccessToken = await getOnBehalfOfAccessToken(authClient, accessToken, navIdent, appName);
+        const audience = `api://${NAIS_CLUSTER_NAME}.klage.${appName}/.default`;
+
+        log.debug({ msg: `Requesting OBO token for audience: ${audience}.`, ...logParams });
+
+        const oboAccessToken = await requestOboToken(accessToken, audience);
 
         const duration = getDuration(oboStart);
         oboRequestDuration.observe(duration);
         reply?.addServerTiming('obo_token_middleware', duration, 'OBO Token Middleware');
 
-        return oboAccessToken;
+        if (!oboAccessToken.ok) {
+          log.warn({
+            msg: `Failed to get OBO token for audience: ${audience}: ${JSON.stringify(oboAccessToken.error)}`,
+            ...logParams,
+          });
+
+          return undefined;
+        }
+
+        log.debug({ msg: `OBO token for ${appName} received.`, ...logParams });
+
+        return oboAccessToken.token;
       } catch (error) {
-        log.warn({
-          msg: 'Failed to prepare request with OBO token.',
-          error,
-          data: { route: req.url },
-        });
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
+        log.error({ msg: `Failed to prepare request with OBO token: ${errorMessage}`, ...logParams });
 
         return undefined;
       }
     },
   );
 };
+
+const oboRequestDuration = new Histogram({
+  name: 'obo_request_duration',
+  help: 'Duration of OBO token requests in milliseconds.',
+  buckets: [0, 10, 100, 200, 300, 400, 500, 600, 800, 900, 1000],
+  registers: [proxyRegister],
+});
