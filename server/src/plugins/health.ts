@@ -1,6 +1,4 @@
 import fastifyPlugin from 'fastify-plugin';
-import { oboCache } from '@/auth/cache/cache';
-import { getIsAzureClientReady } from '@/auth/get-auth-client';
 import { SMART_DOCUMENT_WRITE_ACCESS } from '@/document-access/service';
 import { getLogger } from '@/logger';
 import { isShuttingDown } from '@/shutdown';
@@ -27,26 +25,6 @@ export const healthPlugin = fastifyPlugin(
     });
 
     app.get('/isStarted', async (__, reply) => {
-      const isAzureClientReady = getIsAzureClientReady();
-
-      if (!(oboCache.isReady || isAzureClientReady)) {
-        log.info({ msg: 'OBO Cache and Azure Client not ready' });
-
-        return reply.status(503).type('text/plain').send('OBO Cache and Azure Client not ready');
-      }
-
-      if (!oboCache.isReady) {
-        log.info({ msg: 'OBO Cache not ready' });
-
-        return reply.status(503).type('text/plain').send('OBO Cache not ready');
-      }
-
-      if (!isAzureClientReady) {
-        log.info({ msg: 'Azure Client not ready' });
-
-        return reply.status(503).type('text/plain').send('Azure Client not ready');
-      }
-
       const errors = SMART_DOCUMENT_WRITE_ACCESS.getErrors();
 
       if (errors.length > 0) {

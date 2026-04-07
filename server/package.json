@@ -34,19 +34,18 @@
     "@opentelemetry/sdk-trace-node": "2.7.1",
     "@opentelemetry/semantic-conventions": "1.41.1",
     "@platformatic/kafka": "2.1.0",
+    "@navikt/oasis": "4.1.4",
     "@slate-yjs/core": "1.0.2",
     "fastify": "5.8.5",
     "fastify-metrics": "13.2.0",
     "fastify-plugin": "5.1.0",
-    "jose": "5.9.1",
-    "openid-client": "5.7.1",
     "prom-client": "15.1.3",
-    "redis": "5.12.1",
+    "redis": "6.0.0",
     "slate": "0.124.1",
-    "typebox": "1.1.38",
-    "yjs": "13.6.30"
+    "typebox": "1.1.39",
+    "yjs": "13.6.31"
   },
   "devDependencies": {
-    "@types/node": "25.8.0"
+    "@types/node": "25.9.1"
   }
 }
