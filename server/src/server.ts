@@ -25,7 +25,7 @@ import { serveIndexPlugin } from '@/plugins/serve-index';
 import { serverTimingPlugin } from '@/plugins/server-timing';
 import { staticAssetsPlugin } from '@/plugins/static-assets';
 import { tabIdPlugin } from '@/plugins/tab-id';
-import { unleashProxyPlugin } from '@/plugins/unleash-proxy';
+import { unleashProxyPlugin } from '@/plugins/unleash-proxy/unleash-proxy';
 import { versionPlugin } from '@/plugins/version/version';
 import { processErrors } from '@/process-errors';
 import { EmojiIcons, sendToSlack } from '@/slack';
