@@ -49,7 +49,7 @@ export const RedaktoerRichText = ({
     override: {
       components: redaktørComponents,
     },
-    value: savedContent,
+    value: structuredClone(savedContent),
   });
 
   useImperativeHandle(editorRef, () => editor);
