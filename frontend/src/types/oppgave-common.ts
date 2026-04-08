@@ -140,6 +140,19 @@ export type IFullmektig = IPersonFullmektig | IOrganizationFullmektig;
 export interface ISakenGjelder extends IPersonPart {
   sex: SexEnum;
   language: Language;
+  protectedFamilyMembers: FamilyMember[];
+}
+
+export type IFamilyMemberStatus = Extract<
+  IPersonStatus,
+  { status: PartStatusEnum.FORTROLIG | PartStatusEnum.STRENGT_FORTROLIG | PartStatusEnum.EGEN_ANSATT }
+>;
+
+export interface FamilyMember {
+  identifikator: string;
+  name: string;
+  sex: SexEnum;
+  statusList: IFamilyMemberStatus[];
 }
 
 type Reason =
