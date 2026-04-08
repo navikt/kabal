@@ -8,6 +8,7 @@ import { SKELETON } from '@/components/behandling/behandlingsdialog/medunderskri
 import { MedunderskriverStateText } from '@/components/behandling/behandlingsdialog/medunderskriver/state-text';
 import { TakeFromMedunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/take-from-medunderskriver';
 import { TakeFromSaksbehandler } from '@/components/behandling/behandlingsdialog/medunderskriver/take-from-saksbehandler';
+import { hasFortroligStatus } from '@/domain/is-fortrolig';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
@@ -39,7 +40,7 @@ export const Medunderskriver = () => {
     );
   }
 
-  if (oppgave.fortrolig) {
+  if (hasFortroligStatus(oppgave.sakenGjelder.statusList)) {
     return (
       <LocalAlert status="warning" size="small" className="my-2">
         <LocalAlert.Header>
