@@ -1,4 +1,5 @@
 import { Box, CopyButton, HStack } from '@navikt/ds-react';
+import { ProtectedFamilyMemberStatuses } from '@/components/oppgavebehandling-controls/family-members';
 import { Sikkerhetstiltak } from '@/components/oppgavebehandling-controls/sikkerhetstiltak';
 import { UserSex } from '@/components/oppgavebehandling-controls/user-sex';
 import { PartStatusList } from '@/components/part-status-list/part-status-list';
@@ -7,7 +8,7 @@ import { formatFoedselsnummer } from '@/functions/format-id';
 import type { IOppgavebehandlingBase } from '@/types/oppgavebehandling/oppgavebehandling';
 
 export const UserInfo = ({ sakenGjelder, id, sikkerhetstiltak }: IOppgavebehandlingBase) => (
-  <HStack asChild align="center" gap="space-0 space-8" paddingInline="space-0 space-1">
+  <HStack asChild align="center" gap="space-0 space-8" paddingInline="space-0 space-16">
     <Box borderWidth="0 1 0 0" borderColor="neutral">
       <UserSex sex={sakenGjelder.sex} />
       <span>{sakenGjelder.name ?? '-'}</span>
@@ -17,6 +18,7 @@ export const UserInfo = ({ sakenGjelder, id, sikkerhetstiltak }: IOppgavebehandl
         text={formatFoedselsnummer(sakenGjelder.identifikator)}
       />
       <PartStatusList statusList={sakenGjelder.statusList} size="small" />
+      <ProtectedFamilyMemberStatuses protectedFamilyMembers={sakenGjelder.protectedFamilyMembers} />
       <Sikkerhetstiltak sikkerhetstiltak={sikkerhetstiltak} />
       <RelevantOppgaver oppgaveId={id} />
     </Box>
