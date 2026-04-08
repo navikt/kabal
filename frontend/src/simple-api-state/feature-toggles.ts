@@ -4,6 +4,10 @@ type FeatureToggle = {
   enabled: boolean;
 };
 
-const showNewFileViewer = new SimpleApiState<FeatureToggle>('/feature-toggle/use-new-file-viewer');
+const showNewFileViewer = new SimpleApiState<FeatureToggle>('/feature-toggle/show-new-file-viewer');
 
-export const useNewFileViewerFeatureToggle = () => useSimpleApiState(showNewFileViewer);
+const showOldPdfViewer = new SimpleApiState<FeatureToggle>('/feature-toggle/show-old-pdf-viewer');
+
+export const useShowNewFileViewerFeatureToggle = () => useSimpleApiState(showNewFileViewer);
+
+export const useShowOldPdfViewerFeatureToggle = () => useSimpleApiState(showOldPdfViewer);

@@ -26,7 +26,10 @@ import {
   useSetMottakerListMutation,
   useSetTitleMutation,
 } from '@/redux-api/oppgaver/mutations/documents';
-import { useNewFileViewerFeatureToggle } from '@/simple-api-state/feature-toggles';
+import {
+  useShowNewFileViewerFeatureToggle,
+  useShowOldPdfViewerFeatureToggle,
+} from '@/simple-api-state/feature-toggles';
 import {
   DISTRIBUTION_TYPE_NAMES,
   DistribusjonsType,
@@ -64,7 +67,8 @@ export const DocumentModalContent = ({
 }: Props) => {
   const [setMottakerList, { isLoading }] = useSetMottakerListMutation();
   const [, { error: finishError }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
-  const useNewFileViewer = useNewFileViewerFeatureToggle();
+  const showNewFileViewer = useShowNewFileViewerFeatureToggle();
+  const showOldPdfViewer = useShowOldPdfViewerFeatureToggle();
   const sendErrors = useMemo(
     () =>
       isSendError(finishError)
@@ -158,8 +162,10 @@ export const DocumentModalContent = ({
 
         {pdfUrl === undefined ? null : (
           <>
-            <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />
-            {useNewFileViewer.data?.enabled === true ? (
+            {showOldPdfViewer.data?.enabled === true ? (
+              <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />
+            ) : null}
+            {showNewFileViewer.data?.enabled === true ? (
               <KabalFileViewer files={[{ variants: 'PDF', title: document.tittel, url: pdfUrl }]} />
             ) : null}
           </>
