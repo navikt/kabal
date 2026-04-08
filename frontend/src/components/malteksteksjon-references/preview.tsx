@@ -73,8 +73,9 @@ const LoadedPreview = ({ id, value, maltekstseksjon }: LoadedPreviewProps) => {
     id,
     plugins: previewPlugins,
     override: { components: previewComponents },
-    value: value,
+    value: structuredClone(value),
   });
+
   return (
     <VStack asChild align="center" gap="space-16" padding="space-16">
       <Box borderRadius="4" background="neutral-soft">
