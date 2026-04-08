@@ -66,10 +66,14 @@ export class ServerSentEventManager<E extends string = string> {
   private managerContext: Context;
   private connectionTraceparent: string | null;
   private connectionSpan: Span | null = null;
-
   public isConnected = false;
 
-  constructor(name: string, url: string, initialEventId: string | null = null, metadata: Record<string, string> = {}) {
+  private constructor(
+    name: string,
+    url: string,
+    initialEventId: string | null = null,
+    metadata: Record<string, string> = {},
+  ) {
     this.name = name;
     this.url = url;
     this.lastEventId = initialEventId;
@@ -151,9 +155,7 @@ export class ServerSentEventManager<E extends string = string> {
       );
     };
 
-    this.addEventListener(eventName, jsonListener);
-
-    return () => this.removeEventListener(eventName, jsonListener);
+    return this.addEventListener(eventName, jsonListener);
   }
 
   private removeEventListener(eventName: E, listener: ListenerFn<ServerSentEvent>) {
@@ -214,12 +216,49 @@ export class ServerSentEventManager<E extends string = string> {
   }
 
   public close() {
+    const entry = instances.get(this.url);
+
+    if (entry !== undefined && entry.refCount > 1) {
+      entry.refCount--;
+
+      return;
+    }
+
+    instances.delete(this.url);
+
     this.endConnectionSpan();
     this.managerSpan.end();
     this.events?.close();
     this.removeAllEventSourceListeners();
   }
+
+  public static get<E extends string = string>(
+    name: string,
+    url: string,
+    initialEventId: string | null = null,
+    metadata: Record<string, string> = {},
+  ): ServerSentEventManager<E> {
+    const existing = instances.get(url);
+
+    if (existing !== undefined) {
+      existing.refCount++;
+
+      return existing.manager as ServerSentEventManager<E>;
+    }
+
+    const manager = new ServerSentEventManager<E>(name, url, initialEventId, metadata);
+    instances.set(url, { manager, refCount: 1 });
+
+    return manager;
+  }
 }
 
 const isServerSentEvent = (event: Event): event is ServerSentEvent =>
   'data' in event && typeof event.data === 'string' && 'lastEventId' in event && typeof event.lastEventId === 'string';
+
+interface InstanceEntry {
+  manager: ServerSentEventManager;
+  refCount: number;
+}
+
+const instances = new Map<string, InstanceEntry>();
