@@ -1,5 +1,6 @@
-import { LocalAlert, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { FortroligWarning } from '@/components/behandling/behandlingsdialog/fortrolig-warning';
 import { MedunderskriverReadOnly } from '@/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SelectMedunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/select-medunderskriver';
 import { SendToMedunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/send-to-medunderskriver';
@@ -8,7 +9,7 @@ import { SKELETON } from '@/components/behandling/behandlingsdialog/medunderskri
 import { MedunderskriverStateText } from '@/components/behandling/behandlingsdialog/medunderskriver/state-text';
 import { TakeFromMedunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/take-from-medunderskriver';
 import { TakeFromSaksbehandler } from '@/components/behandling/behandlingsdialog/medunderskriver/take-from-saksbehandler';
-import { hasFortroligStatus } from '@/domain/is-fortrolig';
+import { hasFortroligFamily, hasFortroligStatus } from '@/domain/is-fortrolig';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
@@ -41,16 +42,11 @@ export const Medunderskriver = () => {
   }
 
   if (hasFortroligStatus(oppgave.sakenGjelder.statusList)) {
-    return (
-      <LocalAlert status="warning" size="small" className="my-2">
-        <LocalAlert.Header>
-          <LocalAlert.Title>Medunderskriver</LocalAlert.Title>
-        </LocalAlert.Header>
-        <LocalAlert.Content>
-          Du kan ikke sende til medunderskriver fordi saken gjelder en bruker med fortrolig adresse.
-        </LocalAlert.Content>
-      </LocalAlert>
-    );
+    return <Warning />;
+  }
+
+  if (hasFortroligFamily(oppgave.sakenGjelder)) {
+    return <Warning family />;
   }
 
   return (
@@ -73,4 +69,15 @@ const Container = ({ children }: ContainerProps) => (
   <VStack gap="space-8" marginBlock="space-0 space-1">
     {children}
   </VStack>
+);
+
+interface WarningProps {
+  family?: boolean;
+}
+
+const Warning = ({ family = false }: WarningProps) => (
+  <FortroligWarning heading="Medunderskriver">
+    Du kan ikke sende til medunderskriver fordi saken gjelder en bruker med fortrolig adresse
+    {family ? ' (familieforhold)' : ''}.
+  </FortroligWarning>
 );

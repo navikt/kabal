@@ -1,4 +1,5 @@
-import { LocalAlert, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
+import { FortroligWarning } from '@/components/behandling/behandlingsdialog/fortrolig-warning';
 import { RolReadOnly } from '@/components/behandling/behandlingsdialog/rol/read-only';
 import { SelectRol } from '@/components/behandling/behandlingsdialog/rol/select-rol';
 import { SendToRol } from '@/components/behandling/behandlingsdialog/rol/send-to-rol';
@@ -7,7 +8,7 @@ import { SKELETON } from '@/components/behandling/behandlingsdialog/rol/skeleton
 import { RolStateText } from '@/components/behandling/behandlingsdialog/rol/state-text';
 import { TakeFromRol } from '@/components/behandling/behandlingsdialog/rol/take-from-rol';
 import { TakeFromSaksbehandler } from '@/components/behandling/behandlingsdialog/rol/take-from-saksbehandler';
-import { hasFortroligStatus } from '@/domain/is-fortrolig';
+import { hasFortroligFamily, hasFortroligStatus } from '@/domain/is-fortrolig';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
@@ -52,16 +53,11 @@ const RolInternal = ({ oppgave }: Props) => {
   }
 
   if (hasFortroligStatus(sakenGjelder.statusList)) {
-    return (
-      <LocalAlert status="warning" size="small" className="my-2">
-        <LocalAlert.Header>
-          <LocalAlert.Title>Rådgivende overlege</LocalAlert.Title>
-        </LocalAlert.Header>
-        <LocalAlert.Content>
-          Du kan ikke sende til rådgivende overlege fordi saken gjelder en bruker med fortrolig adresse.
-        </LocalAlert.Content>
-      </LocalAlert>
-    );
+    return <Warning />;
+  }
+
+  if (hasFortroligFamily(sakenGjelder)) {
+    return <Warning family />;
   }
 
   return (
@@ -84,4 +80,15 @@ const Container = ({ children }: ContainerProps) => (
   <VStack gap="space-8" marginBlock="space-0 space-1">
     {children}
   </VStack>
+);
+
+interface WarningProps {
+  family?: boolean;
+}
+
+const Warning = ({ family = false }: WarningProps) => (
+  <FortroligWarning heading="Rådgivende overlege">
+    Du kan ikke sende til rådgivende overlege fordi saken gjelder en bruker med fortrolig adresse
+    {family ? ' (familieforhold)' : ''}.
+  </FortroligWarning>
 );
