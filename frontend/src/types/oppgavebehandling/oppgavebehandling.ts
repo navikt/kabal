@@ -85,7 +85,6 @@ export interface IOppgavebehandlingBase {
   created: string;
   /** DateTime */
   datoSendtMedunderskriver: string | null;
-  egenansatt: boolean;
   eoes: string | null;
   fraNAVEnhet: string | null;
   fraNAVEnhetNavn: string | null;
