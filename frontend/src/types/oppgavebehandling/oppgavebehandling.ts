@@ -120,8 +120,6 @@ export interface IOppgavebehandlingBase {
   sattPaaVent: ISattPåVent | null;
   sendTilbakemelding: boolean | null;
   vergemaalEllerFremtidsfullmakt: boolean;
-  /** DateTime */
-  dead: string | null;
   fullmakt: boolean;
   temaId: string;
   tilbakemelding: string | null;
