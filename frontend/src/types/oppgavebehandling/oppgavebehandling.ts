@@ -87,7 +87,6 @@ export interface IOppgavebehandlingBase {
   datoSendtMedunderskriver: string | null;
   egenansatt: boolean;
   eoes: string | null;
-  fortrolig: boolean;
   fraNAVEnhet: string | null;
   fraNAVEnhetNavn: string | null;
   fraSaksbehandlerident: string | null;
