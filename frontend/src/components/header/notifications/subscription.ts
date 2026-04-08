@@ -12,7 +12,7 @@ export enum EventName {
   DELETE_MULTIPLE = 'delete_multiple',
 }
 
-export const manager = new ServerSentEventManager<EventName>(
+export const manager = ServerSentEventManager.get<EventName>(
   'notifications',
   `${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/events`,
 );
