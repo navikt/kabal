@@ -86,8 +86,6 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
             data-color="neutral"
             style={{}}
             className="absolute top-1/2 right-full hidden -translate-y-1/2 group-hover/placeholder:block"
-            contentEditable
-            suppressContentEditableWarning
             variant="tertiary"
             size="small"
             title='Tilbakestill tittel til "Fullmektig"'
@@ -108,11 +106,11 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
             icon={<ArrowUndoIcon aria-hidden />}
           />
           {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
-          <Editable>{children[0][1]}</Editable>
+          <span>{children[0][1]}</span>
         </span>
         <NonEditable>: </NonEditable>
         {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
-        <Editable>{children[0][3]}</Editable>
+        <span>{children[0][3]}</span>
 
         {readOnly ? null : (
           <SectionToolbar>
@@ -144,11 +142,5 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
     </PlateElement>
   );
 };
-
-const Editable = ({ children }: { children: React.ReactNode }) => (
-  <span className="outline-none" contentEditable suppressContentEditableWarning>
-    {children}
-  </span>
-);
 
 const NonEditable = ({ children }: { children: React.ReactNode }) => <span contentEditable={false}>{children}</span>;
