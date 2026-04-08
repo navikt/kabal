@@ -1,6 +1,8 @@
 import { BodyShort, Label, Skeleton, VStack } from '@navikt/ds-react';
+import { FortroligWarning } from '@/components/behandling/behandlingsdialog/fortrolig-warning';
 import { useTildel } from '@/components/oppgavestyring/use-tildel';
 import { SearchableNavEmployeeSelectWithLabel } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select-with-label';
+import { hasFortroligFamily, hasFortroligStatus } from '@/domain/is-fortrolig';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@/hooks/use-has-role';
 import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
@@ -25,7 +27,15 @@ export const Saksbehandler = () => {
 
   const showSelect = !(isFeilregistrert || isFullfoert) && (isSaksbehandler || hasOppgavestyringRole);
 
-  const { saksbehandler } = oppgave;
+  const { saksbehandler, sakenGjelder } = oppgave;
+
+  if (hasFortroligStatus(sakenGjelder.statusList)) {
+    return <Warning />;
+  }
+
+  if (hasFortroligFamily(sakenGjelder)) {
+    return <Warning family />;
+  }
 
   return (
     <VStack gap="space-8" marginBlock="space-0 space-1">
@@ -72,3 +82,14 @@ const SelectSaksbehandler = ({ oppgave: { saksbehandler, id, typeId, ytelseId } 
     />
   );
 };
+
+interface WarningProps {
+  family?: boolean;
+}
+
+const Warning = ({ family = false }: WarningProps) => (
+  <FortroligWarning heading="Saksbehandler">
+    Du kan ikke tildele til en annen saksbehandler fordi saken gjelder en bruker med fortrolig adresse
+    {family ? ' (familieforhold)' : ''}. Skal du ikke behandle saken må du legge den tilbake.
+  </FortroligWarning>
+);
