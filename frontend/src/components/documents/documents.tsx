@@ -6,12 +6,16 @@ import { PanelContainer } from '@/components/oppgavebehandling-panels/panel-cont
 import { ViewPDF } from '@/components/view-pdf/view-pdf';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useDocumentsEnabled } from '@/hooks/settings/use-setting';
-import { useNewFileViewerFeatureToggle } from '@/simple-api-state/feature-toggles';
+import {
+  useShowNewFileViewerFeatureToggle,
+  useShowOldPdfViewerFeatureToggle,
+} from '@/simple-api-state/feature-toggles';
 
 export const Documents = () => {
   const { value: shown = true } = useDocumentsEnabled();
   const { data, isLoading } = useOppgave();
-  const useNewFileViewer = useNewFileViewerFeatureToggle();
+  const showNewFileViewer = useShowNewFileViewerFeatureToggle();
+  const showOldPdfViewer = useShowOldPdfViewerFeatureToggle();
 
   if (!shown) {
     return null;
@@ -30,8 +34,8 @@ export const Documents = () => {
       <PanelContainer data-testid="documents-panel">
         <ExpandedDocuments />
       </PanelContainer>
-      <ViewPDF />
-      {useNewFileViewer.data?.enabled === true ? <FileViewer /> : null}
+      {showOldPdfViewer.data?.enabled === true ? <ViewPDF /> : null}
+      {showNewFileViewer.data?.enabled === true ? <FileViewer /> : null}
     </TabContextElement>
   );
 };

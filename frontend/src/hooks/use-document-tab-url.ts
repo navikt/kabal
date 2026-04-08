@@ -11,7 +11,7 @@ import {
   getNewDocumentTabUrl,
   getNewFileViewerTabUrl,
 } from '@/domain/tabbed-document-url';
-import { useNewFileViewerFeatureToggle } from '@/simple-api-state/feature-toggles';
+import { useShowNewFileViewerFeatureToggle } from '@/simple-api-state/feature-toggles';
 import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 interface DocumentTabUrlFunctions {
@@ -41,8 +41,8 @@ const DOCUMENT_FUNCTIONS: DocumentTabUrlFunctions = {
 };
 
 export const useDocumentTabUrl = (): DocumentTabUrlFunctions => {
-  const { data } = useNewFileViewerFeatureToggle();
-  const useNewFileViewer = data?.enabled ?? false;
+  const { data } = useShowNewFileViewerFeatureToggle();
+  const showNewFileViewer = data?.enabled ?? false;
 
-  return useMemo(() => (useNewFileViewer ? FILE_VIEWER_FUNCTIONS : DOCUMENT_FUNCTIONS), [useNewFileViewer]);
+  return useMemo(() => (showNewFileViewer ? FILE_VIEWER_FUNCTIONS : DOCUMENT_FUNCTIONS), [showNewFileViewer]);
 };
