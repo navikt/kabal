@@ -76,7 +76,7 @@ export const RichTextPreview = ({
           className="z-22"
         >
           <Plate<RichTextEditor> editor={editor} readOnly>
-            <KabalPlateEditor id={id} contentEditable={false} lang={SPELL_CHECK_LANGUAGES[lang]} />
+            <KabalPlateEditor id={id} lang={SPELL_CHECK_LANGUAGES[lang]} />
           </Plate>
         </Box>
       ) : null}

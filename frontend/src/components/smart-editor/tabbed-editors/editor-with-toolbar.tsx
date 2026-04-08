@@ -22,7 +22,7 @@ export const EditorWithNewCommentAndFloatingToolbar = ({ id }: EditorWithNewComm
     <Sheet ref={setContainerElement} minHeight data-component="sheet" className="mr-4">
       <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
 
-      <KabalPlateEditor id={id} lang={lang} contentEditable="dynamic" />
+      <KabalPlateEditor id={id} lang={lang} />
     </Sheet>
   );
 };
