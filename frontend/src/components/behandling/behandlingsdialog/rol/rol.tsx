@@ -7,6 +7,7 @@ import { SKELETON } from '@/components/behandling/behandlingsdialog/rol/skeleton
 import { RolStateText } from '@/components/behandling/behandlingsdialog/rol/state-text';
 import { TakeFromRol } from '@/components/behandling/behandlingsdialog/rol/take-from-rol';
 import { TakeFromSaksbehandler } from '@/components/behandling/behandlingsdialog/rol/take-from-saksbehandler';
+import { hasFortroligStatus } from '@/domain/is-fortrolig';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
 import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
@@ -31,7 +32,7 @@ const RolInternal = ({ oppgave }: Props) => {
   const isFinished = useIsFullfoert();
   const isFeilregistrert = useIsFeilregistrert();
 
-  const { rol, fortrolig } = oppgave;
+  const { rol, sakenGjelder } = oppgave;
 
   const canEdit =
     !isFinished &&
@@ -50,7 +51,7 @@ const RolInternal = ({ oppgave }: Props) => {
     );
   }
 
-  if (fortrolig) {
+  if (hasFortroligStatus(sakenGjelder.statusList)) {
     return (
       <LocalAlert status="warning" size="small" className="my-2">
         <LocalAlert.Header>
