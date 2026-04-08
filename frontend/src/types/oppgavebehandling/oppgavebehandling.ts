@@ -119,7 +119,6 @@ export interface IOppgavebehandlingBase {
   sakenGjelder: ISakenGjelder;
   sattPaaVent: ISattPåVent | null;
   sendTilbakemelding: boolean | null;
-  vergemaalEllerFremtidsfullmakt: boolean;
   fullmakt: boolean;
   temaId: string;
   tilbakemelding: string | null;
