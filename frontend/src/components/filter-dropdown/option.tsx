@@ -32,7 +32,6 @@ export const Option = <T extends string>({
       }
     >
       <Checkbox
-        data-testid="filter"
         data-filterid={filterId}
         data-label={children}
         type="checkbox"

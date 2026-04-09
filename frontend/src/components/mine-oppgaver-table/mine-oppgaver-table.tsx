@@ -9,8 +9,6 @@ import { useGetMineUferdigeOppgaverQuery } from '@/redux-api/oppgaver/queries/op
 import { Role } from '@/types/bruker';
 import { SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
-const TEST_ID = 'mine-oppgaver-table';
-
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithTrygderetten,
   ColumnKeyEnum.Ytelse,
@@ -56,7 +54,6 @@ const MineOppgaverTableInternal = () => {
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
         refetch={refetch}
-        data-testid={TEST_ID}
         tableKey={OppgaveTableKey.MINE_UFERDIGE}
         defaultRekkefoelge={SortOrderEnum.ASC}
         defaultSortering={SortFieldEnum.FRIST}

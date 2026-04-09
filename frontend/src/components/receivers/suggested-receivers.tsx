@@ -67,7 +67,6 @@ export const SuggestedReceivers = ({
       legend="Foreslåtte mottakere fra saken"
       value={selectedIds}
       onChange={onSelectedChange}
-      data-testid="document-send-receiver-list"
       size="small"
       disabled={isLoading}
     >
@@ -79,7 +78,7 @@ export const SuggestedReceivers = ({
         return (
           <StyledReceiver key={id} accent={isChecked ? 'success' : 'info'}>
             <HStack align="center" gap="space-8" flexShrink="0" paddingInline="space-8" minHeight="8">
-              <Checkbox size="small" value={id} data-testid="document-send-receiver" error={error !== null}>
+              <Checkbox size="small" value={id} error={error !== null}>
                 <HStack align="center" gap="space-4">
                   <Tooltip content={getTooltip(part.type)}>
                     <span>

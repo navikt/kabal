@@ -62,7 +62,6 @@ export const AttachmentModalContent = ({ document, renameAccess, removeAccess }:
                 variant="secondary"
                 icon={<CheckmarkIcon aria-hidden />}
                 title="Endre dokumentnavn"
-                data-testid="document-title-edit-save-button"
                 disabled={renameAccess !== null}
               />
             </HStack>

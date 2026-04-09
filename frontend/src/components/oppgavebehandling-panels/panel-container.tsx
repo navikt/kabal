@@ -8,7 +8,6 @@ const FOCUS_INDICATOR_CLASSES =
 interface PanelContainerProps {
   heading?: string;
   'aria-label'?: string;
-  'data-testid'?: string;
   minWidth?: string;
   maxWidth?: string;
   children: React.ReactNode;
@@ -17,7 +16,6 @@ interface PanelContainerProps {
 export const PanelContainer = ({
   heading,
   'aria-label': ariaLabel,
-  'data-testid': dataTestId,
   minWidth = 'fit-content',
   maxWidth,
   children,
@@ -34,7 +32,6 @@ export const PanelContainer = ({
         maxWidth={maxWidth}
         position="relative"
         className={FOCUS_INDICATOR_CLASSES}
-        data-testid={dataTestId}
       >
         <Box
           ref={ref}

@@ -25,7 +25,6 @@ export const SendToSaksbehandler = ({ oppgaveId, medunderskriver }: Props) => {
       onClick={() => setFlowState({ oppgaveId, flowState: FlowState.RETURNED })}
       disabled={isLoading}
       loading={isLoading}
-      data-testid="send-to-saksbehandler"
       icon={<PaperplaneIcon aria-hidden />}
     >
       Send tilbake til saksbehandler

@@ -24,7 +24,6 @@ interface UtfallResultatProps {
 }
 
 const NOT_SELECTED_LABEL = 'Ikke valgt';
-const CONTAINER_ID = 'utfall-section';
 const NULL_UTFALL_KEY = '__no_utfall__';
 
 type UtfallEntry = IKodeverkSimpleValue<UtfallEnum>;
@@ -83,7 +82,7 @@ export const UtfallResultat = ({ utfall, oppgaveId, extraUtfallIdSet, typeId }: 
   const selectId = useId();
 
   return (
-    <VStack align="start" data-testid={CONTAINER_ID}>
+    <VStack as="section" align="start" aria-label={utfallLabel}>
       <HStack align="center" gap="space-8" marginBlock="space-0 space-8">
         <Label size="small" htmlFor={selectId}>
           {utfallLabel}

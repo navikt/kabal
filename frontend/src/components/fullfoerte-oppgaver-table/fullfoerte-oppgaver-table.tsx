@@ -21,8 +21,6 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Open,
 ];
 
-const TEST_ID = 'fullfoerte-oppgaver-table';
-
 export const FullfoerteOppgaverTable = () => {
   const hasAccess = useHasRole(Role.KABAL_SAKSBEHANDLING);
 
@@ -54,7 +52,6 @@ const FullfoerteOppgaverTableInternal = () => {
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}
-        data-testid={TEST_ID}
         settingsKey={OppgaveTableRowsPerPage.MINE_RETURNERTE}
         behandlinger={data?.behandlinger}
         zebraStripes

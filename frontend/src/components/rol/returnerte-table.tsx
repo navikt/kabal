@@ -55,7 +55,6 @@ const ReturnerteRolOppgaverTableInternal = () => {
       <Heading size="small">Returnerte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        data-testid="rol-ferdigstilte-oppgaver-table"
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ROL_FERDIGE}
         isLoading={isLoading}

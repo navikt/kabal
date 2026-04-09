@@ -10,8 +10,6 @@ import { useGetUferdigeRolOppgaverQuery } from '@/redux-api/oppgaver/queries/opp
 import { Role } from '@/types/bruker';
 import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
-const TEST_ID = 'mine-oppgaver-table';
-
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
   ColumnKeyEnum.RolYtelse,
@@ -57,7 +55,6 @@ const MineRolOppgaverTableInternal = () => {
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}
         refetch={refetch}
-        data-testid={TEST_ID}
         tableKey={OppgaveTableKey.MINE_UFERDIGE}
         defaultRekkefoelge={SortOrderEnum.ASC}
         defaultSortering={SortFieldEnum.FRIST}

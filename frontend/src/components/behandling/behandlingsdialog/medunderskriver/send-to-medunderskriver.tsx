@@ -30,7 +30,6 @@ export const SendToMedunderskriver = ({ oppgaveId, typeId, medunderskriver }: Pr
       type="button"
       onClick={() => setMedunderskriverFlowState({ oppgaveId, flowState: FlowState.SENT })}
       loading={loader.isLoading || medunderskriverLoader.isLoading}
-      data-testid="send-to-medunderskriver"
       icon={<PaperplaneIcon aria-hidden />}
     >
       Send til {getTitleLowercase(typeId)}

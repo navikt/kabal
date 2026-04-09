@@ -4,7 +4,6 @@ import type { OnChange } from '@/components/oppgavestyring/types';
 import { toast } from '@/components/toast/store';
 
 interface ToastProps {
-  testId: string;
   oppgaveId: string;
   label: string;
   fromNavIdent: string | null;
@@ -19,17 +18,8 @@ interface CountdownToastProps extends ToastProps {
 
 export const successToast = (props: CountdownToastProps) => toast.success(<Tildelt {...props} />);
 
-const Tildelt = ({
-  oppgaveId,
-  testId,
-  fromNavIdent,
-  toNavIdent,
-  label,
-  name,
-  onChange,
-  timestamp,
-}: CountdownToastProps) => (
-  <div data-testid={testId} data-oppgaveid={oppgaveId}>
+const Tildelt = ({ oppgaveId, fromNavIdent, toNavIdent, label, name, onChange, timestamp }: CountdownToastProps) => (
+  <div data-oppgaveid={oppgaveId}>
     <span>
       {label} {name}.
     </span>

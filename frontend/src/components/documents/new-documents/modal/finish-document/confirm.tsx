@@ -34,7 +34,6 @@ export const Confirm = ({
             setShowConfirm(isValid);
           }}
           loading={isFinishing || isValidating}
-          data-testid="document-finish-button"
           icon={<PaperplaneIcon aria-hidden />}
           disabled={disabled}
         >
@@ -52,7 +51,6 @@ export const Confirm = ({
         variant="primary"
         onClick={onFinish}
         loading={isFinishing || isValidating}
-        data-testid="document-finish-confirm"
         icon={<PaperplaneIcon aria-hidden />}
       >
         {actionText}
@@ -63,7 +61,6 @@ export const Confirm = ({
         size="small"
         variant="secondary"
         onClick={() => setShowConfirm(false)}
-        data-testid="document-finish-cancel"
         disabled={isFinishing || isValidating}
         icon={<XMarkIcon aria-hidden />}
       >

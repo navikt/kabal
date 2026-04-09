@@ -176,7 +176,6 @@ export const DatePicker = ({
   return (
     <DSDatePicker
       mode="single"
-      data-testid={id}
       fromDate={fromDate}
       toDate={toDate}
       defaultSelected={selected}

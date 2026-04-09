@@ -38,7 +38,6 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
         behandlinger={oppgaveIds}
         refetch={onRefresh}
         settingsKey={OppgaveTableRowsPerPage.SEARCH_FERDIGE}
-        data-testid="search-result-fullfoerte-oppgaver"
         tableKey={StaticOppgaveTableKey.SEARCH_FERDIGE}
       />
     </section>

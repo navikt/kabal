@@ -144,7 +144,7 @@ const Tildelt = ({
 
   return (
     <ActionToast
-      attrs={{ 'data-oppgaveid': oppgaveId, 'data-testid': 'oppgave-tildelt-toast' }}
+      attrs={{ 'data-oppgaveid': oppgaveId }}
       primary={
         <OpenForRoleAccess
           size="small"
@@ -178,7 +178,7 @@ const Fradelt = ({ oppgaveId, sakenGjelder, fromSaksbehandler, oppgaveType, ytel
     );
 
   return (
-    <ActionToast attrs={{ 'data-oppgaveid': oppgaveId, 'data-testid': 'oppgave-fradelt-toast' }} primary={primary}>
+    <ActionToast attrs={{ 'data-oppgaveid': oppgaveId }} primary={primary}>
       Oppgave for {sakenGjelderText} er lagt tilbake fra {fromSaksbehandlerText}.
     </ActionToast>
   );

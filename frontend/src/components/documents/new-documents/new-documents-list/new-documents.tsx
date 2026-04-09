@@ -115,11 +115,7 @@ export const NewDocuments = () => {
               <InlineMessage status="info">Ingen dokumenter</InlineMessage>
             </HStack>
           ) : (
-            <StyledDocumentList
-              data-testid="new-documents-list"
-              className="relative overflow-y-hidden"
-              style={{ height: listHeight }}
-            >
+            <StyledDocumentList className="relative overflow-y-hidden" style={{ height: listHeight }}>
               {documentNodes}
             </StyledDocumentList>
           )}
@@ -139,7 +135,6 @@ const Wrapper = ({ children }: WrapperProps) => (
     paddingInline="space-16"
     paddingBlock="space-0"
     maxHeight="max(80px, calc(50% - 100px))"
-    data-testid="new-documents-section"
     aria-labelledby="dua-heading"
     className="border-ax-border-neutral border-b"
   >

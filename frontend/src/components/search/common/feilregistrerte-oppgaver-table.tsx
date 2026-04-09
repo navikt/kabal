@@ -11,8 +11,6 @@ interface Props {
   isLoading: boolean;
 }
 
-const TEST_ID = 'search-result-feilregistrerte-oppgaver';
-
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Feilregistrert,
   ColumnKeyEnum.TypeWithTrygderetten,
@@ -32,7 +30,6 @@ export const FeilregistrerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading 
       <Heading size="small">Feilregistrerte oppgaver</Heading>
       <StaticOppgaveTableWithPageState
         columns={COLUMNS}
-        data-testid={TEST_ID}
         settingsKey={OppgaveTableRowsPerPage.SEARCH_FEILREGISTRERTE}
         isLoading={isLoading}
         isFetching={false}

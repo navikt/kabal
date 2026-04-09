@@ -144,7 +144,6 @@ export const SharedDocumentTitle = (props: Props) => {
         aria-current={isInlineOpen || isTabOpen}
         onClick={onClick}
         onAuxClick={onClick}
-        data-testid="document-open-button"
         href={url}
         target={tabId}
         icon={icon}

@@ -6,7 +6,7 @@ import { ReturnerteRolOppgaverTable } from '@/components/rol-tables/returnerte-r
 import { OppgaverPageWrapper } from '@/pages/page-wrapper';
 
 export const MineOppgaverPage = () => (
-  <OppgaverPageWrapper testId="mine-oppgaver-tables">
+  <OppgaverPageWrapper>
     <MineOppgaverTable />
     <MineRolOppgaverTable />
     <OppgaverPaaVentTable />

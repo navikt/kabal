@@ -15,7 +15,6 @@ export const ConfirmEditButton = ({ setEditMode }: ConfirmProps) => (
     data-color="neutral"
     onClick={() => setEditMode(false)}
     icon={<CheckmarkIcon aria-hidden className="text-ax-large" />}
-    data-testid="document-title-edit-save-button"
     title="Endre"
     size="xsmall"
     variant="tertiary"
@@ -40,7 +39,6 @@ export const DocumentTitleActions = ({ setEditMode, hasAccess, tittel }: Props) 
         data-color="neutral"
         onClick={() => setEditMode(true)}
         icon={<PencilIcon aria-hidden className="text-ax-large" />}
-        data-testid="document-title-edit-save-button"
         title="Endre"
         size="xsmall"
         variant="tertiary"

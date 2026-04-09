@@ -58,7 +58,6 @@ export const SetFilename = ({
       title="Trykk Enter for å lagre. Escape for å avbryte."
       label="Endre filnavn"
       hideLabel={hideLabel}
-      data-testid="document-filename-input"
       onChange={({ target }) => setLocalFilename(target.value)}
       onBlur={save}
       onKeyDown={({ key }) => {

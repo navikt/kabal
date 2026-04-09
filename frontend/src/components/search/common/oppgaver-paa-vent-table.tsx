@@ -36,7 +36,6 @@ export const OppgaverPaaVentTable = ({ oppgaveIds, onRefresh, isLoading }: Props
       <Heading size="small">Oppgaver på vent</Heading>
       <StaticOppgaveTableWithPageState
         columns={COLUMNS}
-        data-testid="search-result-oppgaver-paa-vent"
         zebraStripes
         behandlinger={oppgaveIds}
         isLoading={isLoading}

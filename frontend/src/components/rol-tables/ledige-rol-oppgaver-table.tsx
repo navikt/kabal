@@ -54,7 +54,6 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
         Ledige oppgaver
       </Heading>
       <OppgaveTable
-        data-testid="oppgave-table"
         zebraStripes
         columns={COLUMNS}
         behandlinger={data?.behandlinger}

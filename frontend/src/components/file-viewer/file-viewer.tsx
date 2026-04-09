@@ -204,14 +204,7 @@ interface ContainerProps {
 }
 
 const Container = ({ children }: ContainerProps) => (
-  <VStack
-    asChild
-    width="min-content"
-    className="snap-start"
-    align="center"
-    justify="center"
-    data-testid="show-document"
-  >
+  <VStack asChild width="min-content" className="snap-start" align="center" justify="center">
     <Box as="section" background="default" shadow="dialog" borderRadius="4" position="relative">
       {children}
     </Box>

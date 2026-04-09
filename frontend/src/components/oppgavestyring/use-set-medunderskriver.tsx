@@ -48,7 +48,6 @@ export const useSetMedunderskriver = (
         }
 
         successToast({
-          testId: 'oppgave-set-medunderskriver-success-toast',
           oppgaveId,
           label: 'Medunderskriver',
           fromNavIdent,

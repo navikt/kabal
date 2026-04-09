@@ -9,26 +9,17 @@ export const PageWrapper = ({ children }: Props) => <main className="w-full grow
 interface OppgaverPageWrapperProps {
   children: React.ReactNode;
   title?: string;
-  testId?: string;
 }
 
-export const OppgaverPageWrapper = ({ children, title, testId }: OppgaverPageWrapperProps): React.JSX.Element => (
-  <VStack flexGrow="1" width="100%" overflow="hidden" data-testid={`${testId}-container`}>
+export const OppgaverPageWrapper = ({ children, title }: OppgaverPageWrapperProps): React.JSX.Element => (
+  <VStack flexGrow="1" width="100%" overflow="hidden">
     {title === undefined ? null : (
-      <Box
-        as={Heading}
-        level="1"
-        size="medium"
-        data-testid={`${testId}-title`}
-        padding="space-16"
-        borderWidth="0 0 1 0"
-        borderColor="neutral"
-      >
+      <Box as={Heading} level="1" size="medium" padding="space-16" borderWidth="0 0 1 0" borderColor="neutral">
         {title}
       </Box>
     )}
 
-    <VStack gap="space-64 space-0" overflow="auto" width="100%" flexGrow="1" padding="space-16" data-testid={testId}>
+    <VStack gap="space-64 space-0" overflow="auto" width="100%" flexGrow="1" padding="space-16">
       {children}
     </VStack>
   </VStack>

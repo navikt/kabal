@@ -55,7 +55,6 @@ const RolOppgaverTableInternal = () => {
       <Heading size="small">Tildelte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        data-testid="rol-oppgaver-table"
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ROL_UFERDIGE}
         isLoading={isLoading}

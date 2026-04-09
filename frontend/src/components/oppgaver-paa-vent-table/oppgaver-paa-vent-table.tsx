@@ -56,7 +56,6 @@ const OppgaverPaaVentTableInternal = () => {
         settingsKey={OppgaveTableRowsPerPage.MINE_VENTENDE}
         refetch={refetch}
         behandlinger={data?.behandlinger}
-        data-testid="oppgaver-paa-vent-table"
         tableKey={OppgaveTableKey.MINE_VENTENDE}
         defaultRekkefoelge={SortOrderEnum.ASC}
         defaultSortering={SortFieldEnum.PAA_VENT_TO}

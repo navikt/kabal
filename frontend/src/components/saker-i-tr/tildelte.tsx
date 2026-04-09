@@ -49,7 +49,6 @@ export const TildelteSakerITRTable = () => {
       <OppgaveTable
         zebraStripes
         columns={COLUMNS}
-        data-testid="saker-i-tr-tildelte-table"
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.SAKER_I_TR_UFERDIGE}
         isLoading={isLoading || isLoadingSettings}

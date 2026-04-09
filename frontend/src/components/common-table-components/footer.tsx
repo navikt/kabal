@@ -14,7 +14,6 @@ interface Props {
   settingsKey: OppgaveTableRowsPerPage;
   columnCount: number;
   setPage: (page: number) => void;
-  'data-testid': string;
   onRefresh: () => void;
   isLoading: boolean;
   isFetching: boolean;
@@ -29,12 +28,11 @@ export const TableFooter = ({
   pageSize,
   settingsKey,
   setPage,
-  'data-testid': testId,
   onRefresh,
   isLoading,
   isFetching,
 }: Props) => (
-  <tfoot data-testid={testId}>
+  <tfoot>
     <Table.Row>
       <Table.DataCell colSpan={columnCount}>
         <HStack align="center" justify="space-between" width="100%">
@@ -44,13 +42,13 @@ export const TableFooter = ({
               size="small"
               variant="tertiary"
               onClick={() => {
-                pushEvent('refresh-oppgave-list', testId);
+                pushEvent('refresh-oppgave-list', settingsKey);
                 onRefresh();
               }}
               loading={isLoading || isFetching}
               icon={<ArrowsCirclepathIcon aria-hidden />}
               title="Oppdater"
-              data-testid={`${testId}-refresh-button`}
+              aria-label="Oppdater"
             />
             <PageInfo total={total} fromNumber={from} toNumber={to} />
           </HStack>
@@ -60,13 +58,12 @@ export const TableFooter = ({
               count={Math.max(Math.ceil(total / pageSize), 1)}
               prevNextTexts
               onPageChange={(p) => {
-                pushEvent('oppgave-list-change-page', testId, { page: p.toString() });
+                pushEvent('oppgave-list-change-page', settingsKey, { page: p.toString() });
                 setPage(p);
               }}
-              data-testid={`${testId}-pagination`}
             />
           )}
-          <RowsPerPage settingKey={settingsKey} pageSize={pageSize} data-testid={`${testId}-rows-per-page`} />
+          <RowsPerPage settingKey={settingsKey} pageSize={pageSize} />
         </HStack>
       </Table.DataCell>
     </Table.Row>

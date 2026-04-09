@@ -23,7 +23,7 @@ export const Documents = () => {
 
   if (isLoading || typeof data === 'undefined') {
     return (
-      <PanelContainer data-testid="documents-panel" aria-label={DOCUMENTS_HEADING}>
+      <PanelContainer aria-label={DOCUMENTS_HEADING}>
         <Loader size="xlarge" />
       </PanelContainer>
     );
@@ -31,7 +31,7 @@ export const Documents = () => {
 
   return (
     <TabContextElement>
-      <PanelContainer data-testid="documents-panel" aria-label={DOCUMENTS_HEADING}>
+      <PanelContainer aria-label={DOCUMENTS_HEADING}>
         <ExpandedDocuments />
       </PanelContainer>
       {showOldPdfViewer.data?.enabled === true ? <ViewPDF /> : null}

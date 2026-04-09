@@ -53,7 +53,6 @@ export const SetParentDocument = ({ document, disabled = false, ...rest }: Props
       onChange={onChange}
       title="Vedlegg til"
       legend="Vedlegg til"
-      data-testid="document-set-parent-document"
       disabled={isSetting || disabled}
       {...rest}
     >

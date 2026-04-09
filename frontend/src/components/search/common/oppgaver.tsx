@@ -36,7 +36,7 @@ export const Oppgaver = ({ data, isFetching, isLoading, error, refetch }: Oppgav
   const footerProps = { onRefresh: refetch, isLoading: isFetching };
 
   return (
-    <OppgaverPageWrapper testId="search-result">
+    <OppgaverPageWrapper title="Søkeresultater">
       <LedigeOppgaverTable oppgaveIds={data.aapneBehandlinger} {...footerProps} />
       <OppgaverPaaVentTable oppgaveIds={data.paaVentBehandlinger} {...footerProps} />
       <FullfoerteOppgaverTable oppgaveIds={data.avsluttedeBehandlinger} {...footerProps} />

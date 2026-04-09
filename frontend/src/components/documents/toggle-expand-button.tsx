@@ -24,7 +24,6 @@ export const ToggleExpandedButton = () => {
       variant="secondary"
       size="small"
       onClick={onToggle}
-      data-testid="documents-collapse-view-button"
       icon={<Icon aria-hidden />}
       title={isExpanded ? 'Bruk kompakt visning' : 'Bruk detaljert visning'}
     />

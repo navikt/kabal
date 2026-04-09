@@ -16,7 +16,7 @@ export const ErrorAlert = ({ error, refetch, isFetching, children }: ErrorAlertP
   const errorData = getErrorData(error);
 
   return (
-    <Alert variant="warning" data-testid="search-result-none">
+    <Alert variant="warning">
       <Heading size="xsmall">
         {children}: <br />
         <i>{errorData.title}</i> {errorData.status !== undefined ? `(${errorData.status})` : null}

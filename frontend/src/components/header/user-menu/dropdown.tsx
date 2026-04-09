@@ -20,20 +20,13 @@ export const UserDropdown = (): React.JSX.Element | null => {
       <ActionMenu.Divider />
 
       <ActionMenu.Group label="Bruker">
-        <ActionMenu.Item
-          as={Link}
-          to="/innstillinger"
-          data-testid="innstillinger-link"
-          className="cursor-pointer"
-          icon={<CogIcon />}
-        >
+        <ActionMenu.Item as={Link} to="/innstillinger" className="cursor-pointer" icon={<CogIcon />}>
           Innstillinger
         </ActionMenu.Item>
 
         <ActionMenu.Item
           as="a"
           href="/oauth2/logout"
-          data-testid="logout-link"
           onClick={() => pushEvent('logout', 'user-menu')}
           className="cursor-pointer text-ax-text-danger-subtle"
           variant="danger"

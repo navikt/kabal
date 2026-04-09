@@ -49,7 +49,6 @@ export const LedigeSakerITRTable = () => {
       <OppgaveTable
         zebraStripes
         columns={COLUMNS}
-        data-testid="saker-i-tr-ledige-table"
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.SAKER_I_TR_LEDIGE}
         isLoading={isLoading || isLoadingSettings}

@@ -26,7 +26,6 @@ export const TitleActions = ({ setEditMode, editMode, document, renameAccessErro
         <Button
           data-color="neutral"
           onClick={() => setEditMode(!editMode)}
-          data-testid="document-title-edit-save-button"
           size="xsmall"
           icon={<Icon aria-hidden />}
           variant="tertiary"

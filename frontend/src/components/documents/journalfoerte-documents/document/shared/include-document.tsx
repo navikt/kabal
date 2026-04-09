@@ -92,7 +92,6 @@ const Enabled = ({ dokumentInfoId, journalpostId }: EnabledProps) => {
           e.stopPropagation();
           setDocument(!checked);
         }}
-        data-testid="journalfoert-document-button"
         disabled={!canEdit || !(isSaksbehandler || isRol) || isFeilregistrert}
         loading={isUpdating}
         style={{ gridArea: Fields.Action }}

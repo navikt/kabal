@@ -9,7 +9,6 @@ export const BackLink = () => (
     as={NavLink}
     variant="secondary"
     size="small"
-    data-testid="footer-button-back"
     icon={<ChevronLeftIcon aria-hidden />}
   >
     Mine oppgaver

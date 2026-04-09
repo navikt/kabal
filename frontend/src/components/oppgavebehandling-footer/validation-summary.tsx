@@ -17,7 +17,7 @@ export const ValidationSummary = ({ sections }: Props) => {
   ));
 
   return (
-    <Alert variant="warning" data-testid="validation-summary">
+    <Alert variant="warning">
       <Heading level="1" size="xsmall" spacing className="pr-8">
         Kan ikke fullføre behandlingen
       </Heading>

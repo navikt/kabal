@@ -43,7 +43,7 @@ export const AttachmentModal = ({
         <Button
           data-color="neutral"
           onClick={() => setIsOpen(!isOpen)}
-          data-testid="document-actions-button"
+          aria-label="Åpne flere valg for dokument"
           variant="tertiary"
           size="small"
           icon={<MenuElipsisVerticalIcon aria-hidden />}
@@ -55,7 +55,6 @@ export const AttachmentModal = ({
           open
           width="600px"
           aria-modal
-          data-testid="document-actions-modal"
           header={{
             heading: `Valg for «${tittel}»`,
             icon: <DocumentIcon type={type} />,

@@ -32,7 +32,6 @@ export const UploadFile = () => {
       <UploadFileButton
         variant="secondary-neutral"
         size="small"
-        data-testid="upload-document"
         distributionType={distributionType}
       />
     </HStack>

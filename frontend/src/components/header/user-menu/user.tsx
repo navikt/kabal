@@ -12,7 +12,6 @@ export const User = () => {
     <ActionMenu>
       <ActionMenu.Trigger>
         <InternalHeader.UserButton
-          data-testid="user-menu-button"
           name={name}
           description={`Enhet: ${user.ansattEnhet.navn}`}
           className="whitespace-nowrap"

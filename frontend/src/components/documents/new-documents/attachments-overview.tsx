@@ -28,15 +28,9 @@ export const AttachmentsOverview = ({ documentId, style, parentId }: Props) => {
   }
 
   return (
-    <StyledAttachmentListItem
-      data-testid="new-attachments-list-item"
-      data-documentname={title}
-      data-documenttype="attachment"
-      style={style}
-    >
+    <StyledAttachmentListItem data-documentname={title} data-documenttype="attachment" style={style}>
       <StyledNewAttachment
         data-documentname={title}
-        data-testid="new-document-list-item-content"
         data-documenttype="attachment"
         onDragStart={(e) => e.preventDefault()}
         draggable={false}

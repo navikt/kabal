@@ -53,7 +53,6 @@ const EnhetensFerdigstilteOppgaverTableInternal = () => {
       <Heading size="small">Fullførte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        data-testid="enhetens-ferdigstilte-oppgaver-table"
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ENHETENS_FERDIGE}
         isLoading={isLoading}

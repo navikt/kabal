@@ -51,7 +51,6 @@ export const SakerITRPåVentTable = () => {
       <OppgaveTable
         zebraStripes
         columns={COLUMNS}
-        data-testid="saker-i-tr-på-vent-table"
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.SAKER_I_TR_VENTENDE}
         isLoading={isLoading || isLoadingSettings}

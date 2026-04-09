@@ -32,7 +32,7 @@ export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onSc
 
   if (isLoading) {
     return (
-      <StyledDocumentList data-testid="oppgavebehandling-documents-all-list">
+      <StyledDocumentList>
         <Loader size="xlarge" aria-hidden role="presentation" />
       </StyledDocumentList>
     );
@@ -58,7 +58,6 @@ export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onSc
     list.push(
       <Box
         as="li"
-        data-testid="oppgavebehandling-documents-all-list-item"
         data-documentname={tittel}
         aria-setsize={documents.length}
         aria-posinset={index + 1}
@@ -131,7 +130,6 @@ export const DocumentList = ({ documents, isLoading, scrollTop, listHeight, onSc
   return (
     <>
       <StyledDocumentList
-        data-testid="oppgavebehandling-documents-all-list"
         style={{ height: dokumenter.height }}
         flexShrink="0"
         flexGrow="1"

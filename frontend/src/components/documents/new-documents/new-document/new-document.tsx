@@ -80,7 +80,6 @@ export const NewDocument = memo(
         columns={getFieldSizes(EXPANDED_NEW_DOCUMENT_FIELDS)}
         data-documentname={document.tittel}
         data-documentid={document.id}
-        data-testid="new-document-list-item-content"
         data-documenttype="parent"
         onDragStart={isDraggable ? onDragStart : (e) => e.preventDefault()}
         onDragEnd={() => {

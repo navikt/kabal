@@ -9,8 +9,6 @@ import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useLazyValidateQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import { ValidationType } from '@/types/oppgavebehandling/params';
 
-const TEST_ID = 'complete-button';
-
 export const FinishButton = () => {
   const canEdit = useIsTildeltSaksbehandler();
   const [validate, { data: validationData, isLoading, isFetching }] = useLazyValidateQuery();
@@ -28,7 +26,7 @@ export const FinishButton = () => {
 
   if (isFullfoert) {
     return (
-      <Button disabled size="small" data-testid={TEST_ID} icon={<CheckmarkIcon aria-hidden />}>
+      <Button disabled size="small" icon={<CheckmarkIcon aria-hidden />}>
         Fullført
       </Button>
     );
@@ -54,7 +52,6 @@ export const FinishButton = () => {
           setValidationSectionErrors(validation.sections);
           setConfirmFinish(true);
         }}
-        data-testid={TEST_ID}
         loading={isFetching || isLoading}
         icon={<CheckmarkIcon aria-hidden />}
       >

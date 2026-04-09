@@ -56,7 +56,6 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
       <OppgaveTable
         columns={COLUMNS}
         zebraStripes
-        data-testid="enhetens-oppgaver-paa-vent-table"
         isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}

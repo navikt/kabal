@@ -27,11 +27,7 @@ export const AttachmentListItem = ({
   children,
   ...props
 }: AttachmentListItemProps) => (
-  <StyledAttachmentListItem
-    data-testid="oppgavebehandling-documents-all-list-item"
-    data-documentname={vedlegg.tittel}
-    {...props}
-  >
+  <StyledAttachmentListItem data-documentname={vedlegg.tittel} {...props}>
     <Attachment
       vedlegg={vedlegg}
       journalpostId={journalpostId}

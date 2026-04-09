@@ -58,7 +58,6 @@ const EnhetensOppgaverTableInternal = () => {
       <Heading size="small">Tildelte oppgaver</Heading>
       <OppgaveTable
         columns={COLUMNS}
-        data-testid="enhetens-oppgaver-table"
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ENHETENS_UFERDIGE}
         isLoading={isLoading}

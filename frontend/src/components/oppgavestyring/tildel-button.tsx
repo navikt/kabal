@@ -53,7 +53,6 @@ export const TildelButton = ({
       size="small"
       loading={isLoading}
       disabled={isLoading}
-      data-testid="behandling-tildel-button"
       data-klagebehandlingid={id}
       onClick={() => tildel({ navIdent, navn })}
       className="whitespace-nowrap [grid-area:tildel]"
