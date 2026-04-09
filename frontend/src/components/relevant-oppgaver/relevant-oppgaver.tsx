@@ -80,7 +80,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
                     <TablePlainHeaders columnKeys={UFERDIGE_COLUMNS} />
                   </Table.Row>
                 </Table.Header>
-                <Table.Body data-state="ready" data-empty="false">
+                <Table.Body>
                   <OppgaveRow columns={UFERDIGE_COLUMNS} oppgaveId={oppgaveId} />
                 </Table.Body>
               </Table>
