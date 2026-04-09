@@ -10,8 +10,11 @@ interface State {
   isLoading: boolean;
 }
 
+const cache = new Map<string, FeatureToggle>();
+
 const useFeatureToggle = (toggleName: string): State => {
-  const [state, setState] = useState<State>({ data: undefined, isLoading: true });
+  const cached = cache.get(toggleName);
+  const [state, setState] = useState<State>({ data: cached, isLoading: cached === undefined });
 
   useEffect(() => {
     const manager = ServerSentEventManager.get<'toggle'>(
@@ -20,6 +23,7 @@ const useFeatureToggle = (toggleName: string): State => {
     );
 
     const removeListener = manager.addJsonEventListener<FeatureToggle>('toggle', (data) => {
+      cache.set(toggleName, data);
       setState({ data, isLoading: false });
     });
 
