@@ -1,5 +1,5 @@
 import { TextField } from '@navikt/ds-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Keys } from '@/keys';
 
 interface Props {
@@ -26,10 +26,16 @@ export const SetFilename = ({
   ref,
 }: Props) => {
   const [isSaving, setIsSaving] = useState(false);
-  const [localFilename, setLocalFilename] = useState(tittel ?? '');
+  const [localFilename, setLocalFilename] = useState(tittel);
+  const cancelledRef = useRef(false);
 
   const save = async () => {
     if (isSaving) {
+      return;
+    }
+
+    if (cancelledRef.current) {
+      cancelledRef.current = false;
       return;
     }
 
@@ -59,7 +65,8 @@ export const SetFilename = ({
         if (key === Keys.Enter) {
           save();
         } else if (key === Keys.Escape) {
-          setLocalFilename(tittel ?? '');
+          cancelledRef.current = true;
+          setLocalFilename(tittel);
           close?.();
         }
       }}
