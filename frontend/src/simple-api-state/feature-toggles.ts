@@ -1,41 +1,13 @@
-import { useEffect, useState } from 'react';
-import { ServerSentEventManager, type TracedEvent } from '@/server-sent-events';
+import { SimpleApiState, useSimpleApiState } from '@/simple-api-state/simple-api-state';
 
-interface FeatureToggle extends TracedEvent {
+type FeatureToggle = {
   enabled: boolean;
-}
-
-interface State {
-  data: FeatureToggle | undefined;
-  isLoading: boolean;
-}
-
-const cache = new Map<string, FeatureToggle>();
-
-const useFeatureToggle = (toggleName: string): State => {
-  const cached = cache.get(toggleName);
-  const [state, setState] = useState<State>({ data: cached, isLoading: cached === undefined });
-
-  useEffect(() => {
-    const manager = ServerSentEventManager.get<'toggle'>(
-      `feature-toggle.${toggleName}`,
-      `/feature-toggle/${toggleName}`,
-    );
-
-    const removeListener = manager.addJsonEventListener<FeatureToggle>('toggle', (data) => {
-      cache.set(toggleName, data);
-      setState({ data, isLoading: false });
-    });
-
-    return () => {
-      removeListener();
-      manager.close();
-    };
-  }, [toggleName]);
-
-  return state;
 };
 
-export const useShowNewFileViewerFeatureToggle = () => useFeatureToggle('show-new-file-viewer');
+const showNewFileViewer = new SimpleApiState<FeatureToggle>('/feature-toggle/show-new-file-viewer');
 
-export const useShowOldPdfViewerFeatureToggle = () => useFeatureToggle('show-old-pdf-viewer');
+const showOldPdfViewer = new SimpleApiState<FeatureToggle>('/feature-toggle/show-old-pdf-viewer');
+
+export const useShowNewFileViewerFeatureToggle = () => useSimpleApiState(showNewFileViewer);
+
+export const useShowOldPdfViewerFeatureToggle = () => useSimpleApiState(showOldPdfViewer);
