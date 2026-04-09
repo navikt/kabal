@@ -38,7 +38,7 @@ export const TabbedEditors = () => {
   }
 
   return (
-    <PanelContainer>
+    <PanelContainer aria-label="Smart editor">
       <EditorPanelFocusProvider>
         <Tabbed documents={documents} />
       </EditorPanelFocusProvider>

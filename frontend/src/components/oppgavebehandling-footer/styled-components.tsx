@@ -41,6 +41,8 @@ interface StyledFooterProps {
 export const StyledFooter = ({ type, children }: StyledFooterProps) => (
   <HStack
     asChild
+    role="region"
+    aria-label="Verktøylinje for behandling"
     position="sticky"
     left="space-0"
     bottom="space-0"

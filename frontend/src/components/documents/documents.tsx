@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react';
-import { ExpandedDocuments } from '@/components/documents/expanded-documents';
+import { DOCUMENTS_HEADING, ExpandedDocuments } from '@/components/documents/expanded-documents';
 import { TabContextElement } from '@/components/documents/tab-context';
 import { FileViewer } from '@/components/file-viewer/file-viewer';
 import { PanelContainer } from '@/components/oppgavebehandling-panels/panel-container';
@@ -23,7 +23,7 @@ export const Documents = () => {
 
   if (isLoading || typeof data === 'undefined') {
     return (
-      <PanelContainer data-testid="documents-panel">
+      <PanelContainer data-testid="documents-panel" aria-label={DOCUMENTS_HEADING}>
         <Loader size="xlarge" />
       </PanelContainer>
     );
@@ -31,7 +31,7 @@ export const Documents = () => {
 
   return (
     <TabContextElement>
-      <PanelContainer data-testid="documents-panel">
+      <PanelContainer data-testid="documents-panel" aria-label={DOCUMENTS_HEADING}>
         <ExpandedDocuments />
       </PanelContainer>
       {showOldPdfViewer.data?.enabled === true ? <ViewPDF /> : null}

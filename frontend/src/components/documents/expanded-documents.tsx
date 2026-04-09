@@ -13,7 +13,8 @@ import { useDocumentsWidth } from '@/hooks/settings/use-setting';
 import { pushEvent } from '@/observability';
 
 const MIN_WIDTH = 570;
-const HEADING_ID = 'dokumenter-heading';
+
+export const DOCUMENTS_HEADING = 'Dokumenter';
 
 export const ExpandedDocuments = () => {
   const [isExpanded] = useIsExpanded();
@@ -107,7 +108,6 @@ export const ExpandedDocuments = () => {
   return (
     <DragAndDropContextElement>
       <VStack
-        as="section"
         width="auto"
         height="100%"
         overflowY="hidden"
@@ -116,7 +116,6 @@ export const ExpandedDocuments = () => {
         minWidth={`${minWidth}px`}
         className="resize-x"
         ref={ref}
-        aria-labelledby={HEADING_ID}
       >
         <HStack asChild align="start" justify="start" gap="space-0 space-8" position="relative">
           <Box
@@ -126,10 +125,9 @@ export const ExpandedDocuments = () => {
             paddingInline="space-16"
             paddingBlock="space-8"
             marginBlock="space-0 space-8"
-            aria-labelledby={HEADING_ID}
           >
-            <Heading size="medium" level="1" id={HEADING_ID}>
-              Dokumenter
+            <Heading size="medium" level="1">
+              {DOCUMENTS_HEADING}
             </Heading>
 
             <HStack align="center" height="100%">

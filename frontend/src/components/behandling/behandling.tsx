@@ -1,4 +1,4 @@
-import { Heading, Skeleton } from '@navikt/ds-react';
+import { Skeleton } from '@navikt/ds-react';
 import { Ankebehandlingsdetaljer } from '@/components/behandling/behandlingsdetaljer/ankebehandlingsdetaljer';
 import { BegjæringOmGjenopptakDetaljer } from '@/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-detaljer';
 import { BegjæringOmGjenopptakITrDetaljer } from '@/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-i-tr-detaljer';
@@ -17,10 +17,6 @@ export const Behandlingsdetaljer = () => {
   if (oppgave === undefined) {
     return (
       <StyledBehandlingSection>
-        <Heading level="1" size="medium" spacing>
-          Behandling
-        </Heading>
-
         <BehandlingSection label="Klager">
           <Skeleton variant="text" height={34} />
           <Skeleton variant="rounded" height={20} width={100} />

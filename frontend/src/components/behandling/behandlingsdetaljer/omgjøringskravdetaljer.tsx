@@ -1,4 +1,4 @@
-import { Heading, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { BehandlingSection } from '@/components/behandling/behandlingsdetaljer/behandling-section';
 import { ExtraUtfall } from '@/components/behandling/behandlingsdetaljer/extra-utfall';
 import { ForlengetBehandlingstid } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/forlenget-behandlingstid';
@@ -35,10 +35,6 @@ export const Omgjøringskravdetaljer = ({ oppgavebehandling }: Props) => {
   return (
     <GrafanaDomainProvider domain={BEHANDLING_PANEL_DOMAIN}>
       <StyledBehandlingSection>
-        <Heading level="1" size="medium" spacing>
-          Behandling
-        </Heading>
-
         <VStack gap="space-16">
           <Klager
             klager={oppgavebehandling.klager}
