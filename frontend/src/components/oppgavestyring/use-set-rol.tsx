@@ -31,7 +31,6 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
         await setRolState({ oppgaveId, flowState: FlowState.SENT }).unwrap();
 
         successToast({
-          testId: 'oppgave-set-rol-success-toast',
           oppgaveId,
           label: 'Rådgivende overlege',
           fromNavIdent,

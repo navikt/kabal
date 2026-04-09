@@ -171,7 +171,6 @@ export const Attachment = memo(
         columns={getFieldSizes(VEDLEGG_FIELDS)}
         ref={ref}
         key={journalpostId + dokumentInfoId}
-        data-testid="oppgavebehandling-documents-all-list-item"
         data-journalpostid={journalpostId}
         data-dokumentinfoid={dokumentInfoId}
         data-documentname={tittel}

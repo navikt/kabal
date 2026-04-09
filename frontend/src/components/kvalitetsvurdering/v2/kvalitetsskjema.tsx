@@ -11,7 +11,7 @@ export const KvalitetsskjemaV2 = () => {
 
   if (isLoading) {
     return (
-      <VStack gap="space-32 space-0" data-testid="kvalitetsskjema">
+      <VStack gap="space-32 space-0">
         <div>
           <Skeleton variant="text" height={48} width="50%" />
           <Skeleton variant="rounded" height={32} />
@@ -33,7 +33,7 @@ export const KvalitetsskjemaV2 = () => {
   }
 
   return (
-    <VStack gap="space-32 space-0" data-testid="kvalitetsskjema">
+    <VStack gap="space-32 space-0">
       <Klageforberedelsen />
       <Utredningen />
       <Vedtaket />

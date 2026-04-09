@@ -6,14 +6,7 @@ import { FooterType, StyledFooter } from '@/components/oppgavebehandling-footer/
 export const FinishedFooter = () => (
   <StyledFooter type={FooterType.FINISHED}>
     <HStack align="center" justify="space-between" gap="space-16">
-      <Button
-        variant="primary"
-        type="button"
-        size="small"
-        disabled
-        data-testid="complete-button"
-        icon={<CheckmarkIcon aria-hidden />}
-      >
+      <Button variant="primary" type="button" size="small" disabled icon={<CheckmarkIcon aria-hidden />}>
         Fullfør
       </Button>
       <BackLink />

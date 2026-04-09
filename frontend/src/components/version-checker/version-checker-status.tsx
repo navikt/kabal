@@ -118,7 +118,6 @@ export const VersionCheckerStatus = () => {
             pushEvent('click_update_modal', 'update');
             window.location.reload();
           }}
-          data-testid="update-button"
           size="medium"
         >
           Oppdater Kabal

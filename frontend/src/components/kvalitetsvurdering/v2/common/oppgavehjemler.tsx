@@ -78,7 +78,6 @@ export const Oppgavehjemler = ({ field, parentKey }: Props) => {
         disabled={!canEdit}
         error={validationError}
         id={field}
-        data-testid={field}
         size="small"
       >
         <HjemmelCheckboxes hjemmelIdList={hjemler} />

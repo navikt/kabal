@@ -20,7 +20,6 @@ interface Props extends TableProps {
   isFetching: boolean;
   isError: boolean;
   refetch: () => void;
-  'data-testid': string;
   tableKey: OppgaveTableKey;
   defaultRekkefoelge: SortOrderEnum;
   defaultSortering: SortFieldEnum;
@@ -63,7 +62,7 @@ export const OppgaveTable = ({
 
   return (
     <Table {...rest} zebraStripes sort={sort} onSortChange={onSortChange}>
-      <Table.Header data-testid={`${rest['data-testid']}-header`}>
+      <Table.Header>
         <Table.Row className="whitespace-nowrap">
           <TableFilterHeaders
             tableKey={tableKey}
@@ -76,7 +75,6 @@ export const OppgaveTable = ({
       </Table.Header>
 
       <OppgaveRows
-        data-testid={`${rest['data-testid']}-rows`}
         oppgaver={oppgaver}
         columns={columns}
         isLoading={isLoading}
@@ -93,7 +91,6 @@ export const OppgaveTable = ({
         isLoading={isLoading}
         isFetching={isFetching}
         settingsKey={settingsKey}
-        data-testid={`${rest['data-testid']}-footer`}
       />
     </Table>
   );

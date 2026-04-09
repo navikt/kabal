@@ -70,7 +70,6 @@ export const AttachmentList = ({
       <VStack
         as="ul"
         position="relative"
-        data-testid="new-attachments-list"
         style={{ height: attachmentListHeight, gridColumnEnd: 'action-end', gridColumnStart: 'title-start' }}
         className="ml-4"
       >
@@ -114,7 +113,6 @@ interface AttachmentProps {
 const Attachment = ({ attachment, parentDocument, top, setSize, posInSet }: AttachmentProps) => (
   <StyledAttachmentListItem
     key={attachment.id}
-    data-testid="new-attachments-list-item"
     data-documentname={attachment.tittel}
     data-documentid={attachment.id}
     data-documenttype="attachment"

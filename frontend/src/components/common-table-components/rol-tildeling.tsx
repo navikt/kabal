@@ -32,10 +32,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
       await setRol({ employee: null, oppgaveId: oppgave.id }).unwrap();
 
       toast.success(
-        <ActionToast
-          secondary={UndoFradelAction}
-          attrs={{ 'data-oppgaveid': oppgave.id, 'data-testid': 'rol-oppgave-fradelt-toast' }}
-        >
+        <ActionToast secondary={UndoFradelAction} attrs={{ 'data-oppgaveid': oppgave.id }}>
           Oppgave lagt i felles kø
         </ActionToast>,
       );
@@ -55,11 +52,7 @@ export const RolTildeling = ({ oppgave }: Props) => {
       await setRol({ employee: { navIdent: user.navIdent, navn: user.navn }, oppgaveId: oppgave.id }).unwrap();
 
       toast.success(
-        <ActionToast
-          secondary={UndoTildelButton}
-          primary={OpenButton}
-          attrs={{ 'data-oppgaveid': oppgave.id, 'data-testid': 'rol-oppgave-tildelt-toast' }}
-        >
+        <ActionToast secondary={UndoTildelButton} primary={OpenButton} attrs={{ 'data-oppgaveid': oppgave.id }}>
           Oppgave tildelt
         </ActionToast>,
       );

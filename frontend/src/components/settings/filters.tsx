@@ -96,7 +96,6 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           variant="secondary"
           size="small"
           onClick={removeAll}
-          data-testid={`${settingKey}-remove-all`}
           icon={<TrashIcon aria-hidden />}
         >
           Fjern alle
@@ -107,14 +106,13 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
           variant="secondary"
           size="small"
           onClick={selectAll}
-          data-testid={`${settingKey}-select-all`}
           icon={<CheckmarkIcon aria-hidden />}
         >
           Velg alle
         </Button>
       </HStack>
       <HGrid asChild width="100%" columns="repeat(auto-fit, 300px)">
-        <Fieldset data-testid={`${settingKey}-settings`} legend={legend}>
+        <Fieldset legend={legend}>
           {options.map(({ id, navn }) => (
             <Switch
               key={id}
@@ -124,7 +122,6 @@ const SettingsFilter = ({ selected, options, settingKey, label }: SettingsSectio
               checked={selected.includes(id)}
               data-type={settingKey}
               data-id={id}
-              data-testid={`${settingKey}-${id}`}
               onChange={(event) => {
                 if (event.target.checked === true) {
                   onChange({ ...settings, [settingKey]: [...selected, id] });

@@ -21,8 +21,6 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Open,
 ];
 
-const TEST_ID = 'returnerte-oppgaver-table';
-
 export const ReturnerteRolOppgaverTable = () => {
   const hasAccess = useHasRole(Role.KABAL_ROL);
 
@@ -54,7 +52,6 @@ const ReturnerteRolOppgaverTableInternal = () => {
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}
-        data-testid={TEST_ID}
         settingsKey={OppgaveTableRowsPerPage.ROL_RETURNERTE}
         behandlinger={data?.behandlinger}
         zebraStripes

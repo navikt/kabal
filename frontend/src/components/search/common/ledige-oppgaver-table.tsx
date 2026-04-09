@@ -11,8 +11,6 @@ interface Props {
   isLoading: boolean;
 }
 
-const TEST_ID = 'search-result-active-oppgaver';
-
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithTrygderetten,
   ColumnKeyEnum.Ytelse,
@@ -37,7 +35,6 @@ export const LedigeOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props)
       <Heading size="small">Oppgaver</Heading>
       <StaticOppgaveTableWithPageState
         columns={COLUMNS}
-        data-testid={TEST_ID}
         isLoading={isLoading}
         isFetching={false}
         isError={false}

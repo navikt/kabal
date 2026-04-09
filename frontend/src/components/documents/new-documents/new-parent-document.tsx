@@ -69,7 +69,6 @@ export const NewParentDocument = ({ document, style, setSize, posInSet, ...listP
       borderRadius="4"
       left="space-0"
       right="space-0"
-      data-testid="new-documents-list-item"
       data-documentname={document.tittel}
       data-documentid={document.id}
       data-documenttype="parent"

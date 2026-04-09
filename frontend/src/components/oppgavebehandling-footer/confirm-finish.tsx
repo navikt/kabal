@@ -145,7 +145,6 @@ const CancelButton = ({ cancel }: CancelButtonProps) => (
     type="button"
     size="small"
     onClick={cancel}
-    data-testid="cancel-finish-klagebehandling-button"
     icon={<XMarkIcon aria-hidden />}
   >
     Avbryt
@@ -281,7 +280,6 @@ const FinishButton = ({ children, nyBehandling = false }: FinishButtonProps) => 
       onClick={finish}
       loading={hasBeenFinished || loader.isLoading}
       disabled={hasBeenFinished || loader.isLoading}
-      data-testid="confirm-finish-klagebehandling-button"
       icon={<CheckmarkIcon aria-hidden />}
       className="[grid-area:left]"
     >

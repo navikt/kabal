@@ -27,7 +27,7 @@ export const KvalitetsskjemaCheckbox = ({ children, field, helpText }: Props) =>
   const canEdit = useIsTildeltSaksbehandler();
 
   return (
-    <HelpTextCheckBox value={field} disabled={!canEdit} data-testid={field} helpText={helpText}>
+    <HelpTextCheckBox value={field} disabled={!canEdit} helpText={helpText}>
       {children}
     </HelpTextCheckBox>
   );

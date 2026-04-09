@@ -18,7 +18,6 @@ export const ArchivingIcon = memo(
           ? 'Dokumentet er under journalføring.'
           : 'Dokumentet er under journalføring og utsending.'
       }
-      data-testid="document-archiving"
     >
       <HourglassIcon aria-hidden />
     </HStack>

@@ -82,7 +82,6 @@ export const DeleteDocumentButton = ({ document, disabled = false, ...rest }: Pr
           loading={isLoading}
           disabled={disabled}
           onClick={onDelete}
-          data-testid="document-delete-confirm"
           icon={<TrashIcon aria-hidden />}
         >
           {text}
@@ -93,7 +92,6 @@ export const DeleteDocumentButton = ({ document, disabled = false, ...rest }: Pr
           size="small"
           variant="secondary"
           onClick={() => setShowConfirm(false)}
-          data-testid="document-delete-cancel"
           icon={<ArrowUndoIcon aria-hidden />}
         >
           Avbryt
@@ -110,7 +108,6 @@ export const DeleteDocumentButton = ({ document, disabled = false, ...rest }: Pr
         variant="primary"
         size="small"
         onClick={() => setShowConfirm(true)}
-        data-testid="document-delete-button"
         icon={<TrashIcon aria-hidden />}
         disabled={disabled}
       >

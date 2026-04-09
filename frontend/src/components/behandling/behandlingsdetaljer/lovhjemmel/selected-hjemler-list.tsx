@@ -54,7 +54,7 @@ const SelectedChildren = ({
   }
 
   return (
-    <section data-testid="selected-hjemler-list">
+    <section>
       {registreringshjemmelIdList.map(({ lovkilde, registreringshjemler }) => (
         <div className="not-first-of-type:pt-1" key={lovkilde.id}>
           <h3 className="font-ax-bold text-base">{lovkilde.navn}</h3>

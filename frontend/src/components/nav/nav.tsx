@@ -21,29 +21,24 @@ import { useHasAnyOfRoles } from '@/hooks/use-has-role';
 import { Role } from '@/types/bruker';
 
 export const Nav = () => (
-  <HStack as="nav" flexGrow="1" overflowX="auto" aria-label="Meny" data-testid="oppgaver-nav">
+  <HStack as="nav" flexGrow="1" overflowX="auto" aria-label="Meny">
     <HStack as="ol" align="center" gap="space-16" wrap={false} height="100%" paddingInline="space-16">
-      <NavItem to="/oppgaver" testId="oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
+      <NavItem to="/oppgaver" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
         <BulletListIcon aria-hidden /> Oppgaver
       </NavItem>
 
-      <NavItem to="/mineoppgaver" testId="mine-oppgaver-nav-link" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
+      <NavItem to="/mineoppgaver" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]}>
         <TasklistIcon aria-hidden /> Mine Oppgaver
       </NavItem>
 
       <NavItem
         to="/sok"
-        testId="search-nav-link"
         roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER, Role.KABAL_ROL, Role.KABAL_ROL]}
       >
         <MagnifyingGlassIcon aria-hidden /> Søk på person
       </NavItem>
 
-      <NavItem
-        to="/oppgavestyring"
-        testId="oppgavestyring-nav-link"
-        roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]}
-      >
+      <NavItem to="/oppgavestyring" roles={[Role.KABAL_INNSYN_EGEN_ENHET, Role.KABAL_KROL]}>
         <Buildings3Icon aria-hidden /> Oppgavestyring
       </NavItem>
 
@@ -51,67 +46,39 @@ export const Nav = () => (
         <GavelIcon aria-hidden /> Saker i Trygderetten
       </NavItem>
 
-      <NavItem
-        to={`/maltekstseksjoner?${DEFAULT_STATUS_FILTER}`}
-        testId="maltekstseksjoner-nav-link"
-        roles={[Role.KABAL_MALTEKSTREDIGERING]}
-      >
+      <NavItem to={`/maltekstseksjoner?${DEFAULT_STATUS_FILTER}`} roles={[Role.KABAL_MALTEKSTREDIGERING]}>
         <PuzzlePieceIcon aria-hidden /> Maltekstseksjoner
       </NavItem>
 
-      <NavItem
-        to={`/maltekster?${DEFAULT_STATUS_FILTER}`}
-        testId="maltekster-nav-link"
-        roles={[Role.KABAL_MALTEKSTREDIGERING]}
-      >
+      <NavItem to={`/maltekster?${DEFAULT_STATUS_FILTER}`} roles={[Role.KABAL_MALTEKSTREDIGERING]}>
         <FileIcon aria-hidden /> Maltekster
       </NavItem>
 
-      <NavItem
-        to={`/redigerbare-maltekster?${DEFAULT_STATUS_FILTER}`}
-        testId="redigerbare-maltekster-nav-link"
-        roles={[Role.KABAL_MALTEKSTREDIGERING]}
-      >
+      <NavItem to={`/redigerbare-maltekster?${DEFAULT_STATUS_FILTER}`} roles={[Role.KABAL_MALTEKSTREDIGERING]}>
         <FileTextIcon aria-hidden /> Redigerbare maltekster
       </NavItem>
 
-      <NavItem
-        to={`/gode-formuleringer?${DEFAULT_STATUS_FILTER}`}
-        testId="gode-formuleringer-nav-link"
-        roles={[Role.KABAL_FAGTEKSTREDIGERING]}
-      >
+      <NavItem to={`/gode-formuleringer?${DEFAULT_STATUS_FILTER}`} roles={[Role.KABAL_FAGTEKSTREDIGERING]}>
         <LightBulbIcon aria-hidden /> Gode formuleringer
       </NavItem>
 
-      <NavItem
-        to={`/regelverk?${DEFAULT_STATUS_FILTER}`}
-        testId="regelverk-nav-link"
-        roles={[Role.KABAL_FAGTEKSTREDIGERING]}
-      >
+      <NavItem to={`/regelverk?${DEFAULT_STATUS_FILTER}`} roles={[Role.KABAL_FAGTEKSTREDIGERING]}>
         <GavelSoundBlockIcon aria-hidden /> Regelverk
       </NavItem>
 
-      <NavItem
-        to={`/topptekster?${DEFAULT_STATUS_FILTER}`}
-        testId="topptekster-nav-link"
-        roles={[Role.KABAL_MALTEKSTREDIGERING]}
-      >
+      <NavItem to={`/topptekster?${DEFAULT_STATUS_FILTER}`} roles={[Role.KABAL_MALTEKSTREDIGERING]}>
         <DocumentHeader size={22} color="#fff" /> Topptekster
       </NavItem>
 
-      <NavItem
-        to={`/bunntekster?${DEFAULT_STATUS_FILTER}`}
-        testId="bunntekster-nav-link"
-        roles={[Role.KABAL_MALTEKSTREDIGERING]}
-      >
+      <NavItem to={`/bunntekster?${DEFAULT_STATUS_FILTER}`} roles={[Role.KABAL_MALTEKSTREDIGERING]}>
         <DocumentFooter size={22} color="#fff" /> Bunntekster
       </NavItem>
 
-      <NavItem to="/svarbrev" testId="svarbrev-nav-link" roles={[Role.KABAL_SVARBREVINNSTILLINGER]}>
+      <NavItem to="/svarbrev" roles={[Role.KABAL_SVARBREVINNSTILLINGER]}>
         <EnvelopeClosedIcon aria-hidden /> Svarbrev
       </NavItem>
 
-      <NavItem to="/tilgangsstyring" testId="access-rights-nav-link" roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]}>
+      <NavItem to="/tilgangsstyring" roles={[Role.KABAL_TILGANGSSTYRING_EGEN_ENHET]}>
         <PadlockLockedIcon aria-hidden /> Tilgangsstyring
       </NavItem>
     </HStack>
@@ -119,11 +86,10 @@ export const Nav = () => (
 );
 
 interface NavItemProps extends NavLinkProps {
-  testId?: string;
   roles?: Role[];
 }
 
-const NavItem = ({ testId, roles, children, ...props }: NavItemProps) => {
+const NavItem = ({ roles, children, ...props }: NavItemProps) => {
   const hasRole = useHasAnyOfRoles(roles);
 
   if (!hasRole) {
@@ -134,7 +100,6 @@ const NavItem = ({ testId, roles, children, ...props }: NavItemProps) => {
     <HStack as="li" align="center">
       <NavLink
         {...props}
-        data-testid={testId}
         className={({ isActive }) =>
           `flex w-full items-center gap-2 whitespace-nowrap border-transparent border-b-2 px-1 transition-colors hover:border-ax-border-neutral-strong ${isActive ? 'border-b-ax-border-focus' : ''}`
         }

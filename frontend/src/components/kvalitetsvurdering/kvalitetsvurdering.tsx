@@ -62,7 +62,7 @@ const Kvalitetsskjema = () => {
 };
 
 const Content = ({ children }: { children: ReactElement }) => (
-  <PanelContainer data-testid="kvalitetsvurdering-panel" heading={SECTION_TITLES[SectionKey.KVALITETSVURDERING]}>
+  <PanelContainer heading={SECTION_TITLES[SectionKey.KVALITETSVURDERING]}>
     <ContentInner>{children}</ContentInner>
   </PanelContainer>
 );

@@ -79,7 +79,6 @@ export const Oppgavehjemler = ({ field, parentKey }: SaksdatahjemlerProps) => {
         disabled={!canEdit}
         error={validationError}
         id={field}
-        data-testid={field}
       >
         <HjemmelCheckboxes hjemmelIdList={hjemler} />
       </CheckboxGroup>

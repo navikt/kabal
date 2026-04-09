@@ -116,7 +116,7 @@ export const Popup = ({
       padding="space-16"
       width="280px"
       className={`z-10 ${direction === Direction.UP ? 'bottom-full' : 'top-full'}`}
-      data-testid="deassign-oppgave-popup"
+      aria-label="Legg tilbake oppgave"
       onKeyDown={handleKeyDown}
     >
       <Box background="default" borderRadius="4" shadow="dialog" borderWidth="1" borderColor="neutral">

@@ -11,7 +11,6 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
   <CheckboxGroup
     legend="Velg hjemler"
     hideLegend
-    data-testid="filter-list"
     onChange={onChange}
     value={selected}
     className={className}
@@ -20,7 +19,6 @@ export const FilterList = <T extends string>({ selected, options, focused, onCha
     {options.map(({ value, label, disabled, tags }) => (
       <Option
         key={value}
-        data-testid="filter-list-item"
         data-filterid={value}
         filterId={value}
         focused={value === focused?.value}

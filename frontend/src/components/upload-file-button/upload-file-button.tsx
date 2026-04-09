@@ -16,7 +16,6 @@ const MAX_SIZE_BYTES = MAX_SIZE_MIB * MEBI - 288;
 interface Props extends Pick<ButtonProps, 'variant' | 'size' | 'children'> {
   parentId?: string;
   distributionType: DistribusjonsType | null;
-  'data-testid'?: string;
 }
 
 const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
@@ -30,7 +29,6 @@ export const UploadFileButton = ({
   children,
   parentId,
   distributionType,
-  'data-testid': dataTestId,
 }: Props) => {
   const oppgaveId = useOppgaveId();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -93,7 +91,6 @@ export const UploadFileButton = ({
   return (
     <>
       <input
-        data-testid={`${dataTestId}-input`}
         type="file"
         accept={INPUT_ACCEPT}
         multiple
@@ -101,6 +98,7 @@ export const UploadFileButton = ({
         onChange={uploadVedlegg}
         className="hidden"
         disabled={isLoading}
+        aria-label="Last opp dokument"
       />
       <Tooltip content="Last opp dokument">
         <Button
@@ -109,7 +107,6 @@ export const UploadFileButton = ({
           icon={<UploadIcon aria-hidden />}
           onClick={onClick}
           loading={isLoading}
-          data-testid={`${dataTestId}-button`}
         >
           {children === undefined ? null : <span className="font-normal">{children}</span>}
         </Button>

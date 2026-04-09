@@ -9,7 +9,7 @@ export const PanelSwitches = () => {
   const { value: documentsEnabled = true, setValue: setDocumentsEnabled } = useDocumentsEnabled();
 
   return (
-    <HStack gap="space-0 space-16" data-testid="behandling-panel-switches" align="center">
+    <HStack gap="space-0 space-16" align="center">
       <TogglePanelButton
         checked={documentsEnabled}
         togglePanel={() => {
@@ -17,7 +17,6 @@ export const PanelSwitches = () => {
           pushEvent('toggle-documents-panel', 'panels', { enabled: isEnabled.toString() });
           setDocumentsEnabled(isEnabled);
         }}
-        testId="panel-switch-documents"
       >
         Dokumenter
       </TogglePanelButton>
@@ -44,7 +43,6 @@ const Brevutforming = () => {
         pushEvent('toggle-smart-editor-panel', 'panels', { enabled: isEnabled.toString() });
         setSmartEditorEnabled(isEnabled);
       }}
-      testId="panel-switch-smart-editor"
     >
       Brevutforming og behandling
     </TogglePanelButton>
@@ -73,7 +71,6 @@ const KvalitetsvurderingLoaded = ({ oppgave }: { oppgave: IOppgavebehandling }) 
         pushEvent('toggle-kvalitetsvurdering-panel', 'panels', { enabled: isEnabled.toString() });
         setValue(isEnabled);
       }}
-      testId="panel-switch-kvalitetsvurdering"
     >
       Kvalitetsvurdering
     </TogglePanelButton>
@@ -84,11 +81,10 @@ interface TogglePanelButtonProps {
   togglePanel: () => void;
   checked: boolean;
   children: string;
-  testId?: string;
 }
 
-const TogglePanelButton = ({ togglePanel, children, checked, testId }: TogglePanelButtonProps) => (
-  <Switch checked={checked} size="small" onChange={togglePanel} data-testid={testId}>
+const TogglePanelButton = ({ togglePanel, children, checked }: TogglePanelButtonProps) => (
+  <Switch checked={checked} size="small" onChange={togglePanel}>
     {children}
   </Switch>
 );

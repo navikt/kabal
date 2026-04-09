@@ -7,10 +7,9 @@ import { pushEvent } from '@/observability';
 interface Props {
   settingKey: string;
   pageSize: number;
-  'data-testid': string;
 }
 
-export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Props) => {
+export const RowsPerPage = ({ settingKey, pageSize }: Props) => {
   const id = useId();
   const { value = pageSize, setValue } = useRestrictedNumberSetting(settingKey, restrictPageSize);
 
@@ -23,12 +22,11 @@ export const RowsPerPage = ({ settingKey, pageSize, 'data-testid': testId }: Pro
         data-color="neutral"
         value={value.toString(10)}
         onChange={(v) => {
-          pushEvent('change-rows-per-page', 'oppgave-lists', { value: v });
+          pushEvent('change-rows-per-page', settingKey, { value: v });
           setValue(Number.parseInt(v, 10));
         }}
         size="small"
-        aria-describedby={id}
-        data-testid={testId}
+        aria-labelledby={id}
       >
         {PAGE_SIZE_OPTIONS.map((option) => (
           <ToggleGroup.Item key={option} value={option} data-value={option}>

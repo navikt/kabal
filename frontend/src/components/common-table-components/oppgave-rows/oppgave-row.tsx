@@ -34,10 +34,9 @@ import type { IOppgave } from '@/types/oppgaver';
 interface Props {
   oppgaveId: string;
   columns: ColumnKeyEnum[];
-  testId: string;
 }
 
-export const OppgaveRow = ({ oppgaveId, columns, testId }: Props): React.JSX.Element => {
+export const OppgaveRow = ({ oppgaveId, columns }: Props): React.JSX.Element => {
   const {
     data: oppgave,
     isLoading,
@@ -67,14 +66,10 @@ export const OppgaveRow = ({ oppgaveId, columns, testId }: Props): React.JSX.Ele
   }
 
   if (isLoading || typeof oppgave === 'undefined') {
-    return <LoadingRow columnCount={columns.length} testId={testId} behandlingid={oppgaveId} />;
+    return <LoadingRow columnCount={columns.length} behandlingid={oppgaveId} />;
   }
 
-  return (
-    <Table.Row data-testid={testId} data-behandlingid={oppgaveId} data-state="ready">
-      {getColumns(columns, oppgave)}
-    </Table.Row>
-  );
+  return <Table.Row data-behandlingid={oppgaveId}>{getColumns(columns, oppgave)}</Table.Row>;
 };
 
 const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>

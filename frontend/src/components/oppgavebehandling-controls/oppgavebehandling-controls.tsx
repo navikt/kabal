@@ -12,14 +12,7 @@ import { UserInfo } from '@/components/oppgavebehandling-controls/user-info';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 
 export const OppgavebehandlingControls = () => (
-  <HStack
-    asChild
-    gap="space-8 space-16"
-    paddingInline="space-16"
-    paddingBlock="space-8"
-    wrap
-    data-testid="behandling-control-panel"
-  >
+  <HStack asChild gap="space-8 space-16" paddingInline="space-16" paddingBlock="space-8" wrap>
     <Box background="default" borderWidth="0 0 1 0" borderColor="neutral" as="header">
       <Content />
     </Box>

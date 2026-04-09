@@ -11,7 +11,7 @@ export const OppgavestyringPage = () => {
   const { user } = useContext(StaticDataContext);
 
   return (
-    <OppgaverPageWrapper title={`Oppgavestyring - ${user.ansattEnhet.navn}`} testId="oppgavestyring-oppgaver-tables">
+    <OppgaverPageWrapper title={`Oppgavestyring - ${user.ansattEnhet.navn}`}>
       <EnhetensOppgaverTable />
       <RolOppgaverTable />
 

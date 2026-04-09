@@ -160,7 +160,6 @@ export const JournalfoerteDocuments = () => {
         flexGrow="1"
         justify="space-between"
         overflow="hidden"
-        data-testid="oppgavebehandling-documents-all"
       >
         <JournalfoertHeading
           allDocuments={documents ?? EMPTY_ARRAY}

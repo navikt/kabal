@@ -158,7 +158,6 @@ export const Document = ({
       align="center"
       columns={isExpandedListView ? getFieldSizes(fields) : getFieldSizes(COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS)}
       ref={ref}
-      data-testid="document-journalfoert"
       data-journalpostid={journalpostId}
       data-dokumentinfoid={dokumentInfoId}
       data-documentname={tittel}

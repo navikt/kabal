@@ -50,7 +50,6 @@ const Upload = ({ document }: Props) => {
       size="xsmall"
       distributionType={document.dokumentTypeId}
       parentId={document.id}
-      data-testid="upload-attachment"
     >
       Last opp vedlegg
     </UploadFileButton>

@@ -21,7 +21,6 @@ export const SetDistributionType = ({ distributionType, setDistributionType }: D
         value={distributionType ?? NONE}
         hideLabel
         size="small"
-        data-testid="upload-document-type-select"
       >
         {distributionType === null ? NONE_OPTION : null}
         {options.map(({ label, value }) => (

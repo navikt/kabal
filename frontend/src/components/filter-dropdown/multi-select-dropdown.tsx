@@ -13,7 +13,6 @@ interface CommonProps<T extends string | number> {
   onChange: (filters: T[]) => void;
   style?: React.CSSProperties;
   className?: string;
-  'data-testid'?: string;
   showCounter?: boolean;
   variant?: ButtonProps['variant'];
 }
@@ -68,7 +67,6 @@ export const MultiSelectDropdown = <T extends string | number>({
   setValue,
   allOptions,
   variant = 'tertiary-neutral',
-  'data-testid': testId,
   showCounter = true,
 }: MultiSelectDropdownProps<T>) => {
   const selectedOptions = useMemo(
@@ -84,7 +82,7 @@ export const MultiSelectDropdown = <T extends string | number>({
   }, [label, selectedOptions.length, showCounter]);
 
   return (
-    <div style={style} className={className} data-testid={testId}>
+    <div style={style} className={className}>
       <ActionMenu>
         <Trigger variant={variant}>{labelWithCounter}</Trigger>
 

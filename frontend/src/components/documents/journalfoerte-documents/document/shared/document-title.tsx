@@ -179,7 +179,6 @@ const DocumentTitleInternal = memo(
           disabled={!hasAccess}
           onClick={onClick}
           onAuxClick={onClick}
-          data-testid="document-open-button"
           href={href}
           target={documentId}
           download={isDownload}

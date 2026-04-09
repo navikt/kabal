@@ -17,7 +17,6 @@ interface CommonProps extends TableProps {
   isFetching: boolean;
   isError: boolean;
   refetch: () => void;
-  'data-testid': string;
   resetPageOnLoad?: boolean;
 }
 
@@ -65,13 +64,12 @@ const InternalStaticOppgaveTable = ({
 
   return (
     <Table {...rest} zebraStripes>
-      <Table.Header data-testid={`${rest['data-testid']}-header`}>
+      <Table.Header>
         <Table.Row>
           <TablePlainHeaders columnKeys={columns} />
         </Table.Row>
       </Table.Header>
       <OppgaveRows
-        data-testid={`${rest['data-testid']}-rows`}
         oppgaver={oppgaver}
         columns={columns}
         isLoading={isLoading}
@@ -87,7 +85,6 @@ const InternalStaticOppgaveTable = ({
         isLoading={isLoading}
         isFetching={isFetching}
         settingsKey={settingsKey}
-        data-testid={`${rest['data-testid']}-footer`}
       />
     </Table>
   );

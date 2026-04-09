@@ -47,7 +47,6 @@ const Options = ({ options, explanation, document, showLabel = false, ...rest }:
   return (
     <Tooltip content={explanation} maxChar={Number.POSITIVE_INFINITY}>
       <Select
-        data-testid="document-type-select"
         label="Dokumenttype"
         hideLabel={!showLabel}
         size="small"

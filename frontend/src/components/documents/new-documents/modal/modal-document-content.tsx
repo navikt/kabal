@@ -124,7 +124,6 @@ export const DocumentModalContent = ({
                 variant="secondary"
                 icon={<CheckmarkIcon aria-hidden />}
                 title="Endre dokumentnavn"
-                data-testid="document-title-edit-save-button"
               />
             </HStack>
           ) : null}

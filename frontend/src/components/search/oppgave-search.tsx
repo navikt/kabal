@@ -142,7 +142,6 @@ const SearchField = ({ onChange, onKeyDown, label, children }: SearchFieldProps)
     size="small"
     variant="primary"
     onChange={onChange}
-    data-testid="search-input"
     placeholder={label}
     label={label}
     onKeyDown={({ key }) => {

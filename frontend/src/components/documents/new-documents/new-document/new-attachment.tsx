@@ -89,7 +89,6 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
       <StyledNewAttachment
         data-documentname={document.tittel}
         data-documentid={document.id}
-        data-testid="new-document-list-item-content"
         data-documenttype="attachment"
         onDragStart={isDraggable ? onDragStart : (e) => e.preventDefault()}
         onDragEnd={() => {
@@ -101,12 +100,7 @@ const NewAttachmentInternal = memo<NewDocumentInternalProps>(
       >
         <DocumentTitle document={document} renameAccessError={renameAccessError} />
         {document.type === DocumentTypeEnum.JOURNALFOERT ? (
-          <DocumentDate
-            data-testid="new-document-date"
-            document={document}
-            className="truncate"
-            style={{ gridArea: Fields.TypeOrDate }}
-          />
+          <DocumentDate document={document} className="truncate" style={{ gridArea: Fields.TypeOrDate }} />
         ) : null}
         {parentDocument.isMarkertAvsluttet ? (
           <ArchivingIcon dokumentTypeId={document.dokumentTypeId} />

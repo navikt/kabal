@@ -25,7 +25,6 @@ interface Props {
 }
 
 const EMPTY_LIST: string[] = [];
-const CURRENT_TEST_ID = 'relevant-current-oppgave-table';
 
 export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
   const location = useLocation();
@@ -76,13 +75,13 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
             <section>
               <Heading size="small">Denne oppgaven</Heading>
               <Table>
-                <Table.Header data-testid={`${CURRENT_TEST_ID}-header`}>
+                <Table.Header>
                   <Table.Row>
                     <TablePlainHeaders columnKeys={UFERDIGE_COLUMNS} />
                   </Table.Row>
                 </Table.Header>
-                <Table.Body data-testid={`${CURRENT_TEST_ID}-rows`} data-state="ready" data-empty="false">
-                  <OppgaveRow columns={UFERDIGE_COLUMNS} oppgaveId={oppgaveId} testId={`${CURRENT_TEST_ID}-row`} />
+                <Table.Body data-state="ready" data-empty="false">
+                  <OppgaveRow columns={UFERDIGE_COLUMNS} oppgaveId={oppgaveId} />
                 </Table.Body>
               </Table>
             </section>
@@ -93,7 +92,6 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
             <StaticOppgaveTable
               behandlinger={uferdigeOppgaverIdList}
               settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
-              data-testid="relevant-uferdige-oppgaver-table"
               columns={UFERDIGE_COLUMNS}
               refetch={refetch}
               isLoading={isLoading}
@@ -107,7 +105,6 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
             <StaticOppgaveTable
               behandlinger={ventendeOppgaverIdList}
               settingsKey={OppgaveTableRowsPerPage.RELEVANT_VENTENDE}
-              data-testid="relevant-ventende-oppgaver-table"
               columns={VENTENDE_COLUMNS}
               refetch={refetch}
               isLoading={isLoading}

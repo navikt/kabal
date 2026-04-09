@@ -143,7 +143,6 @@ const Deassign = ({
         size="small"
         onClick={onLeggTilbake}
         loading={isLoading}
-        data-testid="behandling-fradel-button"
         data-klagebehandlingid={id}
         className="whitespace-nowrap"
       >

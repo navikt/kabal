@@ -44,7 +44,7 @@ export const Person = ({ data, isLoading, isFetching, error, fnr, refetch }: Per
   }
 
   return (
-    <HStack align="center" gap="space-0 space-16" paddingInline="space-16" data-testid="search-result-person">
+    <HStack align="center" gap="space-0 space-16" paddingInline="space-16">
       <span className="justify-self-start truncate">{data.name}</span>
       <span className="justify-self-start">
         <CopyIdButton id={data.id} />
