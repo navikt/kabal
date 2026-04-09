@@ -1,4 +1,4 @@
-import { Heading, InfoCard } from '@navikt/ds-react';
+import { InfoCard } from '@navikt/ds-react';
 import type { ReactElement } from 'react';
 import { KvalitetsskjemaV1 } from '@/components/kvalitetsvurdering/v1/kvalitetsskjema';
 import { KvalitetsskjemaV2 } from '@/components/kvalitetsvurdering/v2/kvalitetsskjema';
@@ -62,7 +62,7 @@ const Kvalitetsskjema = () => {
 };
 
 const Content = ({ children }: { children: ReactElement }) => (
-  <PanelContainer data-testid="kvalitetsvurdering-panel">
+  <PanelContainer data-testid="kvalitetsvurdering-panel" heading={SECTION_TITLES[SectionKey.KVALITETSVURDERING]}>
     <ContentInner>{children}</ContentInner>
   </PanelContainer>
 );
@@ -70,13 +70,5 @@ const Content = ({ children }: { children: ReactElement }) => (
 const ContentInner = ({ children }: { children: ReactElement }) => {
   useFocusPanelShortcut(6);
 
-  return (
-    <div className="w-165 p-4">
-      <Heading level="1" size="medium" spacing>
-        {SECTION_TITLES[SectionKey.KVALITETSVURDERING]}
-      </Heading>
-
-      {children}
-    </div>
-  );
+  return <div className="w-165 px-4 pb-4">{children}</div>;
 };

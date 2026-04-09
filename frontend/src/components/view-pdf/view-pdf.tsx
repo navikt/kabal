@@ -232,15 +232,8 @@ interface ContainerProps {
 }
 
 const Container = ({ minWidth, children }: ContainerProps) => (
-  <VStack
-    asChild
-    minWidth={`${minWidth}px`}
-    className="snap-start"
-    align="center"
-    justify="center"
-    data-testid="show-document"
-  >
-    <Box as="section" background="default" shadow="dialog" borderRadius="4" position="relative">
+  <VStack asChild minWidth={`${minWidth}px`} className="snap-start" align="center" justify="center" data-testid="show-document">
+    <Box as="section" background="default" shadow="dialog" borderRadius="4" position="relative" aria-label="PDF-viser">
       {children}
     </Box>
   </VStack>

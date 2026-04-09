@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import { EventHistory } from '@/components/behandling/behandlingsdialog/history/history';
 import { Medunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/medunderskriver';
 import { Messages } from '@/components/behandling/behandlingsdialog/messages/messages';
@@ -8,9 +7,6 @@ import { StyledBehandlingSection } from '@/components/behandling/styled-componen
 
 export const Behandlingsdialog = () => (
   <StyledBehandlingSection>
-    <Heading level="1" size="medium" spacing>
-      Behandlingsdialog
-    </Heading>
     <Saksbehandler />
     <Medunderskriver />
     <Rol />

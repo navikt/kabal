@@ -21,11 +21,11 @@ const SmartEditorPanelComponent = () => {
     <>
       <TabbedEditors />
 
-      <PanelContainer data-testid="behandling-panel" minWidth={WIDTH} maxWidth={WIDTH}>
+      <PanelContainer data-testid="behandling-panel" heading="Behandling" minWidth={WIDTH} maxWidth={WIDTH}>
         <BehandlingPanelContent />
       </PanelContainer>
 
-      <PanelContainer data-testid="behandlingsdialog-panel" minWidth={WIDTH} maxWidth={WIDTH}>
+      <PanelContainer data-testid="behandlingsdialog-panel" heading="Behandlingsdialog" minWidth={WIDTH} maxWidth={WIDTH}>
         <BehandlingsdialogPanelContent />
       </PanelContainer>
     </>
