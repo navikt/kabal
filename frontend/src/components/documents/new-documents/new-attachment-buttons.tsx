@@ -50,6 +50,7 @@ const Upload = ({ document }: Props) => {
       size="xsmall"
       distributionType={document.dokumentTypeId}
       parentId={document.id}
+      label={`Filopplasting av vedlegg til ${document.tittel}`}
     >
       Last opp vedlegg
     </UploadFileButton>

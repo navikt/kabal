@@ -33,6 +33,7 @@ export const UploadFile = () => {
         variant="secondary-neutral"
         size="small"
         distributionType={distributionType}
+        label="Filopplasting av dokument"
       />
     </HStack>
   );
