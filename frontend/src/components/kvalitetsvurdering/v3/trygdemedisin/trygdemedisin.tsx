@@ -1,4 +1,4 @@
-import { Heading, HStack, Radio } from '@navikt/ds-react';
+import { HStack, Radio } from '@navikt/ds-react';
 import { HelpTextRadio } from '@/components/kvalitetsvurdering/common/kvalitetsvurdering-checkbox';
 import { StyledRadioGroup } from '@/components/kvalitetsvurdering/common/styled-components';
 import { Checkboxes } from '@/components/kvalitetsvurdering/v3/common/checkboxes';
@@ -12,6 +12,7 @@ import {
   TrygdemedisinBoolean,
   TrygdemedisinErrorFields,
 } from '@/components/kvalitetsvurdering/v3/trygdemedisin/data';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useIsRelevantYtelseForRaadgivende } from '@/hooks/use-is-relevant-ytelse-for-raadgivende';
 import { RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
@@ -32,8 +33,7 @@ export const Trygdemedisin = () => {
   const onChange = (value: RadiovalgExtended) => update({ brukAvRaadgivendeLege: value });
 
   return (
-    <section>
-      <Heading size="small">{HEADER}</Heading>
+    <SectionWithHeading heading={HEADER} size="small">
       <StyledRadioGroup
         legend={HEADER}
         hideLegend
@@ -74,7 +74,7 @@ export const Trygdemedisin = () => {
           label="Hva er mangelfullt/kvalitetsavviket?"
         />
       ) : null}
-    </section>
+    </SectionWithHeading>
   );
 };
 

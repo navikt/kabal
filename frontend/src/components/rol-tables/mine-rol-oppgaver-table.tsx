@@ -1,9 +1,9 @@
-import { Heading } from '@navikt/ds-react';
 import type { skipToken } from '@reduxjs/toolkit/query';
 import { OppgaveTable } from '@/components/common-table-components/oppgave-table/oppgave-table';
 import { useOppgaveTableState } from '@/components/common-table-components/oppgave-table/state/state';
 import { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { useHasRole } from '@/hooks/use-has-role';
 import { useGetUferdigeRolOppgaverQuery } from '@/redux-api/oppgaver/queries/oppgaver';
@@ -45,8 +45,7 @@ const MineRolOppgaverTableInternal = () => {
   });
 
   return (
-    <section>
-      <Heading size="small">Oppgaver under arbeid</Heading>
+    <SectionWithHeading heading="Oppgaver under arbeid" size="small">
       <OppgaveTable
         columns={COLUMNS}
         isError={isError}
@@ -59,6 +58,6 @@ const MineRolOppgaverTableInternal = () => {
         defaultRekkefoelge={SortOrderEnum.ASC}
         defaultSortering={SortFieldEnum.FRIST}
       />
-    </section>
+    </SectionWithHeading>
   );
 };

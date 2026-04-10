@@ -1,8 +1,8 @@
-import { Heading } from '@navikt/ds-react';
 import { OppgaveTable } from '@/components/common-table-components/oppgave-table/oppgave-table';
 import { useOppgaveTableState } from '@/components/common-table-components/oppgave-table/state/state';
 import { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { useHasRole } from '@/hooks/use-has-role';
 import { useGetMineFerdigstilteOppgaverQuery } from '@/redux-api/oppgaver/queries/oppgaver';
@@ -44,8 +44,7 @@ const FullfoerteOppgaverTableInternal = () => {
   });
 
   return (
-    <section>
-      <Heading size="small">Fullførte oppgaver</Heading>
+    <SectionWithHeading heading="Fullførte oppgaver" size="small">
       <OppgaveTable
         columns={COLUMNS}
         isLoading={isLoading}
@@ -59,6 +58,6 @@ const FullfoerteOppgaverTableInternal = () => {
         defaultRekkefoelge={SortOrderEnum.DESC}
         defaultSortering={SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER}
       />
-    </section>
+    </SectionWithHeading>
   );
 };

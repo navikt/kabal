@@ -1,8 +1,8 @@
-import { Heading } from '@navikt/ds-react';
 import { OppgaveTable } from '@/components/common-table-components/oppgave-table/oppgave-table';
 import { useOppgaveTableState } from '@/components/common-table-components/oppgave-table/state/state';
 import { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { useHasRole } from '@/hooks/use-has-role';
 import { useGetReturnerteRolOppgaverQuery } from '@/redux-api/oppgaver/queries/oppgaver';
@@ -44,8 +44,7 @@ const ReturnerteRolOppgaverTableInternal = () => {
   });
 
   return (
-    <section>
-      <Heading size="small">Returnerte oppgaver</Heading>
+    <SectionWithHeading heading="Returnerte oppgaver" size="small">
       <OppgaveTable
         columns={COLUMNS}
         isLoading={isLoading}
@@ -59,6 +58,6 @@ const ReturnerteRolOppgaverTableInternal = () => {
         defaultRekkefoelge={SortOrderEnum.DESC}
         defaultSortering={SortFieldEnum.RETURNERT_FRA_ROL}
       />
-    </section>
+    </SectionWithHeading>
   );
 };

@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
 import { StaticDataContext } from '@/components/app/static-data-context';
@@ -6,6 +5,7 @@ import { OppgaveTable } from '@/components/common-table-components/oppgave-table
 import { useOppgaveTableState } from '@/components/common-table-components/oppgave-table/state/state';
 import { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { useHasRole } from '@/hooks/use-has-role';
 import { useSakstyper } from '@/hooks/use-kodeverk-value';
@@ -51,8 +51,7 @@ const RolOppgaverTableInternal = () => {
   });
 
   return (
-    <section>
-      <Heading size="small">Tildelte oppgaver</Heading>
+    <SectionWithHeading heading="Tildelte oppgaver" size="small">
       <OppgaveTable
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
@@ -65,6 +64,6 @@ const RolOppgaverTableInternal = () => {
         defaultRekkefoelge={SortOrderEnum.ASC}
         defaultSortering={SortFieldEnum.FRIST}
       />
-    </section>
+    </SectionWithHeading>
   );
 };

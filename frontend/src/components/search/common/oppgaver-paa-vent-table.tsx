@@ -1,8 +1,8 @@
-import { Heading } from '@navikt/ds-react';
 import { Alert } from '@/components/alert/alert';
 import { StaticOppgaveTableWithPageState } from '@/components/common-table-components/oppgave-table/static-oppgave-table';
 import { StaticOppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 
 interface Props {
@@ -32,8 +32,7 @@ export const OppgaverPaaVentTable = ({ oppgaveIds, onRefresh, isLoading }: Props
   }
 
   return (
-    <section>
-      <Heading size="small">Oppgaver på vent</Heading>
+    <SectionWithHeading heading="Oppgaver på vent" size="small">
       <StaticOppgaveTableWithPageState
         columns={COLUMNS}
         zebraStripes
@@ -45,6 +44,6 @@ export const OppgaverPaaVentTable = ({ oppgaveIds, onRefresh, isLoading }: Props
         settingsKey={OppgaveTableRowsPerPage.SEARCH_VENTENDE}
         tableKey={StaticOppgaveTableKey.SEARCH_VENTENDE}
       />
-    </section>
+    </SectionWithHeading>
   );
 };

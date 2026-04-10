@@ -1,9 +1,9 @@
-import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { OppgaveTable } from '@/components/common-table-components/oppgave-table/oppgave-table';
 import { useOppgaveTableState } from '@/components/common-table-components/oppgave-table/state/state';
 import { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { useGetSettingsQuery } from '@/redux-api/bruker';
 import { useGetLedigeOppgaverITRQuery } from '@/redux-api/oppgaver/queries/oppgaver';
@@ -44,8 +44,7 @@ export const LedigeSakerITRTable = () => {
   });
 
   return (
-    <section>
-      <Heading size="small">Ledige oppgaver</Heading>
+    <SectionWithHeading heading="Ledige oppgaver" size="small">
       <OppgaveTable
         zebraStripes
         columns={COLUMNS}
@@ -59,6 +58,6 @@ export const LedigeSakerITRTable = () => {
         defaultRekkefoelge={DEFAULT_REKKEFOELGE}
         defaultSortering={DEFAULT_SORTING}
       />
-    </section>
+    </SectionWithHeading>
   );
 };
