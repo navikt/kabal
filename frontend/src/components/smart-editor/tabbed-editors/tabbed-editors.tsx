@@ -115,7 +115,7 @@ const Tabbed = ({ documents }: TabbedProps) => {
           ))}
 
           <Tooltip content="Opprett nytt dokument">
-            <Tabs.Tab value={NEW_TAB_ID} icon={<TabsAddIcon aria-hidden />} />
+            <Tabs.Tab value={NEW_TAB_ID} icon={<TabsAddIcon aria-hidden />} aria-label="Opprett nytt dokument" />
           </Tooltip>
         </Tabs.List>
       </div>
