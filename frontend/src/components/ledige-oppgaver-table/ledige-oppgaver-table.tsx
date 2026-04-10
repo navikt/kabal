@@ -1,9 +1,10 @@
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { OppgaveTable } from '@/components/common-table-components/oppgave-table/oppgave-table';
 import { useOppgaveTableState } from '@/components/common-table-components/oppgave-table/state/state';
 import { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { useHasRole } from '@/hooks/use-has-role';
 import { useTimingMeasurement } from '@/hooks/use-timing-measurement';
@@ -61,10 +62,7 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
   useTimingMeasurement('oppgaver_list_load_ms', !isLoading && !isLoadingSettings);
 
   return (
-    <section>
-      <Heading level="1" size="small">
-        Ledige oppgaver
-      </Heading>
+    <SectionWithHeading heading="Ledige oppgaver" size="small" level="1">
       <OppgaveTable
         zebraStripes
         columns={COLUMNS}
@@ -81,6 +79,6 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
       <BodyShort size="small" className="mt-4">
         Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}
       </BodyShort>
-    </section>
+    </SectionWithHeading>
   );
 };

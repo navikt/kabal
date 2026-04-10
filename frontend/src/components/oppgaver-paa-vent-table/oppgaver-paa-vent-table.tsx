@@ -1,8 +1,8 @@
-import { Heading } from '@navikt/ds-react';
 import { OppgaveTable } from '@/components/common-table-components/oppgave-table/oppgave-table';
 import { useOppgaveTableState } from '@/components/common-table-components/oppgave-table/state/state';
 import { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { useHasRole } from '@/hooks/use-has-role';
 import { useGetMineVentendeOppgaverQuery } from '@/redux-api/oppgaver/queries/oppgaver';
@@ -46,8 +46,7 @@ const OppgaverPaaVentTableInternal = () => {
   });
 
   return (
-    <section>
-      <Heading size="small">Oppgaver på vent</Heading>
+    <SectionWithHeading heading="Oppgaver på vent" size="small">
       <OppgaveTable
         columns={COLUMNS}
         isLoading={isLoading}
@@ -60,6 +59,6 @@ const OppgaverPaaVentTableInternal = () => {
         defaultRekkefoelge={SortOrderEnum.ASC}
         defaultSortering={SortFieldEnum.PAA_VENT_TO}
       />
-    </section>
+    </SectionWithHeading>
   );
 };

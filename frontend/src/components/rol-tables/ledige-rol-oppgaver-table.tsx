@@ -1,9 +1,9 @@
-import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { OppgaveTable } from '@/components/common-table-components/oppgave-table/oppgave-table';
 import { useOppgaveTableState } from '@/components/common-table-components/oppgave-table/state/state';
 import { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { useHasRole } from '@/hooks/use-has-role';
 import { useGetSettingsQuery } from '@/redux-api/bruker';
@@ -49,10 +49,7 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
   });
 
   return (
-    <section>
-      <Heading level="1" size="small">
-        Ledige oppgaver
-      </Heading>
+    <SectionWithHeading heading="Ledige oppgaver" size="small" level="1">
       <OppgaveTable
         zebraStripes
         columns={COLUMNS}
@@ -66,6 +63,6 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
         defaultRekkefoelge={SortOrderEnum.ASC}
         defaultSortering={SortFieldEnum.FRIST}
       />
-    </section>
+    </SectionWithHeading>
   );
 };

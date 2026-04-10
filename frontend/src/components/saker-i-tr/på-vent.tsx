@@ -1,9 +1,9 @@
-import { Heading } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { OppgaveTable } from '@/components/common-table-components/oppgave-table/oppgave-table';
 import { useOppgaveTableState } from '@/components/common-table-components/oppgave-table/state/state';
 import { OppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { useGetSettingsQuery } from '@/redux-api/bruker';
 import { useGetVentendeOppgaverITRQuery } from '@/redux-api/oppgaver/queries/oppgaver';
@@ -46,8 +46,7 @@ export const SakerITRPåVentTable = () => {
   });
 
   return (
-    <section>
-      <Heading size="small">Oppgaver på vent</Heading>
+    <SectionWithHeading heading="Oppgaver på vent" size="small">
       <OppgaveTable
         zebraStripes
         columns={COLUMNS}
@@ -61,6 +60,6 @@ export const SakerITRPåVentTable = () => {
         defaultRekkefoelge={DEFAULT_REKKEFOELGE}
         defaultSortering={DEFAULT_SORTING}
       />
-    </section>
+    </SectionWithHeading>
   );
 };

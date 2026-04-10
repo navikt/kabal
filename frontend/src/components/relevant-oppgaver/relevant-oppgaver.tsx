@@ -1,11 +1,12 @@
 import { FolderFileIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, Heading, Loader, Modal, Table, Tooltip } from '@navikt/ds-react';
+import { Button, type ButtonProps, Loader, Modal, Table, Tooltip } from '@navikt/ds-react';
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router';
 import { OppgaveRow } from '@/components/common-table-components/oppgave-rows/oppgave-row';
 import { TablePlainHeaders } from '@/components/common-table-components/oppgave-table/oppgave-table-headers';
 import { StaticOppgaveTable } from '@/components/common-table-components/oppgave-table/static-oppgave-table';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 /*
  * We have the following dependency cycle:
  * Relevant oppgaver -> Oppgaver table -> Oppgave table -> Rows -> Row -> Relevant oppgaver
@@ -72,8 +73,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
           {isOppgaveLoading || sakenGjelder === undefined ? (
             <Loader />
           ) : (
-            <section>
-              <Heading size="small">Denne oppgaven</Heading>
+            <SectionWithHeading heading="Denne oppgaven" size="small">
               <Table>
                 <Table.Header>
                   <Table.Row>
@@ -84,11 +84,10 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
                   <OppgaveRow columns={UFERDIGE_COLUMNS} oppgaveId={oppgaveId} />
                 </Table.Body>
               </Table>
-            </section>
+            </SectionWithHeading>
           )}
 
-          <section>
-            <Heading size="small">Andre oppgaver</Heading>
+          <SectionWithHeading heading="Andre oppgaver" size="small">
             <StaticOppgaveTable
               behandlinger={uferdigeOppgaverIdList}
               settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
@@ -98,10 +97,9 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
               isFetching={isFetching}
               isError={isError}
             />
-          </section>
+          </SectionWithHeading>
 
-          <section>
-            <Heading size="small">Oppgaver på vent</Heading>
+          <SectionWithHeading heading="Oppgaver på vent" size="small">
             <StaticOppgaveTable
               behandlinger={ventendeOppgaverIdList}
               settingsKey={OppgaveTableRowsPerPage.RELEVANT_VENTENDE}
@@ -111,7 +109,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
               isFetching={isFetching}
               isError={isError}
             />
-          </section>
+          </SectionWithHeading>
         </Modal.Body>
       </Modal>
     </>

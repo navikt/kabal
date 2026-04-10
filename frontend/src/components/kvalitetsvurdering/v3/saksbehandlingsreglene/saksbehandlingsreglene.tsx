@@ -1,4 +1,4 @@
-import { Heading, HStack, Radio } from '@navikt/ds-react';
+import { HStack, Radio } from '@navikt/ds-react';
 import { StyledRadioGroup } from '@/components/kvalitetsvurdering/common/styled-components';
 import { Checkboxes } from '@/components/kvalitetsvurdering/v3/common/checkboxes';
 import type { CheckboxParams } from '@/components/kvalitetsvurdering/v3/common/types';
@@ -20,6 +20,7 @@ import {
   UtredningspliktenBoolean,
   VeiledningspliktenBoolean,
 } from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { Radiovalg } from '@/types/kaka-kvalitetsvurdering/radio';
 
@@ -38,9 +39,7 @@ export const Saksbehandlingsreglene = () => {
   const onChange = (value: Radiovalg) => update({ saksbehandlingsregler: value });
 
   return (
-    <section>
-      <Heading size="small">{HEADER}</Heading>
-
+    <SectionWithHeading heading={HEADER} size="small">
       <StyledRadioGroup
         legend={HEADER}
         hideLegend
@@ -68,7 +67,7 @@ export const Saksbehandlingsreglene = () => {
           label="Hva er mangelfullt/kvalitetsavviket?"
         />
       ) : null}
-    </section>
+    </SectionWithHeading>
   );
 };
 

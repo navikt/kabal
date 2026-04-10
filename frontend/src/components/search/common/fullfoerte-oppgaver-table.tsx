@@ -1,8 +1,8 @@
-import { Heading } from '@navikt/ds-react';
 import { Alert } from '@/components/alert/alert';
 import { StaticOppgaveTableWithPageState } from '@/components/common-table-components/oppgave-table/static-oppgave-table';
 import { StaticOppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 
 interface Props {
@@ -28,8 +28,7 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
   }
 
   return (
-    <section>
-      <Heading size="small">Fullførte oppgaver</Heading>
+    <SectionWithHeading heading="Fullførte oppgaver" size="small">
       <StaticOppgaveTableWithPageState
         columns={COLUMNS}
         isLoading={isLoading}
@@ -40,6 +39,6 @@ export const FullfoerteOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Pr
         settingsKey={OppgaveTableRowsPerPage.SEARCH_FERDIGE}
         tableKey={StaticOppgaveTableKey.SEARCH_FERDIGE}
       />
-    </section>
+    </SectionWithHeading>
   );
 };
