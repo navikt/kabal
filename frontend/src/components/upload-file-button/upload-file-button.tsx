@@ -16,6 +16,7 @@ const MAX_SIZE_BYTES = MAX_SIZE_MIB * MEBI - 288;
 interface Props extends Pick<ButtonProps, 'variant' | 'size' | 'children'> {
   parentId?: string;
   distributionType: DistribusjonsType | null;
+  label: string;
 }
 
 const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
@@ -23,13 +24,7 @@ const INPUT_ACCEPT = ALLOWED_FILE_TYPES.join(', ');
 
 const displayError = (error: string) => genericErrorToast('Kunne ikke laste opp dokument', error);
 
-export const UploadFileButton = ({
-  variant,
-  size,
-  children,
-  parentId,
-  distributionType,
-}: Props) => {
+export const UploadFileButton = ({ variant, size, children, parentId, distributionType, label }: Props) => {
   const oppgaveId = useOppgaveId();
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploadFile, { isLoading }] = useUploadFileDocumentMutation();
@@ -98,7 +93,6 @@ export const UploadFileButton = ({
         onChange={uploadVedlegg}
         className="hidden"
         disabled={isLoading}
-        aria-label="Last opp dokument"
       />
       <Tooltip content="Last opp dokument">
         <Button
@@ -107,6 +101,7 @@ export const UploadFileButton = ({
           icon={<UploadIcon aria-hidden />}
           onClick={onClick}
           loading={isLoading}
+          aria-label={label}
         >
           {children === undefined ? null : <span className="font-normal">{children}</span>}
         </Button>
