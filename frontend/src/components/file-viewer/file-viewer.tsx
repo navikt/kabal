@@ -18,6 +18,7 @@ import {
   getJournalfoertFileViewerTabUrl,
   getNewFileViewerTabUrl,
 } from '@/domain/tabbed-document-url';
+import { getIsIncomingDocument } from '@/functions/is-incoming-document';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useFilesViewed } from '@/hooks/settings/use-setting';
 import { useShownDocuments } from '@/hooks/use-shown-documents';
@@ -137,6 +138,12 @@ const expandDocumentList = (showDocumentList: IShownDocument[], documentsInProgr
     }
 
     const attachmentDocs: IShownDocument[] = attachments.map(attachmentToShownDocument);
+
+    const dua = documentsInProgress.find(({ id }) => doc.documentId === id);
+
+    if (dua === undefined || getIsIncomingDocument(dua.dokumentTypeId)) {
+      return [doc, ...attachmentDocs];
+    }
 
     const vedleggsoversikt: IShownDocument = {
       type: DocumentTypeEnum.VEDLEGGSOVERSIKT,
