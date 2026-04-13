@@ -1,5 +1,8 @@
 [install]
 exact = true
+ignoreScripts = true
+minimumReleaseAge = 259200
+minimumReleaseAgeExcludes = ["@navikt/klage-file-viewer"]
 
 [test]
 preload = ["./src/happydom.ts"]

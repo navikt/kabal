@@ -47,6 +47,7 @@ jobs:
       id-token: write
     env:
       BUN_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      XDG_CONFIG_HOME: ${{ github.workspace }}
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
       version: ${{ steps.version.outputs.version }}
@@ -58,13 +59,11 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
+          registries: |
+            @navikt:https://npm.pkg.github.com/|$BUN_AUTH_TOKEN
 
-      - name: Configure @navikt scope
-        shell: bash
-        run: |
-          for dir in . frontend file-viewer server; do
-            echo -e '\n[install.scopes]\n"@navikt" = { token = "$BUN_AUTH_TOKEN", url = "https://npm.pkg.github.com/" }' >> "$dir/bunfig.toml"
-          done
+      - name: Rename bunfig to global config name
+        run: mv bunfig.toml .bunfig.toml
 
       - name: Generate version number
         id: version
@@ -74,12 +73,12 @@ jobs:
 
       - name: Install common dependencies
         shell: bash
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Install frontend dependencies
         shell: bash
         working-directory: frontend
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Build frontend
         shell: bash
@@ -96,7 +95,7 @@ jobs:
       - name: Install file-viewer dependencies
         shell: bash
         working-directory: file-viewer
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Build file-viewer
         shell: bash
@@ -108,7 +107,7 @@ jobs:
       - name: Install server dependencies
         shell: bash
         working-directory: server
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Test server
         shell: bash

@@ -33,7 +33,7 @@ When running locally, the dev server proxies API requests to `kabal.intern.dev.n
 
 ```
 cd frontend
-bun install
+bun install --frozen-lockfile --ignore-scripts
 bun run start
 ```
 
