@@ -35,12 +35,12 @@ jobs:
 
       - name: Install common dependencies
         shell: bash
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Install ${{ matrix.apps }} dependencies
         shell: bash
         working-directory: ${{ matrix.apps }}
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --ignore-scripts
 
       - name: Restore cache for ${{ matrix.apps }}
         uses: actions/cache/restore@v4

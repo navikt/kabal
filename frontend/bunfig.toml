@@ -3,3 +3,6 @@ preload = ["./src/bun-test-setup.ts", "./src/testing-library.ts"]
 
 [install]
 exact = true
+ignoreScripts = true
+minimumReleaseAge = 259200
+minimumReleaseAgeExcludes = ["@navikt/klage-file-viewer"]
