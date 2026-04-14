@@ -145,6 +145,8 @@ const Deassign = ({
         loading={isLoading}
         data-klagebehandlingid={id}
         className="whitespace-nowrap"
+        aria-haspopup="dialog"
+        aria-expanded={reasonPopupDirection !== null}
       >
         Legg tilbake
       </Button>

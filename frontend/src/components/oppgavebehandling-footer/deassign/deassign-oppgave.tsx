@@ -90,6 +90,8 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
         loading={isLoading}
         title={title}
         icon={<Icon aria-hidden />}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
       >
         Legg tilbake
       </Button>
