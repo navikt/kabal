@@ -1,7 +1,7 @@
 import { ENVIRONMENT } from '@/environment';
 import type { IApiValidationResponse } from '@/functions/error-type-guard';
 import { KABAL_BEHANDLINGER_BASE_PATH } from '@/redux-api/common';
-import { OppgaveTagTypes, oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import { BehandlingsdialogTagTypes, OppgaveTagTypes, oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
 import { handleDocumentFinishedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/document-finished';
 import { handleDocumentsAddedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/documents-added';
 import { handleDocumentsChangedEvent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/documents-changed';
@@ -190,9 +190,11 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
     }),
     getPotentialMedunderskrivere: builder.query<IMedunderskrivereResponse, string>({
       query: (id) => `/kabal-api/behandlinger/${id}/potentialmedunderskrivere`,
+      providesTags: (_, __, id) => [{ type: BehandlingsdialogTagTypes.POTENTIAL_MU, id }],
     }),
     getPotentialRol: builder.query<IRols, string>({
       query: (id) => `/kabal-api/behandlinger/${id}/potentialrol`,
+      providesTags: (_, __, id) => [{ type: BehandlingsdialogTagTypes.POTENTIAL_ROL, id }],
     }),
     getFradelingReason: builder.query<ITildelingEvent | null, string>({
       query: (id) => `/kabal-api/behandlinger/${id}/fradelingreason`,

@@ -2,9 +2,10 @@ import { format } from 'date-fns';
 import { ISO_DATETIME_FORMAT } from '@/components/date-picker/constants';
 import { ENVIRONMENT } from '@/environment';
 import {
+  BEHANDLINGSDIALOG_TAG_TYPES,
+  OPPGAVE_LIST_TAG_TYPES,
   OPPGAVELIST_TAG_TYPES,
   OppgaveData,
-  OppgaveListTagTypes,
   OppgaveTagTypes,
   oppgaverApi,
 } from '@/redux-api/oppgaver/oppgaver';
@@ -41,8 +42,6 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
 
-          dispatch(oppgaverApi.util.invalidateTags(Object.values(OppgaveListTagTypes)));
-
           dispatch(
             behandlingerQuerySlice.util.updateQueryData('getSaksbehandler', oppgaveId, () => ({
               saksbehandler: data.saksbehandler,
@@ -66,6 +65,10 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
           optimisticBehandling.undo();
         }
       },
+      invalidatesTags: (_, __, { oppgaveId }) => [
+        ...OPPGAVE_LIST_TAG_TYPES,
+        ...BEHANDLINGSDIALOG_TAG_TYPES.map((type) => ({ type, id: oppgaveId })),
+      ],
     }),
     fradelSaksbehandler: builder.mutation<IFradelingResponse, FradelSaksbehandlerParams>({
       query: ({ oppgaveId, ...body }) => ({
