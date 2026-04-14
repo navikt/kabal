@@ -116,6 +116,7 @@ export const Popup = ({
       padding="space-16"
       width="280px"
       className={`z-10 ${direction === Direction.UP ? 'bottom-full' : 'top-full'}`}
+      role="dialog"
       aria-label="Legg tilbake oppgave"
       onKeyDown={handleKeyDown}
     >
