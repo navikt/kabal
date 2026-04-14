@@ -101,6 +101,7 @@ interface BruddPåRegleneOmKlageOgKlageforberedelse {
   [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageDetErIkkeSoergetForRettingAvFeilIKlagensFormEllerInnhold]: boolean;
   [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageUnderKlageforberedelsenErDetIkkeUtredetEllerGjortUndersoekelser]: boolean;
   [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak]: boolean;
+  [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageAlleRelevanteDokumenterIkkeOversendtKlageinstansen]: boolean;
 }
 
 // Brudd på reglene om omgjøring utenfor ordinær klage- og ankesaksbehandling

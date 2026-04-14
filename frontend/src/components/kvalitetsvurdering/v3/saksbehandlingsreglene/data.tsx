@@ -1,3 +1,5 @@
+import { BodyLong, VStack } from '@navikt/ds-react';
+import type { ReactElement } from 'react';
 import { MAIN_REASON_LABELS, MainReason } from '@/components/kvalitetsvurdering/v3/data';
 
 export const HEADER = MAIN_REASON_LABELS[MainReason.Saksbehandlingsreglene];
@@ -50,6 +52,7 @@ export enum KlageOgKlageforberedelsenBoolean {
   saksbehandlingsreglerBruddPaaKlageDetErIkkeSoergetForRettingAvFeilIKlagensFormEllerInnhold = 'saksbehandlingsreglerBruddPaaKlageDetErIkkeSoergetForRettingAvFeilIKlagensFormEllerInnhold',
   saksbehandlingsreglerBruddPaaKlageUnderKlageforberedelsenErDetIkkeUtredetEllerGjortUndersoekelser = 'saksbehandlingsreglerBruddPaaKlageUnderKlageforberedelsenErDetIkkeUtredetEllerGjortUndersoekelser',
   saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak = 'saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak',
+  saksbehandlingsreglerBruddPaaKlageAlleRelevanteDokumenterIkkeOversendtKlageinstansen = 'saksbehandlingsreglerBruddPaaKlageAlleRelevanteDokumenterIkkeOversendtKlageinstansen',
 }
 
 export enum OmgjoeringBoolean {
@@ -179,6 +182,8 @@ export const SAKSBEHANDLINGSREGLENE_LABELS: Record<Fields, string> = {
     'Under klageforberedelsen er det ikke utredet om klagen faktisk er en klage eller hva i vedtaket som påklages, eller ikke gjort andre undersøkelser som klagen gir grunn til',
   [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak]:
     'Reglene for enkeltvedtak er ikke fulgt til tross for at underinstansen i realiteten har fattet et nytt enkeltvedtak i klagesaken',
+  [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageAlleRelevanteDokumenterIkkeOversendtKlageinstansen]:
+    'Alle relevante dokumenter i saken er ikke oversendt klageinstansen (journalført i godkjent arkiv)',
 
   // Omgjøring
   [OmgjoeringBoolean.saksbehandlingsreglerBruddPaaRegleneOmOmgjoeringUtenforKlageOgAnke]:
@@ -236,7 +241,7 @@ export const SAKSBEHANDLINGSREGLENE_ERROR_LABELS: Record<SaksbehandlingsregleneE
       KlartSpraakBoolean.saksbehandlingsreglerBruddPaaPliktTilAaKommuniserePaaEtKlartSpraak
     ],
 };
-export const SAKSBEHANDLINGSREGLENE_HELP_TEXTS: Partial<Record<Fields, string>> = {
+export const SAKSBEHANDLINGSREGLENE_HELP_TEXTS: Partial<Record<Fields, string | ReactElement>> = {
   // Veiledningsplikten
   [VeiledningspliktenBoolean.saksbehandlingsreglerVeiledningspliktenPartenHarIkkeFaattSvarPaaHenvendelser]:
     'Du velger denne dersom veiledningen ikke har gitt parten mulighet til å ivareta interessene sine i saken på en god nok måte fordi henvendelser fra parten ikke har blitt besvart, eller har blitt mangelfullt eller misvisende besvart.',
@@ -286,6 +291,25 @@ export const SAKSBEHANDLINGSREGLENE_HELP_TEXTS: Partial<Record<Fields, string>> 
     'Du velger denne dersom en henvendelse fra parten har blitt behandlet som en klage, til tross for at det er usikkert om det faktisk er ment som en klage. Tilsvarende dersom det er usikkert hva i vedtaket som påklages, og dette burde vært undersøkt. Du velger også denne dersom underinstansen ikke har vurdert nye opplysninger som er tilkommet saken før den oversendes klageinstansen.',
   [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak]:
     'Du velger denne dersom underinstansen har gjort endringer i det påklagede vedtaket som er bestemmende for partens rettigheter eller plikter, uten at dette er gjort i vedtaks form eller i tråd med underretningsplikten. For eksempel dersom underinstansen har omgjort deler av vedtaket sitt i forbindelse med oversendelse av saken til klageinstansen, og endringene bare går fram av oversendelsesbrevet uten underretning om klageadgang, klagefrist, klageinstans, partsinnsyn, eventuelle sakskostnader mv.',
+  [KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageAlleRelevanteDokumenterIkkeOversendtKlageinstansen]:
+    (
+      <VStack gap="space-20">
+        <BodyLong>
+          Underinstansen har en plikt til å sende alle relevante dokumenter i saken, også interne, til klageinstansen.
+          Dette er nødvendig for at klageinstansen skal kunne prøve alle sider av saken og sikre en reell
+          toinstansbehandling.
+        </BodyLong>
+        <BodyLong>
+          Forvaltningslovens krav er generelle og gjelder for alle klageorganer i forvaltningen, også de som ikke har
+          tilgang til underinstansens systemer. Klageinstansen skal ikke måtte lete etter relevante opplysninger i alle
+          Navs systemer, men skal kunne legge til grunn at vedtaksinstans har journalført i godkjent arkiv det de ville
+          ha oversendt dersom klageinstansen var på utsiden av Navs systemer. Det betyr at dersom relevante opplysninger
+          fra for eksempel Modia, A-inntekt, Aa-registeret, eller fra vedtaksløsninger som for eksempel Infotrygd, Arena
+          eller Pesys, ikke er journalført i godkjent arkiv, vil dette utgjøre et brudd på underinstansens plikt til å
+          sørge for at alle dokumenter i saken blir oversendt klageinstansen.
+        </BodyLong>
+      </VStack>
+    ),
 
   // Omgjøring
   [OmgjoeringBoolean.saksbehandlingsreglerOmgjoeringUgyldighetOgOmgjoeringErIkkeVurdertEllerFeilVurdert]:
