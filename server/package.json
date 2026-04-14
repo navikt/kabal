@@ -16,7 +16,7 @@
   "dependencies": {
     "@fastify/cors": "11.2.0",
     "@fastify/http-proxy": "11.4.3",
-    "@fastify/otel": "0.18.0",
+    "@fastify/otel": "0.18.1",
     "@fastify/type-provider-typebox": "6.1.0",
     "@fastify/websocket": "11.2.0",
     "@hocuspocus/common": "3.4.4",
@@ -32,21 +32,21 @@
     "@opentelemetry/sdk-node": "0.214.0",
     "@opentelemetry/sdk-trace-node": "2.6.1",
     "@opentelemetry/semantic-conventions": "1.40.0",
-    "@platformatic/kafka": "1.32.1",
+    "@platformatic/kafka": "1.33.0",
     "@slate-yjs/core": "1.0.2",
     "fastify": "5.8.4",
-    "fastify-metrics": "13.1.0",
+    "fastify-metrics": "13.2.0",
     "fastify-plugin": "5.1.0",
     "jose": "5.9.1",
     "openid-client": "5.7.1",
     "prom-client": "15.1.3",
     "redis": "5.11.0",
     "slate": "0.124.0",
-    "typebox": "1.1.14",
+    "typebox": "1.1.23",
     "yjs": "13.6.30"
   },
   "devDependencies": {
-    "@types/node": "25.5.2",
+    "@types/node": "25.6.0",
     "@types/uuid": "11.0.0"
   }
 }
