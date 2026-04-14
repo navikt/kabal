@@ -194,6 +194,9 @@ const CHECKBOXES: CheckboxParams[] = [
         field:
           KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak,
       }),
+      getCheckbox({
+        field: KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageRelevanteDokumenterIkkeOversendt,
+      }),
     ],
   }),
 
