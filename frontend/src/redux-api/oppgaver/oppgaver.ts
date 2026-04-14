@@ -37,6 +37,14 @@ export enum OppgaveTagTypes {
   OPPGAVEBEHANDLING = 'oppgavebehandling',
 }
 
+export enum BehandlingsdialogTagTypes {
+  POTENTIAL_MU = 'potential-mu',
+  POTENTIAL_ROL = 'potential-rol',
+}
+
+export const BEHANDLINGSDIALOG_TAG_TYPES = Object.values(BehandlingsdialogTagTypes);
+export const OPPGAVE_LIST_TAG_TYPES = Object.values(OppgaveListTagTypes);
+
 export const oppgaverApi = createApi({
   reducerPath: 'oppgaverApi',
   baseQuery: API_BASE_QUERY,
@@ -44,8 +52,9 @@ export const oppgaverApi = createApi({
     ...Object.values(ListTagTypes),
     ...Object.values(OppgaveTagTypes),
     ...Object.values(DokumenterListTagTypes),
-    ...Object.values(OppgaveListTagTypes),
+    ...OPPGAVE_LIST_TAG_TYPES,
     ...Object.values(OppgaveData),
+    ...BEHANDLINGSDIALOG_TAG_TYPES,
   ],
   endpoints: () => ({}),
 });
