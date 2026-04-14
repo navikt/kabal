@@ -70,10 +70,10 @@
     const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     /**
-     * Retrieves the dark mode preference based on a stored value.
-     * @param {string|boolean|null} storedValue - The stored dark mode preference value
-     * @returns {boolean} Returns true if dark mode should be enabled, false otherwise
-     */
+      * Retrieves the dark mode preference based on a stored value.
+      * @param {string|boolean|null} storedValue - The stored dark mode preference value
+      * @returns {boolean} Returns true if dark mode should be enabled, false otherwise
+      */
     const getDarkMode = (storedValue) => {
       switch (storedValue) {
         case 'dark':
