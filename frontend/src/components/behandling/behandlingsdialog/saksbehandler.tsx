@@ -74,6 +74,7 @@ const SelectSaksbehandler = ({ oppgave: { saksbehandler, id, typeId, ytelseId } 
 
   return (
     <SearchableNavEmployeeSelectWithLabel
+      nullLabel="Ikke tildelt"
       label="Saksbehandler"
       onChange={tildel}
       value={saksbehandler}
