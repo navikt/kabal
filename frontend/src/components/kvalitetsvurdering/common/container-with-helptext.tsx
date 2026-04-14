@@ -1,8 +1,9 @@
 import { HelpText, type HelpTextProps, HStack } from '@navikt/ds-react';
+import type { ReactElement } from 'react';
 
 interface Props {
   children: React.ReactNode;
-  helpText: string | undefined;
+  helpText: string | ReactElement | undefined;
   placement?: HelpTextProps['placement'];
 }
 
