@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react';
 import type { SaksbehandlingsregleneErrorFields } from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
 import type { SærregelverketErrorFields } from '@/components/kvalitetsvurdering/v3/særregelverket/data';
 import type { TrygdemedisinErrorFields } from '@/components/kvalitetsvurdering/v3/trygdemedisin/data';
@@ -10,7 +11,7 @@ import type {
 
 interface BaseParams {
   label: string;
-  helpText?: string;
+  helpText?: string | ReactElement;
   groupErrorField?: GroupErrorField;
 }
 

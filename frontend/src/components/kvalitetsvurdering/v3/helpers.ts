@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react';
 import { type CheckboxParams, type InputParams, TypeEnum } from '@/components/kvalitetsvurdering/v3/common/types';
 import {
   type AllSaksbehandlingsregleneBoolean,
@@ -69,7 +70,7 @@ const getLabel = (field: Booleans): string => {
   return field;
 };
 
-const getHelpText = (field: Booleans): string | undefined => {
+const getHelpText = (field: Booleans): string | ReactElement | undefined => {
   if (isSærregelverketField(field)) {
     return SÆRREGELVERKET_HELP_TEXTS[field];
   }
