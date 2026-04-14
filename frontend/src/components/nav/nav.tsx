@@ -31,10 +31,7 @@ export const Nav = () => (
         <TasklistIcon aria-hidden /> Mine Oppgaver
       </NavItem>
 
-      <NavItem
-        to="/sok"
-        roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER, Role.KABAL_ROL, Role.KABAL_ROL]}
-      >
+      <NavItem to="/sok" roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER, Role.KABAL_ROL]}>
         <MagnifyingGlassIcon aria-hidden /> Søk på person
       </NavItem>
 
