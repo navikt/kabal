@@ -37,7 +37,7 @@
     "@navikt/ds-react": "8.9.1",
     "@navikt/ds-tailwind": "8.9.1",
     "@navikt/fnrvalidator": "2.2.1",
-    "@navikt/klage-file-viewer": "0.0.101",
+    "@navikt/klage-file-viewer": "1.0.1",
     "@opentelemetry/api": "1.9.1",
     "@platejs/autoformat": "52.3.10",
     "@platejs/basic-nodes": "52.3.10",
