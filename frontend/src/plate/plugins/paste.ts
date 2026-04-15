@@ -7,8 +7,8 @@ import {
   BaseH6Plugin,
 } from '@platejs/basic-nodes';
 import { ListItemContentPlugin } from '@platejs/list-classic/react';
-import type { TElement } from 'platejs';
-import { ElementApi } from 'platejs';
+import type { Descendant, TElement } from 'platejs';
+import { ElementApi, TextApi } from 'platejs';
 import { createPlatePlugin, ParagraphPlugin } from 'platejs/react';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import { type ParagraphElement, TextAlign } from '@/plate/types';
@@ -120,7 +120,27 @@ export const PastePlugin = createPlatePlugin({
       return true;
     },
   },
+}).overrideEditor(({ editor }) => {
+  const { deserialize } = editor.api.html;
+
+  editor.api.html.deserialize = (...args): Descendant[] => normalizeDescendantSpaces(deserialize(...args));
+
+  return editor;
 });
+
+/** Normalize all Unicode space-like characters to regular spaces and collapse runs of multiple spaces. */
+const UNICODE_SPACE_PATTERN = /\p{Zs}+/gu;
+export const normalizeSpaces = (text: string): string => text.replaceAll(UNICODE_SPACE_PATTERN, ' ');
+
+/** Recursively normalize spaces in all text nodes of a Slate node tree. */
+export const normalizeDescendantSpaces = (nodes: Descendant[]): Descendant[] =>
+  nodes.map((node) => {
+    if (TextApi.isText(node)) {
+      return { ...node, text: normalizeSpaces(node.text) };
+    }
+
+    return { ...node, children: normalizeDescendantSpaces(node.children) };
+  });
 
 export const processParagraphs = (raw: string): string[] => {
   const rawLines = raw.split('\n');
@@ -138,7 +158,7 @@ export const processParagraphs = (raw: string): string[] => {
       continue;
     }
 
-    paragraphList.push(lastParagraph.join(' ').trim());
+    paragraphList.push(normalizeSpaces(lastParagraph.join(' ')).trim());
     lastParagraph = [];
   }
 

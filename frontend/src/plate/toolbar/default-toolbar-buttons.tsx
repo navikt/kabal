@@ -1,9 +1,11 @@
-import { ArrowUndoIcon } from '@navikt/aksel-icons';
+import { ArrowUndoIcon, BucketMopIcon } from '@navikt/aksel-icons';
 import { DocumentPageBreak, TextDescription } from '@styled-icons/fluentui-system-regular';
 import { BaseParagraphPlugin } from 'platejs';
+import { useEditorReadOnly } from 'platejs/react';
 import { MOD_KEY_TEXT } from '@/keys';
 import { useIsElementActive } from '@/plate/hooks/use-is-element-active';
 import { useIsUnchangeable } from '@/plate/hooks/use-is-unchangeable';
+import { cleanupDocument } from '@/plate/plugins/cleanup/cleanup-document';
 import { Align } from '@/plate/toolbar/align';
 import { CycleCaseButton } from '@/plate/toolbar/cycle-case-button';
 import { Headings } from '@/plate/toolbar/headings';
@@ -20,6 +22,7 @@ import { insertPageBreak } from '@/plate/utils/transforms';
 
 export const DefaultToolbarButtons = () => {
   const editor = useMyPlateEditorRef();
+  const isReadOnly = useEditorReadOnly();
   const unchangeable = useIsUnchangeable();
   const inList = useIsInList();
   const inTable = useIsInTable();
@@ -77,6 +80,16 @@ export const DefaultToolbarButtons = () => {
       <InsertTableButton />
 
       <Align />
+
+      <ToolbarSeparator />
+
+      <ToolbarIconButton
+        label="Rydd opp i dokumentet"
+        keys={[MOD_KEY_TEXT, 'K']}
+        icon={<BucketMopIcon aria-hidden />}
+        onClick={() => cleanupDocument(editor)}
+        disabled={isReadOnly}
+      />
     </>
   );
 };
