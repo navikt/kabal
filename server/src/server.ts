@@ -42,8 +42,15 @@ if (isDeployed) {
 }
 
 const bodyLimit = 300 * 1024 * 1024; // 300 MB
-
-const app = fastify({ trustProxy: true, bodyLimit, routerOptions: { maxParamLength: 20_000, querystringParser } });
+const app = fastify({
+  trustProxy: true,
+  bodyLimit,
+  // Set keepAliveTimeout higher than Wonderwall's idle connection timeout (5s) to prevent
+  // the server from closing keep-alive connections while Wonderwall still expects them to be open.
+  // https://github.com/nais/wonderwall/blob/master/internal/http/transport.go
+  keepAliveTimeout: 10_000,
+  routerOptions: { maxParamLength: 20_000, querystringParser },
+});
 
 await app.register(fastifyOtelInstrumentation.plugin());
 
