@@ -41,7 +41,7 @@ export const Enhetmappe = ({ enhetId, selectedMappe, setSelectedMappe, oppgavebe
 
   return (
     <HStack align="end" gap="space-8">
-      {showEnhetmappeInfo ? <Alert variant="info">Velg enhetsmappen «Sendt til Trygderetten».</Alert> : null}
+      {showEnhetmappeInfo ? <Alert variant="info">Velg enhetsmappen «Sendt Trygderetten».</Alert> : null}
 
       <Select
         title={enhetId === null ? 'Velg enhet først' : undefined}
