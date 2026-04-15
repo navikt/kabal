@@ -1,4 +1,4 @@
-import { TextApi, type TText } from 'platejs';
+import { type At, TextApi, type TText } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 
 /** Match any Unicode space separator that is NOT a regular space (U+0020). */
@@ -6,10 +6,10 @@ const NON_STANDARD_SPACE = /(?!\x20)\p{Zs}/gu;
 const HAS_NON_STANDARD_SPACE = /(?!\x20)\p{Zs}/u;
 
 /** Replace non-standard spaces (NBSP, thin space, etc.) with regular spaces. */
-export const normalizeNonStandardSpaces = (editor: PlateEditor): void => {
+export const normalizeNonStandardSpaces = (editor: PlateEditor, at: At = []): void => {
   const textEntries = editor.api
     .nodes<TText>({
-      at: [],
+      at,
       match: (n): n is TText => TextApi.isText(n) && HAS_NON_STANDARD_SPACE.test(n.text),
       reverse: true,
     })

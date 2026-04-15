@@ -3,6 +3,7 @@ import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-cl
 import { BaseTablePlugin } from '@platejs/table';
 import { type Descendant, ElementApi, NodeApi, type TElement, TextApi, type TNode, type TText } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
+import { UNCHANGEABLE } from '@/plate/plugins/element-types';
 import { SaksbehandlerPlaceholderPlugin } from '@/plate/plugins/placeholder/saksbehandler';
 import { isInRegelverk, isInUnchangeableElement } from '@/plate/plugins/prohibit-deletion/helpers';
 import { RegelverkContainerPlugin, RegelverkPlugin } from '@/plate/plugins/regelverk';
@@ -57,21 +58,25 @@ export const isOfElementTypesFn =
 
 export const isText = (node: TText | TElement): node is FormattedText => TextApi.isText(node);
 
-const LIST_MATCHER = isOfElementTypesFn<BulletListElement | NumberedListElement>([
+export const isList = isOfElementTypesFn<BulletListElement | NumberedListElement>([
   BaseBulletedListPlugin.key,
   BaseNumberedListPlugin.key,
 ]);
 
-export const isInList = (editor: PlateEditor): boolean => editor.api.some({ match: LIST_MATCHER });
+export const isInList = (editor: PlateEditor): boolean => editor.api.some({ match: isList });
 
 export const isInTable = (editor: PlateEditor): boolean => editor.api.some({ match: { type: BaseTablePlugin.key } });
 
-const HEADINGS_MATCHER = isOfElementTypesFn<H1Element | H2Element | H3Element>([
+export const isPathInTable = (editor: PlateEditor, path: number[]): boolean =>
+  editor.api.some({ at: path, match: { type: BaseTablePlugin.key }, mode: 'highest' });
+
+export const isHeading = isOfElementTypesFn<H1Element | H2Element | H3Element>([
   BaseH1Plugin.key,
   BaseH2Plugin.key,
   BaseH3Plugin.key,
 ]);
-export const isInHeading = (editor: RichTextEditor): boolean => editor.api.some({ match: HEADINGS_MATCHER });
+
+export const isInHeading = (editor: RichTextEditor): boolean => editor.api.some({ match: isHeading });
 
 const isContained = (editor: PlateEditor, type: string) => {
   if (editor.selection === null) {
@@ -108,6 +113,29 @@ export const isUnchangeable = (editor: PlateEditor) => {
   }
 
   return false;
+};
+
+/** Path-based version of `isUnchangeable`. Returns true if the path is inside an unchangeable element, unless it is also inside an editable container (regelverk-container or saksbehandler-placeholder). */
+export const isPathUnchangeable = (editor: PlateEditor, path: number[]): boolean => {
+  const isInUnchangeable = editor.api.some({
+    at: path,
+    block: true,
+    text: false,
+    voids: true,
+    match: (n) => ElementApi.isElement(n) && UNCHANGEABLE.includes(n.type),
+    mode: 'highest',
+  });
+
+  if (!isInUnchangeable) {
+    return false;
+  }
+
+  return !editor.api.some({
+    at: path,
+    match: (n) =>
+      isOfElementType(n, RegelverkContainerPlugin.key) || isOfElementType(n, SaksbehandlerPlaceholderPlugin.key),
+    mode: 'highest',
+  });
 };
 
 export const isPlaceholderActive = (editor: PlateEditor) =>
