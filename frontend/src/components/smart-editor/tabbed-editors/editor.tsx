@@ -21,6 +21,7 @@ import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@/hooks/settings/use-setting';
 import { LogLevel, pushError, pushLog, pushMeasurement } from '@/observability';
 import { createCapitalisePlugin } from '@/plate/plugins/capitalise/capitalise';
+import { cleanupDocument } from '@/plate/plugins/cleanup/cleanup-document';
 import { components, saksbehandlerPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@/plate/sheet';
 import { getScaleVar } from '@/plate/status-bar/scale-context';
@@ -76,6 +77,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const collabConnectCount = useRef(0);
   const collabConnectMeasured = useRef(false);
   const collabSyncMeasured = useRef(false);
+  const documentCleanedOnce = useRef(false);
 
   const url = useMemo(
     () => `/collaboration/behandlinger/${oppgave.id}/dokumenter/${id}?${getQueryParams().toString()}`,
@@ -446,6 +448,22 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     },
     [],
   );
+
+  useEffect(() => {
+    if (documentCleanedOnce.current) {
+      return;
+    }
+
+    if (isSynced) {
+      documentCleanedOnce.current = true;
+
+      if (!readOnly) {
+        editor.tf.withoutSaving(() => {
+          cleanupDocument(editor);
+        });
+      }
+    }
+  }, [isSynced, readOnly, editor]);
 
   return (
     <VStack

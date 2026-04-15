@@ -9,6 +9,7 @@ import { TableCellElement } from '@/plate/components/plate-ui/table-cell-element
 import { TableElement } from '@/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@/plate/components/plate-ui/table-row-element';
 import { BookmarkPlugin } from '@/plate/plugins/bookmark';
+import { CleanupDocumentPlugin } from '@/plate/plugins/cleanup/cleanup-document';
 import { CommentsPlugin } from '@/plate/plugins/comments';
 import { CurrentDatePlugin } from '@/plate/plugins/current-date';
 import { CycleCasePlugin } from '@/plate/plugins/cycle-case/cycle-case';
@@ -25,6 +26,7 @@ import { RedigerbarMaltekstPlugin } from '@/plate/plugins/redigerbar-maltekst';
 import { RegelverkContainerPlugin, RegelverkPlugin } from '@/plate/plugins/regelverk';
 import { SaksnummerPlugin } from '@/plate/plugins/saksnummer';
 import { SignaturePlugin } from '@/plate/plugins/signature';
+import { WhitespaceDecorationPlugin, WhitespaceIssueLeaf } from '@/plate/plugins/whitespace-decoration';
 
 export const components = {
   [BaseParagraphPlugin.key]: Paragraph,
@@ -47,6 +49,8 @@ export const components = {
 
 export const historyPlugins = [
   ...defaultPlugins,
+  WhitespaceDecorationPlugin.configure({ render: { node: WhitespaceIssueLeaf } }),
+  CleanupDocumentPlugin,
   SaksbehandlerPlaceholderPlugin,
   MaltekstseksjonPlugin,
   MaltekstPlugin,

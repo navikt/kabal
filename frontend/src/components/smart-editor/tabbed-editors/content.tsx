@@ -38,7 +38,7 @@ export const Content = ({ children }: Props) => {
       return;
     }
 
-    if (!event.shiftKey && lowerCaseKey === Keys.K) {
+    if (event.shiftKey && lowerCaseKey === Keys.K) {
       event.preventDefault();
       setNewCommentSelection(editor.selection);
 

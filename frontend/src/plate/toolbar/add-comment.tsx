@@ -28,7 +28,7 @@ export const CommentsButton = () => {
   return (
     <ToolbarIconButton
       label="Legg til kommentar"
-      keys={[MOD_KEY_TEXT, 'K']}
+      keys={[MOD_KEY_TEXT, 'Shift', 'K']}
       icon={<ChatElipsisIcon width={24} />}
       onClick={async () => {
         if (selection === null || RangeApi.isCollapsed(selection)) {
