@@ -1,4 +1,4 @@
-import { ElementApi, PointApi, TextApi, type TRange } from 'platejs';
+import { type At, ElementApi, PointApi, TextApi, type TRange } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 import {
   findWhitespaceIssues,
@@ -7,10 +7,10 @@ import {
 } from '@/plate/plugins/find-whitespace-issues';
 
 /** Clean up all whitespace issues: double spaces, leading/trailing whitespace, spaces before punctuation. */
-export const cleanupWhitespaceIssues = (editor: PlateEditor): void => {
+export const cleanupWhitespaceIssues = (editor: PlateEditor, at: At = []): void => {
   const elementEntries = editor.api
     .nodes({
-      at: [],
+      at,
       match: (n) => ElementApi.isElement(n) && n.children.some((child) => TextApi.isText(child)),
       reverse: true,
     })

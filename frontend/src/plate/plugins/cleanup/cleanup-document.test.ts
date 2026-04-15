@@ -91,10 +91,6 @@ describe('cleanup document (Ctrl+K)', () => {
   it('should apply all cleanup steps in sequence', () => {
     const editor = createEditor('  Hello\u00A0 world .  ', '', '');
     simulateCtrlK(editor);
-    expect(editor.children).toEqual([
-      createSimpleParagraph('Hello world.'),
-      createSimpleParagraph(''),
-      createSimpleParagraph(''),
-    ]);
+    expect(editor.children).toEqual([createSimpleParagraph('Hello world.')]);
   });
 });

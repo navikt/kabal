@@ -1,7 +1,7 @@
 import { ArrowUndoIcon, BucketMopIcon } from '@navikt/aksel-icons';
 import { DocumentPageBreak, TextDescription } from '@styled-icons/fluentui-system-regular';
 import { BaseParagraphPlugin } from 'platejs';
-import { useEditorReadOnly } from 'platejs/react';
+import { useEditorReadOnly, useSelectionExpanded } from 'platejs/react';
 import { MOD_KEY_TEXT } from '@/keys';
 import { useIsElementActive } from '@/plate/hooks/use-is-element-active';
 import { useIsUnchangeable } from '@/plate/hooks/use-is-unchangeable';
@@ -26,6 +26,7 @@ export const DefaultToolbarButtons = () => {
   const unchangeable = useIsUnchangeable();
   const inList = useIsInList();
   const inTable = useIsInTable();
+  const isExpanded = useSelectionExpanded();
 
   return (
     <>
@@ -84,7 +85,7 @@ export const DefaultToolbarButtons = () => {
       <ToolbarSeparator />
 
       <ToolbarIconButton
-        label="Rydd opp i dokumentet"
+        label={isExpanded ? `Rydd markert innhold - ${description}` : `Rydd hele dokumentet - ${description}`}
         keys={[MOD_KEY_TEXT, 'K']}
         icon={<BucketMopIcon aria-hidden />}
         onClick={() => cleanupDocument(editor)}
@@ -93,3 +94,5 @@ export const DefaultToolbarButtons = () => {
     </>
   );
 };
+
+const description = 'sletter tomme avsnitt, overskrifter og listepunkter. Fjerner doble mellomrom.';

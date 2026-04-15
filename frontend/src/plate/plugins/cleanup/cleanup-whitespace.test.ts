@@ -273,4 +273,15 @@ describe('cleanupWhitespaceIssues', () => {
     cleanupWhitespaceIssues(editor);
     expect(editor.children).toEqual([createSimpleParagraph('hello world.')]);
   });
+
+  it('should only clean whitespace within the given range', () => {
+    const editor = createEditor('Hello  world', 'Foo  bar', 'Baz  qux');
+    const at = { anchor: { path: [1, 0], offset: 0 }, focus: { path: [1, 0], offset: 8 } };
+    cleanupWhitespaceIssues(editor, at);
+    expect(editor.children).toEqual([
+      createSimpleParagraph('Hello  world'),
+      createSimpleParagraph('Foo bar'),
+      createSimpleParagraph('Baz  qux'),
+    ]);
+  });
 });

@@ -21,7 +21,8 @@ import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@/hooks/settings/use-setting';
 import { LogLevel, pushError, pushLog, pushMeasurement } from '@/observability';
 import { createCapitalisePlugin } from '@/plate/plugins/capitalise/capitalise';
-import { cleanupDocument } from '@/plate/plugins/cleanup/cleanup-document';
+import { cleanupWhitespaceIssues } from '@/plate/plugins/cleanup/cleanup-whitespace';
+import { normalizeNonStandardSpaces } from '@/plate/plugins/cleanup/normalize-non-standard-spaces';
 import { components, saksbehandlerPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@/plate/sheet';
 import { getScaleVar } from '@/plate/status-bar/scale-context';
@@ -459,7 +460,11 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
       if (!readOnly) {
         editor.tf.withoutSaving(() => {
-          cleanupDocument(editor);
+          editor.tf.withoutNormalizing(() => {
+            // Only run the space cleanup functions. We cannot remove empty elements in new documents.
+            normalizeNonStandardSpaces(editor);
+            cleanupWhitespaceIssues(editor);
+          });
         });
       }
     }

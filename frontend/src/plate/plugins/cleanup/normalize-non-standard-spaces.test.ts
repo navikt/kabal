@@ -44,4 +44,15 @@ describe('normalizeNonStandardSpaces', () => {
     normalizeNonStandardSpaces(editor);
     expect(editor.children).toEqual([createSimpleParagraph('Hello world')]);
   });
+
+  it('should only normalize non-standard spaces within the given range', () => {
+    const editor = createEditor('Hello\u00A0world', 'Foo\u00A0bar', 'Baz\u00A0qux');
+    const at = { anchor: { path: [1, 0], offset: 0 }, focus: { path: [1, 0], offset: 7 } };
+    normalizeNonStandardSpaces(editor, at);
+    expect(editor.children).toEqual([
+      createSimpleParagraph('Hello\u00A0world'),
+      createSimpleParagraph('Foo bar'),
+      createSimpleParagraph('Baz\u00A0qux'),
+    ]);
+  });
 });
