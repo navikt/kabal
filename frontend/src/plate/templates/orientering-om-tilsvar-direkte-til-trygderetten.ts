@@ -23,7 +23,7 @@ const INITIAL_SLATE_VALUE: Value = [
 
   createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
 
-  createSignature(),
+  createSignature(false),
   createFooter(),
 ];
 
