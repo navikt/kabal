@@ -104,4 +104,79 @@ const withOverrides: OverrideEditor = ({ editor }) => {
   return editor;
 };
 
-export const ProhibitDeletionPlugin = createPlatePlugin({ key: 'prohibit-deletion' }).overrideEditor(withOverrides);
+/**
+ * Input types that mutate the document content.
+ * Preventing the native `beforeinput` event for these types blocks both
+ * the browser's DOM mutation and Slate's deferred processing.
+ */
+const MUTATING_INPUT_TYPES = new Set([
+  'insertText',
+  'insertReplacementText',
+  'insertFromPaste',
+  'insertFromDrop',
+  'insertFromYank',
+  'insertTranspose',
+  'insertCompositionText',
+  'insertFromComposition',
+  'insertParagraph',
+  'insertLineBreak',
+  'insertOrderedList',
+  'insertUnorderedList',
+  'insertHorizontalRule',
+  'insertLink',
+  'deleteWordBackward',
+  'deleteWordForward',
+  'deleteSoftLineBackward',
+  'deleteSoftLineForward',
+  'deleteEntireSoftLine',
+  'deleteHardLineBackward',
+  'deleteHardLineForward',
+  'deleteByDrag',
+  'deleteByCut',
+  'deleteContent',
+  'deleteContentBackward',
+  'deleteContentForward',
+  'formatBold',
+  'formatItalic',
+  'formatUnderline',
+]);
+
+export const ProhibitDeletionPlugin = createPlatePlugin({
+  key: 'prohibit-deletion',
+  handlers: {
+    /**
+     * Intercept native `beforeinput` events to prevent edits in unchangeable elements.
+     *
+     * Slate's `_native` optimization allows the browser to insert characters directly into the DOM
+     * before Slate processes the edit. When ProhibitDeletionPlugin's `insertText` override blocks
+     * the deferred Slate operation, the DOM mutation is not reverted (Slate's `restoreDOM` skips
+     * `characterData` mutations). This handler prevents the native DOM mutation from happening
+     * in the first place by calling `preventDefault()` on the original event.
+     *
+     * Returning `true` tells Plate's pipeHandler to signal Slate that the event was handled,
+     * causing Slate to skip its entire `beforeinput` processing (including the `_native` flag).
+     */
+    onDOMBeforeInput: ({ editor, event }) => {
+      if (!isSyntheticInputEvent(event)) {
+        return;
+      }
+
+      if (!MUTATING_INPUT_TYPES.has(event.nativeEvent.inputType)) {
+        return;
+      }
+
+      if (isUnchangeable(editor)) {
+        event.preventDefault();
+
+        return true;
+      }
+    },
+  },
+}).overrideEditor(withOverrides);
+
+interface SyntheticInputEvent extends Event {
+  nativeEvent: InputEvent;
+}
+
+const isSyntheticInputEvent = (event: Event): event is SyntheticInputEvent =>
+  'nativeEvent' in event && event.nativeEvent instanceof InputEvent;
