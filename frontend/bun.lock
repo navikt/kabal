@@ -40,7 +40,7 @@
         "react-redux": "9.2.0",
         "react-router": "7.14.0",
         "react-router-dom": "7.14.0",
-        "slate": "0.124.0",
+        "slate": "0.124.1",
         "y-webrtc": "10.3.0",
       },
       "devDependencies": {
@@ -591,7 +591,7 @@
 
     "simple-peer": ["simple-peer@9.11.1", "", { "dependencies": { "buffer": "^6.0.3", "debug": "^4.3.2", "err-code": "^3.0.1", "get-browser-rtc": "^1.1.0", "queue-microtask": "^1.2.3", "randombytes": "^2.1.0", "readable-stream": "^3.6.0" } }, "sha512-D1SaWpOW8afq1CZGWB8xTfrT3FekjQmPValrqncJMX7QFl8YwhrPTZvMCANLtgBwwdS+7zURyqxDDEmY558tTw=="],
 
-    "slate": ["slate@0.124.0", "", {}, "sha512-yhtJ0MSV+Z63UTaZtGZDp1goO9XZb5VGER9bmwX+38yJUb7nijPkYEcxD5mpezsSLqL6NedUb4wyvoZa+HDWuQ=="],
+    "slate": ["slate@0.124.1", "", {}, "sha512-ii7DwezgvbLAyKtHBIunjTR1kzbNfYLCUKLMzJELlbTZkvHzX4DzN7HKIwcakf6dPxO6AoeT/P7kHOcyTym/hA=="],
 
     "slate-dom": ["slate-dom@0.124.0", "", { "dependencies": { "@juggle/resize-observer": "^3.4.0", "direction": "^1.0.4", "is-hotkey": "^0.2.0", "is-plain-object": "^5.0.0", "lodash": "^4.17.21", "scroll-into-view-if-needed": "^3.1.0", "tiny-invariant": "1.3.1" }, "peerDependencies": { "slate": ">=0.121.0" } }, "sha512-dPabNlzo67xWRNFT5HtSc0M/F9mfiQSnjJAEx0Uzk7oC++WaRuBy897F+rNzfvM+zH9exMc3hsTMtM7jGDhIiQ=="],
 
@@ -701,7 +701,11 @@
 
     "@platejs/core/nanoid": ["nanoid@5.1.7", "", { "bin": { "nanoid": "bin/nanoid.js" } }, "sha512-ua3NDgISf6jdwezAheMOk4mbE1LXjm1DfMUDMuJf4AqxLFK3ccGpgWizwa5YV7Yz9EpXwEaWoRXSb/BnV0t5dQ=="],
 
+    "@platejs/core/slate": ["slate@0.124.0", "", {}, "sha512-yhtJ0MSV+Z63UTaZtGZDp1goO9XZb5VGER9bmwX+38yJUb7nijPkYEcxD5mpezsSLqL6NedUb4wyvoZa+HDWuQ=="],
+
     "@platejs/floating/@floating-ui/react": ["@floating-ui/react@0.26.28", "", { "dependencies": { "@floating-ui/react-dom": "^2.1.2", "@floating-ui/utils": "^0.2.8", "tabbable": "^6.0.0" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-yORQuuAtVpiRjpMhdc0wJj06b9JFjrYF4qp96j++v2NBpbi6SEGF7donUJ3TMieerQ6qVkAv1tgr7L4r5roTqw=="],
+
+    "@platejs/slate/slate": ["slate@0.124.0", "", {}, "sha512-yhtJ0MSV+Z63UTaZtGZDp1goO9XZb5VGER9bmwX+38yJUb7nijPkYEcxD5mpezsSLqL6NedUb4wyvoZa+HDWuQ=="],
 
     "@reduxjs/toolkit/redux": ["redux@5.0.1", "", {}, "sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w=="],
 
