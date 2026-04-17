@@ -21,7 +21,7 @@ import { Ytelse } from '@/components/common-table-components/ytelse';
 import { CopyButton } from '@/components/copy-button/copy-button';
 import { Feilregistrert } from '@/components/feilregistrering/feilregistrert';
 import { Oppgavestyring } from '@/components/oppgavestyring/oppgavestyring';
-// See relevant-oppgaver.tsx for more information about this dependency cycle
+// biome-ignore lint/suspicious/noImportCycles: See relevant-oppgaver.tsx for more information about this dependency cycle.
 import { RelevantOppgaver } from '@/components/relevant-oppgaver/relevant-oppgaver';
 import { Type } from '@/components/type/type';
 import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
