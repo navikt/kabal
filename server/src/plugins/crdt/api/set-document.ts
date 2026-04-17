@@ -3,6 +3,7 @@ import type { Document } from '@hocuspocus/server';
 import { yTextToSlateElement } from '@slate-yjs/core';
 import { encodeStateAsUpdateV2, XmlText } from 'yjs';
 import { ApiClientEnum } from '@/config/config';
+import { stripBearer } from '@/headers';
 import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 import { KABAL_API_URL } from '@/plugins/crdt/api/url';
@@ -31,7 +32,7 @@ export const setDocument = async (context: ConnectionContext, document: Document
       client_version,
     },
     async (span) => {
-      const accessToken = headers.authorization;
+      const accessToken = stripBearer(headers.authorization);
 
       if (accessToken === undefined) {
         log.error({
