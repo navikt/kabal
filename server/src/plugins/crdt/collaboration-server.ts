@@ -5,6 +5,7 @@ import { ApiClientEnum } from '@/config/config';
 import { isDeployed } from '@/config/env';
 import { SMART_DOCUMENT_WRITE_ACCESS } from '@/document-access/service';
 import { isNotNull } from '@/functions/guards';
+import { stripBearer } from '@/headers';
 import { parseTokenPayload } from '@/helpers/token-parser';
 import { withSpan } from '@/helpers/tracing';
 import { getTeamLogger } from '@/logger';
@@ -311,15 +312,15 @@ export const collaborationServer = new Hocuspocus({
 });
 
 const getTokenExpiresIn = async (context: ConnectionContext, headers: IncomingHttpHeaders, method: string) => {
-  const { authorization } = headers;
+  const accessToken = stripBearer(headers.authorization);
 
-  if (authorization === undefined) {
+  if (accessToken === undefined) {
     logContext(`Missing Authorization header: ${method}`, context, 'warn');
 
     return 0;
   }
 
-  const oboAccessToken = await getOboToken(ApiClientEnum.KABAL_API, { ...context, accessToken: authorization });
+  const oboAccessToken = await getOboToken(ApiClientEnum.KABAL_API, { ...context, accessToken });
 
   if (oboAccessToken === undefined) {
     logContext(`Missing OBO token: ${method}`, context, 'warn');

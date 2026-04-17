@@ -4,6 +4,7 @@ import type { Node } from 'slate';
 import { Doc, encodeStateAsUpdateV2, XmlText } from 'yjs';
 import { ApiClientEnum } from '@/config/config';
 import { isObject } from '@/functions/functions';
+import { stripBearer } from '@/headers';
 import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 import { KABAL_API_URL } from '@/plugins/crdt/api/url';
@@ -29,7 +30,7 @@ export const getDocument = async (
       client_version,
     },
     async (span) => {
-      const accessToken = headers.authorization;
+      const accessToken = stripBearer(headers.authorization);
 
       if (accessToken === undefined) {
         log.error({
