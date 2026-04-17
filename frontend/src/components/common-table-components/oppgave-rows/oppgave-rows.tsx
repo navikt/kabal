@@ -1,6 +1,6 @@
 import { Table } from '@navikt/ds-react';
 import { LoadingRow } from '@/components/common-table-components/loading-row';
-// See relevant-oppgaver.tsx for more information about this dependency cycle
+// biome-ignore lint/suspicious/noImportCycles: See relevant-oppgaver.tsx for more information about this dependency cycle.
 import { OppgaveRow } from '@/components/common-table-components/oppgave-rows/oppgave-row';
 import type { ColumnKeyEnum } from '@/components/common-table-components/types';
 

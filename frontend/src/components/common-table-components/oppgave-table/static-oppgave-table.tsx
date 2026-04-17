@@ -1,6 +1,7 @@
 import { Table, type TableProps } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { TableFooter } from '@/components/common-table-components/footer';
+// biome-ignore lint/suspicious/noImportCycles: See relevant-oppgaver.tsx for more information about this dependency cycle.
 import { OppgaveRows } from '@/components/common-table-components/oppgave-rows/oppgave-rows';
 import { TablePlainHeaders } from '@/components/common-table-components/oppgave-table/oppgave-table-headers';
 import { usePageQueryParam } from '@/components/common-table-components/oppgave-table/state/use-page';
