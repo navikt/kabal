@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@fastify/cors": "11.2.0",
-    "@fastify/http-proxy": "11.4.3",
+    "@fastify/http-proxy": "11.4.4",
     "@fastify/otel": "0.18.1",
     "@fastify/type-provider-typebox": "6.1.0",
     "@fastify/websocket": "11.2.0",
