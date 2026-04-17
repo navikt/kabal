@@ -4,7 +4,6 @@ import type { FastifyRequest } from 'fastify/types/request';
 import fastifyPlugin from 'fastify-plugin';
 import { Doc, encodeStateAsUpdateV2, XmlText } from 'yjs';
 import { ApiClientEnum } from '@/config/config';
-import { isDeployed } from '@/config/env';
 import { isObject } from '@/functions/functions';
 import { parseTokenPayload } from '@/helpers/token-parser';
 import { withSpan } from '@/helpers/tracing';
@@ -145,17 +144,6 @@ export const crdtPlugin = fastifyPlugin(
         const { behandlingId, dokumentId } = req.params;
         logReq('Websocket connection init', req, { behandlingId, dokumentId }, 'debug');
 
-        const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API);
-
-        if (isDeployed && oboAccessToken === undefined) {
-          const msg = 'Tried to authenticate collaboration connection without OBO access token';
-          logReq(msg, req, { behandlingId, dokumentId }, 'warn');
-
-          return socket.close(4401, msg);
-        }
-
-        logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId }, 'debug');
-
         const { navIdent, tab_id, client_version, headers } = req;
         const { traceparent } = req.query;
 
@@ -170,6 +158,8 @@ export const crdtPlugin = fastifyPlugin(
           traceparent,
         };
 
+        // Register message handler immediately to avoid losing the client's auth message.
+        // Token validation is handled by onConnect/onAuthenticate hooks
         collaborationServer.handleConnection(socket, req.raw, context);
       },
     );
