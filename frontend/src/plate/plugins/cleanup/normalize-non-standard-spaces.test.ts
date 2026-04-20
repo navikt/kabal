@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { createPlateEditor } from 'platejs/react';
+import { normalizeNonStandardSpaces } from '@/plate/plugins/cleanup/normalize-non-standard-spaces';
 import { createSimpleParagraph } from '@/plate/templates/helpers';
-import { normalizeNonStandardSpaces } from './normalize-non-standard-spaces';
 
 const createEditor = (...paragraphs: string[]) =>
   createPlateEditor({

@@ -18,3 +18,4 @@
 - Place helper functions after main functions
 - Use early returns to reduce nesting
 - Prefer ternary expression in TSX/JSX over guard and default operators
+- Always use absolute imports
