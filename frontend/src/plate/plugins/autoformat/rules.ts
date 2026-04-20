@@ -1,10 +1,4 @@
-import {
-  autoformatArrow,
-  autoformatLegal,
-  autoformatLegalHtml,
-  autoformatMath,
-  autoformatPunctuation,
-} from '@platejs/autoformat';
+import { autoformatArrow, autoformatLegal, autoformatMath, autoformatPunctuation } from '@platejs/autoformat';
 import { autoformatBlocks } from '@/plate/plugins/autoformat/blocks';
 import { autoformatLists } from '@/plate/plugins/autoformat/lists';
 import { autoformatMarks } from '@/plate/plugins/autoformat/marks';
@@ -18,7 +12,6 @@ export const autoformatRules: EditorAutoformatRule[] = [
   ...autoformatMarks,
   ...(autoformatPunctuation as EditorAutoformatRule[]),
   ...(autoformatLegal as EditorAutoformatRule[]),
-  ...(autoformatLegalHtml as EditorAutoformatRule[]),
   ...(autoformatArrow as EditorAutoformatRule[]),
   ...(autoformatMath as EditorAutoformatRule[]),
 ];
