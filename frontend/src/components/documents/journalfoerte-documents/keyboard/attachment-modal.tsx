@@ -1,16 +1,5 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import {
-  Alert,
-  BodyShort,
-  Button,
-  type ButtonProps,
-  Heading,
-  HStack,
-  List,
-  Modal,
-  Tag,
-  VStack,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Button, type ButtonProps, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -20,12 +9,11 @@ import {
 import { getDocument } from '@/components/documents/journalfoerte-documents/keyboard/hooks/get-document';
 import { decrement, increment } from '@/components/documents/journalfoerte-documents/keyboard/increment-decrement';
 import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
-import { isoDateTimeToPretty } from '@/domain/date';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { isMetaKey, Keys } from '@/keys';
 import { useDeleteDocumentMutation } from '@/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
-import { type IArkivertDocument, type IArkivertDocumentVedlegg, Journalstatus } from '@/types/arkiverte-documents';
+import type { IArkivertDocument, IArkivertDocumentVedlegg } from '@/types/arkiverte-documents';
 import { DocumentTypeEnum, type JournalfoertDokument } from '@/types/documents/documents';
 
 interface Props {
@@ -68,9 +56,6 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
     return null;
   }
 
-  const validDocuments = documents.filter((d) => d.hasAccess && d.journalstatus !== Journalstatus.MOTTATT);
-  const invalidDocuments = documents.filter((d) => d.journalstatus === Journalstatus.MOTTATT);
-
   const attach = (duaParentId: string) => {
     onAttachToDua(duaParentId);
     ref.current?.close();
@@ -89,8 +74,8 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
   };
 
   const onAttachToDua = (duaParentId: string) => {
-    if (validDocuments.length > 0) {
-      attachToDua(duaParentId, ...validDocuments);
+    if (documents.length > 0) {
+      attachToDua(duaParentId, ...documents);
     }
   };
 
@@ -110,7 +95,7 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
    * Checks if all selected documents are attached to the given parent DUA.
    */
   const getIsAttached = (duaParentId: string): boolean => {
-    return validDocuments.every((d) =>
+    return documents.every((d) =>
       allDuaVedlegg.some(
         (v) =>
           v.parentId === duaParentId &&
@@ -159,12 +144,10 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
     }
   };
 
-  const isValid = invalidDocuments.length === 0;
-
   return (
     <Modal
       header={{
-        heading: isValid ? 'Bruk som vedlegg for' : 'Kan ikke bruke som vedlegg',
+        heading: 'Bruk som vedlegg for',
         size: 'small',
         closeButton: true,
       }}
@@ -174,64 +157,21 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
       onKeyDown={onKeyDown}
       className="min-w-[400px]"
     >
-      {isValid ? (
-        <ValidBody
-          validDocumentsCount={validDocuments.length}
-          allVedlegg={allDuaVedlegg}
-          options={options}
-          focused={focused}
-          attach={attach}
-          remove={remove}
-          getIsAttached={getIsAttached}
-        />
-      ) : (
-        <InvalidBody invalidDocuments={invalidDocuments} />
-      )}
+      <Body
+        documentsCount={documents.length}
+        allVedlegg={allDuaVedlegg}
+        options={options}
+        focused={focused}
+        attach={attach}
+        remove={remove}
+        getIsAttached={getIsAttached}
+      />
     </Modal>
   );
 };
 
-interface InvalidBodyProps {
-  invalidDocuments: IArkivertDocument[];
-}
-
-const InvalidBody = ({ invalidDocuments }: InvalidBodyProps) => (
-  <Modal.Body>
-    <Alert variant="warning" size="small" className="mb-4">
-      Journalposter med status{' '}
-      <Tag data-color="neutral" variant="outline" size="xsmall">
-        mottatt
-      </Tag>{' '}
-      kan ikke brukes som vedlegg.
-    </Alert>
-
-    <Heading level="2" size="xsmall" spacing>
-      Følgende dokumenter kan ikke brukes som vedlegg:
-    </Heading>
-
-    <List>
-      {invalidDocuments.map((d) => (
-        <List.Item key={`${d.journalpostId}-${d.dokumentInfoId}`}>
-          {d.tittel}{' '}
-          <Tag data-color="info" size="small" variant="outline">
-            {isoDateTimeToPretty(d.datoOpprettet)}
-          </Tag>
-        </List.Item>
-      ))}
-    </List>
-
-    <BodyShort spacing>
-      Fjern dokumentene med status{' '}
-      <Tag data-color="neutral" variant="outline" size="xsmall">
-        mottatt
-      </Tag>{' '}
-      og prøv igjen.
-    </BodyShort>
-  </Modal.Body>
-);
-
-interface ValidBodyProps {
-  validDocumentsCount: number;
+interface BodyProps {
+  documentsCount: number;
   focusedDocument?: IArkivertDocument;
   focusedVedlegg?: IArkivertDocumentVedlegg;
   allVedlegg: JournalfoertDokument[];
@@ -242,18 +182,10 @@ interface ValidBodyProps {
   getIsAttached: (parentId: string) => boolean;
 }
 
-const ValidBody = ({
-  validDocumentsCount,
-  allVedlegg,
-  options,
-  focused,
-  attach,
-  remove,
-  getIsAttached,
-}: ValidBodyProps) => {
+const Body = ({ documentsCount, allVedlegg, options, focused, attach, remove, getIsAttached }: BodyProps) => {
   return (
     <Modal.Body>
-      <BodyShort spacing>{getDescription(validDocumentsCount)}</BodyShort>
+      <BodyShort spacing>{getDescription(documentsCount)}</BodyShort>
 
       <VStack as="ol" marginBlock="space-0 space-1">
         {options.map(({ id, tittel }, index) => {
