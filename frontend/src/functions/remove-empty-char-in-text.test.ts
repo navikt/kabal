@@ -1,28 +1,26 @@
 import { describe, expect, it } from 'bun:test';
-import { removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
+import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
 
-const EMPTY_CHAR_CODE = 8203;
-const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
+const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE);
 
-describe('remove empty char in string', () => {
-  it('should remove a single empty char from string that contain it', () => {
-    expect.assertions(1);
-
-    const actual = removeEmptyCharInText(`test${EMPTY_CHAR}test`);
-    expect(actual).toBe('testtest');
+describe('removeEmptyCharInText', () => {
+  it('should remove a single zero-width space', () => {
+    expect(removeEmptyCharInText(`test${EMPTY_CHAR}test`)).toBe('testtest');
   });
 
-  it('should remove multiple empty chars from string that contain it', () => {
-    expect.assertions(1);
-
-    const actual = removeEmptyCharInText(`${EMPTY_CHAR}test${EMPTY_CHAR}test${EMPTY_CHAR}`);
-    expect(actual).toBe('testtest');
+  it('should remove multiple zero-width spaces', () => {
+    expect(removeEmptyCharInText(`${EMPTY_CHAR}test${EMPTY_CHAR}test${EMPTY_CHAR}`)).toBe('testtest');
   });
 
-  it('should not change strings that do not contain empty char', () => {
-    expect.assertions(1);
+  it('should not modify text without zero-width spaces', () => {
+    expect(removeEmptyCharInText('testtest')).toBe('testtest');
+  });
 
-    const actual = removeEmptyCharInText('testtest');
-    expect(actual).toBe('testtest');
+  it('should handle empty string', () => {
+    expect(removeEmptyCharInText('')).toBe('');
+  });
+
+  it('should handle string of only zero-width spaces', () => {
+    expect(removeEmptyCharInText(`${EMPTY_CHAR}${EMPTY_CHAR}${EMPTY_CHAR}`)).toBe('');
   });
 });
