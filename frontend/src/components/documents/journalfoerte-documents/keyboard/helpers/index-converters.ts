@@ -8,7 +8,7 @@ import {
   rangesToIndexes,
 } from '@/components/documents/journalfoerte-documents/select-context/range-utils';
 import { Observable } from '@/observable';
-import type { IArkivertDocument } from '@/types/arkiverte-documents';
+import { type IArkivertDocument, Journalstatus } from '@/types/arkiverte-documents';
 
 type Path = readonly [number, number];
 
@@ -93,7 +93,11 @@ const getNextState = (
 ): Readonly<DocumentIndexesState> => {
   const result: Document[] = [];
 
-  filteredDocuments.forEach(({ hasAccess, journalpostId, dokumentInfoId, vedlegg }, i) => {
+  filteredDocuments.forEach(({ hasAccess, journalpostId, dokumentInfoId, vedlegg, journalstatus }, i) => {
+    if (journalstatus === Journalstatus.MOTTATT) {
+      return;
+    }
+
     if (hasAccess) {
       result.push({ path: [i, -1], journalpostId, dokumentInfoId });
     }

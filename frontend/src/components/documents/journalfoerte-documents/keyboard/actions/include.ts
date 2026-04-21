@@ -62,20 +62,17 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
 
       if (selectedDocuments.size > 0 && isSelected(accessibleIndex)) {
         const selected = getSelectedDocuments();
-        const selectedAndIncludable = selected.filter((d) => d.journalstatus !== Journalstatus.MOTTATT);
 
-        if (selectedAndIncludable.length === 0) {
+        if (selected.length === 0) {
           return;
         }
 
-        const selectedAndIncluded = selectedAndIncludable.filter((d) =>
-          isTilknyttet(d.journalpostId, d.dokumentInfoId),
-        );
+        const selectedAndIncluded = selected.filter((d) => isTilknyttet(d.journalpostId, d.dokumentInfoId));
 
         // If all included documents are selected, and all selected are included, remove all.
         if (
           selectedAndIncluded.length > 0 &&
-          selectedAndIncludable.length === selectedAndIncluded.length && // All includable selected are included.
+          selected.length === selectedAndIncluded.length && // All selected are included.
           selectedAndIncluded.length === getAllIncludedDocumentCount() // All selected are all the included documents.
         ) {
           // Remove all documents.
@@ -89,7 +86,7 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
         }
 
         // If all selected documents are included, remove them.
-        if (selectedAndIncluded.length === selectedAndIncludable.length) {
+        if (selectedAndIncluded.length === selected.length) {
           try {
             const documentIdList = selectedAndIncluded.map(({ journalpostId, dokumentInfoId }) => ({
               journalpostId,
@@ -105,23 +102,19 @@ export const useToggleInclude = (filteredDocuments: IArkivertDocument[]) => {
         }
 
         // If not all documents are included, include missing.
-        if (selectedAndIncludable.length > 0) {
+        if (selected.length > 0) {
           try {
-            const documentIdList = selectedAndIncludable.map(({ journalpostId, dokumentInfoId }) => ({
+            const documentIdList = selected.map(({ journalpostId, dokumentInfoId }) => ({
               journalpostId,
               dokumentInfoId,
             }));
             await tilknyttDocuments({ oppgaveId, documentIdList }).unwrap();
-            toast.success(`Inkluderte ${d(selectedAndIncludable.length)}.`);
+            toast.success(`Inkluderte ${d(selected.length)}.`);
           } catch {
             // Error already handled in RTKQ file.
           }
         }
 
-        return;
-      }
-
-      if (focusedDocument.journalstatus === Journalstatus.MOTTATT) {
         return;
       }
 

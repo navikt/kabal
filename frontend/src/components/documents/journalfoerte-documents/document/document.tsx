@@ -3,6 +3,7 @@ import { useCallback, useContext, useRef } from 'react';
 import { createDragUI } from '@/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@/components/documents/drag-context';
 import { ExpandedColumns } from '@/components/documents/journalfoerte-documents/document/expanded-columns';
+import { MottattCheckbox } from '@/components/documents/journalfoerte-documents/document/mottatt-checkbox';
 import { DocumentTitle } from '@/components/documents/journalfoerte-documents/document/shared/document-title';
 import { IncludeDocument } from '@/components/documents/journalfoerte-documents/document/shared/include-document';
 import { ToggleVedleggButton } from '@/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
@@ -20,7 +21,7 @@ import { SelectContext } from '@/components/documents/journalfoerte-documents/se
 import { DOCUMENT_CLASSES } from '@/components/documents/styled-components/document';
 import { isNotNull } from '@/functions/is-not-type-guards';
 import { useArchivedDocumentsColumns } from '@/hooks/settings/use-archived-documents-setting';
-import type { IArkivertDocument } from '@/types/arkiverte-documents';
+import { type IArkivertDocument, Journalstatus } from '@/types/arkiverte-documents';
 
 interface Props {
   document: IArkivertDocument;
@@ -80,7 +81,7 @@ export const Document = ({
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const draggingIsEnabled = draggingEnabled && hasAccess;
+  const draggingIsEnabled = draggingEnabled && hasAccess && journalstatus !== Journalstatus.MOTTATT;
 
   const onDoubleClick = useCallback(() => {
     const accessibleIndex = convertRealToAccessibleDocumentIndex([index, -1]);
@@ -168,23 +169,27 @@ export const Document = ({
       }}
       draggable={draggingIsEnabled}
       onClick={onClick}
-      onDoubleClick={hasAccess ? onDoubleClick : undefined}
+      onDoubleClick={hasAccess && journalstatus !== Journalstatus.MOTTATT ? onDoubleClick : undefined}
       tabIndex={-1}
       className={`${DOCUMENT_CLASSES} ${className} pr-1.5 pl-1.5`}
       style={{
         gridTemplateAreas: `"${isExpandedListView ? getFieldNames(fields) : getFieldNames(COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS)}"`,
       }}
     >
-      <Checkbox
-        size="small"
-        checked={selected}
-        style={{ gridArea: Fields.Select }}
-        hideLabel
-        onClick={onSelectPath}
-        tabIndex={-1}
-      >
-        Velg
-      </Checkbox>
+      {journalstatus === Journalstatus.MOTTATT ? (
+        <MottattCheckbox />
+      ) : (
+        <Checkbox
+          size="small"
+          checked={selected}
+          style={{ gridArea: Fields.Select }}
+          hideLabel
+          onClick={onSelectPath}
+          tabIndex={-1}
+        >
+          Velg
+        </Checkbox>
+      )}
 
       <ToggleVedleggButton hasVedlegg={hasVedlegg} showVedlegg={showVedlegg} toggleShowVedlegg={toggleShowVedlegg} />
 

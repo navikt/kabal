@@ -2,6 +2,7 @@ import { Checkbox, HGrid } from '@navikt/ds-react';
 import { memo, useCallback, useContext, useRef } from 'react';
 import { createDragUI } from '@/components/documents/create-drag-ui';
 import { DragAndDropContext } from '@/components/documents/drag-context';
+import { MottattCheckbox } from '@/components/documents/journalfoerte-documents/document/mottatt-checkbox';
 import { DocumentTitle } from '@/components/documents/journalfoerte-documents/document/shared/document-title';
 import { IncludeDocument } from '@/components/documents/journalfoerte-documents/document/shared/include-document';
 import { ToggleVedleggButton } from '@/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
@@ -24,7 +25,7 @@ import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
 import { useIsAssignedRolAndSent } from '@/hooks/use-is-rol';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useGetArkiverteDokumenterQuery } from '@/redux-api/oppgaver/queries/documents';
-import type { IArkivertDocument, IArkivertDocumentVedlegg, Journalstatus } from '@/types/arkiverte-documents';
+import { type IArkivertDocument, type IArkivertDocumentVedlegg, Journalstatus } from '@/types/arkiverte-documents';
 
 interface Props {
   journalpostId: string;
@@ -116,7 +117,7 @@ export const Attachment = memo(
     }, [documentIndex, index]);
 
     const disabled = !(isSaksbehandler || isRol) || isFeilregistrert;
-    const draggingIsEnabled = draggingEnabled && !disabled && hasAccess;
+    const draggingIsEnabled = draggingEnabled && !disabled && hasAccess && journalpoststatus !== Journalstatus.MOTTATT;
 
     const onSelectPath = useCallback(
       (e: React.MouseEvent<HTMLDivElement>) => {
@@ -183,19 +184,23 @@ export const Attachment = memo(
         className={`${DOCUMENT_CLASSES} pr-1.5 pl-1.5`}
         style={{ gridTemplateAreas: `"${getFieldNames(VEDLEGG_FIELDS)}"` }}
         onClick={onClick}
-        onDoubleClick={hasAccess ? onDoubleClick : undefined}
+        onDoubleClick={hasAccess && journalpoststatus !== Journalstatus.MOTTATT ? onDoubleClick : undefined}
         tabIndex={-1}
       >
-        <Checkbox
-          size="small"
-          checked={selected}
-          style={{ gridArea: Fields.Select }}
-          hideLabel
-          onClick={onSelectPath}
-          tabIndex={-1}
-        >
-          Velg
-        </Checkbox>
+        {journalpoststatus === Journalstatus.MOTTATT ? (
+          <MottattCheckbox />
+        ) : (
+          <Checkbox
+            size="small"
+            checked={selected}
+            style={{ gridArea: Fields.Select }}
+            hideLabel
+            onClick={onSelectPath}
+            tabIndex={-1}
+          >
+            Velg
+          </Checkbox>
+        )}
 
         <ToggleVedleggButton hasVedlegg={hasVedlegg} showVedlegg={showVedlegg} toggleShowVedlegg={toggleShowVedlegg} />
 
