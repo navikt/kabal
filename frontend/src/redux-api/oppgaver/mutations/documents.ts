@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { ISO_DATETIME_FORMAT } from '@/components/date-picker/constants';
 import { toast } from '@/components/toast/store';
+import { genericErrorToast } from '@/components/toast/toast-content/api-error-toast';
 import { areJournalfoertDocumentsEqual } from '@/domain/journalfoerte-documents';
 import { ENVIRONMENT } from '@/environment';
 import { getIsIncomingDocument } from '@/functions/is-incoming-document';
@@ -28,7 +29,13 @@ import {
   type ISetTypeParams,
   mottakerToInputMottaker,
 } from '@/types/documents/params';
-import type { ICreateVedleggResponse, IModifiedDocumentResponse, ISetParentResponse } from '@/types/documents/response';
+import {
+  type ICreateVedleggResponse,
+  type IModifiedDocumentResponse,
+  type ISetParentResponse,
+  UPLOAD_FILE_ERROR,
+} from '@/types/documents/response';
+import { isApiRejectionError, isKabalApiErrorData } from '@/types/errors';
 import type { IdentifikatorPart } from '@/types/oppgave-common';
 
 export const documentsMutationSlice = oppgaverApi.injectEndpoints({
@@ -261,12 +268,26 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         };
       },
       onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
-        const { data } = await queryFulfilled;
-        dispatch(
-          documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-            draft.some((d) => d.id === data.id) ? draft : [data, ...draft],
-          ),
-        );
+        try {
+          const { data } = await queryFulfilled;
+
+          dispatch(
+            documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+              draft.some((d) => d.id === data.id) ? draft : [data, ...draft],
+            ),
+          );
+        } catch (response) {
+          isApiRejectionError(response) && isKabalApiErrorData(response.error.data)
+            ? genericErrorToast(
+                'Kunne ikke laste opp fil',
+                UPLOAD_FILE_ERROR[response.error.data.title] ?? 'Ukjent feil',
+                response.meta.request.headers.get('traceparent')?.split('-')[1],
+              )
+            : genericErrorToast(
+                'Kunne ikke laste opp fil',
+                'Ta kontakt med Team Klage på Teams hvis problemet vedvarer.',
+              );
+        }
       },
     }),
     createVedleggFromJournalfoertDocument: builder.mutation<ICreateVedleggResponse, ICreateVedleggParams>({

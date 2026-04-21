@@ -19,3 +19,9 @@ export interface ISetParentResponse extends IModifiedDocumentResponse {
 export interface IModifiedDocumentResponse {
   modified: string;
 }
+
+export const UPLOAD_FILE_ERROR: Record<string, string> = {
+  TOO_LARGE: 'Filen er for stor.',
+  EMPTY: 'Filen er tom.',
+  VIRUS: 'Filen inneholder virus.',
+};

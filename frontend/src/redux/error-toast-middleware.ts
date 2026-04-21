@@ -9,6 +9,7 @@ import { isBFFError, isKabalApiErrorData } from '@/types/errors';
 const { finishOppgavebehandlingWithUpdateInGosys } = behandlingerMutationSlice.endpoints;
 const { finishDocument } = documentsMutationSlice.endpoints;
 const { getOppgave } = oppgaveDataQuerySlice.endpoints;
+const { uploadFileDocument } = documentsMutationSlice.endpoints;
 
 /** Extract the trace ID (32 hex chars) from the request's traceparent header. */
 const extractTraceId = (meta: unknown): string | undefined => {
@@ -78,6 +79,10 @@ const handleError = (payload: unknown, arg: Arg): boolean => {
   }
 
   if (arg.endpointName === getOppgave.name && payload.status === 403) {
+    return true;
+  }
+
+  if (arg.endpointName === uploadFileDocument.name && payload.status === 400) {
     return true;
   }
 
