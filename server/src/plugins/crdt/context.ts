@@ -12,6 +12,7 @@ export interface ConnectionContext {
   readonly traceparent?: string;
   hasWriteAccess?: boolean;
   tokenRefreshTimer?: Timer;
+  oboTokenExpiresAt?: number;
   removeHasAccessListener?: () => void;
   removeDeletedListener?: () => void;
   /** Current activity window span, started on first message after idle. */

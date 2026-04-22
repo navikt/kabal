@@ -31,9 +31,6 @@ export const createRefreshTimer = async (context: ConnectionContext, expiresIn: 
   // Refresh OBO token before it expires.
   const timer = setTimeout(
     async () => {
-      // Clear previous timer reference.
-      context.tokenRefreshTimer = undefined;
-
       try {
         const newExpiresIn = await refresh(context);
         // Start a new timer to refresh the new token when it expires.
@@ -92,6 +89,8 @@ const refresh = async (context: ConnectionContext, retries = 2): Promise<number>
 
         if (isObject(parsed) && hasOwn(parsed, 'exp') && typeof parsed.exp === 'number') {
           const expiresIn = Math.floor(parsed.exp - Date.now() / 1_000);
+
+          context.oboTokenExpiresAt = parsed.exp;
 
           logContext(`OBO token refreshed for ${navIdent}. Expires in ${expiresIn} seconds`, context, 'debug');
 
