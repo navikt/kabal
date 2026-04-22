@@ -1,6 +1,7 @@
 import { Box, HGrid } from '@navikt/ds-react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useAddComment } from '@/components/smart-editor/hooks/use-add-comment';
 import { DEFAULT, EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
 import { isMetaKey, Keys } from '@/keys';
 import { ScaleContext } from '@/plate/status-bar/scale-context';
@@ -15,12 +16,12 @@ export const Content = ({ children }: Props) => {
   const {
     showGodeFormuleringer,
     setShowGodeFormuleringer,
-    setNewCommentSelection,
     showAnnotationsAtOrigin,
     setShowSearchReplace,
     showSearchReplace,
   } = useContext(SmartEditorContext);
   const { scaleUp, scaleDown, setScale } = useContext(ScaleContext);
+  const { addComment } = useAddComment();
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -40,7 +41,7 @@ export const Content = ({ children }: Props) => {
 
     if (event.shiftKey && lowerCaseKey === Keys.K) {
       event.preventDefault();
-      setNewCommentSelection(editor.selection);
+      addComment(editor.selection);
 
       return;
     }
