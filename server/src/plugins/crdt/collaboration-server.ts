@@ -1,4 +1,3 @@
-import type { IncomingHttpHeaders } from 'node:http';
 import { Hocuspocus } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
 import { ApiClientEnum } from '@/config/config';
@@ -60,7 +59,7 @@ export const collaborationServer = new Hocuspocus({
     }
 
     return withCollaborationSpan('onConnect', context, async (span) => {
-      const expiresIn = await getTokenExpiresIn(context, requestHeaders, 'onConnect');
+      const expiresIn = await exchangeAccessTokenForOboToken(context, requestHeaders);
 
       span.setAttribute('collaboration.token_expires_in', expiresIn);
 
@@ -141,7 +140,7 @@ export const collaborationServer = new Hocuspocus({
     });
   },
 
-  beforeHandleMessage: async ({ context, connection, requestHeaders }) => {
+  beforeHandleMessage: async ({ context, connection }) => {
     if (!isDeployed) {
       return;
     }
@@ -156,13 +155,7 @@ export const collaborationServer = new Hocuspocus({
       throw getCloseEvent('MISSING_COOKIE', 4401);
     }
 
-    if (context.tokenRefreshTimer === undefined) {
-      const expiresIn = await getTokenExpiresIn(context, requestHeaders, 'beforeHandleMessage');
-      logContext('Missing refresh OBO token timer. Starting timer.', context, 'warn');
-      await createRefreshTimer(context, expiresIn);
-    }
-
-    const expiresIn = await getTokenExpiresIn(context, requestHeaders, 'beforeHandleMessage');
+    const expiresIn = getOboTokenExpiresIn(context);
 
     if (expiresIn <= 0) {
       return withCollaborationSpan('beforeHandleMessage', context, async (span) => {
@@ -176,12 +169,12 @@ export const collaborationServer = new Hocuspocus({
     connection.readOnly = !hasWriteAccess;
   },
 
-  onChange: async ({ context, requestHeaders }) => {
+  onChange: async ({ context }) => {
     if (!isConnectionContext(context)) {
       return;
     }
 
-    const expiresIn = await getTokenExpiresIn(context, requestHeaders, 'onChange');
+    const expiresIn = getOboTokenExpiresIn(context);
     const hasWriteAccess = await getHasWriteAccess(context);
 
     trackActivity(context, expiresIn, hasWriteAccess);
@@ -311,33 +304,35 @@ export const collaborationServer = new Hocuspocus({
   extensions: isDeployed ? [getValkeyExtension()].filter(isNotNull) : [],
 });
 
-const getTokenExpiresIn = async (context: ConnectionContext, headers: IncomingHttpHeaders, method: string) => {
-  const accessToken = stripBearer(headers.authorization);
+const exchangeAccessTokenForOboToken = async (context: ConnectionContext, headers: Record<string, string | string[] | undefined>): Promise<number> => {
+  const accessToken = stripBearer(headers['authorization'] as string | undefined);
 
   if (accessToken === undefined) {
-    logContext(`Missing Authorization header: ${method}`, context, 'warn');
-
-    return 0;
+    logContext('Missing Authorization header: onConnect', context, 'warn');
+    throw getCloseEvent('INVALID_SESSION', 4401);
   }
 
   const oboAccessToken = await getOboToken(ApiClientEnum.KABAL_API, { ...context, accessToken });
 
   if (oboAccessToken === undefined) {
-    logContext(`Missing OBO token: ${method}`, context, 'warn');
-
-    return 0;
+    logContext('Missing OBO token: onConnect', context, 'warn');
+    throw getCloseEvent('INVALID_SESSION', 4401);
   }
 
   const payload = parseTokenPayload(oboAccessToken);
 
   if (payload === undefined) {
-    logContext(`Invalid OBO token payload: ${method}`, context, 'warn');
-
-    return 0;
+    logContext('Invalid OBO token payload: onConnect', context, 'warn');
+    throw getCloseEvent('INVALID_SESSION', 4401);
   }
+
+  context.oboTokenExpiresAt = payload.exp;
 
   return Math.floor(payload.exp - Date.now() / 1_000);
 };
+
+const getOboTokenExpiresIn = (context: ConnectionContext): number =>
+  Math.floor((context.oboTokenExpiresAt ?? 0) - Date.now() / 1_000);
 
 const getHasWriteAccess = async (context: ConnectionContext, allowApiFetching?: boolean) => {
   const { dokumentId, navIdent, tab_id, client_version, behandlingId } = context;
