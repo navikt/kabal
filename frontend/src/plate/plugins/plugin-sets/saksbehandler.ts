@@ -22,6 +22,7 @@ import { MaltekstPlugin } from '@/plate/plugins/maltekst';
 import { MaltekstseksjonPlugin } from '@/plate/plugins/maltekstseksjon';
 import { SaksbehandlerPlaceholderPlugin } from '@/plate/plugins/placeholder/saksbehandler';
 import { defaultPlugins } from '@/plate/plugins/plugin-sets/default';
+import { ProhibitDeletionPlugin } from '@/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { RedigerbarMaltekstPlugin } from '@/plate/plugins/redigerbar-maltekst';
 import { RegelverkContainerPlugin, RegelverkPlugin } from '@/plate/plugins/regelverk';
 import { SaksnummerPlugin } from '@/plate/plugins/saksnummer';
@@ -49,6 +50,7 @@ export const components = {
 
 export const historyPlugins = [
   ...defaultPlugins,
+  ProhibitDeletionPlugin,
   WhitespaceDecorationPlugin.configure({ render: { node: WhitespaceIssueLeaf } }),
   CleanupDocumentPlugin,
   SaksbehandlerPlaceholderPlugin,

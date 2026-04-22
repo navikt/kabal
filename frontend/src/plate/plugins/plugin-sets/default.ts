@@ -22,7 +22,6 @@ import { CustomAbbreviationPlugin } from '@/plate/plugins/custom-abbreviations/c
 import { normalizeNodePlugin } from '@/plate/plugins/normalize-node';
 import { PageBreakPlugin } from '@/plate/plugins/page-break';
 import { PastePlugin } from '@/plate/plugins/paste';
-import { ProhibitDeletionPlugin } from '@/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { ReplaceOneHighlightPlugin, SearchReplacePlugin } from '@/plate/plugins/search-replace/search-replace';
 import { SelectionPlugin } from '@/plate/plugins/selection';
 import { withOverrides } from '@/plate/toolbar/table/with-overrides';
@@ -98,7 +97,6 @@ export const defaultPlugins = [
 
   // Custom plugins
   PageBreakPlugin,
-  ProhibitDeletionPlugin,
   CopyPlugin,
   SelectionPlugin,
   normalizeNodePlugin,
