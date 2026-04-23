@@ -1,6 +1,7 @@
 import { ClockDashedIcon, LightBulbIcon } from '@navikt/aksel-icons';
 import { useContext } from 'react';
 import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useSmartEditorGodeFormuleringerOpen } from '@/hooks/settings/use-setting';
 import { MOD_KEY_TEXT } from '@/keys';
 import { pushEvent } from '@/observability';
 import { DefaultToolbarButtons } from '@/plate/toolbar/default-toolbar-buttons';
@@ -11,8 +12,9 @@ import { SaksbehandlerSettings } from '@/plate/toolbar/toolbars/saksbehandler-se
 import { SearchReplaceToolbarButton } from '@/plate/toolbar/toolbars/search-replace-toolbar-button';
 
 export const SaksbehandlerToolbar = () => {
-  const { showGodeFormuleringer, setShowGodeFormuleringer, showHistory, setShowHistory } =
-    useContext(SmartEditorContext);
+  const { value: showGodeFormuleringer, setValue: setShowGodeFormuleringer } = useSmartEditorGodeFormuleringerOpen();
+
+  const { showHistory, setShowHistory } = useContext(SmartEditorContext);
 
   return (
     <StyledToolbar>
@@ -28,7 +30,9 @@ export const SaksbehandlerToolbar = () => {
         icon={<LightBulbIcon aria-hidden />}
         active={showGodeFormuleringer}
         onClick={() => {
-          pushEvent('toggle-gode-formuleringer', 'smart-editor', { enabled: showGodeFormuleringer.toString() });
+          pushEvent('toggle-gode-formuleringer', 'smart-editor', {
+            enabled: showGodeFormuleringer === false ? 'true' : 'false',
+          });
           setShowGodeFormuleringer(!showGodeFormuleringer);
         }}
       />

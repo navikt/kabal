@@ -3,6 +3,7 @@ import { useCallback, useContext, useEffect, useRef } from 'react';
 import { SmartEditorContext } from '@/components/smart-editor/context';
 import { useAddComment } from '@/components/smart-editor/hooks/use-add-comment';
 import { DEFAULT, EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
+import { useSmartEditorGodeFormuleringerOpen } from '@/hooks/settings/use-setting';
 import { isMetaKey, Keys } from '@/keys';
 import { ScaleContext } from '@/plate/status-bar/scale-context';
 import { useMyPlateEditorRef } from '@/plate/types';
@@ -13,13 +14,8 @@ interface Props {
 
 export const Content = ({ children }: Props) => {
   const editor = useMyPlateEditorRef();
-  const {
-    showGodeFormuleringer,
-    setShowGodeFormuleringer,
-    showAnnotationsAtOrigin,
-    setShowSearchReplace,
-    showSearchReplace,
-  } = useContext(SmartEditorContext);
+  const { value: showGodeFormuleringer, setValue: setShowGodeFormuleringer } = useSmartEditorGodeFormuleringerOpen();
+  const { showAnnotationsAtOrigin, setShowSearchReplace, showSearchReplace } = useContext(SmartEditorContext);
   const { scaleUp, scaleDown, setScale } = useContext(ScaleContext);
   const { addComment } = useAddComment();
 
