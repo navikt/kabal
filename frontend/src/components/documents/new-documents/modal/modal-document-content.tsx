@@ -13,7 +13,7 @@ import { SetDocumentType } from '@/components/documents/new-documents/new-docume
 import { DocumentDate } from '@/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@/components/documents/new-documents/shared/document-icon';
 import { SetFilename } from '@/components/documents/set-filename';
-import { KabalFileViewer } from '@/components/kabal-file-viewer';
+import { FileViewer } from '@/components/file-viewer/file-viewer';
 import { usePdfData } from '@/components/pdf/pdf';
 import { isSendError } from '@/components/receivers/is-send-error';
 import { Receivers } from '@/components/receivers/receivers';
@@ -78,12 +78,6 @@ export const DocumentModalContent = ({
   );
   const [setTitle] = useSetTitleMutation();
   const oppgaveId = useOppgaveId();
-  const pdfUrl =
-    oppgaveId === skipToken
-      ? undefined
-      : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${document.id}/pdf`;
-  const { refresh, ...pdfData } = usePdfData(pdfUrl);
-  const { value: pdfWidth, setValue: setPdfWidth } = useDocumentsPdfWidth();
 
   if (oppgaveId === skipToken) {
     return null;
@@ -159,16 +153,10 @@ export const DocumentModalContent = ({
           <Errors />
         </VStack>
 
-        {pdfUrl === undefined ? null : (
-          <>
-            {showOldPdfViewer.data?.enabled === true ? (
-              <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />
-            ) : null}
-            {showNewFileViewer.data?.enabled === true ? (
-              <KabalFileViewer files={[{ variants: 'PDF', title: document.tittel, url: pdfUrl }]} />
-            ) : null}
-          </>
-        )}
+        {showOldPdfViewer.data?.enabled === true ? <OldPdfViewer documentId={document.id} /> : null}
+        {showNewFileViewer.data?.enabled === true ? (
+          <FileViewer showDocumentList={[{ documentId: document.id, parentId: null, type: document.type }]} />
+        ) : null}
       </Modal.Body>
       <Modal.Footer className="items-center">
         <AccessErrorsSummary
@@ -204,4 +192,24 @@ const OpprettetTag = ({ document }: { document: IDocument }) => {
       <DocumentDate document={document} />
     </Tag>
   );
+};
+
+interface OldPdfViewerProps {
+  documentId: IParentDocument['id'];
+}
+
+const OldPdfViewer = ({ documentId }: OldPdfViewerProps) => {
+  const oppgaveId = useOppgaveId();
+  const pdfUrl =
+    oppgaveId === skipToken
+      ? undefined
+      : `/api/kabal-api/behandlinger/${oppgaveId}/dokumenter/mergedocuments/${documentId}/pdf`;
+  const { refresh, ...pdfData } = usePdfData(pdfUrl);
+  const { value: pdfWidth, setValue: setPdfWidth } = useDocumentsPdfWidth();
+
+  if (pdfUrl === undefined) {
+    return null;
+  }
+
+  return <SimplePdfPreview width={pdfWidth} setWidth={setPdfWidth} {...pdfData} refresh={refresh} />;
 };
