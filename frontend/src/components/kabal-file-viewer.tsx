@@ -5,7 +5,7 @@ import {
   type KlageFileViewerHandle,
   type KlageFileViewerProps,
 } from '@navikt/klage-file-viewer';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAppTheme } from '@/app-theme';
 import { addFileViewerHandle, removeFileViewerHandle } from '@/components/file-viewer/file-viewer-handle-store';
 import { PanelContainer } from '@/components/oppgavebehandling-panels/panel-container';
@@ -20,43 +20,42 @@ import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorEnabled } from '@/hooks/settings/use-setting';
 import { isKabalApiErrorData, type KabalApiErrorData } from '@/types/errors';
 
-export type { FileEntry, KlageFileViewerProps } from '@navikt/klage-file-viewer';
+interface KabalFileViewerProps extends Pick<KlageFileViewerProps, 'files' | 'onClose' | 'newTabUrl'> {
+  handle?: RefObject<KlageFileViewerHandle | null>;
+}
 
-export const KabalFileViewer = ({
-  files,
-  onClose,
-  newTabUrl,
-}: Pick<KlageFileViewerProps, 'files' | 'onClose' | 'newTabUrl'>) => (
+export const KabalFileViewerPanel = (props: KabalFileViewerProps) => (
   <PanelContainer>
-    <KabalFileViewerContent files={files} onClose={onClose} newTabUrl={newTabUrl} />
+    <KabalFileViewerPanelContent {...props} />
   </PanelContainer>
 );
 
-const KabalFileViewerContent = ({
-  files,
-  onClose,
-  newTabUrl,
-}: Pick<KlageFileViewerProps, 'files' | 'onClose' | 'newTabUrl'>) => {
+const KabalFileViewerPanelContent = (props: KabalFileViewerProps) => {
+  const panelContainerRef = usePanelContainerRef();
+  const fileViewerHandle = useRef<KlageFileViewerHandle>(null);
+  const focusFileViewer = useCallback(() => fileViewerHandle.current?.focus(), []);
+  usePanelShortcut(2, focusFileViewer, panelContainerRef);
+
+  return <KabalFileViewer {...props} handle={fileViewerHandle} />;
+};
+
+export const KabalFileViewer = ({ files, onClose, newTabUrl, handle }: KabalFileViewerProps) => {
   const appTheme = useAppTheme();
   const { data: oppgave } = useOppgave();
   const fileViewerRef = useRef<KlageFileViewerHandle>(null);
 
   // Register the file viewer handle so SSE event handlers can trigger reloads.
   useEffect(() => {
-    const handle = fileViewerRef.current;
+    const ref = fileViewerRef.current;
 
-    if (handle === null) {
+    if (ref === null) {
       return;
     }
 
-    addFileViewerHandle(handle);
+    addFileViewerHandle(ref);
 
-    return () => removeFileViewerHandle(handle);
+    return () => removeFileViewerHandle(ref);
   }, []);
-
-  const panelContainerRef = usePanelContainerRef();
-  const focusFileViewer = useCallback(() => fileViewerRef.current?.focus(), []);
-  usePanelShortcut(2, focusFileViewer, panelContainerRef);
 
   const sakenGjelder = oppgave?.sakenGjelder;
   const klager = oppgave?.klager;
@@ -82,7 +81,13 @@ const KabalFileViewerContent = ({
       errorComponent={KabalErrorActions}
       theme={appTheme}
       commonPasswords={commonPasswords}
-      handleRef={fileViewerRef}
+      handleRef={(r) => {
+        fileViewerRef.current = r;
+
+        if (handle !== undefined) {
+          handle.current = r;
+        }
+      }}
     />
   );
 };

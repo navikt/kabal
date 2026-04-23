@@ -4,10 +4,11 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 import { Alert } from '@/components/alert/alert';
 import { canOpenInKabal } from '@/components/documents/filetype';
+import { getDuaWithAttachments } from '@/components/file-viewer/get-dua-with-attachments';
 import type { IShownArchivedDocument, IShownDocument } from '@/components/file-viewer/types';
 import { useFileViewerUrl } from '@/components/file-viewer/use-file-viewer-url';
 import { useMarkVisited } from '@/components/file-viewer/use-mark-visited';
-import { KabalFileViewer } from '@/components/kabal-file-viewer';
+import { KabalFileViewerPanel } from '@/components/kabal-file-viewer';
 import {
   getAttachmentsOverviewFileUrl,
   getJournalfoertDocumentFileUrl,
@@ -18,17 +19,18 @@ import {
   getJournalfoertFileViewerTabUrl,
   getNewFileViewerTabUrl,
 } from '@/domain/tabbed-document-url';
-import { getIsIncomingDocument } from '@/functions/is-incoming-document';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
-import { useFilesViewed } from '@/hooks/settings/use-setting';
-import { useShownDocuments } from '@/hooks/use-shown-documents';
 import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument, Variants } from '@/types/arkiverte-documents';
-import { DocumentTypeEnum, type IDocument, type JournalfoertDokument } from '@/types/documents/documents';
+import { DocumentTypeEnum, type IDocument } from '@/types/documents/documents';
 
-export const FileViewer = () => {
-  const { remove: closePdfViewer } = useFilesViewed();
-  const { showDocumentList, isLoading } = useShownDocuments();
+interface FileViewerProps {
+  showDocumentList: IShownDocument[];
+  isLoading?: boolean;
+  onClose?: () => void;
+}
+
+export const FileViewer = ({ showDocumentList, isLoading, onClose }: FileViewerProps) => {
   const oppgaveId = useOppgaveId();
 
   const fileViewerUrl = useFileViewerUrl();
@@ -37,8 +39,8 @@ export const FileViewer = () => {
   const { data: journalposter } = useGetArkiverteDokumenterQuery(oppgaveId);
   const journalpostDocuments = journalposter?.dokumenter ?? EMPTY_ARCHIVED;
 
-  const expandedDocumentList = useMemo(
-    () => expandDocumentList(showDocumentList, documentsInProgress),
+  const shownDocumentsWithAttachments = useMemo(
+    () => getDuaListWithAttachments(showDocumentList, documentsInProgress),
     [showDocumentList, documentsInProgress],
   );
 
@@ -50,7 +52,7 @@ export const FileViewer = () => {
     const entries: FileEntry[] = [];
     const urls: string[] = [];
 
-    for (const file of expandedDocumentList) {
+    for (const file of shownDocumentsWithAttachments) {
       if (file.type === DocumentTypeEnum.JOURNALFOERT) {
         const fileUrl = getJournalfoertDocumentFileUrl(file.journalpostId, file.dokumentInfoId);
         const tabUrl = getJournalfoertFileViewerTabUrl(file.journalpostId, file.dokumentInfoId);
@@ -90,7 +92,7 @@ export const FileViewer = () => {
     }
 
     return { files: entries, tabUrls: urls };
-  }, [oppgaveId, expandedDocumentList, journalpostDocuments, documentsInProgress]);
+  }, [oppgaveId, shownDocumentsWithAttachments, journalpostDocuments, documentsInProgress]);
 
   useMarkVisited(tabUrls);
 
@@ -114,65 +116,17 @@ export const FileViewer = () => {
     );
   }
 
-  return <KabalFileViewer files={files} onClose={closePdfViewer} newTabUrl={fileViewerUrl} />;
+  return <KabalFileViewerPanel files={files} onClose={onClose} newTabUrl={fileViewerUrl} />;
 };
 
 const EMPTY_DOCUMENTS: IDocument[] = [];
 const EMPTY_ARCHIVED: IArkivertDocument[] = [];
 const EMPTY_FILES_AND_TAB_URLS: { files: FileEntry[]; tabUrls: string[] } = { files: [], tabUrls: [] };
 
-const expandDocumentList = (showDocumentList: IShownDocument[], documentsInProgress: IDocument[]): IShownDocument[] =>
-  showDocumentList.flatMap((doc) => {
-    if (doc.type !== DocumentTypeEnum.SMART && doc.type !== DocumentTypeEnum.UPLOADED) {
-      return [doc];
-    }
-
-    if (doc.parentId !== null) {
-      return [doc];
-    }
-
-    const attachments = documentsInProgress.filter((d) => d.parentId === doc.documentId);
-
-    if (attachments.length === 0) {
-      return [doc];
-    }
-
-    const attachmentDocs: IShownDocument[] = attachments.map(attachmentToShownDocument);
-
-    const dua = documentsInProgress.find(({ id }) => doc.documentId === id);
-
-    if (dua === undefined || getIsIncomingDocument(dua.dokumentTypeId)) {
-      return [doc, ...attachmentDocs];
-    }
-
-    const vedleggsoversikt: IShownDocument = {
-      type: DocumentTypeEnum.VEDLEGGSOVERSIKT,
-      documentId: doc.documentId,
-      parentId: null,
-    };
-
-    return [doc, vedleggsoversikt, ...attachmentDocs];
-  });
-
-const isJournalfoertDocument = (doc: IDocument): doc is JournalfoertDokument =>
-  doc.type === DocumentTypeEnum.JOURNALFOERT;
-
-const attachmentToShownDocument = (doc: IDocument): IShownDocument => {
-  if (isJournalfoertDocument(doc)) {
-    return {
-      type: DocumentTypeEnum.JOURNALFOERT,
-      journalpostId: doc.journalfoertDokumentReference.journalpostId,
-      dokumentInfoId: doc.journalfoertDokumentReference.dokumentInfoId,
-      varianter: doc.journalfoertDokumentReference.varianter,
-    };
-  }
-
-  return {
-    type: doc.type,
-    documentId: doc.id,
-    parentId: doc.parentId,
-  };
-};
+const getDuaListWithAttachments = (
+  showDocumentList: IShownDocument[],
+  documentsInProgress: IDocument[],
+): IShownDocument[] => showDocumentList.flatMap((doc) => getDuaWithAttachments(doc, documentsInProgress));
 
 const getArchivedDocumentTitle = (doc: IShownArchivedDocument, journalpostDocuments: IArkivertDocument[]): string => {
   for (const jp of journalpostDocuments) {
