@@ -21,16 +21,19 @@ import {
   VeiledningspliktenBoolean,
 } from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
 import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { Radiovalg } from '@/types/kaka-kvalitetsvurdering/radio';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const Saksbehandlingsreglene = () => {
   const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV3();
+  const { data: oppgave } = useOppgave();
 
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(MainReason.Saksbehandlingsreglene);
 
-  if (isLoading) {
+  if (isLoading || oppgave === undefined) {
     return null;
   }
 
@@ -62,7 +65,7 @@ export const Saksbehandlingsreglene = () => {
         <Checkboxes
           kvalitetsvurdering={kvalitetsvurdering}
           update={update}
-          childList={CHECKBOXES}
+          childList={getSaksbehandlingsregeleneCheckboxes(oppgave.typeId)}
           groupErrorField={SaksbehandlingsregleneErrorFields.saksbehandlingsreglerGroup}
           label="Hva er mangelfullt/kvalitetsavviket?"
         />
@@ -71,7 +74,7 @@ export const Saksbehandlingsreglene = () => {
   );
 };
 
-const CHECKBOXES: CheckboxParams[] = [
+const DEFAULT_CHECKBOXES: CheckboxParams[] = [
   // Veiledningsplikten
   getCheckbox({
     field: VeiledningspliktenBoolean.saksbehandlingsreglerBruddPaaVeiledningsplikten,
@@ -171,79 +174,96 @@ const CHECKBOXES: CheckboxParams[] = [
       }),
     ],
   }),
+];
 
-  // Klage og klageforberedelse
+export const getSaksbehandlingsregeleneCheckboxes = (type: SaksTypeEnum): CheckboxParams[] => {
+  if (type === SaksTypeEnum.ANKE) {
+    return [
+      ...DEFAULT_CHECKBOXES,
+      OMGJØRING,
+      JOURNALFØRINGSPLIKTEN,
+      getCheckbox({ ...KLART_SPRÅK_BASE, sakstypeId: SaksTypeEnum.ANKE }),
+    ];
+  }
+
+  return [
+    ...DEFAULT_CHECKBOXES,
+    KLAGE_OG_KLAGEFORBEREDELSE_CHECKBOXES,
+    OMGJØRING,
+    JOURNALFØRINGSPLIKTEN,
+    getCheckbox({ ...KLART_SPRÅK_BASE, childList: KLART_SPRÅK_CHILDLIST }),
+  ];
+};
+
+const KLAGE_OG_KLAGEFORBEREDELSE_CHECKBOXES = getCheckbox({
+  field: KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaRegleneOmKlageOgKlageforberedelse,
+  groupErrorField:
+    SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaRegleneOmKlageOgKlageforberedelseGroup,
+  childList: [
+    getCheckbox({
+      field:
+        KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageKlagefristenEllerOppreisningErIkkeVurdertEllerFeilVurdert,
+    }),
+    getCheckbox({
+      field:
+        KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageDetErIkkeSoergetForRettingAvFeilIKlagensFormEllerInnhold,
+    }),
+    getCheckbox({
+      field:
+        KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageUnderKlageforberedelsenErDetIkkeUtredetEllerGjortUndersoekelser,
+    }),
+    getCheckbox({
+      field:
+        KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak,
+    }),
+    getCheckbox({
+      field:
+        KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageAlleRelevanteDokumenterIkkeOversendtKlageinstansen,
+    }),
+  ],
+});
+
+const OMGJØRING = getCheckbox({
+  field: OmgjoeringBoolean.saksbehandlingsreglerBruddPaaRegleneOmOmgjoeringUtenforKlageOgAnke,
+  groupErrorField:
+    SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaRegleneOmOmgjoeringUtenforKlageOgAnkeGroup,
+  childList: [
+    getCheckbox({
+      field: OmgjoeringBoolean.saksbehandlingsreglerOmgjoeringUgyldighetOgOmgjoeringErIkkeVurdertEllerFeilVurdert,
+    }),
+    getCheckbox({
+      field:
+        OmgjoeringBoolean.saksbehandlingsreglerOmgjoeringDetErFattetVedtakTilTrossForAtBeslutningVarRiktigAvgjoerelsesform,
+    }),
+  ],
+});
+
+const JOURNALFØRINGSPLIKTEN = getCheckbox({
+  field: JournalfoeringspliktenBoolean.saksbehandlingsreglerBruddPaaJournalfoeringsplikten,
+  groupErrorField: SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaJournalfoeringspliktenGroup,
+  childList: [
+    getCheckbox({
+      field:
+        JournalfoeringspliktenBoolean.saksbehandlingsreglerJournalfoeringspliktenRelevanteOpplysningerErIkkeJournalfoert,
+    }),
+    getCheckbox({
+      field:
+        JournalfoeringspliktenBoolean.saksbehandlingsreglerJournalfoeringspliktenRelevanteOpplysningerHarIkkeGodNokTittelEllerDokumentkvalitet,
+    }),
+  ],
+});
+
+const KLART_SPRÅK_BASE = {
+  field: KlartSpraakBoolean.saksbehandlingsreglerBruddPaaPliktTilAaKommuniserePaaEtKlartSpraak,
+  groupErrorField:
+    SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaPliktTilAaKommuniserePaaEtKlartSpraakGroup,
+};
+
+const KLART_SPRÅK_CHILDLIST = [
   getCheckbox({
-    field: KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaRegleneOmKlageOgKlageforberedelse,
-    groupErrorField:
-      SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaRegleneOmKlageOgKlageforberedelseGroup,
-    childList: [
-      getCheckbox({
-        field:
-          KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageKlagefristenEllerOppreisningErIkkeVurdertEllerFeilVurdert,
-      }),
-      getCheckbox({
-        field:
-          KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageDetErIkkeSoergetForRettingAvFeilIKlagensFormEllerInnhold,
-      }),
-      getCheckbox({
-        field:
-          KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageUnderKlageforberedelsenErDetIkkeUtredetEllerGjortUndersoekelser,
-      }),
-      getCheckbox({
-        field:
-          KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageRegleneIkkeFulgtTilTrossForNyttEnkeltvedtak,
-      }),
-      getCheckbox({
-        field: KlageOgKlageforberedelsenBoolean.saksbehandlingsreglerBruddPaaKlageRelevanteDokumenterIkkeOversendt,
-      }),
-    ],
+    field: KlartSpraakBoolean.saksbehandlingsreglerBruddPaaKlartSprakSpraketIVedtaketErIkkeKlartNok,
   }),
-
-  // Omgjøring
   getCheckbox({
-    field: OmgjoeringBoolean.saksbehandlingsreglerBruddPaaRegleneOmOmgjoeringUtenforKlageOgAnke,
-    groupErrorField:
-      SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaRegleneOmOmgjoeringUtenforKlageOgAnkeGroup,
-    childList: [
-      getCheckbox({
-        field: OmgjoeringBoolean.saksbehandlingsreglerOmgjoeringUgyldighetOgOmgjoeringErIkkeVurdertEllerFeilVurdert,
-      }),
-      getCheckbox({
-        field:
-          OmgjoeringBoolean.saksbehandlingsreglerOmgjoeringDetErFattetVedtakTilTrossForAtBeslutningVarRiktigAvgjoerelsesform,
-      }),
-    ],
-  }),
-
-  // Journalføringsplikten
-  getCheckbox({
-    field: JournalfoeringspliktenBoolean.saksbehandlingsreglerBruddPaaJournalfoeringsplikten,
-    groupErrorField: SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaJournalfoeringspliktenGroup,
-    childList: [
-      getCheckbox({
-        field:
-          JournalfoeringspliktenBoolean.saksbehandlingsreglerJournalfoeringspliktenRelevanteOpplysningerErIkkeJournalfoert,
-      }),
-      getCheckbox({
-        field:
-          JournalfoeringspliktenBoolean.saksbehandlingsreglerJournalfoeringspliktenRelevanteOpplysningerHarIkkeGodNokTittelEllerDokumentkvalitet,
-      }),
-    ],
-  }),
-
-  // Klart språk
-  getCheckbox({
-    field: KlartSpraakBoolean.saksbehandlingsreglerBruddPaaPliktTilAaKommuniserePaaEtKlartSpraak,
-    groupErrorField:
-      SaksbehandlingsregleneErrorFields.saksbehandlingsreglerBruddPaaPliktTilAaKommuniserePaaEtKlartSpraakGroup,
-    childList: [
-      getCheckbox({
-        field: KlartSpraakBoolean.saksbehandlingsreglerBruddPaaKlartSprakSpraketIVedtaketErIkkeKlartNok,
-      }),
-      getCheckbox({
-        field: KlartSpraakBoolean.saksbehandlingsreglerBruddPaaKlartSprakSpraketIOversendelsesbrevetsErIkkeKlartNok,
-      }),
-    ],
+    field: KlartSpraakBoolean.saksbehandlingsreglerBruddPaaKlartSprakSpraketIOversendelsesbrevetsErIkkeKlartNok,
   }),
 ];
