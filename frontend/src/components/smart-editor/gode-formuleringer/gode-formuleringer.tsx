@@ -12,7 +12,7 @@ import { SetGlobalExpandState } from '@/components/smart-editor/gode-formulering
 import { splitQuery } from '@/components/smart-editor/gode-formuleringer/split-query';
 import { useTranslatedFormuleringer } from '@/components/smart-editor/gode-formuleringer/use-translated-formuleringer';
 import { GLOBAL, LIST_DELIMITER, NONE, type NONE_TYPE } from '@/components/smart-editor-texts/types';
-import type { GodeFormuleringerExpandState } from '@/hooks/settings/use-setting';
+import { type GodeFormuleringerExpandState, useSmartEditorGodeFormuleringerOpen } from '@/hooks/settings/use-setting';
 import { isMetaKey, Keys } from '@/keys';
 import { getTextAsString } from '@/plate/functions/get-text-string';
 import type { TemplateSections } from '@/plate/template-sections';
@@ -62,7 +62,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
   const [focused, setFocused] = useState<number>(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const editor = useMyPlateEditorRef();
-  const { showGodeFormuleringer, setShowGodeFormuleringer } = useContext(SmartEditorContext);
+  const { value: showGodeFormuleringer, setValue: setShowGodeFormuleringer } = useSmartEditorGodeFormuleringerOpen();
   const [activeSection, setActiveSection] = useState<TemplateSections | NONE_TYPE>(NONE);
   const { data, isLoading } = useTranslatedFormuleringer(templateId, activeSection);
   const { godeFormuleringerExpandState } = useContext(SmartEditorContext);

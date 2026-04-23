@@ -4,7 +4,6 @@ import {
   GodeFormuleringerExpandState,
   useSmartEditorAnnotationsAtOrigin,
   useSmartEditorGodeFormuleringerExpandstate,
-  useSmartEditorGodeFormuleringerOpen,
   useSmartEditorHistoryOpen,
 } from '@/hooks/settings/use-setting';
 import { DistribusjonsType, type ISmartDocumentOrAttachment } from '@/types/documents/documents';
@@ -14,8 +13,6 @@ import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 const noop = () => undefined;
 
 interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'templateId' | 'dokumentTypeId'> {
-  showGodeFormuleringer: boolean;
-  setShowGodeFormuleringer: (show: boolean) => void;
   godeFormuleringerExpandState: GodeFormuleringerExpandState;
   setGodeFormuleringerExpandState: (state: GodeFormuleringerExpandState) => void;
   showHistory: boolean;
@@ -38,8 +35,6 @@ interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'template
 export const SmartEditorContext = createContext<ISmartEditorContext>({
   templateId: TemplateIdEnum.GENERELT_BREV,
   dokumentTypeId: DistribusjonsType.BREV,
-  showGodeFormuleringer: false,
-  setShowGodeFormuleringer: noop,
   godeFormuleringerExpandState: GodeFormuleringerExpandState.PREVIEW,
   setGodeFormuleringerExpandState: noop,
   showHistory: false,
@@ -66,8 +61,6 @@ interface Props {
 
 export const SmartEditorContextComponent = ({ children, smartDocument }: Props) => {
   const { dokumentTypeId, templateId, id, creator } = smartDocument;
-  const { value: showGodeFormuleringer = false, setValue: setShowGodeFormuleringer } =
-    useSmartEditorGodeFormuleringerOpen();
   const {
     value: godeFormuleringerExpandState = GodeFormuleringerExpandState.PREVIEW,
     setValue: setGodeFormuleringerExpandState,
@@ -86,8 +79,6 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
       value={{
         templateId,
         dokumentTypeId,
-        setShowGodeFormuleringer,
-        showGodeFormuleringer,
         godeFormuleringerExpandState,
         setGodeFormuleringerExpandState,
         showHistory,
