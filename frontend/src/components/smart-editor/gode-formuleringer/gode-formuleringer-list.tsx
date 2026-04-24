@@ -1,9 +1,8 @@
 import { Box } from '@navikt/ds-react';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Alert } from '@/components/alert/alert';
-import { SmartEditorContext } from '@/components/smart-editor/context';
 import { GodFormulering } from '@/components/smart-editor/gode-formuleringer/god-formulering';
-import { GodeFormuleringerExpandState } from '@/hooks/settings/use-setting';
+import { GodeFormuleringerExpandState, useSmartEditorGodeFormuleringerExpandstate } from '@/hooks/settings/use-setting';
 import type { NonNullableGodFormulering } from '@/types/texts/consumer';
 
 interface ListProps {
@@ -23,7 +22,8 @@ export const GodeFormuleringerList = ({
   expandState,
   setExpandState,
 }: ListProps) => {
-  const { godeFormuleringerExpandState } = useContext(SmartEditorContext);
+  const { value: godeFormuleringerExpandState = GodeFormuleringerExpandState.PREVIEW } =
+    useSmartEditorGodeFormuleringerExpandstate();
 
   useEffect(() => {
     setExpandState(texts.reduce((acc, t) => acc.set(t.id, godeFormuleringerExpandState), new Map()));
