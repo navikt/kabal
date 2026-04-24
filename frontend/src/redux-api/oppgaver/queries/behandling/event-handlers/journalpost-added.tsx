@@ -1,154 +1,155 @@
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { JournalpostAddedEvent } from '@/redux-api/server-sent-events/types';
+import type { Dispatch } from '@/redux-api/types';
 import { type AvsenderMottaker, Journalposttype, type Sak } from '@/types/arkiverte-documents';
 
-export const handleJournalpostAddedEvent = (oppgaveId: string, userId: string) => (event: JournalpostAddedEvent) => {
-  const { journalpostList, actor } = event;
-  const count = journalpostList.length;
+export const handleJournalpostAddedEvent =
+  (oppgaveId: string, userId: string, dispatch: Dispatch) => (event: JournalpostAddedEvent) => {
+    const { journalpostList, actor } = event;
+    const count = journalpostList.length;
 
-  if (actor.navIdent !== userId) {
-    const distributedCount = journalpostList.filter((j) => j.journalposttype === Journalposttype.UTGAAENDE).length;
+    if (actor.navIdent !== userId) {
+      const distributedCount = journalpostList.filter((j) => j.journalposttype === Journalposttype.UTGAAENDE).length;
 
-    if (distributedCount !== 0) {
-      const mottakere = distributedCount === 1 ? '1 mottaker' : `${distributedCount} mottakere`;
+      if (distributedCount !== 0) {
+        const mottakere = distributedCount === 1 ? '1 mottaker' : `${distributedCount} mottakere`;
 
-      toast.info(
-        <InfoToast title="Dokument journalført og distribuert">
-          Et dokument har blitt journalført og distribuert til {mottakere} av {formatEmployeeName(actor)}.
-        </InfoToast>,
-      );
-    } else {
-      toast.info(
-        <InfoToast title="Dokument journalført">
-          Et dokument har blitt journalført av {formatEmployeeName(actor)}.
-        </InfoToast>,
-      );
+        toast.info(
+          <InfoToast title="Dokument journalført og distribuert">
+            Et dokument har blitt journalført og distribuert til {mottakere} av {formatEmployeeName(actor)}.
+          </InfoToast>,
+        );
+      } else {
+        toast.info(
+          <InfoToast title="Dokument journalført">
+            Et dokument har blitt journalført av {formatEmployeeName(actor)}.
+          </InfoToast>,
+        );
+      }
     }
-  }
 
-  reduxStore.dispatch(
-    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-    documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (archiveResponse) => {
-      if (archiveResponse === undefined) {
-        if (count === 0) {
-          return archiveResponse;
+    dispatch(
+      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
+      documentsQuerySlice.util.updateQueryData('getArkiverteDokumenter', oppgaveId, (archiveResponse) => {
+        if (archiveResponse === undefined) {
+          if (count === 0) {
+            return archiveResponse;
+          }
+
+          const fromDate = journalpostList.reduce<string>(
+            (prev, curr) => (prev.length === 0 || curr.datoOpprettet < prev ? curr.datoOpprettet : prev),
+            '',
+          );
+
+          const toDate = journalpostList.reduce<string>(
+            (prev, curr) => (prev.length === 0 || curr.datoOpprettet > prev ? curr.datoOpprettet : prev),
+            '',
+          );
+
+          const avsenderMottakerList = journalpostList.reduce<AvsenderMottaker[]>((list, { avsenderMottaker }) => {
+            if (avsenderMottaker !== null && list.every((a) => a.id !== avsenderMottaker.id)) {
+              list.push(avsenderMottaker);
+            }
+
+            return list;
+          }, []);
+
+          const journalposttypeList = journalpostList.reduce<Journalposttype[]>((list, { journalposttype }) => {
+            if (journalposttype !== null && !list.includes(journalposttype)) {
+              list.push(journalposttype);
+            }
+
+            return list;
+          }, []);
+
+          const sakList = journalpostList.reduce<Sak[]>((list, { sak }) => {
+            if (sak !== null && !list.some((s) => isSakEqual(s, sak))) {
+              list.push(sak);
+            }
+
+            return list;
+          }, []);
+
+          const temaIdList = journalpostList.reduce<string[]>((list, { temaId }) => {
+            if (!list.includes(temaId)) {
+              list.push(temaId);
+            }
+
+            return list;
+          }, []);
+
+          return {
+            dokumenter: journalpostList,
+            antall: count,
+            totaltAntall: count,
+            avsenderMottakerList,
+            fromDate,
+            toDate,
+            journalposttypeList,
+            pageReference: null,
+            sakList,
+            temaIdList,
+          };
         }
 
-        const fromDate = journalpostList.reduce<string>(
-          (prev, curr) => (prev.length === 0 || curr.datoOpprettet < prev ? curr.datoOpprettet : prev),
-          '',
-        );
+        const avsenderMottakerList = [...archiveResponse.avsenderMottakerList];
+        const sakList = [...archiveResponse.sakList];
+        const temaIdList = [...archiveResponse.temaIdList];
+        const journalposttypeList = [...archiveResponse.journalposttypeList];
+        let dokumenter = [...archiveResponse.dokumenter];
 
-        const toDate = journalpostList.reduce<string>(
-          (prev, curr) => (prev.length === 0 || curr.datoOpprettet > prev ? curr.datoOpprettet : prev),
-          '',
-        );
+        let { fromDate, toDate } = archiveResponse;
 
-        const avsenderMottakerList = journalpostList.reduce<AvsenderMottaker[]>((list, { avsenderMottaker }) => {
-          if (avsenderMottaker !== null && list.every((a) => a.id !== avsenderMottaker.id)) {
-            list.push(avsenderMottaker);
+        for (const journalpost of journalpostList) {
+          const { avsenderMottaker, sak, temaId, datoOpprettet, journalposttype } = journalpost;
+
+          if (fromDate === null || datoOpprettet < fromDate) {
+            fromDate = datoOpprettet;
           }
 
-          return list;
-        }, []);
-
-        const journalposttypeList = journalpostList.reduce<Journalposttype[]>((list, { journalposttype }) => {
-          if (journalposttype !== null && !list.includes(journalposttype)) {
-            list.push(journalposttype);
+          if (toDate === null || datoOpprettet > toDate) {
+            toDate = datoOpprettet;
           }
 
-          return list;
-        }, []);
-
-        const sakList = journalpostList.reduce<Sak[]>((list, { sak }) => {
-          if (sak !== null && !list.some((s) => isSakEqual(s, sak))) {
-            list.push(sak);
+          if (!temaIdList.includes(temaId)) {
+            temaIdList.push(temaId);
           }
 
-          return list;
-        }, []);
-
-        const temaIdList = journalpostList.reduce<string[]>((list, { temaId }) => {
-          if (!list.includes(temaId)) {
-            list.push(temaId);
+          if (avsenderMottaker !== null && !avsenderMottakerList.some(({ id }) => avsenderMottaker.id === id)) {
+            avsenderMottakerList.push(avsenderMottaker);
           }
 
-          return list;
-        }, []);
+          if (sak !== null && !sakList.some((s) => isSakEqual(s, sak))) {
+            sakList.push(sak);
+          }
+
+          if (journalposttype !== null && !journalposttypeList.includes(journalposttype)) {
+            journalposttypeList.push(journalposttype);
+          }
+
+          if (!archiveResponse.dokumenter.some(({ journalpostId }) => journalpostId === journalpost.journalpostId)) {
+            dokumenter = [journalpost, ...dokumenter];
+          }
+        }
 
         return {
-          dokumenter: journalpostList,
-          antall: count,
-          totaltAntall: count,
+          antall: archiveResponse.antall + count,
+          totaltAntall: archiveResponse.totaltAntall + count,
+          pageReference: archiveResponse.pageReference,
+          dokumenter,
           avsenderMottakerList,
-          fromDate,
-          toDate,
           journalposttypeList,
-          pageReference: null,
           sakList,
           temaIdList,
+          fromDate,
+          toDate,
         };
-      }
-
-      const avsenderMottakerList = [...archiveResponse.avsenderMottakerList];
-      const sakList = [...archiveResponse.sakList];
-      const temaIdList = [...archiveResponse.temaIdList];
-      const journalposttypeList = [...archiveResponse.journalposttypeList];
-      let dokumenter = [...archiveResponse.dokumenter];
-
-      let { fromDate, toDate } = archiveResponse;
-
-      for (const journalpost of journalpostList) {
-        const { avsenderMottaker, sak, temaId, datoOpprettet, journalposttype } = journalpost;
-
-        if (fromDate === null || datoOpprettet < fromDate) {
-          fromDate = datoOpprettet;
-        }
-
-        if (toDate === null || datoOpprettet > toDate) {
-          toDate = datoOpprettet;
-        }
-
-        if (!temaIdList.includes(temaId)) {
-          temaIdList.push(temaId);
-        }
-
-        if (avsenderMottaker !== null && !avsenderMottakerList.some(({ id }) => avsenderMottaker.id === id)) {
-          avsenderMottakerList.push(avsenderMottaker);
-        }
-
-        if (sak !== null && !sakList.some((s) => isSakEqual(s, sak))) {
-          sakList.push(sak);
-        }
-
-        if (journalposttype !== null && !journalposttypeList.includes(journalposttype)) {
-          journalposttypeList.push(journalposttype);
-        }
-
-        if (!archiveResponse.dokumenter.some(({ journalpostId }) => journalpostId === journalpost.journalpostId)) {
-          dokumenter = [journalpost, ...dokumenter];
-        }
-      }
-
-      return {
-        antall: archiveResponse.antall + count,
-        totaltAntall: archiveResponse.totaltAntall + count,
-        pageReference: archiveResponse.pageReference,
-        dokumenter,
-        avsenderMottakerList,
-        journalposttypeList,
-        sakList,
-        temaIdList,
-        fromDate,
-        toDate,
-      };
-    }),
-  );
-};
+      }),
+    );
+  };
 
 const isSakEqual = (a: Sak, b: Sak) =>
   a.fagsakId === b.fagsakId && a.fagsaksystem === b.fagsaksystem && a.datoOpprettet === b.datoOpprettet;

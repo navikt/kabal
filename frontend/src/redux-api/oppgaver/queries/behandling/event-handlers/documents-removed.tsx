@@ -2,9 +2,9 @@ import { Tag } from '@navikt/ds-react';
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { DocumentsRemovedEvent } from '@/redux-api/server-sent-events/types';
+import type { Dispatch } from '@/redux-api/types';
 import type { INavEmployee } from '@/types/bruker';
 import {
   DISTRIBUTION_TYPE_NAMES,
@@ -14,40 +14,41 @@ import {
   type IParentDocument,
 } from '@/types/documents/documents';
 
-export const handleDocumentsRemovedEvent = (oppgaveId: string, userId: string) => (event: DocumentsRemovedEvent) => {
-  reduxStore.dispatch(
-    documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (documents) => {
-      if (documents === undefined) {
-        return documents;
-      }
-
-      if (event.actor.navIdent === userId) {
-        return documents.filter((d) => !event.idList.includes(d.id));
-      }
-
-      const removedParentDocuments: IParentDocument[] = [];
-      const removedVedlegg: IDocument[] = [];
-
-      const filteredList: IDocument[] = [];
-
-      for (const d of documents) {
-        if (event.idList.includes(d.id)) {
-          if (isParentDocument(d)) {
-            removedParentDocuments.push(d);
-          } else {
-            removedVedlegg.push(d);
-          }
-        } else {
-          filteredList.push(d);
+export const handleDocumentsRemovedEvent =
+  (oppgaveId: string, userId: string, dispatch: Dispatch) => (event: DocumentsRemovedEvent) => {
+    dispatch(
+      documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (documents) => {
+        if (documents === undefined) {
+          return documents;
         }
-      }
 
-      handleToast(event.actor, removedParentDocuments, removedVedlegg, documents);
+        if (event.actor.navIdent === userId) {
+          return documents.filter((d) => !event.idList.includes(d.id));
+        }
 
-      return filteredList;
-    }),
-  );
-};
+        const removedParentDocuments: IParentDocument[] = [];
+        const removedVedlegg: IDocument[] = [];
+
+        const filteredList: IDocument[] = [];
+
+        for (const d of documents) {
+          if (event.idList.includes(d.id)) {
+            if (isParentDocument(d)) {
+              removedParentDocuments.push(d);
+            } else {
+              removedVedlegg.push(d);
+            }
+          } else {
+            filteredList.push(d);
+          }
+        }
+
+        handleToast(event.actor, removedParentDocuments, removedVedlegg, documents);
+
+        return filteredList;
+      }),
+    );
+  };
 
 const handleToast = (
   actor: INavEmployee,

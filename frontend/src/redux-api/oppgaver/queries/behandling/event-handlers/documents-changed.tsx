@@ -2,9 +2,9 @@ import { Tag } from '@navikt/ds-react';
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { DocumentsChangedEvent } from '@/redux-api/server-sent-events/types';
+import type { Dispatch } from '@/redux-api/types';
 import {
   DISTRIBUTION_TYPE_NAMES,
   DocumentTypeEnum,
@@ -14,75 +14,76 @@ import {
   type JournalfoertDokument,
 } from '@/types/documents/documents';
 
-export const handleDocumentsChangedEvent = (oppgaveId: string, userId: string) => (event: DocumentsChangedEvent) => {
-  reduxStore.dispatch(
-    documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
-      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-      draft.map((document) => {
-        const update = event.documents.find((d) => d.id === document.id);
+export const handleDocumentsChangedEvent =
+  (oppgaveId: string, userId: string, dispatch: Dispatch) => (event: DocumentsChangedEvent) => {
+    dispatch(
+      documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
+        // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
+        draft.map((document) => {
+          const update = event.documents.find((d) => d.id === document.id);
 
-        if (update === undefined) {
+          if (update === undefined) {
+            return document;
+          }
+
+          if (event.actor.navIdent !== userId) {
+            handleToast(document, update, event.actor, draft);
+          }
+
+          if (document.type === DocumentTypeEnum.SMART) {
+            if (update.parentId === null) {
+              return {
+                ...document,
+                parentId: null,
+                dokumentTypeId: update.dokumentTypeId,
+                tittel: update.tittel,
+                isMarkertAvsluttet: update.isMarkertAvsluttet,
+              } satisfies ISmartDocument<null>;
+            }
+
+            return {
+              ...document,
+              parentId: update.parentId,
+              dokumentTypeId: update.dokumentTypeId,
+              tittel: update.tittel,
+              isMarkertAvsluttet: update.isMarkertAvsluttet,
+            } satisfies ISmartDocument<string>;
+          }
+
+          if (document.type === DocumentTypeEnum.JOURNALFOERT) {
+            return {
+              ...document,
+              parentId: update.parentId ?? document.parentId,
+              dokumentTypeId: update.dokumentTypeId,
+              tittel: update.tittel,
+              isMarkertAvsluttet: update.isMarkertAvsluttet,
+            } satisfies JournalfoertDokument;
+          }
+
+          if (document.type === DocumentTypeEnum.UPLOADED) {
+            if (update.parentId === null) {
+              return {
+                ...document,
+                parentId: null,
+                dokumentTypeId: update.dokumentTypeId,
+                tittel: update.tittel,
+                isMarkertAvsluttet: update.isMarkertAvsluttet,
+              } satisfies IFileDocument<null>;
+            }
+            return {
+              ...document,
+              parentId: update.parentId,
+              dokumentTypeId: update.dokumentTypeId,
+              tittel: update.tittel,
+              isMarkertAvsluttet: update.isMarkertAvsluttet,
+            } satisfies IFileDocument<string>;
+          }
+
           return document;
-        }
-
-        if (event.actor.navIdent !== userId) {
-          handleToast(document, update, event.actor, draft);
-        }
-
-        if (document.type === DocumentTypeEnum.SMART) {
-          if (update.parentId === null) {
-            return {
-              ...document,
-              parentId: null,
-              dokumentTypeId: update.dokumentTypeId,
-              tittel: update.tittel,
-              isMarkertAvsluttet: update.isMarkertAvsluttet,
-            } satisfies ISmartDocument<null>;
-          }
-
-          return {
-            ...document,
-            parentId: update.parentId,
-            dokumentTypeId: update.dokumentTypeId,
-            tittel: update.tittel,
-            isMarkertAvsluttet: update.isMarkertAvsluttet,
-          } satisfies ISmartDocument<string>;
-        }
-
-        if (document.type === DocumentTypeEnum.JOURNALFOERT) {
-          return {
-            ...document,
-            parentId: update.parentId ?? document.parentId,
-            dokumentTypeId: update.dokumentTypeId,
-            tittel: update.tittel,
-            isMarkertAvsluttet: update.isMarkertAvsluttet,
-          } satisfies JournalfoertDokument;
-        }
-
-        if (document.type === DocumentTypeEnum.UPLOADED) {
-          if (update.parentId === null) {
-            return {
-              ...document,
-              parentId: null,
-              dokumentTypeId: update.dokumentTypeId,
-              tittel: update.tittel,
-              isMarkertAvsluttet: update.isMarkertAvsluttet,
-            } satisfies IFileDocument<null>;
-          }
-          return {
-            ...document,
-            parentId: update.parentId,
-            dokumentTypeId: update.dokumentTypeId,
-            tittel: update.tittel,
-            isMarkertAvsluttet: update.isMarkertAvsluttet,
-          } satisfies IFileDocument<string>;
-        }
-
-        return document;
-      }),
-    ),
-  );
-};
+        }),
+      ),
+    );
+  };
 
 type Update = DocumentsChangedEvent['documents'][0];
 type Actor = DocumentsChangedEvent['actor'];

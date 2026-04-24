@@ -7,7 +7,7 @@ import { BOOKMARK_PREFIX } from '@/components/smart-editor/constants';
 import { useOnClickOutside } from '@/hooks/use-on-click-outside';
 import { pushEvent } from '@/observability';
 import { useIsUnchangeable } from '@/plate/hooks/use-is-unchangeable';
-import { BookmarkPlugin } from '@/plate/plugins/bookmark';
+import { ELEMENT_BOOKMARK } from '@/plate/plugins/element-types';
 import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
 import { type FormattedText, useMyPlateEditorState } from '@/plate/types';
 
@@ -20,7 +20,7 @@ export const BookmarkButton = () => {
   const setBookmark = (variant: BookmarkVariantEnum) => {
     pushEvent('set-bookmark', 'smart-editor', { color: variant });
     const id = BOOKMARK_PREFIX + Date.now();
-    editor.tf.setNodes({ [BookmarkPlugin.key]: true, [id]: variant }, { match: TextApi.isText, split: true });
+    editor.tf.setNodes({ [ELEMENT_BOOKMARK]: true, [id]: variant }, { match: TextApi.isText, split: true });
 
     const entries = editor.nodes<FormattedText>({ match: (n) => TextApi.isText(n) && id in n });
     const nodes: FormattedText[] = [];
@@ -32,7 +32,7 @@ export const BookmarkButton = () => {
 
   const removeBookmark = (bookmark: Omit<Bookmark, 'nodes'>) => {
     pushEvent('remove-bookmark', 'smart-editor', { color: bookmark.variant });
-    editor.tf.unsetNodes<FormattedText>([BookmarkPlugin.key, bookmark.key], {
+    editor.tf.unsetNodes<FormattedText>([ELEMENT_BOOKMARK, bookmark.key], {
       match: (n) => TextApi.isText(n) && bookmark.key in n,
       mode: 'lowest',
       at: [],

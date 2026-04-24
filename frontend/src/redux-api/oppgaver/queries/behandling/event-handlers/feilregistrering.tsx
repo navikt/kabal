@@ -1,15 +1,15 @@
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
 import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
 import type { FeilregistreringEvent } from '@/redux-api/server-sent-events/types';
+import type { Dispatch } from '@/redux-api/types';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 import { HistoryEventTypes, type IFeilregistrertEvent } from '@/types/oppgavebehandling/response';
 
 export const handleFeilregistreringEvent =
-  (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
+  (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>, dispatch: Dispatch) =>
   ({ actor, timestamp, reason, registered, fagsystemId }: FeilregistreringEvent) => {
     updateCachedData((draft) => {
       if (draft === undefined) {
@@ -28,7 +28,7 @@ export const handleFeilregistreringEvent =
       draft.feilregistrering = { reason, registered, fagsystemId, feilregistrertAv: actor };
       draft.modified = timestamp;
 
-      reduxStore.dispatch(
+      dispatch(
         historyQuerySlice.util.updateQueryData('getHistory', oppgaveId, (history) => {
           if (history === undefined) {
             return;

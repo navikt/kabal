@@ -5,9 +5,9 @@ import { genericErrorToast } from '@/components/toast/toast-content/api-error-to
 import { areJournalfoertDocumentsEqual } from '@/domain/journalfoerte-documents';
 import { ENVIRONMENT } from '@/environment';
 import { getIsIncomingDocument } from '@/functions/is-incoming-document';
-import { reduxStore } from '@/redux/configure-store';
 import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
+import type { Dispatch } from '@/redux-api/types';
 import { user } from '@/static-data/static-data';
 import { Journalposttype } from '@/types/arkiverte-documents';
 import type { IDocumentParams } from '@/types/documents/common-params';
@@ -47,12 +47,12 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         body: { mottakerList: mottakerList.map(mottakerToInputMottaker) },
         method: 'PUT',
       }),
-      onQueryStarted: async ({ dokumentId, mottakerList, oppgaveId }, { queryFulfilled }) => {
-        const undo = optimisticUpdate(oppgaveId, dokumentId, 'mottakerList', mottakerList);
+      onQueryStarted: async ({ dokumentId, mottakerList, oppgaveId }, { queryFulfilled, dispatch }) => {
+        const undo = optimisticUpdate(oppgaveId, dokumentId, 'mottakerList', mottakerList, dispatch);
 
         try {
           const { data } = await queryFulfilled;
-          optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
+          optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified, dispatch);
         } catch {
           undo();
         }
@@ -64,12 +64,12 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         body: { dokumentTypeId },
         method: 'PUT',
       }),
-      onQueryStarted: async ({ dokumentId, dokumentTypeId, oppgaveId }, { queryFulfilled }) => {
-        const undo = optimisticUpdate(oppgaveId, dokumentId, 'dokumentTypeId', dokumentTypeId);
+      onQueryStarted: async ({ dokumentId, dokumentTypeId, oppgaveId }, { queryFulfilled, dispatch }) => {
+        const undo = optimisticUpdate(oppgaveId, dokumentId, 'dokumentTypeId', dokumentTypeId, dispatch);
 
         try {
           const { data } = await queryFulfilled;
-          optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
+          optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified, dispatch);
         } catch {
           undo();
         }
@@ -81,12 +81,12 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         body: { title },
         method: 'PUT',
       }),
-      onQueryStarted: async ({ dokumentId, title, oppgaveId }, { queryFulfilled }) => {
-        const undo = optimisticUpdate(oppgaveId, dokumentId, 'tittel', title);
+      onQueryStarted: async ({ dokumentId, title, oppgaveId }, { queryFulfilled, dispatch }) => {
+        const undo = optimisticUpdate(oppgaveId, dokumentId, 'tittel', title, dispatch);
 
         try {
           const { data } = await queryFulfilled;
-          optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified);
+          optimisticUpdate(oppgaveId, dokumentId, 'modified', data.modified, dispatch);
         } catch {
           undo();
         }
@@ -411,8 +411,8 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         body: { datoMottatt },
         method: 'PUT',
       }),
-      onQueryStarted: async ({ dokumentId, datoMottatt, oppgaveId }, { queryFulfilled }) => {
-        const collectionPatchResult = reduxStore.dispatch(
+      onQueryStarted: async ({ dokumentId, datoMottatt, oppgaveId }, { queryFulfilled, dispatch }) => {
+        const collectionPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
             draft.map((doc) =>
               doc.id === dokumentId &&
@@ -424,7 +424,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
           ),
         );
 
-        const documentPatchResult = reduxStore.dispatch(
+        const documentPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
             if (
               draft !== null &&
@@ -453,8 +453,8 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         body: { kanal: inngaaendeKanal },
         method: 'PUT',
       }),
-      onQueryStarted: async ({ dokumentId, inngaaendeKanal, oppgaveId }, { queryFulfilled }) => {
-        const collectionPatchResult = reduxStore.dispatch(
+      onQueryStarted: async ({ dokumentId, inngaaendeKanal, oppgaveId }, { queryFulfilled, dispatch }) => {
+        const collectionPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
             draft.map((doc) =>
               doc.id === dokumentId && doc.type === DocumentTypeEnum.UPLOADED ? { ...doc, inngaaendeKanal } : doc,
@@ -462,7 +462,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
           ),
         );
 
-        const documentPatchResult = reduxStore.dispatch(
+        const documentPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
             if (draft.type === DocumentTypeEnum.UPLOADED) {
               draft.inngaaendeKanal = inngaaendeKanal;
@@ -484,8 +484,8 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         body: { identifikator: avsender.identifikator },
         method: 'PUT',
       }),
-      onQueryStarted: async ({ dokumentId, avsender, oppgaveId }, { queryFulfilled }) => {
-        const collectionPatchResult = reduxStore.dispatch(
+      onQueryStarted: async ({ dokumentId, avsender, oppgaveId }, { queryFulfilled, dispatch }) => {
+        const collectionPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
             draft.map((doc) =>
               doc.id === dokumentId && doc.type === DocumentTypeEnum.UPLOADED ? { ...doc, avsender } : doc,
@@ -493,7 +493,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
           ),
         );
 
-        const documentPatchResult = reduxStore.dispatch(
+        const documentPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
             if (draft.type === DocumentTypeEnum.UPLOADED) {
               draft.avsender = avsender;
@@ -517,14 +517,15 @@ const optimisticUpdate = <K extends keyof IDocument>(
   dokumentId: string,
   key: K,
   value: IDocument[K],
+  dispatch: Dispatch,
 ) => {
-  const documentsPatchResult = reduxStore.dispatch(
+  const documentsPatchResult = dispatch(
     documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
       draft.map((doc) => (doc.id === dokumentId ? { ...doc, [key]: value } : doc)),
     ),
   );
 
-  const smartEditorPatchResult = reduxStore.dispatch(
+  const smartEditorPatchResult = dispatch(
     documentsQuerySlice.util.updateQueryData('getDocument', { oppgaveId, dokumentId }, (draft) => {
       if (draft !== null) {
         return { ...draft, [key]: value };
