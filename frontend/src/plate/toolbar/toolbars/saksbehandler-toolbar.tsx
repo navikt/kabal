@@ -1,7 +1,5 @@
 import { ClockDashedIcon, LightBulbIcon } from '@navikt/aksel-icons';
-import { useContext } from 'react';
-import { SmartEditorContext } from '@/components/smart-editor/context';
-import { useSmartEditorGodeFormuleringerOpen } from '@/hooks/settings/use-setting';
+import { useSmartEditorGodeFormuleringerOpen, useSmartEditorHistoryOpen } from '@/hooks/settings/use-setting';
 import { MOD_KEY_TEXT } from '@/keys';
 import { pushEvent } from '@/observability';
 import { DefaultToolbarButtons } from '@/plate/toolbar/default-toolbar-buttons';
@@ -13,8 +11,7 @@ import { SearchReplaceToolbarButton } from '@/plate/toolbar/toolbars/search-repl
 
 export const SaksbehandlerToolbar = () => {
   const { value: showGodeFormuleringer, setValue: setShowGodeFormuleringer } = useSmartEditorGodeFormuleringerOpen();
-
-  const { showHistory, setShowHistory } = useContext(SmartEditorContext);
+  const { value: showHistory = false, setValue: setShowHistory } = useSmartEditorHistoryOpen();
 
   return (
     <StyledToolbar>

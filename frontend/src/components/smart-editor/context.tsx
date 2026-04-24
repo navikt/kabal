@@ -1,6 +1,6 @@
 import type { TRange } from 'platejs';
 import { createContext, type RefObject, useRef, useState } from 'react';
-import { useSmartEditorAnnotationsAtOrigin, useSmartEditorHistoryOpen } from '@/hooks/settings/use-setting';
+import { useSmartEditorAnnotationsAtOrigin } from '@/hooks/settings/use-setting';
 import { DistribusjonsType, type ISmartDocumentOrAttachment } from '@/types/documents/documents';
 import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
@@ -8,8 +8,6 @@ import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 const noop = () => undefined;
 
 interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'templateId' | 'dokumentTypeId'> {
-  showHistory: boolean;
-  setShowHistory: (show: boolean) => void;
   newCommentSelection: TRange | null;
   setNewCommentSelection: (selection: TRange | null) => void;
   dokumentId: string;
@@ -28,8 +26,6 @@ interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'template
 export const SmartEditorContext = createContext<ISmartEditorContext>({
   templateId: TemplateIdEnum.GENERELT_BREV,
   dokumentTypeId: DistribusjonsType.BREV,
-  showHistory: false,
-  setShowHistory: noop,
   newCommentSelection: null,
   setNewCommentSelection: noop,
   dokumentId: '',
@@ -52,7 +48,6 @@ interface Props {
 
 export const SmartEditorContextComponent = ({ children, smartDocument }: Props) => {
   const { dokumentTypeId, templateId, id, creator } = smartDocument;
-  const { value: showHistory = false, setValue: setShowHistory } = useSmartEditorHistoryOpen();
   const [newCommentSelection, setNewCommentSelection] = useState<TRange | null>(null);
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(null);
   const { value: showAnnotationsAtOrigin = false, setValue: setShowAnnotationsAtOrigin } =
@@ -66,8 +61,6 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
       value={{
         templateId,
         dokumentTypeId,
-        showHistory,
-        setShowHistory,
         newCommentSelection,
         setNewCommentSelection,
         dokumentId: id,
