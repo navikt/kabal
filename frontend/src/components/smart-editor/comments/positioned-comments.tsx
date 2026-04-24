@@ -6,6 +6,7 @@ import { COMMENT_PREFIX } from '@/components/smart-editor/constants';
 import { SmartEditorContext } from '@/components/smart-editor/context';
 import { getPositionedItems, type ItemToPosition } from '@/components/smart-editor/functions/get-positioned-items';
 import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
+import { useSmartEditorAnnotationsAtOrigin } from '@/hooks/settings/use-setting';
 import { BASE_FONT_SIZE } from '@/plate/components/get-scaled-em';
 import { useMyPlateEditorState } from '@/plate/types';
 
@@ -15,8 +16,8 @@ const MIN_OFFSET = 16;
 
 export const PositionedComments = () => {
   const { attached, orphans } = useThreads();
-
-  const { sheetRef, showAnnotationsAtOrigin } = useContext(SmartEditorContext);
+  const { sheetRef } = useContext(SmartEditorContext);
+  const { value: showAnnotationsAtOrigin = false } = useSmartEditorAnnotationsAtOrigin();
   const editor = useMyPlateEditorState();
 
   const { positionedItems, maxCount } = useMemo(() => {

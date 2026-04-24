@@ -1,6 +1,5 @@
 import type { TRange } from 'platejs';
 import { createContext, type RefObject, useRef, useState } from 'react';
-import { useSmartEditorAnnotationsAtOrigin } from '@/hooks/settings/use-setting';
 import { DistribusjonsType, type ISmartDocumentOrAttachment } from '@/types/documents/documents';
 import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
@@ -13,8 +12,6 @@ interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'template
   dokumentId: string;
   focusedThreadId: string | null;
   setFocusedThreadId: (threadId: string | null) => void;
-  showAnnotationsAtOrigin: boolean;
-  setShowAnnotationsAtOrigin: (show: boolean) => void;
   sheetRef: RefObject<HTMLDivElement | null>;
   creator: string;
   editingComment: ISmartEditorComment | null;
@@ -31,8 +28,6 @@ export const SmartEditorContext = createContext<ISmartEditorContext>({
   dokumentId: '',
   focusedThreadId: null,
   setFocusedThreadId: noop,
-  showAnnotationsAtOrigin: false,
-  setShowAnnotationsAtOrigin: noop,
   sheetRef: { current: null },
   creator: '',
   editingComment: null,
@@ -50,8 +45,6 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
   const { dokumentTypeId, templateId, id, creator } = smartDocument;
   const [newCommentSelection, setNewCommentSelection] = useState<TRange | null>(null);
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(null);
-  const { value: showAnnotationsAtOrigin = false, setValue: setShowAnnotationsAtOrigin } =
-    useSmartEditorAnnotationsAtOrigin();
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const [editingComment, setEditingComment] = useState<ISmartEditorComment | null>(null);
   const [showSearchReplace, setShowSearchReplace] = useState(false);
@@ -66,8 +59,6 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
         dokumentId: id,
         focusedThreadId,
         setFocusedThreadId,
-        showAnnotationsAtOrigin,
-        setShowAnnotationsAtOrigin,
         sheetRef,
         creator: creator.employee.navIdent,
         editingComment,

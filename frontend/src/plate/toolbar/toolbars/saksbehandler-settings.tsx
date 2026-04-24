@@ -1,11 +1,10 @@
 import { CogIcon } from '@navikt/aksel-icons';
 import { Heading, Modal, ToggleGroup, VStack } from '@navikt/ds-react';
 import { useEditorReadOnly } from 'platejs/react';
-import { useCallback, useContext, useId, useRef, useState } from 'react';
+import { useCallback, useId, useRef, useState } from 'react';
 import { AbbreviationsContent, AbbreviationsHeadingContent } from '@/components/settings/abbreviations/abbreviations';
 import { AbbreviationsExplanation } from '@/components/settings/abbreviations/explanation';
-import { SmartEditorContext } from '@/components/smart-editor/context';
-import { useSmartEditorExpandedThreads } from '@/hooks/settings/use-setting';
+import { useSmartEditorAnnotationsAtOrigin, useSmartEditorExpandedThreads } from '@/hooks/settings/use-setting';
 import { useSetSmartEditorLanguage } from '@/hooks/use-set-smart-editor-language';
 import { useSmartEditorLanguage } from '@/hooks/use-smart-editor-language';
 import { pushEvent } from '@/observability';
@@ -14,7 +13,8 @@ import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
 import { isLanguage, Language } from '@/types/texts/language';
 
 export const SaksbehandlerSettings = () => {
-  const { showAnnotationsAtOrigin, setShowAnnotationsAtOrigin } = useContext(SmartEditorContext);
+  const { value: showAnnotationsAtOrigin = false, setValue: setShowAnnotationsAtOrigin } =
+    useSmartEditorAnnotationsAtOrigin();
   const readOnly = useEditorReadOnly();
   const { value: expandedThreads = true, setValue: setExpandedThreads } = useSmartEditorExpandedThreads();
   const modalRef = useRef<HTMLDialogElement>(null);

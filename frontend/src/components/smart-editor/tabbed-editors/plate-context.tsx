@@ -2,9 +2,8 @@ import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, File
 import { Box, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
 import { TextApi, type TText } from 'platejs';
 import { type PlateEditor, useEditorReadOnly, useEditorRef } from 'platejs/react';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { BasePoint } from 'slate';
-import { SmartEditorContext } from '@/components/smart-editor/context';
 import { GodeFormuleringer } from '@/components/smart-editor/gode-formuleringer/gode-formuleringer';
 import { History } from '@/components/smart-editor/history/history';
 import { Content } from '@/components/smart-editor/tabbed-editors/content';
@@ -19,7 +18,11 @@ import { StickyRight } from '@/components/smart-editor/tabbed-editors/sticky-rig
 import { VersionStatus } from '@/components/smart-editor/tabbed-editors/version-status';
 import { DocumentErrorComponent } from '@/error-boundary/document-error';
 import { ErrorBoundary } from '@/error-boundary/error-boundary';
-import { useSmartEditorActiveDocument, useSmartEditorHistoryOpen } from '@/hooks/settings/use-setting';
+import {
+  useSmartEditorActiveDocument,
+  useSmartEditorAnnotationsAtOrigin,
+  useSmartEditorHistoryOpen,
+} from '@/hooks/settings/use-setting';
 import { useTimingMeasurement } from '@/hooks/use-timing-measurement';
 import { isEditableTextNode } from '@/plate/functions/is-editable-text';
 import { StatusBar } from '@/plate/status-bar/status-bar';
@@ -44,7 +47,7 @@ export const PlateContextWrapper = (props: PlateContextProps) => (
 const PlateContext = ({ smartDocument, oppgave, isConnected, isSynced }: PlateContextProps) => {
   const { id, templateId } = smartDocument;
   const [getDocument, { isLoading }] = useLazyGetDocumentQuery();
-  const { showAnnotationsAtOrigin } = useContext(SmartEditorContext);
+  const { value: showAnnotationsAtOrigin = false } = useSmartEditorAnnotationsAtOrigin();
   const { value: showHistory = false } = useSmartEditorHistoryOpen();
   const readOnly = useEditorReadOnly();
   const editor = useEditorRef();
