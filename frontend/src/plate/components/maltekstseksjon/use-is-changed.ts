@@ -27,12 +27,16 @@ const getIsChanged = (element: MaltekstseksjonElement, texts: IConsumerRichText[
 
 export const useIsChanged = (element: MaltekstseksjonElement, language: Language): [boolean, boolean] => {
   const { id } = element;
-  const { data: texts = [] } = useGetMaltekstseksjonTextsQuery(id === undefined ? skipToken : { id, language });
+  const { data: texts } = useGetMaltekstseksjonTextsQuery(id === undefined ? skipToken : { id, language });
 
   const [isChanged, setIsChanged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (texts === undefined) {
+      return;
+    }
+
     setIsLoading(true);
 
     const timeout = setTimeout(() => {
