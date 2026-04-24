@@ -1,7 +1,6 @@
 import path from 'node:path';
-import type { JWK } from 'jose';
 import { isLocal, isTest } from '@/config/env';
-import { requiredEnvJson, requiredEnvString } from '@/config/env-var';
+import { requiredEnvString } from '@/config/env-var';
 
 export enum ApiClientEnum {
   KABAL_API = 'kabal-api',
@@ -36,11 +35,9 @@ export const fileViewerDirectoryPath = path.resolve(serverDirectoryPath, '../fil
 export const fileViewerDistDirectoryPath = path.resolve(fileViewerDirectoryPath, './dist');
 
 const defaultValue = isLocal ? 'local' : undefined;
-const localJwk: JWK = { kty: 'RSA' };
 
 export const AZURE_APP_CLIENT_ID = requiredEnvString('AZURE_APP_CLIENT_ID', defaultValue);
 export const AZURE_APP_WELL_KNOWN_URL = requiredEnvString('AZURE_APP_WELL_KNOWN_URL', defaultValue);
-export const AZURE_APP_JWK = requiredEnvJson<JWK>('AZURE_APP_JWK', localJwk);
 export const PROXY_VERSION = requiredEnvString('VERSION', defaultValue);
 export const PORT = requiredEnvString('PORT', '8080');
 export const NAIS_CLUSTER_NAME = requiredEnvString('NAIS_CLUSTER_NAME', defaultValue);

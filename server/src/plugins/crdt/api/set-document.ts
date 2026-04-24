@@ -1,12 +1,15 @@
+import type { IncomingHttpHeaders } from 'node:http';
 import type { Document } from '@hocuspocus/server';
 import { yTextToSlateElement } from '@slate-yjs/core';
 import { encodeStateAsUpdateV2, XmlText } from 'yjs';
-import { getCacheKey, oboCache } from '@/auth/cache/cache';
 import { ApiClientEnum } from '@/config/config';
+import { stripBearer } from '@/headers';
 import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 import { KABAL_API_URL } from '@/plugins/crdt/api/url';
+import { getCloseEvent } from '@/plugins/crdt/close-event';
 import type { ConnectionContext } from '@/plugins/crdt/context';
+import { getOboToken } from '@/plugins/obo-token';
 
 const log = getLogger('collaboration');
 
@@ -16,7 +19,7 @@ export const getDocumentJson = (document: Document) => {
   return yTextToSlateElement(sharedRoot).children;
 };
 
-export const setDocument = async (context: ConnectionContext, document: Document) => {
+export const setDocument = async (context: ConnectionContext, document: Document, headers: IncomingHttpHeaders) => {
   const { behandlingId, dokumentId, navIdent, tab_id, client_version } = context;
 
   return withSpan(
@@ -29,6 +32,21 @@ export const setDocument = async (context: ConnectionContext, document: Document
       client_version,
     },
     async (span) => {
+      const accessToken = stripBearer(headers.authorization);
+
+      if (accessToken === undefined) {
+        log.error({
+          msg: 'Missing authorization header. Closing connection.',
+          tab_id,
+          client_version,
+          data: { behandlingId, dokumentId },
+        });
+
+        throw getCloseEvent('MISSING_AUTHORIZATION', 4401);
+      }
+
+      const authorization = `Bearer ${await getOboToken(ApiClientEnum.KABAL_API, { ...context, accessToken })}`;
+
       try {
         const update = Buffer.from(encodeStateAsUpdateV2(document));
         const data = update.toString('base64url');
@@ -37,10 +55,7 @@ export const setDocument = async (context: ConnectionContext, document: Document
 
         const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
           method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
-          },
+          headers: { 'Content-Type': 'application/json', authorization },
           body: JSON.stringify({ content, data }),
         });
 

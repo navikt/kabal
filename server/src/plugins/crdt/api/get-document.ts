@@ -1,18 +1,23 @@
+import type { IncomingHttpHeaders } from 'node:http';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import type { Node } from 'slate';
 import { Doc, encodeStateAsUpdateV2, XmlText } from 'yjs';
-import { getCacheKey, oboCache } from '@/auth/cache/cache';
 import { ApiClientEnum } from '@/config/config';
 import { isObject } from '@/functions/functions';
+import { stripBearer } from '@/headers';
 import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 import { KABAL_API_URL } from '@/plugins/crdt/api/url';
 import { getCloseEvent } from '@/plugins/crdt/close-event';
 import type { ConnectionContext } from '@/plugins/crdt/context';
+import { getOboToken } from '@/plugins/obo-token';
 
 const log = getLogger('collaboration');
 
-export const getDocument = async (context: ConnectionContext): Promise<DocumentResponse> => {
+export const getDocument = async (
+  context: ConnectionContext,
+  headers: IncomingHttpHeaders,
+): Promise<DocumentResponse> => {
   const { behandlingId, dokumentId, navIdent, tab_id, client_version } = context;
 
   return withSpan(
@@ -25,12 +30,24 @@ export const getDocument = async (context: ConnectionContext): Promise<DocumentR
       client_version,
     },
     async (span) => {
+      const accessToken = stripBearer(headers.authorization);
+
+      if (accessToken === undefined) {
+        log.error({
+          msg: 'Missing authorization header. Closing connection.',
+          tab_id,
+          client_version,
+          data: { behandlingId, dokumentId },
+        });
+
+        throw getCloseEvent('MISSING_AUTHORIZATION', 4401);
+      }
+
+      const authorization = `Bearer ${await getOboToken(ApiClientEnum.KABAL_API, { ...context, accessToken })}`;
+
       const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/dokumenter/${dokumentId}`, {
         method: 'GET',
-        headers: {
-          accept: 'application/json',
-          authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
-        },
+        headers: { accept: 'application/json', authorization },
       });
 
       span.setAttribute('http.status_code', res.status);
@@ -89,10 +106,7 @@ export const getDocument = async (context: ConnectionContext): Promise<DocumentR
         // Save the binary data to the database.
         await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
           method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
-          },
+          headers: { 'Content-Type': 'application/json', authorization },
           body: JSON.stringify({ content, data: base64data }),
         });
 
