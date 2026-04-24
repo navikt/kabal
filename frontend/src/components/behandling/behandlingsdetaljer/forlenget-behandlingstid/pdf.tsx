@@ -3,7 +3,7 @@ import { HStack, InlineMessage, Loader, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { Alert } from '@/components/alert/alert';
 import { validateBehandlingstid } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
-import { KabalFileViewer } from '@/components/kabal-file-viewer';
+import { KabalFileViewerPanel } from '@/components/kabal-file-viewer';
 import {
   useGetOrCreateQuery,
   useSetBehandlingstidDateMutation,
@@ -89,7 +89,7 @@ const PdfBody = ({ id }: { id: string }) => {
   const pdfUrl = `/api/kabal-api/behandlinger/${id}/forlenget-behandlingstid-draft/pdf`;
 
   return (
-    <KabalFileViewer
+    <KabalFileViewerPanel
       files={[
         {
           variants: 'PDF',
