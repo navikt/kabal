@@ -3,9 +3,9 @@ import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
 import { areJournalfoertDocumentsEqual } from '@/domain/journalfoerte-documents';
-import { reduxStore } from '@/redux/configure-store';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { DocumentsAddedEvent } from '@/redux-api/server-sent-events/types';
+import type { Dispatch } from '@/redux-api/types';
 import type { INavEmployee } from '@/types/bruker';
 import {
   DISTRIBUTION_TYPE_NAMES,
@@ -14,43 +14,44 @@ import {
   type IDocument,
 } from '@/types/documents/documents';
 
-export const handleDocumentsAddedEvent = (oppgaveId: string, userId: string) => (event: DocumentsAddedEvent) => {
-  const { actor, documents } = event;
+export const handleDocumentsAddedEvent =
+  (oppgaveId: string, userId: string, dispatch: Dispatch) => (event: DocumentsAddedEvent) => {
+    const { actor, documents } = event;
 
-  if (actor.navIdent !== userId) {
-    handleToast(documents, actor);
-  }
+    if (actor.navIdent !== userId) {
+      handleToast(documents, actor);
+    }
 
-  reduxStore.dispatch(
-    documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
-      if (draft === undefined) {
-        return event.documents;
-      }
-
-      for (const document of event.documents) {
-        if (!draft.some((d) => d.id === document.id || areJournalfoertDocumentsEqual(d, document))) {
-          draft.push(document);
+    dispatch(
+      documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) => {
+        if (draft === undefined) {
+          return event.documents;
         }
-      }
 
-      return draft.sort((a, b) => {
-        if (a.type === DocumentTypeEnum.JOURNALFOERT) {
-          if (b.type === DocumentTypeEnum.JOURNALFOERT) {
-            return a.journalfoertDokumentReference.sortKey.localeCompare(b.journalfoertDokumentReference.sortKey);
+        for (const document of event.documents) {
+          if (!draft.some((d) => d.id === document.id || areJournalfoertDocumentsEqual(d, document))) {
+            draft.push(document);
+          }
+        }
+
+        return draft.sort((a, b) => {
+          if (a.type === DocumentTypeEnum.JOURNALFOERT) {
+            if (b.type === DocumentTypeEnum.JOURNALFOERT) {
+              return a.journalfoertDokumentReference.sortKey.localeCompare(b.journalfoertDokumentReference.sortKey);
+            }
+
+            return 1;
           }
 
-          return 1;
-        }
+          if (b.type === DocumentTypeEnum.JOURNALFOERT) {
+            return -1;
+          }
 
-        if (b.type === DocumentTypeEnum.JOURNALFOERT) {
-          return -1;
-        }
-
-        return b.created.localeCompare(a.created);
-      });
-    }),
-  );
-};
+          return b.created.localeCompare(a.created);
+        });
+      }),
+    );
+  };
 
 const handleToast = (documents: IDocument[], actor: INavEmployee) => {
   const count = documents.length;

@@ -1,11 +1,11 @@
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
 import { FormatName } from '@/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
 import type { FullmektigEvent } from '@/redux-api/server-sent-events/types';
+import type { Dispatch } from '@/redux-api/types';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 import {
   type BaseEvent,
@@ -15,7 +15,7 @@ import {
 } from '@/types/oppgavebehandling/response';
 
 export const handlefullmektigEvent =
-  (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>) =>
+  (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>, dispatch: Dispatch) =>
   ({ actor, timestamp, part }: FullmektigEvent) => {
     updateCachedData((draft) => {
       if (draft === undefined) {
@@ -48,7 +48,7 @@ export const handlefullmektigEvent =
       draft.prosessfullmektig = part;
       draft.modified = timestamp;
 
-      reduxStore.dispatch(
+      dispatch(
         historyQuerySlice.util.updateQueryData('getHistory', oppgaveId, (history) => {
           if (history === undefined) {
             return;

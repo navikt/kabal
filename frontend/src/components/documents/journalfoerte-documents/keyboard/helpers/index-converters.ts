@@ -1,12 +1,4 @@
 import { getLastIndex } from '@/components/documents/journalfoerte-documents/keyboard/increment-decrement';
-import {
-  getSelectionRanges,
-  setSelectionRanges,
-} from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
-import {
-  indexesToRanges,
-  rangesToIndexes,
-} from '@/components/documents/journalfoerte-documents/select-context/range-utils';
 import { Observable } from '@/observable';
 import { type IArkivertDocument, Journalstatus } from '@/types/arkiverte-documents';
 
@@ -24,7 +16,7 @@ export type DocumentIndexesState = readonly Document[];
 
 const INITIAL_STATE: DocumentIndexesState = Object.freeze([]);
 
-const state = new Observable<DocumentIndexesState>(INITIAL_STATE);
+export const state = new Observable<DocumentIndexesState>(INITIAL_STATE);
 
 export const resetDocumentIndexes = () => state.set(INITIAL_STATE);
 
@@ -57,37 +49,7 @@ export const convertRealToAccessibleDocumentIndex = (real: Path): number | undef
 export const convertAccessibleIndexToDocumentLocation = (accessibleIndex: number): Document | null =>
   state.get()[accessibleIndex] ?? null;
 
-export const setAccessibleToRealDocumentPaths = (
-  filteredDocuments: readonly IArkivertDocument[],
-  showVedleggIdList: readonly string[],
-) => {
-  const nextState = getNextState(filteredDocuments, showVedleggIdList);
-  const ranges = getSelectionRanges();
-
-  const nextIndexes: number[] = [];
-
-  for (const previousIndex of rangesToIndexes(ranges)) {
-    const location = convertAccessibleIndexToDocumentLocation(previousIndex);
-
-    if (location === null) {
-      continue;
-    }
-
-    const index = nextState.findIndex(
-      (d) => d.journalpostId === location.journalpostId && d.dokumentInfoId === location.dokumentInfoId,
-    );
-
-    if (index !== -1) {
-      nextIndexes.push(index);
-    }
-  }
-
-  state.set(nextState);
-
-  setSelectionRanges(indexesToRanges(nextIndexes));
-};
-
-const getNextState = (
+export const getNextState = (
   filteredDocuments: readonly IArkivertDocument[],
   showVedleggIdList: readonly string[],
 ): Readonly<DocumentIndexesState> => {

@@ -1,7 +1,8 @@
 import { isBefore, isSameDay, isValid, parse, subDays } from 'date-fns';
-import { TTL_DAYS } from '@/components/smart-editor/tabbed-editors/backup';
 import { BACKUP_DATE_FORMAT, KEY_PREFIX } from '@/components/smart-editor/tabbed-editors/constants';
 import { toast } from '@/components/toast/store';
+
+const TTL_DAYS = 30;
 
 export interface LocalStorage {
   length: number;

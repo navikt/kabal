@@ -11,6 +11,3 @@ export const FullmektigPlugin = createPlatePlugin({
     component: Fullmektig,
   },
 });
-
-export const FULLMEKTIG_LABEL_PLACEHOLDER = 'Fullmektigetikett';
-export const FULLMEKTIG_VALUE_PLACEHOLDER = 'Fullmektig';

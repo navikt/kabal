@@ -11,9 +11,9 @@ import type { PlateYjsEditorProps } from '@platejs/yjs';
 import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
 import type { BaseParagraphPlugin, TElement, TTableCellElement, TTableElement, TTableRowElement, TText } from 'platejs';
 import { type PlateEditor, useEditorRef, useEditorState } from 'platejs/react';
-import { BookmarkPlugin } from '@/plate/plugins/bookmark';
 import { CommentsPlugin } from '@/plate/plugins/comments';
 import type {
+  ELEMENT_BOOKMARK,
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
   ELEMENT_FOOTER,
@@ -46,7 +46,7 @@ export interface FormattedText extends TText {
   autoCapitalised?: boolean;
   abbreviation?: string;
   [CommentsPlugin.key]?: boolean;
-  [BookmarkPlugin.key]?: boolean;
+  [ELEMENT_BOOKMARK]?: boolean;
 }
 
 /**

@@ -14,6 +14,8 @@ export const ELEMENT_SIGNATURE = 'signature';
 export const ELEMENT_EMPTY_VOID = 'empty-void';
 export const ELEMENT_SAKSNUMMER = 'saksnummer';
 
+export const ELEMENT_BOOKMARK = 'bookmark';
+
 export const UNCHANGEABLE = [
   ELEMENT_HEADER,
   ELEMENT_FOOTER,

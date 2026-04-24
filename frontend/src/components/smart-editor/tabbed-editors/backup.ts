@@ -4,8 +4,6 @@ import { setLocalStorageItem } from '@/localstorage';
 import { pushError } from '@/observability';
 import type { KabalValue } from '@/plate/types';
 
-export const TTL_DAYS = 30;
-
 export const createLocalStorageBackup = (oppgaveId: string, documentId: string, content: KabalValue) =>
   requestIdleCallback(
     () => {

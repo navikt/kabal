@@ -2,12 +2,14 @@ import { BaseH1Plugin, BaseH2Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
+import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@/plate/components/fullmektig';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
   ELEMENT_FOOTER,
   ELEMENT_FULLMEKTIG,
   ELEMENT_HEADER,
+  ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
   ELEMENT_PAGE_BREAK,
   ELEMENT_PLACEHOLDER,
@@ -17,9 +19,7 @@ import {
   ELEMENT_SAKSNUMMER,
   ELEMENT_SIGNATURE,
 } from '@/plate/plugins/element-types';
-import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@/plate/plugins/fullmektig';
 import { LabelContentPlugin } from '@/plate/plugins/label-content';
-import { MaltekstPlugin } from '@/plate/plugins/maltekst';
 import { TemplateSections } from '@/plate/template-sections';
 import { MAX_TABLE_WIDTH } from '@/plate/toolbar/table/constants';
 import {
@@ -82,7 +82,7 @@ export const createMaltekst = (
   children: ParentOrChildElement[] = [createSimpleParagraph()],
   id?: string,
   language: Language = Language.NB,
-): MaltekstElement => ({ type: MaltekstPlugin.key, section, id, language, children });
+): MaltekstElement => ({ type: ELEMENT_MALTEKST, section, id, language, children });
 
 export const createRedigerbarMaltekst = (
   section: TemplateSections,

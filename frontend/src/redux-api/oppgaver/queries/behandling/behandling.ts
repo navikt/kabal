@@ -62,7 +62,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
       onQueryStarted: async (_, { queryFulfilled }) => {
         await queryFulfilled;
       },
-      onCacheEntryAdded: async (oppgaveId, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) => {
+      onCacheEntryAdded: async (oppgaveId, { cacheDataLoaded, cacheEntryRemoved, updateCachedData, dispatch }) => {
         try {
           await cacheDataLoaded;
 
@@ -75,27 +75,37 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
             { oppgave_id: oppgaveId },
           );
 
-          events.addJsonEventListener(ServerSentEventType.MESSAGE, handleMessageEvent(oppgaveId, navIdent));
+          events.addJsonEventListener(ServerSentEventType.MESSAGE, handleMessageEvent(oppgaveId, navIdent, dispatch));
 
-          const tildeling = handleTildelingEvent(oppgaveId, navIdent, updateCachedData);
-          const medunderskriverListener = handleMedunderskriverEvent(oppgaveId, navIdent, updateCachedData);
-          const klagerListener = handleKlagerEvent(oppgaveId, navIdent, updateCachedData);
-          const fullmektigListener = handlefullmektigEvent(oppgaveId, navIdent, updateCachedData);
+          const tildeling = handleTildelingEvent(oppgaveId, navIdent, updateCachedData, dispatch);
+          const medunderskriverListener = handleMedunderskriverEvent(oppgaveId, navIdent, updateCachedData, dispatch);
+          const klagerListener = handleKlagerEvent(oppgaveId, navIdent, updateCachedData, dispatch);
+          const fullmektigListener = handlefullmektigEvent(oppgaveId, navIdent, updateCachedData, dispatch);
           const utfallListener = handleUtfallEvent(navIdent, updateCachedData);
           const extraUtfallListener = handleExtraUtfallEvent(oppgaveId, navIdent, updateCachedData);
           const mottattVedtaksinstans = handleMottattVedtaksinstansEvent(navIdent, updateCachedData);
           const registreringshjemler = handleRegistreringshjemlerEvent(navIdent, updateCachedData);
           const innsendingshjemler = handleInnsendingshjemlerEvent(navIdent, updateCachedData);
-          const sattPaaVent = handleSattPaaVentEvent(oppgaveId, navIdent, updateCachedData);
-          const ferdigstilt = handleFerdigstiltEvent(oppgaveId, navIdent, updateCachedData);
-          const feilregistrering = handleFeilregistreringEvent(oppgaveId, navIdent, updateCachedData);
+          const sattPaaVent = handleSattPaaVentEvent(oppgaveId, navIdent, updateCachedData, dispatch);
+          const ferdigstilt = handleFerdigstiltEvent(oppgaveId, navIdent, updateCachedData, dispatch);
+          const feilregistrering = handleFeilregistreringEvent(oppgaveId, navIdent, updateCachedData, dispatch);
           const tilbakekreving = handleTilbakekrevingEvent(navIdent, updateCachedData);
-          const gosysOppgaveListener = handleGosysOppgaveEvent(oppgaveId, navIdent, updateCachedData);
+          const gosysOppgaveListener = handleGosysOppgaveEvent(
+            oppgaveId,
+            navIdent,
+            updateCachedData,
+            (recipe) => dispatch(behandlingerQuerySlice.util.updateQueryData('getGosysOppgaveList', oppgaveId, recipe)),
+            (gosysOppgave) =>
+              dispatch(behandlingerQuerySlice.util.upsertQueryData('getGosysOppgave', oppgaveId, gosysOppgave)),
+          );
           const varsletFrist = handleVarsletFristEvent(navIdent, updateCachedData);
 
           events.addJsonEventListener(ServerSentEventType.TILDELING, tildeling);
           events.addJsonEventListener(ServerSentEventType.MEDUNDERSKRIVER, medunderskriverListener);
-          events.addJsonEventListener(ServerSentEventType.ROL, handleRolEvent(oppgaveId, navIdent, updateCachedData));
+          events.addJsonEventListener(
+            ServerSentEventType.ROL,
+            handleRolEvent(oppgaveId, navIdent, updateCachedData, dispatch),
+          );
           events.addJsonEventListener(ServerSentEventType.KLAGER, klagerListener);
           events.addJsonEventListener(ServerSentEventType.FULLMEKTIG, fullmektigListener);
           events.addJsonEventListener(ServerSentEventType.UTFALL, utfallListener);
@@ -111,10 +121,10 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           events.addJsonEventListener(ServerSentEventType.VARSLET_FRIST, varsletFrist);
 
           // Dokumenter under arbeid
-          const documentsAdded = handleDocumentsAddedEvent(oppgaveId, navIdent);
-          const documentsChanged = handleDocumentsChangedEvent(oppgaveId, navIdent);
-          const documentsRemoved = handleDocumentsRemovedEvent(oppgaveId, navIdent);
-          const documentFinished = handleDocumentFinishedEvent(oppgaveId, navIdent);
+          const documentsAdded = handleDocumentsAddedEvent(oppgaveId, navIdent, dispatch);
+          const documentsChanged = handleDocumentsChangedEvent(oppgaveId, navIdent, dispatch);
+          const documentsRemoved = handleDocumentsRemovedEvent(oppgaveId, navIdent, dispatch);
+          const documentFinished = handleDocumentFinishedEvent(oppgaveId, navIdent, dispatch);
 
           events.addJsonEventListener(ServerSentEventType.DOCUMENTS_ADDED, documentsAdded);
           events.addJsonEventListener(ServerSentEventType.DOCUMENTS_CHANGED, documentsChanged);
@@ -122,11 +132,11 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           events.addJsonEventListener(ServerSentEventType.DOCUMENT_FINISHED, documentFinished, true);
 
           // Smart documents
-          const smartDocumentVersioned = handleSmartDocumentVersionedEvent(oppgaveId);
-          const smartDocumentLanguage = handleSmartDocumentLanguageChangedEvent(oppgaveId, navIdent);
-          const smartDocumentCommentAdded = handleSmartDocumentCommentAddedEvent(oppgaveId, navIdent);
-          const smartDocumentCommentRemoved = handleSmartDocumentCommentRemovedEvent(oppgaveId);
-          const smartDocumentCommentChanged = handleSmartDocumentCommentChangedEvent(oppgaveId, navIdent);
+          const smartDocumentVersioned = handleSmartDocumentVersionedEvent(oppgaveId, dispatch);
+          const smartDocumentLanguage = handleSmartDocumentLanguageChangedEvent(oppgaveId, navIdent, dispatch);
+          const smartDocumentCommentAdded = handleSmartDocumentCommentAddedEvent(oppgaveId, navIdent, dispatch);
+          const smartDocumentCommentRemoved = handleSmartDocumentCommentRemovedEvent(oppgaveId, dispatch);
+          const smartDocumentCommentChanged = handleSmartDocumentCommentChangedEvent(oppgaveId, navIdent, dispatch);
 
           events.addJsonEventListener(ServerSentEventType.SMART_DOCUMENT_VERSIONED, smartDocumentVersioned);
           events.addJsonEventListener(ServerSentEventType.SMART_DOCUMENT_LANGUAGE, smartDocumentLanguage);
@@ -135,11 +145,14 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
           events.addJsonEventListener(ServerSentEventType.SMART_DOCUMENT_COMMENT_CHANGED, smartDocumentCommentChanged);
 
           // Journalposter
-          const journalpostAdded = handleJournalpostAddedEvent(oppgaveId, navIdent);
-          const journalfoertDocumentModified = handleJournalfoertDocumentModified(oppgaveId, navIdent);
-          const includedDocumentsAdded = handleIncludedDocumentsAdded(oppgaveId, navIdent);
-          const includedDocumentsRemoved = handleIncludedDocumentsRemoved(oppgaveId, navIdent);
-          const includedDocumentsCleared = handleIncludedDocumentsCleared(oppgaveId, navIdent);
+          const journalpostAdded = handleJournalpostAddedEvent(oppgaveId, navIdent, dispatch);
+          const journalfoertDocumentModified = handleJournalfoertDocumentModified(oppgaveId, navIdent, dispatch);
+          const updateOppgavebehandling = (recipe: Parameters<typeof updateCachedData>[0]) =>
+            dispatch(behandlingerQuerySlice.util.updateQueryData('getOppgavebehandling', oppgaveId, recipe));
+
+          const includedDocumentsAdded = handleIncludedDocumentsAdded(navIdent, updateOppgavebehandling);
+          const includedDocumentsRemoved = handleIncludedDocumentsRemoved(navIdent, updateOppgavebehandling);
+          const includedDocumentsCleared = handleIncludedDocumentsCleared(navIdent, updateOppgavebehandling);
 
           events.addJsonEventListener(ServerSentEventType.JOURNALPOST_ADDED, journalpostAdded);
           events.addJsonEventListener(ServerSentEventType.JOURNALFOERT_DOCUMENT_MODIFIED, journalfoertDocumentModified);

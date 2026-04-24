@@ -2,14 +2,14 @@ import { BodyShort } from '@navikt/ds-react';
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
-import { reduxStore } from '@/redux/configure-store';
 import type { SmartDocumentCommentEvent } from '@/redux-api/server-sent-events/types';
 import { smartEditorCommentsApi } from '@/redux-api/smart-editor-comments';
+import type { Dispatch } from '@/redux-api/types';
 import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 
 export const handleSmartDocumentCommentAddedEvent =
-  (oppgaveId: string, userId: string) => (event: SmartDocumentCommentEvent) => {
-    reduxStore.dispatch(
+  (oppgaveId: string, userId: string, dispatch: Dispatch) => (event: SmartDocumentCommentEvent) => {
+    dispatch(
       smartEditorCommentsApi.util.updateQueryData(
         'getComments',
         { oppgaveId, dokumentId: event.documentId },
