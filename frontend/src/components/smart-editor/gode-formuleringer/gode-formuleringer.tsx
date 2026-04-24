@@ -1,7 +1,6 @@
 import { LightBulbIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, VStack } from '@navikt/ds-react';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Filter } from '@/components/smart-editor/gode-formuleringer/filter';
 import { fuzzySearch } from '@/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { GodeFormuleringerList } from '@/components/smart-editor/gode-formuleringer/gode-formuleringer-list';
@@ -12,7 +11,11 @@ import { SetGlobalExpandState } from '@/components/smart-editor/gode-formulering
 import { splitQuery } from '@/components/smart-editor/gode-formuleringer/split-query';
 import { useTranslatedFormuleringer } from '@/components/smart-editor/gode-formuleringer/use-translated-formuleringer';
 import { GLOBAL, LIST_DELIMITER, NONE, type NONE_TYPE } from '@/components/smart-editor-texts/types';
-import { type GodeFormuleringerExpandState, useSmartEditorGodeFormuleringerOpen } from '@/hooks/settings/use-setting';
+import {
+  GodeFormuleringerExpandState,
+  useSmartEditorGodeFormuleringerExpandstate,
+  useSmartEditorGodeFormuleringerOpen,
+} from '@/hooks/settings/use-setting';
 import { isMetaKey, Keys } from '@/keys';
 import { getTextAsString } from '@/plate/functions/get-text-string';
 import type { TemplateSections } from '@/plate/template-sections';
@@ -65,7 +68,8 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
   const { value: showGodeFormuleringer, setValue: setShowGodeFormuleringer } = useSmartEditorGodeFormuleringerOpen();
   const [activeSection, setActiveSection] = useState<TemplateSections | NONE_TYPE>(NONE);
   const { data, isLoading } = useTranslatedFormuleringer(templateId, activeSection);
-  const { godeFormuleringerExpandState } = useContext(SmartEditorContext);
+  const { value: godeFormuleringerExpandState = GodeFormuleringerExpandState.PREVIEW } =
+    useSmartEditorGodeFormuleringerExpandstate();
 
   useEffect(() => {
     if (focused === -1 && containerRef.current !== null) {

@@ -1,15 +1,14 @@
 import { Button } from '@navikt/ds-react';
-import { useContext, useMemo } from 'react';
-import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useMemo } from 'react';
 import { NextExpandStateIcon, nextExpandState } from '@/components/smart-editor/gode-formuleringer/god-formulering';
-import { GodeFormuleringerExpandState } from '@/hooks/settings/use-setting';
+import { GodeFormuleringerExpandState, useSmartEditorGodeFormuleringerExpandstate } from '@/hooks/settings/use-setting';
 
 interface Props {
   expandState: Map<string, GodeFormuleringerExpandState>;
 }
 
 export const SetGlobalExpandState = ({ expandState }: Props) => {
-  const { setGodeFormuleringerExpandState } = useContext(SmartEditorContext);
+  const { setValue: setGodeFormuleringerExpandState } = useSmartEditorGodeFormuleringerExpandstate();
 
   const mostUsedState = useMemo(() => {
     const stats = expandState.values().reduce(

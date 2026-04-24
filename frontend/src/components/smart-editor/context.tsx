@@ -1,11 +1,6 @@
 import type { TRange } from 'platejs';
 import { createContext, type RefObject, useRef, useState } from 'react';
-import {
-  GodeFormuleringerExpandState,
-  useSmartEditorAnnotationsAtOrigin,
-  useSmartEditorGodeFormuleringerExpandstate,
-  useSmartEditorHistoryOpen,
-} from '@/hooks/settings/use-setting';
+import { useSmartEditorAnnotationsAtOrigin, useSmartEditorHistoryOpen } from '@/hooks/settings/use-setting';
 import { DistribusjonsType, type ISmartDocumentOrAttachment } from '@/types/documents/documents';
 import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
@@ -13,8 +8,6 @@ import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 const noop = () => undefined;
 
 interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'templateId' | 'dokumentTypeId'> {
-  godeFormuleringerExpandState: GodeFormuleringerExpandState;
-  setGodeFormuleringerExpandState: (state: GodeFormuleringerExpandState) => void;
   showHistory: boolean;
   setShowHistory: (show: boolean) => void;
   newCommentSelection: TRange | null;
@@ -35,8 +28,6 @@ interface ISmartEditorContext extends Pick<ISmartDocumentOrAttachment, 'template
 export const SmartEditorContext = createContext<ISmartEditorContext>({
   templateId: TemplateIdEnum.GENERELT_BREV,
   dokumentTypeId: DistribusjonsType.BREV,
-  godeFormuleringerExpandState: GodeFormuleringerExpandState.PREVIEW,
-  setGodeFormuleringerExpandState: noop,
   showHistory: false,
   setShowHistory: noop,
   newCommentSelection: null,
@@ -61,10 +52,6 @@ interface Props {
 
 export const SmartEditorContextComponent = ({ children, smartDocument }: Props) => {
   const { dokumentTypeId, templateId, id, creator } = smartDocument;
-  const {
-    value: godeFormuleringerExpandState = GodeFormuleringerExpandState.PREVIEW,
-    setValue: setGodeFormuleringerExpandState,
-  } = useSmartEditorGodeFormuleringerExpandstate();
   const { value: showHistory = false, setValue: setShowHistory } = useSmartEditorHistoryOpen();
   const [newCommentSelection, setNewCommentSelection] = useState<TRange | null>(null);
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(null);
@@ -79,8 +66,6 @@ export const SmartEditorContextComponent = ({ children, smartDocument }: Props) 
       value={{
         templateId,
         dokumentTypeId,
-        godeFormuleringerExpandState,
-        setGodeFormuleringerExpandState,
         showHistory,
         setShowHistory,
         newCommentSelection,
