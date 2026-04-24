@@ -2,6 +2,7 @@ import { describe, expect, it } from 'bun:test';
 import { BaseParagraphPlugin, getEditorPlugin } from 'platejs';
 import { createPlateEditor } from 'platejs/react';
 import { cleanupWhitespaceIssues } from '@/plate/plugins/cleanup/cleanup-whitespace';
+import { SaksbehandlerPlaceholderPlugin } from '@/plate/plugins/placeholder/saksbehandler';
 import { WhitespaceDecorationPlugin } from '@/plate/plugins/whitespace-decoration';
 import { createSimpleParagraph } from '@/plate/templates/helpers';
 import { type FormattedText, type ParagraphElement, TextAlign } from '@/plate/types';
@@ -178,16 +179,22 @@ describe('cleanupWhitespaceIssues', () => {
     expect(editor.children).toEqual([createSimpleParagraph('Hello world')]);
   });
 
-  it('should trim trailing whitespace', () => {
+  it('should trim double trailing whitespace', () => {
     const editor = createEditor('Hello world  ');
     cleanupWhitespaceIssues(editor);
     expect(editor.children).toEqual([createSimpleParagraph('Hello world')]);
   });
 
-  it('should trim both leading and trailing whitespace', () => {
+  it('should trim leading and double trailing whitespace', () => {
     const editor = createEditor('  Hello world  ');
     cleanupWhitespaceIssues(editor);
     expect(editor.children).toEqual([createSimpleParagraph('Hello world')]);
+  });
+
+  it('should not trim single trailing whitespace', () => {
+    const editor = createEditor('Hello world ');
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toEqual([createSimpleParagraph('Hello world ')]);
   });
 
   it('should handle whitespace-only paragraph', () => {
@@ -282,6 +289,238 @@ describe('cleanupWhitespaceIssues', () => {
       createSimpleParagraph('Hello  world'),
       createSimpleParagraph('Foo bar'),
       createSimpleParagraph('Baz  qux'),
+    ]);
+  });
+});
+
+const createEditorWithInline = (children: (FormattedText | { type: string; children: FormattedText[] })[]) =>
+  createPlateEditor({
+    plugins: [WhitespaceDecorationPlugin, SaksbehandlerPlaceholderPlugin],
+    value: [{ type: BaseParagraphPlugin.key, align: TextAlign.LEFT, children } as ParagraphElement],
+  });
+
+describe('cross-boundary cleanup', () => {
+  it('should remove trailing space inside placeholder and keep the outside space', () => {
+    const editor = createEditorWithInline([
+      { text: 'before ' },
+      { type: 'placeholder', children: [{ text: 'value ' }] },
+      { text: ' after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [{ text: 'before ' }, { type: 'placeholder', children: [{ text: 'value' }] }, { text: ' after' }],
+      },
+    ]);
+  });
+
+  it('should remove trailing space inside placeholder and reduce multiple outside spaces to one', () => {
+    const editor = createEditorWithInline([
+      { text: '' },
+      { type: 'placeholder', children: [{ text: 'value ' }] },
+      { text: '  after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [{ text: '' }, { type: 'placeholder', children: [{ text: 'value' }] }, { text: ' after' }],
+      },
+    ]);
+  });
+
+  it('should not modify when placeholder does not end with space', () => {
+    const editor = createEditorWithInline([
+      { text: '' },
+      { type: 'placeholder', children: [{ text: 'value' }] },
+      { text: ' after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [{ text: '' }, { type: 'placeholder', children: [{ text: 'value' }] }, { text: ' after' }],
+      },
+    ]);
+  });
+
+  it('should remove leading space inside placeholder and keep the outside trailing space (reverse)', () => {
+    const editor = createEditorWithInline([
+      { text: 'before ' },
+      { type: 'placeholder', children: [{ text: ' value' }] },
+      { text: ' after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [{ text: 'before ' }, { type: 'placeholder', children: [{ text: 'value' }] }, { text: ' after' }],
+      },
+    ]);
+  });
+
+  it('should remove leading space inside placeholder and reduce multiple outside trailing spaces to one (reverse)', () => {
+    const editor = createEditorWithInline([
+      { text: 'before  ' },
+      { type: 'placeholder', children: [{ text: ' value' }] },
+      { text: '' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [{ text: 'before ' }, { type: 'placeholder', children: [{ text: 'value' }] }, { text: '' }],
+      },
+    ]);
+  });
+});
+
+describe('placeholder internal cleanup', () => {
+  it('should remove multiple leading spaces inside placeholder', () => {
+    const editor = createEditorWithInline([
+      { text: 'before ' },
+      { type: 'placeholder', children: [{ text: '   value' }] },
+      { text: ' after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [{ text: 'before ' }, { type: 'placeholder', children: [{ text: 'value' }] }, { text: ' after' }],
+      },
+    ]);
+  });
+
+  it('should collapse multiple leading spaces inside placeholder to one when no adjacent text space', () => {
+    const editor = createEditorWithInline([
+      { text: 'before' },
+      { type: 'placeholder', children: [{ text: '  value' }] },
+      { text: ' after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [{ text: 'before' }, { type: 'placeholder', children: [{ text: ' value' }] }, { text: ' after' }],
+      },
+    ]);
+  });
+
+  it('should not remove single leading space inside placeholder', () => {
+    const editor = createEditorWithInline([
+      { text: 'before' },
+      { type: 'placeholder', children: [{ text: ' value' }] },
+      { text: ' after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [{ text: 'before' }, { type: 'placeholder', children: [{ text: ' value' }] }, { text: ' after' }],
+      },
+    ]);
+  });
+
+  it('should remove multiple trailing spaces inside placeholder', () => {
+    const editor = createEditorWithInline([
+      { text: 'before ' },
+      { type: 'placeholder', children: [{ text: 'value   ' }] },
+      { text: ' after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [{ text: 'before ' }, { type: 'placeholder', children: [{ text: 'value' }] }, { text: ' after' }],
+      },
+    ]);
+  });
+
+  it('should collapse double spaces between words inside placeholder', () => {
+    const editor = createEditorWithInline([
+      { text: 'before ' },
+      { type: 'placeholder', children: [{ text: 'hello  world' }] },
+      { text: ' after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [
+          { text: 'before ' },
+          { type: 'placeholder', children: [{ text: 'hello world' }] },
+          { text: ' after' },
+        ],
+      },
+    ]);
+  });
+
+  it('should handle all internal issues at once: leading + double + trailing', () => {
+    const editor = createEditorWithInline([
+      { text: 'before ' },
+      { type: 'placeholder', children: [{ text: '  hello  world  ' }] },
+      { text: ' after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [
+          { text: 'before ' },
+          { type: 'placeholder', children: [{ text: 'hello world' }] },
+          { text: ' after' },
+        ],
+      },
+    ]);
+  });
+
+  it('should handle cross-boundary and internal issues combined', () => {
+    const editor = createEditorWithInline([
+      { text: 'before  ' },
+      { type: 'placeholder', children: [{ text: '  hello  world  ' }] },
+      { text: '  after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [
+          { text: 'before ' },
+          { type: 'placeholder', children: [{ text: 'hello world' }] },
+          { text: ' after' },
+        ],
+      },
+    ]);
+  });
+
+  it('should handle placeholder with only spaces', () => {
+    const editor = createEditorWithInline([
+      { text: 'before ' },
+      { type: 'placeholder', children: [{ text: '   ' }] },
+      { text: ' after' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [{ text: 'before ' }, { type: 'placeholder', children: [{ text: '' }] }, { text: ' after' }],
+      },
+    ]);
+  });
+
+  it('should clean placeholder internal issues without adjacent text', () => {
+    const editor = createEditorWithInline([
+      { text: '' },
+      { type: 'placeholder', children: [{ text: '  hello  world  ' }] },
+      { text: '' },
+    ]);
+    cleanupWhitespaceIssues(editor);
+    expect(editor.children).toMatchObject([
+      {
+        type: BaseParagraphPlugin.key,
+        children: [{ text: '' }, { type: 'placeholder', children: [{ text: ' hello world' }] }, { text: '' }],
+      },
     ]);
   });
 });

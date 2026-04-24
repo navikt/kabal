@@ -4,16 +4,20 @@ import { findWhitespaceIssues } from '@/plate/plugins/find-whitespace-issues';
 
 const WHITESPACE_ISSUE_KEY = 'whitespace-issue';
 
-const decorateWhitespaceIssues: Decorate = ({ entry: [node, path], type }) => {
+const decorateWhitespaceIssues: Decorate = ({ editor, entry: [node, path], type }) => {
   if (!ElementApi.isElement(node)) {
     return [];
   }
 
-  return findWhitespaceIssues(node, path).map(({ anchor, focus }) => ({
-    anchor,
-    focus,
-    [type]: true,
-  }));
+  const isInline = editor.api.isInline(node);
+
+  return findWhitespaceIssues(node, path, isInline ? { collapseLeading: true, strictTrailing: true } : undefined).map(
+    ({ anchor, focus }) => ({
+      anchor,
+      focus,
+      [type]: true,
+    }),
+  );
 };
 
 export const WhitespaceIssueLeaf = (props: PlateLeafProps) => (
