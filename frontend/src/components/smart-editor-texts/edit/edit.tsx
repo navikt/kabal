@@ -8,7 +8,7 @@ import { YtelserAndHjemlerSelect } from '@/components/smart-editor-texts/hjemler
 import { useMetadataFilters } from '@/components/smart-editor-texts/hooks/use-metadata-filters';
 import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
 import { TextModified } from '@/components/smart-editor-texts/modified';
-import { KlageenhetSelect, TemplateSectionSelect } from '@/components/smart-editor-texts/query-filter-selects';
+import { KlageenhetSelect, TemplateSectionFilter } from '@/components/smart-editor-texts/query-filter-selects';
 import { UtfallSetFilter } from '@/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
 import { isPlainText } from '@/functions/is-rich-plain-text';
 import {
@@ -101,7 +101,7 @@ const Filters = ({ text, query, filters }: FiltersProps) => {
     <>
       <HStack gap="space-8" align="center">
         {hasTemplateSectionFilter ? (
-          <TemplateSectionSelect
+          <TemplateSectionFilter
             selected={templateSectionIdList}
             onChange={(v) => updateTemplateSectionIdList({ id, query, templateSectionIdList: v })}
             includeDeprecated

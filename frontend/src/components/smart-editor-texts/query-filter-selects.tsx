@@ -1,12 +1,11 @@
 import { useCallback, useMemo } from 'react';
-import { NestedFilterList } from '@/components/filter-dropdown/nested-filter-list';
+import { NestedFilterList, type NestedOption } from '@/components/filter-dropdown/nested-filter-list';
 import type { IOption } from '@/components/filter-dropdown/props';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { getTemplateOptions } from '@/components/smart-editor-texts/get-template-options';
 import { useKlageenheterOptions } from '@/components/smart-editor-texts/hooks/use-options';
 import {
-  GLOBAL,
   LIST_DELIMITER,
   NONE,
   NONE_OPTION,
@@ -155,7 +154,7 @@ interface TemplateSectionSelectProps {
   includeDeprecated?: boolean;
 }
 
-const useCounts = (selected: string[]) =>
+const useFilterCounts = (selected: string[]) =>
   useMemo(() => {
     let templatesCount = 0;
     let sectionsCount = 0;
@@ -164,7 +163,7 @@ const useCounts = (selected: string[]) =>
       if (item === NONE) {
         continue;
       }
-      if (item === WILDCARD || item === GLOBAL || item.endsWith(`${LIST_DELIMITER}${WILDCARD}`)) {
+      if (item === WILDCARD || item.endsWith(`${LIST_DELIMITER}${WILDCARD}`)) {
         templatesCount++;
       } else if (item.includes(LIST_DELIMITER)) {
         sectionsCount++;
@@ -174,7 +173,7 @@ const useCounts = (selected: string[]) =>
     return { templatesCount, sectionsCount };
   }, [selected]);
 
-export const TemplateSectionSelect = ({
+export const TemplateSectionFilter = ({
   selected,
   onChange,
   includeNoneOption = false,
@@ -185,7 +184,7 @@ export const TemplateSectionSelect = ({
     [selected, includeNoneOption, includeDeprecated],
   );
 
-  const { templatesCount, sectionsCount } = useCounts(selected);
+  const { templatesCount, sectionsCount } = useFilterCounts(selected);
 
   const label = `Maler (${templatesCount}) og seksjoner (${sectionsCount})`;
 
@@ -196,23 +195,18 @@ export const TemplateSectionSelect = ({
   );
 };
 
-export const SectionSelect = ({
-  selected,
-  onChange,
-  includeNoneOption = false,
-  includeDeprecated = false,
-}: TemplateSectionSelectProps) => {
-  const templates = useMemo(
-    () => getTemplateOptions(selected, includeNoneOption, includeDeprecated, false, GLOBAL),
-    [selected, includeNoneOption, includeDeprecated],
-  );
+interface SectionSelectProps {
+  selected: string[];
+  onChange: (value: string[]) => void;
+  nestedOptions: NestedOption[];
+  sectionsCount: number;
+}
 
-  const { sectionsCount } = useCounts(selected);
-
+export const SectionSelect = ({ selected, onChange, nestedOptions, sectionsCount }: SectionSelectProps) => {
   const label = `Seksjoner (${sectionsCount})`;
 
   return (
-    <NestedFilterList options={templates} selected={selected} onChange={onChange}>
+    <NestedFilterList options={nestedOptions} selected={selected} onChange={onChange}>
       {label}
     </NestedFilterList>
   );
