@@ -6,7 +6,7 @@ import { useUtfallOptions } from '@/components/smart-editor-texts/hooks/use-opti
 import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
 import {
   KlageenhetSelect,
-  TemplateSectionSelect,
+  TemplateSectionFilter,
   UtfallSelect,
 } from '@/components/smart-editor-texts/query-filter-selects';
 import type { IGetMaltekstseksjonParams, TextTypes } from '@/types/common-text-types';
@@ -43,7 +43,7 @@ export const Filters = ({ textType, className }: Props) => {
   return (
     <HStack className={className} gap="space-8">
       {hasTemplateSectionFilter ? (
-        <TemplateSectionSelect
+        <TemplateSectionFilter
           selected={templateSectionIdList ?? []}
           onChange={(value) => setFilter('templateSectionIdList', value)}
           includeNoneOption

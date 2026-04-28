@@ -1,6 +1,9 @@
 import { HStack } from '@navikt/ds-react';
+import { useMemo } from 'react';
+import { getTemplateOptions } from '@/components/smart-editor-texts/get-template-options';
 import { YtelserAndHjemlerSelect } from '@/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
 import { SectionSelect } from '@/components/smart-editor-texts/query-filter-selects';
+import { GLOBAL, LIST_DELIMITER, NONE } from '@/components/smart-editor-texts/types';
 import { UtfallSetFilter } from '@/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
 import {
   useUpdateTemplateSectionIdListMutation,
@@ -26,12 +29,20 @@ export const Filters = ({ maltekst, query }: Props) => {
     fixedCacheKey: `${maltekst.id}-utfall`,
   });
 
+  const nestedOptions = useMemo(
+    () => getTemplateOptions(maltekst.templateSectionIdList, false, true, false, GLOBAL),
+    [maltekst.templateSectionIdList],
+  );
+
+  const { sectionsCount } = useCounts(maltekst.templateSectionIdList);
+
   return (
     <HStack gap="space-8" className="[grid-area:filters]">
       <SectionSelect
         selected={maltekst.templateSectionIdList}
         onChange={(templateSectionIdList) => updateTemplateSection({ id: maltekst.id, templateSectionIdList, query })}
-        includeDeprecated
+        nestedOptions={nestedOptions}
+        sectionsCount={sectionsCount}
       />
       <YtelserAndHjemlerSelect
         selected={maltekst.ytelseHjemmelIdList}
@@ -44,3 +55,20 @@ export const Filters = ({ maltekst, query }: Props) => {
     </HStack>
   );
 };
+
+const useCounts = (selected: string[]) =>
+  useMemo(() => {
+    let sectionsCount = 0;
+
+    for (const item of selected) {
+      if (item === NONE) {
+        continue;
+      }
+
+      if (item.includes(LIST_DELIMITER)) {
+        sectionsCount++;
+      }
+    }
+
+    return { sectionsCount };
+  }, [selected]);
