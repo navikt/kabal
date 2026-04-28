@@ -164,7 +164,7 @@ const useCounts = (selected: string[]) =>
       if (item === NONE) {
         continue;
       }
-      if (item === GLOBAL || item.endsWith(`${LIST_DELIMITER}${WILDCARD}`)) {
+      if (item === WILDCARD || item === GLOBAL || item.endsWith(`${LIST_DELIMITER}${WILDCARD}`)) {
         templatesCount++;
       } else if (item.includes(LIST_DELIMITER)) {
         sectionsCount++;
@@ -181,7 +181,7 @@ export const TemplateSectionSelect = ({
   includeDeprecated = false,
 }: TemplateSectionSelectProps) => {
   const templates = useMemo(
-    () => getTemplateOptions(selected, includeNoneOption, includeDeprecated, true),
+    () => getTemplateOptions(selected, includeNoneOption, includeDeprecated, true, WILDCARD),
     [selected, includeNoneOption, includeDeprecated],
   );
 
@@ -203,7 +203,7 @@ export const SectionSelect = ({
   includeDeprecated = false,
 }: TemplateSectionSelectProps) => {
   const templates = useMemo(
-    () => getTemplateOptions(selected, includeNoneOption, includeDeprecated, false),
+    () => getTemplateOptions(selected, includeNoneOption, includeDeprecated, false, GLOBAL),
     [selected, includeNoneOption, includeDeprecated],
   );
 

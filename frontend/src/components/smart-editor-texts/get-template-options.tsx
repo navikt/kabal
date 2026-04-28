@@ -1,6 +1,11 @@
 import { type NestedOption, OptionType } from '@/components/filter-dropdown/nested-filter-list';
 import { MALTEKST_SECTION_NAMES } from '@/components/smart-editor/constants';
-import { GLOBAL, LIST_DELIMITER, NONE_OPTION, WILDCARD } from '@/components/smart-editor-texts/types';
+import {
+  type GLOBAL_TYPE,
+  LIST_DELIMITER,
+  NONE_OPTION,
+  type WILDCARD_TYPE,
+} from '@/components/smart-editor-texts/types';
 import { getTemplateSections } from '@/hooks/use-template-sections';
 import { DeprecatedTemplateSections, TemplateSections } from '@/plate/template-sections';
 import { TEMPLATES } from '@/plate/templates/templates';
@@ -13,6 +18,7 @@ export const getTemplateOptions = (
   includeNone: boolean,
   includeDeprecated: boolean,
   templatesSelectable: boolean,
+  anyValue: WILDCARD_TYPE | GLOBAL_TYPE,
 ): NestedOption[] => {
   const options: NestedOption[] = [];
 
@@ -28,7 +34,7 @@ export const getTemplateOptions = (
       value: `${templateId}${LIST_DELIMITER}${s}`,
       label: MALTEKST_SECTION_NAMES[s],
       filterValue: `${tittel} ${MALTEKST_SECTION_NAMES[s]}`,
-      indeterminate: selected.includes(`${GLOBAL}${LIST_DELIMITER}${s}`),
+      indeterminate: selected.includes(`${anyValue}${LIST_DELIMITER}${s}`),
     }));
 
     const unusedOptionsGroup: NestedOption = {
@@ -44,7 +50,7 @@ export const getTemplateOptions = (
       value: `${templateId}${LIST_DELIMITER}${s}`,
       label: MALTEKST_SECTION_NAMES[s],
       filterValue: `${tittel} ${MALTEKST_SECTION_NAMES[s]}`,
-      indeterminate: selected.includes(`${GLOBAL}${LIST_DELIMITER}${s}`),
+      indeterminate: selected.includes(`${anyValue}${LIST_DELIMITER}${s}`),
     }));
 
     const templateOptions = usedOptions.concat(unusedOptionsGroup);
@@ -55,7 +61,7 @@ export const getTemplateOptions = (
         value: `${templateId}${LIST_DELIMITER}${s}`,
         label: MALTEKST_SECTION_NAMES[s],
         filterValue: `${tittel} ${MALTEKST_SECTION_NAMES[s]}`,
-        indeterminate: selected.includes(`${GLOBAL}${LIST_DELIMITER}${s}`),
+        indeterminate: selected.includes(`${anyValue}${LIST_DELIMITER}${s}`),
       }));
 
       const deprecatedOptionsGroup: NestedOption = {
@@ -72,7 +78,7 @@ export const getTemplateOptions = (
     options.push({
       type: templatesSelectable ? OptionType.OPTION : OptionType.GROUP,
       label: tittel,
-      value: `${templateId}${LIST_DELIMITER}${WILDCARD}`,
+      value: `${templateId}${LIST_DELIMITER}${anyValue}`,
       filterValue: templateId,
       options: templateOptions,
       indeterminate: selected.some((s) => s.startsWith(`${templateId}${LIST_DELIMITER}`)),
@@ -81,7 +87,7 @@ export const getTemplateOptions = (
 
   const globalOptions: NestedOption[] = Object.values(TemplateSections).map((s) => ({
     type: OptionType.OPTION,
-    value: `${GLOBAL}${LIST_DELIMITER}${s}`,
+    value: `${anyValue}${LIST_DELIMITER}${s}`,
     label: MALTEKST_SECTION_NAMES[s],
     filterValue: `${ALL_TEMPLATES_LABEL} ${MALTEKST_SECTION_NAMES[s]}`,
   }));
@@ -89,7 +95,7 @@ export const getTemplateOptions = (
   if (includeDeprecated) {
     const globalDeprecatedOptions: NestedOption[] = Object.values(DeprecatedTemplateSections).map((s) => ({
       type: OptionType.OPTION,
-      value: `${GLOBAL}${LIST_DELIMITER}${s}`,
+      value: `${anyValue}${LIST_DELIMITER}${s}`,
       label: MALTEKST_SECTION_NAMES[s],
       filterValue: `${ALL_TEMPLATES_LABEL} ${MALTEKST_SECTION_NAMES[s]}`,
     }));
@@ -97,7 +103,7 @@ export const getTemplateOptions = (
     const globalDeprecatedOptionsGroup: NestedOption = {
       type: OptionType.GROUP,
       label: DEPRECATED_SECTIONS_LABEL,
-      value: `${GLOBAL}${LIST_DELIMITER}${WILDCARD}`,
+      value: `${anyValue}${LIST_DELIMITER}${anyValue}`,
       filterValue: DEPRECATED_SECTIONS_LABEL,
       options: globalDeprecatedOptions,
     };
@@ -108,9 +114,9 @@ export const getTemplateOptions = (
   options.push({
     type: templatesSelectable ? OptionType.OPTION : OptionType.GROUP,
     label: ALL_TEMPLATES_LABEL,
-    value: GLOBAL,
+    value: anyValue,
     filterValue: '',
-    indeterminate: selected.some((s) => s.startsWith(`${GLOBAL}${LIST_DELIMITER}`)),
+    indeterminate: selected.some((s) => s.startsWith(`${anyValue}${LIST_DELIMITER}`)),
     options: globalOptions,
   });
 
