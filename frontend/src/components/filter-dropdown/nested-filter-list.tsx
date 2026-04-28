@@ -3,7 +3,7 @@ import { BodyShort, Button, Checkbox, HGrid, HStack, Tag, VStack } from '@navikt
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { MultiSelectDropdown } from '@/components/filter-dropdown/multi-select-dropdown';
 import type { BaseProps, IOption } from '@/components/filter-dropdown/props';
-import { GLOBAL, LIST_DELIMITER } from '@/components/smart-editor-texts/types';
+import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@/components/smart-editor-texts/types';
 import { stringToRegExp } from '@/functions/string-to-regex';
 
 export enum OptionType {
@@ -253,7 +253,8 @@ const getAllSubOptions = (options: NestedOption[], selected: string[], filter: R
 
     if (
       selected.includes(subOpt.value) ||
-      selected.includes(`${GLOBAL}${LIST_DELIMITER}${subOpt.value.split(LIST_DELIMITER)[1]}`)
+      selected.includes(`${GLOBAL}${LIST_DELIMITER}${subOpt.value.split(LIST_DELIMITER)[1]}`) ||
+      selected.includes(`${WILDCARD}${LIST_DELIMITER}${subOpt.value.split(LIST_DELIMITER)[1]}`)
     ) {
       subSelectionCount++;
     }
