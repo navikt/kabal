@@ -176,31 +176,51 @@ export type ISattPåVent = BaseSattPåVent & {
 export enum FlowState {
   NOT_SENT = 'NOT_SENT',
   SENT = 'SENT',
-  RETURNED = 'RETURNED',
+  RETURNED = 'RETURNED', // TODO: Remove when this is no longer used
 }
 
-interface IReturnedHelper {
+export enum ReviewFlowState {
+  APPROVED = 'RETURNED_APPROVED',
+  REJECTED = 'RETURNED_NOT_APPROVED',
+}
+
+export type MuFlowState = FlowState | ReviewFlowState;
+
+interface IReturnedRol {
   employee: INavEmployee;
   flowState: FlowState.RETURNED;
   returnertDate: string; // LocalDateTime
 }
 
-interface ISentHelper {
+interface ISentRol {
   employee: INavEmployee;
   flowState: FlowState.SENT;
   returnertDate: null; // LocalDateTime
 }
 
-interface INotSentHelper {
+interface INotSentRol {
   employee: INavEmployee | null;
   flowState: FlowState.NOT_SENT;
   returnertDate: null;
 }
 
-// Medunderskriver/ROL
-export type IHelper = INotSentHelper | ISentHelper | IReturnedHelper;
-
-export interface IMedunderskriverRol {
-  employee: INavEmployee | null;
-  flowState: FlowState;
+interface IReturnedMu {
+  employee: INavEmployee;
+  flowState: FlowState.RETURNED | ReviewFlowState.REJECTED | ReviewFlowState.APPROVED;
+  returnertDate: string; // LocalDateTime
 }
+
+interface ISentMu {
+  employee: INavEmployee;
+  flowState: FlowState.SENT;
+  returnertDate: null; // LocalDateTime
+}
+
+interface INotSentMu {
+  employee: INavEmployee | null;
+  flowState: FlowState.NOT_SENT;
+  returnertDate: null;
+}
+
+export type IRol = IReturnedRol | ISentRol | INotSentRol;
+export type IMedunderskriver = IReturnedMu | ISentMu | INotSentMu;

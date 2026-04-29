@@ -5,7 +5,7 @@ import { StaticDataContext } from '@/components/app/static-data-context';
 import { useHasAnyOfRoles, useHasRole } from '@/hooks/use-has-role';
 import { useHasYtelseAccess } from '@/hooks/use-has-ytelse-access';
 import { Role } from '@/types/bruker';
-import { FlowState, type IHelper } from '@/types/oppgave-common';
+import { FlowState, type IRol } from '@/types/oppgave-common';
 import type { IOppgave } from '@/types/oppgaver';
 
 interface BaseProps extends Omit<ButtonProps, 'id' | 'children'> {
@@ -14,7 +14,7 @@ interface BaseProps extends Omit<ButtonProps, 'id' | 'children'> {
 
 interface RoleAccessedProps extends BaseProps, Pick<IOppgave, 'id' | 'tildeltSaksbehandlerident'> {
   medunderskriverident: string | null;
-  rol: IHelper | null;
+  rol: IRol | null;
 }
 
 export const OpenForRoleAccess = ({

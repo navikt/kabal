@@ -4,61 +4,65 @@ import {
   ArrowUndoIcon,
   CheckmarkIcon,
   PaperplaneIcon,
+  XMarkIcon,
   XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
 import { employeeName, SELF, toKey } from '@/components/behandling/behandlingsdialog/history/common';
 import { HistoryEvent } from '@/components/behandling/behandlingsdialog/history/event';
 import type { INavEmployee } from '@/types/bruker';
-import { FlowState } from '@/types/oppgave-common';
+import { FlowState, ReviewFlowState } from '@/types/oppgave-common';
 import { HistoryEventTypes, type IMedunderskriverEvent } from '@/types/oppgavebehandling/response';
+
+const isReturned = (flowState: FlowState | ReviewFlowState): boolean =>
+  flowState === FlowState.RETURNED || flowState === ReviewFlowState.REJECTED || flowState === ReviewFlowState.APPROVED;
 
 export const getMedunderskriverEvent = (e: IMedunderskriverEvent) => {
   const key = toKey(e);
   const { event, actor, previous, timestamp } = e;
-  const isFlowChange = event.flow !== previous.event.flow;
 
-  if (isFlowChange) {
-    if (previous.event.flow === FlowState.RETURNED && event.flow === FlowState.SENT) {
-      if (event.medunderskriver === null) {
-        console.warn('Cannot be sent to medunderskriver when medunderskriver is null.');
+  if (isReturned(previous.event.flow) && event.flow === FlowState.SENT) {
+    if (event.medunderskriver === null) {
+      console.warn('Cannot be sent to medunderskriver when medunderskriver is null.');
 
-        return null;
-      }
-
-      if (actor?.navIdent === event.medunderskriver.navIdent) {
-        return <Retracted actor={actor} timestamp={timestamp} key={key} />;
-      }
-
-      return <SendBack actor={actor} medunderskriver={event.medunderskriver} timestamp={timestamp} key={key} />;
+      return null;
     }
 
-    if (previous.event.flow === FlowState.NOT_SENT && event.flow === FlowState.SENT) {
-      return <Send actor={actor} medunderskriver={event.medunderskriver} timestamp={timestamp} key={key} />;
+    if (actor?.navIdent === event.medunderskriver.navIdent) {
+      return <Retracted actor={actor} timestamp={timestamp} key={key} />;
     }
 
-    if (previous.event.flow === FlowState.SENT && event.flow === FlowState.RETURNED) {
-      return <Return actor={actor} timestamp={timestamp} key={key} />;
-    }
+    return <SendBack actor={actor} medunderskriver={event.medunderskriver} timestamp={timestamp} key={key} />;
+  }
 
-    if (previous.event.flow === FlowState.SENT && event.flow === FlowState.NOT_SENT) {
-      return <RetractOther actor={actor} medunderskriver={event.medunderskriver} timestamp={timestamp} key={key} />;
-    }
+  if (previous.event.flow === FlowState.NOT_SENT && event.flow === FlowState.SENT) {
+    return <Send actor={actor} medunderskriver={event.medunderskriver} timestamp={timestamp} key={key} />;
+  }
+
+  if (previous.event.flow === FlowState.SENT && event.flow === FlowState.RETURNED) {
+    return <Return actor={actor} timestamp={timestamp} key={key} />;
+  }
+
+  if (previous.event.flow === FlowState.SENT && event.flow === ReviewFlowState.APPROVED) {
+    return <Approved actor={actor} timestamp={timestamp} key={key} />;
+  }
+
+  if (previous.event.flow === FlowState.SENT && event.flow === ReviewFlowState.REJECTED) {
+    return <Rejected actor={actor} timestamp={timestamp} key={key} />;
+  }
+
+  if (event.medunderskriver === null && previous.event.medunderskriver !== null) {
+    return (
+      <Remove actor={actor} previousMedunderskriver={previous.event.medunderskriver} timestamp={timestamp} key={key} />
+    );
+  }
+
+  if (previous.event.flow === FlowState.SENT && event.flow === FlowState.NOT_SENT) {
+    return <RetractOther actor={actor} medunderskriver={event.medunderskriver} timestamp={timestamp} key={key} />;
   }
 
   const isMedunderskriverChange = event.medunderskriver !== previous.event.medunderskriver;
 
   if (isMedunderskriverChange && event.flow !== FlowState.NOT_SENT) {
-    if (event.medunderskriver === null) {
-      return (
-        <Remove
-          actor={actor}
-          previousMedunderskriver={previous.event.medunderskriver}
-          timestamp={timestamp}
-          key={key}
-        />
-      );
-    }
-
     if (previous.event.medunderskriver === null) {
       return <SendOther actor={actor} medunderskriver={event.medunderskriver} timestamp={timestamp} key={key} />;
     }
@@ -146,6 +150,23 @@ const Return = ({ actor, timestamp }: ReturnProps) => (
     icon={CheckmarkIcon}
   >
     <p>{employeeName(actor)} returnerte saken fra medunderskrift til saksbehandler.</p>
+  </HistoryEvent>
+);
+
+const Approved = ({ actor, timestamp }: ReturnProps) => (
+  <HistoryEvent
+    tag="Medunderskriver"
+    type={HistoryEventTypes.MEDUNDERSKRIVER}
+    timestamp={timestamp}
+    icon={CheckmarkIcon}
+  >
+    <p>Medunderskriver {employeeName(actor)} returnerte saken med godkjenning til saksbehandler.</p>
+  </HistoryEvent>
+);
+
+const Rejected = ({ actor, timestamp }: ReturnProps) => (
+  <HistoryEvent tag="Medunderskriver" type={HistoryEventTypes.MEDUNDERSKRIVER} timestamp={timestamp} icon={XMarkIcon}>
+    <p>Medunderskriver {employeeName(actor)} returnerte saken uten godkjenning til saksbehandler.</p>
   </HistoryEvent>
 );
 

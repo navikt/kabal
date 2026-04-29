@@ -8,7 +8,6 @@ import { SendToSaksbehandler } from '@/components/behandling/behandlingsdialog/m
 import { SKELETON } from '@/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { MedunderskriverStateText } from '@/components/behandling/behandlingsdialog/medunderskriver/state-text';
 import { TakeFromMedunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/take-from-medunderskriver';
-import { TakeFromSaksbehandler } from '@/components/behandling/behandlingsdialog/medunderskriver/take-from-saksbehandler';
 import { hasFortroligFamily, hasFortroligStatus } from '@/domain/is-fortrolig';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
@@ -56,7 +55,6 @@ export const Medunderskriver = () => {
       <SendToMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} typeId={typeId} />
       <SendToSaksbehandler oppgaveId={oppgaveId} medunderskriver={medunderskriver} />
       <TakeFromMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} typeId={typeId} />
-      <TakeFromSaksbehandler oppgaveId={oppgaveId} medunderskriver={medunderskriver} />
     </Container>
   );
 };

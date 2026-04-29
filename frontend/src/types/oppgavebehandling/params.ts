@@ -1,6 +1,13 @@
 import type { INavEmployee } from '@/types/bruker';
 import type { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
-import type { BaseSattPåVent, FlowState, IFullmektig, IJournalfoertDokumentId, IPart } from '@/types/oppgave-common';
+import type {
+  BaseSattPåVent,
+  FlowState,
+  IFullmektig,
+  IJournalfoertDokumentId,
+  IPart,
+  MuFlowState,
+} from '@/types/oppgave-common';
 
 export interface IOppgavebehandlingBaseParams {
   oppgaveId: string;
@@ -51,7 +58,11 @@ export interface ISetMedunderskriverParams extends IOppgavebehandlingBaseParams 
   employee: INavEmployee | null;
 }
 
-export interface ISetFlowStateParams extends IOppgavebehandlingBaseParams {
+export interface ISetMuFlowStateParams extends IOppgavebehandlingBaseParams {
+  flowState: MuFlowState;
+}
+
+export interface ISetRolFlowStateParams extends IOppgavebehandlingBaseParams {
   flowState: FlowState;
 }
 

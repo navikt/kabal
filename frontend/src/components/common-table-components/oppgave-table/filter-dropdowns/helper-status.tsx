@@ -22,13 +22,13 @@ import type { Entry } from '@/components/searchable-select/virtualized-option-li
 import { SaksTypeEnum } from '@/types/kodeverk';
 
 interface StatusOption {
-  value: HelperStatus;
+  value: HelperStatus[];
   label: string;
 }
 
 const toEntry = (option: StatusOption): Entry<StatusOption> => ({
   value: option,
-  key: option.value,
+  key: option.value.map((v) => v).join(','),
   label: option.label,
   plainText: option.label,
 });
@@ -42,13 +42,13 @@ export const HelperStatusWithoutSelf = ({ columnKey, tableKey }: FilterDropdownP
   const allOptions = useMemo(() => getOptionsWithoutSelf(typer), [typer]);
 
   const selectedOptions = useMemo(
-    () => allOptions.filter((entry) => statuses?.includes(entry.value.value) === true),
+    () => allOptions.filter((entry) => statuses?.some((status) => entry.value.value.includes(status)) === true),
     [allOptions, statuses],
   );
 
   const handleChange = useCallback(
     (values: StatusOption[]) => {
-      const newStatuses = values.map((v) => v.value);
+      const newStatuses = values.flatMap((v) => v.value);
       setStatuses(newStatuses.length === 0 ? undefined : newStatuses);
     },
     [setStatuses],
@@ -80,13 +80,13 @@ export const HelperStatusWithSelf = ({ columnKey, tableKey }: FilterDropdownProp
   const allOptions = useMemo(() => getOptionsWithSelf(typer), [typer]);
 
   const selectedOptions = useMemo(
-    () => allOptions.filter((entry) => statuses?.includes(entry.value.value) === true),
+    () => allOptions.filter((entry) => statuses?.some((status) => entry.value.value.includes(status)) === true),
     [allOptions, statuses],
   );
 
   const handleChange = useCallback(
     (values: StatusOption[]) => {
-      const newStatuses = values.map((v) => v.value);
+      const newStatuses = values.flatMap((v) => v.value);
       setStatuses(newStatuses.length === 0 ? undefined : newStatuses);
     },
     [setStatuses],
@@ -111,30 +111,36 @@ export const HelperStatusWithSelf = ({ columnKey, tableKey }: FilterDropdownProp
   );
 };
 
+const RETURNED_FROM_MU_STATUSES = [
+  CommonHelperStatus.RETURNERT_FRA_MU,
+  CommonHelperStatus.RETURNERT_FRA_MU_MED_GODKJENNING,
+  CommonHelperStatus.RETURNERT_FRA_MU_UTEN_GODKJENNING,
+];
+
 const COMMON_ROL_OPTIONS: Entry<StatusOption>[] = [
-  { value: CommonHelperStatus.SENDT_TIL_FELLES_ROL_KOE, label: 'I felles kø for ROL' },
-  { value: CommonHelperStatus.SENDT_TIL_ROL, label: 'Sendt til ROL' },
-  { value: CommonHelperStatus.RETURNERT_FRA_ROL, label: 'Tilbake fra ROL' },
+  { value: [CommonHelperStatus.SENDT_TIL_FELLES_ROL_KOE], label: 'I felles kø for ROL' },
+  { value: [CommonHelperStatus.SENDT_TIL_ROL], label: 'Sendt til ROL' },
+  { value: [CommonHelperStatus.RETURNERT_FRA_ROL], label: 'Tilbake fra ROL' },
 ].map(toEntry);
 
 const COMMON_NON_ANKE_I_TR_MU_OPTIONS: Entry<StatusOption>[] = [
-  { value: CommonHelperStatus.SENDT_TIL_MU, label: 'Sendt til MU' },
-  { value: CommonHelperStatus.RETURNERT_FRA_MU, label: 'Tilbake fra MU' },
+  { value: [CommonHelperStatus.SENDT_TIL_MU], label: 'Sendt til MU' },
+  { value: RETURNED_FROM_MU_STATUSES, label: 'Tilbake fra MU' },
 ].map(toEntry);
 
 const COMMON_ANKE_I_TR_MU_OPTIONS: Entry<StatusOption>[] = [
-  { value: CommonHelperStatus.SENDT_TIL_MU, label: 'Sendt til fagansvarlig' },
-  { value: CommonHelperStatus.RETURNERT_FRA_MU, label: 'Tilbake fra fagansvarlig' },
+  { value: [CommonHelperStatus.SENDT_TIL_MU], label: 'Sendt til fagansvarlig' },
+  { value: RETURNED_FROM_MU_STATUSES, label: 'Tilbake fra fagansvarlig' },
 ].map(toEntry);
 
 const COMMON_COMBO_MU_OPTIONS: Entry<StatusOption>[] = [
-  { value: CommonHelperStatus.SENDT_TIL_MU, label: 'Sendt til MU/fagansvarlig' },
-  { value: CommonHelperStatus.RETURNERT_FRA_MU, label: 'Tilbake fra MU/fagansvarlig' },
+  { value: [CommonHelperStatus.SENDT_TIL_MU], label: 'Sendt til MU/fagansvarlig' },
+  { value: RETURNED_FROM_MU_STATUSES, label: 'Tilbake fra MU/fagansvarlig' },
 ].map(toEntry);
 
-const NON_ANKE_I_TR_MU_OPTION: Entry<StatusOption> = toEntry({ value: HelperStatusSelf.MU, label: 'MU' });
-const ANKE_I_TR_MU_OPTION: Entry<StatusOption> = toEntry({ value: HelperStatusSelf.MU, label: 'Fagansvarlig' });
-const COMBO_MU_OPTION: Entry<StatusOption> = toEntry({ value: HelperStatusSelf.MU, label: 'MU/fagansvarlig' });
+const NON_ANKE_I_TR_MU_OPTION: Entry<StatusOption> = toEntry({ value: [HelperStatusSelf.MU], label: 'MU' });
+const ANKE_I_TR_MU_OPTION: Entry<StatusOption> = toEntry({ value: [HelperStatusSelf.MU], label: 'Fagansvarlig' });
+const COMBO_MU_OPTION: Entry<StatusOption> = toEntry({ value: [HelperStatusSelf.MU], label: 'MU/fagansvarlig' });
 
 const getMuOptions = (typer: SaksTypeEnum[]): Entry<StatusOption>[] => {
   if (typer.length === 0) {

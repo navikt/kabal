@@ -8,21 +8,57 @@ import { MISSING_TITLE } from '@/plate/components/signature/title';
 import type { ISignature, SignatureElement } from '@/plate/types';
 import { useGetSignatureQuery } from '@/redux-api/bruker';
 import type { ISignatureResponse } from '@/types/bruker';
+import { FlowState, ReviewFlowState } from '@/types/oppgave-common';
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
-export const useMedunderskriverSignature = () => {
+export const useMedunderskriverSignature = (): {
+  signature: ISignatureResponse | null;
+  error: string | null;
+  isLoading: boolean;
+} => {
+  const { templateId } = useContext(SmartEditorContext);
   const { data: oppgave } = useOppgave();
-  const { data: medunderskriverSignature } = useGetSignatureQuery(
+  const {
+    data: medunderskriverSignature,
+    isSuccess,
+    isLoading,
+  } = useGetSignatureQuery(
     typeof oppgave?.medunderskriver.employee?.navIdent === 'string'
       ? oppgave.medunderskriver.employee.navIdent
       : skipToken,
   );
 
-  if (oppgave === undefined || oppgave.medunderskriver.employee === null || medunderskriverSignature === undefined) {
-    return null;
+  if (templateId === TemplateIdEnum.ROL_ANSWERS) {
+    return { signature: null, error: null, isLoading: false };
   }
 
-  return medunderskriverSignature;
+  if (oppgave === undefined) {
+    return { signature: null, error: null, isLoading: false };
+  }
+
+  if (oppgave.medunderskriver.employee === null) {
+    return { signature: null, error: null, isLoading: false };
+  }
+
+  if (
+    oppgave.medunderskriver.flowState !== ReviewFlowState.APPROVED &&
+    // TODO: Remove RETURNED check when there are no aktive behandlinger left with that state.
+    oppgave.medunderskriver.flowState !== FlowState.RETURNED
+  ) {
+    return {
+      signature: null,
+      error: 'Medunderskrivers signatur settes ikke inn før medunderskriver har godkjent',
+      isLoading: false,
+    };
+  }
+
+  if (!isSuccess) {
+    return { signature: null, error: null, isLoading };
+  }
+
+  return medunderskriverSignature === undefined
+    ? { signature: null, error: 'Fant ikke medunderskrivers signatur', isLoading: false }
+    : { signature: medunderskriverSignature, error: null, isLoading: false };
 };
 
 export const useMainSignature = (element: SignatureElement): ISignature | undefined => {

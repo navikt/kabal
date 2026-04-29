@@ -1,11 +1,10 @@
+import { InlineMessage, Skeleton, VStack } from '@navikt/ds-react';
 import { useEditorReadOnly } from 'platejs/react';
-import { useContext, useEffect, useMemo } from 'react';
-import { SmartEditorContext } from '@/components/smart-editor/context';
+import { useEffect, useMemo } from 'react';
 import { getName } from '@/plate/components/signature/functions';
 import { useMainSignature, useMedunderskriverSignature } from '@/plate/components/signature/hooks';
 import { MISSING_TITLE, Title } from '@/plate/components/signature/title';
 import { type SignatureElement, useMyPlateEditorRef } from '@/plate/types';
-import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 interface Props {
   element: SignatureElement;
@@ -46,32 +45,26 @@ interface MedunderskriverSignatureProps {
 
 export const MedunderskriverSignature = ({ element }: MedunderskriverSignatureProps) => {
   const editor = useMyPlateEditorRef();
-  const medunderskriverSignature = useMedunderskriverSignature();
-  const { templateId } = useContext(SmartEditorContext);
+  const { signature: medunderskriverSignature, error, isLoading } = useMedunderskriverSignature();
   const readOnly = useEditorReadOnly();
-
-  const noMedunderskriver = useMemo(
-    () => medunderskriverSignature === null || templateId === TemplateIdEnum.ROL_ANSWERS,
-    [medunderskriverSignature, templateId],
-  );
 
   const signature = useMemo(
     () =>
-      noMedunderskriver || medunderskriverSignature === null || !element.includeMedunderskriver
+      medunderskriverSignature === null || !element.includeMedunderskriver
         ? undefined
         : {
             name: getName(medunderskriverSignature, element.useShortName),
             title: medunderskriverSignature.customJobTitle ?? MISSING_TITLE,
           },
-    [noMedunderskriver, medunderskriverSignature, element.includeMedunderskriver, element.useShortName],
+    [medunderskriverSignature, element.includeMedunderskriver, element.useShortName],
   );
 
   useEffect(() => {
-    if (readOnly) {
+    if (readOnly || isLoading) {
       return;
     }
 
-    if (noMedunderskriver) {
+    if (medunderskriverSignature === null) {
       if (element.medunderskriver === undefined) {
         return;
       }
@@ -96,9 +89,26 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
     };
 
     editor.tf.setNodes(data, { match: (n) => n === element, at: [] });
-  }, [editor, element, noMedunderskriver, signature, readOnly]);
+  }, [editor, element, signature, readOnly, medunderskriverSignature, isLoading]);
 
-  if (noMedunderskriver || signature === undefined) {
+  if (isLoading) {
+    return (
+      <VStack>
+        <Skeleton variant="text" width="170px" />
+        <Skeleton variant="text" width="200px" />
+      </VStack>
+    );
+  }
+
+  if (error !== null) {
+    return (
+      <InlineMessage status="warning" className="max-w-[50%]">
+        {error}
+      </InlineMessage>
+    );
+  }
+
+  if (signature === undefined) {
     return null;
   }
 

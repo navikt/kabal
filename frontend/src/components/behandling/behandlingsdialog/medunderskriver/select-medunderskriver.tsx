@@ -20,11 +20,11 @@ import { useGetPotentialMedunderskrivereQuery } from '@/redux-api/oppgaver/queri
 import type { INavEmployee } from '@/types/bruker';
 import { Role } from '@/types/bruker';
 import type { SaksTypeEnum } from '@/types/kodeverk';
-import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
+import { FlowState, type IMedunderskriver } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;
-  medunderskriver: IMedunderskriverRol;
+  medunderskriver: IMedunderskriver;
   typeId: SaksTypeEnum;
 }
 

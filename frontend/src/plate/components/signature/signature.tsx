@@ -39,6 +39,9 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
     templateId === TemplateIdEnum.ETTERSENDING_TIL_TRYGDERETTEN;
 
   const hideAll = !(showForkortedeNavnCheckbox || showSuffixCheckbox || hasMedunderskriver);
+  const isCreator = user.navIdent === creator;
+
+  const showControls = isCreator && !readOnly && !hideAll;
 
   const overriddenWithSelf = element.overriddenSaksbehandler === user.navIdent;
 
@@ -66,7 +69,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
           e.stopPropagation();
         }}
       >
-        {readOnly || hideAll ? null : (
+        {showControls ? (
           <Box
             asChild
             borderRadius="4"
@@ -137,7 +140,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
               ) : null}
             </HStack>
           </Box>
-        )}
+        ) : null}
 
         <HStack justify="space-between" wrap={false} marginBlock="space-16">
           <MedunderskriverSignature element={element} />

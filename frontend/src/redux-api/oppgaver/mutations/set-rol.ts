@@ -25,7 +25,11 @@ const setRolMutationSlice = oppgaverApi.injectEndpoints({
             draft.rol.employee = employee;
 
             if (draft.rol.flowState === FlowState.RETURNED) {
-              draft.rol.flowState = FlowState.NOT_SENT;
+              draft.rol = {
+                ...draft.rol,
+                returnertDate: null,
+                flowState: FlowState.NOT_SENT,
+              };
             }
           }),
         );
