@@ -2,7 +2,7 @@ import { ENVIRONMENT } from '@/environment';
 import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
 import { behandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
-import { FlowState } from '@/types/oppgave-common';
+import { FlowState, ReviewFlowState } from '@/types/oppgave-common';
 import type { ISetMedunderskriverParams } from '@/types/oppgavebehandling/params';
 import type { ISetMedunderskriverResponse } from '@/types/oppgavebehandling/response';
 
@@ -26,8 +26,18 @@ const setMedunderskriverMutationSlice = oppgaverApi.injectEndpoints({
 
             draft.medunderskriver.employee = employee;
 
-            if (draft.medunderskriver.flowState === FlowState.RETURNED) {
-              draft.medunderskriver.flowState = FlowState.NOT_SENT;
+            const { flowState } = draft.medunderskriver;
+
+            if (
+              flowState === FlowState.RETURNED ||
+              flowState === ReviewFlowState.APPROVED ||
+              flowState === ReviewFlowState.REJECTED
+            ) {
+              draft.medunderskriver = {
+                ...draft.medunderskriver,
+                returnertDate: null,
+                flowState: FlowState.NOT_SENT,
+              };
             }
           }),
         );

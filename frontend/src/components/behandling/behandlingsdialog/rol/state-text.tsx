@@ -1,8 +1,8 @@
 import { InlineMessage } from '@navikt/ds-react';
-import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
+import { FlowState, type IRol } from '@/types/oppgave-common';
 
 interface Props {
-  rol: IMedunderskriverRol;
+  rol: IRol;
   isSaksbehandler: boolean;
 }
 
@@ -16,7 +16,7 @@ export const RolStateText = ({ rol, isSaksbehandler }: Props) => {
   );
 };
 
-const useText = ({ employee, flowState }: IMedunderskriverRol, isSaksbehandler: boolean): string => {
+const useText = ({ employee, flowState }: IRol, isSaksbehandler: boolean): string => {
   switch (flowState) {
     case FlowState.NOT_SENT:
       return employee === null ? 'Ikke i felles kø eller oversendt.' : 'Ikke oversendt.';

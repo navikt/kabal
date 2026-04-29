@@ -2,10 +2,10 @@ import { InlineMessage } from '@navikt/ds-react';
 import { getTitleLowercase } from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import type { SaksTypeEnum } from '@/types/kodeverk';
-import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
+import { FlowState, type IMedunderskriver, ReviewFlowState } from '@/types/oppgave-common';
 
 interface Props {
-  medunderskriver: IMedunderskriverRol;
+  medunderskriver: IMedunderskriver;
   typeId: SaksTypeEnum;
 }
 
@@ -19,7 +19,7 @@ export const MedunderskriverStateText = ({ medunderskriver, typeId }: Props) => 
   );
 };
 
-const useText = ({ employee, flowState }: IMedunderskriverRol, typeId: SaksTypeEnum): string => {
+const useText = ({ employee, flowState }: IMedunderskriver, typeId: SaksTypeEnum): string => {
   const isSaksbehandler = useIsTildeltSaksbehandler();
 
   switch (flowState) {
@@ -31,5 +31,9 @@ const useText = ({ employee, flowState }: IMedunderskriverRol, typeId: SaksTypeE
         : 'Oversendt fra saksbehandler.';
     case FlowState.RETURNED:
       return isSaksbehandler ? `Returnert av ${getTitleLowercase(typeId)}.` : 'Returnert til saksbehandler.';
+    case ReviewFlowState.APPROVED:
+      return isSaksbehandler ? `Godkjent av ${getTitleLowercase(typeId)}.` : 'Returnert med godkjenning.';
+    case ReviewFlowState.REJECTED:
+      return isSaksbehandler ? `Ikke godkjent av ${getTitleLowercase(typeId)}.` : 'Returnert uten godkjenning.';
   }
 };

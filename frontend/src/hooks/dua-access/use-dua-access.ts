@@ -21,7 +21,7 @@ import {
   type IAttachmentDocument,
   type IParentDocument,
 } from '@/types/documents/documents';
-import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
+import { FlowState, type IMedunderskriver, type IRol } from '@/types/oppgave-common';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
@@ -179,15 +179,15 @@ const getCaseStatus = ({
   return DuaAccessCaseStatus.LEDIG;
 };
 
-const isWithSaksbehandler = (mu: IMedunderskriverRol, rol: IMedunderskriverRol) =>
+const isWithSaksbehandler = (mu: IMedunderskriver, rol: IRol) =>
   (mu.employee === null || mu.flowState !== FlowState.SENT) &&
   (rol.employee === null || rol.flowState === FlowState.NOT_SENT);
 
-const isWith = (part: IMedunderskriverRol) => hasFlow(part, FlowState.SENT);
+const isWith = (part: IMedunderskriver | IRol) => hasFlow(part, FlowState.SENT);
 
-const isReturnedFrom = (part: IMedunderskriverRol) => hasFlow(part, FlowState.RETURNED);
+const isReturnedFrom = (part: IMedunderskriver | IRol) => hasFlow(part, FlowState.RETURNED);
 
-const hasFlow = ({ employee, flowState }: IMedunderskriverRol, flow: FlowState) =>
+const hasFlow = ({ employee, flowState }: IMedunderskriver | IRol, flow: FlowState) =>
   employee !== null && flowState === flow;
 
 const getDocumentType = ({ type, templateId }: Dua): DuaAccessDocumentType => {

@@ -3,10 +3,11 @@ import { toast } from '@/components/toast/store';
 import { getMedunderskriverToastContent } from '@/redux-api/oppgaver/queries/behandling/event-handlers/medunderskriver-toast';
 import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
+import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
 import type { MedunderskriverEvent } from '@/redux-api/server-sent-events/types';
 import type { Dispatch } from '@/redux-api/types';
 import type { INavEmployee } from '@/types/bruker';
-import { FlowState } from '@/types/oppgave-common';
+import { FlowState, type MuFlowState, ReviewFlowState } from '@/types/oppgave-common';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 import { HistoryEventTypes, type IMedunderskriverEvent } from '@/types/oppgavebehandling/response';
 
@@ -14,13 +15,9 @@ export const handleMedunderskriverEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>, dispatch: Dispatch) =>
   ({ flowState, actor, timestamp, medunderskriver }: MedunderskriverEvent) => {
     let previousMedunderskriver: INavEmployee | null = null;
-    let previousFlow = FlowState.NOT_SENT;
+    let previousFlow: MuFlowState = FlowState.NOT_SENT;
 
     updateCachedData((draft) => {
-      if (draft === undefined) {
-        return draft;
-      }
-
       previousMedunderskriver = draft.medunderskriver.employee;
       previousFlow = draft.medunderskriver.flowState;
 
@@ -41,11 +38,20 @@ export const handleMedunderskriverEvent =
       draft.modified = timestamp;
 
       dispatch(
-        historyQuerySlice.util.updateQueryData('getHistory', oppgaveId, (history) => {
-          if (history === undefined) {
-            return;
-          }
+        oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
+          draft.medunderskriver.flowState = flowState;
+          draft.medunderskriver.employee = medunderskriver;
+          draft.medunderskriver.returnertDate =
+            flowState === FlowState.RETURNED ||
+            flowState === ReviewFlowState.REJECTED ||
+            flowState === ReviewFlowState.APPROVED
+              ? draft.medunderskriver.returnertDate
+              : null;
+        }),
+      );
 
+      dispatch(
+        historyQuerySlice.util.updateQueryData('getHistory', oppgaveId, (history) => {
           const previous = history.medunderskriver.at(-1);
 
           if (previous === undefined) {
@@ -80,7 +86,7 @@ export const handleMedunderskriverEvent =
             return history;
           }
 
-          return {
+          const newshit = {
             ...history,
             medunderskriver: [
               ...history.medunderskriver,
@@ -93,6 +99,8 @@ export const handleMedunderskriverEvent =
               } satisfies IMedunderskriverEvent,
             ],
           };
+
+          return newshit;
         }),
       );
     });

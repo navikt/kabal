@@ -3,12 +3,12 @@ import { Button } from '@navikt/ds-react';
 import { getFixedCacheKey } from '@/components/behandling/behandlingsdialog/rol/helpers';
 import { useSetRolMutation } from '@/redux-api/oppgaver/mutations/set-rol';
 import { useSetRolFlowStateMutation } from '@/redux-api/oppgaver/mutations/set-rol-flowstate';
-import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
+import { FlowState, type IRol } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;
   isSaksbehandler: boolean;
-  rol: IMedunderskriverRol;
+  rol: IRol;
 }
 
 export const SendToRol = ({ oppgaveId, isSaksbehandler, rol }: Props) => {

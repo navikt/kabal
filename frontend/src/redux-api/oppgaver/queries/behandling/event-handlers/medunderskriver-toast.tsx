@@ -1,10 +1,10 @@
 import { formatEmployeeName } from '@/domain/employee-name';
 import { employeeName } from '@/redux-api/oppgaver/queries/behandling/event-handlers/common';
 import type { INavEmployee } from '@/types/bruker';
-import { FlowState } from '@/types/oppgave-common';
+import { FlowState, type MuFlowState } from '@/types/oppgave-common';
 
 interface Params {
-  flowState: FlowState;
+  flowState: MuFlowState;
   medunderskriver: INavEmployee | null;
 }
 

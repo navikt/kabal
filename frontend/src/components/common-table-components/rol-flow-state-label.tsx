@@ -20,7 +20,7 @@ export const RolFlowStateLabel = ({ rol }: Props) => {
   if (rol.employee !== null && rol.flowState === FlowState.SENT) {
     return (
       <Tooltip content="Sendt til rådgivende overlege" delay={500}>
-        <Tag data-color="info" className={TAG_CLASSES} variant="outline" size="small">
+        <Tag data-color="success" className={TAG_CLASSES} variant="outline" size="small">
           Sendt til ROL
         </Tag>
       </Tooltip>
@@ -30,7 +30,7 @@ export const RolFlowStateLabel = ({ rol }: Props) => {
   if (rol.flowState === FlowState.RETURNED) {
     return (
       <Tooltip content="Tilbake fra rådgivende overlege" delay={500}>
-        <Tag data-color="warning" className={TAG_CLASSES} variant="outline" size="small">
+        <Tag data-color="info" className={TAG_CLASSES} variant="outline" size="small">
           Tilbake fra ROL
         </Tag>
       </Tooltip>

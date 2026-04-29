@@ -2,13 +2,13 @@ import { ENVIRONMENT } from '@/environment';
 import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
 import { behandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
-import type { ISetFlowStateParams } from '@/types/oppgavebehandling/params';
+import type { ISetRolFlowStateParams } from '@/types/oppgavebehandling/params';
 import type { ISetFlowStateResponse } from '@/types/oppgavebehandling/response';
 
 const setRolStateMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
-    setRolFlowState: builder.mutation<ISetFlowStateResponse, ISetFlowStateParams>({
+    setRolFlowState: builder.mutation<ISetFlowStateResponse, ISetRolFlowStateParams>({
       query: ({ oppgaveId, flowState }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/rolflowstate`,
         method: 'PUT',

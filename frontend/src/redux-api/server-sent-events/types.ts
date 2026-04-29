@@ -9,6 +9,7 @@ import type {
   IOrganizationPart,
   IPersonPart,
   ISattPåVent,
+  ReviewFlowState,
 } from '@/types/oppgave-common';
 import type { BehandlingGosysOppgave, IFeilregistrering } from '@/types/oppgavebehandling/oppgavebehandling';
 import type { FradelReason } from '@/types/oppgaver';
@@ -31,7 +32,7 @@ interface NotSentMedunderskriverEvent {
 
 interface ReturnedMedunderskriverEvent {
   medunderskriver: INavEmployee;
-  flowState: FlowState.RETURNED;
+  flowState: FlowState.RETURNED | ReviewFlowState.APPROVED | ReviewFlowState.REJECTED;
 }
 
 type Medunderskriver = SentMedunderskriverEvent | NotSentMedunderskriverEvent | ReturnedMedunderskriverEvent;

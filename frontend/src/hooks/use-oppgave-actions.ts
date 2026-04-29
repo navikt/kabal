@@ -2,7 +2,7 @@ import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { useHasYtelseAccess } from '@/hooks/use-has-ytelse-access';
 import { Role } from '@/types/bruker';
-import { FlowState } from '@/types/oppgave-common';
+import { FlowState, type MuFlowState } from '@/types/oppgave-common';
 
 interface Actions {
   open: boolean;
@@ -17,7 +17,7 @@ type ReturnType = [Actions, false] | [undefined, true];
 export const useOppgaveActions = (
   tildeltSaksbehandler: string | null,
   medunderskriver: string | null,
-  medunderskriverFlowState: FlowState | null,
+  medunderskriverFlowState: MuFlowState | null,
   rolFlowState: FlowState,
   ytelse?: string,
 ): ReturnType => {

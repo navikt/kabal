@@ -1,9 +1,9 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import { formatEmployeeNameAndIdFallback } from '@/domain/employee-name';
-import type { IMedunderskriverRol } from '@/types/oppgave-common';
+import type { IRol } from '@/types/oppgave-common';
 
 interface Props {
-  rol: IMedunderskriverRol;
+  rol: IRol;
 }
 
 export const RolReadOnly = ({ rol }: Props) => (

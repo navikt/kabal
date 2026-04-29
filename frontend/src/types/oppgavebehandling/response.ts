@@ -1,6 +1,13 @@
 import type { INavEmployee } from '@/types/bruker';
 import type { UtfallEnum } from '@/types/kodeverk';
-import type { FlowState, IMedunderskriverRol, ISakenGjelder, ISattPåVent } from '@/types/oppgave-common';
+import type {
+  FlowState,
+  IMedunderskriver,
+  IRol,
+  ISakenGjelder,
+  ISattPåVent,
+  MuFlowState,
+} from '@/types/oppgave-common';
 import type { IFeilregistrering } from '@/types/oppgavebehandling/oppgavebehandling';
 import type { FradelReason } from '@/types/oppgaver';
 import type { BehandlingstidUnitType } from '@/types/svarbrev';
@@ -44,11 +51,12 @@ export interface ISakenGjelderResponse {
   sakenGjelder: ISakenGjelder;
 }
 
-export type ISetMedunderskriverResponse = IModifiedResponse & IMedunderskriverRol;
+export type ISetMedunderskriverResponse = IModifiedResponse & IMedunderskriver;
 
-export type ISetRolResponse = IModifiedResponse & IMedunderskriverRol;
+export type ISetRolResponse = IModifiedResponse & IRol;
 
-export type ISetFlowStateResponse = IModifiedResponse & IMedunderskriverRol;
+export type ISetMuFlowStateResponse = IModifiedResponse & IMedunderskriver;
+export type ISetFlowStateResponse = IModifiedResponse & IRol;
 
 export interface ISetExtraUtfallResponse extends IModifiedResponse {
   extraUtfallIdSet: UtfallEnum[];
@@ -93,7 +101,7 @@ interface TildelingEvent {
 export interface MedunderskriverEvent {
   /** Nav Ident. `null` betyr "felles kø". */
   medunderskriver: INavEmployee | null; // Nav Ident
-  flow: FlowState;
+  flow: MuFlowState;
 }
 
 export interface RolEvent {

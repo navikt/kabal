@@ -2,8 +2,9 @@ import type { INavEmployee } from '@/types/bruker';
 import type { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 import type {
   IFullmektig,
-  IMedunderskriverRol,
+  IMedunderskriver,
   IPart,
+  IRol,
   ISakenGjelder,
   ISattPåVent,
   IVedlegg,
@@ -104,7 +105,7 @@ export interface IOppgavebehandlingBase {
     id: UUID;
     version: KvalitetsvurderingVersion;
   } | null;
-  medunderskriver: IMedunderskriverRol;
+  medunderskriver: IMedunderskriver;
   /** DateTime */
   modified: string;
   /** Date */
@@ -115,7 +116,7 @@ export interface IOppgavebehandlingBase {
   prosessfullmektig: IFullmektig | null;
   raadfoertMedLege: string | null;
   resultat: Resultat;
-  rol: IMedunderskriverRol;
+  rol: IRol;
   sakenGjelder: ISakenGjelder;
   sattPaaVent: ISattPåVent | null;
   sendTilbakemelding: boolean | null;

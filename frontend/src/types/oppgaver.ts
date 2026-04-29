@@ -1,6 +1,6 @@
 import type { INavEmployee } from '@/types/bruker';
 import type { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
-import type { IHelper, ISattPåVent } from '@/types/oppgave-common';
+import type { IMedunderskriver, IRol, ISattPåVent } from '@/types/oppgave-common';
 
 /** DateTime */
 type DateString = string;
@@ -44,8 +44,8 @@ export interface IOppgave {
   registreringshjemmelIdList: string[];
   id: string;
   isAvsluttetAvSaksbehandler: boolean;
-  medunderskriver: IHelper;
-  rol: IHelper;
+  medunderskriver: IMedunderskriver;
+  rol: IRol;
   /** Date
    * @format yyyy-MM-dd
    */

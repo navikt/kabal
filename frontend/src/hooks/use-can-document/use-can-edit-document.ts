@@ -6,7 +6,7 @@ import { useIsAssignedRolAndSent } from '@/hooks/use-is-rol';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { Role } from '@/types/bruker';
 import { CreatorRole, DocumentTypeEnum, type IDocument, type JournalfoertDokument } from '@/types/documents/documents';
-import { FlowState } from '@/types/oppgave-common';
+import { FlowState, type MuFlowState } from '@/types/oppgave-common';
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 export const useCanEditDocument = (document: IDocument | null, parentDocument?: IDocument) => {
@@ -39,7 +39,7 @@ export const useCanEditDocument = (document: IDocument | null, parentDocument?: 
 };
 
 export interface CanEditDocumentParams {
-  medunderskriverFlowState: FlowState;
+  medunderskriverFlowState: MuFlowState;
   isMarkertAvsluttet: boolean;
   document: IDocument;
   rolFlowState: FlowState;

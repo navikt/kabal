@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
-import { FlowState } from '@/types/oppgave-common';
+import { FlowState, type MuFlowState } from '@/types/oppgave-common';
 
-export const useLazyIsAssignedMedunderskriverAndSent = () => {
+const useLazyIsAssignedMedunderskriverAndSent = () => {
   const isAssignedMedunderskriver = useIsAssignedMedunderskriver();
   const isSentToMedunderskriver = useIsSentToMedunderskriver();
 
@@ -16,7 +16,7 @@ export const useIsAssignedMedunderskriverAndSent = () => {
   return isLazyAssignedMedunderskriverAndSent();
 };
 
-export const useLazyIsAssignedMedunderskriver = () => {
+const useLazyIsAssignedMedunderskriver = () => {
   const { user } = useContext(StaticDataContext);
   const { data, isSuccess } = useOppgave();
 
@@ -29,7 +29,7 @@ export const useIsAssignedMedunderskriver = () => {
   return isLazyAssignedMedunderskriver();
 };
 
-export const useLazyIsSentToMedunderskriver = () => {
+const useLazyIsSentToMedunderskriver = () => {
   const { data, isSuccess } = useOppgave();
 
   return () => isSuccess && getIsSentToMedunderskriver(data.medunderskriver.flowState);
@@ -41,5 +41,5 @@ export const useIsSentToMedunderskriver = () => {
   return isLazySentToMedunderskriver();
 };
 
-export const getIsSentToMedunderskriver = (medunderskriverFlowState: FlowState): boolean =>
+const getIsSentToMedunderskriver = (medunderskriverFlowState: MuFlowState): boolean =>
   medunderskriverFlowState === FlowState.SENT;

@@ -5,12 +5,12 @@ import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useSetMedunderskriverMutation } from '@/redux-api/oppgaver/mutations/set-medunderskriver';
 import { useSetMedunderskriverFlowStateMutation } from '@/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
 import type { SaksTypeEnum } from '@/types/kodeverk';
-import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
+import { FlowState, type IMedunderskriver } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;
   typeId: SaksTypeEnum;
-  medunderskriver: IMedunderskriverRol;
+  medunderskriver: IMedunderskriver;
 }
 
 export const SendToMedunderskriver = ({ oppgaveId, typeId, medunderskriver }: Props) => {

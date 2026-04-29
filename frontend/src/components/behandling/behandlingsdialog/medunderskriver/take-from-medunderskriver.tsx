@@ -5,11 +5,11 @@ import { getFixedCacheKey } from '@/components/behandling/behandlingsdialog/medu
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useSetMedunderskriverFlowStateMutation } from '@/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
 import type { SaksTypeEnum } from '@/types/kodeverk';
-import { FlowState, type IMedunderskriverRol } from '@/types/oppgave-common';
+import { FlowState, type IMedunderskriver } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;
-  medunderskriver: IMedunderskriverRol;
+  medunderskriver: IMedunderskriver;
   typeId: SaksTypeEnum;
 }
 

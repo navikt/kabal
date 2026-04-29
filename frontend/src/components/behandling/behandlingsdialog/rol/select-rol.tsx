@@ -11,11 +11,11 @@ import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useTildelSaksbehandlerMutation } from '@/redux-api/oppgaver/mutations/tildeling';
 import { useGetPotentialRolQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import type { INavEmployee } from '@/types/bruker';
-import type { IMedunderskriverRol } from '@/types/oppgave-common';
+import type { IRol } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;
-  rol: IMedunderskriverRol;
+  rol: IRol;
   isSaksbehandler: boolean;
 }
 
