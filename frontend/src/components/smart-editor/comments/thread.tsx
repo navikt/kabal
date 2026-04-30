@@ -30,7 +30,7 @@ const COLLAPSED_CLASSES = `${BASE_CLASSES} cursor-pointer select-none`;
 const EXPANDED_CLASSES = `${BASE_CLASSES} cursor-auto select-auto`;
 
 export const Thread = ({ thread, style, onClick, isAbsolute = false, isFocused = false, ref, zIndex }: Props) => {
-  const { value: threadsAlwaysExpanded = false } = useSmartEditorExpandedThreads();
+  const { value: threadsAlwaysExpanded = true } = useSmartEditorExpandedThreads();
   const isExpanded = threadsAlwaysExpanded || isFocused;
   const comments: ISmartEditorComment[] = isExpanded ? [thread, ...thread.comments] : [thread];
   const { editingComment, focusedThreadId } = useContext(SmartEditorContext);
