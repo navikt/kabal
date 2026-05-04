@@ -1,3 +1,4 @@
+import type { IncomingHttpHeaders } from 'node:http2';
 import { Hocuspocus } from '@hocuspocus/server';
 import { applyUpdateV2 } from 'yjs';
 import { ApiClientEnum } from '@/config/config';
@@ -304,8 +305,11 @@ export const collaborationServer = new Hocuspocus({
   extensions: isDeployed ? [getValkeyExtension()].filter(isNotNull) : [],
 });
 
-const exchangeAccessTokenForOboToken = async (context: ConnectionContext, headers: Record<string, string | string[] | undefined>): Promise<number> => {
-  const accessToken = stripBearer(headers['authorization'] as string | undefined);
+const exchangeAccessTokenForOboToken = async (
+  context: ConnectionContext,
+  headers: IncomingHttpHeaders,
+): Promise<number> => {
+  const accessToken = stripBearer(headers.authorization);
 
   if (accessToken === undefined) {
     logContext('Missing Authorization header: onConnect', context, 'warn');
