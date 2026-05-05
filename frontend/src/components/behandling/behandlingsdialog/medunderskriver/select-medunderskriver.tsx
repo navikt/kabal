@@ -1,5 +1,6 @@
 import { BodyShort, Label, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { differenceInMilliseconds, parseISO } from 'date-fns';
 import { useMemo } from 'react';
 import {
   getTitleCapitalized,
@@ -12,9 +13,12 @@ import { useSetMedunderskriver } from '@/components/oppgavestyring/use-set-medun
 import { toNavEmployeeEntry } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
 import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
+import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@/hooks/use-has-role';
 import { useIsAssignedMedunderskriver, useIsAssignedMedunderskriverAndSent } from '@/hooks/use-is-medunderskriver';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { pushEvent } from '@/observability';
+import { useGetKvalitetsvurderingQuery } from '@/redux-api/kaka-kvalitetsvurdering/v3';
 import { useTildelSaksbehandlerMutation } from '@/redux-api/oppgaver/mutations/tildeling';
 import { useGetPotentialMedunderskrivereQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import type { INavEmployee } from '@/types/bruker';
@@ -47,6 +51,10 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
   const { onChange, isUpdating } = useSetMedunderskriver(oppgaveId, data?.medunderskrivere);
   const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
 
+  const { data: oppgave } = useOppgave();
+  const kvalitetsvurderingId = oppgave?.kvalitetsvurderingReference?.id;
+  const { data: kvalitetsvurdering } = useGetKvalitetsvurderingQuery(kvalitetsvurderingId ?? skipToken);
+
   const canChange =
     isTildeltSaksbehandler ||
     isMedunderskriver ||
@@ -69,13 +77,24 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
   const fromNavIdent = medunderskriver.employee?.navIdent ?? null;
   const titleLabel = getTitleCapitalized(typeId);
 
+  const handleChange = (employee: INavEmployee | null) => {
+    if (medunderskriver.flowState === FlowState.NOT_SENT && employee !== null && kvalitetsvurdering !== undefined) {
+      const kvalitetsvurderingFilledOut = isModified(kvalitetsvurdering.created, kvalitetsvurdering.modified);
+      pushEvent(kvalitetsvurderingFilledOut ? 'set-mu-after-kv' : 'set-mu-before-kv', 'kvalitetsvurdering', {
+        oppgaveId,
+      });
+    }
+
+    onChange(employee?.navIdent ?? null, fromNavIdent);
+  };
+
   return (
     <SelectMedunderskriverInner
       label={titleLabel}
       medunderskrivere={medunderskrivere}
       employee={medunderskriver.employee}
       isUpdating={isUpdating}
-      onChange={(employee) => onChange(employee?.navIdent ?? null, fromNavIdent)}
+      onChange={handleChange}
       confirmLabel={`Send til ${getTitleLowercase(typeId)}`}
     />
   );
@@ -127,3 +146,11 @@ const SelectMedunderskriverInner = ({
     </VStack>
   );
 };
+
+/**
+ * TODO: Remove tolerance when all old kvalitetsvurderinger are done.
+ *
+ * Backend bug: `modified` can differ from `created` by a few ms on creation. Treat differences under 1 second as unmodified.
+ */
+const isModified = (created: string, modified: string): boolean =>
+  Math.abs(differenceInMilliseconds(parseISO(modified), parseISO(created))) > 1_000;
