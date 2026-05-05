@@ -1,10 +1,10 @@
-import { ChevronLeftFirstIcon, ChevronRightLastIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { DragAndDropContextElement } from '@/components/documents/drag-context';
 import { Fields, SIZES } from '@/components/documents/journalfoerte-documents/grid';
 import { JournalfoerteDocuments } from '@/components/documents/journalfoerte-documents/journalfoerte-documents';
 import { NewDocuments } from '@/components/documents/new-documents/new-documents-list/new-documents';
+import { ResizeHandle } from '@/components/documents/resize-handle';
 import { ToggleExpandedButton } from '@/components/documents/toggle-expand-button';
 import { UploadFile } from '@/components/documents/upload-file/upload-file';
 import { useIsExpanded } from '@/components/documents/use-is-expanded';
@@ -114,9 +114,10 @@ export const ExpandedDocuments = () => {
         overflowX="auto"
         position="relative"
         minWidth={`${minWidth}px`}
-        className="resize-x"
         ref={ref}
       >
+        <ResizeHandle minWidth={minWidth} setWidth={setWidth} />
+
         <HStack asChild align="start" justify="start" gap="space-0 space-8" position="relative">
           <Box
             as="header"
@@ -129,27 +130,6 @@ export const ExpandedDocuments = () => {
             <Heading size="medium" level="1">
               {DOCUMENTS_HEADING}
             </Heading>
-
-            <HStack align="center" height="100%">
-              <Button
-                data-color="neutral"
-                variant="tertiary"
-                size="xsmall"
-                icon={<ChevronLeftFirstIcon aria-hidden />}
-                onClick={() => setWidth(Math.max(minWidth, width - 50))}
-                disabled={width <= minWidth}
-                title="Forminsk dokumenter"
-              />
-
-              <Button
-                data-color="neutral"
-                variant="tertiary"
-                size="xsmall"
-                icon={<ChevronRightLastIcon aria-hidden />}
-                onClick={() => setWidth(width + 50)}
-                title="Forstørr dokumenter"
-              />
-            </HStack>
 
             <UploadFile />
 
