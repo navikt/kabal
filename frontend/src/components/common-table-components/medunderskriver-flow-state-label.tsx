@@ -51,7 +51,7 @@ export const MUFlowStateLabelWithoutSelf = ({ medunderskriver, typeId }: Props) 
 
 const Sendt = ({ typeId }: { typeId: SaksTypeEnum }) => (
   <Tooltip content={`Sendt til ${getTitleLowercase(typeId)}`} delay={500}>
-    <Tag data-color="success" variant="outline" size="small" className="whitespace-nowrap">
+    <Tag data-color="info" variant="outline" size="small" className="whitespace-nowrap">
       Sendt til {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
     </Tag>
   </Tooltip>
@@ -59,7 +59,7 @@ const Sendt = ({ typeId }: { typeId: SaksTypeEnum }) => (
 
 const Tilbake = ({ typeId }: { typeId: SaksTypeEnum }) => (
   <Tooltip content={`Tilbake fra ${getTitleLowercase(typeId)}`} delay={500}>
-    <Tag data-color="info" variant="outline" size="small" className="whitespace-nowrap">
+    <Tag data-color="success" variant="outline" size="small" className="whitespace-nowrap">
       Tilbake fra {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
     </Tag>
   </Tooltip>
