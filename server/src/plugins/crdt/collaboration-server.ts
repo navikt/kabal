@@ -71,8 +71,6 @@ export const collaborationServer = new Hocuspocus({
         'debug',
       );
 
-      await createRefreshTimer(context, expiresIn);
-
       const { dokumentId, navIdent, behandlingId } = context;
 
       const hasWriteAccess = await getHasWriteAccess(context, true);
@@ -97,6 +95,8 @@ export const collaborationServer = new Hocuspocus({
 
     return withCollaborationSpan('connected', context, async () => {
       logContext('New collaboration connection established', context, 'debug');
+
+      await createRefreshTimer(context, getOboTokenExpiresIn(context));
 
       const { navIdent, tab_id, client_version } = context;
 

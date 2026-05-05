@@ -7,12 +7,12 @@ import { logContext } from '@/plugins/crdt/log-context';
 const REFRESH_TOKEN_LIMIT = 120; // Highest token expiration time Wonderwall will give new token for.
 
 export const createRefreshTimer = async (context: ConnectionContext, expiresIn: number): Promise<Timer> => {
+  let refreshedExpiresIn = expiresIn;
+
   if (expiresIn <= REFRESH_TOKEN_LIMIT) {
     try {
       // Refresh OBO token immediately if it's missing or about to expire.
-      const newExpiresIn = await refresh(context);
-      // Start a new timer to refresh the new token when it expires.
-      return createRefreshTimer(context, newExpiresIn);
+      refreshedExpiresIn = await refresh(context);
     } catch (err) {
       logContext(
         `Failed to refresh OBO token for ${context.navIdent}. ${err instanceof Error ? err : 'Unknown error.'}`,
@@ -28,13 +28,17 @@ export const createRefreshTimer = async (context: ConnectionContext, expiresIn: 
     }
   }
 
+  return scheduleRefreshTimer(context, refreshedExpiresIn);
+};
+
+const scheduleRefreshTimer = (context: ConnectionContext, expiresIn: number): Timer => {
   // Refresh OBO token before it expires.
   const timer = setTimeout(
     async () => {
       try {
         const newExpiresIn = await refresh(context);
-        // Start a new timer to refresh the new token when it expires.
-        await createRefreshTimer(context, newExpiresIn);
+        // Schedule a new timer to refresh the new token when it expires.
+        scheduleRefreshTimer(context, newExpiresIn);
       } catch (err) {
         if (err instanceof RefreshError || err instanceof Error) {
           logContext(err.message, context, 'warn');
@@ -43,7 +47,7 @@ export const createRefreshTimer = async (context: ConnectionContext, expiresIn: 
         }
       }
     },
-    (expiresIn - REFRESH_TOKEN_LIMIT) * 1_000,
+    Math.max((expiresIn - REFRESH_TOKEN_LIMIT) * 1_000, 30_000),
   );
 
   context.tokenRefreshTimer = timer;
