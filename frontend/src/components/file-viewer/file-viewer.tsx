@@ -12,6 +12,7 @@ import { KabalFileViewerPanel } from '@/components/kabal-file-viewer';
 import {
   getAttachmentsOverviewFileUrl,
   getJournalfoertDocumentFileUrl,
+  getNewDocumentDownloadUrl,
   getNewDocumentFileUrl,
 } from '@/domain/file-url';
 import {
@@ -83,12 +84,13 @@ export const FileViewer = ({ showDocumentList, isLoading, onClose }: FileViewerP
       }
 
       const fileUrl = getNewDocumentFileUrl(oppgaveId, file.documentId);
+      const downloadUrl = getNewDocumentDownloadUrl(oppgaveId, file.documentId);
       const newTabUrl = getNewFileViewerTabUrl(oppgaveId, file.documentId, file.parentId);
       const title = documentsInProgress.find((d) => d.id === file.documentId)?.tittel ?? 'Ukjent dokument';
 
       urls.push(newTabUrl);
 
-      entries.push({ variants: 'PDF', title, url: fileUrl, downloadUrl: fileUrl, newTabUrl });
+      entries.push({ variants: 'PDF', title, url: fileUrl, downloadUrl, newTabUrl });
     }
 
     return { files: entries, tabUrls: urls };
