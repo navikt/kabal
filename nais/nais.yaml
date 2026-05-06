@@ -10,6 +10,12 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
 spec:
   image: {{image}}
+  resources:
+    requests:
+      cpu: 400m
+      memory: 400Mi
+    limits:
+      memory: 512Mi
   replicas:
     min: 2
     max: 3
@@ -72,7 +78,7 @@ spec:
     path: /isAlive
     initialDelay: 0
     periodSeconds: 1
-    timeout: 1
+    timeout: 3
     failureThreshold: 3
   startup:
     path: /isStarted
