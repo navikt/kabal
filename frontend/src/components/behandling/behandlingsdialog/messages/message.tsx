@@ -64,7 +64,7 @@ export const Message = ({
       bottom="space-0"
       align="center"
     >
-      <Notify id={id} created={created} modified={modified} notify={notify} mine={mine} />
+      <Notify id={id} modified={modified} notify={notify} mine={mine} />
     </HStack>
   </Box>
 );
@@ -143,15 +143,15 @@ enum Placement {
   RIGHT = 'right',
 }
 
-interface NotifyProps extends Pick<IMessage, 'notify' | 'id' | 'created' | 'modified'> {
+interface NotifyProps extends Pick<IMessage, 'notify' | 'id' | 'modified'> {
   mine: boolean;
 }
 
-const Notify = ({ notify, id, created, modified, mine }: NotifyProps) => {
+const Notify = ({ notify, id, modified, mine }: NotifyProps) => {
   const placement = mine ? Placement.LEFT : Placement.RIGHT;
 
   if (notify) {
-    return <MessageNotification at={modified ?? created} placement={placement} />;
+    return <MessageNotification at={modified} placement={placement} />;
   }
 
   return mine ? <SendNotificationButton id={id} placement={placement} /> : null;
