@@ -13,7 +13,7 @@ const useOppgaveTableDateRange = (key: string) => {
   const [toDate, setToDate] = useState<string | undefined>(toQueryValue);
 
   const setDateRange = (from: string | undefined, to: string | undefined) => {
-    if (from === undefined || to === undefined) {
+    if (from === undefined && to === undefined) {
       setFromDate(undefined);
       setToDate(undefined);
 
@@ -24,8 +24,18 @@ const useOppgaveTableDateRange = (key: string) => {
     setFromDate(from);
     setToDate(to);
 
-    query.set(key, `${from}${DATE_SEPARATOR}${to}`);
-    return setQuery(query);
+    if (from !== undefined && to !== undefined) {
+      query.set(key, `${from}${DATE_SEPARATOR}${to}`);
+      return setQuery(query);
+    }
+
+    if (from !== undefined) {
+      query.set(key, `${from}`);
+
+      return setQuery(query);
+    }
+
+    // from === undefined && to !== undefined should never happen
   };
 
   return { from: fromDate, to: toDate, setDateRange } as const;
@@ -43,16 +53,12 @@ export const useOppgaveTableFrist = (tableKey: OppgaveTableKey) =>
 export const useOppgaveTableVarsletFrist = (tableKey: OppgaveTableKey) =>
   useOppgaveTableDateRange(`${tableKey}.${ShortParamKey.VARSLET_FRIST}`);
 
-export const fromDateRangeParam = (value: string | null): [string, string] | [undefined, undefined] => {
+export const fromDateRangeParam = (value: string | null): [string | undefined, string | undefined] => {
   if (value === null) {
     return [undefined, undefined];
   }
 
   const [from, to] = value.split(DATE_SEPARATOR);
 
-  if (from !== undefined && to !== undefined) {
-    return [from, to];
-  }
-
-  return [undefined, undefined];
+  return [from, to];
 };

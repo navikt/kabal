@@ -24,8 +24,20 @@ const Filter = ({ from, to, setDateRange, size }: FilterProps) => {
     );
   };
 
+  const onClose = () => {
+    if (from === undefined || to === undefined) {
+      setDateRange(undefined, undefined);
+    }
+  };
+
   return (
-    <DatePickerRange onChange={onChange} selected={{ from, to }} buttonSize={size} buttonClassName="rounded-l-none" />
+    <DatePickerRange
+      onChange={onChange}
+      selected={{ from, to }}
+      buttonSize={size}
+      buttonClassName="rounded-l-none"
+      onClose={onClose}
+    />
   );
 };
 
