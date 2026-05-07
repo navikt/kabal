@@ -1,7 +1,7 @@
 import { CalendarIcon } from '@navikt/aksel-icons';
 import { Box, Button, type ButtonProps, DatePicker, HStack, InlineMessage, Tooltip } from '@navikt/ds-react';
 import { format, formatISO, parseISO } from 'date-fns';
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useOnClickOutside } from '@/hooks/use-on-click-outside';
 
 export type DateRange = {
@@ -21,14 +21,27 @@ interface Props {
   gridArea?: string;
   buttonClassName?: string;
   buttonSize?: ButtonProps['size'];
+  onClose?: () => void;
 }
 
-export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea, buttonClassName, buttonSize }: Props) => {
+export const DatePickerRange = ({
+  onChange,
+  selected,
+  buttonLabel,
+  gridArea,
+  buttonClassName,
+  buttonSize,
+  onClose,
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const onClick = useCallback(() => setIsOpen((o) => !o), []);
   const ref = useRef(null);
 
-  useOnClickOutside(ref, () => setIsOpen(false));
+  const handleClose = () => {
+    setIsOpen(false);
+    onClose?.();
+  };
+
+  useOnClickOutside(ref, isOpen ? handleClose : () => undefined);
 
   const from = typeof selected.from === 'undefined' ? undefined : parseISO(selected.from);
   const to = typeof selected.to === 'undefined' ? undefined : parseISO(selected.to);
@@ -41,7 +54,7 @@ export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea, but
     <HStack className="relative" style={{ gridArea }} ref={ref}>
       <Tooltip content="Filtrer på dato">
         <Button
-          onClick={onClick}
+          onClick={() => (isOpen ? handleClose() : setIsOpen(true))}
           size={buttonSize}
           variant={variant}
           icon={<CalendarIcon aria-hidden />}
@@ -60,7 +73,7 @@ export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea, but
           className="top-full z-1 font-normal"
         >
           <HStack justify="end" padding="space-12" gap="space-12">
-            <Button size="small" variant="primary" onClick={() => setIsOpen(false)}>
+            <Button size="small" variant="primary" onClick={handleClose}>
               Lukk
             </Button>
             <Button
@@ -69,7 +82,7 @@ export const DatePickerRange = ({ onChange, selected, buttonLabel, gridArea, but
               variant="secondary"
               onClick={() => {
                 onChange(undefined);
-                setIsOpen(false);
+                handleClose();
               }}
             >
               Nullstill
