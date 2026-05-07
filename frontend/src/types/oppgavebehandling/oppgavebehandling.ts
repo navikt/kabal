@@ -101,10 +101,7 @@ export interface IOppgavebehandlingBase {
   klager: IPart;
   kommentarFraVedtaksinstans: string | null;
   gosysOppgaveId: number | null;
-  kvalitetsvurderingReference: {
-    id: UUID;
-    version: KvalitetsvurderingVersion;
-  } | null;
+  kvalitetsvurderingReference: KvalitetsvurderingReference | null;
   medunderskriver: IMedunderskriver;
   /** DateTime */
   modified: string;
@@ -135,6 +132,11 @@ export interface IOppgavebehandlingBase {
   sikkerhetstiltak: ISikkerhetstiltak | null;
   readonly tilknyttedeDokumenter: TilknyttetDokument[];
   requiresGosysOppgave: boolean;
+}
+
+export interface KvalitetsvurderingReference {
+  id: UUID;
+  version: KvalitetsvurderingVersion;
 }
 
 export interface TilknyttetDokument {

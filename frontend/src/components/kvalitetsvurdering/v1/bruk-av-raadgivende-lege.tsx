@@ -3,13 +3,13 @@ import { type Reason, Reasons } from '@/components/kvalitetsvurdering/v1/reasons
 import { FormSection } from '@/components/kvalitetsvurdering/v1/styled-components';
 import { useKvalitetsvurderingV1FieldName } from '@/components/kvalitetsvurdering/v1/use-field-name';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
-import { useKvalitetsvurdering } from '@/hooks/use-kvalitetsvurdering';
+import { useKvalitetsvurderingV1 } from '@/hooks/use-kvalitetsvurdering';
 import { useValidationError } from '@/hooks/use-validation-error';
 import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/v1';
 import { RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
 
 export const BrukAvRaadgivendeLege = () => {
-  const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
+  const [kvalitetsvurdering, isLoading] = useKvalitetsvurderingV1();
   const [updateKvalitetsvurdering] = useUpdateKvalitetsvurderingMutation();
   const validationError = useValidationError('brukAvRaadgivendeLegeRadioValg');
   const canEdit = useIsTildeltSaksbehandler();

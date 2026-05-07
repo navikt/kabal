@@ -2,7 +2,7 @@ import { HStack, Radio } from '@navikt/ds-react';
 import { StyledRadioGroup } from '@/components/kvalitetsvurdering/common/styled-components';
 import { Checkboxes } from '@/components/kvalitetsvurdering/v3/common/checkboxes';
 import type { CheckboxParams } from '@/components/kvalitetsvurdering/v3/common/types';
-import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { MainReason } from '@/components/kvalitetsvurdering/v3/data';
 import { getCheckbox } from '@/components/kvalitetsvurdering/v3/helpers';
@@ -27,7 +27,7 @@ import { Radiovalg } from '@/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const Saksbehandlingsreglene = () => {
-  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV3();
+  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV3State();
   const { data: oppgave } = useOppgave();
 
   const canEdit = useCanEditBehandling();

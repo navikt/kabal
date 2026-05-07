@@ -1,12 +1,12 @@
 import { Skeleton, VStack } from '@navikt/ds-react';
 import { Annet } from '@/components/kvalitetsvurdering/v3/annet/annet';
-import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { Saksbehandlingsreglene } from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/saksbehandlingsreglene';
 import { Særregelverket } from '@/components/kvalitetsvurdering/v3/særregelverket/særregelverket';
 import { Trygdemedisin } from '@/components/kvalitetsvurdering/v3/trygdemedisin/trygdemedisin';
 
 export const KvalitetsskjemaV3 = () => {
-  const { isLoading } = useKvalitetsvurderingV3();
+  const { isLoading } = useKvalitetsvurderingV3State();
 
   if (isLoading) {
     return (

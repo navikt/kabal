@@ -1,6 +1,6 @@
 import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { useEffect } from 'react';
-import { useKvalitetsvurderingV2 } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useKvalitetsvurderingV2State } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
 import { useValidationError } from '@/components/kvalitetsvurdering/v2/common/use-validation-error';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { usePrevious } from '@/hooks/use-previous';
@@ -18,7 +18,7 @@ interface Props {
 const EMPTY_ARRAY: string[] = [];
 
 export const Oppgavehjemler = ({ field, parentKey }: Props) => {
-  const { hjemler, kvalitetsvurdering, update, isLoading } = useKvalitetsvurderingV2();
+  const { hjemler, kvalitetsvurdering, update, isLoading } = useKvalitetsvurderingV2State();
   const { data: registreringshjemlerMap, isLoading: registreringshjemlerMapIsLoading } = useRegistreringshjemlerMap();
   const canEdit = useIsTildeltSaksbehandler();
   const validationError = useValidationError(field);

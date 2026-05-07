@@ -10,7 +10,7 @@ import {
   KvalitetsvurderingInput,
 } from '@/components/kvalitetsvurdering/v2/common/types';
 import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from '@/components/kvalitetsvurdering/v2/common/use-field-name';
-import { useKvalitetsvurderingV2 } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useKvalitetsvurderingV2State } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
 import { useValidationError } from '@/components/kvalitetsvurdering/v2/common/use-validation-error';
 import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingData } from '@/types/kaka-kvalitetsvurdering/v2';
 
@@ -87,7 +87,7 @@ const Checkbox = ({
   checkboxes,
   groupErrorField,
 }: CheckboxParams) => {
-  const { kvalitetsvurdering, isLoading, update } = useKvalitetsvurderingV2();
+  const { kvalitetsvurdering, isLoading, update } = useKvalitetsvurderingV2State();
 
   if (isLoading) {
     return null;

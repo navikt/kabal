@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useMemo } from 'react';
-import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
@@ -28,7 +28,7 @@ interface AllRegistreringshjemlerProps {
 
 export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshjemlerProps) => {
   const containerRef = usePanelContainerRef();
-  const { update, isLoading, kvalitetsvurdering } = useKvalitetsvurderingV3();
+  const { update, isLoading, kvalitetsvurdering } = useKvalitetsvurderingV3State();
   const canEdit = useCanEditBehandling();
   const error = useValidationError(field);
   const { data: oppgave } = useOppgave();

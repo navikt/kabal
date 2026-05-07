@@ -1,7 +1,7 @@
 import { Textarea } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
-import { useKvalitetsvurdering } from '@/hooks/use-kvalitetsvurdering';
+import { useKvalitetsvurderingV1 } from '@/hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/v1';
 import type { IKvalitetsvurderingTexts, IKvalitetsvurderingV1 } from '@/types/kaka-kvalitetsvurdering/v1';
 
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const CommentField = ({ textareaId }: Props) => {
-  const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
+  const [kvalitetsvurdering, isLoading] = useKvalitetsvurderingV1();
 
   if (isLoading || typeof kvalitetsvurdering === 'undefined') {
     return null;

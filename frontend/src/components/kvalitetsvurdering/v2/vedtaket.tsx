@@ -5,7 +5,7 @@ import { StyledRadioGroup } from '@/components/kvalitetsvurdering/common/styled-
 import { Checkboxes } from '@/components/kvalitetsvurdering/v2/common/checkboxes';
 import { type InputParams, KvalitetsvurderingInput } from '@/components/kvalitetsvurdering/v2/common/types';
 import { useKvalitetsvurderingV2FieldName } from '@/components/kvalitetsvurdering/v2/common/use-field-name';
-import { useKvalitetsvurderingV2 } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useKvalitetsvurderingV2State } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
 import { useValidationError } from '@/components/kvalitetsvurdering/v2/common/use-validation-error';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { Radiovalg } from '@/types/kaka-kvalitetsvurdering/radio';
@@ -15,7 +15,7 @@ const AUTOMATISK_VEDTAK_HELPTEXT =
 const VEDTAKET_ID = 'vedtaket';
 
 export const Vedtaket = () => {
-  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV2();
+  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV2State();
 
   const canEdit = useIsTildeltSaksbehandler();
   const validationError = useValidationError(VEDTAKET_ID);

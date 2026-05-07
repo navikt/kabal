@@ -4,7 +4,7 @@ import { StyledRadioGroup } from '@/components/kvalitetsvurdering/common/styled-
 import { Checkboxes } from '@/components/kvalitetsvurdering/v2/common/checkboxes';
 import { type InputParams, KvalitetsvurderingInput } from '@/components/kvalitetsvurdering/v2/common/types';
 import { useKvalitetsvurderingV2FieldName } from '@/components/kvalitetsvurdering/v2/common/use-field-name';
-import { useKvalitetsvurderingV2 } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useKvalitetsvurderingV2State } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
 import { useValidationError } from '@/components/kvalitetsvurdering/v2/common/use-validation-error';
 import { useIsRelevantYtelseForRaadgivende } from '@/hooks/use-is-relevant-ytelse-for-raadgivende';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
@@ -13,7 +13,7 @@ import { RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
 const USE_ROL_FIELD = 'brukAvRaadgivendeLege';
 
 export const BrukAvRaadgivendeLege = () => {
-  const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV2();
+  const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV2State();
   const show = useIsRelevantYtelseForRaadgivende(oppgave?.ytelseId ?? null);
 
   const canEdit = useIsTildeltSaksbehandler();

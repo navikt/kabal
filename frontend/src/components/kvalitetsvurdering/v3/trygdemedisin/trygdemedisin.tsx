@@ -3,7 +3,7 @@ import { HelpTextRadio } from '@/components/kvalitetsvurdering/common/kvalitetsv
 import { StyledRadioGroup } from '@/components/kvalitetsvurdering/common/styled-components';
 import { Checkboxes } from '@/components/kvalitetsvurdering/v3/common/checkboxes';
 import type { CheckboxParams } from '@/components/kvalitetsvurdering/v3/common/types';
-import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { MainReason } from '@/components/kvalitetsvurdering/v3/data';
 import { getCheckbox } from '@/components/kvalitetsvurdering/v3/helpers';
@@ -18,7 +18,7 @@ import { useIsRelevantYtelseForRaadgivende } from '@/hooks/use-is-relevant-ytels
 import { RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
 
 export const Trygdemedisin = () => {
-  const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV3();
+  const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV3State();
   const show = useIsRelevantYtelseForRaadgivende(oppgave?.ytelseId ?? null);
 
   const canEdit = useCanEditBehandling();

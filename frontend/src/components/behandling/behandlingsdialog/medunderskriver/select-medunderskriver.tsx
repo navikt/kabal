@@ -13,12 +13,11 @@ import { useSetMedunderskriver } from '@/components/oppgavestyring/use-set-medun
 import { toNavEmployeeEntry } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
 import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
-import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useHasRole } from '@/hooks/use-has-role';
 import { useIsAssignedMedunderskriver, useIsAssignedMedunderskriverAndSent } from '@/hooks/use-is-medunderskriver';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
+import { useKvalitetsvurdering } from '@/hooks/use-kvalitetsvurdering';
 import { pushEvent } from '@/observability';
-import { useGetKvalitetsvurderingQuery } from '@/redux-api/kaka-kvalitetsvurdering/v3';
 import { useTildelSaksbehandlerMutation } from '@/redux-api/oppgaver/mutations/tildeling';
 import { useGetPotentialMedunderskrivereQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import type { INavEmployee } from '@/types/bruker';
@@ -51,9 +50,7 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
   const { onChange, isUpdating } = useSetMedunderskriver(oppgaveId, data?.medunderskrivere);
   const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
 
-  const { data: oppgave } = useOppgave();
-  const kvalitetsvurderingId = oppgave?.kvalitetsvurderingReference?.id;
-  const { data: kvalitetsvurdering } = useGetKvalitetsvurderingQuery(kvalitetsvurderingId ?? skipToken);
+  const [kvalitetsvurdering] = useKvalitetsvurdering();
 
   const canChange =
     isTildeltSaksbehandler ||
