@@ -1,10 +1,8 @@
 import type { SerializedError } from '@reduxjs/toolkit';
-import { type FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/query';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
-import {
-  useGetKvalitetsvurderingQuery,
-  useUpdateKvalitetsvurderingMutation,
-} from '@/redux-api/kaka-kvalitetsvurdering/v2';
+import { useKvalitetsvurderingV2 } from '@/hooks/use-kvalitetsvurdering';
+import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/v2';
 import type { IKvalitetsvurdering, IKvalitetsvurderingData } from '@/types/kaka-kvalitetsvurdering/v2';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
@@ -36,13 +34,9 @@ interface Loaded {
 
 const EMPTY_ARRAY: string[] = [];
 
-export const useKvalitetsvurderingV2 = (): Loading | Loaded => {
+export const useKvalitetsvurderingV2State = (): Loading | Loaded => {
   const { data: oppgave, isLoading: oppgaveIsLoading } = useOppgave();
-  const param =
-    typeof oppgave === 'undefined' || oppgave.kvalitetsvurderingReference === null
-      ? skipToken
-      : oppgave.kvalitetsvurderingReference.id;
-  const { data: kvalitetsvurdering, isLoading: kvalitetsvurderingIsLoading } = useGetKvalitetsvurderingQuery(param);
+  const [kvalitetsvurdering, kvalitetsvurderingIsLoading] = useKvalitetsvurderingV2();
   const [update, updateStatus] = useUpdateKvalitetsvurderingMutation();
 
   const id = oppgave?.kvalitetsvurderingReference?.id;

@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { CommentField } from '@/components/kvalitetsvurdering/v1/comment-field';
 import { StyledHelpText } from '@/components/kvalitetsvurdering/v1/styled-components';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
-import { useKvalitetsvurdering } from '@/hooks/use-kvalitetsvurdering';
+import { useKvalitetsvurderingV1 } from '@/hooks/use-kvalitetsvurdering';
 import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/v1';
 import type { IKvalitetsvurderingBooleans, IKvalitetsvurderingTexts } from '@/types/kaka-kvalitetsvurdering/v1';
 
@@ -23,7 +23,7 @@ interface ReasonsProps {
 }
 
 export const Reasons = ({ error, show = true, legendText = '', reasons }: ReasonsProps) => {
-  const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
+  const [kvalitetsvurdering, isLoading] = useKvalitetsvurderingV1();
   const [updateKvalitetsvurdering] = useUpdateKvalitetsvurderingMutation();
   const canEdit = useIsTildeltSaksbehandler();
 

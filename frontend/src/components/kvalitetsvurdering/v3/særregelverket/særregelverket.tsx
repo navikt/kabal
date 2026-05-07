@@ -4,7 +4,7 @@ import { HelpTextCheckBox } from '@/components/kvalitetsvurdering/common/kvalite
 import { StyledRadioGroup } from '@/components/kvalitetsvurdering/common/styled-components';
 import { Checkboxes } from '@/components/kvalitetsvurdering/v3/common/checkboxes';
 import type { CheckboxParams } from '@/components/kvalitetsvurdering/v3/common/types';
-import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { MainReason } from '@/components/kvalitetsvurdering/v3/data';
 import { getCheckbox } from '@/components/kvalitetsvurdering/v3/helpers';
@@ -24,7 +24,7 @@ const vedtaketAutomatiskVedtakhelpText =
   'Du skal gjøre de samme kvalitetsvurderingene for automatiske vedtak som for andre vedtak. Du kan krysse av for automatisk vedtak dersom det er tydelig merket i vedtaket.';
 
 export const Særregelverket = () => {
-  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV3();
+  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV3State();
 
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(MainReason.Særregelverket);

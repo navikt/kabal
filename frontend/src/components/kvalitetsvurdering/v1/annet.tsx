@@ -2,13 +2,13 @@ import { Heading, Loader } from '@navikt/ds-react';
 import { type Reason, Reasons } from '@/components/kvalitetsvurdering/v1/reasons';
 import { FormSection } from '@/components/kvalitetsvurdering/v1/styled-components';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
-import { useKvalitetsvurdering } from '@/hooks/use-kvalitetsvurdering';
+import { useKvalitetsvurderingV1 } from '@/hooks/use-kvalitetsvurdering';
 import { Radiovalg } from '@/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const Annet = () => {
   const { data: oppgave } = useOppgave();
-  const [kvalitetsvurdering, isLoading] = useKvalitetsvurdering();
+  const [kvalitetsvurdering, isLoading] = useKvalitetsvurderingV1();
 
   if (isLoading || typeof oppgave === 'undefined' || typeof kvalitetsvurdering === 'undefined') {
     return <Loader size="xlarge" />;

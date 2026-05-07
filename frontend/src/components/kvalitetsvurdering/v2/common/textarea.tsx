@@ -2,7 +2,7 @@ import { BodyLong, HStack, Label, Textarea, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { ContainerWithHelpText } from '@/components/kvalitetsvurdering/common/container-with-helptext';
 import type { TextParams } from '@/components/kvalitetsvurdering/v2/common/types';
-import { useKvalitetsvurderingV2 } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useKvalitetsvurderingV2State } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
 import { SavedStatus } from '@/components/saved-status/saved-status';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import type { IKvalitetsvurderingBooleans } from '@/types/kaka-kvalitetsvurdering/v2';
@@ -12,7 +12,7 @@ interface Props extends TextParams {
 }
 
 export const KvalitetsskjemaTextarea = (props: Props) => {
-  const { kvalitetsvurdering, isLoading } = useKvalitetsvurderingV2();
+  const { kvalitetsvurdering, isLoading } = useKvalitetsvurderingV2State();
   const canEdit = useIsTildeltSaksbehandler();
 
   if (isLoading) {
@@ -51,7 +51,7 @@ const KvalitetsskjemaTextareaInternal = ({
   description,
   initialValue,
 }: InternalProps) => {
-  const { kvalitetsvurdering, isLoading, update, updateStatus } = useKvalitetsvurderingV2();
+  const { kvalitetsvurdering, isLoading, update, updateStatus } = useKvalitetsvurderingV2State();
   const [localValue, setLocalValue] = useState<string>(initialValue);
 
   useEffect(() => {

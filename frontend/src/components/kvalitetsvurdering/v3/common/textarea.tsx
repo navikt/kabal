@@ -2,7 +2,7 @@ import { BodyLong, HStack, Label, Textarea } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { ContainerWithHelpText } from '@/components/kvalitetsvurdering/common/container-with-helptext';
 import type { TextParams } from '@/components/kvalitetsvurdering/v3/common/types';
-import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { SavedStatus } from '@/components/saved-status/saved-status';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
@@ -13,7 +13,7 @@ interface Props extends TextParams {
 }
 
 export const KvalitetsskjemaTextarea = (props: Props) => {
-  const { kvalitetsvurdering, isLoading } = useKvalitetsvurderingV3();
+  const { kvalitetsvurdering, isLoading } = useKvalitetsvurderingV3State();
   const canEdit = useCanEditBehandling();
 
   if (isLoading) {
@@ -50,7 +50,7 @@ const KvalitetsskjemaTextareaInternal = ({
   description,
   initialValue,
 }: InternalProps) => {
-  const { kvalitetsvurdering, isLoading, update, updateStatus } = useKvalitetsvurderingV3();
+  const { kvalitetsvurdering, isLoading, update, updateStatus } = useKvalitetsvurderingV3State();
   const [localValue, setLocalValue] = useState<string>(initialValue);
   const error = useValidationError(field);
 

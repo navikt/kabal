@@ -1,6 +1,6 @@
 import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { useEffect } from 'react';
-import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { usePrevious } from '@/hooks/use-previous';
@@ -18,7 +18,7 @@ interface SaksdatahjemlerProps {
 }
 
 export const Oppgavehjemler = ({ field, parentKey }: SaksdatahjemlerProps) => {
-  const { hjemler, kvalitetsvurdering, update, isLoading } = useKvalitetsvurderingV3();
+  const { hjemler, kvalitetsvurdering, update, isLoading } = useKvalitetsvurderingV3State();
   const { data: registreringshjemlerMap, isLoading: registreringshjemlerMapIsLoading } = useRegistreringshjemlerMap();
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(field);

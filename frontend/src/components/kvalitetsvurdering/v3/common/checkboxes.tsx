@@ -6,7 +6,7 @@ import { Oppgavehjemler } from '@/components/kvalitetsvurdering/v3/common/oppgav
 import { KvalitetsskjemaTextarea } from '@/components/kvalitetsvurdering/v3/common/textarea';
 import type { CheckboxParams, InputParams } from '@/components/kvalitetsvurdering/v3/common/types';
 import { type GroupErrorField, TypeEnum } from '@/components/kvalitetsvurdering/v3/common/types';
-import { useKvalitetsvurderingV3 } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
+import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
 import type { KvalitetsvurderingDataV3, KvalitetsvurderingV3Boolean } from '@/types/kaka-kvalitetsvurdering/v3';
 
@@ -74,7 +74,7 @@ interface CheckboxProps {
 const Checkbox = ({ checkbox }: CheckboxProps) => {
   const { field, label, helpText, saksdatahjemler, allRegistreringshjemler, childList, groupErrorField } = checkbox;
 
-  const { kvalitetsvurdering, isLoading, update } = useKvalitetsvurderingV3();
+  const { kvalitetsvurdering, isLoading, update } = useKvalitetsvurderingV3State();
 
   if (isLoading) {
     return null;

@@ -5,11 +5,11 @@ import { Utredningen } from '@/components/kvalitetsvurdering/v1/utredningen';
 import { Vedtaket } from '@/components/kvalitetsvurdering/v1/vedtaket';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useIsRelevantYtelseForRaadgivende } from '@/hooks/use-is-relevant-ytelse-for-raadgivende';
-import { useKvalitetsvurdering } from '@/hooks/use-kvalitetsvurdering';
+import { useKvalitetsvurderingV1 } from '@/hooks/use-kvalitetsvurdering';
 
 export const KvalitetsskjemaV1 = () => {
   const { data: oppgave } = useOppgave();
-  const [kvalitetsvurdering] = useKvalitetsvurdering();
+  const [kvalitetsvurdering] = useKvalitetsvurderingV1();
 
   if (typeof kvalitetsvurdering === 'undefined' || typeof oppgave === 'undefined') {
     return null;

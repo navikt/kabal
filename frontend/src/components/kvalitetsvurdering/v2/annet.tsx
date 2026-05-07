@@ -1,6 +1,6 @@
 import { KvalitetsskjemaTextarea } from '@/components/kvalitetsvurdering/v2/common/textarea';
 import { KvalitetsvurderingInput } from '@/components/kvalitetsvurdering/v2/common/types';
-import { useKvalitetsvurderingV2 } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useKvalitetsvurderingV2State } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
 
 const HELPTEXT =
   'Det du skriver her er kun for klageinstansens interne bruk og blir ikke synlig for vedtaksinstansen. Har saken andre avvik som ikke passer med noen av de andre registreringsmulighetene i Kaka, kan du skrive dette her. Husk å skrive kort / med stikkord. Ikke skriv personopplysninger eller detaljer om saken. Du kan også skrive stikkord dersom saken gjelder et typetilfelle.';
@@ -8,7 +8,7 @@ const DESCRIPTION =
   'Det du skriver her er kun synlig for klageinstansen og ikke for vedtaksinstansen. Husk å ikke skrive personopplysninger.';
 
 export const Annet = () => {
-  const { isLoading } = useKvalitetsvurderingV2();
+  const { isLoading } = useKvalitetsvurderingV2State();
 
   if (isLoading) {
     return null;
