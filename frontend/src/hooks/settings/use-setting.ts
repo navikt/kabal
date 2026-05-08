@@ -67,8 +67,6 @@ export const setFilesViewed = (oppgaveId: string, navIdent: string, documents: I
   SETTINGS_MANAGER.set(setting, JSON.stringify(documents));
 };
 
-export const useFileViewerWidth = () => useNumberSetting(useOppgavePath('tabs/documents/file-viewer/width'));
-
 export const useDocumentsPdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/pdf/width'));
 
 export const useDocumentsExpanded = () => useBooleanSetting(useOppgavePath('tabs/documents/expanded'));
