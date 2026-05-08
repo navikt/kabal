@@ -72,7 +72,7 @@ export const useFileViewerWidth = () => useNumberSetting(useOppgavePath('tabs/do
 export const useDocumentsPdfWidth = () => useNumberSetting(useOppgavePath('tabs/documents/pdf/width'));
 
 export const useDocumentsExpanded = () => useBooleanSetting(useOppgavePath('tabs/documents/expanded'));
-export const useDocumentsWidth = () => useNumberSetting(useOppgavePath('tabs/documents/width'));
+export const useDocumentsWidth = () => useNumberSetting('tabs/documents/width');
 
 // Oppgavebehandling documents filters
 export const useDocumentsFilterTema = () => useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/tema'));
