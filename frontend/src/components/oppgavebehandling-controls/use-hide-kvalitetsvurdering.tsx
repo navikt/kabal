@@ -15,13 +15,7 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
 
   const { typeId, resultat } = oppgave;
 
-  if (
-    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
-    typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET ||
-    typeId === SaksTypeEnum.OMGJØRINGSKRAV ||
-    typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ||
-    typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR
-  ) {
+  if (!typeHasKvalitetsvurdering(typeId)) {
     return {
       featureEnabled: true,
       panelDefaultEnabled: false,
@@ -33,11 +27,7 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
     };
   }
 
-  if (
-    resultat.utfallId === UtfallEnum.TRUKKET ||
-    resultat.utfallId === UtfallEnum.RETUR ||
-    resultat.utfallId === UtfallEnum.HENLAGT
-  ) {
+  if (!utfallHasKvalitetsvurdering(resultat.utfallId)) {
     return {
       featureEnabled: true,
       panelDefaultEnabled: true,
@@ -59,3 +49,13 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
 
   return { panelDefaultEnabled: true, featureEnabled: true, reason: null };
 };
+
+export const typeHasKvalitetsvurdering = (typeId: SaksTypeEnum): boolean =>
+  typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN &&
+  typeId !== SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET &&
+  typeId !== SaksTypeEnum.OMGJØRINGSKRAV &&
+  typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK &&
+  typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+
+export const utfallHasKvalitetsvurdering = (utfallId: UtfallEnum | null): boolean =>
+  utfallId !== UtfallEnum.TRUKKET && utfallId !== UtfallEnum.RETUR && utfallId !== UtfallEnum.HENLAGT;

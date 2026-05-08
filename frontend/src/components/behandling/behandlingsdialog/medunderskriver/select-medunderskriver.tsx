@@ -9,6 +9,10 @@ import {
 } from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { MedunderskriverReadOnly } from '@/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SELECT_SKELETON } from '@/components/behandling/behandlingsdialog/medunderskriver/skeleton';
+import {
+  typeHasKvalitetsvurdering,
+  utfallHasKvalitetsvurdering,
+} from '@/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
 import { useSetMedunderskriver } from '@/components/oppgavestyring/use-set-medunderskriver';
 import { toNavEmployeeEntry } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
 import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
@@ -22,13 +26,14 @@ import { useTildelSaksbehandlerMutation } from '@/redux-api/oppgaver/mutations/t
 import { useGetPotentialMedunderskrivereQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import type { INavEmployee } from '@/types/bruker';
 import { Role } from '@/types/bruker';
-import type { SaksTypeEnum } from '@/types/kodeverk';
+import type { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 import { FlowState, type IMedunderskriver } from '@/types/oppgave-common';
 
 interface Props {
-  oppgaveId: string;
-  medunderskriver: IMedunderskriver;
+  id: string;
   typeId: SaksTypeEnum;
+  utfallId: UtfallEnum | null;
+  medunderskriver: IMedunderskriver;
 }
 
 const NONE_LABEL = 'Ingen';
@@ -39,15 +44,15 @@ const NONE_ENTRY: Entry<INavEmployee | null> = {
   label: NONE_LABEL,
 };
 
-export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Props) => {
-  const [, { isLoading }] = useTildelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
+export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }: Props) => {
+  const [, { isLoading }] = useTildelSaksbehandlerMutation({ fixedCacheKey: id });
   const isTildeltSaksbehandler = useIsTildeltSaksbehandler();
   const isTildeltMu = useIsAssignedMedunderskriver();
   const hasOppgavestyringRole = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const { data } = useGetPotentialMedunderskrivereQuery(
-    (isTildeltSaksbehandler || isTildeltMu || hasOppgavestyringRole) && !isLoading ? oppgaveId : skipToken,
+    (isTildeltSaksbehandler || isTildeltMu || hasOppgavestyringRole) && !isLoading ? id : skipToken,
   );
-  const { onChange, isUpdating } = useSetMedunderskriver(oppgaveId, data?.medunderskrivere);
+  const { onChange, isUpdating } = useSetMedunderskriver(id, data?.medunderskrivere);
   const isMedunderskriver = useIsAssignedMedunderskriverAndSent();
 
   const [kvalitetsvurdering] = useKvalitetsvurdering();
@@ -75,10 +80,16 @@ export const SelectMedunderskriver = ({ oppgaveId, medunderskriver, typeId }: Pr
   const titleLabel = getTitleCapitalized(typeId);
 
   const handleChange = (employee: INavEmployee | null) => {
-    if (medunderskriver.flowState === FlowState.NOT_SENT && employee !== null && kvalitetsvurdering !== undefined) {
+    if (
+      typeHasKvalitetsvurdering(typeId) &&
+      utfallHasKvalitetsvurdering(utfallId) &&
+      medunderskriver.flowState === FlowState.NOT_SENT &&
+      employee !== null &&
+      kvalitetsvurdering !== undefined
+    ) {
       const kvalitetsvurderingFilledOut = isModified(kvalitetsvurdering.created, kvalitetsvurdering.modified);
       pushEvent(kvalitetsvurderingFilledOut ? 'set-mu-after-kv' : 'set-mu-before-kv', 'kvalitetsvurdering', {
-        oppgaveId,
+        oppgaveId: id,
       });
     }
 

@@ -50,7 +50,12 @@ export const Medunderskriver = () => {
 
   return (
     <Container>
-      <SelectMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} typeId={typeId} />
+      <SelectMedunderskriver
+        id={oppgaveId}
+        medunderskriver={oppgave.medunderskriver}
+        utfallId={oppgave.resultat.utfallId}
+        typeId={typeId}
+      />
       <MedunderskriverStateText medunderskriver={medunderskriver} typeId={typeId} />
       <SendToMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} typeId={typeId} />
       <SendToSaksbehandler oppgaveId={oppgaveId} medunderskriver={medunderskriver} />
