@@ -1,9 +1,25 @@
-import { AutoformatPlugin } from '@platejs/autoformat';
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
-import { BoldPlugin, HeadingPlugin, ItalicPlugin, UnderlinePlugin } from '@platejs/basic-nodes/react';
+import {
+  BaseH1Plugin,
+  BaseH2Plugin,
+  BaseH3Plugin,
+  BoldRules,
+  HeadingRules,
+  ItalicRules,
+  UnderlineRules,
+} from '@platejs/basic-nodes';
+import {
+  BoldPlugin,
+  H1Plugin,
+  H2Plugin,
+  H3Plugin,
+  HeadingPlugin,
+  ItalicPlugin,
+  UnderlinePlugin,
+} from '@platejs/basic-nodes/react';
 import { TextAlignPlugin } from '@platejs/basic-styles/react';
 import { DocxPlugin } from '@platejs/docx';
 import { IndentPlugin } from '@platejs/indent/react';
+import { BulletedListRules, OrderedListRules } from '@platejs/list-classic';
 import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@platejs/list-classic/react';
 import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@platejs/table/react';
 import { ExitBreakPlugin } from '@platejs/utils';
@@ -15,7 +31,8 @@ import { TableElement } from '@/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@/plate/components/plate-ui/table-row-element';
 import { BoldLeaf, ItalicLeaf, UnderlineLeaf } from '@/plate/leaf/marks';
 import { AllSearchHitsHighlightLeaf, ReplaceOneHighlightLeaf } from '@/plate/leaf/search-replace';
-import { autoformatRules } from '@/plate/plugins/autoformat/rules';
+import { CustomAutoFormatRulesPlugin } from '@/plate/plugins/autoformat/custom-rules';
+import { DefaultAutoFormatRulesPlugin } from '@/plate/plugins/autoformat/default-rules';
 import { InsertPlugin } from '@/plate/plugins/capitalise/capitalise';
 import { CopyPlugin } from '@/plate/plugins/copy/copy';
 import { CustomAbbreviationPlugin } from '@/plate/plugins/custom-abbreviations/create-custom-abbreviation-plugin';
@@ -49,15 +66,36 @@ export const defaultPlugins = [
 
     return editor;
   }),
-  BoldPlugin.configure({ render: { node: BoldLeaf } }),
-  ItalicPlugin.configure({ render: { node: ItalicLeaf } }),
-  UnderlinePlugin.configure({ render: { node: UnderlineLeaf } }),
+  DefaultAutoFormatRulesPlugin,
+  CustomAutoFormatRulesPlugin,
+  H1Plugin.configure({ inputRules: [HeadingRules.markdown()] }),
+  H2Plugin.configure({ inputRules: [HeadingRules.markdown()] }),
+  H3Plugin.configure({ inputRules: [HeadingRules.markdown()] }),
+  BoldPlugin.configure({
+    render: { node: BoldLeaf },
+    inputRules: [BoldRules.markdown({ variant: '*' })],
+  }),
+  ItalicPlugin.configure({
+    render: { node: ItalicLeaf },
+    inputRules: [ItalicRules.markdown({ variant: '*' }), ItalicRules.markdown({ variant: '_' })],
+  }),
+  UnderlinePlugin.configure({
+    render: { node: UnderlineLeaf },
+    inputRules: [UnderlineRules.markdown()],
+  }),
   TablePlugin.configure({ options: { disableMarginLeft: true } })
     .withComponent(TableElement)
     .overrideEditor(withOverrides),
   TableCellPlugin.withComponent(TableCellElement),
   TableRowPlugin.withComponent(TableRowElement),
-  ListPlugin,
+  ListPlugin.configure({
+    inputRules: [
+      BulletedListRules.markdown({ variant: '*' }),
+      BulletedListRules.markdown({ variant: '-' }),
+      OrderedListRules.markdown({ variant: '.' }),
+      OrderedListRules.markdown({ variant: ')' }),
+    ],
+  }),
   IndentPlugin.configure({
     options: { indentMax: 15, offset: 24, unit: 'pt' },
     inject: {
@@ -73,12 +111,6 @@ export const defaultPlugins = [
     },
   }),
   TextAlignPlugin.configure({ inject: { targetPlugins: [ParagraphPlugin.key] } }),
-  AutoformatPlugin.configure({
-    options: {
-      rules: autoformatRules,
-      enableUndoOnDelete: true,
-    },
-  }),
   ExitBreakPlugin.configure({
     options: {
       rules: [
