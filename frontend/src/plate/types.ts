@@ -1,4 +1,3 @@
-import type { AutoformatRule } from '@platejs/autoformat';
 import type { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
 import type {
   BaseBulletedListPlugin,
@@ -293,8 +292,6 @@ export type RichTextEditor = PlateEditor & { isDragging?: boolean; children: Kab
 /**
  * Editor utils
  */
-
-export type EditorAutoformatRule = AutoformatRule;
 
 export const useMyPlateEditorRef = (id?: string) =>
   useEditorRef<RichTextEditor & CursorEditor & YjsEditor & PlateYjsEditorProps>(id);
