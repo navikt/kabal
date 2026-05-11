@@ -1,8 +1,5 @@
-import { Select } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useContext } from 'react';
 import { canDistributeAny } from '@/components/documents/filetype';
-import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
 import { DuaActionEnum } from '@/hooks/dua-access/access';
 import { useCreatorRole } from '@/hooks/dua-access/use-creator-role';
 import { useLazyDuaAccess } from '@/hooks/dua-access/use-dua-access';
@@ -12,38 +9,6 @@ import { useCreateVedleggFromJournalfoertDocumentMutation } from '@/redux-api/op
 import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@/types/arkiverte-documents';
 import { DistribusjonsType, DocumentTypeEnum, type IDocument } from '@/types/documents/documents';
-
-const NONE_SELECTED = 'NONE_SELECTED';
-
-export const UseAsAttachments = () => {
-  const { getSelectedDocuments } = useContext(SelectContext);
-  const selectedDocuments = getSelectedDocuments();
-  const options = useOptions(selectedDocuments);
-  const attachFn = useAttachVedleggFn();
-
-  if (attachFn === null) {
-    return null;
-  }
-
-  return (
-    <div className="mx-4 mt-1 mb-3">
-      <Select
-        size="small"
-        label="Bruk som vedlegg for"
-        onChange={({ target }) => attachFn(target.value, ...selectedDocuments)}
-        value={NONE_SELECTED}
-      >
-        <option key={NONE_SELECTED} value={NONE_SELECTED} label="Velg dokument" />
-
-        {options.map(({ id, tittel }) => (
-          <option value={id} key={id}>
-            {tittel}
-          </option>
-        ))}
-      </Select>
-    </div>
-  );
-};
 
 export const useOptions = (selectedDocuments: IArkivertDocument[]): IDocument[] => {
   const oppgaveId = useOppgaveId();
