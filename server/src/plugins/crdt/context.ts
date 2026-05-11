@@ -13,6 +13,7 @@ export interface ConnectionContext {
   hasWriteAccess?: boolean;
   tokenRefreshTimer?: Timer;
   oboTokenExpiresAt?: number;
+  accessToken?: string;
   removeHasAccessListener?: () => void;
   removeDeletedListener?: () => void;
   /** Current activity window span, started on first message after idle. */

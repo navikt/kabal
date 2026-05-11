@@ -331,6 +331,7 @@ const exchangeAccessTokenForOboToken = async (
   }
 
   context.oboTokenExpiresAt = payload.exp;
+  context.accessToken = accessToken;
 
   return Math.floor(payload.exp - Date.now() / 1_000);
 };

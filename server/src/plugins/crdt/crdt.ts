@@ -5,6 +5,7 @@ import fastifyPlugin from 'fastify-plugin';
 import { Doc, encodeStateAsUpdateV2, XmlText } from 'yjs';
 import { ApiClientEnum } from '@/config/config';
 import { isObject } from '@/functions/functions';
+import { stripBearer } from '@/headers';
 import { parseTokenPayload } from '@/helpers/token-parser';
 import { withSpan } from '@/helpers/tracing';
 import { type AnyObject, getLogger, type Level, type LogArgs } from '@/logger';
@@ -194,7 +195,10 @@ export const crdtPlugin = fastifyPlugin(
       '/collaboration/refresh-obo-access-token',
       {
         schema: {
-          response: { 200: Type.Object({ exp: Type.Number(), expiresIn: Type.Number() }), 400: Type.String() },
+          response: {
+            200: Type.Object({ exp: Type.Number(), expiresIn: Type.Number(), access_token: Type.String() }),
+            400: Type.String(),
+          },
         },
       },
       async (req, reply) => {
@@ -211,8 +215,9 @@ export const crdtPlugin = fastifyPlugin(
         }
 
         const now = Math.ceil(Date.now() / 1_000);
+        const access_token = stripBearer(req.headers.authorization) ?? '';
 
-        return reply.status(200).send({ exp: parsed.exp, expiresIn: parsed.exp - now });
+        return reply.status(200).send({ exp: parsed.exp, expiresIn: parsed.exp - now, access_token });
       },
     );
   },
