@@ -30,7 +30,7 @@ export const getDocument = async (
       client_version,
     },
     async (span) => {
-      const accessToken = stripBearer(headers.authorization);
+      const accessToken = context.accessToken ?? stripBearer(headers.authorization);
 
       if (accessToken === undefined) {
         log.error({
