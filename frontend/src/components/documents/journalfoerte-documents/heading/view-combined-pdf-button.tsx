@@ -1,9 +1,6 @@
-import { FilePdfIcon } from '@navikt/aksel-icons';
-import { Button, Tooltip } from '@navikt/ds-react';
-import { useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { showDownloadDocumentsToast } from '@/components/documents/journalfoerte-documents/download-toast';
 import { getSelectedDocumentsInOrder } from '@/components/documents/journalfoerte-documents/heading/selected-in-order';
-import { matchDocuments } from '@/components/documents/journalfoerte-documents/select-context/helpers';
 import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
 import { TabContext } from '@/components/documents/tab-context';
 import { useIsTabOpen } from '@/components/documents/use-is-tab-open';
@@ -11,14 +8,14 @@ import { toast } from '@/components/toast/store';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useFilesViewed } from '@/hooks/settings/use-setting';
 import { useDocumentTabUrl } from '@/hooks/use-document-tab-url';
-import { isMetaKey, MOD_KEY_TEXT, MouseButtons } from '@/keys';
 import { useGetArkiverteDokumenterQuery } from '@/redux-api/oppgaver/queries/documents';
 
-export const ViewCombinedPDF = () => {
+export const useViewCombinedPDF = () => {
   const { getTabRef, setTabRef } = useContext(TabContext);
-  const { value, setArchivedFiles: setArchivedDocuments } = useFilesViewed();
+  const { setArchivedFiles } = useFilesViewed();
   const { selectedDocuments } = useContext(SelectContext);
-  const { data: archivedList, isLoading: archivedIsLoading } = useGetArkiverteDokumenterQuery(useOppgaveId());
+  const { data: archivedList, isLoading } = useGetArkiverteDokumenterQuery(useOppgaveId());
+  const { getCombinedTabUrl, getCombinedTabId } = useDocumentTabUrl();
 
   const { toOpen, toDownload } = useMemo(
     () =>
@@ -28,27 +25,6 @@ export const ViewCombinedPDF = () => {
     [archivedList, selectedDocuments],
   );
 
-  const isInlineOpen = useMemo(() => {
-    const archivedDocuments = value.archivedFiles;
-
-    if (archivedDocuments === undefined || archivedDocuments.length !== toOpen.length) {
-      return false;
-    }
-
-    return archivedDocuments.every((v, i) => {
-      const d = toOpen[i];
-
-      return d !== undefined && matchDocuments(v, d);
-    });
-  }, [toOpen, value]);
-
-  const { getCombinedTabUrl, getCombinedTabId } = useDocumentTabUrl();
-
-  const tabUrl = useMemo(
-    () => (toOpen.length === 0 ? undefined : getCombinedTabUrl(toOpen)),
-    [toOpen, getCombinedTabUrl],
-  );
-
   const documentId = useMemo(
     () => (toOpen.length === 0 ? undefined : getCombinedTabId(toOpen)),
     [toOpen, getCombinedTabId],
@@ -56,18 +32,17 @@ export const ViewCombinedPDF = () => {
 
   const isTabOpen = useIsTabOpen(documentId);
 
-  const onClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-
-    const shouldOpenInNewTab = isMetaKey(e) || e.button === MouseButtons.MIDDLE;
-
+  const onSelect = useCallback(() => {
     if (toDownload.length > 0) {
       showDownloadDocumentsToast(...toDownload);
     }
 
-    if (!shouldOpenInNewTab) {
-      setArchivedDocuments(toOpen);
-      return;
+    setArchivedFiles(toOpen);
+  }, [toDownload, toOpen, setArchivedFiles]);
+
+  const onSelectNewTab = useCallback(() => {
+    if (toDownload.length > 0) {
+      showDownloadDocumentsToast(...toDownload);
     }
 
     if (documentId === undefined) {
@@ -78,7 +53,6 @@ export const ViewCombinedPDF = () => {
 
     const tabRef = getTabRef(documentId);
 
-    // There is a reference to the tab and it is open.
     if (tabRef !== undefined && !tabRef.closed) {
       tabRef.focus();
 
@@ -91,6 +65,8 @@ export const ViewCombinedPDF = () => {
       return;
     }
 
+    const tabUrl = getCombinedTabUrl(toOpen);
+
     const newTabRef = window.open(tabUrl, documentId);
 
     if (newTabRef === null) {
@@ -100,26 +76,7 @@ export const ViewCombinedPDF = () => {
     }
 
     setTabRef(documentId, newTabRef);
-  };
+  }, [toDownload, documentId, isTabOpen, getTabRef, setTabRef, getCombinedTabUrl, toOpen]);
 
-  return (
-    <Tooltip content={`Trykk med musehjulet / midterste knapp eller ${MOD_KEY_TEXT} + klikk for å åpne i ny fane.`}>
-      <Button
-        data-color="neutral"
-        as="a"
-        variant="secondary"
-        size="small"
-        icon={<FilePdfIcon />}
-        onClick={onClick}
-        onAuxClick={onClick}
-        href={tabUrl}
-        loading={archivedIsLoading}
-        className={`mx-4 mb-3 visited:text-ax-text-meta-purple ${
-          isTabOpen || isInlineOpen ? '[text-shadow:0_0_1px_var(--ax-bg-neutral-strong)]' : ''
-        }`}
-      >
-        Vis kombinert dokument
-      </Button>
-    </Tooltip>
-  );
+  return { onSelect, onSelectNewTab, isLoading };
 };
