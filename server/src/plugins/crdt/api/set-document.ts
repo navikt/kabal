@@ -32,7 +32,7 @@ export const setDocument = async (context: ConnectionContext, document: Document
       client_version,
     },
     async (span) => {
-      const accessToken = stripBearer(headers.authorization);
+      const accessToken = context.accessToken ?? stripBearer(headers.authorization);
 
       if (accessToken === undefined) {
         log.error({

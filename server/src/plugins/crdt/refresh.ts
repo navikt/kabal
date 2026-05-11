@@ -5,6 +5,7 @@ import type { ConnectionContext } from '@/plugins/crdt/context';
 import { logContext } from '@/plugins/crdt/log-context';
 
 const REFRESH_TOKEN_LIMIT = 120; // Highest token expiration time Wonderwall will give new token for.
+const RETRY_INTERVAL = 30; // Seconds between retries when Wonderwall hasn't issued a new token yet.
 
 export const createRefreshTimer = async (context: ConnectionContext, expiresIn: number): Promise<Timer> => {
   let refreshedExpiresIn = expiresIn;
@@ -32,23 +33,25 @@ export const createRefreshTimer = async (context: ConnectionContext, expiresIn: 
 };
 
 const scheduleRefreshTimer = (context: ConnectionContext, expiresIn: number): Timer => {
+  const delayMs =
+    expiresIn <= REFRESH_TOKEN_LIMIT
+      ? Math.min(RETRY_INTERVAL, Math.max(1, expiresIn - 5)) * 1_000 // Retry before token expires, at most RETRY_INTERVAL seconds.
+      : (expiresIn - REFRESH_TOKEN_LIMIT) * 1_000; // Schedule to fire when 120s remain.
+
   // Refresh OBO token before it expires.
-  const timer = setTimeout(
-    async () => {
-      try {
-        const newExpiresIn = await refresh(context);
-        // Schedule a new timer to refresh the new token when it expires.
-        scheduleRefreshTimer(context, newExpiresIn);
-      } catch (err) {
-        if (err instanceof RefreshError || err instanceof Error) {
-          logContext(err.message, context, 'warn');
-        } else {
-          logContext(`Failed to refresh OBO token for ${context.navIdent}. Error: ${err}`, context, 'warn');
-        }
+  const timer = setTimeout(async () => {
+    try {
+      const newExpiresIn = await refresh(context);
+      // Schedule a new timer to refresh the new token when it expires.
+      scheduleRefreshTimer(context, newExpiresIn);
+    } catch (err) {
+      if (err instanceof RefreshError || err instanceof Error) {
+        logContext(err.message, context, 'warn');
+      } else {
+        logContext(`Failed to refresh OBO token for ${context.navIdent}. Error: ${err}`, context, 'warn');
       }
-    },
-    Math.max((expiresIn - REFRESH_TOKEN_LIMIT) * 1_000, 30_000),
-  );
+    }
+  }, delayMs);
 
   context.tokenRefreshTimer = timer;
 
@@ -95,6 +98,10 @@ const refresh = async (context: ConnectionContext, retries = 2): Promise<number>
           const expiresIn = Math.floor(parsed.exp - Date.now() / 1_000);
 
           context.oboTokenExpiresAt = parsed.exp;
+
+          if (hasOwn(parsed, 'access_token') && typeof parsed.access_token === 'string') {
+            context.accessToken = parsed.access_token;
+          }
 
           logContext(`OBO token refreshed for ${navIdent}. Expires in ${expiresIn} seconds`, context, 'debug');
 
