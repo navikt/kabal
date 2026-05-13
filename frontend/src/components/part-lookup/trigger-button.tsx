@@ -1,4 +1,4 @@
-import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
+import { PencilIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 
 interface TriggerButtonProps {
@@ -33,7 +33,7 @@ export const TriggerButton = ({
       onClick={onClick}
       onKeyDown={onKeyDown}
       disabled={disabled}
-      icon={<MagnifyingGlassIcon aria-hidden />}
+      icon={<PencilIcon aria-hidden />}
       aria-haspopup="dialog"
       aria-expanded={open}
       aria-label={label}
