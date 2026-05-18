@@ -15,7 +15,7 @@
         "@navikt/ds-react": "8.10.5",
         "@navikt/ds-tailwind": "8.10.5",
         "@navikt/fnrvalidator": "2.2.1",
-        "@navikt/klage-file-viewer": "1.2.5",
+        "@navikt/klage-file-viewer": "1.2.6",
         "@opentelemetry/api": "1.9.1",
         "@platejs/autoformat": "52.3.10",
         "@platejs/basic-nodes": "52.3.10",
@@ -133,7 +133,7 @@
 
     "@navikt/fnrvalidator": ["@navikt/fnrvalidator@2.2.1", "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.2.1/37ed0feb23a7525139ad5512684ff6b0977112c6", {}, "sha512-R6x3MBFC0E/B7oTs+P2jAP+ym7+d6cwSpDsLeMja9IwPpJq3HV/OClFBVWm9fJZPmXfumKRMGy6gqsQPj90ftg=="],
 
-    "@navikt/klage-file-viewer": ["@navikt/klage-file-viewer@1.2.5", "https://npm.pkg.github.com/download/@navikt/klage-file-viewer/1.2.5/645c4addd6490d4acd78433c330d154e4033bb6c", { "dependencies": { "tesseract.js": "7.0.0" }, "peerDependencies": { "@navikt/aksel-icons": "^8.0.0", "@navikt/ds-css": "^8.0.0", "@navikt/ds-react": "^8.0.0", "@opentelemetry/api": "^1.0.0", "react": "^19.0.0", "react-dom": "^19.0.0" } }, "sha512-nBcMNBCxzBFXYIAcx+c/OqRBkZrqEHN+512U0l3g3WozxTKVj7f5EBUSKBpUEDYadERied66bxEXkIJyJWPHFw=="],
+    "@navikt/klage-file-viewer": ["@navikt/klage-file-viewer@1.2.6", "https://npm.pkg.github.com/download/@navikt/klage-file-viewer/1.2.6/31df9243da8e744b3280546cc32ee890a605b788", { "dependencies": { "tesseract.js": "7.0.0" }, "peerDependencies": { "@navikt/aksel-icons": "^8.0.0", "@navikt/ds-css": "^8.0.0", "@navikt/ds-react": "^8.0.0", "@opentelemetry/api": "^1.0.0", "react": "^19.0.0", "react-dom": "^19.0.0" } }, "sha512-ScojHqoY6gNS0ddV0OJ7zjVVRJz42GnavYk3PAX49C2LQUwmD+wztsEEntUId+GRqQlJV83iui1xcgwWFqZbAg=="],
 
     "@opentelemetry/api": ["@opentelemetry/api@1.9.1", "", {}, "sha512-gLyJlPHPZYdAk1JENA9LeHejZe1Ti77/pTeFm/nMXmQH/HFZlcS/O2XJB+L8fkbrNSqhdtlvjBVjxwUYanNH5Q=="],
 
