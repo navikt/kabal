@@ -12,7 +12,7 @@ import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@/types
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
-  ColumnKeyEnum.RolYtelse,
+  ColumnKeyEnum.AllYtelser,
   ColumnKeyEnum.RolInnsendingshjemler,
   ColumnKeyEnum.Navn,
   ColumnKeyEnum.Fnr,

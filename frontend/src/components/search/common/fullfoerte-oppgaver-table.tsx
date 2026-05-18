@@ -13,7 +13,7 @@ interface Props {
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeWithTrygderetten,
-  ColumnKeyEnum.Ytelse,
+  ColumnKeyEnum.UserYtelser,
   ColumnKeyEnum.Registreringshjemler,
   ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Finished,

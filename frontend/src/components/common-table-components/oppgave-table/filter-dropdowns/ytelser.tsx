@@ -5,11 +5,13 @@ import { useOppgaveTableYtelser } from '@/components/common-table-components/opp
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
-import { useSettingsYtelser } from '@/hooks/use-settings-ytelser';
 import type { IKodeverkSimpleValue } from '@/types/kodeverk';
 
-export const Ytelse = ({ columnKey, tableKey }: FilterDropdownProps) => {
-  const ytelseOptions = useSettingsYtelser();
+interface Props extends FilterDropdownProps {
+  ytelser: IKodeverkSimpleValue[];
+}
+
+export const Ytelser = ({ columnKey, tableKey, ytelser: ytelseOptions }: Props) => {
   const [ytelser, setYtelser] = useOppgaveTableYtelser(tableKey);
 
   const options = useMemo<Entry<IKodeverkSimpleValue>[]>(
