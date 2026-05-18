@@ -83,8 +83,8 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <Type type={oppgave.typeId} size="medium" />
           </Table.DataCell>
         );
-      case ColumnKeyEnum.Ytelse:
-      case ColumnKeyEnum.RolYtelse:
+      case ColumnKeyEnum.UserYtelser:
+      case ColumnKeyEnum.AllYtelser:
         return (
           <Table.DataCell key={key}>
             <Ytelse ytelseId={oppgave.ytelseId} />

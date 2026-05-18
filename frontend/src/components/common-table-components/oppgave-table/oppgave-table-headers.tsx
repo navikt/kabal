@@ -1,5 +1,6 @@
 import { Table, type TableProps } from '@navikt/ds-react';
 import { DateColumnHeader } from '@/components/common-table-components/oppgave-table/date-column-header';
+import { AllYtelser } from '@/components/common-table-components/oppgave-table/filter-dropdowns/all-ytelser';
 import { EnhetHjemmel } from '@/components/common-table-components/oppgave-table/filter-dropdowns/enhet-hjemmel';
 import {
   HelperStatusWithoutSelf,
@@ -11,14 +12,13 @@ import { PaaVentReasons } from '@/components/common-table-components/oppgave-tab
 import { Registreringshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
 import { Rol } from '@/components/common-table-components/oppgave-table/filter-dropdowns/rol';
 import { RolHjemmel } from '@/components/common-table-components/oppgave-table/filter-dropdowns/rol-hjemmel';
-import { RolYtelse } from '@/components/common-table-components/oppgave-table/filter-dropdowns/rol-ytelse';
 import { Saksbehandler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/saksbehandler';
 import {
   Sakstype,
   SakstypeForSakerITR,
   SakstypeWithTrygderetten,
 } from '@/components/common-table-components/oppgave-table/filter-dropdowns/sakstype';
-import { Ytelse } from '@/components/common-table-components/oppgave-table/filter-dropdowns/ytelse';
+import { UserYtelser } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-ytelser';
 import {
   useOppgaveTableFerdigstilt,
   useOppgaveTableFrist,
@@ -57,8 +57,10 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         return <SakstypeWithTrygderetten key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.TypeForSakerITR:
         return <SakstypeForSakerITR key={key} columnKey={key} tableKey={tableKey} />;
-      case ColumnKeyEnum.Ytelse:
-        return <Ytelse key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.UserYtelser:
+        return <UserYtelser key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.AllYtelser:
+        return <AllYtelser key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Innsendingshjemler:
         return <Hjemmel key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.EnhetInnsendingshjemler:
@@ -108,8 +110,6 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         );
       case ColumnKeyEnum.Rol:
         return <Rol key={key} columnKey={key} tableKey={tableKey} />;
-      case ColumnKeyEnum.RolYtelse:
-        return <RolYtelse key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.RolInnsendingshjemler:
         return <RolHjemmel key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.PaaVentReason:

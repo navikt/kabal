@@ -1,13 +1,13 @@
 import { isNotUndefined } from '@/functions/is-not-type-guards';
-import { useAvailableYtelser } from '@/hooks/use-available-ytelser';
 import { useGetSettingsQuery } from '@/redux-api/bruker';
+import { useSimpleYtelser } from '@/simple-api-state/use-kodeverk';
 import type { IKodeverkSimpleValue } from '@/types/kodeverk';
 
 export const useSettingsYtelser = (): IKodeverkSimpleValue[] => {
-  const { data } = useGetSettingsQuery();
-  const ytelser = useAvailableYtelser();
+  const { data, isSuccess } = useGetSettingsQuery();
+  const { data: ytelser = [] } = useSimpleYtelser();
 
-  if (typeof data === 'undefined' || typeof ytelser === 'undefined') {
+  if (!isSuccess) {
     return [];
   }
 
