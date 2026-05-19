@@ -4,7 +4,8 @@
   "description": "Kabal File Viewer - Standalone file viewer",
   "type": "module",
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
+    "start": "bun dev",
     "build": "vite build",
     "test": "bun test",
     "typecheck": "tsc --noEmit",
