@@ -34,7 +34,7 @@ When running locally, the dev server proxies API requests to `kabal.intern.dev.n
 ```
 cd frontend
 bun install --frozen-lockfile --ignore-scripts
-bun run start
+bun run start / bun run dev
 ```
 
 5. Open [localhost:8061](http://localhost:8061/).

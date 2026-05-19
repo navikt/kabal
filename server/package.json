@@ -8,7 +8,8 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "start": "bun run build --watch & node --watch --trace-warnings --enable-source-maps dist/server.js",
+    "dev": "bun run build --watch & node --watch --trace-warnings --enable-source-maps dist/server.js",
+    "start": "bun dev",
     "build": "bun build ./src/server.ts --target node --format esm --sourcemap=linked --outdir dist --external @platformatic/wasm-utils",
     "lint": "biome check",
     "typecheck": "tsc --noEmit"
