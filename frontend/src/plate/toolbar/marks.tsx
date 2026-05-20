@@ -3,6 +3,7 @@ import {
   BaseH1Plugin,
   BaseH2Plugin,
   BaseH3Plugin,
+  BaseH4Plugin,
   BaseItalicPlugin,
   BaseUnderlinePlugin,
 } from '@platejs/basic-nodes';
@@ -19,7 +20,7 @@ export const Marks = () => {
 
   const isInPlaceholder = editor.api.some({ match: { type: ELEMENT_PLACEHOLDER } });
   const isInHeading = editor.api.some({
-    match: isOfElementTypesFn([BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key]),
+    match: isOfElementTypesFn([BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key, BaseH4Plugin.key]),
   });
 
   const isInUnchangeableElement = useIsUnchangeable();

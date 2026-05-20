@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { SmartEditorContext } from '@/components/smart-editor/context';
 import { useSmartEditorSpellCheckLanguage } from '@/hooks/use-smart-editor-language';
+import { NavLogo } from '@/plate/nav-logo';
 import { KabalPlateEditor } from '@/plate/plate-editor';
 import { Sheet } from '@/plate/sheet';
 import { SaksbehandlerTableToolbar } from '@/plate/toolbar/toolbars/table-toolbar';
@@ -21,6 +22,8 @@ export const EditorWithNewCommentAndFloatingToolbar = ({ id }: EditorWithNewComm
   return (
     <Sheet ref={setContainerElement} minHeight data-component="sheet" className="mr-4">
       <SaksbehandlerTableToolbar container={containerElement} editorId={id} />
+
+      <NavLogo />
 
       <KabalPlateEditor id={id} lang={lang} />
     </Sheet>

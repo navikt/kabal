@@ -2,6 +2,7 @@ import {
   BaseH1Plugin,
   BaseH2Plugin,
   BaseH3Plugin,
+  BaseH4Plugin,
   BoldRules,
   HeadingRules,
   ItalicRules,
@@ -12,6 +13,7 @@ import {
   H1Plugin,
   H2Plugin,
   H3Plugin,
+  H4Plugin,
   HeadingPlugin,
   ItalicPlugin,
   UnderlinePlugin,
@@ -53,11 +55,13 @@ export const defaultPlugins = [
     },
   }),
   ParagraphPlugin.withComponent(Paragraph),
-  HeadingPlugin.configure({ options: { levels: 3 } }).overrideEditor(({ editor }) => {
+  HeadingPlugin.configure({ options: { levels: 4 } }).overrideEditor(({ editor }) => {
     const { addMark } = editor.tf;
 
     editor.tf.addMark = (key, value) => {
-      if (editor.api.some({ match: { type: [BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key] } })) {
+      if (
+        editor.api.some({ match: { type: [BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key, BaseH4Plugin.key] } })
+      ) {
         return;
       }
 
@@ -71,6 +75,7 @@ export const defaultPlugins = [
   H1Plugin.configure({ inputRules: [HeadingRules.markdown()] }),
   H2Plugin.configure({ inputRules: [HeadingRules.markdown()] }),
   H3Plugin.configure({ inputRules: [HeadingRules.markdown()] }),
+  H4Plugin.configure({ inputRules: [HeadingRules.markdown()] }),
   BoldPlugin.configure({
     render: { node: BoldLeaf },
     inputRules: [BoldRules.markdown({ variant: '*' })],
@@ -103,6 +108,7 @@ export const defaultPlugins = [
         BaseH1Plugin.key,
         BaseH2Plugin.key,
         BaseH3Plugin.key,
+        BaseH4Plugin.key,
         TablePlugin.key,
         NumberedListPlugin.key,
         BulletedListPlugin.key,
@@ -118,7 +124,11 @@ export const defaultPlugins = [
           hotkey: 'enter',
           before: false,
           defaultType: ParagraphPlugin.key,
-          query: { start: true, end: true, allow: [BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key] },
+          query: {
+            start: true,
+            end: true,
+            allow: [BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key, BaseH4Plugin.key],
+          },
           relative: true,
           level: 1,
         },

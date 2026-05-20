@@ -1,30 +1,32 @@
 import { PlateElement, type PlateElementProps } from 'platejs/react';
-import { ptToEm } from '@/plate/components/get-scaled-em';
+import { indentInEm, pxToEm } from '@/plate/components/get-scaled-em';
 import type { BulletListElement, ListItemElement, NumberedListElement } from '@/plate/types';
 
-const LIST_CLASSES = 'pl-[1em] mr-0 mb-0 ml-0 in-[li]:mt-0 not-in-[li]:mt-[1em]';
+const LIST_CLASSES = 'mr-0 mt-0 in-[li]:mb-0 not-in-[li]:mb-[1em] in-[li]:ml-[1em] not-in-[li]:ml-[2em]';
 
 export const OrderedList = ({ children, element, ...props }: PlateElementProps<NumberedListElement>) => (
   <PlateElement
-    as="ol"
+    as="div"
     {...props}
+    style={{ marginLeft: indentInEm(element.indent), fontSize: pxToEm(11) }}
     element={element}
-    style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}
-    className={`${LIST_CLASSES} list-decimal`}
   >
-    {children}
+    <ol className={`${LIST_CLASSES} list-decimal`}>{children}</ol>
   </PlateElement>
 );
 
 export const UnorderedList = ({ children, element, ...props }: PlateElementProps<BulletListElement>) => (
   <PlateElement
-    as="ul"
+    as="div"
     {...props}
     element={element}
-    style={{ marginLeft: ptToEm((element.indent ?? 0) * 24) }}
-    className={`${LIST_CLASSES} list-disc [&_ul]:list-[circle] [&_ul_ul]:list-[square] [&_ul_ul_ul]:list-disc [&_ul_ul_ul_ul]:list-[circle] [&_ul_ul_ul_ul_ul]:list-[square] [&_ul_ul_ul_ul_ul_ul]:list-disc [&_ul_ul_ul_ul_ul_ul_ul]:list-[circle] [&_ul_ul_ul_ul_ul_ul_ul_ul]:list-[square]`}
+    style={{ marginLeft: indentInEm(element.indent), fontSize: pxToEm(11) }}
   >
-    {children}
+    <ul
+      className={`${LIST_CLASSES} list-disc [&_ul]:list-[circle] [&_ul_ul]:list-[square] [&_ul_ul_ul]:list-disc [&_ul_ul_ul_ul]:list-[circle] [&_ul_ul_ul_ul_ul]:list-[square] [&_ul_ul_ul_ul_ul_ul]:list-disc [&_ul_ul_ul_ul_ul_ul_ul]:list-[circle] [&_ul_ul_ul_ul_ul_ul_ul_ul]:list-[square]`}
+    >
+      {children}
+    </ul>
   </PlateElement>
 );
 

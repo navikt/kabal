@@ -2,7 +2,6 @@ import type { Value } from 'platejs';
 import { deepFreeze } from '@/functions/deep-freeze';
 import { TemplateSections } from '@/plate/template-sections';
 import {
-  createCurrentDate,
   createFooter,
   createHeader,
   createMaltekstseksjon,
@@ -14,11 +13,10 @@ import type { IMutableSmartEditorTemplate } from '@/types/smart-editor/smart-edi
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 const INITIAL_SLATE_VALUE: Value = [
-  createCurrentDate(),
   createHeader(),
 
+  createSaksinfo(),
   createMaltekstseksjon(TemplateSections.TITLE),
-  ...createSaksinfo(),
   createMaltekstseksjon(TemplateSections.SVAR_PÅ_INNSYNSBEGJÆRING),
   createMaltekstseksjon(TemplateSections.OM_TAUSHETSPLIKT),
 

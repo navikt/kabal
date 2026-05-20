@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { formatFoedselsnummer } from '@/functions/format-id';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
+import { pxToEm } from '@/plate/components/get-scaled-em';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
 import { type LabelContentElement, LabelContentSource } from '@/plate/types';
 import { useYtelserAll } from '@/simple-api-state/use-kodeverk';
@@ -40,7 +41,10 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
       <SectionContainer data-element={element.type} sectionType={SectionTypeEnum.LABEL}>
         {content === null ? null : (
           <span className="text-ax-neutral-800">
-            <b>{label}</b>: {content}
+            <span className="inline-block" style={{ width: pxToEm(150) }}>
+              {label}:
+            </span>
+            {content}
           </span>
         )}
         {children}
@@ -125,11 +129,9 @@ const useContent = (source: LabelContentSource): string | null => {
     if (source === LabelContentSource.SAKEN_GJELDER_FNR) {
       return `${formatFoedselsnummer(oppgave.sakenGjelder.identifikator)}\n`;
     }
-
     if (source === LabelContentSource.SAKSNUMMER) {
       return oppgave.saksnummer;
     }
-
     const { klager, sakenGjelder } = oppgave;
 
     if (source === LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME) {

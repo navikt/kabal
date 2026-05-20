@@ -1,15 +1,14 @@
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin, BaseH4Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
-import { HeadingOne, HeadingThree, HeadingTwo } from '@/plate/components/headings';
+import { HeadingFour, HeadingOne, HeadingThree, HeadingTwo } from '@/plate/components/headings';
 import { ListItem, OrderedList, UnorderedList } from '@/plate/components/lists';
 import { Paragraph } from '@/plate/components/paragraph';
 import { TableCellElement } from '@/plate/components/plate-ui/table-cell-element';
 import { TableElement } from '@/plate/components/plate-ui/table-element';
 import { TableRowElement } from '@/plate/components/plate-ui/table-row-element';
 import { EmptyVoidPlugin } from '@/plate/plugins/empty-void';
-import { LabelContentPlugin } from '@/plate/plugins/label-content';
 import { MaltekstPlugin } from '@/plate/plugins/maltekst';
 import { SaksbehandlerPlaceholderPlugin } from '@/plate/plugins/placeholder/saksbehandler';
 import { defaultPlugins } from '@/plate/plugins/plugin-sets/default';
@@ -20,7 +19,6 @@ export const previewPlugins = [
   SaksbehandlerPlaceholderPlugin,
   MaltekstPlugin,
   RedigerbarMaltekstPlugin,
-  LabelContentPlugin,
   EmptyVoidPlugin,
 ];
 
@@ -31,6 +29,7 @@ export const previewComponents = {
   [BaseH1Plugin.key]: HeadingOne,
   [BaseH2Plugin.key]: HeadingTwo,
   [BaseH3Plugin.key]: HeadingThree,
+  [BaseH4Plugin.key]: HeadingFour,
 
   // Lists
   [BaseBulletedListPlugin.key]: UnorderedList,

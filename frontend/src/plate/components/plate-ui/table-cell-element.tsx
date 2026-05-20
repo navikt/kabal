@@ -2,14 +2,14 @@ import { type ResizeEvent, ResizeHandle } from '@platejs/resizable';
 import { TablePlugin, useTableCellElement, useTableCellElementResizable, useTableColSizes } from '@platejs/table/react';
 import { PlateElement, type PlateElementProps, useEditorPlugin, useReadOnly } from 'platejs/react';
 import { useContext, useMemo } from 'react';
-import { ptToEm } from '@/plate/components/get-scaled-em';
+import { pxToEm } from '@/plate/components/get-scaled-em';
 import { ScaleContext } from '@/plate/status-bar/scale-context';
 import { MAX_TABLE_WIDTH } from '@/plate/toolbar/table/constants';
 
 const BASE_CLASSES = 'relative align-top';
 const REMOVE_P_PLACEHOLDER = "[&>p::before]:content-['']";
-const REMOVE_P_MARGIN_TOP = '[&>*:first-child]:mt-0!';
-const ALL_CLASSES = `${BASE_CLASSES} ${REMOVE_P_PLACEHOLDER} ${REMOVE_P_MARGIN_TOP}`;
+const REMOVE_P_MARGIN_BOTTOM = '[&>*:first-child]:mb-0!';
+const ALL_CLASSES = `${BASE_CLASSES} ${REMOVE_P_PLACEHOLDER} ${REMOVE_P_MARGIN_BOTTOM}`;
 
 export const TableCellElement = ({ children, ref, ...props }: PlateElementProps) => {
   const { api } = useEditorPlugin(TablePlugin);
@@ -35,8 +35,11 @@ export const TableCellElement = ({ children, ref, ...props }: PlateElementProps)
     width,
     maxWidth: width,
     minHeight,
-    padding: PADDING,
-    border: `${ptToEm(1.25)} solid var(--ax-border-neutral)`,
+    paddingTop: pxToEm(4),
+    paddingBottom: pxToEm(4),
+    paddingLeft: pxToEm(8),
+    paddingRight: pxToEm(8),
+    border: `${pxToEm(1)} solid var(--ax-border-neutral)`,
     overflowWrap: 'anywhere',
   };
 
@@ -93,10 +96,8 @@ const Resize = () => {
       suppressContentEditableWarning
       {...rest}
       options={scaledOptions}
-      style={{ width: PADDING, ...style }}
+      style={{ width: pxToEm(12), ...style }}
       className={`${className} absolute top-0 right-0 z-20 h-full translate-x-1/2 cursor-col-resize select-none`}
     />
   );
 };
-
-const PADDING = ptToEm(6);

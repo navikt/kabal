@@ -3,6 +3,7 @@ import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs
 import { useEffect, useMemo } from 'react';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
+import { pxToEm } from '@/plate/components/get-scaled-em';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import type { PlaceholderElement, SaksnummerElement } from '@/plate/types';
@@ -38,7 +39,7 @@ export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
   return (
     <PlateElement<SaksnummerElement> {...props} as="div">
       <SectionContainer data-element={element.type} sectionType={SectionTypeEnum.LABEL}>
-        <span className="font-ax-bold text-ax-neutral-800" contentEditable={false}>
+        <span className="inline-block text-ax-neutral-800" style={{ width: pxToEm(150) }} contentEditable={false}>
           Saksnummer:{' '}
         </span>
         {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}

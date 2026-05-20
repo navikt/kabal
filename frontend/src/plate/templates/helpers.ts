@@ -16,6 +16,7 @@ import {
   ELEMENT_REDIGERBAR_MALTEKST,
   ELEMENT_REGELVERK,
   ELEMENT_REGELVERK_CONTAINER,
+  ELEMENT_SAKSINFO,
   ELEMENT_SAKSNUMMER,
   ELEMENT_SIGNATURE,
 } from '@/plate/plugins/element-types';
@@ -45,6 +46,7 @@ import {
   type RedigerbarMaltekstElement,
   type RegelverkContainerElement,
   type RegelverkElement,
+  type SaksinfoElement,
   type SaksnummerElement,
   type SignatureElement,
   type TableCellElement,
@@ -215,7 +217,7 @@ export const createFullmektig = (): FullmektigElement => ({
   type: ELEMENT_FULLMEKTIG,
   children: [
     { text: '' },
-    createPlaceHolder(FULLMEKTIG_LABEL_PLACEHOLDER, false, [{ text: 'Fullmektig', bold: true }]),
+    createPlaceHolder(FULLMEKTIG_LABEL_PLACEHOLDER, false, [{ text: 'Fullmektig' }]),
     { text: '' },
     createPlaceHolder(FULLMEKTIG_VALUE_PLACEHOLDER, false),
     { text: '' },
@@ -224,14 +226,16 @@ export const createFullmektig = (): FullmektigElement => ({
   show: false,
 });
 
-export const createSaksinfo = () => [
-  createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
-  createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
-  createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
-  createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
-  createFullmektig(),
-  createSaksnummer(),
-];
+export const createSaksinfo = (
+  children: SaksinfoElement['children'] = [
+    createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
+    createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
+    createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
+    createLabelContent(LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME),
+    createFullmektig(),
+    createSaksnummer(),
+  ],
+): SaksinfoElement => ({ type: ELEMENT_SAKSINFO, children });
 
 export const createSaksnummer = (): SaksnummerElement => ({
   type: ELEMENT_SAKSNUMMER,

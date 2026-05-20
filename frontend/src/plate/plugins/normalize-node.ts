@@ -1,4 +1,4 @@
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin, BaseH4Plugin } from '@platejs/basic-nodes';
 import {
   BaseBulletedListPlugin,
   BaseListItemContentPlugin,
@@ -265,6 +265,7 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
       case BaseH1Plugin.key:
       case BaseH2Plugin.key:
       case BaseH3Plugin.key:
+      case BaseH4Plugin.key:
       case BaseListItemContentPlugin.node.type:
       case ELEMENT_PLACEHOLDER:
       case ELEMENT_PAGE_BREAK:

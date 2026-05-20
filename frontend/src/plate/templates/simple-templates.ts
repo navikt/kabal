@@ -8,6 +8,7 @@ import {
   createMaltekstseksjon,
   createPageBreak,
   createSaksinfo,
+  createSaksnummer,
   createSignature,
   createSimpleParagraph,
 } from '@/plate/templates/helpers';
@@ -22,10 +23,9 @@ export const getGenereltBrevTemplate = (overriddenSaksbehandler?: string): Immut
     templateId: TemplateIdEnum.GENERELT_BREV,
     tittel: 'Generelt brev',
     richText: [
-      createCurrentDate(),
       createHeader(),
+      createSaksinfo(),
       createMaltekstseksjon(TemplateSections.TITLE),
-      ...createSaksinfo(),
       createSimpleParagraph(),
       createSignature(false, overriddenSaksbehandler),
       createFooter(),
@@ -40,12 +40,7 @@ export const getNotatTemplate = (overriddenSaksbehandler?: string): Immutable<IM
   deepFreeze({
     templateId: TemplateIdEnum.NOTAT,
     tittel: 'Notat',
-    richText: [
-      createCurrentDate(),
-      ...createSaksinfo(),
-      createSimpleParagraph(),
-      createSignature(false, overriddenSaksbehandler),
-    ],
+    richText: [createSaksinfo(), createSimpleParagraph(), createSignature(false, overriddenSaksbehandler)],
     dokumentTypeId: DistribusjonsType.NOTAT,
     deprecatedSections: [],
   });
@@ -56,13 +51,14 @@ export const ROL_QUESTIONS_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
   templateId: TemplateIdEnum.ROL_QUESTIONS,
   tittel: 'Spørsmål til rådgivende overlege',
   richText: [
-    createCurrentDate(),
-    createMaltekstseksjon(TemplateSections.TITLE),
+    createSaksinfo([
+      createLabelContent(LabelContentSource.SAKEN_GJELDER_NAME),
+      createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
+      createLabelContent(LabelContentSource.YTELSE),
+      createSaksnummer(),
+    ]),
 
-    createLabelContent(LabelContentSource.SAKEN_GJELDER_NAME),
-    createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
-    createLabelContent(LabelContentSource.YTELSE),
-    createLabelContent(LabelContentSource.SAKSNUMMER),
+    createMaltekstseksjon(TemplateSections.TITLE),
 
     createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
     createMaltekstseksjon(TemplateSections.FREMLEGG),
@@ -89,9 +85,8 @@ export const ROL_TILSVARSBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>
   templateId: TemplateIdEnum.ROL_TILSVARSBREV,
   tittel: 'Tilsvarsbrev (ROL)',
   richText: [
-    createCurrentDate(),
+    createSaksinfo(),
     createMaltekstseksjon(TemplateSections.TITLE),
-    ...createSaksinfo(),
     createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
     createMaltekstseksjon(TemplateSections.GENERELL_INFO),
     createPageBreak(),
