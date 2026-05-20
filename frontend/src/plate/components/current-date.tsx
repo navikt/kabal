@@ -2,7 +2,6 @@ import { Box } from '@navikt/ds-react';
 import { PlateElement, type PlateElementProps, useSelected } from 'platejs/react';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { formatLongDate, zeroPad } from '@/domain/date';
-import { ptToEm } from '@/plate/components/get-scaled-em';
 import type { CurrentDateElement } from '@/plate/types';
 
 type Props = PlateElementProps<CurrentDateElement>;
@@ -64,12 +63,6 @@ const RenderCurrentDate = memo<Props & DateParts>(
           width="100%"
           borderRadius="4"
           background={isSelected ? 'neutral-soft' : undefined}
-          style={{
-            marginTop: '1em',
-            outlineWidth: ptToEm(6),
-            outlineStyle: 'solid',
-            outlineColor: isSelected ? 'var(--ax-bg-neutral-soft)' : 'transparent',
-          }}
           className="block text-right transition-colors duration-200 ease-in-out"
         >
           <span>Dato: {formatLongDate(year, month, day)}</span>

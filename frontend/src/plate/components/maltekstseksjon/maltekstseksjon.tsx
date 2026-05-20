@@ -17,7 +17,7 @@ import { MaltekstseksjonContainer } from '@/plate/components/styled-components';
 import { onPlateContainerDragStart } from '@/plate/drag-start-handler/on-plate-container-drag-start';
 import type { ScoredText } from '@/plate/functions/lex-specialis/lex-specialis';
 import { ELEMENT_EMPTY_VOID } from '@/plate/plugins/element-types';
-import type { TemplateSections } from '@/plate/template-sections';
+import { TemplateSections } from '@/plate/template-sections';
 import type { MaltekstseksjonElement } from '@/plate/types';
 import { getIsInRegelverk } from '@/plate/utils/queries';
 import type { IGetConsumerMaltekstseksjonerParams } from '@/types/common-text-types';
@@ -78,6 +78,8 @@ export const Maltekstseksjon = (props: PlateElementProps<MaltekstseksjonElement>
     <PlateElement<MaltekstseksjonElement>
       {...props}
       as="div"
+      // Add space after unwrapped saksinfo in legacy templates
+      className={element.section === TemplateSections.INTRODUCTION_V2 ? 'mt-6.5' : undefined}
       attributes={{
         ...props.attributes,
         contentEditable: !readOnly,

@@ -1,5 +1,5 @@
 import { Box } from '@navikt/ds-react';
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin, BaseH4Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTablePlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
@@ -73,6 +73,12 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
       case BaseH3Plugin.key: {
         y += 1;
         rects.push(h3({ type, key: i, y }));
+        y += 5 + SPACING;
+        break;
+      }
+      case BaseH4Plugin.key: {
+        y += 1;
+        rects.push(h4({ type, key: i, y }));
         y += 5 + SPACING;
         break;
       }
@@ -241,3 +247,4 @@ interface HeadingProps {
 const h1 = (props: HeadingProps) => r({ ...props, height: 9, width: 160, fill: 'text-neutral-decoration' });
 const h2 = (props: HeadingProps) => r({ ...props, height: 7, width: 150, fill: 'text-neutral-decoration' });
 const h3 = (props: HeadingProps) => r({ ...props, width: 140, fill: 'text-neutral-decoration' });
+const h4 = (props: HeadingProps) => r({ ...props, width: 130, fill: 'text-neutral-decoration' });

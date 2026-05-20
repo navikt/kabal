@@ -1,4 +1,4 @@
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin, BaseH4Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTablePlugin } from '@platejs/table';
 import { BaseParagraphPlugin, ElementApi, NodeApi, type TElement } from 'platejs';
@@ -126,6 +126,7 @@ const isParentOrChildElement = (node: TElement): node is ParentOrChildElement =>
     BaseH1Plugin.key,
     BaseH2Plugin.key,
     BaseH3Plugin.key,
+    BaseH4Plugin.key,
     BaseBulletedListPlugin.key,
     BaseNumberedListPlugin.key,
     BaseTablePlugin.key,

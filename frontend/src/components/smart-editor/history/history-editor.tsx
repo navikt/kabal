@@ -9,6 +9,7 @@ import { ErrorBoundary } from '@/error-boundary/error-boundary';
 import { areDescendantsEqual } from '@/functions/are-descendants-equal';
 import { useSmartEditorSpellCheckLanguage } from '@/hooks/use-smart-editor-language';
 import { pushEvent } from '@/observability';
+import { NavLogo } from '@/plate/nav-logo';
 import { KabalPlateEditor } from '@/plate/plate-editor';
 import { components, historyPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
 import { Sheet } from '@/plate/sheet';
@@ -107,6 +108,8 @@ const HistoryContent = ({ id, version }: HistoryContentProps) => {
 
   return (
     <Sheet minHeight>
+      <NavLogo />
+
       <KabalPlateEditor id={id} lang={lang} />
     </Sheet>
   );

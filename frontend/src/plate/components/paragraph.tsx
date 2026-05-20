@@ -1,13 +1,13 @@
 import { TextApi } from 'platejs';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
-import { ptToEm } from '@/plate/components/get-scaled-em';
+import { indentInEm, pxToEm } from '@/plate/components/get-scaled-em';
 import type { ParagraphElement, PlaceholderElement } from '@/plate/types';
 
 type RenderProps = PlateElementProps<ParagraphElement>;
 
 export const Paragraph = (props: RenderProps) => {
   const { children, element } = props;
-  const indent = ptToEm((element.indent ?? 0) * 24);
+  const indent = indentInEm(element.indent);
 
   return (
     <PlateElement
@@ -17,9 +17,9 @@ export const Paragraph = (props: RenderProps) => {
         marginLeft: element.align !== 'right' ? indent : undefined,
         marginRight: element.align === 'right' ? indent : undefined,
         textAlign: element.align,
-        fontSize: '1em',
-        marginTop: '1em',
-        lineHeight: 1.5,
+        fontSize: pxToEm(11),
+        lineHeight: pxToEm(16),
+        marginBottom: '1em',
       }}
       className="mb-0 whitespace-pre-wrap before:absolute before:cursor-text before:text-ax-text-neutral-decoration before:content-[attr(data-placeholder)]"
       attributes={{ ...props.attributes, 'data-placeholder': isEmpty(element) ? 'Avsnitt' : '' }}

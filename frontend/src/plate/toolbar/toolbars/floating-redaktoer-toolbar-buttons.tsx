@@ -1,4 +1,4 @@
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin, BaseH4Plugin } from '@platejs/basic-nodes';
 import { BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseParagraphPlugin, ElementApi } from 'platejs';
 import { useEditorState } from 'platejs/react';
@@ -58,7 +58,12 @@ export const FloatingRedaktoerToolbarButtons = () => {
     );
   }
 
-  if (type === BaseH1Plugin.key || type === BaseH2Plugin.key || type === BaseH3Plugin.key) {
+  if (
+    type === BaseH1Plugin.key ||
+    type === BaseH2Plugin.key ||
+    type === BaseH3Plugin.key ||
+    type === BaseH4Plugin.key
+  ) {
     return (
       <>
         <ParagraphButton />

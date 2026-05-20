@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useReportDynamicContentLoading } from '@/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
+import { pxToEm } from '@/plate/components/get-scaled-em';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import { type FullmektigElement, type PlaceholderElement, useMyPlateEditorRef } from '@/plate/types';
@@ -103,14 +104,16 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
                 return;
               }
 
-              editor.tf.replaceNodes([{ text: 'Fullmektig', bold: true }], { at: labelEntry[1], children: true });
+              editor.tf.replaceNodes([{ text: 'Fullmektig' }], { at: labelEntry[1], children: true });
             }}
             icon={<ArrowUndoIcon aria-hidden />}
           />
           {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
-          <span>{children[0][1]}</span>
+          {/* Override boldness from legacy elements. Text in saksinfo should no longer be bold. */}
+          <span className="inline-block **:font-normal" style={{ width: pxToEm(150) }}>
+            {children[0][1]}:
+          </span>
         </span>
-        <NonEditable>: </NonEditable>
         {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
         <span>{children[0][3]}</span>
 
@@ -144,5 +147,3 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
     </PlateElement>
   );
 };
-
-const NonEditable = ({ children }: { children: React.ReactNode }) => <span contentEditable={false}>{children}</span>;

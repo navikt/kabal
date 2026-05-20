@@ -1,8 +1,8 @@
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin, BaseH4Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
-import { HeadingOne, HeadingThree, HeadingTwo } from '@/plate/components/headings';
+import { HeadingFour, HeadingOne, HeadingThree, HeadingTwo } from '@/plate/components/headings';
 import { ListItem, OrderedList, UnorderedList } from '@/plate/components/lists';
 import { PageBreak } from '@/plate/components/page-break';
 import { Paragraph } from '@/plate/components/paragraph';
@@ -28,6 +28,7 @@ export const redaktørComponents = {
   [BaseH1Plugin.key]: HeadingOne,
   [BaseH2Plugin.key]: HeadingTwo,
   [BaseH3Plugin.key]: HeadingThree,
+  [BaseH4Plugin.key]: HeadingFour,
 
   // Lists
   [BaseBulletedListPlugin.key]: UnorderedList,

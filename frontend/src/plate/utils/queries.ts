@@ -1,4 +1,4 @@
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin, BaseH4Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { BaseTablePlugin } from '@platejs/table';
 import { type Descendant, ElementApi, NodeApi, type TElement, TextApi, type TNode, type TText } from 'platejs';
@@ -16,6 +16,7 @@ import type {
   H1Element,
   H2Element,
   H3Element,
+  H4Element,
   NumberedListElement,
   ParentOrChildElement,
   RichTextEditor,
@@ -73,10 +74,11 @@ export const isInTable = (editor: PlateEditor): boolean => editor.api.some({ mat
 export const isPathInTable = (editor: PlateEditor, path: number[]): boolean =>
   editor.api.some({ at: path, match: { type: BaseTablePlugin.key }, mode: 'highest' });
 
-export const isHeading = isOfElementTypesFn<H1Element | H2Element | H3Element>([
+export const isHeading = isOfElementTypesFn<H1Element | H2Element | H3Element | H4Element>([
   BaseH1Plugin.key,
   BaseH2Plugin.key,
   BaseH3Plugin.key,
+  BaseH4Plugin.key,
 ]);
 
 export const isInHeading = (editor: RichTextEditor): boolean => editor.api.some({ match: isHeading });

@@ -1,4 +1,4 @@
-import type { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import type { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin, BaseH4Plugin } from '@platejs/basic-nodes';
 import type {
   BaseBulletedListPlugin,
   BaseListItemContentPlugin,
@@ -26,6 +26,7 @@ import type {
   ELEMENT_REDIGERBAR_MALTEKST,
   ELEMENT_REGELVERK,
   ELEMENT_REGELVERK_CONTAINER,
+  ELEMENT_SAKSINFO,
   ELEMENT_SAKSNUMMER,
   ELEMENT_SIGNATURE,
 } from '@/plate/plugins/element-types';
@@ -84,6 +85,11 @@ export interface H2Element extends BlockElement, IndentableStyleProps {
 
 export interface H3Element extends BlockElement, IndentableStyleProps {
   type: typeof BaseH3Plugin.key;
+  children: (FormattedText | PlaceholderElement)[];
+}
+
+export interface H4Element extends BlockElement, IndentableStyleProps {
+  type: typeof BaseH4Plugin.key;
   children: (FormattedText | PlaceholderElement)[];
 }
 
@@ -209,6 +215,11 @@ export interface LabelContentElement extends TElement {
   result?: string;
 }
 
+export interface SaksinfoElement extends TElement {
+  type: typeof ELEMENT_SAKSINFO;
+  children: (LabelContentElement | SaksnummerElement | FullmektigElement)[];
+}
+
 export interface FullmektigElement extends TElement {
   type: typeof ELEMENT_FULLMEKTIG;
   // One would think [PlaceholderElement, PlaceholderElement] would work, but Slate/Plate insists on inserting surrounding text nodes. At least now the type will be correct.
@@ -248,10 +259,10 @@ export type ParentOrChildElement =
   | H1Element
   | H2Element
   | H3Element
+  | H4Element
   | BulletListElement
   | NumberedListElement
   | TableElement
-  | LabelContentElement
   | EmptyVoidElement;
 
 type ParentOnlyElement =
@@ -264,7 +275,7 @@ type ParentOnlyElement =
   | FooterElement
   | SignatureElement
   | MaltekstseksjonElement
-  | SaksnummerElement;
+  | SaksinfoElement;
 
 export type RootElement = ParentOrChildElement | ParentOnlyElement;
 
@@ -277,7 +288,9 @@ export type ChildElement =
   | TableCellElement
   | RegelverkContainerElement
   | PlaceholderElement
-  | FullmektigElement;
+  | FullmektigElement
+  | SaksnummerElement
+  | LabelContentElement;
 
 export type RichTextEditorElement = RootElement | ChildElement;
 

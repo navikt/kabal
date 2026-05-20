@@ -8,8 +8,9 @@ import { useHeaderFooterQuery } from '@/components/smart-editor/hooks/use-query'
 import { useReportDynamicContentLoading } from '@/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
 import { AddNewParagraphAbove, AddNewParagraphBelow } from '@/plate/components/common/add-new-paragraph-buttons';
 import { pxToEm } from '@/plate/components/get-scaled-em';
+import { NavLogo } from '@/plate/components/header/nav-logo';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
-import { ELEMENT_FOOTER, ELEMENT_HEADER } from '@/plate/plugins/element-types';
+import { type ELEMENT_FOOTER, ELEMENT_HEADER } from '@/plate/plugins/element-types';
 import { type FooterElement, type HeaderElement, TextAlign, useMyPlateEditorRef } from '@/plate/types';
 import { useLazyGetConsumerTextsQuery } from '@/redux-api/texts/consumer';
 import { PlainTextTypes } from '@/types/common-text-types';
@@ -115,6 +116,7 @@ const RenderHeaderFooter = (props: PlateElementProps<ElementTypes>) => {
     >
       <SectionContainer data-element={element.type} sectionType={SectionTypeEnum.FOOTER}>
         <HeaderFooterContent text={text} isLoading={isLoading && isUninitialized} type={element.type} />
+        {element.type === ELEMENT_HEADER ? <NavLogo /> : null}
         {children}
         {readOnly ? null : (
           <SectionToolbar>
@@ -133,7 +135,7 @@ interface HeaderFooterContentProps {
 }
 
 const HeaderFooterContent = ({ text, isLoading, type }: HeaderFooterContentProps) => {
-  const fontSize = type === ELEMENT_FOOTER ? pxToEm(14) : pxToEm(16);
+  const fontSize = pxToEm(9);
 
   if (isLoading || text === undefined) {
     return (

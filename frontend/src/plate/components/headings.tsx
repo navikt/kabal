@@ -1,17 +1,28 @@
 import { ElementApi } from 'platejs';
 import { PlateElement, type PlateElementProps } from 'platejs/react';
-import { ptToEm } from '@/plate/components/get-scaled-em';
-import type { H1Element, H2Element, H3Element, PlaceholderElement } from '@/plate/types';
+import { indentInEm, pxToEm } from '@/plate/components/get-scaled-em';
+import type { H1Element, H2Element, H3Element, H4Element, PlaceholderElement } from '@/plate/types';
 
 const CLASSNAMES =
-  'font-semibold mt-4 mb-0 before:absolute before:text-ax-neutral-600 before:cursor-text before:content-[attr(data-placeholder)] ';
+  'font-bold mb-0 before:absolute before:text-ax-neutral-600 before:cursor-text before:content-[attr(data-placeholder)] ';
+
+const H1_FONT_SIZE_PX = 16;
+const H2_FONT_SIZE_PX = 13;
+const H3_FONT_SIZE_PX = 12;
+const H4_FONT_SIZE_PX = 11;
 
 export const HeadingOne = ({ children, element, ...props }: PlateElementProps<H1Element>) => (
   <PlateElement
     {...props}
     element={element}
     as="h1"
-    style={{ fontSize: ptToEm(16), marginTop: '1em', marginLeft: ptToEm((element.indent ?? 0) * 24) }}
+    style={{
+      fontSize: pxToEm(H1_FONT_SIZE_PX),
+      lineHeight: pxToEm(20, H1_FONT_SIZE_PX),
+      letterSpacing: pxToEm(0.3, H1_FONT_SIZE_PX),
+      marginBottom: pxToEm(26, H1_FONT_SIZE_PX),
+      marginLeft: indentInEm(element.indent),
+    }}
     className={CLASSNAMES}
     attributes={{ ...props.attributes, 'data-placeholder': isEmpty(element) ? 'Dokumenttittel / Overskrift 1' : '' }}
   >
@@ -24,7 +35,14 @@ export const HeadingTwo = ({ children, element, ...props }: PlateElementProps<H2
     {...props}
     element={element}
     as="h2"
-    style={{ fontSize: ptToEm(14), marginLeft: ptToEm((element.indent ?? 0) * 24) }}
+    style={{
+      fontSize: pxToEm(H2_FONT_SIZE_PX),
+      lineHeight: pxToEm(16, H2_FONT_SIZE_PX),
+      letterSpacing: pxToEm(0.25, H2_FONT_SIZE_PX),
+      marginTop: pxToEm(26, H2_FONT_SIZE_PX),
+      marginBottom: '1em',
+      marginLeft: indentInEm(element.indent),
+    }}
     className={CLASSNAMES}
     attributes={{ ...props.attributes, 'data-placeholder': isEmpty(element) ? 'Overskrift 2' : '' }}
   >
@@ -37,7 +55,14 @@ export const HeadingThree = ({ children, element, ...props }: PlateElementProps<
     {...props}
     element={element}
     as="h3"
-    style={{ fontSize: ptToEm(12), marginLeft: ptToEm((element.indent ?? 0) * 24) }}
+    style={{
+      fontSize: pxToEm(H3_FONT_SIZE_PX),
+      lineHeight: pxToEm(16, H3_FONT_SIZE_PX),
+      letterSpacing: pxToEm(0.2, H3_FONT_SIZE_PX),
+      marginTop: pxToEm(26, H3_FONT_SIZE_PX),
+      marginBottom: '1em',
+      marginLeft: indentInEm(element.indent),
+    }}
     className={CLASSNAMES}
     attributes={{ ...props.attributes, 'data-placeholder': isEmpty(element) ? 'Overskrift 3' : '' }}
   >
@@ -45,7 +70,27 @@ export const HeadingThree = ({ children, element, ...props }: PlateElementProps<
   </PlateElement>
 );
 
-const isEmpty = (element: H1Element | H2Element | H3Element | PlaceholderElement): boolean => {
+export const HeadingFour = ({ children, element, ...props }: PlateElementProps<H4Element>) => (
+  <PlateElement
+    {...props}
+    element={element}
+    as="h4"
+    style={{
+      fontSize: pxToEm(11),
+      lineHeight: pxToEm(16, H4_FONT_SIZE_PX),
+      letterSpacing: pxToEm(0.1, H4_FONT_SIZE_PX),
+      marginTop: pxToEm(26, H4_FONT_SIZE_PX),
+      marginBottom: '1em',
+      marginLeft: indentInEm(element.indent),
+    }}
+    className={CLASSNAMES}
+    attributes={{ ...props.attributes, 'data-placeholder': isEmpty(element) ? 'Overskrift 4' : '' }}
+  >
+    {children}
+  </PlateElement>
+);
+
+const isEmpty = (element: H1Element | H2Element | H3Element | H4Element | PlaceholderElement): boolean => {
   for (const child of element.children) {
     if (ElementApi.isElement(child)) {
       return false;

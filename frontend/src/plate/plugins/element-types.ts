@@ -13,6 +13,7 @@ export const ELEMENT_FULLMEKTIG = 'fullmektig';
 export const ELEMENT_SIGNATURE = 'signature';
 export const ELEMENT_EMPTY_VOID = 'empty-void';
 export const ELEMENT_SAKSNUMMER = 'saksnummer';
+export const ELEMENT_SAKSINFO = 'saksinfo';
 
 export const ELEMENT_BOOKMARK = 'bookmark';
 
@@ -26,6 +27,7 @@ export const UNCHANGEABLE = [
   ELEMENT_REGELVERK,
   ELEMENT_FULLMEKTIG,
   ELEMENT_SAKSNUMMER,
+  ELEMENT_SAKSINFO,
 ];
 
 export const UNDELETABLE_BUT_EDITABLE = [ELEMENT_REDIGERBAR_MALTEKST, ELEMENT_REGELVERK_CONTAINER];

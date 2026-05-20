@@ -5,7 +5,7 @@ export const TableRowElement = ({ children, ref, ...props }: PlateElementProps) 
     as="tr"
     ref={ref}
     {...props}
-    className="odd:bg-ax-bg-neutral-soft-a even:bg-transparent"
+    className="odd:bg-ax-bg-neutral-softA even:bg-transparent"
     style={{ position: 'static' }}
   >
     {children}

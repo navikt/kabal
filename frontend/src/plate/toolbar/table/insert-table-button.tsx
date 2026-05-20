@@ -1,5 +1,5 @@
 import { Box, HGrid, HStack } from '@navikt/ds-react';
-import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin } from '@platejs/basic-nodes';
+import { BaseH1Plugin, BaseH2Plugin, BaseH3Plugin, BaseH4Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { TableAdd } from '@styled-icons/fluentui-system-regular';
 import { BaseParagraphPlugin } from 'platejs';
@@ -15,6 +15,7 @@ import {
   type H1Element,
   type H2Element,
   type H3Element,
+  type H4Element,
   type NumberedListElement,
   type ParagraphElement,
   useMyPlateEditorRef,
@@ -60,13 +61,14 @@ const TableGrid = ({ close }: TableGridProps) => {
   const onClick = useCallback(
     (rows: number, columns: number) => {
       const current = editor.api.node<
-        ParagraphElement | H1Element | H2Element | H3Element | BulletListElement | NumberedListElement
+        ParagraphElement | H1Element | H2Element | H3Element | H4Element | BulletListElement | NumberedListElement
       >({
         match: isOfElementTypesFn([
           BaseParagraphPlugin.node.type,
           BaseH1Plugin.key,
           BaseH2Plugin.key,
           BaseH3Plugin.key,
+          BaseH4Plugin.key,
           BaseBulletedListPlugin.node.type,
           BaseNumberedListPlugin.node.type,
         ]),

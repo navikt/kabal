@@ -1,6 +1,6 @@
 import type { BasePoint } from 'slate';
 import { CURRENT_SCALE } from '@/components/smart-editor/hooks/use-scale';
-import { BASE_FONT_SIZE_PX } from '@/plate/components/get-scaled-em';
+import { SCREEN_FONT_SIZE_PX } from '@/plate/components/get-scaled-em';
 import type { RichTextEditor } from '@/plate/types';
 
 interface IRangePosition {
@@ -33,7 +33,7 @@ export const calculateRangePosition = (
   const containerPosition = containerRef.getBoundingClientRect();
 
   return {
-    top: (rangePosition.top - containerPosition.top) / CURRENT_SCALE / BASE_FONT_SIZE_PX,
-    left: (rangePosition.left - containerPosition.left) / CURRENT_SCALE / BASE_FONT_SIZE_PX,
+    top: (rangePosition.top - containerPosition.top) / CURRENT_SCALE / SCREEN_FONT_SIZE_PX,
+    left: (rangePosition.left - containerPosition.left) / CURRENT_SCALE / SCREEN_FONT_SIZE_PX,
   };
 };
