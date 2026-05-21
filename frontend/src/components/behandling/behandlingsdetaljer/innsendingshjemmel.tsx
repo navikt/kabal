@@ -3,6 +3,7 @@ import { useCallback, useId, useMemo, useRef } from 'react';
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
+import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
 import { useKodeverkYtelse } from '@/hooks/use-kodeverk-value';
 import { useSetInnsendingshjemlerMutation } from '@/redux-api/oppgaver/mutations/behandling';
 import type { IKodeverkValue } from '@/types/kodeverk';
@@ -57,7 +58,7 @@ export const Innsendingshjemler = ({ oppgavebehandling, id }: Innsendingshjemler
       .filter((h): h is HjemmelOption => h !== undefined);
 
     return [...activeOptions, ...selectedUtfasesOptions]
-      .toSorted((a, b) => a.navn.localeCompare(b.navn))
+      .toSorted((a, b) => sortWithOrdinals(a.navn, b.navn))
       .map((option) => ({
         value: option,
         key: option.id,
