@@ -1,3 +1,4 @@
+import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
 import {
   useEnheter,
   useInnsendingshjemlerMap,
@@ -71,7 +72,9 @@ export const useInnsendingshjemlerFromIds = (hjemmelIdList: string[]): HjemmelNa
     return undefined;
   }
 
-  return hjemmelIdList.map((id) => ({ id, name: data[id] }));
+  return hjemmelIdList
+    .map((id) => ({ id, name: data[id] }))
+    .toSorted((a, b) => sortWithOrdinals(a.name ?? a.id, b.name ?? b.id));
 };
 
 export const useRegistreringshjemlerFromIds = (hjemmelIdList: string[]): HjemmelNameAndId[] | undefined => {
