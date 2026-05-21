@@ -1,4 +1,3 @@
-import { isNotUndefined } from '@/functions/is-not-type-guards';
 import { useGetSettingsQuery } from '@/redux-api/bruker';
 import { useSimpleYtelser } from '@/simple-api-state/use-kodeverk';
 import type { IKodeverkSimpleValue } from '@/types/kodeverk';
@@ -11,5 +10,5 @@ export const useSettingsYtelser = (): IKodeverkSimpleValue[] => {
     return [];
   }
 
-  return data.ytelser.map((ytelseId) => ytelser.find(({ id }) => id === ytelseId)).filter(isNotUndefined);
+  return ytelser.filter(({ id }) => data.ytelser.includes(id));
 };
