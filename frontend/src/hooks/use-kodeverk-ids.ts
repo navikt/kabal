@@ -88,7 +88,7 @@ export const useRegistreringshjemlerFromIds = (hjemmelIdList: string[]): Hjemmel
     .map((id) => {
       const name = data[id];
 
-      return name === undefined ? { id, name } : { id, name: `${name.lovkilde.beskrivelse} ${name.hjemmelnavn}` };
+      return { id, name: name === undefined ? undefined : `${name.lovkilde.beskrivelse} ${name.hjemmelnavn}` };
     })
     .toSorted((a, b) => sortWithOrdinals(a.name ?? a.id, b.name ?? b.id));
 };
