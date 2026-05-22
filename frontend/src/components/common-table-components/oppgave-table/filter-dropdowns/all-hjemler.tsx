@@ -1,4 +1,4 @@
-import { Hjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/hjemmel';
+import { Hjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/hjemler';
 import type { FilterDropdownProps } from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
 import { useAllActiveHjemler } from '@/hooks/use-all-active-hjemler';
 
