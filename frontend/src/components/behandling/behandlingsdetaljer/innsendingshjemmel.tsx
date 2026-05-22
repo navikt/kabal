@@ -58,17 +58,17 @@ export const Innsendingshjemler = ({ oppgavebehandling, id }: Innsendingshjemler
       .filter((h): h is HjemmelOption => h !== undefined);
 
     return [...activeOptions, ...selectedUtfasesOptions]
-      .toSorted((a, b) => sortWithOrdinals(a.navn, b.navn))
+      .toSorted((a, b) => sortWithOrdinals(a.beskrivelse, b.beskrivelse))
       .map((option) => ({
         value: option,
         key: option.id,
         label: (
           <span className="truncate">
-            {option.navn}
+            {option.beskrivelse}
             {option.utfases ? ' (utfases)' : ''}
           </span>
         ),
-        plainText: option.navn,
+        plainText: option.beskrivelse,
       }));
   }, [ytelse]);
 
