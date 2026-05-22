@@ -1,23 +1,22 @@
 import { Table, type TableProps } from '@navikt/ds-react';
 import { DateColumnHeader } from '@/components/common-table-components/oppgave-table/date-column-header';
+import { AllHjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/all-hjemler';
 import { AllYtelser } from '@/components/common-table-components/oppgave-table/filter-dropdowns/all-ytelser';
-import { EnhetHjemmel } from '@/components/common-table-components/oppgave-table/filter-dropdowns/enhet-hjemmel';
 import {
   HelperStatusWithoutSelf,
   HelperStatusWithSelf,
 } from '@/components/common-table-components/oppgave-table/filter-dropdowns/helper-status';
-import { Hjemmel } from '@/components/common-table-components/oppgave-table/filter-dropdowns/hjemmel';
 import { Medunderskriver } from '@/components/common-table-components/oppgave-table/filter-dropdowns/medunderskriver';
 import { PaaVentReasons } from '@/components/common-table-components/oppgave-table/filter-dropdowns/paa-vent-reason';
 import { Registreringshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
 import { Rol } from '@/components/common-table-components/oppgave-table/filter-dropdowns/rol';
-import { RolHjemmel } from '@/components/common-table-components/oppgave-table/filter-dropdowns/rol-hjemmel';
 import { Saksbehandler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/saksbehandler';
 import {
   Sakstype,
   SakstypeForSakerITR,
   SakstypeWithTrygderetten,
 } from '@/components/common-table-components/oppgave-table/filter-dropdowns/sakstype';
+import { UserHjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-hjemler';
 import { UserYtelser } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-ytelser';
 import {
   useOppgaveTableFerdigstilt,
@@ -61,10 +60,10 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         return <UserYtelser key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.AllYtelser:
         return <AllYtelser key={key} columnKey={key} tableKey={tableKey} />;
-      case ColumnKeyEnum.Innsendingshjemler:
-        return <Hjemmel key={key} columnKey={key} tableKey={tableKey} />;
-      case ColumnKeyEnum.EnhetInnsendingshjemler:
-        return <EnhetHjemmel key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.UserInnsendingshjemler:
+        return <UserHjemler key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.AllInnsendingshjemler:
+        return <AllHjemler key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Registreringshjemler:
         return <Registreringshjemler key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Age:
@@ -110,8 +109,6 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         );
       case ColumnKeyEnum.Rol:
         return <Rol key={key} columnKey={key} tableKey={tableKey} />;
-      case ColumnKeyEnum.RolInnsendingshjemler:
-        return <RolHjemmel key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.PaaVentReason:
         return <PaaVentReasons key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.FlowStatesWithSelf:

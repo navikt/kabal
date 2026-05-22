@@ -18,7 +18,7 @@ export const useAvailableHjemler = () => {
 
           return acc;
         }, [])
-        .sort(({ navn: a }, { navn: b }) => a.localeCompare(b)),
+        .toSorted(({ navn: a }, { navn: b }) => a.localeCompare(b)),
     [ytelser],
   );
 

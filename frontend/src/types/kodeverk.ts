@@ -77,6 +77,10 @@ export interface IKabalYtelse extends IKodeverkSimpleValue {
   lovKildeToRegistreringshjemler: IKabalLovKildeToRegistreringshjemmel[];
 }
 
+export interface IInnsendingshjemmel extends IKodeverkValue {
+  deprecated: boolean;
+}
+
 export interface IKlageenhet extends IKodeverkSimpleValue {
   ytelser: IKodeverkSimpleValue[];
 }

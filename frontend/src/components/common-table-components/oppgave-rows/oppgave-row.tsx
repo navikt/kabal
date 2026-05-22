@@ -90,9 +90,8 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
             <Ytelse ytelseId={oppgave.ytelseId} />
           </Table.DataCell>
         );
-      case ColumnKeyEnum.Innsendingshjemler:
-      case ColumnKeyEnum.RolInnsendingshjemler:
-      case ColumnKeyEnum.EnhetInnsendingshjemler:
+      case ColumnKeyEnum.UserInnsendingshjemler:
+      case ColumnKeyEnum.AllInnsendingshjemler:
         return (
           <Table.DataCell key={key}>
             <InnsendingshjemlerList hjemmelIdList={oppgave.hjemmelIdList} size="medium" />

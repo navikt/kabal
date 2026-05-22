@@ -1,5 +1,6 @@
 import { SimpleApiState, useSimpleApiState } from '@/simple-api-state/simple-api-state';
 import type {
+  IInnsendingshjemmel,
   IKabalYtelse,
   IKlageenhet,
   IKodeverkSimpleValue,
@@ -42,7 +43,7 @@ const kabalYtelserLatest = new SimpleApiState<IKabalYtelse[]>(`${API_PREFIX}/kab
 const klageenheter = new SimpleApiState<IKlageenhet[]>(`${API_PREFIX}/klageenheter`);
 const utfall = new SimpleApiState<IKodeverkSimpleValue<UtfallEnum>[]>(`${API_PREFIX}/utfall`);
 const sakstyperToUtfall = new SimpleApiState<ISakstyperToUtfall[]>(`${API_PREFIX}/sakstypertoutfall`);
-const hjemler = new SimpleApiState<IKodeverkValue[]>(`${API_PREFIX}/hjemler`);
+const hjemler = new SimpleApiState<IInnsendingshjemmel[]>(`${API_PREFIX}/hjemler`);
 const fagsystemer = new SimpleApiState<IFagsystem[]>(`${API_PREFIX}/fagsystemer`);
 const lovkildeToRegistreringshjemler = new SimpleApiState<ILovKildeToRegistreringshjemmel[]>(
   `${API_PREFIX}/lovkildetoregistreringshjemler`,
