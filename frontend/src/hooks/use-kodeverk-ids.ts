@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
 import {
   useEnheter,
@@ -68,27 +69,31 @@ export interface HjemmelNameAndId {
 export const useInnsendingshjemlerFromIds = (hjemmelIdList: string[]): HjemmelNameAndId[] | undefined => {
   const { data, isLoading } = useInnsendingshjemlerMap();
 
-  if (isLoading || data === undefined) {
-    return undefined;
-  }
+  return useMemo(() => {
+    if (isLoading || data === undefined) {
+      return undefined;
+    }
 
-  return hjemmelIdList
-    .map((id) => ({ id, name: data[id] }))
-    .toSorted((a, b) => sortWithOrdinals(a.name ?? a.id, b.name ?? b.id));
+    return hjemmelIdList
+      .map((id) => ({ id, name: data[id] }))
+      .toSorted((a, b) => sortWithOrdinals(a.name ?? a.id, b.name ?? b.id));
+  }, [hjemmelIdList, data, isLoading]);
 };
 
 export const useRegistreringshjemlerFromIds = (hjemmelIdList: string[]): HjemmelNameAndId[] | undefined => {
   const { data, isLoading } = useRegistreringshjemlerMap();
 
-  if (isLoading || data === undefined) {
-    return undefined;
-  }
+  return useMemo(() => {
+    if (isLoading || data === undefined) {
+      return undefined;
+    }
 
-  return hjemmelIdList
-    .map((id) => {
-      const name = data[id];
+    return hjemmelIdList
+      .map((id) => {
+        const name = data[id];
 
-      return { id, name: name === undefined ? undefined : `${name.lovkilde.beskrivelse} ${name.hjemmelnavn}` };
-    })
-    .toSorted((a, b) => sortWithOrdinals(a.name ?? a.id, b.name ?? b.id));
+        return { id, name: name === undefined ? undefined : `${name.lovkilde.beskrivelse} ${name.hjemmelnavn}` };
+      })
+      .toSorted((a, b) => sortWithOrdinals(a.name ?? a.id, b.name ?? b.id));
+  }, [hjemmelIdList, data, isLoading]);
 };
