@@ -57,7 +57,7 @@
     "@styled-icons/fluentui-system-regular": "10.47.0",
     "date-fns": "4.1.0",
     "platejs": "52.3.21",
-    "qs": "6.15.1",
+    "qs": "6.15.2",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "react-redux": "9.2.0",
