@@ -68,8 +68,7 @@ export const HjemmelListInner = ({ selected, onChange, error, ytelse, onEscape }
     return ytelse.innsendingshjemler
       .filter(({ utfases }) => !utfases)
       .map(({ id, navn }) => ({ value: id, label: navn }))
-      .concat(selectedUtfasesOptions)
-      .toSorted((a, b) => a.label.localeCompare(b.label));
+      .concat(selectedUtfasesOptions);
   }, [ytelse.innsendingshjemler]);
 
   const filteredOptions = useMemo(
