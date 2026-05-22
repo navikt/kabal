@@ -14,7 +14,7 @@ import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@/types
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
   ColumnKeyEnum.AllYtelser,
-  ColumnKeyEnum.RolInnsendingshjemler,
+  ColumnKeyEnum.AllInnsendingshjemler,
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.VarsletFrist,

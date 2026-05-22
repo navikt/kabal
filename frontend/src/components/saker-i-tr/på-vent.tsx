@@ -12,7 +12,7 @@ import { SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.TypeForSakerITR,
   ColumnKeyEnum.AllYtelser,
-  ColumnKeyEnum.Innsendingshjemler,
+  ColumnKeyEnum.UserInnsendingshjemler,
   ColumnKeyEnum.RelevantOppgaver,
   ColumnKeyEnum.Saksnummer,
   ColumnKeyEnum.Age,

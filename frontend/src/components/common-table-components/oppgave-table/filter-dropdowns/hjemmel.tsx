@@ -5,11 +5,13 @@ import { useOppgaveTableHjemler } from '@/components/common-table-components/opp
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
-import { useSettingsHjemler } from '@/hooks/use-settings-hjemler';
 import type { IKodeverkValue } from '@/types/kodeverk';
 
-export const Hjemmel = ({ columnKey, tableKey }: FilterDropdownProps) => {
-  const hjemlerOptions = useSettingsHjemler();
+interface Props extends FilterDropdownProps {
+  hjemler: IKodeverkValue[];
+}
+
+export const Hjemler = ({ columnKey, tableKey, hjemler: hjemlerOptions }: Props) => {
   const [hjemler, setHjemler] = useOppgaveTableHjemler(tableKey);
 
   const options = useMemo<Entry<IKodeverkValue>[]>(
