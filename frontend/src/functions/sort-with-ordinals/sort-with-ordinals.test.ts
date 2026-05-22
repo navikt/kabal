@@ -46,6 +46,13 @@ describe('sortWithOrdinals', () => {
     expect(sortStrings([ab, abc, a])).toStrictEqual([a, ab, abc]);
   });
 
+  it('should return a positive value when a has more parts than b after a common prefix', () => {
+    expect.assertions(2);
+
+    expect(sortWithOrdinals('Ftrl § 1-1 første ledd', 'Ftrl § 1-1')).toBeGreaterThan(0);
+    expect(sortWithOrdinals('Ftrl § 1-1 1. januar 2020', 'Ftrl § 1-1')).toBeGreaterThan(0);
+  });
+
   it('should sort strings with ordinals', () => {
     expect.assertions(1);
 

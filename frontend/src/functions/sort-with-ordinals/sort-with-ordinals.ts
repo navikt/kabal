@@ -59,8 +59,8 @@ export const sortWithOrdinals = (a: string, b: string): number => {
     return diff;
   }
 
-  if (aParts.length < bParts.length) {
-    return -1;
+  if (aParts.length !== bParts.length) {
+    return aParts.length < bParts.length ? -1 : 1;
   }
 
   return 0; // Strings are equal.
