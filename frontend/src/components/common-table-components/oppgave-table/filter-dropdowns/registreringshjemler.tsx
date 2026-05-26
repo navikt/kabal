@@ -5,7 +5,6 @@ import { useOppgaveTableRegistreringshjemler } from '@/components/common-table-c
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
-import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
 import { useLovKildeToRegistreringshjemler } from '@/simple-api-state/use-kodeverk';
 
 interface FlatRegistreringshjemmel {
@@ -24,12 +23,10 @@ export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProp
     for (const lovkilde of lovkilder) {
       for (const hjemmel of lovkilde.registreringshjemler) {
         if (flat.find((h) => h.id === hjemmel.id) === undefined) {
-          flat.push({ id: hjemmel.id, navn: hjemmel.navn, lovkilde: lovkilde.beskrivelse });
+          flat.push({ id: hjemmel.id, navn: hjemmel.navn, lovkilde: lovkilde.navn });
         }
       }
     }
-
-    flat.sort((a, b) => sortWithOrdinals(a.navn, b.navn));
 
     return flat.map((h) => ({
       value: h,
