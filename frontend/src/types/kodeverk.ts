@@ -64,9 +64,13 @@ export interface ILovKildeToRegistreringshjemmel {
   registreringshjemler: IKodeverkSimpleValue[];
 }
 
+export interface IYtelseHjemmel extends IKodeverkValue {
+  utfases: boolean;
+}
+
 export interface IYtelse extends IKodeverkSimpleValue {
   lovKildeToRegistreringshjemler: ILovKildeToRegistreringshjemmel[];
-  innsendingshjemler: (IKodeverkValue & { utfases: boolean })[];
+  innsendingshjemler: IYtelseHjemmel[];
 }
 
 interface IKabalLovKildeToRegistreringshjemmel extends IKodeverkValue {
