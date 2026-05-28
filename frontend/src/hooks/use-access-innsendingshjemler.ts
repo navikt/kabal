@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 import { useAvailableYtelser } from '@/hooks/use-available-ytelser';
-import type { IYtelseHjemmel } from '@/types/kodeverk';
+import type { IYtelseInnsendingshjemmel } from '@/types/kodeverk';
 
-export const useAccessInnsendingshjemler = (): IYtelseHjemmel[] => {
+export const useAccessInnsendingshjemler = (): IYtelseInnsendingshjemmel[] => {
   const availableYtelser = useAvailableYtelser();
 
   return useMemo(() => {
     const seen = new Set<string>();
-    const hjemler: IYtelseHjemmel[] = [];
+    const hjemler: IYtelseInnsendingshjemmel[] = [];
 
     for (const { innsendingshjemler } of availableYtelser) {
       for (const hjemmel of innsendingshjemler) {

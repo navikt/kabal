@@ -6,7 +6,7 @@ import type { Entry } from '@/components/searchable-select/virtualized-option-li
 import { sortWithOrdinals } from '@/functions/sort-with-ordinals/sort-with-ordinals';
 import { useKodeverkYtelse } from '@/hooks/use-kodeverk-value';
 import { useSetInnsendingshjemlerMutation } from '@/redux-api/oppgaver/mutations/behandling';
-import type { IYtelseHjemmel } from '@/types/kodeverk';
+import type { IYtelseInnsendingshjemmel } from '@/types/kodeverk';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
@@ -44,7 +44,7 @@ export const Innsendingshjemler = ({ oppgavebehandling, id }: Innsendingshjemler
     ),
   );
 
-  const options: Entry<IYtelseHjemmel>[] = useMemo(() => {
+  const options: Entry<IYtelseInnsendingshjemmel>[] = useMemo(() => {
     if (ytelse === undefined) {
       return [];
     }
@@ -53,7 +53,7 @@ export const Innsendingshjemler = ({ oppgavebehandling, id }: Innsendingshjemler
 
     const selectedUtfasesOptions = selectedUtfasesIds.current
       .map((id) => ytelse.innsendingshjemler.find((h) => h.id === id))
-      .filter((h): h is IYtelseHjemmel => h !== undefined);
+      .filter((h): h is IYtelseInnsendingshjemmel => h !== undefined);
 
     return [...activeOptions, ...selectedUtfasesOptions]
       .toSorted((a, b) => sortWithOrdinals(a.beskrivelse, b.beskrivelse))
@@ -76,7 +76,7 @@ export const Innsendingshjemler = ({ oppgavebehandling, id }: Innsendingshjemler
   );
 
   const handleChange = useCallback(
-    (values: IYtelseHjemmel[]) => {
+    (values: IYtelseInnsendingshjemmel[]) => {
       setInnsendingshjemler({
         oppgaveId: oppgavebehandling.id,
         hjemmelIdList: values.map((v) => v.id),

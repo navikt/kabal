@@ -1,8 +1,8 @@
 import { useSettingsYtelser } from '@/hooks/use-settings-ytelser';
 import { useGetSettingsQuery } from '@/redux-api/bruker';
-import type { IYtelseHjemmel } from '@/types/kodeverk';
+import type { IYtelseInnsendingshjemmel } from '@/types/kodeverk';
 
-export const useSettingsInnsendingshjemler = (): IYtelseHjemmel[] => {
+export const useSettingsInnsendingshjemler = (): IYtelseInnsendingshjemmel[] => {
   const userYtelser = useSettingsYtelser();
   const { data: settings, isSuccess } = useGetSettingsQuery();
 
@@ -10,7 +10,7 @@ export const useSettingsInnsendingshjemler = (): IYtelseHjemmel[] => {
     return [];
   }
 
-  const hjemler: IYtelseHjemmel[] = [];
+  const hjemler: IYtelseInnsendingshjemmel[] = [];
 
   for (const { innsendingshjemler } of userYtelser) {
     for (const hjemmel of innsendingshjemler) {
