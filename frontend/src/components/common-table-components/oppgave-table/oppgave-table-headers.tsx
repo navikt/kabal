@@ -1,6 +1,10 @@
 import { Table, type TableProps } from '@navikt/ds-react';
 import { DateColumnHeader } from '@/components/common-table-components/oppgave-table/date-column-header';
+import { AccessInnsendingshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/access-innsendingshjemler';
+import { AccessRegistreringshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/access-registreringshjemler';
+import { AccessYtelser } from '@/components/common-table-components/oppgave-table/filter-dropdowns/access-ytelser';
 import { AllHjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/all-hjemler';
+import { AllRegistreringshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/all-registreringshjemler';
 import { AllYtelser } from '@/components/common-table-components/oppgave-table/filter-dropdowns/all-ytelser';
 import {
   HelperStatusWithoutSelf,
@@ -8,7 +12,6 @@ import {
 } from '@/components/common-table-components/oppgave-table/filter-dropdowns/helper-status';
 import { Medunderskriver } from '@/components/common-table-components/oppgave-table/filter-dropdowns/medunderskriver';
 import { PaaVentReasons } from '@/components/common-table-components/oppgave-table/filter-dropdowns/paa-vent-reason';
-import { Registreringshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/registreringshjemler';
 import { Rol } from '@/components/common-table-components/oppgave-table/filter-dropdowns/rol';
 import { Saksbehandler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/saksbehandler';
 import {
@@ -17,6 +20,7 @@ import {
   SakstypeWithTrygderetten,
 } from '@/components/common-table-components/oppgave-table/filter-dropdowns/sakstype';
 import { UserHjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-hjemler';
+import { UserRegistreringshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-registreringshjemler';
 import { UserYtelser } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-ytelser';
 import {
   useOppgaveTableFerdigstilt,
@@ -56,16 +60,28 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         return <SakstypeWithTrygderetten key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.TypeForSakerITR:
         return <SakstypeForSakerITR key={key} columnKey={key} tableKey={tableKey} />;
-      case ColumnKeyEnum.UserYtelser:
-        return <UserYtelser key={key} columnKey={key} tableKey={tableKey} />;
+
       case ColumnKeyEnum.AllYtelser:
         return <AllYtelser key={key} columnKey={key} tableKey={tableKey} />;
-      case ColumnKeyEnum.UserInnsendingshjemler:
-        return <UserHjemler key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.AccessYtelser:
+        return <AccessYtelser key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.UserYtelser:
+        return <UserYtelser key={key} columnKey={key} tableKey={tableKey} />;
+
       case ColumnKeyEnum.AllInnsendingshjemler:
         return <AllHjemler key={key} columnKey={key} tableKey={tableKey} />;
-      case ColumnKeyEnum.Registreringshjemler:
-        return <Registreringshjemler key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.UserInnsendingshjemler:
+        return <UserHjemler key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.AccessInnsendingshjemler:
+        return <AccessInnsendingshjemler key={key} columnKey={key} tableKey={tableKey} />;
+
+      case ColumnKeyEnum.AllRegistreringshjemler:
+        return <AllRegistreringshjemler key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.UserRegistreringshjemler:
+        return <UserRegistreringshjemler key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.AccessRegistreringshjemler:
+        return <AccessRegistreringshjemler key={key} columnKey={key} tableKey={tableKey} />;
+
       case ColumnKeyEnum.Age:
         return (
           <SortHeader key={key} sortKey={SortFieldEnum.ALDER} {...sortProps}>
