@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
-import { useHjemler } from '@/simple-api-state/use-kodeverk';
+import { useInnsendingshjemler } from '@/simple-api-state/use-kodeverk';
 import type { IInnsendingshjemmel } from '@/types/kodeverk';
 
 const EMPTY_LIST: IInnsendingshjemmel[] = [];
 
 export const useAllActiveInnsendingshjemler = () => {
-  const { data: hjemler } = useHjemler();
+  const { data: hjemler } = useInnsendingshjemler();
 
   return useMemo(() => {
     if (hjemler === undefined) {

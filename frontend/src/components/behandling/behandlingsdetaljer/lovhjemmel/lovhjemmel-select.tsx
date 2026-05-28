@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
-import { SelectHjemler } from '@/components/filter-dropdown/select-hjemler';
+import { SelectRegistreringshjemler } from '@/components/filter-dropdown/select-registreringshjemler';
 import { InputError } from '@/components/input-error/input-error';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
@@ -29,7 +29,12 @@ export const LovhjemmelSelect = ({ onChange, selected, error, children }: Lovhje
 
   return (
     <>
-      <SelectHjemler selectedHjemler={selected} setSelectedHjemler={onChange} label={children} options={options} />
+      <SelectRegistreringshjemler
+        selectedHjemler={selected}
+        setSelectedHjemler={onChange}
+        label={children}
+        options={options}
+      />
 
       <InputError error={error} />
     </>

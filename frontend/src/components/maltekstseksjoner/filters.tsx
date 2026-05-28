@@ -1,8 +1,8 @@
 import { HStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { getTemplateOptions } from '@/components/smart-editor-texts/get-template-options';
-import { YtelserAndHjemlerSelect } from '@/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
 import { SectionSelect } from '@/components/smart-editor-texts/query-filter-selects';
+import { YtelserAndRegistreringshjemlerSelect } from '@/components/smart-editor-texts/registreringshjemler-select/ytelser-and-registreringshjemler-select';
 import { GLOBAL, LIST_DELIMITER, NONE } from '@/components/smart-editor-texts/types';
 import { UtfallSetFilter } from '@/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
 import {
@@ -44,7 +44,7 @@ export const Filters = ({ maltekst, query }: Props) => {
         nestedOptions={nestedOptions}
         sectionsCount={sectionsCount}
       />
-      <YtelserAndHjemlerSelect
+      <YtelserAndRegistreringshjemlerSelect
         selected={maltekst.ytelseHjemmelIdList}
         onChange={(ytelseHjemmelIdList) => updateYtelseHjemmel({ id: maltekst.id, ytelseHjemmelIdList, query })}
       />

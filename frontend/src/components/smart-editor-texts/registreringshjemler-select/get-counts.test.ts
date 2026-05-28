@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { getCounts } from '@/components/smart-editor-texts/hjemler-select/hooks';
+import { getCounts } from '@/components/smart-editor-texts/registreringshjemler-select/hooks';
 import { GLOBAL, LIST_DELIMITER, NONE, WILDCARD } from '@/components/smart-editor-texts/types';
 
 describe('getCounts', () => {

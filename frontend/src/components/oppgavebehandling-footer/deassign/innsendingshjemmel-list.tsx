@@ -16,7 +16,7 @@ interface CommonProps {
   onEscape?: () => void;
 }
 
-export const HjemmelList = ({ ytelseId, ...props }: CommonProps & { ytelseId: string }) => {
+export const InnsendingshjemmelList = ({ ytelseId, ...props }: CommonProps & { ytelseId: string }) => {
   const [ytelse, isLoading] = useKodeverkYtelse(ytelseId);
 
   if (isLoading) {
@@ -31,7 +31,7 @@ export const HjemmelList = ({ ytelseId, ...props }: CommonProps & { ytelseId: st
     return <ErrorMessage>Kunne ikke finne ytelse med id: {ytelseId}</ErrorMessage>;
   }
 
-  return <HjemmelListContent {...props} ytelse={ytelse} />;
+  return <InnsendingshjemmelListContent {...props} ytelse={ytelse} />;
 };
 
 interface InnerProps {
@@ -43,7 +43,7 @@ interface InnerProps {
 }
 
 /** Inner content of the hjemmel list without positioning or box wrapper. Suitable for use inside a Popover. */
-export const HjemmelListInner = ({ selected, onChange, error, ytelse, onEscape }: InnerProps) => {
+export const InnsendingshjemmelListInner = ({ selected, onChange, error, ytelse, onEscape }: InnerProps) => {
   const [search, setSearch] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const filterRegex = useMemo(() => stringToRegExp(search), [search]);
@@ -180,8 +180,8 @@ interface PopoverContentProps {
   onEscape?: () => void;
 }
 
-/** HjemmelList content without positioning or box wrapper. Suitable for use inside a Popover. */
-export const HjemmelListPopoverContent = ({ ytelseId, ...props }: PopoverContentProps) => {
+/** InnsendingshjemmelList content without positioning or box wrapper. Suitable for use inside a Popover. */
+export const InnsendingshjemmelListPopoverContent = ({ ytelseId, ...props }: PopoverContentProps) => {
   const [ytelse, isLoading] = useKodeverkYtelse(ytelseId);
 
   if (isLoading) {
@@ -196,10 +196,10 @@ export const HjemmelListPopoverContent = ({ ytelseId, ...props }: PopoverContent
     return <ErrorMessage>Kunne ikke finne ytelse med id: {ytelseId}</ErrorMessage>;
   }
 
-  return <HjemmelListInner {...props} ytelse={ytelse} />;
+  return <InnsendingshjemmelListInner {...props} ytelse={ytelse} />;
 };
 
-export const HjemmelListContent = ({
+export const InnsendingshjemmelListContent = ({
   selected,
   direction,
   onChange,
@@ -222,7 +222,13 @@ export const HjemmelListContent = ({
       shadow="dialog"
       padding="space-16"
     >
-      <HjemmelListInner selected={selected} onChange={onChange} error={error} ytelse={ytelse} onEscape={onEscape} />
+      <InnsendingshjemmelListInner
+        selected={selected}
+        onChange={onChange}
+        error={error}
+        ytelse={ytelse}
+        onEscape={onEscape}
+      />
     </Box>
   );
 };

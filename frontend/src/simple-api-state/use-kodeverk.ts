@@ -67,7 +67,7 @@ export const useRegistreringshjemlerMap = () => useSimpleApiState(registreringsh
 export const useKlageenheter = () => useSimpleApiState(klageenheter);
 export const useUtfall = () => useSimpleApiState(utfall);
 export const useSakstyperToUtfall = () => useSimpleApiState(sakstyperToUtfall);
-export const useHjemler = () => useSimpleApiState(hjemler);
+export const useInnsendingshjemler = () => useSimpleApiState(hjemler);
 export const useFagsystemer = () => useSimpleApiState(fagsystemer);
 export const useYtelserAll = () => useSimpleApiState(ytelserAll);
 export const useLovKildeToRegistreringshjemler = () => useSimpleApiState(lovkildeToRegistreringshjemler);

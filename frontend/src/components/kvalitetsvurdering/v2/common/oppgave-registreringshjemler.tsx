@@ -1,33 +1,33 @@
 import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { useEffect } from 'react';
-import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
-import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
-import { useCanEditBehandling } from '@/hooks/use-can-edit';
+import { useKvalitetsvurderingV2State } from '@/components/kvalitetsvurdering/v2/common/use-kvalitetsvurdering-v2';
+import { useValidationError } from '@/components/kvalitetsvurdering/v2/common/use-validation-error';
+import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { usePrevious } from '@/hooks/use-previous';
 import { useRegistreringshjemlerMap } from '@/simple-api-state/use-kodeverk';
 import type {
-  KvalitetsvurderingSaksdataHjemlerV3,
-  KvalitetsvurderingV3Boolean,
-} from '@/types/kaka-kvalitetsvurdering/v3';
+  IKvalitetsvurderingBooleans,
+  IKvalitetsvurderingSaksdataHjemler,
+} from '@/types/kaka-kvalitetsvurdering/v2';
+
+interface Props {
+  field: keyof IKvalitetsvurderingSaksdataHjemler;
+  parentKey?: keyof IKvalitetsvurderingBooleans;
+}
 
 const EMPTY_ARRAY: string[] = [];
 
-interface SaksdatahjemlerProps {
-  field: keyof KvalitetsvurderingSaksdataHjemlerV3;
-  parentKey?: keyof KvalitetsvurderingV3Boolean;
-}
-
-export const Oppgavehjemler = ({ field, parentKey }: SaksdatahjemlerProps) => {
-  const { hjemler, kvalitetsvurdering, update, isLoading } = useKvalitetsvurderingV3State();
+export const OppgaveRegistreringshjemler = ({ field, parentKey }: Props) => {
+  const { hjemler, kvalitetsvurdering, update, isLoading } = useKvalitetsvurderingV2State();
   const { data: registreringshjemlerMap, isLoading: registreringshjemlerMapIsLoading } = useRegistreringshjemlerMap();
-  const canEdit = useCanEditBehandling();
+  const canEdit = useIsTildeltSaksbehandler();
   const validationError = useValidationError(field);
 
-  const previousSaksdataHjemmelIdList = usePrevious(isLoading ? undefined : hjemler);
+  const previousHjemler = usePrevious(hjemler);
   const selectedHjemmelIdList = isLoading ? undefined : kvalitetsvurdering[field];
 
   useEffect(() => {
-    if (!canEdit || isLoading || selectedHjemmelIdList === undefined || previousSaksdataHjemmelIdList === undefined) {
+    if (!canEdit || isLoading || selectedHjemmelIdList === undefined) {
       return;
     }
 
@@ -42,13 +42,13 @@ export const Oppgavehjemler = ({ field, parentKey }: SaksdatahjemlerProps) => {
     }
 
     if (selectedHjemmelIdList.length > 0) {
-      const isUnchanged = hjemmelIdListsEquals(previousSaksdataHjemmelIdList, hjemler);
+      const isUnchanged = previousHjemler === undefined || hjemmelIdListsEquals(previousHjemler, hjemler);
 
       if (!isUnchanged) {
         update({ [field]: EMPTY_ARRAY });
       }
     }
-  }, [field, isLoading, selectedHjemmelIdList, previousSaksdataHjemmelIdList, hjemler, update, canEdit]);
+  }, [field, isLoading, selectedHjemmelIdList, previousHjemler, hjemler, update, canEdit]);
 
   if (isLoading || registreringshjemlerMapIsLoading || typeof registreringshjemlerMap === 'undefined') {
     return null;
@@ -72,13 +72,13 @@ export const Oppgavehjemler = ({ field, parentKey }: SaksdatahjemlerProps) => {
   return (
     <Box marginBlock="space-0 space-1" marginInline="space-32 space-0">
       <CheckboxGroup
-        size="small"
         legend="Hjemler"
         onChange={onChange}
         value={value}
         disabled={!canEdit}
         error={validationError}
         id={field}
+        size="small"
       >
         <HjemmelCheckboxes hjemmelIdList={hjemler} />
       </CheckboxGroup>
@@ -94,7 +94,11 @@ const HjemmelCheckboxes = ({ hjemmelIdList }: HjemmelCheckboxesProps) => {
   const { data: registreringshjemlerMap, isLoading } = useRegistreringshjemlerMap();
 
   if (hjemmelIdList.length === 0 || isLoading || typeof registreringshjemlerMap === 'undefined') {
-    return <BodyShort className="italic">Ingen hjemler valgt under saksdata.</BodyShort>;
+    return (
+      <BodyShort size="small" className="italic">
+        Ingen hjemler valgt under behandling.
+      </BodyShort>
+    );
   }
 
   return (

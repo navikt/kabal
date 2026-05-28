@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { Direction } from '@/components/deassign/direction';
 import { useUnreadBehandlingCount } from '@/components/header/notifications/api';
-import { HjemmelList } from '@/components/oppgavebehandling-footer/deassign/hjemmel-list';
+import { InnsendingshjemmelList } from '@/components/oppgavebehandling-footer/deassign/innsendingshjemmel-list';
 import { useFradel } from '@/components/oppgavestyring/use-tildel';
 import { areArraysEqual } from '@/functions/are-arrays-equal';
 import { useHasRole } from '@/hooks/use-has-role';
@@ -135,7 +135,7 @@ export const Popup = ({
         </RadioGroup>
 
         {reasonId === FradelReason.FEIL_HJEMMEL ? (
-          <HjemmelList
+          <InnsendingshjemmelList
             selected={selectedHjemmelIdList}
             onChange={setSelectedHjemmelIdList}
             ytelseId={ytelseId}

@@ -1,9 +1,9 @@
 import { HStack } from '@navikt/ds-react';
 import { useSearchParams } from 'react-router-dom';
-import { YtelserAndHjemlerSelect } from '@/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
 import { useUtfallOptions } from '@/components/smart-editor-texts/hooks/use-options';
 import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
 import { TemplateSectionFilter, UtfallSelect } from '@/components/smart-editor-texts/query-filter-selects';
+import { YtelserAndRegistreringshjemlerSelect } from '@/components/smart-editor-texts/registreringshjemler-select/ytelser-and-registreringshjemler-select';
 import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
 
 export const Filters = () => {
@@ -32,7 +32,7 @@ export const Filters = () => {
         includeDeprecated
       />
 
-      <YtelserAndHjemlerSelect
+      <YtelserAndRegistreringshjemlerSelect
         selected={ytelseHjemmelIdList ?? []}
         onChange={(value: string[]) => setFilter('ytelseHjemmelIdList', value)}
         includeNoneOption

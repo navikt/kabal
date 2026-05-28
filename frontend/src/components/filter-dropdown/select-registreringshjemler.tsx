@@ -15,7 +15,7 @@ interface Props {
   variant?: ButtonProps['variant'];
 }
 
-export const SelectHjemler = ({
+export const SelectRegistreringshjemler = ({
   selectedHjemler,
   setSelectedHjemler,
   label,

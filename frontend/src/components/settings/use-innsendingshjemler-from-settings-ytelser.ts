@@ -3,7 +3,7 @@ import { useAvailableYtelser } from '@/hooks/use-available-ytelser';
 import { useGetSettingsQuery } from '@/redux-api/bruker';
 import type { IKodeverkValue } from '@/types/kodeverk';
 
-export const useHjemlerFromSettingsYtelser = () => {
+export const useInnsendingshjemlerFromSettingsYtelser = () => {
   const { data } = useGetSettingsQuery();
   const ytelser = useAvailableYtelser();
 
