@@ -59,7 +59,7 @@ export interface IKodeverkValue<T extends string = string> extends IKodeverkSimp
   beskrivelse: string;
 }
 
-export interface ILovKildeToRegistreringshjemmel {
+export interface ILovKildeToRegistreringshjemler {
   lovkilde: IKodeverkValue;
   registreringshjemler: IKodeverkSimpleValue[];
 }
@@ -69,7 +69,7 @@ export interface IYtelseHjemmel extends IKodeverkValue {
 }
 
 export interface IYtelse extends IKodeverkSimpleValue {
-  lovKildeToRegistreringshjemler: ILovKildeToRegistreringshjemmel[];
+  lovKildeToRegistreringshjemler: ILovKildeToRegistreringshjemler[];
   innsendingshjemler: IYtelseHjemmel[];
 }
 

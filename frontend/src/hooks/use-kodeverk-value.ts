@@ -1,7 +1,7 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 import { useLatestYtelser, useSakstyperToUtfall, useYtelserAll } from '@/simple-api-state/use-kodeverk';
-import type { ILovKildeToRegistreringshjemmel, IYtelse } from '@/types/kodeverk';
+import type { ILovKildeToRegistreringshjemler, IYtelse } from '@/types/kodeverk';
 
 const EMPTY_ARRAY: [] = [];
 
@@ -23,11 +23,11 @@ export const useKodeverkYtelse = (ytelseId: string | typeof skipToken): [IYtelse
 
 export const useLovkildeToRegistreringshjemmelForYtelse = (
   ytelseId: string | typeof skipToken = skipToken,
-): ILovKildeToRegistreringshjemmel[] => useKodeverkYtelse(ytelseId)[0]?.lovKildeToRegistreringshjemler ?? EMPTY_ARRAY;
+): ILovKildeToRegistreringshjemler[] => useKodeverkYtelse(ytelseId)[0]?.lovKildeToRegistreringshjemler ?? EMPTY_ARRAY;
 
 export const useAllLovkildeToRegistreringshjemmelForYtelse = (
   ytelseId: string | typeof skipToken = skipToken,
-): ILovKildeToRegistreringshjemmel[] => {
+): ILovKildeToRegistreringshjemler[] => {
   const { data = [] } = useYtelserAll();
 
   if (ytelseId === skipToken) {

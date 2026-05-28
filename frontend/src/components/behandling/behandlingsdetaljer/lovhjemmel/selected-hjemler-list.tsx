@@ -3,7 +3,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useAllLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
-import type { ILovKildeToRegistreringshjemmel } from '@/types/kodeverk';
+import type { ILovKildeToRegistreringshjemler } from '@/types/kodeverk';
 
 interface Props {
   selected: string[];
@@ -14,7 +14,7 @@ export const SelectedHjemlerList = ({ selected }: Props) => {
 
   const hjemler = useAllLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
 
-  const list = useMemo<ILovKildeToRegistreringshjemmel[]>(
+  const list = useMemo<ILovKildeToRegistreringshjemler[]>(
     () =>
       hjemler
         .map(({ lovkilde, registreringshjemler }) => ({
@@ -47,7 +47,7 @@ export const SelectedHjemlerList = ({ selected }: Props) => {
 const SelectedChildren = ({
   registreringshjemmelIdList,
 }: {
-  registreringshjemmelIdList: ILovKildeToRegistreringshjemmel[];
+  registreringshjemmelIdList: ILovKildeToRegistreringshjemler[];
 }) => {
   if (registreringshjemmelIdList.length === 0) {
     return <p className="m-0 text-ax-text-neutral-subtle">Ingen valgte hjemler</p>;
