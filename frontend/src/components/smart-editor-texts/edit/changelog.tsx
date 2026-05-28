@@ -82,7 +82,7 @@ const CHANGE_TYPE_NAMES: Record<TextChangeType, string> = {
   [TextChangeType.TEXT_ENHETER]: 'Endret enheter',
   [TextChangeType.TEXT_SECTIONS]: 'Endret seksjoner',
   [TextChangeType.TEXT_UTFALL]: 'Endret utfall',
-  [TextChangeType.TEXT_YTELSE_HJEMMEL]: 'Endret ytelser/hjemler',
+  [TextChangeType.TEXT_YTELSE_REGISTRERINGSHJEMMEL]: 'Endret ytelser/hjemler',
   [TextChangeType.UNKNOWN]: 'Ukjent endring',
   [TextChangeType.SMART_EDITOR_VERSION]: 'Endret smart editor-versjon',
 };

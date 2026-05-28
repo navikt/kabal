@@ -34,7 +34,7 @@ export interface IOppgavebehandlingUtfallSetUpdateParams extends IOppgavebehandl
   extraUtfallIdSet: UtfallEnum[];
 }
 
-export interface IOppgavebehandlingHjemlerUpdateParams extends IOppgavebehandlingBaseParams {
+export interface IOppgavebehandlingRegistreringshjemlerUpdateParams extends IOppgavebehandlingBaseParams {
   hjemmelIdSet: string[];
 }
 

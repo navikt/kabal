@@ -7,11 +7,11 @@ import { usePrevious } from '@/hooks/use-previous';
 import { useRegistreringshjemlerMap } from '@/simple-api-state/use-kodeverk';
 import type {
   IKvalitetsvurderingBooleans,
-  IKvalitetsvurderingSaksdataHjemler,
+  IKvalitetsvurderingSaksdataRegistreringshjemler,
 } from '@/types/kaka-kvalitetsvurdering/v2';
 
 interface Props {
-  field: keyof IKvalitetsvurderingSaksdataHjemler;
+  field: keyof IKvalitetsvurderingSaksdataRegistreringshjemler;
   parentKey?: keyof IKvalitetsvurderingBooleans;
 }
 

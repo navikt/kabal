@@ -1,12 +1,15 @@
 import { ENVIRONMENT } from '@/environment';
 import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
 import { behandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/behandling';
-import type { IOppgavebehandlingHjemlerUpdateParams } from '@/types/oppgavebehandling/params';
+import type { IOppgavebehandlingRegistreringshjemlerUpdateParams } from '@/types/oppgavebehandling/params';
 
 const setRegistreringshjemlerMutationSlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
-    updateRegistreringshjemler: builder.mutation<{ modified: string }, IOppgavebehandlingHjemlerUpdateParams>({
+    updateRegistreringshjemler: builder.mutation<
+      { modified: string },
+      IOppgavebehandlingRegistreringshjemlerUpdateParams
+    >({
       query: ({ oppgaveId, hjemmelIdSet }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/resultat/hjemler`,
         method: 'PUT',

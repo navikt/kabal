@@ -141,7 +141,7 @@ interface Annet {
 
 export interface KvalitetsvurderingDataV3 extends Særregelverket, Saksbehandlingsreglene, Trygdemedisin, Annet {}
 
-export type KvalitetsvurderingSaksdataHjemlerV3 = Pick<
+export type KvalitetsvurderingSaksdataRegistreringshjemlerV3 = Pick<
   KvalitetsvurderingDataV3,
   | SærregelverketSaksdataHjemlerList.saerregelverkVedtaketByggerPaaFeilKonkretRettsanvendelseEllerSkjoennHjemlerList
   | SærregelverketSaksdataHjemlerList.saerregelverkDetErLagtTilGrunnFeilFaktumHjemlerList
@@ -162,7 +162,7 @@ export type KvalitetsvurderingV3Boolean = Omit<
   | MainReason.Særregelverket
   | MainReason.Saksbehandlingsreglene
   | MainReason.Trygdemedisin
-  | keyof KvalitetsvurderingSaksdataHjemlerV3
+  | keyof KvalitetsvurderingSaksdataRegistreringshjemlerV3
   | keyof KvalitetsvurderingAllRegistreringshjemlerV3
   | AnnetFields.annetFritekst
 >;

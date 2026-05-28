@@ -4,7 +4,7 @@ import type { SærregelverketErrorFields } from '@/components/kvalitetsvurdering
 import type { TrygdemedisinErrorFields } from '@/components/kvalitetsvurdering/v3/trygdemedisin/data';
 import type {
   KvalitetsvurderingAllRegistreringshjemlerV3,
-  KvalitetsvurderingSaksdataHjemlerV3,
+  KvalitetsvurderingSaksdataRegistreringshjemlerV3,
   KvalitetsvurderingStrings,
   KvalitetsvurderingV3Boolean,
 } from '@/types/kaka-kvalitetsvurdering/v3';
@@ -22,7 +22,7 @@ export interface CheckboxParams extends BaseParams {
   groupErrorField?: GroupErrorField;
   type: TypeEnum.CHECKBOX;
   childList?: InputParams[];
-  saksdatahjemler?: keyof KvalitetsvurderingSaksdataHjemlerV3;
+  saksdatahjemler?: keyof KvalitetsvurderingSaksdataRegistreringshjemlerV3;
   allRegistreringshjemler?: keyof KvalitetsvurderingAllRegistreringshjemlerV3;
 }
 

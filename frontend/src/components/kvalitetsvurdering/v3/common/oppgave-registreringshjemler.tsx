@@ -6,14 +6,14 @@ import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { usePrevious } from '@/hooks/use-previous';
 import { useRegistreringshjemlerMap } from '@/simple-api-state/use-kodeverk';
 import type {
-  KvalitetsvurderingSaksdataHjemlerV3,
+  KvalitetsvurderingSaksdataRegistreringshjemlerV3,
   KvalitetsvurderingV3Boolean,
 } from '@/types/kaka-kvalitetsvurdering/v3';
 
 const EMPTY_ARRAY: string[] = [];
 
 interface SaksdatahjemlerProps {
-  field: keyof KvalitetsvurderingSaksdataHjemlerV3;
+  field: keyof KvalitetsvurderingSaksdataRegistreringshjemlerV3;
   parentKey?: keyof KvalitetsvurderingV3Boolean;
 }
 
