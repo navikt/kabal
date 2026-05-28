@@ -24,7 +24,7 @@ interface IFagsystem extends IKodeverkValue {
   modernized: boolean;
 }
 
-interface ILovKildeToRegistreringshjemmel extends IKodeverkValue {
+export interface ILovKildeToRegistreringshjemler extends IKodeverkValue {
   registreringshjemler: IKodeverkSimpleValue[];
 }
 
@@ -45,7 +45,7 @@ const utfall = new SimpleApiState<IKodeverkSimpleValue<UtfallEnum>[]>(`${API_PRE
 const sakstyperToUtfall = new SimpleApiState<ISakstyperToUtfall[]>(`${API_PREFIX}/sakstypertoutfall`);
 const hjemler = new SimpleApiState<IInnsendingshjemmel[]>(`${API_PREFIX}/hjemler`);
 const fagsystemer = new SimpleApiState<IFagsystem[]>(`${API_PREFIX}/fagsystemer`);
-const lovkildeToRegistreringshjemler = new SimpleApiState<ILovKildeToRegistreringshjemmel[]>(
+const lovkildeToRegistreringshjemler = new SimpleApiState<ILovKildeToRegistreringshjemler[]>(
   `${API_PREFIX}/lovkildetoregistreringshjemler`,
 );
 const paaVentReasons = new SimpleApiState<IKodeverkValue<PaaVentReasonEnum>[]>(`${API_PREFIX}/satt-paa-vent-reasons`);
