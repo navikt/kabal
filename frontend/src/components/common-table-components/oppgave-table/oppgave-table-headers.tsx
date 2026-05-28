@@ -3,7 +3,7 @@ import { DateColumnHeader } from '@/components/common-table-components/oppgave-t
 import { AccessInnsendingshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/access-innsendingshjemler';
 import { AccessRegistreringshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/access-registreringshjemler';
 import { AccessYtelser } from '@/components/common-table-components/oppgave-table/filter-dropdowns/access-ytelser';
-import { AllHjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/all-hjemler';
+import { AllInnsendingshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/all-innsendingshjemler';
 import { AllRegistreringshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/all-registreringshjemler';
 import { AllYtelser } from '@/components/common-table-components/oppgave-table/filter-dropdowns/all-ytelser';
 import {
@@ -19,7 +19,7 @@ import {
   SakstypeForSakerITR,
   SakstypeWithTrygderetten,
 } from '@/components/common-table-components/oppgave-table/filter-dropdowns/sakstype';
-import { UserHjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-hjemler';
+import { UserInnsendingshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-innsendingshjemler';
 import { UserRegistreringshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-registreringshjemler';
 import { UserYtelser } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-ytelser';
 import {
@@ -69,9 +69,9 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         return <UserYtelser key={key} columnKey={key} tableKey={tableKey} />;
 
       case ColumnKeyEnum.AllInnsendingshjemler:
-        return <AllHjemler key={key} columnKey={key} tableKey={tableKey} />;
+        return <AllInnsendingshjemler key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.UserInnsendingshjemler:
-        return <UserHjemler key={key} columnKey={key} tableKey={tableKey} />;
+        return <UserInnsendingshjemler key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.AccessInnsendingshjemler:
         return <AccessInnsendingshjemler key={key} columnKey={key} tableKey={tableKey} />;
 
