@@ -5,40 +5,19 @@ import { useOppgaveTableRegistreringshjemler } from '@/components/common-table-c
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
-import { useLovKildeToRegistreringshjemler } from '@/simple-api-state/use-kodeverk';
+import type { ILovKildeToRegistreringshjemler } from '@/simple-api-state/use-kodeverk';
 
-interface FlatRegistreringshjemmel {
-  id: string;
-  navn: string;
-  lovkilde: string;
+interface Props extends FilterDropdownProps {
+  lovKildeToRegistreringshjemler: ILovKildeToRegistreringshjemler[];
 }
 
-export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProps) => {
-  const { data: lovkilder = [] } = useLovKildeToRegistreringshjemler();
+export const Registreringshjemler = ({ tableKey, columnKey, lovKildeToRegistreringshjemler }: Props) => {
   const [registreringshjemler, setRegistreringshjemler] = useOppgaveTableRegistreringshjemler(tableKey);
 
-  const options = useMemo<Entry<FlatRegistreringshjemmel>[]>(() => {
-    const flat: FlatRegistreringshjemmel[] = [];
-
-    for (const lovkilde of lovkilder) {
-      for (const hjemmel of lovkilde.registreringshjemler) {
-        if (flat.find((h) => h.id === hjemmel.id) === undefined) {
-          flat.push({ id: hjemmel.id, navn: hjemmel.navn, lovkilde: lovkilde.navn });
-        }
-      }
-    }
-
-    return flat.map((h) => ({
-      value: h,
-      key: h.id,
-      label: (
-        <span>
-          <span className="text-ax-text-neutral-subtle">{h.lovkilde}</span> - {h.navn}
-        </span>
-      ),
-      plainText: `${h.lovkilde} - ${h.navn}`,
-    }));
-  }, [lovkilder]);
+  const options = useMemo(
+    () => flattenRegistreringshjemler(lovKildeToRegistreringshjemler),
+    [lovKildeToRegistreringshjemler],
+  );
 
   const value = useMemo<Entry<FlatRegistreringshjemmel>[]>(
     () => options.filter((entry) => registreringshjemler?.includes(entry.key) === true),
@@ -67,4 +46,40 @@ export const Registreringshjemler = ({ tableKey, columnKey }: FilterDropdownProp
       />
     </Table.ColumnHeader>
   );
+};
+
+interface FlatRegistreringshjemmel {
+  id: string;
+  navn: string;
+  lovkilde: string;
+}
+
+const flattenRegistreringshjemler = (
+  lovKildeToRegistreringshjemler: ILovKildeToRegistreringshjemler[],
+): Entry<FlatRegistreringshjemmel>[] => {
+  const result: Entry<FlatRegistreringshjemmel>[] = [];
+  const seen = new Set<string>();
+
+  for (const { registreringshjemler, navn } of lovKildeToRegistreringshjemler) {
+    for (const hjemmel of registreringshjemler) {
+      if (seen.has(hjemmel.id)) {
+        continue;
+      }
+
+      seen.add(hjemmel.id);
+
+      result.push({
+        value: { id: hjemmel.id, navn: hjemmel.navn, lovkilde: navn },
+        key: hjemmel.id,
+        label: (
+          <span>
+            <span className="text-ax-text-neutral-subtle">{navn}</span> - {hjemmel.navn}
+          </span>
+        ),
+        plainText: `${navn} - ${hjemmel.navn}`,
+      });
+    }
+  }
+
+  return result;
 };
