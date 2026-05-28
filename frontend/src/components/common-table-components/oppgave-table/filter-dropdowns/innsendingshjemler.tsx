@@ -11,7 +11,7 @@ interface Props extends FilterDropdownProps {
   hjemler: IKodeverkValue[];
 }
 
-export const Hjemler = ({ columnKey, tableKey, hjemler: hjemlerOptions }: Props) => {
+export const Innsendingshjemler = ({ columnKey, tableKey, hjemler: hjemlerOptions }: Props) => {
   const [hjemler, setHjemler] = useOppgaveTableHjemler(tableKey);
 
   const options = useMemo<Entry<IKodeverkValue>[]>(
