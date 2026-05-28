@@ -2,7 +2,7 @@ import type { KVALITETSVURDERING_V2_CHECKBOX_GROUP_NAMES } from '@/components/kv
 import type {
   IKvalitetsvurderingAllRegistreringshjemler,
   IKvalitetsvurderingBooleans,
-  IKvalitetsvurderingSaksdataHjemler,
+  IKvalitetsvurderingSaksdataRegistreringshjemler,
   IKvalitetsvurderingStrings,
 } from '@/types/kaka-kvalitetsvurdering/v2';
 
@@ -21,7 +21,7 @@ export interface CheckboxParams extends BaseParams {
   field: keyof IKvalitetsvurderingBooleans;
   type: KvalitetsvurderingInput.CHECKBOX;
   checkboxes?: InputParams[];
-  saksdatahjemler?: keyof IKvalitetsvurderingSaksdataHjemler;
+  saksdatahjemler?: keyof IKvalitetsvurderingSaksdataRegistreringshjemler;
   allRegistreringshjemler?: keyof IKvalitetsvurderingAllRegistreringshjemler;
 }
 

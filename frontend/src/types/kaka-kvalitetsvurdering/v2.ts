@@ -107,7 +107,7 @@ interface Annet {
   annetFritekst: string | null; // Annet (valgfri).
 }
 
-export type IKvalitetsvurderingSaksdataHjemler = Pick<
+export type IKvalitetsvurderingSaksdataRegistreringshjemler = Pick<
   IKvalitetsvurderingData,
   | 'vedtaketLovbestemmelsenTolketFeilHjemlerList'
   | 'vedtaketFeilKonkretRettsanvendelseHjemlerList'
@@ -128,7 +128,7 @@ export type IKvalitetsvurderingBooleans = Omit<
   | 'annetFritekst'
   | 'brukAvRaadgivendeLege'
   | 'vedtaket'
-  | keyof IKvalitetsvurderingSaksdataHjemler
+  | keyof IKvalitetsvurderingSaksdataRegistreringshjemler
   | keyof IKvalitetsvurderingAllRegistreringshjemler
   | keyof IKvalitetsvurderingStrings
   | keyof Annet

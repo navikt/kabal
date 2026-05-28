@@ -21,8 +21,8 @@ import type { SaksTypeEnum } from '@/types/kodeverk';
 import type { ISakenGjelderResponse, ISaksbehandlerResponse } from '@/types/oppgavebehandling/response';
 import {
   FradelReason,
-  type FradelWithHjemler,
-  type FradelWithoutHjemler,
+  type FradelWithInnsendingshjemler,
+  type FradelWithoutInnsendingshjemler,
   type ITildelingResponse,
 } from '@/types/oppgaver';
 
@@ -40,7 +40,10 @@ interface TildeltProps extends Props {
 }
 
 type UseTildel = [(employee: INavEmployee) => Promise<boolean>, { isLoading: boolean }];
-type UseFradel = [(params: FradelWithHjemler | FradelWithoutHjemler) => Promise<boolean>, { isLoading: boolean }];
+type UseFradel = [
+  (params: FradelWithInnsendingshjemler | FradelWithoutInnsendingshjemler) => Promise<boolean>,
+  { isLoading: boolean },
+];
 
 export const useTildel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId: string): UseTildel => {
   const [getSaksbehandler] = useLazyGetSaksbehandlerQuery();
@@ -83,7 +86,7 @@ export const useFradel = (oppgaveId: string, oppgaveType: SaksTypeEnum, ytelseId
   const [fradel] = useFradelSaksbehandlerMutation({ fixedCacheKey: oppgaveId });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fradelSaksbehandler = async (params: FradelWithHjemler | FradelWithoutHjemler) => {
+  const fradelSaksbehandler = async (params: FradelWithInnsendingshjemler | FradelWithoutInnsendingshjemler) => {
     setIsLoading(true);
 
     try {

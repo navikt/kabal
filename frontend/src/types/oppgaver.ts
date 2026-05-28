@@ -160,7 +160,7 @@ interface FradelReasonBase {
   oppgaveId: string;
 }
 
-export interface FradelWithoutHjemler {
+export interface FradelWithoutInnsendingshjemler {
   reasonId:
     | FradelReason.MANGLER_KOMPETANSE
     | FradelReason.INHABIL
@@ -171,12 +171,13 @@ export interface FradelWithoutHjemler {
     | FradelReason.ANGRET;
 }
 
-export interface FradelWithHjemler {
+export interface FradelWithInnsendingshjemler {
   reasonId: FradelReason.FEIL_HJEMMEL;
   hjemmelIdList: string[];
 }
 
-export type FradelSaksbehandlerParams = FradelReasonBase & (FradelWithHjemler | FradelWithoutHjemler);
+export type FradelSaksbehandlerParams = FradelReasonBase &
+  (FradelWithInnsendingshjemler | FradelWithoutInnsendingshjemler);
 
 export interface ISaksbehandlere {
   saksbehandlere: INavEmployee[];
