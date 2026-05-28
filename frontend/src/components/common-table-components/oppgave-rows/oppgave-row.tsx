@@ -85,6 +85,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         );
       case ColumnKeyEnum.UserYtelser:
       case ColumnKeyEnum.AllYtelser:
+      case ColumnKeyEnum.AccessYtelser:
         return (
           <Table.DataCell key={key}>
             <Ytelse ytelseId={oppgave.ytelseId} />
@@ -92,12 +93,15 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         );
       case ColumnKeyEnum.UserInnsendingshjemler:
       case ColumnKeyEnum.AllInnsendingshjemler:
+      case ColumnKeyEnum.AccessInnsendingshjemler:
         return (
           <Table.DataCell key={key}>
             <InnsendingshjemlerList hjemmelIdList={oppgave.hjemmelIdList} size="medium" />
           </Table.DataCell>
         );
-      case ColumnKeyEnum.Registreringshjemler:
+      case ColumnKeyEnum.UserRegistreringshjemler:
+      case ColumnKeyEnum.AllRegistreringshjemler:
+      case ColumnKeyEnum.AccessRegistreringshjemler:
         return (
           <Table.DataCell key={key}>
             <Registreringshjemler hjemmelIdList={oppgave.registreringshjemmelIdList} size="medium" />

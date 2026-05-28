@@ -11,8 +11,8 @@ import { SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Type,
-  ColumnKeyEnum.AllYtelser,
-  ColumnKeyEnum.AllInnsendingshjemler,
+  ColumnKeyEnum.AccessYtelser,
+  ColumnKeyEnum.AccessInnsendingshjemler,
   ColumnKeyEnum.Navn,
   ColumnKeyEnum.Fnr,
   ColumnKeyEnum.Saksnummer,
