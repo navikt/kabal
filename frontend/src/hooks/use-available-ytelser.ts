@@ -16,7 +16,15 @@ export const useAvailableYtelser = (): IYtelse[] => {
       return EMPTY_ARRAY;
     }
 
-    return user.tildelteYtelser.map((ytelseId) => ytelser.find(({ id }) => id === ytelseId)).filter(isNotUndefined);
+    const result: IYtelse[] = [];
+
+    for (const ytelse of ytelser) {
+      if (user.tildelteYtelser.includes(ytelse.id)) {
+        result.push(ytelse);
+      }
+    }
+
+    return result;
   }, [user, ytelser]);
 };
 
