@@ -7,6 +7,7 @@ import {
   systemThemeStore,
   userThemeStore,
 } from '@/app-theme';
+import { IDLE_TRACKER, type IdleState } from '@/components/version-checker/idle-tracker';
 import { ENVIRONMENT } from '@/environment';
 import { getQueryParams } from '@/headers';
 import { pushError } from '@/observability';
@@ -20,6 +21,7 @@ export enum UpdateRequest {
 const UPDATE_REQUEST_EVENT = 'update-request';
 
 type UpdateRequestListenerFn = (request: UpdateRequest) => void;
+type IsUpToDateListenerFn = () => void;
 
 declare global {
   interface Window {
@@ -32,25 +34,36 @@ class VersionChecker {
   private isUpToDate = true;
   private updateRequest: UpdateRequest = UpdateRequest.NONE;
   private updateRequestListeners: UpdateRequestListenerFn[] = [];
+  private isUpToDateListeners: IsUpToDateListenerFn[] = [];
   private eventSource: EventSource;
   private appTheme = getAppTheme();
   private userTheme = getUserTheme();
   private systemTheme = getSystemTheme();
+  private status: IdleState = 'active';
 
   constructor() {
     console.info('CURRENT VERSION', ENVIRONMENT.version);
 
     this.eventSource = this.createEventSource();
 
+    // Expose a method for manually sending update requests from the browser console for testing purposes.
     window.sendUpdateRequest = (data: UpdateRequest) => {
       this.onUpdateRequest(new MessageEvent(UPDATE_REQUEST_EVENT, { data }));
     };
+
+    // Listen for idle state changes
+    IDLE_TRACKER.subscribe(this.onIdleStateChange);
 
     // Listen for app theme changes
     appThemeStore.subscribe((appTheme) => {
       if (this.appTheme !== appTheme) {
         this.appTheme = appTheme;
-        this.reopenEventSource();
+
+        // Skip reconnect while idle — the updated theme will be picked up
+        // when the user returns and we reopen as active.
+        if (this.status === 'active') {
+          this.reopenEventSource();
+        }
       }
     });
 
@@ -58,7 +71,10 @@ class VersionChecker {
     userThemeStore.subscribe((userTheme) => {
       if (this.userTheme !== userTheme) {
         this.userTheme = userTheme;
-        this.reopenEventSource();
+
+        if (this.status === 'active') {
+          this.reopenEventSource();
+        }
       }
     });
 
@@ -66,10 +82,18 @@ class VersionChecker {
     systemThemeStore.subscribe((systemTheme) => {
       if (this.systemTheme !== systemTheme) {
         this.systemTheme = systemTheme;
-        this.reopenEventSource();
+
+        if (this.status === 'active') {
+          this.reopenEventSource();
+        }
       }
     });
   }
+
+  private onIdleStateChange = (state: IdleState): void => {
+    this.status = state;
+    this.reopenEventSource();
+  };
 
   public getUpdateRequest = (): UpdateRequest => this.updateRequest;
 
@@ -86,18 +110,38 @@ class VersionChecker {
     params.set('theme', this.appTheme);
     params.set('user_theme', this.userTheme);
     params.set('system_theme', this.systemTheme);
+    params.set('status', this.status);
 
     const events = new EventSource(`/version?${params.toString()}`);
 
     events.addEventListener('error', () => {
-      if (events.readyState === EventSource.CLOSED) {
-        if (this.delay === 0) {
-          this.createEventSource();
-        } else {
-          setTimeout(this.createEventSource, this.delay);
+      if (events.readyState !== EventSource.CLOSED) {
+        return;
+      }
+
+      // Only reconnect if this is still the active connection.
+      // reopenEventSource() may have already replaced it.
+      if (this.eventSource !== events) {
+        return;
+      }
+
+      // Update delay before scheduling so the timeout uses the correct value.
+      const reconnectDelay = this.delay;
+      this.delay = this.delay === 0 ? 500 : Math.min(this.delay + 500, 10_000);
+
+      const reconnect = () => {
+        // Guard again: a concurrent reopenEventSource() call may have replaced the connection.
+        if (this.eventSource !== events) {
+          return;
         }
 
-        this.delay = this.delay === 0 ? 500 : Math.min(this.delay + 500, 10_000);
+        this.eventSource = this.createEventSource();
+      };
+
+      if (reconnectDelay === 0) {
+        reconnect();
+      } else {
+        setTimeout(reconnect, reconnectDelay);
       }
     });
 
@@ -122,8 +166,15 @@ class VersionChecker {
       return;
     }
 
+    const wasUpToDate = this.isUpToDate;
     this.latestVersion = data;
     this.isUpToDate = data === ENVIRONMENT.version;
+
+    if (this.isUpToDate !== wasUpToDate) {
+      for (const listener of this.isUpToDateListeners) {
+        listener();
+      }
+    }
   };
 
   public addUpdateRequestListener(listener: UpdateRequestListenerFn): void {
@@ -138,6 +189,16 @@ class VersionChecker {
 
   public removeUpdateRequestListener(listener: UpdateRequestListenerFn): void {
     this.updateRequestListeners = this.updateRequestListeners.filter((l) => l !== listener);
+  }
+
+  public addIsUpToDateListener(listener: () => void): void {
+    if (!this.isUpToDateListeners.includes(listener)) {
+      this.isUpToDateListeners.push(listener);
+    }
+  }
+
+  public removeIsUpToDateListener(listener: () => void): void {
+    this.isUpToDateListeners = this.isUpToDateListeners.filter((l) => l !== listener);
   }
 
   private onUpdateRequest = ({ data }: MessageEvent<string>) => {
@@ -169,9 +230,9 @@ export const VERSION_CHECKER = new VersionChecker();
 export const useIsUpToDate = (): boolean =>
   useSyncExternalStore(
     (onStoreChange) => {
-      VERSION_CHECKER.addUpdateRequestListener(onStoreChange);
+      VERSION_CHECKER.addIsUpToDateListener(onStoreChange);
 
-      return () => VERSION_CHECKER.removeUpdateRequestListener(onStoreChange);
+      return () => VERSION_CHECKER.removeIsUpToDateListener(onStoreChange);
     },
     () => VERSION_CHECKER.getIsUpToDate(),
   );

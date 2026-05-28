@@ -139,7 +139,7 @@ export const VirtualizedOptionList = <T,>({
 
     const updateState = () => update(el);
 
-    el.addEventListener('scroll', updateState, { passive: true });
+    el.addEventListener('scroll', updateState);
 
     let requestAnimationFrameHandle = 0;
 

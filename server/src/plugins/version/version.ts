@@ -31,7 +31,7 @@ export const versionPlugin = fastifyPlugin(
 
         const start = performance.now();
 
-        log.debug({ msg: 'Version connection opened', data: { sse: true } });
+        log.debug({ msg: 'Version connection opened', data: { sse: true, status: req.query.status ?? 'active' } });
 
         const stopTimer = histogram.startTimer();
         const endClientSession = startClientSession(req);
