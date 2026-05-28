@@ -1,7 +1,7 @@
 import { Table } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
 import type { FilterDropdownProps } from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
-import { useOppgaveTableHjemler } from '@/components/common-table-components/oppgave-table/state/use-state';
+import { useOppgaveTableInnsendingshjemler } from '@/components/common-table-components/oppgave-table/state/use-state';
 import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
@@ -12,7 +12,7 @@ interface Props extends FilterDropdownProps {
 }
 
 export const Innsendingshjemler = ({ columnKey, tableKey, hjemler: hjemlerOptions }: Props) => {
-  const [hjemler, setHjemler] = useOppgaveTableHjemler(tableKey);
+  const [hjemler, setHjemler] = useOppgaveTableInnsendingshjemler(tableKey);
 
   const options = useMemo<Entry<IKodeverkValue>[]>(
     () =>

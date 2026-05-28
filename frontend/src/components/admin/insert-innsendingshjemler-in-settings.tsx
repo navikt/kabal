@@ -5,7 +5,7 @@ import { Alert } from '@/components/alert/alert';
 import { useInsertHjemlerInSettingsMutation } from '@/redux-api/internal';
 import { useLatestYtelser } from '@/simple-api-state/use-kodeverk';
 
-export const InsertHjemlerInSettings = () => {
+export const InsertInnsendingshjemlerInSettings = () => {
   const { data = [] } = useLatestYtelser();
   const [selectedYtelse, setSelectedYtelse] = useState<string>();
   const [selectedHjemler, setSelectedHjemler] = useState<string[]>([]);

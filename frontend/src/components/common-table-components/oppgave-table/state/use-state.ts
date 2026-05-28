@@ -39,7 +39,7 @@ export const useOppgaveTableTyper = (tableKey: OppgaveTableKey, defaultValue?: S
 export const useOppgaveTableYtelser = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
   useUrlQueryParam(`${tableKey}.${ShortParamKey.YTELSER}`, fromArrayParam, setArrayQuery, defaultValue);
 
-export const useOppgaveTableHjemler = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
+export const useOppgaveTableInnsendingshjemler = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>
   useUrlQueryParam(`${tableKey}.${ShortParamKey.HJEMLER}`, fromArrayParam, setArrayQuery, defaultValue);
 
 export const useOppgaveTableRegistreringshjemler = (tableKey: OppgaveTableKey, defaultValue?: string[]) =>

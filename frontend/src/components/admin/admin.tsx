@@ -1,6 +1,6 @@
 import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { ApiButton } from '@/components/admin/api-button';
-import { InsertHjemlerInSettings } from '@/components/admin/insert-hjemler-in-settings';
+import { InsertInnsendingshjemlerInSettings } from '@/components/admin/insert-innsendingshjemler-in-settings';
 import { MerkantilTaskList } from '@/components/admin/merkantil-task-list/merkantil-task-list';
 import { CreateSystemNotification } from '@/components/admin/system-notifications/create';
 import { ListSystemNotifications } from '@/components/admin/system-notifications/list';
@@ -28,7 +28,7 @@ export const Admin = () => (
           <ApiButton useApi={useEvictCacheMutation}>KLAGE-LOOKUP EVICT CACHE</ApiButton>
         </VStack>
 
-        <InsertHjemlerInSettings />
+        <InsertInnsendingshjemlerInSettings />
 
         <VStack gap="space-16">
           <CreateSystemNotification />

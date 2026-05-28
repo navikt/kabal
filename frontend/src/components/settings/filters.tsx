@@ -2,7 +2,7 @@ import { CheckmarkIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, HGrid, HStack, Switch, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { SectionHeader, SettingsSection } from '@/components/settings/styled-components';
-import { useHjemlerFromSettingsYtelser } from '@/components/settings/use-hjemler-from-settings-ytelser';
+import { useInnsendingshjemlerFromSettingsYtelser } from '@/components/settings/use-innsendingshjemler-from-settings-ytelser';
 import { useAvailableYtelser } from '@/hooks/use-available-ytelser';
 import { useHasRole } from '@/hooks/use-has-role';
 import { useGetSettingsQuery, useUpdateSettingsMutation } from '@/redux-api/bruker';
@@ -16,7 +16,7 @@ const EMPTY_SETTINGS: ISettings = {
 
 export const Filters = () => {
   const { data: settingsData } = useGetSettingsQuery();
-  const hjemler = useHjemlerFromSettingsYtelser();
+  const hjemler = useInnsendingshjemlerFromSettingsYtelser();
   const ytelser = useAvailableYtelser();
   const isSaksbehandler = useHasRole(Role.KABAL_SAKSBEHANDLING);
 

@@ -3,12 +3,12 @@ import { EditableTitle } from '@/components/editable-title/editable-title';
 import { AllMaltekstseksjonReferences } from '@/components/malteksteksjon-references/maltekstseksjon-references';
 import { TextDraftActions } from '@/components/smart-editor-texts/edit/draft-actions';
 import { Tags } from '@/components/smart-editor-texts/edit/tags';
-import { HjemlerSelect } from '@/components/smart-editor-texts/hjemler-select/hjemler-select';
-import { YtelserAndHjemlerSelect } from '@/components/smart-editor-texts/hjemler-select/ytelser-and-hjemler-select';
 import { useMetadataFilters } from '@/components/smart-editor-texts/hooks/use-metadata-filters';
 import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
 import { TextModified } from '@/components/smart-editor-texts/modified';
 import { KlageenhetSelect, TemplateSectionFilter } from '@/components/smart-editor-texts/query-filter-selects';
+import { RegistreringshjemlerSelect } from '@/components/smart-editor-texts/registreringshjemler-select/registreringshjemler-select';
+import { YtelserAndRegistreringshjemlerSelect } from '@/components/smart-editor-texts/registreringshjemler-select/ytelser-and-registreringshjemler-select';
 import { UtfallSetFilter } from '@/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
 import { isPlainText } from '@/functions/is-rich-plain-text';
 import {
@@ -110,12 +110,12 @@ const Filters = ({ text, query, filters }: FiltersProps) => {
 
         {hasYtelseHjemmelFilter ? (
           textType === REGELVERK_TYPE ? (
-            <HjemlerSelect
+            <RegistreringshjemlerSelect
               selected={ytelseHjemmelIdList}
               onChange={(value) => updateYtelseHjemmelIdList({ id, query, ytelseHjemmelIdList: value })}
             />
           ) : (
-            <YtelserAndHjemlerSelect
+            <YtelserAndRegistreringshjemlerSelect
               selected={ytelseHjemmelIdList}
               onChange={(value) => updateYtelseHjemmelIdList({ id, query, ytelseHjemmelIdList: value })}
             />

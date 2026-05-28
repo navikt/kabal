@@ -16,7 +16,7 @@ interface Props {
   setSelected: (selected: string[]) => void;
 }
 
-export const HjemlerFilter = ({ selected, setSelected }: Props) => {
+export const RegistreringshjemlerFilter = ({ selected, setSelected }: Props) => {
   const { data: hjemmelMap = {} } = useRegistreringshjemlerMap();
   const { data: oppgave } = useOppgave();
 

@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Filter } from '@/components/smart-editor/gode-formuleringer/filter';
 import { fuzzySearch } from '@/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { GodeFormuleringerList } from '@/components/smart-editor/gode-formuleringer/gode-formuleringer-list';
-import { HjemlerFilter } from '@/components/smart-editor/gode-formuleringer/hjemler-filter';
 import { insertGodFormulering } from '@/components/smart-editor/gode-formuleringer/insert';
+import { RegistreringshjemlerFilter } from '@/components/smart-editor/gode-formuleringer/registreringshjemler-filter';
 import { SectionSelect } from '@/components/smart-editor/gode-formuleringer/section-select';
 import { SetGlobalExpandState } from '@/components/smart-editor/gode-formuleringer/set-global-expand-state';
 import { splitQuery } from '@/components/smart-editor/gode-formuleringer/split-query';
@@ -190,7 +190,7 @@ export const GodeFormuleringer = ({ templateId }: Props) => {
           </HStack>
           <Filter filter={filter} setFilter={setFilter} isFocused={focused === -1} onFocus={() => setFocused(-1)} />
           <SectionSelect activeSection={activeSection} setActiveSection={setActiveSection} />
-          <HjemlerFilter selected={selectedHjemler} setSelected={setSelectedHjemler} />
+          <RegistreringshjemlerFilter selected={selectedHjemler} setSelected={setSelectedHjemler} />
         </VStack>
 
         <VStack overflowY="auto" flexGrow="1" gap="space-16 space-0" paddingInline="space-4 space-16">

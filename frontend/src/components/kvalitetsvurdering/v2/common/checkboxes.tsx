@@ -2,7 +2,7 @@ import { Box, CheckboxGroup } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { KvalitetsskjemaCheckbox } from '@/components/kvalitetsvurdering/common/kvalitetsvurdering-checkbox';
 import { AllRegistreringshjemler } from '@/components/kvalitetsvurdering/v2/common/all-registreringshjemler';
-import { Oppgavehjemler } from '@/components/kvalitetsvurdering/v2/common/oppgavehjemler';
+import { OppgaveRegistreringshjemler } from '@/components/kvalitetsvurdering/v2/common/oppgave-registreringshjemler';
 import { KvalitetsskjemaTextarea } from '@/components/kvalitetsvurdering/v2/common/textarea';
 import {
   type CheckboxParams,
@@ -100,7 +100,9 @@ const Checkbox = ({
       <KvalitetsskjemaCheckbox field={field} helpText={helpText}>
         {label}
       </KvalitetsskjemaCheckbox>
-      {typeof saksdatahjemler === 'undefined' ? null : <Oppgavehjemler field={saksdatahjemler} parentKey={field} />}
+      {typeof saksdatahjemler === 'undefined' ? null : (
+        <OppgaveRegistreringshjemler field={saksdatahjemler} parentKey={field} />
+      )}
       {typeof allRegistreringshjemler === 'undefined' ? null : (
         <AllRegistreringshjemler field={allRegistreringshjemler} parentKey={field} />
       )}
