@@ -62,9 +62,9 @@ export const ResizeHandle = ({ minWidth, setWidth }: ResizeHandleProps) => {
       const onPointerUp = () => cleanup();
       const onLostPointerCapture = () => cleanup();
 
-      element.addEventListener('pointermove', onPointerMove);
-      element.addEventListener('pointerup', onPointerUp);
-      element.addEventListener('lostpointercapture', onLostPointerCapture);
+      element.addEventListener('pointermove', onPointerMove, { passive: true });
+      element.addEventListener('pointerup', onPointerUp, { passive: true });
+      element.addEventListener('lostpointercapture', onLostPointerCapture, { passive: true });
     },
     [minWidth, setWidth],
   );
