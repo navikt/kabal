@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useAvailableYtelser } from '@/hooks/use-available-ytelser';
 import type { IYtelseHjemmel } from '@/types/kodeverk';
 
-export const useAccessHjemler = (): IYtelseHjemmel[] => {
+export const useAccessInnsendingshjemler = (): IYtelseHjemmel[] => {
   const availableYtelser = useAvailableYtelser();
 
   return useMemo(() => {
