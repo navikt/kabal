@@ -4,7 +4,7 @@ import type { IInnsendingshjemmel } from '@/types/kodeverk';
 
 const EMPTY_LIST: IInnsendingshjemmel[] = [];
 
-export const useAllActiveHjemler = () => {
+export const useAllActiveInnsendingshjemler = () => {
   const { data: hjemler } = useHjemler();
 
   return useMemo(() => {

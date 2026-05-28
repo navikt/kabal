@@ -1,9 +1,9 @@
 import { Innsendingshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/innsendingshjemler';
 import type { FilterDropdownProps } from '@/components/common-table-components/oppgave-table/filter-dropdowns/types';
-import { useSettingsHjemler } from '@/hooks/use-settings-hjemler';
+import { useSettingsInnsendingshjemler } from '@/hooks/use-settings-innsendingshjemler';
 
 export const UserInnsendingshjemler = (props: FilterDropdownProps) => {
-  const hjemler = useSettingsHjemler();
+  const hjemler = useSettingsInnsendingshjemler();
 
   return <Innsendingshjemler {...props} hjemler={hjemler} />;
 };

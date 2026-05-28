@@ -2,7 +2,7 @@ import { useSettingsYtelser } from '@/hooks/use-settings-ytelser';
 import { useGetSettingsQuery } from '@/redux-api/bruker';
 import type { IYtelseHjemmel } from '@/types/kodeverk';
 
-export const useSettingsHjemler = (): IYtelseHjemmel[] => {
+export const useSettingsInnsendingshjemler = (): IYtelseHjemmel[] => {
   const userYtelser = useSettingsYtelser();
   const { data: settings, isSuccess } = useGetSettingsQuery();
 
