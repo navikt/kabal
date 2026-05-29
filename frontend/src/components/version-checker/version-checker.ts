@@ -46,6 +46,10 @@ class VersionChecker {
 
     this.eventSource = this.createEventSource();
 
+    window.addEventListener('beforeunload', () => {
+      this.eventSource.close();
+    });
+
     // Expose a method for manually sending update requests from the browser console for testing purposes.
     window.sendUpdateRequest = (data: UpdateRequest) => {
       this.onUpdateRequest(new MessageEvent(UPDATE_REQUEST_EVENT, { data }));
@@ -100,6 +104,10 @@ class VersionChecker {
   private delay = 0;
 
   private reopenEventSource = () => {
+    if (this.eventSource.readyState === EventSource.CLOSED) {
+      return;
+    }
+
     this.eventSource.close();
     this.delay = 0;
     this.eventSource = this.createEventSource();
