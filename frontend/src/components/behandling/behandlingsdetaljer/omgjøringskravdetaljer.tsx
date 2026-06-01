@@ -3,6 +3,7 @@ import { BehandlingSection } from '@/components/behandling/behandlingsdetaljer/b
 import { ExtraUtfall } from '@/components/behandling/behandlingsdetaljer/extra-utfall';
 import { ForlengetBehandlingstid } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/forlenget-behandlingstid';
 import { Gosys } from '@/components/behandling/behandlingsdetaljer/gosys';
+import { Innsendingshjemmel } from '@/components/behandling/behandlingsdetaljer/innsendingshjemmel';
 import { Klager } from '@/components/behandling/behandlingsdetaljer/klager';
 import { Lovhjemmel } from '@/components/behandling/behandlingsdetaljer/lovhjemmel/lovhjemmel';
 import { MottattDato } from '@/components/behandling/behandlingsdetaljer/mottatt-klageinstans';
@@ -65,6 +66,8 @@ export const Omgjøringskravdetaljer = ({ oppgavebehandling }: Props) => {
           />
 
           <Saksnummer saksnummer={saksnummer} />
+
+          <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 
           <ForlengetBehandlingstid oppgavebehandling={oppgavebehandling}>
             <MottattDato />
