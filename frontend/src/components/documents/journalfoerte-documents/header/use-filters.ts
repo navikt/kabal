@@ -20,7 +20,7 @@ import { setAccessibleToRealDocumentPaths } from '../keyboard/helpers/set-access
 
 const EMPTY_FILTER: string[] = [];
 const EMPTY_TYPE_FILTER: Journalposttype[] = [];
-const DEFAULT_SORT: ArchivedDocumentsSort = { order: SortOrder.DESC, orderBy: ArchivedDocumentsColumn.DATO_OPPRETTET };
+const DEFAULT_SORT: ArchivedDocumentsSort = { order: SortOrder.DESC, orderBy: ArchivedDocumentsColumn.DATO_SORTERING };
 
 export const useFilters = (documents: IArkivertDocument[]) => {
   const [isExpanded] = useIsExpanded();
