@@ -119,6 +119,7 @@ class VersionChecker {
     params.set('user_theme', this.userTheme);
     params.set('system_theme', this.systemTheme);
     params.set('status', this.status);
+    params.set('app', 'kabal');
 
     const events = new EventSource(`/version?${params.toString()}`);
 
