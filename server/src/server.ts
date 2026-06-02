@@ -50,6 +50,7 @@ const app = fastify({
   // https://github.com/nais/wonderwall/blob/master/internal/http/transport.go
   keepAliveTimeout: 10_000,
   routerOptions: { maxParamLength: 20_000, querystringParser },
+  ajv: { customOptions: { useDefaults: true } },
 });
 
 await app.register(fastifyOtelInstrumentation.plugin());
