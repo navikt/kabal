@@ -50,11 +50,11 @@ export const startClientSession = (req: FastifyRequest<{ Querystring: VersionQue
     start_time: Date.now().toString(10),
     app_start_time: START_TIME,
     domain: headers.host ?? 'UNKNOWN',
-    theme: query.theme ?? 'light',
-    user_theme: query.user_theme ?? 'system',
-    system_theme: query.system_theme ?? 'light',
-    status: query.status ?? 'active',
-    app: query.app ?? 'kabal',
+    theme: query.theme,
+    user_theme: query.user_theme,
+    system_theme: query.system_theme,
+    status: query.status,
+    app: query.app,
   };
 
   clientsGauge.set(labels, 1);
