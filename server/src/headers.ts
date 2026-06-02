@@ -3,3 +3,6 @@ export const CLIENT_VERSION_HEADER = 'x-client-version';
 export const PROXY_VERSION_HEADER = 'x-proxy-version';
 export const AZURE_AD_TOKEN_HEADER = 'azure-ad-token';
 export const AUTHORIZATION_HEADER = 'authorization';
+
+const BEARER_PREFIX = /^Bearer /i;
+export const stripBearer = (token: string | undefined): string | undefined => token?.replace(BEARER_PREFIX, '');

@@ -7,7 +7,7 @@ import { tracer } from '@/tracing/tracer';
  */
 export const withSpan = async <T>(
   name: string,
-  attributes: Record<string, string | number | boolean>,
+  attributes: Record<string, string | number | boolean | undefined>,
   fn: (span: Span) => Promise<T>,
 ): Promise<T> => {
   return tracer.startActiveSpan(name, { attributes }, async (span) => {

@@ -3,12 +3,9 @@ import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import type { FastifyRequest } from 'fastify/types/request';
 import fastifyPlugin from 'fastify-plugin';
 import { Doc, encodeStateAsUpdateV2, XmlText } from 'yjs';
-import { getCacheKey } from '@/auth/cache/cache';
-import { getAzureADClient } from '@/auth/get-auth-client';
-import { refreshOnBehalfOfAccessToken } from '@/auth/on-behalf-of';
 import { ApiClientEnum } from '@/config/config';
-import { isDeployed } from '@/config/env';
 import { isObject } from '@/functions/functions';
+import { stripBearer } from '@/headers';
 import { parseTokenPayload } from '@/helpers/token-parser';
 import { withSpan } from '@/helpers/tracing';
 import { type AnyObject, getLogger, type Level, type LogArgs } from '@/logger';
@@ -19,7 +16,7 @@ import { KABAL_API_URL } from '@/plugins/crdt/api/url';
 import { collaborationServer } from '@/plugins/crdt/collaboration-server';
 import type { ConnectionContext } from '@/plugins/crdt/context';
 import { NAV_IDENT_PLUGIN_ID } from '@/plugins/nav-ident';
-import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/obo-token';
+import { getOboToken, OBO_ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/obo-token';
 import { TAB_ID_PLUGIN_ID } from '@/plugins/tab-id';
 
 export const CRDT_PLUGIN_ID = 'crdt';
@@ -148,17 +145,6 @@ export const crdtPlugin = fastifyPlugin(
         const { behandlingId, dokumentId } = req.params;
         logReq('Websocket connection init', req, { behandlingId, dokumentId }, 'debug');
 
-        const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API);
-
-        if (isDeployed && oboAccessToken === undefined) {
-          const msg = 'Tried to authenticate collaboration connection without OBO access token';
-          logReq(msg, req, { behandlingId, dokumentId }, 'warn');
-
-          return socket.close(4401, msg);
-        }
-
-        logReq('Handing over connection to HocusPocus', req, { behandlingId, dokumentId }, 'debug');
-
         const { navIdent, tab_id, client_version, headers } = req;
         const { traceparent } = req.query;
 
@@ -173,6 +159,8 @@ export const crdtPlugin = fastifyPlugin(
           traceparent,
         };
 
+        // Register message handler immediately to avoid losing the client's auth message.
+        // Token validation is handled by onConnect/onAuthenticate hooks
         collaborationServer.handleConnection(socket, req.raw, context);
       },
     );
@@ -207,21 +195,18 @@ export const crdtPlugin = fastifyPlugin(
       '/collaboration/refresh-obo-access-token',
       {
         schema: {
-          response: { 200: Type.Object({ exp: Type.Number(), expiresIn: Type.Number() }), 400: Type.String() },
+          response: {
+            200: Type.Object({ exp: Type.Number(), expiresIn: Type.Number(), access_token: Type.String() }),
+            400: Type.String(),
+          },
         },
       },
       async (req, reply) => {
-        const { navIdent, accessToken } = req;
+        const oboAccessToken = await getOboToken(ApiClientEnum.KABAL_API, req, reply);
 
-        const authClient = await getAzureADClient();
-        const cacheKey = getCacheKey(navIdent, ApiClientEnum.KABAL_API);
-
-        const oboAccessToken = await refreshOnBehalfOfAccessToken(
-          authClient,
-          accessToken,
-          cacheKey,
-          ApiClientEnum.KABAL_API,
-        );
+        if (oboAccessToken === undefined) {
+          return reply.status(400).send('Failed to refresh OBO token');
+        }
 
         const parsed = parseTokenPayload(oboAccessToken);
 
@@ -230,8 +215,9 @@ export const crdtPlugin = fastifyPlugin(
         }
 
         const now = Math.ceil(Date.now() / 1_000);
+        const access_token = stripBearer(req.headers.authorization) ?? '';
 
-        return reply.status(200).send({ exp: parsed.exp, expiresIn: parsed.exp - now });
+        return reply.status(200).send({ exp: parsed.exp, expiresIn: parsed.exp - now, access_token });
       },
     );
   },
