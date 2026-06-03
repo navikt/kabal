@@ -1,22 +1,14 @@
 import { type Static, Type } from 'typebox';
 import { Compile } from 'typebox/compile';
 
-export const ACCESS_LIST_TYPE = Type.Object({
+export const DOCUMENT_ACCESS_LIST_SCHEMA = Type.Object({
   documentId: Type.String(),
   navIdents: Type.Array(Type.String()),
 });
 
-export type AccessList = Static<typeof ACCESS_LIST_TYPE>;
+export type DocumentAccessList = Static<typeof DOCUMENT_ACCESS_LIST_SCHEMA>;
 
-export const ACCESS_LIST_CHECKER = Compile(ACCESS_LIST_TYPE);
-
-export const ACCESS_LISTS_TYPE = Type.Object({
-  smartDocumentWriteAccessList: Type.Array(ACCESS_LIST_TYPE),
-});
-
-export type AccessLists = Static<typeof ACCESS_LISTS_TYPE>;
-
-export const ACCESS_LISTS_CHECKER = Compile(ACCESS_LISTS_TYPE);
+export const DOCUMENT_ACCESS_LIST_CHECKER = Compile(DOCUMENT_ACCESS_LIST_SCHEMA);
 
 export interface Metadata {
   tab_id: string | undefined;

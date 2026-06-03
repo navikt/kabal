@@ -14,23 +14,16 @@ export class SmartDocumentAccessMap {
     this.#accessMap.set(documentId, navIdents);
 
     log.debug({ msg: 'Access map entry set', data: { document_id: documentId, nav_idents: navIdents } });
-    log.debug({
-      msg: 'Current access map',
-      data: {
-        access_map: Object.fromEntries(this.#accessMap.entries()),
-      },
-    });
 
-    for (const [key, value] of this.#accessMap.entries()) {
-      accessListDocumentCountGauge.set({ document_id: key }, value.length);
-    }
-
+    accessListDocumentCountGauge.set({ document_id: documentId }, navIdents.length);
     accessListUserCountSummary.observe(navIdents.length);
   }
 
   public get = (documentId: string): string[] | undefined => this.#accessMap.get(documentId);
 
   public has = (documentId: string): boolean => this.#accessMap.has(documentId);
+
+  public keys = (): string[] => Array.from(this.#accessMap.keys());
 
   public delete = (documentId: string): void => {
     this.#accessMap.delete(documentId);
