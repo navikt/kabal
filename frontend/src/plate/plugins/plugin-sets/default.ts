@@ -92,7 +92,6 @@ export const defaultPlugins = [
     inputRules: [
       BulletedListRules.markdown({ variant: '*' }),
       BulletedListRules.markdown({ variant: '-' }),
-      OrderedListRules.markdown({ variant: '.' }),
       OrderedListRules.markdown({ variant: ')' }),
     ],
   }),
