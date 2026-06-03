@@ -16,6 +16,13 @@ export const healthPlugin = fastifyPlugin(
         return reply.status(200).type('text/plain').send('Shutting down');
       }
 
+      const errors = SMART_DOCUMENT_WRITE_ACCESS.getErrors();
+
+      if (errors.length > 0) {
+        log.error({ msg: `Document Write Access Kafka Consumer is not processing: ${errors.join(', ')}` });
+        return reply.status(503).type('text/plain').send('Document Write Access Kafka Consumer is not processing');
+      }
+
       return reply.status(200).type('text/plain').send('Ready');
     });
 
