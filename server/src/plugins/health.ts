@@ -16,11 +16,14 @@ export const healthPlugin = fastifyPlugin(
         return reply.status(200).type('text/plain').send('Shutting down');
       }
 
+      // Kafka health is intentionally NOT part of liveness. The service degrades
+      // to API polling when Kafka is unavailable, so the process is still alive
+      // and able to serve. Restarting the pod on Kafka flakiness only makes
+      // things worse. Kafka errors are surfaced via logs and metrics instead.
       const errors = SMART_DOCUMENT_WRITE_ACCESS.getErrors();
 
       if (errors.length > 0) {
-        log.error({ msg: `Document Write Access Kafka Consumer is not processing: ${errors.join(', ')}` });
-        return reply.status(503).type('text/plain').send('Document Write Access Kafka Consumer is not processing');
+        log.warn({ msg: `Document Write Access Kafka Consumer degraded, using API fallback: ${errors.join(', ')}` });
       }
 
       return reply.status(200).type('text/plain').send('Ready');
@@ -47,13 +50,13 @@ export const healthPlugin = fastifyPlugin(
         return reply.status(503).type('text/plain').send('Azure Client not ready');
       }
 
-      const errors = SMART_DOCUMENT_WRITE_ACCESS.getErrors();
+      // Startup readiness gates on init() having completed, not on Kafka health
+      // or the access map having data. Access data is fetched on-demand when a
+      // user connects to a document.
+      if (!SMART_DOCUMENT_WRITE_ACCESS.isReady()) {
+        log.debug({ msg: 'Document Write Access not yet initialized' });
 
-      if (errors.length > 0) {
-        log.debug({
-          msg: `Document Write Access Kafka Consumer is not yet processing: ${errors.join(', ')}`,
-        });
-        return reply.status(503).type('text/plain').send('Document Write Access Kafka Consumer is not yet processing');
+        return reply.status(503).type('text/plain').send('Document Write Access not yet initialized');
       }
 
       return reply.status(200).type('text/plain').send('Ready');

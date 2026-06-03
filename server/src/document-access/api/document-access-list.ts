@@ -1,12 +1,23 @@
 import { getToken } from '@/document-access/api/token';
-import { ACCESS_LIST_CHECKER, type AccessList, type Metadata } from '@/document-access/types';
+import { DOCUMENT_ACCESS_LIST_CHECKER, type DocumentAccessList, type Metadata } from '@/document-access/types';
 import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 import { KABAL_API_URL } from '@/plugins/crdt/api/url';
 
 const log = getLogger('document-write-access-api');
 
-export const getAccessListFromApi = async (documentId: string, metadata: Metadata): Promise<AccessList> =>
+/** Thrown when the API reports that a document no longer exists (HTTP 404). */
+export class DocumentAccessNotFoundError extends Error {
+  constructor(documentId: string) {
+    super(`Document access list not found for document ${documentId}`);
+    this.name = 'DocumentAccessNotFoundError';
+  }
+}
+
+export const getDocumentAccessListFromApi = async (
+  documentId: string,
+  metadata: Metadata,
+): Promise<DocumentAccessList> =>
   withSpan(
     'document_access.get_access_list',
     {
@@ -48,6 +59,20 @@ export const getAccessListFromApi = async (documentId: string, metadata: Metadat
 
       span.setAttribute('http.status_code', response.status);
 
+      // A 404 is an authoritative signal that the document has been deleted,
+      // distinct from a transient failure. Surface it as a typed error so
+      // callers can act on the deletion instead of treating it as an outage.
+      if (response.status === 400) {
+        log.info({
+          msg: 'Document deleted (400) from GET kabal-api/smart-document-write-access/:documentId',
+          data: { status: response.status, document_id: documentId, behandling_id, duration },
+          tab_id,
+          client_version,
+        });
+
+        throw new DocumentAccessNotFoundError(documentId);
+      }
+
       if (!response.ok) {
         log.error({
           msg: 'Failed to GET kabal-api/smart-document-write-access/:documentId',
@@ -61,7 +86,7 @@ export const getAccessListFromApi = async (documentId: string, metadata: Metadat
 
       const navIdents = await response.json();
 
-      if (!ACCESS_LIST_CHECKER.Check(navIdents)) {
+      if (!DOCUMENT_ACCESS_LIST_CHECKER.Check(navIdents)) {
         log.error({
           msg: 'Invalid response from GET kabal-api/smart-document-write-access/:documentId',
           data: {

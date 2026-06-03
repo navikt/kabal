@@ -3,7 +3,7 @@ import { Consumer, type MessagesStream } from '@platformatic/kafka';
 import client from 'prom-client';
 import { requiredEnvString } from '@/config/env-var';
 import { SmartDocumentAccessMap } from '@/document-access/access-map';
-import { getAccessListFromApi } from '@/document-access/api/access-list';
+import { DocumentAccessNotFoundError, getDocumentAccessListFromApi } from '@/document-access/api/document-access-list';
 import { parseKafkaMessageValue } from '@/document-access/kafka';
 import type { Metadata } from '@/document-access/types';
 import { parseTraceparent } from '@/helpers/traceparent';
@@ -21,6 +21,17 @@ const kafkaBrokers = requiredEnvString('KAFKA_BROKERS')
 if (kafkaBrokers.length === 0) {
   throw new Error('KAFKA_BROKERS must contain at least one broker');
 }
+
+/**
+ * How often the sync loop runs to poll active documents while Kafka is unavailable.
+ */
+const SYNC_INTERVAL_MS = 5_000;
+
+/**
+ * Metadata used for background API calls that are not tied to a specific user
+ * request (polling active documents while Kafka is down).
+ */
+const BACKGROUND_METADATA: Metadata = { tab_id: undefined, client_version: 'kabal-frontend-background' };
 
 type HasAccessListener = (hasWriteAccess: boolean) => void;
 
@@ -56,16 +67,54 @@ class SmartDocumentWriteAccess {
   #lifecycle_trace_id = trace.getActiveSpan()?.spanContext().traceId ?? crypto.randomUUID().replaceAll('-', '');
   #initTimestamp = Date.now();
 
+  /** Health-gated sync loop. Polls active documents while Kafka is down. */
+  #syncLoop: NodeJS.Timeout | null = null;
+
+  /** Whether init() has completed. Used by the startup readiness probe. */
+  #initialized = false;
+
+  /** Whether a Kafka (re)connect attempt is currently in progress. */
+  #kafkaConnecting = false;
+
   /**
    * Initializes the access list service.
-   * 1. Sync initial state from API.
-   * 2. Create a Kafka consumer to listen for future changes.
+   * 1. Connect a Kafka consumer to receive changes (best-effort).
+   * 2. Start the sync loop (polls active documents while Kafka is unavailable).
+   *
+   * Access data is never pre-seeded. Each document's list is fetched fresh from
+   * the API the first time a user connects to it (allowApiFetching=true), then
+   * kept current by Kafka push updates or polling while Kafka is down.
+   *
+   * Startup never fails because of Kafka — the service degrades to API polling.
    */
   async init(): Promise<void> {
     this.#initTimestamp = Date.now();
     const trace_id = this.#lifecycle_trace_id;
 
     log.debug({ msg: 'Initializing Smart Document Write Access...', trace_id });
+
+    // 1. Connect to Kafka. Failures are logged but do not abort startup.
+    await this.#connectKafka();
+
+    // 2. Start the sync loop.
+    this.#startSyncLoop();
+
+    this.#initialized = true;
+  }
+
+  /**
+   * Connects the Kafka consumer and starts the message stream. Best-effort:
+   * any failure is logged and swallowed so the service can run on API polling.
+   * Also used by the sync loop to reconnect after an initial connection failure.
+   * Guards itself with #kafkaConnecting so concurrent calls are no-ops.
+   */
+  #connectKafka = async (): Promise<void> => {
+    if (this.#kafkaConnecting) {
+      return;
+    }
+
+    this.#kafkaConnecting = true;
+    const trace_id = this.#lifecycle_trace_id;
 
     try {
       log.debug({ msg: 'Connecting to Kafka brokers...', trace_id });
@@ -76,25 +125,149 @@ class SmartDocumentWriteAccess {
       const groupId = await this.#consumer.joinGroup({});
       log.debug({ msg: `Kafka consumer joined group ${groupId}`, trace_id, data: { group_id: groupId } });
 
-      // Create a consumer stream to listen for future changes.
-      const initialStream = await this.#startConsumer(0);
+      await this.#startConsumer(0);
 
       log.info({ msg: 'Kafka consumer stream started', trace_id });
+    } catch (error) {
+      log.error({
+        msg: 'Failed to connect Kafka consumer, continuing with API fallback',
+        trace_id,
+        error,
+      });
+    } finally {
+      this.#kafkaConnecting = false;
+    }
+  };
 
-      const readyPromise = new Promise<void>((resolve) => {
-        initialStream.once('readable', () => {
-          log.debug({ msg: 'Kafka stream readable', trace_id });
-          resolve();
-        });
+  #startSyncLoop = () => {
+    if (this.#syncLoop !== null) {
+      return;
+    }
+
+    this.#syncLoop = setInterval(() => {
+      this.#ensureAccessListsUpdated().catch((error) => {
+        log.error({ msg: 'Sync tick failed', trace_id: this.#lifecycle_trace_id, error });
+      });
+    }, SYNC_INTERVAL_MS);
+  };
+
+  #ensureAccessListsUpdated = async (): Promise<void> => {
+    if (isShuttingDown()) {
+      return;
+    }
+
+    if (this.getErrors().length === 0) {
+      return; // Kafka is healthy — push updates handle everything.
+    }
+
+    // If the consumer never connected (initial connectToBrokers failed), attempt
+    // a background reconnect so the service can self-heal without a pod restart.
+    if (!this.#consumer.isConnected()) {
+      log.info({
+        msg: 'Kafka consumer not connected, attempting background reconnect',
+        trace_id: this.#lifecycle_trace_id,
       });
 
-      return readyPromise;
-    } catch (error) {
-      log.error({ msg: 'Failed to initialize Smart Document Write Access', error });
-
-      throw error;
+      this.#connectKafka().catch((error) => {
+        log.error({ msg: 'Background Kafka reconnect failed', trace_id: this.#lifecycle_trace_id, error });
+      });
     }
-  }
+
+    await this.#pollActiveDocuments();
+  };
+
+  /**
+   * Polls the API for the currently active (connected) documents while Kafka is
+   * unavailable. Bounded to documents users are actually connected to.
+   * A 404 means the document was deleted and is handled as such; any other
+   * failure keeps the last-known list rather than risk a wrongful deletion.
+   */
+  #pollActiveDocuments = async (): Promise<void> => {
+    const documentIds = this.#getActiveDocumentIds();
+
+    if (documentIds.size === 0) {
+      return;
+    }
+
+    const trace_id = this.#lifecycle_trace_id;
+
+    log.debug({
+      msg: `Polling ${documentIds.size} active documents from API (Kafka unavailable)`,
+      trace_id,
+    });
+
+    await Promise.all(
+      Array.from(documentIds, async (documentId) => {
+        try {
+          const { navIdents } = await getDocumentAccessListFromApi(documentId, BACKGROUND_METADATA);
+          this.#applyAccessUpdate(documentId, navIdents);
+        } catch (error) {
+          if (error instanceof DocumentAccessNotFoundError) {
+            log.info({
+              msg: 'Document deleted (400) while polling, removing from access map',
+              trace_id,
+              data: { document_id: documentId },
+            });
+
+            this.#handleDeletion(documentId);
+
+            return;
+          }
+
+          log.warn({
+            msg: 'Failed to poll document access from API',
+            trace_id,
+            data: { document_id: documentId },
+            error,
+          });
+        }
+      }),
+    );
+  };
+
+  /**
+   * The set of documents that currently have active listeners, i.e. documents a
+   * user is connected to. New documents are not tracked until a user connects.
+   */
+  #getActiveDocumentIds = (): Set<string> => {
+    const documentIds = new Set<string>();
+
+    for (const key of this.#hasAccessListeners.keys()) {
+      const [documentId] = key.split(':');
+
+      if (documentId !== undefined && documentId.length > 0) {
+        documentIds.add(documentId);
+      }
+    }
+
+    for (const documentId of this.#deletedDocumentListeners.keys()) {
+      documentIds.add(documentId);
+    }
+
+    return documentIds;
+  };
+
+  /**
+   * Sets the access list for a document and notifies listeners only when the
+   * membership actually changed, to avoid spamming connected clients on every
+   * poll tick.
+   */
+  #applyAccessUpdate = (documentId: string, navIdents: string[]): void => {
+    const previous = this.#accessMap.get(documentId);
+
+    this.#accessMap.set(documentId, navIdents);
+
+    if (previous === undefined || !sameMembers(previous, navIdents)) {
+      this.#notifyHasAccessListeners(documentId, navIdents);
+    }
+  };
+
+  /** Removes a document from the map and notifies access + deletion listeners. */
+  #handleDeletion = (documentId: string): void => {
+    this.#accessMap.delete(documentId);
+    this.#notifyHasAccessListeners(documentId, null);
+    this.#notifyDeletedDocumentListeners(documentId);
+  };
 
   #startConsumer = async (restartCount: number) => {
     const trace_id = this.#lifecycle_trace_id;
@@ -193,9 +366,7 @@ class SmartDocumentWriteAccess {
         data: { key: documentId },
       });
 
-      this.#accessMap.delete(documentId);
-      this.#notifyHasAccessListeners(documentId, null);
-      this.#notifyDeletedDocumentListeners(documentId);
+      this.#handleDeletion(documentId);
 
       try {
         await commit();
@@ -261,31 +432,45 @@ class SmartDocumentWriteAccess {
   ): Promise<boolean> => {
     const { tab_id, client_version, behandling_id } = metadata;
 
-    const errors = this.getErrors();
-
-    if (errors.length > 0) {
-      if (!isShuttingDown()) {
-        log.error({
-          msg: `Smart Document Write Access is not processing Kafka messages: ${errors.join(', ')}`,
-          tab_id,
-          client_version,
-          data: { behandling_id, document_id: documentId, nav_ident: navIdent, allow_api_fetching: allowApiFetching },
-        });
-      }
-
-      return false;
-    }
-
+    // Serve from the in-memory map when we have it. The map is kept fresh by
+    // Kafka when healthy, and by the API sync loop while Kafka is down.
     const fromAccessMap = this.#accessMap.get(documentId);
 
     if (fromAccessMap !== undefined) {
       return fromAccessMap.includes(navIdent);
     }
 
+    // The document is not in the map. Only fall back to the API when the caller
+    // explicitly allows it (e.g. a user connecting). Background and listener
+    // checks rely on the map being populated by Kafka or the sync loop.
     if (allowApiFetching) {
-      const fromApi = await this.#updateAccessListFromApi(documentId, metadata);
+      try {
+        const fromApi = await this.#updateAccessListFromApi(documentId, metadata);
 
-      return fromApi.navIdents.includes(navIdent);
+        return fromApi.navIdents.includes(navIdent);
+      } catch (error) {
+        if (error instanceof DocumentAccessNotFoundError) {
+          log.info({
+            msg: 'Document deleted (400) on access check, removing from access map',
+            trace_id: this.#lifecycle_trace_id,
+            data: { document_id: documentId },
+          });
+
+          this.#handleDeletion(documentId);
+
+          return false;
+        }
+
+        log.error({
+          msg: 'Failed to resolve document access from API fallback',
+          tab_id,
+          client_version,
+          data: { behandling_id, document_id: documentId, nav_ident: navIdent },
+          error,
+        });
+
+        return false;
+      }
     }
 
     return false;
@@ -403,8 +588,17 @@ class SmartDocumentWriteAccess {
     return errors;
   };
 
+  /** Whether init() has completed. Used by the startup readiness probe. */
+  isReady = (): boolean => this.#initialized;
+
   close = async () => {
     const trace_id = this.#lifecycle_trace_id;
+
+    if (this.#syncLoop !== null) {
+      clearInterval(this.#syncLoop);
+      this.#syncLoop = null;
+      log.debug({ msg: 'Sync loop stopped', trace_id });
+    }
 
     log.debug({ msg: 'Closing Kafka consumer...', trace_id });
 
@@ -415,8 +609,13 @@ class SmartDocumentWriteAccess {
     }
 
     log.debug({ msg: 'Kafka consumer leaving group...', trace_id });
-    await this.#consumer.leaveGroup();
-    log.debug({ msg: 'Kafka consumer left group', trace_id });
+
+    if (this.#consumer.isConnected()) {
+      await this.#consumer.leaveGroup();
+      log.debug({ msg: 'Kafka consumer left group', trace_id });
+    } else {
+      log.debug({ msg: 'Kafka consumer was not connected, skipping leaveGroup', trace_id });
+    }
 
     log.debug({ msg: 'Kafka consumer closing...', trace_id });
     await this.#consumer.close();
@@ -424,9 +623,9 @@ class SmartDocumentWriteAccess {
   };
 
   #updateAccessListFromApi = async (documentId: string, metadata: Metadata) => {
-    const accessList = await getAccessListFromApi(documentId, metadata);
+    const accessList = await getDocumentAccessListFromApi(documentId, metadata);
 
-    this.#accessMap.set(documentId, accessList.navIdents);
+    this.#applyAccessUpdate(documentId, accessList.navIdents);
 
     return accessList;
   };
@@ -440,5 +639,23 @@ const closeStream = async (stream: MessagesStream<string, string, string, string
 };
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** Compares two Nav-ident lists by membership, ignoring order and duplicates. */
+const sameMembers = (a: string[], b: string[]): boolean => {
+  const setA = new Set(a);
+  const setB = new Set(b);
+
+  if (setA.size !== setB.size) {
+    return false;
+  }
+
+  for (const value of setA) {
+    if (!setB.has(value)) {
+      return false;
+    }
+  }
+
+  return true;
+};
 
 export const SMART_DOCUMENT_WRITE_ACCESS = new SmartDocumentWriteAccess();
