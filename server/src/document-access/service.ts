@@ -442,37 +442,3 @@ const closeStream = async (stream: MessagesStream<string, string, string, string
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const SMART_DOCUMENT_WRITE_ACCESS = new SmartDocumentWriteAccess();
-
-const reconnectOnError = () => {
-  const reconnect = async (backoff: number): Promise<void> => {
-    log.debug({ msg: `Attempting to reinitialize Smart Document Write Access after ${backoff}ms` });
-    await delay(backoff);
-
-    try {
-      await SMART_DOCUMENT_WRITE_ACCESS.init();
-      log.info({ msg: 'Successfully reinitialized Smart Document Write Access' });
-    } catch (error) {
-      log.error({ msg: 'Failed to initialize Smart Document Write Access', error });
-      await reconnect(backoff * 2);
-    }
-  };
-
-  const startHealthCheck = () => {
-    const interval = setInterval(async () => {
-      const errors = SMART_DOCUMENT_WRITE_ACCESS.getErrors();
-
-      if (errors.length > 0) {
-        log.error({
-          msg: `Smart Document Write Access returned errors: ${errors.join(', ')}, attempting to reinitialize...`,
-        });
-        clearInterval(interval);
-        await reconnect(1_000);
-        startHealthCheck();
-      }
-    }, 10_000);
-  };
-
-  startHealthCheck();
-};
-
-reconnectOnError();
