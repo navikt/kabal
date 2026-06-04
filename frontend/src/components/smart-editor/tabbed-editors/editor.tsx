@@ -486,7 +486,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
             cancelIdleCallback(backupIdleCallbackId.current);
           }
 
-          backupIdleCallbackId.current = createLocalStorageBackup(oppgave.id, id, value);
+          backupIdleCallbackId.current = createLocalStorageBackup(oppgave.id, id, value, user);
         }}
         decorate={({ entry }) => {
           const [node, path] = entry;

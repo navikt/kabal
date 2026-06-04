@@ -1,5 +1,6 @@
-import { isBefore, isSameDay, isValid, parse, subDays } from 'date-fns';
-import { BACKUP_DATE_FORMAT, KEY_PREFIX } from '@/components/smart-editor/tabbed-editors/constants';
+import { isBefore, isSameDay, subDays } from 'date-fns';
+import { parseBackupDateFromKey } from '@/components/smart-editor/tabbed-editors/backup-date';
+import { KEY_PREFIX } from '@/components/smart-editor/tabbed-editors/constants';
 import { toast } from '@/components/toast/store';
 
 const TTL_DAYS = 30;
@@ -52,16 +53,9 @@ export const deleteOldestBackups = (ls: LocalStorage, count: number) => {
       const key = ls.key(i);
 
       if (key?.startsWith(KEY_PREFIX) === true) {
-        const datePart = key.split('/').at(-1);
+        const backupDate = parseBackupDateFromKey(key);
 
-        if (datePart === undefined) {
-          ls.removeItem(key);
-          continue;
-        }
-
-        const backupDate = parse(datePart, BACKUP_DATE_FORMAT, new Date());
-
-        if (!isValid(backupDate)) {
+        if (backupDate === null) {
           ls.removeItem(key);
           continue;
         }
@@ -96,16 +90,9 @@ export const cleanLocalStorage = (ls: LocalStorage) => {
       }
 
       if (key.startsWith(KEY_PREFIX)) {
-        const datePart = key.split('/').at(-1);
+        const backupDate = parseBackupDateFromKey(key);
 
-        if (datePart === undefined) {
-          ls.removeItem(key);
-          continue;
-        }
-
-        const backupDate = parse(datePart, BACKUP_DATE_FORMAT, new Date());
-
-        if (!isValid(backupDate) || (isBefore(backupDate, cutoff) && !isSameDay(backupDate, cutoff))) {
+        if (backupDate === null || (isBefore(backupDate, cutoff) && !isSameDay(backupDate, cutoff))) {
           ls.removeItem(key);
         }
       }

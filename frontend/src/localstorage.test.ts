@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 import { format, subDays } from 'date-fns';
-import { BACKUP_DATE_FORMAT, KEY_PREFIX } from '@/components/smart-editor/tabbed-editors/constants';
+import { BACKUP_KEY_DATE_FORMAT, KEY_PREFIX } from '@/components/smart-editor/tabbed-editors/constants';
 import { cleanLocalStorage, type LocalStorage } from '@/localstorage';
 
 interface TestLocalStorage extends LocalStorage {
@@ -36,7 +36,7 @@ describe('cleanLocalStorage', () => {
   it('should not remove backups newer than 30 days', () => {
     expect.assertions(1);
 
-    const recentDate = format(subDays(new Date(), 5), BACKUP_DATE_FORMAT);
+    const recentDate = format(subDays(new Date(), 5), BACKUP_KEY_DATE_FORMAT);
     const mockStorage = createMockLocalStorage({
       [`${KEY_PREFIX}oppgave1/doc1/${recentDate}`]: '"content"',
     });
@@ -51,7 +51,7 @@ describe('cleanLocalStorage', () => {
   it('should remove backups older than 30 days', () => {
     expect.assertions(1);
 
-    const oldDate = format(subDays(new Date(), 45), BACKUP_DATE_FORMAT);
+    const oldDate = format(subDays(new Date(), 45), BACKUP_KEY_DATE_FORMAT);
     const mockStorage = createMockLocalStorage({
       [`${KEY_PREFIX}oppgave1/doc1/${oldDate}`]: '"content"',
     });
@@ -64,7 +64,7 @@ describe('cleanLocalStorage', () => {
   it('should keep backups exactly 30 days old', () => {
     expect.assertions(1);
 
-    const exactlyThirtyDays = format(subDays(new Date(), 30), BACKUP_DATE_FORMAT);
+    const exactlyThirtyDays = format(subDays(new Date(), 30), BACKUP_KEY_DATE_FORMAT);
     const mockStorage = createMockLocalStorage({
       [`${KEY_PREFIX}oppgave1/doc1/${exactlyThirtyDays}`]: '"content"',
     });
@@ -79,7 +79,7 @@ describe('cleanLocalStorage', () => {
   it('should not touch non-backup keys', () => {
     expect.assertions(1);
 
-    const oldDate = format(subDays(new Date(), 60), BACKUP_DATE_FORMAT);
+    const oldDate = format(subDays(new Date(), 60), BACKUP_KEY_DATE_FORMAT);
     const mockStorage = createMockLocalStorage({
       'some-other-key': 'value',
       [`${KEY_PREFIX}oppgave1/doc1/${oldDate}`]: '"content"',
@@ -97,9 +97,9 @@ describe('cleanLocalStorage', () => {
   it('should handle multiple backups with mixed ages', () => {
     expect.assertions(1);
 
-    const recentDate1 = format(subDays(new Date(), 5), BACKUP_DATE_FORMAT);
-    const recentDate2 = format(subDays(new Date(), 10), BACKUP_DATE_FORMAT);
-    const oldDate = format(subDays(new Date(), 45), BACKUP_DATE_FORMAT);
+    const recentDate1 = format(subDays(new Date(), 5), BACKUP_KEY_DATE_FORMAT);
+    const recentDate2 = format(subDays(new Date(), 10), BACKUP_KEY_DATE_FORMAT);
+    const oldDate = format(subDays(new Date(), 45), BACKUP_KEY_DATE_FORMAT);
 
     const mockStorage = createMockLocalStorage({
       [`${KEY_PREFIX}oppgave1/doc1/${recentDate1}`]: '"recent1"',
@@ -118,10 +118,10 @@ describe('cleanLocalStorage', () => {
   it('should remove all old backups even when multiple need removal', () => {
     expect.assertions(1);
 
-    const recentDate = format(subDays(new Date(), 5), BACKUP_DATE_FORMAT);
-    const oldDate1 = format(subDays(new Date(), 45), BACKUP_DATE_FORMAT);
-    const oldDate2 = format(subDays(new Date(), 60), BACKUP_DATE_FORMAT);
-    const oldDate3 = format(subDays(new Date(), 90), BACKUP_DATE_FORMAT);
+    const recentDate = format(subDays(new Date(), 5), BACKUP_KEY_DATE_FORMAT);
+    const oldDate1 = format(subDays(new Date(), 45), BACKUP_KEY_DATE_FORMAT);
+    const oldDate2 = format(subDays(new Date(), 60), BACKUP_KEY_DATE_FORMAT);
+    const oldDate3 = format(subDays(new Date(), 90), BACKUP_KEY_DATE_FORMAT);
 
     const mockStorage = createMockLocalStorage({
       [`${KEY_PREFIX}oppgave1/doc1/${recentDate}`]: '"recent"',
@@ -145,6 +145,21 @@ describe('cleanLocalStorage', () => {
     cleanLocalStorage(mockStorage);
 
     expect(mockStorage.getItems()).toEqual({});
+  });
+
+  it('should keep legacy minute-format backups within 30 days', () => {
+    expect.assertions(1);
+
+    const recentLegacyDate = format(subDays(new Date(), 5), BACKUP_KEY_DATE_FORMAT);
+    const mockStorage = createMockLocalStorage({
+      [`${KEY_PREFIX}oppgave1/doc1/${recentLegacyDate}`]: '"content"',
+    });
+
+    cleanLocalStorage(mockStorage);
+
+    expect(mockStorage.getItems()).toEqual({
+      [`${KEY_PREFIX}oppgave1/doc1/${recentLegacyDate}`]: '"content"',
+    });
   });
 
   it('should remove keys with missing date part (invalid date)', () => {
