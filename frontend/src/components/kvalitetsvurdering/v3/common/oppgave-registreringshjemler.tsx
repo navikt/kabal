@@ -1,16 +1,12 @@
 import { BodyShort, Box, Checkbox, CheckboxGroup } from '@navikt/ds-react';
-import { useEffect } from 'react';
 import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { useValidationError } from '@/components/kvalitetsvurdering/v3/common/use-validation-error';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
-import { usePrevious } from '@/hooks/use-previous';
 import { useRegistreringshjemlerMap } from '@/simple-api-state/use-kodeverk';
 import type {
   KvalitetsvurderingSaksdataRegistreringshjemlerV3,
   KvalitetsvurderingV3Boolean,
 } from '@/types/kaka-kvalitetsvurdering/v3';
-
-const EMPTY_ARRAY: string[] = [];
 
 interface SaksdatahjemlerProps {
   field: keyof KvalitetsvurderingSaksdataRegistreringshjemlerV3;
@@ -22,33 +18,6 @@ export const OppgaveRegistreringshjemler = ({ field, parentKey }: Saksdatahjemle
   const { data: registreringshjemlerMap, isLoading: registreringshjemlerMapIsLoading } = useRegistreringshjemlerMap();
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(field);
-
-  const previousSaksdataHjemmelIdList = usePrevious(isLoading ? undefined : hjemler);
-  const selectedHjemmelIdList = isLoading ? undefined : kvalitetsvurdering[field];
-
-  useEffect(() => {
-    if (!canEdit || isLoading || selectedHjemmelIdList === undefined || previousSaksdataHjemmelIdList === undefined) {
-      return;
-    }
-
-    if (hjemler.length === 0 || hjemler.length === 1) {
-      if (hjemmelIdListsEquals(selectedHjemmelIdList, hjemler)) {
-        return;
-      }
-
-      update({ [field]: hjemler });
-
-      return;
-    }
-
-    if (selectedHjemmelIdList.length > 0) {
-      const isUnchanged = hjemmelIdListsEquals(previousSaksdataHjemmelIdList, hjemler);
-
-      if (!isUnchanged) {
-        update({ [field]: EMPTY_ARRAY });
-      }
-    }
-  }, [field, isLoading, selectedHjemmelIdList, previousSaksdataHjemmelIdList, hjemler, update, canEdit]);
 
   if (isLoading || registreringshjemlerMapIsLoading || typeof registreringshjemlerMap === 'undefined') {
     return null;
@@ -106,12 +75,4 @@ const HjemmelCheckboxes = ({ hjemmelIdList }: HjemmelCheckboxesProps) => {
       ))}
     </>
   );
-};
-
-const hjemmelIdListsEquals = (a: string[] = [], b: string[] = []) => {
-  if (a.length !== b.length) {
-    return false;
-  }
-
-  return a.every((id) => b.includes(id));
 };
