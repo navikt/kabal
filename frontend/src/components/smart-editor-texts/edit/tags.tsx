@@ -1,4 +1,6 @@
-import { HStack } from '@navikt/ds-react';
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { Button, HStack, Tooltip } from '@navikt/ds-react';
+import { useState } from 'react';
 import { MALTEKST_SECTION_NAMES } from '@/components/smart-editor/constants';
 import { ALL_TEMPLATES_LABEL } from '@/components/smart-editor-texts/get-template-options';
 import { useMetadataFilters } from '@/components/smart-editor-texts/hooks/use-metadata-filters';
@@ -179,20 +181,30 @@ const useYtelseLovkildeAndHjemmelName = (selected: string): string => {
   return 'Ukjent ytelse';
 };
 
-export const TagContainer = (props: { children: React.ReactNode }) => (
-  <HStack
-    data-element="tag-container"
-    gap="space-8"
-    wrap
-    align="center"
-    flexGrow="0"
-    className="[grid-area:tags]"
-    maxHeight="250px"
-    overflowY="auto"
-    flexShrink="0"
-    {...props}
-  />
-);
+export const TagContainer = ({ children }: { children: React.ReactNode }) => {
+  const [expanded, setExpanded] = useState(true);
+
+  return (
+    <div
+      className={`${expanded ? 'max-h-fit' : COLLAPSED_CLASSES} relative flex items-start overflow-hidden [grid-area:tags]`}
+    >
+      <HStack gap="space-8" wrap align="center">
+        {children}
+      </HStack>
+      <Tooltip content={expanded ? 'Minimer innstillinger' : 'Vis alle innstillinger'}>
+        <Button
+          variant="tertiary-neutral"
+          size="small"
+          icon={expanded ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
+          onClick={() => setExpanded(!expanded)}
+        />
+      </Tooltip>
+    </div>
+  );
+};
+
+const COLLAPSED_CLASSES =
+  "max-h-12.5 after:pointer-events-none after:absolute after:right-0 after:bottom-0 after:left-0 after:h-8 after:bg-linear-to-t after:from-ax-bg-default after:to-transparent after:content-['']";
 
 export const YtelseHjemmelTagList = ({ ytelseHjemmelIdList }: Pick<IText, 'ytelseHjemmelIdList'>) => (
   <TagList
