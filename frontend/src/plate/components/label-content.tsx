@@ -12,17 +12,21 @@ import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
   const { children, element, editor, path } = props;
-  const content = useContent(element.source);
+  const result = useResult(element.source);
   const label = useLabel(element.source);
   const readOnly = useEditorReadOnly();
 
   useEffect(() => {
-    editor.tf.setNodes({ result: content }, { at: path });
-  }, [content, editor, path]);
+    if (element.result !== result) {
+      editor.tf.setNodes({ result: result }, { at: path });
+    }
+  }, [result, editor, path, element]);
 
   useEffect(() => {
-    editor.tf.setNodes({ label }, { at: path });
-  }, [label, editor, path]);
+    if (element.label !== label) {
+      editor.tf.setNodes({ label }, { at: path });
+    }
+  }, [label, editor, path, element]);
 
   return (
     <PlateElement<LabelContentElement>
@@ -39,12 +43,12 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
       }}
     >
       <SectionContainer data-element={element.type} sectionType={SectionTypeEnum.LABEL}>
-        {content === null ? null : (
+        {result === undefined ? null : (
           <span className="text-ax-neutral-800">
             <span className="inline-block" style={{ width: pxToEm(150) }}>
               {label}:
             </span>
-            {content}
+            {result}
           </span>
         )}
         {children}
@@ -106,14 +110,14 @@ const useLabel = (source: LabelContentSource): string | undefined => {
   }, [oppgave, source]);
 };
 
-const useContent = (source: LabelContentSource): string | null => {
+const useResult = (source: LabelContentSource): string | undefined => {
   const { data: oppgave } = useOppgave();
   const { data: ytelser = [] } = useYtelserAll();
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   return useMemo(() => {
     if (oppgave === undefined) {
-      return null;
+      return undefined;
     }
 
     if (source === LabelContentSource.YTELSE) {
@@ -139,7 +143,7 @@ const useContent = (source: LabelContentSource): string | null => {
         return `${sakenGjelder.name ?? '-'}\n`;
       }
 
-      return null;
+      return undefined;
     }
 
     if (source === LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME) {
@@ -147,7 +151,7 @@ const useContent = (source: LabelContentSource): string | null => {
         return `${klager.name ?? '-'}\n`;
       }
 
-      return null;
+      return undefined;
     }
 
     if (source === LabelContentSource.KLAGER_IF_DIFFERENT_FROM_SAKEN_GJELDER_NAME) {
@@ -155,7 +159,7 @@ const useContent = (source: LabelContentSource): string | null => {
         return `${klager.name ?? '-'}\n`;
       }
 
-      return null;
+      return undefined;
     }
 
     if (source === LabelContentSource.ANKEMOTPART) {

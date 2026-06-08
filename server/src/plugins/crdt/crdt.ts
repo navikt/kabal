@@ -2,6 +2,7 @@ import { Type, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { slateNodesToInsertDelta } from '@slate-yjs/core';
 import type { FastifyRequest } from 'fastify/types/request';
 import fastifyPlugin from 'fastify-plugin';
+import type { HeadersInit } from 'undici-types';
 import { Doc, encodeStateAsUpdateV2, XmlText } from 'yjs';
 import { getCacheKey } from '@/auth/cache/cache';
 import { getAzureADClient } from '@/auth/get-auth-client';
@@ -173,7 +174,16 @@ export const crdtPlugin = fastifyPlugin(
           traceparent,
         };
 
-        collaborationServer.handleConnection(socket, req.raw, context);
+        const headersInit: HeadersInit = Object.entries(headers).filter(
+          (h): h is [string, string] => typeof h[1] === 'string',
+        );
+
+        const webRequest = new Request(`${req.protocol}://${req.hostname}${req.url}`, { headers: headersInit });
+
+        const clientConnection = collaborationServer.handleConnection(socket, webRequest, context);
+
+        socket.on('message', (data: Uint8Array) => clientConnection.handleMessage(data));
+        socket.on('close', () => clientConnection.handleClose());
       },
     );
 
