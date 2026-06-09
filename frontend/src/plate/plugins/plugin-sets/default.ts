@@ -21,13 +21,14 @@ import { DocxPlugin } from '@platejs/docx';
 import { IndentPlugin } from '@platejs/indent/react';
 import { BulletedListRules, OrderedListRules } from '@platejs/list-classic';
 import { BulletedListPlugin, ListPlugin, NumberedListPlugin } from '@platejs/list-classic/react';
-import { TableCellPlugin, TablePlugin, TableRowPlugin } from '@platejs/table/react';
+import { TableCellHeaderPlugin, TableCellPlugin, TablePlugin, TableRowPlugin } from '@platejs/table/react';
 import { ExitBreakPlugin } from '@platejs/utils';
 import { type NodeEntry, NodeIdPlugin, ParserPlugin } from 'platejs';
 import { ParagraphPlugin } from 'platejs/react';
 import { Paragraph } from '@/plate/components/paragraph';
 import { TableCellElement } from '@/plate/components/plate-ui/table-cell-element';
 import { TableElement } from '@/plate/components/plate-ui/table-element';
+import { TableHeaderComponent } from '@/plate/components/plate-ui/table-header';
 import { TableRowElement } from '@/plate/components/plate-ui/table-row-element';
 import { BoldLeaf, ItalicLeaf, UnderlineLeaf } from '@/plate/leaf/marks';
 import { AllSearchHitsHighlightLeaf, ReplaceOneHighlightLeaf } from '@/plate/leaf/search-replace';
@@ -88,6 +89,7 @@ export const defaultPlugins = [
     .overrideEditor(withOverrides),
   TableCellPlugin.withComponent(TableCellElement),
   TableRowPlugin.withComponent(TableRowElement),
+  TableCellHeaderPlugin.withComponent(TableHeaderComponent),
   ListPlugin.configure({
     inputRules: [
       BulletedListRules.markdown({ variant: '*' }),

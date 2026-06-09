@@ -5,7 +5,12 @@ import type {
   BaseListItemPlugin,
   BaseNumberedListPlugin,
 } from '@platejs/list-classic';
-import type { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
+import type {
+  BaseTableCellHeaderPlugin,
+  BaseTableCellPlugin,
+  BaseTablePlugin,
+  BaseTableRowPlugin,
+} from '@platejs/table';
 import type { PlateYjsEditorProps } from '@platejs/yjs';
 import type { CursorEditor, YjsEditor } from '@slate-yjs/core';
 import type { BaseParagraphPlugin, TElement, TTableCellElement, TTableElement, TTableRowElement, TText } from 'platejs';
@@ -122,6 +127,11 @@ export interface TableRowElement extends BlockElement, TTableRowElement {
 export interface TableCellElement extends BlockElement, TTableCellElement {
   type: typeof BaseTableCellPlugin.key;
   children: (ParagraphElement | BulletListElement | NumberedListElement)[];
+}
+
+export interface TableHeaderElement extends BlockElement, TTableCellElement {
+  type: typeof BaseTableCellHeaderPlugin.key;
+  children: ParagraphElement[];
 }
 
 export interface MaltekstElement extends BlockElement {
@@ -275,6 +285,7 @@ export type ChildElement =
   | ListItemContainerElement
   | TableRowElement
   | TableCellElement
+  | TableHeaderElement
   | RegelverkContainerElement
   | PlaceholderElement
   | FullmektigElement;
