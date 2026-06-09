@@ -182,7 +182,7 @@ const useYtelseLovkildeAndHjemmelName = (selected: string): string => {
 };
 
 export const TagContainer = ({ children }: { children: React.ReactNode }) => {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <div
