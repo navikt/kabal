@@ -5,7 +5,7 @@ import {
   BaseListItemPlugin,
   BaseNumberedListPlugin,
 } from '@platejs/list-classic';
-import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
+import { BaseTableCellHeaderPlugin, BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { TableCellPlugin } from '@platejs/table/react';
 import type { TElement, TNode } from 'platejs';
 import { BaseParagraphPlugin, ElementApi, NodeApi } from 'platejs';
@@ -204,6 +204,14 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
 
       return true;
     }
+  }
+
+  if (node.type === BaseTableCellHeaderPlugin.key) {
+    pushNodeEvent(editor, node, path, 'normalized-table-header-to-table-cell');
+
+    editor.tf.setNodes({ type: BaseTableCellPlugin.key }, { at: path, match: (n) => n === node });
+
+    return true;
   }
 
   // Handle wrong node types.
