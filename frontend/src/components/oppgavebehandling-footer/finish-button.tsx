@@ -57,7 +57,7 @@ export const FinishButton = () => {
       >
         Fullfør
       </Button>
-      <ConfirmFinish show={showConfirmFinishDisplay} cancel={() => setConfirmFinish(false)} />
+      {showConfirmFinishDisplay ? <ConfirmFinish cancel={() => setConfirmFinish(false)} /> : null}
     </div>
   );
 };

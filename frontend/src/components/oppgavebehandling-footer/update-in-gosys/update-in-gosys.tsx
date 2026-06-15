@@ -29,6 +29,7 @@ const NOW = new Date();
 
 interface Props {
   children: string;
+  disabled: boolean;
 }
 
 export const UpdateInGosys = (props: Props) => {
@@ -58,7 +59,7 @@ interface LoadedProps extends Props {
   initialBeskrivelse: string;
 }
 
-const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, children }: LoadedProps) => {
+const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, children, disabled }: LoadedProps) => {
   const [selectedEnhet, setSelectedEnhet] = useState<string | null>(null);
   const [selectedMappe, setSelectedMappe] = useState<number | null>(null);
   const [beskrivelse, setBeskrivelse] = useState(initialBeskrivelse);
@@ -106,7 +107,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
 
   return (
     <div className="[grid-area:left]">
-      <Button variant="primary" size="small" onClick={() => setIsOpen(true)}>
+      <Button variant="primary" size="small" onClick={() => setIsOpen(true)} disabled={disabled}>
         {children}
       </Button>
       <Modal
