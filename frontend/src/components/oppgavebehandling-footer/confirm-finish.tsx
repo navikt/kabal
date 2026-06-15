@@ -1,13 +1,13 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Checkbox, HStack } from '@navikt/ds-react';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
+import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { UpdateInGosys } from '@/components/oppgavebehandling-footer/update-in-gosys/update-in-gosys';
 import { Direction, PopupContainer } from '@/components/popup-container/popup-container';
 import { isReduxValidationResponse } from '@/functions/error-type-guard';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useFinishOppgavebehandlingMutation } from '@/redux-api/oppgaver/mutations/behandling';
-import { FAGSYSTEM_ARENA } from '@/types/fagsystem';
 import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 import type { IFinishOppgavebehandlingParams } from '@/types/oppgavebehandling/params';
 
@@ -17,10 +17,6 @@ interface CancelButtonProps {
 
 interface ButtonsProps extends CancelButtonProps {
   finishDisabled: boolean;
-}
-
-interface FinishProps extends CancelButtonProps {
-  show: boolean;
 }
 
 const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
@@ -168,18 +164,12 @@ const CancelButton = ({ cancel }: CancelButtonProps) => (
   </Button>
 );
 
-export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
+export const ConfirmFinish = ({ cancel }: CancelButtonProps) => {
   const text = useText();
   const { data: oppgave } = useOppgave();
   const [arenaConfirmed, setArenaConfirmed] = useState(false);
 
-  useEffect(() => {
-    if (!show) {
-      setArenaConfirmed(false);
-    }
-  }, [show]);
-
-  if (!show || oppgave === undefined) {
+  if (oppgave === undefined) {
     return null;
   }
 
@@ -194,7 +184,7 @@ export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
     <PopupContainer close={cancel} direction={Direction.RIGHT}>
       <BodyLong>{text}</BodyLong>
       {showConfirmCheckbox ? (
-        <Checkbox checked={arenaConfirmed} onChange={(e) => setArenaConfirmed(e.target.checked)}>
+        <Checkbox onChange={(e) => setArenaConfirmed(e.target.checked)} checked={arenaConfirmed}>
           Jeg bekrefter at jeg har oppdatert saken i Arena.
         </Checkbox>
       ) : null}

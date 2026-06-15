@@ -1,6 +1,7 @@
 import { BodyShort, Button, HStack, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { CheckmarkCircleFillIconColored } from '@/components/colored-icons/colored-icons';
+import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useGetGosysOppgaveQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import { useSearchEnheterQuery } from '@/redux-api/search';
@@ -31,7 +32,8 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
     typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
     typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET ||
     typeId === SaksTypeEnum.OMGJØRINGSKRAV ||
-    (typeId === SaksTypeEnum.ANKE && (utfallId === TRUKKET || utfallId === MEDHOLD || utfallId === OPPHEVET));
+    (typeId === SaksTypeEnum.ANKE && (utfallId === TRUKKET || utfallId === MEDHOLD || utfallId === OPPHEVET)) ||
+    (typeId === SaksTypeEnum.KLAGE && oppgave.fagsystemId === FAGSYSTEM_ARENA);
 
   const { opprettetAvEnhet, tildeltEnhetsnr } = gosysOppgave;
 
