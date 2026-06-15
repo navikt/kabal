@@ -1,12 +1,13 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button, HStack } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { BodyLong, Button, Checkbox, HStack } from '@navikt/ds-react';
+import { useContext, useEffect, useState } from 'react';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
 import { UpdateInGosys } from '@/components/oppgavebehandling-footer/update-in-gosys/update-in-gosys';
 import { Direction, PopupContainer } from '@/components/popup-container/popup-container';
 import { isReduxValidationResponse } from '@/functions/error-type-guard';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useFinishOppgavebehandlingMutation } from '@/redux-api/oppgaver/mutations/behandling';
+import { FAGSYSTEM_ARENA } from '@/types/fagsystem';
 import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 import type { IFinishOppgavebehandlingParams } from '@/types/oppgavebehandling/params';
 
@@ -14,11 +15,15 @@ interface CancelButtonProps {
   cancel: () => void;
 }
 
+interface ButtonsProps extends CancelButtonProps {
+  finishDisabled: boolean;
+}
+
 interface FinishProps extends CancelButtonProps {
   show: boolean;
 }
 
-const Buttons = ({ cancel }: CancelButtonProps) => {
+const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
   const { data: oppgave } = useOppgave();
 
   if (oppgave === undefined) {
@@ -36,9 +41,9 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
       return (
         <HStack align="center" gap="space-8" width="400px">
           {oppgave.requiresGosysOppgave ? (
-            <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+            <UpdateInGosys disabled={finishDisabled}>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
           ) : (
-            <FinishButton>Fullfør</FinishButton>
+            <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
           )}
           <CancelButton cancel={cancel} />
         </HStack>
@@ -49,9 +54,9 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
           return (
             <HStack align="center" gap="space-8" width="400px">
               {oppgave.requiresGosysOppgave ? (
-                <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+                <UpdateInGosys disabled={finishDisabled}>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
               ) : (
-                <FinishButton>Fullfør</FinishButton>
+                <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
               )}
               <CancelButton cancel={cancel} />
             </HStack>
@@ -60,7 +65,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
         default:
           return (
             <HStack align="center" gap="space-8" width="400px">
-              <FinishButton>Fullfør</FinishButton>
+              <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
               <CancelButton cancel={cancel} />
             </HStack>
           );
@@ -71,12 +76,18 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
         case UtfallEnum.GJENOPPTATT_OPPHEVET:
           return (
             <HStack align="center" gap="space-8" width="650px">
-              <FinishButton nyBehandling>Ja, fullfør og opprett ny behandling i Kabal</FinishButton>
+              <FinishButton nyBehandling disabled={finishDisabled}>
+                Ja, fullfør og opprett ny behandling i Kabal
+              </FinishButton>
 
               {oppgave.requiresGosysOppgave ? (
-                <UpdateInGosys>Nei, fullfør uten å opprette ny behandling i Kabal</UpdateInGosys>
+                <UpdateInGosys disabled={finishDisabled}>
+                  Nei, fullfør uten å opprette ny behandling i Kabal
+                </UpdateInGosys>
               ) : (
-                <FinishButton>Nei, fullfør uten å opprette ny behandling i Kabal</FinishButton>
+                <FinishButton disabled={finishDisabled}>
+                  Nei, fullfør uten å opprette ny behandling i Kabal
+                </FinishButton>
               )}
 
               <CancelButton cancel={cancel} />
@@ -86,9 +97,9 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
           return (
             <HStack align="center" gap="space-8" width="400px">
               {oppgave.requiresGosysOppgave ? (
-                <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+                <UpdateInGosys disabled={finishDisabled}>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
               ) : (
-                <FinishButton>Fullfør</FinishButton>
+                <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
               )}
               <CancelButton cancel={cancel} />
             </HStack>
@@ -104,9 +115,9 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
           return (
             <HStack align="center" gap="space-8" width="400px">
               {oppgave.requiresGosysOppgave ? (
-                <UpdateInGosys>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+                <UpdateInGosys disabled={finishDisabled}>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
               ) : (
-                <FinishButton>Fullfør</FinishButton>
+                <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
               )}
               <CancelButton cancel={cancel} />
             </HStack>
@@ -114,12 +125,18 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
         case UtfallEnum.OPPHEVET:
           return (
             <HStack align="center" gap="space-8" width="650px">
-              <FinishButton nyBehandling>Ja, fullfør og opprett ny behandling i Kabal</FinishButton>
+              <FinishButton nyBehandling disabled={finishDisabled}>
+                Ja, fullfør og opprett ny behandling i Kabal
+              </FinishButton>
 
               {oppgave.requiresGosysOppgave ? (
-                <UpdateInGosys>Nei, fullfør uten å opprette ny behandling i Kabal</UpdateInGosys>
+                <UpdateInGosys disabled={finishDisabled}>
+                  Nei, fullfør uten å opprette ny behandling i Kabal
+                </UpdateInGosys>
               ) : (
-                <FinishButton>Nei, fullfør uten å opprette ny behandling i Kabal</FinishButton>
+                <FinishButton disabled={finishDisabled}>
+                  Nei, fullfør uten å opprette ny behandling i Kabal
+                </FinishButton>
               )}
 
               <CancelButton cancel={cancel} />
@@ -128,7 +145,7 @@ const Buttons = ({ cancel }: CancelButtonProps) => {
         case UtfallEnum.HENVIST:
           return (
             <HStack align="center" gap="space-8" width="400px">
-              <FinishButton>Fullfør</FinishButton>
+              <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
               <CancelButton cancel={cancel} />
             </HStack>
           );
@@ -153,15 +170,35 @@ const CancelButton = ({ cancel }: CancelButtonProps) => (
 
 export const ConfirmFinish = ({ cancel, show }: FinishProps) => {
   const text = useText();
+  const { data: oppgave } = useOppgave();
+  const [arenaConfirmed, setArenaConfirmed] = useState(false);
 
-  if (!show) {
+  useEffect(() => {
+    if (!show) {
+      setArenaConfirmed(false);
+    }
+  }, [show]);
+
+  if (!show || oppgave === undefined) {
     return null;
   }
+
+  const showConfirmCheckbox =
+    oppgave.fagsystemId === FAGSYSTEM_ARENA &&
+    (oppgave.typeId === SaksTypeEnum.KLAGE ||
+      oppgave.typeId === SaksTypeEnum.ANKE ||
+      oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+      oppgave.typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET);
 
   return (
     <PopupContainer close={cancel} direction={Direction.RIGHT}>
       <BodyLong>{text}</BodyLong>
-      <Buttons cancel={cancel} />
+      {showConfirmCheckbox ? (
+        <Checkbox checked={arenaConfirmed} onChange={(e) => setArenaConfirmed(e.target.checked)}>
+          Jeg bekrefter at jeg har oppdatert saken i Arena.
+        </Checkbox>
+      ) : null}
+      <Buttons cancel={cancel} finishDisabled={showConfirmCheckbox && !arenaConfirmed} />
     </PopupContainer>
   );
 };
@@ -232,9 +269,10 @@ const useText = (): string => {
 interface FinishButtonProps {
   nyBehandling?: boolean;
   children: string;
+  disabled: boolean;
 }
 
-const FinishButton = ({ children, nyBehandling = false }: FinishButtonProps) => {
+const FinishButton = ({ children, nyBehandling = false, disabled }: FinishButtonProps) => {
   const [finishOppgavebehandling, loader] = useFinishOppgavebehandlingMutation();
   const [hasBeenFinished, setHasBeenFinished] = useState<boolean>(false);
   const errorContext = useContext(ValidationErrorContext);
@@ -279,7 +317,7 @@ const FinishButton = ({ children, nyBehandling = false }: FinishButtonProps) => 
       type="button"
       onClick={finish}
       loading={hasBeenFinished || loader.isLoading}
-      disabled={hasBeenFinished || loader.isLoading}
+      disabled={hasBeenFinished || loader.isLoading || disabled}
       icon={<CheckmarkIcon aria-hidden />}
       className="[grid-area:left]"
     >
