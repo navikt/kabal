@@ -3,17 +3,19 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 import { LoadingCellContent } from '@/components/common-table-components/loading-cell-content';
 import { useTildel } from '@/components/oppgavestyring/use-tildel';
-import { toNavEmployeeEntry } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
+import { toSaksbehandlerAndMUEntry } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
 import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useOppgaveActions } from '@/hooks/use-oppgave-actions';
 import { useGetSignatureQuery } from '@/redux-api/bruker';
 import { useGetPotentialSaksbehandlereQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
-import type { INavEmployee } from '@/types/bruker';
+import { useGetUserInfoQuery } from '@/redux-api/users';
+import { useKlageenheter } from '@/simple-api-state/use-kodeverk';
+import type { INavEmployeeWithEnhet } from '@/types/bruker';
 import type { IOppgave } from '@/types/oppgaver';
 
 const NONE_LABEL = 'Ikke tildelt';
-const NONE_ENTRY: Entry<INavEmployee | null> = {
+const NONE_ENTRY: Entry<INavEmployeeWithEnhet | null> = {
   value: null,
   key: '__none__',
   plainText: NONE_LABEL,
@@ -74,8 +76,14 @@ const SelectSaksbehandler = ({
     isError: saksbehandlereIsError,
   } = useGetPotentialSaksbehandlereQuery(id);
   const [tildel, { isLoading }] = useTildel(id, typeId, ytelseId);
+  const { data: enheter } = useKlageenheter();
+  const { data: user } = useGetUserInfoQuery(
+    tildeltSaksbehandlerident ? { navIdent: tildeltSaksbehandlerident ?? '' } : skipToken,
+  );
 
-  const options = useMemo((): Entry<INavEmployee | null>[] => {
+  const enhetNr = user?.enhet?.enhetsnr;
+
+  const options = useMemo((): Entry<INavEmployeeWithEnhet | null>[] => {
     if (data === undefined) {
       return [NONE_ENTRY];
     }
@@ -94,14 +102,15 @@ const SelectSaksbehandler = ({
         {
           navIdent: tildeltSaksbehandlerident,
           navn: tildeltSaksbehandlerNavn ?? 'Ugyldig saksbehandler',
+          ansattEnhetId: enhetNr ?? 'Ukjent enhet',
         },
       ];
     })();
 
-    return [NONE_ENTRY, ...employees.map(toNavEmployeeEntry)];
-  }, [data, tildeltSaksbehandlerident, tildeltSaksbehandlerNavn]);
+    return [NONE_ENTRY, ...employees.map((option) => toSaksbehandlerAndMUEntry(option, enheter))];
+  }, [data, tildeltSaksbehandlerident, tildeltSaksbehandlerNavn, enheter, enhetNr]);
 
-  const selectedEntry = useMemo((): Entry<INavEmployee | null> | null => {
+  const selectedEntry = useMemo((): Entry<INavEmployeeWithEnhet | null> | null => {
     if (tildeltSaksbehandlerident === null) {
       return null;
     }

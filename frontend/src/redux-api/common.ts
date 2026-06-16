@@ -114,6 +114,7 @@ export const API_BASE_QUERY = staggeredBaseQuery(API_PATH);
 export const KABAL_API_BASE_PATH = '/api/kabal-api';
 export const KABAL_BEHANDLINGER_BASE_PATH = `${KABAL_API_BASE_PATH}/behandlinger`;
 export const INNSTILLINGER_BASE_PATH = '/api/kabal-innstillinger';
+export const KLAGE_LOOKUP_PATH = '/api/klage-lookup';
 
 export const KABAL_BEHANDLINGER_BASE_QUERY = staggeredBaseQuery(KABAL_BEHANDLINGER_BASE_PATH);
 export const KABAL_INTERNAL_BASE_QUERY = staggeredBaseQuery('/api');
@@ -121,3 +122,4 @@ export const INNSTILLINGER_BASE_QUERY = staggeredBaseQuery(INNSTILLINGER_BASE_PA
 export const KAKA_KVALITETSVURDERING_BASE_QUERY = staggeredBaseQuery('/api/kaka-api/kvalitetsvurderinger');
 export const KABAL_TEXT_TEMPLATES_BASE_QUERY = staggeredBaseQuery('/api/kabal-text-templates');
 export const KABAL_API_BASE_QUERY = staggeredBaseQuery(KABAL_API_BASE_PATH);
+export const KLAGE_LOOKUP_API_BASE_QUERY = staggeredBaseQuery(KLAGE_LOOKUP_PATH);

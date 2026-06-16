@@ -52,7 +52,7 @@ import type {
   ISaksbehandlerResponse,
   ITildelingEvent,
 } from '@/types/oppgavebehandling/response';
-import type { IRols, ISaksbehandlere } from '@/types/oppgaver';
+import type { IRols, ISaksbehandlereWithEnhet } from '@/types/oppgaver';
 
 export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,
@@ -198,7 +198,7 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
         validateStatus: ({ status, ok }) => ok || status === 400,
       }),
     }),
-    getPotentialSaksbehandlere: builder.query<ISaksbehandlere, string>({
+    getPotentialSaksbehandlere: builder.query<ISaksbehandlereWithEnhet, string>({
       query: (id) => `/kabal-api/behandlinger/${id}/potentialsaksbehandlere`,
     }),
     getPotentialMedunderskrivere: builder.query<IMedunderskrivereResponse, string>({

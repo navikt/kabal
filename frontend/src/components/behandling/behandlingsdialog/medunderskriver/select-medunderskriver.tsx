@@ -14,7 +14,7 @@ import {
   utfallHasKvalitetsvurdering,
 } from '@/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
 import { useSetMedunderskriver } from '@/components/oppgavestyring/use-set-medunderskriver';
-import { toNavEmployeeEntry } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
+import { toSaksbehandlerAndMUEntry } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
 import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useHasRole } from '@/hooks/use-has-role';
@@ -24,7 +24,8 @@ import { useKvalitetsvurdering } from '@/hooks/use-kvalitetsvurdering';
 import { pushEvent } from '@/observability';
 import { useTildelSaksbehandlerMutation } from '@/redux-api/oppgaver/mutations/tildeling';
 import { useGetPotentialMedunderskrivereQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
-import type { INavEmployee } from '@/types/bruker';
+import { useKlageenheter } from '@/simple-api-state/use-kodeverk';
+import type { INavEmployee, INavEmployeeWithEnhet } from '@/types/bruker';
 import { Role } from '@/types/bruker';
 import type { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 import { FlowState, type IMedunderskriver } from '@/types/oppgave-common';
@@ -37,7 +38,7 @@ interface Props {
 }
 
 const NONE_LABEL = 'Ingen';
-const NONE_ENTRY: Entry<INavEmployee | null> = {
+const NONE_ENTRY: Entry<INavEmployeeWithEnhet | null> = {
   value: null,
   key: '__none__',
   plainText: NONE_LABEL,
@@ -79,7 +80,7 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
   const fromNavIdent = medunderskriver.employee?.navIdent ?? null;
   const titleLabel = getTitleCapitalized(typeId);
 
-  const handleChange = (employee: INavEmployee | null) => {
+  const handleChange = (employee: INavEmployeeWithEnhet | null) => {
     if (
       typeHasKvalitetsvurdering(typeId) &&
       utfallHasKvalitetsvurdering(utfallId) &&
@@ -110,10 +111,10 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
 
 interface SelectMedunderskriverInnerProps {
   label: string;
-  medunderskrivere: INavEmployee[];
+  medunderskrivere: INavEmployeeWithEnhet[];
   employee: INavEmployee | null;
   isUpdating: boolean;
-  onChange: (employee: INavEmployee | null) => void;
+  onChange: (employee: INavEmployeeWithEnhet | null) => void;
   confirmLabel: string;
 }
 
@@ -125,12 +126,14 @@ const SelectMedunderskriverInner = ({
   onChange,
   confirmLabel,
 }: SelectMedunderskriverInnerProps) => {
+  const { data: enheter } = useKlageenheter();
+
   const options = useMemo(
-    (): Entry<INavEmployee | null>[] => [NONE_ENTRY, ...medunderskrivere.map(toNavEmployeeEntry)],
-    [medunderskrivere],
+    () => [NONE_ENTRY, ...medunderskrivere.map((option) => toSaksbehandlerAndMUEntry(option, enheter))],
+    [medunderskrivere, enheter],
   );
 
-  const selectedEntry = useMemo((): Entry<INavEmployee | null> => {
+  const selectedEntry = useMemo((): Entry<INavEmployeeWithEnhet | null> => {
     if (employee === null) {
       return NONE_ENTRY;
     }

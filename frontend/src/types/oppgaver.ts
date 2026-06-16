@@ -1,4 +1,4 @@
-import type { INavEmployee } from '@/types/bruker';
+import type { INavEmployee, INavEmployeeWithEnhet } from '@/types/bruker';
 import type { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 import type { IMedunderskriver, IRol, ISattPåVent } from '@/types/oppgave-common';
 
@@ -181,6 +181,10 @@ export type FradelSaksbehandlerParams = FradelReasonBase &
 
 export interface ISaksbehandlere {
   saksbehandlere: INavEmployee[];
+}
+
+export interface ISaksbehandlereWithEnhet {
+  saksbehandlere: INavEmployeeWithEnhet[];
 }
 
 export interface IMedunderskrivere {

@@ -1,4 +1,4 @@
-import type { INavEmployee } from '@/types/bruker';
+import type { INavEmployee, INavEmployeeWithEnhet } from '@/types/bruker';
 import type { UtfallEnum } from '@/types/kodeverk';
 import type {
   FlowState,
@@ -20,7 +20,7 @@ export interface IVedtakFullfoertResponse extends IModifiedResponse {
 
 export interface IMedunderskrivereResponse {
   tema: string;
-  medunderskrivere: INavEmployee[];
+  medunderskrivere: INavEmployeeWithEnhet[];
 }
 
 export interface IMedunderskriverResponse {
