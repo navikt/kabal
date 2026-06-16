@@ -123,15 +123,15 @@ export const SelectPopover = ({
         }}
         disabled={disabled}
         loading={loading}
-        iconPosition="right"
         icon={open ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
-        className={`flex min-h-8 cursor-pointer items-center justify-between gap-1 ${triggerWidth}`}
+        iconPosition="right"
+        className={`min-h-8 cursor-pointer overflow-hidden ${triggerWidth} grid grid-cols-[1fr_min-content] [&>span:first-child]:block [&>span:first-child]:min-w-0 [&>span:first-child]:overflow-hidden`}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-label={label}
         aria-controls={open ? popoverId : undefined}
       >
-        {trigger}
+        <span className="block truncate">{trigger}</span>
       </Button>
 
       {typeof error === 'string' && error.length > 0 ? (

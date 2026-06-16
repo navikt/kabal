@@ -21,6 +21,7 @@ import { smartEditorCommentsApi } from '@/redux-api/smart-editor-comments';
 import { svarbrevApi } from '@/redux-api/svarbrev';
 import { consumerTextsApi } from '@/redux-api/texts/consumer';
 import { textsApi } from '@/redux-api/texts/texts';
+import { userApi } from '@/redux-api/users';
 
 export const reduxStore = configureStore({
   reducer: rootReducer,
@@ -45,6 +46,7 @@ export const reduxStore = configureStore({
       accessRightsApi.middleware,
       journalposterApi.middleware,
       searchApi.middleware,
+      userApi.middleware,
       logiskeVedleggApi.middleware,
       svarbrevApi.middleware,
       collaborationApi.middleware,

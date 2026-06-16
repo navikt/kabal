@@ -18,6 +18,7 @@ import { smartEditorCommentsApi } from '@/redux-api/smart-editor-comments';
 import { svarbrevApi } from '@/redux-api/svarbrev';
 import { consumerTextsApi } from '@/redux-api/texts/consumer';
 import { textsApi } from '@/redux-api/texts/texts';
+import { userApi } from '@/redux-api/users';
 
 export const rootReducer = combineReducers({
   [oppgaverApi.reducerPath]: oppgaverApi.reducer,
@@ -35,6 +36,7 @@ export const rootReducer = combineReducers({
   [accessRightsApi.reducerPath]: accessRightsApi.reducer,
   [journalposterApi.reducerPath]: journalposterApi.reducer,
   [searchApi.reducerPath]: searchApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
   [logiskeVedleggApi.reducerPath]: logiskeVedleggApi.reducer,
   [svarbrevApi.reducerPath]: svarbrevApi.reducer,
   [collaborationApi.reducerPath]: collaborationApi.reducer,

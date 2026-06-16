@@ -1,3 +1,5 @@
+import type { Enhet } from '@/types/oppgavebehandling/oppgavebehandling';
+
 interface IEnhet {
   id: string;
   navn: string;
@@ -15,6 +17,10 @@ export interface INavEmployee {
   navn: string;
 }
 
+export interface INavEmployeeWithEnhet extends INavEmployee {
+  ansattEnhetId: string;
+}
+
 export interface IUserData extends INavEmployee {
   navIdent: string;
   navn: string;
@@ -22,6 +28,14 @@ export interface IUserData extends INavEmployee {
   enheter: IEnhet[];
   ansattEnhet: IEnhet;
   tildelteYtelser: string[];
+}
+
+export interface UserInfo {
+  navIdent: string;
+  sammensattNavn: string;
+  fornavn: string;
+  etternavn: string;
+  enhet: Enhet;
 }
 
 interface ICustomUserInfo {
