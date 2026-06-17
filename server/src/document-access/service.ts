@@ -5,6 +5,7 @@ import { requiredEnvString } from '@/config/env-var';
 import { SmartDocumentAccessMap } from '@/document-access/access-map';
 import { DocumentAccessNotFoundError, getDocumentAccessListFromApi } from '@/document-access/api/document-access-list';
 import { parseKafkaMessageValue } from '@/document-access/kafka';
+import { ListenerMap } from '@/document-access/listener-map';
 import type { Metadata } from '@/document-access/types';
 import { parseTraceparent } from '@/helpers/traceparent';
 import { getLogger } from '@/logger';
@@ -34,6 +35,7 @@ const SYNC_INTERVAL_MS = 5_000;
 const BACKGROUND_METADATA: Metadata = { tab_id: undefined, client_version: 'kabal-frontend-background' };
 
 type HasAccessListener = (hasWriteAccess: boolean) => void;
+type DeletedDocumentListener = () => void;
 
 class SmartDocumentWriteAccess {
   /**
@@ -42,8 +44,8 @@ class SmartDocumentWriteAccess {
    */
   #accessMap = new SmartDocumentAccessMap();
 
-  #hasAccessListeners: Map<string, HasAccessListener[]> = new Map();
-  #deletedDocumentListeners: Map<string, (() => void)[]> = new Map();
+  #hasAccessListeners = new ListenerMap<HasAccessListener>();
+  #deletedDocumentListeners = new ListenerMap<DeletedDocumentListener>();
 
   #consumer = new Consumer({
     groupId: crypto.randomUUID(),
@@ -176,12 +178,7 @@ class SmartDocumentWriteAccess {
     await this.#pollActiveDocuments();
   };
 
-  /**
-   * Polls the API for the currently active (connected) documents while Kafka is
-   * unavailable. Bounded to documents users are actually connected to.
-   * A 404 means the document was deleted and is handled as such; any other
-   * failure keeps the last-known list rather than risk a wrongful deletion.
-   */
+  /** Polls the API for documents with active connections while Kafka is unavailable. */
   #pollActiveDocuments = async (): Promise<void> => {
     const documentIds = this.#getActiveDocumentIds();
 
@@ -226,8 +223,11 @@ class SmartDocumentWriteAccess {
   };
 
   /**
-   * The set of documents that currently have active listeners, i.e. documents a
-   * user is connected to. New documents are not tracked until a user connects.
+   * The set of documents with at least one active connection, derived from the
+   * access and deletion listeners. Polling is bounded to documents a user is
+   * currently connected to, so it cannot grow with the Kafka-mirrored cache.
+   * Deleted documents are excluded because #handleDeletion removes their
+   * listeners.
    */
   #getActiveDocumentIds = (): Set<string> => {
     const documentIds = new Set<string>();
@@ -267,6 +267,16 @@ class SmartDocumentWriteAccess {
     this.#accessMap.delete(documentId);
     this.#notifyHasAccessListeners(documentId, null);
     this.#notifyDeletedDocumentListeners(documentId);
+    this.#removeHasAccessListenersForDocument(documentId);
+  };
+
+  /** Drops all has-access listeners for a document, e.g. after deletion. */
+  #removeHasAccessListenersForDocument = (documentId: string): void => {
+    for (const key of this.#hasAccessListeners.keys()) {
+      if (key.startsWith(documentId)) {
+        this.#hasAccessListeners.delete(key);
+      }
+    }
   };
 
   #startConsumer = async (restartCount: number) => {
@@ -480,40 +490,11 @@ class SmartDocumentWriteAccess {
     // Immediately check access and call the listener with the result.
     this.hasAccess(documentId, navIdent, metadata, false).then(listener);
 
-    const key = `${documentId}:${navIdent}`;
-
-    // Get existing document listeners.
-    const listeners = this.#hasAccessListeners.get(key);
-
-    if (listeners === undefined) {
-      // If there are no entry for this key, create a new entry.
-      this.#hasAccessListeners.set(key, [listener]);
-
-      return () => this.removeHasAccessListener(documentId, navIdent, listener);
-    }
-
-    // If there are existing listeners for this key, add the new listener to the array.
-    listeners.push(listener);
-
-    return () => this.removeHasAccessListener(documentId, navIdent, listener);
-  };
-
-  removeHasAccessListener = (documentId: string, navIdent: string, listener: HasAccessListener) => {
-    const key = `${documentId}:${navIdent}`;
-    const listeners = this.#hasAccessListeners.get(key);
-
-    if (listeners === undefined) {
-      return;
-    }
-
-    this.#hasAccessListeners.set(
-      key,
-      listeners.filter((l) => l !== listener),
-    );
+    return this.#hasAccessListeners.add(`${documentId}:${navIdent}`, listener);
   };
 
   #notifyHasAccessListeners = (documentId: string, navIdents: string[] | null) => {
-    const listenerLists = this.#hasAccessListeners.entries().filter(([key]) => key.startsWith(`${documentId}:`));
+    const listenerLists = this.#hasAccessListeners.entries().filter(([key]) => key.startsWith(documentId));
 
     for (const [key, listeners] of listenerLists) {
       const [, navIdent] = key.split(':');
@@ -528,28 +509,8 @@ class SmartDocumentWriteAccess {
     }
   };
 
-  addDeletedDocumentListener = (documentId: string, listener: () => void) => {
-    const listeners = this.#deletedDocumentListeners.get(documentId) ?? [];
-    listeners.push(listener);
-    this.#deletedDocumentListeners.set(documentId, listeners);
-
-    return () => this.removeDeletedDocumentListener(documentId, listener);
-  };
-
-  removeDeletedDocumentListener = (documentId: string, listener: () => void) => {
-    const listeners = this.#deletedDocumentListeners.get(documentId);
-
-    if (listeners === undefined) {
-      return;
-    }
-
-    this.#deletedDocumentListeners.set(
-      documentId,
-      listeners.filter((l) => l !== listener),
-    );
-  };
-
-  removeDeletedDocumentListeners = (documentId: string) => this.#deletedDocumentListeners.delete(documentId);
+  addDeletedDocumentListener = (documentId: string, listener: DeletedDocumentListener) =>
+    this.#deletedDocumentListeners.add(documentId, listener);
 
   #notifyDeletedDocumentListeners = (documentId: string) => {
     const listeners = this.#deletedDocumentListeners.get(documentId);
@@ -563,7 +524,7 @@ class SmartDocumentWriteAccess {
     }
 
     // Remove all listeners after notifying. A document can only be deleted once.
-    this.removeDeletedDocumentListeners(documentId);
+    this.#deletedDocumentListeners.delete(documentId);
   };
 
   getErrors = (): string[] => {
