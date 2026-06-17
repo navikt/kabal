@@ -23,8 +23,6 @@ export class SmartDocumentAccessMap {
 
   public has = (documentId: string): boolean => this.#accessMap.has(documentId);
 
-  public keys = (): string[] => Array.from(this.#accessMap.keys());
-
   public delete = (documentId: string): void => {
     this.#accessMap.delete(documentId);
 
