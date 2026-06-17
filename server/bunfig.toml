@@ -2,3 +2,6 @@
 exact = true
 minimumReleaseAge = 259200
 ignoreScripts = true
+
+[test]
+preload = ["./src/test-setup.ts"]
