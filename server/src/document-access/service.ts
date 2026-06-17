@@ -8,6 +8,7 @@ import { parseKafkaMessageValue } from '@/document-access/kafka';
 import { ListenerMap } from '@/document-access/listener-map';
 import type { Metadata } from '@/document-access/types';
 import { IntervalLoop } from '@/helpers/interval-loop';
+import { sameMembers } from '@/helpers/same-members';
 import { parseTraceparent } from '@/helpers/traceparent';
 import { getLogger } from '@/logger';
 import { proxyRegister } from '@/prometheus/types';
@@ -590,23 +591,5 @@ const closeStream = async (stream: MessagesStream<string, string, string, string
 };
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-/** Compares two Nav-ident lists by membership, ignoring order and duplicates. */
-const sameMembers = (a: string[], b: string[]): boolean => {
-  const setA = new Set(a);
-  const setB = new Set(b);
-
-  if (setA.size !== setB.size) {
-    return false;
-  }
-
-  for (const value of setA) {
-    if (!setB.has(value)) {
-      return false;
-    }
-  }
-
-  return true;
-};
 
 export const SMART_DOCUMENT_WRITE_ACCESS = new SmartDocumentWriteAccess();
