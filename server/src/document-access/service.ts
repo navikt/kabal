@@ -7,6 +7,7 @@ import { DocumentAccessNotFoundError, getDocumentAccessListFromApi } from '@/doc
 import { parseKafkaMessageValue } from '@/document-access/kafka';
 import { ListenerMap } from '@/document-access/listener-map';
 import type { Metadata } from '@/document-access/types';
+import { IntervalLoop } from '@/helpers/interval-loop';
 import { parseTraceparent } from '@/helpers/traceparent';
 import { getLogger } from '@/logger';
 import { proxyRegister } from '@/prometheus/types';
@@ -70,7 +71,9 @@ class SmartDocumentWriteAccess {
   #initTimestamp: bigint = BigInt(Date.now());
 
   /** Health-gated sync loop. Polls active documents while Kafka is down. */
-  #syncLoop: NodeJS.Timeout | null = null;
+  #syncLoop = new IntervalLoop(SYNC_INTERVAL_MS, (error) =>
+    log.error({ msg: 'Sync tick failed', trace_id: this.#lifecycle_trace_id, error }),
+  );
 
   /** Whether init() has completed. Used by the startup readiness probe. */
   #initialized = false;
@@ -99,7 +102,7 @@ class SmartDocumentWriteAccess {
     await this.#connectKafka();
 
     // 2. Start the sync loop.
-    this.#startSyncLoop();
+    this.#syncLoop.start(this.#ensureAccessListsUpdated);
 
     this.#initialized = true;
   }
@@ -139,18 +142,6 @@ class SmartDocumentWriteAccess {
     } finally {
       this.#kafkaConnecting = false;
     }
-  };
-
-  #startSyncLoop = () => {
-    if (this.#syncLoop !== null) {
-      return;
-    }
-
-    this.#syncLoop = setInterval(() => {
-      this.#ensureAccessListsUpdated().catch((error) => {
-        log.error({ msg: 'Sync tick failed', trace_id: this.#lifecycle_trace_id, error });
-      });
-    }, SYNC_INTERVAL_MS);
   };
 
   #ensureAccessListsUpdated = async (): Promise<void> => {
@@ -555,9 +546,8 @@ class SmartDocumentWriteAccess {
   close = async () => {
     const trace_id = this.#lifecycle_trace_id;
 
-    if (this.#syncLoop !== null) {
-      clearInterval(this.#syncLoop);
-      this.#syncLoop = null;
+    if (this.#syncLoop.isRunning) {
+      this.#syncLoop.stop();
       log.debug({ msg: 'Sync loop stopped', trace_id });
     }
 
