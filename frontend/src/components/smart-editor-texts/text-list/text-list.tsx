@@ -9,7 +9,7 @@ import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-que
 import { SortableHeader, SortKey } from '@/components/smart-editor-texts/sortable-header';
 import { StatusFilter, useStatusFilter } from '@/components/smart-editor-texts/status-filter/status-filter';
 import { useFilteredAndSorted, useOrder, useSort } from '@/components/smart-editor-texts/text-list/hooks';
-import { isListGodFormulering, isListPlainText, isListRegelverk, isListRichText } from '@/functions/is-rich-plain-text';
+import { isListGodFormulering, isListRegelverk, isListRichText } from '@/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
 import { getTextAsString } from '@/plate/functions/get-text-string';
 import { useGetMaltekstseksjonQuery } from '@/redux-api/maltekstseksjoner/queries';
@@ -39,10 +39,6 @@ const getString = (text: ListText, language: Language) => {
 
   if (isListRegelverk(text)) {
     return getTextAsString(text.richText[UNTRANSLATED]);
-  }
-
-  if (isListPlainText(text)) {
-    return text.plainText[language];
   }
 
   return null;

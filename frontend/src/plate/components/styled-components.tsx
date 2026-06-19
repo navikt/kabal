@@ -9,8 +9,6 @@ export enum SectionTypeEnum {
   REDIGERBAR_MALTEKST = 3,
   REGELVERK = 4,
   SIGNATURE = 5,
-  HEADER = 6,
-  FOOTER = 7,
 }
 
 const FONT_COLOR_MAP: Record<SectionTypeEnum, string> = {
@@ -18,8 +16,6 @@ const FONT_COLOR_MAP: Record<SectionTypeEnum, string> = {
   [SectionTypeEnum.MALTEKST]: 'var(--ax-text-neutral)',
   [SectionTypeEnum.REDIGERBAR_MALTEKST]: 'inherit',
   [SectionTypeEnum.REGELVERK]: 'inherit',
-  [SectionTypeEnum.HEADER]: 'var(--ax-text-neutral)',
-  [SectionTypeEnum.FOOTER]: 'var(--ax-text-neutral)',
   [SectionTypeEnum.SIGNATURE]: 'var(--ax-text-neutral)',
   [SectionTypeEnum.LABEL]: 'var(--ax-text-neutral)',
 };
@@ -29,8 +25,6 @@ const BORDER_COLOR_MAP: Record<SectionTypeEnum, string> = {
   [SectionTypeEnum.MALTEKST]: 'var(--ax-border-meta-purple)',
   [SectionTypeEnum.REDIGERBAR_MALTEKST]: 'var(--ax-border-success)',
   [SectionTypeEnum.REGELVERK]: 'var(--ax-border-accent)',
-  [SectionTypeEnum.HEADER]: 'var(--ax-border-neutral)',
-  [SectionTypeEnum.FOOTER]: 'var(--ax-border-neutral)',
   [SectionTypeEnum.SIGNATURE]: 'var(--ax-border-meta-lime)',
   [SectionTypeEnum.LABEL]: 'var(--ax-border-neutral)',
 };

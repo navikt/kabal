@@ -2,7 +2,7 @@ import { HStack, Label, useId } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { ModifiedCreatedDateTime } from '@/components/datetime/datetime';
 import { Changelog } from '@/components/smart-editor-texts/edit/changelog';
-import { isGodFormuleringType, isRegelverkType, isRichTextType } from '@/functions/is-rich-plain-text';
+import { isRegelverkType } from '@/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
 import { useGetTextVersionsQuery } from '@/redux-api/texts/queries';
 import { TextChangeType } from '@/types/common-text-types';
@@ -15,15 +15,11 @@ export const TextModified = ({ id, created, textType, edits }: IText) => {
   const language = useRedaktoerLanguage();
 
   const changeType: TextChangeType = useMemo(() => {
-    if (isRichTextType(textType) || isGodFormuleringType(textType)) {
-      return language === Language.NB ? TextChangeType.RICH_TEXT_NB : TextChangeType.RICH_TEXT_NN;
-    }
-
     if (isRegelverkType(textType)) {
       return TextChangeType.RICH_TEXT_UNTRANSLATED;
     }
 
-    return language === Language.NB ? TextChangeType.PLAIN_TEXT_NB : TextChangeType.PLAIN_TEXT_NN;
+    return language === Language.NB ? TextChangeType.RICH_TEXT_NB : TextChangeType.RICH_TEXT_NN;
   }, [language, textType]);
 
   const filteredEdits = useMemo(

@@ -1,8 +1,6 @@
 import { deepFreeze } from '@/functions/deep-freeze';
 import { TemplateSections } from '@/plate/template-sections';
 import {
-  createFooter,
-  createHeader,
   createMaltekstseksjon,
   createPageBreak,
   createRegelverk,
@@ -18,8 +16,6 @@ export const GJENOPPTAKSBEGJÆRING_TILSVARSBREV_MED_OVERSENDELSESBREV_TEMPLATE =
     templateId: TemplateIdEnum.GJENOPPTAKSBEGJÆRING_TILSVARSBREV_MED_OVERSENDELSESBREV,
     tittel: 'Tilsvarsbrev med oversendelsesbrev (gjenopptaksbegjæring)',
     richText: [
-      createHeader(),
-
       createSaksinfo(),
       createMaltekstseksjon(TemplateSections.TILSVARSBREV_TITLE),
       createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
@@ -37,7 +33,7 @@ export const GJENOPPTAKSBEGJÆRING_TILSVARSBREV_MED_OVERSENDELSESBREV_TEMPLATE =
       createMaltekstseksjon(TemplateSections.VURDERINGEN),
 
       createSignature(),
-      createFooter(),
+
       createRegelverk(),
     ],
     dokumentTypeId: DistribusjonsType.BREV,

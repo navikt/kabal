@@ -3,11 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useMetadataFilters } from '@/components/smart-editor-texts/hooks/use-metadata-filters';
 import { useUtfallOptions } from '@/components/smart-editor-texts/hooks/use-options';
 import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
-import {
-  KlageenhetSelect,
-  TemplateSectionFilter,
-  UtfallSelect,
-} from '@/components/smart-editor-texts/query-filter-selects';
+import { TemplateSectionFilter, UtfallSelect } from '@/components/smart-editor-texts/query-filter-selects';
 import { YtelserAndRegistreringshjemlerSelect } from '@/components/smart-editor-texts/registreringshjemler-select/ytelser-and-registreringshjemler-select';
 import type { IGetMaltekstseksjonParams, TextTypes } from '@/types/common-text-types';
 
@@ -18,11 +14,10 @@ interface Props {
 
 export const Filters = ({ textType, className }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { hasTemplateSectionFilter, hasEnhetFilter, hasUtfallFilter, hasYtelseHjemmelFilter } =
-    useMetadataFilters(textType);
-  const hasAnyFilter = hasTemplateSectionFilter || hasEnhetFilter || hasUtfallFilter || hasYtelseHjemmelFilter;
+  const { hasTemplateSectionFilter, hasUtfallFilter, hasYtelseHjemmelFilter } = useMetadataFilters(textType);
+  const hasAnyFilter = hasTemplateSectionFilter || hasUtfallFilter || hasYtelseHjemmelFilter;
 
-  const { enhetIdList, utfallIdList, templateSectionIdList, ytelseHjemmelIdList } = useTextQuery();
+  const { utfallIdList, templateSectionIdList, ytelseHjemmelIdList } = useTextQuery();
 
   const utfallOptions = useUtfallOptions();
 
@@ -68,16 +63,6 @@ export const Filters = ({ textType, className }: Props) => {
         >
           Utfallsett
         </UtfallSelect>
-      ) : null}
-
-      {hasEnhetFilter ? (
-        <KlageenhetSelect
-          selected={enhetIdList ?? []}
-          onChange={(value) => setFilter('enhetIdList', value)}
-          includeNoneOption
-        >
-          Enheter
-        </KlageenhetSelect>
       ) : null}
     </HStack>
   );

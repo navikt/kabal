@@ -4,7 +4,6 @@ import type { IOption } from '@/components/filter-dropdown/props';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { getTemplateOptions } from '@/components/smart-editor-texts/get-template-options';
-import { useKlageenheterOptions } from '@/components/smart-editor-texts/hooks/use-options';
 import {
   LIST_DELIMITER,
   NONE,
@@ -98,53 +97,6 @@ const utfallValueToFilter = (value: (UtfallEnum | NONE_TYPE)[]): string[] => {
   const utfallSet = utfall.sort().join(SET_DELIMITER);
 
   return hasNone ? [utfallSet, NONE] : [utfallSet];
-};
-
-interface KlageenhetSelectProps {
-  children: string;
-  selected: string[];
-  onChange: (value: string[]) => void;
-  includeNoneOption?: boolean;
-}
-
-// Styringsenheten er ikke en klageenhet.
-// De må likevel være med i listen man kan velge fra når man legger inn topp- og bunntekster.
-// Dette er fordi de er med i et pilotprosjekt hvor det kan forekomme at de selv må saksbehandle.
-const STYRINGSENHETEN = { value: '4200', label: 'Klageinstans styringsenhet' };
-
-export const KlageenhetSelect = ({
-  children,
-  selected,
-  onChange,
-  includeNoneOption = false,
-}: KlageenhetSelectProps) => {
-  const klageenheter = useKlageenheterOptions();
-  const enheter = [...klageenheter, STYRINGSENHETEN];
-  const options: IOption<string>[] = includeNoneOption ? [NONE_OPTION, ...enheter] : enheter;
-
-  const entries = useMemo<Entry<IOption<string>>[]>(() => options.map(toEntry), [options]);
-
-  const selectedEntries = useMemo(() => entries.filter((e) => selected.includes(e.value.value)), [entries, selected]);
-
-  const handleChange = useCallback(
-    (values: IOption<string>[]) => {
-      onChange(values.map((v) => v.value));
-    },
-    [onChange],
-  );
-
-  return (
-    <SearchableMultiSelect
-      label={children}
-      options={entries}
-      value={selectedEntries}
-      emptyLabel={children}
-      onChange={handleChange}
-      triggerSize="small"
-      triggerVariant="tertiary"
-      showSelectAll
-    />
-  );
 };
 
 interface TemplateSectionSelectProps {

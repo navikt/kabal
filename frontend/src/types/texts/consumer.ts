@@ -1,22 +1,12 @@
 import type { KabalValue } from '@/plate/types';
-import {
-  GOD_FORMULERING_TYPE,
-  type PlainTextTypes,
-  type REGELVERK_TYPE,
-  type RichTextTypes,
-} from '@/types/common-text-types';
-import type { INewPlainTextParams, INewRegelverkParams, INewRichTextParams } from '@/types/texts/common';
+import { GOD_FORMULERING_TYPE, type REGELVERK_TYPE, type RichTextTypes } from '@/types/common-text-types';
+import type { INewRegelverkParams, INewRichTextParams } from '@/types/texts/common';
 import type { Language } from '@/types/texts/language';
 
 interface ConsumerMetadata {
   id: string;
   publishedDateTime: string;
   language: Language;
-}
-
-export interface IConsumerPlainText extends ConsumerMetadata, Omit<INewPlainTextParams, 'plainText' | 'textType'> {
-  textType: PlainTextTypes;
-  plainText: string;
 }
 
 export interface IConsumerRichText extends ConsumerMetadata, Omit<INewRichTextParams, 'richText' | 'textType'> {
@@ -49,8 +39,4 @@ export const isConsumerRichText = (
 ): text is IConsumerRichText | IConsumerRegelverkText | IConsumerGodFormuleringText =>
   'richText' in text && Array.isArray(text.richText);
 
-export type IConsumerText =
-  | IConsumerRichText
-  | IConsumerPlainText
-  | IConsumerRegelverkText
-  | IConsumerGodFormuleringText;
+export type IConsumerText = IConsumerRichText | IConsumerRegelverkText | IConsumerGodFormuleringText;

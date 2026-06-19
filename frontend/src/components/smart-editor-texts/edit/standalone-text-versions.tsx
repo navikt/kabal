@@ -2,17 +2,15 @@ import { Loader, VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { useParams } from 'react-router';
 import { PublishedRichText } from '@/components/maltekstseksjoner/texts/published-rich-text';
-import { DraftPlainText } from '@/components/smart-editor-texts/edit/draft-plain-text';
 import { DraftRegelverk } from '@/components/smart-editor-texts/edit/draft-regelverk';
 import { DraftGodFormulering, DraftRichText } from '@/components/smart-editor-texts/edit/draft-rich-text';
-import { PublishedPlainText } from '@/components/smart-editor-texts/edit/published-plain-text';
 import type { DraftVersionProps } from '@/components/smart-editor-texts/types';
 import { VersionTabs } from '@/components/versioned-tabs/versioned-tabs';
 import { isGodFormulering, isRegelverk, isRichText } from '@/functions/is-rich-plain-text';
 import { useNavigateToStandaloneTextVersion } from '@/hooks/use-navigate-to-standalone-text-version';
 import { useGetTextByIdQuery, useGetTextVersionsQuery } from '@/redux-api/texts/queries';
-import { PlainTextTypes, type TextTypes } from '@/types/common-text-types';
-import type { IDraft, IPlainText, IPublishedText, IText } from '@/types/texts/responses';
+import type { TextTypes } from '@/types/common-text-types';
+import type { IDraft, IPublishedText, IText } from '@/types/texts/responses';
 
 interface Props {
   id: string;
@@ -85,10 +83,6 @@ const DraftVersion = ({ text, onDraftDeleted }: DraftVersionProps) => {
     return <DraftGodFormulering text={text} onDraftDeleted={onDraftDeleted} />;
   }
 
-  if (isPlainText(text)) {
-    return <DraftPlainText text={text} onDraftDeleted={onDraftDeleted} />;
-  }
-
   return null;
 };
 
@@ -99,16 +93,9 @@ interface PublishedVersionProps {
 }
 
 const PublishedVersion = ({ text, hasDraft, setTabId }: PublishedVersionProps) => {
-  if (isPlainText(text)) {
-    return <PublishedPlainText text={text} hasDraft={hasDraft} setTabId={setTabId} />;
-  }
-
   return (
     <VStack gap="space-8" padding="space-16" height="100%">
       <PublishedRichText text={text} hasDraft={hasDraft} setTabId={setTabId} />
     </VStack>
   );
 };
-
-const isPlainText = (text: IText): text is IPlainText =>
-  text.textType === PlainTextTypes.HEADER || text.textType === PlainTextTypes.FOOTER;

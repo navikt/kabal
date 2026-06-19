@@ -2,7 +2,7 @@ import { Tag } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import type { IOption } from '@/components/filter-dropdown/props';
 import { SAKSTYPE_TO_TAG_VARIANT } from '@/components/type/sakstype-to-tag-variant';
-import { useKlageenheter, useSakstyperToUtfall } from '@/simple-api-state/use-kodeverk';
+import { useSakstyperToUtfall } from '@/simple-api-state/use-kodeverk';
 import type { UtfallEnum } from '@/types/kodeverk';
 
 const EMPTY_ARRAY: [] = [];
@@ -53,10 +53,4 @@ export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
 
     return utfallList.sort((a, b) => Number.parseInt(a.value, 10) - Number.parseInt(b.value, 10));
   }, [shortNames]);
-};
-
-export const useKlageenheterOptions = (): IOption<string>[] => {
-  const { data: values = EMPTY_ARRAY } = useKlageenheter();
-
-  return useMemo(() => values.map(({ id, navn }) => ({ value: id, label: navn })), [values]);
 };

@@ -8,11 +8,9 @@ import type { TemplateSections } from '@/plate/template-sections';
 import {
   GOD_FORMULERING_TYPE,
   type IGetConsumerGodFormuleringParams,
-  type IGetConsumerHeaderFooterParams,
   type IGetConsumerMaltekstseksjonerParams,
   type IGetConsumerRegelverkParams,
   type IGetConsumerTextsParams,
-  type PlainTextTypes,
   REGELVERK_TYPE,
   type TextTypes,
 } from '@/types/common-text-types';
@@ -69,16 +67,6 @@ export const useQuery = ({ textType, templateId, section, language, includeEnhet
     language,
     defaultLanguagae,
   ]);
-};
-
-export const useHeaderFooterQuery = (textType: PlainTextTypes): IGetConsumerHeaderFooterParams | SkipToken => {
-  const { user } = useContext(StaticDataContext);
-  const language = useSmartEditorLanguage();
-
-  return useMemo<IGetConsumerHeaderFooterParams>(
-    () => ({ textType, enhetIdList: [user.ansattEnhet.id], language }),
-    [textType, user.ansattEnhet.id, language],
-  );
 };
 
 export const useMaltekstseksjonQuery = (

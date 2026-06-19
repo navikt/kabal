@@ -10,8 +10,6 @@ import { trimFragment } from '@/plate/plugins/copy/trim-fragment';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
-  ELEMENT_FOOTER,
-  ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
@@ -21,14 +19,7 @@ import {
   ELEMENT_SIGNATURE,
 } from '@/plate/plugins/element-types';
 import { createSimpleParagraph } from '@/plate/templates/helpers';
-import type {
-  CurrentDateElement,
-  FooterElement,
-  FormattedText,
-  HeaderElement,
-  LabelContentElement,
-  SignatureElement,
-} from '@/plate/types';
+import type { CurrentDateElement, FormattedText, LabelContentElement, SignatureElement } from '@/plate/types';
 import { isOfElementType } from '@/plate/utils/queries';
 
 const cleanNodes = (editor: PlateEditor, node: Descendant | Descendant[]): Descendant | Descendant[] => {
@@ -53,10 +44,6 @@ const cleanNodes = (editor: PlateEditor, node: Descendant | Descendant[]): Desce
     const formatted = formatLongDate(now.getFullYear(), now.getMonth(), now.getDate());
 
     return [createSimpleParagraph(`Dato: ${formatted}`)];
-  }
-
-  if (isOfElementType<FooterElement>(node, ELEMENT_FOOTER) || isOfElementType<HeaderElement>(node, ELEMENT_HEADER)) {
-    return node.content === null ? [] : [createSimpleParagraph(node.content)];
   }
 
   if (isOfElementType<SignatureElement>(node, ELEMENT_SIGNATURE)) {

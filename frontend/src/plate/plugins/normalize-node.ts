@@ -16,8 +16,6 @@ import { LogLevel, pushEvent, pushLog } from '@/observability';
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
-  ELEMENT_FOOTER,
-  ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
@@ -28,7 +26,6 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SIGNATURE,
 } from '@/plate/plugins/element-types';
-import { FooterPlugin, HeaderPlugin } from '@/plate/plugins/header-footer';
 import { MaltekstPlugin } from '@/plate/plugins/maltekst';
 import { RedigerbarMaltekstPlugin } from '@/plate/plugins/redigerbar-maltekst';
 import { RegelverkContainerPlugin, RegelverkPlugin } from '@/plate/plugins/regelverk';
@@ -50,7 +47,7 @@ import {
 } from '@/plate/types';
 import { isOfElementTypesFn } from '@/plate/utils/queries';
 import { reduxStore } from '@/redux/configure-store';
-import { MALTEKSTSEKSJON_TYPE, PlainTextTypes, REGELVERK_TYPE, RichTextTypes } from '@/types/common-text-types';
+import { MALTEKSTSEKSJON_TYPE, REGELVERK_TYPE, RichTextTypes } from '@/types/common-text-types';
 import { isGenericObject } from '@/types/types';
 
 const module = 'normalize';
@@ -271,8 +268,6 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
       case ELEMENT_PAGE_BREAK:
       case ELEMENT_CURRENT_DATE:
       case ELEMENT_EMPTY_VOID:
-      case ELEMENT_HEADER:
-      case ELEMENT_FOOTER:
       case ELEMENT_LABEL_CONTENT:
       case ELEMENT_SIGNATURE:
         editor.tf.insertNodes({ text: '' }, options);
@@ -327,8 +322,6 @@ const pushNodeEvent = (
 const CORRECTED_NODE_TYPE_MAP: Record<string, string> = {
   [RichTextTypes.REDIGERBAR_MALTEKST]: RedigerbarMaltekstPlugin.key,
   [RichTextTypes.MALTEKST]: MaltekstPlugin.key,
-  [PlainTextTypes.HEADER]: HeaderPlugin.key,
-  [PlainTextTypes.FOOTER]: FooterPlugin.key,
   [REGELVERK_TYPE]: RegelverkPlugin.key,
   [MALTEKSTSEKSJON_TYPE]: MaltekstPlugin.key,
 };

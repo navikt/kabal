@@ -3,7 +3,6 @@ import { useMatch } from 'react-router';
 import {
   GOD_FORMULERING_TYPE,
   MALTEKSTSEKSJON_TYPE,
-  PlainTextTypes,
   REGELVERK_TYPE,
   RichTextTypes,
   type TextTypes,
@@ -15,8 +14,6 @@ export const useTextType = (): TextTypes => {
   const redigerbarMaltekstMatch = useMatch({ path: '/redigerbare-maltekster', end: false });
   const godeFormuleringerMatch = useMatch({ path: '/gode-formuleringer', end: false });
   const regelverkMatch = useMatch({ path: '/regelverk', end: false });
-  const topptekstMatch = useMatch({ path: '/topptekster', end: false });
-  const bunntekstMatch = useMatch({ path: '/bunntekster', end: false });
 
   return useMemo(() => {
     if (maltekstseksjonerMatch !== null) {
@@ -39,22 +36,6 @@ export const useTextType = (): TextTypes => {
       return REGELVERK_TYPE;
     }
 
-    if (topptekstMatch !== null) {
-      return PlainTextTypes.HEADER;
-    }
-
-    if (bunntekstMatch !== null) {
-      return PlainTextTypes.FOOTER;
-    }
-
     throw new Error('Unknown text type');
-  }, [
-    maltekstseksjonerMatch,
-    maltekstMatch,
-    redigerbarMaltekstMatch,
-    godeFormuleringerMatch,
-    regelverkMatch,
-    topptekstMatch,
-    bunntekstMatch,
-  ]);
+  }, [maltekstseksjonerMatch, maltekstMatch, redigerbarMaltekstMatch, godeFormuleringerMatch, regelverkMatch]);
 };

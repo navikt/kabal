@@ -4,7 +4,7 @@ import type { Language, UNTRANSLATED } from '@/types/texts/language';
 import type { IText } from '@/types/texts/responses';
 
 export type { IGetTextsParams } from '@/types/common-text-types';
-export type { INewPlainTextParams, INewRichTextParams, INewTextParams } from '@/types/texts/common';
+export type { INewRichTextParams, INewTextParams } from '@/types/texts/common';
 
 /** Update params */
 
@@ -26,11 +26,6 @@ export interface IDeleteTextDraftParams extends IUpdateBaseParams {
 
 export interface IUpdateRichTextContentParams extends IUpdateBaseParams {
   richText: KabalValue | null;
-  language: Language | typeof UNTRANSLATED;
-}
-
-export interface IUpdateTextPlainTextParams extends IUpdateBaseParams {
-  plainText: string | null;
   language: Language | typeof UNTRANSLATED;
 }
 

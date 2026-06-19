@@ -16,7 +16,6 @@ import { CycleCasePlugin } from '@/plate/plugins/cycle-case/cycle-case';
 import { EmptyVoidPlugin } from '@/plate/plugins/empty-void';
 import { FloatingSaksbehandlerToolbarPlugin } from '@/plate/plugins/floating-toolbar';
 import { FullmektigPlugin } from '@/plate/plugins/fullmektig';
-import { FooterPlugin, HeaderPlugin } from '@/plate/plugins/header-footer';
 import { LabelContentPlugin } from '@/plate/plugins/label-content';
 import { MaltekstPlugin } from '@/plate/plugins/maltekst';
 import { MaltekstseksjonPlugin } from '@/plate/plugins/maltekstseksjon';
@@ -60,8 +59,6 @@ export const historyPlugins = [
   CurrentDatePlugin,
   RegelverkPlugin,
   RegelverkContainerPlugin,
-  HeaderPlugin,
-  FooterPlugin,
   LabelContentPlugin,
   FullmektigPlugin,
   SignaturePlugin,

@@ -11,7 +11,6 @@ import { VersionCheckerStatus } from '@/components/version-checker/version-check
 import { TEXT_TYPE_BASE_PATH } from '@/domain/redaktør-paths';
 import { AccessRightsPage } from '@/pages/access-rights/access-rights';
 import { AdminPage } from '@/pages/admin/admin';
-import { BunnteksterPage } from '@/pages/bunntekster/bunntekster';
 import { GodeFormuleringerPage } from '@/pages/gode-formuleringer/gode-formuleringer';
 import { LandingPage } from '@/pages/landing-page/landing-page';
 import { MalteksterPage } from '@/pages/maltekster/maltekster';
@@ -26,15 +25,8 @@ import { SakerITRPage } from '@/pages/saker-i-tr/saker-i-tr';
 import { SearchPage } from '@/pages/search/search';
 import { SettingsPage } from '@/pages/settings/settings';
 import { SvarbrevPage } from '@/pages/svarbrev/svarbrev';
-import { ToppteksterPage } from '@/pages/topptekster/topptekster';
 import { Role } from '@/types/bruker';
-import {
-  GOD_FORMULERING_TYPE,
-  MALTEKSTSEKSJON_TYPE,
-  PlainTextTypes,
-  REGELVERK_TYPE,
-  RichTextTypes,
-} from '@/types/common-text-types';
+import { GOD_FORMULERING_TYPE, MALTEKSTSEKSJON_TYPE, REGELVERK_TYPE, RichTextTypes } from '@/types/common-text-types';
 
 const RedirectToBehandling = () => {
   const { oppgaveId } = useParams();
@@ -115,22 +107,6 @@ export const Router = () => (
           path={`${TEXT_TYPE_BASE_PATH[RichTextTypes.REDIGERBAR_MALTEKST]}`}
           element={<RedigerbareMalteksterPage />}
         />
-
-        <Route
-          path={`${TEXT_TYPE_BASE_PATH[PlainTextTypes.HEADER]}/:lang/:id/versjoner/:versionId`}
-          element={<ToppteksterPage />}
-        />
-        <Route path={`${TEXT_TYPE_BASE_PATH[PlainTextTypes.HEADER]}/:lang/:id`} element={<ToppteksterPage />} />
-        <Route path={`${TEXT_TYPE_BASE_PATH[PlainTextTypes.HEADER]}/:lang`} element={<ToppteksterPage />} />
-        <Route path={`${TEXT_TYPE_BASE_PATH[PlainTextTypes.HEADER]}`} element={<ToppteksterPage />} />
-
-        <Route
-          path={`${TEXT_TYPE_BASE_PATH[PlainTextTypes.FOOTER]}/:lang/:id/versjoner/:versionId`}
-          element={<BunnteksterPage />}
-        />
-        <Route path={`${TEXT_TYPE_BASE_PATH[PlainTextTypes.FOOTER]}/:lang/:id`} element={<BunnteksterPage />} />
-        <Route path={`${TEXT_TYPE_BASE_PATH[PlainTextTypes.FOOTER]}/:lang`} element={<BunnteksterPage />} />
-        <Route path={`${TEXT_TYPE_BASE_PATH[PlainTextTypes.FOOTER]}`} element={<BunnteksterPage />} />
       </Route>
 
       <Route element={<ProtectedRoute roles={[Role.KABAL_FAGTEKSTREDIGERING]} />}>

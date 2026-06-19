@@ -9,13 +9,11 @@ export const useTextQuery = (): IGetTextsParams => {
 
   const ytelseHjemmelIdList = params.get('ytelseHjemmelIdList');
   const utfallIdList = params.get('utfallIdList');
-  const enhetIdList = params.get('enhetIdList');
   const templateSectionIdList = params.get('templateSectionIdList');
 
   return useMemo(() => {
     const q: IGetTextsParams = {
       ytelseHjemmelIdList: ytelseHjemmelIdList?.split(','),
-      enhetIdList: enhetIdList?.split(','),
       templateSectionIdList: templateSectionIdList?.split(','),
       textType,
     };
@@ -25,5 +23,5 @@ export const useTextQuery = (): IGetTextsParams => {
     }
 
     return q;
-  }, [ytelseHjemmelIdList, enhetIdList, templateSectionIdList, textType, utfallIdList]);
+  }, [ytelseHjemmelIdList, templateSectionIdList, textType, utfallIdList]);
 };

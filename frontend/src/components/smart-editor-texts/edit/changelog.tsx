@@ -71,8 +71,6 @@ const Version = ({ publishedByActor, publishedDateTime }: IPublishedText) => (
 );
 
 const CHANGE_TYPE_NAMES: Record<TextChangeType, string> = {
-  [TextChangeType.PLAIN_TEXT_NB]: 'Endret tekst (bokmål)',
-  [TextChangeType.PLAIN_TEXT_NN]: 'Endret tekst (nynorsk)',
   [TextChangeType.RICH_TEXT_NB]: 'Endret tekst (bokmål)',
   [TextChangeType.RICH_TEXT_NN]: 'Endret tekst (nynorsk)',
   [TextChangeType.RICH_TEXT_UNTRANSLATED]: 'Endret tekst (ikke oversatt)',

@@ -1,7 +1,6 @@
 import {
   GOD_FORMULERING_TYPE,
   MALTEKSTSEKSJON_TYPE,
-  PlainTextTypes,
   REGELVERK_TYPE,
   RichTextTypes,
   type TextTypes,
@@ -19,9 +18,5 @@ export const getPathPrefix = (textType: TextTypes): string => {
       return '/gode-formuleringer';
     case REGELVERK_TYPE:
       return '/regelverk';
-    case PlainTextTypes.HEADER:
-      return '/topptekster';
-    case PlainTextTypes.FOOTER:
-      return '/bunntekster';
   }
 };

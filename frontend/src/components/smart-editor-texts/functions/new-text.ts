@@ -2,13 +2,12 @@ import { createSimpleParagraph } from '@/plate/templates/helpers';
 import {
   GOD_FORMULERING_TYPE,
   type ITextBaseMetadata,
-  type PlainTextTypes,
   REGELVERK_TYPE,
   type RichTextTypes,
 } from '@/types/common-text-types';
 import type { INewGodFormuleringParams, INewRegelverkParams } from '@/types/texts/common';
 import { Language, UNTRANSLATED } from '@/types/texts/language';
-import type { INewPlainTextParams, INewRichTextParams } from '@/types/texts/params';
+import type { INewRichTextParams } from '@/types/texts/params';
 
 const getMetadata = (): ITextBaseMetadata => ({
   templateSectionIdList: [],
@@ -22,15 +21,6 @@ export const getNewRichText = (textType: RichTextTypes, lang: Language = Languag
   richText: {
     [Language.NB]: lang === Language.NB ? [createSimpleParagraph()] : null,
     [Language.NN]: lang === Language.NN ? [createSimpleParagraph()] : null,
-  },
-  textType,
-  ...getMetadata(),
-});
-
-export const getNewPlainText = (textType: PlainTextTypes, lang: Language = Language.NB): INewPlainTextParams => ({
-  plainText: {
-    [Language.NB]: lang === Language.NB ? '' : null,
-    [Language.NN]: lang === Language.NN ? '' : null,
   },
   textType,
   ...getMetadata(),

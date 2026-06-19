@@ -13,8 +13,6 @@ import {
   TasklistIcon,
 } from '@navikt/aksel-icons';
 import { HStack } from '@navikt/ds-react';
-import { DocumentFooter } from '@styled-icons/fluentui-system-regular/DocumentFooter';
-import { DocumentHeader } from '@styled-icons/fluentui-system-regular/DocumentHeader';
 import { NavLink, type NavLinkProps } from 'react-router-dom';
 import { DEFAULT_STATUS_FILTER } from '@/components/smart-editor-texts/status-filter/status-filter';
 import { useHasAnyOfRoles } from '@/hooks/use-has-role';
@@ -61,14 +59,6 @@ export const Nav = () => (
 
       <NavItem to={`/regelverk?${DEFAULT_STATUS_FILTER}`} roles={[Role.KABAL_FAGTEKSTREDIGERING]}>
         <GavelSoundBlockIcon aria-hidden /> Regelverk
-      </NavItem>
-
-      <NavItem to={`/topptekster?${DEFAULT_STATUS_FILTER}`} roles={[Role.KABAL_MALTEKSTREDIGERING]}>
-        <DocumentHeader size={22} color="#fff" /> Topptekster
-      </NavItem>
-
-      <NavItem to={`/bunntekster?${DEFAULT_STATUS_FILTER}`} roles={[Role.KABAL_MALTEKSTREDIGERING]}>
-        <DocumentFooter size={22} color="#fff" /> Bunntekster
       </NavItem>
 
       <NavItem to="/svarbrev" roles={[Role.KABAL_SVARBREVINNSTILLINGER]}>
