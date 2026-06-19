@@ -196,45 +196,56 @@ export class DocumentAccessKafkaConsumer implements DocumentAccessKafkaConsumerA
     log.debug({ msg: 'Kafka consumer stream listener starting...', trace_id });
 
     stream.on('data', async ({ key: documentId, value, timestamp, headers, commit }) => {
-      // Extract trace_id from Kafka message headers for log correlation.
-      // Kafka messages are not covered by OTel HTTP instrumentation, so we parse manually.
-      const traceparentHeader = headers.get('traceparent');
-      const message_trace_id =
-        traceparentHeader === undefined ? trace_id : (parseTraceparent(traceparentHeader).trace_id ?? trace_id);
+      let message_trace_id = trace_id;
 
-      const parentContext =
-        traceparentHeader === undefined
-          ? ROOT_CONTEXT
-          : propagation.extract(ROOT_CONTEXT, { traceparent: traceparentHeader });
+      try {
+        // Extract trace_id from Kafka message headers for log correlation.
+        // Kafka messages are not covered by OTel HTTP instrumentation, so we parse manually.
+        const traceparentHeader = headers.get('traceparent');
+        message_trace_id =
+          traceparentHeader === undefined ? trace_id : (parseTraceparent(traceparentHeader).trace_id ?? trace_id);
 
-      await tracer.startActiveSpan(
-        'kafka.process_document_access',
-        {
-          kind: SpanKind.CONSUMER,
-          attributes: {
-            'messaging.system': 'kafka',
-            'messaging.operation': 'process',
-            'messaging.destination.name': TOPIC,
+        const parentContext =
+          traceparentHeader === undefined
+            ? ROOT_CONTEXT
+            : propagation.extract(ROOT_CONTEXT, { traceparent: traceparentHeader });
+
+        await tracer.startActiveSpan(
+          'kafka.process_document_access',
+          {
+            kind: SpanKind.CONSUMER,
+            attributes: {
+              'messaging.system': 'kafka',
+              'messaging.operation': 'process',
+              'messaging.destination.name': TOPIC,
+            },
           },
-        },
-        parentContext,
-        async (span) => {
-          try {
-            await this.#onMessage({ documentId, value, timestamp, commit, trace_id: message_trace_id });
-            span.setStatus({ code: SpanStatusCode.OK });
-          } catch (error) {
-            span.setStatus({ code: SpanStatusCode.ERROR });
+          parentContext,
+          async (span) => {
+            try {
+              await this.#onMessage({ documentId, value, timestamp, commit, trace_id: message_trace_id });
+              span.setStatus({ code: SpanStatusCode.OK });
+            } catch (error) {
+              span.setStatus({ code: SpanStatusCode.ERROR });
 
-            if (error instanceof Error) {
-              span.recordException(error);
+              if (error instanceof Error) {
+                span.recordException(error);
+              }
+
+              throw error;
+            } finally {
+              span.end();
             }
-
-            throw error;
-          } finally {
-            span.end();
-          }
-        },
-      );
+          },
+        );
+      } catch (error) {
+        log.error({
+          msg: 'Failed to process Kafka document access message',
+          trace_id: message_trace_id,
+          data: { document_id: documentId },
+          error,
+        });
+      }
     });
 
     log.debug({ msg: 'Kafka consumer stream listener started', trace_id });
