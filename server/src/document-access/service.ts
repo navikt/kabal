@@ -67,7 +67,7 @@ class SmartDocumentWriteAccess {
 
   #stream: MessagesStream<string, string, string, string> | null = null;
   #lifecycle_trace_id = trace.getActiveSpan()?.spanContext().traceId ?? crypto.randomUUID().replaceAll('-', '');
-  #initTimestamp = Date.now();
+  #initTimestamp: bigint = BigInt(Date.now());
 
   /** Health-gated sync loop. Polls active documents while Kafka is down. */
   #syncLoop: NodeJS.Timeout | null = null;
@@ -90,7 +90,7 @@ class SmartDocumentWriteAccess {
    * Startup never fails because of Kafka — the service degrades to API polling.
    */
   async init(): Promise<void> {
-    this.#initTimestamp = Date.now();
+    this.#initTimestamp = BigInt(Date.now());
     const trace_id = this.#lifecycle_trace_id;
 
     log.debug({ msg: 'Initializing Smart Document Write Access...', trace_id });
