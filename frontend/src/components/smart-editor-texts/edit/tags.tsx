@@ -6,16 +6,14 @@ import { ALL_TEMPLATES_LABEL } from '@/components/smart-editor-texts/get-templat
 import { useMetadataFilters } from '@/components/smart-editor-texts/hooks/use-metadata-filters';
 import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@/components/smart-editor-texts/types';
 import { CustomTag, ResolvedTags } from '@/components/tags/resolved-tag';
-import { useEnhetNameFromIdOrLoading } from '@/hooks/use-kodeverk-ids';
 import { useUtfallNameOrLoading } from '@/hooks/use-utfall-name';
 import { TEMPLATE_MAP } from '@/plate/templates/templates';
 import { useYtelserAll } from '@/simple-api-state/use-kodeverk';
 import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
 import type { IText } from '@/types/texts/responses';
 
-export const Tags = ({ ytelseHjemmelIdList, utfallIdList, enhetIdList, templateSectionIdList, textType }: IText) => {
-  const { hasEnhetFilter, hasTemplateSectionFilter, hasUtfallFilter, hasYtelseHjemmelFilter } =
-    useMetadataFilters(textType);
+export const Tags = ({ ytelseHjemmelIdList, utfallIdList, templateSectionIdList, textType }: IText) => {
+  const { hasTemplateSectionFilter, hasUtfallFilter, hasYtelseHjemmelFilter } = useMetadataFilters(textType);
 
   const expandedYtelseHjemmelIdList = useExpandedYtelseHjemmelIdList(ytelseHjemmelIdList);
 
@@ -39,14 +37,6 @@ export const Tags = ({ ytelseHjemmelIdList, utfallIdList, enhetIdList, templateS
       ) : null}
       {hasUtfallFilter ? (
         <TagList variant="utfallIdList" noneLabel="Alle utfall" ids={utfallIdList} useName={useUtfallNameOrLoading} />
-      ) : null}
-      {hasEnhetFilter ? (
-        <TagList
-          variant="enhetIdList"
-          noneLabel="Alle enheter"
-          ids={enhetIdList}
-          useName={useEnhetNameFromIdOrLoading}
-        />
       ) : null}
     </TagContainer>
   );

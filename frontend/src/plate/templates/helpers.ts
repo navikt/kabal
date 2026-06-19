@@ -6,9 +6,7 @@ import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@/pl
 import {
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
-  ELEMENT_FOOTER,
   ELEMENT_FULLMEKTIG,
-  ELEMENT_HEADER,
   ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
   ELEMENT_PAGE_BREAK,
@@ -27,12 +25,10 @@ import {
   type BulletListElement,
   type CurrentDateElement,
   type EmptyVoidElement,
-  type FooterElement,
   type FormattedText,
   type FullmektigElement,
   type H1Element,
   type H2Element,
-  type HeaderElement,
   type LabelContentElement,
   LabelContentSource,
   type ListItemContainerElement,
@@ -164,20 +160,6 @@ export const createPageBreak = (): PageBreakElement => ({
 export const createCurrentDate = (): CurrentDateElement => ({
   type: ELEMENT_CURRENT_DATE,
   children: [{ text: '' }],
-});
-
-export const createHeader = (): HeaderElement => ({
-  type: ELEMENT_HEADER,
-  children: [{ text: '' }],
-  threadIds: [],
-  content: null,
-});
-
-export const createFooter = (): FooterElement => ({
-  type: ELEMENT_FOOTER,
-  children: [{ text: '' }],
-  threadIds: [],
-  content: null,
 });
 
 export const createTableRow = (children = [createTableCell()]): TableRowElement => ({

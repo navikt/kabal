@@ -5,8 +5,6 @@ export enum TextChangeType {
   RICH_TEXT_NB = 'RICH_TEXT_NB',
   RICH_TEXT_NN = 'RICH_TEXT_NN',
   RICH_TEXT_UNTRANSLATED = 'RICH_TEXT_UNTRANSLATED',
-  PLAIN_TEXT_NB = 'PLAIN_TEXT_NB',
-  PLAIN_TEXT_NN = 'PLAIN_TEXT_NN',
   TEXT_TYPE = 'TEXT_TYPE',
   TEXT_VERSION_CREATED = 'TEXT_VERSION_CREATED',
   TEXT_TITLE = 'TEXT_TITLE',
@@ -60,11 +58,6 @@ export enum RichTextTypes {
   REDIGERBAR_MALTEKST = 'REDIGERBAR_MALTEKST',
 }
 
-export enum PlainTextTypes {
-  HEADER = 'HEADER',
-  FOOTER = 'FOOTER',
-}
-
 export interface IGetMaltekstseksjonParams {
   templateSectionIdList?: string[];
   ytelseHjemmelIdList?: string[];
@@ -110,7 +103,6 @@ export interface IGetConsumerRegelverkParams {
 }
 
 export interface IGetConsumerHeaderFooterParams extends IGetMaltekstseksjonParams {
-  textType: PlainTextTypes;
   language: Language;
 }
 
@@ -124,7 +116,6 @@ export const GOD_FORMULERING_TYPE = 'GOD_FORMULERING';
 export const MALTEKSTSEKSJON_TYPE = 'MALTEKSTSEKSJON';
 export type TextTypes =
   | RichTextTypes
-  | PlainTextTypes
   | typeof REGELVERK_TYPE
   | typeof GOD_FORMULERING_TYPE
   | typeof MALTEKSTSEKSJON_TYPE;

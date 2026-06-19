@@ -2,8 +2,6 @@ import { deepFreeze } from '@/functions/deep-freeze';
 import { TemplateSections } from '@/plate/template-sections';
 import {
   createCurrentDate,
-  createFooter,
-  createHeader,
   createLabelContent,
   createMaltekstseksjon,
   createPageBreak,
@@ -23,12 +21,10 @@ export const getGenereltBrevTemplate = (overriddenSaksbehandler?: string): Immut
     templateId: TemplateIdEnum.GENERELT_BREV,
     tittel: 'Generelt brev',
     richText: [
-      createHeader(),
       createSaksinfo(),
       createMaltekstseksjon(TemplateSections.TITLE),
       createSimpleParagraph(),
       createSignature(false, overriddenSaksbehandler),
-      createFooter(),
     ],
     dokumentTypeId: DistribusjonsType.BREV,
     deprecatedSections: [],

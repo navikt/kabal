@@ -18,21 +18,13 @@ import type { PlateEditor } from 'platejs/react';
 import { InsertPlugin } from '@/plate/plugins/capitalise/capitalise';
 import {
   ELEMENT_CURRENT_DATE,
-  ELEMENT_FOOTER,
-  ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
   ELEMENT_PLACEHOLDER,
   ELEMENT_SIGNATURE,
 } from '@/plate/plugins/element-types';
 
-const NON_EDITABLE_ELEMENTS = [
-  ELEMENT_HEADER,
-  ELEMENT_FOOTER,
-  ELEMENT_CURRENT_DATE,
-  ELEMENT_SIGNATURE,
-  ELEMENT_LABEL_CONTENT,
-];
+const NON_EDITABLE_ELEMENTS = [ELEMENT_CURRENT_DATE, ELEMENT_SIGNATURE, ELEMENT_LABEL_CONTENT];
 
 export const decorate: Decorate<FindReplaceConfig> = (props) => {
   const { editor } = props;

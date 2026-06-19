@@ -7,14 +7,13 @@ import { LoadText } from '@/components/smart-editor-texts/edit/load-text';
 import { Filters } from '@/components/smart-editor-texts/filters';
 import {
   getNewGodFormulering,
-  getNewPlainText,
   getNewRegelverk,
   getNewRichText,
 } from '@/components/smart-editor-texts/functions/new-text';
 import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
 import { QueryKey, SortKey } from '@/components/smart-editor-texts/sortable-header';
 import { StandaloneTextList } from '@/components/smart-editor-texts/text-list/text-list';
-import { isGodFormuleringType, isPlainTextType, isRegelverkType, isRichTextType } from '@/functions/is-rich-plain-text';
+import { isGodFormuleringType, isRegelverkType, isRichTextType } from '@/functions/is-rich-plain-text';
 import { useNavigateToStandaloneTextVersion } from '@/hooks/use-navigate-to-standalone-text-version';
 import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
 import { useAddTextMutation } from '@/redux-api/texts/mutations';
@@ -102,10 +101,6 @@ export const SmartEditorTexts = ({ textType }: Props) => {
 };
 
 const getNewText = (textType: TextTypes, lang: Language) => {
-  if (isPlainTextType(textType)) {
-    return getNewPlainText(textType, lang);
-  }
-
   if (isRegelverkType(textType)) {
     return getNewRegelverk();
   }

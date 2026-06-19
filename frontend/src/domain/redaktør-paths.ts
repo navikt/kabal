@@ -5,7 +5,5 @@ export const TEXT_TYPE_BASE_PATH: Record<TextTypes, string> = {
   REDIGERBAR_MALTEKST: 'redigerbare-maltekster',
   GOD_FORMULERING: 'gode-formuleringer',
   REGELVERK: 'regelverk',
-  HEADER: 'topptekster',
-  FOOTER: 'bunntekster',
   MALTEKSTSEKSJON: 'maltekstseksjoner',
 };

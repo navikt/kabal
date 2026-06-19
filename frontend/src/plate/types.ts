@@ -15,9 +15,7 @@ import type {
   ELEMENT_BOOKMARK,
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
-  ELEMENT_FOOTER,
   ELEMENT_FULLMEKTIG,
-  ELEMENT_HEADER,
   ELEMENT_LABEL_CONTENT,
   ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
@@ -195,18 +193,6 @@ export interface RegelverkElement extends BlockElement {
   children: [PageBreakElement, MaltekstseksjonElement, RegelverkContainerElement];
 }
 
-export interface HeaderElement extends TElement {
-  type: typeof ELEMENT_HEADER;
-  content: string | null;
-  children: [{ text: '' }];
-}
-
-export interface FooterElement extends TElement {
-  type: typeof ELEMENT_FOOTER;
-  content: string | null;
-  children: [{ text: '' }];
-}
-
 export interface LabelContentElement extends TElement {
   type: typeof ELEMENT_LABEL_CONTENT;
   children: [{ text: '' }];
@@ -271,8 +257,6 @@ type ParentOnlyElement =
   | RegelverkElement
   | CurrentDateElement
   | PageBreakElement
-  | HeaderElement
-  | FooterElement
   | SignatureElement
   | MaltekstseksjonElement
   | SaksinfoElement;

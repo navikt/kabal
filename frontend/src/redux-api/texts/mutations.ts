@@ -1,13 +1,6 @@
 import { formatISO } from 'date-fns';
 import { toast } from '@/components/toast/store';
-import {
-  isListGodFormulering,
-  isListPlainText,
-  isListRegelverk,
-  isListRichText,
-  isPlainText,
-  isRichText,
-} from '@/functions/is-rich-plain-text';
+import { isListGodFormulering, isListRegelverk, isListRichText, isRichText } from '@/functions/is-rich-plain-text';
 import { reduxStore } from '@/redux/configure-store';
 import { maltekstseksjonerQuerySlice } from '@/redux-api/maltekstseksjoner/queries';
 import { getLastPublishedVersion } from '@/redux-api/redaktoer-helpers';
@@ -15,7 +8,7 @@ import { ConsumerTextsTagTypes, consumerTextsApi } from '@/redux-api/texts/consu
 import { textsQuerySlice } from '@/redux-api/texts/queries';
 import { textsApi } from '@/redux-api/texts/texts';
 import { user } from '@/static-data/static-data';
-import type { ListGodFormulering, ListPlainText, ListRegelverk, ListRichText } from '@/types/texts/common';
+import type { ListGodFormulering, ListRegelverk, ListRichText } from '@/types/texts/common';
 import { isLanguage, LANGUAGES, UNTRANSLATED } from '@/types/texts/language';
 import type {
   ICreateDraftFromVersionParams,
@@ -26,8 +19,6 @@ import type {
   IUnpublishTextParams,
   IUpdateBaseParams,
   IUpdateRichTextContentParams,
-  IUpdateTextEnheterParams,
-  IUpdateTextPlainTextParams,
   IUpdateTextTemplateSectionIdListParams,
   IUpdateTextTypeParams,
   IUpdateTextUtfallIdListParams,
@@ -36,7 +27,6 @@ import type {
 import type {
   IDraftRichText,
   IGodFormulering,
-  IPlainText,
   IPublishedText,
   IRegelverk,
   IRichText,
@@ -178,7 +168,7 @@ const textsMutationSlice = textsApi.injectEndpoints({
         const versionPatchResult = dispatch(
           textsQuerySlice.util.updateQueryData('getTextVersions', id, (draft) => {
             for (const version of draft) {
-              if (version.publishedDateTime === null && !isPlainText(version)) {
+              if (version.publishedDateTime === null) {
                 version.textType = newTextType;
               }
             }
@@ -444,28 +434,6 @@ const textsMutationSlice = textsApi.injectEndpoints({
       },
     }),
 
-    updatePlainText: builder.mutation<IPlainText, IUpdateTextPlainTextParams>({
-      query: ({ id, plainText, language }) => ({
-        method: 'PUT',
-        url: `/texts/${id}/${language}/plaintext`,
-        body: { plainText },
-      }),
-      onQueryStarted: async ({ id, plainText, query, language }, { queryFulfilled }) => {
-        const upd = <T extends IText | ListText>(t: T) =>
-          isListPlainText(t) ? { ...t, plainText: { ...t.plainText, [language]: plainText } } : t;
-
-        const undo = update(id, upd);
-        const undoList = updateList(id, upd, query);
-
-        try {
-          pessimisticUpdate(id, (await queryFulfilled).data, query, false);
-        } catch {
-          undo();
-          undoList();
-        }
-      },
-    }),
-
     updateTemplateSectionIdList: builder.mutation<IDraftRichText, IUpdateTextTemplateSectionIdListParams>({
       query: ({ id, templateSectionIdList }) => ({
         method: 'PUT',
@@ -516,23 +484,6 @@ const textsMutationSlice = textsApi.injectEndpoints({
         }
       },
     }),
-
-    updateEnhetIdList: builder.mutation<IDraftRichText, IUpdateTextEnheterParams>({
-      query: ({ id, enhetIdList }) => ({
-        method: 'PUT',
-        url: `/texts/${id}/enhet-id-list`,
-        body: { enhetIdList },
-      }),
-      onQueryStarted: async ({ id, enhetIdList, query }, { queryFulfilled }) => {
-        const undo = update(id, { enhetIdList });
-
-        try {
-          pessimisticUpdate(id, (await queryFulfilled).data, query);
-        } catch {
-          undo();
-        }
-      },
-    }),
   }),
 });
 
@@ -541,18 +492,12 @@ type UpdateListFn = (text: ListText) => ListText;
 
 type Update = Partial<
   Pick<IText, 'title' | 'templateSectionIdList' | 'utfallIdList' | 'ytelseHjemmelIdList' | 'enhetIdList'> &
-    (Pick<IRichText, 'richText'> &
-      Pick<IPlainText, 'plainText'> &
-      Pick<IRegelverk, 'richText'> &
-      Pick<IGodFormulering, 'richText'>)
+    (Pick<IRichText, 'richText'> & Pick<IRegelverk, 'richText'> & Pick<IGodFormulering, 'richText'>)
 >;
 
 type UpdateList = Partial<
   Pick<ListText, 'title'> &
-    (Pick<ListRichText, 'richText'> &
-      Pick<ListPlainText, 'plainText'> &
-      Pick<ListRegelverk, 'richText'> &
-      Pick<ListGodFormulering, 'richText'>)
+    (Pick<ListRichText, 'richText'> & Pick<ListRegelverk, 'richText'> & Pick<ListGodFormulering, 'richText'>)
 >;
 
 const updateList = (id: string, upd: UpdateList | UpdateListFn, query: IGetTextsParams) =>
@@ -637,11 +582,9 @@ export const {
   useSetTextTitleMutation,
   useDeleteDraftMutation,
   useUpdateRichTextMutation,
-  useUpdatePlainTextMutation,
   useUpdateTemplateSectionIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
   useUpdateUtfallIdListMutation,
-  useUpdateEnhetIdListMutation,
 } = textsMutationSlice;
 
 const invalidateConsumerText = (id: string) => {

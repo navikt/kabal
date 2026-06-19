@@ -2,9 +2,7 @@ import type { Value } from 'platejs';
 import { deepFreeze } from '@/functions/deep-freeze';
 import { TemplateSections } from '@/plate/template-sections';
 import {
-  createFooter,
   createFullmektig,
-  createHeader,
   createLabelContent,
   createMaltekstseksjon,
   createSaksinfo,
@@ -17,8 +15,6 @@ import type { IMutableSmartEditorTemplate } from '@/types/smart-editor/smart-edi
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 const INITIAL_SLATE_VALUE: Value = [
-  createHeader(),
-
   createSaksinfo([
     createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
     createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
@@ -35,7 +31,6 @@ const INITIAL_SLATE_VALUE: Value = [
   createMaltekstseksjon(TemplateSections.OM_ETTERSENDING_TIL_TR),
 
   createSignature(false),
-  createFooter(),
 ];
 
 export const ETTERSENDING_TIL_TRYGDERETTEN_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({

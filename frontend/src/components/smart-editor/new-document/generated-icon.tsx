@@ -6,8 +6,6 @@ import { BaseParagraphPlugin } from 'platejs';
 import { CurrentDatePlugin } from '@/plate/plugins/current-date';
 import {
   ELEMENT_EMPTY_VOID,
-  ELEMENT_FOOTER,
-  ELEMENT_HEADER,
   ELEMENT_MALTEKST,
   ELEMENT_MALTEKSTSEKSJON,
   ELEMENT_PAGE_BREAK,
@@ -30,7 +28,7 @@ const SPACING = 2;
 export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
   const rects: React.ReactNode[] = [];
   let y = MARGIN;
-  let bottomOffset = 39 + MARGIN;
+  const bottomOffset = 39 + MARGIN;
   const { length } = template.richText;
 
   for (let i = 0; i < length; i++) {
@@ -146,26 +144,6 @@ export const GeneratedIcon = ({ template }: GeneratedIconProps) => {
         const height = 2;
         rects.push(r({ type, key: i, width: WIDTH, height, y, offset: 0, fill: 'text-neutral-subtle', radius: 0 }));
         y += height + SPACING * 5;
-        break;
-      }
-      case ELEMENT_HEADER: {
-        rects.push(r({ type, key: `${i}-header-line-1`, width: 30, y, fill: 'text-neutral-decoration' }));
-        y += 5 + SPACING;
-        rects.push(r({ type, key: `${i}-header-line-2`, width: 70, y, fill: 'text-neutral-decoration' }));
-        y += 5 + SPACING + SPACING;
-        break;
-      }
-      case ELEMENT_FOOTER: {
-        rects.push(
-          r({ type, key: `${i}-footer-line-1`, width: 150, y: HEIGHT - MARGIN - 14, fill: 'text-neutral-decoration' }),
-        );
-        rects.push(
-          r({ type, key: `${i}-footer-line-2`, width: 50, y: HEIGHT - MARGIN - 7, fill: 'text-neutral-decoration' }),
-        );
-        rects.push(
-          r({ type, key: `${i}-footer-line-3`, width: 20, y: HEIGHT - MARGIN, fill: 'text-neutral-decoration' }),
-        );
-        bottomOffset += 21 + SPACING;
         break;
       }
       case ELEMENT_SIGNATURE: {

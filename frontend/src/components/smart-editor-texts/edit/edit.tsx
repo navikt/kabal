@@ -6,14 +6,12 @@ import { Tags } from '@/components/smart-editor-texts/edit/tags';
 import { useMetadataFilters } from '@/components/smart-editor-texts/hooks/use-metadata-filters';
 import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
 import { TextModified } from '@/components/smart-editor-texts/modified';
-import { KlageenhetSelect, TemplateSectionFilter } from '@/components/smart-editor-texts/query-filter-selects';
+import { TemplateSectionFilter } from '@/components/smart-editor-texts/query-filter-selects';
 import { RegistreringshjemlerSelect } from '@/components/smart-editor-texts/registreringshjemler-select/registreringshjemler-select';
 import { YtelserAndRegistreringshjemlerSelect } from '@/components/smart-editor-texts/registreringshjemler-select/ytelser-and-registreringshjemler-select';
 import { UtfallSetFilter } from '@/components/smart-editor-texts/utfall-set-filter/utfall-set-filter';
-import { isPlainText } from '@/functions/is-rich-plain-text';
 import {
   useSetTextTitleMutation,
-  useUpdateEnhetIdListMutation,
   useUpdateTemplateSectionIdListMutation,
   useUpdateUtfallIdListMutation,
   useUpdateYtelseHjemmelIdListMutation,
@@ -39,9 +37,9 @@ export const Edit = ({ text, onDraftDeleted, children, onPublish, deleteTranslat
   const { id, title, textType, draftMaltekstseksjonIdList, publishedMaltekstseksjonIdList } = text;
 
   const filters = useMetadataFilters(textType);
-  const { hasTemplateSectionFilter, hasEnhetFilter, hasUtfallFilter, hasYtelseHjemmelFilter } = filters;
+  const { hasTemplateSectionFilter, hasUtfallFilter, hasYtelseHjemmelFilter } = filters;
 
-  const hasAnyFilter = hasTemplateSectionFilter || hasEnhetFilter || hasUtfallFilter || hasYtelseHjemmelFilter;
+  const hasAnyFilter = hasTemplateSectionFilter || hasUtfallFilter || hasYtelseHjemmelFilter;
 
   return (
     <VStack height="100%">
@@ -58,14 +56,12 @@ export const Edit = ({ text, onDraftDeleted, children, onPublish, deleteTranslat
         {hasAnyFilter ? <Filters text={text} query={query} filters={filters} /> : null}
 
         <HStack gap="space-8" align="center" justify="space-between">
-          {isPlainText(text) ? null : (
-            <AllMaltekstseksjonReferences
-              textType={textType}
-              currentMaltekstseksjonId={id}
-              draftMaltekstseksjonIdList={draftMaltekstseksjonIdList}
-              publishedMaltekstseksjonIdList={publishedMaltekstseksjonIdList}
-            />
-          )}
+          <AllMaltekstseksjonReferences
+            textType={textType}
+            currentMaltekstseksjonId={id}
+            draftMaltekstseksjonIdList={draftMaltekstseksjonIdList}
+            publishedMaltekstseksjonIdList={publishedMaltekstseksjonIdList}
+          />
           <TextDraftActions
             text={text}
             onDraftDeleted={onDraftDeleted}
@@ -91,11 +87,10 @@ const Filters = ({ text, query, filters }: FiltersProps) => {
   const [updateTemplateSectionIdList] = useUpdateTemplateSectionIdListMutation();
   const [updateYtelseHjemmelIdList] = useUpdateYtelseHjemmelIdListMutation();
   const [updateUtfallIdList] = useUpdateUtfallIdListMutation();
-  const [updateEnhetIdList] = useUpdateEnhetIdListMutation();
 
-  const { id, ytelseHjemmelIdList, utfallIdList, enhetIdList, templateSectionIdList, textType } = text;
+  const { id, ytelseHjemmelIdList, utfallIdList, templateSectionIdList, textType } = text;
 
-  const { hasTemplateSectionFilter, hasEnhetFilter, hasUtfallFilter, hasYtelseHjemmelFilter } = filters;
+  const { hasTemplateSectionFilter, hasUtfallFilter, hasYtelseHjemmelFilter } = filters;
 
   return (
     <>
@@ -127,15 +122,6 @@ const Filters = ({ text, query, filters }: FiltersProps) => {
             selected={utfallIdList}
             onChange={(value) => updateUtfallIdList({ id, query, utfallIdList: value })}
           />
-        ) : null}
-
-        {hasEnhetFilter ? (
-          <KlageenhetSelect
-            selected={enhetIdList ?? []}
-            onChange={(value) => updateEnhetIdList({ id, query, enhetIdList: value })}
-          >
-            Enheter
-          </KlageenhetSelect>
         ) : null}
       </HStack>
 

@@ -1,8 +1,6 @@
 import { deepFreeze } from '@/functions/deep-freeze';
 import { DeprecatedTemplateSections, TemplateSections } from '@/plate/template-sections';
 import {
-  createFooter,
-  createHeader,
   createMaltekstseksjon,
   createPageBreak,
   createRegelverk,
@@ -19,8 +17,6 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
   type: SaksTypeEnum.ANKE,
   tittel: 'Tilsvarsbrev med oversendelsesbrev',
   richText: [
-    createHeader(),
-
     createSaksinfo(),
     createMaltekstseksjon(TemplateSections.TILSVARSBREV_TITLE),
     createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
@@ -37,7 +33,7 @@ export const OVERSENDELSESBREV_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate
     createMaltekstseksjon(TemplateSections.VURDERINGEN),
 
     createSignature(),
-    createFooter(),
+
     createRegelverk(),
   ],
   dokumentTypeId: DistribusjonsType.BREV,

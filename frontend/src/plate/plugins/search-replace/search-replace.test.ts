@@ -3,7 +3,7 @@ import { BaseParagraphPlugin, type Point, type TText } from 'platejs';
 import { createPlateEditor, getEditorPlugin, type PlateEditor } from 'platejs/react';
 import type { Selection } from 'slate';
 import { createCapitalisePlugin } from '@/plate/plugins/capitalise/capitalise';
-import { ELEMENT_FOOTER, ELEMENT_HEADER, ELEMENT_SAKSNUMMER } from '@/plate/plugins/element-types';
+import { ELEMENT_SAKSNUMMER } from '@/plate/plugins/element-types';
 import { saksbehandlerPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
 import { replaceText, SearchReplacePlugin } from '@/plate/plugins/search-replace/search-replace';
 import { TemplateSections } from '@/plate/template-sections';
@@ -219,26 +219,6 @@ describe('search-replace', () => {
 
       expect(editor.api.string([])).toBe('dont replace this');
       expect(editor.children).toEqual([createSeksjon([createText('dont replace this')])]);
-    });
-
-    it('should not replace text in header', () => {
-      const editor = createEditor([{ type: ELEMENT_HEADER, children: [{ text: '' }], content: 'dont replace this' }]);
-
-      doSearchReplace(editor, 'dont replace this', 'REPLACED', autoCapitalise);
-
-      expect(editor.children).toEqual([
-        { type: ELEMENT_HEADER, children: [{ text: '' }], content: 'dont replace this' },
-      ]);
-    });
-
-    it('should not replace text in footer', () => {
-      const editor = createEditor([{ type: ELEMENT_FOOTER, children: [{ text: '' }], content: 'dont replace this' }]);
-
-      doSearchReplace(editor, 'dont replace this', 'REPLACED', autoCapitalise);
-
-      expect(editor.children).toEqual([
-        { type: ELEMENT_FOOTER, children: [{ text: '' }], content: 'dont replace this' },
-      ]);
     });
 
     it('should not replace text in date field', () => {

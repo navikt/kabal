@@ -1,11 +1,5 @@
 import type { KabalValue } from '@/plate/types';
-import type {
-  GOD_FORMULERING_TYPE,
-  ITextBaseMetadata,
-  PlainTextTypes,
-  REGELVERK_TYPE,
-  RichTextTypes,
-} from '@/types/common-text-types';
+import type { GOD_FORMULERING_TYPE, ITextBaseMetadata, REGELVERK_TYPE, RichTextTypes } from '@/types/common-text-types';
 import { Language, UNTRANSLATED } from '@/types/texts/language';
 
 export interface INewRichTextParams extends ITextBaseMetadata {
@@ -31,17 +25,9 @@ export interface INewGodFormuleringParams extends ITextBaseMetadata {
   };
 }
 
-export interface INewPlainTextParams extends ITextBaseMetadata {
-  textType: PlainTextTypes;
-  plainText: {
-    [Language.NB]: string | null;
-    [Language.NN]: string | null;
-  };
-}
+export type TextType = RichTextTypes | typeof REGELVERK_TYPE | typeof GOD_FORMULERING_TYPE;
 
-export type TextType = RichTextTypes | PlainTextTypes | typeof REGELVERK_TYPE | typeof GOD_FORMULERING_TYPE;
-
-export type INewTextParams = INewRichTextParams | INewPlainTextParams | INewRegelverkParams | INewGodFormuleringParams;
+export type INewTextParams = INewRichTextParams | INewRegelverkParams | INewGodFormuleringParams;
 
 interface BaseListText {
   id: string;
@@ -66,9 +52,4 @@ export interface ListRegelverk extends BaseListText {
 export interface ListGodFormulering extends BaseListText {
   textType: typeof GOD_FORMULERING_TYPE;
   richText: { [Language.NB]: KabalValue | null; [Language.NN]: KabalValue | null };
-}
-
-export interface ListPlainText extends BaseListText {
-  textType: PlainTextTypes;
-  plainText: { [Language.NB]: string | null; [Language.NN]: string | null };
 }
