@@ -21,8 +21,8 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.VarsletFrist,
-  ColumnKeyEnum.Rol,
   ColumnKeyEnum.Open,
+  ColumnKeyEnum.KrolStyring,
 ];
 
 export const RolOppgaverTable = () => {
