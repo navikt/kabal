@@ -38,6 +38,8 @@ export enum ColumnKeyEnum {
   FlowStatesWithoutSelf = 37,
   FlowStatesWithSelf = 38,
   TypeForSakerITR = 39,
+  KrolStyring = 40,
+  KrolStyringNonFilterable = 41,
 }
 
 export const TABLE_HEADERS = {
@@ -80,4 +82,6 @@ export const TABLE_HEADERS = {
   [ColumnKeyEnum.AccessYtelser]: 'Ytelse',
   [ColumnKeyEnum.AccessInnsendingshjemler]: 'Hjemmel',
   [ColumnKeyEnum.AccessRegistreringshjemler]: 'Registreringshjemler',
+  [ColumnKeyEnum.KrolStyring]: 'Rådgivende overlege',
+  [ColumnKeyEnum.KrolStyringNonFilterable]: 'Rådgivende overlege',
 };

@@ -10,7 +10,11 @@ import { useSetRolFlowStateMutation } from '@/redux-api/oppgaver/mutations/set-r
 import type { INavEmployee } from '@/types/bruker';
 import { FlowState } from '@/types/oppgave-common';
 
-export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDERSKRIVERE): Return => {
+export const useSetRol = (
+  oppgaveId: string,
+  rol: INavEmployee[] = EMPTY_MEDUNDERSKRIVERE,
+  flowState?: FlowState,
+): Return => {
   const [setRol, { isLoading: isSettingEmployee }] = useSetRolMutation({
     fixedCacheKey: getFixedCacheKey(oppgaveId),
   });
@@ -28,7 +32,9 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
         const { modified } = await setRol({ oppgaveId, employee: toROL }).unwrap();
         const timestamp = parseISO(modified).getTime();
 
-        await setRolState({ oppgaveId, flowState: FlowState.SENT }).unwrap();
+        if (flowState !== FlowState.SENT) {
+          await setRolState({ oppgaveId, flowState: FlowState.SENT }).unwrap();
+        }
 
         successToast({
           oppgaveId,
@@ -43,7 +49,7 @@ export const useSetRol = (oppgaveId: string, rol: INavEmployee[] = EMPTY_MEDUNDE
         // Error already handled in RTKQ file.
       }
     },
-    [rol, oppgaveId, setRol, setRolState],
+    [rol, oppgaveId, setRol, setRolState, flowState],
   );
 
   onChangeRef.current = onChange;

@@ -7,11 +7,7 @@ import type { Entry } from '@/components/searchable-select/virtualized-option-li
 import { useHasRole } from '@/hooks/use-has-role';
 import { useGetPotentialRolQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import { type INavEmployee, Role } from '@/types/bruker';
-
-interface Props {
-  oppgaveId: string;
-  rolIdent: string | null;
-}
+import type { IOppgave } from '@/types/oppgaver';
 
 const NONE_LABEL = 'Felles kø';
 const NONE_ENTRY: Entry<INavEmployee | null> = {
@@ -22,13 +18,15 @@ const NONE_ENTRY: Entry<INavEmployee | null> = {
 };
 const EMPTY_LIST: INavEmployee[] = [];
 
-export const Rol = ({ oppgaveId, rolIdent }: Props) => {
-  const { data, isLoading } = useGetPotentialRolQuery(oppgaveId);
+export const Rol = ({ id, rol }: IOppgave) => {
+  const { employee, flowState } = rol;
+  const rolIdent = employee?.navIdent ?? null;
+  const { data, isLoading } = useGetPotentialRolQuery(id);
   const hasAccess = useHasRole(Role.KABAL_KROL);
 
   const rols = data === undefined ? EMPTY_LIST : data.rols;
 
-  const { onChange, isUpdating } = useSetRol(oppgaveId, rols);
+  const { onChange, isUpdating } = useSetRol(id, rols, flowState);
 
   const options = useMemo((): Entry<INavEmployee | null>[] => [NONE_ENTRY, ...rols.map(toNavEmployeeEntry)], [rols]);
 
