@@ -5,7 +5,7 @@ import { OppgaveTableKey } from '@/components/common-table-components/oppgave-ta
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
 import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
-import { useHasRole } from '@/hooks/use-has-role';
+import { useHasAnyOfRoles } from '@/hooks/use-has-role';
 import { useGetSettingsQuery } from '@/redux-api/bruker';
 import { useGetLedigeRolOppgaverQuery } from '@/redux-api/oppgaver/queries/oppgaver';
 import { Role } from '@/types/bruker';
@@ -18,20 +18,25 @@ const COLUMNS: ColumnKeyEnum[] = [
   ColumnKeyEnum.Age,
   ColumnKeyEnum.Deadline,
   ColumnKeyEnum.VarsletFrist,
-  ColumnKeyEnum.RolTildeling,
+  ColumnKeyEnum.Open,
+  ColumnKeyEnum.KrolStyringNonFilterable,
 ];
 
-export const LedigeRolOppgaverTable = () => {
-  const hasAccess = useHasRole(Role.KABAL_ROL);
+interface Props {
+  heading?: string;
+}
+
+export const LedigeRolOppgaverTable = ({ heading = 'Ledige oppgaver' }: Props) => {
+  const hasAccess = useHasAnyOfRoles([Role.KABAL_ROL, Role.KABAL_KROL]);
 
   if (!hasAccess) {
     return null;
   }
 
-  return <LedigeOppgaverTableInternal />;
+  return <LedigeOppgaverTableInternal heading={heading} />;
 };
 
-const LedigeOppgaverTableInternal = (): React.JSX.Element => {
+const LedigeOppgaverTableInternal = ({ heading }: Required<Props>): React.JSX.Element => {
   const params = useOppgaveTableState(OppgaveTableKey.ROL_LEDIGE, SortFieldEnum.FRIST, SortOrderEnum.ASC);
 
   const {
@@ -49,7 +54,7 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
   });
 
   return (
-    <SectionWithHeading heading="Ledige oppgaver" size="small" level="1">
+    <SectionWithHeading heading={heading} size="small" level="1">
       <OppgaveTable
         zebraStripes
         columns={COLUMNS}

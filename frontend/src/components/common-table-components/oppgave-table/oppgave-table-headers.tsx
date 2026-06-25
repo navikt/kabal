@@ -124,6 +124,7 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
           </Returnert>
         );
       case ColumnKeyEnum.Rol:
+      case ColumnKeyEnum.KrolStyring:
         return <Rol key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.PaaVentReason:
         return <PaaVentReasons key={key} columnKey={key} tableKey={tableKey} />;
@@ -137,6 +138,7 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
       case ColumnKeyEnum.OpenWithYtelseAccess:
       case ColumnKeyEnum.Tildeling:
       case ColumnKeyEnum.OppgavestyringNonFilterable:
+      case ColumnKeyEnum.KrolStyringNonFilterable:
       case ColumnKeyEnum.Utfall:
       case ColumnKeyEnum.Feilregistrert:
       case ColumnKeyEnum.Saksnummer:
