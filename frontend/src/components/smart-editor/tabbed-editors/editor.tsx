@@ -19,7 +19,7 @@ import { parseJSON } from '@/functions/parse-json';
 import { getQueryParams } from '@/headers';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import type { ScalingGroup } from '@/hooks/settings/use-setting';
-import { LogLevel, pushError, pushLog, pushMeasurement } from '@/observability';
+import { LogLevel, pushError, pushEvent, pushLog, pushMeasurement } from '@/observability';
 import { createCapitalisePlugin } from '@/plate/plugins/capitalise/capitalise';
 import { cleanupWhitespaceIssues } from '@/plate/plugins/cleanup/cleanup-whitespace';
 import { normalizeNonStandardSpaces } from '@/plate/plugins/cleanup/normalize-non-standard-spaces';
@@ -90,10 +90,6 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
   const provider: YjsProviderConfig = {
     type: 'hocuspocus',
-    wsOptions: {
-      url,
-      maxAttempts: 1,
-    },
     options: {
       url,
       name: id,
@@ -111,31 +107,46 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
       },
       // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
       onClose: async ({ event }) => {
+        pushEvent('collaboration_ws_close', 'collaboration', { code: event.code.toString(), reason: event.reason });
+
         const span = tracer.startSpan('collaboration.onClose', {
           attributes: { ...traceAttrs, 'ws.close_code': event.code, 'ws.close_reason': event.reason },
         });
 
+        // hocuspocus v4 sends server-initiated closes as a CLOSE app message: code 1000 + reason string.
+        // Real WebSocket closes use numeric codes (1001, 1006, 4401 …) with no reason.
+        const { code, reason } = event;
+        const isDocumentDeleted = reason === 'DOCUMENT_DELETED' || code === 4410;
+        const isDocumentNotFound = reason === 'DOCUMENT_NOT_FOUND' || code === 4404;
+        const isAuthError =
+          reason === 'INVALID_SESSION' ||
+          reason === 'OBO_TOKEN_EXPIRED' ||
+          reason === 'MISSING_COOKIE' ||
+          reason === 'INVALID_CONTEXT' ||
+          code === 4401;
+        const isTransient =
+          reason === 'Connection Timeout' || reason === 'Reset Connection' || code === 1001 || code === 4403;
+        const isNormalClose = code === 1005 || (code === 1000 && (!reason || reason === 'provider_initiated'));
+
         try {
-          if (event.code !== 1000 && event.code !== 1005) {
-            span.setStatus({ code: SpanStatusCode.ERROR, message: `WebSocket closed with code ${event.code}` });
+          if (!isNormalClose) {
+            span.setStatus({ code: SpanStatusCode.ERROR, message: `WebSocket closed with code ${code} (${reason})` });
           }
 
-          pushLog(`WebSocket closed with code ${event.code} and reason: ${event.reason}`, { context });
+          pushLog(`WebSocket closed with code ${code} and reason: ${reason}`, { context });
 
-          if (event.code === 1000 || event.code === 1005) {
+          if (isNormalClose) {
             return;
           }
 
-          if (event.code === 4410) {
-            console.debug('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.');
-            pushLog('Code 4410 - Document has been deleted remotely. Destroying Yjs connection.', { context });
+          if (isDocumentDeleted) {
             span.setAttribute('collaboration.close_action', 'destroy_deleted');
             destroyAndDelete();
 
             return;
           }
 
-          if (event.code === 4401 && !ENVIRONMENT.isLocal) {
+          if (isAuthError && !ENVIRONMENT.isLocal) {
             span.setAttribute('collaboration.close_action', 'redirect_login');
 
             return window.location.assign('/oauth2/login');
@@ -144,17 +155,13 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           setIsConnected(false);
           setIsSynced(false);
 
-          // 4403: Reconnect immediately to regain access, with new access rights.
-          // 1001: Pod gracefully closed the connection, likely due to a redeploy. Reconnect immediately.
-          if (event.code === 4403 || event.code === 1001) {
+          if (isTransient) {
             span.setAttribute('collaboration.close_action', 'reconnect_immediate');
 
             return yjs.connect();
           }
 
-          if (event.code === 4404) {
-            console.debug('Code 4404 - Document not found. Destroying Yjs connection.');
-            pushLog('Code 4404 - Document not found. Destroying Yjs connection.', { context });
+          if (isDocumentNotFound) {
             span.setAttribute('collaboration.close_action', 'destroy_not_found');
             destroyAndDelete();
 
@@ -177,8 +184,6 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
               hasOwn(data.session, 'active') &&
               data.session.active === true
             ) {
-              console.debug('Reconnecting Yjs...');
-              pushLog('Reconnecting Yjs...');
               span.setAttribute('collaboration.close_action', 'reconnect_after_session_check');
               yjs.connect();
             } else {

@@ -102,7 +102,7 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
 
   if (error !== null) {
     return (
-      <InlineMessage status="warning" className="max-w-[50%]">
+      <InlineMessage status="warning" className="max-w-[50%]" size="small">
         {error}
       </InlineMessage>
     );
