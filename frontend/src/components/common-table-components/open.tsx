@@ -28,8 +28,8 @@ export const OpenForRoleAccess = ({
   ...buttonProps
 }: RoleAccessedProps) => {
   const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
-  const { user } = useContext(StaticDataContext);
   const isKrol = useHasRole(Role.KABAL_KROL);
+  const { user } = useContext(StaticDataContext);
 
   const canOpen =
     isMerkantil ||

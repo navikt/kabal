@@ -5,6 +5,7 @@ import { EnhetensOppgaverPaaVentTable } from '@/components/enhetens-oppgaver-paa
 import { EnhetensOppgaverTable } from '@/components/enhetens-oppgaver-table/enhetens-oppgaver-table';
 import { ReturnerteRolOppgaverTable } from '@/components/rol/returnerte-table';
 import { RolOppgaverTable } from '@/components/rol/under-arbeid-table';
+import { LedigeRolOppgaverTable } from '@/components/rol-tables/ledige-rol-oppgaver-table';
 import { OppgaverPageWrapper } from '@/pages/page-wrapper';
 
 export const OppgavestyringPage = () => {
@@ -13,11 +14,15 @@ export const OppgavestyringPage = () => {
   return (
     <OppgaverPageWrapper title={`Oppgavestyring - ${user.ansattEnhet.navn}`}>
       <EnhetensOppgaverTable />
-      <RolOppgaverTable />
 
       <EnhetensOppgaverPaaVentTable />
 
       <EnhetensFerdigstilteOppgaverTable />
+
+      <RolOppgaverTable />
+
+      <LedigeRolOppgaverTable heading="Felles kø" />
+
       <ReturnerteRolOppgaverTable />
     </OppgaverPageWrapper>
   );

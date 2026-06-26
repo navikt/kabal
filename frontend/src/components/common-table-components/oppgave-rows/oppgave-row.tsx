@@ -20,6 +20,7 @@ import { ColumnKeyEnum } from '@/components/common-table-components/types';
 import { Ytelse } from '@/components/common-table-components/ytelse';
 import { CopyButton } from '@/components/copy-button/copy-button';
 import { Feilregistrert } from '@/components/feilregistrering/feilregistrert';
+import { KrolStyring } from '@/components/krolstyring/krolstyring';
 import { Oppgavestyring } from '@/components/oppgavestyring/oppgavestyring';
 // biome-ignore lint/suspicious/noImportCycles: See relevant-oppgaver.tsx for more information about this dependency cycle.
 import { RelevantOppgaver } from '@/components/relevant-oppgaver/relevant-oppgaver';
@@ -191,6 +192,13 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             <Oppgavestyring {...oppgave} />
+          </Table.DataCell>
+        );
+      case ColumnKeyEnum.KrolStyring:
+      case ColumnKeyEnum.KrolStyringNonFilterable:
+        return (
+          <Table.DataCell key={key}>
+            <KrolStyring {...oppgave} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.TildelingWithFilter:
