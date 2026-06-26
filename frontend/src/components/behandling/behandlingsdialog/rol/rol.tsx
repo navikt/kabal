@@ -1,4 +1,3 @@
-import { VStack } from '@navikt/ds-react';
 import { FortroligWarning } from '@/components/behandling/behandlingsdialog/fortrolig-warning';
 import { RolReadOnly } from '@/components/behandling/behandlingsdialog/rol/read-only';
 import { SelectRol } from '@/components/behandling/behandlingsdialog/rol/select-rol';
@@ -8,6 +7,7 @@ import { SKELETON } from '@/components/behandling/behandlingsdialog/rol/skeleton
 import { RolStateText } from '@/components/behandling/behandlingsdialog/rol/state-text';
 import { TakeFromRol } from '@/components/behandling/behandlingsdialog/rol/take-from-rol';
 import { TakeFromSaksbehandler } from '@/components/behandling/behandlingsdialog/rol/take-from-saksbehandler';
+import { PartBox } from '@/components/behandling/styled-components';
 import { hasFortroligFamily, hasFortroligStatus } from '@/domain/is-fortrolig';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
@@ -46,9 +46,9 @@ const RolInternal = ({ oppgave }: Props) => {
     }
 
     return (
-      <Container>
+      <PartBox>
         <RolReadOnly rol={rol} />
-      </Container>
+      </PartBox>
     );
   }
 
@@ -61,26 +61,16 @@ const RolInternal = ({ oppgave }: Props) => {
   }
 
   return (
-    <Container>
+    <PartBox>
       <SelectRol oppgaveId={oppgave.id} isSaksbehandler={isSaksbehandler} rol={oppgave.rol} />
       <RolStateText isSaksbehandler={isSaksbehandler} rol={oppgave.rol} />
       <SendToRol oppgaveId={oppgave.id} isSaksbehandler={isSaksbehandler} rol={rol} />
       <SendToSaksbehandler oppgaveId={oppgave.id} isSaksbehandler={isSaksbehandler} />
       <TakeFromRol oppgaveId={oppgave.id} isSaksbehandler={isSaksbehandler} rol={rol} />
       <TakeFromSaksbehandler oppgaveId={oppgave.id} />
-    </Container>
+    </PartBox>
   );
 };
-
-interface ContainerProps {
-  children: React.ReactNode;
-}
-
-const Container = ({ children }: ContainerProps) => (
-  <VStack gap="space-8" marginBlock="space-0 space-1">
-    {children}
-  </VStack>
-);
 
 interface WarningProps {
   family?: boolean;

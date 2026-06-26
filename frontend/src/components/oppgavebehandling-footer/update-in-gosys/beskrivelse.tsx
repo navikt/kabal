@@ -1,5 +1,5 @@
 import { Textarea } from '@navikt/ds-react';
-import { type IKodeverkSimpleValue, SaksTypeEnum, type UtfallEnum } from '@/types/kodeverk';
+import { type IKodeverkSimpleValue, SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
@@ -26,26 +26,26 @@ const getPrefix = (type: SaksTypeEnum): string => {
   }
 };
 
-export const getInitialBeskrivelse = (oppgave: IOppgavebehandling, utfall: IKodeverkSimpleValue<UtfallEnum>[]) => {
-  const prefix = getPrefix(oppgave.typeId);
-
-  const { utfallId, extraUtfallIdSet } = oppgave.resultat;
-
+const getBody = (
+  utfallId: UtfallEnum | null,
+  extraUtfallIdSet: UtfallEnum[],
+  kodeverk: IKodeverkSimpleValue<UtfallEnum>[],
+): string => {
   if (utfallId === null) {
-    return `${prefix}.`;
+    return '.';
   }
 
-  const utfallName = utfall.find(({ id }) => id === utfallId)?.navn.toLowerCase() ?? `${utfallId} (navn ikke funnet)`;
+  const utfallName = kodeverk.find(({ id }) => id === utfallId)?.navn.toLowerCase() ?? `${utfallId} (navn ikke funnet)`;
 
   if (extraUtfallIdSet.length > 0) {
     const extraUtfallNameList = extraUtfallIdSet
       .filter((id) => id !== utfallId)
-      .map((id) => utfall.find(({ id: uid }) => uid === id)?.navn.toLowerCase() ?? `${id} (navn ikke funnet)`);
+      .map((id) => kodeverk.find(({ id: uid }) => uid === id)?.navn.toLowerCase() ?? `${id} (navn ikke funnet)`);
 
     const [first] = extraUtfallNameList;
 
     if (first === undefined) {
-      return `${prefix} med utfall ${utfallName}.`;
+      return ` med utfall ${utfallName}.`;
     }
 
     const extraUtfallNames =
@@ -53,10 +53,35 @@ export const getInitialBeskrivelse = (oppgave: IOppgavebehandling, utfall: IKode
         ? first
         : `${extraUtfallNameList.slice(0, -1).join(', ')} og ${extraUtfallNameList.slice(-1)}`;
 
-    return `${prefix} med hovedutfall ${utfallName} og ekstra utfall ${extraUtfallNames}.`;
+    return ` med hovedutfall ${utfallName} og ekstra utfall: ${extraUtfallNames}.`;
   }
 
-  return `${prefix} med utfall ${utfallName}.`;
+  return ` med utfall ${utfallName}.`;
+};
+
+export const getSuffix = (type: SaksTypeEnum, utfallId: UtfallEnum | null): string => {
+  switch (type) {
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN: {
+      if (utfallId === UtfallEnum.OPPHEVET) {
+        return ' Vedtaksinstans skal gjøre ny behandling i saken.';
+      }
+
+      return '';
+    }
+    default:
+      return '';
+  }
+};
+
+export const getInitialBeskrivelse = (
+  { typeId, resultat }: IOppgavebehandling,
+  utfall: IKodeverkSimpleValue<UtfallEnum>[],
+) => {
+  const prefix = getPrefix(typeId);
+  const body = getBody(resultat.utfallId, resultat.extraUtfallIdSet, utfall);
+  const suffix = getSuffix(typeId, resultat.utfallId);
+
+  return `${prefix}${body}${suffix}`;
 };
 
 export const Beskrivelse = ({ setBeskrivelse, beskrivelse }: Props) => (

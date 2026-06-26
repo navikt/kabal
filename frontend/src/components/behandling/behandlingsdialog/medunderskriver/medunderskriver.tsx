@@ -1,6 +1,11 @@
-import { VStack } from '@navikt/ds-react';
+import { Label } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { FortroligWarning } from '@/components/behandling/behandlingsdialog/fortrolig-warning';
+import {
+  ArenaInfoMu,
+  ArenaInfoSaksbehandler,
+} from '@/components/behandling/behandlingsdialog/medunderskriver/arena-info';
+import { getTitleCapitalized } from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { MedunderskriverReadOnly } from '@/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SelectMedunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/select-medunderskriver';
 import { SendToMedunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/send-to-medunderskriver';
@@ -8,6 +13,7 @@ import { SendToSaksbehandler } from '@/components/behandling/behandlingsdialog/m
 import { SKELETON } from '@/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import { MedunderskriverStateText } from '@/components/behandling/behandlingsdialog/medunderskriver/state-text';
 import { TakeFromMedunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/take-from-medunderskriver';
+import { PartBox } from '@/components/behandling/styled-components';
 import { hasFortroligFamily, hasFortroligStatus } from '@/domain/is-fortrolig';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
@@ -34,9 +40,9 @@ export const Medunderskriver = () => {
     }
 
     return (
-      <Container>
+      <PartBox>
         <MedunderskriverReadOnly typeId={typeId} medunderskriver={medunderskriver} />
-      </Container>
+      </PartBox>
     );
   }
 
@@ -49,7 +55,9 @@ export const Medunderskriver = () => {
   }
 
   return (
-    <Container>
+    <PartBox>
+      <Label size="small">{getTitleCapitalized(typeId)}</Label>
+      <ArenaInfoSaksbehandler typeId={typeId} />
       <SelectMedunderskriver
         id={oppgaveId}
         medunderskriver={oppgave.medunderskriver}
@@ -57,22 +65,15 @@ export const Medunderskriver = () => {
         typeId={typeId}
       />
       <MedunderskriverStateText medunderskriver={medunderskriver} typeId={typeId} />
+
       <SendToMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} typeId={typeId} />
-      <SendToSaksbehandler oppgaveId={oppgaveId} medunderskriver={medunderskriver} />
       <TakeFromMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} typeId={typeId} />
-    </Container>
+
+      <SendToSaksbehandler oppgaveId={oppgaveId} medunderskriver={medunderskriver} />
+      <ArenaInfoMu typeId={typeId} />
+    </PartBox>
   );
 };
-
-interface ContainerProps {
-  children: React.ReactNode;
-}
-
-const Container = ({ children }: ContainerProps) => (
-  <VStack gap="space-8" marginBlock="space-0 space-1">
-    {children}
-  </VStack>
-);
 
 interface WarningProps {
   family?: boolean;

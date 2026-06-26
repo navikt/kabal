@@ -1,8 +1,8 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button, Checkbox, HStack } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { BodyLong, Box, Button, Checkbox, HStack, InlineMessage, VStack } from '@navikt/ds-react';
+import { useContext, useMemo, useState } from 'react';
+import { useIsFakeArenaCase } from '@/components/behandling/behandlingsdialog/medunderskriver/helpers';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
-import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { UpdateInGosys } from '@/components/oppgavebehandling-footer/update-in-gosys/update-in-gosys';
 import { Direction, PopupContainer } from '@/components/popup-container/popup-container';
 import { isReduxValidationResponse } from '@/functions/error-type-guard';
@@ -120,10 +120,25 @@ const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
           );
         case UtfallEnum.OPPHEVET:
           return (
-            <HStack align="center" gap="space-8" width="650px">
-              <FinishButton nyBehandling disabled={finishDisabled}>
-                Ja, fullfør og opprett ny behandling i Kabal
-              </FinishButton>
+            <VStack gap="space-16" width="650px">
+              <Box
+                asChild
+                background="accent-moderate"
+                padding="space-16"
+                borderColor="accent"
+                borderRadius="8"
+                borderWidth="1"
+              >
+                <VStack gap="space-8">
+                  <FinishButton nyBehandling disabled={finishDisabled}>
+                    Ja, fullfør og opprett ny behandling i Kabal
+                  </FinishButton>
+                  <InlineMessage status="info" size="small">
+                    Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som
+                    Trygderetten har opphevet.
+                  </InlineMessage>
+                </VStack>
+              </Box>
 
               {oppgave.requiresGosysOppgave ? (
                 <UpdateInGosys disabled={finishDisabled}>
@@ -136,14 +151,20 @@ const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
               )}
 
               <CancelButton cancel={cancel} />
-            </HStack>
+            </VStack>
           );
         case UtfallEnum.HENVIST:
           return (
-            <HStack align="center" gap="space-8" width="400px">
-              <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
-              <CancelButton cancel={cancel} />
-            </HStack>
+            <VStack gap="space-16">
+              <InlineMessage status="info">
+                Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som
+                Trygderetten har henvist.
+              </InlineMessage>
+              <HStack align="center" gap="space-8" width="400px">
+                <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
+                <CancelButton cancel={cancel} />
+              </HStack>
+            </VStack>
           );
       }
     }
@@ -168,28 +189,51 @@ export const ConfirmFinish = ({ cancel }: CancelButtonProps) => {
   const text = useText();
   const { data: oppgave } = useOppgave();
   const [arenaConfirmed, setArenaConfirmed] = useState(false);
+  const isFakeArenaCase = useIsFakeArenaCase();
 
   if (oppgave === undefined) {
     return null;
   }
 
-  const showConfirmCheckbox =
-    oppgave.fagsystemId === FAGSYSTEM_ARENA &&
-    (oppgave.typeId === SaksTypeEnum.KLAGE ||
-      oppgave.typeId === SaksTypeEnum.ANKE ||
-      oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
-      oppgave.typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET);
-
   return (
     <PopupContainer close={cancel} direction={Direction.RIGHT}>
       <BodyLong>{text}</BodyLong>
-      {showConfirmCheckbox ? (
-        <Checkbox onChange={(e) => setArenaConfirmed(e.target.checked)} checked={arenaConfirmed}>
-          Jeg bekrefter at jeg har oppdatert saken i Arena.
-        </Checkbox>
-      ) : null}
-      <Buttons cancel={cancel} finishDisabled={showConfirmCheckbox && !arenaConfirmed} />
+      <ConfirmArenaCheckbox typeId={oppgave.typeId} confirmed={arenaConfirmed} setConfirmed={setArenaConfirmed} />
+      <Buttons cancel={cancel} finishDisabled={isFakeArenaCase && !arenaConfirmed} />
     </PopupContainer>
+  );
+};
+
+interface ConfirmArenaCheckboxProps {
+  typeId: SaksTypeEnum;
+  confirmed: boolean;
+  setConfirmed: (confirmed: boolean) => void;
+}
+
+const ConfirmArenaCheckbox = ({ typeId, confirmed, setConfirmed }: ConfirmArenaCheckboxProps) => {
+  const isFakeArenaCase = useIsFakeArenaCase();
+
+  const text = useMemo(() => {
+    switch (typeId) {
+      case SaksTypeEnum.KLAGE:
+      case SaksTypeEnum.ANKE:
+      case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
+        return 'Jeg bekrefter at saken er besluttet i Arena.';
+      case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+        return 'Jeg bekrefter at jeg har registrert utfallet fra Trygderetten i Arena';
+      default:
+        return null;
+    }
+  }, [typeId]);
+
+  if (!isFakeArenaCase || text === null) {
+    return null;
+  }
+
+  return (
+    <Checkbox onChange={(e) => setConfirmed(e.target.checked)} checked={confirmed}>
+      {text}
+    </Checkbox>
   );
 };
 
@@ -309,7 +353,7 @@ const FinishButton = ({ children, nyBehandling = false, disabled }: FinishButton
       loading={hasBeenFinished || loader.isLoading}
       disabled={hasBeenFinished || loader.isLoading || disabled}
       icon={<CheckmarkIcon aria-hidden />}
-      className="[grid-area:left]"
+      className="w-fit [grid-area:left]"
     >
       {children}
     </Button>

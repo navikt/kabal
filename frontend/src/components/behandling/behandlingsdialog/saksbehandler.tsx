@@ -1,5 +1,6 @@
-import { BodyShort, Label, Skeleton, VStack } from '@navikt/ds-react';
+import { BodyShort, Label, Skeleton } from '@navikt/ds-react';
 import { FortroligWarning } from '@/components/behandling/behandlingsdialog/fortrolig-warning';
+import { PartBox } from '@/components/behandling/styled-components';
 import { useTildel } from '@/components/oppgavestyring/use-tildel';
 import { SearchableNavEmployeeSelectWithLabel } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select-with-label';
 import { hasFortroligFamily, hasFortroligStatus } from '@/domain/is-fortrolig';
@@ -38,7 +39,7 @@ export const Saksbehandler = () => {
   }
 
   return (
-    <VStack gap="space-8" marginBlock="space-0 space-1">
+    <PartBox>
       {showSelect ? (
         <SelectSaksbehandler oppgave={oppgave} />
       ) : (
@@ -49,7 +50,7 @@ export const Saksbehandler = () => {
           <BodyShort id={ID}>{saksbehandler === null ? 'Ikke tildelt' : saksbehandler.navn}</BodyShort>
         </>
       )}
-    </VStack>
+    </PartBox>
   );
 };
 

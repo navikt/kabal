@@ -1,4 +1,4 @@
-import { BodyShort, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { differenceInMilliseconds, parseISO } from 'date-fns';
 import { useMemo } from 'react';
@@ -140,7 +140,6 @@ const SelectMedunderskriverInner = ({
 
   return (
     <VStack gap="space-4">
-      <Label size="small">{label}</Label>
       <SearchableSelect
         label={label}
         options={options}
