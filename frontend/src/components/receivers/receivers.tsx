@@ -142,7 +142,7 @@ export const Receivers = ({
     firstReachableReceiver !== undefined;
 
   return (
-    <VStack gap="space-16 space-0" position="relative" as="section" overflow="hidden">
+    <VStack gap="space-16 space-0" position="relative" as="section">
       {dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN ? (
         <InlineMessage status="info" size="small">
           Forhåndsvalgt mottaker: Trygderetten
