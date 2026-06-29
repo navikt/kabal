@@ -92,7 +92,7 @@ export const DocumentModalContent = ({
   return (
     <>
       <Modal.Body className="flex h-[80vh] w-full gap-4 overflow-hidden">
-        <VStack gap="space-16" width="400px" height="100%" flexShrink="0" overflow="visible">
+        <VStack gap="space-16" width="400px" height="100%" flexShrink="0" overflowY="auto">
           <HStack align="center" gap="space-8">
             <Tag data-color="info" variant="outline" size="small">
               {DISTRIBUTION_TYPE_NAMES[document.dokumentTypeId]}
