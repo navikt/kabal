@@ -127,6 +127,8 @@ export interface IOppgavebehandlingBase {
   feilregistrering: IFeilregistrering | null;
   fagsystemId: string;
   saksnummer: string;
+  /** Saksnummer from Arena. */
+  arenaSaksnummer: string | null;
   tilbakekreving: boolean;
   timesPreviouslyExtended: number;
   sikkerhetstiltak: ISikkerhetstiltak | null;

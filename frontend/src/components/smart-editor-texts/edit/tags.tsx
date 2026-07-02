@@ -7,7 +7,7 @@ import { useMetadataFilters } from '@/components/smart-editor-texts/hooks/use-me
 import { GLOBAL, LIST_DELIMITER, WILDCARD } from '@/components/smart-editor-texts/types';
 import { CustomTag, ResolvedTags } from '@/components/tags/resolved-tag';
 import { useUtfallNameOrLoading } from '@/hooks/use-utfall-name';
-import { TEMPLATE_MAP } from '@/plate/templates/templates';
+import { TEMPLATE_METADATA_MAP } from '@/plate/templates/templates';
 import { useYtelserAll } from '@/simple-api-state/use-kodeverk';
 import type { IGetMaltekstseksjonParams } from '@/types/common-text-types';
 import type { IText } from '@/types/texts/responses';
@@ -115,7 +115,7 @@ const getTemaplateAndSectionName = (selected: string): string => {
     return `${ALL_TEMPLATES_LABEL} - ${getMaltekstSectionName(sId) ?? sId}`;
   }
 
-  const templateName = tId === undefined ? 'Ukjent mal' : (TEMPLATE_MAP[tId]?.tittel ?? tId);
+  const templateName = tId === undefined ? 'Ukjent mal' : (TEMPLATE_METADATA_MAP[tId]?.tittel ?? tId);
 
   return sId === undefined ? templateName : `${templateName} - ${getMaltekstSectionName(sId) ?? sId}`;
 };

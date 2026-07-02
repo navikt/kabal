@@ -1,5 +1,5 @@
 import { Box, Heading, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
-import { type Ref, useContext, useState } from 'react';
+import { type Ref, useContext, useMemo, useState } from 'react';
 import { Alert } from '@/components/alert/alert';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { GeneratedIcon } from '@/components/smart-editor/new-document/generated-icon';
@@ -9,23 +9,23 @@ import { useCreatorRole } from '@/hooks/dua-access/use-creator-role';
 import { useDuaAccess } from '@/hooks/dua-access/use-dua-access';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import type { CreateTemplateParams } from '@/plate/templates/helpers';
 import {
-  ANKE_I_TRYGDERETTEN_TEMPLATES,
-  ANKE_TEMPLATES,
-  BEGJÆRING_OM_GJENOPPTAK_I_TR_TEMPLATES,
-  BEGJÆRING_OM_GJENOPPTAK_TEMPLATES,
-  BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
+  getAnkeITrygderettenTemplates,
+  getAnkeTemplates,
+  getBegjæringOmGjenopptakITrTemplates,
+  getBegjæringOmGjenopptakTemplates,
+  getBehandlingEtterTrOpphevetTemplates,
   getFinishedBehandlingTemplates,
-  KLAGE_TEMPLATES,
-  OMGJØRINGSKRAVVEDTAK_TEMPLATES,
+  getKlageTemplates,
+  getOmgjøringskravvedtakTemplates,
 } from '@/plate/templates/templates';
 import { useCreateSmartDocumentMutation } from '@/redux-api/collaboration';
 import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
 import { DocumentTypeEnum } from '@/types/documents/documents';
 import { SaksTypeEnum } from '@/types/kodeverk';
-import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@/types/smart-editor/smart-editor';
+import type { ISmartEditorTemplate } from '@/types/smart-editor/smart-editor';
 import { Language } from '@/types/texts/language';
-import type { Immutable } from '@/types/types';
 
 interface Props {
   onCreate: (id: string) => void;
@@ -97,33 +97,35 @@ export const NewDocument = ({ onCreate, ref }: Props) => {
   );
 };
 
-export const useNewSmartDocumentTemplates = () => {
+export const useNewSmartDocumentTemplates = (): ISmartEditorTemplate[] => {
   const { data: oppgave, isSuccess } = useOppgave();
   const { user } = useContext(StaticDataContext);
 
-  if (!isSuccess) {
-    // ROL and KROL can never create new main documents.
-    // ROL can only create answers to ROL questions.
-    return [];
-  }
+  return useMemo(() => {
+    if (!isSuccess) {
+      // ROL and KROL can never create new main documents.
+      // ROL can only create answers to ROL questions.
+      return [];
+    }
 
-  const { isAvsluttetAvSaksbehandler, typeId } = oppgave;
+    const { isAvsluttetAvSaksbehandler, typeId, fagsystemId } = oppgave;
 
-  if (isAvsluttetAvSaksbehandler) {
-    return getFinishedBehandlingTemplates(user.navIdent);
-  }
+    if (isAvsluttetAvSaksbehandler) {
+      return getFinishedBehandlingTemplates({ sakstype: typeId, fagsystemId, navIdent: user.navIdent });
+    }
 
-  return TEMPLATES[typeId];
+    return TEMPLATE_GETTERS[typeId]({ sakstype: typeId, fagsystemId });
+  }, [isSuccess, oppgave, user.navIdent]);
 };
 
-const TEMPLATES: Record<SaksTypeEnum, Immutable<IMutableSmartEditorTemplate>[]> = {
-  [SaksTypeEnum.KLAGE]: KLAGE_TEMPLATES,
-  [SaksTypeEnum.ANKE]: ANKE_TEMPLATES,
-  [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: ANKE_I_TRYGDERETTEN_TEMPLATES,
-  [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: BEHANDLING_ETTER_TR_OPPHEVET_TEMPLATES,
-  [SaksTypeEnum.OMGJØRINGSKRAV]: OMGJØRINGSKRAVVEDTAK_TEMPLATES,
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: BEGJÆRING_OM_GJENOPPTAK_TEMPLATES,
-  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: BEGJÆRING_OM_GJENOPPTAK_I_TR_TEMPLATES,
+const TEMPLATE_GETTERS: Record<SaksTypeEnum, (params: CreateTemplateParams) => ISmartEditorTemplate[]> = {
+  [SaksTypeEnum.KLAGE]: getKlageTemplates,
+  [SaksTypeEnum.ANKE]: getAnkeTemplates,
+  [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: getAnkeITrygderettenTemplates,
+  [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: getBehandlingEtterTrOpphevetTemplates,
+  [SaksTypeEnum.OMGJØRINGSKRAV]: getOmgjøringskravvedtakTemplates,
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: getBegjæringOmGjenopptakTemplates,
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: getBegjæringOmGjenopptakITrTemplates,
 };
 
 interface TemplateButtonProps {

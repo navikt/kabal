@@ -12,6 +12,7 @@ import type { BaseParagraphPlugin, TElement, TTableCellElement, TTableElement, T
 import { type PlateEditor, useEditorRef, useEditorState } from 'platejs/react';
 import { CommentsPlugin } from '@/plate/plugins/comments';
 import type {
+  ELEMENT_ARENA_SAKSNUMMER,
   ELEMENT_BOOKMARK,
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
@@ -203,7 +204,7 @@ export interface LabelContentElement extends TElement {
 
 export interface SaksinfoElement extends TElement {
   type: typeof ELEMENT_SAKSINFO;
-  children: (LabelContentElement | SaksnummerElement | FullmektigElement)[];
+  children: (LabelContentElement | SaksnummerElement | ArenaSaksnummerElement | FullmektigElement)[];
 }
 
 export interface FullmektigElement extends TElement {
@@ -216,6 +217,13 @@ export interface FullmektigElement extends TElement {
 
 export interface SaksnummerElement extends TElement {
   type: typeof ELEMENT_SAKSNUMMER;
+  // One would think [PlaceholderElement] would work, but Slate/Plate insists on inserting surrounding text nodes. At least now the type will be correct.
+  children: [{ text: '' }, PlaceholderElement, { text: '' }];
+  isInitialized: boolean;
+}
+
+export interface ArenaSaksnummerElement extends TElement {
+  type: typeof ELEMENT_ARENA_SAKSNUMMER;
   // One would think [PlaceholderElement] would work, but Slate/Plate insists on inserting surrounding text nodes. At least now the type will be correct.
   children: [{ text: '' }, PlaceholderElement, { text: '' }];
   isInitialized: boolean;
@@ -274,6 +282,7 @@ export type ChildElement =
   | PlaceholderElement
   | FullmektigElement
   | SaksnummerElement
+  | ArenaSaksnummerElement
   | LabelContentElement;
 
 export type RichTextEditorElement = RootElement | ChildElement;
