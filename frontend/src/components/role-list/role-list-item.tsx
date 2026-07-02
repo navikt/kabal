@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const RoleItem = ({ role, variant }: Props) => {
-  const formattedRole = ROLE_NAMES[role];
+  const formattedRole = ROLE_NAMES[role] ?? role;
 
   return (
     <Tooltip key={role} content="Kopier">

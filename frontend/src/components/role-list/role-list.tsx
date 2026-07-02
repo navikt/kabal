@@ -34,19 +34,15 @@ export const RoleList = ({ roles, variant, title, description }: Props) => {
         </BodyShort>
       )}
 
-      <div>
-        <Heading size="small">{title}</Heading>
-        <BodyShort>{description}</BodyShort>
-        <Box marginBlock="space-16" asChild>
-          <List size="small" className="w-fit">
-            {roles.map((r) => (
-              <List.Item key={r} className="w-fit">
-                <RoleItem key={r} role={r} variant={variant} />
-              </List.Item>
-            ))}
-          </List>
-        </Box>
-      </div>
+      <Box marginBlock="space-16" asChild>
+        <List size="small" className="w-fit">
+          {roles.map((r) => (
+            <List.Item key={r} className="w-fit">
+              <RoleItem role={r} variant={variant} />
+            </List.Item>
+          ))}
+        </List>
+      </Box>
     </section>
   );
 };
