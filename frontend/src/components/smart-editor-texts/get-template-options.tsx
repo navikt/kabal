@@ -8,7 +8,7 @@ import {
 } from '@/components/smart-editor-texts/types';
 import { getTemplateSections } from '@/hooks/use-template-sections';
 import { DeprecatedTemplateSections, TemplateSections } from '@/plate/template-sections';
-import { TEMPLATES } from '@/plate/templates/templates';
+import { TEMPLATE_METADATA_LIST } from '@/plate/templates/templates';
 
 export const ALL_TEMPLATES_LABEL = 'Alle maler';
 export const DEPRECATED_SECTIONS_LABEL = 'Utgåtte seksjoner';
@@ -26,7 +26,7 @@ export const getTemplateOptions = (
     options.push({ ...NONE_OPTION, filterValue: NONE_OPTION.label, type: OptionType.OPTION });
   }
 
-  for (const { templateId, tittel, deprecatedSections } of TEMPLATES) {
+  for (const { templateId, tittel, deprecatedSections } of TEMPLATE_METADATA_LIST) {
     const { used, unused } = getTemplateSections(templateId);
 
     const unusedOptions = unused.map<NestedOption>((s) => ({

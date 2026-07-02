@@ -1,29 +1,49 @@
 import type { Value } from 'platejs';
 import { deepFreeze } from '@/functions/deep-freeze';
 import { TemplateSections } from '@/plate/template-sections';
-import { createMaltekstseksjon, createRegelverk, createSaksinfo, createSignature } from '@/plate/templates/helpers';
+import {
+  type CreateTemplateParams,
+  createMaltekstseksjon,
+  createRegelverk,
+  createSaksinfo,
+  createSignature,
+  type TemplateMetadata,
+} from '@/plate/templates/helpers';
 import { DistribusjonsType } from '@/types/documents/documents';
-import type { IMutableSmartEditorTemplate } from '@/types/smart-editor/smart-editor';
+import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
-const INITIAL_SLATE_VALUE: Value = [
-  createSaksinfo(),
-  createMaltekstseksjon(TemplateSections.TITLE),
-  createMaltekstseksjon(TemplateSections.INTRODUCTION_V2),
-  createMaltekstseksjon(TemplateSections.HVORFOR_OMGJØRING),
-  createMaltekstseksjon(TemplateSections.OM_REGELVERK),
-  createMaltekstseksjon(TemplateSections.TILSVARSRETT_V3),
-  createMaltekstseksjon(TemplateSections.GENERELL_INFO),
-
-  createSignature(),
-
-  createRegelverk(),
+export const VARSEL_OM_OMGJØRING_TIL_UGUNST_SECTIONS: TemplateSections[] = [
+  TemplateSections.TITLE,
+  TemplateSections.INTRODUCTION_V2,
+  TemplateSections.HVORFOR_OMGJØRING,
+  TemplateSections.OM_REGELVERK,
+  TemplateSections.TILSVARSRETT_V3,
+  TemplateSections.GENERELL_INFO,
 ];
 
-export const VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE = deepFreeze<IMutableSmartEditorTemplate>({
+export const VARSEL_OM_OMGJØRING_TIL_UGUNST_METADATA: TemplateMetadata = {
   templateId: TemplateIdEnum.VARSEL_OM_OMGJØRING_TIL_UGUNST_TEMPLATE,
   tittel: 'Varsel om omgjøring til ugunst',
-  richText: INITIAL_SLATE_VALUE,
   dokumentTypeId: DistribusjonsType.BREV,
   deprecatedSections: [],
-});
+};
+
+export const getVarselOmOmgjøringTilUgunstTemplate = ({
+  sakstype,
+  fagsystemId,
+}: CreateTemplateParams): ISmartEditorTemplate => {
+  const richText: Value = [
+    createSaksinfo({ sakstype, fagsystemId }),
+    ...VARSEL_OM_OMGJØRING_TIL_UGUNST_SECTIONS.map((section) => createMaltekstseksjon(section)),
+
+    createSignature(),
+
+    createRegelverk(),
+  ];
+
+  return deepFreeze<IMutableSmartEditorTemplate>({
+    ...VARSEL_OM_OMGJØRING_TIL_UGUNST_METADATA,
+    richText,
+  });
+};

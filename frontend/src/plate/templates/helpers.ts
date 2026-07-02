@@ -2,8 +2,10 @@ import { BaseH1Plugin, BaseH2Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
+import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@/plate/components/fullmektig';
 import {
+  ELEMENT_ARENA_SAKSNUMMER,
   ELEMENT_CURRENT_DATE,
   ELEMENT_EMPTY_VOID,
   ELEMENT_FULLMEKTIG,
@@ -19,9 +21,10 @@ import {
   ELEMENT_SIGNATURE,
 } from '@/plate/plugins/element-types';
 import { LabelContentPlugin } from '@/plate/plugins/label-content';
-import { TemplateSections } from '@/plate/template-sections';
+import { type DeprecatedTemplateSections, TemplateSections } from '@/plate/template-sections';
 import { MAX_TABLE_WIDTH } from '@/plate/toolbar/table/constants';
 import {
+  type ArenaSaksnummerElement,
   type BulletListElement,
   type CurrentDateElement,
   type EmptyVoidElement,
@@ -50,6 +53,9 @@ import {
   type TableRowElement,
   TextAlign,
 } from '@/plate/types';
+import type { DistribusjonsType } from '@/types/documents/documents';
+import { SaksTypeEnum } from '@/types/kodeverk';
+import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 import { Language } from '@/types/texts/language';
 
 export const createLabelContent = (source: LabelContentSource): LabelContentElement => ({
@@ -208,8 +214,32 @@ export const createFullmektig = (): FullmektigElement => ({
   show: false,
 });
 
-export const createSaksinfo = (
-  children: SaksinfoElement['children'] = [
+/** Parameters shared by every template factory, needed to tailor a template's content to the case it is created for. */
+export interface CreateTemplateParams {
+  sakstype: SaksTypeEnum;
+  fagsystemId: string;
+}
+
+/**
+ * The parts of a template that never depend on the case it is created for (unlike `richText`, which depends on
+ * `CreateTemplateParams`). Every template file exports one of these and spreads it into its `deepFreeze(...)` call,
+ * so admin/metadata consumers (e.g. `TEMPLATE_METADATA_MAP`) can read it directly without calling the template factory.
+ */
+export interface TemplateMetadata {
+  templateId: TemplateIdEnum;
+  tittel: string;
+  dokumentTypeId: DistribusjonsType;
+  deprecatedSections: DeprecatedTemplateSections[];
+}
+
+interface CreateSaksinfoParams extends CreateTemplateParams {
+  children?: SaksinfoElement['children'];
+}
+
+export const createSaksinfo = ({
+  sakstype,
+  fagsystemId,
+  children = [
     createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
     createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
     createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
@@ -217,11 +247,35 @@ export const createSaksinfo = (
     createFullmektig(),
     createSaksnummer(),
   ],
-): SaksinfoElement => ({ type: ELEMENT_SAKSINFO, children });
+}: CreateSaksinfoParams): SaksinfoElement => ({
+  type: ELEMENT_SAKSINFO,
+  children: mayHaveArenaSaksnummer(sakstype, fagsystemId) ? [...children, createArenaSaksnummer()] : children,
+});
+
+// So-called "fake" cases: the case is really handled in Arena, but a corresponding case is created in Kabal
+// to allow saksbehandlere to use Kabal's tools for producing documents etc. For these cases, the "Saksnummer"
+// shown elsewhere in the document is Kabal's own (internal) reference, so we also show the actual Arena
+// saksnummer to avoid confusion. See also `useIsFakeArenaCase`.
+const SAKSTYPER_MED_ARENA_SAKSNUMMER: ReadonlySet<SaksTypeEnum> = new Set([
+  SaksTypeEnum.KLAGE,
+  SaksTypeEnum.ANKE,
+  SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET,
+  SaksTypeEnum.ANKE_I_TRYGDERETTEN,
+]);
+
+const mayHaveArenaSaksnummer = (sakstype: SaksTypeEnum, fagsystemId: string): boolean =>
+  fagsystemId === FAGSYSTEM_ARENA && SAKSTYPER_MED_ARENA_SAKSNUMMER.has(sakstype);
 
 export const createSaksnummer = (): SaksnummerElement => ({
   type: ELEMENT_SAKSNUMMER,
   children: [{ text: '' }, createPlaceHolder('Saksnummer', false), { text: '' }],
+  isInitialized: false,
+  deletable: false,
+});
+
+export const createArenaSaksnummer = (): ArenaSaksnummerElement => ({
+  type: ELEMENT_ARENA_SAKSNUMMER,
+  children: [{ text: '' }, createPlaceHolder('Saksnummer fra Arena', false), { text: '' }],
   isInitialized: false,
   deletable: false,
 });

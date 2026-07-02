@@ -24,7 +24,7 @@ import { defaultPlugins } from '@/plate/plugins/plugin-sets/default';
 import { RedigerbarMaltekstPlugin } from '@/plate/plugins/redigerbar-maltekst';
 import { RegelverkContainerPlugin, RegelverkPlugin } from '@/plate/plugins/regelverk';
 import { SaksinfoPlugin } from '@/plate/plugins/saksinfo';
-import { SaksnummerPlugin } from '@/plate/plugins/saksnummer';
+import { ArenaSaksnummerPlugin, SaksnummerPlugin } from '@/plate/plugins/saksnummer';
 import { SignaturePlugin } from '@/plate/plugins/signature';
 import { WhitespaceDecorationPlugin, WhitespaceIssueLeaf } from '@/plate/plugins/whitespace-decoration';
 
@@ -66,6 +66,7 @@ export const historyPlugins = [
   CommentsPlugin,
   BookmarkPlugin,
   SaksnummerPlugin,
+  ArenaSaksnummerPlugin,
   CycleCasePlugin,
   SaksinfoPlugin,
 ];
