@@ -1,3 +1,3 @@
-import { PADDING_INLINE_PX, SHEET_WIDTH_PX } from '@/plate/components/get-scaled-em';
+import { PADDING_INLINE_PT, ptToPx, SHEET_WIDTH_PT } from '@/plate/components/get-scaled-em';
 
-export const MAX_TABLE_WIDTH = SHEET_WIDTH_PX - PADDING_INLINE_PX * 2;
+export const MAX_TABLE_WIDTH_PX = Math.floor(ptToPx(SHEET_WIDTH_PT - PADDING_INLINE_PT * 2));

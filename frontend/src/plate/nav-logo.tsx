@@ -1,8 +1,8 @@
-import { pxToEm } from '@/plate/components/get-scaled-em';
+import { ptToEm } from '@/plate/components/get-scaled-em';
 
 export const NavLogo = () => (
   <svg
-    style={{ height: pxToEm(16) }}
+    style={{ height: ptToEm(16) }}
     aria-label="Nav-logo"
     data-name="Layer 1"
     xmlns="http://www.w3.org/2000/svg"

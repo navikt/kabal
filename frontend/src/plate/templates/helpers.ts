@@ -22,7 +22,7 @@ import {
 } from '@/plate/plugins/element-types';
 import { LabelContentPlugin } from '@/plate/plugins/label-content';
 import { type DeprecatedTemplateSections, TemplateSections } from '@/plate/template-sections';
-import { MAX_TABLE_WIDTH } from '@/plate/toolbar/table/constants';
+import { MAX_TABLE_WIDTH_PX } from '@/plate/toolbar/table/constants';
 import {
   type ArenaSaksnummerElement,
   type BulletListElement,
@@ -182,7 +182,7 @@ export const createTableCell = (text = ''): TableCellElement => ({
 export const createTable = (rows: number, columns: number): TableElement => ({
   type: BaseTablePlugin.key,
   children: Array.from({ length: rows }, () => createTableRow(Array.from({ length: columns }, createTableCell))),
-  colSizes: Array.from({ length: columns }, () => Math.floor(MAX_TABLE_WIDTH / columns)),
+  colSizes: Array.from({ length: columns }, () => Math.floor(MAX_TABLE_WIDTH_PX / columns)),
 });
 
 export const createPlaceHolder = (
