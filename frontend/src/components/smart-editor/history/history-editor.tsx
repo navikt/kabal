@@ -46,7 +46,7 @@ export const HistoryEditor = memo(
         minWidth="210mm"
         paddingInline="space-16"
         paddingBlock="space-16 space-0"
-        className="after:pb-[calc(20mm*var(--kabal-editor-scale)+100px)]"
+        className="after:pb-[calc(20mm*var(--kabal-editor-scale)+100px)]" // Cannot use EDITOR_SCALE_CSS_VAR with Tailwind.
       >
         <Button
           variant="primary"

@@ -6,7 +6,7 @@ import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale'
 import { useOnClickOutside } from '@/hooks/use-on-click-outside';
 import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
 import { SPELL_CHECK_LANGUAGES } from '@/hooks/use-smart-editor-language';
-import { SCREEN_FONT_SIZE_PX } from '@/plate/components/get-scaled-em';
+import { FONT_SIZE_PT } from '@/plate/components/get-scaled-em';
 import { KabalPlateEditor } from '@/plate/plate-editor';
 import { previewComponents, previewPlugins } from '@/plate/plugins/plugin-sets/preview';
 import type { KabalValue, RichTextEditor } from '@/plate/types';
@@ -71,7 +71,7 @@ export const RichTextPreview = ({
             bottom: openUp ? '100%' : 'auto',
             top: openUp ? 'auto' : '100%',
             width: `calc(var(${EDITOR_SCALE_CSS_VAR}) * 105mm)`,
-            fontSize: `calc(var(${EDITOR_SCALE_CSS_VAR}) * ${SCREEN_FONT_SIZE_PX}px)`,
+            fontSize: `calc(var(${EDITOR_SCALE_CSS_VAR}) * ${FONT_SIZE_PT}pt)`,
           }}
           className="z-22"
         >

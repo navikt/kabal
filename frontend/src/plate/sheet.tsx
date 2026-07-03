@@ -1,12 +1,12 @@
 import { Box } from '@navikt/ds-react';
 import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
 import {
-  PADDING_BOTTOM_PX,
-  PADDING_INLINE_PX,
-  PADDING_TOP_PX,
-  SCREEN_FONT_SIZE_PX,
-  SHEET_MIN_HEIGHT_PX,
-  SHEET_WIDTH_PX,
+  FONT_SIZE_PT,
+  PADDING_BOTTOM_PT,
+  PADDING_INLINE_PT,
+  PADDING_TOP_PT,
+  SHEET_HEIGHT_PT,
+  SHEET_WIDTH_PT,
 } from '@/plate/components/get-scaled-em';
 
 interface Props {
@@ -28,12 +28,12 @@ export const Sheet = ({ minHeight = false, children, ref, className, scaleCssVar
     shadow="dialog"
     className={className === undefined ? SHEET_CLASSES : `${SHEET_CLASSES} ${className}`}
     style={{
-      width: `calc(var(${scaleCssVar}) * ${SHEET_WIDTH_PX}px)`,
-      minHeight: minHeight ? `calc(var(${scaleCssVar}) * ${SHEET_MIN_HEIGHT_PX}px)` : 'unset',
-      paddingInline: `calc(var(${scaleCssVar}) * ${PADDING_INLINE_PX}px)`,
-      paddingTop: `calc(var(${scaleCssVar}) * ${PADDING_TOP_PX}px)`,
-      paddingBottom: `calc(var(${scaleCssVar}) * ${PADDING_BOTTOM_PX}px)`,
-      fontSize: `calc(var(${scaleCssVar}) * ${SCREEN_FONT_SIZE_PX}px)`,
+      width: `calc(var(${scaleCssVar}) * ${SHEET_WIDTH_PT}pt)`,
+      minHeight: minHeight ? `calc(var(${scaleCssVar}) * ${SHEET_HEIGHT_PT}pt)` : 'unset',
+      paddingInline: `calc(var(${scaleCssVar}) * ${PADDING_INLINE_PT}pt)`,
+      paddingTop: `calc(var(${scaleCssVar}) * ${PADDING_TOP_PT}pt)`,
+      paddingBottom: `calc(var(${scaleCssVar}) * ${PADDING_BOTTOM_PT}pt)`,
+      fontSize: `calc(var(${scaleCssVar}) * ${FONT_SIZE_PT}pt)`,
     }}
     ref={ref}
     data-element="sheet"

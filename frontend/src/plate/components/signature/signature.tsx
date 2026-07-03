@@ -6,7 +6,7 @@ import { StaticDataContext } from '@/components/app/static-data-context';
 import { SmartEditorContext } from '@/components/smart-editor/context';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { AddNewParagraphs } from '@/plate/components/common/add-new-paragraph-buttons';
-import { pxToEm } from '@/plate/components/get-scaled-em';
+import { ptToEm } from '@/plate/components/get-scaled-em';
 import { MedunderskriverSignature, SaksbehandlerSignature } from '@/plate/components/signature/individual-signature';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
 import type { SignatureElement } from '@/plate/types';
@@ -61,7 +61,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
   return (
     <PlateElement<SignatureElement>
       {...props}
-      style={{ marginTop: pxToEm(32), marginBottom: pxToEm(40) }}
+      style={{ marginTop: ptToEm(32), marginBottom: ptToEm(40) }}
       attributes={{ ...props.attributes, contentEditable: false }}
     >
       <SectionContainer
@@ -80,11 +80,11 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
             className="border-dashed"
             borderColor="neutral"
             style={{
-              marginTop: pxToEm(16),
-              marginBottom: pxToEm(8),
-              padding: pxToEm(8),
-              gap: pxToEm(8),
-              borderWidth: pxToEm(2),
+              marginTop: ptToEm(16),
+              marginBottom: ptToEm(8),
+              padding: ptToEm(8),
+              gap: ptToEm(8),
+              borderWidth: ptToEm(2),
             }}
           >
             <HStack marginInline="auto" wrap justify="center" className="select-none self-center whitespace-nowrap">
@@ -182,7 +182,7 @@ const Checkbox = ({ children, onChange, ...props }: CheckboxProps) => {
         type="checkbox"
         onChange={(e) => onChange(e.target.checked)}
       />
-      <label htmlFor={id} style={{ paddingLeft: pxToEm(8) }} className="cursor-pointer">
+      <label htmlFor={id} style={{ paddingLeft: ptToEm(8) }} className="cursor-pointer">
         {children}
       </label>
     </HStack>

@@ -1,6 +1,6 @@
 import { PlateElement, type PlateElementProps } from 'platejs/react';
 import { formatLongDate } from '@/domain/date';
-import { pxToEm } from '@/plate/components/get-scaled-em';
+import { ptToEm } from '@/plate/components/get-scaled-em';
 import type { SaksinfoElement } from '@/plate/types';
 
 export const Saksinfo = ({ children, ...rest }: PlateElementProps<SaksinfoElement>) => (
@@ -9,7 +9,7 @@ export const Saksinfo = ({ children, ...rest }: PlateElementProps<SaksinfoElemen
     attributes={{ ...rest.attributes, 'data-element': rest.element.type }}
     as="div"
     className="flex items-end justify-between"
-    style={{ marginTop: pxToEm(48), marginBottom: pxToEm(48), fontSize: pxToEm(11) }}
+    style={{ marginTop: ptToEm(48), marginBottom: ptToEm(48), fontSize: ptToEm(11) }}
   >
     <div>{children}</div>
     <span>{formatLongDate(YEAR, MONTH, DAY)}</span>

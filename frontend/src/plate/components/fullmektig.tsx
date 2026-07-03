@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useReportDynamicContentLoading } from '@/components/smart-editor/tabbed-editors/dynamic-content-loading-context';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
-import { pxToEm } from '@/plate/components/get-scaled-em';
+import { ptToEm } from '@/plate/components/get-scaled-em';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import { type FullmektigElement, type PlaceholderElement, useMyPlateEditorRef } from '@/plate/types';
@@ -110,7 +110,7 @@ export const Fullmektig = (props: PlateElementProps<FullmektigElement>) => {
           />
           {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
           {/* Override boldness from legacy elements. Text in saksinfo should no longer be bold. */}
-          <span className="inline-block **:font-normal" style={{ width: pxToEm(150) }}>
+          <span className="inline-block **:font-normal" style={{ width: ptToEm(150) }}>
             {children[0][1]}:
           </span>
         </span>

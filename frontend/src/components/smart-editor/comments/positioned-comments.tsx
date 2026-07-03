@@ -7,7 +7,7 @@ import { SmartEditorContext } from '@/components/smart-editor/context';
 import { getPositionedItems, type ItemToPosition } from '@/components/smart-editor/functions/get-positioned-items';
 import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
 import { useSmartEditorAnnotationsAtOrigin } from '@/hooks/settings/use-setting';
-import { SCREEN_FONT_SIZE_PX } from '@/plate/components/get-scaled-em';
+import { FONT_SIZE_PT } from '@/plate/components/get-scaled-em';
 import { useMyPlateEditorState } from '@/plate/types';
 
 const ITEM_WIDTH = 350;
@@ -43,7 +43,7 @@ export const PositionedComments = () => {
       style={{
         width: maxCount * ITEM_OFFSET + ITEM_WIDTH + MIN_OFFSET,
         gridArea: 'comments',
-        fontSize: `calc(var(${EDITOR_SCALE_CSS_VAR}) * ${SCREEN_FONT_SIZE_PX}px)`,
+        fontSize: `calc(var(${EDITOR_SCALE_CSS_VAR}) * ${FONT_SIZE_PT}pt)`,
       }}
       className="z-0"
     >

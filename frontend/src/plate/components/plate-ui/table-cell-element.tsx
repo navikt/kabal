@@ -2,9 +2,9 @@ import { type ResizeEvent, ResizeHandle } from '@platejs/resizable';
 import { TablePlugin, useTableCellElement, useTableCellElementResizable, useTableColSizes } from '@platejs/table/react';
 import { PlateElement, type PlateElementProps, useEditorPlugin, useReadOnly } from 'platejs/react';
 import { useContext, useMemo } from 'react';
-import { pxToEm } from '@/plate/components/get-scaled-em';
+import { ptToEm } from '@/plate/components/get-scaled-em';
 import { ScaleContext } from '@/plate/status-bar/scale-context';
-import { MAX_TABLE_WIDTH } from '@/plate/toolbar/table/constants';
+import { MAX_TABLE_WIDTH_PX } from '@/plate/toolbar/table/constants';
 
 const BASE_CLASSES = 'relative align-top';
 const REMOVE_P_PLACEHOLDER = "[&>p::before]:content-['']";
@@ -28,18 +28,18 @@ export const TableCellElement = ({ children, ref, ...props }: PlateElementProps)
 
   // Width should always be a number unless something weird has happened
   const width =
-    typeof rawWidth === 'number' ? Math.floor(rawWidth * scale) : Math.floor((MAX_TABLE_WIDTH - totalWidth) * scale);
+    typeof rawWidth === 'number' ? Math.floor(rawWidth * scale) : Math.floor((MAX_TABLE_WIDTH_PX - totalWidth) * scale);
 
   const style: React.CSSProperties = {
     ...props.attributes.style,
     width,
     maxWidth: width,
     minHeight,
-    paddingTop: pxToEm(4),
-    paddingBottom: pxToEm(4),
-    paddingLeft: pxToEm(8),
-    paddingRight: pxToEm(8),
-    border: `${pxToEm(1)} solid var(--ax-border-neutral)`,
+    paddingTop: ptToEm(4),
+    paddingBottom: ptToEm(4),
+    paddingLeft: ptToEm(8),
+    paddingRight: ptToEm(8),
+    border: `${ptToEm(1)} solid var(--ax-border-neutral)`,
     overflowWrap: 'anywhere',
   };
 
@@ -81,8 +81,8 @@ const Resize = () => {
         const totalSize = widthOfRest + delta + initialSize;
 
         // Attempted to be resized outside bounds
-        if (totalSize >= MAX_TABLE_WIDTH && delta > 0) {
-          return options?.onResize?.({ ...e, initialSize: 0, delta: MAX_TABLE_WIDTH - widthOfRest });
+        if (totalSize >= MAX_TABLE_WIDTH_PX && delta > 0) {
+          return options?.onResize?.({ ...e, initialSize: 0, delta: MAX_TABLE_WIDTH_PX - widthOfRest });
         }
       }
 
@@ -96,7 +96,7 @@ const Resize = () => {
       suppressContentEditableWarning
       {...rest}
       options={scaledOptions}
-      style={{ width: pxToEm(12), ...style }}
+      style={{ width: ptToEm(12), ...style }}
       className={`${className} absolute top-0 right-0 z-20 h-full translate-x-1/2 cursor-col-resize select-none`}
     />
   );

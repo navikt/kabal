@@ -14,7 +14,7 @@ import { useIsUnchangeable } from '@/plate/hooks/use-is-unchangeable';
 import { useSelection } from '@/plate/hooks/use-selection';
 import { createSimpleParagraph } from '@/plate/templates/helpers';
 import { ToolbarSeparator } from '@/plate/toolbar/separator';
-import { MAX_TABLE_WIDTH } from '@/plate/toolbar/table/constants';
+import { MAX_TABLE_WIDTH_PX } from '@/plate/toolbar/table/constants';
 import { AddColumnLeftIcon } from '@/plate/toolbar/table/icons/add-column-left';
 import { AddColumnRightIcon } from '@/plate/toolbar/table/icons/add-column-right';
 import { AddRowAboveIcon } from '@/plate/toolbar/table/icons/add-row-above';
@@ -271,7 +271,7 @@ export const useTableMergeState = () => {
  * @param maxWidth - Maximum width of the table (only set explicitly in tests for easier math)
  * @returns - Adjusted column sizes
  */
-export const adjustColSizes = (colSizes: number[], colNum: number, before: boolean, maxWidth = MAX_TABLE_WIDTH) => {
+export const adjustColSizes = (colSizes: number[], colNum: number, before: boolean, maxWidth = MAX_TABLE_WIDTH_PX) => {
   const colSizesWithoutNewCol = colSizes.filter((_, i) => i !== colNum + (before ? 0 : 1));
 
   const totalWidth = colSizesWithoutNewCol.reduce((a, b) => a + b, 0);

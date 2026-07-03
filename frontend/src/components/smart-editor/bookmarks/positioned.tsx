@@ -10,14 +10,14 @@ import {
 } from '@/components/smart-editor/functions/get-positioned-items';
 import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
 import { pushEvent } from '@/observability';
-import { SCREEN_FONT_SIZE_PX } from '@/plate/components/get-scaled-em';
+import { FONT_SIZE_PT } from '@/plate/components/get-scaled-em';
 import { BOOKMARK_VARIANT_TO_CLASSNAME } from '@/plate/toolbar/bookmark-button';
 import { useMyPlateEditorRef } from '@/plate/types';
 
 const ITEM_WIDTH = 6 * 4;
 const ITEM_GAP = 4;
 
-const FONT_SIZE = `calc(var(${EDITOR_SCALE_CSS_VAR}) * ${SCREEN_FONT_SIZE_PX}px)`;
+const FONT_SIZE = `calc(var(${EDITOR_SCALE_CSS_VAR}) * ${FONT_SIZE_PT}pt)`;
 
 export const PositionedBookmarks = () => {
   const { sheetRef } = useContext(SmartEditorContext);

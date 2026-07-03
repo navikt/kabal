@@ -1,7 +1,7 @@
 import { BaseTablePlugin, type TableConfig } from '@platejs/table';
 import type { Descendant } from 'platejs';
 import type { OverrideEditor } from 'platejs/react';
-import { MAX_TABLE_WIDTH } from '@/plate/toolbar/table/constants';
+import { MAX_TABLE_WIDTH_PX } from '@/plate/toolbar/table/constants';
 import type { TableElement, TableRowElement } from '@/plate/types';
 import { isOfElementType } from '@/plate/utils/queries';
 
@@ -47,7 +47,7 @@ export const getDefaultColSizes = (table: TableElement): number[] => {
   const numCols = getNumCols(table);
 
   // Let the table be full width with equal column sizes
-  return Array.from({ length: numCols }, () => Math.floor(MAX_TABLE_WIDTH / numCols));
+  return Array.from({ length: numCols }, () => Math.floor(MAX_TABLE_WIDTH_PX / numCols));
 };
 
 const isValidColSizes = (colSizes: number[] | undefined): boolean => {
@@ -61,7 +61,7 @@ const isValidColSizes = (colSizes: number[] | undefined): boolean => {
 
   const totalWidth = colSizes.reduce((a, b) => a + b);
 
-  return totalWidth <= MAX_TABLE_WIDTH;
+  return totalWidth <= MAX_TABLE_WIDTH_PX;
 };
 
 const DEFAULT_COL_SIZE = 100;
@@ -74,11 +74,11 @@ const getAdjustedColSizes = (colSizes: number[], table: TableElement): number[] 
 
   const totalWidth = nonZeroColSizes.reduce((a, b) => a + b, 0);
 
-  if (totalWidth <= MAX_TABLE_WIDTH) {
+  if (totalWidth <= MAX_TABLE_WIDTH_PX) {
     return nonZeroColSizes;
   }
 
-  const toShrink = totalWidth - MAX_TABLE_WIDTH;
+  const toShrink = totalWidth - MAX_TABLE_WIDTH_PX;
 
   const shinkagePercentage = toShrink / totalWidth;
 

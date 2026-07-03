@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { formatFoedselsnummer } from '@/functions/format-id';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
-import { pxToEm } from '@/plate/components/get-scaled-em';
+import { ptToEm } from '@/plate/components/get-scaled-em';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
 import { type LabelContentElement, LabelContentSource } from '@/plate/types';
 import { useYtelserAll } from '@/simple-api-state/use-kodeverk';
@@ -41,7 +41,7 @@ export const LabelContent = (props: PlateElementProps<LabelContentElement>) => {
       <SectionContainer data-element={element.type} sectionType={SectionTypeEnum.LABEL}>
         {content === null ? null : (
           <span className="text-ax-neutral-800">
-            <span className="inline-block" style={{ width: pxToEm(150) }}>
+            <span className="inline-block" style={{ width: ptToEm(150) }}>
               {label}:
             </span>
             {content}
