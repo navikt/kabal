@@ -19,6 +19,7 @@ interface ButtonsProps extends CancelButtonProps {
   finishDisabled: boolean;
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
 const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
   const { data: oppgave } = useOppgave();
 
@@ -33,7 +34,6 @@ const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
     case SaksTypeEnum.KLAGE:
     case SaksTypeEnum.ANKE:
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
-    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       return (
         <HStack align="center" gap="space-8" width="400px">
           {oppgave.requiresGosysOppgave ? (
@@ -44,6 +44,29 @@ const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
           <CancelButton cancel={cancel} />
         </HStack>
       );
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK: {
+      switch (utfallId) {
+        case UtfallEnum.TRUKKET:
+        case UtfallEnum.HENLAGT:
+          return (
+            <HStack align="center" gap="space-8" width="400px">
+              <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
+              <CancelButton cancel={cancel} />
+            </HStack>
+          );
+        default:
+          return (
+            <HStack align="center" gap="space-8" width="400px">
+              {oppgave.requiresGosysOppgave ? (
+                <UpdateInGosys disabled={finishDisabled}>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
+              ) : (
+                <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
+              )}
+              <CancelButton cancel={cancel} />
+            </HStack>
+          );
+      }
+    }
     case SaksTypeEnum.OMGJØRINGSKRAV: {
       switch (utfallId) {
         case UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35:
@@ -86,6 +109,16 @@ const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
                 </FinishButton>
               )}
 
+              <CancelButton cancel={cancel} />
+            </HStack>
+          );
+        case UtfallEnum.HEVET:
+        case UtfallEnum.IKKE_GJENOPPTATT:
+        case UtfallEnum.AVVIST:
+        case UtfallEnum.GJENOPPTATT_STADFESTET:
+          return (
+            <HStack align="center" gap="space-8" width="400px">
+              <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
               <CancelButton cancel={cancel} />
             </HStack>
           );
