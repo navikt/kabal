@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from 'bun:test';
-import { ConfirmFinish } from '@/components/oppgavebehandling-footer/confirm-finish';
+import { ConfirmFinish } from '@/components/oppgavebehandling-footer/confirm-finish/confirm-finish';
 import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { act, fireEvent, render, screen } from '@/test-utils';
 import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
