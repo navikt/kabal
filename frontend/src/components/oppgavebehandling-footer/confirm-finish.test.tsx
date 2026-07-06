@@ -166,6 +166,8 @@ describe('ConfirmFinish', () => {
       const cases = [
         UtfallEnum.STADFESTET_MED_EN_ANNEN_BEGRUNNELSE,
         UtfallEnum.BESLUTNING_OM_IKKE_Å_OMGJØRE,
+        UtfallEnum.TRUKKET,
+        UtfallEnum.HENLAGT,
         UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35,
       ];
 
@@ -201,7 +203,12 @@ describe('ConfirmFinish', () => {
         expect(screen.queryByRole('dialog')).toBeVisible();
       });
 
-      const cases = [UtfallEnum.STADFESTET_MED_EN_ANNEN_BEGRUNNELSE, UtfallEnum.BESLUTNING_OM_IKKE_Å_OMGJØRE];
+      const cases = [
+        UtfallEnum.STADFESTET_MED_EN_ANNEN_BEGRUNNELSE,
+        UtfallEnum.BESLUTNING_OM_IKKE_Å_OMGJØRE,
+        UtfallEnum.TRUKKET,
+        UtfallEnum.HENLAGT,
+      ];
 
       test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, utfall, true);
@@ -369,16 +376,19 @@ describe('ConfirmFinish', () => {
   describe('Begjæring om gjenopptak i Trygderetten', () => {
     const type = SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
 
-    const cases = [
+    // Utfall that always show "Fullfør", regardless of `requiresGosysOppgave`.
+    const alwaysFullførCases = [
       UtfallEnum.HEVET,
+      UtfallEnum.IKKE_GJENOPPTATT,
       UtfallEnum.AVVIST,
-      UtfallEnum.GJENOPPTATT_DELVIS_ELLER_FULLT_MEDHOLD,
       UtfallEnum.GJENOPPTATT_STADFESTET,
-      UtfallEnum.INNSTILLING_IKKE_GJENOPPTAS,
     ];
 
+    // Utfall that fall through to the default branch and respect `requiresGosysOppgave`.
+    const defaultCases = [UtfallEnum.GJENOPPTATT_DELVIS_ELLER_FULLT_MEDHOLD, UtfallEnum.INNSTILLING_IKKE_GJENOPPTAS];
+
     describe('Does not require Gosys oppgave', async () => {
-      test.each(cases)('Utfall id: %s', async (utfall) => {
+      test.each([...alwaysFullførCases, ...defaultCases])('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, false);
         render(<ConfirmFinish cancel={() => undefined} />);
         const buttonText = 'Fullfør';
@@ -425,7 +435,73 @@ describe('ConfirmFinish', () => {
         expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
       });
 
-      test.each(cases)('Utfall id: %s', async (utfall) => {
+      test.each(alwaysFullførCases)('Utfall id: %s', async (utfall) => {
+        mockOppgave(type, utfall, true);
+        render(<ConfirmFinish cancel={() => undefined} />);
+        const buttonText = 'Fullfør';
+        expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
+
+        const items = await screen.findAllByRole('button');
+        expect(items).toHaveLength(2);
+
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: buttonText })));
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+
+      test.each(defaultCases)('Utfall id: %s', async (utfall) => {
+        mockOppgave(type, utfall, true);
+        render(<ConfirmFinish cancel={() => undefined} />);
+        const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
+        expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
+
+        const items = await screen.findAllByRole('button');
+        expect(items).toHaveLength(2);
+
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: buttonText })));
+        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
+      });
+    });
+  });
+
+  describe('Begjæring om gjenopptak', () => {
+    const type = SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;
+
+    // Utfall that always show "Fullfør", regardless of `requiresGosysOppgave`.
+    const alwaysFullførCases = [UtfallEnum.TRUKKET, UtfallEnum.HENLAGT];
+
+    // Utfall that fall through to the default branch and respect `requiresGosysOppgave`.
+    const defaultCases = [UtfallEnum.INNSTILLING_GJENOPPTAS, UtfallEnum.INNSTILLING_IKKE_GJENOPPTAS];
+
+    describe('Does not require Gosys oppgave', () => {
+      test.each([...alwaysFullførCases, ...defaultCases])('Utfall id: %s', async (utfall) => {
+        mockOppgave(type, utfall, false);
+        render(<ConfirmFinish cancel={() => undefined} />);
+        const buttonText = 'Fullfør';
+        expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
+
+        const items = await screen.findAllByRole('button');
+        expect(items).toHaveLength(2);
+
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: buttonText })));
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+    });
+
+    describe('Requires Gosys oppgave', () => {
+      test.each(alwaysFullførCases)('Utfall id: %s', async (utfall) => {
+        mockOppgave(type, utfall, true);
+        render(<ConfirmFinish cancel={() => undefined} />);
+        const buttonText = 'Fullfør';
+        expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
+
+        const items = await screen.findAllByRole('button');
+        expect(items).toHaveLength(2);
+
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: buttonText })));
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+
+      test.each(defaultCases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, true);
         render(<ConfirmFinish cancel={() => undefined} />);
         const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
