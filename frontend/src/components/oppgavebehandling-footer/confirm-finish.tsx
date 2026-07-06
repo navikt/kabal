@@ -19,7 +19,10 @@ interface ButtonsProps extends CancelButtonProps {
   finishDisabled: boolean;
 }
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
+interface GosysAwareButtonsProps extends ButtonsProps {
+  requiresGosysOppgave: boolean;
+}
+
 const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
   const { data: oppgave } = useOppgave();
 
@@ -27,7 +30,7 @@ const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
     return null;
   }
 
-  const { typeId, resultat } = oppgave;
+  const { typeId, resultat, requiresGosysOppgave } = oppgave;
   const { utfallId } = resultat;
 
   switch (typeId) {
@@ -35,106 +38,68 @@ const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
     case SaksTypeEnum.ANKE:
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
       return (
-        <HStack align="center" gap="space-8" width="400px">
-          {oppgave.requiresGosysOppgave ? (
-            <UpdateInGosys disabled={finishDisabled}>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
-          ) : (
-            <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
-          )}
-          <CancelButton cancel={cancel} />
-        </HStack>
+        <StandardButtonGroup
+          cancel={cancel}
+          finishDisabled={finishDisabled}
+          requiresGosysOppgave={requiresGosysOppgave}
+        />
       );
-    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK: {
+
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       switch (utfallId) {
         case UtfallEnum.TRUKKET:
         case UtfallEnum.HENLAGT:
-          return (
-            <HStack align="center" gap="space-8" width="400px">
-              <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
-              <CancelButton cancel={cancel} />
-            </HStack>
-          );
+          return <SimpleButtonGroup cancel={cancel} finishDisabled={finishDisabled} />;
         default:
           return (
-            <HStack align="center" gap="space-8" width="400px">
-              {oppgave.requiresGosysOppgave ? (
-                <UpdateInGosys disabled={finishDisabled}>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
-              ) : (
-                <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
-              )}
-              <CancelButton cancel={cancel} />
-            </HStack>
+            <StandardButtonGroup
+              cancel={cancel}
+              finishDisabled={finishDisabled}
+              requiresGosysOppgave={requiresGosysOppgave}
+            />
           );
       }
-    }
-    case SaksTypeEnum.OMGJØRINGSKRAV: {
+
+    case SaksTypeEnum.OMGJØRINGSKRAV:
       switch (utfallId) {
         case UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35:
           return (
-            <HStack align="center" gap="space-8" width="400px">
-              {oppgave.requiresGosysOppgave ? (
-                <UpdateInGosys disabled={finishDisabled}>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
-              ) : (
-                <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
-              )}
-              <CancelButton cancel={cancel} />
-            </HStack>
+            <StandardButtonGroup
+              cancel={cancel}
+              finishDisabled={finishDisabled}
+              requiresGosysOppgave={requiresGosysOppgave}
+            />
           );
-
         default:
-          return (
-            <HStack align="center" gap="space-8" width="400px">
-              <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
-              <CancelButton cancel={cancel} />
-            </HStack>
-          );
+          return <SimpleButtonGroup cancel={cancel} finishDisabled={finishDisabled} />;
       }
-    }
+
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
       switch (utfallId) {
         case UtfallEnum.GJENOPPTATT_OPPHEVET:
           return (
-            <HStack align="center" gap="space-8" width="650px">
-              <FinishButton nyBehandling disabled={finishDisabled}>
-                Ja, fullfør og opprett ny behandling i Kabal
-              </FinishButton>
-
-              {oppgave.requiresGosysOppgave ? (
-                <UpdateInGosys disabled={finishDisabled}>
-                  Nei, fullfør uten å opprette ny behandling i Kabal
-                </UpdateInGosys>
-              ) : (
-                <FinishButton disabled={finishDisabled}>
-                  Nei, fullfør uten å opprette ny behandling i Kabal
-                </FinishButton>
-              )}
-
-              <CancelButton cancel={cancel} />
-            </HStack>
+            <NyBehandlingButtonGroup
+              cancel={cancel}
+              finishDisabled={finishDisabled}
+              requiresGosysOppgave={requiresGosysOppgave}
+            />
           );
         case UtfallEnum.HEVET:
         case UtfallEnum.IKKE_GJENOPPTATT:
         case UtfallEnum.AVVIST:
         case UtfallEnum.GJENOPPTATT_STADFESTET:
-          return (
-            <HStack align="center" gap="space-8" width="400px">
-              <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
-              <CancelButton cancel={cancel} />
-            </HStack>
-          );
+          return <SimpleButtonGroup cancel={cancel} finishDisabled={finishDisabled} />;
         default:
           return (
-            <HStack align="center" gap="space-8" width="400px">
-              {oppgave.requiresGosysOppgave ? (
-                <UpdateInGosys disabled={finishDisabled}>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
-              ) : (
-                <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
-              )}
-              <CancelButton cancel={cancel} />
-            </HStack>
+            <StandardButtonGroup
+              cancel={cancel}
+              finishDisabled={finishDisabled}
+              requiresGosysOppgave={requiresGosysOppgave}
+            />
           );
       }
-    case SaksTypeEnum.ANKE_I_TRYGDERETTEN: {
+
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
       switch (utfallId) {
         case UtfallEnum.MEDHOLD:
         case UtfallEnum.DELVIS_MEDHOLD:
@@ -142,67 +107,121 @@ const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
         case UtfallEnum.AVVIST:
         case UtfallEnum.HEVET:
           return (
-            <HStack align="center" gap="space-8" width="400px">
-              {oppgave.requiresGosysOppgave ? (
-                <UpdateInGosys disabled={finishDisabled}>Oppdater oppgaven i Gosys og fullfør</UpdateInGosys>
-              ) : (
-                <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
-              )}
-              <CancelButton cancel={cancel} />
-            </HStack>
+            <StandardButtonGroup
+              cancel={cancel}
+              finishDisabled={finishDisabled}
+              requiresGosysOppgave={requiresGosysOppgave}
+            />
           );
         case UtfallEnum.OPPHEVET:
           return (
-            <VStack gap="space-16" width="650px">
-              <Box
-                asChild
-                background="accent-moderate"
-                padding="space-16"
-                borderColor="accent"
-                borderRadius="8"
-                borderWidth="1"
-              >
-                <VStack gap="space-8">
-                  <FinishButton nyBehandling disabled={finishDisabled}>
-                    Ja, fullfør og opprett ny behandling i Kabal
-                  </FinishButton>
-                  <InlineMessage status="info" size="small">
-                    Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som
-                    Trygderetten har opphevet.
-                  </InlineMessage>
-                </VStack>
-              </Box>
-
-              {oppgave.requiresGosysOppgave ? (
-                <UpdateInGosys disabled={finishDisabled}>
-                  Nei, fullfør uten å opprette ny behandling i Kabal
-                </UpdateInGosys>
-              ) : (
-                <FinishButton disabled={finishDisabled}>
-                  Nei, fullfør uten å opprette ny behandling i Kabal
-                </FinishButton>
-              )}
-
-              <CancelButton cancel={cancel} />
-            </VStack>
+            <TrygderettenOpphevetButtonGroup
+              cancel={cancel}
+              finishDisabled={finishDisabled}
+              requiresGosysOppgave={requiresGosysOppgave}
+            />
           );
         case UtfallEnum.HENVIST:
-          return (
-            <VStack gap="space-16">
-              <InlineMessage status="info">
-                Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som
-                Trygderetten har henvist.
-              </InlineMessage>
-              <HStack align="center" gap="space-8" width="400px">
-                <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
-                <CancelButton cancel={cancel} />
-              </HStack>
-            </VStack>
-          );
+          return <TrygderettenHenvistButtonGroup cancel={cancel} finishDisabled={finishDisabled} />;
       }
-    }
   }
 };
+
+interface GosysAwareFinishButtonProps {
+  requiresGosysOppgave: boolean;
+  disabled: boolean;
+  children: string;
+  // Text for the `UpdateInGosys` trigger button. Defaults to the standard "update and finish" wording, but some
+  // button groups (e.g. a "no" option in a yes/no choice) keep the same text regardless of `requiresGosysOppgave`.
+  gosysChildren?: string;
+}
+
+// Renders `UpdateInGosys` when the oppgave requires a Gosys oppgave to be updated, otherwise a plain `FinishButton`.
+const GosysAwareFinishButton = ({
+  requiresGosysOppgave,
+  disabled,
+  children,
+  gosysChildren = 'Oppdater oppgaven i Gosys og fullfør',
+}: GosysAwareFinishButtonProps) =>
+  requiresGosysOppgave ? (
+    <UpdateInGosys disabled={disabled}>{gosysChildren}</UpdateInGosys>
+  ) : (
+    <FinishButton disabled={disabled}>{children}</FinishButton>
+  );
+
+// The most common button group: a single, Gosys-aware "Fullfør" button and a cancel button.
+const StandardButtonGroup = ({ cancel, finishDisabled, requiresGosysOppgave }: GosysAwareButtonsProps) => (
+  <HStack align="center" gap="space-8" width="400px">
+    <GosysAwareFinishButton requiresGosysOppgave={requiresGosysOppgave} disabled={finishDisabled}>
+      Fullfør
+    </GosysAwareFinishButton>
+    <CancelButton cancel={cancel} />
+  </HStack>
+);
+
+// A "Fullfør" button that is never Gosys-aware, used when the Gosys oppgave should be ignored regardless.
+const SimpleButtonGroup = ({ cancel, finishDisabled }: ButtonsProps) => (
+  <HStack align="center" gap="space-8" width="400px">
+    <FinishButton disabled={finishDisabled}>Fullfør</FinishButton>
+    <CancelButton cancel={cancel} />
+  </HStack>
+);
+
+// Offers a choice between creating a new behandling in Kabal or finishing without one. Unlike `StandardButtonGroup`,
+// the "no" option keeps the same text whether or not it opens the Gosys update dialog.
+const NyBehandlingButtonGroup = ({ cancel, finishDisabled, requiresGosysOppgave }: GosysAwareButtonsProps) => (
+  <HStack align="center" gap="space-8" width="650px">
+    <FinishButton nyBehandling disabled={finishDisabled}>
+      Ja, fullfør og opprett ny behandling i Kabal
+    </FinishButton>
+
+    <GosysAwareFinishButton
+      requiresGosysOppgave={requiresGosysOppgave}
+      disabled={finishDisabled}
+      gosysChildren="Nei, fullfør uten å opprette ny behandling i Kabal"
+    >
+      Nei, fullfør uten å opprette ny behandling i Kabal
+    </GosysAwareFinishButton>
+
+    <CancelButton cancel={cancel} />
+  </HStack>
+);
+
+const TrygderettenOpphevetButtonGroup = ({ cancel, finishDisabled, requiresGosysOppgave }: GosysAwareButtonsProps) => (
+  <VStack gap="space-16" width="650px">
+    <Box asChild background="accent-moderate" padding="space-16" borderColor="accent" borderRadius="8" borderWidth="1">
+      <VStack gap="space-8">
+        <FinishButton nyBehandling disabled={finishDisabled}>
+          Ja, fullfør og opprett ny behandling i Kabal
+        </FinishButton>
+        <InlineMessage status="info" size="small">
+          Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten har
+          opphevet.
+        </InlineMessage>
+      </VStack>
+    </Box>
+
+    <GosysAwareFinishButton
+      requiresGosysOppgave={requiresGosysOppgave}
+      disabled={finishDisabled}
+      gosysChildren="Nei, fullfør uten å opprette ny behandling i Kabal"
+    >
+      Nei, fullfør uten å opprette ny behandling i Kabal
+    </GosysAwareFinishButton>
+
+    <CancelButton cancel={cancel} />
+  </VStack>
+);
+
+const TrygderettenHenvistButtonGroup = ({ cancel, finishDisabled }: ButtonsProps) => (
+  <VStack gap="space-16">
+    <InlineMessage status="info">
+      Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten har
+      henvist.
+    </InlineMessage>
+    <SimpleButtonGroup cancel={cancel} finishDisabled={finishDisabled} />
+  </VStack>
+);
 
 const CancelButton = ({ cancel }: CancelButtonProps) => (
   <Button
