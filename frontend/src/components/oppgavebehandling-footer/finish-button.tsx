@@ -2,7 +2,7 @@ import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
-import { ConfirmFinish } from '@/components/oppgavebehandling-footer/confirm-finish';
+import { ConfirmFinish } from '@/components/oppgavebehandling-footer/confirm-finish/confirm-finish';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
