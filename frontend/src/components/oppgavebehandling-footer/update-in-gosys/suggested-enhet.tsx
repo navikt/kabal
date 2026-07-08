@@ -47,7 +47,7 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
       : opprettetAvEnhet?.enhetsnr;
 
   const suggestedEnhetName =
-    typeId === SaksTypeEnum.ANKE
+    typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK
       ? (enheter.find((enhet) => enhet.enhetsnr === suggestedEnhetsnr)?.navn ?? 'Ukjent enhet')
       : opprettetAvEnhet.navn;
 
