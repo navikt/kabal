@@ -6,6 +6,7 @@ import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useGetGosysOppgaveQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import { useSearchEnheterQuery } from '@/redux-api/search';
 import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
+import type { Enhet } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   id: string;
@@ -41,15 +42,7 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
     return null;
   }
 
-  const suggestedEnhetsnr =
-    typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK
-      ? tildeltEnhetsnr
-      : opprettetAvEnhet?.enhetsnr;
-
-  const suggestedEnhetName =
-    typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK
-      ? (enheter.find((enhet) => enhet.enhetsnr === suggestedEnhetsnr)?.navn ?? 'Ukjent enhet')
-      : opprettetAvEnhet.navn;
+  const suggestedEnhet = getSuggestedEnhet(typeId, tildeltEnhetsnr, opprettetAvEnhet, enheter);
 
   if (isLoading) {
     return (
@@ -72,10 +65,10 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
       <BodyShort size="small">
         <b>Foreslått enhet som skal motta oppgaven:</b>{' '}
         <Tag data-color="meta-purple" size="small" variant="outline">
-          {suggestedEnhetsnr} - {suggestedEnhetName}
+          {suggestedEnhet.enhetsnr} - {suggestedEnhet.navn}
         </Tag>
       </BodyShort>
-      {suggestedEnhetsnr === selectedEnhet ? (
+      {suggestedEnhet.enhetsnr === selectedEnhet ? (
         <Button data-color="neutral" size="small" variant="tertiary" disabled icon={<CheckmarkCircleFillIconColored />}>
           Valgt
         </Button>
@@ -84,7 +77,7 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
           data-color="neutral"
           size="small"
           variant="tertiary"
-          onClick={() => setSelectedEnhet(suggestedEnhetsnr)}
+          onClick={() => setSelectedEnhet(suggestedEnhet.enhetsnr)}
         >
           Velg
         </Button>
@@ -92,3 +85,25 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
     </HStack>
   );
 };
+
+const getSuggestedEnhet = (
+  typeId: SaksTypeEnum,
+  tildeltEnhetsnr: string,
+  opprettetAvEnhet: Enhet,
+  enheter: Enhet[],
+): Enhet => {
+  if (!shouldSuggestTildeltEnhet(typeId)) {
+    return opprettetAvEnhet;
+  }
+
+  const foundEnhet = enheter.find((enhet) => enhet.enhetsnr === tildeltEnhetsnr);
+
+  if (foundEnhet !== undefined) {
+    return foundEnhet;
+  }
+
+  return { enhetsnr: tildeltEnhetsnr, navn: 'Ukjent enhet' };
+};
+
+const shouldSuggestTildeltEnhet = (typeId: SaksTypeEnum): boolean =>
+  typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;
