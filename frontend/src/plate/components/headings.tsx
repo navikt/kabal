@@ -40,7 +40,7 @@ export const HeadingTwo = ({ children, element, ...props }: PlateElementProps<H2
       lineHeight: ptToEm(16, H2_FONT_SIZE_PT),
       letterSpacing: ptToEm(0.25, H2_FONT_SIZE_PT),
       marginTop: ptToEm(26, H2_FONT_SIZE_PT),
-      marginBottom: '1em',
+      marginBottom: ptToEm(6, H2_FONT_SIZE_PT),
       marginLeft: indentInEm(element.indent, H2_FONT_SIZE_PT),
     }}
     className={CLASSNAMES}
@@ -60,7 +60,7 @@ export const HeadingThree = ({ children, element, ...props }: PlateElementProps<
       lineHeight: ptToEm(16, H3_FONT_SIZE_PT),
       letterSpacing: ptToEm(0.2, H3_FONT_SIZE_PT),
       marginTop: ptToEm(26, H3_FONT_SIZE_PT),
-      marginBottom: '1em',
+      marginBottom: ptToEm(6, H3_FONT_SIZE_PT),
       marginLeft: indentInEm(element.indent, H3_FONT_SIZE_PT),
     }}
     className={CLASSNAMES}
@@ -80,7 +80,7 @@ export const HeadingFour = ({ children, element, ...props }: PlateElementProps<H
       lineHeight: ptToEm(16, H4_FONT_SIZE_PT),
       letterSpacing: ptToEm(0.1, H4_FONT_SIZE_PT),
       marginTop: ptToEm(26, H4_FONT_SIZE_PT),
-      marginBottom: '1em',
+      marginBottom: ptToEm(6, H4_FONT_SIZE_PT),
       marginLeft: indentInEm(element.indent, H4_FONT_SIZE_PT),
     }}
     className={CLASSNAMES}
