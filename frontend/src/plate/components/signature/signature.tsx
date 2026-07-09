@@ -1,4 +1,4 @@
-import { Box, HStack } from '@navikt/ds-react';
+import { Box, HGrid, HStack } from '@navikt/ds-react';
 import type { SetNodesOptions } from 'platejs';
 import { PlateElement, type PlateElementProps, useEditorReadOnly } from 'platejs/react';
 import { useContext, useId } from 'react';
@@ -80,7 +80,6 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
             className="border-dashed"
             borderColor="neutral"
             style={{
-              marginTop: ptToEm(16),
               marginBottom: ptToEm(8),
               padding: ptToEm(8),
               gap: ptToEm(8),
@@ -146,10 +145,10 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
           </Box>
         ) : null}
 
-        <HStack justify="space-between" wrap={false} marginBlock="space-16">
+        <div className="grid grid-cols-2 gap-x-[2%]">
           <MedunderskriverSignature element={element} />
           <SaksbehandlerSignature element={element} />
-        </HStack>
+        </div>
 
         {children}
 
