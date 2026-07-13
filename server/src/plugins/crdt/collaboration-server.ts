@@ -22,7 +22,6 @@ const teamLog = getTeamLogger('collaboration');
 
 export const collaborationServer = new Hocuspocus({
   name: 'kabal-collaboration-server',
-  timeout: 5_000,
   debounce: DEBOUNCE_MS,
   maxDebounce: 15_000,
 
@@ -250,26 +249,26 @@ export const collaborationServer = new Hocuspocus({
     });
   },
 
-  onStoreDocument: async ({ context, document }) => {
-    if (!isConnectionContext(context)) {
+  onStoreDocument: async ({ lastContext, document }) => {
+    if (!isConnectionContext(lastContext)) {
       log.error({ msg: 'Tried to store document without context' });
 
       teamLog.debug({
         msg: 'Tried to store document without context',
         data: {
           document: JSON.stringify(getDocumentJson(document)),
-          context: JSON.stringify({ ...context, abortController: undefined }),
+          context: JSON.stringify({ ...lastContext, abortController: undefined }),
         },
       });
 
       throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
-    return withCollaborationSpan('onStoreDocument', context, async () => {
+    return withCollaborationSpan('onStoreDocument', lastContext, async () => {
       try {
-        await setDocument(context, document);
+        await setDocument(lastContext, document);
 
-        logContext('Saved document to database', context, 'debug');
+        logContext('Saved document to database', lastContext, 'debug');
       } catch (error) {
         if (isResponseError(error)) {
           throw getCloseEvent('FAILED_TO_SAVE', 4000 + error.statusCode);
@@ -280,13 +279,13 @@ export const collaborationServer = new Hocuspocus({
     });
   },
 
-  afterStoreDocument: async ({ context }) => {
-    if (!isConnectionContext(context)) {
+  afterStoreDocument: async ({ lastContext }) => {
+    if (!isConnectionContext(lastContext)) {
       return;
     }
 
-    return withCollaborationSpan('afterStoreDocument', context, async () => {
-      logContext('After store document', context, 'debug');
+    return withCollaborationSpan('afterStoreDocument', lastContext, async () => {
+      logContext('After store document', lastContext, 'debug');
     });
   },
 
