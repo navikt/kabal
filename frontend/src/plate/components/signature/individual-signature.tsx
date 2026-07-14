@@ -102,8 +102,12 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
   if (isLoading && element.includeMedunderskriver) {
     return (
       <VStack>
-        <Skeleton variant="text" width="170px" />
-        <Skeleton variant="text" width="200px" />
+        <div className="flex gap-x-[1em]">
+          <Skeleton variant="text" width="7em" />
+          <Skeleton variant="text" width="10em" />
+        </div>
+
+        <Skeleton variant="text" width="12em" />
       </VStack>
     );
   }
