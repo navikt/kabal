@@ -91,20 +91,20 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
     editor.tf.setNodes(data, { match: (n) => n === element, at: [] });
   }, [editor, element, signature, readOnly, medunderskriverSignature, isLoading]);
 
-  if (isLoading) {
+  if (error !== null && element.includeMedunderskriver) {
+    return (
+      <InlineMessage status="warning" size="small" className="text-[1em]">
+        {error}
+      </InlineMessage>
+    );
+  }
+
+  if (isLoading && element.includeMedunderskriver) {
     return (
       <VStack>
         <Skeleton variant="text" width="170px" />
         <Skeleton variant="text" width="200px" />
       </VStack>
-    );
-  }
-
-  if (error !== null) {
-    return (
-      <InlineMessage status="warning" size="small" className="text-[1em]">
-        {error}
-      </InlineMessage>
     );
   }
 
