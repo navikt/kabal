@@ -50,13 +50,13 @@ export const MedunderskriverSignature = ({ element }: MedunderskriverSignaturePr
 
   const signature = useMemo(
     () =>
-      medunderskriverSignature === null || !element.includeMedunderskriver
+      medunderskriverSignature === null || !element.includeMedunderskriver || element.enabled === false
         ? undefined
         : {
             name: getName(medunderskriverSignature, element.useShortName),
             title: medunderskriverSignature.customJobTitle ?? MISSING_TITLE,
           },
-    [medunderskriverSignature, element.includeMedunderskriver, element.useShortName],
+    [medunderskriverSignature, element.includeMedunderskriver, element.useShortName, element.enabled],
   );
 
   useEffect(() => {
