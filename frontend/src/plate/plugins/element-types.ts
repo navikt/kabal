@@ -15,6 +15,7 @@ export const ELEMENT_ARENA_SAKSNUMMER = 'arena-saksnummer';
 export const ELEMENT_SAKSINFO = 'saksinfo';
 
 export const ELEMENT_BOOKMARK = 'bookmark';
+export const ELEMENT_COMMENT = 'comments';
 
 export const UNCHANGEABLE = [
   ELEMENT_CURRENT_DATE,
