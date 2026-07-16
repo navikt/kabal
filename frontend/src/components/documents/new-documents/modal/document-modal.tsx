@@ -2,9 +2,10 @@ import { MenuElipsisVerticalIcon, PadlockLockedIcon } from '@navikt/aksel-icons'
 import { Button, Modal, Tooltip } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { Fields } from '@/components/documents/new-documents/grid';
-import { useFinishValidationErrors } from '@/components/documents/new-documents/hooks/use-finish-access';
 import { useRemoveDocumentAccessErrors } from '@/components/documents/new-documents/hooks/use-remove-access';
+import { useValidationErrors } from '@/components/documents/new-documents/hooks/use-validation-errors';
 import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
+import { VALIDATION_ERROR_MESSAGES } from '@/components/documents/new-documents/modal/finish-document/error-messages';
 import { ModalContext } from '@/components/documents/new-documents/modal/modal-context';
 import { DocumentModalContent } from '@/components/documents/new-documents/modal/modal-document-content';
 import { DocumentIcon } from '@/components/documents/new-documents/shared/document-icon';
@@ -33,17 +34,23 @@ export const DocumentModal = ({ document, isOpen, setIsOpen }: DocumentProps) =>
   const { removeDocumentAccessError, removeAttachmentsAccessErrors } = useRemoveDocumentAccessErrors(document);
 
   const [innsendingshjemlerConfirmed, setInnsendingshjemlerConfirmed] = useState(false);
+  const [klagevedtakDatoConfirmed, setKlagevedtakDatoConfirmed] = useState(false);
   const isArchiveOnly =
     document.dokumentTypeId === DistribusjonsType.NOTAT || getIsIncomingDocument(document.dokumentTypeId); // If the document will only be archived on finish. Otherwise it will be archived and sent on finish.
 
-  const finishValidationErrors = useFinishValidationErrors(document, innsendingshjemlerConfirmed, isArchiveOnly);
+  const validationErrors = useValidationErrors(
+    document,
+    innsendingshjemlerConfirmed,
+    klagevedtakDatoConfirmed,
+    isArchiveOnly,
+  );
 
   const documentErrors = [
     renameAccessError,
     changeTypeAccessError,
     finishAccessError,
     removeDocumentAccessError,
-    ...finishValidationErrors,
+    ...validationErrors.map((error) => VALIDATION_ERROR_MESSAGES[error]),
   ].filter(isNotNull);
 
   const noAccess =
@@ -52,7 +59,7 @@ export const DocumentModal = ({ document, isOpen, setIsOpen }: DocumentProps) =>
     finishAccessError !== null &&
     removeDocumentAccessError !== null &&
     removeAttachmentsAccessErrors.length !== 0 &&
-    finishValidationErrors.length !== 0;
+    validationErrors.length !== 0;
 
   if (noAccess) {
     return (
@@ -100,12 +107,14 @@ export const DocumentModal = ({ document, isOpen, setIsOpen }: DocumentProps) =>
             document={document}
             renameAccess={renameAccessError}
             changeTypeAccess={changeTypeAccessError}
-            finishAccess={finishAccessError}
+            finishAccessError={finishAccessError}
             removeAccess={removeDocumentAccessError}
             removeAttachmentsAccess={removeAttachmentsAccessErrors}
-            finishValidationErrors={finishValidationErrors}
+            validationErrors={validationErrors}
             innsendingshjemlerConfirmed={innsendingshjemlerConfirmed}
             setInnsendingshjemlerConfirmed={setInnsendingshjemlerConfirmed}
+            klagevedtakDatoConfirmed={klagevedtakDatoConfirmed}
+            setKlagevedtakDatoConfirmed={setKlagevedtakDatoConfirmed}
             isArchiveOnly={isArchiveOnly}
           />
         </Modal>

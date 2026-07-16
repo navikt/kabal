@@ -109,6 +109,9 @@ export interface IOppgavebehandlingBase {
   mottattVedtaksinstans: string | null;
   /** Date */
   mottattKlageinstans: string | null;
+  /** Date */
+  paaanketVedtaksdato: string | null;
+  forsterketRett: boolean | null;
   previousSaksbehandler: INavEmployee | null;
   prosessfullmektig: IFullmektig | null;
   raadfoertMedLege: string | null;

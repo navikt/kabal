@@ -22,7 +22,9 @@ interface Props {
 export const ModalContextElement = ({ children }: Props) => {
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>(INITIAL_VALIDATION_ERRORS);
 
-  const close = useCallback(() => setValidationErrors(INITIAL_VALIDATION_ERRORS), []);
+  const close = useCallback(() => {
+    setValidationErrors(INITIAL_VALIDATION_ERRORS);
+  }, []);
 
   return (
     <ModalContext.Provider

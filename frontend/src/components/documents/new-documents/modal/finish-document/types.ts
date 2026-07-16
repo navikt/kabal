@@ -1,37 +1,28 @@
 import type { IDocument } from '@/types/documents/documents';
-import { DocumentValidationErrorType, type NO_RECEIVERS_ERROR } from '@/types/documents/validation';
+import { DocumentValidationApiError, type DocumentValidationFrontendError } from '@/types/documents/validation';
 import { isApiDataError, type KabalApiErrorData } from '@/types/errors';
 
 export interface FinishProps extends React.RefAttributes<HTMLDivElement> {
   document: IDocument;
-  disabled?: boolean;
+  accessError?: string | null;
+  validationErrors?: ValidationError['errors'];
 }
 
 export interface ValidationError {
   dokumentId: string;
   title: string;
-  errors: {
-    type: DocumentValidationErrorType | typeof NO_RECEIVERS_ERROR;
-    message: string;
-  }[];
+  errors: (DocumentValidationApiError | DocumentValidationFrontendError)[];
 }
 
-const VALIDATION_ERRORS = Object.values(DocumentValidationErrorType);
+const VALIDATION_ERRORS = Object.values(DocumentValidationApiError);
 
-const isSmartDocumentError = (error: unknown): error is DocumentValidationErrorType =>
+const isSmartDocumentError = (error: unknown): error is DocumentValidationApiError =>
   VALIDATION_ERRORS.some((e) => e === error);
-
-const isSmartDocumentErrorObject = (error: unknown): error is { type: DocumentValidationErrorType } =>
-  typeof error === 'object' && error !== null && 'type' in error && isSmartDocumentError(error.type);
-
-interface DocumentError {
-  type: DocumentValidationErrorType;
-}
 
 interface FinishValidationError extends KabalApiErrorData {
   documents: {
     dokumentId: string;
-    errors: DocumentError[];
+    errors: DocumentValidationApiError[];
   }[];
 }
 
@@ -49,7 +40,7 @@ export const isSmartDocumentValidatonError = (error: unknown): error is { data: 
         typeof d.dokumentId === 'string' &&
         'errors' in d &&
         Array.isArray(d.errors) &&
-        d.errors.every(isSmartDocumentErrorObject),
+        d.errors.every(isSmartDocumentError),
     )
   );
 };

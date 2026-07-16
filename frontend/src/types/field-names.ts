@@ -46,6 +46,8 @@ export const DEFAULT_FIELD_NAMES = {
   mottattVedtaksinstans: 'Mottatt vedtaksinstans',
   kjennelseMottatt: 'Kjennelse mottatt',
   sendtTilTrygderetten: 'Sendt til Trygderetten',
+  paaanketVedtaksdato: 'Dato for klagevedtaket som er påanket',
+  forsterketRett: 'Forsterket rett',
   inngaaendeKanal: 'Inngående kanal',
   avsender: 'Avsender',
   gosysOppgaveInput: 'Oppgaven fra Gosys er ferdigstilt',
