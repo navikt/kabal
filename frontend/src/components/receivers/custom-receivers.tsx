@@ -19,6 +19,7 @@ interface Props {
   changeMottaker: (mottaker: IMottaker) => void;
   sendErrors: IErrorProperty[];
   templateId: TemplateIdEnum | undefined;
+  disabled?: boolean;
 }
 
 const EXTRA_RECEIVERS_ID = 'extra-receivers';
@@ -30,29 +31,34 @@ export const CustomReceivers = ({
   changeMottaker,
   sendErrors,
   templateId,
+  disabled = false,
 }: Props) => (
   <VStack overflow="hidden">
     <Label size="small" htmlFor={EXTRA_RECEIVERS_ID}>
       Ekstra mottakere
     </Label>
-    <EditPart
-      isLoading={false}
-      id={EXTRA_RECEIVERS_ID}
-      onChange={(part) =>
-        addMottakere([{ part, handling: getInitalHandling(part, templateId), overriddenAddress: null }])
-      }
-      buttonText="Legg til mottaker"
-      validate={(part) =>
-        mottakerList.some((m) => m.part.identifikator === part.identifikator) ? 'Mottaker er allerede lagt til.' : null
-      }
-      warningReceivers={[
-        {
-          id: TRYGDERETTEN_ORGNR,
-          message:
-            'Du skal kun bruke denne brevmalen dersom Trygderetten er arbeidsgiver i saken. Skal du sende til Trygderetten som ankeorgan, må du velge Ekspedisjonsbrev til Trygderetten eller Ettersending til Trygderetten.',
-        },
-      ]}
-    />
+    {disabled ? null : (
+      <EditPart
+        isLoading={false}
+        id={EXTRA_RECEIVERS_ID}
+        onChange={(part) =>
+          addMottakere([{ part, handling: getInitalHandling(part, templateId), overriddenAddress: null }])
+        }
+        buttonText="Legg til mottaker"
+        validate={(part) =>
+          mottakerList.some((m) => m.part.identifikator === part.identifikator)
+            ? 'Mottaker er allerede lagt til.'
+            : null
+        }
+        warningReceivers={[
+          {
+            id: TRYGDERETTEN_ORGNR,
+            message:
+              'Du skal kun bruke denne brevmalen dersom Trygderetten er arbeidsgiver i saken. Skal du sende til Trygderetten som ankeorgan, må du velge Ekspedisjonsbrev til Trygderetten eller Ettersending til Trygderetten.',
+          },
+        ]}
+      />
+    )}
 
     <Receivers
       mottakerList={mottakerList}
@@ -60,6 +66,7 @@ export const CustomReceivers = ({
       changeMottaker={changeMottaker}
       sendErrors={sendErrors}
       templateId={templateId}
+      disabled={disabled}
     />
   </VStack>
 );
@@ -70,9 +77,17 @@ interface ReceiversProps {
   changeMottaker: (mottaker: IMottaker) => void;
   sendErrors: IErrorProperty[];
   templateId: TemplateIdEnum | undefined;
+  disabled?: boolean;
 }
 
-const Receivers = ({ mottakerList, removeMottaker, changeMottaker, sendErrors, templateId }: ReceiversProps) => {
+const Receivers = ({
+  mottakerList,
+  removeMottaker,
+  changeMottaker,
+  sendErrors,
+  templateId,
+  disabled = false,
+}: ReceiversProps) => {
   if (mottakerList.length === 0) {
     return null;
   }
@@ -95,6 +110,7 @@ const Receivers = ({ mottakerList, removeMottaker, changeMottaker, sendErrors, t
                     title="Fjern"
                     icon={<TrashIcon color="var(--ax-text-danger-decoration)" aria-hidden />}
                     onClick={() => removeMottaker(part.identifikator)}
+                    disabled={disabled}
                   />
                 </Tooltip>
                 <Tooltip content={isPerson ? 'Person' : 'Organisasjon'}>

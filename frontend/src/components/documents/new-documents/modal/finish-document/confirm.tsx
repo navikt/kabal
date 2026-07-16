@@ -1,6 +1,7 @@
 import { PaperplaneIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { useState } from 'react';
+import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
 
 interface ConfirmProps extends React.RefAttributes<HTMLDivElement> {
   onFinish: () => void;
@@ -8,7 +9,7 @@ interface ConfirmProps extends React.RefAttributes<HTMLDivElement> {
   isFinishing: boolean;
   isValidating: boolean;
   actionText: string;
-  disabled?: boolean;
+  accessError?: string | null;
 }
 
 export const Confirm = ({
@@ -17,29 +18,31 @@ export const Confirm = ({
   actionText,
   isValidating,
   isFinishing,
-  disabled = false,
+  accessError = null,
   ...rest
 }: ConfirmProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   if (!showConfirm) {
     return (
-      <HStack justify="start" gap="space-0 space-16" {...rest}>
-        <Button
-          type="button"
-          size="small"
-          variant="primary"
-          onClick={async () => {
-            const isValid = await onValidate();
-            setShowConfirm(isValid);
-          }}
-          loading={isFinishing || isValidating}
-          icon={<PaperplaneIcon aria-hidden />}
-          disabled={disabled}
-        >
-          {actionText}
-        </Button>
-      </HStack>
+      <AccessErrorsSummary documentErrors={accessError === null ? [] : [accessError]}>
+        <HStack justify="start" gap="space-0 space-16" {...rest}>
+          <Button
+            type="button"
+            size="small"
+            variant="primary"
+            onClick={async () => {
+              const isValid = await onValidate();
+              setShowConfirm(isValid);
+            }}
+            loading={isFinishing || isValidating}
+            disabled={accessError !== null}
+            icon={<PaperplaneIcon aria-hidden />}
+          >
+            {actionText}
+          </Button>
+        </HStack>
+      </AccessErrorsSummary>
     );
   }
 

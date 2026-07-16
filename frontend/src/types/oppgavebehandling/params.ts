@@ -48,6 +48,14 @@ export interface ISendtTilTrygderettenParams extends IOppgavebehandlingBaseParam
   typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
 }
 
+export interface IPaaanketVedtaksdatoParams extends IOppgavebehandlingBaseParams {
+  paaanketVedtaksdato: string; // LocalDate
+}
+
+export interface IForsterketRettParams extends IOppgavebehandlingBaseParams {
+  forsterketRett: boolean;
+}
+
 export type ICheckDocumentParams = IJournalfoertDokumentId & IOppgavebehandlingBaseParams;
 
 export interface IBatchDocumentParams extends IOppgavebehandlingBaseParams {

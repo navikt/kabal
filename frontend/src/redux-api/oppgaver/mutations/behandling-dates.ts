@@ -11,6 +11,7 @@ import type {
   IKjennelseMottattParams,
   IMottattKlageinstansParams,
   IMottattVedtaksinstansParams,
+  IPaaanketVedtaksdatoParams,
   ISendtTilTrygderettenParams,
 } from '@/types/oppgavebehandling/params';
 import type { IModifiedResponse } from '@/types/oppgavebehandling/response';
@@ -125,6 +126,23 @@ const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
+    setPaaanketVedtaksdato: builder.mutation<IModifiedResponse, IPaaanketVedtaksdatoParams>({
+      query: ({ oppgaveId, paaanketVedtaksdato }) => ({
+        url: `/kabal-api/behandlinger/${oppgaveId}/paaanketvedtaksdato`,
+        method: 'PUT',
+        body: { date: paaanketVedtaksdato },
+      }),
+      onQueryStarted: async ({ oppgaveId, paaanketVedtaksdato }, { queryFulfilled }) => {
+        const undo = updateBehandling(oppgaveId, [['paaanketVedtaksdato', paaanketVedtaksdato]]);
+
+        try {
+          const { data } = await queryFulfilled;
+          updateBehandling(oppgaveId, [['modified', data.modified]]);
+        } catch {
+          undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -171,4 +189,5 @@ export const {
   useSetFristMutation,
   useSetKjennelseMottattMutation,
   useSetSendtTilTrygderettenMutation,
+  useSetPaaanketVedtaksdatoMutation,
 } = behandlingerMutationSlice;

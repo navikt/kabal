@@ -31,9 +31,10 @@ export const Innsendingshjemmel = ({ oppgavebehandling }: Props) => {
 
 interface InnsendingshjemlerProps extends Props {
   id?: string;
+  disabled?: boolean;
 }
 
-export const Innsendingshjemler = ({ oppgavebehandling, id }: InnsendingshjemlerProps) => {
+export const Innsendingshjemler = ({ oppgavebehandling, id, disabled = false }: InnsendingshjemlerProps) => {
   const containerRef = usePanelContainerRef();
   const [setInnsendingshjemler, { isError }] = useSetInnsendingshjemlerMutation();
   const [ytelse, isLoading] = useKodeverkYtelse(oppgavebehandling.ytelseId);
@@ -99,7 +100,7 @@ export const Innsendingshjemler = ({ oppgavebehandling, id }: Innsendingshjemler
       onChange={handleChange}
       error={isError ? 'Kunne ikke sette innsendingshjemler' : undefined}
       scrollContainerRef={containerRef}
-      readOnly={oppgavebehandling.isAvsluttetAvSaksbehandler}
+      readOnly={oppgavebehandling.isAvsluttetAvSaksbehandler || disabled}
     />
   );
 };

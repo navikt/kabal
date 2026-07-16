@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { Confirm } from '@/components/documents/new-documents/modal/finish-document/confirm';
-import { VALIDATION_ERROR_MESSAGES } from '@/components/documents/new-documents/modal/finish-document/error-messages';
 import {
   type FinishProps,
   isSmartDocumentValidatonError,
+  type ValidationError,
 } from '@/components/documents/new-documents/modal/finish-document/types';
 import { ModalContext } from '@/components/documents/new-documents/modal/modal-context';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
@@ -11,8 +11,8 @@ import { useSmartEditorActiveDocument } from '@/hooks/settings/use-setting';
 import { useFinishDocumentMutation } from '@/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@/redux-api/oppgaver/queries/documents';
 
-export const ArchiveButtons = ({ document, disabled, ...rest }: FinishProps) => {
-  const { id: dokumentId } = document;
+export const ArchiveButtons = ({ document, accessError = null, validationErrors = [], ...rest }: FinishProps) => {
+  const { id: dokumentId, tittel: documentTitle } = document;
   const [finish, { isLoading }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const oppgaveId = useOppgaveId();
   const { close, setValidationErrors } = useContext(ModalContext);
@@ -27,21 +27,25 @@ export const ArchiveButtons = ({ document, disabled, ...rest }: FinishProps) => 
 
     const validation = await validate({ dokumentId, oppgaveId }).unwrap();
 
-    if (validation?.length > 0 && validation.some((v) => v.errors.length > 0)) {
-      const validationErrors = validation.map((v) => ({
+    const serverErrorsForThisDocument = validation.find((v) => v.dokumentId === dokumentId)?.errors ?? [];
+    const otherDocumentValidationErrors = validation.filter((v) => v.dokumentId !== dokumentId && v.errors.length > 0);
+
+    const currentDocumentErrors: ValidationError['errors'] = [...validationErrors, ...serverErrorsForThisDocument];
+
+    const allValidationErrors: ValidationError[] = [
+      ...(currentDocumentErrors.length === 0
+        ? []
+        : [{ dokumentId, title: documentTitle, errors: currentDocumentErrors }]),
+      ...otherDocumentValidationErrors.map((v) => ({
         dokumentId: v.dokumentId,
         title: documents.find((d) => d.id === v.dokumentId)?.tittel ?? v.dokumentId,
-        errors: v.errors.map(({ type }) => ({ type, message: VALIDATION_ERROR_MESSAGES[type] })),
-      }));
+        errors: v.errors,
+      })),
+    ];
 
-      setValidationErrors(validationErrors);
+    setValidationErrors(allValidationErrors);
 
-      return false;
-    }
-
-    setValidationErrors([]);
-
-    return true;
+    return allValidationErrors.length === 0;
   };
 
   const onFinish = async () => {
@@ -58,13 +62,13 @@ export const ArchiveButtons = ({ document, disabled, ...rest }: FinishProps) => 
       close();
     } catch (e) {
       if (isSmartDocumentValidatonError(e)) {
-        const validationErrors = e.data.documents.map((d) => ({
+        const allValidationErrors = e.data.documents.map((d) => ({
           dokumentId: d.dokumentId,
           title: documents.find((doc) => doc.id === d.dokumentId)?.tittel ?? d.dokumentId,
-          errors: d.errors.map(({ type }) => ({ type, message: VALIDATION_ERROR_MESSAGES[type] })),
+          errors: d.errors,
         }));
 
-        setValidationErrors(validationErrors);
+        setValidationErrors(allValidationErrors);
       }
     }
   };
@@ -76,7 +80,7 @@ export const ArchiveButtons = ({ document, disabled, ...rest }: FinishProps) => 
       onFinish={onFinish}
       isFinishing={isLoading || document.isMarkertAvsluttet}
       isValidating={isValidating}
-      disabled={disabled}
+      accessError={accessError}
       {...rest}
     />
   );

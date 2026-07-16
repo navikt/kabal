@@ -6,9 +6,10 @@ import type { IFileDocumentOrAttachment } from '@/types/documents/documents';
 interface Props {
   document: IFileDocumentOrAttachment;
   oppgaveId: string | typeof skipToken;
+  disabled?: boolean;
 }
 
-export const MottattDato = ({ document, oppgaveId }: Props) => {
+export const MottattDato = ({ document, oppgaveId, disabled }: Props) => {
   const [setDatoMottatt, { isLoading }] = useSetDatoMottattMutation();
 
   const dokumentId = document.id;
@@ -18,7 +19,7 @@ export const MottattDato = ({ document, oppgaveId }: Props) => {
       size="small"
       label="Nav mottattdato"
       value={document.datoMottatt}
-      disabled={isLoading}
+      disabled={isLoading || disabled}
       onChange={(datoMottatt) => {
         if (oppgaveId === skipToken) {
           return;

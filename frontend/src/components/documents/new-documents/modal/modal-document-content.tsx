@@ -7,8 +7,9 @@ import { AnnenInngaaende } from '@/components/documents/new-documents/modal/anne
 import { DeleteDocumentButton } from '@/components/documents/new-documents/modal/delete-button';
 import { FinishButton } from '@/components/documents/new-documents/modal/finish-button';
 import { Errors } from '@/components/documents/new-documents/modal/finish-document/errors';
-import { ConfirmInnsendingshjemler } from '@/components/documents/new-documents/modal/innsendingshjemler';
+import type { ValidationError } from '@/components/documents/new-documents/modal/finish-document/types';
 import { MottattDato } from '@/components/documents/new-documents/modal/mottatt-dato';
+import { TrygderettenFields } from '@/components/documents/new-documents/modal/trygderetten-fields';
 import { SetDocumentType } from '@/components/documents/new-documents/new-document/set-type';
 import { DocumentDate } from '@/components/documents/new-documents/shared/document-date';
 import { DocumentIcon } from '@/components/documents/new-documents/shared/document-icon';
@@ -44,12 +45,14 @@ interface Props {
   document: IParentDocument;
   renameAccess: string | null;
   changeTypeAccess: string | null;
-  finishAccess: string | null;
+  finishAccessError: string | null;
   removeAccess: string | null;
   removeAttachmentsAccess: string[];
-  finishValidationErrors: string[];
+  validationErrors: ValidationError['errors'];
   innsendingshjemlerConfirmed: boolean;
   setInnsendingshjemlerConfirmed: (confirmed: boolean) => void;
+  klagevedtakDatoConfirmed: boolean;
+  setKlagevedtakDatoConfirmed: (confirmed: boolean) => void;
   isArchiveOnly: boolean;
 }
 
@@ -57,12 +60,14 @@ export const DocumentModalContent = ({
   document,
   renameAccess,
   changeTypeAccess,
-  finishAccess,
+  finishAccessError,
   removeAccess,
   removeAttachmentsAccess,
-  finishValidationErrors,
+  validationErrors,
   innsendingshjemlerConfirmed,
   setInnsendingshjemlerConfirmed,
+  klagevedtakDatoConfirmed,
+  setKlagevedtakDatoConfirmed,
   isArchiveOnly,
 }: Props) => {
   const [setMottakerList, { isLoading }] = useSetMottakerListMutation();
@@ -89,6 +94,8 @@ export const DocumentModalContent = ({
 
   const isInngående = document.type === DocumentTypeEnum.UPLOADED && getIsIncomingDocument(document.dokumentTypeId);
 
+  const disabled = document.isMarkertAvsluttet;
+
   return (
     <>
       <Modal.Body className="flex h-[80vh] w-full gap-4 overflow-hidden">
@@ -111,6 +118,7 @@ export const DocumentModalContent = ({
                 setFilename={async (title) => {
                   await setTitle({ oppgaveId, dokumentId: document.id, title });
                 }}
+                disabled={disabled}
               />
               <Button
                 data-color="neutral"
@@ -118,21 +126,24 @@ export const DocumentModalContent = ({
                 variant="secondary"
                 icon={<CheckmarkIcon aria-hidden />}
                 title="Endre dokumentnavn"
+                disabled={disabled}
               />
             </HStack>
           ) : null}
 
           <AccessErrorsSummary documentErrors={changeTypeAccess === null ? [] : [changeTypeAccess]}>
-            <SetDocumentType document={document} showLabel disabled={changeTypeAccess !== null} />
+            <SetDocumentType document={document} showLabel disabled={changeTypeAccess !== null || disabled} />
           </AccessErrorsSummary>
 
-          {finishAccess === null && isInngående ? <MottattDato document={document} oppgaveId={oppgaveId} /> : null}
-
-          {document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST ? (
-            <AnnenInngaaende document={document} hasAccess={finishAccess === null} />
+          {finishAccessError === null && isInngående ? (
+            <MottattDato document={document} oppgaveId={oppgaveId} disabled={disabled} />
           ) : null}
 
-          {finishAccess === null && !isNotat && !isInngående ? (
+          {document.dokumentTypeId === DistribusjonsType.ANNEN_INNGAAENDE_POST ? (
+            <AnnenInngaaende document={document} hasAccess={finishAccessError === null && !disabled} />
+          ) : null}
+
+          {finishAccessError === null && !isNotat && !isInngående ? (
             <Receivers
               setMottakerList={(mottakerList) => setMottakerList({ oppgaveId, dokumentId: document.id, mottakerList })}
               mottakerList={document.mottakerList}
@@ -140,13 +151,18 @@ export const DocumentModalContent = ({
               dokumentTypeId={document.dokumentTypeId}
               sendErrors={sendErrors}
               isLoading={isLoading}
+              disabled={disabled}
             />
           ) : null}
 
           {document.templateId === TemplateIdEnum.EKSPEDISJONSBREV_TIL_TRYGDERETTEN ? (
-            <ConfirmInnsendingshjemler
+            <TrygderettenFields
+              dokumentId={document.id}
+              klagevedtakDatoConfirmed={klagevedtakDatoConfirmed}
+              setKlagevedtakDatoConfirmed={setKlagevedtakDatoConfirmed}
               innsendingshjemlerConfirmed={innsendingshjemlerConfirmed}
               setInnsendingshjemlerConfirmed={setInnsendingshjemlerConfirmed}
+              disabled={disabled}
             />
           ) : null}
 
@@ -172,8 +188,8 @@ export const DocumentModalContent = ({
         <FinishButton
           document={document}
           innsendingshjemlerConfirmed={innsendingshjemlerConfirmed}
-          finishAccessError={finishAccess}
-          finishValidationErrors={finishValidationErrors}
+          finishAccessError={finishAccessError}
+          validationErrors={validationErrors}
           isArchiveOnly={isArchiveOnly}
         />
       </Modal.Footer>

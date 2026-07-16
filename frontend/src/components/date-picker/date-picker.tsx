@@ -15,6 +15,8 @@ interface Props {
   label: React.ReactNode;
   onChange: (date: string | null) => void;
   onErrorChange?: (date: string | null) => void;
+  /** When `true`, clearing the input reverts it back to `value` on blur instead of calling `onChange(null)`. */
+  preventClear?: boolean;
   size: 'small' | 'medium';
   toDate?: Date;
   value: string | null;
@@ -33,6 +35,7 @@ export const DatePicker = ({
   label,
   onChange,
   onErrorChange,
+  preventClear = false,
   toDate = new Date(),
   value,
   size,
@@ -93,10 +96,22 @@ export const DatePicker = ({
     [fromDate, onChange, onErrorChange, toDate],
   );
 
+  const onEmptyInput = useCallback(() => {
+    setInputError(undefined);
+
+    if (preventClear) {
+      // Empty is not a valid value - revert the visible input back to the current value.
+      setInput(value === null ? '' : (isoDateToPretty(value) ?? ''));
+
+      return;
+    }
+
+    onChange(null);
+  }, [onChange, preventClear, value]);
+
   const onInputChange = useCallback(() => {
-    if (input === '') {
-      setInputError(undefined);
-      onChange(null);
+    if (input.trim().length === 0) {
+      onEmptyInput();
 
       return;
     }
@@ -171,7 +186,7 @@ export const DatePicker = ({
     }
 
     validateInput(input);
-  }, [centuryThreshold, fromDate, input, onChange, toDate, validateInput]);
+  }, [centuryThreshold, fromDate, input, onEmptyInput, toDate, validateInput]);
 
   return (
     <DSDatePicker

@@ -18,6 +18,7 @@ interface Props {
   templateId?: TemplateIdEnum | undefined;
   dokumentTypeId?: DistribusjonsType;
   isLoading: boolean;
+  disabled?: boolean;
 }
 
 export const Receivers = ({
@@ -27,6 +28,7 @@ export const Receivers = ({
   templateId,
   dokumentTypeId,
   isLoading,
+  disabled = false,
 }: Props) => {
   const [suggestedBrevmottakere] = useSuggestedBrevmottakere(mottakerList, templateId);
 
@@ -159,7 +161,7 @@ export const Receivers = ({
             onlyOneReachable={onlyOneReachableReceiver}
             receivers={reachableSuggestedReceivers}
             dokumentTypeId={dokumentTypeId}
-            isLoading={isLoading}
+            isLoading={isLoading || disabled}
           />
 
           <UnreachableSuggestedReceivers receivers={unreachableSuggestedReceivers} />
@@ -171,6 +173,7 @@ export const Receivers = ({
             changeMottaker={changeMottaker}
             sendErrors={sendErrors}
             templateId={templateId}
+            disabled={disabled}
           />
         </>
       )}
