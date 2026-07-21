@@ -1,7 +1,6 @@
 import { Box, Checkbox } from '@navikt/ds-react';
-import { useContext } from 'react';
 import { Innsendingshjemler } from '@/components/behandling/behandlingsdetaljer/innsendingshjemmel';
-import { ModalContext } from '@/components/documents/new-documents/modal/modal-context';
+import { useHasValidationError } from '@/components/documents/new-documents/modal/use-has-validation-error';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { DocumentValidationFrontendError } from '@/types/documents/validation';
 
@@ -19,17 +18,14 @@ export const ConfirmInnsendingshjemler = ({
   disabled = false,
 }: Props) => {
   const { data: oppgave } = useOppgave();
-  const { validationErrors } = useContext(ModalContext);
+  const innsendingshjemlerNotConfirmed = useHasValidationError(
+    dokumentId,
+    DocumentValidationFrontendError.INNSENDINGSHJEMLER_NOT_CONFIRMED,
+  );
 
   if (oppgave === undefined) {
     return null;
   }
-
-  const innsendingshjemlerNotConfirmed = validationErrors.some(
-    (e) =>
-      e.dokumentId === dokumentId &&
-      e.errors.includes(DocumentValidationFrontendError.INNSENDINGSHJEMLER_NOT_CONFIRMED),
-  );
 
   return (
     <Box padding="space-8" borderRadius="4" background="warning-soft" borderWidth="1" borderColor="warning">

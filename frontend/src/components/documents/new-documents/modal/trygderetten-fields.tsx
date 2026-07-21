@@ -1,10 +1,9 @@
 import { Box, Checkbox, HelpText, HStack, Radio, RadioGroup, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useContext } from 'react';
 import { DatePicker } from '@/components/date-picker/date-picker';
 import { VALIDATION_ERROR_MESSAGES } from '@/components/documents/new-documents/modal/finish-document/error-messages';
 import { ConfirmInnsendingshjemler } from '@/components/documents/new-documents/modal/innsendingshjemler';
-import { ModalContext } from '@/components/documents/new-documents/modal/modal-context';
+import { useHasValidationError } from '@/components/documents/new-documents/modal/use-has-validation-error';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useSetPaaanketVedtaksdatoMutation } from '@/redux-api/oppgaver/mutations/behandling-dates';
@@ -32,19 +31,18 @@ export const TrygderettenFields = ({
   const { data: oppgave } = useOppgave();
   const [setPaaanketVedtaksdato] = useSetPaaanketVedtaksdatoMutation();
   const [setForsterketRett] = useSetForsterketRettMutation();
-  const { validationErrors } = useContext(ModalContext);
+  const klagevedtakDatoNotConfirmed = useHasValidationError(
+    dokumentId,
+    DocumentValidationFrontendError.KLAGEVEDTAK_DATO_NOT_CONFIRMED,
+  );
+  const forsterketRettNotAnswered = useHasValidationError(
+    dokumentId,
+    DocumentValidationApiError.FORSTERKET_RETT_NOT_SET,
+  );
 
   if (oppgaveId === skipToken || oppgave === undefined) {
     return null;
   }
-
-  const klagevedtakDatoNotConfirmed = validationErrors.some(
-    (e) =>
-      e.dokumentId === dokumentId && e.errors.includes(DocumentValidationFrontendError.KLAGEVEDTAK_DATO_NOT_CONFIRMED),
-  );
-  const forsterketRettNotAnswered = validationErrors.some(
-    (e) => e.dokumentId === dokumentId && e.errors.includes(DocumentValidationApiError.FORSTERKET_RETT_NOT_SET),
-  );
 
   return (
     <>
