@@ -13,7 +13,7 @@ import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@/redux-api/
 
 export const ArchiveButtons = ({ document, accessError = null, validationErrors = [], ...rest }: FinishProps) => {
   const { id: dokumentId, tittel: documentTitle } = document;
-  const [finish, { isLoading }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
+  const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const oppgaveId = useOppgaveId();
   const { close, setValidationErrors } = useContext(ModalContext);
   const [validate, { isFetching: isValidating }] = useLazyValidateDocumentQuery();
@@ -78,7 +78,7 @@ export const ArchiveButtons = ({ document, accessError = null, validationErrors 
       actionText="Arkiver"
       onValidate={onValidate}
       onFinish={onFinish}
-      isFinishing={isLoading || document.isMarkertAvsluttet}
+      isFinishing={isFinishing}
       isValidating={isValidating}
       accessError={accessError}
       {...rest}
