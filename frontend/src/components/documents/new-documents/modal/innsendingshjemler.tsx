@@ -43,7 +43,7 @@ export const ConfirmInnsendingshjemler = ({
         className="mt-1"
         disabled={disabled}
       >
-        <div className="w-90">Jeg bekrefter at innsendingshjemlene som skal følge saken til Trygderetten stemmer</div>
+        Jeg bekrefter at innsendingshjemlene som skal følge saken til Trygderetten stemmer
       </Checkbox>
     </Box>
   );
