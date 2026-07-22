@@ -1,4 +1,4 @@
-import { hasTrFields } from '@/components/documents/new-documents/has-tr-fields';
+import { hasLovhenvisning, hasPaaanketVedtaksdato } from '@/components/documents/new-documents/has-tr-fields';
 import type { ValidationError } from '@/components/documents/new-documents/modal/finish-document/types';
 import { DistribusjonsType, DocumentTypeEnum, type IParentDocument } from '@/types/documents/documents';
 import { DocumentValidationFrontendError } from '@/types/documents/validation';
@@ -25,12 +25,12 @@ export const useValidationErrors = (
     (document.avsender === null || document.inngaaendeKanal === null)
   ) {
     validationErrors.push(DocumentValidationFrontendError.MISSING_AVSENDER_OR_KANAL);
-  } else if (hasTrFields(document)) {
-    if (!innsendingshjemlerConfirmed) {
+  } else {
+    if (hasLovhenvisning(document.templateId) && !innsendingshjemlerConfirmed) {
       validationErrors.push(DocumentValidationFrontendError.INNSENDINGSHJEMLER_NOT_CONFIRMED);
     }
 
-    if (!klagevedtakDatoConfirmed) {
+    if (hasPaaanketVedtaksdato(document.templateId) && !klagevedtakDatoConfirmed) {
       validationErrors.push(DocumentValidationFrontendError.KLAGEVEDTAK_DATO_NOT_CONFIRMED);
     }
   }
