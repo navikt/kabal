@@ -4,12 +4,12 @@ import { ReadOnlyDate } from '@/components/behandling/behandlingsdetaljer/read-o
 import { DateContainer } from '@/components/behandling/styled-components';
 import { CURRENT_YEAR_IN_CENTURY } from '@/components/date-picker/constants';
 import { DatePicker } from '@/components/date-picker/date-picker';
+import { isTrygderettenBehandling } from '@/functions/is-trygderetten-sak';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useFieldName } from '@/hooks/use-field-name';
 import { useValidationError } from '@/hooks/use-validation-error';
 import { useSetSendtTilTrygderettenMutation } from '@/redux-api/oppgaver/mutations/behandling-dates';
-import { SaksTypeEnum } from '@/types/kodeverk';
 
 const ID = 'sendt-til-trygderetten';
 
@@ -21,7 +21,7 @@ export const SendtTilTrygderetten = () => {
   const label = useFieldName('sendtTilTrygderetten');
   const [setSendtTilTrygderetten] = useSetSendtTilTrygderettenMutation();
 
-  if (data?.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN && data?.typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR) {
+  if (data === undefined || !isTrygderettenBehandling(data)) {
     return null;
   }
 

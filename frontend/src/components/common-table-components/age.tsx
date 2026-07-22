@@ -4,17 +4,15 @@ import { differenceInDays, parseISO } from 'date-fns';
 import { useState } from 'react';
 import { CURRENT_YEAR_IN_CENTURY } from '@/components/date-picker/constants';
 import { DatePicker } from '@/components/date-picker/date-picker';
+import { isTrygderettenTypeId } from '@/functions/is-trygderetten-sak';
 import { useHasAnyOfRoles } from '@/hooks/use-has-role';
 import {
   useSetMottattKlageinstansMutation,
   useSetSendtTilTrygderettenMutation,
 } from '@/redux-api/oppgaver/mutations/behandling-dates';
 import { Role } from '@/types/bruker';
-import { SaksTypeEnum } from '@/types/kodeverk';
+import type { SaksTypeEnum } from '@/types/kodeverk';
 import type { IOppgave } from '@/types/oppgaver';
-
-const isSakITR = (typeId: SaksTypeEnum) =>
-  typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
 
 export const Age = (oppgave: IOppgave) => {
   if (oppgave.isAvsluttetAvSaksbehandler) {
@@ -36,7 +34,7 @@ const EditableAge = ({ ageKA, mottatt, id, typeId, datoSendtTilTR }: IOppgave) =
 
   const children = isOpen ? (
     <EditAge
-      mottattDate={isSakITR(typeId) ? datoSendtTilTR : mottatt}
+      mottattDate={isTrygderettenTypeId(typeId) ? datoSendtTilTR : mottatt}
       oppgaveId={id}
       closeCalendar={closeCalendar}
       setUserAge={setUserAge}
@@ -72,7 +70,9 @@ const EditButton = ({ isOpen, setIsOpen, typeId }: EditButtonProps) => {
 
   return (
     <Tooltip
-      content={isSakITR(typeId) ? 'Endre dato for sendt til Trygderetten' : 'Endre dato for mottatt klageinstans'}
+      content={
+        isTrygderettenTypeId(typeId) ? 'Endre dato for sendt til Trygderetten' : 'Endre dato for mottatt klageinstans'
+      }
     >
       <Button
         data-color="neutral"
@@ -106,7 +106,7 @@ const EditAge = ({ mottattDate, oppgaveId, closeCalendar, setUserAge, typeId }: 
 
     setUserAge(differenceInDays(new Date(), parseISO(date)));
 
-    if (isSakITR(typeId)) {
+    if (isTrygderettenTypeId(typeId)) {
       setSendtTilTR({ sendtTilTrygderetten: date, oppgaveId, typeId });
     } else {
       setMottattklageinstans({ mottattKlageinstans: date, oppgaveId });
