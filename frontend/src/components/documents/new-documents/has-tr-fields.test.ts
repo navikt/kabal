@@ -30,13 +30,13 @@ const CASES: TestCase[] = [
     templateId: TemplateIdEnum.ETTERSENDING_TIL_TRYGDERETTEN,
     paaanketVedtaksdato: false,
     lovhenvisning: false,
-    forsterketRett: true,
+    forsterketRett: false,
   },
   {
     templateId: TemplateIdEnum.GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR,
     paaanketVedtaksdato: false,
     lovhenvisning: false,
-    forsterketRett: true,
+    forsterketRett: false,
   },
   {
     templateId: TemplateIdEnum.GENERELT_BREV,
