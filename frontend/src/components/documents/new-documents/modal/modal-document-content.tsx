@@ -2,7 +2,6 @@ import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
-import { hasTrFields } from '@/components/documents/new-documents/has-tr-fields';
 import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
 import { AnnenInngaaende } from '@/components/documents/new-documents/modal/annen-inngaaende';
 import { DeleteDocumentButton } from '@/components/documents/new-documents/modal/delete-button';
@@ -155,16 +154,15 @@ export const DocumentModalContent = ({
             />
           ) : null}
 
-          {hasTrFields(document) ? (
-            <TrygderettenFields
-              dokumentId={document.id}
-              klagevedtakDatoConfirmed={klagevedtakDatoConfirmed}
-              setKlagevedtakDatoConfirmed={setKlagevedtakDatoConfirmed}
-              innsendingshjemlerConfirmed={innsendingshjemlerConfirmed}
-              setInnsendingshjemlerConfirmed={setInnsendingshjemlerConfirmed}
-              disabled={disabled}
-            />
-          ) : null}
+          <TrygderettenFields
+            templateId={document.templateId}
+            dokumentId={document.id}
+            klagevedtakDatoConfirmed={klagevedtakDatoConfirmed}
+            setKlagevedtakDatoConfirmed={setKlagevedtakDatoConfirmed}
+            innsendingshjemlerConfirmed={innsendingshjemlerConfirmed}
+            setInnsendingshjemlerConfirmed={setInnsendingshjemlerConfirmed}
+            disabled={disabled}
+          />
 
           <Errors />
         </VStack>
