@@ -1,7 +1,7 @@
+import { hasTrFields } from '@/components/documents/new-documents/has-tr-fields';
 import type { ValidationError } from '@/components/documents/new-documents/modal/finish-document/types';
 import { DistribusjonsType, DocumentTypeEnum, type IParentDocument } from '@/types/documents/documents';
 import { DocumentValidationFrontendError } from '@/types/documents/validation';
-import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 export const useValidationErrors = (
   document: IParentDocument,
@@ -25,7 +25,7 @@ export const useValidationErrors = (
     (document.avsender === null || document.inngaaendeKanal === null)
   ) {
     validationErrors.push(DocumentValidationFrontendError.MISSING_AVSENDER_OR_KANAL);
-  } else if (document.templateId === TemplateIdEnum.EKSPEDISJONSBREV_TIL_TRYGDERETTEN) {
+  } else if (hasTrFields(document)) {
     if (!innsendingshjemlerConfirmed) {
       validationErrors.push(DocumentValidationFrontendError.INNSENDINGSHJEMLER_NOT_CONFIRMED);
     }
