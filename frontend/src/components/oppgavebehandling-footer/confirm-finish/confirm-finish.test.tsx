@@ -23,11 +23,8 @@ const mockOppgave = (
   }));
 };
 
-const mockEkspedisjonsbrevIsSent = (isSent: boolean) => {
-  mock.module('@/redux-api/oppgaver/queries/documents', () => ({
-    useGetEkspedisjonsbrevTilTrygderettenIsSentQuery: () => ({ data: isSent, isSuccess: true }),
-  }));
-};
+const renderConfirmFinish = (isEkspedisjonsbrevSent?: boolean) =>
+  render(<ConfirmFinish cancel={() => undefined} isEkspedisjonsbrevSent={isEkspedisjonsbrevSent} />);
 
 const MUTATION_MOCK = [
   () => null,
@@ -44,7 +41,6 @@ describe('ConfirmFinish', () => {
       useFinishOppgavebehandlingMutation: () => MUTATION_MOCK,
       useFinishOppgavebehandlingWithUpdateInGosysMutation: () => MUTATION_MOCK,
     }));
-    mockEkspedisjonsbrevIsSent(true);
 
     mock.module('@/simple-api-state/use-kodeverk', () => ({
       useUtfall: () => ({
@@ -76,13 +72,11 @@ describe('ConfirmFinish', () => {
     const originalSearch = await import('@/redux-api/search');
     const originalKodeverk = await import('@/simple-api-state/use-kodeverk');
     const originalBehandling = await import('@/redux-api/oppgaver/mutations/behandling');
-    const originalDocuments = await import('@/redux-api/oppgaver/queries/documents');
 
     mock.module('@/redux-api/search', () => originalSearch);
     mock.module('@/simple-api-state/use-kodeverk', () => originalKodeverk);
     mock.module('@/hooks/oppgavebehandling/use-oppgave', () => originalUseOppgave);
     mock.module('@/redux-api/oppgaver/mutations/behandling', () => originalBehandling);
-    mock.module('@/redux-api/oppgaver/queries/documents', () => originalDocuments);
   });
 
   describe('Klage', () => {
@@ -90,7 +84,7 @@ describe('ConfirmFinish', () => {
 
     test.each(cases)('Requires Gosys oppgave: %p', async (requiresGosysOppgave) => {
       mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, requiresGosysOppgave);
-      render(<ConfirmFinish cancel={() => undefined} />);
+      renderConfirmFinish();
 
       const buttonText = requiresGosysOppgave ? 'Oppdater oppgaven i Gosys og fullfør' : 'Fullfør';
       const finishButton = screen.getByRole('button', { name: buttonText });
@@ -109,7 +103,7 @@ describe('ConfirmFinish', () => {
 
     test('Arena warning', async () => {
       mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, false, FAGSYSTEM_ARENA);
-      render(<ConfirmFinish cancel={() => undefined} />);
+      renderConfirmFinish();
 
       const checkbox = screen.getByRole('checkbox', { name: 'Jeg bekrefter at saken er besluttet i Arena.' });
       expect(checkbox).toBeVisible();
@@ -126,7 +120,7 @@ describe('ConfirmFinish', () => {
 
     test('No Arena warning', async () => {
       mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, false);
-      render(<ConfirmFinish cancel={() => undefined} />);
+      renderConfirmFinish();
 
       expect(
         screen.queryByRole('checkbox', { name: 'Jeg bekrefter at saken er besluttet i Arena.' }),
@@ -141,7 +135,7 @@ describe('ConfirmFinish', () => {
   describe('Anke', () => {
     test('Arena warning', async () => {
       mockOppgave(SaksTypeEnum.ANKE, UtfallEnum.MEDHOLD, false, FAGSYSTEM_ARENA);
-      render(<ConfirmFinish cancel={() => undefined} />);
+      renderConfirmFinish();
 
       const checkbox = screen.getByRole('checkbox', { name: 'Jeg bekrefter at saken er besluttet i Arena.' });
       expect(checkbox).toBeVisible();
@@ -158,7 +152,7 @@ describe('ConfirmFinish', () => {
 
     test('No Arena warning', async () => {
       mockOppgave(SaksTypeEnum.ANKE, UtfallEnum.MEDHOLD, false);
-      render(<ConfirmFinish cancel={() => undefined} />);
+      renderConfirmFinish();
 
       expect(
         screen.queryByRole('checkbox', { name: 'Jeg bekrefter at saken er besluttet i Arena.' }),
@@ -175,16 +169,9 @@ describe('ConfirmFinish', () => {
       const ekspedisjonsbrevCheckboxLabel =
         'Jeg bekrefter at jeg har sendt ekspedisjonsbrev til Trygderetten på en annen måte.';
 
-      const relevantUtfall = [
-        UtfallEnum.DELVIS_MEDHOLD,
-        UtfallEnum.INNSTILLING_STADFESTELSE,
-        UtfallEnum.INNSTILLING_AVVIST,
-      ];
-
-      test.each(relevantUtfall)('Shows warning and disables finish when not sent - utfall id: %s', async (utfall) => {
-        mockEkspedisjonsbrevIsSent(false);
-        mockOppgave(SaksTypeEnum.ANKE, utfall, false);
-        render(<ConfirmFinish cancel={() => undefined} />);
+      test('Shows warning and disables finish when not sent', async () => {
+        mockOppgave(SaksTypeEnum.ANKE, UtfallEnum.DELVIS_MEDHOLD, false);
+        renderConfirmFinish(false);
 
         expect(screen.getByText(ekspedisjonsbrevWarning)).toBeVisible();
 
@@ -201,10 +188,9 @@ describe('ConfirmFinish', () => {
         expect(finishButton).toBeEnabled();
       });
 
-      test.each(relevantUtfall)('Does not show warning when already sent - utfall id: %s', async (utfall) => {
-        mockEkspedisjonsbrevIsSent(true);
-        mockOppgave(SaksTypeEnum.ANKE, utfall, false);
-        render(<ConfirmFinish cancel={() => undefined} />);
+      test('Does not show warning when already sent', async () => {
+        mockOppgave(SaksTypeEnum.ANKE, UtfallEnum.DELVIS_MEDHOLD, false);
+        renderConfirmFinish(true);
 
         expect(screen.queryByText(ekspedisjonsbrevWarning)).not.toBeInTheDocument();
         expect(screen.queryByRole('checkbox', { name: ekspedisjonsbrevCheckboxLabel })).not.toBeInTheDocument();
@@ -214,10 +200,9 @@ describe('ConfirmFinish', () => {
         expect(finishButton).toBeEnabled();
       });
 
-      test('Does not show warning for irrelevant utfall', async () => {
-        mockEkspedisjonsbrevIsSent(false);
+      test('Does not show warning when not relevant', async () => {
         mockOppgave(SaksTypeEnum.ANKE, UtfallEnum.MEDHOLD, false);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish(undefined);
 
         expect(screen.queryByText(ekspedisjonsbrevWarning)).not.toBeInTheDocument();
         expect(screen.queryByRole('checkbox', { name: ekspedisjonsbrevCheckboxLabel })).not.toBeInTheDocument();
@@ -241,7 +226,7 @@ describe('ConfirmFinish', () => {
 
       test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, utfall, false);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
 
         const buttonText = 'Fullfør';
         const finishButton = screen.getByRole('button', { name: buttonText });
@@ -258,7 +243,7 @@ describe('ConfirmFinish', () => {
     describe('Requires Gosys oppgave', async () => {
       test('Medhold etter forvaltningsloven § 35', async () => {
         mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35, true);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
 
         const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
         const finishButton = screen.getByRole('button', { name: buttonText });
@@ -280,7 +265,7 @@ describe('ConfirmFinish', () => {
 
       test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, utfall, true);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
 
         const buttonText = 'Fullfør';
         const finishButton = screen.getByRole('button', { name: buttonText });
@@ -311,7 +296,7 @@ describe('ConfirmFinish', () => {
 
       test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, false);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const buttonText = 'Fullfør';
         expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
 
@@ -326,7 +311,7 @@ describe('ConfirmFinish', () => {
 
       test('Opphevet', async () => {
         mockOppgave(type, UtfallEnum.OPPHEVET, false);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal';
         const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
         expect(screen.getByRole('button', { name: button1 })).toBeVisible();
@@ -345,7 +330,7 @@ describe('ConfirmFinish', () => {
 
       test('Henvist', async () => {
         mockOppgave(type, UtfallEnum.HENVIST, false);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const button = 'Fullfør';
         expect(screen.getByRole('button', { name: button })).toBeVisible();
 
@@ -369,7 +354,7 @@ describe('ConfirmFinish', () => {
     describe('Requires Gosys oppgave', async () => {
       test('Opphevet', async () => {
         mockOppgave(type, UtfallEnum.OPPHEVET, true);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal';
         const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
         expect(screen.getByRole('button', { name: button1 })).toBeVisible();
@@ -394,7 +379,7 @@ describe('ConfirmFinish', () => {
 
       test.each(cases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, true);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
         expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
 
@@ -410,7 +395,7 @@ describe('ConfirmFinish', () => {
 
     test('Arena warning', async () => {
       mockOppgave(SaksTypeEnum.ANKE_I_TRYGDERETTEN, UtfallEnum.MEDHOLD, false, FAGSYSTEM_ARENA);
-      render(<ConfirmFinish cancel={() => undefined} />);
+      renderConfirmFinish();
 
       const checkbox = screen.getByRole('checkbox', {
         name: 'Jeg bekrefter at jeg har registrert utfallet fra Trygderetten i Arena',
@@ -429,7 +414,7 @@ describe('ConfirmFinish', () => {
 
     test('No Arena warning', async () => {
       mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, false);
-      render(<ConfirmFinish cancel={() => undefined} />);
+      renderConfirmFinish();
 
       expect(
         screen.queryByRole('checkbox', { name: 'Jeg bekrefter at saken er besluttet i Arena.' }),
@@ -458,7 +443,7 @@ describe('ConfirmFinish', () => {
     describe('Does not require Gosys oppgave', async () => {
       test.each([...alwaysFullførCases, ...defaultCases])('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, false);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const buttonText = 'Fullfør';
         expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
 
@@ -471,7 +456,7 @@ describe('ConfirmFinish', () => {
 
       test('Gjenopptatt - Opphevet', async () => {
         mockOppgave(type, UtfallEnum.GJENOPPTATT_OPPHEVET, false);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal';
         const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
         expect(screen.getByRole('button', { name: button1 })).toBeVisible();
@@ -490,7 +475,7 @@ describe('ConfirmFinish', () => {
     describe('Requires Gosys oppgave', async () => {
       test('Gjenopptatt - Opphevet', async () => {
         mockOppgave(type, UtfallEnum.GJENOPPTATT_OPPHEVET, true);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal';
         const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
         expect(screen.getByRole('button', { name: button1 })).toBeVisible();
@@ -505,7 +490,7 @@ describe('ConfirmFinish', () => {
 
       test.each(alwaysFullførCases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, true);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const buttonText = 'Fullfør';
         expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
 
@@ -518,7 +503,7 @@ describe('ConfirmFinish', () => {
 
       test.each(defaultCases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, true);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
         expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
 
@@ -543,7 +528,7 @@ describe('ConfirmFinish', () => {
     describe('Does not require Gosys oppgave', () => {
       test.each([...alwaysFullførCases, ...defaultCases])('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, false);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const buttonText = 'Fullfør';
         expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
 
@@ -558,7 +543,7 @@ describe('ConfirmFinish', () => {
     describe('Requires Gosys oppgave', () => {
       test.each(alwaysFullførCases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, true);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const buttonText = 'Fullfør';
         expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
 
@@ -571,7 +556,7 @@ describe('ConfirmFinish', () => {
 
       test.each(defaultCases)('Utfall id: %s', async (utfall) => {
         mockOppgave(type, utfall, true);
-        render(<ConfirmFinish cancel={() => undefined} />);
+        renderConfirmFinish();
         const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
         expect(screen.getByRole('button', { name: buttonText })).toBeVisible();
 
