@@ -80,4 +80,5 @@ export const {
   useGetSmartDocumentVersionsQuery,
   useGetSmartDocumentVersionQuery,
   useGetEkspedisjonsbrevTilTrygderettenIsSentQuery,
+  useLazyGetEkspedisjonsbrevTilTrygderettenIsSentQuery,
 } = documentsQuerySlice;
