@@ -23,6 +23,12 @@ const mockOppgave = (
   }));
 };
 
+const mockEkspedisjonsbrevIsSent = (isSent: boolean) => {
+  mock.module('@/redux-api/oppgaver/queries/documents', () => ({
+    useGetEkspedisjonsbrevTilTrygderettenIsSentQuery: () => ({ data: isSent, isSuccess: true }),
+  }));
+};
+
 const MUTATION_MOCK = [
   () => null,
   {
@@ -38,6 +44,7 @@ describe('ConfirmFinish', () => {
       useFinishOppgavebehandlingMutation: () => MUTATION_MOCK,
       useFinishOppgavebehandlingWithUpdateInGosysMutation: () => MUTATION_MOCK,
     }));
+    mockEkspedisjonsbrevIsSent(true);
 
     mock.module('@/simple-api-state/use-kodeverk', () => ({
       useUtfall: () => ({
@@ -69,11 +76,13 @@ describe('ConfirmFinish', () => {
     const originalSearch = await import('@/redux-api/search');
     const originalKodeverk = await import('@/simple-api-state/use-kodeverk');
     const originalBehandling = await import('@/redux-api/oppgaver/mutations/behandling');
+    const originalDocuments = await import('@/redux-api/oppgaver/queries/documents');
 
     mock.module('@/redux-api/search', () => originalSearch);
     mock.module('@/simple-api-state/use-kodeverk', () => originalKodeverk);
     mock.module('@/hooks/oppgavebehandling/use-oppgave', () => originalUseOppgave);
     mock.module('@/redux-api/oppgaver/mutations/behandling', () => originalBehandling);
+    mock.module('@/redux-api/oppgaver/queries/documents', () => originalDocuments);
   });
 
   describe('Klage', () => {
@@ -158,6 +167,65 @@ describe('ConfirmFinish', () => {
       const finishButton = screen.getByRole('button', { name: 'Fullfør' });
       expect(finishButton).toBeVisible();
       expect(finishButton).toBeEnabled();
+    });
+
+    describe('Ekspedisjonsbrev til Trygderetten warning', () => {
+      const ekspedisjonsbrevWarning =
+        'Du har ikke sendt ekspedisjonsbrev til Trygderetten. Er du sikker på at du vil fullføre anken?';
+      const ekspedisjonsbrevCheckboxLabel =
+        'Jeg bekrefter at jeg har sendt ekspedisjonsbrev til Trygderetten på en annen måte.';
+
+      const relevantUtfall = [
+        UtfallEnum.DELVIS_MEDHOLD,
+        UtfallEnum.INNSTILLING_STADFESTELSE,
+        UtfallEnum.INNSTILLING_AVVIST,
+      ];
+
+      test.each(relevantUtfall)('Shows warning and disables finish when not sent - utfall id: %s', async (utfall) => {
+        mockEkspedisjonsbrevIsSent(false);
+        mockOppgave(SaksTypeEnum.ANKE, utfall, false);
+        render(<ConfirmFinish cancel={() => undefined} />);
+
+        expect(screen.getByText(ekspedisjonsbrevWarning)).toBeVisible();
+
+        const checkbox = screen.getByRole('checkbox', { name: ekspedisjonsbrevCheckboxLabel });
+        expect(checkbox).toBeVisible();
+        expect(checkbox).not.toBeChecked();
+
+        const finishButton = screen.getByRole('button', { name: 'Fullfør' });
+        expect(finishButton).toBeVisible();
+        expect(finishButton).toBeDisabled();
+
+        await act(async () => fireEvent.click(checkbox));
+        expect(checkbox).toBeChecked();
+        expect(finishButton).toBeEnabled();
+      });
+
+      test.each(relevantUtfall)('Does not show warning when already sent - utfall id: %s', async (utfall) => {
+        mockEkspedisjonsbrevIsSent(true);
+        mockOppgave(SaksTypeEnum.ANKE, utfall, false);
+        render(<ConfirmFinish cancel={() => undefined} />);
+
+        expect(screen.queryByText(ekspedisjonsbrevWarning)).not.toBeInTheDocument();
+        expect(screen.queryByRole('checkbox', { name: ekspedisjonsbrevCheckboxLabel })).not.toBeInTheDocument();
+
+        const finishButton = screen.getByRole('button', { name: 'Fullfør' });
+        expect(finishButton).toBeVisible();
+        expect(finishButton).toBeEnabled();
+      });
+
+      test('Does not show warning for irrelevant utfall', async () => {
+        mockEkspedisjonsbrevIsSent(false);
+        mockOppgave(SaksTypeEnum.ANKE, UtfallEnum.MEDHOLD, false);
+        render(<ConfirmFinish cancel={() => undefined} />);
+
+        expect(screen.queryByText(ekspedisjonsbrevWarning)).not.toBeInTheDocument();
+        expect(screen.queryByRole('checkbox', { name: ekspedisjonsbrevCheckboxLabel })).not.toBeInTheDocument();
+
+        const finishButton = screen.getByRole('button', { name: 'Fullfør' });
+        expect(finishButton).toBeVisible();
+        expect(finishButton).toBeEnabled();
+      });
     });
   });
 

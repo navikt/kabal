@@ -30,7 +30,7 @@ export const ConfirmArenaCheckbox = ({ typeId, confirmed, setConfirmed }: Confir
   }
 
   return (
-    <Checkbox onChange={(e) => setConfirmed(e.target.checked)} checked={confirmed}>
+    <Checkbox onChange={(e) => setConfirmed(e.target.checked)} checked={confirmed} size="small">
       {text}
     </Checkbox>
   );

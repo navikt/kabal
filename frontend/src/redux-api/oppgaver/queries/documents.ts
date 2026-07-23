@@ -63,6 +63,9 @@ export const documentsQuerySlice = oppgaverApi.injectEndpoints({
       query: ({ oppgaveId, dokumentId, versionId }) =>
         `/kabal-api/behandlinger/${oppgaveId}/smartdokumenter/${dokumentId}/versions/${versionId}`,
     }),
+    getEkspedisjonsbrevTilTrygderettenIsSent: builder.query<boolean, string>({
+      query: (oppgaveId) => `/kabal-api/behandlinger/${oppgaveId}/dokumenter/ekspedisjonsbrev-til-trygderetten-is-sent`,
+    }),
   }),
 });
 
@@ -76,4 +79,5 @@ export const {
   useLazyGetDocumentQuery,
   useGetSmartDocumentVersionsQuery,
   useGetSmartDocumentVersionQuery,
+  useGetEkspedisjonsbrevTilTrygderettenIsSentQuery,
 } = documentsQuerySlice;
