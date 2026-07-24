@@ -1,86 +1,18 @@
 import { ArrowsCirclepathIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack, Modal, Table } from '@navikt/ds-react';
-import type { SortState } from '@navikt/ds-react/Table';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo, useState } from 'react';
 import { LoadingTable } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/loading-table';
 import { Row } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/row';
 import { SelectedGosysOppgave } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/selected-gosys-oppgave';
-import { TableHeader } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/table-header';
+import { TableHeader } from '@/components/gosys-oppgave-table/table-header';
+import { getDirection, isKeyofGosysOppgave, type ScopedSortState, sortGosysOppgaver } from '@/domain/gosys-oppgaver';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { usePushEvent } from '@/observability';
 import { useGetGosysOppgaveListQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import { useSearchEnheterQuery } from '@/redux-api/search';
-import type { INavEmployee } from '@/types/bruker';
-import type { Enhet, ListGosysOppgave } from '@/types/oppgavebehandling/oppgavebehandling';
-
-interface ScopedSortState extends SortState {
-  orderBy: keyof ListGosysOppgave;
-}
-
-const getDirection = (sortState: ScopedSortState, sortKey: keyof ListGosysOppgave): SortState['direction'] => {
-  if (sortState.orderBy !== sortKey) {
-    return 'ascending';
-  }
-
-  return sortState.direction === 'ascending' ? 'descending' : 'ascending';
-};
-
-const isINavEmployee = (_: unknown, key: string): _ is INavEmployee => key === 'opprettetAv' || key === 'endretAv';
-
-const sortData = (
-  data: ListGosysOppgave[],
-  { direction, orderBy }: ScopedSortState,
-  enheter: Enhet[],
-): ListGosysOppgave[] =>
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-  data.sort((a, b) => {
-    const aVal = a[orderBy];
-    const bVal = b[orderBy];
-
-    if (aVal === null) {
-      return bVal === null ? 0 : 1;
-    }
-
-    if (bVal === null) {
-      return -1;
-    }
-
-    if (typeof aVal === 'string' && typeof bVal === 'string') {
-      return direction === 'ascending' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-    }
-
-    if (typeof aVal === 'number' && typeof bVal === 'number') {
-      return direction === 'ascending' ? aVal - bVal : bVal - aVal;
-    }
-
-    if (orderBy === 'opprettetAvEnhet') {
-      const aEnhet = `${a.opprettetAvEnhet?.navn ?? ''} (${a.opprettetAvEnhet?.enhetsnr ?? ''})`;
-      const bEnhet = `${b.opprettetAvEnhet?.navn ?? ''} (${b.opprettetAvEnhet?.enhetsnr ?? ''})`;
-
-      return direction === 'ascending' ? aEnhet.localeCompare(bEnhet) : bEnhet.localeCompare(aEnhet);
-    }
-
-    if (orderBy === 'tildeltEnhetsnr') {
-      const aEnhetName = enheter.find((e) => e.enhetsnr === aVal)?.navn ?? '';
-      const bEnhetName = enheter.find((e) => e.enhetsnr === bVal)?.navn ?? '';
-
-      const aEnhet = `${aEnhetName} (${aVal})`;
-      const bEnhet = `${bEnhetName} (${bVal})`;
-
-      return direction === 'ascending' ? aEnhet.localeCompare(bEnhet) : bEnhet.localeCompare(aEnhet);
-    }
-
-    if (orderBy === 'opprettetAv' || orderBy === 'endretAv') {
-      const aName = isINavEmployee(aVal, orderBy) ? aVal.navn : '';
-      const bName = isINavEmployee(bVal, orderBy) ? bVal.navn : '';
-
-      return direction === 'ascending' ? aName.localeCompare(bName) : bName.localeCompare(aName);
-    }
-
-    return 0;
-  });
+import type { ListGosysOppgave } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface SelectGosysOppgaveModalProps {
   hasGosysOppgave: boolean;
@@ -304,6 +236,7 @@ const SortableTable = ({
 }: SortableTableProps) => {
   const { data: enheter = [] } = useSearchEnheterQuery({});
   const [sort, setSort] = useState<ScopedSortState>({ direction: 'ascending', orderBy: 'opprettetTidspunkt' });
+  const canEdit = useIsTildeltSaksbehandler();
 
   const handleSort = (sortKey: string) => {
     if (!isKeyofGosysOppgave(sortKey)) {
@@ -314,7 +247,7 @@ const SortableTable = ({
   };
 
   const sortedOppgaver: ListGosysOppgave[] = useMemo(
-    () => sortData(oppgaver, sort, enheter),
+    () => sortGosysOppgaver(oppgaver, sort, enheter),
     [oppgaver, sort, enheter],
   );
 
@@ -337,7 +270,7 @@ const SortableTable = ({
       </Header>
 
       <Table size="small" zebraStripes onSortChange={handleSort} sort={sort}>
-        <TableHeader showFerdigstilt={showFerdigstilt} />
+        <TableHeader sortable showFerdigstilt={showFerdigstilt} />
 
         <Table.Body>
           {sortedOppgaver.map((d) => (
@@ -347,6 +280,7 @@ const SortableTable = ({
               selectedGosysOppgave={selectedGosysOppgave}
               oppgaveId={oppgaveId}
               showFerdigstilt={showFerdigstilt}
+              canEdit={canEdit}
             />
           ))}
         </Table.Body>
@@ -361,7 +295,7 @@ interface HeaderProps {
   isFetching?: boolean;
 }
 
-const Header = ({ children, refetch, isFetching = false }: HeaderProps) => (
+export const Header = ({ children, refetch, isFetching = false }: HeaderProps) => (
   <Heading level="1" size="xsmall" spacing>
     <HStack align="center" justify="start" gap="space-8">
       <span>{children}</span>
@@ -378,27 +312,3 @@ const Header = ({ children, refetch, isFetching = false }: HeaderProps) => (
     </HStack>
   </Heading>
 );
-
-const GOSYS_OPPGAVE_KEYS: (keyof ListGosysOppgave)[] = [
-  'id',
-  'tildeltEnhetsnr',
-  'endretAvEnhetsnr',
-  'endretAv',
-  'endretTidspunkt',
-  'opprettetAv',
-  'opprettetTidspunkt',
-  'beskrivelse',
-  'temaId',
-  'gjelder',
-  'oppgavetype',
-  'fristFerdigstillelse',
-  'ferdigstiltTidspunkt',
-  'status',
-  'editable',
-  'opprettetAvEnhet',
-  'alreadyUsedBy',
-];
-
-const GOSYS_STATUS_KEY_STRINGS: string[] = GOSYS_OPPGAVE_KEYS.map((key) => key);
-
-const isKeyofGosysOppgave = (key: string): key is keyof ListGosysOppgave => GOSYS_STATUS_KEY_STRINGS.includes(key);

@@ -1,29 +1,18 @@
-import { Button, HStack, Table, Tag, Tooltip } from '@navikt/ds-react';
-import {
-  CheckmarkCircleFillIconColored,
-  ExclamationmarkTriangleFillIconColored,
-} from '@/components/colored-icons/colored-icons';
-import { CopyIdButton } from '@/components/copy-button/copy-id-button';
-import { GosysBeskrivelseTabs } from '@/components/gosys/beskrivelse/beskrivelse-tabs';
-import { isoDateTimeToPretty, isoDateToPretty } from '@/domain/date';
-import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
-import { useFullTemaNameFromIdOrLoading } from '@/hooks/use-kodeverk-ids';
+import { TableRowContent } from '@/components/gosys-oppgave-table/table-row-content';
 import { usePushEvent } from '@/observability';
 import { useSetGosysOppgaveMutation } from '@/redux-api/oppgaver/mutations/set-gosys-oppgave';
-import { useSearchEnheterQuery } from '@/redux-api/search';
-import type { INavEmployee } from '@/types/bruker';
-import { GosysStatus, type ListGosysOppgave } from '@/types/oppgavebehandling/oppgavebehandling';
+import type { ListGosysOppgave } from '@/types/oppgavebehandling/oppgavebehandling';
 
 export interface Props {
   oppgaveId: string;
   selectedGosysOppgave: ListGosysOppgave | undefined;
   gosysOppgave: ListGosysOppgave;
   showFerdigstilt: boolean;
+  canEdit?: boolean;
 }
 
-export const Row = ({ gosysOppgave, selectedGosysOppgave, oppgaveId, showFerdigstilt }: Props) => {
+export const Row = ({ gosysOppgave, selectedGosysOppgave, oppgaveId, showFerdigstilt, canEdit }: Props) => {
   const [setGosysOppgave, { isLoading }] = useSetGosysOppgaveMutation({ fixedCacheKey: oppgaveId });
-  const temaName = useFullTemaNameFromIdOrLoading(gosysOppgave.temaId);
   const pushEvent = usePushEvent();
 
   const onSelect = () => {
@@ -32,165 +21,19 @@ export const Row = ({ gosysOppgave, selectedGosysOppgave, oppgaveId, showFerdigs
       nextGosysOppgaveStatus: gosysOppgave.status,
       previousGosysOppgaveStatus: selectedGosysOppgave?.status ?? 'NONE',
     });
-
     setGosysOppgave({ oppgaveId, gosysOppgaveId: gosysOppgave.id });
   };
 
   const selected = selectedGosysOppgave !== undefined && selectedGosysOppgave.id === gosysOppgave.id;
 
   return (
-    <Table.ExpandableRow
+    <TableRowContent
+      onSelect={onSelect}
+      gosysOppgave={gosysOppgave}
       selected={selected}
-      content={<GosysBeskrivelseTabs beskrivelse={gosysOppgave.beskrivelse} />}
-      shadeOnHover
-      expandOnRowClick
-      className={
-        !selected && gosysOppgave.status === GosysStatus.FEILREGISTRERT
-          ? 'bg-ax-bg-danger-moderate hover:bg-ax-bg-danger-moderate-hover'
-          : undefined
-      }
-    >
-      <Table.DataCell>
-        {gosysOppgave.gjelder === null ? null : (
-          <Tag data-color="success" size="small" variant="outline">
-            {gosysOppgave.gjelder}
-          </Tag>
-        )}
-      </Table.DataCell>
-      <Table.DataCell>
-        <Tag data-color="meta-purple" size="small" variant="outline">
-          {temaName}
-        </Tag>
-      </Table.DataCell>
-      {showFerdigstilt ? <TimeCell time={gosysOppgave.ferdigstiltTidspunkt} /> : null}
-      <DateCell date={gosysOppgave.fristFerdigstillelse} />
-      <Table.DataCell>
-        <Tag data-color="info" size="small" variant="outline">
-          {gosysOppgave.oppgavetype}
-        </Tag>
-      </Table.DataCell>
-      <Table.DataCell>
-        <Employee employee={gosysOppgave.opprettetAv} />
-      </Table.DataCell>
-      <Table.DataCell>
-        {gosysOppgave.opprettetAvEnhet === null ? null : (
-          <Tag data-color="meta-purple" size="small" variant="outline">
-            {gosysOppgave.opprettetAvEnhet.navn} ({gosysOppgave.opprettetAvEnhet.enhetsnr})
-          </Tag>
-        )}
-      </Table.DataCell>
-      <Table.DataCell>
-        <Enhet enhet={gosysOppgave.tildeltEnhetsnr} />
-      </Table.DataCell>
-      <Table.DataCell>
-        <Selection selected={selected} gosysOppgave={gosysOppgave} onSelect={onSelect} isSelecting={isLoading} />
-      </Table.DataCell>
-    </Table.ExpandableRow>
-  );
-};
-
-interface SelectionProps {
-  gosysOppgave: ListGosysOppgave;
-  selected: boolean;
-  onSelect: () => void;
-  isSelecting: boolean;
-}
-
-const Selection = ({ gosysOppgave, selected, onSelect, isSelecting }: SelectionProps) => {
-  const canEdit = useIsTildeltSaksbehandler();
-
-  if (selected) {
-    return (
-      <Tooltip content="Valgt">
-        <HStack align="center" justify="center" aria-label="Valgt">
-          <CheckmarkCircleFillIconColored aria-hidden />
-        </HStack>
-      </Tooltip>
-    );
-  }
-
-  if (gosysOppgave.alreadyUsedBy !== null) {
-    return (
-      <Tooltip content="Tilknyttet annen behandling">
-        <HStack align="center" justify="center">
-          <ExclamationmarkTriangleFillIconColored aria-hidden />
-        </HStack>
-      </Tooltip>
-    );
-  }
-
-  if (!canEdit) {
-    return null;
-  }
-
-  return (
-    <Button data-color="neutral" size="small" variant="tertiary" onClick={onSelect} loading={isSelecting}>
-      Velg
-    </Button>
-  );
-};
-
-export const Enhet = ({ enhet }: { enhet: string }) => {
-  const { data: enheter } = useSearchEnheterQuery({});
-
-  if (enheter === undefined) {
-    return (
-      <Tag data-color="meta-purple" size="small" variant="outline">
-        Laster...
-      </Tag>
-    );
-  }
-
-  const resolvedEnhet = enheter.find((e) => e.enhetsnr === enhet);
-
-  if (resolvedEnhet !== undefined) {
-    return (
-      <Tag data-color="meta-purple" size="small" variant="outline">
-        {resolvedEnhet.navn ?? 'Ukjent enhet'}({enhet})
-      </Tag>
-    );
-  }
-
-  return (
-    <Tag data-color="neutral" size="small" variant="outline">
-      {enhet}
-    </Tag>
-  );
-};
-
-export const Employee = ({ employee }: { employee: INavEmployee | null }) => {
-  if (employee === null) {
-    return null;
-  }
-
-  return (
-    <>
-      <span>{employee.navn}</span>
-      <CopyIdButton id={employee.navIdent} size="xsmall" />
-    </>
-  );
-};
-
-export const DateCell = ({ date }: { date: string | null }) => {
-  if (date === null) {
-    return <Table.DataCell />;
-  }
-
-  return (
-    <Table.DataCell>
-      <time dateTime={date}>{isoDateToPretty(date) ?? date}</time>
-    </Table.DataCell>
-  );
-};
-
-export const TimeCell = ({ time }: { time: string | null }) => {
-  if (time === null) {
-    return <Table.DataCell />;
-  }
-
-  return (
-    <Table.DataCell>
-      <time dateTime={time}>{isoDateTimeToPretty(time) ?? time}</time>
-    </Table.DataCell>
+      showFerdigstilt={showFerdigstilt}
+      isLoading={isLoading}
+      canEdit={canEdit}
+    />
   );
 };
