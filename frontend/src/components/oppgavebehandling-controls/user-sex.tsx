@@ -2,9 +2,11 @@ import { FigureCombinationFillIcon, FigureInwardFillIcon, FigureOutwardFillIcon 
 import { type TagProps, Tooltip } from '@navikt/ds-react';
 import { SexEnum } from '@/types/kodeverk';
 
+type Size = NonNullable<TagProps['size']>;
+
 interface Props {
   sex: SexEnum;
-  size?: TagProps['size'];
+  size?: Size;
 }
 
 export const UserSex = ({ sex, size = 'medium' }: Props) => {
@@ -32,7 +34,7 @@ export const UserSex = ({ sex, size = 'medium' }: Props) => {
   }
 };
 
-const getSize = (size: TagProps['size']) => {
+const getSize = (size: Size): string => {
   switch (size) {
     case 'xsmall':
       return 'size-5';

@@ -1,5 +1,5 @@
 import { Skeleton, Table } from '@navikt/ds-react';
-import { TableHeader } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/table-header';
+import { TableHeader } from '@/components/gosys-oppgave-table/table-header';
 
 export const LoadingTable = () => (
   <Table size="small" zebraStripes>
@@ -42,6 +42,9 @@ const LoadingRow = () => (
     </Table.DataCell>
     <Table.DataCell>
       <Skeleton height={24} width={170} />
+    </Table.DataCell>
+    <Table.DataCell>
+      <Skeleton height={24} width={140} />
     </Table.DataCell>
     <Table.DataCell>
       <Skeleton height={24} width={140} />

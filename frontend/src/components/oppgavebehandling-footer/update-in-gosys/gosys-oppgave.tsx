@@ -1,11 +1,6 @@
 import { Table, Tag } from '@navikt/ds-react';
-import {
-  DateCell,
-  Employee,
-  Enhet,
-  TimeCell,
-} from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/row';
 import { GosysBeskrivelseTabs } from '@/components/gosys/beskrivelse/beskrivelse-tabs';
+import { DateCell, Employee, Enhet, TimeCell } from '@/components/gosys-oppgave-table/table-row-content';
 import { useFullTemaNameFromIdOrLoading } from '@/hooks/use-kodeverk-ids';
 import { useGetGosysOppgaveQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import { GosysStatus, type IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';

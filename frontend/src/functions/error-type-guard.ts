@@ -50,10 +50,10 @@ export const isReduxValidationResponse = (error: unknown): error is IReduxError<
 const isValidationSection = (error: GenericObject): error is IValidationSection =>
   typeof error.section === 'string' && Array.isArray(error.properties);
 
-interface IReduxError<T = unknown> {
+export interface IReduxError<T = unknown> {
   status: number;
   data: T;
 }
 
-const isReduxError = <T>(error: unknown): error is IReduxError<T> =>
+export const isReduxError = <T>(error: unknown): error is IReduxError<T> =>
   isGenericObject(error) && typeof error.status === 'number';

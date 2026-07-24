@@ -5,6 +5,7 @@ import { useAppTheme } from '@/app-theme';
 import { NotFoundPage } from '@/components/app/not-found-page';
 import { ProtectedRoute } from '@/components/app/protected-route';
 import { NavHeader } from '@/components/header/header';
+import { RegistrerAnke } from '@/components/send-to-tr/registrer-anke';
 import { ModalEnum } from '@/components/svarbrev/row/row';
 import { Toasts } from '@/components/toast/toasts';
 import { VersionCheckerStatus } from '@/components/version-checker/version-checker-status';
@@ -58,6 +59,10 @@ export const Router = () => (
 
       <Route element={<ProtectedRoute roles={[Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]} />}>
         <Route path="saker-i-tr" element={<SakerITRPage />} />
+      </Route>
+
+      <Route element={<ProtectedRoute roles={[Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER]} />}>
+        <Route path="/registrer-anke-i-trygderetten-fra-arena" element={<RegistrerAnke />} />
       </Route>
 
       <Route
