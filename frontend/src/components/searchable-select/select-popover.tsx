@@ -1,8 +1,17 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Box, Button, type ButtonProps, Popover, Tag, TextField, Tooltip, VStack } from '@navikt/ds-react';
+import {
+  Box,
+  Button,
+  type ButtonProps,
+  ErrorMessage,
+  Popover,
+  Tag,
+  TextField,
+  Tooltip,
+  VStack,
+} from '@navikt/ds-react';
 import type { ReactNode, RefObject } from 'react';
 import { useEffect, useId, useRef } from 'react';
-import { FieldError } from '@/components/field-error/field-error';
 import { KeyRow } from '@/components/searchable-select/key-row';
 import { Keys, MOD_KEY_TEXT } from '@/keys';
 
@@ -127,7 +136,11 @@ export const SelectPopover = ({
         <span className="block truncate">{trigger}</span>
       </Button>
 
-      {typeof error === 'string' && error.length !== 0 ? <FieldError id={errorId}>{error}</FieldError> : null}
+      {typeof error === 'string' && error.length !== 0 ? (
+        <ErrorMessage id={errorId} showIcon size="small">
+          {error}
+        </ErrorMessage>
+      ) : null}
 
       <Popover
         ref={popoverRef}

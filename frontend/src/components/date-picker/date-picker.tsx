@@ -216,7 +216,7 @@ export const DatePicker = ({
         autoFocus={autoFocus}
         style={{ width }}
       />
-      <Warning date={selected} threshhold={warningThreshhold} />
+      <Warning date={selected} threshhold={warningThreshhold} className="mt-2" />
     </DSDatePicker>
   );
 };

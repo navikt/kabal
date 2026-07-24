@@ -11,7 +11,6 @@ export const TableHeader = ({ sortable, showFerdigstilt }: Props) => {
     <Table.Header>
       <Table.Row>
         <Table.ColumnHeader />
-
         <HeaderCell sortable={sortable} sortKey="gjelder">
           Gjelder
         </HeaderCell>
@@ -38,7 +37,9 @@ export const TableHeader = ({ sortable, showFerdigstilt }: Props) => {
         <HeaderCell sortable={sortable} sortKey="tildeltEnhetsnr">
           Tildelt enhet
         </HeaderCell>
-
+        <HeaderCell sortable={sortable} sortKey="mappe">
+          Enhetsmappe
+        </HeaderCell>
         <Table.ColumnHeader />
       </Table.Row>
     </Table.Header>

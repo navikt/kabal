@@ -4,12 +4,14 @@ import { isObject } from '@/functions/object';
 import { behandlingerMutationSlice } from '@/redux-api/oppgaver/mutations/behandling';
 import { documentsMutationSlice } from '@/redux-api/oppgaver/mutations/documents';
 import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
+import { sendToTrygderettenApi } from '@/redux-api/send-to-trygderetten';
 import { isBFFError, isKabalApiErrorData } from '@/types/errors';
 
 const { finishOppgavebehandlingWithUpdateInGosys } = behandlingerMutationSlice.endpoints;
 const { finishDocument } = documentsMutationSlice.endpoints;
 const { getOppgave } = oppgaveDataQuerySlice.endpoints;
 const { uploadFileDocument } = documentsMutationSlice.endpoints;
+const { sendToTrygderetten } = sendToTrygderettenApi.endpoints;
 
 /** Extract the trace ID (32 hex chars) from the request's traceparent header. */
 const extractTraceId = (meta: unknown): string | undefined => {
@@ -83,6 +85,10 @@ const handleError = (payload: unknown, arg: Arg): boolean => {
   }
 
   if (arg.endpointName === uploadFileDocument.name && payload.status === 400) {
+    return true;
+  }
+
+  if (arg.endpointName === sendToTrygderetten.name && payload.status === 400) {
     return true;
   }
 
