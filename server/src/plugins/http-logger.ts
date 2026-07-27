@@ -13,7 +13,12 @@ export const httpLoggerPlugin = fastifyPlugin(
     app.addHook('onResponse', async (req, res) => {
       const { url } = req;
 
-      if (url.endsWith('/isAlive') || url.endsWith('/isStarted') || url.endsWith('/metrics') || isExternalApi(url)) {
+      if (
+        url.startsWith('/isAlive') ||
+        url.startsWith('/isStarted') ||
+        url.startsWith('/metrics') ||
+        isExternalApi(url)
+      ) {
         return;
       }
 
@@ -71,12 +76,6 @@ const logHttpRequest = ({ client_version, tab_id, ...data }: HttpData) => {
   httpLogger.debug({ msg, data, client_version, tab_id });
 };
 
-const isExternalApi = (url: string): boolean => {
-  for (const clientId of API_CLIENT_IDS) {
-    if (url.includes(`/api/${clientId}/`)) {
-      return true;
-    }
-  }
+const EXTERNAL_API_PREFIX_LIST = API_CLIENT_IDS.map((clientId) => `/api/${clientId}/`);
 
-  return false;
-};
+const isExternalApi = (url: string): boolean => EXTERNAL_API_PREFIX_LIST.some((prefix) => url.startsWith(prefix));

@@ -1,12 +1,11 @@
 import type { Document } from '@hocuspocus/server';
 import { yTextToSlateElement } from '@slate-yjs/core';
 import { encodeStateAsUpdateV2, XmlText } from 'yjs';
-import { getCacheKey, oboCache } from '@/auth/cache/cache';
-import { ApiClientEnum } from '@/config/config';
 import { withSpan } from '@/helpers/tracing';
 import { getLogger } from '@/logger';
 import { KABAL_API_URL } from '@/plugins/crdt/api/url';
 import type { ConnectionContext } from '@/plugins/crdt/context';
+import { getAuthorizationHeader } from '@/plugins/obo-token';
 
 const log = getLogger('collaboration');
 
@@ -29,6 +28,8 @@ export const setDocument = async (context: ConnectionContext, document: Document
       client_version,
     },
     async (span) => {
+      const authorization = await getAuthorizationHeader(context);
+
       try {
         const update = Buffer.from(encodeStateAsUpdateV2(document));
         const data = update.toString('base64url');
@@ -37,10 +38,7 @@ export const setDocument = async (context: ConnectionContext, document: Document
 
         const res = await fetch(`${KABAL_API_URL}/behandlinger/${behandlingId}/smartdokumenter/${dokumentId}`, {
           method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${await oboCache.get(getCacheKey(navIdent, ApiClientEnum.KABAL_API))}`,
-          },
+          headers: { 'Content-Type': 'application/json', authorization },
           body: JSON.stringify({ content, data }),
         });
 

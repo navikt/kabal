@@ -1,16 +1,16 @@
+import type { IncomingHttpHeaders } from 'node:http';
 import { Hocuspocus } from '@hocuspocus/server';
+import { validateToken } from '@navikt/oasis';
 import { applyUpdateV2 } from 'yjs';
-import { getCacheKey, oboCache } from '@/auth/cache/cache';
-import { ApiClientEnum } from '@/config/config';
 import { isDeployed } from '@/config/env';
 import { SMART_DOCUMENT_WRITE_ACCESS } from '@/document-access/service';
 import { isNotNull } from '@/functions/guards';
-import { parseTokenPayload } from '@/helpers/token-parser';
+import { stripBearer } from '@/headers';
 import { withSpan } from '@/helpers/tracing';
 import { getTeamLogger } from '@/logger';
 import { getDocument } from '@/plugins/crdt/api/get-document';
 import { getDocumentJson, isResponseError, setDocument } from '@/plugins/crdt/api/set-document';
-import { getCloseEvent } from '@/plugins/crdt/close-event';
+import { closeConnection, getCloseEvent, isCloseEvent } from '@/plugins/crdt/close-event';
 import { type ConnectionContext, isConnectionContext } from '@/plugins/crdt/context';
 import { DEBOUNCE_MS, endActivity, trackActivity, withCollaborationSpan } from '@/plugins/crdt/crdt-tracing';
 import { log, logContext } from '@/plugins/crdt/log-context';
@@ -51,14 +51,14 @@ export const collaborationServer = new Hocuspocus({
     });
   },
 
-  onConnect: async ({ context, connectionConfig }) => {
+  onConnect: async ({ context, connectionConfig, requestHeaders }) => {
     if (!isConnectionContext(context)) {
       log.error({ msg: 'Tried to establish collaboration connection without context' });
       throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
     return withCollaborationSpan('onConnect', context, async (span) => {
-      const expiresIn = await getTokenExpiresIn(context, 'onConnect');
+      const expiresIn = await setAccessToken(context, requestHeaders);
 
       span.setAttribute('collaboration.token_expires_in', expiresIn);
 
@@ -68,8 +68,6 @@ export const collaborationServer = new Hocuspocus({
         context,
         'debug',
       );
-
-      await createRefreshTimer(context, expiresIn);
 
       const { dokumentId, navIdent, behandlingId } = context;
 
@@ -96,6 +94,13 @@ export const collaborationServer = new Hocuspocus({
     return withCollaborationSpan('connected', context, async () => {
       logContext('New collaboration connection established', context, 'debug');
 
+      // hocuspocus replaces the context object after both `onConnect` and `onAuthenticate`
+      // (`hookPayload.context = { ...hookPayload.context, ...contextAdditions }`). A timer started in
+      // either of those hooks would keep writing the refreshed expiry to a discarded copy, leaving
+      // `beforeHandleMessage` to read the expiry copied at connect time and close the connection once
+      // the first token expires. `connected` runs after the last replacement.
+      await createRefreshTimer(context, getAccessTokenExpiresIn(context));
+
       const { navIdent, tab_id, client_version } = context;
 
       context.removeHasAccessListener = SMART_DOCUMENT_WRITE_ACCESS.addHasAccessListener(
@@ -111,7 +116,7 @@ export const collaborationServer = new Hocuspocus({
       context.removeDeletedListener = SMART_DOCUMENT_WRITE_ACCESS.addDeletedDocumentListener(documentName, () => {
         logContext(`Document deleted and closed "${documentName}"`, context, 'info');
         sendStateless(connection, 'deleted');
-        connection.close(getCloseEvent('DOCUMENT_DELETED', 4410));
+        closeConnection(context, 'DOCUMENT_DELETED', 4410);
       });
     });
   },
@@ -131,7 +136,7 @@ export const collaborationServer = new Hocuspocus({
       if (context.tokenRefreshTimer !== undefined) {
         clearTimeout(context.tokenRefreshTimer);
         context.tokenRefreshTimer = undefined;
-        logContext('Refresh OBO token timer cleared', context, 'debug');
+        logContext('Access token refresh timer cleared', context, 'debug');
       }
 
       context.removeHasAccessListener?.();
@@ -151,22 +156,25 @@ export const collaborationServer = new Hocuspocus({
 
     if (context.cookie === undefined) {
       logContext('Missing session cookie', context, 'warn');
-      throw getCloseEvent('MISSING_COOKIE', 4401);
+      throw closeConnection(context, 'MISSING_COOKIE', 4401);
     }
 
+    // hocuspocus replays queued messages just before running `connected`, and the client sends sync
+    // step 1 immediately, so in practice this branch - not `connected` - is what starts the timer on
+    // a normal connection. It also covers the case where the refresh loop cleared the timer itself
+    // after Wonderwall rejected the session. Neither is an anomaly, hence debug.
     if (context.tokenRefreshTimer === undefined) {
-      const expiresIn = await getTokenExpiresIn(context, 'beforeHandleMessage');
-      logContext('Missing refresh OBO token timer. Starting timer.', context, 'warn');
-      await createRefreshTimer(context, expiresIn);
+      logContext('Access token refresh timer not running. Starting timer.', context, 'debug');
+      await createRefreshTimer(context, getAccessTokenExpiresIn(context));
     }
 
-    const expiresIn = await getTokenExpiresIn(context, 'beforeHandleMessage');
+    const expiresIn = getAccessTokenExpiresIn(context);
 
     if (expiresIn <= 0) {
       return withCollaborationSpan('beforeHandleMessage', context, async (span) => {
         span.setAttribute('token_expires_in', expiresIn);
-        logContext(`OBO token expired ${expiresIn} seconds ago.`, context, 'warn');
-        throw getCloseEvent('OBO_TOKEN_EXPIRED', 4401);
+        logContext(`Access token expired ${Math.abs(expiresIn)} seconds ago.`, context, 'warn');
+        throw closeConnection(context, 'ACCESS_TOKEN_EXPIRED', 4401);
       });
     }
 
@@ -179,10 +187,9 @@ export const collaborationServer = new Hocuspocus({
       return;
     }
 
-    const expiresIn = await getTokenExpiresIn(context, 'onChange');
     const hasWriteAccess = await getHasWriteAccess(context);
 
-    trackActivity(context, expiresIn, hasWriteAccess);
+    trackActivity(context, getAccessTokenExpiresIn(context), hasWriteAccess);
   },
 
   beforeUnloadDocument: async ({ documentName }) => {
@@ -258,7 +265,15 @@ export const collaborationServer = new Hocuspocus({
         msg: 'Tried to store document without context',
         data: {
           document: JSON.stringify(getDocumentJson(document)),
-          context: JSON.stringify({ ...context, abortController: undefined }),
+          context: JSON.stringify({
+            ...context,
+            abortController: undefined,
+            accessToken: undefined,
+            cookie: undefined,
+            hasAbortController: !!context.hasAbortController,
+            accessTokenLength: context.accessToken?.length ?? 'undefined',
+            cookieLength: context.cookie?.length ?? 'undefined',
+          }),
         },
       });
 
@@ -271,6 +286,11 @@ export const collaborationServer = new Hocuspocus({
 
         logContext('Saved document to database', context, 'debug');
       } catch (error) {
+        // Auth failures already carry a precise close code. Keep it so the client can react to 4401.
+        if (isCloseEvent(error)) {
+          throw error;
+        }
+
         if (isResponseError(error)) {
           throw getCloseEvent('FAILED_TO_SAVE', 4000 + error.statusCode);
         }
@@ -309,24 +329,60 @@ export const collaborationServer = new Hocuspocus({
   extensions: isDeployed ? [getValkeyExtension()].filter(isNotNull) : [],
 });
 
-const getTokenExpiresIn = async (context: ConnectionContext, method: string) => {
-  const oboAccessToken = await oboCache.get(getCacheKey(context.navIdent, ApiClientEnum.KABAL_API));
+/**
+ * Validates the Wonderwall access token from the upgrade request and stores it in the context.
+ *
+ * Only the access token is tracked: OBO tokens are minted just-in-time by oasis, which keeps its
+ * own in-memory cache. The access token, on the other hand, cannot be renewed by us — a WebSocket
+ * never receives new request headers — so its expiry is what the refresh loop has to work off.
+ *
+ * @returns Seconds until the access token expires.
+ */
+const setAccessToken = async (context: ConnectionContext, headers: IncomingHttpHeaders): Promise<number> => {
+  const accessToken = stripBearer(headers.authorization);
 
-  if (oboAccessToken === null) {
-    logContext(`Missing OBO token: ${method}`, context, 'warn');
+  if (accessToken === undefined) {
+    logContext('Missing Authorization header: onConnect', context, 'warn');
+    throw closeConnection(context, 'INVALID_SESSION', 4401);
+  }
+
+  const validation = await validateToken(accessToken);
+
+  if (!validation.ok) {
+    logContext(
+      `Invalid access token: ${validation.error.message} (${validation.errorType}): onConnect`,
+      context,
+      'warn',
+    );
+    throw closeConnection(context, 'INVALID_SESSION', 4401);
+  }
+
+  const { exp } = validation.payload;
+
+  if (exp === undefined) {
+    logContext('Access token without expiry: onConnect', context, 'warn');
+    throw closeConnection(context, 'INVALID_SESSION', 4401);
+  }
+
+  context.accessToken = accessToken;
+  context.accessTokenExpiresAt = exp;
+
+  return Math.floor(exp - Date.now() / 1_000);
+};
+
+const getAccessTokenExpiresIn = (context: ConnectionContext): number => {
+  const { accessTokenExpiresAt } = context;
+
+  // Set by setAccessToken() in onConnect, which gates every other hook, so this is a bug if it
+  // happens. Return 0 rather than throwing, so callers treat the token as expired and close the
+  // connection instead of trusting a token we know nothing about.
+  if (accessTokenExpiresAt === undefined) {
+    logContext('Missing access token expiry', context, 'error');
 
     return 0;
   }
 
-  const payload = parseTokenPayload(oboAccessToken);
-
-  if (payload === undefined) {
-    logContext(`Invalid OBO token payload: ${method}`, context, 'warn');
-
-    return 0;
-  }
-
-  return Math.floor(payload.exp - Date.now() / 1_000);
+  return Math.floor(accessTokenExpiresAt - Date.now() / 1_000);
 };
 
 const getHasWriteAccess = async (context: ConnectionContext, allowApiFetching?: boolean) => {

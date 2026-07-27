@@ -22,28 +22,6 @@ export const requiredEnvString = (name: string, defaultValue?: string): string =
   throw new Error(`Missing required environment variable '${name}'.`);
 };
 
-export const requiredEnvJson = <T>(name: string, defaultValue?: T): T => {
-  const json = requiredEnvString(name, '');
-
-  try {
-    if (json.length === 0) {
-      if (defaultValue !== undefined) {
-        return defaultValue;
-      }
-
-      throw new Error('Empty string');
-    }
-
-    return JSON.parse(json);
-  } catch {
-    if (defaultValue !== undefined) {
-      return defaultValue;
-    }
-
-    throw new Error(`Invalid JSON in environment variable '${name}'.`);
-  }
-};
-
 export const requiredEnvNumber = (name: string, defaultValue?: number): number => {
   const envString = optionalEnvString(name);
   const parsed = typeof envString === 'undefined' ? Number.NaN : Number.parseInt(envString, 10);
