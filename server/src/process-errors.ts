@@ -1,3 +1,4 @@
+import { setTimeout as sleep } from 'node:timers/promises';
 import { SMART_DOCUMENT_WRITE_ACCESS } from '@/document-access/service';
 import { getLogger } from '@/logger';
 import { collaborationServer } from '@/plugins/crdt/collaboration-server';
@@ -8,6 +9,9 @@ import { EmojiIcons, sendToSlack } from '@/slack';
 import { shutdownTracing } from '@/tracing';
 
 const log = getLogger('process-errors');
+
+/** Time given to the close frames sent on SIGTERM to reach the clients before the process exits. */
+const CLOSE_FRAME_FLUSH_MS = 250;
 
 export const processErrors = () => {
   process
@@ -32,8 +36,16 @@ export const processErrors = () => {
           try {
             if (isConnectionContext(connection.context)) {
               endActivity(connection.context);
+              // `Connection.close()` only sends a hocuspocus CLOSE *message*, and the client-side
+              // provider hardcodes that message to close code 1000 - indistinguishable from a clean
+              // shutdown. Close the socket itself so the client gets 1001 and takes the immediate
+              // reconnect path instead of the generic unknown-close path with its session check and
+              // backoff. It also makes shutdowns tellable apart from network failures (1006) in the
+              // client-side logs.
+              connection.context.socket.close(1001, 'SERVER_SHUTTING_DOWN');
+            } else {
+              connection.close({ code: 1001, reason: 'SERVER_SHUTTING_DOWN' });
             }
-            connection.close({ code: 1001, reason: 'SERVER_SHUTTING_DOWN' });
           } catch (error) {
             log.error({
               error,
@@ -42,6 +54,11 @@ export const processErrors = () => {
           }
         }
       }
+
+      // `process.exit()` below does not flush pending socket writes. Without this pause the close
+      // frames can still be sitting in the send buffer when the process dies, leaving the client
+      // with an abrupt 1006 instead of the 1001 we just sent.
+      await sleep(CLOSE_FRAME_FLUSH_MS);
 
       await SMART_DOCUMENT_WRITE_ACCESS.close();
       log.info({ msg: `Process ${process.pid} received a ${signal} signal. Shutting down now.` });

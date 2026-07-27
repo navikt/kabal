@@ -8,8 +8,14 @@ type GetHeadersFn = (req: FastifyRequest) => Promise<Record<string, string | str
 const getDeployedHeaders: GetHeadersFn = async (req) => {
   const { client_version, tab_id } = req;
 
+  const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API);
+
+  if (oboAccessToken === undefined) {
+    throw new Error(`Failed to get OBO token for ${ApiClientEnum.KABAL_API}`);
+  }
+
   return {
-    Authorization: `Bearer ${await req.getOboAccessToken(ApiClientEnum.KABAL_API)}`,
+    Authorization: `Bearer ${oboAccessToken}`,
     Accept: 'application/json',
     [PROXY_VERSION_HEADER]: PROXY_VERSION,
     [CLIENT_VERSION_HEADER]: client_version,
@@ -24,7 +30,6 @@ const IGNORED_HEADERS = [
   'upgrade',
   'sec-websocket-version',
   'sec-websocket-extensions',
-  'sec-websocket-version',
   'sec-websocket-key',
   'content-length',
 ];

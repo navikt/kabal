@@ -11,7 +11,7 @@ export const getProxyRequestHeaders = (
   const { client_version, tab_id } = req;
 
   const headers: Record<string, string> = {
-    ...omit(req.raw.headers, 'set-cookie'),
+    ...omit(req.raw.headers, 'set-cookie', AUTHORIZATION_HEADER),
     host: isDeployed ? appName : DEV_DOMAIN,
     [PROXY_VERSION_HEADER]: PROXY_VERSION,
   };
@@ -33,8 +33,12 @@ export const getProxyRequestHeaders = (
 
 const exists = (value: string): boolean => value.length > 0;
 
-const omit = <T extends Record<string, unknown>, K extends keyof T>(obj: T, key: K): Omit<T, K> => {
-  const { [key]: _, ...rest } = obj;
+const omit = <T extends Record<string, unknown>, K extends keyof T>(obj: T, ...keys: K[]): Omit<T, K> => {
+  const rest = { ...obj };
+
+  for (const key of keys) {
+    delete rest[key];
+  }
 
   return rest;
 };

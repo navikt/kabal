@@ -177,8 +177,10 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
               hasOwn(data.session, 'active') &&
               data.session.active === true
             ) {
-              console.debug('Reconnecting Yjs...');
-              pushLog('Reconnecting Yjs...');
+              console.debug(`Reconnecting Yjs after close code ${event.code} (${event.reason || 'no reason'})...`);
+              pushLog('Reconnecting Yjs...', {
+                context: { ...context, code: event.code.toString(), reason: event.reason },
+              });
               span.setAttribute('collaboration.close_action', 'reconnect_after_session_check');
               yjs.connect();
             } else {
