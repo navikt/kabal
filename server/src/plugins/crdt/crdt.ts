@@ -22,6 +22,38 @@ export const CRDT_PLUGIN_ID = 'crdt';
 
 const log = getLogger(CRDT_PLUGIN_ID);
 
+/** hocuspocus 4 expects a Fetch API `Request`, but Fastify's websocket handler only gives us the raw Node request. */
+const toFetchRequest = (req: FastifyRequest): Request => {
+  const headers = new Headers();
+
+  for (const [key, value] of Object.entries(req.headers)) {
+    if (typeof value === 'string') {
+      headers.set(key, value);
+    } else if (Array.isArray(value)) {
+      headers.set(key, value.join(', '));
+    }
+  }
+
+  return new Request(`${req.protocol}://${req.hostname}${req.url}`, { headers });
+};
+
+/** ws delivers message payloads as `string | Buffer | ArrayBuffer | Buffer[]`, but hocuspocus expects a single `Uint8Array`. */
+const toBuffer = (data: string | Buffer | ArrayBuffer | Buffer[]): Buffer => {
+  if (Buffer.isBuffer(data)) {
+    return data;
+  }
+
+  if (Array.isArray(data)) {
+    return Buffer.concat(data);
+  }
+
+  if (data instanceof ArrayBuffer) {
+    return Buffer.from(data);
+  }
+
+  return Buffer.from(data);
+};
+
 const logReq = (msg: string, req: FastifyRequest, data: AnyObject, level: Level = 'info', error?: unknown) => {
   const { tab_id, client_version } = req;
   const body: LogArgs = { msg, tab_id, client_version, data };
@@ -158,17 +190,23 @@ export const crdtPlugin = fastifyPlugin(
           traceparent,
         };
 
+        // hocuspocus 4 no longer wires up the socket itself - `handleConnection` only returns a
+        // `ClientConnection` that the integration must feed manually by forwarding the socket's
+        // `message`/`close` events to `handleMessage`/`handleClose`.
+        const clientConnection = collaborationServer.handleConnection(socket, toFetchRequest(req), context);
+
+        socket.on('message', (data: string | Buffer | ArrayBuffer | Buffer[]) => {
+          clientConnection.handleMessage(toBuffer(data));
+        });
+
         // hocuspocus builds the `onDisconnect` payload without the close event, so the hook cannot
         // tell why a connection ended. Listen on the socket itself instead. Code 1006 means the TCP
         // connection was torn down without a close frame - i.e. the network, the ingress or the
         // sidecar - while any other code means one of the two ends closed deliberately.
         socket.on('close', (code: number, reason: Buffer) => {
           logReq('Websocket closed', req, { behandlingId, dokumentId, code, reason: reason.toString() });
+          clientConnection.handleClose({ code, reason: reason.toString() });
         });
-
-        // Register message handler immediately to avoid losing the client's auth message.
-        // Token validation is handled by onConnect/onAuthenticate hooks
-        collaborationServer.handleConnection(socket, req.raw, context);
       },
     );
 

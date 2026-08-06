@@ -1,4 +1,3 @@
-import type { IncomingHttpHeaders } from 'node:http';
 import { Hocuspocus } from '@hocuspocus/server';
 import { validateToken } from '@navikt/oasis';
 import { applyUpdateV2 } from 'yjs';
@@ -22,7 +21,9 @@ const teamLog = getTeamLogger('collaboration');
 
 export const collaborationServer = new Hocuspocus({
   name: 'kabal-collaboration-server',
-  timeout: 5_000,
+  // Idle connections are only kept alive by awareness updates (~every 15s) in hocuspocus v4 -
+  // must exceed that interval with margin, or authenticated-but-idle clients get closed with 4408.
+  timeout: 60_000,
   debounce: DEBOUNCE_MS,
   maxDebounce: 15_000,
 
@@ -257,8 +258,8 @@ export const collaborationServer = new Hocuspocus({
     });
   },
 
-  onStoreDocument: async ({ context, document }) => {
-    if (!isConnectionContext(context)) {
+  onStoreDocument: async ({ lastContext, document }) => {
+    if (!isConnectionContext(lastContext)) {
       log.error({ msg: 'Tried to store document without context' });
 
       teamLog.debug({
@@ -266,13 +267,13 @@ export const collaborationServer = new Hocuspocus({
         data: {
           document: JSON.stringify(getDocumentJson(document)),
           context: JSON.stringify({
-            ...context,
+            ...lastContext,
             abortController: undefined,
             accessToken: undefined,
             cookie: undefined,
-            hasAbortController: !!context.hasAbortController,
-            accessTokenLength: context.accessToken?.length ?? 'undefined',
-            cookieLength: context.cookie?.length ?? 'undefined',
+            hasAbortController: !!lastContext.hasAbortController,
+            accessTokenLength: lastContext.accessToken?.length ?? 'undefined',
+            cookieLength: lastContext.cookie?.length ?? 'undefined',
           }),
         },
       });
@@ -280,11 +281,11 @@ export const collaborationServer = new Hocuspocus({
       throw getCloseEvent('INVALID_CONTEXT', 4401);
     }
 
-    return withCollaborationSpan('onStoreDocument', context, async () => {
+    return withCollaborationSpan('onStoreDocument', lastContext, async () => {
       try {
-        await setDocument(context, document);
+        await setDocument(lastContext, document);
 
-        logContext('Saved document to database', context, 'debug');
+        logContext('Saved document to database', lastContext, 'debug');
       } catch (error) {
         // Auth failures already carry a precise close code. Keep it so the client can react to 4401.
         if (isCloseEvent(error)) {
@@ -300,13 +301,13 @@ export const collaborationServer = new Hocuspocus({
     });
   },
 
-  afterStoreDocument: async ({ context }) => {
-    if (!isConnectionContext(context)) {
+  afterStoreDocument: async ({ lastContext }) => {
+    if (!isConnectionContext(lastContext)) {
       return;
     }
 
-    return withCollaborationSpan('afterStoreDocument', context, async () => {
-      logContext('After store document', context, 'debug');
+    return withCollaborationSpan('afterStoreDocument', lastContext, async () => {
+      logContext('After store document', lastContext, 'debug');
     });
   },
 
@@ -338,8 +339,8 @@ export const collaborationServer = new Hocuspocus({
  *
  * @returns Seconds until the access token expires.
  */
-const setAccessToken = async (context: ConnectionContext, headers: IncomingHttpHeaders): Promise<number> => {
-  const accessToken = stripBearer(headers.authorization);
+const setAccessToken = async (context: ConnectionContext, headers: Headers): Promise<number> => {
+  const accessToken = stripBearer(headers.get('authorization') ?? undefined);
 
   if (accessToken === undefined) {
     logContext('Missing Authorization header: onConnect', context, 'warn');

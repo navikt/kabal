@@ -20,7 +20,7 @@ export const getValkeyConfig = (): ValkeyOptions | null => {
 };
 
 export const createValkeyClient = (options: ValkeyOptions): ValkeyClientType => {
-  const client = createClient({ ...options, pingInterval: 30_000 });
+  const client: ValkeyClientType = createClient({ ...options, pingInterval: 30_000 });
 
   client.on('error', (error) => log.error({ msg: 'Valkey client error', error }));
 
