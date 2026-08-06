@@ -7,12 +7,14 @@ import {
   type Extension,
   type Hocuspocus,
   IncomingMessage,
+  isTransactionOrigin,
   MessageReceiver,
   OutgoingMessage,
   type onAwarenessUpdatePayload,
   type onChangePayload,
   type onConfigurePayload,
   type onDisconnectPayload,
+  type TransactionOrigin,
 } from '@hocuspocus/server';
 import { getLogger } from '@/logger';
 import type { ValkeyOptions } from '@/valkey/types';
@@ -26,7 +28,7 @@ export class ValkeyExtension implements Extension {
   readonly #disconnectDelay = 1_000;
   readonly #valkeyConnectionRetryDelay = 100;
   // Referenced here: https://github.com/ueberdosis/hocuspocus/blob/main/packages/server/src/Hocuspocus.ts#L412
-  readonly #valkeyTransactionOrigin = '__hocuspocus__redis__origin__';
+  readonly #valkeyTransactionOrigin: TransactionOrigin = { source: 'redis' };
   readonly #pub: ValkeyClientType;
   readonly #sub: ValkeyClientType;
   readonly #messagePrefix: Buffer;
@@ -199,10 +201,12 @@ export class ValkeyExtension implements Extension {
     return this.#pub.publish(this.#getKey(documentName), this.#encodeMessage(awarenessMessage.toUint8Array()));
   }
 
-  async afterStoreDocument({ socketId }: afterStoreDocumentPayload) {
+  async afterStoreDocument({ lastTransactionOrigin }: afterStoreDocumentPayload) {
     // If the change was initiated by a directConnection, we need to delay this hook to make sure sync can finish first.
     // For provider connections, this usually happens in the onDisconnect hook.
-    if (socketId === 'server' && this.#disconnectDelay > 0) {
+    const isDirectConnection = isTransactionOrigin(lastTransactionOrigin) && lastTransactionOrigin.source === 'local';
+
+    if (isDirectConnection && this.#disconnectDelay > 0) {
       await delay(this.#disconnectDelay);
     }
   }

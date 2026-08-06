@@ -32,7 +32,7 @@ export const processErrors = () => {
       });
 
       for (const [, document] of collaborationServer.documents) {
-        for (const [, { connection }] of document.connections) {
+        for (const connection of document.getConnections()) {
           try {
             if (isConnectionContext(connection.context)) {
               endActivity(connection.context);
