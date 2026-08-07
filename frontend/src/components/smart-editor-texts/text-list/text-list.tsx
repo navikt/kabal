@@ -1,6 +1,6 @@
 import { FileTextIcon, PercentIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { Box, HGrid, HStack, Loader, VStack } from '@navikt/ds-react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { DateTime } from '@/components/datetime/datetime';
 import { MaltekstseksjontLinkListItem } from '@/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-link-list-item';
 import { StatusTag } from '@/components/maltekstseksjoner/status-tag';

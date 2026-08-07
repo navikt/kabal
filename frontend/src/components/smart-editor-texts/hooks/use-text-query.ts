@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { useTextType } from '@/components/smart-editor-texts/hooks/use-text-type';
 import type { IGetTextsParams } from '@/types/common-text-types';
 

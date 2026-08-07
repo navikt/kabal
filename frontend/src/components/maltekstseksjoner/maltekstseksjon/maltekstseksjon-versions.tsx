@@ -1,6 +1,6 @@
 import { VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { DraftMaltekstSection } from '@/components/maltekstseksjoner/maltekstseksjon/draft/draft';
 import { PublishedMaltekstSection } from '@/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon-published';
 import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';

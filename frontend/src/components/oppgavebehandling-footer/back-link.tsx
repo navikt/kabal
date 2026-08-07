@@ -1,6 +1,6 @@
 import { ChevronLeftIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 
 export const BackLink = () => (
   <Button

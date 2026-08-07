@@ -1,7 +1,7 @@
 import { ArrowsCirclepathIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Box, Button, CopyButton, Heading, HStack, Skeleton, Table, Tooltip, VStack } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Finish } from '@/components/admin/merkantil-task-list/finish';
 import { SetStatusFilter, StatusFilter } from '@/components/admin/merkantil-task-list/set-status-filter';
 import { Alert } from '@/components/alert/alert';

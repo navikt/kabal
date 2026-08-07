@@ -1,5 +1,5 @@
 import { HGrid, Tag } from '@navikt/ds-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { StatusTag, type StatusTagProps } from '@/components/maltekstseksjoner/status-tag';
 import { isoDateTimeToPretty } from '@/domain/date';
 

@@ -1,6 +1,6 @@
 import { BodyShort, Box, Heading } from '@navikt/ds-react';
 import { useContext, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { RoleList } from '@/components/role-list/role-list';
 import { ENVIRONMENT } from '@/environment';
