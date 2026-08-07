@@ -1,0 +1,15 @@
+version: 2
+
+registries:
+  private-registry:
+    type: npm-registry
+    url: https://npm.pkg.github.com
+    token: ${{ secrets.READER_TOKEN }}
+
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    registries:
+      - private-registry
