@@ -6,6 +6,7 @@ import { accessRightsApi } from '@/redux-api/access-rights';
 import { brukerApi } from '@/redux-api/bruker';
 import { collaborationApi } from '@/redux-api/collaboration';
 import { forlengetBehandlingstidApi } from '@/redux-api/forlenget-behandlingstid';
+import { gosysOppgaverApi } from '@/redux-api/gosys-oppgaver';
 import { kabalInternalApi } from '@/redux-api/internal';
 import { journalposterApi } from '@/redux-api/journalposter';
 import { kvalitetsvurderingV1Api } from '@/redux-api/kaka-kvalitetsvurdering/v1';
@@ -47,6 +48,7 @@ export const reduxStore = configureStore({
       journalposterApi.middleware,
       searchApi.middleware,
       userApi.middleware,
+      gosysOppgaverApi.middleware,
       logiskeVedleggApi.middleware,
       svarbrevApi.middleware,
       collaborationApi.middleware,

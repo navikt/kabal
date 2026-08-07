@@ -3,6 +3,7 @@ import { accessRightsApi } from '@/redux-api/access-rights';
 import { brukerApi } from '@/redux-api/bruker';
 import { collaborationApi } from '@/redux-api/collaboration';
 import { forlengetBehandlingstidApi } from '@/redux-api/forlenget-behandlingstid';
+import { gosysOppgaverApi } from '@/redux-api/gosys-oppgaver';
 import { kabalInternalApi } from '@/redux-api/internal';
 import { journalposterApi } from '@/redux-api/journalposter';
 import { kvalitetsvurderingV1Api } from '@/redux-api/kaka-kvalitetsvurdering/v1';
@@ -37,6 +38,7 @@ export const rootReducer = combineReducers({
   [journalposterApi.reducerPath]: journalposterApi.reducer,
   [searchApi.reducerPath]: searchApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
+  [gosysOppgaverApi.reducerPath]: gosysOppgaverApi.reducer,
   [logiskeVedleggApi.reducerPath]: logiskeVedleggApi.reducer,
   [svarbrevApi.reducerPath]: svarbrevApi.reducer,
   [collaborationApi.reducerPath]: collaborationApi.reducer,

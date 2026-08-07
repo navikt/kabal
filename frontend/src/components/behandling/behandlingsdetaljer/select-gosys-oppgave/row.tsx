@@ -6,7 +6,6 @@ import {
 import { CopyIdButton } from '@/components/copy-button/copy-id-button';
 import { GosysBeskrivelseTabs } from '@/components/gosys/beskrivelse/beskrivelse-tabs';
 import { isoDateTimeToPretty, isoDateToPretty } from '@/domain/date';
-import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useFullTemaNameFromIdOrLoading } from '@/hooks/use-kodeverk-ids';
 import { usePushEvent } from '@/observability';
 import { useSetGosysOppgaveMutation } from '@/redux-api/oppgaver/mutations/set-gosys-oppgave';
@@ -15,25 +14,36 @@ import type { INavEmployee } from '@/types/bruker';
 import { GosysStatus, type ListGosysOppgave } from '@/types/oppgavebehandling/oppgavebehandling';
 
 export interface Props {
-  oppgaveId: string;
+  oppgaveId?: string;
   selectedGosysOppgave: ListGosysOppgave | undefined;
   gosysOppgave: ListGosysOppgave;
   showFerdigstilt: boolean;
+  onSelectGosysOppgave?: (gosysOppgave: ListGosysOppgave) => void;
+  canEdit?: boolean;
 }
 
-export const Row = ({ gosysOppgave, selectedGosysOppgave, oppgaveId, showFerdigstilt }: Props) => {
+export const Row = ({
+  gosysOppgave,
+  selectedGosysOppgave,
+  oppgaveId,
+  showFerdigstilt,
+  onSelectGosysOppgave,
+  canEdit,
+}: Props) => {
   const [setGosysOppgave, { isLoading }] = useSetGosysOppgaveMutation({ fixedCacheKey: oppgaveId });
   const temaName = useFullTemaNameFromIdOrLoading(gosysOppgave.temaId);
   const pushEvent = usePushEvent();
 
   const onSelect = () => {
-    pushEvent('select-gosys-oppgave', {
-      oppgaveId,
-      nextGosysOppgaveStatus: gosysOppgave.status,
-      previousGosysOppgaveStatus: selectedGosysOppgave?.status ?? 'NONE',
-    });
-
-    setGosysOppgave({ oppgaveId, gosysOppgaveId: gosysOppgave.id });
+    if (oppgaveId) {
+      pushEvent('select-gosys-oppgave', {
+        oppgaveId,
+        nextGosysOppgaveStatus: gosysOppgave.status,
+        previousGosysOppgaveStatus: selectedGosysOppgave?.status ?? 'NONE',
+      });
+      setGosysOppgave({ oppgaveId, gosysOppgaveId: gosysOppgave.id });
+    }
+    onSelectGosysOppgave?.(gosysOppgave);
   };
 
   const selected = selectedGosysOppgave !== undefined && selectedGosysOppgave.id === gosysOppgave.id;
@@ -83,7 +93,13 @@ export const Row = ({ gosysOppgave, selectedGosysOppgave, oppgaveId, showFerdigs
         <Enhet enhet={gosysOppgave.tildeltEnhetsnr} />
       </Table.DataCell>
       <Table.DataCell>
-        <Selection selected={selected} gosysOppgave={gosysOppgave} onSelect={onSelect} isSelecting={isLoading} />
+        <Selection
+          selected={selected}
+          gosysOppgave={gosysOppgave}
+          onSelect={onSelect}
+          isSelecting={isLoading}
+          canEdit={canEdit}
+        />
       </Table.DataCell>
     </Table.ExpandableRow>
   );
@@ -94,11 +110,10 @@ interface SelectionProps {
   selected: boolean;
   onSelect: () => void;
   isSelecting: boolean;
+  canEdit?: boolean;
 }
 
-const Selection = ({ gosysOppgave, selected, onSelect, isSelecting }: SelectionProps) => {
-  const canEdit = useIsTildeltSaksbehandler();
-
+const Selection = ({ gosysOppgave, selected, onSelect, isSelecting, canEdit }: SelectionProps) => {
   if (selected) {
     return (
       <Tooltip content="Valgt">

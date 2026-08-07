@@ -15,11 +15,11 @@ import { useSearchEnheterQuery } from '@/redux-api/search';
 import type { INavEmployee } from '@/types/bruker';
 import type { Enhet, ListGosysOppgave } from '@/types/oppgavebehandling/oppgavebehandling';
 
-interface ScopedSortState extends SortState {
+export interface ScopedSortState extends SortState {
   orderBy: keyof ListGosysOppgave;
 }
 
-const getDirection = (sortState: ScopedSortState, sortKey: keyof ListGosysOppgave): SortState['direction'] => {
+export const getDirection = (sortState: ScopedSortState, sortKey: keyof ListGosysOppgave): SortState['direction'] => {
   if (sortState.orderBy !== sortKey) {
     return 'ascending';
   }
@@ -29,7 +29,7 @@ const getDirection = (sortState: ScopedSortState, sortKey: keyof ListGosysOppgav
 
 const isINavEmployee = (_: unknown, key: string): _ is INavEmployee => key === 'opprettetAv' || key === 'endretAv';
 
-const sortData = (
+export const sortData = (
   data: ListGosysOppgave[],
   { direction, orderBy }: ScopedSortState,
   enheter: Enhet[],
@@ -304,6 +304,7 @@ const SortableTable = ({
 }: SortableTableProps) => {
   const { data: enheter = [] } = useSearchEnheterQuery({});
   const [sort, setSort] = useState<ScopedSortState>({ direction: 'ascending', orderBy: 'opprettetTidspunkt' });
+  const canEdit = useIsTildeltSaksbehandler();
 
   const handleSort = (sortKey: string) => {
     if (!isKeyofGosysOppgave(sortKey)) {
@@ -347,6 +348,7 @@ const SortableTable = ({
               selectedGosysOppgave={selectedGosysOppgave}
               oppgaveId={oppgaveId}
               showFerdigstilt={showFerdigstilt}
+              canEdit={canEdit}
             />
           ))}
         </Table.Body>
@@ -361,7 +363,7 @@ interface HeaderProps {
   isFetching?: boolean;
 }
 
-const Header = ({ children, refetch, isFetching = false }: HeaderProps) => (
+export const Header = ({ children, refetch, isFetching = false }: HeaderProps) => (
   <Heading level="1" size="xsmall" spacing>
     <HStack align="center" justify="start" gap="space-8">
       <span>{children}</span>
@@ -401,4 +403,5 @@ const GOSYS_OPPGAVE_KEYS: (keyof ListGosysOppgave)[] = [
 
 const GOSYS_STATUS_KEY_STRINGS: string[] = GOSYS_OPPGAVE_KEYS.map((key) => key);
 
-const isKeyofGosysOppgave = (key: string): key is keyof ListGosysOppgave => GOSYS_STATUS_KEY_STRINGS.includes(key);
+export const isKeyofGosysOppgave = (key: string): key is keyof ListGosysOppgave =>
+  GOSYS_STATUS_KEY_STRINGS.includes(key);
