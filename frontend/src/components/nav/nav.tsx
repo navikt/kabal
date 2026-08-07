@@ -13,7 +13,7 @@ import {
   TasklistIcon,
 } from '@navikt/aksel-icons';
 import { HStack } from '@navikt/ds-react';
-import { NavLink, type NavLinkProps } from 'react-router-dom';
+import { NavLink, type NavLinkProps } from 'react-router';
 import { DEFAULT_STATUS_FILTER } from '@/components/smart-editor-texts/status-filter/status-filter';
 import { useHasAnyOfRoles } from '@/hooks/use-has-role';
 import { Role } from '@/types/bruker';

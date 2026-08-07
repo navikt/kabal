@@ -1,6 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { TEXT_TYPE_BASE_PATH } from '@/domain/redaktør-paths';
 import { REGELVERK_TYPE, type TextTypes } from '@/types/common-text-types';
 import { Language } from '@/types/texts/language';

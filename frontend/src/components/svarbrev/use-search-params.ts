@@ -1,6 +1,6 @@
 import type { SortState } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { ActiveEnum, ALL_TYPES, isActiveValue, isTypeFilter, type TypeFilter } from '@/components/svarbrev/filters';
 
 export const useSvarbrevSearchParams = () => {

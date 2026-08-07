@@ -1,7 +1,7 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Alert } from '@/components/alert/alert';
 import { TextVersions } from '@/components/maltekstseksjoner/texts/text-versions';
 import { useNavigateMaltekstseksjoner } from '@/hooks/use-navigate-maltekstseksjoner';

@@ -1,5 +1,5 @@
 import { useCallback, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { DragAndDropContext } from '@/components/maltekstseksjoner/drag-and-drop/drag-context';
 import { LoadTextListItem } from '@/components/maltekstseksjoner/maltekstseksjon/list-item';
 import { TextListItem } from '@/components/maltekstseksjoner/text-list-item';

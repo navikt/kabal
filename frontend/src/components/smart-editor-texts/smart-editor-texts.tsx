@@ -1,7 +1,7 @@
 import { PlusIcon } from '@navikt/aksel-icons';
 import { Button, HGrid, HStack, Search } from '@navikt/ds-react';
 import { useCallback, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { SetStandaloneTextLanguage } from '@/components/set-redaktoer-language/set-standalone-text-language';
 import { LoadText } from '@/components/smart-editor-texts/edit/load-text';
 import { Filters } from '@/components/smart-editor-texts/filters';

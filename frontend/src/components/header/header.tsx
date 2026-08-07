@@ -1,5 +1,5 @@
 import { InternalHeader } from '@navikt/ds-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import { Notifications } from '@/components/header/notifications/notifications';
 import { NotificationsProvider } from '@/components/header/notifications/state';
 import { User } from '@/components/header/user-menu/user';

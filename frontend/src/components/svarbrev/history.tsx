@@ -2,7 +2,7 @@ import { ClockDashedIcon } from '@navikt/aksel-icons';
 import { Box, type BoxProps, Button, HStack, Modal, Skeleton, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import {
   type ChangeSet,
