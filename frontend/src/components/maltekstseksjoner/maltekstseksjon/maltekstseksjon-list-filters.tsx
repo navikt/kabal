@@ -1,5 +1,5 @@
 import { HStack } from '@navikt/ds-react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { useUtfallOptions } from '@/components/smart-editor-texts/hooks/use-options';
 import { useTextQuery } from '@/components/smart-editor-texts/hooks/use-text-query';
 import { TemplateSectionFilter, UtfallSelect } from '@/components/smart-editor-texts/query-filter-selects';

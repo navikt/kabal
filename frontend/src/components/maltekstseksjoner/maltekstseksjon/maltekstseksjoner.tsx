@@ -1,7 +1,7 @@
 import { PuzzlePieceIcon } from '@navikt/aksel-icons';
 import { Box, HGrid, HStack, Search, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router';
 import { CreateMaltekstseksjon } from '@/components/maltekstseksjoner/create';
 import { DragAndDropContextElement } from '@/components/maltekstseksjoner/drag-and-drop/drag-context';
 import { Maltekstseksjon } from '@/components/maltekstseksjoner/maltekstseksjon/maltekstseksjon';

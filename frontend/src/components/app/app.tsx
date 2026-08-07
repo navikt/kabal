@@ -1,6 +1,6 @@
 import { StrictMode, useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { AppErrorBoundary } from '@/components/app/error-boundary';
 import { Router } from '@/components/app/router';
 import { StaticDataLoader } from '@/components/app/static-data-context';

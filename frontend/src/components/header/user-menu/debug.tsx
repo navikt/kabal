@@ -2,7 +2,7 @@ import { BugIcon, CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Loader, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useSendDebugInfo } from '@/components/header/user-menu/send-debug-hook';
 import { ENVIRONMENT } from '@/environment';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';

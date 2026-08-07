@@ -1,7 +1,7 @@
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Box, Button, Detail, HStack, Skeleton, Switch, Table, Tooltip } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import type { ScoredNamedSvarbrevSetting } from '@/components/svarbrev/filter-sort';
 import { SvarbrevSettingHistory } from '@/components/svarbrev/history';
 import { PdfModal } from '@/components/svarbrev/modal/modal';

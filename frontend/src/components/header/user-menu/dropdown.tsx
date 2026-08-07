@@ -1,6 +1,6 @@
 import { ArrowCirclepathIcon, BranchingIcon, CheckmarkCircleIcon, CogIcon, LeaveIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Tooltip } from '@navikt/ds-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { AppThemeSwitcher } from '@/components/header/user-menu/app-theme';
 import { SendDebugInfoButton } from '@/components/header/user-menu/debug';
 import { useIsUpToDate } from '@/components/version-checker/version-checker';

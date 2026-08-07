@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 /** Returns oppgave ID. Logs an error if used outside of oppgave context. */
 export const useOppgaveId = (): string | typeof skipToken => {

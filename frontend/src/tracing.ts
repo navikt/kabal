@@ -1,7 +1,7 @@
 import { createReactRouterV7Options, ReactIntegration } from '@grafana/faro-react';
 import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
-import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router-dom';
+import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router';
 import { ENVIRONMENT } from '@/environment';
 
 const SERVICE_NAME = 'kabal-frontend-client';

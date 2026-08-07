@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { NoAccessPage } from '@/components/app/no-access-page';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import type { Role } from '@/types/bruker';

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { fuzzySearch } from '@/components/smart-editor/gode-formuleringer/fuzzy-search';
 import { splitQuery } from '@/components/smart-editor/gode-formuleringer/split-query';
 import { QueryKey, SortKey } from '@/components/smart-editor-texts/sortable-header';
