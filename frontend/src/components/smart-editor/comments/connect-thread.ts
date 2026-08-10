@@ -15,6 +15,8 @@ export const connectCommentThread = (editor: RichTextEditor, selection: Selectio
       at: selection ?? undefined,
     },
   );
+
+  editor.tf.deselect();
 };
 
 export const disconnectCommentThread = (editor: RichTextEditor, threadId: string) => {
