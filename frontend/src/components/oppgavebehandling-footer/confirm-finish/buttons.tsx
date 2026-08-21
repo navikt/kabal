@@ -16,7 +16,7 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
     return null;
   }
 
-  const { typeId, resultat, requiresGosysOppgave } = oppgave;
+  const { typeId, resultat, requiresGosysOppgave, fagsystemId } = oppgave;
   const { utfallId } = resultat;
 
   switch (typeId) {
@@ -108,7 +108,9 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
             />
           );
         case UtfallEnum.HENVIST:
-          return <TrygderettenHenvistButtonGroup cancel={cancel} finishDisabled={finishDisabled} />;
+          return (
+            <TrygderettenHenvistButtonGroup cancel={cancel} finishDisabled={finishDisabled} fagsystemId={fagsystemId} />
+          );
       }
   }
 };

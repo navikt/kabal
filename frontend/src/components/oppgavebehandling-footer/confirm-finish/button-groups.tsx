@@ -2,6 +2,7 @@ import { Box, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import { CancelButton } from '@/components/oppgavebehandling-footer/confirm-finish/cancel-button';
 import { FinishButton } from '@/components/oppgavebehandling-footer/confirm-finish/finish-button';
 import type { ButtonsProps, GosysAwareButtonsProps } from '@/components/oppgavebehandling-footer/confirm-finish/types';
+import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { UpdateInGosys } from '@/components/oppgavebehandling-footer/update-in-gosys/update-in-gosys';
 
 interface GosysAwareFinishButtonProps {
@@ -106,12 +107,19 @@ export const TrygderettenOpphevetButtonGroup = ({
  * Used for `ANKE_I_TRYGDERETTEN` with utfall `HENVIST`. Shows a reminder to create an Arena endringsoppgave above a
  * simple "Fullfør" and cancel button pair.
  */
-export const TrygderettenHenvistButtonGroup = ({ cancel, finishDisabled }: ButtonsProps) => (
-  <VStack gap="space-16">
-    <InlineMessage status="info">
-      Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten har
-      henvist.
-    </InlineMessage>
+export const TrygderettenHenvistButtonGroup = ({
+  cancel,
+  finishDisabled,
+  fagsystemId,
+}: ButtonsProps & { fagsystemId: string }) =>
+  fagsystemId === FAGSYSTEM_ARENA ? (
+    <VStack gap="space-16">
+      <InlineMessage status="info">
+        Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten har
+        henvist.
+      </InlineMessage>
+      <SimpleButtonGroup cancel={cancel} finishDisabled={finishDisabled} />
+    </VStack>
+  ) : (
     <SimpleButtonGroup cancel={cancel} finishDisabled={finishDisabled} />
-  </VStack>
-);
+  );
