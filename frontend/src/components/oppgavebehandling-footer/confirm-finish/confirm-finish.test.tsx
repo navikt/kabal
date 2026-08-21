@@ -379,8 +379,8 @@ describe('ConfirmFinish', () => {
         ).not.toBeInTheDocument();
       });
 
-      test('Henvist', async () => {
-        mockOppgave(type, UtfallEnum.HENVIST, false);
+      test('Henvist + Arena', async () => {
+        mockOppgave(type, UtfallEnum.HENVIST, false, FAGSYSTEM_ARENA);
         renderConfirmFinish();
         const button = 'Fullfør';
         expect(screen.getByRole('button', { name: button })).toBeVisible();
@@ -398,6 +398,22 @@ describe('ConfirmFinish', () => {
         await act(async () => fireEvent.click(screen.getByRole('button', { name: button })));
         expect(
           screen.queryByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' }),
+        ).not.toBeInTheDocument();
+      });
+
+      test('Henvist, not Arena', async () => {
+        mockOppgave(type, UtfallEnum.HENVIST, false);
+        renderConfirmFinish();
+        const button = 'Fullfør';
+        expect(screen.getByRole('button', { name: button })).toBeVisible();
+
+        const items = await screen.findAllByRole('button');
+        expect(items).toHaveLength(2);
+
+        expect(
+          screen.queryByText(
+            'Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten har henvist.',
+          ),
         ).not.toBeInTheDocument();
       });
     });
