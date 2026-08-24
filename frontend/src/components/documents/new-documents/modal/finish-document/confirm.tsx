@@ -46,6 +46,8 @@ export const Confirm = ({
     );
   }
 
+  const loading = isFinishing || isValidating;
+
   return (
     <HStack justify="start" gap="space-0 space-16" {...rest}>
       <Button
@@ -53,7 +55,8 @@ export const Confirm = ({
         size="small"
         variant="primary"
         onClick={onFinish}
-        loading={isFinishing || isValidating}
+        disabled={loading}
+        loading={loading}
         icon={<PaperplaneIcon aria-hidden />}
       >
         {actionText}
@@ -64,7 +67,7 @@ export const Confirm = ({
         size="small"
         variant="secondary"
         onClick={() => setShowConfirm(false)}
-        disabled={isFinishing || isValidating}
+        disabled={loading}
         icon={<XMarkIcon aria-hidden />}
       >
         Avbryt
