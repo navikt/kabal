@@ -3,7 +3,7 @@ import fastifyPlugin from 'fastify-plugin';
 import { DEV_URL, isDeployed } from '@/config/env';
 import { getDuration } from '@/helpers/duration';
 import { getProxyRequestHeaders } from '@/helpers/prepare-request-headers';
-import { getLogger } from '@/logger';
+import { getLogger, type Level } from '@/logger';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/obo-token';
 import { SERVER_TIMING_HEADER, SERVER_TIMING_PLUGIN_ID } from '@/plugins/server-timing';
 
@@ -18,6 +18,18 @@ declare module 'fastify' {
 export interface ApiProxyPluginOptions {
   appNames: string[];
 }
+
+const statusCodeToLogLevel = (statusCode: number): Level => {
+  if (statusCode >= 500) {
+    return 'error';
+  }
+
+  if (statusCode >= 400) {
+    return 'warn';
+  }
+
+  return 'debug';
+};
 
 export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
   async (app, { appNames }) => {
@@ -37,7 +49,9 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
       const { method, url, tab_id, client_version, proxyStartTime } = req;
       const responseTime = getDuration(proxyStartTime);
 
-      log.debug({
+      const level = statusCodeToLogLevel(reply.statusCode);
+
+      log[level]({
         msg: `Proxy response (${appName}) ${reply.statusCode} ${method} ${url} ${responseTime}ms`,
         client_version,
         tab_id,
