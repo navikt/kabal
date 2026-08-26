@@ -1,16 +1,17 @@
 import { BodyShort, Button, ConfirmationPanel, Heading, Modal, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { format } from 'date-fns';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Alert } from '@/components/alert/alert';
 import { FORMAT, PRETTY_FORMAT } from '@/components/date-picker/constants';
 import { GrafanaDomainProvider } from '@/components/grafana-domain-context/grafana-domain-context';
+import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
 import { Beskrivelse, getInitialBeskrivelse } from '@/components/oppgavebehandling-footer/update-in-gosys/beskrivelse';
 import { Enhetmappe } from '@/components/oppgavebehandling-footer/update-in-gosys/enhetmappe';
 import { GosysOppgave } from '@/components/oppgavebehandling-footer/update-in-gosys/gosys-oppgave';
 import { ReceivingEnhet } from '@/components/oppgavebehandling-footer/update-in-gosys/receiving-enhet';
 import { ValidationSummary } from '@/components/oppgavebehandling-footer/validation-summary';
-import { type IValidationSection, isReduxValidationResponse } from '@/functions/error-type-guard';
+import { isReduxValidationResponse } from '@/functions/error-type-guard';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useFinishOppgavebehandlingWithUpdateInGosysMutation } from '@/redux-api/oppgaver/mutations/behandling';
 import { useSetGosysOppgaveMutation } from '@/redux-api/oppgaver/mutations/set-gosys-oppgave';
@@ -72,7 +73,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
   const { data: gosysOppgave, isSuccess: hasGosysOppgave } = useGetGosysOppgaveQuery(
     gosysOppgaveId === null ? skipToken : oppgavebehandling.id,
   );
-  const [validationSectionErrors, setValidationSectionErrors] = useState<IValidationSection[]>([]);
+  const { validationSectionErrors, setValidationSectionErrors } = useContext(ValidationErrorContext);
 
   const gosysOppgaveIsOpen = hasGosysOppgave && gosysOppgave.editable;
 
@@ -158,12 +159,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
                   oppgavebehandling={oppgavebehandling}
                 />
 
-                <Enhetmappe
-                  enhetId={selectedEnhet}
-                  selectedMappe={selectedMappe}
-                  setSelectedMappe={setSelectedMappe}
-                  oppgavebehandling={oppgavebehandling}
-                />
+                <Enhetmappe enhetId={selectedEnhet} selectedMappe={selectedMappe} setSelectedMappe={setSelectedMappe} />
               </VStack>
             ) : (
               <ConfirmIgnoreOrRequiredWarning

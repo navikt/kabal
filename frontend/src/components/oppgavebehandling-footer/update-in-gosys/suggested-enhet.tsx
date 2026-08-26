@@ -1,11 +1,15 @@
 import { BodyShort, Button, HStack, Tag } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { useContext } from 'react';
+import { StaticDataContext } from '@/components/app/static-data-context';
 import { CheckmarkCircleFillIconColored } from '@/components/colored-icons/colored-icons';
-import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
+import { FAGSYSTEM_INFOTRYGD } from '@/components/oppgavebehandling-footer/fagsystem';
+import { useIsAnkeOrGbWithUtfallToTr } from '@/components/oppgavebehandling-footer/update-in-gosys/use-is-anke-or-gb-with-utfall-to-tr';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useGetGosysOppgaveQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import { useSearchEnheterQuery } from '@/redux-api/search';
-import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
+import type { IEnhet } from '@/types/bruker';
+import { SaksTypeEnum } from '@/types/kodeverk';
 import type { Enhet } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
@@ -16,33 +20,29 @@ interface Props {
   setSelectedEnhet: (enhet: string | null) => void;
 }
 
-const { TRUKKET, MEDHOLD, OPPHEVET } = UtfallEnum;
-
 export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, gosysOppgaveId }: Props) => {
   const { data: gosysOppgave, isLoading } = useGetGosysOppgaveQuery(gosysOppgaveId === null ? skipToken : id);
   const { data: oppgave } = useOppgave();
   const { data: enheter = [] } = useSearchEnheterQuery({});
+  const suggestOwnEnhet = useIsAnkeOrGbWithUtfallToTr();
+  const {
+    user: { ansattEnhet },
+  } = useContext(StaticDataContext);
 
   if (oppgave === undefined || gosysOppgave === undefined) {
     return null;
   }
 
-  const { utfallId } = oppgave.resultat;
+  const shouldSuggest =
+    suggestOwnEnhet || (typeId === SaksTypeEnum.KLAGE && oppgave.fagsystemId === FAGSYSTEM_INFOTRYGD);
 
-  const noSuggestion =
-    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
-    typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET ||
-    typeId === SaksTypeEnum.OMGJØRINGSKRAV ||
-    (typeId === SaksTypeEnum.ANKE && (utfallId === TRUKKET || utfallId === MEDHOLD || utfallId === OPPHEVET)) ||
-    (typeId === SaksTypeEnum.KLAGE && oppgave.fagsystemId === FAGSYSTEM_ARENA);
+  const { tildeltEnhetsnr } = gosysOppgave;
 
-  const { opprettetAvEnhet, tildeltEnhetsnr } = gosysOppgave;
-
-  if (noSuggestion || opprettetAvEnhet === null) {
+  if (!shouldSuggest) {
     return null;
   }
 
-  const suggestedEnhet = getSuggestedEnhet(typeId, tildeltEnhetsnr, opprettetAvEnhet, enheter);
+  const suggestedEnhet = getSuggestedEnhet(suggestOwnEnhet, ansattEnhet, tildeltEnhetsnr, enheter);
 
   if (isLoading) {
     return (
@@ -87,23 +87,16 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
 };
 
 const getSuggestedEnhet = (
-  typeId: SaksTypeEnum,
+  suggestOwnEnhet: boolean,
+  ansattEnhet: IEnhet,
   tildeltEnhetsnr: string,
-  opprettetAvEnhet: Enhet,
   enheter: Enhet[],
 ): Enhet => {
-  if (!shouldSuggestTildeltEnhet(typeId)) {
-    return opprettetAvEnhet;
+  if (suggestOwnEnhet) {
+    return { enhetsnr: ansattEnhet.id, navn: ansattEnhet.navn };
   }
 
-  const foundEnhet = enheter.find((enhet) => enhet.enhetsnr === tildeltEnhetsnr);
+  const tildeltenhet = enheter.find((enhet) => enhet.enhetsnr === tildeltEnhetsnr);
 
-  if (foundEnhet !== undefined) {
-    return foundEnhet;
-  }
-
-  return { enhetsnr: tildeltEnhetsnr, navn: 'Ukjent enhet' };
+  return { enhetsnr: tildeltEnhetsnr, navn: tildeltenhet?.navn ?? 'Ukjent enhet' };
 };
-
-const shouldSuggestTildeltEnhet = (typeId: SaksTypeEnum): boolean =>
-  typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK;

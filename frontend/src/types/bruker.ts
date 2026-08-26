@@ -1,6 +1,6 @@
 import type { Enhet } from '@/types/oppgavebehandling/oppgavebehandling';
 
-interface IEnhet {
+export interface IEnhet {
   id: string;
   navn: string;
   lovligeYtelser: string[];
