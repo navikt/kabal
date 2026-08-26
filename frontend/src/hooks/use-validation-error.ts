@@ -12,7 +12,8 @@ type Field =
   | 'utfall'
   | 'hjemmel'
   | 'underArbeid'
-  | 'ignoreGosysOppgave';
+  | 'ignoreGosysOppgave'
+  | 'gosysOppgaveUpdate';
 
 export const useValidationError = (field: Field): string | undefined => {
   const context = useContext(ValidationErrorContext);
