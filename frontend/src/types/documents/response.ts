@@ -25,3 +25,7 @@ export const UPLOAD_FILE_ERROR: Record<string, string> = {
   EMPTY: 'Filen er tom.',
   VIRUS: 'Filen inneholder virus.',
 };
+
+export interface FinishedDocumentResponse extends IModifiedDocumentResponse {
+  isMarkertAvsluttet: boolean;
+}
