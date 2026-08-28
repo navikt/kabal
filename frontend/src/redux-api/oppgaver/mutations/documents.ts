@@ -30,6 +30,7 @@ import {
   mottakerToInputMottaker,
 } from '@/types/documents/params';
 import {
+  type FinishedDocumentResponse,
   type ICreateVedleggResponse,
   type IModifiedDocumentResponse,
   type ISetParentResponse,
@@ -194,7 +195,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         }
       },
     }),
-    finishDocument: builder.mutation<IModifiedDocumentResponse, IFinishDocumentParams>({
+    finishDocument: builder.mutation<FinishedDocumentResponse, IFinishDocumentParams>({
       query: ({ oppgaveId, dokumentId }) => ({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/ferdigstill`,
         method: 'POST',
