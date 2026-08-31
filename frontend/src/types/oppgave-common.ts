@@ -35,7 +35,7 @@ export const UTSENDINGSKANAL: Record<Utsendingskanal, string> = {
 };
 
 export interface SearchPersonResponse {
-  id: string;
+  identifikator: string;
   name: string;
   type: IdType.FNR;
   available: boolean;
