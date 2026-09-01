@@ -3,7 +3,7 @@ import {
   Box,
   Button,
   type ButtonProps,
-  InlineMessage,
+  ErrorMessage,
   Popover,
   Tag,
   TextField,
@@ -94,6 +94,7 @@ export const SelectPopover = ({
 }: SelectPopoverProps) => {
   const searchRef = useRef<HTMLInputElement>(null);
   const popoverId = useId();
+  const errorId = useId();
 
   useEffect(() => {
     if (open) {
@@ -130,14 +131,15 @@ export const SelectPopover = ({
         aria-expanded={open}
         aria-label={label}
         aria-controls={open ? popoverId : undefined}
+        aria-describedby={errorId}
       >
         <span className="block truncate">{trigger}</span>
       </Button>
 
-      {typeof error === 'string' && error.length > 0 ? (
-        <InlineMessage size="small" status="error">
+      {typeof error === 'string' && error.length !== 0 ? (
+        <ErrorMessage id={errorId} showIcon size="small">
           {error}
-        </InlineMessage>
+        </ErrorMessage>
       ) : null}
 
       <Popover
