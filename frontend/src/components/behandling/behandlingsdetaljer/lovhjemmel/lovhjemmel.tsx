@@ -1,6 +1,7 @@
 import { HelpText, HStack, Label, Skeleton, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useId, useMemo } from 'react';
+import { PermitteringsårsakWarning } from '@/components/behandling/behandlingsdetaljer/permitteringsårsak-warning';
 import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { BegrunnelsespliktenSaksdataHjemlerLists } from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
 import { SærregelverketSaksdataHjemlerList } from '@/components/kvalitetsvurdering/v3/særregelverket/data';
@@ -111,6 +112,10 @@ export const Lovhjemmel = () => {
         scrollContainerRef={containerRef}
         readOnly={!canEdit}
       />
+
+      {selected?.includes(FTRL_4_7_FØRSTE_LEDD_PERMITTERINGSÅRSAK) ? (
+        <PermitteringsårsakWarning className="mt-2" />
+      ) : null}
     </VStack>
   );
 };
@@ -126,3 +131,5 @@ const getUpdate = (ids: string[]) => ({
   [BegrunnelsespliktenSaksdataHjemlerLists.saksbehandlingsreglerBegrunnelsespliktenBegrunnelsenViserIkkeTilRegelverketHjemlerList]:
     ids,
 });
+
+const FTRL_4_7_FØRSTE_LEDD_PERMITTERINGSÅRSAK = '240';
