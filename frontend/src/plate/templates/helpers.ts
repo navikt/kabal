@@ -2,7 +2,7 @@ import { BaseH1Plugin, BaseH2Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
-import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
+import { treatAsArena } from '@/domain/treat-as-arena';
 import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@/plate/components/fullmektig';
 import {
   ELEMENT_ARENA_SAKSNUMMER,
@@ -218,6 +218,7 @@ export const createFullmektig = (): FullmektigElement => ({
 export interface CreateTemplateParams {
   sakstype: SaksTypeEnum;
   fagsystemId: string;
+  requiresGosysOppgave: boolean;
 }
 
 /**
@@ -239,6 +240,7 @@ interface CreateSaksinfoParams extends CreateTemplateParams {
 export const createSaksinfo = ({
   sakstype,
   fagsystemId,
+  requiresGosysOppgave,
   children = [
     createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
     createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
@@ -249,7 +251,9 @@ export const createSaksinfo = ({
   ],
 }: CreateSaksinfoParams): SaksinfoElement => ({
   type: ELEMENT_SAKSINFO,
-  children: mayHaveArenaSaksnummer(sakstype, fagsystemId) ? [...children, createArenaSaksnummer()] : children,
+  children: mayHaveArenaSaksnummer(sakstype, fagsystemId, requiresGosysOppgave)
+    ? [...children, createArenaSaksnummer()]
+    : children,
 });
 
 // So-called "fake" cases: the case is really handled in Arena, but a corresponding case is created in Kabal
@@ -263,8 +267,8 @@ const SAKSTYPER_MED_ARENA_SAKSNUMMER: ReadonlySet<SaksTypeEnum> = new Set([
   SaksTypeEnum.ANKE_I_TRYGDERETTEN,
 ]);
 
-const mayHaveArenaSaksnummer = (sakstype: SaksTypeEnum, fagsystemId: string): boolean =>
-  fagsystemId === FAGSYSTEM_ARENA && SAKSTYPER_MED_ARENA_SAKSNUMMER.has(sakstype);
+const mayHaveArenaSaksnummer = (sakstype: SaksTypeEnum, fagsystemId: string, requiresGosysOppgave: boolean): boolean =>
+  treatAsArena(fagsystemId, requiresGosysOppgave) && SAKSTYPER_MED_ARENA_SAKSNUMMER.has(sakstype);
 
 export const createSaksnummer = (): SaksnummerElement => ({
   type: ELEMENT_SAKSNUMMER,

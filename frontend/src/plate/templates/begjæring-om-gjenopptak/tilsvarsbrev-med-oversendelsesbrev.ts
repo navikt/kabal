@@ -37,12 +37,11 @@ export const GJENOPPTAKSBEGJÆRING_TILSVARSBREV_MED_OVERSENDELSESBREV_METADATA: 
   deprecatedSections: [],
 };
 
-export const getGjenopptaksbegjæringTilsvarsbrevMedOversendelsesbrevTemplate = ({
-  sakstype,
-  fagsystemId,
-}: CreateTemplateParams): ISmartEditorTemplate => {
+export const getGjenopptaksbegjæringTilsvarsbrevMedOversendelsesbrevTemplate = (
+  params: CreateTemplateParams,
+): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...GJENOPPTAKSBEGJÆRING_TILSVARSBREV_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(),
@@ -50,7 +49,7 @@ export const getGjenopptaksbegjæringTilsvarsbrevMedOversendelsesbrevTemplate = 
     createPageBreak(),
 
     ...GJENOPPTAKSBEGJÆRING_OVERSENDELSESBREV_TITLE_SECTIONS.map((section) => createMaltekstseksjon(section)),
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...GJENOPPTAKSBEGJÆRING_OVERSENDELSESBREV_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(),

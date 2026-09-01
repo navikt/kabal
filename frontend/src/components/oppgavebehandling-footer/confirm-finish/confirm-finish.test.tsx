@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from 'bun:test';
 import { ConfirmFinish } from '@/components/oppgavebehandling-footer/confirm-finish/confirm-finish';
-import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
+import { FAGSYSTEM_ARBEIDSOPPFØLGING, FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { act, fireEvent, render, screen } from '@/test-utils';
 import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 
@@ -131,6 +131,24 @@ describe('ConfirmFinish', () => {
       const finishButton = screen.getByRole('button', { name: 'Fullfør' });
       expect(finishButton).toBeVisible();
       expect(finishButton).toBeEnabled();
+    });
+
+    test('Arena warning for Arbeidsoppfølging when requires Gosys oppgave', async () => {
+      mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, true, FAGSYSTEM_ARBEIDSOPPFØLGING);
+      renderConfirmFinish();
+
+      expect(
+        screen.getByRole('checkbox', { name: 'Jeg bekrefter at saken er sendt til godkjenning i Arena.' }),
+      ).toBeVisible();
+    });
+
+    test('No Arena warning for Arbeidsoppfølging when not requiring Gosys oppgave', async () => {
+      mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, false, FAGSYSTEM_ARBEIDSOPPFØLGING);
+      renderConfirmFinish();
+
+      expect(
+        screen.queryByRole('checkbox', { name: 'Jeg bekrefter at saken er sendt til godkjenning i Arena.' }),
+      ).not.toBeInTheDocument();
     });
   });
 

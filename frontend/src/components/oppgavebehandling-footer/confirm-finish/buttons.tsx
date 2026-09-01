@@ -109,7 +109,12 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
           );
         case UtfallEnum.HENVIST:
           return (
-            <TrygderettenHenvistButtonGroup cancel={cancel} finishDisabled={finishDisabled} fagsystemId={fagsystemId} />
+            <TrygderettenHenvistButtonGroup
+              cancel={cancel}
+              finishDisabled={finishDisabled}
+              fagsystemId={fagsystemId}
+              requiresGosysOppgave={requiresGosysOppgave}
+            />
           );
       }
   }

@@ -25,12 +25,9 @@ export const SVAR_PÅ_INNSYNSBEGJÆRING_METADATA: TemplateMetadata = {
   deprecatedSections: [],
 };
 
-export const getSvarPåInnsynsbegjæringTemplate = ({
-  sakstype,
-  fagsystemId,
-}: CreateTemplateParams): ISmartEditorTemplate => {
+export const getSvarPåInnsynsbegjæringTemplate = (params: CreateTemplateParams): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...SVAR_PÅ_INNSYNSBEGJÆRING_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(false),

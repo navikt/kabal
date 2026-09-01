@@ -30,12 +30,9 @@ export const GJENOPPTAKSBEGJÆRING_VEDTAK_METADATA: TemplateMetadata = {
   deprecatedSections: [],
 };
 
-export const getGjenopptaksbegjæringVedtakTemplate = ({
-  sakstype,
-  fagsystemId,
-}: CreateTemplateParams): ISmartEditorTemplate => {
+export const getGjenopptaksbegjæringVedtakTemplate = (params: CreateTemplateParams): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...GJENOPPTAKSBEGJÆRING_VEDTAK_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(),

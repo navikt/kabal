@@ -34,12 +34,9 @@ export const OMGJØRINGSKRAVVEDTAK_METADATA: TemplateMetadata = {
   deprecatedSections: [],
 };
 
-export const getOmgjøringskravvedtakTemplate = ({
-  sakstype,
-  fagsystemId,
-}: CreateTemplateParams): ISmartEditorTemplate => {
+export const getOmgjøringskravvedtakTemplate = (params: CreateTemplateParams): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
 
     ...OMGJØRINGSKRAVVEDTAK_SECTIONS.map((section) => createMaltekstseksjon(section)),
 

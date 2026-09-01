@@ -26,9 +26,9 @@ export const TIL_FORELEGGELSE_METADATA: TemplateMetadata = {
   deprecatedSections: [],
 };
 
-export const getTilForeleggelseTemplate = ({ sakstype, fagsystemId }: CreateTemplateParams): ISmartEditorTemplate => {
+export const getTilForeleggelseTemplate = (params: CreateTemplateParams): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...TIL_FORELEGGELSE_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(false),

@@ -31,14 +31,13 @@ export const GENERELT_BREV_METADATA: TemplateMetadata = {
 };
 
 export const getGenereltBrevTemplate = ({
-  sakstype,
-  fagsystemId,
   overriddenSaksbehandler,
+  ...params
 }: GetSaksbehandlerTemplateParams): ISmartEditorTemplate =>
   deepFreeze<IMutableSmartEditorTemplate>({
     ...GENERELT_BREV_METADATA,
     richText: [
-      createSaksinfo({ sakstype, fagsystemId }),
+      createSaksinfo(params),
       ...GENERELT_BREV_SECTIONS.map((section) => createMaltekstseksjon(section)),
       createSimpleParagraph(),
       createSignature(false, overriddenSaksbehandler),
@@ -56,17 +55,12 @@ export const NOTAT_METADATA: TemplateMetadata = {
 };
 
 export const getNotatTemplate = ({
-  sakstype,
-  fagsystemId,
   overriddenSaksbehandler,
+  ...params
 }: GetSaksbehandlerTemplateParams): ISmartEditorTemplate =>
   deepFreeze<IMutableSmartEditorTemplate>({
     ...NOTAT_METADATA,
-    richText: [
-      createSaksinfo({ sakstype, fagsystemId }),
-      createSimpleParagraph(),
-      createSignature(false, overriddenSaksbehandler),
-    ],
+    richText: [createSaksinfo(params), createSimpleParagraph(), createSignature(false, overriddenSaksbehandler)],
   });
 
 export const ROL_QUESTIONS_SECTIONS: TemplateSections[] = [
@@ -82,13 +76,12 @@ export const ROL_QUESTIONS_METADATA: TemplateMetadata = {
   deprecatedSections: [],
 };
 
-export const getRolQuestionsTemplate = ({ sakstype, fagsystemId }: CreateTemplateParams): ISmartEditorTemplate =>
+export const getRolQuestionsTemplate = (params: CreateTemplateParams): ISmartEditorTemplate =>
   deepFreeze<IMutableSmartEditorTemplate>({
     ...ROL_QUESTIONS_METADATA,
     richText: [
       createSaksinfo({
-        sakstype,
-        fagsystemId,
+        ...params,
         children: [
           createLabelContent(LabelContentSource.SAKEN_GJELDER_NAME),
           createLabelContent(LabelContentSource.SAKEN_GJELDER_FNR),
@@ -136,11 +129,11 @@ export const ROL_TILSVARSBREV_METADATA: TemplateMetadata = {
   deprecatedSections: [],
 };
 
-export const getRolTilsvarsbrevTemplate = ({ sakstype, fagsystemId }: CreateTemplateParams): ISmartEditorTemplate =>
+export const getRolTilsvarsbrevTemplate = (params: CreateTemplateParams): ISmartEditorTemplate =>
   deepFreeze<IMutableSmartEditorTemplate>({
     ...ROL_TILSVARSBREV_METADATA,
     richText: [
-      createSaksinfo({ sakstype, fagsystemId }),
+      createSaksinfo(params),
       ...ROL_TILSVARSBREV_SECTIONS.map((section) => createMaltekstseksjon(section)),
       createPageBreak(),
       ...ROL_TILSVARSBREV_VEDLEGG_SECTIONS.map((section) => createMaltekstseksjon(section)),

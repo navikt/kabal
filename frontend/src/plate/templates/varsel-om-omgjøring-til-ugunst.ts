@@ -29,12 +29,9 @@ export const VARSEL_OM_OMGJØRING_TIL_UGUNST_METADATA: TemplateMetadata = {
   deprecatedSections: [],
 };
 
-export const getVarselOmOmgjøringTilUgunstTemplate = ({
-  sakstype,
-  fagsystemId,
-}: CreateTemplateParams): ISmartEditorTemplate => {
+export const getVarselOmOmgjøringTilUgunstTemplate = (params: CreateTemplateParams): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...VARSEL_OM_OMGJØRING_TIL_UGUNST_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(),

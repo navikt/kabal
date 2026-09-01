@@ -31,9 +31,9 @@ export const KLAGEVEDTAK_METADATA: TemplateMetadata = {
   deprecatedSections: [],
 };
 
-export const getKlagevedtakTemplate = ({ sakstype, fagsystemId }: CreateTemplateParams): ISmartEditorTemplate => {
+export const getKlagevedtakTemplate = (params: CreateTemplateParams): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...KLAGEVEDTAK_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(),

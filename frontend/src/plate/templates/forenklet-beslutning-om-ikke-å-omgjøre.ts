@@ -33,14 +33,10 @@ export const FORENKLET_BESLUTNING_OM_IKKE_Å_OMGJØRE_METADATA: TemplateMetadata
   deprecatedSections: [],
 };
 
-export const getForenkletBeslutningOmIkkeÅOmgjøreTemplate = ({
-  sakstype,
-  fagsystemId,
-}: CreateTemplateParams): ISmartEditorTemplate => {
+export const getForenkletBeslutningOmIkkeÅOmgjøreTemplate = (params: CreateTemplateParams): ISmartEditorTemplate => {
   const richText: Value = [
     createSaksinfo({
-      sakstype,
-      fagsystemId,
+      ...params,
       children: [
         createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
         createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
