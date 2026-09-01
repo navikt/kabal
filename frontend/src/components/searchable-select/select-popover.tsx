@@ -1,17 +1,8 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import {
-  Box,
-  Button,
-  type ButtonProps,
-  InlineMessage,
-  Popover,
-  Tag,
-  TextField,
-  Tooltip,
-  VStack,
-} from '@navikt/ds-react';
+import { Box, Button, type ButtonProps, Popover, Tag, TextField, Tooltip, VStack } from '@navikt/ds-react';
 import type { ReactNode, RefObject } from 'react';
 import { useEffect, useId, useRef } from 'react';
+import { FieldError } from '@/components/field-error/field-error';
 import { KeyRow } from '@/components/searchable-select/key-row';
 import { Keys, MOD_KEY_TEXT } from '@/keys';
 
@@ -94,6 +85,7 @@ export const SelectPopover = ({
 }: SelectPopoverProps) => {
   const searchRef = useRef<HTMLInputElement>(null);
   const popoverId = useId();
+  const errorId = useId();
 
   useEffect(() => {
     if (open) {
@@ -130,15 +122,12 @@ export const SelectPopover = ({
         aria-expanded={open}
         aria-label={label}
         aria-controls={open ? popoverId : undefined}
+        aria-describedby={errorId}
       >
         <span className="block truncate">{trigger}</span>
       </Button>
 
-      {typeof error === 'string' && error.length > 0 ? (
-        <InlineMessage size="small" status="error">
-          {error}
-        </InlineMessage>
-      ) : null}
+      {typeof error === 'string' && error.length !== 0 ? <FieldError id={errorId}>{error}</FieldError> : null}
 
       <Popover
         ref={popoverRef}
