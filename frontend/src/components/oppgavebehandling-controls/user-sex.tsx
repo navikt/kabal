@@ -1,19 +1,44 @@
-import { FemaleIcon } from '@/components/oppgavebehandling-controls/icons/female';
-import { MaleIcon } from '@/components/oppgavebehandling-controls/icons/male';
-import { NeutralIcon } from '@/components/oppgavebehandling-controls/icons/neutral';
+import { FigureCombinationFillIcon, FigureInwardFillIcon, FigureOutwardFillIcon } from '@navikt/aksel-icons';
+import { type TagProps, Tooltip } from '@navikt/ds-react';
 import { SexEnum } from '@/types/kodeverk';
 
 interface Props {
   sex: SexEnum;
+  size?: TagProps['size'];
 }
 
-export const UserSex = ({ sex }: Props) => {
+export const UserSex = ({ sex, size = 'medium' }: Props) => {
+  const className = getSize(size);
+
   switch (sex) {
     case SexEnum.FEMALE:
-      return <FemaleIcon alt="Kvinne" />;
+      return (
+        <Tooltip content="Kvinne">
+          <FigureOutwardFillIcon aria-hidden role="presentation" className={className} />
+        </Tooltip>
+      );
     case SexEnum.MALE:
-      return <MaleIcon alt="Mann" />;
+      return (
+        <Tooltip content="Mann">
+          <FigureInwardFillIcon aria-hidden role="presentation" className={className} />
+        </Tooltip>
+      );
     case SexEnum.UNKNOWN:
-      return <NeutralIcon alt="Nøytral" />;
+      return (
+        <Tooltip content="Nøytral">
+          <FigureCombinationFillIcon aria-hidden role="presentation" className={className} />
+        </Tooltip>
+      );
+  }
+};
+
+const getSize = (size: TagProps['size']) => {
+  switch (size) {
+    case 'xsmall':
+      return 'size-5';
+    case 'small':
+      return 'size-6';
+    case 'medium':
+      return 'size-8';
   }
 };
