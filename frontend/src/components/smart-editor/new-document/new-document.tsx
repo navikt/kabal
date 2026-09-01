@@ -108,13 +108,18 @@ export const useNewSmartDocumentTemplates = (): ISmartEditorTemplate[] => {
       return [];
     }
 
-    const { isAvsluttetAvSaksbehandler, typeId, fagsystemId } = oppgave;
+    const { isAvsluttetAvSaksbehandler, typeId, fagsystemId, requiresGosysOppgave } = oppgave;
 
     if (isAvsluttetAvSaksbehandler) {
-      return getFinishedBehandlingTemplates({ sakstype: typeId, fagsystemId, navIdent: user.navIdent });
+      return getFinishedBehandlingTemplates({
+        sakstype: typeId,
+        fagsystemId,
+        navIdent: user.navIdent,
+        requiresGosysOppgave,
+      });
     }
 
-    return TEMPLATE_GETTERS[typeId]({ sakstype: typeId, fagsystemId });
+    return TEMPLATE_GETTERS[typeId]({ sakstype: typeId, fagsystemId, requiresGosysOppgave });
   }, [isSuccess, oppgave, user.navIdent]);
 };
 

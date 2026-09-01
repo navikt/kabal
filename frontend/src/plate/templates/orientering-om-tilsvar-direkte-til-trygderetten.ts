@@ -24,12 +24,9 @@ export const ORIENTERING_OM_TILSVAR_METADATA: TemplateMetadata = {
   deprecatedSections: [DeprecatedTemplateSections.TILSVARSRETT_V2],
 };
 
-export const getOrienteringOmTilsvarTemplate = ({
-  sakstype,
-  fagsystemId,
-}: CreateTemplateParams): ISmartEditorTemplate => {
+export const getOrienteringOmTilsvarTemplate = (params: CreateTemplateParams): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...ORIENTERING_OM_TILSVAR_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(false),

@@ -1,4 +1,4 @@
-import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
+import { treatAsArena } from '@/domain/treat-as-arena';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { SaksTypeEnum } from '@/types/kodeverk';
 
@@ -13,10 +13,10 @@ export const useIsFakeArenaCase = () => {
     return false;
   }
 
-  const { fagsystemId, typeId } = oppgave;
+  const { fagsystemId, typeId, requiresGosysOppgave } = oppgave;
 
   return (
-    fagsystemId === FAGSYSTEM_ARENA &&
+    treatAsArena(fagsystemId, requiresGosysOppgave) &&
     (typeId === SaksTypeEnum.KLAGE ||
       typeId === SaksTypeEnum.ANKE ||
       typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET ||

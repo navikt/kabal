@@ -35,15 +35,15 @@ export const OVERSENDELSESBREV_METADATA: TemplateMetadata = {
   deprecatedSections: [DeprecatedTemplateSections.TILSVARSRETT_V2],
 };
 
-export const getOversendelsesbrevTemplate = ({ sakstype, fagsystemId }: CreateTemplateParams): ISmartEditorTemplate => {
+export const getOversendelsesbrevTemplate = (params: CreateTemplateParams): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...OVERSENDELSESBREV_TILSVARSBREV_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(),
 
     createPageBreak(),
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...OVERSENDELSESBREV_VEDTAK_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(),

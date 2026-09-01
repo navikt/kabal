@@ -30,9 +30,9 @@ export const ANKEVEDTAK_METADATA: TemplateMetadata = {
   deprecatedSections: [],
 };
 
-export const getAnkevedtakTemplate = ({ sakstype, fagsystemId }: CreateTemplateParams): ISmartEditorTemplate => {
+export const getAnkevedtakTemplate = (params: CreateTemplateParams): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...ANKEVEDTAK_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(),

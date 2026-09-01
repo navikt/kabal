@@ -30,12 +30,9 @@ export const BEHANDLING_ETTER_TR_OPPHEVET_METADATA: TemplateMetadata = {
   deprecatedSections: [],
 };
 
-export const getBehandlingEtterTrOpphevetTemplate = ({
-  sakstype,
-  fagsystemId,
-}: CreateTemplateParams): ISmartEditorTemplate => {
+export const getBehandlingEtterTrOpphevetTemplate = (params: CreateTemplateParams): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...BEHANDLING_ETTER_TR_OPPHEVET_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(),

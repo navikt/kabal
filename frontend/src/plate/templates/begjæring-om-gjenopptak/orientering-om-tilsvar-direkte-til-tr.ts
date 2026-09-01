@@ -24,12 +24,11 @@ export const GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_METADATA: TemplateMeta
   deprecatedSections: [],
 };
 
-export const getGjenopptaksbegjæringOrienteringOmTilsvarTemplate = ({
-  sakstype,
-  fagsystemId,
-}: CreateTemplateParams): ISmartEditorTemplate => {
+export const getGjenopptaksbegjæringOrienteringOmTilsvarTemplate = (
+  params: CreateTemplateParams,
+): ISmartEditorTemplate => {
   const richText: Value = [
-    createSaksinfo({ sakstype, fagsystemId }),
+    createSaksinfo(params),
     ...GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(false),

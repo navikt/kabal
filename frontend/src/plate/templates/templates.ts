@@ -263,8 +263,9 @@ export const getFinishedBehandlingTemplates = ({
   sakstype,
   fagsystemId,
   navIdent,
+  requiresGosysOppgave,
 }: GetFinishedBehandlingTemplatesParams) => [
-  getGenereltBrevTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent }),
-  getNotatTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent }),
-  getSvarPåInnsynsbegjæringTemplate({ sakstype, fagsystemId }),
+  getGenereltBrevTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
+  getNotatTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
+  getSvarPåInnsynsbegjæringTemplate({ sakstype, fagsystemId, requiresGosysOppgave }),
 ];

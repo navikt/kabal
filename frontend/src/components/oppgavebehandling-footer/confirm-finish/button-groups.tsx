@@ -2,8 +2,8 @@ import { Box, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import { CancelButton } from '@/components/oppgavebehandling-footer/confirm-finish/cancel-button';
 import { FinishButton } from '@/components/oppgavebehandling-footer/confirm-finish/finish-button';
 import type { ButtonsProps, GosysAwareButtonsProps } from '@/components/oppgavebehandling-footer/confirm-finish/types';
-import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { UpdateInGosys } from '@/components/oppgavebehandling-footer/update-in-gosys/update-in-gosys';
+import { treatAsArena } from '@/domain/treat-as-arena';
 
 interface GosysAwareFinishButtonProps {
   requiresGosysOppgave: boolean;
@@ -111,8 +111,9 @@ export const TrygderettenHenvistButtonGroup = ({
   cancel,
   finishDisabled,
   fagsystemId,
-}: ButtonsProps & { fagsystemId: string }) =>
-  fagsystemId === FAGSYSTEM_ARENA ? (
+  requiresGosysOppgave,
+}: ButtonsProps & { fagsystemId: string; requiresGosysOppgave: boolean }) =>
+  treatAsArena(fagsystemId, requiresGosysOppgave) ? (
     <VStack gap="space-16">
       <InlineMessage status="info">
         Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten har

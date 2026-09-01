@@ -29,14 +29,12 @@ export const GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR_METADATA: TemplateMetadat
   deprecatedSections: [],
 };
 
-export const getGjenopptaksbegjæringEttersendingTilTrTemplate = ({
-  sakstype,
-  fagsystemId,
-}: CreateTemplateParams): ISmartEditorTemplate => {
+export const getGjenopptaksbegjæringEttersendingTilTrTemplate = (
+  params: CreateTemplateParams,
+): ISmartEditorTemplate => {
   const richText: Value = [
     createSaksinfo({
-      sakstype,
-      fagsystemId,
+      ...params,
       children: [
         createLabelContent(LabelContentSource.KLAGER_IF_EQUAL_TO_SAKEN_GJELDER_NAME),
         createLabelContent(LabelContentSource.SAKEN_GJELDER_IF_DIFFERENT_FROM_KLAGER_NAME),
