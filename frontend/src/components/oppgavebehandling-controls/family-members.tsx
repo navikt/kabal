@@ -2,9 +2,9 @@ import { HStack, Tag, type TagProps } from '@navikt/ds-react';
 import type { IFamilyMemberStatus, ISakenGjelder } from '@/types/oppgave-common';
 import { PartStatusEnum } from '@/types/oppgave-common';
 
-interface Props extends Pick<ISakenGjelder, 'protectedFamilyMembers'> {}
+interface Props extends Pick<ISakenGjelder, 'protectedFamilyMembers'>, Pick<TagProps, 'size'> {}
 
-export const ProtectedFamilyMemberStatuses = ({ protectedFamilyMembers }: Props) => {
+export const ProtectedFamilyMemberStatuses = ({ protectedFamilyMembers, size }: Props) => {
   const statuses = getUniqueStatuses(protectedFamilyMembers.flatMap((member) => member.statusList));
 
   if (statuses.length === 0) {
@@ -14,7 +14,7 @@ export const ProtectedFamilyMemberStatuses = ({ protectedFamilyMembers }: Props)
   return (
     <HStack gap="space-4" wrap>
       {statuses.map((status) => (
-        <Tag key={status} variant={STATUS_VARIANT[status]} size="small">
+        <Tag key={status} variant={STATUS_VARIANT[status]} size={size}>
           {STATUS_NAMES[status]} (familieforhold)
         </Tag>
       ))}
