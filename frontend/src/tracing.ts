@@ -27,6 +27,7 @@ const collectorUrl = getTelemetryCollectorURL();
 if (collectorUrl !== undefined) {
   initializeFaro({
     url: collectorUrl,
+    paused: ENVIRONMENT.isLocal || ENVIRONMENT.isDevelopment,
     app: {
       name: SERVICE_NAME,
       version: ENVIRONMENT.version,
