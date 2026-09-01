@@ -1,5 +1,6 @@
 import { Label, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useId, useMemo, useRef } from 'react';
+import { PermitteringsårsakWarning } from '@/components/behandling/behandlingsdetaljer/permitteringsårsak-warning';
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
@@ -8,6 +9,8 @@ import { useKodeverkYtelse } from '@/hooks/use-kodeverk-value';
 import { useSetInnsendingshjemlerMutation } from '@/redux-api/oppgaver/mutations/behandling';
 import type { IYtelseInnsendingshjemmel } from '@/types/kodeverk';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
+
+const FTRL_4_7_PERMITTERINGSÅRSAK = 'FTRL_4_7_PERMITTERINGSAARSAK';
 
 interface Props {
   oppgavebehandling: IOppgavebehandling;
@@ -25,6 +28,10 @@ export const Innsendingshjemmel = ({ oppgavebehandling }: Props) => {
       </Label>
 
       <Innsendingshjemler oppgavebehandling={oppgavebehandling} id={selectId} />
+
+      {oppgavebehandling.hjemmelIdList.includes(FTRL_4_7_PERMITTERINGSÅRSAK) ? (
+        <PermitteringsårsakWarning className="mt-2" />
+      ) : null}
     </VStack>
   );
 };
