@@ -105,6 +105,7 @@ export const SelectPopover = ({
   }, [open]);
 
   const triggerWidth = triggerVariant === 'tertiary' ? 'w-fit' : 'w-full';
+  const hasError = typeof error === 'string' && error.length !== 0;
 
   return (
     <VStack gap="space-8" width="100%" style={style}>
@@ -113,7 +114,7 @@ export const SelectPopover = ({
         ref={buttonRef}
         type="button"
         variant={triggerVariant}
-        data-color="neutral"
+        data-color={hasError ? 'danger' : 'neutral'}
         size={triggerSize}
         onClick={onButtonClick}
         onKeyDown={(e) => {
@@ -136,7 +137,7 @@ export const SelectPopover = ({
         <span className="block truncate">{trigger}</span>
       </Button>
 
-      {typeof error === 'string' && error.length !== 0 ? (
+      {hasError ? (
         <ErrorMessage id={errorId} showIcon size="small">
           {error}
         </ErrorMessage>
