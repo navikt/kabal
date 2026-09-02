@@ -156,7 +156,7 @@ interface HjemmelFieldProps {
 }
 
 const HjemmelField = memo(({ options, value, onChange, error }: HjemmelFieldProps) => (
-  <VStack gap="space-6" width="25rem">
+  <VStack gap="space-8" width="25rem">
     <Label size="small" htmlFor={HJEMMEL_LIST_ID}>
       Hjemmel
     </Label>
