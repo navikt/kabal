@@ -107,7 +107,7 @@ export const SelectPopover = ({
   const triggerWidth = triggerVariant === 'tertiary' ? 'w-fit' : 'w-full';
 
   return (
-    <VStack gap="space-4" width="100%" style={style}>
+    <VStack gap="space-8" width="100%" style={style}>
       <Button
         id={id}
         ref={buttonRef}
