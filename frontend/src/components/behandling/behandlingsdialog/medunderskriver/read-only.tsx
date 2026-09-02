@@ -1,5 +1,4 @@
-import { BodyShort, Label } from '@navikt/ds-react';
-import { getTitleCapitalized } from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
+import { BodyShort } from '@navikt/ds-react';
 import { formatEmployeeNameAndIdFallback } from '@/domain/employee-name';
 import type { SaksTypeEnum } from '@/types/kodeverk';
 import type { IMedunderskriver } from '@/types/oppgave-common';
@@ -9,13 +8,6 @@ interface Props {
   typeId: SaksTypeEnum;
 }
 
-export const MedunderskriverReadOnly = ({ medunderskriver, typeId }: Props) => {
-  const title = getTitleCapitalized(typeId);
-
-  return (
-    <>
-      <Label size="small">{title}</Label>
-      <BodyShort>{formatEmployeeNameAndIdFallback(medunderskriver.employee, 'Ikke satt')}</BodyShort>
-    </>
-  );
-};
+export const MedunderskriverReadOnly = ({ medunderskriver }: Props) => (
+  <BodyShort>{formatEmployeeNameAndIdFallback(medunderskriver.employee, 'Ikke satt')}</BodyShort>
+);

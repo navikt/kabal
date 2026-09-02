@@ -34,6 +34,8 @@ export const Medunderskriver = () => {
 
   const isReadOnly = isFinished || isFeilregistrert;
 
+  const label = <Label size="small">{getTitleCapitalized(typeId)}</Label>;
+
   if (isReadOnly) {
     if (medunderskriver.employee === null) {
       return null;
@@ -41,6 +43,7 @@ export const Medunderskriver = () => {
 
     return (
       <PartBox>
+        {label}
         <MedunderskriverReadOnly typeId={typeId} medunderskriver={medunderskriver} />
       </PartBox>
     );
@@ -56,7 +59,7 @@ export const Medunderskriver = () => {
 
   return (
     <PartBox>
-      <Label size="small">{getTitleCapitalized(typeId)}</Label>
+      {label}
       <ArenaInfoSaksbehandler typeId={typeId} />
       <SelectMedunderskriver
         id={oppgaveId}
