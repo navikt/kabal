@@ -7,10 +7,7 @@ import { FAGSYSTEM_INFOTRYGD } from '@/components/oppgavebehandling-footer/fagsy
 import { useIsAnkeOrGbWithUtfallToTr } from '@/components/oppgavebehandling-footer/update-in-gosys/use-is-anke-or-gb-with-utfall-to-tr';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useGetGosysOppgaveQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
-import { useSearchEnheterQuery } from '@/redux-api/search';
-import type { IEnhet } from '@/types/bruker';
 import { SaksTypeEnum } from '@/types/kodeverk';
-import type { Enhet } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
   id: string;
@@ -21,28 +18,17 @@ interface Props {
 }
 
 export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, gosysOppgaveId }: Props) => {
-  const { data: gosysOppgave, isLoading } = useGetGosysOppgaveQuery(gosysOppgaveId === null ? skipToken : id);
-  const { data: oppgave } = useOppgave();
-  const { data: enheter = [] } = useSearchEnheterQuery({});
+  const {
+    data: gosysOppgave,
+    isLoading,
+    isSuccess: gosysOppgaveIsSuccess,
+  } = useGetGosysOppgaveQuery(gosysOppgaveId === null ? skipToken : id);
+  const { data: oppgave, isSuccess: oppgaveIsSuccess } = useOppgave();
   const suggestOwnEnhet = useIsAnkeOrGbWithUtfallToTr();
+
   const {
     user: { ansattEnhet },
   } = useContext(StaticDataContext);
-
-  if (oppgave === undefined || gosysOppgave === undefined) {
-    return null;
-  }
-
-  const shouldSuggest =
-    suggestOwnEnhet || (typeId === SaksTypeEnum.KLAGE && oppgave.fagsystemId === FAGSYSTEM_INFOTRYGD);
-
-  const { tildeltEnhetsnr } = gosysOppgave;
-
-  if (!shouldSuggest) {
-    return null;
-  }
-
-  const suggestedEnhet = getSuggestedEnhet(suggestOwnEnhet, ansattEnhet, tildeltEnhetsnr, enheter);
 
   if (isLoading) {
     return (
@@ -58,6 +44,26 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
         </Button>
       </HStack>
     );
+  }
+
+  if (!oppgaveIsSuccess || !gosysOppgaveIsSuccess) {
+    return null;
+  }
+
+  const suggestOpprettetAvEnhet = typeId === SaksTypeEnum.KLAGE && oppgave.fagsystemId === FAGSYSTEM_INFOTRYGD;
+
+  const shouldSuggest = suggestOwnEnhet || suggestOpprettetAvEnhet;
+
+  const { opprettetAvEnhet } = gosysOppgave;
+
+  if (!shouldSuggest) {
+    return null;
+  }
+
+  const suggestedEnhet = suggestOwnEnhet ? { enhetsnr: ansattEnhet.id, navn: ansattEnhet.navn } : opprettetAvEnhet;
+
+  if (suggestedEnhet === null) {
+    return null;
   }
 
   return (
@@ -84,19 +90,4 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
       )}
     </HStack>
   );
-};
-
-const getSuggestedEnhet = (
-  suggestOwnEnhet: boolean,
-  ansattEnhet: IEnhet,
-  tildeltEnhetsnr: string,
-  enheter: Enhet[],
-): Enhet => {
-  if (suggestOwnEnhet) {
-    return { enhetsnr: ansattEnhet.id, navn: ansattEnhet.navn };
-  }
-
-  const tildeltenhet = enheter.find((enhet) => enhet.enhetsnr === tildeltEnhetsnr);
-
-  return { enhetsnr: tildeltEnhetsnr, navn: tildeltenhet?.navn ?? 'Ukjent enhet' };
 };
