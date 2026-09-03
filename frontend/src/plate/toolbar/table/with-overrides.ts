@@ -10,7 +10,45 @@ export const withOverrides: OverrideEditor<TableConfig> = ({ editor }) => {
     html: { deserialize },
   } = editor.api;
 
-  const { normalizeNode } = editor.tf;
+  const { normalizeNode, deleteBackward, deleteForward } = editor.tf;
+
+  editor.tf.deleteBackward = (unit) => {
+    if (editor.selection === null) {
+      return deleteBackward(unit);
+    }
+
+    const previousNode = editor.api.node({
+      at: editor.api.before(editor.selection.focus),
+      match: (n) => n.type === BaseTablePlugin.node.type,
+    });
+
+    if (previousNode === undefined) {
+      return deleteBackward(unit);
+    }
+
+    const [path] = previousNode;
+
+    return editor.tf.removeNodes({ at: path });
+  };
+
+  editor.tf.deleteForward = (unit) => {
+    if (editor.selection === null) {
+      return deleteForward(unit);
+    }
+
+    const nextNode = editor.api.node({
+      at: editor.api.after(editor.selection.focus),
+      match: (n) => n.type === BaseTablePlugin.node.type,
+    });
+
+    if (nextNode === undefined) {
+      return deleteForward(unit);
+    }
+
+    const [path] = nextNode;
+
+    return editor.tf.removeNodes({ at: path });
+  };
 
   editor.tf.normalizeNode = (entry, options) => {
     const [node, path] = entry;
