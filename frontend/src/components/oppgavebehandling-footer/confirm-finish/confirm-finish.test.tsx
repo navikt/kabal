@@ -1,6 +1,10 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from 'bun:test';
 import { ConfirmFinish } from '@/components/oppgavebehandling-footer/confirm-finish/confirm-finish';
-import { FAGSYSTEM_ARBEIDSOPPFØLGING, FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
+import {
+  FAGSYSTEM_ARBEIDSOPPFØLGING,
+  FAGSYSTEM_ARENA,
+  FAGSYSTEM_GOSYS,
+} from '@/components/oppgavebehandling-footer/fagsystem';
 import { act, fireEvent, render, screen } from '@/test-utils';
 import { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 
@@ -144,6 +148,24 @@ describe('ConfirmFinish', () => {
 
     test('No Arena warning for Arbeidsoppfølging when not requiring Gosys oppgave', async () => {
       mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, false, FAGSYSTEM_ARBEIDSOPPFØLGING);
+      renderConfirmFinish();
+
+      expect(
+        screen.queryByRole('checkbox', { name: 'Jeg bekrefter at saken er sendt til godkjenning i Arena.' }),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Arena warning for Gosys when requires Gosys oppgave', async () => {
+      mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, true, FAGSYSTEM_GOSYS);
+      renderConfirmFinish();
+
+      expect(
+        screen.getByRole('checkbox', { name: 'Jeg bekrefter at saken er sendt til godkjenning i Arena.' }),
+      ).toBeVisible();
+    });
+
+    test('No Arena warning for Gosys when not requiring Gosys oppgave', async () => {
+      mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, false, FAGSYSTEM_GOSYS);
       renderConfirmFinish();
 
       expect(
