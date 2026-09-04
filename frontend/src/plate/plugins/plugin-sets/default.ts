@@ -117,22 +117,10 @@ export const defaultPlugins = [
   }),
   TextAlignPlugin.configure({ inject: { targetPlugins: [ParagraphPlugin.key] } }),
   ExitBreakPlugin.configure({
-    options: {
-      rules: [
-        { hotkey: 'mod+shift+enter', before: true },
-        {
-          hotkey: 'enter',
-          before: false,
-          defaultType: ParagraphPlugin.key,
-          query: {
-            start: true,
-            end: true,
-            allow: [BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key, BaseH4Plugin.key],
-          },
-          relative: true,
-          level: 1,
-        },
-      ],
+    shortcuts: {
+      insertBefore: { keys: 'mod+shift+enter' },
+      // TODO: Decide which function that will get mod + enter. Now there is a conflict between this and insert page-break.
+      insert: { keys: 'mod+enter' },
     },
   }),
   DocxPlugin,
