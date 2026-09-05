@@ -1,6 +1,6 @@
-export const BYTES_PER_KB = 1_024;
+export const BYTES_PER_KB = 1_000;
 
-const UNITS = ['KiB', 'MiB', 'GiB', 'TiB'];
+const UNITS = ['KB', 'MB', 'GB', 'TB'];
 
 export const formatFileSize = (size: number) => {
   if (size < 0) {
