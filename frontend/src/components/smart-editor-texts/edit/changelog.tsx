@@ -1,6 +1,6 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
-import { Button, Modal, Table } from '@navikt/ds-react';
-import { Fragment, useCallback, useRef } from 'react';
+import { Button, Dialog, Table } from '@navikt/ds-react';
+import { Fragment } from 'react';
 import { isoDateTimeToPretty } from '@/domain/date';
 import { TextChangeType } from '@/types/common-text-types';
 import type { IPublishedText, IText } from '@/types/texts/responses';
@@ -10,29 +10,22 @@ interface Props {
 }
 
 export const Changelog = ({ versions }: Props) => {
-  const ref = useRef<HTMLDialogElement>(null);
-
-  const openModal = useCallback(() => {
-    ref.current?.showModal();
-  }, []);
-
   if (versions.length === 0) {
     return null;
   }
 
   return (
-    <>
-      <Button
-        data-color="neutral"
-        onClick={openModal}
-        size="xsmall"
-        variant="tertiary"
-        icon={<ClockDashedIcon aria-hidden />}
-      >
-        Vis endringslogg
-      </Button>
-      <Modal header={{ heading: 'Endringslogg' }} ref={ref} closeOnBackdropClick>
-        <Modal.Body>
+    <Dialog>
+      <Dialog.Trigger>
+        <Button data-color="neutral" size="xsmall" variant="tertiary" icon={<ClockDashedIcon aria-hidden />}>
+          Vis endringslogg
+        </Button>
+      </Dialog.Trigger>
+      <Dialog.Popup>
+        <Dialog.Header>
+          <Dialog.Title>Endringslogg</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
           <Table zebraStripes>
             <Table.Header>
               <Table.Row>
@@ -56,9 +49,9 @@ export const Changelog = ({ versions }: Props) => {
               ))}
             </Table.Body>
           </Table>
-        </Modal.Body>
-      </Modal>
-    </>
+        </Dialog.Body>
+      </Dialog.Popup>
+    </Dialog>
   );
 };
 

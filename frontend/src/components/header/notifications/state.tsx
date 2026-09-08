@@ -1,5 +1,5 @@
 import type React from 'react';
-import { createContext, type RefObject, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 
 interface NotificationsState {
@@ -8,7 +8,6 @@ interface NotificationsState {
   isModalOpen: boolean;
   setIsModalOpen: (open: boolean) => void;
   closeMenuAndModal: () => void;
-  modalRef: RefObject<HTMLDialogElement | null>;
 }
 
 const NotificationsContext = createContext<NotificationsState | undefined>(undefined);
@@ -16,12 +15,10 @@ const NotificationsContext = createContext<NotificationsState | undefined>(undef
 export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const modalRef = useRef<HTMLDialogElement | null>(null);
 
   const closeMenuAndModal = useCallback(() => {
     setIsMenuOpen(false);
     setIsModalOpen(false);
-    modalRef.current?.close();
   }, []);
 
   const { pathname } = useLocation();
@@ -39,7 +36,6 @@ export const NotificationsProvider: React.FC<{ children: React.ReactNode }> = ({
         isModalOpen,
         setIsModalOpen,
         closeMenuAndModal,
-        modalRef,
       }}
     >
       {children}

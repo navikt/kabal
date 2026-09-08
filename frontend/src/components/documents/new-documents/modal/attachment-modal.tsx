@@ -1,5 +1,5 @@
 import { MenuElipsisVerticalIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
-import { Button, Modal } from '@navikt/ds-react';
+import { Button, Dialog } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { Fields } from '@/components/documents/new-documents/grid';
 import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
@@ -50,28 +50,29 @@ export const AttachmentModal = ({
           style={{ gridArea: Fields.Action }}
         />
       </AccessErrorsSummary>
-      {isOpen ? (
-        <Modal
-          open
-          width="600px"
-          aria-modal
-          header={{
-            heading: `Valg for «${tittel}»`,
-            icon: <DocumentIcon type={type} />,
-          }}
-          closeOnBackdropClick
-          onClose={() => {
+      <Dialog
+        open={isOpen}
+        onOpenChange={(next) => {
+          if (!next) {
             close();
             setIsOpen(false);
-          }}
-        >
+          }
+        }}
+      >
+        <Dialog.Popup width="600px">
+          <Dialog.Header>
+            <Dialog.Title className="flex items-center gap-2">
+              <DocumentIcon type={type} />
+              Valg for «{tittel}»
+            </Dialog.Title>
+          </Dialog.Header>
           <AttachmentModalContent
             document={document}
             renameAccess={renameAccessError}
             removeAccess={removeAccessError}
           />
-        </Modal>
-      ) : null}
+        </Dialog.Popup>
+      </Dialog>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { Heading, HStack, Modal, ToggleGroup, Tooltip } from '@navikt/ds-react';
+import { Dialog, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { useMemo, useState } from 'react';
 import { MarkAllAsReadButton } from '@/components/header/notifications/mark-all';
 import { GroupedByBehandlingNotifications } from '@/components/header/notifications/overview/grouped-by-behandling';
@@ -8,7 +8,6 @@ import type { KabalNotification } from '@/components/header/notifications/types'
 import { NotificationsGrouping, useNotificationsOverviewGrouping } from '@/hooks/settings/use-setting';
 
 interface OverviewModalProps {
-  ref: React.RefObject<HTMLDialogElement | null>;
   notifications: readonly KabalNotification[];
   icon: React.ReactElement;
   unreadCount: number;
@@ -24,7 +23,7 @@ const FILTER_VALUES = Object.values(FilterEnum);
 
 const isFilterValue = (value: string): value is FilterEnum => FILTER_VALUES.includes(value as FilterEnum);
 
-export const OverviewModal = ({ ref, notifications, icon, unreadCount }: OverviewModalProps) => {
+export const OverviewModal = ({ notifications, icon, unreadCount }: OverviewModalProps) => {
   const { value: grouping = NotificationsGrouping.BEHANDLING, setValue: setGrouping } =
     useNotificationsOverviewGrouping();
   const [filter, setFilter] = useState<FilterEnum>(FilterEnum.UNREAD);
@@ -44,61 +43,53 @@ export const OverviewModal = ({ ref, notifications, icon, unreadCount }: Overvie
   const { isModalOpen, setIsModalOpen } = useNotificationsContext();
 
   return (
-    <Modal
-      ref={ref}
-      className="h-full w-full min-w-[700px] max-w-[calc(100%-2rem)]"
-      closeOnBackdropClick
-      header={undefined}
-      open={isModalOpen}
-      onClose={() => setIsModalOpen(false)}
-    >
-      <Modal.Header>
-        <HStack gap="space-16" align="center" wrap={false}>
-          <HStack asChild gap="space-4" align="center" wrap={false}>
-            <Heading level="1" size="small">
-              {icon}
-              Varsler ({unreadCount})
-            </Heading>
-          </HStack>
+    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Dialog.Popup className="h-full w-full min-w-175 max-w-[calc(100%-2rem)]">
+        <Dialog.Header>
+          <Dialog.Title className="flex items-center gap-1">
+            {icon}
+            Varsler ({unreadCount})
+          </Dialog.Title>
+          <HStack gap="space-16" align="center" wrap={false}>
+            <Tooltip content="Grupper varsler etter">
+              <ToggleGroup
+                size="small"
+                value={grouping}
+                onChange={(value) => setGrouping(value as NotificationsGrouping)}
+                className="mr-4 inline-block"
+              >
+                <ToggleGroup.Item value={NotificationsGrouping.BEHANDLING} label="Behandling" />
+                <ToggleGroup.Item value={NotificationsGrouping.TYPE} label="Type" />
+              </ToggleGroup>
+            </Tooltip>
 
-          <Tooltip content="Grupper varsler etter">
             <ToggleGroup
               size="small"
-              value={grouping}
-              onChange={(value) => setGrouping(value as NotificationsGrouping)}
+              value={filter}
+              onChange={(value) => {
+                if (isFilterValue(value)) {
+                  setFilter(value);
+                }
+              }}
               className="mr-4 inline-block"
             >
-              <ToggleGroup.Item value={NotificationsGrouping.BEHANDLING} label="Behandling" />
-              <ToggleGroup.Item value={NotificationsGrouping.TYPE} label="Type" />
+              <ToggleGroup.Item value={FilterEnum.UNREAD} label="Vis bare uleste" />
+              <ToggleGroup.Item value={FilterEnum.READ} label="Vis bare leste" />
+              <ToggleGroup.Item value={FilterEnum.ALL} label="Vis alle" />
             </ToggleGroup>
-          </Tooltip>
 
-          <ToggleGroup
-            size="small"
-            value={filter}
-            onChange={(value) => {
-              if (isFilterValue(value)) {
-                setFilter(value);
-              }
-            }}
-            className="mr-4 inline-block"
-          >
-            <ToggleGroup.Item value={FilterEnum.UNREAD} label="Vis bare uleste" />
-            <ToggleGroup.Item value={FilterEnum.READ} label="Vis bare leste" />
-            <ToggleGroup.Item value={FilterEnum.ALL} label="Vis alle" />
-          </ToggleGroup>
+            {unreadCount === 0 ? null : <MarkAllAsReadButton unreadCount={unreadCount} />}
+          </HStack>
+        </Dialog.Header>
 
-          {unreadCount === 0 ? null : <MarkAllAsReadButton unreadCount={unreadCount} />}
-        </HStack>
-      </Modal.Header>
-
-      <Modal.Body className="flex grow flex-col overflow-y-hidden">
-        {grouping === NotificationsGrouping.TYPE ? (
-          <GroupedByTypeNotifications notifications={filteredNotifications} />
-        ) : (
-          <GroupedByBehandlingNotifications notifications={filteredNotifications} />
-        )}
-      </Modal.Body>
-    </Modal>
+        <Dialog.Body className="flex grow flex-col overflow-y-hidden">
+          {grouping === NotificationsGrouping.TYPE ? (
+            <GroupedByTypeNotifications notifications={filteredNotifications} />
+          ) : (
+            <GroupedByBehandlingNotifications notifications={filteredNotifications} />
+          )}
+        </Dialog.Body>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

@@ -1,5 +1,5 @@
 import { CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, Label, Modal, TextField, Tooltip } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, HStack, Label, TextField, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useRef, useState } from 'react';
 import { useLazyFocusedDocumentAndVedlegg } from '@/components/documents/journalfoerte-documents/keyboard/hooks/focused-document';
@@ -21,16 +21,7 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
   const [originalTitle, setOriginalTitle] = useState('');
   const [title, setTitle] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const modalRef = useRef<HTMLDialogElement>(null);
   const getFocusedDocumentAndVedlegg = useLazyFocusedDocumentAndVedlegg(filteredDocuments);
-
-  useEffect(() => {
-    if (open) {
-      modalRef.current?.showModal();
-    } else {
-      modalRef.current?.close();
-    }
-  }, [open]);
 
   const [focusedDocument, setFocusedDocument] = useState<IArkivertDocument | undefined>(undefined);
   const [focusedVedlegg, setFocusedVedlegg] = useState<IArkivertDocumentVedlegg | undefined>(undefined);
@@ -88,7 +79,7 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
       }).unwrap();
 
       setTitle(tittel);
-      modalRef.current?.close();
+      onClose();
       toast.success(`Dokumentnavn oppdatert fra «${originalTitle}» til «${tittel}»`);
     } catch {
       setTitle(originalTitle);
@@ -110,63 +101,56 @@ export const RenameModal = ({ open, onClose, filteredDocuments }: Props) => {
   };
 
   return (
-    <Modal
-      header={{ heading: 'Gi nytt navn til dokument', size: 'small', closeButton: true }}
-      closeOnBackdropClick
-      ref={modalRef}
-      onClose={onClose}
-      className="min-w-[600px]"
-      onFocus={(event) => {
-        // If focus came from outside the modal, focus the input.
-        if (!modalRef.current?.contains(event.relatedTarget)) {
-          inputRef.current?.focus();
-        }
-      }}
-    >
-      <Modal.Body>
-        <HStack align="center" gap="space-8" marginBlock="space-0 space-1">
-          <Label>Originalt navn:</Label>
+    <Dialog size="small" open={open} onOpenChange={(next) => !next && onClose()}>
+      <Dialog.Popup className="min-w-150" initialFocusTo={inputRef}>
+        <Dialog.Header>
+          <Dialog.Title>Gi nytt navn til dokument</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <HStack align="center" gap="space-8" marginBlock="space-0 space-1">
+            <Label>Originalt navn:</Label>
 
-          <BodyShort>"{originalTitle}"</BodyShort>
-        </HStack>
+            <BodyShort>"{originalTitle}"</BodyShort>
+          </HStack>
 
-        <TextField
-          autoFocus
-          size="small"
-          label="Nytt navn"
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-          onKeyDown={onKeyDown}
-          disabled={isLoading}
-          ref={inputRef}
-        />
-      </Modal.Body>
-      <Modal.Footer>
-        <Tooltip placement="top" content="Lagre" keys={['Enter']}>
-          <Button
+          <TextField
+            autoFocus
             size="small"
-            variant="primary"
-            icon={<CheckmarkIcon aria-hidden />}
-            onClick={onSave}
-            loading={isLoading}
-          >
-            Lagre
-          </Button>
-        </Tooltip>
-
-        <Tooltip placement="top" content="Avbryt" keys={['Esc']}>
-          <Button
-            data-color="neutral"
-            size="small"
-            variant="secondary"
-            icon={<XMarkIcon aria-hidden />}
-            onClick={() => modalRef.current?.close()}
+            label="Nytt navn"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+            onKeyDown={onKeyDown}
             disabled={isLoading}
-          >
-            Avbryt
-          </Button>
-        </Tooltip>
-      </Modal.Footer>
-    </Modal>
+            ref={inputRef}
+          />
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Tooltip placement="top" content="Lagre" keys={['Enter']}>
+            <Button
+              size="small"
+              variant="primary"
+              icon={<CheckmarkIcon aria-hidden />}
+              onClick={onSave}
+              loading={isLoading}
+            >
+              Lagre
+            </Button>
+          </Tooltip>
+
+          <Tooltip placement="top" content="Avbryt" keys={['Esc']}>
+            <Button
+              data-color="neutral"
+              size="small"
+              variant="secondary"
+              icon={<XMarkIcon aria-hidden />}
+              onClick={onClose}
+              disabled={isLoading}
+            >
+              Avbryt
+            </Button>
+          </Tooltip>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

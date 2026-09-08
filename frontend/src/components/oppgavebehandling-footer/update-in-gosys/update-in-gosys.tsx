@@ -1,4 +1,4 @@
-import { BodyShort, Button, ConfirmationPanel, Heading, Modal, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, ConfirmationPanel, Dialog, Heading, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { format } from 'date-fns';
 import { useContext, useState } from 'react';
@@ -111,83 +111,95 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
       <Button variant="primary" size="small" onClick={() => setIsOpen(true)} disabled={disabled}>
         {children}
       </Button>
-      <Modal
-        aria-label="Oppdater oppgaven i Gosys og fullfør"
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        header={{ heading: 'Oppdater oppgaven i Gosys og fullfør', closeButton: true }}
-        width="0min(90vw, 1100px)"
-      >
-        <Modal.Body>
-          <VStack gap="space-24">
-            <GrafanaDomainProvider domain="oppgave-finish">
-              <GosysOppgave oppgavebehandling={oppgavebehandling} />
-            </GrafanaDomainProvider>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog.Popup
+          width="min(90vw, 1100px)"
+          aria-label="Oppdater oppgaven i Gosys og fullfør"
+          closeOnOutsideClick={false}
+        >
+          <Dialog.Header>
+            <Dialog.Title>Oppdater oppgaven i Gosys og fullfør</Dialog.Title>
+          </Dialog.Header>
+          <Dialog.Body>
+            <VStack gap="space-24">
+              <GrafanaDomainProvider domain="oppgave-finish">
+                <GosysOppgave oppgavebehandling={oppgavebehandling} />
+              </GrafanaDomainProvider>
 
-            {gosysOppgaveIsOpen ? (
-              <VStack gap="space-12" width="min-content">
-                {oppgavebehandling.typeId === SaksTypeEnum.ANKE &&
-                (oppgavebehandling.resultat.utfallId === UtfallEnum.DELVIS_MEDHOLD ||
-                  oppgavebehandling.resultat.extraUtfallIdSet.includes(UtfallEnum.DELVIS_MEDHOLD)) ? (
-                  <Alert variant="info">
-                    Oppdater denne oppgaven fra Gosys ved å velge enhetsmappe "Sendt til Trygderetten". Du må i tillegg
-                    gå inn i Gosys og opprette en ny oppgave der, som du sender til vedtaksenheten med beskjed om at de
-                    kan effektuere det du har gitt delvis medhold i.
-                  </Alert>
-                ) : null}
+              {gosysOppgaveIsOpen ? (
+                <VStack gap="space-12" width="min-content">
+                  {oppgavebehandling.typeId === SaksTypeEnum.ANKE &&
+                  (oppgavebehandling.resultat.utfallId === UtfallEnum.DELVIS_MEDHOLD ||
+                    oppgavebehandling.resultat.extraUtfallIdSet.includes(UtfallEnum.DELVIS_MEDHOLD)) ? (
+                    <Alert variant="info">
+                      Oppdater denne oppgaven fra Gosys ved å velge enhetsmappe "Sendt til Trygderetten". Du må i
+                      tillegg gå inn i Gosys og opprette en ny oppgave der, som du sender til vedtaksenheten med beskjed
+                      om at de kan effektuere det du har gitt delvis medhold i.
+                    </Alert>
+                  ) : null}
 
-                <Beskrivelse beskrivelse={beskrivelse} setBeskrivelse={setBeskrivelse} />
+                  <Beskrivelse beskrivelse={beskrivelse} setBeskrivelse={setBeskrivelse} />
 
-                <BodyShort size="small">
-                  <b>
-                    Frist: <time dateTime={format(NOW, FORMAT)}>{format(NOW, PRETTY_FORMAT)}</time>
-                  </b>
-                </BodyShort>
+                  <BodyShort size="small">
+                    <b>
+                      Frist: <time dateTime={format(NOW, FORMAT)}>{format(NOW, PRETTY_FORMAT)}</time>
+                    </b>
+                  </BodyShort>
 
-                <ReceivingEnhet
-                  selectedEnhet={selectedEnhet}
-                  setSelectedEnhet={(e) => {
-                    if (e === selectedEnhet) {
-                      return;
-                    }
+                  <ReceivingEnhet
+                    selectedEnhet={selectedEnhet}
+                    setSelectedEnhet={(e) => {
+                      if (e === selectedEnhet) {
+                        return;
+                      }
 
-                    setSelectedEnhet(e);
-                    setSelectedMappe(null);
-                  }}
-                  error={enhetError}
-                  enheter={enheter}
-                  oppgavebehandling={oppgavebehandling}
+                      setSelectedEnhet(e);
+                      setSelectedMappe(null);
+                    }}
+                    error={enhetError}
+                    enheter={enheter}
+                    oppgavebehandling={oppgavebehandling}
+                  />
+
+                  <Enhetmappe
+                    enhetId={selectedEnhet}
+                    selectedMappe={selectedMappe}
+                    setSelectedMappe={setSelectedMappe}
+                  />
+                </VStack>
+              ) : (
+                <ConfirmIgnoreOrRequiredWarning
+                  gosysOppgave={gosysOppgave}
+                  ignoreGosysOppgave={ignoreGosysOppgave}
+                  setIgnoreGosysOppgave={setIgnoreGosysOppgave}
                 />
+              )}
 
-                <Enhetmappe enhetId={selectedEnhet} selectedMappe={selectedMappe} setSelectedMappe={setSelectedMappe} />
-              </VStack>
-            ) : (
-              <ConfirmIgnoreOrRequiredWarning
-                gosysOppgave={gosysOppgave}
-                ignoreGosysOppgave={ignoreGosysOppgave}
-                setIgnoreGosysOppgave={setIgnoreGosysOppgave}
-              />
-            )}
+              <ValidationSummary sections={validationSectionErrors} />
+            </VStack>
+          </Dialog.Body>
 
-            <ValidationSummary sections={validationSectionErrors} />
-          </VStack>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button size="small" variant="primary" onClick={handleFinish} loading={isFinishing || isSettingGosysOppgave}>
-            Oppdater og fullfør
-          </Button>
-          <Button
-            data-color="neutral"
-            size="small"
-            variant="secondary"
-            disabled={isFinishing}
-            onClick={() => setIsOpen(false)}
-          >
-            Avbryt
-          </Button>
-        </Modal.Footer>
-      </Modal>
+          <Dialog.Footer>
+            <Button
+              size="small"
+              variant="primary"
+              onClick={handleFinish}
+              loading={isFinishing || isSettingGosysOppgave}
+            >
+              Oppdater og fullfør
+            </Button>
+            <Button
+              data-color="neutral"
+              size="small"
+              variant="secondary"
+              disabled={isFinishing}
+              onClick={() => setIsOpen(false)}
+            >
+              Avbryt
+            </Button>
+          </Dialog.Footer>
+        </Dialog.Popup>
+      </Dialog>
     </div>
   );
 };

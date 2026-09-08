@@ -32,7 +32,7 @@ export const Notifications = () => {
   const color = hasUnreadNotifications ? 'var(--ax-text-danger-decoration)' : 'var(--ax-text-neutral)';
 
   const theme = useAppTheme();
-  const { modalRef, isMenuOpen, setIsMenuOpen } = useNotificationsContext();
+  const { setIsModalOpen, isMenuOpen, setIsMenuOpen } = useNotificationsContext();
 
   return (
     <>
@@ -69,7 +69,7 @@ export const Notifications = () => {
         <Theme theme={theme}>
           <ActionMenu.Content align="start" className="max-h-[calc(100vh-48px-8px-8px)] w-90">
             <ActionMenu.Item
-              onSelect={() => modalRef.current?.showModal()}
+              onSelect={() => setIsModalOpen(true)}
               icon={<SidebarBothIcon />}
               className="mb-4 w-full cursor-pointer"
             >
@@ -86,7 +86,6 @@ export const Notifications = () => {
       </ActionMenu>
       <Theme theme={theme}>
         <OverviewModal
-          ref={modalRef}
           notifications={notifications}
           icon={<Icon title="Varsler" color={color} />}
           unreadCount={unreadCount}

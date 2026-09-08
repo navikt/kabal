@@ -1,5 +1,5 @@
 import { CogRotationIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from '@/components/toast/store';
 import { VersionToast } from '@/components/version-checker/toast';
@@ -15,7 +15,7 @@ const UPDATE_TOAST_TIMEOUT: number = Number.POSITIVE_INFINITY;
 const UPDATED_TOAST_TIMEOUT: number = 5_000;
 
 export const VersionCheckerStatus = () => {
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
   const [ignoredAt, setIgnoredAt] = useState(getIgnoredAt());
   const ignoredUntil = ignoredAt === 0 ? 0 : ignoredAt + IGNORE_UPDATE_TIMEOUT;
   const closeToast = useRef<() => void>(() => undefined);
@@ -49,7 +49,7 @@ export const VersionCheckerStatus = () => {
 
       if (isRequired && !isNonDisturbPage) {
         closeToast.current();
-        modalRef.current?.showModal();
+        setIsOpen(true);
       } else {
         showToast(isRequired);
       }
@@ -95,38 +95,47 @@ export const VersionCheckerStatus = () => {
     showToast(true);
   }, [showToast]);
 
-  const onIgnoreModal = useCallback(() => modalRef.current?.close(), []);
+  const onIgnoreModal = useCallback(() => {
+    setIsOpen(false);
+    onCloseModal();
+  }, [onCloseModal]);
 
   return (
-    <Modal
-      onClose={onCloseModal}
-      closeOnBackdropClick
-      header={{
-        heading: 'Ny versjon av Kabal er tilgjengelig!',
+    <Dialog
+      open={isOpen}
+      onOpenChange={(nextOpen) => {
+        if (nextOpen) {
+          setIsOpen(true);
+        } else {
+          onIgnoreModal();
+        }
       }}
-      ref={modalRef}
-      width={500}
     >
-      <Modal.Body>
-        <BodyShort>Det er viktig at du oppdaterer så raskt som mulig.</BodyShort>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="primary"
-          icon={<CogRotationIcon aria-hidden />}
-          onClick={() => {
-            pushEvent('click_update_modal', 'update');
-            window.location.reload();
-          }}
-          size="medium"
-        >
-          Oppdater Kabal
-        </Button>
-        <Button data-color="neutral" variant="secondary" onClick={onIgnoreModal} size="medium">
-          Ignorer i {ENVIRONMENT.isProduction ? '1 time' : '10 sekunder'}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      <Dialog.Popup width="500px">
+        <Dialog.Header>
+          <Dialog.Title>Ny versjon av Kabal er tilgjengelig!</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <BodyShort>Det er viktig at du oppdaterer så raskt som mulig.</BodyShort>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button
+            variant="primary"
+            icon={<CogRotationIcon aria-hidden />}
+            onClick={() => {
+              pushEvent('click_update_modal', 'update');
+              window.location.reload();
+            }}
+            size="medium"
+          >
+            Oppdater Kabal
+          </Button>
+          <Button data-color="neutral" variant="secondary" onClick={onIgnoreModal} size="medium">
+            Ignorer i {ENVIRONMENT.isProduction ? '1 time' : '10 sekunder'}
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };
 

@@ -1,5 +1,5 @@
 import { MenuElipsisVerticalIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
-import { Button, Modal, Tooltip } from '@navikt/ds-react';
+import { Button, Dialog, Tooltip } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { Fields } from '@/components/documents/new-documents/grid';
 import { useRemoveDocumentAccessErrors } from '@/components/documents/new-documents/hooks/use-remove-access';
@@ -88,21 +88,22 @@ export const DocumentModal = ({ document, isOpen, setIsOpen }: DocumentProps) =>
           />
         </Tooltip>
       </AccessErrorsSummary>
-      {isOpen ? (
-        <Modal
-          open
-          width={document.parentId === null ? '2000px' : '600px'}
-          aria-modal
-          header={{
-            heading: `Valg for «${tittel}»`,
-            icon: <DocumentIcon type={type} />,
-          }}
-          closeOnBackdropClick
-          onClose={() => {
+      <Dialog
+        open={isOpen}
+        onOpenChange={(next) => {
+          if (!next) {
             close();
             setIsOpen(false);
-          }}
-        >
+          }
+        }}
+      >
+        <Dialog.Popup width={document.parentId === null ? '2000px' : '600px'}>
+          <Dialog.Header>
+            <Dialog.Title className="flex items-center gap-2">
+              <DocumentIcon type={type} />
+              Valg for «{tittel}»
+            </Dialog.Title>
+          </Dialog.Header>
           <DocumentModalContent
             document={document}
             renameAccess={renameAccessError}
@@ -117,8 +118,8 @@ export const DocumentModal = ({ document, isOpen, setIsOpen }: DocumentProps) =>
             setKlagevedtakDatoConfirmed={setKlagevedtakDatoConfirmed}
             isArchiveOnly={isArchiveOnly}
           />
-        </Modal>
-      ) : null}
+        </Dialog.Popup>
+      </Dialog>
     </>
   );
 };
