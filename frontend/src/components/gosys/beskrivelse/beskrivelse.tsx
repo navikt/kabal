@@ -1,6 +1,6 @@
-import { Box, Button, Modal, VStack } from '@navikt/ds-react';
+import { Box, Button, Dialog, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import { GosysBeskrivelseTabs } from '@/components/gosys/beskrivelse/beskrivelse-tabs';
 import { Entry } from '@/components/gosys/beskrivelse/entry';
 import { splitBeskrivelse } from '@/components/gosys/beskrivelse/parsing/split-beskrivelse';
@@ -13,18 +13,21 @@ interface Props {
 
 export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
   const oppgaveId = useOppgaveIdString();
-  const modalRef = useRef<HTMLDialogElement>(null);
   const trimmedBeskrivelse = oppgavebeskrivelse.trim();
   const entries = useMemo(() => splitBeskrivelse(oppgavebeskrivelse), [oppgavebeskrivelse]);
   const pushEvent = usePushEvent();
 
-  const onOpenClick = useCallback(() => {
-    modalRef.current?.showModal();
-    pushEvent('open-gosys-description', {
-      entries: entries.length.toString(10),
-      oppgaveId,
-    });
-  }, [entries.length, oppgaveId, pushEvent]);
+  const onOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      if (nextOpen) {
+        pushEvent('open-gosys-description', {
+          entries: entries.length.toString(10),
+          oppgaveId,
+        });
+      }
+    },
+    [entries.length, oppgaveId, pushEvent],
+  );
 
   const [firstEntry, secondEntry] = entries;
 
@@ -33,7 +36,7 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
   }
 
   return (
-    <>
+    <Dialog onOpenChange={onOpenChange}>
       <VStack gap="space-8">
         <VStack as="ul" gap="space-8">
           <Box background="neutral-soft" padding="space-8" borderRadius="4">
@@ -48,16 +51,21 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
           ) : null}
         </VStack>
 
-        <Button data-color="neutral" variant="tertiary" size="small" onClick={onOpenClick}>
-          Vis alle ({entries.length})
-        </Button>
+        <Dialog.Trigger>
+          <Button data-color="neutral" variant="tertiary" size="small">
+            Vis alle ({entries.length})
+          </Button>
+        </Dialog.Trigger>
       </VStack>
-      <Modal header={{ heading: 'Beskrivelse fra Gosys', closeButton: true }} ref={modalRef} closeOnBackdropClick>
-        <Modal.Body className="h-[80vh] overflow-hidden">
+      <Dialog.Popup>
+        <Dialog.Header>
+          <Dialog.Title>Beskrivelse fra Gosys</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body className="h-[80vh] overflow-hidden">
           <GosysBeskrivelseTabs beskrivelse={trimmedBeskrivelse} entries={entries} />
-        </Modal.Body>
-      </Modal>
-    </>
+        </Dialog.Body>
+      </Dialog.Popup>
+    </Dialog>
   );
 };
 

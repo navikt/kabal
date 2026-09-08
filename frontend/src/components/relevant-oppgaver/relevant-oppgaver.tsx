@@ -1,6 +1,6 @@
 import { FolderFileIcon } from '@navikt/aksel-icons';
-import { Button, type ButtonProps, Loader, Modal, Table, Tooltip } from '@navikt/ds-react';
-import { useEffect, useRef } from 'react';
+import { Button, type ButtonProps, Dialog, Loader, Table, Tooltip } from '@navikt/ds-react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 /*
  * We have the following dependency cycle:
@@ -32,7 +32,7 @@ const EMPTY_LIST: string[] = [];
 
 export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
   const location = useLocation();
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
   const { data: sakenGjelder, isLoading: isOppgaveLoading } = useGetSakenGjelderQuery(oppgaveId);
   const { data, isLoading, refetch, isFetching, isError } = useGetRelevantOppgaverQuery(oppgaveId);
 
@@ -42,7 +42,7 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: React to changes in location.
   useEffect(() => {
-    modalRef.current?.close();
+    setIsOpen(false);
   }, [location.pathname]);
 
   if (!isLoading && totalCount === 0) {
@@ -64,57 +64,62 @@ export const RelevantOppgaver = ({ oppgaveId, size = 'small' }: Props) => {
           loading={isLoading}
           onClick={() => {
             pushEvent('open-relevant-oppgaver', 'oppgave-lists', { enabled: 'true' });
-            modalRef.current?.showModal();
+            setIsOpen(true);
           }}
           icon={<FolderFileIcon aria-hidden />}
         >
           {totalCount.toString(10)}
         </Button>
       </Tooltip>
-      <Modal header={{ heading }} width="2000px" closeOnBackdropClick ref={modalRef}>
-        <Modal.Body className="flex flex-col gap-y-4">
-          {isOppgaveLoading || sakenGjelder === undefined ? (
-            <Loader />
-          ) : (
-            <SectionWithHeading heading="Denne oppgaven" size="small">
-              <Table>
-                <Table.Header>
-                  <Table.Row>
-                    <TablePlainHeaders columnKeys={UFERDIGE_COLUMNS} />
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <OppgaveRow columns={UFERDIGE_COLUMNS} oppgaveId={oppgaveId} />
-                </Table.Body>
-              </Table>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog.Popup width="2000px">
+          <Dialog.Header>
+            <Dialog.Title>{heading}</Dialog.Title>
+          </Dialog.Header>
+          <Dialog.Body className="flex flex-col gap-y-4">
+            {isOppgaveLoading || sakenGjelder === undefined ? (
+              <Loader />
+            ) : (
+              <SectionWithHeading heading="Denne oppgaven" size="small">
+                <Table>
+                  <Table.Header>
+                    <Table.Row>
+                      <TablePlainHeaders columnKeys={UFERDIGE_COLUMNS} />
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    <OppgaveRow columns={UFERDIGE_COLUMNS} oppgaveId={oppgaveId} />
+                  </Table.Body>
+                </Table>
+              </SectionWithHeading>
+            )}
+
+            <SectionWithHeading heading="Andre oppgaver" size="small">
+              <StaticOppgaveTable
+                behandlinger={uferdigeOppgaverIdList}
+                settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
+                columns={UFERDIGE_COLUMNS}
+                refetch={refetch}
+                isLoading={isLoading}
+                isFetching={isFetching}
+                isError={isError}
+              />
             </SectionWithHeading>
-          )}
 
-          <SectionWithHeading heading="Andre oppgaver" size="small">
-            <StaticOppgaveTable
-              behandlinger={uferdigeOppgaverIdList}
-              settingsKey={OppgaveTableRowsPerPage.RELEVANT_ACTIVE}
-              columns={UFERDIGE_COLUMNS}
-              refetch={refetch}
-              isLoading={isLoading}
-              isFetching={isFetching}
-              isError={isError}
-            />
-          </SectionWithHeading>
-
-          <SectionWithHeading heading="Oppgaver på vent" size="small">
-            <StaticOppgaveTable
-              behandlinger={ventendeOppgaverIdList}
-              settingsKey={OppgaveTableRowsPerPage.RELEVANT_VENTENDE}
-              columns={VENTENDE_COLUMNS}
-              refetch={refetch}
-              isLoading={isLoading}
-              isFetching={isFetching}
-              isError={isError}
-            />
-          </SectionWithHeading>
-        </Modal.Body>
-      </Modal>
+            <SectionWithHeading heading="Oppgaver på vent" size="small">
+              <StaticOppgaveTable
+                behandlinger={ventendeOppgaverIdList}
+                settingsKey={OppgaveTableRowsPerPage.RELEVANT_VENTENDE}
+                columns={VENTENDE_COLUMNS}
+                refetch={refetch}
+                isLoading={isLoading}
+                isFetching={isFetching}
+                isError={isError}
+              />
+            </SectionWithHeading>
+          </Dialog.Body>
+        </Dialog.Popup>
+      </Dialog>
     </>
   );
 };

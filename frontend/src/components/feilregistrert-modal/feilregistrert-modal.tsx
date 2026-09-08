@@ -1,5 +1,5 @@
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { BodyLong, BodyShort, Button, Heading, Loader, Modal } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Button, Dialog, Heading, Loader } from '@navikt/ds-react';
 import { isoDateTimeToPretty } from '@/domain/date';
 import { formatEmployeeName } from '@/domain/employee-name';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
@@ -10,15 +10,14 @@ interface Props extends ContentProps {
 }
 
 export const FeilregistrertModal = ({ isOpen, close }: Props) => (
-  <Modal
-    open={isOpen}
-    header={{ heading: 'Feilregistrert oppgave' }}
-    onClose={close}
-    width="medium"
-    closeOnBackdropClick
-  >
-    <Content close={close} />
-  </Modal>
+  <Dialog open={isOpen} onOpenChange={(next) => !next && close()}>
+    <Dialog.Popup width="medium">
+      <Dialog.Header>
+        <Dialog.Title>Feilregistrert oppgave</Dialog.Title>
+      </Dialog.Header>
+      <Content close={close} />
+    </Dialog.Popup>
+  </Dialog>
 );
 
 interface ContentProps {
@@ -35,7 +34,7 @@ const Content = ({ close }: ContentProps) => {
 
   return (
     <>
-      <Modal.Body>
+      <Dialog.Body>
         <BodyShort spacing>
           <time dateTime={oppgave.feilregistrering.registered}>
             {isoDateTimeToPretty(oppgave.feilregistrering.registered)}
@@ -49,12 +48,12 @@ const Content = ({ close }: ContentProps) => {
         <BodyLong spacing className="border-ax-border-neutral-subtle border-l-6 pl-4">
           {oppgave.feilregistrering.reason}
         </BodyLong>
-      </Modal.Body>
-      <Modal.Footer>
+      </Dialog.Body>
+      <Dialog.Footer>
         <Button variant="primary" size="small" icon={<XMarkIcon aria-hidden />} onClick={close}>
           Lukk
         </Button>
-      </Modal.Footer>
+      </Dialog.Footer>
     </>
   );
 };

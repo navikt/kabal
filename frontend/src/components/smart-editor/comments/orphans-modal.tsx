@@ -1,6 +1,5 @@
 import { LinkBrokenIcon } from '@navikt/aksel-icons';
-import { Button, Heading, HStack, Modal, Tooltip } from '@navikt/ds-react';
-import { useId, useRef } from 'react';
+import { Button, Dialog, HStack, Tooltip } from '@navikt/ds-react';
 import { Alert } from '@/components/alert/alert';
 import { THREAD_WIDTH, Thread } from '@/components/smart-editor/comments/thread';
 import { useThreads } from '@/components/smart-editor/comments/use-threads';
@@ -12,36 +11,34 @@ const MODAL_PADDING = 24;
 
 export const OrphansModal = () => {
   const { orphans } = useThreads();
-  const modalRef = useRef<HTMLDialogElement>(null);
-  const headerId = useId();
 
   const orphansCount = orphans.length;
   const modalWidth = Math.min(orphansCount * (THREAD_WIDTH + GAP * 4) - GAP * 4 + MODAL_PADDING * 2, window.innerWidth);
 
   return (
-    <>
+    <Dialog>
       <Tooltip content={ORPHAN_HELP_TEXT}>
-        <Button data-color="neutral" variant="tertiary" size="xsmall" onClick={() => modalRef.current?.showModal()}>
-          <HStack as="span" align="center" wrap={false}>
-            ({orphansCount} <LinkBrokenIcon aria-hidden />)
-          </HStack>
-        </Button>
+        <Dialog.Trigger>
+          <Button data-color="neutral" variant="tertiary" size="xsmall">
+            <HStack as="span" align="center" wrap={false}>
+              ({orphansCount} <LinkBrokenIcon aria-hidden />)
+            </HStack>
+          </Button>
+        </Dialog.Trigger>
       </Tooltip>
-      <Modal ref={modalRef} closeOnBackdropClick width={modalWidth} aria-labelledby={headerId}>
-        <Modal.Header id={headerId} closeButton>
-          <Heading level="1" size="small">
-            Andre kommentarer
-          </Heading>
-        </Modal.Header>
-        <Modal.Body>
+      <Dialog.Popup width={`${modalWidth}px`}>
+        <Dialog.Header>
+          <Dialog.Title>Andre kommentarer</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
           <Alert variant="info">{ORPHAN_HELP_TEXT}</Alert>
           <HStack as="section" wrap align="start" gap="space-16" marginBlock="space-16 space-0">
             {orphans.map((o) => (
               <Thread key={o.id} thread={o} isFocused zIndex={0} />
             ))}
           </HStack>
-        </Modal.Body>
-      </Modal>
-    </>
+        </Dialog.Body>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

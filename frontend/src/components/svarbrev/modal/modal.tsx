@@ -1,4 +1,4 @@
-import { Button, HStack, Loader, Modal, Switch, Tag, TextField, Tooltip, VStack } from '@navikt/ds-react';
+import { Button, Dialog, HStack, Loader, Switch, Tag, TextField, Tooltip, VStack } from '@navikt/ds-react';
 import { usePdfUrl } from '@/components/svarbrev/modal/use-pdf-url';
 import { Warning } from '@/components/svarbrev/modal/warning';
 import { TimeInput } from '@/components/svarbrev/time-input';
@@ -57,129 +57,128 @@ export const PdfModal = ({
   const heading = getTitle(typeId);
 
   return (
-    <Modal
-      header={{ heading }}
-      size="small"
-      closeOnBackdropClick
-      open={isOpen}
-      onClose={close}
-      width="1100px"
-      className="max-w-[90vw]"
-    >
-      <VStack asChild gap="space-16" width="100%">
-        <Modal.Body>
-          <VStack gap="space-16">
-            <HStack align="center" gap="space-0 space-4" className="text-base italic">
-              <span>
-                Sist endret <Time dateTime={modified} /> av <User {...modifiedBy} />.
-              </span>
-              {hasChanges ? (
-                <Tag data-color="warning" variant="outline" size="small">
-                  Utkast
-                </Tag>
-              ) : (
-                <Tag data-color="info" variant="outline" size="small">
-                  Lagret
-                </Tag>
-              )}
-            </HStack>
-            <HStack align="center" gap="space-0 space-16">
-              <Switch size="small" checked={shouldSend} onChange={({ target }) => setShouldSend(target.checked)}>
-                Aktiv
-              </Switch>
-              <Tooltip content="Ytelse">
-                <span>{ytelseNameIsLoading ? 'Laster...' : (ytelseName ?? `Ukjent ytelse med ID «${ytelseId}»`)}</span>
-              </Tooltip>
-              <Tooltip content="Saksbehandlingstid">
-                <HStack align="center" gap="space-0 space-8">
-                  <TimeInput
-                    value={behandlingstidUnits}
-                    onChange={setBehandlingstidUnits}
-                    unit={behandlingstidUnitTypeId}
-                    setUnit={setBehandlingstidUnitTypeId}
-                  />
-                </HStack>
-              </Tooltip>
-              <Tooltip content="Tekst til svarbrev (valgfri)">
-                <div className="grow">
-                  <TextField
-                    size="small"
-                    label="Tekst (valgfri)"
-                    placeholder="Tekst til svarbrev (valgfri)"
-                    hideLabel
-                    value={customText ?? ''}
-                    onChange={({ target }) => setCustomText(target.value)}
-                  />
-                </div>
-              </Tooltip>
-            </HStack>
-          </VStack>
+    <Dialog size="small" open={isOpen} onOpenChange={(next) => !next && close()}>
+      <Dialog.Popup width="1100px" className="max-w-[90vw]">
+        <Dialog.Header>
+          <Dialog.Title>{heading}</Dialog.Title>
+        </Dialog.Header>
+        <VStack asChild gap="space-16" width="100%">
+          <Dialog.Body>
+            <VStack gap="space-16">
+              <HStack align="center" gap="space-0 space-4" className="text-base italic">
+                <span>
+                  Sist endret <Time dateTime={modified} /> av <User {...modifiedBy} />.
+                </span>
+                {hasChanges ? (
+                  <Tag data-color="warning" variant="outline" size="small">
+                    Utkast
+                  </Tag>
+                ) : (
+                  <Tag data-color="info" variant="outline" size="small">
+                    Lagret
+                  </Tag>
+                )}
+              </HStack>
+              <HStack align="center" gap="space-0 space-16">
+                <Switch size="small" checked={shouldSend} onChange={({ target }) => setShouldSend(target.checked)}>
+                  Aktiv
+                </Switch>
+                <Tooltip content="Ytelse">
+                  <span>
+                    {ytelseNameIsLoading ? 'Laster...' : (ytelseName ?? `Ukjent ytelse med ID «${ytelseId}»`)}
+                  </span>
+                </Tooltip>
+                <Tooltip content="Saksbehandlingstid">
+                  <HStack align="center" gap="space-0 space-8">
+                    <TimeInput
+                      value={behandlingstidUnits}
+                      onChange={setBehandlingstidUnits}
+                      unit={behandlingstidUnitTypeId}
+                      setUnit={setBehandlingstidUnitTypeId}
+                    />
+                  </HStack>
+                </Tooltip>
+                <Tooltip content="Tekst til svarbrev (valgfri)">
+                  <div className="grow">
+                    <TextField
+                      size="small"
+                      label="Tekst (valgfri)"
+                      placeholder="Tekst til svarbrev (valgfri)"
+                      hideLabel
+                      value={customText ?? ''}
+                      onChange={({ target }) => setCustomText(target.value)}
+                    />
+                  </div>
+                </Tooltip>
+              </HStack>
+            </VStack>
 
-          {hasChanges ? (
-            <Warning behandlingstidUnits={behandlingstidUnits} behandlingstidUnitTypeId={behandlingstidUnitTypeId} />
+            {hasChanges ? (
+              <Warning behandlingstidUnits={behandlingstidUnits} behandlingstidUnitTypeId={behandlingstidUnitTypeId} />
+            ) : null}
+
+            <div className="relative h-375 max-h-[90vh] w-full">
+              <div className="-translate-1/2 absolute top-1/2 left-1/2 z-0">
+                <Loader size="3xlarge" />
+              </div>
+
+              {pdfUrl === null ? null : (
+                // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: PDF
+                <object
+                  role="document"
+                  type="application/pdf"
+                  name="pdf-viewer"
+                  data={pdfUrl}
+                  className="absolute z-1 h-full w-full"
+                  aria-label={heading}
+                />
+              )}
+            </div>
+          </Dialog.Body>
+        </VStack>
+        <Dialog.Footer>
+          {hasChanges || isLoading ? (
+            <Button
+              type="button"
+              variant="primary"
+              size="small"
+              loading={isLoading}
+              onClick={async () => {
+                await updateSetting({
+                  id,
+                  shouldSend,
+                  behandlingstidUnits,
+                  behandlingstidUnitTypeId,
+                  customText,
+                });
+                close();
+              }}
+            >
+              Lagre
+            </Button>
           ) : null}
 
-          <div className="relative h-[1500px] max-h-[90vh] w-full">
-            <div className="-translate-1/2 absolute top-1/2 left-1/2 z-0">
-              <Loader size="3xlarge" />
-            </div>
+          {hasChanges ? (
+            <Button
+              data-color="neutral"
+              type="button"
+              variant="secondary"
+              size="small"
+              onClick={() => {
+                cancel();
+                close();
+              }}
+            >
+              Avbryt og forkast endringer
+            </Button>
+          ) : null}
 
-            {pdfUrl === null ? null : (
-              // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: PDF
-              <object
-                role="document"
-                type="application/pdf"
-                name="pdf-viewer"
-                data={pdfUrl}
-                className="absolute z-1 h-full w-full"
-                aria-label={heading}
-              />
-            )}
-          </div>
-        </Modal.Body>
-      </VStack>
-      <Modal.Footer>
-        {hasChanges || isLoading ? (
-          <Button
-            type="button"
-            variant="primary"
-            size="small"
-            loading={isLoading}
-            onClick={async () => {
-              await updateSetting({
-                id,
-                shouldSend,
-                behandlingstidUnits,
-                behandlingstidUnitTypeId,
-                customText,
-              });
-              close();
-            }}
-          >
-            Lagre
+          <Button data-color="neutral" type="button" variant="secondary" size="small" onClick={close}>
+            Lukk
           </Button>
-        ) : null}
-
-        {hasChanges ? (
-          <Button
-            data-color="neutral"
-            type="button"
-            variant="secondary"
-            size="small"
-            onClick={() => {
-              cancel();
-              close();
-            }}
-          >
-            Avbryt og forkast endringer
-          </Button>
-        ) : null}
-
-        <Button data-color="neutral" type="button" variant="secondary" size="small" onClick={close}>
-          Lukk
-        </Button>
-      </Modal.Footer>
-    </Modal>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };
 

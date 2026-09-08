@@ -1,5 +1,5 @@
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
+import { Button, Dialog, HStack, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
@@ -97,7 +97,7 @@ export const DocumentModalContent = ({
 
   return (
     <>
-      <Modal.Body className="flex h-[80vh] w-full gap-4 overflow-hidden">
+      <Dialog.Body className="flex h-[80vh] w-full gap-4 overflow-hidden">
         <VStack gap="space-16" width="400px" height="100%" flexShrink="0" overflowY="auto">
           <HStack align="center" gap="space-8">
             <Tag data-color="info" variant="outline" size="small">
@@ -171,8 +171,8 @@ export const DocumentModalContent = ({
         {showNewFileViewer.data?.enabled === true ? (
           <FileViewer showDocumentList={[{ documentId: document.id, parentId: null, type: document.type }]} />
         ) : null}
-      </Modal.Body>
-      <Modal.Footer className="items-center">
+      </Dialog.Body>
+      <Dialog.Footer className="items-center">
         <AccessErrorsSummary
           documentErrors={removeAccess === null ? [] : [removeAccess]}
           attachmentErrors={removeAttachmentsAccess}
@@ -190,7 +190,7 @@ export const DocumentModalContent = ({
           validationErrors={validationErrors}
           isArchiveOnly={isArchiveOnly}
         />
-      </Modal.Footer>
+      </Dialog.Footer>
     </>
   );
 };

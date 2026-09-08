@@ -1,7 +1,7 @@
 import { CogIcon } from '@navikt/aksel-icons';
-import { Heading, Modal, ToggleGroup, VStack } from '@navikt/ds-react';
+import { Dialog, Heading, ToggleGroup, VStack } from '@navikt/ds-react';
 import { useEditorReadOnly } from 'platejs/react';
-import { useCallback, useId, useRef, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
 import { AbbreviationsContent, AbbreviationsHeadingContent } from '@/components/settings/abbreviations/abbreviations';
 import { AbbreviationsExplanation } from '@/components/settings/abbreviations/explanation';
 import { useSmartEditorAnnotationsAtOrigin, useSmartEditorExpandedThreads } from '@/hooks/settings/use-setting';
@@ -17,11 +17,9 @@ export const SaksbehandlerSettings = () => {
     useSmartEditorAnnotationsAtOrigin();
   const readOnly = useEditorReadOnly();
   const { value: expandedThreads = true, setValue: setExpandedThreads } = useSmartEditorExpandedThreads();
-  const modalRef = useRef<HTMLDialogElement>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const language = useSmartEditorLanguage();
   const [setLanguage] = useSetSmartEditorLanguage();
-  const modalHeadingId = useId();
   const langHeadingId = useId();
   const commentHeadingId = useId();
   const abbreviationsHeadingId = useId();
@@ -35,31 +33,28 @@ export const SaksbehandlerSettings = () => {
     [setLanguage],
   );
 
+  const onOpenChange = useCallback((open: boolean) => {
+    setIsSettingsOpen(open);
+
+    if (open) {
+      pushEvent('open-settings', 'smart-editor');
+    }
+  }, []);
+
   return (
-    <>
-      <ToolbarIconButton
-        label="Innstillinger - språk, forkortelser, kommentarer og bokmerker"
-        icon={<CogIcon aria-hidden />}
-        active={isSettingsOpen}
-        onClick={() => {
-          pushEvent('open-settings', 'smart-editor');
-          setIsSettingsOpen(true);
-          modalRef.current?.showModal();
-        }}
-      />
-      <Modal
-        ref={modalRef}
-        onClose={() => setIsSettingsOpen(false)}
-        width="900px"
-        aria-labelledby={modalHeadingId}
-        closeOnBackdropClick
-      >
-        <Modal.Header>
-          <Heading size="medium" level="1" id={modalHeadingId}>
-            Innstillinger for brevutforming
-          </Heading>
-        </Modal.Header>
-        <Modal.Body className="flex flex-col gap-y-4">
+    <Dialog onOpenChange={onOpenChange}>
+      <Dialog.Trigger>
+        <ToolbarIconButton
+          label="Innstillinger - språk, forkortelser, kommentarer og bokmerker"
+          icon={<CogIcon aria-hidden />}
+          active={isSettingsOpen}
+        />
+      </Dialog.Trigger>
+      <Dialog.Popup width="900px">
+        <Dialog.Header>
+          <Dialog.Title>Innstillinger for brevutforming</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body className="flex flex-col gap-y-4">
           {readOnly ? null : (
             <section aria-labelledby={langHeadingId}>
               <Heading level="2" size="small" spacing id={langHeadingId}>
@@ -128,9 +123,9 @@ export const SaksbehandlerSettings = () => {
 
             <AbbreviationsContent headingSize="xsmall" />
           </section>
-        </Modal.Body>
-      </Modal>
-    </>
+        </Dialog.Body>
+      </Dialog.Popup>
+    </Dialog>
   );
 };
 

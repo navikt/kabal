@@ -1,6 +1,6 @@
-import { Box, Heading, HGrid, HStack, Modal } from '@navikt/ds-react';
+import { Box, Dialog, Heading, HGrid, HStack } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
-import { useCallback, useEffect, useId, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   closeKeyboardHelpModal,
   useIsKeyboardHelpModalOpen,
@@ -10,19 +10,14 @@ import { KEY_ICONS, Keys, MOD_KEY } from '@/keys';
 import { pushEvent } from '@/observability';
 
 export const KeyboardHelpModal = () => {
-  const ref = useRef<HTMLDialogElement>(null);
   const isOpen = useIsKeyboardHelpModalOpen();
 
   const { setValue: setHasSeenKeyboardShortcuts } = useHasSeenKeyboardShortcuts();
-  const modalHeadingId = useId();
 
   useEffect(() => {
     if (isOpen) {
-      ref.current?.showModal();
       setHasSeenKeyboardShortcuts(true);
       pushEvent('keyboard-shortcut-help-button-open', 'journalforte-documents-keyboard-shortcuts');
-    } else {
-      ref.current?.close();
     }
   }, [isOpen, setHasSeenKeyboardShortcuts]);
 
@@ -30,105 +25,99 @@ export const KeyboardHelpModal = () => {
     if (event.key === Keys.H) {
       event.preventDefault();
       event.stopPropagation();
-      ref.current?.close();
+      closeKeyboardHelpModal();
     }
   }, []);
 
   return (
-    <Modal
-      ref={ref}
-      closeOnBackdropClick
-      aria-labelledby={modalHeadingId}
-      width={780}
-      onKeyDown={onKeyDown}
-      onClose={closeKeyboardHelpModal}
-    >
-      <Modal.Header closeButton>
-        <HStack as={Heading} gap="space-4" align="center" level="1" size="small">
-          <Keyboard size={24} aria-hidden />
+    <Dialog open={isOpen} onOpenChange={(nextOpen) => !nextOpen && closeKeyboardHelpModal()}>
+      <Dialog.Popup width="780px" onKeyDown={onKeyDown}>
+        <Dialog.Header>
+          <Dialog.Title className="flex items-center gap-1">
+            <Keyboard size={24} aria-hidden />
+            Tastaturstyring i journalførte dokumenter
+          </Dialog.Title>
+        </Dialog.Header>
 
-          <span id={modalHeadingId}>Tastaturstyring i journalførte dokumenter</span>
-        </HStack>
-      </Modal.Header>
+        <Dialog.Body>
+          <HGrid as="dl" gap="space-4 space-8" columns="min-content 1fr">
+            <ShortcutHeading>Grunnleggende</ShortcutHeading>
 
-      <Modal.Body>
-        <HGrid as="dl" gap="space-4 space-8" columns="min-content 1fr">
-          <ShortcutHeading>Grunnleggende</ShortcutHeading>
+            <Shortcut keys={[[Keys.ArrowUp], [Keys.ArrowDown]]}>Naviger mellom dokumenter og vedlegg</Shortcut>
+            <Shortcut keys={[[Keys.ArrowLeft], [Keys.ArrowRight]]}>Vis/skjul vedlegg</Shortcut>
+            <Shortcut keys={[[Keys.Enter]]}>Åpne/lukk valgt(e) dokument(er)</Shortcut>
+            <Shortcut keys={[[MOD_KEY, Keys.Enter]]}>
+              1. Åpne valgt(e) dokument(er) i ny fane / 2. Fokuser åpen fane
+            </Shortcut>
+            <Shortcut keys={[[Keys.Space]]}>Legg til/fjern som valgt dokument eller vedlegg</Shortcut>
+            <Shortcut keys={[[Keys.M]]}>
+              Inkluder/ekskluder dokument i/fra saks<H>m</H>appe
+            </Shortcut>
 
-          <Shortcut keys={[[Keys.ArrowUp], [Keys.ArrowDown]]}>Naviger mellom dokumenter og vedlegg</Shortcut>
-          <Shortcut keys={[[Keys.ArrowLeft], [Keys.ArrowRight]]}>Vis/skjul vedlegg</Shortcut>
-          <Shortcut keys={[[Keys.Enter]]}>Åpne/lukk valgt(e) dokument(er)</Shortcut>
-          <Shortcut keys={[[MOD_KEY, Keys.Enter]]}>
-            1. Åpne valgt(e) dokument(er) i ny fane / 2. Fokuser åpen fane
-          </Shortcut>
-          <Shortcut keys={[[Keys.Space]]}>Legg til/fjern som valgt dokument eller vedlegg</Shortcut>
-          <Shortcut keys={[[Keys.M]]}>
-            Inkluder/ekskluder dokument i/fra saks<H>m</H>appe
-          </Shortcut>
+            <ShortcutHeading>Avansert</ShortcutHeading>
 
-          <ShortcutHeading>Avansert</ShortcutHeading>
+            <Shortcut keys={[[Keys.Shift, Keys.Space]]}>Velg dokumenter og vedlegg fra forrige til dette</Shortcut>
 
-          <Shortcut keys={[[Keys.Shift, Keys.Space]]}>Velg dokumenter og vedlegg fra forrige til dette</Shortcut>
+            <Shortcut keys={[[Keys.Escape]]}>Fjern valgte dokumenter/vedlegg</Shortcut>
 
-          <Shortcut keys={[[Keys.Escape]]}>Fjern valgte dokumenter/vedlegg</Shortcut>
+            <Shortcut keys={[[MOD_KEY, Keys.ArrowUp], [Keys.Home]]}>Gå til første dokument eller vedlegg</Shortcut>
+            <Shortcut keys={[[MOD_KEY, Keys.ArrowDown], [Keys.End]]}>Gå til siste dokument eller vedlegg</Shortcut>
 
-          <Shortcut keys={[[MOD_KEY, Keys.ArrowUp], [Keys.Home]]}>Gå til første dokument eller vedlegg</Shortcut>
-          <Shortcut keys={[[MOD_KEY, Keys.ArrowDown], [Keys.End]]}>Gå til siste dokument eller vedlegg</Shortcut>
+            <Shortcut keys={[[MOD_KEY, Keys.ArrowLeft]]}>Skjul vedlegg for alle dokumenter</Shortcut>
+            <Shortcut keys={[[MOD_KEY, Keys.ArrowRight]]}>Vis vedlegg for alle dokumenter</Shortcut>
 
-          <Shortcut keys={[[MOD_KEY, Keys.ArrowLeft]]}>Skjul vedlegg for alle dokumenter</Shortcut>
-          <Shortcut keys={[[MOD_KEY, Keys.ArrowRight]]}>Vis vedlegg for alle dokumenter</Shortcut>
+            <Shortcut keys={[[MOD_KEY, Keys.F]]}>
+              <H>F</H>iltrer dokumenter på navn
+            </Shortcut>
+            <Shortcut keys={[[Keys.B]]}>
+              Vis <H>b</H>are dokumenter inkludert i saken
+            </Shortcut>
+            <Shortcut keys={[[Keys.I]]}>
+              Vis/skjul <H>i</H>nformasjon for dokument
+            </Shortcut>
+            <Shortcut keys={[[Keys.V]]}>
+              Bruk som <H>v</H>edlegg til dokument under arbeid
+            </Shortcut>
+            <Shortcut keys={[[Keys.F2], [Keys.N]]}>
+              Endre <H>n</H>avn
+            </Shortcut>
+            <Shortcut keys={[[MOD_KEY, Keys.C]]}>Kopier dokumentnavn</Shortcut>
 
-          <Shortcut keys={[[MOD_KEY, Keys.F]]}>
-            <H>F</H>iltrer dokumenter på navn
-          </Shortcut>
-          <Shortcut keys={[[Keys.B]]}>
-            Vis <H>b</H>are dokumenter inkludert i saken
-          </Shortcut>
-          <Shortcut keys={[[Keys.I]]}>
-            Vis/skjul <H>i</H>nformasjon for dokument
-          </Shortcut>
-          <Shortcut keys={[[Keys.V]]}>
-            Bruk som <H>v</H>edlegg til dokument under arbeid
-          </Shortcut>
-          <Shortcut keys={[[Keys.F2], [Keys.N]]}>
-            Endre <H>n</H>avn
-          </Shortcut>
-          <Shortcut keys={[[MOD_KEY, Keys.C]]}>Kopier dokumentnavn</Shortcut>
+            <Shortcut
+              keys={[
+                [Keys.Shift, Keys.ArrowUp],
+                [Keys.Shift, Keys.ArrowDown],
+              ]}
+            >
+              Velg flere dokumenter og vedlegg
+            </Shortcut>
+            <Shortcut
+              keys={[
+                [Keys.Shift, Keys.Home],
+                [MOD_KEY, Keys.Shift, Keys.ArrowUp],
+              ]}
+            >
+              Velg alle dokumenter/vedlegg oppover
+            </Shortcut>
+            <Shortcut
+              keys={[
+                [Keys.Shift, Keys.End],
+                [MOD_KEY, Keys.Shift, Keys.ArrowDown],
+              ]}
+            >
+              Velg alle dokumenter/vedlegg nedover
+            </Shortcut>
+            <Shortcut keys={[[MOD_KEY, Keys.A]]}>Velg/avvelg alle dokumenter og vedlegg</Shortcut>
 
-          <Shortcut
-            keys={[
-              [Keys.Shift, Keys.ArrowUp],
-              [Keys.Shift, Keys.ArrowDown],
-            ]}
-          >
-            Velg flere dokumenter og vedlegg
-          </Shortcut>
-          <Shortcut
-            keys={[
-              [Keys.Shift, Keys.Home],
-              [MOD_KEY, Keys.Shift, Keys.ArrowUp],
-            ]}
-          >
-            Velg alle dokumenter/vedlegg oppover
-          </Shortcut>
-          <Shortcut
-            keys={[
-              [Keys.Shift, Keys.End],
-              [MOD_KEY, Keys.Shift, Keys.ArrowDown],
-            ]}
-          >
-            Velg alle dokumenter/vedlegg nedover
-          </Shortcut>
-          <Shortcut keys={[[MOD_KEY, Keys.A]]}>Velg/avvelg alle dokumenter og vedlegg</Shortcut>
+            <ShortcutHeading>Hjelp</ShortcutHeading>
 
-          <ShortcutHeading>Hjelp</ShortcutHeading>
-
-          <Shortcut keys={[[Keys.H]]}>
-            Vis/skjul <H>h</H>jelp (denne oversikten over <H>h</H>urtigtaster)
-          </Shortcut>
-        </HGrid>
-      </Modal.Body>
-    </Modal>
+            <Shortcut keys={[[Keys.H]]}>
+              Vis/skjul <H>h</H>jelp (denne oversikten over <H>h</H>urtigtaster)
+            </Shortcut>
+          </HGrid>
+        </Dialog.Body>
+      </Dialog.Popup>
+    </Dialog>
   );
 };
 

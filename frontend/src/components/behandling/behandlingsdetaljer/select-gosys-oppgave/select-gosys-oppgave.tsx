@@ -1,5 +1,5 @@
 import { ArrowsCirclepathIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button, Heading, HStack, Modal, Table } from '@navikt/ds-react';
+import { Button, Dialog, Heading, HStack, Table } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo, useState } from 'react';
 import { LoadingTable } from '@/components/behandling/behandlingsdetaljer/select-gosys-oppgave/loading-table';
@@ -39,30 +39,28 @@ export const SelectGosysOppgaveModal = ({ hasGosysOppgave }: SelectGosysOppgaveM
       <Button data-color="neutral" variant="secondary" size="small" onClick={onClick}>
         {text}
       </Button>
-      <Modal
-        aria-label={text}
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        header={{ heading: text, closeButton: true }}
-        closeOnBackdropClick
-        width="90%"
-      >
-        <Modal.Body className="flex flex-col gap-4 p-6">
-          {canEdit ? <SelectGosysOppgave /> : <SelectedGosysOppgave />}
-        </Modal.Body>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog.Popup width="min(90%, 2000px)" aria-label={text}>
+          <Dialog.Header>
+            <Dialog.Title>{text}</Dialog.Title>
+          </Dialog.Header>
+          <Dialog.Body className="flex flex-col gap-4 p-6">
+            {canEdit ? <SelectGosysOppgave /> : <SelectedGosysOppgave />}
+          </Dialog.Body>
 
-        <Modal.Footer>
-          <Button
-            data-color="neutral"
-            variant="secondary"
-            size="small"
-            onClick={() => setIsOpen(false)}
-            className="self-start"
-          >
-            Lukk
-          </Button>
-        </Modal.Footer>
-      </Modal>
+          <Dialog.Footer>
+            <Button
+              data-color="neutral"
+              variant="secondary"
+              size="small"
+              onClick={() => setIsOpen(false)}
+              className="self-start"
+            >
+              Lukk
+            </Button>
+          </Dialog.Footer>
+        </Dialog.Popup>
+      </Dialog>
     </>
   );
 };

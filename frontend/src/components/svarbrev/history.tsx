@@ -1,5 +1,5 @@
 import { ClockDashedIcon } from '@navikt/aksel-icons';
-import { Box, type BoxProps, Button, HStack, Modal, Skeleton, Tooltip, VStack } from '@navikt/ds-react';
+import { Box, type BoxProps, Button, Dialog, HStack, Skeleton, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
 import { Link } from 'react-router';
@@ -41,17 +41,22 @@ export const SvarbrevSettingHistory = ({ id, isOpen, close }: Props) => {
           }}
         />
       </Tooltip>
-      <Modal open={isOpen} onClose={close} header={{ heading: 'Historikk' }} closeOnBackdropClick width={600}>
-        <Modal.Body>
-          <VStack margin="space-0" padding="space-0" gap="space-8 space-0" style={{ listStyle: 'none' }}>
-            {isLoading ? (
-              <SkeletinListItems />
-            ) : (
-              changeSets.map((changeSet) => <HistoryEntry {...changeSet} key={changeSet.id} />)
-            )}
-          </VStack>
-        </Modal.Body>
-      </Modal>
+      <Dialog open={isOpen} onOpenChange={(next) => !next && close()}>
+        <Dialog.Popup width="600px">
+          <Dialog.Header>
+            <Dialog.Title>Historikk</Dialog.Title>
+          </Dialog.Header>
+          <Dialog.Body>
+            <VStack margin="space-0" padding="space-0" gap="space-8 space-0" style={{ listStyle: 'none' }}>
+              {isLoading ? (
+                <SkeletinListItems />
+              ) : (
+                changeSets.map((changeSet) => <HistoryEntry {...changeSet} key={changeSet.id} />)
+              )}
+            </VStack>
+          </Dialog.Body>
+        </Dialog.Popup>
+      </Dialog>
     </>
   );
 };

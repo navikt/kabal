@@ -1,6 +1,5 @@
 import { PadlockLockedIcon, PencilWritingIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, Modal } from '@navikt/ds-react';
-import { useCallback, useState } from 'react';
+import { Button, Dialog } from '@navikt/ds-react';
 import {
   AvailableTextsByType,
   type AvailableTextsByTypeProps,
@@ -11,47 +10,35 @@ export const AvailableTexts = ({ onAdd, onRemove, usedIds, textType }: Available
   const Icon = textType === RichTextTypes.MALTEKST ? PadlockLockedIcon : PencilWritingIcon;
 
   const typeLabel = textType === RichTextTypes.MALTEKST ? 'låst' : 'redigerbar';
-  const [open, setOpen] = useState(false);
-
-  const onClose = useCallback(() => setOpen(false), []);
 
   return (
-    <>
-      <Button
-        data-color="neutral"
-        variant="tertiary"
-        size="small"
-        onClick={() => setOpen(!open)}
-        icon={<Icon aria-hidden />}
-        className="justify-start"
-      >
-        Legg til eksisterende {typeLabel} tekst
-      </Button>
-      <Modal
-        header={{ heading: textType === RichTextTypes.MALTEKST ? 'Låste tekster' : 'Redigerbare tekster' }}
-        width={1500}
-        open={open}
-        onClose={onClose}
-        closeOnBackdropClick
-      >
-        <Modal.Body>
-          {/* Ensures JIT loading */}
-          {open ? (
-            <AvailableTextsByType onAdd={onAdd} onRemove={onRemove} usedIds={usedIds} textType={textType} />
-          ) : null}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            data-color="neutral"
-            size="small"
-            variant="secondary"
-            onClick={onClose}
-            icon={<XMarkIcon aria-hidden />}
-          >
-            Lukk
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <Dialog>
+      <Dialog.Trigger>
+        <Button
+          data-color="neutral"
+          variant="tertiary"
+          size="small"
+          icon={<Icon aria-hidden />}
+          className="justify-start"
+        >
+          Legg til eksisterende {typeLabel} tekst
+        </Button>
+      </Dialog.Trigger>
+      <Dialog.Popup width="1500px">
+        <Dialog.Header>
+          <Dialog.Title>{textType === RichTextTypes.MALTEKST ? 'Låste tekster' : 'Redigerbare tekster'}</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <AvailableTextsByType onAdd={onAdd} onRemove={onRemove} usedIds={usedIds} textType={textType} />
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Dialog.CloseTrigger>
+            <Button data-color="neutral" size="small" variant="secondary" icon={<XMarkIcon aria-hidden />}>
+              Lukk
+            </Button>
+          </Dialog.CloseTrigger>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

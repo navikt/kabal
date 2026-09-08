@@ -14,8 +14,26 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
         return;
       }
 
-      if (event.target instanceof window.Node) {
+      if (event.target instanceof window.Element) {
         const { target } = event;
+
+        // Problem 1: a <Dialog> disables pointer-events on <body>, so clicks in/around it can land on
+        // <html> - which used to make an outer PopupContainer's useOnClickOutside close immediately.
+        // Problem 2: skipping this unconditionally would break useOnClickOutside for a popup nested
+        // inside a dialog, so only skip it when ref itself is outside every dialog.
+        if (target === document.documentElement && ref.current.closest('[role="dialog"]') === null) {
+          return;
+        }
+
+        // Problem 1: a <Dialog> renders via a portal outside ref in the DOM, which used to make an
+        // outer PopupContainer's useOnClickOutside close immediately on any click inside it.
+        // Problem 2: ignoring every portal click unconditionally would break useOnClickOutside for a
+        // popup nested inside a dialog, so only ignore portals which the ref itself isn't part of.
+        const portal = target.closest('[data-aksel-portal]');
+
+        if (portal !== null && !portal.contains(ref.current)) {
+          return;
+        }
 
         if (children && Array.from(ref.current.children).every((e) => !e.contains(target))) {
           callback(event);

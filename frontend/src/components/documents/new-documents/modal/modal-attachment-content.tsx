@@ -1,5 +1,5 @@
 import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
+import { Button, Dialog, HStack, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
 import { DeleteDocumentButton } from '@/components/documents/new-documents/modal/delete-button';
@@ -34,7 +34,7 @@ export const AttachmentModalContent = ({ document, renameAccess, removeAccess }:
 
   return (
     <>
-      <Modal.Body className={`flex w-full gap-4 overflow-hidden ${'h-auto'}`}>
+      <Dialog.Body className={`flex w-full gap-4 overflow-hidden ${'h-auto'}`}>
         <VStack gap="space-16" minWidth="400px" flexShrink="0">
           <HStack align="center" gap="space-8">
             <Tag data-color="info" variant="outline" size="small">
@@ -71,12 +71,12 @@ export const AttachmentModalContent = ({ document, renameAccess, removeAccess }:
             <SetParentDocument document={document} disabled={removeAccess !== null} />
           </AccessErrorsSummary>
         </VStack>
-      </Modal.Body>
-      <Modal.Footer className="items-center">
+      </Dialog.Body>
+      <Dialog.Footer className="items-center">
         <AccessErrorsSummary documentErrors={removeAccess === null ? [] : [removeAccess]}>
           <DeleteDocumentButton document={document} disabled={removeAccess !== null} />
         </AccessErrorsSummary>
-      </Modal.Footer>
+      </Dialog.Footer>
     </>
   );
 };

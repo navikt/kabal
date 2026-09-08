@@ -1,6 +1,6 @@
 import { DocPencilIcon, ExternalLinkIcon, EyeIcon, FileSearchIcon, UploadIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Link, List, Loader, Modal, Tooltip } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
+import { Button, Dialog, HStack, Link, List, Loader, Tooltip } from '@navikt/ds-react';
+import { useState } from 'react';
 import { Preview } from '@/components/malteksteksjon-references/preview';
 import { useGetMaltekstseksjonQuery } from '@/redux-api/maltekstseksjoner/queries';
 import { GOD_FORMULERING_TYPE, REGELVERK_TYPE } from '@/types/common-text-types';
@@ -27,7 +27,7 @@ export const AllMaltekstseksjonReferences = ({
   const publishedReferences = publishedMaltekstseksjonIdList.filter((id) => id !== currentMaltekstseksjonId);
 
   return (
-    <>
+    <HStack align="center">
       <MaltekstseksjonReferences
         currentMaltekstseksjonId={currentMaltekstseksjonId}
         maltekstseksjonIdList={draftReferences}
@@ -35,6 +35,7 @@ export const AllMaltekstseksjonReferences = ({
       >
         {draftReferences.length.toString(10)}
       </MaltekstseksjonReferences>
+
       <MaltekstseksjonReferences
         currentMaltekstseksjonId={currentMaltekstseksjonId}
         maltekstseksjonIdList={publishedReferences}
@@ -42,7 +43,7 @@ export const AllMaltekstseksjonReferences = ({
       >
         {publishedReferences.length.toString(10)}
       </MaltekstseksjonReferences>
-    </>
+    </HStack>
   );
 };
 
@@ -68,7 +69,6 @@ export const MaltekstseksjonReferences = ({
 }: MaltekstseksjonReferences) => {
   const [first] = references;
   const [previewedReference, setPreviewedReference] = useState<string | null>(first ?? null);
-  const ref = useRef<HTMLDialogElement>(null);
 
   const noReferences = references.length === 0;
 
@@ -78,31 +78,46 @@ export const MaltekstseksjonReferences = ({
 
   const heading = `${type === MaltekstseksjonType.DRAFT ? 'Utkast' : 'Publiseringer'}`;
 
-  const icon = type === MaltekstseksjonType.DRAFT ? <DocPencilIcon aria-hidden /> : <UploadIcon aria-hidden />;
+  const icon =
+    type === MaltekstseksjonType.DRAFT ? (
+      <DocPencilIcon aria-hidden fontSize={20} />
+    ) : (
+      <UploadIcon aria-hidden fontSize={20} />
+    );
+
+  if (noReferences) {
+    return (
+      <Tooltip content={tooltip}>
+        <HStack align="center" gap="space-4" className="mr-4 font-bold text-l">
+          {children} {icon}
+        </HStack>
+      </Tooltip>
+    );
+  }
 
   return (
-    <HStack align="center" gap="space-4" position="relative" className={className}>
-      <Tooltip content={tooltip}>
-        <Button
-          data-color="neutral"
-          size="xsmall"
-          onClick={() => {
-            if (noReferences) {
-              return;
-            }
-
-            ref.current?.showModal();
-          }}
-          variant="tertiary"
-          icon={icon}
-          iconPosition="right"
-          className="whitespace-nowrap"
-        >
-          {children}
-        </Button>
-      </Tooltip>
-      <Modal ref={ref} header={{ heading }} width={900} closeOnBackdropClick>
-        <Modal.Body>
+    <Dialog>
+      <HStack align="center" gap="space-4" position="relative" className={className}>
+        <Tooltip content={tooltip}>
+          <Dialog.Trigger>
+            <Button
+              data-color="neutral"
+              size="xsmall"
+              variant="tertiary"
+              icon={icon}
+              iconPosition="right"
+              className="whitespace-nowrap"
+            >
+              {children}
+            </Button>
+          </Dialog.Trigger>
+        </Tooltip>
+      </HStack>
+      <Dialog.Popup width="900px">
+        <Dialog.Header>
+          <Dialog.Title>{heading}</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
           <List>
             {references.map((maltekstseksjonId) => (
               <ListItem
@@ -114,9 +129,9 @@ export const MaltekstseksjonReferences = ({
             ))}
           </List>
           <Preview id={previewedReference} />
-        </Modal.Body>
-      </Modal>
-    </HStack>
+        </Dialog.Body>
+      </Dialog.Popup>
+    </Dialog>
   );
 };
 

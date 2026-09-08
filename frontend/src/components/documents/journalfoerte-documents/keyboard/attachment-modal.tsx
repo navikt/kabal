@@ -1,7 +1,7 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, type ButtonProps, HStack, Modal, Tag, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, type ButtonProps, Dialog, HStack, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import {
   useAttachVedleggFn,
   useOptions,
@@ -31,15 +31,6 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
   const allDuaVedlegg = useDuaVedlegg();
   const attachToDua = useAttachVedleggFn();
   const [deleteDocument] = useDeleteDocumentMutation();
-  const ref = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    if (open) {
-      ref.current?.showModal();
-    } else {
-      ref.current?.close();
-    }
-  }, [open]);
 
   const getDocuments = useCallback(() => {
     if (selectedDocuments.length === 0) {
@@ -58,7 +49,7 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
 
   const attach = (duaParentId: string) => {
     onAttachToDua(duaParentId);
-    ref.current?.close();
+    onClose();
   };
 
   const getDuaVedlegg = (duaParentId: string) => {
@@ -88,7 +79,7 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
       deleteDocument({ oppgaveId, dokumentId: id });
     }
 
-    ref.current?.close();
+    onClose();
   };
 
   /**
@@ -123,7 +114,7 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
         break;
       case Keys.V: {
         event.preventDefault();
-        ref.current?.close();
+        onClose();
         break;
       }
       case Keys.Enter: {
@@ -145,28 +136,22 @@ export const AttachmentModal = ({ open, onClose, filteredDocuments }: Props) => 
   };
 
   return (
-    <Modal
-      header={{
-        heading: 'Bruk som vedlegg for',
-        size: 'small',
-        closeButton: true,
-      }}
-      closeOnBackdropClick
-      ref={ref}
-      onClose={onClose}
-      onKeyDown={onKeyDown}
-      className="min-w-[400px]"
-    >
-      <Body
-        documentsCount={documents.length}
-        allVedlegg={allDuaVedlegg}
-        options={options}
-        focused={focused}
-        attach={attach}
-        remove={remove}
-        getIsAttached={getIsAttached}
-      />
-    </Modal>
+    <Dialog size="small" open={open} onOpenChange={(next) => !next && onClose()}>
+      <Dialog.Popup onKeyDown={onKeyDown} className="min-w-[400px]">
+        <Dialog.Header>
+          <Dialog.Title>Bruk som vedlegg for</Dialog.Title>
+        </Dialog.Header>
+        <Body
+          documentsCount={documents.length}
+          allVedlegg={allDuaVedlegg}
+          options={options}
+          focused={focused}
+          attach={attach}
+          remove={remove}
+          getIsAttached={getIsAttached}
+        />
+      </Dialog.Popup>
+    </Dialog>
   );
 };
 
@@ -184,7 +169,7 @@ interface BodyProps {
 
 const Body = ({ documentsCount, allVedlegg, options, focused, attach, remove, getIsAttached }: BodyProps) => {
   return (
-    <Modal.Body>
+    <Dialog.Body>
       <BodyShort spacing>{getDescription(documentsCount)}</BodyShort>
 
       <VStack as="ol" marginBlock="space-0 space-1">
@@ -224,7 +209,7 @@ const Body = ({ documentsCount, allVedlegg, options, focused, attach, remove, ge
       <Alert variant="info" size="small" inline>
         Naviger med pil opp og ned. Velg dokument med enter.
       </Alert>
-    </Modal.Body>
+    </Dialog.Body>
   );
 };
 

@@ -1,6 +1,6 @@
-import { Box, Heading, HGrid, HStack, Modal } from '@navikt/ds-react';
+import { Box, Dialog, Heading, HGrid, HStack } from '@navikt/ds-react';
 import { Keyboard } from '@styled-icons/fluentui-system-regular/Keyboard';
-import { useCallback, useEffect, useId, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   closePanelKeyboardHelpModal,
   useIsPanelKeyboardHelpModalOpen,
@@ -9,16 +9,11 @@ import { isMetaKey, KEY_ICONS, Keys, MOD_KEY } from '@/keys';
 import { pushEvent } from '@/observability';
 
 export const PanelKeyboardHelpModal = () => {
-  const ref = useRef<HTMLDialogElement>(null);
   const isOpen = useIsPanelKeyboardHelpModalOpen();
-  const modalHeadingId = useId();
 
   useEffect(() => {
     if (isOpen) {
-      ref.current?.showModal();
       pushEvent('panel-keyboard-shortcut-help-open', 'panel-keyboard-shortcuts');
-    } else {
-      ref.current?.close();
     }
   }, [isOpen]);
 
@@ -26,56 +21,50 @@ export const PanelKeyboardHelpModal = () => {
     if (isMetaKey(event) && event.key === Keys.H) {
       event.preventDefault();
       event.stopPropagation();
-      ref.current?.close();
+      closePanelKeyboardHelpModal();
     }
   }, []);
 
   return (
-    <Modal
-      ref={ref}
-      closeOnBackdropClick
-      aria-labelledby={modalHeadingId}
-      width={780}
-      onKeyDown={onKeyDown}
-      onClose={closePanelKeyboardHelpModal}
-    >
-      <Modal.Header closeButton>
-        <HStack as={Heading} gap="space-4" align="center" level="1" size="small">
-          <Keyboard size={24} aria-hidden />
+    <Dialog open={isOpen} onOpenChange={(next) => !next && closePanelKeyboardHelpModal()}>
+      <Dialog.Popup width="780px" onKeyDown={onKeyDown}>
+        <Dialog.Header>
+          <Dialog.Title className="flex items-center gap-1">
+            <Keyboard size={24} aria-hidden />
+            Tastaturstyring for paneler
+          </Dialog.Title>
+        </Dialog.Header>
 
-          <span id={modalHeadingId}>Tastaturstyring for paneler</span>
-        </HStack>
-      </Modal.Header>
+        <Dialog.Body>
+          <HGrid as="dl" gap="space-4 space-8" columns="min-content 1fr">
+            <ShortcutHeading>Navigere mellom paneler</ShortcutHeading>
 
-      <Modal.Body>
-        <HGrid as="dl" gap="space-4 space-8" columns="min-content 1fr">
-          <ShortcutHeading>Navigere mellom paneler</ShortcutHeading>
+            <Shortcut keys={[[Keys.Ctrl, Keys.Period]]}>Neste panel</Shortcut>
+            <Shortcut keys={[[Keys.Ctrl, Keys.Comma]]}>Forrige panel</Shortcut>
 
-          <Shortcut keys={[[Keys.Ctrl, Keys.Period]]}>Neste panel</Shortcut>
-          <Shortcut keys={[[Keys.Ctrl, Keys.Comma]]}>Forrige panel</Shortcut>
+            <ShortcutHeading>Navigere mellom elementer</ShortcutHeading>
 
-          <ShortcutHeading>Navigere mellom elementer</ShortcutHeading>
+            <Shortcut keys={[[Keys.Tab]]}>Neste fokuserbare element</Shortcut>
+            <Shortcut keys={[[Keys.Shift, Keys.Tab]]}>Forrige fokuserbare element</Shortcut>
 
-          <Shortcut keys={[[Keys.Tab]]}>Neste fokuserbare element</Shortcut>
-          <Shortcut keys={[[Keys.Shift, Keys.Tab]]}>Forrige fokuserbare element</Shortcut>
+            <ShortcutHeading>Gå direkte til panel</ShortcutHeading>
 
-          <ShortcutHeading>Gå direkte til panel</ShortcutHeading>
+            <DirectPanelShortcut number="1">Journalførte dokumenter</DirectPanelShortcut>
+            <DirectPanelShortcut number="2">Dokumentvisning</DirectPanelShortcut>
+            <DirectPanelShortcut number="3">Brevutforming</DirectPanelShortcut>
+            <DirectPanelShortcut number="4">Behandling</DirectPanelShortcut>
+            <DirectPanelShortcut number="5">Behandlingsdialog</DirectPanelShortcut>
+            <DirectPanelShortcut number="6">Kvalitetsvurdering</DirectPanelShortcut>
 
-          <DirectPanelShortcut number="1">Journalførte dokumenter</DirectPanelShortcut>
-          <DirectPanelShortcut number="2">Dokumentvisning</DirectPanelShortcut>
-          <DirectPanelShortcut number="3">Brevutforming</DirectPanelShortcut>
-          <DirectPanelShortcut number="4">Behandling</DirectPanelShortcut>
-          <DirectPanelShortcut number="5">Behandlingsdialog</DirectPanelShortcut>
-          <DirectPanelShortcut number="6">Kvalitetsvurdering</DirectPanelShortcut>
+            <ShortcutHeading>Hjelp</ShortcutHeading>
 
-          <ShortcutHeading>Hjelp</ShortcutHeading>
-
-          <Shortcut keys={[[MOD_KEY, Keys.H]]}>
-            Vis/skjul <H>h</H>jelp (denne oversikten over <H>h</H>urtigtaster)
-          </Shortcut>
-        </HGrid>
-      </Modal.Body>
-    </Modal>
+            <Shortcut keys={[[MOD_KEY, Keys.H]]}>
+              Vis/skjul <H>h</H>jelp (denne oversikten over <H>h</H>urtigtaster)
+            </Shortcut>
+          </HGrid>
+        </Dialog.Body>
+      </Dialog.Popup>
+    </Dialog>
   );
 };
 

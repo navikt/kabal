@@ -99,7 +99,7 @@ describe('ConfirmFinish', () => {
       await act(async () => fireEvent.click(finishButton));
 
       if (requiresGosysOppgave) {
-        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
+        expect(screen.getByRole('dialog', { name: 'Oppdater oppgaven i Gosys og fullfør' })).toBeVisible();
       } else {
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       }
@@ -414,9 +414,7 @@ describe('ConfirmFinish', () => {
         expect(items).toHaveLength(3);
 
         await act(async () => fireEvent.click(screen.getByRole('button', { name: button1 })));
-        expect(
-          screen.queryByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' }),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByRole('dialog', { name: 'Oppdater oppgaven i Gosys og fullfør' })).not.toBeInTheDocument();
       });
 
       test('Henvist + Arena', async () => {
@@ -436,9 +434,7 @@ describe('ConfirmFinish', () => {
         ).toBeInTheDocument();
 
         await act(async () => fireEvent.click(screen.getByRole('button', { name: button })));
-        expect(
-          screen.queryByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' }),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByRole('dialog', { name: 'Oppdater oppgaven i Gosys og fullfør' })).not.toBeInTheDocument();
       });
 
       test('Henvist, not Arena', async () => {
@@ -473,7 +469,7 @@ describe('ConfirmFinish', () => {
         expect(items).toHaveLength(3);
 
         await act(async () => fireEvent.click(screen.getByRole('button', { name: button1 })));
-        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
+        expect(screen.getByRole('dialog', { name: 'Oppdater oppgaven i Gosys og fullfør' })).toBeVisible();
       });
 
       const cases = [
@@ -496,7 +492,7 @@ describe('ConfirmFinish', () => {
         expect(screen.queryByText(arenaOpphevetMessage)).not.toBeInTheDocument();
 
         await act(async () => fireEvent.click(screen.getByRole('button', { name: buttonText })));
-        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
+        expect(screen.getByRole('dialog', { name: 'Oppdater oppgaven i Gosys og fullfør' })).toBeVisible();
       });
     });
 
@@ -575,9 +571,7 @@ describe('ConfirmFinish', () => {
         expect(items).toHaveLength(3);
 
         await act(async () => fireEvent.click(screen.getByRole('button', { name: button1 })));
-        expect(
-          screen.queryByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' }),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByRole('dialog', { name: 'Oppdater oppgaven i Gosys og fullfør' })).not.toBeInTheDocument();
       });
     });
 
@@ -594,7 +588,7 @@ describe('ConfirmFinish', () => {
         expect(items).toHaveLength(3);
 
         await act(async () => fireEvent.click(screen.getByRole('button', { name: button1 })));
-        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
+        expect(screen.getByRole('dialog', { name: 'Oppdater oppgaven i Gosys og fullfør' })).toBeVisible();
       });
 
       test.each(alwaysFullførCases)('Utfall id: %s', async (utfall) => {
@@ -620,7 +614,7 @@ describe('ConfirmFinish', () => {
         expect(items).toHaveLength(2);
 
         await act(async () => fireEvent.click(screen.getByRole('button', { name: buttonText })));
-        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
+        expect(screen.getByRole('dialog', { name: 'Oppdater oppgaven i Gosys og fullfør' })).toBeVisible();
       });
     });
   });
@@ -673,7 +667,7 @@ describe('ConfirmFinish', () => {
         expect(items).toHaveLength(2);
 
         await act(async () => fireEvent.click(screen.getByRole('button', { name: buttonText })));
-        expect(screen.getByLabelText('Oppdater oppgaven i Gosys og fullfør', { selector: 'dialog' })).toBeVisible();
+        expect(screen.getByRole('dialog', { name: 'Oppdater oppgaven i Gosys og fullfør' })).toBeVisible();
       });
     });
   });
