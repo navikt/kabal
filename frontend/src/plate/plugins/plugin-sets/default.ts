@@ -72,10 +72,10 @@ export const defaultPlugins = [
   }),
   DefaultAutoFormatRulesPlugin,
   CustomAutoFormatRulesPlugin,
-  H1Plugin.configure({ inputRules: [HeadingRules.markdown()] }),
-  H2Plugin.configure({ inputRules: [HeadingRules.markdown()] }),
-  H3Plugin.configure({ inputRules: [HeadingRules.markdown()] }),
-  H4Plugin.configure({ inputRules: [HeadingRules.markdown()] }),
+  H1Plugin.configure({ inputRules: [HeadingRules.markdown()], rules: { break: { empty: 'reset' } } }),
+  H2Plugin.configure({ inputRules: [HeadingRules.markdown()], rules: { break: { empty: 'reset' } } }),
+  H3Plugin.configure({ inputRules: [HeadingRules.markdown()], rules: { break: { empty: 'reset' } } }),
+  H4Plugin.configure({ inputRules: [HeadingRules.markdown()], rules: { break: { empty: 'reset' } } }),
   BoldPlugin.configure({
     render: { node: BoldLeaf },
     inputRules: [BoldRules.markdown({ variant: '*' })],
@@ -117,22 +117,8 @@ export const defaultPlugins = [
   }),
   TextAlignPlugin.configure({ inject: { targetPlugins: [ParagraphPlugin.key] } }),
   ExitBreakPlugin.configure({
-    options: {
-      rules: [
-        { hotkey: 'mod+shift+enter', before: true },
-        {
-          hotkey: 'enter',
-          before: false,
-          defaultType: ParagraphPlugin.key,
-          query: {
-            start: true,
-            end: true,
-            allow: [BaseH1Plugin.key, BaseH2Plugin.key, BaseH3Plugin.key, BaseH4Plugin.key],
-          },
-          relative: true,
-          level: 1,
-        },
-      ],
+    shortcuts: {
+      insert: { keys: 'mod+shift+enter' },
     },
   }),
   DocxPlugin,
