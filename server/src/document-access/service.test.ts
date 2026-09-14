@@ -18,7 +18,6 @@ const accessList = (documentId: string, navIdents: string[]): DocumentAccessList
 /** A controllable in-memory stand-in for DocumentAccessKafkaConsumer. */
 class FakeKafkaConsumer implements DocumentAccessKafkaConsumerApi {
   readonly #onMessage: DocumentAccessMessageHandler;
-  #connected = true;
   #errors: string[] = [];
   connectCount = 0;
   closeCount = 0;
@@ -30,15 +29,11 @@ class FakeKafkaConsumer implements DocumentAccessKafkaConsumerApi {
   connect = async () => {
     this.connectCount += 1;
   };
-  isConnected = () => this.#connected;
   getErrors = () => this.#errors;
   close = async () => {
     this.closeCount += 1;
   };
 
-  setConnected = (value: boolean) => {
-    this.#connected = value;
-  };
   setErrors = (errors: string[]) => {
     this.#errors = errors;
   };
@@ -235,7 +230,6 @@ describe('SmartDocumentWriteAccess', () => {
 
       await service.init();
 
-      consumer.setConnected(true);
       consumer.setErrors(['Kafka consumer is not active']); // unhealthy -> poll runs
       jest.advanceTimersByTime(SYNC_INTERVAL_MS);
       await flushMicrotasks();
@@ -255,7 +249,6 @@ describe('SmartDocumentWriteAccess', () => {
 
       await service.init();
 
-      consumer.setConnected(true);
       consumer.setErrors(['Kafka consumer is not active']);
       jest.advanceTimersByTime(SYNC_INTERVAL_MS);
       await flushMicrotasks();
@@ -276,7 +269,6 @@ describe('SmartDocumentWriteAccess', () => {
       await service.init();
       await flushMicrotasks();
 
-      consumer.setConnected(true);
       consumer.setErrors(['Kafka consumer is not active']);
       jest.advanceTimersByTime(SYNC_INTERVAL_MS); // undefined -> ['Z1'] -> notify true
       await flushMicrotasks();
@@ -285,6 +277,34 @@ describe('SmartDocumentWriteAccess', () => {
 
       expect(received).toEqual([false, true]);
       expect(fetchAccessList).toHaveBeenCalledTimes(2);
+
+      await service.close();
+      jest.useRealTimers();
+    });
+  });
+
+  describe('Kafka recovery', () => {
+    it('leaves recovery to the consumer and keeps polling while it is degraded', async () => {
+      jest.useFakeTimers();
+
+      const { service, consumer, fetchAccessList } = createService(async (id) => accessList(id, ['Z1']));
+
+      service.addHasAccessListener('doc', 'Z1', META, () => undefined); // makes 'doc' active
+
+      await service.init();
+
+      expect(consumer.connectCount).toBe(1); // init only
+
+      consumer.setErrors(['Stream is closed']);
+
+      jest.advanceTimersByTime(SYNC_INTERVAL_MS);
+      await flushMicrotasks();
+      jest.advanceTimersByTime(SYNC_INTERVAL_MS);
+      await flushMicrotasks();
+
+      // The loop polls, but never reconnects: recovery is the consumer's job.
+      expect(fetchAccessList).toHaveBeenCalledTimes(2);
+      expect(consumer.connectCount).toBe(1);
 
       await service.close();
       jest.useRealTimers();
