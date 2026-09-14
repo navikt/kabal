@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { isMeldekortFilter, type MeldekortFilter } from '@/components/documents/journalfoerte-documents/meldekort';
 import type { IFilesViewed } from '@/components/file-viewer/types';
 import { parseJSON } from '@/functions/parse-json';
 import {
@@ -115,7 +116,16 @@ export const useDocumentsFilterType = () => {
 
 export const useDocumentsFilterSaksId = () => useJsonSetting<string[]>(useOppgavePath('tabs/documents/filters/saksid'));
 
+export const useDocumentsFilterMeldekort = () => {
+  const { value: v, ...rest } = useJsonSetting<MeldekortFilter>(useOppgavePath('tabs/documents/filters/meldekort'));
+
+  const value = useMemo(() => (isMeldekortFilter(v) ? v : undefined), [v]);
+
+  return { ...rest, value };
+};
+
 export const useDocumentsOnlyIncluded = () => useBooleanSetting(useOppgavePath('tabs/documents/filters/included'));
+
 // Oppgavebehandling smart editor
 export const useSmartEditorActiveDocument = () => useSetting(useOppgavePath('tabs/smart-editor/active_document'));
 export const useSmartEditorGodeFormuleringerOpen = () =>

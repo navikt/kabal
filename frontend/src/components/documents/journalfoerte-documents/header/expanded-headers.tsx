@@ -1,6 +1,7 @@
 import { AvsenderMottakerFilter } from '@/components/documents/journalfoerte-documents/header/avsender-mottaker';
 import { DatoOpprettet } from '@/components/documents/journalfoerte-documents/header/dato-opprettet';
 import { DatoSortering } from '@/components/documents/journalfoerte-documents/header/dato-sortering';
+import { Meldekort } from '@/components/documents/journalfoerte-documents/header/meldekort';
 import { Saksnummer } from '@/components/documents/journalfoerte-documents/header/saksnummer';
 import { Tema } from '@/components/documents/journalfoerte-documents/header/tema';
 import { Type } from '@/components/documents/journalfoerte-documents/header/type';
@@ -18,6 +19,8 @@ export const ExpandedHeaders = ({
   setSelectedAvsenderMottakere,
   selectedSaksIds,
   setSelectedSaksIds,
+  meldekortFilter,
+  setMeldekortFilter,
   selectedTypes,
   setSelectedTypes,
   sort,
@@ -49,6 +52,10 @@ export const ExpandedHeaders = ({
           selectedSaksIds={selectedSaksIds}
           setSelectedSaksIds={setSelectedSaksIds}
         />
+      ) : null}
+
+      {columns.MELDEKORT ? (
+        <Meldekort meldekortFilter={meldekortFilter} setMeldekortFilter={setMeldekortFilter} />
       ) : null}
 
       {columns.TYPE ? <Type setSelectedTypes={setSelectedTypes} selectedTypes={selectedTypes} /> : null}

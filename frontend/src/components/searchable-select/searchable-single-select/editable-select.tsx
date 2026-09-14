@@ -35,6 +35,7 @@ export const EditableSelect = <T,>({
   triggerVariant,
   style,
   nullLabel,
+  showSearch,
 }: SearchableSelectProps<T>) => {
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
@@ -239,6 +240,7 @@ export const EditableSelect = <T,>({
       error={error}
       search={search}
       onSearchChange={setSearch}
+      showSearch={showSearch}
       buttonRef={buttonRef}
       popoverRef={popoverRef}
       onButtonClick={handleButtonClick}

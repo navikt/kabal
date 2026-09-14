@@ -1,5 +1,6 @@
 import { ChevronRightDoubleIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button, HGrid, HStack, Tooltip } from '@navikt/ds-react';
+import { getExpandedFields } from '@/components/documents/journalfoerte-documents/fields';
 import { Fields, getFieldNames, getFieldSizes } from '@/components/documents/journalfoerte-documents/grid';
 import { DocumentSearch } from '@/components/documents/journalfoerte-documents/header/document-search';
 import { ExpandedHeaders } from '@/components/documents/journalfoerte-documents/header/expanded-headers';
@@ -7,7 +8,6 @@ import { IncludedFilter } from '@/components/documents/journalfoerte-documents/h
 import { SelectAll } from '@/components/documents/journalfoerte-documents/header/select-all';
 import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
 import { useIsExpanded } from '@/components/documents/use-is-expanded';
-import { isNotNull } from '@/functions/is-not-type-guards';
 import { useArchivedDocumentsColumns } from '@/hooks/settings/use-archived-documents-setting';
 import { IS_WINDOWS } from '@/keys';
 
@@ -31,19 +31,7 @@ export const Header = ({ filters, showsAnyVedlegg, toggleShowAllVedlegg, searchR
 
   const tooltip = showsAnyVedlegg ? 'Skjul alle vedlegg' : 'Vis alle vedlegg';
 
-  const fields = [
-    Fields.Select,
-    Fields.ToggleVedlegg,
-    Fields.Title,
-    columns.TEMA ? Fields.Tema : null,
-    columns.DATO_OPPRETTET ? Fields.DatoOpprettet : null,
-    columns.DATO_SORTERING ? Fields.DatoSortering : null,
-    columns.AVSENDER_MOTTAKER ? Fields.AvsenderMottaker : null,
-    columns.SAKSNUMMER ? Fields.Saksnummer : null,
-    columns.TYPE ? Fields.Type : null,
-    Fields.ToggleMetadata,
-    Fields.Action,
-  ].filter(isNotNull);
+  const fields = getExpandedFields(columns);
 
   return (
     <HGrid

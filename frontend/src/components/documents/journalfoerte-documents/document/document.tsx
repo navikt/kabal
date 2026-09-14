@@ -7,6 +7,7 @@ import { MottattCheckbox } from '@/components/documents/journalfoerte-documents/
 import { DocumentTitle } from '@/components/documents/journalfoerte-documents/document/shared/document-title';
 import { IncludeDocument } from '@/components/documents/journalfoerte-documents/document/shared/include-document';
 import { ToggleVedleggButton } from '@/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
+import { COLLAPSED_FIELDS, getExpandedFields } from '@/components/documents/journalfoerte-documents/fields';
 import { Fields, getFieldNames, getFieldSizes } from '@/components/documents/journalfoerte-documents/grid';
 import { convertRealToAccessibleDocumentIndex } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { setFocusIndex } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
@@ -19,7 +20,6 @@ import {
 } from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
 import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
 import { DOCUMENT_CLASSES } from '@/components/documents/styled-components/document';
-import { isNotNull } from '@/functions/is-not-type-guards';
 import { useArchivedDocumentsColumns } from '@/hooks/settings/use-archived-documents-setting';
 import { type IArkivertDocument, Journalstatus } from '@/types/arkiverte-documents';
 
@@ -138,26 +138,14 @@ export const Document = ({
     [index, hasAccess],
   );
 
-  const fields = [
-    Fields.Select,
-    Fields.ToggleVedlegg,
-    Fields.Title,
-    columns.TEMA ? Fields.Tema : null,
-    columns.DATO_OPPRETTET ? Fields.DatoOpprettet : null,
-    columns.DATO_SORTERING ? Fields.DatoSortering : null,
-    columns.AVSENDER_MOTTAKER ? Fields.AvsenderMottaker : null,
-    columns.SAKSNUMMER ? Fields.Saksnummer : null,
-    columns.TYPE ? Fields.Type : null,
-    Fields.ToggleMetadata,
-    Fields.Action,
-  ].filter(isNotNull);
+  const fields = getExpandedFields(columns);
 
   return (
     <HGrid
       as="article"
       gap="space-0 space-8"
       align="center"
-      columns={isExpandedListView ? getFieldSizes(fields) : getFieldSizes(COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS)}
+      columns={isExpandedListView ? getFieldSizes(fields) : getFieldSizes(COLLAPSED_FIELDS)}
       ref={ref}
       data-journalpostid={journalpostId}
       data-dokumentinfoid={dokumentInfoId}
@@ -173,7 +161,7 @@ export const Document = ({
       tabIndex={-1}
       className={`${DOCUMENT_CLASSES} ${className} pr-1.5 pl-1.5`}
       style={{
-        gridTemplateAreas: `"${isExpandedListView ? getFieldNames(fields) : getFieldNames(COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS)}"`,
+        gridTemplateAreas: `"${isExpandedListView ? getFieldNames(fields) : getFieldNames(COLLAPSED_FIELDS)}"`,
       }}
     >
       {journalstatus === Journalstatus.MOTTATT ? (
@@ -215,5 +203,3 @@ export const Document = ({
     </HGrid>
   );
 };
-
-const COLLAPSED_JOURNALFOERTE_DOCUMENT_FIELDS = [Fields.Select, Fields.ToggleVedlegg, Fields.Title, Fields.Action];

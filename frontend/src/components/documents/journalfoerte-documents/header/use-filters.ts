@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFilteredDocuments } from '@/components/documents/journalfoerte-documents/header/filter-helpers';
+import { DEFAULT_MELDEKORT_FILTER } from '@/components/documents/journalfoerte-documents/meldekort';
 import { useShowVedlegg } from '@/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { useIsExpanded } from '@/components/documents/use-is-expanded';
 import { ArchivedDocumentsColumn } from '@/hooks/settings/use-archived-documents-setting';
@@ -8,6 +9,7 @@ import {
   useDocumentsAvsenderMottaker,
   useDocumentsFilterDatoOpprettet,
   useDocumentsFilterDatoSortering,
+  useDocumentsFilterMeldekort,
   useDocumentsFilterSaksId,
   useDocumentsFilterTema,
   useDocumentsFilterType,
@@ -55,6 +57,12 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     remove: resetSaksId,
   } = useDocumentsFilterSaksId();
 
+  const {
+    value: meldekortFilter = DEFAULT_MELDEKORT_FILTER,
+    setValue: setMeldekortFilter,
+    remove: resetMeldekortFilter,
+  } = useDocumentsFilterMeldekort();
+
   const { value: sort = DEFAULT_SORT, setValue: setSort } = useDocumentsSort();
 
   const totalFilteredDocuments = useFilteredDocuments(
@@ -63,6 +71,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     selectedDatoOpprettet,
     selectedDatoRegSendt,
     selectedSaksIds,
+    meldekortFilter,
     selectedTemaer,
     selectedTypes,
     onlyIncluded,
@@ -82,6 +91,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     resetTypes();
     resetAvsenderMottakere();
     resetSaksId();
+    resetMeldekortFilter();
     resetDatoOpprettet();
     resetDatoRegSendt();
     setIncluded(!isExpanded);
@@ -90,6 +100,7 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     resetAvsenderMottakere,
     resetDatoOpprettet,
     resetDatoRegSendt,
+    resetMeldekortFilter,
     resetSaksId,
     resetTemaer,
     resetTitle,
@@ -103,12 +114,14 @@ export const useFilters = (documents: IArkivertDocument[]) => {
       selectedTypes.length === 0 &&
       selectedAvsenderMottakere.length === 0 &&
       selectedSaksIds.length === 0 &&
+      meldekortFilter === DEFAULT_MELDEKORT_FILTER &&
       selectedDatoOpprettet === undefined &&
       (isExpanded ? onlyIncluded === false : onlyIncluded === true) &&
       search === '',
     [
       onlyIncluded,
       isExpanded,
+      meldekortFilter,
       search,
       selectedAvsenderMottakere.length,
       selectedDatoOpprettet,
@@ -134,6 +147,8 @@ export const useFilters = (documents: IArkivertDocument[]) => {
     setSelectedAvsenderMottakere,
     selectedSaksIds,
     setSelectedSaksIds,
+    meldekortFilter,
+    setMeldekortFilter,
     sort,
     setSort,
   };

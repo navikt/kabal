@@ -39,6 +39,7 @@ export const EditableMultiSelect = <T,>({
   triggerDisplay = 'pills',
   requireConfirmation = false,
   showSelectAll = false,
+  showSearch,
 }: SearchableMultiSelectProps<T>) => {
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
@@ -281,6 +282,7 @@ export const EditableMultiSelect = <T,>({
       error={error}
       search={search}
       onSearchChange={setSearch}
+      showSearch={showSearch}
       buttonRef={buttonRef}
       popoverRef={popoverRef}
       onButtonClick={handleButtonClick}

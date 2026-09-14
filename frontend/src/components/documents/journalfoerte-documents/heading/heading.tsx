@@ -1,4 +1,4 @@
-import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
+import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack, Stack, Tooltip } from '@navikt/ds-react';
 import { memo, useMemo } from 'react';
 import { KeyboardHelpButton } from '@/components/documents/journalfoerte-documents/header/keyboard-help-button';
@@ -74,14 +74,14 @@ const RemoveFilters = ({ resetFilters, noFiltersActive }: RemoveFiltersProps) =>
   }
 
   return (
-    <Button
-      data-color="neutral"
-      size="small"
-      variant="secondary"
-      onClick={resetFilters}
-      icon={<ArrowCirclepathIcon aria-hidden />}
-    >
-      Nullstill filtre
-    </Button>
+    <Tooltip content="Nullstill filtre">
+      <Button
+        data-color="neutral"
+        size="small"
+        variant="secondary"
+        onClick={resetFilters}
+        icon={<ArrowCirclepathReverseIcon aria-hidden />}
+      />
+    </Tooltip>
   );
 };
