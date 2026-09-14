@@ -17,15 +17,10 @@ import { isShuttingDown } from '@/shutdown';
 
 const log = getLogger('document-write-access-kafka-consumer');
 
-/**
- * How often the sync loop runs to poll active documents while Kafka is unavailable.
- */
+/** How often the sync loop runs. It polls active documents while Kafka is degraded. */
 export const SYNC_INTERVAL_MS = 5_000;
 
-/**
- * Metadata used for background API calls that are not tied to a specific user
- * request (polling active documents while Kafka is down).
- */
+/** Metadata for background API calls that aren't tied to a user request. */
 const BACKGROUND_METADATA: Metadata = { tab_id: undefined, client_version: 'kabal-frontend-background' };
 
 type HasAccessListener = (hasWriteAccess: boolean) => void;
@@ -35,10 +30,7 @@ type FetchAccessList = typeof getDocumentAccessListFromApi;
 type CreateKafkaConsumer = (onMessage: DocumentAccessMessageHandler, traceId: string) => DocumentAccessKafkaConsumerApi;
 
 export class SmartDocumentWriteAccess {
-  /**
-   * Map of document IDs to their access lists.
-   * An access list is a list of Nav-ident strings.
-   */
+  /** Access lists (Nav-idents) by document ID. */
   #accessMap = new SmartDocumentAccessMap();
 
   #hasAccessListeners = new ListenerMap<HasAccessListener>();
@@ -53,12 +45,11 @@ export class SmartDocumentWriteAccess {
   /** Fetches a document's access list from kabal-api. */
   readonly #fetchAccessList: FetchAccessList;
 
-  /** Health-gated sync loop. Polls active documents while Kafka is down. */
+  /** Polls active documents while Kafka is degraded. */
   #syncLoop = new IntervalLoop(SYNC_INTERVAL_MS, (error) =>
     log.error({ msg: 'Sync tick failed', trace_id: this.#lifecycle_trace_id, error }),
   );
 
-  /** Whether init() has completed. Used by the startup readiness probe. */
   #initialized = false;
 
   constructor(
@@ -71,15 +62,12 @@ export class SmartDocumentWriteAccess {
   }
 
   /**
-   * Initializes the access list service.
-   * 1. Connect a Kafka consumer to receive changes (best-effort).
-   * 2. Start the sync loop (polls active documents while Kafka is unavailable).
+   * Connects the Kafka consumer, which recovers on its own from then on, and
+   * starts the sync loop. Never fails because of Kafka.
    *
-   * Access data is never pre-seeded. Each document's list is fetched fresh from
-   * the API the first time a user connects to it (allowApiFetching=true), then
-   * kept current by Kafka push updates or polling while Kafka is down.
-   *
-   * Startup never fails because of Kafka — the service degrades to API polling.
+   * Access lists aren't pre-seeded: each is fetched from the API when a user
+   * first connects to the document (allowApiFetching), then kept current by
+   * Kafka, or by polling while Kafka is degraded.
    */
   async init(): Promise<void> {
     this.#initTimestamp = BigInt(Date.now());
@@ -87,10 +75,8 @@ export class SmartDocumentWriteAccess {
 
     log.debug({ msg: 'Initializing Smart Document Write Access...', trace_id });
 
-    // 1. Connect to Kafka. Failures are logged but do not abort startup.
     await this.#kafka.connect();
 
-    // 2. Start the sync loop.
     this.#syncLoop.start(this.#ensureAccessListsUpdated);
 
     this.#initialized = true;
@@ -102,26 +88,14 @@ export class SmartDocumentWriteAccess {
     }
 
     if (this.#kafka.getErrors().length === 0) {
-      return; // Kafka is healthy — push updates handle everything.
+      return; // Healthy: Kafka keeps the access lists current.
     }
 
-    // If the consumer never connected (initial connectToBrokers failed), attempt
-    // a background reconnect so the service can self-heal without a pod restart.
-    if (!this.#kafka.isConnected()) {
-      log.info({
-        msg: 'Kafka consumer not connected, attempting background reconnect',
-        trace_id: this.#lifecycle_trace_id,
-      });
-
-      this.#kafka.connect().catch((error) => {
-        log.error({ msg: 'Background Kafka reconnect failed', trace_id: this.#lifecycle_trace_id, error });
-      });
-    }
-
+    // Degraded. The consumer recovers on its own; until then, poll.
     await this.#pollActiveDocuments();
   };
 
-  /** Polls the API for documents with active connections while Kafka is unavailable. */
+  /** Refreshes the access lists of documents with active connections from the API. */
   #pollActiveDocuments = async (): Promise<void> => {
     const documentIds = this.#getActiveDocumentIds();
 
@@ -166,11 +140,9 @@ export class SmartDocumentWriteAccess {
   };
 
   /**
-   * The set of documents with at least one active connection, derived from the
-   * access and deletion listeners. Polling is bounded to documents a user is
-   * currently connected to, so it cannot grow with the Kafka-mirrored cache.
-   * Deleted documents are excluded because #handleDeletion removes their
-   * listeners.
+   * Documents with at least one active connection, derived from the listeners.
+   * Keeps polling bounded by connected users rather than the whole Kafka-fed
+   * cache. Deleted documents drop out, since #handleDeletion removes their listeners.
    */
   #getActiveDocumentIds = (): Set<string> => {
     const documentIds = new Set<string>();
@@ -191,9 +163,8 @@ export class SmartDocumentWriteAccess {
   };
 
   /**
-   * Sets the access list for a document and notifies listeners only when the
-   * membership actually changed, to avoid spamming connected clients on every
-   * poll tick.
+   * Sets a document's access list, notifying listeners only if the membership
+   * changed, so polls don't spam connected clients.
    */
   #applyAccessUpdate = (documentId: string, navIdents: string[]): void => {
     const previous = this.#accessMap.get(documentId);
@@ -205,7 +176,7 @@ export class SmartDocumentWriteAccess {
     }
   };
 
-  /** Removes a document from the map and notifies access + deletion listeners. */
+  /** Removes a document from the map, notifies its listeners, then drops them. */
   #handleDeletion = (documentId: string): void => {
     this.#accessMap.delete(documentId);
     this.#notifyHasAccessListeners(documentId, null);
@@ -304,17 +275,15 @@ export class SmartDocumentWriteAccess {
   ): Promise<boolean> => {
     const { tab_id, client_version, behandling_id } = metadata;
 
-    // Serve from the in-memory map when we have it. The map is kept fresh by
-    // Kafka when healthy, and by the API sync loop while Kafka is down.
+    // Trust the map: Kafka keeps it current, or the sync loop while Kafka is degraded.
     const fromAccessMap = this.#accessMap.get(documentId);
 
     if (fromAccessMap !== undefined) {
       return fromAccessMap.includes(navIdent);
     }
 
-    // The document is not in the map. Only fall back to the API when the caller
-    // explicitly allows it (e.g. a user connecting). Background and listener
-    // checks rely on the map being populated by Kafka or the sync loop.
+    // Not cached. Only fetch when the caller allows it, e.g. a user connecting;
+    // background and listener checks rely on the map.
     if (allowApiFetching) {
       try {
         const fromApi = await this.#updateAccessListFromApi(documentId, metadata);
@@ -349,7 +318,7 @@ export class SmartDocumentWriteAccess {
   };
 
   addHasAccessListener = (documentId: string, navIdent: string, metadata: Metadata, listener: HasAccessListener) => {
-    // Immediately check access and call the listener with the result.
+    // Report current access right away.
     this.hasAccess(documentId, navIdent, metadata, false).then(listener);
 
     return this.#hasAccessListeners.add(`${documentId}:${navIdent}`, listener);
@@ -385,7 +354,7 @@ export class SmartDocumentWriteAccess {
       listener();
     }
 
-    // Remove all listeners after notifying. A document can only be deleted once.
+    // A document is only deleted once, so its listeners are done.
     this.#deletedDocumentListeners.delete(documentId);
   };
 
