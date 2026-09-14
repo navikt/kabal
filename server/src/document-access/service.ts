@@ -72,7 +72,8 @@ export class SmartDocumentWriteAccess {
 
   /**
    * Initializes the access list service.
-   * 1. Connect a Kafka consumer to receive changes (best-effort).
+   * 1. Connect a Kafka consumer to receive changes (best-effort). The consumer
+   *    keeps itself alive from there on, retrying on its own if Kafka is down.
    * 2. Start the sync loop (polls active documents while Kafka is unavailable).
    *
    * Access data is never pre-seeded. Each document's list is fetched fresh from
@@ -87,7 +88,8 @@ export class SmartDocumentWriteAccess {
 
     log.debug({ msg: 'Initializing Smart Document Write Access...', trace_id });
 
-    // 1. Connect to Kafka. Failures are logged but do not abort startup.
+    // 1. Connect to Kafka. Failures are logged but do not abort startup, and the
+    // consumer retries in the background until it is streaming.
     await this.#kafka.connect();
 
     // 2. Start the sync loop.
@@ -105,19 +107,9 @@ export class SmartDocumentWriteAccess {
       return; // Kafka is healthy — push updates handle everything.
     }
 
-    // If the consumer never connected (initial connectToBrokers failed), attempt
-    // a background reconnect so the service can self-heal without a pod restart.
-    if (!this.#kafka.isConnected()) {
-      log.info({
-        msg: 'Kafka consumer not connected, attempting background reconnect',
-        trace_id: this.#lifecycle_trace_id,
-      });
-
-      this.#kafka.connect().catch((error) => {
-        log.error({ msg: 'Background Kafka reconnect failed', trace_id: this.#lifecycle_trace_id, error });
-      });
-    }
-
+    // Kafka is degraded. Recovering is the consumer's own job — it retries until
+    // it succeeds — so all this loop does is keep the access lists fresh in the
+    // meantime.
     await this.#pollActiveDocuments();
   };
 
