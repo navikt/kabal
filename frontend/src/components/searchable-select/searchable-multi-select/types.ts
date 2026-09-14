@@ -52,4 +52,9 @@ export interface SearchableMultiSelectProps<T> {
    * @default false
    */
   showSelectAll?: boolean;
+  /**
+   * Whether to render the filter field in the popover. Set to `false` for short option lists.
+   * @default true
+   */
+  showSearch?: boolean;
 }

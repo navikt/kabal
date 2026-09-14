@@ -3,7 +3,9 @@ import { Button, CopyButton, Tag, Tooltip } from '@navikt/ds-react';
 import { DocumentDate } from '@/components/documents/journalfoerte-documents/document/document-date';
 import { formatAvsenderMottaker } from '@/components/documents/journalfoerte-documents/document/format-avsender-mottaker';
 import { JournalposttypeTag } from '@/components/documents/journalfoerte-documents/document/journalposttype';
+import { Meldekort } from '@/components/documents/journalfoerte-documents/document/shared/meldekort';
 import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import { isMeldekort } from '@/components/documents/journalfoerte-documents/meldekort';
 import { useArchivedDocumentsColumns } from '@/hooks/settings/use-archived-documents-setting';
 import { useFullTemaNameFromIdOrLoading } from '@/hooks/use-kodeverk-ids';
 import type { IArkivertDocument } from '@/types/arkiverte-documents';
@@ -15,7 +17,7 @@ interface Props {
 }
 
 export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: Props) => {
-  const { temaId, avsenderMottaker, sak, journalposttype } = document;
+  const { temaId, avsenderMottaker, sak, journalposttype, brevkode } = document;
 
   const temaName = useFullTemaNameFromIdOrLoading(temaId);
   const { columns } = useArchivedDocumentsColumns();
@@ -60,6 +62,7 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
         </div>
       ) : null}
       {columns.SAKSNUMMER ? <Saksnummer saksnummer={sak?.fagsakId} /> : null}
+      {columns.MELDEKORT && isMeldekort(brevkode) ? <Meldekort /> : null}
       {columns.TYPE ? <JournalposttypeTag type={journalposttype} /> : null}
       <Tooltip placement="left" content={showMetadata ? 'Skjul informasjon' : 'Vis informasjon'} keys={['I']}>
         <Button

@@ -41,6 +41,11 @@ export interface SearchableSelectProps<T> {
   triggerVariant?: ButtonProps['variant'];
   /** Text shown on the trigger button and in read-only mode when no value is selected. */
   nullLabel?: string;
+  /**
+   * Whether to render the filter field in the popover. Set to `false` for short option lists.
+   * @default true
+   */
+  showSearch?: boolean;
   /** Inline styles applied to the outermost wrapper element. */
   style?: React.CSSProperties;
 }

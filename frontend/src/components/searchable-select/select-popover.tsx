@@ -30,6 +30,11 @@ interface SelectPopoverProps {
   error?: string;
   search: string;
   onSearchChange: (value: string) => void;
+  /**
+   * Whether to render the filter field. When `false`, focus moves to the popover itself on open.
+   * @default true
+   */
+  showSearch?: boolean;
   buttonRef: RefObject<HTMLButtonElement | null>;
   popoverRef?: RefObject<HTMLDivElement | null>;
   onButtonClick: () => void;
@@ -71,6 +76,7 @@ export const SelectPopover = ({
   error,
   search,
   onSearchChange,
+  showSearch = true,
   buttonRef,
   popoverRef,
   onButtonClick,
@@ -99,10 +105,15 @@ export const SelectPopover = ({
   useEffect(() => {
     if (open) {
       requestAnimationFrame(() => {
-        searchRef.current?.focus();
+        // Without a filter field there is nothing focusable, so focus the popover itself to receive key events.
+        if (showSearch) {
+          searchRef.current?.focus();
+        } else {
+          popoverRef?.current?.focus();
+        }
       });
     }
-  }, [open]);
+  }, [open, showSearch, popoverRef]);
 
   const triggerWidth = triggerVariant === 'tertiary' ? 'w-fit' : 'w-full';
   const hasError = typeof error === 'string' && error.length !== 0;
@@ -154,23 +165,27 @@ export const SelectPopover = ({
         tabIndex={-1}
         onKeyDown={onPopoverKeyDown}
         flip={flip}
+        aria-controls={showSearch ? undefined : listboxId}
+        aria-activedescendant={showSearch ? undefined : activeDescendantId}
       >
         <Popover.Content className="flex flex-col gap-2">
-          <TextField
-            ref={searchRef}
-            size="small"
-            label={label}
-            hideLabel
-            placeholder="Filtrer..."
-            value={search}
-            onChange={(e) => onSearchChange(e.target.value)}
-            autoComplete="off"
-            role="combobox"
-            aria-expanded={open}
-            aria-controls={listboxId}
-            aria-activedescendant={activeDescendantId}
-            aria-autocomplete="list"
-          />
+          {showSearch ? (
+            <TextField
+              ref={searchRef}
+              size="small"
+              label={label}
+              hideLabel
+              placeholder="Filtrer..."
+              value={search}
+              onChange={(e) => onSearchChange(e.target.value)}
+              autoComplete="off"
+              role="combobox"
+              aria-expanded={open}
+              aria-controls={listboxId}
+              aria-activedescendant={activeDescendantId}
+              aria-autocomplete="list"
+            />
+          ) : null}
 
           {children}
 

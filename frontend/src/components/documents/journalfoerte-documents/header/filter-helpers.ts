@@ -1,6 +1,7 @@
 import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { getAvsenderMottakerKey } from '@/components/documents/journalfoerte-documents/header/avsender-mottaker';
+import { MELDEKORT_FILTERS, type MeldekortFilter } from '@/components/documents/journalfoerte-documents/meldekort';
 import { useShowVedlegg } from '@/components/documents/journalfoerte-documents/state/show-vedlegg';
 import { useLazyIsTilknyttetDokument } from '@/components/documents/journalfoerte-documents/use-tilknyttede-dokumenter';
 import { fuzzySearch } from '@/components/smart-editor/gode-formuleringer/fuzzy-search';
@@ -28,6 +29,7 @@ export const useFilteredDocuments = (
   selectedDatoOpprettet: DateRange,
   selectedDatoRegSendt: DateRange,
   selectedSaksIds: string[],
+  meldekortFilter: MeldekortFilter,
   selectedTemaer: string[],
   selectedTypes: string[],
   onlyIncluded: boolean,
@@ -64,6 +66,7 @@ export const useFilteredDocuments = (
           if (
             (!columns.TEMA || checkList(selectedTemaer, temaId)) &&
             (!columns.TYPE || checkList(selectedTypes, journalposttype)) &&
+            (!columns.MELDEKORT || MELDEKORT_FILTERS[meldekortFilter](document.brevkode)) &&
             (!columns.AVSENDER_MOTTAKER ||
               checkListWithNone(
                 selectedAvsenderMottakere,
@@ -146,6 +149,7 @@ export const useFilteredDocuments = (
     selectedDatoOpprettet,
     selectedDatoRegSendt,
     selectedSaksIds,
+    meldekortFilter,
     selectedTemaer,
     selectedTypes,
     sort,

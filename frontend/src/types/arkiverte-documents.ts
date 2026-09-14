@@ -212,6 +212,11 @@ export interface DokumentInfo {
   originalJournalpostId: string;
   logiskeVedlegg: LogiskVedlegg[];
   varianter: Variants;
+  /**
+   * For inngående journalposter og notater er datakilden DokumentInfo.brevkode
+   * For utgående journalposter returneres DokumentInfo.dokumenttypeId dersom denne er satt. Ellers brukes DokumentInfo.brevkode
+   */
+  brevkode: string | null;
 }
 
 export enum VariantFormat {

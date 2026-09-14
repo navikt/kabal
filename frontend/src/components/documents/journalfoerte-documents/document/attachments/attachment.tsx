@@ -5,7 +5,9 @@ import { DragAndDropContext } from '@/components/documents/drag-context';
 import { MottattCheckbox } from '@/components/documents/journalfoerte-documents/document/mottatt-checkbox';
 import { DocumentTitle } from '@/components/documents/journalfoerte-documents/document/shared/document-title';
 import { IncludeDocument } from '@/components/documents/journalfoerte-documents/document/shared/include-document';
+import { Meldekort } from '@/components/documents/journalfoerte-documents/document/shared/meldekort';
 import { ToggleVedleggButton } from '@/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
+import { COLLAPSED_FIELDS, getExpandedFields } from '@/components/documents/journalfoerte-documents/fields';
 import { Fields, getFieldNames, getFieldSizes } from '@/components/documents/journalfoerte-documents/grid';
 import { convertRealToAccessibleDocumentIndex } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { setFocusIndex } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
@@ -17,10 +19,13 @@ import {
   unselectOne,
   useIsPathSelected,
 } from '@/components/documents/journalfoerte-documents/keyboard/state/selection';
+import { isMeldekort } from '@/components/documents/journalfoerte-documents/meldekort';
 import { SelectContext } from '@/components/documents/journalfoerte-documents/select-context/select-context';
 import { DOCUMENT_CLASSES } from '@/components/documents/styled-components/document';
+import { useIsExpanded } from '@/components/documents/use-is-expanded';
 import { findDocument } from '@/domain/find-document';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useArchivedDocumentsColumns } from '@/hooks/settings/use-archived-documents-setting';
 import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
 import { useIsAssignedRolAndSent } from '@/hooks/use-is-rol';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
@@ -51,8 +56,10 @@ export const Attachment = memo(
     index,
     documentIndex,
   }: Props) => {
-    const { dokumentInfoId, hasAccess, tittel, varianter } = vedlegg;
+    const { dokumentInfoId, hasAccess, tittel, varianter, brevkode } = vedlegg;
     const oppgaveId = useOppgaveId();
+    const [isExpandedListView] = useIsExpanded();
+    const { columns } = useArchivedDocumentsColumns();
     const { data: arkiverteDokumenter } = useGetArkiverteDokumenterQuery(oppgaveId);
     const cleanDragUI = useRef<() => void>(() => undefined);
     const { setDraggedJournalfoertDocuments, clearDragState, draggingEnabled } = useContext(DragAndDropContext);
@@ -165,11 +172,13 @@ export const Attachment = memo(
 
     const ref = useRef<HTMLDivElement>(null);
 
+    const fields = isExpandedListView ? getExpandedFields(columns) : COLLAPSED_FIELDS;
+
     return (
       <HGrid
         as="article"
         gap="space-0 space-8"
-        columns={getFieldSizes(VEDLEGG_FIELDS)}
+        columns={getFieldSizes(fields)}
         ref={ref}
         key={journalpostId + dokumentInfoId}
         data-journalpostid={journalpostId}
@@ -182,7 +191,7 @@ export const Attachment = memo(
         }}
         draggable={draggingIsEnabled}
         className={`${DOCUMENT_CLASSES} pr-1.5 pl-1.5`}
-        style={{ gridTemplateAreas: `"${getFieldNames(VEDLEGG_FIELDS)}"` }}
+        style={{ gridTemplateAreas: `"${getFieldNames(fields)}"` }}
         onClick={onClick}
         onDoubleClick={hasAccess && journalpoststatus !== Journalstatus.MOTTATT ? onDoubleClick : undefined}
         tabIndex={-1}
@@ -214,6 +223,8 @@ export const Attachment = memo(
           varianter={varianter}
         />
 
+        {isExpandedListView && columns.MELDEKORT && isMeldekort(brevkode) ? <Meldekort /> : null}
+
         <IncludeDocument
           dokumentInfoId={dokumentInfoId}
           journalpostId={journalpostId}
@@ -230,9 +241,8 @@ export const Attachment = memo(
     prevProps.journalpostId === nextProps.journalpostId &&
     prevProps.toggleShowVedlegg === nextProps.toggleShowVedlegg &&
     prevProps.hasVedlegg === nextProps.hasVedlegg &&
-    prevProps.vedlegg.tittel === nextProps.vedlegg.tittel,
+    prevProps.vedlegg.tittel === nextProps.vedlegg.tittel &&
+    prevProps.vedlegg.brevkode === nextProps.vedlegg.brevkode,
 );
 
 Attachment.displayName = 'Attachment';
-
-const VEDLEGG_FIELDS = [Fields.Select, Fields.ToggleVedlegg, Fields.Title, Fields.Action];

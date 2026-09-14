@@ -38,6 +38,7 @@ export const ExpandedDocuments = () => {
       (columns.DATO_OPPRETTET ? SIZES[Fields.DatoOpprettet][0] : 0) +
       (columns.DATO_SORTERING ? SIZES[Fields.DatoSortering][0] : 0) +
       (columns.SAKSNUMMER ? SIZES[Fields.Saksnummer][0] : 0) +
+      (columns.MELDEKORT ? SIZES[Fields.Meldekort][0] : 0) +
       (columns.TEMA ? SIZES[Fields.Tema][0] : 0) +
       (columns.TYPE ? SIZES[Fields.Type][0] : 0);
 
