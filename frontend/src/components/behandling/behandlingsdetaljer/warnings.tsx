@@ -18,8 +18,9 @@ export const ReturWarning = () => (
 
 export const AnkeDelvisMedholdWarning = () => (
   <WarningBox>
-    Du har valgt utfall delvis medhold. Kabal vil opprette en Anke i Trygderetten-oppgave for den delen som går videre
-    til Trygderetten. Dersom saken ikke skal videre til Trygderetten, velg utfall medhold.
+    Du har valgt utfall <UtfallTag utfallId={UtfallEnum.DELVIS_MEDHOLD} />. Kabal vil opprette en Anke i
+    Trygderetten-oppgave for den delen som går videre til Trygderetten. Dersom saken ikke skal videre til Trygderetten,
+    velg utfall medhold.
   </WarningBox>
 );
 

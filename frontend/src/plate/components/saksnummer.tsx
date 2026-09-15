@@ -7,6 +7,7 @@ import { ptToEm } from '@/plate/components/get-scaled-em';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import type { ArenaSaksnummerElement, PlaceholderElement, SaksnummerElement } from '@/plate/types';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
   const { data: oppgave } = useOppgave();
@@ -15,7 +16,15 @@ export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
     return null;
   }
 
-  return <SaksnummerBase {...props} label="Saksnummer" saksnummer={oppgave.saksnummer} />;
+  return (
+    <>
+      <SaksnummerBase {...props} label="Saksnummer" saksnummer={oppgave.saksnummer} />
+      {oppgave.typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
+      oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ? (
+        <SaksnummerBase {...props} label="Saksnummer hos Trygderetten" saksnummer={oppgave.saksnummerHosTrygderetten} />
+      ) : null}
+    </>
+  );
 };
 
 // Shown whenever it is part of the template, regardless of whether the oppgave has loaded or has a value yet.

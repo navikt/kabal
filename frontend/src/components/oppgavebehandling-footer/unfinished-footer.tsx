@@ -35,6 +35,7 @@ export const UnfinishedFooter = () => {
         <DeassignOppgave oppgave={oppgave} />
 
         {oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+        oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ||
         oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR ? (
           <NewAnkebehandlingButton typeId={oppgave.typeId} oppgaveId={oppgave.id} />
         ) : null}

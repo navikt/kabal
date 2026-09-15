@@ -263,8 +263,10 @@ export const createSaksinfo = ({
 const SAKSTYPER_MED_ARENA_SAKSNUMMER: ReadonlySet<SaksTypeEnum> = new Set([
   SaksTypeEnum.KLAGE,
   SaksTypeEnum.ANKE,
+  SaksTypeEnum.ANKE_AFTER_2027,
   SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET,
   SaksTypeEnum.ANKE_I_TRYGDERETTEN,
+  SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027,
 ]);
 
 const mayHaveArenaSaksnummer = (sakstype: SaksTypeEnum, fagsystemId: string, requiresGosysOppgave: boolean): boolean =>

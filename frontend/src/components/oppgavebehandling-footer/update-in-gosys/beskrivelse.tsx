@@ -12,8 +12,10 @@ const getPrefix = (type: SaksTypeEnum): string => {
     case SaksTypeEnum.KLAGE:
       return 'Klageinstansen har fullført behandling av klage';
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
       return 'Klageinstansen har fullført behandling av anken';
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       return 'Trygderetten har fullført behandling av anken';
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
       return 'Klageinstansen har fullført ny behandling etter Trygderetten har opphevet';

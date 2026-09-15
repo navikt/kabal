@@ -50,6 +50,7 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
   return { panelDefaultEnabled: true, featureEnabled: true, reason: null };
 };
 
+//  SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027  will have kvalitetsvurdering
 export const typeHasKvalitetsvurdering = (typeId: SaksTypeEnum): boolean =>
   typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN &&
   typeId !== SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET &&

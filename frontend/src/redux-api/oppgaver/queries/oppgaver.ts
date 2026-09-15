@@ -47,6 +47,15 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       query: ({ enhetId, ...params }) => ({ url: `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent`, params }),
       providesTags: [OppgaveListTagTypes.ENHETENS_VENTENDE],
     }),
+    getLedigeAnkerAfter2027: builder.query<ApiResponse, CommonOppgaverParams>({
+      // TODO: Correct URL
+      query: (params) => ({ url: '/kabal-search/oppgaver/ledige-anker-after-2027', params }),
+      providesTags: [OppgaveListTagTypes.LEDIGE_ANKER_AFTER_2027],
+    }),
+    getAntallLedigeAnkerAfter2027MedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
+      // TODO: Correct URL
+      query: (params) => ({ url: '/kabal-search/antallledigeankerafter2027medutgaattefrister', params }),
+    }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
       query: (params) => ({ url: '/kabal-search/antalloppgavermedutgaattefrister', params }),
     }),
@@ -111,6 +120,26 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       query: (params) => ({ url: '/kabal-search/oppgaver-i-tr/paa-vent', params }),
       providesTags: [OppgaveListTagTypes.TR_VENTENDE],
     }),
+    getFerdigstilteAnkerITR: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/oppgaver-i-tr/ferdigstilt', params }),
+      providesTags: [OppgaveListTagTypes.TR_FERDIGE],
+    }),
+    getAnketeamLedigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/anketeam/ledige', params }),
+      providesTags: [OppgaveListTagTypes.ANKETEAM_LEDIGE],
+    }),
+    getAnketeamTildelteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/anketeam/tildelte', params }),
+      providesTags: [OppgaveListTagTypes.ANKETEAM_TILDELTE],
+    }),
+    getAnketeamVentendeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/anketeam/paa-vent', params }),
+      providesTags: [OppgaveListTagTypes.ANKETEAM_VENTENDE],
+    }),
+    getAnketeamFerdigstilteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/anketeam/ferdigstilte', params }),
+      providesTags: [OppgaveListTagTypes.ANKETEAM_FERDIGSTILTE],
+    }),
   }),
 });
 
@@ -140,4 +169,11 @@ export const {
   useGetTildelteOppgaverITRQuery,
   useGetLedigeOppgaverITRQuery,
   useGetVentendeOppgaverITRQuery,
+  useGetLedigeAnkerAfter2027Query,
+  useGetAntallLedigeAnkerAfter2027MedUtgaatteFristerQuery,
+  useGetAnketeamLedigeOppgaverQuery,
+  useGetAnketeamTildelteOppgaverQuery,
+  useGetAnketeamVentendeOppgaverQuery,
+  useGetAnketeamFerdigstilteOppgaverQuery,
+  useGetFerdigstilteAnkerITRQuery,
 } = oppgaverQuerySlice;
