@@ -116,8 +116,8 @@ export const TrygderettenHenvistButtonGroup = ({
   treatAsArena(fagsystemId, requiresGosysOppgave) ? (
     <VStack gap="space-16">
       <InlineMessage status="info">
-        Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten har
-        henvist.
+        Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som du gjør ny
+        behandling i.
       </InlineMessage>
       <SimpleButtonGroup cancel={cancel} finishDisabled={finishDisabled} />
     </VStack>

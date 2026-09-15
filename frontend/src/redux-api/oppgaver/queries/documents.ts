@@ -79,6 +79,5 @@ export const {
   useLazyGetDocumentQuery,
   useGetSmartDocumentVersionsQuery,
   useGetSmartDocumentVersionQuery,
-  useGetEkspedisjonsbrevTilTrygderettenIsSentQuery,
   useLazyGetEkspedisjonsbrevTilTrygderettenIsSentQuery,
 } = documentsQuerySlice;

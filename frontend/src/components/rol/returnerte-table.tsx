@@ -12,7 +12,7 @@ import { Role } from '@/types/bruker';
 import { type EnhetensOppgaverParams, SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.Type,
+  ColumnKeyEnum.SakstyperForRol,
   ColumnKeyEnum.AllYtelser,
   ColumnKeyEnum.AllInnsendingshjemler,
   ColumnKeyEnum.Saksnummer,

@@ -12,7 +12,10 @@ import { SaksTypeEnum } from '@/types/kodeverk';
 import type { IOppgave } from '@/types/oppgaver';
 
 export const Deadline = (oppgave: IOppgave) => {
-  if (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+  ) {
     return null;
   }
 
@@ -26,10 +29,20 @@ export const Deadline = (oppgave: IOppgave) => {
 interface ReadOnlyDeadlineProps {
   frist: string | null;
   timesPreviouslyExtended: number;
+  typeId: SaksTypeEnum;
 }
 
-export const ReadOnlyDeadline = ({ frist, timesPreviouslyExtended }: ReadOnlyDeadlineProps) => {
+export const ReadOnlyDeadline = ({ frist, timesPreviouslyExtended, typeId }: ReadOnlyDeadlineProps) => {
   const fristExceeded = useMemo(() => (frist === null ? false : isPast(addDays(parseISO(frist), 1))), [frist]);
+
+  if (
+    typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
+    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ||
+    typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR
+  ) {
+    return null;
+  }
 
   return (
     <HStack align="center" gap="space-8" wrap={false}>

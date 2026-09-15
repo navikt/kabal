@@ -1,82 +1,78 @@
 import { Tag, Tooltip } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { StaticDataContext } from '@/components/app/static-data-context';
-import {
-  getTitleCapitalized,
-  getTitleLowercase,
-} from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
-import { SaksTypeEnum } from '@/types/kodeverk';
 import { FlowState, ReviewFlowState } from '@/types/oppgave-common';
 import type { IOppgave } from '@/types/oppgaver';
 
-type Props = Pick<IOppgave, 'medunderskriver' | 'typeId'>;
+type Props = Pick<IOppgave, 'medunderskriver'>;
 
-export const MUFlowStateLabelWithSelf = ({ medunderskriver, typeId }: Props) => {
+export const MUFlowStateLabelWithSelf = (props: Props) => {
+  const { medunderskriver } = props;
   const { user } = useContext(StaticDataContext);
 
   const isMu = medunderskriver.employee?.navIdent === user.navIdent;
 
   if (isMu) {
     return medunderskriver.flowState === FlowState.SENT ? (
-      <Tooltip content={getTitleCapitalized(typeId)} delay={500}>
+      <Tooltip content="Medunderskriver" delay={500}>
         <Tag data-color="meta-purple" variant="outline" size="small" className="whitespace-nowrap">
-          {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'Fagansvarlig' : 'MU'}
+          MU
         </Tag>
       </Tooltip>
     ) : null;
   }
 
-  return <MUFlowStateLabelWithoutSelf medunderskriver={medunderskriver} typeId={typeId} />;
+  return <MUFlowStateLabelWithoutSelf {...props} />;
 };
 
-export const MUFlowStateLabelWithoutSelf = ({ medunderskriver, typeId }: Props) => {
+export const MUFlowStateLabelWithoutSelf = ({ medunderskriver }: Props) => {
   if (medunderskriver.flowState === FlowState.SENT) {
-    return <Sendt typeId={typeId} />;
+    return <Sendt />;
   }
 
   if (medunderskriver.flowState === FlowState.RETURNED) {
-    return <Tilbake typeId={typeId} />;
+    return <Tilbake />;
   }
 
   if (medunderskriver.flowState === ReviewFlowState.APPROVED) {
-    return <Approved typeId={typeId} />;
+    return <Approved />;
   }
 
   if (medunderskriver.flowState === ReviewFlowState.REJECTED) {
-    return <Rejected typeId={typeId} />;
+    return <Rejected />;
   }
 
   return null;
 };
 
-const Sendt = ({ typeId }: { typeId: SaksTypeEnum }) => (
-  <Tooltip content={`Sendt til ${getTitleLowercase(typeId)}`} delay={500}>
+const Sendt = () => (
+  <Tooltip content="Sendt til medunderskriver" delay={500}>
     <Tag data-color="info" variant="outline" size="small" className="whitespace-nowrap">
-      Sendt til {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
+      Sendt til MU
     </Tag>
   </Tooltip>
 );
 
-const Tilbake = ({ typeId }: { typeId: SaksTypeEnum }) => (
-  <Tooltip content={`Tilbake fra ${getTitleLowercase(typeId)}`} delay={500}>
+const Tilbake = () => (
+  <Tooltip content="Tilbake fra medunderskriver" delay={500}>
     <Tag data-color="success" variant="outline" size="small" className="whitespace-nowrap">
-      Tilbake fra {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
+      Tilbake fra MU
     </Tag>
   </Tooltip>
 );
 
-const Approved = ({ typeId }: { typeId: SaksTypeEnum }) => (
-  <Tooltip content={`Returnert og godkjent av ${getTitleLowercase(typeId)}`} delay={500}>
+const Approved = () => (
+  <Tooltip content="Returnert og godkjent av medunderskriver" delay={500}>
     <Tag data-color="success" variant="outline" size="small" className="whitespace-nowrap">
-      Tilbake fra {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
+      Tilbake fra MU
     </Tag>
   </Tooltip>
 );
 
-const Rejected = ({ typeId }: { typeId: SaksTypeEnum }) => (
-  <Tooltip content={`Returnert uten godkjenning av ${getTitleLowercase(typeId)}`} delay={500}>
+const Rejected = () => (
+  <Tooltip content="Returnert uten godkjenning av medunderskriver" delay={500}>
     <Tag data-color="danger" variant="outline" size="small" className="whitespace-nowrap">
-      Tilbake fra {typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ? 'fagansvarlig' : 'MU'}
+      Tilbake fra MU
     </Tag>
   </Tooltip>
 );

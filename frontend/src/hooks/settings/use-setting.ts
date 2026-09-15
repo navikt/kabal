@@ -167,6 +167,12 @@ export enum OppgaveTableRowsPerPage {
   SAKER_I_TR_LEDIGE = 'oppgaver/saker_i_tr_ledige/rows_per_page',
   SAKER_I_TR_VENTENDE = 'oppgaver/saker_i_tr_ventende/rows_per_page',
   SAKER_I_TR_UFERDIGE = 'oppgaver/saker_i_tr_uferdige/rows_per_page',
+  SAKER_I_TR_FERDIGE = 'oppgaver/saker_i_tr_ferdige/rows_per_page',
+  LEDIGE_ANKER_AFTER_2027 = 'oppgaver/ledige_anker_after_2027/rows_per_page',
+  ANKETEAM_LEDIGE = 'oppgaver/anketeam_ledige/rows_per_page',
+  ANKETEAM_TILDELTE = 'oppgaver/anketeam_tildelte/rows_per_page',
+  ANKETEAM_VENTENDE = 'oppgaver/anketeam_paa_vent/rows_per_page',
+  ANKETEAM_FERDIGE = 'oppgaver/anketeam_ferdige/rows_per_page',
 }
 
 export const useGosysBeskrivelseTab = () => useSetting('oppgavebehandling/gosys/beskrivelse/tab');
