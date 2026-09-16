@@ -11,7 +11,7 @@ export enum MeldekortFilter {
   ONLY = 'ONLY',
 }
 
-export const DEFAULT_MELDEKORT_FILTER = MeldekortFilter.EXCLUDE;
+export const DEFAULT_MELDEKORT_FILTER = MeldekortFilter.INCLUDE;
 
 export const MELDEKORT_FILTER_OPTIONS = Object.values(MeldekortFilter);
 
