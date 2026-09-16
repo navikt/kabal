@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useJsonSetting } from '@/hooks/settings/helpers';
+import { useEffect, useMemo } from 'react';
+import { type SettingSetter, useBooleanSetting, useJsonSetting } from '@/hooks/settings/helpers';
 
 export enum ArchivedDocumentsColumn {
   TEMA = 'TEMA',
@@ -36,6 +36,8 @@ export const useArchivedDocumentsColumns = () => {
   const { value = DEFAULT_ARCHIVED_DOCUMENTS_COLUMNS, ...rest } =
     useJsonSetting<ArchivedDocumentsColumn[]>('tabs/documents/columns');
 
+  useMeldekortMigration(value, rest.setValue);
+
   const columns: Record<ArchivedDocumentsColumn, boolean> = useMemo(
     () => ({
       [ArchivedDocumentsColumn.TEMA]: value.includes(ArchivedDocumentsColumn.TEMA),
@@ -50,4 +52,36 @@ export const useArchivedDocumentsColumns = () => {
   );
 
   return { ...rest, value, columns };
+};
+
+/**
+ * Meldekort column migration.
+ * Adds the meldekort column to selected columns, if any.
+ * If no columns are selected, default columns are used and no migration is applied.
+ * Default columns contain the meldekort column.
+ */
+const useMeldekortMigration = (
+  columns: ArchivedDocumentsColumn[],
+  setColumns: SettingSetter<ArchivedDocumentsColumn[]>,
+) => {
+  const { value: meldekortMigrated = false, setValue: setMeldekortMigrated } = useBooleanSetting(
+    'tabs/documents/columns/meldekort-migration',
+  );
+
+  useEffect(() => {
+    if (meldekortMigrated) console.info('Meldekort column migration already applied. Skipping migration.');
+    else if (columns === DEFAULT_ARCHIVED_DOCUMENTS_COLUMNS) {
+      console.info('Columns are default. Marking meldekort column migration as applied.');
+      setMeldekortMigrated(true);
+    } else if (columns.includes(ArchivedDocumentsColumn.MELDEKORT)) {
+      console.info('MELDEKORT column already present. Marking meldekort column migration as applied.');
+      setMeldekortMigrated(true);
+    } else {
+      setColumns((v = []) =>
+        v.includes(ArchivedDocumentsColumn.MELDEKORT) ? v : [...v, ArchivedDocumentsColumn.MELDEKORT],
+      );
+      setMeldekortMigrated(true);
+      console.info('Meldekort column migration applied. Added MELDEKORT column to archived documents columns.');
+    }
+  }, [meldekortMigrated, setMeldekortMigrated, columns, setColumns]);
 };
