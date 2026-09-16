@@ -1,6 +1,6 @@
 import { ChevronRightDoubleIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button, HGrid, HStack, Tooltip } from '@navikt/ds-react';
-import { getExpandedFields } from '@/components/documents/journalfoerte-documents/fields';
+import { getExpandedDocumentFields } from '@/components/documents/journalfoerte-documents/fields';
 import { Fields, getFieldNames, getFieldSizes } from '@/components/documents/journalfoerte-documents/grid';
 import { DocumentSearch } from '@/components/documents/journalfoerte-documents/header/document-search';
 import { ExpandedHeaders } from '@/components/documents/journalfoerte-documents/header/expanded-headers';
@@ -31,7 +31,7 @@ export const Header = ({ filters, showsAnyVedlegg, toggleShowAllVedlegg, searchR
 
   const tooltip = showsAnyVedlegg ? 'Skjul alle vedlegg' : 'Vis alle vedlegg';
 
-  const fields = getExpandedFields(columns);
+  const fields = getExpandedDocumentFields(columns);
 
   return (
     <HGrid

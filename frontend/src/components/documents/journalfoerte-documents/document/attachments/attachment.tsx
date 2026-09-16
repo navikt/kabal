@@ -7,7 +7,10 @@ import { DocumentTitle } from '@/components/documents/journalfoerte-documents/do
 import { IncludeDocument } from '@/components/documents/journalfoerte-documents/document/shared/include-document';
 import { Meldekort } from '@/components/documents/journalfoerte-documents/document/shared/meldekort';
 import { ToggleVedleggButton } from '@/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
-import { COLLAPSED_FIELDS, getExpandedFields } from '@/components/documents/journalfoerte-documents/fields';
+import {
+  COLLAPSED_VEDLEGG_FIELDS,
+  getExpandedVedleggFields,
+} from '@/components/documents/journalfoerte-documents/fields';
 import { Fields, getFieldNames, getFieldSizes } from '@/components/documents/journalfoerte-documents/grid';
 import { convertRealToAccessibleDocumentIndex } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { setFocusIndex } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
@@ -172,7 +175,7 @@ export const Attachment = memo(
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const fields = isExpandedListView ? getExpandedFields(columns) : COLLAPSED_FIELDS;
+    const fields = isExpandedListView ? getExpandedVedleggFields(columns) : COLLAPSED_VEDLEGG_FIELDS;
 
     return (
       <HGrid

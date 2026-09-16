@@ -2,14 +2,9 @@ import { Fields } from '@/components/documents/journalfoerte-documents/grid';
 import { isNotNull } from '@/functions/is-not-type-guards';
 import type { ArchivedDocumentsColumn } from '@/hooks/settings/use-archived-documents-setting';
 
-type Columns = Record<ArchivedDocumentsColumn, boolean>;
+export type Columns = Record<ArchivedDocumentsColumn, boolean>;
 
-/**
- * The fields of an expanded row, in order.
- * Document rows and vedlegg rows share this so the columns line up, even though vedlegg rows
- * only fill in the fields that are document specific.
- */
-export const getExpandedFields = (columns: Columns): Fields[] =>
+export const getExpandedDocumentFields = (columns: Columns): Fields[] =>
   [
     Fields.Select,
     Fields.ToggleVedlegg,
@@ -25,4 +20,15 @@ export const getExpandedFields = (columns: Columns): Fields[] =>
     Fields.Action,
   ].filter(isNotNull);
 
-export const COLLAPSED_FIELDS: Fields[] = [Fields.Select, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
+export const COLLAPSED_DOCUMENT_FIELDS: Fields[] = [Fields.Select, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
+
+export const getExpandedVedleggFields = (columns: Columns): Fields[] =>
+  [
+    Fields.Select,
+    Fields.ToggleVedlegg,
+    Fields.Title,
+    columns.MELDEKORT ? Fields.Meldekort : null,
+    Fields.Action,
+  ].filter(isNotNull);
+
+export const COLLAPSED_VEDLEGG_FIELDS = [Fields.Select, Fields.ToggleVedlegg, Fields.Title, Fields.Action];
