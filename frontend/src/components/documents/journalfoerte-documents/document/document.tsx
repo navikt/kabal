@@ -7,7 +7,10 @@ import { MottattCheckbox } from '@/components/documents/journalfoerte-documents/
 import { DocumentTitle } from '@/components/documents/journalfoerte-documents/document/shared/document-title';
 import { IncludeDocument } from '@/components/documents/journalfoerte-documents/document/shared/include-document';
 import { ToggleVedleggButton } from '@/components/documents/journalfoerte-documents/document/shared/toggle-vedlegg';
-import { COLLAPSED_FIELDS, getExpandedFields } from '@/components/documents/journalfoerte-documents/fields';
+import {
+  COLLAPSED_DOCUMENT_FIELDS,
+  getExpandedDocumentFields,
+} from '@/components/documents/journalfoerte-documents/fields';
 import { Fields, getFieldNames, getFieldSizes } from '@/components/documents/journalfoerte-documents/grid';
 import { convertRealToAccessibleDocumentIndex } from '@/components/documents/journalfoerte-documents/keyboard/helpers/index-converters';
 import { setFocusIndex } from '@/components/documents/journalfoerte-documents/keyboard/state/focus';
@@ -138,14 +141,14 @@ export const Document = ({
     [index, hasAccess],
   );
 
-  const fields = getExpandedFields(columns);
+  const fields = getExpandedDocumentFields(columns);
 
   return (
     <HGrid
       as="article"
       gap="space-0 space-8"
       align="center"
-      columns={isExpandedListView ? getFieldSizes(fields) : getFieldSizes(COLLAPSED_FIELDS)}
+      columns={isExpandedListView ? getFieldSizes(fields) : getFieldSizes(COLLAPSED_DOCUMENT_FIELDS)}
       ref={ref}
       data-journalpostid={journalpostId}
       data-dokumentinfoid={dokumentInfoId}
@@ -161,7 +164,7 @@ export const Document = ({
       tabIndex={-1}
       className={`${DOCUMENT_CLASSES} ${className} pr-1.5 pl-1.5`}
       style={{
-        gridTemplateAreas: `"${isExpandedListView ? getFieldNames(fields) : getFieldNames(COLLAPSED_FIELDS)}"`,
+        gridTemplateAreas: `"${isExpandedListView ? getFieldNames(fields) : getFieldNames(COLLAPSED_DOCUMENT_FIELDS)}"`,
       }}
     >
       {journalstatus === Journalstatus.MOTTATT ? (
