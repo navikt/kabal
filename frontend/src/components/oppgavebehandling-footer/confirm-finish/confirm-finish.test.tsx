@@ -347,15 +347,8 @@ describe('ConfirmFinish', () => {
         expect(screen.queryByRole('dialog')).toBeVisible();
       });
 
-      const cases = [
-        UtfallEnum.STADFESTET_MED_EN_ANNEN_BEGRUNNELSE,
-        UtfallEnum.BESLUTNING_OM_IKKE_Å_OMGJØRE,
-        UtfallEnum.TRUKKET,
-        UtfallEnum.HENLAGT,
-      ];
-
-      test.each(cases)('Utfall id: %s', async (utfall) => {
-        mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, utfall, true);
+      test('Medhold etter forvaltningsloven § 35', async () => {
+        mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, UtfallEnum.UGUNST, true);
         renderConfirmFinish();
 
         const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
@@ -367,6 +360,28 @@ describe('ConfirmFinish', () => {
         await act(async () => fireEvent.click(finishButton));
 
         expect(screen.queryByRole('dialog')).toBeVisible();
+      });
+
+      const cases = [
+        UtfallEnum.STADFESTET_MED_EN_ANNEN_BEGRUNNELSE,
+        UtfallEnum.BESLUTNING_OM_IKKE_Å_OMGJØRE,
+        UtfallEnum.TRUKKET,
+        UtfallEnum.HENLAGT,
+      ];
+
+      test.each(cases)('Utfall id: %s', async (utfall) => {
+        mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, utfall, true);
+        renderConfirmFinish();
+
+        const buttonText = 'Fullfør';
+        const finishButton = screen.getByRole('button', { name: buttonText });
+        expect(finishButton).toBeVisible();
+        expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
+        expect(await screen.findAllByRole('button')).toHaveLength(2);
+
+        await act(async () => fireEvent.click(finishButton));
+
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       });
     });
   });
