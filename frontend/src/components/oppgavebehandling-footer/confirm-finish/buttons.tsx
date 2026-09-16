@@ -49,6 +49,7 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
     case SaksTypeEnum.OMGJØRINGSKRAV:
       switch (utfallId) {
         case UtfallEnum.MEDHOLD_ETTER_FORVALTNINGSLOVEN_35:
+        case UtfallEnum.UGUNST:
           return (
             <StandardButtonGroup
               cancel={cancel}
@@ -57,13 +58,7 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
             />
           );
         default:
-          return (
-            <StandardButtonGroup
-              cancel={cancel}
-              finishDisabled={finishDisabled}
-              requiresGosysOppgave={requiresGosysOppgave}
-            />
-          );
+          return <SimpleButtonGroup cancel={cancel} finishDisabled={finishDisabled} />;
       }
 
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
