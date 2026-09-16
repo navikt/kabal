@@ -358,7 +358,7 @@ describe('ConfirmFinish', () => {
         mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, utfall, true);
         renderConfirmFinish();
 
-        const buttonText = 'Fullfør';
+        const buttonText = 'Oppdater oppgaven i Gosys og fullfør';
         const finishButton = screen.getByRole('button', { name: buttonText });
         expect(finishButton).toBeVisible();
         expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
@@ -366,7 +366,7 @@ describe('ConfirmFinish', () => {
 
         await act(async () => fireEvent.click(finishButton));
 
-        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        expect(screen.queryByRole('dialog')).toBeVisible();
       });
     });
   });
