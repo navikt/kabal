@@ -57,7 +57,13 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
             />
           );
         default:
-          return <SimpleButtonGroup cancel={cancel} finishDisabled={finishDisabled} />;
+          return (
+            <StandardButtonGroup
+              cancel={cancel}
+              finishDisabled={finishDisabled}
+              requiresGosysOppgave={requiresGosysOppgave}
+            />
+          );
       }
 
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
