@@ -56,7 +56,7 @@ export const FinishButton = () => {
           const validationPromise = validate({ oppgaveId: id, type: ValidationType.FINISH }).unwrap();
 
           const ekspedisjonsbrevPromise = isAnkeToTrygderettenUtfall(typeId, utfallId)
-            ? getEkspedisjonsbrevIsSent(id).unwrap() // Trigger ekspedisjonsbrev sent check. Just to populate the RTKQ state, not for local use.
+            ? getEkspedisjonsbrevIsSent(id).unwrap() // Update currentData for useLazyGetEkspedisjonsbrevTilTrygderettenIsSentQuery.
             : Promise.resolve(undefined);
 
           const [validation] = await Promise.all([validationPromise, ekspedisjonsbrevPromise]);
