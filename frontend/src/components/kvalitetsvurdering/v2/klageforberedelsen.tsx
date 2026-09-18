@@ -19,7 +19,12 @@ export const Klageforberedelsen = () => {
   const validationError = useValidationError(KLAGEFORBEREDELSEN_FIELD);
   const header = useKvalitetsvurderingV2FieldName(KLAGEFORBEREDELSEN_FIELD);
 
-  if (isLoading || oppgave.typeId === SaksTypeEnum.ANKE || oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (
+    isLoading ||
+    oppgave.typeId === SaksTypeEnum.ANKE ||
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+  ) {
     return null;
   }
 

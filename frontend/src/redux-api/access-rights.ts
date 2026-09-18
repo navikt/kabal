@@ -2,12 +2,16 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { toast } from '@/components/toast/store';
 import { INNSTILLINGER_BASE_QUERY } from '@/redux-api/common';
 
-export interface SaksbehandlerAccessRights {
+interface Saksbehandler {
   saksbehandlerIdent: string;
   saksbehandlerName: string;
+}
+
+export interface SaksbehandlerAccessRights extends Saksbehandler {
   ytelseIdList: string[];
   created: string | null;
   accessRightsModified: string | null;
+  anketeam: boolean;
 }
 
 interface SaksbehandlereResponse {
@@ -21,6 +25,11 @@ interface SaksbehandlerAccessRightUpdate {
 
 interface UpdateAccessRightsParams {
   accessRights: SaksbehandlerAccessRightUpdate[];
+}
+
+export interface AnketeamAccess {
+  saksbehandlerIdent: string;
+  anketeam: boolean;
 }
 
 export const accessRightsApi = createApi({
@@ -41,7 +50,18 @@ export const accessRightsApi = createApi({
         toast.success('Tilgangsstyring er lagret');
       },
     }),
+    updateAnketeam: builder.mutation<{ anketeam: AnketeamAccess[] }, AnketeamAccess[]>({
+      query: (anketeam) => ({
+        method: 'PUT',
+        url: '/ansatte/setanketeam',
+        body: { anketeam },
+      }),
+      onQueryStarted: async (_, { queryFulfilled }) => {
+        await queryFulfilled;
+        toast.success('Anketeam er lagret');
+      },
+    }),
   }),
 });
 
-export const { useGetAccessRightsQuery, useUpdateAccessRightsMutation } = accessRightsApi;
+export const { useGetAccessRightsQuery, useUpdateAccessRightsMutation, useUpdateAnketeamMutation } = accessRightsApi;

@@ -1,5 +1,5 @@
 import { ArrowUndoIcon, FloppydiskIcon } from '@navikt/aksel-icons';
-import { Button, Heading, HStack, Loader } from '@navikt/ds-react';
+import { Box, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { Body } from '@/components/access-rights/body';
 import { Head } from '@/components/access-rights/head';
@@ -65,36 +65,47 @@ const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
     });
 
   return (
-    <>
-      <TilgangsstyringHeading />
-      <div className="shrink-1 overflow-auto">
-        <table className="max-h-full border-separate border-spacing-0" onMouseLeave={() => setFocusedCell([-1, -1])}>
-          <Head saksbehandlere={accessRights} focusedCell={focusedCell} setFocusedCell={setFocusedCell} />
-          <Body
-            ytelser={ytelser}
-            accessRights={accessRights}
-            onCheck={onCheck}
-            focusedCell={focusedCell}
-            setFocusedCell={setFocusedCell}
-          />
-        </table>
-      </div>
-      <HStack gap="space-16">
-        <Button variant="primary" size="small" onClick={save} loading={isLoading} icon={<FloppydiskIcon aria-hidden />}>
-          Lagre
-        </Button>
-        <Button data-color="danger" variant="primary" size="small" onClick={reset} icon={<ArrowUndoIcon aria-hidden />}>
-          Avbryt
-        </Button>
-      </HStack>
-    </>
+    <Box overflow="hidden" height="100%" borderRadius="4" shadow="dialog" padding="space-16" className="flex flex-col">
+      <Heading level="2" size="small" className="mb-4">
+        Ytelser
+      </Heading>
+
+      <VStack gap="space-16" overflow="hidden" maxHeight="100%">
+        <div className="overflow-auto pr-50">
+          <table className="max-h-full border-separate border-spacing-0" onMouseLeave={() => setFocusedCell([-1, -1])}>
+            <Head saksbehandlere={accessRights} focusedCell={focusedCell} setFocusedCell={setFocusedCell} />
+            <Body
+              ytelser={ytelser}
+              accessRights={accessRights}
+              onCheck={onCheck}
+              focusedCell={focusedCell}
+              setFocusedCell={setFocusedCell}
+            />
+          </table>
+        </div>
+        <HStack gap="space-16">
+          <Button
+            variant="primary"
+            size="small"
+            onClick={save}
+            loading={isLoading}
+            icon={<FloppydiskIcon aria-hidden />}
+          >
+            Lagre
+          </Button>
+          <Button
+            data-color="danger"
+            variant="primary"
+            size="small"
+            onClick={reset}
+            icon={<ArrowUndoIcon aria-hidden />}
+          >
+            Avbryt
+          </Button>
+        </HStack>
+      </VStack>
+    </Box>
   );
 };
 
 const addIfNotExists = (array: string[], value: string) => (array.includes(value) ? array : [...array, value]);
-
-const TilgangsstyringHeading = () => (
-  <Heading level="1" size="medium">
-    Tilgangsstyring
-  </Heading>
-);

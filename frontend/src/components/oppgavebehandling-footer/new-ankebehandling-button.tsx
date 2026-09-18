@@ -12,7 +12,10 @@ import { SaksTypeEnum } from '@/types/kodeverk';
 import { ValidationType } from '@/types/oppgavebehandling/params';
 
 interface Props {
-  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+  typeId:
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+    | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
   oppgaveId: string;
 }
 
@@ -56,7 +59,10 @@ interface PopupProps {
   show: boolean;
   close: () => void;
   oppgaveId: string;
-  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+  typeId:
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+    | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
   newBehandling: (id: string) => void;
   isLoading: boolean;
 }
@@ -90,12 +96,18 @@ const Popup = ({ show, close, oppgaveId, typeId, newBehandling, isLoading }: Pop
   );
 };
 
-const useNewBehandling = (sakstype: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR) => {
+const useNewBehandling = (
+  sakstype:
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+    | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
+) => {
   const newAnkebehandling = useNewAnkebehandlingMutation;
   const newBehandlingFromTRBehandling = useNewBehandlingFromTRBehandlingMutation;
 
   switch (sakstype) {
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       return newAnkebehandling();
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
       return newBehandlingFromTRBehandling();
@@ -103,19 +115,29 @@ const useNewBehandling = (sakstype: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeE
 };
 
 const getValidationType = (
-  type: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
+  type:
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+    | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
 ): ValidationType => {
   switch (type) {
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       return ValidationType.NEW_ANKEBEHANDLING;
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
       return ValidationType.NEW_BEHANDLING_FROM_TR_BEHANDLING;
   }
 };
 
-const getBodyText = (type: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR): string => {
+const getBodyText = (
+  type:
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+    | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
+): string => {
   switch (type) {
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       return 'Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Anke i Trygderetten»-oppgaven forsvinne. Du vil få en ny ankeoppgave som du må behandle. Husk at du må sende orientering til Trygderetten om den nye ankebehandlingen du har gjort i saken. Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
       return 'Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Begjæring om gjenopptak i Trygderetten»-oppgaven forsvinne. Du vil få en ny begjæring om gjenopptak-oppgave som du må behandle. Husk at du må sende orientering til Trygderetten om den nye behandlingen du har gjort i saken. Vær oppmerksom på at det kan ta noen minutter før begjæringen om gjenopptak er opprettet.';

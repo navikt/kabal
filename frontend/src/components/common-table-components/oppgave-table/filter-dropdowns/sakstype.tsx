@@ -17,33 +17,43 @@ const toEntries = (options: SaksTypeOption[]): Entry<SaksTypeOption>[] =>
 
 const BASE_OPTIONS: SaksTypeOption[] = [
   { value: SaksTypeEnum.KLAGE, label: 'Klage' },
-  { value: SaksTypeEnum.ANKE, label: 'Anke' },
+  { value: SaksTypeEnum.ANKE, label: 'Anke før 1.1.27' },
   { value: SaksTypeEnum.OMGJØRINGSKRAV, label: 'Omgjøringskrav' },
   { value: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK, label: 'Begjæring om gjenopptak' },
 ];
 
-const OPTIONS = toEntries(BASE_OPTIONS);
-
-const OPTIONS_WITH_TRYGDERETTEN = toEntries([
-  ...BASE_OPTIONS,
-  { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN, label: 'Anke i Trygderetten' },
+const OPTIONS_WITH_TR_BEFORE_2027 = [
+  { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN, label: 'Anke i TR før 1.1.27' },
   { value: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR, label: 'Begjæring om gjenopptak i Trygderetten' },
   { value: SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET, label: 'Behandling etter Trygderetten opphevet' },
-]);
+];
 
-const OPTIONS_FOR_SAKER_I_TR = toEntries([
-  { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN, label: 'Anke i Trygderetten' },
+const OPTIONS_FOR_SAKER_I_TR = [
+  { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN, label: 'Anke i TR før 1.1.27' },
   { value: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR, label: 'Begjæring om gjenopptak i TR' },
-]);
+  { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027, label: 'Anke i Trygderetten' },
+];
 
-export const Sakstype = (props: FilterDropdownProps) => <Filter {...props} options={OPTIONS} />;
+const OPTIONS_FOR_ANKE_AFTER_2027 = [
+  { value: SaksTypeEnum.ANKE_AFTER_2027, label: 'Anke' },
+  { value: SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027, label: 'Anke i Trygderetten' },
+];
 
-export const SakstypeWithTrygderetten = (props: FilterDropdownProps) => (
-  <Filter {...props} options={OPTIONS_WITH_TRYGDERETTEN} />
-);
+export const Sakstype = (props: FilterDropdownProps) => <Filter {...props} options={toEntries(BASE_OPTIONS)} />;
 
 export const SakstypeForSakerITR = (props: FilterDropdownProps) => (
-  <Filter {...props} options={OPTIONS_FOR_SAKER_I_TR} />
+  <Filter {...props} options={toEntries(OPTIONS_FOR_SAKER_I_TR)} />
+);
+
+export const SakstypeForAnkeAfter2027 = (props: FilterDropdownProps) => (
+  <Filter {...props} options={toEntries(OPTIONS_FOR_ANKE_AFTER_2027)} />
+);
+
+export const AllSakstyper = (props: FilterDropdownProps) => (
+  <Filter
+    {...props}
+    options={toEntries([...BASE_OPTIONS, ...OPTIONS_WITH_TR_BEFORE_2027, ...OPTIONS_FOR_SAKER_I_TR])}
+  />
 );
 
 const Filter = ({ columnKey, tableKey, options }: FilterDropdownProps & { options: Entry<SaksTypeOption>[] }) => {

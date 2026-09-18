@@ -21,7 +21,11 @@ export const KjennelseMottatt = () => {
   const label = useFieldName('kjennelseMottatt');
   const [setKjennelseMottatt] = useSetKjennelseMottattMutation();
 
-  if (data?.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN && data?.typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR) {
+  if (
+    data?.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN &&
+    data?.typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR &&
+    data?.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+  ) {
     return null;
   }
 

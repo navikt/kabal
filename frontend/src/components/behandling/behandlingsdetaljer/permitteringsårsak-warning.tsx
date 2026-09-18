@@ -14,7 +14,11 @@ export const PermitteringsårsakWarning = ({ className }: Props) => {
     return null;
   }
 
-  if (data.typeId !== SaksTypeEnum.ANKE && data.typeId !== SaksTypeEnum.KLAGE) {
+  if (
+    data.typeId !== SaksTypeEnum.ANKE &&
+    data.typeId !== SaksTypeEnum.ANKE_AFTER_2027 &&
+    data.typeId !== SaksTypeEnum.KLAGE
+  ) {
     return null;
   }
 

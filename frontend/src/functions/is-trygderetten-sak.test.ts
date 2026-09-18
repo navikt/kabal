@@ -10,6 +10,8 @@ const CASES: [SaksTypeEnum, boolean][] = [
   [SaksTypeEnum.OMGJØRINGSKRAV, false],
   [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK, false],
   [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR, true],
+  [SaksTypeEnum.ANKE_AFTER_2027, false],
+  [SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027, true],
 ];
 
 describe('isTrygderettenTypeId', () => {
