@@ -172,7 +172,7 @@ export const DocumentModalContent = ({
           <FileViewer showDocumentList={[{ documentId: document.id, parentId: null, type: document.type }]} />
         ) : null}
       </Dialog.Body>
-      <Dialog.Footer className="items-center">
+      <Dialog.Footer className="items-center justify-between">
         <AccessErrorsSummary
           documentErrors={removeAccess === null ? [] : [removeAccess]}
           attachmentErrors={removeAttachmentsAccess}

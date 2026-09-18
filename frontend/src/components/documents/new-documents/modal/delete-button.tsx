@@ -75,6 +75,16 @@ export const DeleteDocumentButton = ({ document, disabled = false, ...rest }: Pr
     return (
       <HStack justify="end" gap="space-0 space-16" {...rest}>
         <Button
+          data-color="neutral"
+          className={BUTTON_CLASSES}
+          size="small"
+          variant="secondary"
+          onClick={() => setShowConfirm(false)}
+          icon={<ArrowUndoIcon aria-hidden />}
+        >
+          Avbryt
+        </Button>
+        <Button
           data-color="danger"
           className={BUTTON_CLASSES}
           variant="primary"
@@ -85,16 +95,6 @@ export const DeleteDocumentButton = ({ document, disabled = false, ...rest }: Pr
           icon={<TrashIcon aria-hidden />}
         >
           {text}
-        </Button>
-        <Button
-          data-color="neutral"
-          className={BUTTON_CLASSES}
-          size="small"
-          variant="secondary"
-          onClick={() => setShowConfirm(false)}
-          icon={<ArrowUndoIcon aria-hidden />}
-        >
-          Avbryt
         </Button>
       </HStack>
     );
