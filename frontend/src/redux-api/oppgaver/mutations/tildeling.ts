@@ -10,7 +10,6 @@ import {
   oppgaverApi,
 } from '@/redux-api/oppgaver/oppgaver';
 import { behandlingerQuerySlice } from '@/redux-api/oppgaver/queries/behandling/behandling';
-import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
 import { user } from '@/static-data/static-data';
 import { HistoryEventTypes, type ITildelingEvent } from '@/types/oppgavebehandling/response';
 import {
@@ -53,12 +52,6 @@ const tildelMutationSlice = oppgaverApi.injectEndpoints({
                 draft.saksbehandler = employee;
                 draft.modified = data.modified;
               }
-            }),
-          );
-          dispatch(
-            oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {
-              draft.tildeltSaksbehandlerident = employee.navIdent;
-              draft.tildeltTimestamp = format(new Date(), ISO_DATETIME_FORMAT);
             }),
           );
         } catch {
