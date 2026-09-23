@@ -23,11 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
 
       - name: Get image registry
         id: image-registry
-        uses: nais/login@v0
+        uses: nais/login@40b72a35a18ddf2ad74b632461139ab838cc2a2f # v0
         with:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
@@ -39,7 +39,7 @@ jobs:
         run: echo "image=${{ steps.image-registry.outputs.registry }}/kabal-frontend:${{ github.sha }}" >> $GITHUB_OUTPUT
 
       - name: Deploy to prod
-        uses: nais/deploy/actions/deploy@v2
+        uses: nais/deploy/actions/deploy@9850be311389ca754d9a9f2280615419d738c891 # v3
         env:
           CLUSTER: prod-gcp
           VARS: nais/prod.yaml
@@ -54,6 +54,6 @@ jobs:
           RELEASE=$VERSION-$COMMIT
           echo "release=${RELEASE}" >> $GITHUB_OUTPUT
 
-      - uses: ncipollo/release-action@v1
+      - uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd # v1.21.0
         with:
           tag: ${{ steps.release.outputs.release }}
