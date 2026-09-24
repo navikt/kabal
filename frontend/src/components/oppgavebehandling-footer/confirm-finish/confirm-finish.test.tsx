@@ -106,7 +106,7 @@ describe('ConfirmFinish', () => {
     });
 
     test('Arena warning', async () => {
-      mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, false, FAGSYSTEM_ARENA);
+      mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, true, FAGSYSTEM_ARENA);
       renderConfirmFinish();
 
       const checkbox = screen.getByRole('checkbox', {
@@ -115,7 +115,7 @@ describe('ConfirmFinish', () => {
       expect(checkbox).toBeVisible();
       expect(checkbox).not.toBeChecked();
 
-      const finishButton = screen.getByRole('button', { name: 'Fullfør' });
+      const finishButton = screen.getByRole('button', { name: 'Oppdater oppgaven i Gosys og fullfør' });
       expect(finishButton).toBeVisible();
       expect(finishButton).toBeDisabled();
 
@@ -126,6 +126,19 @@ describe('ConfirmFinish', () => {
 
     test('No Arena warning', async () => {
       mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, false);
+      renderConfirmFinish();
+
+      expect(
+        screen.queryByRole('checkbox', { name: 'Jeg bekrefter at saken er sendt til godkjenning i Arena.' }),
+      ).not.toBeInTheDocument();
+
+      const finishButton = screen.getByRole('button', { name: 'Fullfør' });
+      expect(finishButton).toBeVisible();
+      expect(finishButton).toBeEnabled();
+    });
+
+    test('No Arena warning for Arena fagsystem when not requiring Gosys oppgave', async () => {
+      mockOppgave(SaksTypeEnum.KLAGE, UtfallEnum.MEDHOLD, false, FAGSYSTEM_ARENA);
       renderConfirmFinish();
 
       expect(
@@ -176,7 +189,7 @@ describe('ConfirmFinish', () => {
 
   describe('Anke', () => {
     test('Arena warning', async () => {
-      mockOppgave(SaksTypeEnum.ANKE, UtfallEnum.MEDHOLD, false, FAGSYSTEM_ARENA);
+      mockOppgave(SaksTypeEnum.ANKE, UtfallEnum.MEDHOLD, true, FAGSYSTEM_ARENA);
       renderConfirmFinish();
 
       const checkbox = screen.getByRole('checkbox', {
@@ -185,7 +198,7 @@ describe('ConfirmFinish', () => {
       expect(checkbox).toBeVisible();
       expect(checkbox).not.toBeChecked();
 
-      const finishButton = screen.getByRole('button', { name: 'Fullfør' });
+      const finishButton = screen.getByRole('button', { name: 'Oppdater oppgaven i Gosys og fullfør' });
       expect(finishButton).toBeVisible();
       expect(finishButton).toBeDisabled();
 
@@ -260,7 +273,7 @@ describe('ConfirmFinish', () => {
 
   describe('Behandling etter TR opphevet', () => {
     test('Arena warning', async () => {
-      mockOppgave(SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET, UtfallEnum.MEDHOLD, false, FAGSYSTEM_ARENA);
+      mockOppgave(SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET, UtfallEnum.MEDHOLD, true, FAGSYSTEM_ARENA);
       renderConfirmFinish();
 
       const checkbox = screen.getByRole('checkbox', {
@@ -269,7 +282,7 @@ describe('ConfirmFinish', () => {
       expect(checkbox).toBeVisible();
       expect(checkbox).not.toBeChecked();
 
-      const finishButton = screen.getByRole('button', { name: 'Fullfør' });
+      const finishButton = screen.getByRole('button', { name: 'Oppdater oppgaven i Gosys og fullfør' });
       expect(finishButton).toBeVisible();
       expect(finishButton).toBeDisabled();
 
@@ -446,7 +459,7 @@ describe('ConfirmFinish', () => {
           screen.queryByText(
             'Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten har henvist.',
           ),
-        ).toBeInTheDocument();
+        ).not.toBeInTheDocument();
 
         await act(async () => fireEvent.click(screen.getByRole('button', { name: button })));
         expect(screen.queryByRole('dialog', { name: 'Oppdater oppgaven i Gosys og fullfør' })).not.toBeInTheDocument();
@@ -512,7 +525,7 @@ describe('ConfirmFinish', () => {
     });
 
     test('Arena warning', async () => {
-      mockOppgave(SaksTypeEnum.ANKE_I_TRYGDERETTEN, UtfallEnum.MEDHOLD, false, FAGSYSTEM_ARENA);
+      mockOppgave(SaksTypeEnum.ANKE_I_TRYGDERETTEN, UtfallEnum.MEDHOLD, true, FAGSYSTEM_ARENA);
       renderConfirmFinish();
 
       const checkbox = screen.getByRole('checkbox', {
@@ -521,7 +534,7 @@ describe('ConfirmFinish', () => {
       expect(checkbox).toBeVisible();
       expect(checkbox).not.toBeChecked();
 
-      const finishButton = screen.getByRole('button', { name: 'Fullfør' });
+      const finishButton = screen.getByRole('button', { name: 'Oppdater oppgaven i Gosys og fullfør' });
       expect(finishButton).toBeVisible();
       expect(finishButton).toBeDisabled();
 

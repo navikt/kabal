@@ -6,14 +6,13 @@ import {
 
 // https://nav-it.slack.com/archives/G01CTUC8LSU/p1787141984237739
 // https://nav-it.slack.com/archives/G01CTUC8LSU/p1788425945624739
+// https://nav-it.slack.com/archives/G01CTUC8LSU/p1790239624564469
 export const treatAsArena = (fagsystemId: string, requiresGosysOppgave: boolean) => {
-  if (fagsystemId === FAGSYSTEM_ARENA) {
-    return true;
+  if (!requiresGosysOppgave) {
+    return false;
   }
 
-  if (requiresGosysOppgave) {
-    return fagsystemId === FAGSYSTEM_ARBEIDSOPPFØLGING || fagsystemId === FAGSYSTEM_GOSYS;
-  }
-
-  return false;
+  return (
+    fagsystemId === FAGSYSTEM_ARENA || fagsystemId === FAGSYSTEM_ARBEIDSOPPFØLGING || fagsystemId === FAGSYSTEM_GOSYS
+  );
 };
