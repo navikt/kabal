@@ -18,6 +18,7 @@ import { isNotNullOrUndefined } from '@/functions/is-not-type-guards';
 import { parseJSON } from '@/functions/parse-json';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useSmartEditorEnabled } from '@/hooks/settings/use-setting';
+import { LogLevel, pushError, pushLog } from '@/observability';
 import { isKabalApiErrorData, type KabalApiErrorData } from '@/types/errors';
 
 interface KabalFileViewerProps extends Pick<KlageFileViewerProps, 'files' | 'onClose' | 'newTabUrl'> {
@@ -92,7 +93,16 @@ export const KabalFileViewer = ({ files, onClose, newTabUrl, handle }: KabalFile
   );
 };
 
-const handleKabalFetchError = ({ status, body }: FetchErrorInfo): void => {
+const handleKabalFetchError = (fetchError: FetchErrorInfo): void => {
+  if (fetchError.type === 'network') {
+    const { error, url } = fetchError;
+    pushError(error, { context: { url } });
+    toast.error(<ErrorToast error={error.message} />);
+    return;
+  }
+
+  const { status, body, url } = fetchError;
+
   if (status === 401) {
     toast.error(<ErrorToast error="Ikke innlogget" />);
 
@@ -102,6 +112,12 @@ const handleKabalFetchError = ({ status, body }: FetchErrorInfo): void => {
 
     return;
   }
+
+  pushLog(
+    `Kabal file viewer fetch failed with status ${status.toString(10)}`,
+    { context: { status: status.toString(10), url } },
+    status >= 500 ? LogLevel.ERROR : LogLevel.WARN,
+  );
 
   const contentType = parseJSON(body);
 
