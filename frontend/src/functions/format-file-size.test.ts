@@ -28,31 +28,31 @@ describe('format file size', () => {
     expect(actual).toBe('200 byte');
   });
 
-  it(`${2 * KB} byte should be formatted as 2 KiB`, () => {
+  it(`${2 * KB} byte should be formatted as 2 KB`, () => {
     expect.assertions(1);
 
     const actual = formatFileSize(2 * KB);
-    expect(actual).toBe('2.00 KiB');
+    expect(actual).toBe('2.00 KB');
   });
 
-  it(`${2 * MB} byte should be formatted as 2 MiB`, () => {
+  it(`${2 * MB} byte should be formatted as 2 MB`, () => {
     expect.assertions(1);
 
     const actual = formatFileSize(2 * MB);
-    expect(actual).toBe('2.00 MiB');
+    expect(actual).toBe('2.00 MB');
   });
 
-  it(`${5.73 * MB} byte should be formatted as 5.73 MiB`, () => {
+  it(`${5.73 * MB} byte should be formatted as 5.73 MB`, () => {
     expect.assertions(1);
 
     const actual = formatFileSize(5.73 * MB);
-    expect(actual).toBe('5.73 MiB');
+    expect(actual).toBe('5.73 MB');
   });
 
-  it(`${5.59073 * GB} byte should be formatted as 5.59 GiB`, () => {
+  it(`${5.59073 * GB} byte should be formatted as 5.59 GB`, () => {
     expect.assertions(1);
 
     const actual = formatFileSize(5.59073 * GB);
-    expect(actual).toBe('5.59 GiB');
+    expect(actual).toBe('5.59 GB');
   });
 });
