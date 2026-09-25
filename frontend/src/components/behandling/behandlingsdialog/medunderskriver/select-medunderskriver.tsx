@@ -2,11 +2,6 @@ import { BodyShort, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { differenceInMilliseconds, parseISO } from 'date-fns';
 import { useMemo } from 'react';
-import {
-  getTitleCapitalized,
-  getTitleLowercase,
-  getTitlePlural,
-} from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { MedunderskriverReadOnly } from '@/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SELECT_SKELETON } from '@/components/behandling/behandlingsdialog/medunderskriver/skeleton';
 import {
@@ -64,7 +59,7 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
     (hasOppgavestyringRole && medunderskriver.flowState === FlowState.SENT);
 
   if (!canChange) {
-    return <MedunderskriverReadOnly medunderskriver={medunderskriver} typeId={typeId} />;
+    return <MedunderskriverReadOnly medunderskriver={medunderskriver} />;
   }
 
   if (typeof data === 'undefined') {
@@ -74,11 +69,11 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
   const { medunderskrivere } = data;
 
   if (medunderskrivere.length === 0) {
-    return <BodyShort>Fant ingen {getTitlePlural(typeId)}</BodyShort>;
+    return <BodyShort>Fant ingen medunderskrivere</BodyShort>;
   }
 
   const fromNavIdent = medunderskriver.employee?.navIdent ?? null;
-  const titleLabel = getTitleCapitalized(typeId);
+  const titleLabel = 'Medunderskriver';
 
   const handleChange = (employee: INavEmployeeWithEnhet | null) => {
     if (
@@ -104,7 +99,7 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
       employee={medunderskriver.employee}
       isUpdating={isUpdating}
       onChange={handleChange}
-      confirmLabel={`Send til ${getTitleLowercase(typeId)}`}
+      confirmLabel="Send til medunderskriver"
     />
   );
 };

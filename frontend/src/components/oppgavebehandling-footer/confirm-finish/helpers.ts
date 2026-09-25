@@ -7,4 +7,6 @@ const LEADS_TO_ANKE_I_TRYGDERETTEN = [
 ];
 
 export const isAnkeToTrygderettenUtfall = (typeId: SaksTypeEnum, utfallId: UtfallEnum | null): boolean =>
-  typeId === SaksTypeEnum.ANKE && utfallId !== null && LEADS_TO_ANKE_I_TRYGDERETTEN.includes(utfallId);
+  (typeId === SaksTypeEnum.ANKE || typeId === SaksTypeEnum.ANKE_AFTER_2027) &&
+  utfallId !== null &&
+  LEADS_TO_ANKE_I_TRYGDERETTEN.includes(utfallId);

@@ -73,6 +73,8 @@ export enum Role {
   STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
   FORTROLIG = 'FORTROLIG',
   EGEN_ANSATT = 'EGEN_ANSATT',
+  ANKETEAM = 'ANKETEAM',
+  KABAL_OPPGAVESTYRING_ANKETEAM = 'KABAL_OPPGAVESTYRING_ANKETEAM',
 }
 
 export const ROLE_NAMES: Record<Role, string> = {
@@ -98,6 +100,8 @@ export const ROLE_NAMES: Record<Role, string> = {
   [Role.STRENGT_FORTROLIG]: 'Strengt fortrolig',
   [Role.FORTROLIG]: 'Fortrolig',
   [Role.EGEN_ANSATT]: 'Egen ansatt',
+  [Role.ANKETEAM]: 'Saksbehandling for anker',
+  [Role.KABAL_OPPGAVESTYRING_ANKETEAM]: 'Oppgavestyring for anker',
 };
 
 const ALL_ROLES = Object.values(Role);
