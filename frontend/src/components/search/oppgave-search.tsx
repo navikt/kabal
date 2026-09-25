@@ -102,7 +102,12 @@ const FnrSearch = ({ children }: Props) => {
         <ErrorMessage>{error}</ErrorMessage>
       </VStack>
 
-      <Person {...personQuery} fnr={rawQuery} refetch={() => validateAndFetch(() => fetchPerson(trimmedQuery))} />
+      <Person
+        {...personQuery}
+        isFetching={personQuery.isFetching || oppgaverQuery.isFetching}
+        fnr={rawQuery}
+        refetch={forceSearch}
+      />
       <Oppgaver {...oppgaverQuery} refetch={() => validateAndFetch(() => fetchOppgaver(trimmedQuery))} />
     </>
   );
