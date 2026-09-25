@@ -111,8 +111,10 @@ const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
             </Button>
           </HStack>
         ) : isSuccess ? (
-          <BodyShort size="small">
-            Lagret <CheckmarkCircleFillIconColored aria-hidden />
+          <BodyShort>
+            <HStack gap="space-4" align="center">
+              Lagret <CheckmarkCircleFillIconColored aria-hidden />
+            </HStack>
           </BodyShort>
         ) : null}
       </VStack>

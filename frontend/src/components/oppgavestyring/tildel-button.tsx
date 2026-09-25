@@ -29,6 +29,7 @@ export const TildelButton = ({
     medunderskriver.employee?.navIdent ?? null,
     medunderskriver.flowState,
     rol.flowState,
+    typeId,
     ytelseId,
   );
 

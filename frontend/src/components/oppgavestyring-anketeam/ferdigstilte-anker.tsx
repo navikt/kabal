@@ -43,7 +43,7 @@ const FerdigstilteAnkerTableInternal = () => {
   });
 
   return (
-    <SectionWithHeading heading="Fullførte anker" size="small">
+    <SectionWithHeading heading="Fullførte" size="small">
       <OppgaveTable
         {...props}
         columns={COLUMNS}

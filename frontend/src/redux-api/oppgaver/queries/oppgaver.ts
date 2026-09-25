@@ -1,5 +1,6 @@
 import { ENVIRONMENT } from '@/environment';
 import { OppgaveListTagTypes, oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import { SaksTypeEnum } from '@/types/kodeverk';
 import type { SearchPersonResponse } from '@/types/oppgave-common';
 import type {
   ApiResponse,
@@ -50,14 +51,14 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getLedigeAnkerAfter2027: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (params) => ({
         url: '/kabal-search/oppgaver/ledige',
-        params,
+        params: { ...params, typer: [SaksTypeEnum.ANKE_AFTER_2027] },
       }),
       providesTags: [OppgaveListTagTypes.LEDIGE_ANKER_AFTER_2027],
     }),
     getAntallLedigeAnkerAfter2027MedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
       query: (params) => ({
         url: '/kabal-search/antalloppgavermedutgaattefrister',
-        params,
+        params: { ...params, typer: [SaksTypeEnum.ANKE_AFTER_2027] },
       }),
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
@@ -129,7 +130,10 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       providesTags: [OppgaveListTagTypes.TR_FERDIGE],
     }),
     getAnketeamLedigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: (params) => ({ url: '/kabal-search/anketeam/oppgaver/ledige', params }),
+      query: (params) => ({
+        url: '/kabal-search/anketeam/oppgaver/ledige',
+        params: { ...params, typer: [SaksTypeEnum.ANKE_AFTER_2027] },
+      }),
       providesTags: [OppgaveListTagTypes.ANKETEAM_LEDIGE],
     }),
     getAnketeamTildelteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({

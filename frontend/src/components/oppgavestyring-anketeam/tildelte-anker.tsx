@@ -42,7 +42,7 @@ const TildelteAnkerTableInternal = () => {
   });
 
   return (
-    <SectionWithHeading heading="Tildelte anker" size="small">
+    <SectionWithHeading heading="Tildelte" size="small">
       <OppgaveTable
         {...props}
         columns={COLUMNS}

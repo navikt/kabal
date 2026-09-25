@@ -1,6 +1,6 @@
 import { FolderPlusIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { BodyShort, Button, HStack, InlineMessage, VStack } from '@navikt/ds-react';
+import { type JSX, useContext, useState } from 'react';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
 import { Direction, PopupContainer } from '@/components/popup-container/popup-container';
 import {
@@ -75,7 +75,7 @@ const Popup = ({ show, close, oppgaveId, typeId, newBehandling, isLoading }: Pop
   return (
     <PopupContainer close={close} direction={Direction.RIGHT}>
       <VStack className="w-[500px]" gap="space-16">
-        <BodyShort>{getBodyText(typeId)}</BodyShort>
+        {getBodyText(typeId)}
         <HStack justify="space-between">
           <Button
             className="whitespace-nowrap"
@@ -134,12 +134,30 @@ const getBodyText = (
     | SaksTypeEnum.ANKE_I_TRYGDERETTEN
     | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
     | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
-): string => {
+): JSX.Element => {
   switch (type) {
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
-      return 'Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Anke i Trygderetten»-oppgaven forsvinne. Du vil få en ny ankeoppgave som du må behandle. Husk at du må sende orientering til Trygderetten om den nye ankebehandlingen du har gjort i saken. Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
+      return (
+        <BodyShort className="flex flex-col gap-4">
+          Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Anke i
+          Trygderetten»-oppgaven forsvinne. Du vil få en ny ankeoppgave som du må behandle. Husk at du må sende
+          orientering til Trygderetten om den nye ankebehandlingen du har gjort i saken. Vær oppmerksom på at det kan ta
+          noen minutter før ankebehandlingen er opprettet.
+          <InlineMessage status="info">
+            Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som du gjør ny
+            behandling i.
+          </InlineMessage>
+        </BodyShort>
+      );
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
-      return 'Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Begjæring om gjenopptak i Trygderetten»-oppgaven forsvinne. Du vil få en ny begjæring om gjenopptak-oppgave som du må behandle. Husk at du må sende orientering til Trygderetten om den nye behandlingen du har gjort i saken. Vær oppmerksom på at det kan ta noen minutter før begjæringen om gjenopptak er opprettet.';
+      return (
+        <BodyShort>
+          Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Begjæring om
+          gjenopptak i Trygderetten»-oppgaven forsvinne. Du vil få en ny begjæring om gjenopptak-oppgave som du må
+          behandle. Husk at du må sende orientering til Trygderetten om den nye behandlingen du har gjort i saken. Vær
+          oppmerksom på at det kan ta noen minutter før begjæringen om gjenopptak er opprettet.
+        </BodyShort>
+      );
   }
 };

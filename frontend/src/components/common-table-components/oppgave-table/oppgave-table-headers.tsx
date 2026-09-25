@@ -137,6 +137,7 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
         return <HelperStatusWithoutSelf key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.Navn:
       case ColumnKeyEnum.Fnr:
+      case ColumnKeyEnum.ReadOnlyType:
       case ColumnKeyEnum.Open:
       case ColumnKeyEnum.OpenWithYtelseAccess:
       case ColumnKeyEnum.Tildeling:

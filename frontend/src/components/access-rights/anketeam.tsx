@@ -142,8 +142,10 @@ export const AnkeTeamLoaded = ({ access }: { access: SaksbehandlerAccessRights[]
 
       {noChanges ? (
         isSuccess ? (
-          <BodyShort size="small">
-            Lagret <CheckmarkCircleFillIconColored aria-hidden />
+          <BodyShort>
+            <HStack gap="space-4" align="center">
+              Lagret <CheckmarkCircleFillIconColored aria-hidden />
+            </HStack>
           </BodyShort>
         ) : null
       ) : (

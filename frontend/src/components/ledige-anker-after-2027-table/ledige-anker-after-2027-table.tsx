@@ -14,11 +14,10 @@ import {
   useGetLedigeAnkerAfter2027Query,
 } from '@/redux-api/oppgaver/queries/oppgaver';
 import { Role } from '@/types/bruker';
-import { SaksTypeEnum } from '@/types/kodeverk';
 import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeForAnkerAfter2027,
+  ColumnKeyEnum.ReadOnlyType,
   ColumnKeyEnum.UserYtelser,
   ColumnKeyEnum.UserInnsendingshjemler,
   ColumnKeyEnum.Age,
@@ -48,8 +47,7 @@ const LedigeAnkerAfter2027TableInternal = (): React.JSX.Element => {
     isFetching: isFetchingSettings,
   } = useGetSettingsQuery();
 
-  const queryParams: typeof skipToken | CommonOppgaverParams =
-    settingsData === undefined ? skipToken : { ...params, typer: getTypes(params.typer) };
+  const queryParams: typeof skipToken | CommonOppgaverParams = settingsData === undefined ? skipToken : params;
 
   const { data, isFetching, isLoading, isError, refetch } = useGetLedigeAnkerAfter2027Query(queryParams, {
     refetchOnFocus: true,
@@ -81,17 +79,5 @@ const LedigeAnkerAfter2027TableInternal = (): React.JSX.Element => {
         Antall oppgaver med utgåtte frister: {utgaatte?.antall ?? 0}
       </BodyShort>
     </SectionWithHeading>
-  );
-};
-
-// Ensure types only includes ANKE_AFTER_2027 and ANKE_I_TRYGDERETTEN_AFTER_2027.
-// The API will return oppgaver with other types if no filter is specified.
-const getTypes = (originalTypes: SaksTypeEnum[] = []): SaksTypeEnum[] => {
-  if (originalTypes.length === 0) {
-    return [SaksTypeEnum.ANKE_AFTER_2027, SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027];
-  }
-
-  return originalTypes.filter(
-    (type) => type === SaksTypeEnum.ANKE_AFTER_2027 || type === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027,
   );
 };

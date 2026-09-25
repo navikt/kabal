@@ -4,7 +4,6 @@ import { TemplateSections } from '@/plate/template-sections';
 import {
   type CreateTemplateParams,
   createMaltekstseksjon,
-  createRegelverk,
   createSaksinfo,
   createSignature,
   type TemplateMetadata,
@@ -28,7 +27,6 @@ export const getSvarPåPåleggOmTilsvarIAnkesakTemplate = (params: CreateTemplat
     ...SVAR_PÅ_PÅLEGG_OM_TILSVAR_I_ANKESAK_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
     createSignature(),
-    createRegelverk(),
   ];
 
   return deepFreeze<IMutableSmartEditorTemplate>({

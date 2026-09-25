@@ -44,7 +44,7 @@ const AnkerPåVentTableInternal = () => {
   });
 
   return (
-    <SectionWithHeading heading="Anker på vent" size="small">
+    <SectionWithHeading heading="På vent" size="small">
       <OppgaveTable
         {...props}
         columns={COLUMNS}

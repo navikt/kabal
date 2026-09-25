@@ -10,7 +10,7 @@ import { Role } from '@/types/bruker';
 import { SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeForAnkerAfter2027,
+  ColumnKeyEnum.ReadOnlyType,
   ColumnKeyEnum.AllYtelser,
   ColumnKeyEnum.AllInnsendingshjemler,
   ColumnKeyEnum.RelevantOppgaver,
@@ -42,7 +42,7 @@ const LedigeAnkerTableInternal = () => {
   });
 
   return (
-    <SectionWithHeading heading="Ledige anker" size="small">
+    <SectionWithHeading heading="Ledige" size="small">
       <OppgaveTable
         {...props}
         columns={COLUMNS}
