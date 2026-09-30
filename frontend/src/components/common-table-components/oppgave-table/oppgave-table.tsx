@@ -1,4 +1,5 @@
 import { type SortState, Table, type TableProps } from '@navikt/ds-react';
+import type { TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react';
 import { useCallback, useMemo } from 'react';
 import { TableFooter } from '@/components/common-table-components/footer';
 // See relevant-oppgaver.tsx for more information about this dependency cycle
@@ -10,7 +11,24 @@ import type { OppgaveTableKey } from '@/components/common-table-components/oppga
 import type { ColumnKeyEnum } from '@/components/common-table-components/types';
 import type { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import { useOppgavePagination } from '@/hooks/use-oppgave-pagination';
-import { SORT_FIELD_ENUM_VALUES, type SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
+import { useAppDispatch } from '@/redux/configure-store';
+import type { API_BASE_QUERY } from '@/redux-api/common';
+import { OppgaveData } from '@/redux-api/oppgaver/oppgaver';
+import { oppgaveDataQuerySlice } from '@/redux-api/oppgaver/queries/oppgave-data';
+import {
+  type ApiResponse,
+  type CommonOppgaverParams,
+  type EnhetensOppgaverParams,
+  SORT_FIELD_ENUM_VALUES,
+  type SortFieldEnum,
+  SortOrderEnum,
+} from '@/types/oppgaver';
+
+type Refetch = TypedUseQueryHookResult<
+  ApiResponse,
+  CommonOppgaverParams | EnhetensOppgaverParams,
+  typeof API_BASE_QUERY
+>['refetch'];
 
 interface Props extends TableProps {
   columns: ColumnKeyEnum[];
@@ -19,7 +37,7 @@ interface Props extends TableProps {
   isLoading: boolean;
   isFetching: boolean;
   isError: boolean;
-  refetch: () => void;
+  refetch: Refetch;
   tableKey: OppgaveTableKey;
   defaultRekkefoelge: SortOrderEnum;
   defaultSortering: SortFieldEnum;
@@ -38,6 +56,7 @@ export const OppgaveTable = ({
   defaultSortering,
   ...rest
 }: Props): React.JSX.Element => {
+  const dispatch = useAppDispatch();
   const { sortField, sortOrder, setSortering } = useOppgaveTableSorting(tableKey, defaultSortering, defaultRekkefoelge);
   const [page, setPage] = usePageQueryParam(tableKey);
 
@@ -87,7 +106,13 @@ export const OppgaveTable = ({
         {...footerProps}
         setPage={setPage}
         columnCount={columns.length}
-        onRefresh={refetch}
+        onRefresh={async () => {
+          const { behandlinger } = await refetch().unwrap();
+
+          const tags = behandlinger.map((id) => ({ type: OppgaveData.OPPGAVE_DATA, id }));
+
+          dispatch(oppgaveDataQuerySlice.util.invalidateTags(tags));
+        }}
         isLoading={isLoading}
         isFetching={isFetching}
         settingsKey={settingsKey}
