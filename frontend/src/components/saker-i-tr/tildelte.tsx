@@ -29,16 +29,11 @@ const DEFAULT_REKKEFOELGE = SortOrderEnum.DESC;
 export const TildelteSakerITRTable = () => {
   const stateParams = useOppgaveTableState(TABLE_KEY, DEFAULT_SORTING, DEFAULT_REKKEFOELGE);
 
-  const {
-    data: settingsData,
-    isLoading: isLoadingSettings,
-    isError: isErrorSettings,
-    isFetching: isFetchingSettings,
-  } = useGetSettingsQuery();
+  const { data: settingsData, isError: isErrorSettings, isFetching: isFetchingSettings } = useGetSettingsQuery();
 
   const params = settingsData === undefined ? skipToken : stateParams;
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetTildelteOppgaverITRQuery(params, {
+  const { data, isFetching, isError, refetch } = useGetTildelteOppgaverITRQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -50,7 +45,6 @@ export const TildelteSakerITRTable = () => {
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.SAKER_I_TR_UFERDIGE}
-        isLoading={isLoading || isLoadingSettings}
         isFetching={isFetching || isFetchingSettings}
         isError={isError || isErrorSettings}
         refetch={refetch}

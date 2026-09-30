@@ -43,7 +43,7 @@ const EnhetensFerdigstilteOppgaverTableInternal = () => {
 
   const queryParams: EnhetensOppgaverParams = { ...params, enhetId: user.ansattEnhet.id };
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetEnhetensFerdigstilteOppgaverQuery(queryParams, {
+  const { data, isFetching, isError, refetch } = useGetEnhetensFerdigstilteOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -54,7 +54,6 @@ const EnhetensFerdigstilteOppgaverTableInternal = () => {
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ENHETENS_FERDIGE}
-        isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}

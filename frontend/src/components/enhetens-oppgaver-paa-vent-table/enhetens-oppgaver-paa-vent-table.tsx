@@ -45,7 +45,7 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
 
   const queryParams: EnhetensOppgaverParams = { ...params, enhetId: user.ansattEnhet.id };
 
-  const { data, isError, isFetching, isLoading, refetch } = useGetEnhetensVentendeOppgaverQuery(queryParams, {
+  const { data, isError, isFetching, refetch } = useGetEnhetensVentendeOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -55,7 +55,6 @@ const EnhetensOppgaverPaaVentTableInternal = () => {
       <OppgaveTable
         columns={COLUMNS}
         zebraStripes
-        isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}

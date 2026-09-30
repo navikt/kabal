@@ -34,7 +34,6 @@ interface Props extends TableProps {
   columns: ColumnKeyEnum[];
   behandlinger: string[] | undefined;
   settingsKey: OppgaveTableRowsPerPage;
-  isLoading: boolean;
   isFetching: boolean;
   isError: boolean;
   refetch: Refetch;
@@ -47,7 +46,6 @@ export const OppgaveTable = ({
   columns,
   behandlinger = [],
   settingsKey,
-  isLoading,
   isFetching,
   isError,
   refetch,
@@ -96,7 +94,6 @@ export const OppgaveTable = ({
       <OppgaveRows
         oppgaver={oppgaver}
         columns={columns}
-        isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         pageSize={footerProps.pageSize}
@@ -113,7 +110,6 @@ export const OppgaveTable = ({
 
           dispatch(oppgaveDataQuerySlice.util.invalidateTags(tags));
         }}
-        isLoading={isLoading}
         isFetching={isFetching}
         settingsKey={settingsKey}
       />

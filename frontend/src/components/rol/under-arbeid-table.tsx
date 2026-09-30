@@ -45,7 +45,7 @@ const RolOppgaverTableInternal = () => {
   const queryParams: typeof skipToken | EnhetensOppgaverParams =
     typeof types === 'undefined' ? skipToken : { ...params, enhetId: user.ansattEnhet.id };
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetRolUferdigeOppgaverQuery(queryParams, {
+  const { data, isFetching, isError, refetch } = useGetRolUferdigeOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -56,7 +56,6 @@ const RolOppgaverTableInternal = () => {
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ROL_UFERDIGE}
-        isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}

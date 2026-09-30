@@ -38,7 +38,7 @@ const ReturnerteRolOppgaverTableInternal = () => {
     SortOrderEnum.DESC,
   );
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetReturnerteRolOppgaverQuery(params, {
+  const { data, isFetching, isError, refetch } = useGetReturnerteRolOppgaverQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -47,7 +47,6 @@ const ReturnerteRolOppgaverTableInternal = () => {
     <SectionWithHeading heading="Returnerte oppgaver" size="small">
       <OppgaveTable
         columns={COLUMNS}
-        isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}

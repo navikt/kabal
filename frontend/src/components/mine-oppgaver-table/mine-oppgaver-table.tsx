@@ -38,7 +38,7 @@ export const MineOppgaverTable = () => {
 const MineOppgaverTableInternal = () => {
   const params = useOppgaveTableState(OppgaveTableKey.MINE_UFERDIGE, SortFieldEnum.FRIST, SortOrderEnum.ASC);
 
-  const { data, isError, isLoading, isFetching, refetch } = useGetMineUferdigeOppgaverQuery(params, {
+  const { data, isError, isFetching, refetch } = useGetMineUferdigeOppgaverQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -48,7 +48,6 @@ const MineOppgaverTableInternal = () => {
       <OppgaveTable
         columns={COLUMNS}
         isError={isError}
-        isLoading={isLoading}
         isFetching={isFetching}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}

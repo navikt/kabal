@@ -68,7 +68,6 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.LEDIGE}
-        isLoading={isLoading || isLoadingSettings}
         isFetching={isFetching || isFetchingSettings}
         isError={isError || isErrorSettings}
         refetch={refetch}

@@ -39,16 +39,11 @@ export const LedigeRolOppgaverTable = ({ heading = 'Ledige oppgaver' }: Props) =
 const LedigeOppgaverTableInternal = ({ heading }: Required<Props>): React.JSX.Element => {
   const params = useOppgaveTableState(OppgaveTableKey.ROL_LEDIGE, SortFieldEnum.FRIST, SortOrderEnum.ASC);
 
-  const {
-    data: settingsData,
-    isLoading: isLoadingSettings,
-    isError: isErrorSettings,
-    isFetching: isFetchingSettings,
-  } = useGetSettingsQuery();
+  const { data: settingsData, isError: isErrorSettings, isFetching: isFetchingSettings } = useGetSettingsQuery();
 
   const queryParams: typeof skipToken | CommonOppgaverParams = typeof settingsData === 'undefined' ? skipToken : params;
 
-  const { data, isFetching, isLoading, isError, refetch } = useGetLedigeRolOppgaverQuery(queryParams, {
+  const { data, isFetching, isError, refetch } = useGetLedigeRolOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -60,7 +55,6 @@ const LedigeOppgaverTableInternal = ({ heading }: Required<Props>): React.JSX.El
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ROL_LEDIGE}
-        isLoading={isLoading || isLoadingSettings}
         isFetching={isFetching || isFetchingSettings}
         isError={isError || isErrorSettings}
         refetch={refetch}

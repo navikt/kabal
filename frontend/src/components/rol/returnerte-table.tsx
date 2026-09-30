@@ -45,7 +45,7 @@ const ReturnerteRolOppgaverTableInternal = () => {
 
   const queryParams: EnhetensOppgaverParams = { ...params, enhetId: user.ansattEnhet.id };
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetRolReturnerteOppgaverQuery(queryParams, {
+  const { data, isFetching, isError, refetch } = useGetRolReturnerteOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -56,7 +56,6 @@ const ReturnerteRolOppgaverTableInternal = () => {
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ROL_FERDIGE}
-        isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}

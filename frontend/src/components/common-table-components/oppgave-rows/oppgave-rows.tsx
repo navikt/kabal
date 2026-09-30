@@ -7,20 +7,12 @@ import type { ColumnKeyEnum } from '@/components/common-table-components/types';
 interface OppgaveRowsProps {
   oppgaver: string[];
   columns: ColumnKeyEnum[];
-  isLoading: boolean;
   isFetching: boolean;
   isError: boolean;
   pageSize: number;
 }
 
-export const OppgaveRows = ({
-  oppgaver,
-  columns,
-  isLoading,
-  isFetching,
-  isError,
-  pageSize,
-}: OppgaveRowsProps): React.JSX.Element => {
+export const OppgaveRows = ({ oppgaver, columns, isFetching, isError, pageSize }: OppgaveRowsProps) => {
   if (isError) {
     return (
       <Table.Body aria-busy={false}>
@@ -31,7 +23,7 @@ export const OppgaveRows = ({
     );
   }
 
-  if (isLoading) {
+  if (isFetching) {
     return (
       <Table.Body aria-busy={true}>
         {new Array(pageSize)
@@ -46,7 +38,7 @@ export const OppgaveRows = ({
 
   if (oppgaver.length === 0) {
     return (
-      <Table.Body aria-busy={isFetching}>
+      <Table.Body aria-busy={false}>
         <Table.Row>
           <Table.DataCell colSpan={columns.length}>Ingen oppgaver</Table.DataCell>
         </Table.Row>
@@ -55,7 +47,7 @@ export const OppgaveRows = ({
   }
 
   return (
-    <Table.Body aria-busy={isFetching}>
+    <Table.Body aria-busy={false}>
       {oppgaver.map((id) => (
         <OppgaveRow columns={columns} oppgaveId={id} key={id} />
       ))}

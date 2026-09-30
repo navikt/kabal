@@ -39,7 +39,7 @@ const MineRolOppgaverTableInternal = () => {
 
   const queryParams: typeof skipToken | CommonOppgaverParams = params;
 
-  const { data, isError, isLoading, isFetching, refetch } = useGetUferdigeRolOppgaverQuery(queryParams, {
+  const { data, isError, isFetching, refetch } = useGetUferdigeRolOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -49,7 +49,6 @@ const MineRolOppgaverTableInternal = () => {
       <OppgaveTable
         columns={COLUMNS}
         isError={isError}
-        isLoading={isLoading}
         isFetching={isFetching}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.MINE_UFERDIGE}

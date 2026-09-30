@@ -48,7 +48,7 @@ const EnhetensOppgaverTableInternal = () => {
   const queryParams: typeof skipToken | EnhetensOppgaverParams =
     typeof types === 'undefined' ? skipToken : { ...params, enhetId: user.ansattEnhet.id };
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetEnhetensUferdigeOppgaverQuery(queryParams, {
+  const { data, isFetching, isError, refetch } = useGetEnhetensUferdigeOppgaverQuery(queryParams, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -59,7 +59,6 @@ const EnhetensOppgaverTableInternal = () => {
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ENHETENS_UFERDIGE}
-        isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}

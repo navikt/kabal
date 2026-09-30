@@ -40,7 +40,7 @@ export const OppgaverPaaVentTable = () => {
 const OppgaverPaaVentTableInternal = () => {
   const params = useOppgaveTableState(OppgaveTableKey.MINE_VENTENDE, SortFieldEnum.PAA_VENT_TO, SortOrderEnum.ASC);
 
-  const { data, isError, isFetching, isLoading, refetch } = useGetMineVentendeOppgaverQuery(params, {
+  const { data, isError, isFetching, refetch } = useGetMineVentendeOppgaverQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -49,7 +49,6 @@ const OppgaverPaaVentTableInternal = () => {
     <SectionWithHeading heading="Oppgaver på vent" size="small">
       <OppgaveTable
         columns={COLUMNS}
-        isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         settingsKey={OppgaveTableRowsPerPage.MINE_VENTENDE}

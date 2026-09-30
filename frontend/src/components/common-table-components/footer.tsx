@@ -15,7 +15,6 @@ interface Props {
   columnCount: number;
   setPage: (page: number) => void;
   onRefresh: () => void;
-  isLoading: boolean;
   isFetching: boolean;
 }
 
@@ -29,7 +28,6 @@ export const TableFooter = ({
   settingsKey,
   setPage,
   onRefresh,
-  isLoading,
   isFetching,
 }: Props) => (
   <tfoot>
@@ -45,7 +43,7 @@ export const TableFooter = ({
                 pushEvent('refresh-oppgave-list', settingsKey);
                 onRefresh();
               }}
-              loading={isLoading || isFetching}
+              loading={isFetching}
               icon={<ArrowsCirclepathIcon aria-hidden />}
               title="Oppdater"
               aria-label="Oppdater"

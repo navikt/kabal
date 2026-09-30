@@ -38,7 +38,7 @@ const FullfoerteOppgaverTableInternal = () => {
     SortOrderEnum.DESC,
   );
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetMineFerdigstilteOppgaverQuery(params, {
+  const { data, isFetching, isError, refetch } = useGetMineFerdigstilteOppgaverQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -47,7 +47,6 @@ const FullfoerteOppgaverTableInternal = () => {
     <SectionWithHeading heading="Fullførte oppgaver" size="small">
       <OppgaveTable
         columns={COLUMNS}
-        isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         refetch={refetch}

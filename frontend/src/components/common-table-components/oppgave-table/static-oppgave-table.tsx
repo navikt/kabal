@@ -73,7 +73,6 @@ const InternalStaticOppgaveTable = ({
       <OppgaveRows
         oppgaver={oppgaver}
         columns={columns}
-        isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
         pageSize={footerProps.pageSize}
@@ -83,7 +82,6 @@ const InternalStaticOppgaveTable = ({
         setPage={setPage}
         columnCount={columns.length}
         onRefresh={refetch}
-        isLoading={isLoading}
         isFetching={isFetching}
         settingsKey={settingsKey}
       />

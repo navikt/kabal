@@ -31,16 +31,11 @@ const DEFAULT_REKKEFOELGE = SortOrderEnum.DESC;
 export const SakerITRPåVentTable = () => {
   const stateParams = useOppgaveTableState(TABLE_KEY, DEFAULT_SORTING, DEFAULT_REKKEFOELGE);
 
-  const {
-    data: settingsData,
-    isLoading: isLoadingSettings,
-    isError: isErrorSettings,
-    isFetching: isFetchingSettings,
-  } = useGetSettingsQuery();
+  const { data: settingsData, isError: isErrorSettings, isFetching: isFetchingSettings } = useGetSettingsQuery();
 
   const params = settingsData === undefined ? skipToken : stateParams;
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetVentendeOppgaverITRQuery(params, {
+  const { data, isFetching, isError, refetch } = useGetVentendeOppgaverITRQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -52,7 +47,6 @@ export const SakerITRPåVentTable = () => {
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.SAKER_I_TR_VENTENDE}
-        isLoading={isLoading || isLoadingSettings}
         isFetching={isFetching || isFetchingSettings}
         isError={isError || isErrorSettings}
         refetch={refetch}
