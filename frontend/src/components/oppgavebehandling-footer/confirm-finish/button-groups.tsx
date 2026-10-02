@@ -2,8 +2,8 @@ import { Box, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import { CancelButton } from '@/components/oppgavebehandling-footer/confirm-finish/cancel-button';
 import { FinishButton } from '@/components/oppgavebehandling-footer/confirm-finish/finish-button';
 import type { ButtonsProps, GosysAwareButtonsProps } from '@/components/oppgavebehandling-footer/confirm-finish/types';
+import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { UpdateInGosys } from '@/components/oppgavebehandling-footer/update-in-gosys/update-in-gosys';
-import { treatAsArena } from '@/domain/treat-as-arena';
 
 interface GosysAwareFinishButtonProps {
   requiresGosysOppgave: boolean;
@@ -76,18 +76,24 @@ export const NyBehandlingButtonGroup = ({ cancel, finishDisabled, requiresGosysO
 export const TrygderettenOpphevetButtonGroup = ({
   cancel,
   finishDisabled,
+  fagsystemId,
   requiresGosysOppgave,
-}: GosysAwareButtonsProps) => (
+}: GosysAwareButtonsProps & { fagsystemId: string }) => (
   <VStack gap="space-16" width="650px">
     <Box asChild background="accent-moderate" padding="space-16" borderColor="accent" borderRadius="8" borderWidth="1">
       <VStack gap="space-8">
         <FinishButton nyBehandling disabled={finishDisabled}>
           Ja, fullfør og opprett ny behandling i Kabal
         </FinishButton>
-        <InlineMessage status="info" size="small">
-          Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten har
-          opphevet.
-        </InlineMessage>
+
+        {/* No need to check for other fagsystemer than Arena here */}
+        {/* https://nav-it.slack.com/archives/G01CTUC8LSU/p1790757728942239?thread_ts=1790683854.400249&cid=G01CTUC8LSU */}
+        {requiresGosysOppgave && fagsystemId === FAGSYSTEM_ARENA ? (
+          <InlineMessage status="info" size="small">
+            Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten
+            har opphevet.
+          </InlineMessage>
+        ) : null}
       </VStack>
     </Box>
 
@@ -112,8 +118,10 @@ export const TrygderettenHenvistButtonGroup = ({
   finishDisabled,
   fagsystemId,
   requiresGosysOppgave,
-}: ButtonsProps & { fagsystemId: string; requiresGosysOppgave: boolean }) =>
-  treatAsArena(fagsystemId, requiresGosysOppgave) ? (
+}: GosysAwareButtonsProps & { fagsystemId: string }) =>
+  // No need to check for other fagsystemer than Arena here
+  // https://nav-it.slack.com/archives/G01CTUC8LSU/p1790757728942239?thread_ts=1790683854.400249&cid=G01CTUC8LSU
+  requiresGosysOppgave && fagsystemId === FAGSYSTEM_ARENA ? (
     <VStack gap="space-16">
       <InlineMessage status="info">
         Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten har

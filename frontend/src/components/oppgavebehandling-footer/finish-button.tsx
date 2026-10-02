@@ -3,21 +3,21 @@ import { Button } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
 import { ConfirmFinish } from '@/components/oppgavebehandling-footer/confirm-finish/confirm-finish';
-import { isAnkeToTrygderettenUtfall } from '@/components/oppgavebehandling-footer/confirm-finish/helpers';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useLazyValidateQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
-import { useLazyGetEkspedisjonsbrevTilTrygderettenIsSentQuery } from '@/redux-api/oppgaver/queries/documents';
+import { useLazyGetEkspedisjonsbrevTilTrygderettenShouldBeSentQuery } from '@/redux-api/oppgaver/queries/documents';
+import { SaksTypeEnum } from '@/types/kodeverk';
 import { ValidationType } from '@/types/oppgavebehandling/params';
 
 export const FinishButton = () => {
   const canEdit = useIsTildeltSaksbehandler();
   const [validate, { data: validationData, isLoading, isFetching }] = useLazyValidateQuery();
   const [
-    getEkspedisjonsbrevIsSent,
-    { isFetching: isEkspedisjonsbrevSentFetching, currentData: isEkspedisjonsbrevSent },
-  ] = useLazyGetEkspedisjonsbrevTilTrygderettenIsSentQuery();
+    getEkspedisjonsbrevShouldBeSent,
+    { isFetching: isEkspedisjonsbrevSentFetching, currentData: ekspedisjonsbrevShouldBeSent },
+  ] = useLazyGetEkspedisjonsbrevTilTrygderettenShouldBeSentQuery();
   const { setValidationSectionErrors } = useContext(ValidationErrorContext);
   const [showConfirmFinish, setConfirmFinish] = useState(false);
   const isFullfoert = useIsFullfoert();
@@ -42,8 +42,7 @@ export const FinishButton = () => {
     return null;
   }
 
-  const { id, typeId, resultat } = oppgave;
-  const { utfallId } = resultat;
+  const { id, typeId } = oppgave;
 
   return (
     <div className="relative">
@@ -55,9 +54,10 @@ export const FinishButton = () => {
         onClick={async () => {
           const validationPromise = validate({ oppgaveId: id, type: ValidationType.FINISH }).unwrap();
 
-          const ekspedisjonsbrevPromise = isAnkeToTrygderettenUtfall(typeId, utfallId)
-            ? getEkspedisjonsbrevIsSent(id).unwrap() // Update currentData for useLazyGetEkspedisjonsbrevTilTrygderettenIsSentQuery.
-            : Promise.resolve(undefined);
+          const ekspedisjonsbrevPromise =
+            typeId === SaksTypeEnum.ANKE_AFTER_2027 || typeId === SaksTypeEnum.ANKE
+              ? getEkspedisjonsbrevShouldBeSent(id).unwrap() // Update currentData for useLazyGetEkspedisjonsbrevTilTrygderettenShouldBeSentSentQuery.
+              : Promise.resolve(undefined);
 
           const [validation] = await Promise.all([validationPromise, ekspedisjonsbrevPromise]);
 
@@ -70,7 +70,10 @@ export const FinishButton = () => {
         Fullfør
       </Button>
       {showConfirmFinishDisplay ? (
-        <ConfirmFinish cancel={() => setConfirmFinish(false)} isEkspedisjonsbrevSent={isEkspedisjonsbrevSent} />
+        <ConfirmFinish
+          cancel={() => setConfirmFinish(false)}
+          ekspedisjonsbrevShouldBeSent={ekspedisjonsbrevShouldBeSent}
+        />
       ) : null}
     </div>
   );

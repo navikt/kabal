@@ -30,14 +30,26 @@ export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
             value: u.id,
             label: u.navn,
             tags: [
-              <Tag size="xsmall" variant={SAKSTYPE_TO_TAG_VARIANT[id]} key={id} className="whitespace-nowrap">
+              <Tag
+                size="xsmall"
+                variant="strong"
+                data-color={SAKSTYPE_TO_TAG_VARIANT[id]}
+                key={id}
+                className="whitespace-nowrap"
+              >
                 {navn}
               </Tag>,
             ],
           });
         } else {
           const tag = (
-            <Tag size="xsmall" variant={SAKSTYPE_TO_TAG_VARIANT[id]} key={id} className="whitespace-nowrap">
+            <Tag
+              size="xsmall"
+              variant="strong"
+              data-color={SAKSTYPE_TO_TAG_VARIANT[id]}
+              key={id}
+              className="whitespace-nowrap"
+            >
               {navn}
             </Tag>
           );

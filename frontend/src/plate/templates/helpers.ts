@@ -18,6 +18,7 @@ import {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SAKSINFO,
   ELEMENT_SAKSNUMMER,
+  ELEMENT_SAKSNUMMER_HOS_TR,
   ELEMENT_SIGNATURE,
 } from '@/plate/plugins/element-types';
 import { LabelContentPlugin } from '@/plate/plugins/label-content';
@@ -47,6 +48,7 @@ import {
   type RegelverkElement,
   type SaksinfoElement,
   type SaksnummerElement,
+  type SaksnummerHosTRElement,
   type SignatureElement,
   type TableCellElement,
   type TableElement,
@@ -54,7 +56,7 @@ import {
   TextAlign,
 } from '@/plate/types';
 import type { DistribusjonsType } from '@/types/documents/documents';
-import { SaksTypeEnum } from '@/types/kodeverk';
+import { isAnkeTypeAfter2027, SaksTypeEnum } from '@/types/kodeverk';
 import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 import { Language } from '@/types/texts/language';
 
@@ -249,12 +251,17 @@ export const createSaksinfo = ({
     createFullmektig(),
     createSaksnummer(),
   ],
-}: CreateSaksinfoParams): SaksinfoElement => ({
-  type: ELEMENT_SAKSINFO,
-  children: mayHaveArenaSaksnummer(sakstype, fagsystemId, requiresGosysOppgave)
+}: CreateSaksinfoParams): SaksinfoElement => {
+  const withArenaSaksnummer = mayHaveArenaSaksnummer(sakstype, fagsystemId, requiresGosysOppgave)
     ? [...children, createArenaSaksnummer()]
-    : children,
-});
+    : children;
+
+  const withSaksnummerHosTR = isAnkeTypeAfter2027(sakstype)
+    ? [...withArenaSaksnummer, createSaksnummerHosTR()]
+    : withArenaSaksnummer;
+
+  return { type: ELEMENT_SAKSINFO, children: withSaksnummerHosTR };
+};
 
 // So-called "fake" cases: the case is really handled in Arena, but a corresponding case is created in Kabal
 // to allow saksbehandlere to use Kabal's tools for producing documents etc. For these cases, the "Saksnummer"
@@ -263,8 +270,10 @@ export const createSaksinfo = ({
 const SAKSTYPER_MED_ARENA_SAKSNUMMER: ReadonlySet<SaksTypeEnum> = new Set([
   SaksTypeEnum.KLAGE,
   SaksTypeEnum.ANKE,
+  SaksTypeEnum.ANKE_AFTER_2027,
   SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET,
   SaksTypeEnum.ANKE_I_TRYGDERETTEN,
+  SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027,
 ]);
 
 const mayHaveArenaSaksnummer = (sakstype: SaksTypeEnum, fagsystemId: string, requiresGosysOppgave: boolean): boolean =>
@@ -280,6 +289,13 @@ export const createSaksnummer = (): SaksnummerElement => ({
 export const createArenaSaksnummer = (): ArenaSaksnummerElement => ({
   type: ELEMENT_ARENA_SAKSNUMMER,
   children: [{ text: '' }, createPlaceHolder('Saksnummer fra Arena', false), { text: '' }],
+  isInitialized: false,
+  deletable: false,
+});
+
+export const createSaksnummerHosTR = (): SaksnummerHosTRElement => ({
+  type: ELEMENT_SAKSNUMMER_HOS_TR,
+  children: [{ text: '' }, createPlaceHolder('Saksnummer hos Trygderetten', false), { text: '' }],
   isInitialized: false,
   deletable: false,
 });

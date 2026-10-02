@@ -26,6 +26,7 @@ export const DeassignOppgave = ({ oppgave }: Props) => {
     oppgave.medunderskriver.employee?.navIdent ?? null,
     oppgave.medunderskriver.flowState,
     oppgave.rol.flowState,
+    oppgave.typeId,
   );
 
   useOnClickOutside(ref, () => setIsOpen(false), true);

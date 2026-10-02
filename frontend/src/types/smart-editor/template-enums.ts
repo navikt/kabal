@@ -22,4 +22,6 @@ export enum TemplateIdEnum {
   GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_DIREKTE_TIL_TR = 'gjenopptakelsesbegjæring-orientering-om-tilsvar-direkte-til-tr',
   GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR = 'gjenopptakelsesbegjæring-ettersending-til-tr',
   TIL_FORELEGGELSE = 'til-foreleggelse',
+  SVAR_PÅ_PÅLEGG_OM_TILSVAR_I_ANKESAK = 'svar-på-pålegg-om-tilsvar-i-ankesak',
+  BER_OM_UTSATT_FRIST_FOR_TILSVAR = 'ber-om-utsatt-frist-for-tilsvar',
 }

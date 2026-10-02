@@ -1,6 +1,6 @@
 import { treatAsArena } from '@/domain/treat-as-arena';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
-import { SaksTypeEnum } from '@/types/kodeverk';
+import { isAnkeTypeAfter2027, SaksTypeEnum } from '@/types/kodeverk';
 
 export const getFixedCacheKey = (oppgaveId: string) => `medunderskriver-cache-key-${oppgaveId}`;
 
@@ -20,6 +20,7 @@ export const useIsFakeArenaCase = () => {
     (typeId === SaksTypeEnum.KLAGE ||
       typeId === SaksTypeEnum.ANKE ||
       typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET ||
-      typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN)
+      typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+      isAnkeTypeAfter2027(typeId))
   );
 };
