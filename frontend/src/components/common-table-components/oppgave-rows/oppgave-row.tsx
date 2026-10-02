@@ -77,8 +77,11 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
   columnKeys.map((key) => {
     switch (key) {
       case ColumnKeyEnum.Type:
-      case ColumnKeyEnum.TypeWithTrygderetten:
       case ColumnKeyEnum.TypeForSakerITR:
+      case ColumnKeyEnum.TypeForAnkerAfter2027:
+      case ColumnKeyEnum.TypeWithoutDirekteAnke:
+      case ColumnKeyEnum.AllTypes:
+      case ColumnKeyEnum.ReadOnlyType:
         return (
           <Table.DataCell key={key}>
             <Type type={oppgave.typeId} size="medium" />
@@ -135,7 +138,11 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.VarsletFrist:
         return (
           <Table.DataCell key={key}>
-            <ReadOnlyDeadline frist={oppgave.varsletFrist} timesPreviouslyExtended={oppgave.timesPreviouslyExtended} />
+            <ReadOnlyDeadline
+              frist={oppgave.varsletFrist}
+              timesPreviouslyExtended={oppgave.timesPreviouslyExtended}
+              typeId={oppgave.typeId}
+            />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Medunderskriver:
@@ -151,7 +158,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             <HStack wrap gap="space-8">
-              <MUFlowStateLabelWithSelf typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
+              <MUFlowStateLabelWithSelf medunderskriver={oppgave.medunderskriver} />
               <RolFlowStateLabel rol={oppgave.rol} />
             </HStack>
           </Table.DataCell>
@@ -160,7 +167,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             <HStack wrap gap="space-8">
-              <MUFlowStateLabelWithoutSelf typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
+              <MUFlowStateLabelWithoutSelf medunderskriver={oppgave.medunderskriver} />
               <RolFlowStateLabel rol={oppgave.rol} />
             </HStack>
           </Table.DataCell>
@@ -242,8 +249,11 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         );
       case ColumnKeyEnum.Saksnummer:
         return (
-          <Table.DataCell key={key}>
-            <CopyButton text={oppgave.saksnummer} />
+          <Table.DataCell key={key} className="overflow-hidden">
+            <CopyButton
+              className="max-w-50 [&>.aksel-label]:truncate"
+              text={oppgave.saksnummer + '1234567890abcdefghijklmnopqrstuvwxyzæøå'}
+            />
           </Table.DataCell>
         );
       case ColumnKeyEnum.RolTildeling:

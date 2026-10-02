@@ -1,3 +1,4 @@
+import type { TrygderettenSakType } from '@/functions/is-trygderetten-sak';
 import type { INavEmployee } from '@/types/bruker';
 import type { SaksTypeEnum, UtfallEnum } from '@/types/kodeverk';
 import type {
@@ -40,12 +41,12 @@ export interface IOppgavebehandlingRegistreringshjemlerUpdateParams extends IOpp
 
 export interface IKjennelseMottattParams extends IOppgavebehandlingBaseParams {
   kjennelseMottatt: string | null; // LocalDate
-  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+  typeId: TrygderettenSakType;
 }
 
 export interface ISendtTilTrygderettenParams extends IOppgavebehandlingBaseParams {
   sendtTilTrygderetten: string; // LocalDate
-  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+  typeId: TrygderettenSakType;
 }
 
 export interface IPaaanketVedtaksdatoParams extends IOppgavebehandlingBaseParams {
@@ -107,7 +108,7 @@ interface IDefaultFinishOppgavebehandlingParams {
 }
 
 interface IFinishOppgavebehandlingOpphevetTRParams extends Omit<IDefaultFinishOppgavebehandlingParams, 'nyBehandling'> {
-  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN;
+  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027;
   nyBehandling: boolean;
 }
 

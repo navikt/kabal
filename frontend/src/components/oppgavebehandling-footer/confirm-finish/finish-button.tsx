@@ -26,7 +26,9 @@ export const FinishButton = ({ children, nyBehandling = false, disabled }: Finis
 
   const finish = async () => {
     const params: IFinishOppgavebehandlingParams =
-      (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN && oppgave.resultat.utfallId === UtfallEnum.OPPHEVET) ||
+      ((oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+        oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027) &&
+        oppgave.resultat.utfallId === UtfallEnum.OPPHEVET) ||
       (oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR &&
         oppgave.resultat.utfallId === UtfallEnum.GJENOPPTATT_OPPHEVET)
         ? {

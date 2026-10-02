@@ -13,13 +13,13 @@ import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 interface Props extends CancelButtonProps {
   /**
    * `undefined` means not relevant, no confirmation needed.
-   * `true` means it has been sent, no confirmation needed.
-   * `false` means it has not been sent, confirmation needed.
+   * `false` means it has been sent, no confirmation needed.
+   * `true` means it has not been sent, confirmation needed.
    */
-  isEkspedisjonsbrevSent: boolean | undefined;
+  ekspedisjonsbrevShouldBeSent: boolean | undefined;
 }
 
-export const ConfirmFinish = ({ cancel, isEkspedisjonsbrevSent }: Props) => {
+export const ConfirmFinish = ({ cancel, ekspedisjonsbrevShouldBeSent }: Props) => {
   const { data: oppgave } = useOppgave();
   const [arenaConfirmed, setArenaConfirmed] = useState(false);
   const [ekspedisjonsbrevConfirmed, setEkspedisjonsbrevConfirmed] = useState(false);
@@ -30,7 +30,7 @@ export const ConfirmFinish = ({ cancel, isEkspedisjonsbrevSent }: Props) => {
   }
 
   const { typeId } = oppgave;
-  const requiresEkspedisjonsbrevConfirmation = isEkspedisjonsbrevSent === false;
+  const requiresEkspedisjonsbrevConfirmation = ekspedisjonsbrevShouldBeSent === true;
 
   return (
     <PopupContainer close={cancel} direction={Direction.RIGHT}>

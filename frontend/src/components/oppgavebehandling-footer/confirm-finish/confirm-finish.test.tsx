@@ -27,8 +27,8 @@ const mockOppgave = (
   }));
 };
 
-const renderConfirmFinish = (isEkspedisjonsbrevSent?: boolean) =>
-  render(<ConfirmFinish cancel={() => undefined} isEkspedisjonsbrevSent={isEkspedisjonsbrevSent} />);
+const renderConfirmFinish = (ekspedisjonsbrevShouldBeSent?: boolean) =>
+  render(<ConfirmFinish cancel={() => undefined} ekspedisjonsbrevShouldBeSent={ekspedisjonsbrevShouldBeSent} />);
 
 const MUTATION_MOCK = [
   () => null,
@@ -228,7 +228,7 @@ describe('ConfirmFinish', () => {
 
       test('Shows warning and disables finish when not sent', async () => {
         mockOppgave(SaksTypeEnum.ANKE, UtfallEnum.DELVIS_MEDHOLD, false);
-        renderConfirmFinish(false);
+        renderConfirmFinish(true);
 
         expect(screen.getByText(ekspedisjonsbrevWarning)).toBeVisible();
 
@@ -247,7 +247,7 @@ describe('ConfirmFinish', () => {
 
       test('Does not show warning when already sent', async () => {
         mockOppgave(SaksTypeEnum.ANKE, UtfallEnum.DELVIS_MEDHOLD, false);
-        renderConfirmFinish(true);
+        renderConfirmFinish(false);
 
         expect(screen.queryByText(ekspedisjonsbrevWarning)).not.toBeInTheDocument();
         expect(screen.queryByRole('checkbox', { name: ekspedisjonsbrevCheckboxLabel })).not.toBeInTheDocument();
@@ -429,14 +429,14 @@ describe('ConfirmFinish', () => {
       });
 
       test('Opphevet', async () => {
-        mockOppgave(type, UtfallEnum.OPPHEVET, false);
+        mockOppgave(type, UtfallEnum.OPPHEVET, false, FAGSYSTEM_ARENA);
         renderConfirmFinish();
         const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal';
         const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
         expect(screen.getByRole('button', { name: button1 })).toBeVisible();
         expect(screen.getByRole('button', { name: button2 })).toBeVisible();
 
-        expect(screen.getByText(arenaOpphevetMessage)).toBeVisible();
+        expect(screen.queryByText(arenaOpphevetMessage)).not.toBeInTheDocument();
 
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(3);
@@ -483,8 +483,8 @@ describe('ConfirmFinish', () => {
     });
 
     describe('Requires Gosys oppgave', async () => {
-      test('Opphevet', async () => {
-        mockOppgave(type, UtfallEnum.OPPHEVET, true);
+      test('Opphevet + Arena', async () => {
+        mockOppgave(type, UtfallEnum.OPPHEVET, true, FAGSYSTEM_ARENA);
         renderConfirmFinish();
         const button1 = 'Nei, fullfør uten å opprette ny behandling i Kabal';
         const button2 = 'Ja, fullfør og opprett ny behandling i Kabal';
@@ -496,8 +496,23 @@ describe('ConfirmFinish', () => {
         const items = await screen.findAllByRole('button');
         expect(items).toHaveLength(3);
 
+        await act(async () =>
+          fireEvent.click(
+            screen.getByRole('checkbox', {
+              name: 'Jeg bekrefter at jeg har registrert utfallet fra Trygderetten i Arena',
+            }),
+          ),
+        );
         await act(async () => fireEvent.click(screen.getByRole('button', { name: button1 })));
         expect(screen.getByRole('dialog', { name: 'Oppdater oppgaven i Gosys og fullfør' })).toBeVisible();
+      });
+
+      test('Opphevet, not Arena', async () => {
+        mockOppgave(type, UtfallEnum.OPPHEVET, true);
+        renderConfirmFinish();
+
+        expect(screen.getByRole('button', { name: 'Ja, fullfør og opprett ny behandling i Kabal' })).toBeVisible();
+        expect(screen.queryByText(arenaOpphevetMessage)).not.toBeInTheDocument();
       });
 
       const cases = [

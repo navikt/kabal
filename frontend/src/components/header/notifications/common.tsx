@@ -17,7 +17,7 @@ export const Type = ({ typeId, size = 'small' }: TypeProps) => {
 
   return (
     <Tooltip content={typeName}>
-      <Tag variant={SAKSTYPE_TO_TAG_VARIANT[typeId]} size={size} className="truncate">
+      <Tag variant="strong" data-color={SAKSTYPE_TO_TAG_VARIANT[typeId]} size={size} className="truncate">
         <span className="truncate">{typeName}</span>
       </Tag>
     </Tooltip>
