@@ -14,6 +14,12 @@ export enum OppgaveTableKey {
   SAKER_I_TR_LEDIGE = 'stl',
   SAKER_I_TR_VENTENDE = 'stv',
   SAKER_I_TR_UFERDIGE = 'stu',
+  SAKER_I_TR_FERDIGE = 'stf',
+  LEDIGE_ANKER_AFTER_2027 = 'la27',
+  ANKETEAM_LEDIGE = 'oal',
+  ANKETEAM_TILDELTE = 'oat',
+  ANKETEAM_VENTENDE = 'oav',
+  ANKETEAM_FERDIGE = 'oaf',
 }
 
 export enum StaticOppgaveTableKey {

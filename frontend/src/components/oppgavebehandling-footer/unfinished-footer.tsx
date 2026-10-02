@@ -11,9 +11,9 @@ import { NewAnkebehandlingButton } from '@/components/oppgavebehandling-footer/n
 import { VentButton } from '@/components/oppgavebehandling-footer/sett-paa-vent/vent-button';
 import { FooterType, StyledFooter } from '@/components/oppgavebehandling-footer/styled-components';
 import { ValidationSummaryPopup } from '@/components/oppgavebehandling-footer/validation-summary-popup';
+import { isTrygderettenBehandling } from '@/functions/is-trygderetten-sak';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
-import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const UnfinishedFooter = () => {
   const { data: oppgave, isSuccess } = useOppgave();
@@ -34,10 +34,7 @@ export const UnfinishedFooter = () => {
         <BackLink />
         <DeassignOppgave oppgave={oppgave} />
 
-        {oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
-        oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR ? (
-          <NewAnkebehandlingButton typeId={oppgave.typeId} oppgaveId={oppgave.id} />
-        ) : null}
+        {isTrygderettenBehandling(oppgave) ? <NewAnkebehandlingButton oppgave={oppgave} /> : null}
 
         <FeilregistrerButton />
       </HStack>

@@ -19,7 +19,9 @@ export const useIsFakeArenaCase = () => {
     treatAsArena(fagsystemId, requiresGosysOppgave) &&
     (typeId === SaksTypeEnum.KLAGE ||
       typeId === SaksTypeEnum.ANKE ||
+      typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
       typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET ||
-      typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN)
+      typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+      typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027)
   );
 };

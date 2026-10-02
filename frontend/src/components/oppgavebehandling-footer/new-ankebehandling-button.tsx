@@ -1,8 +1,10 @@
 import { FolderPlusIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { BodyShort, Button, HStack, InlineMessage, VStack } from '@navikt/ds-react';
+import { type JSX, useContext, useState } from 'react';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
+import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { Direction, PopupContainer } from '@/components/popup-container/popup-container';
+import type { TrygderettenSak } from '@/functions/is-trygderetten-sak';
 import {
   useNewAnkebehandlingMutation,
   useNewBehandlingFromTRBehandlingMutation,
@@ -12,11 +14,11 @@ import { SaksTypeEnum } from '@/types/kodeverk';
 import { ValidationType } from '@/types/oppgavebehandling/params';
 
 interface Props {
-  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
-  oppgaveId: string;
+  oppgave: TrygderettenSak;
 }
 
-export const NewAnkebehandlingButton = ({ typeId, oppgaveId }: Props) => {
+export const NewAnkebehandlingButton = ({ oppgave }: Props) => {
+  const { typeId, id } = oppgave;
   const [showPopup, setShowPopup] = useState(false);
   const [validate, { data: validateData, isLoading: validateIsLoading, isFetching: validateIsFetching }] =
     useLazyValidateQuery();
@@ -32,7 +34,7 @@ export const NewAnkebehandlingButton = ({ typeId, oppgaveId }: Props) => {
         size="small"
         loading={validateIsLoading || validateIsFetching}
         onClick={async () => {
-          const validation = await validate({ oppgaveId, type: getValidationType(typeId) }).unwrap();
+          const validation = await validate({ oppgaveId: id, type: getValidationType(typeId) }).unwrap();
 
           setValidationSectionErrors(validation.sections);
 
@@ -43,33 +45,32 @@ export const NewAnkebehandlingButton = ({ typeId, oppgaveId }: Props) => {
       </Button>
       <Popup
         show={showPopup && validateData !== undefined && validateData.sections.length === 0}
-        oppgaveId={oppgaveId}
         close={() => setShowPopup(false)}
-        typeId={typeId}
         newBehandling={newBehandling}
         isLoading={isLoading}
+        oppgave={oppgave}
       />
     </div>
   );
 };
+
 interface PopupProps {
   show: boolean;
   close: () => void;
-  oppgaveId: string;
-  typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+  oppgave: TrygderettenSak;
   newBehandling: (id: string) => void;
   isLoading: boolean;
 }
 
-const Popup = ({ show, close, oppgaveId, typeId, newBehandling, isLoading }: PopupProps) => {
+const Popup = ({ show, close, oppgave, newBehandling, isLoading }: PopupProps) => {
   if (!show) {
     return null;
   }
 
   return (
     <PopupContainer close={close} direction={Direction.RIGHT}>
-      <VStack className="w-[500px]" gap="space-16">
-        <BodyShort>{getBodyText(typeId)}</BodyShort>
+      <VStack className="w-125" gap="space-16">
+        <BodyText oppgave={oppgave} />
         <HStack justify="space-between">
           <Button
             className="whitespace-nowrap"
@@ -77,7 +78,7 @@ const Popup = ({ show, close, oppgaveId, typeId, newBehandling, isLoading }: Pop
             icon={<FolderPlusIcon aria-hidden />}
             variant="primary"
             size="small"
-            onClick={() => newBehandling(oppgaveId)}
+            onClick={() => newBehandling(oppgave.id)}
           >
             Ny behandling
           </Button>
@@ -90,12 +91,18 @@ const Popup = ({ show, close, oppgaveId, typeId, newBehandling, isLoading }: Pop
   );
 };
 
-const useNewBehandling = (sakstype: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR) => {
+const useNewBehandling = (
+  sakstype:
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+    | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
+) => {
   const newAnkebehandling = useNewAnkebehandlingMutation;
   const newBehandlingFromTRBehandling = useNewBehandlingFromTRBehandlingMutation;
 
   switch (sakstype) {
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       return newAnkebehandling();
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
       return newBehandlingFromTRBehandling();
@@ -103,21 +110,50 @@ const useNewBehandling = (sakstype: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeE
 };
 
 const getValidationType = (
-  type: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
+  type:
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN
+    | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+    | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
 ): ValidationType => {
   switch (type) {
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       return ValidationType.NEW_ANKEBEHANDLING;
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
       return ValidationType.NEW_BEHANDLING_FROM_TR_BEHANDLING;
   }
 };
 
-const getBodyText = (type: SaksTypeEnum.ANKE_I_TRYGDERETTEN | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR): string => {
-  switch (type) {
+interface BodyTextProps {
+  oppgave: TrygderettenSak;
+}
+
+const BodyText = ({ oppgave: { typeId, fagsystemId, requiresGosysOppgave } }: BodyTextProps): JSX.Element => {
+  switch (typeId) {
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
-      return 'Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Anke i Trygderetten»-oppgaven forsvinne. Du vil få en ny ankeoppgave som du må behandle. Husk at du må sende orientering til Trygderetten om den nye ankebehandlingen du har gjort i saken. Vær oppmerksom på at det kan ta noen minutter før ankebehandlingen er opprettet.';
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
+      return (
+        <BodyShort className="flex flex-col gap-4">
+          Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Anke i
+          Trygderetten»-oppgaven forsvinne. Du vil få en ny ankeoppgave som du må behandle. Husk at du må sende
+          orientering til Trygderetten om den nye ankebehandlingen du har gjort i saken. Vær oppmerksom på at det kan ta
+          noen minutter før ankebehandlingen er opprettet.
+          {requiresGosysOppgave && fagsystemId === FAGSYSTEM_ARENA ? (
+            <InlineMessage status="info">
+              Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som du gjør ny
+              behandling i.
+            </InlineMessage>
+          ) : null}
+        </BodyShort>
+      );
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
-      return 'Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Begjæring om gjenopptak i Trygderetten»-oppgaven forsvinne. Du vil få en ny begjæring om gjenopptak-oppgave som du må behandle. Husk at du må sende orientering til Trygderetten om den nye behandlingen du har gjort i saken. Vær oppmerksom på at det kan ta noen minutter før begjæringen om gjenopptak er opprettet.';
+      return (
+        <BodyShort>
+          Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Begjæring om
+          gjenopptak i Trygderetten»-oppgaven forsvinne. Du vil få en ny begjæring om gjenopptak-oppgave som du må
+          behandle. Husk at du må sende orientering til Trygderetten om den nye behandlingen du har gjort i saken. Vær
+          oppmerksom på at det kan ta noen minutter før begjæringen om gjenopptak er opprettet.
+        </BodyShort>
+      );
   }
 };

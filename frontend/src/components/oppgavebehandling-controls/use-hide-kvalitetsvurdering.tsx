@@ -1,3 +1,4 @@
+import { BodyShort } from '@navikt/ds-react';
 import { type ReactElement, useContext } from 'react';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { Type } from '@/components/type/type';
@@ -16,6 +17,14 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
   const { typeId, resultat } = oppgave;
 
   if (!typeHasKvalitetsvurdering(typeId)) {
+    if (typeId === SaksTypeEnum.ANKE_AFTER_2027 || typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027) {
+      return {
+        featureEnabled: true,
+        panelDefaultEnabled: false,
+        reason: <BodyShort>Kommer snart!</BodyShort>,
+      };
+    }
+
     return {
       featureEnabled: true,
       panelDefaultEnabled: false,
@@ -52,6 +61,8 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
 
 export const typeHasKvalitetsvurdering = (typeId: SaksTypeEnum): boolean =>
   typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN &&
+  typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 && // Will have new kvalitetsvurdering, awaiting functional design
+  typeId !== SaksTypeEnum.ANKE_AFTER_2027 && // Will have new kvalitetsvurdering, awaiting functional design
   typeId !== SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET &&
   typeId !== SaksTypeEnum.OMGJØRINGSKRAV &&
   typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK &&
