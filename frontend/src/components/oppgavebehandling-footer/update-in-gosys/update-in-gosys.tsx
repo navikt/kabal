@@ -128,7 +128,8 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
 
               {gosysOppgaveIsOpen ? (
                 <VStack gap="space-12" width="min-content">
-                  {oppgavebehandling.typeId === SaksTypeEnum.ANKE &&
+                  {(oppgavebehandling.typeId === SaksTypeEnum.ANKE ||
+                    oppgavebehandling.typeId === SaksTypeEnum.ANKE_AFTER_2027) &&
                   (oppgavebehandling.resultat.utfallId === UtfallEnum.DELVIS_MEDHOLD ||
                     oppgavebehandling.resultat.extraUtfallIdSet.includes(UtfallEnum.DELVIS_MEDHOLD)) ? (
                     <Alert variant="info">

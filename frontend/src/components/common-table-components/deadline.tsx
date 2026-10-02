@@ -8,11 +8,14 @@ import { isoDateToPretty } from '@/domain/date';
 import { useHasAnyOfRoles } from '@/hooks/use-has-role';
 import { useSetFristMutation } from '@/redux-api/oppgaver/mutations/behandling-dates';
 import { Role } from '@/types/bruker';
-import { SaksTypeEnum } from '@/types/kodeverk';
+import { isAnkeTypeAfter2027, SaksTypeEnum } from '@/types/kodeverk';
 import type { IOppgave } from '@/types/oppgaver';
 
 export const Deadline = (oppgave: IOppgave) => {
-  if (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+  ) {
     return null;
   }
 
@@ -26,10 +29,19 @@ export const Deadline = (oppgave: IOppgave) => {
 interface ReadOnlyDeadlineProps {
   frist: string | null;
   timesPreviouslyExtended: number;
+  typeId: SaksTypeEnum;
 }
 
-export const ReadOnlyDeadline = ({ frist, timesPreviouslyExtended }: ReadOnlyDeadlineProps) => {
+export const ReadOnlyDeadline = ({ frist, timesPreviouslyExtended, typeId }: ReadOnlyDeadlineProps) => {
   const fristExceeded = useMemo(() => (frist === null ? false : isPast(addDays(parseISO(frist), 1))), [frist]);
+
+  if (
+    isAnkeTypeAfter2027(typeId) ||
+    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR
+  ) {
+    return null;
+  }
 
   return (
     <HStack align="center" gap="space-8" wrap={false}>

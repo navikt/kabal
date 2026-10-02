@@ -2,6 +2,7 @@ import { Box, Heading, HGrid, VStack } from '@navikt/ds-react';
 import { ApiButton } from '@/components/admin/api-button';
 import { InsertInnsendingshjemlerInSettings } from '@/components/admin/insert-innsendingshjemler-in-settings';
 import { MerkantilTaskList } from '@/components/admin/merkantil-task-list/merkantil-task-list';
+import { MigrateGodeFormuleringer } from '@/components/admin/migrate-gode-formuleringer';
 import { CreateSystemNotification } from '@/components/admin/system-notifications/create';
 import { ListSystemNotifications } from '@/components/admin/system-notifications/list';
 import {
@@ -26,6 +27,7 @@ export const Admin = () => (
           <ApiButton useApi={useResendDvhMutation}>KABAL-API DVH RESEND</ApiButton>
           <ApiButton useApi={useLogInaccessibleMutation}>KABAL-API LOG INACCESSIBLE</ApiButton>
           <ApiButton useApi={useEvictCacheMutation}>KLAGE-LOOKUP EVICT CACHE</ApiButton>
+          <MigrateGodeFormuleringer />
         </VStack>
 
         <InsertInnsendingshjemlerInSettings />
