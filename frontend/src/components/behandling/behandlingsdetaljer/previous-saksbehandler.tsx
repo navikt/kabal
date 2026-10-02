@@ -8,6 +8,8 @@ type Type =
   | SaksTypeEnum.ANKE_I_TRYGDERETTEN
   | SaksTypeEnum.ANKE
   | SaksTypeEnum.OMGJØRINGSKRAV
+  | SaksTypeEnum.ANKE_AFTER_2027
+  | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
   | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK
   | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
 
@@ -35,7 +37,9 @@ export const PreviousSaksbehandler = ({ previousSaksbehandler, type }: Props) =>
 const getTypeName = (type: Type): string => {
   switch (type) {
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
       return 'klagebehandling';
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
       return 'ankebehandling';
     case SaksTypeEnum.OMGJØRINGSKRAV:
@@ -50,8 +54,10 @@ const getTypeName = (type: Type): string => {
 const getHeading = (type: Type): string => {
   switch (type) {
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
       return 'Klagebehandling fullført av';
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       return 'Ankebehandling fullført av';
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Behandlingen som kreves omgjort er tidligere fullført av';
