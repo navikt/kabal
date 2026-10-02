@@ -10,7 +10,7 @@ import { Role } from '@/types/bruker';
 import { SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.TypeWithTrygderetten,
+  ColumnKeyEnum.AllTypes,
   ColumnKeyEnum.AccessYtelser,
   ColumnKeyEnum.AccessRegistreringshjemler,
   ColumnKeyEnum.Navn,

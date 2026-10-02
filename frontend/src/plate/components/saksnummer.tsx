@@ -6,7 +6,13 @@ import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-butt
 import { ptToEm } from '@/plate/components/get-scaled-em';
 import { SectionContainer, SectionToolbar, SectionTypeEnum } from '@/plate/components/styled-components';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
-import type { ArenaSaksnummerElement, PlaceholderElement, SaksnummerElement } from '@/plate/types';
+import type {
+  ArenaSaksnummerElement,
+  PlaceholderElement,
+  SaksnummerElement,
+  SaksnummerHosTRElement,
+} from '@/plate/types';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
   const { data: oppgave } = useOppgave();
@@ -16,6 +22,19 @@ export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
   }
 
   return <SaksnummerBase {...props} label="Saksnummer" saksnummer={oppgave.saksnummer} />;
+};
+
+export const SaksnummerHosTR = (props: PlateElementProps<SaksnummerHosTRElement>) => {
+  const { data: oppgave } = useOppgave();
+
+  if (
+    oppgave === undefined ||
+    (oppgave.typeId !== SaksTypeEnum.ANKE_AFTER_2027 && oppgave.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027)
+  ) {
+    return null;
+  }
+
+  return <SaksnummerBase {...props} label="Saksnummer hos Trygderetten" saksnummer={oppgave.trygderettenSaksnummer} />;
 };
 
 // Shown whenever it is part of the template, regardless of whether the oppgave has loaded or has a value yet.
@@ -28,7 +47,8 @@ export const ArenaSaksnummer = (props: PlateElementProps<ArenaSaksnummerElement>
   return <SaksnummerBase {...props} label="Saksnummer fra Arena" saksnummer={arenaSaksnummer} />;
 };
 
-interface SaksnummerBaseProps extends PlateElementProps<SaksnummerElement | ArenaSaksnummerElement> {
+interface SaksnummerBaseProps
+  extends PlateElementProps<SaksnummerElement | ArenaSaksnummerElement | SaksnummerHosTRElement> {
   label: string;
   saksnummer: string | null;
 }
@@ -52,7 +72,10 @@ const SaksnummerBase = ({ label, saksnummer, ...props }: SaksnummerBaseProps) =>
 
     editor.tf.withoutSaving(() => {
       editor.tf.insertText(saksnummer, { at: path });
-      editor.tf.setNodes<SaksnummerElement | ArenaSaksnummerElement>({ isInitialized: true }, { at });
+      editor.tf.setNodes<SaksnummerElement | ArenaSaksnummerElement | SaksnummerHosTRElement>(
+        { isInitialized: true },
+        { at },
+      );
     });
   }, [saksnummer, editor, placeholder, element.isInitialized, at]);
 
@@ -66,7 +89,7 @@ const SaksnummerBase = ({ label, saksnummer, ...props }: SaksnummerBaseProps) =>
   }
 
   return (
-    <PlateElement<SaksnummerElement | ArenaSaksnummerElement> {...props} as="div">
+    <PlateElement<SaksnummerElement | ArenaSaksnummerElement | SaksnummerHosTRElement> {...props} as="div">
       <SectionContainer data-element={element.type} sectionType={SectionTypeEnum.LABEL}>
         <span className="inline-block text-ax-neutral-800" style={{ width: ptToEm(150) }} contentEditable={false}>
           {label}:{' '}

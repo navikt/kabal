@@ -1,5 +1,6 @@
 import { ENVIRONMENT } from '@/environment';
 import { OppgaveListTagTypes, oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
+import { SaksTypeEnum } from '@/types/kodeverk';
 import type { SearchPersonResponse } from '@/types/oppgave-common';
 import type {
   ApiResponse,
@@ -46,6 +47,19 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getEnhetensVentendeOppgaver: builder.query<ApiResponse, EnhetensOppgaverParams>({
       query: ({ enhetId, ...params }) => ({ url: `/kabal-search/enhet/${enhetId}/oppgaver/tildelte/paavent`, params }),
       providesTags: [OppgaveListTagTypes.ENHETENS_VENTENDE],
+    }),
+    getLedigeAnkerAfter2027: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({
+        url: '/kabal-search/oppgaver/ledige',
+        params: { ...params, typer: [SaksTypeEnum.ANKE_AFTER_2027] },
+      }),
+      providesTags: [OppgaveListTagTypes.LEDIGE_ANKER_AFTER_2027],
+    }),
+    getAntallLedigeAnkerAfter2027MedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
+      query: (params) => ({
+        url: '/kabal-search/antalloppgavermedutgaattefrister',
+        params: { ...params, typer: [SaksTypeEnum.ANKE_AFTER_2027] },
+      }),
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
       query: (params) => ({ url: '/kabal-search/antalloppgavermedutgaattefrister', params }),
@@ -111,6 +125,29 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       query: (params) => ({ url: '/kabal-search/oppgaver-i-tr/paa-vent', params }),
       providesTags: [OppgaveListTagTypes.TR_VENTENDE],
     }),
+    getFerdigstilteAnkerITR: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/oppgaver-i-tr/ferdigstilte', params }),
+      providesTags: [OppgaveListTagTypes.TR_FERDIGE],
+    }),
+    getAnketeamLedigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({
+        url: '/kabal-search/anketeam/oppgaver/ledige',
+        params: { ...params, typer: [SaksTypeEnum.ANKE_AFTER_2027] },
+      }),
+      providesTags: [OppgaveListTagTypes.ANKETEAM_LEDIGE],
+    }),
+    getAnketeamTildelteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/anketeam/oppgaver/tildelte/uferdige', params }),
+      providesTags: [OppgaveListTagTypes.ANKETEAM_TILDELTE],
+    }),
+    getAnketeamVentendeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/anketeam/oppgaver/tildelte/paavent', params }),
+      providesTags: [OppgaveListTagTypes.ANKETEAM_VENTENDE],
+    }),
+    getAnketeamFerdigstilteOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
+      query: (params) => ({ url: '/kabal-search/anketeam/oppgaver/tildelte/ferdigstilte', params }),
+      providesTags: [OppgaveListTagTypes.ANKETEAM_FERDIGSTILTE],
+    }),
   }),
 });
 
@@ -140,4 +177,11 @@ export const {
   useGetTildelteOppgaverITRQuery,
   useGetLedigeOppgaverITRQuery,
   useGetVentendeOppgaverITRQuery,
+  useGetLedigeAnkerAfter2027Query,
+  useGetAntallLedigeAnkerAfter2027MedUtgaatteFristerQuery,
+  useGetAnketeamLedigeOppgaverQuery,
+  useGetAnketeamTildelteOppgaverQuery,
+  useGetAnketeamVentendeOppgaverQuery,
+  useGetAnketeamFerdigstilteOppgaverQuery,
+  useGetFerdigstilteAnkerITRQuery,
 } = oppgaverQuerySlice;

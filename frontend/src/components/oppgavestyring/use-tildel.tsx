@@ -156,6 +156,7 @@ const Tildelt = ({
           tildeltSaksbehandlerident={toSaksbehandler?.navIdent ?? null}
           medunderskriverident={null}
           rol={null}
+          typeId={oppgaveType}
         >
           Åpne
         </OpenForRoleAccess>

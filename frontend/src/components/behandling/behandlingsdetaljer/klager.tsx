@@ -52,7 +52,9 @@ const getLabel = (typeId: SaksTypeEnum): [string, string, string] => {
     case SaksTypeEnum.KLAGE:
       return ['Klager', 'klager', 'Endre klager'];
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       return ['Den ankende part', 'ankende part', 'Endre ankende part'];
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
       return [

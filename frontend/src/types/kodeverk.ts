@@ -12,6 +12,8 @@ export enum SaksTypeEnum {
   OMGJØRINGSKRAV = '5',
   BEGJÆRING_OM_GJENOPPTAK = '6',
   BEGJÆRING_OM_GJENOPPTAK_I_TR = '7',
+  ANKE_AFTER_2027 = '8',
+  ANKE_I_TRYGDERETTEN_AFTER_2027 = '9',
 }
 
 export const SAKS_TYPE_ENUM_VALUES = Object.values(SaksTypeEnum);
@@ -102,6 +104,7 @@ export enum PaaVentReasonEnum {
   VENTER_PAA_UTFYLLENDE_KLAGE = '7',
   VENTER_PAA_UTFYLLENDE_ANKE = '8',
   VENTER_PAA_AVGJOERELSE_OM_SOEKSMAAL_GJENOPPTAKSBEGJAERING = '9',
+  BEDT_TRYGDERETTEN_OM_UTSATT_FRIST = '10',
 
   ANNET = '5',
 }
@@ -109,3 +112,6 @@ export enum PaaVentReasonEnum {
 export interface SakstypeToPåVentReason extends IKodeverkSimpleValue<SaksTypeEnum> {
   sattPaaVentReasons: IKodeverkValue<PaaVentReasonEnum>[];
 }
+
+export const isAnkeTypeAfter2027 = (typeId: SaksTypeEnum): boolean =>
+  typeId === SaksTypeEnum.ANKE_AFTER_2027 || typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027;
