@@ -35,6 +35,10 @@ export enum TemplateSections {
   OM_ANKENDE_PARTS_TILSVAR = 'section-sei',
   OM_VEDLAGTE_DOKUMENTER = 'section-uer',
   OM_ETTERSENDING_TIL_TR = 'section-hai',
+  INNLEDNING = 'section-jak',
+  SAKENS_FAKTISKE_SIDE = 'section-tyr',
+  SAKENS_RETTSLIGE_SIDE = 'section-lam',
+  ANKEMOTPARTEND_VURDERING = 'section-gås',
 
   INTRODUCTION_TEMP = 'section-rev-temp', // For "migrating" ROL questions
 }

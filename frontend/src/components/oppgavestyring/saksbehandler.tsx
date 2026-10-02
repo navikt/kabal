@@ -34,6 +34,7 @@ const SaksbehandlerContent = (oppgave: IOppgave) => {
     oppgave.medunderskriver.employee?.navIdent ?? null,
     oppgave.medunderskriver.flowState,
     oppgave.rol.flowState,
+    oppgave.typeId,
     oppgave.ytelseId,
   );
   const { data: signature, isLoading: signatureIsLoading } = useGetSignatureQuery(
