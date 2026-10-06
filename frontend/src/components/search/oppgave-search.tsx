@@ -1,8 +1,9 @@
 import { ErrorMessage, HStack, Search, type SearchProps, ToggleGroup, VStack } from '@navikt/ds-react';
-import { dnr, fnr } from '@navikt/fnrvalidator';
 import { useState } from 'react';
 import { Oppgaver } from '@/components/search/common/oppgaver';
 import { Person } from '@/components/search/fnr/person';
+import { isFnr } from '@/domain/fnr';
+import { removeWhitespace } from '@/functions/remove-whitespace';
 import { Keys } from '@/keys';
 import {
   useLazySearchOppgaverByFnrQuery,
@@ -17,9 +18,6 @@ enum SearchType {
 
 const SEARCH_TYPES = Object.values(SearchType);
 const isSearchType = (searchType: string): searchType is SearchType => SEARCH_TYPES.some((type) => type === searchType);
-
-const isFnr = (str: string) => fnr(str).status === 'valid' || dnr(str).status === 'valid';
-const removeWhitespace = (str: string) => str.replaceAll(/\s+/gi, '');
 
 export const OppgaveSearch = () => {
   const [searchType, setSearchType] = useState(SearchType.FNR);

@@ -1,4 +1,5 @@
-import { HStack, Label, TextField, VStack } from '@navikt/ds-react';
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { HStack, InfoCard, Label, TextField, VStack } from '@navikt/ds-react';
 import { parse } from 'date-fns';
 import { type Dispatch, memo, type SetStateAction, useCallback, useMemo } from 'react';
 import { CURRENT_YEAR_IN_CENTURY, FORMAT } from '@/components/date-picker/constants';
@@ -14,6 +15,8 @@ import {
 import type { IValidationSection } from '@/components/send-to-tr/error-summary';
 import { OldDateWarning } from '@/components/send-to-tr/old-date-warning';
 import type { AnkeFormFields } from '@/components/send-to-tr/types';
+import { isFnr } from '@/domain/fnr';
+import { removeWhitespace } from '@/functions/remove-whitespace';
 import type { IKodeverkValue } from '@/types/kodeverk';
 
 interface FieldsProps {
@@ -134,16 +137,25 @@ interface FagsakIdFieldProps {
 }
 
 const FagsakIdField = memo(({ value, onChange, error }: FagsakIdFieldProps) => (
-  <TextField
-    id={FAGSAK_ID}
-    label="Arkivsaksnummer (ikke fra Arena)"
-    value={value}
-    size="small"
-    onChange={({ target }) => onChange(target.value)}
-    error={error}
-    pattern="\d{10}"
-    inputMode="numeric"
-  />
+  <VStack gap="space-16" className="w-80">
+    <TextField
+      id={FAGSAK_ID}
+      label="Arkivsaksnummer (ikke fra Arena)"
+      value={value}
+      size="small"
+      onChange={({ target }) => onChange(target.value)}
+      error={error}
+      pattern="\d{10}"
+      inputMode="numeric"
+    />
+    {isFnr(removeWhitespace(value)) ? (
+      <InfoCard data-color="warning">
+        <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+          Nummeret er et gyldig fødselsnummer. Sjekk om du har limt inn riktig saksnummer.
+        </InfoCard.Message>
+      </InfoCard>
+    ) : null}
+  </VStack>
 ));
 
 FagsakIdField.displayName = 'FagsakIdField';
