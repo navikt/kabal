@@ -4,10 +4,11 @@ import { GrafanaDomainProvider } from '@/components/grafana-domain-context/grafa
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { AnkeForm } from '@/components/send-to-tr/anke-form';
 import { NONE_ENTRY, RELEVANT_YTELSER } from '@/components/send-to-tr/constants';
-import { isFnr, removeWhitespace } from '@/components/send-to-tr/fnr';
 import { RegistrationSuccess } from '@/components/send-to-tr/registration-success';
 import { SearchForm, toEntry } from '@/components/send-to-tr/search-form';
 import type { RegisteredAnke } from '@/components/send-to-tr/types';
+import { isFnr } from '@/domain/fnr';
+import { removeWhitespace } from '@/functions/remove-whitespace';
 import { useLatestYtelser } from '@/simple-api-state/use-kodeverk';
 import type { IYtelse } from '@/types/kodeverk';
 
