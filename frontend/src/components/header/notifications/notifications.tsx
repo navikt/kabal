@@ -1,8 +1,8 @@
 import { BellFillIcon, BellIcon, ChevronDownIcon, ChevronUpIcon, SidebarBothIcon } from '@navikt/aksel-icons';
 import {
   ActionMenu,
+  Badge,
   BodyShort,
-  Box,
   Button,
   Heading,
   HStack,
@@ -30,6 +30,7 @@ export const Notifications = () => {
   const hasUnreadNotifications = unreadCount !== 0;
   const Icon = hasUnreadNotifications ? BellFillIcon : BellIcon;
   const color = hasUnreadNotifications ? 'var(--ax-text-danger-decoration)' : 'var(--ax-text-neutral)';
+  const label = `${unreadCount} ${unreadCount === 1 ? 'ulest varsel' : 'uleste varsler'}`;
 
   const theme = useAppTheme();
   const { setIsModalOpen, isMenuOpen, setIsMenuOpen } = useNotificationsContext();
@@ -37,7 +38,7 @@ export const Notifications = () => {
   return (
     <>
       <ActionMenu onOpenChange={setIsMenuOpen} open={isMenuOpen}>
-        <Tooltip content="Varsler" placement="bottom">
+        <Tooltip content={label} placement="bottom">
           <ActionMenu.Trigger>
             <InternalHeader.Button aria-label="Varsler" className="relative">
               <Icon
@@ -47,21 +48,13 @@ export const Notifications = () => {
                 className={hasUnreadNotifications ? 'animate-wiggle' : undefined}
               />
 
-              <Box
-                as="span"
-                position="absolute"
-                background={hasUnreadNotifications ? 'danger-strong' : 'neutral-strong'}
-                top="space-4"
-                right="space-4"
-                paddingBlock="space-2"
-                paddingInline="space-4"
-                borderRadius="full"
-                shadow="dialog"
-                aria-label="Antall uleste varsler"
-                className="font-ax-bold text-ax-small leading-none"
-              >
-                {unreadCount > 999 ? '999+' : unreadCount}
-              </Box>
+              <Badge
+                count={unreadCount}
+                maxCount={999}
+                data-color={hasUnreadNotifications ? 'danger' : 'neutral'}
+                aria-label={label}
+                className="absolute top-0 right-0 shadow-ax-dialog"
+              />
             </InternalHeader.Button>
           </ActionMenu.Trigger>
         </Tooltip>
