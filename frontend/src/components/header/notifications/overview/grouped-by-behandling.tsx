@@ -1,5 +1,5 @@
 import { Heading, HStack } from '@navikt/ds-react';
-import { CopyButton } from '@/components/copy-button/copy-button';
+import { CopySaksnummerButton } from '@/components/copy-button/copy-saksnummer-button';
 import { Type, Ytelse } from '@/components/header/notifications/common';
 import { GroupContainer, GroupedGrid, NotificationsGroup } from '@/components/header/notifications/overview/common';
 import {
@@ -43,12 +43,7 @@ export const GroupedByBehandlingNotifications = ({ notifications }: GroupedNotif
             <Heading level="1" size="xsmall">
               <Type typeId={behandling.typeId} />
               <Ytelse ytelseId={behandling.ytelseId} />
-              <CopyButton
-                text={behandling.saksnummer}
-                activeText={behandling.saksnummer}
-                size="xsmall"
-                className="shrink-0"
-              />
+              <CopySaksnummerButton saksnummer={behandling.saksnummer} size="xsmall" className="max-w-46" />
             </Heading>
           </HStack>
 

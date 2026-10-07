@@ -12,7 +12,7 @@ import type { JSX } from 'react';
 import { useLocation } from 'react-router';
 import { AppTheme, useAppTheme } from '@/app-theme';
 import { OpenForYtelseAccess } from '@/components/common-table-components/open';
-import { CopyButton } from '@/components/copy-button/copy-button';
+import { CopySaksnummerButton } from '@/components/copy-button/copy-saksnummer-button';
 import { DateTime } from '@/components/datetime/datetime';
 import { useMarkAsRead, useMarkAsUnread } from '@/components/header/notifications/api';
 import { Type, Ytelse } from '@/components/header/notifications/common';
@@ -246,7 +246,7 @@ const CaseData = ({ typeId, ytelseId, saksnummer }: BehandlingInfo) => (
   <HStack wrap={false} align="center" gap="space-4" width="100%">
     <Type typeId={typeId} />
     <Ytelse ytelseId={ytelseId} />
-    <CopyButton text={saksnummer} activeText={saksnummer} size="xsmall" className="shrink-0" />
+    <CopySaksnummerButton saksnummer={saksnummer} size="xsmall" className="max-w-40" />
   </HStack>
 );
 

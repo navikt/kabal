@@ -18,7 +18,7 @@ import { RolTildeling } from '@/components/common-table-components/rol-tildeling
 import { SakenGjelderFnr, SakenGjelderName } from '@/components/common-table-components/saken-gjelder';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
 import { Ytelse } from '@/components/common-table-components/ytelse';
-import { CopyButton } from '@/components/copy-button/copy-button';
+import { CopySaksnummerButton } from '@/components/copy-button/copy-saksnummer-button';
 import { Feilregistrert } from '@/components/feilregistrering/feilregistrert';
 import { KrolStyring } from '@/components/krolstyring/krolstyring';
 import { Oppgavestyring } from '@/components/oppgavestyring/oppgavestyring';
@@ -243,7 +243,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Saksnummer:
         return (
           <Table.DataCell key={key}>
-            <CopyButton text={oppgave.saksnummer} />
+            <CopySaksnummerButton saksnummer={oppgave.saksnummer} className="max-w-40" />
           </Table.DataCell>
         );
       case ColumnKeyEnum.RolTildeling:
