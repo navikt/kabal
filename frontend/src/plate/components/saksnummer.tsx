@@ -12,7 +12,6 @@ import type {
   SaksnummerElement,
   SaksnummerHosTRElement,
 } from '@/plate/types';
-import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const Saksnummer = (props: PlateElementProps<SaksnummerElement>) => {
   const { data: oppgave } = useOppgave();
@@ -29,7 +28,8 @@ export const SaksnummerHosTR = (props: PlateElementProps<SaksnummerHosTRElement>
 
   if (
     oppgave === undefined ||
-    (oppgave.typeId !== SaksTypeEnum.ANKE_AFTER_2027 && oppgave.typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027)
+    'trygderettenSaksnummer' in oppgave === false ||
+    oppgave.trygderettenSaksnummer === null
   ) {
     return null;
   }
