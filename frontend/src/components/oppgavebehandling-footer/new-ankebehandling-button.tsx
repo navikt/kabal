@@ -2,8 +2,8 @@ import { FolderPlusIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import { type JSX, useContext, useState } from 'react';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
-import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { Direction, PopupContainer } from '@/components/popup-container/popup-container';
+import { isArenaCase } from '@/domain/arena-case';
 import type { TrygderettenSak } from '@/functions/is-trygderetten-sak';
 import {
   useNewAnkebehandlingMutation,
@@ -138,9 +138,7 @@ const BodyText = ({ oppgave: { typeId, fagsystemId, requiresGosysOppgave } }: Bo
           Trygderetten»-oppgaven forsvinne. Du vil få en ny ankeoppgave som du må behandle. Husk at du må sende
           orientering til Trygderetten om den nye ankebehandlingen du har gjort i saken. Vær oppmerksom på at det kan ta
           noen minutter før ankebehandlingen er opprettet.
-          {/* No need to check for other fagsystemer than Arena here */}
-          {/* https://nav-it.slack.com/archives/G01CTUC8LSU/p1790757728942239?thread_ts=1790683854.400249&cid=G01CTUC8LSU */}
-          {requiresGosysOppgave && fagsystemId === FAGSYSTEM_ARENA ? (
+          {isArenaCase(fagsystemId, requiresGosysOppgave) ? (
             <InlineMessage status="info">
               Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som du gjør ny
               behandling i.

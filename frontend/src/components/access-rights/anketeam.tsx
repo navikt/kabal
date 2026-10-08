@@ -99,7 +99,7 @@ export const AnkeTeamLoaded = ({ access }: { access: SaksbehandlerAccessRights[]
             setFilter(value);
 
             if (value === '') {
-              return setFiltered(access);
+              return setFiltered(initialSorted);
             }
 
             const newFiltered = access

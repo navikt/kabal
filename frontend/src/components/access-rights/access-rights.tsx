@@ -122,18 +122,20 @@ const AccessRightsContent = ({ ytelser, saksbehandlere }: Props) => {
 const addIfNotExists = (array: string[], value: string) => (array.includes(value) ? array : [...array, value]);
 
 const getHasChanges = (initial: SaksbehandlerAccessRights[], state: SaksbehandlerAccessRights[]) => {
-  for (const stateSb of state) {
-    for (const initialSb of initial) {
-      if (stateSb.saksbehandlerIdent === initialSb.saksbehandlerIdent) {
-        if (
-          stateSb.ytelseIdList.length !== initialSb.ytelseIdList.length ||
-          !stateSb.ytelseIdList.every((id) => initialSb.ytelseIdList.includes(id))
-        ) {
-          return true;
-        }
-      }
-    }
-  }
+  const initialByIdent = new Map(
+    initial.map(({ saksbehandlerIdent, ytelseIdList }) => [saksbehandlerIdent, ytelseIdList]),
+  );
 
-  return false;
+  return state.some(({ saksbehandlerIdent, ytelseIdList }) => {
+    const initialYtelseIdList = initialByIdent.get(saksbehandlerIdent);
+
+    if (initialYtelseIdList === undefined) {
+      return false;
+    }
+
+    return (
+      ytelseIdList.length !== initialYtelseIdList.length ||
+      !ytelseIdList.every((id) => initialYtelseIdList.includes(id))
+    );
+  });
 };

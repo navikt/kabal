@@ -103,11 +103,12 @@ const canAssignOthers = ({
   isAssignedToSelf,
   hasSaksbehandlerAccess,
   hasOppgavestyringAccess,
+  hasAnketeamAccess,
   hasOppgavestyringAnketeamAccess,
   typeId,
 }: Values): boolean => {
   if (isAnkeTypeAfter2027(typeId)) {
-    return hasOppgavestyringAnketeamAccess;
+    return hasOppgavestyringAnketeamAccess || (hasAnketeamAccess && isAssignedToSelf);
   }
 
   if (hasOppgavestyringAccess) {

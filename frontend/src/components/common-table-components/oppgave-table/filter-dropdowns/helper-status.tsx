@@ -31,10 +31,9 @@ const toEntry = (option: StatusOption): Entry<StatusOption> => ({
 export const HelperStatusWithoutSelf = ({ columnKey, tableKey }: FilterDropdownProps) => {
   const [statuses, setStatuses] = useOppgaveTableHelperStatusWithoutSelf(tableKey);
 
-  const allOptions = OPTIONS_WITHOUT_SELF;
-
   const selectedOptions = useMemo(
-    () => allOptions.filter((entry) => statuses?.some((status) => entry.value.value.includes(status)) === true),
+    () =>
+      OPTIONS_WITHOUT_SELF.filter((entry) => statuses?.some((status) => entry.value.value.includes(status)) === true),
     [statuses],
   );
 
@@ -52,7 +51,7 @@ export const HelperStatusWithoutSelf = ({ columnKey, tableKey }: FilterDropdownP
     <Table.ColumnHeader aria-sort="none">
       <SearchableMultiSelect
         label={label}
-        options={allOptions}
+        options={OPTIONS_WITHOUT_SELF}
         value={selectedOptions}
         emptyLabel={label}
         onChange={handleChange}

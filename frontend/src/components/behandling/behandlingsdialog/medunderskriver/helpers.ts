@@ -1,4 +1,4 @@
-import { treatAsArena } from '@/domain/treat-as-arena';
+import { treatAsArena } from '@/domain/arena-case';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { isAnkeTypeAfter2027, SaksTypeEnum } from '@/types/kodeverk';
 
