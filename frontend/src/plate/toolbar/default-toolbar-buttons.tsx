@@ -1,5 +1,5 @@
-import { ArrowUndoIcon, BucketMopIcon } from '@navikt/aksel-icons';
-import { DocumentPageBreak, TextDescription } from '@styled-icons/fluentui-system-regular';
+import { ArrowUndoIcon, BucketMopIcon, PageBreakIcon } from '@navikt/aksel-icons';
+import { TextDescription } from '@styled-icons/fluentui-system-regular';
 import { BaseParagraphPlugin } from 'platejs';
 import { useEditorReadOnly, useSelectionExpanded } from 'platejs/react';
 import { MOD_KEY_TEXT } from '@/keys';
@@ -58,7 +58,7 @@ export const DefaultToolbarButtons = () => {
         label="Sett inn sideskift"
         keys={[MOD_KEY_TEXT, 'Enter']}
         onClick={() => insertPageBreak(editor)}
-        icon={<DocumentPageBreak aria-hidden width={24} />}
+        icon={<PageBreakIcon aria-hidden width={24} />}
         disabled={unchangeable || inList || inTable}
       />
 
