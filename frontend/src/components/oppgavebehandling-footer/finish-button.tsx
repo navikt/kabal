@@ -7,7 +7,7 @@ import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useLazyValidateQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
-import { useLazyGetEkspedisjonsbrevTilTrygderettenShouldBeSentQuery } from '@/redux-api/oppgaver/queries/documents';
+import { useLazyGetEkspedisjonsbrevTilTrygderettenNeedsToBeSentQuery } from '@/redux-api/oppgaver/queries/documents';
 import { SaksTypeEnum } from '@/types/kodeverk';
 import { ValidationType } from '@/types/oppgavebehandling/params';
 
@@ -15,9 +15,9 @@ export const FinishButton = () => {
   const canEdit = useIsTildeltSaksbehandler();
   const [validate, { data: validationData, isLoading, isFetching }] = useLazyValidateQuery();
   const [
-    getEkspedisjonsbrevShouldBeSent,
-    { isFetching: isEkspedisjonsbrevSentFetching, currentData: ekspedisjonsbrevShouldBeSent },
-  ] = useLazyGetEkspedisjonsbrevTilTrygderettenShouldBeSentQuery();
+    getEkspedisjonsbrevNeedsToBeSent,
+    { isFetching: isEkspedisjonsbrevSentFetching, currentData: ekspedisjonsbrevNeedsToBeSent },
+  ] = useLazyGetEkspedisjonsbrevTilTrygderettenNeedsToBeSentQuery();
   const { setValidationSectionErrors } = useContext(ValidationErrorContext);
   const [showConfirmFinish, setConfirmFinish] = useState(false);
   const isFullfoert = useIsFullfoert();
@@ -56,7 +56,7 @@ export const FinishButton = () => {
 
           const ekspedisjonsbrevPromise =
             typeId === SaksTypeEnum.ANKE_AFTER_2027 || typeId === SaksTypeEnum.ANKE
-              ? getEkspedisjonsbrevShouldBeSent(id).unwrap() // Update currentData for useLazyGetEkspedisjonsbrevTilTrygderettenShouldBeSentSentQuery.
+              ? getEkspedisjonsbrevNeedsToBeSent(id).unwrap() // Update currentData for useLazyGetEkspedisjonsbrevTilTrygderettenNeedsToBeSentQuery.
               : Promise.resolve(undefined);
 
           const [validation] = await Promise.all([validationPromise, ekspedisjonsbrevPromise]);
@@ -72,7 +72,7 @@ export const FinishButton = () => {
       {showConfirmFinishDisplay ? (
         <ConfirmFinish
           cancel={() => setConfirmFinish(false)}
-          ekspedisjonsbrevShouldBeSent={ekspedisjonsbrevShouldBeSent}
+          ekspedisjonsbrevNeedsToBeSent={ekspedisjonsbrevNeedsToBeSent}
         />
       ) : null}
     </div>

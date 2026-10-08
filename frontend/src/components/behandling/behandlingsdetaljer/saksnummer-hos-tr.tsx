@@ -2,11 +2,11 @@ import { BehandlingSection } from '@/components/behandling/behandlingsdetaljer/b
 import { CopyButton } from '@/components/copy-button/copy-button';
 
 interface Props {
-  saksnummer: string;
+  saksnummer: string | null;
 }
 
 export const SaksnummerHosTrygderetten = ({ saksnummer }: Props) => (
   <BehandlingSection label="Saksnummer hos Trygderetten">
-    <CopyButton text={saksnummer} activeText={saksnummer} size="small" />
+    {saksnummer === null ? 'Ikke satt' : <CopyButton text={saksnummer} activeText={saksnummer} size="small" />}
   </BehandlingSection>
 );

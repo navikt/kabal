@@ -16,10 +16,10 @@ interface Props extends CancelButtonProps {
    * `false` means it has been sent, no confirmation needed.
    * `true` means it has not been sent, confirmation needed.
    */
-  ekspedisjonsbrevShouldBeSent: boolean | undefined;
+  ekspedisjonsbrevNeedsToBeSent: boolean | undefined;
 }
 
-export const ConfirmFinish = ({ cancel, ekspedisjonsbrevShouldBeSent }: Props) => {
+export const ConfirmFinish = ({ cancel, ekspedisjonsbrevNeedsToBeSent }: Props) => {
   const { data: oppgave } = useOppgave();
   const [arenaConfirmed, setArenaConfirmed] = useState(false);
   const [ekspedisjonsbrevConfirmed, setEkspedisjonsbrevConfirmed] = useState(false);
@@ -30,7 +30,7 @@ export const ConfirmFinish = ({ cancel, ekspedisjonsbrevShouldBeSent }: Props) =
   }
 
   const { typeId } = oppgave;
-  const requiresEkspedisjonsbrevConfirmation = ekspedisjonsbrevShouldBeSent === true;
+  const requiresEkspedisjonsbrevConfirmation = ekspedisjonsbrevNeedsToBeSent === true;
 
   return (
     <PopupContainer close={cancel} direction={Direction.RIGHT}>

@@ -59,13 +59,17 @@ const Filter = ({ columnKey, tableKey, values }: FilterDropdownProps & { values:
   const [typer, setTyper] = useOppgaveTableTyper(tableKey);
   const { data: sakstyper = [] } = useSakstyper();
 
-  const options: Entry<SaksTypeOption>[] = values
-    .map((o) => {
-      const label = sakstyper.find((s) => s.id === o)?.navn ?? o;
+  const options: Entry<SaksTypeOption>[] = useMemo(
+    () =>
+      values
+        .map((o) => {
+          const label = sakstyper.find((s) => s.id === o)?.navn ?? o;
 
-      return { value: { value: o, label }, key: o, label, plainText: label };
-    })
-    .toSorted((a, b) => a.label.localeCompare(b.label));
+          return { value: { value: o, label }, key: o, label, plainText: label };
+        })
+        .toSorted((a, b) => a.label.localeCompare(b.label)),
+    [values, sakstyper],
+  );
 
   const selected = useMemo(() => {
     const selectedSet = new Set(typer ?? []);

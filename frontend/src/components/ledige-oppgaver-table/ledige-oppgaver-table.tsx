@@ -55,9 +55,7 @@ const LedigeOppgaverTableInternal = (): React.JSX.Element => {
     refetchOnMountOrArgChange: true,
   });
 
-  const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(
-    queryParams === skipToken ? skipToken : queryParams,
-  );
+  const { data: utgaatte } = useGetAntallLedigeOppgaverMedUtgaatteFristerQuery(queryParams);
 
   useTimingMeasurement('oppgaver_list_load_ms', !isLoading && !isLoadingSettings);
 

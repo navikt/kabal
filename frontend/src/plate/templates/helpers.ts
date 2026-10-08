@@ -2,7 +2,7 @@ import { BaseH1Plugin, BaseH2Plugin } from '@platejs/basic-nodes';
 import { BaseBulletedListPlugin, BaseListItemContentPlugin, BaseListItemPlugin } from '@platejs/list-classic';
 import { BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { BaseParagraphPlugin } from 'platejs';
-import { treatAsArena } from '@/domain/treat-as-arena';
+import { treatAsArena } from '@/domain/arena-case';
 import { FULLMEKTIG_LABEL_PLACEHOLDER, FULLMEKTIG_VALUE_PLACEHOLDER } from '@/plate/components/fullmektig';
 import {
   ELEMENT_ARENA_SAKSNUMMER,
