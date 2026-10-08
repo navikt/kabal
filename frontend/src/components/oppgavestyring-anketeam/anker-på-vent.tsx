@@ -38,7 +38,7 @@ export const AnkerPåVentTable = () => {
 const AnkerPåVentTableInternal = () => {
   const params = useOppgaveTableState(OppgaveTableKey.ANKETEAM_VENTENDE, SortFieldEnum.PAA_VENT_TO, SortOrderEnum.ASC);
 
-  const { data, ...props } = useGetAnketeamVentendeOppgaverQuery(params, {
+  const { data, isLoading, isFetching, isError, refetch } = useGetAnketeamVentendeOppgaverQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -46,7 +46,10 @@ const AnkerPåVentTableInternal = () => {
   return (
     <SectionWithHeading heading="På vent" size="small">
       <OppgaveTable
-        {...props}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        isError={isError}
+        refetch={refetch}
         columns={COLUMNS}
         zebraStripes
         behandlinger={data?.behandlinger}

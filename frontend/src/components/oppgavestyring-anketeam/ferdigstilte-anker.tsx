@@ -37,7 +37,7 @@ const FerdigstilteAnkerTableInternal = () => {
     SortOrderEnum.DESC,
   );
 
-  const { data, ...props } = useGetAnketeamFerdigstilteOppgaverQuery(params, {
+  const { data, isLoading, isFetching, isError, refetch } = useGetAnketeamFerdigstilteOppgaverQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -45,7 +45,10 @@ const FerdigstilteAnkerTableInternal = () => {
   return (
     <SectionWithHeading heading="Fullførte" size="small">
       <OppgaveTable
-        {...props}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        isError={isError}
+        refetch={refetch}
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ANKETEAM_FERDIGE}

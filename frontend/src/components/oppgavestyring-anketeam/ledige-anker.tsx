@@ -35,7 +35,7 @@ export const LedigeAnkerTable = () => {
 const LedigeAnkerTableInternal = () => {
   const params = useOppgaveTableState(OppgaveTableKey.ANKETEAM_LEDIGE, SortFieldEnum.FRIST, SortOrderEnum.ASC);
 
-  const { data, ...props } = useGetAnketeamLedigeOppgaverQuery(params, {
+  const { data, isLoading, isFetching, isError, refetch } = useGetAnketeamLedigeOppgaverQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -43,7 +43,10 @@ const LedigeAnkerTableInternal = () => {
   return (
     <SectionWithHeading heading="Ledige" size="small">
       <OppgaveTable
-        {...props}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        isError={isError}
+        refetch={refetch}
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ANKETEAM_LEDIGE}

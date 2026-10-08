@@ -135,7 +135,7 @@ interface Values {
 
 const hasSakstypeAccess = (typeId: SaksTypeEnum, roles: Role[]): boolean => {
   if (isAnkeTypeAfter2027(typeId)) {
-    return roles.includes(Role.ANKETEAM);
+    return roles.includes(Role.ANKETEAM) || roles.includes(Role.KABAL_OPPGAVESTYRING_ANKETEAM);
   }
 
   return true;

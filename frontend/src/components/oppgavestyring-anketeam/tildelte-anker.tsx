@@ -36,7 +36,7 @@ export const TildelteAnkerTable = () => {
 const TildelteAnkerTableInternal = () => {
   const params = useOppgaveTableState(OppgaveTableKey.ANKETEAM_TILDELTE, SortFieldEnum.FRIST, SortOrderEnum.ASC);
 
-  const { data, ...props } = useGetAnketeamTildelteOppgaverQuery(params, {
+  const { data, isLoading, isFetching, isError, refetch } = useGetAnketeamTildelteOppgaverQuery(params, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
@@ -44,7 +44,10 @@ const TildelteAnkerTableInternal = () => {
   return (
     <SectionWithHeading heading="Tildelte" size="small">
       <OppgaveTable
-        {...props}
+        isLoading={isLoading}
+        isFetching={isFetching}
+        isError={isError}
+        refetch={refetch}
         columns={COLUMNS}
         behandlinger={data?.behandlinger}
         settingsKey={OppgaveTableRowsPerPage.ANKETEAM_TILDELTE}

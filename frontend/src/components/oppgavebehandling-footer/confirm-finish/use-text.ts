@@ -14,8 +14,7 @@ export const useText = (): string => {
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
       return 'Du fullfører nå klagebehandlingen. Klagebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
-    case SaksTypeEnum.ANKE:
-    case SaksTypeEnum.ANKE_AFTER_2027: {
+    case SaksTypeEnum.ANKE: {
       if (utfallId === UtfallEnum.MEDHOLD || utfallId === UtfallEnum.OPPHEVET) {
         return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
       }
@@ -30,6 +29,8 @@ export const useText = (): string => {
 
       return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
     }
+    case SaksTypeEnum.ANKE_AFTER_2027:
+      return 'Du fullfører nå ankebehandlingen. Ankebehandlingen kan ikke redigeres når den er fullført. Bekreft at du faktisk ønsker å fullføre behandlingen.';
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027: {
       if (utfallId === UtfallEnum.HENVIST) {

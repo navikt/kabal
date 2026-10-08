@@ -29,6 +29,7 @@ import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
 import { isoDateToPretty } from '@/domain/date';
 import { useGetOppgaveQuery } from '@/redux-api/oppgaver/queries/oppgave-data';
 import { isApiDataError } from '@/types/errors';
+import { isAnkeTypeAfter2027, SaksTypeEnum } from '@/types/kodeverk';
 import { FlowState } from '@/types/oppgave-common';
 import type { IOppgave } from '@/types/oppgaver';
 
@@ -136,13 +137,17 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
           </Table.DataCell>
         );
       case ColumnKeyEnum.VarsletFrist:
+        if (
+          isAnkeTypeAfter2027(oppgave.typeId) ||
+          oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+          oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR
+        ) {
+          return <Table.DataCell key={key} />;
+        }
+
         return (
           <Table.DataCell key={key}>
-            <ReadOnlyDeadline
-              frist={oppgave.varsletFrist}
-              timesPreviouslyExtended={oppgave.timesPreviouslyExtended}
-              typeId={oppgave.typeId}
-            />
+            <ReadOnlyDeadline frist={oppgave.varsletFrist} timesPreviouslyExtended={oppgave.timesPreviouslyExtended} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Medunderskriver:
@@ -181,13 +186,19 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Open:
         return (
           <Table.DataCell key={key}>
-            <OpenForRoleAccess {...oppgave} medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null} />
+            <OpenForRoleAccess
+              id={oppgave.id}
+              tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
+              medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null}
+              rol={oppgave.rol}
+              typeId={oppgave.typeId}
+            />
           </Table.DataCell>
         );
       case ColumnKeyEnum.OpenWithYtelseAccess:
         return (
           <Table.DataCell key={key}>
-            <OpenForYtelseAccess {...oppgave} />
+            <OpenForYtelseAccess id={oppgave.id} ytelseId={oppgave.ytelseId} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Oppgavestyring:
