@@ -1,4 +1,4 @@
-import { TextCaseLowercase, TextCaseUppercase, TextChangeCase } from '@styled-icons/fluentui-system-regular';
+import { TextCaseLowercase, TextCaseTitle, TextCaseUppercase } from '@styled-icons/fluentui-system-regular';
 import { RangeApi } from 'platejs';
 import type { ReactElement } from 'react';
 import { Keys } from '@/keys';
@@ -46,7 +46,7 @@ export const CycleCaseButton = (): ReactElement => {
         <ToolbarIconButton
           {...commonProps}
           label="Endre til Stor Forbokstav I Alle Ord"
-          icon={<TextChangeCase aria-hidden width={24} />}
+          icon={<TextCaseTitle aria-hidden width={24} />}
           onClick={() => cycleCase(editor, Case.CAPITALISE)}
         />
       );
