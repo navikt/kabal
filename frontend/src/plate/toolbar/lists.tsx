@@ -1,6 +1,6 @@
+import { BulletListIcon, NumberListIcon } from '@navikt/aksel-icons';
 import { BaseBulletedListPlugin, BaseNumberedListPlugin } from '@platejs/list-classic';
 import { useListToolbarButton, useListToolbarButtonState } from '@platejs/list-classic/react';
-import { TextBulletListLtr, TextNumberListLtr } from '@styled-icons/fluentui-system-regular';
 import { getPluginType } from 'platejs';
 import { useEditorRef } from 'platejs/react';
 import { useIsUnchangeable } from '@/plate/hooks/use-is-unchangeable';
@@ -25,7 +25,7 @@ export const Lists = () => {
         label="Punktliste"
         keys={['- + mellomrom', '* + mellomrom']}
         onClick={toggleUl}
-        icon={<TextBulletListLtr width={24} aria-hidden />}
+        icon={<BulletListIcon width={24} aria-hidden />}
         active={ulActive}
         disabled={disabled}
       />
@@ -34,7 +34,7 @@ export const Lists = () => {
         label="Nummerert liste"
         keys={['1. + mellomrom', '1) + mellomrom']}
         onClick={toggleOl}
-        icon={<TextNumberListLtr width={24} aria-hidden />}
+        icon={<NumberListIcon width={24} aria-hidden />}
         active={olActive}
         disabled={disabled}
       />
