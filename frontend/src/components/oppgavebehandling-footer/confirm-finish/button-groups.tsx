@@ -2,8 +2,8 @@ import { Box, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import { CancelButton } from '@/components/oppgavebehandling-footer/confirm-finish/cancel-button';
 import { FinishButton } from '@/components/oppgavebehandling-footer/confirm-finish/finish-button';
 import type { ButtonsProps, GosysAwareButtonsProps } from '@/components/oppgavebehandling-footer/confirm-finish/types';
-import { FAGSYSTEM_ARENA } from '@/components/oppgavebehandling-footer/fagsystem';
 import { UpdateInGosys } from '@/components/oppgavebehandling-footer/update-in-gosys/update-in-gosys';
+import { isArenaCase } from '@/domain/arena-case';
 
 interface GosysAwareFinishButtonProps {
   requiresGosysOppgave: boolean;
@@ -86,9 +86,7 @@ export const TrygderettenOpphevetButtonGroup = ({
           Ja, fullfør og opprett ny behandling i Kabal
         </FinishButton>
 
-        {/* No need to check for other fagsystemer than Arena here */}
-        {/* https://nav-it.slack.com/archives/G01CTUC8LSU/p1790757728942239?thread_ts=1790683854.400249&cid=G01CTUC8LSU */}
-        {requiresGosysOppgave && fagsystemId === FAGSYSTEM_ARENA ? (
+        {isArenaCase(fagsystemId, requiresGosysOppgave) ? (
           <InlineMessage status="info" size="small">
             Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten
             har opphevet.
@@ -119,9 +117,7 @@ export const TrygderettenHenvistButtonGroup = ({
   fagsystemId,
   requiresGosysOppgave,
 }: GosysAwareButtonsProps & { fagsystemId: string }) =>
-  // No need to check for other fagsystemer than Arena here
-  // https://nav-it.slack.com/archives/G01CTUC8LSU/p1790757728942239?thread_ts=1790683854.400249&cid=G01CTUC8LSU
-  requiresGosysOppgave && fagsystemId === FAGSYSTEM_ARENA ? (
+  isArenaCase(fagsystemId, requiresGosysOppgave) ? (
     <VStack gap="space-16">
       <InlineMessage status="info">
         Husk at du må be merkantil om å opprette en endringsoppgave i Arena knyttet til ankesaken som Trygderetten har

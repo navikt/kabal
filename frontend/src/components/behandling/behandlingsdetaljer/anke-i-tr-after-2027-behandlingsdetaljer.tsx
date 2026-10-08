@@ -17,7 +17,6 @@ import { BEHANDLING_PANEL_DOMAIN } from '@/components/gosys/beskrivelse/domain';
 import { GrafanaDomainProvider } from '@/components/grafana-domain-context/grafana-domain-context';
 import { Fullmektig } from '@/components/part/fullmektig/fullmektig';
 import { Type } from '@/components/type/type';
-import { SaksTypeEnum } from '@/types/kodeverk';
 import type { IAnkeITRAfter2027Behandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
@@ -32,7 +31,8 @@ export const AnkeITRAfter2027Behandlingsdetaljer = ({ oppgavebehandling }: Props
     prosessfullmektig,
     saksnummer,
     id,
-    trygderettenSaksnummer: saksnummerHosTrygderetten,
+    previousSaksbehandler,
+    trygderettenSaksnummer,
   } = oppgavebehandling;
 
   const { utfallId, extraUtfallIdSet } = resultat;
@@ -58,14 +58,11 @@ export const AnkeITRAfter2027Behandlingsdetaljer = ({ oppgavebehandling }: Props
             <Ytelse ytelseId={ytelseId} />
           </BehandlingSection>
 
-          <PreviousSaksbehandler
-            previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
-            type={SaksTypeEnum.ANKE_I_TRYGDERETTEN}
-          />
+          <PreviousSaksbehandler previousSaksbehandler={previousSaksbehandler} type={typeId} />
 
           <Saksnummer saksnummer={saksnummer} />
 
-          <SaksnummerHosTrygderetten saksnummer={saksnummerHosTrygderetten} />
+          <SaksnummerHosTrygderetten saksnummer={trygderettenSaksnummer} />
 
           <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 

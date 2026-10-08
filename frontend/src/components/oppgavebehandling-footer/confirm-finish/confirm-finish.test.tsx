@@ -27,8 +27,8 @@ const mockOppgave = (
   }));
 };
 
-const renderConfirmFinish = (ekspedisjonsbrevShouldBeSent?: boolean) =>
-  render(<ConfirmFinish cancel={() => undefined} ekspedisjonsbrevShouldBeSent={ekspedisjonsbrevShouldBeSent} />);
+const renderConfirmFinish = (ekspedisjonsbrevNeedsToBeSent?: boolean) =>
+  render(<ConfirmFinish cancel={() => undefined} ekspedisjonsbrevNeedsToBeSent={ekspedisjonsbrevNeedsToBeSent} />);
 
 const MUTATION_MOCK = [
   () => null,

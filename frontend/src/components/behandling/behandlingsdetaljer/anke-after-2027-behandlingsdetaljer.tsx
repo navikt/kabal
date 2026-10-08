@@ -18,7 +18,6 @@ import { GrafanaDomainProvider } from '@/components/grafana-domain-context/grafa
 import { Fullmektig } from '@/components/part/fullmektig/fullmektig';
 import { Type } from '@/components/type/type';
 import { useUpdateKlagerMutation } from '@/redux-api/oppgaver/mutations/behandling';
-import { SaksTypeEnum } from '@/types/kodeverk';
 import type { IAnkeAfter2027Behandling } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Props {
@@ -37,7 +36,8 @@ export const AnkeAfter2027Behandlingsdetaljer = ({ oppgavebehandling }: Props) =
     prosessfullmektig,
     saksnummer,
     id,
-    trygderettenSaksnummer: saksnummerHosTrygderetten,
+    trygderettenSaksnummer,
+    previousSaksbehandler,
   } = oppgavebehandling;
 
   const { utfallId, extraUtfallIdSet } = resultat;
@@ -63,14 +63,11 @@ export const AnkeAfter2027Behandlingsdetaljer = ({ oppgavebehandling }: Props) =
             <Ytelse ytelseId={ytelseId} />
           </BehandlingSection>
 
-          <PreviousSaksbehandler
-            previousSaksbehandler={oppgavebehandling.previousSaksbehandler}
-            type={SaksTypeEnum.ANKE}
-          />
+          <PreviousSaksbehandler previousSaksbehandler={previousSaksbehandler} type={typeId} />
 
           <Saksnummer saksnummer={saksnummer} />
 
-          <SaksnummerHosTrygderetten saksnummer={saksnummerHosTrygderetten} />
+          <SaksnummerHosTrygderetten saksnummer={trygderettenSaksnummer} />
 
           <Innsendingshjemmel oppgavebehandling={oppgavebehandling} />
 
