@@ -32,7 +32,7 @@ export const OpenForRoleAccess = ({
 }: RoleAccessedProps) => {
   const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const isKrol = useHasRole(Role.KABAL_KROL);
-  const isInAnketeam = useHasRole(Role.ANKETEAM);
+  const isInAnketeam = useHasAnyOfRoles([Role.ANKETEAM, Role.KABAL_OPPGAVESTYRING_ANKETEAM]);
   const { user } = useContext(StaticDataContext);
 
   const canOpen =

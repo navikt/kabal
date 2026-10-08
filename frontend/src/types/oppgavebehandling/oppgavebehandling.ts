@@ -159,7 +159,7 @@ export interface IAnkebehandling extends IOppgavebehandlingBase {
 
 export interface IAnkeAfter2027Behandling extends IOppgavebehandlingBase {
   typeId: SaksTypeEnum.ANKE_AFTER_2027;
-  trygderettenSaksnummer: string;
+  trygderettenSaksnummer: string | null;
 }
 
 export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
@@ -170,7 +170,7 @@ export interface ITrygderettsankebehandling extends IOppgavebehandlingBase {
 
 export interface IAnkeITRAfter2027Behandling extends Omit<ITrygderettsankebehandling, 'typeId'> {
   typeId: SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027;
-  trygderettenSaksnummer: string;
+  trygderettenSaksnummer: string | null;
 }
 
 export interface IBehandlingEtterTryderettenOpphevet extends IOppgavebehandlingBase {
