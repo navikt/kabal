@@ -1,4 +1,4 @@
-import { ExclamationmarkTriangleIcon, EyeObfuscatedIcon } from '@navikt/aksel-icons';
+import { ExclamationmarkTriangleIcon, PasswordHiddenIcon } from '@navikt/aksel-icons';
 import { HStack, Tag, Tooltip } from '@navikt/ds-react';
 import {
   canDistribute,
@@ -32,7 +32,7 @@ export const DocumentWarnings = ({ varianter }: Props) => {
       {hasRedactedVariant(varianter) ? (
         <Tooltip content="Dokumentet har sladdet versjon">
           <Tag data-color="meta-purple" size="xsmall" variant="strong">
-            <EyeObfuscatedIcon aria-hidden />
+            <PasswordHiddenIcon aria-hidden />
           </Tag>
         </Tooltip>
       ) : null}

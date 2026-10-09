@@ -1,9 +1,29 @@
-import { ExternalLinkIcon, XMarkIcon, ZoomMinusIcon, ZoomPlusIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, type ButtonProps, HStack, Loader, Switch, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import {
+  ExternalLinkIcon,
+  FilePlusIcon,
+  FileTextIcon,
+  PasswordHiddenIcon,
+  XMarkIcon,
+  ZoomMinusIcon,
+  ZoomPlusIcon,
+} from '@navikt/aksel-icons';
+import {
+  Alert,
+  Box,
+  Button,
+  type ButtonProps,
+  HStack,
+  Loader,
+  Tag,
+  ToggleGroup,
+  Tooltip,
+  VStack,
+} from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { FeilTag, PolTag } from '@/components/documents/document-warnings';
 import { TabContext } from '@/components/documents/tab-context';
+import { getActiveFormat, getSelectableFormats } from '@/components/documents/variants';
 import { Pdf, usePdfData } from '@/components/pdf/pdf';
 import { toast } from '@/components/toast/store';
 import { Header } from '@/components/view-pdf/header';
@@ -31,27 +51,18 @@ export const ViewPDF = () => {
   const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
   const oppgaveId = useOppgaveId();
   const showsArchivedDocument = showDocumentList.some((doc) => doc.type === DocumentTypeEnum.JOURNALFOERT);
-  const hasRedactedDocuments = showDocumentList.some(
-    (doc) =>
-      doc.type === DocumentTypeEnum.JOURNALFOERT &&
-      doc.varianter.some(({ format }) => format === VariantFormat.SLADDET),
+  const selectableFormats = useMemo(
+    () =>
+      getSelectableFormats(
+        showDocumentList.flatMap((doc) => (doc.type === DocumentTypeEnum.JOURNALFOERT ? doc.varianter : [])),
+      ),
+    [showDocumentList],
   );
-  const hasAccessToArchivedDocuments = showDocumentList.some(
-    (doc) =>
-      doc.type === DocumentTypeEnum.JOURNALFOERT &&
-      doc.varianter.some(({ hasAccess, format }) => hasAccess && format === VariantFormat.ARKIV),
-  );
-  const [showRedacted, setShowRedacted] = useState(hasRedactedDocuments);
-
-  useEffect(() => {
-    if (hasRedactedDocuments) {
-      setShowRedacted(true);
-    }
-  }, [hasRedactedDocuments]);
+  const [selectedFormat, setSelectedFormat] = useState<VariantFormat>(VariantFormat.SLADDET);
 
   const { mergedDocument, mergedDocumentIsError, mergedDocumentIsLoading } = useMergedDocument(showDocumentList);
   const { inlineUrl, tabUrl, tabId } = useShownDocumentMetadata(oppgaveId, mergedDocument, showDocumentList);
-  const format = showRedacted && hasRedactedDocuments ? VariantFormat.SLADDET : VariantFormat.ARKIV;
+  const format = getActiveFormat(selectableFormats, selectedFormat) ?? VariantFormat.ARKIV;
   const formatQuery = useMemo(() => ({ format }), [format]);
   const { loading, data, refresh, error } = usePdfData(inlineUrl, formatQuery);
 
@@ -135,21 +146,16 @@ export const ViewPDF = () => {
           showsArchivedDocument={showsArchivedDocument}
           showsPol={showsPol}
           showsFeil={showsFeil}
-          hasRedactedDocuments={hasRedactedDocuments}
-          hasAccessToArchivedDocuments={hasAccessToArchivedDocuments}
-          showRedacted={showRedacted}
-          setShowRedacted={setShowRedacted}
+          format={format}
+          selectableFormats={selectableFormats}
+          setSelectedFormat={setSelectedFormat}
         />
         <h1 className="m-0 truncate border-ax-border-neutral border-l py-1 pl-1 font-ax-bold text-base">
           {title ?? mergedDocument?.title ?? 'Ukjent dokument'}
         </h1>
         <Button
           as="a"
-          href={
-            showsArchivedDocument && hasRedactedDocuments && hasAccessToArchivedDocuments
-              ? `${tabUrl}?format=${format}`
-              : tabUrl
-          }
+          href={showsArchivedDocument && selectableFormats.length > 1 ? `${tabUrl}?format=${format}` : tabUrl}
           target={tabId}
           title="Åpne i ny fane"
           icon={<ExternalLinkIcon aria-hidden />}
@@ -163,15 +169,14 @@ export const ViewPDF = () => {
   );
 };
 
-interface RedactedSwitchProps {
+interface VariantSelectorProps {
   showsArchivedDocument: boolean;
-  hasRedactedDocuments: boolean;
-  hasAccessToArchivedDocuments: boolean;
-  showRedacted: boolean;
-  setShowRedacted: (showRedacted: boolean) => void;
+  format: VariantFormat;
+  selectableFormats: VariantFormat[];
+  setSelectedFormat: (format: VariantFormat) => void;
 }
 
-interface VariantProps extends RedactedSwitchProps {
+interface VariantProps extends VariantSelectorProps {
   showsPol: boolean;
   showsFeil: boolean;
 }
@@ -179,7 +184,7 @@ interface VariantProps extends RedactedSwitchProps {
 const Variant = ({ showsPol, showsFeil, ...props }: VariantProps) => {
   return (
     <HStack gap="space-4" wrap={false}>
-      <RedactedSwitch {...props} />
+      <VariantSelector {...props} />
 
       {showsPol ? <PolTag /> : null}
       {showsFeil ? <FeilTag /> : null}
@@ -187,36 +192,79 @@ const Variant = ({ showsPol, showsFeil, ...props }: VariantProps) => {
   );
 };
 
-const RedactedSwitch = ({
+const VARIANT_ITEMS: Record<VariantFormat, { label: string; icon: React.ReactNode }> = {
+  [VariantFormat.SLADDET]: { label: 'Sladdet', icon: <PasswordHiddenIcon aria-hidden className="text-xl" /> },
+  [VariantFormat.ARKIV]: { label: 'Usladdet', icon: <FileTextIcon aria-hidden className="text-xl" /> },
+  [VariantFormat.FULLVERSJON]: { label: 'Fullversjon', icon: <FilePlusIcon aria-hidden className="text-xl" /> },
+};
+
+const VariantSelector = ({
   showsArchivedDocument,
-  hasRedactedDocuments,
-  hasAccessToArchivedDocuments,
-  showRedacted,
-  setShowRedacted,
-}: RedactedSwitchProps) => {
-  if (!showsArchivedDocument || !hasRedactedDocuments) {
+  format,
+  selectableFormats,
+  setSelectedFormat,
+}: VariantSelectorProps) => {
+  if (!showsArchivedDocument) {
     return null;
   }
 
-  if (!hasAccessToArchivedDocuments) {
-    return (
-      <Tooltip content="Du har ikke tilgang til å se usladdet versjon" placement="top">
-        <div className={LEFT_DIVIDER_CLASSES}>
-          <Tag data-color="meta-purple" variant="strong" size="small">
-            Sladdet
-          </Tag>
-        </div>
-      </Tooltip>
-    );
+  if (selectableFormats.length < 2) {
+    return <VariantTag format={format} />;
   }
+
+  const onChange = (value: string) => {
+    const selected = selectableFormats.find((f) => f === value);
+
+    if (selected !== undefined) {
+      setSelectedFormat(selected);
+    }
+  };
 
   return (
     <div className={LEFT_DIVIDER_CLASSES}>
-      <Switch size="small" checked={showRedacted} onChange={() => setShowRedacted(!showRedacted)} className="py-0">
-        Sladdet
-      </Switch>
+      <ToggleGroup size="small" data-color="neutral" value={format} onChange={onChange} aria-label="Velg variant">
+        {selectableFormats.map((f) => (
+          <ToggleGroup.Item
+            key={f}
+            value={f}
+            icon={VARIANT_ITEMS[f].icon}
+            label={VARIANT_ITEMS[f].label}
+            className="min-h-6 px-1.5 py-0.5"
+          />
+        ))}
+      </ToggleGroup>
     </div>
   );
+};
+
+interface VariantTagProps {
+  format: VariantFormat;
+}
+
+/** Non-interactive tag shown when the user cannot choose between variants. */
+const VariantTag = ({ format }: VariantTagProps): React.ReactElement | null => {
+  switch (format) {
+    case VariantFormat.SLADDET:
+      return (
+        <Tooltip content="Du har ikke tilgang til å se usladdet versjon" placement="top">
+          <div className={LEFT_DIVIDER_CLASSES}>
+            <Tag data-color="meta-purple" variant="strong" size="small">
+              Sladdet
+            </Tag>
+          </div>
+        </Tooltip>
+      );
+    case VariantFormat.FULLVERSJON:
+      return (
+        <div className={LEFT_DIVIDER_CLASSES}>
+          <Tag data-color="info" variant="strong" size="small">
+            Fullversjon
+          </Tag>
+        </div>
+      );
+    case VariantFormat.ARKIV:
+      return null;
+  }
 };
 
 const LEFT_DIVIDER_CLASSES = 'border-ax-border-neutral border-l pl-1';

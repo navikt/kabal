@@ -29,6 +29,21 @@ describe('getDefaultVariant', () => {
     expect(getDefaultVariant([ARKIV, FULLVERSJON, SLADDET])).toBe(SLADDET);
   });
 
+  it('should prefer accessible variants', () => {
+    const SLADDET_NO_ACCESS = { ...SLADDET, hasAccess: false };
+    const ARKIV_NO_ACCESS = { ...ARKIV, hasAccess: false };
+
+    expect(getDefaultVariant([SLADDET_NO_ACCESS, ARKIV])).toBe(ARKIV);
+    expect(getDefaultVariant([SLADDET_NO_ACCESS, ARKIV_NO_ACCESS, FULLVERSJON])).toBe(FULLVERSJON);
+  });
+
+  it('should fall back to priority order when no variant is accessible', () => {
+    const SLADDET_NO_ACCESS = { ...SLADDET, hasAccess: false };
+    const ARKIV_NO_ACCESS = { ...ARKIV, hasAccess: false };
+
+    expect(getDefaultVariant([ARKIV_NO_ACCESS, SLADDET_NO_ACCESS])).toBe(SLADDET_NO_ACCESS);
+  });
+
   it('should prefer ARKIV over FULLVERSJON regardless of order', () => {
     expect(getDefaultVariant([FULLVERSJON, ARKIV])).toBe(ARKIV);
     expect(getDefaultVariant([ARKIV, FULLVERSJON])).toBe(ARKIV);
