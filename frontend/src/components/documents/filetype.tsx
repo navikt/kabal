@@ -1,26 +1,22 @@
 import { Tag, Tooltip } from '@navikt/ds-react';
 import { Filtype, type Variant, VariantFormat, type Variants } from '@/types/arkiverte-documents';
 
-export const getDefaultVariant = (varianter: Variants) => {
-  const [first, second] = varianter;
+const VARIANT_FORMAT_PRIORITY: VariantFormat[] = [
+  VariantFormat.SLADDET,
+  VariantFormat.ARKIV,
+  VariantFormat.FULLVERSJON,
+];
 
-  if (first === undefined) {
-    return null;
+export const getDefaultVariant = (varianter: Variants): Variant | null => {
+  for (const format of VARIANT_FORMAT_PRIORITY) {
+    const variant = varianter.find((v) => v.format === format);
+
+    if (variant !== undefined) {
+      return variant;
+    }
   }
 
-  if (first.format === VariantFormat.SLADDET) {
-    return first;
-  }
-
-  if (second === undefined) {
-    return first;
-  }
-
-  if (second.format === VariantFormat.SLADDET) {
-    return second;
-  }
-
-  return first;
+  return varianter[0] ?? null;
 };
 
 export const canDistribute = ({ filtype }: Variant): boolean => filtype === Filtype.PDF;

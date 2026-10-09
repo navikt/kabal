@@ -48,6 +48,7 @@ const BASE_JD_REFERENCE: JournalfoertDokumentReference = {
       filtype: Filtype.PDF,
       format: VariantFormat.ARKIV,
       hasAccess: true,
+      filstoerrelse: 1024,
       skjerming: null,
     },
   ],

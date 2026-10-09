@@ -15,25 +15,33 @@ const FileTypeSchema = Type.Union([
   Type.Literal('RTF'),
 ]);
 
-const VariantFormatSchema = Type.Union([Type.Literal('ARKIV'), Type.Literal('SLADDET')]);
+const VariantFormatSchema = Type.Union([Type.Literal('ARKIV'), Type.Literal('SLADDET'), Type.Literal('FULLVERSJON')]);
 const SkjermingSchema = Type.Union([Type.Literal('POL'), Type.Literal('FEIL')]);
 
 const VariantSchema = Type.Object({
   filtype: FileTypeSchema,
   hasAccess: Type.Boolean(),
   format: VariantFormatSchema,
+  filstoerrelse: Type.Optional(Type.Number()),
   skjerming: Type.Union([SkjermingSchema, Type.Null()]),
 });
 
 const VariantTupleOneSchema = Type.Tuple([VariantSchema]);
 const VariantTupleTwoSchema = Type.Tuple([VariantSchema, VariantSchema]);
+const VariantTupleThreeSchema = Type.Tuple([VariantSchema, VariantSchema, VariantSchema]);
 
 /** Schema for validating the kabal-api response. */
 export const ArchivedApiDocumentSchema = Type.Object({
   journalpostId: Type.String(),
   dokumentInfoId: Type.String(),
   title: Type.String(),
-  varianter: Type.Union([FileTypeSchema, VariantSchema, VariantTupleOneSchema, VariantTupleTwoSchema]),
+  varianter: Type.Union([
+    FileTypeSchema,
+    VariantSchema,
+    VariantTupleOneSchema,
+    VariantTupleTwoSchema,
+    VariantTupleThreeSchema,
+  ]),
   harTilgangTilArkivvariant: Type.Boolean(),
   hasAccess: Type.Boolean(),
 });
