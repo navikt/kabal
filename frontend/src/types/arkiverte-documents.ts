@@ -222,6 +222,7 @@ export interface DokumentInfo {
 export enum VariantFormat {
   ARKIV = 'ARKIV',
   SLADDET = 'SLADDET',
+  FULLVERSJON = 'FULLVERSJON',
 }
 
 export enum Skjerming {
@@ -234,10 +235,12 @@ export interface Variant {
   filtype: Filtype;
   hasAccess: boolean;
   format: VariantFormat;
+  /** Bytes */
+  filstoerrelse: number;
   skjerming: Skjerming | null;
 }
 
-export type Variants = [Variant, Variant] | [Variant];
+export type Variants = [Variant, Variant, Variant] | [Variant, Variant] | [Variant];
 
 export enum TimelineTypes {
   OPPRETTET = 'OPPRETTET',
