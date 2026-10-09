@@ -34,13 +34,14 @@ export const ArenaConfirmationCheckbox = ({ typeId, confirmed, setConfirmed }: A
 );
 
 const getArenaCheckboxText = (typeId: SaksTypeEnum) => {
-  if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN || typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027) {
     return 'Jeg bekrefter at jeg har registrert utfallet fra Trygderetten i Arena';
   }
 
   if (
     typeId === SaksTypeEnum.KLAGE ||
     typeId === SaksTypeEnum.ANKE ||
+    typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
     typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET
   ) {
     return 'Jeg bekrefter at saken er sendt til godkjenning i Arena.';

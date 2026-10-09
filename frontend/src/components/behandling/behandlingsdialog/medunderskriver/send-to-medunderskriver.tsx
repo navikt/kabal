@@ -1,19 +1,16 @@
 import { PaperplaneIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { getTitleLowercase } from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useSetMedunderskriverMutation } from '@/redux-api/oppgaver/mutations/set-medunderskriver';
 import { useSetMedunderskriverFlowStateMutation } from '@/redux-api/oppgaver/mutations/set-medunderskriver-flowstate';
-import type { SaksTypeEnum } from '@/types/kodeverk';
 import { FlowState, type IMedunderskriver } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;
-  typeId: SaksTypeEnum;
   medunderskriver: IMedunderskriver;
 }
 
-export const SendToMedunderskriver = ({ oppgaveId, typeId, medunderskriver }: Props) => {
+export const SendToMedunderskriver = ({ oppgaveId, medunderskriver }: Props) => {
   const isSaksbehandler = useIsTildeltSaksbehandler();
   const [, medunderskriverLoader] = useSetMedunderskriverMutation({ fixedCacheKey: oppgaveId });
   const [setMedunderskriverFlowState, loader] = useSetMedunderskriverFlowStateMutation();
@@ -32,7 +29,7 @@ export const SendToMedunderskriver = ({ oppgaveId, typeId, medunderskriver }: Pr
       loading={loader.isLoading || medunderskriverLoader.isLoading}
       icon={<PaperplaneIcon aria-hidden />}
     >
-      Send til {getTitleLowercase(typeId)}
+      Send til medunderskriver
     </Button>
   );
 };

@@ -5,6 +5,7 @@ import { StaticDataContext } from '@/components/app/static-data-context';
 import { useHasAnyOfRoles, useHasRole } from '@/hooks/use-has-role';
 import { useHasYtelseAccess } from '@/hooks/use-has-ytelse-access';
 import { Role } from '@/types/bruker';
+import { isAnkeTypeAfter2027, type SaksTypeEnum } from '@/types/kodeverk';
 import { FlowState, type IRol } from '@/types/oppgave-common';
 import type { IOppgave } from '@/types/oppgaver';
 
@@ -15,6 +16,7 @@ interface BaseProps extends Omit<ButtonProps, 'id' | 'children'> {
 interface RoleAccessedProps extends BaseProps, Pick<IOppgave, 'id' | 'tildeltSaksbehandlerident'> {
   medunderskriverident: string | null;
   rol: IRol | null;
+  typeId: SaksTypeEnum;
 }
 
 export const OpenForRoleAccess = ({
@@ -22,6 +24,7 @@ export const OpenForRoleAccess = ({
   tildeltSaksbehandlerident,
   medunderskriverident,
   rol,
+  typeId,
   children = 'Åpne',
   variant = 'primary',
   size = 'small',
@@ -29,6 +32,7 @@ export const OpenForRoleAccess = ({
 }: RoleAccessedProps) => {
   const isMerkantil = useHasRole(Role.KABAL_OPPGAVESTYRING_ALLE_ENHETER);
   const isKrol = useHasRole(Role.KABAL_KROL);
+  const isInAnketeam = useHasAnyOfRoles([Role.ANKETEAM, Role.KABAL_OPPGAVESTYRING_ANKETEAM]);
   const { user } = useContext(StaticDataContext);
 
   const canOpen =
@@ -36,7 +40,8 @@ export const OpenForRoleAccess = ({
     user.navIdent === tildeltSaksbehandlerident ||
     user.navIdent === medunderskriverident ||
     (rol !== null && user.navIdent === rol.employee?.navIdent) ||
-    (rol !== null && rol.flowState === FlowState.SENT && isKrol);
+    (rol !== null && rol.flowState === FlowState.SENT && isKrol) ||
+    (isAnkeTypeAfter2027(typeId) && isInAnketeam);
 
   if (!canOpen) {
     return null;

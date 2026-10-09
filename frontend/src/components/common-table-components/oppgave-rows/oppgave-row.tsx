@@ -29,6 +29,7 @@ import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
 import { isoDateToPretty } from '@/domain/date';
 import { useGetOppgaveQuery } from '@/redux-api/oppgaver/queries/oppgave-data';
 import { isApiDataError } from '@/types/errors';
+import { isAnkeTypeAfter2027, SaksTypeEnum } from '@/types/kodeverk';
 import { FlowState } from '@/types/oppgave-common';
 import type { IOppgave } from '@/types/oppgaver';
 
@@ -77,8 +78,11 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
   columnKeys.map((key) => {
     switch (key) {
       case ColumnKeyEnum.Type:
-      case ColumnKeyEnum.TypeWithTrygderetten:
       case ColumnKeyEnum.TypeForSakerITR:
+      case ColumnKeyEnum.TypeForAnkerAfter2027:
+      case ColumnKeyEnum.TypeWithoutDirekteAnke:
+      case ColumnKeyEnum.AllTypes:
+      case ColumnKeyEnum.ReadOnlyType:
         return (
           <Table.DataCell key={key}>
             <Type type={oppgave.typeId} size="medium" />
@@ -133,6 +137,14 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
           </Table.DataCell>
         );
       case ColumnKeyEnum.VarsletFrist:
+        if (
+          isAnkeTypeAfter2027(oppgave.typeId) ||
+          oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+          oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR
+        ) {
+          return <Table.DataCell key={key} />;
+        }
+
         return (
           <Table.DataCell key={key}>
             <ReadOnlyDeadline frist={oppgave.varsletFrist} timesPreviouslyExtended={oppgave.timesPreviouslyExtended} />
@@ -151,7 +163,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             <HStack wrap gap="space-8">
-              <MUFlowStateLabelWithSelf typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
+              <MUFlowStateLabelWithSelf medunderskriver={oppgave.medunderskriver} />
               <RolFlowStateLabel rol={oppgave.rol} />
             </HStack>
           </Table.DataCell>
@@ -160,7 +172,7 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
         return (
           <Table.DataCell key={key}>
             <HStack wrap gap="space-8">
-              <MUFlowStateLabelWithoutSelf typeId={oppgave.typeId} medunderskriver={oppgave.medunderskriver} />
+              <MUFlowStateLabelWithoutSelf medunderskriver={oppgave.medunderskriver} />
               <RolFlowStateLabel rol={oppgave.rol} />
             </HStack>
           </Table.DataCell>
@@ -172,19 +184,21 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
           </Table.DataCell>
         );
       case ColumnKeyEnum.Open:
+        return (
+          <Table.DataCell key={key}>
+            <OpenForRoleAccess
+              id={oppgave.id}
+              tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
+              medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null}
+              rol={oppgave.rol}
+              typeId={oppgave.typeId}
+            />
+          </Table.DataCell>
+        );
       case ColumnKeyEnum.OpenWithYtelseAccess:
         return (
           <Table.DataCell key={key}>
-            {key === ColumnKeyEnum.OpenWithYtelseAccess ? (
-              <OpenForYtelseAccess id={oppgave.id} ytelseId={oppgave.ytelseId} />
-            ) : (
-              <OpenForRoleAccess
-                id={oppgave.id}
-                tildeltSaksbehandlerident={oppgave.tildeltSaksbehandlerident}
-                medunderskriverident={oppgave.medunderskriver.employee?.navIdent ?? null}
-                rol={oppgave.rol}
-              />
-            )}
+            <OpenForYtelseAccess id={oppgave.id} ytelseId={oppgave.ytelseId} />
           </Table.DataCell>
         );
       case ColumnKeyEnum.Oppgavestyring:
