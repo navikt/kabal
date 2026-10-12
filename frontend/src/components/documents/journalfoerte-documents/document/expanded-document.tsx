@@ -25,7 +25,7 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
         borderWidth="0 0 0 1"
         borderColor="neutral"
       >
-        <HStack gap="space-0 space-16" position="sticky" left="space-0" className="whitespace-nowrap" wrap={false}>
+        <HStack gap="space-0 space-16" position="sticky" left="space-0" className="z-1 whitespace-nowrap" wrap={false}>
           <Section>
             <Label size="small">Status</Label>
             <Data>
