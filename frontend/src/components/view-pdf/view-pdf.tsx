@@ -194,7 +194,7 @@ const Variant = ({ showsPol, showsFeil, ...props }: VariantProps) => {
 
 const VARIANT_ITEMS: Record<VariantFormat, { label: string; icon: React.ReactNode }> = {
   [VariantFormat.SLADDET]: { label: 'Sladdet', icon: <PasswordHiddenIcon aria-hidden className="text-xl" /> },
-  [VariantFormat.ARKIV]: { label: 'Usladdet', icon: <FileTextIcon aria-hidden className="text-xl" /> },
+  [VariantFormat.ARKIV]: { label: 'Standard', icon: <FileTextIcon aria-hidden className="text-xl" /> },
   [VariantFormat.FULLVERSJON]: { label: 'Fullversjon', icon: <FilePlusIcon aria-hidden className="text-xl" /> },
 };
 
