@@ -1,4 +1,3 @@
-import { SakerITRFerdigstilteTable } from '@/components/saker-i-tr/ferdigstilte';
 import { LedigeSakerITRTable } from '@/components/saker-i-tr/ledige';
 import { SakerITRPåVentTable } from '@/components/saker-i-tr/på-vent';
 import { TildelteSakerITRTable } from '@/components/saker-i-tr/tildelte';
@@ -9,6 +8,5 @@ export const SakerITRPage = () => (
     <TildelteSakerITRTable />
     <SakerITRPåVentTable />
     <LedigeSakerITRTable />
-    <SakerITRFerdigstilteTable />
   </OppgaverPageWrapper>
 );

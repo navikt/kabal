@@ -125,10 +125,6 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       query: (params) => ({ url: '/kabal-search/oppgaver-i-tr/paa-vent', params }),
       providesTags: [OppgaveListTagTypes.TR_VENTENDE],
     }),
-    getFerdigstilteAnkerITR: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: (params) => ({ url: '/kabal-search/oppgaver-i-tr/ferdigstilte', params }),
-      providesTags: [OppgaveListTagTypes.TR_FERDIGE],
-    }),
     getAnketeamLedigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (params) => ({
         url: '/kabal-search/anketeam/oppgaver/ledige',
@@ -183,5 +179,4 @@ export const {
   useGetAnketeamTildelteOppgaverQuery,
   useGetAnketeamVentendeOppgaverQuery,
   useGetAnketeamFerdigstilteOppgaverQuery,
-  useGetFerdigstilteAnkerITRQuery,
 } = oppgaverQuerySlice;

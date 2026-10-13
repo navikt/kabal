@@ -20,7 +20,6 @@ export enum OppgaveListTagTypes {
   TR_TILDELTE = 'tr-tildelte',
   TR_LEDIGE = 'tr-ledige',
   TR_VENTENDE = 'tr-ventende',
-  TR_FERDIGE = 'tr-ferdige',
   LEDIGE_ANKER_AFTER_2027 = 'ledige-anker-after-2027',
   ANKETEAM_LEDIGE = 'anketeam-ledige',
   ANKETEAM_TILDELTE = 'anketeam-tildelte',
