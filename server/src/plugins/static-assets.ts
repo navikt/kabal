@@ -1,9 +1,7 @@
-import { existsSync, readFileSync } from 'node:fs';
-import path from 'node:path';
 import { SpanStatusCode } from '@opentelemetry/api';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
-import { frontendDistDirectoryPath } from '@/config/config';
+import { CDN_BASE_URL } from '@/config/config';
 import { getLogger } from '@/logger';
 import { NAV_IDENT_PLUGIN_ID } from '@/plugins/nav-ident';
 import { tracer } from '@/tracing/tracer';
@@ -31,6 +29,8 @@ const handleUnresolvedAsset = (req: FastifyRequest, reply: FastifyReply) => {
   );
 };
 
+const FAVICON_URL = `${CDN_BASE_URL}/assets/favicon.ico`;
+
 export const STATIC_ASSETS_PLUGIN_ID = 'static-assets';
 
 export const staticAssetsPlugin = fastifyPlugin(
@@ -38,14 +38,10 @@ export const staticAssetsPlugin = fastifyPlugin(
     app.get('/assets/*', async (req, reply) => handleUnresolvedAsset(req, reply));
     app.get('/file-viewer/assets/*', async (req, reply) => handleUnresolvedAsset(req, reply));
 
-    const faviconPath = path.join(frontendDistDirectoryPath, 'favicon.ico');
-    const faviconBuffer = existsSync(faviconPath) ? readFileSync(faviconPath) : null;
-
-    if (faviconBuffer === null) {
-      app.get('/favicon.ico', async (_, reply) => reply.code(404).send());
-    } else {
-      app.get('/favicon.ico', async (_, reply) => reply.header('content-type', 'image/x-icon').send(faviconBuffer));
-    }
+    // Browsers request /favicon.ico implicitly for non-HTML responses (e.g. PDFs). Redirect to the CDN.
+    app.get('/favicon.ico', async (_, reply) =>
+      reply.header('cache-control', 'public, max-age=86400').redirect(FAVICON_URL, 302),
+    );
   },
   { fastify: '5', name: STATIC_ASSETS_PLUGIN_ID, dependencies: [NAV_IDENT_PLUGIN_ID] },
 );
