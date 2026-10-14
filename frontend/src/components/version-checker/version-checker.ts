@@ -11,6 +11,7 @@ import { IDLE_TRACKER, type IdleState } from '@/components/version-checker/idle-
 import { ENVIRONMENT } from '@/environment';
 import { getQueryParams } from '@/headers';
 import { pushError } from '@/observability';
+import { getSessionStatus, redirectToLogin, SessionStatus } from '@/session';
 
 export enum UpdateRequest {
   REQUIRED = 'REQUIRED',
@@ -138,8 +139,19 @@ class VersionChecker {
       const reconnectDelay = this.delay;
       this.delay = this.delay === 0 ? 500 : Math.min(this.delay + 500, 10_000);
 
-      const reconnect = () => {
+      const reconnect = async () => {
         // Guard again: a concurrent reopenEventSource() call may have replaced the connection.
+        if (this.eventSource !== events) {
+          return;
+        }
+
+        // EventSource cannot see the response status. Avoid reconnecting forever with an invalid session.
+        // If the session status is UNKNOWN, the user is most likely offline and a redirect to login will not help.
+        // If the user is offline, the new EventSource will fail and the error listener will trigger again.
+        if ((await getSessionStatus()) === SessionStatus.INACTIVE) {
+          return redirectToLogin();
+        }
+
         if (this.eventSource !== events) {
           return;
         }

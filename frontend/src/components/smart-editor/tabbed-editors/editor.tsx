@@ -14,7 +14,6 @@ import { createLocalStorageBackup } from '@/components/smart-editor/tabbed-edito
 import { PlateContextWrapper } from '@/components/smart-editor/tabbed-editors/plate-context';
 import { useMounted } from '@/components/smart-editor/tabbed-editors/use-mounted';
 import { ENVIRONMENT } from '@/environment';
-import { hasOwn, isObject } from '@/functions/object';
 import { parseJSON } from '@/functions/parse-json';
 import { getQueryParams } from '@/headers';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
@@ -30,6 +29,7 @@ import { SaksbehandlerToolbar } from '@/plate/toolbar/toolbars/saksbehandler-too
 import type { KabalValue, RichTextEditor } from '@/plate/types';
 import { reduxStore } from '@/redux/configure-store';
 import { documentsQuerySlice, useLazyGetDocumentQuery } from '@/redux-api/oppgaver/queries/documents';
+import { getSessionStatusWithRetry, redirectToLogin, SessionStatus, sleep } from '@/session';
 import { tracer } from '@/tracing/tracer';
 import type { ISmartDocumentOrAttachment } from '@/types/documents/documents';
 import type { IOppgavebehandling } from '@/types/oppgavebehandling/oppgavebehandling';
@@ -60,6 +60,26 @@ export const Editor = (props: EditorProps) => {
   return <LoadedEditor {...props} oppgave={oppgave} />;
 };
 
+const MAX_RECONNECT_DELAY_MS = 30_000;
+
+const getReconnectDelay = (attempt: number) =>
+  attempt === 0 ? 0 : Math.min(MAX_RECONNECT_DELAY_MS, 1_000 * 2 ** (attempt - 1));
+
+/** Hocuspocus registers `onClose` on the WebSocket twice, so every close event is emitted twice. */
+const oncePerCloseEvent = <T extends { event: object }>(handler: (payload: T) => Promise<void>) => {
+  const handled = new WeakSet<object>();
+
+  return async (payload: T) => {
+    if (handled.has(payload.event)) {
+      return;
+    }
+
+    handled.add(payload.event);
+
+    return handler(payload);
+  };
+};
+
 interface LoadedEditorProps extends EditorProps {
   oppgave: IOppgavebehandling;
 }
@@ -79,6 +99,8 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   const collabConnectMeasured = useRef(false);
   const collabSyncMeasured = useRef(false);
   const documentCleanedOnce = useRef(false);
+  const sessionCheckController = useRef<AbortController | null>(null);
+  const reconnectAttempts = useRef(0);
 
   const url = useMemo(
     () => `/collaboration/behandlinger/${oppgave.id}/dokumenter/${id}?${getQueryParams().toString()}`,
@@ -90,12 +112,11 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
   const provider: YjsProviderConfig = {
     type: 'hocuspocus',
-    wsOptions: {
-      url,
-      maxAttempts: 1,
-    },
     options: {
       url,
+      // Plate ignores `wsOptions`. The provider passes `options` to the WebSocket it creates.
+      // Only one attempt per connect. Reconnects are handled in `onClose`, after the session is verified.
+      maxAttempts: 1,
       name: id,
       token: user.navIdent, // There must be a token defined for the server auth hook to run.
       onAuthenticated: ({ scope }) => {
@@ -109,13 +130,14 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           span.end();
         }
       },
-      // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
-      onClose: async ({ event }) => {
+      onClose: oncePerCloseEvent(async ({ event }) => {
         const span = tracer.startSpan('collaboration.onClose', {
           attributes: { ...traceAttrs, 'ws.close_code': event.code, 'ws.close_reason': event.reason },
         });
 
         try {
+          sessionCheckController.current?.abort();
+
           if (event.code !== 1000 && event.code !== 1005) {
             span.setStatus({ code: SpanStatusCode.ERROR, message: `WebSocket closed with code ${event.code}` });
           }
@@ -138,7 +160,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
           if (event.code === 4401 && !ENVIRONMENT.isLocal) {
             span.setAttribute('collaboration.close_action', 'redirect_login');
 
-            return window.location.assign('/oauth2/login');
+            return redirectToLogin();
           }
 
           setIsConnected(false);
@@ -161,43 +183,54 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
             return;
           }
 
-          try {
-            const res = await fetch('/oauth2/session', { credentials: 'include' });
+          const controller = new AbortController();
+          sessionCheckController.current = controller;
 
-            if (!res.ok) {
-              throw new Error(`API responded with error code ${res.status} for /oauth2/session`);
-            }
+          // Back off between consecutive failed reconnects, in case the session is active but the server is unavailable.
+          const reconnectDelayMs = getReconnectDelay(reconnectAttempts.current++);
+          span.setAttribute('collaboration.reconnect_delay_ms', reconnectDelayMs);
+          await sleep(reconnectDelayMs, controller.signal);
 
-            const data: unknown = await res.json();
+          const sessionStatus = await getSessionStatusWithRetry({
+            signal: controller.signal,
+            onRetry: (attempt, delayMs) => {
+              span.setAttribute('session.check_retries', attempt + 1);
 
-            if (
-              isObject(data) &&
-              hasOwn(data, 'session') &&
-              isObject(data.session) &&
-              hasOwn(data.session, 'active') &&
-              data.session.active === true
-            ) {
+              if (attempt === 0) {
+                pushError(new Error('Could not determine session status from /oauth2/session. Retrying.'), {
+                  context,
+                });
+              }
+
+              pushLog(`Session status unknown. Retry ${attempt + 1} in ${delayMs} ms.`, { context });
+            },
+          });
+
+          switch (sessionStatus) {
+            case SessionStatus.ACTIVE: {
               console.debug(`Reconnecting Yjs after close code ${event.code} (${event.reason || 'no reason'})...`);
               pushLog('Reconnecting Yjs...', {
                 context: { ...context, code: event.code.toString(), reason: event.reason },
               });
               span.setAttribute('collaboration.close_action', 'reconnect_after_session_check');
-              yjs.connect();
-            } else {
-              span.setAttribute('collaboration.close_action', 'session_inactive');
-            }
-          } catch (err) {
-            console.error(err);
 
-            if (err instanceof Error) {
-              span.recordException(err);
-              pushError(err, { context });
+              return yjs.connect();
+            }
+            case SessionStatus.INACTIVE: {
+              span.setAttribute('collaboration.close_action', 'session_inactive');
+
+              return redirectToLogin();
+            }
+            case null: {
+              span.setAttribute('collaboration.close_action', 'session_check_aborted');
+
+              return;
             }
           }
         } finally {
           span.end();
         }
-      },
+      }),
       onSynced: () => {
         const span = tracer.startSpan('collaboration.onSynced', { attributes: traceAttrs });
 
@@ -260,6 +293,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
 
           // Record connect time for sync duration measurement
           collabConnectTime.current = now;
+          reconnectAttempts.current = 0;
 
           setIsConnected(true);
         } finally {
@@ -387,6 +421,7 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
   }, [editor]);
 
   const destroyAndDelete = () => {
+    sessionCheckController.current?.abort();
     setReadOnly(true);
     setIsConnected(false);
     setIsSynced(false);
@@ -417,6 +452,8 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
     isInitialized.current = true;
 
     return () => {
+      sessionCheckController.current?.abort();
+
       try {
         forceDestroyProviders();
       } catch (e) {
