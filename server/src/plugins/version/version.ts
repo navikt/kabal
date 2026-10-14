@@ -6,6 +6,7 @@ import { startClientSession } from '@/plugins/version/clients-gauge';
 import { VERSION_QUERY_STRING_SCHEMA, type VersionQueryString } from '@/plugins/version/query';
 import { histogram } from '@/plugins/version/session-histogram';
 import { getUpdateRequest } from '@/plugins/version/update-request';
+import { registerOpenStream } from '@/shutdown';
 
 const log = getLogger('version');
 
@@ -35,8 +36,10 @@ export const versionPlugin = fastifyPlugin(
 
         const stopTimer = histogram.startTimer();
         const endClientSession = startClientSession(req);
+        let unregisterOpenStream: (() => void) | undefined;
 
         const onClose = () => {
+          unregisterOpenStream?.();
           stopTimer();
           endClientSession();
 
@@ -82,6 +85,9 @@ export const versionPlugin = fastifyPlugin(
         reply.raw.write(RETRY_SSE);
         reply.raw.write(VERSION_SSE);
         reply.raw.write(formatSseEvent(EventNames.UPDATE_REQUEST, getUpdateRequest(req)));
+
+        // End the stream cleanly on shutdown. The client reconnects to another pod.
+        unregisterOpenStream = registerOpenStream(() => reply.raw.end());
       },
     );
   },

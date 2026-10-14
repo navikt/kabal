@@ -2,6 +2,7 @@ import proxy from '@fastify/http-proxy';
 import fastifyPlugin from 'fastify-plugin';
 import { DEV_URL, isDeployed } from '@/config/env';
 import { getDuration } from '@/helpers/duration';
+import { createGracefulEventStream, isEventStream } from '@/helpers/event-stream';
 import { getProxyRequestHeaders } from '@/helpers/prepare-request-headers';
 import { getLogger, type Level } from '@/logger';
 import { OBO_ACCESS_TOKEN_PLUGIN_ID } from '@/plugins/obo-token';
@@ -103,6 +104,23 @@ export const apiProxyPlugin = fastifyPlugin<ApiProxyPluginOptions>(
             });
 
             reply.code(502).send({ error: 'Bad Gateway', message: `${code ?? error.message}` });
+          },
+          onResponse: (req, reply, res) => {
+            if (!isEventStream(reply.getHeader('content-type'))) {
+              return reply.send(res.stream);
+            }
+
+            const stream = createGracefulEventStream(res.stream, (error) =>
+              log.warn({
+                msg: `Event stream from ${appName} ended unexpectedly: ${error.message}`,
+                error,
+                tab_id: req.tab_id,
+                client_version: req.client_version,
+                data: { method: req.method, url: req.url, appName },
+              }),
+            );
+
+            return reply.send(stream);
           },
           rewriteRequestHeaders: (req) => getProxyRequestHeaders(req, appName, req.getCachedOboAccessToken(appName)),
           rewriteHeaders: (headers, req) => {

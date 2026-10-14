@@ -4,7 +4,7 @@ import { getLogger } from '@/logger';
 import { collaborationServer } from '@/plugins/crdt/collaboration-server';
 import { isConnectionContext } from '@/plugins/crdt/context';
 import { endActivity } from '@/plugins/crdt/crdt-tracing';
-import { setShuttingDown } from '@/shutdown';
+import { closeServer, setShuttingDown } from '@/shutdown';
 import { EmojiIcons, sendToSlack } from '@/slack';
 import { shutdownTracing } from '@/tracing';
 
@@ -60,6 +60,7 @@ export const processErrors = () => {
       // with an abrupt 1006 instead of the 1001 we just sent.
       await sleep(CLOSE_FRAME_FLUSH_MS);
 
+      await closeServer();
       await SMART_DOCUMENT_WRITE_ACCESS.close();
       log.info({ msg: `Process ${process.pid} received a ${signal} signal. Shutting down now.` });
       await shutdownTracing();

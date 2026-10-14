@@ -4,6 +4,7 @@ import { NAIS_APP_NAME, NAIS_POD_NAME } from '@/config/config';
 import { getLogger } from '@/logger';
 import type { ToggleRequest } from '@/plugins/unleash-proxy/types';
 import { UNLEASH_PROXY_URL } from '@/plugins/unleash-proxy/types';
+import { registerOpenStream } from '@/shutdown';
 import { tracer } from '@/tracing/tracer';
 
 const log = getLogger('unleash-proxy-plugin');
@@ -109,6 +110,8 @@ export const handleSse = async (req: ToggleRequest, reply: FastifyReply) => {
     return reply.status(502).send({ error: 'Unexpected feature toggle response' });
   }
 
+  let unregisterOpenStream: (() => void) | undefined;
+
   const heartbeatInterval = setInterval(() => {
     if (reply.raw.destroyed || reply.raw.writableEnded) {
       finishSseConnection();
@@ -128,6 +131,7 @@ export const handleSse = async (req: ToggleRequest, reply: FastifyReply) => {
       }
 
       finished = true;
+      unregisterOpenStream?.();
       clearInterval(heartbeatInterval);
       span.setStatus({ code: SpanStatusCode.OK });
       span.end();
@@ -163,6 +167,9 @@ export const handleSse = async (req: ToggleRequest, reply: FastifyReply) => {
   const toggleData: SseToggleEvent = { enabled: parsed.enabled, traceparent };
 
   reply.raw.write(`event: toggle\ndata: ${JSON.stringify(toggleData)}\n\n`);
+
+  // End the stream cleanly on shutdown. The client reconnects to another pod.
+  unregisterOpenStream = registerOpenStream(() => reply.raw.end());
 };
 
 interface UpstreamToggleResponse {
