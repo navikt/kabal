@@ -28,6 +28,7 @@ import { tabIdPlugin } from '@/plugins/tab-id';
 import { unleashProxyPlugin } from '@/plugins/unleash-proxy/unleash-proxy';
 import { versionPlugin } from '@/plugins/version/version';
 import { processErrors } from '@/process-errors';
+import { registerServer } from '@/shutdown';
 import { EmojiIcons, sendToSlack } from '@/slack';
 import { fastifyOtelInstrumentation } from '@/tracing';
 
@@ -52,6 +53,8 @@ const app = fastify({
   routerOptions: { maxParamLength: 20_000, querystringParser },
   ajv: { customOptions: { useDefaults: true } },
 });
+
+registerServer(app);
 
 await app.register(fastifyOtelInstrumentation.plugin());
 
