@@ -34,6 +34,8 @@ export const frontendDistDirectoryPath = path.resolve(frontendDirectoryPath, './
 export const fileViewerDirectoryPath = path.resolve(serverDirectoryPath, '../file-viewer');
 export const fileViewerDistDirectoryPath = path.resolve(fileViewerDirectoryPath, './dist');
 
+export const CDN_BASE_URL = 'https://cdn.nav.no/klage/kabal';
+
 const defaultValue = isLocal ? 'local' : undefined;
 
 export const AZURE_APP_CLIENT_ID = requiredEnvString('AZURE_APP_CLIENT_ID', defaultValue);
