@@ -3,6 +3,7 @@ import { ENVIRONMENT } from '@/environment';
 import { parseJSON } from '@/functions/parse-json';
 import { getQueryParams } from '@/headers';
 import { pushLog } from '@/observability';
+import { getSessionStatus, redirectToLogin, SessionStatus } from '@/session';
 import { tracer } from '@/tracing/tracer';
 
 export interface TracedEvent {
@@ -66,6 +67,9 @@ export class ServerSentEventManager<E extends string = string> {
   private managerContext: Context;
   private connectionTraceparent: string | null;
   private connectionSpan: Span | null = null;
+  private closed = false;
+  private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
+  private sessionCheckController: AbortController | null = null;
   public isConnected = false;
 
   private constructor(
@@ -200,7 +204,33 @@ export class ServerSentEventManager<E extends string = string> {
       this.isConnected = false;
       this.endConnectionSpan();
 
-      setTimeout(() => {
+      if (this.closed) {
+        return;
+      }
+
+      this.reconnectTimeout = setTimeout(async () => {
+        this.reconnectTimeout = null;
+        const controller = new AbortController();
+        this.sessionCheckController = controller;
+
+        // EventSource cannot see the response status. Avoid reconnecting forever with an invalid session.
+        // If the session status is UNKNOWN, the user is most likely offline and a redirect to login will not help.
+        // If the user is offline, the new EventSource will fail and the error listener will trigger again.
+        const sessionStatus = await getSessionStatus(controller.signal);
+
+        // The manager may have been closed while the session check was pending.
+        if (this.closed) {
+          return;
+        }
+
+        if (sessionStatus === SessionStatus.INACTIVE) {
+          pushLog('Session inactive, redirecting to login instead of reconnecting SSE', {
+            context: { name: this.name, ...this.metadata },
+          });
+
+          return redirectToLogin();
+        }
+
         this.events = this.createEventSource();
       }, 3000);
     });
@@ -226,6 +256,14 @@ export class ServerSentEventManager<E extends string = string> {
 
     instances.delete(this.url);
 
+    this.closed = true;
+
+    if (this.reconnectTimeout !== null) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
+    }
+
+    this.sessionCheckController?.abort();
     this.endConnectionSpan();
     this.managerSpan.end();
     this.events?.close();
