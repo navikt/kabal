@@ -13,7 +13,7 @@ export const DatoSortering = (props: Props) => {
     <DateFilter
       {...datoSorteringSetting}
       {...props}
-      label="Dato reg./sendt"
+      label="Dato"
       gridArea={Fields.DatoSortering}
       column={ArchivedDocumentsColumn.DATO_SORTERING}
       size="small"
