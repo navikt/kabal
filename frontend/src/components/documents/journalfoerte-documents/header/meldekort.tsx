@@ -1,6 +1,7 @@
 import { Fields } from '@/components/documents/journalfoerte-documents/grid';
 import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
 import {
+  DEFAULT_MELDEKORT_FILTER,
   MELDEKORT_FILTER_LABELS,
   MELDEKORT_FILTER_OPTIONS,
   type MeldekortFilter,
@@ -27,6 +28,6 @@ export const Meldekort = ({ meldekortFilter, setMeldekortFilter }: Props) => (
     showSearch={false}
     style={{ gridArea: Fields.Meldekort }}
     triggerSize="small"
-    triggerVariant="tertiary"
+    triggerVariant={meldekortFilter !== DEFAULT_MELDEKORT_FILTER ? 'primary-neutral' : 'tertiary-neutral'}
   />
 );

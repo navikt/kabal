@@ -2,6 +2,7 @@ import { Buildings3Icon, PersonIcon, QuestionmarkIcon, StethoscopeIcon } from '@
 import { Tag } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
 import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import { filterTriggerVariant } from '@/components/documents/journalfoerte-documents/header/filter-trigger-variant';
 import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
@@ -66,7 +67,7 @@ export const AvsenderMottakerFilter = ({
       onChange={handleChange}
       style={{ gridArea: Fields.AvsenderMottaker }}
       triggerSize="small"
-      triggerVariant="tertiary"
+      triggerVariant={filterTriggerVariant(selectedAvsenderMottakere.length)}
       triggerDisplay="count"
       showSelectAll
     />
