@@ -24,7 +24,7 @@ export const SIZES: Record<Fields, [number, number]> = {
   [Fields.Title]: [275, -1],
   [Fields.Tema]: [110, 110],
   [Fields.DatoOpprettet]: [160, 160],
-  [Fields.DatoSortering]: [90, 90],
+  [Fields.DatoSortering]: [105, 105],
   [Fields.AvsenderMottaker]: [200, 200],
   [Fields.Saksnummer]: [150, 150],
   [Fields.Meldekort]: [165, 165],
