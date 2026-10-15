@@ -28,7 +28,7 @@ export const SIZES: Record<Fields, [number, number]> = {
   [Fields.AvsenderMottaker]: [200, 200],
   [Fields.Saksnummer]: [150, 150],
   [Fields.Meldekort]: [165, 165],
-  [Fields.Type]: [100, 100],
+  [Fields.Type]: [90, 90],
   [Fields.ToggleMetadata]: [32, 32],
   [Fields.Action]: [32, 32],
   [Fields.LogiskeVedlegg]: [0, 0],

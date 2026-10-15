@@ -1,6 +1,7 @@
 import { Tag } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import { Fields } from '@/components/documents/journalfoerte-documents/grid';
+import { filterTriggerVariant } from '@/components/documents/journalfoerte-documents/header/filter-trigger-variant';
 import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
@@ -51,7 +52,7 @@ export const Tema = ({ selectedTemaer, setSelectedTemaer }: Props) => {
       onChange={onChange}
       style={{ gridArea: Fields.Tema }}
       triggerSize="small"
-      triggerVariant="tertiary"
+      triggerVariant={filterTriggerVariant(selectedTemaer.length)}
       triggerDisplay="count"
       showSelectAll
     />
