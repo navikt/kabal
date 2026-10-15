@@ -24,6 +24,7 @@ export const JournalfoerteDocuments = () => {
   const { data, isLoading } = useGetArkiverteDokumenterQuery(oppgaveId ?? skipToken);
   const [listHeight, setListHeight] = useState<number>(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
   const keyboardBoundaryRef = useRef<HTMLDivElement>(null);
 
   const documents = data?.dokumenter;
@@ -136,7 +137,7 @@ export const JournalfoerteDocuments = () => {
       return;
     }
 
-    const bottom = top + 32;
+    const bottom = top + 32 + (headerRef.current?.offsetHeight ?? 0);
 
     if (bottom > scrollContainerRef.current.scrollTop + scrollContainerRef.current.clientHeight) {
       scrollContainerRef.current.scrollTo({ top: bottom - scrollContainerRef.current.clientHeight });
@@ -169,15 +170,6 @@ export const JournalfoerteDocuments = () => {
           filteredDocuments={totalFilteredDocuments}
         />
 
-        <Header
-          filters={filters}
-          documentIdList={documentsWithVedleggIdList ?? []}
-          showsAnyVedlegg={showsAnyVedlegg}
-          toggleShowAllVedlegg={onToggle}
-          searchRef={searchRef}
-          keyboardBoundaryRef={keyboardBoundaryRef}
-        />
-
         <VStack
           overflowY="scroll"
           overflowX="hidden"
@@ -186,6 +178,16 @@ export const JournalfoerteDocuments = () => {
           onScroll={onScroll}
           ref={scrollContainerRef}
         >
+          <Header
+            ref={headerRef}
+            filters={filters}
+            documentIdList={documentsWithVedleggIdList ?? []}
+            showsAnyVedlegg={showsAnyVedlegg}
+            toggleShowAllVedlegg={onToggle}
+            searchRef={searchRef}
+            keyboardBoundaryRef={keyboardBoundaryRef}
+          />
+
           <KeyboardContextElement filteredDocuments={totalFilteredDocuments} searchRef={searchRef}>
             <KeyboardBoundary ref={keyboardBoundaryRef} scrollRef={panelContainerRef}>
               <DocumentList

@@ -9,7 +9,6 @@ import { SelectAll } from '@/components/documents/journalfoerte-documents/header
 import type { useFilters } from '@/components/documents/journalfoerte-documents/header/use-filters';
 import { useIsExpanded } from '@/components/documents/use-is-expanded';
 import { useArchivedDocumentsColumns } from '@/hooks/settings/use-archived-documents-setting';
-import { IS_WINDOWS } from '@/keys';
 
 interface Props {
   documentIdList: string[];
@@ -18,12 +17,19 @@ interface Props {
   toggleShowAllVedlegg: () => void;
   searchRef: React.RefObject<HTMLInputElement | null>;
   keyboardBoundaryRef: React.RefObject<HTMLDivElement | null>;
+  ref: React.RefObject<HTMLDivElement | null>;
 }
 
-const BASE_CLASSES = 'z-1 whitespace-nowrap bg-ax-bg-default border-b border-ax-border-neutral';
-const CLASSES = IS_WINDOWS ? `${BASE_CLASSES} mr-[13px]` : BASE_CLASSES;
+const CLASSES = 'sticky top-0 z-1 whitespace-nowrap bg-ax-bg-default border-b border-ax-border-neutral';
 
-export const Header = ({ filters, showsAnyVedlegg, toggleShowAllVedlegg, searchRef, keyboardBoundaryRef }: Props) => {
+export const Header = ({
+  filters,
+  showsAnyVedlegg,
+  toggleShowAllVedlegg,
+  searchRef,
+  keyboardBoundaryRef,
+  ref,
+}: Props) => {
   const [isExpanded] = useIsExpanded();
   const { columns } = useArchivedDocumentsColumns();
 
@@ -35,6 +41,7 @@ export const Header = ({ filters, showsAnyVedlegg, toggleShowAllVedlegg, searchR
 
   return (
     <HGrid
+      ref={ref}
       as="div"
       gap="space-0 space-8"
       align="center"
