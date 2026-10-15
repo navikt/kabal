@@ -110,6 +110,9 @@ export const smartEditorCommentsApi = createApi({
   }),
 });
 
+/** Shared between all delete call sites for a comment, so they see each other's in-flight requests. */
+export const getDeleteCommentCacheKey = (commentId: string) => `delete-${commentId}`;
+
 export const {
   useGetCommentsQuery,
   usePostCommentMutation,
