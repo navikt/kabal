@@ -37,6 +37,7 @@ const Filter = ({ from, to, setDateRange, size }: FilterProps) => {
       buttonSize={size}
       buttonClassName="rounded-l-none"
       onClose={onClose}
+      showIcon
     />
   );
 };

@@ -22,6 +22,7 @@ interface Props {
   buttonClassName?: string;
   buttonSize?: ButtonProps['size'];
   onClose?: () => void;
+  showIcon?: boolean;
 }
 
 export const DatePickerRange = ({
@@ -32,6 +33,7 @@ export const DatePickerRange = ({
   buttonClassName,
   buttonSize,
   onClose,
+  showIcon = false,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null);
@@ -57,7 +59,7 @@ export const DatePickerRange = ({
           onClick={() => (isOpen ? handleClose() : setIsOpen(true))}
           size={buttonSize}
           variant={variant}
-          icon={<CalendarIcon aria-hidden />}
+          icon={showIcon ? <CalendarIcon aria-hidden /> : undefined}
           className={buttonClassName}
         >
           {buttonLabel}
