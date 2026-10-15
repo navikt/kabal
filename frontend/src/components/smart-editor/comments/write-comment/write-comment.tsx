@@ -1,7 +1,7 @@
 import { Textarea } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import type React from 'react';
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
 import { disconnectCommentThread } from '@/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@/components/smart-editor/context';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
@@ -15,12 +15,18 @@ import {
 } from '@/redux-api/smart-editor-comments';
 import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 
+export interface WriteCommentHandle {
+  /** Saves the comment, or deletes it if it is empty, and stops editing. */
+  finishEditing: () => Promise<void>;
+}
+
 interface Props {
   comment: ISmartEditorComment;
   label: string;
+  ref?: React.Ref<WriteCommentHandle>;
 }
 
-export const WriteComment = ({ comment, label }: Props) => {
+export const WriteComment = ({ comment, label, ref: handleRef }: Props) => {
   const { id: commentId, text } = comment;
   const [value, setValue] = useState(text);
   const isInitialized = useRef(false);
@@ -56,6 +62,37 @@ export const WriteComment = ({ comment, label }: Props) => {
     return () => clearTimeout(timeout);
   }, [value, text, commentId, oppgaveId, dokumentId, editComment]);
 
+  useImperativeHandle(handleRef, () => ({
+    finishEditing: async () => {
+      if (oppgaveId === skipToken) {
+        return;
+      }
+
+      setEditingComment(null);
+      setValue('');
+
+      if (value.length === 0) {
+        if (isDeleting) {
+          return;
+        }
+
+        await deleteComment({ commentId, oppgaveId, dokumentId }).unwrap();
+
+        if (isLoneParent) {
+          disconnectCommentThread(editor, commentId);
+        }
+
+        return;
+      }
+
+      if (text === value) {
+        return;
+      }
+
+      await editComment({ commentId, text: value, oppgaveId, dokumentId }).unwrap();
+    },
+  }));
+
   if (oppgaveId === skipToken) {
     return null;
   }
@@ -86,30 +123,6 @@ export const WriteComment = ({ comment, label }: Props) => {
       placeholder="Skriv inn en kommentar"
       size="small"
       value={value}
-      onBlur={async () => {
-        setEditingComment(null);
-        setValue('');
-
-        if (value === '') {
-          if (isDeleting) {
-            return;
-          }
-
-          await deleteComment({ commentId, oppgaveId, dokumentId }).unwrap();
-
-          if (isLoneParent) {
-            disconnectCommentThread(editor, commentId);
-          }
-
-          return;
-        }
-
-        if (text === value) {
-          return;
-        }
-
-        editComment({ commentId, text: value, oppgaveId, dokumentId }).unwrap();
-      }}
     />
   );
 };

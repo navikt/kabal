@@ -1,10 +1,10 @@
 import { BodyLong, Box, HStack, VStack } from '@navikt/ds-react';
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { SavedStatus } from '@/components/saved-status/saved-status';
 import { DeleteButton } from '@/components/smart-editor/comments/delete-button';
 import { EditButton } from '@/components/smart-editor/comments/edit-comment';
-import { WriteComment } from '@/components/smart-editor/comments/write-comment/write-comment';
+import { WriteComment, type WriteCommentHandle } from '@/components/smart-editor/comments/write-comment/write-comment';
 import { SmartEditorContext } from '@/components/smart-editor/context';
 import { isoDateTimeToPretty } from '@/domain/date';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
@@ -23,11 +23,21 @@ export const Comment = ({ isMain, comment, hasWriteAccess }: Props) => {
   const { editingComment, setEditingComment } = useContext(SmartEditorContext);
   const isSaksbehandler = useIsTildeltSaksbehandler();
   const [, status] = useUpdateCommentOrReplyMutation({ fixedCacheKey: comment.id });
+  const writeCommentRef = useRef<WriteCommentHandle>(null);
 
   const isAuthor = author.ident === user.navIdent;
   const isEditing = editingComment?.id === id;
   const canEditComment = isAuthor && hasWriteAccess;
   const canDeleteComment = (isAuthor || isSaksbehandler) && hasWriteAccess;
+
+  // Only stop editing when focus leaves the whole comment, not when it moves to e.g. the delete button.
+  const onBlur: React.FocusEventHandler<HTMLElement> = (event) => {
+    if (event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget)) {
+      return;
+    }
+
+    writeCommentRef.current?.finishEditing();
+  };
 
   return (
     <Box
@@ -37,7 +47,15 @@ export const Comment = ({ isMain, comment, hasWriteAccess }: Props) => {
       borderColor="neutral-subtle"
       className="group/comment first:border-l-0 first:pl-0"
     >
-      <VStack as="article" position="relative">
+      <VStack
+        as="article"
+        position="relative"
+        onBlur={isEditing ? onBlur : undefined}
+        // Focusable while editing, so that clicks inside the comment keep focus within it.
+        // Safari does not focus buttons on click, but focuses their nearest focusable ancestor.
+        tabIndex={isEditing ? -1 : undefined}
+        className="outline-none"
+      >
         <HStack gap="space-8" align="center" justify="space-between" wrap={false}>
           <div className="w-full grow truncate text-ax-medium">{author.name}</div>
           {canDeleteComment ? (
@@ -60,7 +78,7 @@ export const Comment = ({ isMain, comment, hasWriteAccess }: Props) => {
         />
 
         {isEditing ? (
-          <WriteComment comment={editingComment} label="Rediger kommentar" />
+          <WriteComment ref={writeCommentRef} comment={editingComment} label="Rediger kommentar" />
         ) : (
           <HStack gap="space-8" justify="space-between" align="start" wrap={false}>
             <BodyLong size="small" className="wrap-break-word overflow-hidden whitespace-break-spaces">

@@ -1,6 +1,6 @@
 import { TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { disconnectCommentThread } from '@/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@/components/smart-editor/context';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
@@ -15,8 +15,9 @@ interface DeleteButtonProps {
 
 export const DeleteButton = ({ id, title, className }: DeleteButtonProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
+  const deleteButtonRef = useRef<HTMLButtonElement>(null);
   const { data: oppgave } = useOppgave();
-  const { dokumentId } = useContext(SmartEditorContext);
+  const { dokumentId, editingComment, setEditingComment } = useContext(SmartEditorContext);
   const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation({
     fixedCacheKey: getDeleteCommentCacheKey(id),
   });
@@ -31,7 +32,10 @@ export const DeleteButton = ({ id, title, className }: DeleteButtonProps) => {
       return;
     }
 
-    close();
+    if (editingComment?.id === id) {
+      setEditingComment(null);
+    }
+
     deleteComment({ commentId: id, dokumentId, oppgaveId: oppgave.id }).then(() => {
       if (editor === null) {
         return;
@@ -41,43 +45,39 @@ export const DeleteButton = ({ id, title, className }: DeleteButtonProps) => {
     });
   };
 
-  if (!showConfirm) {
-    return (
-      <Button
-        data-color="danger"
-        size="xsmall"
-        icon={<TrashIcon aria-hidden />}
-        variant="primary"
-        onClick={() => setShowConfirm(true)}
-        disabled={isDeleting}
-        title={title}
-        className={className}
-      />
-    );
-  }
+  const onCancel = () => {
+    setShowConfirm(false);
+    // Keep focus inside the comment, so that the comment container's blur handling keeps working.
+    deleteButtonRef.current?.focus();
+  };
 
+  // The delete button must stay the same element when toggling confirmation, so that it does not lose focus.
   return (
     <>
       <Button
+        ref={deleteButtonRef}
         data-color="danger"
         size="xsmall"
         icon={<TrashIcon aria-hidden />}
         variant="primary"
-        onClick={onDelete}
-        loading={isDeleting}
+        onClick={showConfirm ? onDelete : () => setShowConfirm(true)}
+        loading={showConfirm && isDeleting}
+        disabled={!showConfirm && isDeleting}
         title={title}
         className={className}
       />
-      <Button
-        data-color="neutral"
-        size="xsmall"
-        icon={<XMarkIcon aria-hidden />}
-        variant="tertiary"
-        onClick={() => setShowConfirm(false)}
-        disabled={isDeleting}
-        title="Avbryt"
-        className={className}
-      />
+      {showConfirm ? (
+        <Button
+          data-color="neutral"
+          size="xsmall"
+          icon={<XMarkIcon aria-hidden />}
+          variant="tertiary"
+          onClick={onCancel}
+          disabled={isDeleting}
+          title="Avbryt"
+          className={className}
+        />
+      ) : null}
     </>
   );
 };
