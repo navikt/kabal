@@ -11,6 +11,8 @@ export interface SearchableSelectProps<T> {
   label: string;
   options: Entry<T>[];
   value: Entry<T> | null;
+  /** Value the selection is compared against. The confirm button disables when they match. Defaults to `value`. */
+  committedValue?: Entry<T> | null;
   onChange: (value: T) => void;
   disabled?: boolean;
   /** When true, shows a loading spinner on the trigger button to indicate a pending operation. */
