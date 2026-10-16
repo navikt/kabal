@@ -10,7 +10,7 @@ import { Role } from '@/types/bruker';
 import { FlowState } from '@/types/oppgave-common';
 import type { IOppgave } from '@/types/oppgaver';
 
-export const TildelRolButton = ({ id, rol, medunderskriver, tildeltSaksbehandlerident }: IOppgave) => {
+export const TildelRolButton = ({ id, rol, medunderskriver, tildeltSaksbehandlerident, typeId }: IOppgave) => {
   const { user } = useContext(StaticDataContext);
   const { navIdent, navn } = user;
   const isRol = useHasRole(Role.KABAL_ROL);
@@ -45,6 +45,7 @@ export const TildelRolButton = ({ id, rol, medunderskriver, tildeltSaksbehandler
       tildeltSaksbehandlerident={tildeltSaksbehandlerident}
       medunderskriverident={medunderskriver.employee?.navIdent ?? null}
       rol={rol}
+      typeId={typeId}
     />
   );
 

@@ -12,16 +12,20 @@ const getPrefix = (type: SaksTypeEnum): string => {
     case SaksTypeEnum.KLAGE:
       return 'Klageinstansen har fullført behandling av klage';
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
       return 'Klageinstansen har fullført behandling av anken';
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       return 'Trygderetten har fullført behandling av anken';
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
       return 'Klageinstansen har fullført ny behandling etter Trygderetten har opphevet';
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Klageinstansen har fullført behandling av omgjøringskrav';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return 'Klageinstansen har fullført behandling av begjæringen om gjenopptak';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027:
       return 'Trygderetten har fullført behandling av begjæring om gjenopptak';
   }
 };
@@ -61,7 +65,8 @@ const getBody = (
 
 export const getSuffix = (type: SaksTypeEnum, utfallId: UtfallEnum | null): string => {
   switch (type) {
-    case SaksTypeEnum.ANKE_I_TRYGDERETTEN: {
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027: {
       if (utfallId === UtfallEnum.OPPHEVET) {
         return ' Vedtaksinstans skal gjøre ny behandling i saken.';
       }

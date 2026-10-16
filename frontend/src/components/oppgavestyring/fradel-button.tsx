@@ -59,6 +59,7 @@ export const FradelButton = (props: IOppgave) => {
     medunderskriver.employee?.navIdent ?? null,
     medunderskriver.flowState,
     rol.flowState,
+    typeId,
     ytelseId,
   );
 

@@ -84,7 +84,7 @@ const ExtraUtfallButton = ({ utfallIdSet, mainUtfall, oppgaveId, typeId }: Props
       </HStack>
 
       {disabled ? (
-        <InlineMessage status="info">
+        <InlineMessage status="info" size="small">
           Du må velge utfall/resultat før du kan sette ekstra utfall for tilpasset tekst.
         </InlineMessage>
       ) : (
