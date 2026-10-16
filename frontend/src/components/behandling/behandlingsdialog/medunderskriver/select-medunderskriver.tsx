@@ -102,6 +102,7 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
       label={titleLabel}
       medunderskrivere={medunderskrivere}
       employee={medunderskriver.employee}
+      isSent={medunderskriver.flowState === FlowState.SENT}
       isUpdating={isUpdating}
       onChange={handleChange}
       confirmLabel={`Send til ${getTitleLowercase(typeId)}`}
@@ -113,6 +114,7 @@ interface SelectMedunderskriverInnerProps {
   label: string;
   medunderskrivere: INavEmployeeWithEnhet[];
   employee: INavEmployee | null;
+  isSent: boolean;
   isUpdating: boolean;
   onChange: (employee: INavEmployeeWithEnhet | null) => void;
   confirmLabel: string;
@@ -122,6 +124,7 @@ const SelectMedunderskriverInner = ({
   label,
   medunderskrivere,
   employee,
+  isSent,
   isUpdating,
   onChange,
   confirmLabel,
@@ -147,6 +150,7 @@ const SelectMedunderskriverInner = ({
         label={label}
         options={options}
         value={selectedEntry}
+        committedValue={isSent ? selectedEntry : null}
         onChange={onChange}
         loading={isUpdating}
         nullLabel={NONE_LABEL}

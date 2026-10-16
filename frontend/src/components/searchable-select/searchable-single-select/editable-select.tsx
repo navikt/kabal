@@ -23,6 +23,7 @@ export const EditableSelect = <T,>({
   label,
   options,
   value,
+  committedValue,
   onChange,
   disabled = false,
   loading = false,
@@ -52,15 +53,17 @@ export const EditableSelect = <T,>({
 
   const { highlightedIndex, setHighlightedIndex, highlightedIndexRef } = useHighlight(deferredSearch);
 
+  const committed = committedValue === undefined ? value : committedValue;
+
   const confirmDraft = useCallback(
     (draft: Entry<T> | null) => {
-      if (draft === null || optionEntriesMatch(draft, value)) {
+      if (draft === null || optionEntriesMatch(draft, committed)) {
         return;
       }
 
       onChange(draft.value);
     },
-    [value, onChange],
+    [committed, onChange],
   );
 
   const { open, buttonRef, handleClose, handleButtonClick, onButtonKeyDown } = usePopoverState({
@@ -105,9 +108,9 @@ export const EditableSelect = <T,>({
   );
 
   const handleConfirm = useCallback(() => {
-    confirmDraft(draftValue);
+    confirmDraft(draftValue ?? value);
     handleClose();
-  }, [draftValue, confirmDraft, handleClose]);
+  }, [draftValue, value, confirmDraft, handleClose]);
 
   const scrollToIndex = useCallback((index: number) => {
     virtualizedOptionListHandle.current?.scrollToIndex(index);
@@ -149,7 +152,7 @@ export const EditableSelect = <T,>({
         e.preventDefault();
 
         if (requireConfirmation) {
-          confirmAndClose(draftValueRef.current);
+          confirmAndClose(draftValueRef.current ?? value);
         } else {
           const option = getHighlightedOption(filteredOptions);
           confirmAndClose(option);
@@ -177,7 +180,7 @@ export const EditableSelect = <T,>({
         }
       }
     },
-    [filteredOptions, handleNavigation, requireConfirmation, getHighlightedOption, confirmAndClose],
+    [filteredOptions, handleNavigation, requireConfirmation, getHighlightedOption, confirmAndClose, value],
   );
 
   const handleOptionSelect = useCallback(
@@ -191,7 +194,8 @@ export const EditableSelect = <T,>({
     [requireConfirmation, confirmAndClose],
   );
 
-  const hasDraftChange = !optionEntriesMatch(draftValue, value);
+  const selection = draftValue ?? value;
+  const hasDraftChange = !optionEntriesMatch(selection, committed);
   const displayKey = draftValue !== null ? draftValue.key : value?.key;
 
   // Build the set of selected keys for aria-selected on option elements.

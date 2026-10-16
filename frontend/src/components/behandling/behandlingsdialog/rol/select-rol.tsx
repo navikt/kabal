@@ -11,7 +11,7 @@ import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
 import { useTildelSaksbehandlerMutation } from '@/redux-api/oppgaver/mutations/tildeling';
 import { useGetPotentialRolQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import type { INavEmployee } from '@/types/bruker';
-import type { IRol } from '@/types/oppgave-common';
+import { FlowState, type IRol } from '@/types/oppgave-common';
 
 interface Props {
   oppgaveId: string;
@@ -45,13 +45,15 @@ export const SelectRol = ({ oppgaveId, rol, isSaksbehandler }: Props) => {
 
   const { employee } = rol;
 
-  const selectedEntry = useMemo((): Entry<INavEmployee | null> | null => {
+  const selectedEntry = useMemo((): Entry<INavEmployee | null> => {
     if (employee === null) {
       return NONE_ENTRY;
     }
 
     return options.find((e) => e.key === employee.navIdent) ?? NONE_ENTRY;
   }, [employee, options]);
+
+  const sentEntry = rol.flowState === FlowState.SENT ? selectedEntry : null;
 
   const canSelect = isSaksbehandler || isRol || isKrol;
 
@@ -72,6 +74,7 @@ export const SelectRol = ({ oppgaveId, rol, isSaksbehandler }: Props) => {
         label="Rådgivende overlege"
         options={options}
         value={selectedEntry}
+        committedValue={sentEntry}
         onChange={(employee) => onChange(employee?.navIdent ?? null, fromNavIdent)}
         loading={isUpdating}
         nullLabel={NONE_LABEL}
