@@ -5,7 +5,7 @@ import { StaticDataContext } from '@/components/app/static-data-context';
 import { useHasAnyOfRoles, useHasRole } from '@/hooks/use-has-role';
 import { useHasYtelseAccess } from '@/hooks/use-has-ytelse-access';
 import { Role } from '@/types/bruker';
-import { isAnkeTypeAfter2027, type SaksTypeEnum } from '@/types/kodeverk';
+import { isAnketeamSakstype, type SaksTypeEnum } from '@/types/kodeverk';
 import { FlowState, type IRol } from '@/types/oppgave-common';
 import type { IOppgave } from '@/types/oppgaver';
 
@@ -41,7 +41,7 @@ export const OpenForRoleAccess = ({
     user.navIdent === medunderskriverident ||
     (rol !== null && user.navIdent === rol.employee?.navIdent) ||
     (rol !== null && rol.flowState === FlowState.SENT && isKrol) ||
-    (isAnkeTypeAfter2027(typeId) && isInAnketeam);
+    (isAnketeamSakstype(typeId) && isInAnketeam);
 
   if (!canOpen) {
     return null;

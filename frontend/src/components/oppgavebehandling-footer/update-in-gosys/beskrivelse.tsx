@@ -22,8 +22,10 @@ const getPrefix = (type: SaksTypeEnum): string => {
     case SaksTypeEnum.OMGJØRINGSKRAV:
       return 'Klageinstansen har fullført behandling av omgjøringskrav';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       return 'Klageinstansen har fullført behandling av begjæringen om gjenopptak';
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027:
       return 'Trygderetten har fullført behandling av begjæring om gjenopptak';
   }
 };

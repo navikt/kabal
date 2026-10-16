@@ -14,6 +14,8 @@ export enum SaksTypeEnum {
   BEGJÆRING_OM_GJENOPPTAK_I_TR = '7',
   ANKE_AFTER_2027 = '8',
   ANKE_I_TRYGDERETTEN_AFTER_2027 = '9',
+  BEGJÆRING_OM_GJENOPPTAK_AFTER_2027 = '10',
+  BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027 = '11',
 }
 
 export const SAKS_TYPE_ENUM_VALUES = Object.values(SaksTypeEnum);
@@ -115,3 +117,16 @@ export interface SakstypeToPåVentReason extends IKodeverkSimpleValue<SaksTypeEn
 
 export const isAnkeTypeAfter2027 = (typeId: SaksTypeEnum): boolean =>
   typeId === SaksTypeEnum.ANKE_AFTER_2027 || typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027;
+
+export const ANKETEAM_SAKSTYPER = [
+  SaksTypeEnum.ANKE,
+  SaksTypeEnum.ANKE_AFTER_2027,
+  SaksTypeEnum.ANKE_I_TRYGDERETTEN,
+  SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027,
+  SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK,
+  SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027,
+  SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
+  SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027,
+];
+
+export const isAnketeamSakstype = (typeId: SaksTypeEnum): boolean => ANKETEAM_SAKSTYPER.includes(typeId);

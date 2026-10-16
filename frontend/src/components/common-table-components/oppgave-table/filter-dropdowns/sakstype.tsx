@@ -6,53 +6,71 @@ import { TABLE_HEADERS } from '@/components/common-table-components/types';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import { useSakstyper } from '@/simple-api-state/use-kodeverk';
-import { SaksTypeEnum } from '@/types/kodeverk';
+import { ANKETEAM_SAKSTYPER, SaksTypeEnum } from '@/types/kodeverk';
 
 interface SaksTypeOption {
   value: SaksTypeEnum;
   label: string;
 }
 
-const BASE_OPTIONS: SaksTypeEnum[] = [
-  SaksTypeEnum.KLAGE,
-  SaksTypeEnum.ANKE,
-  SaksTypeEnum.OMGJØRINGSKRAV,
-  SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK,
-];
-
-const OPTIONS_WITH_TR_BEFORE_2027: SaksTypeEnum[] = [
-  SaksTypeEnum.ANKE_I_TRYGDERETTEN,
-  SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
-  SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET,
-];
-
-const OPTIONS_FOR_SAKER_I_TR: SaksTypeEnum[] = [
-  SaksTypeEnum.ANKE_I_TRYGDERETTEN,
-  SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
-  SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027,
-];
-
-const OPTIONS_FOR_ANKE_AFTER_2027: SaksTypeEnum[] = [
-  SaksTypeEnum.ANKE_AFTER_2027,
-  SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027,
-];
-
-export const Sakstype = (props: FilterDropdownProps) => <Filter {...props} values={BASE_OPTIONS} />;
+export const SakstypeForLedigeNonAnkeOppgaver = (props: FilterDropdownProps) => (
+  <Filter
+    {...props}
+    values={[SaksTypeEnum.KLAGE, SaksTypeEnum.ANKE, SaksTypeEnum.OMGJØRINGSKRAV, SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]}
+  />
+);
 
 export const SakstypeForSakerITR = (props: FilterDropdownProps) => (
-  <Filter {...props} values={OPTIONS_FOR_SAKER_I_TR} />
+  <Filter
+    {...props}
+    values={[
+      SaksTypeEnum.ANKE_I_TRYGDERETTEN,
+      SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
+      SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027,
+    ]}
+  />
 );
 
 export const SakstypeForAnkeAfter2027 = (props: FilterDropdownProps) => (
-  <Filter {...props} values={OPTIONS_FOR_ANKE_AFTER_2027} />
+  <Filter {...props} values={ANKETEAM_SAKSTYPER} />
 );
 
 export const AllSakstyper = (props: FilterDropdownProps) => (
-  <Filter {...props} values={[...BASE_OPTIONS, ...OPTIONS_WITH_TR_BEFORE_2027, ...OPTIONS_FOR_ANKE_AFTER_2027]} />
+  <Filter
+    {...props}
+    values={[
+      SaksTypeEnum.KLAGE,
+      SaksTypeEnum.ANKE,
+      SaksTypeEnum.ANKE_AFTER_2027,
+      SaksTypeEnum.OMGJØRINGSKRAV,
+      SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK,
+      SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027,
+      SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
+      SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027,
+      SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET,
+      SaksTypeEnum.ANKE_I_TRYGDERETTEN,
+      SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027,
+    ]}
+  />
 );
 
-export const SakstyperWithoutDirekteAnke = (props: FilterDropdownProps) => (
-  <Filter {...props} values={[...BASE_OPTIONS, ...OPTIONS_WITH_TR_BEFORE_2027]} />
+export const SakstyperForNonAnketeam = (props: FilterDropdownProps) => (
+  <Filter
+    {...props}
+    values={[SaksTypeEnum.KLAGE, SaksTypeEnum.OMGJØRINGSKRAV, SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]}
+  />
+);
+
+export const SakstyperForLedigeAnketeamOppgaver = (props: FilterDropdownProps) => (
+  <Filter
+    {...props}
+    values={[
+      SaksTypeEnum.ANKE,
+      SaksTypeEnum.ANKE_AFTER_2027,
+      SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK,
+      SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027,
+    ]}
+  />
 );
 
 const Filter = ({ columnKey, tableKey, values }: FilterDropdownProps & { values: SaksTypeEnum[] }) => {

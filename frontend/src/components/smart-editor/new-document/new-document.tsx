@@ -15,6 +15,8 @@ import {
   getAnkeITRAfter2027Templates,
   getAnkeITrygderettenTemplates,
   getAnkeTemplates,
+  getBegjæringOmGjenopptakAfter2027Templates,
+  getBegjæringOmGjenopptakITrAfter2027Templates,
   getBegjæringOmGjenopptakITrTemplates,
   getBegjæringOmGjenopptakTemplates,
   getBehandlingEtterTrOpphevetTemplates,
@@ -134,7 +136,9 @@ const TEMPLATE_GETTERS: Record<SaksTypeEnum, (params: CreateTemplateParams) => I
   [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: getBehandlingEtterTrOpphevetTemplates,
   [SaksTypeEnum.OMGJØRINGSKRAV]: getOmgjøringskravvedtakTemplates,
   [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: getBegjæringOmGjenopptakTemplates,
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027]: getBegjæringOmGjenopptakAfter2027Templates,
   [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: getBegjæringOmGjenopptakITrTemplates,
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027]: getBegjæringOmGjenopptakITrAfter2027Templates,
 };
 
 interface TemplateButtonProps {
