@@ -80,9 +80,9 @@ const getColumns = (columnKeys: ColumnKeyEnum[], oppgave: IOppgave) =>
       case ColumnKeyEnum.Type:
       case ColumnKeyEnum.TypeForSakerITR:
       case ColumnKeyEnum.TypeForAnkerAfter2027:
-      case ColumnKeyEnum.TypeWithoutDirekteAnke:
+      case ColumnKeyEnum.TypeForNonAnketeam:
+      case ColumnKeyEnum.TypeForLedigeAnketeamOppgaver:
       case ColumnKeyEnum.AllTypes:
-      case ColumnKeyEnum.ReadOnlyType:
         return (
           <Table.DataCell key={key}>
             <Type type={oppgave.typeId} size="medium" />

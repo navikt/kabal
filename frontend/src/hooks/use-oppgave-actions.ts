@@ -2,7 +2,7 @@ import { useContext, useMemo } from 'react';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { useHasYtelseAccess } from '@/hooks/use-has-ytelse-access';
 import { Role } from '@/types/bruker';
-import { isAnkeTypeAfter2027, type SaksTypeEnum } from '@/types/kodeverk';
+import { isAnketeamSakstype, type SaksTypeEnum } from '@/types/kodeverk';
 import { FlowState, type MuFlowState } from '@/types/oppgave-common';
 
 interface Actions {
@@ -92,7 +92,7 @@ const canAssignSelf = ({
     return false;
   }
 
-  if (isAnkeTypeAfter2027(typeId)) {
+  if (isAnketeamSakstype(typeId)) {
     return hasAnketeamAccess;
   }
 
@@ -107,7 +107,7 @@ const canAssignOthers = ({
   hasOppgavestyringAnketeamAccess,
   typeId,
 }: Values): boolean => {
-  if (isAnkeTypeAfter2027(typeId)) {
+  if (isAnketeamSakstype(typeId)) {
     return hasOppgavestyringAnketeamAccess || (hasAnketeamAccess && isAssignedToSelf);
   }
 
@@ -135,7 +135,7 @@ interface Values {
 }
 
 const hasSakstypeAccess = (typeId: SaksTypeEnum, roles: Role[]): boolean => {
-  if (isAnkeTypeAfter2027(typeId)) {
+  if (isAnketeamSakstype(typeId)) {
     return roles.includes(Role.ANKETEAM) || roles.includes(Role.KABAL_OPPGAVESTYRING_ANKETEAM);
   }
 

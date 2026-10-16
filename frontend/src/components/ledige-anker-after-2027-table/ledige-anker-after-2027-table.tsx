@@ -17,7 +17,7 @@ import { Role } from '@/types/bruker';
 import { type CommonOppgaverParams, SortFieldEnum, SortOrderEnum } from '@/types/oppgaver';
 
 const COLUMNS: ColumnKeyEnum[] = [
-  ColumnKeyEnum.ReadOnlyType,
+  ColumnKeyEnum.TypeForLedigeAnketeamOppgaver,
   ColumnKeyEnum.UserYtelser,
   ColumnKeyEnum.UserInnsendingshjemler,
   ColumnKeyEnum.Age,

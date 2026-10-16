@@ -283,6 +283,11 @@ export const getBegjæringOmGjenopptakTemplates = (params: CreateTemplateParams)
   getVarselOmOmgjøringTilUgunstTemplate(params),
 ];
 
+export const getBegjæringOmGjenopptakAfter2027Templates = (params: CreateTemplateParams) => [
+  getGenereltBrevTemplate(params),
+  getNotatTemplate(params),
+];
+
 export const getBegjæringOmGjenopptakITrTemplates = (params: CreateTemplateParams) => [
   getGenereltBrevTemplate(params),
   getNotatTemplate(params),
@@ -293,6 +298,11 @@ export const getBegjæringOmGjenopptakITrTemplates = (params: CreateTemplatePara
   getRolTilsvarsbrevTemplate(params),
   getTilForeleggelseTemplate(params),
   getSvarPåInnsynsbegjæringTemplate(params),
+];
+
+export const getBegjæringOmGjenopptakITrAfter2027Templates = (params: CreateTemplateParams) => [
+  getGenereltBrevTemplate(params),
+  getNotatTemplate(params),
 ];
 
 interface GetFinishedBehandlingTemplatesParams extends CreateTemplateParams {
@@ -308,4 +318,5 @@ export const getFinishedBehandlingTemplates = ({
   getGenereltBrevTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
   getNotatTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
   getSvarPåInnsynsbegjæringTemplate({ sakstype, fagsystemId, requiresGosysOppgave }),
+  getEttersendingTilTrygderettenTemplate({ sakstype, fagsystemId, requiresGosysOppgave }),
 ];

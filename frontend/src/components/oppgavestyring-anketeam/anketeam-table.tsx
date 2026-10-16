@@ -61,7 +61,7 @@ export const LedigeAnkerTable = () => (
     heading="Ledige"
     useQuery={useGetAnketeamLedigeOppgaverQuery}
     columns={[
-      ColumnKeyEnum.ReadOnlyType,
+      ColumnKeyEnum.TypeForLedigeAnketeamOppgaver,
       ColumnKeyEnum.AllYtelser,
       ColumnKeyEnum.AllInnsendingshjemler,
       ColumnKeyEnum.RelevantOppgaver,
