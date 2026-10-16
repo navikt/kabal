@@ -7,6 +7,7 @@ import type { Entry } from '@/components/searchable-select/virtualized-option-li
 import { useHasRole } from '@/hooks/use-has-role';
 import { useGetPotentialRolQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
 import { type INavEmployee, Role } from '@/types/bruker';
+import { FlowState } from '@/types/oppgave-common';
 import type { IOppgave } from '@/types/oppgaver';
 
 const NONE_LABEL = 'Felles kø';
@@ -31,10 +32,12 @@ export const Rol = ({ id, rol }: IOppgave) => {
   const options = useMemo((): Entry<INavEmployee | null>[] => [NONE_ENTRY, ...rols.map(toNavEmployeeEntry)], [rols]);
 
   const selectedEntry = useMemo(
-    (): Entry<INavEmployee | null> | null =>
-      rolIdent === null ? null : (options.find((e) => e.key === rolIdent) ?? null),
+    (): Entry<INavEmployee | null> =>
+      rolIdent === null ? NONE_ENTRY : (options.find((e) => e.key === rolIdent) ?? NONE_ENTRY),
     [rolIdent, options],
   );
+
+  const sentEntry = flowState === FlowState.SENT ? selectedEntry : null;
 
   const handleChange = useCallback(
     (employee: INavEmployee | null) => {
@@ -56,6 +59,7 @@ export const Rol = ({ id, rol }: IOppgave) => {
       label="Rådgivende overlege"
       options={options}
       value={selectedEntry}
+      committedValue={sentEntry}
       onChange={handleChange}
       loading={isUpdating}
       nullLabel={NONE_LABEL}
