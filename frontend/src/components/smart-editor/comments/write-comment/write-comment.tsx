@@ -8,6 +8,7 @@ import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { Keys } from '@/keys';
 import { useMyPlateEditorRef } from '@/plate/types';
 import {
+  getDeleteCommentCacheKey,
   useDeleteCommentOrThreadMutation,
   useGetCommentsQuery,
   useUpdateCommentOrReplyMutation,
@@ -26,7 +27,9 @@ export const WriteComment = ({ comment, label }: Props) => {
   const [ref, setRef] = useState<HTMLTextAreaElement | null>(null);
   const { dokumentId, setEditingComment } = useContext(SmartEditorContext);
   const [editComment] = useUpdateCommentOrReplyMutation({ fixedCacheKey: comment.id });
-  const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation();
+  const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation({
+    fixedCacheKey: getDeleteCommentCacheKey(commentId),
+  });
   const oppgaveId = useOppgaveId();
   const editor = useMyPlateEditorRef();
   const isLoneParent = useIsLoneParent(commentId);
@@ -88,6 +91,10 @@ export const WriteComment = ({ comment, label }: Props) => {
         setValue('');
 
         if (value === '') {
+          if (isDeleting) {
+            return;
+          }
+
           await deleteComment({ commentId, oppgaveId, dokumentId }).unwrap();
 
           if (isLoneParent) {
