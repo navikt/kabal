@@ -25,7 +25,6 @@ export const DeleteButton = ({ id, title, className }: DeleteButtonProps) => {
   }
 
   const onDelete = () => {
-    close();
     deleteComment({ commentId: id, dokumentId, oppgaveId: oppgave.id }).then(() => {
       if (editor === null) {
         return;
