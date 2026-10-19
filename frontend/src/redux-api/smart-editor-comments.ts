@@ -9,6 +9,10 @@ import type {
   ISmartEditorComment,
 } from '@/types/smart-editor/comments';
 
+// Shares the delete state for a comment between components, so it is only deleted once.
+// Must differ from the update mutation's key, since fixed cache keys are shared across endpoints.
+export const getDeleteCommentCacheKey = (commentId: string) => `delete-${commentId}`;
+
 export const smartEditorCommentsApi = createApi({
   reducerPath: 'smartEditorCommentsApi',
   baseQuery: KABAL_BEHANDLINGER_BASE_QUERY,

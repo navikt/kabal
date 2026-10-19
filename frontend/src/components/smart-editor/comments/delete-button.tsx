@@ -5,7 +5,7 @@ import { disconnectCommentThread } from '@/components/smart-editor/comments/conn
 import { SmartEditorContext } from '@/components/smart-editor/context';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useMyPlateEditorRef } from '@/plate/types';
-import { useDeleteCommentOrThreadMutation } from '@/redux-api/smart-editor-comments';
+import { getDeleteCommentCacheKey, useDeleteCommentOrThreadMutation } from '@/redux-api/smart-editor-comments';
 
 interface DeleteButtonProps {
   id: string;
@@ -17,7 +17,9 @@ export const DeleteButton = ({ id, title, className }: DeleteButtonProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { data: oppgave } = useOppgave();
   const { dokumentId } = useContext(SmartEditorContext);
-  const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation();
+  const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentOrThreadMutation({
+    fixedCacheKey: getDeleteCommentCacheKey(id),
+  });
   const editor = useMyPlateEditorRef();
 
   if (typeof oppgave === 'undefined') {
@@ -25,6 +27,10 @@ export const DeleteButton = ({ id, title, className }: DeleteButtonProps) => {
   }
 
   const onDelete = () => {
+    if (isDeleting) {
+      return;
+    }
+
     deleteComment({ commentId: id, dokumentId, oppgaveId: oppgave.id }).then(() => {
       if (editor === null) {
         return;
