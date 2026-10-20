@@ -5,7 +5,6 @@ import { ColumnKeyEnum } from '@/components/common-table-components/types';
 import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 import {
-  useGetAnketeamFerdigstilteOppgaverQuery,
   useGetAnketeamLedigeOppgaverQuery,
   useGetAnketeamTildelteOppgaverQuery,
   useGetAnketeamVentendeOppgaverQuery,
@@ -126,26 +125,5 @@ export const AnkerPåVentTable = () => (
     settingsKey={OppgaveTableRowsPerPage.ANKETEAM_VENTENDE}
     defaultSortering={SortFieldEnum.PAA_VENT_TO}
     defaultRekkefoelge={SortOrderEnum.ASC}
-  />
-);
-
-export const FerdigstilteAnkerTable = () => (
-  <AnketeamTable
-    heading="Fullførte"
-    useQuery={useGetAnketeamFerdigstilteOppgaverQuery}
-    columns={[
-      ColumnKeyEnum.TypeForAnkerAfter2027,
-      ColumnKeyEnum.AllYtelser,
-      ColumnKeyEnum.AllRegistreringshjemler,
-      ColumnKeyEnum.Saksnummer,
-      ColumnKeyEnum.Finished,
-      ColumnKeyEnum.Utfall,
-      ColumnKeyEnum.PreviousSaksbehandler,
-      ColumnKeyEnum.Open,
-    ]}
-    tableKey={OppgaveTableKey.ANKETEAM_FERDIGE}
-    settingsKey={OppgaveTableRowsPerPage.ANKETEAM_FERDIGE}
-    defaultSortering={SortFieldEnum.AVSLUTTET_AV_SAKSBEHANDLER}
-    defaultRekkefoelge={SortOrderEnum.DESC}
   />
 );

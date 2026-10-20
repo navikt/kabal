@@ -1,6 +1,5 @@
 import {
   AnkerPåVentTable,
-  FerdigstilteAnkerTable,
   LedigeAnkerTable,
   TildelteAnkerTable,
 } from '@/components/oppgavestyring-anketeam/anketeam-table';
@@ -11,6 +10,5 @@ export const OppgavestyringAnketeamPage = () => (
     <LedigeAnkerTable />
     <TildelteAnkerTable />
     <AnkerPåVentTable />
-    <FerdigstilteAnkerTable />
   </OppgaverPageWrapper>
 );
