@@ -1,6 +1,6 @@
 import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { CopyButton, HelpText, HStack, Label, Tooltip } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { PartStatusList } from '@/components/part-status-list/part-status-list';
 import { Address } from '@/components/receivers/address/address';
 import { getTypeNames } from '@/components/receivers/functions';
@@ -57,12 +57,12 @@ export const UnreachableSuggestedReceivers = ({ receivers }: ReceiversProps) => 
               <Address part={part} address={part.address} overriddenAddress={overriddenAddress} handling={handling} />
               {alertText === null ? null : (
                 <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
-                  <Alert variant="warning">
+                  <InfoBox variant="warning">
                     <HStack align="center" gap="space-8">
                       Parten kan ikke velges som mottaker fordi {alertText}.
                       {helpText === null ? null : <HelpText>{helpText}</HelpText>}
                     </HStack>
-                  </Alert>
+                  </InfoBox>
                 </HStack>
               )}
             </StyledReceiver>

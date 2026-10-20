@@ -1,7 +1,7 @@
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
 import { useCallback, useMemo } from 'react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { Address } from '@/components/receivers/address/address';
 import { areAddressesEqual } from '@/functions/are-addresses-equal';
 import type { IMottaker } from '@/types/documents/documents';
@@ -53,12 +53,12 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
     <>
       <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
         <ToggleGroup size="small" value={handling} onChange={onHandlingChange}>
-          <ToggleGroup.Item value={HandlingEnum.AUTO}>{UTSENDINGSKANAL[part.utsendingskanal]}</ToggleGroup.Item>
+          <ToggleGroup.Item value={HandlingEnum.AUTO} label={UTSENDINGSKANAL[part.utsendingskanal]} />
           {part.utsendingskanal !== Utsendingskanal.SENTRAL_UTSKRIFT ? (
-            <ToggleGroup.Item value={HandlingEnum.CENTRAL_PRINT}>Sentral utskrift</ToggleGroup.Item>
+            <ToggleGroup.Item value={HandlingEnum.CENTRAL_PRINT} label="Sentral utskrift" />
           ) : null}
           {part.utsendingskanal !== Utsendingskanal.LOKAL_UTSKRIFT ? (
-            <ToggleGroup.Item value={HandlingEnum.LOCAL_PRINT}>Lokal utskrift</ToggleGroup.Item>
+            <ToggleGroup.Item value={HandlingEnum.LOCAL_PRINT} label="Lokal utskrift" />
           ) : null}
         </ToggleGroup>
 
@@ -76,14 +76,14 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
       </HStack>
       <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
         {isLocalPrint ? (
-          <Alert variant="info">
+          <InfoBox variant="info">
             <BodyShort size="small">Du må skrive ut dokumentet selv og legge det til utsending.</BodyShort>
             {templateId === TemplateIdEnum.OVERSENDELSESBREV ? (
               <BodyShort size="small">
                 Husk at oversendelsesbrev på tilsvar skal sendes som rekommandert post.
               </BodyShort>
             ) : null}
-          </Alert>
+          </InfoBox>
         ) : null}
       </HStack>
       {showAddress ? (

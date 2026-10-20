@@ -1,5 +1,5 @@
 import { VStack } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import type { InvalidReceiver } from '@/components/part/edit-part';
 import { Part } from '@/components/part/part';
 import { isValidOrgnr } from '@/domain/orgnr';
@@ -40,10 +40,10 @@ export const OrgWarning = ({ identifikator, label }: { identifikator: string | n
   }
 
   return (
-    <Alert variant="info">
+    <InfoBox variant="info">
       Er {label} arbeidsgiver? Da må du låse opp teksten <i>Har du spørsmål?</i> og endre telefonnummeret til 55 55 33
       36.
-    </Alert>
+    </InfoBox>
   );
 };
 

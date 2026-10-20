@@ -47,9 +47,9 @@ export const Filters = ({
         value={activeFilter}
         onChange={(a) => setActiveFilter(isActiveValue(a) ? a : activeFilter)}
       >
-        <ToggleGroup.Item value={ActiveEnum.ALL}>Alle</ToggleGroup.Item>
-        <ToggleGroup.Item value={ActiveEnum.ACTIVE}>Aktive</ToggleGroup.Item>
-        <ToggleGroup.Item value={ActiveEnum.INACTIVE}>Inaktive</ToggleGroup.Item>
+        <ToggleGroup.Item value={ActiveEnum.ALL} label="Alle" />
+        <ToggleGroup.Item value={ActiveEnum.ACTIVE} label="Aktive" />
+        <ToggleGroup.Item value={ActiveEnum.INACTIVE} label="Inaktive" />
       </ToggleGroup>
 
       <ToggleGroup
@@ -58,9 +58,9 @@ export const Filters = ({
         value={typeFilter}
         onChange={(t) => setTypeFilter(isTypeFilter(t) ? t : typeFilter)}
       >
-        <ToggleGroup.Item value={ALL_TYPES}>Alle</ToggleGroup.Item>
-        <ToggleGroup.Item value={SaksTypeEnum.KLAGE}>Klage</ToggleGroup.Item>
-        <ToggleGroup.Item value={SaksTypeEnum.ANKE}>Anke</ToggleGroup.Item>
+        <ToggleGroup.Item value={ALL_TYPES} label="Alle" />
+        <ToggleGroup.Item value={SaksTypeEnum.KLAGE} label="Klage" />
+        <ToggleGroup.Item value={SaksTypeEnum.ANKE} label="Anke" />
       </ToggleGroup>
 
       <div className="grow">

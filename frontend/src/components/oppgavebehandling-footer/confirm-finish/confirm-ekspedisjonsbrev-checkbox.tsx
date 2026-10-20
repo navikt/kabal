@@ -1,5 +1,5 @@
 import { BodyShort, Checkbox } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 
 interface Props {
   confirmed: boolean;
@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const ConfirmEkspedisjonsbrevCheckbox = ({ confirmed, setConfirmed }: Props) => (
-  <Alert variant="warning">
+  <InfoBox variant="warning">
     <BodyShort spacing size="small">
       Du har ikke sendt ekspedisjonsbrev til Trygderetten. Er du sikker på at du vil fullføre anken?
     </BodyShort>
@@ -15,5 +15,5 @@ export const ConfirmEkspedisjonsbrevCheckbox = ({ confirmed, setConfirmed }: Pro
     <Checkbox onChange={(e) => setConfirmed(e.target.checked)} checked={confirmed} size="small">
       Jeg bekrefter at jeg har sendt ekspedisjonsbrev til Trygderetten på en annen måte.
     </Checkbox>
-  </Alert>
+  </InfoBox>
 );

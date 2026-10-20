@@ -2,13 +2,13 @@ import { Box, Loader, VStack } from '@navikt/ds-react';
 import type { FileEntry } from '@navikt/klage-file-viewer';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
-import { Alert } from '@/components/alert/alert';
 import { canOpenInKabal } from '@/components/documents/filetype';
 import { getDuaWithAttachments } from '@/components/file-viewer/get-dua-with-attachments';
 import type { IShownArchivedDocument, IShownDocument } from '@/components/file-viewer/types';
 import { useFileViewerUrl } from '@/components/file-viewer/use-file-viewer-url';
 import { useMarkVisited } from '@/components/file-viewer/use-mark-visited';
 import { KabalFileViewerPanel } from '@/components/kabal-file-viewer';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import {
   getAttachmentsOverviewFileUrl,
   getJournalfoertDocumentFileUrl,
@@ -113,7 +113,7 @@ export const FileViewer = ({ showDocumentList, isLoading, onClose }: FileViewerP
   if (files.length === 0) {
     return (
       <Container>
-        <Alert variant="error">Kunne ikke vise dokument(er)</Alert>
+        <LocalAlert status="error" title="Kunne ikke vise dokument(er)" />
       </Container>
     );
   }

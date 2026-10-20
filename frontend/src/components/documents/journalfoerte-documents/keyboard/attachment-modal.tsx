@@ -1,5 +1,5 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, type ButtonProps, Dialog, HStack, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, type ButtonProps, Dialog, HStack, InlineMessage, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import {
@@ -196,7 +196,7 @@ const Body = ({ documentsCount, allVedlegg, options, focused, attach, remove, ge
                     </span>
                   </HStack>
 
-                  <Tag size="xsmall" variant={isAttached ? 'neutral' : 'info'}>
+                  <Tag size="xsmall" data-color={isAttached ? 'neutral' : 'info'}>
                     {vedlegg.length} vedlegg
                   </Tag>
                 </HStack>
@@ -206,9 +206,9 @@ const Body = ({ documentsCount, allVedlegg, options, focused, attach, remove, ge
         })}
       </VStack>
 
-      <Alert variant="info" size="small" inline>
+      <InlineMessage status="info" size="small">
         Naviger med pil opp og ned. Velg dokument med enter.
-      </Alert>
+      </InlineMessage>
     </Dialog.Body>
   );
 };

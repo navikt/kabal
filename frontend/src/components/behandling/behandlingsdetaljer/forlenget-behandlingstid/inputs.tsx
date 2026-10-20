@@ -1,7 +1,6 @@
 import { HStack, Skeleton, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
-import { Alert } from '@/components/alert/alert';
 import { SetBehandlingstid } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-behandlingstid';
 import { SetBehandlingstidDate } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-behandlingstid-date';
 import { SetCustomText } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-custom-text';
@@ -10,6 +9,7 @@ import { SetPreviousBehandlingstidInfo } from '@/components/behandling/behandlin
 import { SetReason } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-reason';
 import { SetReceivers } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-receivers';
 import { SetTitle } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/set-title';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useGetOrCreateQuery } from '@/redux-api/forlenget-behandlingstid';
 
@@ -57,7 +57,7 @@ export const Inputs = ({ behandlingstidError, setBehandlingstidError }: Props) =
   }
 
   if (isError || !isSuccess || !oppgaveIsSuccess) {
-    return <Alert variant="error">Kunne ikke hente data for forlenget saksbehandlingstid</Alert>;
+    return <LocalAlert status="error" title="Kunne ikke hente data for forlenget saksbehandlingstid" />;
   }
 
   const { id, prosessfullmektig } = oppgave;

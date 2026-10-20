@@ -30,14 +30,14 @@ interface CustomTagProps {
 }
 
 export const CustomTag = ({ children, variant }: CustomTagProps) => (
-  <Tag variant={TAG_VARIANT[variant]} size="small" title={children}>
+  <Tag data-color={TAG_COLOR[variant]} size="small" title={children}>
     {children}
   </Tag>
 );
 
-const TAG_VARIANT: Record<keyof IGetMaltekstseksjonParams, TagProps['variant']> = {
-  templateSectionIdList: 'error',
+const TAG_COLOR: Record<keyof IGetMaltekstseksjonParams, TagProps['data-color']> = {
+  templateSectionIdList: 'danger',
   ytelseHjemmelIdList: 'info',
-  utfallIdList: 'alt1',
-  enhetIdList: 'alt2',
+  utfallIdList: 'meta-purple',
+  enhetIdList: 'meta-lime',
 };

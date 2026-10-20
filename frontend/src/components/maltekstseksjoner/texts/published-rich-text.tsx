@@ -1,8 +1,8 @@
 import { PadlockLockedIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { BodyShort, Heading, HStack, Label, VStack } from '@navikt/ds-react';
 import { useRef } from 'react';
-import { Alert } from '@/components/alert/alert';
 import { getTitle } from '@/components/editable-title/editable-title';
+import { InfoBox } from '@/components/info-box/info-box';
 import { AllMaltekstseksjonReferences } from '@/components/malteksteksjon-references/maltekstseksjon-references';
 import { RedaktoerRichText } from '@/components/redaktoer-rich-text/redaktoer-rich-text';
 import { CreateDraftTextButton } from '@/components/smart-editor-texts/create-draft-button';
@@ -84,7 +84,7 @@ export const PublishedRichText = ({ text, maltekstseksjonId, hasDraft, setTabId 
       </VStack>
 
       {savedContent === null ? (
-        <Alert variant="info">Tekst for {LANGUAGE_NAMES[lang].toLowerCase()} mangler</Alert>
+        <InfoBox variant="info">Tekst for {LANGUAGE_NAMES[lang].toLowerCase()} mangler</InfoBox>
       ) : (
         <RedaktoerRichText
           ref={editorRef}

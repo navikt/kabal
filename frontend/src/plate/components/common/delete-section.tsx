@@ -1,9 +1,8 @@
 import { CheckmarkIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Tooltip } from '@navikt/ds-react';
+import { Button, HStack, Popover, Portal, Tooltip, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import type { Path } from 'slate';
-import { Alert } from '@/components/alert/alert';
-import { useOnClickOutside } from '@/hooks/use-on-click-outside';
+import { InfoBox } from '@/components/info-box/info-box';
 import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
 import { useMyPlateEditorRef } from '@/plate/types';
 
@@ -26,7 +25,6 @@ interface Props {
   errorTooltip: string;
   defaultTooltip: string;
   isChangedWarning: string;
-  side?: Side;
 }
 
 export const DeleteSection = ({
@@ -36,7 +34,6 @@ export const DeleteSection = ({
   errorTooltip,
   defaultTooltip,
   isChangedWarning,
-  side,
 }: Props) => {
   const editor = useMyPlateEditorRef();
 
@@ -55,7 +52,7 @@ export const DeleteSection = ({
   const onDelete = () => editor.tf.removeNodes({ at: path });
 
   if (isChanged) {
-    return <IsChanged onConfirm={onDelete} isChangedWarning={isChangedWarning} side={side} />;
+    return <IsChanged onConfirm={onDelete} isChangedWarning={isChangedWarning} />;
   }
 
   return (
@@ -68,59 +65,59 @@ export const DeleteSection = ({
   );
 };
 
-type Side = 'left' | 'right';
-
 interface IsChangedProps {
   onConfirm: () => void;
   isChangedWarning: string;
-  side?: Side;
 }
 
-const IsChanged = ({ onConfirm, isChangedWarning, side = 'left' }: IsChangedProps) => {
-  const [showConfirm, setShowConfirm] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  useOnClickOutside(ref, () => setShowConfirm(false));
-
-  const isLeft = side === 'left';
+const IsChanged = ({ onConfirm, isChangedWarning }: IsChangedProps) => {
+  const [open, setOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <HStack position="relative" gap="space-4" ref={ref} contentEditable={false}>
+    <>
       <Button
+        ref={buttonRef}
         data-color="neutral"
         icon={<TrashIcon aria-hidden />}
         variant="tertiary"
         size="xsmall"
-        onClick={() => setShowConfirm(!showConfirm)}
+        contentEditable={false}
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
       />
-      {showConfirm ? (
-        <Alert
-          variant="warning"
-          className={`absolute top-0 text-ax-text-neutral ${isLeft ? 'left-full' : 'right-full'}`}
-        >
-          {isChangedWarning}
-          <HStack gap="space-4" wrap={false}>
-            <Button
-              data-color="neutral"
-              icon={<CheckmarkIcon aria-hidden />}
-              onClick={onConfirm}
-              variant="tertiary"
-              size="xsmall"
-            >
-              Ja
-            </Button>
-            <Button
-              data-color="neutral"
-              icon={<XMarkIcon aria-hidden />}
-              onClick={() => setShowConfirm(false)}
-              variant="tertiary"
-              size="xsmall"
-              style={{ whiteSpace: 'nowrap' }}
-            >
-              Nei, avbryt
-            </Button>
-          </HStack>
-        </Alert>
-      ) : null}
-    </HStack>
+      <Portal>
+        <Popover open={open} onClose={() => setOpen(false)} anchorEl={buttonRef.current}>
+          <Popover.Content>
+            <VStack gap="space-8">
+              <InfoBox variant="warning">
+                {isChangedWarning}
+                <HStack gap="space-4" wrap={false}>
+                  <Button
+                    data-color="neutral"
+                    icon={<CheckmarkIcon aria-hidden />}
+                    onClick={onConfirm}
+                    variant="tertiary"
+                    size="xsmall"
+                  >
+                    Ja
+                  </Button>
+                  <Button
+                    data-color="neutral"
+                    icon={<XMarkIcon aria-hidden />}
+                    onClick={() => setOpen(false)}
+                    variant="tertiary"
+                    size="xsmall"
+                    className="whitespace-nowrap"
+                  >
+                    Nei, avbryt
+                  </Button>
+                </HStack>
+              </InfoBox>
+            </VStack>
+          </Popover.Content>
+        </Popover>
+      </Portal>
+    </>
   );
 };

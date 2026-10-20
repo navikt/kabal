@@ -27,9 +27,9 @@ export const SetStatusFilter = ({
         }
       }}
     >
-      <ToggleGroup.Item value={StatusFilter.ALL}>Alle</ToggleGroup.Item>
-      <ToggleGroup.Item value={StatusFilter.HANDLED}>Håndterte</ToggleGroup.Item>
-      <ToggleGroup.Item value={StatusFilter.UNHANDLED}>Uhåndterte</ToggleGroup.Item>
+      <ToggleGroup.Item value={StatusFilter.ALL} label="Alle" />
+      <ToggleGroup.Item value={StatusFilter.HANDLED} label="Håndterte" />
+      <ToggleGroup.Item value={StatusFilter.UNHANDLED} label="Uhåndterte" />
     </ToggleGroup>
   );
 };

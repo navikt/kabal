@@ -1,7 +1,7 @@
 import { Tag } from '@navikt/ds-react';
 import { useMemo } from 'react';
 import type { IOption } from '@/components/filter-dropdown/props';
-import { SAKSTYPE_TO_TAG_VARIANT } from '@/components/type/sakstype-to-tag-variant';
+import { SAKSTYPE_TO_TAG_PROPS } from '@/components/type/sakstype-to-tag-props';
 import { useSakstyperToUtfall } from '@/simple-api-state/use-kodeverk';
 import type { UtfallEnum } from '@/types/kodeverk';
 
@@ -30,14 +30,26 @@ export const useUtfallOptions = (): IOption<UtfallEnum>[] => {
             value: u.id,
             label: u.navn,
             tags: [
-              <Tag size="xsmall" variant={SAKSTYPE_TO_TAG_VARIANT[id]} key={id} className="whitespace-nowrap">
+              <Tag
+                size="xsmall"
+                data-color={SAKSTYPE_TO_TAG_PROPS[id]}
+                variant="strong"
+                key={id}
+                className="whitespace-nowrap"
+              >
                 {navn}
               </Tag>,
             ],
           });
         } else {
           const tag = (
-            <Tag size="xsmall" variant={SAKSTYPE_TO_TAG_VARIANT[id]} key={id} className="whitespace-nowrap">
+            <Tag
+              size="xsmall"
+              data-color={SAKSTYPE_TO_TAG_PROPS[id]}
+              variant="strong"
+              key={id}
+              className="whitespace-nowrap"
+            >
               {navn}
             </Tag>
           );

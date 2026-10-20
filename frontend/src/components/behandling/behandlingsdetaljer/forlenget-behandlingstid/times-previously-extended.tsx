@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useGetOrCreateQuery } from '@/redux-api/forlenget-behandlingstid';
 
@@ -13,15 +13,15 @@ export const TimesPreviouslyExtended = () => {
 
   if (data.timesPreviouslyExtended === 1) {
     return (
-      <Alert variant="warning">
+      <InfoBox variant="warning">
         Varslet frist i Kabal har blitt endret <b>1</b> gang.
-      </Alert>
+      </InfoBox>
     );
   }
 
   return (
-    <Alert variant="warning">
+    <InfoBox variant="warning">
       Varslet frist i Kabal har blitt endret <b>{data.timesPreviouslyExtended}</b> ganger.
-    </Alert>
+    </InfoBox>
   );
 };

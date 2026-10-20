@@ -1,6 +1,6 @@
 import { Box, Button, CopyButton, Heading, HStack, VStack } from '@navikt/ds-react';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { Alert } from '@/components/alert/alert';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import { VERSION_CHECKER } from '@/components/version-checker/version-checker';
 import { ENVIRONMENT } from '@/environment';
 import { pushError } from '@/observability';
@@ -58,15 +58,14 @@ export class AppErrorBoundary extends Component<Props, State> {
             Ooops, noe gikk galt :(
           </Heading>
           {isUpToDate ? null : (
-            <Alert variant="warning" className="mb-4">
-              <b>Kabal er utdatert.</b>
+            <LocalAlert status="warning" title="Kabal er utdatert." className="mb-4">
               <div>
                 Din versjon: <Code>{ENVIRONMENT.version}</Code>
               </div>
               <div>
                 Siste versjon: <Code>{lastestVersion}</Code>
               </div>
-            </Alert>
+            </LocalAlert>
           )}
           <Heading level="2" size="medium" spacing>
             Feilmelding
@@ -78,7 +77,7 @@ export class AppErrorBoundary extends Component<Props, State> {
               <Button data-color="neutral" onClick={() => window.location.reload()} variant="secondary">
                 Last Kabal på nytt
               </Button>
-              <CopyButton copyText={copyText} text="Kopier feilmeldingen" variant="action" />
+              <CopyButton copyText={copyText} text="Kopier feilmeldingen" data-color="accent" />
             </HStack>
           </VStack>
         </Box>

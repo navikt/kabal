@@ -14,7 +14,7 @@ export const Sikkerhetstiltak = ({ sikkerhetstiltak, size }: Props) => {
 
   return (
     <Tooltip content={sikkerhetstiltak.beskrivelse}>
-      <Tag variant="warning" size={size} className="flex max-w-75 items-center gap-1 truncate">
+      <Tag data-color="warning" size={size} className="flex max-w-75 items-center gap-1 truncate">
         <ExclamationmarkTriangleFillIcon aria-hidden className="shrink-0" />
         <span className="truncate">{sikkerhetstiltak.beskrivelse}</span>
       </Tag>

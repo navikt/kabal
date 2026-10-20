@@ -4,10 +4,11 @@ import { ROLE_NAMES, type Role } from '@/types/bruker';
 
 interface Props {
   role: Role;
+  dataColor: TagProps['data-color'];
   variant: TagProps['variant'];
 }
 
-export const RoleItem = ({ role, variant }: Props) => {
+export const RoleItem = ({ role, dataColor, variant }: Props) => {
   const formattedRole = ROLE_NAMES[role] ?? role;
 
   return (
@@ -20,7 +21,7 @@ export const RoleItem = ({ role, variant }: Props) => {
         align="center"
         className="cursor-pointer"
       >
-        <Tag variant={variant} size="small">
+        <Tag data-color={dataColor} variant={variant} size="small">
           {formattedRole} <FilesIcon aria-hidden />
         </Tag>
       </HStack>

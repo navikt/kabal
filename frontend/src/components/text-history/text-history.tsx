@@ -63,7 +63,7 @@ export const TextHistory = ({
           <Box as="ul" background="raised" shadow="dialog" borderRadius="4" padding="space-8" margin="space-0">
             {publishedDateTime !== null ? (
               <HStack as="li" align="center" wrap={false} className="whitespace-nowrap" gap="space-4">
-                <StyledTag variant="info" size="xsmall">
+                <StyledTag data-color="info" size="xsmall">
                   <UploadIcon aria-hidden />
                   Publisert
                 </StyledTag>
@@ -75,7 +75,7 @@ export const TextHistory = ({
             ) : null}
             {edits.map((edit) => (
               <HStack as="li" align="center" key={edit.actor.navIdent} wrap={false} style={{ whiteSpace: 'pre' }}>
-                <StyledTag variant="warning" size="xsmall">
+                <StyledTag data-color="warning" size="xsmall">
                   <PencilWritingIcon aria-hidden />
                   Endret
                 </StyledTag>
@@ -86,7 +86,7 @@ export const TextHistory = ({
               </HStack>
             ))}
             <HStack as="li" align="center" wrap={false} style={{ whiteSpace: 'pre' }}>
-              <StyledTag variant="alt1" size="xsmall">
+              <StyledTag data-color="meta-purple" size="xsmall">
                 <CalendarIcon aria-hidden />
                 Opprettet
               </StyledTag>

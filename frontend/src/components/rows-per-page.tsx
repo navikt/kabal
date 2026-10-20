@@ -29,9 +29,7 @@ export const RowsPerPage = ({ settingKey, pageSize }: Props) => {
         aria-labelledby={id}
       >
         {PAGE_SIZE_OPTIONS.map((option) => (
-          <ToggleGroup.Item key={option} value={option} data-value={option}>
-            {option}
-          </ToggleGroup.Item>
+          <ToggleGroup.Item key={option} value={option} data-value={option} label={option} />
         ))}
       </ToggleGroup>
     </HStack>

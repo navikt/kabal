@@ -276,8 +276,8 @@ export const FullmektigLookup = ({
       >
         <Popover.Content className="flex min-w-80 flex-col gap-2">
           <ToggleGroup size="small" onChange={handleModeChange} value={mode}>
-            <ToggleGroup.Item value={Mode.ID}>ID-nummer</ToggleGroup.Item>
-            <ToggleGroup.Item value={Mode.MANUAL}>Navn og adresse</ToggleGroup.Item>
+            <ToggleGroup.Item value={Mode.ID} label="ID-nummer" />
+            <ToggleGroup.Item value={Mode.MANUAL} label="Navn og adresse" />
           </ToggleGroup>
 
           {mode === Mode.ID ? (

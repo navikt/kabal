@@ -1,5 +1,5 @@
 import { ErrorMessage, Heading, HStack, Loader, Tag, type TagProps } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { RedaktoerRichText } from '@/components/redaktoer-rich-text/redaktoer-rich-text';
 import { isRichText } from '@/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
@@ -29,7 +29,7 @@ export const TextPreview = ({ textId, className }: Props) => {
     );
   }
 
-  const [name, tagVariant] = getRichTextTypeTagVariantAndName(text.textType);
+  const [name, tagColor] = getRichTextTypeNameAndTagColor(text.textType);
 
   const savedContent = text.richText[language];
 
@@ -39,13 +39,13 @@ export const TextPreview = ({ textId, className }: Props) => {
         <Heading level="1" size="small">
           {text.title}
         </Heading>
-        <Tag size="xsmall" variant={tagVariant}>
+        <Tag size="xsmall" data-color={tagColor}>
           {name}
         </Tag>
       </HStack>
 
       {savedContent === null ? (
-        <Alert variant="info">Tekst for {LANGUAGE_NAMES[language].toLowerCase()} mangler</Alert>
+        <InfoBox variant="info">Tekst for {LANGUAGE_NAMES[language].toLowerCase()} mangler</InfoBox>
       ) : (
         <RedaktoerRichText
           editorId={textId}
@@ -58,12 +58,12 @@ export const TextPreview = ({ textId, className }: Props) => {
   );
 };
 
-const getRichTextTypeTagVariantAndName = (
+const getRichTextTypeNameAndTagColor = (
   textType: RichTextTypes | typeof REGELVERK_TYPE | typeof GOD_FORMULERING_TYPE | typeof MALTEKSTSEKSJON_TYPE,
-): [string, TagProps['variant']] => {
+): [string, TagProps['data-color']] => {
   switch (textType) {
     case RichTextTypes.MALTEKST:
-      return ['Maltekst', 'alt1'];
+      return ['Maltekst', 'meta-purple'];
     case RichTextTypes.REDIGERBAR_MALTEKST:
       return ['Redigerbar maltekst', 'warning'];
     case GOD_FORMULERING_TYPE:

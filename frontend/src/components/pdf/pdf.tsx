@@ -1,7 +1,8 @@
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Heading, Loader, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppTheme, useAppTheme } from '@/app-theme';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import { toast } from '@/components/toast/store';
 import { Section } from '@/components/toast/toast-content/api-error-toast';
 import { ENVIRONMENT } from '@/environment';
@@ -34,9 +35,8 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
   if (error !== undefined) {
     return (
       <div className="grow p-5">
-        <Alert variant="error" size="small">
-          <HStack gap="space-16" align="center">
-            <Heading size="small">Feil ved lasting av PDF</Heading>
+        <LocalAlert status="error" title="Feil ved lasting av PDF">
+          <VStack gap="space-16" align="start">
             <BodyShort>
               Hvis dette er et brev som er skrevet i Kabal kan det hende det hjelper å:{' '}
               <Button size="small" variant="primary" onClick={fixPdf} loading={isLoading}>
@@ -54,8 +54,8 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
               Last PDF på nytt
             </Button>
             <code className="border-2 border-ax-border-neutral bg-ax-bg-neutral-moderate p-2 text-xs">{error}</code>
-          </HStack>
-        </Alert>
+          </VStack>
+        </LocalAlert>
       </div>
     );
   }

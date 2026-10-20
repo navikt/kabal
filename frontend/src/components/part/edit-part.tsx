@@ -2,7 +2,8 @@ import { Search, Tag, VStack } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import { Lookup } from '@/components/part/lookup';
 import { cleanAndValidate } from '@/components/part/validate';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
@@ -126,7 +127,7 @@ export const EditPart = ({
         />
       </Search>
 
-      {warningReceiver !== null ? <Alert variant="info">{warningReceiver.message}</Alert> : null}
+      {warningReceiver !== null ? <InfoBox variant="info">{warningReceiver.message}</InfoBox> : null}
 
       {invalidReceiver === null ? (
         <Result
@@ -142,7 +143,7 @@ export const EditPart = ({
           {...props}
         />
       ) : (
-        <Alert variant="warning">{invalidReceiver.message}</Alert>
+        <InfoBox variant="warning">{invalidReceiver.message}</InfoBox>
       )}
     </VStack>
   );
@@ -163,7 +164,7 @@ interface ResultProps {
 
 const Result = ({ part, search, isError, error, ...props }: ResultProps) => {
   if (isApiDataError(error)) {
-    return <Alert variant="warning">{error.data.title}</Alert>;
+    return <LocalAlert status="warning" title={error.data.title} />;
   }
 
   if (isError) {

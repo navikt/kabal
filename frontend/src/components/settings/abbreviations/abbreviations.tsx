@@ -1,5 +1,5 @@
 import { Heading, type HeadingProps, HelpText, Loader } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { AddAbbreviation } from '@/components/settings/abbreviations/add';
 import { ExistingAbbreviation } from '@/components/settings/abbreviations/existing';
 import { AbbreviationsExplanation } from '@/components/settings/abbreviations/explanation';
@@ -65,7 +65,7 @@ export const AbbreviationsContent = ({ headingSize = 'small' }: ContentProps) =>
             ))}
           </ul>
         ) : (
-          <Alert variant="info">Du har ingen forkortelser ennå.</Alert>
+          <InfoBox variant="info">Du har ingen forkortelser ennå.</InfoBox>
         )}
       </section>
     </>

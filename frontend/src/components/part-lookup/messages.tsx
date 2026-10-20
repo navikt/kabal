@@ -1,5 +1,5 @@
 import { Loader } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 
 interface MessagesProps {
   warningReceiverMessage: string | null;
@@ -10,9 +10,9 @@ interface MessagesProps {
 
 export const Messages = ({ warningReceiverMessage, invalidReceiverMessage, isSearching, isError }: MessagesProps) => (
   <>
-    {warningReceiverMessage !== null ? <Alert variant="info">{warningReceiverMessage}</Alert> : null}
+    {warningReceiverMessage !== null ? <InfoBox variant="info">{warningReceiverMessage}</InfoBox> : null}
 
-    {invalidReceiverMessage !== null ? <Alert variant="warning">{invalidReceiverMessage}</Alert> : null}
+    {invalidReceiverMessage !== null ? <InfoBox variant="warning">{invalidReceiverMessage}</InfoBox> : null}
 
     {isSearching ? (
       <div className="flex items-center justify-center py-4">
@@ -20,6 +20,6 @@ export const Messages = ({ warningReceiverMessage, invalidReceiverMessage, isSea
       </div>
     ) : null}
 
-    {isError ? <Alert variant="warning">Ingen treff</Alert> : null}
+    {isError ? <InfoBox variant="warning">Ingen treff</InfoBox> : null}
   </>
 );

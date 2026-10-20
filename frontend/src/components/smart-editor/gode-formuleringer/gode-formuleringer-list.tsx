@@ -1,6 +1,6 @@
 import { Box } from '@navikt/ds-react';
 import { useEffect } from 'react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { GodFormulering } from '@/components/smart-editor/gode-formuleringer/god-formulering';
 import { GodeFormuleringerExpandState, useSmartEditorGodeFormuleringerExpandstate } from '@/hooks/settings/use-setting';
 import type { NonNullableGodFormulering } from '@/types/texts/consumer';
@@ -65,7 +65,7 @@ export const GodeFormuleringerList = ({
   };
 
   return texts.length === 0 ? (
-    <Alert variant="info">Ingen gode formuleringer funnet.</Alert>
+    <InfoBox variant="info">Ingen gode formuleringer funnet.</InfoBox>
   ) : (
     texts.map((t, i) => (
       <GodFormulering

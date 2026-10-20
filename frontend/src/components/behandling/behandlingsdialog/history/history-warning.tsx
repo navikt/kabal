@@ -1,4 +1,4 @@
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { isoDateTimeToPretty } from '@/domain/date';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 
@@ -13,9 +13,9 @@ export const MissingHistoryWarning = () => {
 
   return (
     <li>
-      <Alert variant="warning">
+      <InfoBox variant="warning">
         Det finnes ingen historikk før <Time dateTime={START_DATE} />.
-      </Alert>
+      </InfoBox>
     </li>
   );
 };

@@ -29,7 +29,7 @@ export const ReadAddress = ({ part, address, overriddenAddress, onEdit }: Props)
 
         {noAddress ? null : (
           <Tooltip content="Kopier navn og adresse">
-            <CopyButton size="xsmall" variant="neutral" copyText={copyAddress} title="Kopier navn og adresse" />
+            <CopyButton size="xsmall" data-color="neutral" copyText={copyAddress} title="Kopier navn og adresse" />
           </Tooltip>
         )}
 

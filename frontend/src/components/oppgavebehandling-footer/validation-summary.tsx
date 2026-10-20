@@ -1,5 +1,5 @@
 import { Heading, VStack } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { type IValidationError, type IValidationSection, SECTION_TITLES } from '@/functions/error-type-guard';
 import { useFieldName } from '@/hooks/use-field-name';
 
@@ -17,7 +17,7 @@ export const ValidationSummary = ({ sections }: Props) => {
   ));
 
   return (
-    <Alert variant="warning">
+    <InfoBox variant="warning">
       <Heading level="1" size="xsmall" spacing className="pr-8">
         Kan ikke fullføre behandlingen
       </Heading>
@@ -25,7 +25,7 @@ export const ValidationSummary = ({ sections }: Props) => {
       <VStack as="article" gap="space-16">
         {errorMessages}
       </VStack>
-    </Alert>
+    </InfoBox>
   );
 };
 
