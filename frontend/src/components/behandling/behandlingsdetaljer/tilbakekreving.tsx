@@ -1,5 +1,5 @@
 import { BodyShort, Checkbox, CheckboxGroup, Heading, HelpText, HStack } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useSetTilbakekrevingMutation } from '@/redux-api/oppgaver/mutations/set-tilbakekreving';
@@ -85,8 +85,8 @@ export const Tilbakekreving = () => {
 };
 
 const Warning = () => (
-  <Alert variant="warning">
+  <InfoBox variant="warning">
     Saken inneholder hjemler som er knyttet til tilbakekreving, men tilbakekreving er ikke huket av for. Er du sikker på
     at dette er riktig?
-  </Alert>
+  </InfoBox>
 );

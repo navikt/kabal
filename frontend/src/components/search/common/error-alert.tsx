@@ -1,8 +1,8 @@
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading } from '@navikt/ds-react';
+import { BodyShort, Button } from '@navikt/ds-react';
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
-import { Alert } from '@/components/alert/alert';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import { getErrorData } from '@/functions/get-error-data';
 
 interface ErrorAlertProps {
@@ -16,14 +16,15 @@ export const ErrorAlert = ({ error, refetch, isFetching, children }: ErrorAlertP
   const errorData = getErrorData(error);
 
   return (
-    <Alert variant="warning">
-      <Heading size="xsmall">
-        {children}: <br />
-        <i>{errorData.title}</i> {errorData.status !== undefined ? `(${errorData.status})` : null}
-      </Heading>
-
+    <LocalAlert
+      status="error"
+      title={
+        <>
+          {children}: {errorData.title} {errorData.status !== undefined ? `(${errorData.status})` : null}
+        </>
+      }
+    >
       {errorData.detail !== undefined ? <BodyShort>{errorData.detail}</BodyShort> : null}
-
       <Button
         icon={<MagnifyingGlassIcon aria-hidden />}
         onClick={refetch}
@@ -33,6 +34,6 @@ export const ErrorAlert = ({ error, refetch, isFetching, children }: ErrorAlertP
       >
         Søk på nytt
       </Button>
-    </Alert>
+    </LocalAlert>
   );
 };

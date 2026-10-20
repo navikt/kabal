@@ -1,3 +1,5 @@
+import { Provider as AkselProvider } from '@navikt/ds-react';
+import { nb } from '@navikt/ds-react/locales';
 import { StrictMode, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -26,15 +28,17 @@ export const App = () => {
 
   return (
     <StrictMode>
-      <AppErrorBoundary>
-        <Provider store={reduxStore}>
-          <StaticDataLoader>
-            <BrowserRouter>
-              <Router />
-            </BrowserRouter>
-          </StaticDataLoader>
-        </Provider>
-      </AppErrorBoundary>
+      <AkselProvider locale={nb}>
+        <AppErrorBoundary>
+          <Provider store={reduxStore}>
+            <StaticDataLoader>
+              <BrowserRouter>
+                <Router />
+              </BrowserRouter>
+            </StaticDataLoader>
+          </Provider>
+        </AppErrorBoundary>
+      </AkselProvider>
     </StrictMode>
   );
 };

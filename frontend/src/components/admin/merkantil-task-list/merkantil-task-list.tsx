@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { Finish } from '@/components/admin/merkantil-task-list/finish';
 import { SetStatusFilter, StatusFilter } from '@/components/admin/merkantil-task-list/set-status-filter';
-import { Alert } from '@/components/alert/alert';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import { Type } from '@/components/type/type';
 import { isoDateTimeToPretty } from '@/domain/date';
 import { ENVIRONMENT } from '@/environment';
@@ -54,14 +54,11 @@ const TaskList = () => {
     return (
       <VStack gap="space-16">
         <HStack gap="space-16">
-          <Alert variant="error">
-            <Heading level="2" size="small" spacing>
-              Noe gikk galt
-            </Heading>
+          <LocalAlert status="error" title="Noe gikk galt">
             <code className="block whitespace-pre-wrap rounded-lg bg-ax-bg-neutral-moderate p-4">
               {JSON.stringify(error, null, 2)}
             </code>
-          </Alert>
+          </LocalAlert>
         </HStack>
       </VStack>
     );
@@ -95,7 +92,7 @@ const TaskList = () => {
     <VStack gap="space-16">
       <HStack gap="space-16">
         <SetStatusFilter filter={filter} setFilter={setFilter} />
-        <CopyButton size="small" copyText={tasks.map(toCopyLine).join('\n')} text="Kopier alle" variant="action" />
+        <CopyButton size="small" copyText={tasks.map(toCopyLine).join('\n')} text="Kopier alle" data-color="accent" />
         <CopyButton
           size="small"
           copyText={tasks
@@ -103,7 +100,7 @@ const TaskList = () => {
             .map(toCopyLine)
             .join('\n')}
           text="Kopier alle uhåndterte"
-          variant="action"
+          data-color="accent"
         />
       </HStack>
       <Table zebraStripes size="small">

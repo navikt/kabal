@@ -14,7 +14,7 @@ export const ProtectedFamilyMemberStatuses = ({ protectedFamilyMembers, size }: 
   return (
     <HStack gap="space-4" wrap>
       {statuses.map((status) => (
-        <Tag key={status} variant={STATUS_VARIANT[status]} size={size}>
+        <Tag key={status} data-color={STATUS_COLOR[status]} size={size}>
           {STATUS_NAMES[status]} (familieforhold)
         </Tag>
       ))}
@@ -38,8 +38,8 @@ const STATUS_NAMES: Record<IFamilyMemberStatus['status'], string> = {
   [PartStatusEnum.STRENGT_FORTROLIG]: 'Strengt fortrolig',
 };
 
-const STATUS_VARIANT: Record<IFamilyMemberStatus['status'], TagProps['variant']> = {
+const STATUS_COLOR: Record<IFamilyMemberStatus['status'], TagProps['data-color']> = {
   [PartStatusEnum.EGEN_ANSATT]: 'warning',
   [PartStatusEnum.FORTROLIG]: 'info',
-  [PartStatusEnum.STRENGT_FORTROLIG]: 'alt1',
+  [PartStatusEnum.STRENGT_FORTROLIG]: 'meta-purple',
 };

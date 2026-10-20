@@ -1,5 +1,5 @@
 import { isAfter, isValid } from 'date-fns';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 
 interface Props {
   date: Date | undefined;
@@ -22,8 +22,8 @@ export const Warning = ({ date, threshhold, className }: Props) => {
   }
 
   return (
-    <Alert className={className} variant="warning">
+    <InfoBox className={className} variant="warning">
       Du har satt en dato som ligger langt tilbake i tid. Er du sikker på at du har fylt ut riktig dato?
-    </Alert>
+    </InfoBox>
   );
 };

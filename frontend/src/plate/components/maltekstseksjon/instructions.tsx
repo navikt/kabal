@@ -1,6 +1,7 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
 import { useEffect } from 'react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import { MALTEKST_SECTION_NAMES } from '@/components/smart-editor/constants';
 import { useSmartEditorActiveDocument } from '@/hooks/settings/use-setting';
 import { pushError } from '@/observability';
@@ -30,10 +31,10 @@ export const Instructions = ({ oppgave, section, tiedList, templateId }: Props) 
 
   if (text !== null) {
     return (
-      <Alert variant="info" contentEditable={false} className="my-4">
+      <InfoBox variant="info" contentEditable={false} className="my-4">
         {heading}
         {text}
-      </Alert>
+      </InfoBox>
     );
   }
 
@@ -42,10 +43,9 @@ export const Instructions = ({ oppgave, section, tiedList, templateId }: Props) 
   }
 
   return (
-    <Alert variant="warning" contentEditable={false} className="my-4">
-      {heading}
+    <LocalAlert status="warning" title={MALTEKST_SECTION_NAMES[section]} contentEditable={false} className="my-4">
       <TieText {...oppgave.resultat} section={section} templateId={templateId} tiedList={tiedList} />
-    </Alert>
+    </LocalAlert>
   );
 };
 

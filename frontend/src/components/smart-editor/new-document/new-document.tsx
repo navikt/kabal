@@ -1,7 +1,7 @@
 import { Box, Heading, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
 import { type Ref, useContext, useMemo, useState } from 'react';
-import { Alert } from '@/components/alert/alert';
 import { StaticDataContext } from '@/components/app/static-data-context';
+import { InfoBox } from '@/components/info-box/info-box';
 import { GeneratedIcon } from '@/components/smart-editor/new-document/generated-icon';
 import { getTitle } from '@/components/smart-editor/new-document/get-title';
 import { DuaActionEnum } from '@/hooks/dua-access/access';
@@ -88,9 +88,9 @@ export const NewDocument = ({ onCreate, ref }: Props) => {
           />
         ))}
         {templates.length === 0 ? (
-          <Alert variant="info" className="grow">
+          <InfoBox variant="info" className="grow">
             Ingen maler tilgjengelig.
-          </Alert>
+          </InfoBox>
         ) : null}
       </HStack>
     </Box>

@@ -45,8 +45,8 @@ export const Capitalise = () => {
           setValue(enabled);
         }}
       >
-        <ToggleGroup.Item value="true">På</ToggleGroup.Item>
-        <ToggleGroup.Item value="false">Av</ToggleGroup.Item>
+        <ToggleGroup.Item value="true" label="På" />
+        <ToggleGroup.Item value="false" label="Av" />
       </ToggleGroup>
     </section>
   );

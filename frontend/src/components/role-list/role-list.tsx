@@ -6,10 +6,11 @@ interface Props {
   roles: Role[];
   title: string;
   description?: string;
+  dataColor: TagProps['data-color'];
   variant: TagProps['variant'];
 }
 
-export const RoleList = ({ roles, variant, title, description }: Props) => {
+export const RoleList = ({ roles, dataColor, variant, title, description }: Props) => {
   if (roles.length === 0) {
     return (
       <section className="my-3">
@@ -38,7 +39,7 @@ export const RoleList = ({ roles, variant, title, description }: Props) => {
         <List size="small" className="w-fit">
           {roles.map((r) => (
             <List.Item key={r} className="w-fit">
-              <RoleItem role={r} variant={variant} />
+              <RoleItem role={r} dataColor={dataColor} variant={variant} />
             </List.Item>
           ))}
         </List>

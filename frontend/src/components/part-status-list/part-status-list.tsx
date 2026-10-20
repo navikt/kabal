@@ -5,14 +5,9 @@ import { type IOrganizationStatus, type IPart, type IPersonStatus, PartStatusEnu
 
 interface Props extends Pick<IPart, 'statusList'> {
   size?: TagProps['size'];
-  /**
-   * @default undefined
-   * The variant of the tag. If undefined, the variant will be automatically set.
-   */
-  variant?: TagProps['variant'];
 }
 
-export const PartStatusList = ({ statusList, size, variant }: Props) => {
+export const PartStatusList = ({ statusList, size }: Props) => {
   if (statusList === null || statusList.length === 0) {
     return null;
   }
@@ -20,7 +15,7 @@ export const PartStatusList = ({ statusList, size, variant }: Props) => {
   return (
     <HStack gap="space-4" wrap>
       {statusList.map((status) => (
-        <PartStatus status={status} size={size} variant={variant} key={status.status} />
+        <PartStatus status={status} size={size} key={status.status} />
       ))}
     </HStack>
   );
@@ -29,20 +24,21 @@ export const PartStatusList = ({ statusList, size, variant }: Props) => {
 interface IStatusProps {
   status: IPersonStatus | IOrganizationStatus;
   size?: TagProps['size'];
-  variant?: TagProps['variant'];
 }
 
-const PartStatus = ({ status, size, variant = STATUS_VARIANT[status.status] }: IStatusProps) => {
+const PartStatus = ({ status, size }: IStatusProps) => {
+  const color = STATUS_COLOR[status.status];
+
   if (status.date === null) {
     return (
-      <Tag variant={variant} size={size}>
+      <Tag data-color={color} size={size}>
         {STATUS_NAMES[status.status]}
       </Tag>
     );
   }
 
   return (
-    <Tag variant={variant} size={size}>
+    <Tag data-color={color} size={size}>
       {STATUS_NAMES[status.status]} ({isoDateToPretty(status.date)})
     </Tag>
   );
@@ -64,14 +60,14 @@ const STATUS_NAMES: Record<PartStatusEnum, React.ReactNode> = {
   [PartStatusEnum.DELT_ANSVAR]: 'Delt ansvar',
 };
 
-const STATUS_VARIANT: Record<PartStatusEnum, TagProps['variant']> = {
-  [PartStatusEnum.DEAD]: 'error',
-  [PartStatusEnum.DELETED]: 'error',
+const STATUS_COLOR: Record<PartStatusEnum, TagProps['data-color']> = {
+  [PartStatusEnum.DEAD]: 'danger',
+  [PartStatusEnum.DELETED]: 'danger',
   [PartStatusEnum.EGEN_ANSATT]: 'warning',
   [PartStatusEnum.VERGEMAAL]: 'success',
   [PartStatusEnum.FULLMAKT]: 'success',
   [PartStatusEnum.FORTROLIG]: 'info',
-  [PartStatusEnum.STRENGT_FORTROLIG]: 'alt1',
+  [PartStatusEnum.STRENGT_FORTROLIG]: 'meta-purple',
   [PartStatusEnum.RESERVERT_I_KRR]: 'warning',
   [PartStatusEnum.DELT_ANSVAR]: 'info',
 };

@@ -1,6 +1,6 @@
 import { InlineMessage, Loader, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { RedaktoerRichText } from '@/components/redaktoer-rich-text/redaktoer-rich-text';
 import { isRichText } from '@/functions/is-rich-plain-text';
 import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
@@ -82,9 +82,9 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
   if (savedContent.length === 0) {
     return (
       <VStack flexGrow="1" position="relative" as="section">
-        <Alert variant="warning" className="mt-2">
+        <InfoBox variant="warning" className="mt-2">
           Ingen tekster funnet
-        </Alert>
+        </InfoBox>
       </VStack>
     );
   }

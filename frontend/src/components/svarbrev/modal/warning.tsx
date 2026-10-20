@@ -1,4 +1,4 @@
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { BehandlingstidUnitType } from '@/types/svarbrev';
 
 interface Props {
@@ -12,8 +12,8 @@ export const Warning = ({ behandlingstidUnits, behandlingstidUnitTypeId }: Props
     (behandlingstidUnitTypeId === BehandlingstidUnitType.WEEKS && behandlingstidUnits > 52);
 
   return isTooLong ? (
-    <Alert variant="warning">
+    <InfoBox variant="warning">
       Behandlingstiden er <strong>over ett år</strong>. Er du sikker på at dette er riktig?
-    </Alert>
+    </InfoBox>
   ) : null;
 };

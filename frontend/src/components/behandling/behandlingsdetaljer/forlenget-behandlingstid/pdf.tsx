@@ -1,9 +1,9 @@
 import { FilePdfIcon } from '@navikt/aksel-icons';
 import { HStack, InlineMessage, Loader, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { Alert } from '@/components/alert/alert';
 import { validateBehandlingstid } from '@/components/behandling/behandlingsdetaljer/forlenget-behandlingstid/validate';
 import { KabalFileViewerPanel } from '@/components/kabal-file-viewer';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import {
   useGetOrCreateQuery,
   useSetBehandlingstidDateMutation,
@@ -35,7 +35,7 @@ export const Pdf = ({ id, varsletFrist }: VarsletFristProps) => {
   if (isError || !isSuccess) {
     return (
       <div>
-        <Alert variant="error">Kunne ikke hente forhåndsvisning PDF for forlenget saksbehandlingstid</Alert>
+        <LocalAlert status="error" title="Kunne ikke hente forhåndsvisning PDF for forlenget saksbehandlingstid" />
       </div>
     );
   }

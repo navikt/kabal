@@ -161,7 +161,6 @@ const DeleteRegelverk = ({ element }: DeleteRegelverkProps) => {
       errorTooltip="Teknisk feil. Kan ikke slette regelverk."
       defaultTooltip="Slett hele regelverket"
       isChangedWarning="Regelverket inneholder endringer. Er du sikker på at du vil slette det?"
-      side="right"
     />
   );
 };

@@ -1,7 +1,7 @@
-import { Alert } from '@/components/alert/alert';
 import { StaticOppgaveTableWithPageState } from '@/components/common-table-components/oppgave-table/static-oppgave-table';
 import { StaticOppgaveTableKey } from '@/components/common-table-components/oppgave-table/types';
 import { ColumnKeyEnum } from '@/components/common-table-components/types';
+import { InfoBox } from '@/components/info-box/info-box';
 import { SectionWithHeading } from '@/components/section-with-heading/section-with-heading';
 import { OppgaveTableRowsPerPage } from '@/hooks/settings/use-setting';
 
@@ -27,7 +27,7 @@ const COLUMNS: ColumnKeyEnum[] = [
 
 export const LedigeOppgaverTable = ({ oppgaveIds, onRefresh, isLoading }: Props) => {
   if (oppgaveIds.length === 0) {
-    return <Alert variant="info">Ingen oppgaver</Alert>;
+    return <InfoBox variant="info">Ingen oppgaver</InfoBox>;
   }
 
   return (

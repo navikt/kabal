@@ -2,7 +2,7 @@ import { ArrowDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack, Tooltip, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { TextVersions } from '@/components/maltekstseksjoner/texts/text-versions';
 import { useNavigateMaltekstseksjoner } from '@/hooks/use-navigate-maltekstseksjoner';
 import { useRedaktoerLanguage } from '@/hooks/use-redaktoer-language';
@@ -103,9 +103,9 @@ export const TextList = ({ maltekstseksjon, query }: Props) => {
 
   if (textIdList.length === 0) {
     return (
-      <Alert variant="warning" className="mt-2 h-fit">
+      <InfoBox variant="warning" className="mt-2 h-fit">
         Ingen tekster funnet
-      </Alert>
+      </InfoBox>
     );
   }
 

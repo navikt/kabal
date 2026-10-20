@@ -23,8 +23,8 @@ export const SetStandaloneTextLanguage = ({ textType }: Props) => {
         }
       }}
     >
-      <ToggleGroup.Item value={Language.NB}>Bokmål</ToggleGroup.Item>
-      <ToggleGroup.Item value={Language.NN}>Nynorsk</ToggleGroup.Item>
+      <ToggleGroup.Item value={Language.NB} label="Bokmål" />
+      <ToggleGroup.Item value={Language.NN} label="Nynorsk" />
     </ToggleGroup>
   );
 };

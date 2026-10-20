@@ -1,5 +1,5 @@
 import { Skeleton, Tag, type TagProps, Tooltip } from '@navikt/ds-react';
-import { SAKSTYPE_TO_TAG_VARIANT } from '@/components/type/sakstype-to-tag-variant';
+import { SAKSTYPE_TO_TAG_PROPS } from '@/components/type/sakstype-to-tag-props';
 import { useFullYtelseNameFromId, useTypeNameFromId } from '@/hooks/use-kodeverk-ids';
 import type { SaksTypeEnum } from '@/types/kodeverk';
 
@@ -17,7 +17,7 @@ export const Type = ({ typeId, size = 'small' }: TypeProps) => {
 
   return (
     <Tooltip content={typeName}>
-      <Tag variant={SAKSTYPE_TO_TAG_VARIANT[typeId]} size={size} className="truncate">
+      <Tag data-color={SAKSTYPE_TO_TAG_PROPS[typeId]} variant="strong" size={size} className="truncate">
         <span className="truncate">{typeName}</span>
       </Tag>
     </Tooltip>

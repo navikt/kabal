@@ -61,8 +61,8 @@ export const SaksbehandlerSettings = () => {
                 Språk
               </Heading>
               <ToggleGroup size="small" value={language} onChange={onChangeLanguage}>
-                <ToggleGroup.Item value={Language.NB}>Bokmål</ToggleGroup.Item>
-                <ToggleGroup.Item value={Language.NN}>Nynorsk</ToggleGroup.Item>
+                <ToggleGroup.Item value={Language.NB} label="Bokmål" />
+                <ToggleGroup.Item value={Language.NN} label="Nynorsk" />
               </ToggleGroup>
             </section>
           )}
@@ -85,12 +85,11 @@ export const SaksbehandlerSettings = () => {
                   setShowAnnotationsAtOrigin(enabled);
                 }}
               >
-                <ToggleGroup.Item value={Placement.RELATIVE}>
-                  Vis kommentarer og bokmerker ved siden av innhold
-                </ToggleGroup.Item>
-                <ToggleGroup.Item value={Placement.COLUMN}>
-                  Vis kommentarer og bokmerker frikoblet fra innhold
-                </ToggleGroup.Item>
+                <ToggleGroup.Item
+                  value={Placement.RELATIVE}
+                  label="Vis kommentarer og bokmerker ved siden av innhold"
+                />
+                <ToggleGroup.Item value={Placement.COLUMN} label="Vis kommentarer og bokmerker frikoblet fra innhold" />
               </ToggleGroup>
 
               <ToggleGroup
@@ -102,8 +101,8 @@ export const SaksbehandlerSettings = () => {
                   setExpandedThreads(enabled);
                 }}
               >
-                <ToggleGroup.Item value="true">Ekspander alle tråder</ToggleGroup.Item>
-                <ToggleGroup.Item value="false">Ekspander kun valgt tråd</ToggleGroup.Item>
+                <ToggleGroup.Item value="true" label="Ekspander alle tråder" />
+                <ToggleGroup.Item value="false" label="Ekspander kun valgt tråd" />
               </ToggleGroup>
             </VStack>
           </section>

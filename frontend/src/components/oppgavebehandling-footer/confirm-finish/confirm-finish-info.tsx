@@ -1,5 +1,5 @@
 import { BodyShort, Checkbox } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { useText } from '@/components/oppgavebehandling-footer/confirm-finish/use-text';
 import { SaksTypeEnum } from '@/types/kodeverk';
 
@@ -11,13 +11,13 @@ export const ConfirmFinishInfo = ({ children }: Props) => {
   const text = useText();
 
   return (
-    <Alert variant="info">
+    <InfoBox variant="info">
       <BodyShort size="small" spacing>
         {text}
       </BodyShort>
 
       {children}
-    </Alert>
+    </InfoBox>
   );
 };
 

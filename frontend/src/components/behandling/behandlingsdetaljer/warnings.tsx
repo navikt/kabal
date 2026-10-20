@@ -1,11 +1,11 @@
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
 import { UtfallEnum } from '@/types/kodeverk';
 
 const WarningBox = ({ children }: { children: React.ReactNode }) => (
-  <Alert variant="warning" marginBlock="space-16 space-0">
+  <InfoBox variant="warning" className="mt-4">
     {children}
-  </Alert>
+  </InfoBox>
 );
 
 export const ReturWarning = () => (

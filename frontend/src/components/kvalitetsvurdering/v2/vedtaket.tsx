@@ -1,5 +1,5 @@
 import { Checkbox, Heading, HStack, Radio } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { ContainerWithHelpText } from '@/components/kvalitetsvurdering/common/container-with-helptext';
 import { StyledRadioGroup } from '@/components/kvalitetsvurdering/common/styled-components';
 import { Checkboxes } from '@/components/kvalitetsvurdering/v2/common/checkboxes';
@@ -35,7 +35,7 @@ export const Vedtaket = () => {
         <Heading size="small">{header}</Heading>
       </HStack>
 
-      {vedtakAutomatiskVedtak === true ? <Alert variant="info">{AUTOMATISK_VEDTAK_HELPTEXT}</Alert> : null}
+      {vedtakAutomatiskVedtak === true ? <InfoBox variant="info">{AUTOMATISK_VEDTAK_HELPTEXT}</InfoBox> : null}
       <ContainerWithHelpText helpText={AUTOMATISK_VEDTAK_HELPTEXT}>
         <Checkbox
           value="vedtakAutomatiskVedtak"

@@ -44,7 +44,7 @@ const Result = ({
 
   return (
     <VStack asChild gap="space-8" align="start" paddingInline="space-12" paddingBlock="space-8">
-      <Tag variant={part.type === IdType.FNR ? 'info' : 'neutral'} size="medium">
+      <Tag data-color={part.type === IdType.FNR ? 'info' : 'neutral'} size="medium">
         <BodyShort>
           <PartNameAndIdentifikator identifikator={part.identifikator} name={part.name} />
         </BodyShort>

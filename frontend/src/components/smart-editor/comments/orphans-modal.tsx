@@ -1,6 +1,6 @@
 import { LinkBrokenIcon } from '@navikt/aksel-icons';
 import { Button, Dialog, HStack, Tooltip } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { THREAD_WIDTH, Thread } from '@/components/smart-editor/comments/thread';
 import { useThreads } from '@/components/smart-editor/comments/use-threads';
 
@@ -31,7 +31,7 @@ export const OrphansModal = () => {
           <Dialog.Title>Andre kommentarer</Dialog.Title>
         </Dialog.Header>
         <Dialog.Body>
-          <Alert variant="info">{ORPHAN_HELP_TEXT}</Alert>
+          <InfoBox variant="info">{ORPHAN_HELP_TEXT}</InfoBox>
           <HStack as="section" wrap align="start" gap="space-16" marginBlock="space-16 space-0">
             {orphans.map((o) => (
               <Thread key={o.id} thread={o} isFocused zIndex={0} />

@@ -1,5 +1,5 @@
 import { HStack, Radio } from '@navikt/ds-react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
 import { HelpTextCheckBox } from '@/components/kvalitetsvurdering/common/kvalitetsvurdering-checkbox';
 import { StyledRadioGroup } from '@/components/kvalitetsvurdering/common/styled-components';
 import { Checkboxes } from '@/components/kvalitetsvurdering/v3/common/checkboxes';
@@ -39,7 +39,9 @@ export const Særregelverket = () => {
 
   return (
     <SectionWithHeading heading={HEADER} size="small">
-      {saerregelverkAutomatiskVedtak === true ? <Alert variant="info">{vedtaketAutomatiskVedtakhelpText}</Alert> : null}
+      {saerregelverkAutomatiskVedtak === true ? (
+        <InfoBox variant="info">{vedtaketAutomatiskVedtakhelpText}</InfoBox>
+      ) : null}
       <HelpTextCheckBox
         helpText={vedtaketAutomatiskVedtakhelpText}
         value={SærregelverketBoolean.saerregelverkAutomatiskVedtak}

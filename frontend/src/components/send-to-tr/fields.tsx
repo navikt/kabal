@@ -1,9 +1,9 @@
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import { HStack, InfoCard, Label, TextField, VStack } from '@navikt/ds-react';
+import { HStack, Label, TextField, VStack } from '@navikt/ds-react';
 import { parse } from 'date-fns';
 import { type Dispatch, memo, type SetStateAction, useCallback, useMemo } from 'react';
 import { CURRENT_YEAR_IN_CENTURY, FORMAT } from '@/components/date-picker/constants';
 import { DatePicker } from '@/components/date-picker/date-picker';
+import { InfoBox } from '@/components/info-box/info-box';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
 import {
@@ -149,11 +149,9 @@ const FagsakIdField = memo(({ value, onChange, error }: FagsakIdFieldProps) => (
       inputMode="numeric"
     />
     {isFnr(removeWhitespace(value)) ? (
-      <InfoCard data-color="warning">
-        <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
-          Nummeret er et gyldig fødselsnummer. Sjekk om du har limt inn riktig saksnummer.
-        </InfoCard.Message>
-      </InfoCard>
+      <InfoBox variant="warning">
+        Nummeret er et gyldig fødselsnummer. Sjekk om du har limt inn riktig saksnummer.
+      </InfoBox>
     ) : null}
   </VStack>
 ));

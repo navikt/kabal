@@ -1,6 +1,6 @@
 import { InlineMessage, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
-import { Alert } from '@/components/alert/alert';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import { CustomReceivers } from '@/components/receivers/custom-receivers';
 import type { IErrorProperty } from '@/components/receivers/is-send-error';
 import { SingleReceiver } from '@/components/receivers/single-receiver';
@@ -179,10 +179,12 @@ export const Receivers = ({
       )}
 
       {reachableSuggestedReceivers.length === 0 && customReceivers.length === 0 ? (
-        <Alert variant="warning">Ingen gyldige mottakere.</Alert>
+        <LocalAlert status="warning" title="Ingen gyldige mottakere." />
       ) : null}
 
-      {sendErrors.length === 0 ? null : <Alert variant="error">Brevet er ikke sendt til noen. Se feil over.</Alert>}
+      {sendErrors.length === 0 ? null : (
+        <LocalAlert status="error" title="Brevet er ikke sendt til noen. Se feil over." />
+      )}
     </VStack>
   );
 };

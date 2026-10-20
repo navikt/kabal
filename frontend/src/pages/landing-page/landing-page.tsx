@@ -44,12 +44,13 @@ export const LandingPage = () => {
           Siden du har endt opp her betyr det mest sannsynlig at brukeren din ikke har korrekte roller for å bruke
           Kabal.
         </BodyShort>
-        <RoleList title="Roller brukeren din har nå" roles={user.roller} variant="info-moderate" />
+        <RoleList title="Roller brukeren din har nå" roles={user.roller} dataColor="info" variant="moderate" />
         <RoleList
           title="Andre roller Kabal bruker"
           description={INSTRUCTION}
           roles={ALL_PUBLIC_ROLES.filter((r) => !user.roller.includes(r))}
-          variant="neutral-moderate"
+          dataColor="neutral"
+          variant="moderate"
         />
       </Box>
     </PageWrapper>

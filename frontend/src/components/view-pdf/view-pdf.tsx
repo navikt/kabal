@@ -7,23 +7,13 @@ import {
   ZoomMinusIcon,
   ZoomPlusIcon,
 } from '@navikt/aksel-icons';
-import {
-  Alert,
-  Box,
-  Button,
-  type ButtonProps,
-  HStack,
-  Loader,
-  Tag,
-  ToggleGroup,
-  Tooltip,
-  VStack,
-} from '@navikt/ds-react';
+import { Box, Button, type ButtonProps, HStack, Loader, Tag, ToggleGroup, Tooltip, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { FeilTag, PolTag } from '@/components/documents/document-warnings';
 import { TabContext } from '@/components/documents/tab-context';
 import { getActiveFormat, getSelectableFormats } from '@/components/documents/variants';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import { Pdf, usePdfData } from '@/components/pdf/pdf';
 import { toast } from '@/components/toast/store';
 import { Header } from '@/components/view-pdf/header';
@@ -108,9 +98,7 @@ export const ViewPDF = () => {
   if (mergedDocumentIsError || inlineUrl === undefined) {
     return (
       <Container minWidth={pdfWidth}>
-        <Alert variant="error" size="small">
-          Kunne ikke vise dokument(er)
-        </Alert>
+        <LocalAlert status="error" title="Kunne ikke vise dokument(er)" />
       </Container>
     );
   }

@@ -1,7 +1,8 @@
 import { CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox, CheckboxGroup, Heading, HStack, Select, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
-import { Alert } from '@/components/alert/alert';
+import { InfoBox } from '@/components/info-box/info-box';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import { useInsertHjemlerInSettingsMutation } from '@/redux-api/internal';
 import { useLatestYtelser } from '@/simple-api-state/use-kodeverk';
 
@@ -53,14 +54,14 @@ const Hjemler = ({ ytelse, selectedHjemler, setSelectedHjemler }: HjemlerProps) 
   const foundYtelse = data.find(({ id }) => id === ytelse);
 
   if (foundYtelse === undefined) {
-    return <Alert variant="error">Ingen ytelse funnet med ID: {ytelse}</Alert>;
+    return <LocalAlert status="error" title={`Ingen ytelse funnet med ID: ${ytelse}`} />;
   }
 
   if (foundYtelse.innsendingshjemler.length === 0) {
     return (
-      <Alert variant="info">
+      <InfoBox variant="info">
         Ingen innsendingshjemler funnet for ytelse: <b>{foundYtelse.navn}</b>
-      </Alert>
+      </InfoBox>
     );
   }
 

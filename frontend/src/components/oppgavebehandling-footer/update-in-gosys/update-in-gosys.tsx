@@ -1,11 +1,12 @@
-import { BodyShort, Button, ConfirmationPanel, Dialog, Heading, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Checkbox, Dialog, Heading, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { format } from 'date-fns';
 import { useContext, useState } from 'react';
-import { Alert } from '@/components/alert/alert';
 import { FORMAT, PRETTY_FORMAT } from '@/components/date-picker/constants';
 import { GrafanaDomainProvider } from '@/components/grafana-domain-context/grafana-domain-context';
+import { InfoBox } from '@/components/info-box/info-box';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
+import { LocalAlert } from '@/components/local-alert/local-alert';
 import { Beskrivelse, getInitialBeskrivelse } from '@/components/oppgavebehandling-footer/update-in-gosys/beskrivelse';
 import { Enhetmappe } from '@/components/oppgavebehandling-footer/update-in-gosys/enhetmappe';
 import { GosysOppgave } from '@/components/oppgavebehandling-footer/update-in-gosys/gosys-oppgave';
@@ -131,11 +132,11 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
                   {oppgavebehandling.typeId === SaksTypeEnum.ANKE &&
                   (oppgavebehandling.resultat.utfallId === UtfallEnum.DELVIS_MEDHOLD ||
                     oppgavebehandling.resultat.extraUtfallIdSet.includes(UtfallEnum.DELVIS_MEDHOLD)) ? (
-                    <Alert variant="info">
+                    <InfoBox variant="info">
                       Oppdater denne oppgaven fra Gosys ved å velge enhetsmappe "Sendt til Trygderetten". Du må i
                       tillegg gå inn i Gosys og opprette en ny oppgave der, som du sender til vedtaksenheten med beskjed
                       om at de kan effektuere det du har gitt delvis medhold i.
-                    </Alert>
+                    </InfoBox>
                   ) : null}
 
                   <Beskrivelse beskrivelse={beskrivelse} setBeskrivelse={setBeskrivelse} />
@@ -213,15 +214,12 @@ interface ConfirmProps {
 const ConfirmIgnoreOrRequiredWarning = ({ gosysOppgave, ignoreGosysOppgave, setIgnoreGosysOppgave }: ConfirmProps) => {
   if (gosysOppgave === undefined) {
     return (
-      <Alert variant="warning">
-        <Heading level="2" size="small" spacing>
-          Ingen oppgave fra Gosys
-        </Heading>
-        <BodyShort size="small" spacing>
+      <LocalAlert status="warning" title="Ingen oppgave fra Gosys">
+        <BodyShort size="small">
           Velg oppgave over. Dersom du ikke finner riktig oppgave, må du gå inn i Gosys og opprette en der, som du
           deretter kan velge i Kabal.
         </BodyShort>
-      </Alert>
+      </LocalAlert>
     );
   }
 
@@ -232,14 +230,11 @@ const ConfirmIgnoreOrRequiredWarning = ({ gosysOppgave, ignoreGosysOppgave, setI
   if (gosysOppgave.status === GosysStatus.FERDIGSTILT) {
     return (
       <ConfirmationPanel
-        size="small"
         checked={ignoreGosysOppgave}
         onChange={({ target }) => setIgnoreGosysOppgave(target.checked)}
         label="Ja, jeg vil bruke den allerede ferdigstilte oppgaven fra Gosys."
       >
-        <Heading level="2" size="small">
-          Oppgaven fra Gosys er ferdigstilt
-        </Heading>
+        Oppgaven fra Gosys er ferdigstilt
       </ConfirmationPanel>
     );
   }
@@ -247,17 +242,34 @@ const ConfirmIgnoreOrRequiredWarning = ({ gosysOppgave, ignoreGosysOppgave, setI
   if (gosysOppgave.status === GosysStatus.FEILREGISTRERT) {
     return (
       <ConfirmationPanel
-        size="small"
         checked={ignoreGosysOppgave}
         onChange={({ target }) => setIgnoreGosysOppgave(target.checked)}
         label="Ja, jeg vil bruke den allerede feilregistrerte oppgaven fra Gosys."
       >
-        <Heading level="2" size="small">
-          Oppgaven fra Gosys er feilregistrert
-        </Heading>
+        Oppgaven fra Gosys er feilregistrert
       </ConfirmationPanel>
     );
   }
 
   return null;
+};
+
+interface ConfirmationPanelProps {
+  checked: boolean;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  label: string;
+  children: string;
+}
+
+const ConfirmationPanel = ({ checked, onChange, label, children }: ConfirmationPanelProps) => {
+  return (
+    <InfoBox variant="warning">
+      <Heading level="2" size="small">
+        {children}
+      </Heading>
+      <Checkbox checked={checked} onChange={onChange}>
+        {label}
+      </Checkbox>
+    </InfoBox>
+  );
 };
