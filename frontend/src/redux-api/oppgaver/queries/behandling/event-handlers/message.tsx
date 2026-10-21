@@ -21,7 +21,7 @@ export const handleMessageEvent =
         const { id, text, timestamp, actor, notify } = event;
 
         if (messages === undefined) {
-          return [{ author: actor, id, text, created: timestamp, modified: null, notify }];
+          return [{ author: actor, id, text, created: timestamp, modified: timestamp, notify }];
         }
 
         const updatedList: IMessage[] = [];
@@ -40,7 +40,7 @@ export const handleMessageEvent =
           return updatedList;
         }
 
-        return [{ author: actor, id, text, created: timestamp, modified: null, notify }, ...updatedList].toSorted(
+        return [{ author: actor, id, text, created: timestamp, modified: timestamp, notify }, ...updatedList].toSorted(
           (a, b) => b.created.localeCompare(a.created),
         );
       }),
