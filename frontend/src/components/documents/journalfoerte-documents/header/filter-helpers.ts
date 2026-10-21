@@ -1,5 +1,5 @@
 import { isAfter, isBefore, isValid, isWithinInterval, parseISO } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getAvsenderMottakerKey } from '@/components/documents/journalfoerte-documents/header/avsender-mottaker';
 import { MELDEKORT_FILTERS, type MeldekortFilter } from '@/components/documents/journalfoerte-documents/meldekort';
 import { useShowVedlegg } from '@/components/documents/journalfoerte-documents/state/show-vedlegg';
@@ -38,8 +38,9 @@ export const useFilteredDocuments = (
 ): ScoredArkivertDocument[] => {
   const [result, setResult] = useState<ScoredArkivertDocument[]>(EMPTY_ARRAY);
   const isTilknyttet = useLazyIsTilknyttetDokument();
-  const { value: showVedleggIdList, setValue: setShowVedleggIdList } = useShowVedlegg();
+  const { setValue: setShowVedleggIdList } = useShowVedlegg();
   const { columns } = useArchivedDocumentsColumns();
+  const previousSearchRef = useRef<string | null>(null);
 
   useEffect(() => {
     const callback = requestIdleCallback(
@@ -48,6 +49,7 @@ export const useFilteredDocuments = (
         const splitSearch = search.length > 0 ? splitQuery(search) : null;
         const hasSearch = splitSearch !== null;
         const filteredDocuments: ScoredArkivertDocument[] = [];
+        const journalpostIdsWithMatchingVedlegg: string[] = [];
 
         for (const document of documents) {
           const {
@@ -96,8 +98,8 @@ export const useFilteredDocuments = (
               }
 
               if (score > 0) {
-                if (!showVedleggIdList.includes(journalpostId)) {
-                  setShowVedleggIdList([...showVedleggIdList, journalpostId]);
+                if (!journalpostIdsWithMatchingVedlegg.includes(journalpostId)) {
+                  journalpostIdsWithMatchingVedlegg.push(journalpostId);
                 }
 
                 filteredVedlegg.push({ ...v, score });
@@ -126,6 +128,15 @@ export const useFilteredDocuments = (
             }
           }
         }
+
+        if (hasSearch && previousSearchRef.current !== search) {
+          setShowVedleggIdList((ids = []) => [
+            ...ids,
+            ...journalpostIdsWithMatchingVedlegg.filter((id) => !ids.includes(id)),
+          ]);
+        }
+
+        previousSearchRef.current = hasSearch ? search : null;
 
         if (hasSearch) {
           setResult(
@@ -157,7 +168,6 @@ export const useFilteredDocuments = (
     sort.orderBy,
     isTilknyttet,
     setShowVedleggIdList,
-    showVedleggIdList,
     columns,
   ]);
 
