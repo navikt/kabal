@@ -106,6 +106,7 @@ import {
   VARSEL_OM_OMGJØRING_TIL_UGUNST_METADATA,
   VARSEL_OM_OMGJØRING_TIL_UGUNST_SECTIONS,
 } from '@/plate/templates/varsel-om-omgjøring-til-ugunst';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 // Metadata (templateId, tittel, dokumentTypeId, deprecatedSections) for every template, read straight from each
 // template's own *_METADATA constant — never by calling the template factory, which needs case-specific params.
@@ -284,8 +285,15 @@ export const getBegjæringOmGjenopptakTemplates = (params: CreateTemplateParams)
 ];
 
 export const getBegjæringOmGjenopptakAfter2027Templates = (params: CreateTemplateParams) => [
+  getEttersendingTilTrygderettenTemplate(params),
+  getGjenopptaksbegjæringVedtakTemplate(params),
   getGenereltBrevTemplate(params),
   getNotatTemplate(params),
+  getTilForeleggelseTemplate(params),
+  getVarselOmOmgjøringTilUgunstTemplate(params),
+  getRolQuestionsTemplate(params),
+  getRolTilsvarsbrevTemplate(params),
+  getSvarPåInnsynsbegjæringTemplate(params),
 ];
 
 export const getBegjæringOmGjenopptakITrTemplates = (params: CreateTemplateParams) => [
@@ -301,8 +309,13 @@ export const getBegjæringOmGjenopptakITrTemplates = (params: CreateTemplatePara
 ];
 
 export const getBegjæringOmGjenopptakITrAfter2027Templates = (params: CreateTemplateParams) => [
+  getEttersendingTilTrygderettenTemplate(params),
   getGenereltBrevTemplate(params),
   getNotatTemplate(params),
+  getTilForeleggelseTemplate(params),
+  getRolQuestionsTemplate(params),
+  getRolTilsvarsbrevTemplate(params),
+  getSvarPåInnsynsbegjæringTemplate(params),
 ];
 
 interface GetFinishedBehandlingTemplatesParams extends CreateTemplateParams {
@@ -314,9 +327,19 @@ export const getFinishedBehandlingTemplates = ({
   fagsystemId,
   navIdent,
   requiresGosysOppgave,
-}: GetFinishedBehandlingTemplatesParams) => [
-  getGenereltBrevTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
-  getNotatTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
-  getSvarPåInnsynsbegjæringTemplate({ sakstype, fagsystemId, requiresGosysOppgave }),
-  getEttersendingTilTrygderettenTemplate({ sakstype, fagsystemId, requiresGosysOppgave }),
-];
+}: GetFinishedBehandlingTemplatesParams) => {
+  const baseTemplates = [
+    getGenereltBrevTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
+    getNotatTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
+    getSvarPåInnsynsbegjæringTemplate({ sakstype, fagsystemId, requiresGosysOppgave }),
+  ];
+
+  if (
+    sakstype === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027 ||
+    sakstype === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027
+  ) {
+    return baseTemplates;
+  }
+
+  return [...baseTemplates, getEttersendingTilTrygderettenTemplate({ sakstype, fagsystemId, requiresGosysOppgave })];
+};
