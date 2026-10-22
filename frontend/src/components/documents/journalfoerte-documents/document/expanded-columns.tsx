@@ -61,7 +61,7 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
           />
         </div>
       ) : null}
-      {columns.SAKSNUMMER ? <Saksnummer saksnummer={sak?.fagsakId} /> : null}
+      {columns.SAKSNUMMER ? <Saksnummer saksnummer={sak?.saksnummer} /> : null}
       {columns.MELDEKORT && isMeldekort(brevkode) ? <Meldekort /> : null}
       {columns.TYPE ? <JournalposttypeTag type={journalposttype} /> : null}
       <Tooltip placement="left" content={showMetadata ? 'Skjul informasjon' : 'Vis informasjon'} keys={['I']}>

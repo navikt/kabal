@@ -18,9 +18,9 @@ export const Saksnummer = ({ sakList, selectedSaksIds, setSelectedSaksIds }: Sak
 
     const set = new Set<string>();
 
-    for (const { fagsakId } of sakList) {
-      if (fagsakId !== null) {
-        set.add(fagsakId);
+    for (const { saksnummer } of sakList) {
+      if (saksnummer !== null) {
+        set.add(saksnummer);
       }
     }
 
