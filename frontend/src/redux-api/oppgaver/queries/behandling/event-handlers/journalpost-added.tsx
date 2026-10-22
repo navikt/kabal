@@ -152,4 +152,4 @@ export const handleJournalpostAddedEvent =
   };
 
 const isSakEqual = (a: Sak, b: Sak) =>
-  a.fagsakId === b.fagsakId && a.fagsaksystem === b.fagsaksystem && a.datoOpprettet === b.datoOpprettet;
+  a.saksnummer === b.saksnummer && a.fagsaksystem === b.fagsaksystem && a.datoOpprettet === b.datoOpprettet;

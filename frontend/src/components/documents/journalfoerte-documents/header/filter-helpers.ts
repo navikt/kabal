@@ -74,7 +74,7 @@ export const useFilteredDocuments = (
                 selectedAvsenderMottakere,
                 avsenderMottaker === null ? null : getAvsenderMottakerKey(avsenderMottaker),
               )) &&
-            (!columns.SAKSNUMMER || checkListWithNone(selectedSaksIds, sak?.fagsakId ?? 'UNKNOWN')) &&
+            (!columns.SAKSNUMMER || checkListWithNone(selectedSaksIds, sak?.saksnummer ?? 'UNKNOWN')) &&
             (!columns.DATO_OPPRETTET || checkDateInterval(datoOpprettet, selectedDatoOpprettet)) &&
             (!columns.DATO_SORTERING || checkDateInterval(datoSortering, selectedDatoRegSendt))
           ) {
