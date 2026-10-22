@@ -4,9 +4,10 @@ import { Keys } from '@/keys';
 interface UsePopoverStateOptions {
   onOpen?: () => void;
   onClose?: () => void;
+  onConfirm?: () => void;
 }
 
-export const usePopoverState = ({ onOpen, onClose }: UsePopoverStateOptions = {}) => {
+export const usePopoverState = ({ onOpen, onClose, onConfirm }: UsePopoverStateOptions = {}) => {
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const closedByPopoverRef = useRef(false);
@@ -34,11 +35,12 @@ export const usePopoverState = ({ onOpen, onClose }: UsePopoverStateOptions = {}
     }
 
     if (open) {
+      onConfirm?.();
       handleClose();
     } else {
       handleOpen();
     }
-  }, [open, handleClose, handleOpen]);
+  }, [open, handleClose, handleOpen, onConfirm]);
 
   const onButtonKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
