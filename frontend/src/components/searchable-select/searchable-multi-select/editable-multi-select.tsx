@@ -101,6 +101,11 @@ export const EditableMultiSelect = <T,>({
         }
       });
     },
+    onConfirm: () => {
+      if (!requireConfirmation) {
+        confirmDraft();
+      }
+    },
   });
 
   const activeKeys = draftKeys ?? currentKeys;
