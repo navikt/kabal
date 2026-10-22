@@ -266,6 +266,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
           url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/fil`,
           method: 'POST',
           body: formData,
+          timeout: 600_000,
         };
       },
       onQueryStarted: async ({ oppgaveId }, { dispatch, queryFulfilled }) => {
