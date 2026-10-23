@@ -8,7 +8,7 @@ export interface IMessage {
   author: INavEmployee;
   created: string;
   id: string;
-  modified: string | null;
+  modified: string;
   text: string;
   notify: boolean;
 }
