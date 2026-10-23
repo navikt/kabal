@@ -82,11 +82,11 @@ export const ExpandedColumns = ({ document, showMetadata, toggleShowMetadata }: 
 };
 
 interface SaksnummerProps {
-  saksnummer: string | undefined | null;
+  saksnummer: string | undefined;
 }
 
 const Saksnummer = ({ saksnummer }: SaksnummerProps) => {
-  if (saksnummer === undefined || saksnummer === null || saksnummer.length === 0) {
+  if (saksnummer === undefined || saksnummer.length === 0) {
     return null;
   }
 
