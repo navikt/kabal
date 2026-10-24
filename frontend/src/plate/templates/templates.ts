@@ -32,6 +32,11 @@ import {
   getBehandlingEtterTrOpphevetTemplate,
 } from '@/plate/templates/behandling-etter-tr-opphevet-vedtak';
 import {
+  BER_OM_UTSATT_FRIST_FOR_TILSVAR_METADATA,
+  BER_OM_UTSATT_FRIST_FOR_TILSVAR_SECTIONS,
+  getBerOmUtsattFristForTilsvarTemplate,
+} from '@/plate/templates/ber-om-utsatt-frist-for-tilsvar';
+import {
   EKSPEDISJONSBREV_TIL_TRYGDERETTEN_METADATA,
   EKSPEDISJONSBREV_TIL_TRYGDERETTEN_SECTIONS,
   getEkspedisjonsbrevTilTrygderettenTemplate,
@@ -87,6 +92,11 @@ import {
   SVAR_PÅ_INNSYNSBEGJÆRING_SECTIONS,
 } from '@/plate/templates/svar-på-innsynsbegjæring';
 import {
+  getSvarPåPåleggOmTilsvarIAnkesakTemplate,
+  SVAR_PÅ_PÅLEGG_OM_TILSVAR_I_ANKESAK_METADATA,
+  SVAR_PÅ_PÅLEGG_OM_TILSVAR_I_ANKESAK_SECTIONS,
+} from '@/plate/templates/svar-på-pålegg-om-tilsvar-i-ankesak';
+import {
   getTilForeleggelseTemplate,
   TIL_FORELEGGELSE_METADATA,
   TIL_FORELEGGELSE_SECTIONS,
@@ -96,6 +106,7 @@ import {
   VARSEL_OM_OMGJØRING_TIL_UGUNST_METADATA,
   VARSEL_OM_OMGJØRING_TIL_UGUNST_SECTIONS,
 } from '@/plate/templates/varsel-om-omgjøring-til-ugunst';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 // Metadata (templateId, tittel, dokumentTypeId, deprecatedSections) for every template, read straight from each
 // template's own *_METADATA constant — never by calling the template factory, which needs case-specific params.
@@ -125,6 +136,8 @@ export const TEMPLATE_METADATA_MAP = {
     GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_METADATA,
   [GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR_METADATA.templateId]: GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR_METADATA,
   [TIL_FORELEGGELSE_METADATA.templateId]: TIL_FORELEGGELSE_METADATA,
+  [BER_OM_UTSATT_FRIST_FOR_TILSVAR_METADATA.templateId]: BER_OM_UTSATT_FRIST_FOR_TILSVAR_METADATA,
+  [SVAR_PÅ_PÅLEGG_OM_TILSVAR_I_ANKESAK_METADATA.templateId]: SVAR_PÅ_PÅLEGG_OM_TILSVAR_I_ANKESAK_METADATA,
 };
 
 export const TEMPLATE_METADATA_LIST = Object.values(TEMPLATE_METADATA_MAP);
@@ -165,6 +178,8 @@ export const TEMPLATE_SECTIONS_MAP = {
     GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_SECTIONS,
   [GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR_METADATA.templateId]: GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR_SECTIONS,
   [TIL_FORELEGGELSE_METADATA.templateId]: TIL_FORELEGGELSE_SECTIONS,
+  [BER_OM_UTSATT_FRIST_FOR_TILSVAR_METADATA.templateId]: BER_OM_UTSATT_FRIST_FOR_TILSVAR_SECTIONS,
+  [SVAR_PÅ_PÅLEGG_OM_TILSVAR_I_ANKESAK_METADATA.templateId]: SVAR_PÅ_PÅLEGG_OM_TILSVAR_I_ANKESAK_SECTIONS,
 };
 
 export const getKlageTemplates = (params: CreateTemplateParams) => [
@@ -193,6 +208,20 @@ export const getAnkeTemplates = (params: CreateTemplateParams) => [
   getVarselOmOmgjøringTilUgunstTemplate(params),
 ];
 
+export const getAnkeAfter2027Templates = (params: CreateTemplateParams) => [
+  getGenereltBrevTemplate(params),
+  getNotatTemplate(params),
+  getBerOmUtsattFristForTilsvarTemplate(params),
+  getSvarPåPåleggOmTilsvarIAnkesakTemplate(params),
+  getEttersendingTilTrygderettenTemplate(params),
+  getAnkevedtakTemplate(params),
+  getTilForeleggelseTemplate(params),
+  getVarselOmOmgjøringTilUgunstTemplate(params),
+  getRolQuestionsTemplate(params),
+  getRolTilsvarsbrevTemplate(params),
+  getSvarPåInnsynsbegjæringTemplate(params),
+];
+
 export const getAnkeITrygderettenTemplates = (params: CreateTemplateParams) => [
   getGenereltBrevTemplate(params),
   getNotatTemplate(params),
@@ -202,6 +231,18 @@ export const getAnkeITrygderettenTemplates = (params: CreateTemplateParams) => [
   getRolQuestionsTemplate(params),
   getRolTilsvarsbrevTemplate(params),
   getTilForeleggelseTemplate(params),
+  getSvarPåInnsynsbegjæringTemplate(params),
+];
+
+export const getAnkeITRAfter2027Templates = (params: CreateTemplateParams) => [
+  getGenereltBrevTemplate(params),
+  getNotatTemplate(params),
+  getBerOmUtsattFristForTilsvarTemplate(params),
+  getSvarPåPåleggOmTilsvarIAnkesakTemplate(params),
+  getEttersendingTilTrygderettenTemplate(params),
+  getTilForeleggelseTemplate(params),
+  getRolQuestionsTemplate(params),
+  getRolTilsvarsbrevTemplate(params),
   getSvarPåInnsynsbegjæringTemplate(params),
 ];
 
@@ -243,6 +284,18 @@ export const getBegjæringOmGjenopptakTemplates = (params: CreateTemplateParams)
   getVarselOmOmgjøringTilUgunstTemplate(params),
 ];
 
+export const getBegjæringOmGjenopptakAfter2027Templates = (params: CreateTemplateParams) => [
+  getEttersendingTilTrygderettenTemplate(params),
+  getGjenopptaksbegjæringVedtakTemplate(params),
+  getGenereltBrevTemplate(params),
+  getNotatTemplate(params),
+  getTilForeleggelseTemplate(params),
+  getVarselOmOmgjøringTilUgunstTemplate(params),
+  getRolQuestionsTemplate(params),
+  getRolTilsvarsbrevTemplate(params),
+  getSvarPåInnsynsbegjæringTemplate(params),
+];
+
 export const getBegjæringOmGjenopptakITrTemplates = (params: CreateTemplateParams) => [
   getGenereltBrevTemplate(params),
   getNotatTemplate(params),
@@ -255,6 +308,16 @@ export const getBegjæringOmGjenopptakITrTemplates = (params: CreateTemplatePara
   getSvarPåInnsynsbegjæringTemplate(params),
 ];
 
+export const getBegjæringOmGjenopptakITrAfter2027Templates = (params: CreateTemplateParams) => [
+  getEttersendingTilTrygderettenTemplate(params),
+  getGenereltBrevTemplate(params),
+  getNotatTemplate(params),
+  getTilForeleggelseTemplate(params),
+  getRolQuestionsTemplate(params),
+  getRolTilsvarsbrevTemplate(params),
+  getSvarPåInnsynsbegjæringTemplate(params),
+];
+
 interface GetFinishedBehandlingTemplatesParams extends CreateTemplateParams {
   navIdent: string;
 }
@@ -264,8 +327,19 @@ export const getFinishedBehandlingTemplates = ({
   fagsystemId,
   navIdent,
   requiresGosysOppgave,
-}: GetFinishedBehandlingTemplatesParams) => [
-  getGenereltBrevTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
-  getNotatTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
-  getSvarPåInnsynsbegjæringTemplate({ sakstype, fagsystemId, requiresGosysOppgave }),
-];
+}: GetFinishedBehandlingTemplatesParams) => {
+  const baseTemplates = [
+    getGenereltBrevTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
+    getNotatTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
+    getSvarPåInnsynsbegjæringTemplate({ sakstype, fagsystemId, requiresGosysOppgave }),
+  ];
+
+  if (
+    sakstype === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027 ||
+    sakstype === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027
+  ) {
+    return baseTemplates;
+  }
+
+  return [...baseTemplates, getEttersendingTilTrygderettenTemplate({ sakstype, fagsystemId, requiresGosysOppgave })];
+};
