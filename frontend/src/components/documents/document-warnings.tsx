@@ -1,4 +1,4 @@
-import { ExclamationmarkTriangleIcon, PasswordHiddenIcon } from '@navikt/aksel-icons';
+import { PasswordHiddenIcon } from '@navikt/aksel-icons';
 import { HStack, Tag, Tooltip } from '@navikt/ds-react';
 import {
   canDistribute,
@@ -25,7 +25,9 @@ export const DocumentWarnings = ({ varianter }: Props) => {
     <HStack wrap={false} gap="space-8" className="empty:hidden">
       {canDistribute(variant) ? null : (
         <Tooltip content={`Filtype ${FILE_TYPE_NAMES[variant.filtype]} kan ikke distribueres`}>
-          <ExclamationmarkTriangleIcon aria-hidden className="text-ax-text-danger-decoration" />
+          <Tag data-color="neutral" size="xsmall" variant="outline">
+            Kan ikke distribueres
+          </Tag>
         </Tooltip>
       )}
       {canOpenInKabal(varianter) ? null : <FileType varianter={varianter} />}
