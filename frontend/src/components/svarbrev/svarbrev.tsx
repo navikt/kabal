@@ -55,7 +55,7 @@ interface ContainerProps extends FilterProps {
 }
 
 const Container = ({ children, sort, onSortChange, ...filterProps }: ContainerProps) => (
-  <VStack maxWidth="2000px">
+  <VStack maxWidth="2000px" position="relative">
     <Heading level="1" size="medium">
       Svarbrev
     </Heading>
