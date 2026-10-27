@@ -1,7 +1,8 @@
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Box, Button, Detail, HStack, Skeleton, Switch, Table, Tooltip } from '@navikt/ds-react';
+import { Box, Button, Detail, HStack, Popover, Skeleton, Switch, Table, Tooltip } from '@navikt/ds-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
+import { InfoBox } from '@/components/info-box/info-box';
 import type { ScoredNamedSvarbrevSetting } from '@/components/svarbrev/filter-sort';
 import { SvarbrevSettingHistory } from '@/components/svarbrev/history';
 import { PdfModal } from '@/components/svarbrev/modal/modal';
@@ -52,6 +53,7 @@ export const Row = ({ modal, ...setting }: Props) => {
   const rowRef = useRef<HTMLTableRowElement>(null);
 
   const [isFocused, setIsFocused] = useState(rowRef.current?.contains(document.activeElement) ?? false);
+  const anchorRef = useRef<HTMLDivElement | null>(null);
 
   const previousId = usePrevious(id);
   const wasActive = previousId === setting.id;
@@ -87,6 +89,12 @@ export const Row = ({ modal, ...setting }: Props) => {
         onBlur={() => setIsFocused(false)}
       >
         <Table.DataCell>
+          <div ref={anchorRef} aria-hidden className="pointer-events-none absolute top-0 left-1/2" />
+          <Popover open={hasChanges} anchorEl={anchorRef.current} placement="bottom" onClose={() => undefined}>
+            <Popover.Content className="p-0">
+              <InfoBox variant="info">Du har ulagrede endringer. Lagre før du går videre.</InfoBox>
+            </Popover.Content>
+          </Popover>
           <Switch
             checked={localShouldSend}
             onChange={({ target }) => setLocalShouldSend(target.checked)}
