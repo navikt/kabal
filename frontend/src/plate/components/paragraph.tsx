@@ -21,7 +21,7 @@ export const Paragraph = (props: RenderProps) => {
         lineHeight: ptToEm(LINE_HEIGHT_PT),
         marginBottom: '1em',
       }}
-      className="mb-0 whitespace-pre-wrap before:absolute before:cursor-text before:text-ax-text-neutral-decoration before:content-[attr(data-placeholder)]"
+      className="before:text-ax-text-neutral-decoration mb-0 whitespace-pre-wrap before:absolute before:cursor-text before:content-[attr(data-placeholder)]"
       attributes={{ ...props.attributes, 'data-placeholder': isEmpty(element) ? 'Avsnitt' : '' }}
     >
       {children}

@@ -110,7 +110,7 @@ export const History = ({ smartDocument, oppgaveId }: Props) => {
               </li>
             ) : null}
             {isVersionsError ? (
-              <li className="p-2 text-ax-text-danger">Kunne ikke hente versjoner fra server</li>
+              <li className="text-ax-text-danger p-2">Kunne ikke hente versjoner fra server</li>
             ) : null}
             {isEmpty && !isLoadingVersions && !isVersionsError ? <li className="p-2">Ingen versjoner</li> : null}
           </Box>

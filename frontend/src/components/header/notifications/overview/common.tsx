@@ -30,7 +30,7 @@ export const GroupContainer = ({ children, highlight = false }: GroupContainerPr
     marginBlock="space-8"
     borderRadius="4"
     shadow="dialog"
-    className={highlight ? 'outline-2 outline-ax-border-accent' : undefined}
+    className={highlight ? 'outline-ax-border-accent outline-2' : undefined}
   >
     <VStack as="section" overflowY="hidden" className="group/notifications">
       {children}
@@ -45,7 +45,7 @@ interface NotificationsGroupProps {
 
 export const NotificationsGroup = ({ notifications, showCaseData = false }: NotificationsGroupProps) => {
   if (notifications.length === 0) {
-    return <BodyShort className="px-2 text-ax-text-neutral-subtle italic">Ingen varsler</BodyShort>;
+    return <BodyShort className="text-ax-text-neutral-subtle px-2 italic">Ingen varsler</BodyShort>;
   }
 
   const Entry = showCaseData ? KabalNotificationWithCaseDataEntry : KabalNotificationEntry;

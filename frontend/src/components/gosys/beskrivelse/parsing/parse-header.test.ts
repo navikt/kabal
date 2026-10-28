@@ -139,7 +139,7 @@ describe('parse Gosys header', () => {
     });
   });
 
-  it('should parse header with missing last time digits', () => {
+  it('should parse header with missing first time digit', () => {
     const header = '--- 12.06.2024 9:00 F_Z994864 E_Z994864 (Z994864, 4291) ---';
 
     expect.assertions(1);

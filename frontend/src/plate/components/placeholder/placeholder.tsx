@@ -154,7 +154,7 @@ const Placeholder = (props: PlateElementProps<PlaceholderElement>) => {
           style={{
             paddingLeft: hideDeleteButton || readOnly ? '0' : '1em',
           }}
-          className={`inline-block text-ax-text-neutral ${isFocused ? 'bg-ax-accent-200' : 'bg-ax-neutral-200'} after:cursor-text after:select-none after:text-ax-text-neutral-subtle after:content-[attr(data-placeholder)]`}
+          className={`text-ax-text-neutral inline-block ${isFocused ? 'bg-ax-accent-200' : 'bg-ax-neutral-200'} after:text-ax-text-neutral-subtle after:cursor-text after:content-[attr(data-placeholder)] after:select-none`}
           onClick={onClick}
         >
           {children}
@@ -169,7 +169,7 @@ const Placeholder = (props: PlateElementProps<PlaceholderElement>) => {
               position="absolute"
               top="space-0"
               left="space-0"
-              className="inline-flex cursor-pointer items-center text-ax-text-danger-decoration hover:bg-ax-bg-neutral-moderate active:bg-ax-bg-neutral-strong"
+              className="text-ax-text-danger-decoration hover:bg-ax-bg-neutral-moderate active:bg-ax-bg-neutral-strong inline-flex cursor-pointer items-center"
             >
               <button type="button" onClick={deletePlaceholder}>
                 <TrashIcon aria-hidden />

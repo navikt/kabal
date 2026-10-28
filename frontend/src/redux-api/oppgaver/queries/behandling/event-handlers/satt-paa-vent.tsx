@@ -35,7 +35,7 @@ export const handleSattPaaVentEvent =
               <Label size="small" htmlFor={id}>
                 Årsak
               </Label>
-              <p id={id} className="m-0 border-l border-l-ax-border-neutral-subtle p-0 pl-1 italic">
+              <p id={id} className="border-l-ax-border-neutral-subtle m-0 border-l p-0 pl-1 italic">
                 {sattPaaVent.reason}
               </p>
             </InfoToast>,

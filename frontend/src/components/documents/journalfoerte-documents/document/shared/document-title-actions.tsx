@@ -33,7 +33,7 @@ export const DocumentTitleActions = ({ setEditMode, hasAccess, tittel }: Props) 
       flexShrink="0"
       width="0"
       overflow="hidden"
-      className="focus-within:w-fit group-hover:w-fit"
+      className="group-hover:w-fit focus-within:w-fit"
     >
       <Button
         data-color="neutral"

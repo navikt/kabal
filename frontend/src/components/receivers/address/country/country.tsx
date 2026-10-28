@@ -25,7 +25,7 @@ export const Country = ({ value = 'NO', originalValue = 'NO', onChange, width }:
   const countryNameRef = useRef(currentCountryName);
 
   const maxCountrySize = useMemo(
-    () => countryCodeList.reduce((max, { land: { length } }) => (length > max ? length : max), 0),
+    () => countryCodeList.reduce((max, { land: { length } }) => Math.max(length, max), 0),
     [countryCodeList],
   );
 

@@ -9,7 +9,7 @@ export const Container = ({ children }: FragmentProps) => (
 );
 
 export const StyledCloseButton = (props: Omit<ButtonProps, 'className'>) => (
-  <Button {...props} className="absolute top-0 right-0 text-ax-text-neutral" />
+  <Button {...props} className="text-ax-text-neutral absolute top-0 right-0" />
 );
 
 interface ToastContainerProps extends FragmentProps {
@@ -64,7 +64,7 @@ const Timer = ({ duration, type }: TimerProps) => (
     style={{
       animationDuration: `${duration - SLIDE_DURATION}ms`,
     }}
-    className="origin-left animate-forwards animate-linear animate-once animate-timer group-hover/toast:animate-paused"
+    className="animate-forwards animate-linear animate-once animate-timer group-hover/toast:animate-paused origin-left"
   />
 );
 

@@ -49,7 +49,7 @@ const Container = ({ title, icon, notification, children }: Props) => {
       borderWidth="1 1 1 4"
       borderColor={borderColor}
       background="neutral-soft"
-      className={`${read ? 'opacity-60 hover:opacity-100' : 'opacity-100'} starting:opacity-0 transition-[opacity,background-color] duration-200 focus-within:opacity-100 hover:bg-ax-bg-default`}
+      className={`${read ? 'opacity-60 hover:opacity-100' : 'opacity-100'} hover:bg-ax-bg-default transition-[opacity,background-color] duration-200 focus-within:opacity-100 starting:opacity-0`}
     >
       <HStack wrap={false} gap="space-4" align="start" width="100%" paddingBlock="space-0 space-8">
         <Box
@@ -70,7 +70,7 @@ const Container = ({ title, icon, notification, children }: Props) => {
           dateTime={createdAt}
           icon={<ClockIcon aria-hidden />}
           wrap={false}
-          className="ml-auto whitespace-nowrap pr-1 text-ax-small italic"
+          className="text-ax-small ml-auto pr-1 whitespace-nowrap italic"
         />
       </HStack>
       <VStack gap="space-8" paddingInline="space-8" paddingBlock="space-0 space-8" flexGrow="1">

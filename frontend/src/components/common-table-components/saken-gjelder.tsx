@@ -18,7 +18,7 @@ export const SakenGjelderName = ({ oppgaveId }: Props) => {
 
   return (
     <Tooltip content={name} delay={500}>
-      <span className="inline-block min-w-full max-w-20 truncate text-ax-medium">{name}</span>
+      <span className="text-ax-medium inline-block max-w-20 min-w-full truncate">{name}</span>
     </Tooltip>
   );
 };

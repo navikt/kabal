@@ -21,7 +21,7 @@ const decorateWhitespaceIssues: Decorate = ({ editor, entry: [node, path], type 
 };
 
 export const WhitespaceIssueLeaf = (props: PlateLeafProps) => (
-  <PlateLeaf {...props} className="underline decoration-ax-text-danger-subtle decoration-wavy underline-offset-2" />
+  <PlateLeaf {...props} className="decoration-ax-text-danger-subtle underline decoration-wavy underline-offset-2" />
 );
 
 export const WhitespaceDecorationPlugin = createTSlatePlugin({

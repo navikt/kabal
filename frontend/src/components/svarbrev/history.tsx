@@ -113,7 +113,7 @@ const HistoryEntry = (changeSet: InitialVersion | ChangeSet) => {
             as="time"
             dateTime={changeSet.modified}
             paddingBlock="space-2 space-0"
-            className="pr-[3px] font-normal text-ax-small italic leading-none"
+            className="text-ax-small pr-[3px] leading-none font-normal italic"
           >
             {isoDateTimeToPretty(changeSet.modified)}
           </Box>

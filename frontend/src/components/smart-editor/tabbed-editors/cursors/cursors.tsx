@@ -60,7 +60,7 @@ const Cursor = ({ caretPosition, data, disableCaret, disableSelection, selection
           <Box
             position="absolute"
             left="space-0"
-            className={`bottom-full whitespace-nowrap rounded-l-sm rounded-br-sm p-[.25em] text-[.75em] text-ax-text-neutral ${caretBackgroundColorClass}`}
+            className={`text-ax-text-neutral bottom-full rounded-l-sm rounded-br-sm p-[.25em] text-[.75em] whitespace-nowrap ${caretBackgroundColorClass}`}
             ref={labelRef}
           >
             {navn} ({navIdent})

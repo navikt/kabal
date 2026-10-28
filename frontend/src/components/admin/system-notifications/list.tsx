@@ -30,12 +30,12 @@ export const ListSystemNotifications = () => {
 
       <VStack as="ol" gap="space-16" marginBlock="space-0 space-1">
         {isLoading ? (
-          <BodyShort size="small" className="text-center text-ax-text-neutral-subtle italic">
+          <BodyShort size="small" className="text-ax-text-neutral-subtle text-center italic">
             Laster systemvarsler...
           </BodyShort>
         ) : null}
         {!isLoading && systemNotifications.length === 0 ? (
-          <BodyShort size="small" className="text-center text-ax-text-neutral-subtle italic">
+          <BodyShort size="small" className="text-ax-text-neutral-subtle text-center italic">
             Ingen systemvarsler
           </BodyShort>
         ) : null}
@@ -58,7 +58,7 @@ const Notification = ({ id, title, message, createdAt }: AdminSystemNotification
       borderColor="danger"
       background="neutral-soft"
       className={
-        'opacity-100 starting:opacity-0 transition-[opacity,background-color] duration-200 hover:bg-ax-bg-default'
+        'hover:bg-ax-bg-default opacity-100 transition-[opacity,background-color] duration-200 starting:opacity-0'
       }
     >
       <HStack wrap={false} gap="space-4" align="start" width="100%" paddingBlock="space-0 space-8">
@@ -73,7 +73,7 @@ const Notification = ({ id, title, message, createdAt }: AdminSystemNotification
           dateTime={createdAt}
           icon={<ClockIcon aria-hidden />}
           wrap={false}
-          className="ml-auto whitespace-nowrap pr-1 text-ax-small italic"
+          className="text-ax-small ml-auto pr-1 whitespace-nowrap italic"
         />
       </HStack>
       <VStack gap="space-8" paddingInline="space-8" paddingBlock="space-0 space-8" flexGrow="1">

@@ -45,7 +45,7 @@ export const GosysBeskrivelseTabs = ({ beskrivelse = '', entries = splitBeskrive
       <Tabs.Panel value={GosysBeskrivelseFormat.GOSYS} className="overflow-auto">
         <BodyLong
           size="small"
-          className="mt-2 overflow-auto whitespace-pre-wrap border-ax-border-neutral-subtle border-l-4 pl-4"
+          className="border-ax-border-neutral-subtle mt-2 overflow-auto border-l-4 pl-4 whitespace-pre-wrap"
         >
           {beskrivelse?.trim()}
         </BodyLong>

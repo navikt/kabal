@@ -32,7 +32,7 @@ export const ToolbarDropdown = ({ icon, children, title, disabled }: Props) => {
         </HStack>
       </Button>
 
-      {isOpen ? <VStack className="absolute right-0 rounded-lg bg-ax-bg-raised shadow-md">{children}</VStack> : null}
+      {isOpen ? <VStack className="bg-ax-bg-raised absolute right-0 rounded-lg shadow-md">{children}</VStack> : null}
     </div>
   );
 };

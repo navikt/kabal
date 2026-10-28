@@ -135,7 +135,7 @@ const AsyncCopyLink = ({ baseUrl, eventName, appName }: AsyncCopyLinkProps) => {
         onClick={onClick}
         onAnimationEnd={() => setCopied(false)}
         icon={
-          copied ? <CheckmarkIcon aria-hidden className="animate-bounce animate-once" /> : <FilesIcon aria-hidden />
+          copied ? <CheckmarkIcon aria-hidden className="animate-once animate-bounce" /> : <FilesIcon aria-hidden />
         }
       >
         {appName}

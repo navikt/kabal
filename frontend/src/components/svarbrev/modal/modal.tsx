@@ -118,7 +118,7 @@ export const PdfModal = ({
             ) : null}
 
             <div className="relative h-375 max-h-[90vh] w-full">
-              <div className="-translate-1/2 absolute top-1/2 left-1/2 z-0">
+              <div className="absolute top-1/2 left-1/2 z-0 -translate-1/2">
                 <Loader size="3xlarge" />
               </div>
 

@@ -68,7 +68,7 @@ const SaksnummerBase = ({ label, saksnummer, ...props }: SaksnummerBaseProps) =>
   return (
     <PlateElement<SaksnummerElement | ArenaSaksnummerElement> {...props} as="div">
       <SectionContainer data-element={element.type} sectionType={SectionTypeEnum.LABEL}>
-        <span className="inline-block text-ax-neutral-800" style={{ width: ptToEm(150) }} contentEditable={false}>
+        <span className="text-ax-neutral-800 inline-block" style={{ width: ptToEm(150) }} contentEditable={false}>
           {label}:{' '}
         </span>
         {/* Don't render unnecessary text nodes that Slate automatically pads PlaceholderElement with */}
