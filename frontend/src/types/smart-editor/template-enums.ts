@@ -22,4 +22,5 @@ export enum TemplateIdEnum {
   GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_DIREKTE_TIL_TR = 'gjenopptakelsesbegjæring-orientering-om-tilsvar-direkte-til-tr',
   GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR = 'gjenopptakelsesbegjæring-ettersending-til-tr',
   TIL_FORELEGGELSE = 'til-foreleggelse',
+  BESLUTNING_I_SAK_OM_BEGJÆRING_OM_UTSATT_IVERKSETTELSE = 'beslutning-i-sak-om-begjæring-om-utsatt-iverksettelse',
 }
