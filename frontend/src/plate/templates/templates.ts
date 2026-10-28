@@ -32,6 +32,11 @@ import {
   getBehandlingEtterTrOpphevetTemplate,
 } from '@/plate/templates/behandling-etter-tr-opphevet-vedtak';
 import {
+  BESLUTNING_I_SAK_OM_BEGJÆRING_OM_UTSATT_IVERKSETTELSE_METADATA,
+  BESLUTNING_I_SAK_OM_BEGJÆRING_OM_UTSATT_IVERKSETTELSE_SECTIONS,
+  getBeslutningISakOmBegjæringOmUtsattIverksettelseTemplate,
+} from '@/plate/templates/beslutning-i-sak-om-begjæring-om-utsatt-iverksettelse';
+import {
   EKSPEDISJONSBREV_TIL_TRYGDERETTEN_METADATA,
   EKSPEDISJONSBREV_TIL_TRYGDERETTEN_SECTIONS,
   getEkspedisjonsbrevTilTrygderettenTemplate,
@@ -125,6 +130,8 @@ export const TEMPLATE_METADATA_MAP = {
     GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_METADATA,
   [GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR_METADATA.templateId]: GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR_METADATA,
   [TIL_FORELEGGELSE_METADATA.templateId]: TIL_FORELEGGELSE_METADATA,
+  [BESLUTNING_I_SAK_OM_BEGJÆRING_OM_UTSATT_IVERKSETTELSE_METADATA.templateId]:
+    BESLUTNING_I_SAK_OM_BEGJÆRING_OM_UTSATT_IVERKSETTELSE_METADATA,
 };
 
 export const TEMPLATE_METADATA_LIST = Object.values(TEMPLATE_METADATA_MAP);
@@ -165,6 +172,8 @@ export const TEMPLATE_SECTIONS_MAP = {
     GJENOPPTAKSBEGJÆRING_ORIENTERING_OM_TILSVAR_SECTIONS,
   [GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR_METADATA.templateId]: GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR_SECTIONS,
   [TIL_FORELEGGELSE_METADATA.templateId]: TIL_FORELEGGELSE_SECTIONS,
+  [BESLUTNING_I_SAK_OM_BEGJÆRING_OM_UTSATT_IVERKSETTELSE_METADATA.templateId]:
+    BESLUTNING_I_SAK_OM_BEGJÆRING_OM_UTSATT_IVERKSETTELSE_SECTIONS,
 };
 
 export const getKlageTemplates = (params: CreateTemplateParams) => [
@@ -174,6 +183,7 @@ export const getKlageTemplates = (params: CreateTemplateParams) => [
   getRolQuestionsTemplate(params),
   getRolTilsvarsbrevTemplate(params),
   getTilForeleggelseTemplate(params),
+  getBeslutningISakOmBegjæringOmUtsattIverksettelseTemplate(params),
   getSvarPåInnsynsbegjæringTemplate(params),
   getVarselOmOmgjøringTilUgunstTemplate(params),
 ];

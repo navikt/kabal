@@ -75,6 +75,8 @@ const getSmartDocumentTitle = (templateId: TemplateIdEnum, fallback: string) => 
     case TemplateIdEnum.ANKEVEDTAK:
     case TemplateIdEnum.GJENOPPTAKSBEGJÆRING_VEDTAK:
       return 'Omgjøring av klagevedtak';
+    case TemplateIdEnum.BESLUTNING_I_SAK_OM_BEGJÆRING_OM_UTSATT_IVERKSETTELSE:
+      return 'Klageinstans sin vurdering av begjæring om utsatt iverksettelse';
     default:
       return fallback;
   }
