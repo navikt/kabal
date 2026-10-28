@@ -7,7 +7,7 @@ import { RedisInstrumentation } from '@opentelemetry/instrumentation-redis';
 import { UndiciInstrumentation } from '@opentelemetry/instrumentation-undici';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node';
+import { BatchSpanProcessor } from '@opentelemetry/sdk-trace';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 export const fastifyOtelInstrumentation = new FastifyOtelInstrumentation();
@@ -16,7 +16,7 @@ const sdk = new NodeSDK({
   resource: resourceFromAttributes({
     [ATTR_SERVICE_NAME]: 'kabal-frontend-bff',
   }),
-  spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter())],
+  spanProcessors: [new BatchSpanProcessor({ exporter: new OTLPTraceExporter() })],
   instrumentations: [
     new DnsInstrumentation(),
     new HttpInstrumentation(),
