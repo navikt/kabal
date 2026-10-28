@@ -157,7 +157,7 @@ export const InnsendingshjemmelListInner = ({ selected, onChange, error, ytelse,
             variant="simple"
             autoFocus
           />
-          <hr className="m-0 border-ax-border-neutral border-b" />
+          <hr className="border-ax-border-neutral m-0 border-b" />
         </>
       ) : null}
       <FilterList

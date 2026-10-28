@@ -19,7 +19,7 @@ export const createDragUI = (documentTitleList: string[], e: React.DragEvent<HTM
     const title = window.document.createElement('h1');
     title.style.margin = '0';
     title.style.fontSize = '1em';
-    title.innerText = `${documentsCount} Dokumenter:`;
+    title.textContent = `${documentsCount} Dokumenter:`;
     dragElement.appendChild(title);
   }
 
@@ -37,7 +37,7 @@ export const createDragUI = (documentTitleList: string[], e: React.DragEvent<HTM
 
     for (let i = 0; i < listItemCount; i++) {
       const p = window.document.createElement('li');
-      p.innerText = documentTitleList[i] ?? '';
+      p.textContent = documentTitleList[i] ?? '';
 
       list.appendChild(p);
     }
@@ -48,7 +48,7 @@ export const createDragUI = (documentTitleList: string[], e: React.DragEvent<HTM
     if (shouldShowMore) {
       const more = window.document.createElement('p');
       more.style.margin = '0';
-      more.innerText = `... ${documentsCount - MAX_DOCUMENT_LINES} dokumenter til.`;
+      more.textContent = `... ${documentsCount - MAX_DOCUMENT_LINES} dokumenter til.`;
 
       dragElement.appendChild(more);
     }
@@ -56,7 +56,7 @@ export const createDragUI = (documentTitleList: string[], e: React.DragEvent<HTM
     const p = window.document.createElement('p');
     p.style.padding = '0';
     p.style.margin = '0';
-    p.innerText = documentTitleList.join(', ');
+    p.textContent = documentTitleList.join(', ');
 
     dragElement.appendChild(p);
   }

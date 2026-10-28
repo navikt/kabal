@@ -69,7 +69,7 @@ export const ReceivingEnhet = ({ selectedEnhet, setSelectedEnhet, enheter, error
         gosysOppgaveId={gosysOppgaveId}
       />
       <VStack as="fieldset" gap="space-4">
-        <legend className="mb-2 font-ax-bold">Velg enhet som skal motta oppgaven</legend>
+        <legend className="font-ax-bold mb-2">Velg enhet som skal motta oppgaven</legend>
 
         <Search
           style={{ width: 600 }}
@@ -136,7 +136,7 @@ const SelectableListItem = ({ enhetsnr, navn, selected, setSelected }: SelectBut
       align="center"
       ref={ref}
       onClick={() => setSelected(isSelected ? null : enhetsnr)}
-      className="cursor-pointer hover:bg-ax-bg-accent-moderate"
+      className="hover:bg-ax-bg-accent-moderate cursor-pointer"
     >
       <Button data-color="neutral" size="small" variant="tertiary" title={label} aria-label={label} className="w-12">
         <HStack align="center" justify="center">

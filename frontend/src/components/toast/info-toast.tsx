@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const InfoToast = ({ title, children, attrs }: Props) => (
-  <div {...attrs} className="whitespace-normal break-normal">
+  <div {...attrs} className="break-normal whitespace-normal">
     <Heading level="1" size="xsmall">
       {title}
     </Heading>

@@ -54,5 +54,5 @@ interface ListProps {
 }
 
 export const List = ({ children }: ListProps) => (
-  <ul className="m-0 list-none overflow-y-auto overflow-x-hidden whitespace-nowrap p-0">{children}</ul>
+  <ul className="m-0 list-none overflow-x-hidden overflow-y-auto p-0 whitespace-nowrap">{children}</ul>
 );

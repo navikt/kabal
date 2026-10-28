@@ -117,7 +117,7 @@ const CodeBlock = ({ children }: CodeBlockProps) => (
     borderColor="neutral"
     borderRadius="4"
     padding="space-16"
-    className="wrap-break-word block whitespace-pre-wrap"
+    className="block wrap-break-word whitespace-pre-wrap"
   >
     {children}
   </Box>

@@ -50,7 +50,7 @@ const SelectedChildren = ({
   registreringshjemmelIdList: ILovKildeToRegistreringshjemler[];
 }) => {
   if (registreringshjemmelIdList.length === 0) {
-    return <p className="m-0 text-ax-text-neutral-subtle">Ingen valgte hjemler</p>;
+    return <p className="text-ax-text-neutral-subtle m-0">Ingen valgte hjemler</p>;
   }
 
   return (

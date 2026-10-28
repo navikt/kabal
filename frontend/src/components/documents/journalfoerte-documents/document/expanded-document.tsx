@@ -59,7 +59,7 @@ export const ExpandedDocument = ({ document }: ExpandedDocumentProps) => {
 
 const MottattHelpText = () => (
   <HelpText>
-    <p className="m-0 whitespace-normal text-base">
+    <p className="m-0 text-base whitespace-normal">
       Denne journalposten har status «Mottatt» og har ikke blitt journalført. Sørg for å få dokumentet journalført
       riktig før du bruker det i saksbehandlingen din.
     </p>

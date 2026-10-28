@@ -39,12 +39,12 @@ export const Comment = ({ isMain, comment, hasWriteAccess }: Props) => {
     >
       <VStack as="article" position="relative">
         <HStack gap="space-8" align="center" justify="space-between" wrap={false}>
-          <div className="w-full grow truncate text-ax-medium">{author.name}</div>
+          <div className="text-ax-medium w-full grow truncate">{author.name}</div>
           {canDeleteComment ? (
             <DeleteButton
               id={id}
               title={isMain ? 'Slett tråd' : 'Slett svar'}
-              className="justify-start opacity-0 transition-opacity duration-200 focus:opacity-100 group-focus-within/comment:opacity-100 group-hover/comment:opacity-100"
+              className="justify-start opacity-0 transition-opacity duration-200 group-focus-within/comment:opacity-100 group-hover/comment:opacity-100 focus:opacity-100"
             />
           ) : null}
         </HStack>
@@ -63,7 +63,7 @@ export const Comment = ({ isMain, comment, hasWriteAccess }: Props) => {
           <WriteComment comment={editingComment} label="Rediger kommentar" />
         ) : (
           <HStack gap="space-8" justify="space-between" align="start" wrap={false}>
-            <BodyLong size="small" className="wrap-break-word overflow-hidden whitespace-break-spaces">
+            <BodyLong size="small" className="overflow-hidden wrap-break-word whitespace-break-spaces">
               {text}
             </BodyLong>
 
@@ -71,7 +71,7 @@ export const Comment = ({ isMain, comment, hasWriteAccess }: Props) => {
               <EditButton
                 isEditing={isEditing}
                 setIsEditing={() => setEditingComment(comment)}
-                className="opacity-0 transition-opacity duration-200 focus:opacity-100 group-focus-within/comment:opacity-100 group-hover/comment:opacity-100"
+                className="opacity-0 transition-opacity duration-200 group-focus-within/comment:opacity-100 group-hover/comment:opacity-100 focus:opacity-100"
               />
             ) : null}
           </HStack>

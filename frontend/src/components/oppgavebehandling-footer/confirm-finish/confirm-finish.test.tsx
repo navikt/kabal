@@ -360,7 +360,7 @@ describe('ConfirmFinish', () => {
         expect(screen.queryByRole('dialog')).toBeVisible();
       });
 
-      test('Medhold etter forvaltningsloven § 35', async () => {
+      test('Ugunst (Ugyldig)', async () => {
         mockOppgave(SaksTypeEnum.OMGJØRINGSKRAV, UtfallEnum.UGUNST, true);
         renderConfirmFinish();
 

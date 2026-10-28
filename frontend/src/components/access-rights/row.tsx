@@ -28,11 +28,11 @@ export const Row = ({
   return (
     <tr key={ytelse.id}>
       <th
-        className={`relative z-1 m-0 h-8 max-w-64 border-ax-border-neutral border-x border-b ${isRowFocused ? 'bg-ax-bg-neutral-strong text-ax-text-neutral-contrast' : 'text-ax-text-neutral'} p-0`}
+        className={`border-ax-border-neutral relative z-1 m-0 h-8 max-w-64 border-x border-b ${isRowFocused ? 'bg-ax-bg-neutral-strong text-ax-text-neutral-contrast' : 'text-ax-text-neutral'} p-0`}
         title={ytelseTitle}
         onMouseEnter={() => setFocusedCell([-1, rowIndex])}
       >
-        <span className="justify-left flex h-full w-full items-center overflow-hidden whitespace-nowrap px-2 hover:w-fit hover:overflow-visible hover:bg-ax-accent-200">
+        <span className="justify-left hover:bg-ax-accent-200 flex h-full w-full items-center overflow-hidden px-2 whitespace-nowrap hover:w-fit hover:overflow-visible">
           <span className="truncate">{ytelseTitle}</span>
         </span>
       </th>

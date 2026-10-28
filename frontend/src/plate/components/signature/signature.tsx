@@ -86,7 +86,7 @@ export const Signature = (props: PlateElementProps<SignatureElement>) => {
               borderWidth: ptToEm(2),
             }}
           >
-            <HStack marginInline="auto" wrap justify="center" className="select-none self-center whitespace-nowrap">
+            <HStack marginInline="auto" wrap justify="center" className="self-center whitespace-nowrap select-none">
               {showEnableCheckbox ? (
                 <Checkbox
                   disabled={readOnly}

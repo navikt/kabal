@@ -43,7 +43,7 @@ export const GosysBeskrivelse = ({ oppgavebeskrivelse }: Props) => {
             <Entry {...firstEntry} />
           </Box>
           {secondEntry !== undefined ? (
-            <div className="relative z-1 h-12 overflow-hidden after:pointer-events-none after:absolute after:right-0 after:bottom-0 after:left-0 after:h-12 after:bg-gradient-to-t after:from-ax-bg-default after:to-transparent">
+            <div className="after:from-ax-bg-default relative z-1 h-12 overflow-hidden after:pointer-events-none after:absolute after:right-0 after:bottom-0 after:left-0 after:h-12 after:bg-gradient-to-t after:to-transparent">
               <Box background="neutral-soft" padding="space-8" borderRadius="4">
                 <Entry {...secondEntry} />
               </Box>

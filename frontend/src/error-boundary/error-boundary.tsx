@@ -61,7 +61,7 @@ export class ErrorBoundary extends Component<Props, State> {
             padding="space-16"
             borderRadius="4"
             marginBlock="space-0 space-1"
-            className="whitespace-pre-wrap break-words"
+            className="break-words whitespace-pre-wrap"
           >
             {this.state.error.message}
           </Box>
@@ -100,7 +100,7 @@ export const StyledPreDescriptionDetails = ({ children }: FragmentProps) => (
     background="neutral-moderate"
     borderColor="neutral"
     borderWidth="1"
-    className="whitespace-pre-wrap break-all text-ax-text-neutral"
+    className="text-ax-text-neutral break-all whitespace-pre-wrap"
   >
     {children}
   </Box>

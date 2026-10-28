@@ -39,7 +39,7 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
         aria-label={label}
         aria-placeholder="Skriv inn tittel"
         ref={ref}
-        className={`${opacityClass} min-w-32 cursor-text whitespace-pre-wrap rounded-sm border border-ax-border-neutral-subtle px-0.5 empty:not-focus:text-ax-text-neutral-subtle empty:not-focus:italic empty:not-focus:before:content-[attr(aria-placeholder)] focus:border-ax-border-focus`}
+        className={`${opacityClass} border-ax-border-neutral-subtle empty:not-focus:text-ax-text-neutral-subtle focus:border-ax-border-focus min-w-32 cursor-text rounded-sm border px-0.5 whitespace-pre-wrap empty:not-focus:italic empty:not-focus:before:content-[attr(aria-placeholder)]`}
         onFocus={(e) => {
           setCaretAtEnd(e.currentTarget);
         }}
@@ -53,7 +53,7 @@ export const EditableTitle = ({ title, onChange, label, isLoading }: Props) => {
           const { textContent } = e.currentTarget;
 
           if (textContent === null || textContent?.length === 0) {
-            e.currentTarget.innerText = title;
+            e.currentTarget.textContent = title;
           }
         }}
         onKeyDown={(e) => {

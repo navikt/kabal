@@ -13,7 +13,7 @@ export const KeyboardHelp = ({ submitLabel }: KeyboardHelpProps) => (
     paddingInline="space-16"
     marginInline="auto"
     width="fit"
-    className="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-1 text-ax-text-subtle"
+    className="text-ax-text-subtle grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-1"
   >
     <KeyRow shortcut={`${MOD_KEY_TEXT} + Enter`} description={submitLabel} />
     <KeyRow shortcut="Esc" description="Lukk" />
@@ -27,7 +27,7 @@ interface KeyRowProps {
 
 const KeyRow = ({ shortcut, description }: KeyRowProps) => (
   <>
-    <kbd className="inline-block rounded-sm bg-ax-bg-neutral-moderate px-1.5 py-0.5 text-center font-mono text-small">
+    <kbd className="bg-ax-bg-neutral-moderate text-small inline-block rounded-sm px-1.5 py-0.5 text-center font-mono">
       {shortcut}
     </kbd>
     <BodyShort size="small" className="py-0.5">

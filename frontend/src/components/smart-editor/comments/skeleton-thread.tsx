@@ -7,7 +7,7 @@ export const SkeletonThread = () => (
     borderWidth="1"
     borderColor="neutral-subtle"
     borderRadius="4"
-    className="select-none snap-start opacity-50 transition-shadow duration-200 ease-in-out hover:shadow-ax-dialog"
+    className="hover:shadow-ax-dialog snap-start opacity-50 transition-shadow duration-200 ease-in-out select-none"
   >
     <VStack as="section" gap="space-16" marginInline="space-12" padding="space-16">
       <VStack gap="space-4 space-0">

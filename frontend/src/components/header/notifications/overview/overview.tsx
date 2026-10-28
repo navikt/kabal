@@ -44,7 +44,7 @@ export const OverviewModal = ({ notifications, icon, unreadCount }: OverviewModa
 
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <Dialog.Popup className="h-full w-full min-w-175 max-w-[calc(100%-2rem)]">
+      <Dialog.Popup className="h-full w-full max-w-[calc(100%-2rem)] min-w-175">
         <Dialog.Header>
           <Dialog.Title className="flex items-center gap-1">
             {icon}

@@ -17,7 +17,7 @@ export const getFullmektigMessage = (fullmektig: ISetFullmektigParams['fullmekti
   ) : (
     <div>
       Fullmektig satt til:
-      <div className="whitespace-pre-wrap border-l-2 border-l-ax-border-neutral-subtle pl-2 italic">
+      <div className="border-l-ax-border-neutral-subtle border-l-2 pl-2 whitespace-pre-wrap italic">
         <div className="mb-1">{name}</div>
 
         <Line>{address.adresselinje1}</Line>

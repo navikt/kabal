@@ -23,7 +23,7 @@ interface TableHeadersProps {
 }
 
 const TableHeaders = (props: TableHeadersProps) => (
-  <Table.Header className="sticky top-12 z-1 whitespace-nowrap bg-ax-bg-default">
+  <Table.Header className="bg-ax-bg-default sticky top-12 z-1 whitespace-nowrap">
     <Table.Row>
       <Table.HeaderCell>Aktiv</Table.HeaderCell>
 

@@ -42,7 +42,7 @@ export const MaltekstseksjonReadOnly = ({ id, textToHighlight }: Props) => {
             <li key={textId}>
               <TextPreview
                 textId={textId}
-                className={`rounded-sm outline-offset-2 ${textId === textToHighlight ? 'outline-4 outline-ax-border-accent outline-solid' : ''}`}
+                className={`rounded-sm outline-offset-2 ${textId === textToHighlight ? 'outline-ax-border-accent outline-4 outline-solid' : ''}`}
               />
             </li>
           ))}

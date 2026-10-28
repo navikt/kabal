@@ -28,7 +28,7 @@ export const HistoryEvent = ({
         paddingBlock="space-0 space-8"
         overflow="hidden"
         position="relative"
-        className="pl-[2px] before:absolute before:top-0 before:bottom-0 before:left-0 before:rounded-l-sm before:border-inherit before:border-l-3"
+        className="pl-[2px] before:absolute before:top-0 before:bottom-0 before:left-0 before:rounded-l-sm before:border-l-3 before:border-inherit"
         style={{
           borderColor: `var(${borderColor})`,
         }}
@@ -52,7 +52,7 @@ export const HistoryEvent = ({
             </Box>
           </HStack>
 
-          <time className="pt-0.5 pr-[3px] font-normal text-sm italic leading-none" dateTime={timestamp}>
+          <time className="pt-0.5 pr-[3px] text-sm leading-none font-normal italic" dateTime={timestamp}>
             {isoDateTimeToPretty(timestamp)}
           </time>
         </HStack>

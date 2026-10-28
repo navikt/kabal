@@ -47,7 +47,7 @@ export const PaaVentReason = ({ sattPaaVent }: Props) => {
       : (data.find((r) => r.id === sattPaaVent.reasonId)?.beskrivelse ?? 'Ukjent årsak');
 
   const span = (
-    <span ref={truncatedRef} className="block max-w-60 truncate text-ax-medium">
+    <span ref={truncatedRef} className="text-ax-medium block max-w-60 truncate">
       {reason}
     </span>
   );

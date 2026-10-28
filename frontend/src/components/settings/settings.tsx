@@ -14,7 +14,7 @@ export const Settings = () => (
         gridTemplateRows: 'min-content',
         gridTemplateAreas: '"filters other"',
       }}
-      className="@max-[1800px]:flex @min-[1800px]:grid w-full @max-[1800px]:flex-col @min-[1800px]:items-start gap-4"
+      className="w-full gap-4 @max-[1800px]:flex @max-[1800px]:flex-col @min-[1800px]:grid @min-[1800px]:items-start"
     >
       <Filters />
 
