@@ -55,12 +55,12 @@ export const DateColumnHeader = ({
   interactive = true,
   ...filterProps
 }: DateColumnHeaderProps) => (
-  <Table.ColumnHeader className="whitespace-nowrap p-0" aria-sort={getAriaSort(sortKey, sortering, rekkefoelge)}>
+  <Table.ColumnHeader className="p-0 whitespace-nowrap" aria-sort={getAriaSort(sortKey, sortering, rekkefoelge)}>
     <Box
       asChild
       borderRadius="12"
       width="fit-content"
-      className="-outline-offset-2 hover:outline-2 hover:outline-ax-bg-neutral-moderate-hover"
+      className="hover:outline-ax-bg-neutral-moderate-hover -outline-offset-2 hover:outline-2"
     >
       <HStack align="stretch" wrap={false}>
         {interactive ? (

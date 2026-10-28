@@ -30,7 +30,7 @@ export const SearchResult = ({
     <button
       type="button"
       disabled={!selectable}
-      className={`flex flex-col gap-1 rounded-sm border-none px-3 py-2 text-left ${selectable ? 'cursor-pointer bg-ax-bg-accent-moderate ring-2 ring-ax-border-accent ring-inset hover:bg-ax-bg-accent-strong hover:text-ax-text-on-colored focus-visible:bg-ax-bg-accent-strong focus-visible:text-ax-text-on-colored focus-visible:outline-none' : 'cursor-not-allowed bg-ax-bg-neutral-soft opacity-60'}`}
+      className={`flex flex-col gap-1 rounded-sm border-none px-3 py-2 text-left ${selectable ? 'bg-ax-bg-accent-moderate ring-ax-border-accent hover:bg-ax-bg-accent-strong hover:text-ax-text-on-colored focus-visible:bg-ax-bg-accent-strong focus-visible:text-ax-text-on-colored cursor-pointer ring-2 ring-inset focus-visible:outline-none' : 'bg-ax-bg-neutral-soft cursor-not-allowed opacity-60'}`}
       onClick={() => {
         if (selectable) {
           onSelect(result);
@@ -55,6 +55,6 @@ const PartTypeTag = ({ type }: PartTypeTagProps) => {
   const typeLabel = type === IdType.FNR ? 'Person' : 'Organisasjon';
 
   return (
-    <span className="inline-block rounded-sm bg-ax-bg-neutral-moderate px-1.5 py-0.5 text-small">{typeLabel}</span>
+    <span className="bg-ax-bg-neutral-moderate text-small inline-block rounded-sm px-1.5 py-0.5">{typeLabel}</span>
   );
 };

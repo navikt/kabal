@@ -86,7 +86,7 @@ const Code = ({ children }: CodeProps) => (
     paddingInline="space-4"
     marginInline="space-2"
     borderRadius="4"
-    className="inline whitespace-nowrap text-sm"
+    className="inline text-sm whitespace-nowrap"
   >
     {children}
   </Box>

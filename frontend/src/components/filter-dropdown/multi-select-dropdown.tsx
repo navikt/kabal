@@ -87,7 +87,7 @@ export const MultiSelectDropdown = <T extends string | number>({
         <Trigger variant={variant}>{labelWithCounter}</Trigger>
 
         <ActionMenu.Content className="relative">
-          <div className="sticky -top-2 z-1 -mx-2 -mt-2 flex flex-col gap-2 bg-ax-bg-raised p-2">
+          <div className="bg-ax-bg-raised sticky -top-2 z-1 -mx-2 -mt-2 flex flex-col gap-2 p-2">
             <Header<T> label={label} value={value} setValue={setValue} onChange={onChange} allOptions={allOptions} />
 
             <ActionMenu.Divider />

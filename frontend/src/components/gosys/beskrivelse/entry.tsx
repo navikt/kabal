@@ -19,12 +19,12 @@ export const Entry = ({ author, content, date }: GosysBeskrivelseEntry) => (
 
     <BodyLong
       size="small"
-      className="whitespace-pre-wrap border-ax-border-neutral-subtle border-l-4 pl-2 empty:before:italic empty:before:content-['Ingen_tekst']"
+      className="border-ax-border-neutral-subtle border-l-4 pl-2 whitespace-pre-wrap empty:before:italic empty:before:content-['Ingen_tekst']"
     >
       {content}
     </BodyLong>
 
-    <time className="ml-auto whitespace-nowrap text-ax-small italic">{format(date, 'dd.MM.yyyy HH:mm')}</time>
+    <time className="text-ax-small ml-auto whitespace-nowrap italic">{format(date, 'dd.MM.yyyy HH:mm')}</time>
   </VStack>
 );
 

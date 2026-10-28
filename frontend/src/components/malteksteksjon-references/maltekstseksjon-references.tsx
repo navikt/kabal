@@ -88,7 +88,7 @@ export const MaltekstseksjonReferences = ({
   if (noReferences) {
     return (
       <Tooltip content={tooltip}>
-        <HStack align="center" gap="space-4" className="mr-4 font-bold text-l">
+        <HStack align="center" gap="space-4" className="text-l mr-4 font-bold">
           {children} {icon}
         </HStack>
       </Tooltip>

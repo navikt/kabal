@@ -16,7 +16,7 @@ import { isText } from '@/plate/utils/queries';
 const AutoCapitalisedLeaf = (props: PlateLeafProps<FormattedText>) => (
   <PlateLeaf
     {...props}
-    className="underline decoration-auto decoration-ax-text-accent-subtle decoration-dotted underline-offset-1"
+    className="decoration-ax-text-accent-subtle underline decoration-dotted decoration-auto underline-offset-1"
   />
 );
 

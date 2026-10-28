@@ -53,7 +53,7 @@ export const Notifications = () => {
                 maxCount={999}
                 data-color={hasUnreadNotifications ? 'danger' : 'neutral'}
                 aria-label={label}
-                className="absolute top-0 right-0 shadow-ax-dialog"
+                className="shadow-ax-dialog absolute top-0 right-0"
               />
             </InternalHeader.Button>
           </ActionMenu.Trigger>

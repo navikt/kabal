@@ -15,7 +15,7 @@ export const TriggerContent = <T,>({ display, value, emptyLabel }: TriggerConten
   return (
     <span className="flex min-w-0 grow flex-wrap items-center gap-1">
       {value.length === 0 ? (
-        <BodyShort as="span" size="small" className="px-0.5 text-ax-text-subtle">
+        <BodyShort as="span" size="small" className="text-ax-text-subtle px-0.5">
           {emptyLabel}
         </BodyShort>
       ) : (

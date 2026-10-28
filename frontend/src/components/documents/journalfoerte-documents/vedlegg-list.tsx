@@ -100,7 +100,7 @@ export const VedleggList = ({ list, minTop, maxTop, dokument, documentIndex }: P
         gridColumnStart: 'title-start',
         [TREE_HEIGHT_VAR]: `${treeLineHeight}px`,
       }}
-      className="left-[51px] before:absolute before:top-0 before:left-0 before:h-(--tree-height) before:border-l before:border-l-ax-border-neutral-subtle"
+      className="before:border-l-ax-border-neutral-subtle left-[51px] before:absolute before:top-0 before:left-0 before:h-(--tree-height) before:border-l"
     >
       {vedleggNodeList}
     </VStack>

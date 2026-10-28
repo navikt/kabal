@@ -67,7 +67,7 @@ export const MaltekstseksjonPreview = ({ maltekstseksjon }: Props) => {
     return (
       <VStack flexGrow="1" position="relative" as="section">
         <div className="after:absolute after:top-0 after:left-0 after:h-full after:w-full after:backdrop-blur-[2px]">
-          <Loader size="large" className="-translate-1/2 absolute top-1/2 left-1/2 z-1" />
+          <Loader size="large" className="absolute top-1/2 left-1/2 z-1 -translate-1/2" />
           <RedaktoerRichText
             editorId={editorId}
             savedContent={savedContent}

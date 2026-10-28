@@ -9,7 +9,7 @@ export const KeyRow = ({ shortcuts, description }: KeyRowProps) => (
       {shortcuts.map((s) => (
         <kbd
           key={s}
-          className="inline-block rounded-sm bg-ax-bg-neutral-moderate px-1.5 py-0.5 text-center font-mono text-ax-small"
+          className="bg-ax-bg-neutral-moderate text-ax-small inline-block rounded-sm px-1.5 py-0.5 text-center font-mono"
         >
           {s}
         </kbd>

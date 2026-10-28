@@ -4,7 +4,7 @@ import type { SearchableMultiSelectProps } from '@/components/searchable-select/
 export const ReadOnlyMultiSelect = <T,>({ id, label, value, emptyLabel }: SearchableMultiSelectProps<T>) => {
   if (value.length === 0) {
     return (
-      <BodyShort as="span" size="small" className="px-0.5 text-ax-text-subtle">
+      <BodyShort as="span" size="small" className="text-ax-text-subtle px-0.5">
         {emptyLabel}
       </BodyShort>
     );

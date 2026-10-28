@@ -223,7 +223,7 @@ export const SelectPopover = ({
             paddingInline="space-16"
             marginInline="auto"
             width="fit"
-            className="grid grid-cols-[auto_1fr] items-center gap-x-3 text-ax-text-subtle"
+            className="text-ax-text-subtle grid grid-cols-[auto_1fr] items-center gap-x-3"
           >
             <KeyRow shortcuts={['↑', '↓']} description="Naviger" />
             {keyboardShortcuts.map(({ shortcuts, description }) => (

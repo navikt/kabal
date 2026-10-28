@@ -44,7 +44,7 @@ export const Message = ({
     width="fit-content"
     maxWidth="100%"
     minWidth="80px"
-    className="group/bubble opacity-100 starting:opacity-0 duration-200"
+    className="group/bubble opacity-100 duration-200 starting:opacity-0"
   >
     {isFirst ? (
       <MessageHeader author={author} created={created} mine={mine} />
@@ -87,9 +87,9 @@ const MessageHeader = ({ author, created }: MessageHeaderProps) => {
 
   return (
     <HStack asChild wrap={false} align="center" justify="space-between" gap="space-8">
-      <h1 className="mb-2 overflow-hidden text-ax-small">
+      <h1 className="text-ax-small mb-2 overflow-hidden">
         <Tooltip content={name}>
-          <span className="truncate text-ax-text-neutral-subtle">{name}</span>
+          <span className="text-ax-text-neutral-subtle truncate">{name}</span>
         </Tooltip>
 
         <HStack
@@ -97,7 +97,7 @@ const MessageHeader = ({ author, created }: MessageHeaderProps) => {
           align="center"
           gap="space-4"
           flexShrink="0"
-          className="shrink-0 text-ax-small text-ax-text-neutral-subtle"
+          className="text-ax-small text-ax-text-neutral-subtle shrink-0"
         >
           <Tooltip content={isoDateTimeToPretty(created) ?? created}>
             <time dateTime={created}>{displayTime(created)}</time>
@@ -129,7 +129,7 @@ const MessageTime = ({ created, mine, background }: MessageTimeProps) => (
       borderRadius="4"
       background={background}
       shadow="dialog"
-      className="-translate-y-full text-ax-text-neutral-subtle opacity-0 transition-opacity duration-200 group-hover/bubble:opacity-100"
+      className="text-ax-text-neutral-subtle -translate-y-full opacity-0 transition-opacity duration-200 group-hover/bubble:opacity-100"
     >
       <Tooltip content={isoDateTimeToPretty(created) ?? created}>
         <time dateTime={created}>{displayTime(created)}</time>
@@ -191,7 +191,7 @@ const SendNotificationButton = ({ id, placement }: SendNotificationButtonProps) 
         variant="tertiary"
         size="xsmall"
         onClick={onClick}
-        className={`h-full cursor-pointer ${placement === Placement.RIGHT ? 'rounded-l-none' : 'rounded-r-none'} opacity-0 transition-opacity duration-200 focus:opacity-100 group-hover/bubble:opacity-100`}
+        className={`h-full cursor-pointer ${placement === Placement.RIGHT ? 'rounded-l-none' : 'rounded-r-none'} opacity-0 transition-opacity duration-200 group-hover/bubble:opacity-100 focus:opacity-100`}
         loading={isLoading}
         icon={<BellIcon aria-hidden className="text-ax-medium" />}
       />

@@ -107,4 +107,4 @@ export const Inputs = ({ behandlingstidError, setBehandlingstidError }: Props) =
   );
 };
 
-const Vr = () => <div className="h-full border-b-ax-neutral border-l" />;
+const Vr = () => <div className="border-b-ax-neutral h-full border-l" />;
