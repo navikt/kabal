@@ -22,7 +22,7 @@ export const AccessErrorsSummary = ({ documentErrors = [], attachmentErrors = []
     <Tooltip
       content={text}
       maxChar={Number.POSITIVE_INFINITY}
-      className="whitespace-pre text-left"
+      className="text-left whitespace-pre"
       placement={placement}
     >
       {children}

@@ -60,7 +60,7 @@ export const Thread = ({ thread, style, onClick, isAbsolute = false, isFocused =
       >
         <CommentList comments={comments} hasWriteAccess={hasWriteAccess} />
         {isExpanded ? null : (
-          <div className="text-center text-ax-small text-ax-text-neutral-subtle italic">
+          <div className="text-ax-small text-ax-text-neutral-subtle text-center italic">
             {thread.comments.length} svar
           </div>
         )}

@@ -103,7 +103,7 @@ export const GodFormulering = ({
               paddingInline="space-8"
               overflow="hidden"
               maxHeight={isFullRichText ? 'unset' : '200px'}
-              className={`after:absolute after:bottom-0 after:left-0 after:h-10 after:w-full after:bg-linear-to-t after:from-ax-bg-neutral-soft after:via-20% after:via-ax-bg-neutral-soft after:to-transparent [&>:first-child]:mt-0 ${isFullRichText ? 'after:hidden' : 'after:block'}`}
+              className={`after:from-ax-bg-neutral-soft after:via-ax-bg-neutral-soft after:absolute after:bottom-0 after:left-0 after:h-10 after:w-full after:bg-linear-to-t after:via-20% after:to-transparent [&>:first-child]:mt-0 ${isFullRichText ? 'after:hidden' : 'after:block'}`}
             >
               <Plate<RichTextEditor> editor={editor} readOnly>
                 <KabalPlateEditor id={id} lang={SPELL_CHECK_LANGUAGES[language]} />

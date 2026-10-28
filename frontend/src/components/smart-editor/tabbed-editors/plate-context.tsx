@@ -157,7 +157,7 @@ const PlateContext = ({ smartDocument, oppgave, isConnected, isSynced }: PlateCo
 };
 
 const DynamicContentLoadingOverlay = () => (
-  <div className="absolute inset-0 z-50 flex items-center justify-center bg-ax-bg-default">
+  <div className="bg-ax-bg-default absolute inset-0 z-50 flex items-center justify-center">
     <VStack align="center" gap="space-4">
       <Loader size="xlarge" title="Laster innhold..." />
     </VStack>

@@ -53,7 +53,7 @@ export const Pdf = ({ loading, data, error, refresh }: UsePdfData) => {
             >
               Last PDF på nytt
             </Button>
-            <code className="border-2 border-ax-border-neutral bg-ax-bg-neutral-moderate p-2 text-xs">{error}</code>
+            <code className="border-ax-border-neutral bg-ax-bg-neutral-moderate border-2 p-2 text-xs">{error}</code>
           </VStack>
         </LocalAlert>
       </div>

@@ -49,7 +49,7 @@ export const MaltekstseksjonListItem = ({
           borderWidth="2"
           borderColor="accent"
           background={isDragOver ? 'accent-moderateA' : 'neutral-moderateA'}
-          className="border-dashed text-shadow-[1px_1px_white,_-1px_-1px_var(--ax-bg-default)] backdrop-blur-[2px]"
+          className="border-dashed backdrop-blur-[2px] text-shadow-[1px_1px_white,_-1px_-1px_var(--ax-bg-default)]"
         >
           {dragOverText}
         </Box>

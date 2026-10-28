@@ -86,7 +86,7 @@ const TraceIdSection = ({ traceId }: TraceIdSectionProps) => {
 
       <HStack align="center" gap="space-2" wrap={false}>
         <Tag size="xsmall" variant="moderate" data-color="neutral" className="min-w-0 font-mono" title={traceId}>
-          <span className="truncate text-ax-small">{traceId}</span>
+          <span className="text-ax-small truncate">{traceId}</span>
         </Tag>
 
         <CopyButton size="xsmall" copyText={traceId} className="shrink-0" />

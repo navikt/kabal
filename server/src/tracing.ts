@@ -16,7 +16,7 @@ const sdk = new NodeSDK({
   resource: resourceFromAttributes({
     [ATTR_SERVICE_NAME]: 'kabal-frontend-bff',
   }),
-  spanProcessor: new BatchSpanProcessor(new OTLPTraceExporter()),
+  spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter())],
   instrumentations: [
     new DnsInstrumentation(),
     new HttpInstrumentation(),

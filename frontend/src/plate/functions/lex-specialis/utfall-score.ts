@@ -17,10 +17,7 @@ export const getUtfallScore = (utfallIdSet: UtfallEnum[], utfallSetList: string[
       return MAX_UTFALL_SCORE;
     }
 
-    const minLength = parsedUtfallList.reduce(
-      (min, { length }) => (length < min ? length : min),
-      Number.POSITIVE_INFINITY,
-    );
+    const minLength = parsedUtfallList.reduce((min, { length }) => Math.min(length, min), Number.POSITIVE_INFINITY);
 
     return minLength === 0 ? MAX_UTFALL_SCORE : NEGATIVE_INFINITY;
   }

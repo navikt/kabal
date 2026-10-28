@@ -63,7 +63,7 @@ export const AttachmentList = ({
   return (
     <VStack
       position="relative"
-      className={`before:absolute before:top-0 before:bottom-4 before:left-4 before:border-l before:border-l-ax-border-neutral-subtle ${hasAttachments ? 'before:block' : 'before:hidden'}`}
+      className={`before:border-l-ax-border-neutral-subtle before:absolute before:top-0 before:bottom-4 before:left-4 before:border-l ${hasAttachments ? 'before:block' : 'before:hidden'}`}
     >
       <NewAttachmentButtons document={parentDocument} />
 
@@ -127,7 +127,7 @@ const Attachment = ({ attachment, parentDocument, top, setSize, posInSet }: Atta
 const ListSeparator = ({ top }: { top: number }) => (
   <div
     data-label="Journalførte dokumenter"
-    className="absolute right-0 left-0 my-3 ml-0 border-ax-border-neutral-subtle border-b after:absolute after:top-1/2 after:left-5 after:-translate-y-1/2 after:bg-ax-bg-default after:px-1 after:text-ax-small after:content-[attr(data-label)]"
+    className="border-ax-border-neutral-subtle after:bg-ax-bg-default after:text-ax-small absolute right-0 left-0 my-3 ml-0 border-b after:absolute after:top-1/2 after:left-5 after:-translate-y-1/2 after:px-1 after:content-[attr(data-label)]"
     style={{ top }}
   />
 );

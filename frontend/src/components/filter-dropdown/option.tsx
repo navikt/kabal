@@ -28,7 +28,7 @@ export const Option = <T extends string>({
     <div
       ref={wrapperRef}
       className={
-        focused ? 'w-full scroll-my-4 rounded px-1 outline outline-ax-border-focus' : 'w-full scroll-my-4 rounded px-1'
+        focused ? 'outline-ax-border-focus w-full scroll-my-4 rounded px-1 outline' : 'w-full scroll-my-4 rounded px-1'
       }
     >
       <Checkbox

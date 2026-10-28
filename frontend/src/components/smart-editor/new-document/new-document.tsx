@@ -159,7 +159,7 @@ const TemplateButton = ({ template, loading, onClick }: TemplateButtonProps) => 
           align="center"
           position="relative"
           style={{ opacity: hasAccess ? 1 : 0.5, cursor: hasAccess ? 'pointer' : 'not-allowed' }}
-          className="hover:bg-ax-bg-neutral-moderate-hover focus:rounded focus:outline-2 focus:outline-ax-border-focus focus:-outline-offset-2"
+          className="hover:bg-ax-bg-neutral-moderate-hover focus:outline-ax-border-focus focus:rounded focus:outline-2 focus:-outline-offset-2"
         >
           <LoadingOverlay loading={loading} />
 

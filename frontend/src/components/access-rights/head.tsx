@@ -22,9 +22,9 @@ const CONTAINER_WIDTH = NON_ANGLED_HEADER_HEIGHT;
 const CONTAINER_HEIGHT = Math.sqrt(ANGLED_HEADER_WIDTH ** 2 / 2);
 
 export const Head = ({ saksbehandlere, setFocusedCell, focusedCell: [focusedColumn] }: Props) => (
-  <thead className="sticky top-0 z-2 bg-ax-bg-default" style={SHADOW_STYLE}>
+  <thead className="bg-ax-bg-default sticky top-0 z-2" style={SHADOW_STYLE}>
     <tr>
-      <th className="sticky top-0 z-2 bg-ax-bg-default">Ytelse</th>
+      <th className="bg-ax-bg-default sticky top-0 z-2">Ytelse</th>
       <th
         className={`${ANGLED_TH_CLASSES} ${focusedColumn === 0 ? 'bg-ax-bg-neutral-strong text-ax-text-neutral-contrast' : 'text-ax-text-neutral odd:bg-ax-bg-neutral-moderate'}`}
         style={{ height: CONTAINER_HEIGHT, transform: 'skew(-45deg)' }}

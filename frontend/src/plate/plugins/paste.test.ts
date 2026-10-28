@@ -35,7 +35,7 @@ describe('paste plugin', () => {
   });
 
   describe('split plain text into paragraphs', () => {
-    it('text with unnatural breaks into separate paragraphs', () => {
+    it('short lines with unnatural breaks, breaks each line into a separate paragraph', () => {
       const raw = `This is a paragraph.
 This is another paragraph.
 This is a third paragraph.`;
@@ -46,7 +46,7 @@ This is a third paragraph.`;
       expect(result).toStrictEqual(expected);
     });
 
-    it('text with natural breaks into same paragraph', () => {
+    it('text with natural breaks, breaks into same paragraph', () => {
       const raw = `This was probably a heading
 This is another paragraph with a lot of text that should be split into multiple lines when copied
 from a PDF. The PDF text is not formatted as a paragraph, but rather multiple lines. We try to
@@ -62,7 +62,7 @@ detect these lines and split them into paragraphs where natural.`;
       expect(result).toStrictEqual(expected);
     });
 
-    it('text with unnatural breaks into separate paragraphs', () => {
+    it('wrapped lines ending with a short line, joins the wrapped lines and breaks after the short line', () => {
       const raw = `This is a paragraph with a lot of text that should be split into multiple lines when copied from a
 PDF.
 This is a paragraph with a lot of text that should be split into multiple lines when copied from a
@@ -78,6 +78,7 @@ PDF.`;
         'This is a paragraph with a lot of text that should be split into multiple lines when copied from a PDF.',
       ]);
     });
+
     it('should remove double spaces', () => {
       const raw = 'This  has   double    spaces.';
       const result = processParagraphs(raw);

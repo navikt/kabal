@@ -55,7 +55,7 @@ const TaskList = () => {
       <VStack gap="space-16">
         <HStack gap="space-16">
           <LocalAlert status="error" title="Noe gikk galt">
-            <code className="block whitespace-pre-wrap rounded-lg bg-ax-bg-neutral-moderate p-4">
+            <code className="bg-ax-bg-neutral-moderate block rounded-lg p-4 whitespace-pre-wrap">
               {JSON.stringify(error, null, 2)}
             </code>
           </LocalAlert>

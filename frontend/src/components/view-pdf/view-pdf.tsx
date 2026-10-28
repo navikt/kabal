@@ -138,7 +138,7 @@ export const ViewPDF = () => {
           selectableFormats={selectableFormats}
           setSelectedFormat={setSelectedFormat}
         />
-        <h1 className="m-0 truncate border-ax-border-neutral border-l py-1 pl-1 font-ax-bold text-base">
+        <h1 className="border-ax-border-neutral font-ax-bold m-0 truncate border-l py-1 pl-1 text-base">
           {title ?? mergedDocument?.title ?? 'Ukjent dokument'}
         </h1>
         <Button

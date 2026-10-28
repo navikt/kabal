@@ -142,7 +142,7 @@ const getAdjustedColSizes = (colSizes: number[], table: TableElement): number[] 
 };
 
 const getNumCols = (table: TableElement): number =>
-  table.children.reduce((max, { children }) => (children.length > max ? children.length : max), 0);
+  table.children.reduce((max, { children }) => Math.max(children.length, max), 0);
 
 const adjustSpans = (table: TableElement): TableRowElement[] => {
   const maxCols = getNumCols(table);

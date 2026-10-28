@@ -20,7 +20,7 @@ export const TitleActions = ({ setEditMode, editMode, document, renameAccessErro
       flexShrink="0"
       width="0"
       overflow="hidden"
-      className="focus-within:w-fit group-hover:w-fit"
+      className="group-hover:w-fit focus-within:w-fit"
     >
       {renameAccessError === null ? (
         <Button
