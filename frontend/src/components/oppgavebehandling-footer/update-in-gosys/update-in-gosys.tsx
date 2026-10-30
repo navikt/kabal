@@ -1,4 +1,4 @@
-import { BodyShort, Button, Checkbox, Dialog, Heading, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Button, Checkbox, Dialog, Heading, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { format } from 'date-fns';
 import { useContext, useState } from 'react';
@@ -12,6 +12,7 @@ import { Enhetmappe } from '@/components/oppgavebehandling-footer/update-in-gosy
 import { GosysOppgave } from '@/components/oppgavebehandling-footer/update-in-gosys/gosys-oppgave';
 import { ReceivingEnhet } from '@/components/oppgavebehandling-footer/update-in-gosys/receiving-enhet';
 import { ValidationSummary } from '@/components/oppgavebehandling-footer/validation-summary';
+import { UtfallTag } from '@/components/utfall-tag/utfall-tag';
 import { isReduxValidationResponse } from '@/functions/error-type-guard';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useFinishOppgavebehandlingWithUpdateInGosysMutation } from '@/redux-api/oppgaver/mutations/behandling';
@@ -129,15 +130,7 @@ const UpdateInGosysLoaded = ({ oppgavebehandling, enheter, initialBeskrivelse, c
 
               {gosysOppgaveIsOpen ? (
                 <VStack gap="space-12" width="min-content">
-                  {oppgavebehandling.typeId === SaksTypeEnum.ANKE &&
-                  (oppgavebehandling.resultat.utfallId === UtfallEnum.DELVIS_MEDHOLD ||
-                    oppgavebehandling.resultat.extraUtfallIdSet.includes(UtfallEnum.DELVIS_MEDHOLD)) ? (
-                    <InfoBox variant="info">
-                      Oppdater denne oppgaven fra Gosys ved å velge enhetsmappe "Sendt til Trygderetten". Du må i
-                      tillegg gå inn i Gosys og opprette en ny oppgave der, som du sender til vedtaksenheten med beskjed
-                      om at de kan effektuere det du har gitt delvis medhold i.
-                    </InfoBox>
-                  ) : null}
+                  <UpdateInGosysWarning oppgavebehandling={oppgavebehandling} />
 
                   <Beskrivelse beskrivelse={beskrivelse} setBeskrivelse={setBeskrivelse} />
 
@@ -270,6 +263,36 @@ const ConfirmationPanel = ({ checked, onChange, label, children }: ConfirmationP
       <Checkbox checked={checked} onChange={onChange}>
         {label}
       </Checkbox>
+    </InfoBox>
+  );
+};
+
+const UpdateInGosysWarning = ({
+  oppgavebehandling: {
+    typeId,
+    resultat: { extraUtfallIdSet, utfallId },
+  },
+}: {
+  oppgavebehandling: IOppgavebehandling;
+}) => {
+  if (typeId !== SaksTypeEnum.ANKE) {
+    return null;
+  }
+
+  if (utfallId !== UtfallEnum.DELVIS_MEDHOLD && !extraUtfallIdSet.includes(UtfallEnum.DELVIS_MEDHOLD)) {
+    return null;
+  }
+
+  return (
+    <InfoBox variant="warning">
+      <BodyLong spacing size="small">
+        Du må oppdatere oppgaven i Gosys ved å velge din egen enhet og enhetsmappen «Sendt til Trygderetten».
+      </BodyLong>
+
+      <BodyLong size="small">
+        <strong>VIKTIG</strong>: Du må også opprette en ny oppgave i Gosys og sende den til vedtaksenheten, med
+        informasjon om at de kan effektuere utfallet <UtfallTag utfallId={UtfallEnum.DELVIS_MEDHOLD} />.
+      </BodyLong>
     </InfoBox>
   );
 };
