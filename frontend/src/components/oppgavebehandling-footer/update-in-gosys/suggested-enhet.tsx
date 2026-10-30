@@ -3,7 +3,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { CheckmarkCircleFillIconColored } from '@/components/colored-icons/colored-icons';
-import { FAGSYSTEM_INFOTRYGD } from '@/components/oppgavebehandling-footer/fagsystem';
+import { FAGSYSTEM_INFOTRYGD, FAGSYSTEM_PESYS } from '@/components/oppgavebehandling-footer/fagsystem';
 import { useIsAnkeOrGbWithUtfallToTr } from '@/components/oppgavebehandling-footer/update-in-gosys/use-is-anke-or-gb-with-utfall-to-tr';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useGetGosysOppgaveQuery } from '@/redux-api/oppgaver/queries/behandling/behandling';
@@ -50,7 +50,10 @@ export const SuggestedEnhet = ({ setSelectedEnhet, selectedEnhet, id, typeId, go
     return null;
   }
 
-  const suggestOpprettetAvEnhet = typeId === SaksTypeEnum.KLAGE && oppgave.fagsystemId === FAGSYSTEM_INFOTRYGD;
+  const { fagsystemId } = oppgave;
+
+  const suggestOpprettetAvEnhet =
+    typeId === SaksTypeEnum.KLAGE && (fagsystemId === FAGSYSTEM_INFOTRYGD || fagsystemId === FAGSYSTEM_PESYS);
 
   const shouldSuggest = suggestOwnEnhet || suggestOpprettetAvEnhet;
 
