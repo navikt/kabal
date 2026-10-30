@@ -23,4 +23,6 @@ export enum TemplateIdEnum {
   GJENOPPTAKSBEGJÆRING_ETTERSENDING_TIL_TR = 'gjenopptakelsesbegjæring-ettersending-til-tr',
   TIL_FORELEGGELSE = 'til-foreleggelse',
   BESLUTNING_I_SAK_OM_BEGJÆRING_OM_UTSATT_IVERKSETTELSE = 'beslutning-i-sak-om-begjæring-om-utsatt-iverksettelse',
+  SVAR_PÅ_PÅLEGG_OM_TILSVAR_I_ANKESAK = 'svar-på-pålegg-om-tilsvar-i-ankesak',
+  BER_OM_UTSATT_FRIST_FOR_TILSVAR = 'ber-om-utsatt-frist-for-tilsvar',
 }

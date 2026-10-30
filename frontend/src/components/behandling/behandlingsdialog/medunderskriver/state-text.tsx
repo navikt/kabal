@@ -1,16 +1,13 @@
 import { InlineMessage } from '@navikt/ds-react';
-import { getTitleLowercase } from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
-import type { SaksTypeEnum } from '@/types/kodeverk';
 import { FlowState, type IMedunderskriver, ReviewFlowState } from '@/types/oppgave-common';
 
 interface Props {
   medunderskriver: IMedunderskriver;
-  typeId: SaksTypeEnum;
 }
 
-export const MedunderskriverStateText = ({ medunderskriver, typeId }: Props) => {
-  const text = useText(medunderskriver, typeId);
+export const MedunderskriverStateText = ({ medunderskriver }: Props) => {
+  const text = useText(medunderskriver);
 
   return (
     <InlineMessage status="info" size="small">
@@ -19,7 +16,7 @@ export const MedunderskriverStateText = ({ medunderskriver, typeId }: Props) => 
   );
 };
 
-const useText = ({ employee, flowState }: IMedunderskriver, typeId: SaksTypeEnum): string => {
+const useText = ({ employee, flowState }: IMedunderskriver): string => {
   const isSaksbehandler = useIsTildeltSaksbehandler();
 
   switch (flowState) {
@@ -27,13 +24,13 @@ const useText = ({ employee, flowState }: IMedunderskriver, typeId: SaksTypeEnum
       return 'Ikke oversendt.';
     case FlowState.SENT:
       return isSaksbehandler
-        ? `Oversendt til ${employee === null ? 'felles kø' : getTitleLowercase(typeId)}.`
+        ? `Oversendt til ${employee === null ? 'felles kø' : 'medunderskriver'}.`
         : 'Oversendt fra saksbehandler.';
     case FlowState.RETURNED:
-      return isSaksbehandler ? `Returnert av ${getTitleLowercase(typeId)}.` : 'Returnert til saksbehandler.';
+      return isSaksbehandler ? 'Returnert av medunderskriver.' : 'Returnert til saksbehandler.';
     case ReviewFlowState.APPROVED:
-      return isSaksbehandler ? `Godkjent av ${getTitleLowercase(typeId)}.` : 'Returnert med godkjenning.';
+      return isSaksbehandler ? 'Godkjent av medunderskriver.' : 'Returnert med godkjenning.';
     case ReviewFlowState.REJECTED:
-      return isSaksbehandler ? `Ikke godkjent av ${getTitleLowercase(typeId)}.` : 'Returnert uten godkjenning.';
+      return isSaksbehandler ? 'Ikke godkjent av medunderskriver.' : 'Returnert uten godkjenning.';
   }
 };

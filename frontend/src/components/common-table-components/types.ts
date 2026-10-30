@@ -1,6 +1,10 @@
 export enum ColumnKeyEnum {
   Type = 0,
-  TypeWithTrygderetten = 1,
+  TypeForAnkerAfter2027 = 42,
+  TypeForLedigeAnketeamOppgaver = 44,
+  TypeForSakerITR = 39,
+  TypeForNonAnketeam = 46,
+  AllTypes = 43,
   AllYtelser = 3,
   AccessYtelser = 4,
   UserYtelser = 5,
@@ -37,15 +41,17 @@ export enum ColumnKeyEnum {
   DatoSendtTilTr = 36,
   FlowStatesWithoutSelf = 37,
   FlowStatesWithSelf = 38,
-  TypeForSakerITR = 39,
   KrolStyring = 40,
   KrolStyringNonFilterable = 41,
 }
 
 export const TABLE_HEADERS = {
   [ColumnKeyEnum.Type]: 'Type',
-  [ColumnKeyEnum.TypeWithTrygderetten]: 'Type',
   [ColumnKeyEnum.TypeForSakerITR]: 'Type',
+  [ColumnKeyEnum.TypeForAnkerAfter2027]: 'Type',
+  [ColumnKeyEnum.AllTypes]: 'Type',
+  [ColumnKeyEnum.TypeForNonAnketeam]: 'Type',
+  [ColumnKeyEnum.TypeForLedigeAnketeamOppgaver]: 'Type',
   [ColumnKeyEnum.UserYtelser]: 'Ytelse',
   [ColumnKeyEnum.AllYtelser]: 'Ytelse',
   [ColumnKeyEnum.UserInnsendingshjemler]: 'Hjemmel',
