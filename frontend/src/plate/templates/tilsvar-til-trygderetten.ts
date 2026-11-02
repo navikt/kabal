@@ -23,7 +23,7 @@ export const TILSVAR_TIL_TRYGDERETTEN_SECTIONS: TemplateSections[] = [
 export const TILSVAR_TIL_TRYGDERETTEN_METADATA: TemplateMetadata = {
   templateId: TemplateIdEnum.TILSVAR_TIL_TRYGDERETTEN,
   tittel: 'Tilsvar til Trygderetten',
-  dokumentTypeId: DistribusjonsType.BREV,
+  dokumentTypeId: DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN,
   deprecatedSections: [],
 };
 

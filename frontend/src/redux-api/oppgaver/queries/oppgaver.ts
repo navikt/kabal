@@ -14,6 +14,20 @@ import type {
   UtgaatteApiResponse,
 } from '@/types/oppgaver';
 
+const DEFAULT_LEDIGE_ANKER_TYPER: SaksTypeEnum[] = [
+  SaksTypeEnum.ANKE,
+  SaksTypeEnum.ANKE_AFTER_2027,
+  SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK,
+  SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027,
+];
+
+const DEFAULT_LEDIGE_OPPGAVER_TYPER: SaksTypeEnum[] = [
+  SaksTypeEnum.KLAGE,
+  SaksTypeEnum.OMGJØRINGSKRAV,
+  SaksTypeEnum.ANKE,
+  SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK,
+];
+
 const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
   overrideExisting: ENVIRONMENT.isLocal,
   endpoints: (builder) => ({
@@ -30,7 +44,10 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       providesTags: [OppgaveListTagTypes.MINE_VENTENDE],
     }),
     getLedigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: (params) => ({ url: '/kabal-search/oppgaver/ledige', params }),
+      query: ({ typer = [], ...params }) => ({
+        url: '/kabal-search/oppgaver/ledige',
+        params: { ...params, typer: typer.length === 0 ? DEFAULT_LEDIGE_OPPGAVER_TYPER : typer },
+      }),
       providesTags: [OppgaveListTagTypes.LEDIGE],
     }),
     getEnhetensFerdigstilteOppgaver: builder.query<ApiResponse, EnhetensOppgaverParams>({
@@ -49,16 +66,16 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       providesTags: [OppgaveListTagTypes.ENHETENS_VENTENDE],
     }),
     getLedigeAnkerAfter2027: builder.query<ApiResponse, CommonOppgaverParams>({
-      query: (params) => ({
+      query: ({ typer = [], ...params }) => ({
         url: '/kabal-search/oppgaver/ledige',
-        params: { ...params, typer: [SaksTypeEnum.ANKE_AFTER_2027] },
+        params: { ...params, typer: typer.length === 0 ? DEFAULT_LEDIGE_ANKER_TYPER : typer },
       }),
       providesTags: [OppgaveListTagTypes.LEDIGE_ANKER_AFTER_2027],
     }),
     getAntallLedigeAnkerAfter2027MedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
       query: (params) => ({
         url: '/kabal-search/antalloppgavermedutgaattefrister',
-        params: { ...params, typer: [SaksTypeEnum.ANKE_AFTER_2027] },
+        params: { ...params },
       }),
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
@@ -128,7 +145,7 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
     getAnketeamLedigeOppgaver: builder.query<ApiResponse, CommonOppgaverParams>({
       query: (params) => ({
         url: '/kabal-search/anketeam/oppgaver/ledige',
-        params: { ...params, typer: [SaksTypeEnum.ANKE_AFTER_2027] },
+        params: { ...params },
       }),
       providesTags: [OppgaveListTagTypes.ANKETEAM_LEDIGE],
     }),

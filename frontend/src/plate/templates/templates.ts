@@ -106,7 +106,11 @@ import {
   TILSVAR_TIL_TRYGDERETTEN_METADATA,
   TILSVAR_TIL_TRYGDERETTEN_SECTIONS,
 } from '@/plate/templates/tilsvar-til-trygderetten';
-import { getUttalelseTilTrGbTemplate } from '@/plate/templates/uttalelse-til-tr-begjæring-om-gjenopptak';
+import {
+  getUttalelseTilTrGbTemplate,
+  UTTALELSE_TIL_TR_GB_METADATA,
+  UTTALELSE_TIL_TR_GB_SECTIONS,
+} from '@/plate/templates/uttalelse-til-tr-begjæring-om-gjenopptak';
 import {
   getVarselOmOmgjøringTilUgunstTemplate,
   VARSEL_OM_OMGJØRING_TIL_UGUNST_METADATA,
@@ -146,6 +150,7 @@ export const TEMPLATE_METADATA_MAP = {
     BESLUTNING_I_SAK_OM_BEGJÆRING_OM_UTSATT_IVERKSETTELSE_METADATA,
   [BER_OM_UTSATT_FRIST_FOR_TILSVAR_METADATA.templateId]: BER_OM_UTSATT_FRIST_FOR_TILSVAR_METADATA,
   [TILSVAR_TIL_TRYGDERETTEN_METADATA.templateId]: TILSVAR_TIL_TRYGDERETTEN_METADATA,
+  [UTTALELSE_TIL_TR_GB_METADATA.templateId]: UTTALELSE_TIL_TR_GB_METADATA,
 };
 
 export const TEMPLATE_METADATA_LIST = Object.values(TEMPLATE_METADATA_MAP);
@@ -190,6 +195,7 @@ export const TEMPLATE_SECTIONS_MAP = {
     BESLUTNING_I_SAK_OM_BEGJÆRING_OM_UTSATT_IVERKSETTELSE_SECTIONS,
   [BER_OM_UTSATT_FRIST_FOR_TILSVAR_METADATA.templateId]: BER_OM_UTSATT_FRIST_FOR_TILSVAR_SECTIONS,
   [TILSVAR_TIL_TRYGDERETTEN_METADATA.templateId]: TILSVAR_TIL_TRYGDERETTEN_SECTIONS,
+  [UTTALELSE_TIL_TR_GB_METADATA.templateId]: UTTALELSE_TIL_TR_GB_SECTIONS,
 };
 
 export const getKlageTemplates = (params: CreateTemplateParams) => [
@@ -220,12 +226,12 @@ export const getAnkeTemplates = (params: CreateTemplateParams) => [
 ];
 
 export const getAnkeAfter2027Templates = (params: CreateTemplateParams) => [
-  getGenereltBrevTemplate(params),
-  getNotatTemplate(params),
-  getBerOmUtsattFristForTilsvarTemplate(params),
   getTilsvarTilTrygderettenTemplate(params),
   getEttersendingTilTrygderettenTemplate(params),
+  getBerOmUtsattFristForTilsvarTemplate(params),
   getAnkevedtakTemplate(params),
+  getGenereltBrevTemplate(params),
+  getNotatTemplate(params),
   getTilForeleggelseTemplate(params),
   getVarselOmOmgjøringTilUgunstTemplate(params),
   getRolQuestionsTemplate(params),
@@ -246,11 +252,11 @@ export const getAnkeITrygderettenTemplates = (params: CreateTemplateParams) => [
 ];
 
 export const getAnkeITRAfter2027Templates = (params: CreateTemplateParams) => [
+  getEttersendingTilTrygderettenTemplate(params),
+  getTilsvarTilTrygderettenTemplate(params),
+  getBerOmUtsattFristForTilsvarTemplate(params),
   getGenereltBrevTemplate(params),
   getNotatTemplate(params),
-  getBerOmUtsattFristForTilsvarTemplate(params),
-  getTilsvarTilTrygderettenTemplate(params),
-  getEttersendingTilTrygderettenTemplate(params),
   getTilForeleggelseTemplate(params),
   getRolQuestionsTemplate(params),
   getRolTilsvarsbrevTemplate(params),
@@ -296,9 +302,10 @@ export const getBegjæringOmGjenopptakTemplates = (params: CreateTemplateParams)
 ];
 
 export const getBegjæringOmGjenopptakAfter2027Templates = (params: CreateTemplateParams) => [
-  getEttersendingTilTrygderettenTemplate(params),
-  getGjenopptaksbegjæringVedtakTemplate(params),
   getUttalelseTilTrGbTemplate(params),
+  getEttersendingTilTrygderettenTemplate(params),
+  getBerOmUtsattFristForTilsvarTemplate(params),
+  getGjenopptaksbegjæringVedtakTemplate(params),
   getGenereltBrevTemplate(params),
   getNotatTemplate(params),
   getTilForeleggelseTemplate(params),

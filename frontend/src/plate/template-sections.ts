@@ -39,6 +39,7 @@ export enum TemplateSections {
   SAKENS_FAKTISKE_SIDE = 'section-tyr',
   SAKENS_RETTSLIGE_SIDE = 'section-lam',
   ANKEMOTPARTEND_VURDERING = 'section-gås',
+  BER_OM_UTSATT_FRIST = 'section-bie',
 
   INTRODUCTION_TEMP = 'section-rev-temp', // For "migrating" ROL questions
 }

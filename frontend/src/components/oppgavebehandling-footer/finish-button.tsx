@@ -55,7 +55,10 @@ export const FinishButton = () => {
           const validationPromise = validate({ oppgaveId: id, type: ValidationType.FINISH }).unwrap();
 
           const ekspedisjonsbrevPromise =
-            typeId === SaksTypeEnum.ANKE_AFTER_2027 || typeId === SaksTypeEnum.ANKE
+            typeId === SaksTypeEnum.ANKE ||
+            typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
+            typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK ||
+            typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027
               ? getEkspedisjonsbrevNeedsToBeSent(id).unwrap() // Update currentData for useLazyGetEkspedisjonsbrevTilTrygderettenNeedsToBeSentQuery.
               : Promise.resolve(undefined);
 

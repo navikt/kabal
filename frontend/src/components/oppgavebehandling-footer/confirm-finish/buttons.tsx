@@ -33,6 +33,7 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
       );
 
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       switch (utfallId) {
         case UtfallEnum.TRUKKET:
         case UtfallEnum.HENLAGT:
@@ -63,6 +64,7 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
       }
 
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027:
       switch (utfallId) {
         case UtfallEnum.GJENOPPTATT_OPPHEVET:
           return (

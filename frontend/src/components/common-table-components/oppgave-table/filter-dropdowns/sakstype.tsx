@@ -25,8 +25,9 @@ export const SakstypeForSakerITR = (props: FilterDropdownProps) => (
     {...props}
     values={[
       SaksTypeEnum.ANKE_I_TRYGDERETTEN,
-      SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
       SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027,
+      SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
+      SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027,
     ]}
   />
 );

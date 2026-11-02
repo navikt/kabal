@@ -4,7 +4,7 @@ import { type JSX, useContext, useState } from 'react';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
 import { Direction, PopupContainer } from '@/components/popup-container/popup-container';
 import { isArenaCase } from '@/domain/arena-case';
-import type { TrygderettenSak } from '@/functions/is-trygderetten-sak';
+import type { TrygderettenSak, TrygderettenSakType } from '@/functions/is-trygderetten-sak';
 import {
   useNewAnkebehandlingMutation,
   useNewBehandlingFromTRBehandlingMutation,
@@ -91,12 +91,7 @@ const Popup = ({ show, close, oppgave, newBehandling, isLoading }: PopupProps) =
   );
 };
 
-const useNewBehandling = (
-  sakstype:
-    | SaksTypeEnum.ANKE_I_TRYGDERETTEN
-    | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
-    | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
-) => {
+const useNewBehandling = (sakstype: TrygderettenSakType) => {
   const newAnkebehandling = useNewAnkebehandlingMutation;
   const newBehandlingFromTRBehandling = useNewBehandlingFromTRBehandlingMutation;
 
@@ -105,21 +100,18 @@ const useNewBehandling = (
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       return newAnkebehandling();
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027:
       return newBehandlingFromTRBehandling();
   }
 };
 
-const getValidationType = (
-  type:
-    | SaksTypeEnum.ANKE_I_TRYGDERETTEN
-    | SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
-    | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR,
-): ValidationType => {
+const getValidationType = (type: TrygderettenSakType): ValidationType => {
   switch (type) {
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       return ValidationType.NEW_ANKEBEHANDLING;
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027:
       return ValidationType.NEW_BEHANDLING_FROM_TR_BEHANDLING;
   }
 };
@@ -147,6 +139,7 @@ const BodyText = ({ oppgave: { typeId, fagsystemId, requiresGosysOppgave } }: Bo
         </BodyShort>
       );
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027:
       return (
         <BodyShort>
           Denne saken er hos Trygderetten. Du kan velge å starte ny behandling av saken, men da vil «Begjæring om

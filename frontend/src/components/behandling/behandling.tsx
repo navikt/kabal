@@ -3,7 +3,9 @@ import type { JSX } from 'react/jsx-runtime';
 import { AnkeAfter2027Behandlingsdetaljer } from '@/components/behandling/behandlingsdetaljer/anke-after-2027-behandlingsdetaljer';
 import { AnkeITRAfter2027Behandlingsdetaljer } from '@/components/behandling/behandlingsdetaljer/anke-i-tr-after-2027-behandlingsdetaljer';
 import { Ankebehandlingsdetaljer } from '@/components/behandling/behandlingsdetaljer/ankebehandlingsdetaljer';
+import { BegjæringOmGjenopptakAfter2027Detaljer } from '@/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-after-2027-detaljer';
 import { BegjæringOmGjenopptakDetaljer } from '@/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-detaljer';
+import { BegjæringOmGjenopptakITRAfter2027Detaljer } from '@/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-i-tr-after-2027-detaljer';
 import { BegjæringOmGjenopptakITrDetaljer } from '@/components/behandling/behandlingsdetaljer/begjæring-om-gjenopptak-i-tr-detaljer';
 import { BehandlingEtterTrOpphevetDetaljer } from '@/components/behandling/behandlingsdetaljer/behandling-etter-tr-opphevet-detaljer';
 import { BehandlingSection } from '@/components/behandling/behandlingsdetaljer/behandling-section';
@@ -63,8 +65,12 @@ export const Behandlingsdetaljer = (): JSX.Element => {
       return <Omgjøringskravdetaljer oppgavebehandling={oppgave} />;
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
       return <BegjæringOmGjenopptakDetaljer oppgavebehandling={oppgave} />;
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
+      return <BegjæringOmGjenopptakAfter2027Detaljer oppgavebehandling={oppgave} />;
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
       return <BegjæringOmGjenopptakITrDetaljer oppgavebehandling={oppgave} />;
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027:
+      return <BegjæringOmGjenopptakITRAfter2027Detaljer oppgavebehandling={oppgave} />;
     case SaksTypeEnum.ANKE_AFTER_2027:
       return <AnkeAfter2027Behandlingsdetaljer oppgavebehandling={oppgave} />;
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:

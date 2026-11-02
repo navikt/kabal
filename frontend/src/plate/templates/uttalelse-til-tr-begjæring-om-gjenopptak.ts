@@ -22,7 +22,7 @@ export const UTTALELSE_TIL_TR_GB_SECTIONS: TemplateSections[] = [
 export const UTTALELSE_TIL_TR_GB_METADATA: TemplateMetadata = {
   templateId: TemplateIdEnum.UTTALELSE_TIL_TR_GB,
   tittel: 'Uttalelse til Trygderetten (begjæring om gjenopptak)',
-  dokumentTypeId: DistribusjonsType.BREV,
+  dokumentTypeId: DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN,
   deprecatedSections: [],
 };
 

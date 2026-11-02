@@ -12,7 +12,11 @@ import { DistribusjonsType } from '@/types/documents/documents';
 import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
-export const BER_OM_UTSATT_FRIST_FOR_TILSVAR_SECTIONS: TemplateSections[] = [TemplateSections.TITLE];
+export const BER_OM_UTSATT_FRIST_FOR_TILSVAR_SECTIONS: TemplateSections[] = [
+  TemplateSections.TITLE,
+  TemplateSections.INTRODUCTION_V2,
+  TemplateSections.BER_OM_UTSATT_FRIST,
+];
 
 export const BER_OM_UTSATT_FRIST_FOR_TILSVAR_METADATA: TemplateMetadata = {
   templateId: TemplateIdEnum.BER_OM_UTSATT_FRIST_FOR_TILSVAR,
@@ -26,7 +30,7 @@ export const getBerOmUtsattFristForTilsvarTemplate = (params: CreateTemplatePara
     createSaksinfo(params),
     ...BER_OM_UTSATT_FRIST_FOR_TILSVAR_SECTIONS.map((section) => createMaltekstseksjon(section)),
 
-    createSignature(),
+    createSignature(false),
   ];
 
   return deepFreeze<IMutableSmartEditorTemplate>({
