@@ -1,4 +1,4 @@
-import { Histogram } from 'prom-client';
+import { Histogram } from '@prometheus-io/client';
 import { proxyRegister } from '@/prometheus/types';
 
 export const histogram = new Histogram({
