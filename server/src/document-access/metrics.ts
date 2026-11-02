@@ -1,4 +1,4 @@
-import { Gauge, Summary } from 'prom-client';
+import { Gauge, Summary } from '@prometheus-io/client';
 import { proxyRegister } from '@/prometheus/types';
 
 export const labelNames = ['document_id'] as const;
