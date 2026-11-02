@@ -1,5 +1,5 @@
+import { Gauge, type LabelValues } from '@prometheus-io/client';
 import type { FastifyRequest } from 'fastify';
-import { Gauge, type LabelValues } from 'prom-client';
 import { PROXY_VERSION, START_TIME } from '@/config/config';
 import { getLogger } from '@/logger';
 import type { VersionQueryString } from '@/plugins/version/query';

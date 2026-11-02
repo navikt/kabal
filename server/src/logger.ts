@@ -166,7 +166,7 @@ const getLog = (
     return;
   }
 
-  return message;
+  return log.message;
 };
 
 export const getTeamLogger = (module: string) => {

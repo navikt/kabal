@@ -1,8 +1,8 @@
 import type { ConnectionOptions } from 'node:tls';
 import { propagation, ROOT_CONTEXT, SpanKind, SpanStatusCode } from '@opentelemetry/api';
 import { type ConsumeOptions, Consumer, type ConsumerHeartbeatStalledPayload, type Message } from '@platformatic/kafka';
-import client from 'prom-client';
 import { requiredEnvString } from '@/config/env-var';
+import { kafkaPrometheus } from '@/document-access/kafka-prometheus';
 import { parseTraceparent } from '@/helpers/traceparent';
 import { getLogger } from '@/logger';
 import { proxyRegister } from '@/prometheus/types';
@@ -71,7 +71,7 @@ const defaultCreateConsumer = (groupId: string) =>
     clientId: 'kabal-frontend',
     bootstrapBrokers: KAFKA_BROKERS,
     tls: KAFKA_TLS,
-    metrics: { registry: proxyRegister, client },
+    metrics: { registry: proxyRegister, client: kafkaPrometheus },
     deserializers: {
       key: (data) => data?.toString('utf-8'),
       value: (data) => data?.toString('utf-8'),
