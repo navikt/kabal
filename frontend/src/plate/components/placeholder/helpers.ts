@@ -1,3 +1,4 @@
+import { BaseBoldPlugin, BaseItalicPlugin, BaseUnderlinePlugin } from '@platejs/basic-nodes';
 import { ElementApi, NodeApi, type Path, PathApi, type TElement } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
@@ -7,6 +8,16 @@ import type { EditorDescendant, FormattedText, MaltekstElement, PlaceholderEleme
 import { isNodeEmpty, isOfElementType } from '@/plate/utils/queries';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
+
+const PLACEHOLDER_MARK_KEYS: string[] = [BaseBoldPlugin.key, BaseItalicPlugin.key, BaseUnderlinePlugin.key];
+
+export const isPlaceholderMarkKey = (key: string): boolean => PLACEHOLDER_MARK_KEYS.includes(key);
+
+export const getActivePlaceholderMarks = (editor: PlateEditor): Record<string, true> => {
+  const marks = editor.api.marks() ?? {};
+
+  return Object.fromEntries(PLACEHOLDER_MARK_KEYS.filter((key) => marks[key] === true).map((key) => [key, true]));
+};
 
 export const cleanText = (editor: PlateEditor, element: PlaceholderElement, path: Path, at: Path) => {
   const cleanedText: FormattedText[] = element.children.map((c) => ({ ...c, text: removeEmptyCharInText(c.text) }));
@@ -23,10 +34,12 @@ export const cleanText = (editor: PlateEditor, element: PlaceholderElement, path
 };
 
 export const ensureOnlyOneEmptyChar = (editor: PlateEditor, element: PlaceholderElement, path: Path, at: Path) => {
+  const [firstChild] = element.children;
+
   editor.tf.withoutSaving(() => {
     editor.tf.withoutNormalizing(() => {
       editor.tf.removeNodes({ at: path, match: (n) => n !== element });
-      editor.tf.insertNodes<FormattedText>({ text: EMPTY_CHAR }, { at });
+      editor.tf.insertNodes<FormattedText>({ ...firstChild, text: EMPTY_CHAR }, { at });
     });
   });
 };

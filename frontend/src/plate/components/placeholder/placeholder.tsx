@@ -16,7 +16,7 @@ import {
   useIsFocused,
 } from '@/plate/components/placeholder/helpers';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
-import type { PlaceholderElement } from '@/plate/types';
+import type { FormattedText, PlaceholderElement } from '@/plate/types';
 
 export const RedaktørPlaceholder = (props: PlateElementProps<PlaceholderElement>) => <Placeholder {...props} />;
 
@@ -30,6 +30,8 @@ const Placeholder = (props: PlateElementProps<PlaceholderElement>) => {
   const readOnly = useEditorReadOnly();
   const isDragging = window.getSelection()?.isCollapsed === false;
   const containsEmptyChar = getContainsEmptyChar(text);
+  const [firstChild] = element.children;
+  const hintMarkClasses = hasNoVisibleText ? getPlaceholderHintMarkClasses(firstChild) : '';
 
   const onClick = useCallback(
     (e: React.MouseEvent) => {
@@ -154,7 +156,7 @@ const Placeholder = (props: PlateElementProps<PlaceholderElement>) => {
           style={{
             paddingLeft: hideDeleteButton || readOnly ? '0' : '1em',
           }}
-          className={`text-ax-text-neutral inline-block ${isFocused ? 'bg-ax-accent-200' : 'bg-ax-neutral-200'} after:text-ax-text-neutral-subtle after:cursor-text after:content-[attr(data-placeholder)] after:select-none`}
+          className={`text-ax-text-neutral inline-block ${isFocused ? 'bg-ax-accent-200' : 'bg-ax-neutral-200'} after:text-ax-text-neutral-subtle after:cursor-text after:content-[attr(data-placeholder)] after:select-none ${hintMarkClasses}`}
           onClick={onClick}
         >
           {children}
@@ -181,3 +183,10 @@ const Placeholder = (props: PlateElementProps<PlaceholderElement>) => {
     </PlateElement>
   );
 };
+
+const getPlaceholderHintMarkClasses = (text: FormattedText | undefined): string =>
+  [
+    text?.bold === true ? 'after:font-bold' : '',
+    text?.italic === true ? 'after:italic' : '',
+    text?.underline === true ? 'after:underline' : '',
+  ].join(' ');
