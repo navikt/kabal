@@ -1,6 +1,7 @@
 import { RangeApi, type TRange } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 import { removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
+import { getActiveMarks } from '@/plate/components/placeholder/helpers';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import { createPageBreak, createPlaceHolder, createSimpleParagraph } from '@/plate/templates/helpers';
 import type { PlaceholderElement } from '@/plate/types';
@@ -26,10 +27,11 @@ export const insertPlaceholderFromSelection = (editor: PlateEditor, selection: T
   }
 
   const textFromSelection = editor.api.string(selection);
+  const marks = getActiveMarks(editor);
 
   editor.tf.withoutNormalizing(() => {
     editor.tf.delete();
-    editor.tf.insertNode(createPlaceHolder(textFromSelection), {
+    editor.tf.insertNode(createPlaceHolder(textFromSelection, true, [{ text: '', ...marks }]), {
       at: RangeApi.start(selection),
       select: true,
     });

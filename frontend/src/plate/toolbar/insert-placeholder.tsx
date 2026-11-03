@@ -5,6 +5,7 @@ import { useEditorRef } from 'platejs/react';
 import { useRef, useState } from 'react';
 import { useOnClickOutside } from '@/hooks/use-on-click-outside';
 import { Keys, MOD_KEY_TEXT } from '@/keys';
+import { EMPTY_CHAR, getActiveMarks } from '@/plate/components/placeholder/helpers';
 import { useSelection } from '@/plate/hooks/use-selection';
 import { createPlaceHolder } from '@/plate/templates/helpers';
 import { ToolbarIconButton } from '@/plate/toolbar/toolbarbutton';
@@ -71,7 +72,8 @@ const PlaceholderText = ({ show, close, placeholder, setPlaceholder }: Placehold
   }
 
   const addPlaceholder = () => {
-    editor.tf.insertNodes(createPlaceHolder(placeholder), { select: true });
+    const marks = getActiveMarks(editor);
+    editor.tf.insertNodes(createPlaceHolder(placeholder, true, [{ text: EMPTY_CHAR, ...marks }]), { select: true });
     close();
   };
 
