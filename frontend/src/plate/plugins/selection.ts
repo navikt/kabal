@@ -31,20 +31,24 @@ export const SelectionPlugin = createPlatePlugin({ key: 'selection' }).overrideE
   return editor;
 });
 
-const START_REGEX = /\S+$/;
-const END_REGEX = /^\S*/;
-const CONTAINS_REGEX = /\s/;
+// Words consist of letters (including combining marks) and digits, optionally joined by hyphens or apostrophes.
+// Punctuation is a word boundary.
+const WORD_REGEX = /[\p{L}\p{M}\p{N}]+(?:[-'’][\p{L}\p{M}\p{N}]+)*/gu;
+const CONTAINS_WHITESPACE_REGEX = /\s/;
 
-const getWordStart = (text: string, offset: number): number => {
-  const match = text.slice(0, offset).match(START_REGEX);
+interface Word {
+  start: number;
+  end: number;
+}
 
-  return match ? offset - match[0].length : offset;
-};
+// Words must be matched in the full text, so that connectors on either side of the offset are recognised.
+const getWords = (text: string): Word[] =>
+  Array.from(text.matchAll(WORD_REGEX), ({ index, 0: word }) => ({ start: index, end: index + word.length }));
 
-const getWordEnd = (text: string, offset: number): number => {
-  const match = text.slice(offset).match(END_REGEX);
+export const getWordStart = (text: string, offset: number): number =>
+  getWords(text).find(({ start, end }) => start < offset && offset <= end)?.start ?? offset;
 
-  return match ? offset + match[0].length : offset;
-};
+export const getWordEnd = (text: string, offset: number): number =>
+  getWords(text).find(({ start, end }) => start <= offset && offset < end)?.end ?? offset;
 
-const containsMultipleWords = (text: string): boolean => CONTAINS_REGEX.test(text);
+const containsMultipleWords = (text: string): boolean => CONTAINS_WHITESPACE_REGEX.test(text);
