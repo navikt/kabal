@@ -6,7 +6,9 @@ import { ELEMENT_MALTEKST } from '@/plate/plugins/element-types';
 import type { EditorDescendant, FormattedText, MaltekstElement, PlaceholderElement } from '@/plate/types';
 import { isNodeEmpty, isOfElementType } from '@/plate/utils/queries';
 
-const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
+export const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
+
+export const getActiveMarks = (editor: PlateEditor) => editor.api.marks() ?? {};
 
 export const cleanText = (editor: PlateEditor, element: PlaceholderElement, path: Path, at: Path) => {
   const cleanedText: FormattedText[] = element.children.map((c) => ({ ...c, text: removeEmptyCharInText(c.text) }));
@@ -23,10 +25,12 @@ export const cleanText = (editor: PlateEditor, element: PlaceholderElement, path
 };
 
 export const ensureOnlyOneEmptyChar = (editor: PlateEditor, element: PlaceholderElement, path: Path, at: Path) => {
+  const [firstChild] = element.children;
+
   editor.tf.withoutSaving(() => {
     editor.tf.withoutNormalizing(() => {
       editor.tf.removeNodes({ at: path, match: (n) => n !== element });
-      editor.tf.insertNodes<FormattedText>({ text: EMPTY_CHAR }, { at });
+      editor.tf.insertNodes<FormattedText>({ ...firstChild, text: EMPTY_CHAR }, { at });
     });
   });
 };
