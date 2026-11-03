@@ -8,7 +8,7 @@ interface Props extends ButtonProps {
 }
 
 export const ToolbarIconButton = ({ active, label, keys, placement, className, ...rest }: Props) => (
-  <Tooltip content={label} keys={keys} delay={20} placement={placement}>
+  <Tooltip content={label} keys={keys} delay={20} placement={placement} maxChar={Number.POSITIVE_INFINITY}>
     <Button
       size="small"
       variant={active === true ? 'primary' : 'tertiary-neutral'}
