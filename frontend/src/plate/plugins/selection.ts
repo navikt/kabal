@@ -1,12 +1,11 @@
 import { NodeApi, RangeApi, TextApi } from 'platejs';
 import { createPlatePlugin } from 'platejs/react';
-import { Range } from 'slate';
 
 export const SelectionPlugin = createPlatePlugin({ key: 'selection' }).overrideEditor(({ editor }) => {
   const { select } = editor.tf;
 
   editor.tf.select = (target) => {
-    if (!Range.isRange(target) || RangeApi.isCollapsed(target)) {
+    if (!RangeApi.isRange(target) || RangeApi.isCollapsed(target)) {
       return select(target);
     }
 
@@ -20,7 +19,7 @@ export const SelectionPlugin = createPlatePlugin({ key: 'selection' }).overrideE
       return select(target);
     }
 
-    const isForward = Range.isForward(target);
+    const isForward = RangeApi.isForward(target);
 
     const anchorOffset = isForward
       ? getWordStart(node.text, target.anchor.offset)

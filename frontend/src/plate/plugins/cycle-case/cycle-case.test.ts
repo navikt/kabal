@@ -1,7 +1,6 @@
 import { describe, expect, it, test } from 'bun:test';
-import { BaseParagraphPlugin } from 'platejs';
+import { BaseParagraphPlugin, type Point, type TSelection } from 'platejs';
 import { createPlateEditor } from 'platejs/react';
-import type { Point, Selection } from 'slate';
 import { cycleCase } from '@/plate/plugins/cycle-case/cycle-case';
 import { saksbehandlerPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
 import { type KabalValue, type ParagraphElement, TextAlign } from '@/plate/types';
@@ -14,10 +13,10 @@ const createP = (children: ParagraphElement['children']): ParagraphElement => ({
 
 const createText = (text: string, bold = false) => ({ text, bold });
 
-const createEditor = (value: KabalValue, selection: Selection) =>
+const createEditor = (value: KabalValue, selection: TSelection) =>
   createPlateEditor({ plugins: saksbehandlerPlugins, selection, value });
 
-const createSelection = (anchor: Point, focus: Point): Selection => ({ anchor, focus });
+const createSelection = (anchor: Point, focus: Point): TSelection => ({ anchor, focus });
 
 describe('cycleCase', () => {
   it('should cycle lower case to capital case', () => {

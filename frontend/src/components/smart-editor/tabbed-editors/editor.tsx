@@ -3,10 +3,9 @@ import { SpanStatusCode } from '@opentelemetry/api';
 import type { YjsProviderConfig } from '@platejs/yjs';
 import { HocuspocusProviderWrapper } from '@platejs/yjs';
 import { YjsPlugin } from '@platejs/yjs/react';
-import { BaseParagraphPlugin, RangeApi, TextApi } from 'platejs';
+import { BaseParagraphPlugin, PathApi, type Point, RangeApi, TextApi } from 'platejs';
 import { Plate, usePlateEditor } from 'platejs/react';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { type BasePoint, Path, Range } from 'slate';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { SmartEditorContext } from '@/components/smart-editor/context';
 import { EDITOR_SCALE_CSS_VAR } from '@/components/smart-editor/hooks/use-scale';
@@ -533,19 +532,19 @@ const LoadedEditor = ({ oppgave, smartDocument, scalingGroup }: LoadedEditorProp
             return [];
           }
 
-          if (Range.includes(newCommentSelection, path)) {
-            const [start, end] = Range.edges(newCommentSelection);
+          if (RangeApi.includes(newCommentSelection, path)) {
+            const [start, end] = RangeApi.edges(newCommentSelection);
 
             // Selection start point.
-            const anchor: BasePoint = {
+            const anchor: Point = {
               path,
-              offset: Path.equals(start.path, path) ? start.offset : 0,
+              offset: PathApi.equals(start.path, path) ? start.offset : 0,
             };
 
             // Selection end point.
-            const focus: BasePoint = {
+            const focus: Point = {
               path,
-              offset: Path.equals(end.path, path) ? end.offset : node.text.length,
+              offset: PathApi.equals(end.path, path) ? end.offset : node.text.length,
             };
 
             return [{ anchor, focus, selected: true }];

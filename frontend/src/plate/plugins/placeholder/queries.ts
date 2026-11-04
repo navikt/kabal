@@ -1,6 +1,5 @@
-import { NodeApi } from 'platejs';
+import { NodeApi, type Path } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
-import type { Path } from 'slate';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import type { PlaceholderElement } from '@/plate/types';
 

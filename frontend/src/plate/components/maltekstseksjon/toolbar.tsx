@@ -1,7 +1,7 @@
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
+import type { Path } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
-import type { Path } from 'slate';
 import { AddNewParagraphs } from '@/plate/components/common/add-new-paragraph-buttons';
 import { DeleteMaltekstseksjon } from '@/plate/components/maltekstseksjon/delete-maltekstseksjon';
 import { MaltekstseksjonToolbar } from '@/plate/components/styled-components';

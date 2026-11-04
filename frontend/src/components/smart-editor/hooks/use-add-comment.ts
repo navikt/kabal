@@ -1,7 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import { RangeApi } from 'platejs';
+import { RangeApi, type TRange } from 'platejs';
 import { useCallback, useContext } from 'react';
-import type { BaseRange } from 'slate';
 import { StaticDataContext } from '@/components/app/static-data-context';
 import { connectCommentThread } from '@/components/smart-editor/comments/connect-thread';
 import { SmartEditorContext } from '@/components/smart-editor/context';
@@ -10,7 +9,7 @@ import { useMyPlateEditorRef } from '@/plate/types';
 import { usePostCommentMutation } from '@/redux-api/smart-editor-comments';
 
 interface UseAddCommentResult {
-  addComment: (selection: BaseRange | null) => Promise<void>;
+  addComment: (selection: TRange | null) => Promise<void>;
   isLoading: boolean;
   isAvailable: boolean;
 }
@@ -25,7 +24,7 @@ export const useAddComment = (): UseAddCommentResult => {
   const isAvailable = oppgaveId !== skipToken;
 
   const addComment = useCallback(
-    async (selection: BaseRange | null) => {
+    async (selection: TRange | null) => {
       if (oppgaveId === skipToken) {
         return;
       }

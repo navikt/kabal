@@ -1,6 +1,5 @@
-import { ElementApi, type NodeEntry } from 'platejs';
+import { ElementApi, type NodeEntry, type Point } from 'platejs';
 import { createPlatePlugin, type PlateEditor } from 'platejs/react';
-import type { BasePoint } from 'slate';
 import { isMetaKey, Keys } from '@/keys';
 import { SaksbehandlerPlaceholder } from '@/plate/components/placeholder/placeholder';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
@@ -62,7 +61,7 @@ export const SaksbehandlerPlaceholderPlugin = createPlatePlugin({
 const selectAndScrollIntoView = (editor: PlateEditor, [node, path]: NodeEntry<PlaceholderElement>) => {
   const lastIndex = node.children.length - 1;
   const offset = node.children[lastIndex]?.text.length ?? 0;
-  const point: BasePoint = { path: [...path, lastIndex], offset };
+  const point: Point = { path: [...path, lastIndex], offset };
 
   editor.tf.select(point);
   editor.api.toDOMNode(node)?.scrollIntoView({ behavior: 'smooth', block: 'center' });

@@ -1,7 +1,6 @@
-import { ElementApi, NodeApi, RangeApi, TextApi, type TText } from 'platejs';
+import { type Descendant, ElementApi, NodeApi, type NodeEntry, RangeApi, TextApi, type TText } from 'platejs';
 import type { OverrideEditor, PlateEditor } from 'platejs/react';
 import { createPlatePlugin } from 'platejs/react';
-import { type Descendant, type NodeEntry, Range } from 'slate';
 import { BOOKMARK_PREFIX, COMMENT_PREFIX } from '@/components/smart-editor/constants';
 import { formatLongDate } from '@/domain/date';
 import { BookmarkPlugin } from '@/plate/plugins/bookmark';
@@ -125,8 +124,8 @@ const withOverrides: OverrideEditor = ({ editor }) => {
       return;
     }
 
-    const start = Range.start(selection);
-    const end = Range.end(selection);
+    const start = RangeApi.start(selection);
+    const end = RangeApi.end(selection);
 
     const slateFragments = cleanNodes(editor, NodeApi.fragment(editor, selection));
 

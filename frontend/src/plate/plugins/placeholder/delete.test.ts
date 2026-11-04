@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { BaseParagraphPlugin } from 'platejs';
+import { BaseParagraphPlugin, type Point, type TextUnit, type TSelection } from 'platejs';
 import { createPlateEditor } from 'platejs/react';
-import type { Point, Selection, TextUnit } from 'slate';
 import { EMPTY_CHAR_CODE } from '@/functions/remove-empty-char-in-text';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import { saksbehandlerPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
@@ -21,10 +20,10 @@ const createP = (children: ParagraphElement['children']): ParagraphElement => ({
 
 const createText = (text: string) => ({ text });
 
-const createEditor = (value: KabalValue, selection: Selection) =>
+const createEditor = (value: KabalValue, selection: TSelection) =>
   createPlateEditor({ plugins: saksbehandlerPlugins, selection, value });
 
-const createSelection = (point: Point): Selection => ({ anchor: point, focus: point });
+const createSelection = (point: Point): TSelection => ({ anchor: point, focus: point });
 
 const removeCharNTimes = (remove: (unit: TextUnit) => void, n: number) => {
   for (let i = 0; i < n; i++) {

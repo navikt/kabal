@@ -1,6 +1,6 @@
 import { Select } from '@navikt/ds-react';
+import type { TRange } from 'platejs';
 import { useContext, useEffect, useMemo } from 'react';
-import type { Range } from 'slate';
 import { MALTEKST_SECTION_NAMES } from '@/components/smart-editor/constants';
 import { SmartEditorContext } from '@/components/smart-editor/context';
 import { NONE, type NONE_TYPE } from '@/components/smart-editor-texts/types';
@@ -18,7 +18,7 @@ interface Props {
 
 const MATCH_SECTION = isOfElementTypeFn<MaltekstseksjonElement>(ELEMENT_MALTEKSTSEKSJON);
 
-const getActiveSection = (editor: RichTextEditor, selection: Range): TemplateSections | NONE_TYPE => {
+const getActiveSection = (editor: RichTextEditor, selection: TRange): TemplateSections | NONE_TYPE => {
   const entry = editor.api.node<MaltekstseksjonElement>({
     at: selection.focus,
     match: MATCH_SECTION,

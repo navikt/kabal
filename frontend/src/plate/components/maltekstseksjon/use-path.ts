@@ -1,6 +1,6 @@
+import { type Path, PathApi } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 import { useEffect, useRef } from 'react';
-import { Path } from 'slate';
 import type { MaltekstseksjonElement } from '@/plate/types';
 
 export const usePath = (editor: PlateEditor, element: MaltekstseksjonElement) => {
@@ -32,7 +32,7 @@ export const usePath = (editor: PlateEditor, element: MaltekstseksjonElement) =>
       return;
     }
 
-    if (!Path.equals(previous.current, path)) {
+    if (!PathApi.equals(previous.current, path)) {
       previous.current = path;
     }
   }, [path]);

@@ -1,4 +1,4 @@
-import type { BasePoint } from 'slate';
+import type { Point } from 'platejs';
 import { CURRENT_SCALE } from '@/components/smart-editor/hooks/use-scale';
 import { FONT_SIZE_PX } from '@/plate/components/get-scaled-em';
 import type { RichTextEditor } from '@/plate/types';
@@ -13,7 +13,7 @@ interface IRangePosition {
 export const calculateRangePosition = (
   editor: RichTextEditor,
   containerRef: HTMLElement,
-  selectionStart: BasePoint,
+  selectionStart: Point,
 ): IRangePosition | null => {
   const range = editor.api.toDOMRange({
     anchor: selectionStart,

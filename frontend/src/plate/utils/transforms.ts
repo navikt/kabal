@@ -1,6 +1,5 @@
-import { RangeApi } from 'platejs';
+import { RangeApi, type TRange } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
-import { Range } from 'slate';
 import { removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
 import { ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import { createPageBreak, createPlaceHolder, createSimpleParagraph } from '@/plate/templates/helpers';
@@ -17,7 +16,7 @@ export const insertPageBreak = (editor: PlateEditor): boolean => {
   return true;
 };
 
-export const insertPlaceholderFromSelection = (editor: PlateEditor, selection: Range | null) => {
+export const insertPlaceholderFromSelection = (editor: PlateEditor, selection: TRange | null) => {
   if (selection === null || RangeApi.isCollapsed(selection)) {
     return;
   }
@@ -31,7 +30,7 @@ export const insertPlaceholderFromSelection = (editor: PlateEditor, selection: R
   editor.tf.withoutNormalizing(() => {
     editor.tf.delete();
     editor.tf.insertNode(createPlaceHolder(textFromSelection), {
-      at: Range.start(selection),
+      at: RangeApi.start(selection),
       select: true,
     });
   });

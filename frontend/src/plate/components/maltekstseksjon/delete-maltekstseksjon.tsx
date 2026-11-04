@@ -1,4 +1,4 @@
-import type { Path } from 'slate';
+import type { Path } from 'platejs';
 import { useSmartEditorLanguage } from '@/hooks/use-smart-editor-language';
 import { DeleteSection } from '@/plate/components/common/delete-section';
 import { useIsChanged } from '@/plate/components/maltekstseksjon/use-is-changed';

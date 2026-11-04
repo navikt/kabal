@@ -1,7 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import { ElementApi } from 'platejs';
+import { type Descendant, ElementApi } from 'platejs';
 import { useContext, useMemo } from 'react';
-import type { Descendant } from 'slate';
 import { COMMENT_PREFIX } from '@/components/smart-editor/constants';
 import { SmartEditorContext } from '@/components/smart-editor/context';
 import { isNotUndefined } from '@/functions/is-not-type-guards';

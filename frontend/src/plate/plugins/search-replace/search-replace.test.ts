@@ -1,7 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, mock } from 'bun:test';
-import { BaseParagraphPlugin, type Point, type TText } from 'platejs';
+import { BaseParagraphPlugin, type Point, type TSelection, type TText } from 'platejs';
 import { createPlateEditor, getEditorPlugin, type PlateEditor } from 'platejs/react';
-import type { Selection } from 'slate';
 import { createCapitalisePlugin } from '@/plate/plugins/capitalise/capitalise';
 import { ELEMENT_SAKSNUMMER } from '@/plate/plugins/element-types';
 import { saksbehandlerPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
@@ -38,9 +37,9 @@ type Marks = {
 
 const createText = (text: string, marks?: Marks) => ({ text, ...marks });
 
-const createSelection = (point: Point): Selection => ({ anchor: point, focus: point });
+const createSelection = (point: Point): TSelection => ({ anchor: point, focus: point });
 
-const createEditor = (value: KabalValue, selection?: Selection) =>
+const createEditor = (value: KabalValue, selection?: TSelection) =>
   createPlateEditor({ plugins: [...saksbehandlerPlugins, createCapitalisePlugin('some user')], value, selection });
 
 const doSearchReplace = (editor: PlateEditor, search: string, replace: string, autoCapitalise: boolean) => {

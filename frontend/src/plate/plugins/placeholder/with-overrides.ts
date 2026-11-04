@@ -1,6 +1,5 @@
-import { type Descendant, ElementApi, TextApi, type TText } from 'platejs';
+import { type Descendant, ElementApi, PathApi, TextApi, type TText } from 'platejs';
 import type { OverrideEditor } from 'platejs/react';
-import { Path } from 'slate';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import {
   handleDeleteBackwardFromInside,
@@ -135,7 +134,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
     const [node, path] = placeholder;
 
     if (isPlaceholderInMaltekst(editor, path)) {
-      if (Path.equals(anchor.path, focus.path)) {
+      if (PathApi.equals(anchor.path, focus.path)) {
         return setSelection(range);
       }
 
