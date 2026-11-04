@@ -43,7 +43,6 @@ import { PageBreakPlugin } from '@/plate/plugins/page-break';
 import { PastePlugin } from '@/plate/plugins/paste';
 import { ProhibitDeletionPlugin } from '@/plate/plugins/prohibit-deletion/prohibit-deletion';
 import { ReplaceOneHighlightPlugin, SearchReplacePlugin } from '@/plate/plugins/search-replace/search-replace';
-import { SelectionPlugin } from '@/plate/plugins/selection';
 import { withOverrides } from '@/plate/toolbar/table/with-overrides';
 
 export const defaultPlugins = [
@@ -127,7 +126,6 @@ export const defaultPlugins = [
   PageBreakPlugin,
   ProhibitDeletionPlugin,
   CopyPlugin,
-  SelectionPlugin,
   normalizeNodePlugin,
   CustomAbbreviationPlugin,
   PastePlugin,
