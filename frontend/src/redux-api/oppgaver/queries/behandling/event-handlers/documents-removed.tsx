@@ -2,6 +2,7 @@ import { Tag } from '@navikt/ds-react';
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
+import { deleteDocumentBackups } from '@/localstorage';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { DocumentsRemovedEvent } from '@/redux-api/server-sent-events/types';
 import type { Dispatch } from '@/redux-api/types';
@@ -16,6 +17,8 @@ import {
 
 export const handleDocumentsRemovedEvent =
   (oppgaveId: string, userId: string, dispatch: Dispatch) => (event: DocumentsRemovedEvent) => {
+    deleteDocumentBackups(oppgaveId, event.idList);
+
     dispatch(
       documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (documents) => {
         if (documents === undefined) {

@@ -5,6 +5,7 @@ import { ISO_FORMAT } from '@/components/date-picker/constants';
 import { toast } from '@/components/toast/store';
 import { ENVIRONMENT } from '@/environment';
 import { formatIdNumber } from '@/functions/format-id';
+import { deleteAllDocumentBackupsForBehandling } from '@/localstorage';
 import { forlengetBehandlingstidApi } from '@/redux-api/forlenget-behandlingstid';
 import { kvalitetsvurderingV1Api } from '@/redux-api/kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '@/redux-api/kaka-kvalitetsvurdering/v2';
@@ -41,6 +42,8 @@ const finishOppgaveOnQueryStarted = async ({
   dispatch: Dispatch;
 }) => {
   const { data } = await queryFulfilled;
+  // Should be a no-op, as the API requires all documents to be finished or deleted before fullføring. Kept as a cheap safeguard for edge cases.
+  deleteAllDocumentBackupsForBehandling(oppgaveId);
   update(oppgaveId, data, dispatch);
 
   dispatch(
@@ -153,6 +156,8 @@ export const behandlingerMutationSlice = oppgaverApi.injectEndpoints({
       }),
       onQueryStarted: async ({ oppgaveId }, { queryFulfilled, dispatch }) => {
         const { data } = await queryFulfilled;
+        // Should be a no-op, as feilregistrering should not be possible while the behandling has documents. Kept as a cheap safeguard for edge cases.
+        deleteAllDocumentBackupsForBehandling(oppgaveId);
         update(oppgaveId, data, dispatch);
         dispatch(
           oppgaveDataQuerySlice.util.updateQueryData('getOppgave', oppgaveId, (draft) => {

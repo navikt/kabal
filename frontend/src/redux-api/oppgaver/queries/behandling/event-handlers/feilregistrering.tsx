@@ -1,6 +1,7 @@
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
+import { deleteAllDocumentBackupsForBehandling } from '@/localstorage';
 import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
 import type { FeilregistreringEvent } from '@/redux-api/server-sent-events/types';
@@ -11,6 +12,9 @@ import { HistoryEventTypes, type IFeilregistrertEvent } from '@/types/oppgavebeh
 export const handleFeilregistreringEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>, dispatch: Dispatch) =>
   ({ actor, timestamp, reason, registered, fagsystemId }: FeilregistreringEvent) => {
+    // Should be a no-op, as feilregistrering should not be possible while the behandling has documents. Kept as a cheap safeguard for edge cases.
+    deleteAllDocumentBackupsForBehandling(oppgaveId);
+
     updateCachedData((draft) => {
       if (draft === undefined) {
         return draft;
