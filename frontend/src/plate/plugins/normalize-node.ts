@@ -8,9 +8,8 @@ import {
 import { BaseTableCellHeaderPlugin, BaseTableCellPlugin, BaseTablePlugin, BaseTableRowPlugin } from '@platejs/table';
 import { TableCellPlugin } from '@platejs/table/react';
 import type { TElement, TNode } from 'platejs';
-import { BaseParagraphPlugin, ElementApi, NodeApi } from 'platejs';
+import { BaseParagraphPlugin, ElementApi, NodeApi, type Path } from 'platejs';
 import { createPlatePlugin, type OverrideEditor, ParagraphPlugin, type PlateEditor } from 'platejs/react';
-import { isEditor, type Path, Scrubber } from 'slate';
 import { isNotUndefined } from '@/functions/is-not-type-guards';
 import { LogLevel, pushEvent, pushLog } from '@/observability';
 import {
@@ -47,6 +46,7 @@ import {
 } from '@/plate/types';
 import { isOfElementTypesFn } from '@/plate/utils/queries';
 import { reduxStore } from '@/redux/configure-store';
+import { scrubbedStringify } from '@/scrubber';
 import { MALTEKSTSEKSJON_TYPE, REGELVERK_TYPE, RichTextTypes } from '@/types/common-text-types';
 import { isGenericObject } from '@/types/types';
 
@@ -70,9 +70,9 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
 
     const parentEntry = editor.api.parent(path);
 
-    pushLog(`Found parent entry: ${Scrubber.stringify(parentEntry)})`, { context: { module } });
+    pushLog(`Found parent entry: ${scrubbedStringify(parentEntry)})`, { context: { module } });
 
-    const options = { context: { node: Scrubber.stringify(node), path: JSON.stringify(path) } };
+    const options = { context: { node: scrubbedStringify(node), path: JSON.stringify(path) } };
 
     if (parentEntry === undefined) {
       pushLog('Missing node type, but no parent. Setting type to paragraph.', options, LogLevel.WARN);
@@ -84,7 +84,7 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
 
     const [parentNode, parentNodePath] = parentEntry;
 
-    if (isEditor(parentNode)) {
+    if (NodeApi.isEditor(parentNode)) {
       pushLog('Missing node type, element at top level in editor. Setting type to paragraph.', options, LogLevel.WARN);
 
       editor.tf.setNodes({ type: BaseParagraphPlugin.node.type, align: TextAlign.LEFT }, { at: path, mode: 'highest' });
@@ -177,7 +177,7 @@ export const nodeNormalize = (editor: PlateEditor, node: TElement, path: Path): 
 
     pushLog(
       `Missing node type, but normalization is not implemented for parent with type "${parentNode.type}".`,
-      { ...options, context: { ...options.context, parent: Scrubber.stringify(parentNode) } },
+      { ...options, context: { ...options.context, parent: scrubbedStringify(parentNode) } },
       LogLevel.ERROR,
     );
 
@@ -309,11 +309,11 @@ const pushNodeEvent = (
 ) => {
   const [highestAncestorPath] = path;
   const highestAncestor =
-    highestAncestorPath === undefined ? undefined : Scrubber.stringify(NodeApi.get(editor, [highestAncestorPath]));
+    highestAncestorPath === undefined ? undefined : scrubbedStringify(NodeApi.get(editor, [highestAncestorPath]));
 
   pushEvent(name, 'smart-editor', {
     ancestor: JSON.stringify(highestAncestor),
-    node: Scrubber.stringify(node),
+    node: scrubbedStringify(node),
     path: JSON.stringify(path),
     ...extraAttributes,
   });

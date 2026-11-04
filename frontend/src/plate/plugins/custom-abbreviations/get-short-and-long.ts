@@ -1,6 +1,5 @@
-import { type NodeEntry, PathApi, RangeApi } from 'platejs';
+import { type NodeEntry, PathApi, RangeApi, type TRange } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
-import type { Range } from 'slate';
 import { BookmarkPlugin } from '@/plate/plugins/bookmark';
 import { CommentsPlugin } from '@/plate/plugins/comments';
 import { getLong } from '@/plate/plugins/custom-abbreviations/get-long';
@@ -11,7 +10,7 @@ type Marks = Omit<FormattedText, 'text'>;
 interface AbbreviationData {
   long: string;
   short: string;
-  range: Range;
+  range: TRange;
   marks: Marks;
   autoCapitalised: boolean;
 }
@@ -29,7 +28,7 @@ export const getAbbreviationData = (editor: PlateEditor): AbbreviationData | nul
     return null;
   }
 
-  const fromLineStartToCaretRange: Range = { anchor: lineStart, focus: selection.focus };
+  const fromLineStartToCaretRange: TRange = { anchor: lineStart, focus: selection.focus };
 
   if (RangeApi.isCollapsed(fromLineStartToCaretRange)) {
     return null;
@@ -85,7 +84,7 @@ export const getAbbreviationData = (editor: PlateEditor): AbbreviationData | nul
     return null;
   }
 
-  const range: Range = { anchor, focus: selection.focus };
+  const range: TRange = { anchor, focus: selection.focus };
 
   const entries = editor.api
     .nodes<FormattedText>({ at: range, mode: 'lowest', match: (n) => editor.api.isText(n) })

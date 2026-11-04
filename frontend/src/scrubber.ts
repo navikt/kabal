@@ -20,3 +20,5 @@ export const initializeScrubber = () => {
     return value;
   });
 };
+
+export const scrubbedStringify = (value: unknown): string => Scrubber.stringify(value);

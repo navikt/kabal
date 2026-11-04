@@ -1,10 +1,9 @@
-import { TextApi } from 'platejs';
-import type { Selection } from 'slate';
+import { TextApi, type TSelection } from 'platejs';
 import { COMMENT_PREFIX } from '@/components/smart-editor/constants';
 import { CommentsPlugin } from '@/plate/plugins/comments';
 import type { RichTextEditor, RootElement } from '@/plate/types';
 
-export const connectCommentThread = (editor: RichTextEditor, selection: Selection, threadId: string) => {
+export const connectCommentThread = (editor: RichTextEditor, selection: TSelection, threadId: string) => {
   editor.tf.setNodes(
     { [CommentsPlugin.key]: true, [COMMENT_PREFIX + threadId]: true },
     {

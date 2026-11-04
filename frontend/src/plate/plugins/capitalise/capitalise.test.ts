@@ -1,8 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it, mock } from 'bun:test';
 import { BaseH1Plugin } from '@platejs/basic-nodes';
-import { BaseParagraphPlugin } from 'platejs';
+import { BaseParagraphPlugin, type Point, type TSelection } from 'platejs';
 import { createPlateEditor, type PlateEditor } from 'platejs/react';
-import type { Point, Selection } from 'slate';
 import { createCapitalisePlugin } from '@/plate/plugins/capitalise/capitalise';
 import { saksbehandlerPlugins } from '@/plate/plugins/plugin-sets/saksbehandler';
 import { TemplateSections } from '@/plate/template-sections';
@@ -24,7 +23,7 @@ const createEditor = (value: string) =>
     selection: createSelection({ path: [0, 0], offset: value.length }),
   });
 
-const createSelection = (point: Point): Selection => ({ anchor: point, focus: point });
+const createSelection = (point: Point): TSelection => ({ anchor: point, focus: point });
 
 describe('capitalise', () => {
   beforeAll(() => {

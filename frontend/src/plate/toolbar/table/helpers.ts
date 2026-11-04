@@ -1,6 +1,6 @@
 import { BaseTableCellPlugin, BaseTableRowPlugin } from '@platejs/table';
 import type { NodeEntry, TNode } from 'platejs';
-import { Path } from 'slate';
+import { type Path, PathApi } from 'platejs';
 import type { RichTextEditor, TableCellElement, TableRowElement } from '@/plate/types';
 import { isOfElementType, isOfElementTypeFn } from '@/plate/utils/queries';
 
@@ -58,7 +58,7 @@ export const getNextRow = (
     return undefined;
   }
 
-  const nextRowPath = Path.next(currentRowPath);
+  const nextRowPath = PathApi.next(currentRowPath);
 
   if (!editor.api.some({ at: nextRowPath })) {
     return undefined;
@@ -87,11 +87,11 @@ export const getPreviousRow = (
     return undefined;
   }
 
-  if (!Path.hasPrevious(currentRowPath)) {
+  if (!PathApi.hasPrevious(currentRowPath)) {
     return undefined;
   }
 
-  const nextRowPath = Path.previous(currentRowPath);
+  const nextRowPath = PathApi.previous(currentRowPath);
 
   if (!editor.api.some({ at: nextRowPath })) {
     return undefined;

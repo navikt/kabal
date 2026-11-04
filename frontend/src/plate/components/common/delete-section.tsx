@@ -1,7 +1,7 @@
 import { CheckmarkIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Popover, Portal, Tooltip, VStack } from '@navikt/ds-react';
+import type { Path } from 'platejs';
 import { useRef, useState } from 'react';
-import type { Path } from 'slate';
 import { InfoBox } from '@/components/info-box/info-box';
 import { ToolbarButtonWithConfirm } from '@/plate/components/common/toolbar-button-with-confirm';
 import { useMyPlateEditorRef } from '@/plate/types';

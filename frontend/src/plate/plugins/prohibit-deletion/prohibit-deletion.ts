@@ -1,5 +1,5 @@
+import type { EditorFragmentDeletionOptions } from 'platejs';
 import { createPlatePlugin, type OverrideEditor } from 'platejs/react';
-import type { EditorFragmentDeletionOptions } from 'slate';
 import {
   handleDeleteBackwardInFullmektig,
   handleDeleteForwardInFullmektig,

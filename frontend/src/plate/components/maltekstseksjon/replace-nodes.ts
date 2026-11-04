@@ -1,5 +1,5 @@
+import type { Path } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
-import type { Path } from 'slate';
 import { createEmptyVoid } from '@/plate/templates/helpers';
 import type { MaltekstElement, MaltekstseksjonElement, RedigerbarMaltekstElement } from '@/plate/types';
 

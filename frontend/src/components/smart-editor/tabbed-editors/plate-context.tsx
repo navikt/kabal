@@ -1,9 +1,8 @@
 import { ClockDashedIcon, CloudFillIcon, CloudSlashFillIcon, DocPencilIcon, FileTextIcon } from '@navikt/aksel-icons';
 import { Box, HStack, Loader, Tooltip, VStack } from '@navikt/ds-react';
-import { TextApi, type TText } from 'platejs';
+import { type Point, TextApi, type TText } from 'platejs';
 import { type PlateEditor, useEditorReadOnly, useEditorRef } from 'platejs/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { BasePoint } from 'slate';
 import { GodeFormuleringer } from '@/components/smart-editor/gode-formuleringer/gode-formuleringer';
 import { History } from '@/components/smart-editor/history/history';
 import { Content } from '@/components/smart-editor/tabbed-editors/content';
@@ -224,7 +223,7 @@ const useIsDynamicContentLoading = (isSynced: boolean, loadingCount: number): bo
   return isSynced && !settled;
 };
 
-const getFirstEditableTextStart = (editor: PlateEditor): BasePoint | undefined => {
+const getFirstEditableTextStart = (editor: PlateEditor): Point | undefined => {
   const first = editor.api.next<TText>({
     at: [0],
     mode: 'lowest',

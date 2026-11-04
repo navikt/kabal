@@ -1,6 +1,5 @@
-import { ElementApi, NodeApi, type TElement } from 'platejs';
+import { ElementApi, NodeApi, type Path, PathApi, type TElement } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
-import { Path } from 'slate';
 import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
 import { useSelection } from '@/plate/hooks/use-selection';
 import { ELEMENT_MALTEKST } from '@/plate/plugins/element-types';
@@ -89,7 +88,7 @@ export const getIsFocused = (editor: PlateEditor, path: Path | undefined): boole
     return false;
   }
 
-  return Path.isParent(path, editor.selection.focus.path);
+  return PathApi.isParent(path, editor.selection.focus.path);
 };
 
 export const useIsFocused = (path: Path | undefined): boolean => {
@@ -99,7 +98,7 @@ export const useIsFocused = (path: Path | undefined): boolean => {
     return false;
   }
 
-  return Path.isParent(path, selection.focus.path);
+  return PathApi.isParent(path, selection.focus.path);
 };
 
 const getMaltekstElement = (editor: PlateEditor, path: Path | undefined): MaltekstElement | undefined => {

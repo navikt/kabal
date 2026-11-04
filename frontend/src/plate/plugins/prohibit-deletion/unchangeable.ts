@@ -1,6 +1,5 @@
-import { ElementApi } from 'platejs';
+import { ElementApi, NodeApi, PathApi, type TextDirection, type TextUnit } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
-import { isEditor, Path, type TextDirection, type TextUnit } from 'slate';
 import {
   ELEMENT_PLACEHOLDER,
   ELEMENT_REGELVERK_CONTAINER,
@@ -11,7 +10,7 @@ import type { PlaceholderElement } from '@/plate/types';
 import { isInList } from '@/plate/utils/queries';
 
 const deleteCurrentNode = (editor: PlateEditor): void => {
-  const currentEntry = editor.api.node({ match: (n) => !isEditor(n) });
+  const currentEntry = editor.api.node({ match: (n) => !NodeApi.isEditor(n) });
 
   if (isUndeletable(editor, currentEntry)) {
     return;
@@ -37,8 +36,8 @@ export const handleDeleteBackwardIntoUnchangeable = (editor: PlateEditor): boole
     return false;
   }
 
-  const prevSibling = Path.hasPrevious(editor.selection.focus.path)
-    ? editor.api.node({ at: Path.previous(editor.selection.focus.path), mode: 'lowest', voids: true })
+  const prevSibling = PathApi.hasPrevious(editor.selection.focus.path)
+    ? editor.api.node({ at: PathApi.previous(editor.selection.focus.path), mode: 'lowest', voids: true })
     : undefined;
 
   // Prohibit deletion for inline undeletables
@@ -85,7 +84,7 @@ export const handleDeleteForwardIntoUnchangeable = (editor: PlateEditor): boolea
     return false;
   }
 
-  const nextSibling = editor.api.node({ at: Path.next(editor.selection.focus.path), mode: 'lowest', voids: true });
+  const nextSibling = editor.api.node({ at: PathApi.next(editor.selection.focus.path), mode: 'lowest', voids: true });
   const isEnd = editor.api.isEnd(editor.selection.focus, editor.selection.focus.path);
 
   // Prohibit deletion for inline undeletables
