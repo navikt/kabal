@@ -1,9 +1,10 @@
 import { isBefore, isSameDay, subDays } from 'date-fns';
 import { parseBackupDateFromKey } from '@/components/smart-editor/tabbed-editors/backup-date';
-import { KEY_PREFIX } from '@/components/smart-editor/tabbed-editors/constants';
+import { BACKUP_EVENT_NAME, KEY_PREFIX } from '@/components/smart-editor/tabbed-editors/constants';
 import { toast } from '@/components/toast/store';
+import { pushError } from '@/observability';
 
-const TTL_DAYS = 30;
+const TTL_DAYS = 7;
 
 export interface LocalStorage {
   length: number;
@@ -77,7 +78,7 @@ export const deleteOldestBackups = (ls: LocalStorage, count: number) => {
 };
 
 export const cleanLocalStorage = (ls: LocalStorage) => {
-  // Keep 30 days of backups in localStorage
+  // Keep 7 days of backups in localStorage
   try {
     const cutoff = subDays(new Date(), TTL_DAYS);
 
@@ -99,5 +100,63 @@ export const cleanLocalStorage = (ls: LocalStorage) => {
     }
   } catch (error) {
     console.error('Failed to clean up localStorage backups', error);
+  }
+};
+
+/** Deletes all local backups (local history) for the given smart documents. */
+export const deleteDocumentBackups = (
+  oppgaveId: string,
+  documentIds: readonly string[],
+  ls: LocalStorage = window.localStorage,
+) => {
+  if (documentIds.length === 0) {
+    return;
+  }
+
+  try {
+    removeBackupsWithPrefix(
+      documentIds.map((documentId) => `${KEY_PREFIX}${oppgaveId}/${documentId}/`),
+      ls,
+    );
+  } catch (error) {
+    console.error('Failed to delete localStorage backups for documents', error);
+
+    const context = { oppgaveId, documentIds: documentIds.join(',') };
+
+    if (error instanceof Error) {
+      pushError(error, { context });
+    } else {
+      pushError(new Error('Failed to delete localStorage backups for documents'), { context });
+    }
+  }
+};
+
+/** Deletes all local backups (local history) for every smart document in the given behandling. */
+export const deleteAllDocumentBackupsForBehandling = (oppgaveId: string, ls: LocalStorage = window.localStorage) => {
+  try {
+    removeBackupsWithPrefix([`${KEY_PREFIX}${oppgaveId}/`], ls);
+  } catch (error) {
+    console.error('Failed to delete localStorage backups for behandling', error);
+
+    const context = { oppgaveId };
+
+    if (error instanceof Error) {
+      pushError(error, { context });
+    } else {
+      pushError(new Error('Failed to delete localStorage backups for behandling'), { context });
+    }
+  }
+};
+
+const removeBackupsWithPrefix = (prefixes: readonly string[], ls: LocalStorage) => {
+  // Iterate backwards to avoid index shifting issues when removing items
+  for (let i = ls.length - 1; i >= 0; i--) {
+    const key = ls.key(i);
+
+    if (key !== null && prefixes.some((prefix) => key.startsWith(prefix))) {
+      ls.removeItem(key);
+      // `storage` event does not fire in the writing tab. Custom event is used to notify same-tab listeners.
+      window.dispatchEvent(new CustomEvent(BACKUP_EVENT_NAME, { detail: { key } }));
+    }
   }
 };

@@ -1,6 +1,7 @@
 import { InfoToast } from '@/components/toast/info-toast';
 import { toast } from '@/components/toast/store';
 import { formatEmployeeName } from '@/domain/employee-name';
+import { deleteAllDocumentBackupsForBehandling } from '@/localstorage';
 import type { UpdateFn } from '@/redux-api/oppgaver/queries/behandling/types';
 import { historyQuerySlice } from '@/redux-api/oppgaver/queries/history';
 import type { FerdigstiltEvent } from '@/redux-api/server-sent-events/types';
@@ -11,6 +12,9 @@ import { HistoryEventTypes, type IFerdigstiltEvent } from '@/types/oppgavebehand
 export const handleFerdigstiltEvent =
   (oppgaveId: string, userId: string, updateCachedData: UpdateFn<IOppgavebehandling>, dispatch: Dispatch) =>
   ({ actor, timestamp, avsluttetAvSaksbehandler }: FerdigstiltEvent) => {
+    // Should be a no-op, as the API requires all documents to be finished or deleted before fullføring. Kept as a cheap safeguard for edge cases.
+    deleteAllDocumentBackupsForBehandling(oppgaveId);
+
     updateCachedData((draft) => {
       if (draft === undefined) {
         return draft;

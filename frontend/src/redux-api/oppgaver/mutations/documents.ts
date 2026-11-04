@@ -5,6 +5,7 @@ import { genericErrorToast } from '@/components/toast/toast-content/api-error-to
 import { areJournalfoertDocumentsEqual } from '@/domain/journalfoerte-documents';
 import { ENVIRONMENT } from '@/environment';
 import { getIsIncomingDocument } from '@/functions/is-incoming-document';
+import { deleteDocumentBackups } from '@/localstorage';
 import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
 import type { Dispatch } from '@/redux-api/types';
@@ -200,8 +201,15 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}/ferdigstill`,
         method: 'POST',
       }),
-      onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled, getState }) => {
+        const finishedIds = getDocumentAndVedleggIds(
+          dokumentId,
+          documentsQuerySlice.endpoints.getDocuments.select(oppgaveId)(getState()).data,
+        );
+
         const { data } = await queryFulfilled;
+
+        deleteDocumentBackups(oppgaveId, finishedIds);
 
         dispatch(
           documentsQuerySlice.util.updateQueryData('getDocuments', oppgaveId, (draft) =>
@@ -222,7 +230,13 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
         url: `/kabal-api/behandlinger/${oppgaveId}/dokumenter/${dokumentId}`,
         method: 'DELETE',
       }),
-      onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async ({ dokumentId, oppgaveId }, { dispatch, queryFulfilled, getState }) => {
+        // Must be read before the optimistic update removes the documents from the cache.
+        const deletedIds = getDocumentAndVedleggIds(
+          dokumentId,
+          documentsQuerySlice.endpoints.getDocuments.select(oppgaveId)(getState()).data,
+        );
+
         const documentsPatchResult = dispatch(
           documentsQuerySlice.util.updateQueryData(
             'getDocuments',
@@ -245,6 +259,7 @@ export const documentsMutationSlice = oppgaverApi.injectEndpoints({
 
         try {
           await queryFulfilled;
+          deleteDocumentBackups(oppgaveId, deletedIds);
         } catch {
           documentsPatchResult.undo();
           smartEditorPatchResult.undo();
@@ -541,6 +556,14 @@ const optimisticUpdate = <K extends keyof IDocument>(
     smartEditorPatchResult.undo();
   };
 };
+
+/** Returns the ID of the document and the IDs of all its smart vedlegg. */
+const getDocumentAndVedleggIds = (dokumentId: string, documents: readonly IDocument[] = []): string[] => [
+  dokumentId,
+  ...documents
+    .filter(({ parentId, type }) => type === DocumentTypeEnum.SMART && parentId === dokumentId)
+    .map(({ id }) => id),
+];
 
 export const {
   useSetMottakerListMutation,
