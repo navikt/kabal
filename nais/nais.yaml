@@ -70,8 +70,6 @@ spec:
     - secret: kabal-session-key
     - secret: slack-url
   valkey:
-    - instance: obo-cache-kabal
-      access: readwrite
     - instance: hocuspocus
       access: readwrite
   liveness:
