@@ -1,7 +1,7 @@
 import { requestOboToken, validateToken } from '@navikt/oasis';
+import { Histogram } from '@prometheus-io/client';
 import type { FastifyReply } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
-import { Histogram } from 'prom-client';
 import { ApiClientEnum, NAIS_CLUSTER_NAME } from '@/config/config';
 import { isDeployed } from '@/config/env';
 import { getDuration } from '@/helpers/duration';

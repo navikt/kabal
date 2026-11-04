@@ -1,4 +1,4 @@
-import { register } from 'prom-client';
+import { register } from '@prometheus-io/client';
 import { PROXY_VERSION } from '@/config/config';
 import { NAIS_NAMESPACE, POD_NAME } from '@/config/env';
 
