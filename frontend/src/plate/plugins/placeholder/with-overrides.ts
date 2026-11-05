@@ -1,6 +1,6 @@
 import { type Descendant, ElementApi, NodeApi, PathApi, RangeApi, TextApi, type TText } from 'platejs';
 import type { OverrideEditor, PlateEditor } from 'platejs/react';
-import { getHasNoVisibleText, isPlaceholderMarkKey } from '@/plate/components/placeholder/helpers';
+import { getHasNoVisibleText, isMarkKey } from '@/plate/components/placeholder/helpers';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import {
   handleDeleteBackwardFromInside,
@@ -168,7 +168,7 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
 };
 
 const setMarkInEmptyPlaceholder = (editor: PlateEditor, key: string, value: true | undefined): boolean => {
-  if (!isPlaceholderMarkKey(key) || editor.selection === null || RangeApi.isExpanded(editor.selection)) {
+  if (!isMarkKey(editor, key) || editor.selection === null || RangeApi.isExpanded(editor.selection)) {
     return false;
   }
 

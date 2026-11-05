@@ -1,4 +1,3 @@
-import { BaseBoldPlugin, BaseItalicPlugin, BaseUnderlinePlugin } from '@platejs/basic-nodes';
 import { ElementApi, NodeApi, type Path, PathApi, type TElement } from 'platejs';
 import type { PlateEditor } from 'platejs/react';
 import { EMPTY_CHAR_CODE, removeEmptyCharInText } from '@/functions/remove-empty-char-in-text';
@@ -9,14 +8,20 @@ import { isNodeEmpty, isOfElementType } from '@/plate/utils/queries';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
 
-const PLACEHOLDER_MARK_KEYS: string[] = [BaseBoldPlugin.key, BaseItalicPlugin.key, BaseUnderlinePlugin.key];
+const getMarkKeys = (editor: PlateEditor): string[] =>
+  editor.meta.pluginList.filter((p) => p.options?.isMark === true).map((p) => p.key);
 
-export const isPlaceholderMarkKey = (key: string): boolean => PLACEHOLDER_MARK_KEYS.includes(key);
+export const isMarkKey = (editor: PlateEditor, key: string): boolean =>
+  editor.meta.pluginList.some((p) => p.key === key && p.options?.isMark === true);
 
-export const getActivePlaceholderMarks = (editor: PlateEditor): Record<string, true> => {
+export const getActiveMarks = (editor: PlateEditor): Record<string, true> => {
   const marks = editor.api.marks() ?? {};
 
-  return Object.fromEntries(PLACEHOLDER_MARK_KEYS.filter((key) => marks[key] === true).map((key) => [key, true]));
+  return Object.fromEntries(
+    getMarkKeys(editor)
+      .filter((key) => marks[key] === true)
+      .map((key) => [key, true]),
+  );
 };
 
 export const cleanText = (editor: PlateEditor, element: PlaceholderElement, path: Path, at: Path) => {
