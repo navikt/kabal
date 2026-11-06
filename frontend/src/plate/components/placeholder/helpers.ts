@@ -8,21 +8,7 @@ import { isNodeEmpty, isOfElementType } from '@/plate/utils/queries';
 
 const EMPTY_CHAR = String.fromCharCode(EMPTY_CHAR_CODE); // \u200b
 
-const getMarkKeys = (editor: PlateEditor): string[] =>
-  editor.meta.pluginList.filter((p) => p.options?.isMark === true).map((p) => p.key);
-
-export const isMarkKey = (editor: PlateEditor, key: string): boolean =>
-  editor.meta.pluginList.some((p) => p.key === key && p.options?.isMark === true);
-
-export const getActiveMarks = (editor: PlateEditor): Record<string, true> => {
-  const marks = editor.api.marks() ?? {};
-
-  return Object.fromEntries(
-    getMarkKeys(editor)
-      .filter((key) => marks[key] === true)
-      .map((key) => [key, true]),
-  );
-};
+export const getActiveMarks = (editor: PlateEditor) => editor.api.marks() ?? {};
 
 export const cleanText = (editor: PlateEditor, element: PlaceholderElement, path: Path, at: Path) => {
   const cleanedText: FormattedText[] = element.children.map((c) => ({ ...c, text: removeEmptyCharInText(c.text) }));

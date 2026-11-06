@@ -78,17 +78,14 @@ export const defaultPlugins = [
   BoldPlugin.configure({
     render: { node: BoldLeaf },
     inputRules: [BoldRules.markdown({ variant: '*' })],
-    options: { isMark: true },
   }),
   ItalicPlugin.configure({
     render: { node: ItalicLeaf },
     inputRules: [ItalicRules.markdown({ variant: '*' }), ItalicRules.markdown({ variant: '_' })],
-    options: { isMark: true },
   }),
   UnderlinePlugin.configure({
     render: { node: UnderlineLeaf },
     inputRules: [UnderlineRules.markdown()],
-    options: { isMark: true },
   }),
   TablePlugin.configure({ options: { disableMarginLeft: true } })
     .withComponent(TableElement)
