@@ -30,6 +30,11 @@ export const MALTEKST_SECTION_NAMES: Record<TemplateSections | DeprecatedTemplat
   [TemplateSections.OM_ANKENDE_PARTS_TILSVAR]: 'Om ankende parts tilsvar',
   [TemplateSections.OM_VEDLAGTE_DOKUMENTER]: 'Om vedlagte dokumenter',
   [TemplateSections.OM_ETTERSENDING_TIL_TR]: 'Om ettersending til Trygderetten',
+  [TemplateSections.INNLEDNING]: 'Innledning',
+  [TemplateSections.SAKENS_FAKTISKE_SIDE]: 'Sakens faktiske side',
+  [TemplateSections.SAKENS_RETTSLIGE_SIDE]: 'Sakens rettslige side',
+  [TemplateSections.ANKEMOTPARTEND_VURDERING]: 'Ankemotpartens vurdering',
+  [TemplateSections.BER_OM_UTSATT_FRIST]: 'Ber om utsatt frist',
 
   [TemplateSections.INTRODUCTION_TEMP]: 'Introduksjon (midlertidig)',
 };

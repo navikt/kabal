@@ -11,8 +11,12 @@ import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import type { CreateTemplateParams } from '@/plate/templates/helpers';
 import {
+  getAnkeAfter2027Templates,
+  getAnkeITRAfter2027Templates,
   getAnkeITrygderettenTemplates,
   getAnkeTemplates,
+  getBegjæringOmGjenopptakAfter2027Templates,
+  getBegjæringOmGjenopptakITrAfter2027Templates,
   getBegjæringOmGjenopptakITrTemplates,
   getBegjæringOmGjenopptakTemplates,
   getBehandlingEtterTrOpphevetTemplates,
@@ -126,11 +130,15 @@ export const useNewSmartDocumentTemplates = (): ISmartEditorTemplate[] => {
 const TEMPLATE_GETTERS: Record<SaksTypeEnum, (params: CreateTemplateParams) => ISmartEditorTemplate[]> = {
   [SaksTypeEnum.KLAGE]: getKlageTemplates,
   [SaksTypeEnum.ANKE]: getAnkeTemplates,
+  [SaksTypeEnum.ANKE_AFTER_2027]: getAnkeAfter2027Templates,
   [SaksTypeEnum.ANKE_I_TRYGDERETTEN]: getAnkeITrygderettenTemplates,
+  [SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027]: getAnkeITRAfter2027Templates,
   [SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET]: getBehandlingEtterTrOpphevetTemplates,
   [SaksTypeEnum.OMGJØRINGSKRAV]: getOmgjøringskravvedtakTemplates,
   [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK]: getBegjæringOmGjenopptakTemplates,
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027]: getBegjæringOmGjenopptakAfter2027Templates,
   [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR]: getBegjæringOmGjenopptakITrTemplates,
+  [SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027]: getBegjæringOmGjenopptakITrAfter2027Templates,
 };
 
 interface TemplateButtonProps {

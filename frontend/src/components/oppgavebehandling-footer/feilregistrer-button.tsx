@@ -9,7 +9,11 @@ import { SaksTypeEnum } from '@/types/kodeverk';
 export const FeilregistrerButton = () => {
   const { data: oppgave } = useOppgave();
 
-  if (typeof oppgave === 'undefined' || oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
+  if (
+    typeof oppgave === 'undefined' ||
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027
+  ) {
     return null;
   }
 
