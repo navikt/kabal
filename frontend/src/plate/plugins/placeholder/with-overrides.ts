@@ -1,5 +1,6 @@
-import { type Descendant, ElementApi, PathApi, TextApi, type TText } from 'platejs';
-import type { OverrideEditor } from 'platejs/react';
+import { type Descendant, ElementApi, NodeApi, PathApi, RangeApi, TextApi, type TText } from 'platejs';
+import type { OverrideEditor, PlateEditor } from 'platejs/react';
+import { getHasNoVisibleText } from '@/plate/components/placeholder/helpers';
 import { ELEMENT_MALTEKST, ELEMENT_PLACEHOLDER } from '@/plate/plugins/element-types';
 import {
   handleDeleteBackwardFromInside,
@@ -9,7 +10,7 @@ import {
 } from '@/plate/plugins/placeholder/delete';
 import { getPlaceholderEntry, isPlaceholderInMaltekst } from '@/plate/plugins/placeholder/queries';
 import type { MaltekstElement, PlaceholderElement } from '@/plate/types';
-import { isPlaceholderActive } from '@/plate/utils/queries';
+import { isHeading, isPlaceholderActive } from '@/plate/utils/queries';
 
 const extractText = (fragment: Descendant[]): TText[] =>
   fragment.flatMap((node, index) => {
@@ -30,6 +31,8 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
     insertFragment,
     deleteBackward,
     deleteForward,
+    addMark,
+    removeMark,
   } = editor.tf;
 
   editor.tf.deleteBackward = (unit) => {
@@ -149,5 +152,37 @@ export const withOverrides: OverrideEditor = ({ editor }) => {
     return setSelection(range);
   };
 
+  editor.tf.addMark = (key, value) => {
+    if (!setMarkInEmptyPlaceholder(editor, key, value)) {
+      addMark(key, value);
+    }
+  };
+
+  editor.tf.removeMark = (key) => {
+    if (!setMarkInEmptyPlaceholder(editor, key, undefined)) {
+      removeMark(key);
+    }
+  };
+
   return editor;
+};
+
+const setMarkInEmptyPlaceholder = (editor: PlateEditor, key: string, value: true | undefined): boolean => {
+  if (editor.selection === null || RangeApi.isExpanded(editor.selection)) {
+    return false;
+  }
+
+  if (editor.api.some({ match: isHeading })) {
+    return false;
+  }
+
+  const entry = getPlaceholderEntry(editor);
+
+  if (entry === undefined || !getHasNoVisibleText(NodeApi.string(entry[0]))) {
+    return false;
+  }
+
+  editor.tf.setNodes({ [key]: value }, { at: entry[1], match: TextApi.isText });
+
+  return true;
 };
