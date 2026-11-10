@@ -15,6 +15,15 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
 
   const { typeId, resultat } = oppgave;
 
+  // Manual override for testing. Remove when BE is ready.
+  if (
+    typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
+    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ||
+    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN
+  ) {
+    return { panelDefaultEnabled: true, featureEnabled: true, reason: null };
+  }
+
   if (!typeHasKvalitetsvurdering(typeId)) {
     return {
       featureEnabled: true,
@@ -27,7 +36,7 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
     };
   }
 
-  if (!utfallHasKvalitetsvurdering(resultat.utfallId)) {
+  if (!utfallHasKvalitetsvurdering(resultat.utfallId, typeId)) {
     return {
       featureEnabled: true,
       panelDefaultEnabled: true,
@@ -51,11 +60,20 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
 };
 
 export const typeHasKvalitetsvurdering = (typeId: SaksTypeEnum): boolean =>
-  typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN &&
-  typeId !== SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET &&
-  typeId !== SaksTypeEnum.OMGJØRINGSKRAV &&
-  typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK &&
-  typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+  typeId === SaksTypeEnum.KLAGE ||
+  typeId === SaksTypeEnum.ANKE ||
+  typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+  typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
+  typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027;
 
-export const utfallHasKvalitetsvurdering = (utfallId: UtfallEnum | null): boolean =>
-  utfallId !== UtfallEnum.TRUKKET && utfallId !== UtfallEnum.RETUR && utfallId !== UtfallEnum.HENLAGT;
+export const utfallHasKvalitetsvurdering = (utfallId: UtfallEnum | null, typeId: SaksTypeEnum): boolean => {
+  if (
+    typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
+    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ||
+    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN
+  ) {
+    return true;
+  }
+
+  return utfallId !== UtfallEnum.TRUKKET && utfallId !== UtfallEnum.RETUR && utfallId !== UtfallEnum.HENLAGT;
+};

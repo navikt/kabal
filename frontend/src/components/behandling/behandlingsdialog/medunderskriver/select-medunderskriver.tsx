@@ -83,7 +83,7 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
   const handleChange = (employee: INavEmployeeWithEnhet | null) => {
     if (
       typeHasKvalitetsvurdering(typeId) &&
-      utfallHasKvalitetsvurdering(utfallId) &&
+      utfallHasKvalitetsvurdering(utfallId, typeId) &&
       medunderskriver.flowState === FlowState.NOT_SENT &&
       employee !== null &&
       kvalitetsvurdering !== undefined
