@@ -5,7 +5,6 @@ import {
   ArenaInfoMu,
   ArenaInfoSaksbehandler,
 } from '@/components/behandling/behandlingsdialog/medunderskriver/arena-info';
-import { getTitleCapitalized } from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { MedunderskriverReadOnly } from '@/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SelectMedunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/select-medunderskriver';
 import { SendToMedunderskriver } from '@/components/behandling/behandlingsdialog/medunderskriver/send-to-medunderskriver';
@@ -34,7 +33,7 @@ export const Medunderskriver = () => {
 
   const isReadOnly = isFinished || isFeilregistrert;
 
-  const label = <Label size="small">{getTitleCapitalized(typeId)}</Label>;
+  const label = <Label size="small">Medunderskriver</Label>;
 
   if (isReadOnly) {
     if (medunderskriver.employee === null) {
@@ -44,7 +43,7 @@ export const Medunderskriver = () => {
     return (
       <PartBox>
         {label}
-        <MedunderskriverReadOnly typeId={typeId} medunderskriver={medunderskriver} />
+        <MedunderskriverReadOnly medunderskriver={medunderskriver} />
       </PartBox>
     );
   }
@@ -67,10 +66,10 @@ export const Medunderskriver = () => {
         utfallId={oppgave.resultat.utfallId}
         typeId={typeId}
       />
-      <MedunderskriverStateText medunderskriver={medunderskriver} typeId={typeId} />
+      <MedunderskriverStateText medunderskriver={medunderskriver} />
 
-      <SendToMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} typeId={typeId} />
-      <TakeFromMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} typeId={typeId} />
+      <SendToMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} />
+      <TakeFromMedunderskriver oppgaveId={oppgaveId} medunderskriver={medunderskriver} />
 
       <SendToSaksbehandler oppgaveId={oppgaveId} medunderskriver={medunderskriver} />
       <ArenaInfoMu typeId={typeId} />

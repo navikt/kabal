@@ -46,7 +46,7 @@ export const useKvalitetsvurderingAnkeAfter2027State = (): Loading | Loaded => {
   const [update] = useUpdateKvalitetsvurderingMutation();
 
   // TODO: Remove fake state when backend is ready.
-  if (oppgave !== undefined) {
+  if (oppgaveIsSuccess) {
     return {
       oppgave,
       hjemler: oppgave.resultat.hjemmelIdSet,
