@@ -15,9 +15,12 @@ import { PaaVentReasons } from '@/components/common-table-components/oppgave-tab
 import { Rol } from '@/components/common-table-components/oppgave-table/filter-dropdowns/rol';
 import { Saksbehandler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/saksbehandler';
 import {
-  Sakstype,
+  AllSakstyper,
+  SakstypeForAnkeAfter2027,
+  SakstypeForLedigeNonAnkeOppgaver,
   SakstypeForSakerITR,
-  SakstypeWithTrygderetten,
+  SakstyperForLedigeAnketeamOppgaver,
+  SakstyperForNonAnketeam,
 } from '@/components/common-table-components/oppgave-table/filter-dropdowns/sakstype';
 import { UserInnsendingshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-innsendingshjemler';
 import { UserRegistreringshjemler } from '@/components/common-table-components/oppgave-table/filter-dropdowns/user-registreringshjemler';
@@ -55,12 +58,17 @@ export const TableFilterHeaders = ({ columnKeys, tableKey, ...sortProps }: Props
   columnKeys.map((key) => {
     switch (key) {
       case ColumnKeyEnum.Type:
-        return <Sakstype key={key} columnKey={key} tableKey={tableKey} />;
-      case ColumnKeyEnum.TypeWithTrygderetten:
-        return <SakstypeWithTrygderetten key={key} columnKey={key} tableKey={tableKey} />;
+        return <SakstypeForLedigeNonAnkeOppgaver key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.TypeForSakerITR:
         return <SakstypeForSakerITR key={key} columnKey={key} tableKey={tableKey} />;
-
+      case ColumnKeyEnum.TypeForAnkerAfter2027:
+        return <SakstypeForAnkeAfter2027 key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.TypeForNonAnketeam:
+        return <SakstyperForNonAnketeam key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.TypeForLedigeAnketeamOppgaver:
+        return <SakstyperForLedigeAnketeamOppgaver key={key} columnKey={key} tableKey={tableKey} />;
+      case ColumnKeyEnum.AllTypes:
+        return <AllSakstyper key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.AllYtelser:
         return <AllYtelser key={key} columnKey={key} tableKey={tableKey} />;
       case ColumnKeyEnum.AccessYtelser:

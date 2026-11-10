@@ -22,6 +22,7 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
   switch (typeId) {
     case SaksTypeEnum.KLAGE:
     case SaksTypeEnum.ANKE:
+    case SaksTypeEnum.ANKE_AFTER_2027:
     case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
       return (
         <StandardButtonGroup
@@ -32,6 +33,7 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
       );
 
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
       switch (utfallId) {
         case UtfallEnum.TRUKKET:
         case UtfallEnum.HENLAGT:
@@ -62,6 +64,7 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
       }
 
     case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027:
       switch (utfallId) {
         case UtfallEnum.GJENOPPTATT_OPPHEVET:
           return (
@@ -87,6 +90,7 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
       }
 
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
       switch (utfallId) {
         case UtfallEnum.MEDHOLD:
         case UtfallEnum.DELVIS_MEDHOLD:
@@ -105,6 +109,7 @@ export const Buttons = ({ cancel, finishDisabled }: ButtonsProps) => {
             <TrygderettenOpphevetButtonGroup
               cancel={cancel}
               finishDisabled={finishDisabled}
+              fagsystemId={fagsystemId}
               requiresGosysOppgave={requiresGosysOppgave}
             />
           );

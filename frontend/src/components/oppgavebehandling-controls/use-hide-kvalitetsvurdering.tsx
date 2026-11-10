@@ -10,21 +10,33 @@ type Supported =
   | { featureEnabled: true; panelDefaultEnabled: boolean; reason: ReactElement } // Kvalitetsvurdering not supported with reason
   | { featureEnabled: false; panelDefaultEnabled: false; reason: null }; // Completely hide kvalitetsvurdering - don't even show reason
 
+enum Policy {
+  REQUIRED = 'REQUIRED',
+  NOT_REQUIRED_FOR_SAKSTYPE = 'NOT_REQUIRED_FOR_SAKSTYPE',
+  NOT_REQUIRED_FOR_UTFALL = 'NOT_REQUIRED_FOR_UTFALL',
+}
+
 export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Supported => {
   const { user } = useContext(StaticDataContext);
 
   const { typeId, resultat } = oppgave;
+  const status = getKvalitetsvurderingStatus(typeId, resultat.utfallId);
 
-  // Manual override for testing. Remove when BE is ready.
+  // Manual test override until BE has support for kvalitetsvurdering for these sakstyper
   if (
     typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
     typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ||
-    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN
+    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
+    typeId === SaksTypeEnum.ANKE
   ) {
-    return { panelDefaultEnabled: true, featureEnabled: true, reason: null };
+    return {
+      featureEnabled: true,
+      panelDefaultEnabled: true,
+      reason: null,
+    };
   }
 
-  if (!typeHasKvalitetsvurdering(typeId)) {
+  if (status === Policy.NOT_REQUIRED_FOR_SAKSTYPE) {
     return {
       featureEnabled: true,
       panelDefaultEnabled: false,
@@ -36,7 +48,7 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
     };
   }
 
-  if (!utfallHasKvalitetsvurdering(resultat.utfallId, typeId)) {
+  if (status === Policy.NOT_REQUIRED_FOR_UTFALL) {
     return {
       featureEnabled: true,
       panelDefaultEnabled: true,
@@ -59,21 +71,26 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
   return { panelDefaultEnabled: true, featureEnabled: true, reason: null };
 };
 
-export const typeHasKvalitetsvurdering = (typeId: SaksTypeEnum): boolean =>
-  typeId === SaksTypeEnum.KLAGE ||
-  typeId === SaksTypeEnum.ANKE ||
-  typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
-  typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
-  typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027;
+export const hasKvalitetsvurdering = (typeId: SaksTypeEnum, utfallId: UtfallEnum | null): boolean =>
+  getKvalitetsvurderingStatus(typeId, utfallId) === Policy.REQUIRED;
 
-export const utfallHasKvalitetsvurdering = (utfallId: UtfallEnum | null, typeId: SaksTypeEnum): boolean => {
-  if (
-    typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
-    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ||
-    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN
-  ) {
-    return true;
+const getKvalitetsvurderingStatus = (typeId: SaksTypeEnum, utfallId: UtfallEnum | null): Policy => {
+  switch (typeId) {
+    case SaksTypeEnum.ANKE_AFTER_2027:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:
+    case SaksTypeEnum.ANKE_I_TRYGDERETTEN:
+      return Policy.REQUIRED;
+    case SaksTypeEnum.KLAGE:
+    case SaksTypeEnum.ANKE:
+      return utfallId === UtfallEnum.TRUKKET || utfallId === UtfallEnum.RETUR || utfallId === UtfallEnum.HENLAGT
+        ? Policy.NOT_REQUIRED_FOR_UTFALL
+        : Policy.REQUIRED;
+    case SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET:
+    case SaksTypeEnum.OMGJØRINGSKRAV:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027:
+    case SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027:
+      return Policy.NOT_REQUIRED_FOR_SAKSTYPE;
   }
-
-  return utfallId !== UtfallEnum.TRUKKET && utfallId !== UtfallEnum.RETUR && utfallId !== UtfallEnum.HENLAGT;
 };
