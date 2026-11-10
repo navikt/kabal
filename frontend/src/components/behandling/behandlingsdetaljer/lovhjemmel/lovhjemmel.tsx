@@ -2,6 +2,10 @@ import { HelpText, HStack, Label, Skeleton, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useId, useMemo } from 'react';
 import { PermitteringsårsakWarning } from '@/components/behandling/behandlingsdetaljer/permitteringsårsak-warning';
+import { OmgjøringSaksdataHjemlerList as AnkeAfter2027HjemlerList } from '@/components/kvalitetsvurdering/anke-after-2027/data';
+import { useKvalitetsvurderingAnkeAfter2027State } from '@/components/kvalitetsvurdering/anke-after-2027/hooks';
+import { OmgjøringSaksdataHjemlerList as AnkeITRAfter2027HjemlerList } from '@/components/kvalitetsvurdering/anke-i-tr-after-2027/data';
+import { useKvalitetsvurderingAnkeITRAfter2027State } from '@/components/kvalitetsvurdering/anke-i-tr-after-2027/hooks';
 import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { BegrunnelsespliktenSaksdataHjemlerLists } from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
 import { SærregelverketSaksdataHjemlerList } from '@/components/kvalitetsvurdering/v3/særregelverket/data';
@@ -13,6 +17,7 @@ import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
 import { useValidationError } from '@/hooks/use-validation-error';
 import { useUpdateRegistreringshjemlerMutation } from '@/redux-api/oppgaver/mutations/set-registreringshjemler';
+import { SaksTypeEnum } from '@/types/kodeverk';
 import { KvalitetsvurderingVersion } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface HjemmelOption {
@@ -28,7 +33,12 @@ export const Lovhjemmel = () => {
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError('hjemmel');
   const lovKildeToRegistreringshjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
-  const { update: updateKvalitetsvurdering, isLoading } = useKvalitetsvurderingV3State();
+  const { update: updateKvalitetsvurdering, isLoading: kvalitetsvurderingV3IsLoading } = useKvalitetsvurderingV3State();
+  const { update: updateAnkeAfter2027, isLoading: ankeAfter2027IsLoading } = useKvalitetsvurderingAnkeAfter2027State();
+  const { update: updateAnkeITRAfter2027, isLoading: ankeITRAfter2027IsLoading } =
+    useKvalitetsvurderingAnkeITRAfter2027State();
+
+  const isLoading = kvalitetsvurderingV3IsLoading || ankeAfter2027IsLoading || ankeITRAfter2027IsLoading;
 
   const options = useMemo<Entry<HjemmelOption>[]>(
     () =>
@@ -71,11 +81,20 @@ export const Lovhjemmel = () => {
        * If one: Select it
        * If multiple or zero: Reset all selected
        */
+      const kvalitetsvurderingHjemler = ids.length === 1 ? ids : [];
+
       if (oppgave.kvalitetsvurderingReference !== null && !isLoading) {
-        updateKvalitetsvurdering(getUpdate(ids.length === 1 ? ids : []));
+        if (oppgave.typeId === SaksTypeEnum.ANKE_AFTER_2027) {
+          updateAnkeAfter2027(getAnkeAfter2027Update(kvalitetsvurderingHjemler));
+        }
+        if (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027) {
+          updateAnkeITRAfter2027(getAnkeITRAfter2027Update(kvalitetsvurderingHjemler));
+        }
+
+        updateKvalitetsvurdering(getUpdate(kvalitetsvurderingHjemler));
       }
     },
-    [updateHjemler, oppgave, updateKvalitetsvurdering, isLoading],
+    [updateHjemler, oppgave, updateKvalitetsvurdering, isLoading, updateAnkeAfter2027, updateAnkeITRAfter2027],
   );
 
   const selectId = useId();
@@ -133,3 +152,15 @@ const getUpdate = (ids: string[]) => ({
 });
 
 const FTRL_4_7_FØRSTE_LEDD_PERMITTERINGSÅRSAK = '240';
+
+const getAnkeAfter2027Update = (ids: string[]) => ({
+  [AnkeAfter2027HjemlerList.omgjøringFeilILovtolkningenHjemlerList]: ids,
+  [AnkeAfter2027HjemlerList.omgjøringFeilIFaktagrunnlagetHjemlerList]: ids,
+  [AnkeAfter2027HjemlerList.omgjøringFeilIRettsanvendelsenHjemlerList]: ids,
+});
+
+const getAnkeITRAfter2027Update = (ids: string[]) => ({
+  [AnkeITRAfter2027HjemlerList.omgjøringFeilILovtolkningenHjemlerList]: ids,
+  [AnkeITRAfter2027HjemlerList.omgjøringFeilIFaktagrunnlagetHjemlerList]: ids,
+  [AnkeITRAfter2027HjemlerList.omgjøringFeilIRettsanvendelsenHjemlerList]: ids,
+});
