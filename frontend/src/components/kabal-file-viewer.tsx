@@ -8,6 +8,7 @@ import {
 import { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAppTheme } from '@/app-theme';
 import { addFileViewerHandle, removeFileViewerHandle } from '@/components/file-viewer/file-viewer-handle-store';
+import { createKabalHighlightStorage } from '@/components/file-viewer/highlight-storage';
 import { PanelContainer } from '@/components/oppgavebehandling-panels/panel-container';
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { usePanelShortcut } from '@/components/oppgavebehandling-panels/panel-shortcuts-context';
@@ -17,6 +18,7 @@ import { ENVIRONMENT } from '@/environment';
 import { isNotNullOrUndefined } from '@/functions/is-not-type-guards';
 import { parseJSON } from '@/functions/parse-json';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
+import { useMaybeOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useSmartEditorEnabled } from '@/hooks/settings/use-setting';
 import { LogLevel, pushError, pushLog } from '@/observability';
 import { isKabalApiErrorData, type KabalApiErrorData } from '@/types/errors';
@@ -43,6 +45,11 @@ const KabalFileViewerPanelContent = (props: KabalFileViewerProps) => {
 export const KabalFileViewer = ({ files, onClose, newTabUrl, handle }: KabalFileViewerProps) => {
   const appTheme = useAppTheme();
   const { data: oppgave } = useOppgave();
+  const oppgaveId = useMaybeOppgaveId();
+  const highlightStorage = useMemo(
+    () => (oppgaveId === null ? undefined : createKabalHighlightStorage(oppgaveId)),
+    [oppgaveId],
+  );
   const fileViewerRef = useRef<KlageFileViewerHandle>(null);
 
   // Register the file viewer handle so SSE event handlers can trigger reloads.
@@ -82,6 +89,7 @@ export const KabalFileViewer = ({ files, onClose, newTabUrl, handle }: KabalFile
       errorComponent={KabalErrorActions}
       theme={appTheme}
       commonPasswords={commonPasswords}
+      highlightStorage={highlightStorage}
       handleRef={(r) => {
         fileViewerRef.current = r;
 

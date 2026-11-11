@@ -31,11 +31,15 @@ export interface FileEntry {
   newTabUrl?: string;
   /** Optional download URL for this file */
   downloadUrl?: string;
+  /** Identifies the file's highlights. Files without it cannot be highlighted. */
+  highlightsId?: string;
 }
 
 export interface DocumentViewerMetadata {
   navIdent: string;
   files: FileEntry[];
+  /** The behandling the files' highlights belong to. Absent when the files cannot be highlighted. */
+  highlightsBehandlingId?: string;
 }
 
 export interface IJournalfoertDokumentId {

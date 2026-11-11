@@ -1,12 +1,8 @@
 import { describe, expect, it, jest, mock } from 'bun:test';
 import { DocumentAccessNotFoundError } from '@/document-access/api/document-access-list';
-import type {
-  DocumentAccessKafkaConsumerApi,
-  DocumentAccessMessage,
-  DocumentAccessMessageHandler,
-} from '@/document-access/kafka-consumer';
 import { SmartDocumentWriteAccess, SYNC_INTERVAL_MS } from '@/document-access/service';
 import type { DocumentAccessList, Metadata } from '@/document-access/types';
+import type { KafkaConsumerApi, KafkaMessage, KafkaMessageHandler } from '@/kafka/kafka-consumer';
 
 const META: Metadata = { tab_id: undefined, client_version: 'test' };
 
@@ -15,14 +11,14 @@ const flushMicrotasks = () => Promise.resolve();
 
 const accessList = (documentId: string, navIdents: string[]): DocumentAccessList => ({ documentId, navIdents });
 
-/** A controllable in-memory stand-in for DocumentAccessKafkaConsumer. */
-class FakeKafkaConsumer implements DocumentAccessKafkaConsumerApi {
-  readonly #onMessage: DocumentAccessMessageHandler;
+/** A controllable in-memory stand-in for KafkaConsumer. */
+class FakeKafkaConsumer implements KafkaConsumerApi {
+  readonly #onMessage: KafkaMessageHandler;
   #errors: string[] = [];
   connectCount = 0;
   closeCount = 0;
 
-  constructor(onMessage: DocumentAccessMessageHandler) {
+  constructor(onMessage: KafkaMessageHandler) {
     this.#onMessage = onMessage;
   }
 
@@ -39,7 +35,7 @@ class FakeKafkaConsumer implements DocumentAccessKafkaConsumerApi {
   };
 
   /** Simulate a Kafka record arriving on the stream. */
-  deliver = (message: Partial<DocumentAccessMessage> & Pick<DocumentAccessMessage, 'documentId'>) =>
+  deliver = (message: Partial<KafkaMessage> & Pick<KafkaMessage, 'key'>) =>
     this.#onMessage({
       value: undefined,
       timestamp: BigInt(Date.now() + 60_000),
@@ -80,7 +76,7 @@ describe('SmartDocumentWriteAccess', () => {
     it('serves access from the cache without calling the API', async () => {
       const { service, consumer, fetchAccessList } = createService();
 
-      await consumer.deliver({ documentId: 'doc', value: JSON.stringify(['Z1']) });
+      await consumer.deliver({ key: 'doc', value: JSON.stringify(['Z1']) });
 
       expect(await service.hasAccess('doc', 'Z1', META)).toBe(true);
       expect(await service.hasAccess('doc', 'Z2', META)).toBe(false);
@@ -139,7 +135,7 @@ describe('SmartDocumentWriteAccess', () => {
       await flushMicrotasks(); // immediate callback: uncached -> false
 
       const commit = mock(async () => undefined);
-      await consumer.deliver({ documentId: 'doc', value: JSON.stringify(['Z1']), commit });
+      await consumer.deliver({ key: 'doc', value: JSON.stringify(['Z1']), commit });
 
       expect(received.at(-1)).toBe(true);
       expect(commit).toHaveBeenCalledTimes(1);
@@ -148,13 +144,13 @@ describe('SmartDocumentWriteAccess', () => {
     it('re-notifies on a repeated Kafka update (push path has no sameMembers guard)', async () => {
       const { service, consumer } = createService();
 
-      await consumer.deliver({ documentId: 'doc', value: JSON.stringify(['Z1']) });
+      await consumer.deliver({ key: 'doc', value: JSON.stringify(['Z1']) });
 
       const received: boolean[] = [];
       service.addHasAccessListener('doc', 'Z1', META, (value) => received.push(value));
       await flushMicrotasks(); // immediate callback: cached -> true
 
-      await consumer.deliver({ documentId: 'doc', value: JSON.stringify(['Z1']) });
+      await consumer.deliver({ key: 'doc', value: JSON.stringify(['Z1']) });
 
       expect(received).toEqual([true, true]);
     });
@@ -162,7 +158,7 @@ describe('SmartDocumentWriteAccess', () => {
     it('handles a tombstone as deletion', async () => {
       const { service, consumer } = createService();
 
-      await consumer.deliver({ documentId: 'doc', value: JSON.stringify(['Z1']) });
+      await consumer.deliver({ key: 'doc', value: JSON.stringify(['Z1']) });
 
       const accessEvents: boolean[] = [];
       let deleted = false;
@@ -173,7 +169,7 @@ describe('SmartDocumentWriteAccess', () => {
       await flushMicrotasks();
 
       const commit = mock(async () => undefined);
-      await consumer.deliver({ documentId: 'doc', value: undefined, commit });
+      await consumer.deliver({ key: 'doc', value: undefined, commit });
 
       expect(deleted).toBe(true);
       expect(accessEvents.at(-1)).toBe(false);
@@ -184,10 +180,10 @@ describe('SmartDocumentWriteAccess', () => {
     it('ignores an outdated message for a cached document', async () => {
       const { service, consumer } = createService();
 
-      await consumer.deliver({ documentId: 'doc', value: JSON.stringify(['Z1']) });
+      await consumer.deliver({ key: 'doc', value: JSON.stringify(['Z1']) });
 
       const commit = mock(async () => undefined);
-      await consumer.deliver({ documentId: 'doc', value: JSON.stringify(['Z1', 'Z2']), timestamp: 0n, commit });
+      await consumer.deliver({ key: 'doc', value: JSON.stringify(['Z1', 'Z2']), timestamp: 0n, commit });
 
       expect(commit).toHaveBeenCalledTimes(1);
       expect(await service.hasAccess('doc', 'Z2', META)).toBe(false);

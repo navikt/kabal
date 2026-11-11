@@ -68,10 +68,9 @@ export const behandlingerQuerySlice = oppgaverApi.injectEndpoints({
 
           const { navIdent } = await user;
 
-          const events = ServerSentEventManager.get<ServerSentEventType>(
+          const events = new ServerSentEventManager<ServerSentEventType>(
             'behandling',
             `${KABAL_BEHANDLINGER_BASE_PATH}/${oppgaveId}/events`,
-            null,
             { oppgave_id: oppgaveId },
           );
 

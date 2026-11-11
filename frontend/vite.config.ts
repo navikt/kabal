@@ -30,6 +30,7 @@ export default defineConfig(({ command }) => ({
       '/nytt-dokument': PROXY,
       '/vedleggsoversikt': PROXY,
       '/file-viewer': PROXY,
+      '/highlights': PROXY,
       '/smart-document-write-access': PROXY,
       '/version': PROXY,
       '/oauth': PROXY,

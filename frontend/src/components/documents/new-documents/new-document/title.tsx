@@ -7,7 +7,6 @@ import { StyledDocumentTitle } from '@/components/documents/new-documents/new-do
 import { DocumentIcon } from '@/components/documents/new-documents/shared/document-icon';
 import { SharedDocumentTitle } from '@/components/documents/new-documents/shared/title';
 import { SetFilename } from '@/components/documents/set-filename';
-import { getJournalfoertDocumentTabId } from '@/domain/tabbed-document-url';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentTabUrl } from '@/hooks/use-document-tab-url';
 import { useSetTitleMutation } from '@/redux-api/oppgaver/mutations/documents';
@@ -25,7 +24,7 @@ export const DocumentTitle = memo(
     const oppgaveId = useOppgaveId();
     const [setTitle] = useSetTitleMutation();
 
-    const { getNewTabUrl, getJournalfoertTabUrl } = useDocumentTabUrl();
+    const { getNewTabUrl, getJournalfoertTabUrl, getJournalfoertTabId } = useDocumentTabUrl();
 
     const [url, documentId] = useMemo<[string, string] | [undefined, undefined]>(() => {
       if (document.type !== DocumentTypeEnum.JOURNALFOERT) {
@@ -40,9 +39,9 @@ export const DocumentTitle = memo(
 
       return [
         getJournalfoertTabUrl(journalpostId, dokumentInfoId),
-        getJournalfoertDocumentTabId(journalpostId, dokumentInfoId),
+        getJournalfoertTabId(journalpostId, dokumentInfoId),
       ];
-    }, [document, oppgaveId, getNewTabUrl, getJournalfoertTabUrl]);
+    }, [document, oppgaveId, getNewTabUrl, getJournalfoertTabUrl, getJournalfoertTabId]);
 
     const setEditMode = useCallback(
       (edit: boolean) => {

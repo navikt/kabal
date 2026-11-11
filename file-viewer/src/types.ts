@@ -6,4 +6,6 @@ export interface DocumentViewerMetadata {
   navIdent: string;
   /** List of files to render in the file viewer. */
   files: FileEntry[];
+  /** The behandling the files' highlights belong to. Absent when the files cannot be highlighted. */
+  highlightsBehandlingId?: string;
 }

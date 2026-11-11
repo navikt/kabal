@@ -8,7 +8,6 @@ import { SelectContext } from '@/components/documents/journalfoerte-documents/se
 import { TabContext } from '@/components/documents/tab-context';
 import { TAB_MANAGER } from '@/components/documents/use-is-tab-open';
 import { toast } from '@/components/toast/store';
-import { getJournalfoertDocumentTabId } from '@/domain/tabbed-document-url';
 import { useDocumentTabUrl } from '@/hooks/use-document-tab-url';
 import type { IArkivertDocument } from '@/types/arkiverte-documents';
 
@@ -16,7 +15,7 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
   const { selectedDocuments } = useContext(SelectContext);
   const getDocument = useGetDocument(filteredDocuments);
   const { getTabRef, setTabRef } = useContext(TabContext);
-  const { getCombinedTabUrl, getCombinedTabId, getJournalfoertTabUrl } = useDocumentTabUrl();
+  const { getCombinedTabUrl, getCombinedTabId, getJournalfoertTabUrl, getJournalfoertTabId } = useDocumentTabUrl();
 
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: ¯\_(ツ)_/¯
   return useCallback(() => {
@@ -82,7 +81,7 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
       dokumentInfoId = vedlegg.dokumentInfoId;
     }
 
-    const documentId = getJournalfoertDocumentTabId(journalpostId, dokumentInfoId);
+    const documentId = getJournalfoertTabId(journalpostId, dokumentInfoId);
     const isTabOpen = TAB_MANAGER.isTabOpen(documentId);
     const tabRef = getTabRef(documentId);
 
@@ -120,5 +119,6 @@ export const useOpenInNewTab = (filteredDocuments: IArkivertDocument[]) => {
     getCombinedTabUrl,
     getCombinedTabId,
     getJournalfoertTabUrl,
+    getJournalfoertTabId,
   ]);
 };
