@@ -2,16 +2,17 @@ import { trace } from '@opentelemetry/api';
 import { SmartDocumentAccessMap } from '@/document-access/access-map';
 import { DocumentAccessNotFoundError, getDocumentAccessListFromApi } from '@/document-access/api/document-access-list';
 import { parseKafkaMessageValue } from '@/document-access/kafka';
-import {
-  DocumentAccessKafkaConsumer,
-  type DocumentAccessKafkaConsumerApi,
-  type DocumentAccessMessage,
-  type DocumentAccessMessageHandler,
-} from '@/document-access/kafka-consumer';
-import { ListenerMap } from '@/document-access/listener-map';
 import type { Metadata } from '@/document-access/types';
 import { IntervalLoop } from '@/helpers/interval-loop';
+import { ListenerMap } from '@/helpers/listener-map';
 import { sameMembers } from '@/helpers/same-members';
+import {
+  KafkaConsumer,
+  type KafkaConsumerApi,
+  type KafkaConsumerOptions,
+  type KafkaMessage,
+  type KafkaMessageHandler,
+} from '@/kafka/kafka-consumer';
 import { getLogger } from '@/logger';
 import { isShuttingDown } from '@/shutdown';
 
@@ -27,7 +28,13 @@ type HasAccessListener = (hasWriteAccess: boolean) => void;
 type DeletedDocumentListener = () => void;
 
 type FetchAccessList = typeof getDocumentAccessListFromApi;
-type CreateKafkaConsumer = (onMessage: DocumentAccessMessageHandler, traceId: string) => DocumentAccessKafkaConsumerApi;
+
+/** Every pod needs every access change, so each process gets its own group. */
+const DOCUMENT_ACCESS_KAFKA_OPTIONS: KafkaConsumerOptions = {
+  topic: 'klage.smart-document-write-access.v1',
+  spanName: 'kafka.process_document_access',
+};
+type CreateKafkaConsumer = (onMessage: KafkaMessageHandler, traceId: string) => KafkaConsumerApi;
 
 export class SmartDocumentWriteAccess {
   /** Access lists (Nav-idents) by document ID. */
@@ -40,7 +47,7 @@ export class SmartDocumentWriteAccess {
   #initTimestamp: bigint = BigInt(Date.now());
 
   /** Owns the Kafka consumer lifecycle and feeds records to #processMessage. */
-  readonly #kafka: DocumentAccessKafkaConsumerApi;
+  readonly #kafka: KafkaConsumerApi;
 
   /** Fetches a document's access list from kabal-api. */
   readonly #fetchAccessList: FetchAccessList;
@@ -54,7 +61,7 @@ export class SmartDocumentWriteAccess {
 
   constructor(
     createKafkaConsumer: CreateKafkaConsumer = (onMessage, traceId) =>
-      new DocumentAccessKafkaConsumer(onMessage, traceId),
+      new KafkaConsumer(onMessage, traceId, DOCUMENT_ACCESS_KAFKA_OPTIONS),
     fetchAccessList: FetchAccessList = getDocumentAccessListFromApi,
   ) {
     this.#fetchAccessList = fetchAccessList;
@@ -194,12 +201,12 @@ export class SmartDocumentWriteAccess {
   };
 
   #processMessage = async ({
-    documentId,
+    key: documentId,
     value,
     timestamp,
     commit,
     trace_id: message_trace_id,
-  }: DocumentAccessMessage): Promise<void> => {
+  }: KafkaMessage): Promise<void> => {
     const payload = value === undefined ? null : parseKafkaMessageValue(value);
 
     if (payload === null) {

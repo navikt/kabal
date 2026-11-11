@@ -17,6 +17,7 @@ import { debugPlugin } from '@/plugins/debug/debug';
 import { documentPlugin } from '@/plugins/document';
 import { fileViewerPlugin } from '@/plugins/file-viewer/file-viewer';
 import { healthPlugin } from '@/plugins/health';
+import { highlightsPlugin } from '@/plugins/highlights/highlights';
 import { httpLoggerPlugin } from '@/plugins/http-logger';
 import { navIdentPlugin } from '@/plugins/nav-ident';
 import { oboAccessTokenPlugin } from '@/plugins/obo-token';
@@ -79,6 +80,7 @@ app
   .register(apiProxyPlugin, { appNames: API_CLIENT_IDS, prefix: '/api' })
   .register(documentPlugin)
   .register(fileViewerPlugin)
+  .register(highlightsPlugin)
   .register(staticAssetsPlugin)
   .register(serveIndexPlugin)
   .register(httpLoggerPlugin)

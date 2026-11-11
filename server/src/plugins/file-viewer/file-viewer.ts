@@ -1,6 +1,8 @@
 import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import { Value } from 'typebox/value';
+import { getHighlightsId } from '#shared/highlights';
 import { ApiClientEnum } from '@/config/config';
 import { isNotNull } from '@/functions/guards';
 import { getDuration } from '@/helpers/duration';
@@ -13,6 +15,7 @@ import {
   ARCHIVED_PARAMS,
   type ArchivedApiDocument,
   ArchivedApiDocumentSchema,
+  BEHANDLING_ARCHIVED_PARAMS,
   DUA_PARAMS,
   DuaApiDocumentSchema,
   type IDuaApiDocument,
@@ -33,7 +36,20 @@ export const fileViewerPlugin = fastifyPlugin(
     app
       .withTypeProvider<TypeBoxTypeProvider>()
 
-      // Archived documents
+      // Archived documents viewed in a behandling, with highlights
+      .get(
+        '/file-viewer/archived/:behandlingId/:ids',
+        {
+          schema: {
+            tags: ['file-viewer'],
+            params: BEHANDLING_ARCHIVED_PARAMS,
+            produces: ['text/html'],
+          },
+        },
+        async (req, reply) => renderArchivedDocuments(req, reply, req.params.ids, req.params.behandlingId),
+      )
+
+      // Archived documents, without highlights. Kept for tabs opened before the behandling was added to the path.
       .get(
         '/file-viewer/archived/:ids',
         {
@@ -43,88 +59,7 @@ export const fileViewerPlugin = fastifyPlugin(
             produces: ['text/html'],
           },
         },
-        async (req, reply) => {
-          const references = decodeArchivedDocumentIds(req.params.ids);
-
-          if (references.length === 0) {
-            return renderHtml(reply, 'Ingen dokumenter', {
-              navIdent: req.navIdent,
-              files: [],
-            });
-          }
-
-          const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API, reply);
-          const headers = getProxyRequestHeaders(req, ApiClientEnum.KABAL_API, oboAccessToken);
-
-          const metadataStart = performance.now();
-
-          const metadataResults = await Promise.all(
-            references.map(async ({ journalpostId, dokumentInfoId }) => {
-              const url = `${METADATA_BASE_URL}/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}`;
-
-              return withSpan(
-                'file_viewer.get_archived_metadata',
-                { journalpost_id: journalpostId, dokument_info_id: dokumentInfoId },
-                async (span) => {
-                  try {
-                    const response = await fetch(url, { method: 'GET', headers });
-
-                    span.setAttribute('http.status_code', response.status);
-
-                    if (!response.ok) {
-                      log.warn({
-                        msg: 'Failed to fetch archived document metadata',
-                        data: { status: response.status, journalpostId, dokumentInfoId },
-                      });
-
-                      return null;
-                    }
-
-                    const json: unknown = await response.json();
-
-                    if (!Value.Check(ArchivedApiDocumentSchema, json)) {
-                      log.warn({
-                        msg: 'Invalid archived metadata response',
-                        data: { journalpostId, dokumentInfoId },
-                      });
-
-                      return null;
-                    }
-
-                    return json as ArchivedApiDocument;
-                  } catch (error) {
-                    log.warn({
-                      msg: 'Error fetching archived document metadata',
-                      data: { journalpostId, dokumentInfoId, error: String(error) },
-                    });
-
-                    return null;
-                  }
-                },
-              );
-            }),
-          );
-
-          reply.addServerTiming('metadata_request_time', getDuration(metadataStart), 'Metadata Request Time');
-
-          const files: FileEntry[] = metadataResults.filter(isNotNull).map<FileEntry>((doc) => {
-            const fileUrl = getArchivedPdfUrl(doc.journalpostId, doc.dokumentInfoId);
-
-            return {
-              title: doc.title,
-              url: fileUrl,
-              downloadUrl: fileUrl,
-              variants: normalizeVariants(doc.varianter),
-            } satisfies FileEntry;
-          });
-
-          const pageTitle = files[0]?.title ?? 'Dokumentvisning';
-
-          return renderHtml(reply, pageTitle, {
-            navIdent: req.navIdent,
-            files,
-          });
-        },
+        async (req, reply) => renderArchivedDocuments(req, reply, req.params.ids, undefined),
       )
 
       // Document in progress (DUA)
@@ -247,3 +182,93 @@ export const fileViewerPlugin = fastifyPlugin(
   },
   { fastify: '5', name: 'file-viewer', dependencies: [OBO_ACCESS_TOKEN_PLUGIN_ID, SERVER_TIMING_PLUGIN_ID] },
 );
+
+const renderArchivedDocuments = async (
+  req: FastifyRequest,
+  reply: FastifyReply,
+  ids: string,
+  behandlingId: string | undefined,
+) => {
+  const references = decodeArchivedDocumentIds(ids);
+
+  if (references.length === 0) {
+    return renderHtml(reply, 'Ingen dokumenter', {
+      navIdent: req.navIdent,
+      files: [],
+    });
+  }
+
+  const oboAccessToken = await req.getOboAccessToken(ApiClientEnum.KABAL_API, reply);
+  const headers = getProxyRequestHeaders(req, ApiClientEnum.KABAL_API, oboAccessToken);
+
+  const metadataStart = performance.now();
+
+  const metadataResults = await Promise.all(
+    references.map(async ({ journalpostId, dokumentInfoId }) => {
+      const url = `${METADATA_BASE_URL}/journalposter/${journalpostId}/dokumenter/${dokumentInfoId}`;
+
+      return withSpan(
+        'file_viewer.get_archived_metadata',
+        { journalpost_id: journalpostId, dokument_info_id: dokumentInfoId },
+        async (span) => {
+          try {
+            const response = await fetch(url, { method: 'GET', headers });
+
+            span.setAttribute('http.status_code', response.status);
+
+            if (!response.ok) {
+              log.warn({
+                msg: 'Failed to fetch archived document metadata',
+                data: { status: response.status, journalpostId, dokumentInfoId },
+              });
+
+              return null;
+            }
+
+            const json: unknown = await response.json();
+
+            if (!Value.Check(ArchivedApiDocumentSchema, json)) {
+              log.warn({
+                msg: 'Invalid archived metadata response',
+                data: { journalpostId, dokumentInfoId },
+              });
+
+              return null;
+            }
+
+            return json as ArchivedApiDocument;
+          } catch (error) {
+            log.warn({
+              msg: 'Error fetching archived document metadata',
+              data: { journalpostId, dokumentInfoId, error: String(error) },
+            });
+
+            return null;
+          }
+        },
+      );
+    }),
+  );
+
+  reply.addServerTiming('metadata_request_time', getDuration(metadataStart), 'Metadata Request Time');
+
+  const files: FileEntry[] = metadataResults.filter(isNotNull).map<FileEntry>((doc) => {
+    const fileUrl = getArchivedPdfUrl(doc.journalpostId, doc.dokumentInfoId);
+
+    return {
+      title: doc.title,
+      url: fileUrl,
+      downloadUrl: fileUrl,
+      variants: normalizeVariants(doc.varianter),
+      highlightsId: behandlingId === undefined ? undefined : getHighlightsId(behandlingId, doc.dokumentInfoId),
+    } satisfies FileEntry;
+  });
+
+  const pageTitle = files[0]?.title ?? 'Dokumentvisning';
+
+  return renderHtml(reply, pageTitle, {
+    navIdent: req.navIdent,
+    files,
+    highlightsBehandlingId: behandlingId,
+  });
+};

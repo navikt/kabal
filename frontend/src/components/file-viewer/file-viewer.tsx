@@ -2,6 +2,7 @@ import { Box, Loader, VStack } from '@navikt/ds-react';
 import type { FileEntry } from '@navikt/klage-file-viewer';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
+import { getHighlightsId } from '#shared/highlights';
 import { canOpenInKabal } from '@/components/documents/filetype';
 import { getDuaWithAttachments } from '@/components/file-viewer/get-dua-with-attachments';
 import type { IShownArchivedDocument, IShownDocument } from '@/components/file-viewer/types';
@@ -21,6 +22,8 @@ import {
   getNewFileViewerTabUrl,
 } from '@/domain/tabbed-document-url';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
+import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
+import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
 import { useGetArkiverteDokumenterQuery, useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument, Variants } from '@/types/arkiverte-documents';
 import { DocumentTypeEnum, type IDocument } from '@/types/documents/documents';
@@ -33,6 +36,10 @@ interface FileViewerProps {
 
 export const FileViewer = ({ showDocumentList, isLoading, onClose }: FileViewerProps) => {
   const oppgaveId = useOppgaveId();
+  const isFullfoert = useIsFullfoert();
+  const isFeilregistrert = useIsFeilregistrert();
+  // Highlights are deleted when the behandling is finished.
+  const isFinished = isFullfoert || isFeilregistrert;
 
   const fileViewerUrl = useFileViewerUrl();
 
@@ -56,7 +63,7 @@ export const FileViewer = ({ showDocumentList, isLoading, onClose }: FileViewerP
     for (const file of shownDocumentsWithAttachments) {
       if (file.type === DocumentTypeEnum.JOURNALFOERT) {
         const fileUrl = getJournalfoertDocumentFileUrl(file.journalpostId, file.dokumentInfoId);
-        const tabUrl = getJournalfoertFileViewerTabUrl(file.journalpostId, file.dokumentInfoId);
+        const tabUrl = getJournalfoertFileViewerTabUrl(oppgaveId, file.journalpostId, file.dokumentInfoId);
         const title = getArchivedDocumentTitle(file, journalpostDocuments);
         urls.push(tabUrl);
 
@@ -66,6 +73,7 @@ export const FileViewer = ({ showDocumentList, isLoading, onClose }: FileViewerP
           url: fileUrl,
           downloadUrl: fileUrl,
           newTabUrl: tabUrl,
+          highlightsId: isFinished ? undefined : getHighlightsId(oppgaveId, file.dokumentInfoId),
         });
 
         continue;
@@ -94,7 +102,7 @@ export const FileViewer = ({ showDocumentList, isLoading, onClose }: FileViewerP
     }
 
     return { files: entries, tabUrls: urls };
-  }, [oppgaveId, shownDocumentsWithAttachments, journalpostDocuments, documentsInProgress]);
+  }, [oppgaveId, shownDocumentsWithAttachments, journalpostDocuments, documentsInProgress, isFinished]);
 
   useMarkVisited(tabUrls);
 

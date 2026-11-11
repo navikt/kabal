@@ -5,11 +5,12 @@ import { EventEmitter } from 'node:events';
 import type { Connection, Message } from '@platformatic/kafka';
 import {
   type CreateKafkaClient,
-  type DocumentAccessKafkaClient,
-  DocumentAccessKafkaConsumer,
-  type DocumentAccessMessage,
-  type DocumentAccessStream,
-} from '@/document-access/kafka-consumer';
+  type KafkaClient,
+  KafkaConsumer,
+  type KafkaConsumerOptions,
+  type KafkaMessage,
+  type KafkaStream,
+} from '@/kafka/kafka-consumer';
 
 type FakeMessage = Message<string, string, string, string>;
 
@@ -40,8 +41,22 @@ export const flush = async () => {
 };
 
 /** Controllable stand-in for a Kafka message stream. */
-export class FakeStream extends EventEmitter implements DocumentAccessStream {
+export class FakeStream extends EventEmitter implements KafkaStream {
   closed = false;
+  paused = false;
+
+  pause = () => {
+    this.paused = true;
+
+    return this;
+  };
+
+  resume = () => {
+    this.paused = false;
+
+    return this;
+  };
+
   close = mock(async () => {
     this.#terminate();
   });
@@ -94,7 +109,7 @@ export class FakeStream extends EventEmitter implements DocumentAccessStream {
 type CloseCallback = (error: Error | null) => void;
 
 /** Controllable stand-in for a @platformatic/kafka Consumer. */
-export class FakeClient extends EventEmitter implements DocumentAccessKafkaClient {
+export class FakeClient extends EventEmitter implements KafkaClient {
   connected = false;
   active = false;
   closed = false;
@@ -125,6 +140,7 @@ export class FakeClient extends EventEmitter implements DocumentAccessKafkaClien
     // Like the real client, consume() on a fresh client joins the group itself.
     this.active = true;
     this.memberId = 'member';
+    this.emit('consumer:group:join');
 
     const stream = new FakeStream();
     this.streams.push(stream);
@@ -171,7 +187,7 @@ export class FakeClient extends EventEmitter implements DocumentAccessKafkaClien
 }
 
 export interface Harness {
-  consumer: DocumentAccessKafkaConsumer;
+  consumer: KafkaConsumer;
   /** Every client built so far, oldest first. A rebuild appends a new one. */
   clients: FakeClient[];
   /**
@@ -180,13 +196,13 @@ export interface Harness {
    */
   breakKafka: (error: Error | null) => void;
   /** The handler passed to the consumer, so tests can assert on delivered messages. */
-  onMessage: ReturnType<typeof mock<(message: DocumentAccessMessage) => Promise<void>>>;
+  onMessage: ReturnType<typeof mock<(message: KafkaMessage) => Promise<void>>>;
 }
 
-export const createConsumer = (): Harness => {
+export const createConsumer = (options: Partial<KafkaConsumerOptions> = {}): Harness => {
   const clients: FakeClient[] = [];
   let consumeError: Error | null = null;
-  const onMessage = mock(async (_message: DocumentAccessMessage) => undefined);
+  const onMessage = mock(async (_message: KafkaMessage) => undefined);
 
   const createClient: CreateKafkaClient = () => {
     const client = new FakeClient();
@@ -196,7 +212,12 @@ export const createConsumer = (): Harness => {
     return client;
   };
 
-  const consumer = new DocumentAccessKafkaConsumer(onMessage, TRACE_ID, createClient);
+  const consumer = new KafkaConsumer(onMessage, TRACE_ID, {
+    topic: 'topic',
+    spanName: 'span',
+    ...options,
+    createClient,
+  });
 
   const breakKafka = (error: Error | null) => {
     consumeError = error;

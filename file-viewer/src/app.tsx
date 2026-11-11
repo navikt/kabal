@@ -1,6 +1,7 @@
 import { Theme } from '@navikt/ds-react';
 import { KlageFileViewer, type KlageFileViewerHandle } from '@navikt/klage-file-viewer';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { createHighlightStorage } from '@/highlight-storage';
 import { type AppTheme, getAppThemeKey, resolveTheme } from '@/theme';
 import type { DocumentViewerMetadata } from '@/types';
 
@@ -70,12 +71,23 @@ interface AppProps {
 export const App = ({ metadata }: AppProps) => {
   const appTheme = useAppTheme(metadata.navIdent);
   const handleRef = useRef<KlageFileViewerHandle>(null);
+  const { highlightsBehandlingId } = metadata;
+  const highlightStorage = useMemo(
+    () => (highlightsBehandlingId === undefined ? undefined : createHighlightStorage(highlightsBehandlingId)),
+    [highlightsBehandlingId],
+  );
 
   useReloadOnBroadcast(handleRef);
 
   return (
     <Theme theme={appTheme} className="h-full w-full">
-      <KlageFileViewer files={metadata.files} theme={appTheme} standalone handleRef={handleRef} />
+      <KlageFileViewer
+        files={metadata.files}
+        theme={appTheme}
+        standalone
+        handleRef={handleRef}
+        highlightStorage={highlightStorage}
+      />
     </Theme>
   );
 };

@@ -7,17 +7,23 @@ export type ValkeyClientType = ReturnType<typeof createClient>;
 
 const log = getLogger('valkey-client');
 
-const VALKEY_URI = optionalEnvString('REDIS_URI_HOCUSPOCUS');
-const VALKEY_USERNAME = optionalEnvString('REDIS_USERNAME_HOCUSPOCUS');
-const VALKEY_PASSWORD = optionalEnvString('REDIS_PASSWORD_HOCUSPOCUS');
+/** Nais injects the connection details of each Valkey instance in the app spec, suffixed with the instance name. */
+const getInstanceConfig = (instance: string): ValkeyOptions | null => {
+  const url = optionalEnvString(`REDIS_URI_${instance}`);
+  const username = optionalEnvString(`REDIS_USERNAME_${instance}`);
+  const password = optionalEnvString(`REDIS_PASSWORD_${instance}`);
 
-export const getValkeyConfig = (): ValkeyOptions | null => {
-  if (VALKEY_URI === undefined || VALKEY_USERNAME === undefined || VALKEY_PASSWORD === undefined) {
+  if (url === undefined || username === undefined || password === undefined) {
     return null;
   }
 
-  return { url: VALKEY_URI, username: VALKEY_USERNAME, password: VALKEY_PASSWORD };
+  return { url, username, password };
 };
+
+export const getValkeyConfig = (): ValkeyOptions | null => getInstanceConfig('HOCUSPOCUS');
+
+/** Highlights have their own instance, so they never compete with collaboration documents for memory. */
+export const getHighlightsValkeyConfig = (): ValkeyOptions | null => getInstanceConfig('HIGHLIGHTS');
 
 export const createValkeyClient = (options: ValkeyOptions): ValkeyClientType => {
   const client: ValkeyClientType = createClient({ ...options, pingInterval: 30_000 });

@@ -16,7 +16,6 @@
     "noFallthroughCasesInSwitch": true,
     // Some stricter flags
     "useUnknownInCatchVariables": true,
-    "noPropertyAccessFromIndexSignature": true,
     "sourceMap": true,
     "allowJs": false,
     "esModuleInterop": true,
@@ -25,14 +24,15 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "rootDir": "./src",
+    "rootDir": "..",
     "outDir": "./dist",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "#shared/*": ["../shared/*"]
     },
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo"
   },
-  "include": ["src"],
+  "include": ["src", "../shared"],
   "exclude": ["./dist/**"]
 }

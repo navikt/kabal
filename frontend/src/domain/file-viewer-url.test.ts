@@ -99,13 +99,21 @@ describe('getFileViewerUrl', () => {
 
   it('should return a URL for archived files', () => {
     expect.assertions(1);
-    const url = getFileViewerUrl({
-      archivedFiles: [
-        { journalpostId: '111', dokumentInfoId: 'aaa' },
-        { journalpostId: '111', dokumentInfoId: 'bbb' },
-      ],
-    });
-    expect(url).toBe('/file-viewer/archived/111:aaa,bbb');
+    const url = getFileViewerUrl(
+      {
+        archivedFiles: [
+          { journalpostId: '111', dokumentInfoId: 'aaa' },
+          { journalpostId: '111', dokumentInfoId: 'bbb' },
+        ],
+      },
+      'oppgave-456',
+    );
+    expect(url).toBe('/file-viewer/archived/oppgave-456/111:aaa,bbb');
+  });
+
+  it('should return null for archived files without oppgaveId', () => {
+    expect.assertions(1);
+    expect(getFileViewerUrl({ archivedFiles: [{ journalpostId: '111', dokumentInfoId: 'aaa' }] })).toBeNull();
   });
 
   it('should return a URL for a new document', () => {

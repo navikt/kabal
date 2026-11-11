@@ -53,6 +53,11 @@ export const ARCHIVED_PARAMS = Type.Object({
   ids: Type.String({ description: 'Encoded archived document IDs' }),
 });
 
+export const BEHANDLING_ARCHIVED_PARAMS = Type.Object({
+  behandlingId: Type.String({ format: 'uuid' }),
+  ids: Type.String({ description: 'Encoded archived document IDs' }),
+});
+
 // --- DUA document schemas ---
 
 export const DuaApiDocumentSchema = Type.Object({

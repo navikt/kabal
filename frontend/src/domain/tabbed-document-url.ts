@@ -1,15 +1,15 @@
-import { encodeArchivedDocumentIds } from '@/domain/file-viewer-url';
+import { encodeArchivedDocumentIds, getArchivedFileViewerUrl } from '@/domain/file-viewer-url';
 import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 // File viewer URL functions (new /file-viewer/ paths)
 export const getNewFileViewerTabUrl = (oppgaveId: string, documentId: string, _parentId: string | null) =>
   `/file-viewer/dua/${oppgaveId}/${documentId}`;
 
-export const getJournalfoertFileViewerTabUrl = (journalpostId: string, dokumentInfoId: string) =>
-  `/file-viewer/archived/${journalpostId}:${dokumentInfoId}`;
+export const getJournalfoertFileViewerTabUrl = (behandlingId: string, journalpostId: string, dokumentInfoId: string) =>
+  getArchivedFileViewerUrl(behandlingId, `${journalpostId}:${dokumentInfoId}`);
 
-export const getCombinedFileViewerTabUrl = (documents: readonly IJournalfoertDokumentId[]) =>
-  `/file-viewer/archived/${encodeArchivedDocumentIds(documents)}`;
+export const getCombinedFileViewerTabUrl = (behandlingId: string, documents: readonly IJournalfoertDokumentId[]) =>
+  getArchivedFileViewerUrl(behandlingId, encodeArchivedDocumentIds(documents));
 
 export const getCombinedFileViewerTabId = (documents: readonly IJournalfoertDokumentId[]) =>
   `combined-document-${encodeArchivedDocumentIds(documents)}`;

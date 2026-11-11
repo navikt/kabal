@@ -11,11 +11,11 @@ import {
   STABLE_STREAM_MS,
   stallRetryOnStreamClose,
   TRACE_ID,
-} from '@/document-access/kafka-consumer.test-utils';
+} from '@/kafka/kafka-consumer.test-utils';
 
-describe('DocumentAccessKafkaConsumer', () => {
-  // The happy path: one client, one stream, and records reach the handler with the key as
-  // documentId. With no traceparent header, the consumer's own trace ID is used.
+describe('KafkaConsumer', () => {
+  // The happy path: one client, one stream, and records reach the handler with their key.
+  // With no traceparent header, the consumer's own trace ID is used.
   it('connects, joins the group and starts streaming', async () => {
     const { consumer, clients, onMessage } = createConsumer();
 
@@ -35,7 +35,7 @@ describe('DocumentAccessKafkaConsumer', () => {
     expect(onMessage).toHaveBeenCalledTimes(1);
     expect(onMessage).toHaveBeenCalledWith(
       expect.objectContaining({
-        documentId: 'doc-1',
+        key: 'doc-1',
         value: 'payload',
         timestamp: 123n,
         trace_id: TRACE_ID,
@@ -824,6 +824,90 @@ describe('DocumentAccessKafkaConsumer', () => {
 
     expect(clients).toHaveLength(1);
 
+    jest.useRealTimers();
+  });
+});
+
+describe('KafkaConsumer in ordered mode', () => {
+  const ORDERED = { ordered: true };
+
+  // A failing record holds back the records after it, and nothing is committed until it succeeds.
+  // The stream is paused meanwhile, so records wait in Kafka rather than in memory.
+  it('retries a failing record before handling and committing the next one', async () => {
+    jest.useFakeTimers();
+
+    const { consumer, clients, onMessage } = createConsumer(ORDERED);
+
+    onMessage.mockRejectedValueOnce(new Error('Valkey is down.'));
+
+    await consumer.connect();
+
+    const stream = clients[0]?.stream;
+    const first = stream?.deliver({ key: 'b-1', offset: 1n });
+    const second = stream?.deliver({ key: 'b-2', offset: 2n });
+    await flush();
+
+    expect(onMessage).toHaveBeenCalledTimes(1);
+    expect(first?.commit).not.toHaveBeenCalled();
+    expect(second?.commit).not.toHaveBeenCalled();
+    expect(stream?.paused).toBe(true);
+
+    jest.advanceTimersByTime(1_000);
+    await flush();
+
+    expect(onMessage.mock.calls.map(([{ key }]) => key)).toEqual(['b-1', 'b-1', 'b-2']);
+    expect(first?.commit).toHaveBeenCalledTimes(1);
+    expect(second?.commit).toHaveBeenCalledTimes(1);
+    expect(stream?.paused).toBe(false);
+
+    await consumer.close();
+    jest.useRealTimers();
+  });
+
+  // The consumer commits after the handler resolves. The handler's commit is a no-op, so it can't skip the fencing below.
+  it('commits once, after the handler, even when the handler commits', async () => {
+    const { consumer, clients, onMessage } = createConsumer(ORDERED);
+
+    onMessage.mockImplementationOnce(async ({ commit }) => {
+      await commit();
+    });
+
+    await consumer.connect();
+
+    const record = clients[0]?.stream.deliver({ key: 'b-1' });
+    await flush();
+
+    expect(record?.commit).toHaveBeenCalledTimes(1);
+
+    await consumer.close();
+  });
+
+  // After a rebalance the partition may belong to another pod, which gets the record redelivered
+  // from the committed offset. This pod stops retrying and never commits it.
+  it('stops retrying and does not commit a record from before a rebalance', async () => {
+    jest.useFakeTimers();
+
+    const { consumer, clients, onMessage } = createConsumer(ORDERED);
+
+    onMessage.mockRejectedValueOnce(new Error('Valkey is down.'));
+
+    await consumer.connect();
+
+    const client = clients[0];
+    const stream = client?.stream;
+    const record = stream?.deliver({ key: 'b-1' });
+    await flush();
+
+    client?.emit('consumer:group:join');
+
+    jest.advanceTimersByTime(60_000);
+    await flush();
+
+    expect(onMessage).toHaveBeenCalledTimes(1);
+    expect(record?.commit).not.toHaveBeenCalled();
+    expect(stream?.paused).toBe(false);
+
+    await consumer.close();
     jest.useRealTimers();
   });
 });

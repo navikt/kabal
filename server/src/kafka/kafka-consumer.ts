@@ -1,5 +1,5 @@
 import type { ConnectionOptions } from 'node:tls';
-import { propagation, ROOT_CONTEXT, SpanKind, SpanStatusCode } from '@opentelemetry/api';
+import { isSpanContextValid, propagation, ROOT_CONTEXT, SpanKind, SpanStatusCode } from '@opentelemetry/api';
 import { type ConsumeOptions, Consumer, type ConsumerHeartbeatStalledPayload, type Message } from '@platformatic/kafka';
 import client from 'prom-client';
 import { requiredEnvString } from '@/config/env-var';
@@ -8,13 +8,36 @@ import { getLogger } from '@/logger';
 import { proxyRegister } from '@/prometheus/types';
 import { tracer } from '@/tracing/tracer';
 
-const log = getLogger('document-write-access-kafka-consumer');
+const log = getLogger('kafka-consumer');
 
-const TOPIC = 'klage.smart-document-write-access.v1';
+/** Which records to consume, and how to group and trace them. */
+export interface KafkaConsumerOptions {
+  topic: string;
+  /**
+   * Pods sharing a group ID split the records between them, and a restarted pod
+   * resumes from the group's committed offsets. Defaults to a random ID per process,
+   * so every pod receives every record.
+   */
+  groupId?: string;
+  /** Name of the CONSUMER span around each record. */
+  spanName: string;
+  /**
+   * Handle records one at a time, in offset order, and commit each one after its handler resolves.
+   * A failing record is retried with backoff and holds back the records after it.
+   * The handler must be idempotent: uncommitted records are redelivered after a rebalance or restart.
+   */
+  ordered?: boolean;
+  /** Builds the Kafka client. Injectable for tests. */
+  createClient?: CreateKafkaClient;
+}
 
 /** Backoff bounds for retries. */
 const MIN_RETRY_DELAY_MS = 5_000;
 const MAX_RETRY_DELAY_MS = 60_000;
+
+/** Backoff bounds for retrying a failed record in ordered mode. */
+const MIN_RECORD_RETRY_DELAY_MS = 1_000;
+const MAX_RECORD_RETRY_DELAY_MS = 60_000;
 
 /**
  * How long a stream must stay up and healthy before the backoff resets.
@@ -65,7 +88,7 @@ const KAFKA_TLS: ConnectionOptions = {
 };
 
 /** Builds a fresh client. Recovery calls this on every rebuild. */
-const defaultCreateConsumer = (groupId: string) =>
+const defaultCreateClient = (groupId: string) =>
   new Consumer<string, string, string, string>({
     groupId,
     clientId: 'kabal-frontend',
@@ -80,17 +103,19 @@ const defaultCreateConsumer = (groupId: string) =>
     },
   });
 
-type DocumentAccessConsumer = Consumer<string, string, string, string>;
+type PlatformaticConsumer = Consumer<string, string, string, string>;
 
 /**
  * The part of a MessagesStream this class uses. Declared rather than derived:
  * MessagesStream is a concrete Readable built around a live Consumer, so it
- * can't be faked. tsc checks that a real one fits where defaultCreateConsumer
+ * can't be faked. tsc checks that a real one fits where defaultCreateClient
  * is the default factory.
  */
-export interface DocumentAccessStream {
+export interface KafkaStream {
   readonly closed: boolean;
   close(): Promise<void>;
+  pause(): this;
+  resume(): this;
   removeAllListeners(): this;
   on(event: 'error', listener: (error: Error) => void): this;
   on(event: 'close', listener: () => void): this;
@@ -101,58 +126,73 @@ export interface DocumentAccessStream {
  * The part of the Kafka client this class uses. Picked from Consumer to keep
  * the real signatures, except consume() and on(), which are declared against
  * just what this class needs so they can be faked. tsc checks that a real
- * Consumer fits where defaultCreateConsumer is the default factory.
+ * Consumer fits where defaultCreateClient is the default factory.
  */
-export type DocumentAccessKafkaClient = Pick<
-  DocumentAccessConsumer,
+export type KafkaClient = Pick<
+  PlatformaticConsumer,
   'connectToBrokers' | 'isConnected' | 'isActive' | 'leaveGroup' | 'close' | 'memberId'
 > & {
-  consume: (options: ConsumeOptions<string, string, string, string>) => Promise<DocumentAccessStream>;
+  consume: (options: ConsumeOptions<string, string, string, string>) => Promise<KafkaStream>;
   on: {
     (event: 'error', listener: (error: Error) => void): unknown;
     (event: 'consumer:heartbeat:stalled', listener: (payload: ConsumerHeartbeatStalledPayload) => void): unknown;
+    (event: 'consumer:group:join', listener: () => void): unknown;
   };
 };
 
 /** Builds a Kafka client. Injectable for tests. */
-export type CreateKafkaClient = (groupId: string) => DocumentAccessKafkaClient;
+export type CreateKafkaClient = (groupId: string) => KafkaClient;
+
+type KafkaRecord = Message<string, string, string, string>;
 
 /** A single Kafka record handed to the message handler. */
-export interface DocumentAccessMessage {
-  documentId: string;
+export interface KafkaMessage {
+  key: string;
   value: string | undefined;
   timestamp: bigint;
+  /** Commits the record's offset. A no-op in ordered mode, where the consumer commits. */
   commit: () => void | Promise<void>;
+  /** The producer's trace, or a new trace for this record. */
   trace_id: string;
 }
 
-export type DocumentAccessMessageHandler = (message: DocumentAccessMessage) => Promise<void>;
+export type KafkaMessageHandler = (message: KafkaMessage) => Promise<void>;
 
-/** The subset of the Kafka consumer the access service depends on. Injectable for tests. */
-export interface DocumentAccessKafkaConsumerApi {
+/** The subset of the Kafka consumer its owners depend on. Injectable for tests. */
+export interface KafkaConsumerApi {
   connect: () => Promise<void>;
   getErrors: () => string[];
   close: () => Promise<void>;
 }
 
 /**
- * Owns the Kafka consumer lifecycle for document write-access updates: connect,
- * detect failures, recover, report health and close. Each record goes to the
+ * Owns the lifecycle of a Kafka consumer for one topic: connect, detect
+ * failures, recover, report health and close. Each record goes to the
  * injected handler inside a CONSUMER span.
  *
  * Recovery lives here rather than in the caller, so all retry state has one
  * owner and nothing else can race it.
  */
-export class DocumentAccessKafkaConsumer implements DocumentAccessKafkaConsumerApi {
+export class KafkaConsumer implements KafkaConsumerApi {
   /**
    * Stable for the process, so a rebuilt client rejoins the same group and
    * resumes from its committed offsets.
    */
-  readonly #groupId = crypto.randomUUID();
+  readonly #groupId: string;
 
-  #consumer: DocumentAccessKafkaClient;
+  readonly #topic: string;
+  readonly #spanName: string;
+  readonly #ordered: boolean;
 
-  #stream: DocumentAccessStream | null = null;
+  /**
+   * Bumped whenever the client (re)joins its group. Ordered processing drops records from an
+   * older assignment: their partitions may have moved, and the new owner gets them redelivered.
+   */
+  #assignment = 0;
+
+  #consumer: KafkaClient;
+
+  #stream: KafkaStream | null = null;
 
   /** True while an attempt is in flight. Keeps overlapping attempts out. */
   #starting = false;
@@ -185,18 +225,28 @@ export class DocumentAccessKafkaConsumer implements DocumentAccessKafkaConsumerA
   /** Set by close(), so no queued or in-flight attempt can resurrect us. */
   #closed = false;
 
-  readonly #onMessage: DocumentAccessMessageHandler;
+  readonly #onMessage: KafkaMessageHandler;
   readonly #trace_id: string;
-  readonly #createConsumer: CreateKafkaClient;
+  readonly #createClient: CreateKafkaClient;
 
   constructor(
-    onMessage: DocumentAccessMessageHandler,
+    onMessage: KafkaMessageHandler,
     trace_id: string,
-    createConsumer: CreateKafkaClient = defaultCreateConsumer,
+    {
+      topic,
+      groupId = crypto.randomUUID(),
+      spanName,
+      ordered = false,
+      createClient = defaultCreateClient,
+    }: KafkaConsumerOptions,
   ) {
+    this.#topic = topic;
+    this.#groupId = groupId;
+    this.#spanName = spanName;
+    this.#ordered = ordered;
     this.#onMessage = onMessage;
     this.#trace_id = trace_id;
-    this.#createConsumer = createConsumer;
+    this.#createClient = createClient;
     this.#consumer = this.#buildClient();
   }
 
@@ -249,7 +299,7 @@ export class DocumentAccessKafkaConsumer implements DocumentAccessKafkaConsumerA
         return;
       }
 
-      log.error({ msg: 'Failed to start Kafka consumer, degrading to API fallback', trace_id, error });
+      log.error({ msg: 'Failed to start Kafka consumer, retrying', trace_id, error });
 
       // Anything half-started is dropped by the rebuild on the next attempt.
       this.#scheduleRetry();
@@ -318,7 +368,7 @@ export class DocumentAccessKafkaConsumer implements DocumentAccessKafkaConsumerA
    * clearing it lets a second close free the client. Retrying LeaveGroup would
    * gain nothing: by the time it could get through, the session has timed out.
    */
-  #disposeClient = (client: DocumentAccessKafkaClient): void => {
+  #disposeClient = (client: KafkaClient): void => {
     const trace_id = this.#trace_id;
 
     // Callback form: with a force flag, the typings return void, not a promise.
@@ -355,18 +405,21 @@ export class DocumentAccessKafkaConsumer implements DocumentAccessKafkaConsumerA
    * timeouts don't close it, so the library keeps reusing it. The stream has its
    * own connections and keeps working, so nothing else triggers recovery.
    */
-  #buildClient = (): DocumentAccessKafkaClient => {
-    const client = this.#createConsumer(this.#groupId);
+  #buildClient = (): KafkaClient => {
+    const client = this.#createClient(this.#groupId);
 
     client.on('error', (error) => this.#onClientFailure(client, 'Kafka client error', error));
     client.on('consumer:heartbeat:stalled', ({ lastError, stalledFor }) =>
       this.#onClientFailure(client, `Kafka client heartbeat stalled for ${stalledFor} ms`, lastError),
     );
+    client.on('consumer:group:join', () => {
+      this.#assignment += 1;
+    });
 
     return client;
   };
 
-  #onClientFailure = (client: DocumentAccessKafkaClient, failure: string, error: unknown): void => {
+  #onClientFailure = (client: KafkaClient, failure: string, error: unknown): void => {
     const trace_id = this.#trace_id;
 
     if (this.#closed || client !== this.#consumer) {
@@ -575,14 +628,14 @@ export class DocumentAccessKafkaConsumer implements DocumentAccessKafkaConsumerA
   };
 
   /** Resolves true if the stream was installed, false if it was thrown away. */
-  #startStream = async (consumer: DocumentAccessKafkaClient, generation: number): Promise<boolean> => {
+  #startStream = async (consumer: KafkaClient, generation: number): Promise<boolean> => {
     const trace_id = this.#trace_id;
 
     log.debug({ msg: 'Kafka consumer starting stream...', trace_id });
 
     const stream = await consumer.consume({
       autocommit: false,
-      topics: [TOPIC],
+      topics: [this.#topic],
       sessionTimeout: 10_000,
       heartbeatInterval: 500,
       mode: 'committed',
@@ -632,7 +685,9 @@ export class DocumentAccessKafkaConsumer implements DocumentAccessKafkaConsumerA
 
     log.debug({ msg: 'Kafka consumer stream listener starting...', trace_id });
 
-    stream.on('data', async ({ key: documentId, value, timestamp, headers, commit }) => {
+    const enqueue = createSerialQueue(stream);
+
+    stream.on('data', (record: KafkaRecord) => {
       // A discarded stream keeps its listeners until its close finishes, which
       // can stall. Drop its records rather than process them alongside the
       // replacement: they're never committed, so the replacement redelivers them.
@@ -640,69 +695,157 @@ export class DocumentAccessKafkaConsumer implements DocumentAccessKafkaConsumerA
         return;
       }
 
-      let message_trace_id = trace_id;
+      if (!this.#ordered) {
+        void this.#process(record);
 
-      try {
-        // OTel's HTTP instrumentation doesn't cover Kafka, so take the trace from
-        // the traceparent header.
-        const traceparentHeader = headers.get('traceparent');
-        message_trace_id =
-          traceparentHeader === undefined ? trace_id : (parseTraceparent(traceparentHeader).trace_id ?? trace_id);
-
-        const parentContext =
-          traceparentHeader === undefined
-            ? ROOT_CONTEXT
-            : propagation.extract(ROOT_CONTEXT, { traceparent: traceparentHeader });
-
-        await tracer.startActiveSpan(
-          'kafka.process_document_access',
-          {
-            kind: SpanKind.CONSUMER,
-            attributes: {
-              'messaging.system': 'kafka',
-              'messaging.operation': 'process',
-              'messaging.destination.name': TOPIC,
-            },
-          },
-          parentContext,
-          async (span) => {
-            try {
-              await this.#onMessage({ documentId, value, timestamp, commit, trace_id: message_trace_id });
-              span.setStatus({ code: SpanStatusCode.OK });
-            } catch (error) {
-              span.setStatus({ code: SpanStatusCode.ERROR });
-
-              if (error instanceof Error) {
-                span.recordException(error);
-              }
-
-              throw error;
-            } finally {
-              span.end();
-            }
-          },
-        );
-      } catch (error) {
-        log.error({
-          msg: 'Failed to process Kafka document access message',
-          trace_id: message_trace_id,
-          data: { document_id: documentId },
-          error,
-        });
+        return;
       }
+
+      const assignment = this.#assignment;
+
+      enqueue(() => this.#processInOrder(stream, assignment, record, 0));
     });
 
     log.debug({ msg: 'Kafka consumer stream listener started', trace_id });
 
     return true;
   };
+
+  /**
+   * Processes a record, retrying with backoff until it succeeds, then commits it.
+   * Records from a replaced stream are skipped: the replacement redelivers them from the committed offset.
+   * After a rebalance, a queued record is still processed once, since a partition without a committed
+   * offset isn't redelivered, but it's neither retried nor committed: the partition may have a new owner.
+   */
+  #processInOrder = async (stream: KafkaStream, assignment: number, record: KafkaRecord, failures: number) => {
+    if (this.#closed || this.#stream !== stream) {
+      return;
+    }
+
+    const processed = await this.#process(record);
+
+    if (!this.#isCurrent(stream, assignment)) {
+      return;
+    }
+
+    if (processed) {
+      await this.#commit(record);
+
+      return;
+    }
+
+    const delay = recordRetryDelay(failures + 1);
+
+    log.warn({
+      msg: `Retrying Kafka message in ${delay} ms (consecutive failures: ${failures + 1})`,
+      trace_id: this.#trace_id,
+      data: { topic: this.#topic, key: record.key, partition: record.partition, offset: record.offset.toString(10) },
+    });
+
+    await sleep(delay);
+
+    if (!this.#isCurrent(stream, assignment)) {
+      return;
+    }
+
+    await this.#processInOrder(stream, assignment, record, failures + 1);
+  };
+
+  #isCurrent = (stream: KafkaStream, assignment: number): boolean =>
+    !this.#closed && this.#stream === stream && this.#assignment === assignment;
+
+  /** A failed commit is only logged: the record is redelivered, and the handler is idempotent. */
+  #commit = async ({ key, commit }: KafkaRecord): Promise<void> => {
+    try {
+      await commit();
+    } catch (error) {
+      log.warn({ msg: 'Failed to commit Kafka message offset', trace_id: this.#trace_id, data: { key }, error });
+    }
+  };
+
+  /** Runs the handler inside a CONSUMER span. Resolves false if it failed. Never throws. */
+  #process = async ({ key, value, timestamp, headers, commit }: KafkaRecord): Promise<boolean> => {
+    // OTel's HTTP instrumentation doesn't cover Kafka, so take the trace from the traceparent header.
+    const traceparent = headers.get('traceparent');
+    const parentContext = traceparent === undefined ? ROOT_CONTEXT : propagation.extract(ROOT_CONTEXT, { traceparent });
+    const fallbackTraceId =
+      traceparent === undefined ? this.#trace_id : (parseTraceparent(traceparent).trace_id ?? this.#trace_id);
+
+    return tracer.startActiveSpan(
+      this.#spanName,
+      {
+        kind: SpanKind.CONSUMER,
+        attributes: {
+          'messaging.system': 'kafka',
+          'messaging.operation': 'process',
+          'messaging.destination.name': this.#topic,
+        },
+      },
+      parentContext,
+      async (span) => {
+        const spanContext = span.spanContext();
+        const trace_id = isSpanContextValid(spanContext) ? spanContext.traceId : fallbackTraceId;
+
+        try {
+          await this.#onMessage({ key, value, timestamp, commit: this.#ordered ? noop : commit, trace_id });
+          span.setStatus({ code: SpanStatusCode.OK });
+
+          return true;
+        } catch (error) {
+          span.setStatus({ code: SpanStatusCode.ERROR });
+
+          if (error instanceof Error) {
+            span.recordException(error);
+          }
+
+          log.error({ msg: 'Failed to process Kafka message', trace_id, data: { topic: this.#topic, key }, error });
+
+          return false;
+        } finally {
+          span.end();
+        }
+      },
+    );
+  };
 }
+
+/**
+ * Runs tasks one after another, and pauses the stream while any are pending, so records
+ * wait in Kafka rather than in memory. Tasks must not reject.
+ */
+const createSerialQueue = (stream: KafkaStream) => {
+  const state = { tail: Promise.resolve(), pending: 0 };
+
+  return (task: () => Promise<void>) => {
+    state.pending += 1;
+    stream.pause();
+
+    state.tail = state.tail.then(task).then(() => {
+      state.pending -= 1;
+
+      if (state.pending === 0) {
+        stream.resume();
+      }
+    });
+  };
+};
+
+const noop = () => undefined;
+
+const sleep = (ms: number) =>
+  new Promise<void>((resolve) => {
+    setTimeout(resolve, ms).unref();
+  });
+
+/** Capped exponential backoff for a failing record in ordered mode. */
+const recordRetryDelay = (failures: number): number =>
+  Math.min(MIN_RECORD_RETRY_DELAY_MS * 2 ** Math.max(failures - 1, 0), MAX_RECORD_RETRY_DELAY_MS);
 
 /**
  * Closes a stream and drops its listeners. Never throws: close can fail, and
  * throwing would abort the recovery or shutdown that follows.
  */
-const closeStream = async (stream: DocumentAccessStream, trace_id: string) => {
+const closeStream = async (stream: KafkaStream, trace_id: string) => {
   log.debug({ msg: 'Closing Kafka consumer stream...', trace_id });
 
   try {
