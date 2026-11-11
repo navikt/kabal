@@ -116,6 +116,7 @@ import {
   VARSEL_OM_OMGJØRING_TIL_UGUNST_METADATA,
   VARSEL_OM_OMGJØRING_TIL_UGUNST_SECTIONS,
 } from '@/plate/templates/varsel-om-omgjøring-til-ugunst';
+import { SaksTypeEnum } from '@/types/kodeverk';
 
 // Metadata (templateId, tittel, dokumentTypeId, deprecatedSections) for every template, read straight from each
 // template's own *_METADATA constant — never by calling the template factory, which needs case-specific params.
@@ -346,8 +347,16 @@ export const getFinishedBehandlingTemplates = ({
   fagsystemId,
   navIdent,
   requiresGosysOppgave,
-}: GetFinishedBehandlingTemplatesParams) => [
-  getGenereltBrevTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
-  getNotatTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
-  getSvarPåInnsynsbegjæringTemplate({ sakstype, fagsystemId, requiresGosysOppgave }),
-];
+}: GetFinishedBehandlingTemplatesParams) => {
+  const baseTemplates = [
+    getGenereltBrevTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
+    getNotatTemplate({ sakstype, fagsystemId, overriddenSaksbehandler: navIdent, requiresGosysOppgave }),
+    getSvarPåInnsynsbegjæringTemplate({ sakstype, fagsystemId, requiresGosysOppgave }),
+  ];
+
+  if (sakstype === SaksTypeEnum.KLAGE) {
+    return [...baseTemplates, getEttersendingTilTrygderettenTemplate({ sakstype, fagsystemId, requiresGosysOppgave })];
+  }
+
+  return baseTemplates;
+};
