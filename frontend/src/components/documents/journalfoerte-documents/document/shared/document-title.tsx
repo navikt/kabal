@@ -17,7 +17,6 @@ import { useIsTabOpen } from '@/components/documents/use-is-tab-open';
 import type { IFilesViewed } from '@/components/file-viewer/types';
 import { toast } from '@/components/toast/store';
 import { getJournalfoertDocumentFileUrl } from '@/domain/file-url';
-import { getJournalfoertDocumentTabId } from '@/domain/tabbed-document-url';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useFilesViewed } from '@/hooks/settings/use-setting';
 import { useDocumentTabUrl } from '@/hooks/use-document-tab-url';
@@ -39,7 +38,7 @@ interface Props {
 export const DocumentTitle = (props: Props) => {
   // These hooks would cause rerenders if they were used directly in DocumentTitleInternal, even though used values does not change.
   const { value, setArchivedFiles: setArchivedDocuments } = useFilesViewed();
-  const { getJournalfoertTabUrl } = useDocumentTabUrl();
+  const { getJournalfoertTabUrl, getJournalfoertTabId } = useDocumentTabUrl();
 
   return (
     <DocumentTitleInternal
@@ -47,6 +46,7 @@ export const DocumentTitle = (props: Props) => {
       pdfViewed={value}
       setArchivedDocuments={setArchivedDocuments}
       getJournalfoertTabUrl={getJournalfoertTabUrl}
+      getJournalfoertTabId={getJournalfoertTabId}
     />
   );
 };
@@ -55,6 +55,7 @@ interface DocumentTitleInternalProps extends Props {
   pdfViewed: IFilesViewed;
   setArchivedDocuments: (documents: readonly IJournalfoertDokumentId[]) => void;
   getJournalfoertTabUrl: (journalpostId: string, dokumentInfoId: string) => string;
+  getJournalfoertTabId: (journalpostId: string, dokumentInfoId: string) => string;
 }
 
 const DocumentTitleInternal = memo(
@@ -69,9 +70,10 @@ const DocumentTitleInternal = memo(
     documentIndex,
     vedleggIndex = -1,
     getJournalfoertTabUrl,
+    getJournalfoertTabId,
   }: DocumentTitleInternalProps) => {
     const { getTabRef, setTabRef } = useContext(TabContext);
-    const documentId = getJournalfoertDocumentTabId(journalpostId, dokumentInfoId);
+    const documentId = getJournalfoertTabId(journalpostId, dokumentInfoId);
     const isTabOpen = useIsTabOpen(documentId);
     const { setDraggingEnabled } = useContext(DragAndDropContext);
     const oppgaveId = useOppgaveId();

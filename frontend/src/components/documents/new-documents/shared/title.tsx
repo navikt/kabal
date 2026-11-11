@@ -6,12 +6,9 @@ import { DocumentLink } from '@/components/documents/styled-components/document-
 import { TabContext } from '@/components/documents/tab-context';
 import { useIsTabOpen } from '@/components/documents/use-is-tab-open';
 import { toast } from '@/components/toast/store';
-import {
-  getAttachmentsOverviewTabId,
-  getJournalfoertDocumentTabId,
-  getNewDocumentTabId,
-} from '@/domain/tabbed-document-url';
+import { getAttachmentsOverviewTabId, getNewDocumentTabId } from '@/domain/tabbed-document-url';
 import { useFilesViewed } from '@/hooks/settings/use-setting';
+import { type DocumentTabUrlFunctions, useDocumentTabUrl } from '@/hooks/use-document-tab-url';
 import { isMetaKey, MouseButtons } from '@/keys';
 import { DocumentTypeEnum, type JournalfoertDokumentReference } from '@/types/documents/documents';
 
@@ -41,8 +38,9 @@ export const SharedDocumentTitle = (props: Props) => {
   const { title, url, documentId, icon, disabled = false, children, type, journalfoertDokumentReference } = props;
   const { value, setNewDocument, setArchivedFiles: setArchivedDocuments, setVedleggsoversikt } = useFilesViewed();
   const { getTabRef, setTabRef } = useContext(TabContext);
+  const { getJournalfoertTabId } = useDocumentTabUrl();
 
-  const tabId = getTabId(props);
+  const tabId = getTabId(props, getJournalfoertTabId);
 
   const isTabOpen = useIsTabOpen(tabId);
 
@@ -155,9 +153,9 @@ export const SharedDocumentTitle = (props: Props) => {
   );
 };
 
-const getTabId = (props: Props) => {
+const getTabId = (props: Props, getJournalfoertTabId: DocumentTabUrlFunctions['getJournalfoertTabId']) => {
   if (props.type === DocumentTypeEnum.JOURNALFOERT) {
-    return getJournalfoertDocumentTabId(
+    return getJournalfoertTabId(
       props.journalfoertDokumentReference.journalpostId,
       props.journalfoertDokumentReference.dokumentInfoId,
     );

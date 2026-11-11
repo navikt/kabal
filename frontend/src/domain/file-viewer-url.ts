@@ -99,17 +99,21 @@ const getFileViewerId = (pdfViewed: IFilesViewed): string | null => {
   return encodeArchivedDocumentIds(pdfViewed.archivedFiles);
 };
 
-const ARCHIVED_PREFIX = '/file-viewer/archived/';
 const DUA_PREFIX = '/file-viewer/dua/';
+
+const ARCHIVED_PREFIX = '/file-viewer/archived/';
+
+export const getArchivedFileViewerUrl = (behandlingId: string, encodedIds: string): string =>
+  `${ARCHIVED_PREFIX}${behandlingId}/${encodedIds}`;
 
 /**
  * Generates a file-viewer URL for the current PDF viewer state.
  *
- * - Archived files → `/file-viewer/archived/{encoded-ids}`
+ * - Archived files → `/file-viewer/archived/{oppgaveId}/{encoded-ids}`
  * - Document in progress → `/file-viewer/dua/{oppgaveId}/{id}`
  * - Attachment overview → `/file-viewer/dua/{oppgaveId}/{id}/vedleggsoversikt`
  *
- * Returns `null` when the state represents an empty set (no files to view).
+ * Returns `null` when the state represents an empty set (no files to view), or without an oppgave.
  */
 export const getFileViewerUrl = (pdfViewed: IFilesViewed, oppgaveId?: string): string | null => {
   const id = getFileViewerId(pdfViewed);
@@ -118,12 +122,12 @@ export const getFileViewerUrl = (pdfViewed: IFilesViewed, oppgaveId?: string): s
     return null;
   }
 
-  if (pdfViewed.archivedFiles !== undefined) {
-    return `${ARCHIVED_PREFIX}${id}`;
-  }
-
   if (oppgaveId === undefined) {
     return null;
+  }
+
+  if (pdfViewed.archivedFiles !== undefined) {
+    return getArchivedFileViewerUrl(oppgaveId, id);
   }
 
   return `${DUA_PREFIX}${oppgaveId}/${id}`;

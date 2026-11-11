@@ -72,6 +72,8 @@ spec:
   valkey:
     - instance: hocuspocus
       access: readwrite
+    - instance: highlights
+      access: readwrite
   liveness:
     path: /isAlive
     initialDelay: 0

@@ -1,4 +1,4 @@
-import { EventName, manager } from '@/components/header/notifications/subscription';
+import { KLAGE_NOTIFICATIONS_BASE_PATH } from '@/components/header/notifications/constants';
 import type {
   KabalNotification,
   KabalNotificationEvent,
@@ -7,8 +7,27 @@ import type {
   KabalNotificationListEvent,
 } from '@/components/header/notifications/types';
 import { Observable } from '@/observable';
+import { ServerSentEventManager } from '@/server-sent-events';
+
+enum EventName {
+  CREATE = 'create',
+  CREATE_MULTIPLE = 'create_multiple',
+  READ = 'read',
+  READ_MULTIPLE = 'read_multiple',
+  UNREAD = 'unread',
+  UNREAD_MULTIPLE = 'unread_multiple',
+  DELETE = 'delete',
+  DELETE_MULTIPLE = 'delete_multiple',
+}
 
 export const notificationsStore = new Observable<KabalNotification[]>([]);
+
+const manager = new ServerSentEventManager<EventName>(
+  'notifications',
+  `${KLAGE_NOTIFICATIONS_BASE_PATH}/user/notifications/events`,
+);
+
+import.meta.hot?.dispose(() => manager.close());
 
 // Create notifications
 manager.addJsonEventListener<KabalNotificationEvent>(EventName.CREATE, (notification) =>

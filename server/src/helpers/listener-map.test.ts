@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { ListenerMap } from '@/document-access/listener-map';
+import { ListenerMap } from '@/helpers/listener-map';
 
 const noop = () => undefined;
 

@@ -1,18 +1,22 @@
-import { encodeArchivedDocumentIds } from '@/domain/file-viewer-url';
+import { encodeArchivedDocumentIds, getArchivedFileViewerUrl } from '@/domain/file-viewer-url';
 import type { IJournalfoertDokumentId } from '@/types/oppgave-common';
 
 // File viewer URL functions (new /file-viewer/ paths)
 export const getNewFileViewerTabUrl = (oppgaveId: string, documentId: string, _parentId: string | null) =>
   `/file-viewer/dua/${oppgaveId}/${documentId}`;
 
-export const getJournalfoertFileViewerTabUrl = (journalpostId: string, dokumentInfoId: string) =>
-  `/file-viewer/archived/${journalpostId}:${dokumentInfoId}`;
+export const getJournalfoertFileViewerTabUrl = (behandlingId: string, journalpostId: string, dokumentInfoId: string) =>
+  getArchivedFileViewerUrl(behandlingId, `${journalpostId}:${dokumentInfoId}`);
 
-export const getCombinedFileViewerTabUrl = (documents: readonly IJournalfoertDokumentId[]) =>
-  `/file-viewer/archived/${encodeArchivedDocumentIds(documents)}`;
+export const getCombinedFileViewerTabUrl = (behandlingId: string, documents: readonly IJournalfoertDokumentId[]) =>
+  getArchivedFileViewerUrl(behandlingId, encodeArchivedDocumentIds(documents));
 
-export const getCombinedFileViewerTabId = (documents: readonly IJournalfoertDokumentId[]) =>
-  `combined-document-${encodeArchivedDocumentIds(documents)}`;
+// The tab IDs include the behandling, since the file viewer shows the highlights of the behandling it was opened from.
+export const getJournalfoertFileViewerTabId = (behandlingId: string, journalpostId: string, dokumentInfoId: string) =>
+  `archived-document-${behandlingId}-${journalpostId}-${dokumentInfoId}`;
+
+export const getCombinedFileViewerTabId = (behandlingId: string, documents: readonly IJournalfoertDokumentId[]) =>
+  `combined-document-${behandlingId}-${encodeArchivedDocumentIds(documents)}`;
 
 export const getAttachmentsOverviewFileViewerTabUrl = (oppgaveId: string, documentId: string) =>
   `/file-viewer/dua/${oppgaveId}/${documentId}/vedleggsoversikt`;

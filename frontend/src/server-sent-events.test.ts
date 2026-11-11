@@ -29,7 +29,6 @@ const originalFetch = globalThis.fetch;
 
 let timeouts = new Map<number, () => unknown>();
 let nextTimeoutId = 1;
-let testUrlCounter = 0;
 
 const runTimeouts = async () => {
   const pending = [...timeouts.values()];
@@ -69,7 +68,7 @@ describe('ServerSentEventManager reconnect', () => {
     mock.restore();
   });
 
-  const createManager = () => ServerSentEventManager.get('test', `/test-${testUrlCounter++}`);
+  const createManager = () => new ServerSentEventManager('test', '/test');
 
   it('should reconnect when the session is active', async () => {
     expect.assertions(1);
