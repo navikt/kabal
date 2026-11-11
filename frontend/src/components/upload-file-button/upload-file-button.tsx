@@ -9,9 +9,9 @@ import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useUploadFileDocumentMutation } from '@/redux-api/oppgaver/mutations/documents';
 import type { DistribusjonsType } from '@/types/documents/documents';
 
-const MEBI = BYTES_PER_KB * BYTES_PER_KB;
-const MAX_SIZE_MIB = 500;
-const MAX_SIZE_BYTES = MAX_SIZE_MIB * MEBI - 288;
+const MB = BYTES_PER_KB * BYTES_PER_KB;
+const MAX_SIZE_MB = 1000;
+const MAX_SIZE_BYTES = MAX_SIZE_MB * MB;
 
 interface Props extends Pick<ButtonProps, 'variant' | 'size' | 'children'> {
   parentId?: string;
@@ -65,7 +65,7 @@ export const UploadFileButton = ({ variant, size, children, parentId, distributi
           displayError(
             `«${file.name}» (${formatFileSize(
               file.size,
-            )}) er større enn maksgrensen på ${MAX_SIZE_MIB.toLocaleString()} MiB.`,
+            )}) er større enn maksgrensen på ${MAX_SIZE_MB.toLocaleString()} MB.`,
           );
           continue;
         }
