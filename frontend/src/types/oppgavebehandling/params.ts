@@ -114,7 +114,7 @@ interface IFinishOppgavebehandlingOpphevetTRParams extends Omit<IDefaultFinishOp
 
 interface IFinishOppgavebehandlingBegjæringOmGjenopptakITRParams
   extends Omit<IDefaultFinishOppgavebehandlingParams, 'nyBehandling'> {
-  typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR;
+  typeId: SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR | SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027;
   nyBehandling: boolean;
 }
 

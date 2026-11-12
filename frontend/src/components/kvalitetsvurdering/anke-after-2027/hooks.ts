@@ -1,18 +1,9 @@
-import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext, useMemo } from 'react';
-import {
-  MainReason,
-  OmgjøringBoolean,
-  type OmgjøringErrorFields,
-  OmgjøringSaksdataHjemlerList,
-  SaksbehandlingsfeilBoolean,
-} from '@/components/kvalitetsvurdering/anke-after-2027/data';
+import type { OmgjøringErrorFields } from '@/components/kvalitetsvurdering/anke-after-2027/data';
 import { ValidationErrorContext } from '@/components/kvalitetsvurdering/validation-error-context';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
-import {
-  useGetKvalitetsvurderingQuery,
-  useUpdateKvalitetsvurderingMutation,
-} from '@/redux-api/kaka-kvalitetsvurdering/anke-after-2027';
+import { useKvalitetsvurderingAnkeAfter2027 } from '@/hooks/use-kvalitetsvurdering';
+import { useUpdateKvalitetsvurderingMutation } from '@/redux-api/kaka-kvalitetsvurdering/anke-after-2027';
 import type {
   IKvalitetsvurderingAnkeAfter2027,
   KvalitetsvurderingDataAnkeAfter2027,
@@ -39,30 +30,16 @@ const EMPTY_ARRAY: string[] = [];
 
 export const useKvalitetsvurderingAnkeAfter2027State = (): Loading | Loaded => {
   const { data: oppgave, isSuccess: oppgaveIsSuccess } = useOppgave();
-  const id = oppgave?.kvalitetsvurderingReference?.id;
-  const { data: kvalitetsvurdering, isSuccess: kvalitetsvurderingIsSuccess } = useGetKvalitetsvurderingQuery(
-    id ?? skipToken,
-  );
+  const [kvalitetsvurdering, kvalitetsvurderingIsLoading] = useKvalitetsvurderingAnkeAfter2027();
   const [update] = useUpdateKvalitetsvurderingMutation();
 
-  // TODO: Remove fake state when backend is ready.
-  if (oppgaveIsSuccess) {
-    return {
-      oppgave,
-      hjemler: oppgave.resultat.hjemmelIdSet,
-      kvalitetsvurdering: fakeState,
-      update: (patch) => update({ ...patch, id: '' }).unwrap(),
-
-      isLoading: false,
-    };
-  }
+  const id = oppgave?.kvalitetsvurderingReference?.id;
 
   if (
     !oppgaveIsSuccess ||
-    !kvalitetsvurderingIsSuccess ||
-    oppgave === undefined ||
-    kvalitetsvurdering === undefined ||
-    id === undefined
+    kvalitetsvurderingIsLoading ||
+    typeof kvalitetsvurdering === 'undefined' ||
+    typeof id !== 'string'
   ) {
     return {
       oppgave: undefined,
@@ -93,23 +70,23 @@ export const useValidationError = (field: ValidationField): string | undefined =
   );
 };
 
-const fakeState: IKvalitetsvurderingAnkeAfter2027 = {
-  id: 'fake',
-  created: new Date().toISOString(),
-  modified: new Date().toISOString(),
-  version: 4,
-  [MainReason.OmgjøringIKlageomgangen]: null,
-  [OmgjøringBoolean.omgjøringFeilILovtolkningen]: false,
-  [OmgjøringSaksdataHjemlerList.omgjøringFeilILovtolkningenHjemlerList]: [],
-  [OmgjøringBoolean.omgjøringFeilIFaktagrunnlaget]: false,
-  [OmgjøringSaksdataHjemlerList.omgjøringFeilIFaktagrunnlagetHjemlerList]: [],
-  [OmgjøringBoolean.omgjøringFeilIRettsanvendelsen]: false,
-  [OmgjøringSaksdataHjemlerList.omgjøringFeilIRettsanvendelsenHjemlerList]: [],
-  [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaRyddetISakensDokumenterEllerJournalførtOpplysningerFørVedtaketBleFattet]: false,
-  [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaVeiledetPartenBedreFørVedtaketBleFattet]: false,
-  [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaForhåndsvarsletPartenFørVedtaketBleFattet]: false,
-  [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaForelagtOpplysningerForPartenFørVedtaketBleFattet]: false,
-  [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaUtredetSakenBedreFørVedtaketBleFattet]: false,
-  [SaksbehandlingsfeilBoolean.klagevedtaketSkulleVærtBedreBegrunnet]: false,
-  [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaBenyttetRådgivendeOverlege]: false,
-};
+// const FAKE_STATE: IKvalitetsvurderingAnkeAfter2027 = {
+//   id: 'fake',
+//   created: new Date().toISOString(),
+//   modified: new Date().toISOString(),
+//   version: KvalitetsvurderingVersion.ANKE_AFTER_2027,
+//   [MainReason.OmgjøringIKlageomgangen]: null,
+//   [OmgjøringBoolean.omgjøringFeilILovtolkningen]: false,
+//   [OmgjøringSaksdataHjemlerList.omgjøringFeilILovtolkningenHjemlerList]: [],
+//   [OmgjøringBoolean.omgjøringFeilIFaktagrunnlaget]: false,
+//   [OmgjøringSaksdataHjemlerList.omgjøringFeilIFaktagrunnlagetHjemlerList]: [],
+//   [OmgjøringBoolean.omgjøringFeilIRettsanvendelsen]: false,
+//   [OmgjøringSaksdataHjemlerList.omgjøringFeilIRettsanvendelsenHjemlerList]: [],
+//   [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaRyddetISakensDokumenterEllerJournalførtOpplysningerFørVedtaketBleFattet]: false,
+//   [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaVeiledetPartenBedreFørVedtaketBleFattet]: false,
+//   [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaForhåndsvarsletPartenFørVedtaketBleFattet]: false,
+//   [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaForelagtOpplysningerForPartenFørVedtaketBleFattet]: false,
+//   [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaUtredetSakenBedreFørVedtaketBleFattet]: false,
+//   [SaksbehandlingsfeilBoolean.klagevedtaketSkulleVærtBedreBegrunnet]: false,
+//   [SaksbehandlingsfeilBoolean.klageinstansenSkulleHaBenyttetRådgivendeOverlege]: false,
+// };

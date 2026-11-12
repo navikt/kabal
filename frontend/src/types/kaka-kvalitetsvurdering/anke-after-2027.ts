@@ -6,6 +6,7 @@ import {
   type YesNo,
 } from '@/components/kvalitetsvurdering/anke-after-2027/data';
 import type { IKvalitetsvurderingBase } from '@/types/kaka-kvalitetsvurdering/common';
+import type { KvalitetsvurderingVersion } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface Omgjøringsårsaker {
   [OmgjøringBoolean.omgjøringFeilILovtolkningen]: boolean;
@@ -35,5 +36,5 @@ export type KvalitetsvurderingAnkeAfter2027Boolean = Pick<Omgjøringsårsaker, O
 export type KvalitetsvurderingAnkeAfter2027SaksdataHjemler = Pick<Omgjøringsårsaker, OmgjøringSaksdataHjemlerList>;
 
 export interface IKvalitetsvurderingAnkeAfter2027 extends KvalitetsvurderingDataAnkeAfter2027, IKvalitetsvurderingBase {
-  version: 4;
+  version: KvalitetsvurderingVersion.ANKE_AFTER_2027;
 }

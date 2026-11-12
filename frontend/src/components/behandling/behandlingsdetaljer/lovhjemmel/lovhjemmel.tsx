@@ -38,6 +38,13 @@ export const Lovhjemmel = () => {
   const { update: updateAnkeITRAfter2027, isLoading: ankeITRAfter2027IsLoading } =
     useKvalitetsvurderingAnkeITRAfter2027State();
 
+  const kvalitetsvurderingVersion = oppgave?.kvalitetsvurderingReference?.version;
+
+  const hasHjemmelDependantKvalitetsvurdering =
+    kvalitetsvurderingVersion === KvalitetsvurderingVersion.V3 ||
+    kvalitetsvurderingVersion === KvalitetsvurderingVersion.ANKE_AFTER_2027 ||
+    kvalitetsvurderingVersion === KvalitetsvurderingVersion.ANKE_I_TRYGDERETTEN_AFTER_2027;
+
   const isLoading = kvalitetsvurderingV3IsLoading || ankeAfter2027IsLoading || ankeITRAfter2027IsLoading;
 
   const options = useMemo<Entry<HjemmelOption>[]>(
@@ -103,7 +110,7 @@ export const Lovhjemmel = () => {
     return null;
   }
 
-  if (oppgave.kvalitetsvurderingReference?.version === KvalitetsvurderingVersion.V3 && isLoading) {
+  if (hasHjemmelDependantKvalitetsvurdering && isLoading) {
     return <Skeleton width="100%" height="64px" variant="rounded" />;
   }
 
