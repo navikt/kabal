@@ -56,7 +56,7 @@ import {
   TextAlign,
 } from '@/plate/types';
 import type { DistribusjonsType } from '@/types/documents/documents';
-import { isAnkeTypeAfter2027, SaksTypeEnum } from '@/types/kodeverk';
+import { SaksTypeEnum } from '@/types/kodeverk';
 import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 import { Language } from '@/types/texts/language';
 
@@ -256,9 +256,12 @@ export const createSaksinfo = ({
     ? [...children, createArenaSaksnummer()]
     : children;
 
-  const withSaksnummerHosTR = isAnkeTypeAfter2027(sakstype)
-    ? [...withArenaSaksnummer, createSaksnummerHosTR()]
-    : withArenaSaksnummer;
+  const withSaksnummerHosTR =
+    sakstype === SaksTypeEnum.ANKE_AFTER_2027 ||
+    sakstype === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ||
+    sakstype === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027
+      ? [...withArenaSaksnummer, createSaksnummerHosTR()]
+      : withArenaSaksnummer;
 
   return { type: ELEMENT_SAKSINFO, children: withSaksnummerHosTR };
 };

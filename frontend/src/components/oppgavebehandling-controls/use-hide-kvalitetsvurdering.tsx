@@ -22,20 +22,6 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
   const { typeId, resultat } = oppgave;
   const status = getKvalitetsvurderingStatus(typeId, resultat.utfallId);
 
-  // Manual test override until BE has support for kvalitetsvurdering for these sakstyper
-  if (
-    typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
-    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027 ||
-    typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
-    typeId === SaksTypeEnum.ANKE
-  ) {
-    return {
-      featureEnabled: true,
-      panelDefaultEnabled: true,
-      reason: null,
-    };
-  }
-
   if (status === Policy.NOT_REQUIRED_FOR_SAKSTYPE) {
     return {
       featureEnabled: true,

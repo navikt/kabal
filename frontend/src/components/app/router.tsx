@@ -40,7 +40,11 @@ export const Router = () => (
     <Route element={<AppWrapper />}>
       <Route path="/" element={<LandingPage />} />
 
-      <Route element={<ProtectedRoute roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL]} />}>
+      <Route
+        element={
+          <ProtectedRoute roles={[Role.KABAL_SAKSBEHANDLING, Role.KABAL_ROL, Role.KABAL_OPPGAVESTYRING_ANKETEAM]} />
+        }
+      >
         <Route path="oppgaver" element={<OppgaverPage />} />
         <Route path="mineoppgaver" element={<MineOppgaverPage />} />
         <Route path="behandling/:oppgaveId" element={<OppgavebehandlingPage />} />

@@ -73,9 +73,9 @@ const oppgaverQuerySlice = oppgaverApi.injectEndpoints({
       providesTags: [OppgaveListTagTypes.LEDIGE_ANKER_AFTER_2027],
     }),
     getAntallLedigeAnkerAfter2027MedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({
-      query: (params) => ({
+      query: ({ typer = [], ...params }) => ({
         url: '/kabal-search/antalloppgavermedutgaattefrister',
-        params: { ...params },
+        params: { ...params, typer: typer.length === 0 ? DEFAULT_LEDIGE_ANKER_TYPER : typer },
       }),
     }),
     getAntallLedigeOppgaverMedUtgaatteFrister: builder.query<UtgaatteApiResponse, CommonOppgaverParams>({

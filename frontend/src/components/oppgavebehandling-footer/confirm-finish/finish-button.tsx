@@ -29,7 +29,8 @@ export const FinishButton = ({ children, nyBehandling = false, disabled }: Finis
       ((oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN ||
         oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027) &&
         oppgave.resultat.utfallId === UtfallEnum.OPPHEVET) ||
-      (oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR &&
+      ((oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR ||
+        oppgave.typeId === SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_I_TR_AFTER_2027) &&
         oppgave.resultat.utfallId === UtfallEnum.GJENOPPTATT_OPPHEVET)
         ? {
             oppgaveId: oppgave.id,

@@ -23,7 +23,8 @@ export const MottattDato = () => {
     data?.typeId !== SaksTypeEnum.ANKE &&
     data?.typeId !== SaksTypeEnum.ANKE_AFTER_2027 &&
     data?.typeId !== SaksTypeEnum.OMGJØRINGSKRAV &&
-    data?.typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK
+    data?.typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK &&
+    data?.typeId !== SaksTypeEnum.BEGJÆRING_OM_GJENOPPTAK_AFTER_2027
   ) {
     return null;
   }

@@ -16,6 +16,8 @@ export enum KvalitetsvurderingVersion {
   V1 = 1,
   V2 = 2,
   V3 = 3,
+  ANKE_AFTER_2027 = 'ANKE_AFTER_2027',
+  ANKE_I_TRYGDERETTEN_AFTER_2027 = 'ANKE_I_TRYGDERETTEN_AFTER_2027',
 }
 
 export enum GosysStatus {

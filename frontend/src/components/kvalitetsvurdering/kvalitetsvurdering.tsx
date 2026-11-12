@@ -8,11 +8,9 @@ import { KvalitetsskjemaV3 } from '@/components/kvalitetsvurdering/v3/kvalitetss
 import { useKvalitetsvurderingSupported } from '@/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
 import { PanelContainer } from '@/components/oppgavebehandling-panels/panel-container';
 import { useFocusPanelShortcut } from '@/components/oppgavebehandling-panels/panel-shortcuts-context';
-import { ENVIRONMENT } from '@/environment';
 import { SECTION_TITLES, SectionKey } from '@/functions/error-type-guard';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useKvalitetsvurderingEnabled } from '@/hooks/settings/use-setting';
-import { SaksTypeEnum } from '@/types/kodeverk';
 import { type IOppgavebehandling, KvalitetsvurderingVersion } from '@/types/oppgavebehandling/oppgavebehandling';
 
 export const Kvalitetsvurdering = (): React.JSX.Element | null => {
@@ -55,14 +53,6 @@ const Kvalitetsskjema = () => {
     return null;
   }
 
-  if (hasKvalitetsvurderingForAnkeAfter2027(data.typeId)) {
-    return <KvalitetsskjemaAnkeAfter2027 />;
-  }
-
-  if (hasKvalitetsvurderingForAnkeITRAfter2027(data.typeId)) {
-    return <KvalitetsskjemaAnkeITRAfter2027 />;
-  }
-
   switch (data.kvalitetsvurderingReference?.version) {
     case KvalitetsvurderingVersion.V1:
       return <KvalitetsskjemaV1 />;
@@ -70,6 +60,10 @@ const Kvalitetsskjema = () => {
       return <KvalitetsskjemaV2 />;
     case KvalitetsvurderingVersion.V3:
       return <KvalitetsskjemaV3 />;
+    case KvalitetsvurderingVersion.ANKE_AFTER_2027:
+      return <KvalitetsskjemaAnkeAfter2027 />;
+    case KvalitetsvurderingVersion.ANKE_I_TRYGDERETTEN_AFTER_2027:
+      return <KvalitetsskjemaAnkeITRAfter2027 />;
   }
 };
 
@@ -83,39 +77,4 @@ const ContentInner = ({ children }: { children: ReactElement }) => {
   useFocusPanelShortcut(6);
 
   return <div className="w-165 px-4 pb-4">{children}</div>;
-};
-
-const NOW = new Date();
-const IS_2027_OR_LATER = NOW.getFullYear() >= 2027;
-
-const hasKvalitetsvurderingForAnkeAfter2027 = (typeId: SaksTypeEnum): boolean => {
-  if (typeId === SaksTypeEnum.ANKE_AFTER_2027) {
-    return true;
-  }
-
-  if (typeId !== SaksTypeEnum.ANKE) {
-    return false;
-  }
-
-  if (!ENVIRONMENT.isProduction) {
-    return true;
-  }
-
-  return IS_2027_OR_LATER;
-};
-
-const hasKvalitetsvurderingForAnkeITRAfter2027 = (typeId: SaksTypeEnum): boolean => {
-  if (typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027) {
-    return true;
-  }
-
-  if (typeId !== SaksTypeEnum.ANKE_I_TRYGDERETTEN) {
-    return false;
-  }
-
-  if (!ENVIRONMENT.isProduction) {
-    return true;
-  }
-
-  return IS_2027_OR_LATER;
 };
