@@ -25,12 +25,12 @@ const SAMMENSETNING_VALUES = Object.values(RettensSammensetning);
 const KYNDIGE_VALUES = Object.values(KyndigeMedlemmer);
 
 export const RettensSammensetningSection = () => {
-  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingAnkeITRAfter2027State();
+  const { isSuccess, kvalitetsvurdering, update } = useKvalitetsvurderingAnkeITRAfter2027State();
   const canEdit = useCanEditBehandling();
   const sammensetningError = useValidationError(SAMMENSETNING_FIELD);
   const kyndigeError = useValidationError(KYNDIGE_FIELD);
 
-  if (isLoading) {
+  if (!isSuccess) {
     return null;
   }
 

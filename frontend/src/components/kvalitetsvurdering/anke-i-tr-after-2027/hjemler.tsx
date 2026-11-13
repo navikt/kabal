@@ -12,12 +12,12 @@ interface Props {
 }
 
 export const OmgjøringHjemler = ({ field }: Props) => {
-  const { hjemler, kvalitetsvurdering, update, isLoading } = useKvalitetsvurderingAnkeITRAfter2027State();
+  const { hjemler, kvalitetsvurdering, update, isSuccess } = useKvalitetsvurderingAnkeITRAfter2027State();
   const { data: registreringshjemlerMap } = useRegistreringshjemlerMap();
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(field);
 
-  if (isLoading || registreringshjemlerMap === undefined) {
+  if (!isSuccess || registreringshjemlerMap === undefined) {
     return null;
   }
 

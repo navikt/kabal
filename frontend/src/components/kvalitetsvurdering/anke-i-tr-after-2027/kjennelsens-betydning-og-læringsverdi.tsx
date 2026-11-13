@@ -20,9 +20,9 @@ const KJENNELSENS_BETYDNING_HEADER = MAIN_REASON_LABELS[MainReason.KjennelsensBe
 const KJENNELSENS_BETYDNING_FIELDS = Object.values(KjennelsensBetydningOgLæringsverdiFields);
 
 export const KjennelsensBetydningOgLæringsverdi = () => {
-  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingAnkeITRAfter2027State();
+  const { isSuccess, kvalitetsvurdering, update } = useKvalitetsvurderingAnkeITRAfter2027State();
 
-  if (isLoading) {
+  if (!isSuccess) {
     return null;
   }
 

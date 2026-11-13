@@ -27,13 +27,13 @@ import { Radiovalg } from '@/types/kaka-kvalitetsvurdering/radio';
 import { SaksTypeEnum } from '@/types/kodeverk';
 
 export const Saksbehandlingsreglene = () => {
-  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV3State();
+  const { isSuccess, kvalitetsvurdering, update } = useKvalitetsvurderingV3State();
   const { data: oppgave } = useOppgave();
 
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(MainReason.Saksbehandlingsreglene);
 
-  if (isLoading || oppgave === undefined) {
+  if (!isSuccess || oppgave === undefined) {
     return null;
   }
 

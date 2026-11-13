@@ -28,7 +28,7 @@ interface AllRegistreringshjemlerProps {
 
 export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshjemlerProps) => {
   const containerRef = usePanelContainerRef();
-  const { update, isLoading, kvalitetsvurdering } = useKvalitetsvurderingV3State();
+  const { update, isSuccess, kvalitetsvurdering } = useKvalitetsvurderingV3State();
   const canEdit = useCanEditBehandling();
   const error = useValidationError(field);
   const { data: oppgave } = useOppgave();
@@ -53,7 +53,7 @@ export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshj
     [lovKildeToRegistreringshjemler],
   );
 
-  const selected = isLoading ? EMPTY_ARRAY : (kvalitetsvurdering[field] ?? EMPTY_ARRAY);
+  const selected = isSuccess ? (kvalitetsvurdering[field] ?? EMPTY_ARRAY) : EMPTY_ARRAY;
 
   const value = useMemo(() => options.filter((entry) => selected.includes(entry.key)), [options, selected]);
 
@@ -68,7 +68,7 @@ export const AllRegistreringshjemler = ({ field, parentKey }: AllRegistreringshj
     [update, field],
   );
 
-  if (isLoading) {
+  if (!isSuccess) {
     return null;
   }
 
