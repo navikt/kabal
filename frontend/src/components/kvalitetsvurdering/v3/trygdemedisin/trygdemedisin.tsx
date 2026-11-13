@@ -18,13 +18,13 @@ import { useIsRelevantYtelseForRaadgivende } from '@/hooks/use-is-relevant-ytels
 import { RadiovalgExtended } from '@/types/kaka-kvalitetsvurdering/radio';
 
 export const Trygdemedisin = () => {
-  const { isLoading, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV3State();
+  const { isSuccess, kvalitetsvurdering, update, oppgave } = useKvalitetsvurderingV3State();
   const show = useIsRelevantYtelseForRaadgivende(oppgave?.ytelseId ?? null);
 
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(MainReason.Trygdemedisin);
 
-  if (!show || isLoading) {
+  if (!show || !isSuccess) {
     return null;
   }
 

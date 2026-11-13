@@ -9,6 +9,8 @@ import { forlengetBehandlingstidApi } from '@/redux-api/forlenget-behandlingstid
 import { gosysOppgaverApi } from '@/redux-api/gosys-oppgaver';
 import { kabalInternalApi } from '@/redux-api/internal';
 import { journalposterApi } from '@/redux-api/journalposter';
+import { kvalitetsvurderingAnkeAfter2027Api } from '@/redux-api/kaka-kvalitetsvurdering/anke-after-2027';
+import { kvalitetsvurderingAnkeITRAfter2027Api } from '@/redux-api/kaka-kvalitetsvurdering/anke-i-tr-after-2027';
 import { kvalitetsvurderingV1Api } from '@/redux-api/kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '@/redux-api/kaka-kvalitetsvurdering/v2';
 import { kvalitetsvurderingV3Api } from '@/redux-api/kaka-kvalitetsvurdering/v3';
@@ -38,6 +40,8 @@ export const reduxStore = configureStore({
       kvalitetsvurderingV1Api.middleware,
       kvalitetsvurderingV2Api.middleware,
       kvalitetsvurderingV3Api.middleware,
+      kvalitetsvurderingAnkeAfter2027Api.middleware,
+      kvalitetsvurderingAnkeITRAfter2027Api.middleware,
       messagesApi.middleware,
       kabalInternalApi.middleware,
       smartEditorCommentsApi.middleware,

@@ -7,6 +7,8 @@ import { ENVIRONMENT } from '@/environment';
 import { formatIdNumber } from '@/functions/format-id';
 import { deleteAllDocumentBackupsForBehandling } from '@/localstorage';
 import { forlengetBehandlingstidApi } from '@/redux-api/forlenget-behandlingstid';
+import { kvalitetsvurderingAnkeAfter2027Api } from '@/redux-api/kaka-kvalitetsvurdering/anke-after-2027';
+import { kvalitetsvurderingAnkeITRAfter2027Api } from '@/redux-api/kaka-kvalitetsvurdering/anke-i-tr-after-2027';
 import { kvalitetsvurderingV1Api } from '@/redux-api/kaka-kvalitetsvurdering/v1';
 import { kvalitetsvurderingV2Api } from '@/redux-api/kaka-kvalitetsvurdering/v2';
 import { kvalitetsvurderingV3Api } from '@/redux-api/kaka-kvalitetsvurdering/v3';
@@ -61,6 +63,8 @@ const finishOppgaveOnQueryStarted = async ({
     dispatch(kvalitetsvurderingV3Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
     dispatch(kvalitetsvurderingV2Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
     dispatch(kvalitetsvurderingV1Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+    dispatch(kvalitetsvurderingAnkeAfter2027Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
+    dispatch(kvalitetsvurderingAnkeITRAfter2027Api.util.invalidateTags([{ type: 'kvalitetsvurdering', id }]));
   }
 };
 

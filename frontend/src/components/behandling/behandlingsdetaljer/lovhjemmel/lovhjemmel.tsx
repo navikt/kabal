@@ -2,12 +2,17 @@ import { HelpText, HStack, Label, Skeleton, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useId, useMemo } from 'react';
 import { PermitteringsårsakWarning } from '@/components/behandling/behandlingsdetaljer/permitteringsårsak-warning';
+import { OmgjøringSaksdataHjemlerList as AnkeAfter2027HjemlerList } from '@/components/kvalitetsvurdering/anke-after-2027/data';
+import { useKvalitetsvurderingAnkeAfter2027State } from '@/components/kvalitetsvurdering/anke-after-2027/hooks';
+import { OmgjøringSaksdataHjemlerList as AnkeITRAfter2027HjemlerList } from '@/components/kvalitetsvurdering/anke-i-tr-after-2027/data';
+import { useKvalitetsvurderingAnkeITRAfter2027State } from '@/components/kvalitetsvurdering/anke-i-tr-after-2027/hooks';
 import { useKvalitetsvurderingV3State } from '@/components/kvalitetsvurdering/v3/common/use-kvalitetsvurdering-v3';
 import { BegrunnelsespliktenSaksdataHjemlerLists } from '@/components/kvalitetsvurdering/v3/saksbehandlingsreglene/data';
 import { SærregelverketSaksdataHjemlerList } from '@/components/kvalitetsvurdering/v3/særregelverket/data';
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
+import { toast } from '@/components/toast/store';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
@@ -28,7 +33,30 @@ export const Lovhjemmel = () => {
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError('hjemmel');
   const lovKildeToRegistreringshjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
-  const { update: updateKvalitetsvurdering, isLoading } = useKvalitetsvurderingV3State();
+  const {
+    update: updateKvalitetsvurdering,
+    isLoading: v3IsLoading,
+    isSuccess: v3IsSuccess,
+  } = useKvalitetsvurderingV3State();
+  const {
+    update: updateAnkeAfter2027,
+    isLoading: ankeAfter2027IsLoading,
+    isSuccess: ankeAfter2027IsSuccess,
+  } = useKvalitetsvurderingAnkeAfter2027State();
+  const {
+    update: updateAnkeITRAfter2027,
+    isLoading: ankeITRAfter2027IsLoading,
+    isSuccess: ankeITRAfter2027IsSuccess,
+  } = useKvalitetsvurderingAnkeITRAfter2027State();
+
+  const kvalitetsvurderingVersion = oppgave?.kvalitetsvurderingReference?.version;
+
+  const hasHjemmelDependantKvalitetsvurdering =
+    kvalitetsvurderingVersion === KvalitetsvurderingVersion.V3 ||
+    kvalitetsvurderingVersion === KvalitetsvurderingVersion.ANKE_AFTER_2027 ||
+    kvalitetsvurderingVersion === KvalitetsvurderingVersion.ANKE_I_TRYGDERETTEN_AFTER_2027;
+
+  const isLoading = v3IsLoading || ankeAfter2027IsLoading || ankeITRAfter2027IsLoading;
 
   const options = useMemo<Entry<HjemmelOption>[]>(
     () =>
@@ -71,11 +99,39 @@ export const Lovhjemmel = () => {
        * If one: Select it
        * If multiple or zero: Reset all selected
        */
-      if (oppgave.kvalitetsvurderingReference !== null && !isLoading) {
-        updateKvalitetsvurdering(getUpdate(ids.length === 1 ? ids : []));
+      const kvalitetsvurderingHjemler = ids.length === 1 ? ids : [];
+
+      if (hasHjemmelDependantKvalitetsvurdering) {
+        if (kvalitetsvurderingVersion === KvalitetsvurderingVersion.ANKE_AFTER_2027 && ankeAfter2027IsSuccess) {
+          return updateAnkeAfter2027(getAnkeAfter2027Update(kvalitetsvurderingHjemler));
+        }
+
+        if (
+          kvalitetsvurderingVersion === KvalitetsvurderingVersion.ANKE_I_TRYGDERETTEN_AFTER_2027 &&
+          ankeITRAfter2027IsSuccess
+        ) {
+          return updateAnkeITRAfter2027(getAnkeITRAfter2027Update(kvalitetsvurderingHjemler));
+        }
+
+        if (kvalitetsvurderingVersion === KvalitetsvurderingVersion.V3 && v3IsSuccess) {
+          return updateKvalitetsvurdering(getUpdate(kvalitetsvurderingHjemler));
+        }
+
+        toast.error(`Kunne ikke oppdatere kvalitetsvurdering${ids.length === 1 ? ' med valgt hjemmel' : ''}.`);
       }
     },
-    [updateHjemler, oppgave, updateKvalitetsvurdering, isLoading],
+    [
+      updateHjemler,
+      oppgave,
+      updateKvalitetsvurdering,
+      updateAnkeAfter2027,
+      updateAnkeITRAfter2027,
+      ankeAfter2027IsSuccess,
+      ankeITRAfter2027IsSuccess,
+      v3IsSuccess,
+      kvalitetsvurderingVersion,
+      hasHjemmelDependantKvalitetsvurdering,
+    ],
   );
 
   const selectId = useId();
@@ -84,7 +140,7 @@ export const Lovhjemmel = () => {
     return null;
   }
 
-  if (oppgave.kvalitetsvurderingReference?.version === KvalitetsvurderingVersion.V3 && isLoading) {
+  if (hasHjemmelDependantKvalitetsvurdering && isLoading) {
     return <Skeleton width="100%" height="64px" variant="rounded" />;
   }
 
@@ -133,3 +189,15 @@ const getUpdate = (ids: string[]) => ({
 });
 
 const FTRL_4_7_FØRSTE_LEDD_PERMITTERINGSÅRSAK = '240';
+
+const getAnkeAfter2027Update = (ids: string[]) => ({
+  [AnkeAfter2027HjemlerList.omgjøringFeilILovtolkningenHjemlerList]: ids,
+  [AnkeAfter2027HjemlerList.omgjøringFeilIFaktagrunnlagetHjemlerList]: ids,
+  [AnkeAfter2027HjemlerList.omgjøringFeilIRettsanvendelsenHjemlerList]: ids,
+});
+
+const getAnkeITRAfter2027Update = (ids: string[]) => ({
+  [AnkeITRAfter2027HjemlerList.omgjøringFeilILovtolkningenHjemlerList]: ids,
+  [AnkeITRAfter2027HjemlerList.omgjøringFeilIFaktagrunnlagetHjemlerList]: ids,
+  [AnkeITRAfter2027HjemlerList.omgjøringFeilIRettsanvendelsenHjemlerList]: ids,
+});

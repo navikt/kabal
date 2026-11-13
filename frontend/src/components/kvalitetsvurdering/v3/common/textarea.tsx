@@ -13,10 +13,10 @@ interface Props extends TextParams {
 }
 
 export const KvalitetsskjemaTextarea = (props: Props) => {
-  const { kvalitetsvurdering, isLoading } = useKvalitetsvurderingV3State();
+  const { kvalitetsvurdering, isSuccess } = useKvalitetsvurderingV3State();
   const canEdit = useCanEditBehandling();
 
-  if (isLoading) {
+  if (!isSuccess) {
     return null;
   }
 
@@ -50,13 +50,13 @@ const KvalitetsskjemaTextareaInternal = ({
   description,
   initialValue,
 }: InternalProps) => {
-  const { kvalitetsvurdering, isLoading, update, updateStatus } = useKvalitetsvurderingV3State();
+  const { kvalitetsvurdering, isSuccess, update, updateStatus } = useKvalitetsvurderingV3State();
   const [localValue, setLocalValue] = useState<string>(initialValue);
   const error = useValidationError(field);
 
   useEffect(() => {
     if (
-      isLoading ||
+      !isSuccess ||
       localValue === kvalitetsvurdering[field] ||
       (localValue === '' && kvalitetsvurdering[field] === null)
     ) {
@@ -66,9 +66,9 @@ const KvalitetsskjemaTextareaInternal = ({
     const timeout = setTimeout(() => update({ [field]: localValue?.length === 0 ? null : localValue }), 1000);
 
     return () => clearTimeout(timeout);
-  }, [field, isLoading, kvalitetsvurdering, localValue, update]);
+  }, [field, isSuccess, kvalitetsvurdering, localValue, update]);
 
-  if (isLoading || localValue === null) {
+  if (!isSuccess || localValue === null) {
     return null;
   }
 

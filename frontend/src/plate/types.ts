@@ -27,6 +27,7 @@ import type {
   ELEMENT_REGELVERK_CONTAINER,
   ELEMENT_SAKSINFO,
   ELEMENT_SAKSNUMMER,
+  ELEMENT_SAKSNUMMER_HOS_TR,
   ELEMENT_SIGNATURE,
 } from '@/plate/plugins/element-types';
 import type { TemplateSections } from '@/plate/template-sections';
@@ -204,7 +205,13 @@ export interface LabelContentElement extends TElement {
 
 export interface SaksinfoElement extends TElement {
   type: typeof ELEMENT_SAKSINFO;
-  children: (LabelContentElement | SaksnummerElement | ArenaSaksnummerElement | FullmektigElement)[];
+  children: (
+    | LabelContentElement
+    | SaksnummerElement
+    | ArenaSaksnummerElement
+    | SaksnummerHosTRElement
+    | FullmektigElement
+  )[];
 }
 
 export interface FullmektigElement extends TElement {
@@ -224,6 +231,13 @@ export interface SaksnummerElement extends TElement {
 
 export interface ArenaSaksnummerElement extends TElement {
   type: typeof ELEMENT_ARENA_SAKSNUMMER;
+  // One would think [PlaceholderElement] would work, but Slate/Plate insists on inserting surrounding text nodes. At least now the type will be correct.
+  children: [{ text: '' }, PlaceholderElement, { text: '' }];
+  isInitialized: boolean;
+}
+
+export interface SaksnummerHosTRElement extends TElement {
+  type: typeof ELEMENT_SAKSNUMMER_HOS_TR;
   // One would think [PlaceholderElement] would work, but Slate/Plate insists on inserting surrounding text nodes. At least now the type will be correct.
   children: [{ text: '' }, PlaceholderElement, { text: '' }];
   isInitialized: boolean;

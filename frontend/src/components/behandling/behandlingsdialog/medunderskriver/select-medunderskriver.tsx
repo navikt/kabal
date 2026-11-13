@@ -2,17 +2,9 @@ import { BodyShort, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { differenceInMilliseconds, parseISO } from 'date-fns';
 import { useMemo } from 'react';
-import {
-  getTitleCapitalized,
-  getTitleLowercase,
-  getTitlePlural,
-} from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { MedunderskriverReadOnly } from '@/components/behandling/behandlingsdialog/medunderskriver/read-only';
 import { SELECT_SKELETON } from '@/components/behandling/behandlingsdialog/medunderskriver/skeleton';
-import {
-  typeHasKvalitetsvurdering,
-  utfallHasKvalitetsvurdering,
-} from '@/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
+import { hasKvalitetsvurdering } from '@/components/oppgavebehandling-controls/use-hide-kvalitetsvurdering';
 import { useSetMedunderskriver } from '@/components/oppgavestyring/use-set-medunderskriver';
 import { toSaksbehandlerAndMUEntry } from '@/components/searchable-select/searchable-single-select/searchable-nav-employee-select';
 import { SearchableSelect } from '@/components/searchable-select/searchable-single-select/searchable-single-select';
@@ -64,7 +56,7 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
     (hasOppgavestyringRole && medunderskriver.flowState === FlowState.SENT);
 
   if (!canChange) {
-    return <MedunderskriverReadOnly medunderskriver={medunderskriver} typeId={typeId} />;
+    return <MedunderskriverReadOnly medunderskriver={medunderskriver} />;
   }
 
   if (typeof data === 'undefined') {
@@ -74,16 +66,15 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
   const { medunderskrivere } = data;
 
   if (medunderskrivere.length === 0) {
-    return <BodyShort>Fant ingen {getTitlePlural(typeId)}</BodyShort>;
+    return <BodyShort>Fant ingen medunderskrivere</BodyShort>;
   }
 
   const fromNavIdent = medunderskriver.employee?.navIdent ?? null;
-  const titleLabel = getTitleCapitalized(typeId);
+  const titleLabel = 'Medunderskriver';
 
   const handleChange = (employee: INavEmployeeWithEnhet | null) => {
     if (
-      typeHasKvalitetsvurdering(typeId) &&
-      utfallHasKvalitetsvurdering(utfallId) &&
+      hasKvalitetsvurdering(typeId, utfallId) &&
       medunderskriver.flowState === FlowState.NOT_SENT &&
       employee !== null &&
       kvalitetsvurdering !== undefined
@@ -105,7 +96,7 @@ export const SelectMedunderskriver = ({ id, typeId, utfallId, medunderskriver }:
       isSent={medunderskriver.flowState === FlowState.SENT}
       isUpdating={isUpdating}
       onChange={handleChange}
-      confirmLabel={`Send til ${getTitleLowercase(typeId)}`}
+      confirmLabel="Send til medunderskriver"
     />
   );
 };

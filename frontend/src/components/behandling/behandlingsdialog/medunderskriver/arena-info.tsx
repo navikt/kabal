@@ -1,5 +1,4 @@
 import { InlineMessage } from '@navikt/ds-react';
-import { getTitleLowercase } from '@/components/behandling/behandlingsdialog/medunderskriver/get-title';
 import { useIsFakeArenaCase } from '@/components/behandling/behandlingsdialog/medunderskriver/helpers';
 import { useIsAssignedMedunderskriverAndSent } from '@/hooks/use-is-medunderskriver';
 import { useIsTildeltSaksbehandler } from '@/hooks/use-is-saksbehandler';
@@ -20,6 +19,7 @@ export const ArenaInfoMu = ({ typeId }: Props) => {
   if (
     typeId === SaksTypeEnum.KLAGE ||
     typeId === SaksTypeEnum.ANKE ||
+    typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
     typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET
   ) {
     return (
@@ -45,12 +45,13 @@ export const ArenaInfoSaksbehandler = ({ typeId }: Props) => {
   if (
     typeId === SaksTypeEnum.KLAGE ||
     typeId === SaksTypeEnum.ANKE ||
+    typeId === SaksTypeEnum.ANKE_AFTER_2027 ||
     typeId === SaksTypeEnum.BEHANDLING_ETTER_TR_OPPHEVET
   ) {
     return (
       <InlineMessage status="info" size="small">
-        Når du er klar til å sende saken til {getTitleLowercase(typeId)} i Kabal, skal du samtidig sende saken til
-        beslutning i Arena.
+        Når du er klar til å sende saken til medunderskriver i Kabal, skal du samtidig sende saken til beslutning i
+        Arena.
       </InlineMessage>
     );
   }

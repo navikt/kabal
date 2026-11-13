@@ -74,9 +74,9 @@ interface CheckboxProps {
 const Checkbox = ({ checkbox }: CheckboxProps) => {
   const { field, label, helpText, saksdatahjemler, allRegistreringshjemler, childList, groupErrorField } = checkbox;
 
-  const { kvalitetsvurdering, isLoading, update } = useKvalitetsvurderingV3State();
+  const { kvalitetsvurdering, isSuccess, update } = useKvalitetsvurderingV3State();
 
-  if (isLoading) {
+  if (!isSuccess) {
     return null;
   }
 
