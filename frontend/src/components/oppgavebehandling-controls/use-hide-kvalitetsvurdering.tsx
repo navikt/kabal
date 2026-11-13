@@ -20,9 +20,17 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
   const { user } = useContext(StaticDataContext);
 
   const { typeId, resultat } = oppgave;
-  const status = getKvalitetsvurderingStatus(typeId, resultat.utfallId);
+  const policy = getKvalitetsvurderingPolicy(typeId, resultat.utfallId);
 
-  if (status === Policy.NOT_REQUIRED_FOR_SAKSTYPE) {
+  if (
+    oppgave.kvalitetsvurderingReference === null ||
+    oppgave.rol.employee?.navIdent === user.navIdent ||
+    oppgave.feilregistrering !== null
+  ) {
+    return { featureEnabled: false, panelDefaultEnabled: false, reason: null };
+  }
+
+  if (policy === Policy.NOT_REQUIRED_FOR_SAKSTYPE) {
     return {
       featureEnabled: true,
       panelDefaultEnabled: false,
@@ -34,7 +42,7 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
     };
   }
 
-  if (status === Policy.NOT_REQUIRED_FOR_UTFALL) {
+  if (policy === Policy.NOT_REQUIRED_FOR_UTFALL) {
     return {
       featureEnabled: true,
       panelDefaultEnabled: true,
@@ -46,21 +54,13 @@ export const useKvalitetsvurderingSupported = (oppgave: IOppgavebehandling): Sup
     };
   }
 
-  if (
-    oppgave.kvalitetsvurderingReference === null ||
-    oppgave.rol.employee?.navIdent === user.navIdent ||
-    oppgave.feilregistrering !== null
-  ) {
-    return { featureEnabled: false, panelDefaultEnabled: false, reason: null };
-  }
-
   return { panelDefaultEnabled: true, featureEnabled: true, reason: null };
 };
 
 export const hasKvalitetsvurdering = (typeId: SaksTypeEnum, utfallId: UtfallEnum | null): boolean =>
-  getKvalitetsvurderingStatus(typeId, utfallId) === Policy.REQUIRED;
+  getKvalitetsvurderingPolicy(typeId, utfallId) === Policy.REQUIRED;
 
-const getKvalitetsvurderingStatus = (typeId: SaksTypeEnum, utfallId: UtfallEnum | null): Policy => {
+const getKvalitetsvurderingPolicy = (typeId: SaksTypeEnum, utfallId: UtfallEnum | null): Policy => {
   switch (typeId) {
     case SaksTypeEnum.ANKE_AFTER_2027:
     case SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027:

@@ -67,34 +67,28 @@ export const useKvalitetsvurderingV2 = (): [IKvalitetsvurderingV2 | undefined, b
   return [data, isLoading];
 };
 
-export const useKvalitetsvurderingV3 = (): [IKvalitetsvurderingV3 | undefined, boolean] => {
+export const useKvalitetsvurderingV3 = () => {
   const { data: oppgave } = useOppgave();
 
-  const { data, isLoading } = useGetKvalitetsvurderingQueryV3(
+  return useGetKvalitetsvurderingQueryV3(
     getIdOrSkipToken(oppgave?.kvalitetsvurderingReference, KvalitetsvurderingVersion.V3),
   );
-
-  return [data, isLoading];
 };
 
-export const useKvalitetsvurderingAnkeAfter2027 = (): [IKvalitetsvurderingAnkeAfter2027 | undefined, boolean] => {
+export const useKvalitetsvurderingAnkeAfter2027 = () => {
   const { data: oppgave } = useOppgave();
 
-  const { data, isLoading } = useGetKvalitetsvurderingQueryAnkeAfter2027(
+  return useGetKvalitetsvurderingQueryAnkeAfter2027(
     getIdOrSkipToken(oppgave?.kvalitetsvurderingReference, KvalitetsvurderingVersion.ANKE_AFTER_2027),
   );
-
-  return [data, isLoading];
 };
 
-export const useKvalitetsvurderingAnkeITRAfter2027 = (): [IKvalitetsvurderingAnkeITRAfter2027 | undefined, boolean] => {
+export const useKvalitetsvurderingAnkeITRAfter2027 = () => {
   const { data: oppgave } = useOppgave();
 
-  const { data, isLoading } = useGetKvalitetsvurderingQueryAnkeITRAfter2027(
+  return useGetKvalitetsvurderingQueryAnkeITRAfter2027(
     getIdOrSkipToken(oppgave?.kvalitetsvurderingReference, KvalitetsvurderingVersion.ANKE_I_TRYGDERETTEN_AFTER_2027),
   );
-
-  return [data, isLoading];
 };
 
 const getIdOrSkipToken = (

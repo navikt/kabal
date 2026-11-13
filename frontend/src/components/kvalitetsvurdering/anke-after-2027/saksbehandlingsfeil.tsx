@@ -14,9 +14,9 @@ const SAKSBEHANDLINGSFEIL_HEADER = MAIN_REASON_LABELS[MainReason.Saksbehandlings
 const SAKSBEHANDLINGSFEIL_FIELDS = Object.values(SaksbehandlingsfeilBoolean);
 
 export const Saksbehandlingsfeil = () => {
-  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingAnkeAfter2027State();
+  const { isSuccess, kvalitetsvurdering, update } = useKvalitetsvurderingAnkeAfter2027State();
 
-  if (isLoading) {
+  if (!isSuccess) {
     return null;
   }
 

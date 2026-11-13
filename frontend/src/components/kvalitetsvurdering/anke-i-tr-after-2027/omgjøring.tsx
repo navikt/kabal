@@ -25,12 +25,12 @@ const OMGJØRING_FIELD = MainReason.OmgjøringIAnkeomgangen;
 const OMGJØRING_HEADER = MAIN_REASON_LABELS[OMGJØRING_FIELD];
 
 export const Omgjøring = () => {
-  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingAnkeITRAfter2027State();
+  const { isSuccess, kvalitetsvurdering, update } = useKvalitetsvurderingAnkeITRAfter2027State();
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(OMGJØRING_FIELD);
   const groupValidationError = useValidationError(OmgjøringErrorFields.omgjøringGroup);
 
-  if (isLoading) {
+  if (!isSuccess) {
     return null;
   }
 

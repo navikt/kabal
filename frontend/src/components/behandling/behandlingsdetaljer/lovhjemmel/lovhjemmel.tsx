@@ -12,12 +12,12 @@ import { SærregelverketSaksdataHjemlerList } from '@/components/kvalitetsvurder
 import { usePanelContainerRef } from '@/components/oppgavebehandling-panels/panel-container-ref-context';
 import { SearchableMultiSelect } from '@/components/searchable-select/searchable-multi-select/searchable-multi-select';
 import type { Entry } from '@/components/searchable-select/virtualized-option-list';
+import { toast } from '@/components/toast/store';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { useCanEditBehandling } from '@/hooks/use-can-edit';
 import { useLovkildeToRegistreringshjemmelForYtelse } from '@/hooks/use-kodeverk-value';
 import { useValidationError } from '@/hooks/use-validation-error';
 import { useUpdateRegistreringshjemlerMutation } from '@/redux-api/oppgaver/mutations/set-registreringshjemler';
-import { SaksTypeEnum } from '@/types/kodeverk';
 import { KvalitetsvurderingVersion } from '@/types/oppgavebehandling/oppgavebehandling';
 
 interface HjemmelOption {
@@ -33,10 +33,21 @@ export const Lovhjemmel = () => {
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError('hjemmel');
   const lovKildeToRegistreringshjemler = useLovkildeToRegistreringshjemmelForYtelse(oppgave?.ytelseId ?? skipToken);
-  const { update: updateKvalitetsvurdering, isLoading: kvalitetsvurderingV3IsLoading } = useKvalitetsvurderingV3State();
-  const { update: updateAnkeAfter2027, isLoading: ankeAfter2027IsLoading } = useKvalitetsvurderingAnkeAfter2027State();
-  const { update: updateAnkeITRAfter2027, isLoading: ankeITRAfter2027IsLoading } =
-    useKvalitetsvurderingAnkeITRAfter2027State();
+  const {
+    update: updateKvalitetsvurdering,
+    isLoading: v3IsLoading,
+    isSuccess: v3IsSuccess,
+  } = useKvalitetsvurderingV3State();
+  const {
+    update: updateAnkeAfter2027,
+    isLoading: ankeAfter2027IsLoading,
+    isSuccess: ankeAfter2027IsSuccess,
+  } = useKvalitetsvurderingAnkeAfter2027State();
+  const {
+    update: updateAnkeITRAfter2027,
+    isLoading: ankeITRAfter2027IsLoading,
+    isSuccess: ankeITRAfter2027IsSuccess,
+  } = useKvalitetsvurderingAnkeITRAfter2027State();
 
   const kvalitetsvurderingVersion = oppgave?.kvalitetsvurderingReference?.version;
 
@@ -45,7 +56,7 @@ export const Lovhjemmel = () => {
     kvalitetsvurderingVersion === KvalitetsvurderingVersion.ANKE_AFTER_2027 ||
     kvalitetsvurderingVersion === KvalitetsvurderingVersion.ANKE_I_TRYGDERETTEN_AFTER_2027;
 
-  const isLoading = kvalitetsvurderingV3IsLoading || ankeAfter2027IsLoading || ankeITRAfter2027IsLoading;
+  const isLoading = v3IsLoading || ankeAfter2027IsLoading || ankeITRAfter2027IsLoading;
 
   const options = useMemo<Entry<HjemmelOption>[]>(
     () =>
@@ -90,18 +101,37 @@ export const Lovhjemmel = () => {
        */
       const kvalitetsvurderingHjemler = ids.length === 1 ? ids : [];
 
-      if (oppgave.kvalitetsvurderingReference !== null && !isLoading) {
-        if (oppgave.typeId === SaksTypeEnum.ANKE_AFTER_2027) {
-          updateAnkeAfter2027(getAnkeAfter2027Update(kvalitetsvurderingHjemler));
-        }
-        if (oppgave.typeId === SaksTypeEnum.ANKE_I_TRYGDERETTEN_AFTER_2027) {
-          updateAnkeITRAfter2027(getAnkeITRAfter2027Update(kvalitetsvurderingHjemler));
+      if (hasHjemmelDependantKvalitetsvurdering) {
+        if (kvalitetsvurderingVersion === KvalitetsvurderingVersion.ANKE_AFTER_2027 && ankeAfter2027IsSuccess) {
+          return updateAnkeAfter2027(getAnkeAfter2027Update(kvalitetsvurderingHjemler));
         }
 
-        updateKvalitetsvurdering(getUpdate(kvalitetsvurderingHjemler));
+        if (
+          kvalitetsvurderingVersion === KvalitetsvurderingVersion.ANKE_I_TRYGDERETTEN_AFTER_2027 &&
+          ankeITRAfter2027IsSuccess
+        ) {
+          return updateAnkeITRAfter2027(getAnkeITRAfter2027Update(kvalitetsvurderingHjemler));
+        }
+
+        if (kvalitetsvurderingVersion === KvalitetsvurderingVersion.V3 && v3IsSuccess) {
+          return updateKvalitetsvurdering(getUpdate(kvalitetsvurderingHjemler));
+        }
+
+        toast.error(`Kunne ikke oppdatere kvalitetsvurdering${ids.length === 1 ? ' med valgt hjemmel' : ''}.`);
       }
     },
-    [updateHjemler, oppgave, updateKvalitetsvurdering, isLoading, updateAnkeAfter2027, updateAnkeITRAfter2027],
+    [
+      updateHjemler,
+      oppgave,
+      updateKvalitetsvurdering,
+      updateAnkeAfter2027,
+      updateAnkeITRAfter2027,
+      ankeAfter2027IsSuccess,
+      ankeITRAfter2027IsSuccess,
+      v3IsSuccess,
+      kvalitetsvurderingVersion,
+      hasHjemmelDependantKvalitetsvurdering,
+    ],
   );
 
   const selectId = useId();

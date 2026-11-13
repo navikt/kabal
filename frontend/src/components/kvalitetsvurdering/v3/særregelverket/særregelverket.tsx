@@ -24,12 +24,12 @@ const vedtaketAutomatiskVedtakhelpText =
   'Du skal gjøre de samme kvalitetsvurderingene for automatiske vedtak som for andre vedtak. Du kan krysse av for automatisk vedtak dersom det er tydelig merket i vedtaket.';
 
 export const Særregelverket = () => {
-  const { isLoading, kvalitetsvurdering, update } = useKvalitetsvurderingV3State();
+  const { isSuccess, kvalitetsvurdering, update } = useKvalitetsvurderingV3State();
 
   const canEdit = useCanEditBehandling();
   const validationError = useValidationError(MainReason.Særregelverket);
 
-  if (isLoading) {
+  if (!isSuccess) {
     return null;
   }
 
