@@ -41,8 +41,8 @@ export const CustomReceivers = ({
       <EditPart
         isLoading={false}
         id={EXTRA_RECEIVERS_ID}
-        onChange={(part) =>
-          addMottakere([{ part, handling: getInitalHandling(part, templateId), overriddenAddress: null }])
+        onChange={({ utsendingskanal, ...part }) =>
+          addMottakere([{ part, handling: getInitalHandling(utsendingskanal, templateId), overriddenAddress: null }])
         }
         buttonText="Legg til mottaker"
         validate={(part) =>

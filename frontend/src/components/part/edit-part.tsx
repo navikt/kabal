@@ -8,7 +8,7 @@ import { Lookup } from '@/components/part/lookup';
 import { cleanAndValidate } from '@/components/part/validate';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { Keys } from '@/keys';
-import { useLazySearchpartwithutsendingskanalQuery } from '@/redux-api/search';
+import { type PartWithUtsendingskanal, useLazySearchPartWithUtsendingskanalQuery } from '@/redux-api/search';
 import { isApiDataError } from '@/types/errors';
 import type { IdentifikatorPart } from '@/types/oppgave-common';
 
@@ -18,7 +18,7 @@ export interface InvalidReceiver {
 }
 
 interface EditPartProps {
-  onChange: (part: IdentifikatorPart) => void;
+  onChange: (part: PartWithUtsendingskanal) => void;
   onClose?: () => void;
   isLoading: boolean;
   buttonText?: string;
@@ -44,7 +44,7 @@ export const EditPart = ({
   const [inputError, setInputError] = useState<string>();
   const [invalidReceiver, setInvalidReceiver] = useState<InvalidReceiver | null>(null);
   const [warningReceiver, setWarningReceiver] = useState<InvalidReceiver | null>(null);
-  const [search, { data, isLoading, isFetching, isError, error }] = useLazySearchpartwithutsendingskanalQuery();
+  const [search, { data, isLoading, isFetching, isError, error }] = useLazySearchPartWithUtsendingskanalQuery();
 
   if (oppgave === undefined) {
     return null;
@@ -150,8 +150,8 @@ export const EditPart = ({
 };
 
 interface ResultProps {
-  part: IdentifikatorPart | undefined;
-  onChange: (part: IdentifikatorPart) => void;
+  part: PartWithUtsendingskanal | undefined;
+  onChange: (part: PartWithUtsendingskanal) => void;
   isLoading: boolean;
   isSearching: boolean;
   isError: boolean;

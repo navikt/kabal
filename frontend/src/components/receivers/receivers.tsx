@@ -1,4 +1,5 @@
-import { InlineMessage, VStack } from '@navikt/ds-react';
+import { ErrorMessage, InlineMessage, Loader, VStack } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useEffect } from 'react';
 import { DistribusjonsType } from '#shared/documents';
 import { LocalAlert } from '@/components/local-alert/local-alert';
@@ -7,7 +8,7 @@ import type { IErrorProperty } from '@/components/receivers/is-send-error';
 import { SingleReceiver } from '@/components/receivers/single-receiver';
 import { SuggestedReceivers } from '@/components/receivers/suggested-receivers';
 import { UnreachableSuggestedReceivers } from '@/components/receivers/unreachable-suggested-receivers';
-import { type IBrevmottaker, useSuggestedBrevmottakere } from '@/hooks/use-suggested-brevmottakere';
+import { type ReachableMottaker, useSuggestedBrevmottakere } from '@/hooks/use-suggested-brevmottakere';
 import type { IdentifikatorMottaker, IMottaker } from '@/types/documents/documents';
 import { PartStatusEnum } from '@/types/oppgave-common';
 import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
@@ -31,9 +32,12 @@ export const Receivers = ({
   isLoading,
   disabled = false,
 }: Props) => {
-  const [suggestedBrevmottakere] = useSuggestedBrevmottakere(mottakerList, templateId);
-
-  const reachableSuggestedReceivers = suggestedBrevmottakere.filter((s) => s.reachable);
+  const isTrygderetten = dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN;
+  const {
+    brevmottakere: suggestedBrevmottakere,
+    isLoading: brevmottakereIsLoading,
+    error,
+  } = useSuggestedBrevmottakere(isTrygderetten ? skipToken : { mottakerList, templateId });
 
   const addMottakere = useCallback(
     (mottakere: IMottaker[]) => {
@@ -134,6 +138,16 @@ export const Receivers = ({
     }
   }, [mottakerList, removePartMottakere]);
 
+  if (error !== null) {
+    return <ErrorMessage size="small">{error}</ErrorMessage>;
+  }
+
+  if (brevmottakereIsLoading) {
+    return <Loader size="small" />;
+  }
+
+  const reachableSuggestedReceivers = suggestedBrevmottakere.filter((s) => s.reachable);
+
   const customReceivers = mottakerList
     .filter(isIdentifikatorMottaker)
     .filter((m) => suggestedBrevmottakere.every((s) => s.part.id !== m.part.id));
@@ -146,7 +160,7 @@ export const Receivers = ({
 
   return (
     <VStack gap="space-16 space-0" position="relative" as="section">
-      {dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN ? (
+      {isTrygderetten ? (
         <InlineMessage status="info" size="small">
           Forhåndsvalgt mottaker: Trygderetten
         </InlineMessage>
@@ -179,7 +193,7 @@ export const Receivers = ({
         </>
       )}
 
-      {reachableSuggestedReceivers.length === 0 && customReceivers.length === 0 ? (
+      {!isTrygderetten && reachableSuggestedReceivers.length === 0 && customReceivers.length === 0 ? (
         <LocalAlert status="warning" title="Ingen gyldige mottakere." />
       ) : null}
 
@@ -198,7 +212,7 @@ interface DefaultReceiversProps {
   sendErrors: IErrorProperty[];
   templateId: TemplateIdEnum | undefined;
   dokumentTypeId?: DistribusjonsType;
-  receivers: IBrevmottaker[];
+  receivers: ReachableMottaker[];
   onlyOneReachable: boolean;
   isLoading: boolean;
 }

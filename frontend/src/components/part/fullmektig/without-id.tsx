@@ -7,7 +7,7 @@ import { POSTNUMMER_ID, Postnummer } from '@/components/receivers/address/postnu
 import { toast } from '@/components/toast/store';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useUpdateFullmektigMutation } from '@/redux-api/oppgaver/mutations/behandling';
-import { type IFullmektig, Utsendingskanal } from '@/types/oppgave-common';
+import type { IFullmektig } from '@/types/oppgave-common';
 
 interface Props {
   onClose: () => void;
@@ -107,7 +107,6 @@ export const WithoutId = ({ part, onClose }: Props) => {
       identifikator: null,
       type: null,
       statusList: [],
-      utsendingskanal: Utsendingskanal.SENTRAL_UTSKRIFT,
       address,
       name,
       id: part?.id ?? 'temp',

@@ -6,7 +6,6 @@ import { Country } from '@/components/receivers/address/country/country';
 import { POSTNUMMER_ID, Postnummer } from '@/components/receivers/address/postnummer';
 import { isMetaKey } from '@/keys';
 import type { IFullmektig } from '@/types/oppgave-common';
-import { Utsendingskanal } from '@/types/oppgave-common';
 
 const NAME_ID = 'fullmektig-name';
 const LINE1_ID = 'fullmektig-adresselinje1';
@@ -81,7 +80,6 @@ export const ManualEntry = ({ part, onSave, onCancel, isLoading }: ManualEntryPr
       identifikator: null,
       type: null,
       statusList: [],
-      utsendingskanal: Utsendingskanal.SENTRAL_UTSKRIFT,
       address,
       name,
       id: part?.id ?? 'temp',
