@@ -49,7 +49,6 @@ export interface IPartBase {
   id: string;
   name: string | null;
   address: IAddress | null;
-  utsendingskanal: Utsendingskanal;
 }
 
 export enum IdType {

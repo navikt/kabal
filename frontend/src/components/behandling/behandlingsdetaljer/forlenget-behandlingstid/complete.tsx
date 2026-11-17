@@ -1,4 +1,5 @@
-import { Button, HStack } from '@navikt/ds-react';
+import { Button, ErrorMessage, HStack, Loader } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { type IValidationSection, isReduxValidationResponse, SectionKey } from '@/functions/error-type-guard';
 import { useSuggestedBrevmottakere } from '@/hooks/use-suggested-brevmottakere';
@@ -17,15 +18,32 @@ interface Props {
 
 export const Complete = ({ id, onClose, setError }: Props) => {
   const [complete, { isLoading }] = useCompleteMutation();
-  const { data } = useGetOrCreateQuery(id);
+  const { data, isSuccess } = useGetOrCreateQuery(id);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [suggested] = useSuggestedBrevmottakere(data?.receivers ?? []);
-  const reachable = suggested.filter((s) => s.reachable);
+  const {
+    brevmottakere,
+    isLoading: brevmottakereIsLoading,
+    error,
+  } = useSuggestedBrevmottakere(
+    data === undefined || data.doNotSendLetter || data.receivers.length > 0
+      ? skipToken
+      : { mottakerList: data.receivers },
+  );
   const [setReceivers] = useSetReceiversMutation();
 
-  if (data === undefined) {
+  if (!isSuccess) {
     return null;
   }
+
+  if (error !== null) {
+    return <ErrorMessage size="small">{error}</ErrorMessage>;
+  }
+
+  if (brevmottakereIsLoading) {
+    return <Loader size="small" />;
+  }
+
+  const reachable = brevmottakere.filter((s) => s.reachable);
 
   return (
     <HStack gap="space-8" align="center">

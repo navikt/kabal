@@ -11,7 +11,7 @@ import { TriggerButton } from '@/components/part-lookup/trigger-button';
 import type { InvalidReceiver } from '@/components/part-lookup/types';
 import { useOppgave } from '@/hooks/oppgavebehandling/use-oppgave';
 import { isMetaKey, Keys } from '@/keys';
-import { useLazySearchpartwithutsendingskanalQuery } from '@/redux-api/search';
+import { useLazySearchPartWithUtsendingskanalQuery } from '@/redux-api/search';
 import type { IdentifikatorPart, IFullmektig } from '@/types/oppgave-common';
 
 export type { InvalidReceiver } from '@/components/part-lookup/types';
@@ -69,7 +69,7 @@ export const FullmektigLookup = ({
   const [warningReceiverMessage, setWarningReceiverMessage] = useState<string | null>(null);
 
   const [search, { data: searchResult, isLoading: isSearchLoading, isFetching, isError, reset: resetSearch }] =
-    useLazySearchpartwithutsendingskanalQuery();
+    useLazySearchPartWithUtsendingskanalQuery();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);

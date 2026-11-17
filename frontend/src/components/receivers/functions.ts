@@ -1,6 +1,6 @@
 import { HandlingEnum } from '@/types/documents/receivers';
 import { Brevmottakertype } from '@/types/kodeverk';
-import { type IFullmektig, type IPart, Utsendingskanal } from '@/types/oppgave-common';
+import { Utsendingskanal } from '@/types/oppgave-common';
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 const getTypeName = (type: Brevmottakertype): string => {
@@ -34,11 +34,11 @@ export const getTypeNames = (types: Brevmottakertype[]): string => {
   return `${getTypeName(first)}, ${getTypeName(second).toLowerCase()} og ${getTypeName(third).toLowerCase()}`;
 };
 
-export const getInitalHandling = (part: IPart | IFullmektig, templateId: TemplateIdEnum | undefined) => {
+export const getInitalHandling = (utsendingskanal: Utsendingskanal, templateId: TemplateIdEnum | undefined) => {
   if (
     (templateId === TemplateIdEnum.OVERSENDELSESBREV ||
       templateId === TemplateIdEnum.GJENOPPTAKSBEGJÆRING_TILSVARSBREV_MED_OVERSENDELSESBREV) &&
-    part.utsendingskanal === Utsendingskanal.SENTRAL_UTSKRIFT
+    utsendingskanal === Utsendingskanal.SENTRAL_UTSKRIFT
   ) {
     // Disse malene krever kvittering. Sentral utskrift gir ikke kvittering.
     return HandlingEnum.LOCAL_PRINT;

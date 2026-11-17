@@ -2,15 +2,15 @@ import { Buildings3Icon, PersonIcon } from '@navikt/aksel-icons';
 import { CopyButton, HelpText, HStack, Label, Tooltip } from '@navikt/ds-react';
 import { InfoBox } from '@/components/info-box/info-box';
 import { PartStatusList } from '@/components/part-status-list/part-status-list';
-import { Address } from '@/components/receivers/address/address';
+import { ReadAddress } from '@/components/receivers/address/read-address';
 import { getTypeNames } from '@/components/receivers/functions';
 import { StyledReceiver } from '@/components/receivers/styled-components';
 import { formatIdNumber } from '@/functions/format-id';
-import type { IBrevmottaker } from '@/hooks/use-suggested-brevmottakere';
+import type { UnreachableMottaker } from '@/hooks/use-suggested-brevmottakere';
 import { IdType, type IPart, PartStatusEnum } from '@/types/oppgave-common';
 
 interface ReceiversProps {
-  receivers: IBrevmottaker[];
+  receivers: UnreachableMottaker[];
 }
 
 export const UnreachableSuggestedReceivers = ({ receivers }: ReceiversProps) => {
@@ -25,7 +25,7 @@ export const UnreachableSuggestedReceivers = ({ receivers }: ReceiversProps) => 
       </Label>
 
       <ul className="m-0 list-none p-0">
-        {receivers.map(({ part, brevmottakertyper, overriddenAddress, handling }) => {
+        {receivers.map(({ part, brevmottakertyper, overriddenAddress }) => {
           const { identifikator, id, name, statusList } = part;
           const isPerson = part.type === IdType.FNR;
 
@@ -54,7 +54,12 @@ export const UnreachableSuggestedReceivers = ({ receivers }: ReceiversProps) => 
                   <CopyButton size="xsmall" copyText={id} text={formatIdNumber(identifikator)} />
                 )}
               </HStack>
-              <Address part={part} address={part.address} overriddenAddress={overriddenAddress} handling={handling} />
+              <ReadAddress
+                part={part}
+                address={part.address}
+                overriddenAddress={overriddenAddress}
+                onEdit={undefined}
+              />
               {alertText === null ? null : (
                 <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
                   <InfoBox variant="warning">

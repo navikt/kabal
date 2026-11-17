@@ -1,9 +1,11 @@
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, ToggleGroup, Tooltip } from '@navikt/ds-react';
-import { useCallback, useMemo } from 'react';
+import { BodyShort, Button, ErrorMessage, HStack, Loader, ToggleGroup, Tooltip } from '@navikt/ds-react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { InfoBox } from '@/components/info-box/info-box';
 import { Address } from '@/components/receivers/address/address';
 import { areAddressesEqual } from '@/functions/are-addresses-equal';
+import { useSearchPartWithUtsendingskanal } from '@/hooks/use-search-part-with-utsendingskanal';
+import { getErrorMessage } from '@/hooks/use-suggested-brevmottakere';
 import type { IMottaker } from '@/types/documents/documents';
 import { HandlingEnum, type IAddress } from '@/types/documents/receivers';
 import { UTSENDINGSKANAL, Utsendingskanal } from '@/types/oppgave-common';
@@ -14,56 +16,80 @@ interface Props extends IMottaker {
   onChange: (mottaker: IMottaker) => void;
 }
 
+const useUtsendingskanal = (identifikator: string | null) => {
+  const status = useSearchPartWithUtsendingskanal(identifikator === null ? skipToken : identifikator);
+
+  if (identifikator === null) {
+    return {
+      currentData: { utsendingskanal: Utsendingskanal.SENTRAL_UTSKRIFT },
+      isFetching: false,
+      isSuccess: true,
+      isError: false,
+      error: undefined,
+    };
+  }
+
+  return status;
+};
+
 export const Options = ({ part, handling, overriddenAddress, templateId, onChange }: Props) => {
-  const onHandlingChange = useCallback(
-    (newHandling: string) => onChange({ part, overriddenAddress, handling: ensureIsHandling(newHandling) }),
-    [onChange, overriddenAddress, part],
-  );
+  const { isFetching, isSuccess, isError, currentData, error } = useUtsendingskanal(part.identifikator);
 
-  const onAddressChange = useCallback(
-    (address: IAddress | null) =>
-      onChange({
-        part,
-        handling,
-        overriddenAddress: areAddressesEqual(address, part.address) ? null : address,
-      }),
-    [handling, onChange, part],
-  );
+  if (isFetching) {
+    return <Loader size="small" />;
+  }
 
-  const showAddress = useMemo(() => {
+  if (isError) {
+    return <ErrorMessage size="small">{getErrorMessage(error) ?? 'Ukjent feil'}</ErrorMessage>;
+  }
+
+  if (!isSuccess) {
+    return null;
+  }
+
+  const { utsendingskanal } = currentData;
+
+  const onHandlingChange = (newHandling: string) =>
+    onChange({ part, overriddenAddress, handling: ensureIsHandling(newHandling) });
+
+  const onAddressChange = (address: IAddress | null) =>
+    onChange({
+      part,
+      handling,
+      overriddenAddress: areAddressesEqual(address, part.address) ? null : address,
+    });
+
+  const showAddress = () => {
     if (handling === HandlingEnum.AUTO) {
-      return (
-        part.utsendingskanal === Utsendingskanal.SENTRAL_UTSKRIFT ||
-        part.utsendingskanal === Utsendingskanal.LOKAL_UTSKRIFT
-      );
+      return utsendingskanal === Utsendingskanal.SENTRAL_UTSKRIFT || utsendingskanal === Utsendingskanal.LOKAL_UTSKRIFT;
     }
 
     return handling === HandlingEnum.CENTRAL_PRINT || handling === HandlingEnum.LOCAL_PRINT;
-  }, [handling, part.utsendingskanal]);
+  };
 
-  const isLocalPrint = useMemo(() => {
+  const isLocalPrint = () => {
     if (handling === HandlingEnum.AUTO) {
-      return part.utsendingskanal === Utsendingskanal.LOKAL_UTSKRIFT;
+      return utsendingskanal === Utsendingskanal.LOKAL_UTSKRIFT;
     }
 
     return handling === HandlingEnum.LOCAL_PRINT;
-  }, [handling, part.utsendingskanal]);
+  };
 
   return (
     <>
       <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
         <ToggleGroup size="small" value={handling} onChange={onHandlingChange}>
-          <ToggleGroup.Item value={HandlingEnum.AUTO} label={UTSENDINGSKANAL[part.utsendingskanal]} />
-          {part.utsendingskanal !== Utsendingskanal.SENTRAL_UTSKRIFT ? (
+          <ToggleGroup.Item value={HandlingEnum.AUTO} label={UTSENDINGSKANAL[utsendingskanal]} />
+          {utsendingskanal !== Utsendingskanal.SENTRAL_UTSKRIFT ? (
             <ToggleGroup.Item value={HandlingEnum.CENTRAL_PRINT} label="Sentral utskrift" />
           ) : null}
-          {part.utsendingskanal !== Utsendingskanal.LOKAL_UTSKRIFT ? (
+          {utsendingskanal !== Utsendingskanal.LOKAL_UTSKRIFT ? (
             <ToggleGroup.Item value={HandlingEnum.LOCAL_PRINT} label="Lokal utskrift" />
           ) : null}
         </ToggleGroup>
 
         {handling === HandlingEnum.AUTO ? null : (
-          <Tooltip content={`Tilbakestill til "${UTSENDINGSKANAL[part.utsendingskanal]}"`}>
+          <Tooltip content={`Tilbakestill til "${UTSENDINGSKANAL[utsendingskanal]}"`}>
             <Button
               data-color="neutral"
               size="small"
@@ -75,7 +101,7 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
         )}
       </HStack>
       <HStack align="center" gap="space-0 space-8" paddingInline="space-8" paddingBlock="space-0 space-4">
-        {isLocalPrint ? (
+        {isLocalPrint() ? (
           <InfoBox variant="info">
             <BodyShort size="small">Du må skrive ut dokumentet selv og legge det til utsending.</BodyShort>
             {templateId === TemplateIdEnum.OVERSENDELSESBREV ? (
@@ -86,7 +112,7 @@ export const Options = ({ part, handling, overriddenAddress, templateId, onChang
           </InfoBox>
         ) : null}
       </HStack>
-      {showAddress ? (
+      {showAddress() ? (
         <Address
           part={part}
           address={part.address}

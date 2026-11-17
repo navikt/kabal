@@ -6,13 +6,13 @@ import { getTypeNames } from '@/components/receivers/functions';
 import type { IErrorProperty } from '@/components/receivers/is-send-error';
 import { Options } from '@/components/receivers/options';
 import { StyledReceiver } from '@/components/receivers/styled-components';
-import type { IBrevmottaker } from '@/hooks/use-suggested-brevmottakere';
+import type { ReachableMottaker } from '@/hooks/use-suggested-brevmottakere';
 import type { IMottaker } from '@/types/documents/documents';
 import { IdType } from '@/types/oppgave-common';
 import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 interface ReceiversProps {
-  receivers: IBrevmottaker[];
+  receivers: ReachableMottaker[];
   selectedIds: string[];
   addMottakere: (mottakere: IMottaker[]) => void;
   removeMottakere: (ids: string[]) => void;

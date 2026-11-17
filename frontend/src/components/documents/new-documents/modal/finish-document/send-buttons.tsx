@@ -1,3 +1,4 @@
+import { ErrorMessage, Loader } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
 import { DistribusjonsType } from '#shared/documents';
@@ -17,19 +18,32 @@ import { DocumentValidationFrontendError } from '@/types/documents/validation';
 
 export const SendButtons = ({ document, accessError = null, validationErrors = [], ...rest }: FinishProps) => {
   const { id: dokumentId, tittel: documentTitle, mottakerList, dokumentTypeId } = document;
-  const { data, isLoading: oppgaveIsLoading } = useOppgave();
+  const { data, isSuccess } = useOppgave();
   const [setMottakerList] = useSetMottakerListMutation();
   const [finish, { isLoading: isFinishing }] = useFinishDocumentMutation({ fixedCacheKey: document.id });
   const [validate, { isFetching: isValidating }] = useLazyValidateDocumentQuery();
   const { data: documents = [] } = useGetDocumentsQuery(data?.id ?? skipToken);
   const { value: activeSmartEditor, remove: removeActiveSmartEditor } = useSmartEditorActiveDocument();
   const { close, setValidationErrors } = useContext(ModalContext);
-  const [suggestedBrevmottakere] = useSuggestedBrevmottakere(document.mottakerList, document.templateId);
-  const reachableSuggestedReceivers = suggestedBrevmottakere.filter((s) => s.reachable);
+  const { brevmottakere, isLoading, error } = useSuggestedBrevmottakere(
+    dokumentTypeId === DistribusjonsType.EKSPEDISJONSBREV_TIL_TRYGDERETTEN || mottakerList.length > 0
+      ? skipToken
+      : { mottakerList, templateId: document.templateId },
+  );
 
-  if (oppgaveIsLoading || data === undefined) {
+  if (!isSuccess || data === undefined) {
     return null;
   }
+
+  if (isLoading) {
+    return <Loader size="small" />;
+  }
+
+  if (error !== null) {
+    return <ErrorMessage size="small">{error}</ErrorMessage>;
+  }
+
+  const reachableSuggestedReceivers = brevmottakere.filter((s) => s.reachable);
 
   const onValidate = async () => {
     if (typeof data?.id !== 'string') {
