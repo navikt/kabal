@@ -1,5 +1,5 @@
 import type { Descendant } from 'platejs';
-import type { DistribusjonsType } from '@/types/documents/documents';
+import type { DistribusjonsType } from '#shared/documents';
 import type { IOppgavebehandlingBaseParams } from '@/types/oppgavebehandling/params';
 import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 import type { Language } from '@/types/texts/language';

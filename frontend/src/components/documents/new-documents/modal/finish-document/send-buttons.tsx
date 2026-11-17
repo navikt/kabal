@@ -1,5 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useContext } from 'react';
+import { DistribusjonsType } from '#shared/documents';
 import { Confirm } from '@/components/documents/new-documents/modal/finish-document/confirm';
 import {
   type FinishProps,
@@ -12,7 +13,6 @@ import { useSmartEditorActiveDocument } from '@/hooks/settings/use-setting';
 import { useSuggestedBrevmottakere } from '@/hooks/use-suggested-brevmottakere';
 import { useFinishDocumentMutation, useSetMottakerListMutation } from '@/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery, useLazyValidateDocumentQuery } from '@/redux-api/oppgaver/queries/documents';
-import { DistribusjonsType } from '@/types/documents/documents';
 import { DocumentValidationFrontendError } from '@/types/documents/validation';
 
 export const SendButtons = ({ document, accessError = null, validationErrors = [], ...rest }: FinishProps) => {

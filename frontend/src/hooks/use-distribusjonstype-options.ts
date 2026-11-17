@@ -1,4 +1,5 @@
-import { DISTRIBUTION_TYPE_NAMES, DistribusjonsType, DocumentTypeEnum } from '@/types/documents/documents';
+import { DistribusjonsType } from '#shared/documents';
+import { DISTRIBUTION_TYPE_NAMES, DocumentTypeEnum } from '@/types/documents/documents';
 
 const SMART_DOCUMENT_OPTIONS = [
   {

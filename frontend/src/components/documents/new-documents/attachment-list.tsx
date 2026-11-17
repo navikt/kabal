@@ -1,11 +1,11 @@
 import { VStack } from '@navikt/ds-react';
 import { useMemo } from 'react';
+import { getIsIncomingDocument } from '#shared/documents';
 import { AttachmentsOverview } from '@/components/documents/new-documents/attachments-overview';
 import { NewAttachmentButtons } from '@/components/documents/new-documents/new-attachment-buttons';
 import { NewAttachment } from '@/components/documents/new-documents/new-document/new-attachment';
 import { ROW_HEIGHT, SEPARATOR_HEIGHT } from '@/components/documents/new-documents/new-documents-list/constants';
 import { StyledAttachmentListItem } from '@/components/documents/styled-components/attachment-list';
-import { getIsIncomingDocument } from '@/functions/is-incoming-document';
 import { sortWithNumbers } from '@/functions/sort-with-numbers/sort-with-numbers';
 import type {
   IAttachmentDocument,

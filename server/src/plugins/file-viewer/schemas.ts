@@ -1,4 +1,5 @@
 import { type Static, Type } from '@fastify/type-provider-typebox';
+import { DistribusjonsType } from '#shared/documents';
 
 // --- Archived document schemas ---
 
@@ -71,6 +72,7 @@ const JournalfoertDokumentReferenceSchema = Type.Object({
 export const DuaApiDocumentSchema = Type.Object({
   id: Type.String(),
   tittel: Type.String(),
+  dokumentTypeId: Type.Enum(DistribusjonsType),
   parentId: Type.Union([Type.String(), Type.Null()]),
   /** Set for archived documents attached to the DUA. */
   journalfoertDokumentReference: Type.Union([JournalfoertDokumentReferenceSchema, Type.Null()]),

@@ -1,4 +1,5 @@
 import { useCallback, useContext, useMemo } from 'react';
+import { DistribusjonsType } from '#shared/documents';
 import { DragAndDropContext } from '@/components/documents/drag-context';
 import { canDistributeAny } from '@/components/documents/filetype';
 import { DuaActionEnum } from '@/hooks/dua-access/access';
@@ -7,7 +8,6 @@ import { useLazyDuaAccess } from '@/hooks/dua-access/use-dua-access';
 import { useIsFeilregistrert } from '@/hooks/use-is-feilregistrert';
 import { Journalstatus } from '@/types/arkiverte-documents';
 import {
-  DistribusjonsType,
   DocumentTypeEnum,
   type IAttachmentDocument,
   type IDocument,

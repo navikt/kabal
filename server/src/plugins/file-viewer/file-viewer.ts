@@ -2,6 +2,7 @@ import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import { Value } from 'typebox/value';
+import { getIsIncomingDocument } from '#shared/documents';
 import { getHighlightsId } from '#shared/highlights';
 import { ApiClientEnum } from '@/config/config';
 import { isNotNull } from '@/functions/guards';
@@ -123,13 +124,17 @@ export const fileViewerPlugin = fastifyPlugin(
 
                 // If the document is a parent (no parentId), include it and all its attachments.
                 // If the document is an attachment, include only that document.
-                const isParent = document.parentId === null;
+                const attachments = document.parentId === null ? allDocuments.filter((doc) => doc.parentId === id) : [];
 
-                const matchedDocuments = isParent
-                  ? [document, ...allDocuments.filter((doc) => doc.parentId === id)]
-                  : [document];
+                const showVedleggsoversikt = attachments.length > 0 && !getIsIncomingDocument(document.dokumentTypeId);
 
-                const files: FileEntry[] = matchedDocuments.map((doc) => getDuaFile(behandlingId, doc));
+                const files: FileEntry[] = showVedleggsoversikt
+                  ? [
+                      getDuaFile(behandlingId, document),
+                      getVedleggsoversiktFile(behandlingId, id),
+                      ...attachments.map((doc) => getDuaFile(behandlingId, doc)),
+                    ]
+                  : [document, ...attachments].map((doc) => getDuaFile(behandlingId, doc));
 
                 const pageTitle = files[0]?.title ?? 'Dokumentvisning';
 
@@ -166,13 +171,7 @@ export const fileViewerPlugin = fastifyPlugin(
 
           return renderHtml(reply, 'Vedleggsoversikt', {
             navIdent: req.navIdent,
-            files: [
-              {
-                title: 'Vedleggsoversikt',
-                url: getVedleggsoversiktPdfUrl(behandlingId, id),
-                variants: 'PDF',
-              },
-            ],
+            files: [getVedleggsoversiktFile(behandlingId, id)],
           });
         },
       );
@@ -281,3 +280,9 @@ const getArchivedFile = (
     highlightsId: behandlingId === undefined ? undefined : getHighlightsId(behandlingId, dokumentInfoId),
   };
 };
+
+const getVedleggsoversiktFile = (behandlingId: string, id: string): FileEntry => ({
+  title: 'Vedleggsoversikt',
+  url: getVedleggsoversiktPdfUrl(behandlingId, id),
+  variants: 'PDF',
+});

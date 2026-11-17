@@ -1,6 +1,7 @@
 import type { TRange } from 'platejs';
 import { createContext, type RefObject, useRef, useState } from 'react';
-import { DistribusjonsType, type ISmartDocumentOrAttachment } from '@/types/documents/documents';
+import { DistribusjonsType } from '#shared/documents';
+import type { ISmartDocumentOrAttachment } from '@/types/documents/documents';
 import type { ISmartEditorComment } from '@/types/smart-editor/comments';
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 

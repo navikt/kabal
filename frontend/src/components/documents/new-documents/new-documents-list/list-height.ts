@@ -1,3 +1,4 @@
+import { getIsIncomingDocument } from '#shared/documents';
 import {
   PADDING_BOTTOM,
   PADDING_TOP,
@@ -7,7 +8,6 @@ import {
 } from '@/components/documents/new-documents/new-documents-list/constants';
 import type { DocumentWithAttachments } from '@/components/documents/new-documents/new-documents-list/types';
 import { getHasUploadOrRolAnswersButton } from '@/components/documents/new-documents/new-documents-list/upload-button';
-import { getIsIncomingDocument } from '@/functions/is-incoming-document';
 import { DuaActionEnum } from '@/hooks/dua-access/access';
 import type { useLazyDuaAccess } from '@/hooks/dua-access/use-dua-access';
 import { type CreatorRole, DocumentTypeEnum } from '@/types/documents/documents';

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'bun:test';
+import { DistribusjonsType } from '#shared/documents';
 import { type CanEditDocumentParams, canEditDocument } from '@/hooks/use-can-document/use-can-edit-document';
 import { Filtype, VariantFormat } from '@/types/arkiverte-documents';
 import {
   CreatorRole,
-  DistribusjonsType,
   DocumentTypeEnum,
   type IBaseDocument,
   type ISmartDocument,

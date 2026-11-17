@@ -1,16 +1,12 @@
 import { HStack, Radio, RadioGroup, Tag } from '@navikt/ds-react';
 import { useMemo } from 'react';
+import type { DistribusjonsType } from '#shared/documents';
 import { DocumentIcon, type ModalDocumentType } from '@/components/documents/new-documents/shared/document-icon';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useLazyCanBeParentOfDocument } from '@/hooks/use-can-document/use-can-drop-on-document';
 import { useSetParentMutation } from '@/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
-import {
-  DISTRIBUTION_TYPE_NAMES,
-  type DistribusjonsType,
-  type IAttachmentDocument,
-  isParentDocument,
-} from '@/types/documents/documents';
+import { DISTRIBUTION_TYPE_NAMES, type IAttachmentDocument, isParentDocument } from '@/types/documents/documents';
 
 const IS_PARENT_DOCUMENT = 'PARENT_DOCUMENT_VALUE';
 

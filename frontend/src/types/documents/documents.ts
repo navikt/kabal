@@ -1,3 +1,4 @@
+import { DistribusjonsType } from '#shared/documents';
 import type { KabalValue } from '@/plate/types';
 import type { IArkivertDocument } from '@/types/arkiverte-documents';
 import type { INavEmployee } from '@/types/bruker';
@@ -21,19 +22,6 @@ export const DOCUMENT_TYPE_NAMES: Record<DocumentTypeEnum, string> = {
   [DocumentTypeEnum.JOURNALFOERT]: 'Journalført dokument',
   [DocumentTypeEnum.VEDLEGGSOVERSIKT]: 'Vedleggsoversikt',
 };
-
-export enum DistribusjonsType {
-  BREV = '1',
-  NOTAT = '2',
-  // VEDLEGG = '3', // Old and unused
-  VEDTAKSBREV = '4',
-  BESLUTNING = '5',
-  KJENNELSE_FRA_TRYGDERETTEN = '6',
-  ANNEN_INNGAAENDE_POST = '7',
-  SVARBREV = '8',
-  FORLENGET_BEHANDLINGSTIDBREV = '9',
-  EKSPEDISJONSBREV_TIL_TRYGDERETTEN = '10',
-}
 
 export const DISTRIBUSJONSTYPER = Object.values(DistribusjonsType);
 

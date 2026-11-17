@@ -1,6 +1,7 @@
 import { MenuElipsisVerticalIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
 import { Button, Dialog, Tooltip } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
+import { DistribusjonsType, getIsIncomingDocument } from '#shared/documents';
 import { Fields } from '@/components/documents/new-documents/grid';
 import { useRemoveDocumentAccessErrors } from '@/components/documents/new-documents/hooks/use-remove-access';
 import { useValidationErrors } from '@/components/documents/new-documents/hooks/use-validation-errors';
@@ -9,11 +10,10 @@ import { VALIDATION_ERROR_MESSAGES } from '@/components/documents/new-documents/
 import { ModalContext } from '@/components/documents/new-documents/modal/modal-context';
 import { DocumentModalContent } from '@/components/documents/new-documents/modal/modal-document-content';
 import { DocumentIcon } from '@/components/documents/new-documents/shared/document-icon';
-import { getIsIncomingDocument } from '@/functions/is-incoming-document';
 import { isNotNull } from '@/functions/is-not-type-guards';
 import { DuaActionEnum } from '@/hooks/dua-access/access';
 import { type Dua, useDuaAccess } from '@/hooks/dua-access/use-dua-access';
-import { DistribusjonsType, type IParentDocument } from '@/types/documents/documents';
+import type { IParentDocument } from '@/types/documents/documents';
 
 interface Props {
   isOpen: boolean;

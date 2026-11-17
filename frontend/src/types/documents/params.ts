@@ -1,6 +1,7 @@
+import type { DistribusjonsType } from '#shared/documents';
 import type { IArkivertDocument } from '@/types/arkiverte-documents';
 import type { IDocumentParams } from '@/types/documents/common-params';
-import type { DistribusjonsType, IMottaker, UUID } from '@/types/documents/documents';
+import type { IMottaker, UUID } from '@/types/documents/documents';
 import type { HandlingEnum, IAddress } from '@/types/documents/receivers';
 import type { IOppgavebehandlingBaseParams } from '@/types/oppgavebehandling/params';
 
