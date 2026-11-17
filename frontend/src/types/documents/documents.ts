@@ -95,6 +95,7 @@ export interface IFileDocument<P extends UUID | null> extends IBaseDocument<P> {
   datoMottatt: string | null;
   inngaaendeKanal: InngaaendeKanal | null;
   avsender: IdentifikatorPart | null;
+  journalfoertDokumentReference: null;
 }
 
 export type IFileDocumentOrAttachment = IFileDocument<null> | IFileDocument<string>;
@@ -106,6 +107,7 @@ export interface ISmartDocument<P extends UUID | null> extends IBaseDocument<P> 
   content: KabalValue;
   version: number;
   language: Language;
+  journalfoertDokumentReference: null;
 }
 
 export type ISmartDocumentOrAttachment = ISmartDocument<null> | ISmartDocument<string>;
