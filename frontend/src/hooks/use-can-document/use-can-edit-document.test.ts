@@ -39,6 +39,7 @@ const SMART_DOCUMENT: ISmartDocument<null> = {
   content: [],
   version: 1,
   language: Language.NB,
+  journalfoertDokumentReference: null,
 };
 
 const BASE_JD_REFERENCE: JournalfoertDokumentReference = {
