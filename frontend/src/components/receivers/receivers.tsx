@@ -1,5 +1,6 @@
 import { InlineMessage, VStack } from '@navikt/ds-react';
 import { useCallback, useEffect } from 'react';
+import { DistribusjonsType } from '#shared/documents';
 import { LocalAlert } from '@/components/local-alert/local-alert';
 import { CustomReceivers } from '@/components/receivers/custom-receivers';
 import type { IErrorProperty } from '@/components/receivers/is-send-error';
@@ -7,7 +8,7 @@ import { SingleReceiver } from '@/components/receivers/single-receiver';
 import { SuggestedReceivers } from '@/components/receivers/suggested-receivers';
 import { UnreachableSuggestedReceivers } from '@/components/receivers/unreachable-suggested-receivers';
 import { type IBrevmottaker, useSuggestedBrevmottakere } from '@/hooks/use-suggested-brevmottakere';
-import { DistribusjonsType, type IdentifikatorMottaker, type IMottaker } from '@/types/documents/documents';
+import type { IdentifikatorMottaker, IMottaker } from '@/types/documents/documents';
 import { PartStatusEnum } from '@/types/oppgave-common';
 import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 

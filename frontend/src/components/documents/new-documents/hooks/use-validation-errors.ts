@@ -1,6 +1,7 @@
+import { DistribusjonsType } from '#shared/documents';
 import { hasLovhenvisning, hasPaaanketVedtaksdato } from '@/components/documents/new-documents/has-tr-fields';
 import type { ValidationError } from '@/components/documents/new-documents/modal/finish-document/types';
-import { DistribusjonsType, DocumentTypeEnum, type IParentDocument } from '@/types/documents/documents';
+import { DocumentTypeEnum, type IParentDocument } from '@/types/documents/documents';
 import { DocumentValidationFrontendError } from '@/types/documents/validation';
 
 export const useValidationErrors = (

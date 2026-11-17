@@ -1,5 +1,5 @@
+import type { DistribusjonsType } from '#shared/documents';
 import type { DeprecatedTemplateSections } from '@/plate/template-sections';
-import type { DistribusjonsType } from '@/types/documents/documents';
 import type { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 
 export interface INewSmartEditorMetadata {

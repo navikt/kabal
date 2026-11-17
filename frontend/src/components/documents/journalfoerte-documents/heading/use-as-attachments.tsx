@@ -1,4 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/query';
+import { DistribusjonsType } from '#shared/documents';
 import { canDistributeAny } from '@/components/documents/filetype';
 import { DuaActionEnum } from '@/hooks/dua-access/access';
 import { useCreatorRole } from '@/hooks/dua-access/use-creator-role';
@@ -8,7 +9,7 @@ import { useIsFullfoert } from '@/hooks/use-is-fullfoert';
 import { useCreateVedleggFromJournalfoertDocumentMutation } from '@/redux-api/oppgaver/mutations/documents';
 import { useGetDocumentsQuery } from '@/redux-api/oppgaver/queries/documents';
 import type { IArkivertDocument } from '@/types/arkiverte-documents';
-import { DistribusjonsType, DocumentTypeEnum, type IDocument } from '@/types/documents/documents';
+import { DocumentTypeEnum, type IDocument } from '@/types/documents/documents';
 
 export const useOptions = (selectedDocuments: IArkivertDocument[]): IDocument[] => {
   const oppgaveId = useOppgaveId();

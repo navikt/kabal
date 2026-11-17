@@ -1,4 +1,5 @@
 import type { Value } from 'platejs';
+import { DistribusjonsType } from '#shared/documents';
 import { deepFreeze } from '@/functions/deep-freeze';
 import { TemplateSections } from '@/plate/template-sections';
 import {
@@ -9,7 +10,6 @@ import {
   createSignature,
   type TemplateMetadata,
 } from '@/plate/templates/helpers';
-import { DistribusjonsType } from '@/types/documents/documents';
 import type { IMutableSmartEditorTemplate, ISmartEditorTemplate } from '@/types/smart-editor/smart-editor';
 import { TemplateIdEnum } from '@/types/smart-editor/template-enums';
 

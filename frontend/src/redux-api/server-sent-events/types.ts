@@ -1,7 +1,8 @@
+import type { DistribusjonsType } from '#shared/documents';
 import type { TracedEvent } from '@/server-sent-events';
 import type { IArkivertDocument } from '@/types/arkiverte-documents';
 import type { INavEmployee } from '@/types/bruker';
-import type { DistribusjonsType, IDocument } from '@/types/documents/documents';
+import type { IDocument } from '@/types/documents/documents';
 import type { UtfallEnum } from '@/types/kodeverk';
 import type {
   FlowState,

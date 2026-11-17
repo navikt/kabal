@@ -1,14 +1,10 @@
 import { Select, Tag, Tooltip } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import type { DistribusjonsType } from '#shared/documents';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { type DistribusjonsTypeOption, useDistribusjonstypeOptions } from '@/hooks/use-distribusjonstype-options';
 import { useSetTypeMutation } from '@/redux-api/oppgaver/mutations/documents';
-import {
-  DISTRIBUSJONSTYPER,
-  DISTRIBUTION_TYPE_NAMES,
-  type DistribusjonsType,
-  type IDocument,
-} from '@/types/documents/documents';
+import { DISTRIBUSJONSTYPER, DISTRIBUTION_TYPE_NAMES, type IDocument } from '@/types/documents/documents';
 
 interface Props extends React.RefAttributes<HTMLSpanElement> {
   document: IDocument;

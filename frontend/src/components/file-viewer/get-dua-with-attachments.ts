@@ -1,5 +1,5 @@
+import { getIsIncomingDocument } from '#shared/documents';
 import type { IShownDocument } from '@/components/file-viewer/types';
-import { getIsIncomingDocument } from '@/functions/is-incoming-document';
 import { DocumentTypeEnum, type IDocument, type JournalfoertDokument } from '@/types/documents/documents';
 
 export const getDuaWithAttachments = (doc: IShownDocument, documentsInProgress: IDocument[]): IShownDocument[] => {

@@ -2,6 +2,7 @@ import { CalendarIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { Button, Dialog, HStack, Tag, VStack } from '@navikt/ds-react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
+import { DistribusjonsType, getIsIncomingDocument } from '#shared/documents';
 import { AccessErrorsSummary } from '@/components/documents/new-documents/modal/access-errors-summary';
 import { AnnenInngaaende } from '@/components/documents/new-documents/modal/annen-inngaaende';
 import { DeleteDocumentButton } from '@/components/documents/new-documents/modal/delete-button';
@@ -19,7 +20,6 @@ import { usePdfData } from '@/components/pdf/pdf';
 import { isSendError } from '@/components/receivers/is-send-error';
 import { Receivers } from '@/components/receivers/receivers';
 import { SimplePdfPreview } from '@/components/simple-pdf-preview/simple-pdf-preview';
-import { getIsIncomingDocument } from '@/functions/is-incoming-document';
 import { useOppgaveId } from '@/hooks/oppgavebehandling/use-oppgave-id';
 import { useDocumentsPdfWidth } from '@/hooks/settings/use-setting';
 import {
@@ -33,7 +33,6 @@ import {
 } from '@/simple-api-state/feature-toggles';
 import {
   DISTRIBUTION_TYPE_NAMES,
-  DistribusjonsType,
   DOCUMENT_TYPE_NAMES,
   DocumentTypeEnum,
   type IDocument,

@@ -1,10 +1,10 @@
 import { format } from 'date-fns';
+import { DistribusjonsType, getIsIncomingDocument } from '#shared/documents';
 import { ISO_DATETIME_FORMAT } from '@/components/date-picker/constants';
 import { toast } from '@/components/toast/store';
 import { genericErrorToast } from '@/components/toast/toast-content/api-error-toast';
 import { areJournalfoertDocumentsEqual } from '@/domain/journalfoerte-documents';
 import { ENVIRONMENT } from '@/environment';
-import { getIsIncomingDocument } from '@/functions/is-incoming-document';
 import { deleteDocumentBackups } from '@/localstorage';
 import { oppgaverApi } from '@/redux-api/oppgaver/oppgaver';
 import { documentsQuerySlice } from '@/redux-api/oppgaver/queries/documents';
@@ -14,7 +14,6 @@ import { Journalposttype } from '@/types/arkiverte-documents';
 import type { IDocumentParams } from '@/types/documents/common-params';
 import {
   CreatorRole,
-  DistribusjonsType,
   DocumentTypeEnum,
   type IDocument,
   type IFileDocument,
